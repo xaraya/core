@@ -66,7 +66,8 @@ function dynamicdata_admin_modify($args)
         $data['hooks'] = $hooks;
     }
 
-    return $data;
+    $template = $myobject->name;
+    return xarTplModule('dynamicdata','admin','modify',$data,$template);
 }
 
 ?>

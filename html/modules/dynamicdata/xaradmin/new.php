@@ -74,8 +74,8 @@ function dynamicdata_admin_new($args)
         $data['hooks'] = $hooks;
     }
 
-    // Return the template variables defined in this function
-    return $data;
+    $template = $myobject->name;
+    return xarTplModule('dynamicdata','admin','new',$data,$template);
 }
 
 ?>
