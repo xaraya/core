@@ -53,13 +53,17 @@ function base_userapi_dstadjust($args)
             $tzinfo = xarModAPIFunc('base','user','timezones',
                                     array('timezone' => $timezone,
                                           'time'     => $time));
-            list($hours,$minutes) = explode(':',$tzinfo[0]);
-            $offset = (float) $hours + (float) $minutes / 60;
-            if (!empty($tzinfo[1]) && $tzinfo[1] != '-') {
-                // get the DST information for this rule
-                $dstinfo = xarModAPIFunc('base','user','dstrules',
-                                         array('rule' => $tzinfo[1],
-                                               'time' => $time));
+            // Check that a timezone was returned
+            if (!empty($tzinfo)) {
+                // Retrieve timezone information
+                list($hours,$minutes) = explode(':',$tzinfo[0]);
+                $offset = (float) $hours + (float) $minutes / 60;
+                if (!empty($tzinfo[1]) && $tzinfo[1] != '-') {
+                    // get the DST information for this rule
+                    $dstinfo = xarModAPIFunc('base','user','dstrules',
+                                             array('rule' => $tzinfo[1],
+                                                   'time' => $time));
+                }
             }
         }
     }
