@@ -23,16 +23,22 @@ function dynamicdata_admin_main()
 // Security Check
 	if(!xarSecurityCheck('EditDynamicData')) return;
 
-    $data = dynamicdata_admin_menu();
+    if (xarModGetVar('adminpanels', 'overview') == 0){
+        $data = dynamicdata_admin_menu();
 
-    $data['help'] = '';
-// TODO: ML-ise
-    if (file_exists('modules/dynamicdata/xardocs/help.txt')) {
-        $data['help'] = join('',@file('modules/dynamicdata/xardocs/help.txt'));
+        $data['help'] = '';
+        // TODO: ML-ise
+        if (file_exists('modules/dynamicdata/xardocs/help.txt')) {
+            $data['help'] = join('',@file('modules/dynamicdata/xardocs/help.txt'));
+        }
+
+        // Return the template variables defined in this function
+        return $data;
+    } else {
+        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view'));
     }
 
-    // Return the template variables defined in this function
-    return $data;
+    return true;
 }
 
 /**
