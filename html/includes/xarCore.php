@@ -534,7 +534,7 @@ function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)
     //You would have to trap all the page output to get the PHP parse errors?!
     // Catch output, if any
 
-//    ob_start();
+    ob_start();
 
     if ($flags & XAR_INCLUDE_ONCE) {
         $r = include_once($fileName);
@@ -543,7 +543,7 @@ function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)
     }
 
 //    $error_msg = strip_tags(ob_get_contents());
-//    ob_end_clean();
+    ob_end_clean();
     
     if (empty($r) || !$r) {
         return false;
