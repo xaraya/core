@@ -33,13 +33,14 @@ function installer_admin_main()
  *
  * @access private
  * @return data array of language values
- * @todo <johnny> Find way to convert locale string into language, country, etc..
  */
 function installer_admin_phase1()
 {
+    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
+
     // Get the installed locales
     $locales = xarMLSListSiteLocales();
-
+    
     // Construct the array for the selectbox (iso3code, string in own locale)
     if(!empty($locales)) {
         $languages = array();
@@ -53,7 +54,8 @@ function installer_admin_phase1()
             }
         }
     }
-
+    
+    $data['install_language'] = $install_language;
     $data['languages'] = $languages;
     $data['phase'] = 1;
     $data['phase_label'] = xarML('Step One');
@@ -66,14 +68,11 @@ function installer_admin_phase1()
  *
  * @access private
  * @return array
- * @todo <johnny> FIX Installer ML
- * @todo <johnny> accept locale and run the rest of the install using that locale if the locale exists.
  */
 function installer_admin_phase2()
 {
-    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
-    // TODO: fix installer ML
     $data['language'] = $install_language;
     $data['phase'] = 2;
     $data['phase_label'] = xarML('Step Two');
@@ -87,19 +86,18 @@ function installer_admin_phase2()
  * @access private
  * @param agree string
  * @return array
- * @todo <johnny> FIX Installer MLr
  * @todo <johnny> make sure php version checking works with
  *       php versions that contain strings
  */
 function installer_admin_phase3()
 {
-    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     if (!xarVarFetch('agree','regexp:(agree|disagree)',$agree)) return;
 
     if ($agree != 'agree') {
         // didn't agree to license, don't install
-        xarResponseRedirect('install.php?install_phase=2');
+        xarResponseRedirect('install.php?install_phase=2&install_language='.$install_language);
     }
 
     //Defaults
@@ -146,11 +144,10 @@ function installer_admin_phase3()
  *
  * @access private
  * @return array of default values for the database creation
- * @todo FIX installer ML
  */
 function installer_admin_phase4()
 {
-    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     // Get default values from config files
     $data['database_host']       = xarCore_getSystemVar('DB.Host');
@@ -182,12 +179,11 @@ function installer_admin_phase4()
  * @param dbPrefix
  * @param dbType
  * @param createDb
- * @todo FIX installer ML
  * @todo better error checking on arguments
  */
 function installer_admin_phase5()
 {
-    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarVarSetCached('installer','installing', true);
 
     // Get arguments
@@ -329,7 +325,7 @@ function installer_admin_phase5()
 
     // Set the allowed locales to our "C" locale and the one used during installation
     // TODO: make this a bit more friendly.
-    $necessaryLocale = array('en_US.iso-8859-1');
+    $necessaryLocale = array('en_US.utf-8');
     $install_locale  = array($install_language);
     $allowed_locales = array_merge($necessaryLocale, $install_locale);
 
@@ -348,7 +344,7 @@ function installer_admin_phase5()
  */
 function installer_admin_bootstrap()
 {
-    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     xarVarSetCached('installer','installing', true);
     xarTplSetThemeName('installer');
@@ -431,7 +427,7 @@ function installer_admin_bootstrap()
  */
 function installer_admin_create_administrator()
 {
-    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     xarVarSetCached('installer','installing', true);
 
@@ -612,7 +608,7 @@ function installer_admin_create_administrator()
  */
 function installer_admin_choose_configuration()
 {
-    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     xarTplSetThemeName('installer');
     $data['language'] = $install_language;
@@ -692,7 +688,7 @@ function installer_admin_choose_configuration()
  */
 function installer_admin_confirm_configuration()
 {
-    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     xarVarSetCached('installer','installing', true);
 
@@ -910,7 +906,7 @@ function installer_admin_confirm_configuration()
 
 function installer_admin_finish()
 {
-    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     xarUserLogOut();
 // log in admin user
@@ -933,7 +929,7 @@ function installer_admin_finish()
 
 function installer_admin_cleanup()
 {
-    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     $remove = xarModDelVar('roles','adminpass');
     $remove = xarModDelVar('installer','modules');
 
