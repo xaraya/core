@@ -155,6 +155,13 @@ function modules_init()
     $result =& $dbconn->Execute($query);
     if(!$result) return;
 
+    $index = array('name'   => 'i_xar_name',
+                   'fields' => array('xar_name'));
+
+    $query = xarDBCreateIndex($tables['module_vars'],$index);
+
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
 
 
     // prefix_module_uservars
@@ -177,6 +184,9 @@ function modules_init()
     $result =& $dbconn->Execute($query);
     if(!$result) return;
     // MrB: do we want an index on xar_value, on large sites, lots of records may exist
+    // <mikespub> the only reason why you might want to use an index on value is when you're doing
+    //            simple queries or stats based on it. But since all values of all kinds of stuff
+    //            are mixed together here, and we're not querying by value anyway, this wouldn't help at all...
     // Pro: searching for values will speed up (is that used somewhere)
     // Con: setting a user mod var will become slower and slower (relatively tho)
 

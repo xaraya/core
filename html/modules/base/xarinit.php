@@ -141,9 +141,10 @@ function base_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    // FIXME: should be unique or not?
-    $index = array('name'   => 'xar_name',
-                   'fields' => array('xar_name'));
+    // config var name should be unique
+    $index = array('name'   => 'i_xar_name',
+                   'fields' => array('xar_name'),
+                   'unique' => true);
 
     $query = xarDBCreateIndex($configVarsTable,$index);
 
