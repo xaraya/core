@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Draft schema for Blocklayout 1.0. 2003-01-25, Gregor J. Rothfuss gregor@xaraya.com -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="while">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:choice maxOccurs="unbounded">
+					<xs:element ref="continue" maxOccurs="unbounded"/>
+					<xs:element ref="break" maxOccurs="unbounded"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="condition" type="xs:string" use="required"/>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="var">
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="scope" type="xs:string" use="optional"/>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="template">
+		<xs:complexType>
+			<xs:attribute name="compile" type="xs:string" use="optional" default="true"/>
+			<xs:attribute name="type" type="xs:string" use="required"/>
+			<xs:attribute name="file" type="xs:string" use="required"/>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="set">
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="sec">
+		<xs:complexType>
+			<xs:attribute name="level" type="xs:string" use="required"/>
+			<xs:attribute name="instance" type="xs:string" use="required"/>
+			<xs:attribute name="component" type="xs:string" use="required"/>
+			<xs:attribute name="realm" type="xs:integer" use="required"/>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="module">
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="mlvar">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="mlstring">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="mlkey">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ml">
+		<xs:complexType mixed="true">
+			<xs:sequence>
+				<xs:choice maxOccurs="unbounded">
+					<xs:element ref="mlkey" maxOccurs="unbounded"/>
+					<xs:element ref="mlstring"/>
+					<xs:element ref="mlvar" minOccurs="0"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="loop">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:choice maxOccurs="unbounded">
+					<xs:element ref="continue" maxOccurs="unbounded"/>
+					<xs:element ref="break" maxOccurs="unbounded"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="if">
+		<xs:complexType mixed="true">
+			<xs:sequence>
+				<xs:choice maxOccurs="unbounded">
+					<xs:element ref="elseif" maxOccurs="unbounded"/>
+					<xs:element ref="else"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="inline" type="xs:string" use="optional" default="false"/>
+			<xs:attribute name="condition" type="xs:string" use="required"/>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="foreach">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:choice maxOccurs="unbounded">
+					<xs:element ref="continue" maxOccurs="unbounded"/>
+					<xs:element ref="break" maxOccurs="unbounded"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="as" type="xs:string" use="required"/>
+			<xs:attribute name="var" type="xs:string" use="required"/>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="for">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:choice maxOccurs="unbounded">
+					<xs:element ref="continue" maxOccurs="unbounded"/>
+					<xs:element ref="break" maxOccurs="unbounded"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="iter" type="xs:string" use="required"/>
+			<xs:attribute name="test" type="xs:string" use="required"/>
+			<xs:attribute name="start" type="xs:string" use="required"/>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="elseif">
+		<xs:complexType>
+			<xs:attribute name="condition" type="xs:string" use="required"/>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="else">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="continue"/>
+	<xs:element name="break"/>
+	<xs:element name="blockgroup">
+		<xs:complexType>
+			<xs:attribute name="template" type="xs:string" use="optional"/>
+			<xs:attribute name="name" type="xs:string" use="optional"/>
+			<xs:attribute name="id" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="block">
+		<xs:complexType>
+			<xs:attribute name="type" type="xs:string" use="required"/>
+			<xs:attribute name="template" type="xs:string" use="optional"/>
+			<xs:attribute name="module" type="xs:string" use="required"/>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="instance" type="xs:integer" use="optional"/>
+			<xs:attribute name="id" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="blocklayout">
+		<xs:annotation>
+			<xs:documentation>Blocklayout root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType mixed="true">
+			<xs:sequence>
+				<xs:choice maxOccurs="unbounded">
+					<xs:element ref="block" maxOccurs="unbounded"/>
+					<xs:element ref="blockgroup" maxOccurs="unbounded"/>
+					<xs:element ref="for" maxOccurs="unbounded"/>
+					<xs:element ref="foreach" maxOccurs="unbounded"/>
+					<xs:element ref="if" maxOccurs="unbounded"/>
+					<xs:element ref="loop" maxOccurs="unbounded"/>
+					<xs:element ref="ml" maxOccurs="unbounded"/>
+					<xs:element ref="module" maxOccurs="unbounded"/>
+					<xs:element ref="sec" maxOccurs="unbounded"/>
+					<xs:element ref="set" maxOccurs="unbounded"/>
+					<xs:element ref="template" maxOccurs="unbounded"/>
+					<xs:element ref="var" maxOccurs="unbounded"/>
+					<xs:element ref="while" maxOccurs="unbounded"/>
+				</xs:choice>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
