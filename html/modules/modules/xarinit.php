@@ -95,11 +95,19 @@ function modules_init()
     $result =& $dbconn->Execute($query);
     if(!$result) return;
 
+    $index = array('name'   => 'i_xar_regid',
+                   'fields' => array('xar_regid'));
+    
+    $query = xarDBCreateIndex($tables['module_states'],$index);
+   
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
+
     // prefix_module_vars
     /********************************************************************
     * CREATE TABLE xar_module_vars (
     *  xar_id int(11) NOT NULL auto_increment,
-    *  xar_modname varchar(64) NOT NULL default '',
+    *  xar_mod_id int(11) NOT NULL default 0,
     *  xar_name varchar(64) NOT NULL default '',
     *  xar_value longtext,
     *  PRIMARY KEY  (xar_id)
@@ -107,15 +115,24 @@ function modules_init()
     ********************************************************************/
     $fields = array(
     'xar_id'      => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
-    'xar_modname' => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_modid'   => array('type'=>'integer','null'=>false),
     'xar_name'    => array('type'=>'varchar','size'=>64,'null'=>false),
     'xar_value'   => array('type'=>'text','size'=>'long')
     );
-
+    
     $query = xarDBCreateTable($tables['module_vars'],$fields);
-
     $result =& $dbconn->Execute($query);
     if(!$result) return;
+
+    $index = array('name'   => 'i_xar_modid',
+                   'fields' => array('xar_modid'));
+    
+    $query = xarDBCreateIndex($tables['module_vars'],$index);
+   
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
+
+    
 
     // prefix_module_uservars
     /********************************************************************
@@ -136,6 +153,9 @@ function modules_init()
 
     $result =& $dbconn->Execute($query);
     if(!$result) return;
+    // MrB: do we want an index on xar_value, on large sites, lots of records may exist
+    // Pro: searching for values will speed up (is that used somewhere)
+    // Con: setting a user mod var will become slower and slower (relatively tho)
 
     // prefix_hooks
     /********************************************************************
