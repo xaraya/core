@@ -647,7 +647,7 @@ function xarModAPILoad($modName, $modType = 'user')
 
     // Load the file
     // MrB: strtolower fix from main
-    include $osfile;
+    include $fileName;
     $loadedAPICache[strtolower("$modName$modType")] = true;
 
     // Load the API translations files
@@ -767,6 +767,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
 function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
 {
     if (empty($modName)) {
+        die("$modName, $modType, $funcName");
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
@@ -782,10 +783,11 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
     // Build function name and call function
     $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
 	if (!function_exists($modAPIFunc)) {
-		// attempt to load the module's api
+        // attempt to load the module's api
 		xarModAPILoad($modName,$modType);
 		// let's check for that function again to be sure
 		if (!function_exists($modAPIFunc)) {
+            die("api load went fine");
 			$msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
 			xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
 							new SystemException($msg));
@@ -1092,23 +1094,23 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
  * @return string containing the module name, or null if database error
  * @raise BAD_PARAM
  */
-function xarModGetAlias($modName)
-{
-    if (empty($modName)) {
-        $msg = xarML('Invalid module name');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+// function xarModGetAlias($modName)
+// {
+//     if (empty($modName)) {
+//         $msg = xarML('Invalid module name');
+//         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+//                        new SystemException($msg));
+//         return;
+//     }
 
-    $aliases = xarConfigGetVar('System.ModuleAliases');
+//     $aliases = xarConfigGetVar('System.ModuleAliases');
 
-    if (isset($aliases) && !empty($aliases[$modName])) {
-        return $aliases[$modName];
-    } else {
-        return $modName;
-    }
-}
+//     if (isset($aliases) && !empty($aliases[$modName])) {
+//         return $aliases[$modName];
+//     } else {
+//         return $modName;
+//     }
+// }
 
 /**
  * Define a module name as an alias for some other module
@@ -1122,52 +1124,52 @@ function xarModGetAlias($modName)
  * @raise BAD_PARAM
  * @todo <marco> <mikespub> #1 what if 2 modules want to use the same aliases ?
  */
-function xarModSetAlias($modName, $alias)
-{
-    if (empty($modName) || empty($alias)) {
-        $msg = xarML('Invalid module name or alias');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
-    }
+// function xarModSetAlias($modName, $alias)
+// {
+//     if (empty($modName) || empty($alias)) {
+//         $msg = xarML('Invalid module name or alias');
+//         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+//                        new SystemException($msg));
+//         return false;
+//     }
 
-    // Check if the module name we want to define is already in use
-    $modid = xarModGetIDFromName($modName);
-    if (isset($modid)) {
-        $msg = xarML('Module name #(1) is already in use',
-                    xarVarPrepForDisplay($modName));
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
-    }
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        // Ignore exceptions here!
-        xarExceptionFree();
-    }
+//     // Check if the module name we want to define is already in use
+//     $modid = xarModGetIDFromName($modName);
+//     if (isset($modid)) {
+//         $msg = xarML('Module name #(1) is already in use',
+//                     xarVarPrepForDisplay($modName));
+//         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+//                        new SystemException($msg));
+//         return false;
+//     }
+//     if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+//         // Ignore exceptions here!
+//         xarExceptionFree();
+//     }
 
-    // Check if the alias we want to set it to *does* exist
-    $modid = xarModGetIDFromName($alias);
-    if (!isset($modid)) {
-        $msg = xarML('Alias #(1) is unknown',
-                    xarVarPrepForDisplay($alias));
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
-    }
+//     // Check if the alias we want to set it to *does* exist
+//     $modid = xarModGetIDFromName($alias);
+//     if (!isset($modid)) {
+//         $msg = xarML('Alias #(1) is unknown',
+//                     xarVarPrepForDisplay($alias));
+//         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+//                        new SystemException($msg));
+//         return false;
+//     }
 
-    // Get the list of current aliases
-    $aliases = xarConfigGetVar('System.ModuleAliases');
+//     // Get the list of current aliases
+//     $aliases = xarConfigGetVar('System.ModuleAliases');
 
-    if (!isset($aliases)) {
-        $aliases = array();
-    }
+//     if (!isset($aliases)) {
+//         $aliases = array();
+//     }
 
-    // TODO: #1
-    $aliases[$modName] = $alias;
-    xarConfigSetVar('System.ModuleAliases', $aliases);
+//     // TODO: #1
+//     $aliases[$modName] = $alias;
+//     xarConfigSetVar('System.ModuleAliases', $aliases);
 
-    return true;
-}
+//     return true;
+//}
 
 /**
  * Remove an alias for a module name
@@ -1180,26 +1182,26 @@ function xarModSetAlias($modName, $alias)
  * @return mixed true on success
  * @raise BAD_PARAM
  */
-function xarModDelAlias($modName, $alias)
-{
-    if (empty($modName) || empty($alias)) {
-        $msg = xarML('Invalid module name or alias');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
-    }
+// function xarModDelAlias($modName, $alias)
+// {
+//     if (empty($modName) || empty($alias)) {
+//         $msg = xarML('Invalid module name or alias');
+//         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+//                        new SystemException($msg));
+//         return false;
+//     }
 
-    $aliases = xarConfigGetVar('System.ModuleAliases');
+//     $aliases = xarConfigGetVar('System.ModuleAliases');
 
-    // Make sure we only delete it *if* it was assigned to the right alias
-    if (isset($aliases) && !empty($aliases[$modName]) &&
-        $aliases[$modName] == $alias) {
-        unset($aliases[$modName]);
-        xarConfigSetVar('System.ModuleAliases',$aliases);
-    }
+//     // Make sure we only delete it *if* it was assigned to the right alias
+//     if (isset($aliases) && !empty($aliases[$modName]) &&
+//         $aliases[$modName] == $alias) {
+//         unset($aliases[$modName]);
+//         xarConfigSetVar('System.ModuleAliases',$aliases);
+//     }
 
-    return true;
-}
+//     return true;
+// }
 
 /**
  * Get info from xarversion.php for module specified by modOsDir
@@ -1213,14 +1215,14 @@ function xarModDelAlias($modName, $alias)
  */
 function xarMod_getFileInfo($modOsDir)
 {
-    if (empty($modDir)) {
+    if (empty($modOsDir)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modDir');
         return;
     }
 
     $resarray = array();
     // Spliffster, additional mod info from modules/$modDir/xarversion.php
-    $fileName = 'modules/' . $modDir . '/xarversion.php';
+    $fileName = 'modules/' . $modOsDir . '/xarversion.php';
 
     if (!file_exists($fileName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $fileName);

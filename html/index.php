@@ -41,7 +41,9 @@ function xarMain()
 
     // ANSWER <marco>: Who's gonna use that?
     // EXAMPLE <mikespub>: print, rss, wap, ...
-    // <marco> That's wrong! All those things are pages and not themes, and however you have 2 APIs fro changing both of them at run-time. I'm really against having the core to know about this theme get variable.
+    // <marco> That's wrong! All those things are pages and not themes, and however you 
+    // have 2 APIs fro changing both of them at run-time. I'm really against having the 
+    // core to know about this theme get variable.
     // Allow theme override in URL first
     $themeName = xarVarCleanFromInput('theme');
     if (!empty($themeName)) {
@@ -50,12 +52,12 @@ function xarMain()
     }
 
 	// onPageView event would go here
-	if (xarModIsAvailable('sniffer')) {
-		xarModAPIFunc('sniffer','user','sniff');
-		if(xarModIsAvailable('stats')) {
-			xarModAPIFunc('stats', 'user', 'count');
-		}
-	}
+// 	if (xarModIsAvailable('sniffer')) {
+// 		xarModAPIFunc('sniffer','user','sniff');
+// 		if(xarModIsAvailable('stats')) {
+// 			xarModAPIFunc('stats', 'user', 'count');
+// 		}
+// 	}
 
     // Load the module
     if (!xarModLoad($modName, $modType)) return; // throw back

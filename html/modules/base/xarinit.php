@@ -179,8 +179,8 @@ function base_init()
     xarConfigSetVar('Site.MLS.TranslationsBackend', 'php');
     // FIXME: <marco> Temporary config vars, ask them at install time
     xarConfigSetVar('Site.MLS.MLSMode', 1);
-    xarConfigSetVar('Site.MLS.DefaultLocale', 'en_US.iso-8859-1');
-    xarConfigSetVar('Site.MLS.AllowedLocales','en_US.iso-8858-1');
+    xarConfigSetVar('Site.MLS.DefaultLocale', 'en_US.ISO-8859-1');
+    xarConfigSetVar('Site.MLS.AllowedLocales','en_US.ISO-8858-1');
     xarConfigSetVar('Site.User.AuthenticationModules','authsystem');
 
     // Dummy logger
@@ -224,91 +224,91 @@ function base_init()
     
     // Insert Allowed Vars
     $htmltags = array('!--',
-                  'a',
-                  'abbr',
-                  'acronym',
-                  'address',
-	          'applet',
-	          'area',
-                  'b',
-	          'base',
-	          'basefont',
-	          'bdo',
-                  'big',
-                  'blockquote',
-                  'br',
-	          'button',
-                  'caption',
-                  'center',
-                  'cite',
-                  'code',
-	          'col',
-	          'colgroup',
-	          'del',
-                  'dfn',
-	          'dir',
-                  'div',
-                  'dl',
-                  'dd',
-                  'dt',
-                  'em',
-                  'embed',
-	          'fieldset',
-                  'font',
-	          'form',
-                  'h1',
-                  'h2',
-                  'h3',
-                  'h4',
-                  'h5',
-                  'h6',
-                  'hr',
-                  'i',
-                  'iframe',
-                  'img',
-	          'input',
-	          'ins',
-	          'isindex',
-	          'kbd',
-	          'label',
-	          'legend',
-                  'l',
-                  'li',
-	          'map',
-                  'marquee',
-	          'menu',
-	          'nl',
-	          'nobr',
-                  'object',
-                  'ol',
-	          'optgroup',
-	          'option',
-                  'p',
-                  'param',
-                  'pre',
-                  'q',
-                  's',
-                  'samp',
-                  'script',
-	          'select',
-                  'small',
-                  'span',
-                  'strike',
-                  'strong',
-                  'sub',
-                  'sup',
-                  'table',
-	          'tbody',
-                  'td',
-	          'textarea',
-	          'tfoot',
-                  'th',
-	          'thead',
-                  'tr',
-	          'tt',
-                  'u',
-	          'ul',
-	          'var');
+                      'a',
+                      'abbr',
+                      'acronym',
+                      'address',
+                      'applet',
+                      'area',
+                      'b',
+                      'base',
+                      'basefont',
+                      'bdo',
+                      'big',
+                      'blockquote',
+                      'br',
+                      'button',
+                      'caption',
+                      'center',
+                      'cite',
+                      'code',
+                      'col',
+                      'colgroup',
+                      'del',
+                      'dfn',
+                      'dir',
+                      'div',
+                      'dl',
+                      'dd',
+                      'dt',
+                      'em',
+                      'embed',
+                      'fieldset',
+                      'font',
+                      'form',
+                      'h1',
+                      'h2',
+                      'h3',
+                      'h4',
+                      'h5',
+                      'h6',
+                      'hr',
+                      'i',
+                      'iframe',
+                      'img',
+                      'input',
+                      'ins',
+                      'isindex',
+                      'kbd',
+                      'label',
+                      'legend',
+                      'l',
+                      'li',
+                      'map',
+                      'marquee',
+                      'menu',
+                      'nl',
+                      'nobr',
+                      'object',
+                      'ol',
+                      'optgroup',
+                      'option',
+                      'p',
+                      'param',
+                      'pre',
+                      'q',
+                      's',
+                      'samp',
+                      'script',
+                      'select',
+                      'small',
+                      'span',
+                      'strike',
+                      'strong',
+                      'sub',
+                      'sup',
+                      'table',
+                      'tbody',
+                      'td',
+                      'textarea',
+                      'tfoot',
+                      'th',
+                      'thead',
+                      'tr',
+                      'tt',
+                      'u',
+                      'ul',
+                      'var');
 
     foreach ($htmltags as $htmltag) {
         $id_allowedvar = $dbconn->GenId($allowedVarsTable);
@@ -543,6 +543,15 @@ function base_init()
 	                       array('directory'=>'blocks', 'initfunc'=>'init'))) {
 	    return;
 	}  
+
+//     /**************************************************************
+//     * Install the sniffer module
+//     **************************************************************/
+    if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
+	                       array('directory'=>'sniffer', 'initfunc'=>'init'))) {
+	    return;
+	}  
+    
     // Fill language list(?)
 
     // Initialisation successful
@@ -573,7 +582,7 @@ function base_activate()
     }
 
     // Set the state and activate the following modules
-    $modlist=array('groups','permissions','blocks','users');
+    $modlist=array('groups','permissions','blocks','users','sniffer');
     foreach ($modlist as $mod) {
         // Set state to inactive
         $regid=xarModGetIDFromName($mod);
@@ -588,7 +597,7 @@ function base_activate()
                 return;
             }
     }
-
+    
     // Initialise and activate adminpanels, mail
     $modlist = array('adminpanels','mail');
     foreach ($modlist as $mod) {
@@ -612,7 +621,6 @@ function base_activate()
                                                               'state' => XARMOD_STATE_ACTIVE))) {
         return;
     }
-
     
     // Register Block types
     $blocks = array('finclude','html','menu','php','text');
@@ -642,7 +650,6 @@ function base_activate()
                                                                 'template' => 'right'))) {
         return NULL;
     }
-
     return true;
 }
 /**
