@@ -10,6 +10,7 @@
  * @link http://www.xaraya.com
  * @subpackage Roles Module
  * @author Xaraya Team
+ * @todo This file could be coded a bit shorter
  */
 /**
  * Modify the  email for users
@@ -82,7 +83,7 @@ function roles_admin_modifyemail($args)
             $filebase = $messaginghome . "/" . $data['mailtype'] . "-";
 
             $filename = $filebase . 'subject.xd';
-            if (is_writable($filename)) {
+            if (is_writable($filename) && is_writable($messaginghome)) {
                unlink($filename);
                if (!$handle = fopen($filename, 'a')) {
                     xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('Cannot open the template.'));
@@ -92,9 +93,12 @@ function roles_admin_modifyemail($args)
                    exit;
                }
                fclose($handle);
+            } else {
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONFIG_ERROR', new SystemException('The messaging template ' . $filename . ' is not writable or not allowed to delete files from '.$messaginghome.'.'));
+                return;                        
             }
             $filename = $filebase . 'message.xd';
-            if (is_writable($filename)) {
+            if (is_writable($filename) && is_writable($messaginghome)) {
                unlink($filename);
                if (!$handle = fopen($filename, 'a')) {
                     xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('Cannot open the template.'));
@@ -104,6 +108,9 @@ function roles_admin_modifyemail($args)
                    exit;
                }
                fclose($handle);
+            } else {
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONFIG_ERROR', new SystemException('The messaging template ' . $filename . ' is not writable or not allowed to delete files from '.$messaginghome.'.'));
+                return;                        
             }
             xarResponseRedirect(xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => $data['mailtype'])));
             return true;
