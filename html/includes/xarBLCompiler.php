@@ -627,6 +627,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                             $text = ''; $token = '';
                                             break 4; // Start all over, leaving nothing open
                                         }
+                                        $this->getNextToken();
                                         // doctype after root tag is invalid, but we allow it for now
                                     case XAR_TOKEN_CDATA_START:
                                         // Treat it as text
@@ -1098,6 +1099,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
     function stepBack($len = 1)
     {
+        // FIXME: do we need to take line numbers into account here when we
+        // step back over a \n ?
         $this->pos -= $len;
         $this->column -= $len;
         $this->lineText = substr($this->lineText, 0, strlen($this->lineText) - $len);
