@@ -144,7 +144,6 @@ function xarTplSetThemeName($themeName)
  *
  * @access public
  * @global xarTpl_themesBaseDir string
- * @global xarTpl_themeName string
  * @global xarTpl_themeDir string
  * @param themeDir string
  * @return bool
@@ -752,7 +751,6 @@ function xarTplCompileString($templateSource)
  *
  * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access protected
- * @global xarTpl_pageTemplateName string
  * @global xarTpl_pageTitle string
  * @global xarTpl_additionalStyles string
  * @param mainModuleOutput stringthe module output
@@ -765,7 +763,7 @@ function xarTplCompileString($templateSource)
 function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templateName = NULL)
 {
     if (empty($templateName)) {
-        $templateName = $GLOBALS['xarTpl_pageTemplateName'];
+        $templateName = xarTplGetPageTemplateName();
     }
 
     $templateName = xarVarPrepForOS($templateName);
