@@ -494,6 +494,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
     }
 
     // Lets first check to see if any of our type vars are alread set in the cache.
+    //If you change this, change it down there in the results for modvar and themevar
     $cacheName = $name;
     switch(strtolower($type)) {
     case 'moduservar':
@@ -510,6 +511,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         $cacheCollection = 'Mod.Variables.' . $modName;
         break;
     }
+
     if (xarVarIsCached($cacheCollection, $cacheName)) {
         $value = xarVarGetCached($cacheCollection, $cacheName);
         if ($value === $missing) {
@@ -522,7 +524,11 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
             }
             return $value;
         }
+    } elseif (xarVarIsCached($cacheCollection, 0)) {
+        //variable missing.
+        return;
     }
+        
     
     // We didn't find it in the single var cache, let's check the cached collection by whole/name
     switch(strtolower($type)) {
@@ -571,8 +577,8 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
             $module_varstable = $tables['site/module_vars'];
         }
         
-        $query = "SELECT xar_value FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
-        $bindvars = array($modBaseInfo['systemid'],$name);
+        $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ?";
+        $bindvars = array($modBaseInfo['systemid']);
         break;
     case 'moduservar':
         // Takes the right table basing on module mode
@@ -596,11 +602,15 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         } elseif ($modBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
             $theme_varsTable = $tables['site/theme_vars'];
         }
-        
-        $query = "SELECT xar_value, xar_prime, xar_description
+
+        //This was broken!!
+        //Guess nobody is using these
+        //Later on it was list($value) = $this->fields... But there are 3 fields here!!! 
+//        $query = "SELECT xar_value, xar_prime, xar_description
+        $query = "SELECT xar_name, xar_value
                   FROM $theme_varsTable
-                  WHERE xar_themename = ? AND xar_name = ?";
-        $bindvars = array($modName,$name);
+                  WHERE xar_themename = ?";
+        $bindvars = array($modName);
         break;
     case 'configvar':
         
@@ -632,37 +642,53 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         if (!$result) return;
     }
     
-    $setTo = $missing;
-    switch(strtolower($type)) {
-    case 'moduservar':
+    if (strtolower($type) == 'moduservar') {
         // If there is no such thing, return the global setting.
         if ($result->EOF) {
             $result->Close();
             // return global setting
             return xarModGetVar($modName, $name);
         }
-        break;
-    case 'configvar':
-        break;
-    default:
-        $cacheCollection = 'Mod.Variables.' . $modName;
-        break;
     }
+
     if ($result->EOF) {
         $result->Close();
-        xarVarSetCached($cacheCollection, $cacheName, $setTo);
+        xarVarSetCached($cacheCollection, $cacheName, $missing);
         return;
     }
     
-    
-    list($value) = $result->fields;
-    $result->Close();
-    
-    // We finally found it, update the appropriate cache
-    if($type == 'configvar') {
-        $value = unserialize($value);
+    switch(strtolower($type)) {
+        case 'themevar':
+        case 'modvar':
+            while (!$result->EOF) {
+                list($name, $value) = $result->fields;
+                xarVarSetCached($cacheCollection, $name, $value);
+                $result->MoveNext();
+            }
+            //It should be here!
+            if (xarVarIsCached($cacheCollection, $cacheName)) {
+                $value = xarVarGetCached($cacheCollection, $cacheName);
+            } else {
+                xarVarSetCached($cacheCollection, $cacheName, $missing);
+            }
+            //Special value to tell this select has already been run, any 
+            //variable not found now on is missing
+             xarVarSetCached($cacheCollection, 0, true);
+        break;
+
+        default:
+            // We finally found it, update the appropriate cache
+            //Couldnt we serialize and unserialize all variables?
+            //would that be too time expensive?
+            list($value) = $result->fields;
+            if($type == 'configvar') {
+                $value = unserialize($value);
+            }
+            xarVarSetCached($cacheCollection, $cacheName, $value);
+        break;
     }
-    xarVarSetCached($cacheCollection, $cacheName, $value);
+
+    $result->Close();
 
     // Optionally prepare it
     // FIXME: This may sound convenient now, feels wrong though, prepping introduces
