@@ -83,16 +83,41 @@ function adminpanels_adminmenublock_display($blockinfo){
                 foreach($mods as $mod){
                     $label = $mod['name'];
                     $link = xarModURL($mod['name'] ,'admin', 'main', array());
+
                     // depending on which module is currently loaded we display accordingly
                     if($label == $thismodname && $thismodtype == 'admin'){
-                            $adminmods[] = array('label' => $label, 'link' => '', 'marker' => $marker);
+                        $labelDisplay = ucwords($label);
+                        $adminmods[] = array('label' => $labelDisplay, 'link' => '', 'marker' => $marker);
+
+                        // Load API for individual links. 
+                        if (!xarModAPILoad($label, 'admin')) return; // throw back
+
+                        // The user API function is called.
+                        $menulinks = xarModAPIFunc($label,
+                                                   'admin',
+                                                   'getmenulinks');
+                        if (!empty($menulinks)) {
+                            $indlinks = array();
+                            foreach($menulinks as $menulink){
+                                $indlinks[] = array('adminlink' => $menulink['url'], 'adminlabel' => $menulink['label'], 'admintitle' => $menulink['title']);
+                            } 
+                        } else {
+                            $indlinks= '';
+                        }
                     }else{
-                        $adminmods[] = array('label' => $label, 'link' => $link, 'marker' => '');
+                        $modid = xarModGetIDFromName($mod['name']);
+                        $modinfo = xarModGetInfo($modid);
+                        if($modinfo){
+                            $desc = $modinfo['description'];
+                        }
+                        $labelDisplay = ucwords($label);
+                        $adminmods[] = array('label' => $labelDisplay, 'link' => $link, 'desc' => $desc, 'marker' => '');
                     }
                 }
                 // prepare the data for template(s)
                 $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
-                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods'     => $adminmods, 
+                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods'     => $adminmods,
+                                                                    'indlinks'     => $indlinks,
                                                                     'menustyle'     => $menustyle,
                                                                     'logouturl'     => $logouturl,
                                                                     'logoutlabel'   => $logoutlabel));
@@ -113,7 +138,24 @@ function adminpanels_adminmenublock_display($blockinfo){
                     // depending on which module is currently loaded we display accordingly
                     // also we are treating category lables in ML fasion
                     if($label == $thismodname && $thismodtype == 'admin'){
-                        $adminmods[] = array('label' => $label, 'link' => '', 'marker' => $marker);
+                        $labelDisplay = ucwords($label);
+                        $adminmods[] = array('label' => $labelDisplay, 'link' => '', 'marker' => $marker);
+
+                        // Load API for individual links. 
+                        if (!xarModAPILoad($label, 'admin')) return; // throw back
+
+                        // The user API function is called.
+                        $menulinks = xarModAPIFunc($label,
+                                                   'admin',
+                                                   'getmenulinks');
+                        if (!empty($menulinks)) {
+                            $indlinks = array();
+                            foreach($menulinks as $menulink){
+                                $indlinks[] = array('adminlink' => $menulink['url'], 'adminlabel' => $menulink['label'], 'admintitle' => $menulink['title']);
+                            } 
+                        } else {
+                            $indlinks= '';
+                        }
                     } else {
                         switch (strtolower($label)) {
                             case 'global':
@@ -129,7 +171,13 @@ function adminpanels_adminmenublock_display($blockinfo){
                                     $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
                                     break;
                             default:
-                                    $adminmods[] = array('label' => $label, 'link' => $link, 'marker' => '');
+                                    $modid = xarModGetIDFromName($label);
+                                    $modinfo = xarModGetInfo($modid);
+                                    if($modinfo){
+                                        $desc = $modinfo['description'];
+                                    }
+                                    $labelDisplay = ucwords($label);
+                                    $adminmods[] = array('label' => $labelDisplay, 'link' => $link, 'desc' => $desc, 'marker' => '');
                                     break;
 
                         }
@@ -137,7 +185,11 @@ function adminpanels_adminmenublock_display($blockinfo){
                 }
                 // prepare the data for template(s)
                 $menustyle = xarVarPrepForDisplay(xarML('[by category]'));
+                if (empty($indlinks)){
+                    $indlinks = '';
+                }
                 $data = xarTplBlock('adminpanels','sidemenu', array('adminmods'     => $adminmods, 
+                                                                    'indlinks'     => $indlinks,
                                                                     'menustyle'     => $menustyle,
                                                                     'logouturl'     => $logouturl,
                                                                     'logoutlabel'   => $logoutlabel));

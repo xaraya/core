@@ -10,13 +10,20 @@
     </xar:if>
     <xar:if condition="empty($link)">
         <b>&xar-var-label;</b>
+		<xar:if condition="empty($marker)">
+			<br />
+		</xar:if>
     <xar:else />
-        <a href="&xar-var-link;">&xar-var-label;</a>
+        <a href="&xar-var-link;" title="&xar-var-desc;">&xar-var-label;</a><br />
     </xar:if>
     <xar:if condition="!empty($marker)">
-        &xar-var-marker;
+        &xar-var-marker;<br />
+			<xar:if condition="!empty($indlinks)">
+				<xar:loop name="$indlinks">
+					&nbsp;&nbsp;<strong>&middot;</strong>&nbsp;&nbsp;<a href="&xar-var-adminlink;" title="&xar-var-admintitle;">&xar-var-adminlabel;</a><br />
+				</xar:loop>
+			</xar:if>
     </xar:if>
-    <br />
 </xar:loop>
 <br />
 <!-- Logout -->
