@@ -12,6 +12,8 @@ function roles_user_main()
 
 // Security Check
     // Security Check
+    //This is limiting all admin users the chance to get to the menu for the roles.
+    /*
     if(xarSecurityCheck('EditRole',0)) {
 
         if (xarModGetVar('adminpanels', 'overview') == 0){
@@ -21,7 +23,7 @@ function roles_user_main()
         }
     }
     elseif(xarSecurityCheck('ViewRoles',0)) {
-
+    */
         if (xarUserIsLoggedIn()) {
            xarResponseRedirect(xarModURL('roles',
                                          'user',
@@ -30,9 +32,12 @@ function roles_user_main()
             xarResponseRedirect(xarModURL('roles',
                                           'user',
                                           'register'));
+
         }
+   /*
     }
     else { return; }
+    */
 }
 
 ?>
