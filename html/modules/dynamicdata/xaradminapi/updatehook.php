@@ -47,6 +47,13 @@ function dynamicdata_adminapi_updatehook($args)
         return $extrainfo;
     }
 
+    // We can exit immediately if the status flag is set because we are just updating
+    // the status in the articles or other content module that works on that principle
+    // Bug 1960
+    if (!empty($extrainfo['statusflag'])){
+        return $extrainfo;
+    }
+
     // When called via hooks, the module name may be empty, so we get it from
     // the current module
     if (empty($extrainfo['module'])) {
