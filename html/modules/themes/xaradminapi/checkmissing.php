@@ -75,10 +75,7 @@ function themes_adminapi_checkmissing()
             }
         }
     }
-
     $check = true;
-
     return true;
 }
-
 ?>

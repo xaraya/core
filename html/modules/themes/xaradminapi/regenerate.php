@@ -83,6 +83,11 @@ function themes_adminapi_regenerate()
 
         if (empty($dbThemes[$name])) {
             // New theme
+            
+            if (empty($themeInfo['xar_version'])){
+                $themeInfo['xar_version'] = '1.0.0';
+            }
+
             $themeId = $dbconn->GenId($xartable['themes']);
             $sql = "INSERT INTO $xartable[themes]
                       (xar_id, xar_name, xar_regid, xar_directory,
@@ -116,8 +121,6 @@ function themes_adminapi_regenerate()
                 }
         }
     }
-
     return true;
 }
-
 ?>

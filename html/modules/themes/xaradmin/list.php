@@ -36,21 +36,21 @@ function themes_admin_list()
 
     // form parameters
     if (!xarVarFetch('startnum', 'isset', $startnum,    NULL,  XARVAR_DONT_SET)) return;
-/*     if (!xarVarFetch('regen',    'isset', $regen,       NULL,  XARVAR_DONT_SET)) return; */
-/*     if (!xarVarFetch('selfilter','isset', $selfilter,   NULL,  XARVAR_DONT_SET)) return; */
+    if (!xarVarFetch('regen',    'isset', $regen,       NULL,  XARVAR_DONT_SET)) return;
+    //if (!xarVarFetch('selfilter','isset', $selfilter,   NULL,  XARVAR_DONT_SET)) return;
 
     $data['items'] = array();
 
-    $data['infolabel']                              = xarVarPrepForDisplay(xarML('Info'));
-    $data['actionlabel']                            = xarVarPrepForDisplay(xarML('Action'));
-    $data['optionslabel']                           = xarVarPrepForDisplay(xarML('Options'));
-    $data['reloadlabel']                            = xarVarPrepForDisplay(xarML('Refresh'));
+    $data['infolabel']                              = xarML('Info');
+    $data['actionlabel']                            = xarML('Action');
+    $data['optionslabel']                           = xarML('Options');
+    $data['reloadlabel']                            = xarML('Refresh');
     $data['pager']                                  = '';
     $authid = xarSecGenAuthKey();
 
     // pass tru some of the form variables (we dont store them anywhere, atm)
     $data['hidecore']                               = xarModGetUserVar('themes', 'hidecore');
-/*     $data['regen']                                  = $regen; */
+    $data['regen']                                  = $regen;
     $data['selstyle']                               = xarModGetUserVar('themes', 'selstyle');
     $data['selfilter']                              = xarModGetUserVar('themes', 'selfilter');
     $data['selsort']                                = xarModGetUserVar('themes', 'selsort');
@@ -76,11 +76,7 @@ function themes_admin_list()
     // obtain list of modules based on filtering criteria
 /*     if($regen){ */
         // lets regenerate the list on each reload, for now
-        if(!xarModAPIFunc('themes', 'admin', 'regenerate')){
-            $msg = xarML('Themes list  regeneration failed!');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-            return;
-        }
+        if(!xarModAPIFunc('themes', 'admin', 'regenerate')) return;
         $themelist = xarModAPIFunc('themes','admin','getthemelist',  array('filter'=> array('State' => $data['selfilter'])));
 /*         , array('filter'=> array('State' => $data['selfilter'][0]))); */
 /*     }else{ */
@@ -124,7 +120,7 @@ function themes_admin_list()
         // for the sake of clarity, lets prepare all our links in advance
         $initialiseurl              = xarModURL('themes',
                                     'admin',
-                                    'initialise',
+                                    'install',
                                      array( 'id'        => $thisthemeid,
                                             'authid'    => $authid));
         $activateurl                = xarModURL('themes',
@@ -158,6 +154,12 @@ function themes_admin_list()
                                     'admin',
                                     'themesinfo',
                                      array( 'id'        => $thisthemeid));
+        // added due to the feature request - opens info in new window
+        $listrows[$i]['infourlnew'] = xarModURL('themes',
+                                    'admin',
+                                    'themesinfo',
+                                    array( 'id'        => $thisthemeid));
+
         
         // image urls
         

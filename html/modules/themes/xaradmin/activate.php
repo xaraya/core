@@ -28,27 +28,20 @@ function themes_admin_activate()
 { 
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) return;
-
     if (!xarVarFetch('id', 'int:1:', $id)) return; 
+
     // Activate
     $activated = xarModAPIFunc('themes',
-        'admin',
-        'activate',
-        array('regid' => $id)); 
-    // throw back
-    if (!isset($activated)) return; 
-    // Set State
-    $set = xarModAPIFunc('themes',
-        'admin',
-        'setstate',
-        array('regid' => $id,
-            'state' => XARTHEME_STATE_ACTIVE)); 
-    // throw back
-    if (!isset($set)) return;
+                               'admin',
+                               'activate',
+                               array('regid' => $id));
 
-    xarResponseRedirect(xarModURL('themes', 'admin', 'list'));
-
+    //throw back
+    if (!isset($activated)) return;
+    $minfo=xarThemeGetInfo($id);
+    // set the target location (anchor) to go to within the page
+    $target=$minfo['name'];
+    xarResponseRedirect(xarModURL('themes', 'admin', 'list', array('state' => 0), NULL, $target));
     return true;
 } 
-
 ?>

@@ -143,7 +143,7 @@ function themes_adminapi_setstate($args)
 
     $sql = "UPDATE $theme_statesTable SET xar_state = ? WHERE xar_regid =?";
     $bindvars = array($state,$regid);
-    $result = $dbconn->Execute($sql);
+    $result = $dbconn->Execute($sql, $bindvars);
     if (!$result) return;
     return true;
 }
