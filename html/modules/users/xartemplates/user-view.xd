@@ -13,7 +13,7 @@
     <xar:loop name="$items">
     <tr>
         <td>
-			#$uname#
+			<a href="#xarModURL('users', 'user', 'display', array('uid' => $uid))#">#$uname#</a>
 		</td>
         <td>
 			#$name#

@@ -204,6 +204,11 @@ president@whitehouse.gov';
     xarBlockTypeRegister('users', 'user');
     xarBlockTypeRegister('users', 'language');
 
+    if (!xarModRegisterHook('item', 'search', 'GUI',
+                           'users', 'user', 'search')) {
+        return false;
+    }
+
     return true;
 }
 /**
