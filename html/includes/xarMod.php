@@ -1613,8 +1613,10 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
               FROM $hookstable
               WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'";
     if (empty($callerItemType)) {
-        //$query .= " AND xar_stype = ''";
+        // Itemtype is not specified, only get the generic hooks
+        $query .= " AND xar_stype = ''";
     } else {
+        // FIXME: if itemtype is specified, why get the generic hooks? To save a function call in the modules?
         // hooks can be enabled for all or for a particular item type
         $query .= " AND (xar_stype = '' OR xar_stype = '" . xarVarPrepForStore($callerItemType) . "')";
     }
@@ -1680,9 +1682,11 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
                   FROM $hookstable
                   WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'";
         if (empty($callerItemType)) {
-            //$query .= " AND xar_stype = ''";
+            // Itemtype is not specified, get only the generic hooks
+            $query .= " AND xar_stype = ''";
         } else {
-        // hooks can be enabled for all or for a particular item type
+            // FIXME: if itemtype is specified, i think we should not return the generic hook 
+            // hooks can be enabled for all or for a particular item type <-- this logic is strange
             $query .= " AND (xar_stype = '' OR xar_stype = '" . xarVarPrepForStore($callerItemType) . "')";
         }
 
