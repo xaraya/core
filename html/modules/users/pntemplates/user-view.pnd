@@ -22,12 +22,22 @@
         <td align="center">
         
         </td>
-        <td align="center">
-            <a href="&pnt-modurl-users-user-terms;"><pnt:mlstring>Terms of Use</pnt:mlstring></a>
-        </td>
-        <td align="center">
-            <a href="&pnt-modurl-users-user-privacy;"><pnt:mlstring>Privacy Policy</pnt:mlstring></a>
-        </td>
+		<pnt:if condition="pnModGetVar('users', 'showterms')">
+			<td align="center">
+				<a href="&pnt-modurl-users-user-terms;"><pnt:mlstring>Terms of Use</pnt:mlstring></a>
+			</td>
+		<pnt:else />
+			<td align="center">
+			</td>
+		</pnt:if>
+		<pnt:if condition="pnModGetVar('users', 'showprivacy')">
+			<td align="center">
+				<a href="&pnt-modurl-users-user-terms;"><pnt:mlstring>Privacy Policy</pnt:mlstring></a>
+			</td>
+		<pnt:else />
+			<td align="center">
+			</td>
+		</pnt:if>
         <td align="center">
             <a href="&pnt-modurl-users-user-logout;"><pnt:mlstring>Logout</pnt:mlstring></a>
         </td>
