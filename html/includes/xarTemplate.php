@@ -975,6 +975,14 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
             fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
             fclose($fd);
+            
+	    // Commented this out for now, a double entry should not occur anyway, eventually this could even be an assert.
+            //if (!in_array($entry, $file)) {
+            //   $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
+            //   fwrite($fd, $entry);
+            //   fclose($fd);
+            //} 
+        }
         } else {
             return xarTpl__execute($templateCode, $tplData, $sourceFileName);
         }
@@ -1187,6 +1195,14 @@ function xarTpl__loadFromFile($sourceFileName)
             $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
             fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
             fclose($fd);
+            
+            // commented this out for now, a double entry should never occure, eventuall this mayb even become an assert
+            // for the details see bug #1600
+            //if (!in_array($entry, $file)) {
+            //    $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
+            //    fwrite($fd, $entry);
+            //    fclose($fd);
+            //} 
         }
         return $templateCode;
     }
