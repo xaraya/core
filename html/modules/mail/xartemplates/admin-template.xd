@@ -5,7 +5,7 @@
 <xar:set name="$messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Configure Notification Template</xar:mlstring></h2><br />
-<div style="margin: auto;">
+<div style="margin: auto;width:100%">
     <div style="float:left;width:100%"> <xar:comment> containing float - quick fix for JC's css layouts [andyv] </xar:comment>
         <div style="clear: both; padding-top: 10px;">
             <span style="float: right; width: 95%; text-align: left;">

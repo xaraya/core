@@ -13,10 +13,10 @@
         </xar:mlstring>
     </h2>
     <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
-        <div>
+        <div style="width:100%;">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="formname" id="formname" value="adminmenu" />
-            <table border="0" cellspacing="1" cellpadding="4" align="center" width="100%">
+            <table class="xar-fullwidth xar-noborder" cellspacing="1" cellpadding="4" align="center">
                 <tr>
                     <td align="right" width="180">
                         &nbsp; 
@@ -184,11 +184,11 @@
         </xar:mlstring>
     </h2>
     <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
-        <div>
+        <div style="width:100%;">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="formname" id="formname" value="overviews" />
 <!-- Disable overviews -->
-            <table border="0" cellspacing="1" cellpadding="4" align="left" width="100%">
+            <table class="xar-fullwidth xar-noborder" cellspacing="1" cellpadding="4" align="left" width="100%">
                 <tr>
                     <td align="right" width="180">
                         &nbsp; 
