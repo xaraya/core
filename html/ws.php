@@ -1,13 +1,15 @@
 <?php
-/*
- * File: $Id: s.ws.php 1.18 03/01/18 15:56:23+00:00 miko@power.dudleynet $
+/**
+ * File: $Id$
  * 
  * Xaraya WebServices Interface
  * 
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.org
+ * @link http://www.xaraya.com
+ * @subpackage Xaraya WebServices Interface
+ * @author Miko 
 */
 
 /**

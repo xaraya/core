@@ -7,7 +7,8 @@
  * @package multilanguage
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.org
+ * @link http://www.xaraya.com
+ * @subpackage Multi Language System
  * @author Marco Canini <m.canini@libero.it>
  * @todo Dynamic Translations
  *       Timezone and DST support

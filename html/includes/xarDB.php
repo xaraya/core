@@ -1,13 +1,14 @@
 <?php
 /**
- * File: $Id: s.xarDB.php 1.26 03/01/21 13:54:43+00:00 johnny@falling.local.lan $
+ * File: $Id$
  * 
  * ADODB Database Abstraction Layer API Helpers
  * 
  * @package database
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.org
+ * @link http://www.xaraya.com
+ * @subpackage ADODB Database Abstraction Layer API Helpers
  * @author Marco Canini
 */
 

@@ -1,13 +1,14 @@
 <?php
 /**
- * File: $Id: s.xarTableDDL.php 1.26 03/01/18 15:33:56+00:00 mikespub@sasquatch.pulpcontent.com $
+ * File: $Id$
  * 
  * Table Maintenance API
  * 
  * @package database
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.org
+ * @link http://www.xaraya.com
+ * @subpackage Table Maintenance API
  * @author Gary Mitchell
  * @todo Check functions!
  *       Check FIXMEs

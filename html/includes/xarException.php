@@ -1,13 +1,14 @@
 <?php
 /**
- * File: $Id: s.xarException.php 1.22 03/01/21 04:15:07+01:00 marcel@hsdev.com $
+ * File: $Id$
  *
  * Exception Handling System
  * 
  * @package exceptions
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.org
+ * @link http://www.xaraya.com
+ * @subpackage Exception Handling System
  * @author Marco Canini <m.canini@libero.it>
  */
 

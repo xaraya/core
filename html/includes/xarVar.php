@@ -1,13 +1,14 @@
 <?php
 /**
- * File: $Id: s.xarVar.php 1.29 03/01/21 13:54:43+00:00 johnny@falling.local.lan $
+ * File: $Id$
  * 
  * Variable utilities
  * 
  * @package variables
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.org
+ * @link http://www.xaraya.com
+ * @subpackage Variable Utilities
  * @author Marco Canini m.canini@libero.it
  */
 

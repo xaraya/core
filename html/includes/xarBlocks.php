@@ -1,13 +1,14 @@
 <?php
 /**
- * File: $Id: s.xarBlocks.php 1.76 03/01/21 13:54:43+00:00 johnny@falling.local.lan $
+ * File: $Id$
  * 
  * Display Blocks
  *
  * @package blocks
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.org
+ * @link http://www.xaraya.com
+ * @subpackage Display Blocks
  * @author Paul Rosania
  */
 
