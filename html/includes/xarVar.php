@@ -579,7 +579,8 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
-
+    $bindvars = array();
+    
     switch(strtolower($type)) {
     case 'modvar':
     default:
@@ -590,10 +591,8 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
             $module_varstable = $tables['site/module_vars'];
         }
         
-        $query = "SELECT xar_value
-                      FROM $module_varstable
-                      WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'
-                      AND xar_name = '" . xarVarPrepForStore($name) . "'";
+        $query = "SELECT xar_value FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
+        $bindvars = array($modBaseInfo['systemid'],$name);
         break;
     case 'moduservar':
         // Takes the right table basing on module mode
@@ -606,10 +605,9 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         $modvarid = xarModGetVarId($modName, $name);
         if (!$modvarid) return;
         
-        $query = "SELECT xar_value
-                      FROM $module_uservarstable
-                      WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'
-                      AND xar_uid ='" . xarVarPrepForStore($uid). "'";
+        $query = "SELECT xar_value FROM $module_uservarstable 
+                  WHERE xar_mvid = ? AND xar_uid = ?";
+        $bindvars = array($modvarid, $uid);
         break;
     case 'themevar':
         // Takes the right table basing on theme mode
@@ -619,21 +617,17 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
             $theme_varsTable = $tables['site/theme_vars'];
         }
         
-        $query = "SELECT xar_value,
-                      xar_prime,
-                      xar_description
-                      FROM $theme_varsTable
-                      WHERE xar_themename = '" . xarVarPrepForStore($modName) . "'
-                      AND xar_name = '" . xarVarPrepForStore($name) . "'";
+        $query = "SELECT xar_value, xar_prime, xar_description
+                  FROM $theme_varsTable
+                  WHERE xar_themename = ? AND xar_name = ?";
+        $bindvars = array($modName,$name);
         break;
     case 'configvar':
         
         $config_varsTable = $tables['config_vars'];
         
-        $query = "SELECT xar_value
-                      FROM $config_varsTable
-                      WHERE xar_name='" . xarVarPrepForStore($name) . "'";
-        
+        $query = "SELECT xar_value FROM $config_varsTable WHERE xar_name=?";
+        $bindvars = array($name);
         break;
 
     }
@@ -645,16 +639,16 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         case 'modvar':
         case 'themevar':
         case 'configvar':
-            $result =& $dbconn->CacheExecute(3600*24*7,$query);
+            $result =& $dbconn->CacheExecute(3600*24*7,$query,$bindvars);
             if (!$result) return;
             break;
         case 'moduservar':
-            $result =& $dbconn->Execute($query);
+            $result =& $dbconn->Execute($query,$bindvars);
             if (!$result) return;
             break;
         }
     } else {
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,$bindvars);
         if (!$result) return;
     }
     
@@ -760,19 +754,12 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             if(!$modvarid) {
                 $seqId = $dbconn->GenId($module_varstable);
                 $query = "INSERT INTO $module_varstable
-                             (xar_id,
-                              xar_modid,
-                              xar_name,
-                              xar_value)
-                          VALUES
-                             ('$seqId',
-                              '" . xarVarPrepForStore($modBaseInfo['systemid']) . "',
-                              '" . xarVarPrepForStore($name) . "',
-                              '" . xarVarPrepForStore($value) . "');";
+                             (xar_id, xar_modid, xar_name, xar_value)
+                          VALUES (?,?,?,?)";
+                $bindvars = array($seqId, $modBaseInfo['systemid'],$name,$value);
             } else {
-                $query = "UPDATE $module_varstable
-                          SET xar_value = '" . xarVarPrepForStore($value) . "'
-                          WHERE xar_id = " . $modvarid;
+                $query = "UPDATE $module_varstable SET xar_value = ? WHERE xar_id = ?";
+                $bindvars = array($value,$modvarid);
             }
 
             break;
@@ -799,13 +786,9 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             // Only store setting if different from global setting
             if ($value != $modsetting) {
                 $query = "INSERT INTO $module_uservarstable
-                            (xar_mvid, 
-                             xar_uid, 
-                             xar_value)
-                        VALUES
-                         ('" . xarVarPrepForStore($modvarid) . "',
-                          '" . xarVarPrepForStore($uid) . "',
-                          '" . xarVarPrepForStore($value) . "');";
+                            (xar_mvid, xar_uid, xar_value)
+                        VALUES (?,?,?)";
+                $bindvars = array($modvarid, $uid, $value);
             }
             break;
         case 'themevar':
@@ -821,19 +804,11 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
 
             $seqId = $dbconn->GenId($theme_varsTable);
             $query = "INSERT INTO $theme_varsTable
-                         (xar_id,
-                          xar_themename,
-                          xar_name,
-                          xar_prime,
-                          xar_value,
-                          xar_description)
-                      VALUES
-                         ('$seqId',
-                          '" . xarVarPrepForStore($modName) . "',
-                          '" . xarVarPrepForStore($name) . "',
-                          '" . xarVarPrepForStore($prime) . "',
-                          '" . xarVarPrepForStore($value) . "',
-                          '" . xarVarPrepForStore($description) . "');";
+                         (xar_id, xar_themename,
+                          xar_name, xar_prime,
+                          xar_value, xar_description)
+                      VALUES (?,?,?,?,?,?)";
+            $bindvars = array($seqId, $modName, $name, $prime, $value, $description);
 
             break;
         case 'configvar':
@@ -850,12 +825,9 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             //Insert
             $seqId = $dbconn->GenId($config_varsTable);
             $query = "INSERT INTO $config_varsTable
-                      (xar_id,
-                       xar_name,
-                       xar_value)
-                      VALUES ('$seqId',
-                              '" . xarVarPrepForStore($name) . "',
-                              '" . xarVarPrepForStore($serialvalue). "')";
+                      (xar_id, xar_name, xar_value)
+                      VALUES (?,?,?)";
+            $bindvars = array($seqId, $name, $serialvalue);
 
             break;
     }
@@ -865,7 +837,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
     }
     
     if (!empty($query)){
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,$bindvars);
         if (!$result) return;
     }
 
@@ -939,9 +911,8 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
 
                 // MrB: we could use xarModDelUserVar in a loop here, but this is
                 //      much faster.
-                $query = "DELETE FROM $module_uservarstable
-                          WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'";
-                $result =& $dbconn->Execute($query);
+                $query = "DELETE FROM $module_uservarstable WHERE xar_mvid = ?";
+                $result =& $dbconn->Execute($query,array($modvarid));
                 if(!$result) return;
             }
             // Takes the right table basing on module mode
@@ -951,9 +922,8 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
                 $module_varstable = $tables['site/module_vars'];
             }
             // Now delete the module var itself
-            $query = "DELETE FROM $module_varstable
-                      WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'
-                      AND xar_name = '" . xarVarPrepForStore($name) . "'";
+            $query = "DELETE FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
+            $bindvars = array($modBaseInfo['systemid'], $name);
             break;
         case 'moduservar':
             // Takes the right table basing on module mode
@@ -967,9 +937,8 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
             $modvarid = xarModGetVarId($modName, $name);
             if(!$modvarid) return;
 
-            $query = "DELETE FROM $module_uservarstable
-                      WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'
-                        AND xar_uid = '" . xarVarPrepForStore($uid) . "'";
+            $query = "DELETE FROM $module_uservarstable WHERE xar_mvid = ? AND xar_uid = ?";
+            $bindvars = array($modvarid, $uid);
             break;
         case 'themevar':
             // Takes the right table basing on theme mode
@@ -979,18 +948,17 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
                 $theme_varsTable = $tables['site/theme_vars'];
             }
 
-            $query = "DELETE FROM $theme_varsTable
-                      WHERE xar_themename = '" . xarVarPrepForStore($modName) . "'
-                      AND xar_name = '" . xarVarPrepForStore($name) . "'";
+            $query = "DELETE FROM $theme_varsTable WHERE xar_themename = ?  AND xar_name = ?";
+            $bindvars = array($modName,$name);
             break;
         case 'configvar':
             $config_varsTable = $tables['config_vars'];
-            $query = "DELETE FROM $config_varsTable
-                      WHERE xar_name = '" . xarVarPrepForStore($name) . "'";
+            $query = "DELETE FROM $config_varsTable WHERE xar_name = ?";
+            $bindvars = array($name);
             break;
     }
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query, $bindvars);
     if (!$result) return;
 
     switch(strtolower($type)) {
