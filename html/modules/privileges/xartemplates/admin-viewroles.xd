@@ -15,6 +15,13 @@
  window.onload = doOnLoad;
  window.onunload = doOnUnload;
 </script>
+<script language="JavaScript">
+<!--
+function setaction(target){
+document.forms[0].action = target;
+document.forms[0].submit();}
+//-->
+</script>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>View</xar:mlstring></h2><br />
 <div style="margin: auto;">
@@ -74,6 +81,24 @@
 			</a>
 		</td>
 	</tr>
+	<form action="&xar-modurl-privileges-admin-viewroles;" method="post" enctype="application/x-www-form-urlencoded">
+		<input type="hidden" name="pid" id="pid" value="#$pid#" />
+	<tr>
+		<td align="left">Show Privileges that are: 
+			<xar:if condition="$show eq 'assigned'">
+			<input type="radio" name="show" id="show" value="assigned" checked="checked" onClick="javascript:setaction('&xar-modurl-privileges-admin-viewroles;')"/>
+			<xar:else />
+			<input type="radio" name="show" id="show" value="assigned" onClick="javascript:setaction('&xar-modurl-privileges-admin-viewroles;')" />
+			</xar:if><xar:mlstring>Assigned</xar:mlstring>
+
+			<xar:if condition="$show eq 'all'">
+			<input type="radio" name="show" id="show" value="all" checked="checked" onClick="javascript:setaction('&xar-modurl-privileges-admin-viewroles;')"/>
+			<xar:else />
+			<input type="radio" name="show" id="show" value="all" onClick="javascript:setaction('&xar-modurl-privileges-admin-viewroles;')" />
+			</xar:if><xar:mlstring>All</xar:mlstring>
+		</td>
+	</tr>
+	</form>
 	<tr>
 		<td>
 			<hr>
