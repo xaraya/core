@@ -130,6 +130,7 @@ function blocks_init()
     if (!$result) return;
 
     // *_userblocks
+    /* Removed Collapsing blocks to see if there is a better solution.
     $query = xarDBCreateTable($prefix . '_userblocks',
                              array('xar_uid'         => array('type'    => 'integer',
                                                              'null'    => false,
@@ -154,12 +155,13 @@ function blocks_init()
                                    'unique' => true));
     $result =& $dbconn->Execute($query);
     if (!$result) return;
+    
 
     // Register BL tags
     xarTplRegisterTag('blocks', 'blocks-stateicon',
                      array(new xarTemplateAttribute('bid', XAR_TPL_STRING|XAR_TPL_REQUIRED)),
                      'blocks_userapi_handleStateIconTag');
-
+    */
     /* these can't be set because they are part of the core
        and when the core is installed, blocks is installed
        before the modules module is so, the module_vars table

@@ -339,14 +339,14 @@ function xarBlock_render($blockInfo)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $displayFuncName);
         return;
 	}
-
+    /* Removed collapsible blocks for better solution.  
     // Handle block state
     $res = xarModAPIFunc('blocks', 'user', 'getState', $blockInfo);
     if (!isset($res)) {
         if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
         $blockInfo['content'] = '';
     }
-
+    */
     // Determine which block box template to use
 
     $templateName = NULL;
