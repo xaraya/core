@@ -1617,9 +1617,9 @@ function xarTplUnregisterTag($tag_name)
 
     $tag_table = $xartable['template_tags'];
 
-    $query = "DELETE FROM $tag_table WHERE xar_name = '$tag_name';";
+    $query = "DELETE FROM $tag_table WHERE xar_name = ?";
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,array($tag_name));
     if (!$result) return;
 
     return true;
@@ -1707,9 +1707,9 @@ function xarTplGetTagObjectFromName($tag_name)
 
     $systemPrefix = xarDBGetSystemTablePrefix();
     $tag_table = $systemPrefix . '_template_tags';
-    $query = "SELECT xar_data, xar_module FROM $tag_table WHERE xar_name='$tag_name'";
+    $query = "SELECT xar_data, xar_module FROM $tag_table WHERE xar_name=?";
 
-    $result =& $dbconn->SelectLimit($query, 1);
+    $result =& $dbconn->SelectLimit($query, 1,-1,array($tag_name));
     if (!$result) return;
 
     if ($result->EOF) {
