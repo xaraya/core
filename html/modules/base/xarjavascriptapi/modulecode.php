@@ -26,7 +26,7 @@
  * @returns true=success; null=fail
  * @return boolean
  */
-function base_javascriptapi_modulefile($args)
+function base_javascriptapi_modulecode($args)
 {
     extract($args);
 
@@ -41,7 +41,17 @@ function base_javascriptapi_modulefile($args)
         return;
     }
 
-    return xarTplAddJavaScript($position, 'src', $filePath, $filePath);
+    // Read the file.
+    $fp = fopen($filePath, 'rb');
+
+    if (! $fp) {
+        return;
+    }
+
+    $code = fread($fp, filesize($filePath));
+    fclose($fp);
+
+    return xarTplAddJavaScript($position, 'code', $code, $filePath);
 }
 
 ?>
