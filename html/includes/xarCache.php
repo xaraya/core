@@ -28,6 +28,7 @@ function xarCache_init($args)
     global $xarPage_cacheTime;
     global $xarPage_cacheDisplay;
     global $xarPage_cacheShowTime;
+    global $xarPage_cacheGroups;
     global $xarBlock_cacheTime;
 
     if ((@include('var/cache/config.caching.php')) == false) {
@@ -42,6 +43,7 @@ function xarCache_init($args)
     $xarPage_cacheTime = isset($cachingConfiguration['Page.TimeExpiration']) ? $cachingConfiguration['Page.TimeExpiration'] : 1800;
     $xarPage_cacheDisplay = isset($cachingConfiguration['Page.DisplayView']) ? $cachingConfiguration['Page.DisplayView'] : 0;
     $xarPage_cacheShowTime = isset($cachingConfiguration['Page.ShowTime']) ? $cachingConfiguration['Page.ShowTime'] : 1;
+    $xarPage_cacheGroups = isset($cachingConfiguration['Page.CacheGroups']) ? $cachingConfiguration['Page.CacheGroups'] : '';
     $xarBlock_cacheTime = isset($cachingConfiguration['Block.TimeExpiration']) ? $cachingConfiguration['Block.TimeExpiration'] : 7200;
 
     return true;
@@ -77,11 +79,21 @@ function xarCache_init($args)
  */
 function xarPageIsCached($cacheKey, $name = '')
 {
-    global $xarOutput_cacheCollection, $xarPage_cacheTime, $xarOutput_cacheTheme, $xarPage_cacheDisplay, $xarPage_cacheCode;
+    global $xarOutput_cacheCollection, $xarPage_cacheTime, $xarOutput_cacheTheme, $xarPage_cacheDisplay, $xarPage_cacheCode, $xarPage_cacheGroups;
 
     $xarTpl_themeDir = xarTplGetThemeDir();
 
-    $page = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir . xarServerGetVar('REQUEST_URI');
+    $page = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir .
+            xarUserGetNavigationLocale();
+
+    // add user groups as a factor if necessary
+    // Note : we don't share the cache between groups or with anonymous here
+    if (!empty($xarPage_cacheGroups) && xarUserIsLoggedIn()) {
+        $gidlist = xarCache_getParents();
+        $page .= join(';',$gidlist);
+    }
+
+    $page .= xarServerGetVar('REQUEST_URI');
     $param = xarServerGetVar('QUERY_STRING');
     if (!empty($param)) {
         $page .= '?' . $param;
@@ -101,7 +113,7 @@ function xarPageIsCached($cacheKey, $name = '')
         file_exists($cache_file) &&
         filesize($cache_file) > 0 &&
         ($xarPage_cacheTime == 0 || filemtime($cache_file) > time() - $xarPage_cacheTime) &&
-        !xarUserIsLoggedIn()) {
+        xarPage_checkUserCaching()) {
 
         // start 304 test
         $mod = filemtime($cache_file);
@@ -205,7 +217,8 @@ function xarBlockIsCached($args)
         return false;
     }
 
-    $factors = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir;
+    $factors = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir .
+               xarUserGetNavigationLocale();
 
     if ($pageShared == 0) {
         $factors .= xarServerGetVar('REQUEST_URI');
@@ -218,26 +231,8 @@ function xarBlockIsCached($args)
     if ($userShared == 2) {
         $factors .= 0;
     } elseif ($userShared == 1) {
-        $currentuid = xarSessionGetVar('uid');
-        if (xarVarIsCached('User.Variables.'.$currentuid, 'parentlist')) {
-            $gids = xarVarGetCached('User.Variables.'.$currentuid, 'parentlist');
-        } else {
-            $systemPrefix = xarDBGetSystemTablePrefix();
-            $rolemembers = $systemPrefix . '_rolemembers';
-            $dbconn =& xarDBGetConn();
-            $query = "SELECT xar_parentid FROM $rolemembers WHERE xar_uid = ?";
-            $result =& $dbconn->Execute($query,array($currentuid));
-            if (!$result) return;
-            $gids ='';
-            while(!$result->EOF) {
-                $parentid = $result->GetRowAssoc(false);
-                $gids .= $parentid['xar_parentid'];
-                $result->MoveNext();
-            }
-            $result->Close();
-            xarVarSetCached('User.Variables.'.$currentuid, 'parentlist',$gids);
-        }
-        $factors .=$gids;
+        $gidlist = xarCache_getParents();
+        $factors .= join(';',$gidlist);
     } else {
         $factors .= xarSessionGetVar('uid');
     }
@@ -332,7 +327,7 @@ function xarPageSetCached($cacheKey, $name, $value)
         (!file_exists($cache_file) ||
         ($xarPage_cacheTime != 0 && filemtime($cache_file) < time() - $xarPage_cacheTime)) &&
         xarCacheDirSize($xarOutput_cacheCollection, 'Page') <= $xarOutput_cacheSizeLimit &&
-        !xarUserIsLoggedIn()) {
+        xarPage_checkUserCaching()) {
         $fp = @fopen($cache_file,"w");
         if (!empty($fp)) {
             if ($xarPage_cacheShowTime == 1) {
@@ -494,6 +489,68 @@ function xarCacheDirSize($dir = FALSE, $type, $cacheKey = '')
     }
 
     return $size;
+}
+
+/**
+ * check if the user can benefit from page caching
+ *
+ * @access private
+ * @return bool
+ * @todo avoid DB lookup by passing group via cookies ?
+ * @todo Note : don't do this if admins get cached too :)
+ */
+function xarPage_checkUserCaching()
+{
+    global $xarPage_cacheGroups;
+
+    if (!xarUserIsLoggedIn()) {
+        // always allow caching for anonymous users
+        return true;
+    } elseif (empty($xarPage_cacheGroups)) {
+        // if no other cache groups are defined
+        return false;
+    }
+
+    $gidlist = xarCache_getParents();
+
+    $groups = explode(';',$xarPage_cacheGroups);
+    foreach ($groups as $groupid) {
+        if (in_array($groupid,$gidlist)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * get the parent group ids of the current user (with minimal overhead)
+ *
+ * @access private
+ * @return array of parent gids
+ * @todo avoid DB lookup by passing groups via cookies ?
+ * @todo Note : don't do this if admins get cached too :)
+ */
+function xarCache_getParents()
+{
+    $currentuid = xarSessionGetVar('uid');
+    if (xarVarIsCached('User.Variables.'.$currentuid, 'parentlist')) {
+        return xarVarGetCached('User.Variables.'.$currentuid, 'parentlist');
+    }
+    $systemPrefix = xarDBGetSystemTablePrefix();
+    $rolemembers = $systemPrefix . '_rolemembers';
+    $dbconn =& xarDBGetConn();
+    $query = "SELECT xar_parentid FROM $rolemembers WHERE xar_uid = ?";
+    $result =& $dbconn->Execute($query,array($currentuid));
+    if (!$result) return;
+    $gidlist = array();
+    while(!$result->EOF) {
+        list($parentid) = $result->fields;
+        $gidlist[] = $parentid;
+        $result->MoveNext();
+    }
+    $result->Close();
+    xarVarSetCached('User.Variables.'.$currentuid, 'parentlist',$gidlist);
+    return $gidlist;
 }
 
 ?>
