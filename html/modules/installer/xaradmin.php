@@ -518,7 +518,7 @@ function installer_admin_create_administrator()
                              'name'     => 'reminder',
                              'content'  => $msg,
                              'type'     => $htmlBlockTypeId,
-                             'groups'    => array(array('gid'      => $leftBlockGroup,
+                             'groups'   => array(array('gid'      => $leftBlockGroup,
                                                        'template' => '')),
                              'template' => '',
                              'state'    => 2))) {

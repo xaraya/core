@@ -1190,8 +1190,8 @@ Password : %%password%%
                              'name'     => 'reminder',
                              'content'  => $msg,
                              'type'     => $htmlBlockTypeId,
-                             'groups'    => array(array('gid'      => $leftBlockGroup,
-                                                        'template' => '')),
+                             'groups'   => array(array('gid'      => 1,
+                                                       'template' => '')),
                              'template' => '',
                              'state'    => 2))) {
         return;
