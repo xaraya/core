@@ -757,6 +757,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     }
 
     $tplData = $modFunc($args);
+    if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
 
     if (!is_array($tplData)) {
         return $tplData;

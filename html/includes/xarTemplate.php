@@ -257,6 +257,10 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             $fd = fopen($cachedFileName, 'w');
             fwrite($fd, $templateCode);
             fclose($fd);
+            // Add an entry into CACHEKEYS
+            $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
+            fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
+            fclose($fd);
         } else {
             return xarTpl__execute($templateCode, $tplData);
         }

@@ -91,19 +91,7 @@ function xarEvt_fire($eventName, $value = NULL)
         $funcName = $xarEvt_subscribed[$eventName][$i];
         if (is_array($funcName)) {
             list($modName, $modType) = $funcName;
-
-            xarModFunc($modName, $modType, '_On'.$eventName, array('value'=>$value));
-            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                if (xarExceptionId() == 'MODULE_FUNCTION_NOT_EXIST') {
-                    xarExceptionFree();
-                } else {
-                    return; // throw back
-                }
-            }
-            xarModFunc($modName, $modType, '_OnEvent', array('eventName'=>$eventName, 'value'=>$value));
-            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                return; // throw back
-            }
+            xarEvt_notify($modName, $modType, $eventName, $value);
         } else {
             // Raw callback
             if (function_exists($funcName)) {
@@ -116,20 +104,15 @@ function xarEvt_fire($eventName, $value = NULL)
 
 function xarEvt_notify($modName, $modType, $eventName, $value)
 {
-    xarModFunc($modName, $modType, '_On'.$eventName, array('value'=>$value));
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        if (xarExceptionId() == 'MODULE_FUNCTION_NOT_EXIST') {
-            xarExceptionFree();
-        } else {
-            return; // throw back
-        }
-    }
-    xarModFunc($modName, $modType, '_OnEvent', array('eventName'=>$eventName, 'value'=>$value));
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        if (xarExceptionId() == 'MODULE_FUNCTION_NOT_EXIST') {
-            xarExceptionFree();
-        } else {
-            return; // throw back
+    $funcName = "{$modName}_{$modType}evt_On$eventName";
+    if (function_exists($funcName)) {
+        $funcName($value);
+        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
+    } else {
+        $funcName = "{$modName}_{$modType}evt_OnEvent";
+        if (function_exists($funcName)) {
+            $funcName($eventName, $value);
+            if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
         }
     }
 }
