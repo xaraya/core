@@ -50,29 +50,23 @@ function base_javascriptapi_handlemodulejavascript($args)
         // The module name is supplied.
         $module = '\'' . addslashes($module) . '\'';
     }
+    if (empty($position)) {$position = 'head';}
 
-    if (empty($position)) {
-        $position = 'head';
-    } else {
-        $position = addslashes($position);
-    }
-
-    if (!empty($code) && !empty($type)) {
-        // If the 'code' attribute has been passed in, then some inline code
-        // has been supplied - we don't need to read anything from a file then.
-        $out = "xarTplAddJavaScript('$position', '$type', \"$code\");";
-    } elseif (!empty($filename)) {
-        // Return the code to call up the javascript file.
-        // Only the file version is supported for now.
+    // Return the code to call up the javascript file.
+    // Only the file version is supported for now.
+    // If the tag that calls this function up is allowed to be open,
+    // then its content value could be raw javascript for inclusion in
+    // the head/body/whatever.
+    if (!empty($filename)) {
         $out = "xarModAPIFunc("
             . "'base', 'javascript', 'modulefile', "
-            . "array('module'=>" . $module
+            ."array('module'=>" . $module
             . ", 'filename'=>'" . addslashes($filename)
-            . "', 'position'=>'$position')); ";
+            . "', 'position'=>'" . addslashes($position) . "')); ";
     } else {
         $out = '';
     }
-
+ //return ' echo "'.$out.'"; ';
     return $out;
 }
 
