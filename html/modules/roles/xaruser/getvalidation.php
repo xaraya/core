@@ -154,7 +154,8 @@ function roles_user_getvalidation()
 
             $sitename = xarModGetVar('themes', 'SiteName');
             $siteadmin = xarModGetVar('mail', 'adminname');
-
+            
+            $baseurl = xarServerGetBaseURL();
             $confemailsearch = array('/%%link%%/',
                                      '/%%name%%/',
                                      '/%%username%%/',
@@ -164,12 +165,7 @@ function roles_user_getvalidation()
                                      '/%%siteadmin%%/',
                                      '/%%valcode%%/');
 
-            $confemailreplace = array(xarModEmailUrl('roles',
-                                                     'user',
-                                                     'getvalidation',
-                                                     array('stage'   => 'getvalidation',
-                                                           'valcode' => $status['valcode'],
-                                                           'uname'   => $status['uname'])),
+            $confemailreplace = array("".$baseurl."val.php?v=".$status['valcode']."&u=".$status['uid']."",
                                       "$status[name]",
                                       "$status[uname]",
                                       "".xarML('Cannot resend IP')."",

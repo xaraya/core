@@ -11,13 +11,23 @@
 			<td>#$uname#</td>
 		</tr>
 		<tr>
-			<td><xar:mlstring>Email</xar:mlstring>:</td>
-			<td>#$email#</td>
+			<td><xar:mlstring>Email Address</xar:mlstring>:</td>
+			<td>#$emailaddress#</td>
 		</tr>
 		<tr>
 			<td><label for="name"><xar:mlstring>Display Name</xar:mlstring>:</label></td>
 			<td><input type="text" name="name" id="name" value="#$name#" size="20" maxlength="60" /></td>
 		</tr>
+		<tr>
+			<td><label for="email"><xar:mlstring>Email Address</xar:mlstring>:</label></td>
+			<td><input type="text" name="email" id="email" value="" size="40" maxlength="60" /></td>
+		</tr>
+		<xar:if condition="xarModGetVar('roles', 'requirevalidation')">
+		<tr>
+			<td></td>
+			<td><label for="email"><xar:mlstring>Changing your email address will require you to revalidate your account.</xar:mlstring></label></td>
+		</tr>
+		</xar:if>
 		<tr>
 			<td><label for="pass1"><xar:mlstring>Password</xar:mlstring>:</label></td>
 			<td><input type="password" name="pass1" id="pass1" value="" size="20" maxlength="40" /></td>

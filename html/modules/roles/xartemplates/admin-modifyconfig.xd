@@ -42,6 +42,16 @@
 	<h4><xar:mlstring>User Registration Options</xar:mlstring></h4>
     <table border="0" cellpadding="2" cellspacing="0">
 	    <tr>
+            <td><label for="allowregistration"><xar:mlstring>Allow registration</xar:mlstring></label>:</td>
+            <td>
+		<xar:if condition="xarModGetVar('roles', 'allowregistration')">
+			<input type="checkbox" name="allowregistration" id="allowregistration" value="1" checked="checked" />
+		<xar:else />
+			<input type="checkbox" name="allowregistration" id="allowregistration" value="1" />
+		</xar:if></td>
+        </tr>
+		<xar:if condition="xarModGetVar('roles', 'allowregistration')">
+	    <tr>
             <td><label for="minage"><xar:mlstring>Minimum age to be a user</xar:mlstring>:</label></td>
             <td><input type="text" name="minage" id="minage" value="#xarModGetVar('roles', 'minage')#" size="3" maxlength="3" /></td>
         </tr>
@@ -54,6 +64,12 @@
 			<input type="checkbox" name="chooseownpassword" id="chooseownpassword" value="1" />
 		</xar:if></td>
         </tr>
+		<xar:if condition="xarModGetVar('roles', 'chooseownpassword')">
+	    <tr>
+            <td><label for="minpasslength"><xar:mlstring>Minimum length for password</xar:mlstring>:</label></td>
+            <td><input type="text" name="minpasslength" id="minpasslength" value="#xarModGetVar('roles', 'minpasslength')#" size="3" maxlength="3" /></td>
+        </tr>
+		</xar:if>
 	    <tr>
             <td><label for="sendnotice"><xar:mlstring>Send notice to admin when new user registers?</xar:mlstring>:</label></td>
             <td>
@@ -118,7 +134,9 @@
 			</td>
 		</tr> 
 -->
+	</xar:if>
     </table>
+	<xar:if condition="xarModGetVar('roles', 'allowregistration')">
 	<h4><xar:mlstring>Filtering Options</xar:mlstring></h4>
 	<p><label for=-"disallowednames"><xar:mlstring>Disallowed user names</xar:mlstring>:</label><br />
 	<i><xar:mlstring>Note: Enter each name on a single line.  Do not separate with comma, etc</xar:mlstring></i></p>
@@ -131,9 +149,8 @@
 	<p><label for="disallowedips"><xar:mlstring>Disallowed IP addresses</xar:mlstring>:</label><br />
 	<i><xar:mlstring>Note: Enter each name on a single line.  Do not separate with comma, etc</xar:mlstring></i></p>
 	<textarea name="disallowedips" id="disallowedips" rows="10" cols="30" />#$ips#</textarea> 
-
+	</xar:if>
 		#$hooks#
-
 	<br /><br />
 	<input type="submit" value="#$updatelabel#" align="middle" />
 </form>

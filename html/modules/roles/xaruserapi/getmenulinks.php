@@ -5,20 +5,21 @@ function roles_userapi_getmenulinks()
 
     // get the admin part of the menu
     $menulinks = xarModAPIFunc('roles','admin','getmenulinks');
-
+    if (xarModGetVar('roles', 'allowregistration')){
     // Security check
-    if (true) {
-        $menulinks[] = Array('url'   => xarModURL('roles',
-                                                  'user',
-                                                  'view'),
-                             'title' => xarML('View All Users'),
-                             'label' => xarML('Memberslist'));
-        if (xarUserIsLoggedIn()){
+        if (true) {
             $menulinks[] = Array('url'   => xarModURL('roles',
                                                       'user',
-                                                      'account'),
-                                 'title' => xarML('Your Custom Configuration'),
-                                 'label' => xarML('Your Account'));
+                                                      'view'),
+                                 'title' => xarML('View All Users'),
+                                 'label' => xarML('Memberslist'));
+            if (xarUserIsLoggedIn()){
+                $menulinks[] = Array('url'   => xarModURL('roles',
+                                                          'user',
+                                                          'account'),
+                                     'title' => xarML('Your Custom Configuration'),
+                                     'label' => xarML('Your Account'));
+            }
         }
         if (xarModGetVar('roles', 'showprivacy')){
             $menulinks[] = Array('url'   => xarModURL('roles',

@@ -26,6 +26,14 @@ function roles_user_register()
        return true;
     }
 
+    $allowregistration = xarModGetVar('roles', 'allowregistration');
+
+    if ($allowregistration != true) {
+        $msg = xarML('Registration has been suspended');
+        xarExceptionSet(XAR_USER_EXCEPTION, 'NO_PERMISSION', new DefaultUserException($msg));
+        return;
+    }
+
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML('New Account')));
 
     $phase = xarVarCleanFromInput('phase');
@@ -206,6 +214,12 @@ function roles_user_register()
 
             // Check password and set
             if (xarModGetVar('roles', 'chooseownpassword')) {
+                $minpasslegnth = xarModGetVar('roles', 'minpasslength');
+                if (strlen($pass2) < $minpasslegnth) {
+                    $invalid['pass1'] = xarML('Your password must be ' . $minpasslegnth . ' characters long.');
+                    $invalid['pass2'] = xarML('Your password must be ' . $minpasslegnth . ' characters long.');
+                }            
+                
                 if ((empty($pass1)) || (empty($pass2))) {
                     $invalid['pass2'] = xarML('You must enter the same password twice');
                 } elseif ($pass1 != $pass2) {

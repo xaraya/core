@@ -43,6 +43,10 @@ function roles_adminapi_update($args)
         return false;
     }
 
+    if (empty($valcode)) {
+        $valcode = '';
+    }
+
 //    if (!xarSecAuthAction(0, 'roles::Item', "$item[uname]::$uid", ACCESS_EDIT)) {
 //        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
 //        return;
@@ -56,19 +60,21 @@ function roles_adminapi_update($args)
     if (!empty($pass)){
         $cryptpass=md5($pass);
         $query = "UPDATE $rolesTable
-                SET xar_name =  '" . xarVarPrepForStore($name) . "',
-                    xar_uname = '" . xarVarPrepForStore($uname) . "',
-                    xar_email = '" . xarVarPrepForStore($email) . "',
-                    xar_pass = '" . xarVarPrepForStore($cryptpass) . "',
-                    xar_state = '" . xarVarPrepForStore($state) . "'
-                WHERE xar_uid = " . xarVarPrepForStore($uid);
+                SET xar_name    =  '" . xarVarPrepForStore($name) . "',
+                    xar_uname   = '" . xarVarPrepForStore($uname) . "',
+                    xar_email   = '" . xarVarPrepForStore($email) . "',
+                    xar_pass    = '" . xarVarPrepForStore($cryptpass) . "',
+                    xar_valcode = '" . xarVarPrepForStore($valcode) . "',
+                    xar_state   = '" . xarVarPrepForStore($state) . "'
+                WHERE xar_uid   = " . xarVarPrepForStore($uid);
     } else {
         $query = "UPDATE $rolesTable
-                SET xar_name =  '" . xarVarPrepForStore($name) . "',
-                    xar_uname = '" . xarVarPrepForStore($uname) . "',
-                    xar_email = '" . xarVarPrepForStore($email) . "',
-                    xar_state = '" . xarVarPrepForStore($state) . "'
-                WHERE xar_uid = " . xarVarPrepForStore($uid);
+                SET xar_name    =  '" . xarVarPrepForStore($name) . "',
+                    xar_uname   = '" . xarVarPrepForStore($uname) . "',
+                    xar_email   = '" . xarVarPrepForStore($email) . "',
+                    xar_valcode = '" . xarVarPrepForStore($valcode) . "',
+                    xar_state   = '" . xarVarPrepForStore($state) . "'
+                WHERE xar_uid   = " . xarVarPrepForStore($uid);
     }
 
     $result =& $dbconn->Execute($query);

@@ -175,6 +175,7 @@ function roles_activate()
     xarModSetVar('roles', 'welcomeemail', 'Your account is now active.  Thank you, and welcome to our community.');
     xarModSetVar('roles', 'rolesperpage', 20);
     xarModSetVar('roles', 'showtacs', 0);
+    xarModSetVar('roles', 'allowregistration', 1);
     xarModSetVar('roles', 'requirevalidation', 1);
     xarModSetVar('roles', 'defaultgroup', 'Users');
     xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');

@@ -23,11 +23,17 @@ function roles_user_main()
         }
     }
     elseif(xarSecurityCheck('ViewRoles',0)) {
-    */
+    */    
+    $allowregistration = xarModGetVar('roles', 'allowregistration');
+
         if (xarUserIsLoggedIn()) {
            xarResponseRedirect(xarModURL('roles',
                                          'user',
                                          'account'));
+        } elseif ($allowregistration != true) {
+            xarResponseRedirect(xarModURL('roles',
+                                          'user',
+                                          'showloginform'));
         } else {
             xarResponseRedirect(xarModURL('roles',
                                           'user',

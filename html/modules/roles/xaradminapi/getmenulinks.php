@@ -53,6 +53,14 @@ function roles_adminapi_getmenulinks()
                               'label' => xarML('Reminder Email'));
     }
 
+    if (xarSecurityCheck('AdminRole',0)) {
+        $menulinks[] = Array('url'   => xarModURL('roles',
+                                                  'admin',
+                                                  'validationemail'),
+                              'title' => xarML('Modify the validation email'),
+                              'label' => xarML('Validation Email'));
+    }
+
 // Security Check
     if (xarSecurityCheck('AdminRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',

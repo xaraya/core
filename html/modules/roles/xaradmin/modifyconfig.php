@@ -56,12 +56,14 @@ function roles_admin_modifyconfig()
             if (!xarVarFetch('shorturls', 'checkbox', $shorturls, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('showprivacy', 'checkbox', $showprivacy, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('chooseownpassword', 'checkbox', $chooseownpassword, false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('allowregistration', 'checkbox', $allowregistration, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('explicitapproval', 'checkbox', $explicitapproval, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('sendwelcomeemail', 'checkbox', $sendwelcomeemail, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('sendnotice', 'checkbox', $sendnotice, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('requirevalidation', 'checkbox', $requirevalidation, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('allowinvisible', 'checkbox', $allowinvisible, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('minage', 'str:1:3:', $minage, '13', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('minpasslegnth', 'int:1', $minpasslength, 5, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('defaultgroup', 'str:1', $defaultgroup, 'Users', XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('rolesperpage', 'str:1:4:', $rolesperpage, '20', XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('disallowedemails', 'str:1', $disallowedemails, '', XARVAR_NOT_REQUIRED)) return;
@@ -72,7 +74,9 @@ function roles_admin_modifyconfig()
             // Update module variables
             xarModSetVar('roles', 'showterms', $showterms);
             xarModSetVar('roles', 'showprivacy', $showprivacy);
+            xarModSetVar('roles', 'allowregistration', $allowregistration);
             xarModSetVar('roles', 'minage', $minage);
+            xarModSetVar('roles', 'minpasslength', $minpasslength);
             xarModSetVar('roles', 'defaultgroup', $defaultgroup);
             xarModSetVar('roles', 'chooseownpassword', $chooseownpassword);
             xarModSetVar('roles', 'sendnotice', $sendnotice);
