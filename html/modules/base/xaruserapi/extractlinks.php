@@ -62,7 +62,7 @@ function base_userapi_extractlinks($args)
                 continue;
             }
             // check if we're dealing with a local URL
-            if (preg_match("!://($server|localhost|127\.0\.0\.1)/!",$url)) {
+            if (preg_match("!^(https?|ftp)://($server|localhost|127\.0\.0\.1)/!",$url)) {
                 if (!empty($args['getlocal'])) {
                     $links[$url] = 1;
                 }
