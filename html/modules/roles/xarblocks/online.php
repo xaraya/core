@@ -55,10 +55,9 @@ function roles_onlineblock_display($blockinfo)
     $xartable =& xarDBGetTables();
     $sessioninfotable = $xartable['session_info'];
     $activetime = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
-    $sql = "SELECT COUNT(xar_uid)
+    $sql = "SELECT COUNT(DISTINCT xar_uid)
             FROM $sessioninfotable
-            WHERE xar_lastused > ? AND xar_uid > 2
-            GROUP BY xar_uid";
+            WHERE xar_lastused > ? AND xar_uid > 2";
     $result = $dbconn->Execute($sql, array($activetime));
     if (!$result) {return false;}
     list($args['numusers']) = $result->fields;
@@ -112,10 +111,9 @@ function roles_onlineblock_display($blockinfo)
     }
 
 
-    $query2 = "SELECT count( 1 )
+    $query2 = "SELECT COUNT(DISTINCT xar_ipaddr)
                FROM $sessioninfotable
-               WHERE xar_lastused > ? AND xar_uid = 2
-               GROUP BY xar_ipaddr";
+               WHERE xar_lastused > ? AND xar_uid = 2";
     $result2 = $dbconn->Execute($query2, array($activetime));
     if (!$result2) {return false;}
     list($args['numguests']) = $result2->fields;
