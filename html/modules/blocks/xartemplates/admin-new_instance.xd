@@ -10,7 +10,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>New Instance</xar:mlstring></h2>
 	<div style="margin: auto;">
-	<form action="#xarModURL('blocks', 'admin', 'create_instance')#"  method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded" />
+	<form action="#xarModURL('blocks', 'admin', 'create_instance')#"  method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded" >
 		<div style="clear: both; padding-top: 10px;">
 		<input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
 		<span style="float: left; width: 20%; text-align: right;">

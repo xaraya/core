@@ -18,7 +18,7 @@
 </xar:if>
 <div style="border: 1px solid #ccc; border-top : none;padding: 10px;">
 <br />
-<form method="post" action="#xarModURL('roles', 'admin', 'modifynotice')#" method="post" enctype="application/x-www-form-urlencoded" />
+<form method="post" action="#xarModURL('roles', 'admin', 'modifynotice')#" method="post" enctype="application/x-www-form-urlencoded" >
   <div>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="phase" id="phase" value="update" />

@@ -10,7 +10,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Modify Mail Configuration</xar:mlstring></h2><br />
 <div style="margin: auto;">
-<form method="post" action="#xarModUrl('mail', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded" />
+<form method="post" action="#xarModUrl('mail', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded" >
 
 		<div style="clear: both; padding-top: 10px;">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
