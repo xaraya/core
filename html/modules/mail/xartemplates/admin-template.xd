@@ -76,7 +76,7 @@
                         </span>
                     </span>
                     <span style="float: right; width: 78%; text-align: left;">
-                        <input type="text" name="subject" id="subject" size="80" value="#xarVarPrepForDisplay($subject)#"  maxlength="150" />
+                        <input type="text" name="subject" id="subject" size="50" value="#xarVarPrepForDisplay($subject)#"  maxlength="150" />
                     </span>
          </div>
          <div style="clear: both; padding-top: 10px;">
@@ -86,7 +86,7 @@
                         </span>
                     </span>
                     <span style="float: right; width: 78%; text-align: left;">
-                        <textarea name="message" id="message" rows="20" cols="80">#xarVarPrepForDisplay($message)#</textarea>
+                        <textarea name="message" id="message" rows="10" cols="50">#xarVarPrepForDisplay($message)#</textarea>
                     </span>
          </div>
          <div style="clear: both; padding-top: 10px;">

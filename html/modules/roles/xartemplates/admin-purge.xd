@@ -4,7 +4,8 @@
 <xar:set name="$statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
 <xar:set name="$stateactive">ROLES_STATE_ACTIVE</xar:set>
 <xar:set name="$statepending">ROLES_STATE_PENDING</xar:set>
-<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
+<xar:base-include-javascript module="base" filename="checkall.js" position="head" />
+<xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
 </xar:if>
 <xar:if condition="xarTplAddStyleLink('roles', 'privileges')">
 </xar:if>
@@ -12,17 +13,40 @@
      <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring>
      </span>
 </div>
-<br />
-<div id="tabnav">
-    <xar:if condition="$operation eq 'recall'">
-        <div><a href="#xarModURL('roles', 'admin', 'purge', array('operation' => 'recall'))#" class="active"><xar:mlstring>Recall Groups and Users</xar:mlstring></a></div>
-        <div><a href="#xarModURL('roles', 'admin', 'purge', array('operation' => 'purge'))#" ><xar:mlstring>Purge Users</xar:mlstring></a></div>
-    <xar:else />
-        <div><a href="#xarModURL('roles', 'admin', 'purge', array('operation' => 'recall'))#"><xar:mlstring>Recall Groups and Users</xar:mlstring></a></div>
-        <div><a href="#xarModURL('roles', 'admin', 'purge', array('operation' => 'purge'))#" class="active"><xar:mlstring>Purge Users</xar:mlstring></a></div>
-    </xar:if>
-</div>
-<div class="xar-mod-body">
+<div class="xar-mod-body"><h2><xar:mlstring>Recall / Purge</xar:mlstring></h2>
+    <div>
+        <dl class="xar-tabs">
+            <dt class="help">
+                <xar:mlstring>
+                    Actions
+                </xar:mlstring>
+                : 
+            </dt>
+            <xar:if condition="$operation eq 'recall'">
+                <dd class="active">
+                    <a href="#xarModURL('roles', 'admin', 'purge', array('operation' => 'recall'))#">
+                        <xar:mlstring>Recall Groups and Users</xar:mlstring>
+                    </a>
+                </dd>
+                <dd>
+                    <a href="#xarModURL('roles', 'admin', 'purge', array('operation' => 'purge'))#" >
+                        <xar:mlstring>Purge Users</xar:mlstring>
+                    </a>
+                </dd>
+            <xar:else />
+                <dd>
+                    <a href="#xarModURL('roles', 'admin', 'purge', array('operation' => 'recall'))#">
+                        <xar:mlstring>Recall Groups and Users</xar:mlstring>
+                    </a>
+                </dd>
+                <dd class="active">
+                    <a href="#xarModURL('roles', 'admin', 'purge', array('operation' => 'purge'))#">
+                        <xar:mlstring>Purge Users</xar:mlstring>
+                    </a>
+                </dd>
+            </xar:if>
+        </dl>
+    </div>
 <xar:if condition="$operation eq 'recall'">
     <div class="xar-mod-body"><h2><xar:mlstring>Recall Deleted Groups and Users</xar:mlstring></h2>
         <br />
@@ -184,7 +208,8 @@
     <h2><xar:mlstring>Purge Users</xar:mlstring></h2>
     <br />
     <div style="margin: auto;">
-    <form method="post" action="#xarModURL('roles', 'admin', 'purge')#" method="post" enctype="application/x-www-form-urlencoded" >
+    <form method="post" action="#xarModURL('roles', 'admin', 'purge')#" enctype="application/x-www-form-urlencoded" name="purge">
+
         <div>
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="operation" id="operation" value="purge" />
@@ -325,12 +350,23 @@
                </xar:if>
             </table>
         </div>
+    <span style="float: right">
+        <a href="javascript:xar_base_checkall(document.forms['purge'],true)" class="xar-sub">
+            <xar:mlstring>
+                Check All
+            </xar:mlstring>
+        </a>
+        
+        <a href="javascript:xar_base_checkall(document.forms['purge'],false)" class="xar-sub">
+            <xar:mlstring>
+                Uncheck All
+            </xar:mlstring>
+        </a>
+    </span>
     </form>
-    <br />
     <span class="xar-title">
           <xar:mlstring>Note: Purged users cannot be recalled. Groups and some special users cannot be purged.</xar:mlstring>
     </span>
     </div>
 </xar:if>
 </div>
-

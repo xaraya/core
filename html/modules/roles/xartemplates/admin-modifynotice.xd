@@ -6,15 +6,33 @@
         </a>&nbsp;&gt;&nbsp;
         <xar:mlstring>Modify notification options</xar:mlstring>
 </h2>
-<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
-<div id="tabnav">
-        <xar:set name="$tmptitle"><xar:mlstring>Send mail to groups, configure automatic notification or edit notification templates</xar:mlstring></xar:set>
-    <div class="help" title="#$tmptitle#"><xar:mlstring>Actions</xar:mlstring></div>
-    <div><a href="#xarModURL('roles', 'admin', 'createmail')#"><xar:mlstring>Send mail</xar:mlstring></a></div>
-    <div><a href="#xarModURL('roles', 'admin', 'modifyemail')#"><xar:mlstring>Templates</xar:mlstring></a></div>
-    <div><a href="#xarModURL('roles', 'admin', 'modifynotice')#" class="active"><xar:mlstring>Configure</xar:mlstring></a></div>
-</div>
-</xar:if>
+        <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+        <div>
+            <dl class="xar-tabs">
+                <dt class="help">
+                    <xar:mlstring>
+                        Actions
+                    </xar:mlstring>
+                    : 
+                </dt>
+                <dd>
+                    <a href="#xarModURL('roles', 'admin', 'createmail')#">
+                        <xar:mlstring>Send mail</xar:mlstring>
+                    </a>
+                </dd>
+                <dd>
+                    <a href="#xarModURL('roles', 'admin', 'modifyemail')#">
+                        <xar:mlstring>Templates</xar:mlstring>
+                    </a>
+                </dd>
+                <dd class="active">
+                    <a href="#xarModURL('roles', 'admin', 'modifynotice')#">
+                        <xar:mlstring>Configure</xar:mlstring>
+                    </a>
+                </dd>
+            </dl>
+        </div>
+        </xar:if>
 <div style="border: 1px solid #ccc; border-top : none;padding: 10px;">
 <br />
 <form method="post" action="#xarModURL('roles', 'admin', 'modifynotice')#" method="post" enctype="application/x-www-form-urlencoded" >

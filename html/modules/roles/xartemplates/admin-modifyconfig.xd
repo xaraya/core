@@ -1,75 +1,82 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
+<xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
 </xar:if>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Configuration</xar:mlstring></h2>
-<div id="tabnav">
-    <div class="help" title="Choose a set of configuration options"><xar:mlstring>Actions</xar:mlstring> :</div>
-    <xar:if condition="$tab eq 'general'">
-        <div>
-            <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'general'))#" class="active">
-                <xar:mlstring>General</xar:mlstring>
-            </a>
-        </div>    
-    <xar:else />
-        <div>
-            <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'general'))#">    
-                <xar:mlstring>General</xar:mlstring>
-            </a>
-        </div>    
-    </xar:if>
-    <xar:if condition="$tab eq 'registration'">
-        <div>
-            <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'registration'))#" class="active">
-                <xar:mlstring>Registration</xar:mlstring>
-            </a>
-        </div>    
-    <xar:else />
-        <div>
-            <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'registration'))#">    
-                <xar:mlstring>Registration</xar:mlstring>
-            </a>
-        </div>    
-    </xar:if>
-    <xar:if condition="$tab eq 'filtering'">
-        <div>
-            <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'filtering'))#" class="active">
-                <xar:mlstring>Filtering</xar:mlstring>
-            </a>
-        </div>    
-    <xar:else />
-        <div>
-            <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'filtering'))#">    
-                <xar:mlstring>Filtering</xar:mlstring>
-            </a>
-        </div>    
-    </xar:if>
-    <xar:if condition="$tab eq 'hooks'">
-        <div>
-            <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'hooks'))#" class="active">
-                <xar:mlstring>Hooks</xar:mlstring>
-            </a>
-        </div>    
-    <xar:else />
-        <div>
-            <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'hooks'))#">    
-                <xar:mlstring>Hooks</xar:mlstring>
-            </a>
-        </div>    
-    </xar:if>
-    <xar:if condition="$tab eq 'memberlist'">
-        <div>
-            <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'memberlist'))#" class="active">
-                <xar:mlstring>Member List</xar:mlstring>
-            </a>
-        </div>    
-    <xar:else />
-        <div>
-            <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'memberlist'))#">    
-                <xar:mlstring>Member List</xar:mlstring>
-            </a>
-        </div>    
-    </xar:if>
+    <div>
+        <dl class="xar-tabs">
+            <dt class="help">
+                <xar:mlstring>
+                    Actions
+                </xar:mlstring>
+                : 
+            </dt>
+            <xar:if condition="$tab eq 'general'">
+                <dd class="active">
+                    <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'general'))#">
+                        <xar:mlstring>General</xar:mlstring>
+                    </a>
+                </dd>    
+            <xar:else />
+                <dd>
+                    <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'general'))#">    
+                        <xar:mlstring>General</xar:mlstring>
+                    </a>
+                </dd>    
+            </xar:if>
+            <xar:if condition="$tab eq 'registration'">
+                <dd class="active">
+                    <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'registration'))#">
+                        <xar:mlstring>Registration</xar:mlstring>
+                    </a>
+                </dd>    
+            <xar:else />
+                <dd>
+                    <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'registration'))#">    
+                        <xar:mlstring>Registration</xar:mlstring>
+                    </a>
+                </dd>    
+            </xar:if>
+            <xar:if condition="$tab eq 'filtering'">
+                <dd class="active">
+                    <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'filtering'))#">
+                        <xar:mlstring>Filtering</xar:mlstring>
+                    </a>
+                </dd>    
+            <xar:else />
+                <dd>
+                    <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'filtering'))#">    
+                        <xar:mlstring>Filtering</xar:mlstring>
+                    </a>
+                </dd>    
+            </xar:if>
+            <xar:if condition="$tab eq 'hooks'">
+                <dd class="active">
+                    <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'hooks'))#">
+                        <xar:mlstring>Hooks</xar:mlstring>
+                    </a>
+                </dd>    
+            <xar:else />
+                <dd>
+                    <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'hooks'))#">    
+                        <xar:mlstring>Hooks</xar:mlstring>
+                    </a>
+                </dd>    
+            </xar:if>
+            <xar:if condition="$tab eq 'memberlist'">
+                <dd class="active">
+                    <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'memberlist'))#">
+                        <xar:mlstring>Member List</xar:mlstring>
+                    </a>
+                </dd>    
+            <xar:else />
+                <dd>
+                    <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'memberlist'))#">    
+                        <xar:mlstring>Member List</xar:mlstring>
+                    </a>
+                </dd>    
+            </xar:if>
+        </dl>
     </div>
     <div style="border: 1px solid #ccc; text-align: left; width: 100%; border-top: none; padding-left: 5px;">
     
@@ -324,7 +331,9 @@
         </xar:if>                
 
 <xar:comment> ----------------- Begin Member List Options ------------------- </xar:comment>
+    
     <xar:elseif condition="$tab eq 'memberlist'" />
+        <div>&nbsp;</div>
         <form method="post" action="#xarModURL('roles', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded" >
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="phase" id="phase" value="update" />

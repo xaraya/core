@@ -5,6 +5,7 @@
 <xar:set name="$stateactive">ROLES_STATE_ACTIVE</xar:set>
 <xar:set name="$statepending">ROLES_STATE_PENDING</xar:set>
 <xar:set name="$modstatus">xarSessionGetVar('statusmsg')</xar:set>
+<xar:base-include-javascript module="base" filename="checkall.js" position="head" />
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
 </div>
@@ -47,35 +48,50 @@
                 #$roletree#<br />
             </div>
         <xar:elseif condition="$selstyle eq '2'"/>
-            <xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
-            <div id="tabnav">
-                <div class="help" title="#xarML('Click on a group tab to display users from that group')#"><xar:mlstring>Groups</xar:mlstring> :</div>
-                <xar:if condition="$groupuid eq 0">
-                    <div>
-                        <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => 0, 'state' => $state, 'order' => $order, 'search' => $search))#" class="active">
-                            <xar:mlstring>All Users</xar:mlstring> (#$totalusers#)</a>
-                    </div>
-                <xar:else/>
-                    <div>
-                        <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => 0, 'state' => $state, 'order' => $order, 'search' => $search))#">
-                            <xar:mlstring>All Users </xar:mlstring> (#$totalusers#)</a>
-                    </div>
-                </xar:if>
-                <xar:set name="$prevgroup">""</xar:set>
-                <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
-                    <xar:if condition="$prevgroup ne $groups[$i]['name']">
-                        <xar:if condition="$groupuid eq $groups[$i]['uid']">
-                            <div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $groups[$i]['uid'], 'state' => $state, 'order' => $order, 'search' => $search))#" title="#xarML('Display the users in this group')#" class="active">#xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)</a></div>
-                        <xar:else/>
-                            <div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $groups[$i]['uid'], 'state' => $state, 'order' => $order, 'search' => $search))#" title="#xarML('Display the users in this group')#">#xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)</a></div>
-                        </xar:if>
+            <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+            <div>
+                <dl class="xar-tabs">
+                    <dt class="help" title="#xarML('Click on a group tab to display users from that group')#">
+                        <xar:mlstring>
+                            Groups
+                        </xar:mlstring>
+                        : 
+                    </dt>
+                    <xar:if condition="$groupuid eq 0">
+                        <dd class="active">
+                            <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => 0, 'state' => $state, 'order' => $order, 'search' => $search))#">
+                                <xar:mlstring>All Users</xar:mlstring> (#$totalusers#)</a>
+                        </dd>
+                    <xar:else/>
+                        <dd>
+                            <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => 0, 'state' => $state, 'order' => $order, 'search' => $search))#">
+                                <xar:mlstring>All Users </xar:mlstring> (#$totalusers#)</a>
+                        </dd>
                     </xar:if>
-                    <xar:set name="$prevgroup">#xarVarPrepForDisplay($groups[$i]['name'])#</xar:set>
-                </xar:for>
+                    <xar:set name="$prevgroup">""</xar:set>
+                    <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
+                        <xar:if condition="$prevgroup ne $groups[$i]['name']">
+                            <xar:if condition="$groupuid eq $groups[$i]['uid']">
+                                <dd class="active">
+                                    <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $groups[$i]['uid'], 'state' => $state, 'order' => $order, 'search' => $search))#" title="#xarML('Display the users in this group')#">
+                                        #xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)
+                                    </a>
+                                </dd>
+                            <xar:else/>
+                                <dd>
+                                    <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $groups[$i]['uid'], 'state' => $state, 'order' => $order, 'search' => $search))#" title="#xarML('Display the users in this group')#">
+                                        #xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)
+                                    </a>
+                                </dd>
+                            </xar:if>
+                        </xar:if>
+                        <xar:set name="$prevgroup">#xarVarPrepForDisplay($groups[$i]['name'])#</xar:set>
+                    </xar:for>
+                </dl>
             </div>
-            <br />
             </xar:if>
         </xar:if>
+        <div>&nbsp;</div>
         <form method="post" action="#xarModUrl('roles', 'admin', 'showusers')#">
         <div class="xar-norm-outline" style="padding: 0px;">
             <xar:comment> Module List Sort and Filter Controls table </xar:comment>
@@ -210,7 +226,7 @@
         <div class="xar-norm-outline" style="margin-top:1px;">
             <table style="width:100%; border-collapse:collapse; border-spacing:1px; padding:0;">
                 <tr>
-                <form method="post" action="#xarModURL('roles','admin','updatestate')#">
+                <form method="post" action="#xarModURL('roles','admin','updatestate')#" name="state">
                     <td colspan="6" style="text-align:right;">
                         <label for="status">
                             <xar:mlstring>Change the state of selected users</xar:mlstring>
@@ -323,13 +339,27 @@
                 <input type="hidden" name="order" id="order" value="#$order#"/>
                 <input type="hidden" name="search" id="search" value="#xarVarPrepForDisplay($search)#"/>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                </form>
+
                 <!-- always show the new user link -->
                 <tr class="xar-norm">
                     <td colspan="7">
+                        <span style="float: right">
+                            <a href="javascript:xar_base_checkall(document.forms['state'],true)" class="xar-sub">
+                                <xar:mlstring>
+                                    Check All
+                                </xar:mlstring>
+                            </a>
+                            
+                            <a href="javascript:xar_base_checkall(document.forms['state'],false)" class="xar-sub">
+                                <xar:mlstring>
+                                    Uncheck All
+                                </xar:mlstring>
+                            </a>
+                        </span>
                         <a href="#xarModURL('roles', 'admin', 'newrole', array('ptype' => 0, 'pparentid' => $groupuid))#" title="#xarML('Add a new user')#">
                             <xar:mlstring>Add a New User to this Group</xar:mlstring>
                         </a>
+                    </form>
                     </td>
                 </tr>
                 <!-- if there is a pager show it in the last row -->

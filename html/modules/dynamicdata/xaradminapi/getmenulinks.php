@@ -39,8 +39,8 @@ function dynamicdata_adminapi_getmenulinks()
     }
     if (xarSecurityCheck('AdminDynamicData',0)) {
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
-                                                  'util',
-                                                  'main'),
+                                                  'admin',
+                                                  'utilities'),
                               'title' => xarML('Import/export and other utilities'),
                               'label' => xarML('Utilities'));
     }

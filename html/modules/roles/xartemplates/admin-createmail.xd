@@ -17,15 +17,34 @@
             </a>&nbsp;&gt;&nbsp;
             <xar:mlstring>Send mail to users/groups</xar:mlstring>
         </h2>
-        <xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
-        <div id="tabnav">
-            <div class="help" title="#xarML('Send mail to groups, configure automatic notification or edit notification templates')#"><xar:mlstring>Actions</xar:mlstring></div>
-            <div><a href="#xarModURL('roles', 'admin', 'createmail')#" class="active"><xar:mlstring>Send mail</xar:mlstring></a></div>
-            <div><a href="#xarModURL('roles', 'admin', 'modifyemail')#"><xar:mlstring>Templates</xar:mlstring></a></div>
-            <div><a href="#xarModURL('roles', 'admin', 'modifynotice')#"><xar:mlstring>Configure</xar:mlstring></a></div>
+        <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+        <div>
+            <dl class="xar-tabs">
+                <dt class="help">
+                    <xar:mlstring>
+                        Actions
+                    </xar:mlstring>
+                    : 
+                </dt>
+                <dd class="active">
+                    <a href="#xarModURL('roles', 'admin', 'createmail')#">
+                        <xar:mlstring>Send mail</xar:mlstring>
+                    </a>
+                </dd>
+                <dd>
+                    <a href="#xarModURL('roles', 'admin', 'modifyemail')#">
+                        <xar:mlstring>Templates</xar:mlstring>
+                    </a>
+                </dd>
+                <dd>
+                    <a href="#xarModURL('roles', 'admin', 'modifynotice')#">
+                        <xar:mlstring>Configure</xar:mlstring>
+                    </a>
+                </dd>
+            </dl>
         </div>
         </xar:if>
-        <br />
+        <div>&nbsp;</div>
         <form method="post" action="#xarModUrl('roles', 'admin', 'createmail')#">
         <input type="hidden" name="q" id="q" value="new"/>
         <div class="xar-norm-outline" style="padding: 0px;">
@@ -313,7 +332,7 @@
                 </span>
                 </span>
                 <span style="float: right; width: 78%; text-align: left;">
-                <input type="text" name="subject" id="subject" size="80" value="#xarVarPrepForDisplay($subject)#"  maxlength="150" />
+                <input type="text" name="subject" id="subject" size="50" value="#xarVarPrepForDisplay($subject)#"  maxlength="150" />
                 </span>
              </div>
              <div style="clear: both; padding-top: 10px;">
@@ -323,7 +342,7 @@
                 </span>
                 </span>
                 <span style="float: right; width: 78%; text-align: left;">
-                <textarea name="message" id="message" rows="20" cols="80">#xarVarPrepForDisplay($message)#</textarea>
+                <textarea name="message" id="message" rows="20" cols="50">#xarVarPrepForDisplay($message)#</textarea>
                 </span>
              </div>
              <div style="clear: both; padding-top: 10px;">
