@@ -504,3 +504,26 @@ abbr, acronym, .help {
     border-bottom: 1px dotted #999;
     cursor: help;
 }
+
+/*  EXPERIMENTAL RULES - keep them near the bottom!!
+    some of these rules may eventually be propagated to the core required set
+    because they are essentially an attempt to eradicate inline styles in templates */
+
+.xar-noborder { border:0 none;}
+
+.xar-fullwidth { width: 99.9%; }
+.xar-halfwidth { width: 49%; }
+.xar-thirdwidth { width: 33%; }
+.xar-quarterwidth { width: 24%; }
+.xar-threequarterswidth { width: 75%; }
+
+.xar-fullwidth, .xar-halfwidth, .xar-thirdwidth, .xar-quarterwidth {
+    padding: 0;
+    margin: auto 0;
+}
+
+.xar-aligncenter { text-align: center; }
+.xar-alignleft { text-align: left; }
+.xar-alignright { text-align: right; }
+
+.xar-standard-box-padding { padding: 0 1em 1em 1em; }
