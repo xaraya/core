@@ -74,74 +74,92 @@ function adminpanels_adminmenublock_display($blockinfo){
     
     // Sort Order, Status and Links Display preparation
     $menustyle = xarModGetVar('adminpanels','menustyle');
-    if($menustyle == 'byname'){
-        // sort by name
-        foreach($mods as $mod){
-            $label = $mod['name'];
-            $link = xarModURL($mod['name'] ,'admin', 'main', array());
-            // depending on which module is currently loaded we display accordingly
-            if($label == $thismodname && $thismodtype == 'admin'){
-                    $adminmods[] = array('label' => $label, 'link' => '', 'marker' => $marker);
-            }else{
-                $adminmods[] = array('label' => $label, 'link' => $link, 'marker' => '');
-            }
-        }
-        // prepare the data for template(s)
-        $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
-        $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
-        // this should do for now
-        
-    }else if ($menustyle == 'bycat'){
-        // sort by categories
-        xarModAPILoad('adminpanels', 'admin');
-        // check if we need to update the table
-        xarModAPIFunc('adminpanels', 'admin', 'updatemenudb');
-        
-        $catmods = xarModAPIFunc('adminpanels', 'admin', 'buildbycat');
-        foreach($catmods as $mod){
-            $label = $mod;
-            $link = xarModURL($mod ,'admin', 'main', array());
-            // depending on which module is currently loaded we display accordingly
-            // also we are treating category lables in ML fasion
-            if($label == $thismodname && $thismodtype == 'admin'){
-                $adminmods[] = array('label' => $label, 'link' => '', 'marker' => $marker);
-            }elseif($label == 'Global'){
-                $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
-            }elseif($label == 'Content'){
-                $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
-            }elseif($label == 'Users & Groups'){
-                $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
-            }elseif($label == 'Miscellaneous'){
-                $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
-            }else{
-                $adminmods[] = array('label' => $label, 'link' => $link, 'marker' => '');
-            }
-        }
-        // prepare the data for template(s)
-        $menustyle = xarVarPrepForDisplay(xarML('[by category]'));
-        $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
-        
-    }else if ($menustyle == 'byweight'){
-        // sort by weight
-        xarModAPILoad('adminpanels', 'admin');
-        $data = xarModAPIFunc('adminpanels', 'admin', 'buildbyweight');
-        
-        $adminmods = 'not implemented';
-        // prepare the data for template(s)
-        $menustyle = xarVarPrepForDisplay(xarML('[by weight]'));
-        $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
-    }else if ($menustyle == 'bygroup'){
-        // sort by group
-        xarModAPILoad('adminpanels', 'admin');
-        $data = xarModAPIFunc('adminpanels', 'admin', 'buildbygroup');
-        
-        $adminmods = 'not implemented';
-        // prepare the data for template(s)
-        $menustyle = xarVarPrepForDisplay(xarML('[by group]'));
-        $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
+    switch(strtolower($menustyle)) {
+        case 'byname':
+                // sort by name
+                foreach($mods as $mod){
+                    $label = $mod['name'];
+                    $link = xarModURL($mod['name'] ,'admin', 'main', array());
+                    // depending on which module is currently loaded we display accordingly
+                    if($label == $thismodname && $thismodtype == 'admin'){
+                            $adminmods[] = array('label' => $label, 'link' => '', 'marker' => $marker);
+                    }else{
+                        $adminmods[] = array('label' => $label, 'link' => $link, 'marker' => '');
+                    }
+                }
+                // prepare the data for template(s)
+                $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
+                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
+                // this should do for now
+                break;
+
+        default:
+        case 'bycat':
+                // sort by categories
+                xarModAPILoad('adminpanels', 'admin');
+                // check if we need to update the table
+                xarModAPIFunc('adminpanels', 'admin', 'updatemenudb');
+
+                $catmods = xarModAPIFunc('adminpanels', 'admin', 'buildbycat');
+                foreach($catmods as $mod){
+                    $label = $mod;
+                    $link = xarModURL($mod ,'admin', 'main', array());
+                    // depending on which module is currently loaded we display accordingly
+                    // also we are treating category lables in ML fasion
+                    if($label == $thismodname && $thismodtype == 'admin'){
+                        $adminmods[] = array('label' => $label, 'link' => '', 'marker' => $marker);
+                    } else {
+                        switch (strtolower($label)) {
+                            case 'global':
+                                    $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
+                                    break;
+                            case 'content':
+                                    $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
+                                    break;
+                            case 'users & groups':
+                                    $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
+                                    break;
+                            case 'miscellaneous':
+                                    $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
+                                    break;
+                            default:
+                                    $adminmods[] = array('label' => $label, 'link' => $link, 'marker' => '');
+                                    break;
+
+                        }
+                    }
+                }
+                // prepare the data for template(s)
+                $menustyle = xarVarPrepForDisplay(xarML('[by category]'));
+                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
+                break;
+
+        case 'byweight':
+                // sort by weight
+                xarModAPILoad('adminpanels', 'admin');
+                $data = xarModAPIFunc('adminpanels', 'admin', 'buildbyweight');
+
+                $adminmods = 'not implemented';
+                // prepare the data for template(s)
+                $menustyle = xarVarPrepForDisplay(xarML('[by weight]'));
+                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
+                break;
+
+        case 'bygroup':
+                // sort by group
+                xarModAPILoad('adminpanels', 'admin');
+                $data = xarModAPIFunc('adminpanels', 'admin', 'buildbygroup');
+
+                $adminmods = 'not implemented';
+                // prepare the data for template(s)
+                $menustyle = xarVarPrepForDisplay(xarML('[by group]'));
+                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
+                break;
+
     }
+
     // default view is by categories
-    
+
     // Populate block info and pass to BlockLayout.
     $blockinfo['content'] = $data;
     return $blockinfo;
