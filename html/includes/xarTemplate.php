@@ -682,13 +682,38 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
                        new SystemException($msg));
         return;
     }
+
+    if (!isset($GLOBALS['xarTpl_showTemplateFilenames'])) {
+        // CHECKME: not sure if this is needed, e.g. during installation
+        if (function_exists('xarModGetVar')){
+            $showtemplates = xarModGetVar('themes', 'ShowTemplates');
+            if (!empty($showtemplates)) {
+                $GLOBALS['xarTpl_showTemplateFilenames'] = 1;
+            } else {
+                $GLOBALS['xarTpl_showTemplateFilenames'] = 0;
+            }
+        } else {
+            $GLOBALS['xarTpl_showTemplateFilenames'] = 0;
+        }
+    }
     
     // Start output buffering
     ob_start();
-    
+
+// TODO: check for <?xml> header stuff
+    // optionally show template filenames
+    if ($GLOBALS['xarTpl_showTemplateFilenames']) {
+        echo "<!-- start $sourceFileName -->";
+    }
+
     // Load cached template file
     $res = include $cachedFileName;
-    
+
+    // optionally show template filenames
+    if ($GLOBALS['xarTpl_showTemplateFilenames']) {
+        echo "<!-- end $sourceFileName -->";
+    }
+
     // Fetch output and clean buffer
     $output = ob_get_contents();
     ob_end_clean();

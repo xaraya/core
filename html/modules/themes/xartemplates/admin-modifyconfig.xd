@@ -68,6 +68,19 @@
                         <textarea name="footer" id="footer" cols="60" rows="5" wrap="virtual" class="xar-norm">#xarModGetVar('themes', 'SiteFooter')#</textarea>
                     </td>
                 </tr>
+                <tr align="left" valign="top">
+                    <td>
+                        <xar:mlstring>Show template filenames</xar:mlstring><br />
+                        <xar:mlstring>in HTML comments</xar:mlstring>
+                    </td>
+                    <td>
+                        <xar:if condition="xarModGetVar('themes', 'ShowTemplates')">
+                            <input type="checkbox" name="showtemplates" id="showtemplates" value="1" checked="checked" />
+                        <xar:else />
+                            <input type="checkbox" name="showtemplates" id="showtemplates" value="1" />
+                        </xar:if>
+                    </td>
+                </tr>
             </table>
             <br />
             <input type="submit" value="#$submitbutton#" />
