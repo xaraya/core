@@ -70,8 +70,9 @@ function roles_userapi_decode_shorturl($params)
         return array('showloginform', $args);
 
     } elseif (preg_match('/^account/i',$params[1])) {
-        // something that starts with 'list' is probably for the view function
-        // Note : make sure your encoding/decoding is consistent ! :-)
+        if (!empty($params[2]) && preg_match('/^(\w+)/i',$params[2],$matches)) {
+            $args['moduleload'] = $matches[1];
+        }
         return array('account', $args);
 
     } elseif (preg_match('/^terms/i',$params[1])) {

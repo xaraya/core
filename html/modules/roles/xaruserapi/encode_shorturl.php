@@ -62,7 +62,9 @@ function roles_userapi_encode_shorturl($args)
 
     } elseif ($func == 'account') {
         $path = '/' . $module . '/account';
-
+        if(!empty($moduleload)) {
+            $path = $path . '/' . $moduleload;
+        }
     } elseif ($func == 'terms') {
         $path = '/' . $module . '/terms';
 
