@@ -457,8 +457,11 @@ function dynamicdata_init()
     /**
      * Register blocks
      */
-// TODO ?
-//    xarBlockTypeRegister('dynamicdata', 'form');
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'register_block_type',
+                       array('modName'  => 'dynamicdata',
+                             'blockType'=> 'form'))) return;
 
     /**
      * Register hooks
@@ -814,7 +817,11 @@ function dynamicdata_delete()
     /**
      * Unregister blocks
      */
-    // xarBlockTypeUnregister('dynamicdata', 'form');
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'unregister_block_type',
+                       array('modName'  => 'dynamicdata',
+                             'blockType'=> 'form'))) return;
 
     /**
      * Unregister hooks

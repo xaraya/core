@@ -31,7 +31,7 @@ class Dynamic_Select_Property extends Dynamic_Property
 
             // if the validation field starts with xarModAPIFunc, we'll assume that this is
             // a function call that returns an array of names, or an array of id => name
-            if (preg_match('/^xarModAPIFunc/',$this->validation)) {
+            if (preg_match('/^xarModAPIFunc/i',$this->validation)) {
                 eval('$options = ' . $this->validation .';');
                 if (isset($options) && count($options) > 0) {
                     foreach ($options as $id => $name) {

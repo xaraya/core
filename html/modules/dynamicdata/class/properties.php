@@ -39,6 +39,8 @@ class Dynamic_Property_Master
 
         $dynamicprop = $xartable['dynamic_properties'];
 
+        $bindvars = array();
+        $bindvars = array();
         $query = "SELECT xar_prop_name,
                          xar_prop_label,
                          xar_prop_type,
@@ -50,17 +52,19 @@ class Dynamic_Property_Master
                          xar_prop_validation
                   FROM $dynamicprop ";
         if (isset($args['objectid'])) {
-            $query .= " WHERE xar_prop_objectid = " . xarVarPrepForStore($args['objectid']);
+            $query .= " WHERE xar_prop_objectid = ?";
+            $bindvars[] = $args['objectid'];
         } else {
-            $query .= " WHERE xar_prop_moduleid = " . xarVarPrepForStore($args['moduleid']) . "
-                          AND xar_prop_itemtype = " . xarVarPrepForStore($args['itemtype']);
+            $query .= " WHERE xar_prop_moduleid = ?
+                          AND xar_prop_itemtype = ?";
+            $bindvars[] = $args['moduleid']; $bindvars[] = $args['itemtype'];
         }
         if (empty($args['allprops'])) {
             $query .= " AND xar_prop_status > 0 ";
         }
         $query .= " ORDER BY xar_prop_order ASC, xar_prop_id ASC";
 
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,$bindvars);
 
         if (!$result) return;
 
@@ -133,7 +137,8 @@ class Dynamic_Property_Master
      */
     function &getProperty($args)
     {
-        if (!is_numeric($args['type'])) {
+        if (!is_numeric($args['type'])) 
+        {
             $proptypes = Dynamic_Property_Master::getPropertyTypes();
             if (!isset($proptypes)) {
                 $proptypes = array();
@@ -146,26 +151,24 @@ class Dynamic_Property_Master
             }
         } else {
             $proptypes = Dynamic_Property_Master::getPropertyTypes();
-		}
+        }
 
-		if( isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']]) )
-		{
-			$propertyInfo  = $proptypes[$args['type']];
-			$propertyClass = $propertyInfo['propertyClass'];
-			require_once 'includes/properties/'.$propertyClass.'.php';
+        if( isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']]) )
+        {
+            $propertyInfo  = $proptypes[$args['type']];
+            $propertyClass = $propertyInfo['propertyClass'];
+            require_once 'includes/properties/'.$propertyClass.'.php';
 			
-			if( isset($propertyInfo['args']) && ($propertyInfo['args'] != '') )
-			{
-				$baseArgs = unserialize($propertyInfo['args']);
-				$args = array_merge($baseArgs, $args);
-			}
+            if( isset($propertyInfo['args']) && ($propertyInfo['args'] != '') )
+            {
+                $baseArgs = unserialize($propertyInfo['args']);
+                $args = array_merge($baseArgs, $args);
+            }
 			
-			$property = new $propertyClass($args);
-
-		} else {
-			echo "Using default?";
-			$property = new Dynamic_Property($args);
-		}
+            $property = new $propertyClass($args);
+        } else {
+	    $property = new Dynamic_Property($args);
+        }
 		
         return $property;
     }
@@ -203,7 +206,7 @@ class Dynamic_Property_Master
      */
     function getPropertyTypes()
     {
-		$proptypes = xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush'=>false));
+        $proptypes = xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush'=>false));
 		
     // TODO: yes :)
     /*
@@ -272,7 +275,17 @@ class Dynamic_Property
             }
         }
         if (!isset($args['value'])) {
-           $this->value = $this->default;
+            // if the default field looks like xar<something>(...), we'll assume that this is
+            // a function call that returns some dynamic default value
+            if (!empty($this->default) && preg_match('/^xar\w+\(.*\)$/',$this->default)) {
+                eval('$value = ' . $this->default .';');
+                if (isset($value)) {
+                    $this->default = $value;
+                } else {
+                    $this->default = null;
+                }
+            }
+            $this->value = $this->default;
         }
     }
 
