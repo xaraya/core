@@ -215,7 +215,7 @@
         <xar:foreach in="$masks" value="$mask">
         <tr>
             <td width="150">
-                <a href="&xar-modurl-roles-admin-testprivileges;&uid=&xar-var-uid;&name=#$mask->getName()#&test=true">                
+                <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=&xar-var-uid;&amp;name=#$mask->getName()#&amp;test=true">                
                     #$mask->getName()#
                 </a>
             </td>

@@ -17,7 +17,7 @@
         <td><input type="text" name="uname" id="uname" value="#xarVarPrepForDisplay($uname)#" /></td>
     </tr>
     <tr>
-        <td><label for="valcode"><xar:mlstring>Validation Code</xar:mlstring>:<label></td>
+        <td><label for="valcode"><xar:mlstring>Validation Code</xar:mlstring>:</label></td>
         <td><input type="text" name="valcode" id="valcode" value="" /></td>
     </tr>
     <tr>

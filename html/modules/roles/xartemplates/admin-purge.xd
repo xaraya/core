@@ -159,10 +159,11 @@
                      </xar:if>
                      <xar:loop name="$recallroles">
                      <xar:if condition="$loop:item['unique'] eq 1">
-                     <tr class="xar-norm-outline" style="text-align: left; padding-left: .5em; width: 5em;border-width: 0px 0px 1px 0px;border-style: solid;">
-                         <xar:else />
-                     <tr class="xar-partial" style="text-align: left; padding-left: .5em; width: 5em;border-width: 0px 0px 1px 0px;border-style: solid;">
+                        <xar:set name="recallclass">'xar-norm-outline'</xar:set>
+                     <xar:else/>
+                        <xar:set name="recallclass">'xar-partial'</xar:set>
                      </xar:if>
+                     <tr class="#$recallclass#" style="text-align: left; padding-left: .5em; width: 5em;border-width: 0px 0px 1px 0px;border-style: solid;">
                          <td>
                              <b>#$loop:item['name']#</b>
                          </td>

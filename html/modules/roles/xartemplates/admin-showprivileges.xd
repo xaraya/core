@@ -123,13 +123,15 @@
         </tr>
     <xar:else />
         <xar:loop name="$inherited">
+        
         <xar:if condition="$loop:item['status'] eq 1">
-            <tr class="xar-overridden">
+            <xar:set name="priv_class">'xar-overridden'</xar:set>
         <xar:elseif condition="$loop:item['status'] eq 2" />
-            <tr class="xar-partial">
+            <xar:set name="priv_class">'xar-partial'</xar:set>
         <xar:else />
-            <tr class="xar-norm">
+            <xar:set name="priv_class">'xar-norm'</xar:set>
         </xar:if>
+          <tr class="#$priv_class#">
             <td width="150">
                 <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['privid']#">#xarVarPrepForDisplay($loop:item['name'])#</a>
             </td>
@@ -200,12 +202,13 @@
     <xar:else />
         <xar:loop name="$privileges">
         <xar:if condition="$loop:item['status'] eq 1">
-            <tr class="xar-overridden">
+            <xar:set name="priv_class">'xar-overridden'</xar:set>
         <xar:elseif condition="$loop:item['status'] eq 2" />
-            <tr class="xar-partial">
+            <xar:set name="priv_class">'xar-partial'</xar:set>
         <xar:else />
-            <tr class="xar-norm">
+            <xar:set name="priv_class">'xar-norm'</xar:set>
         </xar:if>
+        <tr class="#$priv_class#">
             <td width="150">
                 <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['privid']#">#xarVarPrepForDisplay($loop:item['name'])#</a>
             </td>
@@ -260,7 +263,7 @@
                 <td>
                     <select name="privid" id="privid">
                         <xar:loop name="$allprivileges">
-                            <option value="#$loop:item['pid']#">#xarVarPrepForDisplay($loop:item['name'])#
+                            <option value="#$loop:item['pid']#">#xarVarPrepForDisplay($loop:item['name'])#</option>
                         </xar:loop>
                     </select>
                 </td>
@@ -269,6 +272,7 @@
                 <td colspan="2" style="text-align: center"><br />
                     <input type="submit" value="#$addlabel#" tabindex="2" />
                 </td>
+            </tr>
         </table>            
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
         <input type="hidden" name="roleid" id="roleid" value="#$roleid#" />

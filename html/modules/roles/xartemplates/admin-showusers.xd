@@ -217,14 +217,15 @@
                     <p class="xar-accent" style="margin:.25em;text-align:center;">
                         #$modstatus#
                     </p>
+                </p>    
             </div>
         </xar:if>
         </form>
         <xar:comment> the Roles Lists table-based styles (borrow from the Modules list)</xar:comment>
         <div class="xar-norm-outline xar-fullwidth" style="margin-top:1px;">
             <table class="xar-fullwidth" style="width:100%; border-collapse:collapse; border-spacing:1px; padding:0;">
-                <tr>
                 <form method="post" action="#xarModURL('roles','admin','updatestate')#" name="state">
+                 <tr>
                     <td colspan="6" style="text-align:right;">
                         <label for="status">
                             <xar:mlstring>Change the state of selected users</xar:mlstring>
@@ -350,9 +351,9 @@
                         <a href="#xarModURL('roles', 'admin', 'newrole', array('ptype' => 0, 'pparentid' => $groupuid))#" title="#xarML('Add a new user')#">
                             <xar:mlstring>Add a New User to this Group</xar:mlstring>
                         </a>
-                    </form>
                     </td>
                 </tr>
+                </form>
                 <!-- if there is a pager show it in the last row -->
                 <xar:if condition="!empty($pager)">
                     <tr class="xar-norm" style="text-align: center;">

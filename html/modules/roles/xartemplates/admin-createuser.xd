@@ -1,16 +1,17 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Create User</xar:mlstring></h2>
-<div style="margin: auto;">
+
+<div class="xar-mod-body">
+  <h2><xar:mlstring>Create User</xar:mlstring></h2>
+  <div style="margin: auto;">
     <p>
-        <xar:if condition="$uid eq -1">
-            <xar:mlstring>Passwords do not match.</xar:mlstring>
-        <xar:elseif condition="$uid eq 0" />
-            <xar:mlstring>User could not be created. Most likely the username already exists.</xar:mlstring>.
-        <xar:else />
-            <xar:mlstring>User successfully created with UID</xar:mlstring> #$uid#    
-        </xar:if>
+      <xar:if condition="$uid eq -1">
+        <xar:mlstring>Passwords do not match.</xar:mlstring>
+      <xar:elseif condition="$uid eq 0" />
+        <xar:mlstring>User could not be created. Most likely the username already exists.</xar:mlstring>.
+      <xar:else />
+        <xar:mlstring>User successfully created with UID</xar:mlstring> #$uid#    
+      </xar:if>
     </p>
-</center>
-</div>
+  </div>
 </div>

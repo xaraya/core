@@ -37,8 +37,8 @@
     <h3 id="intro"><xar:mlstring>Introduction</xar:mlstring></h3>
         <p><xar:mlstring>We take your right to privacy seriously and want you to feel comfortable using our web site. This Privacy Policy deals with personally identifiable information (referred to as "Data" below) that may be collected by us on our site. This Policy does not apply to other entities that we do not own or control or persons that are not our employees, agents or within our control.</xar:mlstring></p>
         <xar:if condition="xarModGetVar('roles', 'showterms')">
-            <p><xar:mlstring>Please take time to read our</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a>.
-        </xar:if></p>
+            <p><xar:mlstring>Please take time to read our</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a>.</p>
+        </xar:if>
     
     <xar:set name="curnum">++$curnum</xar:set>
     <h3 id="collection">#$curnum#.&nbsp;<xar:mlstring>Collection of Data</xar:mlstring></h3>
@@ -80,9 +80,9 @@
         <p><xar:mlstring>Content or other data that you may have provided to us and that is not contained within your user account, such as posts that may appear within our forums, may continue to remain on our site at our discretion even though your user account is deleted.</xar:mlstring></p>
         <p><xar:mlstring>We take your right to privacy seriously and want you to feel comfortable using our web site. This Privacy Policy deals with personally identifiable information (referred to as "Data" below) that may be collected by us on our site. This Policy does not apply to other entities that we do not own or control or persons that are not our employees, agents or within our control.</xar:mlstring>
         <xar:if condition="xarModGetVar('roles', 'showterms')">
-            <xar:mlstring>Please see our</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring> for more information.</xar:mlstring></p>
+            <xar:mlstring>Please see our</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring> for more information.</xar:mlstring>
         </xar:if>
-
+        </p>
     <xar:set name="curnum">++$curnum</xar:set>
     <h3 id="changes">#$curnum#.&nbsp;
         <xar:mlstring>Changes to this Privacy Policy</xar:mlstring></h3>

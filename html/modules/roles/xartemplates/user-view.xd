@@ -94,10 +94,12 @@
             </tr>
             <xar:loop name="$items">
                 <xar:if condition="(($loop:index + 1) % 2)">
-                    <tr class="xar-norm">
-                <xar:else />
-                    <tr class="xar-accent">
+                    <xar:set name="item_class">'xar-norm'</xar:set>
+                <xar:else/>
+                    <xar:set name="item_class">'xar-accent'</xar:set>
                 </xar:if>
+                
+                <tr class="#$item_class#">
                 <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
                     <td>
                         <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>

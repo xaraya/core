@@ -3,10 +3,13 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Registration</xar:mlstring></h2>
 <div style="margin: auto;">
 <xar:if condition="isset($withupload) AND $withupload">
-    <form method="post" name="post" id="post" action="#xarModURL('roles', 'user', 'register')#" enctype="multipart/form-data">
-<xar:else />
-    <form method="post" name="post" id="post" action="#xarModURL('roles', 'user', 'register')#">
+    <xar:set name="enc_type">'multipart/form-data'</xar:set>
+<xar:else/>
+    <xar:set nmame="enc_type">'application/x-www-form-urlencoded'</xar:set>
 </xar:if>
+
+<form method="post" name="post" id="post" action="#xarModURL('roles', 'user', 'register')#" enctype="#$enc_type#">
+
 <div>
 <table border="0" cellpadding="2" cellspacing="0">
     <tr>
@@ -36,7 +39,7 @@
     <xar:if condition="xarModGetVar('roles', 'chooseownpassword')" >
         <tr>
             <td><label for="pass1"><xar:mlstring>Password</xar:mlstring>:</label></td>
-            <td><input type="password" name="pass1" id="pass1" value="#xarVarPrepForDisplay($values['pass1'])#"" size="25" maxlength="40" />
+            <td><input type="password" name="pass1" id="pass1" value="#xarVarPrepForDisplay($values['pass1'])#" size="25" maxlength="40" />
                     <xar:if condition="!empty($invalid['pass1'])">
                         <span class="xar-error">#$invalid['pass1']#</span>
                     </xar:if>
@@ -44,7 +47,7 @@
         </tr>
         <tr>
             <td><label for="pass2"><xar:mlstring>Retype Password</xar:mlstring>:</label></td>
-            <td><input type="password" name="pass2" id="pass2" value="#xarVarPrepForDisplay($values['pass2'])#"" size="25" maxlength="40" />
+            <td><input type="password" name="pass2" id="pass2" value="#xarVarPrepForDisplay($values['pass2'])#" size="25" maxlength="40" />
                     <xar:if condition="!empty($invalid['pass2'])">
                         <span class="xar-error">#$invalid['pass2']#</span>
                     </xar:if>
