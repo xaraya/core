@@ -21,11 +21,7 @@ function roles_user_lostpassword()
 
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Lost Password')));
 
-    $phase = xarVarCleanFromInput('phase');
-
-    if (empty($phase)){
-        $phase = 'request';
-    }
+    if (!xarVarFetch('phase','str:1:100',$phase,'request',XARVAR_NOT_REQUIRED)) return;
 
     switch(strtolower($phase)) {
 
@@ -38,9 +34,8 @@ function roles_user_lostpassword()
 
         case 'send':
 
-            list($uname,
-                 $email) = xarVarCleanFromInput('uname',
-                                                'email');
+            if (!xarVarFetch('uname','str:1:100',$uname,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('email','str:1:100',$email,'',XARVAR_NOT_REQUIRED)) return;
 
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;

@@ -3,12 +3,9 @@
 /**
  * display user
  */
-function roles_user_display($args)
+function roles_user_display()
 {
-    // Get parameters from whatever input we need
-    $uid = xarVarCleanFromInput('uid');
-
-    extract($args);
+    if (!xarVarFetch('uid','int:1:',$uid)) return;
 
     // Get user information
     $data = xarModAPIFunc('roles',
@@ -17,9 +14,8 @@ function roles_user_display($args)
                           array('uid' => $uid));
 
     if ($data == false) return;
-
-    // obfuscate email address
-    $data['email'] = preg_replace('/@/',' AT ',$data['email']);
+    
+    $data['email'] = xarVarPrepForDisplay($data['email']);
 
     $hooks = xarModCallHooks('item',
                              'display',

@@ -6,11 +6,11 @@
 function roles_user_logout()
 {
     // Get input parameters
-    $redirecturl = xarVarCleanFromInput('redirecturl');
+    if (!xarVarFetch('redirecturl','str:1:100',$redirecturl,'index.php',XARVAR_NOT_REQUIRED)) return;
 
     // Defaults
-    if (empty($redirecturl) || preg_match('/roles/',$redirecturl)) {
-    $redirecturl = 'index.php';
+    if (preg_match('/roles/',$redirecturl)) {
+        $redirecturl = 'index.php';
     }
 
     // Log user out
@@ -18,13 +18,10 @@ function roles_user_logout()
         $msg = xarML('Problem Logging Out',
                     'roles');
         xarExceptionSet(XAR_USER_EXCEPTION,
-                    'LOGGIN_OUT',
+                    'LOG_OUT',
                      new DefaultUserException($msg));
         return;
     }
-
-//FIXME why is this line repeated?
-    xarUserLogOut();
 
     xarResponseRedirect($redirecturl);
     return true;

@@ -19,17 +19,13 @@ function roles_user_login()
 {
     global $xarUser_authenticationModules;
 
-    // Get input parameters
-    list($uname,
-         $pass,
-         $rememberme,
-         $redirecturl)= xarVarCleanFromInput('uname',
-                                            'pass',
-                                            'rememberme',
-                                            'redirecturl');
+    if (!xarVarFetch('uname','str:1:100',$uname)) return;
+    if (!xarVarFetch('pass','str:1:100',$pass)) return;
+    if (!xarVarFetch('rememberme','checkbox',$rememberme,false,XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('redirecturl','str:1:100',$redirecturl,'index.php',XARVAR_NOT_REQUIRED)) return;
 
     // Defaults
-    if (empty($redirecturl) || preg_match('/roles/',$redirecturl)) {
+    if (preg_match('/roles/',$redirecturl)) {
         $redirecturl = 'index.php';
     }
 

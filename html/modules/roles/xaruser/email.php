@@ -11,17 +11,11 @@
  */
 function roles_user_email($args)
 {
-    // Get parameters from whatever input we need
-    list($uid,
-         $phase) = xarVarCleanFromInput('uid',
-                                        'phase');
+    if (!xarVarFetch('uid','int:1:',$uid)) return;
+    if (!xarVarFetch('phase','str:1:100',$phase,'modify',XARVAR_NOT_REQUIRED)) return;
 
     // Security Check
     if(!xarSecurityCheck('ReadRole')) return;
-
-    if (empty($phase)){
-        $phase = 'modify';
-    }
 
     switch(strtolower($phase)) {
 
@@ -44,36 +38,17 @@ function roles_user_email($args)
 
         case 'update':
 
-           list($name,
-                 $uid,
-                 $fname,
-                 $femail,
-                 $message,
-                 $subject) = xarVarCleanFromInput('name',
-                                                  'uid',
-                                                  'fname',
-                                                  'femail',
-                                                  'message',
-                                                  'subject');
+            if (!xarVarFetch('name','str:1:100',$name)) return;
+            if (!xarVarFetch('fname','str:1:100',$fname)) return;
+            if (!xarVarFetch('subject','html:strict',$subject)) return;
+            if (!xarVarFetch('message','html:strict',$message)) return;
+            if (!xarVarFetch('femail','str:1:100',$femail)) return;
 
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
 
             // Security Check
             if(!xarSecurityCheck('ReadRole')) return;
-
-            // Check arguments
-            if (empty($subject)) {
-                $msg = xarML('No Subject Provided for Email');
-                xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                return;
-            }
-
-            if (empty($message)) {
-                $msg = xarML('No Message Provided for Email');
-                xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                return;
-            }
 
             list($message) = xarModCallHooks('item',
                                              'transform',

@@ -82,22 +82,17 @@ function roles_user_register()
 
         case 'checkregistration':
 
-            list($uname,
-                 $email,
-                 $realname,
-                 $agreetoterms,
-                 $pass1,
-                 $pass2) = xarVarCleanFromInput('uname',
-                                                'email',
-                                                'realname',
-                                                'agreetoterms',
-                                                'pass1',
-                                                'pass2');
+            if (!xarVarFetch('uname','str:1:100',$uname,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('realname','str:1:100',$realname,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('pass1','str:4:100',$pass1,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('pass2','str:4:100',$pass2,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('email','str:1:100',$email,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('agreetoterms','checkbox',$agreetoterms,false,XARVAR_NOT_REQUIRED)) return;
 
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
 
-// TODO: check behind proxies too ?
+            // TODO: check behind proxies too ?
             // check if the IP address is banned, and if so, throw an exception :)
             $ip = xarServerGetVar('REMOTE_ADDR');
             $disallowedips = xarModGetVar('roles','disallowedips');
@@ -162,7 +157,7 @@ function roles_user_register()
 
             // check if the real name is empty
             if (empty($realname)){
-                $invalid['realname'] = xarML('You must provide your name to continue.');
+                $invalid['realname'] = xarML('You must provide your display name to continue.');
 
             } else {
                 // TODO: add some other limitations ?
@@ -172,7 +167,7 @@ function roles_user_register()
             if (empty($email)){
                 $invalid['email'] = xarML('You must provide a valid email address to continue.');
 
-// TODO: replace this with dynamic data property checker.
+            // TODO: replace this with dynamic data property checker.
             // check if the email is of a valid format
             } elseif (!preg_match('/.*@.*/',$email )) {
                 $invalid['email'] = xarML('There is an error in your email address');
@@ -260,26 +255,21 @@ function roles_user_register()
 
         case 'createuser':
 
-            list($uname,
-                 $email,
-                 $realname,
-                 $ip,
-                 $pass) = xarVarCleanFromInput('uname',
-                                               'email',
-                                               'realname',
-                                               'ip',
-                                               'pass');
+            if (!xarVarFetch('uname','str:1:100',$uname,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('realname','str:1:100',$realname,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('pass1','str:4:100',$pass,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('ip','str:4:100',$ip,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('email','str:1:100',$email,'',XARVAR_NOT_REQUIRED)) return;
 
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
 
             if (empty($pass)){
-
                 $pass = xarModAPIFunc('roles',
                                       'user',
                                       'makepass');
-
             }
+
             // Create confirmation code and time registered
             $confcode = xarSecGenAuthKey();
             $now = time();
@@ -318,9 +308,9 @@ function roles_user_register()
             if (empty($defaultRole)) return;
 
             // Make the user a member of the users role
-            if( !xarMakeRoleMemberByID($user['uid'], $defaultRole['uid'])) return;
+            if(!xarMakeRoleMemberByID($user['uid'], $defaultRole['uid'])) return;
 
-// TODO: make sending mail configurable too, depending on the other options ?
+            // TODO: make sending mail configurable too, depending on the other options ?
             // Set up confirmation email
             $confemail = xarModGetVar('roles', 'confirmationemail');
             $conftitle = xarModGetVar('roles', 'confirmationtitle');

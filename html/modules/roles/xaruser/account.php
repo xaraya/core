@@ -15,6 +15,7 @@ function roles_user_account()
 
     $name = xarUserGetVar('name');
     $uid = xarUserGetVar('uid');
+
     $output = xarModCallHooks('item', 'usermenu', '', array());
 
     if (empty($output)){

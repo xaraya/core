@@ -25,20 +25,12 @@ function roles_user_getvalidation()
        return true;
     }
 
-    list($uname,
-         $valcode,
-         $sent,
-         $phase) = xarVarCleanFromInput('uname',
-                                        'valcode',
-                                        'sent',
-                                        'phase');
-
+    if (!xarVarFetch('uname','str:1:100',$uname,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('valcode','str:1:100',$valcode,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('sent','str:1:100',$sent,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('phase','str:1:100',$phase,'startvalidation',XARVAR_NOT_REQUIRED)) return;
 
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Validate Your Account')));
-
-    if (empty($phase)){
-        $phase = 'startvalidation';
-    }
 
     switch(strtolower($phase)) {
 

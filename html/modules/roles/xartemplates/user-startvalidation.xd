@@ -3,7 +3,7 @@
 <xar:mlstring>Your account has not yet been activated.  You need to finish these final steps in order to complete your registration.</xar:mlstring> 
 <br /><br />
 <xar:if condition="!empty($valcode)">
-	<xar:mlstring>To continue, please follow</xar:mlstring> <a href="#xarModURL('roles', 'user', 'getvalidation', array('phase' => 'getvalidate', 'uname' => $uname, 'valcode' => $valcode))#"> &nbsp; <xar:mlstring>this link</xar:mlstring></a>
+	<xar:mlstring>To continue, please follow</xar:mlstring> <a href="#xarModURL('roles', 'user', 'getvalidation', array('phase' => 'getvalidate', 'uname' => $uname, 'valcode' => $valcode))#"> <xar:mlstring>this link</xar:mlstring></a>
 <xar:else />
 	<xar:mlstring>Please enter your username and validation code below</xar:mlstring> :
 	<form action="#xarModURL('roles', 'user', 'getvalidation')#" method="post" enctype="application/x-www-form-urlencoded">

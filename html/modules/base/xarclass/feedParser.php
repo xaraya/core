@@ -247,18 +247,34 @@ class feedParser {
                     switch($child['tag']) {
                         case "RSS:TITLE":
                         case "RDF2:TITLE":
-                            $channel['title'] = $child['children'][0];
+                            if (array_key_exists('children', $child)){
+                                $channel['title'] = $child['children'][0];
+                            }else{
+                                $channel['title'] = '';
+                            }
                             break;
                         case "RSS:LINK":
                         case "RDF2:LINK":
-                            $channel['link'] = $child['children'][0];
+                            if (array_key_exists('children', $child)){
+                                $channel['link'] = $child['children'][0];
+                            }else{
+                                $channel['link'] = '';
+                            }
                             break;
                         case "RSS:DESCRIPTION":
                         case "RDF2:DESCRIPTION":
-                            $channel['description'] = $child['children'][0];
+                            if (array_key_exists('children', $child)){
+                                $channel['description'] = $child['children'][0];
+                            }else{
+                                $channel['description'] = '';
+                            }
                             break;
                         case "RSS:WEBMASTER":
-                            $channel['creator'] = $child['children'][0];
+                            if (array_key_exists('children', $child)){
+                                $channel['creator'] = $child['children'][0];
+                            }else{
+                                $channel['creator'] = '';
+                            }
                             break;
                         default:
                             break;
@@ -278,17 +294,29 @@ class feedParser {
                         case "UNDEF:TITLE":
                         case "RSS:TITLE":
                         case "RSS2:TITLE":
-                            $channel['title'] = $child['children'][0];
+                            if (array_key_exists('children', $child)){
+                                $channel['title'] = $child['children'][0];
+                            }else{
+                                $channel['title'] = '';
+                            }
                             break;
                         case "UNDEF:LINK":
                         case "RSS:LINK":
                         case "RSS2:LINK":
-                            $channel['link'] = $child['children'][0];
+                            if (array_key_exists('children', $child)){
+                                $channel['link'] = $child['children'][0];
+                            }else{
+                                $channel['link'] = '';
+                            }
                             break;
                         case "UNDEF:DESCRIPTION":
                         case "RSS:DESCRIPTION":
                         case "RSS2:DESCRIPTION":
-                            $channel['description'] = $child['children'][0];
+                            if (array_key_exists('children', $child)){
+                                $channel['description'] = $child['children'][0];
+                            }else{
+                                $channel['description'] = '';
+                            }
                             break;
                         case "UNDEF:ITEM":
                         case "RSS:ITEM":
@@ -298,7 +326,11 @@ class feedParser {
                         case "UNDEF:LASTBUILDDATE":
                         case "RSS:LASTBUILDDATE":
                         case "RSS2:LASTBUILDDATE":
-                            $channel['lastbuilddate'] = strtotime($child['children'][0]);
+                            if (array_key_exists('children', $child)){
+                                $channel['lastbuilddate'] = strtotime($child['children'][0]);
+                            }else{
+                                $channel['lastbuilddate'] = strtotime('01/01/1900)');
+                            }
                             break;
                         default:
                             break;
@@ -317,19 +349,31 @@ class feedParser {
                     switch($child['tag']) {
                         case "RSS:TITLE":
                         case "RDF2:TITLE":
-                            $item['title'] = $child['children'][0];
+                            if (array_key_exists('children', $child)){
+                                $item['title'] = $child['children'][0];
+                            }else{
+                                $item['title'] = '';
+                            }
                             break;
                         case "RSS:LINK":
                         case "RDF2:LINK":
-                            $item['link'] = $child['children'][0];
+                            if (array_key_exists('children', $child)){
+                                $item['link'] = $child['children'][0];
+                            }else{
+                                $item['link'] = '';
+                            }
                             break;
                         case "RSS:DESCRIPTION":
                         case "RDF2:DESCRIPTION":
-                            $item["description"] = $child['children'][0];
+                            if (array_key_exists('children', $child)){
+                                $item['description'] = $child['children'][0];
+                            }else{
+                                $item['description'] = '';
+                            }
                             break;
                         case "DC:DATE":
-                            $item["date"] = $this->dcDateToUnixTime($child['children'][0],0);
-                            $item["locdate"] = $this->dcDateToUnixTime($child['children'][0],1);
+                            $item['date'] = $this->dcDateToUnixTime($child['children'][0],0);
+                            $item['locdate'] = $this->dcDateToUnixTime($child['children'][0],1);
                             break;
                         default:
                             break;
@@ -349,17 +393,29 @@ class feedParser {
                         case "UNDEF:TITLE":
                         case "RSS:TITLE":
                         case "RSS2:TITLE":
-                            $item['title'] = $child['children'][0];
+                            if (array_key_exists('children', $child)){
+                                $item['title'] = $child['children'][0];
+                            }else{
+                                $item['title'] = '';
+                            }
                             break;
                         case "UNDEF:LINK":
                         case "RSS:LINK":
                         case "RSS2:LINK":
-                            $item['link'] = $child['children'][0];
+                            if (array_key_exists('children', $child)){
+                                $item['link'] = $child['children'][0];
+                            }else{
+                                $item['link'] = '';
+                            }
                             break;
                         case "UNDEF:DESCRIPTION":
                         case "RSS:DESCRIPTION":
                         case "RSS2:DESCRIPTION":
-                            $item["description"] = $child['children'][0];
+                            if (array_key_exists('children', $child)){
+                                $item['description'] = $child['children'][0];
+                            }else{
+                                $item['description'] = '';
+                            }
                             break;
                         case "DC:DATE":
                             $item["date"] = $this->dcDateToUnixTime($child['children'][0],0);
