@@ -77,7 +77,7 @@ function xarBlock_render($blockinfo)
     // This lets the security system know what module we're in
     // no need to update / select in database for each block here
     // xarModSetVar('blocks','currentmodule',$modName);
-    xarVarSetCached('Security.Variables', 'currentmodule', $modName);
+    xarCore_SetCached('Security.Variables', 'currentmodule', $modName);
 
     // Load the block.
     if (!xarModAPIFunc(
