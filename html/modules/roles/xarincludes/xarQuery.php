@@ -796,5 +796,10 @@ class xarQuery
             $this->statement = $this->_statement();
         }
     }
+    function qecho()
+    {
+        $this->setstatement();
+        echo $this->getstatement();
+    }
 }
 ?>

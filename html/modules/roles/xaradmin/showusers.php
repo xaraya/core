@@ -34,7 +34,7 @@ function roles_admin_showusers()
     if (!xarVarFetch('state', 'int:0:', $data['state'], ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('selstyle', 'isset', $data['selstyle'], xarSessionGetVar('rolesdisplay'), XARVAR_DONT_SET)) return;
     if (!xarVarFetch('invalid', 'str:0:', $data['invalid'], NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('order', 'str:0:', $data['order'], 'name', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('order', 'str:0:', $data['order'], 'xar_name', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('search', 'str:0:', $data['search'], NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
 
     if (empty($data['selstyle'])) $data['selstyle'] = 0;
@@ -46,26 +46,14 @@ function roles_admin_showusers()
         $renderer = new xarTreeRenderer();
         $data['roletree'] = $renderer->drawtree($renderer->maketree());
     }
-    $selection = NULL;
-    //Create the selection
-    if (!empty($data['search'])) {
-        $selection = " AND (";
-        $selection .= "(xar_name LIKE '%" . $data['search'] . "%')";
-        $selection .= " OR (xar_uname LIKE '%" . $data['search'] . "%')";
-        $selection .= " OR (xar_email LIKE '%" . $data['search'] . "%')";
-        $selection .= ")";
-    }
 
-    // Load Template
+// Get information on the group we're at
     $data['groups'] = xarModAPIFunc('roles',
                                     'user',
                                     'getallgroups');
     $data['groupuid'] = $uid;
-    $numitems = xarModGetVar('roles', 'rolesperpage');
     $data['totalusers'] = xarModAPIFunc('roles','user','countall');
-    // Make sure a value was retrieved for rolesperpage
-    if (empty($numitems))
-        $numitems = -1;
+
     if ($uid != 0) {
         // Call the Roles class and get the role
         $roles = new xarRoles();
@@ -85,76 +73,79 @@ function roles_admin_showusers()
         $data['groupname'] = '';
     }
 
-     if ($uid != 0) {
-    $usrs = $role->getUsers($data['state'], $startnum, $numitems, $data['order'], $selection);
-    $data['totalselect'] = count($role->getUsers($data['state'], 0, 0, 'name', $selection));
-     } else {
-    $usrs = xarModAPIFunc('roles','user','getall', array('state' => $data['state'], 'startnum' => $startnum, 'numitems' => $numitems, 'order' => $data['order'], 'selection' => $selection));
-    $data['totalselect']  = count(xarModAPIFunc('roles','user','getall', array('state' => $data['state'], 'selection' => $selection)));
-     }
-     $data['totaldisplay'] = count($usrs);
-    // get all children of this role that are users
+    // Initialize a query
+    $xartable =& xarDBGetTables();
+    $q = new xarQuery('SELECT');
+    $q->addtable($xartable['roles'],'r');
+    $q->addfields(array('r.xar_uid','r.xar_name','r.xar_uname','r.xar_email','r.xar_state','r.xar_date_reg'));
+
+    //Create the selection
+    if (!empty($data['search'])) {
+        $c[1] = $q->like('xar_name','%' . $data['search'] . '%');
+        $c[2] = $q->like('xar_uname','%' . $data['search'] . '%');
+        $c[3] = $q->like('xar_email','%' . $data['search'] . '%');
+        $q->qor($c);
+    }
+
+    // Add limits and order
+    $numitems = xarModGetVar('roles', 'rolesperpage');
+    $q->setrowstodo($numitems);
+    $q->setstartat($startnum);
+    $q->setorder($data['order']);
+    $q->eq('xar_type',0);
+
+    // Add state
+    if ($data['state'] == ROLES_STATE_CURRENT) $q->ne('xar_state',ROLES_STATE_DELETED);
+    elseif ($data['state'] == ROLES_STATE_ALL) {}
+    else $q->eq('xar_state',$data['state']);
+
+    // If a group was chosen, get only the users of that group
+    if ($uid != 0) {
+        $q->addtable($xartable['rolemembers'],'rm');
+        $q->join('r.xar_uid','rm.xar_uid');
+        $q->eq('rm.xar_parentid',$uid);
+    }
+
+    $q->run();
+    $data['totalselect'] = $q->getrows();
+
     switch ($data['state']) {
         case ROLES_STATE_CURRENT :
         default:
-            if ($data['totalselect'] == 0) {
-                $data['message'] = xarML('There are no users');
-            }
+            if ($data['totalselect'] == 0) $data['message'] = xarML('There are no users');
             $data['title'] .= xarML('Users');
             break;
         case ROLES_STATE_INACTIVE:
-            if ($data['totalselect'] == 0) {
-                $data['message'] = xarML('There are no inactive users');
-            }
+            if ($data['totalselect'] == 0) $data['message'] = xarML('There are no inactive users');
             $data['title'] .= xarML('Inactive Users');
             break;
         case ROLES_STATE_NOTVALIDATED:
-            if ($data['totalselect'] == 0) {
-                $data['message'] = xarML('There are no users waiting for validation');
-            }
+            if ($data['totalselect'] == 0) $data['message'] = xarML('There are no users waiting for validation');
             $data['title'] .= xarML('Users Waiting for Validation');
             break;
         case ROLES_STATE_ACTIVE:
-            if ($data['totalselect'] == 0) {
-                $data['message'] = xarML('There are no active users');
-            }
+            if ($data['totalselect'] == 0) $data['message'] = xarML('There are no active users');
             $data['title'] .= xarML('Active Users');
             break;
         case ROLES_STATE_PENDING:
-            if ($data['totalselect'] == 0) {
-                $data['message'] = xarML('There are no pending users');
-            }
+            if ($data['totalselect'] == 0) $data['message'] = xarML('There are no pending users');
             $data['title'] .= xarML('Pending Users');
             break;
     }
     // assemble the info for the display
     $users = array();
-    if ($uid != 0) {
-        //$data['pname'] = $role->getName();
-        while (list($key, $user) = each($usrs)) {
-            $users[] = array('uid' => $user->getID(),
-                'name' => $user->getName(),
-                'uname' => $user->getUser(),
-                'email' => $user->getEmail(),
-                'status' => $user->getState(),
-                'date_reg' => $user->getDateReg(),
-                'frozen' => !xarSecurityCheck('EditRole',0,'Roles',$user->getName())
+        foreach($q->output() as $role) {
+            $users[] = array('uid' => $role['r.xar_uid'],
+                'name' => $role['r.xar_name'],
+                'uname' => $role['r.xar_uname'],
+                'email' => $role['r.xar_email'],
+                'status' => $role['r.xar_state'],
+                'date_reg' => $role['r.xar_date_reg'],
+                'frozen' => !xarSecurityCheck('EditRole',0,'Roles',$role['r.xar_name'])
                 );
         }
-     $data['title'] .= " ".xarML('of group')." ";
-    } else {
-        //$data['pname'] = xarML("All Users");
-        while (list($key, $user) = each($usrs)) {
-            $users[] = array('uid' => $user['uid'],
-                'name' => $user['name'],
-                'uname' => $user['uname'],
-                'email' => $user['email'],
-                'status' => $user['state'],
-                'date_reg' => $user['date_reg'],
-                'frozen' => !xarSecurityCheck('EditRole',0,'Roles',$user['name'])
-                );
-        }
-    }
+    if ($uid != 0) $data['title'] .= " ".xarML('of group')." ";
+
     //selstyle
     $data['style'] = array('0' => xarML('Simple'),
                                        '1' => xarML('Tree'),

@@ -48,7 +48,7 @@ function roles_admin_purge($args)
 
         if ($confirmation == "Recall")
         {
-    // --- recall users and groups
+ // --- recall users and groups
             if(!xarSecurityCheck('DeleteRole')) return;
             $roleslist = new xarRoles();
             if ($data['groupuid'] != 0) $parentgroup = $roleslist->getRole($data['groupuid']);
@@ -149,7 +149,11 @@ function roles_admin_purge($args)
             if(!xarSecurityCheck('AdminRole')) return;
             $roleslist = new xarRoles();
             foreach ($purgeuids as $uid => $val) {
+// --- do this in 2 stages. First, delete the role: this will update the user
+// --- count on all the role's parents
                 $role = $roleslist->getRole($uid);
+                $role->remove();
+// --- now actually remove the data from the role's entry
                 $state = ROLES_STATE_DELETED;
                 $uname = $deleted . microtime(TRUE) .'.'. $uid;
                 $name = '';

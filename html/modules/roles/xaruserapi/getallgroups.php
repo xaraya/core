@@ -84,6 +84,7 @@ function roles_userapi_getallgroups($args)
 
     if (count($conditions) != 0) $q->qor($conditions);
     $q->eq('r.xar_type',1);
+    $q->ne('r.xar_state',ROLES_STATE_DELETED);
     $q->run();
 
 //this is a kludge, but xarQuery doesn't have this functionality yet
