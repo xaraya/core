@@ -44,7 +44,7 @@
             </div>
             <xar:else />
             <div class="xar-accent-outline" style="position:relative;top:-1.5em;left:51%;width:49%;height:1.5em;margin-bottom:-1.3em;border-width:0px 0px 1px 0px;">
-                <div class="xar-sub" style="float:right;width:auto;height:1.5em;text-align:right;">
+                <div class="xar-sub" style="float:right;width:auto;height:1.5em;text-align:right;margin-bottom:-1.3em;">
                     [ <a href="&xar-modurl-blocks-admin-modify_group;&amp;gid=#$loop:item['group_id']#">#$loop:item['group_name']#</a> |
 					<xar:if condition="$loop:item['template'] ne NULL">
 						#$loop:item['template']# &nbsp;
