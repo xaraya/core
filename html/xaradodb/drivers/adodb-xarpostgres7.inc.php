@@ -40,7 +40,7 @@ class ADODB_xarpostgres7 extends ADODB_postgres7
         }
 
         // Execute the standard driver.
-        $result = ADODB_mysql::_Execute($sql, $inputar);
+        $result = ADODB_postgres7::_Execute($sql, $inputar);
 
         if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
             $lmtime = explode(' ', microtime());
