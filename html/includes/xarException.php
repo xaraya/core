@@ -351,7 +351,7 @@ function xarExceptionRender($format)
 //    echo count($GLOBALS['xarException_stack']);exit;
     foreach($GLOBALS['xarException_stack'] as $exception) {
 
-        $data['id'] = $exception['id'];
+        $data = array();
 
         if ($format == 'html') {
             if (method_exists($exception['value'], 'toHTML')) {
@@ -367,7 +367,7 @@ function xarExceptionRender($format)
             case XAR_SYSTEM_EXCEPTION:
                 $type = 'System Error';
                 $template = "system";
-                $data['type'] = $type;
+//                $data['type'] = $type;
                 break;
             case XAR_USER_EXCEPTION:
                 $type = 'User Error';
@@ -394,6 +394,7 @@ function xarExceptionRender($format)
 
         $showParams = xarCoreIsDebugFlagSet(XARDBG_SHOW_PARAMS_IN_BT);
 
+
         //This format thing should be dealt some other way...
         // BL? depending on output type...
         if ($format == 'html') {
@@ -404,6 +405,7 @@ function xarExceptionRender($format)
 
             if ($exception['major'] != XAR_USER_EXCEPTION) {
                 $stack = $exception['stack'];
+                $text = "";
                 for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
                     if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
                     else $function = '{}';
@@ -429,6 +431,7 @@ function xarExceptionRender($format)
             }
             if ($exception['major'] != XAR_USER_EXCEPTION) {
                 $stack = $exception['stack'];
+                $text = "";
                 for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
                     if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
                     else $function = '{}';
@@ -448,6 +451,8 @@ function xarExceptionRender($format)
                 }
             }
         }
+       $data['title'] = $exception['exceptionId'];
+       $data['stack'] = $text;
     }
 return  xarTplModule('base',$template, 'exception', $data);
 }
