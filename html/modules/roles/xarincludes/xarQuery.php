@@ -186,7 +186,16 @@ class xarQuery
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemMessage($msg));
             return;
         }
-    $this->tables[] = $argsarray;
+        $notdone = true;
+        $limit = count($this->tables);
+        for ($i=0;$i<$limit;$i++) {
+            if ($this->tables[$i]['name'] == $argsarray['name']) {
+                $this->tables[$i] = $argsarray;
+                $notdone = false;
+                break;
+            }
+        }
+        if ($notdone) $this->tables[] = $argsarray;
     }
 
     function addfield()
@@ -295,15 +304,15 @@ class xarQuery
     {
         $key = $this->_addcondition();
         $limit = count($this->conditions);
-/*        for ($i=0;$i<$limit;$i++) {
-            if ($this->conditions[$i]['field1'] == $field1) {
+       for ($i=0;$i<$limit;$i++) {
+/*             if ($this->conditions[$i]['field1'] == $field1) {
                 $this->conditions[$i]=array('field1' => $field1,
                                           'field2' => $field2,
                                           'op' => '=');
                 return;
             }
-        }
-*/        $this->conditions[$key]=array('field1' => $field1,
+*/         }
+       $this->conditions[$key]=array('field1' => $field1,
                                   'field2' => $field2,
                                   'op' => '=');
         return $key;

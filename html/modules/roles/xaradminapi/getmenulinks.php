@@ -52,7 +52,7 @@ function roles_adminapi_getmenulinks()
     if (xarSecurityCheck('AdminRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
-                                                  'modifynotice'),
+                                                  'createmail'),
                               'title' => xarML('Manage system emails'),
                               'label' => xarML('Email Messaging'));
     }

@@ -64,12 +64,12 @@
 			</td>
 			<td style="text-align: center;">
 				<select name="uid" id="uid" size="1" tabindex="9"  onchange="this.form.submit()">
-					<xar:if condition="$groupuid eq -1">
+					<xar:if condition="$type eq 'single'">
 						<option value="#$uid#" selected="selected">
 							<xar:mlstring>Single user</xar:mlstring>
 						</option>
 					</xar:if>
-					<xar:if condition="$groupuid eq 0">
+					<xar:if condition="$uid eq 0">
 						<option value="0" selected="selected">
 							<xar:mlstring>All Users</xar:mlstring>
 						</option>
@@ -145,7 +145,7 @@
 					<input type="checkbox" name="includesubgroups" id="includesubgroups" value="1" onchange="this.form.submit()"/>
 				<xar:else/>
 					<input type="checkbox" name="includesubgroups" id="includesubgroups" value="1" checked="checked" onchange="this.form.submit()"/>
-				</xar:if>(<xar:mlstring>Not displayed</xar:mlstring>)
+				</xar:if>
 			</td>
 			<td style="text-align: center; vertical-align: middle;">
 				<select name="mailtype" id="mailtype" size="1" tabindex="5"  onchange="this.form.submit()">
@@ -312,7 +312,6 @@
 					</xar:loop> 
 					<!-- end loop over users -->
 					<input type="hidden" name="uid" id="uid" value="#$uid#"/>
-					<input type="hidden" name="groupuid" id="groupuid" value="#$groupuid#"/>
 					<input type="hidden" name="includesubgroups" id="uid" value="#$includesubgroups#"/>
 					<input type="hidden" name="state" id="state" value="#$state#"/>
 					<input type="hidden" name="order" id="order" value="#$order#"/>
@@ -331,7 +330,6 @@
 		<form action="#xarModURL('roles', 'admin', 'sendmail')#" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<input type="hidden" name="uid" id="uid" value="#$uid#" />
-		<input type="hidden" name="groupuid" id="groupuid" value="#$groupuid#" />
 		<input type="hidden" name="state" id="state" value="#$state#" />
 		<input type="hidden" name="includesubgroups" id="includesubgroups" value="#$includesubgroups#"/>
 		<!--<input type="hidden" name="uids" id="uids" value="#$uids#" />-->
