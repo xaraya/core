@@ -10,7 +10,7 @@ $modversion['changelog'] = '';
 $modversion['license'] = '';
 $modversion['official'] = 1;
 $modversion['author'] = 'Jim McDonald, Paul Rosania';
-$modversion['contact'] = 'http://www.mcdee.net/, paul@postnuke.com';
+$modversion['contact'] = 'http://www.mcdee.net/, paul@xaraya.com';
 $modversion['admin'] = 1;
 $modversion['user'] = 0;
 $modversion['securityschema'] = array('Blocks::Group'    => 'Group name::Group ID',
