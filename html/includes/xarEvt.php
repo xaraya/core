@@ -184,7 +184,7 @@ function xarEvtUnsubscribe($eventName, $modName, $modType)
  * 
  * @author  Marco Canini
  * @author  Marcel van der Boom <marcel@xaraya.com>
- * @access  protected only called from core.
+ * @access  protected
  * @param   $eventName string The name of the event
  * @param   $value mixed Passed as parameter to the even handler function in the module
  * @return  void
@@ -216,7 +216,7 @@ function xarEvt_fire($eventName, $value = NULL)
  *
  * @author  Marco Canini
  * @author  Marcel van der Boom <marcel@xaraya.com>
- * @access  private Only called from core packages
+ * @access  protected
  * @param   $modName string The name of the module
  * @param   $modType string userapi / adminapi
  * @return  void
@@ -313,7 +313,7 @@ function xarEvt_registerEvent($eventName)
  *
  * @author  Marco Canini
  * @author  Marcel van der Boom
- * @access  protected Only from  this module
+ * @access  private
  * @param   $eventName Name of the event to check
  * @returns boolean 
  * @throws  EVENT_NOT_REGISTERED

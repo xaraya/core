@@ -4,19 +4,21 @@
  *
  * Multi Language System - XML Translations Backend
  *
- * @package Xaraya eXtensible Management System
+ * @package multilanguage
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  *
- * @subpackage MLSXMLBackend
- * @link xarMLSXMLBackend.php
+ * @subpackage backend
  * @author Marco Canini <m.canini@libero.it>
  */
 
 /**
+ * XML based translation backend 
+ *
  * Implements a concrete translations backend based on the XML language.
- * All xml files are encoded in utf-8. This backend is useful only when
- * running Xaraya in the multi-language mode (utf-8).
+ * All xml files are encoded in UTF-8. This backend is useful only when
+ * running Xaraya in the multi-language mode (UTF-8).
+ * @package multilanguage
  */
 class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
 {

@@ -12,7 +12,7 @@
  * @todo Use serialize in module variables?
  */
 
-/*
+/**
  * State of modules
  */
 define('XARMOD_STATE_UNINITIALISED', 1);
