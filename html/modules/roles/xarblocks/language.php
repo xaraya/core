@@ -34,7 +34,7 @@ function roles_languageblock_info()
 function roles_languageblock_display($blockinfo)
 {
     // Security check
-    if (!xarSecurityCheck('ReadRole',1,'Languageblock','$blockinfo[title]:All:All')) return;
+    if (!xarSecurityCheck('ReadRole',1,'Block','$blockinfo[title]:All:All')) return;
 
     if (xarMLSGetMode() != XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
         return;

@@ -59,7 +59,7 @@ function initializeSetup() {
 //    xarRegisterPrivilege('Editing','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
 //    xarRegisterPrivilege('Reading','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
 
-    xarRegisterPrivilege('ViewLogin','All','All','Loginblock','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
+    xarRegisterPrivilege('ViewLogin','All','roles','Block','login:Login:All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
     xarRegisterPrivilege('ViewBlocks','All','base','Block','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
     xarRegisterPrivilege('CasualAccess','All','themes','metablock','All',ACCESS_OVERVIEW,'The base privilege for the Anonymous user');
 //    xarRegisterPrivilege('AddAll','All','All','All','All',ACCESS_ADD,'The base privilege granting add access');
@@ -301,7 +301,6 @@ function initializeSetup() {
     * xarregisterMask(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    xarRegisterMask('ViewLogin','All','All','Loginblock','All:All:ALL',ACCESS_OVERVIEW);
     xarRegisterMask('AdminAll','All','All','All','All',ACCESS_ADMIN);
 
     xarRegisterMask('ViewBlocks','All','base','Block','All:All:ALL',ACCESS_OVERVIEW);
@@ -323,6 +322,9 @@ function initializeSetup() {
     xarRegisterMask('DeletePanel','All','adminpanels','All','All',ACCESS_DELETE);
     xarRegisterMask('AdminPanel','All','adminpanels','All','All',ACCESS_ADMIN);
 
+    xarRegisterMask('ViewLogin','All','roles','Block','login:Login:All',ACCESS_OVERVIEW);
+   	xarRegisterMask('ViewRoles','All','roles','Block','All',ACCESS_OVERVIEW);
+   	xarRegisterMask('ReadRole','All','roles','Block','All',ACCESS_READ);
    	xarRegisterMask('ViewRoles','All','roles','All','All',ACCESS_OVERVIEW);
    	xarRegisterMask('ReadRole','All','roles','All','All',ACCESS_READ);
    	xarRegisterMask('EditRole','All','roles','All','All',ACCESS_EDIT);
