@@ -210,7 +210,7 @@ function xarInstallMain()
 if (!xarInstallMain()) {
 
     // If we're here there must be surely an uncaught exception
-    $text = xarExceptionRender('template');
+    $text = xarErrorRender('template');
 
     // TODO: #2
     if (xarCurrentErrorID() == 'TEMPLATE_NOT_EXIST') {
