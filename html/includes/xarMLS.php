@@ -1483,10 +1483,10 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
     {
         $this->spacedir = $GLOBALS['MLS']->getSpace($dnType);
         foreach ($this->locales as $locale) {
-            if($this->spacedir == "core") {
+            if($this->spacedir == "core" || $this->spacedir == "xaraya") {
                 $this->domainlocation  = xarCoreGetVarDirPath() . "/locales/"
                 . $locale . "/" . $this->backendtype . "/" . $this->spacedir;
-            }
+           }
             else {
                 $this->domainlocation  = xarCoreGetVarDirPath() . "/locales/"
                 . $locale . "/" . $this->backendtype . "/" . $this->spacedir . "/" . $dnName;
@@ -1496,6 +1496,7 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
                 return true;
             }
         }
+        return false;
     }
 
     function getDomainLocation() { return $this->domainlocation; }
@@ -1513,7 +1514,7 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
         if ($context->getDir() != "") $fileName .= $context->getDir() . "/";
         $fileName .= $ctxName . "." . $this->backendtype;
         if (!file_exists($fileName)) {
-//            die("File does not exist:" . $fileName);
+            die("File does not exist:" . $fileName);
             return false;
         }
         return $fileName;
