@@ -1023,7 +1023,7 @@ function xarMod__URLnested($args, $prefix)
  */
 function xarMod__URLaddParametersToPath($args, $path, $pini, $psep)
 {
-    if( count($args) > 0 )
+    if (count($args) > 0)
     {
         $params = '';
 
@@ -1037,15 +1037,16 @@ function xarMod__URLaddParametersToPath($args, $path, $pini, $psep)
             }
         }
         // Decode a few 'safe' characters as rawurlencode() goes too far.
+        // TODO: write our own urlencode function. The encoding will be slightly
+        // different depending on whether we are encoding path components or get values.
         $params = str_replace(
-            array('%2C', '%24', '%21', '%2A', '%27', '%28', '%29', '%5B', '%5D'),
-            array(',', '$', '!', '*', '\'', '(', ')', '[', ']'),
+            array('%2C', '%24', '%21', '%2A', '%27', '%28', '%29', '%5B', '%5D', '%3A', '%2F', '%3F', '%3D'),
+            array(',', '$', '!', '*', '\'', '(', ')', '[', ']', ':', '/', '?', '='),
             $params
         );
 
-
         // Check for Join character
-        if( strpos($path,$pini) === FALSE )
+        if (strpos($path, $pini) === FALSE)
         {
             // Path does not already have any params, remove leading seperator
             $params = ltrim($params, $psep);
@@ -1055,6 +1056,7 @@ function xarMod__URLaddParametersToPath($args, $path, $pini, $psep)
             $path .= $params;
         }
     }
+
     return $path;
 }
 
@@ -1072,6 +1074,7 @@ function xarMod__URLaddParametersToPath($args, $path, $pini, $psep)
  * @param args array of arguments to put on the URL
  * @param entrypoint array of arguments for different entrypoint than index.php
  * @return mixed absolute URL for call, or false on failure
+ * @todo allow for an alternative entry point (e.g. stream.php) without affecting the other parameters
  */
 function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL, $target = NULL, $entrypoint = array())
 {
@@ -1091,7 +1094,6 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     }
 
     // No module specified - just jump to the home page.
-    // FIXME: use baseModURL if it has been configured?
     if (empty($modName)) {
         return xarServerGetBaseURL() . $BaseModURL;
     }
@@ -1126,11 +1128,13 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
                 $path = preg_replace('/^\//', '', $path);
 
                 // Append any encoderArgs that weren't handled by the module specific short-url encoder
+                // TODO: swap the order here? i.e. put the 'leftovers' at the end.
                 $unencodedArgs = xarMod__URLGetUnencodedArgs($encoderArgs, $path);
                 $path = xarMod__URLaddParametersToPath($unencodedArgs, $path, $pini, $psep);
 
                 // We now have the short form of the URL.
                 // Further custom manipulation of the URL can be added here.
+                // It may be worthwhile allowing for some kind of hook?
             }
         }
     }
@@ -1140,6 +1144,8 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     if (empty($path)) {
         if (!empty($entrypoint)) {
             // Custom entry-point.
+            // TODO: allow the alt entry point to work without assuming it is calling
+            // ws.php, so retaining the module and type params, and short url.
             // Entry Point comes as an array since ws.php sets a type var.
             // Entry array should be $entrypoint['entry'], $entrypoint['action']
             // e.g. ws.php?type=xmlrpc&args=foo
@@ -1159,19 +1165,15 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
             if ((!empty($funcName)) && ($funcName != 'main')) {
                 $pathArgs[] = 'func=' . $funcName;
             }
-            // CHECKME: do we allow http://www.mysite.com/?module=this here, or do we
-            // always want to fall back to index.php when we don't have short urls ?
-            //if ($BaseModURL == '') {
-            //    $BaseModURL = 'index.php';
-            //}
+
             $path = $BaseModURL . $pini . join($psep, $pathArgs);
         }
-
 
         // Add further parameters to the path, ensuring each value is encoded correctly.
         $path = xarMod__URLaddParametersToPath($args, $path, $pini, $psep);
 
         // We have the long form of the URL here.
+        // Again, some form of hook may be useful.
     }
 
     // FIXME: check if this works with all modules supporting short and long URLs.
