@@ -21,6 +21,14 @@
  * - conversion from 1 byte to multi byte charset (utf-8)
  * - conversion from multibyte charset (utf-8) to 1 byte charset
  * - every conversion output can be save with numeric entities (browser charset independent - not a full truth)
+ *
+ * Convert Tables Directory
+ * 
+ * This is a place where you store all files with charset encodings. Filenames should have
+ * the same names as encodings. My advise is to keep existing names, because thay
+ * were taken from unicode.org (www.unicode.org), and after update to unicode 3.0 or 4.0
+ * the names of files will be the same, so if you want to save your time...uff, leave the
+ * names as thay are for future updates.
  * 
  * This is a list of charsets you can operate with, the basic rule is that a char have to be in both charsets,
  * otherwise you'll get an error.
