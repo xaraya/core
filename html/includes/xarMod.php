@@ -743,7 +743,7 @@ function xarModGetInfo($modRegId)
         $modFileInfo['category'] = xarML('Unknown');
         $modFileInfo['author'] = xarML('Unknown');
         $modFileInfo['contact'] = xarML('Unknown');
-        $modFileInfo['dependecy'] = array();
+        $modFileInfo['dependency'] = array();
     } 
     $modInfo = array_merge($modFileInfo, $modInfo);
 
@@ -1747,7 +1747,7 @@ function xarMod_getFileInfo($modOsDir)
     // EXTRA INFO: required by components mod and possibly other core modules; added by <andyv>
     $modFileInfo['author']         = isset($modversion['author']) ? $modversion['author'] : false;
     $modFileInfo['contact']        = isset($modversion['contact']) ? $modversion['contact'] : false;
-    $modFileInfo['dependency']     = isset($modversion['dependency']) ? $modversion['dependency'] : false;
+    $modFileInfo['dependency']     = isset($modversion['dependency']) ? $modversion['dependency'] : array();
 
     return $modFileInfo;
 }
