@@ -75,3 +75,28 @@
 <!-- add the pager here -->
 &xar-var-pager;
 
+<h2><xar:mlstring>Other modules</xar:mlstring></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="4">
+    <tr>
+        <th>&xar-var-modidlabel;</th>
+        <th>&xar-var-optionslabel;</th>
+    </tr>
+    <xar:loop name="$modlist">
+    <xar:if condition="!empty($header)">
+    <tr>
+        <td colspan="2"><strong>#$header#</strong></td>
+    </tr>
+    </xar:if>
+    <tr>
+        <td>&xar-var-name;</td>
+        <td>
+           <xar:if condition="empty($link)">
+               &xar-var-edittitle;
+               <xar:else />
+                   <a href="&xar-var-link;"><xar:mlstring>View Properties</xar:mlstring></a>
+           </xar:if>
+        </td>
+    </tr>
+    </xar:loop>
+</table>
+

@@ -230,22 +230,27 @@ function dynamicdata_init()
     }
 
 // TODO: move this to some common place in Xaraya ('datadict' module ?)
-    // Register BL tags
-    xarTplRegisterTag('dynamicdata', 'data-input',
-                      array(),
-                      'dynamicdata_userapi_handleInputTag');
+    // Register BL user tags
     xarTplRegisterTag('dynamicdata', 'data-output',
                       array(),
                       'dynamicdata_userapi_handleOutputTag');
-    xarTplRegisterTag('dynamicdata', 'data-form',
-                      array(),
-                      'dynamicdata_userapi_handleFormTag');
     xarTplRegisterTag('dynamicdata', 'data-display',
                       array(),
                       'dynamicdata_userapi_handleDisplayTag');
+    xarTplRegisterTag('dynamicdata', 'data-view',
+                      array(),
+                      'dynamicdata_userapi_handleViewTag');
+
+    // Register BL admin tags
+    xarTplRegisterTag('dynamicdata', 'data-input',
+                      array(),
+                      'dynamicdata_adminapi_handleInputTag');
+    xarTplRegisterTag('dynamicdata', 'data-form',
+                      array(),
+                      'dynamicdata_adminapi_handleFormTag');
     xarTplRegisterTag('dynamicdata', 'data-list',
                       array(),
-                      'dynamicdata_userapi_handleListTag');
+                      'dynamicdata_adminapi_handleListTag');
 
     // Initialisation successful
     return true;
@@ -373,6 +378,7 @@ function dynamicdata_delete()
     xarTplUnregisterTag('data-form');
     xarTplUnregisterTag('data-display');
     xarTplUnregisterTag('data-list');
+    xarTplUnregisterTag('data-view');
 
     // Deletion successful
     return true;

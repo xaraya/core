@@ -1,0 +1,26 @@
+<xar:if condition="empty($layout) or $layout eq 'default'">
+    <table width="100%" border="1" cellspacing="0" cellpadding="4">
+    <tr>
+        <xar:loop name="$labels">
+            <th align="center">#$label#</th>
+        </xar:loop>
+        <th align="center"><xar:mlstring>Options</xar:mlstring></th>
+    </tr>
+    <xar:loop name="$items">
+    <tr>
+    <!-- we don't use xar:data-form or xar:data-input here, because this
+         is typically not an input form -->
+        <xar:loop name="$fields">
+            <td><xar:data-output type="$type" name="dd_'.$id.'" value="$value" /></td>
+        </xar:loop>
+        <td><xar:mlstring>View</xar:mlstring> | <xar:mlstring>Edit</xar:mlstring> | <xar:mlstring>Delete</xar:mlstring></td>
+    </tr>
+    </xar:loop>
+    </table>
+<!-- TODO: multi-column output -->
+<xar:else />
+    <xar:mlstring>Specify your own layout here...</xar:mlstring>
+    <br /><br />
+    <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+</xar:if>
+

@@ -18,6 +18,8 @@
  * @param $args['modid'] module id of the item fields to get
  * @param $args['itemtype'] item type of the item fields to get
  * @param $args['itemid'] item id of the item fields to get
+ * @param $args['fieldlist'] array of field labels to retrieve (default is all)
+ * @param $args['static'] include the static properties (= module tables) too (default no)
  * @returns array
  * @return array of fields, or false on failure
  * @raise BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
@@ -58,9 +60,22 @@ function dynamicdata_userapi_getall($args)
         return;
     }
 
+    // check the optional field list
+    if (empty($fieldlist)) {
+        $fieldlist = null;
+    }
+
+    // include the static properties (= module tables) too ?
+    if (empty($static)) {
+        $static = false;
+    }
+
+    // get all properties for this module / itemtype
     $fields = xarModAPIFunc('dynamicdata','user','getprop',
                            array('modid' => $modid,
-                                 'itemtype' => $itemtype));
+                                 'itemtype' => $itemtype,
+                                 'fieldlist' => $fieldlist,
+                                 'static' => $static));
     if (empty($fields) || count($fields) == 0) {
         return array();
     }
@@ -69,21 +84,30 @@ function dynamicdata_userapi_getall($args)
     $ids = array();
     $tables = array();
     $hooks = array();
+    $functions = array();
     foreach ($fields as $id => $field) {
         // normal dynamic data field
         if ($field['source'] == 'dynamic_data') {
             $ids[] = $id;
-        // data field coming from another table
-        } elseif (preg_match('/^(\w+)\.(\w+)$/', $field['source'], $matches)) {
-            $table = $matches[1];
-            $fieldname = $matches[2];
-            $tables[$table][$fieldname] = $id;
+
+        // data managed by a hook/utility module
         } elseif ($field['source'] == 'hook module') {
             // check if this is a known module, based on the name of the property type
             $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
             if (!empty($proptypes[$field['type']]['name'])) {
                 $hooks[$proptypes[$field['type']]['name']] = $id;
             }
+
+        // data managed by some user function (specified in validation for now)
+        } elseif ($field['source'] == 'user function') {
+            $functions[$field['validation']] = $id;
+
+        // data field coming from another table
+        } elseif (preg_match('/^(\w+)\.(\w+)$/', $field['source'], $matches)) {
+            $table = $matches[1];
+            $fieldname = $matches[2];
+            $tables[$table][$fieldname] = $id;
+
         } else {
     // TODO: retrieve from other data sources than (known) tables as well
         }
@@ -172,9 +196,58 @@ function dynamicdata_userapi_getall($args)
         // TODO: find some more consistent way to do this !
             $fields[$id]['value'] = xarModAPIFunc($hook,'user','get',
                                                   array('modname' => $modinfo['name'],
+                                                        'modid' => $modid,
                                                         'itemtype' => $itemtype,
                                                         'itemid' => $itemid,
                                                         'objectid' => $itemid));
+        }
+    }
+
+    // retrieve properties via some user function
+    foreach ($functions as $function => $id) {
+        // split into module, type and function
+// TODO: improve this ?
+        list($fmod,$ftype,$ffunc) = explode('_',$function);
+        // see if the module is available
+        if (!xarModIsAvailable($fmod)) {
+            continue;
+        }
+        // see if we're dealing with an API function or a GUI one
+        if (preg_match('/api$/',$ftype)) {
+            $ftype = preg_replace('/api$/','',$ftype);
+            // try to load the module API
+            if (!xarModAPILoad($fmod,$ftype)) {
+                continue;
+            }
+            // try to invoke the function with some common parameters
+        // TODO: standardize this, or allow the admin to specify the arguments
+            $value = xarModAPIFunc($fmod,$ftype,$ffunc,
+                                   array('modname' => $modinfo['name'],
+                                         'modid' => $modid,
+                                         'itemtype' => $itemtype,
+                                         'itemid' => $itemid,
+                                         'objectid' => $itemid));
+            // see if we got something interesting in return
+            if (isset($value)) {
+                $fields[$id]['value'] = $value;
+            }
+        } else {
+            // try to load the module GUI
+            if (!xarModLoad($fmod,$ftype)) {
+                continue;
+            }
+            // try to invoke the function with some common parameters
+        // TODO: standardize this, or allow the admin to specify the arguments
+            $value = xarModFunc($fmod,$ftype,$ffunc,
+                                array('modname' => $modinfo['name'],
+                                      'modid' => $modid,
+                                      'itemtype' => $itemtype,
+                                      'itemid' => $itemid,
+                                      'objectid' => $itemid));
+            // see if we got something interesting in return
+            if (isset($value)) {
+                $fields[$id]['value'] = $value;
+            }
         }
     }
 
@@ -195,6 +268,7 @@ function dynamicdata_userapi_getall($args)
 
 /**
  * get a specific item field
+// TODO: update this with all the new stuff
  *
  * @author the DynamicData module development team
  * @param $args['module'] module name of the item field to get, or
@@ -300,6 +374,8 @@ function dynamicdata_userapi_get($args)
  * @param $args['module'] module name of the item fields, or
  * @param $args['modid'] module id of the item field to get
  * @param $args['itemtype'] item type of the item field to get
+ * @param $args['fieldlist'] array of field labels to retrieve (default is all)
+ * @param $args['static'] include the static properties (= module tables) too (default no)
  * @returns mixed
  * @return value of the field, or false on failure
  * @raise BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
@@ -317,6 +393,16 @@ function dynamicdata_userapi_getprop($args)
         $itemtype = 0;
     }
 
+    // check the optional field list
+    if (empty($fieldlist)) {
+        $fieldlist = null;
+    }
+
+    // include the static properties (= module tables) too ?
+    if (empty($static)) {
+        $static = false;
+    }
+
     $invalid = array();
     if (!isset($modid) || !is_numeric($modid)) {
         $invalid[] = 'module id';
@@ -332,8 +418,18 @@ function dynamicdata_userapi_getprop($args)
         return;
     }
 
-    if (isset($propertybag["$modid:$itemtype"])) {
-        return $propertybag["$modid:$itemtype"];
+    if (empty($static) && isset($propertybag["$modid:$itemtype"])) {
+        if (empty($fieldlist)) {
+            return $propertybag["$modid:$itemtype"];
+        } else {
+            $myfields = array();
+            foreach ($propertybag["$modid:$itemtype"] as $id => $field) {
+                if (in_array($field['label'],$fieldlist)) {
+                    $myfields[$id] = $field;
+                }
+            }
+            return $myfields;
+        }
     }
 
     list($dbconn) = xarDBGetConn();
@@ -378,12 +474,33 @@ function dynamicdata_userapi_getprop($args)
 
     $result->Close();
 
-    $propertybag["$modid:$itemtype"] = $fields;
-    return $fields;
+    if (!empty($static)) {
+        // get the list of static properties for this module
+        $staticlist = xarModAPIFunc('dynamicdata','user','getstatic',
+                                    array('modid' => $modid,
+                                          'itemtype' => $itemtype));
+// TODO: watch out for conflicting property ids
+        $fields = array_merge($fields,$staticlist);
+    }
+
+    if (empty($static)) {
+        $propertybag["$modid:$itemtype"] = $fields;
+    }
+    if (empty($fieldlist)) {
+            return $fields;
+    } else {
+        $myfields = array();
+        foreach ($fields as $id => $field) {
+            if (in_array($field['label'],$fieldlist)) {
+                $myfields[$id] = $field;
+            }
+        }
+        return $myfields;
+    }
 }
 
 /**
- * get the list of modules + itemtypes for which properties are defined
+ * get the list of modules + itemtypes for which dynamic properties are defined
  *
  * @author the DynamicData module development team
  * @returns array
@@ -493,6 +610,9 @@ function dynamicdata_userapi_getsources($args)
 // TODO: re-evaluate this once we're further along
     // hook modules manage their own data
     $sources[] = 'hook module';
+
+    // hook modules manage their own data
+    $sources[] = 'user function';
 
     // add the list of table + field
     while (!$result->EOF) {
@@ -660,6 +780,115 @@ function dynamicdata_userapi_getstatic($args)
 
     $propertybag["$modid:$itemtype"] = $static;
     return $static;
+}
+
+/**
+ * (try to) get the relationships between a particular module and others (e.g. hooks)
+// TODO: allow other kinds of relationships than hooks
+// TODO: allow modules to specify their own relationships
+ *
+ * @author the DynamicData module development team
+ * @param $args['module'] module name of the item fields, or
+ * @param $args['modid'] module id of the item field to get
+ * @param $args['itemtype'] item type of the item field to get
+ * @returns mixed
+ * @return value of the field, or false on failure
+ * @raise BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ */
+function dynamicdata_userapi_getrelations($args)
+{
+    static $propertybag = array();
+
+    extract($args);
+
+    if (empty($modid) && !empty($module)) {
+        $modid = xarModGetIDFromName($module);
+    }
+    $modinfo = xarModGetInfo($modid);
+    if (empty($itemtype)) {
+        $itemtype = 0;
+    }
+
+    $invalid = array();
+    if (!isset($modid) || !is_numeric($modid) || empty($modinfo['name'])) {
+        $invalid[] = 'module id ' . xarVarPrepForDisplay($modid);
+    }
+    if (!isset($itemtype) || !is_numeric($itemtype)) {
+        $invalid[] = 'item type';
+    }
+    if (count($invalid) > 0) {
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    join(', ',$invalid), 'user', 'getstatic', 'DynamicData');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return;
+    }
+
+    if (isset($propertybag["$modid:$itemtype"])) {
+        return $propertybag["$modid:$itemtype"];
+    }
+
+    // get the list of static properties for this module
+    $static = xarModAPIFunc('dynamicdata','user','getstatic',
+                            array('modid' => $modid,
+                                  'itemtype' => $itemtype));
+
+    // get the list of hook modules that are enabled for this module
+// TODO: get all hooks types, not only item display hooks
+//    $hooklist = xarModGetHookList($modinfo['name'],'item','display');
+    $hooklist = array_merge(xarModGetHookList($modinfo['name'],'item','display'),
+                            xarModGetHookList($modinfo['name'],'item','update'));
+    $modlist = array();
+    foreach ($hooklist as $hook) {
+        $modlist[$hook['module']] = 1;
+    }
+
+    $relations = array();
+    if (count($modlist) > 0) {
+        // first look for the (possible) item id field in the current module
+        $itemid = '???';
+        foreach ($static as $field) {
+            if (!empty($field['is_itemid'])) {
+                $itemid = $field['source'];
+                break;
+            }
+        }
+        // for each enabled hook module
+        foreach ($modlist as $mod => $val) {
+            // get the list of static properties for this hook module
+            $modstatic = xarModAPIFunc('dynamicdata','user','getstatic',
+                                       array('modid' => xarModGetIDFromName($mod)));
+                                       // skip this for now
+                                       //      'itemtype' => $itemtype));
+        // TODO: automatically find the link(s) on module, item type, item id etc.
+        //       or should hook modules tell us that ?
+            $links = array();
+            foreach ($modstatic as $field) {
+                // link on module name/id
+                if (preg_match('/_module$/',$field['source'])) {
+                    $links[] = array('from' => $field['source'], 'to' => $modinfo['name'], 'type' => 'modulename');
+                } elseif (preg_match('/_moduleid$/',$field['source'])) {
+                    $links[] = array('from' => $field['source'], 'to' => $modid, 'type' => 'moduleid');
+                } elseif (preg_match('/_modid$/',$field['source'])) {
+                    $links[] = array('from' => $field['source'], 'to' => $modid, 'type' => 'moduleid');
+
+                // link on item type
+                } elseif (preg_match('/_itemtype$/',$field['source'])) {
+                    $links[] = array('from' => $field['source'], 'to' => $itemtype, 'type' => 'itemtype');
+
+                // link on item id
+                } elseif (preg_match('/_itemid$/',$field['source'])) {
+                    $links[] = array('from' => $field['source'], 'to' => $itemid, 'type' => 'itemid');
+                } elseif (preg_match('/_iid$/',$field['source'])) {
+                    $links[] = array('from' => $field['source'], 'to' => $itemid, 'type' => 'itemid');
+                }
+            }
+            $relations[] = array('module' => $mod,
+                                 'fields' => $modstatic,
+                                 'links'  => $links);
+        }
+    }
+    return $relations;
 }
 
 /**
@@ -857,14 +1086,37 @@ function dynamicdata_userapi_getproptypes($args)
                                 // ...
                                );
     }
+    if (xarModIsAvailable('comments') && xarModAPILoad('comments','user')) {
+        $proptypes[103] = array(
+                                'id'         => 103,
+                                'name'       => 'comments',
+                                'label'      => 'Comments',
+                                'format'     => '103',
+                                'validation' => '',
+                                'source'     => 'hook module',
+                                // ...
+                               );
+    }
+// trick : retrieve the number of comments via a user function here
+    if (xarModIsAvailable('comments') && xarModAPILoad('comments','user')) {
+        $proptypes[104] = array(
+                                'id'         => 104,
+                                'name'       => 'numcomments',
+                                'label'      => '# of Comments',
+                                'format'     => '104',
+                                'validation' => 'comments_userapi_get_count',
+                                'source'     => 'user function',
+                                // ...
+                               );
+    }
 // TODO: replace fileupload above with this one someday ?
 /*
     if (xarModIsAvailable('uploads') && xarModAPILoad('uploads','user')) {
-        $proptypes[103] = array(
-                                'id'         => 103,
+        $proptypes[105] = array(
+                                'id'         => 105,
                                 'name'       => 'uploads',
                                 'label'      => 'Upload',
-                                'format'     => '103',
+                                'format'     => '105',
                                 'validation' => '',
                                 'source'     => 'hook module',
                                 // ...
@@ -896,392 +1148,9 @@ function dynamicdata_userapi_getproptypes($args)
     return $proptypes;
 }
 
-/**
-// TODO: move this to some common place in Xaraya (base module ?)
- * Handle <xar:data-input ...> form field tags
- * Format : <xar:data-input definition="$definition" /> with $definition an array
- *                                             containing the type, name, value, ...
- *       or <xar:data-input name="thisname" type="thattype" value="$val" ... />
- * 
- * @param $args array containing the input field definition or the type, name, value, ...
- * @returns string
- * @return the PHP code needed to invoke showinput() in the BL template
- */
-function dynamicdata_userapi_handleInputTag($args)
-{
-    $out = "xarModAPILoad('dynamicdata','user');
-echo xarModAPIFunc('dynamicdata',
-                   'user',
-                   'showinput',\n";
-    if (isset($args['definition'])) {
-        $out .= '                   '.$args['definition']."\n";
-        $out .= '                  );';
-    } else {
-        $out .= "                   array(\n";
-        foreach ($args as $key => $val) {
-            if (is_numeric($val) || substr($val,0,1) == '$') {
-                $out .= "                         '$key' => $val,\n";
-            } else {
-                $out .= "                         '$key' => '$val',\n";
-            }
-        }
-        $out .= "                         ));";
-    }
-    return $out;
-}
-
-/**
-// TODO: move this to some common place in Xaraya (base module ?)
- * show some predefined form input field in a template
- * 
- * @param $args array containing the definition of the field (type, name, value, ...)
- * @returns string
- * @return string containing the HTML (or other) text to output in the BL template
- */
-function dynamicdata_userapi_showinput($args)
-{
-    extract($args);
-    if (empty($name)) {
-        return xarML('Missing \'name\' attribute in field tag or definition');
-    }
-    if (!isset($type)) {
-        $type = 1;
-    }
-    if (!isset($value)) {
-        $value = '';
-    }
-    if (!isset($id)) {
-        $id = '';
-    } else {
-        $id = ' id="'.$id.'"';
-    }
-    if (!isset($tabindex)) {
-        $tabindex = '';
-    } else {
-        $tabindex = ' tabindex="'.$tabindex.'"';
-    }
-
-// TODO: replace with something else
-    $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
-    if (is_numeric($type)) {
-        if (!empty($proptypes[$type]['name'])) {
-            $typename = $proptypes[$type]['name'];
-        } else {
-            return xarML('Unknown property type #(1)',$type);
-        }
-    } else {
-        $typename = $type;
-    }
-
-    $output = '';
-    switch ($typename) {
-        case 'text':
-        case 'textbox':
-            if (empty($size)) {
-                $size = 50;
-            }
-            $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
-            break;
-        case 'textarea':
-        case 'textarea_small':
-        case 'textarea_medium':
-        case 'textarea_large':
-            if (empty($wrap)) {
-                $wrap = 'soft';
-            }
-            if (empty($cols)) {
-                $cols = 50;
-            }
-            if (empty($rows)) {
-                if ($typename == 'textarea_small') {
-                    $rows = 2;
-                } elseif ($typename == 'textarea_large') {
-                    $rows = 20;
-                } else {
-                    $rows = 8;
-                }
-            }
-            $output .= '<textarea name="'.$name.'" wrap="'.$wrap.'" rows="'.$rows.'" cols="'.$cols.'"'.$id.$tabindex.'>'.$value.'</textarea>';
-            break;
-    // TEST ONLY
-        case 'webpage':
-            if (!isset($options) || !is_array($options)) {
-                $options = array();
-            // Load admin API for HTML file browser
-                if (!xarModAPILoad('articles', 'admin'))  return 'Unable to load articles admin API';
-                //$basedir = '/home/mikespub/www/pictures';
-                $basedir = 'd:/backup/mikespub/pictures';
-                $filetype = 'html?';
-                $files = xarModAPIFunc('articles','admin','browse',
-                                       array('basedir' => $basedir,
-                                             'filetype' => $filetype));
-                natsort($files);
-                array_unshift($files,'');
-                foreach ($files as $file) {
-                    $options[] = array('id' => $file,
-                                       'name' => $file);
-                }
-                unset($files);
-            }
-            // fall through to the next one
-        case 'status':
-            if (!isset($options) || !is_array($options)) {
-                $options = array(
-                                 array('id' => 0, 'name' => xarML('Submitted')),
-                                 array('id' => 1, 'name' => xarML('Rejected')),
-                                 array('id' => 2, 'name' => xarML('Approved')),
-                                 array('id' => 3, 'name' => xarML('Front Page')),
-                           );
-            }
-            if (empty($value)) {
-                $value = 0;
-            }
-            // fall through to the next one
-        case 'select':
-        case 'dropdown':
-        case 'listbox':
-            if (!isset($multiple)) {
-                $multiple = '';
-            } else {
-                $multiple = ' multiple';
-            }
-            $output .= '<select name="'.$name.'"'.$id.$tabindex.$multiple.'>';
-            if (!isset($selected)) {
-                if (!empty($value)) {
-                    $selected = $value;
-                } else {
-                    $selected = '';
-                }
-            }
-            if (!isset($options) || !is_array($options)) {
-                $options = array();
-            }
-            foreach ($options as $option) {
-                $output .= '<option value="'.$option['id'].'"';
-                if ($option['id'] == $selected) {
-                    $output .= ' selected';
-                }
-                $output .= '>'.$option['name'].'</option>';
-            }
-            $output .= '</select>';
-            break;
-        case 'file':
-        case 'fileupload':
-            if (empty($maxsize)) {
-                $maxsize = 1000000;
-            }
-            $output .= '<input type="hidden" name="MAX_FILE_SIZE" value="'.$maxsize.'" />';
-            if (empty($size)) {
-                $size = 40;
-            }
-            $output .= '<input type="file" name="'.$name.'" size="'.$size.'"'.$id.$tabindex.' />';
-            break;
-        case 'url':
-            if (empty($size)) {
-                $size = 50;
-            }
-            $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
-            if (!empty($value)) {
-                $output .= ' [ <a href="'.$value.'" target="preview">'.xarML('check').'</a> ]';
-            }
-            break;
-        case 'image':
-            if (empty($size)) {
-                $size = 50;
-            }
-            $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
-            if (!empty($value)) {
-                $output .= ' [ <a href="'.$value.'" target="preview">'.xarML('show').'</a> ]';
-            }
-            $output .= '<br />// TODO: add image picker ?';
-            break;
-        case 'static':
-            $output .= $value;
-            break;
-        case 'hidden':
-            $output .= '<input type="hidden" name="'.$name.'" value="'.$value.'"'.$id.$tabindex.' />';
-            break;
-        case 'username':
-            if (empty($value)) {
-                $value = xarUserGetVar('uid');
-            }
-            $user = xarUserGetVar('name', $value);
-            if (empty($user)) {
-                $user = xarUserGetVar('uname', $value);
-            }
-            $output .= $user;
-            if ($value > 1) {
-                $output .= ' [ <a href="'.xarModURL('users','user','display',
-                                                    array('uid' => $value))
-                           . '" target="preview">'.xarML('profile').'</a> ]';
-            }
-            break;
-        case 'date':
-        case 'calendar':
-            if (empty($value)) {
-                $value = time();
-            }
-        // TODO: adapt to local/user time !
-            $output .= strftime('%a, %d %B %Y %H:%M:%S %Z', $value);
-            $output .= '<br />';
-            $localtime = localtime($value,1);
-            $output .= xarML('Date') . ' <select name="'.$name.'[year]"'.$id.$tabindex.'>';
-            if (empty($minyear)) {
-                $minyear = $localtime['tm_year'] + 1900 - 2;
-            }
-            if (empty($maxyear)) {
-                $maxyear = $localtime['tm_year'] + 1900 + 2;
-            }
-            for ($i = $minyear; $i <= $maxyear; $i++) {
-                if ($i == $localtime['tm_year'] + 1900) {
-                    $output .= '<option selected>' . $i;
-                } else {
-                    $output .= '<option>' . $i;
-                }
-            }
-            $output .= '</select> - <select name="'.$name.'[mon]">';
-            for ($i = 1; $i <= 12; $i++) {
-                if ($i == $localtime['tm_mon'] + 1) {
-                    $output .= '<option selected>' . $i;
-                } else {
-                    $output .= '<option>' . $i;
-                }
-            }
-            $output .= '</select> - <select name="'.$name.'[mday]">';
-            for ($i = 1; $i <= 31; $i++) {
-                if ($i == $localtime['tm_mday']) {
-                    $output .= '<option selected>' . $i;
-                } else {
-                    $output .= '<option>' . $i;
-                }
-            }
-            $output .= '</select> ';
-            $output .= xarML('Time') . ' <select name="'.$name.'[hour]">';
-            for ($i = 0; $i < 24; $i++) {
-                if ($i == $localtime['tm_hour']) {
-                    $output .= '<option selected>' . sprintf("%02d",$i);
-                } else {
-                    $output .= '<option>' . sprintf("%02d",$i);
-                }
-            }
-            $output .= '</select> : <select name="'.$name.'[min]">';
-            for ($i = 0; $i < 60; $i++) {
-                if ($i == $localtime['tm_min']) {
-                    $output .= '<option selected>' . sprintf("%02d",$i);
-                } else {
-                    $output .= '<option>' . sprintf("%02d",$i);
-                }
-            }
-            $output .= '</select> : <select name="'.$name.'[sec]">';
-            for ($i = 0; $i < 60; $i++) {
-                if ($i == $localtime['tm_sec']) {
-                    $output .= '<option selected>' . sprintf("%02d",$i);
-                } else {
-                    $output .= '<option>' . sprintf("%02d",$i);
-                }
-            }
-            $output .= '</select> ';
-            break;
-        case 'fieldtype':
-            $output .= '<select name="'.$name.'"'.$id.$tabindex.'>';
-            foreach ($proptypes as $propid => $proptype) {
-                $output .= '<option value="'.$propid.'"';
-                if ($propid == $value) {
-                    $output .= ' selected';
-                }
-                $output .= '>'.$proptype['label'].'</option>';
-            }
-            $output .= '</select>';
-            break;
-        case 'checkbox':
-        // TODO: allow different values here, and verify $checked ?
-            $output .= '<input type="checkbox" name="'.$name.'" value="1"'.$id.$tabindex;
-            if (!empty($value)) {
-                $output .= ' checked';
-            }
-            $output .= ' />';
-            break;
-        case 'integerbox':
-            if (empty($size)) {
-                $size = 10;
-            }
-            $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
-            break;
-        case 'integerlist':
-            if (!isset($selected)) {
-                if (!empty($value)) {
-                    $selected = $value;
-                } else {
-                    $selected = '';
-                }
-            }
-            if (!isset($options) || !is_array($options)) {
-                $options = array();
-            // TODO: specify how to give a range of numbers
-                if (isset($min) && isset($max)) {
-                    for ($i = $min; $i <= $max; $i++) {
-                        $options[] = array('id' => $i, 'name' => $i);
-                    }
-                }
-            }
-            $output .= '<select name="'.$name.'"'.$id.$tabindex.'>';
-            foreach ($options as $option) {
-                $output .= '<option value="'.$option['id'].'"';
-                if ($option['id'] == $selected) {
-                    $output .= ' selected';
-                }
-                $output .= '>'.$option['name'].'</option>';
-            }
-            $output .= '</select>';
-            break;
-        case 'floatbox':
-            if (empty($size)) {
-                $size = 10;
-            }
-            $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
-            break;
-        case 'categories':
-            $output .= '// TODO: get categories select lists for this item';
-            break;
-        case 'hitcount':
-            if (!empty($value)) {
-                $output .= $value;
-/* value retrieved in getall now
-            } elseif (empty($modname) || empty($itemid)) {
-                $output .= xarML('Please provide "modname" and "itemid" as parameters in the data-input tag');
-            } elseif (xarModAPILoad('hitcount','user')) {
-                $value = xarModAPIFunc('hitcount','user','get',
-                                       array('modname' => $modname,
-                                             'itemid' => $itemid));
-                $output .= $value;
-*/
-            } else {
-                $output .= xarML('The hitcount module is currently unavailable');
-            }
-            break;
-        case 'ratings':
-            if (!empty($value)) {
-                $output .= $value;
-/* value retrieved in getall now
-            } elseif (empty($modname) || empty($itemid)) {
-                $output .= xarML('Please provide "modname" and "itemid" as parameters in the data-input tag');
-            } elseif (xarModAPILoad('ratings','user')) {
-                $value = xarModAPIFunc('ratings','user','get',
-                                          array('modname' => $modname,
-                                                'itemid' => $itemid,
-                                                'objectid' => $itemid));
-                $output .= $value;
-*/
-            } else {
-                $output .= xarML('The ratings module is currently unavailable');
-            }
-            break;
-        default:
-            $output .= 'Unknown type '.xarVarPrepForDisplay($typename);
-            break;
-    }
-    return $output;
-}
+// ----------------------------------------------------------------------
+// BL user tags (output, display & view)
+// ----------------------------------------------------------------------
 
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
@@ -1349,6 +1218,10 @@ function dynamicdata_userapi_showoutput($args)
     } else {
         $typename = $type;
     }
+
+// TODO: what kind of security checks do we want/need here ?
+    //if (xarSecAuthAction(0, 'DynamicData::Field', "$label:$type:$id", ACCESS_READ)) {
+    //}
 
     $output = '';
     switch ($typename) {
@@ -1490,8 +1363,22 @@ function dynamicdata_userapi_showoutput($args)
             }
             break;
 
+    // output from some common hook/utility modules
         case 'categories':
-            // TODO: show categories for this item
+            $output .= '// TODO: show categories for this item';
+            break;
+        case 'comments':
+            $output .= '// TODO: show comments for this item';
+            break;
+        case 'numcomments':
+            // via comments_userapi_get_count()
+            if (empty($value)) {
+                $output .= xarML('no comments');
+            } elseif ($value == 1) {
+                $output .= xarML('one comment');
+            } else {
+                $output .= xarML('#(1) comments',$value);
+            }
             break;
         case 'hitcount':
 // TODO: this doesn't increase the display count yet
@@ -1528,7 +1415,7 @@ function dynamicdata_userapi_showoutput($args)
             }
             break;
         default:
-            $output .= 'Unknown type '.xarVarPrepForDisplay($typename);
+            $output .= xarML('Unknown type #(1)',xarVarPrepForDisplay($typename));
             break;
     }
     return $output;
@@ -1536,55 +1423,8 @@ function dynamicdata_userapi_showoutput($args)
 
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
- * Handle <xar:data-form ...> form tags
- * Format : <xar:data-form module="123" itemtype="0" itemid="555" />
- *       or <xar:data-form fields="$fields" ... />
- * 
- * @param $args array containing the item for which you want to show a form, or fields
- * @returns string
- * @return the PHP code needed to invoke showform() in the BL template
- */
-function dynamicdata_userapi_handleFormTag($args)
-{
-    $out = "xarModAPILoad('dynamicdata','user');
-echo xarModAPIFunc('dynamicdata',
-                   'user',
-                   'showform',\n";
-    if (isset($args['definition'])) {
-        $out .= '                   '.$args['definition']."\n";
-        $out .= '                  );';
-    } else {
-        $out .= "                   array(\n";
-        foreach ($args as $key => $val) {
-            if (is_numeric($val) || substr($val,0,1) == '$') {
-                $out .= "                         '$key' => $val,\n";
-            } else {
-                $out .= "                         '$key' => '$val',\n";
-            }
-        }
-        $out .= "                         ));";
-    }
-    return $out;
-}
-
-/**
-// TODO: move this to some common place in Xaraya (base module ?)
- * show an input form in a template
- * 
- * @param $args array containing the item or fields to show
- * @returns string
- * @return string containing the HTML (or other) text to output in the BL template
- */
-function dynamicdata_userapi_showform($args)
-{
-   // TODO: retrieve params or properties for this item and loop
-}
-
-
-/**
-// TODO: move this to some common place in Xaraya (base module ?)
  * Handle <xar:data-display ...> display tags
- * Format : <xar:data-display module="123" itemtype="0" itemid="555" />
+ * Format : <xar:data-display module="123" itemtype="0" itemid="555" fieldlist="$fieldlist" static="yes" .../>
  *       or <xar:data-display fields="$fields" ... />
  * 
  * @param $args array containing the item that you want to display, or fields
@@ -1624,25 +1464,138 @@ echo xarModAPIFunc('dynamicdata',
  */
 function dynamicdata_userapi_showdisplay($args)
 {
-   // TODO: retrieve params or properties for this item and loop
+    extract($args);
+
+    // optional layout for the template
+    if (empty($layout)) {
+        $layout = 'default';
+    }
+    // or optional template, if you want e.g. to handle individual fields
+    // differently for a specific module / item type
+    if (empty($template)) {
+        $template = '';
+    }
+
+    // we got everything via template parameters
+    if (isset($fields) && is_array($fields)) {
+        return xarTplModule('dynamicdata','user','showdisplay',
+                            array('fields' => $fields,
+                                  'layout' => $layout),
+                            $template);
+    }
+
+    // When called via hooks, the module name may be empty, so we get it from
+    // the current module
+    if (empty($module)) {
+        $modname = xarModGetName();
+    } else {
+        $modname = $module;
+    }
+
+    $modid = xarModGetIDFromName($modname);
+    if (empty($modid)) {
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module name', 'user', 'showform', 'dynamicdata');
+        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    if (empty($itemtype) || !is_numeric($itemtype)) {
+        $itemtype = null;
+    }
+
+    // try getting the item id via input variables if necessary
+    if (!isset($itemid) || !is_numeric($itemid)) {
+        $itemid = xarVarCleanFromInput('itemid');
+    }
+
+// TODO: what kind of security checks do we want/need here ?
+    if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:$itemid", ACCESS_READ)) {
+        return '';
+    }
+
+    // check the optional field list
+    if (!empty($fieldlist)) {
+        // support comma-separated field list
+        if (is_string($fieldlist)) {
+            $myfieldlist = explode(',',$fieldlist);
+        // and array of fields
+        } elseif (is_array($fieldlist)) {
+            $myfieldlist = $fieldlist;
+        }
+    } else {
+        $myfieldlist = null;
+    }
+
+    // include the static properties (= module tables) too ?
+    if (empty($static)) {
+        $static = false;
+    }
+
+    if (empty($itemid)) {
+        // we're probably dealing with a new item (no itemid yet), so
+        // retrieve the properties only
+        $fields = xarModAPIFunc('dynamicdata','user','getprop',
+                                array('modid' => $modid,
+                                      'itemtype' => $itemtype,
+                                      'fieldlist' => $myfieldlist,
+                                      'static' => $static));
+        if (!isset($fields) || $fields == false || count($fields) == 0) {
+            return '';
+        }
+
+        // prefill the values with defaults (if any)
+        foreach (array_keys($fields) as $id) {
+            $fields[$id]['value'] = $fields[$id]['default'];
+        }
+
+    } else {
+        // we're dealing with a real item, so retrieve the property values
+        $fields = xarModAPIFunc('dynamicdata','user','getall',
+                                array('modid' => $modid,
+                                      'itemtype' => $itemtype,
+                                      'itemid' => $itemid,
+                                      'fieldlist' => $myfieldlist,
+                                      'static' => $static));
+        if (!isset($fields) || $fields == false || count($fields) == 0) {
+            return '';
+        }
+    }
+
+    // if we are in preview mode, we need to check for any preview values
+    $preview = xarVarCleanFromInput('preview');
+    if (!empty($preview)) {
+        foreach (array_keys($fields) as $id) {
+            $value = xarVarCleanFromInput('dd_'.$id);
+            if (isset($value)) {
+                $fields[$id]['value'] = $value;
+            }
+        }
+    }
+
+    return xarTplModule('dynamicdata','user','showdisplay',
+                        array('fields' => $fields,
+                              'layout' => $layout),
+                        $template);
 }
 
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
- * Handle <xar:data-list ...> list tags
- * Format : <xar:data-list module="123" itemtype="0" itemids="$list" />
- *       or <xar:data-list fields="$fields" ... />
+ * Handle <xar:data-view ...> view tags
+ * Format : <xar:data-view module="123" itemtype="0" itemids="$idlist" fieldlist="$fieldlist" static="yes" .../>
+ *       or <xar:data-view items="$items" labels="$labels" ... />
  * 
  * @param $args array containing the items that you want to display, or fields
  * @returns string
- * @return the PHP code needed to invoke showlist() in the BL template
+ * @return the PHP code needed to invoke showview() in the BL template
  */
-function dynamicdata_userapi_handleListTag($args)
+function dynamicdata_userapi_handleViewTag($args)
 {
     $out = "xarModAPILoad('dynamicdata','user');
 echo xarModAPIFunc('dynamicdata',
                    'user',
-                   'showlist',\n";
+                   'showview',\n";
     if (isset($args['definition'])) {
         $out .= '                   '.$args['definition']."\n";
         $out .= '                  );';
@@ -1668,9 +1621,119 @@ echo xarModAPIFunc('dynamicdata',
  * @returns string
  * @return string containing the HTML (or other) text to output in the BL template
  */
-function dynamicdata_userapi_showlist($args)
+function dynamicdata_userapi_showview($args)
 {
-   // TODO: retrieve params or properties to retrieve and loop
+    extract($args);
+
+    // optional layout for the template
+    if (empty($layout)) {
+        $layout = 'default';
+    }
+    // or optional template, if you want e.g. to handle individual fields
+    // differently for a specific module / item type
+    if (empty($template)) {
+        $template = '';
+    }
+
+    // we got everything via template parameters
+    if (isset($items) && is_array($items)) {
+        return xarTplModule('dynamicdata','user','showview',
+                            array('items' => $items,
+                                  'labels' => $labels,
+                                  'layout' => $layout),
+                            $template);
+    }
+
+    // When called via hooks, the module name may be empty, so we get it from
+    // the current module
+    if (empty($module)) {
+        $modname = xarModGetName();
+    } else {
+        $modname = $module;
+    }
+
+    $modid = xarModGetIDFromName($modname);
+    if (empty($modid)) {
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module name', 'user', 'showform', 'dynamicdata');
+        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    if (empty($itemtype) || !is_numeric($itemtype)) {
+        $itemtype = null;
+    }
+
+    // try getting the item id list via input variables if necessary
+    if (!isset($itemids) || !is_numeric($itemids)) {
+        $itemids = xarVarCleanFromInput('itemids');
+    }
+
+// TODO: what kind of security checks do we want/need here ?
+    if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:", ACCESS_OVERVIEW)) {
+        return '';
+    }
+
+    // check the optional field list
+    if (!empty($fieldlist)) {
+        // support comma-separated field list
+        if (is_string($fieldlist)) {
+            $myfieldlist = explode(',',$fieldlist);
+        // and array of fields
+        } elseif (is_array($fieldlist)) {
+            $myfieldlist = $fieldlist;
+        }
+    } else {
+        $myfieldlist = null;
+    }
+
+    // include the static properties (= module tables) too ?
+    if (empty($static)) {
+        $static = false;
+    }
+
+    // retrieve the properties for this module / itemtype
+    $fields = xarModAPIFunc('dynamicdata','user','getprop',
+                            array('modid' => $modid,
+                                  'itemtype' => $itemtype,
+                                  'fieldlist' => $myfieldlist,
+                                  'static' => $static));
+    // create the label list
+    $labels = array();
+    foreach ($fields as $id => $field) {
+        $labels[$id] = array('label' => $field['label']);
+    }
+
+    $items = array();
+    if (empty($itemids)) {
+        // TODO: we'll need to retrieve a bunch of itemids based on
+        // some primary key of the module here -> use getstatic and relationships
+
+    } else {
+        if (!is_array($itemids)) {
+            $itemids = explode(',',$itemids);
+        }
+        // TODO: get rid of the brute-force approach :-)
+        foreach ($itemids as $itemid) {
+            $fields = xarModAPIFunc('dynamicdata','user','getall',
+                                    array('modid' => $modid,
+                                          'itemtype' => $itemtype,
+                                          'itemid' => $itemid,
+                                          'fieldlist' => $myfieldlist,
+                                          'static' => $static));
+            if (!isset($fields) || $fields == false || count($fields) == 0) {
+                continue;
+            }
+            $items[] = array('fields' => $fields);
+        }
+    }
+
+    return xarTplModule('dynamicdata','user','showview',
+                        array('items' => $items,
+                              'labels' => $labels,
+                              'layout' => $layout),
+                        $template);
 }
 
 

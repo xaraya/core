@@ -78,6 +78,9 @@ function dynamicdata_admin_modifyprop()
 
     // get possible data sources
     $data['sources'] = xarModAPIFunc('dynamicdata','user','getsources');
+    if (empty($data['sources'])) {
+        $data['sources'] = array();
+    }
 
     $data['labels'] = array(
                             'id' => xarML('ID'),
@@ -107,64 +110,19 @@ function dynamicdata_admin_modifyprop()
     $data['labels']['is_itemid'] = xarML('Item ID');
 
 // TODO: allow other kinds of relationships than hooks
-    $data['relations'] = array();
+    // (try to) get the relationships between this module and others
+    $data['relations'] = xarModAPIFunc('dynamicdata','user','getrelations',
+                                       array('modid' => $modid,
+                                             'itemtype' => $itemtype));
+    if (!isset($data['relations']) || $data['relations'] == false) {
+        $data['relations'] = array();
+    }
+
     $data['relationstitle'] = xarML('Relationships with other Modules/Properties (only item display hooks for now)');
     $data['labels']['module'] = xarML('Module');
     $data['labels']['linktype'] = xarML('Link Type');
     $data['labels']['linkfrom'] = xarML('From');
     $data['labels']['linkto'] = xarML('To');
-
-    // get the list of hook modules that are enabled for this module
-// TODO: get all hooks types, not only item display hooks
-    $hooklist = xarModGetHookList($modinfo['name'],'item','display');
-    $modlist = array();
-    foreach ($hooklist as $hook) {
-        $modlist[$hook['module']] = 1;
-    }
-    if (count($modlist) > 0) {
-        // first look for the (possible) item id field in the current module
-        $itemid = '???';
-        foreach ($data['static'] as $field) {
-            if (!empty($field['is_itemid'])) {
-                $itemid = $field['source'];
-                break;
-            }
-        }
-        // for each enabled hook module
-        foreach ($modlist as $mod => $val) {
-            // get the list of static properties for this hook module
-            $modstatic = xarModAPIFunc('dynamicdata','user','getstatic',
-                                       array('modid' => xarModGetIDFromName($mod)));
-                                       // skip this for now
-                                       //      'itemtype' => $itemtype));
-        // TODO: automatically find the link(s) on module, item type, item id etc.
-        //       or should hook modules tell us that ?
-            $links = array();
-            foreach ($modstatic as $field) {
-                // link on module name/id
-                if (preg_match('/_module$/',$field['source'])) {
-                    $links[] = array('from' => $field['source'], 'to' => $modinfo['name'], 'type' => 'modulename');
-                } elseif (preg_match('/_moduleid$/',$field['source'])) {
-                    $links[] = array('from' => $field['source'], 'to' => $modid, 'type' => 'moduleid');
-                } elseif (preg_match('/_modid$/',$field['source'])) {
-                    $links[] = array('from' => $field['source'], 'to' => $modid, 'type' => 'moduleid');
-
-                // link on item type
-                } elseif (preg_match('/_itemtype$/',$field['source'])) {
-                    $links[] = array('from' => $field['source'], 'to' => $itemtype, 'type' => 'itemtype');
-
-                // link on item id
-                } elseif (preg_match('/_itemid$/',$field['source'])) {
-                    $links[] = array('from' => $field['source'], 'to' => $itemid, 'type' => 'itemid');
-                } elseif (preg_match('/_iid$/',$field['source'])) {
-                    $links[] = array('from' => $field['source'], 'to' => $itemid, 'type' => 'itemid');
-                }
-            }
-            $data['relations'][] = array('module' => $mod,
-                                         'fields' => $modstatic,
-                                         'links'  => $links);
-        }
-    }
 
     // Return the template variables defined in this function
     return $data;
@@ -659,11 +617,13 @@ function dynamicdata_admin_view()
     // Note : we could use a foreach ($items as $item) here as well, as
     // shown in xaruser.php, but as an example, we'll adapt the $items array
     // 'in place', and *then* pass the complete items array to $data
+    $seenmod = array();
     for ($i = 0; $i < count($items); $i++) {
         $item = $items[$i];
         $modinfo = xarModGetInfo($item['modid']);
         $items[$i]['name'] = $modinfo['displayname'];
-        if (xarSecAuthAction(0, 'DynamicData::Item', "$item[modid]:$item[itemtype]:", ACCESS_EDIT)) {
+        $seenmod[$modinfo['name']] = 1;
+        if (xarSecAuthAction(0, 'DynamicData::Item', "$item[modid]:$item[itemtype]:", ACCESS_ADMIN)) {
             $items[$i]['editurl'] = xarModURL('dynamicdata',
                                               'admin',
                                               'modifyprop',
@@ -673,22 +633,33 @@ function dynamicdata_admin_view()
             $items[$i]['editurl'] = '';
         }
         $items[$i]['edittitle'] = xarML('Edit');
-/*
-        if (xarSecAuthAction(0, 'DynamicData::Item', "$item[modid]:$item[itemtype]:", ACCESS_DELETE)) {
-            $items[$i]['deleteurl'] = xarModURL('dynamicdata',
-                                                'admin',
-                                                'delete',
-                                                array('modid' => $item['modid'],
-                                                      'itemtype' => $item['itemtype'],));
-        } else {
-            $items[$i]['deleteurl'] = '';
-        }
-        $items[$i]['deletetitle'] = xarML('Delete');
-*/
     }
 
     // Add the array of items to the template variables
     $data['items'] = $items;
+
+    // show other modules
+    $data['modlist'] = array();
+    $modList = xarModGetList(array(),NULL,NULL,'category/name');
+    $oldcat = '';
+    for ($i = 0; $i < count($modList); $i++) {
+        if (!empty($seenmod[$modList[$i]['name']])) {
+            continue;
+        }
+        if ($oldcat != $modList[$i]['category']) {
+            $modList[$i]['header'] = $modList[$i]['category'];
+            $oldcat = $modList[$i]['category'];
+        } else {
+            $modList[$i]['header'] = '';
+        }
+        if (xarSecAuthAction(0, 'DynamicData::Item', $modList[$i]['regid']."::", ACCESS_ADMIN)) {
+            $modList[$i]['link'] = xarModURL('dynamicdata','admin','modifyprop',
+                                              array('modid' => $modList[$i]['regid']));
+        } else {
+            $modList[$i]['link'] = '';
+        }
+        $data['modlist'][] = $modList[$i];
+    }
 
 // TODO : add a pager (once it exists in BL)
     $data['pager'] = '';

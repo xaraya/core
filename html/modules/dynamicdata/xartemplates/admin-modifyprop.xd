@@ -32,7 +32,8 @@ Tip : empty label -> delete field for all items
         <td><input type="text" name="dd_default[&xar-var-id;]" size="15" value="&xar-var-default;" /></td>
         <td>
             <select name="dd_source[#$id#]">
-            <xar:foreach var="$sources" as="$mysource">
+            <!-- xar:foreach var="$sources" as="$mysource" Johnny was here :) -->
+            <xar:foreach in="$sources" value="$mysource">
                 <xar:if condition="$mysource eq $source">
                     <option selected>#$mysource#</option>
                 <xar:else />
@@ -52,7 +53,8 @@ Tip : empty label -> delete field for all items
         <td><input type="text" name="dd_default[0]" size="15" /></td>
         <td>
             <select name="dd_source[0]">
-            <xar:foreach var="$sources" as="$mysource">
+            <!-- xar:foreach var="$sources" as="$mysource" Johnny was here :) -->
+            <xar:foreach in="$sources" value="$mysource">
                 <option>#$mysource#</option>
             </xar:foreach>
             </select>
