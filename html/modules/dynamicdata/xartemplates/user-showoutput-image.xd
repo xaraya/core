@@ -4,5 +4,3 @@
 <xar:if condition="!empty($value)">
     <img src="#$value#" alt="#$imagealt#"/>
 </xar:if>
-
-

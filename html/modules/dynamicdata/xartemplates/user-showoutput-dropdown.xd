@@ -3,5 +3,3 @@
 <xar:if condition="!empty($option['name'])" >
 #$option['name']#
 </xar:if>
-
-

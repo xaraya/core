@@ -7,5 +7,3 @@
 <xar:elseif condition="empty($title) and !empty($link)" />
     <a href="#$link#">#$link#</a>
 </xar:if>
-
-

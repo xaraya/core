@@ -3,5 +3,3 @@
 <xar:if condition="$srcpath ne ''" >
     #$srcpath#
 </xar:if>
-
-

@@ -3,5 +3,3 @@
 <xar:if condition="$srcpath ne ''" >
      <img src="#$basedir#/#$value#" alt="" />
 </xar:if>
-
-

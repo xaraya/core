@@ -3,5 +3,3 @@
 <xar:if condition="!empty($value)" >
 #$value#
 </xar:if>
-
-
