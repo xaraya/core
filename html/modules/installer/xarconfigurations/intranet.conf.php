@@ -34,6 +34,11 @@ $options = array(
         'comment' => xarML('Install the Autolinks module.')
     ),
     array(
+        'item' => 'm745',
+        'option' => 'true',
+        'comment' => xarML('Install the Bloggerapi module.')
+    ),
+    array(
         'item' => 'm147',
         'option' => 'true',
         'comment' => xarML('Install the Categories module.')
@@ -60,19 +65,39 @@ $options = array(
     ),
 */
     array(
+        'item' => 'm747',
+        'option' => 'true',
+        'comment' => xarML('Install the Metaweblogapi module.')
+    ),
+    array(
         'item' => 'm32',
         'option' => 'true',
         'comment' => xarML('Install the Search module.')
     ),
     array(
-        'item' => 'm743',
+        'item' => 'm748',
         'option' => 'true',
-        'comment' => xarML('Install the Webservices module.')
+        'comment' => xarML('Install the Soapserver module.')
     ),
     array(
         'item' => 'm28',
         'option' => 'true',
         'comment' => xarML('Install the Wiki module.')
+    )
+    array(
+        'item' => 'm743',
+        'option' => 'true',
+        'comment' => xarML('Install the Xmlrpcserver module.')
+    )
+    array(
+        'item' => 'm744',
+        'option' => 'true',
+        'comment' => xarML('Install the Xmlrpcsystemapi module.')
+    )
+    array(
+        'item' => 'm746',
+        'option' => 'true',
+        'comment' => xarML('Install the Xmlrpcvalidatorapi module.')
     )
 );
  $configuration_options = $options;
