@@ -201,7 +201,8 @@ var $bar = '<img src="modules/roles/xarimages/s.gif" style="vertical-align: midd
 var $emptybox = '<img class="box" src="modules/roles/xarimages/k1.gif" style="vertical-align: middle"/>';
 var $expandedbox = '<img class="box" src="modules/roles/xarimages/k2.gif" style="vertical-align: middle"/>';
 var $collapsedbox = '<img class="box" src="modules/roles/xarimages/k3.gif" style="vertical-align: middle"/>';
-var $blank = '<img src="modules/roles/xarimages/blank.gif" style="vertical-align: middle"/>';
+var $blank = '<img src="modules/privileges/xarimages/blank.gif" style="vertical-align: middle"/>';
+var $bigblank ='<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/blank.gif" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
 
 // we'll use this to check whether a group has already been processed
 var	$alreadydone;
@@ -267,7 +268,60 @@ function drawbranch($node){
 	$isbranch = count($node['children'])>0 ? true : false;
 
 // now begin adding rows to the string
-	$this->html .= '<div class="xarbranch" id="branch' . $this->nodeindex . '" style="position: relative;">';
+	$this->html .= '<div class="xarbranch" id="branch' . $this->nodeindex . '">';
+
+// this next table holds the Delete, Users and Privileges links
+// don't allow deletion of certain roles
+	if(($object['pid'] < 5) || ($object['users'] > 0) || (!$drawchildren)) {
+		$this->html .= $this->bigblank;
+	}
+	else {
+		$this->html .= '<a href="' .
+			xarModURL('roles',
+				 'admin',
+				 'deleterole',
+				 array('ppid'=>$object['pid'])) .
+				 '" title="Delete this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>';
+	}
+
+// offer to show users of a group if there are some
+	if($object['users'] == 0 || (!$drawchildren)) {
+		$this->html .= $this->bigblank;
+	}
+	else {
+		$this->html .= '<a href="' .
+				xarModURL('roles',
+					 'admin',
+					 'showusers',
+					 array('ppid'=>$object['pid'])) .
+					 '" title="Show the Users in this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/users.gif" style="vertical-align: middle;" /></a>';
+	}
+
+// offer to show the privileges of this group
+	if(!$drawchildren) {
+		$this->html .= $this->bigblank;
+	}
+	else {
+		$this->html .= '<a href="' .
+			xarModURL('roles',
+				 'admin',
+				 'showprivileges',
+				 array('ppid'=>$object['pid'])) .
+				 '" title="Show the Privileges assigned to this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>';
+	}
+
+// offer to test the privileges of this group
+	if(!$drawchildren) {
+		$this->html .= $this->bigblank;
+	}
+	else {
+		$this->html .= '<a href="' .
+			xarModURL('roles',
+				 'admin',
+				 'testprivileges',
+				 array('ppid'=>$object['pid'])) .
+				 '" title="Test this Groups\'s Privileges" style="padding-left: 0.25em; padding-right: 1em;"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>';
+	}
 
 // this table hold the index, the tree drawing gifs and the info about the role
 	$this->html .= $this->drawindent();
@@ -288,7 +342,7 @@ function drawbranch($node){
 		$this->html .= $this->bar;
 		$this->html .= $this->emptybox;
 	}
-	$this->html .=  '<span name="titletext" style="padding-left: 1em">';
+	$this->html .=  '<span style="padding-left: 1em">';
 
 // if we've already done this entry skip the links and just tell the user
 	if (!$drawchildren) {
@@ -304,67 +358,6 @@ function drawbranch($node){
 		$this->html .= count($this->getsubgroups($object['pid'])) . ' subgroups';
 		$this->html .= ' | ' . $object['users'] . ' users</span>';
 	}
-
-// this next table holds the Delete, Users and Privileges links
-// don't allow deletion of certain roles
-	$this->html .=  '<span name="deletelink" style="text-align:center; position:absolute; right: 17em;">';
-	if(($object['pid'] < 5) || ($object['users'] > 0) || (!$drawchildren)) {
-		$this->html .= '&nbsp;';
-	}
-	else {
-		$this->html .= '<a href="' .
-			xarModURL('roles',
-				 'admin',
-				 'deleterole',
-				 array('ppid'=>$object['pid'])) .
-				 '" title="Delete this Group">Delete</a>';
-	}
-	$this->html .= '</span>';
-
-// offer to show users of a group if there are some
-	$this->html .=  '<span name="userslink" style="text-align:center; position:absolute; right: 12em;">';
-	if($object['users'] == 0 || (!$drawchildren)) {
-		$this->html .= '&nbsp;';
-	}
-	else {
-		$this->html .= '<a href="' .
-				xarModURL('roles',
-					 'admin',
-					 'showusers',
-					 array('ppid'=>$object['pid'])) .
-					 '" title="Show the Users in this Group">Users</a>';
-	}
-	$this->html .= '</span>';
-
-// offer to show the privileges of this group
-	$this->html .=  '<span name="privilegeslink" style="text-align:center; position:absolute; right: 5em;">';
-	if(!$drawchildren) {
-		$this->html .= '&nbsp;';
-	}
-	else {
-		$this->html .= '<a href="' .
-			xarModURL('roles',
-				 'admin',
-				 'showprivileges',
-				 array('ppid'=>$object['pid'])) .
-				 '" title="Show the Privileges assigned to this Group">Privileges</a>';
-	}
-	$this->html .= '</span>';
-
-// offer to test the privileges of this group
-	$this->html .=  '<span name="testlink" style="text-align:center; position:absolute; right: 1em; border:">';
-	if(!$drawchildren) {
-		$this->html .= '&nbsp;';
-	}
-	else {
-		$this->html .= '<a href="' .
-			xarModURL('roles',
-				 'admin',
-				 'testprivileges',
-				 array('ppid'=>$object['pid'])) .
-				 '" title="Test this Groups\'s Privileges">Test</a>';
-	}
-	$this->html .= '</span>';
 
 
 // we've finished this row; now do the children of this role

@@ -58,9 +58,7 @@
 				</td>
 			<td align="right">
 				<a href="&xar-var-removeurl;&roleid=&xar-var-roleid;"
-				title="Remove this Privilege assignment">				
-					Remove    
-				</a>
+				title="Remove this Privilege assignment"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 			</td>
 			</tr>
 		</xar:loop>

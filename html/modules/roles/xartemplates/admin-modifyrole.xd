@@ -47,7 +47,13 @@ document.forms[0].submit();}
 			</tr>
 				<tr>
 					<td colspan="2">
-							This role cannot be edited or deleted
+						This 
+						<xar:if condition="$ptype eq 0">
+							<xar:mlstring>User</xar:mlstring>
+						<xar:else />
+							<xar:mlstring>Group</xar:mlstring>
+						</xar:if>
+						cannot be edited or deleted
 					</td>
 				</tr>
 			<xar:else />
@@ -220,9 +226,7 @@ document.forms[0].submit();}
 						</td>
 						<td width="50" align="right">
 							<xar:if condition="count($parents) ne 1">
-								<a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$ppid#&amp;parentid=#$parentid#">
-									<xar:mlstring>Remove</xar:mlstring>
-								</a>
+								<a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$ppid#&amp;parentid=#$parentid#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 							<xar:else />
 								&nbsp;
 							</xar:if>

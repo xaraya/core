@@ -58,7 +58,7 @@ function initializeSetup() {
     xarRegisterPrivilege('DenyRolesPrivileges','All','empty','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
     xarRegisterPrivilege('Editing','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
 
-    xarRegisterPrivilege('ViewAll','All','All','All','All',ACCESS_OVERVIEW,'The base privilege granting view access');
+    xarRegisterPrivilege('Viewing','All','All','All','All',ACCESS_OVERVIEW,'The base privilege granting view access');
 //    xarRegisterPrivilege('AddAll','All','All','All','All',ACCESS_ADD,'The base privilege granting add access');
 //    xarRegisterPrivilege('DeleteAll','All','All','All','All',ACCESS_DELETE,'The base privilege granting delete access');
     xarRegisterPrivilege('ModPrivilege','All','Privileges','All','All',ACCESS_EDIT,'');
@@ -81,6 +81,7 @@ function initializeSetup() {
 	makePrivilegeRoot('DenyRoles');
 	makePrivilegeRoot('DenyPrivileges');
 	makePrivilegeRoot('Editing');
+	makePrivilegeRoot('Viewing');
 	makePrivilegeMember('DenyRoles','DenyRolesPrivileges');
 	makePrivilegeMember('DenyPrivileges','DenyRolesPrivileges');
 	makePrivilegeMember('DenyRolesPrivileges','Oversight');
@@ -105,7 +106,7 @@ function initializeSetup() {
 	xarAssignPrivilege('NoPrivileges','Everybody');
 	xarAssignPrivilege('Administration','Administrators');
 	xarAssignPrivilege('Oversight','Oversight');
-//	xarAssignPrivilege('AdminPrivilege','Anonymous');
+	xarAssignPrivilege('Viewing','Anonymous');
 //	xarAssignPrivilege('AdminRole','Anonymous');
 
     /*********************************************************************

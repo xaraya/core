@@ -1066,13 +1066,14 @@ var $emptybox = '<img class="box" src="modules/privileges/xarimages/k1.gif" styl
 var $expandedbox = '<img class="box" src="modules/privileges/xarimages/k2.gif" style="vertical-align: middle" />';
 var $blank = '<img src="modules/privileges/xarimages/blank.gif" style="vertical-align: middle" />';
 var $collapsedbox = '<img class="box" src="modules/privileges/xarimages/k3.gif" style="vertical-align: middle" />';
+var $bigblank ='<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/blank.gif" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
 
 // we'll use this to check whether a group has already been processed
 var	$alreadydone;
 
 function drawtree($node) {
 
-	$this->html = '<div name="PrivilegesTree" id="PrivilegesTree">';
+	$this->html = '<div name="PrivilegesTree" id="PrivilegesTree" style="position: relative;">';
 	$this->nodeindex = 0;
 	$this->indent = array();
 	$this->level = 0;
@@ -1117,9 +1118,40 @@ function drawbranch($node){
 	$isbranch = count($node['children'])>0 ? true : false;
 
 // now begin adding rows to the string
-	$this->html .= '<div class="xarbranch" id="branch' . $this->nodeindex . '" style="position: relative;">';
+	$this->html .= '<div class="xarbranch" id="branch' . $this->nodeindex . '">';
 
 // this table holds the index, the tree drawing gifs and the info about the privilege
+
+// this next part holds the icon links
+// toggle the tree
+	if(count($this->getsubprivileges($object['pid'])) == 0) {
+		$this->html .= $this->bigblank;
+	}
+	else {
+		$this->html .= '<a href="javascript:xarTree_exec(\''. $object['name'] .'\',2);" title="Expand or collapse this tree" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/toggle.gif" style="vertical-align: middle;" /></a>';
+	}
+
+// don't allow deletion of certain privileges
+	if($object['pid'] < 3) {
+		$this->html .= $this->bigblank;
+	}
+	else {
+		$this->html .= '<a href="' .
+			xarModURL('privileges',
+				 'admin',
+				 'deleteprivilege',
+				 array('pid'=>$object['pid'])) .
+				 '" title="Delete this Privilege" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>';
+	}
+
+// offer to show the users/groups of this group
+	$this->html .= '<a href="' .
+			xarModURL('privileges',
+				 'admin',
+				 'viewroles',
+				 array('pid'=>$object['pid'])) .
+				 '" title="Show the Groups/Users this Privilege is assigned to" style="padding-left: 0.25em; padding-right: 1em;"><img src="modules/privileges/xarimages/usersgroups.gif" style="vertical-align: middle;" /></a>';
+
 	$this->html .= $this->drawindent();
 	if (count($node['children']) > 0) {
 		if ($this->nodeindex != 1){
@@ -1140,56 +1172,14 @@ function drawbranch($node){
 		}
 		$this->html .= $this->emptybox;
 	}
-	$this->html .=  '<span name="titletext" style="padding-left: 1em">';
 
 // draw the name of the object and make a link
-		$this->html .= '<a href="' .
+		$this->html .= '<a style="padding-left: 1em" href="' .
 					xarModURL('privileges',
 						 'admin',
 						 'modifyprivilege',
 						 array('pid'=>$object['pid'])) .' ">' .$object['name'] . '</a>: &nbsp;';
-	$this->html .= count($this->getsubprivileges($object['pid'])) . ' components</span>';
-
-// this next table holds the Delete, Users and Privileges links
-
-// toggle the tree
-	$this->html .=  '<span name="togglelink" style="text-align:center; position:absolute; right: 15em">';
-	if(count($this->getsubprivileges($object['pid'])) == 0) {
-		$this->html .= '&nbsp;';
-	}
-	else {
-		$this->html .= '<a href="javascript:xarTree_exec(\''. $object['name'] .'\',2);" title="Expand or collapse this tree">
-			Toggle
-			</a>';
-	}
-	$this->html .= '</span>';
-
-// don't allow deletion of certain privileges
-	$this->html .=  '<span name="deletelink" style="text-align:center; position:absolute; right: 10em">';
-	if($object['pid'] < 3) {
-		$this->html .= '&nbsp;';
-	}
-	else {
-		$this->html .= '<a href="' .
-			xarModURL('privileges',
-				 'admin',
-				 'deleteprivilege',
-				 array('pid'=>$object['pid'])) .
-				 '" title="Delete this Privilege">Delete</a>';
-	}
-	$this->html .= '</span>';
-
-// offer to show the users/groups of this group
-	$this->html .=  '<span name="userslink" style="text-align:center; position:absolute; right: 1em">';
-	$this->html .= '<a href="' .
-			xarModURL('privileges',
-				 'admin',
-				 'viewroles',
-				 array('pid'=>$object['pid'])) .
-				 '" title="Show the Groups/Users this Privilege is assigned to">Groups/Users</a>';
-
-// close the html row
-	$this->html .= '</span>';
+	$this->html .= count($this->getsubprivileges($object['pid'])) . ' components';
 
 // we've finished this row; now do the children of this privilege
 	$this->html .= $isbranch ? '<div class="xarleaf" id="leaf' . $this->nodeindex . '" >' : '';

@@ -108,15 +108,11 @@
 				</td>
 				<td width="60" align="right">
 					<a href="&xar-modurl-roles-admin-showprivileges;&amp;ppid=#$pid#"
-					title="Show the Privileges assigned to this User">				
-						&nbsp;Privileges&nbsp;    
-					</a>
+					title="Show the Privileges assigned to this User"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
 				</td>
 				<td width="30" align="right">
 					<a href="&xar-modurl-roles-admin-testprivileges;&amp;ppid=#$pid#"
-					 title="Test this User's Privileges">				
-						&nbsp;Test&nbsp;    
-					</a>
+					 title="Test this User's Privileges"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>
 				</td>
 			</tr>
 		</xar:loop>
