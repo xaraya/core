@@ -241,6 +241,7 @@ function installer_admin_phase5()
         $data['dbPrefix']   = $dbPrefix;
         $data['dbType']     = $dbType;
         $data['newDB']      = $createDB;
+        $data['language']    = $install_language;
         return $data;
     }
     else {
@@ -1011,6 +1012,7 @@ function installer_admin_cleanup()
         }
     }
 
+    $data['language']    = $install_language;
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Step Six');
     $data['finalurl'] = xarModURL('installer', 'admin', 'finish');
