@@ -19,11 +19,11 @@
  * Defines for comment specifiers
  *
  */
-define('XAR_TOKEN_BL_COMMENT', 1);
-define('XAR_TOKEN_BL_COMMENT_OPEN', '<!---');
-define('XAR_TOKEN_BL_COMMENT_CLOSE', '--->');
-define('XAR_TOKEN_HTML_COMMENT', 2);
-define('XAR_TOKEN_HTML_COMMENT_OPEN', '<!--');
+define('XAR_TOKEN_BL_COMMENT'        , 1);
+define('XAR_TOKEN_BL_COMMENT_OPEN'   , '<!---');
+define('XAR_TOKEN_BL_COMMENT_CLOSE'  , '--->');
+define('XAR_TOKEN_HTML_COMMENT'      , 2);
+define('XAR_TOKEN_HTML_COMMENT_OPEN' , '<!--');
 define('XAR_TOKEN_HTML_COMMENT_CLOSE', '-->');
 
 /** 
@@ -348,13 +348,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         //         Windows  :  \r\n
         $this->templateSource = str_replace('\r\n','\n',$templateSource);
 
-        $this->line = 1;
-        $this->column = 1;
-        $this->pos = 0;
-        $this->lineText = '';
-
-        $this->tagNamesStack = array();
-        $this->tagIds = array();
+        // Initializing parse trace variables
+        $this->line = 1; $this->column = 1; $this->pos = 0; $this->lineText = '';
+        $this->tagNamesStack = array();  $this->tagIds = array();
 
         $this->tplVars =& new xarTpl__TemplateVariables();
 
@@ -374,6 +370,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         // Start of parsing a node, initialize our result variables
         $text = ''; $token=''; $children = array();
 
+        // Main parse loop
         while (true) {
             $token = $this->getNextToken();
             if (!isset($token)) break;
@@ -464,8 +461,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Add text to parent, if there is any
                         if (trim($text) != '') {
                             if ($parent->hasText()) {
-                                $node = $this->nodesFactory->createTextNode($text, $this);
-                                $children[] = $node;
+                                $children[] = $this->nodesFactory->createTextNode($text, $this);
                             } elseif (trim($text) != '') {
                                 $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                                 return;
@@ -518,9 +514,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         if (trim($text) != '') {
                             //echo "Close:$text\n";
                             if ($parent->hasText()) {
-                                $node = $this->nodesFactory->createTextNode($text, $this);
-                                //print_r($node);
-                                $children[] = $node;
+                                $children[] = $this->nodesFactory->createTextNode($text, $this);
                             } else {
                                 $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                                 return;
@@ -653,8 +647,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     // Add text to parent
                     if (trim($text) != '') {
                         if ($parent->hasText()) {
-                            $node = $this->nodesFactory->createTextNode($text, $this);
-                            $children[] = $node;
+                            $children[] = $this->nodesFactory->createTextNode($text, $this);
                         } elseif (trim($text) != '') {
                             $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                             return;
@@ -718,8 +711,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     // Add text to parent
                     if (trim($text) != '') {
                         if ($parent->hasText()) {
-                            $node = $this->nodesFactory->createTextNode($text, $this);
-                            $children[] = $node;
+                            $children[] = $this->nodesFactory->createTextNode($text, $this);
                         } elseif (trim($text) != '') {
                             $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                             return;
