@@ -265,6 +265,14 @@ class DefaultUserException extends Exception
         );
     }
 
+    function load($id) {
+        if (array_key_exists($id, $this->defaults)) parent::load($id);
+        else {
+            $this->title = $id;
+            $this->short = "No further information available";
+        }
+    }
+
     function toHTML()
     {
         $str = "<pre>\n" . xarVarPrepForDisplay($this->msg) . "\n</pre><br/>";
@@ -525,13 +533,16 @@ function xarExceptionRender($format)
         $showParams = xarCoreIsDebugFlagSet(XARDBG_SHOW_PARAMS_IN_BT);
         $text = '';
 
-        $roles = new xarRoles();
-        $admins = "Administrators";
-        $admingroup = $roles->findRole("Administrators");
-        $me = $roles->getRole(xarSessionGetVar('uid'));
-        $imadmin = $me->isParent($admingroup);
+        if(!xarVarGetCached('installer','installing')) {
+            $roles = new xarRoles();
+            $admins = "Administrators";
+            $admingroup = $roles->findRole("Administrators");
+            $me = $roles->getRole(xarSessionGetVar('uid'));
+            $imadmin = $me->isParent($admingroup);
+        }
+        else $imadmin = true;
         if ($format == 'html') {
-            if ($exception['major'] != XAR_USER_EXCEPTION && $imadmin) {
+          if ($exception['major'] != XAR_USER_EXCEPTION && $imadmin) {
                 $stack = $exception['stack'];
                 $text = "";
                 for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
@@ -581,10 +592,11 @@ function xarExceptionRender($format)
        $data['title'] = $thisexception->getTitle();
        $data['short'] = $thisexception->getShort();
        $data['long'] = $thisexception->getLong();
+       $data['hint'] = $thisexception->getHint();
        $data['stack'] = $text;
-       $hint = $thisexception->getHint();
     }
-    return  xarTplModule('base',$template, 'exception', $data);
+
+   return  xarTplModule('base',$template, 'exception', $data);
 }
 
 // PRIVATE FUNCTIONS
