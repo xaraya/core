@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * File: $Id$
  *
  * Modify a block instance
@@ -45,6 +45,12 @@ function blocks_admin_modify_instance()
 
     if (function_exists($modfunc)) {
         $extra = $modfunc($instance);
+
+        // if there was an error here, return...
+        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+            return;
+        }
+
         if (is_array($extra)) {
             // Render the extra settings if necessary.
             $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);
@@ -88,7 +94,7 @@ function blocks_admin_modify_instance()
 
     // Fetch complete block group list.
     $block_groups = xarModAPIfunc('blocks', 'user', 'getallgroups');
-    
+
     // In the modify form, we want to provide an array of checkboxes: one for each group.
     // Also a field for the overriding template name for each group instance.
     foreach ($block_groups as $key => $block_group) {
