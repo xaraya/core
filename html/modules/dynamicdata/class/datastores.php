@@ -780,8 +780,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
         $datafields = array();
         while (!$result->EOF) {
-            list($dd_id,$prop_id) = $result->fields;
-            $datafields[$prop_id] = $dd_id;
+            list($dd_id,$propid) = $result->fields;
+            $datafields[$propid] = $dd_id;
             $result->MoveNext();
         }
 
@@ -797,7 +797,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             }
 
             // update the dynamic data field if it exists
-            if (!empty($datafields[$prop_id])) {
+            if (!empty($datafields[$propid])) {
                 $query = "UPDATE $dynamicdata
                              SET xar_dd_value = '" . xarVarPrepForStore($value) . "'
                            WHERE xar_dd_id = " . xarVarPrepForStore($datafields[$propid]);
