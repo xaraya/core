@@ -100,7 +100,7 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
 
     // This is wrong here as well, but it's better at least than in xarMod
     include "includes/xarTheme.php";
-    
+
     // Subsystem initialized, register a handler to run when the request is over
     register_shutdown_function ('xarTemplate__shutdown_handler');
     return true;
@@ -897,6 +897,7 @@ function xarTpl_includeThemeTemplate($templateName, $tplData)
     // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
     $sourceFileName = xarTplGetThemeDir() ."/includes/$templateName.xt";
+    if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:includes', $templateName) === NULL) return;
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
