@@ -546,6 +546,14 @@ function xarCore_disposeDebugger()
  */
 function xarCore_die($msg)
 {
+    static $dying = false;
+    /*
+     * Prolly paranoid now, but to prevent looping we keep track if we have already
+     * been here.
+     */
+    if($dying) return;
+    $dying = true;
+
     // Cant we standardize errors for both this and Exceptions????
     // It is useful for the developer to know this is happening before the
     // Exceptions is loaded, still for the end user it is still just an error.
