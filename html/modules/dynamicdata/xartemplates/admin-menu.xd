@@ -1,34 +1,7 @@
-
-<!-- common admin menu for this module - remove link to the current function -->
-
-<table border="0" width="100%" cellspacing="1" cellpadding="8">
-
-    <!-- the variables used in this menu come from example_admin_menu() -->
-
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
     <tr>
         <th align="center">#$menutitle#</th>
     </tr>
-    <tr><td>
-        <table border="0" width="100%" cellspacing="1" cellpadding="8">
-        <tr align="center" valign="middle">
-
-        <!-- links to particular menu items -->
-
-        <!-- Simple URLs can be specified directly in the template -->
-
-        <td><a href="&xar-modurl-example-admin-new;">#$menulabel_new#</a></td>
-        <td><a href="&xar-modurl-example-admin-view;">#$menulabel_view#</a></td>
-        <td><a href="&xar-modurl-example-admin-modifyconfig;">#$menulabel_config#</a></td>
-
-        <!-- more menu items come here... -->
-
-        <!-- Note : you can also specify the links in example_admin_menu()
-             and pass them on as variables : e.g. #$menulink_view# -->
-        </tr>
-        </table>
-    </td></tr>
 </table>
 <br />
-
-<!-- the specific template for the current admin function comes here -->
 

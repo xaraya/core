@@ -27,9 +27,6 @@ function dynamicdata_admin_main()
 
     $data = dynamicdata_admin_menu();
 
-    // Specify some other variables used in the blocklayout template
-    $data['welcome'] = xarML('Welcome to the administration part of this Dynamic Data module...');
-
     // Return the template variables defined in this function
     return $data;
 }
@@ -56,7 +53,7 @@ function dynamicdata_admin_view($args)
         $itemtype = 0;
     }
 
-    $object = xarModAPIFunc('dynamicdata','user','getobject',
+    $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
                             array('objectid' => $itemid,
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype));
@@ -66,15 +63,18 @@ function dynamicdata_admin_view($args)
         $itemtype = $object['itemtype'];
         $label = $object['label'];
         $param = $object['urlparam'];
-        // override for system objects
-        if ($objectid < 3) {
-            $param = 'itemid';
-        }
     } else {
         return;
     }
 
     $data = dynamicdata_admin_menu();
+
+/*
+    $mylist = new Dynamic_Object_List(array('objectid' => $itemid,
+                                            'moduleid' => $modid,
+                                            'itemtype' => $itemtype));
+    $data['mylist'] = & $mylist;
+*/
 
     $data['objectid'] = $objectid;
     $data['modid'] = $modid;
@@ -433,6 +433,12 @@ function dynamicdata_admin_delete($args)
     if (empty($confirm)) {
         $data = dynamicdata_admin_menu();
         $data['object'] = & $myobject;
+        if ($myobject->objectid == 1) {
+            $mylist = new Dynamic_Object_List(array('objectid' => $itemid));
+            if (count($mylist->properties) > 0) {
+                $data['related'] = xarML('Warning : there are #(1) properties and #(2) items associated with this object !', count($mylist->properties), $mylist->countItems());
+            }
+        }
         $data['authid'] = xarSecGenAuthKey();
 
         return $data;
@@ -441,6 +447,16 @@ function dynamicdata_admin_delete($args)
     // If we get here it means that the user has confirmed the action
 
     if (!xarSecConfirmAuthKey()) return;
+
+    // special case for a dynamic object : delete its properties too // TODO: and items
+// TODO: extend to any parent-child relation ?
+    if ($myobject->objectid == 1) {
+        $mylist = new Dynamic_Object_List(array('objectid' => $itemid));
+        foreach (array_keys($mylist->properties) as $name) {
+            $propid = $mylist->properties[$name]->id;
+            $propid = Dynamic_Property_Master::deleteProperty(array('itemid' => $propid));
+        }
+    }
 
     $itemid = $myobject->deleteItem();
 
@@ -476,20 +492,39 @@ function dynamicdata_admin_modifyprop()
 
     list($itemid,
          $modid,
-         $itemtype) = xarVarCleanFromInput('itemid',
-                                           'modid',
-                                           'itemtype');
+         $itemtype,
+         $details) = xarVarCleanFromInput('itemid',
+                                          'modid',
+                                          'itemtype',
+                                          'details');
 
     if (empty($itemtype)) {
         $itemtype = 0;
     }
 
+/*
+    if (!empty($itemid)) {
+        $where = 'objectid eq '.$itemid;
+    } else {
+        $where = 'moduleid eq '.$modid.' and itemtype eq '.$itemtype;
+    }
+    $myobject = new Dynamic_Object_List(array('objectid' => 2,
+                                              'fieldlist' => array('id','label','type','default','source','validation','status','objectid','moduleid','itemtype'),
+                                              'where' => $where));
+    if ($myobject->items) {
+        $myobject->getItems();
+    }
+    $data['myobject'] = & $myobject;
+    //echo var_dump($myobject);
+*/
+
     if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
 
-    $object = xarModAPIFunc('dynamicdata','user','getobject',
+    $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
                             array('objectid' => $itemid,
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype));
+
     if (isset($object)) {
         $objectid = $object['objectid'];
         $modid = $object['moduleid'];
@@ -534,7 +569,7 @@ function dynamicdata_admin_modifyprop()
     }
 
     // get possible data sources
-    $data['sources'] = xarModAPIFunc('dynamicdata','user','getsources');
+    $data['sources'] = Dynamic_DataStore_Master::getDataSources();
     if (empty($data['sources'])) {
         $data['sources'] = array();
     }
@@ -553,6 +588,24 @@ function dynamicdata_admin_modifyprop()
 
     // Specify some labels and values for display
     $data['updatebutton'] = xarVarPrepForDisplay(xarML('Update Properties'));
+
+    if (empty($details)) {
+        $data['static'] = array();
+        $data['relations'] = array();
+        if (!empty($objectid)) {
+            $data['detailslink'] = xarModURL('dynamicdata','admin','modifyprop',
+                                             array('itemid' => $objectid,
+                                                   'details' => 1));
+        } else {
+            $data['detailslink'] = xarModURL('dynamicdata','admin','modifyprop',
+                                             array('modid' => $modid,
+                                                   'itemtype' => empty($itemtype) ? null : $itemtype,
+                                                   'details' => 1));
+        }
+        return $data;
+    }
+
+    $data['details'] = $details;
 
 // TODO: allow modules to specify their own properties
     // (try to) show the "static" properties, corresponding to fields in dedicated
@@ -590,7 +643,14 @@ function dynamicdata_admin_modifyprop()
     $data['labels']['linkfrom'] = xarML('From');
     $data['labels']['linkto'] = xarML('To');
 
-//    $data['where'] = "moduleid eq $modid and itemtype eq $itemtype";
+    if (!empty($objectid)) {
+        $data['detailslink'] = xarModURL('dynamicdata','admin','modifyprop',
+                                         array('itemid' => $objectid));
+    } else {
+        $data['detailslink'] = xarModURL('dynamicdata','admin','modifyprop',
+                                         array('modid' => $modid,
+                                               'itemtype' => empty($itemtype) ? null : $itemtype));
+    }
 
     // Return the template variables defined in this function
     return $data;
@@ -635,7 +695,7 @@ function dynamicdata_admin_updateprop()
 
     if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
 
-    $object = xarModAPIFunc('dynamicdata','user','getobject',
+    $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
                             array('objectid' => $objectid,
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype));
@@ -816,7 +876,7 @@ function dynamicdata_admin_export($args)
 
     if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
 
-    $object = xarModAPIFunc('dynamicdata','user','getobject',
+    $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
                             array('objectid' => $objectid,
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype));
@@ -1100,7 +1160,7 @@ function dynamicdata_admin_import($args)
 
                     // retrieve the correct itemtype if necessary
                     if ($object['itemtype'] < 0) {
-                        $objectinfo = xarModAPIFunc('dynamicdata','user','getobject',
+                        $objectinfo = xarModAPIFunc('dynamicdata','user','getobjectinfo',
                                                     array('objectid' => $objectid));
                         $object['itemtype'] = $objectinfo['itemtype'];
                     }

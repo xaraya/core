@@ -29,7 +29,7 @@ require_once 'modules/dynamicdata/class/objects.php';
  * @param $args['fields'] array containing the field definitions and values
  * @returns mixed
  * @return item id on success, null on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @raise BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_create($args)
 {
@@ -91,7 +91,7 @@ function dynamicdata_adminapi_create($args)
  * @param $args['itemtype'] item type of the original item
  * @returns bool
  * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @raise BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_delete($args)
 {
@@ -147,7 +147,7 @@ function dynamicdata_adminapi_delete($args)
  * @param $args['fields'] array containing the field definitions and values
  * @returns mixed
  * @return item id on success, null on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @raise BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_update($args)
 {
@@ -227,7 +227,7 @@ function dynamicdata_adminapi_update($args)
  * @param $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
  * @returns int
  * @return object ID on success, null on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @raise BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_createobject($args)
 {
@@ -256,7 +256,7 @@ function dynamicdata_adminapi_createobject($args)
  * @param $args['validation'] validation of the property to create
  * @returns int
  * @return property ID on success, null on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @raise BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_createproperty($args)
 {
@@ -341,7 +341,7 @@ function dynamicdata_adminapi_createproperty($args)
  * @param $args['objectid'] object id to assign these properties to
  * @returns bool
  * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @raise BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_importproperties($args)
 {
@@ -373,7 +373,7 @@ function dynamicdata_adminapi_importproperties($args)
 
     // search for an object, or create one
     if (empty($objectid)) {
-        $object = xarModAPIFunc('dynamicdata','user','getobject',
+        $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
                                 array('modid' => $modid,
                                       'itemtype' => $itemtype));
         if (!isset($object)) {
@@ -441,7 +441,7 @@ function dynamicdata_adminapi_importproperties($args)
  * @param $args['validation'] validation of the field to update (optional)
  * @returns bool
  * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @raise BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_updateprop($args)
 {
@@ -515,16 +515,9 @@ function dynamicdata_adminapi_updateprop($args)
 
     $sql .= " WHERE xar_prop_id = " . xarVarPrepForStore($prop_id);
 
-    $dbconn->Execute($sql);
+    $result = $dbconn->Execute($sql);
 
-    // Check for an error with the database code, and if so raise an
-    // appropriate exception
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $sql);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (!$result) return;
 
     return true;
 }
@@ -545,7 +538,7 @@ function dynamicdata_adminapi_updateprop($args)
  * @param $args['validation'] validation of the field to delete
  * @returns bool
  * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @raise BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_deleteprop($args)
 {
@@ -601,16 +594,9 @@ function dynamicdata_adminapi_deleteprop($args)
     $sql = "DELETE FROM $dynamicdata
             WHERE xar_dd_propid = " . xarVarPrepForStore($prop_id);
 
-    $dbconn->Execute($sql);
+    $result = $dbconn->Execute($sql);
 
-    // Check for an error with the database code, and if so raise an
-    // appropriate exception
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $sql);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (!$result) return;
 
     return true;
 }
@@ -1011,7 +997,7 @@ function dynamicdata_adminapi_checkinput($args)
 // TODO: test this replacement :)
     $invalid = array();
     foreach ($args['fields'] as $field) {
-        $property = Dynamic_Property_Master::getProperty($field);
+        $property = & Dynamic_Property_Master::getProperty($field);
         if (!$property->checkInput()) {
             $invalid[$property->name] = $property->invalid;
         }
@@ -1038,12 +1024,17 @@ function dynamicdata_adminapi_handleInputTag($args)
 {
     // we just invoke the showInput() method of the Dynamic Property here
     if (!empty($args['property'])) {
-        if (isset($args['value'])) {
-            if (is_numeric($args['value']) || substr($args['value'],0,1) == '$') {
-                return 'echo '.$args['property']."->showInput(array('value' => ".$args['value'].")); ";
-            } else {
-                return 'echo '.$args['property']."->showInput(array('value' => '".$args['value']."')); ";
+        if (count($args) > 1) {
+            $parts = array();
+            foreach ($args as $key => $val) {
+                if ($key == 'property') continue;
+                if (is_numeric($val) || substr($val,0,1) == '$') {
+                    $parts[] = "'$key' => ".$val;
+                } else {
+                    $parts[] = "'$key' => '".$val."'";
+                }
             }
+            return 'echo '.$args['property'].'->showInput(array('.join(', ',$parts).')); ';
         } else {
             return 'echo '.$args['property'].'->showInput(); ';
         }
@@ -1080,7 +1071,7 @@ function dynamicdata_adminapi_handleInputTag($args)
  */
 function dynamicdata_adminapi_showinput($args)
 {
-    $property = Dynamic_Property_Master::getProperty($args);
+    $property = & Dynamic_Property_Master::getProperty($args);
     return $property->showInput($args);
 
     // TODO: input for some common hook/utility modules
@@ -1100,11 +1091,17 @@ function dynamicdata_adminapi_showinput($args)
 function dynamicdata_adminapi_handleFormTag($args)
 {
     if (!empty($args['object'])) {
-        if (isset($args['layout']) || isset($args['template'])) {
-            return 'echo '.$args['object'].'->showForm(array('.
-                   (isset($args['layout']) ? "'layout' => ".$args['layout'].', ' : '') .
-                   (isset($args['template']) ? "'template' => ".$args['template'].', ' : '') .
-                   '); ';
+        if (count($args) > 1) {
+            $parts = array();
+            foreach ($args as $key => $val) {
+                if ($key == 'object') continue;
+                if (is_numeric($val) || substr($val,0,1) == '$') {
+                    $parts[] = "'$key' => ".$val;
+                } else {
+                    $parts[] = "'$key' => '".$val."'";
+                }
+            }
+            return 'echo '.$args['object'].'->showForm(array('.join(', ',$parts).')); ';
         } else {
             return 'echo '.$args['object'].'->showForm(); ';
         }
@@ -1250,11 +1247,17 @@ function dynamicdata_adminapi_handleListTag($args)
 {
     // if we already have an object, we simply invoke its showList() method
     if (!empty($args['object'])) {
-        if (isset($args['layout']) || isset($args['template'])) {
-            return 'echo '.$args['object'].'->showList(array('.
-                   (isset($args['layout']) ? "'layout' => ".$args['layout'].", " : '') .
-                   (isset($args['template']) ? "'template' => ".$args['template'].", " : '') .
-                   '); ';
+        if (count($args) > 1) {
+            $parts = array();
+            foreach ($args as $key => $val) {
+                if ($key == 'object') continue;
+                if (is_numeric($val) || substr($val,0,1) == '$') {
+                    $parts[] = "'$key' => ".$val;
+                } else {
+                    $parts[] = "'$key' => '".$val."'";
+                }
+            }
+            return 'echo '.$args['object'].'->showList(array('.join(', ',$parts).')); ';
         } else {
             return 'echo '.$args['object'].'->showList(); ';
         }

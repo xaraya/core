@@ -6,12 +6,16 @@
         </xar:foreach>
         <th align="center"><xar:mlstring>Options</xar:mlstring></th>
     </tr>
-    <xar:foreach in="$items" key="$itemid" value="$fields">
-    <tr>
     <!-- we don't use xar:data-form or xar:data-input here, because this
          is typically not an input form -->
-        <xar:foreach in="$fields" key="$name" value="$value">
-            <td><xar:data-output property="$properties[$name]" value="$value" /></td>
+    <xar:foreach in="$items" key="$itemid" value="$fields">
+    <tr>
+        <xar:foreach in="$properties" key="$name" value="$property">
+            <xar:if condition="!empty($fields[$name])">
+            <td><xar:data-output property="$properties[$name]" value="$fields[$name]" /></td>
+            <xar:else />
+            <td>&nbsp;</td>
+            </xar:if>
         </xar:foreach>
         <td>
             <xar:loop name="$links[$itemid]">
@@ -47,28 +51,31 @@
         </div>
     </xar:if>
 
+
 <xar:elseif condition="$layout eq 'cells'" />
-    <table width="100%" border="1" cellspacing="0" cellpadding="4">
+    <table width="100%" border="0" cellspacing="0" cellpadding="4">
     <tr>
-        <xar:loop name="$labels">
-            <th align="center">#$label#</th>
-        </xar:loop>
+        <xar:foreach in="$properties" key="$name" value="$property">
+            <td><strong><xar:data-label property="$properties[$name]" /></strong></td>
+        </xar:foreach>
     </tr>
-    <xar:loop name="$items">
+    <!-- for this layout, we'll use xar:data-input here -->
+    <xar:foreach in="$items" key="$itemid" value="$fields">
     <tr>
-        <xar:loop name="$fields">
-            <td><xar:data-input type="$type" name="dd_'.$id.'" value="$value" size="15" /></td>
-        </xar:loop>
+        <xar:foreach in="$properties" key="$name" value="$property">
+            <xar:if condition="!empty($fields[$name])">
+            <td><xar:data-input property="$properties[$name]" name="dd_'.$name.'['.$itemid.']" size="10" value="$fields[$name]" /></td>
+            <xar:else />
+            <td><xar:data-input property="$properties[$name]" name="dd_'.$name.'['.$itemid.']" size="10" /></td>
+            </xar:if>
+        </xar:foreach>
     </tr>
-    </xar:loop>
-    <xar:if condition="!empty($newlink)">
+    </xar:foreach>
     <tr>
-        <xar:loop name="$labels">
-            <td>&nbsp;</td>
-        </xar:loop>
-        <td><a href="#$newlink#"><xar:mlstring>New</xar:mlstring></a></td>
+        <xar:foreach in="$properties" key="$name" value="$property">
+            <td><xar:data-input property="$properties[$name]" size="10" name="dd_'.$name.'[0]" /></td>
+        </xar:foreach>
     </tr>
-    </xar:if>
     </table>
 
     <xar:if condition="!empty($prevurl) or !empty($nexturl)">

@@ -1,6 +1,6 @@
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
-        <td align="center" colspan="5">
+        <td align="center" colspan="6">
             <strong>&xar-var-labels.dynamicdata;</strong> [ <a href="#$link#" target="hook">&xar-var-labels.config;</a> ]
         </td>
     </tr>

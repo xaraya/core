@@ -11,6 +11,12 @@
 
 <xar:data-display object="$object" />
 
+<xar:if condition="!empty($related)">
+<br />
+<strong>#$related#</strong>
+<br /><br />
+</xar:if>
+
 <center>
 <form method="post" action="&xar-modurl-dynamicdata-admin-delete;">
     <input type="hidden" name="authid" value="#$authid#" />

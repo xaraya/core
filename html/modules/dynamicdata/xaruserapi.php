@@ -31,8 +31,8 @@ require_once 'modules/dynamicdata/class/objects.php';
  * @param $args['status'] limit to property fields of a certain status (e.g. active)
  * @param $args['static'] include the static properties (= module tables) too (default no)
  * @returns array
- * @return array of fields, or false on failure
- * @raise BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ * @return array of (name => value), or false on failure
+ * @raise BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_userapi_getitem($args)
 {
@@ -134,8 +134,8 @@ function dynamicdata_userapi_getall($args)
  * @param $args['startnum'] start number
  * @param $args['where'] WHERE clause to be used as part of the selection
  * @returns array
- * @return array of fields, or false on failure
- * @raise BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ * @return array of (itemid => array of (name => value)), or false on failure
+ * @raise BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_userapi_getitems($args)
 {
@@ -236,11 +236,10 @@ function dynamicdata_userapi_getitems($args)
  * @param $args['modid'] module id of the item field to get
  * @param $args['itemtype'] item type of the item field to get
  * @param $args['itemid'] item id of the item field to get
- * @param $args['prop_id'] property id of the field to get, or
  * @param $args['name'] name of the field to get
  * @returns mixed
  * @return value of the field, or false on failure
- * @raise BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ * @raise BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_userapi_getfield($args)
 {
@@ -263,10 +262,8 @@ function dynamicdata_userapi_getfield($args)
     if (!isset($itemid) || !is_numeric($itemid)) {
         $invalid[] = 'item id';
     }
-    if ((!isset($name) && !isset($prop_id)) ||
-        (isset($name) && !is_string($name)) ||
-        (isset($prop_id) && !is_numeric($prop_id))) {
-        $invalid[] = 'field name or property id';
+    if (!isset($name) || !is_string($name)) {
+        $invalid[] = 'field name';
     }
     if (count($invalid) > 0) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
@@ -276,54 +273,24 @@ function dynamicdata_userapi_getfield($args)
         return;
     }
 
-    list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $object = new Dynamic_Object(array('moduleid'  => $modid,
+                                       'itemtype'  => $itemtype,
+                                       'itemid'    => $itemid,
+                                       'fieldlist' => array($name)));
+    if (!isset($object)) return;
+    $object->getItem();
 
-    $dynamicdata = $xartable['dynamic_data'];
-    $dynamicprop = $xartable['dynamic_properties'];
+    if (!isset($object->properties[$name])) return;
+    $property = $object->properties[$name]; 
 
-// TODO: retrieve from other data sources as well
-
-    $sql = "SELECT xar_prop_name,
-                   xar_prop_type,
-                   xar_prop_id,
-                   xar_prop_default,
-                   xar_dd_value
-            FROM $dynamicdata, $dynamicprop
-            WHERE xar_prop_id = xar_dd_propid
-              AND xar_prop_moduleid = " . xarVarPrepForStore($modid);
-    if (!empty($itemtype)) {
-        $sql .= " AND xar_prop_itemtype = " . xarVarPrepForStore($itemtype);
-    }
-    $sql .= " AND xar_dd_itemid = " . xarVarPrepForStore($itemid);
-    if (!empty($prop_id)) {
-        $sql .= " AND xar_prop_id = " . xarVarPrepForStore($prop_id);
-    } else {
-        $sql .= " AND xar_prop_name = '" . xarVarPrepForStore($name) . "'";
-    }
-
-    $result = $dbconn->Execute($sql);
-
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $sql);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
-
-    if ($result->EOF) {
-        $result->Close();
-        return;
-    }
-    list($name, $type, $id, $default, $value) = $result->fields;
-    $result->Close();
-
-    if (!xarSecAuthAction(0, 'DynamicData::Field', "$name:$type:$id", ACCESS_READ)) {
+    if (!xarSecAuthAction(0, 'DynamicData::Field', $property->name.':'.$property->type.':'.$property->id, ACCESS_READ)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
-    if (!isset($value)) {
-        $value = $default;
+    if (!isset($property->value)) {
+        $value = $property->default;
+    } else {
+        $value = $property->value;
     }
 
     return $value;
@@ -337,64 +304,6 @@ function dynamicdata_userapi_get($args)
     return dynamicdata_userapi_getfield($args);
 }
 
-
-/**
- * split the fields array into parts for dynamic data, static tables, hooks, functions, ...
- *
- * @param &$fields fields array (pass by reference here !)
- * @returns array
- * @return array of $dynprops, $tables, $hooks, $functions arrays
- * @raise BAD_PARAM
- */
-function dynamicdata_userapi_splitfields($args)
-{
-// don't use extract here - we get the fields by reference
-//    extract($args);
-
-    // pass by reference
-    $fields = &$args['fields'];
-
-    $dynprops = array();
-    $tables = array();
-    $hooks = array();
-    $functions = array();
-    // name of the item id field
-    $itemidname = '';
-    foreach ($fields as $name => $field) {
-        if (empty($itemidname) && $field['type'] == 21) { // Item ID
-            $itemidname = $name;
-        }
-
-        // normal dynamic data field
-        if ($field['source'] == 'dynamic_data') {
-            // we still use the property ids here, because they're faster/more consistent
-            $dynprops[$field['id']] = $name;
-
-        // data field coming from another table
-        } elseif (preg_match('/^(\w+)\.(\w+)$/', $field['source'], $matches)) {
-            $table = $matches[1];
-            $fieldname = $matches[2];
-            $tables[$table][$fieldname] = $name;
-
-        // data managed by a hook/utility module
-        } elseif ($field['source'] == 'hook module') {
-            // check if this is a known module, based on the name of the property type
-            $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
-            if (!empty($proptypes[$field['type']]['name'])) {
-                $hooks[$proptypes[$field['type']]['name']] = $name;
-            }
-
-        // data managed by some user function (specified in validation for now)
-        } elseif ($field['source'] == 'user function') {
-            $functions[$field['validation']] = $name;
-
-        } else {
-    // TODO: retrieve from other data sources than (known) tables as well
-        }
-    }
-
-    return array($dynprops,$tables,$hooks,$functions,$itemidname);
-}
 
 // ----------------------------------------------------------------------
 // get*() properties, data sources, static fields, relationships, ...
@@ -422,12 +331,14 @@ function dynamicdata_userapi_getprop($args)
     extract($args);
 
     if (!empty($objectid)) {
-        $object = xarModAPIFunc('dynamicdata','user','getobject',
+        $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
                                 array('objectid' => $objectid));
         if (!empty($object)) {
             $modid = $object['moduleid'];
             $itemtype = $object['itemtype'];
         }
+    } else {
+        $objectid = null;
     }
 
     if (empty($modid) && !empty($module)) {
@@ -489,53 +400,9 @@ function dynamicdata_userapi_getprop($args)
         }
     }
 
-    list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
-
-    $dynamicprop = $xartable['dynamic_properties'];
-
-    $sql = "SELECT xar_prop_name,
-                   xar_prop_label,
-                   xar_prop_type,
-                   xar_prop_id,
-                   xar_prop_default,
-                   xar_prop_source,
-                   xar_prop_status,
-                   xar_prop_order,
-                   xar_prop_validation
-            FROM $dynamicprop
-            WHERE xar_prop_moduleid = " . xarVarPrepForStore($modid) . "
-              AND xar_prop_itemtype = " . xarVarPrepForStore($itemtype) . "
-            ORDER BY xar_prop_order ASC, xar_prop_id ASC";
-
-    $result = $dbconn->Execute($sql);
-
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $sql);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
-
-    $fields = array();
-
-    while (!$result->EOF) {
-        list($name, $label, $type, $id, $default, $source, $fieldstatus, $order, $validation) = $result->fields;
-        if (xarSecAuthAction(0, 'DynamicData::Field', "$name:$type:$id", ACCESS_READ)) {
-            $fields[$name] = array('name' => $name,
-                                   'label' => $label,
-                                   'type' => $type,
-                                   'id' => $id,
-                                   'default' => $default,
-                                   'source' => $source,
-                                   'status' => $fieldstatus,
-                                   'order' => $order,
-                                   'validation' => $validation);
-        }
-        $result->MoveNext();
-    }
-
-    $result->Close();
+    $fields = Dynamic_Property_Master::getProperties(array('objectid' => $objectid,
+                                                           'moduleid' => $modid,
+                                                           'itemtype' => $itemtype));
 
     if (!empty($static)) {
         // get the list of static properties for this module
@@ -595,7 +462,7 @@ function dynamicdata_userapi_getobjects($args = array())
  * @return array of object definitions
  * @raise DATABASE_ERROR, NO_PERMISSION
  */
-function dynamicdata_userapi_getobject($args)
+function dynamicdata_userapi_getobjectinfo($args)
 {
     if (empty($args['moduleid']) && !empty($args['modid'])) {
        $args['moduleid'] = $args['modid'];
@@ -1131,9 +998,9 @@ function dynamicdata_userapi_handleOutputTag($args)
     if (!empty($args['property'])) {
         if (isset($args['value'])) {
             if (is_numeric($args['value']) || substr($args['value'],0,1) == '$') {
-                return 'echo '.$args['property']."->showOutput(".$args['value']."); ";
+                return 'echo '.$args['property'].'->showOutput('.$args['value'].'); ';
             } else {
-                return 'echo '.$args['property']."->showOutput('".$args['value']."'); ";
+                return 'echo '.$args['property'].'->showOutput("'.$args['value'].'"); ';
             }
         } else {
             return 'echo '.$args['property'].'->showOutput(); ';
@@ -1170,7 +1037,7 @@ function dynamicdata_userapi_handleOutputTag($args)
  */
 function dynamicdata_userapi_showoutput($args)
 {
-    $property = Dynamic_Property_Master::getProperty($args);
+    $property = & Dynamic_Property_Master::getProperty($args);
     return $property->showOutput($args['value']);
 
     // TODO: output from some common hook/utility modules
@@ -1190,11 +1057,17 @@ function dynamicdata_userapi_showoutput($args)
 function dynamicdata_userapi_handleDisplayTag($args)
 {
     if (!empty($args['object'])) {
-        if (isset($args['layout']) || isset($args['template'])) {
-            return 'echo '.$args['object'].'->showDisplay(array('.
-                   (isset($args['layout']) ? "'layout' => '".$args['layout']."', " : '') .
-                   (isset($args['template']) ? "'template' => '".$args['template']."', " : '') .
-                   '); ';
+        if (count($args) > 1) {
+            $parts = array();
+            foreach ($args as $key => $val) {
+                if ($key == 'object') continue;
+                if (is_numeric($val) || substr($val,0,1) == '$') {
+                    $parts[] = "'$key' => ".$val;
+                } else {
+                    $parts[] = "'$key' => '".$val."'";
+                }
+            }
+            return 'echo '.$args['object'].'->showDisplay(array('.join(', ',$parts).')); ';
         } else {
             return 'echo '.$args['object'].'->showDisplay(); ';
         }
@@ -1338,11 +1211,17 @@ function dynamicdata_userapi_handleViewTag($args)
 {
     // if we already have an object, we simply invoke its showView() method
     if (!empty($args['object'])) {
-        if (isset($args['layout']) || isset($args['template'])) {
-            return 'echo '.$args['object'].'->showView(array('.
-                   (isset($args['layout']) ? "'layout' => ".$args['layout'].", " : '') .
-                   (isset($args['template']) ? "'template' => ".$args['template'].", " : '') .
-                   '); ';
+        if (count($args) > 1) {
+            $parts = array();
+            foreach ($args as $key => $val) {
+                if ($key == 'object') continue;
+                if (is_numeric($val) || substr($val,0,1) == '$') {
+                    $parts[] = "'$key' => ".$val;
+                } else {
+                    $parts[] = "'$key' => '".$val."'";
+                }
+            }
+            return 'echo '.$args['object'].'->showView(array('.join(', ',$parts).')); ';
         } else {
             return 'echo '.$args['object'].'->showView(); ';
         }
@@ -1540,7 +1419,7 @@ function dynamicdata_userapi_handleObjectTag($args)
                 return 'echo '.$args['object'].'->'.$args['method'].'(); ';
             }
         } else {
-            return 'echo "I need a property or a method"; ';
+            return 'echo "I need a property or a method for this object"; ';
         }
     } else {
         return 'echo "I need an object"; ';
@@ -1598,65 +1477,16 @@ function dynamicdata_userapi_getmenulinks()
  * utility function to count the number of items held by this module
  *
  * @author the DynamicData module development team
+ * @param $args the usual suspects :)
  * @returns integer
  * @return number of items held by this module
- * @raise DATABASE_ERROR
  */
-function dynamicdata_userapi_countitems()
+function dynamicdata_userapi_countitems($args)
 {
-    // Get database setup - note that both xarDBGetConn() and xarDBGetTables()
-    // return arrays but we handle them differently.  For xarDBGetConn() we
-    // currently just want the first item, which is the official database
-    // handle.  For xarDBGetTables() we want to keep the entire tables array
-    // together for easy reference later on
-    list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $mylist = new Dynamic_Object_List($args);
+    if (!isset($mylist)) return;
 
-    // It's good practice to name the table and column definitions you are
-    // getting - $table and $column don't cut it in more complex modules
-    $exampletable = $xartable['example'];
-
-    // Get item - the formatting here is not mandatory, but it does make the
-    // SQL statement relatively easy to read.  Also, separating out the sql
-    // statement from the Execute() command allows for simpler debug operation
-    // if it is ever needed
-    $sql = "SELECT COUNT(1)
-            FROM $exampletable";
-    $result = $dbconn->Execute($sql);
-
-    // Check for an error with the database code, and if so set an appropriate
-    // error message and return
-    if ($dbconn->ErrorNo() != 0) {
-        // Hint : for debugging SQL queries, you can use $dbconn->ErrorMsg()
-        // to retrieve the actual database error message, and use e.g. the
-        // following message :
-        // $msg = xarML('Database error #(1) in query #(2) for #(3) function ' .
-        //             '#(4)() in module #(5)',
-        //          $dbconn->ErrorMsg(), $sql, 'user', 'countitems', 'DynamicData');
-        // Don't use that for release versions, though...
-        /*
-        $msg = xarML('Database error for #(1) function #(2)() in module #(3)',
-                    'user', 'countitems', 'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-        */
-        // This is the API compliant way to raise a db error exception
-        $msg = xarMLByKey('DATABASE_ERROR', $sql);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
-
-    // Obtain the number of items
-    list($numitems) = $result->fields;
-
-    // All successful database queries produce a result set, and that result
-    // set should be closed when it has been finished with
-    $result->Close();
-
-    // Return the number of items
-    return $numitems;
+    return $mylist->countItems();
 }
 
 // ----------------------------------------------------------------------
@@ -1675,7 +1505,6 @@ function dynamicdata_userapi_encode_shorturl($args)
 
     if (count($objectcache) == 0) {
         $objects = xarModAPIFunc('dynamicdata','user','getobjects');
-//print_r($objects);
         foreach ($objects as $object) {
             $objectcache[$object['moduleid'].':'.$object['itemtype']] = $object['name'];
         }

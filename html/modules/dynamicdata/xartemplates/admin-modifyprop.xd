@@ -107,6 +107,17 @@ Tip : empty label -> delete field for all items
 </table>
 <br />
 
+<!--xar:data-list object="$myobject" layout="'cells'" template="''" /-->
+
+<div align="center">
+<br />[
+<xar:if condition="empty($details)">
+    <a href="#$detailslink#"><xar:mlstring>Show Static Properties and Relations</xar:mlstring></a>
+<xar:else />
+    <a href="#$detailslink#"><xar:mlstring>Hide Static Properties and Relations</xar:mlstring></a>
+</xar:if>
+]<br />
+</div>
 
 <xar:if condition="count($static) gt 0">
 <h2>#$statictitle#</h2>

@@ -24,7 +24,7 @@ class Dynamic_DataStore_Master
     /**
      * Class method to get a new dynamic data store (of the right type)
      */
-    function getDataStore($name = '_dynamic_data_', $type = 'data')
+    function &getDataStore($name = '_dynamic_data_', $type = 'data')
     {
         switch ($type)
         {
@@ -57,7 +57,7 @@ class Dynamic_DataStore_Master
         return $datastore;
     }
 
-    function &getDataStores()
+    function getDataStores()
     {
     }
 
@@ -281,9 +281,14 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
+        $fieldlist = array_keys($this->fields);
+        if (count($fieldlist) < 1) {
+            return;
+        }
+
         list($dbconn) = xarDBGetConn();
 
-        $query = "SELECT $itemidfield, " . join(', ', array_keys($this->fields)) . "
+        $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
                     FROM $table
                    WHERE $itemidfield = " . xarVarPrepForStore($itemid);
 
@@ -303,7 +308,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
-        foreach (array_keys($this->fields) as $field) {
+        foreach ($fieldlist as $field) {
             // set the value for this property
             $this->fields[$field]->setValue(array_shift($values));
         }
@@ -320,6 +325,11 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
+        $fieldlist = array_keys($this->fields);
+        if (count($fieldlist) < 1) {
+            return;
+        }
+
         list($dbconn) = xarDBGetConn();
 
     // TODO: this won't work for objects with several static tables !
@@ -331,7 +341,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         $query = "INSERT INTO $table ( ";
         $join = '';
-        foreach (array_keys($this->fields) as $field) {
+        foreach ($fieldlist as $field) {
             // get the value from the corresponding property
             $value = $this->fields[$field]->getValue();
             // skip fields where values aren't set
@@ -343,7 +353,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
         $query .= " ) VALUES ( ";
         $join = '';
-        foreach (array_keys($this->fields) as $field) {
+        foreach ($fieldlist as $field) {
             // get the value from the corresponding property
             $value = $this->fields[$field]->getValue();
             // skip fields where values aren't set
@@ -387,11 +397,16 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
+        $fieldlist = array_keys($this->fields);
+        if (count($fieldlist) < 1) {
+            return;
+        }
+
         list($dbconn) = xarDBGetConn();
 
         $query = "UPDATE $table ";
         $join = 'SET ';
-        foreach (array_keys($this->fields) as $field) {
+        foreach ($fieldlist as $field) {
             // get the value from the corresponding property
             $value = $this->fields[$field]->getValue();
 
@@ -465,9 +480,14 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
+        $fieldlist = array_keys($this->fields);
+        if (count($fieldlist) < 1) {
+            return;
+        }
+
         list($dbconn) = xarDBGetConn();
 
-        $query = "SELECT $itemidfield, " . join(', ', array_keys($this->fields)) . "
+        $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
                     FROM $table ";
 
         if (count($itemids) > 1) {
@@ -519,7 +539,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
                 $this->itemids[] = $itemid;
             }
 
-            foreach (array_keys($this->fields) as $field) {
+            foreach ($fieldlist as $field) {
                 // add the item to the value list for this property
                 $this->fields[$field]->setItemValue($itemid,array_shift($values));
             }
@@ -630,12 +650,15 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
     {
         $itemid = $args['itemid'];
 
+        $propids = array_keys($this->fields);
+        if (count($propids) < 1) {
+            return;
+        }
+
         list($dbconn) = xarDBGetConn();
         $xartable = xarDBGetTables();
 
         $dynamicdata = $xartable['dynamic_data'];
-
-        $propids = array_keys($this->fields);
 
         $query = "SELECT xar_dd_propid,
                          xar_dd_value
@@ -672,12 +695,17 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             }
         }
 
+        $propids = array_keys($this->fields);
+        if (count($propids) < 1) {
+            return $itemid;
+        }
+
         list($dbconn) = xarDBGetConn();
         $xartable = xarDBGetTables();
 
         $dynamicdata = $xartable['dynamic_data'];
 
-        foreach (array_keys($this->fields) as $propid) {
+        foreach ($propids as $propid) {
             // get the value from the corresponding property
             $value = $this->fields[$propid]->getValue();
 
@@ -711,12 +739,15 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
     {
         $itemid = $args['itemid'];
 
+        $propids = array_keys($this->fields);
+        if (count($propids) < 1) {
+            return $itemid;
+        }
+
         list($dbconn) = xarDBGetConn();
         $xartable = xarDBGetTables();
 
         $dynamicdata = $xartable['dynamic_data'];
-
-        $propids = array_keys($this->fields);
 
         // get the current dynamic data fields for all properties of this item
         $query = "SELECT xar_dd_id,
@@ -737,7 +768,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
         $result->Close();
 
-        foreach (array_keys($this->fields) as $propid) {
+        foreach ($propids as $propid) {
             // get the value from the corresponding property
             $value = $this->fields[$propid]->getValue();
 
@@ -779,12 +810,15 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
     {
         $itemid = $args['itemid'];
 
+        $propids = array_keys($this->fields);
+        if (count($propids) < 1) {
+            return $itemid;
+        }
+
         list($dbconn) = xarDBGetConn();
         $xartable = xarDBGetTables();
 
         $dynamicdata = $xartable['dynamic_data'];
-
-        $propids = array_keys($this->fields);
 
         // get the current dynamic data fields for all properties of this item
         $query = "DELETE FROM $dynamicdata
@@ -817,11 +851,14 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             $itemids = array();
         }
 
+        $propids = array_keys($this->fields);
+        if (count($propids) < 1) {
+            return;
+        }
+
         list($dbconn) = xarDBGetConn();
         $xartable = xarDBGetTables();
         $dynamicdata = $xartable['dynamic_data'];
-
-        $propids = array_keys($this->fields);
 
         // easy case where we already know the items we want
         if (count($itemids) > 0) {

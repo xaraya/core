@@ -91,8 +91,8 @@ class Dynamic_Object_Master
            ) {
            Dynamic_Property_Master::getProperties(array('objectid'  => $this->objectid,
                                                         'moduleid'  => $this->moduleid,
-                                                        'itemtype'  => $this->itemtype),
-                                                  $this); // we pass this object along
+                                                        'itemtype'  => $this->itemtype,
+                                                        'objectref' => & $this)); // we pass this object along
         }
         // filter on property status if necessary
         if (isset($this->status) && count($this->fieldlist) == 0) {
@@ -182,10 +182,10 @@ class Dynamic_Object_Master
     function addDataStore($name = '_dynamic_data_', $type='data')
     {
         // get a new data store
-        $datastore = Dynamic_DataStore_Master::getDataStore($name, $type);
+        $datastore =& Dynamic_DataStore_Master::getDataStore($name, $type);
 
         // add it to the list of data stores
-        $this->datastores[$datastore->name] = $datastore;
+        $this->datastores[$datastore->name] =& $datastore;
     }
 
     /**
@@ -194,7 +194,7 @@ class Dynamic_Object_Master
      * @returns array
      * @return array of object definitions
      */
-    function getObjects()
+    function &getObjects()
     {
         // here we can use our own classes to retrieve this :-)
         $objects = new Dynamic_Object_List(array('objectid' => 1));
@@ -211,7 +211,7 @@ class Dynamic_Object_Master
      * @returns object
      * @return the requested object definition
      */
-    function getObject($args)
+    function &getObject($args)
     {
         $args['itemid'] = null;
         // here we can use our own classes to retrieve this
@@ -293,7 +293,7 @@ class Dynamic_Object_Master
      */
     function createObject($args)
     {
-        $object = new Dynamic_Object(array('objectid' => 1));
+        $object = new Dynamic_Object(array('objectid' => 1)); // the Dynamic Objects = 1
         $objectid = $object->createItem($args);
         return $objectid;
     }
@@ -304,6 +304,8 @@ class Dynamic_Object_Master
 
     function deleteObject($args)
     {
+        // TODO: delete all the properties of this object too
+        // TODO: delete all the (dynamic ?) data for those properties as well
     }
 
 }

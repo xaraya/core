@@ -26,26 +26,12 @@ class Dynamic_Property_Master
      * @param $args['objectid'] the object id of the object, or
      * @param $args['moduleid'] the module id of the object +
      * @param $args['itemtype'] the itemtype of the object
-     * @param $objectref a reference to the object to add those properties to (optional)
+     * @param $args['objectref'] a reference to the object to add those properties to (optional)
      */
-    function &getProperties($args, &$objectref)
+    function getProperties($args)
     {
         // we can't use our own classes here, because we'd have an endless loop :-)
-/*
-        if ($args['objectid']) {
-            $where = 'objectid eq ' . $args['objectid'];
-        } else {
-            $where = 'moduleid eq ' . $args['moduleid'] . ' and itemtype eq ' .  $args['itemtype'];
-        }
-        $propertylist = new Dynamic_Object_List(array('objectid' => 2, 'where' => $where));
-        $propertyitems = $propertylist->getItems();
-        foreach ($propertyitems as $id => $property) {
-            if (xarSecAuthAction(0, 'DynamicData::Field', "$property[name]:$property[type]:$property[id]", ACCESS_READ)) {
-                $this->addProperty($property,$objectref);
-            }
-        }
-*/
-/**/
+
         list($dbconn) = xarDBGetConn();
         $xartable = xarDBGetTables();
 
@@ -73,6 +59,7 @@ class Dynamic_Property_Master
 
         if (!$result) return;
 
+        $properties = array();
         while (!$result->EOF) {
             list($name, $label, $type, $id, $default, $source, $fieldstatus, $order, $validation) = $result->fields;
             if (xarSecAuthAction(0, 'DynamicData::Field', "$name:$type:$id", ACCESS_READ)) {
@@ -85,15 +72,18 @@ class Dynamic_Property_Master
                                   'status' => $fieldstatus,
                                   'order' => $order,
                                   'validation' => $validation);
-                if (isset($objectref)) {
-                    Dynamic_Property_Master::addProperty($property,$objectref);
+                if (isset($args['objectref'])) {
+                    Dynamic_Property_Master::addProperty($property,$args['objectref']);
+                } else {
+                    $properties[$name] = $property;
                 }
             }
             $result->MoveNext();
         }
 
         $result->Close();
-/**/
+
+        return $properties;
     }
 
     /**
@@ -109,17 +99,17 @@ class Dynamic_Property_Master
     {
         if (isset($objectref)) {
             // get a new property
-            $property = Dynamic_Property_Master::getProperty($args);
+            $property =& Dynamic_Property_Master::getProperty($args);
 
             // add it to the list of properties
-            $objectref->properties[$property->name] = $property;
+            $objectref->properties[$property->name] =& $property;
         }
     }
 
     /**
      * Class method to get a new dynamic property of the right type
      */
-    function getProperty($args)
+    function &getProperty($args)
     {
         if (!is_numeric($args['type'])) {
             $proptypes = Dynamic_Property_Master::getPropertyTypes();
@@ -222,14 +212,26 @@ class Dynamic_Property_Master
 
     function createProperty($args)
     {
+        $object = new Dynamic_Object(array('objectid' => 2)); // the Dynamic Properties = 2
+        $objectid = $object->createItem($args);
+        return $objectid;
+    }
+
+    function updateProperty($args)
+    {
+        // TODO: what if the property type changes to something incompatible ?
     }
 
     function deleteProperty($args)
     {
-    }
+        if (empty($args['itemid'])) return;
 
-    function deleteProperty($args)
-    {
+        // TODO: delete all the (dynamic ?) data for this property as well
+        $object = new Dynamic_Object(array('objectid' => 2, // the Dynamic Properties = 2
+                                           'itemid'   => $args['itemid']));
+        $object->getItem();
+        $objectid = $object->deleteItem();
+        return $objectid;
     }
 
     /**
@@ -869,10 +871,14 @@ class Dynamic_Select_Property extends Dynamic_Property
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
                '>';
         foreach ($options as $option) {
+            $out .= '<option';
+            if ($option['id'] != $option['name']) {
+                $out .= ' value="'.$option['id'].'"';
+            }
             if ($option['id'] == $value) {
-                $out .= '<option value="'.$option['id'].'" selected>'.$option['name'].'</option>';
+                $out .= ' selected>'.$option['name'].'</option>';
             } else {
-                $out .= '<option value="'.$option['id'].'">'.$option['name'].'</option>';
+                $out .= '>'.$option['name'].'</option>';
             }
         }
         $out .= '</select>' .
@@ -1732,7 +1738,7 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
     {
         $this->Dynamic_Select_Property($args);
         if (count($this->options) == 0) {
-            $objects = Dynamic_Object_Master::getObjects();
+            $objects =& Dynamic_Object_Master::getObjects();
             if (!isset($objects)) {
                 $objects = array();
             }
