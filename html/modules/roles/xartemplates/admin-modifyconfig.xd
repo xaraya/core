@@ -161,8 +161,16 @@
 	<i><xar:mlstring>Note: Enter each name on a single line.  Do not separate with comma, etc</xar:mlstring></i></p>
 	<textarea name="disallowedips" id="disallowedips" rows="10" cols="30">#$ips#</textarea> 
 	</xar:if>
-		#$hooks#
-	<br /><br />
+
+    <xar:if condition="!empty($hooks)">
+        <h4><xar:mlstring>Configuration of Hooked Modules</xar:mlstring></h4>
+        <p><xar:mlstring>Default hooks for user roles.</xar:mlstring></p>
+        <xar:foreach in="$hooks" key="$hookmodule">
+            #$hooks[$hookmodule]#
+        </xar:foreach>
+    </xar:if>
+
+    <br /><br />
 	<input type="submit" value="#$updatelabel#"  />
     </div>
 </form>

@@ -41,13 +41,15 @@ function roles_admin_modifyconfig()
             $data['authid'] = xarSecGenAuthKey();
             $data['updatelabel'] = xarML('Update Users Configuration');
 
+            // Item type 0 is the default itemtype for 'user' roles.
             $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
-                array('module' => 'roles'));
-            if (empty($hooks) || !is_string($hooks)) {
-                $data['hooks'] = '';
-            } else {
-                $data['hooks'] = $hooks;
-            } 
+                array('module' => 'roles', 'itemtype' => 0));
+
+            if (empty($hooks)) {
+                $hooks = array();
+            }
+
+            $data['hooks'] = $hooks;
 
             break;
 
@@ -98,8 +100,9 @@ function roles_admin_modifyconfig()
             $disallowedips = serialize($disallowedips);
             xarModSetVar('roles', 'disallowedips', $disallowedips);
 
+            // Role type 'user' (itemtype 0).
             xarModCallHooks('module', 'updateconfig', 'roles',
-                array('module' => 'roles'));
+                array('module' => 'roles', 'itemtype' => 0));
 
             xarResponseRedirect(xarModURL('roles', 'admin', 'modifyconfig')); 
             // Return
