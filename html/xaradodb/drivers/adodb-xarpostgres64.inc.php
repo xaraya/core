@@ -29,7 +29,8 @@ class ADODB_xarpostgres64 extends ADODB_postgres64
     }
 
     // Add some debug timings to the driver execute method.
-    function &_Execute($sql, $inputarr = false) {
+    function &_Execute($sql, $inputarr = false)
+    {
         if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
             global $xarDebug_sqlCalls;
             $xarDebug_sqlCalls++;
