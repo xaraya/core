@@ -442,8 +442,8 @@ class ADODB_mysql extends ADOConnection {
 
         // Special handling if nrows is negative (-ve nrows means 'to end of table')
         if ($nrows < 0) {
-            if ($offset > 1) {
-                // Offset present: set nrows to a large number (max possible rows)
+            if ($offset > 0) {
+                // Offset present: set nrows to a large number (max possible rows 2^64)
                 $limitStr = ' LIMIT 18446744073709551615,'.$nrows;
             } else {
                 // No offset: no limit on query.
@@ -451,7 +451,7 @@ class ADODB_mysql extends ADOConnection {
             }
         } else {
             // Normal row limit and optional offset.
-            $limitStr = ' LIMIT '.(($offset > 1) ? "$offset," : '').$nrows;
+            $limitStr = ' LIMIT '.(($offset > 0) ? "$offset," : '').$nrows;
         }
 
 		if ($secs) {
