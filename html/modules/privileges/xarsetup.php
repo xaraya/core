@@ -232,7 +232,7 @@ function initializeSetup()
     xarRegisterMask('AdminPanel','All','adminpanels','All','All',ACCESS_ADMIN);
 
     xarRegisterMask('ViewLogin','All','roles','Block','login:Login:All',ACCESS_OVERVIEW);
-    xarRegisterMask('ViewRoles','All','roles','Block','All',ACCESS_OVERVIEW);
+    xarRegisterMask('ViewRolesBlocks','All','roles','Block','All',ACCESS_OVERVIEW);
     xarRegisterMask('ReadRole','All','roles','Block','All',ACCESS_READ);
     xarRegisterMask('ViewRoles','All','roles','All','All',ACCESS_OVERVIEW);
     xarRegisterMask('ReadRole','All','roles','All','All',ACCESS_READ);

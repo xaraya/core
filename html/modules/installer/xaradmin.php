@@ -378,7 +378,7 @@ function installer_admin_create_administrator()
         $msg = xarML('The passwords do not match');
         xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
         return;
-    } 
+    }
 
     // assemble the args into an array for the role constructor
     $pargs = array('uid'   => $adminuid,
@@ -540,9 +540,6 @@ function installer_admin_choose_configuration()
     $data['names'] = $names;
 
     return $data;
-
-    // Huh? This is never reached
-    //xarResponseRedirect(xarModURL('installer', 'admin', 'confirm_configuration', array('theme' => 'installer')));
 }
 
 /**

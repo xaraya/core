@@ -120,6 +120,10 @@ function installer_intranet_configuration_load($args)
         xarModAPIFunc('modules','admin','initialise',array('regid'=>11));     // autolinks
         xarModAPIFunc('modules','admin','activate',array('regid'=>11));
     }
+    if(in_array('m745',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>745));    // bloggerapi
+        xarModAPIFunc('modules','admin','activate',array('regid'=>745));
+    }
     if(in_array('m147',$args)) {
         xarModAPIFunc('modules','admin','initialise',array('regid'=>147));    // categories
         xarModAPIFunc('modules','admin','activate',array('regid'=>147));
@@ -131,6 +135,10 @@ function installer_intranet_configuration_load($args)
     if(in_array('m177',$args)) {
         xarModAPIFunc('modules','admin','initialise',array('regid'=>177));    // hitcount
         xarModAPIFunc('modules','admin','activate',array('regid'=>177));
+    }
+    if(in_array('m747',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>747));    // metaweblogapi
+        xarModAPIFunc('modules','admin','activate',array('regid'=>747));
     }
     if(in_array('m41',$args)) {
         xarModAPIFunc('modules','admin','initialise',array('regid'=>41));     // ratings
@@ -157,8 +165,16 @@ function installer_intranet_configuration_load($args)
         xarModAPIFunc('modules','admin','activate',array('regid'=>28));
     }
     if(in_array('m743',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>743));    // webservices
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>743));    // xmlrpcserver
         xarModAPIFunc('modules','admin','activate',array('regid'=>743));
+    }
+    if(in_array('m744',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>744));    // xmlrpcsystemapi
+        xarModAPIFunc('modules','admin','activate',array('regid'=>744));
+    }
+    if(in_array('m746',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>746));    // xmlrpcvalidatorapi
+        xarModAPIFunc('modules','admin','activate',array('regid'=>746));
     }
 
     $content['marker'] = '[x]';                                           // create the user menu

@@ -36,6 +36,11 @@ $options  = array(
         'comment' => xarML('Install the Autolinks module.')
     ),
     array(
+        'item' => 'm745',
+        'option' => 'true',
+        'comment' => xarML('Install the Bloggerapi module.')
+    ),
+    array(
         'item' => 'm147',
         'option' => 'true',
         'comment' => xarML('Install the Categories module.')
@@ -56,6 +61,11 @@ $options  = array(
         'comment' => xarML('Install the Hitcount module.')
     ),
     array(
+        'item' => 'm747',
+        'option' => 'true',
+        'comment' => xarML('Install the Metaweblogapi module.')
+    ),
+    array(
         'item' => 'm41',
         'option' => 'true',
         'comment' => xarML('Install the Ratings module.')
@@ -66,14 +76,29 @@ $options  = array(
         'comment' => xarML('Install the Search module.')
     ),
     array(
-        'item' => 'm743',
+        'item' => 'm748',
         'option' => 'true',
-        'comment' => xarML('Install the Webservices module.')
+        'comment' => xarML('Install the Soapserver module.')
     ),
     array(
         'item' => 'm28',
         'option' => 'true',
         'comment' => xarML('Install the Wiki module.')
+    ),
+    array(
+        'item' => 'm743',
+        'option' => 'true',
+        'comment' => xarML('Install the Xmlrpcserver module.')
+    ),
+    array(
+        'item' => 'm744',
+        'option' => 'true',
+        'comment' => xarML('Install the Xmlrpcsystemapi module.')
+    ),
+    array(
+        'item' => 'm746',
+        'option' => 'true',
+        'comment' => xarML('Install the Xmlrpcvalidatorapi module.')
     )
 );
 $configuration_options = $options;
@@ -95,6 +120,10 @@ function installer_community_configuration_load($args)
         xarModAPIFunc('modules','admin','initialise',array('regid'=>11));     // autolinks
         xarModAPIFunc('modules','admin','activate',array('regid'=>11));
     }
+    if(in_array('m745',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>745));    // bloggerapi
+        xarModAPIFunc('modules','admin','activate',array('regid'=>745));
+    }
     if(in_array('m147',$args)) {
         xarModAPIFunc('modules','admin','initialise',array('regid'=>147));    // categories
         xarModAPIFunc('modules','admin','activate',array('regid'=>147));
@@ -106,6 +135,10 @@ function installer_community_configuration_load($args)
     if(in_array('m177',$args)) {
         xarModAPIFunc('modules','admin','initialise',array('regid'=>177));    // hitcount
         xarModAPIFunc('modules','admin','activate',array('regid'=>177));
+    }
+    if(in_array('m747',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>747));    // metaweblogapi
+        xarModAPIFunc('modules','admin','activate',array('regid'=>747));
     }
     if(in_array('m41',$args)) {
         xarModAPIFunc('modules','admin','initialise',array('regid'=>41));     // ratings
@@ -132,8 +165,16 @@ function installer_community_configuration_load($args)
         xarModAPIFunc('modules','admin','activate',array('regid'=>28));
     }
     if(in_array('m743',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>743));    // webservices
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>743));    // xmlrpcserver
         xarModAPIFunc('modules','admin','activate',array('regid'=>743));
+    }
+    if(in_array('m744',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>744));    // xmlrpcsystemapi
+        xarModAPIFunc('modules','admin','activate',array('regid'=>744));
+    }
+    if(in_array('m746',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>746));    // xmlrpcvalidatorapi
+        xarModAPIFunc('modules','admin','activate',array('regid'=>746));
     }
 
     $content['marker'] = '[x]';                                           // create the user menu

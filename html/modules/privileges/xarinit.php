@@ -328,11 +328,13 @@ function privileges_init()
                                       'primary_key' => true),
                    'xar_set' => array('type'        => 'text')));
 
+/*  TO BE IMPLEMENTED LATER
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     xarDB_importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
 
+*/
     // Initialisation successful
     return true;
 }
