@@ -1056,9 +1056,9 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
                 // Remove the leading / from the path (if any).
                 $path = preg_replace('/^\//', '', $path);
 
-				// Append any encoderArgs that weren't handled by the module specific short-url encoder
-				$unencodedArgs = xarModURLGetUnencodedArgs($encoderArgs, $path);
-				$path = xarModURLAppendParams( $unencodedArgs, $path );
+                // Append any encoderArgs that weren't handled by the module specific short-url encoder
+                $unencodedArgs = xarModURLGetUnencodedArgs($encoderArgs, $path);
+                $path = xarModURLAppendParams( $unencodedArgs, $path );
 
                 // We now have the short form of the URL.
                 // Further custom manipulation of the URL can be added here.
@@ -1142,45 +1142,45 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
  */
 function xarModURLGetUnencodedArgs ( $args, $path )
 {
-	// This first part is ripped from xarServer.php lines 413 through 434
-	// ideally this code should be refactored from here and from xarServer.php so that
-	// the two sets of code don't get out of sink
-	
-	
-	$modName = NULL;
-	$modType = 'user';
-	$funcName = 'main';		
-	preg_match_all('|/([a-z0-9_ .+-]+)|i', $path, $matches);
-	$params = $matches[1];
-	if (count($params) > 0) 
-	{
-		$modName = $params[0];
-		// if the second part is not admin, it's user by default
-		if (isset($params[1]) && $params[1] == 'admin') $modType = 'admin';
-		else $modType = 'user';
-		// Check if this is an alias for some other module
-		$modName = xarRequest__resolveModuleAlias($modName);		
-		// Call the appropriate decode_shorturl function
-		if (   xarModIsAvailable($modName) 
-			&& xarModGetVar($modName, 'SupportShortURLs') 
-			&& xarModAPILoad($modName, $modType)
-			) 
-		{
-			$loopHole = array($modName,$modType,$funcName);
-		// don't throw exception on missing file or function anymore
-			$res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params, 0);
-		}
-	}
+    // This first part is ripped from xarServer.php lines 413 through 434
+    // ideally this code should be refactored from here and from xarServer.php so that
+    // the two sets of code don't get out of sink
+    
+    
+    $modName = NULL;
+    $modType = 'user';
+    $funcName = 'main';        
+    preg_match_all('|/([a-z0-9_ .+-]+)|i', $path, $matches);
+    $params = $matches[1];
+    if (count($params) > 0) 
+    {
+        $modName = $params[0];
+        // if the second part is not admin, it's user by default
+        if (isset($params[1]) && $params[1] == 'admin') $modType = 'admin';
+        else $modType = 'user';
+        // Check if this is an alias for some other module
+        $modName = xarRequest__resolveModuleAlias($modName);        
+        // Call the appropriate decode_shorturl function
+        if (   xarModIsAvailable($modName) 
+            && xarModGetVar($modName, 'SupportShortURLs') 
+            && xarModAPILoad($modName, $modType)
+            ) 
+        {
+            $loopHole = array($modName,$modType,$funcName);
+        // don't throw exception on missing file or function anymore
+            $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params, 0);
+        }
+    }
 
-	if( isset($res) && (count($res)>=2) )
-	{
-		$resolvedParams         = $res[1];
-		$resolvedParams['func'] = $res[0];
-	} else {
-		$resolvedParams = array();
-	}
+    if( isset($res) && (count($res)>=2) )
+    {
+        $resolvedParams         = $res[1];
+        $resolvedParams['func'] = $res[0];
+    } else {
+        $resolvedParams = array();
+    }
 
-	return array_diff($args, $resolvedParams);
+    return array_diff($args, $resolvedParams);
 }
 
 /**
@@ -1196,11 +1196,11 @@ function xarModURLAppendParams( $args, $path )
     $join = '?';
     $psep = '&';
 
-	// If we have more arguments, then they need to be joined onto the end of the path
-	if( count($args) > 0 )
-	{
-		$params = '';
-	
+    // If we have more arguments, then they need to be joined onto the end of the path
+    if( count($args) > 0 )
+    {
+        $params = '';
+    
         // Select parameters to add to the path, ensuring each value is encoded correctly.
         foreach ($args as $k=>$v) {
             if (is_array($v)) {
@@ -1221,21 +1221,21 @@ function xarModURLAppendParams( $args, $path )
             array(',', '$', '!', '*', '\'', '(', ')', '[', ']'),
             $params
         );
-		
-		// Check for Join character
-		if( strpos($path,$join) === FALSE )
-		{
-			// Path does not already have any params, remove leading seperator
-			$params = ltrim($params, $psep);
-			
-			$path .= $join . $params;
-		} else {
-			$path .= $params;
-		}
+        
+        // Check for Join character
+        if( strpos($path,$join) === FALSE )
+        {
+            // Path does not already have any params, remove leading seperator
+            $params = ltrim($params, $psep);
+            
+            $path .= $join . $params;
+        } else {
+            $path .= $params;
+        }
 
-		
-	}
-	return $path;
+        
+    }
+    return $path;
 }
 
 
