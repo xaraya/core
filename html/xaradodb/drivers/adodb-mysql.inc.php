@@ -96,8 +96,10 @@ class ADODB_mysql extends ADOConnection {
 	
 	function GenID($seqname='adodbseq',$startID=1)
 	{
-		// post-nuke sets hasGenID to false
-		if (!$this->hasGenID) return false;
+        // XARAYA MODIFICATION - START
+		//if (!$this->hasGenID) return false;
+        if (!$this->hasGenID) return 0;
+        // XARAYA MODIFICATION - END
 		
 		$getnext = sprintf($this->_genIDSQL,$seqname);
 		$rs = @$this->Execute($getnext);
