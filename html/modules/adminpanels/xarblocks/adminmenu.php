@@ -374,33 +374,4 @@ function adminpanels_adminmenublock_display($blockinfo){
     return $blockinfo;
 }
 
-/**
- * Modify block settings
- *
- * @author  Andy Varganov <andyv@xaraya.com>
- * @access  public
- * @param   $blockinfo
- * @return  $blockinfo data array
- */
-function adminpanels_adminmenublock_modify($blockinfo)
-{
-    // Return - nothing to modify
-    return $blockinfo;
-}
-
-/**
- * Update block settings
- *
- * @author  Andy Varganov <andyv@xaraya.com>
- * @access  public
- * @param   $blockinfo
- * @return  $blockinfo data array
- */
-function adminpanels_adminmenublock_update($blockinfo)
-{
-
-    // Return - nothing to update
-    return $blockinfo;
-}
-
 ?>
