@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Verifies if all dependencies of a module are satisfied.
+ * Activate all of the modules dependencies if possible.
  *
  * @param $maindId int ID of the module to look dependents for
  * @returns bool
- * @return true on dependencies verified and ok, false for not
+ * @return true on dependencies activated, false for not
  * @raise NO_PERMISSION
  */
-function modules_adminapi_verifydependency($mainId)
+function modules_adminapi_activatedependency($mainId)
 {
     // Security Check
     // need to specify the module because this function is called by the installer module
@@ -33,52 +33,65 @@ function modules_adminapi_verifydependency($mainId)
 
     // See if we have lost any modules since last generation
     if (!xarModAPIFunc('modules','admin','checkmissing')) {return;}
-    
+
     // Get all modules in DB
     // A module is dependent only if it was already initialised at least.
     // So db modules should be a safe start to go looking for them
-    $dbModules = xarModAPIFunc('modules','admin','getdbmodules');
-    if (!isset($dbModules)) return;
+    $fileModules = xarModAPIFunc('modules','admin','getfilemodules');
+    if (!isset($fileModules)) return;
 
-    $dbMods = array();
-
-    foreach ($dbModules as $name => $dbInfo) {
-        if ($dbInfo['state'] == XARMOD_STATE_ACTIVE) {
-            $dbMods[$dbInfo['regid']] = $dbInfo;
-        }
+    foreach ($fileModules as $name => $fileInfo) {
+        $fileMods[$fileInfo['regid']] = $fileInfo;
     }
-    
+
     foreach ($dependecy as $module_id => $conditions) {
     
         if (is_array($conditions)) {
+        
+            //The module id is in $modId
+            $modId = $module_id;
 
             //Required module inexistent
-            if (!isset($dbMods[$module_id])) {
+            if (!isset($fileMods[$modId])) {
                 //Need to add some info for the user
                 return false;
             }
 
+            //Checks if the dependency version is bigger than the min version
             if (xarModAPIFunc('base','versions','compare',array(
                 'ver1' => $conditions['minversion'],
-                'ver2' => $dbMods[$module_id]['version'])) < 0) {
+                'ver2' => $fileMods[$modId]['version'])) < 0) {
                 //Need to add some info for the user
                 return false; // 1st version is bigger
             }
 
+            //Checks if the dependency version is smaller than the max version
             if (xarModAPIFunc('base','versions','compare',array(
                 'ver1' => $conditions['maxversion'],
-                'ver2' => $dbMods[$module_id]['version'])) > 0) {
+                'ver2' => $fileMods[$modId]['version'])) > 0) {
                 //Need to add some info for the user
                 return false; // 1st version is smaller
             }
 
         } else {
+
+            //The module id is in $conditions
+            $modId = $conditions;
+
             //Required module inexistent
-            if (!isset($dbMods[$conditions])) {
+            if (!isset($fileMods[$modId])) {
                 //Need to add some info for the user
                 return false;
             }
+            
+            //We just have the ID, so no conditions to check for.
         }
+        
+        //So far so good, lets start the dependecy's dependecies
+
+        //TODO: Add check for loops here..
+        // Modules shouldnt depend on one that depend on itself... Still a check for this case is a good idea.
+        if (!xarModAPIFunc('modules','admin','activatedependency',$module_id)) {return;}
     }
 
     return true;
