@@ -50,10 +50,16 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         $idpart ='';
         if(isset($id)) {
             // Make the id property point to the same loop so loop:id:index etc. works too
-            $idpart = $loopName.'->'.$id.'=&'.$loopName.'; $loop->'.$id.'=& '.$loopName.'->'.$id.';';
+            $idpart = $loopName.'->'.$id.'='.$loopName.'; $loop->'.$id.'=& '.$loopName.'->'.$id.';';
+        }
+        $output = '';
+        if($loopCounter > 1) {
+            $previousLoop ='$loop_'.($loopCounter-1);
+            $output = $previousLoop.'_save=serialize('.$previousLoop.');';
         }
         $output = $loopName.'->index=-1; '.$loopName.'->number='.$loopCounter.';
         foreach ('.$name.' as '.$loopName.'->key => '.$loopName.'->item ) {
+            unset($loop);
             $loop->index = '.$loopName.'->index++;
             $loop->key   = '.$loopName.'->key; 
             $loop->item  =& '.$loopName.'->item; 
@@ -68,7 +74,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
             $previousLoop = xarTpl__XarLoopNode::loopCounter('--');
             $output = '} ';
         if($previousLoop >= 1 ) {
-            $output .= '$loop = $loop_'.$previousLoop.';'; 
+            $output .= '$loop = unserialize($loop_'.$previousLoop.'_save);';
         } 
         return $output;
     }

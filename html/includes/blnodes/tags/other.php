@@ -22,46 +22,45 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
     }
     
     function render()
-   {
+    {
         assert('isset($this->tagobject); /* The tagobject should have been set when constructing */');
         if (!xarTplCheckTagAttributes($this->tagName, $this->attributes)) return;
         return $this->tagobject->callHandler($this->attributes);
-   }
+    }
     
     function isAssignable()
-   {
+    {
         return $this->tagobject->isAssignable();
-   }
+    }
     
     function isPHPCode()
-   {
+    {
         return $this->tagobject->isPHPCode();
-   }
+    }
     
     function hasText()
-   {
+    {
         return $this->tagobject->hasText();
-   }
+    }
     
     function needAssignment()
-   {
+    {
         return $this->tagobject->needAssignement();
-   }
+    }
     
     function hasChildren()
-   {
+    {
         return $this->tagobject->hasChildren();
-   }
+    }
     
     function needParameter()
-   {
+    {
         return $this->tagobject->needParameter();
-   }
+    }
     
     function needExceptionsControl()
-   {
+    {
         return $this->tagobject->needExceptionsControl();
-   }
-    
+    }
 }
 ?>
