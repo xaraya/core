@@ -135,20 +135,9 @@ function adminpanels_adminmenublock_display($blockinfo){
                                                     'modactive' => 1,
                                                     'maintitle' => '');
                         }
-                        // Little bug fix since we wrapped the load API calls
-                        // Lets check to see if the function exists and just skip it if it doesn't
-                        // with the new api load, it causes some problems.  We need to load the api
-                        // in order to do it right.
-                        xarModAPILoad($label, 'admin');
-                        if (function_exists($label.'_adminapi_getmenulinks') ||
-                            file_exists("modules/$mod[osdirectory]/xaradminapi/getmenulinks.php")){
-                            // The user API function is called.
-                            $menulinks = xarModAPIFunc($label,
-                                                       'admin',
-                                                       'getmenulinks');
-                        } else {
-                            $menulinks = '';
-                        }
+
+                        // Call the admin menu links function, but don't raise an exception if it's not there
+                        $menulinks = xarModAPIFunc($label,'admin','getmenulinks',array(),false);
                         // scan array and prepare the links
                         if (!empty($menulinks)){
                             $indlinks = array();
@@ -245,8 +234,8 @@ function adminpanels_adminmenublock_display($blockinfo){
                                                     'maintitle' => '');
                         }
                         // For active module we need to display the mod functions links
-                        // call the api function to obtain function links
-                        $menulinks = xarModAPIFunc($label, 'admin', 'getmenulinks');
+                        // call the api function to obtain function links, don't raise an exception if it's not there
+                        $menulinks = xarModAPIFunc($label, 'admin', 'getmenulinks',array(),false);
                         // scan array and prepare the links
                         if (!empty($menulinks)) {
                             $indlinks = array();
