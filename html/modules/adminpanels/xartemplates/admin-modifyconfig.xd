@@ -1,5 +1,5 @@
 <xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
+    License: GPL http://www.gnu.org/copyleft/gpl.html
 </xar:comment>
 <div class="xar-mod-head">
     <span class="xar-mod-title">
@@ -17,7 +17,7 @@
     <form class="xar-fullwidth" method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
         <table class="xar-fullwidth xar-noborder">
             <tr>
-                <td width="180">
+                <td style="width:180;">
                 </td>
                 <td colspan="2">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -183,7 +183,7 @@
 <!-- Disable overviews -->
         <table class="xar-fullwidth xar-noborder">
             <tr>
-                <td width="180">
+                <td style="width:180;">
                 </td>
                 <td>
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />

@@ -1,10 +1,10 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
-<div class="xar-mod-body" style="width: 100%"><h2><xar:mlstring>View Block Types</xar:mlstring></h2>
+<div class="xar-mod-body" style="width: 99%"><h2><xar:mlstring>View Block Types</xar:mlstring></h2>
 
     <xar:if condition="!empty($tid)">
         <table cellpadding="4" cellspacing="1" class="xar-norm-outline">
-            <caption align="top">
+            <caption style="vertical-align:top;">
                 <xar:mlstring>Selected block details</xar:mlstring>
             </caption>
             <tr>
@@ -50,7 +50,7 @@
         <xar:comment>Table of overrideable parameters (see xar:block tag)</xar:comment>
             <xar:if condition="!empty($params)">
                 <table cellpadding="4" cellspacing="1" class="xar-norm-outline">
-                    <caption align="top">
+                    <caption style="vertical-align:top;">
                         <xar:mlstring>Block parameters customisable through &lt;xar:block&gt; tag</xar:mlstring>
                     </caption>
                     <tr>
@@ -85,7 +85,7 @@
     </xar:if>
 
     <table cellpadding="4" cellspacing="1" class="xar-norm-outline xar-fullwidth xar-noborder">
-        <caption align="top">
+        <caption style="vertical-align:top;">
             <xar:mlstring>All available block types</xar:mlstring>
         </caption>
         <tr>
