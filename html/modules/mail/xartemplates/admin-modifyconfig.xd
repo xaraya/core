@@ -41,7 +41,7 @@
 							</xar:if>
 						</td>
 					</tr>
-					<xar:if condition="xarModGetVar('mail', 'replyto') eq 'smtp'">
+					<xar:if condition="xarModGetVar('mail', 'replyto')">
 						<tr align="left" valign="middle">
 							<td>
 								<xar:mlstring>Reply To Name</xar:mlstring>
