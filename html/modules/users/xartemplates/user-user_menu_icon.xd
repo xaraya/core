@@ -1,6 +1,0 @@
-<xar:mlstring>Your Basic Details</xar:mlstring>:<br /><br />
-<a href="#xarModURL('users', 'user', 'usermenu', array('phase' => 'formbasic'))#"><img src="#$iconbasic#" /></a>
-<br /><br />
-<xar:mlstring>Your Enhanced Details</xar:mlstring>:<br /><br />
-<a href="#xarModURL('users', 'user', 'usermenu', array('phase' => 'formenhanced'))#"><img src="#$iconenhanced#" /></a>
-<br /><br />

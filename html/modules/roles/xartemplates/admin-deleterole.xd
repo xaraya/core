@@ -1,0 +1,26 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <xar:mlstring>Delete a Group/User</xar:mlstring>            
+        </th>
+    </tr>
+</table>
+
+<div align="center">
+<form method="post" action="&xar-modurl-roles-admin-deleterole;" method="post" enctype="application/x-www-form-urlencoded" />
+    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+	<input type="hidden" name="pid" id="pid" value="#$pid#" />
+	<input type="hidden" name="confirmation" id="confirmation" value="1" />
+
+	<span class="xar-title"><xar:mlstring>Confirm the deletion of</xar:mlstring>
+	<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
+	<xar:else /><xar:mlstring>User</xar:mlstring>
+	</xar:if>
+	 '#$name#'</span>
+	<br /><br />
+
+	<input type="submit" value="Confirm" align="middle" tabindex="1" /><br /><br />
+	
+	<a href="&xar-modurl-roles-admin-newrole;"><xar:mlstring>Cancel the deletion</xar:mlstring></a>
+</form>        
+</div>

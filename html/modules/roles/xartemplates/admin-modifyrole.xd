@@ -1,0 +1,250 @@
+<script type="text/javascript" src="modules/roles/xartemplates/xarTree.js">
+</script>
+<script language="JavaScript">
+<!--
+function setaction(target){
+document.forms[0].action = target;
+document.forms[0].submit();}
+ var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
+ function doOnLoad() {
+      oldOnLoadFunction();      
+      xarTree_init('RolesTree');
+      }
+ var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
+ function doOnUnload() {
+      oldOnUnloadFunction();      
+      xarTree_init('RolesTree');
+      }
+ 
+ window.onload = doOnLoad;
+ window.onunload = doOnUnload;
+//-->
+</script>
+
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <xar:mlstring>Modify a Group/User</xar:mlstring>
+        </th>
+    </tr>
+</table>
+
+<div align="center">
+	<br /><br />
+	<form action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
+
+		<table border="0" cellpadding="5">
+			<tr>
+				<td>
+					<xar:mlstring>Name</xar:mlstring>
+				</td>
+				<td>
+					<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="20" tabindex="1" />
+					<input type="hidden" name="ppid" id="ppid" value="#$ppid#" />
+					<input type="hidden" name="authid" id="authid" value="#$authid#" />
+				</td>
+				<td width="20">
+					&nbsp;
+				</td>
+				<td>
+					<xar:mlstring>Type</xar:mlstring>
+				</td>
+        		<td>
+        			<select name="ptype" id="ptype"  tabindex="3" onChange="javascript:setaction('&xar-modurl-roles-admin-modifyrole;&ppid=#$ppid#')">
+							<xar:if condition="$ptype eq 1">
+		                    	<option value="1" selected="selected">Group
+							<xar:else />
+		                    	<option value="1">Group
+							</xar:if>
+							<xar:if condition="$ptype eq 0">
+		                    	<option value="0" selected="selected">User
+							<xar:else />
+		                    	<option value="0">User
+							</xar:if>
+					</select>
+            	</td>
+			</tr>
+			<xar:if condition="$ptype eq 0">
+				<tr>
+					<td colspan="5" align="center">
+						Only for Users
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<xar:mlstring>User Name</xar:mlstring>
+					</td>
+					<td>
+						<input type="text" name="puname" id="puname" value="#$puname#" size="20" maxlength="20" tabindex="2" />
+					</td>
+					<td width="20">
+						&nbsp;
+					</td>
+					<td>
+						<xar:mlstring>Email</xar:mlstring>
+					</td>
+					<td>
+						<input type="text" name="pemail" id="pemail" value="#$pemail#" size="20" maxlength="20" tabindex="4" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<xar:mlstring>Password</xar:mlstring>
+					</td>
+					<td>
+						<input type="text" name="ppass" id="ppass" value="#$ppass#" size="20" maxlength="20" tabindex="6" />
+					</td>
+					<td width="20">
+						&nbsp;
+					</td>
+					<td>
+						<xar:mlstring>Pwd. Again</xar:mlstring>
+					</td>
+					<td>
+						<input type="text" name="ppass2" id="ppass2" value="" size="20" maxlength="20" tabindex="6" />
+					</td>
+				</tr>
+			</xar:if>
+		</table>
+
+		<br /><br />
+
+		<input type="submit" value="Update" align="middle" tabindex="2" />
+	</form>
+</div>
+
+<table border="0" width="100%">
+	<tr>
+		<td colspan="2">
+		<hr />
+		</td>
+	</tr>
+	<tr>
+		<td valign="top" width ="50%">
+			<table border="0" width="100%">
+				</tr>
+				<tr>
+					<td  align="middle" colspan="4">
+						<xar:mlstring>Add</xar:mlstring>
+						<xar:if condition="$ptype eq 0">
+							<xar:mlstring>User</xar:mlstring>
+						<xar:else />
+							<xar:mlstring>Group</xar:mlstring>
+						</xar:if>
+						 <b>'#$pname#'</b> <xar:mlstring>to a Group</xar:mlstring>
+					</td>
+				</tr>
+			</table>
+			<div align="center">
+			<form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
+
+				<table border="0" cellpadding="5">
+
+					<tr>
+						<td  align="middle">
+							<xar:mlstring>Group:</xar:mlstring>
+						</td>
+						<td>
+							<select name="roleid" id="roleid">
+								<xar:loop name="$groups">
+									<option value="#$pid#">#$name#
+								</xar:loop>
+							</select>
+						</td>
+					</tr>
+				</table>
+				<br />
+				<input type="submit" value="Add" align="middle" tabindex="2" />
+				<input type="hidden" name="authid" id="authid" value="#$authid#" />
+				<input type="hidden" name="ppid" id="ppid" value="#$ppid#" />
+			</form>
+			</div>
+		</td>
+		<td  valign="top" width ="50%">
+			<table border="0" width="100%">
+				<tr>
+					<td colspan="5">
+						<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
+						<xar:else /><xar:mlstring>User</xar:mlstring>
+						</xar:if>
+						<b>'#$pname#'</b>
+						<xar:mlstring>is a member of the following groups:</xar:mlstring>
+					</td>
+				</tr>
+				<xar:loop name="$parents">
+					<tr>
+						<td width="150">
+							<xar:if condition="$parentid gt 4">
+								<a href="&xar-modurl-roles-admin-modifyrole;&amp;ppid=#$parentid#">
+								#$parentname#
+								</a>
+							<xar:else />
+								<b>#$parentname#</b>
+							</xar:if>
+						</td>
+						<td width="50">
+							&nbsp;
+						</td>
+						<td width="100">
+							&nbsp;
+						</td>
+						<td>
+							&nbsp;
+						</td>
+						<td width="50" align="right">
+							<xar:if condition="count($parents) ne 1">
+								<a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$ppid#&amp;parentid=#$parentid#">
+									<xar:mlstring>Remove</xar:mlstring>
+								</a>
+							<xar:else />
+								&nbsp;
+							</xar:if>
+						</td>
+					</tr>
+				</xar:loop>
+			</table>
+		</td>
+	</tr>
+</table
+
+<table border="0" width="100%">
+	<tr>
+		<th align="center">
+			<xar:mlstring>Current Groups</xar:mlstring>
+		</th>
+	</tr>
+</table>
+<table border="0" cellspacing="5" width="100%">
+	<tr>
+		<td>
+			<a href="&xar-modurl-roles-admin-newrole;">
+				<xar:mlstring>Add User/Group</xar:mlstring>
+			</a>
+		</td>
+		<td valign="bottom" width="80" align="right">
+			<a href="javascript:xarTree_exec('RolesTree',1);">
+			Expand
+			</a>  &nbsp;
+		</td>
+		<td valign="bottom" width="70" align="right">
+			<a href="javascript:xarTree_exec('RolesTree',0);">
+			Collapse
+			</a>  &nbsp;
+		</td>
+		<td valign="bottom" width="60" align="right">
+			<a href="javascript:xarTree_exec('RolesTree',2);">
+			Toggle
+			</a>  &nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td colspan="4">
+			<hr />
+		</td>
+	</tr>
+	<tr>
+		<td>
+			#$tree#
+		</td>
+	</tr>
+</table>

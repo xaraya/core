@@ -1,0 +1,99 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <xar:mlstring>Register Form</xar:mlstring>           
+        </th>
+    </tr>
+</table>
+
+<br /><br />
+<form action="#xarModURL('roles', 'user', 'register')#" method="post" enctype="application/x-www-form-urlencoded">
+<table cellpadding="0" cellspacing="0" border="0">
+	<tr>
+		<td>
+			<xar:mlstring>Preferred Username</xar:mlstring>:
+		</td>
+		<td>
+			<input type="text" name="uname" id="uname" size="25" maxlength="25" />
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<xar:mlstring>Real Name</xar:mlstring>
+		</td>
+		<td>
+			<input type="text" name="realname" id="realname" size="25" maxlength="60" />
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<xar:mlstring>E-mail Address</xar:mlstring>:
+		</td>
+		<td>
+			<input type="text" name="email" id="email" size="25" maxlength="60" />
+		</td>
+	</tr>
+    <xar:if condition="xarModGetVar('roles', 'chooseownpassword')" >
+<!-- 		<tr align="left" valign="middle">
+			<td>
+				<xar:mlstring>System create password?</xar:mlstring>
+			</td>
+			<td>
+				<input type="checkbox" name="createpassword" id="createpassword" value="1" tabindex="2" />
+			</td>
+		</tr> -->
+		<tr>
+			<td>
+				<xar:mlstring>Password</xar:mlstring>
+			</td>
+			<td>
+				<input type="password" name="pass1" id="pass1" value="" size="25" maxlength="40" tabindex="4" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<xar:mlstring>Retype Password</xar:mlstring>
+			</td>
+			<td>
+				<input type="password" name="pass2" id="pass2" value="" size="25" maxlength="40" tabindex="5" />
+			</td>
+		</tr>
+    </xar:if>
+	<xar:if condition="xarModGetVar('roles','showtac') eq 0 and xarModGetVar('roles','showprivacy') eq 1">
+		<tr>
+			<td colspan="2">
+				<input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" />
+				<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('roles', 'user', 'privacy')#"> <xar:mlstring>Privacy Policy</xar:mlstring> </a>.
+			</td>
+		</tr>
+	<xar:elseif condition="xarModGetVar('roles','showprivacy') eq 0 and xarModGetVar('roles','showtac') eq 1" />
+		<tr>
+			<td colspan="2">
+				<input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" />
+				<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('roles', 'user', 'terms')#"> <xar:mlstring>Terms of Use</xar:mlstring> </a>.
+			</td>
+		</tr>
+	<xar:elseif condition="xarModGetVar('roles','showprivacy') eq 1 and xarModGetVar('roles','showtac') eq 1" />
+		<tr>
+			<td colspan="2">
+				<input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" />
+				<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('roles', 'user', 'terms')#"> <xar:mlstring>Terms of Use</xar:mlstring> </a> and <a href="#xarModURL('roles', 'user', 'privacy')#"> <xar:mlstring>Privacy Policy</xar:mlstring> </a>.
+			</td>
+		</tr>
+	<xar:else />
+		<tr>
+			<td colspan="2">
+				<input type="hidden" name="agreetoterms" id="agreetoterms" value="1" />
+			</td>
+		</tr>
+	</xar:if>
+	<tr>
+		<td>
+			<br /><br />
+			<input type="hidden" name="authid" id="authid" value="#$authid#" />
+			<input type="hidden" name="phase" id="phase" value="checkregistration" />
+			<input type="submit" value="New user" />
+		</td>
+	</tr>
+</table>
+</form>

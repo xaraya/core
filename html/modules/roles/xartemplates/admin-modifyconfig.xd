@@ -1,0 +1,166 @@
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Users Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2>Modify Configuration</h2><br />
+
+<div align="center">
+<form method="post" action="#xarModURL('roles', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded" />
+    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+    <input type="hidden" name="phase" id="phase" value="update" />
+	<table border="0" width="100%">
+		<tr>
+			<td>
+				<table border="0" width="100%">
+					<tr align="left" valign="middle">
+						<td>
+							<xar:mlstring>Show Terms of Service</xar:mlstring>
+						</td>
+						<td>
+							<xar:if condition="xarModGetVar('roles', 'showterms')">
+								<input type="checkbox" name="showterms" id="showterms" value="1" checked="checked" tabindex="1" />
+							<xar:else />
+								<input type="checkbox" name="showterms" id="showterms" value="1" tabindex="1" />
+							</xar:if>
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<xar:mlstring>Show Privacy Policy</xar:mlstring>
+						</td>
+						<td>
+							<xar:if condition="xarModGetVar('roles', 'showprivacy')">
+								<input type="checkbox" name="showprivacy" id="showprivacy" value="1" checked="checked" tabindex="2" />
+							<xar:else />
+								<input type="checkbox" name="showprivacy" id="showprivacy" value="1" tabindex="2" />
+							</xar:if>
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<xar:mlstring>Minimum age to be a user</xar:mlstring>
+						</td>
+						<td>
+							<input type="text" name="minage" id="minage" value="#xarModGetVar('roles', 'minage')#" size="3" maxlength="3" />
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<xar:mlstring>Allow users to choose their own password when registering</xar:mlstring>
+						</td>
+						<td>
+							<xar:if condition="xarModGetVar('roles', 'chooseownpassword')">
+								<input type="checkbox" name="chooseownpassword" id="chooseownpassword" value="1" checked="checked" tabindex="2" />
+							<xar:else />
+								<input type="checkbox" name="chooseownpassword" id="chooseownpassword" value="1" tabindex="2" />
+							</xar:if>
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<xar:mlstring>Send notice to admin when new user registers?</xar:mlstring>
+						</td>
+						<td>
+							<xar:if condition="xarModGetVar('roles', 'sendnotice')">
+								<input type="checkbox" name="sendnotice" id="sendnotice" value="1" checked="checked" tabindex="1" />
+							<xar:else />
+								<input type="checkbox" name="sendnotice" id="sendnotice" value="1" tabindex="1" />
+							</xar:if>
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<xar:mlstring>Require explicit administrator approval before activating new user</xar:mlstring>
+						</td>
+						<td>
+							<xar:if condition="xarModGetVar('roles', 'explicitapproval')">
+								<input type="checkbox" name="explicitapproval" id="explicitapproval" value="1" checked="checked" tabindex="2" />
+							<xar:else />
+								<input type="checkbox" name="explicitapproval" id="explicitapproval" value="1" tabindex="2" />
+							</xar:if>
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<xar:mlstring>Send welcome email on successful registration of user</xar:mlstring>
+						</td>
+						<td>
+							<xar:if condition="xarModGetVar('roles', 'sendwelcomeemail')">
+								<input type="checkbox" name="sendwelcomeemail" id="sendwelcomeemail" value="1" checked="checked" tabindex="2" />
+							<xar:else />
+								<input type="checkbox" name="sendwelcomeemail" id="sendwelcomeemail" value="1" tabindex="2" />
+							</xar:if>
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<xar:mlstring>Default Group for New Users</xar:mlstring>
+						</td>
+						<td>
+							<select name="defaultgroup" id="defaultgroup">
+							<xar:loop name="$groups">
+
+								<xar:if condition="$name eq $defaultgroup">
+									<option name="#$name#" id="#$name#" value="#$name#" selected="selected">#$name#</option>
+								<xar:else />
+									<option name="#$name#" id="#$name#" value="#$name#">#$name#</option>
+								</xar:if>
+							</xar:loop>
+							</select>
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<xar:mlstring>Allow users to be invisible in users list</xar:mlstring>
+						</td>
+						<td>
+							<xar:if condition="xarModGetVar('roles', 'allowinvisible')">
+								<input type="checkbox" name="allowinvisible" id="allowinvisible" value="1" checked="checked" tabindex="1" />
+							<xar:else />
+								<input type="checkbox" name="allowinvisible" id="allowinvisible" value="1" tabindex="1" />
+							</xar:if>
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<xar:mlstring>Number of users to view per page</xar:mlstring>
+						</td>
+						<td>
+							<input type="text" name="rolesperpage" id="rolesperpage" value="#xarModGetVar('roles', 'rolesperpage')#" size="3" maxlength="3" />
+						</td>
+					</tr>
+					<tr align="left" valign="top">
+						<td>
+							<xar:mlstring>Disallowed user names</xar:mlstring><br />
+							<i><xar:mlstring>Note: Enter after each name.  Do not seperate with comma, etc</xar:mlstring></i>
+						</td>
+						<td>
+						        <textarea name="disallowednames" id="disallowednames" tabindex="3" rows="10" cols="30" />#$names#</textarea> 
+						</td>
+					</tr>
+					<tr align="left" valign="top">
+						<td>
+							<xar:mlstring>Disallowed email addresses</xar:mlstring><br />
+							<i><xar:mlstring>Note: Enter after each name.  Do not seperate with comma, etc</xar:mlstring></i>
+						</td>
+						<td>
+						        <textarea name="disallowedemails" id="disallowedemails" tabindex="4" rows="10" cols="30" />#$emails#</textarea> 
+						</td>
+					</tr>
+					<tr align="left" valign="top">
+						<td>
+							<xar:mlstring>Disallowed IP addresses</xar:mlstring><br />
+							<i><xar:mlstring>Note: Enter after each name.  Do not seperate with comma, etc</xar:mlstring></i>
+						</td>
+						<td>
+						        <textarea name="disallowedips" id="disallowedips" tabindex="4" rows="10" cols="30" />#$ips#</textarea> 
+						</td>
+					</tr>
+					#$hooks#
+				</table>
+			</td>
+		</tr>
+	</table>
+
+	<br /><br />
+	<input type="submit" value="Update Users Configuration" align="middle" tabindex="5" />
+</form>
+</div>
+        

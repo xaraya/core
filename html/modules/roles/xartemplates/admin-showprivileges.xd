@@ -1,0 +1,245 @@
+<script type="text/javascript" src="modules/roles/xartemplates/xarTree.js">
+</script>
+<script language="JavaScript">
+ var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
+ function doOnLoad() {
+      oldOnLoadFunction();      
+      xarTree_init('RolesTree');
+      }
+ var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
+ function doOnUnload() {
+      oldOnUnloadFunction();      
+      xarTree_init('RolesTree');
+      }
+ 
+ window.onload = doOnLoad;
+ window.onunload = doOnUnload;
+</script>
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <xar:mlstring>Privileges of </xar:mlstring>
+			<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
+			<xar:else /><xar:mlstring>User</xar:mlstring>
+			</xar:if>
+            '#$pname#'
+        </th>
+    </tr>
+</table>
+
+<table border="0" width="100%" cellpadding="2">
+    <tr>
+        <td colspan="7">
+            <b><xar:mlstring>Inherited</xar:mlstring></b>            
+        </td>
+    </tr>
+	<xar:if condition="count($inherited) eq 0">
+		<tr>
+			<td colspan="7">
+				<xar:mlstring>No privileges inherited.</xar:mlstring>            
+			</td>
+		</tr>
+	<xar:else />
+		<tr>
+			<td>
+				<xar:mlstring>Name</xar:mlstring>            
+			</td>
+			<td>
+				<xar:mlstring>Realm</xar:mlstring>            
+			</td>
+			<td>
+				<xar:mlstring>Module</xar:mlstring>            
+			</td>
+			<td>
+				<xar:mlstring>Component</xar:mlstring>            
+			</td>
+			<td>
+				<xar:mlstring>Instance</xar:mlstring>            
+			</td>
+			<td>
+				<xar:mlstring>Level</xar:mlstring>            
+			</td>
+			<td align="right">
+				<xar:mlstring>From Group</xar:mlstring>            
+			</td>
+		</tr>
+		<xar:loop name="$inherited">
+		<tr>
+			<td width="150">
+				#$name#
+			</td>
+			<td width="50">
+				#$realm#
+			</td>
+			<td width="100">
+				#$module#
+			</td>
+			<td width="100">
+				#$component#
+			</td>
+			<td width="100">
+				#$instance#
+			</td>
+			<td width="100">
+				#$level#
+			</td>
+			<td align="right">
+				<a href="#$groupurl#&amp;ppid=#$groupid#">				
+				#$groupname#
+				</a>
+			</td>
+			</tr>
+		</xar:loop>
+	</xar:if>
+    <tr>
+        <td colspan="7">
+            <hr />            
+        </td>
+    </tr>
+    <tr>
+        <td colspan="7">
+            <b><xar:mlstring>Assigned</xar:mlstring></b>            
+        </td>
+    </tr>
+	<xar:if condition="count($privileges) eq 0">
+		<tr>
+			<td colspan="7">
+				<xar:mlstring>No privileges assigned.</xar:mlstring>            
+			</td>
+		</tr>
+	<xar:else />
+		<tr>
+			<td>
+				<xar:mlstring>Name </xar:mlstring>            
+			</td>
+			<td>
+				<xar:mlstring>Realm </xar:mlstring>            
+			</td>
+			<td>
+				<xar:mlstring>Module </xar:mlstring>            
+			</td>
+			<td>
+				<xar:mlstring>Component </xar:mlstring>            
+			</td>
+			<td>
+				<xar:mlstring>Instance </xar:mlstring>            
+			</td>
+			<td>
+				<xar:mlstring>Level </xar:mlstring>            
+			</td>
+			<td>
+				&nbsp;            
+			</td>
+		</tr>
+		<xar:loop name="$privileges">
+		<tr>
+			<td width="150">
+				#$name#
+			</td>
+			<td width="50">
+				#$realm#
+			</td>
+			<td width="100">
+				#$module#
+			</td>
+			<td width="100">
+				#$component#
+			</td>
+			<td width="100">
+				#$instance#
+			</td>
+			<td width="100">
+				#$level#
+			</td>
+			<td align="right">
+				<a href="#$removeurl#&amp;privid=#$privid#"
+				title="Remove this Privilege assignment">				
+					Remove    
+				</a>
+			</td>
+			</tr>
+		</xar:loop>
+	</xar:if>
+</table>
+<br />
+
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <xar:mlstring>Assign a Privilege to </xar:mlstring>            
+			<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
+			<xar:else /><xar:mlstring>User</xar:mlstring>
+			</xar:if>
+            '#$pname#'
+        </th>
+    </tr>
+</table>
+
+<div align="center">
+	<br />
+	<form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
+		
+		<table border="0" cellpadding="5">
+
+			<tr>
+				<td>
+					<xar:mlstring>Privilege</xar:mlstring>
+				</td>
+				<td>
+					<select name="privid" id="privid">
+						<xar:loop name="$allprivileges">
+							<option value="#$pid#">#$name#
+						</xar:loop>
+					</select>
+				</td>
+			</tr>
+		</table>			
+					
+		<br />
+		<input type="submit" value="Add" align="middle" tabindex="2" />
+		<input type="hidden" name="authid" id="authid" value="#$authid#" />
+		<input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
+	</form>
+</div>
+
+<table border="0" width="100%">
+	<tr>
+		<th align="center">
+			<xar:mlstring>Current Groups</xar:mlstring>
+		</th>
+	</tr>
+</table>
+<table border="0" cellspacing="5" width="100%">
+	<tr>
+		<td>
+			<a href="&xar-modurl-roles-admin-newrole;">
+				<xar:mlstring>Add User/Group</xar:mlstring>
+			</a>
+		</td>
+		<td valign="bottom" width="80" align="right">
+			<a href="javascript:xarTree_exec('RolesTree',1);">
+			Expand
+			</a>  &nbsp;
+		</td>
+		<td valign="bottom" width="70" align="right">
+			<a href="javascript:xarTree_exec('RolesTree',0);">
+			Collapse
+			</a>  &nbsp;
+		</td>
+		<td valign="bottom" width="60" align="right">
+			<a href="javascript:xarTree_exec('RolesTree',2);">
+			Toggle
+			</a>  &nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td colspan="4">
+			<hr />
+		</td>
+	</tr>
+	<tr>
+		<td>
+			#$tree#
+		</td>
+	</tr>
+</table>			
