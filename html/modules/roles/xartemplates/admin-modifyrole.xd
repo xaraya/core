@@ -3,10 +3,8 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2>
 <xar:if condition="$ptype eq 0"><xar:mlstring>Manage the user</xar:mlstring>
-<xar:else/><xar:mlstring>Manage the group</xar:mlstring></xar:if>
-: #$pname#</h2>
+<xar:else/><xar:mlstring>Manage the group</xar:mlstring></xar:if>: #$pname#</h2>
 <div id="tabnav">
-	<div class="help" title="Choose an action to perform on the selected user"><xar:mlstring>Actions</xar:mlstring> :</div>
 	<div><a href="#xarModURL('roles', 'admin', 'displayrole', array('uid' => $uid))#"><xar:mlstring>Display</xar:mlstring></a></div>	
 	<div><a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid))#" class="active"><xar:mlstring>Modify</xar:mlstring></a></div>	
 	<div><a href="#xarModURL('roles', 'admin', 'deleterole', array('uid' => $uid))#"><xar:mlstring>Delete</xar:mlstring></a></div>	

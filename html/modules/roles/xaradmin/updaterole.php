@@ -107,8 +107,9 @@ function roles_admin_updaterole()
         //Ask to send email if the password has changed
         if ($ppass1 != '') {
             if (xarModGetVar('roles', 'askpasswordemail')) {
+                xarSessionSetVar('tmppass',$ppass1);
                 xarResponseRedirect(xarModURL('roles', 'admin', 'asknotification',
-                              array('uid' => array($uid => '1'), 'mailtype' => 'password', 'pass' => $ppass1)));
+                array('uid' => array($uid => '1'), 'mailtype' => 'password')));
             }
             //TODO : If askpasswordemail is false, the user won't know his new password...
         }
