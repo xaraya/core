@@ -56,7 +56,8 @@ if (empty($step)){
     $xarVersion = xarConfigGetVar('System.Core.VersionNum');
 
 //Begin Upgrades -- needs to be a switch after this first upgrade.
-
+    switch($xarVersion) {
+        case .901:
             xarConfigSetVar('System.Core.VersionNum', '.902');
 
             // Themes 
@@ -147,6 +148,64 @@ if (empty($step)){
                 $query = xarDBCreateIndex($tables['roles'],$index);
                 $result =& $dbconn->Execute($query);
                 if (!$result) return;
+            break;
+
+            case .902:
+                xarConfigSetVar('System.Core.VersionNum', '.9.0.3');
+
+                $blockGroupsTable = $tables['block_groups'];
+
+                // Register blocks
+                if (!xarModAPIFunc('blocks',
+                                   'admin',
+                                   'register_block_type',
+                                   array('modName'  => 'themes',
+                                         'blockType'=> 'syndicate'))) return;
+
+                if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'syndicate',
+                                                                            'template' => 'syndicate'))) return;
+
+                $query = "SELECT    xar_id as id
+                          FROM      $blockGroupsTable
+                          WHERE     xar_name = 'syndicate'";
+
+                // Check for db errors
+                $result =& $dbconn->Execute($query);
+                if (!$result) return;
+
+                // Freak if we don't get one and only one result
+                if ($result->PO_RecordCount() != 1) {
+                    $msg = xarML("Group 'syndicate' not found.");
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                   new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+                    return;
+                }
+
+                list ($syndicateBlockGroup) = $result->fields;
+
+                $syndicateBlockId= xarModAPIFunc('blocks',
+                                                 'admin',
+                                                 'block_type_exists',
+                                                 array('modName'  => 'themes',
+                                                       'blockType'=> 'syndicate'));
+
+                if (!isset($syndicateBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+                    return;
+                }
+
+                if (!xarModAPIFunc('blocks',
+                                   'admin',
+                                   'create_instance', array('title'    => 'Syndicate',
+                                                            'type'     => $syndicateBlockId,
+                                                            'group'    => $syndicateBlockGroup,
+                                                            'template' => '',
+                                                            'state'    => 2))) {
+                    return;
+                }
+
+            break;
+    }
+
 // Fini
 
 // start the output buffer
@@ -156,7 +215,7 @@ ob_start();
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Upgrade</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Upgrades Complete</xar:mlstring></h2><br />
 <div style="margin: auto;">
-Thank you, the upgrades are complete between .900 and .902.
+Thank you, the upgrades are complete.
 </div>
 </div>
 
