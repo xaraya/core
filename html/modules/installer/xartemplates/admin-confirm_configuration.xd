@@ -90,6 +90,7 @@
 							: #$missing# 
 						</p>
 					</xar:if>
+					<xar:if condition="count($options3) ne 0">
 					<h4>
 						<xar:mlstring>
 							Other Modules 
@@ -100,7 +101,6 @@
 							The following modules are present that are not part of the configuration you have chosen. If you wish to, you can load them as well. 
 						</xar:mlstring>
 					</p>
-					<xar:if condition="count($options3) ne 0">
 						<div style="padding:10px;text-align:justify; overflow:auto; height:150px; border: 1px solid black;">
 								<xar:loop name="$options3">
 										<xar:if condition="$loop:item['option'] eq ''">

@@ -40,7 +40,7 @@ function installer_admin_phase1()
 
     // Get the installed locales
     $locales = xarMLSListSiteLocales();
-    
+
     // Construct the array for the selectbox (iso3code, string in own locale)
     if(!empty($locales)) {
         $languages = array();
@@ -54,7 +54,7 @@ function installer_admin_phase1()
             }
         }
     }
-    
+
     $data['install_language'] = $install_language;
     $data['languages'] = $languages;
     $data['phase'] = 1;
@@ -596,7 +596,7 @@ function installer_admin_create_administrator()
             return;
         }
     }
-    xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration', array('theme' => 'installer')));
+    xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration'));
 }
 
 /**
@@ -898,13 +898,13 @@ function installer_admin_confirm_configuration()
             }
         }
 
-        xarResponseRedirect(xarModURL('installer', 'admin', 'finish', array('theme' => 'installer')));
+        xarResponseRedirect(xarModURL('installer', 'admin', 'cleanup'));
     }
 
 }
 
 
-function installer_admin_finish()
+function installer_admin_cleanup()
 {
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
@@ -919,6 +919,7 @@ function installer_admin_finish()
         return false;
     }
 
+    xarTplSetThemeName('installer');
     $remove = xarModDelVar('roles','adminpass');
     $remove = xarModDelVar('installer','modules');
 
@@ -1020,8 +1021,6 @@ function installer_admin_finish()
 
 function installer_admin_finish()
 {
-    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
     xarResponseRedirect('index.php');
-    return true;
 }
 
