@@ -2,9 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <meta name="Generator" content="#xarConfigGetVar('System.Core.VersionNum')# :: #xarConfigGetVar('System.Core.VersionID')#" />
-        <meta name="Keywords" content="#xarConfigGetVar('Site.Core.MetaKeywords')#" />
-        <meta name="Description" content="#xarConfigGetVar('Site.Core.MetaDescription')#" />
+		<xar:blockgroup name="header" id="header" />
         <title>#$tpl:pageTitle#</title>
         <base href="&xar-baseurl;index.php" />
         <link rel="StyleSheet" href="&xar-baseurl;themes/Xaraya_Classic/style/styleNN.css" type="text/css" />
