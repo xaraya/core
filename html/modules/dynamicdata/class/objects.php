@@ -1135,6 +1135,10 @@ class Dynamic_Object extends Dynamic_Object_Master
                 // we'll let the primary datastore create an itemid for us
                 } elseif (!empty($this->properties[$this->primary]->datastore)) {
                     $primarystore = $this->properties[$this->primary]->datastore;
+                    // add the primary to the data store fields if necessary
+                    if (!empty($this->fieldlist) && !in_array($this->primary,$this->fieldlist)) {
+                        $this->datastores[$primarystore]->addField($this->properties[$this->primary]); // use reference to original property
+                    }
                     $this->itemid = $this->datastores[$primarystore]->createItem(array('objectid' => $this->objectid,
                                                                                        'modid'    => $this->moduleid,
                                                                                        'itemtype' => $this->itemtype,
