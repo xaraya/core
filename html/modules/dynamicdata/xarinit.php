@@ -589,30 +589,32 @@ function dynamicdata_init()
  * upgrade the dynamicdata module from an old version
  * This function can be called multiple times
  */
-function dynamicdata_upgrade($oldversion)
+function dynamicdata_upgrade($oldVersion)
 {
     // Upgrade dependent on old version number
-    switch($oldversion) {
-        case 1.0:
-            // Code to upgrade from version 1.0 goes here
-
-            // Register BL item tags to get properties and values directly in the template
-            // get properties for this item
-            xarTplRegisterTag('dynamicdata', 'data-getitem',
-                              array(),
-                              'dynamicdata_userapi_handleGetItemTag');
-            // get properties and item values for these items
-            xarTplRegisterTag('dynamicdata', 'data-getitems',
-                              array(),
-                              'dynamicdata_userapi_handleGetItemsTag');
-            break;
-
+    switch($oldVersion) {
+    case '1.0':
+        // Code to upgrade from version 1.0 goes here
+        
+        // Register BL item tags to get properties and values directly in the template
+        // get properties for this item
+        xarTplRegisterTag('dynamicdata', 'data-getitem',
+                          array(),
+                          'dynamicdata_userapi_handleGetItemTag');
+        // get properties and item values for these items
+        xarTplRegisterTag('dynamicdata', 'data-getitems',
+                          array(),
+                          'dynamicdata_userapi_handleGetItemsTag');
+        break;
+        
         // for the switch from blob to text of the xar_dd_value field, no upgrade is necessary for MySQL,
         // and no simple upgrade is possible for PostgreSQL
-
-        case 2.0:
-            // Code to upgrade from version 2.0 goes here
-            break;
+    case '1.1':
+        // compatability upgrade, nothiing to be done 
+        break;
+    case '2.0.0':
+        // Code to upgrade from version 2.0.0 goes here
+        break;
     }
 
     // Update successful

@@ -14,7 +14,7 @@
 
 $modversion['name'] = 'Dynamic Data';
 $modversion['id'] = '182';
-$modversion['version'] = '1.1';
+$modversion['version'] = '1.1.0';
 $modversion['description'] = 'Dynamic Data Module';
 $modversion['credits'] = 'xardocs/credits.txt';
 $modversion['help'] = 'xardocs/help.txt';
