@@ -201,7 +201,8 @@ function xarUserGetNavigationThemeName()
 
     if (xarUserIsLoggedIn()){
         $uid = xarUserGetVar('uid');
-        $themeName = xarModGetUserVar('themes', 'default', $uid);
+        $userThemeName = xarModGetUserVar('themes', 'default', $uid);
+        if ($userThemeName) $themeName=$userThemeName;
     }
 
     return $themeName;
