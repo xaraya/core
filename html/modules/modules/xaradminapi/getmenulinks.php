@@ -1,5 +1,16 @@
 <?php
-
+/**
+ * File: $Id$
+ *
+ * Utility function to pass individual menu items to main menu
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @subpackage modules module
+ * @author Xaraya Team 
+ */
 /**
  * utility function pass individual menu items to the main menu
  *

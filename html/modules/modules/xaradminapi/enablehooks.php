@@ -1,5 +1,16 @@
 <?php
-
+/**
+ * File: $Id$
+ *
+ * Enable hooks between a caller module and a hook module
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @subpackage modules module
+ * @author Xaraya Team 
+ */
 /**
  * Enable hooks between a caller module and a hook module
  * Note : hooks will be enabled for all item types if no specific item type is given

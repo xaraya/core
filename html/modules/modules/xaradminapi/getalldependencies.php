@@ -1,8 +1,19 @@
 <?php
-
 /**
- * Find all the modules dependencies with all the dependencies of its
- * sibblings
+ * File: $Id$
+ *
+ * Find all of a module's dependencies with all dependencies of its siblings
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @subpackage modules module
+ * @author Xaraya Team 
+ */
+/**
+ * Find all the module's dependencies with all the dependencies of its
+ * siblings
  *
  * @param $maindId int ID of the module to look dependents for
  * @returns bool

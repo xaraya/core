@@ -1,11 +1,22 @@
 <?php
-
 /**
- * <h1>Get module information from xarversion.php for each module </h1>
- * <br />
- * <p>Here we cycle through the modules directory and and
- * return an array of information from xarversion.php of each module.</p>
- * <br />
+ * File: $Id$
+ *
+ * Get module information from xarversion.php for each module
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @subpackage modules module
+ * @author Xaraya Team 
+ */
+/**
+ * Get module information from xarversion.php for each module
+ *
+ * Here we cycle through the modules directory and and
+ * return an array of information from xarversion.php of each module.
+ *
  * Excluded directories:
  * CVS - this is a special directory of the Concurrent Versioning System
  * SCCS - where Bitkeeper stores source files
