@@ -16,7 +16,8 @@
  * upper        - make alphabetic characters upper-case
  * lower        - make alphabetic characters lower-case
  * alpha        - strip out all but alphabetical characters (a-z, A-Z)
- * alnum        - strip out all the alphanumeric characters (a-z, A-Z, 0-9)
+ * alnum        - strip out all but alphanumeric characters (a-z, A-Z, 0-9)
+ * num          - strip out all but numeric characters (0-9)
  * ftoken       - convert to a token suitable for use within a file or path name
  *                (a-z, A-Z, 0-9, _, -, starting a-z or A-Z)
  *                Note: this token is not a file or path name in itself, but is more to
@@ -49,7 +50,7 @@
 function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
 {
     // Start by forcing the subject into a string.
-    if (!is_string($subject)) {
+    if (isset($subject) && !is_string($subject)) {
         $subject = strval($subject);
     }
 
@@ -72,90 +73,122 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
         $param = array_shift($parameters);
 
         // Choose an action (and feel free to add more:)
+        // The first switch is for rules that require a value to be set.
+        if (isset($subject)) {
+            switch ($param) {
+                case 'trim' :
+                    $subject = trim($subject);
+                    break;
+
+                case 'upper' :
+                    $subject = strtoupper($subject);
+                    break;
+
+                case 'lower' :
+                    $subject = strtolower($subject);
+                    break;
+
+                case 'html' :
+                    $subject = xarVarPrepHTMLDisplay($subject);
+                    break;
+
+                case 'display' :
+                    $subject = xarVarPrepForDisplay($subject);
+                    break;
+
+                case 'store' :
+                case 'sql' :
+                    // Preparing for use in a quoted SQL string.
+                    $dbconn =& xarDBGetConn();
+                    $subject = $dbconn->qstr($subject);
+                    break;
+
+                case 'alpha' :
+                    $subject = preg_replace('/[^a-z]+/i', '', $subject);
+                    break;
+
+                case 'alnum' :
+                    $subject = preg_replace('/[^a-z0-9]+/i', '', $subject);
+                    break;
+
+                case 'num' :
+                    $subject = preg_replace('/[^0-9]+/i', '', $subject);
+                    break;
+
+                case 'vtoken' :
+                    // Variable-name compatible token.
+                    $subject = preg_replace(
+                        array('/[ _]+/', '/[^a-z0-9_]+/i'),
+                        array('_', ''),
+                        trim(strtolower($subject))
+                    );
+                    // The token must start with a letter or underscore.
+                    // Raise an error if not.
+                    if (!empty($subject) && !preg_match('/^[a-z_]/', $subject)) {
+                        $msg = xarML('Value "#(1)" is not a valid variable name', $subject);
+                        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+                        $result = false;
+                    }
+                    break;
+
+                case 'ftoken' :
+                    // Filename-compatible token. Use in conjunction with
+                    // 'lower' if case forcing is required too.
+                    // Note: this is not a file name, so periods/full stops/dots
+                    // are in included in the accepted characters.
+                    $subject = preg_replace(
+                        array('/[ _]+/', '/[^-a-z0-9_]+/i'),
+                        array('_', ''),
+                        trim($subject)
+                    );
+                    break;
+
+                case 'field' :
+                    // TODO: decide, should this be a separate validation type?
+                    // i.e. a validation type designed to provide a more
+                    // user-friendly error message, describing the form item
+                    // label.
+                    if (!empty($parameters)) {
+                        $fieldname = array_shift($parameters);
+                    }
+                    break;
+
+                default: break;
+            } // switch
+        }
+
+        // The second switch is for rules that don't require a value to be set.
         switch ($param) {
             case 'trim' :
-                $subject = trim($subject);
-                break;
-
             case 'upper' :
-                $subject = strtoupper($subject);
-                break;
-
             case 'lower' :
-                $subject = strtolower($subject);
-                break;
-
             case 'html' :
-                $subject = xarVarPrepHTMLDisplay($subject);
-                break;
-
             case 'display' :
-                $subject = xarVarPrepForDisplay($subject);
-                break;
-
             case 'store' :
             case 'sql' :
-                // Preparing for use in a quoted SQL string.
-                $dbconn =& xarDBGetConn();
-                $subject = $dbconn->qstr($subject);
-                break;
-
             case 'alpha' :
-                $subject = preg_replace('/[^a-z]+/i', '', $subject);
-                break;
-
             case 'alnum' :
-                $subject = preg_replace('/[^a-z0-9]+/i', '', $subject);
-                break;
-
+            case 'num' :
             case 'vtoken' :
-                // Variable-name compatible token.
-                $subject = preg_replace(
-                    array('/[ _]+/', '/[^a-z0-9_]+/i'),
-                    array('_', ''),
-                    trim(strtolower($subject))
-                );
-                // The token must start with a letter or underscore.
-                // Raise an error if not.
-                if (!empty($subject) && !preg_match('/^[a-z_]/', $subject)) {
-                    $msg = xarML('Value "#(1)" is not a valid variable name', $subject);
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-                    $result = false;
-                }
-                break;
-
             case 'ftoken' :
-                // Filename-compatible token. Use in conjunction with
-                // 'lower' if case forcing is required too.
-                // Note: this is not a file name, so periods/full stops/dots
-                // are in included in the accepted characters.
-                $subject = preg_replace(
-                    array('/[ _]+/', '/[^-a-z0-9_]+/i'),
-                    array('_', ''),
-                    trim($subject)
-                );
                 break;
 
             case 'field' :
-                // TODO: decide, should this be a separate validation type?
-                // i.e. a validation type designed to provide a more
-                // user-friendly error message, describing the form item
-                // label.
                 if (!empty($parameters)) {
                     $fieldname = array_shift($parameters);
                 }
                 break;
 
-            default:
+            case 'passthru' :
+            case 'val' :
                 // Assume an unrecognised option refers to an alternative validation
                 // type, making 'passthru' redundant. Doing it this way simplifies the
                 // validation, so fetching a string 'str:1:20' can be trimmed by adding
                 // a simple prefix - 'pre:trim:str:1:20'
                 // Put the current parameter back onto the parameters stack, as we will now
                 // be treating it as the passthru validation type.
+            default:
                 array_unshift($parameters, $param);
-            case 'passthru' :
-            case 'val' :
                 if (!empty($parameters)) {
                     // Roll up the remaining parameters.
                     $validation = implode(':', $parameters);
