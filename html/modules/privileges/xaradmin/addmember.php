@@ -27,12 +27,22 @@ function privileges_admin_addmember()
     $priv = $privs->getPrivilege($pid);
     $member = $privs->getPrivilege($privid);
 
+// we bail if there is a loop: the child is already an ancestor of the parent
+    $found = false;
+    $descendants = $member->getDescendants();
+    foreach ($descendants as $descendant) if ($descendant->getID() == $priv->getID()) $found = true;
+    if ($found) {
+        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException("The privilege you are trying to assign to is already a component of the one you are assigning."));
+        return;
+    }
+
 // assign the child to the parent and bail if an error was thrown
 // we bail if the child is already a member of the *parent*
 // if the child was a member of an ancestor further up that would be OK.
+    $found = false;
     $children = $priv->getChildren();
     foreach ($children as $child) if ($child->getID() == $member->getID()) $found = true;
-    if (!isset($found)) if (!$priv->addMember($member)) {return;}
+    if (!$found) if (!$priv->addMember($member)) {return;}
 
 // set the session variable
     xarSessionSetVar('privileges_statusmsg', xarML('Added to Privilege',
