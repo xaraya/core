@@ -17,10 +17,9 @@
             #$modscount#
         </span>
     </h2>
-    <form method="post" action="#xarModUrl('themes', 'admin', 'settings')#">
-        <div class="xar-norm-outline" style="padding: 0px;">
+    <form class="xar-norm-outline xar-fullwidth" style="padding: 0px;" method="post" action="#xarModUrl('themes', 'admin', 'settings')#">
             <xar:comment> Theme List Sort and Filter Controls table </xar:comment>
-            <table width="100%" border="0" cellspacing="1" cellpadding="1">
+            <table class="xar-fullwidth xar-noborder" cellspacing="1" cellpadding="1">
               <tr>
                 <th nowrap="nowrap">
                     <label class="xar-mod-title" for="filter"><xar:mlstring>Style</xar:mlstring></label>
@@ -74,7 +73,6 @@
                 </td>
               </tr>
             </table>
-        </div>
         <xar:if condition="$modstatus">
             <xar:comment> lets display latest status on core modules upgrades if any </xar:comment>
             <div class="xar-norm-outline" style="margin-top:1px;">
@@ -93,8 +91,8 @@
             <xar:template file="compactlist-ab" type="module" />
         <xar:else />
         <xar:comment> the Module Lists table-based styles </xar:comment>
-            <div class="xar-norm-outline" style="margin-top:1px;">
-                <table style="width:100%; border-collapse:collapse; border-spacing:1px; padding:0;">
+            <div class="xar-norm-outline xar-fullwidth" style="margin-top:1px;">
+                <table class="xar-fullwidth xar-noborder" style="width:100%; border-collapse:collapse; border-spacing:1px; padding:0;">
                     <tr>
                         <th style="text-align: left; padding-left: .5em;">
                             <xar:mlstring>Name</xar:mlstring>

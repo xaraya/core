@@ -296,7 +296,9 @@ module rendering area and related rules
 }
 
 .xar-mod-body { padding: .3em .6em; }
-.xar-mod-foot { }
+ /* andyv and random are two crazies who want ie5 to work properly */
+ * html .xar-mod-body {width:90%;}
+ .xar-mod-foot { }
 
 /*
 complementary styling - colors, backgrounds and outlines 

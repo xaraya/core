@@ -1,7 +1,7 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>View</xar:mlstring> #$label#</h2><br />
-<div style="margin: auto;">
+<div class="xar-fullwidth" style="margin: auto;">
 <!-- this does all the hard work :) -->
 <xar:data-list module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$param" numitems="30" startnum="$startnum" catid="$catid" sort="$sort" />
 
@@ -13,7 +13,7 @@
 <!-- when we're viewing the Dynamic Objects themselves, show other modules -->
 <h2><xar:mlstring>Other Modules</xar:mlstring></h2>
 
-<table width="100%" border="1" cellspacing="0" cellpadding="4">
+<table class="xar-fullwidth xar-noborder" border="1" cellspacing="0" cellpadding="4">
     <tr>
         <th><xar:mlstring>Module</xar:mlstring></th>
         <th><xar:mlstring>Options</xar:mlstring></th>

@@ -92,10 +92,9 @@
             </xar:if>
         </xar:if>
         <div>&nbsp;</div>
-        <form method="post" action="#xarModUrl('roles', 'admin', 'showusers')#">
-        <div class="xar-norm-outline" style="padding: 0px;">
+        <form class="xar-norm-outline xar-fullwidth" style="padding: 0px;" method="post" action="#xarModUrl('roles', 'admin', 'showusers')#">
             <xar:comment> Module List Sort and Filter Controls table </xar:comment>
-            <table width="100%" border="0" cellspacing="1" cellpadding="1">
+            <table class="xar-fullwidth xar-noborder" cellspacing="1" cellpadding="1">
               <tr>
             <th nowrap="nowrap">
                 <label class="xar-mod-title" for="filter" title="#xarML('Select display type')#"><xar:mlstring>Style</xar:mlstring></label>
@@ -211,7 +210,6 @@
             </td>
               </tr>
             </table>
-        </div>
         <xar:if condition="$modstatus">
             <xar:comment> lets display latest status roles update </xar:comment>
             <div class="xar-norm-outline" style="margin-top:1px;">
@@ -223,8 +221,8 @@
         </xar:if>
         </form>
         <xar:comment> the Roles Lists table-based styles (borrow from the Modules list)</xar:comment>
-        <div class="xar-norm-outline" style="margin-top:1px;">
-            <table style="width:100%; border-collapse:collapse; border-spacing:1px; padding:0;">
+        <div class="xar-norm-outline xar-fullwidth" style="margin-top:1px;">
+            <table class="xar-fullwidth" style="width:100%; border-collapse:collapse; border-spacing:1px; padding:0;">
                 <tr>
                 <form method="post" action="#xarModURL('roles','admin','updatestate')#" name="state">
                     <td colspan="6" style="text-align:right;">

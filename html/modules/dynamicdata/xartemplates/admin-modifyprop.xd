@@ -1,10 +1,10 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Modify Dynamic Properties</xar:mlstring> #$label#</h2><br />
-<div style="margin: auto;">
+<div class="xar-mod-body" style="overflow:auto;"><h2><xar:mlstring>Modify Dynamic Properties</xar:mlstring> #$label#</h2><br />
+<div class="xar-fullwidth" style="margin: auto;">
 
 <xar:if condition="!empty($objectid)">
-<table width="100%" border="0" cellspacing="0" cellpadding="4">
+<table class="xar-fullwidth xar-noborder" cellspacing="0" cellpadding="4">
     <tr>
         <td align="left"><a href="#xarModURL('dynamicdata','admin','modify',array('itemid' => $objectid))#"><xar:mlstring>Modify Object Definition</xar:mlstring></a></td>
         <!-- show some basic info about this dynamic object -->
@@ -18,86 +18,84 @@
 <br />
 <xar:mlstring>Hint : empty the Label to delete a property for all items</xar:mlstring>
 <br />
-<table width="100%" border="0" cellspacing="0" cellpadding="4">
-<form method="post" action="&xar-modurl-dynamicdata-admin-updateprop;">
-    <div>
-    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-    <input type="hidden" name="objectid" id="objectid" value="#$objectid#" />
-    <input type="hidden" name="modid" id="modid" value="#$modid#" />
-    <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
+<form class="xar-fullwidth" method="post" action="&xar-modurl-dynamicdata-admin-updateprop;">
+	<table class="xar-fullwidth" cellspacing="0" cellpadding="4">
+		<input type="hidden" name="authid" id="authid" value="#$authid#" />
+		<input type="hidden" name="objectid" id="objectid" value="#$objectid#" />
+		<input type="hidden" name="modid" id="modid" value="#$modid#" />
+		<input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
 
-    <xar:if condition="!empty($objectid) and $objectid lt 3">
-    <tr>
-        <td colspan="6" align="center"><br />
-            <br /><b><xar:mlstring>Warning ! This is a system object used internally by the Dynamic Data module.<br /><br />Trying to modify the properties of this object may break the Dynamic Data module.<br />Proceed with caution...</xar:mlstring></b><br />&nbsp;
-        </td>
-    </tr>
-    </xar:if>
+		<xar:if condition="!empty($objectid) and $objectid lt 3">
+		<tr>
+			<td colspan="6" align="center"><br />
+				<br /><b><xar:mlstring>Warning ! This is a system object used internally by the Dynamic Data module.<br /><br />Trying to modify the properties of this object may break the Dynamic Data module.<br />Proceed with caution...</xar:mlstring></b><br />&nbsp;
+			</td>
+		</tr>
+		</xar:if>
 
-    <tr>
-       <td><b>#$labels['id']#</b></td>
-       <td><b>#$labels['label']#</b></td>
-       <td><b>#$labels['type']#</b></td>
-       <td><b>#$labels['default']#</b></td>
-       <td><b>#$labels['source']#</b></td>
-       <td><b>#$labels['validation']#</b></td>
-       <td><b>#$labels['status']#</b></td>
-    </tr>
+		<tr>
+		   <td><b>#$labels['id']#</b></td>
+		   <td><b>#$labels['label']#</b></td>
+		   <td><b>#$labels['type']#</b></td>
+		   <td><b>#$labels['default']#</b></td>
+		   <td><b>#$labels['source']#</b></td>
+		   <td><b>#$labels['validation']#</b></td>
+		   <td><b>#$labels['status']#</b></td>
+		</tr>
 
-<xar:foreach in="$fields" value="$field">
-    <tr align="left" valign="middle">
-        <xar:set name="otherfields">xarML('Edit property "#(1)"',$field['name'])</xar:set>
-        <td><a href="#xarModURL('dynamicdata','admin','modify',array('objectid' => 2, 'itemid' => $field['id']))#" title="#xarVarPrepForDisplay($otherfields)#">#$field['id']#</a></td>
-        <td><input type="text" name="dd_label[#$field['id']#]" id="dd_label_#$field['id']#" size="10" value="#$field['label']#" /></td>
-        <td><xar:data-input property="$fieldtypeprop" name="dd_type['.$field['id'].']" id="dd_type_'.$field['id'].'" value="$field['type']" /></td>
-        <td><input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" size="10" value="#xarVarPrepForDisplay($field['default'])#" /></td>
-        <td>#$field['source']#</td>
-        <td><input type="text" name="dd_validation[#$field['id']#]" id="dd_validation_#$field['id']#" size="10" value="#xarVarPrepForDisplay($field['validation'])#" /></td>
-        <td><xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" size="15" value="$field['status']" /></td>
-    </tr>
-</xar:foreach>
+	<xar:foreach in="$fields" value="$field">
+		<tr align="left" valign="middle">
+			<xar:set name="otherfields">xarML('Edit property "#(1)"',$field['name'])</xar:set>
+			<td><a href="#xarModURL('dynamicdata','admin','modify',array('objectid' => 2, 'itemid' => $field['id']))#" title="#xarVarPrepForDisplay($otherfields)#">#$field['id']#</a></td>
+			<td><input type="text" name="dd_label[#$field['id']#]" id="dd_label_#$field['id']#" size="10" value="#$field['label']#" /></td>
+			<td><xar:data-input property="$fieldtypeprop" name="dd_type['.$field['id'].']" id="dd_type_'.$field['id'].'" value="$field['type']" /></td>
+			<td><input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" size="10" value="#xarVarPrepForDisplay($field['default'])#" /></td>
+			<td>#$field['source']#</td>
+			<td><input type="text" name="dd_validation[#$field['id']#]" id="dd_validation_#$field['id']#" size="10" value="#xarVarPrepForDisplay($field['validation'])#" /></td>
+			<td><xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" size="15" value="$field['status']" /></td>
+		</tr>
+	</xar:foreach>
 
-    <tr align="left" valign="middle">
-        <td>#$labels['new']#</td>
-        <td><input type="text" name="dd_label[0]" id="dd_label_0" size="10" /></td>
-        <td><xar:data-input property="$fieldtypeprop" name="dd_type[0]" value="" /></td>
-        <td><input type="text" name="dd_default[0]" id="dd_default_0" size="10" /></td>
-        <td>
-            <select name="dd_source[0]" id="dd_source_0">
-            <xar:foreach in="$sources" value="$mysource">
-                <option>#$mysource#</option>
-            </xar:foreach>
-            </select>
-        </td>
-        <td><input type="text" name="dd_validation[0]" id="dd_validation_0" size="10" /></td>
-        <td><xar:data-input property="$fieldstatusprop" name="dd_status[0]" value="1" /></td>
-    </tr>
+		<tr align="left" valign="middle">
+			<td>#$labels['new']#</td>
+			<td><input type="text" name="dd_label[0]" id="dd_label_0" size="10" /></td>
+			<td><xar:data-input property="$fieldtypeprop" name="dd_type[0]" value="" /></td>
+			<td><input type="text" name="dd_default[0]" id="dd_default_0" size="10" /></td>
+			<td>
+				<select name="dd_source[0]" id="dd_source_0">
+					<xar:foreach in="$sources" value="$mysource">
+						<option>#$mysource#</option>
+					</xar:foreach>
+				</select>
+			</td>
+			<td><input type="text" name="dd_validation[0]" id="dd_validation_0" size="10" /></td>
+			<td><xar:data-input property="$fieldstatusprop" name="dd_status[0]" value="1" /></td>
+		</tr>
 
-<xar:if condition="$modid eq 182">
-    <tr>
-        <td colspan="7" align="center">
-           <xar:mlstring>Note : for completely dynamic Objects like this one, you need to define one property that is of type "Item ID"</xar:mlstring>
-        </td>
-    </tr>
-</xar:if>
+	<xar:if condition="$modid eq 182">
+		<tr>
+			<td colspan="7" align="center">
+			   <xar:mlstring>Note : for completely dynamic Objects like this one, you need to define one property that is of type "Item ID"</xar:mlstring>
+			</td>
+		</tr>
+	</xar:if>
 
-<xar:if condition="!empty($hooks)">
-    <tr>
-        <td colspan="7" align="left">
-        #$hooks#
-        </td>
-    </tr>
-</xar:if>
+	<xar:if condition="!empty($hooks)">
+		<tr>
+			<td colspan="7" align="left">
+			#$hooks#
+			</td>
+		</tr>
+	</xar:if>
 
-    <tr>
-        <td colspan="7" align="center">
-           <input type="submit" value="#$updatebutton#" />
-        </td>
-    </tr>
-</div>
+		<tr>
+			<td colspan="7" align="center">
+			   <input type="submit" value="#$updatebutton#" />
+			</td>
+		</tr>
+	</table>
 </form>
 
-</table>
 <br />
 
 <xar:mlstring>
@@ -130,7 +128,7 @@ each other. You can adapt the property name by clicking on the ID link above.
 
 // TODO: very much under construction, obviously :-)
 <br /><br />
-<table width="100%" border="0" cellspacing="0" cellpadding="4">
+<table class="xar-fullwidth xar-noborder" cellspacing="0" cellpadding="4">
 <!-- don't accept updates for this (for now) -->
     <tr>
        <td><b>#$labels['name']#</b></td>
@@ -181,40 +179,38 @@ each other. You can adapt the property name by clicking on the ID link above.
 
 // TODO: very much under construction, obviously :-)
 <br /><br />
-<table width="100%" border="0" cellspacing="0" cellpadding="4">
 <!-- don't accept updates for this (for now) -->
-<form method="post" action="&xar-modurl-dynamicdata-admin-modifyprop;">
-    <div>
-    <tr>
-       <td><b>#$labels['module']#</b></td>
-       <td><b>#$labels['linktype']#</b></td>
-       <td><b>#$labels['linkfrom']#</b></td>
-       <td><b>#$labels['linkto']#</b></td>
-    </tr>
+<form class="xar-fullwidth" method="post" action="&xar-modurl-dynamicdata-admin-modifyprop;">
+	<table class="xar-fullwidth xar-noborder" cellspacing="0" cellpadding="4">
+		<tr>
+		   <td><b>#$labels['module']#</b></td>
+		   <td><b>#$labels['linktype']#</b></td>
+		   <td><b>#$labels['linkfrom']#</b></td>
+		   <td><b>#$labels['linkto']#</b></td>
+		</tr>
 
-<xar:foreach in="$relations" value="$relation">
-    <xar:if condition="count($relation['links']) gt 0">
-        <xar:foreach in="$relation['links']" value="$link">
-        <tr align="left" valign="middle">
-            <td>#$relation['module']#</td>
-            <td>#$link['type']#</td>
-            <td>#$link['from']#</td>
-            <td>#$link['to']#</td>
-        </tr>
-        </xar:foreach>
-    <xar:else />
-        <tr align="left" valign="middle">
-            <td>#$relation['module']#</td>
-            <td>(<xar:mlstring>not found</xar:mlstring>)</td>
-            <td>-</td>
-            <td>(<xar:mlstring>not found</xar:mlstring>)</td>
-        </tr>
-    </xar:if>
-</xar:foreach>
+	<xar:foreach in="$relations" value="$relation">
+		<xar:if condition="count($relation['links']) gt 0">
+			<xar:foreach in="$relation['links']" value="$link">
+			<tr align="left" valign="middle">
+				<td>#$relation['module']#</td>
+				<td>#$link['type']#</td>
+				<td>#$link['from']#</td>
+				<td>#$link['to']#</td>
+			</tr>
+			</xar:foreach>
+		<xar:else />
+			<tr align="left" valign="middle">
+				<td>#$relation['module']#</td>
+				<td>(<xar:mlstring>not found</xar:mlstring>)</td>
+				<td>-</td>
+				<td>(<xar:mlstring>not found</xar:mlstring>)</td>
+			</tr>
+		</xar:if>
+	</xar:foreach>
 
-</div>
+	</table>
 </form>
-</table>
 <br />
 </xar:if>
 </div>

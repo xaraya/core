@@ -9,8 +9,9 @@
 <div class="xar-mod-body">
     <h2><xar:mlstring>Modify Instance</xar:mlstring></h2>
 
-    <form action="#xarModURL('blocks', 'admin', 'update_instance')#" method="post" enctype="application/x-www-form-urlencoded">
-        <p style="float: left; width: 100%;">
+    <form class="xar-fullwidth" action="#xarModURL('blocks', 'admin', 'update_instance')#" method="post" enctype="application/x-www-form-urlencoded">
+		<div class="xar-fullwidth">
+        <p style="float: left;">
             <span style="float: left; width: 20%; text-align: right;">
                 <span class="help" title="#xarML('This is the type of block that is being modified.')#">
                     <xar:mlstring>Type:</xar:mlstring>
@@ -21,7 +22,7 @@
             </span>
         </p>
 
-        <p style="float: left; width: 100%;">
+        <p style="float: left;">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="bid" id="bid" value="#$bid#" />
             <span style="float: left; width: 20%; text-align: right;">
@@ -36,7 +37,7 @@
             </span>
         </p>
 
-        <p style="float: left; width: 100%;">
+        <p style="float: left;">
             <span style="float: left; width: 20%; text-align: right;">
                 <span class="help" title="#xarML('Enter the new title for the block instance. The title is optional.')#">
                     <label for="block_title">
@@ -117,7 +118,7 @@
         </xar:loop>
         </p>
 
-        <p style="float: left; width: 100%;">
+        <p style="float: left;">
             <span style="float: left; width: 20%; text-align: right;">
                 <span class="help" title="#xarML('Optional default template for the block instance when no more specific template defined for the group instance. Format is: [outer-template][semi-colon][inner-template].')#">
                     <label for="block_template">
@@ -132,7 +133,7 @@
 
         <xar:comment>It is likely this section will be removed, since blocks generally do not use it.</xar:comment>
         <xar:if condition="isset($block_settings['form_refresh']) and $block_settings['form_refresh'] eq true">
-            <p style="float: left; width: 100%;">
+            <p style="float: left;">
                 <span style="float: left; width: 20%; text-align: right;">
                     <span class="help" title="#xarML('If your block uses a refresh time, this field needs to be filled in.')#">
                         <label for="block_refresh">
@@ -158,7 +159,7 @@
             </p>
         </xar:if>
  
-        <p style="float: left; width: 100%;">
+        <p style="float: left;">
             <span style="float: left; width: 20%; text-align: right;">
                 <span class="help" title="#xarML('This is the default state of the block.  Maximized is visible, hidden is not.')#">
                     <label for="block_state">
@@ -192,7 +193,7 @@
 
         <xar:comment>This 'content' section is deprecated - it will be removed once the PHP block no longer uses it.</xar:comment>
         <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
-            <p style="float: left; width: 100%;">
+            <p style="float: left;">
                 <span style="float: left; width: 20%; text-align: right;">
                     <span class="help" title="#xarML('Enter the content that is shown in the block instance.')#">
                         <label for="block_content">
@@ -215,5 +216,6 @@
         </xar:if>
         <div>#$hooks#</div>
         <div style="clear:both; padding-top: 10px; padding-left: 20px;"><input type="submit" value="#xarML('Update')#" /></div>
+    </div>
     </form>
 </div>

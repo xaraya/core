@@ -2,7 +2,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Modify template tag</xar:mlstring></h2><br />
 <div style="margin: auto;">
-<form method="post" action="#$updateurl#" enctype="application/x-www-form-urlencoded">
+<form class="xar-fullwidth" method="post" action="#$updateurl#" enctype="application/x-www-form-urlencoded">
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
 
     <!-- the same function is used for updates and inserts, therefore we
@@ -13,7 +13,7 @@
         <input type="hidden" name="tag_action" value="update" />
     </xar:if>
 
-    <table width="100%">
+    <table class="xar-fullwidth xar-noborder">
         <tr>
             <td><label for="tag_module"><xar:mlstring>Module</xar:mlstring></label></td>
             <td><input style="width:100%;"
