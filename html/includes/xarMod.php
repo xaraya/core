@@ -1517,7 +1517,6 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
 
     $FileInfo['name']           = $version['name'];
     $FileInfo['id']             = $version['id'];
-    $FileInfo['version']        = (($version['version']) || ($version['xar_version']));
     $FileInfo['description']    = isset($version['description'])    ? $version['description'] : false;
     $FileInfo['admin']          = isset($version['admin'])          ? $version['admin'] : false;
     $FileInfo['admin_capable']  = isset($version['admin'])          ? $version['admin'] : false;
@@ -1537,6 +1536,10 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     $FileInfo['publish_date']   = isset($version['publish_date'])   ? $version['publish_date'] : false;
     $FileInfo['license']        = isset($version['license'])        ? $version['license'] : false;
     $FileInfo['version']        = isset($version['version'])        ? $version['version'] : false;
+    // Check that 'xar_version' key exists before assigning
+    if (!$FileInfo['version'] && isset($version['xar_version'])) {
+        $FileInfo['version'] = $version['xar_version'];
+    }
     $FileInfo['bl_version']     = isset($version['bl_version'])     ? $version['bl_version'] : false;
 
     xarVarSetCached('Mod.getFileInfos', $modOsDir, $FileInfo);
