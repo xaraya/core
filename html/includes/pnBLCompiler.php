@@ -300,7 +300,8 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                                 return;
                             }
                             // Add text to parent
-                            if (trim($text) != '') {
+                            //if (trim($text) != '') {
+                            if ($text != '') {
                                 if (!$parent->hasText()) {
                                     pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                    new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
@@ -362,7 +363,8 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                                 return;
                             }
                             // Add text to parent
-                            if (trim($text) != '') {
+                            //if (trim($text) != '') {
+                            if ($text != '') {
                                 if (!$parent->hasText()) {
                                     pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                    new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
@@ -425,7 +427,8 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                                 // </pnt: tag
                                 //pnLogMessage('found </pnt:', PNLOG_LEVEL_ERROR);
                                 // Add text to parent
-                                if (trim($text) != '') {
+                                //if (trim($text) != '') {
+                                if ($text != '') {
                                     if (!$parent->hasText()) {
                                         pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                        new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
@@ -457,7 +460,8 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                             if ($nextToken == 'idget:') {
                                 // </widget: tag
                                 // Add text to parent
-                                if (trim($text) != '') {
+                                //if (trim($text) != '') {
+                                if ($text != '') {
                                     if (!$parent->hasText()) {
                                         pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                        new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
@@ -499,7 +503,8 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                             return;
                         }
                         // Add text to parent
-                        if (trim($text) != '') {
+                        //if (trim($text) != '') {
+                        if ($text != '') {
                             if (!$parent->hasText()) {
                                 pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));

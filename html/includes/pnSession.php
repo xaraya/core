@@ -234,7 +234,7 @@ function pnSession__setup($args)
     ini_set('session.use_cookies', 1);
 
     // Name of our cookie
-    ini_set('session.name', 'POSTNUKESID');
+    ini_set('session.name', 'XARAYASID');
 
     // Lifetime of our cookie
     switch ($args['securityLevel']) {
