@@ -100,7 +100,7 @@ if (empty($step)) {
         echo '</div></div>';
         // catch the output
         CatchOutput();
-        return;
+        //return;
     }
 
     // Check the installed security instances table for hard coded prefix bug and the bug fix bug :).
@@ -655,12 +655,21 @@ if (empty($step)) {
         $data = 'xar_type C(64) NotNull DEFAULT \'\', 
         xar_module C(64) NotNull DEFAULT \'\'';
         $result = $datadict->changeTable($blocktypestable, $data);
-        echo "Table $blocktypestable xar_module and xar_type columns are correct<br/>";
+        echo "Table $blocktypestable xar_module and xar_type columns are up-to-date<br/>";
 
-        // * TODO:
-        // * At this point we want to drop index i_xar_block_types and create
-        // * unique compound index i_xar_block_types2 on xar_type and xar_module.
-        // * Support for this is not in the DataDict yet (updates are available).
+        // Drop index i_xar_block_types and create unique compound index
+        // i_xar_block_types2 on xar_module and xar_type.
+        $indexes = $datadict->getIndexes($blocktypestable);
+        $indexname = 'i_' . xarDBGetSiteTablePrefix() . '_block_types';
+        if (isset($indexes[$indexname])) {
+            $result = $datadict->dropIndex($indexname, $blocktypestable);
+            echo "Dropped index $indexname from table $blocktypestable<br/>";
+        }
+        $indexname .= '2';
+        if (!isset($indexes[$indexname])) {
+            $result = $datadict->createIndex($indexname, $blocktypestable, 'xar_module,xar_type', array('UNIQUE'));
+            echo "Created unique index $indexname on table $blocktypestable<br/>";
+        }
     }
 
 

@@ -140,10 +140,11 @@ class xarDataDict
     /**
      * alterTable
      *
-     * Alters a table with appropriate ALTER TABLE MODIFY COLUMN or
-     * ALTER TABLE ADD $column if the column does not exist 
+     * Alters a table.
      *
-     * $fields = "xar_name C(100) NOTNULL";
+     * Alias for changeTable() at the moment, but that may change if
+     * we want to use this function to execute explicit ALTER TABLE
+     * statements rather than driving from the table meta data.
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
@@ -156,37 +157,17 @@ class xarDataDict
     */
     function alterTable($table, $fields)
     {
-        // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (empty($fields)) {
-            $invalid[] = 'fields';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'alterTable', 'xarDataDict');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
-
-        // Generate SQL to change the table
-        $sql = $this->dict->ChangeTableSQL($table, $fields);
-        if (!$sql)
-            return false;
-
-        // Execute the resulting SQL
-       $result = $this->executeSQLArray($sql);
-
-        return $result;
+        return $this->changeTable($table, $fields);
     }
 
     /**
      * changeTable
      *
-     * Calls alterTable()
+     * Calls ADODB changeTable()
+     * Alters a table with appropriate ALTER TABLE MODIFY COLUMN or
+     * ALTER TABLE ADD $column if the column does not exist 
+     *
+     * $fields = "xar_name C(100) NOTNULL";
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
@@ -208,14 +189,27 @@ class xarDataDict
             $invalid[] = 'fields';
         }
         if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'changeTable', 'xarDataDict');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+            $msg = xarML(
+                'Invalid #(1) for function #(2)() in #(3)',
+                join(', ',$invalid), 'changeTable', 'xarDataDict'
+            );
+            xarExceptionSet(
+                XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                new SystemException(__FILE__.'('.__LINE__.'): ' . $msg)
+            );
             return false;
         }
 
-        return $this->alterTable($table, $fields);
+        // Generate SQL to change the table
+        $sql = $this->dict->ChangeTableSQL($table, $fields);
+        if (!$sql) {
+            $result = false;
+        } else {
+            // Execute the resulting SQL
+            $result = $this->executeSQLArray($sql);
+        }
+
+        return $result;
     }
 
     /**
@@ -249,11 +243,12 @@ class xarDataDict
 
         // Generate SQL to create the database
         $sql = $this->dict->CreateDatabase($database, $options);
-        if (!$sql)
-            return false;
-
-        // Execute the resulting SQL - don't continue on error
-        $result = $this->executeSQLArray($sql, false);
+        if (!$sql) {
+            $result = false;
+        } else {
+            // Execute the resulting SQL - don't continue on error
+            $result = $this->executeSQLArray($sql, false);
+        }
 
         return $result;
     }
@@ -288,20 +283,73 @@ class xarDataDict
             $invalid[] = 'fields';
         }
         if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'createIndex', 'xarDataDict');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+            $msg = xarML(
+                'Invalid #(1) for function #(2)() in #(3)',
+                join(', ',$invalid), 'createIndex', 'xarDataDict'
+            );
+            xarExceptionSet(
+                XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                new SystemException(__FILE__.'('.__LINE__.'): '.$msg)
+            );
             return false;
         }
 
         // Generate SQL to create the index
         $sql = $this->dict->CreateIndexSQL($index, $table, $fields, $options);
-        if (!$sql)
-            return false;
+        if (!$sql) {
+            $result = false;
+        } else {
+            // Execute the resulting SQL
+            $result = $this->executeSQLArray($sql);
+        }
 
-        // Execute the resulting SQL
-        $result = $this->executeSQLArray($sql);
+        return $result;
+    }
+
+    /**
+     * createIndex
+     *
+     * Drop an index
+     *
+     * @author  Jason Judge <judgej@xaraya.com>
+     * @access  public
+     * @param   $index name of the index
+     * @param   $table name of the table
+     * @returns 0 if failed, 1 if executed with errors, 2 if successful
+     * @return  integer
+     * @throws  none
+     * @todo    none
+    */
+    function dropIndex($index, $table)
+    {
+        // Perform validation on input arguments
+        $invalid = array();
+        if (empty($index)) {
+            $invalid[] = 'index name';
+        }
+        if (empty($table)) {
+            $table = NULL;
+        }
+        if (count($invalid) > 0) {
+            $msg = xarML(
+                'Invalid #(1) for function #(2)() in #(3)',
+                join(', ',$invalid), 'dropIndex', 'xarDataDict'
+            );
+            xarExceptionSet(
+                XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                new SystemException(__FILE__.'('.__LINE__.'): '.$msg)
+            );
+            return false;
+        }
+
+        // Generate SQL to drop the index
+        $sql = $this->dict->DropIndexSQL($index, $table);
+        if (!$sql) {
+            $result = false;
+        } else {
+            // Execute the resulting SQL
+            $result = $this->executeSQLArray($sql);
+        }
 
         return $result;
     }
@@ -525,6 +573,42 @@ class xarDataDict
 
         $keys = $this->dict->MetaPrimaryKeys($table);
         return $keys;
+    }
+
+    /**
+     * getIndexes
+     *
+     * Retrieve all indexes for a table
+     *
+     * @author  Richard Cave <rcave@xaraya.com>
+     * @access  public
+     * @param   table name of table
+     * @param   primary boolean include primary keys (default false)
+     * @returns array on success, false on failure
+     * @return  returns an array of ADODB index arrays or false if none
+     * @throws  none
+     * @todo    none
+    */
+    function getIndexes($table, $primary = false)
+    {
+        // Perform validation on input arguments
+        $invalid = array();
+        if (empty($table)) {
+            $invalid[] = 'table name';
+        }
+        if (count($invalid) > 0) {
+            $msg = xarML(
+                'Invalid #(1) for function #(2)() in #(3)',
+                join(', ',$invalid), 'getIndexes', 'xarDataDict'
+            );
+            xarExceptionSet(
+                XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                new SystemException(__FILE__.'('.__LINE__.'): ' . $msg)
+            );
+            return false;
+        }
+
+        return $this->dict->MetaIndexes($table, $primary);
     }
 
     /**
