@@ -15,7 +15,7 @@
  * addmember - add a role to a group
  * @param $args['gid'] group id
  * @param $args['uid'] role id
- * @return true on succes, false on failure
+ * @return true on success, false on failure
  */
 function roles_userapi_addmember($args)
 {
@@ -44,7 +44,16 @@ function roles_userapi_addmember($args)
 
     $user = $roles->getRole($uid);
 
-    return $group->addMember($user);
+    $result = $group->addMember($user);
+    if (!$result) return;
+
+    // call item create hooks (for DD etc.)
+    $pargs['module'] = 'roles';
+    $pargs['itemtype'] = $group->getType(); // we might have something separate for groups later on
+    $pargs['itemid'] = $gid;
+    xarModCallHooks('item', 'create', $gid, $pargs);
+
+    return $result;
 }
 
 ?>

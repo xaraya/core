@@ -182,6 +182,7 @@ function roles_activate()
     xarModSetVar('roles', 'askdeactivationemail', 1);
     xarModSetVar('roles', 'askpendingemail', 1);
     xarModSetVar('roles', 'askpasswordemail', 1);
+    xarModSetVar('roles', 'uniqueemail', 1);
     //Default Display
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
 

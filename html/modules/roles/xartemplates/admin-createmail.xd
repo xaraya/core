@@ -344,7 +344,7 @@
 			 </div>
 			<div style="clear: both; padding-top: 10px;">
 				   <span style="float: right; width: 95%; text-align: left;">
-					<xar:mlstring>Note that some variables (e.g. "myusername" in the confirmation template) are defined dynamically during Xaraya processes, such as registration. You cannot use those variables, nor can you send messages that contain them from here.</xar:mlstring>
+					<xar:mlstring>Note that some variables (e.g. $myusername in the confirmation template) are defined dynamically during Xaraya processes, such as registration. You cannot use those variables, nor can you send messages that contain them from here.</xar:mlstring>
 				    </span>
 			 </div>
 		</div>

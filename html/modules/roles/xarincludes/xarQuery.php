@@ -724,6 +724,10 @@ class xarQuery
     }
 
     // ------ Gets and sets -----
+    function cleartables()
+    {
+        $this->tables = array();
+    }
     function clearfields()
     {
         $this->fields = array();
@@ -795,6 +799,11 @@ class xarQuery
         if ($x != '') {
             $this->sorts[] = array('name' => $x, 'order' => $y);
         }
+    }
+    function settable($x)
+    {
+        $this->cleartables();
+        $this->addtable($x);
     }
     function setorder($x = '',$y = 'ASC')
     {
