@@ -27,8 +27,10 @@ include 'includes/pnCore.php';
 
 function pnMain()
 {
+    // Load the core with all optional systems loaded
     pnCoreInit(PNCORE_SYSTEM_ALL);
-
+    
+    // Get module parameters
     list($modName, $modType, $funcName) = pnRequestGetInfo();
 
     // Load the module
@@ -36,13 +38,14 @@ function pnMain()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return; // throw back
     }
-    
-    // Run the function - also handle cancel button clicking
+
+    // if the debugger is active, start it
     if (pnCoreIsDebuggerActive()) {
         ob_start();
     }
 
     // FIXME: <marco> What's this insanity for?
+    // Run the function - also handle cancel button clicking
     if (pnVarCleanFromInput('cancel')) {
         $mainModuleOutput = pnModFunc($modName, $modType);
     } else {
@@ -84,7 +87,7 @@ function pnMain()
     if (pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     echo $pageOutput;
 
     return true;
@@ -124,6 +127,7 @@ if (!isset($res)) {
     }
 }
 
+// Kill the debugger
 pnCore_disposeDebugger();
 
 ?>

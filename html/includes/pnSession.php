@@ -218,9 +218,13 @@ function pnSession_close()
 // PRIVATE FUNCTIONS
 
 /**
- * Set up session handling
- *
  * Set all PHP options for PostNuke session handling
+ *
+ * @param $args['securityLevel'] the current security level
+ * @param $args['duration'] duration of the session
+ * @param $args['enableIntranetMode']
+ * @param $args['inactivityTimeout']
+ * @returns bool
  */
 function pnSession__setup($args)
 {
