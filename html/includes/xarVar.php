@@ -1038,19 +1038,30 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
                 $module_varstable = $tables['site/module_vars'];
             }
 
-            xarModDelVar($modName, $name);
+            // can't do that here - this breaks the link with the module user vars !
+            //xarModDelVar($modName, $name);
 
-            $seqId = $dbconn->GenId($module_varstable);
-            $query = "INSERT INTO $module_varstable
-                         (xar_id,
-                          xar_modid,
-                          xar_name,
-                          xar_value)
-                      VALUES
-                         ('$seqId',
-                          '" . xarVarPrepForStore($modBaseInfo['systemid']) . "',
-                          '" . xarVarPrepForStore($name) . "',
-                          '" . xarVarPrepForStore($value) . "');";
+            // We need the variable id
+            unset($modvarid);
+            $modvarid = xarModGetVarId($modName, $name);
+
+            if(!$modvarid) {
+                $seqId = $dbconn->GenId($module_varstable);
+                $query = "INSERT INTO $module_varstable
+                             (xar_id,
+                              xar_modid,
+                              xar_name,
+                              xar_value)
+                          VALUES
+                             ('$seqId',
+                              '" . xarVarPrepForStore($modBaseInfo['systemid']) . "',
+                              '" . xarVarPrepForStore($name) . "',
+                              '" . xarVarPrepForStore($value) . "');";
+            } else {
+                $query = "UPDATE $module_varstable
+                          SET xar_value = '" . xarVarPrepForStore($value) . "'
+                          WHERE xar_id = " . $modvarid;
+            }
 
             break;
         case 'moduservar':
@@ -1070,6 +1081,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             if(!$modvarid) return;
 
             // First delete it.
+        // FIXME: do we really want that ?
             xarModDelUserVar($modName,$name,$uid);
 
             // Only store setting if different from global setting
@@ -1092,6 +1104,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
                 $theme_varsTable = $tables['site/theme_vars'];
             }
 
+        // FIXME: do we really want that ?
             xarThemeDelVar($modName, $name);
 
             $seqId = $dbconn->GenId($theme_varsTable);
@@ -1113,6 +1126,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             break;
         case 'configvar':
 
+        // FIXME: do we really want that ?
             xarVar__DelVarByAlias($modname = NULL, $name, $uid = NULL, $type = 'configvar');
 
             $config_varsTable = $tables['config_vars'];
