@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.install.php 1.156 03/05/11 21:03:58+02:00 marcel@hsdev.com $
  *
  * Xaraya Installer
  *
@@ -83,7 +83,7 @@ xarSerReqRes_init($systemArgs, $whatToLoad);
 // Start BlockLayout Template Engine
 $systemArgs = array('enableTemplatesCaching' => false,
                     'themesBaseDirectory' => 'themes',
-                    'defaultThemeName' => 'installer');
+                    'defaultThemeDir' => 'installer');
 xarTpl_init($systemArgs, $whatToLoad);
 
 // Start Multi Language System

@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.xarCore.php 1.85 03/06/30 13:34:13+01:00 miko@miko.homelinux.org $
  *
  * The Core
  *
@@ -267,7 +267,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     // Start BlockLayout Template Engine
     $systemArgs = array('enableTemplatesCaching' => xarConfigGetVar('Site.BL.CacheTemplates'),
                         'themesBaseDirectory' => xarConfigGetVar('Site.BL.ThemesDirectory'),
-                        'defaultThemeName' => xarModGetVar('themes','default'));
+                        'defaultThemeDir' => xarModGetVar('themes','default'));
     xarTpl_init($systemArgs, $whatToLoad);
         // TODO (marcinmilan): review what pasts of the old user system need to be retained
         if ($whatToLoad & XARCORE_SYSTEM_USER) {

@@ -1,4 +1,4 @@
-<?php
+z<?php
 
 /**
  * Update the configuration parameters of the
@@ -44,8 +44,8 @@ function themes_admin_updateconfig()
         xarVarDelCached('Mod.Variables.themes', 'default');
     } 
     // update the data
-    xarTplSetThemeName($themeInfo['name']);
-    xarModSetVar('themes', 'default', $themeInfo['name']); 
+    xarTplSetThemeDir($themeInfo['directory']);
+    xarModSetVar('themes', 'default', $themeInfo['directory']); 
     // make sure we dont miss empty variables (which were not passed thru)
     if (empty($selstyle)) $selstyle = 'plain';
     if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;

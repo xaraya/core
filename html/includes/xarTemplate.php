@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.xarTemplate.php 1.119 03/06/30 16:10:26+01:00 miko@miko.homelinux.org $
  *
  * BlockLayout Template Engine
  * 
@@ -42,10 +42,10 @@ NOTE: <Dracos>  All the widget stuff in here is essentially dead code,
 function xarTpl_init($args, $whatElseIsGoingLoaded)
 {
     $GLOBALS['xarTpl_themesBaseDir'] = $args['themesBaseDirectory'];
-    $GLOBALS['xarTpl_defaultThemeName'] = $args['defaultThemeName'];
+    $GLOBALS['xarTpl_defaultThemeDir'] = $args['defaultThemeDir'];
     $GLOBALS['xarTpl_cacheTemplates'] = $args['enableTemplatesCaching'];
 
-    if (!xarTplSetThemeName($args['defaultThemeName'])) {
+    if (!xarTplSetThemeDir($args['defaultThemeDir'])) {
         xarCore_die("xarTpl_init: Unexistent theme directory '$GLOBALS[xarTpl_themeDir]'.");
     }
     if (!xarTplSetPageTemplateName('default')) {
@@ -106,6 +106,26 @@ function xarTplSetThemeName($themeName)
     }
     $GLOBALS['xarTpl_themeName'] = $themeName;
     $GLOBALS['xarTpl_themeDir'] = $GLOBALS['xarTpl_themesBaseDir'].'/'.$GLOBALS['xarTpl_themeName'];
+    return true;
+}
+
+/**
+ * Set theme dir
+ * 
+ * @access public
+ * @global xarTpl_themesBaseDir string
+ * @global xarTpl_themeName string
+ * @global xarTpl_themeDir string
+ * @param themeDir string
+ * @return bool
+ */
+function xarTplSetThemeDir($themeDir)
+{
+    assert('$themeDir != "" && $themeDir{0} != "/"');
+    if (!file_exists($GLOBALS['xarTpl_themesBaseDir'].'/'.$themeDir)) {
+        return false;
+    }
+    $GLOBALS['xarTpl_themeDir'] = $GLOBALS['xarTpl_themesBaseDir'].'/'.$themeDir;
     return true;
 }
 
