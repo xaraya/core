@@ -79,7 +79,7 @@ function roles_init()
                 'default' => ''),
             'xar_date_reg' => array('type'=>'datetime',
                 'null'=>false,
-                'default'=>$dbconn->DBTimeStamp(0)),
+                'default'=> '1970-01-01 00:00'),
             'xar_valcode' => array('type' => 'varchar',
                 'size' => 35,
                 'null' => false,
