@@ -735,6 +735,15 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $token = '';
                         break;
                     }
+                    // No XAR entity, but might be another one (we do this here for &#xBA type entities, which would other wise get caught in an instruction)
+                    $between = $this->windTo(XAR_TOKEN_ENTITY_END);
+                    if(!isset($between) or strpos($between,XAR_TOKEN_TAG_START)) {
+                        // set an exception and return
+                        $this->raiseError(XAR_BL_INVALID_SYNTAX,"Entity isn't closed properly.", $this);
+                        return; // throw back
+                    }
+                    // Otherwise just pass the entity to the outputtext and clear the token to start over 
+                    $text.=XAR_TOKEN_ENTITY_START.$between.$this->getNextToken();$token=''; 
                     break;
                 case XAR_TOKEN_CI_DELIM:
                     $nextToken = $this->getNextToken();
