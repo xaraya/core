@@ -179,6 +179,8 @@ function users_activate()
     xarModSetVar('users', 'usersperpage', 20);
     xarModSetVar('users', 'showtacs', 0);
     xarModSetVar('users', 'defaultgroup', 'Users');
+    xarModSetVar('users', 'confirmationtitle', 'Confirmation Email for %%username%%');
+    xarModSetVar('users', 'welcometitle', 'Welcome to %%sitename%%');
 
     // Unfortunately, crappy format here, and not to PEAR Standardards
     // But I need the line break to come into play without the tab.
