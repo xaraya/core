@@ -24,7 +24,6 @@ function blocks_init()
     $query = pnDBCreateTable($prefix . '_block_groups',
                              array('pn_id'         => array('type'        => 'integer',
                                                              'null'        => false,
-                                                             'default'     => '',
                                                              'increment'   => true,
                                                              'primary_key' => true),
                                    'pn_name'        => array('type'        => 'varchar',
@@ -36,7 +35,7 @@ function blocks_init()
                                                              'null'        => false,
                                                              'default'     => '')));
     $dbconn->Execute($query);
-        
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -44,13 +43,13 @@ function blocks_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     $query = pnDBCreateIndex($prefix . '_block_groups',
                              array('name'   => 'pn_name_index',
                                    'fields' => array('pn_name'),
                                    'unique' => 'true'));
     $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -58,12 +57,11 @@ function blocks_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     // *_block_instances
     $query = pnDBCreateTable($prefix . '_block_instances',
                              array('pn_id'          => array('type'        => 'integer',
                                                              'null'        => false,
-                                                             'default'     => '0',
                                                              'increment'   => true,
                                                              'primary_key' => true),
                                    'pn_type_id'     => array('type'        => 'integer',
@@ -74,8 +72,7 @@ function blocks_init()
                                                              'null'        => true,
                                                              'default'     => NULL),
                                    'pn_content'     => array('type'        => 'text',
-                                                             'null'        => false,
-                                                             'default'     => ''),
+                                                             'null'        => false),
                                    'pn_template'    => array('type'        => 'varchar',
                                                              'size'        => 255,
                                                              'null'        => true,
@@ -90,9 +87,9 @@ function blocks_init()
                                    'pn_last_update' => array('type'        => 'integer',
                                                              'null'        => false,
                                                              'default'     => '0')));
-    
+
      $dbconn->Execute($query);
-        
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -100,12 +97,11 @@ function blocks_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-                                                                               
+
     // *_block_types
     $query = pnDBCreateTable($prefix . '_block_types',
                              array('pn_id'          => array('type'        => 'integer',
                                                              'null'        => false,
-                                                             'default'     => '0',
                                                              'increment'   => true,
                                                              'primary_key' => true),
                                    'pn_type'        => array('type'        => 'varchar',
@@ -116,9 +112,9 @@ function blocks_init()
                                                              'size'        => 255,
                                                              'null'        => false,
                                                              'default'     => '')));
-    
+
      $dbconn->Execute($query);
-        
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -140,7 +136,8 @@ function blocks_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-
+/*
+    TODO: Find a fix for this - Postgres will not allow partial indexes
     $query = pnDBCreateIndex($prefix . '_block_types',
                              array('name'   => 'pn_typemodule_index',
                                    'fields' => array('pn_type(50)', 'pn_module(50)'),
@@ -154,12 +151,11 @@ function blocks_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+*/    
     // *_block_group_instances
     $query = pnDBCreateTable($prefix . '_block_group_instances',
                              array('pn_id'          => array('type'        => 'integer',
                                                              'null'        => false,
-                                                             'default'     => '0',
                                                              'increment'   => true,
                                                              'primary_key' => true),
                                    'pn_group_id'    => array('type'        => 'integer',

@@ -233,11 +233,11 @@ function installer_admin_bootstrap()
 {
 
     // log in admin user
-    $res = pnUserLogIn('admin', 'password', 0);
+    $res = pnUserLogIn('Admin', 'password', 0);
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     // Load installer API
     pnModAPILoad('installer','admin');
 
@@ -293,7 +293,7 @@ function installer_admin_create_administrator()
                                                           'email' => $email,
                                                           'pass'  => $password,
                                                           'url'   => $url));
-    die(var_dump($res));
+
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }

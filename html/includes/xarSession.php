@@ -517,4 +517,61 @@ function xarSession__phpGC($maxlifetime)
     return true;
 }
 
+/**
+ * Function to determine the client (browser, bot, ...)
+ *
+ * @return Boolean
+ */
+function pnSession__sniff()
+{
+//  sniff process
+    include_once 'phpSniff.class.php';
+    $client = new phpSniff('',0);
+    $client->init();
+
+/*
+//  Get database setup (see pntables.php root)
+    list($dbconn) = pnDBGetConn();
+    $pntable      = pnDBGetTables();
+
+//  set some variables used in the database call
+    $uatable  =  $pntable['user_agent'];
+    $uacolumn = &$pntable['user_agent_column'];
+
+    $sql = "SELECT $uacolumn[id]
+            FROM $uatable
+            WHERE $uacolumn[agent] = '" . pnVarPrepForStore($client->get_property('ua')) . "'";
+    $result = $dbconn->Execute($sql);
+
+    if (!$result->EOF) {
+        $uaid = $result->fields[0];
+    } else {
+        $dbconn->GenId('useragent')
+        $insarr = array($dbconn->GenId($uatable), pnVarPrepForStore($client->get_property('ua')),
+        $client->property('platform'), $client->property('os'),
+                        $client->property('browser'), $client->property('version'));
+
+        $insql = "INSERT INTO $uatable
+                  VALUES ({$insarr[0]}, '{$insarr[1]}', '{$insarr[2]}',
+                          '{$insarr[3]}', '{$insarr[4]}', '{$insarr[5]}', '', '')";
+//      last 2 are reserved for caps and quirks, supported by the sniffers cvs-version
+        $dbconn->Execute($insql);
+        $uaid = $dbconn->PO_Insert_ID($uatable,$uacolumn['id']);
+    }
+*/
+
+//  provide user agent details as session variables
+    pnSessionSetVar("uaid", $uaid);
+    pnSessionSetVar('browsername', $client->property('browser'));
+    pnSessionSetVar('browserversion', $client->property('version'));
+    pnSessionSetVar('osname', $client->property('platform'));
+    pnSessionSetVar('osversion', $client->property('os'));
+//  pnSessionSetVar('caps', $client->property('caps'));
+//  pnSessionSetVar('quirks', $client->property('quirks'));
+//  pnSessionSetVar('browserlang', $client->property('language'));
+
+//  end of sniffin ... bark-bark
+    return true;
+}
+
 ?>

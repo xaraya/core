@@ -32,6 +32,7 @@ function base_init()
     * Here we create non module associated tables
     *
     * prefix_config_vars   - system configuration variables
+    * prefix_allowed_vars  - Allowed system variable (IE HTML, dirty words)
     * prefix_session_info  - Session table
     * prefix_template_tags - module template tag registry
     *********************************************************************/
@@ -163,6 +164,50 @@ function base_init()
     pnConfigSetVar('Site.Log.LoggerName', 'dummy');
     pnConfigSetVar('Site.Log.LoggerArgs', '');
     pnConfigSetVar('Site.Log.LogLevel', 1 /*PNLOG_LEVEL_DEBUG*/);
+
+    /*********************************************************************
+    * Here we install the allowed vars table and fill it with some
+    * standard config values.
+    *********************************************************************/
+    $configVarsTable  = $systemPrefix . '_allowed_vars';
+    /*********************************************************************
+    * CREATE TABLE pn_allowed_vars (
+    *  pn_id int(11) unsigned NOT NULL auto_increment,
+    *  pn_name varchar(64) NOT NULL default '',
+    *  pn_type varchar(64) NOT NULL default '',
+    *  PRIMARY KEY  (pn_id),
+    *  KEY pn_name (pn_name)
+    * )
+    *********************************************************************/
+
+    $fields = array(
+    'pn_id'    => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
+    'pn_name'  => array('type'=>'varchar','size'=>64,'null'=>false),
+    'pn_type' => array('type'=>'varchar','size'=>64,'null'=>false)
+    );
+
+    $query = pnDBCreateTable($configVarsTable,$fields);
+    $dbconn->Execute($query);
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+    // FIXME: should be unique or not?
+    $index = array('name'   => 'pn_name',
+                   'fields' => array('pn_name'));
+
+    $query = pnDBCreateIndex($configVarsTable,$index);
+
+    $dbconn->Execute($query);
+
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
 
     $templateTagsTable = $systemPrefix . '_template_tags';
     /*********************************************************************
@@ -479,9 +524,8 @@ function base_activate()
     pnModAPILoad('modules', 'admin');
 
     // load modules into *_modules table
-    $res = pnModAPIFunc('modules', 'admin', 'regenerate');
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
+    if (!pnModAPIFunc('modules', 'admin', 'regenerate')) {
+        return NULL;
     }
 
     // Activate the groups module
@@ -494,7 +538,7 @@ function base_activate()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     // Activate the permissions module
     $res = pnModAPIFunc('modules', 'admin', 'setstate', array('regid' => pnModGetIDFromName('permissions'),
                                                               'state' => PNMOD_STATE_INACTIVE));
@@ -507,15 +551,14 @@ function base_activate()
     }
 
     // initialize blocks module
-    $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('blocks')));
+    $modRegId = pnModGetIDFromName('blocks');
 
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
+    if (!pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => $modRegId))) {
+        return NULL;
     }
 
-    $res1 = pnModAPIFunc('modules', 'admin', 'activate', array('regid' => pnModGetIDFromName('blocks')));
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
+    if (!pnModAPIFunc('modules', 'admin', 'activate', array('regid' => $modRegId))) {
+        return NULL;
     }
 
     // initialize & activate adminpanels module
@@ -553,11 +596,10 @@ function base_activate()
     // initialize installer module
 
     // Register Block types
-    $res = pnBlockTypeRegister('base', 'finclude');
-
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
+    if (!pnBlockTypeRegister('base', 'finclude')) {
+        return NULL;
     }
+
     $res = pnBlockTypeRegister('base', 'html');
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;

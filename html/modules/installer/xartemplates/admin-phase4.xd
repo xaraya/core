@@ -100,7 +100,7 @@
     <tr>
         <td colspan="2" style="text-align:justify;">
             <span class="pn-normal">
-                You must enable the "intranet" option if your site will not operate on a fully-qualified domain name (e.g. www.postnuke.com, foo.bar.com).  Examples of hostnames that are not fully qualified are bar.com, localhost, and mysite.org.  <b>If you do not set this parameter properly you may be unable to log in to your site.</b>
+                You must enable the "intranet" option if your site will not operate on a fully-qualified domain name (e.g. www.Xaraya.com, foo.bar.com).  Examples of hostnames that are not fully qualified are bar.com, localhost, and mysite.org.  <b>If you do not set this parameter properly you may be unable to log in to your site.</b>
             </span><br /><br />
         </td>
     </tr>
