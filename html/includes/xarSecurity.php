@@ -26,7 +26,8 @@
 
     //Maybe changing this touch to a centralized API would be a good idea?
     //Even if in the end it would use touched files too...
-    if (file_exists('./var/security/on.touch')) {
+
+    if (file_exists(xarCoreGetVarDirPath() . '/security/on.touch')) {
         include_once('./includes/xarCacheSecurity.php');
     }
 
