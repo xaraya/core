@@ -41,8 +41,10 @@ function xarMain()
     xarVarFetch('theme','str:1:',$themeName,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
     if (!empty($themeName)) {
         $themeName = xarVarPrepForOS($themeName);
-        xarTplSetThemeName($themeName);
-        xarVarSetCached('Themes.name','CurrentTheme', $themeName);
+        if (xarThemeIsAvailable($themeName)){
+            xarTplSetThemeName($themeName);
+            xarVarSetCached('Themes.name','CurrentTheme', $themeName);
+        }
     }
 
     $caching = 0;
