@@ -132,7 +132,7 @@
     </span>
     <span style="float: right; width: 78%; text-align: left;">
         <xar:set name="timezone">#xarConfigGetVar('Site.Core.TimeZone')#</xar:set>
-        <xar:data-input type="dropdown" name="defaulttimezone" id="defaulttimezone" value="$timezone" options="$timezones" />
+        <xar:data-input type="timezone" name="defaulttimezone" id="defaulttimezone" value="$timezone" />
     </span>
 </div>
 

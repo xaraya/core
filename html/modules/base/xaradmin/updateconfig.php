@@ -116,25 +116,12 @@ function base_admin_updateconfig()
                     // tz offset is in hours
                     $offset = (float) $hours + (float) $minutes / 60;
                     xarConfigSetVar('Site.MLS.DefaultTimeOffset', $offset);
-                    if (!empty($timezoneinfo[1]) && $timezoneinfo[1] != '-') {
-                        $dstrules = xarModAPIFunc('base','user','dstrules',
-                                                  array('rule' => $timezoneinfo[1]));
-                // TODO: analyze DST rules and do something with them, e.g.
-                //       array('1974', 'max', '-', 'Oct', 'lastSun', '2:00', '0', 'S'),
-                //       array('1987', 'max', '-', 'Apr', 'Sun>=1', '2:00', '1:00', 'D'),
-                        //xarConfigSetVar('Site.MLS.DaylightStartInfo', ...); // when daylight savings start each year ?
-                        //xarConfigSetVar('Site.MLS.DaylightEndInfo', ...); // when daylight savings end each year ?
-                    } else {
-                        xarConfigSetVar('Site.MLS.DaylightStartInfo', ''); // when daylight savings start each year ?
-                        xarConfigSetVar('Site.MLS.DaylightEndInfo', ''); // when daylight savings end each year ?
-                    }
                 } else {
                     // unknown/invalid timezone
                 }
             } else {
+                xarConfigSetVar('Site.Core.TimeZone', '');
                 xarConfigSetVar('Site.MLS.DefaultTimeOffset', 0);
-                xarConfigSetVar('Site.MLS.DaylightStartInfo', ''); // when daylight savings start each year ?
-                xarConfigSetVar('Site.MLS.DaylightEndInfo', ''); // when daylight savings end each year ?
             }
 
             break;

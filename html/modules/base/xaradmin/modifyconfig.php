@@ -54,20 +54,6 @@ function base_admin_modifyconfig()
         xarConfigSetVar('Site.Core.TimeZone', '');
     }
 
-// TODO: adapt DD timezone property to support new format
-    $timezones = xarModAPIFunc('base','user','timezones');
-    $data['timezones'] = array();
-    $data['timezones'][] = array('id' => '', 'name' => '');
-    foreach ($timezones as $timezone => $info) {
-        $name = strtr($timezone, array('/' => ' - ', '_' => ' '));
-        if (substr($info[0],0,1) == '-') {
-            $name .= ' (GMT ' . $info[0] . ')';
-        } else {
-            $name .= ' (GMT +' . $info[0] . ')';
-        }
-        $data['timezones'][] = array('id' => $timezone, 'name' => $name);
-    }
-
     $data['editor'] = xarModGetVar('base','editor');
     $data['editors'] = array(array('displayname' => xarML('none')));
     if(xarModIsAvailable('htmlarea')) $data['editors'][] = array('displayname' => 'htmlarea');

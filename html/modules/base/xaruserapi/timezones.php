@@ -9,7 +9,7 @@
  * @subpackage base
  */
 /**
- * Simplified timezone list
+ * Simplified timezone list (cfr. modules/timezone/xaradmin/regenerate.php)
  *
  * @param $args['timezone'] string timezone we're looking for (default all)
  * @param $args['time'] integer timestamp for the period we're interested in (unsupported)
@@ -18,6 +18,14 @@
  */
 function base_userapi_timezones($args)
 {
+/*
+    if (isset($time) && xarModIsAvailable('timezone')) {
+        // get time-dependent timezone information from the timezone module
+        ...
+        return $Zones;
+    }
+*/
+
     $Zones = array();
 
     // Zone    NAME    GMTOFF    RULES    FORMAT    [UNTIL]

@@ -1,0 +1,13 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+
+<xar:if condition="isset($timezone)">
+    #$timezone#
+    <xar:if condition="isset($offset)">
+        (GMT #$offset#)
+    </xar:if>
+<xar:elseif condition="isset($offset)" />
+    GMT #$offset#
+<xar:elseif condition="!empty($option['name'])" />
+    #$option['name']#
+</xar:if>
+

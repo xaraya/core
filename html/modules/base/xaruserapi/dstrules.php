@@ -9,7 +9,7 @@
  * @subpackage base
  */
 /**
- * Simplified DST rules
+ * Simplified DST rules (cfr. modules/timezone/xaradmin/regenerate.php)
  *
  * @param $args['rule'] string DST rule we're looking for (default all)
  * @param $args['time'] integer timestamp for the period we're interested in (unsupported)
@@ -18,6 +18,14 @@
  */
 function base_userapi_dstrules($args)
 {
+/*
+    if (isset($time) && xarModIsAvailable('timezone')) {
+        // get time-dependent DST rules from the timezone module
+        ...
+        return $Rules;
+    }
+*/
+
     $Rules = array();
 
     // Rule    NAME    FROM    TO    TYPE    IN    ON    AT    SAVE    LETTER

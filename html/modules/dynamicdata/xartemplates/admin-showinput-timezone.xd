@@ -1,18 +1,44 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
+<xar:if condition="empty($style) or $style eq 'offset'">
 <select name="#$name#" id="#$id#" tabindex="#$tabindex#" >
     <xar:foreach in="$options" value="$option" >
         <xar:set name="gmttime">gmdate('H:i',$now + $option['id']*60*60)</xar:set>
-        <xar:if condition="empty($option['id']) or ($option['id'] ne $option['name'])" >
-             <xar:if condition="$option['id'] eq $value" >
-                <option value="#$option['id']#" selected="selected">#$gmttime#(#$option['name']#)</option>
-            <xar:else />
-                <option value="#$option['id']#">#$gmttime#(#$option['name']#)</option>
-          </xar:if>
+        <xar:if condition="isset($value) and $option['id'] eq $value" >
+            <option value="#$option['id']#" selected="selected">#$gmttime# (#$option['name']#)</option>
+        <xar:else />
+            <option value="#$option['id']#">#$gmttime# (#$option['name']#)</option>
         </xar:if>
-
     </xar:foreach>
 </select>
+
+<xar:else/>
+<select name="#$name#" id="#$id#" tabindex="#$tabindex#" >
+    <xar:set name="now">time()</xar:set>
+    <xar:foreach in="$options" value="$option" >
+        <xar:if condition="isset($option['offset'])">
+            <xar:if condition="substr($option['offset'],0,1) eq '-'">
+                <xar:set name="plus">''</xar:set>
+            <xar:else/>
+                <xar:set name="plus">'+'</xar:set>
+            </xar:if>
+            <xar:comment> if you want to show the current time (without daylight saving)
+                <xar:set name="fields">explode(':',$option['offset'])</xar:set>
+                <xar:set name="offset">($fields[0] * 60 + $fields[1]) * 60</xar:set>
+                <xar:set name="gmtime">gmdate('H:i',$now + $offset)</xar:set>
+            </xar:comment>
+            <xar:set name="label">$option['name'] . ' (GMT ' . $plus . $option['offset'] . ')'</xar:set>
+        <xar:else/>
+            <xar:set name="label">$option['name']</xar:set>
+        </xar:if>
+        <xar:if condition="isset($timezone) and $option['id'] eq $timezone" >
+            <option value="#$option['id']#" selected="selected">#$label#</option>
+        <xar:else />
+            <option value="#$option['id']#">#$label#</option>
+        </xar:if>
+    </xar:foreach>
+</select>
+</xar:if>
 
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>

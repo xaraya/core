@@ -39,7 +39,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
             $this->value = strtotime($value);
             if ($this->value >= 0) {
                 // adjust for the user's timezone offset
-                $this->value -= xarMLS_userOffset() * 3600;
+                $this->value -= xarMLS_userOffset($this->value) * 3600;
             }
         } else {
             $this->invalid = xarML('date');
