@@ -1,42 +1,26 @@
 <xar:set name="steptext[1]">
-    <xar:mlstring>
-        Selecting Language 
-    </xar:mlstring>
+    <xar:mlstring>Selecting Language</xar:mlstring>
 </xar:set>
 <xar:set name="steptext[2]">
-    <xar:mlstring>
-        Agreeing to License 
-    </xar:mlstring>
+    <xar:mlstring>Agreeing to License</xar:mlstring>
 </xar:set>
 <xar:set name="steptext[3]">
-    <xar:mlstring>
-        Checking System Settings 
-    </xar:mlstring>
+    <xar:mlstring>Checking System Settings</xar:mlstring>
 </xar:set>
 <xar:set name="steptext[4]">
-    <xar:mlstring>
-        Collecting Database Settings 
-    </xar:mlstring>
+    <xar:mlstring>Collecting Database Settings</xar:mlstring>
 </xar:set>
 <xar:set name="steptext[5]">
-    <xar:mlstring>
-        Beginning Initialization 
-    </xar:mlstring>
+    <xar:mlstring>Beginning Initialization</xar:mlstring>
 </xar:set>
 <xar:set name="steptext[6]">
-    <xar:mlstring>
-        Creating an Administrator 
-    </xar:mlstring>
+    <xar:mlstring>Creating an Administrator</xar:mlstring>
 </xar:set>
 <xar:set name="steptext[7]">
-    <xar:mlstring>
-        Choosing a Configuration 
-    </xar:mlstring>
+    <xar:mlstring>Choosing a Configuration</xar:mlstring>
 </xar:set>
 <xar:set name="steptext[8]">
-    <xar:mlstring>
-        Choosing Options 
-    </xar:mlstring>
+    <xar:mlstring>Choosing Options</xar:mlstring>
 </xar:set>
 <div id="status">
     <xar:for start="$phase = 1" test="$phase lt $active_step" iter="$phase++">

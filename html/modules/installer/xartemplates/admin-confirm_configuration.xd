@@ -1,17 +1,13 @@
-<xar:set name="active_step">
-    8 
-</xar:set>
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:set name="active_step">8</xar:set>
 <div id="install">
     <xar:template file="status" />
     <h1 class="xar-pagetitle">
-        <xar:mlstring>
-            Choose Configuration Options 
-        </xar:mlstring>
+        <xar:mlstring>Choose Configuration Options</xar:mlstring>
     </h1>
+
     <h3>
-        <xar:mlstring>
-            Privileges 
-        </xar:mlstring>
+        <xar:mlstring>Privileges</xar:mlstring>
     </h3>
     <form action="&xar-modurl-installer-admin-confirm_configuration;" method="post">
         <div>
@@ -19,7 +15,7 @@
             <input type="hidden" name="configuration" id="configuration" value="#$configuration#" />
             <input type="hidden" name="confirmed" id="confirmed" value="true" />
             <xar:loop name="$options1">
-                <p class="xar-normal">
+                <p>
                     <xar:if condition="$loop:item['option'] eq ''">
                         #$loop:item['comment']# 
                         <xar:else />
@@ -34,83 +30,73 @@
                     </xar:if>
                 </p>
             </xar:loop>
-            <p class="xar-normal">
-                <xar:mlstring>
-                    Disabling the options above will leave your registered and unregistered users with minimal access. The administrator you created in Step 6 will always have full access to the site. 
-                </xar:mlstring>
+            <p>
+                <xar:mlstring>Disabling the options above will leave your registered and unregistered users with minimal access. The administrator you created in Step 6 will always have full access to the site.</xar:mlstring>
             </p>
+
             <div class="configuration">
-            <h4>
-                <xar:mlstring>
-                    Configuration Modules 
-                </xar:mlstring>
-            </h4>
-            <div class="scroller">
-                <xar:if condition="$missing eq '' and count($options2) eq 0">
-                    <p>
-                        <xar:mlstring>
-                            This configuration does not need to load any modules. 
-                        </xar:mlstring>
-                    </p>
+
+	            <h4>
+	                <xar:mlstring>Configuration Modules</xar:mlstring>
+	            </h4>
+
+	            <div class="scroller">
+	                <xar:if condition="$missing eq '' and count($options2) eq 0">
+	                    <p>
+	                        <xar:mlstring>This configuration does not need to load any modules.</xar:mlstring>
+	                    </p>
                     <xar:else />
-                    <xar:loop name="$options2">
-                        <xar:if condition="$loop:item['option'] eq ''">
-                            <p class="xar-normal">
-                                #$loop:item['comment']# 
-                            </p>
+	                    <xar:loop name="$options2">
+	                        <xar:if condition="$loop:item['option'] eq ''">
+	                            <p>
+	                                #$loop:item['comment']# 
+	                            </p>
                             <xar:else />
-                            <p class="xar-normal">
-                                <xar:if condition="$loop:item['option'] == 'true'">
-                                    <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
+	                            <p class="xar-normal">
+	                                <xar:if condition="$loop:item['option'] == 'true'">
+	                                    <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
                                     <xar:else />
-                                    <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" />
-                                </xar:if>
-                                <label for="chosen2_#$loop:index#">
-                                    #$loop:item['comment']# 
-                                </label>
-                            </p>
-                        </xar:if>
-                    </xar:loop>
-                </xar:if>
-            </div>
+	                                    <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" />
+	                                </xar:if>
+	                                <label for="chosen2_#$loop:index#">
+	                                    #$loop:item['comment']# 
+	                                </label>
+	                            </p>
+	                        </xar:if>
+	                    </xar:loop>
+	                </xar:if>
+	            </div>
             <xar:if condition="$installed ne ''">
                 <p class="xar-normal">
-                    <xar:mlstring>
-                        The following modules for this configuration are already installed 
-                    </xar:mlstring>
-                    : #$installed# 
+                    <xar:mlstring>The following modules for this configuration are already installed:</xar:mlstring>
+                    #$installed# 
                 </p>
             </xar:if>
             <xar:if condition="$missing ne ''">
                 <p>
-                    <xar:mlstring>
-                        The following modules for this configuration are missing in the modules directory 
-                    </xar:mlstring>
-                    : #$missing# 
+                    <xar:mlstring>The following modules for this configuration are missing in the modules directory:</xar:mlstring>
+                    #$missing# 
                 </p>
             </xar:if>
             <xar:if condition="count($options3) ne 0">
                 <h4>
-                    <xar:mlstring>
-                        Other Modules 
-                    </xar:mlstring>
+                    <xar:mlstring>Other Modules</xar:mlstring>
                 </h4>
+
                 <p>
-                    <xar:mlstring>
-                        The following modules are present that are not part of the configuration you have chosen. If you wish to, you can load them as well. 
-                    </xar:mlstring>
+                    <xar:mlstring>The following modules are present that are not part of the configuration you have chosen. If you wish to, you can load them as well.</xar:mlstring>
                 </p>
                 <div class="scroller">
                     <xar:loop name="$options3">
                         <xar:if condition="$loop:item['option'] eq ''">
-                            <p class="xar-normal">
+                            <p>
                                 #$loop:item['comment']# 
                             </p>
-                            <xar:else />
-                            <p class="xar-normal">
+                        <xar:else />
+                            <p>
                                 <xar:if condition="$loop:item['option'] == 'true'">
                                     <input type="checkbox" name="chosen[]" id="chosen3_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
-                                    <xar:else />
+                                <xar:else />
                                     <input type="checkbox" name="chosen[]" id="chosen3_#$loop:index#" value="#$loop:item['item']#" />
                                 </xar:if>
                                 <label for="chosen3_#$loop:index#">
@@ -123,14 +109,10 @@
             </xar:if>
             </div>
             <p>
-                <xar:mlstring>
-                    All of the above modules can be installed or removed at any later time in the Modules module. 
-                </xar:mlstring>
+                <xar:mlstring>All of the above modules can be installed or removed at any later time in the Modules module.</xar:mlstring>
             </p>
             <xar:set name="buttonnext">
-                <xar:mlstring>
-                    Continue &gt; 
-                </xar:mlstring>
+                <xar:mlstring>Continue</xar:mlstring>
             </xar:set>
             <input type="submit" name="create" id="create" value="#$buttonnext#" />
         </div>

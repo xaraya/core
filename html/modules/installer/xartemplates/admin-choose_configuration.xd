@@ -1,25 +1,22 @@
-<xar:set name="active_step">
-    7 
-</xar:set>
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:set name="active_step">7</xar:set>
 <div id="install">
     <xar:template file="status" />
     <h1>
-        <xar:mlstring>
-            Choose a Configuration 
-        </xar:mlstring>
+        <xar:mlstring>Choose a Configuration</xar:mlstring>
     </h1>
+
     <form action="&xar-modurl-installer-admin-confirm_configuration;" method="post">
         <div>
             <input type="hidden" name="install_language" id="install_language" value="#$language#" />
             <h3>
-                <xar:mlstring>
-                    Available configurations 
-                </xar:mlstring>
+                <xar:mlstring>Available Configurations</xar:mlstring>
             </h3>
             <xar:if condition="isset($warning)">
                 #$warning# 
             <xar:else />
-                <select id="configuration" name="configuration" size="5">
+            	<xar:set name="configsize">count($names)</xar:set>
+                <select id="configuration" name="configuration" size="#$configsize#">
                     <xar:loop name="$names">
                         <xar:if condition="$loop:item['selected']">
                             <option value="#$loop:item['value']#" selected="selected">
@@ -34,14 +31,10 @@
                 </select>
             </xar:if>
             <p>
-                <xar:mlstring>
-                    Each configuration will load a predefined set of modules, menus, hooks etc. as well as create an initial configuration of the security system. On the next page you can change some of the options of your chosen configuration. 
-                </xar:mlstring>
+                <xar:mlstring>Each configuration will load a predefined set of modules, menus, hooks etc. as well as create an initial configuration of the security system. On the next page you can change some of the options of your chosen configuration.</xar:mlstring>
             </p>
             <xar:set name="buttonnext">
-                <xar:mlstring>
-                    Continue &gt; 
-                </xar:mlstring>
+                <xar:mlstring>Continue</xar:mlstring>
             </xar:set>
             <input type="submit" name="create" id="create" value="#$buttonnext#" />
         </div>
