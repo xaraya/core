@@ -27,7 +27,7 @@ function roles_admin_modifyconfig()
             // first find the id of the admin privilege
             $roles = new xarRoles();
             $role = $roles->getRole(xarModGetVar('roles','admin'));
-            $privs = $role->getInheritedPrivileges();
+            $privs = array_merge($role->getInheritedPrivileges(),$role->getAssignedPrivileges());
             foreach ($privs as $priv)
             {
                 if ($priv->getLevel() == 800)
