@@ -31,6 +31,7 @@ function dynamicdata_util_meta($args)
     $data['tables'] = xarModAPIFunc('dynamicdata','util','getmeta',
                                     array('table' => $table));
 
+    $data['table'] = $table;
     $data['export'] = $export;
 
     xarTplSetPageTemplateName('admin');

@@ -45,13 +45,14 @@ function dynamicdata_utilapi_getmeta($args)
     }
 
     $metadata = array();
-    foreach ($tables as $table) {
-        if (isset($propertybag[$table])) {
-             $metadata[$table] = $propertybag[$table];
+    foreach ($tables as $curtable) {
+        if (isset($propertybag[$curtable])) {
+             $metadata[$curtable] = $propertybag[$curtable];
              continue;
         }
-        $fields = $dbconn->MetaColumns($table);
-        $keys = $dbconn->MetaPrimaryKeys($table);
+
+        $fields = $dbconn->MetaColumns($curtable);
+        $keys = $dbconn->MetaPrimaryKeys($curtable);
 
         $id = 1;
         $columns = array();
@@ -146,14 +147,14 @@ function dynamicdata_utilapi_getmeta($args)
                                    'type' => $proptype,
                                    'id' => $id,
                                    'default' => '', // unknown here
-                                   'source' => $table . '.' . $fieldname,
+                                   'source' => $curtable . '.' . $fieldname,
                                    'status' => $status,
                                    'order' => $id,
                                    'validation' => $validation);
             $id++;
         }
-        $metadata[$table] = $columns;
-        $propertybag[$table] = $columns;
+        $metadata[$curtable] = $columns;
+        $propertybag[$curtable] = $columns;
     }
 
     return $metadata;

@@ -60,7 +60,10 @@ function dynamicdata_userapi_encode_shorturl($args)
     }
 
     // specify some short URLs relevant to your module
-    if ($func == 'view') {
+    if (!empty($table)) {
+        // no short URLs for this one...
+
+    } elseif ($func == 'view') {
         if (!empty($objectcache[$modid.':'.$itemtype])) {
             $name = $objectcache[$modid.':'.$itemtype];
             $alias = xarModGetAlias($name);

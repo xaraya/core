@@ -9,7 +9,7 @@
     <li><a href="#xarModURL('dynamicdata','util','export')#"><xar:mlstring>Export Object Definitions and Data</xar:mlstring></a> : <xar:mlstring>for a particular object, go via View Objects - Edit</xar:mlstring></li>
     <li><a href="#xarModURL('dynamicdata','util','static')#"><xar:mlstring>Static Table Definition</xar:mlstring></a> : <xar:mlstring>for a particular object, go via View Objects - Edit</xar:mlstring></li>
     <li><a href="#xarModURL('dynamicdata','util','relations')#"><xar:mlstring>Relations between Objects</xar:mlstring></a> (<xar:mlstring>TODO</xar:mlstring>)</li>
-    <li><a href="#xarModURL('dynamicdata','util','meta')#"><xar:mlstring>Meta Table Definitions</xar:mlstring></a> (<xar:mlstring>for all tables in your database - you may have to increase the PHP memory limit for this, if you have many tables</xar:mlstring>)</li>
+    <li><a href="#xarModURL('dynamicdata','util','meta')#"><xar:mlstring>Meta Table Definitions</xar:mlstring></a></li>
 </ul>
 </div>
 </div>

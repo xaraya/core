@@ -1785,6 +1785,11 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($itemtype)) {
             $itemtype = null; // don't add to URL
         }
+        if (empty($this->table)) {
+            $table = null;
+        } else {
+            $table = $this->table;
+        }
         $args['modname'] = $modname;
         $args['itemtype'] = $itemtype;
         $args['links'] = array();
@@ -1795,8 +1800,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             }
             $args['links'][$itemid]['display'] =  array('otitle' => $args['linklabel'],
                                                         'olink'  => xarModURL($modname,'user',$args['linkfunc'],
-                                                                              array($args['param'] => $itemid,
-                                                                                    'itemtype'     => $itemtype)),
+                                                                              array('itemtype'     => $itemtype,
+                                                                                    'table'        => $table,
+                                                                                    $args['param'] => $itemid)),
                                                         'ojoin'  => '');
         }
         if (!empty($this->isgrouped)) {
