@@ -38,6 +38,7 @@ class xarDate {
 
     function regenerate() {
         $this->timestamp = mktime($this->hour,$this->minute,$this->second,$this->month,$this->day,$this->year);
+        $this->extract();
     }
 
     function extract() {
