@@ -28,7 +28,7 @@
 		<xar:mlstring>Available hooks for this module</xar:mlstring>&nbsp;&nbsp;
 		<!-- TODO~  Not Working:( [<a href="&xar-var-DetailsURL;">&xar-var-DetailsLabel;</a>] -->
 		<br /><br />
-			<xar:loop name="hooklist">
+			<xar:loop name="$hooklist">
 				Enable hooks from &xar-var-modname; 
 				<xar:if condition="$checked eq 1">
 					<input type="checkbox" name="hooks_&xar-var-modname;" id="hooks_&xar-var-modname;" value="&xar-var-checked;" checked="checked" tabindex="2" />
@@ -37,7 +37,7 @@
 				</xar:if>
 				<br /><br />
 				<xar:if condition="$details eq 1">
-					<xar:loop name="hooks">
+					<xar:loop name="$hooks">
 						&nbsp;&nbsp;&xar-var-hook;
 					</xar:loop>
 				</xar:if>
