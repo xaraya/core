@@ -1,7 +1,7 @@
 <?php
 
 /**
-  V3.60 16 June 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+  V4.05 13 Dec 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -118,12 +118,8 @@ function Lens_ParseArgs($args,$endstmtchar=',',$tokenchars='_.-')
 			}
 			
 			if ($quoted) $tokarr[] = $ch;
-            // Function ctype_alnum() is not available on the earlier supported PHP versions.
-			else if (function_exists('ctype_alnum') && ctype_alnum($ch) || strpos($tokenchars,$ch) !== false) {
-                $tokarr[] = $ch;
-            } else if (!function_exists('ctype_alnum') && preg_match('/^[a-z0-9]*$/i', $ch) || strpos($tokenchars,$ch) !== false) {
-                $tokarr[] = $ch;
-            } else {
+			else if (ctype_alnum($ch) || strpos($tokenchars,$ch) !== false) $tokarr[] = $ch;
+			else {
 				if ($ch == $endstmtchar) {			
 					$tokens[$stmtno][] = implode('',$tokarr);
 					$stmtno += 1;
@@ -154,6 +150,7 @@ class ADODB_DataDict {
 	var $schema = false;
 	var $serverInfo = array();
 	var $autoIncrement = false;
+	var $quote = '"';
 	var $dataProvider;
 	var $blobSize = 100; 	/// any varchar/char field this size or greater is treated as a blob
 							/// in other words, we use a text area for editting.
@@ -234,6 +231,7 @@ class ADODB_DataDict {
 	function CreateDatabase($dbname,$options=false)
 	{
 		$options = $this->_Options($options);
+		if (!preg_match('/^[a-z0-9A-Z_]*$/',$dbname)) $dbname = $this->quote.$dbname.$this->quote;
 		$s = 'CREATE DATABASE '.$dbname;
 		if (isset($options[$this->upperName])) $s .= ' '.$options[$this->upperName];
 		$sql[] = $s;
@@ -372,7 +370,7 @@ class ADODB_DataDict {
 				case 'NAME': 	$fname = $v; break;
 				case '1':
 				case 'TYPE': 	$ty = $v; $ftype = $this->ActualType(strtoupper($v)); break;
-				case 'SIZE': 	$dotat = strpos($v,'.');
+				case 'SIZE': 	$dotat = strpos($v,array('.',','));
 								if ($dotat === false) $fsize = $v;
 								else {
 									$fsize = substr($v,0,$dotat);
@@ -458,7 +456,7 @@ class ADODB_DataDict {
 	{
 		if (strlen($fsize) && $ty != 'X' && $ty != 'B' && strpos($ftype,'(') === false) {
 			$ftype .= "(".$fsize;
-			if ($fprec) $ftype .= ",".$fprec;
+			if (strlen($fprec)) $ftype .= ",".$fprec;
 			$ftype .= ')';
 		}
 		return $ftype;
@@ -557,7 +555,7 @@ This function changes/adds new fields to your table. You
 own.
 
 */
-	function ChangeTableSQL($tablename, $flds)
+	function ChangeTableSQL($tablename, $flds,$tableoptions=false)
 	{
 		if ($this->schema) $tabname = $this->schema.'.'.$tablename;
 		else $tabname = $tablename;
@@ -565,14 +563,16 @@ own.
 		$conn = &$this->connection;
 		if (!$conn) return false;
 		
-		$colarr = $conn->MetaColumns($tabname);
+		$colarr = &$conn->MetaColumns($tabname);
+        // XARAYA MODIFICATION - START
+		// if (!$colarr) return $this->CreateTableSQL($tablename,$flds,$tableoptions);
 		if (!$colarr) {
-            // XARAYA MODIFICATION
             if (xarExceptionId()) {
                 xarExceptionHandled();
             }
             return $this->CreateTableSQL($tablename,$flds);
         }
+        // XARAYA MODIFICATION - END
 		foreach($colarr as $col) $cols[strtoupper($col->name)] = " ALTER ";
 		
 		$sql = array();
