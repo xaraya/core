@@ -106,7 +106,7 @@ END OF TERMS AND CONDITIONS
         </td>
     </tr>
     <form action="install.php" method="post">
-        <input type="hidden" name="install_language" value="<?php echo $language; ?>" />
+        <input type="hidden" name="install_language" value="#$language#" />
         <input type="hidden" name="install_phase" value="3" />
         <tr>
             <td>

@@ -37,8 +37,9 @@ function installer_admin_phase1()
     /*
      * TODO: Find way to convert locale string into language, country, etc..
      */
-
-    return array('languages' => array('eng' => 'English'));
+    $data['languages'] = array('eng' => 'English');
+    
+    return $data;
 }
 
 /**
@@ -47,13 +48,18 @@ function installer_admin_phase1()
  * @param none
  * @returns array
  */
-function installer_admin_phase2() {
+function installer_admin_phase2()
+{
     /*
      * TODO: accept locale and run the rest of the install
      *       using that locale if the locale exists.
      */
     // Might have to unset some cached variables.
-    return array();
+    
+    // TODO: fix installer ML
+    $data['language'] = 'English';
+    
+    return $data;
 }
 
 /**
@@ -70,8 +76,26 @@ function installer_admin_phase3()
         // didn't agree to license, don't install
         xarResponseRedirect('install.php');
     }
-
-    return array();
+    
+    //Defaults
+    $systemConfigIsWritable = false;
+    
+    $systemVarDir     = xarCoreGetVarDirPath();
+    $systemConfigFile = $systemVarDir . '/config.system.php';
+    $siteConfigFile   = $systemVarDir . '/config.site.xml';
+    
+    if (is_writable($systemConfigFile)) {
+        $systemConfigIsWritable = true;
+    }
+    
+    $data['systemConfigFile'] = $systemConfigFile;
+    $data['siteConfigFile']   = $siteConfigFile;
+    $data['systemConfigIsWritable'] = $systemConfigIsWritable;
+    
+    // TODO: fix installer ML
+    $data['language'] = 'English';
+    
+    return $data;
 }
 
 /**
@@ -83,26 +107,25 @@ function installer_admin_phase3()
 function installer_admin_phase4()
 {
     // Get default values from config files
-    $dbHost   = xarCore_getSystemVar('DB.Host');
-    $dbUser   = xarCore_getSystemVar('DB.UserName');
-    $dbPass   = xarCore_getSystemvar('DB.Password');
-    $dbName   = xarCore_getSystemvar('DB.Name');
-    $dbPrefix = xarCore_getSystemvar('DB.TablePrefix');
+    $data['database_host']       = xarCore_getSystemVar('DB.Host');
+    $data['database_username']   = xarCore_getSystemVar('DB.UserName');
+    $data['database_password']   = xarCore_getSystemvar('DB.Password');
+    $data['database_name']       = xarCore_getSystemvar('DB.Name');
+    $data['database_prefix']     = xarCore_getSystemvar('DB.TablePrefix');
+    
+    // Supported  Databases:
+    $data['database_types']      = array('mysql'    => 'MySQL',
+                                         'oci8'     => 'Oracle',
+                                         'postgres' => 'Postgres');
+                                         
+    // TODO: fix installer ML
+    $data['language'] = 'English';
 
-    return array('database_host' => $dbHost,
-                 'database_username' => $dbUser,
-                 'database_password' => $dbPass,
-                 'database_name' => $dbName,
-                 'database_prefix' => $dbPrefix,
-                 'database_types' => array('mysql'    => 'MySQL',
-                                           'oci8'     => 'Oracle',
-                                           'postgres' => 'Postgres'));
+    return $data;
 }
 
 /**
  * Phase 5: Pre-Boot, Modify Configuration
- *    INSTALL: create minimal tables, direct to bootstrap
- *    UPGRADE: upgrade tables, direct to bootstrap
  *
  * @param dbHost
  * @param dbName
@@ -110,7 +133,6 @@ function installer_admin_phase4()
  * @param dbPass
  * @param dbPrefix
  * @param dbType
- * @param installType
  * @param intranetMode
  * @param createDb
  *
@@ -118,6 +140,11 @@ function installer_admin_phase4()
  */
 function installer_admin_phase5()
 {
+    // Defaults
+    $createDb = false;
+    $intranetMode = false;
+    $dbPass = '';
+    
     // Get arguments
     list($dbHost,
          $dbName,
@@ -125,7 +152,6 @@ function installer_admin_phase5()
          $dbPass,
          $dbPrefix,
          $dbType,
-         $installType,
          $intranetMode,
          $createDb)    = xarVarCleanFromInput('install_database_host',
                                              'install_database_name',
@@ -133,90 +159,61 @@ function installer_admin_phase5()
                                              'install_database_password',
                                              'install_database_prefix',
                                              'install_database_type',
-                                             'install_type',
                                              'install_intranet',
                                              'install_create_database');
 
     // Check necessary arguments
-    if (empty($dbHost) || empty($dbName) || empty($dbUname)
-        || empty($dbPrefix) || empty($dbType) || empty($installType)) {
-
-       $msg = xarML('Empty dbHost (#(1)) or dbName (#(2)) or dbUname (#(3))
-                   or dbPrefix (#(4)) or dbType (#(5)) or installType (#(6)).'
-                  , $dbHost, $dbName, $dbUname, $dbPrefix, $dbType, $installType);
-       die($msg);
+    if (empty($dbHost) || empty($dbName) || empty($dbUname) || empty($dbPrefix) || empty($dbType)) {
+       $msg = xarML('Empty dbHost (#(1)) or dbName (#(2)) or dbUname (#(3)) or dbPrefix (#(4)) or dbType (#(5)).'
+              , $dbHost, $dbName, $dbUname, $dbPrefix, $dbType);
+       // TODO: better error checking
+       xarCore_die($msg);
     }
 
-    // Set default for password
-    if (!isset($dbPass)) {
-        $dbPass = '';
-    }
 
-    // Set defaults for createdb
-    if (isset($createDb)) {
-        $createDb = TRUE;
-    } else {
-        $createDb = FALSE;
-    }
-
-    // Pre-Setup of intranet mode
-    if (isset($intranetMode)) {
-        $intranetMode = TRUE;
-    } else {
-        $intranetMode = FALSE;
-    }
-
-    if ('new' == $installType) {
-        $initFunc = 'init';
-    } elseif ('upgrade' == $installType) {
-        $initfunc = 'upgrade';
-    }
-
+    // FIXME: Pre-Setup of intranet mode
 
 
     if (!xarInstallAPILoad('installer','admin')) {
-        return NULL;
+        return;
     }
 
     // Save config data
-    if (!xarInstallAPIFunc('installer',
-                            'admin',
-                            'modifyconfig',
-                            array('dbHost'    => $dbHost,
-                                  'dbName'    => $dbName,
-                                  'dbUname'   => $dbUname,
-                                  'dbPass'    => $dbPass,
-                                  'dbPrefix'  => $dbPrefix,
-                                  'dbType'    => $dbType))) {
-        return NULL;
+    if (!xarInstallAPIFunc('installer', 'admin', 'modifyconfig',
+                                                 array('dbHost'    => $dbHost,
+                                                       'dbName'    => $dbName,
+                                                       'dbUname'   => $dbUname,
+                                                       'dbPass'    => $dbPass,
+                                                       'dbPrefix'  => $dbPrefix,
+                                                       'dbType'    => $dbType))) {
+        return;
     }
 
 
     // Create the database if necessary
     if ($createDb) {
-        if (!xarInstallAPIFunc('installer',
-                               'admin',
-                               'createdb')) {
-           return NULL;
+        if (!xarInstallAPIFunc('installer', 'admin', 'createdb')) {
+           return;
         }
     }
 
     // Start the database
     xarCoreInit(XARCORE_SYSTEM_ADODB);
 
-    // Load in modules/installer/xarinit.php and choose a new install or upgrade
-    if (!xarInstallAPIFunc('installer',
-                            'admin',
-                            'initialise',
-                            array('directory' => 'installer',
-                                  'initfunc'  => $initFunc))) {
-        return NULL;
+    // Load in modules/installer/xarinit.php and start the install
+    if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
+                                                 array('directory' => 'installer',
+                                                       'initfunc'  => 'init'))) {
+        return;
     }
 
     session_start(); 
     session_destroy();
 
-    return array();
+    // TODO: fix installer ML
+    $data['language'] = 'English';
+    
+    return $data;
 }
 
 /**
@@ -227,16 +224,16 @@ function installer_admin_phase5()
  */
 function installer_admin_bootstrap()
 {
-	xarTplSetThemeName('installer');
+     xarTplSetThemeName('installer');
 
     // log in admin user
     if (!xarUserLogIn('Admin', 'password', 0)) {
-        return NULL;
+        return;
     }
 
     // Load installer API
     if (!xarModAPILoad('installer','admin')) {
-        return NULL;
+        return;
     }
 
     // Activate modules
@@ -245,7 +242,7 @@ function installer_admin_bootstrap()
                         'initialise',
                         array('directory' => 'base',
                               'initfunc' => 'activate'))) {
-        return NULL;
+        return;
     }
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator'));
@@ -282,19 +279,17 @@ function installer_admin_create_administrator()
                                        'install_admin_url');
 
     if (!xarModAPILoad('users', 'admin')) {
-        return NULL;
+        return;
     }
 
-    //$password = md5($password);
-
     if(!xarModAPIFunc('users', 'admin', 'update', array('uid'   => 2,
-                                                          'name'  => $name,
-                                                          'uname' => $username,
-                                                          'email' => $email,
-                                                          'pass'  => $password,
-                                                          'url'   => $url,
-                                                          'state' => 3))) {
-        return NULL;
+                                                        'name'  => $name,
+                                                        'uname' => $username,
+                                                        'email' => $email,
+                                                        'pass'  => $password,
+                                                        'url'   => $url,
+                                                        'state' => 3))) {
+        return;
     }
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'finish'));
@@ -321,7 +316,7 @@ function installer_admin_finish()
         $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
+        return;
     }
 
     // Freak if we don't get one and only one result
@@ -329,19 +324,19 @@ function installer_admin_finish()
         $msg = xarML("Group 'left' not found.");
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
+        return;
     }
 
     list ($leftBlockGroup) = $result->fields;
 
     if (!xarModAPILoad('blocks', 'admin')) {
-        return NULL;
+        return;
     }
 
     $adminBlockId = xarBlockTypeExists('adminpanels', 'adminmenu');
 
     if (!isset($adminBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return NULL;
+        return;
     }
     if (!xarModAPIFunc('blocks',
                        'admin',
@@ -350,7 +345,7 @@ function installer_admin_finish()
                                                 'group'    => $leftBlockGroup,
                                                 'template' => '',
                                                 'state'    => 2))) {
-        return NULL;
+        return;
     }
 
 
@@ -364,7 +359,7 @@ function installer_admin_finish()
     $htmlBlockId = xarBlockTypeExists('base', 'html');
 
     if (!isset($htmlBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return NULL;
+        return;
     }
 
     if (!xarModAPIFunc('blocks',
@@ -375,7 +370,7 @@ function installer_admin_finish()
                                                 'group'    => $leftBlockGroup,
                                                 'template' => '',
                                                 'state'    => 2))) {
-        return NULL;
+        return;
     }
 
     $query = "SELECT    xar_id as id
@@ -389,7 +384,7 @@ function installer_admin_finish()
         $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
+        return;
     }
 
     // Freak if we don't get one and only one result
@@ -397,7 +392,7 @@ function installer_admin_finish()
         $msg = xarML("Group 'right' not found.");
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
+        return;
     }
 
     list ($rightBlockGroup) = $result->fields;
@@ -405,7 +400,7 @@ function installer_admin_finish()
     $loginBlockId = xarBlockTypeExists('users', 'login');
 
     if (!isset($loginBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return NULL;
+        return;
     }
     if (!xarModAPIFunc('blocks',
                        'admin',
@@ -414,7 +409,7 @@ function installer_admin_finish()
                                                 'group'    => $rightBlockGroup,
                                                 'template' => '',
                                                 'state'    => 2))) {
-        return NULL;
+        return;
     }
 
     xarConfigSetVar('Site.BL.DefaultTheme','Xaraya_Classic');

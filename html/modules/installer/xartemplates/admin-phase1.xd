@@ -1,7 +1,7 @@
 <div align="center">
 <font class="xar-pagetitle">Xaraya Installation</font><br />
 <font class="xar-sub">Step 1/6</font><br /><br />
-<font class="xar-title">Select your language.</font>
+<font class="xar-title">Select your Language.</font>
 <form action="install.php" method="post">
 <table width="50%" align="center">
     <tr>
