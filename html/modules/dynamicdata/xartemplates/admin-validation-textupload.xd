@@ -1,0 +1,44 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<table class="xar-norm">
+<xar:if condition="empty($ishooked)">
+  <tr>
+    <td colspan="2">
+      <strong><xar:mlstring>Note: the uploads module is not hooked</xar:mlstring></strong>
+    </td>
+  </tr>
+<xar:else/>
+  <tr>
+    <td>
+      <xar:mlstring>Methods</xar:mlstring>
+    </td>
+    <td>
+      <xar:foreach in="$methods" key="$method" value="$checked">
+        <label for="#$id#_methods_#$method#">#$method#</label>
+        <xar:if condition="!empty($checked)">
+          <input type="checkbox" name="#$name#[methods][#$method#]" id="#$id#_methods_#$method#" value="1" tabindex="#$tabindex#" checked="checked" />
+        <xar:else/>
+          <input type="checkbox" name="#$name#[methods][#$method#]" id="#$id#_methods_#$method#" value="1" tabindex="#$tabindex#" />
+        </xar:if>
+        <br/>
+      </xar:foreach>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <strong><xar:mlstring>Note: the uploads module is hooked</xar:mlstring></strong>
+    </td>
+  </tr>
+</xar:if>
+  <tr>
+    <td>
+      <xar:mlstring>Other rule</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="#$size#" tabindex="#$tabindex#" />
+    </td>
+  </tr>
+</table>
+
+<xar:if condition="!empty($invalid)">
+    <span class="xar-error">#$invalid#</span>
+</xar:if>

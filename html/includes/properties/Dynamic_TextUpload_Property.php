@@ -2,7 +2,7 @@
 /**
  * File: $Id$
  *
- * Dynamic Text Upload Property (TODO: work with uploads module)
+ * Dynamic Text Upload Property
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
@@ -26,8 +26,10 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
 
     var $size = 40;
     var $maxsize = 1000000;
-//    var $basedir;
-//    var $filetype;
+    var $methods = array('trusted'  => false,
+                         'external' => false,
+                         'upload'   => false,
+                         'stored'   => false);
 
     // this is used by Dynamic_Property_Master::addProperty() to set the $object->upload flag
     var $upload = true;
@@ -35,7 +37,12 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
     function Dynamic_TextUpload_Property($args)
     {
         $this->Dynamic_Property($args);
-        // TODO: do we want any other verifications here, like file type ?
+
+        if (!isset($this->validation)) {
+            $this->validation = '';
+        }
+        // always parse validation to preset methods here
+        $this->parseValidation($this->validation);
     }
 
     function validateValue($value = null)
@@ -60,12 +67,11 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         // if the uploads module is hooked (to be verified and set by the calling module)
         // any uploaded files will be referenced in the text as #...:NN# for transform hooks
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
-            list( , $methods) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $this->validation);
             $return = xarModAPIFunc('uploads','admin','validatevalue',
                                     array('id' => $name, // not $this->id
                                           'value' => null, // we don't keep track of values here
                                           'multiple' => FALSE, // not relevant here
-                                          'methods' => $methods,
+                                          'methods' => $this->methods,
                                           'format' => 'textupload',
                                           'maxsize' => $this->maxsize));
             if (!isset($return) || !is_array($return) || count($return) < 2) {
@@ -156,8 +162,6 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         xarVarSetCached('Hooks.dynamicdata','withupload',1);
 
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
-            list(, $methods) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $this->validation);
-
             // relevant input fields are handled directly by the uploads module
             //$extensions = xarModGetVar('uploads','allowed_types');
             $data['extensions']= '';
@@ -167,7 +171,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                                            'value' => null, // we don't keep track of values here
                                            'multiple' => FALSE, // not relevant here
                                            'format' => 'textupload',
-                                           'methods' => $methods));
+                                           'methods' => $this->methods));
             if (!empty($uploads)) {
                 $data['uploads_hooked'] = $uploads;
             }
@@ -178,25 +182,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         }
         $data['allowed']   =$allowed;
         $data['upname']    =$upname;
-        // we're using a textarea field to keep track of any previously uploaded file here
-        /*return '<textarea' .
-               ' name="' . $name . '"' .
-               ' rows="'. (!empty($rows) ? $rows : $this->rows) . '"' .
-               ' cols="'. (!empty($cols) ? $cols : $this->cols) . '"' .
-               ' wrap="'. (!empty($wrap) ? $wrap : $this->wrap) . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               '>' . xarVarPrepForDisplay($value) . '</textarea><br /><br />' .
-               '<input type="hidden" name="MAX_FILE_SIZE"'.
-               ' value="'. (!empty($maxsize) ? $maxsize : $this->maxsize) .'" />' .
-               '<input type="file"'.
-               ' name="'.$upname.'"' .
-               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               (!empty($id) ? ' id="'.$id.'_upload"' : '') .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' /> ' . $allowed .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        */
+        // we're using the textarea field to keep track of any previously uploaded file here
         $data['name']     = $name;
         $data['id']       = $id;
         $data['upid']     = !empty($id) ? $id.'_upload' : '';
@@ -235,6 +221,21 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
     }
 
 
+    function parseValidation($validation = '')
+    {
+        // Determine if the uploads module is hooked to the calling module
+        // if so, we will use the uploads modules functionality
+        if (xarVarGetCached('Hooks.uploads','ishooked')) {
+            list($multiple, $methods) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $validation);
+
+            // $multiple is not relevant here
+            $this->methods = $methods;
+
+        } else {
+            // nothing interesting here
+        }
+    }
+
     /**
      * Get the base information for this property.
      *
@@ -261,6 +262,89 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                            );
         return $baseInfo;
      }
+
+    function showValidation($args = array())
+    {
+        extract($args);
+
+        $data = array();
+        $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
+        $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
+        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
+        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+
+        $data['size']       = !empty($size) ? $size : 50;
+        $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
+
+        if (isset($validation)) {
+            $this->validation = $validation;
+            $this->parseValidation($validation);
+        }
+
+        if (xarVarGetCached('Hooks.uploads','ishooked')) {
+            $data['ishooked'] = true;
+        } else {
+            $data['ishooked'] = false;
+        }
+        if ($data['ishooked']) {
+            $data['methods'] = $this->methods;
+        } else {
+            // nothing interesting here
+        }
+        $data['other'] = '';
+
+        // allow template override by child classes
+        if (!isset($template)) {
+            $template = 'textupload';
+        }
+        return xarTplModule('dynamicdata', 'admin', 'validation', $data, $template);
+    }
+
+    function updateValidation($args = array())
+    {
+        extract($args);
+
+        // in case we need to process additional input fields based on the name
+        if (empty($name)) {
+            $name = 'dd_'.$this->id;
+        }
+        // do something with the validation and save it in $this->validation
+        if (isset($validation)) {
+            if (is_array($validation)) {
+                if (!empty($validation['other'])) {
+                    $this->validation = $validation['other'];
+
+                } elseif (xarVarGetCached('Hooks.uploads','ishooked')) {
+                    $this->validation = '';
+// CHECKME: verify format of methods(...) part
+                    if (!empty($validation['methods'])) {
+                        $todo = array();
+                        foreach (array_keys($this->methods) as $method) {
+                            if (!empty($validation['methods'][$method])) {
+                                $todo[] = '+' .$method;
+                            } else {
+                                $todo[] = '-' .$method;
+                            }
+                        }
+                        if (count($todo) > 0) {
+                            $this->validation .= ';methods(';
+                            $this->validation .= join(',',$todo);
+                            $this->validation .= ')';
+                        }
+                    }
+
+                } else {
+                    $this->validation = '';
+                    // nothing interesting here
+                }
+            } else {
+                $this->validation = $validation;
+            }
+        }
+
+        // tell the calling function that everything is OK
+        return true;
+    }
 
 }
 

@@ -35,11 +35,20 @@ function dynamicdata_admin_showpropval($args)
     if (empty($myobject)) return;
 
     $newid = $myobject->getItem();
+
     if (empty($newid) || empty($myobject->properties['id']->value)) {
         $msg = xarML('Invalid item id');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                     new SystemException($msg));
         return;
+    }
+
+    // check if the module+itemtype this property belongs to is hooked to the uploads module
+    $modid = $myobject->properties['moduleid']->value;
+    $itemtype = $myobject->properties['itemtype']->value;
+    $modinfo = xarModGetInfo($modid);
+    if (xarModIsHooked('uploads', $modinfo['name'], $itemtype)) {
+        xarVarSetCached('Hooks.uploads','ishooked',1);
     }
 
     $data = array();

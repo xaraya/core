@@ -1,6 +1,6 @@
 <?php
 /**
- * Dynamic File Upload Property (TODO: work with uploads module)
+ * Dynamic File Upload Property
  *
  * @package dynamicdata
  * @subpackage properties
@@ -15,12 +15,16 @@
 class Dynamic_FileUpload_Property extends Dynamic_Property
 {
     var $size = 40;
-    var $maxSize = 1000000;
+    var $maxsize = 1000000;
     var $basedir = '';
     var $filetype;
     var $UploadsModule_isHooked = FALSE;
     var $basePath;
     var $multiple = TRUE;
+    var $methods = array('trusted'  => false,
+                         'external' => false,
+                         'upload'   => false,
+                         'stored'   => false);
 
     // this is used by Dynamic_Property_Master::addProperty() to set the $object->upload flag
     var $upload = true;
@@ -31,16 +35,6 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
 
         if (empty($this->id)) {
             $this->id = $this->name;
-        }
-
-        if (!empty($this->validation)) {
-            $options = explode(';', strtolower($this->validation));
-            if (in_array('single', $options)) {
-                $this->multiple = FALSE;
-            } else {
-                $this->multiple = TRUE;
-            }
-            unset($options);
         }
 
         // Determine if the uploads module is hooked to the calling module
@@ -58,6 +52,12 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             }
         }
 
+        if (!isset($this->validation)) {
+            $this->validation = '';
+        }
+        // always parse validation to preset methods here
+        $this->parseValidation($this->validation);
+
         if(xarServerGetVar('PATH_TRANSLATED')) {
             $base_directory = dirname(realpath(xarServerGetVar('PATH_TRANSLATED')));
         } elseif(xarServerGetVar('SCRIPT_FILENAME')) {
@@ -67,19 +67,6 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         }
 
         $this->basePath = $base_directory;
-
-        // specify base directory and optional file types in validation
-        // field - e.g. this/dir or this/dir;(gif|jpg|png|bmp).
-        if (empty($this->basedir) && !empty($this->validation)) {
-            if (strchr($this->validation,';')) {
-                list($dir,$type) = explode(';',$this->validation);
-                $this->basedir = trim($dir);
-                $this->filetype = trim($type);
-            } else {
-                $this->basedir = $this->validation;
-                $this->filetype = '';
-            }
-        }
 
         if (empty($this->basedir)) {
             $this->basedir = 'var/uploads';
@@ -116,14 +103,13 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
 
         // if the uploads module is hooked in, use it's functionality instead
         if ($this->UploadsModule_isHooked == TRUE) {
-            list($multiple, $methods) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $this->validation);
             $return = xarModAPIFunc('uploads','admin','validatevalue',
                                     array('id' => $name, // not $this->id
                                           'value' => $value,
-                                          'multiple' => $multiple,
+                                          'multiple' => $this->multiple,
                                           'format' => 'fileupload',
-                                          'methods' => $methods,
-                                          'maxsize' => $this->maxSize));
+                                          'methods' => $this->methods,
+                                          'maxsize' => $this->maxsize));
             if (!isset($return) || !is_array($return) || count($return) < 2) {
                 $this->value = null;
             // CHECKME: copied from autolinks :)
@@ -155,7 +141,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $file = array();
         }
 
-        if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name']) && $file['size'] > 0 && $file['size'] < $this->maxSize) {
+        if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name']) && $file['size'] > 0 && $file['size'] < $this->maxsize) {
             // if the uploads module is hooked (to be verified and set by the calling module)
             if (!empty($_FILES[$upname]['name'])) {
                 $fileName = xarVarPrepForOS(basename(strval($file['name'])));
@@ -197,7 +183,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         return true;
     }
 
-//    function showInput($name = '', $value = null, $size = 0, $maxSize = 0, $id = '', $tabindex = '')
+//    function showInput($name = '', $value = null, $size = 0, $maxsize = 0, $id = '', $tabindex = '')
     function showInput($args = array())
     {
         extract($args);
@@ -217,8 +203,6 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         xarVarSetCached('Hooks.dynamicdata','withupload',1);
 
         if ($this->UploadsModule_isHooked == TRUE) {
-            list($multiple, $methods) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $this->validation);
-
             // user must have hooked the uploads module after uploading files directly
             // CHECKME: remove any left over values - or migrate entries to uploads table ?
             if (!empty($value) && !is_numeric($value) && !stristr($value, ';')) {
@@ -227,9 +211,9 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             return xarModAPIFunc('uploads','admin','showinput',
                                  array('id' => $name, // not $this->id
                                        'value' => $value,
-                                       'multiple' => $multiple,
+                                       'multiple' => $this->multiple,
                                        'format' => 'fileupload',
-                                       'methods' => $methods));
+                                       'methods' => $this->methods));
         }
 
         // user must have unhooked the uploads module
@@ -253,7 +237,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         $data['id']         = $id;
         $data['upname']     = $upname;
         $data['size']       = !empty($size) ? $size : $this->size;
-        $data['maxsize']    = !empty($maxSize) ? $maxSize : $this->maxSize;
+        $data['maxsize']    = !empty($maxsize) ? $maxsize : $this->maxsize;
         $data['tabindex']   = !empty($tabindex) ? $tabindex  : 0;
         $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)',  $this->invalid) : '';
         $data['allowed']    = $allowed;
@@ -265,7 +249,6 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
 
     function showOutput($args = array())
     {
-
         extract($args);
 
         if (!isset($value)) {
@@ -302,6 +285,27 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         }
     }
 
+    function parseValidation($validation = '')
+    {
+        if ($this->UploadsModule_isHooked == TRUE) {
+            list($multiple, $methods) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $validation);
+
+            $this->multiple = $multiple;
+            $this->methods = $methods;
+
+        } else {
+            // specify base directory and optional file types in validation
+            // field - e.g. this/dir or this/dir;(gif|jpg|png|bmp).
+            if (strchr($validation,';')) {
+                list($dir,$type) = explode(';',$validation);
+                $this->basedir = trim($dir);
+                $this->filetype = trim($type);
+            } else {
+                $this->basedir = $validation;
+                $this->filetype = '';
+            }
+        }
+    }
 
     /**
      * Get the base information for this property.
@@ -327,6 +331,121 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                            );
         return $baseInfo;
      }
+
+    function showValidation($args = array())
+    {
+        extract($args);
+
+        $data = array();
+        $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
+        $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
+        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
+        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+
+        $data['size']       = !empty($size) ? $size : 50;
+        $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
+
+        if (isset($validation)) {
+            $this->validation = $validation;
+            $this->parseValidation($validation);
+        }
+
+        if (xarVarGetCached('Hooks.uploads','ishooked')) {
+            $data['ishooked'] = true;
+        } else {
+            $data['ishooked'] = false;
+        }
+        if ($data['ishooked']) {
+            $data['multiple'] = $this->multiple;
+            $data['methods'] = $this->methods;
+        } else {
+            $data['basedir'] = $this->basedir;
+            if (!empty($this->filetype)) {
+                $this->filetype = strtr($this->filetype, array('(' => '', ')' => ''));
+                $data['filetype'] = explode('|',$this->filetype);
+            } else {
+                $data['filetype'] = array();
+            }
+            $numtypes = count($data['filetype']);
+            if ($numtypes < 4) {
+                for ($i = $numtypes; $i < 4; $i++) {
+                    $data['filetype'][] = '';
+                }
+            }
+        }
+        $data['other'] = '';
+
+        // allow template override by child classes
+        if (!isset($template)) {
+            $template = 'fileupload';
+        }
+        return xarTplModule('dynamicdata', 'admin', 'validation', $data, $template);
+    }
+
+    function updateValidation($args = array())
+    {
+        extract($args);
+
+        // in case we need to process additional input fields based on the name
+        if (empty($name)) {
+            $name = 'dd_'.$this->id;
+        }
+        // do something with the validation and save it in $this->validation
+        if (isset($validation)) {
+            if (is_array($validation)) {
+                if (!empty($validation['other'])) {
+                    $this->validation = $validation['other'];
+
+                } elseif ($this->UploadsModule_isHooked) {
+                    $this->validation = '';
+                    if (!empty($validation['multiple'])) {
+                        $this->validation = 'multiple';
+                    } else {
+                        $this->validation = 'single';
+                    }
+// CHECKME: verify format of methods(...) part
+                    if (!empty($validation['methods'])) {
+                        $todo = array();
+                        foreach (array_keys($this->methods) as $method) {
+                            if (!empty($validation['methods'][$method])) {
+                                $todo[] = '+' .$method;
+                            } else {
+                                $todo[] = '-' .$method;
+                            }
+                        }
+                        if (count($todo) > 0) {
+                            $this->validation .= ';methods(';
+                            $this->validation .= join(',',$todo);
+                            $this->validation .= ')';
+                        }
+                    }
+
+                } else {
+                    $this->validation = '';
+                    if (!empty($validation['basedir'])) {
+                        $this->validation = $validation['basedir'];
+                    }
+                    if (!empty($validation['filetype'])) {
+                        $todo = array();
+                        foreach ($validation['filetype'] as $ext) {
+                            if (empty($ext)) continue;
+                            $todo[] = $ext;
+                        }
+                        if (count($todo) > 0) {
+                            $this->validation .= ';(';
+                            $this->validation .= join('|',$todo);
+                            $this->validation .= ')';
+                        }
+                    }
+                }
+            } else {
+                $this->validation = $validation;
+            }
+        }
+
+        // tell the calling function that everything is OK
+        return true;
+    }
 
 }
 
