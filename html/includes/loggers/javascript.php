@@ -55,7 +55,7 @@ class xarLogger_javascript extends xarLogger
         static $first = true;
 
         if ($first) {
-            xarTplAddJavaScriptCode('head', "JavaScriptLogger ", $this->getCommonCode());
+            xarTplAddJavaScript('head', 'code', $this->getCommonCode());
             $first = false;
         }
 
@@ -66,8 +66,7 @@ class xarLogger_javascript extends xarLogger
                 "    debugWindow.scrollBy(0,100000);\n".
                 "}\n";
 
-
-        xarTplAddJavaScriptCode('head', 'JavaScriptLogger', $code);
+        xarTplAddJavaScript('head', 'code', $code);
     }
 }
 

@@ -55,7 +55,7 @@ class xarLogger_mozilla extends xarLogger
         // TODO: check on windows and browsers other than mozilla, to fall back gracefully
         if (!$commoncodeinserted) {
             $code = $this->getCommonCode();
-            xarTplAddJavaScriptCode('body',$this->loggerdesc,$code);
+            xarTplAddJavaScript('body', 'code', $code);
             $commoncodeinserted = true;
         }
         $logentry = $this->getTime(). " - (" .$this->levelToString($level).")".$message;
@@ -65,7 +65,7 @@ class xarLogger_mozilla extends xarLogger
         $trans = array("\n" => "\\\n","\r" => "\\\r","\r\n" => "\\\r\n");
         $logentry = strtr($logentry,$trans);
         $code = "jsconsole.logStringMessage('$logentry');\n";
-        xarTplAddJavaScriptCode('body', $this->loggerdesc, $code);
+        xarTplAddJavaScript('body', 'code', $code);
     }
  }
 
