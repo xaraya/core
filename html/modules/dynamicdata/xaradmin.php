@@ -21,7 +21,7 @@ require_once 'modules/dynamicdata/class/objects.php';
 function dynamicdata_admin_main()
 {
 // Security Check
-	if(!xarSecurityCheck('Edit')) return;
+	if(!xarSecurityCheck('EditDynamicData')) return;
 
     $data = dynamicdata_admin_menu();
 
@@ -90,7 +90,7 @@ function dynamicdata_admin_view($args)
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
 // Security Check
-	if(!xarSecurityCheck('Edit')) return;
+	if(!xarSecurityCheck('EditDynamicData')) return;
 
     // show other modules
     $data['modlist'] = array();
@@ -113,7 +113,7 @@ function dynamicdata_admin_view($args)
             } else {
                 $modList[$i]['header'] = '';
             }
-            if (xarSecAuthAction(0, 'DynamicData::Item', $modList[$i]['regid']."::", ACCESS_ADMIN)) {
+			if(xarSecurityCheck('AdminDynamicDataItem',0,'Item',$modList[$i]['regid'].':All:All')) {
                 $modList[$i]['link'] = xarModURL('dynamicdata','admin','modifyprop',
                                                   array('modid' => $modList[$i]['regid']));
             } else {
@@ -158,10 +158,7 @@ function dynamicdata_admin_new($args)
 
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::Item', '$modid:$itemtype:', ACCESS_ADD)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+	if(!xarSecurityCheck('AddDynamicDataItem',1,'Item','$modid:$itemtype:All')) return;
 
     $data = dynamicdata_admin_menu();
 
@@ -289,10 +286,7 @@ function dynamicdata_admin_modify($args)
 
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::Item', '$modid:$itemtype:$itemid', ACCESS_EDIT)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+	if(!xarSecurityCheck('EditDynamicDataItem',1,'Item','$modid:$itemtype:$itemid')) return;
 
     $data = dynamicdata_admin_menu();
 
@@ -444,10 +438,7 @@ function dynamicdata_admin_delete($args)
 
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::Item', '$modid:$itemtype:$itemid', ACCESS_DELETE)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+	if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item','$modid:$itemtype:$itemid')) return;
 
     if (empty($confirm)) {
         $data = dynamicdata_admin_menu();
@@ -505,7 +496,7 @@ function dynamicdata_admin_modifyprop()
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
 // Security Check
-	if(!xarSecurityCheck('Admin')) return;
+	if(!xarSecurityCheck('AdminDynamicData')) return;
 
     list($itemid,
          $modid,
@@ -1072,7 +1063,7 @@ function dynamicdata_admin_modifyconfig()
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
 // Security Check
-	if(!xarSecurityCheck('Admin')) return;
+	if(!xarSecurityCheck('AdminDynamicData')) return;
 
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();

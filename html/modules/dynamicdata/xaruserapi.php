@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -66,10 +66,7 @@ function &dynamicdata_userapi_getitem($args)
         return;
     }
 
-    if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:$itemid", ACCESS_OVERVIEW)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item','$modid:$itemtype:$itemid')) return;
 
     // check the optional field list
     if (empty($fieldlist)) {
@@ -106,7 +103,7 @@ function &dynamicdata_userapi_getitem($args)
     $fields = array();
     foreach ($fieldlist as $name) {
         $property = $object->properties[$name];
-        if (xarSecAuthAction(0, 'DynamicData::Field', $property->name.':'.$property->type.':'.$property->id, ACCESS_READ)) {
+		if(xarSecurityCheck('ReadDynamicDataField',0,'Field',$property->name.':'.$property->type.':'.$property->id)) {
             $fields[$name] = $property->value;
         }
     }
@@ -171,10 +168,7 @@ function &dynamicdata_userapi_getitems($args)
         return;
     }
 
-    if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:", ACCESS_OVERVIEW)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item','$modid:$itemtype:All')) return;
 
     if (empty($itemids)) {
         $itemids = array();
@@ -183,10 +177,7 @@ function &dynamicdata_userapi_getitems($args)
     }
 
     foreach ($itemids as $itemid) {
-        if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:$itemid", ACCESS_OVERVIEW)) {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-            return;
-        }
+		if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item','$modid:$itemtype:$itemid')) return;
     }
 
     // check the optional field list
@@ -292,12 +283,9 @@ function dynamicdata_userapi_getfield($args)
     $object->getItem();
 
     if (!isset($object->properties[$name])) return;
-    $property = $object->properties[$name]; 
+    $property = $object->properties[$name];
 
-    if (!xarSecAuthAction(0, 'DynamicData::Field', $property->name.':'.$property->type.':'.$property->id, ACCESS_READ)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+	if(!xarSecurityCheck('ReadDynamicDataField',1,'Field',$property->name.':'.$property->type.':'.$property->id)) return;
     if (!isset($property->value)) {
         $value = $property->default;
     } else {
@@ -531,7 +519,7 @@ function dynamicdata_userapi_getmodules($args)
 
     while (!$result->EOF) {
         list($modid, $itemtype, $count) = $result->fields;
-        if (xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:", ACCESS_OVERVIEW)) {
+		if(xarSecurityCheck('ViewDynamicDataItems',0,'Item','$modid:$itemtype:All')) {
             $modules[] = array('modid' => $modid,
                                'itemtype' => $itemtype,
                                'numitems' => $count);
@@ -587,7 +575,7 @@ function dynamicdata_userapi_getproptypes($args)
  * Format : <xar:data-output name="thisname" type="thattype" value="$val" ... />
  *       or <xar:data-output field="$field" /> with $field an array containing the type, name, value, ...
  *       or <xar:data-output property="$property" /> with $property a Dynamic Property object
- * 
+ *
  * @param $args array containing the input field definition or the type, name, value, ...
  * @returns string
  * @return the PHP code needed to invoke showoutput() in the BL template
@@ -605,7 +593,7 @@ function dynamicdata_userapi_handleOutputTag($args)
             return 'echo '.$args['property'].'->showOutput(); ';
         }
     }
-    
+
     $out = "echo xarModAPIFunc('dynamicdata',
                    'user',
                    'showoutput',\n";
@@ -629,7 +617,7 @@ function dynamicdata_userapi_handleOutputTag($args)
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
  * show some predefined output field in a template
- * 
+ *
  * @param $args array containing the definition of the field (type, name, value, ...)
  * @returns string
  * @return string containing the HTML (or other) text to output in the BL template
@@ -648,7 +636,7 @@ function dynamicdata_userapi_showoutput($args)
  * Format : <xar:data-display module="123" itemtype="0" itemid="555" fieldlist="$fieldlist" static="yes" .../>
  *       or <xar:data-display fields="$fields" ... />
  *       or <xar:data-display object="$object" ... />
- * 
+ *
  * @param $args array containing the item that you want to display, or fields
  * @returns string
  * @return the PHP code needed to invoke showdisplay() in the BL template
@@ -695,7 +683,7 @@ function dynamicdata_userapi_handleDisplayTag($args)
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
  * display an item in a template
- * 
+ *
  * @param $args array containing the item or fields to show
  * @returns string
  * @return string containing the HTML (or other) text to output in the BL template
@@ -747,9 +735,7 @@ function dynamicdata_userapi_showdisplay($args)
     }
 
 // TODO: what kind of security checks do we want/need here ?
-    if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:$itemid", ACCESS_READ)) {
-        return '';
-    }
+	if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item','$modid:$itemtype:$itemid')) return;
 
     // we got everything via template parameters
     if (isset($fields) && is_array($fields) && count($fields) > 0) {
@@ -800,7 +786,7 @@ function dynamicdata_userapi_showdisplay($args)
  * Handle <xar:data-getitem ...> getitem tags
  * Format : <xar:data-getitem name="$properties" module="123" itemtype="0" itemid="$id" fieldlist="$fieldlist" .../>
  *       or <xar:data-getitem name="$properties" object="$object" ... />
- * 
+ *
  * @param $args array containing the module and item that you want to display, or fields
  * @returns string
  * @return the PHP code needed to invoke getitemtag() in the BL template and return an array of properties
@@ -849,7 +835,7 @@ function dynamicdata_userapi_handleGetItemTag($args)
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
  * return the properties for an item
- * 
+ *
  * @param $args array containing the items or fields to show
  * @returns array
  * @return array containing a reference to the properties of the item
@@ -868,7 +854,7 @@ function dynamicdata_userapi_getitemfordisplay($args)
  * Format : <xar:data-view module="123" itemtype="0" itemids="$idlist" fieldlist="$fieldlist" static="yes" .../>
  *       or <xar:data-view items="$items" labels="$labels" ... />
  *       or <xar:data-view object="$object" ... />
- * 
+ *
  * @param $args array containing the items that you want to display, or fields
  * @returns string
  * @return the PHP code needed to invoke showview() in the BL template
@@ -914,7 +900,7 @@ function dynamicdata_userapi_handleViewTag($args)
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
  * list some items in a template
- * 
+ *
  * @param $args array containing the items or fields to show
  * @returns string
  * @return string containing the HTML (or other) text to output in the BL template
@@ -972,9 +958,7 @@ function dynamicdata_userapi_showview($args)
     }
 
 // TODO: what kind of security checks do we want/need here ?
-    if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:", ACCESS_OVERVIEW)) {
-        return '';
-    }
+	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item','$modid:$itemtype:All')) return;
 
     // try getting the item id list via input variables if necessary
     if (!isset($itemids)) {
@@ -1065,7 +1049,7 @@ function dynamicdata_userapi_showview($args)
  * Handle <xar:data-getitems ...> getitems tags
  * Format : <xar:data-getitems name="$properties" value="$values" module="123" itemtype="0" itemids="$idlist" fieldlist="$fieldlist" .../>
  *       or <xar:data-getitems name="$properties" value="$values" object="$object" ... />
- * 
+ *
  * @param $args array containing the items that you want to display, or fields
  * @returns string
  * @return the PHP code needed to invoke getitemstag() in the BL template and return an array of properties and items
@@ -1114,7 +1098,7 @@ function dynamicdata_userapi_handleGetItemsTag($args)
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
  * return the properties and items
- * 
+ *
  * @param $args array containing the items or fields to show
  * @returns array
  * @return array containing a reference to the properties and a reference to the items
@@ -1139,7 +1123,7 @@ function dynamicdata_userapi_getitemsforview($args)
  * Handle <xar:data-label ...> label tag
  * Format : <xar:data-label object="$object" /> with $object some Dynamic Object
  *       or <xar:data-label property="$property" /> with $property some Dynamic Property
- * 
+ *
  * @param $args array containing the object or property
  * @returns string
  * @return the PHP code needed to show the object or property label in the BL template
@@ -1159,7 +1143,7 @@ function dynamicdata_userapi_handleLabelTag($args)
  * Handle <xar:data-object ...> object tag
  * Format : <xar:data-object object="$object" property="$property" /> with $object some object and $property some property of this object
  *       or <xar:data-object object="$object" method="$method" arguments="$args" /> with $object some object and $method some method of this object
- * 
+ *
  * @param $args array containing the object and property/method
  * @returns string
  * @return the PHP code needed to show the object property or call the object method in the BL template
@@ -1198,7 +1182,7 @@ function dynamicdata_userapi_getmenulinks()
 {
     $menulinks = array();
 
-    if (xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_OVERVIEW)) {
+	if(xarSecurityCheck('ViewDynamicDataItems')) {
 
         // get items from the objects table
         $objects = xarModAPIFunc('dynamicdata','user','getobjects');

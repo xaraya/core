@@ -336,6 +336,14 @@ function roles_delete()
     xarModDelVar('roles', 'disallowednames');
     xarModDelVar('roles', 'disallowedemails');
 
+    /**
+     * Remove instances and masks
+     */
+
+    // Remove Masks and Instances
+    xarRemoveMasks('roles');
+    xarRemoveInstances('roles');
+
     // Deletion successful
     return true;
 }

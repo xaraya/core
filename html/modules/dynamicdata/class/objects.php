@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -414,10 +414,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
 
         // see if we can access this object, at least in overview
-        if (!xarSecAuthAction(0, 'DynamicData::Item', $this->moduleid.':'.$this->itemtype.':'.$this->itemid, ACCESS_OVERVIEW)) {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-            return;
-        }
+		if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->moduleid.':'.$this->itemtype.':'.$this->itemid)) return;
         //$this->getItem();
     }
 
@@ -756,10 +753,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         $this->Dynamic_Object_Master($args);
 
         // see if we can access these objects, at least in overview
-        if (!xarSecAuthAction(0, 'DynamicData::Item', $this->moduleid.':'.$this->itemtype.':', ACCESS_OVERVIEW)) {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-            return;
-        }
+		if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->moduleid.':'.$this->itemtype.':All')) return;
 
         // set the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
@@ -1021,21 +1015,21 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         foreach (array_keys($this->items) as $itemid) {
     // TODO: improve this + SECURITY !!!
             $options = array();
-            if (xarSecAuthAction(0, 'DynamicData::Item', $this->moduleid.':'.$this->itemtype.':'.$itemid, ACCESS_READ)) {
+			if(xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
                 $options[] = array('otitle' => xarML('View'),
                                    'olink'  => xarModURL($modname,$viewtype,$viewfunc,
                                                array($args['param'] => $itemid,
                                                      'itemtype'     => $itemtype)),
                                    'ojoin'  => '');
             }
-            if (xarSecAuthAction(0, 'DynamicData::Item', $this->moduleid.':'.$this->itemtype.':'.$itemid, ACCESS_EDIT)) {
+			if(xarSecurityCheck('EditDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
                 $options[] = array('otitle' => xarML('Edit'),
                                    'olink'  => xarModURL($modname,'admin','modify',
                                                array($args['param'] => $itemid,
                                                      'itemtype'     => $itemtype)),
                                    'ojoin'  => '|');
             }
-            if (xarSecAuthAction(0, 'DynamicData::Item', $this->moduleid.':'.$this->itemtype.':'.$itemid, ACCESS_DELETE)) {
+			if(xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
                 $options[] = array('otitle' => xarML('Delete'),
                                    'olink'  => xarModURL($modname,'admin','delete',
                                                array($args['param'] => $itemid,
@@ -1046,7 +1040,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         }
 
         // TODO: improve this + SECURITY !!!
-        if (xarSecAuthAction(0, 'DynamicData::Item', $this->moduleid.':'.$this->itemtype.':', ACCESS_ADD)) {
+		if(xarSecurityCheck('AddDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':All')) {
             $args['newlink'] = xarModURL($modname,'admin','new',
                                          array('itemtype' => $itemtype));
         } else {

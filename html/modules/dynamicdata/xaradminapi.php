@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -54,10 +54,7 @@ function dynamicdata_adminapi_create($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:$itemid", ACCESS_ADD)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+	if(!xarSecurityCheck('AddDynamicDataItem',1,'Item','$modid:$itemtype:$itemid')) return;
 
     if (!isset($fields) || !is_array($fields)) {
         $fields = array();
@@ -120,10 +117,7 @@ function dynamicdata_adminapi_delete($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:$itemid", ACCESS_DELETE)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+	if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item','$modid:$itemtype:$itemid')) return;
 
 // TODO: test this
     $myobject = new Dynamic_Object(array('moduleid' => $modid,
@@ -181,10 +175,7 @@ function dynamicdata_adminapi_update($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:$itemid", ACCESS_EDIT)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+	if(!xarSecurityCheck('EditDynamicDataItem',1,'Item','$modid:$itemtype:$itemid')) return;
 
     if (!isset($fields) || !is_array($fields)) {
         $fields = array();
@@ -299,10 +290,7 @@ function dynamicdata_adminapi_createproperty($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::Field', "$name:$type:", ACCESS_ADMIN)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+	if(!xarSecurityCheck('AdminDynamicDataField',1,'Field','$name:$type:All')) return;
 
     if (empty($moduleid)) {
         // defaults to the current module
@@ -315,10 +303,7 @@ function dynamicdata_adminapi_createproperty($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::Item', "$moduleid:$itemtype:", ACCESS_ADMIN)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+	if(!xarSecurityCheck('AdminDynamicDataItem',1,'Item','$moduleid:$itemtype:All')) return;
 
     // get the properties of the 'properties' object
     $fields = xarModAPIFunc('dynamicdata','user','getprop',
@@ -399,10 +384,7 @@ function dynamicdata_adminapi_updateprop($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::Field', "$name:$type:$prop_id", ACCESS_EDIT)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+	if(!xarSecurityCheck('EditDynamicDataField',1,'Field','$name:$type:$prop_id')) return;
 
     // Get database setup - note that both xarDBGetConn() and xarDBGetTables()
     // return arrays but we handle them differently.  For xarDBGetConn()
@@ -491,10 +473,7 @@ function dynamicdata_adminapi_deleteprop($args)
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
 // TODO: check based on other arguments too
-    if (!xarSecAuthAction(0, 'DynamicData::Field', "::$prop_id", ACCESS_DELETE)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+	if(!xarSecurityCheck('DeleteDynamicDataField',1,'Field','All:All:$prop_id')) return;
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
@@ -827,8 +806,7 @@ function dynamicdata_adminapi_removehook($args)
         return $extrainfo;
     }
 
-    if (!xarSecAuthAction(0, "DynamicData::Item", "$modid::", ACCESS_DELETE)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
+	if(!xarSecurityCheck('DeleteDynamicDataItem',0,'Item','$modid:All:All')) {
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;
@@ -946,7 +924,7 @@ function dynamicdata_adminapi_checkinput($args)
  * Format : <xar:data-input name="thisname" type="thattype" value="$val" ... />
  *       or <xar:data-input field="$field" /> with $field an array containing the type, name, value, ...
  *       or <xar:data-input property="$property" /> with $property a Dynamic Property object
- * 
+ *
  * @param $args array containing the input field definition or the type, name, value, ...
  * @returns string
  * @return the PHP code needed to invoke showinput() in the BL template
@@ -999,7 +977,7 @@ function dynamicdata_adminapi_handleInputTag($args)
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
  * show some predefined form input field in a template
- * 
+ *
  * @param $args array containing the definition of the field (type, name, value, ...)
  * @returns string
  * @return string containing the HTML (or other) text to output in the BL template
@@ -1022,7 +1000,7 @@ function dynamicdata_adminapi_showinput($args)
  * Format : <xar:data-form module="123" itemtype="0" itemid="555" fieldlist="$fieldlist" static="yes" ... />
  *       or <xar:data-form fields="$fields" ... />
  *       or <xar:data-form object="$object" ... />
- * 
+ *
  * @param $args array containing the item for which you want to show a form, or fields
  * @returns string
  * @return the PHP code needed to invoke showform() in the BL template
@@ -1069,7 +1047,7 @@ function dynamicdata_adminapi_handleFormTag($args)
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
  * show an input form in a template
- * 
+ *
  * @param $args array containing the item or fields to show
  * @returns string
  * @return string containing the HTML (or other) text to output in the BL template
@@ -1147,10 +1125,7 @@ function dynamicdata_adminapi_showform($args)
     }
 
     // throw an exception if you can't edit this
-    if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:$itemid", ACCESS_EDIT)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+	if(!xarSecurityCheck('EditDynamicDataItem',1,'Item','$modid:$itemtype:$itemid')) return;
 
     $object = new Dynamic_Object(array('moduleid'  => $modid,
                                        'itemtype'  => $itemtype,
@@ -1177,7 +1152,7 @@ function dynamicdata_adminapi_showform($args)
  * Format : <xar:data-list module="123" itemtype="0" itemids="$idlist" fieldlist="$fieldlist" static="yes" .../>
  *       or <xar:data-list items="$items" labels="$labels" ... />
  *       or <xar:data-list object="$object" ... />
- * 
+ *
  * @param $args array containing the items that you want to list, or fields
  * @returns string
  * @return the PHP code needed to invoke showlist() in the BL template
@@ -1221,7 +1196,7 @@ function dynamicdata_adminapi_handleListTag($args)
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
  * list some items in a template
- * 
+ *
  * @param $args array containing the items or fields to show
  * @returns string
  * @return string containing the HTML (or other) text to output in the BL template
@@ -1278,9 +1253,7 @@ function dynamicdata_adminapi_showlist($args)
 
 // TODO: what kind of security checks do we want/need here ?
     // don't bother if you can't edit anything anyway
-    if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:", ACCESS_EDIT)) {
-         return '';
-    }
+	if(!xarSecurityCheck('EditDynamicDataItem',1,'Item','$modid:$itemtype:All')) return;
 
     // try getting the item id list via input variables if necessary
     if (!isset($itemids)) {
@@ -1365,7 +1338,7 @@ function dynamicdata_adminapi_browse($args)
     }
 
     // Security check - we require ADMIN rights here for now...
-	if(!xarSecurityCheck('Admin')) return;
+	if(!xarSecurityCheck('AdminDynamicData')) return;
 
     // Get arguments from argument array
     extract($args);
@@ -1407,7 +1380,7 @@ function dynamicdata_adminapi_getmenulinks()
     $menulinks = array();
 
 // Security Check
-	if (xarSecurityCheck('Admin',0)) {
+	if (xarSecurityCheck('AdminDynamicData',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                    'admin',
@@ -1417,7 +1390,7 @@ function dynamicdata_adminapi_getmenulinks()
     }
 
 // Security Check
-	if (xarSecurityCheck('Admin',0)) {
+	if (xarSecurityCheck('AdminDynamicData',0)) {
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                   'admin',
                                                   'modifyconfig'),
@@ -1426,7 +1399,7 @@ function dynamicdata_adminapi_getmenulinks()
     }
 
 // Security Check
-	if (xarSecurityCheck('Admin',0)) {
+	if (xarSecurityCheck('AdminDynamicData',0)) {
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                   'util',
                                                   'main'),

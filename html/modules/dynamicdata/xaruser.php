@@ -105,7 +105,7 @@ function dynamicdata_user_displayhook($args)
 function dynamicdata_user_main()
 {
 // Security Check
-	if(!xarSecurityCheck('Overview')) return;
+	if(!xarSecurityCheck('ViewDynamicData')) return;
 
     $data = dynamicdata_user_menu();
 
@@ -167,10 +167,7 @@ function dynamicdata_user_view()
         $label = xarML('Dynamic Data Objects');
         $param = '';
     }
-    if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:", ACCESS_OVERVIEW)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item','$modid:$itemtype:All')) return;
 
     $data = dynamicdata_user_menu();
     $data['objectid'] = $objectid;

@@ -62,7 +62,7 @@ class Dynamic_Property_Master
         $properties = array();
         while (!$result->EOF) {
             list($name, $label, $type, $id, $default, $source, $fieldstatus, $order, $validation) = $result->fields;
-            if (xarSecAuthAction(0, 'DynamicData::Field', "$name:$type:$id", ACCESS_READ)) {
+			if(xarSecurityCheck('ReadDynamicDataField',1,'Field','$name:$type:$id')) {
                 $property = array('name' => $name,
                                   'label' => $label,
                                   'type' => $type,
@@ -650,7 +650,7 @@ class Dynamic_Property_Master
             list(...) = $result->fields;
 
 // Security Check
-		if (xarSecurityCheck('Overview',0)) {
+		if (xarSecurityCheck('ViewDynamicData',0)) {
                 $proptypes[] = array(...);
             }
             $result->MoveNext();
@@ -2592,7 +2592,7 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
     function Dynamic_ImageList_Property($args)
     {
         $this->Dynamic_Select_Property($args);
-        // specify base directory in validation field 
+        // specify base directory in validation field
         if (empty($this->basedir) && !empty($this->validation)) {
             $this->basedir = $this->validation;
         }

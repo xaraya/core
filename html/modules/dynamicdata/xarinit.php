@@ -493,8 +493,25 @@ function dynamicdata_init()
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    xarRegisterMask('Edit','All','DynamicData','Edit','All',ACCESS_EDIT);
+    xarRegisterMask('ViewDynamicData','All','dynamicdata','All','All',ACCESS_OVERVIEW);
+    xarRegisterMask('EditDynamicData','All','dynamicdata','All','All',ACCESS_EDIT);
+    xarRegisterMask('AdminDynamicData','All','dynamicdata','All','All',ACCESS_ADMIN);
 
+    xarRegisterMask('ViewDynamicDataItems','All','dynamicdata','Item','All:All:All',ACCESS_OVERVIEW);
+    xarRegisterMask('ReadDynamicDataItem','All','dynamicdata','Item','All:All:All',ACCESS_READ);
+    xarRegisterMask('EditDynamicDataItem','All','dynamicdata','Item','All:All:All',ACCESS_EDIT);
+    xarRegisterMask('AddDynamicDataItem','All','dynamicdata','Item','All:All:All',ACCESS_ADD);
+    xarRegisterMask('DeleteDynamicDataItem','All','dynamicdata','Item','All:All:All',ACCESS_DELETE);
+    xarRegisterMask('AdminDynamicDataItem','All','dynamicdata','Item','All:All:All',ACCESS_ADMIN);
+
+    xarRegisterMask('ReadDynamicDataField','All','dynamicdata','Field','All:All:All',ACCESS_READ);
+    xarRegisterMask('EditDynamicDataField','All','dynamicdata','Field','All:All:All',ACCESS_EDIT);
+    xarRegisterMask('AddDynamicDataField','All','dynamicdata','Field','All:All:All',ACCESS_ADD);
+    xarRegisterMask('DeleteDynamicDataField','All','dynamicdata','Field','All:All:All',ACCESS_DELETE);
+    xarRegisterMask('AdminDynamicDataField','All','dynamicdata','Field','All:All:All',ACCESS_ADMIN);
+
+    xarRegisterMask('ViewDynamicDataBlocks','All','dynamicdata','Block','All:All:All',ACCESS_OVERVIEW);
+    xarRegisterMask('ReadDynamicDataBlock','All','dynamicdata','BLock','All:All:All',ACCESS_READ);
    /*********************************************************************
     * Define instances for this module
     * Format is

@@ -24,7 +24,7 @@ require_once 'modules/dynamicdata/class/objects.php';
 function dynamicdata_util_main()
 {
 // Security Check
-	if(!xarSecurityCheck('Admin')) return;
+	if(!xarSecurityCheck('AdminDynamicData')) return;
 
     $data = array();
     $data['menutitle'] = xarML('Dynamic Data Utilities');
@@ -40,7 +40,7 @@ function dynamicdata_util_main()
 function dynamicdata_util_export($args)
 {
 // Security Check
-	if(!xarSecurityCheck('Admin')) return;
+	if(!xarSecurityCheck('AdminDynamicData')) return;
 
     list($objectid,
          $modid,
@@ -194,7 +194,7 @@ function dynamicdata_util_export($args)
 function dynamicdata_util_import($args)
 {
 // Security Check
-	if(!xarSecurityCheck('Admin')) return;
+	if(!xarSecurityCheck('AdminDynamicData')) return;
 
     $import = xarVarCleanFromInput('import');
 
@@ -263,7 +263,7 @@ function dynamicdata_util_import($args)
 function dynamicdata_util_static($args)
 {
 // Security Check
-	if(!xarSecurityCheck('Admin')) return;
+	if(!xarSecurityCheck('AdminDynamicData')) return;
 
     list($module,
          $modid,
@@ -317,7 +317,7 @@ function dynamicdata_util_static($args)
 function dynamicdata_util_meta($args)
 {
 // Security Check
-	if(!xarSecurityCheck('Admin')) return;
+	if(!xarSecurityCheck('AdminDynamicData')) return;
 
     list($export,
          $table) = xarVarCleanFromInput('export',
@@ -350,7 +350,7 @@ function dynamicdata_util_meta($args)
 function dynamicdata_util_relations($args)
 {
 // Security Check
-	if(!xarSecurityCheck('Admin')) return;
+	if(!xarSecurityCheck('AdminDynamicData')) return;
 
     list($module,
          $modid,
@@ -382,7 +382,7 @@ function dynamicdata_util_relations($args)
 function dynamicdata_util_importprops()
 {
 // Security Check
-	if(!xarSecurityCheck('Admin')) return;
+	if(!xarSecurityCheck('AdminDynamicData')) return;
 
     list($objectid,
          $modid,
