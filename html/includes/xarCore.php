@@ -400,10 +400,11 @@ function xarCoreActivateDebugger($flags)
         // Proper error reporting
         error_reporting(E_ALL);
         // Activate assertions
-        assert_options(ASSERT_ACTIVE, 1);
-        assert_options(ASSERT_WARNING, 1);
-        assert_options(ASSERT_BAIL, 1);
-
+        assert_options(ASSERT_ACTIVE, 1);    // Activate when debugging
+        assert_options(ASSERT_WARNING, 1);   // Issue a php warning
+        assert_options(ASSERT_BAIL, 0);      // Stop processing?
+        assert_options(ASSERT_QUIET_EVAL,0); // Quiet evaluation of assert condition?
+        assert_options(ASSERT_CALLBACK,'xarCore__asserthandler'); // Call this function when the assert fails
         $GLOBALS['xarDebug_sqlCalls'] = 0;
         $lmtime = explode(' ', microtime());
         $GLOBALS['xarDebug_startTime'] = $lmtime[1] + $lmtime[0];
@@ -414,6 +415,20 @@ function xarCoreActivateDebugger($flags)
         assert_options(ASSERT_ACTIVE, 0);
     }
 }
+
+/**
+ * Temp simplistic handler to let assert at least report
+ * to the log, otherwise they are just hidden
+ *
+ */
+function xarCore__assertHandler($script,$line,$code) 
+{
+    // Redirect the assertion to a system exception
+    $msg = "ASSERTION FAILED: $script [$line] : $code";
+    xarExceptionSet(XAR_SYSTEM_EXCEPTION,'ASSERT_FAILURE',$msg);
+    
+}
+
 
 /**
  * Check if the debugger is active

@@ -165,6 +165,10 @@
         'XML_PARSER_ERROR' => array(
             'title' => xarML('XML Parser Error'),
             'short' => xarML('The XML parser has encountered an error.'),
-            'long' => xarML('The XML parser tried to execute a line that was not well formed.'))
+            'long' => xarML('The XML parser tried to execute a line that was not well formed.')),
+        'ASSERT_FAILURE' => array(
+            'title' => xarML('Assertion in code failed'),
+            'short' => xarML('A assertion evaluated to false, which indicates a coding error.'),
+            'long' => xarML('While executing, an asserted condition failed. This means that a definite error in some code exists.'))
     );
 ?>
