@@ -68,7 +68,7 @@
             <a href="&pnt-modurl-blocks-admin-view_types;"><pnt:var name="module" />\<pnt:var name="type" /></a>
         </td>
         <td>
-            <pnt:if condition="$template != NULL">
+            <pnt:if condition="$template neq NULL">
                 <pnt:var name="template" />
             <pnt:else />
                 <pnt:var name="group_template" />

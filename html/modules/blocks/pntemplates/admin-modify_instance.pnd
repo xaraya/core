@@ -64,7 +64,7 @@
             <td>
                 <select name="block_group" style="width:150px;">
                     <pnt:loop name="block_groups">
-                        <pnt:if condition="$instance['group_id'] == $id">
+                        <pnt:if condition="$instance['group_id'] eq $id">
                             <option value="&pnt-var-id;" selected="selected">
                         <pnt:else />
                             <option value="&pnt-var-id;">
@@ -82,7 +82,7 @@
             <td>
                 <select name="block_refresh" style="width:150px;">
                     <pnt:loop name="refresh_times">
-                        <pnt:if condition="$instance['refresh'] == $id">
+                        <pnt:if condition="$instance['refresh'] eq $id">
                             <option value="&pnt-var-id;" selected="selected">
                         <pnt:else />
                             <option value="&pnt-var-id;">
@@ -107,19 +107,19 @@
             </td>
             <td>
                 <select name="block_state" style="width:150px;">
-                    <pnt:if condition="$instance['state'] == 0">
+                    <pnt:if condition="$instance['state'] eq 0">
                         <option value="0" selected="selected">
                     <pnt:else />
                         <option value="0">
                     </pnt:if>
                     Hidden</option>
-                    <pnt:if condition="$instance['state'] == 1">
+                    <pnt:if condition="$instance['state'] eq 1">
                         <option value="1" selected="selected">
                     <pnt:else />
                         <option value="1">
                     </pnt:if>
                     Minimized</option>
-                    <pnt:if condition="$instance['state'] == 2">
+                    <pnt:if condition="$instance['state'] eq 2">
                         <option value="2" selected="selected">
                     <pnt:else />
                         <option value="2">
@@ -128,7 +128,7 @@
                 </select>
             </td>
         </tr>
-        <pnt:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] == true">
+        <pnt:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
         <tr>
             <td colspan="2">
                 Content:

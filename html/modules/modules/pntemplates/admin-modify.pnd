@@ -45,11 +45,10 @@
                 Activate &pnt-var-hooks['tmodName']; for this module
             </td>
             <td>
-               <pnt:if condition="$hooks['checked'] == 1">
+               <pnt:if condition="$hooks['checked'] eq 1">
                     <input type="checkbox" name="hook_&pnt-var-hooks['tmodName'];" value="1" checked="checked" />
-                    <pnt:else>
+                    <pnt:else />
                         <input type="checkbox" name="hook_&pnt-var-hooks['tmodName'];" value="1" />
-                    </pnt:else>
                 </pnt:if>
             </td>
         </tr>

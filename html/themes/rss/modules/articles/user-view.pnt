@@ -1,4 +1,4 @@
-<pnt:if condition="$number > 0">
+<pnt:if condition="$number gt 0">
     <pnt:loop name="columns">
         <pnt:loop name="colitems">
             &pnt-var-colitem;
