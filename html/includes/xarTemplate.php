@@ -426,8 +426,12 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     if (function_exists('xarModGetVar')){
         $var_dump = xarModGetVar('themes', 'var_dump');
         if ($var_dump == true){
-            $pre = var_export($tplData, true); 
-            echo "<pre>$pre</pre>";
+            if (function_exists('var_export')) {
+                $pre = var_export($tplData, true); 
+                echo "<pre>$pre</pre>";
+            } else {
+                echo '<pre>',var_dump($tplData),'</pre>';
+            }
         }
     }
 
