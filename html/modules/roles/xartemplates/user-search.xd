@@ -1,7 +1,9 @@
 <h2><xar:mlstring>Search for Users</xar:mlstring></h2>
-<xar:if condition="!empty($name)">
-    <h3><xar:mlstring>User Found</xar:mlstring>:</h3>
-    <ul><a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">#$name#</a></ul>
+<xar:if condition="!empty($users) and count($users) gt 0">
+    <h3><xar:mlstring>Users Found</xar:mlstring>:</h3>
+    <xar:foreach in="$users" key="$uid" value="$user">
+        <ul><a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">#$user['name']#</a></ul>
+    </xar:foreach>
 </xar:if>
 
 <xar:if condition="!empty($status)">
@@ -9,6 +11,18 @@
 </xar:if>
 
 <p><xar:mlstring>Search on</xar:mlstring>:</p>
-<p><input type="checkbox" name="email" value=1 checked /> <xar:mlstring>Email Address </xar:mlstring></p>
 <p><input type="checkbox" name="name" value=1 checked /> <xar:mlstring>Real Name</xar:mlstring></p>
-<p><input type="checkbox" name="uname" value=1 checked /> <xar:mlstring>Uname</xar:mlstring></p>
+<p><input type="checkbox" name="uname" value=1 checked /> <xar:mlstring>Username</xar:mlstring></p>
+<p><input type="checkbox" name="email" value=1 checked /> <xar:mlstring>Email Address </xar:mlstring></p>
+
+<xar:if condition="!empty($properties) and count($properties) gt 0">
+<!-- you can also specify individual fields here, if you don't want to allow searching
+     through all dynamic properties (e.g. ... name="icq" ... property="$properties['icq']" ...) -->
+<xar:foreach in="$properties" key="$field">
+    <xar:if condition="!empty($checked[$field])">
+        <p><input type="checkbox" name="#$field#" value=1 checked /> <xar:data-label property="$properties[$field]" /></p>
+    <xar:else />
+        <p><input type="checkbox" name="#$field#" value=1 /> <xar:data-label property="$properties[$field]" /></p>
+    </xar:if>
+</xar:foreach>
+</xar:if>
