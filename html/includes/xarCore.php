@@ -135,8 +135,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     include 'includes/xarMLS.php';
     // {ML_dont_parse 'includes/xarTemplate.php'}
     include 'includes/xarTemplate.php';
-    // {ML_dont_parse 'includes/xarTheme.php'}
-    include 'includes/xarTheme.php';
 
     // Start Exception Handling System
     $systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));

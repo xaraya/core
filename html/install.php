@@ -51,8 +51,6 @@ include_once 'includes/xarServer.php';
 include_once 'includes/xarMLS.php';
 // {ML_dont_parse 'includes/xarTemplate.php'}
 include_once 'includes/xarTemplate.php';
-// {ML_dont_parse 'includes/xarTheme.php'}
-include_once 'includes/xarTheme.php';
 
 $whatToLoad = XARCORE_SYSTEM_NONE;
 
