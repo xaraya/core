@@ -360,6 +360,45 @@ function xarLocaleGetList($filter=array())
 }
 
 /**
+ * Parses a string as a currency amount according to specified locale data
+ *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @return string representing a currency amount
+ */
+function xarLocaleParseCurrency($currency, $localeData = NULL)
+{
+    if ($localeData == NULL) {
+        $localeData =& xarMLSLoadLocaleData();
+    }
+
+    $currency = xarLocaleParseNumber($currency, $localeData, true);
+    $currencySym = $localeData['/monetary/currencySymbol'];
+    $currency = str_replace($currencySym,'',$currency);
+    return trim($currency);
+}
+
+/**
+ * Parses a string as a number according to specified locale data
+ *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @return string representing a number
+ */
+function xarLocaleParseNumber($number, $localeData = NULL, $isCurrency = false)
+{
+    if ($localeData == NULL) {
+        $localeData =& xarMLSLoadLocaleData();
+    }
+    if ($isCurrency == true) $bp = 'monetary';
+    else $bp = 'numeric';
+
+    $groupSep = $localeData["/$bp/groupingSeparator"];
+    $number = str_replace($groupSep,'',$number);
+    return trim($number);
+}
+
+/**
  * Formats a currency according to specified locale data
  *
  * @author Marco Canini <marco@xaraya.com>
