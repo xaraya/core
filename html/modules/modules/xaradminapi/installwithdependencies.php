@@ -93,7 +93,7 @@ function modules_adminapi_installwithdependencies ($args)
         }
 
         if (!xarModAPIFunc('modules', 'admin', 'installwithdependencies', array('regid'=>$modId))) {
-            $msg = xarML('Unable to initialize dependecy module with ID (#(1)).', $modId);
+            $msg = xarML('Unable to initialize dependency module with ID (#(1)).', $modId);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
             return;
         }

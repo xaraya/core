@@ -45,7 +45,7 @@ function modules_adminapi_remove($args)
     /*
         if (!xarModAPIFunc('modules','admin','verifydependents',array('regid'=>$regid))) {
             //TODO: Add description of the dependencies
-            $msg = xarML('There are dependents to the module "#(1)" that weren\'t removed yet.', $modInfo['displayname']);
+            $msg = xarML('There are dependents to the module "#(1)" that have not been removed yet.', $modInfo['displayname']);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
             return;
         }

@@ -9,7 +9,7 @@
                 <p><xar:mlstring>Module Information Generator/Validator</xar:mlstring></p>
             </div>
             <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-                <p><xar:mlstring>Although Xaraya modules system still recognses the 'old style' modinfo 
+                <p><xar:mlstring>Although the Xaraya modules system still recognises the 'old style' modinfo 
                 from xarversion.php, we strongly encourage all module developers to re-generate 
                 their module's information to comply with the 'new' XML format.</xar:mlstring></p>
                 <p>

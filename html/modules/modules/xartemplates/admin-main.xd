@@ -25,7 +25,7 @@
                 </xar:mlstring></p>
                 <ul>
                     <li><xar:mlstring>View -- Allows you to see what modules are currently installed on your system, and the current state that they are in.</xar:mlstring></li>
-                    <li><xar:mlstring>Configure Hooks -- Allows you to set certain hooks for modules to be reused (such as allowing comments to a module data)</xar:mlstring></li>
+                    <li><xar:mlstring>Configure Hooks -- Allows you to set certain hooks for modules to be reused (such as allowing comments on a module's data)</xar:mlstring></li>
                     <li><xar:mlstring>Certified Releases -- Allows you to see the latest certified release announcements from Xaraya.com</xar:mlstring></li>
                 </ul>
         </div>

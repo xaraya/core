@@ -28,7 +28,7 @@
             <br />
             <table border="1" cellpadding="5" cellspacing="0">
                 <tr>
-                    <th><xar:mlstring>Dependents still Initialised(Inactive)</xar:mlstring></th>
+                    <th><xar:mlstring>Dependents still Initialized (Inactive)</xar:mlstring></th>
                 </tr>
 
                 <xar:foreach in="$dependencies['initialised']" value="$modInfo">

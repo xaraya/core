@@ -57,7 +57,7 @@ function modules_adminapi_executeinitfunction ($args)
 
     if (empty($xarinitfile)) {
         /*
-        $msg = xarML('No Initiliazation File Found for Module "#(1)"', $modInfo['name']);
+        $msg = xarML('No Initialization File Found for Module "#(1)"', $modInfo['name']);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $msg);
         return;
         */
