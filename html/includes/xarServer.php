@@ -95,16 +95,16 @@ function xarServerGetVar($name)
  */
 function xarServerGetBaseURI()
 {
-	// Allows overriding the Base URI from config.php
-	// it can be used to configure Xaraya for mod_rewrite by 
-	// setting BaseURI = '' in config.php
-	$BaseURI =  xarCore_getSystemVar('BaseURI',true);
-	if( isSet( $BaseURI) )
-	{
-		// If BaseURI set, just use it
-		return  $BaseURI;
-	}
-	// Otherwise build it dynamically
+  // Allows overriding the Base URI from config.php
+  // it can be used to configure Xaraya for mod_rewrite by
+  // setting BaseURI = '' in config.php
+  $BaseURI =  xarCore_getSystemVar('BaseURI',true);
+  if( isSet( $BaseURI) )
+  {
+    // If BaseURI set, just use it
+    return  $BaseURI;
+  }
+  // Otherwise build it dynamically
 
 
     // Get the name of this URI
@@ -536,7 +536,6 @@ function xarRequest__resolveModuleAlias($aliasModName)
  * @access public
  * @global xarResponse_redirectCalled bool
  * @param redirectURL string the URL to redirect to
- * @return bool
  */
 function xarResponseRedirect($redirectURL)
 {
@@ -544,10 +543,12 @@ function xarResponseRedirect($redirectURL)
     // First checks if there's a pending exception, if so does not redirect browser
     if (xarExceptionMajor() != XAR_NO_EXCEPTION) return false;
 
-    if ($GLOBALS['xarResponse_redirectCalled'] == true) {
-        if (headers_sent() == true) return false;
-    }
-    $GLOBALS['xarResponse_redirectCalled'] = true;
+
+    if (headers_sent() == true) return false;
+
+    // MrB: I don't think we need this
+    //$GLOBALS['xarResponse_redirectCalled'] = true;
+
 
     // Remove &amp; entites to prevent redirect breakage
     // according to besfred's php.net research str_replace is faster
@@ -557,29 +558,34 @@ function xarResponseRedirect($redirectURL)
     // for now we use str_replace tho, end of discussion :-)
     $redirectURL = str_replace('&amp;', '&', $redirectURL);
 
-    if (substr($redirectURL, 0, 4) == 'http') {
-        // Absolute URL - simple redirect
-        $header = "Location: $redirectURL";
-    } else {
+    if (substr($redirectURL, 0, 4) != 'http') {
         // Removing leading slashes from redirect url
         $redirectURL = preg_replace('!^/*!', '', $redirectURL);
-
 
         // Get base URL
         $baseurl = xarServerGetBaseURL();
 
-        $header = "Location: $baseurl$redirectURL";
-    }
-    if ($GLOBALS['xarResponse_closeSession']) {
-        xarSession_close();
+        $redirectURL = $baseurl.$redirectURL;
     }
 
-    header($header, headers_sent());
+    // MrB: I don't think we need this #cls
+    //if ($GLOBALS['xarResponse_closeSession']) {
+    //    xarSession_close();
+    //}
+
+
+    if (preg_match('/IIS/', xarServerGetVar('SERVER_SOFTWARE')) && preg_match('/CGI/', xarServerGetVar('GATEWAY_INTERFACE')) ) {
+      $header = "Refresh: 0; URL=$redirectURL";
+    } else {
+      $header = "Location: $redirectURL";
+    }// if
+
+    header($header);
 
     // As this is a redirect we can stop processing
     // It gave some errors on some installations if we just returned true here.
 
-// But this means we need to close the session and dispose of the debugger here too...
+    // But this means we need to close the session and dispose of the debugger here too...
     // Close the session
     xarSession_close();
 
