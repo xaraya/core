@@ -3831,8 +3831,11 @@ BK|sql/Attic/nuke.sql|19700101030959|03687|f95df0f7daafb86e
 BK|sql/Attic/postgres7_rogue.sql|19700101030959|03691|1c5145d7d411fd85
 BK|sql/Attic/ragnarok.sql|19700101030959|03690|ef22bd30956e0e24
 BK|sql/Attic/rogue.sql|19700101030959|03689|ac176d36b8d3c018
+BK|sql/mssql_rogue.sql|19700101030959|03692|ad3100ff244cc030
 BK|sql/mysql_ragnarok.sql|19700101030959|03694|64e2d4657593076f
 BK|sql/mysql_xaraya.marco-20020916.sql|19700101030959|03696|de16150a83b0ba9a
+BK|sql/postgres7_ragnarok.sql|19700101030959|03695|664b798b73f7be50
+BK|sql/vfp_rogue.sql|19700101030959|03693|3baa05f6aef6ae6f
 BK|stats/README.txt|19700101030959|03921|ca6b73d81843191a
 BK|stats/pndocs/credits.txt|19700101030959|03908|339c9ac8bfddec2
 BK|stats/pninit.php|19700101030959|03922|a62b54d52553702c
@@ -4093,6 +4096,7 @@ Jason.Judge@acad-ajp.|html/modules/autolinks/xartemplates/link-standard.xd|20030
 Jason.Judge@acad-ajp.|html/modules/autolinks/xaruserapi/_transform.php|20030621224430|10241|fc26fe1e
 Jason.Judge@acad-ajp.|html/modules/autolinks/xaruserapi/getreplace.php|20030707103217|00420|6d9ed033
 Jason.Judge@acad-ajp.|html/modules/autolinks/xaruserapi/htmlattributes.php|20030707103218|07297|6dae8390
+Jason.Judge@acad-ajp.|html/themes/rss/modules/base/user-pager.xd|20031010230728|32157|dd3ac40f
 John.Cox@d38yrl11.|html/modules/adminpanels/pntemplates/admin-main.pnd|20021027202430|25134|25d49b38
 John.Cox@d38yrl11.|html/modules/autolinks/pntemplates/admin-create.pnd|20021101120307|30792|74a6a374
 John.Cox@d38yrl11.|html/modules/autolinks/pntemplates/admin-delete.pnd|20021101120307|35845|74aa9c66
@@ -4215,6 +4219,7 @@ John.Cox@mcnabb.|html/modules/base/xartemplates/blocks/endMenuStyle.xd|200212060
 John.Cox@mcnabb.|html/modules/base/xartemplates/blocks/rss.xd|20030101235543|27696|2922b7a0
 John.Cox@mcnabb.|html/modules/base/xartemplates/blocks/rssAdmin.xd|20021208152107|41685|ca2cb48e
 John.Cox@mcnabb.|html/modules/base/xartemplates/blocks/startMenuStyle.xd|20021206025108|07927|47e027bb
+John.Cox@mcnabb.|html/modules/blocks/xartemplates/functions.js|20030831031456|18478|a7836cda
 John.Cox@mcnabb.|html/modules/categories/pnimages/AllTopics.gif|20021129225238|31908|ca3662d3
 John.Cox@mcnabb.|html/modules/example/pntemplates/pnblocks/example-firstblock-modify.pnd|20021128155329|45898|d3b9203a
 John.Cox@mcnabb.|html/modules/example/xarimages/preferences.gif|20030226014045|36690|8e0636e3
@@ -4230,6 +4235,7 @@ John.Cox@mcnabb.|html/modules/multisites/xaradminapi.php|20021223154257|61173|92
 John.Cox@mcnabb.|html/modules/multisites/xartemplates/admin-main.xd|20021204024102|10471|15910a8c
 John.Cox@mcnabb.|html/modules/multisites/xartemplates/admin-modifyconfig.xd|20021204024102|14374|1597e9a5
 John.Cox@mcnabb.|html/modules/search/xartemplates/blocks/search.xd|20021207193645|17109|9168e622
+John.Cox@mcnabb.|html/modules/sniffer/xarversion.php|20021228141140|11516|a77bb070
 John.Cox@mcnabb.|html/modules/uploads/xaradmin/approve.php|20030624023315|05037|f6df656e
 John.Cox@mcnabb.|html/modules/uploads/xaradmin/approvefinal.php|20030624015336|22225|fb63cc42
 John.Cox@mcnabb.|html/modules/uploads/xaradmin/download.php|20030624023315|57452|f6f182c1
@@ -4746,6 +4752,10 @@ anon@numenor.|docs/blocklayout/blocklayout_spec.html|20021015161043|26321|dc726d
 anon@numenor.|docs/blocklayout/blocklayoutsm.jpg|20021015061608|63464|f33c866b
 anon@numenor.|docs/blocklayout/templates.gif|20021015062454|36138|18b3cdec
 anon@numenor.|docs/blocklayout/xaraya.gif|20021015061608|38710|f33daadf
+besfred@chimera.(none)|html/modules/sniffer/class/xarSniff.php|20030315193842|10646|3cca1692adb9fcb1
+besfred@chimera.(none)|html/modules/sniffer/xaradminapi.php|20030101124755|12431|450fe121a3d8106c
+besfred@chimera.(none)|html/modules/sniffer/xarinit.php|20030101143132|22509|8ee103d57b909342
+besfred@chimera.(none)|html/modules/sniffer/xartables.php|20030118170342|26857|7fefeead1622143b
 besfred@chimera.(none)|stats/xarimages/amaya.png|20030531150800|43752|764053c83b3dd758
 besfred@chimera.(none)|stats/xarimages/apple.png|20030205225402|00621|3cda0acd3af44877
 besfred@chimera.(none)|stats/xarimages/konqueror.png|20030531150800|44605|85d84db482e51cb0
@@ -4760,6 +4770,8 @@ besfred@chimera.(none)|stats/xarimages/winxp.png|20030205231121|06142|523a06adf1
 besfred@chimera.(none)|stats/xarincludes/mlfuncs.php|20030118161657|21953|b44b23db165ef4e6
 besfred@chimera.(none)|stats/xartemplates/user-details_browser.xd|20030606194032|44168|c27c31c7a6eb305e
 besfred@chimera.(none)|stats/xartemplates/user-details_os.xd|20030606205207|11033|598ffa0381679174
+besfred@chimera.medusa|html/modules/sniffer/class/phpSniff.class.php|20021227165152|27737|3acbc873a3f538a
+besfred@chimera.medusa|html/modules/sniffer/class/phpSniff.core.php|20021227165156|08635|f55175ecd696ac2
 besfred@chimera.medusa|html/modules/stats/xartemplates/includes/header.xd|20030705131517|35225|5900dc62462d152b
 besfred@chimera.medusa|html/modules/stats/xaruser/details_browser.php|20030705131517|39932|ae9c584dc6e19db
 besfred@chimera.medusa|html/modules/stats/xaruser/details_os.php|20030705131517|45305|e6d535874cb5f2f4
@@ -4852,6 +4864,8 @@ brihana25@brihana2-n6mya4.|html/themes/installer/images/step3_header.png|2003022
 brihana25@brihana2-n6mya4.|html/themes/installer/images/step4_header.png|20030227103349|61990|baabbf75
 brihana25@brihana2-n6mya4.|html/themes/installer/images/step5_header.png|20030227103350|09963|bab9ad86
 brihana25@brihana2-n6mya4.|html/themes/installer/images/step6_header.png|20030227103350|18362|bac52b89
+ccorliss@lxwdev-1.schwabfoundation.org|tests/file_slicer.php|20031023005023|22991|d30f91028a4ac23c
+ccorliss@lxwdev-1.schwabfoundation.org|tests/file_slicer|20031023005037|09849|97b737af5f250fb3
 dracos@numenor.|html/modules/themes/xarimages/admin.gif|20021222040519|53747|20a38f95
 dracos@numenor.|html/themes/Xaraya_Classic/pages/admin.xt|20021206045839|41909|b36d0a2
 dracos@numenor.|html/themes/Xaraya_Neo/blocks/bottomnav.xt|20021222040521|42069|20c065dd
@@ -4914,6 +4928,8 @@ jan@jack.iwr.uni-heidelberg.de|tests/PHPUnit/PHPUnit/TestSuite.php|2003031409201
 jan@jack.iwr.uni-heidelberg.de|tests/PHPUnit/gui.php|20030314092011|32454|a329bfc84e10ec32
 jan@jack.iwr.uni-heidelberg.de|tests/unit_tests/test.xt|20030314092011|40341|96c5ccd93ee8485
 jan@jack.iwr.uni-heidelberg.de|tests/unit_tests/testclass.php|20030314092011|48188|a0a02f31220a4d52
+jbeames@sting.in-beames.net|tests/caching/config.caching.php|20031008071027|21251|86eb98fdb02a47b6
+jbeames@sting.in-beames.net|tests/caching/var/cache/output/cache.touch|20031014064156|20652|9c4419beadc5fe4a
 johnny@falling.local.lan|html/images/index.html|20021003154139|20688|ca7c306767ddff11
 johnny@falling.local.lan|html/index.html|20021003153845|26519|1b682d56eaba4d7e
 johnny@falling.local.lan|html/modules/blocks/xarlang/index.html|20030117163130|10425|44a5da205b2944ae
@@ -5797,6 +5813,10 @@ mikespub@someone.bru.fsc.net|html/modules/articles/xaruserapi/handleFieldTag.php
 mikespub@someone.bru.fsc.net|html/modules/articles/xaruserapi/index.html|20030529190915|36013|6b4d5e59e1bfe355
 mikespub@someone.bru.fsc.net|html/modules/articles/xaruserapi/leftjoin.php|20030529190915|36391|c1b562323941a34f
 mikespub@someone.bru.fsc.net|html/modules/articles/xaruserapi/showfield.php|20030529190915|36882|bb2d9bb4890ddf79
+mikespub@someone.bru.fsc.net|html/modules/authsystem/xaruserapi/create_user.php|20030530003714|59381|fe5c9b86df11d665
+mikespub@someone.bru.fsc.net|html/modules/authsystem/xaruserapi/delete_user.php|20030530003714|59835|feda040a66466f85
+mikespub@someone.bru.fsc.net|html/modules/authsystem/xaruserapi/get_all_users.php|20030530003714|60282|e5546f93d5eded5c
+mikespub@someone.bru.fsc.net|html/modules/authsystem/xaruserapi/get_authorization_info.php|20030530003714|60733|51da52f97e00f4e4
 mikespub@someone.bru.fsc.net|html/modules/autolinks/xaradmin/create.php|20030530003751|43642|55f5021ba715bd06
 mikespub@someone.bru.fsc.net|html/modules/autolinks/xaradmin/delete.php|20030530003751|51329|3c9f9d3319f9931e
 mikespub@someone.bru.fsc.net|html/modules/autolinks/xaradmin/index.html|20030530003751|51844|fb88bdb771907d63
@@ -5940,6 +5960,7 @@ mikespub@someone.bru.fsc.net|html/modules/ratings/xaruserapi/rate.php|2003053000
 mikespub@someone.bru.fsc.net|html/modules/ratings/xaruserapi/topitems.php|20030530004246|28632|7bfa3cef10e8ab51
 mikespub@someone.bru.fsc.net|html/modules/search/xaruser/index.html|20030530004356|23737|72dce6599ea49c92
 mikespub@someone.bru.fsc.net|html/modules/search/xaruser/main.php|20030530004356|32099|56415a67350bed45
+mikespub@someone.bru.fsc.net|html/modules/sniffer/xareventapi.php|20030529154813|14013|9efc5074a7410431
 mikespub@someone.bru.fsc.net|messages/xaradmin/create.php|20030530181914|01127|8c1852042882a8a6
 mikespub@someone.bru.fsc.net|messages/xaradmin/delete.php|20030530181914|03804|c64bac0a32000cb1
 mikespub@someone.bru.fsc.net|messages/xaradmin/index.html|20030530181914|05472|844a8ff748979ebc
