@@ -213,6 +213,9 @@ function installer_admin_phase5()
         return NULL;
     }
 
+    session_start(); 
+    session_destroy();
+
     return array();
 }
 
