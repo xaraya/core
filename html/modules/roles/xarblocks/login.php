@@ -56,6 +56,7 @@ function roles_loginblock_display($blockinfo)
 
     // URL of this page
     $args['return_url'] = xarServerGetCurrentURL();
+    $args['signinlabel'] = xarML('Sign In');
 
     $blockinfo['content'] = xarTplBlock('roles', 'login', $args);
 
