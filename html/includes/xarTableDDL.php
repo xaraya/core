@@ -491,9 +491,15 @@ function xarDB__postgresqlAlterTable($tableName, $args)
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
-       // TODO: adapt postgresColumnDefinition to return field name too
             $sql = 'ALTER TABLE '.$tableName.' ADD '.$args['field'].' ';
-            $sql .= join(' ', xarDB__postgresColumnDefinition($args['field'], $args));
+            // Get column definitions
+            $this_field = xarDB__postgresColumnDefinition($args['field'], $args);
+            // Add column values if they exist
+            // Note:  PostgreSQL does not support default or null values in ALTER TABLE
+            $sqlDDL = "";
+            if (array_key_exists("type", $this_field))
+                $sqlDDL = $sqlDDL . ' ' . $this_field['type'];
+            $sql .= $sqlDDL;
             break;
         case 'rename':
             if (empty($args['new_name'])) {
@@ -534,8 +540,17 @@ function xarDB__oracleAlterTable($tableName, $args)
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
-            $sql = 'ALTER TABLE '.$tableName.' ADD ';
-            $sql .= join(' ', xarDB__oracleColumnDefinition($args['field'], $args));
+            $sql = 'ALTER TABLE '.$tableName.' ADD '.$args['field'].' ';
+            // Get column definitions
+            $this_field = xarDB__oracleColumnDefinition($args['field'], $args);
+            // Add column values if they exist
+            // Note:  Oracle does not support null values in ALTER TABLE
+            $sqlDDL = "";
+            if (array_key_exists("type", $this_field))
+                $sqlDDL = $sqlDDL . ' ' . $this_field['type'];
+            if (array_key_exists("default", $this_field))
+                $sqlDDL = $sqlDDL . ' ' . $this_field['default'];
+            $sql .= $sqlDDL;
             break;
         case 'rename':
             if (empty($args['new_name'])) {
@@ -1101,11 +1116,12 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
     // Test for defaults - must come immediately after datatype for PostgreSQL
     // Note that postgres does not support defaults in a alter table add
     if (isset($parameters['default'])) {
-        if ($parameters['command'] == 'add') return false;
-        if ($parameters['default'] == 'NULL') {
-            $this_field['default'] = 'DEFAULT NULL';
-        } else {
-            $this_field['default'] = "DEFAULT ".$parameters['default']."";
+        if ($parameters['command'] != 'add') {
+            if ($parameters['default'] == 'NULL') {
+                $this_field['default'] = 'DEFAULT NULL';
+            } else {
+                $this_field['default'] = "DEFAULT ".$parameters['default']."";
+            }
         }
     } else {
         $this_field['default'] = '';
@@ -1115,8 +1131,9 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
 
     // Test for NO NULLS - postgres does not support No Nulls on an alter table add
     if (isset($parameters['null']) && $parameters['null'] == false) {
-        if ($parameters['command'] == 'add') return false;
-        $this_field['null'] = 'NOT NULL';
+        if ($parameters['command'] != 'add') {
+            $this_field['null'] = 'NOT NULL';
+        }
     }
 
     // Test for PRIMARY KEY
@@ -1354,7 +1371,7 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
             return false;
     }
 
-    // Test for defaults - must come immediately after datatype for PostgreSQL
+    // Test for defaults - must come immediately after datatype for Oracle
     if (isset($parameters['default'])) {
         if ($parameters['default'] == 'NULL') {
             $this_field['default'] = 'DEFAULT NULL';
@@ -1363,10 +1380,11 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
         }
     }
 
-    // Test for NO NULLS - oracle does not support No Nulls on an alter table add
+    // Test for NO NULLS - Oracle does not support No Nulls on an alter table add
     if (isset($parameters['null']) && $parameters['null'] == false) {
-        if ($parameters['command'] == 'add') return false;
-        $this_field['null'] = 'NOT NULL';
+        if ($parameters['command'] != 'add') {
+            $this_field['null'] = 'NOT NULL';
+        }
     }
 
     // Test for PRIMARY KEY
