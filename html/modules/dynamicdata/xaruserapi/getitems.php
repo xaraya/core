@@ -13,6 +13,8 @@
  * @param $args['fieldlist'] array of field labels to retrieve (default is all)
  * @param $args['status'] limit to property fields of a certain status (e.g. active)
  * @param $args['join'] join a module table to the dynamic object (if it extends the table)
+ * @param $args['table'] make some database table available via DD (without pre-defined object)
+ * @param $args['catid'] select in some category
  * @param $args['sort'] sort field(s)
  * @param $args['numitems'] number of items to retrieve
  * @param $args['startnum'] start number
@@ -110,6 +112,10 @@ function &dynamicdata_userapi_getitems($args)
     if (empty($table)) {
         $table = '';
     }
+    // select in some category
+    if (empty($catid)) {
+        $catid = '';
+    }
 
     $object = new Dynamic_Object_List(array('moduleid'  => $modid,
                                            'itemtype'  => $itemtype,
@@ -121,6 +127,7 @@ function &dynamicdata_userapi_getitems($args)
                                            'fieldlist' => $fieldlist,
                                            'join' => $join,
                                            'table' => $table,
+                                           'catid' => $catid,
                                            'groupby' => $groupby,
                                            'status' => $status));
     if (!isset($object)) return;

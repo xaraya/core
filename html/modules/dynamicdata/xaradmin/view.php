@@ -14,6 +14,7 @@ function dynamicdata_admin_view($args)
     if(!xarVarFetch('sort',     'isset', $sort,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('catid',    'isset', $catid,     NULL, XARVAR_DONT_SET)) {return;}
 
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');
@@ -56,6 +57,7 @@ function dynamicdata_admin_view($args)
     $data['sort'] = $sort;
     $data['join'] = $join;
     $data['table'] = $table;
+    $data['catid'] = $catid;
 
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing

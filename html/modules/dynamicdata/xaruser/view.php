@@ -13,6 +13,7 @@ function dynamicdata_user_view($args)
     if(!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('catid',    'isset', $catid,     NULL, XARVAR_DONT_SET)) {return;}
 
     // Override if needed from argument array
     extract($args);
@@ -57,6 +58,7 @@ function dynamicdata_user_view($args)
     $data['label'] = $label;
     $data['join'] = $join;
     $data['table'] = $table;
+    $data['catid'] = $catid;
 
 /*  // we could also retrieve the object list here, and pass that along to the template
     $numitems = 30;

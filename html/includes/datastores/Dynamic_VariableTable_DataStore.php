@@ -280,6 +280,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             $keys = array();
             $where = array();
             $andor = 'AND';
+            $more = '';
             foreach ($this->join as $info) {
                 $tables[] = $info['table'];
                 foreach ($info['fields'] as $field) {
@@ -294,10 +295,16 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 if (!empty($info['andor'])) {
                     $andor = $info['andor'];
                 }
+                if (!empty($info['more'])) {
+                    $more .= ' ' . $info['more'];
+                }
                 // TODO: sort clauses for the joined table ?
             }
-            $query = "SELECT xar_dd_itemid, xar_dd_propid, xar_dd_value, " . join(', ',$fields) . "
-                        FROM $dynamicdata, " . join(', ',$tables) . "
+            $query = "SELECT DISTINCT xar_dd_itemid, xar_dd_propid, xar_dd_value";
+            if (count($fields) > 0) {
+                $query .= ", " . join(', ',$fields);
+            }
+            $query .= " FROM $dynamicdata, " . join(', ',$tables) . $more . "
                        WHERE xar_dd_propid IN (" . join(', ',$propids) . ") ";
             if (count($keys) > 0) {
                 $query .= " AND " . join(' AND ', $keys);

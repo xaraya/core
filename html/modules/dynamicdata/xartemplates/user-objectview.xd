@@ -1,3 +1,6 @@
+<xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
+    <xar:categories-navigation layout="trails" showchildren="1" module="$modname" itemtype="$itemtype" catid="$catid" />
+</xar:if>
 <xar:if condition="empty($layout) or $layout eq 'default'">
     <table border="0" cellspacing="0" cellpadding="4">
     <xar:foreach in="$items" key="$itemid" value="$fields">

@@ -114,6 +114,10 @@ function dynamicdata_adminapi_showlist($args)
     if (empty($table)) {
         $table = '';
     }
+    // select in some category
+    if (empty($catid)) {
+        $catid = '';
+    }
 
     // check the URL parameter for the item id used by the module (e.g. exid, aid, ...)
     if (empty($param)) {
@@ -130,6 +134,7 @@ function dynamicdata_adminapi_showlist($args)
                                            'fieldlist' => $myfieldlist,
                                            'join' => $join,
                                            'table' => $table,
+                                           'catid' => $catid,
                                            'groupby' => $groupby,
                                            'status' => $status));
     $object->getItems();

@@ -44,6 +44,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         $tables = array($table);
+        $more = '';
 
         // join with another table
         if (count($this->join) > 0) {
@@ -65,6 +66,9 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
                 //if (!empty($info['andor'])) {
                 //    $andor = $info['andor'];
                 //}
+                if (!empty($info['more'])) {
+                    $more .= ' ' . $info['more'];
+                }
             }
         }
 
@@ -76,7 +80,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         list($dbconn) = xarDBGetConn();
 
         $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
-                    FROM " . join(', ', $tables) . "
+                    FROM " . join(', ', $tables) . $more . "
                    WHERE $itemidfield = " . xarVarPrepForStore($itemid);
 
         if (count($this->join) > 0) {
@@ -277,6 +281,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         $tables = array($table);
+        $more = '';
 
         // join with another table
         if (count($this->join) > 0) {
@@ -296,6 +301,9 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
                 }
                 if (!empty($info['andor'])) {
                     $andor = $info['andor'];
+                }
+                if (!empty($info['more'])) {
+                    $more .= ' ' . $info['more'];
                 }
                 // TODO: sort clauses for the joined table ?
             }
@@ -325,10 +333,10 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         if ($isgrouped) {
             $query = "SELECT " . join(', ', $newfields) . "
-                        FROM " . join(', ', $tables) . " ";
+                        FROM " . join(', ', $tables) . $more . " ";
         } else {
             $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
-                        FROM " . join(', ', $tables) . " ";
+                        FROM " . join(', ', $tables) . $more . " ";
         }
 
         $next = 'WHERE';

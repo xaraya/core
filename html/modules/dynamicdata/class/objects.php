@@ -59,6 +59,7 @@ class Dynamic_Object_Master
      * @param $args['moduleid'] module id of the object to retrieve +
      * @param $args['itemtype'] item type of the object to retrieve, or
      * @param $args['table'] database table to turn into an object
+     * @param $args['catid'] categories we're selecting in (if hooked)
      *
      * @param $args['fieldlist'] optional list of properties to use, or
      * @param $args['status'] optional status of the properties to use
@@ -785,18 +786,37 @@ class Dynamic_Object extends Dynamic_Object_Master
             $args['fieldlist'] = $this->fieldlist;
         }
         if (count($args['fieldlist']) > 0 || !empty($this->status)) {
-            $properties = array();
+            $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
-                    $properties[$name] = & $this->properties[$name];
+                    $args['properties'][$name] = & $this->properties[$name];
                 }
             }
         } else {
-            $properties = & $this->properties;
+            $args['properties'] = & $this->properties;
         }
+
+        $modinfo = xarModGetInfo($this->moduleid);
+        $args['modname'] = $modinfo['name'];
+        if (empty($this->itemtype)) {
+            $args['itemtype'] = null; // don't add to URL
+        } else {
+            $args['itemtype'] = $this->itemtype;
+        }
+        $args['itemid'] = $this->itemid;
+        if (!empty($this->primary)) {
+            $args['isprimary'] = true;
+        } else {
+            $args['isprimary'] = false;
+        }
+        if (!empty($this->catid)) {
+            $args['catid'] = $this->catid;
+        } else {
+            $args['catid'] = null;
+        }
+
         return xarTplModule('dynamicdata','user','objectdisplay',
-                            array('properties' => $properties,
-                                  'layout'     => $args['layout']),
+                            $args,
                             $args['template']);
     }
 
@@ -1166,6 +1186,11 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (!empty($args['groupby'])) {
             $this->setGroupBy($args['groupby']);
         }
+
+        // set the categories
+        if (!empty($args['catid'])) {
+            $this->setCategories($args['catid']);
+        }
     }
 
     function setSort($sort)
@@ -1284,6 +1309,18 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         }
     }
 
+    function setCategories($catid)
+    {
+        if (!xarModIsAvailable('categories')) return;
+        $categoriesdef = xarModAPIFunc('categories','user','leftjoin',
+                                       array('modid' => $this->moduleid,
+                                             'itemtype' => $this->itemtype,
+                                             'catid' => $catid));
+        foreach (array_keys($this->datastores) as $name) {
+            $this->datastores[$name]->addJoin($categoriesdef['table'], $categoriesdef['field'], array(), $categoriesdef['where'], 'and', $categoriesdef['more']);
+        }
+    }
+
     function &getItems($args = array())
     {
         // initialize the items array
@@ -1393,7 +1430,6 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
         $modinfo = xarModGetInfo($this->moduleid);
         $modname = $modinfo['name'];
-        $args['links'] = array();
 
         // override for viewing dynamic objects
         if ($modname == 'dynamicdata' && $this->itemtype == 0 && empty($this->table)) {
@@ -1417,6 +1453,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         } else {
             $table = $this->table;
         }
+        $args['modname'] = $modname;
+        $args['itemtype'] = $itemtype;
+        $args['links'] = array();
         foreach (array_keys($this->items) as $itemid) {
     // TODO: improve this + SECURITY !!!
             $options = array();
@@ -1491,6 +1530,16 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                 }
             }
         }
+        if (!empty($this->primary)) {
+            $args['isprimary'] = true;
+        } else {
+            $args['isprimary'] = false;
+        }
+        if (!empty($this->catid)) {
+            $args['catid'] = $this->catid;
+        } else {
+            $args['catid'] = null;
+        }
 
         // TODO: improve this + SECURITY !!!
 		if(xarSecurityCheck('AddDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':All')) {
@@ -1555,6 +1604,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($itemtype)) {
             $itemtype = null; // don't add to URL
         }
+        $args['modname'] = $modname;
+        $args['itemtype'] = $itemtype;
         $args['links'] = array();
         foreach (array_keys($this->items) as $itemid) {
             if (!empty($this->isgrouped)) {
@@ -1574,6 +1625,16 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                 }
             }
             $args['linkfield'] = 'N/A';
+        }
+        if (!empty($this->primary)) {
+            $args['isprimary'] = true;
+        } else {
+            $args['isprimary'] = false;
+        }
+        if (!empty($this->catid)) {
+            $args['catid'] = $this->catid;
+        } else {
+            $args['catid'] = null;
         }
 
         list($args['prevurl'],

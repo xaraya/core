@@ -49,6 +49,11 @@ function dynamicdata_userapi_decode_shorturl($params)
             return array('main', $args);
         }
 
+    } elseif (preg_match('/^c(_?[0-9 +-]+)/',$params[1],$matches)) {
+        $catid = $matches[1];
+        $args['catid'] = $catid;
+        return array('view', $args);
+
     } elseif (preg_match('/^(\d+)/',$params[1],$matches)) {
         $itemid = $matches[1];
         $args['itemid'] = $itemid;
@@ -58,6 +63,10 @@ function dynamicdata_userapi_decode_shorturl($params)
         $args['modid'] = $objectcache[$params[1]]['modid'];
         $args['itemtype'] = $objectcache[$params[1]]['itemtype'];
         if (empty($params[2]) || preg_match('/^index/i',$params[2])) {
+            return array('view', $args);
+        } elseif (preg_match('/^c(_?[0-9 +-]+)/',$params[2],$matches)) {
+            $catid = $matches[1];
+            $args['catid'] = $catid;
             return array('view', $args);
         } elseif (preg_match('/^(\d+)/',$params[2],$matches)) {
             $itemid = $matches[1];

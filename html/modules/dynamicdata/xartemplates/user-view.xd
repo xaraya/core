@@ -6,7 +6,7 @@
 <xar:elseif condition="!empty($modid)" />
 <!-- here we only retrieve the parameters in the function, and we let the data-view tag retrieve the complete object list -->
 <h2><xar:mlstring>View</xar:mlstring> #$label#</h2>
-    <xar:data-view module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$param" numitems="30" startnum="$startnum" />
+    <xar:data-view module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$param" numitems="30" startnum="$startnum" catid="$catid" />
 
 <xar:else />
     <div align="center">

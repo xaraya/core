@@ -115,6 +115,10 @@ function dynamicdata_userapi_showview($args)
     if (empty($table)) {
         $table = '';
     }
+    // select in some category
+    if (empty($catid)) {
+        $catid = '';
+    }
 
     $object = new Dynamic_Object_List(array('moduleid'  => $modid,
                                            'itemtype'  => $itemtype,
@@ -126,6 +130,7 @@ function dynamicdata_userapi_showview($args)
                                            'fieldlist' => $myfieldlist,
                                            'join' => $join,
                                            'table' => $table,
+                                           'catid' => $catid,
                                            'groupby' => $groupby,
                                            'status' => $status));
     if (!isset($object)) return;

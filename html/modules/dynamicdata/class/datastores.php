@@ -268,7 +268,7 @@ class Dynamic_DataStore
     /**
      * Join another database table to this data store (unfinished)
      */
-    function addJoin($table, $key, $fields, $where = array(), $andor = 'and', $sort = array())
+    function addJoin($table, $key, $fields, $where = array(), $andor = 'and', $more = '', $sort = array())
     {
         if (!isset($this->extra)) {
             $this->extra = array();
@@ -282,16 +282,19 @@ class Dynamic_DataStore
             $this->extra[$source] = & $fields[$field]; // use reference to original property
         }
         $whereclause = '';
-        if (count($where) > 0) {
+        if (is_array($where) && count($where) > 0) {
             foreach ($where as $part) {
                 $whereclause .= $part['join'] . ' ' . $part['property']->source . ' ' . $part['clause'] . ' ';
             }
+        } elseif (is_string($where)) {
+            $whereclause = $where;
         }
         $this->join[] = array('table' => $table,
                               'key' => $key,
                               'fields' => $fieldlist,
                               'where' => $whereclause,
-                              'andor' => $andor);
+                              'andor' => $andor,
+                              'more' => $more);
     }
 
     /**

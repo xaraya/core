@@ -58,6 +58,9 @@ function dynamicdata_userapi_encode_shorturl($args)
             } else {
                 $path = '/' . $module . '/' . $name . '/';
             }
+            if (!empty($catid)) {
+                $path .= 'c' . $catid . '/';
+            }
         } else {
             // we don't know this one...
         }
