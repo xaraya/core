@@ -14,7 +14,28 @@
 /**
  * return the path for a short URL to xarModURL for this module
  *
- * @author the Example module development team
+ * Supported URLs :
+ *
+ * /roles/
+ * /roles/123
+ * /roles/account
+ * /roles/account/[module]
+ * /roles/list
+ * /roles/list/viewall
+ * /roles/list/X
+ * /roles/list/viewall/X
+ * /roles/login
+ * /roles/logout
+ * /roles/password
+ * /roles/privacy
+ * /roles/register
+ * /roles/register/registration
+ * /roles/register/checkage
+ * /roles/settings
+ * /roles/settings/form (deprecated)
+ * /roles/terms
+ *
+ * @author the roles module development team
  * @param $args the function and arguments passed to xarModURL
  * @returns string
  * @return path to be added to index.php for a short URL, or empty if failed
@@ -63,6 +84,7 @@ function roles_userapi_encode_shorturl($args)
     } elseif ($func == 'account') {
         $path = '/' . $module . '/account';
         if(!empty($moduleload)) {
+            // Note: this handles usermenu requests for hooked modules (including roles itself)
             $path = $path . '/' . $moduleload;
         }
     } elseif ($func == 'terms') {
@@ -76,7 +98,8 @@ function roles_userapi_encode_shorturl($args)
 
     } elseif ($func == 'usermenu') {
         $path = '/' . $module . '/settings';
-        if (!empty($phase) && $phase == 'formbasic') {
+        if (!empty($phase) && ($phase == 'formbasic' || $phase == 'form')) {
+            // Note : this URL format is no longer in use
             $path = $path . '/form';
         }
 

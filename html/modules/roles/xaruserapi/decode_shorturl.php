@@ -15,7 +15,28 @@
  * extract function and arguments from short URLs for this module, and pass
  * them back to xarGetRequestInfo()
  *
- * @author the Example module development team
+ * Supported URLs :
+ *
+ * /roles/
+ * /roles/123
+ * /roles/account
+ * /roles/account/[module]
+ * /roles/list
+ * /roles/list/viewall
+ * /roles/list/X
+ * /roles/list/viewall/X
+ * /roles/login
+ * /roles/logout
+ * /roles/password
+ * /roles/privacy
+ * /roles/register
+ * /roles/register/registration
+ * /roles/register/checkage
+ * /roles/settings
+ * /roles/settings/form (deprecated)
+ * /roles/terms
+ *
+ * @author the roles module development team
  * @param $params array containing the different elements of the virtual path
  * @returns array
  * @return array containing func the function to be called and args the query
@@ -27,7 +48,7 @@ function roles_userapi_decode_shorturl($params)
     $args = array();
 
     // Analyse the different parts of the virtual path
-    // $params[1] contains the first part after index.php/example
+    // $params[1] contains the first part after index.php/roles
 
     // In general, you should be strict in encoding URLs, but as liberal
     // as possible in trying to decode them...
@@ -53,54 +74,37 @@ function roles_userapi_decode_shorturl($params)
             $args['letter'] = $matches[1];
         }
         return array('view', $args);
-/*
-    } elseif (preg_match('/^register/i',$params[1])) {
-        // something that starts with 'list' is probably for the view function
-        // Note : make sure your encoding/decoding is consistent ! :-)
-        return array('register', $args);
-*/
+
     } elseif (preg_match('/^password/i',$params[1])) {
-        // something that starts with 'list' is probably for the view function
-        // Note : make sure your encoding/decoding is consistent ! :-)
         return array('lostpassword', $args);
 
     } elseif (preg_match('/^login/i',$params[1])) {
-        // something that starts with 'list' is probably for the view function
-        // Note : make sure your encoding/decoding is consistent ! :-)
         return array('showloginform', $args);
 
     } elseif (preg_match('/^account/i',$params[1])) {
         if (!empty($params[2]) && preg_match('/^(\w+)/i',$params[2],$matches)) {
+            // Note: this handles usermenu requests for hooked modules (including roles itself)
             $args['moduleload'] = $matches[1];
         }
         return array('account', $args);
 
     } elseif (preg_match('/^terms/i',$params[1])) {
-        // something that starts with 'list' is probably for the view function
-        // Note : make sure your encoding/decoding is consistent ! :-)
         return array('terms', $args);
 
     } elseif (preg_match('/^privacy/i',$params[1])) {
-        // something that starts with 'list' is probably for the view function
-        // Note : make sure your encoding/decoding is consistent ! :-)
         return array('privacy', $args);
 
     } elseif (preg_match('/^logout/i',$params[1])) {
-        // something that starts with 'list' is probably for the view function
-        // Note : make sure your encoding/decoding is consistent ! :-)
         return array('logout', $args);
 
     } elseif (preg_match('/^settings/i',$params[1])) {
-        // something that starts with 'list' is probably for the view function
-        // Note : make sure your encoding/decoding is consistent ! :-)
         if (!empty($params[2]) && preg_match('/^form/i',$params[2],$matches)) {
-            $args['phase'] = 'formbasic';
+            // Note : this URL format is no longer in use
+            $args['phase'] = 'form';
         }
         return array('usermenu', $args);
 
     } elseif (preg_match('/^register/i',$params[1])) {
-        // something that starts with 'list' is probably for the view function
-        // Note : make sure your encoding/decoding is consistent ! :-)
         if (!empty($params[2])) {
             if ($params[2] == 'registration') {
                 $args['phase'] = 'registerform';
