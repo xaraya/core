@@ -164,6 +164,26 @@ function xarMakeRoleMemberByID($childId, $parentId)
 }
 
 /**
+ * xarRemoveRoleMemberByID: destroys a parent-child relationship in the database between two roles
+ *
+ * This is a wrapper function
+ *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @param  string child ID
+ * @param  string parent ID
+ * @return bool
+ */
+function xarRemoveRoleMemberByID($childId, $parentId)
+{
+    $roles = new xarRoles();
+    $parent = $roles->getRole($parentId);
+    $child = $roles->getRole($childId);
+
+    return $parent->removeMember($child);
+}
+
+/**
  * xarRegisterPrivilege: create an entry in the database for a privilege
  *
  * This is a wrapper function
