@@ -37,7 +37,7 @@
             'long' => xarML('A value was expected during this operation, but none was found.')),
         'MULTIPLE_INSTANCES' => array(
             'title' => xarML('Multiple instances'),
-            'short' => xarML('A module contains more than once instance of the same block type.')),
+            'short' => xarML('A module contains more than one instance of the same block type.')),
         'WRONG_VERSION' => array(
             'title' => xarML('Wrong version'),
             'short' => xarML('The application version supplied is wrong.'))
