@@ -57,7 +57,7 @@
 			<tr class="xar-norm">
 		</xar:if>
 			<td width="150">
-				#$loop:item['name']#
+				<a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['privid']#">#$loop:item['name']#</a>
 			</td>
 			<td width="50" style="text-align: center;">
 				#$loop:item['realm']#
@@ -125,7 +125,7 @@
 			<tr class="xar-norm">
 		</xar:if>
 			<td width="150">
-				#$loop:item['name']#
+				<a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['privid']#">#$loop:item['name']#</a>
 			</td>
 			<td width="50" style="text-align: center;">
 				#$loop:item['realm']#
