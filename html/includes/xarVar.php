@@ -21,7 +21,9 @@ define('XARVAR_ALLOW', 2);
 define('XARVAR_GET_OR_POST', 0);
 define('XARVAR_GET_ONLY', 2);
 define('XARVAR_POST_ONLY', 4);
+
 define('XARVAR_NOT_REQUIRED', 64);
+define('XARVAR_DONT_SET', 96);
 
 /**
  * Initialise the variable handling options
@@ -92,8 +94,10 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
 {
     //<nuncanada> XARVAR_NOT_REQUIRED is useless in the logic used here, just put the
     // default value and it will work fine
-    // XARVAR_NOTREQUIRED should be some independent integer so it could be mixed(!) with XARVAR_GET_OR_POST
+    // XARVAR_NOT_REQUIRED should be some independent integer so it could be mixed(!) with XARVAR_GET_OR_POST
     // What about cookie/env/request/server variables?
+    
+    //XARVAR_DONT_SET
 
     assert('is_int($flags)');
 
@@ -104,9 +108,13 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     //This allows us to have a extract($args) before the xarVarFetch and still run
     //the variables thru the tests here.
     if (!isset($value)) {
-        $value = xarRequestGetVar($name, $allowOnlyMethod);
+        $inputValue = xarRequestGetVar($name, $allowOnlyMethod);
 
-        if ($value == NULL) {
+        if ($inputValue == NULL) {
+            if ($flags & XARVAR_DONT_SET) {
+                return true;
+            }
+
             if ($flags & XARVAR_NOT_REQUIRED || isset($defaultValue)) {
                 $value = $defaultValue;
 
@@ -118,6 +126,9 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
                 return;
             }
         }
+        
+        //So far so good... Let's use the input value then...
+        $value = $inputValue;
     }
 
     $result = xarVarValidate($validation, $value);
