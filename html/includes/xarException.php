@@ -382,6 +382,11 @@ function xarExceptionSet($major, $exceptionId, $value = NULL)
             xarCore_die('xarExceptionSet: Invalid major value: ' . $major);
     }
 
+    //Checks for a @ presence in the given line, should stop from setting Xaraya or DB errors
+    if (!error_reporting()) {
+        return;
+    }
+
     $stack = xarException__backTrace();
     if (!is_object($value)) {
         // The exception passed in is just a msg or an identifier, try to construct

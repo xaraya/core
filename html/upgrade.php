@@ -26,7 +26,6 @@ xarDBLoadTableMaintenanceAPI();
 if(!xarSecurityCheck('AdminPanel')) return;
     //include 'modules/privileges/xarsetup.php';
 
-
 $xarVersion = xarConfigGetVar('System.Core.VersionNum');
 
 $title = xarML('Upgrade');
@@ -113,7 +112,7 @@ if (empty($step)) {
                        'fields'    => array('xar_level'),
                        'unique'    => FALSE);
         $query = xarDBCreateIndex($leveltable,$index);
-        $result =& $dbconn->Execute($query);
+        $result = @$dbconn->Execute($query);
 
         $nextId = $dbconn->GenId($leveltable);
         $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
@@ -165,43 +164,44 @@ if (empty($step)) {
                   VALUES ($nextId, 800, 'ACCESS_ADMIN', 'Admin Access', '')";
         $result =& $dbconn->Execute($query);
 
-        if (!$result){ 
+        if (!$result){
             echo "failed</font><br>\r\n";
         } else {
             echo "done!</font><br>\r\n";
         }
     } else {
-        echo "$table_name[security_levels] already exists, moving to next check. <br />";  
+        echo "$table_name[security_levels] already exists, moving to next check. <br />";
     }
 
     // Set indexes on roles table.
-    $table_name['roles'] = $sitePrefix . '_roles'; 
+    $table_name['roles'] = $sitePrefix . '_roles';
 
     $index = array(
        'name'      => 'i_xar_roles_type',
        'fields'    => array('xar_type')
       );
-        $query = xarDBCreateIndex($table_name['roles'],$index);
-        $result =& $dbconn->Execute($query);
+
+    $query = xarDBCreateIndex($table_name['roles'],$index);
+    $result = @$dbconn->Execute($query);
 
     if (!$result) {
         echo "$table_name[roles] table already has index set for xar_type, moving to next check. <br /> ";
     } else {
-        echo "Setting index on $table_name[roles]... done! <br />";  
+        echo "Setting index on $table_name[roles]... done! <br />";
     }
-    
+
     $index = array(
                    'name'      => 'i_xar_roles_uname',
                    'fields'    => array('xar_uname'),
                    'unique'    => true
                   );
     $query = xarDBCreateIndex($table_name['roles'],$index);
-    $result =& $dbconn->Execute($query);
+    $result = @$dbconn->Execute($query);
 
     if (!$result) {
         echo "$table_name[roles] table already has index set for xar_uname, moving to next check. <br /> ";
     } else {
-        echo "Setting index on $table_name[roles]... done! <br />";  
+        echo "Setting index on $table_name[roles]... done! <br />";
     }
 
     $index = array(
@@ -210,12 +210,12 @@ if (empty($step)) {
                    'unique'    => false
                   );
     $query = xarDBCreateIndex($table_name['roles'],$index);
-    $result =& $dbconn->Execute($query);
+    $result = @$dbconn->Execute($query);
 
     if (!$result) {
         echo "$table_name[roles] table already has index set for xar_name, moving to next check. <br /> ";
     } else {
-        echo "Setting index on $table_name[roles]... done! <br />";  
+        echo "Setting index on $table_name[roles]... done! <br />";
     }
 
     $index = array(
@@ -224,16 +224,16 @@ if (empty($step)) {
                    'unique'    => false
                   );
     $query = xarDBCreateIndex($table_name['roles'],$index);
-    $result =& $dbconn->Execute($query);
+    $result = @$dbconn->Execute($query);
 
     if (!$result) {
         echo "$table_name[roles] table already has index set for xar_email, moving to next check. <br /> ";
     } else {
-        echo "Setting index on $table_name[roles]... done! <br />";  
+        echo "Setting index on $table_name[roles]... done! <br />";
     }
 
     // Drop the admin_wc table and the hooks for the admin panels.
-    $table_name['admin_wc'] = $sitePrefix . '_admin_wc'; 
+    $table_name['admin_wc'] = $sitePrefix . '_admin_wc';
 
     $upgrade['waiting_content'] = xarModAPIFunc('installer',
                                                 'admin',
@@ -255,17 +255,17 @@ if (empty($step)) {
             // Generate the SQL to drop the table using the API
             $query = xarDBDropTable($table_name['admin_wc']);
             $result =& $dbconn->Execute($query);
-            if (!$result){ 
+            if (!$result){
                 echo "failed</font><br>\r\n";
             } else {
                 echo "done!</font><br>\r\n";
             }
     } else {
-        echo "$table_name[admin_wc] has been dropped previously, moving to next check. <br />";  
+        echo "$table_name[admin_wc] has been dropped previously, moving to next check. <br />";
     }
 
     // Drop the security_privsets table
-    $table_name['security_privsets'] = $sitePrefix . '_security_privsets'; 
+    $table_name['security_privsets'] = $sitePrefix . '_security_privsets';
 
     $upgrade['security_privsets'] = xarModAPIFunc('installer',
                                                 'admin',
@@ -276,7 +276,7 @@ if (empty($step)) {
         // Generate the SQL to drop the table using the API
         $query = xarDBDropTable($table_name['security_privsets']);
         $result =& $dbconn->Execute($query);
-        if (!$result){ 
+        if (!$result){
             echo "failed</font><br>\r\n";
         } else {
             echo "done!</font><br>\r\n";
@@ -499,7 +499,7 @@ if (empty($step)) {
             xarRegisterMask('AdminArticles','All','articles','Article','All','ACCESS_ADMIN');
             xarRegisterMask('ReadArticlesBlock','All','articles','Block','All','ACCESS_READ');
     } else {
-        echo "Articles Masks have been created previously, moving to next check. <br />";  
+        echo "Articles Masks have been created previously, moving to next check. <br />";
     }
 
     $upgrade['category_masks'] = xarMaskExists('ViewCategoryLink',$module='categories');
@@ -564,14 +564,16 @@ if (empty($step)) {
     // Check the installed privs and masks.
     echo "<h5>Checking Hook Structure</h5>";
 
+    $ratings = array();
+
     if (xarModIsAvailable('ratings')) {
         $ratings['deleteall'] = xarModRegisterHook('module', 'remove', 'API', 'ratings', 'admin', 'deleteall');
     }
 
-    if (!$ratings['deleteall']) {
+    if (!isset($ratings['deleteall']) || !$ratings['deleteall']) {
         echo "Ratings Delete All Hook already exists, moving to next check. <br /> ";
     } else {
-        echo "Setting Ratings Delete All Hook... done! <br />";  
+        echo "Setting Ratings Delete All Hook... done! <br />";
     }
 
 ?>
