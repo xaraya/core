@@ -721,7 +721,10 @@ class xarRole
         while (!$result->EOF) {
             list($parentid) = $result->fields;
             $parentpart = $parts->getRole($parentid);
-            $parentpart->removeMember($this);
+            // Check that a parent was returned
+            if ($parentpart) {
+                $parentpart->removeMember($this);
+            }
             $result->MoveNext();
         }
         // delete the relevant entry in the roles table
