@@ -37,9 +37,20 @@ function installer_admin_main()
  */
 function installer_admin_phase1()
 {
-    //$locales = xarMLSListSiteLocales();
-
-    $data['languages'] = array('eng' => 'English');
+    // Get the installed locales
+    $locales = xarMLSListSiteLocales();
+    
+    // Construct the array for the selectbox (iso3code, string in own locale)
+    if(!empty($locales)) {
+        $languages = array();
+        foreach ($locales as $locale) {
+            // Get the isocode and the description
+            $locale_data =& xarMLSLoadLocaleData($locale);
+            $languages[$locale] = $locale_data['/language/display'];
+        }
+    }
+    
+    $data['languages'] = $languages;
     $data['phase'] = 1;
     $data['phase_label'] = xarML('Step One');
 
@@ -56,8 +67,10 @@ function installer_admin_phase1()
  */
 function installer_admin_phase2()
 {
+    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+
     // TODO: fix installer ML
-    $data['language'] = 'English';
+    $data['language'] = $install_language;
     $data['phase'] = 2;
     $data['phase_label'] = xarML('Step Two');
 
@@ -76,6 +89,8 @@ function installer_admin_phase2()
  */
 function installer_admin_phase3()
 {
+    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+
     if (!xarVarFetch('agree','regexp:(agree|disagree)',$agree)) return;
 
     if ($agree != 'agree') {
@@ -115,7 +130,7 @@ function installer_admin_phase3()
     $data['systemConfigFile']         = $systemConfigFile;
     $data['systemConfigIsWritable']   = $systemConfigIsWritable;
 
-    $data['language']    = 'English';
+    $data['language']    = $install_language;
     $data['phase']       = 3;
     $data['phase_label'] = xarML('Step Three');
 
@@ -131,6 +146,8 @@ function installer_admin_phase3()
  */
 function installer_admin_phase4()
 {
+    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+
     // Get default values from config files
     $data['database_host']       = xarCore_getSystemVar('DB.Host');
     $data['database_username']   = xarCore_getSystemVar('DB.UserName');
@@ -143,7 +160,7 @@ function installer_admin_phase4()
                                          //'oci8'     => 'Oracle',
                                          'postgres' => 'Postgres');
 
-    $data['language'] = 'English';
+    $data['language'] = $install_language;
     $data['phase'] = 4;
     $data['phase_label'] = xarML('Step Four');
 
@@ -166,6 +183,7 @@ function installer_admin_phase4()
  */
 function installer_admin_phase5()
 {
+    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
     xarVarSetCached('installer','installing', true);
 
     // Get arguments
@@ -233,13 +251,27 @@ function installer_admin_phase5()
     xarSecurity_init();
 
     // Load in modules/installer/xarinit.php and start the install
+    // This effectively initializes the base module.
     if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
                                                  array('directory' => 'installer',
                                                        'initfunc'  => 'init'))) {
         return;
     }
 
-    $data['language'] = 'English';
+    // If we are here, the base system has completed
+    // We can now pass control to xaraya.
+    include_once 'includes/xarConfig.php';
+    xarConfig_init(array(),XARCORE_SYSTEM_ADODB);
+    xarConfigSetVar('Site.MLS.DefaultLocale', $install_language);
+
+    // Set the allowed locales to our "C" locale and the one used during installation
+    // TODO: make this a bit more friendly.
+    $necessaryLocale = array('en_US.iso-8859-1');
+    $install_locale  = array($install_language);
+    $allowed_locales = array_merge($necessaryLocale, $install_locale);
+
+    xarConfigSetVar('Site.MLS.AllowedLocales',$allowed_locales);    $data['language'] = $install_language;
+
     $data['phase'] = 5;
     $data['phase_label'] = xarML('Step Five');
 
@@ -253,10 +285,11 @@ function installer_admin_phase5()
  */
 function installer_admin_bootstrap()
 {
+    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+
     xarVarSetCached('installer','installing', true);
     xarTplSetThemeName('installer');
 
-    // activate the security stuff
     // create the default roles and privileges setup
     include 'modules/privileges/xarsetup.php';
     initializeSetup();
@@ -286,7 +319,7 @@ function installer_admin_bootstrap()
     }
 
     // Set the state and activate the following themes
-    $themelist=array('print','rss','Xaraya_Classic');
+    $themelist=array('print','rss','Xaraya_Classic', 'installer');
     foreach ($themelist as $theme) {
         // Set state to inactive
         $regid=xarThemeGetIDFromName($theme);
@@ -294,7 +327,7 @@ function installer_admin_bootstrap()
             if (!xarModAPIFunc('themes','admin','setstate', array('regid'=> $regid,'state'=> XARTHEME_STATE_INACTIVE))){
                 return;
             }
-            // Activate the module
+            // Activate the theme
             if (!xarModAPIFunc('themes','admin','activate', array('regid'=> $regid)))
             {
                 return;
@@ -335,11 +368,12 @@ function installer_admin_bootstrap()
  */
 function installer_admin_create_administrator()
 {
+    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
 
     xarVarSetCached('installer','installing', true);
 
     xarTplSetThemeName('installer');
-    $data['language'] = 'English';
+    $data['language'] = $install_language;
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Create Administrator');
 
@@ -499,9 +533,10 @@ function installer_admin_create_administrator()
  */
 function installer_admin_choose_configuration()
 {
+    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
 
     xarTplSetThemeName('installer');
-    $data['language'] = 'English';
+    $data['language'] = $install_language;
     $data['phase'] = 7;
     $data['phase_label'] = xarML('Choose your configuration');
 
@@ -578,6 +613,8 @@ function installer_admin_choose_configuration()
  */
 function installer_admin_confirm_configuration()
 {
+    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+
     xarVarSetCached('installer','installing', true);
 
     //We should probably break here if $configuration is not set.
@@ -589,7 +626,7 @@ function installer_admin_confirm_configuration()
     if(!xarVarFetch('options',       'isset', $options,       NULL, XARVAR_DONT_SET))   return;
 
     xarTplSetThemeName('installer');
-    $data['language'] = 'English';
+    $data['language'] = $install_language;
     $data['phase'] = 8;
     $data['phase_label'] = xarML('Choose configuration options');
 
@@ -785,6 +822,7 @@ function installer_admin_confirm_configuration()
 
 function installer_admin_finish()
 {
+    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
 
     xarUserLogOut();
 // log in admin user
@@ -807,6 +845,7 @@ function installer_admin_finish()
 
 function installer_admin_cleanup()
 {
+    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
     $remove = xarModDelVar('roles','adminpass');
     $remove = xarModDelVar('installer','modules');
 
