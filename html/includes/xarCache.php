@@ -259,8 +259,7 @@ function xarBlockGetCached($cacheKey, $name = '')
         fclose($file);
     }
 
-    // jsb: don't clean output cache from block functions for now
-    //xarOutputCleanCached('Block');
+    xarOutputCleanCached('Block', $cacheKey);
     return $blockCachedOutput;
 }
 
@@ -301,7 +300,6 @@ function xarPageSetCached($cacheKey, $name, $value)
             @fwrite($fp,$value);
             @fclose($fp);
         }
-        xarOutputCleanCached('Page');
     }
 }
 
@@ -322,7 +320,7 @@ function xarBlockSetCached($cacheKey, $name, $value)
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         (!file_exists($cache_file) ||
         ($xarBlock_cacheTime != 0 && filemtime($cache_file) < time() - $xarBlock_cacheTime)) &&
-        xarCacheDirSize($xarOutput_cacheCollection, 'Block') <= $xarOutput_cacheSizeLimit
+        xarCacheDirSize($xarOutput_cacheCollection, 'Block', $cacheKey) <= $xarOutput_cacheSizeLimit
         ) {
         $fp = @fopen($cache_file,"w");
         if (!empty($fp)) {
@@ -330,8 +328,6 @@ function xarBlockSetCached($cacheKey, $name, $value)
             @fwrite($fp, $value);
             @fclose($fp);
         }
-        // jsb: don't clean output cache from block functions unless cache size limit is reached
-        //xarOutputCleanCached('Block');
     }
 }
 
@@ -379,7 +375,7 @@ function xarPageFlushCached($cacheKey)
  * @access public
  * @returns void
  */
-function xarOutputCleanCached($type)
+function xarOutputCleanCached($type, $cacheKey = '')
 {
     global $xarOutput_cacheCollection, ${'xar' . $type . '_cacheTime'};
 
@@ -394,7 +390,8 @@ function xarOutputCleanCached($type)
             $cache_file = $xarOutput_cacheCollection . '/' . $file;
             if (filemtime($cache_file) < time() - (${'xar' . $type . '_cacheTime'} + 60) &&
                 (strstr($file, '.php') !== false) &&
-                (($type == 'Block' && strstr($file, 'block') !== false) || ($type == 'Page' && strstr($file, 'block') == false))) {
+                (($type == 'Block' && strstr($file, $cacheKey) !== false) || 
+                ($type == 'Page' && strstr($file, 'block') == false))) {
                 @unlink($cache_file);
             }
         }
@@ -409,7 +406,7 @@ function xarOutputCleanCached($type)
  * @returns float
  * @author nospam@jusunlee.com | laurie@oneuponedown.com | jsb
  */
-function xarCacheDirSize($dir = FALSE, $type)
+function xarCacheDirSize($dir = FALSE, $type, $cacheKey = '')
 {
     global $xarOutput_cacheSizeLimit;
     $size = 0;
