@@ -91,7 +91,7 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 
 	<h4><xar:mlstring>Legacy Configuration</xar:mlstring></h4>
 	<p><label for="loadlegacy"><xar:mlstring>Load Legacy Support</xar:mlstring></label>:
-	<xar:if condition="xarConfigGetVar('Site.Core.LoadLegacy')">
+	<xar:if condition="xarConfigGetVar('System.Core.LoadLegacy')">
 		<input type="checkbox" name="loadlegacy" id="loadlegacy" value="1" checked="checked" />
 	<xar:else />
 		<input type="checkbox" name="loadlegacy" id="loadlegacy" value="1" />
