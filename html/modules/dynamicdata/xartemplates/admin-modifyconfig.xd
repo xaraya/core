@@ -2,10 +2,8 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Configure Property Types</xar:mlstring></h2><br />
 <div style="margin: auto;">
 
-<xar:mlstring>The following property types are predefined in Xaraya and may be used in your own dynamic properties</xar:mlstring>
-<br /><br />
+<p><xar:mlstring>The following property types are predefined in Xaraya and may be used in your own dynamic properties</xar:mlstring></p>
 // TODO: very much under construction, obviously :-)
-<br />
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
 <form method="post" action="&xar-modurl-dynamicdata-admin-updateconfig;">
     <div>
@@ -52,6 +50,5 @@
 </form>
 
 </table>
-<br />
 </div>
 </div>

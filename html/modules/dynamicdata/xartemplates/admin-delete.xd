@@ -2,14 +2,12 @@
 <div class="xar-mod-body"><h2><xar:ml><xar:mlstring>Delete Item #(1) in #(2)</xar:mlstring><xar:mlvar>#$object->itemid#</xar:mlvar><xar:mlvar>#$object->label#</xar:mlvar></xar:ml></h2><br />
 <div style="margin: auto;">
 
-<div align="center"><b><xar:mlstring>Confirm deleting this item ?</xar:mlstring></b></div><br />
+<div align="center"><p><b><xar:mlstring>Confirm deleting this item ?</xar:mlstring></b></p></div>
 
 <xar:data-display object="$object" />
 
 <xar:if condition="!empty($related)">
-<br />
-<b>#$related#</b>
-<br /><br />
+<p><b>#$related#</b></p>
 </xar:if>
 
 <div align="center">
