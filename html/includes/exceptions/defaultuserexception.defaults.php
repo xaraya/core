@@ -50,6 +50,10 @@
             'title' => xarML('Not logged in'),
             'short' => xarML('You are attempting an operation that is not allowed for the Anonymous user.'),
             'long' => xarML('An operation was encountered that requires the user to be logged in. If you are currently logged in please report this as a bug.')),
+        'NOT_FOUND' => array(
+            'title' => xarML('Item not found'),
+            'short' => xarML('An unexpected empty result occurred.'),
+            'long' => xarML('An operation that should have returned a result instead came up empty.')),
         'WRONG_VERSION' => array(
             'title' => xarML('Wrong version'),
             'short' => xarML('The application version supplied is wrong.'))
