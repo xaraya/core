@@ -68,7 +68,10 @@ function base_contentblock_display($blockinfo)
 
     // Check if the block is within its start/end period
     $now = time();
-    if (!empty($vars['start_date']) && ($vars['start_date'] > $now || $vars['end_date'] < $now)) {
+    if (
+        (!empty($vars['start_date']) && $vars['start_date'] > $now)
+        || (!empty($vars['end_date']) && $vars['end_date'] < $now)
+    ) {
         // Not yet started.
         return;
     }
