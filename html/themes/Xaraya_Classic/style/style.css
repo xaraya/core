@@ -65,7 +65,7 @@ a:hover 	{
 	color: #F12600;
 	text-decoration: underline;
 } /*
-leave pseudo-selectors exactly in this order even if you decide to re-declare them 
+leave pseudo-classes exactly in this order even if you decide to re-declare them 
 ------------------------------------------------------------------[important note] */
 
 /*
@@ -695,17 +695,18 @@ in this _special_ _fixer_ container.. [andyv]
 
 
 * html div#classicheader { 
-	width: expression((body.clientWidth <= 710) ? "710px" : "auto");
+/* 	width: expression((body.clientWidth <= 710) ? "710px" : "auto"); */
 }
 
 * html div#classicfooter { 
-	width: expression((body.clientWidth <= 710) ? "710px" : "auto");
+/* 	width: expression((body.clientWidth <= 710) ? "710px" : "auto"); */
 }
 
 * html table#classiccontentarea { 
-	width: expression((body.clientWidth <= 710) ? "710px" : "100%");
+/* 	width: expression((body.clientWidth <= 710) ? "710px" : "100%"); */
 } /*
 rules above are min-width equvivalent for IE-Win browsers only, 
 because they dont support this property along with many 
 other ordinary and extremely useful w3c standards, fancy that :-{
+The only problem is how to make these things validate - uncomment at your own risk..
 -------------------------------------------------------------------------[comment] */

@@ -100,10 +100,10 @@
             <div id="classicfooter">
                 <div class="validators">
                     <a href="http://validator.w3.org:8001/check?uri=referer" title="Validate XHTML 1.0 Strict">
-                        <img src="#xarTplGetThemeDir()#/images/xhtml.jpg" alt="#xarModGetVar('themes', 'SiteName')#" style="align:left; border:0px" />
+                        <img src="#xarTplGetThemeDir()#/images/xhtml.jpg" alt="#xarModGetVar('themes', 'SiteName')#" />
                     </a>
                     <a href="http://jigsaw.w3.org/css-validator/validator?uri=&xar-baseurl;index.php&amp;warning=1&amp;profile=css2&amp;usermedium=all" title="Validate CSS">
-                        <img src="#xarTplGetThemeDir()#/images/css.jpg" alt="#xarModGetVar('themes', 'SiteName')#" style="align:left; border:0px" />
+                        <img src="#xarTplGetThemeDir()#/images/css.jpg" alt="#xarModGetVar('themes', 'SiteName')#" />
                     </a>
                 </div>
                 <p id="footermsg">
