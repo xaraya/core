@@ -1,19 +1,18 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Xaraya Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>Modules' Hooks Configuration</xar:mlstring></h2>
-    <b><xar:mlstring>Extend the functionality of your modules via one of the following available hooks :</xar:mlstring></b>
-    <p />
+    <h2><xar:mlstring>Module Hooks Configuration</xar:mlstring></h2>
+    <p><xar:mlstring>Extend the functionality of your modules via one of the following available hooks :</xar:mlstring></p>
     <ul>
     <xar:loop name="$hookmodules">
-        <li><a href="#$modlink#">#$modname#</a> : #$modtitle# </li>
+        <li><a href="#$modlink#">#$modname#</a> : #$modtitle#</li>
         <xar:if condition="$modname eq $curhook">
-            <xar:mlstring>Use this functionality in the following modules</xar:mlstring> : 	[<a href="#$DetailsURL#">#$DetailsLabel#</a>]<br />
+            <xar:mlstring>Use this functionality in the following modules</xar:mlstring>: [ <a href="#$DetailsURL#">#$DetailsLabel#</a> ]<br />
             <xar:if condition="count($hooktypes) gt 0">
                 <br />
-                <xar:mlstring>This module offers the following hooks</xar:mlstring> :<br />
+                <xar:mlstring>This module offers the following hooks</xar:mlstring>:<br />
                 <ul>
                 <xar:loop name="$hooktypes">
-                    <li>#$hooktype# </li>
+                    <li>#$hooktype#</li>
                 </xar:loop>
                 </ul>
             </xar:if>
@@ -24,10 +23,10 @@
                     <xar:if condition="!empty($header)">
                         <br /><b>#$header#</b><br />
                     </xar:if>
-                    <input type="checkbox" name="hooked_#$name#" id="hooked_#$name#" value="1"#$checked# /><label for="hooked_#$name#">#$name# : #$description#</label><br />
+                    <input type="checkbox" name="hooked_#$name#" id="hooked_#$name#" value="1" #$checked# style="vertical-align: middle;" /> <label for="hooked_#$name#">#$name# : #$description#</label><br />
                 </xar:loop>
                 <br />
-                <input type="submit" value="Save Changes" />
+                <input type="submit" value="#$savechangeslabel#" />
             </form>
         </xar:if>
     </xar:loop>
