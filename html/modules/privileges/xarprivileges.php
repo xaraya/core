@@ -268,6 +268,9 @@ class xarMasks
     function xarSecurityCheck($mask,$showexception=1,$component='', $instance='',$module='',$rolename='')
     {
 
+    // FIXME: Security checks in functions used by decode_shorturl cause infinite loops,
+    //        because they request the current module too at the moment - unnecessary ?
+
 // get the masks pertaining to the current module and the component requested
         if ($module == '') list($module) = xarRequestGetInfo();
         if ($module == 'blocks') $module = xarModGetVar('blocks','currentmodule');

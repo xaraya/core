@@ -373,8 +373,14 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
 function xarRequestGetInfo()
 {
     static $requestInfo = NULL;
+    static $loopHole = NULL;
     if (is_array($requestInfo)) {
         return $requestInfo;
+    } elseif (is_array($loopHole)) {
+    // FIXME: Security checks in functions used by decode_shorturl cause infinite loops,
+    //        because they request the current module too at the moment - unnecessary ?
+        xarLogMessage('Avoiding loop in xarRequestGetInfo()');
+        return $loopHole;
     }
 
     // Get variables
@@ -398,6 +404,7 @@ function xarRequestGetInfo()
             $modName = xarRequest__resolveModuleAlias($modName);
             // Call the appropriate decode_shorturl function
             if (xarModGetVar($modName, 'SupportShortURLs') && xarModAPILoad($modName, $modType)) {
+                $loopHole = array($modName,$modType,$funcName);
                 $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params);
                 if (is_array($res)) {
                     list($funcName, $args) = $res;
@@ -415,6 +422,7 @@ function xarRequestGetInfo()
                         }
                     }
                 }
+                $loopHole = NULL;
             }
             if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 // If exceptionId is MODULE_FUNCTION_NOT_EXIST there's no problem,
