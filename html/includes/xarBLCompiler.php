@@ -2976,13 +2976,19 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
             $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'file\' attribute in <xar:template> tag.', $this);
             return;
         }
-        
+
+        // Allow php expressions for the attibute
+        $file = xarTpl__ExpressionTransformer::transformPHPExpression($file);
+        if (!isset($file)) {
+            return;
+        }
+
         switch($type) {
         case 'theme':
-            return "xarTpl_includeThemeTemplate('$file', $subdata)";
+            return "xarTpl_includeThemeTemplate(\"$file\", $subdata)";
             break;
         case 'module':
-            return "xarTpl_includeModuleTemplate(\$_bl_module_name, '$file', $subdata)";
+            return "xarTpl_includeModuleTemplate(\$_bl_module_name, \"$file\", $subdata)";
             break;
         default:
             $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,"Invalid value '$type' for 'type' attribute in <xar:template> tag.", $this);
