@@ -69,7 +69,6 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     <input type="hidden" name="step" value="1">
     <input type="hidden" name="module" value="roles">
     </form>
-    <p><strong>Warning : for PHP 4.2+, this script needs to be run with register_globals OFF (for now)...</strong></p>
     Recommended usage :<br /><ol>
     <li>install Xaraya with the 'Community Site' option</li>
     <li>initialize and activate the following modules :<ul>
