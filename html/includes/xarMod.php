@@ -709,7 +709,11 @@ function xarModGetInfo($modRegId)
     //xarVarSetCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
 
     $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
-    if (!isset($modFileInfo)) return; // throw back
+    if (!isset($modFileInfo)) {
+        // Set an exception, id was passed in, so module *should* exist
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', 'xarversion.php or pnversion.php');
+        return; // throw back
+    }
 //    $modInfo = array_merge($modInfo, $modFileInfo);
     $modInfo = array_merge($modFileInfo, $modInfo);
 
@@ -874,7 +878,9 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
 
                 $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
                 if (!isset($modFileInfo)) {
+                    // Set an exception, the info from the DB doesn't match the filesystem
                     $result->Close();
+                     xarExceptionSet(XAR_SYSTEM_EXCEPTION, ' MODULE_FILE_NOT_EXIST','xarversion.php or pnversion.php');
                     return; // throw back
                 }
                 //     $modInfo = array_merge($modInfo, $modFileInfo);
@@ -1585,9 +1591,10 @@ function xarMod_getFileInfo($modOsDir)
     }
 
     if (!file_exists($fileName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $fileName);
-        // Fix for bug 295
-        //return;
+        // Don't raise an exception, it is too harsh, but log it tho (bug #295)
+        xarLogMessage("xarMod_getFileInfo: Could not find xarversion.php or pnversion.php, skipping $modOsDir");
+        //xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $fileName);
+        return;
     }
 
     include($fileName);
