@@ -5,18 +5,18 @@
 
     <!-- the variables used in this menu come from example_user_menu() -->
 
-    <tr><th align="center">&pnt-var-menutitle;</th></tr>
+    <tr><th align="center">&xar-var-menutitle;</th></tr>
     <tr><td>
         <table border="0" width="100%"><tr align="center" valign="middle">
 
         <!-- since this is the menu item we're on, we only show the label -->
 
-        <td> &pnt-var-menulabel_view; </td>
+        <td> &xar-var-menulabel_view; </td>
 
         <!-- more menu items come here... -->
 
         <!-- Note : you can also specify simple links directly with blocklayout
-             template tags : e.g. &pnt-modurl-example-user-view; -->
+             template tags : e.g. &xar-modurl-example-user-view; -->
         </tr></table>
     </td></tr>
 </table>
@@ -24,45 +24,45 @@
 
 <!-- the specific template for the current function comes here -->
 
-<pnt:blockgroup name="topnav" id="topnav" />
+<xar:blockgroup name="topnav" id="topnav" />
 
 <!-- some status given by the function using this template -->
 
-<pnt:if condition="!empty($status)">
-    <strong>&pnt-var-status;</strong>
-</pnt:if>
+<xar:if condition="!empty($status)">
+    <strong>&xar-var-status;</strong>
+</xar:if>
 
 <table border="1" cellpadding="5" cellspacing="0">
     <tr>
-        <th> &pnt-var-someheader; </th>
+        <th> &xar-var-someheader; </th>
     </tr>
 
     <!-- Loop over all the items given by the function. Since $data['items']
          is preset to an empty array, we don't need to use an if/else
-         structure like we do in user-display.pnd -->
+         structure like we do in user-display.xd -->
     <!-- Note : when you specify a prefix="item", the individual variable
          names ("name" and "link" in this case) are renamed to "item_..."
          ("item_name" and "item_link" here). This makes is easier for
          template designer, e.g. when you have several loops with different
          variables in the same template -->
 
-    <pnt:loop name="items" prefix="item">
+    <xar:loop name="items" prefix="item">
     <tr align="center"><td>
 
         <!-- we only show a link if the item link variable is not empty -->
 
-        <pnt:if condition="empty($item_link)">
-            &pnt-var-item_name;
-            <pnt:else />
-               <a href="&pnt-var-item_link;">&pnt-var-item_name;</a>
-        </pnt:if>
+        <xar:if condition="empty($item_link)">
+            &xar-var-item_name;
+            <xar:else />
+               <a href="&xar-var-item_link;">&xar-var-item_name;</a>
+        </xar:if>
 
     </td></tr>
-    </pnt:loop>
+    </xar:loop>
 
 </table>
 <br />
 
 <!-- add the pager here -->
-&pnt-var-pager;
+&xar-var-pager;
 

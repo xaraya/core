@@ -16,41 +16,41 @@
  */
 function dynamicdata_init()
 {
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $dynamic_data = $pntable['dynamic_data'];
-    $dynamic_properties = $pntable['dynamic_properties'];
+    $dynamic_data = $xartable['dynamic_data'];
+    $dynamic_properties = $xartable['dynamic_properties'];
 
-    include ('includes/pnTableDDL.php');
+    include ('includes/xarTableDDL.php');
 
-    $fields = array('pn_dd_id'       => array('type'        => 'integer',
+    $fields = array('xar_dd_id'       => array('type'        => 'integer',
                                               'null'        => false,
                                               'default'     => '0',
                                               'increment'   => true,
                                               'primary_key' => true),
-                    'pn_dd_propid'   => array('type'        => 'integer',
+                    'xar_dd_propid'   => array('type'        => 'integer',
                                               'null'        => false,
                                               'default'     => '0'),
 /* only needed if we go for freely extensible fields per item
-                    'pn_dd_moduleid' => array('type'        => 'integer',
+                    'xar_dd_moduleid' => array('type'        => 'integer',
                                               'null'        => false,
                                               'default'     => '0'),
-                    'pn_dd_itemtype' => array('type'        => 'integer',
+                    'xar_dd_itemtype' => array('type'        => 'integer',
                                               'null'        => false,
                                               'default'     => '0'),
 */
-                    'pn_dd_itemid'   => array('type'        => 'integer',
+                    'xar_dd_itemid'   => array('type'        => 'integer',
                                               'null'        => false,
                                               'default'     => '0'),
-                    'pn_dd_value'    => array('type'        => 'blob', // or text ?
+                    'xar_dd_value'    => array('type'        => 'blob', // or text ?
                                               'size'        => 'medium',
                                               'null'        => 'false')
               );
 
     // Create the Table - the function will return the SQL is successful or
     // raise an exception if it fails, in this case $sql is empty
-    $sql = pnDBCreateTable($dynamic_data,$fields);
+    $sql = xarDBCreateTable($dynamic_data,$fields);
     if (empty($sql)) return; // throw back
 
     // Pass the Table Create DDL to adodb to create the table
@@ -59,15 +59,15 @@ function dynamicdata_init()
     // Check for an error with the database code, and if so raise the
     // appropriate exception
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $sql);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $sql);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
 
-    $sql = pnDBCreateIndex($dynamic_data,
-                           array('name'   => 'i_pn_dd_propid',
-                                 'fields' => array('pn_dd_propid')));
+    $sql = xarDBCreateIndex($dynamic_data,
+                           array('name'   => 'i_xar_dd_propid',
+                                 'fields' => array('xar_dd_propid')));
     if (empty($sql)) return; // throw back
 
     // Pass the Table Create DDL to adodb to create the table
@@ -76,15 +76,15 @@ function dynamicdata_init()
     // Check for an error with the database code, and if so raise the
     // appropriate exception
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $sql);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $sql);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
 
-    $sql = pnDBCreateIndex($dynamic_data,
-                           array('name'   => 'i_pn_dd_itemid',
-                                 'fields' => array('pn_dd_itemid')));
+    $sql = xarDBCreateIndex($dynamic_data,
+                           array('name'   => 'i_xar_dd_itemid',
+                                 'fields' => array('xar_dd_itemid')));
     if (empty($sql)) return; // throw back
 
     // Pass the Table Create DDL to adodb to create the table
@@ -93,42 +93,42 @@ function dynamicdata_init()
     // Check for an error with the database code, and if so raise the
     // appropriate exception
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $sql);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $sql);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
 
 
-    $fields = array('pn_prop_id'         => array('type'        => 'integer',
+    $fields = array('xar_prop_id'         => array('type'        => 'integer',
                                                   'null'        => false,
                                                   'default'     => '0',
                                                   'increment'   => true,
                                                   'primary_key' => true),
-                    'pn_prop_moduleid'   => array('type'        => 'integer',
+                    'xar_prop_moduleid'   => array('type'        => 'integer',
                                                   'null'        => false,
                                                   'default'     => '0'),
-                    'pn_prop_itemtype'   => array('type'        => 'integer',
+                    'xar_prop_itemtype'   => array('type'        => 'integer',
                                                   'null'        => false,
                                                   'default'     => '0'),
-                    'pn_prop_label'      => array('type'        => 'varchar',
+                    'xar_prop_label'      => array('type'        => 'varchar',
                                                   'size'        => 254,
                                                   'null'        => false,
                                                   'default'     => ''),
-                    'pn_prop_dtype'      => array('type'        => 'integer',
+                    'xar_prop_dtype'      => array('type'        => 'integer',
                                                   'null'        => false,
                                                   'default'     => NULL),
-                    'pn_prop_default'    => array('type'        => 'varchar',
+                    'xar_prop_default'    => array('type'        => 'varchar',
                                                   'size'        => 254,
                                                   'default'     => NULL),
-                    'pn_prop_validation' => array('type'        => 'varchar',
+                    'xar_prop_validation' => array('type'        => 'varchar',
                                                   'size'        => 254,
                                                   'default'     => NULL)
               );
 
     // Create the Table - the function will return the SQL is successful or
     // raise an exception if it fails, in this case $sql is empty
-    $sql = pnDBCreateTable($dynamic_properties,$fields);
+    $sql = xarDBCreateTable($dynamic_properties,$fields);
     if (empty($sql)) return; // throw back
 
     // Pass the Table Create DDL to adodb to create the table
@@ -137,18 +137,18 @@ function dynamicdata_init()
     // Check for an error with the database code, and if so raise the
     // appropriate exception
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $sql);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $sql);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
 
 // TODO: evaluate efficiency of combined index vs. individual ones
-    $sql = pnDBCreateIndex($dynamic_properties,
-                           array('name'   => 'i_pn_prop_combo',
-                                 'fields' => array('pn_prop_moduleid',
-                                                   'pn_prop_itemtype',
-                                                   'pn_prop_label'),
+    $sql = xarDBCreateIndex($dynamic_properties,
+                           array('name'   => 'i_xar_prop_combo',
+                                 'fields' => array('xar_prop_moduleid',
+                                                   'xar_prop_itemtype',
+                                                   'xar_prop_label'),
                                  'unique' => 'true'));
     if (empty($sql)) return; // throw back
 
@@ -158,57 +158,57 @@ function dynamicdata_init()
     // Check for an error with the database code, and if so raise the
     // appropriate exception
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $sql);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $sql);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
 
-    pnModSetVar('dynamicdata', 'bold', 0);
-    pnModSetVar('dynamicdata', 'itemsperpage', 10);
+    xarModSetVar('dynamicdata', 'bold', 0);
+    xarModSetVar('dynamicdata', 'itemsperpage', 10);
 
-    pnModSetVar('dynamicdata', 'SupportShortURLs', 0);
+    xarModSetVar('dynamicdata', 'SupportShortURLs', 0);
 
-    pnBlockTypeRegister('dynamicdata', 'form');
+    xarBlockTypeRegister('dynamicdata', 'form');
 
     // when a new module item is being specified
-    if (!pnModRegisterHook('item', 'new', 'GUI',
+    if (!xarModRegisterHook('item', 'new', 'GUI',
                            'dynamicdata', 'admin', 'newhook')) {
         return false;
     }
     // when a module item is created (uses 'dd_*')
-    if (!pnModRegisterHook('item', 'create', 'API',
+    if (!xarModRegisterHook('item', 'create', 'API',
                            'dynamicdata', 'admin', 'createhook')) {
         return false;
     }
     // when a module item is being modified (uses 'dd_*')
-    if (!pnModRegisterHook('item', 'modify', 'GUI',
+    if (!xarModRegisterHook('item', 'modify', 'GUI',
                            'dynamicdata', 'admin', 'modifyhook')) {
         return false;
     }
     // when a module item is updated (uses 'dd_*')
-    if (!pnModRegisterHook('item', 'update', 'API',
+    if (!xarModRegisterHook('item', 'update', 'API',
                            'dynamicdata', 'admin', 'updatehook')) {
         return false;
     }
     // when a module item is deleted
-    if (!pnModRegisterHook('item', 'delete', 'API',
+    if (!xarModRegisterHook('item', 'delete', 'API',
                            'dynamicdata', 'admin', 'deletehook')) {
         return false;
     }
     // when a module configuration is being modified (uses 'dd_*')
-    if (!pnModRegisterHook('module', 'modifyconfig', 'GUI',
+    if (!xarModRegisterHook('module', 'modifyconfig', 'GUI',
                            'dynamicdata', 'admin', 'modifyconfighook')) {
         return false;
     }
     // when a module configuration is updated (uses 'dd_*')
-    if (!pnModRegisterHook('module', 'updateconfig', 'API',
+    if (!xarModRegisterHook('module', 'updateconfig', 'API',
                            'dynamicdata', 'admin', 'updateconfighook')) {
         return false;
     }
     // when a whole module is removed, e.g. via the modules admin screen
     // (set object ID to the module name !)
-    if (!pnModRegisterHook('module', 'remove', 'API',
+    if (!xarModRegisterHook('module', 'remove', 'API',
                            'dynamicdata', 'admin', 'removehook')) {
         return false;
     }
@@ -220,7 +220,7 @@ function dynamicdata_init()
 //       adapting the get() function in the user API of the module, perhaps...
 
     // when a module item is being displayed
-    if (!pnModRegisterHook('item', 'display', 'GUI',
+    if (!xarModRegisterHook('item', 'display', 'GUI',
                            'dynamicdata', 'user', 'displayhook')) {
         return false;
     }
@@ -256,13 +256,13 @@ function dynamicdata_upgrade($oldversion)
  */
 function dynamicdata_delete()
 {
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    include ('includes/pnTableDDL.php');
+    include ('includes/xarTableDDL.php');
 
     // Generate the SQL to drop the table using the API
-    $sql = pnDBDropTable($pntable['dynamic_data']);
+    $sql = xarDBDropTable($xartable['dynamic_data']);
     if (empty($sql)) return; // throw back
 
     // Drop the table
@@ -270,14 +270,14 @@ function dynamicdata_delete()
     // Check for an error with the database code, and if so raise the
     // appropriate exception
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $sql);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $sql);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
 
     // Generate the SQL to drop the table using the API
-    $sql = pnDBDropTable($pntable['dynamic_properties']);
+    $sql = xarDBDropTable($xartable['dynamic_properties']);
     if (empty($sql)) return; // throw back
 
     // Drop the table
@@ -285,52 +285,52 @@ function dynamicdata_delete()
     // Check for an error with the database code, and if so raise the
     // appropriate exception
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $sql);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $sql);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
 
     // Delete any module variables
-    pnModDelVar('dynamicdata', 'itemsperpage');
-    pnModDelVar('dynamicdata', 'bold');
+    xarModDelVar('dynamicdata', 'itemsperpage');
+    xarModDelVar('dynamicdata', 'bold');
 
-    pnModDelVar('dynamicdata', 'SupportShortURLs');
+    xarModDelVar('dynamicdata', 'SupportShortURLs');
 
-    pnBlockTypeUnregister('dynamicdata', 'form');
+    xarBlockTypeUnregister('dynamicdata', 'form');
 
     // Remove module hooks
-    if (!pnModUnregisterHook('item', 'new', 'GUI',
+    if (!xarModUnregisterHook('item', 'new', 'GUI',
                              'dynamicdata', 'admin', 'newhook')) {
-        pnSessionSetVar('errormsg', pnML('Could not unregister hook'));
+        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
     }
-    if (!pnModUnregisterHook('item', 'create', 'API',
+    if (!xarModUnregisterHook('item', 'create', 'API',
                              'dynamicdata', 'admin', 'createhook')) {
-        pnSessionSetVar('errormsg', pnML('Could not unregister hook'));
+        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
     }
-    if (!pnModUnregisterHook('item', 'modify', 'GUI',
+    if (!xarModUnregisterHook('item', 'modify', 'GUI',
                              'dynamicdata', 'admin', 'modifyhook')) {
-        pnSessionSetVar('errormsg', pnML('Could not unregister hook'));
+        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
     }
-    if (!pnModUnregisterHook('item', 'update', 'API',
+    if (!xarModUnregisterHook('item', 'update', 'API',
                              'dynamicdata', 'admin', 'updatehook')) {
-        pnSessionSetVar('errormsg', pnML('Could not unregister hook'));
+        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
     }
-    if (!pnModUnregisterHook('item', 'delete', 'API',
+    if (!xarModUnregisterHook('item', 'delete', 'API',
                              'dynamicdata', 'admin', 'deletehook')) {
-        pnSessionSetVar('errormsg', pnML('Could not unregister hook'));
+        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
     }
-    if (!pnModUnregisterHook('module', 'modifyconfig', 'GUI',
+    if (!xarModUnregisterHook('module', 'modifyconfig', 'GUI',
                              'dynamicdata', 'admin', 'modifyconfighook')) {
-        pnSessionSetVar('errormsg', pnML('Could not unregister hook'));
+        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
     }
-    if (!pnModUnregisterHook('module', 'updateconfig', 'API',
+    if (!xarModUnregisterHook('module', 'updateconfig', 'API',
                              'dynamicdata', 'admin', 'updateconfighook')) {
-        pnSessionSetVar('errormsg', pnML('Could not unregister hook'));
+        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
     }
-    if (!pnModUnregisterHook('module', 'remove', 'API',
+    if (!xarModUnregisterHook('module', 'remove', 'API',
                              'dynamicdata', 'admin', 'removehook')) {
-        pnSessionSetVar('errormsg', pnML('Could not unregister hook'));
+        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
     }
 
 // TODO: replace this with block/cached variables/special template tag/... ?
@@ -339,9 +339,9 @@ function dynamicdata_delete()
 //       module templates as if they were 'normal' fields -> this means
 //       adapting the get() function in the user API of the module, perhaps...
 
-    if (!pnModUnregisterHook('item', 'display', 'GUI',
+    if (!xarModUnregisterHook('item', 'display', 'GUI',
                              'dynamicdata', 'user', 'displayhook')) {
-        pnSessionSetVar('errormsg', pnML('Could not unregister hook'));
+        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
     }
 
     // Deletion successful

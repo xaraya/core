@@ -15,7 +15,7 @@
 function dynamicdata_formblock_init()
 {
     // Security
-    pnSecAddSchema('DynamicData:Formblock:', 'Block title::');
+    xarSecAddSchema('DynamicData:Formblock:', 'Block title::');
 }
 
 /**
@@ -39,7 +39,7 @@ function dynamicdata_formblock_info()
 function dynamicdata_formblock_display($blockinfo)
 {
     // Security check
-    if (!pnSecAuthAction(0,
+    if (!xarSecAuthAction(0,
                          'DynamicData:Formblock:',
                          "$blockinfo[title]::",
                          ACCESS_READ)) {
@@ -55,16 +55,16 @@ function dynamicdata_formblock_display($blockinfo)
     }
 
     // Database information
-    pnModDBInfoLoad('dynamicdata');
-    list($dbconn) = pnDBGetConn();
-    $pntable =pnDBGetTables();
-    $dynamicdata = $pntable['dynamic_data'];
+    xarModDBInfoLoad('dynamicdata');
+    list($dbconn) = xarDBGetConn();
+    $xartable =xarDBGetTables();
+    $dynamicdata = $xartable['dynamic_data'];
 
     // Query
-    $sql = "SELECT pn_exid,
-                   pn_name
+    $sql = "SELECT xar_exid,
+                   xar_name
             FROM $dynamicdata
-            ORDER by pn_name";
+            ORDER by xar_name";
     $result = $dbconn->SelectLimit($sql, $vars['numitems']);
 
     if ($dbconn->ErrorNo() != 0) {
@@ -75,21 +75,21 @@ function dynamicdata_formblock_display($blockinfo)
         return;
     }
     // Create output object
-    $output = new pnHTML();
+    $output = new xarHTML();
 
     // Display each item, permissions permitting
     for (; !$result->EOF; $result->MoveNext()) {
         list($exid, $name) = $result->fields;
 
-        if (pnSecAuthAction(0,
+        if (xarSecAuthAction(0,
                             'DynamicData::',
                             "$name::$exid",
                             ACCESS_OVERVIEW)) {
-            if (pnSecAuthAction(0,
+            if (xarSecAuthAction(0,
                                 'DynamicData::',
                                 "$name::$exid",
                                 ACCESS_READ)) {
-                $output->URL(pnModURL('dynamicdata',
+                $output->URL(xarModURL('dynamicdata',
                                       'user',
                                       'display',
                                       array('exid' => $exid)),
@@ -119,7 +119,7 @@ function dynamicdata_formblock_display($blockinfo)
 function dynamicdata_formblock_modify($blockinfo)
 {
     // Create output object
-    $output = new pnHTML();
+    $output = new xarHTML();
 
     // Get current content
     $vars = @unserialize($blockinfo['content']);
@@ -134,7 +134,7 @@ function dynamicdata_formblock_modify($blockinfo)
     $output->SetOutputMode(_PNH_RETURNOUTPUT);
     $row[] = $output->Text(_NUMITEMS);
     $row[] = $output->FormText('numitems',
-                               pnVarPrepForDisplay($vars['numitems']),
+                               xarVarPrepForDisplay($vars['numitems']),
                                5,
                                5);
     $output->SetOutputMode(_PNH_KEEPOUTPUT);
@@ -153,7 +153,7 @@ function dynamicdata_formblock_modify($blockinfo)
  */
 function dynamicdata_formblock_update($blockinfo)
 {
-    $vars['numitems'] = pnVarCleanFromInput('numitems');
+    $vars['numitems'] = xarVarCleanFromInput('numitems');
 
     $blockinfo['content'] = serialize($vars);
 
@@ -165,7 +165,7 @@ function dynamicdata_formblock_update($blockinfo)
  */
 function dynamicdata_formblock_help()
 {
-    $output = new pnHTML();
+    $output = new xarHTML();
 
     $output->SetInputMode(_PNH_VERBATIMINPUT);
     $output->Text('Any related block info should be placed in your modname_blocknameblock_help() function.');

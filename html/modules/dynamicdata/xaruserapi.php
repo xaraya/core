@@ -27,7 +27,7 @@ function dynamicdata_userapi_getall($args)
     extract($args);
 
     if (empty($modid) && !empty($module)) {
-        $modid = pnModGetIDFromName($module);
+        $modid = xarModGetIDFromName($module);
     }
     if (empty($itemtype)) {
         $itemtype = 0;
@@ -44,22 +44,22 @@ function dynamicdata_userapi_getall($args)
         $invalid[] = 'item id';
     }
     if (count($invalid) > 0) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     join(', ',$invalid), 'user', 'getall', 'DynamicData');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
 
-    if (!pnSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:$itemid", ACCESS_OVERVIEW)) {
-        $msg = pnML('Not authorized to access #(1) fields',
+    if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:$itemid", ACCESS_OVERVIEW)) {
+        $msg = xarML('Not authorized to access #(1) fields',
                     'DynamicData');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                        new SystemException($msg));
         return;
     }
 
-    $fields = pnModAPIFunc('dynamicdata','user','getprop',
+    $fields = xarModAPIFunc('dynamicdata','user','getprop',
                            array('modid' => $modid,
                                  'itemtype' => $itemtype));
     if (empty($fields) || count($fields) == 0) {
@@ -68,22 +68,22 @@ function dynamicdata_userapi_getall($args)
 
     $ids = array_keys($fields);
 
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $dynamicdata = $pntable['dynamic_data'];
-    $dynamicprop = $pntable['dynamic_properties'];
+    $dynamicdata = $xartable['dynamic_data'];
+    $dynamicprop = $xartable['dynamic_properties'];
 
-    $sql = "SELECT pn_dd_propid,
-                   pn_dd_value
+    $sql = "SELECT xar_dd_propid,
+                   xar_dd_value
              FROM $dynamicdata
-            WHERE pn_dd_propid IN (" . join(', ',$ids) . ")
-              AND pn_dd_itemid = " . pnVarPrepForStore($itemid);
+            WHERE xar_dd_propid IN (" . join(', ',$ids) . ")
+              AND xar_dd_itemid = " . xarVarPrepForStore($itemid);
     $result = $dbconn->Execute($sql);
 
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $sql);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $sql);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -99,7 +99,7 @@ function dynamicdata_userapi_getall($args)
     $result->Close();
 
     foreach ($fields as $id => $field) {
-        if (pnSecAuthAction(0, 'DynamicData::Field', $field['label'].':'.$field['type'].':'.$id, ACCESS_READ)) {
+        if (xarSecAuthAction(0, 'DynamicData::Field', $field['label'].':'.$field['type'].':'.$id, ACCESS_READ)) {
             if (!isset($field['value'])) {
                 $fields[$id]['value'] = $fields[$id]['default'];
             }
@@ -130,7 +130,7 @@ function dynamicdata_userapi_get($args)
     extract($args);
 
     if (empty($modid) && !empty($module)) {
-        $modid = pnModGetIDFromName($module);
+        $modid = xarModGetIDFromName($module);
     }
     if (empty($itemtype)) {
         $itemtype = 0;
@@ -152,42 +152,42 @@ function dynamicdata_userapi_get($args)
         $invalid[] = 'field name or property id';
     }
     if (count($invalid) > 0) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     join(', ',$invalid), 'user', 'get', 'DynamicData');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
 
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $dynamicdata = $pntable['dynamic_data'];
-    $dynamicprop = $pntable['dynamic_properties'];
+    $dynamicdata = $xartable['dynamic_data'];
+    $dynamicprop = $xartable['dynamic_properties'];
 
-    $sql = "SELECT pn_prop_label,
-                   pn_prop_dtype,
-                   pn_prop_id,
-                   pn_prop_default,
-                   pn_dd_value
+    $sql = "SELECT xar_prop_label,
+                   xar_prop_dtype,
+                   xar_prop_id,
+                   xar_prop_default,
+                   xar_dd_value
             FROM $dynamicdata, $dynamicprop
-            WHERE pn_prop_id = pn_dd_propid
-              AND pn_prop_moduleid = " . pnVarPrepForStore($modid);
+            WHERE xar_prop_id = xar_dd_propid
+              AND xar_prop_moduleid = " . xarVarPrepForStore($modid);
     if (!empty($itemtype)) {
-        $sql .= " AND pn_prop_itemtype = " . pnVarPrepForStore($itemtype);
+        $sql .= " AND xar_prop_itemtype = " . xarVarPrepForStore($itemtype);
     }
-    $sql .= " AND pn_dd_itemid = " . pnVarPrepForStore($itemid);
+    $sql .= " AND xar_dd_itemid = " . xarVarPrepForStore($itemid);
     if (!empty($prop_id)) {
-        $sql .= " AND pn_prop_id = " . pnVarPrepForStore($prop_id);
+        $sql .= " AND xar_prop_id = " . xarVarPrepForStore($prop_id);
     } else {
-        $sql .= " AND pn_prop_label = '" . pnVarPrepForStore($name) . "'";
+        $sql .= " AND xar_prop_label = '" . xarVarPrepForStore($name) . "'";
     }
 
     $result = $dbconn->Execute($sql);
 
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $sql);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $sql);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -199,10 +199,10 @@ function dynamicdata_userapi_get($args)
     list($label, $type, $id, $default, $value) = $result->fields;
     $result->Close();
 
-    if (!pnSecAuthAction(0, 'DynamicData::Field', "$label:$type:$id", ACCESS_READ)) {
-        $msg = pnML('Not authorized to access #(1) fields',
+    if (!xarSecAuthAction(0, 'DynamicData::Field', "$label:$type:$id", ACCESS_READ)) {
+        $msg = xarML('Not authorized to access #(1) fields',
                     'DynamicData');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                        new SystemException($msg));
         return;
     }
@@ -231,7 +231,7 @@ function dynamicdata_userapi_getprop($args)
     extract($args);
 
     if (empty($modid) && !empty($module)) {
-        $modid = pnModGetIDFromName($module);
+        $modid = xarModGetIDFromName($module);
     }
     if (empty($itemtype)) {
         $itemtype = 0;
@@ -245,9 +245,9 @@ function dynamicdata_userapi_getprop($args)
         $invalid[] = 'item type';
     }
     if (count($invalid) > 0) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     join(', ',$invalid), 'user', 'getprop', 'DynamicData');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
@@ -256,27 +256,27 @@ function dynamicdata_userapi_getprop($args)
         return $propertybag["$modid:$itemtype"];
     }
 
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $dynamicprop = $pntable['dynamic_properties'];
+    $dynamicprop = $xartable['dynamic_properties'];
 
-    $sql = "SELECT pn_prop_label,
-                   pn_prop_dtype,
-                   pn_prop_id,
-                   pn_prop_default,
-                   pn_prop_validation
+    $sql = "SELECT xar_prop_label,
+                   xar_prop_dtype,
+                   xar_prop_id,
+                   xar_prop_default,
+                   xar_prop_validation
             FROM $dynamicprop
-            WHERE pn_prop_moduleid = " . pnVarPrepForStore($modid);
+            WHERE xar_prop_moduleid = " . xarVarPrepForStore($modid);
     if (!empty($itemtype)) {
-        $sql .= " AND pn_prop_itemtype = " . pnVarPrepForStore($itemtype);
+        $sql .= " AND xar_prop_itemtype = " . xarVarPrepForStore($itemtype);
     }
 
     $result = $dbconn->Execute($sql);
 
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $sql);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $sql);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -285,7 +285,7 @@ function dynamicdata_userapi_getprop($args)
 
     while (!$result->EOF) {
         list($label, $type, $id, $default, $validation) = $result->fields;
-        if (pnSecAuthAction(0, 'DynamicData::Field', "$label:$type:$id", ACCESS_READ)) {
+        if (xarSecAuthAction(0, 'DynamicData::Field', "$label:$type:$id", ACCESS_READ)) {
             $fields[$id] = array('label' => $label,
                                  'type' => $type,
                                  'id' => $id,
@@ -315,17 +315,17 @@ function dynamicdata_userapi_getprop($args)
  */
 function dynamicdata_userapi_countitems()
 {
-    // Get database setup - note that both pnDBGetConn() and pnDBGetTables()
-    // return arrays but we handle them differently.  For pnDBGetConn() we
+    // Get database setup - note that both xarDBGetConn() and xarDBGetTables()
+    // return arrays but we handle them differently.  For xarDBGetConn() we
     // currently just want the first item, which is the official database
-    // handle.  For pnDBGetTables() we want to keep the entire tables array
+    // handle.  For xarDBGetTables() we want to keep the entire tables array
     // together for easy reference later on
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
     // It's good practice to name the table and column definitions you are
     // getting - $table and $column don't cut it in more complex modules
-    $exampletable = $pntable['example'];
+    $exampletable = $xartable['example'];
 
     // Get item - the formatting here is not mandatory, but it does make the
     // SQL statement relatively easy to read.  Also, separating out the sql
@@ -341,20 +341,20 @@ function dynamicdata_userapi_countitems()
         // Hint : for debugging SQL queries, you can use $dbconn->ErrorMsg()
         // to retrieve the actual database error message, and use e.g. the
         // following message :
-        // $msg = pnML('Database error #(1) in query #(2) for #(3) function ' .
+        // $msg = xarML('Database error #(1) in query #(2) for #(3) function ' .
         //             '#(4)() in module #(5)',
         //          $dbconn->ErrorMsg(), $sql, 'user', 'countitems', 'DynamicData');
         // Don't use that for release versions, though...
         /*
-        $msg = pnML('Database error for #(1) function #(2)() in module #(3)',
+        $msg = xarML('Database error for #(1) function #(2)() in module #(3)',
                     'user', 'countitems', 'DynamicData');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
         */
         // This is the API compliant way to raise a db error exception
-        $msg = pnMLByKey('DATABASE_ERROR', $sql);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $sql);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }

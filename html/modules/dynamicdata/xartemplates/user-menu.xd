@@ -5,18 +5,18 @@
 
     <!-- the variables used in this menu come from example_user_menu() -->
 
-    <tr><th align="center">&pnt-var-menutitle;</th></tr>
+    <tr><th align="center">&xar-var-menutitle;</th></tr>
     <tr><td>
         <table border="0" width="100%"><tr align="center" valign="middle">
 
         <!-- a link to a particular menu item -->
 
-        <td><a href="&pnt-var-menulink_view;">&pnt-var-menulabel_view;</a></td>
+        <td><a href="&xar-var-menulink_view;">&xar-var-menulabel_view;</a></td>
 
         <!-- more menu items come here... -->
 
         <!-- Note : you can also specify simple links directly with blocklayout
-             template tags : e.g. &pnt-modurl-example-user-view; -->
+             template tags : e.g. &xar-modurl-example-user-view; -->
         </tr></table>
     </td></tr>
 </table>

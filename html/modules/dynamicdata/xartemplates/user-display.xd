@@ -5,18 +5,18 @@
 
     <!-- the variables used in this menu come from example_user_menu() -->
 
-    <tr><th align="center">&pnt-var-menutitle;</th></tr>
+    <tr><th align="center">&xar-var-menutitle;</th></tr>
     <tr><td>
         <table border="0" width="100%"><tr align="center" valign="middle">
 
         <!-- a link to a particular menu item -->
 
-        <td><a href="&pnt-var-menulink_view;">&pnt-var-menulabel_view;</a></td>
+        <td><a href="&xar-var-menulink_view;">&xar-var-menulabel_view;</a></td>
 
         <!-- more menu items come here... -->
 
         <!-- Note : you can also specify simple links directly with blocklayout
-             template tags : e.g. &pnt-modurl-example-user-view; -->
+             template tags : e.g. &xar-modurl-example-user-view; -->
         </tr></table>
     </td></tr>
 </table>
@@ -29,33 +29,33 @@
 <!-- Note : we use an if/else structure here, either to show a status *or*
      to show the details of a particular item -->
 
-<pnt:if condition="!empty($status)">
-    <strong>&pnt-var-status;</strong>
-<pnt:else />
+<xar:if condition="!empty($status)">
+    <strong>&xar-var-status;</strong>
+<xar:else />
 <!-- some item variables given by the function using this template -->
 
-<pnt:blockgroup name="topnav" id="topnav" />
+<xar:blockgroup name="topnav" id="topnav" />
 
 <table border="0" cellspacing="0" cellpadding="5">
     <tr>
-        <td align="right">&pnt-var-name_label; : </td>
+        <td align="right">&xar-var-name_label; : </td>
 
         <!-- display depends on another variable specified by the function -->
 
-        <pnt:if condition="!empty($is_bold)">
-            <td><strong>&pnt-var-name_value;</strong> (in bold now)</td>
-            <pnt:else />
-                <td>&pnt-var-name_value; (not in bold now)</td>
-        </pnt:if>
+        <xar:if condition="!empty($is_bold)">
+            <td><strong>&xar-var-name_value;</strong> (in bold now)</td>
+            <xar:else />
+                <td>&xar-var-name_value; (not in bold now)</td>
+        </xar:if>
     </tr>
     <tr>
-        <td align="right">&pnt-var-number_label; : </td>
-        <td>&pnt-var-number_value;</td>
+        <td align="right">&xar-var-number_label; : </td>
+        <td>&xar-var-number_value;</td>
     </tr>
 </table>
 <br />
 
 <!-- add the output from display hooks here -->
-&pnt-var-hookoutput;
-</pnt:if>
+&xar-var-hookoutput;
+</xar:if>
 

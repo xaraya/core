@@ -1,10 +1,10 @@
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
-<pnt:loop name="fields">
+<xar:loop name="fields">
     <tr align="left" valign="middle">
-        <td>&pnt-var-label;</td>
-        <td><input type="text" name="dd_&pnt-var-id;" value="&pnt-var-default;"></td>
-        <td>(&pnt-var-type;)</td>
+        <td>&xar-var-label;</td>
+        <td><input type="text" name="dd_&xar-var-id;" value="&xar-var-default;"></td>
+        <td>(&xar-var-type;)</td>
     </tr>
-</pnt:loop>
+</xar:loop>
 </table>
 

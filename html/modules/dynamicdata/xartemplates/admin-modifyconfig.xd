@@ -1,6 +1,6 @@
 <table border="0" width="100%" cellspacing="1" cellpadding="8">
     <tr>
-        <th align="center">&pnt-var-menutitle;<br/>&pnt-var-module;</th>
+        <th align="center">&xar-var-menutitle;<br/>&xar-var-module;</th>
     </tr>
 </table>
 <br />
@@ -10,48 +10,48 @@
 Tip : empty label -> delete field for all items
 <br />
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
-<form method="post" action="&pnt-modurl-dynamicdata-admin-updateconfig;">
-    <input type="hidden" name="authid" value="&pnt-var-authid;" />
-    <input type="hidden" name="modid" value="&pnt-var-modid;" />
-    <input type="hidden" name="itemtype" value="&pnt-var-itemtype;" />
+<form method="post" action="&xar-modurl-dynamicdata-admin-updateconfig;">
+    <input type="hidden" name="authid" value="&xar-var-authid;" />
+    <input type="hidden" name="modid" value="&xar-var-modid;" />
+    <input type="hidden" name="itemtype" value="&xar-var-itemtype;" />
 
     <tr>
-       <td><strong>&pnt-var-labels.id;</strong></td>
-       <td><strong>&pnt-var-labels.label;</strong></td>
-       <td><strong>&pnt-var-labels.type;</strong></td>
-       <td><strong>&pnt-var-labels.default;</strong></td>
-       <td><strong>&pnt-var-labels.validation;</strong></td>
+       <td><strong>&xar-var-labels.id;</strong></td>
+       <td><strong>&xar-var-labels.label;</strong></td>
+       <td><strong>&xar-var-labels.type;</strong></td>
+       <td><strong>&xar-var-labels.default;</strong></td>
+       <td><strong>&xar-var-labels.validation;</strong></td>
     </tr>
 
-<pnt:loop name="fields">
+<xar:loop name="fields">
     <tr align="left" valign="middle">
-        <td>&pnt-var-id;</td>
-        <td><input type="text" name="dd_label[&pnt-var-id;]" size="15" value="&pnt-var-label;"></td>
-        <td><select name="dd_type[&pnt-var-id;]">
-                <pnt:if condition="$type eq 1">
+        <td>&xar-var-id;</td>
+        <td><input type="text" name="dd_label[&xar-var-id;]" size="15" value="&xar-var-label;"></td>
+        <td><select name="dd_type[&xar-var-id;]">
+                <xar:if condition="$type eq 1">
                     <option value="1" selected>option 1
-                <pnt:else />
+                <xar:else />
                     <option value="1">option 1
-                </pnt:if>
-                <pnt:if condition="$type eq 2">
+                </xar:if>
+                <xar:if condition="$type eq 2">
                     <option value="2" selected>option 2
-                <pnt:else />
+                <xar:else />
                     <option value="2">option 2
-                </pnt:if>
-                <pnt:if condition="$type eq 3">
+                </xar:if>
+                <xar:if condition="$type eq 3">
                     <option value="3" selected>option 3
-                <pnt:else />
+                <xar:else />
                     <option value="3">option 3
-                </pnt:if>
+                </xar:if>
             </select>
         </td>
-        <td><input type="text" name="dd_default[&pnt-var-id;]" size="15" value="&pnt-var-default;"></td>
-        <td><input type="text" name="dd_validation[&pnt-var-id;]" size="15" value="&pnt-var-validation;"></td>
+        <td><input type="text" name="dd_default[&xar-var-id;]" size="15" value="&xar-var-default;"></td>
+        <td><input type="text" name="dd_validation[&xar-var-id;]" size="15" value="&xar-var-validation;"></td>
     </tr>
-</pnt:loop>
+</xar:loop>
 
     <tr align="left" valign="middle">
-        <td>&pnt-var-labels.new;</td>
+        <td>&xar-var-labels.new;</td>
         <td><input type="text" name="dd_label[0]" size="15"></td>
         <td><select name="dd_type[0]">
                 <option value="1">option 1
@@ -65,7 +65,7 @@ Tip : empty label -> delete field for all items
 
     <tr>
         <td colspan="5" align="center">
-           <input type="submit" value="&pnt-var-updatebutton;">
+           <input type="submit" value="&xar-var-updatebutton;">
         </td>
     </tr>
 </form>

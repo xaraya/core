@@ -1,20 +1,20 @@
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
         <td align="center" colspan="5">
-            <strong>&pnt-var-labels.dynamicdata;</strong> [ <a href="&pnt-var-link;" target="dd">&pnt-var-labels.config;</a> ]
+            <strong>&xar-var-labels.dynamicdata;</strong> [ <a href="&xar-var-link;" target="dd">&xar-var-labels.config;</a> ]
 <br />
 // TODO: well, just about everything :-)
         </td>
     </tr>
-<pnt:loop name="fields">
+<xar:loop name="fields">
     <tr align="left" valign="middle">
-        <td>&pnt-var-id;</td>
-        <td>&pnt-var-label;</td>
-        <td>&pnt-var-type;</td>
-        <td>&pnt-var-default;</td>
-        <td>&pnt-var-validation;</td>
+        <td>&xar-var-id;</td>
+        <td>&xar-var-label;</td>
+        <td>&xar-var-type;</td>
+        <td>&xar-var-default;</td>
+        <td>&xar-var-validation;</td>
     </tr>
-</pnt:loop>
+</xar:loop>
 </table>
 <br />
 

@@ -6,7 +6,7 @@
     <!-- the variables used in this menu come from example_admin_menu() -->
 
     <tr>
-        <th align="center">&pnt-var-menutitle;</th>
+        <th align="center">&xar-var-menutitle;</th>
     </tr>
     <tr><td>
         <table border="0" width="100%" cellspacing="1" cellpadding="8">
@@ -16,14 +16,14 @@
 
         <!-- Simple URLs can be specified directly in the template -->
 
-        <td><a href="&pnt-modurl-example-admin-new;">&pnt-var-menulabel_new;</a></td>
-        <td><a href="&pnt-modurl-example-admin-view;">&pnt-var-menulabel_view;</a></td>
-        <td><a href="&pnt-modurl-example-admin-modifyconfig;">&pnt-var-menulabel_config;</a></td>
+        <td><a href="&xar-modurl-example-admin-new;">&xar-var-menulabel_new;</a></td>
+        <td><a href="&xar-modurl-example-admin-view;">&xar-var-menulabel_view;</a></td>
+        <td><a href="&xar-modurl-example-admin-modifyconfig;">&xar-var-menulabel_config;</a></td>
 
         <!-- more menu items come here... -->
 
         <!-- Note : you can also specify the links in example_admin_menu()
-             and pass them on as variables : e.g. &pnt-var-menulink_view; -->
+             and pass them on as variables : e.g. &xar-var-menulink_view; -->
         </tr>
         </table>
     </td></tr>
@@ -33,34 +33,34 @@
 <!-- the specific template for the current admin function comes here -->
 
 
-<center>&pnt-var-confirmtext;</center><br />
+<center>&xar-var-confirmtext;</center><br />
 
 <center>
-<form method="post" action="&pnt-modurl-example-admin-delete;">
-    <input type="hidden" name="authid" value="&pnt-var-authid;" />
+<form method="post" action="&xar-modurl-example-admin-delete;">
+    <input type="hidden" name="authid" value="&xar-var-authid;" />
     <input type="hidden" name="confirm" value="true" />
-    <input type="hidden" name="exid" value="&pnt-var-exid;" />
+    <input type="hidden" name="exid" value="&xar-var-exid;" />
 
     <table border="0" width="300">
         <tr>
             <td>
-                &pnt-var-itemid;:
+                &xar-var-itemid;:
             </td>
             <td>
-                &pnt-var-exid;
+                &xar-var-exid;
             </td>
         </tr>
         <tr>
             <td>
-                &pnt-var-namelabel;:
+                &xar-var-namelabel;:
             </td>
             <td>
-                &pnt-var-namevalue;
+                &xar-var-namevalue;
             </td>
         </tr>
         <tr>
             <td colspan="2" align="center"><br />
-                    <input type="submit" value="&pnt-var-confirmbutton;" align="middle" />
+                    <input type="submit" value="&xar-var-confirmbutton;" align="middle" />
             </td>
         </tr>
     </table>

@@ -13,22 +13,22 @@
  * This function is called internally by the core whenever the module is
  * loaded.  It adds in the information
  */
-function dynamicdata_pntables()
+function dynamicdata_xartables()
 {
     // Initialise table array
-    $pntable = array();
+    $xartable = array();
 
     // Get the name for the dynamicdata item table.  This is not necessary
     // but helps in the following statements and keeps them readable
-    $dynamic_data = pnDBGetSiteTablePrefix() . '_dynamic_data';
-    $dynamic_properties = pnDBGetSiteTablePrefix() . '_dynamic_properties';
+    $dynamic_data = xarDBGetSiteTablePrefix() . '_dynamic_data';
+    $dynamic_properties = xarDBGetSiteTablePrefix() . '_dynamic_properties';
 
     // Set the table names
-    $pntable['dynamic_data'] = $dynamic_data;
-    $pntable['dynamic_properties'] = $dynamic_properties;
+    $xartable['dynamic_data'] = $dynamic_data;
+    $xartable['dynamic_properties'] = $dynamic_properties;
 
     // Return the table information
-    return $pntable;
+    return $xartable;
 }
 
 ?>

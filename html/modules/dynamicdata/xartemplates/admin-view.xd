@@ -6,7 +6,7 @@
     <!-- the variables used in this menu come from example_admin_menu() -->
 
     <tr>
-        <th align="center">&pnt-var-menutitle;</th>
+        <th align="center">&xar-var-menutitle;</th>
     </tr>
     <tr><td>
         <table border="0" width="100%" cellspacing="1" cellpadding="8">
@@ -16,17 +16,17 @@
 
         <!-- Simple URLs can be specified directly in the template -->
 
-        <td><a href="&pnt-modurl-example-admin-new;">&pnt-var-menulabel_new;</a></td>
+        <td><a href="&xar-modurl-example-admin-new;">&xar-var-menulabel_new;</a></td>
 
         <!-- Note : we remove the link to this admin function here -->
 
-        <td> <strong>&pnt-var-menulabel_view;</strong> </td>
-        <td><a href="&pnt-modurl-example-admin-modifyconfig;">&pnt-var-menulabel_config;</a></td>
+        <td> <strong>&xar-var-menulabel_view;</strong> </td>
+        <td><a href="&xar-modurl-example-admin-modifyconfig;">&xar-var-menulabel_config;</a></td>
 
         <!-- more menu items come here... -->
 
         <!-- Note : you can also specify the links in example_admin_menu()
-             and pass them on as variables : e.g. &pnt-var-menulink_view; -->
+             and pass them on as variables : e.g. &xar-var-menulink_view; -->
         </tr>
         </table>
     </td></tr>
@@ -37,36 +37,36 @@
 
 <!-- some status given by the function using this template -->
 
-<strong>&pnt-var-status;</strong>
+<strong>&xar-var-status;</strong>
 
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
-        <th>&pnt-var-namelabel;</th>
-        <th>&pnt-var-numberlabel;</th>
-        <th>&pnt-var-optionslabel;</th>
+        <th>&xar-var-namelabel;</th>
+        <th>&xar-var-numberlabel;</th>
+        <th>&xar-var-optionslabel;</th>
     </tr>
-    <pnt:loop name="items">
+    <xar:loop name="items">
     <tr>
-        <td>&pnt-var-name;</td>
-        <td>&pnt-var-number;</td>
+        <td>&xar-var-name;</td>
+        <td>&xar-var-number;</td>
         <td>
-           <pnt:if condition="empty($editurl)">
-               &pnt-var-edittitle;
-               <pnt:else />
-                   <a href="&pnt-var-editurl;">&pnt-var-edittitle;</a>
-           </pnt:if>
+           <xar:if condition="empty($editurl)">
+               &xar-var-edittitle;
+               <xar:else />
+                   <a href="&xar-var-editurl;">&xar-var-edittitle;</a>
+           </xar:if>
            |
-           <pnt:if condition="empty($deleteurl)">
-               &pnt-var-deletetitle;
-               <pnt:else />
-                   <a href="&pnt-var-deleteurl;">&pnt-var-deletetitle;</a>
-           </pnt:if>
+           <xar:if condition="empty($deleteurl)">
+               &xar-var-deletetitle;
+               <xar:else />
+                   <a href="&xar-var-deleteurl;">&xar-var-deletetitle;</a>
+           </xar:if>
         </td>
     </tr>
-    </pnt:loop>
+    </xar:loop>
 </table>
 <br />
 
 <!-- add the pager here -->
-&pnt-var-pager;
+&xar-var-pager;
 
