@@ -78,14 +78,20 @@ function dynamicdata_userapi_showdisplay($args)
         $myfieldlist = null;
     }
 
-    // include the static properties (= module tables) too ?
-    if (empty($static)) {
-        $static = false;
+    // join a module table to a dynamic object
+    if (empty($join)) {
+        $join = '';
+    }
+    // make some database table available via DD
+    if (empty($table)) {
+        $table = '';
     }
 
     $object = new Dynamic_Object(array('moduleid'  => $modid,
                                        'itemtype'  => $itemtype,
                                        'itemid'    => $itemid,
+                                       'join'      => $join,
+                                       'table'     => $table,
                                        'fieldlist' => $myfieldlist));
     // we're dealing with a real item, so retrieve the property values
     if (!empty($itemid)) {

@@ -75,9 +75,13 @@ function dynamicdata_adminapi_showform($args)
         $myfieldlist = null;
     }
 
-    // include the static properties (= module tables) too ?
-    if (empty($static)) {
-        $static = false;
+    // join a module table to a dynamic object
+    if (empty($join)) {
+        $join = '';
+    }
+    // make some database table available via DD
+    if (empty($table)) {
+        $table = '';
     }
 
     // throw an exception if you can't edit this
@@ -86,6 +90,8 @@ function dynamicdata_adminapi_showform($args)
     $object = new Dynamic_Object(array('moduleid'  => $modid,
                                        'itemtype'  => $itemtype,
                                        'itemid'    => $itemid,
+                                       'join'      => $join,
+                                       'table'     => $table,
                                        'fieldlist' => $myfieldlist));
     if (!empty($itemid)) {
         $object->getItem();

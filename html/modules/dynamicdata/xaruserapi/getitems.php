@@ -11,7 +11,6 @@
  * @param $args['itemids'] array of item ids to return
  * @param $args['fieldlist'] array of field labels to retrieve (default is all)
  * @param $args['status'] limit to property fields of a certain status (e.g. active)
- * @param $args['static'] include the static properties (= module tables) too (default no)
  * @param $args['sort'] sort field(s)
  * @param $args['numitems'] number of items to retrieve
  * @param $args['startnum'] start number
@@ -25,8 +24,17 @@ function &dynamicdata_userapi_getitems($args)
 {
     extract($args);
 
-    if (empty($modid) && !empty($module)) {
-        $modid = xarModGetIDFromName($module);
+    if (empty($modid)) {
+        if (empty($module)) {
+            $modname = xarModGetName();
+        } else {
+            $modname = $module;
+        }
+        if (is_numeric($modname)) {
+            $modid = $modname;
+        } else {
+            $modid = xarModGetIDFromName($modname);
+        }
     }
     $modinfo = xarModGetInfo($modid);
 
@@ -73,11 +81,6 @@ function &dynamicdata_userapi_getitems($args)
         $status = null;
     }
 
-    // include the static properties (= module tables) too ?
-    if (empty($static)) {
-        $static = false;
-    }
-
     if (empty($startnum) || !is_numeric($startnum)) {
         $startnum = 1;
     }
@@ -92,6 +95,15 @@ function &dynamicdata_userapi_getitems($args)
         $where = null;
     }
 
+    // join a module table to a dynamic object
+    if (empty($join)) {
+        $join = '';
+    }
+    // make some database table available via DD
+    if (empty($table)) {
+        $table = '';
+    }
+
     $object = new Dynamic_Object_List(array('moduleid'  => $modid,
                                            'itemtype'  => $itemtype,
                                            'itemids' => $itemids,
@@ -100,6 +112,8 @@ function &dynamicdata_userapi_getitems($args)
                                            'startnum' => $startnum,
                                            'where' => $where,
                                            'fieldlist' => $fieldlist,
+                                           'join' => $join,
+                                           'table' => $table,
                                            'status' => $status));
     if (!isset($object)) return;
     // $items[$itemid]['fields'][$name]['value'] --> $items[$itemid][$name] now

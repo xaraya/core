@@ -22,8 +22,17 @@ function &dynamicdata_userapi_getitem($args)
 {
     extract($args);
 
-    if (empty($modid) && !empty($module)) {
-        $modid = xarModGetIDFromName($module);
+    if (empty($modid)) {
+        if (empty($module)) {
+            $modname = xarModGetName();
+        } else {
+            $modname = $module;
+        }
+        if (is_numeric($modname)) {
+            $modid = $modname;
+        } else {
+            $modid = xarModGetIDFromName($modname);
+        }
     }
     $modinfo = xarModGetInfo($modid);
 
@@ -64,15 +73,21 @@ function &dynamicdata_userapi_getitem($args)
         $status = null;
     }
 
-    // include the static properties (= module tables) too ?
-    if (empty($static)) {
-        $static = false;
+    // join a module table to a dynamic object
+    if (empty($join)) {
+        $join = '';
+    }
+    // make some database table available via DD
+    if (empty($table)) {
+        $table = '';
     }
 
     $object = new Dynamic_Object(array('moduleid'  => $modid,
                                        'itemtype'  => $itemtype,
                                        'itemid'    => $itemid,
                                        'fieldlist' => $fieldlist,
+                                       'join'      => $join,
+                                       'table'     => $table,
                                        'status'    => $status));
     if (!isset($object) || empty($object->objectid)) return;
     if (!empty($itemid)) {
