@@ -2029,51 +2029,6 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
     }
 }
 
-/**
- * xarTpl__XarTernaryNode: <xar:ternary> tag class
- *
- * Wraps (condition) ? ops : otherops;
- *
- * @package blocklayout
- * @deprecated
- */
-class xarTpl__XarTernaryNode extends xarTpl__TplTagNode
-{
-    function renderBeginTag()
-    {
-        extract($this->attributes);
-
-        if (!isset($condition)) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'condition\' attribute in <xar:ternary> tag.', $this);
-            return;
-        }
-
-        if (count($this->children) != 3 || $this->children[1]->tagName != 'else') {
-            $this->raiseError(XAR_BL_INVALID_TAG,'Missing subexpressions or \'else\' tag in <xar:ternary> tag.', $this);
-            return;
-        }
-
-        $condition = xarTpl__ExpressionTransformer::transformPHPExpression($condition);
-        if (!isset($condition)) return; // throw back
-
-        return "($condition) ? ";
-    }
-
-    function renderEndTag()
-    {
-        return '';
-    }
-
-    function hasChildren()
-    {
-        return true;
-    }
-
-    function needParameter()
-    {
-        return true;
-    }
-}
 
 /**
  * xarTpl__XarIfNode : <xar:if> tag class
@@ -2152,7 +2107,7 @@ class xarTpl__XarElseifNode extends xarTpl__TplTagNode
 /**
  * xarTpl__XarElseNode: <xar:else/> tag class
  *
- * Takes care of the "} else {" construct for both if, else and ternary tags
+ * Takes care of the "} else {" construct for both if and else tags
  *
  * @package blocklayout
  * @access private
@@ -2166,9 +2121,6 @@ class xarTpl__XarElseNode extends xarTpl__TplTagNode
             case 'sec':
                 $output = "} else { ";
                 break;
-            case 'ternary':
-                $output = " : ";
-                break;
             default:
                 $this->raiseError(XAR_BL_INVALID_TAG,"The <xar:else> tag cannot be placed under '".$this->parentTagName."' tag.", $this);
                 return;
@@ -2178,12 +2130,12 @@ class xarTpl__XarElseNode extends xarTpl__TplTagNode
 
     function isAssignable()
     {
-        return ($this->parentTagName == 'ternary');
+        return false;
     }
 
     function needParameter()
     {
-        return ($this->parentTagName == 'ternary');
+        return false;
     }
 }
 
