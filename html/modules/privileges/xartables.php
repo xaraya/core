@@ -8,38 +8,42 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  *
- * @subpackage Security Module
+ * @subpackage security
  * @author Marc Lutolf <marcinmilan@xaraya.com>
 */
 
 /**
+ * Return table name definitions to Xaraya
+ *
  * This function is called internally by the core whenever the module is
- * loaded.  It adds in the information
+ * loaded. It is called by xarMod__dbInfoLoad()
+ *
+ * @return array
  */
 function privileges_xartables()
 {
     // Initialise table array
-    $xartable = array();
+    $tables = array();
 
-    $privileges = xarDBGetSiteTablePrefix() . '_privileges';
-    $privmembers = xarDBGetSiteTablePrefix() . '_privmembers';
-    $roles = xarDBGetSiteTablePrefix() . '_roles';
-    $rolemembers = xarDBGetSiteTablePrefix() . '_rolemembers';
-    $acl = xarDBGetSiteTablePrefix() . '_security_acl';
-    $masks = xarDBGetSiteTablePrefix() . '_security_masks';
-    $instances = xarDBGetSiteTablePrefix() . '_instances';
+    $privileges  = xarDBGetSiteTablePrefix() . '_privileges';
+    $privMembers = xarDBGetSiteTablePrefix() . '_privmembers';
+    $roles       = xarDBGetSiteTablePrefix() . '_roles';
+    $roleMembers = xarDBGetSiteTablePrefix() . '_rolemembers';
+    $acl         = xarDBGetSiteTablePrefix() . '_security_acl';
+    $masks       = xarDBGetSiteTablePrefix() . '_security_masks';
+    $instances   = xarDBGetSiteTablePrefix() . '_instances';
 
-    // Set the table name
-    $xartable['privileges'] = $privileges;
-    $xartable['privmembers'] = $privmembers;
-    $xartable['roles'] = $roles;
-    $xartable['rolemembers'] = $rolemembers;
-    $xartable['security_acl'] = $acl;
-    $xartable['security_masks'] = $masks;
-    $xartable['instances'] = $instances;
+    // Set the table names
+    $tables['privileges']     = $privileges;
+    $tables['privmembers']    = $privMembers;
+    $tables['roles']          = $roles;
+    $tables['rolemembers']    = $roleMembers;
+    $tables['security_acl']   = $acl;
+    $tables['security_masks'] = $masks;
+    $tables['instances']      = $instances;
 
 	// Return the table information
-    return $xartable;
+    return $tables;
 }
 
 ?>

@@ -1,26 +1,37 @@
-<?php 
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: John Cox
-// Purpose of file:  Table information for base module
-// ----------------------------------------------------------------------
+<?php
+/**
+ * File: $Id$
+ *
+ * base table defintions
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage base
+ * @author Paul Rosania
+ * @todo template tag table!!! what are we gonna do !
+ */
 
+/**
+ * Passes table definitons back to Xaraya core
+ *
+ * @return string
+ */
 function base_xartables()
 {
     // Initialise table array
-    $xartable = array();
+    $tables = array();
 
-    // Get the name for the autolinks item table
-    $templat_tags = xarConfigGetVar('prefix') . '_template_tags';
+    $systemPrefix = xarDBGetSystemTablePrefix();
+
+    // Get the name for the template Tags table table
+    $templateTagsTable = $systemPrefix . '_template_tags';
 
     // Q: does this need to be here?
-    $xartable['template_tags']= $templat_tags;
+    $tables['template_tags']= $templateTagsTable;
     // Return the table information
-    return $xartable;
+    return $tables;
 }
 
 ?>
