@@ -12,7 +12,7 @@
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @author Marty Vance <dracos@xaraya.com>
- * @author Garett Hunter <garett@blacktower.com>
+ * @author Garrett Hunter <garrett@blacktower.com>
  */
 
 
