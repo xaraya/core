@@ -173,7 +173,7 @@ function xarBlockSetCached($cacheKey, $name, $value)
         (!file_exists($cache_file) ||
         ($blockCacheExpireTime != 0 &&
          filemtime($cache_file) < time() - $blockCacheExpireTime)) &&
-        xarCacheDirSize($xarOutput_cacheCollection, 'Block', $cacheKey) <= $xarOutput_cacheSizeLimit
+        xarCacheDirSize($xarOutput_cacheCollection, 'Block') < $xarOutput_cacheSizeLimit
         ) {
 
         xarOutputSetCached($cacheKey, $cache_file, 'Block', $value);

@@ -252,10 +252,9 @@ function xarOutputFlushCached($cacheKey, $dir = false)
  *
  * @access  public
  * @param   string $cacheType
- * @param   string $cacheKey
  * @returns void
  */
-function xarOutputCleanCached($cacheType, $cacheKey = '')
+function xarOutputCleanCached($cacheType)
 {
     global $xarOutput_cacheCollection, ${'xar' . $cacheType . '_cacheTime'};
 
@@ -287,12 +286,34 @@ function xarOutputCleanCached($cacheType, $cacheKey = '')
 }
 
 /**
- * check the size of the cache
+ * helper function to get the size of the cache
  *
  * @access public
  * @param  string  $dir
  * @param  string  $cacheType
- * @param  string  $cacheKey
+ * @return float
+ * @author jsb
+ */
+function xarCacheDirSize($dir = FALSE, $cacheType)
+{
+    global $xarOutput_cacheSizeLimit;
+    
+    if (xarCore_IsCached('Output.Caching', 'size')) {
+        $size = xarCore_GetCached('Output.Caching', 'size');
+    } else {
+        $size = xarCacheGetDirSize($dir, $cacheType);
+        xarCore_SetCached('Output.Caching', 'size', $size);
+    }
+
+    return $size;
+}
+
+/**
+ * calculate the size of the cache
+ *
+ * @access public
+ * @param  string  $dir
+ * @param  string  $cacheType
  * @return float
  * @author nospam@jusunlee.com 
  * @author laurie@oneuponedown.com 
@@ -302,9 +323,10 @@ function xarOutputCleanCached($cacheType, $cacheKey = '')
  *         important and flush them to make more space.  atime would be a
  *         possibility, but is often disabled at the filesystem
  */
-function xarCacheDirSize($dir = FALSE, $cacheType, $cacheKey = '')
+function xarCacheGetDirSize($dir = FALSE, $cacheType)
 {
     global $xarOutput_cacheSizeLimit;
+
     $size = 0;
     if ($dir && is_dir($dir)) {
         if (substr($dir,-1) != "/") $dir .= "/";
@@ -312,7 +334,7 @@ function xarCacheDirSize($dir = FALSE, $cacheType, $cacheKey = '')
             while (($item = readdir($dirId)) !== FALSE) {
                 if ($item != "." && $item != "..") {
                     if (is_dir($dir . $item)) {
-                        $size += xarCacheDirSize($dir . $item, $cacheType);
+                        $size += xarCacheGetDirSize($dir . $item, $cacheType);
                     } else {
                         $size += filesize($dir . $item);
                     }
