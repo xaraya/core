@@ -34,12 +34,8 @@ function roles_onlineblock_info()
 function roles_onlineblock_display($blockinfo)
 {
     // Security check
-    if (!xarSecAuthAction(0,
-                         'roles:Onlineblock:',
-                         "$blockinfo[title]::",
-                         ACCESS_READ)) {
-        return;
-    }
+    // Security check
+    if (!xarSecurityCheck('ReadRole',1,'Onlineblock','$blockinfo[title]::')) return;
 
     // Get variables from content block
     $vars = unserialize($blockinfo['content']);

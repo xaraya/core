@@ -179,8 +179,8 @@ function initializeSetup() {
 
    	xarRegisterMask('ReadLogin','All','roles','LoginBlock','All',ACCESS_READ);
 
-   	xarRegisterMask('SeeRoles','All','roles','All','All',ACCESS_OVERVIEW);
-   	xarRegisterMask('ViewRoles','All','roles','All','All',ACCESS_READ);
+   	xarRegisterMask('ViewRoles','All','roles','All','All',ACCESS_OVERVIEW);
+   	xarRegisterMask('ReadRole','All','roles','All','All',ACCESS_READ);
    	xarRegisterMask('EditRole','All','roles','All','All',ACCESS_EDIT);
     xarRegisterMask('AddRole','All','roles','All','All',ACCESS_ADD);
     xarRegisterMask('DeleteRole','All','roles','All','All',ACCESS_DELETE);

@@ -319,6 +319,23 @@ $schemas = array();
 	}
 
 /**
+ * xarUnregisterMask: wrapper function for unregistering a mask
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   component string
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+	function xarUnregisterMask($name)
+	{
+			$masks = new xarMasks();
+			return $masks->unregister($name);
+	}
+
+/**
  * see if a user is authorised to carry out a particular task
  * @access public
  * @param realm the realm to authorize
