@@ -41,7 +41,7 @@
                      <xar:if condition="!empty($dd['userurl'])">
                          <img src="modules/roles/xarimages/ob_user.gif" alt="" style="width:16px; height:16px; vertical-align: middle;" />
                          <xar:else />
-                         <img src="modules/roles/xarimages/ob_user_other.gif" style="width:16px; height:16px; vertical-align: middle;" />
+                         <img src="modules/roles/xarimages/ob_user_other.gif" alt="" style="width:16px; height:16px; vertical-align: middle;" />
                      </xar:if>
                      <a href="#$dd['userurl']#">
                          #$dd['name']#
@@ -83,7 +83,7 @@
      </tr>
      <tr>
          <td>
-             <img src="modules/roles/xarimages/ob_users_an.gif" style="width:16px; height:16px; vertical-align: middle;" />
+             <img src="modules/roles/xarimages/ob_users_an.gif" alt="" style="width:16px; height:16px; vertical-align: middle;" />
              <xar:mlstring>
                  Total guests
              </xar:mlstring>
