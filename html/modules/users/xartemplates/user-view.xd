@@ -3,22 +3,53 @@
 <div class="xar-mod-body">
 <h2>#$title#</h2>
 <b><xar:mlstring>Sort Options</xar:mlstring>:</b><br />
-&nbsp;&nbsp;<a href="#xarModURL('users', 'user', 'view', array('phase' => 'active'))#">Online Members</a> <br />
-&nbsp;&nbsp;<a href="#xarModURL('users', 'user', 'view', array('phase' => 'today'))#">Active Today</a> <br />
-&nbsp;&nbsp;<a href="#xarModURL('users', 'user', 'view', array('phase' => 'week'))#">Active This week</a><br />
-&nbsp;&nbsp;<a href="#xarModURL('users', 'user', 'view', array('phase' => 'viewall'))#">All Members</a><br /><br />
 
+<form action="#xarModURL('users', 'user', 'view')#" method="post">
+
+<xar:if condition="$phase eq 'active'">
+<input type="radio" name="phase" id="phase" value="active" checked="checked" />
+<xar:else />
+<input type="radio" name="phase" id="phase" value="active"  />
+</xar:if><xar:mlstring>Active Users</xar:mlstring>
+
+<xar:if condition="$phase eq 'today'">
+<input type="radio" name="phase" id="phase" value="today" checked="checked" />
+<xar:else />
+<input type="radio" name="phase" id="phase" value="today"  />
+</xar:if><xar:mlstring>Active Today</xar:mlstring>
+
+<xar:if condition="$phase eq 'week'">
+<input type="radio" name="phase" id="phase" value="week" checked="checked" />
+<xar:else />
+<input type="radio" name="phase" id="phase" value="week"  />
+</xar:if><xar:mlstring>Active This Week</xar:mlstring>
+
+<xar:if condition="$phase eq 'viewall'">
+<input type="radio" name="phase" id="phase" value="viewall" checked="checked" />
+<xar:else />
+<input type="radio" name="phase" id="phase" value="viewall"  />
+</xar:if><xar:mlstring>All Users</xar:mlstring>
+
+<input type="submit" value="Refresh" />
+</form>
+
+<br />
 <xar:if condition="!empty($message)">
 	#$message#
 <xar:else />
-	<div class="xar-accent">
-	<table width="100%" border="0" cellspacing="0" cellpadding="4">
+	<table width="80%" border="0" cellspacing="0" cellpadding="4">
 		<tr>        
-			<th width="20%">
-				<xar:mlstring>Real Name</xar:mlstring>
+			<th width="70%">
+				<xar:mlstring>Name</xar:mlstring>
 			</th>
-			<th width="80%">
-				<xar:mlstring>saved for icons, NEED SOME DUD HERE</xar:mlstring>
+			<th width="10%">
+				<xar:mlstring>Info</xar:mlstring>
+			</th>
+			<th width="10%">
+				<xar:mlstring>Email</xar:mlstring>
+			</th>
+			<th width="10%">
+				<xar:mlstring>URL</xar:mlstring>
 			</th>
 		</tr>
 		<xar:loop name="$items">
@@ -28,11 +59,21 @@
 						<a href="#xarModURL('users', 'user', 'display', array('uid' => $uid))#">#$name#</a>
 					</td>
 					<td class="xar-norm">
+						<a href="#xarModURL('users', 'user', 'display', array('uid' => $uid))#">#$infoicon#</a>
+					</td>
+					<td class="xar-norm">
 					   <xar:if condition="empty($emailurl)">
-						   #$email#
-						   <xar:else />
-						   <a href="#$emailurl#">#$email#</a>
-					   </xar:if>
+						   #$emailicon#
+						<xar:else />
+							<a href="#$emailurl#">#$emailicon#</a>
+						</xar:if>
+					</td>
+					<td class="xar-norm">
+					   <xar:if condition="!empty($urlicon)">
+						   <a href="#$url#">#$urlicon#</a>
+						<xar:else />
+							&nbsp;&nbsp;
+						</xar:if>
 					</td>
 				</tr>
 			<xar:else />
@@ -41,17 +82,26 @@
 						<a href="#xarModURL('users', 'user', 'display', array('uid' => $uid))#">#$name#</a>
 					</td>
 					<td class="xar-accent">
+						<a href="#xarModURL('users', 'user', 'display', array('uid' => $uid))#">#$infoicon#</a>
+					</td>
+					<td class="xar-accent">
 					   <xar:if condition="empty($emailurl)">
-						   #$email#
-						   <xar:else />
-						   <a href="#$emailurl#">#$email#</a>
-					   </xar:if>
+						   #$emailicon#
+						<xar:else />
+							<a href="#$emailurl#">#$emailicon#</a>
+						</xar:if>
+					</td>
+					<td class="xar-accent">
+					   <xar:if condition="!empty($urlicon)">
+						   <a href="#$url#">#$urlicon#</a>
+						<xar:else />
+							&nbsp;&nbsp;
+						</xar:if>
 					</td>
 				</tr>
 			</xar:if>
 		</xar:loop>
 	</table>
-	</div>
 	<br />
 
 	<!-- add the pager here -->

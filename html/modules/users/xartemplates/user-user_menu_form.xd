@@ -31,6 +31,14 @@
 	</tr>
 	<tr>
 		<td>
+			<b><xar:mlstring>URL</xar:mlstring>:</b>
+		</td>
+		<td>
+			<input type="text" name="url" id="url" value="#$url#" size="30" maxlength="60" tabindex="1" />
+		</td>
+	</tr>
+	<tr>
+		<td>
 			<b><xar:mlstring>Password</xar:mlstring></b>
 		</td>
 		<td>
