@@ -96,6 +96,12 @@
     $usercount = xarModGetVar('installer','usercount');
     echo "Found " . $usercount . " Users<br/>\n";
 
+    // Delete current users in Xaraya database
+    if ($reset && $startnum == 0) {
+        $dbconn->Execute("DELETE FROM " . $tables['roles'] . " WHERE xar_uid > 6"); // TODO: VERIFY !
+        $dbconn->Execute("DELETE FROM " . $tables['rolemembers'] . " WHERE xar_uid > 6 OR xar_parentid > 6"); // TODO: VERIFY !
+    }
+
     // uid          - user id
     // nickname     - the name as displayed in their comments
     // realname     - their real name (legal name)    
@@ -142,12 +148,6 @@
         die("Oops, select users failed : " . $dbconn->ErrorMsg());
     }
   
-    // Delete current users in Xaraya database
-    if ($reset && $startnum == 0) {
-        $dbconn->Execute("DELETE FROM " . $tables['roles'] . " WHERE xar_uid > 6"); // TODO: VERIFY !
-        $dbconn->Execute("DELETE FROM " . $tables['rolemembers'] . " WHERE xar_uid > 6 OR xar_parentid > 6"); // TODO: VERIFY !
-    }
-
     // check if there's a dynamic object defined for users
     $myobject =& xarModAPIFunc('dynamicdata',
                                'user',

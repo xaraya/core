@@ -24,7 +24,7 @@
     $table_topic_parents = 'topic_parents';
     $table_topics_tree = xarDBGetSiteTablePrefix() . '_installer_topics';
     
-    // Delet from categories table
+    // Delet current categories
     if ($resetcat) {
         $dbconn->Execute("DELETE FROM " . $tables['categories']);
         //$dbconn->Execute('FLUSH TABLE ' . $tables['categories']);

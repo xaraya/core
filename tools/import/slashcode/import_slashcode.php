@@ -53,6 +53,7 @@ if (isset($step)) {
         if(!xarVarFetch('storyimport','isset', $storyimport, NULL, XARVAR_NOT_REQUIRED)) {return;}
         if(!xarVarFetch('submissionimport','isset', $submissionimport, NULL, XARVAR_NOT_REQUIRED)) {return;}
         if(!xarVarFetch('commentimport','isset', $commentimport, NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if(!xarVarFetch('discussionimport','isset', $discussionimport, NULL, XARVAR_NOT_REQUIRED)) {return;}
     } elseif ($step > 1 || isset($startnum)) {
         $reset = xarModGetVar('installer','reset');
         $resetcat = xarModGetVar('installer','resetcat');
@@ -60,6 +61,7 @@ if (isset($step)) {
         $storyimport = xarModGetVar('installer','storyimport');
         $submissionimport = xarModGetVar('installer','submissionimport');
         $commentimport = xarModGetVar('installer','commentimport');
+        $discussionimport = xarModGetVar('installer','discussionimport');
     }
 }
 
@@ -72,6 +74,7 @@ $table_users = 'users';
 $table_stories = 'stories';
 $table_submissions = 'submissions';
 $table_comments = 'comments';
+$table_discussions = 'discussions';
 
 // Count number of users
 $query = 'SELECT COUNT(uid) FROM ' . $table_users;
@@ -113,6 +116,16 @@ $commentcount = $result->fields[0];
 xarModSetVar('installer','commentcount',$commentcount);
 $result->Close();
 
+// Count number of discussions
+$query = 'SELECT COUNT(id) FROM ' . $table_discussions;
+$result =& $dbconn->Execute($query);
+if (!$result) {
+    die("Oops, count of " . $table_discussions . " failed : " . $dbconn->ErrorMsg());
+} 
+$discussioncount = $result->fields[0];
+xarModSetVar('installer','discussioncount',$discussioncount);
+$result->Close();
+
 
 ?>
     Requirement for use : The Slashcode data and the Xaraya data HAVE to be in the same database for this script to work and they HAVE to be using a different prefix.  We read the Slashcode data and use the Xaraya API to import the data into Xaraya.  In order to do this we must be reading from the same database.  Easiest solution is to copy your Slashcode data into the same database as your Xaraya installation.
@@ -131,6 +144,8 @@ $result->Close();
     <input type="text" name="submissionimport" size="10" maxlength="10" value="500"></td></tr>
     <tr><td align="right"><?php echo($commentcount);?> comments found in the database<br>Number of comments to import at a time:</td><td>
     <input type="text" name="commentimport" size="10" maxlength="10" value="500"></td></tr>
+    <tr><td align="right"><?php echo($discussioncount);?> discussions found in the database<br>Number of discussion to import at a time:</td><td>
+    <input type="text" name="discussionimport" size="10" maxlength="10" value="500"></td></tr>
     <tr><td colspan=2 align="middle">
     <input type="submit" value=" Import Data "></td></tr>
     </table>
@@ -171,6 +186,8 @@ $result->Close();
         xarModSetVar('installer','submissionimport',$submissionimport);
         if (!isset($commentimport)) {$commentimport = 500;}
         xarModSetVar('installer','commentimport',$commentimport);
+        if (!isset($discussionimport)) {$discussionimport = 500;}
+        xarModSetVar('installer','discussionimport',$discussionimport);
     }
 
     if (!xarModAPILoad('roles','admin')) {
@@ -205,17 +222,19 @@ $result->Close();
         $resetcat = 0;
     }
 
-    $importfiles = array(//1 => array('import_slashcode_users.php'),
-                         //2 => array('import_slashcode_topicscat.php'),
-                         //1 => array('import_slashcode_stories.php'),
-                         //1 => array('import_slashcode_submissions.php'),
-                         1 => array('import_slashcode_comments.php'),
-                         //6 => array('import_slashcode_poll_desc.php',
-                          //           'import_slashcode_poll_data.php',
-                          //           'import_slashcode_pollcomments.php'),
+    $importfiles = array(1 => array('import_slashcode_users.php'),
+                         2 => array('import_slashcode_topicscat.php'),
+                         3 => array('import_slashcode_stories.php'),
+                         4 => array('import_slashcode_submissions.php'),
+                         5 => array('import_slashcode_comments.php'),
+                         //6 => array('import_slashcode_discussions.php'),
+                         6 => array('import_slashcode_poll_questions.php',
+                                    'import_slashcode_poll_answers.php'),
+                         //           'import_slashcode_pollcomments.php'),
 // TODO: add the rest :-)
-                         2 => array('import_slashcode_cleanup.php')
+                         7 => array('import_slashcode_cleanup.php')
                         );
+
     if (isset($importfiles[$step]) && count($importfiles[$step]) > 0) {
         foreach ($importfiles[$step] as $file) {
             if (!is_file($file)) {

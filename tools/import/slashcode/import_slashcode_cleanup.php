@@ -18,6 +18,10 @@
 
     echo "<strong>$step. Cleaning up</strong><br/>\n";
 
+    // Initialize table names
+    $table_topics_tree = xarDBGetSiteTablePrefix() . '_installer_topics';
+    $table_userids = xarDBGetSiteTablePrefix() . '_installer_userids';
+    
     // Drop temporary topics table
     $table_userids = xarDBGetSiteTablePrefix() . '_installer_topics';
     $dbconn->Execute("DROP TABLE " . $table_topics_tree);
@@ -37,6 +41,8 @@
     xarModDelVar('installer','submissioncount');
     xarModDelVar('installer','commentimport');
     xarModDelVar('installer','commentcount');
+    xarModDelVar('installer','discussionimport');
+    xarModDelVar('installer','discussioncount');
     xarModDelVar('installer','sections_cid');
     xarModDelVar('installer','sections');
     xarModDelVar('installer','categories_cid');
@@ -47,9 +53,6 @@
     xarModDelVar('installer','admingid');
     xarModDelVar('installer','articles');
     //xarModDelVar('installer','userid');
-    xarModDelVar('installer','faqs');
-    xarModDelVar('installer','faqid');
-    xarModDelVar('installer','weblinks');
 
     echo "<strong>TODO : import the rest...</strong><br/><br/>\n";
     echo '<a href="import_slashcode.php">Return to start of Slashcode import</a>&nbsp;&nbsp;&nbsp;

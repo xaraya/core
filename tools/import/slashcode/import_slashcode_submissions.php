@@ -126,11 +126,11 @@
                                      )
                                );
         if (!isset($newaid)) {
-            echo "Insert article ($subid) $title failed : " . xarErrorRender('text') . "<br/>\n";
+            echo "Insert submission ($subid) $title failed : " . xarErrorRender('text') . "<br/>\n";
         } elseif ($submissioncount < 200) {
-            echo "Inserted article ($subid) $title<br/>\n";
+            echo "Inserted submission ($subid) $title<br/>\n";
         } elseif ($num % 100 == 0) {
-            echo "Inserted article " . ($num + $startnum) . "<br/>\n";
+            echo "Inserted submission " . ($num + $startnum) . "<br/>\n";
             flush();
         }
         $num++;

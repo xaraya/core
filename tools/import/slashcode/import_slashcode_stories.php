@@ -18,14 +18,13 @@
 
     echo "<strong>$step. Importing stories</strong><br/>\n";
 
-    //$userid = unserialize(xarModGetVar('installer','userid'));
+    // Get categories info
     $categories_cid = xarModGetVar('installer','categories_cid');
     $categories = unserialize(xarModGetVar('installer','categories'));
 
     // Initialize table names
     $table_stories = 'stories';
     $table_story_text = 'story_text';
-    $table_story_topics_rendered = 'story_topics_rendered';
     $table_userids = xarDBGetSiteTablePrefix() . '_installer_userids';
 
     // Import stories
@@ -33,6 +32,16 @@
     echo "Found " . $storycount . " stories<br/>\n";
 
     $regid = xarModGetIDFromName('articles');
+
+    // Remove all articles if reset
+    if ($reset && $startnum == 0) {
+        $dbconn->Execute("DELETE FROM " . $tables['articles']);
+    }
+    if (!empty($docounter)) {
+        if ($reset && $startnum == 0) {
+            $dbconn->Execute("DELETE FROM " . $tables['hitcount'] . " WHERE xar_moduleid = " . $regid);
+        }
+    }
 
     // Select all of the stories
     $query = "SELECT $table_stories.stoid, 
@@ -61,16 +70,9 @@
         $result =& $dbconn->Execute($query);
     }
     if (!$result) {
-        die("Oops, select stories failed : " . $dbconn->ErrorMsg());
+        die("Oops, select from " . $table_stories . " failed : " . $dbconn->ErrorMsg());
     }
-    if ($reset && $startnum == 0) {
-        $dbconn->Execute("DELETE FROM " . $tables['articles']);
-    }
-    if (!empty($docounter)) {
-        if ($reset && $startnum == 0) {
-            $dbconn->Execute("DELETE FROM " . $tables['hitcount'] . " WHERE xar_moduleid = " . $regid);
-        }
-    }
+
     $num = 1;
     $language = xarMLSGetCurrentLocale();
     while (!$result->EOF) {
@@ -87,7 +89,7 @@
              $day_published,
              $hits) = $result->fields;
 
-        // Set status of the new articel
+        // Set status of the new article
         switch ($writestatus) {
             case 'ok':
                 // Set status to Approved
@@ -203,8 +205,8 @@
             $query = 'VACUUM ANALYZE ' . $tables['categories_linkage'];
             $result =& $dbconn->Execute($query);
             if (!empty($docounter)) {
-            $query = 'VACUUM ANALYZE ' . $tables['hitcount'];
-            $result =& $dbconn->Execute($query);
+                $query = 'VACUUM ANALYZE ' . $tables['hitcount'];
+                $result =& $dbconn->Execute($query);
             }
             break;
         default:
