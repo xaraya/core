@@ -3007,7 +3007,13 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
             // template, we make sure that the include resolves to the right file.
             $patharray = explode('/',dirname($this->fileName));
             // We need the value after 'modules' always, whether the container is overridden or not.
-            $modName = $patharray[array_search ('modules',$patharray)+1];
+            // Note; Bug 2156: array_search() fails to match the correct element for some modules.
+            foreach($patharray as $patharrayid => $patharrayname) {
+                if ($patharrayname == 'modules') {
+                    $modName = $patharray[$patharrayid+1];
+                    break;
+                }
+            }
             
             return "xarTpl_includeModuleTemplate(\"$modName\", \"$file\", $subdata)";
             break;
