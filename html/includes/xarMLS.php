@@ -685,8 +685,15 @@ function xarMLS_strftime($format=null,$timestamp=null)
             case '%D' :
                 // just use the abbreviated formating string that %D represents
                 $locale_format = $localeData['/dateFormats/short'];
-                //TODO: either modify locale.xml or convert the data to valid strftime flags
-                $format = str_replace($modifier,gmstrftime($locale_format,$timestamp),$format);
+                $locale_format = str_replace('MMMM','%B',$locale_format);
+                $locale_format = str_replace('MMM','%b',$locale_format);
+                $locale_format = str_replace('M','%m',$locale_format);
+                $locale_format = str_replace('dddd','%A',$locale_format);
+                $locale_format = str_replace('ddd','%a',$locale_format);
+                $locale_format = str_replace('d','%e',$locale_format);
+                $locale_format = str_replace('yyyy','%Y',$locale_format);
+                $locale_format = str_replace('yy','%y',$locale_format);
+                $format = str_replace($modifier,xarMLS_strftime($locale_format,$timestamp),$format);
                 break;
                 
             case '%r' :
