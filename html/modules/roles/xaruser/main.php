@@ -11,19 +11,28 @@ function roles_user_main()
 {
 
 // Security Check
-    if(!xarSecurityCheck('ViewRoles')) return;
+    // Security Check
+    if(xarSecurityCheck('EditRole',0)) {
 
-    if (xarUserIsLoggedIn()) {
-       xarResponseRedirect(xarModURL('roles',
-                                     'user',
-                                     'account'));
-    } else {
-        xarResponseRedirect(xarModURL('roles',
-                                      'user',
-                                      'register'));
+        if (xarModGetVar('adminpanels', 'overview') == 0){
+            return xarTplModule('roles','admin', 'main',array());
+        } else {
+            xarResponseRedirect(xarModURL('roles', 'admin', 'viewroles'));
+        }
     }
+    elseif(xarSecurityCheck('ViewRoles',0)) {
 
-    return true;
+        if (xarUserIsLoggedIn()) {
+           xarResponseRedirect(xarModURL('roles',
+                                         'user',
+                                         'account'));
+        } else {
+            xarResponseRedirect(xarModURL('roles',
+                                          'user',
+                                          'register'));
+        }
+    }
+    else { return; }
 }
 
 ?>

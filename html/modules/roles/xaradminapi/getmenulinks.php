@@ -11,7 +11,7 @@ function roles_adminapi_getmenulinks()
 {
 
 // Security Check
-	if (xarSecurityCheck('EditRole',0)) {
+    if (xarSecurityCheck('EditRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
                                                   'viewroles'),
@@ -20,7 +20,7 @@ function roles_adminapi_getmenulinks()
     }
 
 // Security Check
-	if (xarSecurityCheck('AddRole',0)) {
+    if (xarSecurityCheck('AddRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
                                                   'newrole'),
@@ -29,7 +29,7 @@ function roles_adminapi_getmenulinks()
     }
 
 // Security Check
-	if (xarSecurityCheck('EditRole',0)) {
+    if (xarSecurityCheck('AdminRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
                                                   'confirmationemail'),
@@ -38,7 +38,7 @@ function roles_adminapi_getmenulinks()
     }
 
 // Security Check
-	if (xarSecurityCheck('EditRole',0)) {
+    if (xarSecurityCheck('AdminRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
                                                   'welcomeemail'),
@@ -47,7 +47,7 @@ function roles_adminapi_getmenulinks()
     }
 
 // Security Check
-	if (xarSecurityCheck('AdminRole',0)) {
+    if (xarSecurityCheck('AdminRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
                                                   'modifyconfig'),

@@ -2,6 +2,10 @@
 
 function roles_userapi_getmenulinks()
 {
+
+    // get the admin part of the menu
+    $menulinks = xarModAPIFunc('roles','admin','getmenulinks');
+
     // Security check
     if (true) {
         $menulinks[] = Array('url'   => xarModURL('roles',
@@ -31,6 +35,7 @@ function roles_userapi_getmenulinks()
                                  'label' => xarML('Terms of Use'));
         }
     }
+
 
     if (empty($menulinks)){
         $menulinks = '';

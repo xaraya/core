@@ -49,7 +49,7 @@ function base_menublock_info()
 }
 
 /**
- * display adminmenu block
+ * display usermenu block
  *
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
@@ -70,7 +70,7 @@ function base_menublock_display($blockinfo)
     // Break out options from our content field
     $vars = unserialize($blockinfo['content']);
 
-    // are there any admin modules, then get their names
+    // are there any user modules, then get their names
     // checking as early as possible :)
     $mods = xarModGetList(array('UserCapable' => 1));
     if(empty($mods)) {
