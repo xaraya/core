@@ -73,6 +73,12 @@ function base_admin_updateconfig()
             if (!in_array($defaultLocale,$localesList)) $localesList[] = $defaultLocale;
             sort($localesList);
 
+            if (($MLSMode == 'UNBOXED') && (xarMLSGetCharsetFromLocale($defaultLocale) != 'utf-8')) {
+                $msg = xarML('You should select utf-8 locale as default before selecting UNBOXED mode');
+                xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+                break;
+            }
+
             // Locales
             xarConfigSetVar('Site.MLS.MLSMode', $MLSMode);
             xarConfigSetVar('Site.MLS.DefaultLocale', $defaultLocale);
