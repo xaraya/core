@@ -925,6 +925,11 @@ if (empty($step)) {
         }
     }
 
+    $timezone = xarConfigGetVar('Site.Core.TimeZone');
+    if (!isset($timezone) || substr($timezone,0,2) == 'US') {
+        xarConfigSetVar('Site.Core.TimeZone', '');
+        echo "Site.Core.TimeZone incorrect, attempting to set.... done!<br />";
+    }
     $offset = xarConfigGetVar('Site.MLS.DefaultTimeOffset');
     if (!isset($offset)) {
         xarConfigSetVar('Site.MLS.DefaultTimeOffset', 0);
