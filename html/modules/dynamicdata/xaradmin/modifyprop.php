@@ -89,7 +89,8 @@ function dynamicdata_admin_modifyprop()
 
     $data['fields'] = xarModAPIFunc('dynamicdata','user','getprop',
                                    array('modid' => $modid,
-                                         'itemtype' => $itemtype));
+                                         'itemtype' => $itemtype,
+                                         'allprops' => true));
     if (!isset($data['fields']) || $data['fields'] == false) {
         $data['fields'] = array();
     }

@@ -33,7 +33,8 @@ function dynamicdata_util_export($args)
     $myobject = new Dynamic_Object(array('objectid' => $objectid,
                                          'moduleid' => $modid,
                                          'itemtype' => $itemtype,
-                                         'itemid'   => $itemid));
+                                         'itemid'   => $itemid,
+                                         'allprops' => true));
 
     if (!isset($myobject) || empty($myobject->label)) {
         $data['label'] = xarML('Unknown Object');

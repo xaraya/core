@@ -27,6 +27,7 @@ class Dynamic_Property_Master
      * @param $args['moduleid'] the module id of the object +
      * @param $args['itemtype'] the itemtype of the object
      * @param $args['objectref'] a reference to the object to add those properties to (optional)
+     * @param $args['allprops'] skip disabled properties by default
      */
     function getProperties($args)
     {
@@ -52,6 +53,9 @@ class Dynamic_Property_Master
         } else {
             $query .= " WHERE xar_prop_moduleid = " . xarVarPrepForStore($args['moduleid']) . "
                           AND xar_prop_itemtype = " . xarVarPrepForStore($args['itemtype']);
+        }
+        if (empty($args['allprops'])) {
+            $query .= " AND xar_prop_status > 0 ";
         }
         $query .= " ORDER BY xar_prop_order ASC, xar_prop_id ASC";
 
@@ -90,23 +94,31 @@ class Dynamic_Property_Master
      * Add a dynamic property to an object
      *
      * @param $args['name'] the name for the dynamic property
-     * @param $args['label'] the label for the dynamic property
      * @param $args['type'] the type of dynamic property
+     * @param $args['label'] the label for the dynamic property
      * ...
      * @param $objectref a reference to the object to add this property to
      */
     function addProperty($args, &$objectref)
     {
-        if (isset($objectref)) {
-            // get a new property
-            $property =& Dynamic_Property_Master::getProperty($args);
+        if (!isset($objectref) || empty($args['name']) || empty($args['type'])) {
+            return;
+        }
 
-            // add it to the list of properties
-            $objectref->properties[$property->name] =& $property;
+        // "beautify" label based on name if not specified
+        if (!isset($args['label']) && !empty($args['name'])) {
+            $args['label'] = strtr($args['name'], '_', ' ');
+            $args['label'] = ucwords($args['label']);
+        }
 
-            if (isset($property->upload)) {
-                $objectref->upload = true;
-            }
+        // get a new property
+        $property =& Dynamic_Property_Master::getProperty($args);
+
+        // add it to the list of properties
+        $objectref->properties[$property->name] =& $property;
+
+        if (isset($property->upload)) {
+            $objectref->upload = true;
         }
     }
 

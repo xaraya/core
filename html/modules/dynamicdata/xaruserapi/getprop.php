@@ -10,6 +10,7 @@
  * @param $args['itemtype'] item type of the item field to get
  * @param $args['fieldlist'] array of field labels to retrieve (default is all)
  * @param $args['status'] limit to property fields of a certain status (e.g. active)
+ * @param $args['allprops'] skip disabled properties by default
  * @param $args['static'] include the static properties (= module tables) too (default no)
  * @returns mixed
  * @return value of the field, or false on failure
@@ -47,6 +48,11 @@ function dynamicdata_userapi_getprop($args)
     // limit to property fields of a certain status (e.g. active)
     if (!isset($status)) {
         $status = null;
+    }
+
+    // skip disabled properties by default
+    if (!isset($allprops)) {
+        $allprops = null;
     }
 
     // include the static properties (= module tables) too ?
@@ -93,7 +99,8 @@ function dynamicdata_userapi_getprop($args)
 
     $fields = Dynamic_Property_Master::getProperties(array('objectid' => $objectid,
                                                            'moduleid' => $modid,
-                                                           'itemtype' => $itemtype));
+                                                           'itemtype' => $itemtype,
+                                                           'allprops' => $allprops));
 
     if (!empty($static)) {
         // get the list of static properties for this module

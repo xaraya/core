@@ -58,6 +58,7 @@ class Dynamic_Object_Master
      *
      * @param $args['fieldlist'] optional list of properties to use, or
      * @param $args['status'] optional status of the properties to use
+     * @param $args['allprops'] skip disabled properties by default
      */
     function Dynamic_Object_Master($args)
     {
@@ -94,9 +95,13 @@ class Dynamic_Object_Master
         if (count($this->properties) == 0 &&
             (isset($this->objectid) || (isset($this->moduleid) && isset($this->itemtype)))
            ) {
+           if (!isset($args['allprops'])) {
+               $args['allprops'] = null;
+           }
            Dynamic_Property_Master::getProperties(array('objectid'  => $this->objectid,
                                                         'moduleid'  => $this->moduleid,
                                                         'itemtype'  => $this->itemtype,
+                                                        'allprops'  => $args['allprops'],
                                                         'objectref' => & $this)); // we pass this object along
         }
         // filter on property status if necessary
@@ -199,6 +204,24 @@ class Dynamic_Object_Master
         return $this->datastores;
     }
 
+    /**
+     * Add a data store for this object
+     *
+     * @param $name the name for the data store
+     * @param $type the type of data store
+     */
+    function addDataStore($name = '_dynamic_data_', $type='data')
+    {
+        // get a new data store
+        $datastore =& Dynamic_DataStore_Master::getDataStore($name, $type);
+
+        // add it to the list of data stores
+        $this->datastores[$datastore->name] =& $datastore;
+    }
+
+    /**
+     * Get the selected dynamic properties for this object
+     */
     function &getProperties($args = array())
     {
         if (empty($args['fieldlist'])) {
@@ -220,18 +243,21 @@ class Dynamic_Object_Master
     }
 
     /**
-     * Add a data store for this object
+     * Add a property for this object
      *
-     * @param $name the name for the data store
-     * @param $type the type of data store
+     * @param $args['name'] the name for the dynamic property (required)
+     * @param $args['type'] the type of dynamic property (required)
+     * @param $args['label'] the label for the dynamic property
+     * @param $args['id'] the id for the dynamic property
+     * ...
      */
-    function addDataStore($name = '_dynamic_data_', $type='data')
+    function addProperty($args)
     {
-        // get a new data store
-        $datastore =& Dynamic_DataStore_Master::getDataStore($name, $type);
-
-        // add it to the list of data stores
-        $this->datastores[$datastore->name] =& $datastore;
+        // TODO: find some way to have unique IDs across all objects if necessary
+        if (!isset($args['id'])) {
+            $args['id'] = count($this->properties) + 1;
+        }
+        Dynamic_Property_Master::addProperty($args,$this);
     }
 
     /**
@@ -494,6 +520,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         } else {
             $properties = & $this->properties;
         }
+
         return xarTplModule('dynamicdata','admin','objectform',
                             array('properties' => $properties,
                                   'layout'     => $args['layout']),
