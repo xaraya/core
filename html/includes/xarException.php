@@ -627,11 +627,11 @@ function xarExceptionRender($format)
         }
        $thisexception = $exception['value'];
        $thisexception->load($exception['exceptionId']);
-       $data['title'] = $thisexception->getTitle();
-       $data['short'] = $thisexception->getShort();
-       $data['long'] = $thisexception->getLong();
-       $data['hint'] = $thisexception->getHint();
-       $data['stack'] = $text;
+       $data['title'] = xarVarPrepForDisplay($thisexception->getTitle());
+       $data['short'] = xarVarPrepForDisplay($thisexception->getShort());
+       $data['long'] = xarVarPrepForDisplay($thisexception->getLong());
+       $data['hint'] = xarVarPrepForDisplay($thisexception->getHint());
+       $data['stack'] = xarVarPrepForDisplay($text);
     }
 
    return  xarTplModule('base',$template, 'exception', $data);
@@ -654,7 +654,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
     // Make cached files also display their source file if it's a template
     // This is just for convenience when giving support, as people will probably
     // not look in the CACHEKEYS file to mention the template.
-    if($GLOBALS['xarTpl_cacheTemplates']) {
+    if(isset($GLOBALS['xarTpl_cacheTemplates'])) {
         $sourcetmpl='';
         $base = basename($file,'.php');
         $varDir = xarCoreGetVarDirPath();

@@ -74,7 +74,7 @@ function installer_adminapi_modifyconfig($args)
 function installer_adminapi_initialise($args)
 {
     extract($args);
-    
+
 
     if (empty($directory) || empty($initfunc)) {
         $msg = xarML('Empty modName (#(1)) or name (#(2)).', $directory, $initFunc);
@@ -96,14 +96,14 @@ function installer_adminapi_initialise($args)
     }
 
     // Run the function, check for existence
-    
+
     $initFunc = $osDirectory.'_'.$initfunc;
     if (function_exists($initFunc)) {
         $res = $initFunc();
-   
+
         // Handle exceptions
         if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
-        
+
         if ($res == false) {
             // exception
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
@@ -116,7 +116,7 @@ function installer_adminapi_initialise($args)
                        new SystemException(__FILE__."(".__LINE__."): Module API function $initFunc doesn't exist."));
                        return;
     }
-   
+
     return true;
 }
 
@@ -155,6 +155,7 @@ function installer_adminapi_createdb($args)
         define('ADODB_DIR','xaradodb');
     }
    include_once ADODB_DIR . '/adodb.inc.php';
+   $ADODB_CACHE_DIR = xarCoreGetVarDirPath() . "/cache/adodb";
 
     // Start connection
     $dbconn = ADONewConnection($dbType);
@@ -203,7 +204,7 @@ function installer_adminapi_CheckForField($args)
     $query = "desc $table_name";
     $result =& $dbconn->Execute($query);
 
-    for(;!$result->EOF;$result->MoveNext()) { 
+    for(;!$result->EOF;$result->MoveNext()) {
         if ($result[Field] == $field_name) {
             return true;
         }
@@ -241,7 +242,7 @@ function installer_adminapi_GetFieldType($args)
     $query = "desc $table_name";
     $result =& $dbconn->Execute($query);
 
-    for(;!$result->EOF;$result->MoveNext()) { 
+    for(;!$result->EOF;$result->MoveNext()) {
         if ($result[Field] == $field_name) {
             return ($row[Type]);
         }
