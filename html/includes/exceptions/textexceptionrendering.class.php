@@ -11,7 +11,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-include "includes/exceptions/exceptionrendering.class.php";
+include_once "includes/exceptions/exceptionrendering.class.php";
 
 class TextExceptionRendering extends ExceptionRendering
 {
