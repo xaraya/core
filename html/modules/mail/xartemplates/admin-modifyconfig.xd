@@ -7,7 +7,7 @@
 </table>
 <div align="center"><h2><xar:mlstring>Modify Mail Configuration</xar:mlstring></h2><br />
 <form method="post" action="&xar-modurl-mail-admin-updateconfig;" method="post" enctype="application/x-www-form-urlencoded" />
-    <input type="hidden" name="authid" value="&xar-var-authid;" />
+    <input type="hidden" name="authid" value="#$authid#" />
 
 	<table border="0" width="100%">
 		<tr>

@@ -6,7 +6,7 @@
     <!-- the variables used in this menu come from example_admin_menu() -->
 
     <tr>
-        <th align="center">&xar-var-menutitle;</th>
+        <th align="center">#$menutitle#</th>
     </tr>
     <tr><td>
         <table border="0" width="100%" cellspacing="1" cellpadding="8">
@@ -16,14 +16,14 @@
 
         <!-- Simple URLs can be specified directly in the template -->
 
-        <td><a href="&xar-modurl-example-admin-new;">&xar-var-menulabel_new;</a></td>
-        <td><a href="&xar-modurl-example-admin-view;">&xar-var-menulabel_view;</a></td>
-        <td><a href="&xar-modurl-example-admin-modifyconfig;">&xar-var-menulabel_config;</a></td>
+        <td><a href="&xar-modurl-example-admin-new;">#$menulabel_new#</a></td>
+        <td><a href="&xar-modurl-example-admin-view;">#$menulabel_view#</a></td>
+        <td><a href="&xar-modurl-example-admin-modifyconfig;">#$menulabel_config#</a></td>
 
         <!-- more menu items come here... -->
 
         <!-- Note : you can also specify the links in example_admin_menu()
-             and pass them on as variables : e.g. &xar-var-menulink_view; -->
+             and pass them on as variables : e.g. #$menulink_view# -->
         </tr>
         </table>
     </td></tr>

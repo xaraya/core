@@ -15,6 +15,6 @@
 		<xar:mlstring>Logout Title</xar:mlstring>
 	</td>
 	<td>
-		<input type="text" name="logouttitle" id="logouttitle" value="&xar-var-logouttitle;" size="15" maxlength="25" tabindex="2" />
+		<input type="text" name="logouttitle" id="logouttitle" value="#$logouttitle#" size="15" maxlength="25" tabindex="2" />
 	</td>
 </tr>

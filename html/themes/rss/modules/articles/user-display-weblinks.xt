@@ -1,8 +1,8 @@
 <item>
-<title>&xar-var-title;</title>
-<link>&xar-var-notes;</link>
-<description>&xar-var-summary;</description>
-<author>&xar-var-author;</author>
-<PubDate>&xar-var-date;</PubDate>
+<title>#$title#</title>
+<link>#$notes#</link>
+<description>#$summary#</description>
+<author>#$author#</author>
+<PubDate>#$date#</PubDate>
 <comments>&xar-modurl-comments-user-view;</comments>
 </item>

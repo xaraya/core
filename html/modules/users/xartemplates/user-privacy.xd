@@ -11,17 +11,17 @@
 	<xar:mlstring>Like many web sites, we set and use cookies to enhance your user experience, such as retaining your personal settings. Advertisements may appear on our web site and, if so, may set and access cookies on your computer and is subject to the privacy policy of those parties providing the advertisement. However, the companies serving the advertising do not have access to our cookies. These companies usually use non-personally identifiable or anonymous codes to obtain information about your visits to our site.</xar:mlstring>
 
 	<!-- **NOTE: that this last statement should be true but modify if necessary -->
-	<xar:mlstring>You can </xar:mlstring><a href=http://www.networkadvertising.org/optout_nonppii.asp><xar:mlstring>click here</xar:mlstring></a><xar:mlstring> to find out more information about this practice and to find out about your options including from the following companies that may serve advertising on our site:</xar:mlstring><br>
+	<xar:mlstring>You can </xar:mlstring><a href="http://www.networkadvertising.org/optout_nonppii.asp"><xar:mlstring>click here</xar:mlstring></a><xar:mlstring> to find out more information about this practice and to find out about your options including from the following companies that may serve advertising on our site:</xar:mlstring><br />
 	<!-- **NOTE: Add or delete from the following -->
 	<br />
 	<br />
-	[ <a href=http://www.affiliateshop.com><xar:mlstring>AffiliateShop</xar:mlstring></a> ]<br />
-	[ <a href=http://www.associateprograms.com><xar:mlstring>AssociatePrograms.com</xar:mlstring></a> ]<br />
-	[ <a href=http://www.befree.com><xar:mlstring>Be Free</xar:mlstring></a> ]<br />
-	[ <a href=http://www.clicktrade.com><xar:mlstring>Click Trade</xar:mlstring></a> ]<br />
-	[ <a href=http://www.cj.com><xar:mlstring>Commission Junction</xar:mlstring></a> ]<br />
-	[ <a href=http://www.doubleclick.net><xar:mlstring>DoubleClick</xar:mlstring></a> ]<br />
-	[ <a href=http://www.linkshare.com><xar:mlstring>Linkshare</xar:mlstring></a> ]<br />
+	[ <a href="http://www.affiliateshop.com"><xar:mlstring>AffiliateShop</xar:mlstring></a> ]<br />
+	[ <a href="http://www.associateprograms.com"><xar:mlstring>AssociatePrograms.com</xar:mlstring></a> ]<br />
+	[ <a href="http://www.befree.com"><xar:mlstring>Be Free</xar:mlstring></a> ]<br />
+	[ <a href="http://www.clicktrade.com"><xar:mlstring>Click Trade</xar:mlstring></a> ]<br />
+	[ <a href="http://www.cj.com"><xar:mlstring>Commission Junction</xar:mlstring></a> ]<br />
+	[ <a href="http://www.doubleclick.net"><xar:mlstring>DoubleClick</xar:mlstring></a> ]<br />
+	[ <a href="http://www.linkshare.com"><xar:mlstring>Linkshare</xar:mlstring></a> ]<br />
 	<h3><xar:mlstring>4. Children.</xar:mlstring></h3>
 	<xar:mlstring>We do not allow persons who are ages thirteen or younger to become members of this site. For more information, please contact</xar:mlstring> <a href="mailto:&xar-config-core.adminmail;"><xar:mlstring>our webmaster</xar:mlstring></a>.
 	<!-- **NOTE: Feel free to provide other information -->

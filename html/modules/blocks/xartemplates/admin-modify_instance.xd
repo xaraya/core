@@ -11,8 +11,8 @@
 
 <div align="center"><h2>Modify Block Instance</h2><br />
 <form method="post" action="&xar-modurl-blocks-admin-update_instance;">
-    <input type="hidden" name="authid" value="&xar-var-authid;" />
-    <input type="hidden" name="bid" value="&xar-var-bid;" />
+    <input type="hidden" name="authid" value="#$authid#" />
+    <input type="hidden" name="bid" value="#$bid#" />
     
     <table border="0" width="300">
         <tr>
@@ -39,11 +39,11 @@
                 <select name="block_group" style="width:150px;">
                     <xar:loop name="$block_groups">
                         <xar:if condition="$instance['group_id'] eq $id">
-                            <option value="&xar-var-id;" selected="selected">
+                            <option value="#$id#" selected="selected">
                         <xar:else />
-                            <option value="&xar-var-id;">
+                            <option value="#$id#">
                         </xar:if>
-                        &xar-var-name;
+                        #$name#
                         </option>
                     </xar:loop>                
                 </select>
@@ -57,9 +57,9 @@
                 <select name="block_refresh" style="width:150px;">
                     <xar:loop name="$refresh_times">
                         <xar:if condition="$instance['refresh'] eq $id">
-                            <option value="&xar-var-id;" selected="selected">
+                            <option value="#$id#" selected="selected">
                         <xar:else />
-                            <option value="&xar-var-id;">
+                            <option value="#$id#">
                         </xar:if>
                         <xar:var name="$name" />
                         </option>
@@ -114,7 +114,7 @@
             </td>
         </tr>
         </xar:if>
-        &xar-var-extra_fields;
+        #$extra_fields#
         <tr>
             <td colspan="2" align="center"><br />
                     <input type="submit" value="OK" align="middle" />

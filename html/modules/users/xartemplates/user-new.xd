@@ -19,7 +19,7 @@
 	<br /><br />
 	<form action="&xar-modurl-users-user-new;" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="stage" id="stage" value="3" />		
-		<input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />		
+		<input type="hidden" name="authid" id="authid" value="#$authid#" />		
 		<table border="0" cellpadding="5">
 			<tr>
 				<td>

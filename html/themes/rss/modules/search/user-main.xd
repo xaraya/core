@@ -1,7 +1,7 @@
 <xar:if condition="!empty($query)">
 <item>
-<title>Search term : &xar-var-query;</title>
-<author>&xar-var-name;</author>
-<description>&xar-var-output;</description>
+<title>Search term : #$query#</title>
+<author>#$name#</author>
+<description>#$output#</description>
 </item>
 </xar:if>

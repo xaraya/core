@@ -4,7 +4,7 @@
     <tr>
         <th align="center" valign="top">
             <!-- Menu title -->
-            &xar-var-title;
+            #$title#
         </th>
     </tr>
 </table>
@@ -13,20 +13,20 @@
 </table>
 <div align="center"><h2><xar:mlstring>Configure Themes</xar:mlstring></h2><br />
 <form method="post" action="&xar-modurl-themes-admin-updateconfig;">
-<input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
+<input type="hidden" name="authid" id="authid" value="#$authid#" />
             <table border="0" width="450" cellpadding="2" cellspacing="0">
                 <tr align="left" valign="top">
                     <td>
-                        &xar-var-defaultthemelabel; #$defaulttheme#
+                        #$defaultthemelabel# #$defaulttheme#
                     </td>
                     <td>
                         <select name="defaulttheme" id="defaulttheme" size="1">
                         <!-- there is a bug in BL which prevents using entities in if tag, so for now this will work -->
                             <xar:loop name="$themes">
                             <xar:if condition="$name == $defaulttheme">
-                                <option value="&xar-var-regid;" selected>#$name#</option>
+                                <option value="#$regid#" selected>#$name#</option>
                             <xar:else />
-                                <option value="&xar-var-regid;">#$name#</option>
+                                <option value="#$regid#">#$name#</option>
                             </xar:if>
                             </xar:loop>
                         </select>
@@ -34,7 +34,7 @@
                 </tr>
                 <tr align="left" valign="top">
                     <td><br>
-                        &xar-var-submitlabel;
+                        #$submitlabel#
                     </td>
                     <td><br>
                         <!-- submit button -->

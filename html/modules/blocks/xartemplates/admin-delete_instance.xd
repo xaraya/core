@@ -11,7 +11,7 @@
 
 <div align="center"><h2>Delete Block Instance</h2><br />
 <form method="post" action="&xar-modurl-blocks-admin-delete_instance;">
-    <input type="hidden" name="authid" value="&xar-var-authid;" />
+    <input type="hidden" name="authid" value="#$authid#" />
     <input type="hidden" name="confirm" value="true" />
     <input type="hidden" name="bid" value="&xar-var-instance.id;" />
     

@@ -8,12 +8,12 @@
     </tr>
 </table>
 <!-- Confirmation -->
-<div align="center"><h2>&xar-var-question;</h2></div><br />
+<div align="center"><h2>#$question#</h2></div><br />
 <table border="0" width="100%">
     <tr>
         <td align="center">
-            <h3>[<a href="&xar-var-logouturl;">&xar-var-logoutlabel;</a>]
-            [<a href="&xar-var-cancelurl;">&xar-var-cancellabel;</a>]</h3>
+            <h3>[<a href="#$logouturl#">#$logoutlabel#</a>]
+            [<a href="#$cancelurl#">#$cancellabel#</a>]</h3>
         </td>
     </tr>
 </table>

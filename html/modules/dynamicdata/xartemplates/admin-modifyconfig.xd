@@ -14,7 +14,7 @@
 <br />
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
 <form method="post" action="&xar-modurl-dynamicdata-admin-updateconfig;">
-    <input type="hidden" name="authid" value="&xar-var-authid;" />
+    <input type="hidden" name="authid" value="#$authid#" />
 
     <tr>
        <td><strong>&xar-var-labels.id;</strong></td>
@@ -28,12 +28,12 @@
 
 <xar:loop name="$fields">
     <tr align="left" valign="middle">
-        <td>&xar-var-id;</td>
-        <td><input type="text" name="name[&xar-var-id;]" size="15" value="&xar-var-name;" /></td>
-        <td><input type="text" name="label[&xar-var-id;]" size="20" value="&xar-var-label;" /></td>
+        <td>#$id#</td>
+        <td><input type="text" name="name[#$id#]" size="15" value="#$name#" /></td>
+        <td><input type="text" name="label[#$id#]" size="20" value="#$label#" /></td>
         <td><xar:data-input type="fieldtype" name="format['.$id.']" value="$format" /></td>
         <td>&lt;-- see input</td>
-        <td><input type="text" name="validation[&xar-var-id;]" size="20" value="&xar-var-validation;" /></td>
+        <td><input type="text" name="validation[#$id#]" size="20" value="#$validation#" /></td>
         <td>...</td>
     </tr>
 </xar:loop>
@@ -50,7 +50,7 @@
 
     <tr>
         <td colspan="7" align="center">
-           <input type="submit" value="&xar-var-updatebutton;" />
+           <input type="submit" value="#$updatebutton#" />
         </td>
     </tr>
 </form>

@@ -1,7 +1,7 @@
 <xar:if condition="$number gt 0">
     <xar:loop name="$columns">
         <xar:loop name="$colitems">
-            &xar-var-colitem;
+            #$colitem#
         </xar:loop>
     </xar:loop>
 </xar:if>

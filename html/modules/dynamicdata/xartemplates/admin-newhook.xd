@@ -1,6 +1,6 @@
 <xar:loop name="$fields">
     <tr align="left" valign="middle">
-        <td>&xar-var-label;</td>
+        <td>#$label#</td>
         <td><xar:data-input type="$type" name="dd_'.$id.'" value="$value" /></td>
     </tr>
 </xar:loop>

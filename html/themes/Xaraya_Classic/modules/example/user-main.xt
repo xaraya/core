@@ -1,4 +1,4 @@
-<font color="red">This is an over-ridden template.  See themes/Xaraya_Classic/modules/example user-main.xar for the example</font>
+<span style="color: ##FF0000;">This is an over-ridden template.  See themes/Xaraya_Classic/modules/example user-main.xar for the example</span>
 
 <br />
 <br />
@@ -8,13 +8,13 @@
 
     <!-- the variables used in this menu come from example_user_menu() -->
 
-    <tr><th align="center">&xar-var-menutitle;</th></tr>
+    <tr><th align="center">#$menutitle#</th></tr>
     <tr><td>
         <table border="0" width="100%"><tr align="center" valign="middle">
 
         <!-- a link to a particular menu item -->
 
-        <td><a href="&xar-var-menulink_view;">&xar-var-menulabel_view;</a></td>
+        <td><a href="#$menulink_view#">#$menulabel_view#</a></td>
 
         <!-- more menu items come here... -->
 
@@ -29,5 +29,5 @@
 
 <!-- some variable filled in by the function using this template -->
 
-<center><strong> &xar-var-welcome; </strong></center>
+<center> #$welcome# </b></center>
 

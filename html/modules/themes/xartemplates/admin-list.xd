@@ -15,75 +15,75 @@
 			<table border="1" width="100%" cellpadding="2" cellspacing="0">
 				<tr>
 					<th>
-						&xar-var-themenamelabel;
+						#$themenamelabel#
 					</th>
 					<th>
-						&xar-var-disnamelabel;
+						#$disnamelabel#
 					</th>
 					<th>
-						&xar-var-themedirlabel;
+						#$themedirlabel#
 					</th>
 					<th>
-						&xar-var-statelabel;
+						#$statelabel#
 					</th>
 					<th>
-						&xar-var-actionslabel;
+						#$actionslabel#
 					</th>
 				</tr>
 				<xar:loop name="$items">
 				<tr align="CENTER" valign="middle">
 					<td>
-						&xar-var-name;
+						#$name#
 					</td>
 					<td>
-						&xar-var-displayname;
+						#$displayname#
 					</td>
 					<td align="left">
-						themes/&xar-var-directory;
+						themes/#$directory#
 					</td>
 					<td>
 						<xar:if condition="$state eq 4">
-							&xar-var-state4label;
+							#$state4label#
 						</xar:if>
 						<xar:if condition="$state eq 3">
-							&xar-var-state3label;
+							#$state3label#
 						</xar:if>
 						<xar:if condition="$state eq 2">
-							&xar-var-state2label;
+							#$state2label#
 						</xar:if>
 						<xar:if condition="$state eq 1">
-							&xar-var-state1label;
+							#$state1label#
 						</xar:if>
 						<xar:if condition="$state eq 0">
-							&xar-var-state0label;
+							#$state0label#
 						</xar:if>
 
 					</td>
 					<td>
 						<xar:if condition="$state eq 4">
-							<a href="&xar-var-removeurl;">&xar-var-remove;</a>
+							<a href="#$removeurl#">#$remove#</a>
 							|
-							<a href="&xar-var-editurl;">&xar-var-edit;</a>
+							<a href="#$editurl#">#$edit#</a>
 						</xar:if>
 						<xar:if condition="$state eq 3">
-							<a href="&xar-var-deactivateurl;">&xar-var-deactivate;</a>
+							<a href="#$deactivateurl#">#$deactivate#</a>
 							|
-							<a href="&xar-var-editurl;">&xar-var-edit;</a>
+							<a href="#$editurl#">#$edit#</a>
 						</xar:if>
 						<xar:if condition="$state eq 2">
-							<a href="&xar-var-activateurl;">&xar-var-activate;</a>
+							<a href="#$activateurl#">#$activate#</a>
 							|
-							<a href="&xar-var-removeurl;">&xar-var-remove;</a>
+							<a href="#$removeurl#">#$remove#</a>
 							|
-							<a href="&xar-var-editurl;">&xar-var-edit;</a>
+							<a href="#$editurl#">#$edit#</a>
 						</xar:if>
 						<xar:if condition="$state eq 1">
-							<a href="&xar-var-initialiseurl;">&xar-var-initialise;</a>
+							<a href="#$initialiseurl#">#$initialise#</a>
 							|
-							<a href="&xar-var-removeurl;">&xar-var-remove;</a>
+							<a href="#$removeurl#">#$remove#</a>
 						</xar:if>
 						<xar:if condition="$state eq 0">
-							<a href="&xar-var-upgradeurl;">&xar-var-upgrade;</a>
+							<a href="#$upgradeurl#">#$upgrade#</a>
 						</xar:if>
 					</td>
 				</tr>

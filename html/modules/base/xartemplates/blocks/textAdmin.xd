@@ -21,7 +21,7 @@
 		<xar:if condition="$expirein eq 0">
 		<xar:mlstring>Block set to 'Unlimited'</xar:mlstring>
 		<xar:else />
-		&xar-var-expirein; <xar:mlstring>Hours</xar:mlstring>
+		#$expirein# <xar:mlstring>Hours</xar:mlstring>
 		</xar:if>
 	</td>
 </tr>
@@ -30,6 +30,6 @@
 		<xar:mlstring>Text</xar:mlstring>
 	</td>
 	<td colspan="2">
-		<textarea name="text_content" style="width:300px;height:150px;">&xar-var-text_content;</textarea>
+		<textarea name="text_content" style="width:300px;height:150px;">#$text_content#</textarea>
     </td>
 </tr>

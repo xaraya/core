@@ -10,8 +10,8 @@
 </table>
 <div align="center"><h2><xar:mlstring>Edit Theme</xar:mlstring>: #$name#</h2><br />
 <form action="&xar-modurl-themes-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
-	<input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
-	<input type="hidden" name="id" id="id" value="&xar-var-id;" />
+	<input type="hidden" name="authid" id="authid" value="#$authid#" />
+	<input type="hidden" name="id" id="id" value="#$id#" />
     <table border="1" cellpadding="2" cellspacing="0" width="100%">
         <tr>
             <th><xar:mlstring>Name</xar:mlstring></th>
@@ -26,7 +26,7 @@
                <xar:if condition="$prime eq 1">&nbsp;&nbsp;[primary]</xar:if>
             </td>
             <td>
-               <input type="text" name="&xar-var-name;" id="&xar-var-name;" value="&xar-var-value;">
+               <input type="text" name="#$name#" id="#$name#" value="#$value#">
             </td>
             <td>
                #$description#
@@ -35,7 +35,7 @@
                <xar:if condition="$prime eq 1">
                    none
                <xar:else />
-                   <input type="checkbox" name="&xar-var-name;-del" value="delete"> Delete
+                   <input type="checkbox" name="#$name#-del" value="delete"> Delete
                </xar:if>
             </td>
         </tr>

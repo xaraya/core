@@ -41,7 +41,7 @@ function saveBlockOrder(f) {
 
 <center>
 <form method="post" action="&xar-modurl-blocks-admin-update_group;" onsubmit="saveBlockOrder(this);">
-    <input type="hidden" name="authid" value="&xar-var-authid;" />
+    <input type="hidden" name="authid" value="#$authid#" />
     <input type="hidden" name="gid" value="<xar:var name="$group['id']" />" />
     <input type="hidden" name="group_instance_order" value="" />
     <table border="0" width="300">
@@ -61,19 +61,19 @@ function saveBlockOrder(f) {
                 <table>
                     <tr>
                         <td rowspan="2">
-                            <select name="group_instances" size="&xar-var-instance_count;">
+                            <select name="group_instances" size="#$instance_count#">
                                 <xar:loop name="$group['instances']">
-                                    <option value="&xar-var-id;"><xar:var name="$title" /></option>
+                                    <option value="#$id#"><xar:var name="$title" /></option>
                                 </xar:loop>
                             </select>
                         </td>
                         <td>
-                            <input type="image" src="&xar-var-up_arrow_src;" onclick="return moveBlock(this.form, true)" />
+                            <input type="image" src="#$up_arrow_src#" onclick="return moveBlock(this.form, true)" />
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <input type="image" src="&xar-var-down_arrow_src;" onclick="return moveBlock(this.form, false)" />
+                            <input type="image" src="#$down_arrow_src#" onclick="return moveBlock(this.form, false)" />
                         </td>
                     </tr>
                 </table>
