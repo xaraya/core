@@ -82,29 +82,9 @@ function themes_metablock_display($blockinfo)
     $incomingkey = xarVarGetCached('Blocks.articles','body');
 
     if ((!empty($incomingkey)) and ($vars['usedk'] == 1)){
-
-        // Strip -all- html
-        $htmlless = strip_tags($incomingkey);
-
-        // Strip anything that isn't alphanumeric or _ -
-        $symbolLess = trim(ereg_replace('([^a-zA-Z0-9_-])+',' ',$htmlless));
-
-        // Remove duplicate words
-        $keywords = explode(" ", strtolower($symbolLess));
-        $keywords = array_unique($keywords);
-
-        // Remove words that are < four characters in length
-        foreach($keywords as $word) {
-            if (strlen($word) >= 4 && !empty($word)) {
-                $list[] = $word;
-            }
-        } $keywords = $list;
-
-        // Sort the list of words in Ascending order Alphabetically
-        sort($keywords, SORT_STRING);
-
-        // Merge the list of words into a single, comma delimited string of keywords
-        $meta['keywords'] = implode(",",$keywords);
+        
+        // Keywords generated from articles module
+        $meta['keywords'] = xarVarGetCached('Blocks.articles','body');
 
     } else {
         $meta['keywords'] = $vars['metakeywords'];
