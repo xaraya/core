@@ -298,6 +298,10 @@ class Dynamic_Property_Master
                 require_once "includes/properties/Dynamic_TextUpload_Property.php";
                 $property = new Dynamic_TextUpload_Property($args);
                 break;
+            case 39: // (multiselect) Multi Select
+                require_once "includes/properties/Dynamic_MultiSelect_Property.php";
+                $property = new Dynamic_MultiSelect_Property($args);
+                break;
             default:
                 $property = new Dynamic_Property($args);
                 break;
@@ -645,6 +649,14 @@ class Dynamic_Property_Master
                               'name'       => 'textupload',
                               'label'      => 'Text Upload',
                               'format'     => '38',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[39] = array(
+                              'id'         => 39,
+                              'name'       => 'multiselect',
+                              'label'      => 'Multi Select',
+                              'format'     => '39',
                               'validation' => '',
                               // ...
                              );
