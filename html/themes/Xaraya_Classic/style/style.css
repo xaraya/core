@@ -433,6 +433,7 @@ ul li.xar-menu-section {
 
 * html .xar-menu-item a, * html .xar-menu-item-current a {
 	float:left;
+	f\loat:none;
 }
 
 * html .xar-menu-section a {

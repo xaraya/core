@@ -1,9 +1,7 @@
 <!---
     Default theme - main template [rev2]
     
-    .. processing the page data BEFORE we actually START delivering page LAYOUT can only improve user exprerience, imnsho,
-    it would be perfect if BL compiler could just somehow _exclude_ the linefeeds (and extra spaces) from this _data_assembly_area_
-    i guess we could introduce a <xar:compact> tag or something specifically for that purpose, to avoid the problems..
+    .. processing the page data BEFORE we actually START delivering page LAYOUT can only improve user exprerience, imnsho
    
     1) get data for the default blockgroups
 _____________________________________________________________________________________________________________[comment]--->
