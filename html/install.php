@@ -10,7 +10,7 @@
  * @link http://www.xaraya.com
  * @subpackage Installer
  * @author Johnny Robeson
-*/
+ */
 
 /**
  * 1. select language

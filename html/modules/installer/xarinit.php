@@ -1,13 +1,16 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Johnny Robeson
-// Purpose of file:  Xaraya Install
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Installer initialization functions
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ * @subpackage installer
+ * @author Johnny Robeson
+ */
 
 /**
  * Install Xaraya
@@ -58,9 +61,8 @@ function installer_upgrade($oldVersion)
 }
 
 /**
- * Delete Xaraya
+ * Delete Installer module
  *
- * @param none
  * @returns bool
  */
 function installer_delete()

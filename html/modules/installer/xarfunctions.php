@@ -1,17 +1,16 @@
 <?php
-
 /**
  * File: $Id$
  *
  * Extra functions for the installer
  *
- * @package installer
+ * @package Xaraya
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- *
+ * @subpackage installer
  * @author John Robeson
  * @author Marcel van der Boom <marcel@hsdev.com>
-*/
+ */
 
 
 function xarInstallConfigSetVar($name, $value)
