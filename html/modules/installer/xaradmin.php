@@ -330,7 +330,7 @@ function installer_admin_create_administrator()
     $modifiedrole = $role->update();
     if (!$modifiedrole) {return;}
 
-    xarResponseRedirect(xarModURL('installer', 'admin', 'finish'));
+    xarResponseRedirect(xarModURL('installer', 'admin', 'finish', array('theme' => 'installer')));
 
 }
 
