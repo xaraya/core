@@ -20,13 +20,17 @@ function blocks_admin_update_instance()
     // Get parameters
     if (!xarVarFetch('bid', 'int:1:', $bid)) {return;}
     if (!xarVarFetch('block_groups', 'keylist:id;checkbox', $block_groups, array(), XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('block_name', 'pre:lower:ftoken:field:Name:passthru:str:1:', $name)) {return;}
-    if (!xarVarFetch('block_title', 'str:1:', $title, '', XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('block_state', 'str:1:', $state)) {return;}
+    if (!xarVarFetch('block_name', 'pre:lower:ftoken:field:Name:passthru:str:1:100', $name)) {return;}
+    if (!xarVarFetch('block_title', 'str:1:255', $title, '', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('block_state', 'int:1:4', $state)) {return;}
     if (!xarVarFetch('block_template', 'strlist:;,:pre:trim:lower:ftoken', $block_template, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('group_templates', 'keylist:id;strlist:;,:pre:trim:lower:ftoken', $group_templates, array(), XARVAR_NOT_REQUIRED)) {return;}
+    // TODO: deprecate 'block_content' - make sure each block handles its own content entirely.
     if (!xarVarFetch('block_content', 'str:1:', $content, '', XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('block_refresh', 'str:1:', $refresh, '0', XARVAR_NOT_REQUIRED)) {return;}
+    // TODO: check out where 'block_refresh' is used. Could it be used more effectively?
+    // Could the caching be supported in a more consistent way, so individual blocks don't
+    // need to handle it themselves?
+    if (!xarVarFetch('block_refresh', 'int:0:', $refresh, '0', XARVAR_NOT_REQUIRED)) {return;}
 
     // Confirm Auth Key
     if (!xarSecConfirmAuthKey()) {return;}
@@ -36,6 +40,16 @@ function blocks_admin_update_instance()
 
     // Get and update block info.
     $blockinfo = xarModAPIFunc('blocks', 'user', 'get', array('bid' => $bid));
+
+    // If the name is being changed, then check the new name has not already been used.
+    if ($blockinfo['name'] != $name) {
+        $checkname = xarModAPIFunc('blocks', 'user', 'get', array('name' => $name));
+        if (!empty($checkname)) {
+            $msg = xarML('Block name "#(1)" already exists', $name);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+            return;
+        }
+    }
     $blockinfo['name'] = $name;
     $blockinfo['title'] = $title;
     $blockinfo['template'] = $block_template;
@@ -71,22 +85,19 @@ function blocks_admin_update_instance()
     if (function_exists($updatefunc)) {
         $blockinfo = $updatefunc($blockinfo);
     } else {
-	$updatefunc = $usname . '_' . $blockinfo['type'] . 'block_info';
-	$func = $updatefunc();
-	if(!empty($func['func_update'])) {
-	    if (function_exists($func['func_update'])) {
-                // TODO: this doesn't look right. Is there a function the get/post vars
-                // go through before being used?
-		global $HTTP_POST_VARS;
-		$blockinfo = $func['func_update'](array_merge($HTTP_POST_VARS, $blockinfo));
-	    }
+        $updatefunc = $usname . '_' . $blockinfo['type'] . 'block_info';
+        $func = $updatefunc();
+        if (!empty($func['func_update'])) {
+            if (function_exists($func['func_update'])) {
+                $blockinfo = $func['func_update']($blockinfo);
+            }
         }
     }
 
     // Pass to API - do generic updates.
     if (!xarModAPIFunc('blocks', 'admin', 'update_instance', $blockinfo)) {return;}
 
-    // Resequence.
+    // Resequence blocks within groups.
     if (!xarModAPIFunc('blocks', 'admin', 'resequence')) {return;}
 
     xarResponseRedirect(xarModURL('blocks', 'admin', 'modify_instance',array('bid'=>$bid)));

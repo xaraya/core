@@ -48,8 +48,7 @@ function blocks_userapi_getall($args)
 
     if (!empty($bid)) {
         $query .= ' WHERE inst.xar_id = ' . $bid;
-    }
-    if (!empty($name)) {
+    } elseif (!empty($name)) {
         $query .= ' WHERE inst.xar_name = \'' . $name . '\'';
     }
 

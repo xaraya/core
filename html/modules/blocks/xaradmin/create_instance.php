@@ -30,6 +30,14 @@ function blocks_admin_create_instance()
     // Security Check
 	if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
 
+    // Check if block name has already been used.
+    $checkname = xarModAPIFunc('blocks', 'user', 'get', array('name' => $name));
+    if (!empty($checkname)) {
+        $msg = xarML('Block name "#(1)" already exists', $name);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        return;
+    }
+
     // Pass to API
     $bid = xarModAPIFunc(
         'blocks', 'admin', 'create_instance',

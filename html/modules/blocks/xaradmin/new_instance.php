@@ -18,7 +18,7 @@
 function blocks_admin_new_instance()
 {
     // Security Check
-	if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
+	if (!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
@@ -57,9 +57,11 @@ function blocks_admin_new_instance()
         $result->MoveNext();
     }
 
-    return array('block_types'  => $block_types,
-                 'block_groups' => $block_groups,
-                 'createlabel'  => xarML('Create Instance'));
+    return array(
+        'block_types'  => $block_types,
+        'block_groups' => $block_groups,
+        'createlabel'  => xarML('Create Instance')
+    );
 }
 
 ?>
