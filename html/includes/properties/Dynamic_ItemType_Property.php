@@ -37,14 +37,18 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 20,
                               'name'       => 'itemtype',
                               'label'      => 'Item Type',
                               'format'     => '20',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
 							// ...
 						   );
 		return $baseInfo;

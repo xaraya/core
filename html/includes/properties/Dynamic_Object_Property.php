@@ -51,14 +51,18 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 24,
                               'name'       => 'object',
                               'label'      => 'Object',
                               'format'     => '24',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
+                            'source'     => '',
+                            'dependancies' => '',
+                            'requiresmodule' => '',
+                            'aliases'        => '',
+							'args'           => serialize($args)
 							// ...
 						   );
 		return $baseInfo;

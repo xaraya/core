@@ -79,14 +79,18 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 15,
                               'name'       => 'integerbox',
                               'label'      => 'Number Box',
                               'format'     => '15',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
+                            'source'     => '',
+                            'dependancies' => '',
+                            'requiresmodule' => '',
+                            'aliases'        => '',
+							'args'           => serialize($args)
 							// ...
 						   );
 		return $baseInfo;

@@ -49,13 +49,18 @@ class Dynamic_DataSource_Property extends Dynamic_Select_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 23,
                               'name'       => 'datasource',
                               'label'      => 'Data Source',
                               'format'     => '23',
                               'validation' => '',
-							'source'     => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
 							// ...
 						   );
 		return $baseInfo;

@@ -52,14 +52,18 @@ class Dynamic_LanguageList_Property extends Dynamic_Select_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 36,
                               'name'       => 'language',
                               'label'      => 'Language List',
                               'format'     => '36',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
+                            'source'     => '',
+                            'dependancies' => '',
+                            'requiresmodule' => '',
+                            'aliases'        => '',
+							'args'           => serialize($args)
 							// ...
 						   );
 		return $baseInfo;

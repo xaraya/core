@@ -128,16 +128,18 @@ class Dynamic_TextBox_Property extends Dynamic_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 2,
                               'name'       => 'textbox',
                               'label'      => 'Text Box',
                               'format'     => '2',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
-							'requiresmodule' => '',
-							'aliases' => '',
+                              'source'     => '',
+                              'dependancies' => '',
+                              'requiresmodule' => '',
+                              'aliases' => '',
+                              'args'       => serialize( $args ),
 							// ...
 						   );
 		return $baseInfo;

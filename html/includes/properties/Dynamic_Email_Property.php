@@ -121,13 +121,18 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 26,
                               'name'       => 'email',
                               'label'      => 'E-Mail',
                               'format'     => '26',
                               'validation' => '',
-							'source'     => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
 							// ...
 						   );
 		return $baseInfo;

@@ -118,14 +118,18 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 12,
                               'name'       => 'image',
                               'label'      => 'Image',
                               'format'     => '12',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
 							// ...
 						   );
 		return $baseInfo;

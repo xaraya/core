@@ -123,15 +123,18 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 44,
                               'name'       => 'tcolorpicker',
                               'label'      => 'Tigra Color Picker',
                               'format'     => '44',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
-							'requiresmodule' => '',
+                            'source'     => '',
+                            'dependancies' => '',
+                            'requiresmodule' => '',
+                            'aliases'        => '',
+							'args'           => serialize($args)
 							// ...
 						   );
 		return $baseInfo;

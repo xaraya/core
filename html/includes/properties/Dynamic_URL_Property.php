@@ -125,6 +125,7 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
 							'dependancies' => '',
 							'requiresmodule' => '',
 							'aliases' => '',
+							'args'         => '',
 							// ...
 						   );
 		return $baseInfo;

@@ -218,13 +218,18 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         =>45,
                               'name'       => 'grouplist',
                               'label'      => 'Group List',
                               'format'     => '45',
                               'validation' => '',
-							'source'     => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
 							// ...
 						   );
 		return $baseInfo;

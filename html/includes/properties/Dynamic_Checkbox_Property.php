@@ -102,13 +102,18 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 14,
                               'name'       => 'checkbox',
                               'label'      => 'Checkbox',
                               'format'     => '14',
                               'validation' => '',
-							'source'     => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
 							// ...
 						   );
 		return $baseInfo;

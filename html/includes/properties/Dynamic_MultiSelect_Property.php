@@ -160,14 +160,18 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 39,
                               'name'       => 'multiselect',
                               'label'      => 'Multi Select',
                               'format'     => '39',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
+                            'source'     => '',
+                            'dependancies' => '',
+                            'requiresmodule' => '',
+                            'aliases'        => '',
+							'args'           => serialize($args)
 							// ...
 						   );
 		return $baseInfo;

@@ -141,6 +141,7 @@ class Dynamic_Username_Property extends Dynamic_Property
 							'dependancies' => '',
 							'requiresmodule' => '',
 							'aliases' => '',
+							'args'         => '',
 							// ...
 						   );
 		return $baseInfo;

@@ -93,6 +93,8 @@ class Dynamic_Hardcore_Property extends Dynamic_Property
 							'validation' => '',
 							'source'     => '',
 							'dependancies' => 'hardcore/webeditor/webeditor.js',
+                            'requiresmodule' => '',
+                            'aliases'        => '',
 							'args' => serialize( $args ),
 							// ...
 						   );

@@ -261,6 +261,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
 							'dependancies' => '',
 							'requiresmodule' => '',
 							'aliases' => '',
+							'args'         => '',
 							// ...
 						   );
 		return $baseInfo;

@@ -107,14 +107,18 @@ class Dynamic_NumberList_Property extends Dynamic_Select_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 16,
                               'name'       => 'integerlist',
                               'label'      => 'Number List',
                               'format'     => '16',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
+                            'source'     => '',
+                            'dependancies' => '',
+                            'requiresmodule' => '',
+                            'aliases'        => '',
+							'args'           => serialize($args)
 							// ...
 						   );
 		return $baseInfo;

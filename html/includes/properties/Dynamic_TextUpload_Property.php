@@ -255,6 +255,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
 							'requiresmodule' => '',
 							'aliases' => '',
 							'args' => serialize( $args ),
+							'args'         => '',
 							// ...
 						   );
 		return $baseInfo;

@@ -302,13 +302,18 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 9,
                               'name'       => 'fileupload',
                               'label'      => 'File Upload',
                               'format'     => '9',
                               'validation' => '',
-							'source'     => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
 							// ...
 						   );
 		return $baseInfo;

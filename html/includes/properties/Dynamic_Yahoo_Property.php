@@ -126,16 +126,18 @@ class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 31,
                               'name'       => 'yahoo',
                               'label'      => 'Yahoo Messenger',
                               'format'     => '31',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
-							'requiresmodule' => '',
-							'aliases' => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
 							// ...
 						   );
 		return $baseInfo;

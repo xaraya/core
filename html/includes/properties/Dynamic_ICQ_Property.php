@@ -128,14 +128,18 @@ else
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 28,
                               'name'       => 'icq',
                               'label'      => 'ICQ Number',
                               'format'     => '28',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
 							// ...
 						   );
 		return $baseInfo;

@@ -175,14 +175,18 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 35,
                               'name'       => 'imagelist',
                               'label'      => 'Image List',
                               'format'     => '35',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
 							// ...
 						   );
 		return $baseInfo;

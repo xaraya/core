@@ -87,6 +87,32 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
             return $value;
         }
     } /* showOutput */
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$args = array();
+	 	$baseInfo = array(
+                              'id'         => 47,
+                              'name'       => 'extendeddate',
+                              'label'      => 'Extended Date',
+                              'format'     => '47',
+                              'validation' => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 

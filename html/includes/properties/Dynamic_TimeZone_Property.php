@@ -144,6 +144,7 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
 							'dependancies' => '',
 							'requiresmodule' => '',
 							'aliases' => '',
+							'args'         => '',
 							// ...
 						   );
 		return $baseInfo;

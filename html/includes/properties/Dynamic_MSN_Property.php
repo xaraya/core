@@ -130,14 +130,18 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 30,
                               'name'       => 'msn',
                               'label'      => 'MSN Messenger',
                               'format'     => '30',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
+                            'source'     => '',
+                            'dependancies' => '',
+                            'requiresmodule' => '',
+                            'aliases'        => '',
+							'args'           => serialize($args)
 							// ...
 						   );
 		return $baseInfo;

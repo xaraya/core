@@ -168,13 +168,18 @@ var '.$jsID.'_cal = new xar_base_calendar(document.getElementById("'.$id.'_input
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 8,
                               'name'       => 'calendar',
                               'label'      => 'Calendar',
                               'format'     => '8',
                               'validation' => '',
-							'source'     => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
 							// ...
 						   );
 		return $baseInfo;

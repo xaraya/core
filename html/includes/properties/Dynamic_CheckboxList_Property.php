@@ -30,13 +30,18 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
 	**/
 	function getBasePropertyInfo()
 	{
+		$args = array();
 		$baseInfo = array(
 						'id'         => 1115,
 						'name'       => 'checkboxlist',
 						'label'      => 'Checkbox List',
 						'format'     => '1115',
 						'validation' => '',
-						'source'     => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
 						// ...
 					   );
 		return $baseInfo;

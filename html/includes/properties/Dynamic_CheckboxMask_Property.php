@@ -30,13 +30,18 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
 	**/
 	function getBasePropertyInfo()
 	{
+		$args = array();
 		$baseInfo = array(
 						'id'         => 1114,
 						'name'       => 'checkboxmask',
 						'label'      => 'Checkbox Mask',
 						'format'     => '1114',
 						'validation' => '',
-						'source'     => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
 						// ...
 					   );
 		return $baseInfo;

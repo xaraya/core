@@ -98,13 +98,18 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
 	 **/
 	 function getBasePropertyInfo()
 	 {
+	 	$args = array();
 	 	$baseInfo = array(
                               'id'         => 17,
                               'name'       => 'floatbox',
                               'label'      => 'Number Box (float)',
                               'format'     => '17',
                               'validation' => '',
-							'source'     => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
 							// ...
 						   );
 		return $baseInfo;
