@@ -282,11 +282,11 @@ function initializeSetup()
 
     xarRegisterMask('AdminAll','All','All','All','All',ACCESS_ADMIN);
 
-    xarRegisterMask('ViewBlocks','All','base','Block','All:All:All',ACCESS_OVERVIEW);
-    xarRegisterMask('EditBlock','All','base','Block','All:All:All',ACCESS_EDIT);
-    xarRegisterMask('AddBlock','All','base','Block','All:All:All',ACCESS_ADD);
-    xarRegisterMask('DeleteBlock','All','base','Block','All:All:ALL',ACCESS_DELETE);
-    xarRegisterMask('AdminBlock','All','base','Block','All:All:ALL',ACCESS_ADMIN);
+    xarRegisterMask('ViewBaseBlocks','All','base','Block','All:All:All',ACCESS_OVERVIEW);
+    xarRegisterMask('EditBaseBlock','All','base','Block','All:All:All',ACCESS_EDIT);
+    xarRegisterMask('AddBaseBlock','All','base','Block','All:All:All',ACCESS_ADD);
+    xarRegisterMask('DeleteBaseBlock','All','base','Block','All:All:ALL',ACCESS_DELETE);
+    xarRegisterMask('AdminBaseBlock','All','base','Block','All:All:ALL',ACCESS_ADMIN);
     xarRegisterMask('ViewBase','All','base','All','All',ACCESS_OVERVIEW);
     xarRegisterMask('ReadBase','All','base','All','All',ACCESS_READ);
     xarRegisterMask('AdminBase','All','base','All','All',ACCESS_ADMIN);

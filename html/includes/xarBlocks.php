@@ -304,6 +304,10 @@ function xarBlock_render($blockInfo)
     $modName = $blockInfo['module'];
     $blockType = $blockInfo['type'];
 
+// this lets the security system know what module we're in
+    xarModSetVar('blocks','currentmodule',$modName);
+
+
     if (empty($modName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;

@@ -318,6 +318,9 @@ class xarMasks
 
 // get the masks pertaining to the current module and the component requested
         if ($module == '') list($module) = xarRequestGetInfo();
+        if ($module == 'blocks') $module = xarModGetVar('blocks','currentmodule');
+
+
 /*      $temppriv = new xarPrivileges();
         if ($module == '') {
             $path = strrev(dirname(__FILE__));

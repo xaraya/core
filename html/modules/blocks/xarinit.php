@@ -115,7 +115,7 @@ function blocks_init()
 /*
     TODO: Find a fix for this - Postgres will not allow partial indexes
     $query = xarDBCreateIndex($prefix . '_block_types',
-                             array('name'   => $prefix . '_block_types_2_idx', 
+                             array('name'   => $prefix . '_block_types_2_idx',
                                    'fields' => array('xar_type(50)', 'xar_module(50)'),
                                    'unique' => true));
     $result =& $dbconn->Execute($query);

@@ -65,7 +65,7 @@ function base_menublock_display($blockinfo)
     $xartable = xarDBGetTables();
 
 // Security Check
-    if(!xarSecurityCheck('ViewBase',0,'Menublock','$blockinfo[title]:All:All')) return;
+    if(!xarSecurityCheck('ViewBaseBlocks',0,'Block','$blockinfo[title]:All:All')) return;
 
     // Break out options from our content field
     $vars = unserialize($blockinfo['content']);
@@ -134,7 +134,7 @@ function base_menublock_display($blockinfo)
                         $comment = $parts[2];
                         $child = isset($parts[3]) ? $parts[3] : '';
                         // Security Check
-                        if (xarSecurityCheck('ReadBase',0,'Menublock','$blockinfo[title]:$title:All')) {
+                        if (xarSecurityCheck('ReadBaseBlock',0,'Block','$blockinfo[title]:$title:All')) {
                             $title = xarVarPrepForDisplay($title);
                             $url = xarVarPrepForDisplay($url);
                             $comment = xarVarPrepForDisplay($comment);
@@ -184,7 +184,7 @@ function base_menublock_display($blockinfo)
                                     }
 
                         // Security Check
-                                    if (xarSecurityCheck('ReadBase',0,'Menublock','$blockinfo[title]:$menulink[title]:All')) {
+                                    if (xarSecurityCheck('ReadBaseBlock',0,'Block','$blockinfo[title]:$menulink[title]:All')) {
                                         $indlinks[] = array('userlink'      => $menulink['url'],
                                                             'userlabel'     => $menulink['label'],
                                                             'usertitle'     => $menulink['title'],
@@ -222,7 +222,7 @@ function base_menublock_display($blockinfo)
                 // we dont want to show logout link if the user is anonymous or admin
                 // admins have their own logout method, which is more robust
                 // Security Check
-                            if (xarSecurityCheck('ReadBase',0,'Menublock','$blockinfo[title]:All:All') or !xarUserIsLoggedIn()){
+                            if (xarSecurityCheck('ReadBaseBlock',0,'Block','$blockinfo[title]:All:All') or !xarUserIsLoggedIn()){
                     $showlogout = false;
                 }else{
                     $showlogout = true;
