@@ -25,7 +25,7 @@
 <xar:set name="$curnum">0</xar:set>
 <xar:set name="$contmail">xarModGetVar('mail','adminmail',1)</xar:set>
 
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>User Information</xar:mlstring></span></div>
+<div class="xar-mod-head"><span class="xar-mod-title"><p><xar:mlstring>User Information</xar:mlstring></span></p></div>
 <div class="xar-mod-body">
 <h2><xar:mlstring>Terms of Use</xar:mlstring></h2>
 <div style="margin: auto;">
@@ -129,7 +129,7 @@
 	    <p><xar:mlstring>In the event that this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>conflicts with any law under which any provision may be held invalid by a court with jurisdiction over the parties, such provision will be interpreted to reflect the original intentions of the parties in accordance with applicable law, and the remainder of this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>will remain valid and intact; (ii) The failure of either party to assert any right under this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>shall not be considered a waiver of any that party's right and that right will remain in full force and effect; (iii) You agree that without regard to any statue or contrary law that any claim or cause arising out of this web site or its services must be filed within one (1) year after such claim or cause arose or the claim shall be forever barred; (iv) We may assign our rights and obligations under this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>and we shall be relieved of any further obligation.</xar:mlstring></p>
 
 <xar:else />
-	<xar:mlstring>Terms of Service not active</xar:mlstring>
+	<p><xar:mlstring>Terms of Service not active</xar:mlstring></p>
 </xar:if>
 </div>
 </div>

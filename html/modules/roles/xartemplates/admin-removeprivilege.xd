@@ -8,16 +8,15 @@
 	<input type="hidden" name="privid" id="privid" value="#$privid#" />
 	<input type="hidden" name="confirmation" id="confirmation" value="1" />
 
-	<span class="xar-title"><xar:mlstring>Confirm the removal of</xar:mlstring> '#$privname#' <xar:mlstring>from</xar:mlstring>
+	<p><span class="xar-title"><xar:mlstring>Confirm the removal of</xar:mlstring> '#$privname#' <xar:mlstring>from</xar:mlstring>
 	<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
 	<xar:else /><xar:mlstring>User</xar:mlstring>
 	</xar:if>
-	'#$rolename#'</span>
-	<br /><br />
+	'#$rolename#'</span></p>
 
-	<input type="submit" value="#$removelabel#"  tabindex="1" /><br /><br />
+	<p><input type="submit" value="#$removelabel#"  tabindex="1" /><br /><br />
 	
-	<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$roleid#"><xar:mlstring>Cancel Removal</xar:mlstring></a>
+	<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$roleid#"><xar:mlstring>Cancel Removal</xar:mlstring></a></p>
     </div>
 </form>        
 </div>

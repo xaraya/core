@@ -1,22 +1,19 @@
 <xar:if condition="$stage eq 1">
   <div align="center">
-        <xar:mlstring>Terms and Conditions</xar:mlstring>
-	<br /><br />
-        <xar:template file="user-terms" type="module" />
-	<br /><br />
-<!---this shit shouldnt print        <a href="##xarModURL('roles',
+        <p><xar:mlstring>Terms and Conditions</xar:mlstring></p>
+        <p><xar:template file="user-terms" type="module" /></p>
+<!---this stuff shouldnt print        <p><a href="##xarModURL('roles',
                            'user',
                            'new',
                             array('stage' => 2,
                                   'authid' => xarSecGenAuthKey()))##">
-                            <xar:mlstring>Accept terms and conditions</xar:mlstring></a> --->
-        <a href="index.php"><xar:mlstring>Do not accept terms and conditions</xar:mlstring></a>
+                            <xar:mlstring>Accept terms and conditions</xar:mlstring></a></p> --->
+        <p><a href="index.php"><xar:mlstring>Do not accept terms and conditions</xar:mlstring></a></p>
   </div>
 <xar:elseif condition="$stage eq 2" />
 
   <div align="center">
-        <xar:mlstring>Create User Account</xar:mlstring>
-	<br /><br />
+        <p><xar:mlstring>Create User Account</xar:mlstring></p>
 	<form action="&xar-modurl-roles-user-register;" method="post" enctype="application/x-www-form-urlencoded">
            <div>
 		<input type="hidden" name="stage" id="stage" value="3" />		
@@ -66,7 +63,6 @@
                         </xar:if>
 		</table>			
 					
-		<br /><br />
 
 
 		<input type="submit" value="Create User" tabindex="6" />
@@ -77,14 +73,13 @@
 
 <xar:elseif condition="$stage eq 3" /> 
 
-    #$errortext#
+    <p>#$errortext#</p>
 
 <xar:elseif condition="$stage eq 4" />
 <xar:elseif condition="$stage eq 5" />
-    <xar:mlstring>This account is awaiting approval from an administrater before being activated.</xar:mlstring>
+    <p><xar:mlstring>This account is awaiting approval from an administrater before being activated.</xar:mlstring></p>
     <xar:if condition="xarModGetVar('roles', 'sendwelcomeemail')">
-        <br /><br />
-        <xar:mlstring>You will be sent an email when the account is activated.</xar:mlstring>
+        <p><xar:mlstring>You will be sent an email when the account is activated.</xar:mlstring></p>
     </xar:if>
 </xar:if>
 

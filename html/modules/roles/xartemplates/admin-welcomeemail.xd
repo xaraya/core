@@ -1,10 +1,8 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Welcome Email</xar:mlstring></h2><br />
 <div style="margin: auto;">
-	<xar:mlstring>This email will be sent to users to welcome them.</xar:mlstring>
-	<br /><br />
-	<xar:mlstring>The welcome email is plain text</xar:mlstring>
-	<br /><br />
+	<p><xar:mlstring>This email will be sent to users to welcome them.</xar:mlstring></p>
+	<p><xar:mlstring>The welcome email is plain text</xar:mlstring></p>
 	<form action="#xarModURL('roles', 'admin', 'welcomeemail')#" method="post" enctype="application/x-www-form-urlencoded">
              <div>
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -24,8 +22,7 @@
 		<input type="submit" value="#$submitlabel#" tabindex="2" />
             </div>
 	</form>
-	<xar:mlstring>The following variables will be replaced in the text with specific information:</xar:mlstring>
-	<br /><br />
+	<p><xar:mlstring>The following variables will be replaced in the text with specific information:</xar:mlstring></p>
 	<table border="0" width="100%">
 		<tr align="left" valign="middle">
 			<td>

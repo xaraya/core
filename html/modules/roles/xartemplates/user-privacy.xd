@@ -27,7 +27,7 @@
 
 
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>User Registration</xar:mlstring></span>
+    <p><span class="xar-mod-title"><xar:mlstring>User Registration</xar:mlstring></span></p>
 </div>
 <div class="xar-mod-body">
     <h2><xar:mlstring>Privacy Policy</xar:mlstring></h2>
@@ -35,9 +35,9 @@
     <xar:if condition="xarModGetVar('roles', 'showprivacy')">
 	
 	<h3 id="intro"><xar:mlstring>Introduction</xar:mlstring></h3>
-	    <p><xar:mlstring>We take your right to privacy seriously and want you to feel comfortable using our web site. This Privacy Policy deals with personally identifiable information (referred to as "Data" below) that may be collected by us on our site. This Policy does not apply to other entities that we do not own or control or persons that are not our employees, agents or within our control.</xar:mlstring> 
+	    <p><xar:mlstring>We take your right to privacy seriously and want you to feel comfortable using our web site. This Privacy Policy deals with personally identifiable information (referred to as "Data" below) that may be collected by us on our site. This Policy does not apply to other entities that we do not own or control or persons that are not our employees, agents or within our control.</xar:mlstring></p>
         <xar:if condition="xarModGetVar('roles', 'showterms')">
-            <xar:mlstring>Please take time to read our</xar:mlstring>
+            <p><xar:mlstring>Please take time to read our</xar:mlstring>
 			<a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a>.
         </xar:if></p>
     
@@ -100,7 +100,7 @@
 	    <p><xar:mlstring>If you have any questions about this Policy or our web site, please feel free to contact</xar:mlstring> <a href="mailto:#$contmail#">our Webmaster.</a></p>
 
     <xar:else />
-	    <xar:mlstring>Privay Policy Not Active</xar:mlstring>
+	    <p><xar:mlstring>Privay Policy Not Active</xar:mlstring></p>
     </xar:if>
 </div>
 </div>
