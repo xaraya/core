@@ -79,7 +79,7 @@ function xarMain()
     if (xarResponseIsRedirected()) return true;
     // Here we check for exceptions even if $res isn't empty
     if (isCoreException()) return; // we found a core exception
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // we found a non-core error
+    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
 
     // Note : the page template may be set to something else in the module function
     if (xarTplGetPageTemplateName() == 'default') {
@@ -98,7 +98,7 @@ function xarMain()
 
      // Handle exceptions (the bubble at the top handler
     if (isCoreException()) return; // we found a core exception
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // we found a non-core error
+    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
 
     echo $pageOutput;
 
@@ -110,15 +110,15 @@ if (!xarMain()) {
     // If we're here there must be surely an uncaught exception
     if (xarCoreIsDebuggerActive()) {
         if (isCoreException()) $text = xarErrorRender('html', "CORE");
-        else $text = xarExceptionRender('html');
+        else $text = xarErrorRender('html');
     } else {
         $text = xarML('An error occurred while processing your request. The details are:');
         $text .= '<br />';
-        $value = xarExceptionValue();
+        $value = xarCurrentError();
         if (is_object($value) && method_exists($value, 'toHTML')) {
             $text .= '<span style="color: #FF0000;">'.$value->toHTML().'</span>';
         } else {
-            $text .= '<span style="color: #999900;">'.xarExceptionId().'</span>';
+            $text .= '<span style="color: #999900;">'.xarCurrentErrorID().'</span>';
         }
     }
 
@@ -133,7 +133,7 @@ if (!xarMain()) {
         xarErrorFree();
         // Render page
         $pageOutput = xarTpl_renderPage($text);
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
             // Fallback to raw html
             $msg = '<span style="color: #FF0000;">The current page is shown because the Blocklayout Template Engine failed to render the page, however this could be due to a problem not in BL itself but in the template. BL has raised or has left uncaught the following exception:</span>';
             $msg .= '<br /><br />';
