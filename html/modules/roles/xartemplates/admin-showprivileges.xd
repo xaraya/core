@@ -125,7 +125,7 @@
 			<td style="text-align: center;">
 				<xar:if condition="in_array($loop:item['privid'],$directassigned)">
 					<xar:if condition="!$loop:item['frozen']">
-						<a href="#$loop:item['removeurl']#&amp;privid=#$loop:item['privid']#" title="Remove this Privilege assignment">				
+						<a href="#$removeurl#&amp;privid=#$loop:item['privid']#" title="Remove this Privilege assignment">				
 							Remove    
 						</a>
 					<xar:else />

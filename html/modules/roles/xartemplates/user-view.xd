@@ -43,9 +43,9 @@
 		<xar:loop name="$items">
 			<xar:if condition="(($loop:index + 1) % 2)">
 				<tr>
-					<xar:if ="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
+					<xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
 						<td class="xar-norm">
-							<a href="#xarModURL('roles', 'user', 'display')#&amp;uid=#$loop:item['uid#']">#$loop:item['name']#</a>
+							<a href="#xarModURL('roles', 'user', 'display')#&amp;uid=#$loop:item['uid']#">#$loop:item['name']#</a>
 						</td>
 						<td class="xar-norm" style="text-align: center;">
 							<a href="http://www.geektools.com/cgi-bin/proxy.cgi?query=#$loop:item['ipaddr']#&amp;targetnic=auto">#$loop:item['ipaddr']#</a>
@@ -95,7 +95,7 @@
 							<a href="#$loop:item['emailurl']#">#$loop:item['emailicon']#</a>
 						</xar:if>
 					</td>
-				    <xar:if condition="isset($loop:item['properties']) and count($loop:item['properties'[) gt 0">
+				    <xar:if condition="isset($loop:item['properties']) and count($loop:item['properties']) gt 0">
 				    <xar:foreach in="$properties" key="$key">
 					<td class="xar-accent">
 					    <xar:if condition="isset($values[$uid][$key])">
