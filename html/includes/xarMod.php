@@ -114,7 +114,7 @@ function xarModGetVar($modName, $name, $prep = NULL)
     }
 
     if (empty($prep)) {
-        $prep = 0;
+        $prep = XARVAR_PREP_FOR_NOTHING;
     }
 
     if (xarVarIsCached('Mod.Variables.' . $modName, $name)) {
@@ -122,9 +122,9 @@ function xarModGetVar($modName, $name, $prep = NULL)
         if ($value === '*!*MiSSiNG*!*') {
             return;
         } else {
-            if ($prep == 1){
+            if ($prep == XARVAR_PREP_FOR_DISPLAY){
                 $value = xarVarPrepForDisplay($value);
-            } elseif ($prep == 2){
+            } elseif ($prep == XARVAR_PREP_FOR_HTML){
                 $value = xarVarPrepHTMLDisplay($value);
             }
             return $value;
@@ -169,13 +169,13 @@ function xarModGetVar($modName, $name, $prep = NULL)
     list($value) = $result->fields;
     $result->Close();
     
-    if ($prep == 1){
+    xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
+
+    if ($prep == XARVAR_PREP_FOR_DISPLAY){
         $value = xarVarPrepForDisplay($value);
-    } elseif ($prep == 2){
+    } elseif ($prep == XARVAR_PREP_FOR_HTML){
         $value = xarVarPrepHTMLDisplay($value);
     }
-
-    xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
 
     return $value;
 }
