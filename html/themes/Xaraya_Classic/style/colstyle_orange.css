@@ -33,6 +33,50 @@ th {
 .xar-norm-outline { border-color: #7F5300; }
 .xar-norm { background-color: #FFFFFF; }
 
+/* MENUS */
+ul.xar-menu-section, ul.xar-menu-item, ul.xar-menu-subitem { background-color: #FFF8E6; }
+
+.xar-menu-section a { color: #E14F21; }
+
+ul li.xar-menu-section {
+	border-color: #C7D2E2 #DBDEE2 #DBDEE2 #C7D2E2;
+}
+.xar-menu-section h4 {
+	border-bottom: #E59600;
+}
+
+.xar-menu-section a:hover {
+	color: #fff;
+	background-color: #E59600;
+}
+
+.xar-menu-section ul ul a {
+	color: #fff;
+	background-color: #E59600;
+}
+
+.xar-menu-section ul ul a:hover {
+	color: #804340;
+	background-color: #FFD37F;
+}
+
+
+li.xar-menu-section-current a {
+	color: #583D2C;
+	background-color: #FFD37F;
+}
+
+li.xar-menu-item-current {
+	color: #2C3F58;
+	background-color: #FFDE80;
+}
+
+li li.xar-menu-subitem-current a, li.xar-menu-item-current a {
+	color: #5C3C00;
+	background-color: #FFA700;
+}
+
+
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
 
 div#classicheader {
