@@ -127,7 +127,7 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                     if (!empty($subject) && !preg_match('/^[a-z_]/', $subject)) {
                         $msg = xarML('Value "#(1)" is not a valid variable name', $subject);
                         xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-                        $result = false;
+                        $return = false;
                     }
                     break;
 
