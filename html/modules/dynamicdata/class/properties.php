@@ -347,6 +347,16 @@ class Dynamic_Property_Master
                 $property = new Dynamic_HTMLArea_Property($args);
                 break;
 
+           // Using 800 range for PayPal and E-Commerce.  Module Dependant
+            case 800: // PayPal Now
+                require_once "includes/properties/Dynamic_PayPalNow_Property.php";
+                $property = new Dynamic_PayPalNow_Property($args);
+                break;
+            case 801: // PayPal Cart
+                require_once "includes/properties/Dynamic_PayPalCart_Property.php";
+                $property = new Dynamic_PayPalCart_Property($args);
+                break;
+
 
             default:
                 $property = new Dynamic_Property($args);
@@ -839,6 +849,25 @@ class Dynamic_Property_Master
 								  // ...
 								 );
 		}
+
+        if (xarModIsAvailable('paypalsetup')){
+			$proptypes[800] = array(
+								  'id'         => 800,
+								  'name'       => 'paypalnow',
+								  'label'      => 'PayPal Now Button',
+								  'format'     => '800',
+								  'validation' => '',
+								  // ...
+								 );
+			$proptypes[801] = array(
+								  'id'         => 801,
+								  'name'       => 'paypalcart',
+								  'label'      => 'PayPal Cart Button',
+								  'format'     => '801',
+								  'validation' => '',
+								  // ...
+								 );
+        }
 
 
 
