@@ -327,6 +327,11 @@ class Dynamic_Property_Master
                 require_once "includes/properties/Dynamic_TColorPicker_Property.php";
                 $property = new Dynamic_TColorPicker_Property($args);
                 break;
+            case 45: // (send_to_friend) Send To A Friend
+                require_once "includes/properties/Dynamic_SendToFriend_Property.php";
+                $property = new Dynamic_SendToFriend_Property($args);
+                break;
+
 
             case 105: // (uploads) Upload
                 require_once "includes/properties/Dynamic_Upload_Property.php";
@@ -767,7 +772,16 @@ class Dynamic_Property_Master
                               'validation' => '',
                               // ...
                              );
-
+        if (xarModIsAvailable('recommend')) {
+        $proptypes[45] = array(
+                              'id'         => 45,
+                              'name'       => 'sendtofriend',
+                              'label'      => 'Send To A Friend',
+                              'format'     => '45',
+                              'validation' => '',
+                              // ...
+                             );
+        }
     // TODO: add multiple select and multiple checkboxes
 
         // add some property types supported by utility modules
