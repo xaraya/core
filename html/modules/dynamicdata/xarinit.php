@@ -87,7 +87,7 @@ function dynamicdata_init()
 // TODO: evaluate efficiency of combined index vs. individual ones
     // the combination of module id + item type *must* be unique
     $query = xarDBCreateIndex($dynamic_objects,
-                           array('name'   => 'i_xar_dynobjects_combo',
+                           array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynobjects_combo',
                                  'fields' => array('xar_object_moduleid',
                                                    'xar_object_itemtype'),
                                  'unique' => 'true'));
@@ -97,7 +97,7 @@ function dynamicdata_init()
 
     // the object name *must* be unique
     $query = xarDBCreateIndex($dynamic_objects,
-                           array('name'   => 'i_xar_dynobjects_name',
+                           array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynobjects_name',
                                  'fields' => array('xar_object_name'),
                                  'unique' => 'true'));
     if (empty($query)) return; // throw back
@@ -202,7 +202,7 @@ function dynamicdata_init()
 // TODO: evaluate efficiency of combined index vs. individual ones
     // the combination of module id + item type + property name *must* be unique !
     $query = xarDBCreateIndex($dynamic_properties,
-                           array('name'   => 'i_xar_dynprops_combo',
+                           array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynprops_combo',
                                  'fields' => array('xar_prop_moduleid',
                                                    'xar_prop_itemtype',
                                                    'xar_prop_name'),
@@ -212,14 +212,14 @@ function dynamicdata_init()
     if (!isset($result)) return;
 
     $query = xarDBCreateIndex($dynamic_properties,
-                           array('name'   => 'i_xar_dynprops_name',
+                           array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynprops_name',
                                  'fields' => array('xar_prop_name')));
     if (empty($query)) return; // throw back
     $result = $dbconn->Execute($query);
     if (!isset($result)) return;
 
     $query = xarDBCreateIndex($dynamic_properties,
-                           array('name'   => 'i_xar_dynprops_objectid',
+                           array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynprops_objectid',
                                  'fields' => array('xar_prop_objectid')));
     if (empty($query)) return; // throw back
     $result = $dbconn->Execute($query);
@@ -315,14 +315,14 @@ function dynamicdata_init()
     if (!isset($result)) return;
 
     $query = xarDBCreateIndex($dynamic_data,
-                           array('name'   => 'i_xar_dyndata_propid',
+                           array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dyndata_propid',
                                  'fields' => array('xar_dd_propid')));
     if (empty($query)) return; // throw back
     $result = $dbconn->Execute($query);
     if (!isset($result)) return;
 
     $query = xarDBCreateIndex($dynamic_data,
-                           array('name'   => 'i_xar_dyndata_itemid',
+                           array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dyndata_itemid',
                                  'fields' => array('xar_dd_itemid')));
     if (empty($query)) return; // throw back
     $result = $dbconn->Execute($query);
