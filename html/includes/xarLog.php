@@ -92,7 +92,11 @@ function xarLogException($level = XARLOG_LEVEL_DEBUG)
 
 function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
 {
-    //This seems of dubial usefulness
-    xarLogMessage("logVariable($name, ".var_export($var,TRUE).')', $level);
+    //This seems of dubial usefulness - indeed :)
+    if (phpversion() < "4.2.0") {
+        xarLogMessage("logVariable($name, (serialized) ".serialized($var).')', $level);
+    } else {
+        xarLogMessage("logVariable($name, ".var_export($var,TRUE).')', $level);
+    }
 }
 ?>
