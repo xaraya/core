@@ -12,12 +12,12 @@
 </div>
 
 <form method="post" action="#xarModURL('roles','user','view')#">
-<input type="hidden" name="phase" id="phase" value="#$phase#" />
-<input type="hidden" name="order" id="order" value="#$order#" />
-<table width="100%" border="0" cellspacing="2" cellpadding="2">
+<table border="0" cellspacing="2" cellpadding="2">
 <tr>
 <td>
-	<xar:mlstring>Search: </xar:mlstring>
+	<label for="search"><xar:mlstring>Search:</xar:mlstring></label>
+	<input type="hidden" name="phase" id="phase" value="#$phase#" />
+	<input type="hidden" name="order" id="order" value="#$order#" />
 	<input type="text" name="search" id="search" value="" size="40" maxlength="255" tabindex="1" />
 	<input type="submit" value="#$searchlabel#" />
 </td>
@@ -58,18 +58,18 @@
 		<tr>
 			<xar:if condition="$phase eq 'active' and xarSecurityCheck('AdminPanel',0)">
 				<th width="30%" align="left">
-					<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=#$phase#&letter=#$letter#&search=#$search#&order=name">
+					<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=#$phase#&amp;letter=#$letter#&amp;search=#$search#&amp;order=name">
 						<xar:mlstring>Name</xar:mlstring>
 					</a>
 				</th>
 				<th width="40%">
-					<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=#$phase#&letter=#$letter#&search=#$search#&order=uname">
+					<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=#$phase#&amp;letter=#$letter#&amp;search=#$search#&amp;order=uname">
 						<xar:mlstring>IP Address</xar:mlstring>
 					</a>
 				</th>
 			<xar:else />
 				<th width="70%" align="left">
-					<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=#$phase#&letter=#$letter#&search=#$search#&order=name">
+					<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=#$phase#&amp;letter=#$letter#&amp;search=#$search#&amp;order=name">
 						<xar:mlstring>Name</xar:mlstring>
 					</a>
 				</th>
