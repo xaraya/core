@@ -110,10 +110,10 @@ function dynamicdata_util_export($args)
 
         } else {
             $varDir = xarCoreGetVarDirPath();
-            $outfile = $varDir . '/cache/templates/' . xarVarPrepForOS($mylist->name) . '.data.xml';
+            $outfile = $varDir . '/uploads/' . xarVarPrepForOS($mylist->name) . '.data.' . xarLocaleFormatDate('%Y%m%d%H%M%S',time()) . '.xml';
             $fp = @fopen($outfile,'w');
             if (!$fp) {
-                $data['xml'] = xarML('Unable to open file');
+                $data['xml'] = xarML('Unable to open file #(1)',$outfile);
                 return $data;
             }
             fputs($fp, "<items>\n");
