@@ -364,7 +364,31 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     // Make the current load level == the new load level
     $current_load_level = $new_load_level;
+
+    // Core initialized register the shutdown function
+    register_shutdown_function('xarCore__shutdown_handler');
     return true;
+}
+
+/**
+ * Default shutdown handler
+ *
+ *
+ */
+function xarCore__shutdown_handler()
+{
+    // Default shutdownhandlers, nothing here yet,
+    // but i think we should do something here with the
+    // connection_aborted() function, signalling that
+    // the user prematurely aborted. (by hitting stop or closing browser)
+    // Also, the other subsystems can use this for example to clean up
+    // session tables or removing online status flags etc.
+    // A carefully constructed combo with ignore_user_abort() and
+    // a check afterward will get all requests atomic which might save
+    // some headaches. 
+    // This handler is guaranteed to be registered as the last one, which
+    // means that is also guaranteed to run last in the sequence of shutdown
+    // handlers, the last statement is guaranteed to be the last statement of Xaraya ;-)
 }
 
 /**
@@ -654,6 +678,7 @@ $errPage = <<<EOM
 </html>
 EOM;
     echo $errPage;
+    // CHECK: do we still want the shutdown functions to run here?
     die();
 }
 
