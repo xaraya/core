@@ -273,22 +273,13 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
 /**
  * Get theme template image replacement for a module's image
  *
- * Usage 1: a module developer should use it to avoid hardcoding
- * the module's image url if there is a clear need for the image
- * to be able to blend seamlessly into a current theme.. 
  * Example:
  * $my_module_image = xarTplGetImage('button1.png');
- *
- * Usage 2: a theme utility developer can use it to check if
- * a particular module's image exists and suggest a replacement
- * image url for the theme or show a preview of the original.. 
- * Example:
- * $my_theme_image = xarTplGetImage('button1.png', 'example');
  *
  * Correct practices: 
  *
  * 1. module developers should never rely on theme's images, but instead
- * provide their own inside <module name>/xarimages/ directory and use
+ * provide their own artwork inside <module name>/xarimages/ directory and use
  * this function to reference their images in the module's functions.
  * Such reference can then be safely passed to the module template.
  *
@@ -304,7 +295,7 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
  * @returns theme image url if it exists
  * @returns module image url if it exists and theme image not found
  * @returns NULL if either image or module doesn't exist
- * @todo    provide examples, test and improve description
+ * @todo    provide examples, improve description, add functionality
 */
 function xarTplGetImage($modImage, $modName = NULL)
 {
@@ -324,30 +315,46 @@ function xarTplGetImage($modImage, $modName = NULL)
         
         $modOsDir = $modBaseInfo['osdirectory'];
         
-        // relative url to this module's image
+        // relative url to the current module's image
         $modImage = 'modules/'.$modOsDir.'/xarimages/'.$modImage;
         
-        // relative url to the replacement theme image
+        // relative url to the replacement image in current theme
         $themeImage = $themedir . '/' . $modImage;
-        
-        // check if replacement image exists in the theme
-        if(file_exists($themeImage)){
-            // image found, return its path in the theme
-            return $themeImage;
-        }else{
-            // image not found, return it's path in the module
-            return $modImage;
-        }
+
     
     // module name was specified
     }else{
-        // check if this image file exists in the module
         
-        // make relative url (path) to this module image
-        $modImage = 'modules/'.$modName.'/xarimages/'.$modImage;
+        // we dont need to know if module exists
+        // just check if the image file actually exists
+        $modImage = 'modules/'.$modname.'/xarimages/'.$modImage;
+        if(file_exists($modImage)){
+            
+            // relative url to the replacement image in current theme
+            $themeImage = $themedir . '/' . $modImage;
+            
+        }else{
+            
+            // module's image doesnt exist or specified incorrectly
+            // at this point we must return.. TODO: other option?
+            return;
+        }
     }
     
-    return $modImage;
+    // check if replacement image exists in the theme
+    if(file_exists($themeImage)){
+        
+        // image found, return its path in the theme
+        return $themeImage;
+    
+    }else{
+        
+        // image not found, return it's path in the module
+        return $modImage;
+    }
+    
+    // all efforts failed, return NULL
+    return;
 }
 
 /**
