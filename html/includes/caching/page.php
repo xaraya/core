@@ -434,11 +434,11 @@ function xarPage_sessionLess()
     global $xarPage_cacheTime;
     global $xarPage_cacheShowTime;
     global $xarPage_autoCachePeriod;
-    global $cachingConfiguration;
+    global $xarPage_sessionLess;
     
     // Session-less page caching (TODO: extend and place in separate function)
-    if (!empty($cachingConfiguration['Page.SessionLess']) &&
-        is_array($cachingConfiguration['Page.SessionLess']) &&
+    if (!empty($xarPage_sessionLess) &&
+        is_array($xarPage_sessionLess) &&
     // we have no session id in a cookie or URL parameter
         empty($_REQUEST['XARAYASID']) &&
     // we're dealing with a GET OR a HEAD request
@@ -449,7 +449,7 @@ function xarPage_sessionLess()
         !empty($_SERVER['HTTP_HOST']) &&
         !empty($_SERVER['REQUEST_URI']) &&
         in_array('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
-                 $cachingConfiguration['Page.SessionLess'])
+                 $xarPage_sessionLess)
        ) {
         global $xarPage_cacheCode;
         $cacheKey = 'static';

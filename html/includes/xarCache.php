@@ -35,7 +35,7 @@ function xarCache_init($args)
     global $xarPage_cacheHookedOnly;
     global $xarBlock_cacheTime;
     global $xarPage_autoCachePeriod;
-    global $cachingConfiguration;
+    global $xarPage_sessionLess;
 
     if (!include_once('var/cache/config.caching.php')) {
         // if the config file is missing, turn caching off
@@ -60,6 +60,8 @@ function xarCache_init($args)
         $cachingConfiguration['Page.CacheGroups'] : '';
     $xarPage_cacheHookedOnly = isset($cachingConfiguration['Page.HookedOnly']) ?
         $cachingConfiguration['Page.HookedOnly'] : 0;
+    $xarPage_sessionLess = isset($cachingConfiguration['Page.SessionLess']) ?
+        $cachingConfiguration['Page.SessionLess'] : '';
     $xarBlock_cacheTime = isset($cachingConfiguration['Block.TimeExpiration']) ?
         $cachingConfiguration['Block.TimeExpiration'] : 7200;
     $xarPage_autoCachePeriod = isset($cachingConfiguration['AutoCache.Period']) ?
