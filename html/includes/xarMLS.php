@@ -70,6 +70,7 @@ class MLSEnvironment {
 function xarMLS_init($args, $whatElseIsGoingLoaded)
 {
 // <mrb> Why do we have two formats here?
+// <iansym> Should all this stuff be stored in the MLSEnvironment class rather than $GLOBALS?
     // FIXME: use constants also for the configvars
     switch ($args['MLSMode']) {
     case 'SINGLE':
@@ -172,31 +173,39 @@ function xarMLSListSiteLocales()
  * @return array locale data
  * @raise LOCALE_NOT_EXIST
  */
-function xarMLSLoadLocaleData($locale = NULL)
-{
+function &xarMLSLoadLocaleData($locale = NULL)
+{   // <iansym> We should return this function by reference as it's a large array.  
+    // <iansym> Doing this will save memory for other processes.
+    // TODO: Check for uses of $localedata = xarMLSLoadLocaleData(); as opposed to
+    // TODO: $localedata = & xarMLSLoadLocaleData();
+    
     if (!isset($locale)) {
         $locale = xarMLSGetCurrentLocale();
     }
-
-    // check for locale availability
-    $siteLocales = xarMLSListSiteLocales();
+    
+    // <iansym> moved this check here to avoid running this function when the data already exists
+    // <iansym> this makes the assumption that the locale is available
+    if (!isset($GLOBALS['xarMLS_localeDataCache'][$locale])) {
+        // check for locale availability
+        $siteLocales = xarMLSListSiteLocales();
 
 // TODO: figure out why we go through this function for xarModIsAvailable
 //       (this one breaks on upper/lower-case issues, BTW)
-    if (!in_array($locale, $siteLocales)) {
-        if (preg_match('/ISO/',$locale)) {
-            $locale = preg_replace('/ISO/','iso',$locale);
-            if (!in_array($locale, $siteLocales)) {
+        if (!in_array($locale, $siteLocales)) {
+            // <iansym> use of preg_match and preg_replace is overkill
+            // <iansym> replacing with strstr and str_replace
+            if (strstr('ISO',$locale)) {
+                $locale = str_replace('ISO','iso',$locale);
+                if (!in_array($locale, $siteLocales)) {
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
+                    return;
+                }
+            } else {
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
                 return;
             }
-        } else {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
-            return;
         }
-    }
 
-    if (!isset($GLOBALS['xarMLS_localeDataCache'][$locale])) {
         $res = $GLOBALS['xarMLS_localeDataLoader']->load($locale);
 
         if (!isset($res)) return; // Throw back
@@ -206,7 +215,9 @@ function xarMLSLoadLocaleData($locale = NULL)
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_EXIST',$msg);
             return;
         }
-        $GLOBALS['xarMLS_localeDataCache'][$locale] = $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
+        // <iansym> assigning this by reference should save some memory
+        // <iansym> we don't need to create multiple large arrays
+        $GLOBALS['xarMLS_localeDataCache'][$locale] =& $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
     }
     return $GLOBALS['xarMLS_localeDataCache'][$locale];
 }
@@ -352,8 +363,9 @@ function xarLocaleGetInfo($locale)
  * @access public
  * @return string locale string
  */
-function xarLocaleGetString($localeInfo)
-{
+function xarLocaleGetString(&$localeInfo)
+{   // <iansym> Since this function makes copies of the data in the passed in array
+    // <iansym> We pass it in by reference so we don't make another copy of it.
     if (!isset($localeInfo['lang']) || !isset($localeInfo['country']) || !isset($localeInfo['specializer']) || !isset($localeInfo['charset'])) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
         return;
@@ -539,16 +551,16 @@ function xarLocaleGetFormattedUTCDate($length = 'short',$timestamp = null)
  */
 function xarLocaleGetFormattedDate($length = 'short',$timestamp = null)
 {
-    static $localeData;
+    //static $localeData;
     $length = strtolower($length);
     $validLengths = array('short','medium','long');
     if(!in_array($length,$validLengths)) {
         return '';
     }
     // load the locale date
-    if(!isset($localeData)) {
-        $localeData = xarMLSLoadLocaleData();
-    }
+    //if(!isset($localeData)) {
+        $localeData = & xarMLSLoadLocaleData();
+    //}
     // grab the right set of locale data
     $locale_format = $localeData["/dateFormats/$length"];
     // replace the locale formatting style with valid strftime() style
@@ -592,16 +604,16 @@ function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null)
  */
 function xarLocaleGetFormattedTime($length = 'short',$timestamp = null)
 {
-    static $localeData;
+    //static $localeData;
     $length = strtolower($length);
     $validLengths = array('short','medium','long');
     if(!in_array($length,$validLengths)) {
         return '';
     }
     // load the locale date
-    if(!isset($localeData)) {
+    //if(!isset($localeData)) {
         $localeData = xarMLSLoadLocaleData();
-    }
+    //}
     // grab the right set of locale data
     $locale_format = $localeData["/timeFormats/$length"];
     // replace the locale formatting style with valid strftime() style
@@ -751,7 +763,7 @@ function xarMLS_userOffset()
  */
 function xarMLS_strftime($format=null,$timestamp=null)
 {
-    static $localeDate;
+    //static $localeDate;
     // if we don't have a timestamp, get the user's current time
     if(!isset($timestamp)) {
         $timestamp = xarMLS_userTime();
@@ -775,9 +787,9 @@ function xarMLS_strftime($format=null,$timestamp=null)
 
     // load the locale date
     // FIXME: <mrb> this can return an empty array silently
-    if(!isset($localeData)) {
+    //if(!isset($localeData)) {
         $localeData = xarMLSLoadLocaleData();
-    }
+    //}
 
     // TODO
     // if no $format is provided we need to use the default for the locale
@@ -1194,7 +1206,7 @@ class xarMLS__LocaleDataLoader
         return true;
     }
 
-    function getLocaleData()
+    function & getLocaleData()
     {
         return $this->localeData;
     }
