@@ -1,7 +1,6 @@
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Base Module</xar:mlstring></span></div>
-<!-- common admin menu for this module - remove link to the current function -->
-<div class="xar-mod-body">
-<h2><xar:mlstring>Base Xaraya Administration</xar:mlstring>  </h2>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>System Information</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <b><xar:mlstring>Sort Options</xar:mlstring>:</b><br />
 
 <form action="&xar-modurl-base-admin-sysinfo;" method="post">
@@ -58,3 +57,5 @@
 
 <br />
 #$phpinfo#
+</div>
+</div>

@@ -24,7 +24,7 @@
                     <xar:if condition="!empty($header)">
                         <br /><b>#$header#</b><br />
                     </xar:if>
-                    <input type="checkbox" name="hooked_#$name#" id="hooked_#$name#" value="1"#$checked# />#$name# : #$description#<br />
+                    <input type="checkbox" name="hooked_#$name#" id="hooked_#$name#" value="1"#$checked# /><label for="hooked_#$name#">#$name# : #$description#</label><br />
                 </xar:loop>
                 <br />
                 <input type="submit" value="Save Changes" />

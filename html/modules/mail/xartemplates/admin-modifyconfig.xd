@@ -1,11 +1,6 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">
-            <xar:mlstring>Mail Administration</xar:mlstring>            
-        </th>
-    </tr>
-</table>
-<div align="center"><h2><xar:mlstring>Modify Mail Configuration</xar:mlstring></h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Modify Mail Configuration</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <form method="post" action="&xar-modurl-mail-admin-updateconfig;" method="post" enctype="application/x-www-form-urlencoded" />
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
 
@@ -31,7 +26,9 @@
 					</tr>
 					<tr align="left" valign="middle">
 						<td>
-							<xar:mlstring>Add a reply to name and address to all emails sent</xar:mlstring>
+							<label for="replyto">
+								<xar:mlstring>Add different reply-to</xar:mlstring>
+							</label>
 						</td>
 						<td>
 							<xar:if condition="xarModGetVar('mail', 'replyto')">
@@ -61,7 +58,9 @@
 					</xar:if>
 					<tr align="left" valign="middle">
 						<td>
-							<xar:mlstring>Send HTML Emails?</xar:mlstring>
+							<label for="html">
+								<xar:mlstring>Send HTML Emails?</xar:mlstring>
+							</label>
 						</td>
 						<td>
 							<xar:if condition="xarModGetVar('mail', 'html')">
@@ -161,7 +160,9 @@
 						</tr>
 						<tr align="left" valign="middle">
 							<td>
-								<xar:mlstring>SMTP Requires Authentication</xar:mlstring>
+								<label for="smtpAuth">
+									<xar:mlstring>SMTP Requires Authentication</xar:mlstring>
+								</label>
 							</td>
 							<td>
 								<xar:if condition="xarModGetVar('mail', 'smtpAuth')">
@@ -197,5 +198,5 @@
 	<br /><br />
 	<input type="submit" value="Update Mail Configuration" align="middle" tabindex="3" />
 </form>
-</center>
-        
+</div>
+</div>
