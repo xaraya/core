@@ -810,7 +810,7 @@ Password : %%password%%
     $configvars[] = array(array('name'    =>  'Site.User.AnonymousUID',
                                 'set'     =>  $roleanon->getID()),
                           array('name'    =>  'System.Core.VersionNum',
-                                'set'     =>  '.9.1.3'));
+                                'set'     =>  '.9.1.4'));
 
     foreach($configvars as $configvar){
         foreach($configvar as $var){
