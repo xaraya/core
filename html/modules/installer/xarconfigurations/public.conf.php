@@ -49,11 +49,11 @@ function installer_public_configuration_load($args)
 
     if(in_array(2,$args)) {
         installer_public_commentaccess();
-        xarAssignPrivilege('CommentAccess','Anonymous');
+        xarAssignPrivilege('CommentAccess','Everybody');
    }
     else {
         if(in_array(1,$args)) installer_public_readnoncore();
-        xarAssignPrivilege('ReadNonCore','Anonymous');
+        xarAssignPrivilege('ReadNonCore','Everybody');
     }
 
     return true;

@@ -38,7 +38,7 @@ function installer_intranet_configuration_load($args)
 // the following needs to be done in any case
 
     installer_intranet_casualaccess();
-    xarAssignPrivilege('CasualAccess','Anonymous');
+    xarAssignPrivilege('CasualAccess','Everybody');
 
 // now do the necessary loading for each item
 

@@ -665,7 +665,7 @@ function drawindent() {
         $nameprep = xarVarPrepForStore($name);
         $unameprep = xarVarPrepForStore($uname);
         $emailprep = xarVarPrepForStore($email);
-        $passprep = md5(xarVarPrepForStore($pass));
+        $passprep = xarVarPrepForStore(md5($pass));
         $dateregprep = xarVarPrepForStore($datereg);
         $valcodeprep = xarVarPrepForStore($valcode);
         $stateprep = xarVarPrepForStore($state);
@@ -1004,19 +1004,15 @@ function drawindent() {
 
     function update()
     {
-// FIXME: if you need to fix it, do it somewhere else...
-    // Double-MD5 hashed password for Admin user is the result of this -> login fails
-    //    $pass = md5($this->pass);
         $query =    "UPDATE " . $this->rolestable .
                     " SET " .
                     "xar_name = '$this->name'," .
                     "xar_type = $this->type," .
                     "xar_uname = '$this->uname'," .
                     "xar_email = '$this->email'," .
-                    "xar_pass = '$this->pass'," .
-    //                "xar_pass = '$pass'," .
-                    "xar_state = '$this->state'" .
-                    " WHERE xar_uid = " . $this->getID();
+                    "xar_state = '$this->state'";
+        if($this->pass != '') $query .= ",xar_pass = '" . md5($this->pass) ."'";
+        $query .= " WHERE xar_uid = " . $this->getID();
 
 //Execute the query, bail if an exception was thrown
         if (!$this->dbconn->Execute($query)) return;

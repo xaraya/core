@@ -367,13 +367,12 @@ function installer_admin_create_administrator()
 
 
     // assemble the args into an array for the role constructor
-    $password = md5($pass);
     $pargs = array('uid'   => 3,
                    'name'  => $name,
                    'type'  => 0,
                    'uname' => $userName,
                    'email' => $email,
-                   'pass'  => $password,
+                   'pass'  => $pass,
                    'state' => 3);
 
     // create a role from the data

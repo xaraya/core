@@ -49,11 +49,11 @@ function installer_community_configuration_load($args)
 
     if(in_array(2,$args)) {
         installer_community_readnoncore();
-        xarAssignPrivilege('ReadNonCore','Anonymous');
+        xarAssignPrivilege('ReadNonCore','Everybody');
    }
     else {
         if(in_array(1,$args)) installer_community_casualaccess();
-        xarAssignPrivilege('CasualAccess','Anonymous');
+        xarAssignPrivilege('CasualAccess','Everybody');
     }
 
     return true;
