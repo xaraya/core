@@ -76,7 +76,7 @@ function roles_admin_sendmail()
         $line = fgets($fd, 1024);
         $string .= $line;
     }
-    
+
     $subject  = xarTplCompileString($string . $subject);
     $message  = xarTplCompileString($string . $message);
 
@@ -87,18 +87,17 @@ function roles_admin_sendmail()
         $data['recipientname'] = $user['name'];
         $data['recipientusername'] = $user['username'];
         $data['recipientemail'] = $user['email'];
-        $subject = xarTplString($subject, $data);
-        $message = xarTplString($message, $data);
+        $mailsubject = xarTplString($subject, $data);
+        $mailmessage = xarTplString($message, $data);
 
         if (!xarModAPIFunc('mail',
             'admin',
             'sendmail',
             array('info' => $user['email'],
                 'name' => $user['name'],
-                'subject' => $subject,
-                'message' => $message))) return;
+                'subject' => $mailsubject,
+                'message' => $mailmessage))) return;
     }
-
     xarResponseRedirect(xarModURL('roles', 'admin', 'createmail'));
     // Return
     return true;
