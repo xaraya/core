@@ -77,6 +77,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
 <li>hitcount</li>
 <li>ratings (optional)</li>
 <li>articles</li>
+<li>polls (if you want to import those)</li>
 </ul>
 [do not modify the default privileges, hooks etc. yet]
 </li>
@@ -127,6 +128,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
     if (!xarModAPILoad('dynamicdata','util')) {
         die("Unable to load the dynamicdata util API");
+    }
+    if (xarModIsAvailable('polls') && !xarModAPILoad('polls','admin')) {
+        die("Unable to load the polls admin API");
     }
     if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','admin')) {
         $docounter = 1;
@@ -238,6 +242,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
                       'realname'   => $name,
                       'email'      => $email,
                       'cryptpass'  => $pass,
+                      'pass'       => '', // in case $pass is empty
                       'date'       => $date,
                       'valcode'    => 'createdbyadmin',
                       'authmodule' => 'authsystem',
@@ -253,9 +258,26 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         $num++;
         $result->MoveNext();
 
-        if (!isset($newuid)) {
-            echo "Insert user ($uid) $uname failed : " . xarExceptionRender('text') . "<br>\n";
-            continue;
+        if (empty($newuid)) {
+            echo "Insert user ($uid) $uname failed - ";
+            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+                xarExceptionRender('text');
+                xarExceptionHandled();
+            }
+        // same player, shoot again :)
+            $user['uname'] .= $uid;
+            echo "trying again with username " . $user['uname'] . " : ";
+            $newuid = xarModAPIFunc('roles',
+                                    'admin',
+                                    'create',
+                                    $user);
+            if (empty($newuid)) {
+                echo "failed<br>\n";
+                flush();
+                continue;
+            }
+            echo "succeeded<br>\n";
+            flush();
         } elseif ($count < 200) {
             echo "Inserted user ($uid) $name - $uname<br>\n";
         } elseif ($num % 100 == 0) {
@@ -263,21 +285,31 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
             flush();
         }
 
+        // default for timezone changed from 0 to 12 in PN
+        if ($timezone > 0) {
+            $timezone -= 12.0;
+        }
+        if ($url === 'http://') {
+            $url = '';
+        }
+        if ($avatar === 'blank.gif') {
+            $avatar = '';
+        }
         // fill in the dynamic properties - cfr. users.xml !
         $dynamicvalues = array(
                                'itemid'     => $newuid,
-                               'website'    => $url,
-                               'timezone'   => $timezone - 12.0,
-                               'avatar'     => $avatar,
-                               'icq'        => $icq,
-                               'aim'        => $aim,
-                               'yim'        => $yim,
-                               'msnm'       => $msnm,
-                               'location'   => $location,
-                               'occupation' => $occupation,
-                               'interests'  => $interests,
-                               'signature'  => $signature,
-                               'extra_info' => $extra_info,
+                               'website'    => empty($url) ? null : $url,
+                               'timezone'   => $timezone == 0 ? null : $timezone, // GMT default
+                               'avatar'     => empty($avatar) ? null : $avatar,
+                               'icq'        => empty($icq) ? null : $icq,
+                               'aim'        => empty($aim)  ? null : $aim,
+                               'yim'        => empty($yim) ? null : $yim,
+                               'msnm'       => empty($msnm) ? null : $msnm,
+                               'location'   => empty($location) ? null : $location,
+                               'occupation' => empty($occupation) ? null : $occupation,
+                               'interests'  => empty($interests) ? null : $interests,
+                               'signature'  => empty($signature) ? null : $signature,
+                               'extra_info' => empty($extra_info) ? null : $extra_info,
                               );
         $myobject->createItem($dynamicvalues);
 
@@ -480,12 +512,18 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         if (isset($userid[$authorid])) {
             $authorid = $userid[$authorid];
         } // else we're lost :)
+        if (empty($authorid) || $authorid < 2) {
+            $authorid = _XAR_ID_UNREGISTERED;
+        }
         $cids = array();
         if (isset($topicid[$topic])) {
             $cids[] = $topicid[$topic];
         }
         if (isset($catid[$cat])) {
             $cids[] = $catid[$cat];
+        }
+        if (empty($title)) {
+            $title = xarML('[none]');
         }
         $newaid = xarModAPIFunc('articles',
                                 'admin',
@@ -582,6 +620,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
             $cids[] = $topicid[$topic];
         }
         $counter = 0;
+        if (empty($title)) {
+            $title = xarML('[none]');
+        }
         $newaid = xarModAPIFunc('articles',
                                 'admin',
                                 'create',
@@ -690,6 +731,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
             $cids[] = $sections;
         }
         $status = 2;
+        if (empty($title)) {
+            $title = xarML('[none]');
+        }
         $newaid = xarModAPIFunc('articles',
                                 'admin',
                                 'create',
@@ -800,6 +844,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         }
         $counter = 0;
         $status = 2;
+        if (empty($title)) {
+            $title = xarML('[none]');
+        }
         $newaid = xarModAPIFunc('articles',
                                 'admin',
                                 'create',
@@ -878,12 +925,13 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     while (!$result->EOF) {
         list($tid,$sid,$pid,$date,$uname,$uid,$hostname,$subject,$comment) = $result->fields;
 
-        if (empty($uid)) {
-            $uid = 0;
-        }
         if (isset($userid[$uid])) {
             $uid = $userid[$uid];
         } // else we're lost :)
+        if (empty($uid) || $uid < 2) {
+            $uid = _XAR_ID_UNREGISTERED;
+        }
+        $data = array();
         $data['modid'] = $regid;
         $data['objectid'] = $sid;
         if (!empty($pid) && !empty($pid2cid[$pid])) {
@@ -994,18 +1042,21 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
             $email, $hits, $submitter, $rating, $votes, $uid) = $result->fields;
         $status = 2;
         $language = '';
-        if (empty($uid)) {
-            $uid = 0;
-        }
         if (isset($userid[$uid])) {
             $uid = $userid[$uid];
         } // else we're lost :)
+        if (empty($uid) || $uid < 2) {
+            $uid = _XAR_ID_UNREGISTERED;
+        }
         if (!empty($email)) {
             $email = ' <' . $email . '>';
         }
         $cids = array();
         if (isset($weblinks[$catid])) {
             $cids[] = $weblinks[$catid];
+        }
+        if (empty($title)) {
+            $title = xarML('[none]');
         }
         $newaid = xarModAPIFunc('articles',
                                 'admin',
@@ -1042,10 +1093,218 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
     }
 
-// TODO: add the rest :-)
+    if ($step == 12 && !xarModIsAvailable('polls')) {
+        $step++;
+    }
 
     if ($step == 12) {
-    echo "<strong>12. Cleaning up</strong><br>\n";
+    echo "<strong>12. Importing old polls</strong><br>\n";
+
+    $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_poll_desc';
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
+        die("Oops, count polls failed : " . $dbconn->ErrorMsg());
+    }
+    $count = $result->fields[0];
+    $result->Close();
+
+    $query = 'SELECT pdesc.pn_pollid,pn_title,pn_timestamp,pn_voters,SUM(pn_optioncount)
+              FROM ' . $oldprefix . '_poll_desc as pdesc
+              LEFT JOIN ' . $oldprefix . '_poll_data as pdata
+                  ON pdesc.pn_pollid = pdata.pn_pollid
+              GROUP BY pdata.pn_pollid
+              ORDER BY pdesc.pn_pollid ASC';
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
+        die("Oops, select polls failed : " . $dbconn->ErrorMsg());
+    }
+    $pollid = array();
+    $num = 1;
+    while (!$result->EOF) {
+        list($pid,$title,$time,$wrongvotes,$realvotes) = $result->fields;
+        if (empty($title)) {
+            $title = xarML('[none]');
+        }
+        $newpid = xarModAPIFunc('polls','admin','create',
+                                array('title' => $title,
+                                      'polltype' => 'single', // does PN support any other kind ?
+                                      'private' => 0,
+                                      'time' => $time,
+                                      'votes' => $realvotes));
+        if (empty($newpid)) {
+            echo "Insert poll ($pid) $title failed : " . xarExceptionRender('text') . "<br>\n";
+        } elseif ($count < 200) {
+            echo "Inserted poll ($pid) $title<br>\n";
+        } elseif ($num % 100 == 0) {
+            echo "Inserted poll $num<br>\n";
+            flush();
+        }
+        if (!empty($newpid)) {
+            $pollid[$pid] = $newpid;
+        }
+        $num++;
+        $result->MoveNext();
+    }
+    $result->Close();
+
+    $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_poll_data';
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
+        die("Oops, count poll options failed : " . $dbconn->ErrorMsg());
+    }
+    $count = $result->fields[0];
+    $result->Close();
+
+    $query = 'SELECT pn_pollid, pn_optiontext, pn_optioncount, pn_voteid
+              FROM ' . $oldprefix . '_poll_data
+              ORDER BY pn_pollid ASC, pn_voteid ASC';
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
+        die("Oops, select poll options failed : " . $dbconn->ErrorMsg());
+    }
+    $num = 1;
+    while (!$result->EOF) {
+        list($pid,$text,$count,$vid) = $result->fields;
+        if ($text === '') {
+            $num++;
+            $result->MoveNext();
+            continue;
+        } elseif (!isset($pollid[$pid])) {
+            echo "Unknown poll id $pid for option $text<br />\n";
+            $num++;
+            $result->MoveNext();
+            continue;
+        }
+        $newvid = xarModAPIFunc('polls','admin','createopt',
+                                array('pid' => $pollid[$pid],
+                                      'option' => $text,
+                                      'votes' => $count));
+        if (empty($newvid)) {
+            echo "Insert poll option ($pid $vid) $text failed : " . xarExceptionRender('text') . "<br>\n";
+        } elseif ($count < 100) {
+            echo "Inserted poll option ($pid $vid) $text<br>\n";
+        } elseif ($num % 100 == 0) {
+            echo "Inserted poll option $num<br>\n";
+            flush();
+        }
+        $num++;
+        $result->MoveNext();
+    }
+    $result->Close();
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['polls']);
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['polls_info']);
+
+    $users = xarModGetVar('installer','userid');
+    if (!isset($users)) {
+        $userid = array();
+    } else {
+        $userid = unserialize($users);
+    }
+    $regid = xarModGetIDFromName('polls');
+    $pid2cid = array();
+// TODO: fix issue for large # of poll comments
+/*
+    $pids = xarModGetVar('installer','commentid');
+    if (!empty($pids)) {
+        $pid2cid = unserialize($pids);
+        $pids = '';
+    }
+*/
+    $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_pollcomments';
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
+        die("Oops, count poll comments failed : " . $dbconn->ErrorMsg());
+    }
+    $count = $result->fields[0];
+    $result->Close();
+    $query = 'SELECT pn_tid, pn_pollid, pn_pid, UNIX_TIMESTAMP(pn_date), pn_uname, pn_uid,
+              pn_host_name, pn_subject, pn_comment 
+              FROM ' . $oldprefix . '_pollcomments 
+              LEFT JOIN ' . $oldprefix . '_users
+              ON ' . $oldprefix . '_users.pn_uname = ' . $oldprefix . '_pollcomments.pn_name
+              ORDER BY pn_tid ASC';
+/* if you try to match against Xaraya users someday
+    $query = 'SELECT pn_tid, pn_pollid, pn_pid, UNIX_TIMESTAMP(pn_date), xar_uname, xar_uid,
+              pn_host_name, pn_subject, pn_comment 
+              FROM ' . $oldprefix . '_pollcomments 
+              LEFT JOIN ' . $tables['roles'] . '
+              ON ' . $tables['roles'] . '.xar_uname = ' . $oldprefix . '_pollcomments.pn_name
+              ORDER BY pn_tid ASC';
+*/
+// TODO: fix issue for large # of poll comments
+//    $numitems = 1500;
+    $numitems = $count;
+    if (!isset($startnum)) {
+        $startnum = 0;
+    }
+
+    if ($count > $numitems) {
+        $result =& $dbconn->SelectLimit($query, $numitems, $startnum);
+    } else {
+        $result =& $dbconn->Execute($query);
+    }
+    if (!$result) {
+        die("Oops, select poll comments failed : " . $dbconn->ErrorMsg());
+    }
+    $num = 1;
+    while (!$result->EOF) {
+        list($tid,$sid,$pid,$date,$uname,$uid,$hostname,$subject,$comment) = $result->fields;
+
+        if (!isset($pollid[$sid])) {
+            echo "Unknown poll id $sid for comment ($tid) $subject<br>\n";
+            $num++;
+            $result->MoveNext();
+            continue;
+        }
+
+        if (isset($userid[$uid])) {
+            $uid = $userid[$uid];
+        } // else we're lost :)
+        if (empty($uid) || $uid < 2) {
+            $uid = _XAR_ID_UNREGISTERED;
+        }
+        $data = array();
+        $data['modid'] = $regid;
+        $data['objectid'] = $pollid[$sid];
+        if (!empty($pid) && !empty($pid2cid[$pid])) {
+            $pid = $pid2cid[$pid];
+        }
+        $data['pid'] = $pid;
+        $data['author'] = $uid;
+        $data['title'] = $subject;
+        $data['comment'] = $comment;
+        $data['hostname'] = $hostname;
+        //$data['cid'] = $tid;
+        $data['date'] = $date;
+        $data['postanon'] = 0;
+
+        $cid = xarModAPIFunc('comments','user','add',$data);
+        if (empty($cid)) {
+            echo "Failed inserting poll comment ($sid $pid) $uname - $subject : ".$dbconn->ErrorMsg()."<br>\n";
+        } elseif ($count < 200) {
+            echo "Inserted poll comment ($sid $pid) $uname - $subject<br>\n";
+        } elseif ($num % 100 == 0) {
+            echo "Inserted poll comment " . ($num + $startnum) . "<br>\n";
+            flush();
+        }
+        $pid2cid[$tid] = $cid;
+        $num++;
+        $result->MoveNext();
+    }
+    $result->Close();
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['comments']);
+
+    echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
+          <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+    // Enable comments hooks for polls
+    xarModAPIFunc('modules','admin','enablehooks',
+                  array('callerModName' => 'polls', 'hookModName' => 'comments'));
+    }
+
+// TODO: add the rest :-)
+
+    if ($step == 13) {
+    echo "<strong>13. Cleaning up</strong><br>\n";
 
     echo "<strong>TODO : import the rest...</strong><br><br>\n";
     //xarModDelVar('installer','userobjectid');
