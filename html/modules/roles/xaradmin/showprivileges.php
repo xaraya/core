@@ -129,6 +129,7 @@ function roles_admin_showprivileges()
     unset($inherited);
     $inherited[0] = $currentprivileges;
     for ($i=1;$i<$maxlevel+1;$i++) {
+        $inherited[$i] = array();
         foreach ($privilegestodo as $todo) {
             if ($todo['relation'] != $i) continue;
             foreach($privilegesdone as $done) {
