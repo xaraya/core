@@ -33,22 +33,46 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         }
         if (!empty($value)) {
             if (is_array($value)) {
+                
                 if (isset($value['title'])) {
                     $title = $value['title'];
-                }
-                if (empty($title)) {
+                } else {
                     $title = '';
                 }
+                
                 if (isset($value['link'])) {
                     $link = $value['link'];
-                }
-                if (empty($link) || $link == 'http://') {
+                } else {
                     $link = '';
-            // TODO: add some URL validation routine !
-                } elseif (preg_match('/[<>"]/',$link)) {
-                    $this->invalid = xarML('URL');
-                    $this->value = null;
-                    return false;
+                }
+                // Make sure $value['title'] is set and has a length > 0
+                if (strlen(trim($title))) {
+                    $title = $value['title'];
+                } else {
+                    $title = '';
+                }
+                
+                // Make sure $value['link'] is set, has a length > 0 and does not equal simply 'http://'
+                if (strlen(trim($link)) && trim($link) != 'http://') {
+                        $link = $value['link'];
+                } else {
+                    // If we have a scheme but nothing following it,
+                    // then consider the link empty :-)
+                    if (eregi('^[a-z]+\:\/\/$', trim($link))) {
+                        $link = '';
+                    } else {
+                    
+                        // Do some URL validation below - make sure the url 
+                        // has at least a scheme (http/ftp/etc) and a host (domain.tld)
+                        $uri = parse_url($value['link']);
+
+                        if ( (!isset($uri['scheme']) || empty($uri['scheme'])) ||
+                            (!isset($uri['host']) || empty($uri['host']))) {
+                                $this->invalid = xarML('URL');
+                                $this->value = null;
+                                return false;
+                        }
+                    }
                 }
                 $value = array('link' => $link, 'title' => $title);
                 $this->value = serialize($value);
