@@ -140,10 +140,8 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
 
     $rolestable = $xartable['roles'];
 
-    $query = "UPDATE $rolestable
-              SET xar_auth_module = '" . xarVarPrepForStore($authModName) . "'
-              WHERE xar_uid = " . xarVarPrepForStore($userId);
-    $result =& $dbconn->Execute($query);
+    $query = "UPDATE $rolestable SET xar_auth_module = ? WHERE xar_uid = ?";
+    $result =& $dbconn->Execute($query,array($authModName,$userId));
     if (!$result) return;
 
     // Set session variables
@@ -627,10 +625,8 @@ function xarUser__getAuthModule($userId)
     // Get user auth_module name
     $rolestable = $xartable['roles'];
 
-    $query = "SELECT xar_auth_module
-              FROM $rolestable
-              WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
-    $result =& $dbconn->Execute($query);
+    $query = "SELECT xar_auth_module FROM $rolestable WHERE xar_uid = ?";
+    $result =& $dbconn->Execute($query,array($userId));
     if (!$result) return;
 
     if ($result->EOF) {
@@ -732,9 +728,8 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
     // The $name variable will be used to get the appropriate column
     // from the users table.
     $query = "UPDATE $rolestable
-              SET $usercolumns[$name] = '" . xarVarPrepForStore($value) . "'
-              WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
-    $result =& $dbconn->Execute($query);
+              SET $usercolumns[$name] = ? WHERE xar_uid = ?";
+    $result =& $dbconn->Execute($query,array($value,$userId));
     if (!$result) return;
     return true;
 }
