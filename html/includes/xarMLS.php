@@ -90,7 +90,7 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
  */
 function xarMLSGetMode()
 {
-    if (isset($GLOBALS['xarMLS_mode'])){ 
+    if (isset($GLOBALS['xarMLS_mode'])){
         return $GLOBALS['xarMLS_mode'];
     } else {
         return 'BOXED';
@@ -145,15 +145,15 @@ function &xarMLSLoadLocaleData($locale = NULL)
     if (!isset($locale)) {
         $locale = xarMLSGetCurrentLocale();
     }
-    
+
     // rraymond : move the check for the loaded locale before processing as
     //          : all of this would have been taken care of the first time
     //          : the locale data was loaded - saves processing time
     if (!isset($GLOBALS['xarMLS_localeDataCache'][$locale])) {
-        
+
         // check for locale availability
         $siteLocales = xarMLSListSiteLocales();
-        
+
         if (!in_array($locale, $siteLocales)) {
             if (strstr($locale,'ISO')) {
                 $locale = str_replace('ISO','iso',$locale);
@@ -167,7 +167,7 @@ function &xarMLSLoadLocaleData($locale = NULL)
             }
         }
 
-    
+
         $res = $GLOBALS['xarMLS_localeDataLoader']->load($locale);
 
         if (!isset($res)) return; // Throw back
@@ -178,9 +178,9 @@ function &xarMLSLoadLocaleData($locale = NULL)
             return;
         }
         $GLOBALS['xarMLS_localeDataCache'][$locale] = $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
-    
+
     } // end if (!isset($GLOBALS['xarMLS_localeDataCache'][$locale]))
-    
+
     return $GLOBALS['xarMLS_localeDataCache'][$locale];
 }
 
@@ -248,7 +248,7 @@ function xarML($string/*, ...*/)
 
 /**
  * Return the translation associated to passed key
- * 
+ *
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the translation string, or the key if no translation is available
@@ -324,11 +324,11 @@ function xarLocaleGetString($localeInfo)
         }
         $locale .= '_'.strtoupper($localeInfo['country']);
     }
-    if (!empty($localeInfo['specializer'])) {
-        $locale .= '@'.$localeInfo['specializer'];
-    }
     if (!empty($localeInfo['charset'])) {
         $locale .= '.'.$localeInfo['charset'];
+    }
+    if (!empty($localeInfo['specializer'])) {
+        $locale .= '@'.$localeInfo['specializer'];
     } else {
         $locale .= '.utf-8';
     }
@@ -504,11 +504,11 @@ function xarLocaleGetFormattedDate($length = 'short',$timestamp = null)
         //TODO: We should throw a USER exception here
         return '';
     }
-   
+
     // the locale data should already be a static var in the main loader script
     // so we no longer need to make it a static in this function
     $localeData =& xarMLSLoadLocaleData();  // rraymond : assign by reference for large array (memory issues)
-    
+
     // grab the right set of locale data
     $locale_format = $localeData["/dateFormats/$length"];
     // replace the locale formatting style with valid strftime() style
@@ -520,7 +520,7 @@ function xarLocaleGetFormattedDate($length = 'short',$timestamp = null)
     $locale_format = str_replace('d','%d',$locale_format);
     $locale_format = str_replace('yyyy','%Y',$locale_format);
     $locale_format = str_replace('yy','%y',$locale_format);
-    
+
     return xarLocaleFormatDate($locale_format,$timestamp);
 }
 
@@ -557,11 +557,11 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null)
     if(!in_array($length,$validLengths)) {
         return '';
     }
-    
+
     // the locale data should already be a static var in the main loader script
     // so we no longer need to make it a static in this function
     $localeData =& xarMLSLoadLocaleData();  // rraymond : assign by reference for large array (memory issues)
-    
+
     // grab the right set of locale data
     $locale_format = $localeData["/timeFormats/$length"];
     // replace the locale formatting style with valid strftime() style
@@ -1040,7 +1040,7 @@ function xarMLS__parseLocaleString($locale)
  * @return string the charset
  * @todo   Dont hardcode this
  */
-function xarMLS__getSingleByteCharset($langISO2Code) 
+function xarMLS__getSingleByteCharset($langISO2Code)
 {
     static $charsets = array(
                              'af' => 'iso-8859-1', 'sq' => 'iso-8859-1',
@@ -1389,10 +1389,10 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
         return false;
     }
 
-    function getDomainLocation() 
+    function getDomainLocation()
     { return $this->domainlocation; }
 
-    function getContextLocation() 
+    function getContextLocation()
     { return $this->contextlocation; }
 
     function hasContext($ctxType, $ctxName)
