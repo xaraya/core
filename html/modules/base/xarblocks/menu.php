@@ -155,12 +155,14 @@ function base_menublock_display($blockinfo)
 
                 // Added list of modules if selected.
                 if (!empty($vars['displaymodules'])) {
-                    if (xarSecurityCheck('ReadBaseBlock',0,'Block',"$blockinfo[title]:All:All")) {
+                    if (xarSecurityCheck('ReadBaseBlock',0,'Block',"All:$blockinfo[title]:All")) {
                         foreach($mods as $mod){
                             $label = $mod['name'];
                             $link = xarModURL($mod['name'] ,'user', 'main', array());
                             // depending on which module is currently loaded we display accordingly
                             if($label == $thismodname && $thismodtype == 'user'){
+							
+							
                                 // Get list of links for modules
                                 $labelDisplay = ucwords($label);
                                 $usermods[] = array(   'label'     => $labelDisplay,
@@ -177,6 +179,7 @@ function base_menublock_display($blockinfo)
                                     $menulinks = xarModAPIFunc($label,
                                                                'user',
                                                                'getmenulinks');
+
                                 } else {
                                     $menulinks = '';
                                 }
