@@ -11,6 +11,10 @@
 <br /><br />
 <a href="#xarModURL('users', 'user', 'showloginform')#"><xar:mlstring>Login</xar:mlstring></a>
 <br /><br />
-<a href="#xarModURL('users', 'user', 'register', array('phase' => 'checkage'))#"><xar:mlstring>Register</xar:mlstring></a>
+<xar:if condition="xarModGetVar('users', 'minage') eq 0">
+	<a href="#xarModURL('users', 'user', 'register', array('phase' => 'registerform'))#"><xar:mlstring>Register</xar:mlstring></a>
+<xar:else />
+	<a href="#xarModURL('users', 'user', 'register', array('phase' => 'checkage'))#"><xar:mlstring>Register</xar:mlstring></a>
+</xar:if>
 <br /><br />
 <a href="#xarModURL('users', 'user', 'lostpassword')#"><xar:mlstring>Retrieve lost password</xar:mlstring></a>

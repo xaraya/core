@@ -51,6 +51,7 @@
 			<input type="hidden" name="realname" id="realname" value="#$realname#">
 			<input type="hidden" name="email" id="email" value="#$email#">
 			<input type="hidden" name="pass" id="pass" value="#$pass#">
+			<input type="hidden" name="ip" id="ip" value="#$ip#">
 			<input type="submit" value="<xar:mlstring>Create Account</xar:mlstring>">
 		</td>
 	</tr>

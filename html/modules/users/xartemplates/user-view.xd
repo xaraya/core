@@ -6,11 +6,8 @@
         <th width="20%">
 			<xar:mlstring>Nick Name</xar:mlstring>
 		</th>
-        <th width="40%">
+        <th width="60%">
 			<xar:mlstring>saved for icons, NEED SOME DUD HERE</xar:mlstring>
-		</th>
-        <th width="20%">
-			<xar:mlstring>Options</xar:mlstring>
 		</th>
 	</tr>
     <xar:loop name="$items">
@@ -24,19 +21,6 @@
         <td>
 			<a href="#$emailurl#">#$email#</a>
 		</td>
-		<td>
-           <xar:if condition="empty($editurl)">
-               #$edittitle#
-           <xar:else />
-               <a href="#$editurl#">#$edittitle#</a>
-           </xar:if>
-           |
-           <xar:if condition="empty($deleteurl)">
-               #$deletetitle#
-           <xar:else />
-               <a href="#$deleteurl#">#$deletetitle#</a>
-           </xar:if>
-        </td>
     </tr>
     </xar:loop>
 </table>

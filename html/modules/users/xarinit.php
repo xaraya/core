@@ -177,14 +177,32 @@ function users_activate()
     // Set up an initial value for module variables.
     xarModSetVar('users', 'usersperpage', 20);
     xarModSetVar('users', 'showtacs', 0);
+    xarModSetVar('users', 'defaultgroup', 'Users');
 
     // Unfortunately, crappy format here, and not to PEAR Standardards
     // But I need the line break to come into play without the tab.
 
+$confirmationemail = 'Your account has been created for %%sitename%% and needs to be activated.  You can either do this now, or on the first time that you log in.  If you perfer to do it now, then you will need to follow this link:
+
+%%link%%
+
+Here are the details that were provided.
+
+IP Address of the person creating that account: %%ipaddr%%
+User Name:  %%username%%
+Password:  %%password%%
+
+If you did not create this account, then do nothing.  The account will be deemed inactive after a period of time and deleted from our records.  You will recieve no further emails from us.
+
+Thank you, 
+
+%%siteadmin%%';
+
+    xarModSetVar('users', 'confirmationemail', $confirmationemail);
+
     $names = 'Admin
 Root
-Linux
-Slim Shady';
+Linux';
     $disallowednames = serialize($names);
     xarModSetVar('users', 'disallowednames', $disallowednames);
 
