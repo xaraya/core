@@ -101,21 +101,13 @@ function base_textblock_modify($blockinfo)
  */
 function base_textblock_update($blockinfo)
 {
-    list($vars['expire'],
-         $vars['text_content']) = xarVarCleanFromInput('expire',
-                                                       'text_content');
-    // Defaults
-    if (empty($vars['expire'])) {
-        $vars['expire'] = 0;
-    }
+   if (!xarVarFetch('expire','str:1', $vars['expire'], 0, XARVAR_NOT_REQUIRED)) {return;}
+   if (!xarVarFetch('text_content','str:1', $vars['text_content'], '', XARVAR_NOT_REQUIRED)) {return;}
 
+    // Defaults
     if ($vars['expire'] != 0){
         $now = time();
         $vars['expire'] = $vars['expire'] + $now;
-    }
-
-    if (empty($vars['text_content'])) {
-        $vars['text_content'] = '';
     }
 
     $blockinfo['content'] = serialize($vars);

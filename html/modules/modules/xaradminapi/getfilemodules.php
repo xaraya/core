@@ -43,7 +43,8 @@ function modules_adminapi_getfilemodules()
             $category     = $modFileInfo['category'];
             $adminCapable = $modFileInfo['admin_capable'];
             $userCapable  = $modFileInfo['user_capable'];
-
+            $dependency   = $modFileInfo['dependency'];
+            
 
             // TODO: beautify :-)
             if (!isset($regId)) {
@@ -75,6 +76,11 @@ function modules_adminapi_getfilemodules()
                 $userCapable = 1;
             }
 
+            // No dependency information = ok
+            if (!isset($dependency)) {
+                $dependency = array();
+            }
+
             //FIXME: <johnny> this detection isn't finished yet... we should be checking
             //for xaruser.php and then overriding with if $modFileInfo['user_capable'] is 1
             // Work out if user-capable
@@ -92,7 +98,8 @@ function modules_adminapi_getfilemodules()
                                         'class'         => $class,
                                         'category'      => $category,
                                         'admin_capable' => $adminCapable,
-                                        'user_capable'  => $userCapable);
+                                        'user_capable'  => $userCapable,
+                                        'dependency'    => $dependency);
         }
     }
     closedir($dh);

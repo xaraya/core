@@ -88,6 +88,7 @@ function base_menublock_display($blockinfo)
 
     // which module is loaded atm?
     // we need it's name, type and function - dealing only with user type mods, aren't we?
+    // This needs to be deprecated for multi-modules setups later on
     list($thismodname, $thismodtype, $thisfuncname) = xarRequestGetInfo();
 
     // Sort Order, Status, Common Labels and Links Display preparation
@@ -351,18 +352,9 @@ function base_menublock_modify($blockinfo)
 */
 function base_menublock_insert($blockinfo)
 {
-    list($vars['displaymodules'],
-         $vars['marker']) = xarVarCleanFromInput('displaymodules',
-                                                 'marker');
-
-    // Defaults
-    if (empty($vars['displaymodules'])) {
-        $vars['displaymodules'] = 0;
-    }
-
-    if (empty($vars['marker'])) {
-        $vars['marker'] = '[x]';
-    }
+    //Should be boolean, but needs to review the where this variable is coming from to change it.
+    if (!xarVarFetch('displaymodules', 'str:1', $vars['displaymodules'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('marker', 'str:1', $vars['marker'], '[x]', XARVAR_NOT_REQUIRED)) return;
 
     // User links
     $content = array();

@@ -16,28 +16,28 @@ function adminpanels_admin_updateconfig()
 
     // obsolete, need to comment out or delete after upgrade..
     // but for now we just re-use it to indicate if we want a marker against active module
-    $showold = xarVarCleanFromInput('showold');
+    if(!xarVarFetch('showold', 'str', $showold, false, XARVAR_NOT_REQUIRED)) {return;}
 
     // true if we want to always display adminmenu on top
-    $showontop = xarVarCleanFromInput('showontop');
+    if(!xarVarFetch('showontop', 'str', $showontop, false, XARVAR_NOT_REQUIRED)) {return;}
 
     // type of the marker symbol(s)
-    $marker = xarVarCleanFromInput('marker');
+    if(!xarVarFetch('marker', 'str', $marker, '[x]', XARVAR_NOT_REQUIRED)) {return;}
 
     // this is actually a sort order switch, which of course affect the style of the menu
-    $menustyle = xarVarCleanFromInput('menustyle');
+    if(!xarVarFetch('menustyle', 'str', $menustyle, 'byname', XARVAR_NOT_REQUIRED)) {return;}
 
     // left, centre or right.. hmm we definately dont want it upside down, do we?
-    $menuposition = xarVarCleanFromInput('menuposition');
+    if(!xarVarFetch('menuposition', 'str', $menuposition, 'r', XARVAR_NOT_REQUIRED)) {return;}
 
     // show or hide a link in adminmenu to a contectual on-line help for the active module
-    $showhelp = xarVarCleanFromInput('showhelp');
+    if(!xarVarFetch('showhelp', 'str', $showhelp, NULL, XARVAR_NOT_REQUIRED)) {return;}
 
     // enable or disable overviews
-    $overview = xarVarCleanFromInput('overview');
-    
+    if(!xarVarFetch('overview', 'str', $overview, NULL, XARVAR_NOT_REQUIRED)) {return;}
+
     // which form is this data coming from (we have more than one) - lets find out
-    $formname = xarVarCleanFromInput('formname');
+    if(!xarVarFetch('formname', 'str', $formname, NULL, XARVAR_NOT_REQUIRED)) {return;}
 
     // Confirm authorisation code
     if (!xarSecConfirmAuthKey()) return;
@@ -56,20 +56,10 @@ function adminpanels_admin_updateconfig()
             xarModSetVar('adminpanels', 'showold', 1);
         }
     
-        if(!isset($marker)){
-            xarModSetVar('adminpanels', 'marker', '[x]');
-        }else{
-            xarModSetVar('adminpanels', 'marker', $marker);
-        }
-    
-        if (!isset($menustyle)) {
-            $menustyle = 'byname';
-        }
         xarModSetVar('adminpanels', 'menustyle', $menustyle);
     
-        if (!isset($menuposition)) {
-            $menuposition = 'r';
-        }
+        xarModSetVar('adminpanels', 'marker', $marker);
+
         $whatwasbefore = xarModGetVar('adminpanels', 'menuposition');
         xarModSetVar('adminpanels', 'menuposition', $menuposition);
     

@@ -166,42 +166,12 @@ function themes_metablock_modify($blockinfo)
 */
 function themes_metablock_update($blockinfo)
 {
-    list($vars['metakeywords'],
-         $vars['metadescription'],
-         $vars['usegeo'],
-         $vars['usedk'],
-         $vars['longitude'],
-         $vars['latitude']) = xarVarCleanFromInput('metakeywords',
-                                                   'metadescription',
-                                                   'usegeo',
-                                                   'usedk',
-                                                   'longitude',
-                                                   'latitude');
-
-    // Defaults
-    if (empty($vars['metakeywords'])) {
-        $vars['metakeywords'] = '';
-    }
-
-    if (empty($vars['metadescription'])) {
-        $vars['metadescription'] = '';
-    }
-
-    if (empty($vars['usegeo'])) {
-        $vars['usegeo'] = '';
-    }
-
-    if (empty($vars['longitude'])) {
-        $vars['longitude'] = '';
-    }
-
-    if (empty($vars['latitude'])) {
-        $vars['latitude'] = '';
-    }
-
-    if (empty($vars['usedk'])) {
-        $vars['usedk'] = '';
-    }
+    if(!xarVarFetch('metakeywords',    'str:1', $vars['metakeywords'],    '', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('metadescription', 'str:1', $vars['metadescription'], '', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('usegeo',          'str:1', $vars['usegeo'],          '', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('usedk',           'str:1', $vars['usedk'],           '', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('longitude',       'str:1', $vars['longitude'],       '', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('latitude',        'str:1', $vars['latitude'],        '', XARVAR_NOT_REQUIRED)) {return;}
 
     $blockinfo['content'] = serialize($vars);
 

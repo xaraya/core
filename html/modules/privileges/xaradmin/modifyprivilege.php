@@ -23,6 +23,19 @@ function privileges_admin_modifyprivilege()
                                         'plevel',
                                         'show');
 
+    if(!xarVarFetch('pid',           'str', $pid,          NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('pname',         'str', $name,         NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('prealm',        'str', $realm,        NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('pmodule',       'str', $module,       NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('pcomponent',    'str', $component,    NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('poldcomponent', 'str', $oldcomponent, NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('ptype',         'str', $type,         NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('plevel',        'str', $level,        NULL, XARVAR_NOT_REQUIRED)) {return;}
+
+
+    if(!xarVarFetch('pparentid',  'str', $pparentid,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+
+
     $i = 0;
     $instance = array();
     while ($pinstance = xarVarCleanFromInput('pinstance'.$i)) {

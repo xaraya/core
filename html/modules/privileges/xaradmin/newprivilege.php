@@ -6,26 +6,22 @@
  */
 function privileges_admin_newprivilege()
 {
+    $data = array();
+    
+    if (!xarVarFetch('pid',        'id',  $data['pid'],        '',         XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('pname',      'str', $data['pname'],      '',         XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('prealm',     'str', $data['prealm'],     'All',      XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('pmodule',    'str', $module,             NULL,       XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('pcomponent', 'str', $data['pcomponent'], 'All',      XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('pinstance',  'str', $data['pinstance'],  '',         XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('plevel',     'str', $data['plevel'],     '',         XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('ptype',      'str', $data['ptype'],      'empty',    XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('show',       'str', $data['show'],       'assigned', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('trees',      'str', $trees,              NULL,       XARVAR_NOT_REQUIRED)) {return;}
 
-    list($pid,
-        $name,
-        $realm,
-        $module,
-        $component,
-        $instance,
-        $level,
-        $type,
-        $show,
-        $trees) = xarVarCleanFromInput('pid',
-                                        'pname',
-                                        'prealm',
-                                        'pmodule',
-                                        'pcomponent',
-                                        'pinstance',
-                                        'plevel',
-                                        'ptype',
-                                        'show',
-                                        'trees');
+    if ($module !== NULL) {$data['pmodule'] = strtolower($module);}
+    else {$data['pmodule'] = 'All';}
+
 // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');
 
@@ -49,35 +45,8 @@ function privileges_admin_newprivilege()
     }
 
     //Load Template
-    if(isset($name)) {$data['pid'] = $pid;}
-    else {$data['pid'] = '';}
-
-    if(isset($name)) {$data['pname'] = $name;}
-    else {$data['pname'] = '';}
-
-    if(isset($realm)) {$data['prealm'] = $realm;}
-    else {$data['prealm'] = 'All';}
-
-    if(isset($module)) {$data['pmodule'] = strtolower($module);}
-    else {$data['pmodule'] = 'All';}
-
-    if(isset($component)) {$data['pcomponent'] = $component;}
-    else {$data['pcomponent'] = 'All';}
-
-    if(isset($instance)) {$data['pinstance'] = $instance;}
-    else {$data['pinstance'] = '';}
-
-    if(isset($level)) {$data['plevel'] = $level;}
-    else {$data['plevel'] = '';}
-
-    if(isset($type)) {$data['ptype'] = $type;}
-    else {$data['ptype'] = 'empty';}
-
     if(isset($pparentid)) {$data['pparentid'] = $pparentid;}
     else {$data['pparentid'] = '0';}
-
-    if(isset($show)) {$data['show'] = $show;}
-    else {$data['show'] = 'assigned';}
 
     $instances = $privs->getinstances($data['pmodule'],$data['pcomponent']);
 // send to external wizard if necessary

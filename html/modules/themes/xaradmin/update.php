@@ -25,15 +25,10 @@ function themes_admin_update()
     $delvars = array(); 
     // build array of updated and to-be-deleted theme vars
     foreach($themevars as $themevar) {
-        $varname = xarVarCleanFromInput($themevar['name']);
+        if (!xarVarFetch($themevar['name'], 'str', $varname)) {return;}
 
-        if (!isset($varname)) {
-            $msg = xarML('Missing theme variable #(1)', $themevar['name']);
-            xarExceptionSet(XAR_USER_EXCEPTION,'MISSING_DATA', new DefaultUserException($msg));
-            return;
-        } 
+        if (!xarVarFetch($themevar['name'] . '-del', 'str', $delvar, NULL, XARVAR_NOT_REQUIRED)) {return;}
 
-        $delvar = xarVarCleanFromInput($themevar['name'] . "-del");
         if ($delvar == 'delete' && $themevar['prime'] != 1) {
             $delvars[] = $themevar['name'];
         } else {
@@ -52,9 +47,10 @@ function themes_admin_update()
         } 
     } 
 
-    list($newname, $newval, $newdesc) = xarVarCleanFromInput('newvarname',
-        'newvarvalue',
-        'newvardescription');
+    if (!xarVarFetch('newvarname',        'str', $newname, '',   XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('newvarvalue',       'str', $newval,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('newvardescription', 'str', $newdesc, NULL, XARVAR_NOT_REQUIRED)) {return;}
+
     $newname = trim($newname);
     $newname = preg_replace("/[\s]+/", "_", $newname);
     $newname = preg_replace("/\W/", "", $newname);

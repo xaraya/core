@@ -21,9 +21,8 @@ function privileges_admin_removemember()
     if (!xarSecConfirmAuthKey()) return;
 
 // get input from any view of this page
-    list($childid,
-        $parentid) = xarVarCleanFromInput('childid',
-                                        'parentid');
+   if (!xarVarFetch('childid',  'id', $childid,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+   if (!xarVarFetch('parentid', 'id', $parentid, NULL, XARVAR_NOT_REQUIRED)) {return;}
 
 // call the Roles class and get the parent and child objects
     $privs = new xarPrivileges();

@@ -6,7 +6,8 @@
  */
 function privileges_admin_deleteprivilege()
 {
-    list($pid, $confirmation) = xarVarCleanFromInput('pid', 'confirmation');
+    if (!xarVarFetch('pid', 'id', $pid)) return;
+    if (!xarVarFetch('confirmation', 'bool', $confirmation, '', XARVAR_NOT_REQUIRED)) return;
 
 // some privileges can't be deleted, for your own good.
     if ($pid <= xarModGetVar('privileges','frozenprivileges')) {

@@ -8,33 +8,20 @@
  */
 function dynamicdata_admin_create($args)
 {
-    list($objectid,
-         $modid,
-         $itemtype,
-         $itemid,
-         $return_url,
-         $preview) = xarVarCleanFromInput('objectid',
-                                          'modid',
-                                          'itemtype',
-                                          'itemid',
-                                          'return_url',
-                                          'preview');
+
+    if (!xarVarFetch('objectid',    'id',      $objectid,   null,   XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('modid',       'id',      $modid,      xarModGetIDFromName('dynamicdata'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemtype',    'int',     $itemtype,   0,      XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemid',      'id',      $itemid,     0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('preview',     'id',      $preview,    0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('return_url',  'str:1',   $return_url,
+                     xarModURL('dynamicdata', 'admin', 'view',
+                               array('itemid' => $myobject->objectid)), XARVAR_NOT_REQUIRED)) return;
+
+
     extract($args);
 
     if (!xarSecConfirmAuthKey()) return;
-
-    if (empty($modid)) {
-        $modid = xarModGetIDFromName('dynamicdata');
-    }
-    if (empty($itemtype)) {
-        $itemtype = 0;
-    }
-    if (empty($itemid)) {
-        $itemid = 0;
-    }
-    if (empty($preview)) {
-        $preview = 0;
-    }
 
     $myobject = new Dynamic_Object(array('objectid' => $objectid,
                                          'moduleid' => $modid,
@@ -56,12 +43,7 @@ function dynamicdata_admin_create($args)
 
     if (empty($itemid)) return; // throw back
 
-    if (!empty($return_url)) {
-        xarResponseRedirect($return_url);
-    } else {
-        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
-                                      array('itemid' => $myobject->objectid)));
-    }
+    xarResponseRedirect($return_url);
 
     // Return
     return true;

@@ -5,21 +5,22 @@
  */
 function privileges_admin_viewroles()
 {
-    list($pid,
-         $show) = xarVarCleanFromInput('pid',
-                                       'show');
+    $data = array();
+   
+    if (!xarVarFetch('pid',  'id',   $pid,          0,          XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('show', 'bool', $data['show'], 'assigned', XARVAR_NOT_REQUIRED)) {return;}
 
-// Clear Session Vars
+    // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');
 
-// Security Check
+    // Security Check
     if(!xarSecurityCheck('ViewRoles')) return;
 
-//Call the Privileges class and get the privilege
+    //Call the Privileges class and get the privilege
     $privs = new xarPrivileges();
     $priv = $privs->getPrivilege($pid);
 
-//Get the array of current roles this privilege is assigned to
+    //Get the array of current roles this privilege is assigned to
     $curroles = array();
     foreach ($priv->getRoles() as $role) {
         array_push($curroles, array('roleid'=>$role->getID(),
@@ -30,18 +31,14 @@ function privileges_admin_viewroles()
                                     'auth_module'=>$role->getAuthModule()));
     }
 
-// Load Template
-
-    if(isset($show)) {$data['show'] = $show;}
-    else {$data['show'] = 'assigned';}
-
+    // Load Template
     include_once 'modules/privileges/xartreerenderer.php';
     $renderer = new xarTreeRenderer();
 
     $data['pname'] = $priv->getName();
     $data['pid'] = $pid;
     $data['roles'] = $curroles;
-//    $data['allgroups'] = $roles->getAllPrivileges();
+    //    $data['allgroups'] = $roles->getAllPrivileges();
     $data['authid'] = xarSecGenAuthKey();
     $data['removeurl'] = xarModURL('privileges',
                              'admin',

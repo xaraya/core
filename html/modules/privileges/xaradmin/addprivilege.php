@@ -6,24 +6,20 @@
  */
 function privileges_admin_addprivilege()
 {
-
-    list($pname,
-        $prealm,
-        $pmodule,
-        $pcomponent,
-        $plevel,
-        $type,
-        $pparentid) = xarVarCleanFromInput('pname',
-                                            'prealm',
-                                            'pmodule',
-                                            'pcomponent',
-                                            'plevel',
-                                            'ptype',
-                                            'pparentid');
+    if(!xarVarFetch('pname',      'str', $pname,      NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('prealm',     'str', $prealm,     NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('pmodule',    'str', $pmodule,    NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('pcomponent', 'str', $pcomponent, NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('ptype',      'str', $type,       NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('plevel',     'str', $plevel,     NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('pparentid',  'str', $pparentid,  NULL, XARVAR_NOT_REQUIRED)) {return;}
 
     $i = 0;
     $instance = "";
-    while ($pinstance = xarVarCleanFromInput('pinstance'.$i)) {
+    //Why using this instead of an array??
+    // you can do in the form => <input type=whatever name="array[]">
+    // And you will get an array back...
+    while ( xarVarFetch('pinstance'.$i, $pinstance, NULL, XARVAR_NOT_REQUIRED) && $pinstance) {
         $i++;
         $instance .= $pinstance . ":";
     }

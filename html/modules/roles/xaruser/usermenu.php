@@ -6,13 +6,9 @@ function roles_user_usermenu()
     // Security check
     if (!xarSecurityCheck('ViewRoles')) return;
 
-    $phase = xarVarCleanFromInput('phase');
+    if(!xarVarFetch('phase','str:1', $phase, 'menu', XARVAR_NOT_REQUIRED)) {return;}
 
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Your Account Preferences')));
-
-    if (empty($phase)){
-        $phase = 'menu';
-    }
 
     switch(strtolower($phase)) {
         case 'menu':
