@@ -283,6 +283,22 @@ function dynamicdata_admin_newhook($args)
         return;
     }
 
+    // prefill the values with defaults (if any)
+    foreach (array_keys($fields) as $id) {
+        $fields[$id]['value'] = $fields[$id]['default'];
+    }
+
+    // if we are in preview mode, we need to check for any preview values
+    $preview = xarVarCleanFromInput('preview');
+    if (!empty($preview)) {
+        foreach (array_keys($fields) as $id) {
+            $value = xarVarCleanFromInput('dd_'.$id);
+            if (isset($value)) {
+                $fields[$id]['value'] = $value;
+            }
+        }
+    }
+
     return xarTplModule('dynamicdata','admin','newhook',
                          array('fields' => $fields));
 }
@@ -359,6 +375,19 @@ function dynamicdata_admin_modifyhook($args)
                                  'itemid' => $itemid));
     if (!isset($fields) || $fields == false) {
         return;
+    }
+
+    // if we are in preview mode, we need to check for any preview values
+    if (is_array($fields) && count($fields) > 0) {
+        $preview = xarVarCleanFromInput('preview');
+        if (!empty($preview)) {
+            foreach (array_keys($fields) as $id) {
+                $value = xarVarCleanFromInput('dd_'.$id);
+                if (isset($value)) {
+                    $fields[$id]['value'] = $value;
+                }
+            }
+        }
     }
 
     return xarTplModule('dynamicdata','admin','modifyhook',
