@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * Remove a theme
+ *
+ * @param $args['regid'] the id of the theme
+ * @returns bool
+ * @return true on success, false on failure
+ * @raise BAD_PARAM, NO_PERMISSION
+ */
+function themes_adminapi_remove($args)
+{
+    // Get arguments from argument array
+    extract($args);
+
+    // Argument check
+    if (!isset($regid)) {
+        $msg = xarML('Empty regid (#(1)).', $regid);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return;
+    }
+
+// Security Check
+	if(!xarSecurityCheck('AdminTheme')) return;
+
+    // Remove variables and theme
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
+
+    // Get theme information
+    $themeInfo = xarThemeGetInfo($regid);
+    if (empty($themeInfo)) {
+        xarSessionSetVar('errormsg', xarML('No such theme'));
+        return false;
+    }
+
+    // Get theme database info
+    xarThemeDBInfoLoad($themeInfo['name'], $themeInfo['directory']);
+
+    // Delete any theme variables that the theme cleanup function might
+    // have missed
+    $sql = "DELETE FROM $tables[theme_vars]
+                  WHERE xar_themeName = '" . xarVarPrepForStore($themeInfo['name']) . "'";
+
+    $result = $dbconn->Execute($sql);
+    if (!$result) return;
+
+    // Delete the theme from the themes table
+    $sql = "DELETE FROM $tables[themes]
+              WHERE xar_regid = " . xarVarPrepForStore($regid);
+    $result = $dbconn->Execute($sql);
+    if (!$result) return;
+
+    // Delete the theme state from the theme states table
+
+    //Get current theme mode to update the proper table
+    $themeMode  = $themeInfo['mode'];
+
+    if ($themeMode == XARTHEME_MODE_SHARED) {
+        $theme_statesTable = $tables['system/theme_states'];
+    } elseif ($themeMode == XARTHEME_MODE_PER_SITE) {
+        $theme_statesTable = $tables['site/theme_states'];
+    }
+
+// TODO: what happens if a theme state is still there in one of the subsites ?
+//    $theme_statesTable = $tables['site/theme_states'];
+
+    $sql = "DELETE FROM $theme_statesTable
+            WHERE xar_regid = " . xarVarPrepForStore($regid);
+
+    $result = $dbconn->Execute($sql);
+    if (!$result) return;
+
+    return true;
+}
+
+?>
