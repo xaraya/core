@@ -15,6 +15,7 @@ include_once 'modules/roles/xarroles.php';
 
 class xarTreeRenderer {
     var $roles;
+    var $tree;
     // some variables we'll need to hold drawing info
     var $html;
     var $nodeindex;
@@ -54,13 +55,14 @@ class xarTreeRenderer {
      * @throws none
      * @todo none
      */
-    function maketree()
+    function maketree($topuid ='')
     {
-        return $this->addbranches(array('parent' => $this->roles->getgroup(xarModGetVar('roles', 'everybody'))));
+        if ($topuid == '') $topuid = xarModGetVar('roles', 'everybody');
+        $this->tree = $this->addbranches(array('parent' => $this->roles->getgroup($topuid)));
     }
 
     /**
-     * addbranches: given an initial tree node, add on the brtanches that are groups
+     * addbranches: given an initial tree node, add on the branches that are groups
      *
      * We don't include users in the tree because there are too many to display
      *
@@ -101,21 +103,25 @@ class xarTreeRenderer {
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @access private
-     * @param array $ representing a tree node
+     * @param nested array representing a tree
      * @return none
      * @throws none
      * @todo none
      */
 
-    function drawtree($node)
+    function drawtree($tree='')
     {
+        if ($tree == '') $tree = $this->tree;
+        if ($tree == '') {
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ENTITY', new SystemException('A tree must be defined before attempting to display.'));
+        }
         $this->html = '<div name="RolesTree" id="RolesTree">';
         $this->nodeindex = 0;
         $this->indent = array();
         $this->level = 0;
         $this->alreadydone = array();
 
-        $this->drawbranch($node);
+        $this->drawbranch($tree);
         $this->html .= '</div>';
         return $this->html;
     }
