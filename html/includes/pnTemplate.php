@@ -69,6 +69,10 @@ function pnTplModule($modName, $modType, $funcName, $tplData = array(), $templat
         $sourceFileName = "modules/$modOsDir/pntemplates/$modType-$funcName" . (empty($templateName) ? '.pnd' : "-$templateName.pnd");
     }
 
+    $tplData['_bl_module_name'] = $modName;
+    $tplData['_bl_module_type'] = $modType;
+    $tplData['_bl_module_func'] = $funcName;
+    
     return pnTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -216,8 +220,8 @@ function pnTpl__executeFromFile($sourceFileName, $tplData)
         $varDir = pnCoreGetVarDirPath();
         $cacheKey = md5($sourceFileName);
         $cachedFileName = $varDir . '/cache/templates/' . $cacheKey . '.php';
-        if (file_exists($cachedFileName) && !file_exists($sourceFileName)
-            || (filemtime($sourceFileName) < filemtime($cachedFileName))) {
+        if (file_exists($cachedFileName)
+            && (!file_exists($sourceFileName) || (filemtime($sourceFileName) < filemtime($cachedFileName)))) {
             $needCompilation = false;
         }
     }

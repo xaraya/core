@@ -118,6 +118,11 @@ class pnTpl__CodeGenerator
     function generate($documentTree)
     {
         $code = $this->generateNode($documentTree);
+        
+        if (!isset($code)) {
+            return; // throw back
+        }
+        
         if (!$this->isPHPBlock()) {
             $code .= "<?php ";
             $this->setPHPBlock(true);
@@ -698,7 +703,7 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                 pnExceptionSet(PN_USER_EXCEPTION, 'InvalidFile',
                                new pnTpl__ParserError("Unexpected end of the file.", $this));
                 return;
-            } elseif ($token == '>' || $token == '/') {
+            } elseif ($token == '>') {
                 pnExceptionSet(PN_USER_EXCEPTION, 'InvalidAttribute',
                                new pnTpl__ParserError("Unclosed '$name' attribute.", $this));
                 return;
@@ -893,6 +898,9 @@ class pnTpl__NodesFactory
                 break;
             case 'event':
                 $node = new pnTpl__PntEventNode();
+                break;
+            case 'include':
+                $node = new pnTpl__PntIncludeNode();
                 break;
             case 'set':
                 $node = new pnTpl__PntSetNode();
@@ -1515,14 +1523,10 @@ class pnTpl__PntLoopNode extends pnTpl__TplTagNode
         $output .= '$_bl_loop_number'.$loopCounter." = 1;\n";
         $output .= 'foreach ('.$name.' as $_bl_loop_key'.$loopCounter.' => $_bl_loop_item'.$loopCounter.") {\n";
 
-        // FIXME: <marco> Didn't we say to get rid of the extractVariables attrib and have only the prefix attrib?
-	// And I think that loop:item and loop:key can go out. Just stay with loop:index and loop:number
-        if (!isset($extractVariables) || isset($extractVariables) && $extractVariables == 'true') {
-            if (!isset($prefix)) {
-                $output .= 'extract($_bl_loop_item'.$loopCounter.", EXTR_OVERWRITE);\n";
-            } else {
-                $output .= 'extract($_bl_loop_item'.$loopCounter.", EXTR_PREFIX_ALL, '$prefix');\n";
-            }
+        if (!isset($prefix)) {
+            $output .= 'extract($_bl_loop_item'.$loopCounter.", EXTR_OVERWRITE);\n";
+        } else {
+            $output .= 'extract($_bl_loop_item'.$loopCounter.", EXTR_PREFIX_ALL, '$prefix');\n";
         }
 
         return $output;
@@ -2203,6 +2207,55 @@ class pnTpl__PntEventNode extends pnTpl__TplTagNode
     function isAssignable()
     {
         return false;
+    }
+}
+
+class pnTpl__PntIncludeNode extends pnTpl__TplTagNode
+{
+    function render()
+    {
+        extract($this->attributes);
+        
+        if (!isset($file)) {
+            pnExceptionSet(PN_USER_EXCEPTION, 'MissingAttribute',
+                           new pnTpl__ParserError('Missing \'file\' attribute in <pnt:include> tag.', $this));
+            return;
+        }
+        
+        if (!isset($type)) {
+            pnExceptionSet(PN_USER_EXCEPTION, 'MissingAttribute',
+                           new pnTpl__ParserError('Missing \'type\' attribute in <pnt:include> tag.', $this));
+            return;
+        }
+        
+        $themeName = pnCore_getSiteVar('BL.Theme.Name');
+        $directories = array();
+        if ($type == 'theme') {
+            $directories[] = "themes/$themeName/includes/";
+        } elseif ($type == 'module') {
+            $directories[] = "themes/$themeName/modules/$_bl_module_name/includes/";
+            $directories[] = "modules/$_bl_module_name/pninclude/";
+        } else {
+            pnExceptionSet(PN_USER_EXCEPTION, 'InvalidAttribute',
+                           new pnTpl__ParserError("Invalid value '$type' for 'type' attribute in <pnt:include> tag.", $this));
+            return;
+        }
+
+        $path = implode('; ', $directories);
+        if (strstr($file, '..') != false) {
+            pnExceptionSet(PN_USER_EXCEPTION, 'InvalidAttribute',
+                           new pnTpl__ParserError("File '$file' may not be located outside search path. (Path: '$path')", $this));
+            return;
+        }
+        
+        foreach ($directories as $directory) {
+            if (file_exists($directory . '/' . $file)) {
+                return "include ('$directory/$file');\n";
+            }
+        }
+        
+        pnExceptionSet(PN_USER_EXCEPTION, 'InvalidAttribute',
+                       new pnTpl__ParserError("File '$file' not found. (Search path: '$path')", $this));
     }
 }
 
