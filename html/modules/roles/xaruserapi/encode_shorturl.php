@@ -51,11 +51,9 @@ function roles_userapi_encode_shorturl($args)
         if(!empty($phase) && $phase == 'viewall') {
             $path = $path . '/viewall';
         }
-        /*
-        elseif(!empty($letter)) {
-            $path = $path . '/letter' . $letter;
+        if(!empty($letter)) {
+            $path = $path . '/' . $letter;
         }
-        */
     } elseif ($func == 'lostpassword') {
         $path = '/' . $module . '/password';
 

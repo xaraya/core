@@ -46,12 +46,12 @@ function roles_userapi_decode_shorturl($params)
         // Note : make sure your encoding/decoding is consistent ! :-)
         if (!empty($params[2]) && preg_match('/^viewall/i',$params[2],$matches)) {
             $args['phase'] = 'viewall';
+            if (!empty($params[3]) && preg_match('/^(\w+)/i',$params[3],$matches)) {
+                $args['letter'] = $matches[1];
+            }
+        } elseif (!empty($params[2]) && preg_match('/^(\w+)/i',$params[2],$matches)) {
+            $args['letter'] = $matches[1];
         }
-        /*
-        elseif (!empty($params[3]) && preg_match('/^letter/i',$params[3],$matches)) {
-            $args['letter'] = 'letter';
-        }
-        */
         return array('view', $args);
 /*
     } elseif (preg_match('/^register/i',$params[1])) {
