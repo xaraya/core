@@ -43,16 +43,17 @@ function modules_adminapi_remove($args)
         return;
     }
 */
-    // Delete any module variables that the module cleanup function might
-    // have missed.
-    // This needs to be done before the module ntry is removed.
-    xarModDelAllVars($modinfo['name']);
-
     // If the files have been removed, the module will now also be removed from the db
     if ($modinfo['state'] == XARMOD_STATE_MISSING_FROM_UNINITIALISED ||
         $modinfo['state'] == XARMOD_STATE_MISSING_FROM_INACTIVE ||
         $modinfo['state'] == XARMOD_STATE_MISSING_FROM_ACTIVE ||
         $modinfo['state'] == XARMOD_STATE_MISSING_FROM_UPGRADED ) {
+
+        // Delete any module variables that the module cleanup function might
+        // have missed.
+        // This needs to be done before the module ntry is removed.
+        xarModDelAllVars($modinfo['name']);
+
         $query = "DELETE FROM " . $tables['modules'] .
                   " WHERE xar_regid = " . xarVarPrepForStore($modinfo['regid']);
         $result =& $dbconn->Execute($query);
@@ -72,6 +73,12 @@ function modules_adminapi_remove($args)
             //Raise an Exception
             return;
         }
+
+        // Delete any module variables that the module cleanup function might
+        // have missed.
+        // This needs to be done before the module ntry is removed.
+        // <mikespub> But *after* the delete() function of the module !
+        xarModDelAllVars($modinfo['name']);
 
         // Update state of module
         $res = xarModAPIFunc('modules',
