@@ -587,11 +587,6 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10, $pageBlo
     // Quick check to ensure that we have work to do
     if ($total <= $perpage) {return '';}
 
-    // Fix for the RSS theme.  We don't want to throw pager information
-    // with the syndication.
-    $themeName = xarVarGetCached('Themes.name','CurrentTheme');
-    if ($themeName == 'rss') {return '';}
-
     // Number of pages in a page block.
     if ($pageBlockSize < 1) {$pageBlockSize = 10;}
 
