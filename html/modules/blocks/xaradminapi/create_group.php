@@ -30,7 +30,7 @@ function blocks_adminapi_create_group($args)
 
     // Argument check
     if ((!isset($name))) {
-        $msg = xarML('Empty name in adminapi create group);
+        $msg = xarML('Empty name in adminapi create group');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
