@@ -44,7 +44,7 @@
                          <img src="modules/roles/xarimages/ob_user_other.gif" alt="" style="width:16px; height:16px; vertical-align: middle;" />
                      </xar:if>
                      <a href="#$dd['userurl']#">
-                         #$dd['name']#
+                         #xarVarPrepForDisplay($dd['name'])#
                      </a>
                  </td>
                  <td>
@@ -101,7 +101,7 @@
              Welcome to our latest member,
          </xar:mlstring>
          <a href="#xarModURL('roles', 'user', 'display')#&amp;uid=#$lastuser['uid']#">
-             #$lastuser['name']#
+             #xarVarPrepForDisplay($lastuser['name'])#
          </a>
      </p>
 </xar:if>

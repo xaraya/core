@@ -11,6 +11,6 @@
             </xar:if>
         </xar:loop>
     </select>
-    <input type="submit" name="change_language" value="#$languagelabel#" />
+    <input type="submit" name="change_language" value="#xarML('Set Language')#" />
    </div>
 </form>

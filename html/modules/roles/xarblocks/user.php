@@ -17,7 +17,7 @@
  */
 function roles_userblock_init()
 {
-    return true;
+    return array();
 }
 
 /**
@@ -25,13 +25,15 @@ function roles_userblock_init()
  */
 function roles_userblock_info()
 {
-    return array('text_type' => 'User',
-         'text_type_long' => "User's Custom Box",
-         'module' => 'roles',
-         'allow_multiple' => false,
-         'form_content' => false,
-         'form_refresh' => false,
-         'show_preview' => true);
+    return array(
+        'text_type' => 'User',
+        'text_type_long' => "User's Custom Box",
+        'module' => 'roles',
+        'allow_multiple' => false,
+        'form_content' => false,
+        'form_refresh' => false,
+        'show_preview' => true
+    );
 }
 
 /**
@@ -46,7 +48,7 @@ function roles_userblock_display($blockinfo)
             $ublock = '';
         }
         $username = xarUserGetVar('name');
-        $blockinfo['title'] = "". xarML('Menu For #(1)',xarVarPrepForDisplay($username));
+        $blockinfo['title'] = "". xarML('Menu For #(1)', $username);
         $blockinfo['content'] = $ublock;
         return $blockinfo;
     }

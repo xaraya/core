@@ -28,7 +28,7 @@
         <tr>
             <td colspan="2" align="center">
                 <input type="hidden" name="redirecturl" id="returnurl#$blockid#" value="#$return_url#" />
-                <input type="submit" value="#$signinlabel#" />
+                <input type="submit" value="#xarML('Sign in')#" />
             </td>
         </tr>
     </table>

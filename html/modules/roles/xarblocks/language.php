@@ -17,7 +17,7 @@
  */
 function roles_languageblock_init()
 {
-    return true;
+    return array();
 }
 
 /**
@@ -25,9 +25,11 @@ function roles_languageblock_init()
  */
 function roles_languageblock_info()
 {
-    return array('text_type' => 'Language',
-                 'module' => 'roles',
-                 'text_type_long' => 'Language selection');
+    return array(
+        'text_type' => 'Language',
+        'module' => 'roles',
+        'text_type_long' => 'Language selection'
+    );
 }
 
 /**
@@ -37,7 +39,7 @@ function roles_languageblock_info()
 function roles_languageblock_display($blockinfo)
 {
     // Security check
-    if (!xarSecurityCheck('ReadRole',1,'Block',"All:" . $blockinfo['title'] . ":All")) return;
+    if (!xarSecurityCheck('ReadRole', 1, 'Block', "All:" . $blockinfo['title'] . ":All")) {return;}
 
     if (xarMLSGetMode() != XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
         return;
@@ -54,27 +56,24 @@ function roles_languageblock_display($blockinfo)
 
         $selected = ($current_locale == $locale);
 
-        $locales[] = array('locale'   => $locale,
-                           'country'  => $locale_data['/country/display'],
-                           'name'     => $locale_data['/language/display'],
-                           'selected' => $selected);
+        $locales[] = array(
+            'locale'   => $locale,
+            'country'  => $locale_data['/country/display'],
+            'name'     => $locale_data['/language/display'],
+            'selected' => $selected
+        );
     }
 
 
     $tplData['form_action'] = xarModURL('roles', 'user', 'changelanguage');
     $tplData['form_picker_name'] = 'locale';
     $tplData['locales'] = $locales;
-    $tplData['languagelabel'] = xarML('Set Language');
     $tplData['blockid'] = $blockinfo['bid'];
 
     // URL of this page
     $tplData['return_url'] = xarServerGetCurrentURL();
-    if (empty($blockinfo['template'])) {
-        $template = 'language';
-    } else {
-        $template = $blockinfo['template'];
-    }
-    $blockinfo['content'] = xarTplBlock('roles', $template, $tplData);
+
+    $blockinfo['content'] = $tplData;
 
     return $blockinfo;
 }

@@ -17,7 +17,10 @@
  */
 function roles_loginblock_init()
 {
-    return true;
+    return array(
+        'showlogout' => 0,
+        'logouttitle' => ''
+    );
 }
 
 /**
@@ -25,9 +28,11 @@ function roles_loginblock_init()
  */
 function roles_loginblock_info()
 {
-    return array('text_type' => 'Login',
-                 'module' => 'roles',
-                 'text_type_long' => 'User login');
+    return array(
+        'text_type' => 'Login',
+        'module' => 'roles',
+        'text_type_long' => 'User login'
+    );
 }
 
 /**
@@ -38,79 +43,39 @@ function roles_loginblock_display($blockinfo)
 {
     // Security Check
     if(!xarSecurityCheck('ViewLogin',1,'Block',"Login:" . $blockinfo['title'] . ":All",'All')) return;
-    // Bug 1961 Fix
-    //if(!xarSecurityCheck('ViewLogin',1,'Block',"All:" . $blockinfo['title'] . ":All",'All')) return;
 
     // Get variables from content block
-    $vars = unserialize($blockinfo['content']);
+    if (!is_array($blockinfo['content'])) {
+        $vars = unserialize($blockinfo['content']);
+    } else {
+        $vars = $blockinfo['content'];
+    }
 
     // Display logout block if user is already logged in
     // e.g. when the login/logout block also contains a search box
     if (xarUserIsLoggedIn()) {
         if (!empty($vars['showlogout'])) {
             $args['name'] = xarUserGetVar('name');
-            $args['blockid'] = $blockinfo['bid'];
-            $blockinfo['content'] = xarTplBlock('roles', 'logout', $args);
+
+            // Since we are logged in, set the template base to 'logout'.
+            $blockinfo['_bl_template_base'] = 'logout';
+
             if (!empty($vars['logouttitle'])) {
                 $blockinfo['title'] = $vars['logouttitle'];
             }
-            return $blockinfo;
         } else {
             return;
         }
-    }
-
-    // URL of this page
-    $args['return_url'] = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL());
-    $args['signinlabel']= xarML('Sign in');
-    $args['blockid'] = !empty($blockinfo['bid']) ? $blockinfo['bid'] : $blockinfo['id'];
-    if (empty($blockinfo['template'])) {
-        $template = 'login';
     } else {
-        $template = $blockinfo['template'];
-    }
-    $blockinfo['content'] = xarTplBlock('roles', $template, $args);
-
-    return $blockinfo;
-}
-
-/**
- * Modify Function to the Blocks Admin
- * @param $blockinfo array containing title,content
- */
-function roles_loginblock_modify($blockinfo)
-{
-    // Get current content
-    $vars = @unserialize($blockinfo['content']);
-
-    // Defaults
-    if (empty($vars['showlogout'])) {
-        $args['showlogout'] = 0;
-    }
-    if (empty($vars['logouttitle'])) {
-        $args['logouttitle'] = '';
+        // URL of this page
+        // TODO: check this - it doesn't look quite right.
+        $args['return_url'] = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL());
     }
 
-    $args['showlogout'] = $vars['showlogout'];
-    $args['logouttitle'] = $vars['logouttitle'];
-
+    // Used in the templates.
     $args['blockid'] = $blockinfo['bid'];
-    $content = xarTplBlock('roles', 'loginAdmin', $args);
 
-    return $content;
-}
-
-/**
- * Updates the Block config from the Blocks Admin
- * @param $blockinfo array containing title,content
- */
-function roles_loginblock_update($blockinfo)
-{
-    if (!xarVarFetch('showlogout', 'notempty', $vars['showlogout'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('logouttitle', 'notempty', $vars['logouttitle'], '', XARVAR_NOT_REQUIRED)) return;
-
-    $blockinfo['content'] = serialize($vars);
-
+    $blockinfo['content'] = $args;
     return $blockinfo;
 }
 
