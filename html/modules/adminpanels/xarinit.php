@@ -1,13 +1,16 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Paul Rosania
-// Purpose of file:  Initialisation functions for adminpanels
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Administration System
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ * 
+ * @subpackage adminpanels
+ * @author Andy Varganov <andyv@xaraya.com>
+*/
 
 // Load Table Maintaince API
 xarDBLoadTableMaintenanceAPI();

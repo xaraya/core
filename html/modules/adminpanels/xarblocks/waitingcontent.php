@@ -8,6 +8,7 @@
 // Original Author of file: Patrick Kellum
 // Purpose of file: Display the text content of the block
 // ----------------------------------------------------------------------
+
 /**
  * init func
  */

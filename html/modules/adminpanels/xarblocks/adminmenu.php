@@ -1,14 +1,16 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of template file: Jim McDonald
-// Original Author of this file: Andy Varganov
-// Purpose of file: Show adminmenu items
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Administration System
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ * 
+ * @subpackage adminpanels
+ * @author Andy Varganov <andyv@xaraya.com>
+*/
 
 /**
  * initialise block

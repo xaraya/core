@@ -1,10 +1,16 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Administration System
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ * 
+ * @subpackage adminpanels
+ * @author Andy Varganov <andyv@xaraya.com>
+*/
 $modversion['name'] = 'Administration';
 $modversion['description'] = 'Displays the Adminstration Area in a user friendly block format';
 $modversion['id'] = '9';
