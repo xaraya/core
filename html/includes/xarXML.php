@@ -16,13 +16,9 @@
  * It includes:
  * - Generic XML parser with an interface to parse any XML data including the
  *   callback functions
- * - xml producers   : [   ? -> xml ] make input available as XML data
- * - xml transformers: [ xml -> xml ] transform XML into XML
- * - xml processors  : [ xml ->   ? ] process XML data to output format
  *
- * By linking a producer to a tranformer(-chain) and zero or one processor we can
- * theoretically handle any input to be transformed into any output.
- *
+ * 2003-06-08: xmlrpc, translations, rss, dynamicdata all use xml. This core
+ *             subsystem can be reused by them all
  */
 
 error_reporting(E_ALL);
@@ -31,7 +27,7 @@ error_reporting(E_ALL);
  * Defines make our life a bit easier.
  *
  */
-define('XARXML_VERSION','0.0.2');
+define('XARXML_VERSION','0.0.1');
 define('XARXML_PARSERCLASS' ,'xarXmlParser');
 define('XARXML_HANDLERCLASS','xarAbstractXmlHandler');
 
