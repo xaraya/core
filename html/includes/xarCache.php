@@ -46,9 +46,21 @@ function xarCache_init($args)
     $xarPage_cacheGroups = isset($cachingConfiguration['Page.CacheGroups']) ? $cachingConfiguration['Page.CacheGroups'] : '';
     $xarBlock_cacheTime = isset($cachingConfiguration['Block.TimeExpiration']) ? $cachingConfiguration['Block.TimeExpiration'] : 7200;
 
+    // Subsystem initialized, register a handler to run when the request is over
+    register_shutdown_function ('xarCache__shutdown_handler');
     return true;
 }
 
+/**
+ * Shutdown handler for xarCache subsystem
+ *
+ * @access private
+ *
+ */
+function xarCache__shutdown_handler()
+{
+    //xarLogMessage("xarCache shutdown handler");
+}
 
 /**
  * functions providing page caching

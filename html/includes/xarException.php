@@ -68,7 +68,20 @@ $ErrorStack = new xarExceptionStack();
 function xarError_init($systemArgs, $whatToLoad)
 {
     xarErrorFree();
+    
+    // Subsystem initialized, register a handler to run when the request is over
+    register_shutdown_function ('xarError__shutdown_handler');
     return true;
+}
+
+/**
+ * Shutdown handler for error subsystem
+ *
+ * @access private
+ */
+function xarError__shutdown_handler()
+{
+    //xarLogMessage("xarError shutdown handler");
 }
 
 /**

@@ -56,17 +56,29 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
 
     return true;
     */
-        $GLOBALS['xarVar_allowableHTML'] = xarConfigGetVar('Site.Core.AllowableHTML');
-        if (!isset($GLOBALS['xarVar_allowableHTML']) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            return; // throw back exception
-        }
+    $GLOBALS['xarVar_allowableHTML'] = xarConfigGetVar('Site.Core.AllowableHTML');
+    if (!isset($GLOBALS['xarVar_allowableHTML']) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+        return; // throw back exception
+    }
 
-        $GLOBALS['xarVar_fixHTMLEntities'] = xarConfigGetVar('Site.Core.FixHTMLEntities');
-        if (!isset($GLOBALS['xarVar_fixHTMLEntities']) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            return; // throw back exception
-        }
-
+    $GLOBALS['xarVar_fixHTMLEntities'] = xarConfigGetVar('Site.Core.FixHTMLEntities');
+    if (!isset($GLOBALS['xarVar_fixHTMLEntities']) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+        return; // throw back exception
+    }
+        
+    // Subsystem initialized, register a handler to run when the request is over
+    register_shutdown_function ('xarVar__shutdown_handler');
     return true;
+}
+
+/**
+ * Shutdown handler for xarVar subsystem
+ *
+ * @access private
+ */
+function xarVar__shutdown_handler()
+{
+    //xarLogMessage("xarVar shutdown handler");
 }
 
 /**

@@ -38,8 +38,22 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
     );
 
     xarDB_importTables($tables);
-
+    
+    // Subsystem initialized, register a handler to run when the request is over
+    register_shutdown_function ('xarBlocks__shutdown_handler');
+    
     return true;
+}
+
+/**
+ *  Shutdown handler for the blocks subsystem
+ *
+ * @access private
+ *
+ */
+function xarBlocks__shutdown_handler()
+{
+    //xarLogMessage("xarBlocks shutdown handler");
 }
 
 /**

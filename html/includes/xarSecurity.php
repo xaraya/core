@@ -49,7 +49,19 @@
 
 function xarSecurity_init()
 {
+    // Subsystem initialized, register a handler to run when the request is over
+    register_shutdown_function ('xarSecurity__shutdown_handler');
     return true;
+}
+
+/**
+ * Shutdown handler for xarSecurity
+ *
+ * @access private
+ */
+function xarSecurity__shutdown_handler()
+{
+    //xarLogMessage("xarSecurity shutdown handler");
 }
 
 /*
