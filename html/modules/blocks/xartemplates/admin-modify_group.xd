@@ -42,7 +42,7 @@ function saveBlockOrder(f) {
 <div align="center">
 <form method="post" action="&xar-modurl-blocks-admin-update_group;" onsubmit="saveBlockOrder(this);">
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
-    <input type="hidden" name="gid" id="gid" value="#$group['id']#" />" />
+    <input type="hidden" name="gid" id="gid" value="#$group['id']#" />
     <input type="hidden" name="group_instance_order" id="group_instance_order" value="" />
     <table border="0" width="300">
         <tr>
@@ -50,7 +50,7 @@ function saveBlockOrder(f) {
                 Name:
             </td>
             <td>
-                <input type="text" name="group_name" id="group_name" value="#$group['name']#" />" length="40" maxlength="255" style="width:150px;" />
+                <input type="text" name="group_name" id="group_name" value="#$group['name']#" maxlength="255" style="width:150px;" />
             </td>
         </tr>
         <tr>

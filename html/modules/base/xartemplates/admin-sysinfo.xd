@@ -1,27 +1,8 @@
-<table border="0" width="100%">
-    <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>Base Xaraya Administration</xar:mlstring>            
-        </th>
-    </tr>
-    <tr align="center">
-        <td align="center">
-        <table border="0" width="100%" cellpadding="2" cellspacing="0">
-            <tr>
-                <td>
-                    <a href="&xar-modurl-base-admin-modifyconfig;"><xar:mlstring>Modify Xaraya Site Configuration</xar:mlstring></a>
-                </td>
-                <td align="center">
-                    <a href="&xar-modurl-base-admin-sysinfo;"><xar:mlstring>View System Information</xar:mlstring></a>
-                </td>
-                <td align="center">
-                    <a href="&xar-modurl-base-admin-addallowed;"><xar:mlstring>Add Allowed Vars</xar:mlstring></a>
-                </td>
-            </tr>
-        </table>
-        </td>
-    </tr>
-</table>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Base Module</xar:mlstring></span></div>
+<!-- common admin menu for this module - remove link to the current function -->
+<div class="xar-mod-body">
+<h2><xar:mlstring>Base Xaraya Administration</xar:mlstring>  </h2>
+<b><xar:mlstring>Sort Options</xar:mlstring>:</b><br />
 
 <form action="&xar-modurl-base-admin-sysinfo;" method="post">
 

@@ -1,5 +1,5 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Users Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2>Modify COnfig</h2><br />
+<div class="xar-mod-body"><h2>Modify Configuration</h2><br />
 
 <div align="center">
 <form method="post" action="#xarModURL('users', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded" />
