@@ -21,7 +21,7 @@
                 <p><span class="xar-mod-title"><xar:mlstring>Name</xar:mlstring>:</span></p>
             </div>
             <div style="float: right; width: 60%; text-align: right; display: inline;">
-                <p><span class="xar-mod-title">#$modname#</span></p>
+                <p><span class="xar-mod-title"><a href="http://www.xaraya.com/index.php/release/#$modid#.html">#$modname#</a></span></p>
             </div>
         </div>
         <!-- Module Display Name -->
