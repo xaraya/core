@@ -28,9 +28,9 @@
 //quick hack to show some of what the functions are doing
 //set to 1 to activate
 define('XARDBG_WINNOW', 0);
-define('XARDBG_TEST', 1);
+define('XARDBG_TEST', 0);
 define('XARDBG_TESTDENY', 0);
-define('XARDBG_MASK', 'AttachRole');
+define('XARDBG_MASK', 'All');
 define('XAR_ENABLE_WINNOW', 0);
 
 class xarMasks
