@@ -1096,6 +1096,10 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         $entityClass = 'xarTpl__Xar'.$entityType.'EntityNode';
         $entityFile = XAR_NODES_LOCATION . 'entities/' .strtolower($entityType) . '.php';
         if(!class_exists($entityClass)) {
+            if(!file_exists($entityFile)) {
+                $parser->raiseError(XAR_BL_INVALID_ENTITY,"Cannot instantiate nonexistent entity '$entityType'",$parser);
+                return;
+            }
             include_once($entityFile);
         }
         $node =& new $entityClass($parser,'EntityNode', $entityType, $parameters);
@@ -1104,13 +1108,20 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
 
     function createTplInstructionNode($instruction, &$parser)
     {
+        $instructionClass = 'xarTpl__XarApiInstructionNode';
+        $instructionFile = XAR_NODES_LOCATION . 'instructions/api.php';
         if ($instruction[0] == XAR_TOKEN_VAR_START) {
-            include_once(XAR_NODES_LOCATION . 'instructions/var.php');
-            $node =& new xarTpl__XarVarInstructionNode($parser, 'InstructionNode', $instruction);
-        } else {
-            include_once(XAR_NODES_LOCATION . 'instructions/api.php');
-            $node =& new xarTpl__XarApiInstructionNode($parser, 'InstructionNode', $instruction);
+            $instructionClass .= 'xarTpl__XarVarInstructionNode';
+            $instructionFile = XAR_NODES_LOCATION . 'instructions/var.php';
+        } 
+        if(!class_exists($instructionClass)) {
+            if(!file_exists($instructionFile)) {
+                $parser->raiseError(XAR_BL_INVALID_INSTRUCTION,"Cannot instantiate nonexistent instruction '$instruction'",$parser);
+                return;   
+            }
+            include_once($instructionFile);
         }
+        $node =& new $instructionClass($parser, 'InstructionNode', $instruction);
         return $node;
     }
 
