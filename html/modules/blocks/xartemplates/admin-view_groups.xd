@@ -1,22 +1,21 @@
-<table border="0" width="100%">
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
     <tr>
-        <th colspan="4" align="center">
+        <th align="center">
             Blocks Administration
         </th>
     </tr>
     <tr align="center">
         <td align="center">
-        
-        </td>
+        <table border="0" width="100%" cellpadding="2" cellspacing="0">
+            <tr>
+                <td>&nbsp;</td>
         <td align="center">
             <a href="&xar-modurl-blocks-admin-new_instance;">New block instance</a>
         </td>
         <td align="center">
             <a href="&xar-modurl-blocks-admin-new_group;">New block group</a>
         </td>
-        <td align="center">
-        
-        </td>
+        <td align="center">&nbsp;</td>
     </tr>
     <tr align="center">
         <td align="center" width="25%">
@@ -32,10 +31,13 @@
             <a href="&xar-modurl-blocks-admin-settings;">General settings</a>
         </td>
     </tr>
-</table><br />
-<center>View block groups</center><br />
+</table>
+        </td>
+    </tr>
+</table>
 
-<table border="1" width="100%">
+<div align="center"><h2>View block groups</h2><br />
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
     <tr align="center">
         <th>
             Name
@@ -53,15 +55,15 @@
     <xar:loop name="$block_groups">
     <tr align="center">
         <td>
-            &xar-var-name;
+            &xar-var-name;&nbsp;
         </td>
-        <td>
+        <td>&nbsp;
             <xar:loop name="$instances" prefix="inst">
                 <a href="&xar-modurl-blocks-admin-modify_instance;&bid=&xar-var-inst_id;">&xar-var-inst_title;</a><br />
             </xar:loop>
         </td>
         <td>
-            &xar-var-template;
+            &xar-var-template;&nbsp;
         </td>
         <td>
             <a href="&xar-modurl-blocks-admin-modify_group;&gid=&xar-var-id;">Edit</a> |

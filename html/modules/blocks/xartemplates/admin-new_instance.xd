@@ -1,22 +1,21 @@
-<table border="0" width="100%">
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
     <tr>
-        <th colspan="4" align="center">
+        <th align="center">
             Blocks Administration
         </th>
     </tr>
     <tr align="center">
         <td align="center">
-        
-        </td>
+        <table border="0" width="100%" cellpadding="2" cellspacing="0">
+            <tr>
+                <td>&nbsp;</td>
         <td align="center">
             <b>New block instance</b>
         </td>
         <td align="center">
             <a href="&xar-modurl-blocks-admin-new_group;">New block group</a>
         </td>
-        <td align="center">
-        
-        </td>
+        <td align="center">&nbsp;</td>
     </tr>
     <tr align="center">
         <td align="center" width="25%">
@@ -32,14 +31,16 @@
             <a href="&xar-modurl-blocks-admin-settings;">General settings</a>
         </td>
     </tr>
-</table><br />
-<center>New block instance</center><br />
+</table>
+        </td>
+    </tr>
+</table>
 
-<center>
+<div align="center"><h2>New block instance</h2><br />
 <form method="post" action="&xar-modurl-blocks-admin-create_instance;">
     <input type="hidden" name="authid" value="<?php echo xarSecGenAuthKey(); ?>" />
     
-    <table border="0" width="300">
+    <table border="0" width="300" cellpadding="2" cellspacing="0">
         <tr>
             <td>
                 Title:
@@ -104,4 +105,4 @@
         </tr>
     </table>
 </form>
-</center>
+</div>

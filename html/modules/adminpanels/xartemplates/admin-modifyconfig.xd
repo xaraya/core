@@ -1,6 +1,6 @@
 <!-- admin menu configuration template -->
 <!-- Formatting table to center the menu -->
-<table border="0" width="100%">
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
     <tr>
         <th align="center" valign="top">
             <!-- Menu title -->
@@ -28,6 +28,7 @@
 </table>
 <!-- End of formatting table -->
 <!-- BL style form for adminpanels configuration options -->
+<div align="center"><h2><xar:mlstring>Configure Adminmenu</xar:mlstring></h2><br />
 <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
 <input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
 <table border="0" width="100%">
