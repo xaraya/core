@@ -541,7 +541,11 @@ function xarException__assertErrorHandler($script,$line,$code)
 function xarException__dbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $param1 = false, $param2 = false)
 {
     if ($funcName == 'EXECUTE') {
-        $msg = xarML('Database error while executing: \'#(1)\'; error description is: \'#(2)\'.', $param1, $errMsg);
+        if (function_exists('xarML')) {
+            $msg = xarML('Database error while executing: \'#(1)\'; error description is: \'#(2)\'.', $param1, $errMsg);
+        } else {
+            $msg = 'Database error while executing: '. $param1 .'; error description is: ' . $errMsg;
+        }
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemException("ErrorNo: ".$errNo.", Message:".$msg));
     } else {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', $errMsg);
