@@ -30,8 +30,8 @@
                 </xar:if>
             </td>
             <td>
-                <xar:if condition="empty($loop:item['group_template'])">
-                    <xar:mlstring>default</xar:mlstring>
+                <xar:if condition="empty($loop:item['template'])">
+                    <xar:mlstring>[default]</xar:mlstring>
                 <xar:else />
                     #$loop:item['template']#
                 </xar:if>

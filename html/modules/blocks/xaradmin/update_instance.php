@@ -23,8 +23,8 @@ function blocks_admin_update_instance()
     if (!xarVarFetch('block_name', 'pre:lower:ftoken:field:Name:passthru:str:1:', $name)) {return;}
     if (!xarVarFetch('block_title', 'str:1:', $title, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('block_state', 'str:1:', $state)) {return;}
-    if (!xarVarFetch('block_template', 'str:1:', $block_template, '', XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('group_templates', 'keylist:id;str', $group_templates, array(), XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('block_template', 'strlist:;,:pre:trim:lower:ftoken', $block_template, '', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('group_templates', 'keylist:id;strlist:;,:pre:trim:lower:ftoken', $group_templates, array(), XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('block_content', 'str:1:', $content, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('block_refresh', 'str:1:', $refresh, '0', XARVAR_NOT_REQUIRED)) {return;}
 
