@@ -61,14 +61,10 @@ function xarInstallFunc($funcName = 'main', $args = array())
     return xarTplModule($modName, $modType, $funcName, $tplData, $templateName);
 }
 
-function xarInstallAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
+function xarInstallAPIFunc($funcName = 'main', $args = array())
 {
-    if (empty($modName)) {
-        $msg = xarML('Empty modname.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    $modName = 'installer';
+    $modType = 'admin';
 
     // Build function name and call function
     $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";

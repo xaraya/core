@@ -241,7 +241,7 @@ function base_init()
     /**************************************************************
     * Install modules table and insert the modules module
     **************************************************************/
-    if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
+    if (!xarInstallAPIFunc('initialise',
                            array('directory' => 'modules', 'initfunc'  => 'init'))) {
         return;
     }
@@ -252,9 +252,7 @@ function base_init()
     /****************************************************************
     * Install roles module and set up default roles
     ****************************************************************/
-    if (!xarInstallAPIFunc('installer',
-                           'admin',
-                           'initialise',
+    if (!xarInstallAPIFunc('initialise',
                            array('directory' => 'roles',
                                  'initfunc'  => 'init'))) {
         return NULL;
@@ -263,9 +261,7 @@ function base_init()
     /**************************************************************
     * Install privileges module and setup default privileges
     **************************************************************/
-    if (!xarInstallAPIFunc('installer',
-                           'admin',
-                           'initialise',
+    if (!xarInstallAPIFunc('initialise',
                            array('directory' => 'privileges',
                                  'initfunc'  => 'init'))) {
         return NULL;
@@ -355,12 +351,12 @@ function base_init()
     **************************************************************/
     // FIXME: the installation of the blocks module depends on the modules module
     // to be present, doh !
-    if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
+    if (!xarInstallAPIFunc('initialise',
                            array('directory'=>'blocks', 'initfunc'=>'init'))) {
         return;
     }
 
-    if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
+    if (!xarInstallAPIFunc('initialise',
                            array('directory'=>'themes', 'initfunc'=>'init'))) {
         return;
     }

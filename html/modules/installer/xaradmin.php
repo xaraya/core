@@ -209,7 +209,7 @@ function installer_admin_phase5()
                          'dbPrefix'  => $dbPrefix,
                          'dbType'    => $dbType);
 
-    if (!xarInstallAPIFunc('installer', 'admin', 'modifyconfig', $config_args)) {
+    if (!xarInstallAPIFunc('modifyconfig', $config_args)) {
         return;
     }
 
@@ -255,7 +255,7 @@ function installer_admin_phase5()
         if ($dbExists) {
             if (!$dbconn->Execute('DROP DATABASE ' . $dbName)) return;
         }
-        if (!xarInstallAPIFunc('installer', 'admin', 'createdb', $config_args)) {
+        if (!xarInstallAPIFunc('createdb', $config_args)) {
             $msg = xarML('Could not create database (#(1)). Check if you already have a database by that name and remove it.', $dbName);
             xarCore_die($msg);
             return;
@@ -310,9 +310,9 @@ function installer_admin_phase5()
 
     // Load in modules/installer/xarinit.php and start the install
     // This effectively initializes the base module.
-    if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
-                                                 array('directory' => 'installer',
-                                                       'initfunc'  => 'init'))) {
+    if (!xarInstallAPIFunc('initialise',
+                           array('directory' => 'installer',
+                                 'initfunc'  => 'init'))) {
         return;
     }
 

@@ -32,9 +32,7 @@ function installer_init()
         return NULL;
     }
 
-    if (!xarInstallAPIFunc('installer',
-                           'admin',
-                           'initialise',
+    if (!xarInstallAPIFunc('initialise',
                            array('directory' => 'base',
                                  'initfunc'  => 'init'))) {
         return NULL;
