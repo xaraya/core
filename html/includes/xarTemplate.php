@@ -1075,6 +1075,8 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")) {
         $use_internal = true;
     }
+    // Subpart mayb have been empty, 
+    $sourceFileName = str_replace('//','/',$sourceFileName);
     // assert('isset($sourceFileName); /* The source file for the template has no value in xarTplModule */');
 
     // Load the appropriate translations
