@@ -1,50 +1,26 @@
-<script type="text/javascript" src="modules/base/xartemplates/functions.js"></script>
-<script language="JavaScript">
-<!--
-	// Enter name of mandatory fields
-	var fieldRequired = Array("block_title");
-	// Enter field description to appear in the dialog box
-	var fieldDescription = Array("Title");
-//-->
-</script>
-
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Modify Configuration</xar:mlstring></h2><br />
 <div style="margin: auto;">
 <p><xar:mlstring>Please note that the default theme variable has moved to the themes module
 and that you cannot use UNBOXED mode of the MultiLanguage system unless you have php 4.3.0
 with the mbstring extension compiled in.</xar:mlstring></p>
+
 <p><xar:mlstring>Legacy Testers Note: The Load Legacy allows the usage of pnHTML and and other legacy PostNuke functions.
 Xaraya itself is completely legacy free, but other modules may still yet use them.</xar:mlstring></p>
-
-
 <form method="post" action="&xar-modurl-base-admin-updateconfig;" method="post" enctype="application/x-www-form-urlencoded" />
-    <div>
-    <h4><xar:mlstring>Website Display Configuration</xar:mlstring></h4>
-
-	<div style="clear: both; padding-top: 10px;">
-	<input type="hidden" name="authid" value="#$authid#" />
-	<span style="float: left; width: 20%; text-align: right;">
-		<span class="help" title="#xarML('This is the module that will load when your index.php is loaded without parameters.  IE your start module.')#"><label for="defaultmodule"><xar:mlstring>Default Module</xar:mlstring></label>:</span>
-	</span>
-	<span style="float: right; width: 78%; text-align: left;">
-		<select name="defaultmodule" id="defaultmodule">
-		<xar:loop name="$mods">
-			<xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleName') eq $loop:item['displayname']">
-				<option value="#$loop:item['displayname']#" selected="selected">#$loop:item['displayname']#</option>
-			<xar:else />
-				<option value="#$loop:item['displayname']#">#$loop:item['displayname']#</option>
-			</xar:if>
-		</xar:loop>
-		</select>
-	</span>
-	</div>
-
-	<div style="clear: both; padding-top: 10px;">
-	<span style="float: left; width: 20%; text-align: right;">
-		<span class="help" title="#xarML('When your index.php loads you have the choice of loading either a user or an admin module.  Note: User modules are generally the norm use this setting with caution.')#"><label for="defaulttype"><xar:mlstring>Default Module Type</xar:mlstring></label>:</span>
-	</span>
-	<span style="float: right; width: 78%; text-align: left;">
+    <input type="hidden" name="authid" value="&xar-var-authid;" />
+	<h4><xar:mlstring>Website Display Configuration</xar:mlstring></h4>
+	<p><xar:mlstring>Default Module</xar:mlstring>:&nbsp;&nbsp;
+	<select name="defaultmodule" id="defaultmodule" size="1">
+	<xar:loop name="$mods">
+		<xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleName') eq $loop:item['displayname']">
+			<option value="#$loop:item['displayname']#" selected="selected">#$loop:item['displayname']#</option>
+		<xar:else />
+			<option value="#$loop:item['displayname']#">#$loop:item['displayname']#</option>
+		</xar:if>
+	</xar:loop>
+	</select></p>
+	<p><xar:mlstring>Default Module Type</xar:mlstring>:
 	<select name="defaulttype" id="defaulttype" size="1">
 		<xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleType') eq 'admin'">
 			<option value="admin" selected="selected"><xar:mlstring>Admin</xar:mlstring></option>
@@ -53,70 +29,30 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 			<option value="admin"><xar:mlstring>Admin</xar:mlstring></option>
 			<option value="user" selected="selected"><xar:mlstring>User</xar:mlstring></option>
 		</xar:if>
-	</select>
-	</span>
-	</div>
-
-	<div style="clear: both; padding-top: 10px;">
-	<span style="float: left; width: 20%; text-align: right;">
-		<span class="help" title="#xarML('When your index.php loads you have the choice of the default function to load when the parameter is not set.  Please note this is a very advanced setting and will normally be set to main.')#"><label for="defaultfunction"><xar:mlstring>Default Module Function</xar:mlstring></label>:</span>
-	</span>
-	<span style="float: right; width: 78%; text-align: left;">
-		<input type="text" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" size="30" maxlength="100">
-	</span>
-	</div>
-
-	<div style="clear: both; padding-top: 10px;">
-	<span style="float: left; width: 20%; text-align: right;">
-		<span class="help" title="#xarML('This is where Xaraya will look for your default theme directory.  The default is themes')#"><label for="themedir"><xar:mlstring>Default Theme Directory</xar:mlstring></label>:</span>
-	</span>
-	<span style="float: right; width: 78%; text-align: left;">
-		<input type="text" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" size="30" maxlength="100">
-	</span>
-	</div>
-
-	<div style="clear: both; padding-top: 10px;">
-	<span style="float: left; width: 20%; text-align: right;">
-		<span class="help" title="#xarML('By setting this to true, you enable Xaraya to allow the modules to use short url controls when available.')#"><label for="shorturl"><xar:mlstring>Enable Short URL Support</xar:mlstring>:</span>
-	</span>
-	<span style="float: right; width: 78%; text-align: left;">
-		<xar:if condition="xarConfigGetVar('Site.Core.EnableShortURLsSupport')">
-			<input type="checkbox" name="shorturl" id="shorturl" value="1" checked="checked" />
-		<xar:else />
-			<input type="checkbox" name="shorturl" id="shorturl" value="1" />
-		</xar:if>
-	</span>
-	</div>
-
-	<div style="clear: both; padding-top: 10px;">
-	<span style="float: left; width: 20%; text-align: right;">
-		<span class="help" title="#xarML('By setting this to true, you enable Xaraya to fix HTML entities to display correctly depending on your default locale.')#"><label for="htmlenitites"><xar:mlstring>Fix HTML Entities</xar:mlstring></label>:</span>
-	</span>
-	<span style="float: right; width: 78%; text-align: left;">
-		<xar:if condition="xarConfigGetVar('Site.Core.FixHTMLEntities')">
-			<input type="checkbox" name="htmlenitites" id="htmlenitites" value="1" checked="checked" />
-		<xar:else />
-			<input type="checkbox" name="htmlenitites" id="htmlenitites" value="1" />
-		</xar:if>
-	</span>
-	</div>
-
-	<div style="clear: both; padding-top: 10px;">
-	<span style="float: left; width: 20%; text-align: right;">
-		<span class="help" title="#xarML('By setting this to true, you enable Xaraya to work on a secure enviroment (HTTPS protocol)')#"><label for="secureserver"><xar:mlstring>Configure to run on Secure Server</xar:mlstring></label>:</span>
-	</span>
-	<span style="float: right; width: 78%; text-align: left;">
-		<xar:if condition="xarConfigGetVar('Site.Core.EnableSecureServer')">
-			<input type="checkbox" name="secureserver" id="secureserver" value="1" checked="checked" />
-		<xar:else />
-			<input type="checkbox" name="secureserver" id="secureserver" value="1" />
-		</xar:if>
-	</span>
-	</div>
-
+	</select></p>
+	<p><label for="defaultfunction"><xar:mlstring>Default Module Function</xar:mlstring></label>:
+	<input type="text" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" size="30" maxlength="100"></p>
+	<p><label for="themedir"><xar:mlstring>Default Theme Directory</xar:mlstring></label>:
+	<input type="text" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" size="30" maxlength="100"></p>
+	<p><label for="shorturl"><xar:mlstring>Enable Short URL Support</xar:mlstring></label>:
+	<xar:if condition="xarConfigGetVar('Site.Core.EnableShortURLsSupport')">
+		<input type="checkbox" name="shorturl" id="shorturl" value="1" checked="checked" />
+	<xar:else />
+		<input type="checkbox" name="shorturl" id="shorturl" value="1" />
+	</xar:if></p>
+	<p><label for="htmlenitites"><xar:mlstring>Fix HTML Entities</xar:mlstring></label>:
+	<xar:if condition="xarConfigGetVar('Site.Core.FixHTMLEntities')">
+		<input type="checkbox" name="htmlenitites" id="htmlenitites" value="1" checked="checked" />
+	<xar:else />
+		<input type="checkbox" name="htmlenitites" id="htmlenitites" value="1" />
+	</xar:if></p>
+	<p><label for="secureserver"><xar:mlstring>Configure to run on Secure Server</xar:mlstring></label>:
+	<xar:if condition="xarConfigGetVar('Site.Core.EnableSecureServer')">
+		<input type="checkbox" name="secureserver" id="secureserver" value="1" checked="checked" />
+	<xar:else />
+		<input type="checkbox" name="secureserver" id="secureserver" value="1" />
+	</xar:if></p>
 	<h4><xar:mlstring>Sessions and Security</xar:mlstring></h4>
-
-
 	<p><xar:mlstring>Security Level</xar:mlstring>:
 	<select name="securitylevel" id="securitylevel" size="1">
 		<xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'High'">
@@ -190,7 +126,6 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 	</xar:if></p>
 
 	<p><input type="submit" value="#$updatelabel#" align="middle" /></p>
-      </div>
 </form>
 </div>
 </div>
