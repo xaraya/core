@@ -10,7 +10,7 @@
     <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-    <div style="margin: auto;">
+    <div style="margin: auto; width: 100%;">
         <h2 style="width:100%;height:1.5em;">
             <span style="width:95%;float:left;text-align:left;">
                     #xarVarPrepForDisplay($title)# > <a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $groupuid))#" title="#xarML('Modify role')#" class="active">#xarVarPrepForDisplay($groupname)#</a>

@@ -10,7 +10,7 @@
     <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-    <div style="margin: auto;">
+    <div style="margin: auto; width: 100%;">
         <h2>
             <a href="#xarModURL('roles', 'admin', 'createmail')#">
                 <xar:mlstring>Messaging system</xar:mlstring>

@@ -14,7 +14,7 @@
      </span>
 </div>
 <div class="xar-mod-body"><h2><xar:mlstring>Recall / Purge</xar:mlstring></h2>
-    <div>
+    <div style="width: 100%;">
         <dl class="xar-tabs">
             <dt class="help">
                 <xar:mlstring>
@@ -50,7 +50,7 @@
 <xar:if condition="$operation eq 'recall'">
     <div class="xar-mod-body"><h2><xar:mlstring>Recall Deleted Groups and Users</xar:mlstring></h2>
         <br />
-        <div style="margin: auto;">
+        <div style="margin: auto; width: 100%;">
         <form method="post" action="#xarModURL('roles', 'admin', 'purge')#" enctype="application/x-www-form-urlencoded" >
            <div>
                <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -207,7 +207,7 @@
 <xar:else />
     <h2><xar:mlstring>Purge Users</xar:mlstring></h2>
     <br />
-    <div style="margin: auto;">
+    <div style="margin: auto; width: 100%;">
     <form method="post" action="#xarModURL('roles', 'admin', 'purge')#" enctype="application/x-www-form-urlencoded" name="purge">
 
         <div>
