@@ -158,7 +158,7 @@ class ADODB_Pager {
 			
 			for($i=$start; $i <= $end; $i++) {
                 if ($this->rs->AbsolutePage() == $i)
-                    $numbers .= "<font color=$this->linkSelectedColor><b>$i</b></font>  ";
+                    $numbers .= "<span style=\"color: $this->linkSelectedColor\"><b>$i</b></span>";
                 else 
                      $numbers .= "<a href=$PHP_SELF?$link=$i>$i</a>  ";
             
@@ -233,7 +233,7 @@ class ADODB_Pager {
 		if (!$this->db->pageExecuteCountRows) return '';
 		$lastPage = $this->rs->LastPageNo();
 		if ($lastPage == -1) $lastPage = 1; // check for empty rs.
-		return "<font size=-1>$this->page ".$this->curr_page."/".$lastPage."</font>";
+		return "< size=-1>$this->page ".$this->curr_page."/".$lastPage."</>";
 	}
 	
 	//-----------------------------------
