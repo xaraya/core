@@ -36,6 +36,8 @@ class xarMasks
     var $levels;
     var $instancestable;
 
+    var $privilegeset;
+
 /**
  * xarMasks: constructor for the class
  *
@@ -271,7 +273,9 @@ class xarMasks
 
 // get the masks pertaining to the current module and the component requested
         if ($module == '') list($module) = xarRequestGetInfo();
-        if ($module == 'blocks') $module = xarModGetVar('blocks','currentmodule');
+// no need to update / select in database for each block here
+//        if ($module == 'blocks') $module = xarModGetVar('blocks','currentmodule');
+        if ($module == 'blocks' && xarVarIsCached('Security.Variables','currentmodule')) $module = xarVarGetCached('Security.Variables','currentmodule');
 
         $mask =  $this->getMask($mask);
         if (!$mask) {
@@ -287,9 +291,11 @@ class xarMasks
             return;
         }
 
-// insert any instance overrides
-if ($instance != '') $mask->setInstance($instance);
+        // insert any instance overrides
+        if ($instance != '') $mask->setInstance($instance);
 
+    // check if we already have the irreducible set of privileges for the current user
+    if (!xarVarIsCached('Security.Variables','privilegeset') || !empty($rolename)) {
 // get the Roles class
         include_once 'modules/roles/xarroles.php';
         $roles = new xarRoles();
@@ -376,6 +382,14 @@ if ($instance != '') $mask->setInstance($instance);
 //      echo "Irreducible: ";
 //      foreach($irreducibleset as $test) echo $test->getName();
 
+        if (empty($rolename)) {
+            xarVarSetCached('Security.Variables','privilegeset',$irreducibleset);
+        }
+    } else {
+        // retrieve the irreducible set of privileges for the current user
+        $irreducibleset = xarVarGetCached('Security.Variables','privilegeset');
+    }
+
 // check each privilege from the irreducible set
         $pass = false;
         $score = 0;
@@ -424,25 +438,31 @@ if ($instance != '') $mask->setInstance($instance);
 */
     function getMask($name)
     {
+        // check if we already have the definition of this mask
+        if (!xarVarIsCached('Security.Masks',$name)) {
 //Set up the query and get the data from the xarmasks table
-        $query = "SELECT * FROM $this->maskstable
-                    WHERE xar_name= '$name'";
-        $result = $this->dbconn->Execute($query);
-        if (!$result) return;
-        if ($result->EOF) return false;
+            $query = "SELECT * FROM $this->maskstable
+                        WHERE xar_name= '$name'";
+            $result = $this->dbconn->Execute($query);
+            if (!$result) return;
+            if ($result->EOF) return false;
 
 // reorganize the data into an array and create the masks object
-        list($sid, $name, $realm, $module, $component, $instance, $level,$description) = $result->fields;
-        $pargs = array('sid' => $sid,
-                            'name' => $name,
+            list($sid, $name, $realm, $module, $component, $instance, $level,$description) = $result->fields;
+            $result->Close();
+            $pargs = array('sid' => $sid,
+                           'name' => $name,
                            'realm' => $realm,
                            'module' => $module,
                            'component' => $component,
                            'instance' => $instance,
                            'level' => $level,
                            'description'=>$description);
-
 // done
+            xarVarSetCached('Security.Masks',$name,$pargs);
+        } else {
+            $pargs = xarVarGetCached('Security.Masks',$name);
+        }
         return new xarMask($pargs);
     }
 }
