@@ -45,7 +45,7 @@
     -->
     <registry>
 
-        <id>5648881</</id>
+        <id>5648882</id>
         <name>modwizard_typical</name>
 
     </registry>
@@ -63,6 +63,13 @@
 
             <!-- Add code to change <head> -> <title> tag for each page? -->
             <setpagetitle>yes</setpagetitle>
+
+            <!-- Code for hooks ?
+
+                 module hooks are generated if either transform_hooks or item_hooks are generated
+            -->
+            <item_hooks>no</item_hooks>
+            <transform_hooks>no</transform_hooks>
 
         </capabilities>
 
@@ -108,36 +115,6 @@
         -->
         <security />
 
-            <!-- I have no usage for these. Perhaps they should be removed. -->
-            <!--
-            <component name="block">
-                <query>
-                    <header>Block ID</header>
-                    <select>select * from block</select>
-                    <limit>10</limit>
-                </query>
-
-                <query>
-                    <header>Block Cat</header>
-                    <select>select * from block</select>
-                </query>
-
-                <mask name="ViewMask">
-                    <instance>all</instance>
-                    <level>ACCESS_OVERVIEW</level>
-                    <comment>A description</comment>
-                </mask>
-
-                <mask name="AdminMask">
-                    <instance>all</instance>
-                    <level>ACCESS_ADMIN</level>
-                    <comment>A description</comment>
-                </mask>
-            </component>
-            -->
-
-        </security>
-
     </configuration>
 
     <!-- DATABASE related stuff -->
@@ -163,13 +140,11 @@
 
 
             @itemtype   =>  'The numeric itemtype'
-            @hooks      =>  'enable'    =>  call hooks for this itemtype
-                            'disable'   =>  do not call hooks for this itemtype
-            @admin      =>  create admin interface for this itemtype?
-            @user       =>  cerate user interface for this itemtype?
+            @admin      =>  create admin interface for this itemtype? ( yes )
+            @user       =>  cerate user interface for this itemtype?  ( yes )
 
         -->
-        <table name="member" itemtype="1" hooks="enable">
+        <table name="member" itemtype="1">
 
             <label>Member</label>
             <labelfields separator=", "><field name="lastname" /><field name="firstname" /></labelfields>
@@ -228,9 +203,46 @@
                 <field name="firstname" />
             </index>
 
-            <index name="birthday">
+            <index name="birthday" unique="false">
                 <comment>index for birthday access</comment>
                 <field name="birthday" />
+            </index>
+
+        </table>
+
+        <table name="events" itemtype="2">
+
+            <label>Events</label>
+            <labelfields separator=", "><field name="name" /></labelfields>
+
+            <!-- describe the table -->
+            <structure>
+
+                <!-- the one and only primary_key field is mapped to 'Item ID'. No need to specify ourselve -->
+                <field name="mid"     type="integer" size="6"  notnull="true" primary_key="true" increment="true" overview="false">
+                    <label>Id</label>
+                </field>
+
+                <!-- Default Input type is textbox. No need to specify ourselve -->
+                <field name="name"  type="varchar" size="32" notnull="true" overview="true">
+                    <label>Name</label>
+                </field>
+
+                <field name="evt_date"  type="date"               overview="false">
+                    <dd_type>calendar</dd_type>
+                    <label>Date</label>
+                </field>
+
+            </structure>
+
+            <order>
+                <field name="evt_date" />
+                <field name="name" />
+            </order>
+
+            <index name="evt_date" unique="false">
+                <comment>index for birthday access</comment>
+                <field name="evt_date" />
             </index>
 
         </table>
@@ -244,7 +256,7 @@
     <blocks>
 
         <!-- declaration of a block -->
-        <block name="useful" />
+        <block name="block1" />
         <block name="block2" />
 
     </blocks>

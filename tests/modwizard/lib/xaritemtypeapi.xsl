@@ -40,8 +40,12 @@
 
 <xsl:template match="xaraya_module" mode="xaritemtypeapi" xml:space="default">
 
-    <xsl:message>
+    <xsl:if test="count( database/table ) > 0">
+
+        <xsl:message>
 ### Generating itemtype apis</xsl:message>
+
+    </xsl:if>
 
     <xsl:for-each select="database/table[ @user='true' or @admin='true' ]">
 

@@ -53,7 +53,7 @@
     itemtype    CDATA #REQUIRED
     admin       ( true | false ) 'true'
     user        ( true | false ) 'true'
-    hooks       ( enable | disable ) 'disable' >
+    >
 
 <!ELEMENT label ( #PCDATA )>
 <!ELEMENT labelfields    ( field+ )>

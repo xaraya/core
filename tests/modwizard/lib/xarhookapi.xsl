@@ -27,25 +27,33 @@
 
 <xsl:template match="xaraya_module" mode="xarhookapi">
 
+        <!-- MODULE HOOKS -->
+        <xsl:if test="configuration/capabilities/item_hooks/text() = 'yes'
+                   or configuration/capabilities/transform_hooks/text() = 'yes'" >
+
         <xsl:message>
 ### Generating hook API</xsl:message>
 
-        <!-- ITEM HOOKS -->
+            <xsl:apply-templates mode="xarhookapi_module_updateconfig" select="." />
+            <xsl:apply-templates mode="xarhookapi_module_modifyconfig" select="." />
+            <xsl:apply-templates mode="xarhookapi_module_remove" select="." />
+        </xsl:if>
 
-        <xsl:apply-templates mode="xarhookapi_item_new" select="." />
-        <xsl:apply-templates mode="xarhookapi_item_modify" select="." />
-        <xsl:apply-templates mode="xarhookapi_item_create" select="." />
-        <xsl:apply-templates mode="xarhookapi_item_delete" select="." />
-        <xsl:apply-templates mode="xarhookapi_item_update" select="." />
+        <!-- ITEM HOOKS -->
+        <xsl:if test="configuration/capabilities/item_hooks/text() = 'yes'" >
+            <xsl:apply-templates mode="xarhookapi_item_new"     select="." />
+            <xsl:apply-templates mode="xarhookapi_item_modify"  select="." />
+            <xsl:apply-templates mode="xarhookapi_item_create"  select="." />
+            <xsl:apply-templates mode="xarhookapi_item_delete"  select="." />
+            <xsl:apply-templates mode="xarhookapi_item_update"  select="." />
+        </xsl:if>
 
         <!-- TRANSFORM HOOKS -->
-        <xsl:apply-templates mode="xarhookapi_item_transform" select="." />
-        <xsl:apply-templates mode="xarhookapi_item_transform-input" select="." />
+        <xsl:if test="configuration/capabilities/transform_hooks/text() = 'yes'" >
+            <xsl:apply-templates mode="xarhookapi_item_transform"       select="." />
+            <xsl:apply-templates mode="xarhookapi_item_transform-input" select="." />
+        </xsl:if>
 
-        <!-- MODULE HOOKS -->
-        <xsl:apply-templates mode="xarhookapi_module_updateconfig" select="." />
-        <xsl:apply-templates mode="xarhookapi_module_modifyconfig" select="." />
-        <xsl:apply-templates mode="xarhookapi_module_remove" select="." />
 
 </xsl:template>
 

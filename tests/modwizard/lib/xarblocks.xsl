@@ -18,8 +18,10 @@
 
 <xsl:template match="xaraya_module" mode="xarblocks" xml:space="default">
 
-    <xsl:message>
+    <xsl:if test="count( blocks/block ) > 0">
+        <xsl:message>
 ### Generating Blocks</xsl:message>
+    </xsl:if>
 
     <xsl:for-each select="blocks/block">
 

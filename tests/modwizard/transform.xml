@@ -12,7 +12,7 @@
     -->
     <about>
 
-        <name>ModWizard Example - Minimal </name>
+        <name>ModWizard Example - Transform</name>
         <copyright>by Michael Jansen</copyright>
         <license>GPL (http://www.gnu.org/licenses/gpl.html)</license>
 
@@ -25,14 +25,15 @@
         <description>
 
             <!-- add a short ONE LINE description -->
-            <short>Module Wizard Test Module I</short>
+            <short>Module Wizard Test Module III</short>
             <!-- add a description as long and detailed as you want. -->
             <long>
-            * The minimal module to generate
+            * A transform module
             *   # no tables
-            *   # no hooks
             *   # no blocks
-            *   </long>
+            *   # doesn't use hooks
+            *   # provide transform hook
+            * </long>
         </description>
 
     </about>
@@ -45,8 +46,8 @@
     -->
     <registry>
 
-        <id>5648880</id>
-        <name>modwizard_minimal</name>
+        <id>5648883</id>
+        <name>modwizard_transform</name>
 
     </registry>
 
@@ -64,8 +65,12 @@
             <!-- Add code to change <head> -> <title> tag for each page? -->
             <setpagetitle>yes</setpagetitle>
 
+            <!-- Code for hooks ?
+
+                 module hooks are generated if either transform_hooks or item_hooks are generated
+            -->
             <item_hooks>no</item_hooks>
-            <transform_hooks>no</transform_hooks>
+            <transform_hooks>yes</transform_hooks>
 
         </capabilities>
 
@@ -95,15 +100,7 @@
         -->
         <hooks />
 
-        <!-- SECURITY related stuff ( ROLES / PRIVILEGES )
-
-            Create / remove Instances and Masks during initialization / removing
-
-                The appropriate calls have to be inserted manually
-
-            MODULE Level Instance and Masks for Blocks and Itemtypes will be created automatically and used to
-            provide basic access control.
-        -->
+        <!-- SECURITY related stuff ( ROLES / PRIVILEGES ) -->
         <security />
 
     </configuration>
@@ -111,10 +108,7 @@
     <!-- DATABASE related stuff -->
     <database />
 
-    <!-- BLOCKS
-
-        stub functions and privileges will be generated
-    -->
+    <!-- BLOCKS -->
     <blocks />
 
 </xaraya_module>
