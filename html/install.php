@@ -160,6 +160,9 @@ function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
     return true;
 }
 
+if (!isset($phase)) {
+    $phase = PNINSTALL_PHASE_WELCOME;
+}
 $res = pnInstallMain($phase);
 
 if (!isset($res)) {
