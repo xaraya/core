@@ -22,22 +22,6 @@
                 <td colspan="2">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="formname" id="formname" value="adminmenu" />
-                    <xar:if condition="$showontop eq 1">
-                        <input type="checkbox" name="showontop" id="showontop" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="showontop" id="showontop" value="1" />
-                    </xar:if>
-                    <label for="showontop">
-                        <xar:mlstring>
-                            Always on top (position the menu in blockgroup) 
-                        </xar:mlstring>
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                </td>
-                <td colspan="2">
                     <xar:if condition="$showmarker eq 1">
                         <input type="checkbox" name="showmarker" id="showmarker" value="1" checked="checked" />
                         <xar:else />
@@ -93,35 +77,6 @@
                 <td class="adminpanels-rednote">
                     <xar:mlstring>
                         (only name and category implemented) 
-                    </xar:mlstring>
-                </td>
-            </tr>
-            <tr>
-                <td align="right">
-                    <label for="menuposition">
-                        <xar:mlstring>
-                            Position admin menu: 
-                        </xar:mlstring>
-                    </label>
-                </td>
-                <td>
-                    <select name="menuposition" id="menuposition" size="1">
-                        <xar:foreach in="$menuselect" value="$v" key="$k">
-                            <xar:if condition="$k eq $menuposition">
-                                <option value="#$k#" selected="selected">
-                                    #$v# 
-                                </option>
-                                <xar:else />
-                                <option value="#$k#">
-                                    #$v# 
-                                </option>
-                            </xar:if>
-                        </xar:foreach>
-                    </select>
-                </td>
-                <td class="adminpanels-rednote">
-                    <xar:mlstring>
-                        (center blockgroup not implemented) 
                     </xar:mlstring>
                 </td>
             </tr>

@@ -31,7 +31,6 @@ function adminpanels_admin_modifyconfig()
     $data['authid'] = xarSecGenAuthKey();
 
     // prepare labels and values for display by the template
-    $data['showontop']              = xarModGetVar('adminpanels', 'showontop');
     $data['showmarker']             = xarModGetVar('adminpanels', 'showmarker');
     $data['marker']                 = xarModGetVar('adminpanels', 'marker');
 
@@ -42,15 +41,7 @@ function adminpanels_admin_modifyconfig()
     //$data['sortorder']['bygroup']   = xarML('By Group');
 
     $data['menustyle']              = xarModGetVar('adminpanels', 'menustyle');
-    //TODO: need a better routine for building select in template
 
-    $data['menuselect']             = array();
-    $data['menuselect']['l']        = xarML('Left');
-    //$data['menuselect']['c']        = xarML('Center');
-    $data['menuselect']['r']        = xarML('Right');
-    $data['menuposition']           = xarModGetVar('adminpanels', 'menuposition');
-    //TODO: need a better routine for building select in template
-    
     $data['showlogout']             = xarModGetVar('adminpanels', 'showlogout');
     $data['showhelp']               = xarModGetVar('adminpanels', 'showhelp');
 /*     $data['submitlabel']            = xarML('Click "Submit" to change configuration:'); */

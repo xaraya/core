@@ -30,17 +30,11 @@ function adminpanels_admin_updateconfig()
     // but for now we just re-use it to indicate if we want a marker against active module
     if(!xarVarFetch('showmarker', 'isset', $showmarker, NULL, XARVAR_DONT_SET)) {return;}
 
-    // true if we want to always display adminmenu on top
-    if(!xarVarFetch('showontop', 'isset', $showontop, NULL, XARVAR_DONT_SET)) {return;}
-
     // type of the marker symbol(s)
     if(!xarVarFetch('marker', 'isset', $marker, '[x]', XARVAR_NOT_REQUIRED)) {return;}
 
     // this is actually a sort order switch, which of course affect the style of the menu
     if(!xarVarFetch('menustyle', 'isset', $menustyle, 'byname', XARVAR_NOT_REQUIRED)) {return;}
-
-    // left, centre or right.. hmm we definately dont want it upside down, do we?
-    if(!xarVarFetch('menuposition', 'isset', $menuposition, 'r', XARVAR_NOT_REQUIRED)) {return;}
 
     // show or hide a link in adminmenu to administrators logout
     if(!xarVarFetch('showlogout', 'isset', $showlogout, NULL, XARVAR_DONT_SET)) {return;}
@@ -58,13 +52,6 @@ function adminpanels_admin_updateconfig()
     if (!xarSecConfirmAuthKey()) return;
 
     if($formname == 'adminmenu'){
-        // update the data from first form
-        if(!$showontop){
-            xarModSetVar('adminpanels', 'showontop', 0);
-        }else{
-            xarModSetVar('adminpanels', 'showontop', 1);
-        }
-    
         if(!$showmarker){
             xarModSetVar('adminpanels', 'showmarker', 0);
         }else{
@@ -75,9 +62,6 @@ function adminpanels_admin_updateconfig()
     
         xarModSetVar('adminpanels', 'marker', $marker);
 
-        $whatwasbefore = xarModGetVar('adminpanels', 'menuposition');
-        xarModSetVar('adminpanels', 'menuposition', $menuposition);
-    
         if(!$showlogout){
             xarModSetVar('adminpanels', 'showlogout', 0);
         }else{
@@ -88,40 +72,6 @@ function adminpanels_admin_updateconfig()
             xarModSetVar('adminpanels', 'showhelp', 0);
         }else{
             xarModSetVar('adminpanels', 'showhelp', 1);
-        }
-            
-        // if necessary set our block position, left, centre or right
-        // FIXME: this should be moved either to blocks, or blocks interface should
-        // be incorporated here, the hard coding of xar_id will not work, for my database
-        // the xar_id is 7 for example, so this code doesn't even work for me.
-        // BAD - TODO: adminapi function should deal with db, at least
-        if($whatwasbefore != $menuposition){
-    
-            // obtain db connection
-            $dbconn =& xarDBGetConn();
-            $xartable =& xarDBGetTables();
-            $blockgroupinstancetable= $xartable['block_group_instances'];
-            $group_id = 0;
-            switch($menuposition) {
-                case 'l':
-                    $group_id = 1;
-                    break;
-                case 'r':
-                    $group_id = 2;
-                    break;
-                case 'c':
-                    break;
-                default:
-                    // Weird, return
-                    return;
-            }
-            if($group_id != 0) {
-                $query = "UPDATE $blockgroupinstancetable
-                            SET xar_group_id = ?
-                            WHERE xar_id = 1";
-                $result =& $dbconn->Execute($query,array($group_id));
-                if (!$result) return;
-            }
         }
     } elseif ($formname == 'overviews'){
         // update data from second form
