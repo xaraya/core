@@ -1,0 +1,50 @@
+<img src="themes/installer/images/step6_header.png" style="border:0px;width:758px;height:223px;" alt="Xaraya Installation: Step Six" /><br />
+<div style="padding:10px;">
+  <span class="xar-pagetitle">Step Seven : Choosing a Configuration</span><br /><br /><br />
+  <form action="&xar-modurl-installer-admin-confirm_configuration;" method="post">
+  <div style="text-align:center;">
+    <input type="hidden" name="install_language" id="install_language" value="#$language#" />
+    <div style="text-align:justify;padding:0% 23% 0% 23%;">
+           <span class="xar-normal">Choose a configuration to be installed from those available in the list below.</span>
+    </div>
+      <br /><br />
+      <div style="padding:0% 23% 0% 23%;">
+      <table cellspacing="0" border="0" summary="For choosing a configuration">
+              <thead>
+              <tr>
+               <th colspan="2">Supported configurations</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+              <td>
+              &nbsp;
+              </td>
+              </tr>
+                  <tr>
+                  <td>
+                  <xar:if condition="isset($warning)">
+                  	#$warning#
+                  <xar:else />
+					  <select name="configuration"size="5">
+					  <xar:loop name="$names">
+					  <option value="#$value#">#$display#</option>
+					  </xar:loop>
+					  </select>
+                  </xar:if>
+                  <td>
+                  </tr>
+              </tbody>
+          </table>
+        </div>
+        <br />
+        <div style="text-align:justify;padding:0% 23% 0% 23%;">
+        <span class="xar-normal">Each configuration will load a predefined set of modules, menus, hooks etc. as well as create an initial configuration of the security system. On the next page you can change some of the options of chosen configuration.</span><br /><br />
+      </div>
+      <div style="text-align:center;">
+        <input type="submit" name="create" id="create" value="Continue &gt;" />
+      </div>
+    </div>
+  </form>
+</div><br /><br />	
+<div style="text-align:center;padding:5px;"><span class="xar-sub">Thank you for trying Xaraya.</span></div>

@@ -1,0 +1,62 @@
+<img src="themes/installer/images/step6_header.png" style="border:0px;width:758px;height:223px;" alt="Xaraya Installation: Step Six" /><br />
+<div style="padding:10px;">
+  <span class="xar-pagetitle">Step Eight : Choosing Configuration Options</span><br /><br /><br />
+  <form action="&xar-modurl-installer-admin-confirm_configuration;" method="post">
+  <div style="text-align:center;">
+    <input type="hidden" name="install_language" id="install_language" value="#$language#" />
+    <input type="hidden" name="configuration" id="configuration" value="#$configuration#" />
+    <input type="hidden" name="confirmed" id="confirmed" value="true" />
+    <div style="text-align:justify;padding:0% 23% 0% 23%;">
+           <span class="xar-normal">Choose from the available configuration options shown:</span>
+    </div>
+      <br /><br />
+      <div style="padding:0% 23% 0% 23%;">
+      <table cellspacing="0" border="0" summary="For creating the site administrator account">
+              <thead>
+              <tr>
+               <th colspan="2">Configuration options</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+              <td width="10%">
+              &nbsp;
+              </td>
+              <td width="90%">
+              &nbsp;
+              </td>
+              </tr>
+				<xar:loop name="$options">
+				  <tr>
+					<xar:if condition="$option eq ''">                  
+						  <td colspan="2">
+						  #$comment#
+						  </td>
+					<xar:else />
+						  <td valign="top">
+						  <xar:if condition="$option == 'true'">
+							  <input type="checkbox" name="options" value=1 checked />
+						  <xar:else />
+							  <input type="checkbox" name="options" value=1 />
+						  </xar:if>
+						  </td>
+						  <td>
+						  #$comment#
+						  </td>
+				</xar:if>
+				  </tr>
+				</xar:loop>
+              </tbody>
+          </table>
+        </div>
+        <br />
+        <div style="text-align:justify;padding:0% 23% 0% 23%;">
+        <span class="xar-normal">Disabling the options above will leave your registered and unregistered users with minimal access. The administrator you created in Step 6 will always have full access to the site.</span><br /><br />
+      </div>
+      <div style="text-align:center;">
+        <input type="submit" name="create" id="create" value="Continue &gt;" />
+      </div>
+    </div>
+  </form>
+</div><br /><br />	
+<div style="text-align:center;padding:5px;"><span class="xar-sub">Thank you for trying Xaraya.</span></div>
