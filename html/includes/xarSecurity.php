@@ -389,25 +389,6 @@ function xarTree()
     return $tree;
 }
 
-/**
- * xarPrivilegeCheck: check whether a role has a certain privilege assigned or inherited
- *
- * This is a wrapper function
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   string privilege name privname
- * @param   string role ID uid
- * @return  bool
- */
-function xarPrivilegeCheck($privilege,$uid='')
-{
-   $roles = new xarRoles();
-    if (empty($uid)) $uid = xarSessionGetVar('uid');
-    $role = $roles->getRole($uid);
-    return $role->hasPrivilege($privilege);
-}
-
 /* xarReturnPrivilege: stores a privilege from an external wizard in the repository.
  *
  * This is a wrapper function
