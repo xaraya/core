@@ -988,8 +988,7 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
 
     // Call each hook
     foreach ($hooklist as $hook) {
-        // FIXME: <marco> Shouldn't this be a continue; instead of return; ?
-        if (!xarModIsAvailable($hook['module'], $hook['type'])) return;
+        if (!xarModIsAvailable($hook['module'], $hook['type'])) continue;
         if ($hook['area'] == 'GUI') {
             $isGUI = true;
             if (!xarModLoad($hook['module'], $hook['type'])) return;
@@ -1063,7 +1062,8 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
               FROM $hookstable
               WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'
               AND xar_object = '" . xarVarPrepForStore($hookObject) . "'
-              AND xar_action = '" . xarVarPrepForStore($hookAction) . "'";
+              AND xar_action = '" . xarVarPrepForStore($hookAction) . "'
+              ORDER BY xar_order ASC";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
