@@ -74,13 +74,10 @@ form label {
 }
 
 textarea#license, select#configuration {
-	width: 460px;
+	width: 440px;
 	height: 13em;
 	padding: .5em;
-	white-space: pre;
 	font-size: .8em;
-	line-height: 1.5em;
-	color: #7a7a7a;
 }
 
 label.block {
@@ -155,60 +152,43 @@ p.complete, p.active, p.greyed {
 	background-image: url(../modules/installer/images/greyed.gif);
 }
 
-/* .xar-pagetitle { */
-/* 	color: #4B0A86; */
-/* 	font-size: 12pt; */
-/* 	font-weight: bold; */
-/* } */
 .xar-normal {
 	color: #000000;
-	/* 	font-family: Tahoma, Arial, Helvetica, sans-serif; */
 	font-size: .75em;
 }
 
 .xar-normal a:link {
 	color: #8200A8;
-	/* 	font-family: Tahoma, Arial, Helvetica, sans-serif; */
-	/* 	font-size: 10pt; */
 	font-weight: bold;
 	text-decoration: underline;
 }
 
 .xar-normal a:visited {
 	color: #4B0A86;
-	/* 	font-family: Tahoma, Arial, Helvetica, sans-serif; */
-	/* 	font-size: 10pt; */
 	font-weight: bold;
 	text-decoration: underline;
 }
 
 .xar-normal a:hover {
 	color: #4B0A86;
-	/* 	font-family: Tahoma, Arial, Helvetica, sans-serif; */
-	/* 	font-size: 10pt; */
 	font-weight: bold;
 	text-decoration: overline underline;
 }
 
 .xar-normal a:active {
 	color: #4B0A86;
-	/* 	font-family: Tahoma, Arial, Helvetica, sans-serif; */
-	/* 	font-size: 10pt; */
 	font-weight: bold;
 	text-decoration: overline underline;
 }
 
 .xar-title p strong {
 	color: #4B0A86;
-	/* 	font-family: Tahoma, Arial, Helvetica, sans-serif; */
-	/* 	font-size: 11pt; */
 	font-weight: bold;
 }
 
 .xar-title p { text-align: left; }
 
 #status p {
-	/* 	line-height: 2em; */
 	padding: 0;
 	margin: 0;
 }
