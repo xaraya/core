@@ -21,9 +21,10 @@ function blocks_xartables()
     // Get the name for the example item table.  This is not necessary
     // but helps in the following statements and keeps them readable
     $userblocks = xarDBGetSiteTablePrefix() . '_userblocks';
-
+    $blocktypes = xarDBGetSiteTablePrefix() . '_block_types';
     // Set the table name
     $xartable['userblocks'] = $userblocks;
+    $xartable['block_types'] = $blocktypes;
 
     // Return the table information
     return $xartable;
