@@ -302,6 +302,7 @@ function xarErrorRender($format,$stacktype = "ERROR")
     }
 
     $data = array();
+    $data['major'] = $error->getMajor();
     $data['type'] = $error->getType();
     $data['title'] = $error->getTitle();
     $data['short'] = $error->getShort();
@@ -351,6 +352,7 @@ function xarErrorGet($stacktype = "ERROR",$format='data')
     $datamsgs = array();
 
     foreach($msgs as $msg) {
+        $data['major'] = $msg->getMajor();
         $data['type'] = $msg->getType();
         $data['title'] = $msg->getTitle();
         $data['short'] = $msg->getShort();
