@@ -109,7 +109,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         }
         $fileName .= '.xml';
         if (!file_exists($this->baseDir.$fileName)) {
-        die("existiert nicht:".$this->baseDir.$fileName);
+        die("File does not exist:".$this->baseDir.$fileName);
         return false;
         }
         return $this->baseDir.$fileName;
@@ -142,7 +142,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         xml_set_character_data_handler($this->parser, "characterData");
 
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
-            die("hier tritt der Fehler auf");
+            die("Error arises here");
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($ctxType.': '.$ctxName));
             return;
         }
