@@ -2280,23 +2280,24 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
             return;
         }
 
+        // FIXME: this doesn't do what you think, and there's no way to test for this at compilation
         if (!array($in)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
                            new xarTpl__ParserError('Invalid \'in\' attribute in <xar:foreach> tag. \'in\' must be an array', $this));
             return;
         }
 
-        if (!isset($value)) {
+        if (isset($key) && isset($value)) {
+            return "foreach ($in as $key => $value) { ";
+        } elseif (isset($value)) {
+            return "foreach ($in as $value) { ";
+        } elseif (isset($key)) {
+            return "foreach (array_keys($in) as $key) { ";
+        } else {
             xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
-                           new xarTpl__ParserError('Missing \'value\' attribute in <xar:foreach> tag.', $this));
+                           new xarTpl__ParserError('Missing \'key\' or \'value\' attribute in <xar:foreach> tag.', $this));
             return;
         }
-        
-        if (isset($key)) {
-            return "foreach ($in as $key => $value) { ";
-        }
-        
-        return "foreach ($in as $value) { ";
     }
     
     function renderEndTag()
