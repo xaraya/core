@@ -672,6 +672,7 @@ if (empty($step)) {
     // Set any empty modvars.
     echo "<h5>Checking Module and Config Variables</h5>";
     $role = xarFindRole('Everybody');
+    $admin = xarFindRole('Admin');
     $modvars[] = array(array('name'    =>  'hidecore',
                              'module'  =>  'themes',
                              'set'     =>  0),
@@ -738,6 +739,9 @@ if (empty($step)) {
                        array('name'    =>  'askpasswordemail',
                              'module'  =>  'roles',
                              'set'     =>  1),
+                       array('name'    =>  'admin',
+                             'module'  =>  'roles',
+                             'set'     =>  $admin->getID()),
                        array('name'    =>  'rolesdisplay',
                              'module'  =>  'roles',
                              'set'     =>  'tabbed'),
@@ -1119,9 +1123,9 @@ Password : %%password%%
         // Get items from result array
         while (!$result->EOF) {
             list ($regid, $state) = $result->fields;
- 
+
             $seqId = $dbconn->GenId($module_states_table);
-            $query = "UPDATE $module_states_table 
+            $query = "UPDATE $module_states_table
                       SET xar_id = $seqId
                       WHERE xar_regid = $regid
                       AND xar_state = $state";
@@ -1129,10 +1133,10 @@ Password : %%password%%
             if (!$updresult) {
                 echo "FAILED to update the $module_states_table table<br/>";
             }
- 
+
             $result->MoveNext();
         }
- 
+
         // Close result set
         $result->Close();
 
@@ -1158,7 +1162,7 @@ Password : %%password%%
         }
 
         // 4. Set the version number of the modules module
-        $query = 'UPDATE ' . $sitePrefix . "_modules SET xar_version='2.3.0' WHERE xar_regid=1";
+        $query = "UPDATE " . $sitePrefix . "_modules SET xar_version='2.3.0' WHERE xar_regid=1";
         $result = &$dbconn->Execute($query);
         if(!$result) {
             echo "FAILED to update the version number for the modules module<br/>";
@@ -1191,7 +1195,38 @@ Password : %%password%%
         }
     } else {
         echo "Output caching is not enabled.<br/>";
-    }
+    } // Done with xarCache state check
+
+    // Bug 1798 - Rename davedap module to phpldapmodule
+    $regId = 1651;
+
+    // Get module information from the database
+    $dbModule = xarModAPIFunc('modules',
+                              'admin',
+                              'getdbmodules',
+                              array('regId' => $regId));                                                                      
+    // Get module information from the filesystem
+    $fileModule = xarModAPIFunc('modules',
+                                'admin',
+                                'getfilemodules',
+                                array('regId' => $regId));
+
+    if ((!isset($dbModule)) || (!isset($fileModule))){ 
+        echo "FAILED to update the davedap module to phpldapadmin module<br/>";
+    } elseif (($dbModule['name'] == 'davedap') && ($fileModule['name'] == 'phpldapadmin')) {
+        // Update modules table with new module name
+        echo "<h5>Rename davedap module to phpldapadmin module in database.</h5>";
+        $query = "UPDATE " . $sitePrefix . "_modules 
+                  SET xar_name = 'phpldapadmin',
+                      xar_directory = 'phpldapadmin'
+                  WHERE xar_regid = " . $regId;
+        $result = &$dbconn->Execute($query);
+        if (!$result) {
+            echo "FAILED to update the davedap module to phpldapadmin module<br/>";
+        } else {
+            echo "Successfully renamed davedap module to phpldapadmin module in database<br/>";
+        } 
+    } // End bug 1798
 
     // Bug 630, let's throw the reminder back up after upgrade.
 
@@ -1224,7 +1259,7 @@ Password : %%password%%
                                  'state'    => 2))) {
             return;
         }
-    }
+    } // End bug 630
 
 ?>
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
@@ -1246,7 +1281,7 @@ exit;
  * Helper function to render the output as we have it so far
  *
  */
-function CatchOutput() 
+function CatchOutput()
 {
     $out = ob_get_contents();
     ob_end_clean();

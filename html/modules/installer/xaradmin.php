@@ -385,6 +385,8 @@ function installer_admin_create_administrator()
     xarModSetVar('roles', 'everybody', $role->getID());
     $role = xarFindRole('Anonymous');
     xarConfigSetVar('Site.User.AnonymousUID', $role->getID());
+    $role = xarFindRole('Admin');
+    xarModSetVar('roles', 'admin', $role->getID());
 
     include_once 'modules/roles/xarroles.php';
     $role = xarFindRole('Admin');
