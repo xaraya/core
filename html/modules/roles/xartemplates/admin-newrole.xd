@@ -38,7 +38,7 @@ document.forms[0].submit();}
 					<xar:mlstring>Name</xar:mlstring>
 				</td>
 				<td>
-					<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="20" tabindex="1" />
+					<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="50" tabindex="1" />
 					<input type="hidden" name="authid" id="authid" value="#$authid#" />
 				</td>
 				<td width="20">
@@ -103,7 +103,7 @@ document.forms[0].submit();}
 						<xar:mlstring>Email</xar:mlstring>
 					</td>
 					<td>
-						<input type="text" name="pemail" id="pemail" value="#$pemail#" size="20" maxlength="20" tabindex="4" />
+						<input type="text" name="pemail" id="pemail" value="#$pemail#" size="20" maxlength="50" tabindex="4" />
 					</td>
 				</tr>
 				<tr>
