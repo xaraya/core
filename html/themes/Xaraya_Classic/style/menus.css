@@ -81,11 +81,7 @@
 .xar-block-body ul ul li.xar-menu-item, 
 .xar-block-body-right ul ul li.xar-menu-item,
 .xar-block-body ul ul li.xar-menu-item-current, 
-.xar-block-body-right ul ul li.xar-menu-item-current {
-    border-bottom: #F3F3FF;
-    border-width: 0 0 1px 0;
-    border-style: none none solid none;
-}
+.xar-block-body-right ul ul li.xar-menu-item-current {}
 
 
 .xar-block-body ul ul li.xar-menu-item-current, 

@@ -85,7 +85,7 @@ div#xc-footer {
 .xar-block-body ul ul li.xar-menu-item, 
 .xar-block-body-right ul ul li.xar-menu-item,
 .xar-block-body ul ul li.xar-menu-item-current, 
-.xar-block-body-right ul ul li.xar-menu-item-current { border-bottom: 1px solid #eeeeee; }
+.xar-block-body-right ul ul li.xar-menu-item-current {}
 
 .xar-block-body ul ul li.xar-menu-item-current a, 
 .xar-block-body-right ul ul li.xar-menu-item-current a { border-right: 10px solid #dfdfdf; }
