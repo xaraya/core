@@ -513,42 +513,6 @@ function xarCore_getSystemVar($name, $returnNull = false)
     return $systemVars[$name];
 }
 
-/**
- * Get a core site variable
- *
- * @access protected
- * @static array siteVars
- * @param string name name of core site variable to get
- * @return mixed variable value
- */
-function xarCore_getSiteVar($name)
-{
-    static $siteVars = NULL;
-
-    if (xarCore_IsCached('Core.getSiteVar', $name)) {
-        return xarCore_GetCached('Core.getSiteVar', $name);
-    }
-
-    if (!isset($siteVars)) {
-        $configLoader = new xarCore__ConfigFileLoader();
-        // Dependency to xarServer!
-        $serverName = xarServerGetVar('SERVER_NAME');
-        $fileName = xarCoreGetVarDirPath() . "/config.$serverName.xml";
-        if (!file_exists($fileName)) {
-            $fileName = xarCoreGetVarDirPath() . "/config.site.xml";
-        }
-        $configLoader->load($fileName);
-        $siteVars = $configLoader->getConfigVars();
-    }
-    if (!isset($siteVars[$name])) {
-        xarCore_die("xarCore_getSiteVar: Unknown site variable: ".$name);
-    }
-
-    xarCore_SetCached('Core.getSiteVar', $name, $siteVars[$name]);
-
-    return $siteVars[$name];
-
-}
 
 /**
  * Load a file and capture any php errors
