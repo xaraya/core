@@ -1,16 +1,54 @@
 <xar:if condition="empty($layout) or $layout eq 'default'">
     <table width="100%" border="0" cellspacing="0" cellpadding="4">
+    <xar:loop name="$items">
+    <tr>
+        <td>
+            <table width="100%" border="0" cellspacing="0" cellpadding="4">
+            <xar:loop name="$fields">
+            <tr>
+                <td align="right" valign="top" width="15%"><strong>#$label# :</strong></td>
+                <td><xar:data-output type="$type" name="dd_'.$id.'" value="$value" /></td>
+            </tr>
+            </xar:loop>
+            <xar:if condition="!empty($displaylink)">
+            <tr>
+                <td>&nbsp;</td>
+                <td><a href="#$displaylink#"><xar:mlstring>Display...</xar:mlstring></a> </td>
+            </tr>
+            </xar:if>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;
+        </td>
+    </tr>
+    </xar:loop>
+    </table>
+<xar:elseif condition="$layout eq 'list'" />
+    <table width="100%" border="0" cellspacing="0" cellpadding="4">
     <tr>
         <xar:loop name="$labels">
             <th align="center">#$label#</th>
         </xar:loop>
+        <th>
+            &nbsp;
+        </th>
     </tr>
     <xar:loop name="$items">
     <tr>
         <!-- we could use xar:data-display here too, instead of looping over fields ourselves -->
         <xar:loop name="$fields">
-            <td><xar:data-output type="$type" name="dd_'.$id.'" value="$value" /></td>
+            <td valign="top"><xar:data-output type="$type" name="dd_'.$id.'" value="$value" /></td>
         </xar:loop>
+        <td valign="top" align="center">
+        <xar:if condition="!empty($displaylink)">
+            <a href="#$displaylink#"><xar:mlstring>Display...</xar:mlstring></a>
+        <xar:else />
+            &nbsp;
+        </xar:if>
+        </td>
     </tr>
     </xar:loop>
     </table>

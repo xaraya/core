@@ -13,9 +13,21 @@
         <xar:loop name="$fields">
             <td><xar:data-output type="$type" name="dd_'.$id.'" value="$value" /></td>
         </xar:loop>
-        <td><xar:mlstring>View</xar:mlstring> | <xar:mlstring>Edit</xar:mlstring> | <xar:mlstring>Delete</xar:mlstring></td>
+        <td>
+            <xar:loop name="$options">
+                #$join# <a href="#$link#">#$title#</a>
+            </xar:loop>
+        </td>
     </tr>
     </xar:loop>
+    <xar:if condition="!empty($newlink)">
+    <tr>
+        <xar:loop name="$labels">
+            <td>&nbsp;</td>
+        </xar:loop>
+        <td><a href="#$newlink#"><xar:mlstring>New</xar:mlstring></a></td>
+    </tr>
+    </xar:if>
     </table>
 <!-- TODO: multi-column output -->
 <xar:else />

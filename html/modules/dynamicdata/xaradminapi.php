@@ -148,7 +148,10 @@ function dynamicdata_adminapi_delete($args)
     if (!isset($fields) || $fields == false) {
         return true;
     }
-    $ids = array_keys($fields);
+    $ids = array();
+    foreach ($fields as $field) {
+        $ids[] = $field['id'];
+    }
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
@@ -362,7 +365,9 @@ function dynamicdata_adminapi_updatehook($args)
 
     $values = array();
     $invalid = array();
-    foreach ($fields as $id => $field) {
+    foreach ($fields as $label => $field) {
+        // $values still uses property id instead of label, for create/update/delete in database
+        $id = $field['id'];
         if (empty($proptypes[$field['type']]['name'])) {
             $invalid[] = xarML('Invalid #(1) for dynamic field #(2) in function #(3)() of module #(4)',
                                'property', $id, $dd_function, 'dynamicdata');
@@ -562,7 +567,8 @@ function dynamicdata_adminapi_updatehook($args)
     }
 
     // update the extrainfo array
-    foreach ($fields as $id => $field) {
+    foreach ($fields as $label => $field) {
+        $id = $field['id'];
         if (isset($values[$id])) {
             $extrainfo['dd_'.$id] = $values[$id];
         } elseif (isset($extrainfo['dd_'.$id])) {
@@ -1112,11 +1118,11 @@ function dynamicdata_adminapi_deleteprop($args)
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
  * Handle <xar:data-input ...> form field tags
- * Format : <xar:data-input definition="$definition" /> with $definition an array
- *                                             containing the type, name, value, ...
- *       or <xar:data-input name="thisname" type="thattype" value="$val" ... />
+ * Format : <xar:data-input field="$field" /> with $definition an array
+ *                                             containing the type, label, value, ...
+ *       or <xar:data-input label="thisname" type="thattype" value="$val" ... />
  * 
- * @param $args array containing the input field definition or the type, name, value, ...
+ * @param $args array containing the input field definition or the type, label, value, ...
  * @returns string
  * @return the PHP code needed to invoke showinput() in the BL template
  */
@@ -1128,6 +1134,9 @@ echo xarModAPIFunc('dynamicdata',
                    'showinput',\n";
     if (isset($args['definition'])) {
         $out .= '                   '.$args['definition']."\n";
+        $out .= '                  );';
+    } elseif (isset($args['field'])) {
+        $out .= '                   '.$args['field']."\n";
         $out .= '                  );';
     } else {
         $out .= "                   array(\n";
@@ -1154,8 +1163,11 @@ echo xarModAPIFunc('dynamicdata',
 function dynamicdata_adminapi_showinput($args)
 {
     extract($args);
+    if (empty($name) && !empty($label)) {
+        $name = $label;
+    }
     if (empty($name)) {
-        return xarML('Missing \'name\' attribute in field tag or definition');
+        return xarML('Missing \'name\' or \'label\' attribute in tag parameters or field definition');
     }
     if (!isset($type)) {
         $type = 1;
@@ -1634,8 +1646,8 @@ function dynamicdata_adminapi_showform($args)
         }
 
         // prefill the values with defaults (if any)
-        foreach (array_keys($fields) as $id) {
-            $fields[$id]['value'] = $fields[$id]['default'];
+        foreach (array_keys($fields) as $label) {
+            $fields[$label]['value'] = $fields[$label]['default'];
         }
 
     } else {
@@ -1659,10 +1671,11 @@ function dynamicdata_adminapi_showform($args)
     // if we are in preview mode, we need to check for any preview values
     $preview = xarVarCleanFromInput('preview');
     if (!empty($preview)) {
-        foreach (array_keys($fields) as $id) {
+        foreach ($fields as $label => $field) {
+            $id = $field['id'];
             $value = xarVarCleanFromInput('dd_'.$id);
             if (isset($value)) {
-                $fields[$id]['value'] = $value;
+                $fields[$label]['value'] = $value;
             }
         }
     }
@@ -1759,7 +1772,7 @@ function dynamicdata_adminapi_showlist($args)
     }
 
     // try getting the item id list via input variables if necessary
-    if (!isset($itemids) || !is_numeric($itemids)) {
+    if (!isset($itemids)) {
         $itemids = xarVarCleanFromInput('itemids');
     }
 
@@ -1795,10 +1808,20 @@ function dynamicdata_adminapi_showlist($args)
                                   'itemtype' => $itemtype,
                                   'fieldlist' => $myfieldlist,
                                   'static' => $static));
-    // create the label list
+    // create the label list + (try to) find the field containing the item id (if any)
     $labels = array();
-    foreach ($fields as $id => $field) {
-        $labels[$id] = array('label' => $field['label']);
+    $itemidfield = '';
+    foreach ($fields as $label => $field) {
+        $labels[$label] = array('label' => $label);
+        if (!empty($field['is_itemid'])) {
+            $itemidfield = $label;
+            // take a wild guess at the parameter name this module expects
+        // TODO: let the module tell us at installation ?
+            $param = 'itemid';
+            if (!empty($field['source']) && preg_match('/_([^_]+)$/',$field['source'],$matches)) {
+                $param = $matches[1];
+            }
+        }
     }
 
     $items = array();
@@ -1825,13 +1848,36 @@ function dynamicdata_adminapi_showlist($args)
             if (!isset($fields) || $fields == false || count($fields) == 0) {
                 continue;
             }
-            $items[] = array('fields' => $fields);
+        // TODO: improve this + SECURITY !!!
+            $options = array();
+            if (!empty($itemidfield) && isset($fields[$itemidfield])) {
+                $options[] = array('title' => xarML('View'),
+                                   'link'  => xarModURL($modname,'user','display',
+                                              array($param => $fields[$itemidfield]['value'],
+                                                    'itemtype' => $itemtype)),
+                                   'join'  => '');
+                $options[] = array('title' => xarML('Edit'),
+                                   'link'  => xarModURL($modname,'admin','modify',
+                                              array($param => $fields[$itemidfield]['value'],
+                                                    'itemtype' => $itemtype)),
+                                   'join'  => '|');
+                $options[] = array('title' => xarML('Delete'),
+                                   'link'  => xarModURL($modname,'admin','delete',
+                                              array($param => $fields[$itemidfield]['value'],
+                                                    'itemtype' => $itemtype)),
+                                   'join'  => '|');
+            }
+            $items[] = array('fields' => $fields, 'options' => $options);
         }
     }
+    // TODO: improve this + SECURITY !!!
+    $newlink = xarModURL($modname,'admin','new',
+                         array('itemtype' => $itemtype));
 
     return xarTplModule('dynamicdata','admin','showlist',
                         array('items' => $items,
                               'labels' => $labels,
+                              'newlink' => $newlink,
                               'layout' => $layout),
                         $template);
 }
