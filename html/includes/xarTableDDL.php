@@ -786,6 +786,11 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
                                   ? 'AUTO_INCREMENT'
                                   : '';
 
+    // Bug #408 - MySQL 4.1 Alpha bug fix reported by matrix9180@deskmod.com (Chad Ingram)
+    if (!empty($this_field['auto_increment'])) {
+        $this_field['default'] = '';
+    }
+
     // Test for PRIMARY KEY
     $this_field['primary_key'] = (isset($parameters['primary_key']) && $parameters['primary_key'] == true)
                                ? true
