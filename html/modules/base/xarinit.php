@@ -403,6 +403,8 @@ function base_init()
         'base_javascriptapi_handlerenderjavascript'
     );
 
+    // TODO: is this is correct place for a default value for a modvar?
+    xarModSetVar('base', 'AlternatePageTemplate', 'homepage');
     
     // Initialisation successful
     return true;

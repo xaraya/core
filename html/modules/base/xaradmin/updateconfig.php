@@ -33,6 +33,8 @@ function base_admin_updateconfig()
     switch ($data['tab']) {
         case 'display':
             if (!xarVarFetch('defaultmodule','str:1:',$defaultModuleName)) return;
+            if (!xarVarFetch('alternatepagetemplate','checkbox',$alternatePageTemplate,false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('alternatepagetemplatename','str',$alternatePageTemplateName,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('defaulttype','str:1:',$defaultModuleType)) return;
             if (!xarVarFetch('defaultfunction','str:1:',$defaultModuleFunction,'main',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('shorturl','checkbox',$enableShortURLs,false,XARVAR_NOT_REQUIRED)) return;
@@ -42,6 +44,8 @@ function base_admin_updateconfig()
             // FIXME: Where has this moved to??? It's not settable now, very inconvenient
             //xarConfigSetVar('Site.BL.CacheTemplates', $cacheTemplates);
             xarConfigSetVar('Site.Core.DefaultModuleName', $defaultModuleName);
+            xarModSetVar('base','UseAlternatePageTemplate', ($alternatePageTemplate ? 1 : 0));
+            xarModSetVar('base','AlternatePageTemplateName', $alternatePageTemplateName);
             xarConfigSetVar('Site.Core.DefaultModuleType', $defaultModuleType);
             xarConfigSetVar('Site.Core.DefaultModuleFunction', $defaultModuleFunction);
             xarConfigSetVar('Site.Core.EnableShortURLsSupport', $enableShortURLs);
