@@ -141,19 +141,19 @@ function xarWebservicesMain()
             $server->ServeRequest();
         }
         break;
-  	case 'flashremoting' :
-      	xarLogMessage("FlashRemoting request");
+      case 'flashremoting' :
+          xarLogMessage("FlashRemoting request");
         if(xarModIsAvailable('flashservices')) {
           $server = xarModAPIFunc('flashservices','user','initflashservices');
           if (is_object($server)) {
-        	  $server->service();
-        	  
+              $server->service();
+              
           } else {
             echo "could not create flashremoting server";
             
           }// if
         }// if
-		    break; 
+            break; 
 
     default:
         if (xarServerGetVar('QUERY_STRING') == 'wsdl') {
