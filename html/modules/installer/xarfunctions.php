@@ -1,13 +1,18 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of this file: John Robeson
-// Purpose of this file: extra functions for the installer
-// ----------------------------------------------------------------------
+
+/**
+ * File: $Id$
+ *
+ * Extra functions for the installer
+ *
+ * @package installer
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ * 
+ * @author John Robeson
+ * @author Marcel van der Boom <marcel@hsdev.com>
+*/
+
 
 function xarInstallConfigSetVar($name, $value)
 {
