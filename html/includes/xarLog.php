@@ -108,6 +108,10 @@ function xarLog__shutdown_handler()
         xarLogMessage("Response was served in $totalTime seconds.");
     }
 
+//During register_shutdown, it's already too late.
+//fwrite presents problems during it.
+//you can't use it with javascript/mozilla loggers...
+//Maybe there should be a xaraya shutdown event?
 /*
      xarLogMessage("xarLog shutdown handler: Ending all logging.");
 

@@ -98,9 +98,6 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
 
     $GLOBALS['xarTpl_additionalStyles'] = '';
 
-    // Initialise the JavaScript array. Start with placeholders for the head and body.
-    $GLOBALS['xarTpl_JavaScript'] = array('head'=>array(), 'body'=>array());
-
     // This is wrong here as well, but it's better at least than in xarMod
     include "includes/xarTheme.php";
     
@@ -355,6 +352,17 @@ function xarTplAddJavaScriptCode($position, $owner, $code)
 function xarTplAddJavaScript($position, $type, $data, $index = '')
 {
     if (empty($position) || empty($type) || empty($data)) {return;}
+
+    //Do lazy initialization of the array. There are instances of the logging system
+    //where we need to use this function before the Template System was initialized
+    //Maybe this can be used with a new shutdown event (not based on the 
+    // php's register_shutdown_function) as at that time it's already too late to be able
+    // to log anything
+    if (!isset($GLOBALS['xarTpl_JavaScript'])) {
+        // Initialise the JavaScript array. Start with placeholders for the head and body.
+        $GLOBALS['xarTpl_JavaScript'] = array('head'=>array(), 'body'=>array());
+    }
+
     if (empty($index)) {
         $GLOBALS['xarTpl_JavaScript'][$position][] = array('type'=>$type, 'data'=>$data);
     } else {
