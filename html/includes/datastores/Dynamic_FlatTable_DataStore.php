@@ -153,6 +153,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
         $query .= " ) VALUES ( ";
         $join = '';
+        $bindvars = array();
         foreach ($fieldlist as $field) {
             // get the value from the corresponding property
             $value = $this->fields[$field]->getValue();
@@ -161,15 +162,12 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
                 continue;
             }
             // TODO: improve this based on static table info
-            if (is_numeric($value)) {
-                $query .= $join . $value;
-            } else {
-                $query .= $join . " ? ";
-            }
+            $query .= $join . " ? ";
+            $bindvars[] = $value;
             $join = ', ';
         }
         $query .= " )";
-        $result = & $dbconn->Execute($query,array($value));
+        $result = & $dbconn->Execute($query,$bindvars);
         if (!$result) return;
 
         // get the real next id from ADODB for this table now
