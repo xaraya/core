@@ -1,15 +1,15 @@
 <?php
 /**
- * File: $Id: s.xarSecurity.php 1.33 03/01/18 11:53:04+01:00 marcel@hsdev.com $
- * 
- * Low-level security access mechanism 
- * 
+ * File: $Id$
+ *
+ * Security Access Mechanism
+ *
  * @package security
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.org
- * @author Jim McDonald
-*/
+ * @author Jim McDonald, Marco Canini <m.canini@libero.it>
+ */
 
 /**
  * Notes on security system
