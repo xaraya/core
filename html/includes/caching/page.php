@@ -303,7 +303,8 @@ function xarPage_httpCacheHeaders($cache_file)
            $xarPage_cacheExpireHeader,
            $xarPage_cacheTime;
 
-    @$mod = filemtime($cache_file);
+    if (!file_exists($cache_file)) { return; }
+    $mod = filemtime($cache_file);
     // doesn't seem to be taken into account ?
     $etag = $xarPage_cacheCode.$mod;
     $match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ?

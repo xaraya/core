@@ -163,7 +163,7 @@ function xarOutputSetCached($cacheKey, $cache_file, $cacheType, $value)
            $xarPage_cacheShowTime,
            ${'xar' . $cacheType . '_cacheCode'};
 
-    $tmp_cache_file = tempnam($xarOutput_cacheCollection,
+    $tmp_cache_file = tempnam($xarOutput_cacheCollection . '/' . strtolower($cacheType),
                               "$cacheKey-${'xar' . $cacheType . '_cacheCode'}");
     $fp = @fopen($tmp_cache_file, "w");
     if (!empty($fp)) {
