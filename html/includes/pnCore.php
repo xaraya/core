@@ -139,10 +139,9 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
         pnDB_init($systemArgs);
     }
 
-    // Start Event Messagging System
-    // FIXME: what are we gonna do here marco ... Evt_init doesn't take an array
-    pnEvt_init($whatToLoad);
-    //pnEvt_init($systemArgs);
+    // Start Event Messaging System
+    $systemArgs = array('loadLevel' => $whatToLoad);
+    pnEvt_init($systemArgs);
 
     pnEvt_registerEvent('PostBodyStart');
     pnEvt_registerEvent('PreBodyEnd');

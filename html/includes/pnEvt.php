@@ -31,7 +31,15 @@
  * event := owner + '_' + name
  * where owner is a system short identifier and name is the proper event name
  */
-function pnEvt_init($loadLevel)
+
+/**
+ * Start Event Messaging System
+ * 
+ * @access private
+ * @param args['loadLevel']
+ * returns bool
+ */
+function pnEvt_init($args)
 {
     global $pnEvt_subscribed, $pnEvt_knownEvents;
 
@@ -42,6 +50,15 @@ function pnEvt_init($loadLevel)
     return true;
 }
 
+/**
+ * Subscribe to an event
+ *
+ * @access public
+ * @param eventName
+ * @param modName
+ * @param modType
+ * @returns
+ */
 function pnEvtSubscribe($eventName, $modName, $modType)
 {
     global $pnEvt_subscribed;
@@ -55,6 +72,15 @@ function pnEvtSubscribe($eventName, $modName, $modType)
     $pnEvt_subscribed[$eventName][] = array($modName, $modType);
 }
 
+/**
+ * Unsubscribe from an event
+ *
+ * @access public
+ * @param eventName
+ * @param modName
+ * @param modType
+ * @returns
+ */
 function pnEvtUnsubscribe($eventName, $modName, $modType)
 {
     global $pnEvt_subscribed;
@@ -70,7 +96,6 @@ function pnEvtUnsubscribe($eventName, $modName, $modType)
 }
 
 // PROTECTED FUNCTIONS
-
 function pnEvt_fire($eventName, $value = NULL)
 {
     global $pnEvt_subscribed;
@@ -100,7 +125,7 @@ function pnEvt_fire($eventName, $value = NULL)
             }
         }
     }
-    
+
 }
 
 function pnEvt_notify($modName, $modType, $eventName, $value)
