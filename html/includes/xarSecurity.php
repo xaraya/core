@@ -24,6 +24,8 @@
  *
  */
 
+    // FIXME: Can we reverse this? (i.e. the module loading the files from here?)
+    //        said another way, can we move the two files to /includes (partially preferably)
     include_once 'modules/privileges/xarprivileges.php';
     include_once 'modules/roles/xarroles.php';
     $prefix = xarDBGetSiteTablePrefix();

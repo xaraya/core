@@ -151,7 +151,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
     include 'includes/xarException.php';
     $systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
-    xarCES_init($systemArgs, $whatToLoad);
     xarError_init($systemArgs, $whatToLoad);
 
     /**
