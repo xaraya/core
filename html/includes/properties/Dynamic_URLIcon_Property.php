@@ -37,7 +37,7 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-        if (!empty($value)) {
+        if (!empty($value) && $value != 'http://') {
             $this->value = $value;
         } else {
             $this->value = '';
@@ -51,20 +51,18 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-        if (!empty($value)) {
-            $link = $value;
-        } else {
-            $link = '';
+        if (empty($value)) {
+            $value = 'http://';
         }
         return '<input type="text"'.
                ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
-               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
+               ' value="'. xarVarPrepForDisplay($value) . '"' .
                ' size="'. (!empty($size) ? $size : $this->size) . '"' .
                ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
                (!empty($id) ? ' id="'.$id.'"' : '') .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
-               (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
+               (!empty($value) && $value != 'http://' ? ' [ <a href="'.xarVarPrepForDisplay($value).'" target="preview">'.xarML('check').'</a> ]' : '') .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
