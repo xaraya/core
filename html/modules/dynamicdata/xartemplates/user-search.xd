@@ -1,0 +1,29 @@
+<xar:foreach in="$items" value="$item">
+<h2><xar:ml><xar:mlstring>Search #(1)</xar:mlstring><xar:mlvar>#$item['label']#</xar:mlvar></xar:ml></h2>
+<p></p>
+<xar:if condition="!empty($item['result'])">
+#$item['result']#
+<xar:else/>
+<table border="0" cellpadding="2" cellspacing="0">
+<tr>
+    <td valign="top"><xar:mlstring>Search on</xar:mlstring>:</td>
+    <td>
+<xar:if condition="!empty($item['fields']) and count($item['fields']) gt 0">
+<xar:set name="$i">-1</xar:set>
+<xar:foreach in="$item['fields']" key="$name" value="$field">
+    <xar:if condition="$i++ and $i % 4 eq 0">
+</td><td valign="top">
+    </xar:if>
+    <xar:if condition="!empty($field['checked'])">
+        <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check[#$field['id']#]" value="1" checked="checked" /> <label for="dd_check[#$field['id']#]">#$field['label']#</label><br />
+    <xar:else />
+        <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check[#$field['id']#]" value="1" /> <label for="dd_check[#$field['id']#]">#$field['label']#</label><br />
+    </xar:if>
+</xar:foreach>
+</xar:if>
+    </td>
+</tr>
+</table>
+</xar:if>
+</xar:foreach>
+

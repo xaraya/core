@@ -452,6 +452,11 @@ function dynamicdata_init()
     }
 */
 
+    if (!xarModRegisterHook('item', 'search', 'GUI',
+                           'dynamicdata', 'user', 'search')) {
+        return false;
+    }
+
     /**
      * Register BL tags
      */
@@ -712,6 +717,11 @@ function dynamicdata_delete()
         xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
     }
 */
+
+    if (!xarModUnregisterHook('item', 'search', 'GUI',
+                             'dynamicdata', 'user', 'search')) {
+        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
+    }
 
     /**
      * Unregister BL tags
