@@ -131,7 +131,7 @@ function xarTplGetThemeName()
 function xarTplSetThemeName($themeName)
 {
     assert('$themeName != "" && $themeName{0} != "/"');
-    if (!file_exists($GLOBALS['xarTpl_themesBaseDir'].'/'.$themeName)) {     
+    if (!file_exists($GLOBALS['xarTpl_themesBaseDir'].'/'.$themeName)) {
         return false;
     }
 
@@ -154,7 +154,7 @@ function xarTplSetThemeDir($themeDir)
     if (!file_exists($GLOBALS['xarTpl_themesBaseDir'].'/'.$themeDir)) {
         return false;
     }
-    
+
     __setThemeNameAndDir($themeDir);
     return true;
 }
@@ -949,8 +949,12 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
     if ($needCompilation) {
         $blCompiler = xarTpl__getCompilerInstance();
+        $lasterror = xarCurrentError();
         $templateCode = $blCompiler->compileFile($sourceFileName);
-        if (!isset($templateCode) || xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+        // TODO (random) make this more robust
+        // we check the error stack here to make sure no new errors happened during compile
+        // but we do not check the core stack
+        if (!isset($templateCode) || xarCurrentError() != $lasterror) {
             return; // exception! throw back
         }
         if ($GLOBALS['xarTpl_cacheTemplates']) {
@@ -970,13 +974,13 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
             fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
             fclose($fd);
-            
-	    // Commented this out for now, a double entry should not occur anyway, eventually this could even be an assert.
+
+        // Commented this out for now, a double entry should not occur anyway, eventually this could even be an assert.
             //if (!in_array($entry, $file)) {
             //   $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
             //   fwrite($fd, $entry);
             //   fclose($fd);
-            //} 
+            //}
         } else {
             return xarTpl__execute($templateCode, $tplData, $sourceFileName);
         }
@@ -1189,14 +1193,14 @@ function xarTpl__loadFromFile($sourceFileName)
             $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
             fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
             fclose($fd);
-            
+
             // commented this out for now, a double entry should never occure, eventuall this mayb even become an assert
             // for the details see bug #1600
             //if (!in_array($entry, $file)) {
             //    $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
             //    fwrite($fd, $entry);
             //    fclose($fd);
-            //} 
+            //}
         }
         return $templateCode;
     }
