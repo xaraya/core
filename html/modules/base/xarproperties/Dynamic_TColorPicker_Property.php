@@ -24,7 +24,7 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
     var $maxlength = 7;
     var $min = 7;
 
-    function validateValue($value = null)
+    function validateValue($value = NULL)
     {
         if (!isset($value)) {
             $value = $this->value;
@@ -94,9 +94,7 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        $template="tcolorpicker";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
-        //return $output;
+        return xarTplProperty('base', 'tcolorpicker', 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -109,8 +107,8 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
         } else {
             $data['value'] = xarVarPrepHTMLDisplay($this->value);
         }
-         $template="tcolorpicker";
-         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+
+         return xarTplProperty('base', 'tcolorpicker', 'showoutput', $data);
     }
 
 
@@ -132,7 +130,7 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
                               'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'base',
                             'aliases'        => '',
                             'args'           => serialize($args)
                             // ...

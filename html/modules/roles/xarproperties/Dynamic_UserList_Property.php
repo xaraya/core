@@ -175,10 +175,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
        */
 
-        $template="userlist";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
-
-       // return $out;
+        return xarTplProperty('roles', 'userlist', 'showinput', $data);
     }
 
     // TODO: format the output according to the 'showlist'.
@@ -215,9 +212,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         }
         */
 
-        $template="userlist";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
-
+        return xarTplProperty('roles', 'userlist', 'showoutput', $data);
     }
 
     function parseValidation($validation = '')
@@ -268,7 +263,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
                           'validation' => '',
                           'source'     => '',
                           'dependancies' => '',
-                          'requiresmodule' => '',
+                          'requiresmodule' => 'roles',
                           'aliases' => '',
                           'args'         => '',
                           // ...

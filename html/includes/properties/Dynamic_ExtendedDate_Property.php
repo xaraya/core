@@ -7,7 +7,7 @@
  * @author Roger Keays <roger.keays@ninthave.net>
  */
 
-include_once "includes/properties/Dynamic_Calendar_Property.php";
+include_once "modules/base/xarproperties/Dynamic_Calendar_Property.php";
 
 /**
  * The extended date property converts the value provided by the javascript
@@ -105,7 +105,7 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
                               'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => '',
+                              'requiresmodule' => 'base',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...

@@ -148,9 +148,7 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
         $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
-        $template="timezone";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
-        //return $out;
+        return xarTplProperty('base', 'timezone', 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -210,8 +208,7 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         // old timezone output format
         $data['option']['name'] = $value;
 
-        $template = "timezone";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        return xarTplProperty('base', 'timezone', 'showoutput', $data);
     }
 
     function getOldOptions()
@@ -287,7 +284,7 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
                               'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'base',
                             'aliases' => '',
                             'args'         => '',
                             // ...

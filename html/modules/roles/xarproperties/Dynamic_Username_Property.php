@@ -83,9 +83,7 @@ class Dynamic_Username_Property extends Dynamic_Property
         $data['id']   = $id;
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        $template="username";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
-
+        return xarTplProperty('roles', 'username', 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -118,8 +116,7 @@ class Dynamic_Username_Property extends Dynamic_Property
 */
         }
 
-        $template="username";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        return xarTplProperty('roles', 'username', 'showoutput', $data);
     }
 
 
@@ -139,7 +136,7 @@ class Dynamic_Username_Property extends Dynamic_Property
                               'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'roles',
                             'aliases' => '',
                             'args'         => '',
                             // ...

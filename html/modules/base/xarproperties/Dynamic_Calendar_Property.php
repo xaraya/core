@@ -108,8 +108,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $data['value']      = $value;
         $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        $template="calendar";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        return xarTplProperty('base', 'calendar', 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -140,8 +139,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $data['value'] = $value;
         // $data['returnvalue']= xarLocaleFormatDate($dateformat, $value);
 
-        $template="calendar";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        return xarTplProperty('base', 'calendar', 'showoutput', $data);
     }
 
     /**
@@ -161,7 +159,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
                               'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => '',
+                              'requiresmodule' => 'base',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...
@@ -196,7 +194,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         if (!isset($template)) {
             $template = 'calendar';
         }
-        return xarTplModule('dynamicdata', 'admin', 'validation', $data, $template);
+        return xarTplProperty('base', 'calendar', 'validation', $data, $template);
     }
 
     function updateValidation($args = array())

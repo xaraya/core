@@ -166,9 +166,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
         $data['tabindex']= !empty($tabindex) ? $tabindex : 0;
         $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
-        $template="grouplist";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
-
+        return xarTplProperty('roles', 'grouplist', 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -207,9 +205,8 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
             return xarVarPrepForDisplay($groupname);
         }
         */
-    $template="grouplist";
-    return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
-
+        
+        return xarTplProperty('roles', 'grouplist', 'showoutput', $data);
     }
 
 
@@ -230,7 +227,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
                               'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => '',
+                              'requiresmodule' => 'roles',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...

@@ -57,7 +57,7 @@ class Dynamic_Module_Property extends Dynamic_Select_Property
                               'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'modules',
                             'aliases'        => '',
                             'args'           => serialize($args)
                             // ...
