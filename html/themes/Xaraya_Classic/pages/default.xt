@@ -199,4 +199,3 @@
             <xar:base-render-javascript position="body" />
         </body>
     </html>
-</xar:blocklayout>

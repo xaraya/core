@@ -105,6 +105,11 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
     // This is wrong here as well, but it's better at least than in xarMod
     include "includes/xarTheme.php";
 
+    // NOTE: starting from 0.9.11 we attempt to link core css to any css-aware xhtml theme
+    // immediate goal is elimination of inline styles, consistency and other core UI related issues
+    // no need to init anything, the css tags api is handling everything css related now.. 
+    // DONE: removed all but legacy css handling from core to themes module
+    
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarTemplate__shutdown_handler');
     return true;
@@ -318,86 +323,34 @@ function xarTplGetPageTitle()
 }
 
 /**
- * Add stylesheet link for a module
+ * Add stylesheet link for a module (after 0912 this function is just legacy really)
  *
- * @access public
- * @global array xarTpl_additionalStyles string
- * @param  string $modName
- * @param  string $styleName
- * @param  string $fileExt
- * @param  string $themeFolder ('' or path no leading or trailing /, )- 
- * used to set specific folder within theme directory only
- * @todo   rethink this, it's messy
+ * @access public (deprecated - all CSS issues are normally handled by the css classlib via bl tags)
+ * @param  string $modname
+ * @param  string $filename
+ * @param  string $fileext
+ * @param  string $themefolder ('' or path no leading or trailing /, )
+ * @media  string $media (multiple values supported as a comma separated list "screen, print")
+ * @todo   can deprecate sometime soon actually, with advent of template tags
  * @return bool
  */
-function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css', $themeFolder='')
+function xarTplAddStyleLink($modname = null, $filename = null, $fileext = null, $themefolder = null, $media = null)
 { 
-    if (empty($styleName) || (empty($modName) && empty($themeFolder))) return;
-    $modulePath = "/$styleName.$fileExt";
     
-    if (!empty($modName)){
-        $info = xarMod_getBaseInfo($modName);
-        if (!isset($info)) return;        
-        $modulePath = 'modules/' . $info['directory'] . '/xarstyles/' . "$styleName.$fileExt";
-    }
-
-    $themePath = (!empty($themeFolder)) ? xarTplGetThemeDir ()."/".$themeFolder."/$styleName.$fileExt" : xarTplGetThemeDir()."/".$modulePath; 
+    $args = compact('modname', 'filename', 'fileext', 'themefolder', 'media');
     
-    if (file_exists($themePath)) {
-        $fileName = $themePath;
-    } else {        
-        $fileName = $modulePath;
-        if (!file_exists($fileName)) {        
-            return false;
-        }    
-    }    
-    $url = xarServerGetBaseURL().$fileName;
-    // FIXME: this doesn't belong here, it's hardcoded and not output agnostic
-    $GLOBALS['xarTpl_additionalStyles'][$modName.':'.$styleName.':'.$fileExt] = $url;
-    return true;
-}
-
-/**
- * Get CSS urls requested by modules
- *
- * @access public
- * @global array  xarTpl_additionalStyles
- * @param  bool $getCoreCSS
- * @todo   lots to abstract here
- * @return string
- */
-function xarTplGetStyles($getCoreCSS = true)
-{
-    assert('is_array($GLOBALS[\'xarTpl_additionalStyles\'])');
-    $styles = '';
-    // todo: decide how to present CSS, based on doctype 
-    foreach($GLOBALS['xarTpl_additionalStyles'] as $key => $style){
-        list($modName, $styleName, $fileExt) = explode(':', $key, 3);
-        $styles .= '<link rel="stylesheet" href="' . $style . '" type="text/'.$fileExt.'" />'."\n";
-    }
-
-    // load dtd-based core css last, if dtd has been set and $getCoreCSS is true
-    if (empty($GLOBALS['xarTpl_doctype']) || !$getCoreCSS) return $styles;
+    // make sure we can use css objects
+    xarModFunc('themes', 'user', 'includemodulecss');
+    // using css class library now
+    $cssObj = xarModuleCSS();
     
-    $modulePath = 'modules/base/xarstyles/xarcore-' .xarTplGetDoctype().'.css';
-
-    $themePath = xarTplGetThemeDir().'/modules/base/xarstyles/xarcore-'.xarTplGetDoctype().'.css';
-
-    if (file_exists($themePath)) {
-        $fileName = $themePath;
+    // easy? just straight mapping to the class methods
+    if($fileext == 'php'){
+        return $cssObj->link_dynamic($args);
     } else {
-        $fileName = $modulePath;
-        if (!file_exists($fileName)) {
-            return $styles;
-        }    
-    }    
-    $styles .= '<link rel="stylesheet" href="'.xarServerGetBaseURL().$fileName.'" type="text/css" />'."\n";
-
-
-
-    return $styles;
+        return $cssObj->link_static($args);
+    }
 }
-
 
 /**
  * Add JavaScript code to template output **deprecated**
@@ -940,7 +893,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
 
     $tpl = (object) null; // Create an object to hold the 'specials'
     $tpl->pageTitle = xarTplGetPageTitle();
-    $tpl->additionalStyles = $GLOBALS['xarTpl_additionalStyles'];
+    // $tpl->additionalStyles = $GLOBALS['xarTpl_additionalStyles'];
     $tplData = array(
         'tpl'                      => $tpl,
         '_bl_mainModuleOutput'     => $mainModuleOutput,

@@ -46,8 +46,8 @@ function modules_admin_list()
     // select vars for drop-down menus
     $data['style']['plain']                         = xarML('Plain');
     $data['style']['icons']                         = xarML('Icons');
-    $data['style']['compacta']                      = xarML('Compact-A');
-    $data['style']['compactb']                      = xarML('Compact-B');
+//    $data['style']['compacta']                      = xarML('Compact-A');
+//    $data['style']['compactb']                      = xarML('Compact-B');
 
     $data['filter'][XARMOD_STATE_ANY]               = xarML('All Modules');
     $data['filter'][XARMOD_STATE_INSTALLED]         = xarML('All Installed');
