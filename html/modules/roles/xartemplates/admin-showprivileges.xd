@@ -29,8 +29,16 @@
 
 <table border="0" width="100%" cellpadding="2">
     <tr>
-        <td colspan="7">
+        <td colspan="1">
             <b><xar:mlstring>Inherited</xar:mlstring></b>            
+        </td>
+        <td colspan="6" align="right">
+            <b>
+            <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$roleid#">#$pname#</a>
+			</b> 
+			&nbsp;&nbsp;
+			<a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$roleid#"
+			 title="Test this User's Privileges"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>
         </td>
     </tr>
 	<xar:if condition="count($inherited) eq 0">
@@ -97,8 +105,11 @@
         </td>
     </tr>
     <tr>
-        <td colspan="7">
+        <td colspan="1">
             <b><xar:mlstring>Assigned</xar:mlstring></b>            
+        </td>
+        <td colspan="6">
+            (<xar:mlstring>only relevant privileges are shown</xar:mlstring>)           
         </td>
     </tr>
 	<xar:if condition="count($privileges) eq 0">
