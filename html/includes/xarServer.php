@@ -546,8 +546,8 @@ function xarResponseRedirect($redirectURL)
 
     if (headers_sent() == true) return false;
 
-    // MrB: I don't think we need this
-    //$GLOBALS['xarResponse_redirectCalled'] = true;
+    // MrB: We only do this for pn Legacy, consider removing it
+    $GLOBALS['xarResponse_redirectCalled'] = true;
 
 
     // Remove &amp; entites to prevent redirect breakage
@@ -586,6 +586,7 @@ function xarResponseRedirect($redirectURL)
  * @author Marco Canini
  * @access public
  * @global xarResponse_redirectCalled bool
+ @ @deprec 2004-01-10
  * @return bool
  */
 function xarResponseIsRedirected()
