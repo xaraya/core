@@ -222,7 +222,7 @@
                         &nbsp; 
                     </td>
                     <td>
-                        <input type="submit" value="Submit"  />
+                        <input type="submit" value="#xarML('Submit')#"  />
                     </td>
                     <td class="adminpanels-rednote">
                         &nbsp; 
@@ -271,7 +271,7 @@
                         &nbsp; 
                     </td>
                     <td>
-                        <input type="submit" value="Submit"  />
+                        <input type="submit" value="#xarML('Submit')#"  />
                     </td>
                     <td class="adminpanels-rednote">
                         &nbsp; 
