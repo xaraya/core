@@ -26,7 +26,6 @@ function mail_admin_sendtest()
 {
     // Get parameters from whatever input we need
     if (!xarVarFetch('message', 'str:1:', $message)) return;
-    if (!xarVarFetch('htmlmessage', 'str::', $htmlmessage)) return;
     if (!xarVarFetch('subject', 'str:1', $subject)) return;
     if (!xarVarFetch('email', 'str:1', $email, '')) return;
     if (!xarVarFetch('name', 'str:1', $name, '')) return;
@@ -51,6 +50,8 @@ function mail_admin_sendtest()
     } else {
         $when = 0;
     }
+
+    $htmlmessage = $message;
 
     if (!xarModAPIFunc('mail',
             'admin',
