@@ -183,7 +183,6 @@ function base_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
     
-    $id_allowedvar = $dbconn->GenId($allowedVarsTable);
     // Insert Allowed Vars
     $htmltags = array('!--',
                   'a',
@@ -273,6 +272,7 @@ function base_init()
 	          'var');
 
     foreach ($htmltags as $htmltag) {
+        $id_allowedvar = $dbconn->GenId($allowedVarsTable);
         $query = "INSERT INTO $allowedVarsTable VALUES ($id_allowedvar,'$htmltag','html')";
         $result =& $dbconn->Execute($query);
         if (!$result) return;
@@ -288,6 +288,7 @@ function base_init()
                            'cum');
 
     foreach ($censoredWords as $censoredWord) {
+        $id_allowedvar = $dbconn->GenId($allowedVarsTable);
         $query = "INSERT INTO $allowedVarsTable VALUES ($id_allowedvar,'$censoredWord','censored')";
         $result =& $dbconn->Execute($query);
         if (!$result) return;
