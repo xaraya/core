@@ -1,7 +1,7 @@
 <h4>Component - #$component#</h4> 
 <p>
     <xar:mlstring>
-        The Theme CSS deals with the styles defined and incuded by the user themes.
+        The Theme CSS tools deal with the styles defined and included by the user themes.
     </xar:mlstring>
 </p>
 <xar:if condition="$configurable">

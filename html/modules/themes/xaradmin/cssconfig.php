@@ -82,9 +82,6 @@ function themes_admin_cssconfig()
         case "themes":
             break;
         default:
-            
-            
-            
             // reset tags to defaults
             if (!xarVarFetch('resetcsstags', 'str::', $resetcsstags, '', XARVAR_NOT_REQUIRED)) return;
             

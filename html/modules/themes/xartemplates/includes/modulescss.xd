@@ -1,7 +1,7 @@
 <h4>Component - #$component#</h4> 
 <p>
     <xar:mlstring>
-        The Modules CSS deals with the styles defined and incuded by the Xaraya Modules.
+        The Modules CSS tools deal with the styles defined and included by the Xaraya Modules.
     </xar:mlstring>
 </p>
 <xar:if condition="$configurable">
