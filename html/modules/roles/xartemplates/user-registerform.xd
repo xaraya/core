@@ -2,6 +2,7 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Registration</xar:mlstring></h2>
 <div style="margin: auto;">
 <form action="#xarModURL('roles', 'user', 'register')#" method="post" enctype="application/x-www-form-urlencoded">
+<div>
 <table border="0" cellpadding="2" cellspacing="0">
 	<tr>
 		<td><label for="username"><xar:mlstring>Username</xar:mlstring>:</label></td>
@@ -102,6 +103,7 @@
 <input type="hidden" name="authid" id="authid" value="#$authid#" />
 <input type="hidden" name="phase" id="phase" value="checkregistration" />
 
+</div>
 </form>
 </div>
 </div>

@@ -2,6 +2,7 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Delete</xar:mlstring></h2>
 <div style="text-align: center; margin: auto;">
 <form method="post" action="&xar-modurl-roles-admin-deleterole;" method="post" enctype="application/x-www-form-urlencoded" />
+   <div>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
 	<input type="hidden" name="uid" id="uid" value="#$uid#" />
 	<input type="hidden" name="confirmation" id="confirmation" value="1" />
@@ -16,6 +17,7 @@
 	<input type="submit" value="#$deletelabel#" align="middle" tabindex="1" /><br /><br />
 	
 	<a href="&xar-modurl-roles-admin-newrole;"><xar:mlstring>Cancel the deletion</xar:mlstring></a>
+    </div>
 </form>        
 </div>
 </div>

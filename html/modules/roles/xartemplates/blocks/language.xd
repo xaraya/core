@@ -1,4 +1,5 @@
 <form action="#$form_action#" method="post">
+   <div>
     <input type="hidden" name="return_url" value="#$return_url#" />
     <select name="#$form_picker_name#">
         <xar:loop name="$locales">
@@ -10,4 +11,5 @@
         </xar:loop>
     </select>
     <input type="submit" name="change_language" value="#$languagelabel#" />
+   </div>
 </form>

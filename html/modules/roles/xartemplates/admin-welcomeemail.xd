@@ -6,6 +6,7 @@
 	<xar:mlstring>The welcome email is plain text</xar:mlstring>
 	<br /><br />
 	<form action="#xarModURL('roles', 'admin', 'welcomeemail')#" method="post" enctype="application/x-www-form-urlencoded">
+             <div>
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<input type="hidden" name="phase" id="phase" value="update" />
 		<table>
@@ -21,6 +22,7 @@
 		<textarea name="welcomeemail" id="welcomeemail" wrap="soft" rows="20" cols="80" tabindex="1">#$welcomeemail#</textarea>
 		<br /><br />
 		<input type="submit" value="#$submitlabel#" align="middle" tabindex="2" />
+            </div>
 	</form>
 	<xar:mlstring>The following variables will be replaced in the text with specific information:</xar:mlstring>
 	<br /><br />

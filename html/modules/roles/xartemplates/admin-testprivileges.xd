@@ -104,6 +104,7 @@
 	<div style="text-align: center;">#$resultdisplay#</div><br />
 </xar:if>
 <form action="&xar-modurl-roles-admin-testprivileges;" method="post" enctype="application/x-www-form-urlencoded">
+     <div>
 	<table border="0" cellpadding="2" cellspacing="0">
 		<tr>
 			<td><label for="pmodule"><xar:mlstring>Registered Masks For Module</xar:mlstring>:</label></td>
@@ -121,6 +122,7 @@
 		</tr>
 	</table>
 	<input type="hidden" name="uid" id="uid" value="#$uid#" />
+    </div>
 </form>
 	<xar:if condition="count($masks) eq 0">
 		<h3><xar:mlstring>No masks registered for this module.</xar:mlstring></h3>

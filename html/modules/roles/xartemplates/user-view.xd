@@ -12,6 +12,7 @@
 </div>
 
 <form method="post" action="#xarModURL('roles','user','view')#">
+<div>
 <table border="0" cellspacing="2" cellpadding="2">
 <tr>
 <td>
@@ -26,6 +27,7 @@
 </td>
 </tr>
 </table>
+</div>
 </form>
 	
 <table width="100%" border="0" cellspacing="2" cellpadding="2">

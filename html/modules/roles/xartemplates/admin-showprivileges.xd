@@ -147,6 +147,7 @@
 			'#$pname#'</h3>
 
 	<form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
+             <div>
 		<table border="0" cellpadding="2" cellspacing="0">
 			<tr>
 				<td>
@@ -167,6 +168,7 @@
 		</table>			
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
+            </div>
 	</form>
 
 </div>

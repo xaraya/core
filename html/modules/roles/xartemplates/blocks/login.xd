@@ -1,4 +1,5 @@
 <form action="&xar-modurl-roles-user-login;" method="post" enctype="application/x-www-form-urlencoded">
+<div>
     <table border="0" width="100%">
         <tr>
             <td>
@@ -38,4 +39,5 @@
 			<a href="#xarModURL('roles', 'user', 'register', array('phase' => 'checkage'))#"><xar:mlstring>Register here</xar:mlstring></a>.
 		</xar:if></p>
 	</xar:if>
+</div>
 </form>

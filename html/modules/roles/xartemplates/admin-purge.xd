@@ -2,6 +2,7 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Purge Users by Status</xar:mlstring></h2><br />
 <div style="margin: auto;">
 <form method="post" action="#xarModURL('roles', 'admin', 'purge')#" method="post" enctype="application/x-www-form-urlencoded" />
+   <div>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="confirmation" id="confirmation" value="1" />
 
@@ -17,6 +18,7 @@
     <input type="submit" value="#$submitlabel#" align="middle" /><br /><br />
     
     <a href="#xarModURL('roles', 'admin', 'viewroles')#"><xar:mlstring>Cancel purge process.</xar:mlstring></a>
+  </div>
 </form>        
 </div>
 </div>

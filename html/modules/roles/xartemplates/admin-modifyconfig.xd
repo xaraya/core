@@ -2,6 +2,7 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Configuration</xar:mlstring></h2>
 <div style="margin: auto;">
 <form method="post" action="#xarModURL('roles', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded" />
+  <div>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="phase" id="phase" value="update" />
 	<h4><xar:mlstring>Page Layout</xar:mlstring></h4>
@@ -163,6 +164,7 @@
 		#$hooks#
 	<br /><br />
 	<input type="submit" value="#$updatelabel#" align="middle" />
+    </div>
 </form>
 </div>
 </div>

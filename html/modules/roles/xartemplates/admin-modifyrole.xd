@@ -2,6 +2,7 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Modify Role</xar:mlstring></h2>
 <div style="text-align: center; margin: auto;">
 	<form name="modifyrole" action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
+             <div>
 		<input type="hidden" name="uid" id="uid" value="#$uid#" />
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
         <div style="text-align: left;">
@@ -137,6 +138,7 @@
 			</xar:if>
 		</table>
         </div>
+        </div>
 	</form>
 </div>
 <h2>				<xar:mlstring>Add</xar:mlstring> 
@@ -148,6 +150,7 @@
 				'#$pname#' <xar:mlstring>To A Group</xar:mlstring></h2>
 <xar:if condition="$uid gt 4">
 	<form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
+             <div>
 		<input type="hidden" name="uid" id="uid" value="#$uid#" />
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<table border="0" cellpadding="2" cellspacing="0">
@@ -169,6 +172,7 @@
                 </td>
 			</tr>
 		</table>
+             </div>
 	</form>
 </xar:if>
 <h2><xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
