@@ -947,7 +947,6 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
 function xarModPrivateLoad($modName, $modType)
 {
     static $loadedModuleCache = array();
-
     if (empty($modName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
@@ -985,7 +984,16 @@ function xarModPrivateLoad($modName, $modType)
     // <nuncanada> We need some way to find it out.
     if (file_exists($fileName)) {
         // Load file
-        include_once($fileName);
+        ob_start();
+        $r = include_once($fileName);
+        $error_msg = strip_tags(ob_get_contents());
+        ob_end_clean();
+
+        if (empty($r) || !$r) {
+            $msg = xarML("Could not load file: [#(1)].\n\n Error Caught:\n #(2)", $fileName, $error_msg);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
+            return;
+        }
 
         // Make sure we access the case with lower case key
         $loadedModuleCache[strtolower("$modName$modType")] = true;
@@ -1007,7 +1015,16 @@ function xarModPrivateLoad($modName, $modType)
     // FIXME: <marco> Remove it when the old language packs are gone
     $fileName = "modules/$modDir/xarlang/eng/$modType.php";
     if (file_exists($fileName)) {
-        include_once($fileName);
+        ob_start();
+        $r = include_once($fileName);
+        $error_msg = strip_tags(ob_get_contents());
+        ob_end_clean();
+
+        if (empty($r) || !$r) {
+            $msg = xarML("Could not load file: [#(1)].\n\n Error Caught:\n #(2)", $fileName, $error_msg);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
+            return;
+        }
     }
 
     // Load database info
@@ -1117,6 +1134,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     // Build function name and call function
     $modFunc = "{$modName}_{$modType}_{$funcName}";
     $found = true;
+    $isLoaded = true;
     if (!function_exists($modFunc)) {
         // attempt to load the module's api
         xarModLoad($modName,$modType);
@@ -1130,7 +1148,17 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
             if (!file_exists($funcFile)) {
                 $found = false;
             } else {
-                require_once $funcFile;
+
+                ob_start();
+                $r = require_once $funcFile;
+                $error_msg = strip_tags(ob_get_contents());
+                ob_end_clean();
+
+                if (empty($r) || !$r) {
+                    $msg = xarML("Could not load function file: [#(1)].\n\n Error Caught:\n #(2)", $funcFile, $error_msg);
+                    $isLoaded = false;
+                }
+
                 if (!function_exists($modFunc)) {
                     $found = false;
                 }
@@ -1138,7 +1166,11 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
         }
     }
     if (!$found) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $modFunc);
+        // if it's loaded but not found, then set the error message to that
+        if (isLoaded) {
+            $msg = xarML('Module function #(1) doesn\'t exist.', $modAPIFunc);
+        }
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
         return;
     }
 
@@ -1195,6 +1227,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
     $funcName = strtolower($funcName);
     $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
     $found = true;
+    $isLoaded = true;
     if (!function_exists($modAPIFunc)) {
         // attempt to load the module's api
         xarModAPILoad($modName,$modType);
@@ -1208,7 +1241,16 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
             if (!file_exists($funcFile)) {
                 $found = false;
             } else {
-                require_once $funcFile;
+                ob_start();
+                $r = require_once $funcFile;
+                $error_msg = strip_tags(ob_get_contents());
+                ob_end_clean();
+
+                if (empty($r) || !$r) {
+                    $msg = xarML("Could not load function file: [#(1)].\n\n Error Caught:\n #(2)", $funcFile, $error_msg);
+                    $isLoaded = false;
+                }
+
                 if (!function_exists($modAPIFunc)) {
                     $found = false;
                 }
@@ -1217,9 +1259,13 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
     }
     if (!$found) {
         if ($throwException) {
+            if (isLoaded) {
+                $msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
+            }
             // MrB: When there is a parse error in the api file we sometimes end up
             // here, the error is never shown !!!! (xmlrpc for example)
-            $msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
+            // TODO: the isloaded stuff -should- fix the problem above
+            //       someone needs to double check this to be sure
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
                             new SystemException($msg));
         }
