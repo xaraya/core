@@ -203,11 +203,10 @@ function blocks_init()
                                                              'null'        => false,
                                                              'default'     => '0'),
                                    'xar_user'    => array('type'        => 'integer',
-                                                             'null'        => true,
+                                                             'null'        => false,
                                                              'default'     => '0'),
                                    'xar_expire'    => array('type'        => 'integer',
-                                                             'null'        => false,
-                                                             'default'     => '0')));
+                                                             'null'        => true)));
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
