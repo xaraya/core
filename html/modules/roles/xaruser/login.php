@@ -35,7 +35,7 @@ function roles_user_login()
     $lockouttries =xarModGetVar('roles','lockouttries') ? xarModGetVar('roles','lockouttries') : 3;
 
     if ((time() < $unlockTime) && (xarModGetVar('roles','uselockout')==true)) {
-        $msg = xarML('Your account has been locked for '.$lockouttime.' minutes.');
+        $msg = xarML('Your account has been locked for #(1) minutes.', $lockouttime);
         xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
         return;
     }
@@ -231,7 +231,7 @@ function roles_user_login()
                     // set the time for fifteen minutes from now
                     xarSessionSetVar('roles.login.lockedout', time() + (60 * $lockouttime));
                     xarSessionSetVar('roles.login.attempts', 0);
-                    $msg = xarML('Problem logging in: Invalid username or password.  Your account has been locked for '.$lockouttime .' minutes.');
+                    $msg = xarML('Problem logging in: Invalid username or password.  Your account has been locked for #(1) minutes.', $lockouttime);
                     xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
                     return;
                 } else{
