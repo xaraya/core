@@ -218,7 +218,12 @@ document.forms['privilegeform'].submit();}
                     <td>
                     <label for="pinstance0"><xar:mlstring>Current instances</xar:mlstring></label> <input type="text" name="pinstance0" id="pinstance0" value="#$curinstance#" />
                     <br /><br />
-                    <xar:mlstring>Modify the <a href="$target" title="Use Wizard">instances that apply</a> for this privilege</xar:mlstring>
+				    <xar:set name="$targetlinktitle"><xar:mlstring>Use Wizard</xar:mlstring></xar:set>
+				    <xar:set name="$targetlink">"href=\"$target\" title=\"$targetlinktitle\""</xar:set>
+				    <xar:ml>
+				        <xar:mlstring>Modify the <a #(1)>instances that apply</a> for this privilege</xar:mlstring>
+				        <xar:mlvar>#$targetlink#</xar:mlvar>
+				    </xar:ml>
                     </td>
                 </tr>
             </table>
