@@ -391,17 +391,18 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
 }
 
 /**
- * Turns block output into a template.
+ * Renders a block content through a block template.
  *
  * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access public
  * @param modName string the module name
- * @param blockName string the block name
+ * @param blockType string the block type (xar_block_types.xar_type)
  * @param tplData array arguments for the template
  * @param templateName string the specific template to call
+ * @param templateBase string the base name of the template (defaults to block type)
  * @return string xarTpl__executeFromFile($sourceFileName, $tplData)
  */
-function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = NULL)
+function xarTplBlock($modName, $blockType, $tplData = array(), $templateName = NULL, $templateBase = NULL)
 {
 
     if (!empty($templateName)) {
@@ -409,16 +410,38 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
     }
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) return; // throw back
+    if (!isset($modBaseInfo)) {
+        // module not known
+        return;
+    }
     $modOsDir = $modBaseInfo['osdirectory'];
 
-    // Try theme template
-    $sourceFileName = xarTplGetThemeDir() . "/modules/$modOsDir/blocks/$blockName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
-    if (!file_exists($sourceFileName)) {
-        // Use internal template
-        $blockFileName = $blockName . (empty($templateName) ? '' : "-$templateName");
-        $sourceFileName = "modules/$modOsDir/xartemplates/blocks/$blockFileName" . '.xd';
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates/blocks', $blockFileName) === NULL) return;
+    // The template base name can be over-ridden within a block.
+    if (empty($templateBase)) {
+        $templateBase = $blockType;
+    }
+    $templateBase = xarVarPrepForOS($templateBase);
+
+    // Template search order:
+    // 1. {theme-module}/blocks/{template-base}-{instance-name}.xt
+    // 2. {theme-module}/blocks/{template-base}.xt
+    // 3. {internal-module}/blocks/{template-base}.xt
+
+    $path = xarTplGetThemeDir() . "/modules/$modOsDir/blocks/";
+    if (!empty($templateName) && file_exists($path . "$templateBase-$templateName.xt")) {
+        // Theme template for template base and instance name or admin over-ride.
+        $sourceFileName = $path . "$templateBase-$templateName.xt";
+    } elseif (file_exists($path . "$templateBase.xt")) {
+        // Theme template for template base only.
+        $sourceFileName = $path . "$templateBase.xt";
+    } else {
+        // Internal template for blocktype (note: block name and admin over-ride is
+        // not considered here, as over-rides should always go into a theme.
+        // TODO: check this assumption, as it is a change from previous functionality.
+        $sourceFileName = "modules/$modOsDir/xartemplates/blocks/$templateBase.xd";
+        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates/blocks', $blockType) === NULL) {
+            return;
+        }
     }
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
@@ -806,14 +829,18 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
  */
 function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
 {
-    // FIXME: <mrb> should we revert to default here?
-    if (empty($templateName)) {
-        $templateName = 'default';
+    $templateName = xarVarPrepForOS($templateName);
+    $themeDir = xarTplGetThemeDir();
+
+    if (!empty($templateName) && file_exists("$themeDir/blocks/$templateName.xt")) {
+        $sourceFileName = "$themeDir/blocks/$templateName.xt";
+    } else {
+        // We must fall back to the default, as the template passed in could be the group
+        // name, allowing an optional template to be utilised.
+        $sourceFileName = "$themeDir/blocks/default.xt";
     }
 
-    $templateName = xarVarPrepForOS($templateName);
-
-    $sourceFileName = xarTplGetThemeDir() . "/blocks/$templateName.xt";
+    // TODO: fallback to some internal default block box template.
 
     return xarTpl__executeFromFile($sourceFileName, $blockInfo);
 }
