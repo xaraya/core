@@ -218,6 +218,7 @@ function xarServerGetBaseURL()
  * @param args array additional parameters to be added to/replaced in the URL (e.g. theme, ...)
  * @return string current URL
  * @todo cfr. BaseURI() for other possible ways, or try PHP_SELF
+ * @todo two extra params: disable XML encoding flag and #-anchor support
  */
 function xarServerGetCurrentURL($args = array())
 {
@@ -265,13 +266,13 @@ function xarServerGetCurrentURL($args = array())
                     $find = $matches[2];
                     // ... replace it in-line if it's not empty
                     if (!empty($v)) {
-                        $request = preg_replace("/(&|\?)$find/","$1$k=$v",$request);
+                        $request = preg_replace("/(&|\?)".preg_quote($find)."/","$1$k=$v",$request);
 
                     // ... or remove it otherwise
                     } elseif ($matches[1] == '?') {
-                        $request = preg_replace("/\?$find(&|)/",'?',$request);
+                        $request = preg_replace("/\?".preg_quote($find)."(&|)/",'?',$request);
                     } else {
-                        $request = preg_replace("/&$find/",'',$request);
+                        $request = str_replace("&$find",'',$request);
                     }
                 } elseif (!empty($v)) {
                     $request .= "$k=$v&";
@@ -282,7 +283,7 @@ function xarServerGetCurrentURL($args = array())
         $request = substr($request, 0, -1);
     }
 
-    if ($GLOBALS['xarServer_generateXMLURLs']) $request = htmlspecialchars($request);
+    if ($GLOBALS['xarServer_generateXMLURLs']) {$request = htmlspecialchars($request);}
 
     return $baseurl . $request;
 }

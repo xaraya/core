@@ -32,8 +32,7 @@
 // $page_text = $curl->exec();
 // if ($curl->errno <> 0) {...raise error...}
 
-class xarCurl
-{
+class xarCurl {
     // The curl object.
     // Extra methods and properties can be accessed through this property.
     var $curl;
@@ -413,7 +412,7 @@ class xarCurl
     * decode a string that is encoded w/ "chunked' transfer encoding
     * as defined in RFC2068 19.4.6
     *
-    * This method extracted from ?
+    * This method extracted from 'nusoap'.
     *
     * @param    string $buffer
     * @returns	string
