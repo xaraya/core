@@ -16,7 +16,7 @@
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
-$step = xarVarCleanFromInput('step');
+if(!xarVarFetch('step','int', $step, NULL, XARVAR_NOT_REQUIRED)) {return;}
 
 // pre-fill the module name (if any) for hooks
 xarRequestGetInfo();
