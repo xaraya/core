@@ -259,7 +259,7 @@ function xarOutputCleanCached($cacheType, $cacheKey = '')
 {
     global $xarOutput_cacheCollection, ${'xar' . $cacheType . '_cacheTime'};
 
-    $touch_file = $xarOutput_cacheCollection . '/' . 'cache.touch';
+    $touch_file = $xarOutput_cacheCollection . '/cache.' . strtolower($cacheType) . 'level';
 
     if (${'xar' . $cacheType . '_cacheTime'} == 0 ||
         (file_exists($touch_file) &&
