@@ -528,9 +528,10 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         if (xarVarIsCached('Theme.GetVarsByName', $cacheName)) return;
         break;
     case 'modvar':
-    default:
         if (xarVarIsCached('Mod.GetVarsByModule', $modName)) return;
         if (xarVarIsCached('Mod.GetVarsByName', $cacheName)) return;
+        break;
+    default:
         break;
     }
     
