@@ -1610,8 +1610,8 @@ function drawindent() {
         }
 
         if (count($instance1) != count($instance2)) {
-echo "Comparing: " . $comparing . $this->getName() . " implies " . $mask->getName();
-return false;
+//echo "Comparing: " . $comparing . $this->getName() . " implies " . $mask->getName();
+//return false;
             $msg = xarML('Mask and privilege do not have the same instances');
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException($msg));
