@@ -1044,7 +1044,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         }
 
         list($args['prevurl'],
-             $args['nexturl']) = $this->getPager();
+             $args['nexturl'],
+             $args['sorturl']) = $this->getPager();
 
         return xarTplModule('dynamicdata','admin','objectlist',
                             $args,
@@ -1106,7 +1107,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         }
 
         list($args['prevurl'],
-             $args['nexturl']) = $this->getPager();
+             $args['nexturl'],
+             $args['sorturl']) = $this->getPager();
 
         return xarTplModule('dynamicdata','user','objectview',
                             $args,
@@ -1147,6 +1149,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
     {
         $prevurl = '';
         $nexturl = '';
+        $sorturl = '';
 
         if (empty($this->startnum)) {
             $this->startnum = 1;
@@ -1154,12 +1157,29 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
     // TODO: count items before calling getItems() if we want some better pager
 
-        if (empty($this->numitems) || ( (count($this->items) < $this->numitems) && $this->startnum == 1 )) {
-            return array($prevurl,$nexturl);
-        }
-
         // Get current URL
         $currenturl = xarServerGetCurrentURL();
+
+    // TODO: clean up generation of sort URL
+
+        // get rid of current startnum and sort params
+        $sorturl = $currenturl;
+        $sorturl = preg_replace('/&startnum=\d+/','',$sorturl);
+        $sorturl = preg_replace('/\?startnum=\d+&/','?',$sorturl);
+        $sorturl = preg_replace('/\?startnum=\d+$/','',$sorturl);
+        $sorturl = preg_replace('/&sort=\w+/','',$sorturl);
+        $sorturl = preg_replace('/\?sort=\w+&/','?',$sorturl);
+        $sorturl = preg_replace('/\?sort=\w+$/','',$sorturl);
+        // add sort param at the end of the URL
+        if (preg_match('/\?/',$sorturl)) {
+            $sorturl = $sorturl . '&sort';
+        } else {
+            $sorturl = $sorturl . '?sort';
+        }
+
+        if (empty($this->numitems) || ( (count($this->items) < $this->numitems) && $this->startnum == 1 )) {
+            return array($prevurl,$nexturl,$sorturl);
+        }
 
         if (preg_match('/startnum=\d+/',$currenturl)) {
             if (count($this->items) == $this->numitems) {
@@ -1189,7 +1209,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                 $prevurl = $currenturl . '?startnum=' . $prev;
             }
         }
-        return array($prevurl,$nexturl);
+        return array($prevurl,$nexturl,$sorturl);
     }
 
 }

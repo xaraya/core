@@ -2,7 +2,7 @@
     <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
         <xar:foreach in="$properties" key="$name" value="$property">
-            <th align="center"><xar:data-label property="$properties[$name]" /></th>
+            <th align="center"><a href="#$sorturl#=#$name#"><xar:data-label property="$properties[$name]" /></a></th>
         </xar:foreach>
         <th align="center"><xar:mlstring>Options</xar:mlstring></th>
     </tr>

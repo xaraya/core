@@ -16,6 +16,9 @@
            #$table# 
        </th>
        <th colspan="3" align="right">
+           <a href="#xarModURL('dynamicdata','util','meta',array('table' => $table, 'export' => 1))#">
+           <xar:mlstring>Export XML</xar:mlstring>
+           </a> |
            <a href="#xarModURL('dynamicdata','util','relations',array('table' => $table))#">
            <xar:mlstring>Add Relation</xar:mlstring>
            </a>

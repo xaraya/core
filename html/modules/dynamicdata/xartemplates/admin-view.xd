@@ -8,7 +8,7 @@
 <h2><xar:mlstring>View</xar:mlstring> #$label# </h2>
 
 <!-- this does all the hard work :) -->
-<xar:data-list module="$modid" itemtype="$itemtype" param="$param" numitems="30" startnum="$startnum" />
+<xar:data-list module="$modid" itemtype="$itemtype" param="$param" numitems="30" startnum="$startnum" sort="$sort" />
 
 
 <xar:if condition="!empty($modlist) and count($modlist) gt 0">
