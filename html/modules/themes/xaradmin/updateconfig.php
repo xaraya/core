@@ -1,4 +1,4 @@
-z<?php
+<?php
 
 /**
  * Update the configuration parameters of the
