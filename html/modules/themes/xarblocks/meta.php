@@ -55,28 +55,37 @@ function themes_metablock_display($blockinfo)
 
         // The following is from PostNuke's Header.php.  I believe the original function
         // Was written by Tim Litwiller.
-
-        // TODO Strip words that are used more than once.
-        // TODO Strip all html.
-        $htmlless = check_html($incoming, $strip ='nohtml');
-        $symbolLess = trim(ereg_replace('("|\?|!|:|\.|\(|\)|;|\\\\)+', ' ', $htmlless));
-
+        
+        // Strip -all- html
+        $htmlless = strip_tags($incoming);
+        
+        // Strip anything that isn't alphanumeric or _ - 
+        $symbolLess = trim(ereg_replace('([^a-zA-Z0-9_-])+',' ',$htmlless));
+        
+        // Remove duplicate words
         $keywords = explode(" ", strtolower($symbolLess));
         $keywords = array_unique($keywords);
+        
+        // Remove words that are < four characters in length
+        foreach($keywords as $word) {
+            if (strlen($word) >= 4 && !empty($word)) {
+                $list[] = $word;
+            }
+        } $keywords = $list;
+        
+        // Sort the list of words in Ascending order Alphabetically
+        sort($keywords, SORT_STRING);
+        
+        // Merge the list of words into a single, comma delimited string of keywords
         $text = implode(",",$keywords);
-        /*
-        $htmlless = check_html($incoming, $strip ='nohtml');
-        $symbolLess = trim(ereg_replace('("|\?|!|:|\.|\(|\)|;|\\\\)+', ' ', $htmlless));
-        $keywords = ereg_replace('( |'.CHR(10).'|'.CHR(13).')+', ',', $symbolLess);
-        $text = ereg_replace(",+", ",",$keywords);
-        */
+    
     } else {
-        $text = 1;
+        $text = '';
     }
     
     $blockinfo['content'] = $text;
     return $blockinfo;
-
+ 
 }
 
 /**
@@ -123,47 +132,6 @@ function themes_metablock_update($blockinfo)
     $blockinfo['content'] = serialize($vars);
 
     return $blockinfo;
-}
-
-function check_html ($str, $strip = '') {
-    
-    // The core of this code has been lifted from phpslash
-    // which is licenced under the GPL.
-      
-    if ($strip == "nohtml")
-        $AllowableHTML=array('');
-    $str = stripslashes($str);
-    $str = eregi_replace("<[[:space:]]*([^>]*)[[:space:]]*>",
-                         '<\\1>', $str);
-    // Delete all spaces from html tags .
-    $str = eregi_replace("<a[^>]*href[[:space:]]*=[[:space:]]*\"?[[:space:]]*([^\" >]*)[[:space:]]*\"?[^>]*>",
-                         '<a href="\\1">', $str); # "
-    // Delete all attribs from Anchor, except an href, double quoted.
-    $tmp = "";
-    while (ereg("<(/?[[:alpha:]]*)[[:space:]]*([^>]*)>",$str,$reg)) {
-        $i = strpos($str,$reg[0]);
-        $l = strlen($reg[0]);
-        if ($reg[1][0] == "/") $tag = strtolower(substr($reg[1],1));
-        else $tag = strtolower($reg[1]);
-        if (isset($AllowableHTML[$tag])) {
-            if ($a=$AllowableHTML[$tag])
-            if ($reg[1][0] == "/") $tag = "</$tag>";
-            elseif (($a == 1) || ($reg[2] == "")) $tag = "<$tag>";
-            else {
-              # Place here the double quote fix function.
-              $attrb_list=delQuotes($reg[2]);
-              $tag = "<$tag" . $attrb_list . ">";
-            } # Attribs in tag allowed
-        } else $tag = "";
-        $tmp .= substr($str,0,$i) . $tag;
-        $str = substr($str,$i+$l);
-    }
-    $str = $tmp . $str;
-    return $str;
-    exit;
-    // Squash PHP tags unconditionally
-    $str = ereg_replace("<\?","",$str);
-    return $str;
 }
 
 ?>
