@@ -28,22 +28,17 @@ function roles_admin_showusers()
                                                        'type'   => 1));
     }
     xarVarSetCached('roles', 'defaultgroupuid', $defaultgroupuid);
+    $defaultstyle = xarSessionGetVar('rolesdisplay');
+    if (isset($defaultstyle)) $defaultstyle = 0;
 
     if (!xarVarFetch('uid', 'int:0:', $uid, $defaultgroupuid['uid'], XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('startnum', 'int:1:', $startnum, 1, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('state', 'int:0:', $data['state'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('selstyle', 'isset', $data['selstyle'], xarSessionGetVar('rolesdisplay'), XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('selstyle', 'isset', $data['selstyle'], $defaultstyle, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('invalid', 'str:0:', $data['invalid'], NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('order', 'str:0:', $data['order'], 'name', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('search', 'str:0:', $data['search'], NULL, XARVAR_NOT_REQUIRED)) return;
     
-    /*if (!isset($data['selstyle'])) {
-        if (isset($userdisplay)) {
-            $data['selstyle'] = $userdisplay;
-        } else {
-            $data['selstyle'] ="tabbed";
-        }
-    }*/
     xarSessionSetVar('rolesdisplay', $data['selstyle']);
 
     //Create the role tree
