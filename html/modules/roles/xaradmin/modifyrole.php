@@ -2,8 +2,8 @@
 
 /**
  * modifyrole - modify role details
- * 
- * @author Marc Lutolf <marcinmilan@xaraya.com> 
+ *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 function roles_admin_modifyrole()
 {
@@ -13,19 +13,19 @@ function roles_admin_modifyrole()
     if (!xarVarFetch('puname', 'str:1:35:', $uname, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pemail', 'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ppass', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_NOT_REQUIRED)) return; 
+    if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_NOT_REQUIRED)) return;
     // Security Check
-    if (!xarSecurityCheck('EditRole')) return; 
+    if (!xarSecurityCheck('EditRole')) return;
     // Call the Roles class and get the role to modify
     $roles = new xarRoles();
-    $role = $roles->getRole($uid); 
+    $role = $roles->getRole($uid);
     // get the array of parents of this role
     // need to display this in the template
     $parents = array();
     foreach ($role->getParents() as $parent) {
         $parents[] = array('parentid' => $parent->getID(),
             'parentname' => $parent->getName());
-    } 
+    }
     // remove duplicate entries from the list of groups
     // get the array of all roles, minus the current one
     // need to display this in the template
@@ -37,38 +37,38 @@ function roles_admin_modifyrole()
             $names[] = $nam;
             $groups[] = array('duid' => $temp['uid'],
                 'dname' => $temp['name']);
-        } 
-    } 
+        }
+    }
     // Load Template
-    if (isset($name)) {
+    if (!empty($name)) {
         $data['pname'] = $name;
     } else {
         $data['pname'] = $role->getName();
-    } 
+    }
 
-    if (isset($type)) {
+    if (!empty($type)) {
         $data['ptype'] = $type;
     } else {
         $data['ptype'] = $role->getType();
-    } 
+    }
 
-    if (isset($uname)) {
+    if (!empty($uname)) {
         $data['puname'] = $uname;
     } else {
         $data['puname'] = $role->getUser();
-    } 
+    }
 
-    if (isset($email)) {
+    if (!empty($email)) {
         $data['pemail'] = $email;
     } else {
         $data['pemail'] = $role->getEmail();
-    } 
+    }
 
-    if (isset($pstate)) {
+    if (!empty($pstate)) {
         $data['pstate'] = $pstate;
     } else {
         $data['pstate'] = $role->getState();
-    } 
+    }
 
     include_once 'modules/roles/xartreerenderer.php';
     $renderer = new xarTreeRenderer();
@@ -79,6 +79,6 @@ function roles_admin_modifyrole()
     $data['authid'] = xarSecGenAuthKey();
     $data['tree'] = $renderer->drawtree($renderer->maketree());
     return $data;
-} 
+}
 
 ?>
