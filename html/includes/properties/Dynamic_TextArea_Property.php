@@ -60,7 +60,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         $data['tabindex'] = !empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         $data['rows']     = !empty($rows) ? $rows : $this->rows;
-        $data['cols']     = !empty($cols) ? $size : $this->cols; 
+        $data['cols']     = !empty($cols) ? $cols : $this->cols; 
         $data['wrap']     = !empty($wrap) ? $wrap : $this->wrap;
 
         $template="textarea";
