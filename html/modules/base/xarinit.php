@@ -68,7 +68,7 @@ function base_init()
     // xar_decimals,
 
     $query = xarDBCreateTable($tablesTable,$fields);
-    
+
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -367,9 +367,11 @@ function base_init()
 
     // Install themes module
     $seqId = $dbconn->GenId($modulesTable);
+    // FIXME: the theme version should not be hard-coded here.
+    // Fetch it from the modules/themes/xarversion.php script
     $query = "INSERT INTO $modulesTable
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES (?, 'themes', 70, 'themes', '1.3.0', 1, 'Core Utility', 'Global', 1, 0)";
+     ) VALUES (?, 'themes', 70, 'themes', '1.3.1', 1, 'Core Utility', 'Global', 1, 0)";
     $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 

@@ -543,7 +543,7 @@ function installer_admin_create_administrator()
     if (!$modifiedrole) {return;}
 
     // Register Block types
-    $blocks = array('finclude','html','menu','php','text');
+    $blocks = array('finclude','html','menu','php','text','content');
 
     foreach ($blocks as $block) {
         if (!xarModAPIFunc('blocks', 'admin', 'register_block_type', array('modName'  => 'base', 'blockType'=> $block))) return;
