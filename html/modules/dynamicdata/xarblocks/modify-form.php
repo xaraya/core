@@ -22,8 +22,8 @@ function dynamicdata_formblock_modify($blockinfo)
     $vars = @unserialize($blockinfo['content']);
 
     // Defaults
-    if (empty($vars['numitems'])) {
-        $vars['numitems'] = 5;
+    if (empty($vars['objectid'])) {
+        $vars['objectid'] = 0;
     }
 
     $vars['blockid'] = $blockinfo['bid'];
@@ -37,7 +37,7 @@ function dynamicdata_formblock_modify($blockinfo)
  */
 function dynamicdata_formblock_update($blockinfo)
 {
-    if (!xarVarFetch('numitems', 'int:1:100', $vars['numitems'], 5, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('objectid', 'id', $vars['objectid'], 0, XARVAR_NOT_REQUIRED)) {return;}
 
     $blockinfo['content'] = serialize($vars);
 

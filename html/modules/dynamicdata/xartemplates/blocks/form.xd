@@ -1,9 +1,12 @@
-<xar:foreach in="$items" value="$item">
-    &bull;
-    <xar:if condition="empty($item['link'])">
-        #$item['title']#
-    <xar:else />
-        <a href="#$item['link']#">#$item['title']#</a>
-    </xar:if>
-    <br />
-</xar:foreach>
+<form method="post" action="#xarModURL('dynamicdata','admin','create')#">
+<table>
+    <xar:data-form module="$moduleid" itemtype="$itemtype" itemid="0" />
+    <tr><td align="center" colspan="2"><input type="submit" value="#xarML('Create Item')#" /></td></tr>
+</table>
+<input type="hidden" name="modid" id="modid" value="#$moduleid#" />
+<input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
+<input type="hidden" name="itemid" id="itemid" value="0" />
+<input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#" />
+<input type="hidden" name="return_url" id="return_url" value="#xarServerGetCurrentURL()#" />
+</form>
+

@@ -41,62 +41,20 @@ function dynamicdata_formblock_info()
 function dynamicdata_formblock_display($blockinfo)
 {
     // Security check
-    if(!xarSecurityCheck('ReadDynamicDataBlock',1,'Block',"$blockinfo[title]:All:All")) return;
+    if(!xarSecurityCheck('ReadDynamicDataBlock',0,'Block',"$blockinfo[title]:All:All")) return;
 
     // Get variables from content block
     $vars = @unserialize($blockinfo['content']);
 
-    // Defaults
-    if (empty($vars['numitems'])) {
-        $vars['numitems'] = 5;
-    }
-
-    // Database information
-    xarModDBInfoLoad('dynamicdata');
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-    $dynamicdata = $xartable['dynamic_data'];
-
-    // Query
-    $sql = "SELECT xar_dd_id,
-                   xar_dd_value
-            FROM $dynamicdata
-            ORDER by xar_dd_value";
-    $result = $dbconn->SelectLimit($sql, $vars['numitems']);
-
-    if ($dbconn->ErrorNo() != 0) {
-        return;
-    }
-
-    if ($result->EOF) {
-        return;
-    }
-    $items = array();
-    // Display each item, privileges permitting
-    for (; !$result->EOF; $result->MoveNext()) {
-        list($itemid, $name) = $result->fields;
-        $item = array();
-
-        if(!xarSecurityCheck('ViewDynamicDataBlocks',1,'Block',"$name:All:$itemid")) {
-            if(!xarSecurityCheck('ReadDynamicDataBlock',1,'Block',"$name:All:$itemid")) {
-                $item['link'] = xarModURL('dynamicdata',
-                                          'user',
-                                          'display',
-                                          array('itemid' => $itemid));
-                $item['title'] = $name;
-                $items[] = $item;
-            } else {
-                $item['link'] = '';
-                $item['title'] = $name;
-                $items[] = $item;
-            }
-        }
-    }
-
     // Populate block info and pass to theme
-    if (count($items) > 0) {
-        $blockinfo['content'] = array('items' => $items);
-        return $blockinfo;
+    if (!empty($vars['objectid'])) {
+        $objectinfo = xarModAPIFunc('dynamicdata','user','getobjectinfo',
+                                    $vars);
+        if (!empty($objectinfo)) {
+            if (!xarSecurityCheck('AddDynamicDataItem',0,'Item',"$objectinfo[moduleid]:$objectinfo[itemtype]:All")) return;
+            $blockinfo['content'] = $objectinfo;
+            return $blockinfo;
+        }
     }
 }
 
