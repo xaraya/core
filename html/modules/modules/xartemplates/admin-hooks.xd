@@ -30,17 +30,17 @@
                         <input type="checkbox" name="hooked_#$loop:hookedmodules:item['name']#[0]" id="hooked_#$loop:hookedmodules:item['name']#[0]" value="1" style="vertical-align: middle;" />
                     </xar:if>
                     <xar:if condition="count($loop:hookedmodules:item['itemtypes']) gt 0">
-                        <label for="hooked_#$loop:hookedmodules['name']#[0]"><xar:mlstring>all</xar:mlstring> #$loop:hookedmodules:item['name']# : #$loop:hookedmodules:item['description']# </label><br />
+                        <label for="hooked_#$loop:hookedmodules:item['name']#[0]"><xar:mlstring>all</xar:mlstring> #$loop:hookedmodules:item['name']# : #$loop:hookedmodules:item['description']# </label><br />
                         <div style="padding-left: 2em;">
                         <xar:mlstring>or for individual item types</xar:mlstring> :<br />
-                        <xar:foreach in="$loop:hookedmodules:item['itemtypes']" key="$loop:hookedmodules:item['typeid']" value="$loop:hookedmodules:item['itemtype']">
+                        <xar:foreach in="$itemtypes" key="$typeid" value="$itemtype">
                             &nbsp;&nbsp;
-                            <xar:if condition="!empty($loop:hookedmodules:item['checked'][$loop:hookedmodules:item['typeid']])">
-                                <input type="checkbox" name="hooked_#$loop:hookedmodules:item['name']#[#$loop:hookedmodules:item['typeid']#]" id="hooked_#$loop:hookedmodules:item['name']#[#$loop:hookedmodules:item['typeid']#]" value="1" checked="checked" style="vertical-align: middle;" />
+                            <xar:if condition="!empty($checked[$typeid])">
+                                <input type="checkbox" name="hooked_#$name#[#$typeid#]" id="hooked_#$name#[#$typeid#]" value="1" checked="checked" style="vertical-align: middle;" />
                             <xar:else />
-                                <input type="checkbox" name="hooked_#$loop:hookedmodules:item['name']#[#$loop:hookedmodules:item['typeid']#]" id="hooked_#$loop:hookedmodules:item['name']#[#$loop:hookedmodules:item['typeid']#]" value="1" style="vertical-align: middle;" />
+                                <input type="checkbox" name="hooked_#$name#[#$typeid#]" id="hooked_#$name#[#$typeid#]" value="1" style="vertical-align: middle;" />
                             </xar:if>
-                            <label for="hooked_#$loop:hookedmodules:item['name']#[#$loop:hookedmodules:item['typeid']#]">#$loop:hookedmodules:item['itemtype']['label']#</label><br />
+                            <label for="hooked_#$name#[#$typeid#]">#$itemtype['label']#</label><br />
                         </xar:foreach>
                         </div>
                     <xar:else />
