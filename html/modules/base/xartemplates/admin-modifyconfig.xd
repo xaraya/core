@@ -5,27 +5,27 @@
     <input type="hidden" name="authid" value="&xar-var-authid;" />
 	<h4><xar:mlstring>Website Display Configuration</xar:mlstring></h4>
 	<p><xar:mlstring>Default Module</xar:mlstring>:&nbsp;&nbsp;
-	<select name="startpage" id="startpage" size="1">
+	<select name="defaultmodule" id="defaultmodule" size="1">
 	<xar:loop name="$mods">
 		<xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleName ') eq $displayname">
 			<option value="&xar-var-displayname;" selected="selected">&xar-var-displayname;</option>
 		<xar:else />
 			<option value="&xar-var-displayname;">&xar-var-displayname;</option>
-		</xar:if>		
+		</xar:if>
 	</xar:loop>
 	</select></p>
 	<p><xar:mlstring>Default Module Type</xar:mlstring>:
-	<select name="starttype" id="starttype" size="1">
+	<select name="defaulttype" id="defaulttype" size="1">
 		<xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleType') eq 'admin'">
 			<option value="admin" selected="selected"><xar:mlstring>Admin</xar:mlstring></option>
 			<option value="user"><xar:mlstring>User</xar:mlstring></option>
 		<xar:else />
 			<option value="admin"><xar:mlstring>Admin</xar:mlstring></option>
 			<option value="user" selected="selected"><xar:mlstring>User</xar:mlstring></option>
-		</xar:if>		
+		</xar:if>
 	</select></p>
 	<p><xar:mlstring>Default Module Function</xar:mlstring>:
-	<input type="text" name="startfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" size="30" maxlength="100"></p>
+	<input type="text" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" size="30" maxlength="100"></p>
 	<p><xar:mlstring>Default Theme Directory</xar:mlstring>:
 	<input type="text" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" size="30" maxlength="100"></p>
 	<p><label for="shorturl"><xar:mlstring>Enable Short URL Support</xar:mlstring></label>:
@@ -55,7 +55,8 @@
 		<p><xar:mlstring>Session Duration (In Days)</xar:mlstring>:
 		<input type="text" name="sessionduration" value="#xarConfigGetVar('Site.Session.Duration')#" size="5" maxlength="3"></p>
 	</xar:if>
-	<p><xar:mlstring>Session Iactivity Time Out</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="sessiontimeout" value="#xarConfigGetVar('Site.Session.InactivityTimeout')#" size="5" maxlength="3"></p>
+	<p><xar:mlstring>Session Iactivity Time Out</xar:mlstring>:&nbsp;&nbsp;
+    <input type="text" name="sessiontimeout" value="#xarConfigGetVar('Site.Session.InactivityTimeout')#" size="5" maxlength="3"></p>
 	<p><input type="submit" value="<xar:mlstring>Update Base Configuration</xar:mlstring>" align="middle" /></p>
 </form>
 </div>

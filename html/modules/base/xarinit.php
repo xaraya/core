@@ -201,9 +201,9 @@ function base_init()
 
     // Dummy logger
     // THESE VARIABLES AREN"T USED ANYWHERE YET.. DON"T BE FOOLED! :)
-    xarConfigSetVar('Site.Log.LoggerName', 'dummy');
-    xarConfigSetVar('Site.Log.LoggerArgs', '');
-    xarConfigSetVar('Site.Log.LogLevel', 1 /*XARLOG_LEVEL_DEBUG*/);
+    //xarConfigSetVar('Site.Log.LoggerName', 'dummy');
+    //xarConfigSetVar('Site.Log.LoggerArgs', '');
+    //xarConfigSetVar('Site.Log.LogLevel', 1 /*XARLOG_LEVEL_DEBUG*/);
 
     $templateTagsTable = $systemPrefix . '_template_tags';
     /*********************************************************************
