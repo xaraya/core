@@ -1,0 +1,30 @@
+
+<!-- common user menu for this module - remove link to the current function -->
+
+<table border="0" width="100%">
+
+    <!-- the variables used in this menu come from example_user_menu() -->
+
+    <tr><th align="center">&pnt-var-menutitle;</th></tr>
+    <tr><td>
+        <table border="0" width="100%"><tr align="center" valign="middle">
+
+        <!-- a link to a particular menu item -->
+
+        <td><a href="&pnt-var-menulink_view;">&pnt-var-menulabel_view;</a></td>
+
+        <!-- more menu items come here... -->
+
+        <!-- Note : you can also specify simple links directly with blocklayout
+             template tags : e.g. &pnt-modurl-example-user-view; -->
+        </tr></table>
+    </td></tr>
+</table>
+<br />
+
+<!-- the specific template for the current function comes here -->
+
+<!-- some variable filled in by the function using this template -->
+
+<center><strong> &pnt-var-welcome; </strong></center>
+

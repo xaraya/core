@@ -1,0 +1,45 @@
+<table width="100%" border="0" cellspacing="1" cellpadding="8">
+    <tr>
+        <th colspan="3" align="center">Example Administration</th>
+    </tr>
+    <tr>
+<!-- TODO : waiting for pnt:ml* stuff to work again -->
+        <td><a href="&pnt-modurl-example-admin-new;"><?php echo _NEWEXAMPLE ?></a></td>
+        <td><a href="&pnt-modurl-example-admin-view;"><?php echo _VIEWEXAMPLE ?></a></td>
+        <td><a href="&pnt-modurl-example-admin-modifyconfig;"><?php echo _EDITEXAMPLECONFIG ?></a></td>
+    </tr>
+</table>
+<br />
+
+<table width="100%" border="0" cellspacing="1" cellpadding="8">
+<!--
+    // Start form - note the use of pnModURL() to create the recipient URL of
+    // this form.  All URLs should be generated through pnModURL() to ensure
+    // compatibility with future versions of PostNuke
+-->
+<form method="post" action="&pnt-modurl-example-admin-update;">
+<!--
+    // Add an authorisation ID - this adds a hidden field in the form that
+    // contains an authorisation ID.  The authorisation ID is very important in
+    // preventing certain attacks on the website
+-->
+    <input type="hidden" name="authid" value="&pnt-var-authid;" />
+    <input type="hidden" name="exid" value="&pnt-var-item.exid;" />
+
+<tr><td colspan="2">
+&pnt-var-hooks;
+</td></tr>
+
+<tr><td>&pnt-var-namelabel;</td>
+<td><input type="text" name="name" size=32 maxlength=32 value="&pnt-var-item.name;"></td></tr>
+
+<tr><td>&pnt-var-numberlabel;</td>
+<td><input type="text" name="number" size=5 maxlength=5 value="&pnt-var-item.number;"></td></tr>
+
+<tr><td colspan="2" align="center">
+    <input type="submit" value="&pnt-var-updatebutton;"></td></tr>
+</form>
+
+</table>
+<br />
+

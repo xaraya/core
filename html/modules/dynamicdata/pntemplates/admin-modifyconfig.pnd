@@ -1,0 +1,73 @@
+<table border="0" width="100%" cellspacing="1" cellpadding="8">
+    <tr>
+        <th align="center">&pnt-var-menutitle;<br/>&pnt-var-module;</th>
+    </tr>
+</table>
+<br />
+
+// TODO: very much under construction, obviously :-)
+
+<table width="100%" border="0" cellspacing="0" cellpadding="4">
+<form method="post" action="&pnt-modurl-dynamicdata-admin-updateconfig;">
+    <input type="hidden" name="authid" value="&pnt-var-authid;" />
+    <input type="hidden" name="modid" value="&pnt-var-modid;" />
+    <input type="hidden" name="itemtype" value="&pnt-var-itemtype;" />
+
+    <tr>
+       <td><strong>&pnt-var-labels.id;</strong></td>
+       <td><strong>&pnt-var-labels.label;</strong></td>
+       <td><strong>&pnt-var-labels.type;</strong></td>
+       <td><strong>&pnt-var-labels.default;</strong></td>
+       <td><strong>&pnt-var-labels.validation;</strong></td>
+    </tr>
+
+<pnt:loop name="fields">
+    <tr align="left" valign="middle">
+        <td>&pnt-var-id;</td>
+        <td><input type="text" name="dd_label[&pnt-var-id;]" size="15" value="&pnt-var-label;"></td>
+        <td><select name="dd_type[&pnt-var-id;]">
+                <pnt:if condition="$type eq 1">
+                    <option value="1" selected>option 1
+                <pnt:else />
+                    <option value="1">option 1
+                </pnt:if>
+                <pnt:if condition="$type eq 2">
+                    <option value="2" selected>option 2
+                <pnt:else />
+                    <option value="2">option 2
+                </pnt:if>
+                <pnt:if condition="$type eq 3">
+                    <option value="3" selected>option 3
+                <pnt:else />
+                    <option value="3">option 3
+                </pnt:if>
+            </select>
+        </td>
+        <td><input type="text" name="dd_default[&pnt-var-id;]" size="15" value="&pnt-var-default;"></td>
+        <td><input type="text" name="dd_validation[&pnt-var-id;]" size="15" value="&pnt-var-validation;"></td>
+    </tr>
+</pnt:loop>
+
+    <tr align="left" valign="middle">
+        <td>&pnt-var-labels.new;</td>
+        <td><input type="text" name="dd_label[0]" size="15"></td>
+        <td><select name="dd_type[0]">
+                <option value="1">option 1
+                <option value="2">option 2
+                <option value="3">option 3
+            </select>
+        </td>
+        <td><input type="text" name="dd_default[0]" size="15"></td>
+        <td><input type="text" name="dd_validation[0]" size="15"></td>
+    </tr>
+
+    <tr>
+        <td colspan="5" align="center">
+           <input type="submit" value="&pnt-var-updatebutton;">
+        </td>
+    </tr>
+</form>
+
+</table>
+<br />
+ 

@@ -1,0 +1,65 @@
+
+<!-- common admin menu for this module - remove link to the current function -->
+
+<table border="0" width="100%" cellspacing="1" cellpadding="8">
+
+    <!-- the variables used in this menu come from example_admin_menu() -->
+
+    <tr>
+        <th align="center">&pnt-var-menutitle;</th>
+    </tr>
+    <tr><td>
+        <table border="0" width="100%" cellspacing="1" cellpadding="8">
+        <tr align="center" valign="middle">
+
+        <!-- links to particular menu items -->
+
+        <!-- Simple URLs can be specified directly in the template -->
+
+        <td> <strong>&pnt-var-menulabel_new;</strong> </td>
+        <td><a href="&pnt-modurl-example-admin-view;">&pnt-var-menulabel_view;</a></td>
+        <td><a href="&pnt-modurl-example-admin-modifyconfig;">&pnt-var-menulabel_config;</a></td>
+
+        <!-- more menu items come here... -->
+
+        <!-- Note : you can also specify the links in example_admin_menu()
+             and pass them on as variables : e.g. &pnt-var-menulink_view; -->
+        </tr>
+        </table>
+    </td></tr>
+</table>
+<br />
+
+<!-- the specific template for the current admin function comes here -->
+
+<table width="100%" border="0" cellspacing="1" cellpadding="8">
+<!--
+    // Start form - note the use of pnModURL() to create the recipient URL of
+    // this form.  All URLs should be generated through pnModURL() to ensure
+    // compatibility with future versions of PostNuke
+-->
+<form method="post" action="&pnt-modurl-example-admin-create;">
+<!--
+    // Add an authorisation ID - this adds a hidden field in the form that
+    // contains an authorisation ID.  The authorisation ID is very important in
+    // preventing certain attacks on the website
+-->
+    <input type="hidden" name="authid" value="&pnt-var-authid;" />
+
+<tr><td colspan="2">
+&pnt-var-hooks;
+</td></tr>
+
+<tr><td>&pnt-var-namelabel;</td>
+<td><input type="text" name="name" size=32 maxlength=32></td></tr>
+
+<tr><td>&pnt-var-numberlabel;</td>
+<td><input type="text" name="number" size=5 maxlength=5></td></tr>
+
+<tr><td colspan="2" align="center">
+    <input type="submit" value="&pnt-var-addbutton;"></td></tr>
+</form>
+
+</table>
+<br />
+

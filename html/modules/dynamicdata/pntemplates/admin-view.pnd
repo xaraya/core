@@ -1,0 +1,72 @@
+
+<!-- common admin menu for this module - remove link to the current function -->
+
+<table border="0" width="100%" cellspacing="1" cellpadding="8">
+
+    <!-- the variables used in this menu come from example_admin_menu() -->
+
+    <tr>
+        <th align="center">&pnt-var-menutitle;</th>
+    </tr>
+    <tr><td>
+        <table border="0" width="100%" cellspacing="1" cellpadding="8">
+        <tr align="center" valign="middle">
+
+        <!-- links to particular menu items -->
+
+        <!-- Simple URLs can be specified directly in the template -->
+
+        <td><a href="&pnt-modurl-example-admin-new;">&pnt-var-menulabel_new;</a></td>
+
+        <!-- Note : we remove the link to this admin function here -->
+
+        <td> <strong>&pnt-var-menulabel_view;</strong> </td>
+        <td><a href="&pnt-modurl-example-admin-modifyconfig;">&pnt-var-menulabel_config;</a></td>
+
+        <!-- more menu items come here... -->
+
+        <!-- Note : you can also specify the links in example_admin_menu()
+             and pass them on as variables : e.g. &pnt-var-menulink_view; -->
+        </tr>
+        </table>
+    </td></tr>
+</table>
+<br />
+
+<!-- the specific template for the current admin function comes here -->
+
+<!-- some status given by the function using this template -->
+
+<strong>&pnt-var-status;</strong>
+
+<table width="100%" border="1" cellspacing="0" cellpadding="4">
+    <tr>
+        <th>&pnt-var-namelabel;</th>
+        <th>&pnt-var-numberlabel;</th>
+        <th>&pnt-var-optionslabel;</th>
+    </tr>
+    <pnt:loop name="items">
+    <tr>
+        <td>&pnt-var-name;</td>
+        <td>&pnt-var-number;</td>
+        <td>
+           <pnt:if condition="empty($editurl)">
+               &pnt-var-edittitle;
+               <pnt:else />
+                   <a href="&pnt-var-editurl;">&pnt-var-edittitle;</a>
+           </pnt:if>
+           |
+           <pnt:if condition="empty($deleteurl)">
+               &pnt-var-deletetitle;
+               <pnt:else />
+                   <a href="&pnt-var-deleteurl;">&pnt-var-deletetitle;</a>
+           </pnt:if>
+        </td>
+    </tr>
+    </pnt:loop>
+</table>
+<br />
+
+<!-- add the pager here -->
+&pnt-var-pager;
+
