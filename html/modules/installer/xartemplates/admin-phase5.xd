@@ -19,7 +19,7 @@
 			</h4>
 		</form>
 	</div>
-	<xar:else />
+<xar:else />
 	<div id="install">
 		<xar:template file="status" />
 		<h1>
@@ -72,4 +72,4 @@
 			</div>
 		</div>
 	</div>
-
+</xar:if>
