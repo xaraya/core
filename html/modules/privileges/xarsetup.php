@@ -18,7 +18,7 @@ function initializeSetup()
     * Enter some default groups and users
     *********************************************************************/
 
-//    xarMakeUser('Self','self','self@xaraya.com','password');
+    xarMakeUser('Self','self','self@xaraya.com','password');
     xarMakeGroup('Everybody');
     xarMakeUser('Anonymous','anonymous','anonymous@xaraya.com');
     xarMakeUser('Admin','Admin','admin@xaraya.com','password');
@@ -36,7 +36,7 @@ function initializeSetup()
     xarMakeRoleMemberByName('Admin','Administrators');
     xarMakeRoleMemberByName('Users','Everybody');
     xarMakeRoleMemberByName('Anonymous','Everybody');
-//    xarMakeRoleMemberByName('Self','Everybody');
+    xarMakeRoleMemberByName('Self','Everybody');
 
     /*********************************************************************
     * Enter some default privileges
@@ -45,6 +45,11 @@ function initializeSetup()
     *********************************************************************/
 
     xarRegisterPrivilege('Administration','All','All','All','All',ACCESS_ADMIN,'Admin access to all modules');
+    xarRegisterPrivilege('GeneralLock','All','empty','All','All',ACCESS_NONE,'A container privilege for denying access to certain roles');
+    xarRegisterPrivilege('LockSelf','All','roles','Roles','Self',ACCESS_NONE,'Deny access to Self');
+    xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody',ACCESS_NONE,'Deny access to Everybody');
+    xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous',ACCESS_NONE,'Deny access to Anonymous');
+    xarRegisterPrivilege('LockAdministrators','All','roles','Roles','Administrators',ACCESS_NONE,'Deny access to Administrators');
 
     /*********************************************************************
     * Arrange the  privileges in a hierarchy
@@ -54,6 +59,11 @@ function initializeSetup()
     *********************************************************************/
 
     xarMakePrivilegeRoot('Administration');
+    xarMakePrivilegeRoot('GeneralLock');
+    xarMakePrivilegeMember('LockSelf','GeneralLock');
+    xarMakePrivilegeMember('LockEverybody','GeneralLock');
+    xarMakePrivilegeMember('LockAnonymous','GeneralLock');
+    xarMakePrivilegeMember('LockAdministrators','GeneralLock');
 
     /*********************************************************************
     * Assign the default privileges to groups/users
@@ -62,6 +72,7 @@ function initializeSetup()
     *********************************************************************/
 
     xarAssignPrivilege('Administration','Administrators');
+    xarAssignPrivilege('GeneralLock','Everybody');
 
     /*********************************************************************
     * Define instances for the core modules

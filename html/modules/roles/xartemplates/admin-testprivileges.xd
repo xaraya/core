@@ -108,7 +108,7 @@
 		<tr>
 			<td><label for="pmodule"><xar:mlstring>Registered Masks For Module</xar:mlstring>:</label></td>
 			<td>
-				<select name="pmodule" id="pmodule" size="1" tabindex="4">
+				<select name="pmodule" id="pmodule" size="1" tabindex="4" onChange="javascript:this.form.submit();">
 					<xar:loop name="$allmodules">
 						<xar:if condition="$name eq $pmodule">
 							<option value="#$name#" selected="selected">#$name#</option>
