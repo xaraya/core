@@ -2086,11 +2086,22 @@ class xarPrivilege extends xarMask
     function removeMember($member)
     {
 
-        $query = "DELETE FROM $this->privmemberstable
-              WHERE xar_pid= ? AND xar_parentid= ?";
-        $bindvars = array($member->getID(), $this->getID());
-        //Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query,$bindvars)) return;
+        $q = new xarQuery('SELECT', $this->privmemberstable, 'COUNT(*) AS count');
+        $q->eq('xar_pid', $member->getID());
+        if (!$q->run()) return;
+        $total = $q->row();
+        if($total['count'] == 0) return true;
+
+        if($total['count'] > 1) {
+            $q = new xarQuery('DELETE');
+            $q->eq('xar_parentid', $this->getID());
+        } else {
+            $q = new xarQuery('UPDATE');
+            $q->addfield('xar_parentid', 0);
+        }
+        $q->addtable($this->privmemberstable);
+        $q->eq('xar_pid', $member->getID());
+        if (!$q->run()) return;
 
 // empty the privset cache
 //        $privileges = new xarPrivileges();

@@ -349,7 +349,7 @@
                     </xar:if>
                 </td>
                 <td>
-                    <i><xar:mlstring>Note: Be careful, it might reveal enough information to help compromising user's login.</xar:mlstring></i>
+                    <i><xar:mlstring>Note: Be careful, it might reveal enough information to compromise the user's login.</xar:mlstring></i>
                 </td>
             </tr></table>
                 

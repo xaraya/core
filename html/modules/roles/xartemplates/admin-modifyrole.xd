@@ -3,8 +3,6 @@
 <xar:set name="$statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
 <xar:set name="$stateactive">ROLES_STATE_ACTIVE</xar:set>
 <xar:set name="$statepending">ROLES_STATE_PENDING</xar:set>
-<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
-</xar:if>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2>
 <xar:if condition="$ptype eq 0"><xar:mlstring>Manage the user</xar:mlstring>
