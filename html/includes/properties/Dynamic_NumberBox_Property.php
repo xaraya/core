@@ -1,6 +1,8 @@
 <?php
 /**
- * Dynamic NumberBox (integerbox) Property
+ * File: $Id$
+ *
+ * Dynamic Data Number Box Property
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
@@ -10,6 +12,7 @@
  * @subpackage dynamicdata properties
  * @author mikespub <mikespub@xaraya.com>
 */
+
 /**
  * Include the base class
  *

@@ -1,6 +1,6 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 
-<select name="#$name#" id="#$id#" tabindex="#$tabindex#" >
+<select name="#$name#" id="#$id#" #$tabindex# >
 
 
     <xar:foreach in="$coptions" value="$coption" >

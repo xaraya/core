@@ -1,10 +1,17 @@
 <?php
 /**
+ * File: $Id$
+ *
  * Dynamic Text Upload Property (TODO: work with uploads module)
  *
- * @package dynamicdata
- * @subpackage properties
- */
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 
 /**
  * Handle text upload property
@@ -95,6 +102,9 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
     function showInput($args = array())
     {
         extract($args);
+        
+        $data = array();
+
         if (empty($name)) {
             $name = 'dd_'.$this->id;
         }
@@ -112,6 +122,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
 
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
             $extensions = xarModGetVar('uploads','allowed_types');
+            $data['extensions']= $extensions;
             if (!empty($extensions)) {
                 $allowed = '<br />' . xarML('Allowed extensions : #(1)',$extensions);
             } else {
@@ -119,11 +130,13 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             }
         } else {
             // no verification of file types here
+            $data['extensions']= '';
             $allowed = '';
         }
-
+        $data['allowed']   =$allowed;
+        $data['upname']    =$upname;
         // we're using a textarea field to keep track of any previously uploaded file here
-        return '<textarea' .
+        /*return '<textarea' .
                ' name="' . $name . '"' .
                ' rows="'. (!empty($rows) ? $rows : $this->rows) . '"' .
                ' cols="'. (!empty($cols) ? $cols : $this->cols) . '"' .
@@ -140,19 +153,41 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' /> ' . $allowed .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+        */
+        $data['name']     = $name;
+        $data['id']       = $id;
+        $data['upid']     = !empty($id) ? $id.'_upload' : '';
+        $data['rows']     = !empty($rows) ? $rows : $this->rows;
+        $data['cols']     = !empty($cols) ? $cols : $this->cols;
+        $data['wrap']     = !empty($wrap) ? $wrap : $this->wrap;
+        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+        $data['tabindex'] = !empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        $data['maxsize']  = !empty($maxsize) ? $maxsize: $this->maxsize;
+        $data['size']     = !empty($size) ? $size : $this->size;
+
+        $template="textupload";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+
     }
 
     function showOutput($args = array())
     {
-         extract($args);
+        extract($args);
+        $data = array();
+
         if (!isset($value)) {
-            $value = $this->value;
+            $data['value'] = $this->value;
         }
         if (!empty($value)) {
-            return xarVarPrepHTMLDisplay($value);
+            $data['value'] = xarVarPrepHTMLDisplay($value);
         } else {
-            return '';
+            $data['value'] ='';
         }
+
+        $template="textupload";
+        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+
     }
 
 }

@@ -1,10 +1,17 @@
 <?php
 /**
- * Dynamic Number Box (float) Property
+ * File: $Id$
  *
- * @package dynamicdata
- * @subpackage properties
- */
+ * Dynamic Number (float) Box Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 
 /**
  * Include the base class
@@ -62,7 +69,9 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
 
     function showOutput($args = array())
     {
-         extract($args);
+        extract($args);
+        $data = array();
+
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -73,7 +82,11 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
             //    return sprintf("%.".$precision."f",$value);
             //}
         }
-        return xarVarPrepForDisplay($value);
+        $data['value']= xarVarPrepForDisplay($value);
+        
+        $template="floatbox";
+        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+
     }
 
 }

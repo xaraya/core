@@ -77,7 +77,7 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
         $data['name']     = $name;
         $data['id']       = $id;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex=$tabindex : '';
+        $data['tabindex'] = !empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
         $data['size']     = !empty($size) ? $size : $this->size;

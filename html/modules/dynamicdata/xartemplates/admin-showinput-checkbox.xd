@@ -1,5 +1,5 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
-<input type="checkbox"  name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" #$checked# /> 
+<input type="checkbox"  name="#$name#" value="1" id="#$id#" #$tabindex# #$checked# />
 
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>

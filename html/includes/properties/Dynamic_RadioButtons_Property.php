@@ -1,10 +1,17 @@
 <?php
 /**
- * Dynamic Radio Buttons Property
+ * File: $Id$
  *
- * @package dynamicdata
- * @subpackage properties
- */
+ * Dynamic Radio Button Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 
 /**
  * Include the base class
@@ -22,6 +29,8 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
     function showInput($args = array())
     {
         extract($args);
+        $data = array();
+
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -31,6 +40,12 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
         if (empty($name)) {
             $name = 'dd_'.$this->id;
         }
+        $data['value']   = $value;
+        $data['name']    = $name;
+        $data['options'] = $options;
+
+
+        /*
         $out = '';
         $idx = 1;
         foreach ($options as $option) {
@@ -45,6 +60,14 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
         }
         $out .= (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
         return $out;
+        */
+        
+        $data['tabindex'] =!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
+        $data['invalid']  =!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
+
+        $template="radio";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+
     }
 
     // default methods from Dynamic_Select_Property

@@ -1,5 +1,7 @@
 <?php
 /**
+ * File: $Id$
+ *
  * Dynamic Data Static Text Property
  *
  * @package Xaraya eXtensible Management System

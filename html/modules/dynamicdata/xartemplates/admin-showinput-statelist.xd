@@ -1,0 +1,19 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+
+<select name="#$name#" id="#$id#" #$tabindex# >
+
+
+    <xar:foreach in="$soptions" value="$soption" >
+        <xar:if condition="($soption['id'])" >
+            <xar:if condition="$value eq $soption['name']" >
+                <option value="#$soption['name']#" selected="selected">#$soption['name']#</option>
+            <xar:else />
+                <option value="#$soption['name']#">#$soption['name']#</option>
+            </xar:if>
+        </xar:if>
+    </xar:foreach>
+</select>
+
+<xar:if condition="!empty($invalid)">
+    <span class="xar-error">#$invalid#</span>
+</xar:if>

@@ -12,7 +12,7 @@
 
     </xar:foreach>
 </select>
-
+ 
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
 </xar:if>

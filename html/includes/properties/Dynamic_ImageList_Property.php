@@ -1,11 +1,17 @@
 <?php
 /**
- * Dynamic Image List Property
+ * File: $Id$
  *
- * @package dynamicdata
- * @subpackage properties
- */
-
+ * Dynamic Data Image List Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 /**
  * Include the base class
  *
@@ -63,6 +69,8 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
     function showInput($args = array())
     {
         extract($args);
+        $data = array();
+
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -90,7 +98,7 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
         if (empty($id)) {
             $id = $name;
         }
-        $out = '<select' .
+        /*$out = '<select' .
                ' name="' . $name . '"' .
                ' id="'. $id . '"' .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
@@ -106,29 +114,56 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
                 $out .= '>'.$option['name'].'</option>';
             }
         }
+        */
+        /*
         $out .= '</select>' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        return $out;
+        */
+        $data['name']    = $name;
+        $data['value']    = $value;        
+        $data['id']      = $id;
+        $data['options'] = $options;
+        $data['tabindex']= !empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
+        $data['invalid'] = !empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
+
+        $template="imagelist";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+
     }
 
     function showOutput($args = array())
     {
-         extract($args);
+        extract($args);
+        $data = array();
+
         if (!isset($value)) {
             $value = $this->value;
         }
         $basedir = $this->basedir;
         $filetype = $this->filetype;
+
         if (!empty($value) &&
             preg_match('/^[a-zA-Z0-9_\/.-]+$/',$value) &&
             preg_match("/$filetype$/",$value) &&
             file_exists($basedir.'/'.$value) &&
             is_file($basedir.'/'.$value)) {
         // TODO: make sure basedir and baseurl match
-            return '<img src="'.$basedir.'/'.$value.'" alt="" />';
+        //    return '<img src="'.$basedir.'/'.$value.'" alt="" />';
+           $srcpath=$basedir.'/'.$value;
         } else {
-            return '';
+            //return '';
+           $srcpath='';
         }
+
+
+        $data['value']=$value;
+        $data['basedir']=$basedir;
+        $data['filetype']=$filetype;
+        $data['srcpath']=$srcpath;
+
+        $template="imagelist";
+        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+
     }
 
 }

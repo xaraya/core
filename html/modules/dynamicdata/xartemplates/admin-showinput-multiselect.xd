@@ -1,6 +1,6 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 
-<select name="#$name#[]" id="#$id#" tabindex="#$tabindex#" multiple>
+<select name="#$name#[]" id="#$id#" #$tabindex# multiple>
     <xar:foreach in="$options" value="$option" >
         <xar:if condition="($option['id'])" >
             <xar:if condition="in_array($option['id'],$value)" >

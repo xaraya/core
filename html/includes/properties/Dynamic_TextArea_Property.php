@@ -1,6 +1,8 @@
 <?php
 /**
-  * Dynamic Data Text Area Property
+ * File: $Id$
+ *
+ * Dynamic Data Text Area Property
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
@@ -55,7 +57,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         $data['name']     = $name;
         $data['id']       = $id;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex=$tabindex : '';
+        $data['tabindex'] = !empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         $data['rows']     = !empty($rows) ? $rows : $this->rows;
         $data['cols']     = !empty($cols) ? $size : $this->cols; 
