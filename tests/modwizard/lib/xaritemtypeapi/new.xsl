@@ -109,10 +109,13 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,$args
         ,'<xsl:value-of select="$module_prefix" />' );
 
+    $values = $object->getFieldValues();
+
     /*
      * Compose the data for the template
      */
     $data['object_props'] =&amp; $object->getProperties();
+    $data['object_values']  =&amp; $values;
     $data['action'] = xarModURL(
         '<xsl:value-of select="$module_prefix" />'
         ,'admin'

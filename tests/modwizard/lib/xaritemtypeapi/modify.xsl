@@ -110,6 +110,8 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,$args
         ,'<xsl:value-of select="$module_prefix" />' );
 
+    $values = $object->getFieldValues();
+
     /*
      * Compose the data for the template
      */
