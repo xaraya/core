@@ -634,8 +634,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                             $text = ''; $token = '';
                                             break 4; // Start all over, leaving nothing open
                                         }
-                                        $this->getNextToken();
                                         // doctype after root tag is invalid, but we allow it for now
+                                        break;
                                     case XAR_TOKEN_CDATA_START:
                                         // Treat it as text
                                         // FIXME: CDATA should really be skipped, but our RSS theme depends on the resolving inside
