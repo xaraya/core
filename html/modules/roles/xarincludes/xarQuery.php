@@ -65,72 +65,70 @@ class xarQuery
 
     function run($statement='',$pretty=1)
     {
+        if ($this->type != 'SELECT') {
+            $this->setstatement($statement);
+            if(!$this->dbconn->Execute($this->statement)) return;
+            return true;
+        }
 
-        if ($this->type == 'SELECT') {
-            if($this->rowstodo != 0 && $this->limits == 1 && $statement == '') {
-                $temp = $this->fields;
-                $this->clearfields();
-                $this->addfield('COUNT(*)');
-                $this->setstatement();
-                $result = $this->dbconn->Execute($this->statement);
-                list($this->rows) = $result->fields;
-                $this->fields = $temp;
-                $this->setstatement();
+        if($this->rowstodo != 0 && $this->limits == 1 && $statement == '') {
+            $temp = $this->fields;
+            $this->clearfields();
+            $this->addfield('COUNT(*)');
+            $this->setstatement();
+            $result = $this->dbconn->Execute($this->statement);
+            list($this->rows) = $result->fields;
+            $this->fields = $temp;
+            $this->setstatement();
 
-                $begin = $this->startat-1;
-                $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
-                $this->statement .= " LIMIT " . $begin . "," . $this->rowstodo;
-            }
-            else {
-                $this->setstatement($statement);
-                $result = $this->dbconn->Execute($this->statement);
-            }
-            if (!$result) return;
-            $this->result =& $result;
-
-            if (($result->fields) === false) $numfields = 0;
-            else $numfields = $result->_numOfFields;
-            $this->output = array();
-            if ($pretty == 1) {
-                if ($statement == '') {
-                    if ($this->fields == array() && $numfields > 0) {
-                        for ($i=0;$i<$numfields;$i++) {
-                            $o =& $result->FetchField($i);
-                            if (!isset($o) || !isset($o->name)) {
-                                $msg = xarML('SELECT with total of columns different from the number retrieved.');
-                                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
-                                return;
-                            }
-                            $this->fields[$i]['name'] = strtolower($o->name);
-                        }
-                    }
-                    while (!$result->EOF) {
-                        for ($i=0;$i<$numfields;$i++) {
-                            $line[$this->fields[$i]['name']] = $result->fields[$i];
-                        }
-                        $this->output[] = $line;
-                        $result->MoveNext();
-                    }
-                }
-                else {
-                    while (!$result->EOF) {
-                        $line = array();
-                        for ($i=0;$i<$numfields;$i++) {
-                            $line[] = $result->fields[$i];
-                        }
-                        $this->output[] = $line;
-                        $result->MoveNext();
-                    }
-                }
-            }
+            $begin = $this->startat-1;
+            $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
+            $this->statement .= " LIMIT " . $begin . "," . $this->rowstodo;
         }
         else {
             $this->setstatement($statement);
             $result = $this->dbconn->Execute($this->statement);
+            $this->rows = $result->_numOfRows;
         }
+        if (!$result) return;
+        $this->result =& $result;
 
+        if (($result->fields) === false) $numfields = 0;
+        else $numfields = $result->_numOfFields;
+        $this->output = array();
+        if ($pretty == 1) {
+            if ($statement == '') {
+                if ($this->fields == array() && $numfields > 0) {
+                    for ($i=0;$i<$numfields;$i++) {
+                        $o =& $result->FetchField($i);
+                        if (!isset($o) || !isset($o->name)) {
+                            $msg = xarML('SELECT with total of columns different from the number retrieved.');
+                            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
+                            return;
+                        }
+                        $this->fields[$i]['name'] = strtolower($o->name);
+                    }
+                }
+                while (!$result->EOF) {
+                    for ($i=0;$i<$numfields;$i++) {
+                        $line[$this->fields[$i]['name']] = $result->fields[$i];
+                    }
+                    $this->output[] = $line;
+                    $result->MoveNext();
+                }
+            }
+            else {
+                while (!$result->EOF) {
+                    $line = array();
+                    for ($i=0;$i<$numfields;$i++) {
+                        $line[] = $result->fields[$i];
+                    }
+                    $this->output[] = $line;
+                    $result->MoveNext();
+                }
+            }
+        }
         return true;
-
     }
 
     function close()
