@@ -65,6 +65,12 @@ function base_admin_updateconfig()
     //$authModules = array('authsystem');
     //xarConfigSetVar('Site.User.AuthenticationModules',$authModules);
 
+    if (!xarVarFetch('proxyhost','str:1:',$proxyhost,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('proxyport','int:1:',$proxyport,0,XARVAR_NOT_REQUIRED)) return;
+// Save these in normal module variables for now
+    xarModSetVar('base','proxyhost',$proxyhost);
+    xarModSetVar('base','proxyport',$proxyport);
+
     xarResponseRedirect(xarModURL('base', 'admin', 'modifyconfig'));
 
     return true;
