@@ -221,7 +221,7 @@ function xarVarValidate($validation, &$subject) {
         return;
     }
 
-    $function_file = './modules/variable/validations/'.$valType.'.php';
+    $function_file = './includes/validations/'.$valType.'.php';
     $function_name = 'variable_validations_'.$valType;
 
     if (!function_exists($function_name)) {
