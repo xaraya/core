@@ -432,7 +432,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
     {
         if (!$node->hasChildren()) {
             $this->raiseError(XAR_BL_INVALID_TAG,"The '".$node->tagName."' tag cannot have children.", $node);
-            return;
+            return false;
         }
         return true;
     }
@@ -441,10 +441,19 @@ class xarTpl__Parser extends xarTpl__PositionInfo
     {
         if(!$node->hasText()) {
             $this->raiseError(XAR_BL_INVALID_TAG,"The '".$node->tagName."' tag cannot have text.", $node);
-            return;
+            return false;
         }
         return true;
     }
+    
+    function reverseXMLEntities($content)
+    {
+        return   str_replace(
+                             array('&amp;', '&gt;', '&lt;', '&quot;'),
+                             array('&', '>', '<', '"'),
+                             $content);
+    }
+    
     
     /**
      * parseNode
@@ -542,7 +551,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             // Check for xar end tag
                             $xarToken = $this->getNextToken(4);
                             if ($xarToken == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
-                                // Add text to parent
                                 // Situation: [...text...]</xar:...
                                 $trimmer='xmltrim';
                                 $natives = array('set', 'ml', 'mlvar');
@@ -724,21 +732,14 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $natives = array('set','ml');
                         if(in_array($parent->tagName,$natives,true)) $trimmer='trim';
                         if ($trimmer($text) != '') {
-                            if ($parent->hasText()) {
-                                $children[] = $this->nodesFactory->createTextNode($trimmer($text), $this);
-                            } elseif(trim($text) != '') { // ???
-                                $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
-                                return;
-                            }
+                            if(!$this->canHaveText($parent) && trim($text) != '') return;
+                            $children[] = $this->nodesFactory->createTextNode($trimmer($text), $this);
                             $text = '';
                         }
 
                         // Replace XML entities with their ASCII equivalents.
                         // An XML parser would do this for us automatically.
-                        $instruction = str_replace(
-                            array('&amp;', '&gt;', '&lt;', '&quot;'),
-                            array('&', '>', '<', '"'),
-                            $instruction);
+                        $instruction = $this->reverseXMLEntities($instruction);
                     
                         // The following is a bit of a sledge-hammer approach. See bug 1273.
                         // TODO: parse the PHP so the semi-colon can be tested in context.
@@ -776,7 +777,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         return $children;
     }
-
+    
     function parseHeaderTag()
     {
         $variables = array();
@@ -929,11 +930,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         // Replace XML entities with their ASCII equivalents.
         // An XML parser would do this for us automatically.
-        $value = str_replace(
-            array('&amp;', '&gt;', '&lt;', '&quot;'),
-            array('&', '>', '<', '"'),
-            $value
-        );
+        $value = $this->reverseXMLEntities($value);
         return array($name, $value);
     }
 
