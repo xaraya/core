@@ -175,14 +175,14 @@ function mail_adminapi__sendmail($args)
         if (is_array($recipients)) {
             foreach($recipients as $k=>$v) {
                 if (!is_numeric($k) && !is_numeric($v)) {
-                // $recipients[$info] = $name describes $recipients parameter
-                $mail->AddAddress($k, $v);
+                    // $recipients[$info] = $name describes $recipients parameter
+                    $mail->AddAddress($k, $v);
                 } else if (!is_numeric($k)) {
-                // $recipients[$info] = (int) describes $recipients parameter
-                $mail->AddAddress($k);
+                    // $recipients[$info] = (int) describes $recipients parameter
+                    $mail->AddAddress($k);
                 } else {
-                // $recipients[(int)] = $info describes $recipients parameter
-                $mail->AddAddress($v);
+                    // $recipients[(int)] = $info describes $recipients parameter
+                    $mail->AddAddress($v);
                 }// if
             }// foreach
         }
@@ -246,16 +246,18 @@ function mail_adminapi__sendmail($args)
         $mail->AddAttachment($attachPath, $attachName);
     }
     // Send the mail, or send an exception.
+    $result = true;
     if (!$mail->Send()) {
         $msg = xarML('The message was not sent. Mailer Error: #(1)',$mail->ErrorInfo);
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', new SystemException($msg));
-        return;
+        $result = false;
     }
 
+    // Clear all address and attachments for next email
     $mail->ClearAddresses();
     $mail->ClearAttachments();
 
-    return true;
+    return $result;
 }
 
 ?>
