@@ -155,9 +155,9 @@ function &xarDBNewConn($args = NULL)
     // Commented out due to FIXME above.
     // $conn->SetFetchMode(ADODB_FETCH_NUM);
 
-    // force oracle to a consistent date format for comparison methods later on
+    // force oracle (oci8, oci8po or oci805) to a consistent date format for comparison methods later on
     // FIXME: <mrb> this doesn't belong here
-    if (strcmp($dbType, 'oci8') == 0) {
+    if (substr($dbType, 0, 4) == 'oci8') {
         $conn->Execute("ALTER session SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
     }
 

@@ -699,4 +699,3 @@ class ADORecordSet_ext_mysql extends ADORecordSet_mysql {
 
 
 }
-?>

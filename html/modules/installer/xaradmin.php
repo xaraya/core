@@ -161,7 +161,8 @@ function installer_admin_phase4()
     $data['database_type']       = xarCore_getSystemvar('DB.Type');
     // Supported  Databases:
     $data['database_types']      = array('mysql'    => array('name' => 'MySQL'   , 'available' => extension_loaded('mysql')),
-                                         'oci8'     => array('name' => 'Oracle'  , 'available' => false),
+                                         // use portable version of OCI8 driver to support ? bind variables
+                                         'oci8po'   => array('name' => 'Oracle (not supported)'  , 'available' => extension_loaded('oci8')),
                                          'postgres' => array('name' => 'Postgres', 'available' => extension_loaded('pgsql')),
                                          'sqlite'   => array('name' => 'SQLite'  , 'available' => extension_loaded('sqlite')));
 
