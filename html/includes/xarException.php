@@ -302,18 +302,20 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
         $sourcetmpl='';
         $base = basename($file,'.php');
         $varDir = xarCoreGetVarDirPath();
-        $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'r');
-        while($cache_entry = fscanf($fd, "%s\t%s\n")) {
-            list($hash, $template) = $cache_entry;
-            // Strip the colon
-            $hash = substr($hash,0,-1);
-            if($hash == $base) {
-                // Found the file, source is $template
-                $sourcetmpl = $template;
-                break;
+        if (file_exists($varDir . '/cache/templates/CACHEKEYS')) {
+            $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'r');
+            while($cache_entry = fscanf($fd, "%s\t%s\n")) {
+                list($hash, $template) = $cache_entry;
+                // Strip the colon
+                $hash = substr($hash,0,-1);
+                if($hash == $base) {
+                    // Found the file, source is $template
+                    $sourcetmpl = $template;
+                    break;
+                }
             }
+            fclose($fd);
         }
-        fclose($fd);
     }
 
     switch($errorType) {
