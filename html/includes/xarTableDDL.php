@@ -477,13 +477,26 @@ function xarDB_oracleAlterTable($tableName, $args)
 function xarDB__mysqlCreateTable($tableName, $fields)
 {
     $sql_fields = array();
+	$primary_key = array();
 
     while (list($field_name, $parameters) = each($fields)) {
         $parameters['command'] = 'create';
         $this_field = xarDB__mysqlColumnDefinition($field_name, $parameters);
-        $sql_fields[] = implode(' ', $this_field);
+
+		$sql_fields[] = $this_field['name'];
+		$sql_fields[] = $this_field['type'];
+		$sql_fields[] = $this_field['unsigned'];
+		$sql_fields[] = $this_field['null'];
+		$sql_fields[] = $this_field['default'];
+		$sql_fields[] = $this_field['auto_increment'].', ';
+		if ($this_field['primary_key'] == true) {
+			$primary_key[] = $this_field['name'];
+		}
     }
-    $sql = 'CREATE TABLE '.$tableName.' ('.implode(',', $sql_fields).')';
+
+    $sql = 'CREATE TABLE '.$tableName.' ('.implode(' ',$sql_fields);
+    $sql .= 'PRIMARY KEY ('.implode(',',$primary_key).'))';
+
     return $sql;
 }
 
@@ -497,7 +510,8 @@ function xarDB__mysqlCreateTable($tableName, $fields)
  */
 function xarDB__mysqlColumnDefinition($field_name, $parameters)
 {
-    $this_field = array($field_name);
+	$this_field = array();
+    $this_field['name'] = $field_name;
 
     switch($parameters['type']) {
 
@@ -507,19 +521,19 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
             }
             switch ($parameters['size']) {
                 case 'tiny':
-                    $this_field[] = 'TINYINT';
+                    $this_field['type'] = 'TINYINT';
                     break;
                 case 'small':
-                    $this_field[] = 'SMALLINT';
+                    $this_field['type'] = 'SMALLINT';
                     break;
                 case 'medium':
-                    $this_field[] = 'MEDIUMINT';
+                    $this_field['type'] = 'MEDIUMINT';
                     break;
                 case 'big':
-                    $this_field[] = 'BIGINT';
+                    $this_field['type'] = 'BIGINT';
                     break;
                 default:
-                    $this_field[] = 'INTEGER';
+                    $this_field['type'] = 'INTEGER';
             } // switch ($parameters['size'])
             break;
 
@@ -527,7 +541,7 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
             if (empty($parameters['size'])) {
                 return false;
             } else {
-                $this_field[] = 'CHAR('.$parameters['size'].')';
+                $this_field['type'] = 'CHAR('.$parameters['size'].')';
             }
             break;
 
@@ -535,7 +549,7 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
             if (empty($parameters['size'])) {
                 return false;
             } else {
-                $this_field[] = 'VARCHAR('.$parameters['size'].')';
+                $this_field['type'] = 'VARCHAR('.$parameters['size'].')';
             }
             break;
 
@@ -545,16 +559,16 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
             }
             switch ($parameters['size']) {
                 case 'tiny':
-                    $this_field[] = 'TINYTEXT';
+                    $this_field['type'] = 'TINYTEXT';
                     break;
                 case 'medium':
-                    $this_field[] = 'MEDIUMTEXT';
+                    $this_field['type'] = 'MEDIUMTEXT';
                     break;
                 case 'long':
-                    $this_field[] = 'LONGTEXT';
+                    $this_field['type'] = 'LONGTEXT';
                     break;
                 default:
-                    $this_field[] = 'TEXT';
+                    $this_field['type'] = 'TEXT';
             }
             break;
 
@@ -564,25 +578,25 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
             }
             switch ($parameters['size']) {
                 case 'tiny':
-                    $this_field[] = 'TINYBLOB';
+                    $this_field['type'] = 'TINYBLOB';
                     break;
                 case 'medium':
-                    $this_field[] = 'MEDIUMBLOB';
+                    $this_field['type'] = 'MEDIUMBLOB';
                     break;
                 case 'long':
-                    $this_field[] = 'LONGBLOB';
+                    $this_field['type'] = 'LONGBLOB';
                     break;
                 default:
-                    $this_field[] = 'BLOB';
+                    $this_field['type'] = 'BLOB';
             }
             break;
 
         case 'boolean':
-            $this_field[] = "BOOL";
+            $this_field['type'] = "BOOL";
             break;
 
         case 'datetime':
-            $this_field[] = "DATETIME";
+            $this_field['type'] = "DATETIME";
             // convert parameter array back to string for datetime
             // array('year'=>2002,'month'=>04,'day'=>17,'hour'=>'12','minute'=>59,'second'=>0)
             if (isset($parameters['default'])) {
@@ -597,7 +611,7 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
             break;
 
         case 'date':
-            $this_field[] = "DATE";
+            $this_field['type'] = "DATE";
             // convert parameter array back to string for datetime
             // array('year'=>2002,'month'=>04,'day'=>17)
             if (isset($parameters['default'])) {
@@ -625,7 +639,7 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
             if (isset($parameters['width']) && isset($parameters['decimals'])) {
                $data_type .= '('.$parameters['width'].','.$parameters['width'].')';
             }
-            $this_field[] = $data_type;
+            $this_field['type'] = $data_type;
             break;
 
         case 'timestamp':
@@ -634,28 +648,28 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
             }
             switch ($parameters['size']) {
                 case 'YY':
-                    $this_field[] = 'TIMESTAMP(2)';
+                    $this_field['type'] = 'TIMESTAMP(2)';
                     break;
                 case 'YYYY':
-                    $this_field[] = 'TIMESTAMP(4)';
+                    $this_field['type'] = 'TIMESTAMP(4)';
                     break;
                 case 'YYYYMM':
-                    $this_field[] = 'TIMESTAMP(6)';
+                    $this_field['type'] = 'TIMESTAMP(6)';
                     break;
                 case 'YYYYMMDD':
-                    $this_field[] = 'TIMESTAMP(8)';
+                    $this_field['type'] = 'TIMESTAMP(8)';
                     break;
                 case 'YYYYMMDDHH':
-                    $this_field[] = 'TIMESTAMP(10)';
+                    $this_field['type'] = 'TIMESTAMP(10)';
                     break;
                 case 'YYYYMMDDHHMM':
-                    $this_field[] = 'TIMESTAMP(12)';
+                    $this_field['type'] = 'TIMESTAMP(12)';
                     break;
                 case 'YYYYMMDDHHMMSS':
-                    $this_field[] = 'TIMESTAMP(14)';
+                    $this_field['type'] = 'TIMESTAMP(14)';
                     break;
                 default:
-                    $this_field[] = 'TIMESTAMP';
+                    $this_field['type'] = 'TIMESTAMP';
             }
             break;
 
@@ -665,33 +679,32 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
     }
 
     // Test for UNSIGNED
-    if (isset($parameters['unsigned']) && $parameters['unsigned'] == true) {
-       $this_field[] = 'UNSIGNED';
-    }
+	$this_field['unsigned'] = (isset($parameters['unsigned']) && $parameters['unsigned'] == true)
+							? 'UNSIGNED'
+							: '';
 
     // Test for NO NULLS
-    if (isset($parameters['null']) && $parameters['null'] == false) {
-       $this_field[] = 'NOT NULL';
-    }
+	$this_field['null']	= (isset($parameters['null']) && $parameters['null'] == false)
+						? 'NOT NULL'
+						: '';
 
     // Test for DEFAULTS
-    if (isset($parameters['default'])) {
-        if ($parameters['default'] == 'NULL') {
-            $this_field[] = 'DEFAULT NULL';
-        } else {
-            $this_field[] = "DEFAULT '".$parameters['default']."'";
-        }
-    }
+	$this_field['default'] = (isset($parameters['default']))
+						   ? (($parameters['default'] == 'NULL') 
+									? 'DEFAULT NULL'
+									: "DEFAULT '".$parameters['default']."'")
+						   : '';
 
     // Test for AUTO_INCREMENT
-    if (isset($parameters['increment']) && $parameters['increment'] == true) {
-        $this_field[] = "AUTO_INCREMENT";
-    }
+	$this_field['auto_increment'] = (isset($parameters['increment']) && $parameters['increment'] == true)
+								  ? 'AUTO_INCREMENT'
+								  : '';
 
     // Test for PRIMARY KEY
-    if (isset($parameters['primary_key']) && $parameters['primary_key'] == true) {
-        $this_field[] = "PRIMARY KEY";
-    }
+	$this_field['primary_key'] = (isset($parameters['primary_key']) && $parameters['primary_key'] == true)
+							   ? true
+							   : false;
+
     return $this_field;
 }
 
