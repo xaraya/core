@@ -57,7 +57,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     $sourceFileName = "$xarTpl_themeDir/modules/$modOsDir/$modType-$funcName" . (empty($templateName) ? '.xar' : "-$templateName.xar");
     if (!file_exists($sourceFileName)) {
         // Use internal template
-        $sourceFileName = "modules/$modOsDir/xaremplates/$modType-$funcName" . (empty($templateName) ? '.xrd' : "-$templateName.xrd");
+        $sourceFileName = "modules/$modOsDir/xartemplates/$modType-$funcName" . (empty($templateName) ? '.xrd' : "-$templateName.xrd");
     }
 
     $tplData['_bl_module_name'] = $modName;
