@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.xarDB.php 1.39 03/09/06 12:25:23+01:00 miko@power.dudleynet $
  * 
  * ADODB Database Abstraction Layer API Helpers
  * 
@@ -127,6 +127,48 @@ function xarDBLoadTableMaintenanceAPI()
     include_once 'includes/xarTableDDL.php';
 
     return true;
+}
+
+/**
+ * Create a data dictionary object
+ *
+ * This function will include the appropriate classes and instantiate
+ * a data dictionary object for the specified mode. The default mode
+ * is 'READONLY', which just provides methods for reading the data
+ * dictionary. Mode 'METADATA' will return the meta data object. Further
+ * modes will support the return of an object for manipulating the
+ * database structure.
+ *
+ * NOTE: until the data dictionary is split into separate readonly and
+ * amend classes, the READONLY mode will return an object containing
+ * all read and amend methods.
+ *
+ * @access public
+ * @return data dictionary object (specifics depend on mode)
+ * @param object $dbconn ADODB database connection object
+ * @param string $mode the mode in which the data dictionary will be used; default READONLY
+ * @todo fully implement the mode, by layering the classes into separate files of readonly and amend methods
+ * @todo xarMetaData class needs to accept the database connection object
+ * @todo make xarMetaData the base class for the data dictionary
+ */
+function &xarDBNewDataDict(&$dbconn, $mode = 'READONLY')
+{
+    // Include the data dictionary source.
+    // Depending on the mode, there may be one or more files to include.
+    include_once 'includes/xarDataDict.php';
+
+    // Decide which class to use.
+    if ($mode == 'METADATA') {
+        $class = 'xarMetaData';
+    } else {
+        // 'READONLY' or the default for unknown modes.
+        $class = 'xarDataDict';
+    }
+
+    // Instantiate the object.
+    $dict =& new $class($dbconn);
+
+    return $dict;
 }
 
 /**

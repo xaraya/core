@@ -691,7 +691,9 @@ class xarDataDict {
                 $type           = $column->type;
                 $not_null       = $column->not_null;
                 $has_default    = $column->has_default;
-                $default_value  = $column->default_value;
+                if ($has_default) {
+                    $default_value  = $column->default_value;
+                }
 
                 // Optional fields
                 if (isset($column->primary_key))
@@ -716,16 +718,19 @@ class xarDataDict {
 
                 // Assign columns.  Keys are different names as they
                 // must correspond to the existing xar_tables columns.
-                $columnDefs[$name] = array('table'       => $table,
-                                           'field'       => $name,
-                                           'type'        => $type,
-                                           'size'        => $max_length,
-                                           'has_default' => $has_default,
-                                           'default'     => $default_value,
-                                           'binary'      => $binary,
-                                           'null'        => $not_null,
-                                           'increment'   => $auto_increment,
-                                           'primary_key' => $primary_key);
+                $columnDefs[$name] = array(
+                    'table'       => $table,
+                    'field'       => $name,
+                    'type'        => $type,
+                    'size'        => $max_length,
+                    'has_default' => $has_default,
+                    'binary'      => $binary,
+                    'null'        => $not_null,
+                    'increment'   => $auto_increment,
+                    'primary_key' => $primary_key);
+                if ($has_default) {
+                    $columnDefs[$name]['default'] = $default_value;
+                }
             }
 
             // Assign column definitions to table
