@@ -119,6 +119,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
 
                 // Save the name of the property
                 $baseInfo['propertyClass'] = $propertyClass;
+                $baseInfo['filepath'] = $propertyfilepath;
                 
                 // Update database entry for this property
                 updateDB( $baseInfo, '', $propertyfilepath );
