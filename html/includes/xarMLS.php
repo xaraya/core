@@ -450,7 +450,7 @@ function xarMLS_setCurrentLocale($locale)
         }
 
         // Load core translations
-        xarMLS_loadTranslations('core', 'xaraya', 'locales', 'file', 'core');
+        xarMLS_loadTranslations('core', 'xaraya', '.', 'file', 'core');
 
         // Load global language defines
         $localeData = xarMLSLoadLocaleData($locale);
@@ -480,6 +480,7 @@ function xarMLS_setCurrentLocale($locale)
  * @returns bool
  * @return
  */
+/*
 function xarMLS_loadModuleTranslations($modName, $modOsDir, $modType)
 {
     global $xarMLS_backend;
@@ -518,6 +519,7 @@ function xarMLS_loadModuleTranslations($modName, $modOsDir, $modType)
     // No valid translations set loaded, try with old style translations
 
     /* Old style language packs */
+    /*
     $localeData = xarMLSLoadLocaleData($locale);
     if (!isset($localeData)) return; // throw back
     $lang = $localeData['/language/iso3code'];
@@ -535,7 +537,7 @@ function xarMLS_loadModuleTranslations($modName, $modOsDir, $modType)
 
     return false;
 }
-
+*/
 /**
  * Loads translations for the specified context
  *
@@ -571,7 +573,7 @@ function xarMLS_loadTranslations($type, $name, $baseDir, $subtype, $subname)
                      'subtype' => $subtype,
                      'subname' => $subname,
                      'locale' => $testLocale);
-if($subtype == 'template')
+//if($subtype == 'template')
 xarLogVariable('ctx', $ctx);
         if ($xarMLS_backend->hasContext($ctx, $loadCtx)) {
             if (!$xarMLS_backend->load($loadCtx)) return;
@@ -1094,7 +1096,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         // Only module typed contexts are allowed
         //if ($translationCtx['type'] != 'module') return false;
 
-        $fileName = "$translationCtx[baseDir]/xarlang/xml/$translationCtx[locale]/";
+        $fileName = "$translationCtx[baseDir]/locales/$translationCtx[locale]/xml/";
         switch ($translationCtx['subtype']) {
             case 'file':
                 $fileName .= 'xar'.$translationCtx['subname'];
@@ -1298,7 +1300,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
         // Only module typed contexts are allowed
         //if ($translationCtx['type'] != 'module') return false;
 
-        $fileName = "$translationCtx[baseDir]/xarlang/php/$translationCtx[locale]/";
+        $fileName = "$translationCtx[baseDir]/locales/$translationCtx[locale]/php/";
         switch ($translationCtx['subtype']) {
             case 'file':
                 $fileName .= 'xar'.$translationCtx['subname'];
