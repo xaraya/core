@@ -35,15 +35,13 @@ function xarCache_init($args)
         return false;
     }
 
-    // should we set default values, or bail out if something is missing?
-    // <MrB> Set defaults where appropriate: For all below a sensible default can be given
     $xarOutput_cacheCollection = $cacheDir;
-    $xarOutput_cacheTheme = $cachingConfiguration['Output.DefaultTheme'];
-    $xarOutput_cacheSizeLimit = $cachingConfiguration['Output.SizeLimit'];
-    $xarPage_cacheTime = $cachingConfiguration['Page.TimeExpiration'];
-    $xarPage_cacheDisplay = $cachingConfiguration['Page.DisplayView'];
-    $xarPage_cacheShowTime = $cachingConfiguration['Page.ShowTime'];
-    $xarBlock_cacheTime = $cachingConfiguration['Block.TimeExpiration'];
+    $xarOutput_cacheTheme = isset($cachingConfiguration['Output.DefaultTheme']) ? $cachingConfiguration['Output.DefaultTheme'] : '';
+    $xarOutput_cacheSizeLimit = isset($cachingConfiguration['Output.SizeLimit']) ? $cachingConfiguration['Output.SizeLimit'] : 2097152;
+    $xarPage_cacheTime = isset($cachingConfiguration['Page.TimeExpiration']) ? $cachingConfiguration['Page.TimeExpiration'] : 1800;
+    $xarPage_cacheDisplay = isset($cachingConfiguration['Page.DisplayView']) ? $cachingConfiguration['Page.DisplayView'] : 0;
+    $xarPage_cacheShowTime = isset($cachingConfiguration['Page.ShowTime']) ? $cachingConfiguration['Page.ShowTime'] : 1;
+    $xarBlock_cacheTime = isset($cachingConfiguration['Block.TimeExpiration']) ? $cachingConfiguration['Block.TimeExpiration'] : 7200;
 
     return true;
 }
