@@ -1,63 +1,59 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Adminpanels</xar:mlstring></span></div>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Adminpanels Administration</xar:mlstring></span>
+</div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>Overview</xar:mlstring></h2>
-    <div style="padding: 1px;" class="xar-norm-outline">
-        <div style="float:right;padding:10px;">
-            <img src="modules/adminpanels/xarimages/admin.gif" alt="official icon" width="96" height="96" />
-        </div>
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>What is it?</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><em><xar:mlstring>Adminpanels is a Xaraya Core Module.</xar:mlstring></em>
-            <xar:mlstring>It is currently responsible for accomplishing these tasks:</xar:mlstring></p>
-            <ul>
-                <li><xar:mlstring>Configuration and display of the administration menu</xar:mlstring></li>
-                <li><xar:mlstring>Management of overviews for other modules</xar:mlstring></li>
-                <li><xar:mlstring>Display information about waiting content</xar:mlstring></li>
-            </ul>
-            <p><xar:mlstring>When you login as a website administrator, you should see the adminmenu, which lists installed and activated modules. 
-            These are the modules with administrative functions and a user interface (UI).
-            They allow you to set various parameters, which change the layout or behaviour of either the module itself or the web site.</xar:mlstring></p>
-        </div>
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>How to use it?</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>Using this administration system is very simple. First, you may want to configure the adminmenu appearance and the sorting order of the items in it. 
-            Of course, it largely depends on what kind of website you are running and on the number of admin-capable modules you deploy. 
-            Experiment with the options provided, and hopefully you will find the best solution for your administrative environment. 
-            For instance, position the menu left or right, choose a convenient display order and/or temporarily hide modules which you are not going to re-configure frequently. </xar:mlstring></p>
-            <p><xar:mlstring>Secondly, you may configure this overview panel to show some more useful information than this text. 
-            Some options are (will be) available from "Configure Overview" panel. </xar:mlstring></p>
-            <p><xar:mlstring>Having done that, you can start using other modules' administration facilities. Load other modules by clicking the corresponding links in the adminmenu.</xar:mlstring></p>
-            <p><xar:mlstring>And lastly, to hide the administration menu, you must logout as an admin; to minimise, use the collapsible menu option in the "blocks" module.</xar:mlstring></p>
+    <img src="#xarTplGetImage('admin.gif', 'adminpanels')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
 
-        </div>
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>Included Blocks</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <ul>
-                <li><xar:mlstring>admin menu</xar:mlstring></li>
-                <li><xar:mlstring>waiting content</xar:mlstring></li>
-            </ul>
-        </div>
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>Included Hooks</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>[Hooks developers, please provide a description..]</xar:mlstring></p>
-        </div>
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>And more.. [for module developers]</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>Please use this consistent template for your module overview.</xar:mlstring></p>
-        </div>
-        <div class="xar-norm-outline xar-accent" style="text-align: center; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-            <p><xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring></p>
-        </div>
-    </div>
+    <h2>
+        <xar:mlstring>Overview</xar:mlstring>
+    </h2>
+
+    <h3>
+        <xar:mlstring>What is it?</xar:mlstring>
+    </h3>
+
+    <p><em><xar:mlstring>Adminpanels is a Xaraya Core Module.</xar:mlstring></em>
+        <xar:mlstring>It is currently responsible for accomplishing these tasks:</xar:mlstring>
+    </p>
+
+    <ul>
+        <li><xar:mlstring>Configuration and display of the administration menu</xar:mlstring></li>
+        <li><xar:mlstring>Management of overviews for other modules</xar:mlstring></li>
+        <li><xar:mlstring>Display information about waiting content</xar:mlstring></li>
+    </ul>
+
+    <p><xar:mlstring>When you login as a website administrator, you should see the adminmenu, which lists installed and activated modules. 
+    These are the modules with administrative functions and a user interface (UI).
+    They allow you to set various parameters, which change the layout or behaviour of either the module itself or the web site.</xar:mlstring></p>
+
+    <h3><xar:mlstring>How to use it?</xar:mlstring></h3>
+
+    <p><xar:mlstring>Using this administration system is very simple. First, you may want to configure the adminmenu appearance and the sorting order of the items in it. 
+    Of course, it largely depends on what kind of website you are running and on the number of admin-capable modules you deploy. 
+    Experiment with the options provided, and hopefully you will find the best solution for your administrative environment. 
+    For instance, position the menu left or right, choose a convenient display order and/or temporarily hide modules which you are not going to re-configure frequently. </xar:mlstring></p>
+
+    <p><xar:mlstring>Secondly, you may configure this overview panel to show some more useful information than this text. 
+    Some options are (will be) available from "Configure Overview" panel. </xar:mlstring></p>
+
+    <p><xar:mlstring>Having done that, you can start using other modules' administration facilities. Load other modules by clicking the corresponding links in the adminmenu.</xar:mlstring></p>
+
+    <p><xar:mlstring>And lastly, to hide the administration menu, you must logout as an admin; to minimise, use the collapsible menu option in the "blocks" module.</xar:mlstring></p>
+
+    <h3><xar:mlstring>Included Blocks</xar:mlstring></h3>
+
+    <ul>
+        <li><xar:mlstring>admin menu</xar:mlstring></li>
+        <li><xar:mlstring>waiting content</xar:mlstring></li>
+    </ul>
+
+    <h3><xar:mlstring>Included Hooks</xar:mlstring></h3>
+
+    <p><xar:mlstring>Adminpanels has no hooks included at this time.</xar:mlstring></p>
+</div>
+<div class="xar-mod-foot xar-align-center xar-padding-thick">
+    <p>
+        <xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring>
+    </p>
 </div>

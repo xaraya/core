@@ -1,176 +1,94 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html
-</xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <div class="xar-mod-head">
-    <span class="xar-mod-title">
-        <xar:mlstring>
-            Administration - Adminpanels 
-        </xar:mlstring>
+    <span class="xar-mod-title"><xar:mlstring>Adminpanels Administration</xar:mlstring>
     </span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>
-            Configure Administrator's Menus (built-in solutions) 
-        </xar:mlstring>
+        <xar:mlstring>Modify Config</xar:mlstring>
     </h2>
     <form class="xar-fullwidth" method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
-        <table class="xar-fullwidth xar-noborder">
-            <tr>
-                <td style="width:180;">
-                </td>
-                <td colspan="2">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="formname" id="formname" value="adminmenu" />
-                    <xar:if condition="$showmarker eq 1">
-                        <input type="checkbox" name="showmarker" id="showmarker" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="showmarker" id="showmarker" value="1" />
+
+    <fieldset>
+        <legend>
+            <xar:mlstring>Administrator Menu Options</xar:mlstring>
+        </legend>
+
+        <div class="xar-form-input-wrapper-after">
+            <xar:if condition="$showmarker eq 1">
+                <input type="checkbox" name="showmarker" id="showmarker" value="1" checked="checked" />
+            <xar:else />
+                <input type="checkbox" name="showmarker" id="showmarker" value="1" />
+            </xar:if>
+            <label for="showmarker" title="#xarML('Display a marker in Adminpanels menu to identify current item.')#">
+                <xar:mlstring>Mark Active Item</xar:mlstring>
+            </label>
+        </div>
+
+        <div class="xar-form-input-wrapper">
+            <label for="marker" title="#xarML('Marker to identify active menu item')#" class="xar-form-label">
+                <xar:mlstring>Specify Marker:</xar:mlstring>
+            </label>
+            <input type="text" name="marker" id="marker" maxlength="10" value="#$marker#" class="xar-form-textshort" />
+        </div>
+
+        <div class="xar-form-input-wrapper">
+            <label for="menustyle" title="#xarML('Set the order to display menu sections')#" class="xar-form-label">
+                <xar:mlstring>Sort Admin Menu Items:</xar:mlstring>
+            </label>
+            <select name="menustyle" id="menustyle">
+                <xar:foreach in="$sortorder" value="$v" key="$k">
+                    <xar:if condition="$k eq $menustyle">
+                        <option value="#$k#" selected="selected">#$v#</option>
+                    <xar:else />
+                        <option value="#$k#">#$v#</option>
                     </xar:if>
-                    <label for="showmarker">
-                        <xar:mlstring>
-                            Mark active item (when unchecked, marker is not displayed) 
-                        </xar:mlstring>
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td align="right">
-                    <label for="marker">
-                        <xar:mlstring>
-                            Specify marker: 
-                        </xar:mlstring>
-                    </label>
-                </td>
-                <td>
-                    <input type="text" name="marker" id="marker" size="10" maxlength="10" value="#$marker#" />
-                </td>
-                <td class="adminpanels-rednote">
-                    <xar:mlstring>
-                        (to be displayed next to active menu item) 
-                    </xar:mlstring>
-                </td>
-            </tr>
-            <tr>
-                <td align="right">
-                    <label for="menustyle">
-                        <xar:mlstring>
-                            Sort admin menu items: 
-                        </xar:mlstring>
-                    </label>
-                </td>
-                <td>
-                    <select name="menustyle" id="menustyle" size="1">
-                        <xar:foreach in="$sortorder" value="$v" key="$k">
-                            <xar:if condition="$k eq $menustyle">
-                                <option value="#$k#" selected="selected">
-                                    #$v# 
-                                </option>
-                                <xar:else />
-                                <option value="#$k#">
-                                    #$v# 
-                                </option>
-                            </xar:if>
-                        </xar:foreach>
-                    </select>
-                </td>
-                <td class="adminpanels-rednote">
-                    <xar:mlstring>
-                        (only name and category implemented) 
-                    </xar:mlstring>
-                </td>
-            </tr>
-            <tr>
-                <td align="right">
-                    &nbsp; 
-                </td>
-                <td colspan="2">
-                    <xar:if condition="$showlogout eq 1">
-                        <input type="checkbox" name="showlogout" id="showlogout" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="showlogout" id="showlogout" value="1" />
-                    </xar:if>
-                    <label for="showlogout">
-                        <xar:mlstring>
-                            Display "Logout" link in the menus 
-                        </xar:mlstring>
-                    </label>
-                </td>
-            </tr>
-            <xar:comment>
-                <tr>
-                    <td align="right">
-                        &nbsp; 
-                    </td>
-                    <td colspan="2">
-                        <xar:if condition="$showhelp eq 1">
-                            <input type="checkbox" name="showhelp" id="showhelp" value="1" checked="checked" />
-                            <xar:else />
-                            <input type="checkbox" name="showhelp" id="showhelp" value="1" />
-                        </xar:if>
-                        <label for="showhelp">
-                            <xar:mlstring>
-                                Display "Help" link in the menus 
-                            </xar:mlstring>
-                        </label>
-                    </td>
-                </tr>
-            </xar:comment>
-            <tr>
-                <td align="right">
-                    &nbsp; 
-                </td>
-                <td>
-                    <input type="submit" value="#xarML('Submit')#" />
-                </td>
-                <td class="adminpanels-rednote">
-                    &nbsp; 
-                </td>
-            </tr>
-        </table>
-    </form>
-    <h2>
-        <xar:mlstring>
-            Configure Overviews 
-        </xar:mlstring>
-    </h2>
-    <form class="xar-fullwidth" method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
-<!-- Disable overviews -->
-        <table class="xar-fullwidth xar-noborder">
-            <tr>
-                <td style="width:180;">
-                </td>
-                <td>
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="formname" id="formname" value="overviews" />
-                    <xar:if condition="$showoverviews eq 1">
-                        <input type="checkbox" name="overview" id="overview" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="overview" id="overview" value="1" />
-                    </xar:if>
-                    <label for="overview">
-                        <xar:mlstring>
-                            Disable Module Overviews 
-                        </xar:mlstring>
-                    </label>
-                </td>
-                <td class="adminpanels-rednote">
-                    <xar:mlstring>
-                        Bypass the overviews and go directly to the module's configuration 
-                    </xar:mlstring>
-                </td>
-            </tr>
-            <tr>
-                <td align="right">
-                    &nbsp; 
-                </td>
-                <td>
-                    <input type="submit" value="#xarML('Submit')#" />
-                </td>
-                <td class="adminpanels-rednote">
-                    &nbsp; 
-                </td>
-            </tr>
-        </table>
+                </xar:foreach>
+            </select>
+        </div>
+
+        <div class="xar-form-input-wrapper-after">
+            <xar:if condition="$showlogout eq 1">
+                <input type="checkbox" name="showlogout" id="showlogout" value="1" checked="checked" />
+            <xar:else />
+                <input type="checkbox" name="showlogout" id="showlogout" value="1" />
+            </xar:if>
+            <label for="showlogout" title="#xarML('Allow admins to log out via admin menu.')#">
+                <xar:mlstring>Display "Logout" Link</xar:mlstring>
+            </label>
+        </div>
+
+        <xar:comment>
+            <div class="xar-form-input-wrapper-after">
+                <xar:if condition="$showhelp eq 1">
+                    <input type="checkbox" name="showhelp" id="showhelp" value="1" checked="checked" />
+                <xar:else />
+                    <input type="checkbox" name="showhelp" id="showhelp" value="1" />
+                </xar:if>
+                <label for="showhelp" title="#xarML('Show links to module documentation in menu.')#">
+                    <xar:mlstring>Display "Help" Link</xar:mlstring>
+                </label>
+            </div>
+        </xar:comment>
+
+    </fieldset>
+
+    <div class="xar-form-input-wrapper-after">
+        <xar:if condition="$showoverviews eq 1">
+            <input type="checkbox" name="overview" id="overview" value="1" checked="checked" />
+        <xar:else />
+            <input type="checkbox" name="overview" id="overview" value="1" />
+        </xar:if>
+        <label for="overview" title="#xarML('Bypass the overviews and go directly to the module configuration')#">
+            <xar:mlstring>Disable Module Overviews</xar:mlstring>
+        </label>
+    </div>
+
+    <div class="xar-clear-both xar-align-center">
+        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+        <input type="submit" value="#xarML('Update Adminpanels Configuration')#" class="xar-margin-thickright" />
+        <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft"  />
+    </div>
+
     </form>
 </div>

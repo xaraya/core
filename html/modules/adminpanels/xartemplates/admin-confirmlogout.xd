@@ -1,23 +1,16 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <div class="xar-mod-body">
     <div class="xar-mod-head">
-        <span class="xar-mod-title">
-            <xar:mlstring>
-                Administration 
-            </xar:mlstring>
-        </span>
+        <span class="xar-mod-title"><xar:mlstring>Administration</xar:mlstring></span>
     </div>
     <h2>
-        <xar:mlstring>
-            Confirm Logout 
-        </xar:mlstring>
+        <xar:mlstring>Confirm Logout</xar:mlstring>
     </h2>
     <p>
-        <xar:mlstring>
-            Are you sure? Click "Cancel" to return to the previous admin panel 
-        </xar:mlstring>
+        <xar:mlstring>Are you sure? Click "Cancel" to return to the previous admin panel</xar:mlstring>
     </p>
-    [<a href="#$logouturl#">#$logoutlabel#</a>] [<a href="#$cancelurl#">#$cancellabel#</a>] 
+
+    <div class="xar-align-center">
+        [ <a href="#$logouturl#"><xar:mlstring>Log Out</xar:mlstring></a> ] [ <a href="#$cancelurl#"><xar:mlstring>Cancel</xar:mlstring></a> ]
+    </div>
 </div>
