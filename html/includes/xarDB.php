@@ -217,7 +217,7 @@ function xarDB_importTables($tables)
 function xarDB__adodbErrorHandler($dbms, $fn, $errno, $errmsg, $p1=false, $p2=false)
 {
     // I need to complete it.
-    if (!p1) {
+    if (!$p1) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', new SystemException($errmsg));
     } else {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', new SystemException($errmsg.$p1));
