@@ -8,9 +8,9 @@
         <td align="center" class="xar-normal">
                 Language:
                 <select name="install_language" class="xar-text">
-                    <?php while (list($key, $name) = each($languages)) { ?>
-                        <option value="<?php echo $key; ?>"><?php echo $name; ?></option>
-                    <?php } ?>
+                    <xar:foreach in="$languages" key="$key" value="$value">
+                        <option value="#$key#">#$value#</option>
+                    </xar:foreach>
                 </select>
                 <input type="hidden" name="install_phase" value="2" />
                 <input type="submit" value="Continue &gt;">
