@@ -1117,15 +1117,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return $wound;
     }
     
-    function stepBack($len = 1)
-    {
-        // FIXME: do we need to take line numbers into account here when we
-        // step back over a \n ?
-        $this->pos -= $len;
-        $this->column -= $len;
-        $this->lineText = substr($this->lineText, 0, strlen($this->lineText) - $len);
-    }
-
     function peek($len = 1, $start = 0)
     {
         assert('$start >= 0; /* The start position for peeking needs to be zero or greater, a call to parser->peek was wrong */');
