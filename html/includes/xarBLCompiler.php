@@ -677,7 +677,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     if ($nextToken == 'xar-') {
                         if(!$this->canbeChild($parent)) return;
 
-                        // Add text to parent
                         // Situation: [...text...]&xar-...
                         if (trim($text) != '') {
                             if(!$this->canHaveText($parent)) return;
@@ -760,7 +759,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             // Once we get here, nothing in the switch caught the token, we copy verbatim to output.
             $text .= $token;
             // and get a new one
-            $token = $this->getNextToken();
+            $token = $this->getNextToken(1,true);
         } // end while
         
         // Add the final text as a text node 
@@ -798,10 +797,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         // Must parse the entire tag, we want to find > character
         while (true) {
             $token = $this->getNextToken();
-            if (!isset($token)) {
-                $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
-                return;
-            }
+            if (!isset($token)) return;
+
             if ($token == XAR_TOKEN_TAG_START) {
                 $this->raiseError(XAR_BL_INVALID_TAG,"Unclosed tag.", $this);
                 return;
@@ -818,10 +815,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $tagName = '';
         while (true) {
             $token = $this->getNextToken();
-            if (!isset($token)) {
-                $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
-                return;
-            }
+            if (!isset($token)) return;
+            
             if ($token == XAR_TOKEN_TAG_START) {
                 $this->raiseError(XAR_BL_INVALID_TAG,"Unclosed tag.", $this);
                 return;
@@ -854,10 +849,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             // Must parse the entire tag, we want to find > character
             while (true) {
                 $token = $this->getNextToken();
-                if (!isset($token)) {
-                    $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
-                    return;
-                }
+                if (!isset($token)) return;
+
                 if ($token == XAR_TOKEN_TAG_START) {
                     $this->raiseError(XAR_BL_INVALID_TAG,"Unclosed tag.", $this);
                     return;
@@ -876,10 +869,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $name = '';
         while (true) {
             $token = $this->getNextToken();
-            if (!isset($token)) {
-                $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
-                return;
-            } elseif ($token == '"' || $token == "'") {
+            if (!isset($token)) return;
+        
+            if ($token == '"' || $token == "'") {
                 $quote = $token;
                 $this->raiseError(XAR_BL_INVALID_TAG,"Invalid '$token' character in attribute name.", $this);
                 return;
@@ -907,10 +899,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $ok = false;
         while (true) {
             $token = $this->getNextToken();
-            if (!isset($token)) {
-                $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
-                return;
-            } elseif ($token == XAR_TOKEN_TAG_END) {
+            if (!isset($token)) return;
+        
+            if($token == XAR_TOKEN_TAG_END) {
                 $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,"Unclosed '$name' attribute.", $this);
                 return;
             } elseif ($token == $quote) {
@@ -940,10 +931,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $tagName = '';
         while (true) {
             $token = $this->getNextToken();
-            if (!isset($token)) {
-                $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
-                return;
-            } elseif ($token == XAR_TOKEN_TAG_START) {
+            if (!isset($token)) return;
+        
+            if($token == XAR_TOKEN_TAG_START) {
                 $this->raiseError(XAR_BL_INVALID_TAG,"Unclosed tag.", $this);
                 return;
             } elseif ($token == XAR_TOKEN_TAG_END) {
@@ -965,10 +955,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $entityType = '';
         while (true) {
             $token = $this->getNextToken();
-            if (!isset($token)) {
-                $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
-                return;
-            } elseif ($token == '-' || $token == XAR_TOKEN_ENTITY_END) {
+            if (!isset($token)) return;
+            
+            if($token == '-' || $token == XAR_TOKEN_ENTITY_END) {
                 break;
             }
             $entityType .= $token;
@@ -982,10 +971,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             $parameter = '';
             while (true) {
                 $token = $this->getNextToken();
-                if (!isset($token)) {
-                    $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
-                    return;
-                } elseif ($token == XAR_TOKEN_ENTITY_END) {
+                if (!isset($token)) return;
+ 
+                if($token == XAR_TOKEN_ENTITY_END) {
                     if ($parameter == '') {
                         $this->raiseError(XAR_BL_INVALID_ENTITY,"Empty parameter.", $this);
                         return;
@@ -1003,7 +991,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return array($entityType, $parameters);
     }
 
-    function getNextToken($len = 1)
+    function getNextToken($len = 1,$dontExcept = false)
     {
         $result = '';
         while($len >= 1) {
@@ -1012,6 +1000,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 // This line fixes a bug that happen when $len is > 1
                 // and the file ends before the token has been read
                 $this->pos += $len;
+                if(!$dontExcept) {
+                    $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
+                }
                 return;
             }
             $this->lineText .= $token;
