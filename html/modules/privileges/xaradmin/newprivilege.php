@@ -10,6 +10,7 @@ function privileges_admin_newprivilege()
 
     if (!xarVarFetch('pid',        'isset', $data['pid'],        '',         XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('pname',      'isset', $data['pname'],      '',         XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('pparentid',  'isset', $data['pparentid'],  '',         XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('prealm',     'isset', $data['prealm'],     'All',      XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('pmodule',    'isset', $module,             NULL,       XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('pcomponent', 'isset', $data['pcomponent'], 'All',      XARVAR_NOT_REQUIRED)) {return;}
@@ -45,9 +46,6 @@ function privileges_admin_newprivilege()
     }
 
     //Load Template
-    if(isset($pparentid)) {$data['pparentid'] = $pparentid;}
-    else {$data['pparentid'] = '0';}
-
     $instances = $privs->getinstances($data['pmodule'],$data['pcomponent']);
 // send to external wizard if necessary
     if (!empty($instances['external']) && $instances['external'] == "yes") {
