@@ -16,7 +16,7 @@
                 <input type="password" name="pass" id="pass#$blockid#" maxlength="64" size="10" />
             </td>
         </tr>
-        <xar:if condition="xarConfigGetVar('seclevel') ne 'High'">
+        <xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') ne 'High'">
             <tr>
                 <td colspan="2">
                     <input type="checkbox" name="rememberme" id="rememberme#$blockid#" value="1" /><label for="rememberme#$blockid#"><xar:mlstring>Remember me</xar:mlstring></label>
