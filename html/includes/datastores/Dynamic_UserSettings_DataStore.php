@@ -2,7 +2,7 @@
 /**
  * Data Store is the user settings (user variables per module) // TODO: integrate user variable handling with DD
  *
- * @package dynamic data
+ * @package dynamicdata
  * @subpackage datastores
  */
 

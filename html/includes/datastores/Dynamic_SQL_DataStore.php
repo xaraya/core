@@ -2,7 +2,7 @@
 /**
  * Base class for SQL Data Stores
  *
- * @package dynamic data
+ * @package dynamicdata
  * @subpackage datastores
  */
 

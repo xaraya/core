@@ -2,7 +2,7 @@
 /**
  * Data Store is the module variables // TODO: integrate module variable handling with DD
  *
- * @package dynamic data
+ * @package dynamicdata
  * @subpackage datastores
  */
 

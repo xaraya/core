@@ -2,7 +2,7 @@
 /**
  * Data Store is an LDAP directory
  *
- * @package dynamic data
+ * @package dynamicdata
  * @subpackage datastores
  */
 
