@@ -21,7 +21,7 @@
 	<input type="text" name="search" id="search" value="" size="40" maxlength="255" tabindex="1" />
 	<input type="submit" value="#$searchlabel#" />
 </td>
-<td align="left">
+<td style="text-align: left; padding: 50px">
 <b>#$msg#</b>
 </td>
 </tr>
@@ -57,30 +57,30 @@
 	<table width="100%" border="0" cellspacing="0" cellpadding="2">
 		<tr>
 			<xar:if condition="$phase eq 'active' and xarSecurityCheck('AdminPanel',0)">
-				<th width="30%" align="left">
+				<th style="width: 30%;" align="left">
 					<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=#$phase#&amp;letter=#$letter#&amp;search=#$search#&amp;order=name">
 						<xar:mlstring>Name</xar:mlstring>
 					</a>
 				</th>
-				<th width="40%">
+				<th style="width: 40%;">
 					<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=#$phase#&amp;letter=#$letter#&amp;search=#$search#&amp;order=uname">
 						<xar:mlstring>IP Address</xar:mlstring>
 					</a>
 				</th>
 			<xar:else />
-				<th width="70%" align="left">
+				<th style="width: 70%;" align="left">
 					<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=#$phase#&amp;letter=#$letter#&amp;search=#$search#&amp;order=name">
 						<xar:mlstring>Name</xar:mlstring>
 					</a>
 				</th>
 			</xar:if>
-			<th width="10%">
+			<th style="width: 10%;">
 				<xar:mlstring>Email</xar:mlstring>
 			</th>
 		    <xar:if condition="isset($properties) and count($properties) gt 0">
 	<!-- TODO: adapt % of column widths -->
 		    <xar:foreach in="$properties" key="$key">
-			<th width="10%">
+			<th style="width: 10%;">
 				<xar:data-label property="$properties[$key]" />
 			</th>
 		    </xar:foreach>
