@@ -1,0 +1,27 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <xar:mlstring>Remove a Group/User</xar:mlstring>            
+        </th>
+    </tr>
+</table>
+
+<center>
+<form method="post" action="&xar-modurl-participants-admin-removeparticipant;" method="post" enctype="application/x-www-form-urlencoded" />
+    <input type="hidden" name="authid" value="&xar-var-authid;" />
+	<input type="hidden" name="partid" id="partid" value="&xar-var-partid;" />
+	<input type="hidden" name="permid" id="permid" value="&xar-var-permid;" />
+	<input type="hidden" name="confirmation" id="confirmation" value="1"/>
+
+	<font class="xar-title"><xar:mlstring>Confirm the removal of Permission</xar:mlstring>  '&xar-var-permname;' <xar:mlstring>from</xar:mlstring>
+	<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
+	<xar:else /><xar:mlstring>User</xar:mlstring>
+	</xar:if>
+	'&xar-var-partname;'</font>
+	<br /><br />
+
+	<input type="submit" value="<xar:mlstring>Confirm</xar:mlstring>" align="middle" tabindex="1" /><br /><br />
+	
+	<a href="&xar-modurl-security-admin-showparticipants;&pid=&xar-var-permid;"><xar:mlstring>Cancel the removal</xar:mlstring></a>
+</form>        
+</center>

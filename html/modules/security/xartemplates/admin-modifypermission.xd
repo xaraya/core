@@ -1,0 +1,291 @@
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function setaction(target){
+document.forms[0].action = target;
+document.forms[0].submit();}
+//-->
+</SCRIPT>
+
+<table border="0" width="100%">
+    <tr>
+        <th colspan="10" align="center">
+            <xar:mlstring>Modify Permission</xar:mlstring> '&xar-var-pname;'           
+        </th>
+    </tr>
+</table>
+
+<center>
+	<br /><br />
+	<form action="&xar-modurl-security-admin-updatepermission;" method="post" enctype="application/x-www-form-urlencoded">
+		
+		<table border="0" cellpadding="5">
+			<tr>
+				<td>
+					<xar:mlstring>Name</xar:mlstring>
+				</td>
+				<td>
+					<input type="text" name="pname" id="pname" value="&xar-var-pname;" size="20" maxlength="20" tabindex="1" />
+					<input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
+					<input type="hidden" name="pid" id="pid" value="&xar-var-pid;" />
+				</td>
+				<td width="20">
+					&nbsp;
+				</td>
+				<td>
+					<xar:mlstring>Realm</xar:mlstring>
+				</td>
+				<td>
+					<select name="prealm" id="prealm" size="1" tabindex="3">
+						<xar:loop name="$realms">
+							<xar:if condition="$name eq $prealm">
+								<option value="&xar-var-name;" selected>&xar-var-name;</option>
+							<xar:else />
+								<option value="&xar-var-name;">&xar-var-name;</option>
+							</xar:if>
+						</xar:loop>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					&nbsp;
+				</td>
+				<td width="20">
+					&nbsp;
+				</td>
+				<td>
+					<xar:mlstring>Module</xar:mlstring>
+				</td>
+				<td>
+					<select name="pmodule" id="pmodule" size="1" tabindex="4" onChange="javascript:setaction('&xar-modurl-security-admin-modifypermission;')">
+						<xar:loop name="$modules">
+							<xar:if condition="$name eq $pmodule">
+								<option value="&xar-var-name;" selected>&xar-var-name;</option>
+							<xar:else />
+								<option value="&xar-var-name;">&xar-var-name;</option>
+							</xar:if>
+						</xar:loop>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					&nbsp;
+				</td>
+				<td width="20">
+					&nbsp;
+				</td>
+				<td>
+					<xar:mlstring>Component</xar:mlstring>
+				</td>
+				<td>
+					<select name="pcomponent" id="pcomponent" size="1" tabindex="5">
+						<xar:loop name="$components">
+							<xar:if condition="$name eq $pcomponent">
+								<option value="&xar-var-name;" selected>&xar-var-name;</option>
+							<xar:else />
+								<option value="&xar-var-name;">&xar-var-name;</option>
+							</xar:if>
+						</xar:loop>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					&nbsp;
+				</td>
+				<td width="20">
+					&nbsp;
+				</td>
+				<td>
+					<xar:mlstring>Instance</xar:mlstring>
+				</td>
+				<td>
+					<input type="text" name="pinstance" id="pinstance" value="&xar-var-pinstance;" size="36" maxlength="255" tabindex="6" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					&nbsp;
+				</td>
+				<td width="20">
+					&nbsp;
+				</td>
+				<td>
+					<xar:mlstring>Level</xar:mlstring>
+				</td>
+				<td>
+					<select name="plevel" id="plevel" size="1" tabindex="7">				
+						<xar:if condition="$plevel eq 0">
+							<option value="0" selected><xar:mlstring>None</xar:mlstring></option>
+						<xar:else />
+							<option value="0"><xar:mlstring>None</xar:mlstring></option>
+						</xar:if>						
+						<xar:if condition="$plevel eq 100">
+							<option value="100" selected><xar:mlstring>Overview</xar:mlstring></option
+						<xar:else />
+							<option value="100"><xar:mlstring>Overview</xar:mlstring></option>
+						</xar:if>						
+						<xar:if condition="$plevel eq 200">
+							<option value="200" selected><xar:mlstring>Read</xar:mlstring></option>
+						<xar:else />
+							<option value="200"><xar:mlstring>Read</xar:mlstring></option>
+						</xar:if>						
+						<xar:if condition="$plevel eq 300">
+							<option value="300" selected><xar:mlstring>Comment</xar:mlstring></option>
+						<xar:else />
+							<option value="300"><xar:mlstring>Comment</xar:mlstring></option>
+						</xar:if>						
+						<xar:if condition="$plevel eq 400">
+							<option value="400" selected><xar:mlstring>Moderate</xar:mlstring></option>
+						<xar:else />
+							<option value="400"><xar:mlstring>Moderate</xar:mlstring></option>
+						</xar:if>						
+						<xar:if condition="$plevel eq 500">
+							<option value="500" selected><xar:mlstring>Edit</xar:mlstring></option>
+						<xar:else />
+							<option value="500"><xar:mlstring>Edit</xar:mlstring></option>
+						</xar:if>						
+						<xar:if condition="$plevel eq 600">
+							<option value="600" selected><xar:mlstring>Add</xar:mlstring></option>
+						<xar:else />
+							<option value="600"><xar:mlstring>Add</xar:mlstring></option>
+						</xar:if>						
+						<xar:if condition="$plevel eq 700">
+							<option value="700" selected><xar:mlstring>Delete</xar:mlstring></option>
+						<xar:else />
+							<option value="700"><xar:mlstring>Delete</xar:mlstring></option>
+						</xar:if>						
+						<xar:if condition="$plevel eq 800">
+							<option value="800" selected><xar:mlstring>Admin</xar:mlstring></option>
+						<xar:else />
+							<option value="800"><xar:mlstring>Admin</xar:mlstring></option>
+						</xar:if>						
+					</select>
+				</td>
+			</tr>
+		</table>			
+					
+		<br /><br />
+
+		<input type="submit" value="<xar:mlstring>Update</xar:mlstring>" align="middle" tabindex="8" />
+	</form>
+</center>
+
+<table border="0" width="100%">
+	<tr>
+		<td colspan="5">
+			<hr>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="5">			
+			<xar:mlstring>Permission</xar:mlstring>
+			<b>'&xar-var-pname;'</b>
+			<xar:mlstring>is a member of the following permissions:</xar:mlstring>			
+		</td>
+	</tr>
+	<xar:loop name="$parents">
+		<tr>
+			<td width="150">
+				<xar:if condition="$parentid gt 2">
+					<a href="&xar-modurl-participants-admin-modifyparticipant;&ppid=&xar-var-parentid;">				
+					&xar-var-parentname;
+					</a>
+				<xar:else />
+					<b>&xar-var-parentname;</b>
+				</xar:if>
+			</td>
+			<td width="50">
+				&nbsp;
+			</td>
+			<td width="100">
+				&nbsp;
+			</td>
+			<td>
+				&nbsp;
+			</td>
+			<td width="50" align="right">
+				<xar:if condition="count($parents) neq 1">
+					<a href="&xar-modurl-security-admin-removemember;&childid=&xar-var-ppid;&parentid=&xar-var-parentid;">				
+						<xar:mlstring>Remove</xar:mlstring>    
+					</a>
+				<xar:else />
+					&nbsp;
+				</xar:if>
+			</td>
+		</tr>
+	</xar:loop>
+</table>
+<table border="0" width="100%">
+    <tr>
+        <td colspan="4" align="center">
+        	<hr>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" align="center">
+            <xar:mlstring>Add Permission</xar:mlstring>
+             <b>'&xar-var-pname;'</b> <xar:mlstring>to a Permission</xar:mlstring>                  
+        </td>
+    </tr>
+</table>
+
+<center>
+	<form action="&xar-modurl-security-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
+		
+		<table border="0" cellpadding="5">
+
+			<tr>
+				<td>
+					<xar:mlstring>Permission:</xar:mlstring>
+				</td>
+				<td>
+					<select name="permid">
+						<xar:loop name="$permissions">
+							<option value="&xar-var-pid;">&xar-var-name;
+						</xar:loop>
+					</select>
+				</td>
+			</tr>
+		</table>			
+		<br />
+		<input type="submit" value="<xar:mlstring>Add</xar:mlstring>" align="middle" tabindex="2" />
+		<input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
+		<input type="hidden" name="ppid" id="ppid" value="&xar-var-ppid;" />
+	</form>
+</center>
+
+<table border="0" width="100%">
+	<tr>
+		<th align="center">
+			<xar:mlstring>Current Permissions</xar:mlstring>
+		</th>
+	</tr>
+</table>
+<table border="0" cellspacing="5" width="100%">
+	<tr>
+		<td>
+			<a href="&xar-modurl-security-admin-newpermission;">
+				<xar:mlstring>Add Permission</xar:mlstring>
+			</a>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			#$tree#
+		</td>
+	</tr>
+</table>			
