@@ -99,21 +99,10 @@ function installer_admin_phase3()
         if (version_compare(PHP_VERSION,'4.1.2','>=')) $metRequiredPHPVersion = true;
     }
 
-    if (is_writable($systemConfigFile)) {
-        $systemConfigIsWritable = true;
-    }
-
-    if (is_writable($cacheTemplatesDir)) {
-        $cacheTemplatesIsWritable = true;
-    }
-
-    if (is_writable($rssTemplatesDir)) {
-        $rssTemplatesIsWritable = true;
-    }
-
-    if (is_writable($adodbTemplatesDir)) {
-        $adodbTemplatesIsWritable = true;
-    }
+    $systemConfigIsWritable = is_writable($systemConfigFile);
+    $cacheTemplatesIsWritable = is_writable($cacheTemplatesDir);
+    $rssTemplatesIsWritable = is_writable($rssTemplatesDir);
+    $adodbTemplatesIsWritable = is_writable($adodbTemplatesDir);
 
     $data['metRequiredPHPVersion']    = $metRequiredPHPVersion;
     $data['phpVersion']               = PHP_VERSION;
