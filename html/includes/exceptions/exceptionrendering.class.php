@@ -180,7 +180,7 @@ class ExceptionRendering
                 else $function = '{}';
                 $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at ' . $this->openstrong .$function.'(';
                 // Note: eval() doesn't generate file or line
-                if (isset($stack[$j]['file'])) $text .= basename($stack[$j]['file']).':';
+                if (isset($stack[$j]['file'])) $text .= basename(strval($stack[$j]['file'])).':';
                 if (isset($stack[$j]['line'])) $text .= $stack[$j]['line'];
                 $text .= ')' . $this->closestrong . $this->linebreak;
                 if ($showParams && isset($stack[$i]['args']) && is_array($stack[$i]['args']) && count($stack[$i]['args']) > 0) {
