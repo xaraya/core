@@ -50,7 +50,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,'type' => 'admin'
             ));
 
-    list( $itemtype, $authid ) = xarVarCleanFromInput( 'itemtype', 'authid' );
+    list( $authid ) = xarVarCleanFromInput( 'authid' );
     extract( $args );
 
     if ( isset( $authid ) ) {
@@ -69,7 +69,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
 
         xarModSetVar(
             '<xsl:value-of select="$module_prefix" />'
-            ,'itemsperpage.' . $itemtype
+            ,'itemsperpage.' . '<xsl:value-of select="@itemtype" />'
             ,$itemsperpage );
 
         <xsl:if test="@hooks = 'enable'">
@@ -78,7 +78,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
          */
         $args = array(
             'module'        =>  '<xsl:value-of select="$module_prefix" />'
-            ,'itemtype'     =>  $itemtype );
+            ,'itemtype'     =>  <xsl:value-of select="@itemtype" /> );
         $data['hooks'] = xarModCallHooks(
             'module'
             ,'updateconfig'
@@ -103,7 +103,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
                 ,'admin'
                 ,'config'
                 ,array(
-                    'itemtype' => $itemtype )));
+                    'itemtype' => <xsl:value-of select="@itemtype" /> )));
 
     } // Save the changes
 
@@ -113,7 +113,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
      */
     $args = array(
         'module'        =>  '<xsl:value-of select="$module_prefix" />'
-        ,'itemtype'     =>  $itemtype );
+        ,'itemtype'     =>   <xsl:value-of select="@itemtype" /> );
     $data['hooks'] = xarModCallHooks(
         'module'
         ,'modifyconfig'
@@ -123,11 +123,11 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
 
     </xsl:if>
 
-    $data['itemtype']       = $itemtype;
-    $data['itemtype_label'] = $itemtype;
+    $data['itemtype']       = <xsl:value-of select="@itemtype" />;
+    $data['itemtype_label'] = <xsl:value-of select="@itemtype" />;
     $data['itemsperpage']   = xarModGetVar(
         '<xsl:value-of select="$module_prefix" />'
-        ,'itemsperpage.' . $itemtype );
+        ,'itemsperpage.' . '<xsl:value-of select="@itemtype" />' );
 
 
     /*
@@ -141,7 +141,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,array() );
     $data['action']     = xarModURL( '<xsl:value-of select="$module_prefix" />', 'admin', 'config' );
     $data['authid']     = xarSecGenAuthKey();
-    $data['_bl_template'] = '<xsl:value-of select="@name" />';
+
     return $data;
 }
 

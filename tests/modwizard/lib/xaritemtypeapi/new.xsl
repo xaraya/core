@@ -44,7 +44,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
 
     if (!xarSecurityCheck( 'Add<xsl:value-of select="$module_prefix" />')) return;
 
-    list ( $authid, $itemtype ) = xarVarCleanFromInput( 'authid', 'itemtype' );
+    list ( $authid ) = xarVarCleanFromInput( 'authid' );
     extract( $args );
 
     // Retrieve the object via the dynamicdata module api.
@@ -122,8 +122,6 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,array(
             'itemtype'  => <xsl:value-of select="@itemtype" /> ));
     $data['authid'] = xarSecGenAuthKey();
-    $data['_bl_template'] = '<xsl:value-of select="@name" />';
-
     return $data;
 }
 </xsl:template>

@@ -43,7 +43,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
 
     if (!xarSecurityCheck( 'Delete<xsl:value-of select="$module_prefix" />')) return;
 
-    list ( $itemid, $itemtype ) = xarVarCleanFromInput( 'itemid', 'itemtype' );
+    list ( $itemid ) = xarVarCleanFromInput( 'itemid' );
     extract($args);
 
     // Retrieve the object
@@ -63,7 +63,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,'gettitle'
         ,array(
             'object'    =>  $object
-            ,'itemtype' =>  $itemtype ));
+            ,'itemtype' =>  <xsl:value-of select="@itemtype" /> ));
 
     /*
      * The user confirmed the deletion so let's go.
@@ -79,16 +79,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         '<xsl:value-of select="$module_prefix" />_statusmsg'
         ,'Deleted  <xsl:value-of select="label" /> '. $itemid .' -> '. $item_title .'!' );
 
-    // This function generated no output, and so now it is complete we redirect
-    // the user to an appropriate page for them to carry on their work
-    xarResponseRedirect(
-        xarModURL(
-            '<xsl:value-of select="$module_prefix" />'
-            ,'admin'
-            ,'view'
-            ,array(
-                'itemtype' => <xsl:value-of select="@itemtype" /> )));
-
+    return;
 }
 </xsl:template>
 

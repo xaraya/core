@@ -43,7 +43,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
 
     if (!xarSecurityCheck( 'Delete<xsl:value-of select="$module_prefix" />')) return;
 
-    list ( $itemid,  $itemtype ) = xarVarCleanFromInput( 'itemid', 'itemtype' );
+    list ( $itemid ) = xarVarCleanFromInput( 'itemid' );
     extract($args);
 
     // Retrieve the object
@@ -63,7 +63,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,'gettitle'
         ,array(
             'object'    =>  $object
-            ,'itemtype' =>  $itemtype ));
+            ,'itemtype' =>  <xsl:value-of select="@itemtype" /> ));
     $data = xarModAPIFunc(
         '<xsl:value-of select="$module_prefix" />'
         ,'private'
@@ -86,7 +86,6 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             'itemtype'  => <xsl:value-of select="@itemtype" />
             ,'itemid'   => $itemid ));
     $data['authid'] = xarSecGenAuthKey();
-    $data['_bl_template'] = '<xsl:value-of select="@name" />';
 
     return $data;
 

@@ -42,17 +42,8 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
     if (!xarSecurityCheck( 'View<xsl:value-of select="$module_prefix" />')) return;
 
     // Get parameter from browser
-    list( $type, $startnum, $itemid ,$itemtype ) = xarVarCleanFromInput( 'type', 'startnum', 'itemid', 'itemtype' );
+    list( $type, $startnum, $itemid ) = xarVarCleanFromInput( 'type', 'startnum', 'itemid' );
     extract( $args );
-
-    // The itemtype is a must!
-    if ( empty( $itemtype ) ) {
-        xarResponseRedirect(
-            xarModURL(
-                '<xsl:value-of select="$module_prefix" />'
-                ,'user'
-                ,'main' ));
-    }
 
     $data =&amp; xarModAPIFunc(
         '<xsl:value-of select="$module_prefix" />'
@@ -65,14 +56,14 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
 
     $itemsperpage = xarModGetVar(
             '<xsl:value-of select="$module_prefix" />'
-            ,'itemsperpage.' . $itemtype );
+            ,'itemsperpage.' . <xsl:value-of select="@itemtype" /> );
 
     $objects =&amp; xarModAPIFunc(
         '<xsl:value-of select="$module_prefix" />'
         ,'user'
         ,'getall'
         ,array(
-             'itemtype'  => $itemtype
+             'itemtype'  => <xsl:value-of select="@itemtype" />
             ,'numitems'  => $itemsperpage
             ,'startnum'  => $startnum
             ,'sort'      => array(
@@ -85,22 +76,21 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
 
     $data['objects_props']  =&amp; $objects->getProperties();
     $data['objects_values'] =&amp; $objects->items;
-    $data['itemtype'] = $itemtype;
-    $data['_bl_template'] = '<xsl:value-of select="@name" />';
+    $data['itemtype'] = <xsl:value-of select="@itemtype" />;
     $data['pager'] = xarTplGetPager(
         $startnum
         ,xarModAPIFunc(
             '<xsl:value-of select="$module_prefix" />'
             ,'user'
             ,'count'
-            ,array( 'itemtype' => $itemtype ))
+            ,array( 'itemtype' => <xsl:value-of select="@itemtype" /> ))
         ,xarModURL(
             '<xsl:value-of select="$module_prefix" />'
             ,$type
             ,'view'
             ,array(
                 'startnum'  => '%%'
-                ,'itemtype' => $itemtype ))
+                ,'itemtype' => <xsl:value-of select="@itemtype" /> ))
         ,$itemsperpage );
 
     return $data;

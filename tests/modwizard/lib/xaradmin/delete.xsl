@@ -92,11 +92,12 @@ function <xsl:value-of select="$module_prefix" />_admin_delete( $args ) {
             switch( $itemtype ) {
             <xsl:for-each select="database/table[@admin='true']">
                 case <xsl:value-of select="@itemtype" />:
-                    return xarModAPIFunc(
+                    xarModAPIFunc(
                         '<xsl:value-of select="$module_prefix" />'
                         ,'<xsl:value-of select="@name" />'
                         ,'delete'
                         ,$args );
+                    break;
             </xsl:for-each>
 
                 default:
@@ -108,17 +109,29 @@ function <xsl:value-of select="$module_prefix" />_admin_delete( $args ) {
                             ,'view' ));
             }
 
+            // This function generated no output, and so now it is complete we redirect
+            // the user to an appropriate page for them to carry on their work
+            xarResponseRedirect(
+                xarModURL(
+                    '<xsl:value-of select="$module_prefix" />'
+                    ,'admin'
+                    ,'view'
+                    ,array(
+                        'itemtype' => $itemtype )));
         }
     }
+
 
     switch( $itemtype ) {
     <xsl:for-each select="database/table[@admin='true']">
         case <xsl:value-of select="@itemtype" />:
-            return xarModAPIFunc(
+            $data = xarModAPIFunc(
                 '<xsl:value-of select="$module_prefix" />'
                 ,'<xsl:value-of select="@name" />'
                 ,'confirmdelete'
                 , $args );
+            $itemtype_name = '<xsl:value-of select="@name" />';
+            break;
     </xsl:for-each>
         default:
             // TODO // Add statusmessage
@@ -128,6 +141,15 @@ function <xsl:value-of select="$module_prefix" />_admin_delete( $args ) {
                     ,'admin'
                     ,'view' ));
     }
+
+    return xarTplModule(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'admin'
+        ,'delete'
+        ,$data
+        ,$itemtype_name );
+
+
 }
 </xsl:template>
 

@@ -69,11 +69,13 @@ function <xsl:value-of select="$module_prefix" />_user_display( $args ) {
     switch( $itemtype ) {
     <xsl:for-each select="database/table[@user='true' or @admin='true']">
         case <xsl:value-of select="@itemtype" />:
-            return xarModAPIFunc(
+            $data = xarModAPIFunc(
                 '<xsl:value-of select="$module_prefix" />'
                 ,'<xsl:value-of select="@name" />'
                 ,'display'
                 , $args );
+            $itemtype_name = '<xsl:value-of select="@name" />';
+            break;
     </xsl:for-each>
 
         default:
@@ -87,6 +89,15 @@ function <xsl:value-of select="$module_prefix" />_user_display( $args ) {
                     ,'user'
                     ,'main' ));
     }
+
+    return xarTplModule(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'user'
+        ,'display'
+        ,$data
+        ,$itemtype_name );
+
+
 }
 </xsl:template>
 

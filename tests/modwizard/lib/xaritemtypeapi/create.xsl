@@ -44,7 +44,6 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
 
     if (!xarSecurityCheck( 'Add<xsl:value-of select="$module_prefix" />')) return;
 
-    list ( $itemtype ) = xarVarCleanFromInput( 'itemtype' );
     extract( $args );
 
     // Retrieve the object via the dynamicdata module api.
@@ -77,7 +76,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,'gettitle'
             ,array(
                 'object'    =>  $object
-                ,'itemtype' =>  $itemtype ));
+                ,'itemtype' =>  <xsl:value-of select="@itemtype" /> ));
 
         xarSessionSetVar(
             '<xsl:value-of select="$module_prefix" />_statusmsg'
@@ -99,7 +98,6 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         return <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_new( $args );
 
     }
-
 
 }
 </xsl:template>

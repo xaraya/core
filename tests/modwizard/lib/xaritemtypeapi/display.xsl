@@ -45,30 +45,17 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
     if (!xarSecurityCheck( 'View<xsl:value-of select="$module_prefix" />')) return;
 
     // Get parameter from browser
-    list( $itemid ,$itemtype ) = xarVarCleanFromInput( 'itemid', 'itemtype' );
+    list( $itemid ) = xarVarCleanFromInput( 'itemid' );
     extract( $args );
 
     // Overload it with the arguments from the admin interface ( if provided )
     $data = array();
     if ( isset( $object ) ) {
 
-        // We need a itemtype to render things properly.
-        if ( empty( $itemtype ) ) return 'please provide a itemtype';
-
     } else {
 
         // Load the object and provide all tasks which should only be done
         // when we are not rendering a preview ( Menu, Hooks ... )
-
-        // We are called from a browser. To load a object we need a itemtype
-        // and a itemid. If there is itemtype let's go to the main page.
-        if ( empty( $itemtype ) ) {
-            xarResponseRedirect(
-                xarModURL(
-                    '<xsl:value-of select="$module_prefix" />'
-                    ,'user'
-                    ,'main' ));
-        }
 
         // If there is no itemid let's go to the itemtypes overview page.
         if ( empty( $itemid ) ) {
@@ -78,7 +65,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
                     ,'user'
                     ,'view'
                     ,array(
-                        'itemtype'  =>  $itemtype )));
+                        'itemtype'  =>  <xsl:value-of select="@itemtype" /> )));
         }
 
         // Retrieve the object
@@ -87,7 +74,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,'user'
             ,'get'
             ,array(
-                 'itemtype'  => $itemtype
+                 'itemtype'  => <xsl:value-of select="@itemtype" />
                 ,'itemid'    => $itemid
             ));
         if ( empty( $object ) ) return;
@@ -98,7 +85,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,'gettitle'
             ,array(
                 'object'    =>  $object
-                ,'itemtype' =>  $itemtype ));
+                ,'itemtype' =>  <xsl:value-of select="@itemtype" /> ));
         $data = xarModAPIFunc(
             '<xsl:value-of select="$module_prefix" />'
             ,'private'
@@ -118,14 +105,14 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         $args = array(
             'module'        =>  '<xsl:value-of select="$module_prefix" />'
             ,'itemid'       =>  $itemid
-            ,'itemtype'     =>  $itemtype
+            ,'itemtype'     =>  <xsl:value-of select="@itemtype" />
             ,'returnurl'    =>  xarModURL(
                 '<xsl:value-of select="$module_prefix" />'
                 ,'user'
                 ,'display'
                 ,array(
                     'itemid'       =>  $itemid
-                    ,'itemtype'    =>  $itemtype
+                    ,'itemtype'    =>  <xsl:value-of select="@itemtype" />
                     ))
             );
         $hooks = xarModCallHooks(
@@ -140,12 +127,9 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
     }
 
     $data['object_props'] =&amp; $object->getProperties();
-    $data['_bl_template'] = '<xsl:value-of select="@name" />';
-    $data['itemtype'] = $itemtype;
+    $data['itemtype'] = <xsl:value-of select="@itemtype" />;
     $data['itemid']   = $itemid;
     return $data;
-
-   return $data;
 }
 </xsl:template>
 

@@ -61,16 +61,25 @@ function <xsl:value-of select="$module_prefix" />_admin_config( $args ) {
     switch( $itemtype ) {
     <xsl:for-each select="database/table[@admin='true']">
         case <xsl:value-of select="@itemtype" />:
-            return xarModAPIFunc(
+            $data = xarModAPIFunc(
                 '<xsl:value-of select="$module_prefix" />'
                 ,'<xsl:value-of select="@name" />'
                 ,'config'
                 ,$args );
+            $itemtype_name = '<xsl:value-of select="@name" />';
+            break;
     </xsl:for-each>
 
         default:
             return <xsl:value-of select="$module_prefix" />_adminpriv_config( $args );
     }
+
+    return xarTplModule(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'admin'
+        ,'config'
+        ,$data
+        ,$itemtype_name );
 }
 
 /**

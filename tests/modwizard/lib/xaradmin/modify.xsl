@@ -111,11 +111,13 @@ function <xsl:value-of select="$module_prefix" />_admin_modify( $args ) {
     switch( $itemtype ) {
     <xsl:for-each select="database/table[@admin='true']">
         case <xsl:value-of select="@itemtype" />:
-            return xarModAPIFunc(
+            $data = xarModAPIFunc(
                 '<xsl:value-of select="$module_prefix" />'
                 ,'<xsl:value-of select="@name" />'
                 ,'modify'
                 ,$args );
+            $itemtype_name = '<xsl:value-of select="@name" />';
+            break;
     </xsl:for-each>
         default:
             // TODO // Add statusmessage
@@ -126,6 +128,12 @@ function <xsl:value-of select="$module_prefix" />_admin_modify( $args ) {
                     ,'view' ));
     }
 
+    return xarTplModule(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'admin'
+        ,'modify'
+        ,$data
+        ,$itemtype_name );
 }
 </xsl:template>
 

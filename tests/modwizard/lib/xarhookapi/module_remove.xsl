@@ -69,9 +69,6 @@ function <xsl:value-of select="$module_prefix" />_hookapi_module_remove ( $args 
         return;
     }
 
-    // Security check. Adjust.
-    // if (!xarSecurityCheck('SubmitCategoryLink',0,'Link',"$modid:All:All:All")) return '';
-
     return xarTplModule(
         '<xsl:value-of select="$module_prefix" />'
         ,'hook'
