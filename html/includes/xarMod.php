@@ -1283,7 +1283,7 @@ function xarModGetDisplayableDescription($modName = NULL, $type = 'module')
     if (empty($modName)) {
         $modName = xarModGetName();
     }
-    $modInfo = xarMod_getFileInfo($modName);
+    $modInfo = xarMod_getFileInfo($modName, $type);
     return xarML($modInfo['displaydescription']);
 }
 
@@ -1831,9 +1831,9 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     $modBaseInfo['systemid'] = (int) $systemid;
     $modBaseInfo['state'] = (int) $state;
     $modBaseInfo['name'] = $name;
-    $modBaseInfo['displayname'] = xarModGetDisplayableName($name, $type);
-    $modBaseInfo['displaydescription'] = xarModGetDisplayableDescription($name, $type);
     $modBaseInfo['directory'] = $directory;
+    $modBaseInfo['displayname'] = xarModGetDisplayableName($directory, $type);
+    $modBaseInfo['displaydescription'] = xarModGetDisplayableDescription($directory, $type);
     // Shortcut for os prepared directory
     // TODO: <marco> get rid of it since useless
     $modBaseInfo['osdirectory'] = xarVarPrepForOS($directory);
