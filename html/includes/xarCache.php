@@ -221,8 +221,8 @@ function xarBlockIsCached($args)
             $systemPrefix = xarDBGetSystemTablePrefix();
             $rolemembers = $systemPrefix . '_rolemembers';
             $dbconn =& xarDBGetConn();
-            $query = "SELECT xar_parentid FROM $rolemembers WHERE xar_uid = $currentuid ";
-            $result =& $dbconn->Execute($query);
+            $query = "SELECT xar_parentid FROM $rolemembers WHERE xar_uid = ?";
+            $result =& $dbconn->Execute($query,array($currentuid));
             if (!$result) return;
             $gids ='';
             while(!$result->EOF) {
