@@ -120,6 +120,14 @@ function initializeSetup()
                              'limit' => 20));
     xarDefineInstance('roles','Roles',$instances,0,$roleMembersTable,'xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
 
+    $instances = array(array('header' => 'Parent:',
+                             'query' => $query,
+                             'limit' => 20),
+                       array('header' => 'Child:',
+                             'query' => $query,
+                             'limit' => 20));
+    xarDefineInstance('roles','Relation',$instances,0,$roleMembersTable,'xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
+
    // ----------------------------- Privileges Module
     $query = "SELECT DISTINCT xar_name FROM $privilegesTable";
     $instances = array(array('header' => 'Privileges',
@@ -201,12 +209,13 @@ function initializeSetup()
     xarRegisterMask('ViewRolesBlocks','All','roles','Block','All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewRoles','All','roles','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('ReadRole','All','roles','All','All','ACCESS_READ');
-    xarRegisterMask('AssignRole','All','roles','All','All','ACCESS_MODERATE');
     xarRegisterMask('EditRole','All','roles','All','All','ACCESS_EDIT');
     xarRegisterMask('AddRole','All','roles','All','All','ACCESS_ADD');
     xarRegisterMask('DeleteRole','All','roles','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminRole','All','roles','All','All','ACCESS_ADMIN');
     xarRegisterMask('MailRoles','All','roles','Mail','All','ACCESS_ADMIN');
+    xarRegisterMask('AttachRole','All','roles','Relation','All','ACCESS_ADD');
+    xarRegisterMask('RemoveRole','All','roles','Relation','All','ACCESS_DELETE');
 
     xarRegisterMask('EditMail','All','mail','All','All','ACCESS_EDIT');
     xarRegisterMask('AddMail','All','mail','All','All','ACCESS_ADD');

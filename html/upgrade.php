@@ -945,6 +945,15 @@ Password : %%password%%
         echo "Myself role has been created previously, moving to next check. <br />";
     }
 
+    $upgrade['roles_masks'] = xarMaskExists('AttachRole',$module='roles');
+    if (!$upgrade['roles_masks']) {
+        echo "AttachRole, RemoveRole masks do not exist, attempting to create... done! <br />";
+        xarRegisterMask('AttachRole','All','roles','Relation','All','ACCESS_ADD');
+        xarRegisterMask('RemoveRole','All','roles','Relation','All','ACCESS_DELETE');
+    } else {
+        echo "AttachRole, RemoveRole masks have been created previously, moving to next check. <br />";
+    }
+
     // Check the installed privs and masks.
     echo "<h5>Checking Privilege Structure</h5>";
 
@@ -1052,9 +1061,8 @@ Password : %%password%%
         echo "Privileges Locks have been created previously, moving to next check. <br />";
     }
 
-    //Move this mask from privilges to roles module
+    //Move this mask from privileges module
     xarUnregisterMask('AssignRole');
-    xarRegisterMask('AssignRole','All','roles','All','All','ACCESS_MODERATE');
 
     // Check the installed privs and masks.
     echo "<h5>Checking Hook Structure</h5>";

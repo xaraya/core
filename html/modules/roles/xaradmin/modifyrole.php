@@ -35,9 +35,11 @@ function roles_admin_modifyrole()
     $parents = array();
     $names = array();
     foreach ($role->getParents() as $parent) {
-        $parents[] = array('parentid' => $parent->getID(),
-            'parentname' => $parent->getName());
-        $names[] = $parent->getName();
+        if(xarSecurityCheck('RemoveRole',0,'Relation',$parent->getName() . ":" . $role->getName())) {
+            $parents[] = array('parentid' => $parent->getID(),
+                'parentname' => $parent->getName());
+            $names[] = $parent->getName();
+        }
     }
     $data['parents'] = $parents;
 
@@ -48,7 +50,7 @@ function roles_admin_modifyrole()
     foreach($roles->getgroups() as $temp) {
         $nam = $temp['name'];
 // TODO: this is very inefficient. Here we have the perfect use case for embedding security checks directly into the SQL calls
-        if(!xarSecurityCheck('EditRole',0,'Roles',$nam)) continue;
+        if(!xarSecurityCheck('AttachRole',0,'Relation',$nam . ":" . $role->getName())) continue;
         if (!in_array($nam, $names) && $temp['uid'] != $uid) {
             $names[] = $nam;
             $groups[] = array('duid' => $temp['uid'],
