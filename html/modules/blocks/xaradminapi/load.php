@@ -43,7 +43,7 @@ function blocks_adminapi_load($args)
     $loaded["$modName$blockName"] = 1;
 
     // Load the block language files
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_BLOCK, $blockName) === NULL) return;
+    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:blocks', $blockName) === NULL) return;
 
     // Initialise block (security schema) if required.
     $initFunc = "{$modName}_{$blockName}block_init";
