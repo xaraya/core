@@ -5,10 +5,9 @@
 		<xar:if condition="empty($url)">
 			&xar-var-title;
 		<xar:else />
-			<a href="&xar-var-url;" title="&xar-var-comment;">&xar-var-title;</a>
+			<a href="&xar-var-url;" title="&xar-var-comment;">&xar-var-title;</a><br />
 		</xar:if>
 	</xar:loop>
-	<br />
 	<br />
 </xar:if>
 
