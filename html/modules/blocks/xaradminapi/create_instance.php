@@ -91,6 +91,8 @@ function blocks_adminapi_create_instance($args)
     // Resequence the blocks
     xarModAPIFunc('blocks','admin','resequence');
 
+    xarModCallHooks('item', 'create', $block_id, '');
+
     return $block_id;
 }
 

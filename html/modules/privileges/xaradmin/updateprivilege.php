@@ -63,6 +63,8 @@ function privileges_admin_updateprivilege()
 
 //Try to update the privilege to the repository and bail if an error was thrown
     if (!$priv->update()) {return;}
+    
+    xarModCallHooks('item', 'update', $pid, '');
 
     xarSessionSetVar('privileges_statusmsg', xarML('Privilege Modified',
                     'privileges'));
