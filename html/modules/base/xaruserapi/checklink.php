@@ -15,6 +15,7 @@
  * @param $args['url'] string the absolute URL for the link
  * @param $args['method'] string the request method to use (default is HEAD, alternative is GET)
  * @param $args['skiplocal'] bool indicates if we want to skip checking local URLs (default is true)
+ * @param $args['referer'] string optional referer (default is base URL of your site)
  * @return integer status of the link
  */
 function base_userapi_checklink($args)
@@ -24,6 +25,7 @@ function base_userapi_checklink($args)
     if (!isset($url)) $url = '';
     if (!isset($method)) $method = 'HEAD';
     if (!isset($skiplocal)) $skiplocal = true;
+    if (!isset($referer)) $referer = xarServerGetBaseURL();
 
     $invalid = false;
     $islocal = false;
@@ -50,10 +52,7 @@ function base_userapi_checklink($args)
         $islocal = true;
     }
     if ($invalid) {
-        $msg = xarML('Invalid URL [#(1)]', $url);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                        new SystemException($msg));
-        return;
+        return xarML('Invalid URL [#(1)]', $url);
     }
 
     if ($skiplocal && $islocal) {
@@ -66,13 +65,12 @@ function base_userapi_checklink($args)
         $proxyport = xarModGetVar('base','proxyport');
         $fp = fsockopen($proxyhost,$proxyport,$errno,$errstr,10);
         if (!$fp) {
-            $msg = xarML('Socket error #(1) : #(2) while retrieving URL #(3)', $errno, $errstr, $url);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
-            return;
+            return xarML('Socket error #(1) : #(2) while retrieving URL #(3)', $errno, $errstr, $url);
         }
-        $baseurl = xarServerGetBaseURL();
-        $request = "$method $url HTTP/1.0\r\nHost: $proxyhost\r\nUser-Agent: Xaraya (http://www.xaraya.com/)\r\nReferer: $baseurl\r\nConnection: close\r\n\r\n";
+        // avoid unnecessary redirects
+        $info = parse_url($url);
+        if (empty($info['path'])) $url .= '/';
+        $request = "$method $url HTTP/1.0\r\nHost: $proxyhost\r\nUser-Agent: Mozilla/5.0 (Xaraya - http://www.xaraya.com/)\r\nReferer: $referer\r\nConnection: close\r\n\r\n";
 
     } else {
         $info = parse_url($url);
@@ -82,25 +80,18 @@ function base_userapi_checklink($args)
 
         $fp = fsockopen($info['host'],$info['port'],$errno,$errstr,10);
         if (!$fp) {
-            $msg = xarML('Socket error #(1) : #(2) while retrieving URL #(3)', $errno, $errstr, $url);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
-            return;
+            return xarML('Socket error #(1) : #(2) while retrieving URL #(3)', $errno, $errstr, $url);
         }
         $uri = $info['path'];
         if (!empty($info['query'])) {
             $uri .= '?' . $info['query'];
         }
-        $baseurl = xarServerGetBaseURL();
-        $request = "$method $uri HTTP/1.0\r\nHost: $info[host]\r\nUser-Agent: Xaraya (http://www.xaraya.com/)\r\nReferer: $baseurl\r\nConnection: close\r\n\r\n";
+        $request = "$method $uri HTTP/1.0\r\nHost: $info[host]\r\nUser-Agent: Mozilla/5.0 (Xaraya - http://www.xaraya.com/)\r\nReferer: $referer\r\nConnection: close\r\n\r\n";
     }
 
     $size = fwrite($fp, $request);
     if (!$size) {
-        $msg = xarML('Error sending request for URL #(1)', $url);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                        new SystemException($msg));
-        return;
+        return xarML('Error sending request for URL #(1)', $url);
     }
     $content = '';
     while (!feof($fp)) {
@@ -108,20 +99,25 @@ function base_userapi_checklink($args)
     }
     fclose($fp);
     if (!preg_match('/^\s*HTTP\/[\d\.]+\s+(\d+)/s',$content,$matches)) {
-        $header = preg_replace('/\r\n\r\n.*$/s','',$content);
-        $msg = xarML('Invalid response headers for URL #(1) : #(2)', $url, $header);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                        new SystemException($msg));
-        return;
+        // some hosts (e.g. newsforge.com) don't even send HTTP headers or <html tags ?!
+        if (!preg_match('/<html(\s+|>)/is',$content) &&
+            !preg_match('/<body(\s+|>)/is',$content)) {
+            $header = preg_replace('/\r\n\r\n.*$/s','',$content);
+            return xarML('Invalid response headers for URL #(1) : #(2)', $url, $header);
+        }
+        // let's assume this is somewhat OK if there's some HTML in there
+        $status = 203; // Non-Authoritative Information
+    } else {
+        $status = $matches[1];
     }
-    $status = $matches[1];
     switch ($status) {
+        case 400: // Bad Request
         case 405: // Method Not Allowed
         case 501: // Not Implemented
             if ($method == 'HEAD') {
                 // try again using GET method
                 return xarModAPIFunc('base', 'user', 'checklink',
-                                     array('url' => $location,
+                                     array('url' => $url,
                                            'method' => 'GET',
                                            'skiplocal' => $skiplocal));
             }
