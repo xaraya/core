@@ -250,6 +250,13 @@ function modules_admin_list()
             $listrows[$i]['actionimg2']         = $img_none;
             $listrows[$i]['actionimg1']         = $img_upgrade;
 
+        } else {
+	  // Something seriously wrong
+	  $statelabel = xarML('Unknown');
+	  $listrows[$i]['actionurl'] = $removeurl;
+          $listrows[$i]['actionlabel'] = xarML('Remove (Bug! in list generation)');
+          $listrows[$i]['state'] = xarML('Remove');
+	  
         }
         
         // nearly done
