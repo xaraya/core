@@ -260,15 +260,11 @@ class xarLogger_simple extends xarLogger
 			die('File is not writeable');
 		}
 		
-		$insert_header = false;
-		
-		if (!file_exists($this->_filename)) {
+		if (!file_exists($this->_filename) || filesize($this->_filename) > $this->_maxFileSize) {
 			$insert_header = true;
-		}
-
-        if (filesize($this->_filename) > $this->_maxFileSize) {
             $option = 'w'; //write over
-        } else {
+		} else {       
+            $insert_header = false;
             $option = 'a'; //append
         }
 		
