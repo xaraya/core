@@ -33,7 +33,15 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         $this->Dynamic_Select_Property($args);
         // specify base directory in validation field
         if (empty($this->basedir) && !empty($this->validation)) {
-            $this->basedir = $this->validation;
+            // Hack for passing this thing into transform hooks 
+            // validation may start with 'transform:' and we
+            // obviously dont want that in basedir
+            if(substr($this->validation,0,10) == 'transform:') {
+                $basedir = substr($this->validation,10,strlen($this->validation)-10);
+            } else {
+                $basedir = $this->validation;
+            }
+            $this->basedir = $basedir;
         }
     }
 
