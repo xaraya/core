@@ -43,9 +43,7 @@ leave pseudo-classes exactly in this order even if you decide to re-declare them
 a:link:hover, a:visited:hover {
     color: #CC3300;
     text-decoration: underline;
-}
-
-/*
+} /*
 we dont really want to underline and hilite named anchors in this theme, just links 
 ------------------------------------------------------------------[important note] */
 
@@ -53,18 +51,9 @@ we dont really want to underline and hilite named anchors in this theme, just li
 Tables and related selectors
 -------------------------------------------------------------------------[comment] */
 
-table {
-/*     border-collapse: collapse; */
-/*     border-style: solid; */
-/*     border-color: #757F8B; */
-/*     border-width: 1px; */
-/*     margin: 0 auto; */
-/*     padding: 0; */
-/*     width: inherit; */
-    font-size:100%;
-}
+table { font-size: 100%; }
 
-div table {width:inherit;}
+/* div table {width:inherit;} */
 
 /*
 the actual border should be visible only when border-width is re-declared
@@ -156,37 +145,27 @@ button { border: 2px outset #f0f0f0; }
 
 input,
 select,
-textarea {
-/*     font-family: monaco, courier, monospace; */
-/*     font-size: .95em; */
-/*     line-height: 1.8em; */
-/*     color: #0a0a0a; */
-/*     background-color: #fbfbfb; */
-/*     padding: 1px 2px; */
-/*     margin: 0 2px .5em 0; */
-/*     border-color: #aaaaaa #dddddd #dddddd #aaaaaa; */
-/*     border-width: 2px; */
-/*     border-style: solid; */
-/*     vertical-align: middle; */
+textarea {}
+
+/* input types and form elements rules can be accurately re-specified for good browsers, but not at this time yet */
+
+/* input[type="text"], 
+input[type="password"],
+input[type="file"],
+textarea { width: 90%; }
+
+select[multiple="multiple"] { width: 45%; }
+
+input[type="submit"] {
+    border-color: #dddddd #aaaaaa #aaaaaa #dddddd;
+    background-color: #eeeeee;
 }
 
-/* input types and form elements rules can be accurately re-specified for good browsers */
-/* input[type="text"], */
-/* input[type="password"], */
-/* input[type="file"], */
-/* textarea { width: 90%; } */
-/* select[multiple="multiple"] { width: 45%; } */
-
-/* input[type="submit"] { */
-/*     border-color: #dddddd #aaaaaa #aaaaaa #dddddd; */
-/*     background-color: #eeeeee; */
-/* } */
-/*  */
-/* input[type="checkbox"], */
-/* input[type="radio"] { */
-/*     width: auto; */
-/*     margin: auto 3px; */
-/* } */
+input[type="checkbox"],
+input[type="radio"] {
+    width: auto;
+    margin: auto 3px;
+} */
 
 /*
 replaced elements 
@@ -296,32 +275,33 @@ module rendering area and related rules
 }
 
 .xar-mod-body { padding: .3em 0;}
-* html .xar-mod-body {width:97%;}
- /* andyv and random are two crazies who want ie5 to work properly */
- * html .xar-mod-body {width:90%;}
+
+/* andyv and random are two crazies who want ie5-win to work properly - remove next rule when the cure is found */
+ * html .xar-mod-body { /*\*/ width:97%; /**/ }
+ 
  .xar-mod-foot { }
 
 /*
 complementary styling - colors, backgrounds and outlines 
 -------------------------------------------------------------------------[comment] */
 
-.xar-alt { background-color: #E7E9F4; }
-.xar-accent { background-color: #E7EAF4; }
+.xar-alt { background-color: #f0f0f0; }
+.xar-accent { background-color: #efefef; }
 
 .xar-alt-outline {
-    border-color: #A782BB;
+    border-color: #6699CC;
     border-width: 1px;
     border-style: solid;
 }
 
 .xar-accent-outline {
-    border-color: #82BBA7;
+    border-color: #333366;
     border-width: 1px;
     border-style: solid;
 }
 
 .xar-norm-outline {
-    border-color: #8296BB;
+    border-color: #666666;
     border-width: 1px;
     border-style: solid;
 }
@@ -449,7 +429,6 @@ div.validators {
     float: right;
     height: 23px;
     width: 80px;
-    /*  padding-top:2px; */
     margin-right: 7px;
 }
 
@@ -530,7 +509,7 @@ abbr, acronym, .help {
 }
 
 /*  EXPERIMENTAL RULES - keep them near the bottom!!
-    some of these rules may eventually be propagated to core required set
+    some of these rules may eventually be propagated to the core required set
     because they are essentially an attempt to eradicate inline styles in templates */
 
 .xar-noborder { border:0 none;}
@@ -539,6 +518,7 @@ abbr, acronym, .help {
 .xar-halfwidth { width: 49%; }
 .xar-thirdwidth { width: 33%; }
 .xar-quarterwidth { width: 24%; }
+.xar-threequarterswidth { width: 75%; }
 
 .xar-fullwidth, .xar-halfwidth, .xar-thirdwidth, .xar-quarterwidth {
     padding: 0;
