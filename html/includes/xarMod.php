@@ -988,6 +988,60 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
 }
 
 /**
+ * Encode parts of a URL.
+ * This will encode the path parts, the and GET parameter names
+ * and data. It cannot encode a complete URL yet.
+ *
+ * @access private
+ * @param data string the data to be encoded (see todo)
+ * @param type string the type of string to be encoded ('getname', 'getvalue', 'path', 'url')
+ * @return string the encoded URL parts
+ * @todo this could be made public
+ * @todo support arrays and encode the complete array (keys and values)
+ **/
+function xarMod__URLencode($data, $type = 'getname')
+{
+    // Different parts of a URL are encoded in different ways.
+    // e.g. a '?' and '/' are allowed in GET parameters, but
+    // '?' must be encoded when in a path, and '/' is not
+    // allowed in a path at all except as the path-part
+    // separators.
+    // The aim is to encode as little as possible, so that URLs
+    // remain as human-readable as we can allow.
+    $type = strtolower($type);
+
+    // We will encode everything first, then restore a select few
+    // characters.
+    // TODO: tackle it the other way around, i.e. have rules for
+    // what to encode, rather than undoing some ecoded characters.
+    $data = rawurlencode($data);
+
+    $decode = array(
+        'path' => array(
+            array('%2C', '%24', '%21', '%2A', '%28', '%29', '%3D'),
+            array(',', '$', '!', '*', '(', ')', '=')
+        ),
+        'getname' => array(
+            array('%2C', '%24', '%21', '%2A', '%28', '%29', '%3D', '%27', '%5B', '%5D'),
+            array(',', '$', '!', '*', '(', ')', '=', '\'', '[', ']')
+        ),
+        'getvalue' => array(
+            array('%2C', '%24', '%21', '%2A', '%28', '%29', '%3D', '%27', '%5B', '%5D', '%3A', '%2F', '%3F', '%3D'),
+            array(',', '$', '!', '*', '(', ')', '=', '\'', '[', ']', ':', '/', '?', '=')
+        )
+    );
+
+    // TODO: check what automatic ML settings have on this.
+    // I suspect none, as all multi-byte characters have ASCII values
+    // of their parts > 127.
+    if (isset($decode[$data])) {
+        $data = str_replace($decode[$data][0], $decode[$data][1]);
+    }
+
+    return $data;
+}
+    
+/**
  * Format GET parameters formed by nested arrays, to support xarModURL().
  * This function will recurse for each level to the arrays.
  *
@@ -1001,11 +1055,12 @@ function xarMod__URLnested($args, $prefix)
     $path = '';
     foreach ($args as $key => $arg) {
         if (is_array($arg)) {
-            $path .= xarMod__URLnested($arg, $prefix . '['.rawurlencode($key).']');
+            $path .= xarMod__URLnested($arg, $prefix . '['.xarMod__URLencode($key, 'getname').']');
         } else {
-            $path .= $prefix . '['.rawurlencode($key).']' . '=' . rawurlencode($arg);
+            $path .= $prefix . '['.xarMod__URLencode($key, 'getname').']' . '=' . xarMod__URLencode($arg, 'getvalue');
         }
     }
+
     return $path;
 }
 
@@ -1030,27 +1085,18 @@ function xarMod__URLaddParametersToPath($args, $path, $pini, $psep)
                 // e.g. ...&foo[bar][dee][doo]=value&...
                 $params .= xarMod__URLnested($v, $psep . $k);
             } elseif (isset($v)) {
-                $params .= $psep . $k . '=' . rawurlencode($v);
+                // TODO: rather than rawurlencode, use a xar function to encode
+                $params .= (!empty($params) ? $psep : '') . xarMod__URLencode($k, 'getname') . '=' . xarMod__URLencode($v, 'getvalue');
             }
         }
-        // Decode a few 'safe' characters as rawurlencode() goes too far.
-        // TODO: write our own urlencode function. The encoding will be slightly
-        // different depending on whether we are encoding path components or get values.
-        $params = str_replace(
-            array('%2C', '%24', '%21', '%2A', '%27', '%28', '%29', '%5B', '%5D', '%3A', '%2F', '%3F', '%3D'),
-            array(',', '$', '!', '*', '\'', '(', ')', '[', ']', ':', '/', '?', '='),
-            $params
-        );
 
-        // Check for Join character
+        // Join to the path with the appropriate character,
+        // depending on whether there are already GET parameters.
         if (strpos($path, $pini) === FALSE)
         {
-            // Path does not already have any params, remove leading seperator
-            $params = ltrim($params, $psep);
-
             $path .= $pini . $params;
         } else {
-            $path .= $params;
+            $path .= $psep . $params;
         }
     }
 
@@ -1073,11 +1119,12 @@ function xarMod__URLaddParametersToPath($args, $path, $pini, $psep)
  * @return mixed absolute URL for call, or false on failure
  * @todo allow for an alternative entry point (e.g. stream.php) without affecting the other parameters
  */
-function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL, $target = NULL, $entrypoint = array())
+function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL, $fragment = NULL, $entrypoint = array())
 {
     // Parameter separator and initiator.
     $psep = '&';
     $pini = '?';
+    $pathsep = '/';
 
     // Initialise the path.
     $path = '';
@@ -1111,27 +1158,38 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
             $encoderArgs = $args;
             $encoderArgs['func'] = $funcName;
 
-            // Don't throw exception on missing file or function anymore.
-            // FIXME: why do we want to hide errors here? The encode_shorturl function *must*
-            // be available if 'SupportShortURLs' is set for the module, so we are only hiding
-            // parsing errors, which we want to know about. Also, if the file is missing, we
-            // want to know.
-            $path = xarModAPIFunc($modName, 'user', 'encode_shorturl', $encoderArgs, 0);
-            if (!empty($path)) {
+            // Execute the short URL function.
+            // It must exist if the SupportShortURLs variable is set for the module.
+            $short = xarModAPIFunc($modName, 'user', 'encode_shorturl', $encoderArgs);
+            if (!empty($short)) {
+                if (is_array($short)) {
+                    // An array of path and args has been returned (both optional) - new style.
+                    if (!empty($short['path'])) {
+                        foreach($short['path'] as $pathpart) {
+                            // Use path encoding method, which can differ from
+                            // the GET parameter encoding method.
+                            $path .= $pathsep . xarMod__URLencode($pathpart, 'path');
+                        }
+                    }
+                    // Unconsumed arguments, to be treated as additional GET parameters.
+                    // These may actually be additional GET parameters injected by the
+                    // short URL function - it makes no difference either way.
+                    if (!empty($short['get']) && is_array($short['get'])) {
+                        $path = xarMod__URLaddParametersToPath($short['get'], $path, $pini, $psep);
+                    } else {
+                        $args = array();
+                    }
+                } else {
+                    // A string URL has been returned - old style - deprecated.
+                    $path = $short;
+                    $args = array();
+                }
+
                 // Use xaraya default (index.php) or BaseModURL if provided in config.system.php
                 $path = $BaseModURL . $path;
 
                 // Remove the leading / from the path (if any).
                 $path = preg_replace('/^\//', '', $path);
-
-                // Append any encoderArgs that weren't handled by the module specific short-url encoder
-                // TODO: swap the order here? i.e. put the 'leftovers' at the end.
-                //
-                // Commented out at the request of Jason and mikespub
-                // <jojodee> Please don't uncomment here until the encoding is fixed and tested
-                //           At this time incorrect short URL encoding for articles occurs with a ? appended
-                // $unencodedArgs = xarMod__URLGetUnencodedArgs($encoderArgs, $path);
-                // $path = xarMod__URLaddParametersToPath($unencodedArgs, $path, $pini, $psep);
 
                 // We now have the short form of the URL.
                 // Further custom manipulation of the URL can be added here.
@@ -1178,8 +1236,8 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     }
 
     // FIXME: check if this works with all modules supporting short and long URLs.
-    if ($target != NULL) {
-        $path = $path . '#' . urlencode($target);
+    if (isset($fragment)) {
+        $path = $path . '#' . xarMod__URLencode($fragment, 'getvalue');
     }
 
     // Encode the URL if an XML-compatible format is required.
@@ -1189,61 +1247,6 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 
     // Return the URL.
     return xarServerGetBaseURL() . $path;
-}
-
-/**
- * Helper function for xarModURL() to determine which arguments are not encoded in a given path
- *
- * @access private
- * @param args array of arguments to check for
- * @param path string of path to decode looking for args
- * @return array of unencoded arguments
- */
-function xarMod__URLGetUnencodedArgs($args, $path)
-{
-    // This first part is ripped from xarServer.php lines 413 through 434.
-    // This code should be refactored so that it is only coded once.
-
-    $modName = NULL;
-    $modType = 'user';
-    $funcName = 'main';
-
-    preg_match_all('|/([^/]+)|i', $path, $matches);
-    $params = $matches[1];
-    if (count($params) > 0)
-    {
-        $modName = $params[0];
-
-        // if the second part is not admin, it's user by default
-        if (isset($params[1]) && $params[1] == 'admin') {
-            $modType = 'admin';
-        } else {
-            $modType = 'user';
-        }
-
-        // Check if this is an alias for some other module
-        $modName = xarRequest__resolveModuleAlias($modName);
-
-        // Call the appropriate decode_shorturl function
-        if (xarModIsAvailable($modName)
-            && xarModGetVar($modName, 'SupportShortURLs')
-            && xarModAPILoad($modName, $modType)
-        ) {
-            $loopHole = array($modName, $modType, $funcName);
-            // don't throw exception on missing file or function anymore
-            $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params, 0);
-        }
-    }
-
-    if (isset($res) && (count($res) >= 2))
-    {
-        $resolvedParams = $res[1];
-        $resolvedParams['func'] = $res[0];
-    } else {
-        $resolvedParams = array();
-    }
-
-    return array_diff($args, $resolvedParams);
 }
 
 
