@@ -81,9 +81,6 @@ V2.50 14 Nov 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights rese
 */
     function &csv2rs($url,&$err,$timeout=0)
     {
-        // XARAYA MODIFICATION START
-        if (!file_exists($url)) return false;
-        // XARAYA MODIFICATION END
         $fp = @fopen($url,'r');
         $err = false;
         if (!$fp) {

@@ -3286,10 +3286,7 @@
             // skip the decimal place
             $mtime = substr(str_replace(' ','_',microtime()),2);
             // unlink will let some latencies develop, so uniqid() is more random
-        // XARAYA MODIFICATION START
-            if (file_exists($filename)) @unlink($filename);
-        //  @unlink($filename);
-        // XARAYA MODIFICATION END
+            @unlink($filename);
             // getmypid() actually returns 0 on Win98 - never mind!
             $tmpname = $filename.uniqid($mtime).getmypid();
             if (!($fd = fopen($tmpname,'a'))) return false;
