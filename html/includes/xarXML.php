@@ -88,10 +88,7 @@ define('XARXML_HSTATE_WAITCONDOPEN'     , 4);
 define('XARXML_HSTATE_DTDCLOSE_EXPECTED', 8);
 define('XARXML_HSTATE_DTDGATHERING'     ,16);
 
-define('XARXML_DTD_TRACE',false);
-define('XARXML_DTD_GUESSROOT',false);
-
-// Attribute names 
+// Attribute names for the tree constructed by the default handler
 define('XARXML_ATTR_TAGINDEX','tagindex'); 
 define('XARXML_ATTR_TYPE','type');
 define('XARXML_ATTR_NAME','name');
@@ -163,11 +160,11 @@ class xarXmlParser
      *
      * @access public
      * @param string $xmldata string representation of xmldata to parse
+     * @todo check the string more thoroughly, seems to be delicate
      */
     function parseString($xmldata) 
     {
         $this->__activate();
-        // TODO: check the string for stuff, this can be very delicate
         if(!$this->__parse($xmldata, true)) {
             $this->__deactivate();
             return false;
@@ -228,6 +225,7 @@ class xarXmlParser
      * @access private
      * @param string $xmldata chunk of xmldata
      * @param bool   $final   denotes whether this is the last chunk we can expect
+     * @todo put the $vals and $index arrays to use, we get them nearly for free here when parsing as a whole
      */
     function __parse($xmldata, $final) 
     {
@@ -519,6 +517,7 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
      * @param $parser  object the parser which this handler is attached to
      * @param $tagname string the start tag found
      * @param $attribs array  array of attributes with [attribname] => value pairs
+     * @todo the ID attribute should be unique, check for that somehow
      *
      */
     function open_tag($parser, $tagname, $attribs, $type=XML_ELEMENT_NODE) 
@@ -528,7 +527,7 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
         $this->_tree[$this->_depth][XARXML_ATTR_NAME]= $tagname;
         $this->_tree[$this->_depth][XARXML_ATTR_TYPE] = $type;
         $this->_tree[$this->_depth][XARXML_ATTR_TAGINDEX]=$this->_tagindex;
-        // FIXME: somewhere we should at least check the the attribute ID is unique
+        
         $attribs and $this->_tree[$this->_depth][XARXML_ATTR_ATTRIBUTES] = $attribs;
         // See if the ns handler has registered namespaces
         if(count($this->_nsregister) > 0 ) {
@@ -587,7 +586,9 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
      * We support the system_id for now. We take the class of the current handler
      * and instantiate a subparser which parses the externatl entity. That subtree
      * is inserted into the children element of the entity reference node as an entity
-     * node. 
+     * node.
+     *
+     * @todo figure out the logic for public_id and system id 
      * 
     */
     function external_entity_reference($parser, $entity_names,  $resolve_base, $system_id, $public_id) 
@@ -641,6 +642,8 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
      * Handler for notation declarations
      *
      * Likely we don't need this, but here it is.
+     *
+     * @todo at least add the node into the tree for this handler
      */
     function notation_declaration($parser, $notation_name, $resolve_base, $system_id, $public_id) 
     {
