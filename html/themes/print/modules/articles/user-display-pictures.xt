@@ -1,0 +1,6 @@
+<h3>#$title#</h3>
+<img src="#$body#" border="0" alt="#$title#" />
+<br />
+<span class="xar-quote">
+	#$notes#
+</span>

@@ -9,7 +9,10 @@
     </head>
     <body>
 
-<xar:module main="true" />
+<h2><xar:mlstring>Document From </xar:mlstring> <a href="#xarServerGetCurrentURL()#">#xarModGetVar('themes', 'SiteName')#</a></h2>
 
+<div id="main">
+	<xar:module id="modulespace" main="true" />
+</div>
 </body>
 </html>
