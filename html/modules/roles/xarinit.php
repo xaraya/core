@@ -16,7 +16,7 @@
  */
 
 /**
- * Initialise the users module
+ * Initialise the roles module
  *
  * @access public
  * @param none $
@@ -372,7 +372,7 @@ Password : %%password%%
 }
 
 /**
- * Upgrade the users module from an old version
+ * Upgrade the roles module from an old version
  *
  * @access public
  * @param oldVersion $

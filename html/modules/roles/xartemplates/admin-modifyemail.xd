@@ -1,4 +1,7 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:if condition="xarModGetVar('base','editor') eq 'htmlarea'">
+	<xar:template file="htmlarea_insert" module="htmlarea" type="module" />
+</xar:if>
 <xar:set name="$messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
 <div class="xar-mod-body"><div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <h2>

@@ -43,7 +43,7 @@ define('XAR_TOKEN_VAR_START'         , '$'    ); // Start of a variable
 define('XAR_TOKEN_CI_DELIM'          , '#'    ); // Delimiter for variables, functions and other the CI stands for Code Item
 define('XAR_NAMESPACE_PREFIX'        , 'xar'  ); // Our own default namespace prefix
 
-/** 
+/**
  * Defines for errors
  *
  */
@@ -154,7 +154,7 @@ class xarTpl__Compiler extends xarTpl__CompilerError
     {
         $documentTree = $this->parser->parse($templateSource);
         if (!isset($documentTree)) return; // throw back
-        
+
         return $this->codeGenerator->generate($documentTree);
     }
 }
@@ -212,7 +212,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
         if (!$this->isPHPBlock()) {
             $this->code .= "<?php ";
             $this->setPHPBlock(true);
-        } 
+        }
         if ($this->isPHPBlock()) {
             $this->code .= " return true;?>";
             $this->setPHPBlock(false);
@@ -223,7 +223,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
     function generateNode(&$node)
     {
         // Generating the code for a node consists of 3 parts in a recursive loop:
-        // 1. render the begin tag 
+        // 1. render the begin tag
         // 2. render the children
         // 3. render the end tag.
         // If there are no children, we call the render method on the tag.
@@ -234,7 +234,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             $startcode = $node->renderBeginTag();
             if (!isset($startcode)) return; // throw back
             $code = $startcode;
-            
+
             //
             // PART 2: Handle each child below it.
             //
@@ -262,10 +262,10 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
 
                 // Recursively do the children
                 $childCode = $this->generateNode($child);
-                if (!isset($childCode)) return; // throw back 
+                if (!isset($childCode)) return; // throw back
                 $code .= $childCode;
 
-                // This is in the outer level of the current node, see what kind of node we're dealing with 
+                // This is in the outer level of the current node, see what kind of node we're dealing with
                 // here and whether it needs exceptions control
                 if ($child->isAssignable() && !($checkNode->needParameter()) || $checkNode->needAssignment()) {
                     $code .= "; ";
@@ -279,8 +279,8 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                     }
                 }
             }
-            
-            // 
+
+            //
             // PART 3: Handle the end rendering of the node
             //
             if ($node->isPHPCode() && !$this->isPHPBlock()) {
@@ -289,9 +289,9 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             }
             $endCode = $node->renderEndTag();
             if (!isset($endCode)) return; // throw back
-            
+
             $code .= $endCode;
-            
+
             // Other part: exception handling
             if (!$node->isAssignable() && ($node->needExceptionsControl() /*&& $this->isPendingExceptionsControl()*/)) {
                 if (!$this->isPHPBlock()) {
@@ -361,14 +361,14 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
         $res = $this->parseNode($documentTree);
         if (!isset($res)) return; // throw back
-        
+
         $documentTree->children = $res;
         $documentTree->variables = $this->tplVars;
 
         return $documentTree;
     }
 
-    function parseNode(&$parent) 
+    function parseNode(&$parent)
     {
         // Start of parsing a node, initialize our result variables
         $text = ''; $token=''; $children = array();
@@ -397,13 +397,13 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     switch ($target) {
                     case 'xar':
                         // <?xar processing instruction
-                        $variables = $this->parseHeaderTag();  
+                        $variables = $this->parseHeaderTag();
                         if (!isset($variables))  return; // throw back
-                   
+
                         // Register the attributes or <?xar at template variables
                         // FIXME: this is awkward syntax juggling
                         foreach ($variables as $name => $value) $this->tplVars->set($name, $value);
-                      
+
                         // Here we set token to an empty string so that $text .= $token will result in $text
                         $token = '';
                         break;
@@ -481,7 +481,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Handle Begin Tag
                         $res = $this->parseBeginTag();
                         if (!isset($res)) return; // throw back
-                        
+
                         list($tagName, $attributes, $closed) = $res;
                         // Check for uniqueness of id attribute
                         if (isset($attributes['id'])) {
@@ -512,13 +512,13 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Create the node we parsed.
                         $node = $this->nodesFactory->createTplTagNode($tagName, $attributes, $parent->tagName, $this);
                         if (!isset($node)) return; // throw back
-                        
+
                         //xarLogVariable('node', $node, XARLOG_LEVEL_ERROR);
                         if (!$closed) {
                             array_push($this->tagNamesStack, $tagName);
                             $res = $this->parseNode($node);
                             if (!isset($res)) return; // throw back
-                            
+
                             $node->children = $res;
                         }
                         $children[] = $node;
@@ -545,7 +545,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Handle End Tag
                         $tagName = $this->parseEndTag();
                         if (!isset($tagName)) return; // throw back
-                        
+
                         $stackTagName = array_pop($this->tagNamesStack);
                         if ($tagName != $stackTagName) {
                             $this->raiseError(XAR_BL_INVALID_TAG,"Found closed '$tagName' tag where close '$stackTagName' was expected.", $this);
@@ -562,7 +562,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     $nextChar = $this->getNextToken();
                     while(trim($nextChar)) {
                         $buildup .= $nextChar;
-                        
+
                         switch($buildup) {
                         case XAR_TOKEN_BLCOMMENT_DELIM:
                             $identifier = XAR_TOKEN_BLCOMMENT_DELIM;
@@ -627,9 +627,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             $token .= $identifier . $tagrest . $matchToken . $nextChar;
                             break;
                         default:
-                            // <!WHATEVER Something else ( <!DOCTYPE for example ) as long as it ends properly, we're happy 
+                            // <!WHATEVER Something else ( <!DOCTYPE for example ) as long as it ends properly, we're happy
                             $invalid = false;
-                            // Take the $tagrest and resolve stuff #...# 
+                            // Take the $tagrest and resolve stuff #...#
                             $token .= $buildup . $identifier . $tagrest . $nextChar;
                         }
                         if($invalid) {
@@ -688,11 +688,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     // Handle Entity
                     $res = $this->parseEntity();
                     if (!isset($res)) return; // throw back
-                    
+
                     list($entityType, $parameters) = $res;
                     $node = $this->nodesFactory->createTplEntityNode($entityType, $parameters, $this);
                     if (!isset($node)) return; // throw back
-                    
+
                     $children[] = $node;
                     $token = '';
                     break;
@@ -774,7 +774,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     // Character encoding could be ASCII or UTF-8, so only expand
                     // the shared ASCII character for now.
                     // (Actually this doesn't work due to the way the file is parsed. We should
-                    // actually parse the XML first, converting entities as appropriate, *THEN* 
+                    // actually parse the XML first, converting entities as appropriate, *THEN*
                     // start looking for BL processing statements. Even then, entities should be
                     // recognised in context, so &amp;#123; in a BL processing instruction is
                     // handled as a literal string '&#123;' and not as a processing instruction
@@ -798,7 +798,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     // Instruction is now set to $varname of xFunction(.....)
                     $node = $this->nodesFactory->createTplInstructionNode($instruction, $this);
                     if (!isset($node)) return; // throw back
-                    
+
                     $children[] = $node;
                     $token = '';
                     break;
@@ -828,13 +828,13 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return $children;
     }
 
-    function parseHeaderTag() 
+    function parseHeaderTag()
     {
         $variables = array();
         while (true) {
             $variable = $this->parseTagAttribute();
             if (!isset($variable)) return; // throw back
-            
+
             if (is_string($variable)) {
                 $exitToken = $variable;
                 break;
@@ -863,7 +863,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return $variables;
     }
 
-    function parseBeginTag() 
+    function parseBeginTag()
     {
         //xarLogMessage('parseBeginTag', XARLOG_LEVEL_ERROR);
         // Tag name
@@ -892,7 +892,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             while (true) {
                 $attribute = $this->parseTagAttribute();
                 if (!isset($attribute)) return; // throw back
-                
+
                 if (is_string($attribute)) {
                     $exitToken = $attribute;
                     break;
@@ -922,7 +922,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return array($tagName, $attributes, ($exitToken == XAR_TOKEN_ENDTAG_START) ? true : false);
     }
 
-    function parseTagAttribute() 
+    function parseTagAttribute()
     {
         //xarLogMessage('parseTagAttribute', XARLOG_LEVEL_ERROR);
         // Tag attribute
@@ -991,7 +991,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return array($name, $value);
     }
 
-    function parseEndTag() 
+    function parseEndTag()
     {
         //xarLogMessage('parseEndTag', XARLOG_LEVEL_ERROR);
         // Tag name
@@ -1017,7 +1017,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return $tagName;
     }
 
-    function parseEntity() 
+    function parseEntity()
     {
         //xarLogMessage('parseEntity', XARLOG_LEVEL_ERROR);
         // Entity type
@@ -1230,7 +1230,7 @@ class xarTpl__SpecialVariableNamesResolver extends xarTpl__PositionInfo
 {
     var $varsMapping = array();
 
-    function &instance() 
+    function &instance()
     {
         static $instance = NULL;
         if (!isset($instance)) {
@@ -1333,7 +1333,7 @@ class xarTpl__ExpressionTransformer
             $resolver =& xarTpl__SpecialVariableNamesResolver::instance();
             $expression = $resolver->resolve($expression, $this);
             if (!isset($expression)) return; // throw back
-            
+
         } else {
             $expression = XAR_TOKEN_VAR_START . $expression;
         }
@@ -1374,7 +1374,7 @@ class xarTpl__ExpressionTransformer
             for ($i = 0; $i < $numMatches; $i++) {
                 $resolvedName =& xarTpl__ExpressionTransformer::transformBLExpression($matches[1][$i]);
                 if (!isset($resolvedName)) return; // throw back
-                
+
                 $phpExpression = str_replace($matches[0][$i], $resolvedName, $phpExpression);
             }
         }
@@ -1589,7 +1589,7 @@ class xarTpl__XarVarInstructionNode extends xarTpl__InstructionNode
         }
         $instruction = xarTpl__ExpressionTransformer::transformPHPExpression($this->instruction);
         if (!isset($instruction)) return; // throw back
-        
+
         return $instruction;
     }
 }
@@ -1611,7 +1611,7 @@ class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
         }
         $instruction = xarTpl__ExpressionTransformer::transformPHPExpression($this->instruction);
         if (!isset($instruction)) return; // throw back
-        
+
         return $instruction;
     }
 }
@@ -1865,7 +1865,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
             // Resolve the name, not that this works for both name="test" and name="$test"
             $value = xarTpl__ExpressionTransformer::transformPHPExpression(XAR_TOKEN_VAR_START . $name);
             if (!isset($value)) return; // throw back
-            
+
             return $value;
         default:
             $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'Invalid value for \'scope\' attribute in <xar:var> tag.', $this);
@@ -1878,7 +1878,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
         if (!isset($this->attributes['scope'])) {
             return false;
         }
-        return ($this->attributes['scope'] == 'module' || 
+        return ($this->attributes['scope'] == 'module' ||
                 $this->attributes['scope'] == 'config' ||
                 $this->attributes['scope'] == 'user');
     }
@@ -2287,7 +2287,7 @@ class xarTpl__XarForNode extends xarTpl__TplTagNode
 
         $test = xarTpl__ExpressionTransformer::transformPHPExpression($test);
         if (!isset($test)) return; // throw back
-        
+
         $iter = xarTpl__ExpressionTransformer::transformPHPExpression($iter);
         if (!isset($iter)) return; // throw back
 
@@ -2325,7 +2325,7 @@ class xarTpl__XarForNode extends xarTpl__TplTagNode
  */
 class xarTpl__XarForEachNode extends xarTpl__TplTagNode
 {
-    var $attr_value = null; // properties to hold the values of any values which might have the same name in 
+    var $attr_value = null; // properties to hold the values of any values which might have the same name in
     var $attr_key = null;   // the scope of the foreach loop.
     var $keysavename = null;
     var $valsavename = null;
@@ -2343,7 +2343,7 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
             $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'Invalid \'in\' attribute in <xar:foreach> tag. \'in\' must be an array', $this);
             return;
         }
-        
+
         $in = xarTpl__ExpressionTransformer::transformPHPExpression($in);
         // Create a save scope for the attributes using line and column as semi unique identifiers.
         // Note that this is only applicable on merged templates (as in: non existent in current code)
@@ -2352,9 +2352,9 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
         //        the one representation one.
         if(isset($key))
             $this->keysavename = '$_bl_ks_' . substr($key,1) . '_' . $this->line . '_' . $this->column;
-        if(isset($value)) 
+        if(isset($value))
             $this->valsavename = '$_bl_vs_' . substr($value,1) . '_' .$this->line .'_' . $this->column;
-        
+
         if (isset($key) && isset($value)) {
             $this->attr_value = $value;
             $this->attr_key = $key;
@@ -2373,7 +2373,7 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
 
     function renderEndTag()
     {
-        if(isset($this->attr_value) && isset($this->attr_key)) 
+        if(isset($this->attr_value) && isset($this->attr_key))
             return "} if (isset($this->valsavename)) $this->attr_value = $this->valsavename; if (isset($this->keysavename)) $this->attr_key = $this->keysavename; ";
         if(isset($this->attr_value))
             return "} if (isset($this->valsavename)) $this->attr_value = $this->valsavename; ";
@@ -2721,7 +2721,7 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
         }
         // Problem here is that we *do* want trimming for translation, but *not* for the displaying as
         // they may be very relevant. Only one space is relevant though.
-        // TODO: this is an XML rule (whitespace collapsing), might not apply is we're going for other output formats 
+        // TODO: this is an XML rule (whitespace collapsing), might not apply is we're going for other output formats
         // TODO: it's now getting a bit insane not using a XML parser, this is the kind of mess we need to deal with now
         $leftspace = (strlen(ltrim($string)) != strlen($string)) ? ' ' : '';
         $this->_rightspace =(strlen(rtrim($string)) != strlen($string)) ? ' ' : '';
@@ -2767,12 +2767,12 @@ class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
         if (isset($this->cachedOutput)) {
             return $this->cachedOutput;
         }
-        
+
         if (count($this->children) != 1) {
             $this->raiseError(XAR_BL_INVALID_TAG,'The <xar:mlvar> tag can contain only one child tag.', $this);
             return;
         }
-        
+
         if (count($this->attributes) != 0) {
             $this->raiseError(XAR_BL_INVALID_TAG,'The <xar:mlvar> tag takes no attributes.', $this);
             return;
@@ -2969,7 +2969,7 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
             break;
         case 'module':
             // The module which needs to be passed in needs to come from the location of the
-            // template which holds the tag, not the active module although they will be the same 
+            // template which holds the tag, not the active module although they will be the same
             // in most cases. If the active module would be passed in, this would break when
             // calling API functions from other modules which in turn use a template (rare, but possible,
             // like generating xml with blocklayout). By passing in the modulename which holds the
@@ -2977,13 +2977,18 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
             $patharray = explode('/',dirname($this->fileName));
             // We need the value after 'modules' always, whether the container is overridden or not.
             // Note; Bug 2156: array_search() fails to match the correct element for some modules.
-            foreach($patharray as $patharrayid => $patharrayname) {
-                if ($patharrayname == 'modules') {
-                    $modName = $patharray[$patharrayid+1];
-                    break;
+            if (isset($module)) {
+                $modName = $module;
+            }
+            else {
+                foreach($patharray as $patharrayid => $patharrayname) {
+                    if ($patharrayname == 'modules') {
+                        $modName = $patharray[$patharrayid+1];
+                        break;
+                    }
                 }
             }
-            
+
             return "xarTpl_includeModuleTemplate(\"$modName\", \"$file\", $subdata)";
             break;
         default:
@@ -3133,7 +3138,7 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
         xarLogMessage("Constructing custom tag: $tagName");
         $this->tagobject = xarTplGetTagObjectFromName($tagName);
     }
-    
+
     // FIXME: Add the renderbegintag and renderendtag methods here, so custom tags can also support this
     function render()
     {
@@ -3153,11 +3158,11 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
         return $this->tagobject->isPHPCode();
     }
 
-    function hasText() 
+    function hasText()
     {
         return $this->tagobject->hasText();
     }
-    
+
     function needAssignment()
     {
         return $this->tagobject->needAssignement();
@@ -3173,11 +3178,11 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
         return $this->tagobject->needParameter();
     }
 
-    function needExceptionsControl() 
+    function needExceptionsControl()
     {
         return $this->tagobject->needExceptionsControl();
     }
-        
+
 }
 
 /**
@@ -3187,7 +3192,7 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
  *
  * @package blocklayout
  * @access  private
- * 
+ *
  */
 class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
 {
@@ -3201,7 +3206,7 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
     {
         return true;
     }
-    
+
     function hasText()
     {
         return true;
@@ -3209,14 +3214,14 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
 
 
     function renderBeginTag()
-    {        
+    {
         $content = 'text/html'; // Default content type
         extract($this->attributes);
         if(!isset($version)) {
             $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'version\' attribute in <xar:blocklayout> tag.', $this);
             return;
         }
-        
+
         // Literally copy the content type, charset is determined by MLS
         $headercode = '
             $_bl_locale  = xarMLSGetCurrentLocale();
@@ -3243,7 +3248,7 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
  * This function regards 'space' in the xml sense i.e.:
  * - multiple spaces are equivalent to one
  * - only 'outside space' is considered, not space 'inside' the input
- * 
+ *
  * As the 'whitespace' problem is really unsolvable (by me) isolate it
  * here. If someone finds a solution, here's where it should happen
  *
@@ -3256,10 +3261,10 @@ function xmltrim($input='')
     // Let's first determine if there is space at all.
     $hasleftspace = (strlen(ltrim($input)) != strlen($input));
     $hasrightspace = (strlen(rtrim($input)) != strlen($input));
-    
+
     $leftspace  = $hasleftspace  ? ' ' : '';
     $rightspace = $hasrightspace ? ' ' : '';
-    $input = $leftspace . trim($input) . $rightspace;  
+    $input = $leftspace . trim($input) . $rightspace;
     return $input;
 }
 ?>
