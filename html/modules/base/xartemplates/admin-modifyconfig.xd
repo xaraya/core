@@ -10,7 +10,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Modify System Configuration</xar:mlstring></h2><br />
 <div style="margin: auto;">
-<form method="post" action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
+<form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
 <p><xar:mlstring>Please note that the default theme variable has moved to the themes module
 and that you cannot use UNBOXED mode of the MultiLanguage system unless you have php 4.3.0
 with the mbstring extension compiled in.</xar:mlstring></p>
@@ -178,7 +178,7 @@ with the mbstring extension compiled in.</xar:mlstring></p>
 			 <xar:if condition="$loop:item['active'] == 'true'">
 				  <input type="checkbox" name="active[]" id="locale_#$loop:index#" value="#$loop:item['name']#" checked="checked" />
 			<xar:else />
-				  <input type="checkbox" name="active[]" id="locale_#$loop:index#" value=#$loop:item['name']# />
+				  <input type="checkbox" name="active[]" id="locale_#$loop:index#" value="#$loop:item['name']#" />
 			</xar:if>
 		</span>
 		</div>
