@@ -335,7 +335,8 @@ function dynamicdata_admin_create($args)
 
     if (!isset($itemid)) return; // throw back
 
-    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view'));
+    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
+                                  array('objectid' => $objectid)));
 
     // Return
     return true;
@@ -523,7 +524,8 @@ function dynamicdata_admin_update($args)
 
     if (!isset($itemid)) return; // throw back
 
-    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view'));
+    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
+                                  array('objectid' => $objectid)));
 
     // Return
     return true;

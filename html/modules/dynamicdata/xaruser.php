@@ -123,6 +123,7 @@ function dynamicdata_user_main()
 
     $data = dynamicdata_user_menu();
 
+/*
     if (!xarModAPILoad('dynamicdata','user')) return;
 
     // get items from the objects table (= itemtype 0 of the dynamicdata module)
@@ -145,6 +146,7 @@ function dynamicdata_user_main()
 
     $data['itemtypes'] = $itemtypes;
     $data['objects'] = $objects;
+*/
 
     return $data;
 }
@@ -170,6 +172,7 @@ function dynamicdata_user_view()
         if (isset($object)) {
             $modid = $object['moduleid']['value'];
             $itemtype = $object['itemtype']['value'];
+            $label = $object['label']['value'];
         }
     } else {
         $objectid = 0;
@@ -184,12 +187,16 @@ function dynamicdata_user_view()
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
+    if (empty($label)) {
+        $label = xarML('Dynamic Data Objects');
+    }
 
     $data = dynamicdata_user_menu();
     $data['objectid'] = $objectid;
     $data['modid'] = $modid;
     $data['itemtype'] = $itemtype;
     $data['startnum'] = $startnum;
+    $data['label'] = xarML('View #(1)',$label);
 
     return $data;
 }
@@ -203,21 +210,38 @@ function dynamicdata_user_view()
  */
 function dynamicdata_user_display($args)
 {
-    list($modid,
+    list($objectid,
+         $modid,
          $itemtype,
-         $itemid)= xarVarCleanFromInput('modid',
+         $itemid)= xarVarCleanFromInput('objectid',
+                                        'modid',
                                         'itemtype',
                                         'itemid');
     extract($args);
 
+    if (empty($modid)) {
+        $modid = xarModGetIDFromName('dynamicdata');
+    }
     if (empty($itemtype)) {
         $itemtype = 0;
     }
 
+    if (!xarModAPILoad('dynamicdata','user')) return;
+    $object = xarModAPIFunc('dynamicdata','user','getobject',
+                            array('objectid' => $objectid,
+                                  'moduleid' => $modid,
+                                  'itemtype' => $itemtype));
+    if (isset($object)) {
+        $label = $object['label']['value'];
+    } else {
+        $label = xarML('Dynamic Data Object');
+    }
+
     // Return the template variables defined in this function
-    return array('module' => 'dynamicdata',
+    return array('module' => $modid,
                  'itemtype' => $itemtype,
-                 'itemid' => $itemid);
+                 'itemid' => $itemid,
+                 'label' => $label);
 }
 
 /**

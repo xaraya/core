@@ -1,9 +1,4 @@
-<table border="0" width="100%">
-
-    <tr><th align="center"><xar:mlstring>Dynamic Data Object</xar:mlstring></th></tr>
-
-</table>
-<br />
+<h2>#$label#</h2>
 
 <xar:if condition="!empty($objectid)">
     <xar:data-view object="$objectid" numitems="20" layout="list" />

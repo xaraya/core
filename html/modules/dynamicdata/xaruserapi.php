@@ -2701,6 +2701,39 @@ function dynamicdata_userapi_showview($args)
 //
 
 /**
+ * utility function pass individual menu items to the main menu
+ *
+ * @author the DynamicData module development team
+ * @returns array
+ * @return array containing the menulinks for the main menu items.
+ */
+function dynamicdata_userapi_getmenulinks()
+{
+    $menulinks = array();
+
+    if (xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_OVERVIEW)) {
+
+        // get items from the objects table
+        $objects = xarModAPIFunc('dynamicdata','user','getobjects');
+        if (!isset($objects)) {
+            return $menulinks;
+        }
+        foreach ($objects as $object) {
+            $itemid = $object['fields']['id']['value'];
+            // skip the internal objects
+            if ($itemid < 3) continue;
+            $label = $object['fields']['label']['value'];
+            $menulinks[] = Array('url'   => xarModURL('dynamicdata','user','view',
+                                                      array('objectid' => $itemid)),
+                                 'title' => xarML('View #(1)', $label),
+                                 'label' => $label);
+        }
+    }
+
+    return $menulinks;
+}
+
+/**
  * utility function to count the number of items held by this module
  *
  * @author the DynamicData module development team

@@ -1,9 +1,4 @@
-<table border="0" width="100%">
-
-    <tr><th align="center"><xar:mlstring>Welcome to Dynamic Data</xar:mlstring></th></tr>
-
-</table>
-<br />
+<h2><xar:mlstring>Welcome to Dynamic Data</xar:mlstring></h2>
 
 <!-- this displays the available dynamic data objects in bullet format -->
 <xar:data-view module="dynamicdata" itemtype="0" layout="bullet" fieldlist="label" linkfunc="view" linkfield="label" param="objectid" />
