@@ -795,13 +795,17 @@ class Dynamic_Object extends Dynamic_Object_Master
                             new SystemException($msg));
             return;
         }
+        if (!empty($this->primary) && !empty($this->properties[$this->primary])) {
+            $primarystore = $this->properties[$this->primary]->datastore;
+        }
         $modinfo = xarModGetInfo($this->moduleid);
         foreach ($this->datastores as $name => $datastore) {
             $itemid = $datastore->getItem(array('modid'    => $this->moduleid,
                                                 'itemtype' => $this->itemtype,
                                                 'itemid'   => $this->itemid,
                                                 'modname'  => $modinfo['name']));
-            if (empty($itemid)) return;
+            // only worry about finding something in primary datastore (if any)
+            if (empty($itemid) && !empty($primarystore) && $primarystore == $name) return;
         }
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if (!empty($args['preview'])) {
