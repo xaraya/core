@@ -8,10 +8,9 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
- * @subpackage Module handling subsystem
  * @author Jim McDonald
  * @author Marco Canini <m.canini@libero.it>
- * @aathor Marcel van der Boom <marcel@xaraya.com>
+ * @author Marcel van der Boom <marcel@xaraya.com>
  * @todo Use serialize in module variables?
  */
 
@@ -26,6 +25,12 @@ define('XARMOD_STATE_UPGRADED', 5);
 // This isn't a module state, but only a convenient definition to indicates,
 // where it's used, that we don't care about state, any state is good
 define('XARMOD_STATE_ANY', 0);
+// <andyv> added an extra superficial state, need it for the list filter because
+// some ppl requested not to see modules which are not initialised FR/BUG #252
+// now we define 'Installed' state as all except 'uninitialised'
+// in fact we dont even need a record as it's an exact reverse of state 1
+// tell me if there is something wrong with my (twisted) logic ;-)
+define('XARMOD_STATE_INSTALLED', 6);
 
 /*
  * Modules modes
@@ -94,7 +99,6 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
  * @access public
  * @param modName The name of the module
  * @param name The name of the variable
- * @returns bool
  * @return mixed The value of the variable or void if variable doesn't exist
  * @raise DATABASE_ERROR, BAD_PARAM
  */
@@ -183,8 +187,7 @@ function xarModGetVar($modName, $name, $prep = NULL)
  * @param modName The name of the module
  * @param name The name of the variable
  * @param value The value of the variable
- * @returns bool
- * @return true on success
+ * @return bool true on success
  * @raise DATABASE_ERROR, BAD_PARAM
  * @todo  We could delete the user vars for the module with the new value to save space?
  */
@@ -249,8 +252,7 @@ function xarModSetVar($modName, $name, $value)
  * @access public
  * @param modName The name of the module
  * @param name The name of the variable
- * @returns bool
- * @return true on success
+ * @return bool true on success
  * @raise DATABASE_ERROR, BAD_PARAM
  * @todo Add caching for user variables?
  */
@@ -308,8 +310,7 @@ function xarModDelVar($modName, $name)
  *
  * @access public
  * @param modName The name of the module
- * @returns bool
- * @return true on success
+ * @return bool true on success
  * @raise DATABASE_ERROR, BAD_PARAM
  * @todo Add caching for user variables?
  */
@@ -380,7 +381,7 @@ function xarModDelAllVars($modName)
  * @param modName The name of the module
  * @param name    The name of the variable to get
  * @param uid     User id for which value is to be retrieved
- * @returns mixed Teh value of the variable or void if variable doesn't exist.
+ * @return mixed Teh value of the variable or void if variable doesn't exist.
  * @raise  DATABASE_ERROR, BAD_PARAM (indirect)
  * @see  xarModGetVar
  * @todo Mrb : Add caching?
@@ -458,8 +459,7 @@ function xarModGetUserVar($modName, $name, $uid=NULL)
  * @param name    The name of the variable to set
  * @param value   Value to set the variable to.
  * @param uid     User id for which value needs to be set
- * @returns boolean
- * @return  true on success false on failure
+ * @return bool true on success false on failure
  * @raise BAD_PARAM
  * @see xarModSetVar
  * @todo Add caching?
@@ -541,8 +541,7 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
  * @param modName The name of the module to set a variable for
  * @param name    The name of the variable to set
  * @param uid     User id of the user to delete the variable for.
- * @returns bool
- * @return true on success
+ * @return bool true on success
  * @raise BAD_PARAM
  * @see xarModDelVar
  * @todo Add caching?
@@ -605,7 +604,7 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
  * @access private
  * @param modName The name of the module
  * @param name    The name of the variable
- * @returns id identifier for the variable
+ * @return int id identifier for the variable
  * @raise BAD_PARAM
  * @see xarModUserSetVar, xarModUserGetVar, xarModUserDelVar
 */
@@ -770,7 +769,7 @@ function xarModGetInfo($modRegId)
  * RFC.
  * Permitted values for State are XARMOD_STATE_ANY, XARMOD_STATE_UNINITIALISED,
  * XARMOD_STATE_INACTIVE, XARMOD_STATE_ACTIVE, XARMOD_STATE_MISSING,
- * XARMOD_STATE_UPGRADED.
+ * XARMOD_STATE_UPGRADED, XARMOD_STATE_INSTALLED
  * The XARMOD_STATE_ANY means that any state is valid.
  * The default value of State is XARMOD_STATE_ACTIVE.
  * For other criteria there's no default value.
@@ -788,7 +787,7 @@ function xarModGetInfo($modRegId)
  * @param startNum integer the start offset in the list
  * @param numItems integer the length of the list
  * @param orderBy string the order type of the list
- * @return array of module information arrays
+ * @return array array of module information arrays
  * @raise DATABASE_ERROR, BAD_PARAM
  */
 function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $orderBy = 'name')
@@ -846,7 +845,11 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
     }
     if (isset($filter['State'])) {
         if ($filter['State'] != XARMOD_STATE_ANY) {
-            $whereClauses[] = 'states.xar_state = '.xarVarPrepForStore($filter['State']);
+            if ($filter['State'] != XARMOD_STATE_INSTALLED) {
+                $whereClauses[] = 'states.xar_state = '.xarVarPrepForStore($filter['State']);
+            } else {
+                $whereClauses[] = 'states.xar_state != '.XARMOD_STATE_UNINITIALISED;
+            }
         }
     } else {
         $whereClauses[] = 'states.xar_state = '.XARMOD_STATE_ACTIVE;
@@ -1059,8 +1062,7 @@ function xarModAPILoad($modName, $modType = 'user')
  *
  * @param modName name of module to load database definition for
  * @param modDir directory that module is in (if known)
- * @returns bool
- * @return true on success
+ * @return bool true on success
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
  */
 function xarModDBInfoLoad($modName, $modDir = NULL)
@@ -1703,8 +1705,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
  *
  * @access protected
  * @param modOSdir the module's directory
- * @returns array
- * @return an array of module file information
+ * @return array an array of module file information
  * @raise MODULE_FILE_NOT_EXIST
  * @todo <marco> #1 FIXME: admin or admin capable?
  */
@@ -2017,8 +2018,7 @@ function xarMod__getState($modRegId, $modMode)
  * @param hookModName name of the hook module
  * @param hookModType name of the hook type
  * @param hookFuncName name of the hook function
- * @returns bool
- * @return true on success
+ * @return bool true on success
  * @raise DATABASE_ERROR
  */
 function xarModRegisterHook($hookObject,
@@ -2068,8 +2068,7 @@ function xarModRegisterHook($hookObject,
  * @param hookModName name of the hook module
  * @param hookModType name of the hook type
  * @param hookFuncName name of the hook function
- * @returns bool
- * @return true if the unregister call suceeded, false if it failed
+ * @return bool true if the unregister call suceeded, false if it failed
  */
 function xarModUnregisterHook($hookObject,
                              $hookAction,

@@ -7,6 +7,7 @@
  * function to actually perform the initialisation,
  * then redirects to the list function with a
  * status message and returns true.
+ * <andyv implementation of JC's request> attempt to activate module immediately after it's inited
  *
  * @param id the module id to initialise
  * @returns
@@ -51,8 +52,20 @@ function modules_admin_initialise()
     $minfo = xarModGetInfo($id);
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
-
-    xarResponseRedirect(xarModURL('modules', 'admin', "list", array('state' => 0), NULL, $target));
+    
+    // attempt to activate
+    $activated = xarModAPIFunc('modules',
+                              'admin',
+                              'setstate',
+                              array('regid' => $id,
+                                    'state' => XARMOD_STATE_ACTIVE));
+    if (!isset($activated)){                             
+        // something gone wrong with normal activation
+        xarResponseRedirect(xarModURL('modules', 'admin', "list", array('state' => 0), NULL, $target));
+    } else {
+        // done with complete install cycle i.e. init+activate in a single step
+        xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
+    }    
 
     return true;
 }

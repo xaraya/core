@@ -46,8 +46,8 @@ function modules_adminapi_verifydependency($args)
 	//Find the modules which are active
     foreach ($dbModules as $name => $dbInfo) {
         if ($dbInfo['state'] == XARMOD_STATE_ACTIVE ||
-        	$dbInfo['state'] == XARMOD_STATE_INACTIVE ||
-        	$dbInfo['state'] == XARMOD_STATE_UPGRADED) 
+            $dbInfo['state'] == XARMOD_STATE_INACTIVE ||
+            $dbinfo['state'] == XARMOD_STATE_UPGRADED) 
         {
             $dbMods[$dbInfo['regid']] = $dbInfo;
         }
@@ -55,9 +55,9 @@ function modules_adminapi_verifydependency($args)
     
     $dependency = $modInfo['dependency'];
     
-	if (empty($dependency)) {
-		$dependency = array();
-	}
+    if (empty($dependency)) {
+	$dependency = array();
+    }
 
     foreach ($dependency as $module_id => $conditions) {
     
@@ -70,18 +70,23 @@ function modules_adminapi_verifydependency($args)
             }
 
             if (xarModAPIFunc('base','versions','compare',array(
-                'ver1' => $conditions['minversion'],
-                'ver2' => $dbMods[$module_id]['version'])) < 0) {
+                'ver1'      => $conditions['minversion'],
+                'ver2'      => $dbMods[$module_id]['version'],
+		'normalize' => 'numeric')) < 0) {
                 //Need to add some info for the user
                 return false; // 1st version is bigger
             }
 
+           //Not to be checked, at least not for now
+           /*
             if (xarModAPIFunc('base','versions','compare',array(
-                'ver1' => $conditions['maxversion'],
-                'ver2' => $dbMods[$module_id]['version'])) > 0) {
+                'ver1'       => $conditions['maxversion'],
+                'ver2'       => $dbMods[$module_id]['version'],
+		'normalize'  => 'numeric')) > 0) {
                 //Need to add some info for the user
                 return false; // 1st version is smaller
             }
+            */
 
         } else {
             //Required module inexistent
