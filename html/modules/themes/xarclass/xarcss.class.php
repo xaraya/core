@@ -218,17 +218,17 @@ class xarCSS
 
     function set_method_link()
     {
-        $this->method = 'link';
+        $this->set_method('link');
     }
 
     function set_method_import()
     {
-        $this->method = 'import';
+        $this->set_method('import');
     }
 
     function set_method_style()
     {
-        $this->method = 'style';
+        $this->set_method('style');
     }
 
     // access css file extension
@@ -244,12 +244,12 @@ class xarCSS
 
     function set_fileext_css()
     {
-        $this->fileext = 'css';
+        $this->set_fileext('css');
     }
 
     function set_fileext_php()
     {
-        $this->fileext = 'php';
+        $this->set_fileext('php');
     }
 
     // access embedded styles source code
@@ -276,12 +276,12 @@ class xarCSS
 
     function set_language_html()
     {
-        $this->language = 'html';
+        $this->set_language('html');
     }
 
     function set_language_xml()
     {
-        $this->language = 'xml';
+        $this->set_language('xml');
     }
 
     // output css inclusion string for various languages
