@@ -1,15 +1,28 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Confirm Registration</xar:mlstring></h2><br />
 <div style="margin: auto;">
 <form action="#xarModURL('roles', 'user', 'register')#" method="post" enctype="application/x-www-form-urlencoded">
-<p><xar:mlstring>Preferred Username</xar:mlstring>:&nbsp;&nbsp;#$uname#<br />
-<xar:mlstring>Display Name</xar:mlstring>:&nbsp;&nbsp;#$realname#<br />
-<xar:mlstring>E-mail Address</xar:mlstring>:&nbsp;&nbsp;#$email#<br />
+<table>
+	<tr>
+		<td><xar:mlstring>Preferred Username</xar:mlstring>:</td>
+		<td>#$uname#</td>
+	</tr>
+	<tr>
+		<td><xar:mlstring>Display Name</xar:mlstring>:</td>
+		<td>#$realname#</td>
+	</tr>
+	<tr>
+		<td><xar:mlstring>E-mail Address</xar:mlstring>:</td>
+		<td>#$email#</td>
+	</tr>
 <xar:if condition="isset($properties)" >
 	<xar:foreach in="$properties" key="$name">
-		<xar:data-label property="$properties[$name]" />:&nbsp;&nbsp;<xar:data-output property="$properties[$name]" /><br />
+		<tr>
+			<td><xar:data-label property="$properties[$name]" />:</td>
+			<td><xar:data-output property="$properties[$name]" /></td>
+		</tr>
 	</xar:foreach>
 </xar:if>
-</p>
+</table>
 <input type="hidden" name="authid" id="authid" value="#$authid#" />
 <input type="hidden" name="phase" id="phase" value="createuser" />
 <input type="hidden" name="uname" id="uname" value="#$uname#" />

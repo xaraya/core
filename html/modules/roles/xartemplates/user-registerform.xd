@@ -1,69 +1,96 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Registration</xar:mlstring></h2><br />
 <div style="margin: auto;">
 <form action="#xarModURL('roles', 'user', 'register')#" method="post" enctype="application/x-www-form-urlencoded">
-<p><xar:mlstring>Username</xar:mlstring>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="uname" id="uname" value="#$values['uname']#" size="25" maxlength="255" />
+<table>
+	<tr>
+		<td><xar:mlstring>Username</xar:mlstring>:</td>
+		<td><input type="text" name="uname" id="uname" value="#$values['uname']#" size="25" maxlength="255" />
 			<xar:if condition="!empty($invalid['uname'])">
 				<span style="color: red">#$invalid['uname']#</span>
 			</xar:if>
-<br />
-<xar:mlstring>Display Name</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="realname" id="realname" value="#$values['realname']#" size="25" maxlength="255" />
+		</td>
+	</tr>
+	<tr>
+		<td><xar:mlstring>Display Name</xar:mlstring>:</td>
+		<td><input type="text" name="realname" id="realname" value="#$values['realname']#" size="25" maxlength="255" />
 			<xar:if condition="!empty($invalid['realname'])">
 				<span style="color: red">#$invalid['realname']#</span>
 			</xar:if>
-<br />
-<xar:mlstring>E-mail Address</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="email" id="email" value="#$values['email']#" size="25" maxlength="255" />
+		</td>
+	</tr>
+	<tr>
+		<td><xar:mlstring>E-mail Address</xar:mlstring>:</td>
+		<td><input type="text" name="email" id="email" value="#$values['email']#" size="25" maxlength="255" />
 			<xar:if condition="!empty($invalid['email'])">
 				<span style="color: red">#$invalid['email']#</span>
 			</xar:if>
-<br />
-    <xar:if condition="xarModGetVar('roles', 'chooseownpassword')" >
-		<xar:mlstring>Password</xar:mlstring>: &nbsp;&nbsp;<input type="password" name="pass1" id="pass1" value="#$values['pass1']#"" size="25" maxlength="40" />
-				<xar:if condition="!empty($invalid['pass1'])">
-					<span style="color: red">#$invalid['pass1']#</span>
-				</xar:if>
-	<br />
-		<xar:mlstring>Retype Password</xar:mlstring>&nbsp;&nbsp;<input type="password" name="pass2" id="pass2" value="#$values['pass2']#"" size="25" maxlength="40" />
-				<xar:if condition="!empty($invalid['pass2'])">
-					<span style="color: red">#$invalid['pass2']#</span>
-				</xar:if>
-	<br />
+		</td>
+	</tr>
+	<xar:if condition="xarModGetVar('roles', 'chooseownpassword')" >
+		<tr>
+			<td><xar:mlstring>Password</xar:mlstring>:</td>
+			<td><input type="password" name="pass1" id="pass1" value="#$values['pass1']#"" size="25" maxlength="40" />
+					<xar:if condition="!empty($invalid['pass1'])">
+						<span style="color: red">#$invalid['pass1']#</span>
+					</xar:if>
+			</td>
+		</tr>
+		<tr>
+			<td><xar:mlstring>Retype Password</xar:mlstring>:</td>
+			<td><input type="password" name="pass2" id="pass2" value="#$values['pass2']#"" size="25" maxlength="40" />
+					<xar:if condition="!empty($invalid['pass2'])">
+						<span style="color: red">#$invalid['pass2']#</span>
+					</xar:if>
+			</td>
+		</tr>
     </xar:if>
 	<xar:if condition="xarModGetVar('roles','showtac') eq 0 and xarModGetVar('roles','showprivacy') eq 1">
-		<input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" />
-				<label for="agreetoterms">
+		<tr>
+			<td><input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" /></td>
+			<td><label for="agreetoterms">
 					<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('roles', 'user', 'privacy')#"> <xar:mlstring>Privacy Policy</xar:mlstring> </a>.
 				</label>
 				<xar:if condition="!empty($invalid['agreetoterms'])">
 					<span style="color: red">#$invalid['agreetoterms']#</span>
 				</xar:if>
-	<br />
+			</td>
+		</tr>
 	<xar:elseif condition="xarModGetVar('roles','showprivacy') eq 0 and xarModGetVar('roles','showtac') eq 1" />
-		<input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" />
-			<label for="agreetoterms">
-				<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('roles', 'user', 'terms')#"> <xar:mlstring>Terms of Use</xar:mlstring> </a>.
-			</label>
-				<xar:if condition="!empty($invalid['agreetoterms'])">
-					<span style="color: red">#$invalid['agreetoterms']#</span>
-				</xar:if>
-	<br />
+		<tr>
+			<td><input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" /></td>
+			<td>
+				<label for="agreetoterms">
+					<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('roles', 'user', 'terms')#"> <xar:mlstring>Terms of Use</xar:mlstring> </a>.
+				</label>
+					<xar:if condition="!empty($invalid['agreetoterms'])">
+						<span style="color: red">#$invalid['agreetoterms']#</span>
+					</xar:if>
+			</td>
+		</tr>
 	<xar:elseif condition="xarModGetVar('roles','showprivacy') eq 1 and xarModGetVar('roles','showtac') eq 1" />
-		<input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" />
+		<tr>
+			<td><input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" /></td>
+			<td>
 			<label for="agreetoterms">
 				<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('roles', 'user', 'terms')#"> <xar:mlstring>Terms of Use</xar:mlstring> </a> and <a href="#xarModURL('roles', 'user', 'privacy')#"> <xar:mlstring>Privacy Policy</xar:mlstring> </a>.
 			</label>
 				<xar:if condition="!empty($invalid['agreetoterms'])">
 					<span style="color: red">#$invalid['agreetoterms']#</span>
 				</xar:if>
+			</td>
+		</tr>
 	<xar:else />
 		<input type="hidden" name="agreetoterms" id="agreetoterms" value="1" />
 	</xar:if>
 	<xar:if condition="isset($properties)">
 		<xar:foreach in="$properties" key="$name">
-			<xar:data-label property="$properties[$name]" />:&nbsp;&nbsp;<xar:data-input property="$properties[$name]" />
-			<br />
+			<tr>
+				<td><xar:data-label property="$properties[$name]" />:</td>
+				<td><xar:data-input property="$properties[$name]" /></td>
+			</tr>
 		</xar:foreach>
 	</xar:if>
-</p>
+</table>
 <input type="hidden" name="authid" id="authid" value="#$authid#" />
 <input type="hidden" name="phase" id="phase" value="checkregistration" />
 <input type="submit" value="New user" />
