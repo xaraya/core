@@ -1,8 +1,15 @@
 <item>
 <title><?php echo htmlentities($title); ?></title>
 <link><?php echo htmlentities($link); ?></link>
-<author><?php echo htmlentities($author); ?></author>
 <pubDate><?php echo date("r" , strtotime($date)); ?></pubDate>
-<description><?php echo htmlentities($summary); ?></description>
+<content:format rdf:resource="http://www.w3.org/1999/xhtml" />
+<content:encoded><![CDATA[<?php echo $summary; ?> ]]></content:encoded>
+<description><?php $summary = preg_replace('<br />',"\n",$summary); echo xarVarPrepForDisplay(strip_tags($summary)); ?></description>
 <comments><?php $url = xarModURL('comments','user','display',array('modid' => xarModGetIDFromName('articles'),'objectid' => $aid)); echo htmlentities($url); ?></comments>
+<guid isPermaLink="true"><?php echo htmlentities($link); ?></guid>
+<xar:if condition="!empty($categories) and count($categories) gt 0">
+<xar:loop name="$categories">
+<category><?php echo htmlentities($cname); ?></category>
+</xar:loop>
+</xar:if>
 </item>
