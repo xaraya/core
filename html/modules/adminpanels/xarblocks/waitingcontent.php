@@ -71,7 +71,7 @@ function adminpanels_waitingcontentblock_display($blockinfo)
 
     $blockinfo['content'] = array(
         'output'   => $data['output'],
-        'message'  => $data['message'])
+        'message'  => $data['message']
     );
 
     return $blockinfo;
