@@ -1,0 +1,23 @@
+Testing
+
+<pnt:if condition="$menustyle eq byname">
+	By Name
+	<br>
+	&pnt-var-data;
+<pnt:elseif condition="$menustyle eq bycat" />
+	By Category
+	<br>
+	&pnt-var-data;
+<pnt:elseif condition="$menustyle eq byweight" />
+	By Weight
+	<br>
+	&pnt-var-data;
+<pnt:elseif condition="$menustyle eq bygroup" />
+	By Group
+	<br>
+	&pnt-var-data;
+<pnt:else />
+	By Category
+	<br>
+	&pnt-var-data;
+</pnt:if>
