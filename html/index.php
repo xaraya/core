@@ -42,6 +42,7 @@ function xarMain()
     if (!empty($themeName)) {
         $themeName = xarVarPrepForOS($themeName);
         xarTplSetThemeName($themeName);
+        xarVarSetCached('Themes.name','CurrentTheme', $themeName);
     }
 
     // Load the module
