@@ -1,6 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:base-include-javascript module="base" filename="formcheck.js" />
-<script language="JavaScript">
+<script type="text/javascript">
 <!--
     // Enter name of mandatory fields
     var base_fieldRequired = Array("defaultfunction");
@@ -82,7 +82,7 @@
                 <h4><xar:mlstring>Website Display Configuration</xar:mlstring></h4>
             </div>
 
-        <p><xar:mlstring>Please note that the default theme variable has moved to the themes module.</xar:mlstring></p>
+           <p><xar:mlstring>Please note that the default theme variable has moved to the themes module.</xar:mlstring></p>
 
             <div style="clear: both; padding-top: 10px;">
             <span style="float: left; width: 20%; text-align: right;">
@@ -117,10 +117,11 @@
             
             <div style="clear: both; padding-top: 10px;">
             <span style="float: left; width: 20%; text-align: right;">
-                <span class="help" title="#xarML('The name of the alternate page template to use.')#"><label for="alternatepagetemplatename"><xar:mlstring>Alternate Page Template Name</xar:mlstring></label>:</span>
+            <span class="help" title="#xarML('The name of the alternate page template to use.')#">
+                <label for="alternatepagetemplatename"><xar:mlstring>Alternate Page Template Name</xar:mlstring></label>:</span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
-                <input type="text" name="alternatepagetemplatename" value="#xarModGetVar('base', 'AlternatePageTemplateName')#" size="15" />
+                <input type="text" id="alternatepagetemplatename" name="alternatepagetemplatename" value="#xarModGetVar('base', 'AlternatePageTemplateName')#" size="15" />
             </span>
             </div>
             </xar:if>
@@ -145,25 +146,28 @@
 
             <div style="clear: both; padding-top: 10px;">
             <span style="float: left; width: 20%; text-align: right;">
-                <span class="help" title="#xarML('The default function of module to be loaded.')#"><label for="defaultfunction"><xar:mlstring>Default Module Function</xar:mlstring></label>:</span>
+            <span class="help" title="#xarML('The default function of module to be loaded.')#">
+                <label for="defaultfunction"><xar:mlstring>Default Module Function</xar:mlstring></label>:</span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
-                <input type="text" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" size="30" maxlength="100" />
+                <input type="text" id="defaultfunction" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" size="30" maxlength="100" />
             </span>
             </div>
 
             <div style="clear: both; padding-top: 10px;">
             <span style="float: left; width: 20%; text-align: right;">
-                <span class="help" title="#xarML('The default directory for site themes - no trailing slash.')#"><label for="themefir"><xar:mlstring>Default Theme Directory</xar:mlstring></label>:</span>
+            <span class="help" title="#xarML('The default directory for site themes - no trailing slash.')#">
+                <label for="themedir"><xar:mlstring>Default Theme Directory</xar:mlstring></label>:</span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
-                <input type="text" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" size="30" maxlength="100" />
+                <input type="text" id="themedir" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" size="30" maxlength="100" />
             </span>
             </div>
 
             <div style="clear: both; padding-top: 10px;">
             <span style="float: left; width: 20%; text-align: right;">
-                <span class="help" title="#xarML('Enable short url support throughout Xaraya.')#"><label for="themefir"><xar:mlstring>Enable Short URL Support</xar:mlstring></label>:</span>
+            <span class="help" title="#xarML('Enable short url support throughout Xaraya.')#">
+                <label for="shorturl"><xar:mlstring>Enable Short URL Support</xar:mlstring></label>:</span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
                 <xar:if condition="xarConfigGetVar('Site.Core.EnableShortURLsSupport')">
@@ -176,7 +180,8 @@
 
             <div style="clear: both; padding-top: 10px;">
             <span style="float: left; width: 20%; text-align: right;">
-                <span class="help" title="#xarML('Change HTML Entities to readible entities.')#"><label for="htmlenitites"><xar:mlstring>Fix HTML Entities</xar:mlstring></label>:</span>
+            <span class="help" title="#xarML('Change HTML Entities to readible entities.')#">
+                <label for="htmlenitites"><xar:mlstring>Fix HTML Entities</xar:mlstring></label>:</span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
                 <xar:if condition="xarConfigGetVar('Site.Core.FixHTMLEntities')">
@@ -186,10 +191,11 @@
                 </xar:if>    
             </span>
             </div>
-            <br /><br />
+            <div style="clear: both; padding-top: 10px;">
             <input type="submit" value="#$updatelabel#"  />
+            </div>
         </form>
-    
+
 <xar:comment> ----------------- Begin Security Options ------------------- </xar:comment>
     <xar:elseif condition="$tab eq 'security'" />
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
@@ -200,7 +206,8 @@
             </div>
             <div style="clear: both; padding-top: 10px;">
                 <span style="float: left; width: 20%; text-align: right;">
-                    <span class="help" title="#xarML('Configure to run on a secure server.')#"><label for="secureserver"><xar:mlstring>Configure to run on Secure Server</xar:mlstring></label>:</span>
+                <span class="help" title="#xarML('Configure to run on a secure server.')#">
+                    <label for="secureserver"><xar:mlstring>Configure to run on Secure Server</xar:mlstring></label>:</span>
                 </span>
                 <span style="float: right; width: 78%; text-align: left;">
                     <xar:if condition="xarConfigGetVar('Site.Core.EnableSecureServer')">
@@ -212,7 +219,8 @@
             </div>
         <div style="clear: both; padding-top: 10px;">
             <span style="float: left; width: 20%; text-align: right;">
-                <span class="help" title="#xarML('Security options for sessions')#"><label for="securitylevel"><xar:mlstring>Security Level</xar:mlstring></label>:</span>
+            <span class="help" title="#xarML('Security options for sessions')#">
+                <label for="securitylevel"><xar:mlstring>Security Level</xar:mlstring></label>:</span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
                 <select name="securitylevel" id="securitylevel" size="1">
@@ -236,7 +244,8 @@
         <xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'Medium'">
             <div style="clear: both; padding-top: 10px;">
             <span style="float: left; width: 20%; text-align: right;">
-                <span class="help" title="#xarML('How long to allow the session to last in days')#"><label for="securitylevel"><xar:mlstring>Session Duration (In Days)</xar:mlstring></label>:</span>
+            <span class="help" title="#xarML('How long to allow the session to last in days')#">
+                <label for="sessionduration"><xar:mlstring>Session Duration (In Days)</xar:mlstring></label>:</span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
                 <input type="text" name="sessionduration" value="#xarConfigGetVar('Site.Session.Duration')#" size="5" maxlength="3" />
@@ -246,7 +255,8 @@
 
             <div style="clear: both; padding-top: 10px;">
             <span style="float: left; width: 20%; text-align: right;">
-                <span class="help" title="#xarML('Session times out in minutes')#"><label for="securitylevel"><xar:mlstring>Session Inactivity Time Out</xar:mlstring></label>:</span>
+            <span class="help" title="#xarML('Session times out in minutes')#">
+                <label for="sessiontimeout"><xar:mlstring>Session Inactivity Time Out</xar:mlstring></label>:</span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
                 <input type="text" name="sessiontimeout" value="#xarConfigGetVar('Site.Session.InactivityTimeout')#" size="5" maxlength="3" />
@@ -282,7 +292,8 @@
 
             <div style="clear: both; padding-top: 10px;">
             <span style="float: left; width: 20%; text-align: right;">
-                <span class="help" title="#xarML('Load Legacy Support for Postnuke (7.1x, 7.2x)')#"><label for="defaultlocale"><xar:mlstring>Load Legacy Support</xar:mlstring></label>:</span>
+            <span class="help" title="#xarML('Load Legacy Support for Postnuke (7.1x, 7.2x)')#">
+                <label for="loadlegacy"><xar:mlstring>Load Legacy Support</xar:mlstring></label>:</span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
                 <xar:if condition="xarConfigGetVar('Site.Core.LoadLegacy')">
@@ -300,7 +311,8 @@
 
             <div style="clear: both; padding-top: 10px;">
             <span style="float: left; width: 20%; text-align: right;">
-                <span class="help" title="#xarML('Proxy server to load')#"><label for="proxyhost"><xar:mlstring>Proxy Server</xar:mlstring></label>:</span>
+            <span class="help" title="#xarML('Proxy server to load')#">
+                <label for="proxyhost"><xar:mlstring>Proxy Server</xar:mlstring></label>:</span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
                 <input type="text" name="proxyhost" value="#xarModGetVar('base','proxyhost')#" size="30" maxlength="100" />
@@ -309,7 +321,8 @@
 
             <div style="clear: both; padding-top: 10px;">
             <span style="float: left; width: 20%; text-align: right;">
-                <span class="help" title="#xarML('Proxy port to load')#"><label for="proxyport"><xar:mlstring>Proxy Port</xar:mlstring></label>:</span>
+            <span class="help" title="#xarML('Proxy port to load')#">
+                <label for="proxyport"><xar:mlstring>Proxy Port</xar:mlstring></label>:</span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
                 <input type="text" name="proxyport" value="#xarModGetVar('base','proxyport')#" size="5" maxlength="10" />
@@ -322,7 +335,8 @@
 
             <div style="clear: both; padding-top: 10px;">
             <span style="float: left; width: 20%; text-align: right;">
-                <span class="help" title="#xarML('WYSIWYG Editors')#"><label for="wysiwyg"><xar:mlstring>WYSIWYG Editors</xar:mlstring></label>:</span>
+            <span class="help" title="#xarML('WYSIWYG Editors')#">
+                <label for="editor"><xar:mlstring>WYSIWYG Editors</xar:mlstring></label>:</span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
                 <select name="editor" id="editor" size="1">

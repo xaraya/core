@@ -116,7 +116,7 @@
         <p><xar:mlstring> We reserve all of our rights, including but not limited to any and all copyrights, trademarks, patents, trade secrets, and any other proprietary right that we may have in our web site, its content, and the goods and services that may be provided. The use of our rights and property requires our prior written consent.   We are not providing you with any implied or express licenses or rights by making services available to you and you will have no rights to make any commercial uses of our web site or service without our prior written consent.</xar:mlstring></p>
 
     <xar:set name="$curnum">++$curnum</xar:set>
-    <h3 id="copyright">#$curnum#.&nbsp;<xar:mlstring>Notification of Copyright   Infringement</xar:mlstring></h3>
+    <h3 id="copyrights">#$curnum#.&nbsp;<xar:mlstring>Notification of Copyright Infringement</xar:mlstring></h3>
         <p><xar:mlstring>If you believe that your property has been used in any way that would be considered copyright infringement or a violation of your intellectual property rights, our copyright agent may be contacted at the following address:&nbsp;</xar:mlstring><a href="mailto:#$contmail#">#$contmail#</a>.</p>
 
     <xar:set name="$curnum">++$curnum</xar:set>
