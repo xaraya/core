@@ -23,7 +23,7 @@
         </td>
         <td>
             <xar:if condition="$loop:item['membercount'] gt 0">
-                <xar:loop name="$instances">
+                <xar:loop name="$loop:item['instances']">
                     <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item['id']#">#$loop:item['title']#</a><br />
                 </xar:loop>
             <xar:else />
