@@ -2773,8 +2773,8 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
         // they may be very relevant. Only one space is relevant though.
         // TODO: this is an XML rule (whitespace collapsing), might not apply is we're going for other output formats 
         // TODO: it's now getting a bit insane not using a XML parser, this is the kind of mess we need to deal with now
-        $leftspace = (strlen(rtrim($string)) != strlen($string)) ? ' ' : '';
-        $this->_rightspace =(strlen(ltrim($string)) != strlen($string)) ? ' ' : '';
+        $leftspace = (strlen(ltrim($string)) != strlen($string)) ? ' ' : '';
+        $this->_rightspace =(strlen(rtrim($string)) != strlen($string)) ? ' ' : '';
         $totranslate = trim($string);
         if ($totranslate == '') {
             $this->raiseError(XAR_BL_INVALID_TAG,'Missing content in <xar:mlstring> tag.', $this);
