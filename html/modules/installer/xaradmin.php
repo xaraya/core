@@ -700,7 +700,7 @@ function installer_admin_confirm_configuration()
     
     if(!xarVarFetch('configuration', 'isset', $configuration, NULL,  XARVAR_DONT_SET))  return;
     if(!isset($configuration)) {
-        $msg = xarML("Please go back and select one of the avialable configurations.");
+        $msg = xarML("Please go back and select one of the available configurations.");
         xarErrorSet(XAR_USER_EXCEPTION, 'Please select a configuration', $msg);
         return;
     }
