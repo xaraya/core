@@ -16,9 +16,7 @@
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
-list($step,
-     $startnum) = xarVarCleanFromInput('step',
-                                       'startnum');
+$step = xarVarCleanFromInput('step');
 
 // pre-fill the module name (if any) for hooks
 xarRequestGetInfo();
@@ -27,24 +25,25 @@ xarDBLoadTableMaintenanceAPI();
 
 if(!xarSecurityCheck('AdminPanel')) return;
 
-if (!isset($step)) {
-// start the output buffer
-ob_start();
-}
+$xarVersion = xarConfigGetVar('System.Core.VersionNum');
 
-if (empty($step)){
-    ?>
+$title = xarML('Upgrade');
 
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Upgrade</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Preparing to upgrade from previous Xaraya Version.</xar:mlstring></h2><br />
+if (empty($step)) {
+    $descr = xarML('Preparing to upgrade from previous Xaraya Version #(1)',$xarVersion);
+
+    // start the output buffer
+    ob_start();
+?>
+
+<div class="xar-mod-head"><span class="xar-mod-title"><?php echo $title; ?></span></div>
+<div class="xar-mod-body"><h2><?php echo $descr; ?></h2><br />
 <div style="margin: auto;">
     <form method="POST" action="upgrade.php">
     <p><input type="submit" value="Upgrade Core Tables"></p>
 
     <input type="hidden" name="step" value="1">
-    <input type="hidden" name="module" value="roles">
     </form>
-    <p><strong>Warning : for PHP 4.2+, this script needs to be run with register_globals OFF</strong></p>
     </div>
     </div>
 
@@ -53,7 +52,6 @@ if (empty($step)){
 
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
-    $xarVersion = xarConfigGetVar('System.Core.VersionNum');
 
 //Begin Upgrades -- needs to be a switch after this first upgrade.
     switch($xarVersion) {
@@ -204,23 +202,46 @@ if (empty($step)){
                 }
 
             break;
+
+            case '0.903':  // this is how it's defined in modules/base/xarinit.php
+            case '.9.0.3': // this is how it's defined in upgrade.php
+//                xarConfigSetVar('System.Core.VersionNum', '.9.0.4');
+
+                $instances = array(
+                                   array('header' => 'external', // this keyword indicates an external "wizard"
+                                         'query'  => xarModURL('categories', 'admin', 'privileges'),
+                                         'limit'  => 0
+                                        )
+                                  );
+                xarDefineInstance('categories', 'Link', $instances);
+
+                xarRegisterMask('ViewCategoryLink','All','categories','Link','All:All:All:All',ACCESS_OVERVIEW);
+                xarRegisterMask('SubmitCategoryLink','All','categories','Link','All:All:All:All',ACCESS_COMMENT);
+                xarRegisterMask('EditCategoryLink','All','categories','Link','All:All:All:All',ACCESS_EDIT);
+                xarRegisterMask('DeleteCategoryLink','All','categories','Link','All:All:All:All',ACCESS_DELETE);
+
+                xarRegisterMask('AdminCategories','All','categories','Category','All:All',ACCESS_ADMIN);
+            break;
+
     }
 
 // Fini
 
+    $complete = xarML('Upgrades Complete');
+
 // start the output buffer
-ob_start();
+    ob_start();
 ?>
 
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Upgrade</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Upgrades Complete</xar:mlstring></h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><?php echo $title; ?></span></div>
+<div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
 <div style="margin: auto;">
 Thank you, the upgrades are complete.
 </div>
 </div>
 
 <?php
-    }
+}
 
 // catch the output
 $return = ob_get_contents();
