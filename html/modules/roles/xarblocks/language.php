@@ -33,7 +33,7 @@ function roles_languageblock_info()
 function roles_languageblock_display($blockinfo)
 {
     // Security check
-    if (!xarSecurityCheck('ReadRole',1,'Block',"All:" . $blockinfo[title] . ":All")) return;
+    if (!xarSecurityCheck('ReadRole',1,'Block',"All:" . $blockinfo['title'] . ":All")) return;
 
     if (xarMLSGetMode() != XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
         return;
@@ -60,6 +60,7 @@ function roles_languageblock_display($blockinfo)
     $tplData['form_action'] = xarModURL('roles', 'user', 'changelanguage');
     $tplData['form_picker_name'] = 'locale';
     $tplData['locales'] = $locales;
+    $tplData['languagelabel'] = xarML('Select');
 
     // URL of this page
     $tplData['return_url'] = xarServerGetCurrentURL();
