@@ -310,7 +310,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                 }
                 if ($node->needAssignment() || $node->needParameter()) {
                     if (!$child->isAssignable() && $child->tagName != 'TextNode') {
-                        $this->raiseError(XAR_BL_INVALID_TAG,"The '".$nodeode->tagName."' tag cannot have children of type '".$child->tagName."'.", $child);
+                        $this->raiseError(XAR_BL_INVALID_TAG,"The '".$node->tagName."' tag cannot have children of type '".$child->tagName."'.", $child);
                         return;
                     }
 
