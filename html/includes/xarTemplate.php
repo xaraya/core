@@ -174,18 +174,20 @@ function xarTplSetPageTitle($title)
  * @global xarTpl_additionalStyles string
  * @param modName string
  * @param styleName string
+ * @param fileExt string
  * @returns bool
  */ 
-function xarTplAddStyleLink($modName, $styleName)
+function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css')
 {
     $info = xarMod_getBaseInfo($modName);
     if (!isset($info)) return;
-    $fileName = "modules/$info[directory]/xarstyles/$styleName.css";
+    $fileName = "modules/$info[directory]/xarstyles/$styleName.$fileExt";
     if (!file_exists($fileName)) {
         return false;
     }
     $url = xarServerGetBaseURL().$fileName;
     $GLOBALS['xarTpl_additionalStyles'] .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$url}\" />\n";
+
     return true;
 }
 
