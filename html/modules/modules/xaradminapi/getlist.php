@@ -169,13 +169,15 @@ function modules_adminapi_GetList($args)
 
                 $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
                 if (!isset($modFileInfo)) {
-                    // The info from the DB doesn't match the filesystem
-                    // This is already logged in the getfileinfo function, we don't have to do it again
-                    // FIXME: Set the status of module to missing files or something?
+//                    $modInfo['state'] = XARMOD_STATE_MISSING;
+//                    $modList[] = $modInfo;
                 } else {
                     //     $modInfo = array_merge($modInfo, $modFileInfo);
                     $modInfo = array_merge($modFileInfo, $modInfo);
                     xarVarSetCached('Mod.Infos', $modInfo['regid'], $modInfo);
+                    if ($modInfo['state'] == XARMOD_STATE_MISSING) {
+                        $modInfo['state'] = XARMOD_STATE_UNINITIALISED;
+                    }
                     $modList[] = $modInfo;
                 }
             }

@@ -62,6 +62,8 @@ function modules_admin_list()
                           array('filter'     => array('State' => $data['selfilter'])));
     }else{
         // or just fetch the quicker old list
+        // think we need to always check the filesystem
+        xarModAPIFunc('modules', 'admin', 'regenerate');
         $modlist = xarModAPIFunc('modules',
                           'admin',
                           'GetList',
@@ -91,7 +93,6 @@ function modules_admin_list()
 
         // we're going to use the module regid in many places
         $thismodid = $mod['regid'];
-
         // if this module has been classified as 'Core'
         // we will disable certain actions
         $modinfo = xarModGetInfo($thismodid);

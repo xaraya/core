@@ -42,6 +42,7 @@ function modules_adminapi_setstate($args)
     switch ($state) {
         case XARMOD_STATE_UNINITIALISED:
 
+            if ($oldState == XARMOD_STATE_MISSING) break;
             if ($oldState != XARMOD_STATE_INACTIVE) {
                 // New Module
                 $module_statesTable = $xartable['system/module_states'];
