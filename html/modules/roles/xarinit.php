@@ -176,7 +176,8 @@ function roles_activate()
     xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');
     xarModSetVar('roles', 'welcometitle', 'Welcome to %%sitename%%');
     $lockdata = array('roles' => array( array('uid' => 2,
-                                              'name' => 'Administrators')
+                                              'name' => 'Administrators',
+                                              'notify' => TRUE)
                                        ),
                       'message' => '',
                       'locked' => 0);

@@ -1,0 +1,116 @@
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Site Locks</xar:mlstring></h2>
+<div style="margin: auto;">
+	<form action="#xarModURL('roles', 'admin', 'sitelock')#" method="post" enctype="application/x-www-form-urlencoded">
+		
+		<table>
+		<tr>
+			<td>
+				<input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#" />
+				<input type="hidden" name="toggle" id="toggle" value="#$toggle#" />
+				&nbsp;
+				<b>#$statusmessage#</b>&nbsp;<input type="button" value="#$togglelabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&cmd=toggle';this.form.submit();"/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<hr/>			
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b><xar:mlstring>Configuration</xar:mlstring></b>			
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<xar:mlstring>On a locked site only the following users and groups will have access:</xar:mlstring>			
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table border="0" padding="2" width="300">
+					<tr>
+						<td width="100" align="center">
+							<xar:mlstring>Action</xar:mlstring>
+						</td>
+						<td width="150" align="center">
+							<xar:mlstring>Role</xar:mlstring>	
+						</td>
+						<td width="50" align="center">
+							<xar:mlstring>Notify</xar:mlstring>	
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<hr />
+						</td>
+					</tr>
+				<xar:loop name="$roles">
+					<tr>
+						<td width="100" align="right">
+							<xar:if condition="count($roles) gt 1">
+								<input type="button" value="#$deletelabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;uid=#$loop:item['uid']#';this.form.submit();"/>
+							<xar:else />
+								&nbsp;
+							</xar:if>
+						</td>
+						<td>
+							&nbsp;#$loop:item['name']#
+						</td>
+						<td>
+							 <xar:if condition="$loop:item['notify'] == 'true'">
+								  <input type="checkbox" name="notify[]" value=#$loop:item['uid']# checked />
+							<xar:else />
+								  <input type="checkbox" name="notify[]" value=#$loop:item['uid']# />
+							</xar:if>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<hr />
+						</td>
+					</tr>
+				</xar:loop>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table border="0" padding="2" width="450">
+					<tr>
+						<td width="100" align="right">
+							<input type="hidden" name="lockedoutmsg" id="lockedoutmsg" value="#$lockedoutmsg#" />
+							<input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#" />
+							<input type="button" value="#$addlabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&cmd=add';this.form.submit();"/>
+						</td>
+						<td>
+							<input type="text" name="newname" id="newname" value=""  tabindex="1"/>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<xar:mlstring>The following message will be displayed to members who are locked out:</xar:mlstring>			
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<textarea name="lockedoutmsg" id="lockedoutmsg" wrap="soft" rows="5" cols="80" tabindex="1">#$lockedoutmsg#</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="button" value="#$savelabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&cmd=save';this.form.submit();"/>
+			</td>
+		</tr>
+		</table>
+	</form>
+</div>
+</div>
