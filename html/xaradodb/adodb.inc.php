@@ -205,7 +205,8 @@
 	/**
 	 * Connection object. For connecting to databases, and executing queries.
 	 */ 
-	class ADOConnection {
+	class ADOConnection
+        {
 	//
 	// PUBLIC VARS 
 	//
@@ -2297,12 +2298,18 @@
 		var $_numOfRows = 0;
 		var $fields = false;
 		var $connection = false;
-		function RowCount() {return 0;}
-		function RecordCount() {return 0;}
-		function PO_RecordCount(){return 0;}
-		function Close(){return true;}
-		function FetchRow() {return false;}
-		function FieldCount(){ return 0;}
+		function RowCount()
+                {return 0;}
+		function RecordCount()
+                {return 0;}
+		function PO_RecordCount()
+                {return 0;}
+		function Close()
+                {return true;}
+		function FetchRow()
+                {return false;}
+		function FieldCount()
+                { return 0;}
 	}
 	
 	//==============================================================================================	
