@@ -1191,6 +1191,12 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
             if ($generateXMLURL) {
                 $path = htmlspecialchars($path);
             }
+
+            // FIXME: check if this works with all modules supporting short urls
+            if ($target != NULL) {
+                $path = "$path#$target";
+            }
+
             return xarServerGetBaseURL() . 'index.php' . $path;
         }
     }
