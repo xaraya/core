@@ -12,7 +12,7 @@
 class xarQuery
 {
 
-    var $version = "1.0";
+    var $version = "1.1";
     var $type;
     var $tables;
     var $fields;
@@ -57,7 +57,6 @@ class xarQuery
     function run($statement='',$pretty=1)
     {
         $this->setstatement($statement);
-
         $result = $this->dbconn->Execute($this->statement);
 
         if ($this->type == 'SELECT') {
@@ -137,6 +136,7 @@ class xarQuery
 
     function row($row=0)
     {
+        if ($this->output == array()) return array();
         return $this->output[$row];
     }
 
@@ -270,12 +270,29 @@ class xarQuery
 
     function join($field1,$field2)
     {
-        $this->conditions[]=array('field1' => $field1,
-                                  'field2' => $field2,
-                                  'op' => 'join');
+        $numargs = func_num_args();
+        if ($numargs == 2) {
+            $this->conditions[]=array('field1' => $field1,
+                                      'field2' => $field2,
+                                      'op' => 'join');
+        }
+        elseif ($numargs == 4) {
+            $this->conditions[]=array('field1' => func_get_arg(0) . "." . func_get_arg(1),
+                                      'field2' => func_get_arg(2) . "." . func_get_arg(3),
+                                      'op' => 'join');
+        }
     }
     function eq($field1,$field2)
     {
+        $limit = count($this->conditions);
+        for ($i=0;$i<$limit;$i++) {
+            if ($this->conditions[$i]['field1'] == $field1) {
+                $this->conditions[$i]=array('field1' => $field1,
+                                          'field2' => $field2,
+                                          'op' => '=');
+                return;
+            }
+        }
         $this->conditions[]=array('field1' => $field1,
                                   'field2' => $field2,
                                   'op' => '=');
@@ -433,7 +450,7 @@ class xarQuery
             foreach ($this->fields as $field) {
                 if (is_array($field)) {
                     $f .= $field['name'];
-                    $f .= ($field['alias'] != '' ) ? " AS " . $field['alias'] . ", " : ", ";
+                    $f .= (isset($field['alias']) && $field['alias'] != '') ? " AS " . $field['alias'] . ", " : ", ";
                 }
                 else {
                     $f .= $field . ", ";
@@ -577,6 +594,10 @@ class xarQuery
     {
         if ($x == '') $this->dbconn =& xarDBGetConn();
         else $this->dbconn = $x;
+    }
+    function getconnection()
+    {
+        return $this->dbconn;
     }
     function getstatement()
     {
