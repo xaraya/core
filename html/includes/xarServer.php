@@ -136,6 +136,7 @@ function xarServerGetBaseURI()
     }
     $path = dirname($path);
 
+    //FIXME: This is VERY slow!!
     if (preg_match('!^[/\\\]*$!', $path)) {
         $path = '';
     }

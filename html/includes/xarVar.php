@@ -479,6 +479,7 @@ function xarVar__getAllowedTags($level)
  * @return mixed The value of the variable or void if variable doesn't exist
  * @raise DATABASE_ERROR, BAD_PARAM
  */
+ //FIXME: Theme vars seems to be useless, get rid of it.
 function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL, $type = 'modvar')
 {
     if (empty($name)) {
