@@ -1857,7 +1857,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         $idpart ='';
         if(isset($id)) {
             // Make the id property point to the same loop so loop:id:index etc. works too
-            $idpart = $loopName.'->'.$id.'='.$loopName.'->item; $loop->'.$id.'=& '.$loopName.'->item;';
+            $idpart = $loopName.'->'.$id.'=&'.$loopName.'; $loop->'.$id.'=& '.$loopName.'->'.$id.';';
         }
         $output = $loopName.'->index=-1; '.$loopName.'->number='.$loopCounter.';
                   foreach ('.$name.' as '.$loopName.'->key => '.$loopName.'->item ) {
