@@ -4,67 +4,85 @@
  * 
  * Xaraya WebServices Interface
  * 
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
- * @subpackage Xaraya WebServices Interface
+ * @subpackage webservices
  * @author Miko 
 */
+
+
+/**
+ * Entry point for the webservices module
+ *
+ * Just here to create a convenient url, the
+ * actual work is done in the module, so we
+ * are going as fast as we can to the module
+ * to avoid redundancy.
+ *
+ * This script accepts one parameter: type [xmlrpc, soap]
+ * with which the protocol is chosed
+ *
+ * Entry points for client:
+ * XMLRPC: http://host.com/ws.php?type=xmlrpc
+ * SOAP  : http://host.com/ws.php?type=soap
+ */
+
 
 /**
  * Main WebServices Function
 */
 include 'includes/xarCore.php';
 
-function xarWebservicesMain()
-{
+function xarWebservicesMain() {
 
-// TODO: don't load the whole core
+    // TODO: don't load the whole core
     xarCoreInit(XARCORE_SYSTEM_ALL);
-
+    
     // Load user API for xmlrpc module
     if (!xarModAPILoad('webservices', 'user')) {
         xarCore_die('Could not load webservices module');
     }
-
+    
     /* determine the server type (xml-rpc or soap), then
     create an instance of an that server and define the apis we export
     and the mapping to the functions.
     */
     $type = xarRequestGetVar('type');
-
-    if ($type == 'xmlrpc') {
+    $server=false;
+    switch($type) {
+    case  'xmlrpc':
+        // xmlrpc server does automatic processing directly
         $server = xarModAPIFunc('webservices','user','initXMLRPCServer');
         if (!$server) {
             xarLogMessage("Could not load XML-RPC server, giving up");
             die('Could not load XML-RPC server');
+        } else {
+            xarLogMessage("Created XMLRPC server");
         }
-    }
-
-    elseif ($type == 'soap') {
+        break;
+    case 'soap' :
         $server = xarModAPIFunc('webservices','user','initSOAPServer');
         if (!$server) {
-            $fault = new soap_fault( 
-                'Server', '', 
-                'Unable to start SOAP server', '' 
-            ); 
-        // TODO: check this
+            $fault = new soap_fault('Server','','Unable to start SOAP server', ''); 
+            // TODO: check this
             echo $fault->serialize();
         }
+        // Try to process the request
         if ($server) {
             global $HTTP_RAW_POST_DATA;
             $server->service($HTTP_RAW_POST_DATA);
         }
-
-    } elseif (xarServerGetVar('QUERY_STRING') == 'wsdl') {
-        header('Location: ' . xarServerGetBaseURL() . 'modules/webservices/xaraya.wsdl');
-
-    } else {
-    // TODO: show something nice(r) ?
-        echo '<a href="ws.php?wsdl">WSDL</a><br />
+    default:
+        if (xarServerGetVar('QUERY_STRING') == 'wsdl') {
+            header('Location: ' . xarServerGetBaseURL() . 'modules/webservices/xaraya.wsdl');
+        } else {
+            // TODO: show something nice(r) ?
+            echo '<a href="ws.php?wsdl">WSDL</a><br />
 <a href="ws.php?type=xmlrpc">XML-RPC Interface</a><br />
 <a href="ws.php?type=soap">SOAP Interface</a>';
+        }
     }
 }
 
