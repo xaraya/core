@@ -11,26 +11,11 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://www.w3.org/TR/xhtml1/strict">
 
-<!--
-
-    xarversion.xsl
-    ===========
-
--->
-
-<!-- ENTRY POINT    print out progress and call module template -->
-<xsl:template match="/" mode="xarversion" xml:space="default">
-    generating xarversion.php ... <xsl:apply-templates mode="xarversion" select="xaraya_module" /> ... finished
-</xsl:template>
-
-
-
-<!-- MODULE POINT
-
-     Create a new file called xarversion.php.
-
--->
 <xsl:template match="xaraya_module" mode="xarversion">
+
+    <xsl:message>
+### Generating xarversion.php</xsl:message>
+
 <xsl:document href="{$output}/xarversion.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
     <!-- call template for file header -->

@@ -3,28 +3,16 @@
                 xmlns:xar="dd"
                 xmlns="http://www.w3.org/TR/xhtml1/strict">
 
-<!--
-
-    xartemplates/includes/xarinit.php
-    =================================
-
--->
-
-<xsl:template match="/" mode="xd_blocks_block">
-    <xsl:apply-templates mode="xd_blocks_block" select="xaraya_module" />
-</xsl:template>
-
-
-<!--
-
-    THE FILE
-    ========
-
--->
 <xsl:template match="xaraya_module" mode="xd_blocks_block">
+
+
     <xsl:for-each select="blocks/block">
-    generating xartemplates/blocks/<xsl:value-of select="@name" />.xd <xsl:apply-templates mode="xd_blocks_block" select="." /> ... finished
+
+        <xsl:message>      * xartemplates/blocks/<xsl:value-of select="@name" />.xd</xsl:message>
+        <xsl:apply-templates mode="xd_blocks_block" select="." />
+
     </xsl:for-each>
+
 </xsl:template>
 
 <xsl:template match="block" mode="xd_blocks_block">

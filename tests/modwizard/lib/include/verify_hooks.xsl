@@ -20,20 +20,9 @@
 
 -->
 
+<xsl:template mode="verify" match="xaraya_module">
 
-
-<!-- ENTRY POINT    print out progress and call module template -->
-<xsl:template match="/" mode="verify" xml:space="default">
-    verifying hooks ... <xsl:apply-templates mode="verify_hooks" select="xaraya_module" /> ... finished
-</xsl:template>
-
-
-<!-- =========================================================================
-
-    MODE: xarverify_hooks                   MATCH: xaraya_module
-
--->
-<xsl:template mode="verify_hooks" match="xaraya_module">
+    <xsl:message>      * Database</xsl:message>
 
     <xsl:if test="configuration/hooks/@enable = 'no' and count(configuration/hooks/hook) > 0 ">hooks disabled but configured !!!
         <xsl:message terminate="yes" />

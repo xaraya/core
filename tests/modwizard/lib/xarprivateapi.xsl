@@ -11,21 +11,18 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://www.w3.org/TR/xhtml1/strict">
 
-<xsl:include href="xaradminapi/getmenulinks.xsl" />
 
+<xsl:include href="xarprivateapi/adminconfigmenu.xsl" />
+<xsl:include href="xarprivateapi/common.xsl" />
 
-<xsl:template match="xaraya_module" mode="xaradminapi" xml:space="default">
+<xsl:template match="xaraya_module" mode="xarprivateapi" xml:space="default">
 
     <xsl:message>
-### Generating adminstration api</xsl:message>
+### Generating private api</xsl:message>
 
-    <xsl:apply-templates select="." mode="xaradminapi_getmenulinks" />
+    <xsl:apply-templates mode="xarprivateapi_adminconfigmenu" select="." />
 
-    <xsl:for-each select="database/table">
-
-        <!-- NOTHING TO DO -->
-
-    </xsl:for-each>
+    <xsl:apply-templates mode="xarprivateapi_common" select="." />
 
 </xsl:template>
 

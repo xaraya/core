@@ -21,7 +21,7 @@ BEGIN {
 # FIND LIBRARY
 #
 print "[MSG] Starting validation of your xml file.\n";
-print qx/ pwd && xmlproc_val $INPUT_FILE /;
+print qx/ xmlproc_val $INPUT_FILE /;
 print "[MSG] Finished validation of your xml file.\n";
 
 if ( not -e "$OUTPUT_DIR/modwizard.dtd" )

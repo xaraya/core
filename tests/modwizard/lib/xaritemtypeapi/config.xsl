@@ -1,0 +1,151 @@
+<!DOCTYPE xsl:stylesheet [
+        <!ENTITY nbsp "&#160;">
+]>
+<xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:html="http://www.w3.org/TR/xhtml1/strict"
+                xmlns:xar="dd"
+                xmlns="http://www.w3.org/TR/xhtml1/strict">
+
+
+<xsl:template match="table" mode="xaritemtypeapi_config">
+
+    <xsl:variable name="itemtype" select="@name" />
+
+    <xsl:message>      * <xsl:value-of select="$itemtype" />api/config.php</xsl:message>
+
+    <xsl:document href="{$output}/xar{$itemtype}api/config.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xar<xsl:value-of select="$itemtype" />api/config.php</xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:apply-templates mode="xaritemtypeapi_config_func" select="." />
+
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+    </xsl:processing-instruction></xsl:document>
+
+</xsl:template>
+
+
+<!-- ========================================================================
+
+        MODE: xaritemtypeapi_config      MATCH: xaraya_module
+
+-->
+<xsl:template mode="xaritemtypeapi_config_func" match="table">
+    <xsl:variable name="module_prefix" select="../../registry/name" />
+/**
+ * Administration for the <xsl:value-of select="$module_prefix" /> module.
+ */
+function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_config( $args ) {
+
+    $data =&amp; xarModAPIFunc(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'private'
+        ,'common'
+        ,array(
+            'title' => 'View <xsl:value-of select="label" /> Configuration'
+            ,'type' => 'admin'
+            ));
+
+    list( $itemtype, $authid ) = xarVarCleanFromInput( 'itemtype', 'authid' );
+    extract( $args );
+
+    if ( isset( $authid ) ) {
+
+        /*
+         * The user confirmed the form. So save the results.
+         */
+
+        if (!xarSecConfirmAuthKey()) return;
+
+        $itemsperpage = xarVarCleanFromInput( 'itemsperpage' );
+
+        if ( empty( $itemsperpage ) or !is_numeric( $itemsperpage ) ) {
+            $itemsperpage = 10;
+        }
+
+        xarModSetVar(
+            '<xsl:value-of select="$module_prefix" />'
+            ,'itemsperpage.' . $itemtype
+            ,$itemsperpage );
+
+        <xsl:if test="@hooks = 'enable'">
+        /*
+         * call the hook 'module:updateconfig:GUI'
+         */
+        $args = array(
+            'module'        =>  '<xsl:value-of select="$module_prefix" />'
+            ,'itemtype'     =>  $itemtype );
+        $data['hooks'] = xarModCallHooks(
+            'module'
+            ,'updateconfig'
+            ,'<xsl:value-of select="$module_prefix" />'
+            ,$args
+            ,'<xsl:value-of select="$module_prefix" />' );
+        </xsl:if>
+
+        /*
+         * Set a status message
+         */
+        xarSessionSetVar(
+            '<xsl:value-of select="$module_prefix" />_statusmsg'
+            ,'Updated the <xsl:value-of select="label" /> configuration!' );
+
+        /*
+         * Finished. Back to the sender!
+         */
+        xarResponseRedirect(
+            xarModURL(
+                '<xsl:value-of select="$module_prefix" />'
+                ,'admin'
+                ,'config'
+                ,array(
+                    'itemtype' => $itemtype )));
+
+    } // Save the changes
+
+    <xsl:if test="@hooks = 'enable'">
+    /*
+     * call the hook 'module:modifyconfig:GUI'
+     */
+    $args = array(
+        'module'        =>  '<xsl:value-of select="$module_prefix" />'
+        ,'itemtype'     =>  $itemtype );
+    $data['hooks'] = xarModCallHooks(
+        'module'
+        ,'modifyconfig'
+        ,'<xsl:value-of select="$module_prefix" />'
+        ,$args
+        ,'<xsl:value-of select="$module_prefix" />' );
+
+    </xsl:if>
+
+    $data['itemtype']       = $itemtype;
+    $data['itemtype_label'] = $itemtype;
+    $data['itemsperpage']   = xarModGetVar(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'itemsperpage.' . $itemtype );
+
+
+    /*
+     * Populate the rest of the template
+     */
+    $data['common']['menu_label'] = 'Configure';
+    $data['common']['menu']       = xarModAPIFunc(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'private'
+        ,'adminconfigmenu'
+        ,array() );
+    $data['action']     = xarModURL( '<xsl:value-of select="$module_prefix" />', 'admin', 'config' );
+    $data['authid']     = xarSecGenAuthKey();
+    $data['_bl_template'] = '<xsl:value-of select="@name" />';
+    return $data;
+}
+
+</xsl:template>
+
+
+</xsl:stylesheet>

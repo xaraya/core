@@ -1,0 +1,30 @@
+ITEM HOOKS
+----------
+
+    API
+        item_create.xsl
+        item_delete.xsl
+        item_update.xsl
+
+    GUI
+        item_update.xsl
+        item_modify.xsl
+
+
+MODULE HOOKS
+------------
+
+    API
+        module_remove.xsl
+        module_updateconfig.xsl
+
+    GUI
+        module_modifyconfig.xsl
+
+TRANSFORM HOOKS
+---------------
+
+    API
+        transform.xsl
+        transform-input.xsl
+

@@ -3,24 +3,6 @@
                 xmlns:xar="dd"
                 xmlns="http://www.w3.org/TR/xhtml1/strict">
 
-<!--
-
-    xartemplates/includes/xarinit.php
-    =================================
-
--->
-
-<xsl:template match="/" mode="xd_includes_header">
-    Baue xartemplates/includes/header.php ...<xsl:apply-templates mode="xd_includes_header" select="xaraya_module" />... fertig
-</xsl:template>
-
-
-<!--
-
-    THE FILE
-    ========
-
--->
 <xsl:template match="xaraya_module" mode="xd_includes_header">
 <xsl:document href="{$output}/xartemplates/includes/header.xd" format="text" omit-xml-declaration="yes" xml:space="preserve">
 

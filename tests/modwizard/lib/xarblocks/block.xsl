@@ -11,63 +11,46 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://www.w3.org/TR/xhtml1/strict">
 
-<!--
-
-    xarblocks/block.xsl
-    ===========
-
--->
-
-<!-- ENTRY POINT    print out progress and call module template -->
-<xsl:template match="/" mode="xarblocks_block" xml:space="default">
-    <xsl:apply-templates mode="xarblocks_block" select="xaraya_module" />
-</xsl:template>
-
 <!-- ENTRY POINT    print out progress and call module template -->
 <xsl:template match="xaraya_module" mode="xarblocks_block" xml:space="default">
+
+    <xsl:message>
+### Generating blocks</xsl:message>
+
     <xsl:for-each select="blocks/block">
-    generating xarblocks/<xsl:value-of select="@name" />.php ... <xsl:apply-templates mode="xarblocks_block" select="." /> ... finished
+
+        <xsl:variable name="block" select="@name" />
+        <xsl:document href="{$output}/xarblocks/{$block}.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+            <!-- call template for file header -->
+            <xsl:call-template name="xaraya_standard_php_file_header" select="../..">
+                <xsl:with-param name="filename"><xsl:value-of select="$block" />.php</xsl:with-param>
+            </xsl:call-template>
+
+            <!-- call template for module_init() function -->
+            <xsl:apply-templates mode="xarblocks_block_init" select="." />
+
+            <!-- call template for module_delete() function -->
+            <xsl:apply-templates mode="xarblocks_block_info" select="." />
+
+            <!-- call template for module_xarupgrade() function -->
+            <xsl:apply-templates mode="xarblocks_block_display" select="." />
+
+            <!-- call template for module_xarupgrade() function -->
+            <xsl:apply-templates mode="xarblocks_block_modify" select="." />
+
+            <!-- call template for module_xarupgrade() function -->
+            <xsl:apply-templates mode="xarblocks_block_admin" select="." />
+
+            <!-- call template for module_xarupgrade() function -->
+            <xsl:apply-templates mode="xarblocks_block_help" select="." />
+
+            <!-- call template for file footer -->
+            <xsl:call-template name="xaraya_standard_php_file_footer" select="../.." />
+
+        </xsl:processing-instruction></xsl:document>
+
     </xsl:for-each>
-</xsl:template>
-
-
-
-<!-- MODULE POINT
-
-     Create a new file called xarblocks/xarblock.php.
-
--->
-<xsl:template match="block" mode="xarblocks_block">
-<xsl:variable name="block" select="@name" />
-<xsl:document href="{$output}/xarblocks/{$block}.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
-
-    <!-- call template for file header -->
-    <xsl:call-template name="xaraya_standard_php_file_header" select="../..">
-        <xsl:with-param name="filename"><xsl:value-of select="$block" />.php</xsl:with-param>
-    </xsl:call-template>
-
-    <!-- call template for module_init() function -->
-    <xsl:apply-templates mode="xarblocks_block_init" select="." />
-
-    <!-- call template for module_delete() function -->
-    <xsl:apply-templates mode="xarblocks_block_info" select="." />
-
-    <!-- call template for module_xarupgrade() function -->
-    <xsl:apply-templates mode="xarblocks_block_display" select="." />
-
-    <!-- call template for module_xarupgrade() function -->
-    <xsl:apply-templates mode="xarblocks_block_modify" select="." />
-
-    <!-- call template for module_xarupgrade() function -->
-    <xsl:apply-templates mode="xarblocks_block_admin" select="." />
-
-    <!-- call template for module_xarupgrade() function -->
-    <xsl:apply-templates mode="xarblocks_block_help" select="." />
-
-    <!-- call template for file footer -->
-    <xsl:call-template name="xaraya_standard_php_file_footer" select="../.." />
-
-</xsl:processing-instruction></xsl:document>
 </xsl:template>
 
 

@@ -45,38 +45,44 @@
 <xsl:include href="include/verify_hooks.xsl" />
 <xsl:include href="include/verify_database.xsl" />
 
-<!-- INCLUDE THE REQUIRED STYLESHEETS -->
-<!-- Xaraya Module File and Function Templates -->      <xsl:include href="include/xaraya_standard.xsl" />
-<!-- Template for xartables.php -->                     <xsl:include href="xartables.xsl" />
-<!-- Template for xarinit.php -->                       <xsl:include href="xarinit.xsl" />
-<!-- Template for xarobject.xml -->                     <xsl:include href="xarobject.xsl" />
-<!-- Template for xarversion.php -->                    <xsl:include href="xarversion.xsl" />
-<!-- Template for xaradminapi.php -->                   <xsl:include href="xaradminapi.xsl" />
-<!-- Template for xaritemtypeapi.php -->                <xsl:include href="xaritemtypeapi.xsl" />
-<!-- Template for xaradmin.php -->                      <xsl:include href="xaradmin.xsl" />
-<!-- Template for xaruserapi.php -->                    <xsl:include href="xaruserapi.xsl" />
-<!-- Template for xaruser.php -->                       <xsl:include href="xaruser.xsl" />
-<!-- Template for xarprivateapi.php -->                 <xsl:include href="xarprivateapi.xls" />
-<!-- Template for xartemplates/admin-main.xd -->        <xsl:include href="xartemplates/admin-main.xsl" />
-<!-- Template for xartemplates/admin-view.xd -->        <xsl:include href="xartemplates/admin-view.xsl" />
-<!-- Template for xartemplates/admin-view-table.xd -->  <xsl:include href="xartemplates/admin-view-table.xsl" />
-<!-- Template for xartemplates/admin-modify-table.xd --><xsl:include href="xartemplates/admin-modify-table.xsl" />
-<!-- Template for xartemplates/admin-config.xd -->      <xsl:include href="xartemplates/admin-config.xsl" />
-<!-- Template for xartemplates/admin-config-table.xd --><xsl:include href="xartemplates/admin-config-table.xsl" />
-<!-- Template for xartemplates/admin-delete-table.xd --><xsl:include href="xartemplates/admin-delete-table.xsl" />
-<!-- Template for xartemplates/admin-new-table.xd -->   <xsl:include href="xartemplates/admin-new-table.xsl" />
-<!-- Template for xartemplates/user-main.xd -->         <xsl:include href="xartemplates/user-main.xsl" />
-<!-- Template for xartemplates/user-display-table.xd --><xsl:include href="xartemplates/user-display-table.xsl" />
-<!-- Template for xartemplates/user-view-table.xd -->   <xsl:include href="xartemplates/user-view-table.xsl" />
-<!-- Template for xartemplates/includes/header.xd -->   <xsl:include href="xartemplates/includes/header.xsl" />
-<!-- Template for xarblocks/block.php -->               <xsl:include href="xarblocks/block.xsl" />
-<!-- Template for xartemplates/blocks/block.php -->     <xsl:include href="xartemplates/blocks/block.xsl" />
+<xsl:include href="include/xaraya_standard.xsl" />
+<xsl:include href="xartables.xsl" />
+<xsl:include href="xarinit.xsl" />
+<xsl:include href="xarobject.xsl" />
+<xsl:include href="xarversion.xsl" />
+<xsl:include href="xaritemtypeapi.xsl" />
+<xsl:include href="xarprivateapi.xsl" />
+<xsl:include href="xarhookapi.xsl" />
+
+<xsl:include href="xaruserapi.xsl" />
+<xsl:include href="xaruser.xsl" />
+
+<xsl:include href="xaradmin.xsl" />
+<xsl:include href="xaradminapi.xsl" />
+<xsl:include href="xartemplates/includes/header.xsl" />
+
+<xsl:include href="xarblocks/block.xsl" />
+<xsl:include href="xartemplates/blocks/block.xsl" />
 
 
 <xsl:template match="/">
 
+    <xsl:message>
+    Xaraya module generator will generate the following module for you:
+
+    Module:         <xsl:value-of select="about/name" />
+    Author:         <xsl:value-of select="about/author/name" />
+
+    </xsl:message>
+
+    <xsl:message>
+### Verifying the xml file</xsl:message>
+
     <!-- VERIFY -->
-    <xsl:apply-templates mode="verify" select="." />
+    <xsl:apply-templates mode="verify" select="xaraya_module" />
+
+    <xsl:message>
+### Begin of code generation</xsl:message>
 
     <!-- CREATE -->
     <xsl:apply-templates select="xaraya_module" />
@@ -86,42 +92,24 @@
 <!-- ENTRY POINT    print out progress and call module template -->
 <xsl:template match="xaraya_module" xml:space="preserve">
 
-    <xsl:message>
-    Xaraya module generator will generate the following module for you:
-
-    Module:         <xsl:value-of select="about/name" />
-    Author:         <xsl:value-of select="about/author/name" />
-
-    Starting with the creation
-    </xsl:message>
     <!-- CALL THE TEMPLATES -->
-    <!-- xartables.php -->                      <xsl:apply-templates mode="xartables"             select="/" />
-    <!-- xarinit.php -->                        <xsl:apply-templates mode="xarinit"               select="/" />
-    <!-- xarobject.xml -->                      <xsl:apply-templates mode="xarobject"             select="/" />
-    <!-- xarversion.php -->                     <xsl:apply-templates mode="xarversion"            select="/" />
+    <!-- xartables.php -->                      <xsl:apply-templates mode="xartables"             select="." />
+    <!-- xarinit.php -->                        <xsl:apply-templates mode="xarinit"               select="." />
+    <!-- xarobject.xml -->                      <xsl:apply-templates mode="xarobject"             select="." />
+    <!-- xarversion.php -->                     <xsl:apply-templates mode="xarversion"            select="." />
+    <!-- xaritemtypeapi.php -->                 <xsl:apply-templates mode="xaritemtypeapi"        select="." />
+    <!-- xarprivateapi.php -->                  <xsl:apply-templates mode="xarprivateapi"         select="." />
+    <!-- xarhookapi.php -->                     <xsl:apply-templates mode="xarhookapi"            select="." />
 
-    <!-- xaradminapi.php -->                    <xsl:apply-templates mode="xaradminapi"           select="/" />
-    <!-- xaritemtypeapi.php -->                 <xsl:apply-templates mode="xaritemtypeapi"           select="/" />
-    <!-- xaradmin.php -->                       <xsl:apply-templates mode="xaradmin"              select="/" />
-    <!-- xartemplates/admin-main.xd -->         <xsl:apply-templates mode="xd_admin-main"         select="/" />
-    <!-- xartemplates/admin-view.xd -->         <xsl:apply-templates mode="xd_admin-view"         select="/" />
-    <!-- xartemplates/admin-view-table.xd -->   <xsl:apply-templates mode="xd_admin-view-table"   select="/" />
-    <!-- xartemplates/admin-modify-table.xd --> <xsl:apply-templates mode="xd_admin-modify-table" select="/" />
-    <!-- xartemplates/admin-config.xd -->       <xsl:apply-templates mode="xd_admin-config"       select="/" />
-    <!-- xartemplates/admin-config-table.xd --> <xsl:apply-templates mode="xd_admin-config-table" select="/" />
-    <!-- xartemplates/admin-delete-table.xd --> <xsl:apply-templates mode="xd_admin-delete-table" select="/" />
-    <!-- xartemplates/admin-new-table.xd -->    <xsl:apply-templates mode="xd_admin-new-table"    select="/" />
+    <!-- xaradminapi.php -->                    <xsl:apply-templates mode="xaradminapi"           select="." />
+    <!-- xaradmin.php -->                       <xsl:apply-templates mode="xaradmin"              select="." />
 
-    <!-- xaruserapi.php -->                     <xsl:apply-templates mode="xaruserapi"            select="/" />
-    <!-- xaruser.php -->                        <xsl:apply-templates mode="xaruser"               select="/" />
-    <!-- xaruserprivateapi.php -->              <xsl:apply-templates mode="xarprivateapi"         select="/" />
-    <!-- xartemplates/user-main.xd -->          <xsl:apply-templates mode="xd_user-main"          select="/" />
-    <!-- xartemplates/user-display-table.xd --> <xsl:apply-templates mode="xd_user-display-table" select="/" />
-    <!-- xartemplates/user-view-table.xd -->    <xsl:apply-templates mode="xd_user-view-table"    select="/" />
-    <!-- xartemplates/includes/header.xd -->    <xsl:apply-templates mode="xd_includes_header"    select="/" />
+    <!-- xaruserapi.php -->                     <xsl:apply-templates mode="xaruserapi"            select="." />
+    <!-- xaruser.php -->                        <xsl:apply-templates mode="xaruser"               select="." />
+    <!-- xartemplates/includes/header.xd -->    <xsl:apply-templates mode="xd_includes_header"    select="." />
 
-    <!-- xarblocks/block.php -->                <xsl:apply-templates mode="xarblocks_block"       select="/" />
-    <!-- xartemplates/blocks/block.php -->      <xsl:apply-templates mode="xd_blocks_block"       select="/" />
+    <!-- xarblocks/block.php -->                <xsl:apply-templates mode="xarblocks_block"       select="." />
+    <!-- xartemplates/blocks/block.php -->      <xsl:apply-templates mode="xd_blocks_block"       select="." />
 
 </xsl:template>
 

@@ -11,26 +11,12 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://www.w3.org/TR/xhtml1/strict">
 
-<!--
 
-    xarinit.xsl
-    ===========
-
--->
-
-<!-- ENTRY POINT    print out progress and call module template -->
-<xsl:template match="/" mode="xarinit" xml:space="default">
-    generating xarinit.php ... <xsl:apply-templates mode="xarinit" select="xaraya_module" /> ... finished
-</xsl:template>
-
-
-
-<!-- MODULE POINT
-
-     Create a new file called xarinit.php.
-
--->
 <xsl:template match="xaraya_module" mode="xarinit">
+
+    <xsl:message>
+### Generating xarinit.php</xsl:message>
+
 <xsl:document href="{$output}/xarinit.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
     <!-- call template for file header -->
