@@ -89,9 +89,9 @@ function xarBlockGetInfo($blockId)
 
     if ($result->EOF) {
         $result->Close();
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST', $blockId);
-	    return;
-                       new SystemException($msg));
+        $msg = xarML('Block identified by bid #(1) doesn\'t exist.', $blockId);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
+                        new SystemException($msg));
 	    return NULL;
     }
 
