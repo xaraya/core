@@ -254,20 +254,20 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             //
             // PART 2: Handle each child below it.
             //
-            $checkNode = $node;
+            //$checkNode = $node;
             foreach ($node->children as $child) {
                 if ($child->isPHPCode()) {
                     $code .= $this->setPHPBlock(true);
-                } elseif (!$checkNode->needAssignment()) {
+                } elseif (!$node->needAssignment()) {
                     $code .= $this->setPHPBlock(false);
                 }
-                if ($checkNode->needAssignment() || $checkNode->needParameter()) {
+                if ($node->needAssignment() || $node->needParameter()) {
                     if (!$child->isAssignable() && $child->tagName != 'TextNode') {
-                        $this->raiseError(XAR_BL_INVALID_TAG,"The '".$checkNode->tagName."' tag cannot have children of type '".$child->tagName."'.", $child);
+                        $this->raiseError(XAR_BL_INVALID_TAG,"The '".$nodeode->tagName."' tag cannot have children of type '".$child->tagName."'.", $child);
                         return;
                     }
 
-                    if ($checkNode->needAssignment()) {
+                    if ($node->needAssignment()) {
                         $code .= ' = ';
                     }
                 } elseif ($child->isAssignable()) {
@@ -281,7 +281,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
 
                 // This is in the outer level of the current node, see what kind of node we're dealing with
                 // here and whether it needs exceptions control
-                if ($child->isAssignable() && !($checkNode->needParameter()) || $checkNode->needAssignment()) {
+                if ($child->isAssignable() && !($node->needParameter()) || $node->needAssignment()) {
                     $code .= "; ";
                     if ($child->needExceptionsControl() || $this->isPendingExceptionsControl()) {
                         $code .= "if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return false; ";
@@ -2337,6 +2337,7 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 {
     var $blockgrouptemplate = NULL;
     
+    
     function renderBeginTag()
     {
         extract($this->attributes);
@@ -2428,6 +2429,8 @@ EOT;
 class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
 {
     var $template = NULL;
+    var $assignable = true;
+    
     
     function renderBeginTag()
     {
@@ -2439,8 +2442,10 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
         }
 
         // Template attribute is optional.
-        $code =';';
+        $code ='\'\';';
         // If a grouptemplate is set, notify the children
+        // Note that we are just in time here to notify the children that a
+        // blockgroup template is going to be used. 
         if (isset($template)) {            
             $children =& $this->children; 
             for($i=0;$i<count($children); $i++) {
@@ -2482,7 +2487,11 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
     }
     function isAssignable() 
     {
-        return true;
+        // FIXME: this should be true on closed form and false on open form, but 
+        // we only know that while generating the code into the template, so we
+        // need to reorganize that a bit
+        // Let's make this a variable for now
+        return $this->assignable;
     }
 }
 
