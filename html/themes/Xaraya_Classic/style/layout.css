@@ -107,7 +107,7 @@ div#xc-header {
 
 div#xc-header-rightbevel {
     float: right;
-    width: 25px;
+    width: 27px;
     height: 90px;
     margin-right:-25px;
     background-color: transparent;
@@ -144,7 +144,7 @@ div#xc-footer {
     position: relative;
     z-index: 14;
     height: 50px;
-    margin-top: 3px;
+    margin-top: 5px;
 }
 
 #xc-clear { clear: both; }
