@@ -198,7 +198,7 @@ class xarLog__Logger
     function logVariable($name, $var)
     {
         $msg = $this->dumpVariable($var, $name);
-        $this->logMessage($msg, false);
+				$this->logMessage($msg, false);
     }
 
     /**
@@ -465,7 +465,7 @@ class xarLog__MozJSConsoleLogger extends xarLog__Logger
 		}
 
 		function getCommonCode() {
-			//
+			// Common javascript to get a variable which has the logmessage method
 			$code="netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');\n".
 				"var con_service_class = Components.classes['@mozilla.org/consoleservice;1'];\n".
 				"var iface = Components.interfaces.nsIConsoleService;\n".
@@ -475,6 +475,7 @@ class xarLog__MozJSConsoleLogger extends xarLog__Logger
 
     function logMessage($msg, $callPrepForDisplay = true)
     {
+			
 			// FIXME: this code depends on a user setting to use principal codebase support (same origin policy)
 			// it should be done with a signed script eventually, but this is rather complex 
 			// TODO: check on windows and browsers other than mozilla, to fall back gracefully
@@ -484,15 +485,15 @@ class xarLog__MozJSConsoleLogger extends xarLog__Logger
 				$this->commoncodeinserted=true;
 			}
 			$logentry=$this->getTimestamp(). " - (" .$this->formatLevel().")".$msg;
-			// Add \ for each newline
+			
+			// Add \ for problematic chars and for each newline format unix, mac and windows
 			$logentry = addslashes($logentry);
 			$trans=array("\n" => "\\\n","\r" => "\\\r","\r\n" => "\\\r\n");
       $logentry=strtr($logentry,$trans);
 		  $code= "jsconsole.logStringMessage('$logentry');\n";
 			xarTplAddJavaScriptCode('body', $this->loggerdesc, $code);
     }
-
-}
+ }
 
 class xarLog__EmailLogger extends xarLog__Logger
 {
