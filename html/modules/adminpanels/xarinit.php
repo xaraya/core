@@ -227,40 +227,40 @@ function adminpanels_delete()
     // TODO: remove prior to xarays 1.0 release
 
     // removal of module stuff from version 1.0
-    xarModDelVar('adminpanels', 'showold');
-    xarModDelVar('adminpanels', 'menuposition');
-    xarModDelVar('adminpanels', 'menustyle');
-    xarModDelVar('adminpanels', 'showontop');
-    xarModDelVar('adminpanels', 'showhelp');
-    xarModDelVar('adminpanels', 'marker');
+/*     xarModDelVar('adminpanels', 'showold'); */
+/*     xarModDelVar('adminpanels', 'menuposition'); */
+/*     xarModDelVar('adminpanels', 'menustyle'); */
+/*     xarModDelVar('adminpanels', 'showontop'); */
+/*     xarModDelVar('adminpanels', 'showhelp'); */
+/*     xarModDelVar('adminpanels', 'marker'); */
 
     // need to drop the module tables too
     // Get database information
-    list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+/*     list($dbconn) = xarDBGetConn(); */
+/*     $xartable = xarDBGetTables(); */
 
     //Load Table Maintainance API
-    xarDBLoadTableMaintenanceAPI();
+/*     xarDBLoadTableMaintenanceAPI(); */
 
     // Generate the SQL to drop the table using the API
-    $query = xarDBDropTable($xartable['admin_menu']);
-    if (empty($query)) return; // throw back
+/*     $query = xarDBDropTable($xartable['admin_menu']); */
+/*     if (empty($query)) return;  */
 
     // Drop the table and send exception if returns false.
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
+/*     $result =& $dbconn->Execute($query); */
+/*     if (!$result) return; */
 
     // unregister our blocks.. maybe not
     // xarBlockTypeUnregister('adminpanels', 'adminmenu');
     // xarBlockTypeUnregister('articles', 'waitingcontent');
 
     // Remove Masks and Instances
-    xarRemoveMasks('adminpanels');
-    xarRemoveInstances('adminpanels');
+/*     xarRemoveMasks('adminpanels'); */
+/*     xarRemoveInstances('adminpanels'); */
 
     // we are done with removing stuff from version 1.0
 
-    return true;
+/*     return true; */
 }
 
 ?>
