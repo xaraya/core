@@ -999,6 +999,7 @@ Password : %%password%%
 Thank you, the upgrades are complete.
 </div>
 </div>
+</div>
 
 <?php
 }
