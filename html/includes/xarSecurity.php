@@ -364,6 +364,39 @@ function xarSecurityLevel($levelname)
     return $masks->xarSecLevel($levelname);
 }
 
+/* xarPrivExists: checks whether a privilege exists.
+ *
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   string name of privilege
+ * @return  boolean
+ */
+function xarPrivExists($name)
+{
+    $privileges = new xarPrivileges();
+    $priv = $privileges->findPrivilege($name);
+    if ($priv) return TRUE;
+    else return FALSE;
+}
+
+/* xarMaskExists: checks whether a mask exists.
+ *
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   string name of mask
+ * @param   string module of mask
+ * @return  boolean
+ */
+function xarMaskExists($name,$module="All")
+{
+    $masks = new xarMasks();
+    $mask = $masks->getMask($name,$module);
+    if ($mask) return TRUE;
+    else return FALSE;
+}
+
 /**
  * xarSecurityCheck: check a role's privileges against the masks of a component
  *

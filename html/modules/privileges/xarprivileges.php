@@ -571,13 +571,20 @@ class xarMasks
  * @throws  none
  * @todo    none
 */
-    function getMask($name)
+    function getMask($name,$module="All")
     {
         // check if we already have the definition of this mask
         if (!xarVarIsCached('Security.Masks',$name)) {
 //Set up the query and get the data from the xarmasks table
-            $query = "SELECT * FROM $this->maskstable
-                        WHERE xar_name= '$name'";
+            if ($module == "All") {
+                $query = "SELECT * FROM $this->maskstable
+                            WHERE xar_name= '$name'";
+            }
+            else {
+                $module = strtolower($module);
+                $query = "SELECT * FROM $this->maskstable
+                            WHERE xar_name= '$name' AND xar_module = '$module'";
+            }
             $result = $this->dbconn->Execute($query);
             if (!$result) return;
             if ($result->EOF) return false;

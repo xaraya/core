@@ -15,7 +15,7 @@ function privileges_admin_newprivilege()
     if (!xarVarFetch('pcomponent', 'isset', $data['pcomponent'], 'All',      XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('pinstance',  'isset', $data['pinstance'],  '',         XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('plevel',     'isset', $data['plevel'],     '',         XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('ptype',      'isset', $data['ptype'],      'empty',    XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('ptype',      'isset', $data['ptype'],      '',         XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('show',       'isset', $data['show'],       'assigned', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('trees',      'isset', $trees,              NULL,       XARVAR_NOT_REQUIRED)) {return;}
 
