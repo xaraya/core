@@ -585,6 +585,14 @@ function xarExceptionRender($format)
             }
         } else {
             if ($exception['major'] != XAR_USER_EXCEPTION && $imadmin) {
+              if (xarExceptionId() == "ErrorCollection") {
+                  $exception['exceptionId'] = "PHP_ERROR";
+                  $collecteditems = "One or more PHP errors were encountered. \n\n";
+                  foreach($exception['value']->exceptions as $collecteditem) {
+                      $collecteditems .= $collecteditem['value']->getShort() . "\n";
+                  }
+                  $exception['value']->setMsg($collecteditems);
+              }
                 $stack = $exception['stack'];
                 $text = "";
                 for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
