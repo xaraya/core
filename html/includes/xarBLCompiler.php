@@ -2035,7 +2035,7 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
     {
-        $catch = 1;       // Catch exceptions by default
+        $catch = 'true';  // Catch exceptions by default
         $component = '';  // Component is empty by default
         $instance = '';   // Instance is empty by default
         extract($this->attributes);
