@@ -9,10 +9,63 @@
 // Purpose of this file: extra functions for the installer
 // ----------------------------------------------------------------------
 
-//TODO: remove
-function xarInstallGetTheme()
+function xarInstallConfigSetVar($name, $value)
 {
-    return 'themes/'. XARINSTALL_THEME;
+    if (empty($name)) {
+        $msg = xarML('Empty name.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return;
+    }
+
+    // see if the variable has already been set
+    /*$oldValue = xarConfigGetVar($name);
+    $mustInsert = false;
+    if (!isset($oldValue)) {
+        if (xarExceptionMajor()) return; // thorw back
+        $mustInsert = true;
+    }*/
+
+    list($dbconn) = xarDBGetConn();
+    //$tables = xarDBGetTables();
+    //$config_varsTable = $tables['config_vars'];
+    $config_varsTable = xarDBGetSystemTablePrefix() . '_config_vars';
+
+    //Here we serialize the configuration variables
+    //so they can effectively contain more than one value
+    $value = serialize($value);
+
+    //Here we insert the value if it's new
+    //or update the value if it already exists
+    //if ($mustInsert == true) {
+        //Insert
+        $seqId = $dbconn->GenId($config_varsTable);
+        $query = "INSERT INTO $config_varsTable
+                  (xar_id,
+                   xar_name,
+                   xar_value)
+                  VALUES ('$seqId',
+                          '" . xarVarPrepForStore($name) . "',
+                          '" . xarVarPrepForStore($value). "')";
+    /*} else {
+         //Update
+         $query = "UPDATE $config_varsTable
+                   SET xar_value='" . xarVarPrepForStore($value) . "'
+                   WHERE xar_name='" . xarVarPrepForStore($name) . "'";
+    }*/
+
+    $dbconn->Execute($query);
+    if($dbconn->ErrorNo() != 0) {
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException($msg));
+        return;
+    }
+
+    //Update configuration variables
+    //xarVarSetCached('Config.Variables', $name, $value);
+
+    return true;
 }
 
 /**
