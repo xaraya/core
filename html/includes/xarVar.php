@@ -348,12 +348,9 @@ function xarVarPrepHTMLDisplay()
     // OR
     //  2) You havent checked and so, the only thing you should do is to escape whatever
     //     meaningful html character that is present.... (Preparation for strings without Validation)
-    
     // If you want to add the possibility of adding html markup to a text, do 1.
-    
     // Besides that you could have special transform hooks to transform text, but this is not the case
     // over here...
-
 
     // This search and replace finds the text 'x@y' and replaces
     // it with HTML entities, this provides protection against
@@ -375,15 +372,21 @@ function xarVarPrepHTMLDisplay()
         $allowedHTML = array();
 
         foreach($GLOBALS['xarVar_allowableHTML'] as $k=>$v) {
-            switch($v) {
-                case 0:
-                    break;
-                case 1:
-                    $allowedHTML[] = "|<(/?$k)\s*/?>|si";
-                    break;
-                case 2: 
-                    $allowedHTML[] = "|<(/?$k(\s+.*?)?)/?>|si";
-                    break;
+            if ($k == '!--') {
+                if ($v <> 0) {
+                    $allowedHTML[] = "|<($k.*?--)>|s";
+                }
+            } else {
+                switch($v) {
+                    case 0:
+                        break;
+                    case 1:
+                        $allowedHTML[] = "|<(/?$k)\s*/?>|i";
+                        break;
+                    case 2:
+                        $allowedHTML[] = "|<(/?$k(\s+[^>]?)?)/?>|i";
+                        break;
+                }
             }
         }
     }
