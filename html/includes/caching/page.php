@@ -130,11 +130,17 @@ function xarPageSetCached($cacheKey, $name, $value)
            $xarPage_cacheDisplay,
            $xarOutput_cacheSizeLimit,
            $xarPage_cacheShowTime,
+           $xarPage_cacheHookedOnly,
            $xarPage_cacheCode;
     
     $xarTpl_themeDir = xarTplGetThemeDir();
     
     if (xarCore_IsCached('Page.Caching', 'nocache')) { return; }
+    
+    if ($xarPage_cacheHookedOnly) {
+        $modName = substr($cacheKey, 0, strpos($cacheKey, '-'));
+        if (!xarModIsHooked('xarcachemanager', $modName)) { return; }
+    }
 
     // CHECKME: use $name for something someday ?
     $cache_file = "$xarOutput_cacheCollection/page/$cacheKey-$xarPage_cacheCode.php";

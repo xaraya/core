@@ -32,6 +32,7 @@ function xarCache_init($args)
     global $xarPage_cacheShowTime;
     global $xarPage_cacheExpireHeader;
     global $xarPage_cacheGroups;
+    global $xarPage_cacheHookedOnly;
     global $xarBlock_cacheTime;
     global $xarPage_autoCachePeriod;
 
@@ -66,6 +67,8 @@ function xarCache_init($args)
         $cachingConfiguration['Page.ExpireHeader'] : 1;
     $xarPage_cacheGroups = isset($cachingConfiguration['Page.CacheGroups']) ?
         $cachingConfiguration['Page.CacheGroups'] : '';
+    $xarPage_cacheHookedOnly = isset($cachingConfiguration['Page.HookedOnly']) ?
+        $cachingConfiguration['Page.HookedOnly'] : 0;
     $xarBlock_cacheTime = isset($cachingConfiguration['Block.TimeExpiration']) ?
         $cachingConfiguration['Block.TimeExpiration'] : 7200;
     $xarPage_autoCachePeriod = isset($cachingConfiguration['AutoCache.Period']) ?
