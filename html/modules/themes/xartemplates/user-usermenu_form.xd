@@ -1,9 +1,13 @@
-<h2>#$name# <xar:mlstring>'s Theme Selection</xar:mlstring></h2> 
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Theme Selection For</xar:mlstring> #$name#</span></div>
+<!-- common admin menu for this module - remove link to the current function -->
+<div class="xar-mod-body">
+<h2><xar:mlstring>Select Theme</xar:mlstring></h2> 
+<div align="center">
 <form action="#xarModURL('themes', 'user', 'usermenu')#" method="post" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="authid" id="authid" value="#$authid#" />	
 <input type="hidden" name="uid" id="uid" value="#$uid#" />	
 <input type="hidden" name="phase" id="phase" value="update" />
-<table border="0" width="100%" cellspacing="1" cellpadding="4">
+<table border="0" width="100%" cellspacing="0" cellpadding="2">
 	<tr align="left" valign="middle">
 		<td>
 			<xar:mlstring>Site Theme</xar:mlstring>
@@ -22,7 +26,8 @@
 		</td>
 	</tr>
 </table>
-</div>
-<br /><br />
+<br />
 <input type="submit" value="<xar:mlstring>Modify Default Theme</xar:mlstring>" align="middle" tabindex="2" />
 </form>
+</div>
+</div>

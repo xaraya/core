@@ -1,18 +1,11 @@
-<xar:var scope="session" name="$errormsg" />
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">
-            <xar:mlstring>Themes Administration</xar:mlstring>            
-        </th>
-    </tr>
-</table>
-        </td>
-    </tr>
-</table>
-<div align="center"><h2><xar:mlstring>Xaraya Themes List</xar:mlstring></h2><br />
-<b><xar:var scope="session" name="$themes_statusmsg" /></b>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span></div>
+<!-- common admin menu for this module - remove link to the current function -->
+<div class="xar-mod-body">
+<h2><xar:mlstring>Xaraya Themes List</xar:mlstring></h2>
+<div align="center">
+<h3><xar:var scope="session" name="$themes_statusmsg" /></h3>
 
-			<table border="1" width="100%" cellpadding="2" cellspacing="0">
+			<table border="0" width="100%" cellpadding="2" cellspacing="1" class="xar-accent">
 				<tr>
 					<th>
 						#$themenamelabel#
@@ -31,17 +24,17 @@
 					</th>
 				</tr>
 				<xar:loop name="$items">
-				<tr align="CENTER" valign="middle">
-					<td>
+				<tr align="center" valign="middle">
+					<td class="xar-norm">
 						#$name#
 					</td>
-					<td>
+					<td class="xar-norm">
 						#$displayname#
 					</td>
-					<td align="left">
+					<td align="left" class="xar-norm">
 						themes/#$directory#
 					</td>
-					<td>
+					<td class="xar-norm">
 						<xar:if condition="$state eq 4">
 							#$state4label#
 						</xar:if>
@@ -59,7 +52,7 @@
 						</xar:if>
 
 					</td>
-					<td>
+					<td class="xar-norm" style="white-space: nowrap;">[ 
 						<xar:if condition="$state eq 4">
 							<a href="#$removeurl#">#$remove#</a>
 							|
@@ -84,8 +77,10 @@
 						</xar:if>
 						<xar:if condition="$state eq 0">
 							<a href="#$upgradeurl#">#$upgrade#</a>
-						</xar:if>
+						</xar:if> ]
 					</td>
 				</tr>
 				</xar:loop>
 			</table>
+</div>
+</div>

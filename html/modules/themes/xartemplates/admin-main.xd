@@ -1,11 +1,9 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">
-            <xar:mlstring>Themes Administration</xar:mlstring>            
-        </th>
-    </tr>
-</table>
-        </td>
-    </tr>
-</table>
-<div align="center"><h2><xar:mlstring>Xaraya Themes Administration</xar:mlstring></h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span></div>
+<!-- common admin menu for this module - remove link to the current function -->
+<div class="xar-mod-body">
+<h2><xar:mlstring>Xaraya Themes Administration</xar:mlstring></h2>
+<div align="center">
+<h3><xar:var scope="session" name="$themes_statusmsg" /></h3>
+TODO: write overview
+</div>
+</div>

@@ -1,18 +1,13 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">
-            <xar:mlstring>Themes Administration</xar:mlstring>            
-        </th>
-    </tr>
-</table>
-        </td>
-    </tr>
-</table>
-<div align="center"><h2><xar:mlstring>Edit Theme</xar:mlstring>: #$name#</h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span></div>
+<!-- common admin menu for this module - remove link to the current function -->
+<div class="xar-mod-body">
+<h2><xar:mlstring>Edit Theme</xar:mlstring>: #$name#</h2>
+<div align="center">
+<h3><xar:var scope="session" name="$themes_statusmsg" /></h3>
 <form action="&xar-modurl-themes-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
 	<input type="hidden" name="authid" id="authid" value="#$authid#" />
 	<input type="hidden" name="id" id="id" value="#$id#" />
-    <table border="1" cellpadding="2" cellspacing="0" width="100%">
+    <table border="0" cellpadding="2" cellspacing="1" width="100%" class="xar-accent">
         <tr>
             <th><xar:mlstring>Name</xar:mlstring></th>
             <th><xar:mlstring>Value</xar:mlstring></th>
@@ -21,17 +16,17 @@
     <xar:if condition="count($themevars) gt 0">
         <xar:loop name="$themevars">
         <tr>
-            <td>
-               #$name#
-               <xar:if condition="$prime eq 1">&nbsp;&nbsp;[primary]</xar:if>
+            <td class="xar-norm">
+               <label for="#$name#">#$name#
+               <xar:if condition="$prime eq 1">&nbsp;&nbsp;[primary]</xar:if></label>
             </td>
-            <td>
+            <td class="xar-norm">
                <input type="text" name="#$name#" id="#$name#" value="#$value#">
             </td>
-            <td>
+            <td class="xar-norm">
                #$description#
             </td>
-            <td align="center">
+            <td align="center" class="xar-norm">
                <xar:if condition="$prime eq 1">
                    none
                <xar:else />
@@ -42,61 +37,50 @@
         </xar:loop>
     <xar:else />
         <tr>
-            <td align="center" colspan="4">
+            <td align="center" colspan="4" class="xar-norm">
                 <b><xar:mlstring>Theme has no editable variables</xar:mlstring></b>
             </td>
         </tr>
     </xar:if>
+	</table><br />
+    <table border="0" cellpadding="2" cellspacing="1" width="100%" class="xar-accent">
         <tr>
             <th align="center" colspan="4">
                 <xar:mlstring>Add new theme variable</xar:mlstring>
             </th>
         </tr>
         <tr>
-            <td>
+            <td class="xar-norm">
                <input type="text" name="newvarname" id="newvarname" value="" maxlength="64">
             </td>
-            <td>
+            <td class="xar-norm">
                <input type="text" name="newvarvalue" id="newvarvalue" value="">
             </td>
-            <td>
+            <td class="xar-norm">
                <input type="text" name="newvardescription" id="newvardescription" size="35" value="" maxlength="255">
             </td>
-            <td align="center">
+            <td align="center" class="xar-norm">
                new
             </td>
         </tr>
-        <tr>
-            <td align="center" colspan="4">
-                <input type="checkbox" name="return" value="1"> 
-                <xar:mlstring>Update and return to this screen.</xar:mlstring>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="4" align="center">
-		<br />
-	<input type="submit" value="<xar:mlstring>Save Changes</xar:mlstring>" align="middle" tabindex="9" />
-            </td>
-        </tr>
-
-    </table>
-<div align="center"><h2><xar:mlstring>Credits</xar:mlstring></h2><br />
-    <table border="1" cellpadding="2" cellspacing="0" width="60%">
+	</table>
+                <input type="checkbox" name="return" id="return" value="1"> 
+                <label for="return"><xar:mlstring>Update and return to this screen.</xar:mlstring></label><br /><br />
+	<input type="submit" value="#$savebutton#" align="middle" tabindex="9" />
+</form>
+<div align="left"><h2><xar:mlstring>Credits</xar:mlstring></h2></div>
+    <table border="0" cellpadding="2" cellspacing="1" width="60%" class="xar-accent">
         <xar:loop name="$themeInfo">
         <tr>
-            <td>
+            <td class="xar-norm">
                #$name#
             </td>
-            <td>
+            <td class="xar-norm">
                #$value#
             </td>
         </tr>
         </xar:loop>
-        <tr>
-            <td colspan="2" align="center">
-		<br />
-	<input type="submit" value="<xar:mlstring>Save Changes</xar:mlstring>" align="middle" tabindex="9" />
-            </td>
-        </tr>
     </table>
 
+</div>
+</div>
