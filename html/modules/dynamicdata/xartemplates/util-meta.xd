@@ -106,7 +106,7 @@
             </a>
         </p>
     <xar:else />
-        <form class="dd-modifyprop-form">
+        <form class="dd-modifyprop-form" method="post" action="#xarModURL('dynamicdata','util','import')#">
             <fieldset>
                 <textarea name="xml" id="xml" rows="30" cols="80" style="width: 100%;">
 &lt;objects&gt;
@@ -134,6 +134,8 @@
     </xar:foreach>
 &lt;/objects&gt;
                 </textarea>
+                <input type="hidden" name="authid" value="#xarSecGenAuthKey()#" />
+                <input type="submit" value="#xarML('Import table definition')#" />
             </fieldset>
         </form>
         <p>

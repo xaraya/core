@@ -80,7 +80,9 @@ function dynamicdata_util_import($args)
                                     array('objectid' => $objectid));
         if (empty($objectinfo)) return;
 
-        $data['warning'] = xarML('Object #(1) was successfully imported',xarVarPrepForDisplay($objectinfo['label']));
+        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
+                                      array('itemid' => $objectid)));
+        return true;
     }
 
     natsort($files);
