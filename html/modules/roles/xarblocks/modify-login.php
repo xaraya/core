@@ -28,10 +28,10 @@ function roles_loginblock_modify($blockinfo)
 
     // Defaults
     if (empty($vars['showlogout'])) {
-        $args['showlogout'] = 0;
+        $vars['showlogout'] = 0;
     }
     if (empty($vars['logouttitle'])) {
-        $args['logouttitle'] = '';
+        $var['logouttitle'] = '';
     }
 
     $args['showlogout'] = $vars['showlogout'];
