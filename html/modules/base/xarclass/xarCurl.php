@@ -458,7 +458,7 @@ class xarCurl
     * This method extracted from other classes in Xaraya (see nusoap).
     *
     * @param    string $buffer
-    * @returns	string
+    * @returns  string
     * @access   public
     */
     function _decode_chunked($buffer)
