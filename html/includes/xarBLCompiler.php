@@ -2532,8 +2532,9 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
                     'type' => $type,
                     'name' => $name,
                     'title' => $title,
-                    // Allow the template to be set from a xar:blockgroup tag.
-                    'template' => (isset(\$_bl_blockgroup_template) ? \$_bl_blockgroup_template : $template),
+                    'template' => $template,
+                    // Allow the box template to be set from a xar:blockgroup tag.
+                    'box_template' => (isset(\$_bl_blockgroup_template) ? \$_bl_blockgroup_template : NULL),
                     'state' => $state,
                     'content' => $override
             )
