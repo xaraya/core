@@ -114,25 +114,27 @@ function base_menublock_display($blockinfo)
                     // FIXME: make sure we don't generate content lines with missing pieces elsewhere
                         $parts = explode('|', $contentline);
                         $url = $parts[0];
-                        switch ($url[0])
-                        {
-                            case '[': // module link
+                        if (!empty($url)){
+                            switch ($url[0])
                             {
-                                $url = explode(':', substr($url, 1,  - 1));
-                                $url = xarModUrl($url[0], 'user', 'main');
-                                break;
-                            }
-                            case '{': // article link
-                            {
-                                $url = explode(':', substr($url, 1,  - 1));
-                                $url = xarModUrl('articles', 'user', 'view', array('ptid' => $url[0]));
-                                break;
-                            }
-                            case '(': // category link
-                            {
-                                $url = explode(':', substr($url, 1,  - 1));
-                                $url = xarModUrl('articles', 'user', 'view', array('catid' => $url[0]));
-                                break;
+                                case '[': // module link
+                                {
+                                    $url = explode(':', substr($url, 1,  - 1));
+                                    $url = xarModUrl($url[0], 'user', 'main');
+                                    break;
+                                }
+                                case '{': // article link
+                                {
+                                    $url = explode(':', substr($url, 1,  - 1));
+                                    $url = xarModUrl('articles', 'user', 'view', array('ptid' => $url[0]));
+                                    break;
+                                }
+                                case '(': // category link
+                                {
+                                    $url = explode(':', substr($url, 1,  - 1));
+                                    $url = xarModUrl('articles', 'user', 'view', array('catid' => $url[0]));
+                                    break;
+                                }
                             }
                         }
                         $title = $parts[1];
