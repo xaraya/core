@@ -960,10 +960,36 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
  * @param funcName string module function
  * @param string target anchor tag target (ie., somesite.com/index.php?foo=bar#target)
  * @param args array of arguments to put on the URL
+ * @param entrypoint array of arguments for different entrypoint than index.php
  * @return mixed absolute URL for call, or false on failure
  */
-function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL, $target = NULL )
+function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL, $target = NULL, $entrypoint = array())
 {
+    if (!empty($entrypoint)){
+        // If for some reason someone set the entrypoint to be index then we want to continue
+        // and not process.
+        if (is_array($entrypoint)){
+            // Entry Point comes as an array since ws.php sets a type var.
+            // Entry array should be $entrypoint['entry'], $entrypoint['action']
+            // IE: ws.php?type=xmlrpc&args=foo
+            $url = $entrypoint['entry'] . '?type=' . $entrypoint['action'];
+            // Grab the arguments as well.
+            foreach ($args as $k=>$v) {
+                if (is_array($v)) {
+                    foreach($v as $l=>$w) {
+                        if (isset($w)) {
+                            $url .= "&amp;$k" . "[$l]=$w";
+                        }
+                    }
+                } elseif (isset($v)) {
+                    $url .= "&amp;$k=$v";
+                }
+            }
+            // The URL
+            return xarServerGetBaseURL() . $url;
+        }
+    }
+
     if (empty($modName)) {
         return xarServerGetBaseURL() . 'index.php';
     }
