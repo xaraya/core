@@ -147,6 +147,18 @@ function roles_user_login()
 
             // User is active.
 
+                // TODO: remove this when everybody has moved to 1.0
+                if(!xarModGetVar('roles', 'lockdata')) {
+                    $lockdata = array('roles' => array( array('uid' => 4,
+                                                              'name' => 'Administrators',
+                                                              'notify' => TRUE)
+                                                       ),
+                                      'message' => '',
+                                      'locked' => 0,
+                                      'notifymsg' => '');
+                    xarModSetVar('roles', 'lockdata', serialize($lockdata));
+                }
+
             // Check if the site is locked and this user is allowed in
             $lockvars = unserialize(xarModGetVar('roles','lockdata'));
             if ($lockvars['locked'] ==1) {
