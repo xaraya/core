@@ -318,8 +318,8 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         */
 
         $data['coptions'] = $coptions;
-        $data['invalid']  = !empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
-        $data['tabindex'] =! empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
+        $data['tabindex'] =! empty($tabindex) ? $tabindex: 0;
 
         $template="countrylist";
         return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
