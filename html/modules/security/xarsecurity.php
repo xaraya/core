@@ -32,6 +32,7 @@ class xarSchemas
 	var $realmstable;
 	var $acltable;
 	var $allschemas;
+	var $levels;
 
 /**
  * xarSchemas: constructor for the class
@@ -55,6 +56,17 @@ class xarSchemas
 		$this->modulestable = $xartable['modules'];
 		$this->realmstable = $xartable['realms'];
 		$this->acltable = $xartable['acl'];
+// hack this for display purposes
+// probably should be defined elsewhere
+		$this->levels = array(0=>'No Access (0)',
+					100=>'Overview (100)',
+					200=>'Read (200)',
+					300=>'Comment (300)',
+					400=>'Moderate (400)',
+					500=>'Edit (500)',
+					600=>'Add (600)',
+					700=>'Delete (700)',
+					800=>'Administer (800)');
 	}
 
 /**
