@@ -74,16 +74,16 @@ function xarBlockGetInfo($blockId)
                         inst.xar_state as state,
                         inst.xar_last_update as last_update,
                         group_inst.xar_group_id as group_id,
-                        type.xar_module as module,
-                        type.xar_type as type,
-                        groups.xar_name as group_name
+                        btypes.xar_module as module,
+                        btypes.xar_type as type,
+                        bgroups.xar_name as group_name
               FROM      $blockInstancesTable as inst
               LEFT JOIN $blockGroupInstancesTable as group_inst
               ON        group_inst.xar_instance_id = inst.xar_id
-              LEFT JOIN $blockTypesTable as type
-              ON        type.xar_id = inst.xar_type_id
-              LEFT JOIN $blockGroupsTable as groups
-              ON        groups.xar_id = group_inst.xar_group_id
+              LEFT JOIN $blockTypesTable as btypes
+              ON        btypes.xar_id = inst.xar_type_id
+              LEFT JOIN $blockGroupsTable as bgroups
+              ON        bgroups.xar_id = group_inst.xar_group_id
               WHERE     inst.xar_id = $blockId";
 
     $result =& $dbconn->Execute($query);
@@ -153,18 +153,18 @@ function xarBlockGroupGetInfo($blockGroupId)
 
     // Query for instances in this group
     $query = "SELECT    inst.xar_id as id,
-                        types.xar_type as type,
-                        types.xar_module as module,
+                        btypes.xar_type as type,
+                        btypes.xar_module as module,
                         inst.xar_title as title,
                         group_inst.xar_position as position
               FROM      $blockGroupInstancesTable as group_inst
-              LEFT JOIN $blockGroupsTable as groups
-              ON        group_inst.xar_group_id = groups.xar_id
+              LEFT JOIN $blockGroupsTable as bgroups
+              ON        group_inst.xar_group_id = bgroups.xar_id
               LEFT JOIN $blockInstancesTable as inst
               ON        inst.xar_id = group_inst.xar_instance_id
-              LEFT JOIN $blockTypesTable as types
-              ON        types.xar_id = inst.xar_type_id
-              WHERE     groups.xar_id = '$blockGroupId'
+              LEFT JOIN $blockTypesTable as btypes
+              ON        btypes.xar_id = inst.xar_type_id
+              WHERE     bgroups.xar_id = '$blockGroupId'
               ORDER BY  group_inst.xar_position ASC";
 
     $result =& $dbconn->Execute($query);
@@ -376,22 +376,22 @@ function xarBlock_renderGroup($groupName)
     $blockTypesTable          = $tables['block_types'];
 
     $query = "SELECT    inst.xar_id as bid,
-                        types.xar_type as type,
-                        types.xar_module as module,
+                        btypes.xar_type as type,
+                        btypes.xar_module as module,
                         inst.xar_title as title,
                         inst.xar_content as content,
                         inst.xar_last_update as last_update,
                         inst.xar_state as state,
                         group_inst.xar_position as position,
-                        groups.xar_template as _bl_template
+                        bgroups.xar_template as _bl_template
               FROM      $blockGroupInstancesTable as group_inst
-              LEFT JOIN $blockGroupsTable as groups
-              ON        group_inst.xar_group_id = groups.xar_id
+              LEFT JOIN $blockGroupsTable as bgroups
+              ON        group_inst.xar_group_id = bgroups.xar_id
               LEFT JOIN $blockInstancesTable as inst
               ON        inst.xar_id = group_inst.xar_instance_id
-              LEFT JOIN $blockTypesTable as types
-              ON        types.xar_id = inst.xar_type_id
-              WHERE     groups.xar_name = '$groupName'
+              LEFT JOIN $blockTypesTable as btypes
+              ON        btypes.xar_id = inst.xar_type_id
+              WHERE     bgroups.xar_name = '$groupName'
               AND       inst.xar_state > 0
               ORDER BY  group_inst.xar_position ASC";
 
@@ -404,7 +404,13 @@ function xarBlock_renderGroup($groupName)
         $blockInfo['last_update'] = $result->UnixTimeStamp($blockInfo['last_update']);
 
         $output .= xarBlock_render($blockInfo);
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
+
+// don't throw back exception for broken blocks
+//        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
+        if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            $output .= xarExceptionRender('html');
+            xarExceptionFree();
+        }
 
         $result->MoveNext();
     }
