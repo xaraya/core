@@ -735,14 +735,20 @@ function base_activate()
         return;
     }
 
+    $res = xarBlockTypeRegister('base', 'rss');
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        return;
+    }
+
     $res = xarBlockTypeRegister('base', 'text');
     if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
-    $res = xarBlockTypeRegister('base', 'thelang'); // FIXME <paul> should this be here???
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
-    }
+
+    //$res = xarBlockTypeRegister('base', 'thelang'); // FIXME <paul> should this be here???
+    //if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    //    return;
+    //}
 
     if (xarVarIsCached('Mod.BaseInfos', 'blocks')) {
         xarVarDelCached('Mod.BaseInfos', 'blocks');

@@ -43,7 +43,90 @@ function users_onlineblock_display($blockinfo)
 
     // Get variables from content block
     $vars = unserialize($blockinfo['content']);
+    
+    // Database setup
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
+    $sessioninfotable = $xartable['session_info'];
+    $activetime = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
+    $sql = "SELECT COUNT(1)
+            FROM $sessioninfotable
+            WHERE xar_lastused > $activetime AND xar_uid > 1 
+		    GROUP BY xar_uid
+            ";
+    $result = $dbconn->Execute($sql);
 
+    if ($dbconn->ErrorNo() != 0) {
+        return false;
+    }
+    $args['numusers'] = $result->RecordCount();
+    $result->Close();
+
+   $query2 = "SELECT count( 1 )
+             FROM $sessioninfotable
+              WHERE xar_lastused > $activetime AND xar_uid = '1'
+			  GROUP BY xar_ipaddr
+			 ";
+   $result2 = $dbconn->Execute($query2);
+   $args['numguests'] = $result2->RecordCount();
+   $result2->Close();
+       
+       // Pluralise
+   
+   if ($args['numguests'] == 1) {
+       $args['guests'] = xarML('guest');
+   } else {
+       $args['guests'] = xarML('guests');
+   }
+   
+   if ($args['numusers'] == 1) {
+       $args['users'] = xarML('user');
+   } else {
+       $args['users'] = xarML('users');
+   }
+   
+    
+    // TODO Figure out the call for usergetvar.
+ /*
+    if (xarUserIsLoggedIn()) {
+        $content .= '<br />'.xarML('Welcome Back').' <b> ' .xarUserGetVar('uid') . '</b>.<br />';
+
+    }
+ */
+        //$content .= '<br />'.xarML('Welcome Back').';
+        //<b>' .xarUserGetVar('uname') . '</b>.<br />';
+        /*
+        $column = &$pntable['priv_msgs_column'];
+        $result2 = $dbconn->Execute("SELECT count(*) FROM $pntable[priv_msgs] WHERE $column[to_userid]=" . pnUserGetVar('uid'));
+        list($numrow) = $result2->fields;
+        if ($numrow == 0) {
+            $content .= '<br /></span>';
+        } else {
+            $content .= "<br />"._YOUHAVE." <a class=\"pn-normal\" href=\"modules.php?op=modload&amp;name=Messages&amp;file=index\"><b>".pnVarPrepForDisplay($numrow)."</b></a> ";
+            if ($numrow==1) { 
+               $content .= _PRIVATEMSG ;     
+           }
+           elseif ($numrow>1) { 
+               $content .= _PRIVATEMSGS ;
+           }
+           $content .= "</span><br />";
+        }
+        */
+
+    //} else {
+    //    $content .= '<br />'.xarML('You are an anonymous user').'</span><br />';
+    //}
+
+    // Block formatting
+    if (empty($blockinfo['title'])) {
+        $blockinfo['title'] = pnML('Online');
+    }
+ 
+    $blockinfo['content'] = xarTplBlock('users', 'online', $args);
+    return $blockinfo;
+}
+
+/*
     // Defaults
     if (empty($vars['howmany'])) {
         $vars['howmany'] = 1;
@@ -173,7 +256,8 @@ function users_onlineblock_display($blockinfo)
 
     return $blockinfo;
 }
-
+*/
 // TODO - modify/update block settings
+
 
 ?>

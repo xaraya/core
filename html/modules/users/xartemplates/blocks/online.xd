@@ -1,1 +1,2 @@
-Test
+    <xar:mlstring>There are currently</xar:mlstring> &xar-var-numguests; &xar-var-guests; <xar:mlstring> and </xar:mlstring> &xar-var-numusers; &xar-var-users; <xar:mlstring>online</xar:mlstring>
+	<br /><br />
