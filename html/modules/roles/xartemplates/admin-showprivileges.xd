@@ -37,8 +37,17 @@
 			</xar:if>
             '#$pname#'
         </h3>
-<p><xar:mlstring>Inherited by</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$roleid#">#$pname#</a>:&nbsp;
-<a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$roleid#" title="Test this User's Privileges"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a></p>
+<p>
+<a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$roleid#" title="Test this User's Privileges">
+	<img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" />
+</a>
+&nbsp;
+<a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$roleid#" title="Test this User's Privileges">
+	<xar:mlstring>Test the privileges of</xar:mlstring>&nbsp;#$pname#
+</a>
+</p>
+<p><xar:mlstring>Privileges inherited by</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$roleid#">#$pname#</a>:
+</p>
 <table border="0" width="100%" cellpadding="2" cellspacing="0" class="xar-accent-outline">
 		<tr>
 			<td colspan="7" align="right">
@@ -110,7 +119,7 @@
 		</xar:loop>
 	</xar:if>
     </table>
-            <p><xar:mlstring>Assigned to</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$roleid#">#$pname#</a>:&nbsp;
+            <p><xar:mlstring>Privileges assigned to</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$roleid#">#$pname#</a>:&nbsp;
             (<xar:mlstring>only relevant privileges are shown</xar:mlstring>)</p>
 <table border="0" width="100%" cellpadding="2" cellspacing="0" class="xar-accent-outline">
 		<tr>

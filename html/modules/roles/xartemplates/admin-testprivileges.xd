@@ -29,9 +29,12 @@
 	</xar:if>
 </div>
 <div style="margin: auto;">
-<p><b><a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">#$pname#</a></b>&nbsp;&nbsp;
-<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#" title="Show this User's Privileges"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a></p>
-<xar:if condition="isset($test)">
+<p>
+<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#" title="Show this User's Privileges"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
+&nbsp;
+<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#"><xar:mlstring>Show the privileges of</xar:mlstring>&nbsp;#$pname#</a>
+</p>
+<xar:if condition="!empty($test)">
 <h3><xar:mlstring>Test Result</xar:mlstring>:
 				<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">'#$pname#'</a>
 				<xar:else /><xar:mlstring>User</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">'#$pname#'</a>
@@ -149,7 +152,11 @@
 	<input type="hidden" name="uid" id="uid" value="#$uid#" />
     </div>
 </form>
-	<xar:if condition="count($masks) eq 0">
+	<xar:if condition="empty($pmodule)">
+		<p>
+			<xar:mlstring>Choose a module from the list and click on "Test"</xar:mlstring>
+		</p>
+	<xar:elseif condition="count($masks) eq 0" />
 		<h3><xar:mlstring>No masks registered for this module.</xar:mlstring></h3>
 	<xar:else />
 		<h3><xar:mlstring>Click on the mask you want to test privileges against:</xar:mlstring></h3>

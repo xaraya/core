@@ -33,7 +33,7 @@ function roles_admin_testprivileges()
     if (!xarVarFetch('name', 'str:1', $name, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('test', 'str:1:35:', $test, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
 
-    // Security Check
+    echo $test;// Security Check
     if (!xarSecurityCheck('EditRole')) return;
 
     // Call the Roles class and get the role
@@ -77,7 +77,6 @@ function roles_admin_testprivileges()
             $data['rlevel'] = $masks->levels[$testresult->getLevel()];
         }
         // rest of the data for template display
-        $data['test'] = $test;
         $data['testresult'] = $testresult;
         $data['resultdisplay'] = $resultdisplay;
         $testmasks = array($mask);
@@ -97,6 +96,7 @@ function roles_admin_testprivileges()
     }
     // no test yet
     // Load Template
+    $data['test'] = $test;
     $data['pname'] = $role->getName();
     $data['ptype'] = $role->getType();
     $data['pmodule'] = $module;
