@@ -43,7 +43,7 @@ function base_textblock_info()
 function base_textblock_display($blockinfo)
 {
     // Security Check
-    if(!xarSecurityCheck('ViewBase',0,'Textblock','$blockinfo[title]::')) return;
+	if(!xarSecurityCheck('ViewBase',0,'Textblock','$blockinfo[title]:All:All')) return;
 
     // Get variables from content block
     $vars = unserialize($blockinfo['content']);

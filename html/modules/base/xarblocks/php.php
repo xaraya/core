@@ -42,7 +42,7 @@ function base_phpblock_info()
 function base_phpblock_display($blockinfo)
 {
     // Security Check
-    if(!xarSecurityCheck('ViewBase',0,'PHPblock','$blockinfo[title]::')) return;
+	if(!xarSecurityCheck('ViewBase',0,'Block','$blockinfo[title]:All:All')) return;
 
     if (empty($blockinfo['title'])){
         $blockinfo['title'] = xarML('PHP Block');

@@ -61,7 +61,7 @@ function adminpanels_adminmenublock_info(){
 function adminpanels_adminmenublock_display($blockinfo){
 
 // Security Check
-    if(!xarSecurityCheck('AdminPanel',0,'adminmenu','$blockinfo[title]::')) return;
+	if(!xarSecurityCheck('AdminPanel',0,'adminmenu','$blockinfo[title]:All:All')) return;
 
     // are there any admin modules, then get the whole list sorted by names
     // checking this as early as possible
