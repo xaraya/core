@@ -14,22 +14,40 @@
 ////////////////////////////////////////////////////
 
 /**
- * STMP is rfc 821 compliant and implements all the rfc 821 SMTP
+ * SMTP is rfc 821 compliant and implements all the rfc 821 SMTP
  * commands except TURN which will always return a not implemented
  * error. SMTP also provides some utility methods for sending mail
  * to an SMTP server.
+ * @package PHPMailer
  * @author Chris Ryan
  */
 class SMTP
 {
-    var $SMTP_PORT = 25; # the default SMTP PORT
-    var $CRLF = "\r\n";  # CRLF pair
+    /**
+     *  SMTP server port
+     *  @var int
+     */
+    var $SMTP_PORT = 25;
+    
+    /**
+     *  SMTP reply line ending
+     *  @var string
+     */
+    var $CRLF = "\r\n";
+    
+    /**
+     *  Sets whether debugging is turned on
+     *  @var bool
+     */
+    var $do_debug;       # the level of debug to perform
 
+    /**#@+
+     * @access private
+     */
     var $smtp_conn;      # the socket to the server
     var $error;          # error if any on the last call
     var $helo_rply;      # the reply the server sent to us for HELO
-
-    var $do_debug;       # the level of debug to perform
+    /**#@-*/
 
     /**
      * Initialize the class so that the data is in a known state.
@@ -101,7 +119,7 @@ class SMTP
         # so we will give it a longer timeout for the first read
         // Windows still does not have support for this timeout function
         if(substr(PHP_OS, 0, 3) != "WIN")
-           socket_set_timeout($this->smtp_conn, 1, 0);
+           socket_set_timeout($this->smtp_conn, $tval, 0);
 
         # get any announcement stuff
         $announce = $this->get_lines();
@@ -446,7 +464,23 @@ class SMTP
             $host = "localhost";
         }
 
-        fputs($this->smtp_conn,"HELO " . $host . $this->CRLF);
+        // Send extended hello first (RFC 2821)
+        if(!$this->SendHello("EHLO", $host))
+        {
+            if(!$this->SendHello("HELO", $host))
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Sends a HELO/EHLO command.
+     * @access private
+     * @return bool
+     */
+    function SendHello($hello, $host) {
+        fputs($this->smtp_conn, $hello . " " . $host . $this->CRLF);
 
         $rply = $this->get_lines();
         $code = substr($rply,0,3);
@@ -457,7 +491,7 @@ class SMTP
 
         if($code != 250) {
             $this->error =
-                array("error" => "HELO not accepted from server",
+                array("error" => $hello . " not accepted from server",
                       "smtp_code" => $code,
                       "smtp_msg" => substr($rply,4));
             if($this->do_debug >= 1) {
@@ -468,7 +502,7 @@ class SMTP
         }
 
         $this->helo_rply = $rply;
-
+        
         return true;
     }
 
@@ -548,7 +582,7 @@ class SMTP
             return false;
         }
 
-        fputs($this->smtp_conn,"MAIL FROM:" . $from . $this->CRLF);
+        fputs($this->smtp_conn,"MAIL FROM:<" . $from . ">" . $this->CRLF);
 
         $rply = $this->get_lines();
         $code = substr($rply,0,3);
@@ -687,7 +721,7 @@ class SMTP
             return false;
         }
 
-        fputs($this->smtp_conn,"RCPT TO:" . $to . $this->CRLF);
+        fputs($this->smtp_conn,"RCPT TO:<" . $to . ">" . $this->CRLF);
 
         $rply = $this->get_lines();
         $code = substr($rply,0,3);
