@@ -419,7 +419,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
                         $foundEndXmlHeader=false;
                         $copy = '';
-                        while(!$foundEndXmlHeader) {
+                        $peek = '';
+                        while(!$foundEndXmlHeader && $peek!='>') {
                             $peek = $this->getNextToken(1);
                             if($peek == '?') {
                                 $end = $this->getNextToken();
@@ -429,6 +430,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             } else {
                                 $copy .= $peek;
                             }
+                        }
+                        if($peek == '>' && !$foundEndXmlHeader) {
+                            // Template error, found a > before the end
+                            $this->raiseError(XAR_BL_INVALID_TAG,"The XML header ended prematurely, check the syntax", $this);
+                            break;
                         }
 
                         // We do the exception check here, so the output is already parsed.
