@@ -31,6 +31,7 @@ define('XARMLS_DNTYPE_MODULE', 3);
 define('XARMLS_CTXTYPE_FILE', 1);
 define('XARMLS_CTXTYPE_TEMPLATE', 2);
 define('XARMLS_CTXTYPE_BLOCK', 3);
+define('XARMLS_CTXTYPE_INCLTEMPL', 4);
 
 /**
  * Initializes the Multi Language System
@@ -1092,6 +1093,9 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
         case XARMLS_CTXTYPE_BLOCK:
             $fileName = "blocks/$ctxName";
             break;
+        case XARMLS_CTXTYPE_INCLTEMPL:
+            $fileName = "templates/includes/$ctxName";
+            break;
         }
         $fileName .= '.php';
         if (!file_exists($this->baseDir.$fileName)) return false;
@@ -1123,6 +1127,9 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
             break;
         case XARMLS_CTXTYPE_BLOCK:
             $dirName .= 'blocks';
+            break;
+        case XARMLS_CTXTYPE_INCLTEMPL:
+            $dirName .= 'templates/includes';
             break;
         }
         $ctxNames = array();

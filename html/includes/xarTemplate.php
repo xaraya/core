@@ -265,12 +265,13 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     if (!file_exists($sourceFileName)) {
         // Use internal template
         $tplName = "$modType-$funcName" . (empty($templateName) ? '' : "-$templateName");
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_TEMPLATE, $tplName) === NULL) return;
         $sourceFileName = "modules/$modOsDir/xartemplates/$tplName.xd";
         // fall back to default template if necessary
         if (!empty($templateName) && !file_exists($sourceFileName)) {
+            $tplName = "$modType-$funcName";
             $sourceFileName = "modules/$modOsDir/xartemplates/$modType-$funcName.xd";
         }
+        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_TEMPLATE, $tplName) === NULL) return;
     } /*else {
         TODO: <marco> Handle i18n for this case
     }*/
@@ -593,6 +594,7 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
     $sourceFileName = "$GLOBALS[xarTpl_themeDir]/modules/$modName/includes/$templateName.xt";
     if (!file_exists($sourceFileName)) {
         $sourceFileName = "modules/$modName/xartemplates/includes/$templateName.xd";
+        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_INCLTEMPL, $templateName) === NULL) return;
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
