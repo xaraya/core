@@ -42,7 +42,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
     $propDirs = array('includes/properties/'); // Initialize it with the core location of properties
     foreach($activeMods as $modInfo) {
         // FIXME: the modinfo directory does NOT end with a /
-        $propDirs[] = $modInfo['osdirectory'] . '/xarproperties/';
+        $propDirs[] = 'modules/' .$modInfo['osdirectory'] . '/xarproperties/';
     }
     
     // Get list of properties in properties directories
@@ -51,7 +51,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
         
         // Open Properties Directory if it exists, otherwise go to the next one
         if(!file_exists($PropertiesDir)) continue;
-        
+
         if ($pdh = opendir($PropertiesDir)) {
             // Loop through properties directory
             while (($propertyfile = readdir($pdh)) !== false) 
@@ -121,9 +121,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                 $baseInfo['propertyClass'] = $propertyClass;
                 $baseInfo['filepath'] = $propertyfilepath;
                 
-                // Update database entry for this property
-                updateDB( $baseInfo, '', $propertyfilepath );
-                
+               
                 // Check for aliases
                 if( !isset($baseInfo['aliases']) || ($baseInfo['aliases'] == '') || !is_array($baseInfo['aliases']) )
                 {
@@ -153,11 +151,15 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                     }
                     
                     // Store a list of reference ID's from the base property it's aliases
+                    // FIXME: strip the last comma off?
                     $baseInfo['aliases'] = $aliasList;
 
                     // Add the base property to the property type list
                     $proptypes[$baseInfo['id']] = $baseInfo;
                 }
+                
+                // Update database entry for this property (the aliases array, if any, will now be an aliaslist)
+                updateDB( $baseInfo, '', $propertyfilepath );
             }
             closedir($pdh);
         }
@@ -166,8 +168,6 @@ function dynamicdata_adminapi_importpropertytypes( $args )
         ksort( $proptypes );
         
     }
-
-    
     return $proptypes;
 }
 
@@ -192,6 +192,6 @@ function updateDB( $proptype, $parent, $filepath )
                       $proptype['format'], $proptype['validation'], $proptype['source'], 
                       $proptype['dependancies'], $proptype['requiresmodule'], $proptype['args'], 
                       $proptype['aliases']);
-    $result =& $dbconn->Execute($insert);
+    $result =& $dbconn->Execute($insert,$bindvars);
 }
 ?>
