@@ -169,7 +169,7 @@ function xarBlockIsCached($args)
         $systemPrefix = xarDBGetSystemTablePrefix();
         $rolemembers = $systemPrefix . '_rolemembers';
         $currentuid = xarSessionGetVar('uid');
-        list($dbconn) = xarDBGetConn();
+        $dbconn =& xarDBGetConn();
         $query = "SELECT xar_parentid FROM $rolemembers WHERE xar_uid = $currentuid ";
         $result =& $dbconn->Execute($query);
         if (!$result) return;
