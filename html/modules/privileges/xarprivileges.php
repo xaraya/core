@@ -790,7 +790,6 @@ class xarPrivileges extends xarMasks
 							   'name' => 'None');
 			$ind = 2;
 			while(!$result->EOF) {
-			echo $name;
 				list($mid, $name) = $result->fields;
 				$ind = $ind + 1;
 				$components[$ind] = array('id' => $mid,
@@ -978,7 +977,7 @@ function drawbranch($node){
 	$isbranch = count($node['children'])>0 ? true : false;
 
 // now begin adding rows to the string
-	$this->html .= '<div name="xarBranch" id="' . $object['name'] . '" style="align: left;">';
+	$this->html .= '<div name="xarbranch" id="' . $object['name'] . '" style="align: left;">';
 
 // this table holds the index, the tree drawing gifs and the info about the privilege
 	$this->html .= $this->drawindent();
@@ -1058,7 +1057,7 @@ function drawbranch($node){
 	$this->html .= '</span>';
 
 // we've finished this row; now do the children of this privilege
-	$this->html .= $isbranch ? '<div name="xarLeaf">' : '';
+	$this->html .= $isbranch ? '<div name="xarleaf">' : '';
 	$ind=0;
 	foreach($node['children'] as $subnode){
 		$ind = $ind + 1;

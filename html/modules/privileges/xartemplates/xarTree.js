@@ -52,7 +52,7 @@ function xarTree_buildTree(tree) {
         var currNode = tree.childNodes[i];
 		if (currNode.childNodes.length > 0)
             xarTree_buildTree(currNode);
-       	if (currNode.name == "xarLeaf"){
+       	if (currNode.name == "xarleaf"){
 			var titlenode = currNode.parentNode;
 			var j = 0;
 			while(j < titlenode.childNodes.length) {
@@ -98,14 +98,14 @@ function xarTree_doEvent(e) {
     }
 
 function xarTree_getParent(node) {
-    while (node.parentNode.name != "xarBranch")
+    while (node.parentNode.name != "xarbranch")
         node = node.parentNode;
     return node.parentNode;
     }
 
 function xarTree_getChild(branch) {
 	var node = branch[0];
-	while (node.name != "xarLeaf") node = node.nextSibling;
+	while (node.name != "xarleaf") node = node.nextSibling;
 	return(node);
 	}	
 
@@ -145,7 +145,7 @@ function xarTree_saveLoad(thisnode) {
         var currNode = thisnode.childNodes[i];
         if (currNode.childNodes.length > 0)
             xarTree_saveLoad(currNode);
-        if (currNode.nodeName == "xarBranch" && currNode.className == xarTree_config.branchtitle && currNode.getAttribute(xarTree_config.ignore) != "true") {
+        if (currNode.nodeName == "xarbranch" && currNode.className == xarTree_config.branchtitle && currNode.getAttribute(xarTree_config.ignore) != "true") {
             if (xarTree_config.parseType == 'save')
                     setCookie("subtree_" + xarTree_config.count, currNode.getAttribute(xarTree_config.attr));
             if (xarTree_config.parseType == 'open')
