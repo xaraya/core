@@ -129,9 +129,6 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
 
         $currentcharset = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
 
-//        echo $this->locale . " " . $charset ."<br />";
-//        echo xarMLSGetCurrentLocale() . " " . $currentcharset."<br />";exit;
-
         $fp = fopen($fileName, 'r');
 
         while ($data = fread($fp, 4096)) {
@@ -280,7 +277,11 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
             $this->trans[] = $this->curEntry;
             $this->transKeyEntries[$key] = count($this->trans) - 1;
         } elseif ($tag == 'string') {
-            $this->curEntry['string'] = trim($this->curData);
+            // Delete extra whitespaces and spaces around newline
+            $string = trim($this->curData);
+            $string = preg_replace('/[\t ]+/',' ',$string);
+            $string = preg_replace('/\s*\n\s*/',"\n",$string);
+            $this->curEntry['string'] = $string;
             //$this->curEntry['string'] = utf8_decode(trim($this->curData));
         } elseif ($tag == 'key') {
             $this->curEntry['key'] = trim($this->curData);
