@@ -703,7 +703,6 @@ function installer_admin_confirm_configuration()
                 if(in_array($module['item'],$chosen)) {
                    $dependents = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$module['item']));
                    if (count($dependents['unsatisfiable']) > 0) {
-//                   echo var_dump($dependents);exit;
                         $msg = xarML("Cannot load because of unsatisfied dependencies. One or more of the following modules is missing: ");
                         foreach ($dependents['unsatisfiable'] as $dependent) {
                             $modname = isset($dependent['name']) ? $dependent['name'] : "Unknown";
@@ -727,7 +726,7 @@ function installer_admin_confirm_configuration()
 //                    xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
                 }
             }
-        $func = "installer_" . basename("$configuration",'.conf.php') . "_configuration_load";
+        $func = "installer_" . basename(strval($configuration),'.conf.php') . "_configuration_load";
         $func($chosen);
         $content['marker'] = '[x]';                                           // create the user menu
         $content['displaymodules'] = 1;
@@ -806,7 +805,7 @@ function installer_admin_finish()
 }
 
 
-function installer_admin_cleanup() 
+function installer_admin_cleanup()
 {
     $remove = xarModDelVar('roles','adminpass');
     $remove = xarModDelVar('installer','modules');
@@ -936,8 +935,7 @@ function installer_admin_cleanup()
     xarResponseRedirect('index.php');
 }
 
-
-function installer_admin_modifyconfig() 
+function installer_admin_modifyconfig()
 {}
 
 ?>
