@@ -725,6 +725,7 @@ class xarRole
         $deleted = xarML('deleted');
         $q = new xarQuery('UPDATE',$this->rolestable);
         $q->addfield('xar_uname',$this->getUser() . "[" . $deleted . "]" . mktime());
+        $q->addfield('xar_email',$this->getEmail() . "[" . $deleted . "]" . mktime());
         $q->addfield('xar_state',ROLES_STATE_DELETED);
         $q->eq('xar_uid',$this->getID());
 

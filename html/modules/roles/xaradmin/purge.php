@@ -111,6 +111,7 @@ function roles_admin_purge($args)
                 }
                 else {
                     $uname1 = explode($deleted,$role['xar_uname']);
+// checking empty unames for code robustness :-)
                     if($uname1[0] == '') {
                         $existinguser = 0;
                         $skip = 1;
@@ -119,8 +120,17 @@ function roles_admin_purge($args)
                         $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $uname1[0], 'state' => ROLES_STATE_CURRENT));
                     if (is_array($existinguser)) $unique = 0;
                     $role['xar_uname'] = $uname1[0];
+// remove [deleted] marker from email (fix for Bug 3484)
+                    $email = explode($deleted,$role['xar_email']);
+                    $role['xar_email']=$email[0];                    
+// now check that email is unique if this has to be checked (fix for nonexisting Bug)
+                    if (xarModGetVar('roles', 'uniqueemail')) {
+                        $existinguser = xarModAPIFunc('roles','user','get',array('email' => $email[0], 'state' => ROLES_STATE_CURRENT));
+                        if (is_array($existinguser)) $unique = 0;
+                    }
+                    
                }
-                if (!$skip) {
+                if (!$skip) {                    
                     $role['xar_type'] = $role['xar_type'] ? "Group" : "User";
 // Not elegant, but this version of xarQuery doesn't support field aliases
                     $recallroles[] = array(

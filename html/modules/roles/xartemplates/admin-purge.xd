@@ -175,7 +175,8 @@
         </form>
         <br />
         <span class="xar-title">
-              <xar:mlstring>Note: Shaded groups/users cannot be recalled because another group/user of the same name already exists.</xar:mlstring>
+              <xar:mlstring>Note: Shaded groups/users cannot be recalled because another group/user 
+              of the same name already exists (or same email, if the admin restricted emails to be unique).</xar:mlstring>
         </span>
         </div>
     </div>

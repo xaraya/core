@@ -41,11 +41,12 @@ function roles_adminapi_recall($args)
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
     $uname = explode($deleted,$role->getUser());
+    $email = explode($deleted,$role->getEmail());
 //            echo $uname[0];exit;
     $query = "UPDATE $rolestable
-              SET xar_uname = ?, xar_state = ?
+              SET xar_uname = ?, xar_email = ?, xar_state = ?
               WHERE xar_uid = ?";
-    $bindvars = array($uname[0],$state,$uid);
+    $bindvars = array($uname[0],$email[0],$state,$uid);
     $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
