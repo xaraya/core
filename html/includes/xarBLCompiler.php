@@ -989,6 +989,9 @@ class xarTpl__NodesFactory
             case 'for':
                 $node = new xarTpl__XarForNode();
                 break;
+            case 'foreach':
+                $node = new xarTpl__XarForEachNode();
+                break;
             case 'block':
                 $node = new xarTpl__XarBlockNode();
                 break;
@@ -2073,6 +2076,54 @@ class xarTpl__XarForNode extends xarTpl__TplTagNode
         return "for ($start; $test; $iter) { ";
     }
 
+    function renderEndTag()
+    {
+        return "} ";
+    }
+
+    function hasChildren()
+    {
+        return true;
+    }
+
+    function hasText()
+    {
+        return true;
+    }
+
+    function isAssignable()
+    {
+        return false;
+    }
+}
+
+class xarTpl__XarForEachNode extends xarTpl__TplTagNode
+{
+    function renderBeginTag()
+    {
+        extract($this->attributes);
+
+        if (!isset($var)) {
+            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+                           new xarTpl__ParserError('Missing \'var\' attribute in <xar:foreach> tag.', $this));
+            return;
+        }
+
+        if (!array($var)) {
+            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
+                           new xarTpl__ParserError('Invalid \'var\' attribute in <xar:foreach> tag. \'var\' must be an array', $this));
+            return;
+        }
+
+        if (!isset($as)) {
+            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+                           new xarTpl__ParserError('Missing \'as\' attribute in <xar:foreach> tag.', $this));
+            return;
+        }
+        
+        return "foreach ($var as $as) { ";
+    }
+    
     function renderEndTag()
     {
         return "} ";

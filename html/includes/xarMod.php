@@ -322,7 +322,8 @@ function xarModGetInfo($modRegId)
 
     $query = "SELECT xar_name,
                      xar_directory,
-                     xar_mode
+                     xar_mode,
+                     xar_version
               FROM $modulestable
               WHERE xar_regid = " . xarVarPrepForStore($modRegId);
     $result =& $dbconn->Execute($query);
@@ -335,7 +336,8 @@ function xarModGetInfo($modRegId)
     }
     list($modInfo['name'],
          $modInfo['directory'],
-         $mode) = $result->fields;
+         $mode,
+         $modInfo['version']) = $result->fields;
     $result->Close();
 
     $modInfo['regid'] = $modRegId;
@@ -354,7 +356,8 @@ function xarModGetInfo($modRegId)
 
     $modFileInfo = xarMod_getFileInfo($modInfo['directory']);
     if (!isset($modFileInfo)) return; // throw back
-    $modInfo = array_merge($modInfo, $modFileInfo);
+//    $modInfo = array_merge($modInfo, $modFileInfo);
+    $modInfo = array_merge($modFileInfo, $modInfo);
 
     xarVarSetCached('Mod.Infos', $modRegId, $modInfo);
 
@@ -470,6 +473,7 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
         $query = "SELECT mods.xar_regid,
                          mods.xar_name,
                          mods.xar_directory,
+                         mods.xar_version,
                          states.xar_state";
 
 
@@ -491,6 +495,7 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
                 list($modInfo['regid'],
                     $modInfo['name'],
                     $modInfo['directory'],
+                    $modInfo['version'],
                     $modState) = $result->fields;
                 $result->MoveNext();
 
@@ -510,7 +515,8 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
 
                     $modFileInfo = xarMod_getFileInfo($modInfo['directory']);
                     if (!isset($modFileInfo)) return; // throw back
-                    $modInfo = array_merge($modInfo, $modFileInfo);
+               //     $modInfo = array_merge($modInfo, $modFileInfo);
+                    $modInfo = array_merge($modFileInfo, $modInfo);
 
                     xarVarSetCached('Mod.Infos', $modInfo['regid'], $modInfo);
 

@@ -144,8 +144,6 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
                            new SystemException($msg));
             return;
         }
-    } else {
-        $value = $subject;
     }
     return true;
 }
