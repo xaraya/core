@@ -483,14 +483,14 @@ function xarDB__mysqlCreateTable($tableName, $fields)
         $parameters['command'] = 'create';
         $this_field = xarDB__mysqlColumnDefinition($field_name, $parameters);
 
-		$sql_fields[] = $this_field['name'] .' '
+		$sql_fields[] = $field_name .' '
 					  . $this_field['type'] .' '
 					  . $this_field['unsigned'] .' '
 					  . $this_field['null'] .' '
 					  . $this_field['default'] .' '
 					  . $this_field['auto_increment'];
 		if ($this_field['primary_key'] == true) {
-			$primary_key[] = $this_field['name'];
+			$primary_key[] = $field_name;
 		}
     }
 
@@ -514,7 +514,6 @@ function xarDB__mysqlCreateTable($tableName, $fields)
 function xarDB__mysqlColumnDefinition($field_name, $parameters)
 {
 	$this_field = array();
-    $this_field['name'] = $field_name;
 
     switch($parameters['type']) {
 
@@ -722,6 +721,8 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
  */
 function xarDB__postgresqlCreateTable($tableName, $fields)
 {
+// old code. need to review the sequence thingy
+/*
     $sql_fields = array();
     $seq_sql = '';
 
@@ -741,6 +742,33 @@ function xarDB__postgresqlCreateTable($tableName, $fields)
         $sql .= '; '.$seq_sql;
     }
     return $sql;
+*/
+// new code
+    $sql_fields = array();
+	$primary_key = array();
+
+    while (list($field_name, $parameters) = each($fields)) {
+        $parameters['command'] = 'create';
+        $this_field = xarDB__postgresColumnDefinition($field_name, $parameters);
+
+		$sql_fields[] = $field_name .' '
+					  . $this_field['type'] .' '
+//					  . $this_field['unsigned'] .' ' // doesnt do unsigned
+					  . $this_field['null'] .' '
+					  . $this_field['default'];// .' '
+//					  . $this_field['auto_increment']; // may not use autoinc
+		if ($this_field['primary_key'] == true) {
+			$primary_key[] = $field_name;
+		}
+    }
+
+    $sql = 'CREATE TABLE '.$tableName.' ('.implode(', ',$sql_fields);
+	if (!empty($primary_key)) {
+		$sql .= ', PRIMARY KEY ('.implode(',',$primary_key).')';
+	}
+	$sql .= ')';
+
+    return $sql;
 }
 
 /**
@@ -753,26 +781,26 @@ function xarDB__postgresqlCreateTable($tableName, $fields)
  */
 function xarDB__postgresColumnDefinition($field_name, $parameters)
 {
-    $this_field = array($field_name);
+    $this_field = array();
 
     switch($parameters['type']) {
         case 'integer':
             if (isset($parameters['size'])) {
                 switch ($parameters['size']) {
                     case 'tiny':
-                        $this_field[] = 'SMALLINT';
+                        $this_field['type'] = 'SMALLINT';
                         break;
                     case 'small':
-                        $this_field[] = 'SMALLINT';
+                        $this_field['type'] = 'SMALLINT';
                         break;
                     case 'big':
-                        $this_field[] = 'BIGINT';
+                        $this_field['type'] = 'BIGINT';
                         break;
                     default:
-                        $this_field[] = 'INTEGER';
+                        $this_field['type'] = 'INTEGER';
                 }
             } else {
-                $this_field[] = 'INTEGER';
+                $this_field['type'] = 'INTEGER';
             }
             break;
 
@@ -780,7 +808,7 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
             if (empty($parameters['size'])) {
                 return false;
             } else {
-                $this_field[] = 'CHAR('.$parameters['size'].')';
+                $this_field['type'] = 'CHAR('.$parameters['size'].')';
             }
             if (isset($parameters['default'])) {
                 $parameters['default'] = "'".$parameters['default']."'";
@@ -791,7 +819,7 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
             if (empty($parameters['size'])) {
                 return false;
             } else {
-                $this_field[] = 'VARCHAR('.$parameters['size'].')';
+                $this_field['type'] = 'VARCHAR('.$parameters['size'].')';
             }
             if (isset($parameters['default'])) {
                 $parameters['default'] = "'".$parameters['default']."'";
@@ -799,20 +827,20 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
             break;
 
         case 'text':
-            $this_field[] = 'TEXT';
+            $this_field['type'] = 'TEXT';
             break;
 
         case 'blob':
-            $this_field[] = 'BYTEA';
+            $this_field['type'] = 'BYTEA';
             break;
 
         case 'boolean':
-            $this_field[] = 'BOOLEAN';
+            $this_field['type'] = 'BOOLEAN';
             break;
 
         case 'timestamp':
         case 'datetime':
-            $this_field[] = 'TIMESTAMP WITH TIME ZONE';
+            $this_field['type'] = 'TIMESTAMP WITH TIME ZONE';
             // convert parameter array back to string for datetime
             // array('year'=>2002,'month'=>04,'day'=>17,'hour'=>'12','minute'=>59,'second'=>0)
             if (isset($parameters['default'])) {
@@ -834,7 +862,7 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
             break;
 
         case 'date':
-            $this_field[] = "DATE";
+            $this_field['type'] = "DATE";
             // convert parameter array back to string for datetime
             // array('year'=>2002,'month'=>04,'day'=>17)
             if (isset($parameters['default'])) {
@@ -864,7 +892,7 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
                 default:
                     $data_type = 'REAL';
             }
-            $this_field[] = $data_type;
+            $this_field['type'] = $data_type;
             break;
 
         // undefined type
@@ -877,10 +905,12 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
     if (isset($parameters['default'])) {
         if ($parameters['command'] == 'add') return false;
         if ($parameters['default'] == 'NULL') {
-            $this_field[] = 'DEFAULT NULL';
+            $this_field['default'] = 'DEFAULT NULL';
         } else {
-            $this_field[] = "DEFAULT ".$parameters['default']."";
+            $this_field['default'] = "DEFAULT ".$parameters['default']."";
         }
+    } else {
+    	$this_field['default'] = '';
     }
 
     // UNSIGNED - postgres does not unsigned integers so skip this test
@@ -888,12 +918,12 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
     // Test for NO NULLS - postgres does not support No Nulls on an alter table add
     if (isset($parameters['null']) && $parameters['null'] == false) {
         if ($parameters['command'] == 'add') return false;
-        $this_field[] = 'NOT NULL';
+        $this_field['null'] = 'NOT NULL';
     }
 
     // Test for PRIMARY KEY
     if (isset($parameters['primary_key']) && $parameters['primary_key'] == true) {
-        $this_field[] = 'PRIMARY KEY';
+        $this_field['primary_key'] = 'PRIMARY KEY';
     }
 
     return $this_field;
