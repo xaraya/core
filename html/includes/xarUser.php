@@ -3,15 +3,15 @@
  * File: $Id$
  *
  * User System
- *
+ * 
  * @package user
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.org
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>, Jan Schrage, Gregor Rothfuss
+ * @author Jim McDonald
+ * @todo <marco> user status field
+ * @todo <johnny> look over xarUserComparePasswords
  */
-
-// TODO: <marco> user status field
 
 /**
  * Dynamic User Data types for User Properties
@@ -38,11 +38,12 @@ define('XARUSER_AUTH_USER_ENUMERABLE', 128);
 define('XARUSER_AUTH_FAILED', -1);
 
 /**
- * Initializes the User System
- *
- * @author Marco Canini <m.canini@libero.it>
+ * Initialise the User System
+ * 
  * @access protected
- * @return bool true
+ * @global xarUser_authentication modules array 
+ * @param args[authenticationModules] array 
+ * @return bool true on success
  */
 function xarUser_init($args, $whatElseIsGoingLoaded)
 {
@@ -72,12 +73,14 @@ function xarUser_init($args, $whatElseIsGoingLoaded)
 /**
  * Log the user in
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
- * @param userName the name of the user logging in
- * @param password the password of the user logging in
- * @param rememberMe whether or not to remember this login
+ * @author Marco Canini
+ * @access public
+ * @param userName string the name of the user logging in
+ * @param password string the password of the user logging in
+ * @param rememberMe bool whether or not to remember this login
  * @return bool true if the user successfully logged in
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
+ * @todo <marco> #1 here we could also set a last_logon timestamp
  */
 function xarUserLogIn($userName, $password, $rememberMe)
 {
@@ -269,12 +272,14 @@ function xarUserSetNavigationLocale($locale)
 /**
  * get a user variable
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
- * @param name the name of the variable
- * @param uid the user to get the variable for
- * @returns mixed
- * @return the value of the user variable if the variable exists, void if the variable doesn't exist
+ * @author Marco Canini
+ * @access public
+ * @param name string the name of the variable
+ * @param uid integer the user to get the variable for
+ * @return mixed the value of the user variable if the variable exists, void if the variable doesn't exist
  * @raise BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION, UNKNOWN, DATABASE_ERROR, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST, VARIABLE_NOT_REGISTERED
+ * @todo <marco> #1 figure out why this check failsall the time now: if ($userId != xarSessionGetVar('uid')) {
+ * @todo <marco FIXME: ignoring unknown user variables for now...
  */
 function xarUserGetVar($name, $userId = NULL)
 {
@@ -300,7 +305,7 @@ function xarUserGetVar($name, $userId = NULL)
         return;
     }
 
-/* TODO: figure out why this fails all the time now (marco ?)
+/* TODO: #1
     if ($userId != xarSessionGetVar('uid')) {
         // Security check
         // Here we use a trick
@@ -322,7 +327,7 @@ function xarUserGetVar($name, $userId = NULL)
         // check that $name variable appears in the dynamic user data fields
         $infos = xarUser__getUserVarInfo($name);
         if (!isset($infos)) {
-        // FIXME: ignoring unknown user variables for now...
+        // TODO: #2
             if (xarExceptionMajor() != XAR_NO_EXCEPTION &&
                 xarExceptionId() == 'VARIABLE_NOT_REGISTERED') {
                 xarVarSetCached('User.Variables.'.$userId, $name, false);
@@ -404,13 +409,15 @@ function xarUserGetVar($name, $userId = NULL)
 }
 
 /**
- * set a user variable
+ * Set a user variable
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
- * @param name the name of the variable
- * @param value the value of the variable
- * @returns bool
- * @return true if the set was successful, false if validation fails
+ * @author Marco Canini
+ * @since 1.23 - 2002/02/01
+ * @access public
+ * @param name string the name of the variable
+ * @param value ??? the value of the variable
+ * @param userId integer user's ID
+ * @return bool true if the set was successful, false if validation fails
  * @raise BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION, UNKNOWN, DATABASE_ERROR, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST, VARIABLE_NOT_REGISTERED
  */
 function xarUserSetVar($name, $value, $userId = NULL)
@@ -522,13 +529,13 @@ function xarUserSetVar($name, $value, $userId = NULL)
 }
 
 /**
- * validate a user variable
+ * Validate a user variable
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @since 1.60 - 2002/05/02
+ * @author Marco Canini
  * @param name user variable name
  * @param value value to be validated
- * @returns bool
- * @return true when validation was successfully accomplished, false otherwise
+ * @return bool true when validation was successfully accomplished, false otherwise
  * @raise ID_NOT_EXIST, DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST, UNKNOWN
  */
 function xarUserValidateVar($name, $value)
@@ -571,6 +578,7 @@ function xarUserValidateVar($name, $value)
  * Compare Passwords
  *
  * @access public
+ * @param givenPassword string
  * @return bool true if the passwords match, false otherwise
  */
 function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryptSalt = '')
@@ -606,8 +614,13 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
 // PRIVATE FUNCTIONS
 
 /*
+ * Get user's authentication module
+ *
  * @access private
+ * @param userId string
  * @raise UNKNOWN, DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @todo FIXME: what happens for anonymous users ???
+ * @todo check coherence 1 vs. 0 for Anonymous users !!!
  */
 function xarUser__getAuthModule($userId)
 {

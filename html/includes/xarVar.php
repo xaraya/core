@@ -37,6 +37,7 @@ define('XARVAR_NOT_REQUIRED', 64);
  * @param whatElseIsGoingLoaded integer
  * @return bool
  * @todo <johnny> fix the load level stuff here... it's inconsistant to the rest of the core
+ * @todo <johnny> remove censored words and allowable HTML
  */
 function xarVar_init($args, $whatElseIsGoingLoaded)
 {
@@ -130,7 +131,7 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
  * 
  * @author Marco Canini
  * @access public
- * @param name mixed the variable name
+ * @param name string the variable name
  * @param validation string the validation to be performed
  * @param value mixed contains the converted value of fetched variable
  * @param defaultValue mixed the default value

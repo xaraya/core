@@ -2,19 +2,29 @@
 /**
  * File: $Id$
  * 
- * Xaraya Index
+ * Xaraya Web Interface Entry Point
  * 
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.org
-*/
+ * @author Marco Canini
+ */
 
 /**
  * Index Function 
 */
 include 'includes/xarCore.php';
 
+/**
+ * Main Xaraya Entry 
+ *
+ * @access public
+ * @return bool
+ * @todo <marco> <mikespub> #1 decide whether to accept index.php?theme=$theme URL for rss, print, wap themes, etc..
+ * @todo <marco>  #2 decide whether to remove or keep the cancel button clicking functionality
+ * @todo <marco> #3 Do fallback if raised exception is coming from template engine
+ */
 function xarMain()
 {
     // Load the core with all optional systems loaded
@@ -24,7 +34,9 @@ function xarMain()
     list($modName, $modType, $funcName) = xarRequestGetInfo();
 
     // Adjust BL settings
-    // Set the default page title
+    // TODO: 1
+    // Line below was manually merged in, so if merge was wrong,
+    // it's easy to recover
     xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarConfigGetVar('Site.Core.Slogan'));
 
     // ANSWER <marco>: Who's gonna use that?
@@ -48,7 +60,9 @@ function xarMain()
     // FIXME: <marco> What's this insanity for?
     // Run the function - also handle cancel button clicking
 
-    /* <marco> Disabled until someone answer.
+    // Run the function - also handle cancel button clicking
+    // TODO: 2
+    /* <marco> Disable until someone answer.
     if (xarVarCleanFromInput('cancel')) {
         $mainModuleOutput = xarModFunc($modName, $modType);
     } else {
@@ -85,6 +99,7 @@ function xarMain()
         xarTplSetPageTemplateName('admin');
     }
 
+    // Note : the page template may be set to something else in the module function
     if (xarTplGetPageTemplateName() == 'default') {
         xarTplSetPageTemplateName($modName);
     }
@@ -121,7 +136,7 @@ if (!xarMain()) {
 
     xarLogException(XARLOG_LEVEL_ERROR);
 
-    // TODO: <marco> Do fallback if raised exception is coming from template engine
+    // TODO: 3
     if (xarExceptionId() == 'TEMPLATE_NOT_EXIST') {
         echo "<html><head><title>Error</title><body>$text</body></html>";
     } else {
