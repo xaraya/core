@@ -1,0 +1,270 @@
+<xar:comment>
+    License: GPL http://www.gnu.org/copyleft/gpl.html 
+</xar:comment>
+<xar:if condition="xarTplAddStyleLink('dynamicdata', 'dd')">
+    <xar:comment>
+        no action required if external file was not added 
+    </xar:comment>
+</xar:if>
+<div class="xar-mod-head">
+    <span class="xar-mod-title">
+        <xar:mlstring>
+            Dynamic Data Administration 
+        </xar:mlstring>
+    </span>
+</div>
+<div class="xar-mod-body">
+    <h2>
+        <xar:if condition="!empty($mapfrom) and !empty($mapto)">
+            <xar:ml>
+            <xar:mlstring>
+                Migrate Items from #(1) to #(2)
+            </xar:mlstring>
+            <xar:mlvar>
+                #$mapfrom#
+            </xar:mlvar>
+            <xar:mlvar>
+                #$mapto#
+            </xar:mlvar>
+            </xar:ml>
+        <xar:else/>
+            <xar:mlstring>
+                Migrate Module Items
+            </xar:mlstring>
+        </xar:if>
+    </h2>
+    <form class="dd-modifyprop-form" method="post" action="#xarModURL('dynamicdata','util','migrate')#">
+        <table class="xar-accent">
+        <tr>
+            <td>
+                <xar:mlstring>Mapping</xar:mlstring>
+            </td>
+            <td>
+                <select name="map" id="map">
+                    <option value=""></option>
+                    <xar:foreach in="$maplist" value="$maptype">
+                        <xar:if condition="!empty($map) and $map eq $maptype">
+                            <option value="#$maptype#" selected="selected">#$maptype#</option>
+                        <xar:else/>
+                            <option value="#$maptype#">#$maptype#</option>
+                        </xar:if>
+                    </xar:foreach>
+                </select>
+            </td>
+            <td>
+                <input type="submit" name="load" value="#xarML('Load')#" />
+            </td>
+            <td>
+                <input type="text" name="newmap" value="#$newmap#" size="30" />
+            </td>
+            <td>
+                <input type="submit" name="save" value="#xarML('Save')#" />
+            </td>
+        </tr>
+        </table>
+    <fieldset>
+        <table class="xar-norm">
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                <strong><xar:mlstring>From</xar:mlstring></strong>
+            </td>
+            <td>
+                <strong><xar:mlstring>To</xar:mlstring></strong>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="dd-norm" for="from_module">
+                    <xar:mlstring>
+                        Module
+                    </xar:mlstring>
+                </label>
+            </td>
+            <td>
+                <xar:comment> get the list of modules </xar:comment>
+                <xar:if condition="empty($from['module'])">
+                     <xar:data-input type="module" name="from[module]" id="from_module" value="151" />
+                <xar:else/>
+                     <xar:data-output type="module" value="$from['module']" />
+                     <input type="hidden" name="from[module]" value="#$from['module']#" />
+                </xar:if>
+            </td>
+            <td>
+                 <xar:if condition="empty($to['module'])">
+                     <xar:data-input type="module" name="to[module]" id="to_module" value="151" />
+                 <xar:else/>
+                     <xar:data-output type="module" value="$to['module']" />
+                     <input type="hidden" name="to[module]" value="#$to['module']#" />
+                 </xar:if>
+            </td>
+        </tr>
+<xar:if condition="!empty($from['module']) && !empty($to['module'])">
+        <tr>
+            <td>
+                <label class="dd-norm" for="from_itemtype">
+                    <xar:mlstring>
+                        Itemtype
+                    </xar:mlstring>
+                </label>
+            </td>
+            <td>
+                <xar:comment> get the list of itemtypes for that module </xar:comment>
+                <xar:if condition="!isset($from['itemtype'])">
+                    <select name="from[itemtype]" id="from_itemtype">
+                    <xar:foreach in="$fromitemtypes" key="$itemtype" value="$info">
+                        <option value="#$itemtype#">[#$itemtype#] #$info['label']#</option>
+                    </xar:foreach>
+                    </select>
+                <xar:else/>
+                    [#$from['itemtype']#] #$fromitemtypes[$from['itemtype']]['label']#
+                    <input type="hidden" name="from[itemtype]" value="#$from['itemtype']#" />
+                </xar:if>
+            </td>
+            <td>
+                <xar:if condition="!isset($to['itemtype'])">
+                    <select name="to[itemtype]" id="to_itemtype">
+                    <xar:foreach in="$toitemtypes" key="$itemtype" value="$info">
+                        <option value="#$itemtype#">[#$itemtype#] #$info['label']#</option>
+                    </xar:foreach>
+                    </select>
+                <xar:else/>
+                    [#$to['itemtype']#] #$toitemtypes[$to['itemtype']]['label']#
+                    <input type="hidden" name="to[itemtype]" value="#$to['itemtype']#" />
+                </xar:if>
+            </td>
+        </tr>
+    <xar:if condition="!empty($from['itemtype']) && !empty($to['itemtype'])">
+        <tr>
+            <td>
+                <label class="dd-norm" for="from_itemid">
+                    <xar:mlstring>
+                        Items
+                    </xar:mlstring>
+                </label>
+            </td>
+            <td>
+                <xar:comment> get the list of items for that module+itemtype </xar:comment>
+                <xar:if condition="!isset($from['itemid'])">
+                    <select name="from[itemid][]" id="from_itemid" multiple="multiple">
+                    <xar:foreach in="$fromitems" key="$itemid" value="$info">
+                        <option value="#$itemid#">[#$itemid#] #$info['label']#</option>
+                    </xar:foreach>
+                    </select>
+                <xar:else/>
+                    <xar:foreach in="$fromitems" key="$itemid" value="$info">
+                        [#$itemid#] #$info['label']#<br/>
+                    </xar:foreach>
+                    <input type="hidden" name="from[itemid]" value="#$from['itemid']#" />
+                </xar:if>
+            </td>
+            <td>
+                <label class="dd-norm" for="to_itemid">
+                    <xar:mlstring>
+                        Preserve Id
+                    </xar:mlstring>
+                </label>
+                <xar:if condition="empty($to['itemid'])">
+                    <input type="checkbox" name="to[itemid]" id="to_itemid" value="1" />
+                <xar:else/>
+                    <input type="checkbox" name="to[itemid]" id="to_itemid" value="1" checked="checked" />
+                </xar:if>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <strong><xar:mlstring>Fields</xar:mlstring></strong>
+            </td>
+            <td colspan="2">
+                &nbsp;
+            </td>
+        </tr>
+        <xar:foreach in="$fromfieldlist" key="$namefrom" value="$infofrom">
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                <label class="dd-norm" for="fieldmap_#$namefrom#">[#$namefrom#] #$infofrom['label']# (#$infofrom['type']#)</label>
+            </td>
+            <td>
+                <select name="fieldmap[#$namefrom#]" id="fieldmap_#$namefrom#">
+                    <option value=""><xar:mlstring>* not migrated *</xar:mlstring></option>
+                    <xar:foreach in="$tofieldlist" key="$nameto" value="$infoto">
+                        <xar:if condition="!isset($fieldmap[$namefrom]) and $namefrom eq $nameto">
+                            <option value="#$nameto#" selected="selected">[#$nameto#] #$infoto['label']# (#$infoto['type']#)</option>
+                        <xar:elseif condition="!empty($fieldmap[$namefrom]) and $fieldmap[$namefrom] eq $nameto"/>
+                            <option value="#$nameto#" selected="selected">[#$nameto#] #$infoto['label']# (#$infoto['type']#)</option>
+                        <xar:else/>
+                            <option value="#$nameto#">[#$nameto#] #$infoto['label']# (#$infoto['type']#)</option>
+                        </xar:if>
+                    </xar:foreach>
+                </select>
+            </td>
+        </tr>
+        </xar:foreach>
+        <tr>
+            <td>
+                <strong><xar:mlstring>Hooks</xar:mlstring></strong>
+            </td>
+            <td colspan="2">
+                &nbsp;
+            </td>
+        </tr>
+        <xar:foreach in="$fromhooklist" key="$hookmodfrom" value="$valfrom">
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                <label class="dd-norm" for="hookmap_#$hookmodfrom#">#$hookmodfrom#</label>
+            </td>
+            <td>
+                <xar:if condition="!in_array($hookmodfrom,$hooksupported)">
+                    <xar:mlstring>not supported</xar:mlstring>
+                <xar:elseif condition="$hookmodfrom eq 'dynamicdata'"/>
+                    <xar:mlstring>see field mapping above</xar:mlstring>
+                <xar:else/>
+                    <select name="hookmap[#$hookmodfrom#]" id="hookmap_#$hookmodfrom#">
+                        <option value=""><xar:mlstring>* not migrated *</xar:mlstring></option>
+                        <xar:foreach in="$tohooklist" key="$hookmodto" value="$valto">
+                            <xar:if condition="!isset($hookmap[$hookmodfrom]) and $hookmodfrom eq $hookmodto">
+                                <option value="#$hookmodto#" selected="selected">#$hookmodto#</option>
+                            <xar:elseif condition="!empty($hookmap[$hookmodfrom]) and $hookmap[$hookmodfrom] eq $hookmodto"/>
+                                <option value="#$hookmodto#" selected="selected">#$hookmodto#</option>
+                            <xar:elseif condition="!in_array($hookmodto,$hooksupported)"/>
+                                <option value="#$hookmodto#" disabled="disabled">#$hookmodto#</option>
+                            <xar:else/>
+                                <option value="#$hookmodto#">#$hookmodto#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </xar:if>
+            </td>
+        </tr>
+        </xar:foreach>
+    </xar:if>
+</xar:if>
+        <tr>
+          <td colspan="2">
+              <input type="hidden" name="step" value="#$step#" />
+              <input type="hidden" name="authid" value="#xarSecGenAuthKey()#" />
+              <xar:if condition="$step gt 1">
+                  <input class="dd-norm" type="submit" name="back" value="#xarML('Back')#" />
+              <xar:else/>
+                  <input class="dd-norm" type="submit" name="back" value="#xarML('Back')#" disabled="disabled" />
+              </xar:if>
+              <input class="dd-norm" type="submit" name="next" value="#xarML('Next')#" />
+              <xar:if condition="!empty($check)">
+                  <input class="dd-norm" type="submit" name="confirm" value="#xarML('Finish')#" />
+              <xar:else/>
+                  <input class="dd-norm" type="submit" name="confirm" value="#xarML('Finish')#" disabled="disabled" />
+              </xar:if>
+          </td>
+        </tr>
+        </table>
+    </fieldset>
+    </form>
+</div>

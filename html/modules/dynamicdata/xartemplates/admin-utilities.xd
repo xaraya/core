@@ -129,6 +129,23 @@
                     </a>
                 </dd>
             </xar:if>
+            <xar:if condition="$option eq 'migrate'">
+                <dd class="active">
+                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'migrate'))#">
+                        <xar:mlstring>
+                            Migrate Items 
+                        </xar:mlstring>
+                    </a>
+                </dd>
+                <xar:else />
+                <dd>
+                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'migrate'))#">
+                        <xar:mlstring>
+                            Migrate Items 
+                        </xar:mlstring>
+                    </a>
+                </dd>
+            </xar:if>
         </dl>
     </div>
     <xar:if condition="empty($option) or $option eq 'query'">
