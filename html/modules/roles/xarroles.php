@@ -477,23 +477,25 @@ function drawindent() {
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
 
-// set the data in an array
-		list($uid,$name,$type,$parentid,$uname,$email,$pass,
-		$date_reg,$val_code,$state,$auth_module) = $result->fields;
-		$pargs = array('uid'=>$uid,
-						'name'=>$name,
-						'type'=>$type,
-						'parentid'=>$parentid,
-						'uname'=>$uname,
-						'email'=>$email,
-						'pass'=>$pass,
-						'date_reg'=>$date_reg,
-						'val_code'=>$val_code,
-						'state'=>$state,
-						'auth_module'=>$auth_module);
+        if (!$result->EOF) {
+            // set the data in an array
+            list($uid,$name,$type,$parentid,$uname,$email,$pass,
+                 $date_reg,$val_code,$state,$auth_module) = $result->fields;
+            $pargs = array('uid'=>$uid,
+                           'name'=>$name,
+                           'type'=>$type,
+                           'parentid'=>$parentid,
+                           'uname'=>$uname,
+                           'email'=>$email,
+                           'pass'=>$pass,
+                           'date_reg'=>$date_reg,
+                           'val_code'=>$val_code,
+                           'state'=>$state,
+                           'auth_module'=>$auth_module);
 
-// create and return the role object
-		return new xarRole($pargs);
+            // create and return the role object
+            return new xarRole($pargs);
+        }
 	}
 
 /**
