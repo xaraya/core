@@ -30,7 +30,9 @@ include "../../html/modules/xmlrpcserver/xarincludes/xmlrpcs.inc";
     Path:<br/>
     <input type="textbox" size="80" value="<?php echo $path;?>" name="path"/><br/>
     Port:<br/>
-    <input type="textbox" size="5" value="<?php echo $port;?>" name="port"/><br/>
+    <input type="textbox" size="5" value="<?php echo $port;?>" name="port"/>
+    Show payloads:
+    <input type="checkbox" name="debug" value="1" /><br/>
     <input type="hidden" name="listmethods" value="1" />
     <input type="submit" value="Query server"/>
   </div>
@@ -44,7 +46,7 @@ include "../../html/modules/xmlrpcserver/xarincludes/xmlrpcs.inc";
 // system.listmethods
 if ($listmethods == 1) {
     $client = new xmlrpc_client($path, $server,$port);
-    //$client->setDebug(1);
+    if($debug == 1) $client->setDebug(1);
     $request = new xmlrpcmsg('system.listMethods');
     $response = $client->send($request);
     //var_dump($response);
@@ -72,6 +74,7 @@ if ($listmethods == 1) {
 ?>
         </select>
         <input type="submit" value="Show method"/> 
+        Show payloads: <input type="checkbox" name="payloads2" value="1"/>
       </div>
     </form>
 <?php
@@ -80,7 +83,7 @@ if ($listmethods == 1) {
 // system.methodHelp
 if ($methodhelp == 1) {
     $client = new xmlrpc_client($path, $server,$port);
-    //$client->setDebug(1);
+    if($payloads2 ==1) $client->setDebug(1);
     // Get the helptext for the method
     $request = new xmlrpcmsg('system.methodHelp',array(new xmlrpcval($method)));
     $response = $client->send($request);
