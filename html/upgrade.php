@@ -62,6 +62,249 @@ if (empty($step)) {
 <div class="xar-mod-body"><h2><?php echo $in_process; ?></h2>
 <div style="margin: auto;">
 <?php
+  // Check the installed security instances table for hard coded prefix bug and the bug fix bug :).
+    echo "<h5>Checking Security Instances Table</h5>";
+
+    $sprefix=xarDBGetSiteTablePrefix();
+    echo "Table Prefix is : ".$sprefix."<br /><br />";
+    echo "Checking for a missing 'underscore' in the dynamicdata security_instance entries, and hard coded table prefixes in security_instances table for dynamicdata, categories, articles, ratings and 
+    hitcount modules.<br /><br />";
+    $instancestable = $sprefix."_security_instances";
+    $ddtable=$sprefix.'_dynamic_properties';
+    $ddobjecttable=$sprefix.'_dynamic_objects';
+    $modulestable=$sprefix.'_modules';
+    $categorytable=$sprefix.'_categories';
+    $blockinstancetable=$sprefix.'_block_instances';
+    $blocktypestable=$sprefix.'_block_types';
+    $hitcounttable =$sprefix.'_hitcount';
+    $ratingstable=$sprefix.'_ratings';
+
+   //check dynamic properties - for 'underscore bug' which affects all site prefixed tables, and hardcoded prefix bug
+  if (xarModIsAvailable('dynamicdata')) {
+       $ddupdate=false;
+       $ddinstances[]  =array(array ('ccomponent'  => 'Item',
+                                     'cheader'     => 'Module Name:',
+                                     'cquery'      => 'SELECT DISTINCT xar_prop_name FROM '.$ddtable.''),
+                              array ('ccomponent'  => 'Type',
+                                     'cheader'     => 'Property Name:',
+                                     'cquery'      => 'SELECT DISTINCT xar_prop_name FROM '.$ddtable.''),
+                              array ('ccomponent'  => 'Type',
+                                     'cheader'     => 'Property Type:',
+                                     'cquery'      => 'SELECT DISTINCT xar_prop_name FROM '.$ddtable.''),
+                              array ('ccomponent'  => 'Type',
+                                     'cheader'     => 'Property ID:',
+                                     'cquery'      => 'SELECT DISTINCT xar_prop_name FROM '.$ddtable.''),
+                              array ('ccomponent'  => 'Item',
+                                     'cheader'     => 'Object Type:',
+                                     'cquery'      => 'SELECT DISTINCT xar_object_itemtype FROM '.$ddobjecttable.''),
+                              array ('ccomponent'  => 'Item',
+                                     'cheader'     => 'Object ID:',
+                                     'cquery'      => 'SELECT DISTINCT xar_object_id FROM '.$ddobjecttable.''));
+
+
+          foreach($ddinstances as $ddinstance){
+              foreach ($ddinstance as $instance) {
+                  list($dbconn) = xarDBGetConn();
+                  $query = "SELECT xar_iid, xar_header, xar_query
+                            FROM $instancestable
+                            WHERE xar_module= 'dynamicdata' AND xar_component = '{$instance['ccomponent']}' AND xar_header='{$instance['cheader']}'";
+                  $result =&$dbconn->Execute($query);
+
+                  list($iid, $header, $xarquery) = $result->fields;
+
+                  if ($instance['cquery'] != $xarquery) {
+                      $ddupdate=true;
+                      $query="UPDATE $instancestable SET xar_query= '{$instance['cquery']}'
+                              WHERE xar_module='dynamicdata' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
+                      $result =& $dbconn->Execute($query);
+                  }
+              }
+
+          }//end foreach
+          if ($ddupdate) {
+              echo "Dynamic Data security_instance entries require updating ...attempting to update... DONE! <br />";
+          } else {
+              echo "Dynamic Data security_instance entries do not require updating.<br />";
+          }
+
+      } else {
+          echo "Dynamic Data module not available - no checking of dynamic data instances carried out.<br />";
+      } // endif modavailable
+
+   //now check modules instances - only affected if their site prefix is other than 'xar'
+ if ($sprefix == 'xar') { // check ratings, hitcount, articles and categories
+  echo "Categories, Articles, Hitcount and Ratings security_instances do not require updating as your site prefix is the default 'xar'.";
+ } else {
+  //check categories instances - two bugs - hardcoded prefix bug and also instancetable2 column hardcoded prefix
+      if (xarModIsAvailable('categories')) {
+          $categoriesupdate=false;
+          $categoriesinstances[]= array(array ('ccomponent'  => 'Category',
+                                               'cheader'     => 'Category Name:',
+                                               'cquery'      => 'SELECT DISTINCT xar_name FROM '.$categorytable.'',
+                                               'ctable2'     => $categorytable),
+                                        array ('ccomponent'  => 'Category',
+                                               'cheader'     => 'Category ID:',
+                                               'cquery'      => 'SELECT DISTINCT xar_cid FROM '.$categorytable.'',
+                                               'ctable2'     => $categorytable),
+                                        array ('ccomponent'  => 'Block',
+                                               'cheader'     => 'Category Block Title:',
+                                               'cquery'      => 'SELECT DISTINCT instances.xar_title FROM '.$blockinstancetable.' as instances LEFT JOIN '.$blocktypestable.' as btypes ON  btypes.xar_id = instances.xar_type_id WHERE xar_module = \'categories\'',
+                                               'ctable2'     => ''));
+
+          foreach($categoriesinstances as $categoriesinstance){
+              foreach ($categoriesinstance as $instance) {
+                  list($dbconn) = xarDBGetConn();
+                  $query = "SELECT xar_iid,xar_header,xar_query, xar_instancetable2
+                            FROM $instancestable
+                            WHERE xar_module= 'categories' AND xar_component = '{$instance['ccomponent']}' AND xar_header='{$instance['cheader']}'";
+                  $result =&$dbconn->Execute($query);
+                  list($iid, $header, $xarquery, $instancetable2) = $result->fields;
+                  if (($instance['cquery'] != $xarquery) || ($instance['ctable2'] != $instancetable2)) {
+                      $categoriesupdate=true;
+                      $query="UPDATE $instancestable SET xar_query= '{$instance['cquery']}', xar_instancetable2 = '$instance[ctable2]'
+                              WHERE xar_module='categories' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
+                      $result =& $dbconn->Execute($query);
+                  }
+              }
+
+          }//end foreach
+          if ($categoriesupdate) {
+              echo "Categories security_instance entries require updating ...attempting to update... DONE! <br />";
+          } else {
+              echo "Categories security_instance entries do not require updating.<br />";
+          }
+
+      } else {
+          echo "Categories module not available - no checking of categories instances carried out.<br />";
+       } // endif modavailable
+
+
+   //check hitcount instances
+      if (xarModIsAvailable('hitcount')) {
+          $hitcountupdate=false;
+          $hitcountinstances[]=array(array ('ccomponent'  => 'Item',
+                                            'cheader'     => 'Module Name:',
+                                            'cquery'      => 'SELECT DISTINCT '.$modulestable.'.xar_name FROM '.$hitcounttable.' LEFT JOIN '.$modulestable.' ON '.$hitcounttable.'.xar_moduleid = '.$modulestable.'.xar_regid'),
+                                     array ('ccomponent'  => 'Item',
+                                            'cheader'     => 'Item Type:',
+                                            'cquery'      => 'SELECT DISTINCT xar_itemtype FROM '.$hitcounttable.''),
+                                     array ('ccomponent'  => 'Item',
+                                            'cheader'     => 'Item ID:',
+                                            'cquery'      => 'SELECT DISTINCT xar_itemtype FROM '.$hitcounttable.''));
+
+          foreach($hitcountinstances as $hitcountinstance){
+              foreach ($hitcountinstance as $instance) {
+                  list($dbconn) = xarDBGetConn();
+                  $query = "SELECT xar_iid, xar_header, xar_query
+                            FROM $instancestable
+                            WHERE xar_module= 'hitcount' AND xar_component = '{$instance['ccomponent']}' AND xar_header='{$instance['cheader']}'";
+                  $result =&$dbconn->Execute($query);
+
+                  list($iid, $header, $xarquery) = $result->fields;
+
+
+                if (($instance['cquery'])==($xarquery)) {
+                  } else {
+                      $hitcountupdate=true;
+                      $query="UPDATE $instancestable SET xar_query= '{$instance['cquery']}'
+                              WHERE xar_module='hitcount' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
+                      $result =& $dbconn->Execute($query);
+                  }
+              }
+
+          }//end foreach
+          if ($hitcountupdate) {
+              echo "Hit Count security_instance entries require updating ...attempting to update... DONE! <br />";
+          } else {
+              echo "Hit Count security_instance entries do not require updating.<br />";
+          }
+
+      } else {
+          echo "Hit Count module not available - no checking of hit count instances carried out.<br />";
+      } // endif modavailable
+
+   //check rating instances
+      if (xarModIsAvailable('ratings')) {
+          $ratingsupdate=false;
+          $ratinginstances[]=array(array ('ccomponent'  => 'Item',
+                                          'cheader'     => 'Module Name:',
+                                          'cquery'      => 'SELECT DISTINCT '.$modulestable.'.xar_name FROM '.$ratingstable.' LEFT JOIN '.$modulestable.' ON '.$ratingstable.'.xar_moduleid = '.$modulestable.'.xar_regid'),
+                                   array ('ccomponent'  => 'Item',
+                                          'cheader'     => 'Item Type:',
+                                          'cquery'      => 'SELECT DISTINCT xar_itemtype FROM '.$ratingstable.''),
+                                   array ('ccomponent'  => 'Item',
+                                          'cheader'     => 'Item ID:',
+                                          'cquery'      => 'SELECT DISTINCT xar_itemtype FROM '.$ratingstable.''),
+                                   array ('ccomponent'  => 'Template',
+                                          'cheader'     => 'Module Name:',
+                                          'cquery'      => 'SELECT DISTINCT '.$modulestable.'.xar_name FROM '.$ratingstable.' LEFT JOIN '.$modulestable.' ON '.$ratingstable.'.xar_moduleid = '.$modulestable.'.xar_regid'),
+                                   array ('ccomponent'  => 'Template',
+                                          'cheader'     => 'Item Type:',
+                                          'cquery'      => 'SELECT DISTINCT xar_itemtype FROM '.$ratingstable.''),
+                                   array ('ccomponent'  => 'Template',
+                                          'cheader'     => 'Item ID:',
+                                          'cquery'      => 'SELECT DISTINCT xar_itemtype FROM '.$ratingstable.''));
+
+          foreach($ratinginstances as $ratingsinstance){
+              foreach ($ratingsinstance as $instance) {
+
+                  list($dbconn) = xarDBGetConn();
+                  $query = "SELECT xar_iid, xar_header, xar_query
+                            FROM $instancestable
+                            WHERE xar_module= 'ratings' AND xar_component = '{$instance['ccomponent']}' AND xar_header='{$instance['cheader']}'";
+                  $result =&$dbconn->Execute($query);
+
+                  list($iid, $header, $xarquery) = $result->fields;
+
+                  if ($instance['cquery'] != $xarquery) {
+                      $ratingsupdate = true;
+                       $query="UPDATE $instancestable SET xar_query= '{$instance['cquery']}'
+                              WHERE xar_module='ratings' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
+                      $result =& $dbconn->Execute($query);
+                  }
+              }//end foreach
+
+          }//end foreach
+
+          if ($ratingsupdate) {
+              echo "Ratings security_instance entries require updating ...attempting to update... DONE! <br />";
+          } else {
+              echo "Ratings security_instance entries do not require updating.<br />";
+          }//endif updatetrue
+
+      } else {
+          echo "Ratings module not available - no checking of ratings instances carried out.<br />";
+      } // endif modavailable
+
+   //check articles instances
+      if (xarModIsAvailable('articles')) {
+          $articlesupdate=false;
+          $articlesinstance ='SELECT DISTINCT instances.xar_title FROM '.$blockinstancetable.' as instances LEFT JOIN '.$blocktypestable.' as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module=\'articles\'';
+
+           list($dbconn) = xarDBGetConn();
+                  $query = "SELECT xar_iid, xar_header, xar_query
+                            FROM $instancestable
+                            WHERE xar_module= 'articles' AND xar_component = 'Block' AND xar_header='Article Block Title:'";
+                  $result =&$dbconn->Execute($query);
+
+           list($iid, $header, $xarquery) = $result->fields;
+               if ($articlesinstance != $xarquery) {
+                   $articlesupdate=true;
+                   $query="UPDATE $instancestable SET xar_query= 'SELECT DISTINCT instances.xar_title FROM $blockinstancetable as instances LEFT JOIN $blocktypestable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module=\'articles\''
+                           WHERE xar_module='articles' AND xar_component = 'Block' AND xar_header= 'Article Block Title:'";
+                   $result =& $dbconn->Execute($query);
+               }
+               if ($articlesupdate) {
+                  echo "Articles security_instance entry required updating ...attempting to update... DONE! <br />";
+               } else {
+                  echo "Articles security_instance entry does not require updating.<br />";
+               }
+
+      } else {
+          echo "Articles module not available - no checking of articles instance carried out.<br />";
+      } // endif modavailable
+
+  }
 
     // Upgrade will check to make sure that upgrades in the past have worked, and if not, correct them now.
     $sitePrefix = xarDBGetSiteTablePrefix();
@@ -575,6 +818,8 @@ if (empty($step)) {
     } else {
         echo "Setting Ratings Delete All Hook... done! <br />";
     }
+
+
 
 ?>
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
