@@ -128,9 +128,10 @@ class XMLParser {
         xml_parser_set_option($p, XML_OPTION_SKIP_WHITE, 1);
         xml_parse_into_struct($p, $this->xmldata, $vals, $index);
         xml_parser_free($p);
-    
+
         $this->data = array();
         $i = 0;
+        if (!isset($vals[$i])) return;
         $ns = $this->getnamespaces(isset($vals[$i]['attributes']));
         array_push($this->data, array(
             'tag' => $this->_convertTagNs($vals[$i]['tag'],$ns), 

@@ -169,7 +169,7 @@ class feedParser {
 
     function parseFeed($xmldata) {
         $data =& $this->buildStruct($xmldata);
-        if(is_array($data)) {
+        if(is_array($data) && count($data) > 0) {
             foreach($data as $child) {
                 if(is_array($child)) {
                     switch($child['tag']) {
@@ -182,12 +182,14 @@ class feedParser {
                             $info = $this->parseRDF($child);
                             break;
                         default:
-                            $info["warning"] = "Unknown document format: " . $child['tag'] . "\n";
+                            $info["warning"] = xarML('Unknown document format: #(1)', $child['tag']);
                             break;
                     }
                 }
             }
-        } 
+        } else {
+            $info["warning"] = xarML('Invalid XML data');
+        }
         
         return $info;
     
