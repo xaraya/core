@@ -46,7 +46,7 @@ function roles_userblock_display($blockinfo)
             $ublock = '';
         }
         $username = xarUserGetVar('name');
-        $blockinfo['title'] = "". pnML('Menu For')." ".xarVarPrepForDisplay($username)."";
+        $blockinfo['title'] = "". xarML('Menu For #(1)',xarVarPrepForDisplay($username));
         $blockinfo['content'] = $ublock;
         return $blockinfo;
     }
