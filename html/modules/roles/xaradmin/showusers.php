@@ -52,7 +52,7 @@ function roles_admin_showusers()
         case 'active':
             $total = count($role->getUsers(3));
             if ($total == 0) {
-                $data['message'] = xarML('There are no inactive users');
+                $data['message'] = xarML('There are no active users');
             } 
             $usrs = $role->getUsers(3, $startnum, $numitems);
             $data['phase'] = 'active';
@@ -78,8 +78,6 @@ function roles_admin_showusers()
             'email' => $user->getEmail());
     } 
 
-    include_once 'modules/roles/xartreerenderer.php';
-    $renderer = new xarTreeRenderer(); 
     // Load Template
     $data['pname'] = $role->getName();
     $data['uid'] = $uid;
@@ -89,7 +87,6 @@ function roles_admin_showusers()
         'admin',
         'deleterole',
         array('roleid' => $uid));
-    $data['tree'] = $renderer->drawtree($renderer->maketree());
     $filter['startnum'] = '%%';
     $filter['uid'] = $uid;
     $data['pager'] = xarTplGetPager($startnum,

@@ -1,83 +1,31 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Welcome Email</xar:mlstring></h2><br />
+<div class="xar-mod-body"><h2><xar:mlstring>Welcome Email</xar:mlstring></h2>
 <div style="margin: auto;">
-	<xar:mlstring>This email will be sent to users to welcome them.</xar:mlstring>
-	<br /><br />
-	<xar:mlstring>The welcome email is plain text</xar:mlstring>
-	<br /><br />
+	<p><xar:mlstring>This email will be sent to users to welcome them.</xar:mlstring></p>
+	<p><xar:mlstring>The welcome email is plain text</xar:mlstring></p>
 	<form action="#xarModURL('roles', 'admin', 'welcomeemail')#" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<input type="hidden" name="phase" id="phase" value="update" />
-		<table>
-		<tr>
-			<td>
-				<label for="welcometitle"><xar:mlstring>Welcome Email Title</xar:mlstring></label>:
-			</td>
-			<td>
-				<input type="text" name="welcometitle" id="welcometitle" value="#$welcometitle#" size="35" maxlength="100" />
-			</td>
-		</tr>
-		</table>
+		<label for="welcometitle"><xar:mlstring>Welcome Email Title</xar:mlstring></label>:
+		<input type="text" name="welcometitle" id="welcometitle" value="#$welcometitle#" size="35" maxlength="100" />
+        <br />
 		<textarea name="welcomeemail" id="welcomeemail" wrap="soft" rows="20" cols="80" tabindex="1">#$welcomeemail#</textarea>
 		<br /><br />
-		<input type="submit" value="Submit new welcome email" align="middle" tabindex="2" />
+		<input type="submit" value="#$submitlabel#" align="middle" tabindex="2" />
 	</form>
-	<xar:mlstring>The following variables will be replaced in the text with specific information:</xar:mlstring>
-	<br /><br />
-	<table border="0" width="100%">
-		<tr align="left" valign="middle">
-			<td>
-				%%link%%
-			</td>
-			<td>
-				<xar:mlstring>The link for the user to click on to complete their registration</xar:mlstring>
-			</td>
-		</tr>
-		<tr align="left" valign="middle">
-			<td>
-				%%name%%
-			</td>
-			<td>
-				<xar:mlstring>Name given during registration</xar:mlstring>
-			</td>
-		</tr>
-		<tr align="left" valign="middle">
-			<td>
-				%%username%%
-			</td>
-			<td>
-				<xar:mlstring>Username given during registration</xar:mlstring>
-			</td>
-		</tr>
-		<tr align="left" valign="middle">
-			<td>
-				%%sitename%%
-			</td>
-			<td>
-				<xar:mlstring>Your Site Name</xar:mlstring>
-			</td>
-		</tr>
-		<tr align="left" valign="middle">
-			<td>
-				%%siteadmin%%
-			</td>
-			<td>
-				<xar:mlstring>Your name</xar:mlstring>
-			</td>
-		</tr>
+	<p><xar:mlstring>The following variables will be replaced in the text with specific information:</xar:mlstring></p>
+    <ul>
+		<li><b>%%link%%</b>: <xar:mlstring>The link for the user to click on to complete their registration</xar:mlstring></li>
+		<li><b>%%name%%</b>: <xar:mlstring>Name given during registration</xar:mlstring></li>
+		<li><b>%%username%%</b>: <xar:mlstring>Username given during registration</xar:mlstring></li>
+		<li><b>%%sitename%%</b>: <xar:mlstring>Your Site Name</xar:mlstring></li>
+		<li><b>%%siteadmin%%</b>: <xar:mlstring>Your name</xar:mlstring></li>
 	   <xar:if condition="isset($properties)">
 		   <xar:foreach in="$properties" key="$name">
-			<tr align="left" valign="middle">
-				<td>
-					%%#$name#%%
-				</td>
-				<td>
-					(<xar:mlstring>dynamic property</xar:mlstring>)
-					<xar:data-label property="$properties[$name]" />
-				</td>
-			</tr>
+			<li><b>%%#$name#%%</b>: (<xar:mlstring>dynamic property</xar:mlstring>)
+					<xar:data-label property="$properties[$name]" /></li>
 		   </xar:foreach>
 	   </xar:if>
-	</table>
+	</ul>
 </div>
 </div>

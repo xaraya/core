@@ -1,5 +1,5 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Remove Privilege</xar:mlstring></h2><br />
+<div class="xar-mod-body"><h2><xar:mlstring>Remove Privilege</xar:mlstring></h2>
 <div style="text-align: center; margin: auto;">
 <form method="post" action="&xar-modurl-roles-admin-removeprivilege;" method="post" enctype="application/x-www-form-urlencoded" />
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -14,9 +14,9 @@
 	'#$rolename#'</span>
 	<br /><br />
 
-	<input type="submit" value="Confirm" align="middle" tabindex="1" /><br /><br />
+	<input type="submit" value="#$removelabel#" align="middle" tabindex="1" /><br /><br />
 	
-	<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$roleid#"><xar:mlstring>Cancel the removal</a>
+	<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$roleid#"><xar:mlstring>Cancel Removal</xar:mlstring></a>
 </form>        
 </div>
 </div>

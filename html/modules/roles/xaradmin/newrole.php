@@ -82,11 +82,8 @@ function roles_admin_newrole()
         $data['pparentid'] = 1;
     } 
 
-    include_once 'modules/roles/xartreerenderer.php';
-    $renderer = new xarTreeRenderer();
-
     $data['authid'] = xarSecGenAuthKey();
-    $data['tree'] = $renderer->drawtree($renderer->maketree());
+    $data['addlabel'] = xarML('Add');
     $data['groups'] = $groups;
     return $data;
 } 

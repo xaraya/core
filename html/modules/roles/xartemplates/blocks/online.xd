@@ -1,2 +1,7 @@
-    <xar:mlstring>There are currently</xar:mlstring> #$numguests# #$guests# <xar:mlstring> and </xar:mlstring> #$numusers# #$users# <xar:mlstring>online</xar:mlstring>
-
+<xar:ml>
+    <xar:mlstring>There are currently #(1) #(2) and #(3) #(4) online.</xar:mlstring>
+    <xar:mlvar>#$numguests#</xar:mlvar>
+    <xar:mlvar>#$guests#</xar:mlvar>
+    <xar:mlvar>#$numusers#</xar:mlvar>
+    <xar:mlvar>#$users#</xar:mlvar>
+</xar:ml>

@@ -1,32 +1,10 @@
-<script type="text/javascript" src="modules/roles/xartemplates/xarTree.js">
-</script>
-<script language="JavaScript">
-<!--
-function setaction(target){
-document.forms["newrole"].action = target;
-document.forms["newrole"].submit();}
- var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
- function doOnLoad() {
-      oldOnLoadFunction();      
-      xarTree_init('RolesTree');
-      }
- var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
- function doOnUnload() {
-      oldOnUnloadFunction();      
-      }
- 
- window.onload = doOnLoad;
- window.onunload = doOnUnload;
-//-->
-</script>
-
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Add</xar:mlstring></h2><br />
+<div class="xar-mod-body"><h2><xar:mlstring>Add Role</xar:mlstring></h2>
 <div style="text-align: center; margin: auto;">
 	<p><xar:mlstring>All fields are required to create a new role on the system.</xar:mlstring></p>
 	<form name="newrole" action="&xar-modurl-roles-admin-addrole;" method="post" enctype="application/x-www-form-urlencoded">
-		
-		<table border="0" cellpadding="5">
+        <div style="text-align: left;">
+		<table border="0" cellpadding="2" cellspacing="2">
 			<tr>
 				<td>
 					<label for="pname"><xar:mlstring>Display Name</xar:mlstring></label>
@@ -35,56 +13,46 @@ document.forms["newrole"].submit();}
 					<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="255" tabindex="1" />
 					<input type="hidden" name="authid" id="authid" value="#$authid#" />
 				</td>
-				<td width="20">
-					&nbsp;
-				</td>
+            </tr>
+			<tr>
 				<td>
-					<xar:mlstring>Type</xar:mlstring>
+					<label for="ptype"><xar:mlstring>Type</xar:mlstring></label>
 				</td>
         		<td>
         			<select name="ptype" id="ptype"  tabindex="2" onChange="javascript:setaction('&xar-modurl-roles-admin-newrole;')">
 							<xar:if condition="$ptype eq 1">
-		                    	<option value="1" selected="selected">Group
+		                    	<option value="1" selected="selected">Group</option>
 							<xar:else />
-		                    	<option value="1">Group
+		                    	<option value="1">Group</option>
 							</xar:if>
 							<xar:if condition="$ptype eq 0">
-		                    	<option value="0" selected="selected">User
+		                    	<option value="0" selected="selected">User</option>
 							<xar:else />
-		                    	<option value="0">User
+		                    	<option value="0">User</option>
 							</xar:if>
 					</select>
             	</td>
 			</tr>
 			<tr>
 				<td>
-					<xar:mlstring>Member of</xar:mlstring>
+					<label for="pparentid"><xar:mlstring>Member of</xar:mlstring></label>
 				</td>
 				<td>
 					<select name="pparentid" id="pparentid" tabindex="3">
 					<xar:loop name="$groups">
-						<xar:if condition="$uid == $pparentid">
-								<option value="#$uid#" selected>#$name#
+						<xar:if condition="$uid eq $pparentid">
+								<option value="#$uid#" selected="seleected">#$name#</optioon>
 						<xar:else />
-								<option value="#$uid#">#$name#
+								<option value="#$uid#">#$name#</option>
 						</xar:if>
 					</xar:loop>
 					</select>
 				</td>
-				<td width="20">
-					&nbsp;
-				</td>
-				<td width="20">
-					&nbsp;
-				</td>
-				<td width="20">
-					&nbsp;
-				</td>
 			</tr>
 			<xar:if condition="$ptype eq 0">
 				<tr>
-					<td colspan="5" align="center">
-						Only for Users
+					<td colspan="2" align="center">
+						<xar:mlstring>The following fields only apply for Users</xar:mlstring>
 					</td>
 				</tr>
 				<tr>
@@ -94,9 +62,8 @@ document.forms["newrole"].submit();}
 					<td>
 						<input type="text" name="puname" id="puname" value="#$puname#" size="20" maxlength="255" tabindex="4" />
 					</td>
-					<td width="20">
-						&nbsp;
-					</td>
+			</tr>
+			<tr>
 					<td>
 						<label for="pemail"><xar:mlstring>Email</xar:mlstring></label>
 					</td>
@@ -106,7 +73,7 @@ document.forms["newrole"].submit();}
 				</tr>
 				<tr>
 					<td>
-						<xar:mlstring>State</xar:mlstring>
+						<label for="pstate"><xar:mlstring>State</xar:mlstring></label>
 					</td>
 					<td>
 					<select name="pstate" id="pstate" size="1" tabindex="8">				
@@ -132,9 +99,8 @@ document.forms["newrole"].submit();}
 						</xar:if>						
 					</select>
 					</td>
-					<td width="20">
-						&nbsp;
-					</td>
+			</tr>
+			<tr>
 					<td>
 						<label for="ppass1"><xar:mlstring>Password</xar:mlstring></label>
 					</td>
@@ -144,15 +110,6 @@ document.forms["newrole"].submit();}
 				</tr>
 				<tr>
 					<td>
-						&nbsp;
-					</td>
-					<td>
-						&nbsp;
-					</td>
-					<td width="20">
-						&nbsp;
-					</td>
-					<td>
 						<label for="ppass2"><xar:mlstring>Confirm Password</xar:mlstring></label>
 					</td>
 					<td>
@@ -160,46 +117,14 @@ document.forms["newrole"].submit();}
 					</td>
 				</tr>
 			</xar:if>
+			<tr>
+					<td colspan="2" style="text-align: center"><br />
+                        <input type="submit" value="#$addlabel#" align="middle" tabindex="9" />
+					</td>
+				</tr>
 		</table>			
-					
-		<br />
-
-		<input type="submit" value="Add" align="middle" tabindex="9" />
+		</div>
 	</form>
 </div>
-<br />
-
-<table border="0" width="100%">
-	<tr>
-		<th align="center">
-			<xar:mlstring>Current Groups</xar:mlstring>
-		</th>
-	</tr>
-</table>
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tr>
-		<td>
-			&nbsp;
-		</td>
-		<td valign="bottom" width="80" align="right">
-			<a href="javascript:xarTree_exec('RolesTree',1);">
-			Expand</a>  &nbsp;
-		</td>
-		<td valign="bottom" width="70" align="right">
-			<a href="javascript:xarTree_exec('RolesTree',0);">
-			Collapse</a>  &nbsp;
-		</td>
-		<td valign="bottom" width="60" align="right">
-			<a href="javascript:xarTree_exec('RolesTree',2);">
-			Toggle</a>  &nbsp;
-		</td>
-	</tr>
-	<tr>
-		<td colspan="4">
-			<hr />
-		</td>
-	</tr>
-</table>
-#$tree#
 </div>
 </div>

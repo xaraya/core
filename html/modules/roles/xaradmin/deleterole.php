@@ -37,6 +37,7 @@ function roles_admin_deleterole()
         $data['authid'] = xarSecGenAuthKey();
         $data['uid'] = $uid;
         $data['ptype'] = $role->getType();
+        $data['deletelabel'] = xarML('Delete');
         $data['name'] = $name;
         return $data;
     } else {

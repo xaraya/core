@@ -40,6 +40,7 @@ function roles_admin_removeprivilege()
         $data['ptype'] = $role->getType();
         $data['privname'] = $privname;
         $data['rolename'] = $rolename;
+        $data['removelabel'] = xarML('Remove');
         return $data;
     } else {
         // Check for authorization code

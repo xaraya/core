@@ -3,12 +3,11 @@
     <select name="#$form_picker_name#">
         <xar:loop name="$locales">
             <xar:if condition="$selected">
-                <option value="#$locale#" selected>
+                <option value="#$locale#" selected="selected">#$name# (#$country#)</option>
             <xar:else/>
-                <option value="#$locale#">
+                <option value="#$locale#">#$name# (#$country#)</option>
             </xar:if>
-            #$name# (#$country#)</option>
         </xar:loop>
     </select>
-    <input type="submit" name="change_language" value="OK" />
+    <input type="submit" name="change_language" value="#$languagelabel#" />
 </form>

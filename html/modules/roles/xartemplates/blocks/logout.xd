@@ -1,8 +1,7 @@
-<xar:if condition="xarModisAvailable('search')">
-	<form action="index.php?module=search" method="post">
-		<label for="q"><xar:mlstring>Search</xar:mlstring></label>
-		<input type="text" name="q" id="q" size="15" align="middle" />
-	</form>
-</xar:if>
-
-<xar:mlstring>Welcome</xar:mlstring> <b>#$name#</b>&nbsp;-&nbsp;<a href="#xarModUrl('roles', 'user', 'logout')#"> <xar:mlstring>Logout</xar:mlstring> </a>
+<div style="text-align: center;">
+<xar:ml>
+    <xar:mlstring>Welcome, #(1)</xar:mlstring>
+    <xar:mlvar>#$name#</xar:mlvar>
+</xar:ml><br /><br />
+<a href="#xarModUrl('roles', 'user', 'logout')#"><xar:mlstring>Logout</xar:mlstring></a>
+</div>

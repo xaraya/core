@@ -1,52 +1,29 @@
-<script type="text/javascript" src="modules/roles/xartemplates/xarTree.js">
-</script>
-<script language="JavaScript">
-<!--
-function setaction(target){
-document.forms["modifyrole"].action = target;
-document.forms["modifyrole"].submit();}
- var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
- function doOnLoad() {
-      oldOnLoadFunction();      
-      xarTree_init('RolesTree');
-      }
- var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
- function doOnUnload() {
-      oldOnUnloadFunction();      
-      xarTree_init('RolesTree');
-      }
- 
- window.onload = doOnLoad;
- window.onunload = doOnUnload;
-//-->
-</script>
-
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Modify</xar:mlstring></h2><br />
+<div class="xar-mod-body"><h2><xar:mlstring>Modify Role</xar:mlstring></h2>
 <div style="text-align: center; margin: auto;">
 	<form name="modifyrole" action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="uid" id="uid" value="#$uid#" />
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
-
-		<table border="0" cellpadding="5">
+        <div style="text-align: left;">
+		<table border="0" cellpadding="2" cellspacing="0">
 			<xar:if condition="$uid lt xarModGetVar('roles','frozenroles')">
 			<tr>
 				<td>
 					<label for="pname"><xar:mlstring>Name</xar:mlstring></label>
 				</td>
 				<td>
-					<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="255" tabindex="1" />
+					<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="255" tabindex="1" disabled="disabled" />
 				</td>
 			</tr>
 				<tr>
 					<td colspan="2">
-						This 
+						<xar:mlstring>This</xar:mlstring> 
 						<xar:if condition="$ptype eq 0">
 							<xar:mlstring>User</xar:mlstring>
 						<xar:else />
 							<xar:mlstring>Group</xar:mlstring>
 						</xar:if>
-						cannot be edited or deleted
+						<xar:mlstring>cannot be edited or deleted</xar:mlstring>
 					</td>
 				</tr>
 			<xar:else />
@@ -59,31 +36,30 @@ document.forms["modifyrole"].submit();}
 					<input type="hidden" name="uid" id="uid" value="#$uid#" />
 					<input type="hidden" name="authid" id="authid" value="#$authid#" />
 				</td>
-				<td width="20">
-					&nbsp;
-				</td>
+				</tr>
+				<tr>
 				<td>
 					<label for="ptype"><xar:mlstring>Type</xar:mlstring></label>
 				</td>
         		<td>
         			<select name="ptype" id="ptype"  tabindex="2" onChange="javascript:setaction('&xar-modurl-roles-admin-modifyrole;&uid=#$uid#')">
 							<xar:if condition="$ptype eq 1">
-		                    	<option value="1" selected="selected">Group
+		                    	<option value="1" selected="selected">Group</option>
 							<xar:else />
-		                    	<option value="1">Group
+		                    	<option value="1">Group</option>
 							</xar:if>
 							<xar:if condition="$ptype eq 0">
-		                    	<option value="0" selected="selected">User
+		                    	<option value="0" selected="selected">User</option>
 							<xar:else />
-		                    	<option value="0">User
+		                    	<option value="0">User</option>
 							</xar:if>
 					</select>
             	</td>
 			</tr>
 			<xar:if condition="$ptype eq 0">
 				<tr>
-					<td colspan="5" align="center">
-						Only for Users
+					<td colspan="2" align="center">
+						<xar:mlstring>The fields below only apply for Users</xar:mlstring>
 					</td>
 				</tr>
 				<tr>
@@ -93,9 +69,8 @@ document.forms["modifyrole"].submit();}
 					<td>
 						<input type="text" name="puname" id="puname" value="#$puname#" size="20" maxlength="255" tabindex="3" />
 					</td>
-					<td width="20">
-						&nbsp;
-					</td>
+				</tr>
+				<tr>
 					<td>
 						<label for="pemail"><xar:mlstring>Email</xar:mlstring></label>
 					</td>
@@ -105,7 +80,7 @@ document.forms["modifyrole"].submit();}
 				</tr>
 				<tr>
 					<td>
-						<xar:mlstring>State</xar:mlstring>
+						<label for="pstate"><xar:mlstring>State</xar:mlstring></label>
 					</td>
 					<td>
 					<select name="pstate" id="pstate" size="1" tabindex="7">				
@@ -131,9 +106,8 @@ document.forms["modifyrole"].submit();}
 						</xar:if>						
 					</select>
 					</td>
-					<td width="20">
-						&nbsp;
-					</td>
+				</tr>
+				<tr>
 					<td>
 						<label for="ppass1"><xar:mlstring>Password</xar:mlstring></label>
 					</td>
@@ -143,15 +117,6 @@ document.forms["modifyrole"].submit();}
 				</tr>
 				<tr>
 					<td>
-						&nbsp;
-					</td>
-					<td>
-						&nbsp;
-					</td>
-					<td width="20">
-						&nbsp;
-					</td>
-					<td>
 						<label for="ppass2"><xar:mlstring>Confirm Password</xar:mlstring></label>
 					</td>
 					<td>
@@ -160,146 +125,77 @@ document.forms["modifyrole"].submit();}
 				</tr>
 			</xar:if>
 			<tr>
-				<td colspan="5">
-					&nbsp;
-				</td>
-			</tr>
-			<tr>
-				<td align="center" colspan="5">
-					<input type="submit" value="Update" align="middle" tabindex="8" />
+				<td align="center" colspan="2"><br />
+					<input type="submit" value="#$updatelabel#" align="middle" tabindex="8" />
 				</td>
 			</tr>
 			</xar:if>
 		</table>
-
+        </div>
 	</form>
 </div>
-
-<table border="0" width="100%">
-	<tr>
-		<td colspan="2">
-		<hr />
-		</td>
-	</tr>
-	<tr>
-		<xar:if condition="$uid gt 4">
-			<td valign="top" width ="50%">
-				<table border="0" width="100%">
-					</tr>
-					<tr>
-						<td  align="middle" colspan="4">
-							<xar:mlstring>Add </xar:mlstring>
-							<xar:if condition="$ptype eq 0">
-								<xar:mlstring>User</xar:mlstring>
-							<xar:else />
-								<xar:mlstring>Group</xar:mlstring>
-							</xar:if>
-							 <b> '#$pname#' </b> <xar:mlstring>to a Group</xar:mlstring>
-						</td>
-					</tr>
-				</table>
-				<div align="center">
-				<form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
-					<input type="hidden" name="uid" id="uid" value="#$uid#" />
-					<input type="hidden" name="authid" id="authid" value="#$authid#" />
-
-					<table border="0" cellpadding="5">
-
-						<tr>
-							<td  align="middle">
-								<xar:mlstring>Group:</xar:mlstring>
-							</td>
-							<td>
-								<select name="roleid" id="roleid">
-									<xar:loop name="$groups">
-										<option value="#$duid#">#$dname#
-									</xar:loop>
-								</select>
-							</td>
-						</tr>
-					</table>
-					<br />
-					<input type="submit" value="Add" align="middle" tabindex="2" />
-				</form>
-				</div>
+<h2>				<xar:mlstring>Add</xar:mlstring> 
+				<xar:if condition="$ptype eq 0">
+					<xar:mlstring>User</xar:mlstring>
+				<xar:else />
+					<xar:mlstring>Group</xar:mlstring>
+				</xar:if>
+				'#$pname#' <xar:mlstring>To A Group</xar:mlstring></h2>
+<xar:if condition="$uid gt 4">
+	<form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
+		<input type="hidden" name="uid" id="uid" value="#$uid#" />
+		<input type="hidden" name="authid" id="authid" value="#$authid#" />
+		<table border="0" cellpadding="2" cellspacing="0">
+			<tr>
+				<td>
+					<xar:mlstring>Group:</xar:mlstring>
+				</td>
+				<td>
+					<select name="roleid" id="roleid">
+						<xar:loop name="$groups">
+							<option value="#$duid#">#$dname#</option>
+						</xar:loop>
+					</select>
+				</td>
+			</tr>
+            <tr>
+                <td colspan="2" style="text-align: center;"><br />
+                    <input type="submit" value="#$addlabel#" align="middle" tabindex="2" />
+                </td>
+			</tr>
+		</table>
+	</form>
+</xar:if>
+<h2><xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
+<xar:else /><xar:mlstring>User</xar:mlstring>
+</xar:if>
+ '#$pname#' 
+<xar:mlstring>Group Memberships:</xar:mlstring></h2>
+<table border="0" cellpadding="2" cellspacing="0" class="xar-accent-outline">
+    <tr>
+        <th><xar:mlstring>Group</xar:mlstring></th>
+        <th><xar:mlstring>Remove</xar:mlstring></th>
+    </tr>
+	<xar:loop name="$parents">
+		<tr>
+			<td width="150">
+				<xar:if condition="$parentid gt 4">
+					<a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$parentid#">
+					#$parentname#
+					</a>
+				<xar:else />
+					<b>#$parentname#</b>
+				</xar:if>
 			</td>
-		</xar:if>
-		<td  valign="top" width ="50%">
-			<table border="0" width="100%">
-				<tr>
-					<td colspan="5">
-						<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
-						<xar:else /><xar:mlstring>User</xar:mlstring>
-						</xar:if>
-						<b> '#$pname#' </b>
-						<xar:mlstring>is a member of the following groups:</xar:mlstring>
-					</td>
-				</tr>
-				<xar:loop name="$parents">
-					<tr>
-						<td width="150">
-							<xar:if condition="$parentid gt 4">
-								<a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$parentid#">
-								#$parentname#
-								</a>
-							<xar:else />
-								<b>#$parentname#</b>
-							</xar:if>
-						</td>
-						<td width="50">
-							&nbsp;
-						</td>
-						<td width="100">
-							&nbsp;
-						</td>
-						<td>
-							&nbsp;
-						</td>
-						<td width="50" align="right">
-							<xar:if condition="count($parents) ne 1">
-								<a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$uid#&amp;parentid=#$parentid#&amp;authid=#$authid#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
-							<xar:else />
-								&nbsp;
-							</xar:if>
-						</td>
-					</tr>
-				</xar:loop>
-			</table>
-		</td>
-	</tr>
+			<td width="50" style="text-align: center;">
+				<xar:if condition="count($parents) ne 1">
+					<a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$uid#&amp;parentid=#$parentid#&amp;authid=#$authid#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
+				<xar:else />
+					&nbsp;
+				</xar:if>
+			</td>
+		</tr>
+	</xar:loop>
 </table>
-
-<table border="0" width="100%">
-	<tr>
-        <th colspan="4" align="center">
-			<xar:mlstring>Current Groups</xar:mlstring>
-		</th>
-	</tr>
-	<tr>
-		<td>
-			<a href="&xar-modurl-roles-admin-newrole;">
-				<xar:mlstring>Add User/Group</xar:mlstring>
-			</a>
-		</td>
-		<td valign="bottom" width="80" align="right">
-			<a href="javascript:xarTree_exec('RolesTree',1);">
-			Expand</a>  &nbsp;
-		</td>
-		<td valign="bottom" width="70" align="right">
-			<a href="javascript:xarTree_exec('RolesTree',0);">
-			Collapse</a>  &nbsp;
-		</td>
-		<td valign="bottom" width="60" align="right">
-			<a href="javascript:xarTree_exec('RolesTree',2);">
-			Toggle</a>  &nbsp;
-		</td>
-	</tr>
-	<tr>
-		<td colspan="4">
-			<hr />
-		</td>
-	</tr>
-</table>
-#$tree#
 </div>
 </div>

@@ -39,6 +39,7 @@ function roles_admin_modifyconfig()
             $data['names'] = unserialize(xarModGetVar('roles', 'disallowednames'));
             $data['ips'] = unserialize(xarModGetVar('roles', 'disallowedips'));
             $data['authid'] = xarSecGenAuthKey();
+            $data['updatelabel'] = xarML('Update Users Configuration');
 
             $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
                 array('module' => 'roles'));

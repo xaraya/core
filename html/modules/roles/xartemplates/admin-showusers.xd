@@ -1,85 +1,34 @@
-<script type="text/javascript" src="modules/roles/xartemplates/xarTree.js">
-</script>
-<script language="JavaScript">
- var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
- function doOnLoad() {
-      oldOnLoadFunction();      
-      xarTree_init('RolesTree');
-      }
- var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
- function doOnUnload() {
-      oldOnUnloadFunction();      
-      xarTree_init('RolesTree');
-      }
- 
- window.onload = doOnLoad;
- window.onunload = doOnUnload;
-</script>
-
-<table border="0" width="100%" cellpadding="2">
-	<tr>
-		<td>
-			<a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $uid))#"><xar:mlstring>View All</xar:mlstring></a>
-		</td>
-		<td>
-			<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'inactive','uid' => $uid))#"><xar:mlstring>View Inactive</xar:mlstring></a>		</td>
-		<td>
-			<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'notvalidated','uid' => $uid))#"><xar:mlstring>View Not Validated</xar:mlstring></a>		</td>
-		<td>
-			<xar:if condition="xarModGetVar('roles', 'explicitapproval')">
-				<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'pending','uid' => $uid))#"><xar:mlstring>View Pending</xar:mlstring></a>
-			</xar:if>
-		</td>
-		<td>
-			<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'active','uid' => $uid))#"><xar:mlstring>View Active</xar:mlstring></a>
-		</td>
-	</tr>
-    <tr>
-        <td>
-            &nbsp;
-        </td>
-    </tr>
-</table>
-<table border="0" width="100%">
-    <tr>
-        <th colspan="4" align="center">
-        	#$title# 
-            <xar:mlstring>of Group</xar:mlstring>
-            '#$pname#'
-        </th>
-    </tr>
-</table>
-<table border="0" width="100%" cellpadding="2">
-	<tr>
-		<td width="150">
-			<xar:mlstring>Name </xar:mlstring>            
-		</td>
-		<td width="150">
-			<xar:mlstring>User Name </xar:mlstring>            
-		</td>
-		<td width="200">
-			<xar:mlstring>Email </xar:mlstring>            
-		</td>
-		<td>
-			&nbsp;            
-		</td>
-		<td width="20">
-			&nbsp;            
-		</td>
-		<td width="20">
-			&nbsp;            
-		</td>
-		<td width="20">
-			&nbsp;            
-		</td>
-	</tr>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Show Users</xar:mlstring></h2>
+<div style="margin: auto;">
+<p>[&nbsp;<a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $uid))#"><xar:mlstring>View All</xar:mlstring></a>&nbsp;|&nbsp;<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'inactive','uid' => $uid))#"><xar:mlstring>View Inactive</xar:mlstring></a>&nbsp;|&nbsp;<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'notvalidated','uid' => $uid))#"><xar:mlstring>View Not Validated</xar:mlstring></a>&nbsp;|&nbsp;<xar:if condition="xarModGetVar('roles', 'explicitapproval')"><a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'pending','uid' => $uid))#"><xar:mlstring>View Pending</xar:mlstring></a>&nbsp;|&nbsp;</xar:if><a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'active','uid' => $uid))#"><xar:mlstring>View Active</xar:mlstring></a>&nbsp;]</p>
+<h3>#$title# <xar:mlstring>of Group</xar:mlstring> '#$pname#'</h3>
 	<xar:if condition="count($users)==0">
-	<tr>
-	<td>
-		<em>#$message#<em>
-	</td>
-	</tr>
+	<div style="text-align: center;">
+		#$message#
+	</div>
 	<xar:else />
+<table border="0" cellpadding="2" cellspacing="0" width="100%" class="xar-accent-outline">
+	<tr>
+		<th width="150">
+			<xar:mlstring>Name</xar:mlstring>            
+		</th>
+		<th width="150">
+			<xar:mlstring>User Name</xar:mlstring>            
+		</th>
+		<th width="200">
+			<xar:mlstring>Email</xar:mlstring>            
+		</th>
+		<th width="20">
+			<xar:mlstring>Delete</xar:mlstring>            
+		</th>
+		<th width="20">
+			<xar:mlstring>View</xar:mlstring>            
+		</th>
+		<th width="20">
+			<xar:mlstring>Test</xar:mlstring>            
+		</th>
+	</tr>
 		<xar:loop name="$users">
 			<tr>
 				<td width="150">
@@ -97,67 +46,25 @@
 				<td width="100">
 					#$email#
 				</td>
-				<td>
-					&nbsp;
-				</td>
-				<td>
+				<td style="text-align: center">
 					<xar:if condition="$uid gt 4">
 						<a href="&xar-modurl-roles-admin-deleterole;&amp;uid=#$uid#" title="Delete this User"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 					<xar:else />
 						&nbsp;
 					</xar:if>
 				</td>
-				<td>
+				<td style="text-align: center">
 					<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#" title="Show the Privileges assigned to this User"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
 				</td>
-				<td>
+				<td style="text-align: center">
 					<a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$uid#" title="Test this User's Privileges"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>
 				</td>
 			</tr>
 		</xar:loop>
 	</xar:if>
 </table>
-<table border="0" width="100%">
-	<tr>
-		<th align="center">
+
 	<!-- add the pager here -->
 	<div align="center">#$pager#</div>
-		</th>
-	</tr>
-</table>
-<br />
-
-<table border="0" width="100%">
-	<tr>
-		<th align="center">
-			<xar:mlstring>Current Groups</xar:mlstring>
-		</th>
-	</tr>
-</table>
-<table border="0" cellspacing="5" width="100%">
-	<tr>
-		<td>
-			<a href="&xar-modurl-roles-admin-newrole;">
-				<xar:mlstring>Add User/Group</xar:mlstring>
-			</a>
-		</td>
-		<td valign="bottom" width="80" align="right">
-			<a href="javascript:xarTree_exec('RolesTree',1);">
-			Expand</a>  &nbsp;
-		</td>
-		<td valign="bottom" width="70" align="right">
-			<a href="javascript:xarTree_exec('RolesTree',0);">
-			Collapse</a>  &nbsp;
-		</td>
-		<td valign="bottom" width="60" align="right">
-			<a href="javascript:xarTree_exec('RolesTree',2);">
-			Toggle</a>  &nbsp;
-		</td>
-	</tr>
-	<tr>
-	<td colspan="4">
-	<hr/>
-	</td>
-	</tr>
-</table>			
-#$tree#
+</div>
+</div>

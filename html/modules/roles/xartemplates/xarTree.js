@@ -158,3 +158,15 @@ function xarTree_commands(thisnode) {
 	i++;
 	}
 }*/
+
+function toggleBranch(img, node){
+	if (!xarTree_config.is.dom || xarTree_config.is.mac) return;
+    if(node.style.display != 'none'){
+        node.style.display = 'none';
+        img.src = 'modules/privileges/xarimages/k3.gif';
+    }
+    else {
+        node.style.display = 'block';
+        img.src = 'modules/privileges/xarimages/k2.gif';
+    }
+}

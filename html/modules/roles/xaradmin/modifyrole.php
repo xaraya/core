@@ -76,8 +76,9 @@ function roles_admin_modifyrole()
     $data['uid'] = $uid;
     $data['groups'] = $groups;
     $data['parents'] = $parents;
+    $data['updatelabel'] = xarML('Update');
+    $data['addlabel'] = xarML('Add');
     $data['authid'] = xarSecGenAuthKey();
-    $data['tree'] = $renderer->drawtree($renderer->maketree());
     return $data;
 }
 
