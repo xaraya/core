@@ -8,36 +8,31 @@ function dynamicdata_admin_privileges($args)
     // Security Check
     if (!xarSecurityCheck('AdminDynamicData')) return;
 
+    // Preparation of  new block of getting the variables: (prolly use xarVarBatchFetch eeventually)
+//    if(!xarVarFetch('objectid', 'id'   , $objectid                           )) return;    // id? , only passed on further in this func
+//    if(!xarVarFetch('moduleid', 'str::', $moduleid,0, XARVAR_NOT_REQUIRED    )) return;    // empty, 'All', numeric or modulename
+//    if(!xarVarFetch('itemtype', 'str::', $itemtype,0, XARVAR_NOT_REQUIRED    )) return;    // empty, 'All', numeric 
+//    if(!xarVarFetch('itemid'  , 'str::', $itemid  ,0, XARVAR_NOT_REQUIRED    )) return;    // empty, 'All', numeric  
+//    if(!xarVarFetch('propname', 'str::', $propname,'' XARVAR_NOT_REQUIRED    )) return;    // empty, 'All', string
+//    if(!xarVarFetch('proptype', 'str::', $proptype,0, XARVAR_NOT_REQUIRED    )) return;    // empty, 'All', numeric
+//    if(!xarVarFetch('propid'  , 'id'   , $propid  ,0, XARVAR_NOT_REQUIRED    )) return;    // empty, 'All', numeric
+//    if(!xarVarFetch('apply'   , 'bool' , $apply , false, XARVAR_NOT_REQUIRED )) return;    // boolean?
+//    if(!xarVarFetch('extpid'  , 'id'   , $extpid                             )) return;    // empty, 'All', numeric ?
+//    if(!xarVarFetch('extname' , 'str:1', $extname                            )) return;    // ?
+//    if(!xarVarFetch('extrealm', 'str:1', $extrealm                           )) return;    // ?
+//    if(!xarVarFetch('extmodule','str:1', $extmodule                          )) return;    // ?
+//    if(!xarVarFetch('extcomponent', 'enum:Item:Type', $extcomponent          )) return;    // 'Item', 'Type'
+//    if(!xarVarFetch('extinstance', 'str:1', $extinstance,'', XARVAR_NOT_REQUIRED)) return; // somthing:somthing:somthing or empty
+//    if(!xarVarFetch('extlevel', 'str:1', $extlevel                        )) return;
+    
+    // Deprecated block of getting the variables:
     // fixed params
-    list($objectid,
-         $moduleid,
-         $itemtype,
-         $itemid,
-         $propname,
-         $proptype,
-         $propid,
-         $apply,
-         $extpid,
-         $extname,
-         $extrealm,
-         $extmodule,
-         $extcomponent,
-         $extinstance,
-         $extlevel) = xarVarCleanFromInput('objectid',
-                                           'moduleid',
-                                           'itemtype',
-                                           'itemid',
-                                           'propname',
-                                           'proptype',
-                                           'propid',
-                                           'apply',
-                                           'extpid',
-                                           'extname',
-                                           'extrealm',
-                                           'extmodule',
-                                           'extcomponent',
-                                           'extinstance',
-                                           'extlevel');
+    list($objectid     , $moduleid   , $itemtype, $itemid , $propname, $proptype,
+         $propid       , $apply      , $extpid  , $extname, $extrealm, $extmodule,
+         $extcomponent , $extinstance, $extlevel) = xarVarCleanFromInput(
+         'objectid'    ,'moduleid'   ,'itemtype','itemid' ,'propname','proptype',
+         'propid'      ,'apply'      ,  'extpid','extname','extrealm','extmodule',
+         'extcomponent','extinstance','extlevel');
     extract($args);
 
 // TODO: combine 'Item' and 'Type' instances someday ?
