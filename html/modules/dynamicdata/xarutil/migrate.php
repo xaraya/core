@@ -28,6 +28,7 @@ function dynamicdata_util_migrate($args)
     // support for the Back and Finish buttons
     if(!xarVarFetch('step',     'int',   $step,     0,    XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('back',     'str',   $back,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('test',     'str',   $test,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('confirm',  'str',   $confirm,  NULL, XARVAR_DONT_SET)) {return;}
 
     // support for loading/saving mappings
@@ -78,17 +79,37 @@ function dynamicdata_util_migrate($args)
         $step = 1;
     }
 
+    // Get the list of all modules
+    $modlist = xarModAPIFunc('modules', 'admin', 'getlist');
+
     // Get the list of all hook modules, and the current hooks enabled for all modules
     $hooklist = xarModAPIFunc('modules','admin','gethooklist');
 
     $data = array();
 
+    $data['modulelist'] = array();
+    foreach ($modlist as $modinfo) {
+        $data['modulelist'][$modinfo['regid']] = $modinfo['displayname'];
+    }
+
+    // list of modules supported by the migration process (for now)
+    $modsupported = array('articles','dynamicdata');
+
+    $data['modulesupported'] = array();
+    foreach ($modsupported as $modname) {
+        $data['modulesupported'][] = xarModGetIDFromName($modname);
+    }
+
     // list of hooks supported by the migration process (for now)
-    $data['hooksupported'] = array('categories','comments','dynamicdata','hitcount','ratings');
+    $data['hooksupported'] = array('categories','changelog','comments','dynamicdata','hitcount','keywords','polls','ratings','uploads','xlink');
 
     $data['from'] = array();
     if (!empty($from) && is_array($from)) {
-        if (!empty($from['module'])) {
+        if (!empty($from['objectid'])) {
+            // TODO ?
+        } elseif (!empty($from['table'])) {
+            // TODO ?
+        } elseif (!empty($from['module'])) {
             // we have a from module
             $data['from']['module'] = $from['module'];
             $modinfo = xarModGetInfo($from['module']);
@@ -193,7 +214,11 @@ function dynamicdata_util_migrate($args)
 
     $data['to'] = array();
     if (!empty($to) && is_array($to)) {
-        if (!empty($to['module'])) {
+        if (!empty($to['objectid'])) {
+            // TODO ?
+        } elseif (!empty($to['table'])) {
+            // TODO ?
+        } elseif (!empty($to['module'])) {
             // we have a to module
             $data['to']['module'] = $to['module'];
             $modinfo = xarModGetInfo($to['module']);
@@ -315,11 +340,25 @@ function dynamicdata_util_migrate($args)
     }
 
     // migrate item(s)
-    if (!empty($confirm) && !empty($data['check'])) {
+    if ((!empty($test) || !empty($confirm)) && !empty($data['check'])) {
         if (!xarSecConfirmAuthKey()) return;
 
-        if (!xarModAPIFunc('dynamicdata','util','migrate',
-                           $data)) return;
+        if (!empty($test)) {
+            $data['debug'] = xarML('Test Results') . "\n";
+        }
+        $result = xarModAPIFunc('dynamicdata','util','migrate',
+                                $data);
+        if (!$result) return;
+        if (!empty($test)) {
+            // put test results in debug string
+            $data['debug'] = xarVarPrepForDisplay($result);
+        } elseif (!empty($confirm)) {
+            // return and load the same map again
+            $url = xarModURL('dynamicdata','util','migrate',
+                             array('load' => 1, 'map' => $map));
+            xarResponseRedirect($url);
+            return true;
+        }
     }
 
     // save current map

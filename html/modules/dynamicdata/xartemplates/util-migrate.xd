@@ -33,6 +33,13 @@
             </xar:mlstring>
         </xar:if>
     </h2>
+    <xar:if condition="!empty($debug)">
+        <div>
+            <pre>
+                #$debug#
+            </pre>
+        </div>
+    </xar:if>
     <form class="dd-modifyprop-form" method="post" action="#xarModURL('dynamicdata','util','migrate')#">
         <table class="xar-accent">
         <tr>
@@ -86,19 +93,39 @@
             <td>
                 <xar:comment> get the list of modules </xar:comment>
                 <xar:if condition="empty($from['module'])">
-                     <xar:data-input type="module" name="from[module]" id="from_module" value="151" />
+                    <select name="from[module]" id="from_module">
+                    <xar:foreach in="$modulelist" key="$modid" value="$modlabel">
+                        <xar:if condition="!in_array($modid,$modulesupported)">
+                            <option value="#$modid#" disabled="disabled">#$modlabel#</option>
+                        <xar:elseif condition="$modid eq 151" /> <xar:comment> preset to articles </xar:comment>
+                            <option value="#$modid#" selected="selected">#$modlabel#</option>
+                        <xar:else/>
+                            <option value="#$modid#">#$modlabel#</option>
+                        </xar:if>
+                    </xar:foreach>
+                    </select>
                 <xar:else/>
-                     <xar:data-output type="module" value="$from['module']" />
-                     <input type="hidden" name="from[module]" value="#$from['module']#" />
+                    #$modulelist[$from['module']]#
+                    <input type="hidden" name="from[module]" value="#$from['module']#" />
                 </xar:if>
             </td>
             <td>
-                 <xar:if condition="empty($to['module'])">
-                     <xar:data-input type="module" name="to[module]" id="to_module" value="151" />
-                 <xar:else/>
-                     <xar:data-output type="module" value="$to['module']" />
-                     <input type="hidden" name="to[module]" value="#$to['module']#" />
-                 </xar:if>
+                <xar:if condition="empty($to['module'])">
+                    <select name="to[module]" id="to_module">
+                    <xar:foreach in="$modulelist" key="$modid" value="$modlabel">
+                        <xar:if condition="!in_array($modid,$modulesupported)">
+                            <option value="#$modid#" disabled="disabled">#$modlabel#</option>
+                        <xar:elseif condition="$modid eq 151" /> <xar:comment> preset to articles </xar:comment>
+                            <option value="#$modid#" selected="selected">#$modlabel#</option>
+                        <xar:else/>
+                            <option value="#$modid#">#$modlabel#</option>
+                        </xar:if>
+                    </xar:foreach>
+                    </select>
+                <xar:else/>
+                    #$modulelist[$to['module']]#
+                    <input type="hidden" name="to[module]" value="#$to['module']#" />
+                </xar:if>
             </td>
         </tr>
 <xar:if condition="!empty($from['module']) && !empty($to['module'])">
@@ -173,6 +200,33 @@
                 </xar:if>
             </td>
         </tr>
+    </xar:if>
+</xar:if>
+        <tr>
+          <td colspan="2">
+              <input type="hidden" name="step" value="#$step#" />
+              <input type="hidden" name="authid" value="#xarSecGenAuthKey()#" />
+              <xar:if condition="$step gt 1">
+                  <input class="dd-norm" type="submit" name="back" value="#xarML('Back')#" />
+              <xar:else/>
+                  <input class="dd-norm" type="submit" name="back" value="#xarML('Back')#" disabled="disabled" />
+              </xar:if>
+              <input class="dd-norm" type="submit" name="next" value="#xarML('Next')#" />
+              <xar:if condition="!empty($check)">
+                  <input class="dd-norm" type="submit" name="test" value="#xarML('Test')#" />
+                  <input class="dd-norm" type="submit" name="confirm" value="#xarML('Finish')#" />
+              <xar:else/>
+                  <input class="dd-norm" type="submit" name="test" value="#xarML('Test')#" disabled="disabled" />
+                  <input class="dd-norm" type="submit" name="confirm" value="#xarML('Finish')#" disabled="disabled" />
+              </xar:if>
+          </td>
+        </tr>
+    </table>
+    </fieldset>
+<xar:if condition="!empty($from['module']) && !empty($to['module'])">
+    <xar:if condition="!empty($from['itemtype']) && !empty($to['itemtype'])">
+    <fieldset>
+    <table>
         <tr>
             <td>
                 <strong><xar:mlstring>Fields</xar:mlstring></strong>
@@ -245,26 +299,9 @@
             </td>
         </tr>
         </xar:foreach>
-    </xar:if>
-</xar:if>
-        <tr>
-          <td colspan="2">
-              <input type="hidden" name="step" value="#$step#" />
-              <input type="hidden" name="authid" value="#xarSecGenAuthKey()#" />
-              <xar:if condition="$step gt 1">
-                  <input class="dd-norm" type="submit" name="back" value="#xarML('Back')#" />
-              <xar:else/>
-                  <input class="dd-norm" type="submit" name="back" value="#xarML('Back')#" disabled="disabled" />
-              </xar:if>
-              <input class="dd-norm" type="submit" name="next" value="#xarML('Next')#" />
-              <xar:if condition="!empty($check)">
-                  <input class="dd-norm" type="submit" name="confirm" value="#xarML('Finish')#" />
-              <xar:else/>
-                  <input class="dd-norm" type="submit" name="confirm" value="#xarML('Finish')#" disabled="disabled" />
-              </xar:if>
-          </td>
-        </tr>
         </table>
     </fieldset>
+    </xar:if>
+</xar:if>
     </form>
 </div>
