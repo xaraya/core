@@ -20,47 +20,16 @@
 /**
  * Multilange package defines
  */
-define('XARMLS_SINGLE_LANGUAGE_MODE', 1);
-define('XARMLS_BOXED_MULTI_LANGUAGE_MODE', 2);
-define('XARMLS_UNBOXED_MULTI_LANGUAGE_MODE', 4);
+define('XARMLS_SINGLE_LANGUAGE_MODE', 'SINGLE');
+define('XARMLS_BOXED_MULTI_LANGUAGE_MODE', 'BOXED');
+define('XARMLS_UNBOXED_MULTI_LANGUAGE_MODE', 'UNBOXED');
+
 
 define('XARMLS_DNTYPE_CORE', 1);
 define('XARMLS_DNTYPE_THEME', 2);
 define('XARMLS_DNTYPE_MODULE', 3);
 
-// This class represents the MLS environment on the site
-/* FIXME: delete class after testing
-class MLSEnvironment {
-    var $mlsdata;
-    var $mlsobjects;
-    var $backend;
-    var $domain;
-    var $backend = "php";
 
-    function MLSEnvironment() {
-        $this->mlsobjects = array();
-    }
-
-    function setDomain($x) { $this->domain = $x; }
-
-    function getSpace($x) {
-        $this->space = $x;
-        switch ($this->space) {
-        case XARMLS_DNTYPE_MODULE:
-            return "modules";
-        case XARMLS_DNTYPE_THEME:
-            return "themes";
-        case XARMLS_DNTYPE_CORE:
-            return "core";
-        default:
-            return NULL;
-        }
-    }
-    function getLocale() { return $this->locale; }
-    function getBackend() { return $this->backend; }
-    function getDomain() { return $this->domain; }
-}
-*/
 /**
  * Initializes the Multi Language System
  *
@@ -70,29 +39,21 @@ class MLSEnvironment {
  */
 function xarMLS_init($args, $whatElseIsGoingLoaded)
 {
-    // <mrb> Why do we have two formats here?
-    // FIXME: use constants also for the configvars
     switch ($args['MLSMode']) {
-    case 'SINGLE':
-        $GLOBALS['xarMLS_mode'] = XARMLS_SINGLE_LANGUAGE_MODE;
+    case XARMLS_SINGLE_LANGUAGE_MODE:
+    case XARMLS_BOXED_MULTI_LANGUAGE_MODE:
+        $GLOBALS['xarMLS_mode'] = $args['MLSMode'];
         break;
-    case 'BOXED':
-        $GLOBALS['xarMLS_mode'] = XARMLS_BOXED_MULTI_LANGUAGE_MODE;
-        break;
-    case 'UNBOXED':
-        $GLOBALS['xarMLS_mode'] = XARMLS_UNBOXED_MULTI_LANGUAGE_MODE;
+    case XARMLS_UNBOXED_MULTI_LANGUAGE_MODE:
+        $GLOBALS['xarMLS_mode'] = $args['MLSMode'];
         if (!function_exists('mb_http_input')) {
             // mbstring required
             xarCore_die('xarMLS_init: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
         }
         break;
     default:
-        // FIXME: Do we have to die ?
         xarCore_die('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
-
-    // FIXME: voll delete this line after testing
-    //$GLOBALS['MLS'] = new MLSEnvironment();
 
     $GLOBALS['xarMLS_backendName'] = $args['translationsBackend'];
     if ($GLOBALS['xarMLS_backendName'] != 'php' && $GLOBALS['xarMLS_backendName'] != 'xml') {
@@ -276,16 +237,11 @@ function xarML($string/*, ...*/)
 }
 
 /**
- * *** DO NOT USE THIS FUNCTION ***
  * Return the translation associated to passed key
- * *** DO NOT USE THIS FUNCTION ***
- *
- * *** IT IS CURRENTLY DEPRECATED, USE xarMLString instead ***
- *
+ * 
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the translation string, or the key if no translation is available
- * @deprec
  */
 function xarMLByKey($key/*, ...*/)
 {
@@ -909,7 +865,6 @@ function xarMLS_setCurrentLocale($locale)
 {
     static $called = 0;
 
-    // FIXME: What is the purpose of it?
     assert('$called == 0; // Can only be called once during a page request');
     $called++;
 
