@@ -1101,8 +1101,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
            
         // We found sumtin, advance the pointer, cos we can
-        $this->getNextToken(strlen($peek));
-        return $peek;
+        return $this->getNextToken(strlen($peek));
     }
     
     /**
@@ -1123,13 +1122,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 
         // fifo the buffer in each iteration and check for the needle
         while($buffer != $needle) {
+            $wound.= substr($buffer,0,1); // fifo the first char out
             $buffer = $this->peek($needleSize,$offset);
             if(!isset($buffer)) return; // throw back
-            $wound.= substr($buffer,-1);
             $offset++;
         }
-        // We found the needle, but we dont want to return it inclusive
-        $wound = substr($wound,0,-1*strlen($needle));
+        // We found the needle, return what we wound over
         return $wound;
     }
     

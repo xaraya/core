@@ -17,9 +17,10 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
         $endMarker = XAR_TOKEN_TAG_START . XAR_TOKEN_ENDTAG_START. XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM .'comment'. XAR_TOKEN_TAG_END;
         $res = $parser->windTo($endMarker);
         if(isset($res)) {
-            // We found it, eat that
-            $parser->getNextToken(strlen($endMarker)-1);
-        }
+            // We found it, eat that leave next lines to be able to check easily
+            //$end = $parser->peek(strlen($endMarker));
+            //xarLogMessage("BL: next should read '$endMarker' : '$end'");
+        } 
     }
     
     function renderBeginTag()
