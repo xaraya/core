@@ -65,8 +65,9 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 
     // Make sure we should still be here
     if ($phase >= XARINSTALL_PHASE_BOOTSTRAP) {
-        xarCoreInit(XARCORE_SYSTEM_ALL);
+        xarCoreInit(XARCORE_SYSTEM_ALL);      
         xarResponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
+        exit();
     }
 
     // Hardcode module name and type
