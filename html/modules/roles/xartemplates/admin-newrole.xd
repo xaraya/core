@@ -23,7 +23,7 @@ document.forms[0].submit();}
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Add</xar:mlstring></h2><br />
 <div style="text-align: center; margin: auto;">
-	<br />
+	<p><xar:mlstring>All fields are required to create a new role on the system.</xar:mlstring></p>
 	<form action="&xar-modurl-roles-admin-addrole;" method="post" enctype="application/x-www-form-urlencoded">
 		
 		<table border="0" cellpadding="5">
