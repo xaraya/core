@@ -12,7 +12,7 @@
  * @author Marc Lutolf
  */
 
-$configuration_name = 'Community Site';
+$configuration_name = xarML('Community Site -- modules and privilege for semi-open access');
 
 function installer_community_moduleoptions() 
 {

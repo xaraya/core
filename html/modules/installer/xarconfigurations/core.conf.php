@@ -11,7 +11,7 @@
  * @author Marcel van der Boom <marcel@xaraya.com>
  */
 
-$configuration_name = 'Core Xaraya install (aka minimal)';
+$configuration_name = xarML('Core Xaraya install - minimal modules needed to run Xaraya');
 
 function installer_core_moduleoptions() 
 {

@@ -12,7 +12,7 @@
  * @author Marc Lutolf
  */
 
-$configuration_name = 'Intranet';
+$configuration_name = xarML('Intranet - modules and privilege appropriate for restricted access');
 
 function installer_intranet_moduleoptions() 
 {

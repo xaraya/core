@@ -12,7 +12,7 @@
  * @author Marc Lutolf
  */
 
-$configuration_name = 'Public Site';
+$configuration_name = xarML('Public Site - modules and privilege appropriate for open access');
 
 function installer_public_moduleoptions() 
 {
