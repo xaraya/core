@@ -237,8 +237,8 @@ class xarMasks
         foreach ($privs1 as $key1 => $priv1) {
             foreach ($privs2 as $key2 => $priv2) {
 //                echo "Winnowing: ";
-//                echo $priv1->getName(). " implies " . $priv2->getName() . ": " . $priv1->implies($priv2,true);
-//                echo $priv2->getName(). " implies " . $priv1->getName() . ": " . $priv2->implies($priv1,true);
+//                echo $priv1->getName(). " implies " . $priv2->getName() . ": " . $priv1->implies($priv2,true) . " | ";
+//                echo $priv2->getName(). " implies " . $priv1->getName() . ": " . $priv2->implies($priv1,true) . " | ";
                 if ($priv1->implies($priv2,true)) array_splice($privs2,$key2);
                 elseif ($priv2->implies($priv1,true)) $privs1[$key1] = $priv2;
                 else {
@@ -265,7 +265,7 @@ class xarMasks
  * @todo    none
 */
 
-    function xarSecurityCheck($mask,$showexception=1,$component='', $instance='',$module='',$rolename='')
+    function xarSecurityCheck($mask,$catch=1,$component='', $instance='',$module='',$rolename='')
     {
 
     // FIXME: Security checks in functions used by decode_shorturl cause infinite loops,
@@ -373,29 +373,33 @@ if ($instance != '') $mask->setInstance($instance);
 //      echo "Assigned: ";
 //      foreach($roleprivileges as $test) echo $test->getName();
 
-// trump them against the accumulated privileges from higher levels
+// winnow them against the accumulated privileges from higher levels
         $irreducibleset = $this->winnow($irreducibleset,$roleprivileges);
 //      echo "Irreducible: ";
 //      foreach($irreducibleset as $test) echo $test->getName();
+
 // check each privilege from the irreducible set
         $pass = false;
         foreach ($irreducibleset as $chiave) {
-
-// check the mask
-//          echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask,false);
-            if ($chiave->implies($mask,false)) {
-
-// found a privilege that admits: return the privilege
-            return $chiave;
+           if($chiave->matches($mask)){
+                if ($chiave->implies($mask,false)) {$pass = $chiave; break;}
+                else {$pass = false; break;}
             }
+
+            if ($chiave->implies($mask,false)) $pass = $chiave;
+
+//          echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask,false);
         }
-// nothing found: return false
+
+
 // check if the exception needs to be caught here or not
-        if ($showexception) {
+        if ($catch && !$pass) {
         $msg = xarML('No privilege for #(1)',$mask->getName());
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         }
+
+// done
         return $pass;
     }
 
@@ -1532,6 +1536,30 @@ function drawindent() {
     }
 
 /**
+ * matches: checks the structure of one privilege against another
+ *
+ * Checks whether two privileges, or a privilege and a mask, are equal
+ * in all respects except for the access level
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   mask object
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+    function matches($mask)
+    {
+        return (
+               (strtolower($this->realm) == strtolower($mask->realm))
+            && (strtolower($this->module) == strtolower($mask->module))
+            && (strtolower($this->component) == strtolower($mask->component))
+            && (strtolower($this->instance) == strtolower($mask->instance))
+            );
+    }
+
+/**
  * implies: compares two masks
  *
  * Checks whether this mask is mighter than $mask
@@ -1547,10 +1575,11 @@ function drawindent() {
     function implies($mask,$comparing) {
 
 // take care of the case that one of the instances may be "All"
-//echo "Comparing: " . $comparing . $this->getName() . " implies " . $mask->getName();
+if (($this->getName() == "NoDocumants" || $mask->getName() == "NoDocumants") && !$comparing)
+echo " | Comparing: " . $comparing . " " . $this->getName() . " implies " . $mask->getName();
 
         if($comparing) {
-            $samelevels = $this->getLevel() == $this->getLevel();
+            $samelevels = $mask->getLevel() == $this->getLevel();
 
             $thisrealm = strtolower($this->getRealm());
             $maskrealm = strtolower($mask->getRealm());
@@ -1561,7 +1590,6 @@ function drawindent() {
             $maskmodule = strtolower($mask->getModule());
             if ($thismodule != $maskmodule
                 && !($thismodule == 'all' && $samelevels)) return false;
-
             $thiscomponent = strtolower($this->getComponent());
             $maskcomponent = strtolower($mask->getComponent());
             if ($thiscomponent != $maskcomponent
@@ -1650,8 +1678,9 @@ function drawindent() {
 
         if (!($this->getLevel() >= $mask->getLevel())) return false;
 
-
-//if ($this->getName() == "NoAccess")
+if (($this->getName() == "NoDocumants") && !$comparing)
+echo " hi";
+        if ($this->getLevel() == 0) return false;
 
         return true;
     }
