@@ -41,20 +41,19 @@ function blocks_userapi_groupgetinfo($args)
     $blockGroupsTable         = $tables['block_groups'];
     $blockGroupInstancesTable = $tables['block_group_instances'];
 
-    $query = "SELECT    xar_id as id,
+    $query = 'SELECT    xar_id as id,
                         xar_name as name,
                         xar_template as template
-              FROM      $blockGroupsTable
-              WHERE     xar_id = " . $gid;
+              FROM      '.$blockGroupsTable.'
+              WHERE     xar_id = ' . $gid;
 
     $result =& $dbconn->Execute($query);
     if (!$result) {return;}
 
-    // Freak if we don't get one and only one result
+    // Error if we don't get exactly one result.
     if ($result->PO_RecordCount() != 1) {
-        $msg = xarML("Group ID #(1) not found: #(2)", $blockGroupId, $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        $msg = xarML("Block group ID #(1) not found: #(2)", $blockGroupId, $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 

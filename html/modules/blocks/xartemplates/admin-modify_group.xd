@@ -5,60 +5,78 @@
     xar_base_reorder_warn = '#xarML('You must select the block to move.')#';
 </script>
 
-
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Modify Group</xar:mlstring></h2>
+
+<div class="xar-mod-body">
+    <h2><xar:mlstring>Modify Group</xar:mlstring></h2>
 	<div style="margin: auto;">
-	<form action="#xarModURL('blocks', 'admin', 'update_group')#" method="post" enctype="application/x-www-form-urlencoded" >
+	    <form action="#xarModURL('blocks', 'admin', 'update_group')#" method="post" enctype="application/x-www-form-urlencoded" >
             <div>
-		<div style="clear: both; padding-top: 10px;">
-	    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-		<input type="hidden" name="gid" id="gid" value="#$group['id']#" />
-		<input type="hidden" name="group_instance_order" id="group_instance_order" value="" />
-	
-		<span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#xarML('Enter the name of the group.  This value is used in your theme template to call the block group.')#"><label for="group_name"><xar:mlstring>Name</xar:mlstring></label>:</span>
-		</span>
-		<span style="float: right; width: 78%; text-align: left;">
-			<input type="text" name="group_name" id="group_name" value="#$group['name']#" size="40" maxlength="255" />
-		</span>
-		</div>
+                <div style="clear: both; padding-top: 10px;">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="gid" id="gid" value="#$group['id']#" />
+                    <input type="hidden" name="group_instance_order" id="group_instance_order" value="" />
 
-		<div style="clear: both; padding-top: 10px;">
-		<span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#xarML('You may reorder the members in this block group by selecting the block to reorder and then using the up and down arrows to chose the position.')#"><label for="group_instances"><xar:mlstring>Members</xar:mlstring></label>:</span>
-		</span>
-		<span style="float: right; width: 68%; text-align: left;">
-                        <xar:if condition="$instance_count gt 2">
-			<select name="group_instances" id="group_instances" size="#$instance_count#">
-                        <xar:else />
-			<select name="group_instances" id="group_instances" size="3">
-                        </xar:if>
-				<xar:loop name="$group['instances']">
-                    <xar:if condition="empty($loop:item['title'])">
-					    <option value="#$loop:item['id']#">#$loop:item['name']#</option>
+                    <span style="float: left; width: 20%; text-align: right;">
+                        <span class="help" title="#xarML('Enter the name of the group.  This value is used in your theme template to call the block group.')#">
+                            <label for="group_name"><xar:mlstring>Name:</xar:mlstring></label>
+                        </span>
+                    </span>
+                    <span style="float: right; width: 78%; text-align: left;">
+                        <input type="text" name="group_name" id="group_name" value="#$group['name']#" size="40" maxlength="255" />
+                    </span>
+                </div>
+
+                <div style="clear: both; padding-top: 10px;">
+                    <span style="float: left; width: 20%; text-align: right;">
+                        <span class="help" title="#xarML('You may reorder the members in this block group by selecting the block to reorder and then using the up and down arrows to chose the position.')#">
+                            <label for="group_instances"><xar:mlstring>Members:</xar:mlstring></label>
+                        </span>
+                    </span>
+
+                    <xar:if condition="$instance_count gt 0">
+                        <span style="float: right; width: 68%; text-align: left;">
+                            <xar:if condition="$instance_count gt 2">
+                                <xar:set name="$list_size">#$instance_count#</xar:set>
+                            <xar:else />
+                                <xar:set name="$list_size">3</xar:set>
+                            </xar:if>
+                            <select name="group_instances" id="group_instances" size="#$instance_count#">
+                                <xar:loop name="$group['instances']">
+                                    <xar:if condition="empty($loop:item['title'])">
+                                        <option value="#$loop:item['id']#">#$loop:item['name']#</option>
+                                    <xar:else />
+                                        <option value="#$loop:item['id']#">#$loop:item['name']# (#$loop:item['title']#)</option>
+                                    </xar:if>
+                                </xar:loop>
+                            </select>
+                        </span>
+
+                        <span style="float: right; width: 10%; text-align: left;">
+                            <input type="image" src="#$up_arrow_src#" onclick="return xar_base_reorder('group_instances', true, 'group_instance_order');" title="#$moveuplabel#" /><br />
+                            <input type="image" src="#$down_arrow_src#" onclick="return xar_base_reorder('group_instances', false, 'group_instance_order');" title="#$movedownlabel#" />
+                        </span>
                     <xar:else />
-    					<option value="#$loop:item['id']#">#$loop:item['name']# (#$loop:item['title']#)</option>
+                        <span style="float: right; width: 78%; text-align: left;">
+                            <xar:mlstring>none</xar:mlstring>
+                        </span>
                     </xar:if>
-				</xar:loop>
-			</select>
-		</span>
-		<span style="float: right; width: 10%; text-align: left;">
-             <input type="image" src="#$up_arrow_src#" onclick="return xar_base_reorder('group_instances', true, 'group_instance_order');" title="#$moveuplabel#" /> <br />
-			 <input type="image" src="#$down_arrow_src#" onclick="return xar_base_reorder('group_instances', false, 'group_instance_order');" title="#$movedownlabel#" />
-		</span>
-		</div>
+                </div>
 
-		<div style="clear: both; padding-top: 10px;">
-		<span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#xarML('If you wish to override the default template you may do so by entering a template name.  Otherwise the default.xt template will be used.')#"><label for="group_template"><xar:mlstring>Default template (optional)</xar:mlstring></label>:</span>
-		</span>
-		<span style="float: right; width: 78%; text-align: left;">
-			<input type="text" name="group_template" id="group_template" value="#$group['template']#" size="40" maxlength="255" />
-		</span>
-		</div>
-		<span style="float: left; width: 30%; text-align: right;"><p><input type="submit" value="#$updatelabel#" /></p></span>
-              </div>
-	</form>
-	</div>
+                <div style="clear: both; padding-top: 10px;">
+                    <span style="float: left; width: 20%; text-align: right;">
+                        <span class="help" title="#xarML('If you wish to override the default template you may do so by entering a template name.  Otherwise the default.xt template will be used.')#">
+                            <label for="group_template"><xar:mlstring>Default template (optional):</xar:mlstring></label>
+                        </span>
+                    </span>
+                    <span style="float: right; width: 78%; text-align: left;">
+                        <input type="text" name="group_template" id="group_template" value="#$group['template']#" size="40" maxlength="255" />
+                    </span>
+                </div>
+                <span style="float: left; width: 30%; text-align: right;">
+                    <p><input type="submit" value="#$updatelabel#" /></p>
+                </span>
+            </div>
+        </form>
+    </div>
 </div>
