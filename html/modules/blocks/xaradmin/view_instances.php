@@ -48,13 +48,13 @@ function blocks_admin_view_instances()
 
         switch ($block['state']) {
             case 0:
-                $block['state_desc'] = 'Hidden';
+                $block['state_desc'] = xarML('Hidden');
                 break;
             case 1:
-                $block['state_desc'] = 'Minimized';
+                $block['state_desc'] = xarML('Minimized');
                 break;
             case 2:
-                $block['state_desc'] = 'Maximized';
+                $block['state_desc'] = xarML('Maximized');
                 break;
         }
         $block['javascript'] = "return xar_base_confirmLink(this, '" . xarML('Delete instance') . " $block[title] ?')";
