@@ -18,9 +18,9 @@ function roles_adminapi_addgroup($args)
     }
 
 // Security Check
-	if(!xarSecurityCheck('AddRole')) return;
+    if(!xarSecurityCheck('AddRole')) return;
 
-	return makeGroup($gname);
+    return xarMakeGroup($gname);
 }
 
 ?>
