@@ -120,7 +120,7 @@ function xarMain()
 
     // Handle exceptions
     if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
-
+    xarEvt_Fire('StartBodyTag');
     echo $pageOutput;
 
     return true;

@@ -401,7 +401,7 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
                        new SystemException($msg));
         return;
     }
-
+    
     // Optional arguments.
     if (!isset($startNum)) $startNum = 1;
     if (!isset($numItems)) $numItems = -1;
@@ -483,16 +483,16 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
         $query .= " ORDER BY $orderByClause";
         $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1);
         if (!$result) return;
-
+        
         if (!$result->EOF) {
             while(!$result->EOF) {
                 list($modInfo['regid'],
-                    $modInfo['name'],
-                    $modInfo['directory'],
-                    $modInfo['version'],
-                    $modState) = $result->fields;
+                     $modInfo['name'],
+                     $modInfo['directory'],
+                     $modInfo['version'],
+                     $modState) = $result->fields;
                 $result->MoveNext();
-
+                
                 if (xarVarIsCached('Mod.Infos', $modInfo['regid'])) {
                     // Get infos from cache
                     $modList[] = xarVarGetCached('Mod.Infos', $modInfo['regid']);
@@ -501,29 +501,29 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
                     $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
                     // Shortcut for os prepared directory
                     $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
-
+                    
                     $modInfo['state'] = (int) $modState;
-
+                    
                     xarVarSetCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
-
+                    
                     $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
                     if (!isset($modFileInfo)) return; // throw back
-               //     $modInfo = array_merge($modInfo, $modFileInfo);
+                    //     $modInfo = array_merge($modInfo, $modFileInfo);
                     $modInfo = array_merge($modFileInfo, $modInfo);
-
+                    
                     xarVarSetCached('Mod.Infos', $modInfo['regid'], $modInfo);
-
+                    
                     $modList[] = $modInfo;
                 }
                 $modInfo = array();
             }
         }
+    
         $result->Close();
-
         $mode = XARMOD_MODE_PER_SITE;
         array_shift($whereClauses);
     }
-
+    
     return $modList;
 }
 
@@ -898,7 +898,9 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 function xarModGetDisplayableName($modName)
 {
     // The module display name is language sensitive, so it's fetched through xarMLByKey
-    return xarMLByKey($modName);
+    
+    return $modName;
+    //return xarMLByKey($modName);
 }
 
 /**
