@@ -1,5 +1,5 @@
 <?php
-// File: $Id$
+// File: $Id: s.xaradmin.php 1.35 03/01/16 18:54:29+00:00 johnny@falling.local.lan $
 // ----------------------------------------------------------------------
 // Xaraya eXtensible Management System
 // Copyright (C) 2002 by the Xaraya Development Team.
