@@ -980,7 +980,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $result = '';
         while($len >= 1) {
             $token = substr($this->templateSource, $this->pos, 1);
-            if ($token === false) {
+            // FIXME: We compare to 0 because substr() with "mbstring.func_overload = 7" settings
+            // returns not false but 0 at the end of a template
+            if ($token === false || $token == null) {
                 // This line fixes a bug that happen when $len is > 1
                 // and the file ends before the token has been read
                 $this->pos += $len;
