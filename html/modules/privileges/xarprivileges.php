@@ -288,18 +288,23 @@ class xarMasks
 
     function xarSecurityCheck($mask,$catch=1,$component='', $instance='',$module='',$rolename='')
     {
-
-// get the masks pertaining to the current module and the component requested
-        if ($module == '') list($module) = xarRequestGetInfo();
-// no need to update / select in database for each block here
-//        if ($module == 'blocks') $module = xarModGetVar('blocks','currentmodule');
-
-// I'm a bit lost on this line. Does this var ever get set?
-        if ($module == 'blocks' && xarVarIsCached('Security.Variables','currentmodule'))
-        $module = xarVarGetCached('Security.Variables','currentmodule');
-
         $mask =  $this->getMask($mask);
         if (!$mask) {
+// <mikespub> moved this whole $module thing where it's actually used, i.e. for 
+// error reporting only. If you want to override masks with this someday, move
+// it back before the $this->getMask($mask) or wherever :-)
+
+// get the masks pertaining to the current module and the component requested
+// <mikespub> why do you need this in the first place ?
+            if ($module == '') list($module) = xarRequestGetInfo();
+
+// I'm a bit lost on this line. Does this var ever get set?
+// <mikespub> this gets set in xarBlock_render, to replace the xarModSetVar / 
+// xarModGetVar combination you used before (although $module will generally
+// not be 'blocks', so I have no idea why this is needed anyway)
+            if ($module == 'blocks' && xarVarIsCached('Security.Variables','currentmodule'))
+            $module = xarVarGetCached('Security.Variables','currentmodule');
+
             if ($component == "") {
                 $msg = xarML('Did not find a mask registered for an unspecified component in module ') . $module;
             }
