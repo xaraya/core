@@ -1,5 +1,5 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
-<xar:loop name="fields">
+<xar:loop name="$fields">
     <tr align="left" valign="middle">
         <td>&xar-var-label;</td>
         <td>&xar-var-value; (&xar-var-type;)</td>

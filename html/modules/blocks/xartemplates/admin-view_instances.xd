@@ -56,26 +56,26 @@
             Operations
         </th>
     </tr>
-    <xar:loop name="blocks">
+    <xar:loop name="$blocks">
     <tr align="center">
         <td>
             <a href="&xar-modurl-blocks-admin-modify_group;&gid=&xar-var-group_id;">&xar-var-group_name;</a>
         </td>
         <td>
-            <xar:var name="title" />
+            <xar:var name="$title" />
         </td>
         <td>
-            <a href="&xar-modurl-blocks-admin-view_types;"><xar:var name="module" />\<xar:var name="type" /></a>
+            <a href="&xar-modurl-blocks-admin-view_types;"><xar:var name="$module" />\<xar:var name="$type" /></a>
         </td>
         <td>
             <xar:if condition="$template neq NULL">
-                <xar:var name="template" />
+                <xar:var name="$template" />
             <xar:else />
-                <xar:var name="group_template" />
+                <xar:var name="$group_template" />
             </xar:if>
         </td>
         <td>
-            <xar:var name="state_desc" />
+            <xar:var name="$state_desc" />
         </td>
         <td>
             <a href="&xar-modurl-blocks-admin-modify_instance;&bid=&xar-var-id;">Edit</a> |

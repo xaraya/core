@@ -63,7 +63,7 @@
 			&xar-var-optionslabel;
 		</th>
 	</tr>
-    <xar:loop name="items">
+    <xar:loop name="$items">
     <tr>
         <td>
 			&xar-var-uname;

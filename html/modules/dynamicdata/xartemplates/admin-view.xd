@@ -45,7 +45,7 @@
         <th>&xar-var-numberlabel;</th>
         <th>&xar-var-optionslabel;</th>
     </tr>
-    <xar:loop name="items">
+    <xar:loop name="$items">
     <tr>
         <td>&xar-var-name;</td>
         <td>&xar-var-number;</td>

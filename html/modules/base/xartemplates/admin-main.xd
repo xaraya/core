@@ -23,6 +23,6 @@
 
 <center>
 
-<b><xar:var scope="session" name="base_statusmsg" /></b>
+<b><xar:var scope="session" name="$base_statusmsg" /></b>
 
 </center>

@@ -466,7 +466,7 @@ function dynamicdata_user_menu()
     // Then you can let the blocklayout template create the different
     // menu items *dynamically*, e.g. by using something like :
     //
-    // <xar:loop name="menuitems">
+    // <xar:loop name="$menuitems">
     //    <td><a href="&xar-var-menulink;">&xar-var-menulabel;</a></td>
     // </xar:loop>
     //

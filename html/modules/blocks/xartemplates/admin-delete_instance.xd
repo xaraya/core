@@ -39,7 +39,7 @@
 <form method="post" action="&xar-modurl-blocks-admin-delete_instance;">
     <input type="hidden" name="authid" value="&xar-var-authid;" />
     <input type="hidden" name="confirm" value="true" />
-    <input type="hidden" name="bid" value="<xar:var name="instance.id" />" />
+    <input type="hidden" name="bid" value="<xar:var name="$instance.id" />" />
     
     <table border="0" width="300">
         <tr>
@@ -47,7 +47,7 @@
                 Title:
             </td>
             <td>
-                <xar:var name="instance.title" />
+                <xar:var name="$instance.title" />
             </td>
         </tr>
         <tr>
@@ -55,7 +55,7 @@
                 Group:
             </td>
             <td>
-                <xar:var name="instance.group_name" />
+                <xar:var name="$instance.group_name" />
             </td>
         </tr>
         <tr>
@@ -63,7 +63,7 @@
                 Type:
             </td>
             <td>
-                <xar:var name="instance.module" />\<xar:var name="instance.type" />
+                <xar:var name="$instance.module" />\<xar:var name="$instance.type" />
             </td>
         </tr>
         <tr>

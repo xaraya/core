@@ -46,7 +46,7 @@
          template designer, e.g. when you have several loops with different
          variables in the same template -->
 
-    <xar:loop name="items" prefix="item">
+    <xar:loop name="$items" prefix="item">
     <tr align="center"><td>
 
         <!-- we only show a link if the item link variable is not empty -->

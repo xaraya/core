@@ -23,7 +23,7 @@ Tip : empty label -> delete field for all items
        <td><strong>&xar-var-labels.validation;</strong></td>
     </tr>
 
-<xar:loop name="fields">
+<xar:loop name="$fields">
     <tr align="left" valign="middle">
         <td>&xar-var-id;</td>
         <td><input type="text" name="dd_label[&xar-var-id;]" size="15" value="&xar-var-label;"></td>
