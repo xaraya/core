@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.finclude.php 1.23 03/07/13 11:22:54+02:00 marcel@hsdev.com $
  *
  * Includes a file into a block
  *
@@ -44,14 +44,16 @@ function base_fincludeblock_display($blockinfo)
     // Security Check
     if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"finclude:$blockinfo[title]:All")) return;
 
+    $blockinfo['content'] = unserialize($blockinfo['content']);
+
     if (empty($blockinfo['title'])){
         $blockinfo['title'] = xarML('File Include');
     }
 
-    if (empty($blockinfo['url'])){
+    if (empty($blockinfo['content']['url'])){
         $blockinfo['content'] = xarML('Block has no file defined to include');
     } else {
-
+        $blockinfo['url'] = $blockinfo['content']['url'];
         if (!file_exists($blockinfo['url'])) {
             $blockinfo['content'] = xarML('Block has no file defined to include');
         }

@@ -26,7 +26,7 @@
 				<span style="float: left; text-align: center; width: 22%; font-weight: normal;">
 					<xar:if condition="$loop:item['membercount'] gt 0">
 						<xar:loop name="$loop:item['instances']">
-							[ <a href="#xarModUrl('blocks', 'admin', 'modify_group', array('bid' => $loop:item['id']))#">#$loop:item['title']#</a> ]
+							[ <a href="#xarModUrl('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['id']))#">#$loop:item['title']#</a> ]
 						</xar:loop>
 					<xar:else />
 						[&nbsp;<xar:mlstring>none</xar:mlstring>&nbsp;]
