@@ -11,8 +11,8 @@
 	<xar:mlstring>Send an email to a user or group of users</xar:mlstring>
 	<br /><br />
 	<br /><br />
-	<form action="&xar-modurl-users-admin-sendmail;" method="post" enctype="application/x-www-form-urlencoded">
-		<input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
+	<form action="#xarModURL('users', 'admin', 'sendmail')#" method="post" enctype="application/x-www-form-urlencoded">
+		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<table>
 			<tr>
 				<td align=left>

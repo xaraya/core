@@ -157,7 +157,7 @@ function installer_adminapi_createdb($args)
 
     $query = xarDBCreateDatabase($dbName,$dbType);
 
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     return true;

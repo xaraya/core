@@ -7,15 +7,13 @@
 </table>
 
 <center>
-	<br /><br />
 	<p>
 		<xar:if condition="$uid eq -1">
-            Passwords don't match.
+            <xar:mlstring>Passwords don't match.</xar:mlstring>
 		<xar:elseif condition="$uid eq 0" />
-			User could not be created. Most likely the username exists
-already.
+			<xar:mlstring>User could not be created. Most likely the username exists already</xar:mlstring>.
 		<xar:else />
-			User successfully created with UID &xar-var-uid;	
+			<xar:mlstring>User successfully created with UID</xar:mlstring> #$uid#	
 		</xar:if>
 	</p>
 </center>

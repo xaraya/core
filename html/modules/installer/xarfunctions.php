@@ -54,7 +54,7 @@ function xarInstallConfigSetVar($name, $value)
                    WHERE xar_name='" . xarVarPrepForStore($name) . "'";
     }*/
 
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     //Update configuration variables
