@@ -93,12 +93,12 @@ function xarPageIsCached($cacheKey, $name = '')
     // CHECKME: use $name for something someday ?
     $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
 
-    if (strstr($cacheKey, '-user-') &&
-        !strstr($cacheKey, '-search') &&
-        !strstr($cacheKey, '-register') &&
-        ((($xarPage_cacheDisplay != 1) && !strstr($cacheKey, '-display')) || ($xarPage_cacheDisplay == 1)) &&
+    if (strpos($cacheKey, '-user-') &&
+        !strpos($cacheKey, '-search') &&
+        !strpos($cacheKey, '-register') &&
+        ((($xarPage_cacheDisplay != 1) && !strpos($cacheKey, '-display')) || ($xarPage_cacheDisplay == 1)) &&
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
-        (empty($xarOutput_cacheTheme) || strstr($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
+        (empty($xarOutput_cacheTheme) || strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
         file_exists($cache_file) &&
         filesize($cache_file) > 0 &&
         ($xarPage_cacheTime == 0 || filemtime($cache_file) > time() - $xarPage_cacheTime) &&
@@ -318,12 +318,12 @@ function xarPageSetCached($cacheKey, $name, $value)
     // CHECKME: use $name for something someday ?
     $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
 
-    if (strstr($cacheKey, '-user-') &&
-        !strstr($cacheKey, '-search') &&
-        !strstr($cacheKey, '-register') &&
-        ((($xarPage_cacheDisplay != 1) && !strstr($cacheKey, '-display')) || ($xarPage_cacheDisplay == 1)) &&
+    if (strpos($cacheKey, '-user-') &&
+        !strpos($cacheKey, '-search') &&
+        !strpos($cacheKey, '-register') &&
+        ((($xarPage_cacheDisplay != 1) && !strpos($cacheKey, '-display')) || ($xarPage_cacheDisplay == 1)) &&
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
-        (empty($xarOutput_cacheTheme) || strstr($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
+        (empty($xarOutput_cacheTheme) || strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
         (!file_exists($cache_file) ||
         ($xarPage_cacheTime != 0 && filemtime($cache_file) < time() - $xarPage_cacheTime)) &&
         xarCacheDirSize($xarOutput_cacheCollection, 'Page') <= $xarOutput_cacheSizeLimit &&
@@ -407,7 +407,7 @@ function xarPageFlushCached($cacheKey)
 
     if ($handle = @opendir($xarOutput_cacheCollection)) {
         while (($file = readdir($handle)) !== false) {
-            if ((preg_match("#$cacheKey#", $file)) && (strstr($file, '.php') !== false)) {
+            if ((preg_match("#$cacheKey#", $file)) && (strpos($file, '.php') !== false)) {
                 @unlink($xarOutput_cacheCollection . '/' . $file);
             }
         }
@@ -439,9 +439,9 @@ function xarOutputCleanCached($type, $cacheKey = '')
         while (($file = readdir($handle)) !== false) {
             $cache_file = $xarOutput_cacheCollection . '/' . $file;
             if (filemtime($cache_file) < time() - (${'xar' . $type . '_cacheTime'} + 60) &&
-                (strstr($file, '.php') !== false) &&
+                (strpos($file, '.php') !== false) &&
                 ($type == 'Block' || 
-                ($type == 'Page' && strstr($file, 'block') == false))) {
+                ($type == 'Page' && strpos($file, 'block') === false))) {
                 @unlink($cache_file);
             }
         }
