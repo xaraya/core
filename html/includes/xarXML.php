@@ -97,9 +97,10 @@ function xarXml_init($args, $whatElseIsGoingLoaded)
  */
 class xarXmlParser 
 {
-    var $encoding; // Which input encoding are we gonna use for parsing?
-    var $handler;  // Which handler object is attached to this parser (of class xarXMLHandler)
-    var $parser;   // The parser object itself
+    var $encoding;      // Which input encoding are we gonna use for parsing?
+    var $handler;       // Which handler object is attached to this parser (of class xarXMLHandler)
+    var $parser=NULL;   // The parser object itself
+    var $tree=array();  // Resulting parse tree
     
     /**
      * Construct the xarXmlParser object
@@ -134,6 +135,7 @@ class xarXmlParser
         $this->__activate();
         // TODO: check the string for stuff, this can be very delicate
         if(!xml_parse($this->parser, $xmldata, true)) {
+            $this->__deactivate();
             return false;
         }
         return $this->__deactivate();
@@ -152,6 +154,11 @@ class xarXmlParser
             $this->lastmsg="Could't open $fileName";
             return false;
         }
+        // If doc is empty return false
+        if(filesize($fileName) == 0) {
+            $this->lastmsg="File is empty";
+            return false;
+        }
         // Activate the parser with resolve base the base path of the file
         $resolve_base = dirname($fileName);
         $this->__activate($resolve_base);
@@ -161,6 +168,7 @@ class xarXmlParser
                 $this->lastmsg= "[".xml_get_current_line_number($this->parser).":"
                                    .xml_get_current_column_number($this->parser)."]-"
                                    .xml_error_string($error);
+                $this->__deactivate();
                 return false;
             }
         }
@@ -226,7 +234,9 @@ class xarXmlParser
      */
     function __deactivate() 
     {
-        return $this-->_free;
+        $this->tree = $this->handler->_tree;
+        $this->handler->_reset();
+        return $this->__free();
     }
 
     /**
@@ -302,6 +312,7 @@ class xarXmlHandler
     function default_handler($parser, $data) 
     {
         if( trim($data) ) {
+            //echo "$data\n";
             // get the attributes
             preg_match_all('/ (\w+=".+")/U', $data, $matches);
             foreach($matches[1] as $match) {
@@ -480,12 +491,28 @@ class xarXmlHandler
      * namespace declaration. This will be called, for each 
      * namespace declaration, after the handler for the end 
      * tag of the element in which the namespace was declared.
+     *
+     * @access protected
+     * @param object $parser parser object to which handler is attached
+     * @param string $prefix by which prefix is this namespace identified in the doc
      */
     function end_namespace($parser, $prefix) 
     {
         // Reset the namespace register, bit paranoid, but can't hurt
         $this->_nsregister=array();
         return true;
+    }
+
+    /**
+     * Handler reset
+     *
+     * @access protected
+     */
+    function _reset() 
+    {
+        $this->_tree=array();
+        $this->_depth=1;
+        $this->_resolve_base=NULL;
     }
 }
 
