@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.xarinit.php 1.106 03/10/05 07:47:51-04:00 John.Cox@mcnabb. $
  *
  * Base initialization functions
  *
@@ -360,6 +360,15 @@ function base_init()
 
     // Fill language list(?)
 
+    // TODO: move this to some common place in Xaraya ?
+    // Register BL user tags
+    // Include a JavaScript file in a page
+    xarTplRegisterTag(
+        'base', 'include-javascript', array(),
+        'base_javascriptapi_handlemodulejavascript'
+    );
+
+    
     // Initialisation successful
     return true;
 }
