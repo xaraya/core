@@ -1,5 +1,5 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
+<xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
 </xar:if>
 <script type="text/javascript" src="modules/privileges/xartemplates/xarTree.js">
 </script>
@@ -30,24 +30,56 @@ document.forms['privilegeform'].submit();}
 <div class="xar-mod-body"><h2><xar:mlstring>Manage the Privilege</xar:mlstring>: #$pname#</h2>
 
 <xar:if condition="count($parents) ne 0">
-  <div id="tabnav">
-        <div class="help" title="These are the privileges that contain #$pname# as a component"><xar:mlstring>Used in</xar:mlstring> :</div>
-        <xar:set name="$prevgroup">""</xar:set>
-        <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
-            <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                <div><a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $parents[$i]['parentid']))#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a></div>
-            </xar:if>
-            <xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
-        </xar:for>
-  </div>
+    <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+		<div>
+			<dl class="xar-tabs">
+				<dt class="help" title="These are the privileges that contain #$pname# as a component">
+					<xar:mlstring>Used in</xar:mlstring> :
+				</dt>
+				<xar:set name="$prevgroup">""</xar:set>
+				<xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
+					<xar:if condition="$prevgroup ne $parents[$i]['parentname']">
+						<dd>
+							<a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $parents[$i]['parentid']))#" title="#xarML('Show this privilege')#">
+								#$parents[$i]['parentname']#
+							</a>
+						</dd>
+					</xar:if>
+					<xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
+				</xar:for>
+			</dl>
+		</div>
+	</xar:if>
 </xar:if>
-<div id="tabnav">
-    <div class="help" title="#xarML('Choose an action to perform on this privilege')#"><xar:mlstring>Actions</xar:mlstring> :</div>
-    <div><a href="#xarModURL('privileges', 'admin', 'displayprivilege', array('pid' => $pid))#"><xar:mlstring>Display</xar:mlstring></a></div>    
-    <div><a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $pid))#"><xar:mlstring>Modify</xar:mlstring></a></div>    
-    <div><a href="#xarModURL('privileges', 'admin', 'deleteprivilege', array('pid' => $pid))#"><xar:mlstring>Delete</xar:mlstring></a></div>    
-    <div><a href="#xarModURL('privileges', 'admin', 'viewroles', array('pid' => $pid))#" class="active"><xar:mlstring>Groups/Users</xar:mlstring></a></div>    
-</div>
+<xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+	<div>
+		<dl class="xar-tabs">
+			<dt class="help" title="#xarML('Choose an action to perform on this privilege')#">
+				<xar:mlstring>Actions</xar:mlstring> :
+			</dt>
+			<dd>
+				<a href="#xarModURL('privileges', 'admin', 'displayprivilege', array('pid' => $pid))#">
+					<xar:mlstring>Display</xar:mlstring>
+				</a>
+			</dd>    
+			<dd>
+				<a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $pid))#">
+					<xar:mlstring>Modify</xar:mlstring>
+				</a>
+			</dd>    
+			<dd>
+				<a href="#xarModURL('privileges', 'admin', 'deleteprivilege', array('pid' => $pid))#">
+					<xar:mlstring>Delete</xar:mlstring>
+				</a>
+			</dd>    
+			<dd>
+				<a href="#xarModURL('privileges', 'admin', 'viewroles', array('pid' => $pid))#" class="active">
+					<xar:mlstring>Groups/Users</xar:mlstring>
+				</a>
+			</dd>    
+		</d1>
+	</div>
+</xar:if>
 <div style="border: 1px solid #ccc; text-align: left; width: 100%; border-top : none; padding-left: 5px;">
     <br />
     <xar:mlstring>This privilege is assigned to the following groups/users</xar:mlstring>:

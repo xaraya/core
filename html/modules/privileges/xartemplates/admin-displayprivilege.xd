@@ -1,6 +1,4 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
-</xar:if>
 <script type="text/javascript" src="modules/privileges/xartemplates/xarTree.js">
 </script>
 <script language="JavaScript">
@@ -29,34 +27,52 @@ document.forms['privilegeform'].submit();}
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Manage the Privilege</xar:mlstring>: #$pname#</h2>
 
-<xar:if condition="count($parents) ne 0">
-  <div id="tabnav">
-        <div class="help" title="These are the privileges that contain #$pname# as a component"><xar:mlstring>Used in</xar:mlstring> :</div>
-        <xar:set name="$prevgroup">""</xar:set>
-        <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
-            <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                <div><a href="#xarModURL('privileges', 'admin', 'displayprivilege', array('pid' => $parents[$i]['parentid']))#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a></div>
-            </xar:if>
-            <xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
-        </xar:for>
-  </div>
-</xar:if>
-<div id="tabnav">
-    <div class="help" title="#xarML('Choose an action to perform on this privilege')#"><xar:mlstring>Actions</xar:mlstring> :</div>
-    <div><a href="#xarModURL('privileges', 'admin', 'displayprivilege', array('pid' => $ppid))#" class="active"><xar:mlstring>Display</xar:mlstring></a></div>    
-    <div><a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $ppid))#"><xar:mlstring>Modify</xar:mlstring></a></div>    
-    <div><a href="#xarModURL('privileges', 'admin', 'deleteprivilege', array('pid' => $ppid))#"><xar:mlstring>Delete</xar:mlstring></a></div>    
-    <div><a href="#xarModURL('privileges', 'admin', 'viewroles', array('pid' => $ppid))#"><xar:mlstring>Groups/Users</xar:mlstring></a></div>    
-</div>
-<div style="border: 1px solid #ccc; text-align: left; width: 100%; border-top : none; padding-left: 5px;">
-<br />
-    <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-updateprivilege;" method="post" enctype="application/x-www-form-urlencoded">
-    <div>
+	<xar:if condition="count($parents) ne 0">
+		<xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+			<div>
+				<dl class="xar-tabs">
+					<dt class="help" title="These are the privileges that contain #$pname# as a component"><xar:mlstring>Used in</xar:mlstring> :
+					</dt>
+					<xar:set name="$prevgroup">""</xar:set>
+					<xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
+						<xar:if condition="$prevgroup ne $parents[$i]['parentname']">
+							<dd>
+								<a href="#xarModURL('privileges', 'admin', 'displayprivilege', array('pid' => $parents[$i]['parentid']))#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a>
+							</dd>
+						</xar:if>
+						<xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
+					</xar:for>
+				</d1>
+			</div>
+		</xar:if>
+	</xar:if>
+	<xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+		<div>
+			<dl class="xar-tabs">
+				<dt class="help" title="#xarML('Choose an action to perform on this privilege')#">
+					<xar:mlstring>Actions</xar:mlstring> :
+				</dt>
+				<dd>
+					<a href="#xarModURL('privileges', 'admin', 'displayprivilege', array('pid' => $ppid))#" class="active"><xar:mlstring>Display</xar:mlstring></a>
+				</dd>    
+				<dd>
+					<a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $ppid))#"><xar:mlstring>Modify</xar:mlstring></a>
+				</dd>    
+				<dd>
+					<a href="#xarModURL('privileges', 'admin', 'deleteprivilege', array('pid' => $ppid))#"><xar:mlstring>Delete</xar:mlstring></a>
+				</dd>    
+				<dd>
+					<a href="#xarModURL('privileges', 'admin', 'viewroles', array('pid' => $ppid))#"><xar:mlstring>Groups/Users</xar:mlstring></a>
+				</dd>    
+			</d1>
+		</div>
+	</xar:if>
+	<div style="border: 1px solid #ccc; text-align: left; width: 100%; border-top : none; padding-left: 5px;">
+	<br />
         <table width="100%">
             <tr>
                 <td>
                     <input type="hidden" name="pid" id="pid" value="#$ppid#" />
-                    <div style="text-align: left">
                     <table border="0" cellpadding="2" cellspacing="0">
                         <tr>
                             <td>
@@ -107,26 +123,25 @@ document.forms['privilegeform'].submit();}
                                 <xar:mlstring>Level</xar:mlstring>
                             </td>
                             <td>
-                                    <xar:if condition="$plevel eq 0">
-                                        <xar:mlstring>None</xar:mlstring>
-                                    <xar:elseif condition="$plevel eq 100" />
-                                        <xar:mlstring>Overview</xar:mlstring>
-                                    <xar:elseif condition="$plevel eq 200" />
-                                        <xar:mlstring>Read</xar:mlstring>
-                                    <xar:elseif condition="$plevel eq 300" />
-                                        <xar:mlstring>Comment</xar:mlstring>
-                                    <xar:elseif condition="$plevel eq 400" />
-                                        <xar:mlstring>Moderate</xar:mlstring>
-                                    <xar:elseif condition="$plevel eq 500" />
-                                        <xar:mlstring>Edit</xar:mlstring>
-                                    <xar:elseif condition="$plevel eq 600" />
-                                        <xar:mlstring>Add</xar:mlstring>
-                                    <xar:elseif condition="$plevel eq 700" />
-                                        <xar:mlstring>Delete</xar:mlstring>
-                                    <xar:elseif condition="$plevel eq 800" />
-                                        <xar:mlstring>Admin</xar:mlstring>
-                                    </xar:if>                       
-                                </select>
+								<xar:if condition="$plevel eq 0">
+									<xar:mlstring>None</xar:mlstring>
+								<xar:elseif condition="$plevel eq 100" />
+									<xar:mlstring>Overview</xar:mlstring>
+								<xar:elseif condition="$plevel eq 200" />
+									<xar:mlstring>Read</xar:mlstring>
+								<xar:elseif condition="$plevel eq 300" />
+									<xar:mlstring>Comment</xar:mlstring>
+								<xar:elseif condition="$plevel eq 400" />
+									<xar:mlstring>Moderate</xar:mlstring>
+								<xar:elseif condition="$plevel eq 500" />
+									<xar:mlstring>Edit</xar:mlstring>
+								<xar:elseif condition="$plevel eq 600" />
+									<xar:mlstring>Add</xar:mlstring>
+								<xar:elseif condition="$plevel eq 700" />
+									<xar:mlstring>Delete</xar:mlstring>
+								<xar:elseif condition="$plevel eq 800" />
+									<xar:mlstring>Admin</xar:mlstring>
+								</xar:if>                       
                             </td>
                         </tr>
                         <tr>
@@ -146,6 +161,4 @@ document.forms['privilegeform'].submit();}
             </tr>
         </table>
     </div>          
-</div>
-</div>
 </div>

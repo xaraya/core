@@ -13,7 +13,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 /**
- * removeMember - remove a privilege from a privilege
+ * removebranch - remove a privilege from a privilege
  *
  * Remove a privilege as a member of another privilege.
  * This is an action page..
@@ -25,11 +25,8 @@
  * @throws  none
  * @todo    none
  */
-function privileges_admin_removemember()
+function privileges_admin_removebranch()
 {
-// Check for authorization code
-    if (!xarSecConfirmAuthKey()) return;
-
 // get input from any view of this page
    if (!xarVarFetch('childid',  'int', $childid,  NULL, XARVAR_NOT_REQUIRED)) {return;}
    if (!xarVarFetch('parentid', 'int', $parentid, NULL, XARVAR_NOT_REQUIRED)) {return;}
@@ -41,7 +38,6 @@ function privileges_admin_removemember()
 // redirect to the next page
     xarResponseRedirect(xarModURL('privileges',
                              'admin',
-                             'modifyprivilege',
-                             array('pid'=>$childid)));
+                             'viewprivileges'));
 }
 ?>

@@ -58,7 +58,6 @@ function privileges_admin_viewroles()
     $data['pid'] = $pid;
     $data['roles'] = $curroles;
     //    $data['allgroups'] = $roles->getAllPrivileges();
-    $data['authid'] = xarSecGenAuthKey();
     $data['removeurl'] = xarModURL('privileges',
                              'admin',
                              'removerole',

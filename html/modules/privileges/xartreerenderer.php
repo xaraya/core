@@ -31,11 +31,12 @@ class xarTreeRenderer
     var $tee = '<img src="modules/privileges/xarimages/T.gif" alt="" style="vertical-align: middle" />';
     var $aye = '<img src="modules/privileges/xarimages/I.gif" alt="" style="vertical-align: middle" />';
     var $bar = '<img src="modules/privileges/xarimages/s.gif" alt="" style="vertical-align: middle" />';
-    var $emptybox = '<img class="xar-privtree-box" src="modules/privileges/xarimages/k1.gif" alt="" style="vertical-align: middle" />';
-    var $expandedbox = '<img class="xar-privtree-box" src="modules/privileges/xarimages/k2.gif" alt="" style="vertical-align: middle" onclick="toggleBranch(this, this.parentNode.lastChild);" />';
+    var $emptybox = '<img class="xar-privtree-box" src="modules/privileges/xarimages/k1.gif" alt="" style="padding-left: 0.1em; vertical-align: middle" />';
+    var $expandedbox = '<img class="xar-privtree-box" src="modules/privileges/xarimages/k2.gif" alt="" style="padding-left: 0.1em; vertical-align: middle" onclick="toggleBranch(this, this.parentNode.lastChild);" />';
     var $blank = '<img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle" />';
-    var $collapsedbox = '<img class="xar-privtree-box" src="modules/privileges/xarimages/k3.gif" alt="" style="vertical-align: middle" onclick="toggleBranch(this, this.parentNode.lastChild);" />';
+    var $collapsedbox = '<img class="xar-privtree-box" src="modules/privileges/xarimages/k3.gif" alt="" style="padding-left: 0.1em; vertical-align: middle" onclick="toggleBranch(this, this.parentNode.lastChild);" />';
     var $bigblank ='<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
+    var $biggerblank ='<span style="padding-left: 0.25em; padding-right: 0.5em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
 
     // we'll use this to check whether a group has already been processed
     var $alreadydone;
@@ -217,16 +218,41 @@ class xarTreeRenderer
                      'admin',
                      'deleteprivilege',
                      array('pid'=>$object['pid'])) .
-                     '" title="'.xarML('Delete this Privilege').'" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>';
+                     '" title="'.xarML('Delete this Privilege').'">
+                         <span style="padding-left: 0.25em; padding-right: 0.25em;">
+                            <img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" />
+                        </span>
+                    </a>';
         }
 
-    // offer to show the users/groups of this group
+    // offer to show the users/groups this privilege is assigned to
         $this->html .= '<a href="' .
                 xarModURL('privileges',
                      'admin',
                      'viewroles',
                      array('pid'=>$object['pid'])) .
-                     '" title="'.xarML('Show the Groups/Users this Privilege is assigned to').'" style="padding-left: 0.25em; padding-right: 1em;"><img src="modules/privileges/xarimages/usersgroups.gif" style="vertical-align: middle;" /></a>'."\n\t\t";
+                     '" title="'.xarML('Show the Groups/Users this Privilege is assigned to').'">
+                        <span style="padding-left: 0.25em; padding-right: 0.25em;">
+                            <img src="modules/privileges/xarimages/usersgroups.gif" style="vertical-align: middle;" />
+                        </span>
+                     </a>';
+
+    // offer to remove this privilege from its parent
+        if($object['parentid'] == 0) {
+            $this->html .= $this->biggerblank;
+        }
+        else {
+            $this->html .= '<a href="' .
+                    xarModURL('privileges',
+                         'admin',
+                         'removebranch',
+                         array('childid'=> $object['pid'], 'parentid' => $object['parentid'])) .
+                         '" title="'.xarML('Remove this privilege from its parent').'">
+                             <span style="padding-left: 0.25em; padding-right: 0.25em;">
+                                 <img src="modules/privileges/xarimages/remove.gif" style="vertical-align: middle;" />
+                             </span>
+                         </a>'."\n\t\t";
+        }
 
         $this->html .= $this->drawindent();
         if (count($node['children']) > 0) {
