@@ -78,6 +78,8 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                     $value = $magicLink;
                 }
                 $this->value = $value;
+                // save new value for preview + new/modify combinations
+                xarVarSetCached('DynamicData.FileUpload',$name,$value);
             } elseif (!empty($_FILES[$upname]['name'])) {
                 $file = xarVarPrepForOS(basename($_FILES[$upname]['name']));
                 if (!empty($filetype) && !preg_match("/\.$filetype$/",$file)) {
@@ -90,12 +92,17 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                     return false;
                 }
                 $this->value = $file;
+                // save new value for preview + new/modify combinations
+                xarVarSetCached('DynamicData.FileUpload',$name,$file);
             } else {
             // TODO: assign random name + figure out mime type to add the right extension ?
                 $this->invalid = xarML('file name for upload');
                 $this->value = null;
                 return false;
             }
+        // retrieve new value for preview + new/modify combinations
+        } elseif (xarVarIsCached('DynamicData.FileUpload',$name)) {
+            $this->value = xarVarGetCached('DynamicData.FileUpload',$name);
         } elseif (!empty($value)) {
             // if the uploads module is hooked (to be verified and set by the calling module)
             if (xarVarGetCached('Hooks.uploads','ishooked') && preg_match("/#ulid\:\d+#/",$value)) {

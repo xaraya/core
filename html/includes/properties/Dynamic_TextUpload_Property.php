@@ -64,6 +64,8 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                     $value = $magicLink;
                 }
                 $this->value = $value;
+                // save new value for preview + new/modify combinations
+                xarVarSetCached('DynamicData.TextUpload',$name,$value);
             } else {
                 // this doesn't work on some configurations
                 //$this->value = join('', @file($_FILES[$upname]['tmp_name']));
@@ -75,7 +77,12 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                     $this->value = join('', file($tmpfile));
                     unlink($tmpfile);
                 }
+                // save new value for preview + new/modify combinations
+                xarVarSetCached('DynamicData.TextUpload',$name,$this->value);
             }
+        // retrieve new value for preview + new/modify combinations
+        } elseif (xarVarIsCached('DynamicData.TextUpload',$name)) {
+            $this->value = xarVarGetCached('DynamicData.TextUpload',$name);
         } elseif (!empty($value)) {
             $this->value = $value;
         } else {
