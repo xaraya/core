@@ -262,14 +262,12 @@ function installer_community_casualaccess()
 function installer_community_readnoncore()
 {
     xarRegisterPrivilege('ReadNonCore','All','empty','All','All',ACCESS_NONE,'Read access only to none-core modules');
-//    xarRegisterPrivilege('ReadAccess','All','All','All','All',ACCESS_READ,'Read access to all modules');
     xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All',ACCESS_NONE,'Deny access to the Privileges module');
     xarRegisterPrivilege('DenyAdminPanels','All','adminpanels','All','All',ACCESS_NONE,'Deny access to the AdminPanels module');
     xarRegisterPrivilege('DenyBlocks','All','blocks','All','All',ACCESS_NONE,'Deny access to the Blocks module');
     xarRegisterPrivilege('DenyMail','All','mail','All','All',ACCESS_NONE,'Deny access to the Mail module');
     xarRegisterPrivilege('DenyModules','All','modules','All','All',ACCESS_NONE,'Deny access to the Modules module');
     xarRegisterPrivilege('DenyThemes','All','themes','All','All',ACCESS_NONE,'Deny access to the Themes module');
-//    xarRegisterPrivilege('DenyDynamicData','All','dynamicdata','All','All',ACCESS_NONE,'Deny access to the Dynamic Data module');
     xarMakePrivilegeRoot('ReadNonCore');
     xarMakePrivilegeRoot('DenyPrivileges');
     xarMakePrivilegeRoot('DenyAdminPanels');
@@ -277,7 +275,6 @@ function installer_community_readnoncore()
     xarMakePrivilegeRoot('DenyMail');
     xarMakePrivilegeRoot('DenyModules');
     xarMakePrivilegeRoot('DenyThemes');
-//    xarMakePrivilegeRoot('DenyDynamicData');
     xarMakePrivilegeMember('ReadAccess','ReadNonCore');
     xarMakePrivilegeMember('DenyPrivileges','ReadNonCore');
     xarMakePrivilegeMember('DenyAdminPanels','ReadNonCore');
@@ -285,7 +282,6 @@ function installer_community_readnoncore()
     xarMakePrivilegeMember('DenyMail','ReadNonCore');
     xarMakePrivilegeMember('DenyModules','ReadNonCore');
     xarMakePrivilegeMember('DenyThemes','ReadNonCore');
-//    xarMakePrivilegeMember('DenyDynamicData','ReadNonCore');
 }
 
 function installer_community_readaccess()
