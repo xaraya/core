@@ -422,6 +422,13 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10)
         return '';
     }
 
+    // Fix for the RSS theme.  We don't want to throw pager information
+    // with the syndication.
+    xarVarFetch('theme','str:1:',$themeName,'',XARVAR_NOT_REQUIRED);
+    if ($themeName == 'rss') {
+        return '';
+    }
+
     // TODO - various fixes required
     // Make << and >> do paging properly
     // Display subset of pages if large number
