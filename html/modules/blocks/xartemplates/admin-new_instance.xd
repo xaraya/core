@@ -5,9 +5,6 @@
         </th>
     </tr>
 </table>
-        </td>
-    </tr>
-</table>
 
 <div align="center"><h2>New block instance</h2><br />
 <form method="post" action="&xar-modurl-blocks-admin-create_instance;">
