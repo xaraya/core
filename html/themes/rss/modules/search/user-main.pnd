@@ -1,0 +1,7 @@
+<pnt:if condition="!empty($query)">
+<item>
+<title>Search term : &pnt-var-query;</title>
+<author>&pnt-var-name;</author>
+<description>&pnt-var-output;</description>
+</item>
+</pnt:if>
