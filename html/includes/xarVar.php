@@ -629,7 +629,7 @@ function xarVarGetCached($cacheKey, $name)
  * @param key string the key identifying the particular cache you want to access
  * @param name string the name of the variable in that particular cache
  * @param value string the new value for that variable
- * @returns void
+ * @return void
  */
 function xarVarSetCached($cacheKey, $name, $value)
 {

@@ -47,8 +47,7 @@ $sql = xarDBAlterTable($xartable['nascar_tracks'],
  * @access public
  * @param databaseName
  * @param databaseType
- * @returns string
- * @return sql statement for database creation
+ * @return string sql statement for database creation
  * @raise BAD_PARAM
  */
 function xarDBCreateDatabase($databaseName, $databaseType = NULL)
@@ -96,8 +95,7 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
  * @param args['increment'] auto incrementing files
  * @param args['primary_key'] primary key
  * @param databaseType the database type (optional)
- * @returns string
- * @return generated sql
+ * @return string generated sql
  */
 function xarDBAlterTable($tableName, $args, $databaseType = NULL)
 {
@@ -182,8 +180,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
  * @param tableName the physical table name
  * @param fields an array containing the fields to create
  * @param databaseType database type (optional)
- * @returns string|false
- * @return the generated SQL statement, or false on failure
+ * @return string|false the generated SQL statement, or false on failure
  */
 function xarDBCreateTable($tableName, $fields, $databaseType="")
 {
@@ -268,8 +265,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
  * @access public
  * @param tableName the physical table name
  * @param index an array containing the index name, type and fields array
- * @returns data|false
- * @return the generated SQL statement, or false on failure
+ * @return data|false the generated SQL statement, or false on failure
  */
 function xarDBDropTable($tableName, $databaseType = NULL)
 {
@@ -316,8 +312,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
  * @param tableName the physical table name
  * @param index an array containing the index name, type and fields array
  * @param databaseType is an optional parameter to specify the database type
- * @returns string|false
- * @return the generated SQL statement, or false on failure
+ * @return string|false the generated SQL statement, or false on failure
  */
 function xarDBCreateIndex($tableName, $index, $databaseType = NULL) {
 
@@ -379,8 +374,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL) {
  * @param tableName
  * @param fields array of database index fields?
  * @param databaseType
- * @returns string|false
- * @return generated sql to drop an index
+ * @return string|false generated sql to drop an index
  * @raise BAD_PARAM
  */
 function xarDBDropIndex($tableName, $fields, $databaseType = NULL)
@@ -432,8 +426,7 @@ function xarDBDropIndex($tableName, $fields, $databaseType = NULL)
  * @param args['field'] name of column to modify
  * @param args['after_field']
  * @param args['new_name'] new name of table
- * @returns string|false
- * @return mysql specific sql to alter a table
+ * @return string|false mysql specific sql to alter a table
  * @raise BAD_PARAM
  */
 function xarDB__mysqlAlterTable($tableName, $args)
@@ -481,8 +474,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
  * @param args['command'] command to perform on the table
  * @param args['field'] name of column to modify
  * @param args['new_name'] new name of table
- * @returns string|false
- * @return postgres specific sql to alter a table
+ * @return string|false postgres specific sql to alter a table
  * @raise BAD_PARAM
  */
 function xarDB__postgresqlAlterTable($tableName, $args)
@@ -525,8 +517,7 @@ function xarDB__postgresqlAlterTable($tableName, $args)
  * @param args['command'] command to perform on the table
  * @param args['field'] name of column to modify
  * @param args['new_name'] new name of table
- * @returns string|false
- * @return oracle specific sql to alter a table
+ * @return string|false oracle specific sql to alter a table
  * @raise BAD_PARAM
  */
 function xarDB__oracleAlterTable($tableName, $args)
@@ -566,8 +557,7 @@ function xarDB__oracleAlterTable($tableName, $args)
  * @access private
  * @param tableName the physical table name
  * @param fields an array containing the fields to create
- * @returns string|false
- * @return the generated SQL statement, or false on failure
+ * @return string|false the generated SQL statement, or false on failure
  */
 function xarDB__mysqlCreateTable($tableName, $fields)
 {
@@ -845,8 +835,7 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
  * @access private
  * @param tableName the physical table name
  * @param fields an array containing the fields to create
- * @returns string|false
- * @return the generated SQL statement, or false on failure
+ * @return string|false the generated SQL statement, or false on failure
  */
 function xarDB__postgresqlCreateTable($tableName, $fields)
 {
@@ -1085,8 +1074,7 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
  * @access private
  * @param tableName the physical table name
  * @param fields an array containing the fields to create
- * @returns string|false
- * @return the generated SQL statement, or false on failure
+ * @return string|false the generated SQL statement, or false on failure
  */
 function xarDB__oracleCreateTable($tableName, $fields)
 {

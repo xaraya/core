@@ -257,7 +257,7 @@ function xarEvt_registerEvent($eventName)
  * @author  Marcel van der Boom
  * @access  private
  * @param   $eventName Name of the event to check
- * @returns boolean 
+ * @return  bool 
  * @throws  EVENT_NOT_REGISTERED
 */
 function xarEvt__checkEvent($eventName)

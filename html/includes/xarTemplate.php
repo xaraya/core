@@ -72,7 +72,7 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
  * 
  * @access public
  * @global xarTpl_themeName string
- * @returns xarTpl_themeName string
+ * @return string themename
  */
 function xarTplGetThemeName()
 {
@@ -96,7 +96,7 @@ function xarTplGetThemeName()
  * @global xarTpl_themeName string
  * @global xarTpl_themeDir string
  * @param themeName string
- * @returns bool
+ * @return bool
  */
 function xarTplSetThemeName($themeName)
 {
@@ -114,7 +114,7 @@ function xarTplSetThemeName($themeName)
  * 
  * @access public
  * @global xarTpl_themeDir string
- * @returns xarTpl_themeDir string
+ * @return sring theme directory
  */
 function xarTplGetThemeDir()
 {
@@ -126,7 +126,7 @@ function xarTplGetThemeDir()
  *
  * @access public
  * @global xarTpl_pageTemplateName string
- * @returns xarTpl_pageTemplateName string
+ * @return string page template name
  */
 function xarTplGetPageTemplateName()
 {
@@ -140,7 +140,7 @@ function xarTplGetPageTemplateName()
  * @global xarTpl_pageTemplateName string
  * @global xarTpl_themeDir string
  * @param templateName string
- * @returns bool
+ * @return bool
  */
 function xarTplSetPageTemplateName($templateName)
 {
@@ -159,7 +159,7 @@ function xarTplSetPageTemplateName($templateName)
  * @global xarTpl_pageTitle string
  * @param title string
  * @param module string
- * @returns bool
+ * @return bool
  */
 function xarTplSetPageTitle($title = NULL, $module = NULL)
 {
@@ -198,7 +198,7 @@ function xarTplSetPageTitle($title = NULL, $module = NULL)
  * @param modName string
  * @param styleName string
  * @param fileExt string
- * @returns bool
+ * @return bool
  */ 
 function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css')
 {
@@ -223,7 +223,7 @@ function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css')
  * @param position string
  * @param owner string
  * @param code string
- * @returns bool
+ * @return bool
  */ 
 function xarTplAddJavaScriptCode($position, $owner, $code)
 {
@@ -247,7 +247,7 @@ function xarTplAddJavaScriptCode($position, $owner, $code)
  * @param funcName string module function to template
  * @param tplData array arguments for the template
  * @param templateName string the specific template to call
- * @returns string xarTpl__executeFromFile($sourceFileName, $tplData)
+ * @return string xarTpl__executeFromFile($sourceFileName, $tplData)
  */
 function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templateName = NULL)
 {
@@ -298,7 +298,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
  * @param blockName string the block name
  * @param tplData array arguments for the template
  * @param templateName string the specific template to call
- * @returns string xarTpl__executeFromFile($sourceFileName, $tplData)
+ * @return string xarTpl__executeFromFile($sourceFileName, $tplData)
  */
 function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = NULL)
 {
@@ -348,9 +348,7 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
  * @access  public
  * @param   modImage string, the module image url relative to xarimages/
  * @param   modName string, the module to check for the image <optional>
- * @returns theme image url if it exists
- * @returns module image url if it exists and theme image not found
- * @returns NULL if either image or module doesn't exist
+ * @return string theme image url if it exists or module image url if not, or NULL if neither found
  * @todo    provide examples, improve description, add functionality
 */
 function xarTplGetImage($modImage, $modName = NULL)
@@ -475,7 +473,7 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10)
  * @access public
  * @param templateCode string
  * @param tplData string
- * @returns 
+ * @return 
  */
 function xarTplString($templateCode, $tplData)
 {
@@ -488,7 +486,7 @@ function xarTplString($templateCode, $tplData)
  * @access public
  * @param templateCode string
  * @param tplData string
- * @returns 
+ * @return 
  */
 function xarTplFile($fileName, $tplData)
 {
@@ -500,7 +498,7 @@ function xarTplFile($fileName, $tplData)
  *
  * @access public
  * @param templateSource string
- * @returns 
+ * @return 
  */
 function xarTplCompileString($templateSource)
 {
@@ -522,7 +520,7 @@ function xarTplCompileString($templateSource)
  * @param mainModuleOutput stringthe module output
  * @param otherModulesOutput string
  * @param templateName string the template page to use
- * @returns string
+ * @return string
  *
  * @todo finish otherModulesOuptput
  */
@@ -558,7 +556,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
  * @global xarTpl_themeDir string
  * @param blockInfo string
  * @param templateName string
- * @returns bool xarTpl__executeFromFile($sourceFileName, $blockInfo)
+ * @return bool xarTpl__executeFromFile($sourceFileName, $blockInfo)
  */
 function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
 {
@@ -582,7 +580,7 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
  * @global xarTpl_themeDir string
  * @param widgetName string
  * @param tplData string
- * @returns xarTpl__executeFromFile($sourceFileName, $tplData)
+ * @return xarTpl__executeFromFile($sourceFileName, $tplData)
  */
 function xarTpl_renderWidget($widgetName, $tplData)
 {
@@ -617,7 +615,7 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
  * Get BL compiler instance
  * 
  * @access private
- * @returns object xarTpl__Compiler()
+ * @return object xarTpl__Compiler()
  */
 function xarTpl__getCompilerInstance()
 {
@@ -632,7 +630,7 @@ function xarTpl__getCompilerInstance()
  * @access private
  * @param templateCode string
  * @param tplData array
- * @returns string output
+ * @return string output
  */
 function xarTpl__execute($templateCode, $tplData)
 {
@@ -673,7 +671,7 @@ function xarTpl__execute($templateCode, $tplData)
  * @global xarTpl_cacheTemplates bool
  * @param sourceFileName string
  * @param tplData array
- * @returns mixed
+ * @return mixed
  */
 function xarTpl__executeFromFile($sourceFileName, $tplData)
 {

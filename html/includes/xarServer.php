@@ -173,8 +173,7 @@ function xarServerGetProtocol()
  * get base URL for Xaraya
  *
  * @access public
- * @returns string
- * @return base URL for Xaraya
+ * @return string base URL for Xaraya
  */
 function xarServerGetBaseURL()
 {
@@ -491,7 +490,6 @@ function xarRequest__setShortURLVars($vars)
  *
  * @access private
  * @param aliasModName name of the module
- * @returns mixed
  * @return string containing the module name
  * @raise BAD_PARAM
  */
@@ -515,7 +513,7 @@ function xarRequest__resolveModuleAlias($aliasModName)
  * @access public
  * @global xarResponse_redirectCalled bool
  * @param redirectURL string the URL to redirect to
- * @returns bool
+ * @return bool
  */
 function xarResponseRedirect($redirectURL)
 {
@@ -568,7 +566,7 @@ function xarResponseRedirect($redirectURL)
  * @author Marco Canini
  * @access public
  * @global xarResponse_redirectCalled bool
- * @returns bool
+ * @return bool
  */
 function xarResponseIsRedirected()
 {

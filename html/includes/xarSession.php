@@ -224,7 +224,7 @@ function xarSession_close()
  * @param $args['securityLevel'] the current security level
  * @param $args['duration'] duration of the session
  * @param $args['inactivityTimeout']
- * @returns bool
+ * @return bool
  */
 function xarSession__setup($args)
 {

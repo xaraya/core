@@ -636,8 +636,7 @@ function xarUser__getAuthModule($userId)
 
 /*
  * @access private
- * @returns bool
- * @return true if the variable is defined
+ * @return bool true if the variable is defined
  */
 function xarUser__isVarDefined($name)
 {
@@ -660,8 +659,7 @@ function xarUser__isVarDefined($name)
 
 /*
  * @access private
- * @returns bool
- * @return true
+ * @return bool
  * @raise NOT_LOGGED_IN, UNKNOWN, DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
 function xarUser__syncUsersTableFields()
@@ -700,8 +698,7 @@ function xarUser__syncUsersTableFields()
 
 /*
  * @access private
- * @returns bool
- * @return true
+ * @return bool
  * @raise DATABASE_ERROR
  */
 function xarUser__setUsersTableUserVar($name, $value, $userId)

@@ -165,7 +165,7 @@ class pnHTML
      * Constructor
      *
      * @access public
-     * @return boolean Always returns true
+     * @return bool Always returns true
      */
     function pnHTML()
     {
@@ -273,7 +273,7 @@ class pnHTML
      *
      * @access public
      * @since 1.13 - 2002/01/23
-     * @return boolean Always returns true
+     * @return bool Always returns true
      * @see FormStart(), FormFile()
      */
     function UploadMode()

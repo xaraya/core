@@ -21,8 +21,8 @@
  * @author Paul Rosania
  * @access protected
  * @param  array args
- * @param whatElseIsGoingLoaded integer
- * @returns bool
+ * @param  whatElseIsGoingLoaded integer
+ * @return bool
  * @todo    And why are you using $blockType instead of $blockName,
  *          when I said you to change I meant use $blockName everywhere,
  *          in the end it's the block name, not the block type, don't you think?
