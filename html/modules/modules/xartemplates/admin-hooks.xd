@@ -1,0 +1,32 @@
+<strong><xar:mlstring>Extend the functionality of your modules via one of the following available hooks :</xar:mlstring></strong>
+<p />
+<ul>
+<xar:loop name="$hookmodules">
+    <li><a href="#$modlink#">#$modname#</a> : #$modtitle# </li>
+    <xar:if condition="$modname eq $curhook">
+        <xar:mlstring>Use this functionality in the following modules</xar:mlstring> : 	[<a href="#$DetailsURL#">#$DetailsLabel#</a>]<br />
+        <xar:if condition="count($hooktypes) gt 0">
+            <br />
+            <xar:mlstring>This module offers the following hooks</xar:mlstring> :<br />
+            <ul>
+            <xar:loop name="$hooktypes">
+                <li>#$hooktype# </li>
+            </xar:loop>
+            </ul>
+        </xar:if>
+        <form action="&xar-modurl-modules-admin-updatehooks;" method="post">
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="curhook" value="#$curhook#" />
+            <xar:loop name="$hookedmodules">
+                <xar:if condition="!empty($header)">
+                    <br /><strong>#$header#</strong><br />
+                </xar:if>
+                <input type="checkbox" name="hooked_#$name#" value="1"#$checked# />#$name# : #$description#<br />
+            </xar:loop>
+            <br />
+            <input type="submit" value="<xar:mlstring>Save Changes</xar:mlstring>" />
+        </form>
+    </xar:if>
+</xar:loop>
+</ul>
+
