@@ -13,20 +13,20 @@
         #$tpl:headJavaScript#
     </head>
     <body>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<table width="100%" cellpadding="0" cellspacing="0">
     <tr>
-        <td style="text-align: left;background-image: url(themes/Xaraya_Classic/images/header_fill.gif);">
+        <td style="text-align:left; background-image:url(themes/Xaraya_Classic/images/header_fill.gif)">
             <a href="&xar-baseurl;">
-            <img src="themes/Xaraya_Classic/images/header_logo1.gif" alt="#xarConfigGetVar('Site.Core.SiteName')#" width="187" height="52" border="0" align="top" />
+            <img src="themes/Xaraya_Classic/images/header_logo1.gif" alt="#xarConfigGetVar('Site.Core.SiteName')#" width="187" height="52" style="align:left; vertical-align:top; border:0px" />
             </a>
         </td>
-        <td width="100%" background="themes/Xaraya_Classic/images/header_fill.gif">
-            <img src="themes/Xaraya_Classic/images/dot.gif" alt="" width="1" height="1" border="0" align="top" />
+        <td style="width:100%; background-image:url(themes/Xaraya_Classic/images/header_fill.gif)">
+            <img src="themes/Xaraya_Classic/images/dot.gif" alt="" style="align:middle; vertical-align:top; width:1px; height:1px; border:0px" />
         </td>
-        <td align="right" background="themes/Xaraya_Classic/images/header_fill.gif" />
+        <td style="align:right; background-image:url(themes/Xaraya_Classic/images/header_fill.gif)">
             <a href="http://www.xaraya.com">
-            <img src="themes/Xaraya_Classic/images/header_logo2.gif" alt="#xarConfigGetVar('Site.Core.SiteName')#" width="259" height="52" border="0" align="top" />
-            </a>
+            <img src="themes/Xaraya_Classic/images/header_logo2.gif" alt="#xarConfigGetVar('Site.Core.SiteName')#" style="vertical-align:top; width:259; height:52" />
+            </a>			
         </td>
     </tr>
 <!--
@@ -37,41 +37,40 @@
     </tr>
 -->
 </table>
-<br />
 
 <!-- start body -->
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<table width="100%" cellpadding="0" cellspacing="0">
     <tr>
         <td style="width: 18%;" align="left" valign="top">
-            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                    <td bgcolor="##ffffff">
+                    <td style="background-color:##ffffff">
                         <xar:blockgroup name="left" id="left" />
                     </td>
                 </tr>
-                <tr height="200">
-                    <td background="themes/Xaraya_Classic/images/sideline.gif">
+                <tr style="height:200">
+                    <td style="background-image: url(themes/Xaraya_Classic/images/sideline.gif)" >
                         <img src="themes/Xaraya_Classic/images/dot.gif" alt="" />
                     </td>
                 </tr>
             </table>
-        <td width="1%" background="themes/Xaraya_Classic/images/vline.gif" />
+        <td style="width:1%; background-image: url(themes/Xaraya_Classic/images/vline.gif);">
+			<img src="themes/Xaraya_Classic/images/dot.gif" alt="" style="align:middle; vertical-align:top; width:2px; height:1px; border:0px" />
         </td>
-        <td  class="main_copy" valign="top">
+        <td  class="main_copy" style="width: 80%; align: center; vertical-align: top">
             <xar:blockgroup name="center" id="center" />
             <xar:module id="modulespace" main="true" />
         </td>
-        <td width="1%">
-        </td>
-        <td style="width: 20%;" align="left" valign="top" background="themes/Xaraya_Classic/images/side_all.gif">
+        <td style="width: 1%"></td>
+        <td style="width: 20%; align: left; vertical-align: top; background-image:url(themes/Xaraya_Classic/images/side_all.gif)">
             <xar:blockgroup name="right" id="right" />
         </td>
     </tr>
 </table>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<table width="100%" cellpadding="0" cellspacing="0">
     <tr>
-        <td align="right" bgcolor="##f0f0f0">
+        <td style="height:20px; text-align: right; padding-right: 10px; background-color:##f0f0f0">
             <b>#xarConfigGetVar('Site.Core.Slogan')#</b>
         </td>
     </tr>
