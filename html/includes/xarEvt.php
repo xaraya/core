@@ -105,10 +105,6 @@
  */
 function xarEvt_init($args, $whatElseIsGoingLoaded)
 {
-    // Deprecated
-    //$GLOBALS['xarEvt_subscribed'] = array();
-    //$GLOBALS['xarEvt_knownEvents'] = array();
-
     return true;
 }
 
@@ -131,8 +127,6 @@ function xarEvt_trigger($eventName, $value = NULL)
 {
     // Must make sure the event exists.
     if (!xarEvt__checkEvent($eventName)) return; // throw back
-
-    //if (!isset($GLOBALS['xarEvt_subscribed'][$eventName])) return;
 
     // Call the event handlers in the active modules
     $activemods = xarEvt__GetActiveModsList();
@@ -238,15 +232,12 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
  */
 function xarEvt_registerEvent($eventName)
 {
-    
     if (empty($eventName)) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'eventName');
-        return false;
+        return;
     }
     
     $GLOBALS['xarEvt_knownEvents'][$eventName] = true;
-
-    // return a good message if all worked ok
     return true;
 }
 
@@ -279,29 +270,17 @@ function xarEvt__checkEvent($eventName)
 function xarEvt__GetActiveModsList()
 {
     // use vars instead of defines to narrow the scope
-    $XARMOD_STATE_ACTIVE = 3;
-    $XARMOD_MODE_SHARED = 1;
+    $XARMOD_STATE_ACTIVE  = 3;
+    $XARMOD_MODE_SHARED   = 1;
     $XARMOD_MODE_PER_SITE = 2;
-    $startNum = 1;
-    $numItems = -1;
-
-    $extraSelectClause = '';
-    $whereClauses = array();
-
-
+    
     $dbconn =& xarDBGetConn();
 
     $systabpre = xarDBGetSystemTablePrefix();
     $sitetabpre = xarDBGetSiteTablePrefix();
-
     $modulestable = $sitetabpre.'_modules';
-
     $module_statesTables = array(($systabpre.'_module_states'), ($sitetabpre.'_module_states'));
-
-    $whereClauses[] = 'states.xar_state = '.$XARMOD_STATE_ACTIVE;
-
     $mode = $XARMOD_MODE_SHARED;
-
     $modList = array();
 
     // Here we do 2 SELECTs: one for SHARED moded modules and
@@ -310,30 +289,19 @@ function xarEvt__GetActiveModsList()
     for ($i = 0; $i < 2; $i++ ) {
         $module_statesTable = $module_statesTables[$i];
 
-        $query = "SELECT mods.xar_regid,
-                         mods.xar_name,
-                         mods.xar_directory,
-                         mods.xar_version,
-                         states.xar_state";
-
-
-        $query .= " FROM $modulestable AS mods";
-        array_unshift($whereClauses, 'mods.xar_mode = '.$mode);
-
-        // Do join
-        $query .= " LEFT JOIN $module_statesTable AS states ON mods.xar_regid = states.xar_regid";
-
-        $whereClause = join(' AND ', $whereClauses);
-        $query .= " WHERE $whereClause";
-
-        $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1);
+        $query = "SELECT    mods.xar_regid, mods.xar_name,
+                            mods.xar_directory, mods.xar_version,
+                            states.xar_state
+                  FROM      $modulestable AS mods
+                  LEFT JOIN $module_statesTable AS states 
+                  ON        mods.xar_regid = states.xar_regid
+                  WHERE     states.xar_state = ? AND mods.xar_mode = ?";
+        $result =& $dbconn->Execute($query,array($XARMOD_STATE_ACTIVE,$mode));
         if (!$result) return;
         
         while(!$result->EOF) {
-            list($modInfo['regid'],
-                 $modInfo['name'],
-                 $modInfo['directory'],
-                 $modInfo['version'],
+            list($modInfo['regid'],     $modInfo['name'],
+                 $modInfo['directory'], $modInfo['version'],
                  $modState) = $result->fields;
                 
             if (xarVarIsCached('Evt.Mod.Infos', $modInfo['regid'])) {
@@ -341,32 +309,17 @@ function xarEvt__GetActiveModsList()
                 $modList[] = xarVarGetCached('Evt.Mod.Infos', $modInfo['regid']);
             } else {
                 $modInfo['mode'] = (int) $mode;
-                // $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
-                // Shortcut for os prepared directory
-                // $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
-                
                 $modInfo['state'] = (int) $modState;
-                
                 xarVarSetCached('Evt.Mod.BaseInfos', $modInfo['name'], $modInfo);
-                
-                // $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
-                // if (!isset($modFileInfo)) return; // throw back
-                //    $modInfo = array_merge($modInfo, $modFileInfo);
-                // $modInfo = array_merge($modFileInfo, $modInfo);
-                
                 xarVarSetCached('Evt.Mod.Infos', $modInfo['regid'], $modInfo);
-                
                 $modList[] = $modInfo;
             }
             $modInfo = array();
             $result->MoveNext();
         }
-    
         $result->Close();
         $mode = $XARMOD_MODE_PER_SITE;
-        array_shift($whereClauses);
     }
-    
     return $modList;
 }
 
