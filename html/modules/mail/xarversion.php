@@ -28,3 +28,4 @@ $modversion['securityschema'] = array('mail::' => '::');
 $modversion['class']          = 'Core Complete';
 $modversion['category']       = 'Global';
 
+?>
