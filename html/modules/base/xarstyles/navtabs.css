@@ -1,16 +1,17 @@
-/* category and status navigation tabs
-similar to roles, but nicely wrappable 
-and made out of a list */
-
+/* system-wide navigation tabs nicely wrappable and made out of a list */
 dl.xar-tabs {
-    margin: .5em auto;
+    margin: 0 0 .5em 0;
     padding: 3px 0 0 0;
     width: 100%;
-    display: block;
     float: left;
     background-color: #f0f0f0;
     line-height: 1.6em;
     border-bottom: 1px solid #a0a0a0;
+}
+
+html * dl.xar-tabs {
+    display: table;
+    float: none;
 }
 
 dl.xar-tabs dt.help {
@@ -39,7 +40,6 @@ dl.xar-tabs dd a {
     white-space: nowrap;
 }
 
-
 dl.xar-tabs dd a:hover {
     color: #ffffff;
     background-color: #bbbbbb;
@@ -54,7 +54,7 @@ dl.xar-tabs dd.active a {
 }
 
 /* ie5-mac seems to need this */
-* html dl.xar-tabs dd a { display:inline-block; }
+* html dl.xar-tabs dd a { display: inline-block; }
 
 /* a bit fancier look for good browsers */
 dl.xar-tabs dd.active > a {

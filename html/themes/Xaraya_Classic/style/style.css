@@ -18,6 +18,7 @@ body {
     background-image: url(../images/page_bg.gif);
     background-repeat: repeat-x;
     background-position: 0% 0%;
+    background-attachment: fixed;
     text-align: center;
 }
 
@@ -56,7 +57,9 @@ table {
     border-collapse: collapse;
     border-style: solid;
     border-color: #757F8B;
-    border-width: 0px;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
 }
 
 /*
@@ -74,7 +77,6 @@ tfoot {
 }
 
 th, td { padding: .25em; }
-
 
 /*
 General text and related selectors 
@@ -118,6 +120,8 @@ ul li {
     background-position: 0 .45em;
 }
 
+/* off-set background on all pre-styled li elements for good browsers */
+ul li[style] { background-image: none; }
 
 blockquote {
     color: #333366;
@@ -139,37 +143,46 @@ Form elements
 -------------------------------------------------------------------------[comment] */
 
 form {
-    margin: 0;
+    margin: 1em 0;
     padding: 0;
-}
-
-input {
-    font-weight: normal;
-    text-indent: 2px;
-    margin: 2px;
-    max-width:100%; 
+    display: block;
 }
 
 button { border: 2px outset #f0f0f0; }
-select { font-weight: normal;}
 
-/*
-in many browsers appearance of select is handled by OSs widgets, not by css
-------------------------------------------------------------------[important note] */
-
+input,
+select,
 textarea {
-    font-weight: normal;
-    text-indent: 2px;
+    font-family: monaco, courier, monospace;
+    font-size: .95em;
+    line-height: 1.8em;
+    color: #0a0a0a;
+    background-color: #fbfbfb;
+    padding: 1px 2px;
+    margin: 0 2px .5em 0;
+    border-color: #aaaaaa #dddddd #dddddd #aaaaaa;
+    border-width: 2px;
+    border-style: solid;
+    vertical-align: middle;
 }
 
-button, input, select, textarea {
-    color: #003399;
-    background-color: #F8F8F8;
+/* input types and form elements rules can be accurately re-specified for good browsers */
+input[type="text"],
+input[type="password"],
+input[type="file"],
+form * textarea { width: 90%; }
+select[multiple="multiple"] { width: 45%; }
+
+input[type="submit"] {
+    border-color: #dddddd #aaaaaa #aaaaaa #dddddd;
+    background-color: #eeeeee;
 }
 
-/*
-shared properties for form elements
--------------------------------------------------------------------------[comment] */
+input[type="checkbox"],
+input[type="radio"] {
+    width: auto;
+    margin: auto 3px;
+}
 
 /*
 replaced elements 
@@ -246,7 +259,7 @@ center block group classes
 .xar-block-head-center { width: 100%; }
 
 .xar-block-title-center {
-/*  background-color: inherit; */
+    /*  background-color: inherit; */
     font-weight: bold;
 }
 
