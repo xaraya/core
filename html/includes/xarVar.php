@@ -172,8 +172,6 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * 'bool' matches a string that can be 'true' or 'false'
  * 'str:<min len>:<max len>' matches a string which has a lenght between <min len> and <max len>, if <min len>
  *                           is omitted no control is done on mininum lenght, the same applies to <max len>
- * 'regex:<pattern>' matches against the <pattern> regular expression, because preg_match is used internally the pattern
- *                   must be contained into delimiters (/ or !)
  * 'html:<level>' validates the subject by searching unallowed html tags, allowed tags are defined by specifying <level>
  *                that could be one of restricted, basic, enhanced, admin. This last level is not configurable and allows
  *                every tag
@@ -189,99 +187,249 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * @access public
  * @param validation mixed the validation to be performed
  * @param subject string the subject on which the validation must be performed
- * @param convValue contains the converted value of $subject
+ * @param convValue contains the converted value of $subject // i sugest to deprecate this and subject for everything
  * @return bool true if the $subject validates correctly, false otherwise
  */
-function xarVarValidate($validation, $subject, &$convValue)
-{
-    assert('is_string($validation) || is_object($validation)');
-    assert('is_string($subject)');
+function xarVarValidate($validation, $subject, &$convValue) {
 
-    if (is_object($validation)) {
-        return $validation->validate($subject, $convValue);
+    global $_xarValidationList;
+    
+    if (!isset($_xarValidationList)) {
+        $xarValidationList = array();
     }
+
     $valParams = explode(':', $validation);
-    $valType = array_shift($valParams); 
-    switch ($valType) {
-        case 'id':
-        $valParams = array('1', '');
+    $valType = array_shift($valParams);
 
-        case 'int':
-        assert('count($valParams) == 2');
-        $value = (int) $subject;
-        if (!empty($valParams[0])) {
-            if ($value < (int) $valParams[0]) {
+    if (isset($_xarValidationList[$valType])) {
+        $_xarValidationList[$valType]->setSubject($subject);
+        $_xarValidationList[$valType]->setParameters($valParams);
+        return $_xarValidationList[$valType]->validate($convValue);
+    } else {
+        // Raise an exception
+        $msg = xarML('The validation type \'#(1)\' couldn\'t be found.', $valType);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                        new SystemException($msg));
+        return false;
+    }
+}
+
+
+/**
+ * Allows developers to use Xaraya Variable Validation for their own validation schemas
+ *
+ * Abstract Factory Design Pattern
+ *
+ * @author Flavio Botelho
+ * //@access public for later on
+ * @access private
+ * @param name mixed the validation to be performed
+ * @param object mixed the validation to be performed
+ * @return bool true if the $subject validates correctly, false otherwise
+ */
+function xarVarRegisterValidation ($validation_name, $object_name) {
+
+    global $_xarValidationList;
+
+    if (!isset($_xarValidationList)) {
+        $xarValidationList = array();
+    }
+
+    if (empty($validation_name)) {
+        // Raise an exception
+        // ML system not loaded yet
+        $msg = "The required validation name '$validation_name' input variable couldn\'t be found.";
+        die($msg);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                        new SystemException($msg));
+        return false;
+    }
+
+    if (isset($validationList[$validation_name])) {
+        // Raise an exception
+        // ML system not loaded yet
+        $msg = "The validation name '$validation_name' is already being used";
+        die($msg);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                        new SystemException($msg));
+        return false;
+    }
+
+    if (empty($object_name)) {
+        // Raise an exception
+        // ML system not loaded yet
+        $msg = "The required object name '$object_name' input variable couldn\'t be found or do not contain an validation object.";
+        die($msg);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                        new SystemException($msg));
+        return false;
+    }
+
+    if (!class_exists($object_name)) {
+        // Raise an exception
+        // ML system not loaded yet
+        $msg = "'$object_name' isnt the name of an object.";
+        die($msg);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                        new SystemException($msg));
+        return false;
+    }
+
+    if (!is_subclass_of($obj=&new $object_name, 'xarVarValidator')) {
+        // Raise an exception
+        // ML system not loaded yet
+        $msg = "'$object_name' isnt a child of the object xarVarValidator.";
+        die($msg);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                        new SystemException($msg));
+        return false;
+    }
+
+
+    $_xarValidationList[$validation_name] =& $obj;
+    
+    return true;
+
+}
+
+
+
+/**
+ *
+ * 
+ * @package variables
+ */
+class xarVarValidator {
+    var $subject;
+    var $parameters = array();
+
+    function setSubject(&$subject) {
+        $this->subject = $subject;
+    }
+
+    function setParameters($parameters) {
+        $this->parameters = $parameters;
+    }
+
+    function validate(&$convValue) {
+        die('Validation not implemented');
+    }
+}
+
+class xarVarValidator_int extends xarVarValidator {
+    function validate (&$convValue) {
+    
+        $value = intval($this->subject);
+        if ("$this->subject" != "$value") {
+            return false;
+        }
+        
+        if (isset($this->parameters[0]) && !empty($this->parameters[0])) {
+            if ($value < (int) $this->parameters[0]) {
                 return false;
             }
         }
-        if (!empty($valParams[1])) {
-            if ($value > (int) $valParams[1]) {
+
+        if (isset($this->parameters[1]) && !empty($this->parameters[1])) {
+            if ($value > (int) $this->parameters[1]) {
                 return false;
             }
         }
+
         $convValue = $value;
-        break;
+        return true;
+    }
+}
 
-        case 'float':
-        assert('count($valParams) == 2');
-        $value = (float) $subject;
-        if (!empty($valParams[0])) {
-            if ($value < (float) $valParams[0]) {
+class xarVarValidator_id extends xarVarValidator_int {
+    function setParameters ($paremeters) {
+        $this->parameters = array(0 => 1, 1 => null);
+    }
+}
+
+class xarVarValidator_float extends xarVarValidator {
+    function validate (&$convValue) {
+
+        $value = floatval($this->subject);
+        if ("$this->subject" != "$value") {
+            return false;
+        }
+        
+        $this->subject = $value;
+
+        if (isset($this->parameters[0]) && !empty($this->parameters[0])) {
+            if ($value < (int) $this->parameters[0]) {
                 return false;
             }
         }
-        if (!empty($valParams[1])) {
-            if ($value > (float) $valParams[1]) {
+
+        if (isset($this->parameters[1]) && !empty($this->parameters[1])) {
+            if ($value > (int) $this->parameters[1]) {
                 return false;
             }
         }
+
         $convValue = $value;
-        break;
+        return true;
+    }
+}
 
-        case 'bool':
-        assert('count($valParams) == 0');
-        if ($subject == 'true') {
-            $convValue = true;
-        } elseif ($subject == 'false') {
-            $convValue = false;
+class xarVarValidator_bool extends xarVarValidator {
+
+    function validate (&$convValue) {
+        if ($this->subject == 'true') {
+            $this->subject = true;
+        } elseif ($this->subject == 'false') {
+            $this->subject = false;
         } else {
             return false;
         }
-        break;
 
-        case 'str':
-        assert('count($valParams) == 2');
-        $len = strlen($subject);
-        if (!empty($valParams[0])) {
-            if ($len < (int) $valParams[0]) {
+        $convValue = $value;
+        return true;
+    }
+}
+
+class xarVarValidator_str extends xarVarValidator {
+
+    function validate (&$convValue) {
+
+        $length = strlen($this->subject);
+
+        if (isset($this->parameters[0]) && !empty($this->parameters[0])) {
+            if ($length < (int) $this->parameters[0]) {
                 return false;
             }
         }
-        if (!empty($valParams[1])) {
-            if ($len > (int) $valParams[1]) {
+
+        if (isset($this->parameters[1]) && !empty($this->parameters[1])) {
+            if ($length > (int) $this->parameters[1]) {
                 return false;
             }
         }
-        if (preg_match("|</?(\w+)(\s+.*?)?/?>|", $subject, $matches)) return false;
-        $convValue = $subject;
-        break;
+        
+        $convValue = (string) $this->subject;
+        return true;
+    }
+}
 
-        case 'regexp':
-        assert('count($valParams) == 1');
-        if (!preg_match($valParams[0], $subject)) {
-            return false;
-        }
-        $convValue = $subject;
-        break;
+class xarVarValidator_html extends xarVarValidator {
 
-        case 'html':
-        assert('count($valParams) == 1 && ($valParams[0] == "restricted" || $valParams[0] == "basic" ||
-                $valParams[0] == "enhanced" || $valParams[0] == "admin")');
+    function validate (&$convValue) {
+
+        assert('($this->parameters[0] == "restricted" ||
+                 $this->parameters[0] == "basic" ||
+                 $this->parameters[0] == "enhanced" ||
+                 $this->parameters[0] == "admin")');
+
         if ($valParams[0] == 'admin') {
-            break;
+            return true;
         }
-        $allowedTags = xarVar__getAllowedTags($valParams[0]); 
-        preg_match_all("|</?(\w+)(\s+.*?)?/?>|", $subject, $matches, PREG_SET_ORDER);
+
+        $allowedTags = xarVar__getAllowedTags($valParams[0]);
+
+        preg_match_all("|</?(\w+)(\s+.*?)?/?>|", $this->subject, $matches, PREG_SET_ORDER);
+
         foreach ($matches as $match) {
             $tag = strtolower($match[1]);
             if (!isset($allowedTags[$tag])) {
@@ -290,22 +438,19 @@ function xarVarValidate($validation, $subject, &$convValue)
                 return false;
             }
         }
-        break;
+
+        $convValue = $value;
+        return true;
     }
-    return true;
 }
 
-/**
- *
- * 
- * @package variables
- */
-class xarVarValidator
-{
-    function validate($subject, &$convValue)
-    {
-    }
-}
+xarVarRegisterValidation ('int', 'xarVarValidator_int');
+xarVarRegisterValidation ('id', 'xarVarValidator_id');
+xarVarRegisterValidation ('float', 'xarVarValidator_float');
+xarVarRegisterValidation ('bool', 'xarVarValidator_bool');
+xarVarRegisterValidation ('str', 'xarVarValidator_str');
+xarVarRegisterValidation ('html', 'xarVarValidator_html');
+
 
 /**
  *
