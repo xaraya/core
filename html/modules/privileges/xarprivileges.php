@@ -440,7 +440,7 @@ class xarMasks
         // check if the exception needs to be caught here or not
         if ($catch && !$pass) {
             $msg = xarML('No privilege for #(1)',$mask->getName());
-            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA',
+            xarErrorSet(XAR_USER_EXCEPTION, 'NO_PRIVILEGES',
                            new DefaultUserException($msg));
         }
 

@@ -38,6 +38,10 @@
         'MULTIPLE_INSTANCES' => array(
             'title' => xarML('Multiple instances'),
             'short' => xarML('A module contains more than one instance of the same block type.')),
+        'NO_PRIVILEGES' => array(
+            'title' => xarML('Privileges Error'),
+            'short' => xarML('You do not have privileges for this operation.'),
+            'long' => xarML('The operation you are attempting requires privileges that you do not have. Contact the systems/site administrator to request access.')),
         'NOT_LOGGED_IN' => array(
             'title' => xarML('Not logged in'),
             'short' => xarML('You are attempting an operation that is not allowed for the Anonymous user.'),

@@ -42,7 +42,7 @@ function roles_loginblock_info()
 function roles_loginblock_display($blockinfo)
 {
     // Security Check
-    if(!xarSecurityCheck('ViewLogin',1,'Block',"Login:" . $blockinfo['title'] . ":All",'All')) return;
+    if(!xarSecurityCheck('ViewLogin',0,'Block',"Login:" . $blockinfo['title'] . ":All",'All')) return;
 
     // Get variables from content block
     if (!is_array($blockinfo['content'])) {
