@@ -293,9 +293,14 @@ function modules_activate()
  * @returns bool
  * @todo include setting moduservars in next upgrade (2.1)
  */
-function modules_upgrade($oldversion)
+function modules_upgrade($oldVersion)
 {
-    return false;
+    switch($oldVersion) {
+    case '2.02':
+        // compatability upgrade, nothing to be done
+        break;
+    }
+    return true;
 } 
 
 /**
