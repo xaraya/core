@@ -108,7 +108,7 @@ function roles_admin_sitelock($args)
                 if(!xarModAPIFunc('roles','admin','clearsessions', $spared)) {
                     $msg = xarML('Could not clear sessions table');
                     xarExceptionSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
+                    'DATABASE_ERROR',
                      new SystemException($msg));
                      return;
                 }
