@@ -21,7 +21,7 @@
                 </span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
-                <input type="text" name="block_name" id="block_name" value="#$instance['name']#" maxlength="255" /> TODO
+                <input type="text" name="block_name" id="block_name" value="#$instance['name']#" maxlength="255" />
             </span>
         </p>
 
