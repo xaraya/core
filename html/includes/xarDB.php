@@ -135,13 +135,14 @@ function xarDBLoadTableMaintenanceAPI()
  * This function will include the appropriate classes and instantiate
  * a data dictionary object for the specified mode. The default mode
  * is 'READONLY', which just provides methods for reading the data
- * dictionary. Mode 'METADATA' will return the meta data object. Further
- * modes will support the return of an object for manipulating the
- * database structure.
+ * dictionary. Mode 'METADATA' will return the meta data object.
+ * Mode 'ALTERTABLE' will provide methods for altering schemas
+ * (creating, removing and changing tables, indexes, constraints, etc).
+ * Mode 'ALTERDATABASE' will provide the highest level of commands
+ * for creating, dropping and changing databases.
  *
- * NOTE: until the data dictionary is split into separate readonly and
- * amend classes, the READONLY mode will return an object containing
- * all read and amend methods.
+ * NOTE: until the data dictionary is split into separate classes
+ * all modes except METADATA will return the ALTERDATABASE object.
  *
  * @access public
  * @return data dictionary object (specifics depend on mode)
@@ -150,6 +151,7 @@ function xarDBLoadTableMaintenanceAPI()
  * @todo fully implement the mode, by layering the classes into separate files of readonly and amend methods
  * @todo xarMetaData class needs to accept the database connection object
  * @todo make xarMetaData the base class for the data dictionary
+ * @todo move these comments off to some proper document
  */
 function &xarDBNewDataDict(&$dbconn, $mode = 'READONLY')
 {
@@ -161,7 +163,7 @@ function &xarDBNewDataDict(&$dbconn, $mode = 'READONLY')
     if ($mode == 'METADATA') {
         $class = 'xarMetaData';
     } else {
-        // 'READONLY' or the default for unknown modes.
+        // 'READONLY', 'ALTERTABLE', 'ALTERDATABASE' or other.
         $class = 'xarDataDict';
     }
 
