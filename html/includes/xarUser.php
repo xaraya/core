@@ -332,7 +332,7 @@ function xarUserGetVar($name, $userId = NULL)
         if ($name == 'name' || $name == 'uname') {
             return xarMLByKey('ANONYMOUS');
         }
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN');
+        xarErrorSet(XAR_USER_EXCEPTION, 'NOT_LOGGED_IN');
         return;
     }
 
