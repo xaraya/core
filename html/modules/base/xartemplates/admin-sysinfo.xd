@@ -12,7 +12,7 @@
                     <a href="&xar-modurl-base-admin-modifyconfig;"><xar:mlstring>Modify Xaraya Site Configuration</xar:mlstring></a>
                 </td>
                 <td align="center">
-                    <a href="&xar-modurl-base-admin-sysinfo&theme=print;"><xar:mlstring>View System Information</xar:mlstring></a>
+                    <a href="&xar-modurl-base-admin-sysinfo;"><xar:mlstring>View System Information</xar:mlstring></a>
                 </td>
                 <td align="center">
                     <a href="&xar-modurl-base-admin-addallowed;"><xar:mlstring>Add Allowed Vars</xar:mlstring></a>
@@ -23,8 +23,17 @@
     </tr>
 </table>
 
-<br />
-<br />
-<br />
+<form action="&xar-modurl-base-admin-sysinfo;" method="POST">
+<input type="radio" name="what" value="1" <xar:if condition="$what eq 1">checked="checked"</xar:if>>General info
+<input type="radio" name="what" value="2" <xar:if condition="$what eq 2">checked="checked"</xar:if>>Credits
+<input type="radio" name="what" value="4" <xar:if condition="$what eq 4">checked="checked"</xar:if>>Configuration
+<input type="radio" name="what" value="8" <xar:if condition="$what eq 8">checked="checked"</xar:if>>Modules
+<input type="radio" name="what" value="16" <xar:if condition="$what eq 16">checked="checked"</xar:if>>Environment
+<input type="radio" name="what" value="32" <xar:if condition="$what eq 32">checked="checked"</xar:if>>Variables
+<input type="radio" name="what" value="64" <xar:if condition="$what eq 64">checked="checked"</xar:if>>License
+<input type="radio" name="what" value="-1" <xar:if condition="$what eq -1">checked="checked"</xar:if>>All
+<input type="submit" value="<xar:mlstring>Refresh</xar:mlstring>">
+</form>
 
-<?php phpinfo(); ?>
+<br />
+#$phpinfo#
