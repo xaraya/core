@@ -550,8 +550,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     $this->stepBack(4);
                 } elseif ($nextToken == XAR_TOKEN_NONMARKUP_START) {
                     $token .= $nextToken; // <!
-                    $buildup='';
-                    // Get all tokens till the first whitespace char, and check whether we found the comment tokens
+                    $buildup=''; unset($identifier);unset($remember);
+                    // Get all tokens till the first whitespace char, and check whether we found any tokens
                     $nextChar = $this->getNextToken();
                     while(trim($nextChar)) {
                         $buildup .= $nextChar;
@@ -569,8 +569,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         }
                         $nextChar = $this->getNextToken();
                     }
-                    if(!isset($identifier)) $identifier = $nextChar;
-                    // identifier if now a token or free form (in our case  -- or --- or the first whitespace char
+                    if(!isset($identifier)) {
+                        $identifier = $nextChar;
+                        $remember = $identifier;
+                    }
+                    // identifier is now a token or free form (in our case  -- or --- or the first whitespace char
 
                     // Get the rest of the non markup tag, recording along the way
                     $matchToken=''; $match = '';
@@ -581,12 +584,17 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $nextChar = $this->getNextToken();
                         $matchToken = substr($match,-1* strlen($identifier));
                     }
+                    // special case for the freeform, set it to whatever it was after the buildup 
+                    // if the matchtoken doesn't match the identifier
+                    if($matchToken != $identifier && isset($remember)) {
+                        $match .= $matchToken;
+                        $matchToken = $remember;
+                    } 
                     $tagrest = substr($match,0,-1 * strlen($identifier));
 
                     while(isset($nextChar) && $nextChar != XAR_TOKEN_TAG_END) {
                         $nextChar = $this->getNextToken();
                     }
-                    
                     // Was it properly ended?
                     if($matchToken == $identifier && $nextChar == XAR_TOKEN_TAG_END) {
                         // the tag was properly ended.
@@ -612,9 +620,10 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             return;
                         }
                     } else {
+                        xarLogMessage("[$token][$buildup][$identifier][$tagrest][$matchToken][$nextChar]");
                         $this->raiseError(XAR_BL_INVALID_TAG,
-                                          "A non-markup tag (probably a comment) wasn't properly matches (".
-                                          $matchToken." vs. ". $identifier .") This is invalid XML syntax",$this);
+                                          "A non-markup tag (probably a comment) wasn't properly matches ('".
+                                          $identifier."' vs. '". $matchToken ."') This is invalid XML syntax",$this);
                         return;
                     }
                     break;
