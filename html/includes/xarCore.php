@@ -138,15 +138,10 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     include 'includes/xarLog.php';
     // {ML_dont_parse 'includes/xarEvt.php'}
     include 'includes/xarEvt.php';
-    // {ML_dont_parse 'includes/xarException.php'}
     include 'includes/xarException.php';
-    // {ML_dont_parse 'includes/xarVar.php'}
     include 'includes/xarVar.php';
-    // {ML_dont_parse 'includes/xarServer.php'}
     include 'includes/xarServer.php';
-    // {ML_dont_parse 'includes/xarMLS.php'}
     include 'includes/xarMLS.php';
-    // {ML_dont_parse 'includes/xarTemplate.php'}
     include 'includes/xarTemplate.php';
 
     /*
@@ -183,7 +178,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     if ($whatToLoad & XARCORE_SYSTEM_ADODB) {
-        // {ML_dont_parse 'includes/xarDB.php'}
         include 'includes/xarDB.php';
         include 'includes/xarDataDict.php';
 
@@ -229,7 +223,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     if ($whatToLoad & XARCORE_SYSTEM_CONFIGURATION) {
-        // {ML_dont_parse 'includes/xarConfig.php'}
         include 'includes/xarConfig.php';
 
         // Start Configuration Unit
@@ -253,9 +246,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * @todo <mrb> check if this is on/off by default.
      */
     if (xarConfigGetVar('Site.Core.LoadLegacy') == true){
-        // {ML_dont_parse 'includes/pnHTML.php'}
         include 'includes/pnHTML.php';
-        // {ML_dont_parse 'includes/pnLegacy.php'}
         include 'includes/pnLegacy.php';
     }
 
@@ -299,7 +290,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     define('_XAR_ID_UNREGISTERED', $anonuid);
 
     if ($whatToLoad & XARCORE_SYSTEM_SESSION) {
-        // {ML_dont_parse 'includes/xarSession.php'}
         include 'includes/xarSession.php';
 
         $systemArgs = array('securityLevel' => xarConfigGetVar('Site.Session.SecurityLevel'),
@@ -318,7 +308,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     //        it's a legacy thought, we don't need it anymore
 
     if ($whatToLoad & XARCORE_SYSTEM_BLOCKS) {
-        // {ML_dont_parse 'includes/xarBlocks.php'}
         include 'includes/xarBlocks.php';
 
         // Start Blocks Support Sytem
@@ -336,7 +325,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * @todo <mrb> i thought it was configurable
      */
     if ($whatToLoad & XARCORE_SYSTEM_MODULES) {
-        // {ML_dont_parse 'includes/xarMod.php'}
         include 'includes/xarMod.php';
         $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => false);
@@ -365,9 +353,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * @todo <marcinmilan> review what pasts of the old user system need to be retained
      */
     if ($whatToLoad & XARCORE_SYSTEM_USER) {
-        // {ML_dont_parse 'includes/xarUser.php'}
         include 'includes/xarUser.php';
-        // {ML_dont_parse 'includes/xarSecurity.php'}
         include 'includes/xarSecurity.php';
 
         // Start User System

@@ -288,6 +288,22 @@ function xarVarValidate($validation, &$subject, $supress = false) {
         return;
     }
 
+    // {ML_include 'includes/validations/array.php'}
+    // {ML_include 'includes/validations/bool.php'}
+    // {ML_include 'includes/validations/checkbox.php'}
+    // {ML_include 'includes/validations/email.php'}
+    // {ML_include 'includes/validations/enum.php'}
+    // {ML_include 'includes/validations/float.php'}
+    // {ML_include 'includes/validations/fullemail.php'}
+    // {ML_include 'includes/validations/html.php'}
+    // {ML_include 'includes/validations/id.php'}
+    // {ML_include 'includes/validations/int.php'}
+    // {ML_include 'includes/validations/isset.php'}
+    // {ML_include 'includes/validations/list.php'}
+    // {ML_include 'includes/validations/mxcheck.php'}
+    // {ML_include 'includes/validations/notempty.php'}
+    // {ML_include 'includes/validations/regexp.php'}
+    // {ML_include 'includes/validations/str.php'}
     $function_file = './includes/validations/'.$valType.'.php';
     $function_name = 'variable_validations_'.$valType;
 
