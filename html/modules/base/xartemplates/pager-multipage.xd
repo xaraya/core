@@ -5,7 +5,7 @@
     <xar:comment> Display first-page link if there is more than one page and we are not on that page </xar:comment>
     <xar:if condition="$currentpagenum ne $firstpagenum">
         &nbsp;&nbsp;<a title="#xarML('First page')#" href="#$firsturl#">#xarML('First')#</a>
-    </xar:else />
+    <xar:else />
         &nbsp;&nbsp;<span title="#xarML('First page')#">#xarML('First')#</span>
     </xar:if>
 
@@ -16,7 +16,7 @@
     </xar:ml></xar:set>
     <xar:if condition="$currentblock ne $firstblock">
         &nbsp;&nbsp;<a title="#$prevblocklabel#" href="#$prevblockurl#">&lt;&lt;</a>
-    </xar:else />
+    <xar:else />
         &nbsp;&nbsp;<span title="#$prevblocklabel#">&lt;&lt;</span>
     </xar:if>
 
