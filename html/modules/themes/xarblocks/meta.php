@@ -100,7 +100,7 @@ function themes_metablock_display($blockinfo)
 
     $meta['geourl'] = $vars['usegeo'];
 
-    $meta['activepage'] = xarServerGetCurrentURL();
+    $meta['activepage'] = preg_replace('/&[^amp;]/', '&amp;', xarServerGetCurrentURL());
 
     $blockinfo['content'] = $meta;
     return $blockinfo;
