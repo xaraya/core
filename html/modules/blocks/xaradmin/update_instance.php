@@ -38,7 +38,7 @@ function blocks_admin_update_instance()
     if (!xarSecConfirmAuthKey()) {return;}
 
     // Security Check.
-	if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
+	if (!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
 
     // Get and update block info.
     $blockinfo = xarModAPIFunc('blocks', 'user', 'get', array('bid' => $bid));
@@ -86,9 +86,9 @@ function blocks_admin_update_instance()
     if (!xarModAPIFunc(
             'blocks', 'admin', 'load',
             array(
-                'modName' => $blockinfo['module'],
-                'blockName' => $blockinfo['type'],
-                'blockFunc' => 'modify'
+                'module' => $blockinfo['module'],
+                'type' => $blockinfo['type'],
+                'func' => 'modify'
             )
         )
     ) {return;}
@@ -100,13 +100,26 @@ function blocks_admin_update_instance()
     if (function_exists($updatefunc)) {
         $blockinfo = $updatefunc($blockinfo);
     } else {
-        $updatefunc = $usname . '_' . $blockinfo['type'] . 'block_info';
-        $func = $updatefunc();
+        $blockinfofunc = $usname . '_' . $blockinfo['type'] . 'block_info';
+        $blockinfo = $blockinfofunc();
         if (!empty($func['func_update'])) {
-            if (function_exists($func['func_update'])) {
-                $blockinfo = $func['func_update']($blockinfo);
+            $updatefunc = $blockinfo['func_update'];
+            if (function_exists($updatefunc)) {
+                $blockinfo = $updatefunc($blockinfo);
             }
         }
+    }
+
+    // If the update function failed to return the blockinfo array, then
+    // throw the error back (if there is an error).
+    if (!is_array($blockinfo)) {
+        if (!xarCurrentErrorType()) {
+            // Raise an error here, since no error has been raised in 
+            // the block update function.
+            $msg = xarML('Unknown error in block update function "#(1)"', $updatefunc);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        }
+        return; 
     }
 
     // Pass to API - do generic updates.

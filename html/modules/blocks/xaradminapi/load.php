@@ -80,7 +80,7 @@ function blocks_adminapi_load($args)
         if (!file_exists($filePath)) {
             // TODO: should the block base be optional now?
             // i.e. do we really need to raise an error?
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $filePath);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $filePath);
             return;
         }
         include($filePath);

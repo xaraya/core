@@ -26,7 +26,7 @@ function blocks_adminapi_delete_group($args)
     // Argument check
     if (!isset($gid) || !is_numeric($gid)) {
         $msg = xarML('Invalid parameter');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return false;
     }
 

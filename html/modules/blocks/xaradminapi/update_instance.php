@@ -51,7 +51,8 @@ function blocks_adminapi_update_instance($args)
         (!isset($title)) ||
         (!isset($refresh) || !is_numeric($refresh)) ||
         (!isset($state)  || !is_numeric($state))) {
-        xarSessionSetVar('errormsg', _MODARGSERROR);
+        $msg = xarML('Invalid parameter');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return false;
     }
 
