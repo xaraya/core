@@ -86,19 +86,8 @@ function modules_admin_hooks($args)
         $data['hookedmodules'] = $modList;
         $data['authid'] = xarSecGenAuthKey('modules');
 
-        if (!xarVarFetch('details', 'bool', $details, false, XARVAR_NOT_REQUIRED)) {return;}
-        if ($details) {
-            $data['DetailsLabel'] = xarML('Hide Details');
-            $data['DetailsURL'] = xarModURL('modules','admin','hooks',
-                                            array('hook' => $curhook, 'details' => false));
-
-            foreach ($hooklist[$curhook] as $hook => $hookedmods) {
-                $data['hooktypes'][] = $hook;
-            }
-        } else {
-            $data['DetailsLabel'] = xarML('Show Details');
-            $data['DetailsURL'] = xarModURL('modules','admin','hooks',
-                                            array('hook' => $curhook, 'details' => true));
+        foreach ($hooklist[$curhook] as $hook => $hookedmods) {
+            $data['hooktypes'][] = $hook;
         }
     }
 

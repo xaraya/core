@@ -131,6 +131,14 @@ common form elements
 /*
 minimal formatting - relative padding
 */
+.xar-padding-none { padding: 0; }
+.xar-padding-nonetop { padding-top: 0; }
+.xar-padding-noneright { padding-right: 0; }
+.xar-padding-nonebottom { padding-bottom: 0; }
+.xar-padding-noneleft { padding-left: 0; }
+.xar-padding-nonesides { padding-left: 0; padding-right: 0; }
+.xar-padding-noneends { padding-top: 0; padding-bottom: 0; }
+
 .xar-padding-thin { padding: 1px; }
 .xar-padding-thintop { padding-top: 1px; }
 .xar-padding-thinright { padding-right: 1px; }
@@ -158,6 +166,14 @@ minimal formatting - relative padding
 /*
 minimal formatting - relative margin
 */
+.xar-margin-none { margin: 0; }
+.xar-margin-nonetop { margin-top: 0; }
+.xar-margin-noneright { margin-right: 0; }
+.xar-margin-nonebottom { margin-bottom: 0; }
+.xar-margin-noneleft { margin-left: 0; }
+.xar-margin-nonesides { margin-left: 0; margin-right: 0; }
+.xar-margin-noneends { margin-top: 0; margin-bottom: 0; }
+
 .xar-margin-thin { margin: 1px; }
 .xar-margin-thintop { margin-top: 1px; }
 .xar-margin-thinright { margin-right: 1px; }

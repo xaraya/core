@@ -30,7 +30,6 @@ function modules_admin_modify($args)
 
     // xarVarFetch does validation if not explicitly set to be not required
     xarVarFetch('id','id',$id);
-    xarVarFetch('details','str:0:1',$details,0,XARVAR_NOT_REQUIRED);
     xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET);
 
     $modInfo = xarModGetInfo($id);
@@ -43,15 +42,6 @@ function modules_admin_modify($args)
     if(!xarSecurityCheck('AdminModules',0,'All',"$modName::$id")) return;
 
     $data['savechangeslabel'] = xarML('Save Changes');
-    if ($details) {
-        $data['DetailsLabel'] = xarML('Hide Details');
-        $data['DetailsURL'] = xarModURL('modules','admin','modify',
-                                        array('id' => $id));
-    } else {
-        $data['DetailsLabel'] = xarML('Show Details');
-        $data['DetailsURL'] = xarModURL('modules','admin','modify',
-                                        array('id' => $id, 'details' => true));
-    }
 
     // Get the list of all hook modules, and the current hooks enabled for this module
     $hooklist = xarModAPIFunc('modules','admin','gethooklist',
@@ -93,7 +83,7 @@ function modules_admin_modify($args)
     }
   //print_r($data['hooklist']);
     // End form
-    $data['details'] = $details;
+
     $data['authid'] = xarSecGenAuthKey('modules');
     $data['id'] = $id;
     $data['displayname'] = $modInfo['displayname'];
