@@ -101,9 +101,9 @@ function blocks_admin_update_instance()
         $blockinfo = $updatefunc($blockinfo);
     } else {
         $blockinfofunc = $usname . '_' . $blockinfo['type'] . 'block_info';
-        $blockinfo = $blockinfofunc();
-        if (!empty($func['func_update'])) {
-            $updatefunc = $blockinfo['func_update'];
+        $blockdesc = $blockinfofunc();
+        if (!empty($blockdesc['func_update'])) {
+            $updatefunc = $blockdesc['func_update'];
             if (function_exists($updatefunc)) {
                 $blockinfo = $updatefunc($blockinfo);
             }
