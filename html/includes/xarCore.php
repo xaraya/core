@@ -725,3 +725,4 @@ function xarCore_FlushCached($cacheKey)
     }
 }
 
+?>
