@@ -1,173 +1,247 @@
-	<div id="install">
-	  <div style="padding:10px;">
-      <div style="text-align:center;"><span class="xar-pagetitle">Choose Configuration Options</span></div><br />
-			<form action="&xar-modurl-installer-admin-confirm_configuration;" method="post">
-			  <div style="text-align:center;">
-  			  <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-    			<input type="hidden" name="configuration" id="configuration" value="#$configuration#" />
-    			<input type="hidden" name="confirmed" id="confirmed" value="true" />
-   				<br />
-      		<div style="text-align:justify;">
-    			  <table cellspacing="0" border="0">
-						<tr>
-						  <th colspan="2">Privileges</th>
-						</tr>
-						<xar:loop name="$options1">
-						<tr>
-							<xar:if condition="$loop:item['option'] eq ''">                  
-						<td width="100%" class="xar-normal">
-							  #$loop:item['comment']#
-						</td>
-							<xar:else />
-						<td width="10%" valign="top" class="xar-normal">
-							  <xar:if condition="$loop:item['option'] == 'true'">
-								  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# checked />
-							<xar:else />
-								  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# />
-							</xar:if>
-						</td>
-						<td width="90%" class="xar-normal">
-							  #$loop:item['comment']#
-						</td>
-							</xar:if>
-						</tr>
-						</xar:loop>
-						<tr>
-							<td colspan="2">
-							&nbsp;
-							 </td>
-						</tr>
-						<tr>
-							<td colspan="2">
-							<span class="xar-normal">
-							  Disabling the options above will leave your registered and unregistered users with minimal access. The administrator you created in Step 6 will always have full access to the site.
-							  </span>
-							 </td>
-						</tr>
-         		</table>
-       		</div>
-       		<p></p>
-      		<div style="text-align:justify;">
-    			  <table cellspacing="0" border="0">
-						<tr>
-						  <th colspan="2">Configuration Modules</th>
-						</tr>
-						<xar:if condition = "$missing eq '' and count($options2) eq 0">
-						<tr>
-							<td>
-							<span class="xar-normal">
-							This configuration does not need to load any modules.
-							</span>
-							</td>
-						</tr>
-						<xar:else />
-							<xar:loop name="$options2">
-							<tr>
-								<xar:if condition="$loop:item['option'] eq ''">                  
-							<td width="100%" class="xar-normal">
-								  #$loop:item['comment']#
-							</td>
-								<xar:else />
-							<td width="10%" valign="top" class="xar-normal">
-								  <xar:if condition="$loop:item['option'] == 'true'">
-									  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# checked />
-								<xar:else />
-									  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# />
-								</xar:if>
-							</td>
-							<td width="90%" class="xar-normal">
-								  #$loop:item['comment']#
-							</td>
-								</xar:if>
-							</tr>
-							</xar:loop>
-						<xar:if condition = "$missing ne ''">
-							<tr>
-							<td colspan="2">
-							<span class="xar-normal">
-							The following modules for this configuration are missing in the modules directory: #$missing#
-							</span>
-							</td>
-							</tr>
-						</xar:if>
-						<tr>
-							<td colspan="2">
-							&nbsp;
-							 </td>
-						</tr>
-						</xar:if>
-						<tr>
-							<td colspan="2">
-							<span class="xar-normal">
-							  Modules can be installed or removed at any later time in the Modules module.
-							  </span>
-							 </td>
-						</tr>
-         		</table>
-       		</div>
-       		<p></p>
-			<xar:if condition="count($options3) ne 0">                  
-      		<div style="text-align:justify;">
-    			  <table cellspacing="0" border="0">
-						<tr>
-						  <th colspan="2">Other Modules</th>
-						</tr>
-						<tr>
-							<td colspan="2">
-							<span class="xar-normal">
-							  Th following modules are present that are not part of the configuration you have chosen. If you wish to, you can load them as well.
-							  </span>
-							 </td>
-						</tr>
-							<xar:loop name="$options3">
-							<tr>
-								<xar:if condition="$loop:item['option'] eq ''">                  
-							<td width="100%" class="xar-normal">
-								  #$loop:item['comment']#
-							</td>
-								<xar:else />
-							<td width="10%" valign="top" class="xar-normal">
-								  <xar:if condition="$loop:item['option'] == 'true'">
-									  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# checked />
-								<xar:else />
-									  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# />
-								</xar:if>
-							</td>
-							<td width="90%" class="xar-normal">
-								  #$loop:item['comment']#
-							</td>
-								</xar:if>
-							</tr>
-							</xar:loop>
-						<tr>
-							<td colspan="2">
-							&nbsp;
-							 </td>
-						</tr>
-						<tr>
-							<td colspan="2">
-							<span class="xar-normal">
-							  Modules can be installed or removed at any later time in the Modules module.
-							  </span>
-							 </td>
-						</tr>
-         		</table>
-       		</div>
-       		</xar:if>
-      		<div style="text-align:center;">
-      		  <input type="submit" name="create" id="create" value="Continue &gt;" />
-      		</div>
-    		</div>
-  		</form>
-		</div>
-	</div>
-	<div id="status">
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Selecting Language</span><br />
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Agreeing to License</span><br />
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Checking System Settings</span><br />
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Collecting Database Settings</span><br />
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Beginning Initialization</span><br />
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Creating an Administrator</span><br />
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Choosing a Configuration</span><br />
-	  <span class="active"><img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />Choosing Options</span><br />
-	</div>
+<div id="install">
+    <div style="padding:10px;">
+        <div style="text-align:center;">
+            <span class="xar-pagetitle">
+                <xar:mlstring>
+                    Choose Configuration Options 
+                </xar:mlstring>
+            </span>
+        </div>
+        <br />
+        <form action="&xar-modurl-installer-admin-confirm_configuration;" method="post">
+            <div style="text-align:center;">
+                <input type="hidden" name="install_language" id="install_language" value="#$language#" />
+                <input type="hidden" name="configuration" id="configuration" value="#$configuration#" />
+                <input type="hidden" name="confirmed" id="confirmed" value="true" />
+                <br />
+                <div style="text-align:justify;">
+                    <table cellspacing="0" border="0">
+                        <tr>
+                            <th colspan="2">
+                                <xar:mlstring>
+                                    Privileges 
+                                </xar:mlstring>
+                            </th>
+                        </tr>
+                        <xar:loop name="$options1">
+                            <tr>
+                                <xar:if condition="$loop:item['option'] eq ''">
+                                    <td width="100%" class="xar-normal">
+                                        #$loop:item['comment']# 
+                                    </td>
+                                    <xar:else />
+                                    <td width="10%" valign="top" class="xar-normal">
+                                        <xar:if condition="$loop:item['option'] == 'true'">
+                                            <input type="checkbox" name="chosen[]" value="#$loop:item['item']#" checked="checked" />
+                                            <xar:else />
+                                            <input type="checkbox" name="chosen[]" value="#$loop:item['item']#" />
+                                        </xar:if>
+                                    </td>
+                                    <td width="90%" class="xar-normal">
+                                        #$loop:item['comment']# 
+                                    </td>
+                                </xar:if>
+                            </tr>
+                        </xar:loop>
+                        <tr>
+                            <td colspan="2">
+                                &nbsp; 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <span class="xar-normal">
+                                    <xar:mlstring>
+                                        Disabling the options above will leave your registered and unregistered users with minimal access. The administrator you created in Step 6 will always have full access to the site. 
+                                    </xar:mlstring>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <p>
+                </p>
+                <div style="text-align:justify;">
+                    <table cellspacing="0" border="0">
+                        <tr>
+                            <th colspan="2">
+                                <xar:mlstring>
+                                    Configuration Modules 
+                                </xar:mlstring>
+                            </th>
+                        </tr>
+                        <xar:if condition="$missing eq '' and count($options2) eq 0">
+                            <tr>
+                                <td>
+                                    <span class="xar-normal">
+                                        <xar:mlstring>
+                                            This configuration does not need to load any modules. 
+                                        </xar:mlstring>
+                                    </span>
+                                </td>
+                            </tr>
+                            <xar:else />
+                            <xar:loop name="$options2">
+                                <tr>
+                                    <xar:if condition="$loop:item['option'] eq ''">
+                                        <td width="100%" class="xar-normal">
+                                            #$loop:item['comment']# 
+                                        </td>
+                                        <xar:else />
+                                        <td width="10%" valign="top" class="xar-normal">
+                                            <xar:if condition="$loop:item['option'] == 'true'">
+                                                <input type="checkbox" name="chosen[]" value="#$loop:item['item']#" checked="checked" />
+                                                <xar:else />
+                                                <input type="checkbox" name="chosen[]" value="#$loop:item['item']#" />
+                                            </xar:if>
+                                        </td>
+                                        <td width="90%" class="xar-normal">
+                                            #$loop:item['comment']# 
+                                        </td>
+                                    </xar:if>
+                                </tr>
+                            </xar:loop>
+                            <xar:if condition="$missing ne ''">
+                                <tr>
+                                    <td colspan="2">
+                                        <span class="xar-normal">
+                                            <xar:mlstring>
+                                                The following modules for this configuration are missing in the modules directory 
+                                            </xar:mlstring>
+                                            : #$missing# 
+                                        </span>
+                                    </td>
+                                </tr>
+                            </xar:if>
+                            <tr>
+                                <td colspan="2">
+                                    &nbsp; 
+                                </td>
+                            </tr>
+                        </xar:if>
+                        <tr>
+                            <td colspan="2">
+                                <span class="xar-normal">
+                                    <xar:mlstring>
+                                        Modules can be installed or removed at any later time in the Modules module. 
+                                    </xar:mlstring>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <p>
+                </p>
+                <xar:if condition="count($options3) ne 0">
+                    <div style="text-align:justify;">
+                        <table cellspacing="0" border="0">
+                            <tr>
+                                <th colspan="2">
+                                    <xar:mlstring>
+                                        Other Modules 
+                                    </xar:mlstring>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <span class="xar-normal">
+                                        <xar:mlstring>
+                                            The following modules are present that are not part of the configuration you have chosen. If you wish to, you can load them as well. 
+                                        </xar:mlstring>
+                                    </span>
+                                </td>
+                            </tr>
+                            <xar:loop name="$options3">
+                                <tr>
+                                    <xar:if condition="$loop:item['option'] eq ''">
+                                        <td width="100%" class="xar-normal">
+                                            #$loop:item['comment']# 
+                                        </td>
+                                        <xar:else />
+                                        <td width="10%" valign="top" class="xar-normal">
+                                            <xar:if condition="$loop:item['option'] == 'true'">
+                                                <input type="checkbox" name="chosen[]" value="#$loop:item['item']#" checked="checked" />
+                                                <xar:else />
+                                                <input type="checkbox" name="chosen[]" value="#$loop:item['item']#" />
+                                            </xar:if>
+                                        </td>
+                                        <td width="90%" class="xar-normal">
+                                            #$loop:item['comment']# 
+                                        </td>
+                                    </xar:if>
+                                </tr>
+                            </xar:loop>
+                            <tr>
+                                <td colspan="2">
+                                    &nbsp; 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <span class="xar-normal">
+                                        <xar:mlstring>
+                                            Modules can be installed or removed at any later time in the Modules module. 
+                                        </xar:mlstring>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </xar:if>
+                <div style="text-align:center;">
+                    <input type="submit" name="create" id="create" value="Continue &gt;" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="status">
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        <xar:mlstring>
+            Selecting Language
+        </xar:mlstring> 
+    </p>
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        <xar:mlstring>
+            Agreeing to License
+        </xar:mlstring> 
+    </p>
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        <xar:mlstring>
+            Checking System Settings
+        </xar:mlstring> 
+    </p>
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        <xar:mlstring>
+            Collecting Database Settings
+        </xar:mlstring> 
+    </p>
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        <xar:mlstring>
+            Beginning Initialization
+        </xar:mlstring> 
+    </p>
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        <xar:mlstring>
+            Creating an Administrator
+        </xar:mlstring> 
+    </p>
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        <xar:mlstring>
+            Choosing a Configuration 
+        </xar:mlstring>
+    </p>
+    <p class="active">
+        <img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />
+        <xar:mlstring>
+            Choosing Options
+        </xar:mlstring> 
+    </p>
+</div>

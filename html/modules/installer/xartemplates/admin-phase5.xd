@@ -1,16 +1,21 @@
-<META http-equiv="refresh" content="1;URL=#xarModURL('installer', 'admin','bootstrap')#">
+<meta http-equiv="refresh" content="1;URL=#xarModURL('installer', 'admin','bootstrap')#" />
 <div id="install">
     <div style="padding:10px;">
         <div style="text-align:center;">
             <span class="xar-pagetitle">
-                Beginning Initialization</span>
+                <xar:mlstring>
+                    Beginning Initialization 
+                </xar:mlstring>
+            </span>
         </div>
         <br />
         <div style="text-align:center;">
             <form action="install.php" method="post">
                 <div style="text-align:center;">
                     <input type="hidden" name="install_phase" id="install_phase" value="6" />
-                    This may take a moment. Thank you for your patience. 
+                    <xar:mlstring>
+                        This may take a moment. Thank you for your patience.
+                    </xar:mlstring> 
                 </div>
             </form>
         </div>
@@ -19,26 +24,50 @@
 <div id="status">
     <p class="completed">
         <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-        Selecting Language</p>
+        <xar:mlstring>
+            Selecting Language 
+        </xar:mlstring>
+    </p>
     <p class="completed">
         <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-        Agreeing to License</p>
+        <xar:mlstring>
+            Agreeing to License
+        </xar:mlstring> 
+    </p>
     <p class="completed">
         <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-        Checking System Settings</p>
+        <xar:mlstring>
+            Checking System Settings 
+        </xar:mlstring>
+    </p>
     <p class="completed">
         <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-        Collecting Database Settings</p>
+        <xar:mlstring>
+            Collecting Database Settings
+        </xar:mlstring> 
+    </p>
     <p class="active">
         <img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />
-        Beginning Initialization</p>
+        <xar:mlstring>
+            Beginning Initialization 
+        </xar:mlstring>
+    </p>
     <p class="greyed">
         <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-        Creating an Administrator</p>
+        <xar:mlstring>
+            Creating an Administrator 
+        </xar:mlstring>
+    </p>
     <p class="greyed">
         <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-        Choosing a Configuration</p>
+        <xar:mlstring>
+            Choosing a Configuration 
+        </xar:mlstring>
+    </p>
     <p class="greyed">
         <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-        Choosing Options</p>
+        <xar:mlstring>
+            Choosing Options 
+        </xar:mlstring>
+    </p>
 </div>
