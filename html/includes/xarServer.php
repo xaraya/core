@@ -59,18 +59,23 @@ function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
  */
 function xarServerGetVar($name)
 {
+    // Try the new stuff first, see link above
     if (isset($_SERVER[$name])) {
         return $_SERVER[$name];
     }
-    global $HTTP_SERVER_VARS;
-    if (isset($HTTP_SERVER_VARS[$name])) {
-        return $HTTP_SERVER_VARS[$name];
+    // Make it work with older php versions
+    // FIXME: 4.1.2 is our requirement, superglobals were available
+    // in 4.1.0 and higher, i think we can move this out.
+    if (isset($GLOBALS['HTTP_SERVER_VARS'][$name])) {
+        return $GLOBALS['HTTP_SERVER_VARS'][$name];
     }
     if (isset($_ENV[$name])) {
         return $_ENV[$name];
     }
-    global $HTTP_ENV_VARS;
-    if (isset($HTTP_ENV_VARS[$name])) {
+
+    // FIXME: 4.1.2 is our requirement, superglobals were available
+    // in 4.1.0 and higher, i think we can move this out.
+    if (isset($GLOBALS['HTTP_ENV_VARS'][$name])) {
         return $HTTP_ENV_VARS[$name];
     }
     if ($val = getenv($name)) {
@@ -253,7 +258,7 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
         // Then check in $_GET
         } elseif (isset($_GET[$name])) {
             $value = $_GET[$name];
-        // Try to fallback to global $HTTP_GET_VARS for older php versions
+        // Try to fallback to $HTTP_GET_VARS for older php versions
         } elseif (isset($GLOBALS['HTTP_GET_VARS'][$name])) {
             $value = $GLOBALS['HTTP_GET_VARS'][$name];
         // Nothing found, return void
@@ -265,7 +270,7 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
         // First check in $_POST
         if (isset($_POST[$name])) {
             $value = $_POST[$name];
-        // Try to fallback to global $HTTP_POST_VARS for older php versions
+        // Try to fallback to $HTTP_POST_VARS for older php versions
         } elseif (isset($GLOBALS['HTTP_POST_VARS'][$name])) {
             $value = $GLOBALS['HTTP_POST_VARS'][$name];
         // Nothing found, return void
@@ -283,7 +288,7 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
         } elseif (isset($_POST[$name])) {
             $value = $_POST[$name];
             $method = 'POST';
-        // Try to fallback to global $HTTP_POST_VARS for older php versions
+        // Try to fallback to $HTTP_POST_VARS for older php versions
         } elseif (isset($GLOBALS['HTTP_POST_VARS'][$name])) {
             $value = $GLOBALS['HTTP_POST_VARS'][$name];
             $method = 'POST';
@@ -291,7 +296,7 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
         } elseif (isset($_GET[$name])) {
             $value = $_GET[$name];
             $method = 'GET';
-        // Try to fallback to global $HTTP_GET_VARS for older php versions
+        // Try to fallback to $HTTP_GET_VARS for older php versions
         } elseif (isset($GLOBALS['HTTP_GET_VARS'][$name])) {
             $value = $GLOBALS['HTTP_GET_VARS'][$name];
             $method = 'GET';
@@ -477,15 +482,14 @@ function xarRequest__resolveModuleAlias($aliasModName)
  */
 function xarResponseRedirect($redirectURL)
 {
-    global $xarResponse_redirectCalled;
 
     // First checks if there's a pending exception, if so does not redirect browser
     if (xarExceptionMajor() != XAR_NO_EXCEPTION) return false;
 
-    if ($xarResponse_redirectCalled == true) {
+    if ($GLOBALS['xarResponse_redirectCalled'] == true) {
         if (headers_sent() == true) return false;
     }
-    $xarResponse_redirectCalled = true;
+    $GLOBALS['xarResponse_redirectCalled'] = true;
 
     if (substr($redirectURL, 0, 4) == 'http') {
         // Absolute URL - simple redirect
@@ -513,6 +517,8 @@ function xarResponseRedirect($redirectURL)
 
     header($header, headers_sent());
     
+    // As this is a redirect we can stop processing
+    // It gave some errors on some installations if we just returned true here.
     exit();
     
     // return true;

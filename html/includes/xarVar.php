@@ -41,70 +41,67 @@ define('XARVAR_NOT_REQUIRED', 64);
  */
 function xarVar_init($args, $whatElseIsGoingLoaded)
 {
-    global $xarVar_allowableHTML, $xarVar_fixHTMLEntities,
-           $xarVar_enableCensoringWords, $xarVar_censoredWords,
-           $xarVar_censoredWordsReplacers;
     /*
-    $xarVar_allowableHTML = $args['allowableHTML'];
-    $xarVar_fixHTMLEntities = $args['fixHTMLEntities'];
+    $GLOBALS['xarVar_allowableHTML'] = $args['allowableHTML'];
+    $GLOBALS['xarVar_fixHTMLEntities'] = $args['fixHTMLEntities'];
 
-    $xarVar_enableCensoringWords = $args['enableCensoringWords'];
-    $xarVar_censoredWords = $args['censoredWords'];
-    $xarVar_censoredWordsReplacers = $args['censoredWordsReplacers'];
+    $GLOBALS['xarVar_enableCensoringWords'] = $args['enableCensoringWords'];
+    $GLOBALS['xarVar_censoredWords'] = $args['censoredWords'];
+    $GLOBALS['xarVar_censoredWords']Replacers = $args['censoredWordsReplacers'];
 
     return true;
     */
     if ($whatElseIsGoingLoaded & XARCORE_SYSTEM_CONFIGURATION) {
 
-        $xarVar_allowableHTML = xarConfigGetVar('Site.Core.AllowableHTML');
-        if (!isset($xarVar_allowableHTML) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        $GLOBALS['xarVar_allowableHTML'] = xarConfigGetVar('Site.Core.AllowableHTML');
+        if (!isset($GLOBALS['xarVar_allowableHTML']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back exception
         }
 
-        $xarVar_fixHTMLEntities = xarConfigGetVar('Site.Core.FixHTMLEntities');
-        if (!isset($xarVar_fixHTMLEntities) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        $GLOBALS['xarVar_fixHTMLEntities'] = xarConfigGetVar('Site.Core.FixHTMLEntities');
+        if (!isset($GLOBALS['xarVar_fixHTMLEntities']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back exception
         }
 
-        $xarVar_enableCensoringWords = xarConfigGetVar('Site.Core.EnableCensoring');
-        if (!isset($xarVar_enableCensoringWords) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        $GLOBALS['xarVar_enableCensoringWords'] = xarConfigGetVar('Site.Core.EnableCensoring');
+        if (!isset($GLOBALS['xarVar_enableCensoringWords']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back exception
         }
 
-        $xarVar_censoredWords = xarConfigGetVar('Site.Core.CensoredWords');
-        if (!isset($xarVar_censoredWords) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        $GLOBALS['xarVar_censoredWords'] = xarConfigGetVar('Site.Core.CensoredWords');
+        if (!isset($GLOBALS['xarVar_censoredWords']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back exception
         }
-        $xarVar_censoredWordsReplacers = xarConfigGetVar('Site.Core.CensoredWordReplacers');
-        if (!isset($xarVar_censoredWordsReplacers) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        $GLOBALS['xarVar_censoredWordsReplacers'] = xarConfigGetVar('Site.Core.CensoredWordReplacers');
+        if (!isset($GLOBALS['xarVar_censoredWordsReplacers']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back exception
         }
 
     } else {
             // hardcode it until there is a file to draw this info from
-            $xarVar_allowableHTML = '';
-            //$xarVar_allowableHTML = xarCore_getSiteVar('Core.AllowableHTML');
-            /*if (!isset($xarVar_allowableHTML) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            $GLOBALS['xarVar_allowableHTML'] = '';
+            //$GLOBALS['xarVar_allowableHTML'] = xarCore_getSiteVar('Core.AllowableHTML');
+            /*if (!isset($GLOBALS['xarVar_allowableHTML']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back exception
             }*/
 
-            $xarVar_fixHTMLEntities = xarCore_getSiteVar('Core.FixHTMLEntities');
-            if (!isset($xarVar_fixHTMLEntities) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            $GLOBALS['xarVar_fixHTMLEntities'] = xarCore_getSiteVar('Core.FixHTMLEntities');
+            if (!isset($GLOBALS['xarVar_fixHTMLEntities']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back exception
             }
 
-            $xarVar_enableCensoringWords = xarCore_getSiteVar('Core.EnableCensoring');
-            if (!isset($xarVar_enableCensoringWords) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            $GLOBALS['xarVar_enableCensoringWords'] = xarCore_getSiteVar('Core.EnableCensoring');
+            if (!isset($GLOBALS['xarVar_enableCensoringWords']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back exception
             }
 
-            $xarVar_censoredWords = xarCore_getSiteVar('Core.CensoredWords');
-            if (!isset($xarVar_censoredWords) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            $GLOBALS['xarVar_censoredWords'] = xarCore_getSiteVar('Core.CensoredWords');
+            if (!isset($GLOBALS['xarVar_censoredWords']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back exception
             }
 
-            $xarVar_censoredWordsReplacers = xarCore_getSiteVar('Core.CensoredWordReplacers');
-            if (!isset($xarVar_censoredWordsReplacers) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            $GLOBALS['xarVar_censoredWordsReplacers'] = xarCore_getSiteVar('Core.CensoredWordReplacers');
+            if (!isset($GLOBALS['xarVar_censoredWordsReplacers']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back exception
             }
     }
@@ -471,7 +468,6 @@ function xarVarPrepForDisplay()
  */
 function xarVarPrepHTMLDisplay()
 {
-    global $xarVar_allowableHTML, $xarVar_fixHTMLEntities;
 
     // This search and replace finds the text 'x@y' and replaces
     // it with HTML entities, this provides protection against
@@ -492,7 +488,7 @@ function xarVarPrepHTMLDisplay()
     if (!isset($allowedHTML)) {
         $allowedHTML = array();
 
-        foreach($xarVar_allowableHTML as $k=>$v) {
+        foreach($GLOBALS['xarVar_allowableHTML'] as $k=>$v) {
             switch($v) {
                 case 0:
                     break;
@@ -525,7 +521,7 @@ function xarVarPrepHTMLDisplay()
                                . '>';", $var);
 
         // Fix entities if required
-        if ($xarVar_fixHTMLEntities) {
+        if ($GLOBALS['xarVar_fixHTMLEntities']) {
             $var = preg_replace('/&amp;([a-z#0-9]+);/i', "&\\1;", $var);
         }
 
@@ -653,12 +649,11 @@ $GLOBALS['xarVar_cacheCollection'] = array();
  */
 function xarVarIsCached($cacheKey, $name)
 {
-    global $xarVar_cacheCollection;
-    if (!isset($xarVar_cacheCollection[$cacheKey])) {
-        $xarVar_cacheCollection[$cacheKey] = array();
+    if (!isset($GLOBALS['xarVar_cacheCollection'][$cacheKey])) {
+        $GLOBALS['xarVar_cacheCollection'][$cacheKey] = array();
         return false;
     }
-    return isset($xarVar_cacheCollection[$cacheKey][$name]);
+    return isset($GLOBALS['xarVar_cacheCollection'][$cacheKey][$name]);
 }
 
 /**
@@ -672,11 +667,10 @@ function xarVarIsCached($cacheKey, $name)
  */
 function xarVarGetCached($cacheKey, $name)
 {
-    global $xarVar_cacheCollection;
-    if (!isset($xarVar_cacheCollection[$cacheKey][$name])) {
+    if (!isset($GLOBALS['xarVar_cacheCollection'][$cacheKey][$name])) {
         return;
     }
-    return $xarVar_cacheCollection[$cacheKey][$name];
+    return $GLOBALS['xarVar_cacheCollection'][$cacheKey][$name];
 }
 
 /**
@@ -691,8 +685,7 @@ function xarVarGetCached($cacheKey, $name)
  */
 function xarVarSetCached($cacheKey, $name, $value)
 {
-    global $xarVar_cacheCollection;
-    $xarVar_cacheCollection[$cacheKey][$name] = $value;
+    $GLOBALS['xarVar_cacheCollection'][$cacheKey][$name] = $value;
 }
 
 /**
@@ -705,10 +698,9 @@ function xarVarSetCached($cacheKey, $name, $value)
  */
 function xarVarDelCached($cacheKey, $name)
 {
-    global $xarVar_cacheCollection;
     // TODO: check if we don't need to work with $GLOBALS here for some PHP ver
-    if (isset($xarVar_cacheCollection[$cacheKey][$name])) {
-        unset($xarVar_cacheCollection[$cacheKey][$name]);
+    if (isset($GLOBALS['xarVar_cacheCollection'][$cacheKey][$name])) {
+        unset($GLOBALS['xarVar_cacheCollection'][$cacheKey][$name]);
     }
 }
 
@@ -721,10 +713,9 @@ function xarVarDelCached($cacheKey, $name)
  */
 function xarVarFlushCached($cacheKey)
 {
-    global $xarVar_cacheCollection;
     // TODO: check if we don't need to work with $GLOBALS here for some PHP ver
-    if (isset($xarVar_cacheCollection[$cacheKey])) {
-        unset($xarVar_cacheCollection[$cacheKey]);
+    if (isset($GLOBALS['xarVar_cacheCollection'][$cacheKey])) {
+        unset($GLOBALS['xarVar_cacheCollection'][$cacheKey]);
     }
 }
 

@@ -26,50 +26,49 @@ define('XARLOG_LEVEL_ERROR', 8);
 
 function xarLog_init($args, $whatElseIsGoingLoaded)
 {
-    global $xarLog_logger, $xarLog_level;
 
     $loggerName = $args['loggerName'];
     $loggerArgs = $args['loggerArgs'];
     switch ($args['level']) {
-        case 'DEBUG':
-            $xarLog_level = XARLOG_LEVEL_DEBUG;
-            break;
-        case 'NOTICE':
-            $xarLog_level = XARLOG_LEVEL_NOTICE;
-            break;
-        case 'WARNING':
-            $xarLog_level = XARLOG_LEVEL_WARNING;
-            break;
-        case 'ERROR':
-            $xarLog_level = XARLOG_LEVEL_ERROR;
-            break;
-        default:
-            xarCore_die('xarLog_init: Unknown logger level: '.$args['level']);
+    case 'DEBUG':
+        $GLOBALS['xarLog_level'] = XARLOG_LEVEL_DEBUG;
+        break;
+    case 'NOTICE':
+        $GLOBALS['xarLog_level'] = XARLOG_LEVEL_NOTICE;
+        break;
+    case 'WARNING':
+        $GLOBALS['xarLog_level'] = XARLOG_LEVEL_WARNING;
+        break;
+    case 'ERROR':
+        $GLOBALS['xarLog_level'] = XARLOG_LEVEL_ERROR;
+        break;
+    default:
+        xarCore_die('xarLog_init: Unknown logger level: '.$args['level']);
     }
-
+    
     switch ($loggerName) {
-        case 'dummy':
-            $xarLog_logger = new xarLog__Logger($loggerArgs);
-            break;
-        case 'simple':
-            $xarLog_logger = new xarLog__SimpleLogger($loggerArgs);
-            break;
-        case 'html':
-            $xarLog_logger = new xarLog__HTMLLogger($loggerArgs);
-            break;
-        case 'javascript':
-            $xarLog_logger = new xarLog__JavaScriptLogger($loggerArgs);
-            break;
-		    case 'mozjsconsole':
-					$xarLog_logger = new xarLog__MozJSConsoleLogger($loggerArgs);
-					break;
-        case 'email':
-            $xarLog_logger = new xarLog__EmailLogger($loggerArgs);
-            break;
-        default:
-            xarCore_die('xarLog_init: Unknown logger name: '.$loggerName);
+    case 'dummy':
+        $GLOBALS['xarLog_logger'] = new xarLog__Logger($loggerArgs);
+        break;
+    case 'simple':
+        $GLOBALS['xarLog_logger'] = new xarLog__SimpleLogger($loggerArgs);
+        break;
+    case 'html':
+        $GLOBALS['xarLog_logger'] = new xarLog__HTMLLogger($loggerArgs);
+        break;
+    case 'javascript':
+        $GLOBALS['xarLog_logger'] = new xarLog__JavaScriptLogger($loggerArgs);
+        break;
+    case 'mozjsconsole':
+        $GLOBALS['xarLog_logger'] = new xarLog__MozJSConsoleLogger($loggerArgs);
+        break;
+    case 'email':
+        $GLOBALS['xarLog_logger'] = new xarLog__EmailLogger($loggerArgs);
+        break;
+    default:
+        xarCore_die('xarLog_init: Unknown logger name: '.$loggerName);
     }
-
+    
     return true;
 }
 
@@ -78,11 +77,8 @@ function xarLog_init($args, $whatElseIsGoingLoaded)
  * @access public
  * @return log level
  */
-function xarLogGetLevel()
-{
-    global $xarLog_level;
-    return $xarLog_level;
-}
+function xarLogGetLevel() {  return $GLOBALS['xarLog_level']; }
+
 
 // TODO: <marco> Move to logger module
 /*
@@ -154,28 +150,25 @@ function logger_adminapi_parseArgsString($string)
 
 function xarLogMessage($msg, $level = XARLOG_LEVEL_DEBUG)
 {
-    global $xarLog_logger, $xarLog_level;
-    if ($level >= $xarLog_level) {
-       if ($level == XARLOG_LEVEL_DEBUG && !xarCoreIsDebuggerActive()) return;
-       $xarLog_logger->logMessage($msg);
+    if ($level >= $GLOBALS['xarLog_level']) {
+        if ($level == XARLOG_LEVEL_DEBUG && !xarCoreIsDebuggerActive()) return;
+        $GLOBALS['xarLog_logger']->logMessage($msg);
     }
 }
 
 function xarLogException($level = XARLOG_LEVEL_DEBUG)
 {
-    global $xarLog_logger, $xarLog_level;
-    if ($level >= $xarLog_level) {
-       if ($level == XARLOG_LEVEL_DEBUG && !xarCoreIsDebuggerActive()) return;
-       $xarLog_logger->logException();
+    if ($level >= $GLOBALS['xarLog_level']) {
+        if ($level == XARLOG_LEVEL_DEBUG && !xarCoreIsDebuggerActive()) return;
+        $GLOBALS['xarLog_logger']->logException();
     }
 }
 
 function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
 {
-    global $xarLog_logger, $xarLog_level;
-    if ($level >= $xarLog_level) {
-       if ($level == XARLOG_LEVEL_DEBUG && !xarCoreIsDebuggerActive()) return;
-       $xarLog_logger->logVariable($name, $var);
+    if ($level >= $GLOBALS['xarLog_level']) {
+        if ($level == XARLOG_LEVEL_DEBUG && !xarCoreIsDebuggerActive()) return;
+        $GLOBALS['xarLog_logger']->logVariable($name, $var);
     }
 }
 

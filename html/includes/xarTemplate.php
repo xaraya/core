@@ -329,9 +329,6 @@ function xarTplCompileString($templateSource)
  */
 function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templateName = NULL)
 {
-//     global $xarTpl_themeDir, $xarTpl_pageTemplateName, $xarTpl_pageTitle;
-//     global $xarTpl_additionalStyles, $xarTpl_headJavaScript, $xarTpl_bodyJavaScript;
-
     if (empty($templateName)) {
         $templateName = $GLOBALS['xarTpl_pageTemplateName'];
     }
@@ -480,7 +477,6 @@ function xarTpl__execute($templateCode, $tplData)
  */
 function xarTpl__executeFromFile($sourceFileName, $tplData)
 {
-    global $xarTpl_cacheTemplates;
 
     // $tplData should be an array (-even-if- it only has one value in it) 
     assert('is_array($tplData)');
@@ -576,7 +572,7 @@ class xarTemplateAttribute {
         // this was on the server on xaraya
         // FIXME: Move this expression out of the class and define() it.
         if (!eregi('^[a-z][-_a-z0-9]*$', $name)) {
-            $msg = xarML("Illegal attribute name ('#(1)'): Tag name may contain letters, numbers, _ and -, and must start with a letter.", $name);
+            $msg = xarML("Illegal attribute name ('#(1)'): Attribute name may contain letters, numbers, _ and -, and must start with a letter.", $name);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
             return;

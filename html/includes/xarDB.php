@@ -196,9 +196,8 @@ function xarDBGetSiteTablePrefix()
  */
 function xarDB_importTables($tables)
 {
-    global $xarDB_tables;
     assert('is_array($tables)');
-    $xarDB_tables = array_merge($xarDB_tables, $tables);
+    $GLOBALS['xarDB_tables'] = array_merge($GLOBALS['xarDB_tables'], $tables);
 }
 
 /**

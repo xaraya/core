@@ -70,7 +70,6 @@ function xarEvtSubscribe($eventName, $modName, $modType)
  */
 function xarEvtUnsubscribe($eventName, $modName, $modType)
 {
-    global $xarEvt_subscribed;
 
     if (!xarEvt__checkEvent($eventName)) return; // throw back
     if (empty($modName)) {
@@ -78,16 +77,16 @@ function xarEvtUnsubscribe($eventName, $modName, $modType)
         return;
     }
     if (!xarCoreIsApiAllowed($modType)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType : $modType for $modName');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
         return;
     }
 
-    if (!isset($xarEvt_subscribed[$eventName])) return;
+    if (!isset($GLOBALS['xarEvt_subscribed'][$eventName])) return;
 
-    for ($i = 0; $i < count($xarEvt_subscribed[$eventName]); $i++) {
-        list($mn, $mt) = $xarEvt_subscribed[$eventName][$i];
+    for ($i = 0; $i < count($GLOBALS['xarEvt_subscribed'][$eventName]); $i++) {
+        list($mn, $mt) = $GLOBALS['xarEvt_subscribed'][$eventName][$i];
         if ($modName == $mn && $modType == $mt) {
-            unset($xarEvt_subscribed[$eventName][$i]);
+            unset($GLOBALS['xarEvt_subscribed'][$eventName][$i]);
             break;
         }
     }
@@ -96,14 +95,13 @@ function xarEvtUnsubscribe($eventName, $modName, $modType)
 // PROTECTED FUNCTIONS
 function xarEvt_fire($eventName, $value = NULL)
 {
-    global $xarEvt_subscribed;
 
     if (!xarEvt__checkEvent($eventName)) return; // throw back
 
-    if (!isset($xarEvt_subscribed[$eventName])) return;
+    if (!isset($GLOBALS['xarEvt_subscribed'][$eventName])) return;
 
-    for ($i = 0; $i < count($xarEvt_subscribed[$eventName]); $i++) {
-        $funcName = $xarEvt_subscribed[$eventName][$i];
+    for ($i = 0; $i < count($GLOBALS['xarEvt_subscribed'][$eventName]); $i++) {
+        $funcName = $GLOBALS['xarEvt_subscribed'][$eventName][$i];
         if (is_array($funcName)) {
             list($modName, $modType) = $funcName;
             xarEvt_notify($modName, $modType, $eventName, $value);
@@ -126,7 +124,7 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
     }
     // Can we load this api?
     if(!xarCoreIsApiAllowed($modType)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType : $modType for $modName');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
         return;
     }
 
@@ -145,7 +143,6 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
 
 function xarEvt_subscribeRawCallback($eventName, $funcName)
 {
-    global $xarEvt_subscribed;
 
     if (!xarEvt__checkEvent($eventName)) return; // throw back
     if (empty($funcName)) {
@@ -153,19 +150,18 @@ function xarEvt_subscribeRawCallback($eventName, $funcName)
         return;
     }
 
-    $xarEvt_subscribed[$eventName][] = $funcName;
+    $GLOBALS['xarEvt_subscribed'][$eventName][] = $funcName;
 }
 
 function xarEvt_registerEvent($eventName)
 {
-    global $xarEvt_knownEvents;
 
     if (empty($eventName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'eventName');
         return;
     }
 
-    $xarEvt_knownEvents[$eventName] = true;
+    $GLOBALS['xarEvt_knownEvents'][$eventName] = true;
 }
 
 // PRIVATE FUNCTIONS

@@ -317,10 +317,8 @@ function xarExceptionFree()
  */
 function xarExceptionRender($format)
 {
-    global $xarException_major, $xarException_exceptionId;
-    global $xarException_value;
 
-    switch ($xarException_major) {
+    switch ($GLOBALS['xarException_major']) {
         case XAR_SYSTEM_EXCEPTION:
             $type = 'SYSTEM Exception';
             break;
@@ -332,11 +330,11 @@ function xarExceptionRender($format)
     }
     $showParams = xarCoreIsDebugFlagSet(XARDBG_SHOW_PARAMS_IN_BT);
     if ($format == 'html') {
-        $text = '<span style="color: purple">('.$type.')</span> <b>'.$xarException_exceptionId.'</b>:<br />';
-        if (method_exists($xarException_value, 'toHTML')) {
-            $text .= '<span style="color: red">'.$xarException_value->toHTML().'</span>';
+        $text = '<span style="color: purple">('.$type.')</span> <b>'.$GLOBALS['xarException_exceptionId'].'</b>:<br />';
+        if (method_exists($GLOBALS['xarException_value'], 'toHTML')) {
+            $text .= '<span style="color: red">'.$GLOBALS['xarException_value']->toHTML().'</span>';
         }
-        $stack = $xarException_value->__stack;
+        $stack = $GLOBALS['xarException_value']->__stack;
         for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
             if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
             else $function = '{}';
@@ -349,11 +347,11 @@ function xarExceptionRender($format)
             }
         }
     } else {
-        $text = '('.$type.') '.$xarException_exceptionId.":\n";
-        if (method_exists($xarException_value, 'toString')) {
-            $text .= $xarException_value->toString();
+        $text = '('.$type.') '.$GLOBALS['xarException_exceptionId'].":\n";
+        if (method_exists($GLOBALS['xarException_value'], 'toString')) {
+            $text .= $GLOBALS['xarException_value']->toString();
         }
-        $stack = $xarException_value->__stack;
+        $stack = $GLOBALS['xarException_value']->__stack;
         for ($i = 1, $j = 0; $i < count($stack); $i++, $j++) {
             if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
             else $function = '{}';

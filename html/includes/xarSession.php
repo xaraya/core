@@ -18,8 +18,7 @@
  */
 function xarSession_init($args, $whatElseIsGoingLoaded)
 {
-    global $xarSession_systemArgs;
-    $xarSession_systemArgs = $args;
+    $GLOBALS['xarSession_systemArgs'] = $args;
 
     // Session Support Tables
     $systemPrefix = xarDBGetSystemTablePrefix();
@@ -30,7 +29,7 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
 
     xarSession__setup($args);
 
-    if ($xarSession_systemArgs['useOldPHPSessions']) {
+    if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
         // First thing we do is ensure that there is no attempted pollution
         // of the session namespace (yes, we still need this for now)
         foreach($GLOBALS as $k=>$v) {
@@ -46,8 +45,6 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
 
     $sessionId = session_id();
 
-    global $xarSession_isNewSession, $xarSession_ownerUserId, $xarSession_ipAddress;
-
     // TODO : add an admin option to re-activate this e.g. for
     //        Security Level "High" ?
 
@@ -59,7 +56,7 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
         $ipAddress = xarServerGetVar('REMOTE_ADDR');
     }
 
-    if ($xarSession_isNewSession) {
+    if ($GLOBALS['xarSession_isNewSession']) {
         xarSession__new($sessionId, $ipAddress);
 
         // Generate a random number, used for
@@ -70,7 +67,7 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
     } else {
         // same remark as in .71x branch : AOL, NZ and other ISPs don't
         // necessarily have a fixed IP (or a reliable X_FORWARDED_FOR)
-        // if ($ipAddress == $xarSession_ipAddress) {
+        // if ($ipAddress == $GLOBALS['xarSession_ipAddress']) {
             xarSession__current($sessionId);
         // } else {
             // Mismatch - destroy the session
@@ -85,9 +82,7 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
 
 function xarSessionGetSecurityLevel()
 {
-    global $xarSession_systemArgs;
-
-    return $xarSession_systemArgs['securityLevel'];
+    return $GLOBALS['xarSession_systemArgs']['securityLevel'];
 }
 
 /*
@@ -105,21 +100,19 @@ function xarSessionGetSecurityLevel()
  */
 function xarSessionGetVar($name)
 {
-    global $xarSession_systemArgs;
-	if (!$xarSession_systemArgs['useOldPHPSessions']) {
+	if (!$GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
         if (isset($_SESSION[$name])) {
             return $_SESSION[$name];
         }
         return;
     }
 
-//    global $HTTP_SESSION_VARS;
     $var = 'XARSV' . $name;
 
-// forget about $_SESSION for now - doesn't work for PHP 4.0.6
-// + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
-//    if (isset($HTTP_SESSION_VARS[$var])) {
-//        return $HTTP_SESSION_VARS[$var];
+    // forget about $_SESSION for now - doesn't work for PHP 4.0.6
+    // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
+    //    if (isset($HTTP_SESSION_VARS[$var])) {
+    //        return $HTTP_SESSION_VARS[$var];
     if (isset($GLOBALS[$var])) {
         return $GLOBALS[$var];
     } elseif (isset($GLOBALS['HTTP_SESSION_VARS'][$var])) {
@@ -138,22 +131,20 @@ function xarSessionGetVar($name)
  */
 function xarSessionSetVar($name, $value)
 {
-    global $xarSession_systemArgs;
     if ($name == 'uid') {
         return false;
     }
 
-    if (!$xarSession_systemArgs['useOldPHPSessions']) {
+    if (!$GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
         $_SESSION[$name] = $value;
         return true;
     }
 
-//    global $HTTP_SESSION_VARS;
     $var = 'XARSV' . $name;
 
-// forget about $_SESSION for now - doesn't work for PHP 4.0.6
-// + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
-//    $HTTP_SESSION_VARS[$var] = $value;
+    // forget about $_SESSION for now - doesn't work for PHP 4.0.6
+    // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
+    //    $HTTP_SESSION_VARS[$var] = $value;
     $GLOBALS[$var] = $value;
     if (!session_is_registered($var)) {
         session_register($var);
@@ -168,12 +159,11 @@ function xarSessionSetVar($name, $value)
  */
 function xarSessionDelVar($name)
 {
-    global $xarSession_systemArgs;
     if ($name == 'uid') {
         return false;
     }
 
-    if (!$xarSession_systemArgs['useOldPHPSessions']) {
+    if (!$GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
         if (!isset($_SESSION[$name])) {
             return false;
         }
@@ -181,13 +171,12 @@ function xarSessionDelVar($name)
 		return true;
     }
 
-//    global $HTTP_SESSION_VARS;
     $var = 'XARSV' . $name;
-
-// forget about $_SESSION for now - doesn't work for PHP 4.0.6
-// + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
-//    if (isset($HTTP_SESSION_VARS[$var])) {
-//        unset($HTTP_SESSION_VARS[$var]);
+    
+    // forget about $_SESSION for now - doesn't work for PHP 4.0.6
+    // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
+    //    if (isset($HTTP_SESSION_VARS[$var])) {
+    //        unset($HTTP_SESSION_VARS[$var]);
      if (isset($GLOBALS[$var]) || isset($GLOBALS['HTTP_SESSION_VARS'][$var])) {
         unset($GLOBALS[$var]);
         unset($GLOBALS['HTTP_SESSION_VARS'][$var]);
@@ -209,8 +198,6 @@ function xarSessionGetId()
 
 function xarSession_setUserInfo($userId, $rememberSession)
 {
-    global $xarSession_systemArgs;
-
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
@@ -222,7 +209,7 @@ function xarSession_setUserInfo($userId, $rememberSession)
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    if ($xarSession_systemArgs['useOldPHPSessions']) {
+    if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
         global $XARSVuid;
         $XARSVuid = $userId;
     } else {
@@ -414,9 +401,6 @@ function xarSession__phpClose()
  */
 function xarSession__phpRead($sessionId)
 {
-    global $xarSession_isNewSession, $xarSession_ipAddress;
-    global $xarSession_systemArgs;
-
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
@@ -431,23 +415,23 @@ function xarSession__phpRead($sessionId)
     if (!$result) return;
 
     if (!$result->EOF) {
-        $xarSession_isNewSession = false;
-        if ($xarSession_systemArgs['useOldPHPSessions']) {
+        $GLOBALS['xarSession_isNewSession'] = false;
+        if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
             global $XARSVuid;
         }
-        list($XARSVuid, $xarSession_ipAddress, $vars) = $result->fields;
+        list($XARSVuid, $GLOBALS['xarSession_ipAddress'], $vars) = $result->fields;
     } else {
-        $xarSession_isNewSession = true;
+        $GLOBALS['xarSession_isNewSession'] = true;
         // NOTE: <marco> Since it's useless to save the same information twice into
         // the session_info table, we use a little hack: $XARSVuid will appear to be
         // a session variable even if it's not registered as so!
-        if ($xarSession_systemArgs['useOldPHPSessions']) {
+        if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
             global $XARSVuid;
             $XARSVuid = 0;
         } else {
             $_SESSION['uid'] = 0;
         }
-        $xarSession_ipAddress = '';
+        $GLOBALS['xarSession_ipAddress'] = '';
         $vars = '';
     }
     $result->Close();
@@ -500,38 +484,36 @@ function xarSession__phpDestroy($sessionId)
  */
 function xarSession__phpGC($maxlifetime)
 {
-    global $xarSession_systemArgs;
-
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
     $sessioninfoTable = $xartable['session_info'];
 
-    switch ($xarSession_systemArgs['securityLevel']) {
-        case 'Low':
-            // Low security - delete session info if user decided not to
-            //                remember themself
-            $where = "WHERE xar_remembersess = 0
-                      AND xar_lastused < " . (time() - ($xarSession_systemArgs['inactivityTimeout'] * 60));
-            break;
-        case 'Medium':
-            // Medium security - delete session info if session cookie has
-            //                   expired or user decided not to remember
-            //                   themself
-            $where = "WHERE (xar_remembersess = 0
-                        AND xar_lastused < " . (time() - ($xarSession_systemArgs['inactivityTimeout'] * 60)) . ")
-                      OR xar_firstused < " . (time() - ($xarSession_systemArgs['duration'] * 86400));
-            break;
-        case 'High':
-        default:
-            // High security - delete session info if user is inactive
-            $where = "WHERE xar_lastused < " . (time() - ($xarSession_systemArgs['inactivityTimeout'] * 60));
-            break;
+    switch ($GLOBALS['xarSession_systemArgs']['securityLevel']) {
+    case 'Low':
+        // Low security - delete session info if user decided not to
+        //                remember themself
+        $where = "WHERE xar_remembersess = 0
+                      AND xar_lastused < " . (time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60));
+        break;
+    case 'Medium':
+        // Medium security - delete session info if session cookie has
+        //                   expired or user decided not to remember
+        //                   themself
+        $where = "WHERE (xar_remembersess = 0
+                        AND xar_lastused < " . (time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60)) . ")
+                      OR xar_firstused < " . (time() - ($GLOBALS['xarSession_systemArgs']['duration'] * 86400));
+        break;
+    case 'High':
+    default:
+        // High security - delete session info if user is inactive
+        $where = "WHERE xar_lastused < " . (time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60));
+        break;
     }
     $query = "DELETE FROM $sessioninfoTable $where";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-
+    
     return true;
 }
 
