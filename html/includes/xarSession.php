@@ -222,7 +222,6 @@ function xarSession_close()
  *
  * @param $args['securityLevel'] the current security level
  * @param $args['duration'] duration of the session
- * @param $args['enableIntranetMode']
  * @param $args['inactivityTimeout']
  * @returns bool
  */
@@ -276,22 +275,19 @@ function xarSession__setup($args)
     }
     ini_set('session.cookie_lifetime', $lifetime);
 
-    if ($args['enableIntranetMode'] == false) {
-        // Cookie path
-        // this should be customized for multi-server setups wanting to share
-        // sessions
-        ini_set('session.cookie_path', $path);
+    // Cookie path
+    // this should be customized for multi-server setups wanting to share
+    // sessions
+    ini_set('session.cookie_path', $path);
 
-        // Cookie domain
-        $domain = xarServerGetVar('HTTP_HOST');
-        $domain = preg_replace('/:.*/', '', $domain);
-        // this is only necessary for sharing sessions across multiple servers,
-        // and should be configurable for multi-site setups
-        // Example: .Xaraya.com for all *.Xaraya.com servers
-        // Example: www.Xaraya.com for www.Xaraya.com and *.www.Xaraya.com
-        //ini_set('session.cookie_domain', $domain);
-    }
-
+    // Cookie domain
+    // this is only necessary for sharing sessions across multiple servers,
+    // and should be configurable for multi-site setups
+    // Example: .Xaraya.com for all *.Xaraya.com servers
+    // Example: www.Xaraya.com for www.Xaraya.com and *.www.Xaraya.com
+    //$domain = xarServerGetVar('HTTP_HOST');
+    //$domain = preg_replace('/:.*/', '', $domain);
+    //ini_set('session.cookie_domain', $domain);
 
     // Garbage collection
     ini_set('session.gc_probability', 1);

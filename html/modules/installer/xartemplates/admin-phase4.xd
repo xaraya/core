@@ -57,9 +57,6 @@
 		  <input type="checkbox" name="install_create_database" id="install_create_database" value="1" />
 			<span class="xar-normal"><label for="install_create_database">Create the database</label></span><br />
 			<span class="xar-sub">If you cannot create databases through phpMyAdmin because of virtual hosting or MySQL security settings, the installer will not be able to create the database for you.</span><br /><br />
-      <input type="checkbox" name="install_intranet" id="install_intranet" value="1" />
-      <span class="xar-normal"><label for="install_intranet">This site is for intranet or other local (non-internet) use</label></span><br />
-      <span class="xar-sub">You must enable the "intranet" option if your site will not operate on a fully-qualified domain name (e.g. www.Xaraya.com, foo.bar.com).  Examples of hostnames that are not fully qualified are bar.com, localhost, and mysite.org.  <b>If you do not set this parameter properly you may be unable to log in to your site.</b></span><br /><br />
     </div>
 		<div style="text-align:center;">
 		  <input type="hidden" name="install_phase" id="install_phase" id="install_phase" value="5" />

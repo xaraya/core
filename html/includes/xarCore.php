@@ -242,7 +242,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // Start Session Support
         $systemArgs = array('securityLevel' => xarCore_getSiteVar('Session.SecurityLevel'),
                             'duration' => xarCore_getSiteVar('Session.Duration'),
-                            'enableIntranetMode' => xarCore_getSiteVar('Session.EnableIntranetMode'),
                             'inactivityTimeout' => xarCore_getSiteVar('Session.InactivityTimeout'));
         xarSession_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_SESSION;
