@@ -1,7 +1,7 @@
 <?php
 
 /**
- * File: $Id: s.xaruser.php 1.16 03/04/07 04:30:01-04:00 johnny@falling.local.lan $
+ * File: $Id$
  *
  * Base User version management functions
  *
