@@ -1,6 +1,5 @@
 <?php
 /**
- * File: $Id$
  *
  * Exception Handling System
  *
@@ -24,6 +23,10 @@ class ExceptionRendering
     var $hint;
     var $stack;
     var $linebreak = "<br/>";
+    var $openstrong = "<strong>";
+    var $closestrong = "</strong>";
+    var $openpre = "<pre>";
+    var $closepre = "</pre>";
 
     function ExceptionRendering($exception = NULL)
     {
@@ -72,7 +75,7 @@ class ExceptionRendering
         $this->defaults = '';
     }
 
-    function load() 
+    function load()
     {
         $id = $this->id;
         $this->title = array_key_exists("title", $this->defaults[$id]) ? $this->defaults[$id]['title'] : '';
@@ -81,44 +84,44 @@ class ExceptionRendering
         $this->hint = array_key_exists("hint", $this->defaults[$id]) ? $this->defaults[$id]['hint'] : '';
     }
 
-    function getMajor() 
-    { 
-        return $this->major; 
+    function getMajor()
+    {
+        return $this->major;
     }
-    
-    function getType() 
-    { 
-        return $this->type; 
+
+    function getType()
+    {
+        return $this->type;
     }
-    
-    function getTitle() 
-    { 
-        return $this->exception->getTitle() == '' ? $this->title : $this->exception->getTitle(); 
+
+    function getTitle()
+    {
+        return $this->exception->getTitle() == '' ? $this->title : $this->exception->getTitle();
     }
-    
-    function getLong() 
-    { 
-        return $this->exception->getLong() == '' ? $this->long : $this->exception->getLong(); 
+
+    function getLong()
+    {
+        return $this->exception->getLong() == '' ? $this->long : $this->exception->getLong();
     }
-    
-    function getHint() 
-    { 
-        return $this->exception->getHint() == '' ? $this->hint : $this->exception->getHint(); 
+
+    function getHint()
+    {
+        return $this->exception->getHint() == '' ? $this->hint : $this->exception->getHint();
     }
-    
-    function getShort() 
-    { 
-        return $this->exception->getShort() == '' ? $this->short : $this->exception->getShort(); 
+
+    function getShort()
+    {
+        return $this->exception->getShort() == '' ? $this->short : $this->exception->getShort();
     }
-    
-    function getProduct() 
-    { 
-        return $this->exception->getProduct(); 
+
+    function getProduct()
+    {
+        return $this->exception->getProduct();
     }
-    
-    function getComponent() 
-    { 
-        return $this->exception->getComponent(); 
+
+    function getComponent()
+    {
+        return $this->exception->getComponent();
     }
 
     function isadmin()
@@ -141,17 +144,17 @@ class ExceptionRendering
     }
 
     function iserrorcollection()
-    { 
+    {
         return get_class($this->exception) == 'errorcollection';
     }
 
-    function getID() 
+    function getID()
     {
         if ($this->iserrorcollection()) $this->id = "PHP_ERROR";
         else $this->id = $this->exception->getID();
     }
 
-    function getMsg() 
+    function getMsg()
     {
         if ($this->iserrorcollection()) {
           $collection = $this->exception->exceptions;
@@ -165,7 +168,7 @@ class ExceptionRendering
         else return $this->exception->getMsg();
     }
 
-    function getStack() 
+    function getStack()
     {
         $showParams = xarCoreIsDebugFlagSet(XARDBG_SHOW_PARAMS_IN_BT);
 
@@ -175,17 +178,17 @@ class ExceptionRendering
             for ($i = 2, $j = 1, $max = count($stack); $i < $max; $i++, $j++) {
                 if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
                 else $function = '{}';
-                $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>at '.$function.'(';
+                $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at ' . $this->openstrong .$function.'(';
                 // Note: eval() doesn't generate file or line
                 if (isset($stack[$j]['file'])) $text .= basename($stack[$j]['file']).':';
                 if (isset($stack[$j]['line'])) $text .= $stack[$j]['line'];
-                $text .= ')</strong>' . $this->linebreak;
+                $text .= ')' . $this->closestrong . $this->linebreak;
                 if ($showParams && isset($stack[$i]['args']) && is_array($stack[$i]['args']) && count($stack[$i]['args']) > 0) {
                     ob_start();
                     print_r($stack[$i]['args']);
                     $dump = ob_get_contents();
                     ob_end_clean();
-                    $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<pre>' . htmlspecialchars($dump) . '</pre>';
+                    $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->openpre . htmlspecialchars($dump) . $this->closepre;
                     $text .= $this->linebreak;
                 }
             }

@@ -1,6 +1,5 @@
 <?php
 /**
- * File: $Id$
  *
  * Exception Handling System
  *
@@ -16,6 +15,10 @@ include_once "includes/exceptions/exceptionrendering.class.php";
 class TextExceptionRendering extends ExceptionRendering
 {
     var $linebreak = "\n";
+    var $openstrong = "";
+    var $closestrong = "";
+    var $openpre = "";
+    var $closepre = "";
 }
 
 ?>
