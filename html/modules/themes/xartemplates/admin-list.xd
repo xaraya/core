@@ -1,36 +1,26 @@
-<!--- DATA AREA --->
-<xar:comment> 
+<xar:comment>
+    DATA:
     This part contains essential data preparation for the template.
     WARNING: Normally, this part should not be changed by theme developers and users!!
     It is, therefore, reserved for use by Xaraya Core Development Team only.
 </xar:comment>
 
-<!--- $list_options_url - URL for list configuration form [andyv] --->
+<!--- TEMPLATE VARIABLES --->
+
+<!--- $list_options_url - URL for list configuration form --->
 <xar:set name="$list_options_url">#xarModUrl('themes', 'admin', 'settings')#</xar:set>
 
 
-
-
-<!--- PRESENTATION AREA --->
 <xar:comment>
-    Below this comment is the part of themplate that theme developers and users can override in their own version of template.
-    Notice that we do not include any template specific styles here any longer. Also notice that:
-    - all template variables are commented in the data area to ease customisation of this template
-    - core developers make every effort to ensure that this template validates as XHTML1.0 strict when markup is compiled
-    - only xaraya required css classes and rules are used throughout template
-    - all formatting conform to RFC10 rules and best known to us (X)HTML coding practices
-        - all linefeeds are executed in UNIX standard
-        - all indentations are executed as 4 spaces per 1 tab (no actual tabs used)
-    - any inconsistencies or non-compliance with the above statements can be reported to Xaraya QA team or filed as a bug
-    
-    Enjoy your user experience with Xaraya CMS! :-)
-    [andyv@xaraya.com - core developer]
+    PRESENTATION:
+    Below this comment is the part that theme developers  
+    can override in their own version of template.
 </xar:comment>
 
 <div class="xar-mod-head">
 	<span class="xar-mod-title"> 
 		<xar:mlstring>
-			Xaraya Themes System 
+			Administration - Themes System 
 		</xar:mlstring>
 	</span> 
 </div>
@@ -41,18 +31,14 @@
 		</xar:mlstring>
 	</h2> 
 	<form method="post" action="#$list_options_url#">
-		<p class="xar-norm-outline">
+		<p>
             <span>
                 <xar:mlstring>
-                    List Options 
+                    List Options - [work in progress..]
                 </xar:mlstring>
             </span>
             <!--- Other options were considered non-essential, moved to listconfig template [andyv] --->     
-		</p><dl compact="compact">
-<dd>
-blah
-</dd>
-</dl>
+		</p>
     </form>
 <!-- the Themes List table -->
 		<div class="xar-norm-outline" style="padding: 0px 0px 5px 0px;">

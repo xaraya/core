@@ -4,14 +4,26 @@
  * List themes and current settings
  * @param none
  */
-function themes_admin_list()
-{
+function themes_admin_list() {
+
+/* TODO (till 1.0): 
+
+- simplify installation/deinstallation procedure
+    - transparent On/Off mode for 'non-core themes'
+    - transparent regenerate
+- list 'core themes' separate from 'designer themes'
+- allow to show/hide 'core themes' from interface
+- clarify possible actions upon 'missing' states
+- add previews of 'required css' for each theme
+
+*/
+
     // Security Check
     if(!xarSecurityCheck('AdminTheme')) return;
 
     // form parameters
     if (!xarVarFetch('startnum', 'isset', $startnum,    NULL,  XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('regen',    'isset', $regen,       NULL,  XARVAR_DONT_SET)) return;
+/*     if (!xarVarFetch('regen',    'isset', $regen,       NULL,  XARVAR_DONT_SET)) return; */
 /*     if (!xarVarFetch('selfilter','isset', $selfilter,   NULL,  XARVAR_DONT_SET)) return; */
 
     $data['items'] = array();
@@ -25,7 +37,7 @@ function themes_admin_list()
 
     // pass tru some of the form variables (we dont store them anywhere, atm)
     $data['hidecore']                               = xarModGetUserVar('themes', 'hidecore');
-    $data['regen']                                  = $regen;
+/*     $data['regen']                                  = $regen; */
     $data['selstyle']                               = xarModGetUserVar('themes', 'selstyle');
     $data['selfilter']                              = xarModGetUserVar('themes', 'selfilter');
     $data['selsort']                                = xarModGetUserVar('themes', 'selsort');
@@ -50,11 +62,11 @@ function themes_admin_list()
 
     // obtain list of modules based on filtering criteria
 /*     if($regen){ */
-        // lets regenerate the list on the fly
+        // lets regenerate the list on each reload, for now
         if(!xarModAPIFunc('themes', 'admin', 'regenerate')){
             $msg = xarML('Themes list  regeneration failed!');
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-                return;
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+            return;
         }
         $themelist = xarModAPIFunc('themes','admin','getthemelist',  array('filter'=> array('State' => $data['selfilter'])));
 /*         , array('filter'=> array('State' => $data['selfilter'][0]))); */
