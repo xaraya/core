@@ -452,9 +452,9 @@
 	 */
 	function &Execute($sql,$inputarr=false,$arg3=false) 
 	{
-        if (pnCoreIsDebugFlagSet(PNDBG_SQL)) {
-            global $pnDebug_sqlCalls;
-            $pnDebug_sqlCalls++;
+        if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
+            global $xarDebug_sqlCalls;
+            $xarDebug_sqlCalls++;
             // initialise time to render by proca
             $lmtime = explode(' ', microtime());
             $lstarttime = $lmtime[1] + $lmtime[0];
@@ -544,11 +544,11 @@
 		// return simplified empty recordset for inserts/updates/deletes with lower overhead
 			$rs = new ADORecordSet_empty();
             //  time to render SQL by proca
-            if (pnCoreIsDebugFlagSet(PNDBG_SQL)) {
+            if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
                 $lmtime = explode(" ", microtime());
                 $lendtime = $lmtime[1] + $lmtime[0];
                 $ltotaltime = ($lendtime - $lstarttime);
-                pnLogMessage("Query ($ltotaltime Seconds): ".$sql);
+                xarLogMessage("Query ($ltotaltime Seconds): ".$sql);
             }
 			return $rs;
 		}
@@ -571,11 +571,11 @@
 				$rs->_numOfRows = 0;
 		}
         //  time to render SQL by proca
-        if (pnCoreIsDebugFlagSet(PNDBG_SQL)) {
+        if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
             $lmtime = explode(' ', microtime());
             $lendtime = $lmtime[1] + $lmtime[0];
             $ltotaltime = ($lendtime - $lstarttime);
-            pnLogMessage("Query ($ltotaltime Seconds):\n".$sql);
+            xarLogMessage("Query ($ltotaltime Seconds):\n".$sql);
         }
 		return $rs;
 	}

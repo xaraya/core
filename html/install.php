@@ -40,7 +40,7 @@ define ('XARINSTALL_PHASE_SETTINGS_COLLECTION', '5');
 // FIXME: <marco> doesn't make more sense to call it DATABASE_CREATION?
 define ('XARINSTALL_PHASE_ADMIN_CREATION',      '6');
 define ('XARINSTALL_PHASE_PLUGIN_INSTALL',      '7');
-define ('PNINSTALL_PHASE_FINISHED',            '8');
+define ('XARINSTALL_PHASE_FINISHED',            '8');
 
 /**
  * Entry function for the installer
