@@ -102,7 +102,7 @@
 			</tr>
 		</xar:if>
 	</table><br />
-	<div style="text-align: center;">#$resultdisplay#</div><br />
+	<div style="text-align: center;"><strong>#$resultdisplay#</strong></div><br />
 </xar:if>
 <form action="&xar-modurl-roles-admin-testprivileges;" method="post" enctype="application/x-www-form-urlencoded">
      <div>
@@ -174,7 +174,7 @@
 			</td>
 			</tr>
 		</xar:foreach>
+	</table>
 	</xar:if>
-</table>
 </div>
 </div>

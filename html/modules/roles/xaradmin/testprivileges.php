@@ -53,7 +53,7 @@ function roles_admin_testprivileges()
         $testresult = $masks->xarSecurityCheck($name, 0, $component, 'All', $mask->getModule(), $role->getName());
         // test failed
         if (!$testresult) {
-            $resultdisplay = "<b>Privilege: none found.</b>";
+            $resultdisplay = xarML('Privilege: none found');
         }
         // test returned an object
         else {
