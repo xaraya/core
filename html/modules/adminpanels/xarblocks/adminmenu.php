@@ -70,10 +70,8 @@ function adminpanels_adminmenublock_display($blockinfo){
     }
     
     // which module is loaded atm?
-    $thismod = xarRequestGetInfo();
-    // we need it's name and type, because we deal here only with admin type mods, dont we?
-    $thismodname = $thismod[0];
-    $thismodtype = $thismod[1];
+    // we need it's name and type - dealing only with admin type mods, aren't we?
+    list($thismodname, $thismodtype) = xarRequestGetInfo();
     
     // Sort Order, Status and Links Display preparation
     $menustyle = xarModGetVar('adminpanels','menustyle');
@@ -84,9 +82,7 @@ function adminpanels_adminmenublock_display($blockinfo){
             $link = xarModURL($mod['name'] ,'admin', 'main', array());
             // depending on which module is currently loaded we display accordingly
             if($label == $thismodname && $thismodtype == 'admin'){
-//                if($modType != 'user'){
                     $adminmods[] = array('label' => $label, 'link' => '', 'marker' => $marker);
-//                }
             }else{
                 $adminmods[] = array('label' => $label, 'link' => $link, 'marker' => '');
             }
