@@ -89,11 +89,10 @@ function base_contentblock_update($blockinfo)
         } else {
             $vars['start_date'] = '';
         }
-        //xarLocaleFormatDate("%Y-%m-%d %H:%M:%S",$start)
     }
 
     if (xarVarFetch('end_date', 'str', $end_date, '0', XARVAR_NOT_REQUIRED)) {
-        // Convert the start date into a datetime format.
+        // Convert the end date into a datetime format.
         // TODO: is this the way we should be converting dates from the calendar property?
         if (!empty($end_date)) {
             $vars['end_date'] = strtotime($end_date);
