@@ -87,4 +87,35 @@ function xarConfigSetVar($name, $value)
     return xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $description = NULL, $uid = NULL, $type = 'configvar');
 }
 
+/**
+ * Pre-load site configuration variables
+ *
+ * @access private
+ * @return bool true on success, or void on database error
+ * @raise DATABASE_ERROR
+ */
+function xarConfig_loadVars()
+{
+    $cacheCollection = 'Config.Variables';
+
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
+
+    $query = "SELECT xar_name,
+                     xar_value
+                FROM $tables[config_vars]";
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    while (!$result->EOF) {
+        list($name,$value) = $result->fields;
+        $newval = unserialize($value);
+        xarVarSetCached($cacheCollection, $name, $newval);
+        $result->MoveNext();
+    }
+    $result->Close();
+
+    return true;
+}
+
 ?>

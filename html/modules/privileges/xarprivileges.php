@@ -2204,20 +2204,26 @@ class xarPrivilege extends xarMask
 */
     function getChildren()
     {
-        // create an array to hold the objects to be returned
-        $children = array();
-
         $cacheId = $this->getID();
 
-        if (xarVarIsCached('Privileges.getChildren', $cacheId)) {
-            return xarVarGetCached('Privileges.getChildren', $cacheId);
+        // we retrieve and cache everything at once now
+        if (xarVarIsCached('Privileges.getChildren', 'cached')) {
+            if (xarVarIsCached('Privileges.getChildren', $cacheId)) {
+                return xarVarGetCached('Privileges.getChildren', $cacheId);
+            } else {
+                return array();
+            }
         }
+
+        // create an array to hold the objects to be returned
+        $children = array();
 
         // if this is a user just perform a SELECT on the rolemembers table
         $query = "SELECT p.*, pm.xar_parentid
                     FROM $this->privilegestable AS p, $this->privmemberstable AS pm
-                    WHERE p.xar_pid = pm.xar_pid
-                      AND pm.xar_parentid = " . $cacheId;
+                    WHERE p.xar_pid = pm.xar_pid";
+        // retrieve all children of everyone at once
+        //              AND pm.xar_parentid = " . $cacheId;
         if (xarCore_getSystemVar('DB.UseADODBCache')){
             $result =& $this->dbconn->CacheExecute(3600,$query);
             if (!$result) return;
@@ -2226,9 +2232,10 @@ class xarPrivilege extends xarMask
             if (!$result) return;
         }
 
-            // collect the table values and use them to create new role objects
-            while(!$result->EOF) {
+        // collect the table values and use them to create new role objects
+        while(!$result->EOF) {
             list($pid,$name,$realm,$module,$component,$instance,$level,$description,$parentid) = $result->fields;
+            if (!isset($children[$parentid])) $children[$parentid] = array();
             $pargs = array('pid'=>$pid,
                             'name'=>$name,
                             'realm'=>$realm,
@@ -2238,12 +2245,19 @@ class xarPrivilege extends xarMask
                             'level'=>$level,
                             'description'=>$description,
                             'parentid' => $parentid);
-            array_push($children, new xarPrivilege($pargs));
+            array_push($children[$parentid], new xarPrivilege($pargs));
             $result->MoveNext();
-            }
+        }
         // done
-        xarVarSetCached('Privileges.getChildren', $cacheId, $children);
-        return $children;
+        foreach (array_keys($children) as $parentid) {
+            xarVarSetCached('Privileges.getChildren', $parentid, $children[$parentid]);
+        }
+        xarVarSetCached('Privileges.getChildren', 'cached', 1);
+        if (isset($children[$cacheId])) {
+            return $children[$cacheId];
+        } else {
+            return array();
+        }
     }
 
 /**
