@@ -25,7 +25,8 @@
 */
 function adminpanels_waitingcontentblock_init()
 {
-    return true;
+    // Nothing to configure.
+    return array();
 }
 
 /**
@@ -40,13 +41,15 @@ function adminpanels_waitingcontentblock_init()
 */
 function adminpanels_waitingcontentblock_info()
 {
-    return array('text_type' => 'Waiting Content',
-         'text_type_long' => 'Displays Waiting Content for All Modules',
-         'module' => 'adminpanels',
-         'allow_multiple' => false,
-         'form_content' => false,
-         'form_refresh' => false,
-         'show_preview' => true);
+    return array(
+        'text_type' => 'Waiting Content',
+        'text_type_long' => 'Displays Waiting Content for All Modules',
+        'module' => 'adminpanels',
+        'allow_multiple' => false,
+        'form_content' => false,
+        'form_refresh' => false,
+        'show_preview' => true
+    );
 }
 
 /**
@@ -60,32 +63,18 @@ function adminpanels_waitingcontentblock_info()
 */
 function adminpanels_waitingcontentblock_display($blockinfo)
 {
-// Security Check
-    if(!xarSecurityCheck('EditPanel',0,'Waitingcontentblock',"$blockinfo[title]:All:All")) return;
+    // Security Check
+    if(!xarSecurityCheck('EditPanel',0,'Waitingcontentblock',"$blockinfo[title]:All:All")) {return;}
 
     // Get publication types
     $data = xarModAPIFunc('adminpanels', 'admin', 'waitingcontent');
 
-    if (empty($blockinfo['template'])) {
-        $template = 'waitingcontent';
-    } else {
-        $template = $blockinfo['template'];
-    }
-
-    $display = xarTplBlock('adminpanels',$template, array('output'   => $data['output'],
-                                                          'message'  => $data['message']));
-
-    // Populate block info and pass to BlockLayout.
-
-    if (empty($blockinfo['title'])){
-        $blockinfo['title'] = xarML('Waiting Content');
-    }
-
-    $blockinfo['content'] = $display;
-
+    $blockinfo['content'] = array(
+        'output'   => $data['output'],
+        'message'  => $data['message'])
+    );
 
     return $blockinfo;
-
 }
 
 ?>

@@ -18,7 +18,9 @@
  */
 function base_fincludeblock_init()
 {
-    return true;
+    return array(
+        'url' => 'http://www.example.com/'
+    );
 }
 
 /**
@@ -43,12 +45,12 @@ function base_fincludeblock_info()
 function base_fincludeblock_display($blockinfo)
 {
     // Security Check
-    if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"finclude:$blockinfo[title]:All")) return;
+    if (!xarSecurityCheck('ViewBaseBlocks',0,'Block',"finclude:$blockinfo[title]:All")) {return;}
 
-    $blockinfo['content'] = unserialize($blockinfo['content']);
-
-    if (empty($blockinfo['title'])){
-        $blockinfo['title'] = xarML('File Include');
+    if (!is_array($blockinfo['content'])) {
+        $blockinfo['content'] = unserialize($blockinfo['content']);
+    } else {
+        $blockinfo['content'] = $blockinfo['content'];
     }
 
     if (empty($blockinfo['content']['url'])){
@@ -78,9 +80,7 @@ function base_fincludeblock_modify($blockinfo)
     }
     $args['blockid'] = $blockinfo['bid'];
 
-    $content = xarTplBlock('base','fincludeAdmin', $args);
-
-    return $content;
+    return $args;
 }
 
 /**
@@ -89,19 +89,11 @@ function base_fincludeblock_modify($blockinfo)
  */
 function base_fincludeblock_update($blockinfo)
 {
-    if (!xarVarFetch('url', 'isset', $vars['url'], NULL, XARVAR_DONT_SET)) return;
+    $vars = array();
+    if (!xarVarFetch('url', 'isset', $vars['url'], xarML('Error - No Url Specified'), XARVAR_DONT_SET)) {return;}
 
-    if (empty($blockinfo['title'])){
-        $blockinfo['title'] = xarML('File Include');
-    }
-
-    // Defaults
-    if (empty($vars['url'])) {
-        $vars['url'] = 'Error - No Url Specified';
-    }
-
-    $blockinfo['content'] = serialize($vars);
-
+    $blockinfo['content'] = $vars;
     return $blockinfo;
 }
+
 ?>

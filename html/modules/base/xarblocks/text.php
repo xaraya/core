@@ -18,7 +18,10 @@
  */
 function base_textblock_init()
 {
-    return true;
+    return array(
+        'text_content' => '',
+        'expire' => 0
+    );
 }
 
 /**
@@ -26,14 +29,16 @@ function base_textblock_init()
  */
 function base_textblock_info()
 {
-    return array('text_type' => 'Text',
-         'text_type_long' => 'Plain Text',
-         'module' => 'base',
-         'func_update' => 'base_textblock_update',
-         'allow_multiple' => true,
-         'form_content' => false,
-         'form_refresh' => false,
-         'show_preview' => true);
+    return array(
+        'text_type' => 'Text',
+        'text_type_long' => 'Plain Text',
+        'module' => 'base',
+        'func_update' => 'base_textblock_update',
+        'allow_multiple' => true,
+        'form_content' => false,
+        'form_refresh' => false,
+        'show_preview' => true
+    );
 }
 
 /**
@@ -43,10 +48,14 @@ function base_textblock_info()
 function base_textblock_display($blockinfo)
 {
     // Security Check
-    if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"text:$blockinfo[title]:All")) return;
+    if (!xarSecurityCheck('ViewBaseBlocks', 0, 'Block', "text:$blockinfo[title]:All")) {return;}
 
     // Get variables from content block
-    $vars = unserialize($blockinfo['content']);
+    if (!is_array($blockinfo['content'])) {
+        $vars = unserialize($blockinfo['content']);
+    } else {
+        $vars = $blockinfo['content'];
+    }
 
     $now = time();
 
@@ -71,30 +80,34 @@ function base_textblock_display($blockinfo)
 function base_textblock_modify($blockinfo)
 {
     // Get current content
-    $vars = @unserialize($blockinfo['content']);
+    if (!is_array($blockinfo['content'])) {
+        $vars = unserialize($blockinfo['content']);
+    } else {
+        $vars = $blockinfo['content'];
+    }
 
     // Defaults
     if (empty($vars['expire'])) {
         $vars['expire'] = 0;
     }
+
     // Defaults
     if (empty($vars['text_content'])) {
         $vars['text_content'] = '';
     }
 
-    $now = time();
     if ($vars['expire'] == 0){
         $vars['expirein'] = 0;
     } else {
+        $now = time();
         $soon = $vars['expire'] - $now ;
         $sooner = $soon / 3600;
-        $vars['expirein'] =  round($sooner);
+        $vars['expirein'] = round($sooner);
     }
 
     $vars['blockid'] = $blockinfo['bid'];
-    $content = xarTplBlock('base', 'textAdmin', $vars);
 
-    return $content;
+    return $vars;
 }
 
 /**
@@ -103,16 +116,29 @@ function base_textblock_modify($blockinfo)
  */
 function base_textblock_update($blockinfo)
 {
-   if (!xarVarFetch('expire','str:1', $vars['expire'], 0, XARVAR_NOT_REQUIRED)) {return;}
-   if (!xarVarFetch('text_content','str:1', $vars['text_content'], '', XARVAR_NOT_REQUIRED)) {return;}
-
-    // Defaults
-    if ($vars['expire'] != 0){
-        $now = time();
-        $vars['expire'] = $vars['expire'] + $now;
+    if (!is_array($blockinfo['content'])) {
+        $vars = unserialize($blockinfo['content']);
+    } else {
+        $vars = $blockinfo['content'];
     }
 
-    $blockinfo['content'] = serialize($vars);
+    if (!xarVarFetch('expire', 'int', $expire, 0, XARVAR_NOT_REQUIRED)) {return;}
+
+    // TODO: check the flags that allow a posted value to override the existing value.
+    if (!xarVarFetch('text_content', 'str:1', $text_content, '', XARVAR_NOT_REQUIRED)) {return;}
+    $vars['text_content'] = $text_content;
+
+    // Defaults
+    if ($expire > 0) {
+        $now = time();
+        $vars['expire'] = $expire + $now;
+    }
+    
+    if (!isset($vars['expire'])) {
+        $vars['expire'] = 0;
+    }
+
+    $blockinfo['content'] = $vars;
 
     return $blockinfo;
 }

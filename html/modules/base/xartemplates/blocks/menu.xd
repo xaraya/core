@@ -95,10 +95,10 @@
     <p> [<a href="#$logouturl#">#$logoutlabel#</a>] </p>
 </xar:if>
 
-<xar:if condition="(xarThemeIsAvailable('print')) and ($displayprint eq 1)">
+<xar:if condition="(xarThemeIsAvailable('print')) and !empty($displayprint)">
     <p> [<a href="#$printurl#" title="Print View"><xar:mlstring>Print View</xar:mlstring></a>] </p>
 </xar:if>
-<xar:if condition="(xarThemeIsAvailable('rss')) and ($displayrss eq 1)">
+<xar:if condition="(xarThemeIsAvailable('rss')) and !empty($displayrss)">
     <!-- TODO check whether a modules supports syndication, do not hardcode in here -->
     <xar:if condition="($where eq 'articles')">
         <p> [<a href="#$rssurl#" title="Syndication"><xar:mlstring>Syndication</xar:mlstring></a>] </p>

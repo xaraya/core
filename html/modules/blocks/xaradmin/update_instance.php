@@ -26,7 +26,7 @@ function blocks_admin_update_instance()
     if (!xarVarFetch('block_template', 'strlist:;,:pre:trim:lower:ftoken', $block_template, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('group_templates', 'keylist:id;strlist:;,:pre:trim:lower:ftoken', $group_templates, array(), XARVAR_NOT_REQUIRED)) {return;}
     // TODO: deprecate 'block_content' - make sure each block handles its own content entirely.
-    if (!xarVarFetch('block_content', 'str:1:', $content, '', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('block_content', 'str:1:', $content, NULL, XARVAR_NOT_REQUIRED)) {return;}
     // TODO: check out where 'block_refresh' is used. Could it be used more effectively?
     // Could the caching be supported in a more consistent way, so individual blocks don't
     // need to handle it themselves?
@@ -53,9 +53,12 @@ function blocks_admin_update_instance()
     $blockinfo['name'] = $name;
     $blockinfo['title'] = $title;
     $blockinfo['template'] = $block_template;
-    $blockinfo['content'] = $content;
     $blockinfo['refresh'] = $refresh;
     $blockinfo['state'] = $state;
+
+    if (isset($content)) {
+        $blockinfo['content'] = $content;
+    }
 
     // Pick up the block instance groups and templates.
     $groups = array();

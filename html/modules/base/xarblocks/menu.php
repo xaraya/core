@@ -24,7 +24,13 @@
 */
 function base_menublock_init()
 {
-    return true;
+    return array(
+        'displaymodules' => false,
+        'displayrss' => false,
+        'displayprint' => false,
+        'marker' => '[x]',
+        'content' => 'http://www.example.com/|Title|Example|'
+    );
 }
 
 /**
@@ -38,14 +44,16 @@ function base_menublock_init()
 */
 function base_menublock_info()
 {
-    return array('text_type' => 'Menu',
-         'text_type_long' => 'Generic menu',
-         'module' => 'base',
-         'func_update' => 'base_menublock_insert',
-         'allow_multiple' => true,
-         'form_content' => false,
-         'form_refresh' => false,
-         'show_preview' => true);
+    return array(
+        'text_type' => 'Menu',
+        'text_type_long' => 'Generic menu',
+        'module' => 'base',
+        'func_update' => 'base_menublock_insert',
+        'allow_multiple' => true,
+        'form_content' => false,
+        'form_refresh' => false,
+        'show_preview' => true
+    );
 }
 
 /**
@@ -60,19 +68,15 @@ function base_menublock_info()
 */
 function base_menublock_display($blockinfo)
 {
-
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-
-    if (empty($blockinfo['bid'])){
-        $blockinfo['bid'] = '';
-    }
-
-// Security Check
-    if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) return;
+    // Security Check
+    if (!xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {return;}
 
     // Break out options from our content field
-    $vars = unserialize($blockinfo['content']);
+    if (!is_array($blockinfo['content'])) {
+        $vars = unserialize($blockinfo['content']);
+    } else {
+        $vars = $blockinfo['content'];
+    }
 
     // are there any user modules, then get their names
     // checking as early as possible :)
@@ -107,204 +111,186 @@ function base_menublock_display($blockinfo)
     // Get current URL
     $currenturl = preg_replace('/&/', '&amp;', xarServerGetCurrentURL());
 
-    // Dirty right now, need to do a block group check and fix.
-    $menustyle = 'side';
-
-    switch(strtolower($menustyle)) {
-        default:
-        case 'side':
-                // Added Content For non-modules list.
-                if (!empty($vars['content'])) {
-                    $usercontent = array();
-                    $contentlines = explode("LINESPLIT", $vars['content']);
-                    foreach ($contentlines as $contentline) {
-                        //list($url, $title, $comment, $child) = explode('|', $contentline);
-                    // FIXME: make sure we don't generate content lines with missing pieces elsewhere
-                        $parts = explode('|', $contentline);
-                        $url = $parts[0];
-                        if (!empty($url)){
-                            switch ($url[0])
-                            {
-                                case '[': // module link
-                                {
-                                    // Credit to Elek Márton for further expansion
-                                    $url = explode(':', substr($url, 1,  - 1));
-                                    if (empty($url[1])) $url[1]="user";
-                                    if (empty($url[2])) $url[2]="main";
-                                    $url = xarModUrl($url[0],$url[1],$url[2]);
-                                    break;
-                                }
-                                case '{': // article link
-                                {
-                                    $url = explode(':', substr($url, 1,  - 1));
-                                    $url = xarModUrl('articles', 'user', 'view', array('ptid' => $url[0]));
-                                    break;
-                                }
-                                case '(': // category link
-                                {
-                                    $url = explode(':', substr($url, 1,  - 1));
-                                    $url = xarModUrl('articles', 'user', 'view', array('catid' => $url[0]));
-                                    break;
-                                }
-                            }
-                        }
-                        $title = $parts[1];
-                        $comment = $parts[2];
-                        $child = isset($parts[3]) ? $parts[3] : '';
-                        // Security Check
-                        //FIX: Should contain a check for the particular menu item
-                        //     Like "menu:$blockinfo[title]:$blockinfo[bid]:$title"?
-                        if (xarSecurityCheck('ReadBaseBlock',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {
-                            $title = xarVarPrepForDisplay($title);
-                            $comment = xarVarPrepForDisplay($comment);
-                            $child = xarVarPrepForDisplay($child);
-                            $usercontent[] = array('title' => $title, 'url' => $url, 'comment' => $comment, 'child'=> $child, 'here'=> $currenturl);
-                        }
+    // Added Content For non-modules list.
+    if (!empty($vars['content'])) {
+        $usercontent = array();
+        $contentlines = explode("LINESPLIT", $vars['content']);
+        foreach ($contentlines as $contentline) {
+            //list($url, $title, $comment, $child) = explode('|', $contentline);
+        // FIXME: make sure we don't generate content lines with missing pieces elsewhere
+            $parts = explode('|', $contentline);
+            $url = $parts[0];
+            if (!empty($url)){
+                switch ($url[0])
+                {
+                    case '[': // module link
+                    {
+                        // Credit to Elek Márton for further expansion
+                        $url = explode(':', substr($url, 1,  - 1));
+                        if (empty($url[1])) $url[1]="user";
+                        if (empty($url[2])) $url[2]="main";
+                        $url = xarModUrl($url[0],$url[1],$url[2]);
+                        break;
                     }
-                } else {
-                    $usercontent = '';
-                }
-
-                // Added list of modules if selected.
-                if (!empty($vars['displaymodules'])) {
-                    if (xarSecurityCheck('ReadBaseBlock',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {
-                        foreach($mods as $mod){
-                            $label = $mod['name'];
-                            $link = xarModURL($mod['name'] ,'user', 'main', array());
-                            // depending on which module is currently loaded we display accordingly
-                            if($label == $thismodname && $thismodtype == 'user'){
-
-                                // Get list of links for modules
-                                $labelDisplay = ucwords($label);
-                                $usermods[] = array(   'label'     => $labelDisplay,
-                                                       'link'      => '',
-                                                       'modactive' => 1);
-
-                                // Lets check to see if the function exists and just skip it if it doesn't
-                                // with the new api load, it causes some problems.  We need to load the api
-                                // in order to do it right.
-                                xarModAPILoad($label, 'user');
-                                if (function_exists($label.'_userapi_getmenulinks') ||
-                                    file_exists("modules/$mod[osdirectory]/xaruserapi/getmenulinks.php")){
-                                    // The user API function is called.
-                                    $menulinks = xarModAPIFunc($label,
-                                                               'user',
-                                                               'getmenulinks');
-
-                                } else {
-                                    $menulinks = '';
-                                }
-
-                                if (!empty($menulinks)) {
-                                    $indlinks = array();
-                                    foreach($menulinks as $menulink){
-
-                                        // Compare with current URL
-                                        if ($menulink['url'] == $currenturl) {
-                                            $funcactive = 1;
-                                        } else {
-                                            $funcactive = 0;
-                                        }
-
-                            // Security Check
-//                                        if (xarSecurityCheck('ReadBaseBlock',0,'Block',"$blockinfo[title]:$menulink[title]:All")) {
-                                            $indlinks[] = array('userlink'      => $menulink['url'],
-                                                                'userlabel'     => $menulink['label'],
-                                                                'usertitle'     => $menulink['title'],
-                                                                'funcactive'    => $funcactive);
-                                        }
-//                                    }
-                                } else {
-                                    $indlinks= '';
-                                }
-
-                            }else{
-                                $modid = xarModGetIDFromName($mod['name']);
-                                $modinfo = xarModGetInfo($modid);
-                                if($modinfo){
-                                    $desc = $modinfo['description'];
-                                }
-
-                                $labelDisplay = ucwords($label);
-                                $usermods[] = array('label' => $labelDisplay,
-                                                    'link' => $link,
-                                                    'desc' => $desc,
-                                                    'modactive' => 0);
-                            }
-                        }
-                    } else {
-                        $modid = xarModGetIDFromName('roles');
-                        $modinfo = xarModGetInfo($modid);
-                        if($modinfo){
-                            $desc = $modinfo['description'];
-                        }
-                        $usermods[] = array('label' => 'roles',
-                            'link' => xarModUrl('roles', 'user', 'main'),
-                            'desc' => $desc,
-                            'modactive' => 0);
+                    case '{': // article link
+                    {
+                        $url = explode(':', substr($url, 1,  - 1));
+                        $url = xarModUrl('articles', 'user', 'view', array('ptid' => $url[0]));
+                        break;
                     }
-                } else {
-                    $usermods = '';
+                    case '(': // category link
+                    {
+                        $url = explode(':', substr($url, 1,  - 1));
+                        $url = xarModUrl('articles', 'user', 'view', array('catid' => $url[0]));
+                        break;
+                    }
                 }
-
-                // prepare the data for template(s)
-                $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
-                if (empty($indlinks)){
-                    $indlinks = '';
-                }
-
-                // we dont want to show logout link if the user is anonymous or admin
-                // admins have their own logout method, which is more robust
-                // Security Check
-                if (xarSecurityCheck('AdminPanel',0,'adminmenu',"$blockinfo[title]:All:All") or !xarUserIsLoggedIn()){
-                    $showlogout = false;
-                }else{
-                    $showlogout = true;
-                }
-
-                //$meta['activepage'] = preg_replace('/&[^amp;]/', '&amp;', xarServerGetCurrentURL());
-                $rssurl         = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'rss')));
-                $printurl       = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'print')));
-                $rssurl         = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'rss')));
-                $printurl       = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'print')));
-
-                if (isset($vars['displayprint'])) {
-                    $displayprint = $vars['displayprint'];
-                } else {
-                    $displayprint = 0;
-                }
-                if (isset($vars['displayrss'])) {
-                    $displayrss = $vars['displayrss'];
-                } else {
-                    $displayrss = 0;
-                }
-
-                if (empty($blockinfo['template'])) {
-                    $template = 'sidemenu';
-                } else {
-                    $template = $blockinfo['template'];
-                }
-
-                $data = xarTplBlock('base',$template, array('usermods'         => $usermods,
-                                                            'indlinks'         => $indlinks,
-                                                            //'blockid'          => $blockinfo['bid'],
-                                                            'logouturl'        => $logouturl,
-                                                            'logoutlabel'      => $logoutlabel,
-                                                            'loggedin'         => $loggedin,
-                                                            'usercontent'      => $usercontent,
-                                                            'marker'           => $marker,
-                                                            'showlogout'       => $showlogout,
-                                                            'where'            => $thismodname,
-                                                            'what'             => $thisfuncname,
-                                                            'displayrss'       => $displayrss,
-                                                            'displayprint'     => $displayprint,
-                                                            'displayrss'       => $displayrss,
-                                                            'displayprint'     => $displayprint,
-                                                            'printurl'         => $printurl,
-                                                            'rssurl'           => $rssurl));
-                // this should do for now
-                break;
+            }
+            $title = $parts[1];
+            $comment = $parts[2];
+            $child = isset($parts[3]) ? $parts[3] : '';
+            // Security Check
+            //FIX: Should contain a check for the particular menu item
+            //     Like "menu:$blockinfo[title]:$blockinfo[bid]:$title"?
+            if (xarSecurityCheck('ReadBaseBlock',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {
+                $title = xarVarPrepForDisplay($title);
+                $comment = xarVarPrepForDisplay($comment);
+                $child = xarVarPrepForDisplay($child);
+                $usercontent[] = array('title' => $title, 'url' => $url, 'comment' => $comment, 'child'=> $child, 'here'=> $currenturl);
+            }
+        }
+    } else {
+        $usercontent = '';
     }
+
+    // Added list of modules if selected.
+    if (!empty($vars['displaymodules'])) {
+        if (xarSecurityCheck('ReadBaseBlock',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {
+            foreach($mods as $mod){
+                $label = $mod['name'];
+                $link = xarModURL($mod['name'] ,'user', 'main', array());
+                // depending on which module is currently loaded we display accordingly
+                if($label == $thismodname && $thismodtype == 'user'){
+
+                    // Get list of links for modules
+                    $labelDisplay = ucwords($label);
+                    $usermods[] = array(   'label'     => $labelDisplay,
+                                           'link'      => '',
+                                           'modactive' => 1);
+
+                    // Lets check to see if the function exists and just skip it if it doesn't
+                    // with the new api load, it causes some problems.  We need to load the api
+                    // in order to do it right.
+                    xarModAPILoad($label, 'user');
+                    if (function_exists($label.'_userapi_getmenulinks') ||
+                        file_exists("modules/$mod[osdirectory]/xaruserapi/getmenulinks.php")){
+                        // The user API function is called.
+                        $menulinks = xarModAPIFunc($label,
+                                                   'user',
+                                                   'getmenulinks');
+
+                    } else {
+                        $menulinks = '';
+                    }
+
+                    if (!empty($menulinks)) {
+                        $indlinks = array();
+                        foreach($menulinks as $menulink){
+
+                            // Compare with current URL
+                            if ($menulink['url'] == $currenturl) {
+                                $funcactive = 1;
+                            } else {
+                                $funcactive = 0;
+                            }
+
+                // Security Check
+//                                        if (xarSecurityCheck('ReadBaseBlock',0,'Block',"$blockinfo[title]:$menulink[title]:All")) {
+                                $indlinks[] = array('userlink'      => $menulink['url'],
+                                                    'userlabel'     => $menulink['label'],
+                                                    'usertitle'     => $menulink['title'],
+                                                    'funcactive'    => $funcactive);
+                            }
+//                                    }
+                    } else {
+                        $indlinks= '';
+                    }
+
+                }else{
+                    $modid = xarModGetIDFromName($mod['name']);
+                    $modinfo = xarModGetInfo($modid);
+                    if($modinfo){
+                        $desc = $modinfo['description'];
+                    }
+
+                    $labelDisplay = ucwords($label);
+                    $usermods[] = array('label' => $labelDisplay,
+                                        'link' => $link,
+                                        'desc' => $desc,
+                                        'modactive' => 0);
+                }
+            }
+        } else {
+            $modid = xarModGetIDFromName('roles');
+            $modinfo = xarModGetInfo($modid);
+            if($modinfo){
+                $desc = $modinfo['description'];
+            }
+            $usermods[] = array('label' => 'roles',
+                'link' => xarModUrl('roles', 'user', 'main'),
+                'desc' => $desc,
+                'modactive' => 0);
+        }
+    } else {
+        $usermods = '';
+    }
+
+    // prepare the data for template(s)
+    $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
+    if (empty($indlinks)){
+        $indlinks = '';
+    }
+
+    // we dont want to show logout link if the user is anonymous or admin
+    // admins have their own logout method, which is more robust
+    // Security Check
+    if (xarSecurityCheck('AdminPanel',0,'adminmenu',"$blockinfo[title]:All:All") or !xarUserIsLoggedIn()){
+        $showlogout = false;
+    }else{
+        $showlogout = true;
+    }
+
+    //$meta['activepage'] = preg_replace('/&[^amp;]/', '&amp;', xarServerGetCurrentURL());
+    $rssurl         = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'rss')));
+    $printurl       = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'print')));
+
+    if (isset($vars['displayprint'])) {
+        $displayprint = $vars['displayprint'];
+    } else {
+        $displayprint = false;
+    }
+    if (isset($vars['displayrss'])) {
+        $displayrss = $vars['displayrss'];
+    } else {
+        $displayrss = false;
+    }
+
+    $data = array(
+        'usermods'         => $usermods,
+        'indlinks'         => $indlinks,
+        'logouturl'        => $logouturl,
+        'logoutlabel'      => $logoutlabel,
+        'loggedin'         => $loggedin,
+        'usercontent'      => $usercontent,
+        'marker'           => $marker,
+        'showlogout'       => $showlogout,
+        'where'            => $thismodname,
+        'what'             => $thisfuncname,
+        'displayrss'       => $displayrss,
+        'displayprint'     => $displayprint,
+        'printurl'         => $printurl,
+        'rssurl'           => $rssurl
+    );
 
     // Populate block info and pass to BlockLayout.
     $blockinfo['content'] = $data;
@@ -323,12 +309,12 @@ function base_menublock_display($blockinfo)
 */
 function base_menublock_modify($blockinfo)
 {
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-
     // Break out options from our content field
-    $vars = unserialize($blockinfo['content']);
-    $blockinfo['content'] = '';
+    if (!is_array($blockinfo['content'])) {
+        $vars = unserialize($blockinfo['content']);
+    } else {
+        $vars = $blockinfo['content'];
+    }
 
     // Defaults
     if (empty($vars['style'])) {
@@ -350,8 +336,8 @@ function base_menublock_modify($blockinfo)
             $c++;
         }
     }
-    
-    return xarTplBlock('base', 'menuAdmin', $vars);
+
+    return $vars;
 }
 
 /**
@@ -365,28 +351,22 @@ function base_menublock_modify($blockinfo)
 */
 function base_menublock_insert($blockinfo)
 {
-    // Should be boolean, but needs to review the where this variable is coming from to change it.
-    if (!xarVarFetch('displaymodules', 'str:1', $vars['displaymodules'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('displayrss', 'str:1', $vars['displayrss'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('displayprint', 'str:1', $vars['displayprint'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('displayrss', 'str:1', $vars['displayrss'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('displayprint', 'str:1', $vars['displayprint'], 0, XARVAR_NOT_REQUIRED)) return;
+    // Global options.
+    if (!xarVarFetch('displaymodules', 'checkbox', $vars['displaymodules'], false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('displayrss', 'checkbox', $vars['displayrss'], false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('displayprint', 'checkbox', $vars['displayprint'], false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('marker', 'str:1', $vars['marker'], '[x]', XARVAR_NOT_REQUIRED)) return;
 
-    if (!xarVarFetch('linkname', 'isset', $linkname, NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('new_linkname', 'str', $new_linkname, NULL, XARVAR_NOT_REQUIRED)) return;
-
-    if (!xarVarFetch('linkdelete', 'isset', $linkdelete, NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('linkinsert', 'isset', $linkinsert, NULL, XARVAR_NOT_REQUIRED)) return;
-
-    // User links
+    // User links.
     $content = array();
     $c = 1;
+    if (!xarVarFetch('linkname', 'list:str', $linkname, NULL, XARVAR_NOT_REQUIRED)) return;
     if (isset($linkname)) {
-        if (!xarVarFetch('linkurl',   'isset', $linkurl,   NULL, XARVAR_DONT_SET)) {return;}
-        if (!xarVarFetch('linkname',  'isset', $linkname,  NULL, XARVAR_DONT_SET)) {return;}
-        if (!xarVarFetch('linkdesc',  'isset', $linkdesc,  NULL, XARVAR_DONT_SET)) {return;}
-        if (!xarVarFetch('linkchild', 'isset', $linkchild, NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVarFetch('linkurl',  'list:str', $linkurl,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('linkdesc',  'list:str', $linkdesc,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('linkchild', 'list:str', $linkchild, NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('linkdelete', 'list:checkbox', $linkdelete, NULL, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('linkinsert', 'list:checkbox', $linkinsert, NULL, XARVAR_NOT_REQUIRED)) return;
 
         foreach ($linkname as $v) {
             if (!isset($linkdelete[$c])) {
@@ -394,30 +374,30 @@ function base_menublock_insert($blockinfo)
                 // JJ: xarVarFetch() should be able to provide defaults for us.
                 @$content[] = "$linkurl[$c]|$linkname[$c]|$linkdesc[$c]|$linkchild[$c]";
             }
-            if (isset($linkinsert[$c])) {
+            if (!empty($linkinsert[$c])) {
                 $content[] = "||";
             }
             $c++;
         }
     }
 
-    if ($new_linkname) {
-        if (!xarVarFetch('new_linkname', 'str', $new_linkname, NULL, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('new_linkurl', 'str', $new_linkurl, NULL, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('new_linkdesc', 'str', $new_linkdesc, NULL, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('new_linkchild', 'str', $new_linkchild, NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('new_linkname', 'str', $new_linkname, '', XARVAR_NOT_REQUIRED)) return;
+    if (!empty($new_linkname)) {
+        if (!xarVarFetch('new_linkurl', 'str', $new_linkurl, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('new_linkdesc', 'str', $new_linkdesc, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('new_linkchild', 'str', $new_linkchild, '', XARVAR_NOT_REQUIRED)) return;
 
         $content[] = $new_linkurl . '|' . $new_linkname . '|' . $new_linkdesc . '|' . $new_linkchild;
     }
 
-    if (!xarVarFetch('new_linkinsert', 'isset', $new_linkinsert, NULL, XARVAR_NOT_REQUIRED)) return;
-    if (isset($new_linkinsert)) {
+    if (!xarVarFetch('new_linkinsert', 'checkbox', $new_linkinsert, false, XARVAR_NOT_REQUIRED)) return;
+    if (!empty($new_linkinsert)) {
         $content[] = "||";
     }
 
     $vars['content'] = implode("LINESPLIT", $content);
 
-    $blockinfo['content'] = serialize($vars);
+    $blockinfo['content'] = $vars;
 
     return($blockinfo);
 }
