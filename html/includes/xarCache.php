@@ -94,7 +94,7 @@ function xarPageIsCached($cacheKey, $name = '')
         !strstr($cacheKey, '-search') &&
         ((($xarPage_cacheDisplay != 1) && !strstr($cacheKey, '-display')) || ($xarPage_cacheDisplay == 1)) &&
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
-        strstr($xarTpl_themeDir, $xarPage_cacheTheme) &&
+        (empty($xarPage_cacheTheme) || strstr($xarTpl_themeDir, $xarPage_cacheTheme)) &&
         file_exists($cache_file) &&
         filesize($cache_file) > 0 &&
         filemtime($cache_file) > time() - $xarPage_cacheTime &&
@@ -235,7 +235,7 @@ function xarPageSetCached($cacheKey, $name, $value)
         !strstr($cacheKey, '-search') &&
         ((($xarPage_cacheDisplay != 1) && !strstr($cacheKey, '-display')) || ($xarPage_cacheDisplay == 1)) &&
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
-        strstr($xarTpl_themeDir, $xarPage_cacheTheme) &&
+        (empty($xarPage_cacheTheme) || strstr($xarTpl_themeDir, $xarPage_cacheTheme)) &&
         (!file_exists($cache_file) ||
         filemtime($cache_file) < time() - $xarPage_cacheTime) &&
         xarCacheDirSize($xarPage_cacheCollection) <= $xarOutput_cacheSizeLimit &&
