@@ -18,8 +18,4 @@
 <br />
 <br />
 
-<center>
-
-&pnt-var-phpinfo;
-
-</center>
+<?php phpinfo(); ?>
