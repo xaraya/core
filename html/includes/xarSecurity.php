@@ -26,7 +26,7 @@
 
     //Maybe changing this touch to a centralized API would be a good idea?
     //Even if in the end it would use touched files too...
-    if (file_exists('./var/cache/security/security.touch')) {
+    if (file_exists('./var/security/on.touch')) {
         include_once('./includes/xarCacheSecurity.php');
     }
 
@@ -487,7 +487,7 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
        $masks = new xarMasks();
        $return = $masks->xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
 
-        if (file_exists('./var/cache/security/security.touch')) {
+        if (file_exists('./var/security/on.touch')) {
             $cache_return = xarCacheSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
 //            if ($cache_return !== null) return $cache_return;
             //This is a temporary construct to allow a lot of ppl to test if the cache if
