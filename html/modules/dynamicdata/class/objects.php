@@ -1506,7 +1506,18 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                 continue;
             }
             $pieces = preg_split('/\s+/',$part);
+            $pre = '';
+            $post = '';
             $name = array_shift($pieces);
+            if ($name == '(') {
+                $pre = '(';
+                $name = array_shift($pieces);
+            }
+            $last = count($pieces) - 1;
+            if ($pieces[$last] == ')') {
+                $post = ')';
+                array_pop($pieces);
+            }
             // sanity check on SQL
             if (count($pieces) < 2) {
                 $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
@@ -1532,7 +1543,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                 }
                 $this->datastores[$datastore]->addWhere($this->properties[$name],
                                                         join(' ',$pieces),
-                                                        $join);
+                                                        $join,
+                                                        $pre,
+                                                        $post);
             }
         }
     }

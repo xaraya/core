@@ -357,6 +357,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             if (count($this->where) > 0) {
                 $query .= " $andor ( ";
                 // we're looking for combinations (propid + where clause) here - only OR is supported !
+// TODO: support pre- and post-parts here too ? (cfr. bug 3090)
                 foreach ($this->where as $whereitem) {
                     $query .= $whereitem['join'] . " (xar_dd_propid = " . $whereitem['field'] . ' AND xar_dd_value ' . $whereitem['clause'] . ') ';
                 }
@@ -431,7 +432,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             if (count($this->where) > 0) {
                 $query .= " HAVING ";
                 foreach ($this->where as $whereitem) {
-                    $query .= $whereitem['join'] . ' dd_' . $whereitem['field'] . ' ' . $whereitem['clause'] . ' ';
+                    $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'dd_' . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
                 }
             }
 
@@ -575,6 +576,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                         FROM $dynamicdata
                        WHERE ";
             // only grab the fields we're interested in here...
+// TODO: support pre- and post-parts here too ? (cfr. bug 3090)
             foreach ($this->where as $whereitem) {
                 $query .= $whereitem['join'] . ' (xar_dd_propid = ' . $whereitem['field'] . ' AND xar_dd_value ' . $whereitem['clause'] . ') ';
             }

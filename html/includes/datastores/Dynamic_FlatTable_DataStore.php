@@ -373,7 +373,7 @@ if (empty($itemidfield)) {
         } elseif (count($this->where) > 0) {
             $query .= " $next ";
             foreach ($this->where as $whereitem) {
-                $query .= $whereitem['join'] . ' ' . $whereitem['field'] . ' ' . $whereitem['clause'] . ' ';
+                $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
             }
         }
         if (count($this->join) > 0 && count($where) > 0) {
@@ -488,7 +488,7 @@ if (empty($itemidfield)) {
         } elseif (count($this->where) > 0) {
             $query .= " WHERE ";
             foreach ($this->where as $whereitem) {
-                $query .= $whereitem['join'] . ' ' . $whereitem['field'] . ' ' . $whereitem['clause'] . ' ';
+                $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
             }
         }
 
@@ -594,7 +594,7 @@ if (empty($itemidfield)) {
             } elseif (count($this->where) > 0) {
                 $query .= " WHERE ";
                 foreach ($this->where as $whereitem) {
-                    $query .= $whereitem['join'] . ' ' . $whereitem['field'] . ' ' . $whereitem['clause'] . ' ';
+                    $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
                 }
             }
 

@@ -259,14 +259,16 @@ class Dynamic_DataStore
     /**
      * Add a where clause for this data store (for getItems)
      */
-    function addWhere(&$property, $clause, $join)
+    function addWhere(&$property, $clause, $join, $pre = '', $post = '')
     {
         $name = $this->getFieldName($property);
         if (!isset($name)) return;
 
         $this->where[] = array('field'  => $name,
                                'clause' => $clause,
-                               'join'   => $join);
+                               'join'   => $join,
+                               'pre'    => $pre,
+                               'post'   => $post);
     }
 
     /**
@@ -315,6 +317,7 @@ class Dynamic_DataStore
         $whereclause = '';
         if (is_array($where) && count($where) > 0) {
             foreach ($where as $part) {
+// TODO: support pre- and post-parts here too ? (cfr. bug 3090)
                 $whereclause .= $part['join'] . ' ' . $part['property']->source . ' ' . $part['clause'] . ' ';
             }
         } elseif (is_string($where)) {
