@@ -65,6 +65,15 @@ if (empty($step)){
             xarModSetVar('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" style="border:0px;" /></a>');
             xarModSetVar('themes', 'ShowTemplates', 0);
 
+
+            // Modules
+
+            // expertlist
+            $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modid, xar_name, xar_value) 
+            VALUES (".$dbconn->GenId($tables['module_vars']).",1,'expertlist',0)";
+            $result =& $dbconn->Execute($query);
+            if(!$result) return;
+
             // Articles
 
             // Remove Masks and Instances

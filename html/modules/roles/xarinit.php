@@ -281,48 +281,7 @@ function roless_upgrade($oldVersion)
     // Upgrade dependent on old version number
     switch($oldVersion) {
         case 1.01:
-                $index = array(
-                   'name'      => 'i_xar_roles_type',
-                   'fields'    => array('xar_type')
-                  );
-    $query = xarDBCreateIndex($tables['roles'],$index);
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    // username must be unique (for login) + don't allow groupname to be the same either
-    $index = array(
-                   'name'      => 'i_xar_roles_uname',
-                   'fields'    => array('xar_uname'),
-                   'unique'    => true
-                  );
-    $query = xarDBCreateIndex($tables['roles'],$index);
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    // allow identical "real names" here
-    $index = array(
-                   'name'      => 'i_xar_roles_name',
-                   'fields'    => array('xar_name'),
-                   'unique'    => false
-                  );
-    $query = xarDBCreateIndex($tables['roles'],$index);
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    // allow identical e-mail here (???) + is empty for groups !
-    $index = array(
-                   'name'      => 'i_xar_roles_email',
-                   'fields'    => array('xar_email'),
-                   'unique'    => false
-                  );
-    $query = xarDBCreateIndex($tables['roles'],$index);
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    $ips = '';
-    $disallowedips = serialize($ips);
-    xarModSetVar('roles', 'disallowedips', $disallowedips);
-
+            
             break;
         case 2.0:
             // Code to upgrade from version 2.0 goes here
