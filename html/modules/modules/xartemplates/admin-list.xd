@@ -148,12 +148,12 @@
                                 <xar:if condition="$selstyle eq 'pro'">
                                     <input type="submit" name="info" id="info" value="#$infolabel#" />
                                 <xar:elseif condition="$selstyle eq 'icons'" />
-                                    <a href="#$modinfo['infourlnew']#&theme=print" target="_new"><img src="#$infoimg#" alt="#$infolabel#" /></a>
+                                    <a href="#$modinfo['infourlnew']#&amp;theme=print" target="_new"><img src="#$infoimg#" alt="#$infolabel#" /></a>
                                     <noscript>
                                         <a href="#$modinfo['infourl']#"><img src="#$infoimg#" alt="#$infolabel#" /></a>
                                     </noscript>
                                 <xar:else />
-                                    <a href="#$modinfo['infourlnew']#&theme=print" target="_new"><xar:mlstring>Info</xar:mlstring></a>
+                                    <a href="#$modinfo['infourlnew']#&amp;theme=print" target="_new"><xar:mlstring>Info</xar:mlstring></a>
                                     <noscript>
                                         <a href="#$modinfo['infourl']#"><xar:mlstring>Info</xar:mlstring></a>
                                     </noscript>
@@ -240,7 +240,6 @@
                             </td>
                         </tr>
                     </xar:foreach>
-                    </tr>
                 </table>
             </div>
         </xar:if>

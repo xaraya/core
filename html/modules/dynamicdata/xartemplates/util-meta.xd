@@ -101,7 +101,8 @@
                                     #$curtable# 
                                 </label>
                                 <moduleid>
-                                    182&lt/moduleid> 
+                                    182
+                                </moduleid> 
                                     <itemtype>
                                         -1 
                                     </itemtype>
@@ -121,8 +122,8 @@
                                             <property name="#$name#">
                                                 <xar:foreach in="$field" key="$key" value="$value">
                                                     <xar:if condition="$key ne 'name'">
-                                                        <#$key#>#$value# 
-                                                    </#$key#>
+                                                        &lt;#$key#&gt;#$value# 
+                                                    &lt;/#$key#&gt;
                                                 </xar:if>
                                             </xar:foreach>
                                         </property>

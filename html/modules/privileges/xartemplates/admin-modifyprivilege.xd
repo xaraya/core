@@ -33,14 +33,14 @@ document.forms['privilegeform'].submit();}
             <dl class="xar-tabs">
                 <dt class="help" title="These are the privileges that contain #$pname# as a component"><xar:mlstring>Used in</xar:mlstring> :
                 </dt>
-                <xar:set name="$prevgroup">""</xar:set>
+                <xar:set name="prevgroup">""</xar:set>
                 <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                     <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                         <dd>
                             <a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $parents[$i]['parentid']))#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a>
                         </dd>
                     </xar:if>
-                    <xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
+                    <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
                 </xar:for>
             </dl>
         </div>
@@ -264,8 +264,8 @@ document.forms['privilegeform'].submit();}
                                 <td>
                                 <label for="pinstance0"><xar:mlstring>Current instances</xar:mlstring></label> <input type="text" name="pinstance0" id="pinstance0" value="#$curinstance#" />
                                 <br /><br />
-                                <xar:set name="$targetlinktitle"><xar:mlstring>Use Wizard</xar:mlstring></xar:set>
-                                <xar:set name="$targetlink">"href=\"$target\" title=\"$targetlinktitle\""</xar:set>
+                                <xar:set name="targetlinktitle"><xar:mlstring>Use Wizard</xar:mlstring></xar:set>
+                                <xar:set name="targetlink">"href=\"$target\" title=\"$targetlinktitle\""</xar:set>
                                 <a #$targetlink#><xar:mlstring>Modify the instances that apply for this privilege</xar:mlstring></a>
                                 </td>
                             </tr>
@@ -274,7 +274,7 @@ document.forms['privilegeform'].submit();}
                     </xar:if>
                     <br />
 
-                    <xar:set name="$tmpupdatevalue"><xar:mlstring>Update</xar:mlstring></xar:set>
+                    <xar:set name="tmpupdatevalue"><xar:mlstring>Update</xar:mlstring></xar:set>
                     <input type="submit" value="#$tmpupdatevalue#"  tabindex="8" />
                 </td>
                 <td valign="top">
@@ -301,7 +301,7 @@ document.forms['privilegeform'].submit();}
             <tr>
             <td colspan="2" align="center">
             <br />
-            <xar:set name="$tmpaddvalue"><xar:mlstring>Add</xar:mlstring></xar:set>
+            <xar:set name="tmpaddvalue"><xar:mlstring>Add</xar:mlstring></xar:set>
             <input type="button" value="#$tmpaddvalue#"  tabindex="2" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-addmember;&amp;ppid=#$ppid#&amp;authid=#$authid#';this.form.submit();"/>
             </td>
             </tr>
@@ -320,7 +320,7 @@ document.forms['privilegeform'].submit();}
             <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['parentid']#">#$loop:item['parentname']#</a>
         </td>
         <td width="50" style="text-align: center;">
-            <xar:set name="$tmptitle">
+            <xar:set name="tmptitle">
                 <xar:ml>
                     <xar:mlstring>Remove #(1) from #(2)</xar:mlstring>
                     <xar:mlvar>#$pname#</xar:mlvar>

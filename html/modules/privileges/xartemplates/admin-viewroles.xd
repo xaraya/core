@@ -77,7 +77,7 @@ document.forms['privilegeform'].submit();}
                     <xar:mlstring>Groups/Users</xar:mlstring>
                 </a>
             </dd>    
-        </d1>
+        </dl>
     </div>
 </xar:if>
 <div style="border: 1px solid #ccc; text-align: left; width: 100%; border-top : none; padding-left: 5px;">
@@ -167,9 +167,6 @@ document.forms['privilegeform'].submit();}
                 </a>
             </td>
         </tr>
-            <td>
-                <div>
-            </td>
         <tr>
             <td align="left"><xar:mlstring>Show Privileges that are:</xar:mlstring> 
                 <xar:if condition="$show eq 'assigned'">
