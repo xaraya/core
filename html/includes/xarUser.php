@@ -97,11 +97,16 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
 
     $userId = XARUSER_AUTH_FAILED;
     $args = array('uname' => $userName, 'pass' => $password);
+
     foreach($GLOBALS['xarUser_authenticationModules'] as $authModName) {
+        // Bug #918 - If the module has been deactivated, then continue
+        // checking with the next available authentication module
+        if (!xarModIsAvailable($authModName)) continue;
+
         // Every authentication module must at least implement the
-        // Authentication interface so there's at least the authenticate_user
+        // authentication interface so there's at least the authenticate_user
         // user api function
-        if (!xarModAPILoad($authModName, 'user')) return; // throw back
+        if (!xarModAPILoad($authModName, 'user')) continue; 
 
         $userId = xarModAPIFunc($authModName, 'user', 'authenticate_user', $args);
         if (!isset($userId)) return; // throw back
