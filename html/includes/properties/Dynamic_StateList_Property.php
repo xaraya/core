@@ -1,11 +1,17 @@
 <?php
 /**
- * Dynamic User List Property
+ * File: $Id$
  *
- * @package dynamicdata
- * @subpackage properties
- */
-
+ * Dynamic State List Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 /**
  * Include the base class
  *
@@ -49,6 +55,7 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
     function showInput($args = array())
     {
         extract($args);
+        $data = array();
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -58,11 +65,17 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
         if (empty($id)) {
             $id = $name;
         }
+        $data['value'] = $value;
+        $data['name']  = $name;
+        $data['id']    = $id;
+       
+       /*
         $out = '<select' .
        ' name="' . $name . '"' .
        ' id="'. $id . '"' .
        (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
        '>';
+       */
         $soptions = array();
         $soptions[] = array('id' =>'Please select', 'name' =>'Please select' );
         $soptions[] = array('id' =>'Alabama', 'name' =>'Alabama');
@@ -137,7 +150,7 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
         $soptions[] = array('id' =>'Victoria     ', 'name' =>'Victoria');
         $soptions[] = array('id' =>'Western Australia', 'name' =>'Western Australia');
 
-        for($i=0; isset($soptions[$i]); $i++) {
+        /*for($i=0; isset($soptions[$i]); $i++) {
             $out .= '<option';
             $out .= ' value="'.$soptions[$i]['name'].'"';
             if ($value == $soptions[$i]['name']) {
@@ -145,21 +158,42 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
             } else {
                 $out .= '>'.$soptions[$i]['name'].'</option>';
             }
-        }
+        }*/
 
-        $out .= '</select>' .
+        /*$out .= '</select>' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        return $out;
+        */
+
+        $data['soptions'] = $soptions;
+        $data['invalid']  = !empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
+        $data['tabindex'] =! empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
+
+
+        $template="statelist";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+
+        //return $out;
     }
 
     function showOutput($args = array())
     {
          extract($args);
+         $data = array();
+
         if (isset($value)) {
-            return xarVarPrepHTMLDisplay($value);
-        } else {
-            return xarVarPrepHTMLDisplay($this->value);
-        }
+             $data['value']=xarVarPrepHTMLDisplay($value);
+         } else {
+             $data['value']=xarVarPrepHTMLDisplay($this->value);
+         }
+         if (isset($name)) {
+           $data['name']=$name;
+         }
+         if (isset($id)) {
+             $data['id']=$id;
+         }
+         $template="statelist";
+         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+
     }
 
 }

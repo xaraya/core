@@ -1,11 +1,17 @@
 <?php
 /**
- * Dynamic User List Property
+ * File: $Id$
  *
- * @package dynamicdata
- * @subpackage properties
- */
-
+ * Dynamic Country List Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 /**
  * Include the base class
  *
@@ -49,6 +55,9 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
     function showInput($args = array())
     {
         extract($args);
+        
+        $data=array();
+
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -58,12 +67,18 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         if (empty($id)) {
             $id = $name;
         }
-        $out = '<select' .
+        $data['value'] = $value;
+        $data['name']  = $name;
+        $data['id']    = $id;
+
+       /* $out = '<select' .
        ' name="' . $name . '"' .
        ' id="'. $id . '"' .
        (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
        '>';
+       */
         // credit to jojodee for the array.  You can expect me to type this can you?
+        // <jojodee> no but you could do the capital city list for me :)
         $coptions = array();
         $coptions[] = array('id' =>'Please select', 'name' =>'Please select' );
         $coptions[] = array('id' =>'Afghanistan', 'name' =>'Afghanistan' );
@@ -289,6 +304,8 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'Zambia', 'name'=>'Zambia');
         $coptions[] = array('id' =>'Zimbabwe', 'name'=>'Zimbabwe');
 
+
+        /*
         for($i=0; isset($coptions[$i]); $i++) {
             $out .= '<option';
             $out .= ' value="'.$coptions[$i]['name'].'"';
@@ -298,20 +315,40 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
                 $out .= '>'.$coptions[$i]['name'].'</option>';
             }
         }
+        */
 
-        $out .= '</select>' .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        return $out;
+        $data['coptions'] = $coptions;
+        $data['invalid']  = !empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
+        $data['tabindex'] =! empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
+
+        $template="countrylist";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+
     }
 
     function showOutput($args = array())
     {
          extract($args);
-        if (isset($value)) {
+         $data=array();
+         if (isset($value)) {
+             $data['value']=xarVarPrepHTMLDisplay($value);
+         } else {
+             $data['value']=xarVarPrepHTMLDisplay($this->value);
+         }
+         if (isset($name)) {
+           $data['name']=$name;
+         }
+         if (isset($id)) {
+             $data['id']=$id;
+         }
+         $template="countrylist";
+
+         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        /*if (isset($value)) {
             return xarVarPrepHTMLDisplay($value);
         } else {
             return xarVarPrepHTMLDisplay($this->value);
-        }
+        }*/
     }
 
 }

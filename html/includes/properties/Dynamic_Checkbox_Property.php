@@ -1,10 +1,17 @@
 <?php
 /**
- * Dynamic Checkbox Property
+ * File: $Id$
  *
- * @package dynamicdata
- * @subpackage properties
- */
+ * Dynamic Data Check Box Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 
 /**
  * Class to handle check box property
@@ -32,6 +39,9 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
     function showInput($args = array())
     {
         extract($args);
+        
+        $data=array();
+
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -41,7 +51,11 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
         if (empty($id)) {
             $id = $name;
         }
-        return '<input type="checkbox"'.
+        $data['value']=$value;
+        $data['name']=$name;
+        $data['id']=$id;
+
+       /*return '<input type="checkbox"'.
                ' name="' . $name . '"' .
                ' value="1"' .
                ' id="'. $id . '"' .
@@ -49,20 +63,35 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
                (!empty($value) ? ' checked="checked"' : '') .
                ' />' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+        */
+        $data['checked']=!empty($value) ? ' checked="checked"' :'';
+        $data['tabindex']=!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
+        $data['invalid'] = !empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
+
+        $template="checkbox";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+
     }
 
     function showOutput($args = array())
     {
-         extract($args);
+        extract($args);
+
+        $data=array();
         if (!isset($value)) {
             $value = $this->value;
         }
-    // TODO: allow different values here, and verify $checked ?
-        if (!empty($value)) {
+        $data['value']=$value;
+        // TODO: allow different values here, and verify $checked ?
+        //Move ML language defines to templates
+        /*if (!empty($value)) {
             return xarML('yes');
         } else {
             return xarML('no');
-        }
+        }*/
+        $template="checkbox";
+        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+
     }
 
 }

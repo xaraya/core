@@ -1,11 +1,17 @@
 <?php
 /**
- * Dynamic Select Property
+ * File: $Id$
  *
- * @package dynamicdata
- * @subpackage properties
- */
-
+ * Dynamic Data Select Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 /**
  * Handle the select property
  *
@@ -79,23 +85,32 @@ class Dynamic_Select_Property extends Dynamic_Property
     function showInput($args = array())
     {
         extract($args);
+        $data=array();
+
         if (!isset($value)) {
-            $value = $this->value;
+            $data['value'] = $this->value;
+        } else {
+            $data['value'] = $value;
         }
         if (!isset($options) || count($options) == 0) {
-            $options = $this->options;
+            $data['options'] = $this->options;
         }
         if (empty($name)) {
-            $name = 'dd_' . $this->id;
+            $data['name'] = 'dd_' . $this->id;
+        } else {
+        $data['name'] = $name;
         }
         if (empty($id)) {
-            $id = $name;
+            $data['id'] = $data['name'];
+        } else {
+        $data['id']= $id;
         }
-        $out = '<select' .
+        /*$out = '<select' .
                ' name="' . $name . '"' .
                ' id="'. $id . '"' .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
                '>';
+
         foreach ($options as $option) {
             $out .= '<option';
             if (empty($option['id']) || $option['id'] != $option['name']) {
@@ -107,9 +122,18 @@ class Dynamic_Select_Property extends Dynamic_Property
                 $out .= '>'.$option['name'].'</option>';
             }
         }
-        $out .= '</select>' .
+        */
+
+        /*$out .= '</select>' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        return $out;
+        */
+
+        $data['tabindex'] =!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
+        $data['invalid']  =!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
+
+        $template="dropdown";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+        //return $out;
     }
 
     function showOutput($args = array())
@@ -118,16 +142,21 @@ class Dynamic_Select_Property extends Dynamic_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-        $out = '';
-    // TODO: support multiple selection
+        //$out = '';
+        $data=array();
+        // TODO: support multiple selection
         $join = '';
         foreach ($this->options as $option) {
             if ($option['id'] == $value) {
-                $out .= $join . xarVarPrepForDisplay($option['name']);
+                $data['option']['name']=xarVarPrepForDisplay($option['name']);
+                //$out .= $join . xarVarPrepForDisplay($option['name']);
                 $join = ' | ';
             }
         }
-        return $out;
+
+        $template="dropdown";
+        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        // return $out;
     }
 
 }

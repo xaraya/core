@@ -1,10 +1,17 @@
 <?php
 /**
- * Dynamic User List Property
+ * File: $Id$
  *
- * @package dynamicdata
- * @subpackage properties
- */
+ * Dynamic Data User List Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 
 /**
  * Include the base class
@@ -114,6 +121,9 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
 
         extract($args);
 
+        $data= array();
+        //$users=array(0;
+        
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -152,15 +162,21 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         }
 
         if (empty($name)) {
-            $name = 'dd_' . $this->id;
+            $data['name'] = 'dd_' . $this->id;
         }
 
         if (empty($id)) {
             // TODO: strip out characters that are not allowed in a name.
-            $id = $name;
+            $data['id'] = xarVarPrepForDisplay($data['name']);
         }
+       //$data['select_options']=$select_options;
+        $data['value']=$value;
+        $data['options']=$options;
+        $data['users']=$users;
+        $data['tabindex']=!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
+        $data['invalid']=!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
 
-        $out = '<select' .
+        /*$out = '<select' .
                ' name="' . $name . '"' .
                ' id="'. $id . '"' .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
@@ -180,8 +196,12 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
 
         $out .= '</select>' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+       */
 
-        return $out;
+        $template="userlist";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+
+       // return $out;
     }
 
     // TODO: format the output according to the 'showlist'.
@@ -190,6 +210,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
     function showOutput($args = array())
     {
         extract($args);
+        $data= array();
 
         if (!isset($value)) {
             $value = $this->value;
@@ -205,7 +226,9 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
                 if (!isset($user)) xarExceptionHandled();
             }
         }
-
+        $data['value']=$value;
+        $data['user']=$user;
+        /*
         if ($value > 1) {
             return '<a href="'.xarModURL('roles', 'user', 'display',
                                          array('uid' => $value))
@@ -213,6 +236,11 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         } else {
             return xarVarPrepForDisplay($user);
         }
+        */
+
+        $template="userlist";
+        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+
     }
 }
 

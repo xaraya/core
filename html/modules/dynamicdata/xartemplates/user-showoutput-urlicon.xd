@@ -1,5 +1,5 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
-<xar:set name="icon"><xar:mlstring>Icon</xar:mlstring></xar:set>
+<xar:set name="iconalt"><xar:mlstring>Icon</xar:mlstring></xar:set>
 <xar:if condition="(!empty($value)) and ($value ne 'http://')">
-    <a href="#$value#"><img src="#$image#" alt="#$icon#" ></a>
+    <a href="#$value#"><img src="#$icon#" alt="#$iconalt#" ></a>
 </xar:if>

@@ -1,7 +1,8 @@
 <?php
 /**
+ * File: $Id$
  *
- * Dynamic Data Dynamic URL and Title Property
+ * Dynamic Data URL and Title Property
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.

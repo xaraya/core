@@ -1,0 +1,11 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:set name="yes"><xar:mlstring>Yes</xar:mlstring></xar:set>
+<xar:set name="no"><xar:mlstring>No</xar:mlstring></xar:set>
+
+<xar:if condition="!empty($value)" >
+#$yes#
+<xar:else />
+#$no#
+</xar:if>
+
+

@@ -109,7 +109,7 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
 /*                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="'.xarML('URL').'" /></a>';
 */
                 $data['value']= $this->value;
-                $data['icon'] = $this->icon;
+                $data['icon'] = xarVarPrepForDisplay($this->icon);
                 $data['name'] = $this->name;
                 $data['id']   = $this->id;
 
