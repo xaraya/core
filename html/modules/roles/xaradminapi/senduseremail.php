@@ -110,4 +110,5 @@ function roles_adminapi_senduseremail($args)
     }
     return true;
 }
+
 ?>

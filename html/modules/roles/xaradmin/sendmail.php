@@ -21,9 +21,6 @@ function roles_admin_sendmail()
     if (!xarVarFetch('subject', 'str:1', $subject)) return;
     if (!xarVarFetch('includesubgroups','int:0:',$includesubgroups,0,XARVAR_NOT_REQUIRED));
 
-    $message = xarVarPrepHTMLDisplay($message);
-    $subject = xarVarPrepForDisplay($subject);
-
     // Confirm authorisation code.
     if (!xarSecConfirmAuthKey()) return;
     // Security check

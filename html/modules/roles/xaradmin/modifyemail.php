@@ -73,8 +73,6 @@ function roles_admin_modifyemail($args)
 
             if (!xarVarFetch('message', 'str:1:', $message)) return;
             if (!xarVarFetch('subject', 'str:1:', $subject)) return;
-            $message = xarVarPrepHTMLDisplay($message);
-            $subject = xarVarPrepForDisplay($subject);
             // Confirm authorisation code
 //            if (!xarSecConfirmAuthKey()) return;
 //            xarModSetVar('roles', $data['mailtype'].'email', $message);
@@ -113,4 +111,5 @@ function roles_admin_modifyemail($args)
     }
     return $data;
 }
+
 ?>
