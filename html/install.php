@@ -72,6 +72,13 @@ define ('PNINSTALL_PHASE_FINISHED',            '8');
 function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
 {
     pnCoreInit(PNCORE_SYSTEM_NONE); // Does not initialise any optional system
+    
+    // Check for installer theme
+    //TODO: use main function as the gateway to the phases and the location for this check
+    if (pnCore_getSiteVar('BL.Theme.Name') != 'installer') {
+        $varDir = pnCoreGetVarDirPath();
+        die('Please set the BL.Theme.Name variable in ' .$varDir.'/config.site.xml to installer');
+    }
 
     // Handle installation phase designation
     $phase = (int) pnRequestGetVar('install_phase', 'POST');
@@ -103,19 +110,19 @@ function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
     // Build functioname from phase
     $funcName = 'phase'.$phase;
 
-    //run install functions
-    $mainInstallOutput = pnInstallFunc('installer', 'admin', $funcName);
+    // Run installer function
+    $mainModuleOutput = pnInstallFunc('installer', 'admin', $funcName);
 
     if (pnCoreIsDebuggerActive()) {
         if (ob_get_length() > 0) {
             $rawOutput = ob_get_contents();
-            $mainInstallOutput = 'The following lines were printed in raw mode by module, however this
+            $mainModuleOutput = 'The following lines were printed in raw mode by module, however this
                                  should not happen. The module is probably directly calling functions
                                  like echo, print, or printf. Please modify the module to exclude direct output.
                                  The module is violating PostNuke architecture principles.<br /><br />'.
                                  $rawOutput.
                                  '<br /><br />This is the real module output:<br /><br />'.
-                                 $mainInstallOutput;
+                                 $mainModuleOutput;
         }
         ob_end_clean();
     }
@@ -129,14 +136,14 @@ function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
         // is not checking exceptions, so it's also their fault.
         return true;
     }
-    
+
     // Here we check for exceptions even if $res isn't empty
     if (pnExceptionMajor() != PN_NO_EXCEPTION) {
         return; // throw back
     }
 
     // Render page
-    $pageOutput = pnTpl_renderPage($mainInstallOutput);
+    $pageOutput = pnTpl_renderPage($mainModuleOutput);
 
     // Handle exceptions
     if (pnExceptionMajor() != PN_NO_EXCEPTION) {

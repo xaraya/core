@@ -22,11 +22,26 @@
 // Purpose of file: Installer display functions
 // ----------------------------------------------------------------------
 
+//TODO: make this phpdoc true, right now phase 1 is the entry
+/**
+ * Entry function for the installer module
+ *
+ * @access public
+ * @param none
+ * @returns array
+ * @return an array of template values
+ */
 function installer_admin_main(){
     return array();
 }
-// entry point for the installer
 
+/**
+ * Phase 1 of the installer
+ *
+ * @param
+ * @returns array
+ * @return array of language values
+ */
 function installer_admin_phase1() {
     return array('languages' => array('eng' => 'English'));
 }
@@ -46,13 +61,26 @@ function installer_admin_phase3()
     return array();
 }
 
+/**
+ * Phase 4 of the installer
+ *
+ * @returns array
+ * @return array of default values for the database creation
+ */
 function installer_admin_phase4()
 {
-    return array('database_host' => 'localhost',
-                 'database_username' => 'root',
-                 'database_password' => '',
-                 'database_name' => 'Xaraya2',
-                 'database_prefix' => 'pn',
+    // Get default values from config files
+    $dbHost   = pnCore_getSystemVar('DB.Host');
+    $dbUser   = pnCore_getSystemVar('DB.UserName');
+    $dbPass   = pnCore_getSystemvar('DB.Password');
+    $dbName   = pnCore_getSystemvar('DB.Name');
+    $dbPrefix = pnCore_getSystemvar('DB.TablePrefix');
+
+    return array('database_host' => $dbHost,
+                 'database_username' => $dbUser,
+                 'database_password' => $dbPass,
+                 'database_name' => $dbName,
+                 'database_prefix' => $dbPrefix,
                  'database_types' => array('mysql'    => 'MySQL',
                                            'postgres' => 'Postgres'));
 }
@@ -61,12 +89,13 @@ function installer_adminapi_phase5()
 {
     global $HTTP_POST_VARS;
 
-    $dbhost = $HTTP_POST_VARS['install_database_host'];
-    $dbname = $HTTP_POST_VARS['install_database_name'];
-    $dbuser = $HTTP_POST_VARS['install_database_username'];
-    $dbpass = $HTTP_POST_VARS['install_database_password'];
-    $prefix = $HTTP_POST_VARS['install_database_prefix'];
-    $dbtype = $HTTP_POST_VARS['install_database_type'];
+    $dbInfo['dbHost'] = $HTTP_POST_VARS['install_database_host'];
+    $dbInfo['dbName'] = $HTTP_POST_VARS['install_database_name'];
+    $dbInfo['dbUname'] = $HTTP_POST_VARS['install_database_username'];
+    $dbInfo['dbPass'] = $HTTP_POST_VARS['install_database_password'];
+    $dbInfo['prefix'] = $HTTP_POST_VARS['install_database_prefix'];
+    $dbInfo['dbType'] = $HTTP_POST_VARS['install_database_type'];
+
     if (isset($HTTP_POST_VARS['install_create_database'])) {
     //Ugly Switch... until we write a database connection wrapper
     //Needed because ADONewConnection requires a database to connect to
@@ -88,7 +117,7 @@ function installer_adminapi_phase5()
     }
 
     // Save config data
-    installer_adminapi_modifyconfig($dbhost, $dbuser, $dbpass, $dbname, $prefix, $dbtype);
+    installer_adminapi_modifyconfig($dbInfo);
 
     // Kick it
     pnCoreInit(PNCORE_SYSTEM_ADODB);
@@ -167,25 +196,25 @@ function installer_admin_bootstrap()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     // load modules API
     $res = pnModAPILoad('modules', 'admin');
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     // initialize & activate adminpanels module
     $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('adminpanels')));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     $res = pnModAPIFunc('modules', 'admin', 'setstate', array('regid' => pnModGetIDFromName('adminpanels'),
                                                               'state' => _PNMODULE_STATE_ACTIVE));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     pnRedirect(pnModURL('installer', 'admin', 'create_administrator'));
     return array();
 }
@@ -210,7 +239,7 @@ function installer_admin_create_administrator()
                                        'install_admin_password',
                                        'install_admin_email',
                                        'install_admin_url');
-                                       
+
     $res = pnModAPILoad('users', 'admin');
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
