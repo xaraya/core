@@ -45,7 +45,7 @@ function adminpanels_waitingcontentblock_display($blockinfo)
     // Load API
     if (!xarModAPILoad('adminpanels', 'admin')) return;
 
-    $data['moditems'] = array();
+    $moditems = array();
 
     $modlist = xarModAPIFunc('adminpanels','admin','getmoduleswc');
     foreach ($modlist as $modid => $numitems) {
@@ -55,18 +55,10 @@ function adminpanels_waitingcontentblock_display($blockinfo)
         $moditem['numitems'] = $numitems;
         $moditem['link'] = xarModURL($modinfo['name'],'admin','main');
 
-        $data['moditems'][] = $moditem;
+        $moditems[] = $moditem;
     }
 
-    if (empty($moditem)){
-        $moditem['link'] = '';
-        $moditem['numitems'] = '';
-        $moditem['name'] = '';
-    }
-
-    $data = xarTplBlock('adminpanels','waitingcontent', array('link'     => $moditem['link'],
-                                                              'items'    => $moditem['numitems'],
-                                                              'modname'  => $moditem['name']));
+    $data = xarTplBlock('adminpanels','waitingcontent', array('moditems' => $moditems));
 
     // Populate block info and pass to BlockLayout.
 
