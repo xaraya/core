@@ -9,7 +9,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage modules module
- * @author Xaraya Team 
+ * @author Xaraya Team
  */
 /**
  * Loads xarinit or pninit and executes the given function
@@ -23,7 +23,7 @@
 function modules_adminapi_executeinitfunction ($args)
 {
     // Security Check
-	if(!xarSecurityCheck('AdminModules')) return;
+    if(!xarSecurityCheck('AdminModules')) return;
 
     // Argument check
     if (!isset($args['regid'])) {
@@ -88,11 +88,11 @@ function modules_adminapi_executeinitfunction ($args)
             $result = $func();
         }
         if ($result === false) {
-            $msg = xarML('While changing state of a module, the function #(1) returned a false value when executed.', $func);
+            $msg = xarML('While changing state of the #(1) module, the function #(2) returned a false value when executed.', $modInfo['name'], $func);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
             return;
         } elseif ($result != true) {
-            $msg = xarML('An error ocurred while changing state of module, executing function #(1)', $func);
+            $msg = xarML('An error ocurred while changing state of the #(1) module, executing function #(2)', $modInfo['name'], $func);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
             return;
         }
@@ -108,7 +108,7 @@ function modules_adminapi_executeinitfunction ($args)
     }
     //}
 
-	return true;
+    return true;
 }
 
 ?>
