@@ -68,7 +68,7 @@ if (empty($step)) {
     $sprefix=xarDBGetSiteTablePrefix();
     // First see if the authsystem module has been upgraded.
     echo "<h5>Making sure the system is ready for authenticating</h5>";
-    
+
     // UNSECURE CODE, RETHINK THIS
     // If authsystem module is upgraded
     $as_dbinfo = xarModGetInfo(42);
@@ -989,7 +989,7 @@ Password : %%password%%
         xarRegisterMask('AssignPrivilege','All','privileges','All','All','ACCESS_ADD');
         xarRegisterMask('DeassignPrivilege','All','privileges','All','All','ACCESS_DELETE');
     } else {
-        echo "Priviliges Masks have been created previously, moving to next check. <br />";
+        echo "Privileges Masks have been created previously, moving to next check. <br />";
     }
 
     $upgrade['priv_masks'] = xarMaskExists('pnLegacyMask',$module='All');
@@ -1004,7 +1004,7 @@ Password : %%password%%
 
     $upgrade['priv_locks'] = xarPrivExists('GeneralLock');
     if (!$upgrade['priv_locks']) {
-        echo "Priviliges Locks do not exist, attempting to create... done! <br />";
+        echo "Privileges Locks do not exist, attempting to create... done! <br />";
 
         // This creates the new lock privileges and assigns them to the relevant roles
         xarRegisterPrivilege('GeneralLock','All','empty','All','All','ACCESS_NONE',xarML('A container privilege for denying access to certain roles'));
@@ -1027,7 +1027,7 @@ Password : %%password%%
         xarAssignPrivilege('GeneralLock','Users');
 
     } else {
-        echo "Priviliges Locks have been created previously, moving to next check. <br />";
+        echo "Privileges Locks have been created previously, moving to next check. <br />";
     }
     // Check the installed privs and masks.
     echo "<h5>Checking Hook Structure</h5>";
@@ -1097,20 +1097,20 @@ Password : %%password%%
     // - add xar_id as primary key
     // - make index on xar_regid unique
     // 1. Add the primary key: save operation
-    $changes = array('command'     => 'add', 
-                     'field'       => 'xar_id', 
-                     'type'        => 'integer', 
-                     'null'        => false, 
-                     'unsigned'    => true, 
-                     'increment'   => true, 
+    $changes = array('command'     => 'add',
+                     'field'       => 'xar_id',
+                     'type'        => 'integer',
+                     'null'        => false,
+                     'unsigned'    => true,
+                     'increment'   => true,
                      'primary_key' => true,
                      'first'       => true);
     $query = xarDBAlterTable($sitePrefix . '_module_states', $changes);
     $result = &$dbconn->Execute($query);
     if (!$result) {
         echo "FAILED to alter the module_states table<br/>";
-    } 
-    
+    }
+
     // 2. change index for reg_id to unique
     $indexname = 'i_' . $sitePrefix . '_module_states_regid';
     $query = xarDBDropIndex($sitePrefix . '_module_states', array('name' => $indexname));
@@ -1120,16 +1120,16 @@ Password : %%password%%
     } else {
         echo "Dropped old index for module_states table<br/>";
     }
-    
+
     // 3. Add the new index.
     $index = array('name' => $indexname, 'unique' => true, 'fields' => array('xar_regid'));
     $query = xarDBCreateIndex($sitePrefix . '_module_states', $index);
-    
+
     $result = &$dbconn->Execute($query);
     if (!$result) {
         echo "FAILED to create the new index for the module states regid column<br/>";
     } else {
-        echo "Added a new index on the module_status table<br/>";
+        echo "Added a new index on the module_states table<br/>";
     }
 
     // 4. Set the version number of the modules module
@@ -1170,7 +1170,7 @@ Password : %%password%%
 
 ?>
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
-Thank you, the upgrades are complete. It is recommended you go to the 
+Thank you, the upgrades are complete. It is recommended you go to the
 <a href="<?php echo xarModUrl('modules','admin','list'); ?>">admin section of the modules module</a>
 to upgrade the modules which have gotten a new version.
 </div>
