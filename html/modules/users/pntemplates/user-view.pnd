@@ -62,7 +62,7 @@
 			&pnt-var-name;
 		</td>
         <td>
-			<a href="mailto:&pnt-var-name;">&pnt-var-email;</a>
+			&pnt-var-email;
 		</td>
 		<td>
            <pnt:if condition="empty($editurl)">
