@@ -77,6 +77,7 @@ define('XARCORE_BIT_USER', 4 );
 define('XARCORE_BIT_CONFIGURATION', 8);
 define('XARCORE_BIT_BLOCKS', 16);
 define('XARCORE_BIT_MODULES', 32);
+
 /*
  * Debug flags
  */
@@ -85,8 +86,6 @@ define('XARDBG_SQL', 2);
 define('XARDBG_EXCEPTIONS', 4);
 define('XARDBG_SHOW_PARAMS_IN_BT', 8);
 
-//'All' and 'Anonymous' roles
-//define('_XARSEC_ALL', '-1');
 define('_XAR_ID_UNREGISTERED', '2');
 
 /**
@@ -119,10 +118,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $whatToLoad ^= $current_load_level;
     }
 
-    // FIXME: <marco> Shouldn't we use include instead of include_once?
-    // Since xarCoreInit is supposed to be called once per request there's
-    // no need to get this more overhead from include_once
-
     //Comment this line to disable debugging
     //xarCoreActivateDebugger(XARDBG_EXCEPTIONS /*| XARDBG_SQL*/);
     xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT);
@@ -130,27 +125,27 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     // Basic systems alway loaded
     // {ML_dont_parse 'includes/xarLog.php'}
-    include_once 'includes/xarLog.php';
+    include 'includes/xarLog.php';
     // {ML_dont_parse 'includes/xarEvt.php'}
-    include_once 'includes/xarEvt.php';
+    include 'includes/xarEvt.php';
 
-    include_once 'includes/xarException.php';
+    include 'includes/xarException.php';
     // {ML_dont_parse 'includes/xarVar.php'}
-    include_once 'includes/xarVar.php';
+    include 'includes/xarVar.php';
     // {ML_dont_parse 'includes/xarServer.php'}
-    include_once 'includes/xarServer.php';
+    include 'includes/xarServer.php';
     // {ML_dont_parse 'includes/xarMLS.php'}
-    include_once 'includes/xarMLS.php';
+    include 'includes/xarMLS.php';
     // {ML_dont_parse 'includes/xarTemplate.php'}
-    include_once 'includes/xarTemplate.php';
+    include 'includes/xarTemplate.php';
     // {ML_dont_parse 'includes/xarTheme.php'}
-    include_once 'includes/xarTheme.php';
+    include 'includes/xarTheme.php';
     // Legacy systems
     if (xarCore_getSiteVar('Core.LoadLegacy') == true){
         // {ML_dont_parse 'includes/pnHTML.php'}
-        include_once 'includes/pnHTML.php';
+        include 'includes/pnHTML.php';
         // {ML_dont_parse 'includes/pnLegacy.php'}
-        include_once 'includes/pnLegacy.php';
+        include 'includes/pnLegacy.php';
     }
 
     // Start Exception Handling System
@@ -166,7 +161,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     // Start Database Connection Handling System
     if ($whatToLoad & XARCORE_SYSTEM_ADODB) {
         // {ML_dont_parse 'includes/xarDB.php'}
-        include_once 'includes/xarDB.php';
+        include 'includes/xarDB.php';
 
         // Decode encoded DB parameters
         $userName = xarCore_getSystemVar('DB.UserName');
@@ -197,7 +192,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     // Start Configuration System
     if ($whatToLoad & XARCORE_SYSTEM_CONFIGURATION) {
         // {ML_dont_parse 'includes/xarConfig.php'}
-        include_once 'includes/xarConfig.php';
+        include 'includes/xarConfig.php';
 
         // Start Configuration Unit
         $systemArgs = array();
@@ -235,8 +230,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // FIXME: LOOK AT xarSession2 code it has a catch22 situation!!
         // It wants to store sessions into the database, which is good,
         // but during the installation procedure there is no database
-        //include_once 'includes/xarSession2.php';
-        include_once 'includes/xarSession.php';
+        //include 'includes/xarSession2.php';
+        include 'includes/xarSession.php';
 
         // Migrated into xarSession.php
         //     if (phpversion() >= "4.2.0") {
@@ -256,7 +251,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     // Start Blocks Subsystem
     if ($whatToLoad & XARCORE_SYSTEM_BLOCKS) {
         // {ML_dont_parse 'includes/xarBlocks.php'}
-        include_once 'includes/xarBlocks.php';
+        include 'includes/xarBlocks.php';
 
         // Start Blocks Support Sytem
         $systemArgs = array();
@@ -267,7 +262,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     // Start Modules Subsystem
     if ($whatToLoad & XARCORE_SYSTEM_MODULES) {
         // {ML_dont_parse 'includes/xarMod.php'}
-        include_once 'includes/xarMod.php';
+        include 'includes/xarMod.php';
 
         // Start Modules Support
         // TODO: <marco> Figure out how to dynamically compute generateXMLURLs argument based on browser request
@@ -282,9 +277,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // TODO (marcinmilan): review what pasts of the old user system need to be retained
         if ($whatToLoad & XARCORE_SYSTEM_USER) {
         // {ML_dont_parse 'includes/xarUser.php'}
-        include_once 'includes/xarUser.php';
+        include 'includes/xarUser.php';
         // {ML_dont_parse 'includes/xarSecurity.php'}
-        include_once 'includes/xarSecurity.php';
+        include 'includes/xarSecurity.php';
 
         // Start User System
         $systemArgs = array('authenticationModules' => xarCore_getSiteVar('User.AuthenticationModules'));
