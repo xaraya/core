@@ -215,7 +215,7 @@ function installer_admin_phase5()
     return array();
 }
 
-function installer_admin_phase6
+function installer_admin_phase6()
 {
 
 

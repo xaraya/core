@@ -19,15 +19,16 @@
 function installer_init()
 {
     // Load in installer API
-    xarInstallAPILoad('installer','admin');
+    if (!xarInstallAPILoad('installer','admin')) {
+        return NULL;
+    }
 
-    $res = xarInstallAPIFunc('installer',
-                            'admin',
-                            'initialise',
-                            array('directory' => 'base',
-                                  'initfunc'  => 'init'));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
+    if (!xarInstallAPIFunc('installer',
+                           'admin',
+                           'initialise',
+                           array('directory' => 'base',
+                                 'initfunc'  => 'init'))) {
+        return NULL;
     }
 
     // Initialisation successful

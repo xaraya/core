@@ -472,7 +472,7 @@ function base_init()
                            'admin',
                            'initialise',
                            array('directory' => 'permissions',
-                                 'initfunc'  => 'init')) {
+                                 'initfunc'  => 'init'))) {
         return NULL;
     }
     $groupPermsTable = $systemPrefix . '_group_perms';
