@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * Update hooks by hook module
+ *
+ * @param none
+ *
+ */
+function modules_admin_updatehooks()
+{
+// Security Check
+    if(!xarSecurityCheck('AdminModules')) return;
+
+    if (!xarSecConfirmAuthKey()) return;
+
+    $curhook = xarVarCleanFromInput('curhook');
+    $regId = xarModGetIDFromName($curhook);
+    if (!isset($curhook) || !isset($regId)) {
+        $msg = xarML('Invalid hook');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                        new SystemException($msg));
+        return;
+    }
+
+    // Pass to API
+    $updated = xarModAPIFunc('modules',
+                             'admin',
+                             'updatehooks',
+                              array('regid' => $regId));
+
+    if (!isset($updated)) return;
+
+    xarResponseRedirect(xarModURL('modules', 'admin', 'hooks',
+                                  array('hook' => $curhook)));
+    return true;
+}
+
+//TODO: <johnny> update for exceptions
+?>
