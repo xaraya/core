@@ -131,8 +131,8 @@ function initializeSetup() {
     xarDefineInstance('blocks','BlockGroups',$instances);
 
 	$query1 = "SELECT DISTINCT xar_type FROM xar_block_types";
-	$query2 = "SELECT DISTINCT instances.xar_title FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'base'";
-	$query3 = "SELECT DISTINCT instances.xar_id FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'base'";
+	$query2 = "SELECT DISTINCT instances.xar_title FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id";
+	$query3 = "SELECT DISTINCT instances.xar_id FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id";
 	$instances = array(
 						array('header' => 'Block Type:',
 								'query' => $query1,
