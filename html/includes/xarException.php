@@ -342,29 +342,16 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
         }
     }
 
-    switch($errorType) {
-        case 2: // Warning
-        case 8: // Notice
-            $msg = $file.'('.$line."):\n". $errorString ;
-            if(isset($sourcetmpl)) $msg .= "\n[".$sourcetmpl."]";
+        $msg = "At: " . $file." (Line: " . $line.")<br/><br/>". $errorString ;
+        if(isset($sourcetmpl) && $sourcetmpl != '') $msg .= "<br/><br/>[".$sourcetmpl."]";
 
-            if($CoreStack->isempty()) $CoreStack->initialize();
-            $exception = new SystemException($msg);
-            $exception->setID('PHP_ERROR');
-            $exception->setMajor(XAR_SYSTEM_EXCEPTION);
-            $CoreStack->push($exception);
-            // render this now! go!
-            return;
-            break;
-        default:
-            echo "<b>FATAL</b> $errorString<br />\n";
-            echo "Fatal error in $file at line $line<br />\n";
-            exit;
-    }
+        xarResponseRedirect(xarModURL('base','user','systemexit',
+            array('code' => $errorType,
+                  'exception' => urlencode($msg))));
 
     // This will make us log the errors, still not break the script
     //if they are not supposed to
-    if (!(error_reporting() & $errorType)) xarExceptionHandled();
+//    if (!(error_reporting() & $errorType)) xarExceptionHandled();
 }
 
 /**
