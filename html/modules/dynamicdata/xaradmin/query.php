@@ -213,9 +213,51 @@ function dynamicdata_admin_query($args)
     $data['startnum'] = $startnum;
 
     $fieldlist = array();
+    $grouped = array();
     foreach ($data['field'] as $name => $val) {
         if (empty($val)) continue;
-        $fieldlist[] = $name;
+        if (empty($groupby)) {
+            $fieldlist[] = $name;
+        } else {
+            // when grouped, any field *must* be either used in some function or grouped by
+            if (empty($operation[$name])) {
+                // if not, we unselect it :-)
+                $data['field'][$name] = 0;
+                continue;
+            }
+        // CHECKME: find equivalents for other databases if necessary
+            switch ($operation[$name]) {
+                case 1:
+                case 2:
+                case 3:
+                    $grouped[$operation[$name]] = $name;
+                    $fieldlist[] = $name;
+                    break;
+                case 'count':
+                    $fieldlist[] = "COUNT($name)";
+                    break;
+                case 'min':
+                    $fieldlist[] = "MIN($name)";
+                    break;
+                case 'max':
+                    $fieldlist[] = "MAX($name)";
+                    break;
+                case 'avg':
+                    $fieldlist[] = "AVG($name)";
+                    break;
+                case 'sum':
+                    $fieldlist[] = "SUM($name)";
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    if (count($grouped) > 0) {
+        ksort($grouped);
+        $grouplist = array_values($grouped);
+    } else {
+        $grouplist = null;
     }
 
 // TODO: clean up passing of where clauses
@@ -260,19 +302,21 @@ function dynamicdata_admin_query($args)
         $sortlist = null;
     }
 
-// TODO: add groupby, operation and extra support
     $data['groupby'] = $groupby;
     $data['operation'] = $operation;
 
-    if (!empty($groupby)) {
-        array_push($data['properties'], array('_extra_' => null));
-    }
+// TODO: add extra support
+//    if (!empty($groupby)) {
+//        array_push($data['properties'], array('_extra_' => null));
+//    }
 
     // TODO: clean up generation of dummy object
-    if ( (!empty($itemid) && $itemid == $olditemid) ||
-         (!empty($table) && $table == $oldtable) ) {
+    if ( !empty($fieldlist) && count($fieldlist) > 0 &&
+         ((!empty($itemid) && $itemid == $olditemid) ||
+         (!empty($table) && $table == $oldtable)) ) {
         $data['object']->getItems(array('fieldlist' => $fieldlist,
                                         'where' => $whereclause,
+                                        'groupby' => $grouplist,
                                         'sort' => $sortlist,
                                         'numitems' => $numitems,
                                         'startnum' => $startnum));
@@ -295,6 +339,9 @@ function dynamicdata_admin_query($args)
         }
         if (!empty($whereclause)) {
             $data['sample'] .= 'where="' . xarVarPrepForDisplay(addslashes($whereclause)) . '" ';
+        }
+        if (!empty($grouplist) && count($grouplist) > 0) {
+            $data['sample'] .= 'groupby="' . xarVarPrepForDisplay(join(',',$grouplist)) . '" ';
         }
         if (!empty($sortlist) && count($sortlist) > 0) {
             $data['sample'] .= 'sort="' . xarVarPrepForDisplay(join(',',$sortlist)) . '" ';

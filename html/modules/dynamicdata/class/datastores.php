@@ -155,6 +155,7 @@ class Dynamic_DataStore
 
     var $sort;
     var $where;
+    var $groupby;
     var $join;
     var $itemids;  // reference to itemids in Dynamic_Object_List
     var $itemtype; // reference to itemtype in Dynamic_Object
@@ -166,6 +167,7 @@ class Dynamic_DataStore
         $this->primary = null;
         $this->sort = array();
         $this->where = array();
+        $this->groupby = array();
         $this->join = array();
     }
 
@@ -242,6 +244,25 @@ class Dynamic_DataStore
     function cleanWhere()
     {
         $this->where = array();
+    }
+
+    /**
+     * Add a group by field for this data store (for getItems)
+     */
+    function addGroupBy(&$property)
+    {
+        $name = $this->getFieldName($property);
+        if (!isset($name)) return;
+
+        $this->groupby[] = $name;
+    }
+
+    /**
+     * Remove all group by fields for this data store (for getItems)
+     */
+    function cleanGroupBy()
+    {
+        $this->groupby = array();
     }
 
     /**

@@ -182,6 +182,27 @@ class Dynamic_Object_Master
             }
         }
 
+        // check the fieldlist for valid property names and for operations like COUNT, SUM etc.
+        if (!empty($this->fieldlist) && count($this->fieldlist) > 0) {
+            $cleanlist = array();
+            foreach ($this->fieldlist as $name) {
+                if (!strstr($name,'(')) {
+                    if (isset($this->properties[$name])) {
+                        $cleanlist[] = $name;
+                    }
+                } elseif (preg_match('/^(.+)\((.+)\)/',$name,$matches)) {
+                    $operation = $matches[1];
+                    $field = $matches[2];
+                    if (isset($this->properties[$field])) {
+                        $this->properties[$field]->operation = $operation;
+                        $cleanlist[] = $field;
+                        $this->isgrouped = 1;
+                    }
+                }
+            }
+            $this->fieldlist = $cleanlist;
+        }
+
         foreach ($this->properties as $name => $property) {
             // skip properties we're not interested in (but always include the item id field)
             if (empty($this->fieldlist) || in_array($name,$this->fieldlist) || $property->type == 21) {
@@ -1021,7 +1042,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         }
 
         // Note: they can be empty here, which means overriding any previous criteria
-        if (isset($args['sort']) || isset($args['where'])) {
+        if (isset($args['sort']) || isset($args['where']) || isset($args['groupby'])) {
             foreach (array_keys($this->datastores) as $name) {
                 // make sure we don't have some left-over sort criteria
                 if (isset($args['sort'])) {
@@ -1030,6 +1051,10 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                 // make sure we don't have some left-over where clauses
                 if (isset($args['where'])) {
                     $this->datastores[$name]->cleanWhere();
+                }
+                // make sure we don't have some left-over group by fields
+                if (isset($args['groupby'])) {
+                    $this->datastores[$name]->cleanGroupBy();
                 }
             }
         }
@@ -1042,6 +1067,11 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         // set the where clauses
         if (!empty($args['where'])) {
             $this->setWhere($args['where']);
+        }
+
+        // set the group by fields
+        if (!empty($args['groupby'])) {
+            $this->setGroupBy($args['groupby']);
         }
     }
 
@@ -1125,6 +1155,38 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                 $this->datastores[$datastore]->addWhere($this->properties[$name],
                                                         join(' ',$pieces),
                                                         $join);
+            }
+        }
+    }
+
+    function setGroupBy($groupby)
+    {
+        if (is_array($groupby)) {
+            $this->groupby = $groupby;
+        } else {
+            $this->groupby = explode(',',$groupby);
+        }
+        $this->isgrouped = 1;
+
+        foreach ($this->groupby as $name) {
+            if (isset($this->properties[$name])) {
+                // pass the sort criteria to the right data store
+                $datastore = $this->properties[$name]->datastore;
+                // assign property to datastore if necessary
+                if (empty($datastore)) {
+                    list($storename, $storetype) = $this->property2datastore($this->properties[$name]);
+                    if (!isset($this->datastores[$storename])) {
+                        $this->addDataStore($storename, $storetype);
+                    }
+                    $this->properties[$name]->datastore = $storename;
+                    $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
+                    $datastore = $storename;
+                }
+                $this->datastores[$datastore]->addGroupBy($this->properties[$name]);
+                // if we're grouping by some field, we should start querying by the data store that holds it
+                if (!isset($this->startstore)) {
+                   $this->startstore = $datastore;
+                }
             }
         }
     }
@@ -1261,6 +1323,10 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         foreach (array_keys($this->items) as $itemid) {
     // TODO: improve this + SECURITY !!!
             $options = array();
+            if (!empty($this->isgrouped)) {
+                $args['links'][$itemid] = $options;
+                continue;
+            }
             if(xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
                 $options[] = array('otitle' => xarML('View'),
                                    'olink'  => xarModURL($modname,$viewtype,$viewfunc,
@@ -1302,6 +1368,13 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                                    'ojoin'  => '');
             }
             $args['links'][$itemid] = $options;
+        }
+        if (!empty($this->isgrouped)) {
+            foreach (array_keys($args['properties']) as $name) {
+                if (!empty($this->properties[$name]->operation)) {
+                    $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';
+                }
+            }
         }
 
         // TODO: improve this + SECURITY !!!
@@ -1369,11 +1442,23 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         }
         $args['links'] = array();
         foreach (array_keys($this->items) as $itemid) {
+            if (!empty($this->isgrouped)) {
+                $args['links'][$itemid] = array();
+                continue;
+            }
             $args['links'][$itemid]['display'] =  array('otitle' => $args['linklabel'],
                                                         'olink'  => xarModURL($modname,'user',$args['linkfunc'],
                                                                               array($args['param'] => $itemid,
                                                                                     'itemtype'     => $itemtype)),
                                                         'ojoin'  => '');
+        }
+        if (!empty($this->isgrouped)) {
+            foreach (array_keys($args['properties']) as $name) {
+                if (!empty($this->properties[$name]->operation)) {
+                    $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';
+                }
+            }
+            $args['linkfield'] = 'N/A';
         }
 
         list($args['prevurl'],

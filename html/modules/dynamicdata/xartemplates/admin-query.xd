@@ -47,7 +47,7 @@
   </td>
   <td>
     <xar:if condition="!empty($groupby)">
-      <input type="checkbox" name="groupby" id="groupby" value="1" checked="checked" onchange="submit()" /> TODO :)
+      <input type="checkbox" name="groupby" id="groupby" value="1" checked="checked" onchange="submit()" />
     <xar:else/>
       <input type="checkbox" name="groupby" id="groupby" value="1" onchange="submit()" />
     </xar:if>
@@ -221,7 +221,11 @@
 <p><a href="#$viewlink#"><xar:mlstring>View</xar:mlstring> #$label#</a></p>
 </xar:if>
 <xar:if condition="isset($mylist)">
-  <xar:data-list object="$mylist" />
+  <xar:if condition="!empty($groupby)">
+    <xar:data-view object="$mylist" layout="list" />
+  <xar:else/>
+    <xar:data-list object="$mylist" />
+  </xar:if>
 </xar:if>
 <xar:if condition="!empty($sample)">
   <p>Sample Tag : #$sample#</p>

@@ -247,10 +247,32 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
+        // check if we're dealing with GROUP BY fields and/or COUNT, SUM etc. operations
+        $isgrouped = 0;
+        if (count($this->groupby) > 0) {
+            $isgrouped = 1;
+        }
+        $newfields = array();
+        foreach ($fieldlist as $field) {
+            if (!empty($this->fields[$field]->operation)) {
+                $newfields[] = $this->fields[$field]->operation . '(' . $field . ') AS ' . $this->fields[$field]->operation . '_' . $this->fields[$field]->name;
+                $isgrouped = 1;
+            } else {
+                $newfields[] = $field;
+            }
+        }
+
         list($dbconn) = xarDBGetConn();
 
-        $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
-                    FROM $table ";
+        if ($isgrouped) {
+            $query = "SELECT " . join(', ', $newfields) . "
+                        FROM $table ";
+        } else {
+            $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
+                        FROM $table ";
+        }
+
+        // TODO: LEFT JOIN, ... ? -> cfr. relationships
 
         if (count($itemids) > 1) {
             $query .= " WHERE $itemidfield IN (" . join(', ',$itemids) . ") ";
@@ -263,16 +285,22 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             }
         }
 
-        // TODO: GROUP BY, LEFT JOIN, ... ? -> cfr. relationships
+        if (count($this->groupby) > 0) {
+            $query .= " GROUP BY " . join(', ', $this->groupby);
+        }
 
         if (count($this->sort) > 0) {
             $query .= " ORDER BY ";
             $join = '';
             foreach ($this->sort as $sortitem) {
-                $query .= $join . $sortitem['field'] . ' ' . $sortitem['sortorder'];
+                if (empty($this->fields[$sortitem['field']]->operation)) {
+                    $query .= $join . $sortitem['field'] . ' ' . $sortitem['sortorder'];
+                } else {
+                    $query .= $join . $this->fields[$sortitem['field']]->operation . '_' . $this->fields[$sortitem['field']]->name . ' ' . $sortitem['sortorder'];
+                }
                 $join = ', ';
             }
-        } else {
+        } elseif (!$isgrouped) {
             $query .= " ORDER BY $itemidfield";
         }
 
@@ -283,14 +311,19 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
         if (!$result) return;
 
-        if (count($itemids) == 0) {
+        if (count($itemids) == 0 && !$isgrouped) {
             $saveids = 1;
         } else {
             $saveids = 0;
         }
+        $itemid = 0;
         while (!$result->EOF) {
             $values = $result->fields;
-            $itemid = array_shift($values);
+            if ($isgrouped) {
+                $itemid++;
+            } else {
+                $itemid = array_shift($values);
+            }
             // oops, something went seriously wrong here...
             if (empty($itemid) || count($values) != count($this->fields)) {
                 continue;
