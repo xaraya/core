@@ -20,20 +20,24 @@
  * /roles/123
  * /roles/account
  * /roles/account/[module]
+ *
  * /roles/list
  * /roles/list/viewall
  * /roles/list/X
  * /roles/list/viewall/X
+ *
  * /roles/login
  * /roles/logout
  * /roles/password
  * /roles/privacy
+ * /roles/terms
+ *
  * /roles/register
  * /roles/register/registration
  * /roles/register/checkage
+ *
  * /roles/settings
  * /roles/settings/form (deprecated)
- * /roles/terms
  *
  * @author the roles module development team
  * @param $args the function and arguments passed to xarModURL
@@ -49,104 +53,112 @@ function roles_userapi_encode_shorturl($args)
     if (!isset($func)) {
         return;
     }
+    unset($args['func']);
 
-    // Note : make sure you don't pass the following variables as arguments in
-    // your module too - adapt here if necessary
+    // Initialise the path.
+    $path = array();
 
-    // default path is empty -> no short URL
-    $path = '';
-    // if we want to add some common arguments as URL parameters below
-    $join = '?';
-    // we can't rely on xarModGetName() here -> you must specify the modname !
+    // we can't rely on xarModGetName() here -> you must specify the modname.
     $module = 'roles';
 
-    // specify some short URLs relevant to your module
-    if ($func == 'main') {
-        $path = '/' . $module . '/';
-
-        // Note : if your main function calls some other function by default,
-        // you should set the path to directly to that other function
-
-    } elseif ($func == 'view') {
-        $path = '/' . $module . '/list';
-        if(!empty($phase) && $phase == 'viewall') {
-            $path = $path . '/viewall';
-        }
-        if(!empty($letter)) {
-            $path = $path . '/' . $letter;
-        }
-    } elseif ($func == 'lostpassword') {
-        $path = '/' . $module . '/password';
-
-    } elseif ($func == 'showloginform') {
-        $path = '/' . $module . '/login';
-
-    } elseif ($func == 'account') {
-        $path = '/' . $module . '/account';
-        if(!empty($moduleload)) {
-            // Note: this handles usermenu requests for hooked modules (including roles itself)
-            $path = $path . '/' . $moduleload;
-        }
-    } elseif ($func == 'terms') {
-        $path = '/' . $module . '/terms';
-
-    } elseif ($func == 'privacy') {
-        $path = '/' . $module . '/privacy';
-
-    } elseif ($func == 'logout') {
-        $path = '/' . $module . '/logout';
-
-    } elseif ($func == 'usermenu') {
-        $path = '/' . $module . '/settings';
-        if (!empty($phase) && ($phase == 'formbasic' || $phase == 'form')) {
-            // Note : this URL format is no longer in use
-            $path = $path . '/form';
-        }
-
-    } elseif ($func == 'register') {
-        $path = '/' . $module . '/register';
-        if (!empty($phase)) {
-            if ($phase == 'registerform') {
-                $path = $path . '/registration';
-            } elseif ($phase == 'checkage') {
-                $path = $path . '/checkage';
-            } else {
-                // unsupported phase - must be passed via forms
+    switch($func) {
+        case 'main':
+            // Note : if your main function calls some other function by default,
+            // you should set the path to directly to that other function
+            break;
+        case 'view':
+            $path[] = 'list';
+            if (!empty($phase) && $phase == 'viewall') {
+                unset($args['phase']);
+                $path[] = 'viewall';
             }
-        }
+            if (!empty($letter)) {
+                unset($args['letter']);
+                $path[] = $letter;
+            }
+            break;
 
-    } elseif ($func == 'display') {
-        // check for required parameters
-        if (isset($uid) && is_numeric($uid)) {
-            $path = '/' . $module . '/' . $uid;
+        case 'lostpassword':
+            $path[] = 'password';
+            break;
+
+        case 'showloginform':
+            $path[] = 'login';
+            break;
+
+        case 'account':
+            $path[] = 'account';
+            if(!empty($moduleload)) {
+                // Note: this handles usermenu requests for hooked modules (including roles itself).
+                unset($args['moduleload']);
+                $path[] = $moduleload;
+            }
+            break;
+
+        case 'terms':
+        case 'privacy':
+        case 'logout':
+            $path[] = $func;
+            break;
+
+        case 'usermenu':
+            $path[] = 'settings';
+            if (!empty($phase) && ($phase == 'formbasic' || $phase == 'form')) {
+                // Note : this URL format is no longer in use
+                unset($args['phase']);
+                $path[] = 'form';
+            }
+            break;
+
+        case 'register':
+            $path[] = 'register';
+            if (!empty($phase)) {
+                if ($phase == 'registerform' || $phase == 'checkage') {
+                    unset($args['phase']);
+                    $path[] = $phase;
+                } else {
+                    // unsupported phase - must be passed via forms
+                }
+            }
+            break;
+
+        case 'display':
+            // check for required parameters
+            if (isset($uid) && is_numeric($uid)) {
+                unset($args['uid']);
+                $path[] = $uid;
+            }
+            break;
+
+        default:
+            break;
+    }
+    
+
+    // If no short URL path was obtained above, then there is no encoding.
+    if (empty($path)) {
+        // Return without a short URL.
+        return;
+    }
+
+    // Modify some other module arguments as standard URL parameters.
+    // Turn a 'cids' array into a 'catid' string.
+    if (!empty($cids) && count($cids) > 0) {
+        unset($args['cids']);
+        if (!empty($andcids)) {
+            $args['catid'] = join('+', $cids);
+        } else {
+            $args['catid'] = join('-', $cids);
         }
     }
 
-    // add some other module arguments as standard URL parameters
-    if (!empty($path)) {
-        if (isset($search)) {
-            $path .= $join . 'search=' . $search;
-            $join = '&';
-        }
-        if (isset($startnum)) {
-            $path .= $join . 'startnum=' . $startnum;
-            $join = '&';
-        }
-        if (!empty($catid)) {
-            $path .= $join . 'catid=' . $catid;
-            $join = '&';
-        } elseif (!empty($cids) && count($cids) > 0) {
-            if (!empty($andcids)) {
-                $catid = join('+',$cids);
-            } else {
-                $catid = join('-',$cids);
-            }
-            $path .= $join . 'catid=' . $catid;
-            $join = '&';
-        }
-    }
+    // Slip the module name or alias in at the start of the path.
+    array_unshift($path, $module);
 
-    return $path;
+    return array(
+        'path' => $path,
+        'get' => $args
+    );
 }
 
 ?>
