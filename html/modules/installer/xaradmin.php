@@ -39,7 +39,7 @@ function installer_admin_phase1()
 {
     // Get the installed locales
     $locales = xarMLSListSiteLocales();
-    
+
     // Construct the array for the selectbox (iso3code, string in own locale)
     if(!empty($locales)) {
         $languages = array();
@@ -53,7 +53,7 @@ function installer_admin_phase1()
             }
         }
     }
-    
+
     $data['languages'] = $languages;
     $data['phase'] = 1;
     $data['phase_label'] = xarML('Step One');
@@ -198,6 +198,7 @@ function installer_admin_phase5()
     if (!xarVarFetch('install_database_prefix','pre:trim:passthru:str',$dbPrefix,'xar',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_type','str:1:',$dbType)) return;
     if (!xarVarFetch('install_create_database','checkbox',$createDb,false,XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('confirmDB','bool',$confirmDB,false,XARVAR_NOT_REQUIRED)) return;
 
     if ($dbName == '') {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
@@ -217,6 +218,7 @@ function installer_admin_phase5()
     }
 
     // Create the database if necessary
+    $data['confirmDB']  = $confirmDB;
     if ($createDb) {
         //Let's pass all input variables thru the function argument or none, as all are stored in the system.config.php
         //Now we are passing all, let's see if we gain consistency by loading config.php already in this phase?
@@ -227,6 +229,18 @@ function installer_admin_phase5()
             $msg = xarML('Could not create database (#(1)).', $dbName);
             xarCore_die($msg);
             return;
+        }
+    }
+    else {
+        if(!$confirmDB) {
+            $data['dbHost']     = $dbHost;
+            $data['dbName']     = $dbName;
+            $data['dbUname']    = $dbUname;
+            $data['dbPass']     = $dbPass;
+            $data['dbPrefix']   = $dbPrefix;
+            $data['dbType']     = $dbType;
+            $data['createDb']   = $createDb;
+            return $data;
         }
     }
 
