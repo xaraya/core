@@ -1,7 +1,5 @@
 <?php
 
-include_once 'includes/caching/storage.php';
-
 class xarCache_Database_Storage extends xarCache_Storage
 {
     var $table = '';

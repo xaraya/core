@@ -79,12 +79,25 @@ function xarCache_init($args = false)
     if (file_exists($cacheDir . '/cache.pagelevel')) {
         define('XARCACHE_PAGE_IS_ENABLED',1);
         require_once('includes/caching/page.php');
+        // Note : we may already exit here if session-less page caching is enabled
         xarPage_sessionLess();
+/*
+        $xarPage_storage =& xarCache_getStorage(array('storage'  => 'filesystem',
+                                                      'type'     => 'page',
+                                                      'cachedir' => $xarOutput_cacheCollection,
+                                                      'expire'   => $xarPage_cacheTime));
+*/
     }
 
     if (file_exists($cacheDir . '/cache.blocklevel')) {
         define('XARCACHE_BLOCK_IS_ENABLED',1);
         require_once('includes/caching/block.php');
+/*
+        $xarBlock_storage =& xarCache_getStorage(array('storage'  => 'filesystem',
+                                                       'type'     => 'block',
+                                                       'cachedir' => $xarOutput_cacheCollection,
+                                                       'expire'   => $xarBlock_cacheTime));
+*/
     }
 
     // Subsystem initialized, register a handler to run when the request is over
@@ -447,6 +460,42 @@ function xarCache_getVarDirPath()
         $varpath = './var';
     }
     return $varpath;
+}
+
+/**
+ * Get a storage class instance for some type of cached data
+ *
+ * @access protected
+ * @param string $storage the storage you want (filesystem, database or memcached)
+ * @param string $type the type of cached data (page, block, template, ...)
+ * @param string $cachedir the cache directory
+ * @param string $code the cache code (for URL factors et al.) if it's fixed
+ * @param string $expire the expiration time for this data
+ * @returns object
+ * @return storage class
+ */
+function &xarCache_getStorage($args)
+{
+    include_once 'includes/caching/storage.php';
+    switch ($args['storage'])
+    {
+        case 'database':
+            include_once 'includes/caching/storage/database.php';
+            $classname = 'xarCache_Database_Storage';
+            break;
+
+        case 'memcached':
+            include_once 'includes/caching/storage/memcached.php';
+            $classname = 'xarCache_MemCached_Storage';
+            break;
+
+        case 'filesystem':
+        default:
+            include_once 'includes/caching/storage/filesystem.php';
+            $classname = 'xarCache_FileSystem_Storage';
+            break;
+    }
+    return new $classname($args);
 }
 
 ?>
