@@ -9,7 +9,7 @@
 				<input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#" />
 				<input type="hidden" name="toggle" id="toggle" value="#$toggle#" />
 				
-				<b>#$statusmessage#</b>&nbsp;&nbsp;<input type="button" value="#$togglelabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&cmd=toggle';this.form.submit();"/>
+				<b>#$statusmessage#</b>&nbsp;&nbsp;<input type="button" value="#$togglelabel#"  tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&cmd=toggle';this.form.submit();"/>
 			</td>
 		</tr>
 		<tr>
@@ -57,9 +57,9 @@
 					<tr>
 						<td width="100" align="center">
 							<xar:if condition="count($roles) gt 1">
-								<input type="button" value="#$deletelabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;uid=#$loop:item['uid']#';this.form.submit();" />
+								<input type="button" value="#$deletelabel#"  tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;uid=#$loop:item['uid']#';this.form.submit();" />
 							<xar:else />
-								<input type="button" value="#$deletelabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;uid=#$loop:item['uid']#';this.form.submit();" disabled />
+								<input type="button" value="#$deletelabel#"  tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;uid=#$loop:item['uid']#';this.form.submit();" disabled />
 							</xar:if>
 						</td>
 						<td align="center">
@@ -89,7 +89,7 @@
 						<td width="100" align="right">
 							<input type="hidden" name="lockedoutmsg" id="lockedoutmsg" value="#$lockedoutmsg#" />
 							<input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#" />
-							<input type="button" value="#$addlabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&cmd=add';this.form.submit();"/>
+							<input type="button" value="#$addlabel#"  tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&cmd=add';this.form.submit();"/>
 						</td>
 						<td>
 							<input type="text" name="newname" id="newname" value=""  tabindex="1"/>
@@ -131,7 +131,7 @@
 		<tr>
 		<tr>
 			<td>
-				<input type="button" value="#$savelabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&cmd=save';this.form.submit();"/>
+				<input type="button" value="#$savelabel#"  tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&cmd=save';this.form.submit();"/>
 			</td>
 		</tr>
 		</table>

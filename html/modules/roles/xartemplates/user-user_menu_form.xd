@@ -48,7 +48,7 @@
 	</xar:if>
         <tr>
             <td colspan="2" style="text-align: center;"><br />
-                <input type="submit" value="#$submitlabel#" align="middle" />
+                <input type="submit" value="#$submitlabel#"  />
             </td>
         </tr>
 	</table>

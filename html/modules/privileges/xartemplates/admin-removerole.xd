@@ -15,7 +15,7 @@
 	'#$rolename#'</span>
 	<br /><br />
 
-	<input type="submit" value="Confirm" align="middle" tabindex="1" /><br /><br />
+	<input type="submit" value="Confirm"  tabindex="1" /><br /><br />
 	
 	<a href="&xar-modurl-privileges-admin-viewroles;&amp;pid=#$pid#"><xar:mlstring>Cancel the removal</xar:mlstring></a>
 </div>

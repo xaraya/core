@@ -163,7 +163,7 @@
 	</xar:if>
 		#$hooks#
 	<br /><br />
-	<input type="submit" value="#$updatelabel#" align="middle" />
+	<input type="submit" value="#$updatelabel#"  />
     </div>
 </form>
 </div>

@@ -11,7 +11,7 @@
 	<span class="xar-title"><xar:mlstring>Confirm the deletion of all instances of Privilege</xar:mlstring>  '#$name#'</span>
 	<br /><br />
 
-	<input type="submit" value="Confirm" align="middle" tabindex="1" /><br /><br />
+	<input type="submit" value="Confirm"  tabindex="1" /><br /><br />
 	
 	<a href="&xar-modurl-privileges-admin-newprivilege;"><xar:mlstring>Cancel the deletion</xar:mlstring></a>
    </div>

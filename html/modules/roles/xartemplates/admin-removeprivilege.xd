@@ -15,7 +15,7 @@
 	'#$rolename#'</span>
 	<br /><br />
 
-	<input type="submit" value="#$removelabel#" align="middle" tabindex="1" /><br /><br />
+	<input type="submit" value="#$removelabel#"  tabindex="1" /><br /><br />
 	
 	<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$roleid#"><xar:mlstring>Cancel Removal</xar:mlstring></a>
     </div>
