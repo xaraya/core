@@ -101,16 +101,19 @@ function searchDir($path)
                 fputs($fp, 'global $xarML_PHPBackend_keyEntries;'."\n");
                 foreach ($vals as $node) {
                     if ($node['tag'] == 'STRING') {
-                        fputs($fp, '$xarML_PHPBackend_entries[\''.addslashes($node['value'])."']");
+                        $node['value'] = str_replace('\'', '\\\'', $node['value']);
+                        fputs($fp, '$xarML_PHPBackend_entries[\''.$node['value']."']");
                     } elseif ($node['tag'] == 'KEY') {
-                        fputs($fp, '$xarML_PHPBackend_keyEntries[\''.addslashes($node['value'])."']");
+                        $node['value'] = str_replace('\'', '\\\'', $node['value']);
+                        fputs($fp, '$xarML_PHPBackend_keyEntries[\''.$node['value']."']");
                     } elseif ($node['tag'] == 'TRANSLATION') {
                         if ($outputEncoding != 'utf-8') {
                             $translation = iconv($inputEncoding, $outputEncoding, $node['value'] );
                         } else {
                             $translation = $node['value'];
                         }
-                        fputs($fp, " = '".addslashes($translation)."';\n");
+                        $translation = str_replace('\'', '\\\'', $translation);
+                        fputs($fp, " = '".$translation."';\n");
                     }
                 }
                 fputs($fp, "?>");
