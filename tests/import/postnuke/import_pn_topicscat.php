@@ -20,18 +20,18 @@
 
     if ($resetcat) {
         $dbconn->Execute("DELETE FROM " . $tables['categories']);
-        $dbconn->Execute('FLUSH TABLE ' . $tables['categories']);
+        //$dbconn->Execute('FLUSH TABLE ' . $tables['categories']);
     }
     $regid = xarModGetIDFromName('articles');
     if ($reset) {
         $dbconn->Execute("DELETE FROM " . $tables['categories_linkage'] . " WHERE xar_modid=$regid");
-        $dbconn->Execute('FLUSH TABLE ' . $tables['categories_linkage']);
+        //$dbconn->Execute('FLUSH TABLE ' . $tables['categories_linkage']);
     }
     if (!empty($docounter)) {
         if ($reset) {
             $regid2 = xarModGetIDFromName('categories');
             $dbconn->Execute("DELETE FROM " . $tables['hitcount'] . " WHERE xar_moduleid = " . $regid2);
-            $dbconn->Execute('FLUSH TABLE ' . $tables['hitcount']);
+            //$dbconn->Execute('FLUSH TABLE ' . $tables['hitcount']);
         }
     }
     echo "Creating root for old news topics<br>\n";

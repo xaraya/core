@@ -51,12 +51,12 @@
     }
     if ($reset && $startnum == 0) {
         $dbconn->Execute("DELETE FROM " . $tables['articles']);
-        $dbconn->Execute('FLUSH TABLE ' . $tables['articles']);
+        //$dbconn->Execute('FLUSH TABLE ' . $tables['articles']);
     }
     if (!empty($docounter)) {
         if ($reset && $startnum == 0) {
             $dbconn->Execute("DELETE FROM " . $tables['hitcount'] . " WHERE xar_moduleid = " . $regid);
-            $dbconn->Execute('FLUSH TABLE ' . $tables['hitcount']);
+            //$dbconn->Execute('FLUSH TABLE ' . $tables['hitcount']);
         }
     }
     $num = 1;

@@ -44,11 +44,11 @@
         die("Oops, select users failed : " . $dbconn->ErrorMsg());
     }
     if ($reset && $startnum == 0) {
-        $dbconn->Execute("DELETE FROM " . $tables['roles'] . " WHERE xar_uid > 5"); // TODO: VERIFY !
-        $dbconn->Execute('FLUSH TABLE ' . $tables['roles']);
+        $dbconn->Execute("DELETE FROM " . $tables['roles'] . " WHERE xar_uid > 6"); // TODO: VERIFY !
+        //$dbconn->Execute('FLUSH TABLE ' . $tables['roles']);
         $dbconn->Execute('OPTIMIZE TABLE ' . $tables['roles']);
-        $dbconn->Execute("DELETE FROM " . $tables['rolemembers'] . " WHERE xar_uid > 5 OR xar_parentid > 5"); // TODO: VERIFY !
-        $dbconn->Execute('FLUSH TABLE ' . $tables['rolemembers']);
+        $dbconn->Execute("DELETE FROM " . $tables['rolemembers'] . " WHERE xar_uid > 6 OR xar_parentid > 6"); // TODO: VERIFY !
+        //$dbconn->Execute('FLUSH TABLE ' . $tables['rolemembers']);
         $dbconn->Execute('OPTIMIZE TABLE ' . $tables['rolemembers']);
     }
     // check if there's a dynamic object defined for users
