@@ -53,50 +53,6 @@ function installer_intranet_privilegeoptions() {
  */
 function installer_intranet_configuration_load($args)
 {
-/*    $content['marker'] = '[x]';                                           // create the user menu
-    $content['displaymodules'] = 1;
-    $content['content'] = '';
-
-    // Load up database
-    list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
-
-    $blockGroupsTable = $tables['block_groups'];
-
-    $query = "SELECT    xar_id as id
-              FROM      $blockGroupsTable
-              WHERE     xar_name = 'left'";
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    // Freak if we don't get one and only one result
-    if ($result->PO_RecordCount() != 1) {
-        $msg = xarML("Group 'left' not found.");
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
-
-    list ($leftBlockGroup) = $result->fields;
-
-    $adminBlockId= xarModAPIFunc('blocks',
-                                 'admin',
-                                 'block_type_exists',
-                                 array('modName'  => 'base',
-                                       'blockType'=> 'menu'));
-
-    if (!isset($adminBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
-    }
-
-    xarModAPIFunc('blocks','admin','create_instance',array('title' => 'Main Menu',
-                                                           'type' => $adminBlockId,
-                                                           'group' => $leftBlockGroup,
-                                                           'template' => '',
-                                                           'content' => serialize($content),
-                                                           'state' => 2));
-*/
 // load the privileges chosen
 
     installer_intranet_casualaccess();
