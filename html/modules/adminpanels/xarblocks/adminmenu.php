@@ -103,6 +103,9 @@ function adminpanels_adminmenublock_display($blockinfo)
     // xhtml compliant url, we fetch the default 'XML'-formatted URL.
     $currenturl = xarServerGetCurrentURL();
 
+    // Admin types
+    $admintypes = array('admin', 'util');
+
     // TODO: why isn't the menustyle part of the block admin?
     // Set up like it is, means we are forced to use global menu style settings site-wide.
     switch(strtolower($menustyle)){
@@ -121,13 +124,13 @@ function adminpanels_adminmenublock_display($blockinfo)
                     'overview'  => 0,
                     'maintitle' => xarML('Show administration options for module #(1)', $labelDisplay));
                 
-                if ($modname == $thismodname && $thismodtype == 'admin') {
+                if ($modname == $thismodname && in_array($thismodtype, $admintypes)) {
                     // this module is currently loaded (active), we need to display
                     // 1. blank label 2. no URL 3. no title text 4. links to module functions, when users looking at default main function
                     // 5. URL with title text, when user is looking at other than default function of this module
 
                     // adding attributes and flags to each module link for the template
-                    if ($thisfuncname != 'main') {
+                    if ($thisfuncname != 'main' || $thismodtype != 'admin'){
                         $adminmods[$modname]['features']['overview'] = 1;
                         $adminmods[$modname]['features']['maintitle'] = xarML('Display overview information for module #(1)', $labelDisplay);
                     }
@@ -194,14 +197,14 @@ function adminpanels_adminmenublock_display($blockinfo)
                         'modactive' => 0,
                         'overview'  => 0,
                         'maintitle' => xarML('Show administration options for module #(1)', $labelDisplay));
-                    if ($modname == $thismodname && $thismodtype == 'admin') {
+                    if ($modname == $thismodname && in_array($thismodtype, $admintypes)) {
                         // this module is currently loaded (active), we need to display
                         // 1. blank label 2. no URL 3. no title text 4. links to module functions, when users looking at default main function
                         // 5. URL with title text, when user is looking at other than default function of this module
  
                         // adding attributes and flags to each module link for the template
                         $catmods[$cat][$modname]['features']['modactive'] = 1;
-                        if ($thisfuncname != 'main'){
+                        if ($thisfuncname != 'main' || $thismodtype != 'admin'){
                             $catmods[$cat][$modname]['features']['overview'] = 1;
                             $catmods[$cat][$modname]['features']['maintitle'] = xarML('Display overview information for module #(1)', $labelDisplay);
                         }
