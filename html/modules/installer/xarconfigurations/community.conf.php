@@ -14,138 +14,39 @@
 
 $configuration_name = 'Community Site';
 
-$options  = array(
-                  array(
-                        'item' => '1',
-                        'option' => 'true',
-                        'comment' => xarML('Registered users have read access to all modules of the site.')
-                        ),
-                  array(
-                        'item' => '2',
-                        'option' => 'false',
-                        'comment' => xarML('Unregistered users have read access to the non-core modules of the site. If this option is not chosen unregistered users see only the first page.')
-                        )
-                  );
-
-                  if (xarMod_getState(151) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-                      $options[] = array('item' => 'm151',
-                                         'option' => 'true',
-                                         'comment' => xarML('Install the Articles module. Categories will also automatically be installed.')
-                                         );
-                  }
-
-if(xarMod_getState(11) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-    $options[] =array(
-                      'item' => 'm11',
-                      'option' => 'true',
-                      'comment' => xarML('Install the Autolinks module.')
-                      );
+function installer_community_moduleoptions() {
+    return array(
+        array('name' => "autolinks",            'regid' => 11),
+        array('name' => "bloggerapi",           'regid' => 745),
+        array('name' => "categories",           'regid' => 147),
+        array('name' => "comments",             'regid' => 14),
+        array('name' => "example",              'regid' => 36),
+        array('name' => "hitcount",             'regid' => 177),
+        array('name' => "metaweblogapi",        'regid' => 747),
+        array('name' => "ratings",              'regid' => 41),
+        array('name' => "search",               'regid' => 32),
+        array('name' => "soapserver",           'regid' => 748),
+        array('name' => "wiki",                 'regid' => 28),
+        array('name' => "xmlrpcserver",         'regid' => 743),
+        array('name' => "xmlrpcsystemapi",      'regid' => 744),
+        array('name' => "xmlrpcvalidatorapi",   'regid' => 746),
+        array('name' => "articles",             'regid' => 151)
+    );
 }
-
-if(xarMod_getState(745) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-    $options[] =array(
-                      'item' => 'm745',
-                      'option' => 'true',
-                      'comment' => xarML('Install the Bloggerapi module.')
-                      );
-        }
-
-if(xarMod_getState(147) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-    $options[] =array(
-                      'item' => 'm147',
-                      'option' => 'true',
-                      'comment' => xarML('Install the Categories module.')
-                      );
+function installer_community_privilegeoptions() {
+    return array(
+              array(
+                    'item' => 'p1',
+                    'option' => 'true',
+                    'comment' => xarML('Registered users have read access to all modules of the site.')
+                    ),
+              array(
+                    'item' => 'p2',
+                    'option' => 'false',
+                    'comment' => xarML('Unregistered users have read access to the non-core modules of the site. If this option is not chosen unregistered users see only the first page.')
+                    )
+    );
 }
-if(xarMod_getState(14) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-    $options[] =array(
-                      'item' => 'm14',
-                      'option' => 'true',
-                      'comment' => xarML('Install the Comments module.')
-                      );
-}
-
-if(xarMod_getState(36) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-    $options[] =array(
-                      'item' => 'm36',
-                      'option' => 'true',
-                      'comment' => xarML('Install the Example module.')
-                      );
-}
-
-if(xarMod_getState(177) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-    $options[] =array(
-                      'item' => 'm177',
-                      'option' => 'true',
-                      'comment' => xarML('Install the Hitcount module.')
-                      );
-}
-
-if(xarMod_getState(747) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-    $options[] = array(
-                       'item' => 'm747',
-                       'option' => 'true',
-                       'comment' => xarML('Install the Metaweblogapi module.')
-                       );
-}
-
-if(xarMod_getState(41) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-    $options[] = array(
-                       'item' => 'm41',
-                       'option' => 'true',
-                       'comment' => xarML('Install the Ratings module.')
-                       );
-}
-
-if(xarMod_getState(32) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-    $options[] = array(
-                       'item' => 'm32',
-                       'option' => 'true',
-                       'comment' => xarML('Install the Search module.')
-                       );
-}
-
-if(xarMod_getState(748) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-    $options[] = array(
-                       'item' => 'm748',
-                       'option' => 'true',
-                       'comment' => xarML('Install the Soapserver module.')
-                       );
-}
-
-if(xarMod_getState(28) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-    $options[] = array(
-                       'item' => 'm28',
-                       'option' => 'true',
-                       'comment' => xarML('Install the Wiki module.')
-                       );
-}
-
-if(xarMod_getState(743) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-    $options[] = array(
-                       'item' => 'm743',
-                       'option' => 'true',
-                       'comment' => xarML('Install the Xmlrpcserver module.')
-                       );
-}
-
-if(xarMod_getState(744) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-    $options[] = array(
-                       'item' => 'm744',
-                       'option' => 'true',
-                       'comment' => xarML('Install the Xmlrpcsystemapi module.')
-                       );
-}
-
-if(xarMod_getState(746) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-    $options[] = array(
-                       'item' => 'm746',
-                       'option' => 'true',
-                       'comment' => xarML('Install the Xmlrpcvalidatorapi module.')
-                       );
-}
-
-$configuration_options = $options;
 
 /**
  * Load the configuration
@@ -155,76 +56,7 @@ $configuration_options = $options;
  */
 function installer_community_configuration_load($args)
 {
-    // disable caching of module state in xarMod.php
-    $GLOBALS['xarMod_noCacheState'] = true;
-
-    if (!isset($args)) {
-        $args = array();
-    }
-    // load the modules chosen
-    xarModAPIFunc('modules','admin','regenerate');
-    if(in_array('m11',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>11));     // autolinks
-        xarModAPIFunc('modules','admin','activate',array('regid'=>11));
-    }
-    if(in_array('m743',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>743));    // xmlrpcserver
-        xarModAPIFunc('modules','admin','activate',array('regid'=>743));
-    }
-    if(in_array('m147',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>147));    // categories
-        xarModAPIFunc('modules','admin','activate',array('regid'=>147));
-    }
-    if(in_array('m14',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>14));     // comments
-        xarModAPIFunc('modules','admin','activate',array('regid'=>14));
-    }
-    if(in_array('m177',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>177));    // hitcount
-        xarModAPIFunc('modules','admin','activate',array('regid'=>177));
-    }
-    if(in_array('m747',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>747));    // metaweblogapi
-        xarModAPIFunc('modules','admin','activate',array('regid'=>747));
-    }
-    if(in_array('m41',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>41));     // ratings
-        xarModAPIFunc('modules','admin','activate',array('regid'=>41));
-    }
-    if(in_array('m32',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>32));     // search
-        xarModAPIFunc('modules','admin','activate',array('regid'=>32));
-    }
-    if(in_array('m151',$args)) {
-        if(!in_array('m147',$args)) {
-            xarModAPIFunc('modules','admin','initialise',array('regid'=>147));
-            xarModAPIFunc('modules','admin','activate',array('regid'=>147));
-        }
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>151));    // articles
-        xarModAPIFunc('modules','admin','activate',array('regid'=>151));
-    }
-    if(in_array('m36',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>36));     // example
-        xarModAPIFunc('modules','admin','activate',array('regid'=>36));
-    }
-    if(in_array('m28',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>28));     // wiki
-        xarModAPIFunc('modules','admin','activate',array('regid'=>28));
-    }
-    if(in_array('m744',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>744));    // xmlrpcsystemapi
-        xarModAPIFunc('modules','admin','activate',array('regid'=>744));
-    }
-    if(in_array('m746',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>746));    // xmlrpcvalidatorapi
-        xarModAPIFunc('modules','admin','activate',array('regid'=>746));
-    }
-    if(in_array('m745',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>745));    // bloggerapi
-        xarModAPIFunc('modules','admin','activate',array('regid'=>745));
-    }
-
-    $content['marker'] = '[x]';                                           // create the user menu
+/*    $content['marker'] = '[x]';                                           // create the user menu
     $content['displaymodules'] = 1;
     $content['content'] = '';
 
@@ -267,10 +99,10 @@ function installer_community_configuration_load($args)
                                                            'template' => '',
                                                            'content' => serialize($content),
                                                            'state' => 2));
-
+*/
 // load the privileges chosen
 
-    if(in_array(1,$args)) {
+    if(in_array('p1',$args)) {
         installer_community_readaccess();
         xarAssignPrivilege('ReadAccess','Users');
     }
@@ -279,12 +111,12 @@ function installer_community_configuration_load($args)
         xarAssignPrivilege('CasualAccess','Users');
     }
 
-    if(in_array(2,$args)) {
+    if(in_array('p2',$args)) {
         installer_community_readnoncore();
         xarAssignPrivilege('ReadNonCore','Everybody');
    }
     else {
-        if(in_array(1,$args)) installer_community_casualaccess();
+        if(in_array('p1',$args)) installer_community_casualaccess();
         xarAssignPrivilege('CasualAccess','Everybody');
     }
 

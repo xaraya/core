@@ -13,21 +13,24 @@
 
 $configuration_name = 'Core Xaraya install (aka minimal)';
 
-$options  = array(
-    array(
-        'item' => '1',
-        'option' => 'true',
-        'comment' => xarML('Registered users have read access to all modules of the site.')
-    ),
-    array(
-        'item' => '2',
-        'option' => 'false',
-        'comment' => xarML('Unregistered users have read access to the non-core modules of the site. If this option is not chosen unregistered users see only the first page.')
-    ),
+function installer_core_moduleoptions() {
+    return array();
+}
+function installer_core_privilegeoptions() {
+    return array(
+        array(
+            'item' => 'p1',
+            'option' => 'true',
+            'comment' => xarML('Registered users have read access to all modules of the site.')
+        ),
+        array(
+            'item' => 'p2',
+            'option' => 'false',
+            'comment' => xarML('Unregistered users have read access to the non-core modules of the site. If this option is not chosen unregistered users see only the first page.')
+        ),
 
-);
-
-$configuration_options = $options;
+    );
+}
 
 /**
  * Load the configuration
@@ -37,64 +40,9 @@ $configuration_options = $options;
  */
 function installer_core_configuration_load($args)
 {
-    // disable caching of module state in xarMod.php
-    $GLOBALS['xarMod_noCacheState'] = true;
+// load the privileges chosen
 
-    // load the modules chosen
-    xarModAPIFunc('modules','admin','regenerate');
-
-    $content['marker'] = '[x]';                                           // create the user menu
-    $content['displaymodules'] = 1;
-    $content['content'] = '';
-
-    // Load up database
-    list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
-
-    $blockGroupsTable = $tables['block_groups'];
-
-    $query = "SELECT    xar_id as id
-              FROM      $blockGroupsTable
-              WHERE     xar_name = 'left'";
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    // Freak if we don't get one and only one result
-    if ($result->PO_RecordCount() != 1) {
-        $msg = xarML("Group 'left' not found.");
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
-
-    list ($leftBlockGroup) = $result->fields;
-
-    $adminBlockId= xarModAPIFunc('blocks',
-                                 'admin',
-                                 'block_type_exists',
-                                 array('modName'  => 'base',
-                                       'blockType'=> 'menu'));
-
-    if (!isset($adminBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
-    }
-
-    xarModAPIFunc('blocks','admin','create_instance',array('title' => 'Main Menu',
-                                                           'type' => $adminBlockId,
-                                                           'group' => $leftBlockGroup,
-                                                           'template' => '',
-                                                           'content' => serialize($content),
-                                                           'state' => 2));
-
-    // load the privileges chosen
-
-    if (!isset($args)) {
-        $args = array();
-    }
-
-
-    if(in_array(1,$args)) {
+    if(in_array('p1',$args)) {
         installer_core_readaccess();
         xarAssignPrivilege('ReadAccess','Users');
     }
@@ -103,12 +51,12 @@ function installer_core_configuration_load($args)
         xarAssignPrivilege('CasualAccess','Users');
     }
 
-    if(in_array(2,$args)) {
+    if(in_array('p2',$args)) {
         installer_core_readnoncore();
         xarAssignPrivilege('ReadNonCore','Everybody');
    }
     else {
-        if(in_array(1,$args)) installer_core_casualaccess();
+        if(in_array('p1',$args)) installer_core_casualaccess();
         xarAssignPrivilege('CasualAccess','Everybody');
     }
 
