@@ -184,26 +184,26 @@ document.forms['privilegeform'].submit();}
             <xar:if condition="$pcomponent ne 'All' and empty($target)">
                 <p style="text-align: left;"><xar:ml><xar:mlstring>Allow instances of component #(1) that have:</xar:mlstring><xar:mlvar>#$pcomponent#</xar:mlvar></xar:ml></p>
                 <table border="0" cellpadding="2" cellspacing="0">
-                    <xar:loop name="$instances">
+                    <xar:foreach in="$instances" key="$id" value="$instance">
                         <tr>
-                            <td>#$loop:item['header']#</td>
+                            <td>#$instance['header']#</td>
                             <td>
-                                <xar:if condition="$loop:item['type'] eq 'manual'">
-                                    <input type="text" name="pinstance#$loop:index#" value="#$loop:item['default']#" size="20" />
+                                <xar:if condition="$instance['type'] eq 'manual'">
+                                    <input type="text" name="pinstance#$id#" value="#$instance['default']#" size="20" />
                                 <xar:else />
-                                    <select name="pinstance#$loop:index#" size="1" tabindex="5">
-                                        <xar:loop name="$loop:item['dropdown']">
-                                            <xar:if condition="$loop:item['name'] eq $loop:item['default']">
-                                                <option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
+                                    <select name="pinstance#$id#" size="1" tabindex="5">
+                                        <xar:foreach in="$instance['dropdown']" value="$option">
+                                            <xar:if condition="$option['name'] eq $instance['default']">
+                                                <option value="#$option['name']#" selected="selected">#$option['name']#</option>
                                             <xar:else />
-                                                <option value="#$loop:item['name']#">#$loop:item['name']#</option>
+                                                <option value="#$option['name']#">#$option['name']#</option>
                                             </xar:if>
-                                        </xar:loop>
+                                        </xar:foreach>
                                     </select>
                                 </xar:if>
                             </td>
                         </tr>
-                    </xar:loop>
+                    </xar:foreach>
                 </table>
             <xar:elseif condition="!empty($target)" />
             <table border="0" cellpadding="2" cellspacing="0">
