@@ -1,17 +1,45 @@
-<xar:if condition="!empty($beginurl)">
-	<a href="#$beginurl#">&lt;&lt;</a>
+<xar:if condition="$prevblockpages gt 0">
+    <xar:set name="$prevblocklabel"><xar:ml>
+        <xar:mlstring>Previous #(1) pages</xar:mlstring>
+        <xar:mlvar>#$prevblockpages#</xar:mlvar>
+    </xar:ml></xar:set>
+	<a title="#xarML('First page')#" href="#$firsturl#">|&lt;</a>&nbsp;&nbsp;<a title="#$prevblocklabel#" href="#$prevblockurl#">&lt;&lt;</a>
 <xar:else />
-	&lt;&lt;
+	|&lt;&nbsp;&nbsp;&lt;&lt;
 </xar:if>
-<xar:foreach in="$middleurls" key="$pagenum" value="$numberurl">
-<xar:if condition="!empty($numberurl)">
-	&nbsp;<a href="#$numberurl#">#$pagenum#</a>&nbsp;
+
+<!--- Example previous page link
+<xar:if condition="$prevpageitems gt 0">
+	&nbsp;&nbsp;<a title="#xarML('Previous page')#" href="#$prevpageurl#">&lt;</a>
 <xar:else />
-	&nbsp;#$pagenum#&nbsp;
+	&nbsp;&nbsp;&lt;
 </xar:if>
+--->
+
+<xar:foreach in="$middleurls" key="$pagenumber" value="$pageurl">
+    <xar:if condition="$pagenumber ne $currentpage">
+        &nbsp;&nbsp;<a href="#$pageurl#">#$pagenumber#</a>
+    <xar:else />
+        &nbsp;&nbsp;#$pagenumber#
+    </xar:if>
 </xar:foreach>
-<xar:if condition="!empty($endurl)">
-	<a href="#$endurl#">&gt;&gt;</a>
+
+<!---
+<xar:if condition="$nextpageitems gt 0">
+	&nbsp;&nbsp;<a title="#xarML('Next page')#" href="#$nextpageurl#">&gt;</a>
 <xar:else />
-	&gt;&gt;
+	&nbsp;&nbsp;&gt;
+</xar:if>
+--->
+
+<xar:if condition="$nextblockpages gt 0">
+    <xar:set name="$nextblocklabel"><xar:ml>
+        <xar:mlstring>Next #(1) pages</xar:mlstring>
+        <xar:mlvar>#$nextblockpages#</xar:mlvar>
+    </xar:ml></xar:set>
+	&nbsp;&nbsp;<a title="#$nextblocklabel#" href="#$nextblockurl#">&gt;&gt;</a>
+	<!--- &nbsp;&nbsp;<a title="#xarML('Last')#" href="#$lasturl#">&gt;|</a> --->
+<xar:else/>
+	&nbsp;&nbsp;&gt;&gt;
+    <!--- &nbsp;&nbsp;&gt;| --->
 </xar:if>
