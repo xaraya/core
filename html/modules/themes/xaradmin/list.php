@@ -126,9 +126,8 @@ function themes_admin_list()
                                             'authid'    => $authid));
         $listrows[$i]['infourl']    = xarModURL('themes',
                                     'admin',
-                                    'modinfo',
-                                     array( 'id'        => $thismodid,
-                                            'authid'    => $authid));
+                                    'themesinfo',
+                                     array( 'id'        => $thismodid));
         
         // image urls
         
