@@ -64,12 +64,12 @@ function roles_admin_purge($args)
 // --- display roles that can be recalled
         //Create the selection
         $q = new xarQuery('SELECT',$rolestable);
-        $q->addfields(array('xar_uid as uid',
-                    'xar_uname as uname',
-                    'xar_name as name',
-                    'xar_email as email',
-                    'xar_type as type',
-                    'xar_date_reg as date_reg'));
+        $q->addfields(array('xar_uid AS uid',
+                    'xar_uname AS uname',
+                    'xar_name AS name',
+                    'xar_email AS email',
+                    'xar_type AS type',
+                    'xar_date_reg AS date_reg'));
         $q->setorder('xar_name');
         if (!empty($data['recallsearch'])) {
             $c[1] = $q->like('xar_name','%' . $data['recallsearch'] . '%');
@@ -82,7 +82,7 @@ function roles_admin_purge($args)
         $q->setrowstodo($numitems);
         $q->setstartat($recallstartnum);
 //        $q->qecho();
-        $q->run();
+        if(!$q->run()) return;
 
         $data['totalselect'] = $q->getrows();
 
@@ -96,21 +96,21 @@ function roles_admin_purge($args)
         $recallroles = array();
         foreach ($q->output() as $role) {
 // check each role's user name
-            if (empty($role['xar_uname'])) {
-                $msg = xarML('Execution halted: the role with uid #(1) has an empty name. This needs to be corrected manually in the database.', $role['xar_uid']);
+            if (empty($role['uname'])) {
+                $msg = xarML('Execution halted: the role with uid #(1) has an empty name. This needs to be corrected manually in the database.', $role['uid']);
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM',
                 new SystemException($msg));
             }
-            if (xarSecurityCheck('ReadRole', 0, 'All', $role['xar_uname'] . ":All:" . $role['xar_uid'])) {
+            if (xarSecurityCheck('ReadRole', 0, 'All', $role['uname'] . ":All:" . $role['uid'])) {
                 $skip = 0;
                 $unique = 1;
-                if ($role['xar_type']) {
-                    $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $role['xar_uname'], 'type' => 1, 'state' => ROLES_STATE_CURRENT));
+                if ($role['type']) {
+                    $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $role['uname'], 'type' => 1, 'state' => ROLES_STATE_CURRENT));
                     if (is_array($existinguser)) $unique = 0;
-                    $role['xar_uname'] = "";
+                    $role['uname'] = "";
                 }
                 else {
-                    $uname1 = explode($deleted,$role['xar_uname']);
+                    $uname1 = explode($deleted,$role['uname']);
 // checking empty unames for code robustness :-)
                     if($uname1[0] == '') {
                         $existinguser = 0;
@@ -119,16 +119,16 @@ function roles_admin_purge($args)
                     else
                         $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $uname1[0], 'state' => ROLES_STATE_CURRENT));
                     if (is_array($existinguser)) $unique = 0;
-                    $role['xar_uname'] = $uname1[0];
+                    $role['uname'] = $uname1[0];
 // remove [deleted] marker from email (fix for Bug 3484)
-                    $email = explode($deleted,$role['xar_email']);
-                    $role['xar_email']=$email[0];                    
+                    $email = explode($deleted,$role['email']);
+                    $role['email']=$email[0];
 // now check that email is unique if this has to be checked (fix for nonexisting Bug)
                     if (xarModGetVar('roles', 'uniqueemail')) {
                         $existinguser = xarModAPIFunc('roles','user','get',array('email' => $email[0], 'state' => ROLES_STATE_CURRENT));
                         if (is_array($existinguser)) $unique = 0;
                     }
-                    
+
                }
                 if (!$skip) {
                     $role['type'] = $role['type'] ? "Group" : "User";
