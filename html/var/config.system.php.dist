@@ -1,7 +1,5 @@
 <?php
-
 // Database Configuration
-
 // Database Username: the username that will be used to connect to the database.
 $systemConfiguration['DB.UserName'] = '';
 // Database Password: the password that will be used to connect to the database.
