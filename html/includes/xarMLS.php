@@ -1091,7 +1091,7 @@ function xarMLS__parseLocaleString($locale)
     // Match the locales standard format  : en_US.iso-8859-1
     // Thus: language code lowercase(2), country code uppercase(2), encoding lowercase(1+)
     if (!preg_match('/([a-z][a-z])(_([A-Z][A-Z]))?(\.([0-9a-z\-]+))?(@([0-9a-zA-Z]+))?/', $locale, $matches)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'locale');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'locale');
         return;
     }
 
