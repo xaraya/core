@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.xarBLCompiler.php 1.71 03/07/05 11:35:12+02:00 marcel@hsdev.com $
  *
  * BlockLayout Template Engine Compiler
  *
@@ -1979,6 +1979,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         $resolver->push('loop:key', '$_bl_loop_key'.$loopCounter);
         $resolver->push('loop:index', '$_bl_loop_index'.$loopCounter);
         $resolver->push('loop:number', '$_bl_loop_number'.$loopCounter);
+
         if (isset($id)) {
             // Register special variables for tag id
             $resolver->push("loop:$id:item", '$_bl_loop_item'.$loopCounter);
@@ -2074,11 +2075,15 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
         }
 
 
-        if (!isset($component)) {
+        if (isset($component)) {
+            $component = xarTpl__ExpressionTransformer::transformPHPExpression($component);
+        } else {
             $component = '';
         }
 
-        if (!isset($instance)) {
+        if (isset($instance)) {
+            $instance = xarTpl__ExpressionTransformer::transformPHPExpression($instance);
+        } else {
             $instance = '';
         }
 
