@@ -1451,7 +1451,11 @@ class xarTemplateTag
                 return;
             }
         }
-        return xarModAPIFunc($this->_module, $this->_type, $this->_func, $args);
+        $code = xarModAPIFunc($this->_module, $this->_type, $this->_func, $args);
+        assert('is_string($code); /* A custom tag should return a string with the code to put into the compile template */');
+        // Make sure the code has UNIX line endings too
+        $code = str_replace(array('\r\n','\r'),'\n',$code);
+        return $code;
     }
 }
 
