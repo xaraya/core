@@ -451,7 +451,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
                     // add an exception to error collection
                     $value->exceptions[] = array('id' => 'PHP_ERROR', 
                                                  'value' => new SystemException($msg));
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'ErrorCollection', $value);
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $value);
                 } else {
                     // raise an error collection
                     $exc = new ErrorCollection();
@@ -459,14 +459,14 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
                                                'value' => $value);
                     $exc->exceptions[] = array('id' => 'PHP_ERROR', 
                                                'value' => new SystemException($msg));
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'ErrorCollection', $exc);
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $exc);
                 }
             } else {
                 // raise an error collection
                 $exc = new ErrorCollection();
                 $exc->exceptions[] = array('id' => 'PHP_ERROR', 
                                            'value' => new SystemException($msg));
-                xarExceptionSet(XAR_USER_EXCEPTION, 'ErrorCollection', $exc);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $exc);
             }
             break;
         default:
