@@ -33,7 +33,7 @@ function setDisplayOff(id)
 <ul style="list-style: none;">
     <xar:foreach in="$hookmodules" value="$hookmod">
     <xar:if condition="empty($return_url)">
-        <li class="xar-alt xar-norm-outline" style="padding:3pt; font-size: 1.2em; margin-bottom: 5pt;"><a href="#$hookmod['modlink']#">#$hookmod['modname']#</a> : #$hookmod['modtitle']#</li>
+        <li class="xar-alt xar-norm-outline" style="background-image: none; padding:3pt; font-size: 1.2em; margin-bottom: 5pt;"><a href="#$hookmod['modlink']#">#$hookmod['modname']#</a> : #$hookmod['modtitle']#</li>
     </xar:if>
     <xar:if condition="$hookmod['modname'] eq $curhook">
         <xar:mlstring>Use this functionality in the following modules</xar:mlstring>: [ <a href="#$DetailsURL#">#$DetailsLabel#</a> ]<br />
