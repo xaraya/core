@@ -121,16 +121,16 @@ function initializeSetup() {
 // -------------------------------------------------------------- Blocks Module
 	$query1 = "SELECT DISTINCT xar_name FROM xar_block_groups";
 	$query2 = "SELECT DISTINCT xar_id FROM xar_block_groups";
-		$instances = array(
-							array('header' => 'Group Name:',
-									'query' => $query1,
-									'limit' => 20
-								),
-							array('header' => 'Group ID:',
-									'query' => $query2,
-									'limit' => 20
-								)
-						);
+    $instances = array(
+                        array('header'  => 'Group Name:',
+                              'query'   => $query1,
+                              'limit'   => 20
+                            ),
+                        array('header'  => 'Group ID:',
+                              'query'   => $query2,
+                              'limit'   => 20
+                            )
+                    );
     xarDefineInstance('blocks','BlockGroups',$instances);
 
 	$query1 = "SELECT DISTINCT xar_type FROM xar_block_types";
