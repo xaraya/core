@@ -17,16 +17,15 @@ function roles_admin_sendmail()
     // Get parameters from whatever input we need
     if (!xarVarFetch('uid', 'int:0:', $uid, 0)) return;
     if (!xarVarFetch('state', 'int:0:', $state, ROLES_STATE_CURRENT)) return;
-    if (!xarVarFetch('groupuid', 'int:0:', $groupuid, 0)) return;
     if (!xarVarFetch('message', 'str:1:', $message)) return;
     if (!xarVarFetch('subject', 'str:1', $subject)) return;
-    xarVarFetch('includesubgroups','int:0:',$includesubgroups,0,XARVAR_NOT_REQUIRED);
+    if (!xarVarFetch('includesubgroups','int:0:',$includesubgroups,0,XARVAR_NOT_REQUIRED));
 
     $message = xarVarPrepHTMLDisplay($message);
     $subject = xarVarPrepForDisplay($subject);
 
     // Confirm authorisation code.
-    if (!xarSecConfirmAuthKey()) return;
+//    if (!xarSecConfirmAuthKey()) return;
     // Security check
     if (!xarSecurityCheck('MailRoles')) return;
     // Get user information
@@ -45,67 +44,53 @@ function roles_admin_sendmail()
                               $replace,
                               $subject);
 
-    $roles = new xarRoles();
-    if ($uid != 0) {
-        $role = $roles->getRole($uid);
-        //$user = xarModAPIFunc('roles','user','get', array('uid' => $uid));
-        //verify if it's not frozen
-        if (xarSecurityCheck('EditRole',0,'Roles',$role->getName()))  {
-            //send the mail
-            if (!xarModAPIFunc('mail',
-                'admin',
-                'sendmail',
-                array('info' => $role->getEmail(),
-                    'name' => $role->getName(),
-                    'subject' => $subject,
-                    'message' => $message))) return;
-        }
+    // Get the current query
+    $q = unserialize(xarSessionGetVar('rolesquery'));
 
-         if ($groupuid == 0) $groupuid = $role->getParents();
+    // only need the uid,name and email fields
+    $q->clearfields();
+    $q->addfields(array('r.xar_uid','r.xar_name','r.xar_email'));
+
+    // Open a connection and run the query
+    $q->open();
+    $q->run();
+
+    foreach ($q->output() as $user) {
+        $users[$user['r.xar_uid']] = array('uid' => $user['r.xar_uid'],
+            'name' => $user['r.xar_name'],
+            'email' => $user['r.xar_email']
+        );
     }
-    else {
-        if ($groupuid == 0) {
-            $users = xarModAPIFunc('roles','user','getall', array('state' => $state));
-            foreach ($users as $user) {
-                //verify if it's not frozen
-                if (xarSecurityCheck('EditRole',0,'Roles',$user['name'])){
-                    //send the mail
-                    if (!xarModAPIFunc( 'mail',
-                                    'admin',
-                                    'sendmail',
-                                    array('info' => $user['email'],
-                                        'name' => $user['name'],
-                                        'subject' => $subject,
-                                        'message' => $message))) return;
-                }
 
-            }
-        } else {
-            $role = $roles->getRole($groupuid);
+    // Check if we also want to send to subgroups
+    // In this case we'll just pick out the descendants in the same state
+    // Note the nice use of the array keys to overwrite users we already have
+    if ($uid != 0 && ($includesubgroups == 1)) {
+        $roles = new xarRoles();
+        $parentgroup = $roles->getRole($uid);
+        $descendants = $parentgroup->getDescendants($state);
 
-            if(!$includesubgroups){
-                $users = $role->getUsers($state);
-            }else{
-                //TODO: roll this into a getDescendants() method in class xarrole
-                $users = roles_admin_sendmail__getsubusers($groupuid,$state);
-            }
-            //foreach ($users as $user) {
-            while (list($key, $user) = each($users)) {
-                //verify if it's not frozen
-                if (xarSecurityCheck('EditRole',0,'Roles',$user->getName())){
-                    //send the mail
-                    if (!xarModAPIFunc( 'mail',
-                                    'admin',
-                                    'sendmail',
-                                    array('info' => $user->getEmail(),
-                                        'name' => $user->getName(),
-                                        'subject' => $subject,
-                                        'message' => $message))) return;
-                }
-            }
+        while (list($key, $user) = each($descendants)) {
+            $users[$user->getID()] = array('uid' => $user->getID(),
+                'name' => $user->getName(),
+                'email' => $user->getEmail()
+                );
         }
     }
-    xarResponseRedirect(xarModURL('roles', 'admin', 'showusers', array('uid' => $groupuid, 'state' => $state)));
+
+
+// now send the mails
+    foreach ($users as $user) {
+        if (!xarModAPIFunc('mail',
+            'admin',
+            'sendmail',
+            array('info' => $user['email'],
+                'name' => $user['name'],
+                'subject' => $subject,
+                'message' => $message))) return;
+    }
+
+    xarResponseRedirect(xarModURL('roles', 'admin', 'createmail'));
     // Return
     return true;
 }

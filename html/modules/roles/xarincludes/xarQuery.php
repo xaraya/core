@@ -715,6 +715,10 @@ class xarQuery
     }
 
     // ------ Gets and sets -----
+    function clearfields()
+    {
+        $this->fields = array();
+    }
     function result()
     {
         return $this->result;

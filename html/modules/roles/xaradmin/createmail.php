@@ -77,6 +77,9 @@ function roles_admin_createmail()
             }
         }
 
+        // Save the query so we can reuse it somewhere
+        xarSessionSetVar('rolesquery', serialize($q));
+
         // open a connection and run the query
         $q->open();
         $q->run();
