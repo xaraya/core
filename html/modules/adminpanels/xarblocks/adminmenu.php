@@ -98,7 +98,7 @@ function adminpanels_adminmenublock_display($blockinfo){
     $logouturl = xarModURL('adminpanels' ,'admin', 'confirmlogout', array());
 
     // Get current URL
-    $currenturl = xarServerGetCurrentURL();
+    $currenturl = preg_replace('/&/', '&amp;', xarServerGetCurrentURL());
 
     switch(strtolower($menustyle)){
         case 'byname':

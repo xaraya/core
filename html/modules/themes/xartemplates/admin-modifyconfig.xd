@@ -24,7 +24,39 @@
             </select>
         </td>
     </tr>
+	<tr align="left" valign="middle">
+		<td>
+			<xar:mlstring>Site Name</xar:mlstring>
+		</td>
+		<td>
+			<input type="text" name="sitename" id="sitename" value="#xarModGetVar('themes', 'SiteName')#" size="30" maxlength="100" />
+		</td>
+	</tr>
+	<tr align="left" valign="middle">
+		<td>
+			<xar:mlstring>Site Slogan</xar:mlstring>
+		</td>
+		<td>
+			<input type="text" name="slogan" id="slogan" value="#xarModGetVar('themes', 'SiteSlogan')#" size="50" maxlength="100" />
+		</td>
+	</tr>
+	<tr align="left" valign="middle">
+		<td>
+			<xar:mlstring>Copyright</xar:mlstring>
+		</td>
+		<td>
+			<input type="text" name="copyright" id="copyright" value="#xarModGetVar('themes', 'SiteCopyRight')#" size="50" maxlength="100" />
+		</td>
+	</tr>
+	<tr align="left" valign="middle">
+		<td>
+			<xar:mlstring>Footer Note</xar:mlstring>
+		</td>
+		<td>
+			<textarea name="footer" id="footer" cols="60" rows="5" wrap="virtual" class="xar-normal">#xarModGetVar('themes', 'SiteFooter')#</textarea>
+		</td>
+	</tr>
 </table>
-            <br />
-                        <input type="submit" value="#$submitbutton#" />
+<br />
+<input type="submit" value="#$submitbutton#" />
 </form>

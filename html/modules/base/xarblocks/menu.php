@@ -97,7 +97,7 @@ function base_menublock_display($blockinfo)
     $loggedin = xarUserIsLoggedIn();
 
     // Get current URL
-    $currenturl = xarServerGetCurrentURL();
+    $currenturl = preg_replace('/&/', '&amp;', xarServerGetCurrentURL());
 
     // Dirty right now, need to do a block group check and fix.
     $menustyle = 'side';
@@ -133,7 +133,7 @@ function base_menublock_display($blockinfo)
                         $title = $parts[1];
                         $comment = $parts[2];
                         $child = isset($parts[3]) ? $parts[3] : '';
-// Security Check
+                        // Security Check
 		    			if (xarSecurityCheck('ReadBase',0,'Menublock','$blockinfo[title]:$title:')) {
                             $title = xarVarPrepForDisplay($title);
                             $url = xarVarPrepForDisplay($url);
