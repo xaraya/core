@@ -126,9 +126,9 @@ function xarVarBatchFetch()
 
         if (!$result) {
             //Records the error presented in the given input variable
-            $result_array[$line[2]]['error'] = xarExceptionValue();
+            $result_array[$line[2]]['error'] = xarCurrentError();
             //Handle the Exception
-            xarExceptionHandled();
+            xarErrorHandled();
             //Mark that we've got an error
             $no_errors = false;
         } else {
@@ -1331,43 +1331,6 @@ function xarVarPrepEmailDisplay()
         // Prepare var
 //        $var = preg_replace($search, $replace, $var);
         $var = strtr($var,array('@' => '&#064;'));
-        // Add to array
-        array_push($resarray, $var);
-    }
-
-    // Return vars
-    if (func_num_args() == 1) {
-        return $resarray[0];
-    } else {
-        return $resarray;
-    }
-}
-
-/**
- * Ready database output
- *
- * Gets a variable, cleaning it up such that the text is
- * stored in a database exactly as expected. Can have as many parameters as desired.
- *
- * @deprec 2004-02-18
- * @access public
- * @return mixed prepared variable if only one variable passed
- * in, otherwise an array of prepared variables
- * @todo are we allowing arrays and objects for real?
- */
-function xarVarPrepForStore()
-{
-    // Issue a WARNING as this function is deprecated
-    xarLogMessage('Using deprecated function xarVarPrepForStore, use bind variables instead',XARLOG_LEVEL_WARNING);
-    $resarray = array();
-    foreach (func_get_args() as $var) {
-
-        // Prepare var
-        if (!get_magic_quotes_runtime()) {
-            // FIXME: allow other than strings?
-            $var = addslashes($var);
-        }
-
         // Add to array
         array_push($resarray, $var);
     }

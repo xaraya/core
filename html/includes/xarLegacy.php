@@ -117,7 +117,21 @@ include 'includes/pnHTML.php';
 *     pnUserGetTheme
 *     pnThemeLoad
 *
-*/
+*
+* DEPRECATED XAR FUNCTIONS
+* xarModEmailURL        -> no direct equivalent
+* xarVarPrepForStore()  -> use bind vars or dbconn->qstr() method
+* xarExceptionSet()     -> xarErrorSet()
+* xarExceptionMajor()   -> xarCurrentErrorType()
+* xarExceptionId()      -> xarCurrentErrorID()
+* xarExceptionValue()   -> xarCurrentError()
+* xarExceptionFree()    -> xarErrorFree()
+* xarExceptionHandled() -> xarErrorHandled()
+* xarExceptionRender()  -> xarErrorRender()
+* /
+
+
+
 /**
  * get base URI for PostNuke
  *
@@ -1103,4 +1117,135 @@ function xarModEmailURL($modName = NULL, $modType = 'user', $funcName = 'main', 
     // The URL
     return xarServerGetBaseURL() . $url;
 }
+
+/**
+* Ready database output
+ *
+ * Gets a variable, cleaning it up such that the text is
+ * stored in a database exactly as expected. Can have as many parameters as desired.
+ *
+ * @deprec 2004-02-18
+ * @access public
+ * @return mixed prepared variable if only one variable passed
+ * in, otherwise an array of prepared variables
+ * @todo are we allowing arrays and objects for real?
+ */
+function xarVarPrepForStore()
+{
+    // Issue a WARNING as this function is deprecated
+    xarLogMessage('Using deprecated function xarVarPrepForStore, use bind variables instead',XARLOG_LEVEL_WARNING);
+    $resarray = array();
+    foreach (func_get_args() as $var) {
+        
+        // Prepare var
+        if (!get_magic_quotes_runtime()) {
+            // FIXME: allow other than strings?
+            $var = addslashes($var);
+        }
+        
+        // Add to array
+        array_push($resarray, $var);
+    }
+    
+    // Return vars
+    if (func_num_args() == 1) {
+        return $resarray[0];
+    } else {
+        return $resarray;
+    }
+}
+
+function xarExceptionSet($major, $errorID, $value = NULL)
+{
+    xarErrorSet($major, $errorID, $value);
+}
+
+function xarExceptionMajor()
+{
+    return xarCurrentErrorType();
+}    // deprecated
+
+/**
+* Gets the identifier of current error
+ *
+ * Returns the error identifier corresponding to the current error.
+ * If invoked when no error was raised, a void value is returned.
+ *
+ * @author Marco Canini <marco@xaraya.com>
+ * @access public
+ * @return string the error identifier
+ * @deprec 2004-04-01
+ */
+function xarExceptionId()
+{
+    return xarCurrentErrorID();
+} 
+
+/**
+* Gets the current error object
+ *
+ * Returns the value corresponding to the current error.
+ * If invoked when no error or an error for which there is no associated information was raised, a void value is returned.
+ *
+ * @author Marco Canini <marco@xaraya.com>
+ * @access public
+ * @return mixed error value object
+ * @deprec 2004-04-01
+ */
+function xarExceptionValue()
+{
+    return xarCurrentError();
+}    // deprecated
+
+/**
+* Resets current error status
+ *
+ * xarErrorFree is a shortcut for xarErrorSet(XAR_NO_EXCEPTION, NULL, NULL).
+ * You must always call this function when you handle a caught error or
+ * equivalently you don't throw the error back to the caller.
+ *
+ * @author Marco Canini <marco@xaraya.com>
+ * @access public
+ * @return void
+ * @deprec 2004-04-01
+ */
+function xarExceptionFree()
+{
+    xarErrorFree();
+} 
+
+/**
+* Handles the current error
+ *
+ * You must always call this function when you handle a caught error.
+ *
+ * @author Marco Canini <marco@xaraya.com>
+ * @access public
+ * @return void
+ * @deprec 2004-04-01
+ */
+function xarExceptionHandled()
+{
+    xarErrorHandled();
+}
+
+/**
+* Renders the current error
+ *
+ * Returns a string formatted according to the $format parameter that provides all the information
+ * available on current error.
+ * If there is no error currently raised an empty string is returned.
+ *
+ * @author Marco Canini <marco@xaraya.com>
+ * @access public
+ * @param format string one of template or plain
+ * @param stacktype string one of CORE or ERROR
+ * @return string the string representing the raised error
+ * @deprec 2004-04-01
+ */
+function xarExceptionRender($format)
+{
+    return xarErrorRender($format);
+}    // deprecated
+
 ?>

@@ -104,11 +104,6 @@ function xarError__shutdown_handler()
  * @param value error object
  * @return void
  */
-function xarExceptionSet($major, $errorID, $value = NULL)
-{
-    xarErrorSet($major, $errorID, $value);
-}    // deprecated
-
 function xarErrorSet($major, $errorID, $value = NULL)
 {
     global $ErrorStack;
@@ -183,11 +178,6 @@ function xarErrorSet($major, $errorID, $value = NULL)
  * @access public
  * @return integer the major value of raised error
  */
-function xarExceptionMajor()
-{
-    return xarCurrentErrorType();
-}    // deprecated
-
 function xarCurrentErrorType()
 {
     global $ErrorStack;
@@ -195,22 +185,6 @@ function xarCurrentErrorType()
     $err = $ErrorStack->peek();
     return $err->getMajor();
 }
-
-/**
- * Gets the identifier of current error
- *
- * Returns the error identifier corresponding to the current error.
- * If invoked when no error was raised, a void value is returned.
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access public
- * @return string the error identifier
- * @deprec 2004-04-01
- */
-function xarExceptionId()
-{
-    return xarCurrentErrorID();
-} 
 
 /**
  * Gets the identifier of current error
@@ -236,22 +210,6 @@ function xarCurrentErrorID()
  * Returns the value corresponding to the current error.
  * If invoked when no error or an error for which there is no associated information was raised, a void value is returned.
  *
- * @author Marco Canini <marco@xaraya.com>
- * @access public
- * @return mixed error value object
- * @deprec 2004-04-01
- */
-function xarExceptionValue()
-{
-    return xarCurrentError();
-}    // deprecated
-
-/**
- * Gets the current error object
- *
- * Returns the value corresponding to the current error.
- * If invoked when no error or an error for which there is no associated information was raised, a void value is returned.
- *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @return mixed error value object
@@ -261,23 +219,6 @@ function xarCurrentError()
     global $ErrorStack;
     if ($ErrorStack->isempty()) return false;
     return $ErrorStack->peek();
-}
-
-/**
- * Resets current error status
- *
- * xarErrorFree is a shortcut for xarErrorSet(XAR_NO_EXCEPTION, NULL, NULL).
- * You must always call this function when you handle a caught error or
- * equivalently you don't throw the error back to the caller.
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access public
- * @return void
- * @deprec 2004-04-01
- */
-function xarExceptionFree()
-{
-    xarErrorFree();
 }
 
 /**
@@ -304,21 +245,6 @@ function xarErrorFree()
  *
  * @author Marco Canini <marco@xaraya.com>
  * @access public
- * @return void
- * @deprec 2004-04-01
- */
-function xarExceptionHandled()
-{
-    xarErrorHandled();
-}
-
-/**
- * Handles the current error
- *
- * You must always call this function when you handle a caught error.
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access public
  * @return voidx
  */
 function xarErrorHandled()
@@ -331,25 +257,6 @@ function xarErrorHandled()
     if (!$ErrorStack->isempty())
     $ErrorStack->pop();
 }
-
-/**
- * Renders the current error
- *
- * Returns a string formatted according to the $format parameter that provides all the information
- * available on current error.
- * If there is no error currently raised an empty string is returned.
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access public
- * @param format string one of template or plain
- * @param stacktype string one of CORE or ERROR
- * @return string the string representing the raised error
- * @deprec 2004-04-01
- */
-function xarExceptionRender($format)
-{
-    return xarErrorRender($format);
-}    // deprecated
 
 /**
  * Renders the current error
