@@ -22,7 +22,6 @@
  * @access protected
  * @global array xarDB_systemArgs
  * @global object dbconn database connection object
- * @global integer ADODB_FETCH_MODE array fectching by associative or numeric keyed arrays
  * @global array xarTables database tables used by Xaraya
  * @param string args[databaseType] database type to use
  * @param string args[databaseHost] database hostname
@@ -68,8 +67,7 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
         //        we can't right now
         xarCore_die("xarDB_init: Failed to connect to $dbType://$dbUname@$dbHost/$dbName, error message: " . $dbconn->ErrorMsg());
     }
-    
-    $GLOBALS['ADODB_FETCH_MODE'] = ADODB_FETCH_NUM;
+    $dbconn->SetFetchMode(ADODB_FETCH_NUM);
 
     // force oracle to a consistent date format for comparison methods later on
     // FIXME: <mrb> this doesn't belong here
