@@ -66,6 +66,7 @@ if (empty($step)){
             xarModSetVar('themes', 'selsort', 'namedesc');
             xarModSetVar('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" style="border:0px;" /></a>');
             xarModSetVar('themes', 'ShowTemplates', 0);
+            xarModSetVar('comments','CollapsedBranches',serialize(array()));
 
 
             // Modules
