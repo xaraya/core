@@ -28,9 +28,9 @@
 
     // Count number of poll answers
     $query = 'SELECT COUNT(*) FROM ' . $table_pollanswers;
-    $result =& $dbconn->Execute($query);
+    $result =& $dbimport->Execute($query);
     if (!$result) {
-        die("Oops, count of " . $table_pollanswers . " failed : " . $dbconn->ErrorMsg());
+        die("Oops, count of " . $table_pollanswers . " failed : " . $dbimport->ErrorMsg());
     } 
     $pollcount = $result->fields[0];
     $result->Close();
@@ -45,9 +45,9 @@
               FROM   $table_pollanswers
               ORDER BY qid ASC, aid ASC";
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbimport->Execute($query);
     if (!$result) {
-        die("Oops, select from " . $table_pollanswers . "  failed : " . $dbconn->ErrorMsg());
+        die("Oops, select from " . $table_pollanswers . "  failed : " . $dbimport->ErrorMsg());
     }
 
     $num = 1;

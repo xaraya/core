@@ -65,10 +65,14 @@
     
     // Because the users table could contain a large number of users (+200,000),
     // create a new table to store the Slashcode and Xaraya user ids.
+    // Note: we'll create this in the Slashcode database, so we can use table joins afterwards
 
-    // In case the topics_tree table exits, drop the table
+    $dbtype = xarModGetVar('installer','dbtype');
+    $importdbtype = xarModGetVar('installer','importdbtype');
+
+    // In case the userids table exits, drop the table
     if (empty($startnum)) {
-        $dbconn->Execute("DROP TABLE " . $table_userids);
+        $dbimport->Execute("DROP TABLE " . $table_userids);
 
         // Create topic tree table
         $fields = array(
@@ -77,18 +81,18 @@
         );
 
         // Create the table DDL
-        $query = xarDBCreateTable($table_userids,$fields);
+        $query = xarDBCreateTable($table_userids,$fields,$importdbtype);
         if (empty($query)) {
             echo "Couldn't create query for table $table_userids<br/>\n";
             return; // throw back
         }
 
         // Pass the Table Create DDL to adodb to create the table
-        $dbconn->Execute($query);
+        $dbimport->Execute($query);
 
         // Check for an error with the database
-        if ($dbconn->ErrorNo() != 0) {
-            die("Oops, create of table " . $table_userids . " failed : " . $dbconn->ErrorMsg());
+        if ($dbimport->ErrorNo() != 0) {
+            die("Oops, create of table " . $table_userids . " failed : " . $dbimport->ErrorMsg());
         }
     }
     
@@ -103,13 +107,12 @@
 
     // Use different unix timestamp conversion function for
     // MySQL and PostgreSQL databases
-    $dbtype = xarModGetVar('installer','dbtype');
-    switch ($dbtype) {
+    switch ($importdbtype) {
         case 'mysql':
-                $dbfunction = "UNIX_TIMESTAMP($table_users_info.lastaccess)";
+            $dbfunction = "UNIX_TIMESTAMP($table_users_info.lastaccess)";
             break;
         case 'postgres':
-                $dbfunction = "DATE_PART('epoch',$table_users_info.lastaccess)";
+            $dbfunction = "DATE_PART('epoch',$table_users_info.lastaccess)";
             break;
         default:
             die("Unknown database type");
@@ -160,12 +163,12 @@
         $startnum = 0;
     }
     if ($usercount > $numitems) {
-        $result =& $dbconn->SelectLimit($query, $numitems, $startnum);
+        $result =& $dbimport->SelectLimit($query, $numitems, $startnum);
     } else {
-        $result =& $dbconn->Execute($query);
+        $result =& $dbimport->Execute($query);
     }
     if (!$result) {
-        die("Oops, select users failed : " . $dbconn->ErrorMsg());
+        die("Oops, select users failed : " . $dbimport->ErrorMsg());
     }
   
     // check if there's a dynamic object defined for users
@@ -200,19 +203,6 @@
                       array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
     }
     
-    // Check for userid array
-    /*
-    $users = xarModGetVar('installer', 'userid');
-    if (!empty($users)) {
-        $userid = unserialize($users);
-    } else {
-        $userid = array();
-        $userid[0] = _XAR_ID_UNREGISTERED; // Anonymous account
-        $userid[1] = _XAR_ID_UNREGISTERED; // Anonymous account
-        $userid[2] = _XAR_ID_UNREGISTERED + 1; // Admin account - VERIFY !
-    }
-    */
-
     $num = 0;
     while (!$result->EOF) {
         list($uid, 
@@ -345,7 +335,7 @@
 
         // Add user to the temporary userids table
         $query = "INSERT INTO $table_userids (slash_uid, xar_uid) VALUES (".$uid.",".$newuid.")";
-        $dbconn->Execute($query);
+        $dbimport->Execute($query);
     }
     
     $result->Close();
@@ -355,14 +345,14 @@
         xarErrorFree();
     }
     
-    //xarModSetVar('installer', 'userid', serialize($userid));
-    
     //echo "<strong>TODO : import user_data</strong><br/><br/>\n";
     
     echo '<a href="import_slashcode.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($usercount > $numitems && $startnum + $numitems < $usercount) {
         $startnum += $numitems;
         echo '<a href="import_slashcode.php?module=roles&step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - users ' . $startnum . '+ of ' . $usercount . '</a><br/>';
+        $nexturl = xarServerGetBaseURL() . 'import_slashcode.php?module=roles&step=' . $step . '&startnum=' . $startnum;
+
     } else {
         // Enable dynamicdata hooks for roles
         xarModAPIFunc('modules',
@@ -373,16 +363,16 @@
         // Add index for slash_uid
         $query = xarDBCreateIndex($table_userids,
                                   array('name'   => 'i_' . $table_userids,
-                                        'fields' => array('slash_uid')));
+                                        'fields' => array('slash_uid')),
+                                  $importdbtype);
         if (empty($query)) return; // throw back
-        $result = $dbconn->Execute($query);
+        $result = $dbimport->Execute($query);
         if (!isset($result)) return;
 
         echo '<a href="import_slashcode.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br/>';
     }
 
     // Optimize tables
-    $dbtype = xarModGetVar('installer','dbtype');
     switch ($dbtype) {
         case 'mysql':
             $query = 'OPTIMIZE TABLE ' . $tables['roles'];
@@ -390,8 +380,6 @@
             $query = 'OPTIMIZE TABLE ' . $tables['rolemembers'];
             $result =& $dbconn->Execute($query);
             $query = 'OPTIMIZE TABLE ' . $tables['dynamic_data'];
-            $result =& $dbconn->Execute($query);
-            $query = 'OPTIMIZE TABLE ' . $table_userids;
             $result =& $dbconn->Execute($query);
             break;
         case 'postgres':
@@ -401,10 +389,29 @@
             $result =& $dbconn->Execute($query);
             $query = 'VACUUM ANALYZE ' . $tables['dynamic_data'];
             $result =& $dbconn->Execute($query);
-            $query = 'VACUUM ANALYZE ' . $table_userids;
-            $result =& $dbconn->Execute($query);
             break;
         default:
             break;
     }
+    switch ($importdbtype) {
+        case 'mysql':
+            $query = 'OPTIMIZE TABLE ' . $table_userids;
+            $result =& $dbimport->Execute($query);
+            break;
+        case 'postgres':
+            $query = 'VACUUM ANALYZE ' . $table_userids;
+            $result =& $dbimport->Execute($query);
+            break;
+        default:
+            break;
+    }
+
+    // auto-step
+    if (!empty($nexturl)) {
+        flush();
+        echo "<script>
+document.location = '" . $nexturl . "'
+</script>";
+    }
+
 ?>

@@ -37,7 +37,11 @@ ob_start();
 $prefix = xarDBGetSystemTablePrefix();
 
 // Get and set the database type
-$dbtype  = xarCore_getSystemVar('DB.Type');
+$dbtype = xarDBGetType();
+$dbhost = xarDBGetHost();
+$dbname = xarDBGetName();
+$dbuser = '';
+$dbpass = '';
 xarModSetVar('installer','dbtype',$dbtype);
 
 // Set cached flag similar to install so that privileges are by-passed.
@@ -76,16 +80,47 @@ $table_submissions = 'submissions';
 $table_comments = 'comments';
 $table_discussions = 'discussions';
 
+// Check the import database configuration
+if (!isset($step)) {
+    $importdb = array();
+    if (!xarVarFetch('importdbtype', 'str', $importdb['databaseType'], NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if (!empty($importdb['databaseType'])) {
+        // get the import database information
+        if (!xarVarFetch('importdbhost', 'str', $importdb['databaseHost'], NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('importdbname', 'str', $importdb['databaseName'], NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('importdbuser', 'str', $importdb['userName'], NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('importdbpass', 'str', $importdb['password'], NULL, XARVAR_NOT_REQUIRED)) {return;}
+        xarModSetVar('installer','importdb',serialize($importdb));
+        xarModSetVar('installer','importdbtype',$dbtype);
+
+    } elseif (isset($importdb['databaseType'])) {
+        // reset the import database information
+        xarModSetVar('installer','importdb','');
+    }
+}
+$importdbserial = xarModGetVar('installer','importdb');
+if (!empty($importdbserial)) {
+    $importdb = unserialize($importdbserial);
+    $dbimport =& xarDBNewConn($importdb);
+    xarModSetVar('installer','importdbtype',$importdb['databaseType']);
+} else {
+    $dbimport =& $dbconn;
+    xarModSetVar('installer','importdbtype',$dbtype);
+}
+
 if (empty($step)) {
+    $showdbform = false;
+
     // Count number of users
     //$query = 'SELECT COUNT(uid) FROM ' . $table_users;
     // skip users with invalid password lengths
     $query = 'SELECT COUNT(uid) FROM ' . $table_users . ' WHERE LENGTH(passwd) = 32';
-    $result =& $dbconn->Execute($query);
+    $result =& $dbimport->Execute($query);
     if (!$result) {
-        echo("Oops, count of " . $table_users . " failed : " . $dbconn->ErrorMsg() . '<br/>');
+        echo("Oops, count of " . $table_users . " failed : " . $dbimport->ErrorMsg() . '<br/>');
         xarErrorHandled();
         $usercount = 0;
+        $showdbform = true;
     } else {
         $usercount = $result->fields[0];
         xarModSetVar('installer','usercount',$usercount);
@@ -94,11 +129,12 @@ if (empty($step)) {
 
     // Count number of stories
     $query = 'SELECT COUNT(stoid) FROM ' . $table_stories;
-    $result =& $dbconn->Execute($query);
+    $result =& $dbimport->Execute($query);
     if (!$result) {
-        echo("Oops, count of " . $table_stories . " failed : " . $dbconn->ErrorMsg() . '<br/>');
+        echo("Oops, count of " . $table_stories . " failed : " . $dbimport->ErrorMsg() . '<br/>');
         xarErrorHandled();
         $storycount = 0;
+        $showdbform = true;
     } else {
         $storycount = $result->fields[0];
         xarModSetVar('installer','storycount',$storycount);
@@ -107,11 +143,12 @@ if (empty($step)) {
 
     // Count number of submissions (these are also stories)
     $query = 'SELECT COUNT(subid) FROM ' . $table_submissions;
-    $result =& $dbconn->Execute($query);
+    $result =& $dbimport->Execute($query);
     if (!$result) {
-        echo("Oops, count of " . $table_submissions . " failed : " . $dbconn->ErrorMsg() . '<br/>');
+        echo("Oops, count of " . $table_submissions . " failed : " . $dbimport->ErrorMsg() . '<br/>');
         xarErrorHandled();
         $submissioncount = 0;
+        $showdbform = true;
     } else {
         $submissioncount = $result->fields[0];
         xarModSetVar('installer','submissioncount',$submissioncount);
@@ -120,11 +157,12 @@ if (empty($step)) {
 
     // Count number of comments
     $query = 'SELECT COUNT(cid) FROM ' . $table_comments;
-    $result =& $dbconn->Execute($query);
+    $result =& $dbimport->Execute($query);
     if (!$result) {
-        echo("Oops, count of " . $table_comments . " failed : " . $dbconn->ErrorMsg() . '<br/>');
+        echo("Oops, count of " . $table_comments . " failed : " . $dbimport->ErrorMsg() . '<br/>');
         xarErrorHandled();
         $commentcount = 0;
+        $showdbform = true;
     } else {
         $commentcount = $result->fields[0];
         xarModSetVar('installer','commentcount',$commentcount);
@@ -133,21 +171,111 @@ if (empty($step)) {
 
     // Count number of discussions
     $query = 'SELECT COUNT(id) FROM ' . $table_discussions;
-    $result =& $dbconn->Execute($query);
+    $result =& $dbimport->Execute($query);
     if (!$result) {
-        echo("Oops, count of " . $table_discussions . " failed : " . $dbconn->ErrorMsg() . '<br/>');
+        echo("Oops, count of " . $table_discussions . " failed : " . $dbimport->ErrorMsg() . '<br/>');
         xarErrorHandled();
         $discussioncount = 0;
+        $showdbform = true;
     } else {
         $discussioncount = $result->fields[0];
         xarModSetVar('installer','discussioncount',$discussioncount);
         $result->Close();
     }
+?>
 
+    <h3>Recommended usage</h3>
+    <ol>
+        <li>Install Xaraya with the 'Community Site' option</li>
+        <li>Initialize and activate the following modules :
+        <ul>
+            <li>categories</li>
+            <li>comments</li>
+            <li>hitcount</li>
+            <li>ratings (optional)</li>
+            <li>articles</li>
+            <li>polls (if you want to import those)</li>
+        </ul>
+        [do not modify the default privileges, hooks etc. yet]
+        </li>
+        <li><b>Backup your database!</b></li>
+        <li>Copy all of the import files found in ./tools/import/slashcode to your Xaraya html directory </li>
+        <li>Run import_slashcode.php.  Leave both Reset options checked.</li>
+        <li>Evaluate data.  If an error occurs or data is not correct, go back to step #1</li>
+        <li>Delete the import_slashcode*.php files</li>
+        <li>Crack open a cold beer</li>
+    </ol>
+
+<?php
+    if ($showdbform) {
+?>
+    <form method="POST" action="import_slashcode.php">
+    <h3>Slashcode database</h3>
+    <p>Note: fill in this form if your Slashcode data is not in the same database as your Xaraya site</p>
+    <table border="0" cellpadding="4">
+    <tr>
+        <td align="right">
+            Database Type
+        </td>
+        <td>
+            <select name="importdbtype" id="importdbtype">
+                <option value="">same database as Xaraya</option>
+                <option value="mysql">MySQL</option>
+                <option value="oci8">Oracle</option>
+                <option value="postgres">Postgres</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            Database Host
+        </td>
+        <td>
+            <input type="text" name="importdbhost" id="importdbhost" value="<?php echo $dbhost; ?>" size="30" />
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            Database Name
+        </td>
+        <td>
+            <input type="text" name="importdbname" id="importdbname" value="<?php echo $dbname; ?>" size="30" />
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            Username
+        </td>
+        <td>
+            <input type="text" name="importdbuser" id="importdbuser" value="" size="30" />
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            Password
+        </td>
+        <td>
+            <input type="password" name="importdbpass" id="importdbpass" value="" size="30" />
+        </td>
+    </tr>
+    <tr>
+        <td colspan=2 align="middle">
+            <input type="submit" value=" Configure Database ">
+        </td>
+    </tr>
+    </table>
+    </form>
+
+<?php
+    } else {
     // only show this when we start
 ?>
-    Requirement for use : The Slashcode data and the Xaraya data HAVE to be in the same database for this script to work and they HAVE to be using a different prefix.  We read the Slashcode data and use the Xaraya API to import the data into Xaraya.  In order to do this we must be reading from the same database.  Easiest solution is to copy your Slashcode data into the same database as your Xaraya installation.
+    <form method="POST" action="import_slashcode.php">
+        <input type="hidden" name="importdbtype" value="" />
+        <input type="submit" value=" Reset Database Configuration ">
+    </form>
     <p></p>
+    <h3>Import settings</h3>
     <form method="POST" action="import_slashcode.php">
     <table border="0" cellpadding="4">
     <tr><td align="right">Reset corresponding Xaraya data ?</td><td>
@@ -170,28 +298,10 @@ if (empty($step)) {
     <input type="hidden" name="step" value="1">
     <input type="hidden" name="module" value="roles">
     </form>
-    Recommended usage :<br /><ol>
-    <li>Install Xaraya with the 'Community Site' option</li>
-    <li>Initialize and activate the following modules :<ul>
-    <li>categories</li>
-    <li>comments</li>
-    <li>hitcount</li>
-    <li>ratings (optional)</li>
-    <li>articles</li>
-    <li>polls (if you want to import those)</li>
-    </ul>
-    [do not modify the default privileges, hooks etc. yet]
-    </li>
-    <li><b>Backup your database!</b></li>
-    <li>Copy all of the import files found in ./tools/import/slashcode to your Xaraya html directory </li>
-    <li>Run import_slashcode.php.  Leave both Reset options checked.</li>
-    <li>Evaluate data.  If an error occurs or data is not correct, go back to step #1</li>
-    <li>Delete the import_slashcode*.php files</li>
-    <li>Crack open a cold beer</li>
-</ol>
 
 <?php
-    } // if (empty($step))
+    } // if ($showdbform)
+} // if (empty($step))
 
     if ($step == 1 && !isset($startnum)) {
         if (!isset($reset)) { $reset = 0; }

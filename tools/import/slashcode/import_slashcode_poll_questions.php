@@ -32,9 +32,9 @@
     $table_pollquestions = 'pollquestions';
 
     $query = 'SELECT COUNT(qid) FROM ' . $table_pollquestions;
-    $result =& $dbconn->Execute($query);
+    $result =& $dbimport->Execute($query);
     if (!$result) {
-        die("Oops, count of " . $table_pollquestions . " failed : " . $dbconn->ErrorMsg());
+        die("Oops, count of " . $table_pollquestions . " failed : " . $dbimport->ErrorMsg());
     }
     $count = $result->fields[0];
     $result->Close();
@@ -62,13 +62,13 @@
 
     // Use different unix timestamp conversion function for
     // MySQL and PostgreSQL databases
-    $dbtype = xarModGetVar('installer','dbtype');
-    switch ($dbtype) {
+    $importdbtype = xarModGetVar('installer','importdbtype');
+    switch ($importdbtype) {
         case 'mysql':
-                $dbfunction = "UNIX_TIMESTAMP($table_pollquestions.date)";
+            $dbfunction = "UNIX_TIMESTAMP($table_pollquestions.date)";
             break;
         case 'postgres':
-                $dbfunction = "DATE_PART('epoch',$table_pollquestions.date)";
+            $dbfunction = "DATE_PART('epoch',$table_pollquestions.date)";
             break;
         default:
             die("Unknown database type");
@@ -87,9 +87,9 @@
                      polltype
               FROM   $table_pollquestions";
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbimport->Execute($query);
     if (!$result) {
-        die("Oops, select polls failed : " . $dbconn->ErrorMsg());
+        die("Oops, select polls failed : " . $dbimport->ErrorMsg());
     }
 
     // mapping old-new poll id

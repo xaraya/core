@@ -29,10 +29,14 @@
     
     // Because the comments table could contain a large number of entries (+100,000),
     // create a new table to store the Slashcode and Xaraya comment ids.
+    // Note: we'll create this in the Slashcode database, so we can use table joins afterwards
+
+    $dbtype = xarModGetVar('installer','dbtype');
+    $importdbtype = xarModGetVar('installer','importdbtype');
 
     // In case the commentids table exits, drop the table
     if (empty($startnum)) {
-        $dbconn->Execute("DROP TABLE " . $table_commentids);
+        $dbimport->Execute("DROP TABLE " . $table_commentids);
 
         // Create topic tree table
         $fields = array(
@@ -41,26 +45,27 @@
         );
 
         // Create the table DDL
-        $query = xarDBCreateTable($table_commentids,$fields);
+        $query = xarDBCreateTable($table_commentids,$fields,$importdbtype);
         if (empty($query)) {
             echo "Couldn't create query for table $table_commentids<br/>\n";
             return; // throw back
         }
 
         // Pass the Table Create DDL to adodb to create the table
-        $dbconn->Execute($query);
+        $dbimport->Execute($query);
 
         // Check for an error with the database
-        if ($dbconn->ErrorNo() != 0) {
-            die("Oops, create of table " . $table_commentids . " failed : " . $dbconn->ErrorMsg());
+        if ($dbimport->ErrorNo() != 0) {
+            die("Oops, create of table " . $table_commentids . " failed : " . $dbimport->ErrorMsg());
         }
 
         // Add index for slash_cid
         $query = xarDBCreateIndex($table_commentids,
                                   array('name'   => 'i_' . $table_commentids,
-                                        'fields' => array('slash_cid')));
+                                        'fields' => array('slash_cid')),
+                                  $importdbtype);
         if (empty($query)) return; // throw back
-        $result = $dbconn->Execute($query);
+        $result = $dbimport->Execute($query);
         if (!isset($result)) return;
     }
 
@@ -75,8 +80,7 @@
 
     // Use different unix timestamp conversion function for
     // MySQL and PostgreSQL databases
-    $dbtype = xarModGetVar('installer','dbtype');
-    switch ($dbtype) {
+    switch ($importdbtype) {
         case 'mysql':
                 $dbfunction = "UNIX_TIMESTAMP($table_comments.date)";
             break;
@@ -111,12 +115,12 @@
         $startnum = 0;
     }
     if ($commentcount > $numitems) {
-        $result =& $dbconn->SelectLimit($query, $numitems, $startnum);
+        $result =& $dbimport->SelectLimit($query, $numitems, $startnum);
     } else {
-        $result =& $dbconn->Execute($query);
+        $result =& $dbimport->Execute($query);
     }
     if (!$result) {
-        die("Oops, select comments failed : " . $dbconn->ErrorMsg());
+        die("Oops, select comments failed : " . $dbimport->ErrorMsg());
     }
     if ($reset && $startnum == 0) {
         $dbconn->Execute("DELETE FROM " . $tables['comments']);
@@ -167,9 +171,9 @@
         }
 
         if (!empty($pid)) {
-            $result2 =& $dbconn->Execute($query2,array((int)$pid));
+            $result2 =& $dbimport->Execute($query2,array((int)$pid));
             if (!$result2) {
-                die("Oops, could not select comment id from " . $table_commentids . ": " . $dbconn->ErrorMsg());
+                die("Oops, could not select comment id from " . $table_commentids . ": " . $dbimport->ErrorMsg());
             } 
             if (!$result->EOF) {
                 $pid = $result2->fields[0];
@@ -207,9 +211,9 @@
             flush();
         }
 
-        $result3 =& $dbconn->Execute($query3,array((int)$newcid,(int)$cid));
+        $result3 =& $dbimport->Execute($query3,array((int)$newcid,(int)$cid));
         if (!$result3) {
-            die("Oops, could not insert comment id in " . $table_commentids . ": " . $dbconn->ErrorMsg());
+            die("Oops, could not insert comment id in " . $table_commentids . ": " . $dbimport->ErrorMsg());
         } 
         $num++;
         $result->MoveNext();
@@ -226,19 +230,26 @@
     }
 
     // Optimize tables
-    $dbtype = xarModGetVar('installer','dbtype');
     switch ($dbtype) {
         case 'mysql':
             $query = 'OPTIMIZE TABLE ' . $tables['comments'];
-            $result =& $dbconn->Execute($query);
-            $query = 'OPTIMIZE TABLE ' . $table_commentids;
             $result =& $dbconn->Execute($query);
             break;
         case 'postgres':
             $query = 'VACUUM ANALYZE ' . $tables['comments'];
             $result =& $dbconn->Execute($query);
+            break;
+        default:
+            break;
+    }
+    switch ($importdbtype) {
+        case 'mysql':
+            $query = 'OPTIMIZE TABLE ' . $table_commentids;
+            $result =& $dbimport->Execute($query);
+            break;
+        case 'postgres':
             $query = 'VACUUM ANALYZE ' . $table_commentids;
-            $result =& $dbconn->Execute($query);
+            $result =& $dbimport->Execute($query);
             break;
         default:
             break;

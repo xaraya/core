@@ -94,9 +94,9 @@
               FROM $table_sections
               ORDER BY $table_sections.id ASC";
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbimport->Execute($query);
     if (!$result) {
-        die("Oops, select all sections from " . $table_sections . " failed : " . $dbconn->ErrorMsg());
+        die("Oops, select all sections from " . $table_sections . " failed : " . $dbimport->ErrorMsg());
     }
 
     // Loop through result
@@ -129,8 +129,10 @@
     // To make it easier to retrieve the values from the tables topics and topic_parents,
     // we'll create a new table and store the values that we need in that table.
 
+    $importdbtype = xarModGetVar('installer','importdbtype');
+
     // In case the topics_tree table exits, drop the table
-    $dbconn->Execute("DROP TABLE " . $table_topics_tree);
+    $dbimport->Execute("DROP TABLE " . $table_topics_tree);
 
     // Create topic tree table
     $fields = array(
@@ -142,7 +144,7 @@
 
     // Create the table DDL
 
-    $query = xarDBCreateTable($table_topics_tree,$fields);
+    $query = xarDBCreateTable($table_topics_tree,$fields,$importdbtype);
 
     if (empty($query)) {
         echo "Couldn't create query for table $table_topics_tree<br/>\n";
@@ -150,11 +152,11 @@
     }
 
     // Pass the Table Create DDL to adodb to create the table
-    $dbconn->Execute($query);
+    $dbimport->Execute($query);
 
     // Check for an error with the database
-    if ($dbconn->ErrorNo() != 0) {
-        die("Oops, create of table " . $table_topics_tree . " failed : " . $dbconn->ErrorMsg());
+    if ($dbimport->ErrorNo() != 0) {
+        die("Oops, create of table " . $table_topics_tree . " failed : " . $dbimport->ErrorMsg());
     }
 
 // CHECKME: the same topic may appear more than once ?!
@@ -169,9 +171,9 @@
               LEFT JOIN $table_topic_parents
               ON $table_topics.tid = $table_topic_parents.tid";
   
-    $result =& $dbconn->Execute($query);
+    $result =& $dbimport->Execute($query);
     if (!$result) {
-        die("Oops, insert into " . $table_topics_tree . " failed : " . $dbconn->ErrorMsg());
+        die("Oops, insert into " . $table_topics_tree . " failed : " . $dbimport->ErrorMsg());
     }
 
     // Set parent_tid to 0 where parent_tid is null to allow sorting for Postgres too (NULL comes later numbers there)
@@ -179,9 +181,9 @@
                  SET $table_topics_tree.xar_parent_tid=0
                WHERE $table_topics_tree.xar_parent_tid IS NULL";
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbimport->Execute($query);
     if (!$result) {
-        die("Oops, update of " . $table_topics_tree . " failed : " . $dbconn->ErrorMsg());
+        die("Oops, update of " . $table_topics_tree . " failed : " . $dbimport->ErrorMsg());
     }
     
     // Get all of the topics from the topics tree ordered by parent_tid then by tid,
@@ -193,9 +195,9 @@
               FROM   $table_topics_tree
               ORDER BY $table_topics_tree.xar_parent_tid ASC, $table_topics_tree.xar_tid ASC";
   
-    $result =& $dbconn->Execute($query);
+    $result =& $dbimport->Execute($query);
     if (!$result) {
-        die("Oops, select parent topics from " . $table_topics_tree . " failed : " . $dbconn->ErrorMsg());
+        die("Oops, select parent topics from " . $table_topics_tree . " failed : " . $dbimport->ErrorMsg());
     }
 
     $categories = array();

@@ -20,17 +20,19 @@
 
     // Drop temporary topics table
     $table_topics_tree = xarDBGetSiteTablePrefix() . '_installer_topics';
-    $dbconn->Execute("DROP TABLE " . $table_topics_tree);
+    $dbimport->Execute("DROP TABLE " . $table_topics_tree);
 
     // Drop temporary userids table
     $table_userids = xarDBGetSiteTablePrefix() . '_installer_userids';
-    $dbconn->Execute("DROP TABLE " . $table_userids);
+    $dbimport->Execute("DROP TABLE " . $table_userids);
 
     // Drop temporary commentids table
     $table_commentids = xarDBGetSiteTablePrefix() . '_installer_commentids';
-    $dbconn->Execute("DROP TABLE " . $table_commentids);
+    $dbimport->Execute("DROP TABLE " . $table_commentids);
 
     xarModDelVar('installer','dbtype');
+    xarModDelVar('installer','importdbtype');
+    xarModDelVar('installer','importdb');
     xarModDelVar('installer','reset');
     xarModDelVar('installer','resetcat');
     xarModDelVar('installer','userimport');

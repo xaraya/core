@@ -26,9 +26,9 @@
     $table_discussions = 'discussions';
 
     $query = 'SELECT COUNT(id) FROM ' . $table_discussions . ' WHERE stoid > 0';
-    $result =& $dbconn->Execute($query);
+    $result =& $dbimport->Execute($query);
     if (!$result) {
-        die("Oops, count of " . $table_discussions . " failed : " . $dbconn->ErrorMsg());
+        die("Oops, count of " . $table_discussions . " failed : " . $dbimport->ErrorMsg());
     }
     $count = $result->fields[0];
     $result->Close();

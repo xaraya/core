@@ -34,13 +34,13 @@
 
     // Use different unix timestamp conversion function for
     // MySQL and PostgreSQL databases
-    $dbtype = xarModGetVar('installer','dbtype');
-    switch ($dbtype) {
+    $importdbtype = xarModGetVar('installer','importdbtype');
+    switch ($importdbtype) {
         case 'mysql':
-                $dbfunction = "UNIX_TIMESTAMP($table_submissions.time)";
+            $dbfunction = "UNIX_TIMESTAMP($table_submissions.time)";
             break;
         case 'postgres':
-                $dbfunction = "DATE_PART('epoch',$table_submissions.time)";
+            $dbfunction = "DATE_PART('epoch',$table_submissions.time)";
             break;
         default:
             die("Unknown database type");
@@ -66,12 +66,12 @@
         $startnum = 0;
     }
     if ($submissioncount > $numitems) {
-        $result =& $dbconn->SelectLimit($query, $numitems, $startnum);
+        $result =& $dbimport->SelectLimit($query, $numitems, $startnum);
     } else {
-        $result =& $dbconn->Execute($query);
+        $result =& $dbimport->Execute($query);
     }
     if (!$result) {
-        die("Oops, select stories failed : " . $dbconn->ErrorMsg());
+        die("Oops, select stories failed : " . $dbimport->ErrorMsg());
     }
 
     $num = 1;
