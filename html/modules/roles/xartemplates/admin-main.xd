@@ -65,7 +65,7 @@
             <p><xar:mlstring>The roles module allows the use of the User Menu hook which will allow users to set values to further enhance their visit.</xar:mlstring></p>
         </div>
         <div class="xar-norm-outline xar-accent" style="text-align: center; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-            <p><xar:mlstring>Extended information about this module can be found in</xar:mlstring> <a href="http://docs.xaraya.com/docs/rfcs/rfc0030.html"><xar:mlstring>RFC-30</xar:mlstring></a>.</p>
+            <p><xar:mlstring>Extended information about this module can be found in</xar:mlstring> <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html"><xar:mlstring>RFC-30</xar:mlstring></a>.</p>
         </div>
     </div>
 </div>
