@@ -43,6 +43,8 @@ class xarCSS
     var $debug      = false;        // true == debug mode enabled
     var $parse      = false;        // true == parse mode enabled
     var $suppress   = false;        // true == this css is suppressed
+    
+    var $legacy     = true;         // true == legacy pre-csslib support
 
     var $language   = 'html';       // only (x)html compliant css inclusion is supported out of the box
 
@@ -85,7 +87,6 @@ class xarCSS
         // subclass it instead and let the polymorphism to do its job :-) <andyv>
         $msg = xarML("you have illegally instantiated class: ") . get_class (&$this);
         $this->_error($msg);
-//        $this->set_fileext('css'); // assume static methods
     }
 
     // PUBLIC METHODS
@@ -123,11 +124,6 @@ class xarCSS
     {
         $this->type = $type;
     }
-
-//     function set_type($type)
-//     {
-//         $this->type = $type;
-//     }
 
     function set_type_text()
     {
@@ -295,7 +291,6 @@ class xarCSS
     // output css inclusion string for various languages
     function get_output()
     {
-//        echo var_dump($this);exit;
         // only (x)html supported ATM
         if($this->language == 'html') {
             $htmlstr = $this->_htmltag();
@@ -303,11 +298,13 @@ class xarCSS
             $htmlstr = '';
         }
 
-        // that's all we care to do ATM, and rather quietly too
-        $GLOBALS['xarTpl_additionalStyles'][$this->comptype][$this->compname][] = $htmlstr;
+        $cssarray = self::_handle_cssdata_var();
+        $cssarray["$this->comptype"]["$this->compname"][] = $htmlstr;
+        self::_handle_cssdata_var($cssarray);
 
         // return the result only if debug is on
         if($this->debug) return $htmlstr;
+        
     }
 
     // PRIVATE (and PROTECTED) UTILITY METHODS
@@ -363,13 +360,35 @@ class xarCSS
         return $tag->render();
     }
 
+    // handle consolidated static css data array
+    // to use static method var in a consistent way (between php4 and 5) we seem to need this helper
+    function _handle_cssdata_var($add_data = null)
+    {
+        static $cssdata = array();
+
+        if(!$add_data) {
+            return $cssdata;
+        }
+        $cssdata = $add_data;
+    }
+
     // PROTECTED HELPERS
     function _error($msg = null)
     {
         if(isset($msg)) xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
     }
 
-    // toggle debug and parse modes dynamically
+    // toggle legacy, debug and parse modes dynamically
+    function _legacy()
+    {
+        $this->legacy = true;
+    }
+    
+    function _nolegacy()
+    {
+        $this->legacy = false;
+    }
+    
     function _debug()
     {
         $this->debug = true;
@@ -389,7 +408,7 @@ class xarCSS
     {
         $this->parse = false;
     }
-
 }
+
 
 ?>

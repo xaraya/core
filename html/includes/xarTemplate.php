@@ -893,7 +893,10 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
 
     $tpl = (object) null; // Create an object to hold the 'specials'
     $tpl->pageTitle = xarTplGetPageTitle();
-    // $tpl->additionalStyles = $GLOBALS['xarTpl_additionalStyles'];
+    // leaving it ON here for pure legacy support, css classlib in themes mod must have legacy enabled to support it
+    // TODO: remove whenever the legacy can be dropped <andy>
+    $tpl->additionalStyles = $GLOBALS['xarTpl_additionalStyles'];
+    
     $tplData = array(
         'tpl'                      => $tpl,
         '_bl_mainModuleOutput'     => $mainModuleOutput,

@@ -24,7 +24,10 @@
  */ 
 function themes_cssapi_rendercss($args)
 {
-    return "echo xarModFunc('themes', 'user', 'rendercssratruntime');";
+    // return "echo xarModFunc('themes', 'user', 'rendercssratruntime');";
+    $args['tagtype'] = 'render';
+    $args['csscomponent'] = 'theme';
+    return xarModFunc('themes', 'user', 'handlecsstagsatruntime', $args);
 }
 
 ?>

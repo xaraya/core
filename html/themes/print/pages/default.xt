@@ -5,8 +5,8 @@
     <head>
         <title>#$tpl:pageTitle#</title>
         <base href="&xar-baseurl;index.php" />
-        #xarTplGetStyles()#
         <style type="text/css">@import url(&xar-baseurl;#xarTplGetThemeDir()#/style/style.css); </style>
+        <xar:additional-styles />
     </head>
     <body>
     <div id="main">
