@@ -63,7 +63,7 @@
 <xar:if condition="$showlogout">
     <ul class="xar-menu-section">
         <li class="xar-menu-item">
-            <a title="#xarML('Logout as administrator')#" href="#$logouturl#">
+            <a title="#xarML('Logout as administrator')#" href="&xar-modurl-adminpanels-admin-confirmlogout;">
                 <xar:mlstring>Admin logout</xar:mlstring>
             </a> 
         </li>

@@ -111,8 +111,6 @@ function adminpanels_adminmenublock_display($blockinfo)
         $showlogout = true;
     }
     
-    $logouturl = xarModURL('adminpanels' ,'admin', 'confirmlogout', array());
-
     // Get current URL for later comparisons because we need to compare
     // xhtml compliant url, we fetch the default 'XML'-formatted URL.
     $currenturl = xarServerGetCurrentURL();
@@ -178,7 +176,6 @@ function adminpanels_adminmenublock_display($blockinfo)
             $data = array(
                 'adminmods'     => $adminmods,
                 'menustyle'     => $menustyle,
-                'logouturl'     => $logouturl,
                 'marker'        => $marker
             );
             // this should do for now
@@ -259,7 +256,6 @@ function adminpanels_adminmenublock_display($blockinfo)
             $template = 'verticallistbycats';
             $data = array(
                 'catmods'       => $catmods,
-                'logouturl'     => $logouturl,
                 'marker'        => $marker
             );
             break;
@@ -279,7 +275,6 @@ function adminpanels_adminmenublock_display($blockinfo)
                     'adminmods'     => $adminmods = array(),
                     'indlinks'      => $indlinks ='',
                     'menustyle'     => $menustyle,
-                    'logouturl'     => $logouturl = xarModURL('adminpanels', 'admin', 'modifyconfig'),
                     'marker'        => $marker
                 );
                 break;
@@ -299,7 +294,6 @@ function adminpanels_adminmenublock_display($blockinfo)
                     'adminmods'     => $adminmods = array(),
                     'indlinks'      => $indlinks ='',
                     'menustyle'     => $menustyle,
-                    'logouturl'     => $logouturl = xarModURL('adminpanels', 'admin', 'modifyconfig'),
                     'marker'        => $marker
                 );
                 break;
