@@ -35,6 +35,7 @@ function roles_user_usermenu($args)
 
         case 'formbasic':
             $properties = null;
+            $withupload = (int) FALSE;
             if (xarModIsAvailable('dynamicdata')) {
                 // get the Dynamic Object defined for this module (and itemtype, if relevant)
                 $object =& xarModAPIFunc('dynamicdata','user','getobject',
@@ -44,7 +45,6 @@ function roles_user_usermenu($args)
                     $properties =& $object->getProperties();
                 }
 
-                $withupload = (int) FALSE;
                 if (is_array($properties)) {
                     foreach ($properties as $key => $prop) {
                         if (isset($prop->upload) && $prop->upload == TRUE) {
@@ -61,11 +61,26 @@ function roles_user_usermenu($args)
             $email = xarUserGetVar('email');
             $authid = xarSecGenAuthKey();
             $submitlabel = xarML('Submit');
+            $item['module'] = 'roles';
+            $hooks = xarModCallHooks('item','modify',$uid,$item);
+            if (empty($hooks)) {
+                $hooks = '';
+            } elseif (is_array($hooks)) {
+                if (isset($hooks['dynamicdata'])) {
+                    unset($hooks['dynamicdata']);
+                }
+                $hooks = join('',$hooks);
+            }
+
+            if (empty($hooks) || !is_string($hooks)) {
+                $hooks = '';
+            }
             $data = xarTplModule('roles','user', 'user_menu_form',
                                   array('authid'       => $authid,
                                   'withupload'   => $withupload,
                                   'name'         => $name,
                                   'uname'        => $uname,
+                                  'hooks'        => $hooks,
                                   'emailaddress' => $email,
                                   'submitlabel'  => $submitlabel,
                                   'uid'          => $uid));

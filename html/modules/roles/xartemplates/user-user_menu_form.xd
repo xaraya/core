@@ -52,6 +52,13 @@
 			</tr>
 	    </xar:foreach>
 	</xar:if>
+<xar:if condition="!empty($hooks)">
+        <tr>
+            <td colspan="2">
+                #$hooks#
+            </td>
+        </tr>
+</xar:if>
         <tr>
             <td colspan="2" style="text-align: center;"><br />
                 <input type="submit" value="#$submitlabel#"  />
