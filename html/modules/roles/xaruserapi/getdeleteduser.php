@@ -72,7 +72,7 @@ function roles_userapi_getdeleteduser($args)
 
     if (!empty($uid) && is_numeric($uid)) {
         $query .= " AND xar_uid = ?";
-        $bindvars[] = $uid
+        $bindvars[] = $uid;
     } elseif (!empty($name)) {
         $query .= " AND xar_name = ?";
         $bindvars[] = $name;
