@@ -14,7 +14,7 @@
  */
 function variable_validations_array (&$subject, $parameters) {
 
-    if (!is_array($subject)) {
+    if (!is_array($subject) && ($subject !== NULL)) {
         $msg = xarML('Not an array: "#(1)"', $subject);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
