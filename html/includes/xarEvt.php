@@ -239,7 +239,7 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
     // We can use xarModAPILoad. This will create another event ModAPILoad 
     // if the api wasn't loaded yet. The event will *not* be created if the
     // API was already loaded. However, this would mean that all module APIs
-    // are always loaded, which is a bit too much, so we try it another way
+    // are always loaded, which is a bit too much, so we should try it another way
 
     // First issue it to the specific event handler
     // Function naming: module_userapievt_OnEventName
