@@ -20,8 +20,7 @@
             <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">#$pname#</a>
 			</b> 
 			&nbsp;&nbsp;
-			<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#"
-			 title="Show this User's Privileges"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
+			<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#" title="Show this User's Privileges"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
 		</td>
     </tr>
 </table>
@@ -141,7 +140,7 @@
 			</td>
 			<td>
 				Module: 
-				<select name="pmodule" id="pmodule" size="1" tabindex="4" onChange="javascript:document.forms[0].submit();">
+				<select name="pmodule" id="pmodule" size="1" tabindex="4" onChange="javascript:submit();">
 					<xar:loop name="$allmodules">
 						<xar:if condition="$name eq $pmodule">
 							<option value="#$name#" selected="selected">#$name#</option>
