@@ -100,7 +100,7 @@ function adminpanels_adminmenublock_display($blockinfo)
     // TODO: pick these up from block settings.
     $menustyle = xarModGetVar('adminpanels', 'menustyle');
     // TODO: prep for display in the template, not here.
-    $logoutlabel = xarVarPrepForDisplay(xarML('admin logout'));
+    $logoutlabel = xarVarPrepForDisplay(xarML('Admin Logout'));
     $logouturl = xarModURL('adminpanels' ,'admin', 'confirmlogout', array());
 
     // Get current URL for later comparisons
