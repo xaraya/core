@@ -414,7 +414,7 @@ function xarRequestGetInfo()
         // IIS fix
         && $path != xarServerGetVar('SCRIPT_NAME')) {
     // Note: we need to match anything that might be used as module params here too ! (without compromising security)
-        preg_match_all('|/([a-z0-9_ +-]+)|i', $path, $matches);
+        preg_match_all('|/([a-z0-9_ .+-]+)|i', $path, $matches);
         $params = $matches[1];
         if (count($params) > 0) {
             $modName = $params[0];
