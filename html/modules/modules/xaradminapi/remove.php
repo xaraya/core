@@ -37,12 +37,12 @@ function modules_adminapi_remove($args)
         $modinfo['state'] == XARMOD_STATE_MISSING_FROM_INACTIVE ||
         $modinfo['state'] == XARMOD_STATE_MISSING_FROM_ACTIVE ||
         $modinfo['state'] == XARMOD_STATE_MISSING_FROM_UPGRADED ) {
-        $query = "DELETE FROM $tables[modules]
-                  WHERE xar_regid = '" . xarVarPrepForStore($modinfo['regid']) . "'";
+        $query = "DELETE FROM " . $tables['modules'] .
+                  "WHERE xar_regid = " . xarVarPrepForStore($modinfo['regid']);
         $result =& $dbconn->Execute($query);
         if (!$result) return;
-        $query = "DELETE FROM $tables[system/module_states]
-                  WHERE xar_regid = " . xarVarPrepForStore($modinfo['regid']);
+        $query = "DELETE FROM " . $tables['system/module_states'] .
+                  "WHERE xar_regid = " . xarVarPrepForStore($modinfo['regid']);
         $result =& $dbconn->Execute($query);
         if (!$result) return;
     }
