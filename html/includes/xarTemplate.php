@@ -601,12 +601,12 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
     // If this request was the same as the last one, then return the cached pager details.
     // TODO: is there a better way of caching for each unique request?
     $request = md5($currentItem . ':' . $lastItem . ':' . $itemsPerPage . ':' . serialize($blockOptions));
-    if (xarVarGetCached('Pager.core', 'request') == $request) {
-        return xarVarGetCached('Pager.core', 'details');
+    if (xarCore_GetCached('Pager.core', 'request') == $request) {
+        return xarCore_GetCached('Pager.core', 'details');
     }
 
     // Record the values in this request.
-    xarVarSetCached('Pager.core', 'request', $request);
+    xarCore_SetCached('Pager.core', 'request', $request);
 
     // Max number of items in a block of pages.
     $itemsPerBlock = ($blockSize * $itemsPerPage);
@@ -729,7 +729,7 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
     }
 
     // Cache all the pager details.
-    xarVarSetCached('Pager.core', 'details', $data);
+    xarCore_SetCached('Pager.core', 'details', $data);
 
     return $data;
 }
@@ -771,12 +771,12 @@ function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $bl
     // Couple of cached values used in various pages.
     // It is unclear what these values are supposed to be used for.
     if ($data['prevblockpages'] > 0) {
-        xarVarSetCached('Pager.first', 'leftarrow', $data['firsturl']);
+        xarCore_SetCached('Pager.first', 'leftarrow', $data['firsturl']);
     }
 
     // Links for next block of pages.
     if ($data['nextblockpages'] > 0) {
-        xarVarSetCached('Pager.last', 'rightarrow', $data['lasturl']);
+        xarCore_SetCached('Pager.last', 'rightarrow', $data['lasturl']);
     }
 
     return trim(xarTplModule('base', 'pager', $template, $data));
