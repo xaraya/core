@@ -20,7 +20,7 @@
  * better control on config settings
  *
  */
-define('XARCORE_VERSION_NUM', '0.9.11');
+define('XARCORE_VERSION_NUM', '0.9.12');
 define('XARCORE_VERSION_ID',  'Xaraya');
 define('XARCORE_VERSION_SUB', 'adam_baum');
 
@@ -34,7 +34,7 @@ define('XARCORE_VERSION_SUB', 'adam_baum');
  * | SESSION        | ADODB                     |
  * | CONFIGURATION  | ADODB                     |
  * | USER           | SESSION, ADODB            |
- * | BLOCKS         | CONFIGURATION, ADODB      | 
+ * | BLOCKS         | CONFIGURATION, ADODB      |
  * | MODULES        | CONFIGURATION, ADODB      |
  * | EVENTS         | MODULES                   |
  * ----------------------------------------------
@@ -95,7 +95,7 @@ define('XARDBG_INACTIVE'         ,16);
 define('XAR_INCLUDE_ONCE'         , 1);
 define('XAR_INCLUDE_MAY_NOT_EXIST', 2);
 
-/* 
+/*
  * Miscelaneous
  */
 define('XARCORE_CONFIG_FILE', 'config.system.php');
@@ -134,14 +134,14 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     /*
      * Start the different subsystems
      */
-    
+
     /*
      * Load PHP Version Backwards Compatibility Library
      *
      */
     include 'includes/xarPHPCompat.php';
     xarPHPCompat::loadAll('includes/phpcompat');
-    
+
     /**
         * At this point we should be able to catch all low level errors, so we can start the debugger
      *
@@ -152,7 +152,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * XARDBG_EXCEPTIONS        debug exceptions
      * XARDBG_SQL               debug SQL statements
      * XARDBG_SHOW_PARAMS_IN_BT show parameters in the backtrace
-     * 
+     *
      * Flags can be OR-ed together
      */
     xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT );

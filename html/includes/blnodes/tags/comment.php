@@ -67,4 +67,3 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
         return false;
     }
 }
-?>
