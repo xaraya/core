@@ -550,33 +550,42 @@ class xarMasks
     function testprivileges($mask,$privilegeset,$pass)
     {
         $matched = false;
+
+        // Note : DENY rules override all others here...
+        foreach ($privilegeset['privileges'] as $privilege) {
+            if(XARDBG_TESTDENY && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
+                echo "<br />Comparing " . $privilege->present() . " against " . $mask->present() . " <b>for deny</b>. ";
+                if (($privilege->level == 0) && ($privilege->includes($mask))) echo $privilege->getName() . " found. ";
+                else echo "not found. ";
+            }
+            if ($privilege->level == 0 && $privilege->includes($mask)) {
+                return false;
+            }
+        }
+
         foreach ($privilegeset['privileges'] as $privilege) {
             if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
                 echo "<br />Comparing <br />" . $privilege->present() . " and <br />" . $mask->present() . ". <br />";
             }
-            if($privilege->implies($mask)) {
-                $pass = $privilege;
-                $matched = true;
-                if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                    echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <br />Privilege includes mask. Privilege level greater or equal.<br />";
+            if ($privilege->includes($mask)) {
+                if (($privilege->level >= $mask->level) && ($mask->level > 0)) {
+                    if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
+                        echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <br />Privilege includes mask. Privilege level greater or equal.<br />";
+                    }
+                    return $privilege;
+                } else {
+                    if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
+                        echo $mask->getName() . " <font color='blue'>wins</font>. Breaking .. <br />Privilege includes mask. Privilege level lesser.<br />";
+                    }
+                    return false;
                 }
-                break;
-            }
-            elseif ($privilege->includes($mask)) {
-                $matched = true;
-                if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                    echo $mask->getName() . " <font color='blue'>wins</font>. Breaking .. <br />Privilege includes mask. Privilege level lesser.<br />";
-                }
-                break;
             }
             elseif ($mask->includes($privilege)) {
-                if ($privilege->getLevel() >= $mask->getLevel()) {
-                    $pass = $privilege;
-                    $matched = true;
+                if ($privilege->level >= $mask->level) {
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
                         echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <br />Mask includes privilege. Privilege level greater or equal.<br />";
                     }
-                    break;
+                    return $privilege;
                 }
                 else {
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
@@ -589,19 +598,6 @@ class xarMasks
                     echo "<font color='red'>no match</font>. Continuing...<br />";
                 }
             }
-        }
-// CHECKME: why loop over the privileges again here ? Can't this be combined in the previous loop ?
-        foreach ($privilegeset['privileges'] as $privilege) {
-            if(XARDBG_TESTDENY && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                echo "<br />Comparing " . $privilege->present() . " against " . $mask->present() . " <b>for deny</b>. ";
-                if (($privilege->getLevel() == 0) && ($privilege->includes($mask))) echo $privilege->getName() . " found. ";
-                else echo "not found. ";
-            }
-            if (($privilege->getLevel() == 0) && ($privilege->includes($mask))) {
-            $pass = false;
-            $matched = true;
-            break;
-           }
         }
         if (!$matched && ($privilegeset['children'] != array())) $pass = $this->testprivileges($mask,$privilegeset['children'],$pass);
         return $pass;
@@ -1653,8 +1649,16 @@ class xarPrivileges extends xarMasks
 
     function includes($mask)
     {
-        $p1 = $this->normalize();
-        $p2 = $mask->normalize();
+        if (isset($this->normalform)) {
+            $p1 = $this->normalform;
+        } else {
+            $p1 = $this->normalize();
+        }
+        if (isset($mask->normalform)) {
+            $p2 = $mask->normalform;
+        } else {
+            $p2 = $mask->normalize();
+        }
 
         // match realm, module and component. bail if no match.
         for ($i=1;$i<4;$i++) {
