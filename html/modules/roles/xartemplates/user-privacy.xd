@@ -85,19 +85,19 @@
         </xar:if>
 
     <xar:set name="$curnum">++$curnum</xar:set>
-	<h3 id="changes">#$curnum#
-        <xar:mlstring>. Changes to this Privacy Policy</xar:mlstring></h3>
+	<h3 id="changes">#$curnum#.&nbsp;
+        <xar:mlstring>Changes to this Privacy Policy</xar:mlstring></h3>
 	    <p><xar:mlstring>We may make changes to this Policy from time to time. We will notify you of substantial changes to this Policy either by posting a prominent announcement on our site and/or by sending a message to the e-mail address you have provided to us that is contained within your user settings.</xar:mlstring></p>
 
     <xar:set name="$curnum">++$curnum</xar:set>
-	<h3 id="guarantee">#$curnum#
-        <xar:mlstring>. NO GUARANTEES</xar:mlstring></h3>
+	<h3 id="guarantee">#$curnum#.&nbsp;
+        <xar:mlstring>NO GUARANTEES</xar:mlstring></h3>
   	    <p><xar:mlstring>While this Privacy Policy states our standards for maintenance of Data and we will make efforts to meet them, we are not in a position to guarantee these standards. There may be factors beyond our control that may result in disclosure of data. As a consequence, we disclaim any warranties or representations relating to maintenance or nondisclosure of Data.</xar:mlstring></p>
 
     <xar:set name="$curnum">++$curnum</xar:set>
 	<h3 id="contact">#$curnum#.&nbsp;
         <xar:mlstring>Contact Information</xar:mlstring></h3>
-	    <p><xar:mlstring>If you have any questions about this Policy or our web site, please feel free to contact</xar:mlstring> <a href="mailto:#$contmail#">our Webmaster.</a></p>
+	    <p><xar:mlstring>If you have any questions about this Policy or our web site, please feel free to contact</xar:mlstring>.&nbsp;<a href="mailto:#$contmail#">our Webmaster.</a></p>
 
     <xar:else />
 	    <xar:mlstring>Privay Policy Not Active</xar:mlstring>
