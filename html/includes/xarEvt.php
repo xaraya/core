@@ -68,11 +68,11 @@
  *
  * Server package:
  * ---------------
- * ServerRequest - fires when a request is received at the server.
+ * ServerRequest - event is triggered when a request is received at the server (see index.php)
  * 
  * Session package:
  * ----------------
- * none
+ * SessionCreate - event is triggered when a new session is being created (see xarSession.php)
  *
  * TableDDL package :
  * ------------------
@@ -114,69 +114,6 @@ function xarEvt_init($args, $whatElseIsGoingLoaded)
 }
 
 /**
- * Subscribes to an event
- *
- * @author Marco Canini <m.canini@libero.it>
- * @access public
- * @deprec 20030222
- * @param $eventName
- * @param $modName
- * @param $modType
- * @return void
- */
-function xarEvtSubscribe($eventName, $modName, $modType)
-{
-    if (!xarEvt__checkEvent($eventName)) return; // throw back
-    if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
-    if (!xarCoreIsApiAllowed($modType)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
-        return;
-    }
-
-    $GLOBALS['xarEvt_subscribed'][$eventName][] = array($modName, $modType);
-}
-
-/**
- * Unsubscribes from an event
- *
- * @author Marco Canini <m.canini@libero.it>
- * @access public
- * @deprec 20030222
- * @param eventName
- * @param modName
- * @param modType
- * @return void
- */
-function xarEvtUnsubscribe($eventName, $modName, $modType)
-{
-
-    if (!xarEvt__checkEvent($eventName)) return; // throw back
-    if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
-    if (!xarCoreIsApiAllowed($modType)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
-        return;
-    }
-
-    if (!isset($GLOBALS['xarEvt_subscribed'][$eventName])) return;
-
-    for ($i = 0; $i < count($GLOBALS['xarEvt_subscribed'][$eventName]); $i++) {
-        list($mn, $mt) = $GLOBALS['xarEvt_subscribed'][$eventName][$i];
-        if ($modName == $mn && $modType == $mt) {
-            unset($GLOBALS['xarEvt_subscribed'][$eventName][$i]);
-            break;
-        }
-    }
-}
-
-
-
-/**
  * Trigger an event and call the potential handlers for it in the modules
  *
  * The specified event is issued to the active modules. If a module
@@ -199,16 +136,16 @@ function xarEvt_trigger($eventName, $value = NULL)
     //if (!isset($GLOBALS['xarEvt_subscribed'][$eventName])) return;
 
     // Call the event handlers in the active modules
-//    $activemods = xarModGetList(array('State'=>XARMOD_STATE_ACTIVE));
-    $activemods = xarEvtGetActiveModsList();
+    $activemods = xarEvt__GetActiveModsList();
 	xarLogMessage("Triggered event ($eventName)");
+//FIXME: <besfred> ^^^ should we catch its return value and react?
 
     $nractive=count($activemods);
     for ($i =0; $i < $nractive; $i++) {
         // We issue the event to the user api for now
         // FIXME: Could all 4 types be supported? In which situations?
-
         xarEvt_notify($activemods[$i]['name'], 'user', $eventName, $value);
+//FIXME: <besfred> ^^^ should we catch its return value and react?
     }
 
 }
@@ -249,9 +186,8 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
 
     // First issue it to the specific event handler
     // Function naming: module_userapievt_OnEventName
-    $funcName=array();
     $funcSpecific = "{$modName}_{$modType}apievt_On$eventName";
-    $funcGeneral  = "{$modName}_{$modType}apievt_OnEvent";
+//    $funcGeneral  = "{$modName}_{$modType}apievt_OnEvent";
 
     // set which file to load for looking up the event handler
     $xarapifile="modules/{$modName}/xar{$modType}api.php";
@@ -262,17 +198,12 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
 
         $funcSpecific($value);
         if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
-    } elseif (function_exists($funcGeneral)) {
-        $funcGeneral($eventName,$value);
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
+//    } elseif (function_exists($funcGeneral)) {
+//        $funcGeneral($eventName,$value);
+//        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
     } elseif (file_exists($xarapifile)) {
 
-        // FIXME: can we do without this call?
-		if(!function_exists('xarModAPILoad')) {
-			include_once('includes/xarMod.php');
-		}
-//        xarModAPILoad($modName,$modType);
-		include_once($xarapifile);// FIXME: <besfred> That ok?
+		include_once($xarapifile);
 
 		if (file_exists($xartabfile)) {
 		    include_once($xartabfile);
@@ -288,30 +219,12 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
 
             if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
 
-        } elseif (function_exists($funcGeneral)) {
-            $funcGeneral($eventName,$value);
-            if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
+//        } elseif (function_exists($funcGeneral)) {
+//            $funcGeneral($eventName,$value);
+//            if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
         }
     }   
 }
-
-/**
- * Subscribe to a raw callback function
- *
- * @deprec 20030222
- */
-function xarEvt_subscribeRawCallback($eventName, $funcName)
-{
-
-    if (!xarEvt__checkEvent($eventName)) return; // throw back
-    if (empty($funcName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'funcName');
-        return;
-    }
-
-    $GLOBALS['xarEvt_subscribed'][$eventName][] = $funcName;
-}
-
 
 /**
  * Register a supported event
@@ -333,8 +246,10 @@ function xarEvt_registerEvent($eventName)
     }
     
     $GLOBALS['xarEvt_knownEvents'][$eventName] = true;
-}
 
+	// return a good message if all worked ok
+    return true;
+}
 
 /**
  * Check whether an event is registered
@@ -353,9 +268,7 @@ function xarEvt__checkEvent($eventName)
         return;
     }
     return true;
-
 }
-
 
 /**
  * Replicate the functionality of xarModGetList(array('State'=>XARMOD_STATE_ACTIVE));
@@ -364,7 +277,7 @@ function xarEvt__checkEvent($eventName)
  * @access  private
  * @return array of module information arrays
  */
-function xarEvtGetActiveModsList()
+function xarEvt__GetActiveModsList()
 {
 	// use vars instead of defines to narrow the scope
 	$XARMOD_STATE_ACTIVE = 3;
