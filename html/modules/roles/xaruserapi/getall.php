@@ -13,6 +13,9 @@
  */
 /**
  * get all users
+ * @param $args['order'] comma-separated list of order items; default 'name'
+ * @param $args['selection'] extra coonditions passed into the where-clause
+ * @param $args['group'] comma-separated list of group names or IDs
  * @returns array
  * @return array of users, or false on failure
  */
@@ -24,78 +27,142 @@ function roles_userapi_getall($args)
     if (!isset($startnum)) {
         $startnum = 1;
     }
+
     if (!isset($numitems)) {
         $numitems = -1;
     }
-    if (!isset($order)){
-        $order = 'name';
-    }
-    $roles = array();
 
     // Security check
-    if(!xarSecurityCheck('ReadRole')) return;
+    if(!xarSecurityCheck('ReadRole')) {return;}
 
     // Get database setup
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
     $rolestable = $xartable['roles'];
+    $rolemembtable = $xartable['rolemembers'];
 
-    if (!empty($state) && is_numeric($state)) {
-        $query = "SELECT xar_uid,
-                       xar_uname,
-                       xar_name,
-                       xar_email,
-                       xar_state,
-               xar_date_reg
-        FROM $rolestable
-                WHERE xar_state = " . xarVarPrepForStore($state);
+    // Create the order array.
+    if (!isset($order)) {
+        $order_clause = array('roletab.xar_name');
     } else {
-        $query = "SELECT xar_uid,
-                       xar_uname,
-                       xar_name,
-                       xar_email,
-                       xar_state,
-               xar_date_reg
-        FROM $rolestable
-                WHERE xar_state != 0";
+        $order_clause = array();
+        foreach (explode(',', $order) as $order_field) {
+            if (preg_match('/^[-]?(name|uname|email|uid|state|date_reg)$/', $order_field)) {
+                if (strstr($order_field, '-')) {
+                    $order_clause[] = 'roletab.xar_' . str_replace('-', '', $order_field) . ' desc';
+                } else {
+                    $order_clause[] = 'roletab.xar_' . $order_field;
+                }
+            }
+        }
     }
 
-    //suppress display of pending users to non-admins
-    if (!xarSecurityCheck("AdminRole",0)) $query .= " AND xar_state != 4";
+    // Restriction by group.
+    if (isset($group)) {
+        $groups = explode(',', $group);
+        $group_list = array();
+        foreach ($groups as $group) {
+            $group = xarModAPIFunc(
+                'roles', 'user', 'get',
+                array(
+                    (is_numeric($group) ? 'uid' : 'name') => $group,
+                    'type' => 1
+                )
+            );
+            if (isset($group['uid']) && is_numeric($group['uid'])) {
+                $group_list[] = $group['uid'];
+            }
+        }
+    }
 
+    $where_clause = array();
 
-    if (isset($selection)) $query .= $selection;
+    if (!empty($state) && is_numeric($state)) {
+        $where_clause[] = 'roletab.xar_state = ' . $state;
+    } else {
+        $where_clause[] = 'roletab.xar_state <> 0';
+    }
 
-    // if we aren't including anonymous in the query,
+    // Select-clause.
+    $query = '
+        SELECT  DISTINCT roletab.xar_uid,
+                roletab.xar_uname,
+                roletab.xar_name,
+                roletab.xar_email,
+                roletab.xar_state,
+                roletab.xar_date_reg';
+
+    // From-clause for the query.
+    if (empty($group_list)) {
+        // Simple query.
+        $query .= ' FROM ' . $rolestable . ' AS roletab';
+    } else {
+        // Restrict by group(s) - join to the group_members table.
+        $query .= ' FROM ' . $rolestable . ' AS roletab, ' . $rolemembtable . ' AS rolememb';
+        $where_clause[] = 'roletab.xar_uid = rolememb.xar_uid';
+        if (count($group_list) > 1) {
+            $where_clause[] = 'rolememb.xar_parentid in (' . implode(', ', $group_list) . ')';
+        } else {
+            $where_clause[] = 'rolememb.xar_parentid = ' . $group_list[0];
+        }
+    }
+
+    // Hide pending users from non-admins
+    if (!xarSecurityCheck('AdminRole', 0)) {
+        $where_clause[] = 'roletab.xar_state <> 4';
+    }
+
+    // If we aren't including anonymous in the query,
     // then find the anonymous user's uid and add
-    // a where clause to the query
-   if (isset($include_anonymous) && !$include_anonymous) {
-        $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'anonymous'));
-        $query .= " AND xar_uid != $thisrole[uid]";
+    // a where clause to the query.
+    // By default, include both 'myself' and 'anonymous'.
+    if (isset($include_anonymous) && !$include_anonymous) {
+        $thisrole = xarModAPIFunc('roles', 'user', 'get', array('uname'=>'anonymous'));
+        $where_clause[] = 'roletab.xar_uid <> ' . $thisrole[uid];
     }
     if (isset($include_myself) && !$include_myself) {
 
-        $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'myself'));
-        $query .= " AND xar_uid != $thisrole[uid]";
+        $thisrole = xarModAPIFunc('roles', 'user', 'get', array('uname'=>'myself'));
+        $where_clause[] = 'roletab.xar_uid <> ' . $thisrole[uid];
     }
 
-    $query .= " AND xar_type = 0 ORDER BY xar_" . $order;
+    // Return only users (not groups).
+    $where_clause[] = 'roletab.xar_type = 0';
 
-    if($startnum==0) $result = $dbconn->Execute($query);
-    else $result = $dbconn->SelectLimit($query, $numitems, $startnum-1);
-    if (!$result) return;
+    // Add the where-clause to the query.
+    $query .= ' WHERE ' . implode(' AND ', $where_clause);
+
+    // Add extra where-clause criteria.
+    if (isset($selection)) {
+        $query .= ' ' . $selection;
+    }
+
+    // Add the order clause.
+    if (!empty($order_clause)) {
+        $query .= ' ORDER BY ' . implode(', ', $order_clause);
+    }
+
+    if ($startnum == 0) {
+        $result = $dbconn->Execute($query);
+    } else {
+        $result = $dbconn->SelectLimit($query, $numitems, $startnum-1);
+    }
+    if (!$result) {return;}
 
     // Put users into result array
+    $roles = array();
     for (; !$result->EOF; $result->MoveNext()) {
         list($uid, $uname, $name, $email, $state, $date_reg) = $result->fields;
-        if (xarSecurityCheck('ReadRole',0,'All', "$uname:All:$uid")) {
-            $roles[] = array('uid'      => $uid,
-                             'uname'    => $uname,
-                             'name'     => $name,
-                             'email'    => $email,
-                             'state'    => $state,
-                 'date_reg'   => $date_reg);
+        if (xarSecurityCheck('ReadRole', 0, 'All', "$uname:All:$uid")) {
+            $roles[] = array(
+                'uid'       => $uid,
+                'uname'     => $uname,
+                'name'      => $name,
+                'email'     => $email,
+                'state'     => $state,
+                'date_reg'  => $date_reg
+            );
         }
     }
 
