@@ -988,6 +988,13 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
                 if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'version')) return; // throw back
             }
         }
+        if ($dnType == XARMLS_DNTYPE_THEME) {
+            // Load common translations
+            if (!isset($loadedCommons[$dnName])) {
+                $loadedCommons[$dnName] = true;
+                if (!$GLOBALS['xarMLS_backend']->loadContext('themes:', 'common')) return; // throw back
+            }
+        }
 
         if (!$GLOBALS['xarMLS_backend']->loadContext($ctxType, $ctxName)) return; // throw back
         $loadedTranslations["$dnType.$dnName.$ctxType.$ctxName"] = true;

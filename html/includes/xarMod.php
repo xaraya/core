@@ -65,6 +65,10 @@ define('XARMOD_LOAD_ANYSTATE', 2);
 /*
  * Modules modes
  */
+    //The Shared Mode should not use 2 different tables!!!!!
+    //It should add an extra column
+    //2 different tables multiplies per 2 the number of sql queries we must make
+    //to get the appropriate information
 define('XARMOD_MODE_SHARED', 1);
 define('XARMOD_MODE_PER_SITE', 2);
 
@@ -156,7 +160,7 @@ function xarModGetVar($modName, $name, $prep = NULL)
         return;
     }
 
-    return xarVar__GetVarByAlias($modName, $name, $uid = NULL, $prep, $type = 'modvar');
+    return xarVar__GetVarByAlias($modName, $name, $uid = NULL, $prep, 'modvar');
 }
 
 /**
@@ -1266,7 +1270,10 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
 
     // Call each hook
     foreach ($hooklist as $hook) {
-        if (!xarModIsAvailable($hook['module'], $hook['type'])) continue;
+        //THIS IS BROKEN
+        //$hook['type'] and $type in the xarModIsAvailable ARE NOT THE SAME THING
+//        if (!xarModIsAvailable($hook['module'], $hook['type'])) continue;
+        if (!xarModIsAvailable($hook['module'])) continue;
         if ($hook['area'] == 'GUI') {
             $isGUI = true;
             if (!xarModLoad($hook['module'], $hook['type'])) return;
@@ -1581,6 +1588,17 @@ function xarMod_getBaseInfo($modName, $type = 'module')
         return;
     }
 
+    $type = strtolower($type);
+
+    if ($type != 'module' && $type != 'theme') {
+        $msg = xarML('Wrong type, it must be \'module\' or \'theme\': #(1).', $type);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM',  new SystemException($msg));
+        return;
+    }
+
+    $upperFirstLetter = $type;
+    $upperFirstLetter[0] = strtoupper($type[0]);
+
     // FIXME: <MrB> I've seen cases where the cache info is not in sync
     // with reality. I've take a couple ones out, but I haven't tested all
     // the way through.
@@ -1589,91 +1607,69 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     // installation), since the state changes of those modules weren't taken
     // into account. The GLOBALS['xarMod_noCacheState'] flag tells Xaraya *not*
     // to cache module (+state) information in that case...
-
-    switch(strtolower($type)) {
-        case 'module':
-            default:
-            if (empty($GLOBALS['xarMod_noCacheState']) && xarCore_IsCached('Mod.BaseInfos', $modName)) {
-                return xarCore_GetCached('Mod.BaseInfos', $modName);
-            }
-            break;
-        case 'theme':
-            if (empty($GLOBALS['xarTheme_noCacheState']) && xarCore_IsCached('Theme.BaseInfos', $modName)) {
-                return xarCore_GetCached('Theme.BaseInfos', $modName);
-            }
-            break;
+    
+    if ($type == 'module') {
+        $cacheCollection = 'Mod.BaseInfos';
+        $checkNoState = 'xarMod_noCacheState';
+   } else {
+        $cacheCollection = 'Theme.BaseInfos';
+        $checkNoState = 'xarTheme_noCacheState';
     }
+//    $cacheCollection = $upperFirstLetter.'.BaseInfos';
+//    $checkNoState = 'xar'.$upperFirstLetter.'_noCacheState';
+ 
+     if (empty($GLOBALS[$checkNoState]) && xarCore_IsCached($cacheCollection, $modName)) {
+        return xarCore_GetCached($cacheCollection, $modName);
+     }
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    switch(strtolower($type)) {
-        case 'module':
-        default:
-            $modulestable = $tables['modules'];
-            $query = "SELECT xar_regid,
-                             xar_directory,
-                             xar_mode,
-                             xar_id
-                      FROM $modulestable
-                      WHERE xar_name = ?";
-            $bindvars = array($modName);
+    $modulestable = $tables[$type.'s'];
+    //The Shared Mode should not use 2 different tables!!!!!
+    //It should add an extra column
+    
+    //FIXME:
+    //This is a hack while we have 2 different tables for modules states
+    //It will look in the most probable one first (SHARED) 
+    $modules_statesTable = $tables['system/'.$type.'_states'];
 
-            break;
-        case 'theme':
-            $themestable = $tables['themes'];
-            $query = "SELECT xar_regid,
-                             xar_directory,
-                             xar_mode
-                      FROM $themestable
-                      WHERE xar_name = ? OR xar_directory = ?";
-            $bindvars = array($modName,$modName);
-            break;
-    }
+    $query = "SELECT $modulestable.xar_regid,
+                                    $modulestable.xar_directory,
+                                    $modulestable.xar_mode,
+                                    $modulestable.xar_id,
+                                    $modules_statesTable.xar_state
+                         FROM $modulestable
+                   LEFT JOIN $modules_statesTable 
+                              ON $modulestable.xar_regid = $modules_statesTable.xar_regid
+                       WHERE xar_name = ? OR xar_directory = ?";
+     $bindvars = array($modName, $modName);
 
     $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     if ($result->EOF) {
         $result->Close();
-        switch(strtolower($type)) {
-            case 'module':
-                default:
-
-/*                $msg = xarML('Module #(1) does not exist.', $modName);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', new SystemException($msg));
-*/                return;
-
-                break;
-            case 'theme':
 /*
-                $msg = xarML('Theme #(1) does not exist.', $themeName);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'THEME_NOT_EXIST', new SystemException($msg));
-*/                return;
-
-                break;
-        }
+    if (strtolower($type) == 'module') {
+        $msg = xarML('Module #(1) does not exist.', $modName);
+    } else {
+        $msg = xarML('Theme #(1) does not exist.', $modName);
+    }
+     xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', new SystemException($msg));
+*/
+        return;
     }
 
-    switch(strtolower($type)) {
-        case 'module':
-            default:
-            list($modBaseInfo['regid'],
-                 $modBaseInfo['directory'],
-                 $mode,
-                 $modBaseInfo['systemid']) = $result->fields;
-            $result->Close();
-            break;
-        case 'theme':
-            list($modBaseInfo['regid'],
-                 $modBaseInfo['directory'],
-                 $mode) = $result->fields;
-            $result->Close();
-            break;
-    }
-
-
-
+    $modBaseInfo = array();
+    
+     list($modBaseInfo['regid'],
+            $modBaseInfo['directory'],
+            $mode,
+            $modBaseInfo['systemid'],
+            $modBaseInfo['state']) = $result->fields;
+     $result->Close();
+ 
     $modBaseInfo['name'] = $modName;
     $modBaseInfo['mode'] = (int) $mode;
     $modBaseInfo['displayname'] = xarModGetDisplayableName($modName);
@@ -1682,21 +1678,20 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     // TODO: <marco> get rid of it since useless
     $modBaseInfo['osdirectory'] = xarVarPrepForOS($modBaseInfo['directory']);
 
-    switch(strtolower($type)) {
-        case 'module':
-            default:
-            $modState = xarMod_getState($modBaseInfo['regid'], $modBaseInfo['mode']);
-            if (!isset($modState)) return; // throw back
-            $modBaseInfo['state'] = $modState;
-            xarCore_SetCached('Mod.BaseInfos', $modName, $modBaseInfo);
-            break;
-        case 'theme':
-            $modState = xarMod_getState($modBaseInfo['regid'], $modBaseInfo['mode'], $type = 'theme');
-            if (!isset($modState)) return; // throw back
-            $modBaseInfo['state'] = $modState;
-            xarCore_SetCached('Theme.BaseInfos', $modName, $modBaseInfo);
-            break;
+    //If we guessed wrong, then get the right state then.
+    if ($modBaseInfo['mode'] != XARMOD_MODE_SHARED) {
+         $modBaseInfo['state'] = xarMod_getState($modBaseInfo['regid'], $modBaseInfo['mode']);
+         if (!isset($modBaseInfo['state'])) return; // throw back
+    } else {
+        if (empty($modBaseInfo['state'])) {
+            $modBaseInfo['state'] = XARMOD_STATE_UNINITIALISED;
+        } else {
+            $modBaseInfo['state'] = (int) $modBaseInfo['state'];
+        }
     }
+
+    xarCore_SetCached($cacheCollection, $modName, $modBaseInfo);
+
     return $modBaseInfo;
 }
 
@@ -1930,6 +1925,8 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modRegId');
         return;
     }
+    //FIXME: what the heck this is doing in the interface?
+    //Shouldnt this be a global of some sort, or function that returns this or whatever?
     if ($modMode != XARMOD_MODE_SHARED && $modMode != XARMOD_MODE_PER_SITE) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modMode');
         return;
