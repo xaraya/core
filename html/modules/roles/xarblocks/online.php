@@ -55,15 +55,17 @@ function roles_onlineblock_display($blockinfo)
     $xartable =& xarDBGetTables();
     $sessioninfotable = $xartable['session_info'];
     $activetime = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
-    $sql = "SELECT xar_uid
+    $sql = "SELECT COUNT(xar_uid)
             FROM $sessioninfotable
             WHERE xar_lastused > ? AND xar_uid > 2
             GROUP BY xar_uid";
     $result = $dbconn->Execute($sql, array($activetime));
-
-    if ($dbconn->ErrorNo() != 0) {return false;}
-
-    $args['numusers'] = $result->RecordCount();
+    if (!$result) {return false;}
+    list($args['numusers']) = $result->fields;
+    $result->Close();
+    if (empty($args['numusers'])) {
+        $args['numusers'] = 0;
+    }
 
     $zz = xarModAPIFunc(
         'roles', 'user', 'getallactive',
@@ -109,15 +111,18 @@ function roles_onlineblock_display($blockinfo)
         }
     }
 
-    $result->Close();
 
     $query2 = "SELECT count( 1 )
                FROM $sessioninfotable
                WHERE xar_lastused > ? AND xar_uid = 2
                GROUP BY xar_ipaddr";
     $result2 = $dbconn->Execute($query2, array($activetime));
-    $args['numguests'] = $result2->RecordCount();
+    if (!$result2) {return false;}
+    list($args['numguests']) = $result2->fields;
     $result2->Close();
+    if (empty($args['numguests'])) {
+        $args['numguests'] = 0;
+    }
 
     // Pluralise
     if ($args['numguests'] == 1) {
