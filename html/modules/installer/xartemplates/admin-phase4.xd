@@ -36,7 +36,11 @@
 								</tr>
 								<tr>
 								  <td align="left"><span class="xar-normal"><label for="install_database_prefix">Table Prefix</label></span></td>
-									<td align="left"><input type="text" name="install_database_prefix" id="install_database_prefix" maxlength="10" value="#$database_prefix#" />(for Table Sharing)</td>
+									<td align="left"><input type="text" name="install_database_prefix" id="install_database_prefix" maxlength="10" value="#$database_prefix#" />
+									<span class="xar-normal">
+									(for Table Sharing)
+									</span>
+									</td>
 								</tr>
 								<tr>
 								  <td align="left"><span class="xar-normal"><label for="install_database_type">Database Type</label></span></td>

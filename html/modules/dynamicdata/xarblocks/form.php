@@ -71,7 +71,7 @@ function dynamicdata_formblock_display($blockinfo)
     // Create output object
     $output = new xarHTML();
 
-    // Display each item, permissions permitting
+    // Display each item, privileges permitting
     for (; !$result->EOF; $result->MoveNext()) {
         list($exid, $name) = $result->fields;
 

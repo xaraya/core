@@ -114,22 +114,17 @@ function adminpanels_init()
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'groups', 'Users & Groups', 0, 1);";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    $id = $dbconn->GenId($adminMenuTable);
     $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'modules', 'Global', 0, 1);";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'permissions', 'Users & Groups', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'privileges', 'Users & Groups', 0, 1);";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'users', 'Users & Groups', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'roles', 'Users & Groups', 0, 1);";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 

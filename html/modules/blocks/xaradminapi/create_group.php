@@ -22,9 +22,8 @@ function blocks_adminapi_create_group($args)
                        new SystemException(__FILE__."(".__LINE__."): Missing block group name."));return;
     }
 
-    // TODO: group add permissions
     // Security
-	if(!xarSecurityCheck('AddBlock',1,'Block',"All:$name:All")) return;
+    if(!xarSecurityCheck('AddBlock',1,'Block',"All:$name:All")) return;
 
     // Load up database
     list($dbconn) = xarDBGetConn();

@@ -494,6 +494,29 @@ function installer_admin_choose_configuration()
     $data['phase'] = 7;
     $data['phase_label'] = xarML('Choose your configuration');
 
+    //Get all modules in the filesystem
+    $fileModules = xarModAPIFunc('modules','admin','getfilemodules');
+    if (!isset($fileModules)) return;
+
+    // Make sure all the core modules are here
+    // Remove them from the list if name and regid coincide
+    $awol = array();
+    include 'xarconfigurations/coremoduleslist.php';
+    foreach ($coremodules as $coremodule) {
+        if (in_array($coremodule['name'],array_keys($fileModules))) {
+            if ($coremodule['regid'] == $fileModules[$coremodule['name']]['regid'])
+                unset($fileModules[$coremodule['name']]);
+        }
+        else $awol[] = $coremodule['name'];
+    }
+
+    if (count($awol) != 0) {
+        $msg = xarML("Xaraya cannot install bcause the following core modules are missing or corrupted: #(1)",implode(', ', $awol));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
+                       new SystemException($msg));
+        return;
+    }
+
     $basedir = realpath('modules/installer/xarconfigurations');
 
     $files = array();
@@ -503,23 +526,31 @@ function installer_admin_choose_configuration()
         }
         closedir($handle);
     }
+
     if (!isset($files) || count($files) < 1) {
         $data['warning'] = xarML('There are currently no configuration files available.');
         return $data;
     }
 
-    //quick hack to determine what to display
-    if (!file_exists('modules/articles/xarinit.php')){
+        xarModSetVar('installer','modulelist',serialize($fileModules));
+    if (count($fileModules) == 0){
+    // No non-core modules present. Show only the minimal configuration
         $names = array();
         include 'modules/installer/xarconfigurations/core.conf.php';
         $names[] = array('value' => 'modules/installer/xarconfigurations/core.conf.php',
                          'display'  => 'Core Xaraya install (aka minimal)');
-    } else {
+    }
+    // Add more criteria for filtering the configurations to be displayed here
+    else {
+    // Show all the configurations
         $names = array();
         foreach ($files as $file) {
-            include $basedir . '/' . $file;
-            $names[] = array('value' => $basedir . '/' . $file,
-                            'display' => $configuration_name);
+            $pos = strrpos($file,'conf.php');
+            if($pos == strlen($file)-8) {
+                include $basedir . '/' . $file;
+                $names[] = array('value' => $basedir . '/' . $file,
+                                'display' => $configuration_name);
+            }
         }
     }
     $data['names'] = $names;
@@ -543,7 +574,7 @@ function installer_admin_confirm_configuration()
 
     //I am not sure if these should these break
     if(!xarVarFetch('confirmed',     'isset', $confirmed,     NULL, XARVAR_DONT_SET))   return;
-    if(!xarVarFetch('chosen',        'isset', $chosen,        NULL,  XARVAR_DONT_SET))  return;
+    if(!xarVarFetch('chosen',        'isset', $chosen,        array(),  XARVAR_NOT_REQUIRED))  return;
     if(!xarVarFetch('options',       'isset', $options,       NULL, XARVAR_DONT_SET))   return;
 
     xarTplSetThemeName('installer');
@@ -551,18 +582,120 @@ function installer_admin_confirm_configuration()
     $data['phase'] = 8;
     $data['phase_label'] = xarML('Choose configuration options');
 
-    if (!$confirmed) {
         include $configuration;
-        $data['options'] = $configuration_options;
+        $fileModules = unserialize(xarModGetVar('installer','modulelist'));
+        $func = "installer_" . basename($configuration,'.conf.php') . "_moduleoptions";
+        $modules = $func();
+        $availablemodules = $awolmodules = array();
+        foreach ($modules as $module) {
+            if (in_array($module['name'],array_keys($fileModules))) {
+                if ($module['regid'] == $fileModules[$module['name']]['regid']) {
+                    $availablemodules[] = $module;
+                    unset($fileModules[$module['name']]);
+                }
+            }
+            else $awolmodules[] = ucfirst($module['name']);
+        }
+
+        $options2 = $options3 = array();
+        foreach ($availablemodules as $availablemodule) {
+//            if(xarMod_getState($availablemodule['regid']) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
+//                echo var_dump($availablemodule);exit;
+                $options2[] = array(
+                           'item' => $availablemodule['regid'],
+                           'option' => 'true',
+                           'comment' => xarML('Install the #(1) module.',ucfirst($availablemodule['name']))
+                           );
+//            }
+        }
+        foreach ($fileModules as $fileModule) {
+//            if(xarMod_getState($fileModule['regid']) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
+                $options3[] = array(
+                           'item' => $fileModule['regid'],
+                           'option' => 'false',
+                           'comment' => xarML('Install the #(1) module.',ucfirst($fileModule['name']))
+                           );
+//            }
+        }
+
+    if (!$confirmed) {
+
+        $func = "installer_" . basename($configuration,'.conf.php') . "_privilegeoptions";
+        $data['options1'] = $func();
+        $data['options2'] = $options2;
+        $data['options3'] = $options3;
+        $data['missing'] = implode(', ',$awolmodules);
         $data['configuration'] = $configuration;
         return $data;
         // Huh? This is never reached
         //xarResponseRedirect(xarModURL('installer', 'admin', 'confirm_configuration', array('theme' => 'installer','options' => $options)));
     }
     else {
-        include $configuration;
+        // disable caching of module state in xarMod.php
+            $GLOBALS['xarMod_noCacheState'] = true;
+            xarModAPIFunc('modules','admin','regenerate');
+
+        // load the modules from the configuration
+            foreach ($options2 as $module) {
+                if(in_array($module['item'],$chosen)) {
+                    xarModAPIFunc('modules','admin','initialise',array('regid'=>$module['item']));
+                    xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
+                }
+            }
+        // load any other modules chosen
+            xarModAPIFunc('modules','admin','regenerate');
+            foreach ($options3 as $module) {
+                if(in_array($module['item'],$chosen)) {
+                    xarModAPIFunc('modules','admin','initialise',array('regid'=>$module['item']));
+                    xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
+                }
+            }
         $func = "installer_" . basename($configuration,'.conf.php') . "_configuration_load";
         $func($chosen);
+        $content['marker'] = '[x]';                                           // create the user menu
+        $content['displaymodules'] = 1;
+        $content['content'] = '';
+
+        // Load up database
+        list($dbconn) = xarDBGetConn();
+        $tables = xarDBGetTables();
+
+        $blockGroupsTable = $tables['block_groups'];
+
+        $query = "SELECT    xar_id as id
+                  FROM      $blockGroupsTable
+                  WHERE     xar_name = 'left'";
+
+        $result =& $dbconn->Execute($query);
+        if (!$result) return;
+
+        // Freak if we don't get one and only one result
+        if ($result->PO_RecordCount() != 1) {
+            $msg = xarML("Group 'left' not found.");
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+            return;
+        }
+
+        list ($leftBlockGroup) = $result->fields;
+
+        $adminBlockId= xarModAPIFunc('blocks',
+                                     'admin',
+                                     'block_type_exists',
+                                     array('modName'  => 'base',
+                                           'blockType'=> 'menu'));
+
+        if (!isset($adminBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            return;
+        }
+
+        xarModAPIFunc('blocks','admin','create_instance',array('title' => 'Main Menu',
+                                                               'type' => $adminBlockId,
+                                                               'group' => $leftBlockGroup,
+                                                               'template' => '',
+                                                               'content' => serialize($content),
+                                                               'state' => 2));
+
         xarResponseRedirect(xarModURL('installer', 'admin', 'finish', array('theme' => 'installer')));
     }
 
@@ -583,6 +716,7 @@ function installer_admin_finish()
         return false;
     }
     $remove = xarModDelVar('roles','adminpass');
+    $remove = xarModDelVar('installer','modules');
 
     // Load up database
     list($dbconn) = xarDBGetConn();

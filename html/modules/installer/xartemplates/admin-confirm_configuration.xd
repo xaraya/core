@@ -8,41 +8,152 @@
     			<input type="hidden" name="confirmed" id="confirmed" value="true" />
    				<br />
       		<div style="text-align:justify;">
-    			  <table cellspacing="0" border="0" summary="For creating the site administrator account">
-           	  <thead>
-           		  <tr>
-           			  <th colspan="2">Configuration options</th>
-             		</tr>
-             	</thead>
-             	<tbody>
-								<xar:loop name="$options">
-								<tr>
-									<xar:if condition="$loop:item['option'] eq ''">                  
-					  			<td width="100%" class="xar-normal">
-									  #$loop:item['comment']#
-					  			</td>
-									<xar:else />
-					  			<td width="10%" valign="top" class="xar-normal">
-									  <xar:if condition="$loop:item['option'] == 'true'">
-										  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# checked />
-					  				<xar:else />
-										  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# />
-					  				</xar:if>
-					  			</td>
-					  			<td width="90%" class="xar-normal">
-									  #$loop:item['comment']#
-					  			</td>
-									</xar:if>
-								</tr>
-								</xar:loop>
-             	</tbody>
+    			  <table cellspacing="0" border="0">
+						<tr>
+						  <th colspan="2">Privileges</th>
+						</tr>
+						<xar:loop name="$options1">
+						<tr>
+							<xar:if condition="$loop:item['option'] eq ''">                  
+						<td width="100%" class="xar-normal">
+							  #$loop:item['comment']#
+						</td>
+							<xar:else />
+						<td width="10%" valign="top" class="xar-normal">
+							  <xar:if condition="$loop:item['option'] == 'true'">
+								  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# checked />
+							<xar:else />
+								  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# />
+							</xar:if>
+						</td>
+						<td width="90%" class="xar-normal">
+							  #$loop:item['comment']#
+						</td>
+							</xar:if>
+						</tr>
+						</xar:loop>
+						<tr>
+							<td colspan="2">
+							&nbsp;
+							 </td>
+						</tr>
+						<tr>
+							<td colspan="2">
+							<span class="xar-normal">
+							  Disabling the options above will leave your registered and unregistered users with minimal access. The administrator you created in Step 6 will always have full access to the site.
+							  </span>
+							 </td>
+						</tr>
          		</table>
        		</div>
-       		<br />
-       		<div style="text-align:justify;">
-      		  <span class="xar-normal"><p>Disabling the first 2 options above will leave your registered and unregistered users with minimal access. The administrator you created in Step 6 will always have full access to the site.</p>
-      		  <p>Modules can be installed or removed at any later time in the Modules module.</p></span>
-      		</div>
+       		<p></p>
+      		<div style="text-align:justify;">
+    			  <table cellspacing="0" border="0">
+						<tr>
+						  <th colspan="2">Configuration Modules</th>
+						</tr>
+						<xar:if condition = "$missing eq '' and count($options2) eq 0">
+						<tr>
+							<td>
+							<span class="xar-normal">
+							This configuration does not need to load any modules.
+							</span>
+							</td>
+						</tr>
+						<xar:else />
+							<xar:loop name="$options2">
+							<tr>
+								<xar:if condition="$loop:item['option'] eq ''">                  
+							<td width="100%" class="xar-normal">
+								  #$loop:item['comment']#
+							</td>
+								<xar:else />
+							<td width="10%" valign="top" class="xar-normal">
+								  <xar:if condition="$loop:item['option'] == 'true'">
+									  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# checked />
+								<xar:else />
+									  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# />
+								</xar:if>
+							</td>
+							<td width="90%" class="xar-normal">
+								  #$loop:item['comment']#
+							</td>
+								</xar:if>
+							</tr>
+							</xar:loop>
+						<xar:if condition = "$missing ne ''">
+							<tr>
+							<td colspan="2">
+							<span class="xar-normal">
+							The following modules for this configuration are missing in the modules directory: #$missing#
+							</span>
+							</td>
+							</tr>
+						</xar:if>
+						<tr>
+							<td colspan="2">
+							&nbsp;
+							 </td>
+						</tr>
+						</xar:if>
+						<tr>
+							<td colspan="2">
+							<span class="xar-normal">
+							  Modules can be installed or removed at any later time in the Modules module.
+							  </span>
+							 </td>
+						</tr>
+         		</table>
+       		</div>
+       		<p></p>
+			<xar:if condition="count($options3) ne 0">                  
+      		<div style="text-align:justify;">
+    			  <table cellspacing="0" border="0">
+						<tr>
+						  <th colspan="2">Other Modules</th>
+						</tr>
+						<tr>
+							<td colspan="2">
+							<span class="xar-normal">
+							  Th following modules are present that are not part of the configuration you have chosen. If you wish to, you can load them as well.
+							  </span>
+							 </td>
+						</tr>
+							<xar:loop name="$options3">
+							<tr>
+								<xar:if condition="$loop:item['option'] eq ''">                  
+							<td width="100%" class="xar-normal">
+								  #$loop:item['comment']#
+							</td>
+								<xar:else />
+							<td width="10%" valign="top" class="xar-normal">
+								  <xar:if condition="$loop:item['option'] == 'true'">
+									  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# checked />
+								<xar:else />
+									  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# />
+								</xar:if>
+							</td>
+							<td width="90%" class="xar-normal">
+								  #$loop:item['comment']#
+							</td>
+								</xar:if>
+							</tr>
+							</xar:loop>
+						<tr>
+							<td colspan="2">
+							&nbsp;
+							 </td>
+						</tr>
+						<tr>
+							<td colspan="2">
+							<span class="xar-normal">
+							  Modules can be installed or removed at any later time in the Modules module.
+							  </span>
+							 </td>
+						</tr>
+         		</table>
+       		</div>
+       		</xar:if>
       		<div style="text-align:center;">
       		  <input type="submit" name="create" id="create" value="Continue &gt;" />
       		</div>
