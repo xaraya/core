@@ -1,13 +1,16 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of this file: mikespub
-// Purpose of this file: Quick & dirty import of .71 data to a .8 test site
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Quick & dirty import of PN .71x data into Xaraya test sites
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ * 
+ * @subpackage import
+ * @author mikespub <mikespub@xaraya.com>
+*/
 
 // initialize the Xaraya core
 include 'includes/xarCore.php';
@@ -83,8 +86,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     if (!xarModAPILoad('articles','admin')) {
         die("Unable to load the articles admin API");
     }
-    if (!xarModAPILoad('comments','admin')) {
-        die("Unable to load the comments admin API");
+    if (!xarModAPILoad('comments','user')) {
+        die("Unable to load the comments user API");
     }
     if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','admin')) {
         $docounter = 1;
@@ -101,8 +104,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     if ($step == 1) {
     echo "<strong>1. Importing users</strong><br>\n";
     $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_users';
-    $result = $dbconn->Execute($query);
-    if ($dbconn->ErrorNo() != 0) {
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
         die("Oops, count users failed : " . $dbconn->ErrorMsg());
     }
     $count = $result->fields[0];
@@ -111,21 +114,22 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
               FROM ' . $oldprefix . '_users 
               WHERE pn_uid > 2
               ORDER BY pn_uid ASC';
-    $numitems = 2000;
+    $numitems = 1000;
     if (!isset($startnum)) {
         $startnum = 0;
     }
     if ($count > $numitems) {
-        $result = $dbconn->SelectLimit($query, $numitems, $startnum);
+        $result =& $dbconn->SelectLimit($query, $numitems, $startnum);
     } else {
-        $result = $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query);
     }
-    if ($dbconn->ErrorNo() != 0) {
+    if (!$result) {
         die("Oops, select users failed : " . $dbconn->ErrorMsg());
     }
     if ($reset && $startnum == 0) {
         $dbconn->Execute("DELETE FROM " . $tables['users'] . " WHERE xar_uid > 2");
         $dbconn->Execute('FLUSH TABLE ' . $tables['users']);
+        $dbconn->Execute('OPTIMIZE ' . $tables['users']);
     }
     $num = 1;
     while (!$result->EOF) {
@@ -211,8 +215,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     $query = 'SELECT pn_topicid, pn_topicname, pn_topictext, pn_topicimage, pn_counter
               FROM ' . $oldprefix . '_topics
               ORDER BY pn_topicid ASC';
-    $result = $dbconn->Execute($query);
-    if ($dbconn->ErrorNo() != 0) {
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
         die("Oops, select topics failed : " . $dbconn->ErrorMsg());
     }
     while (!$result->EOF) {
@@ -238,8 +242,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     $query = 'SELECT pn_catid, pn_title, pn_counter
               FROM ' . $oldprefix . '_stories_cat
               ORDER BY pn_catid ASC';
-    $result = $dbconn->Execute($query);
-    if ($dbconn->ErrorNo() != 0) {
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
         die("Oops, select stories_cat failed : " . $dbconn->ErrorMsg());
     }
     while (!$result->EOF) {
@@ -276,8 +280,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     $catid = unserialize(xarModGetVar('installer','catid'));
     echo "<strong>3. Importing articles</strong><br>\n";
     $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_stories';
-    $result = $dbconn->Execute($query);
-    if ($dbconn->ErrorNo() != 0) {
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
         die("Oops, count stories failed : " . $dbconn->ErrorMsg());
     }
     $count = $result->fields[0];
@@ -293,11 +297,11 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         $startnum = 0;
     }
     if ($count > $numitems) {
-        $result = $dbconn->SelectLimit($query, $numitems, $startnum);
+        $result =& $dbconn->SelectLimit($query, $numitems, $startnum);
     } else {
-        $result = $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query);
     }
-    if ($dbconn->ErrorNo() != 0) {
+    if (!$result) {
         die("Oops, select stories failed : " . $dbconn->ErrorMsg());
     }
     if ($reset && $startnum == 0) {
@@ -373,8 +377,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     $catid = unserialize(xarModGetVar('installer','catid'));
     echo "<strong>4. Importing queued articles</strong><br>\n";
     $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_queue';
-    $result = $dbconn->Execute($query);
-    if ($dbconn->ErrorNo() != 0) {
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
         die("Oops, count queue failed : " . $dbconn->ErrorMsg());
     }
     $count = $result->fields[0];
@@ -390,11 +394,11 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         $startnum = 0;
     }
     if ($count > $numitems) {
-        $result = $dbconn->SelectLimit($query, $numitems, $startnum);
+        $result =& $dbconn->SelectLimit($query, $numitems, $startnum);
     } else {
-        $result = $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query);
     }
-    if ($dbconn->ErrorNo() != 0) {
+    if (!$result) {
         die("Oops, select queue failed : " . $dbconn->ErrorMsg());
     }
     $num = 1;
@@ -469,8 +473,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         $query = 'SELECT pn_secid, pn_secname, pn_image
                   FROM ' . $oldprefix . '_sections
                   ORDER BY pn_secid ASC';
-        $result = $dbconn->Execute($query);
-        if ($dbconn->ErrorNo() != 0) {
+        $result =& $dbconn->Execute($query);
+        if (!$result) {
             die("Oops, select sections failed : " . $dbconn->ErrorMsg());
         }
         while (!$result->EOF) {
@@ -500,8 +504,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     $query = 'SELECT pn_artid, pn_secid, pn_title, pn_content, pn_language, pn_counter
               FROM ' . $oldprefix . '_seccont
               ORDER BY pn_artid ASC';
-    $result = $dbconn->Execute($query);
-    if ($dbconn->ErrorNo() != 0) {
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
         die("Oops, select section content failed : " . $dbconn->ErrorMsg());
     }
     if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','admin')) {
@@ -566,8 +570,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         $query = 'SELECT pn_id_cat, pn_categories, pn_parent_id
                   FROM ' . $oldprefix . '_faqcategories 
                   ORDER BY pn_parent_id ASC, pn_id_cat ASC';
-        $result = $dbconn->Execute($query);
-        if ($dbconn->ErrorNo() != 0) {
+        $result =& $dbconn->Execute($query);
+        if (!$result) {
             die("Oops, select faqcategories failed : " . $dbconn->ErrorMsg());
         }
         // set parent 0 to root FAQ category
@@ -604,8 +608,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     $query = 'SELECT pn_id, pn_id_cat, pn_question, pn_answer, pn_submittedby
               FROM ' . $oldprefix . '_faqanswer
               ORDER BY pn_id ASC';
-    $result = $dbconn->Execute($query);
-    if ($dbconn->ErrorNo() != 0) {
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
         die("Oops, select faq answer failed : " . $dbconn->ErrorMsg());
     }
     while (!$result->EOF) {
@@ -653,10 +657,17 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
 
     if ($step == 9) {
     $regid = xarModGetIDFromName('articles');
+    $pid2cid = array();
+// TODO: fix issue for large # of comments
+    $pids = xarModGetVar('installer','commentid');
+    if (!empty($pids)) {
+        $pid2cid = unserialize($pids);
+        $pids = '';
+    }
     echo "<strong>9. Importing comments</strong><br>\n";
     $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_comments';
-    $result = $dbconn->Execute($query);
-    if ($dbconn->ErrorNo() != 0) {
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
         die("Oops, count comments failed : " . $dbconn->ErrorMsg());
     }
     $count = $result->fields[0];
@@ -667,24 +678,23 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
               LEFT JOIN ' . $oldprefix . '_users
               ON ' . $oldprefix . '_users.pn_uname = ' . $oldprefix . '_comments.pn_name
               ORDER BY pn_tid ASC';
-    $numitems = 2000;
+    $numitems = 1000;
     if (!isset($startnum)) {
         $startnum = 0;
     }
-/*
+
     if ($count > $numitems) {
-        $result = $dbconn->SelectLimit($query, $numitems, $startnum);
+        $result =& $dbconn->SelectLimit($query, $numitems, $startnum);
     } else {
-        $result = $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query);
     }
-    if ($dbconn->ErrorNo() != 0) {
+    if (!$result) {
         die("Oops, select comments failed : " . $dbconn->ErrorMsg());
     }
     if ($reset && $startnum == 0) {
         $dbconn->Execute("DELETE FROM " . $tables['comments']);
     }
     $num = 1;
-    include_once('modules/comments/xarincludes/backend/backend.php');
     while (!$result->EOF) {
         list($tid,$sid,$pid,$date,$uname,$uid,$hostname,$subject,$comment) = $result->fields;
 
@@ -692,34 +702,42 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
             $uid = 0;
         }
         $data['modid'] = $regid;
-        $data['itemid'] = $sid;
+        $data['objectid'] = $sid;
+        if (!empty($pid) && !empty($pid2cid[$pid])) {
+            $pid = $pid2cid[$pid];
+        }
         $data['pid'] = $pid;
         $data['author'] = $uid;
-        $data['title'] = xarVarPrepForStore($subject);
+        $data['subject'] = xarVarPrepForStore($subject);
         $data['comment'] = xarVarPrepForStore($comment);
         $data['hostname'] = xarVarPrepForStore($hostname);
-        $data['cid'] = $tid;
+        //$data['cid'] = $tid;
         $data['date'] = $date;
+        $data['postanon'] = 0;
 
-        if (!pnComments_Add($data)) {
-            echo "Failed inserting comment ($sid $pid) $uname - $subject<br>\n";
+        $cid = xarModAPIFunc('comments','user','add',$data);
+        if (empty($cid)) {
+            echo "Failed inserting comment ($sid $pid) $uname - $subject : ".$dbconn->ErrorMsg()."<br>\n";
         } elseif ($count < 200) {
             echo "Inserted comment ($sid $pid) $uname - $subject<br>\n";
         } elseif ($num % 100 == 0) {
             echo "Inserted comment " . ($num + $startnum) . "<br>\n";
             flush();
         }
+        $pid2cid[$tid] = $cid;
         $num++;
         $result->MoveNext();
     }
     $result->Close();
-*/
+
     echo "<strong>TODO : import other comments</strong><br><br>\n";
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
+        xarModSetVar('installer','commentid',serialize($pid2cid));
         $startnum += $numitems;
         echo '<a href="import8.php?step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - comments ' . $startnum . '+ of ' . $count . '</a><br>';
     } else {
+        xarModDelVar('installer','commentid');
         echo '<a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
     }
     }
@@ -734,8 +752,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     $query = 'SELECT pn_cat_id, pn_parent_id, pn_title, pn_description
               FROM ' . $oldprefix . '_links_categories
               ORDER BY pn_parent_id ASC, pn_cat_id ASC';
-    $result = $dbconn->Execute($query);
-    if ($dbconn->ErrorNo() != 0) {
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
         die("Oops, select links_categories failed : " . $dbconn->ErrorMsg());
     }
     while (!$result->EOF) {
@@ -781,8 +799,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
               LEFT JOIN ' . $oldprefix . '_users
               ON ' . $oldprefix . '_users.pn_uname = ' . $oldprefix . '_links_links.pn_submitter
               ORDER BY pn_lid ASC';
-    $result = $dbconn->Execute($query);
-    if ($dbconn->ErrorNo() != 0) {
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
         die("Oops, select links failed : " . $dbconn->ErrorMsg());
     }
     while (!$result->EOF) {
@@ -834,8 +852,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
 
     if ($step == 12) {
     echo "<strong>12. Optimizing database tables</strong><br>\n";
-    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['users']);
-    if ($dbconn->ErrorNo() != 0) {
+    $result =& $dbconn->Execute('OPTIMIZE TABLE ' . $tables['users']);
+    if (!$result) {
         echo $dbconn->ErrorMsg();
     }
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories']);
