@@ -109,7 +109,7 @@ function roles_admin_showusers()
     $q->run();
 
     // Save the query so we can reuse it somewhere
-    xarSessionSetVar('currentquery', serialize($q));
+    xarSessionSetVar('rolesquery', serialize($q));
 
     $data['totalselect'] = $q->getrows();
 

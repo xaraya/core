@@ -37,9 +37,9 @@ function roles_admin_createmail()
                                        );
 
     // Get the current query or create a new one if need be
-    $q = unserialize(xarSessionGetVar('currentquery'));
+    $q = unserialize(xarSessionGetVar('rolesquery'));
+    $xartable =& xarDBGetTables();
     if(!isset($q)) {
-        $xartable =& xarDBGetTables();
         $q = new xarQuery('SELECT');
         $q->addtable($xartable['roles'],'r');
         $q->addfields(array('r.xar_uid','r.xar_name','r.xar_uname','r.xar_email','r.xar_state','r.xar_date_reg'));
@@ -50,6 +50,17 @@ function roles_admin_createmail()
     $q->setrowstodo($numitems);
     $q->setstartat($startnum);
     $q->setorder($data['order']);
+
+    // Add state
+    if ($data['state'] == ROLES_STATE_CURRENT) $q->ne('xar_state',ROLES_STATE_DELETED);
+    elseif ($data['state'] == ROLES_STATE_ALL) {}
+    else $q->eq('xar_state',$data['state']);
+
+    // If a group was chosen, get only the users of that group
+    if ($data['uid'] != 0) {
+        $q->join('r.xar_uid','rm.xar_uid');
+        $q->eq('rm.xar_parentid',$data['uid']);
+    }
 
     $roles = new xarRoles();
 
