@@ -1,12 +1,12 @@
 <xar:if condition="empty($layout) or $layout eq 'default'">
-    <table border="0" cellspacing="0" cellpadding="4" style="width: 100%">
+    <table border="0" cellspacing="0" cellpadding="4">
     <xar:foreach in="$items" key="$itemid" value="$fields">
     <tr>
         <td>
-            <table border="0" cellspacing="0" cellpadding="4" style="width: 100%">
+            <table border="0" cellspacing="0" cellpadding="4">
             <xar:foreach in="$fields" key="$name" value="$value">
             <tr>
-                <td align="right" valign="top" style="width: 15%"><b><xar:data-label property="$properties[$name]" /> :</b></td>
+                <td align="right" valign="top"><b><xar:data-label property="$properties[$name]" /> :</b></td>
                 <xar:if condition="!empty($linkfield) and $linkfield eq $name">
                     <td><a href="#$links[$itemid]['display']['olink']#"><xar:data-output property="$properties[$name]" value="$value" /></a></td>
                 <xar:else />
@@ -52,7 +52,7 @@
     </xar:if>
 
 <xar:elseif condition="$layout eq 'list'" />
-    <table width="100%" border="0" cellspacing="0" cellpadding="4">
+    <table border="0" cellspacing="0" cellpadding="4">
     <tr>
         <xar:foreach in="$properties" key="$name" value="$property">
             <th align="center"><xar:data-label property="$properties[$name]" /></th>
@@ -148,4 +148,3 @@
     <br /><br />
     <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
 </xar:if>
-
