@@ -62,8 +62,9 @@ function base_textblock_display($blockinfo)
     }
 
     $now = time();
-    // Transform Output
-    $vars['text_content'] = xarModCallHooks('item', 'transform', $blockinfo['bid'], $vars['text_content'], 'base', array('module' => 'base'));
+    //$args['content'] = $vars['text_content'];
+    //$args['module'] = 'base';
+    //$vars['text_content'] = xarModCallHooks('item', 'transform', $blockinfo['bid'], $args);
 
     if ($now > $vars['expire']){
         if ($vars['expire'] != 0){
