@@ -1,0 +1,9 @@
+/* Orang'ish colours styles */
+
+body {
+	color: #805400;
+	background-color: #E59600;
+	background-image: url(../images/page_bg.jpg);
+	background-repeat: repeat-x;
+	background-position: 100% 0;
+}

@@ -1,0 +1,9 @@
+/* Green'ish colours styles */
+
+body {
+	color: #669797;
+	background-color: #669797;
+	background-image: url(../images/page_bg.jpg);
+	background-repeat: repeat-x;
+	background-position: 100% 0;
+}

@@ -1,0 +1,7 @@
+/*  High contrast style, to somewhat emulate Google and Yahoo - mainly for color-blind people ;-) */
+
+body {
+	color: #000000;
+	background-color: #FFFFFF;
+	background-image: none;
+}
