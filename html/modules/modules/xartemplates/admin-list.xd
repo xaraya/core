@@ -1,6 +1,5 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="modstatus">xarSessionGetVar('statusmsg')</xar:set>
-</xar:comment>
 <xar:if condition="xarTplAddStyleLink('modules', 'modules')">
     <xar:comment>
         no action required if external file was not added 
