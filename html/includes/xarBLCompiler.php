@@ -1374,6 +1374,81 @@ class xarTpl__Node extends xarTpl__PositionInfo
 }
 
 /**
+* xarTpl__TplTagNode
+ *
+ * Base class for tag nodes
+ *
+ * hasChildren -> false
+ * hasText -> false
+ * isAssignable -> true
+ * isPHPCode -> true
+ * needAssignment -> false
+ * needParameter -> false
+ * needExceptionsControl -> false
+ * @package blocklayout
+ */
+class xarTpl__TplTagNode extends xarTpl__Node
+{
+    var $attributes;
+    var $parentTagName;
+    var $children;
+    
+    function isPHPCode()
+   {
+        return true;
+   }
+}
+
+/**
+ * xarTpl__EntityNode
+ * 
+ * Base class for entity nodes
+ * 
+ * hasChildren -> false
+ * hasText -> false
+ * isAssignable -> true
+ * isPHPCode -> true
+ * needAssignment -> false
+ * needParameter -> false
+ * needExceptionsControl -> false
+ * @package blocklayout
+ */
+class xarTpl__EntityNode extends xarTpl__Node
+{
+    var $entityType;
+    var $parameters;
+    
+    function isPHPCode()
+   {
+        return true;
+   }
+}
+
+/**
+ * xarTpl__InstructionNode
+ *
+ * Base class for instruction nodes
+ * 
+ * hasChildren -> false
+ * hasText -> false
+ * isAssignable -> true
+ * isPHPCode -> true
+ * needAssignment -> false
+ * needParameter -> false
+ * needExceptionsControl -> false
+ * @package blocklayout
+ */
+class xarTpl__InstructionNode extends xarTpl__Node
+{
+    var $instruction;
+    
+    function isPHPCode()
+   {
+        return true;
+   }
+}
+
+/**
  * xarTpl__DocumentNode
  *
  *
@@ -1440,75 +1515,6 @@ class xarTpl__TextNode extends xarTpl__Node
     function isAssignable()
     {
         return false;
-    }
-}
-
-/**
- * xarTpl__EntityNode
- * hasChildren -> false
- * hasText -> false
- * isAssignable -> true
- * isPHPCode -> true
- * needAssignment -> false
- * needParameter -> false
- * needExceptionsControl -> false
- * @package blocklayout
- */
-class xarTpl__EntityNode extends xarTpl__Node
-{
-    var $entityType;
-    var $parameters;
-    
-    function isPHPCode()
-    {
-        return true;
-    }
-}
-
-/**
- * xarTpl__InstructionNode
- * hasChildren -> false
- * hasText -> false
- * isAssignable -> true
- * isPHPCode -> true
- * needAssignment -> false
- * needParameter -> false
- * needExceptionsControl -> false
- * @package blocklayout
- */
-class xarTpl__InstructionNode extends xarTpl__Node
-{
-    var $instruction;
-
-    function isPHPCode()
-    {
-        return true;
-    }
-}
-
-/**
- * xarTpl__TplTagNode
- *
- * Base class for tag nodes
- *
- * hasChildren -> false
- * hasText -> false
- * isAssignable -> true
- * isPHPCode -> true
- * needAssignment -> false
- * needParameter -> false
- * needExceptionsControl -> false
- * @package blocklayout
- */
-class xarTpl__TplTagNode extends xarTpl__Node
-{
-    var $attributes;
-    var $parentTagName;
-    var $children;
-    
-    function isPHPCode()
-    {
-        return true;
     }
 }
 
