@@ -1001,7 +1001,22 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
                 $path = "$path#$target";
             }
 
-            return xarServerGetBaseURL() . 'index.php' . $path;
+			// The following allows you to modify the BaseURL from the config file
+			// it can be used to configure Xaraya for mod_rewrite by 
+			// setting BaseModURL = '' in config.php
+			$BaseModURL =  xarCore_getSystemVar('BaseModURL',true);
+			if( !isSet($BaseModURL) )
+			{
+				// Use xaraya default if BaseModURL not provided in config.php
+	            return xarServerGetBaseURL() . 'index.php' . $path;
+			} else {
+            	// Build Base URL from Config
+            	
+            	// remove the leading / from the short URL path
+            	$path = preg_replace('/^\//','',$path);
+            	// put everything together for the complete URL
+            	return xarServerGetBaseURL() . $BaseModURL . $path;
+        	}
         }
     }
     if (xarExceptionMajor() != XAR_NO_EXCEPTION) {

@@ -95,6 +95,18 @@ function xarServerGetVar($name)
  */
 function xarServerGetBaseURI()
 {
+	// Allows overriding the Base URI from config.php
+	// it can be used to configure Xaraya for mod_rewrite by 
+	// setting BaseURI = '' in config.php
+	$BaseURI =  xarCore_getSystemVar('BaseURI',true);
+	if( isSet( $BaseURI) )
+	{
+		// If BaseURI set, just use it
+		return  $BaseURI;
+	}
+	// Otherwise build it dynamically
+
+
     // Get the name of this URI
     $path = xarServerGetVar('REQUEST_URI');
 

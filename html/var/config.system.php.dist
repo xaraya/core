@@ -41,4 +41,17 @@ $systemConfiguration['Exception.EnablePHPErrorHandler'] = true;
  *                this might speed things up a little
 */
 $systemConfiguration['DB.UseADODBCache'] = false;
+
+/*
+ * This value is used to change the default behavior of the
+ * xarServerGetBaseURL() and xarModURL() functions to allow you
+ * to use things like Apache's mod_rewrite to shorten your
+ * URLs even further then Short URL's allows, for example
+ * completely removing the "index.php" from your site's URLs
+ *
+ * Comment them out to use Xaraya's built-in/auto values
+ */
+$systemConfiguration['BaseURI'] = '';
+$systemConfiguration['BaseModURL'] = '';
+
 ?>
