@@ -14,7 +14,7 @@
 
  $configuration_name = 'Intranet';
 
-    $options = array(
+$options = array(
     array(
         'item' => '1',
         'option' => 'true',
@@ -22,8 +22,59 @@
     array(
         'item' => '2',
         'option' => 'false',
-        'comment' => xarML("Create an Oversight role that has full access but cannot change security. Password will be 'password'."))
-    );
+        'comment' => xarML("Create an Oversight role that has full access but cannot change security. Password will be 'password'.")),
+    array(
+        'item' => 'm151',
+        'option' => 'true',
+        'comment' => xarML('Install the Articles module. Categories will also automatically be installed.')
+    ),
+    array(
+        'item' => 'm11',
+        'option' => 'true',
+        'comment' => xarML('Install the Autolinks module.')
+    ),
+    array(
+        'item' => 'm147',
+        'option' => 'true',
+        'comment' => xarML('Install the Categories module.')
+    ),
+    array(
+        'item' => 'm14',
+        'option' => 'true',
+        'comment' => xarML('Install the Comments module.')
+    ),
+    array(
+        'item' => 'm36',
+        'option' => 'true',
+        'comment' => xarML('Install the Example module.')
+    ),
+/*    array(
+        'item' => 'm177',
+        'option' => 'true',
+        'comment' => xarML('Install the Hitcount module.')
+    ),
+    array(
+        'item' => 'm41',
+        'option' => 'true',
+        'comment' => xarML('Install the Ratings module.')
+    ),
+*/
+    array(
+        'item' => 'm32',
+        'option' => 'true',
+        'comment' => xarML('Install the Search module.')
+    ),
+    array(
+        'item' => 'm743',
+        'option' => 'true',
+        'comment' => xarML('Install the Webservices module.')
+    ),
+    array(
+        'item' => 'm28',
+        'option' => 'true',
+        'comment' => xarML('Install the Wiki module.')
+    )
+);
  $configuration_options = $options;
 
 
@@ -35,7 +86,101 @@
  */
 function installer_intranet_configuration_load($args)
 {
-// the following needs to be done in any case
+// disable caching of module state in xarMod.php
+    $GLOBALS['xarMod_noCacheState'] = true;
+
+// load the modules chosen
+    xarModAPIFunc('modules','admin','regenerate');
+    if(in_array('m11',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>11));     // autolinks
+        xarModAPIFunc('modules','admin','activate',array('regid'=>11));
+    }
+    if(in_array('m147',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>147));    // categories
+        xarModAPIFunc('modules','admin','activate',array('regid'=>147));
+    }
+    if(in_array('m14',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>14));     // comments
+        xarModAPIFunc('modules','admin','activate',array('regid'=>14));
+    }
+    if(in_array('m177',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>177));    // hitcount
+        xarModAPIFunc('modules','admin','activate',array('regid'=>177));
+    }
+    if(in_array('m41',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>41));     // ratings
+        xarModAPIFunc('modules','admin','activate',array('regid'=>41));
+    }
+    if(in_array('m32',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>32));     // search
+        xarModAPIFunc('modules','admin','activate',array('regid'=>32));
+    }
+    if(in_array('m151',$args)) {
+        if(!in_array('m147',$args)) {
+            xarModAPIFunc('modules','admin','initialise',array('regid'=>147));
+            xarModAPIFunc('modules','admin','activate',array('regid'=>147));
+        }
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>151));    // articles
+        xarModAPIFunc('modules','admin','activate',array('regid'=>151));
+    }
+    if(in_array('m36',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>36));     // example
+        xarModAPIFunc('modules','admin','activate',array('regid'=>36));
+    }
+    if(in_array('m28',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>28));     // wiki
+        xarModAPIFunc('modules','admin','activate',array('regid'=>28));
+    }
+    if(in_array('m743',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>743));    // webservices
+        xarModAPIFunc('modules','admin','activate',array('regid'=>743));
+    }
+
+    $content['marker'] = '[x]';                                           // create the user menu
+    $content['displaymodules'] = 1;
+    $content['content'] = '';
+
+    // Load up database
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
+
+    $blockGroupsTable = $tables['block_groups'];
+
+    $query = "SELECT    xar_id as id
+              FROM      $blockGroupsTable
+              WHERE     xar_name = 'left'";
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    // Freak if we don't get one and only one result
+    if ($result->PO_RecordCount() != 1) {
+        $msg = xarML("Group 'left' not found.");
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return;
+    }
+
+    list ($leftBlockGroup) = $result->fields;
+
+    $adminBlockId= xarModAPIFunc('blocks',
+                                 'admin',
+                                 'block_type_exists',
+                                 array('modName'  => 'base',
+                                       'blockType'=> 'menu'));
+
+    if (!isset($adminBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        return;
+    }
+
+    xarModAPIFunc('blocks','admin','create_instance',array('title' => 'Main Menu',
+                                                           'type' => $adminBlockId,
+                                                           'group' => $leftBlockGroup,
+                                                           'template' => '',
+                                                           'content' => serialize($content),
+                                                           'state' => 2));
+
+// load the privileges chosen
 
     installer_intranet_casualaccess();
     xarAssignPrivilege('CasualAccess','Everybody');
@@ -54,6 +199,12 @@ function installer_intranet_configuration_load($args)
         installer_intranet_oversightprivilege();
         installer_intranet_oversightrole();
         xarAssignPrivilege('Oversight','Oversight');
+        if(!in_array(1,$args)) {
+            xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
+            xarMakePrivilegeRoot('DenyPrivileges');
+        }
+        xarMakePrivilegeMember('DenyPrivileges','Oversight');
+//        xarMakePrivilegeMember('Administration','Oversight');
    }
 
    return true;
@@ -64,20 +215,13 @@ function installer_intranet_oversightprivilege()
 {
     xarRegisterPrivilege('Oversight','All','empty','All','All',ACCESS_NONE,'The privileges for the Obersight group');
     xarMakePrivilegeRoot('Oversight');
-
-    if(!in_array(1,$args)) {
-        xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
-        xarMakePrivilegeRoot('DenyPrivileges');
-    }
-    xarMakePrivilegeMember('DenyPrivileges','Oversight');
-    xarMakePrivilegeMember('Administration','Oversight');
 }
 
 function installer_intranet_oversightrole()
 {
     xarMakeGroup('Oversight');
     xarMakeUser('Overseer','overseer','overseer@xaraya.com','password');
-    xarMakeRoleMemberByName('Oversight','Everybody');
+    xarMakeRoleMemberByName('Oversight','Administrators');
     xarMakeRoleMemberByName('Overseer','Oversight');
 }
 
