@@ -80,8 +80,9 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
         return $output;
     }
 
-    function showOutput($value = null)
+    function showOutput($args = array())
     {
+        extract($args);
         if (isset($value)) {
             return xarVarPrepHTMLDisplay($value);
         } else {
