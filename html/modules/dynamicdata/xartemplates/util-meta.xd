@@ -94,7 +94,7 @@
     <xar:foreach in="$tables" key="$curtable" value="$fields">
         &lt;object name="#$curtable#"&gt;
             &lt;label&gt;#$curtable#&lt;/label&gt;
-            &lt;moduleid&gt;182&lt/moduleid&gt;
+            &lt;moduleid&gt;182&lt;/moduleid&gt;
             &lt;itemtype&gt;-1&lt;/itemtype&gt;
             &lt;urlparam&gt;itemid&lt;/urlparam&gt;
             &lt;maxid&gt;0&lt;/maxid&gt;

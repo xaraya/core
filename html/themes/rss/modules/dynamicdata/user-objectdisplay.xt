@@ -1,3 +1,3 @@
 <xar:foreach in="$properties" key="$name">
-    <#$properties.$name:name#>#xarVarPrepForDisplay($properties.$name:value)#</#$properties.$name:name#>
+    &lt;#$properties.$name:name#&gt;#xarVarPrepForDisplay($properties.$name:value)#&lt;/#$properties.$name:name#&gt;
 </xar:foreach>
