@@ -44,6 +44,14 @@ function roles_userapi_decode_shorturl($params)
     } elseif (preg_match('/^list/i',$params[1])) {
         // something that starts with 'list' is probably for the view function
         // Note : make sure your encoding/decoding is consistent ! :-)
+        if (!empty($params[2]) && preg_match('/^viewall/i',$params[2],$matches)) {
+            $args['phase'] = 'viewall';
+        }
+        /*
+        elseif (!empty($params[3]) && preg_match('/^letter/i',$params[3],$matches)) {
+            $args['letter'] = 'letter';
+        }
+        */
         return array('view', $args);
 /*
     } elseif (preg_match('/^register/i',$params[1])) {
@@ -61,11 +69,29 @@ function roles_userapi_decode_shorturl($params)
         // Note : make sure your encoding/decoding is consistent ! :-)
         return array('showloginform', $args);
 
+    } elseif (preg_match('/^account/i',$params[1])) {
+        // something that starts with 'list' is probably for the view function
+        // Note : make sure your encoding/decoding is consistent ! :-)
+        return array('account', $args);
+
+    } elseif (preg_match('/^logout/i',$params[1])) {
+        // something that starts with 'list' is probably for the view function
+        // Note : make sure your encoding/decoding is consistent ! :-)
+        return array('logout', $args);
+
+    } elseif (preg_match('/^settings/i',$params[1])) {
+        // something that starts with 'list' is probably for the view function
+        // Note : make sure your encoding/decoding is consistent ! :-)
+        if (!empty($params[2]) && preg_match('/^form/i',$params[2],$matches)) {
+            $args['phase'] = 'formbasic';
+        }
+        return array('usermenu', $args);
+
     } elseif (preg_match('/^(\d+)/',$params[1],$matches)) {
         // something that starts with a number must be for the display function
         // Note : make sure your encoding/decoding is consistent ! :-)
-        $exid = $matches[1];
-        $args['exid'] = $exid;
+        $uid = $matches[1];
+        $args['uid'] = $uid;
         return array('display', $args);
 
     } else {

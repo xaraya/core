@@ -4,12 +4,12 @@
 <div style="margin: auto;">
 
 <div style="text-align: center">
-[&nbsp;<a href="#xarModURL('roles','user','view')#&amp;letter=&amp;phase=#$phase#&amp;order=#$order#"><xar:mlstring>All</xar:mlstring></a>&nbsp;|
+[&nbsp;<a href="#xarModURL('roles','user','view',array('phase' => $phase))#"><xar:mlstring>All</xar:mlstring></a>&nbsp;|
 &nbsp;
 <xar:foreach in="$alphabet" value="$ltr">
-	<a href="#xarModURL('roles','user','view')#&amp;letter=#$ltr#&amp;phase=#$phase#&amp;order=#$order#">#$ltr#</a>&nbsp;|&nbsp;
+	<a href="#xarModURL('roles','user','view',array('phase' => '$phase', 'letter' => $letter, 'search' => $search, 'order' => $order))#">#$ltr#</a>&nbsp;|&nbsp;
 </xar:foreach>
-<a href="#xarModURL('roles','user','view')#&amp;letter=Other&amp;phase=#$phase#&amp;order=#$order#"><xar:mlstring>Other</xar:mlstring></a>&nbsp;]
+<a href="#xarModURL('roles','user','view',array('phase' => $phase, 'letter' => 'Other', 'search' => $search, 'order' => $order))#"><xar:mlstring>Other</xar:mlstring></a>&nbsp;]
 </div>
 
 <form method="post" action="#xarModURL('roles','user','view')#">
@@ -38,9 +38,9 @@
 
 <xar:if condition="$phase eq 'active'">
 <b><xar:mlstring>Active Members</xar:mlstring></b>&nbsp;|
-<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#"><xar:mlstring>All Members</xar:mlstring></a>
+<a href="#xarModURL('roles', 'user', 'view',array('phase' => 'viewall', 'letter' => $letter, 'search' => $search, 'order' => $order))#"><xar:mlstring>All Members</xar:mlstring></a>
 <xar:else />
-<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#"><xar:mlstring>Active Members</xar:mlstring></a>&nbsp;|
+<a href="#xarModURL('roles', 'user', 'view',array('phase' => 'active', 'letter' => $letter, 'search' => $search, 'order' => $order))#"><xar:mlstring>Active Members</xar:mlstring></a>&nbsp;|
 <b><xar:mlstring>All Members</xar:mlstring></b>
 </xar:if>
 </td>
@@ -94,14 +94,14 @@
 				<tr>
 					<xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
 						<td class="xar-norm">
-							<a href="#xarModURL('roles', 'user', 'display')#&amp;uid=#$loop:item['uid']#">#$loop:item['name']#</a>
+							<a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
 						</td>
 						<td class="xar-norm" style="text-align: center;">
 							<a href="http://www.geektools.com/cgi-bin/proxy.cgi?query=#$loop:item['ipaddr']#&amp;targetnic=auto">#$loop:item['ipaddr']#</a>
 						</td>
 					<xar:else />
 						<td class="xar-norm">
-							<a href="#xarModURL('roles', 'user', 'display')#&amp;uid=#$loop:item['uid']#">#$loop:item['name']#</a>
+							<a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
 						</td>
 					</xar:if>
 					<td class="xar-norm" style="text-align: center;">
@@ -135,7 +135,7 @@
 						</td>
 					<xar:else />
 						<td class="xar-accent">
-							<a href="#xarModURL('roles', 'user', 'display')#&amp;uid=#$loop:item['uid']#">#$loop:item['name']#</a>
+							<a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
 						</td>
 					</xar:if>
 					<td class="xar-accent" style="text-align: center;">

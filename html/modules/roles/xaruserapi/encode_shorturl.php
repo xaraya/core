@@ -47,13 +47,32 @@ function roles_userapi_encode_shorturl($args)
         // you should set the path to directly to that other function
 
     } elseif ($func == 'view') {
-        $path = '/' . $module . '/list.html';
-
+        $path = '/' . $module . '/list';
+        if(!empty($phase) && $phase == 'viewall') {
+            $path = $path . '/viewall';
+        }
+        /*
+        elseif(!empty($letter)) {
+            $path = $path . '/letter' . $letter;
+        }
+        */
     } elseif ($func == 'lostpassword') {
-        $path = '/' . $module . '/password.html';
+        $path = '/' . $module . '/password';
 
     } elseif ($func == 'showloginform') {
-        $path = '/' . $module . '/login.html';
+        $path = '/' . $module . '/login';
+
+    } elseif ($func == 'account') {
+        $path = '/' . $module . '/account';
+
+    } elseif ($func == 'logout') {
+        $path = '/' . $module . '/logout';
+
+    } elseif ($func == 'usermenu') {
+        $path = '/' . $module . '/settings';
+        if(!empty($phase) && $phase == 'formbasic') {
+            $path = $path . '/form';
+        }
 /*
     } elseif ($func == 'register') {
         $path = '/' . $module . '/register.html';
@@ -63,25 +82,9 @@ function roles_userapi_encode_shorturl($args)
 */
     } elseif ($func == 'display') {
         // check for required parameters
-        if (isset($exid) && is_numeric($exid)) {
-            $path = '/' . $module . '/' . $exid . '.html';
-
-            // you might have some additional parameter that you want to use to
-            // create different virtual paths here - for example a category name
-            // See above for an example...
-
-        } else {
-            // we don't know how to handle that -> don't create a path here
-
-            // Note : this generally means that someone tried to create a
-            // link to your module, but used invalid parameters for xarModURL
-            // -> you might want to provide a default path to return to
-            // $path = '/' . $module . '/list.html';
+        if (isset($uid) && is_numeric($uid)) {
+            $path = '/' . $module . '/' . $uid;
         }
-
-    } else {
-        // anything else that you haven't defined a short URL equivalent for
-        // -> don't create a path here
     }
 
     // add some other module arguments as standard URL parameters
