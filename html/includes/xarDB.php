@@ -123,7 +123,7 @@ function &xarDBNewConn($args = NULL)
     $dbPass  = $args['password'];
 
     $conn =& ADONewConnection($dbType);
-    if (!$conn->Connect($dbHost, $dbUname, $dbPass, $dbName)) {
+    if (!$conn->Connect($dbHost, $dbUname, $dbPass, $dbName, true)) {
         // FIXME: <mrb> theoretically we could raise an exceptions here, but due to the dependencies we can't right now
         xarCore_die("xarDB_init: Failed to connect to $dbType://$dbUname@$dbHost/$dbName, error message: " . $conn->ErrorMsg());
     }
