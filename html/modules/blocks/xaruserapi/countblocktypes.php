@@ -37,8 +37,8 @@ function blocks_userapi_countblocktypes($args)
         $where[] = 'xar_type = \'' . xarVarPrepForStore($type) . '\'';
     }
 
-    list ($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $dbconn =& xarDBGetConn();
+    $xartable =& xarDBGetTables();
     $block_types_table = $xartable['block_types'];
 
     $query = 'SELECT count(xar_id) FROM ' . $block_types_table;

@@ -21,8 +21,8 @@ function blocks_userapi_getall($args)
     // Check parameters.
     if (!empty($bid) && !xarVarValidate('int:1:', $bid)) {return;}
 
-    list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $dbconn =& xarDBGetConn();
+    $xartable =& xarDBGetTables();
 
     $block_instances_table = $xartable['block_instances'];
     $block_group_instances_table = $xartable['block_group_instances'];

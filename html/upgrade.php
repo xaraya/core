@@ -625,7 +625,7 @@ if (empty($step)) {
     // Bugs 1581/1586/1838: Update the blocks table definitions.
     // Use the data dictionary to do the checking and altering.
     echo "<h5>Checking Block Table Definitions</h5>";
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     $datadict =& xarDBNewDataDict($dbconn, 'CREATE');
 
     // Upgrade the xar_block_instances table.

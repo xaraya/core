@@ -35,8 +35,8 @@ function blocks_userapi_getallblocktypes($args)
         $where[] = 'xar_id = ' . $tid;
     }
 
-    list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $dbconn =& xarDBGetConn();
+    $xartable =& xarDBGetTables();
     $block_types_table = $xartable['block_types'];
 
     // Fetch instance details.
