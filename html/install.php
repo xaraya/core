@@ -81,7 +81,7 @@ $systemArgs = array('enableShortURLsSupport' =>false,
 xarSerReqRes_init($systemArgs, $whatToLoad);
 
 // Start BlockLayout Template Engine
-$systemArgs = array('enableTemplatesCaching' => true,
+$systemArgs = array('enableTemplatesCaching' => false,
                     'themesBaseDirectory' => 'themes',
                     'defaultThemeName' => 'installer');
 xarTpl_init($systemArgs, $whatToLoad);
