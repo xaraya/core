@@ -66,8 +66,8 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
 
     // Loop through the parameter options.
     // Note: we count on every iteration as the loop may consume
-    // any number of parameters.
-    while (count($parameters) > 0) {
+    // or replace any number of parameters.
+    while (count($parameters) > 0 && $return) {
         // Consume a parameter.
         $param = array_shift($parameters);
 
@@ -76,30 +76,38 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
             case 'trim' :
                 $subject = trim($subject);
                 break;
+
             case 'upper' :
                 $subject = strtoupper($subject);
                 break;
+
             case 'lower' :
                 $subject = strtolower($subject);
                 break;
+
             case 'html' :
                 $subject = xarVarPrepHTMLDisplay($subject);
                 break;
+
             case 'display' :
                 $subject = xarVarPrepForDisplay($subject);
                 break;
+
             case 'store' :
             case 'sql' :
                 // Preparing for use in a quoted SQL string.
                 $dbconn =& xarDBGetConn();
                 $subject = $dbconn->qstr($subject);
                 break;
+
             case 'alpha' :
                 $subject = preg_replace('/[^a-z]+/i', '', $subject);
                 break;
+
             case 'alnum' :
                 $subject = preg_replace('/[^a-z0-9]+/i', '', $subject);
                 break;
+
             case 'vtoken' :
                 // Variable-name compatible token.
                 $subject = preg_replace(
@@ -115,36 +123,37 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                     $result = false;
                 }
                 break;
+
             case 'ftoken' :
                 // Filename-compatible token. Use in conjunction with
-                // 'lower' if case preservation is required too.
+                // 'lower' if case forcing is required too.
+                // Note: this is not a file name, so periods/full stops/dots
+                // are in included in the accepted characters.
                 $subject = preg_replace(
                     array('/[ _]+/', '/[^-a-z0-9_]+/i'),
                     array('_', ''),
                     trim($subject)
                 );
                 break;
+
             case 'field' :
                 // TODO: decide, should this be a separate validation type?
                 // i.e. a validation type designed to provide a more
-                // user-friendly error message (linked to the form item
-                // label), based on any type of subsequent validation.
+                // user-friendly error message, describing the form item
+                // label.
                 if (!empty($parameters)) {
                     $fieldname = array_shift($parameters);
                 }
                 break;
+
             default:
                 // Assume an unrecognised option refers to an alternative validation
-                // type, making 'passthru' redundant. I'm not sure if we really should
-                // do this or raise an error. Doing it this way simplifies the validation,
-                // so fetching a string 'str:1:20' can be trimmed by adding a simple
-                // prefix - 'pre:trim:str:1:20'
+                // type, making 'passthru' redundant. Doing it this way simplifies the
+                // validation, so fetching a string 'str:1:20' can be trimmed by adding
+                // a simple prefix - 'pre:trim:str:1:20'
                 // Put the current parameter back onto the parameters stack, as we will now
                 // be treating it as the passthru validation type.
                 array_unshift($parameters, $param);
-                // $msg = xarML('Invalid option "#(1)" in validation type "pre"', $param);
-                // xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-                // return false;
             case 'passthru' :
             case 'val' :
                 if (!empty($parameters)) {
@@ -152,9 +161,11 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                     $validation = implode(':', $parameters);
                     $return = xarVarValidate($validation, $subject, $supress_soft_exc);
                 }
-                // Break out of the switch *and* the parameter loop.
-                // Once we hit the passthru, we have nothing more to process here.
-                break 2;
+
+                // The passthru validation consumes all further parameters, so clear
+                // them here to complete the loop.
+                $parameters = array();
+                break;
         }
     }
     
@@ -162,9 +173,9 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
         // Add another error message, naming the field.
         // Combine it with the 'short' details of the last message logged,
         // with the assumption that it will contain some useful details.
-        $errorstack = xarErrorGet();
+        $errorstack =& xarErrorGet();
         $error = array_shift($errorstack);
-        $msg = xarML('#(1) is invalid. [#(2)]', $fieldname, $error['short']);
+        $msg = xarML('Field "#(1)" is invalid. [#(2)]', $fieldname, $error['short']);
         xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
     }
 
