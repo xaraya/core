@@ -201,7 +201,9 @@ function xarMLSLoadLocaleData($locale = NULL)
 
         if (!isset($res)) return; // Throw back
         if ($res == false) {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_EXIST');
+            // Can we use xarML here? border case, play it safe for now.
+            $msg = "The locale '$locale' could not be loaded";
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_EXIST',$msg);
             return;
         }
         $GLOBALS['xarMLS_localeDataCache'][$locale] = $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
@@ -1149,7 +1151,7 @@ class xarMLS__LocaleDataLoader
             return false;
         }
 
-        if(filesize($filename) == 0 ) {
+        if(filesize($fileName) == 0 ) {
             return false;
         }
 
