@@ -2,93 +2,114 @@
 <div class="xar-mod-body">
     <h2><xar:mlstring>Modules' List</xar:mlstring></h2>
     <form method="post" action="&xar-modurl-modules-admin-list;">
-        <label class="xar-mod-title" for="filter"><xar:mlstring>Display</xar:mlstring></label>
-        <select name="filter" onchange="this.form.submit()">
-        <option label="All" value="All" selected>All</option>
-        <option label="Active" value="Active">Active</option>
-        <option label="Inactive" value="Inactive">Inactive</option>
-        <option label="Uninitialised" value="Uninitialised">Uninitialised</option>
-        <option label="Dependent" value="Dependent">Dependent</option>
-        </select>
-        <xar:if condition="$hidecore eq 1">
-            <input type="checkbox" name="hidecore" value="1" checked="checked" />
-        <xar:else />
-            <input type="checkbox" name="hidecore" value="1" />
-        </xar:if>
-        <label for="hidecore"><xar:mlstring>[hide core]</xar:mlstring></label>
-        <label class="xar-mod-title" for="sort"><xar:mlstring>Sort by</xar:mlstring></label>
-        <select name="sort" onchange="this.form.submit()">
-        <option label="Name [a-z]" value="asc" selected>Name [a-z]</option>
-        <option label="Name [z-a]" value="desc">Name [z-a]</option>
-        </select>
-        <xar:if condition="$regen eq 1">
-            <input type="checkbox" name="regen" value="1" checked="checked" />
-        <xar:else />
-            <input type="checkbox" name="regen" value="1" />
-        </xar:if>
-        <label for="regen"><xar:mlstring>[regenerate]</xar:mlstring></label>
-        <input type="submit" name="reload" value="Reload" />
+        <table width="100%">
+            <tr>
+                <td align="right" nowrap>
+                    <label class="xar-mod-title" for="filter"><xar:mlstring>View</xar:mlstring></label>
+                </td>
+                <td align="left">
+                    <select name="selfilter" onchange="this.form.submit()">
+                        <xar:foreach in="$filter" key="$key" value="$value">
+                            <xar:if condition="$key eq $selfilter">
+                                <option value="#$key#" selected="selected">#$value#</option>
+                            <xar:else />
+                                <option value="#$key#">#$value#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </td>
+                <td align="right">
+                    <xar:if condition="$hidecore eq 1">
+                        <input type="checkbox" name="hidecore" value="1" checked="checked" />
+                    <xar:else />
+                        <input type="checkbox" name="hidecore" value="1" />
+                    </xar:if>
+                </td>
+                <td align="left" nowrap>
+                    <label for="hidecore"><xar:mlstring>[Hide Core Modules]</xar:mlstring></label>
+                </td>
+                <td align="right" nowrap>
+                    <label class="xar-mod-title" for="sort"><xar:mlstring>Sort by</xar:mlstring></label>
+                </td>
+                <td align="left">
+                    <select name="selsort" onchange="this.form.submit()">
+                        <xar:foreach in="$sort" key="$key" value="$value">
+                            <xar:if condition="$key eq $selsort">
+                                <option value="#$key#" selected="selected">#$value#</option>
+                            <xar:else />
+                                <option value="#$key#">#$value#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </td>
+                <td align="right">
+                    <xar:if condition="$regen eq 1">
+                        <input type="checkbox" name="regen" value="1" checked="checked" />
+                    <xar:else />
+                        <input type="checkbox" name="regen" value="1" />
+                    </xar:if>
+                </td>
+                <td align="left" nowrap>
+                    <label for="regen"><xar:mlstring>[Regenerate]</xar:mlstring></label>
+                </td>
+                <td>
+                    <input type="submit" name="reload" value="Reload" />
+                </td>
+            </tr>
+        </table>
     </form>
     <div class="xar-accent">
-                <table border="0" width="100%" cellspacing="1" cellpadding="2">
+        <table border="0" width="100%" cellspacing="1" cellpadding="2">
+            <tr class="xar-norm" valign="top">
+                <th align="left">
+                    #$modnamelabel#
+                </th>
+                <th align="left">
+                    #$versionlabel#
+                </th>
+                <th align="left">
+                    #$statelabel#
+                </th>	
+                <th align="left">	
+                    #$actionlabel#
+                </th>
+                <th align="left">
+                    #$optionslabel#
+                </th>
+            </tr>
+            <xar:loop name="$listrowsitems">
+                <xar:if condition="$coremod and $hidecore">
+                <!-- skip -->
+                <xar:else />
                     <tr class="xar-norm" valign="top">
-                        <th align="left">
-                            #$disnamelabel#
-                        </th>
-                        <th align="left">
-                            #$versionlabel#
-                        </th>
-                        <th align="left">
+                        <td>
+                            #$displayname#
+                        </td>
+                        <td>
+                            #$version#
+                        </td>
+                        <td nowrap>
                             #$statelabel#
-                        </th>	
-                        <th align="left">	
+                        </td>
+                        <td nowrap>
+                        <xar:if condition="$coremod">
                             #$actionlabel#
-                        </th>
-                        <th align="left">
-                            #$optionslabel#
-                        </th>
+                        <xar:else />
+                            <a href="#$actionurl#">#$actionlabel#</a>
+                            <xar:if condition="$state == 2">
+                                |<a href="#$removeurl#">#$removelabel#</a>
+                            </xar:if>
+                        </xar:if>
+                        </td>
+                        <td nowrap>
+                            <a href="#$infourl#">#$infolabel#</a>
+                            |
+                            <a href="#$editurl#">#$edit#</a>
+                        </td>
                     </tr>
-                    <xar:loop name="$items">
-                            <tr class="xar-norm" valign="top">
-                                <td>
-                                    #$displayname#
-                                </td>
-                                <td>
-                                    #$version#
-                                </td>
-                                <td nowrap>
-                                    #$statelabel#
-                                </td>
-                                <td nowrap>
-                                    <xar:if condition="($state eq 4) and ($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
-                                        <a href="#$removeurl#">#$remove#</a>
-                                    <xar:elseif  condition="($state eq 3) and (($class eq 'Core Admin') or ($class eq 'Core Utility') or ($class eq 'Core Complete') or ($class eq 'Core Other'))" />
-                                        <xar:mlstring>(none allowed)</xar:mlstring>
-                                    </xar:if>
-                                    <xar:if condition="($state eq 3) and ($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
-                                        <a href="#$deactivateurl#">#$deactivate#</a>
-                                    </xar:if>
-                                    <xar:if condition="$state eq 2">
-                                        <a href="#$activateurl#">#$activate#</a>
-                                        <xar:if condition="($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
-                                            | <a href="#$removeurl#">#$remove#</a>
-                                        </xar:if>
-                                    </xar:if>
-                                    <xar:if condition="$state eq 1">
-                                        <a href="#$initialiseurl#">#$initialise#</a>
-                                    </xar:if>
-                                    <xar:if condition="$state eq 5">
-                                        <a href="#$upgradeurl#">#$upgrade#</a>
-                                    </xar:if>
-                                </td>
-                                <td nowrap>
-                                    <a href="#$infourl#">#$infolabel#</a>
-                                    |
-                                    <a href="#$editurl#">#$edit#</a>
-                                </td>
-                            </tr>
-                    </xar:loop>
-                </table>
+                </xar:if>
+            </xar:loop>
+        </table>
     </div>
     <br />
     <xar:mlstring>Note: removal of all core modules is currently disabled; you may need to re-classify your module in accordance with</xar:mlstring>

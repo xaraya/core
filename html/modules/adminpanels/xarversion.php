@@ -12,7 +12,7 @@
  * @author Andy Varganov <andyv@xaraya.com>
 */
 $modversion['name'] = 'Administration';
-$modversion['description'] = 'Displays the Adminstration Area in a user friendly block format';
+$modversion['description'] = 'Displays the Adminstration Block';
 $modversion['id'] = '9';
 $modversion['version'] = '1.2';
 $modversion['official'] = 1;

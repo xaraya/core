@@ -1,31 +1,34 @@
-<!-- The form for editting the module settings and hooks -->
-<form action="&xar-modurl-modules-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
-	<input type="hidden" name="authid" id="authid" value="#$authid#" />
-	<input type="hidden" name="id" id="id" value="#$id#" />
-  <xar:mlstring>Enter new display name(Does not work)</xar:mlstring>
-  <br />
-	<input type="text" name="newdisplayname" id="newdisplayname" value="#$displayname#" size="30" maxlength="30" tabindex="1" />
-  <br /><br />
-	<xar:mlstring>Available hooks for this module</xar:mlstring>&nbsp;&nbsp;
-	[<a href="#$DetailsURL#">#$DetailsLabel#</a>] 
-	<br /><br />
-	<xar:loop name="$hooklist">
-	  <xar:if condition="$checked eq 1">
-		  <input type="checkbox" name="hooks_#$modname#" id="hooks_#$modname#" value="#$checked#" checked="checked" tabindex="2" />
-		<xar:else />
-		  <input type="checkbox" name="hooks_#$modname#" id="hooks_#$modname#" value="#$checked#" tabindex="2" />
-		</xar:if>
-    <xar:ml>
-		  <xar:mlstring>Enable hooks from #(1)</xar:mlstring>
-	    <xar:mlvar>#$modname#</xar:mlvar>
-		</xar:ml>	
-		<br /><br />
-		<xar:if condition="$details eq 1">
-		  <xar:loop name="$hooks">
-			  &nbsp;&nbsp;#$hook#<br />
-			</xar:loop>
-		</xar:if>
-	</xar:loop>
-	<br /><br />
-	<input type="submit" value="Save Changes" align="middle" tabindex="9" />
-
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Xaraya Modules System</xar:mlstring></span></div>
+<div class="xar-mod-body">
+    <h2><xar:mlstring>Module's Settings and Hooks</xar:mlstring></h2>
+    <!-- The form for editting the module settings and hooks -->
+    <form action="&xar-modurl-modules-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
+        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+        <input type="hidden" name="id" id="id" value="#$id#" />
+      <xar:mlstring>Enter new display name(Does not work)</xar:mlstring>
+      <br />
+        <input type="text" name="newdisplayname" id="newdisplayname" value="#$displayname#" size="30" maxlength="30" tabindex="1" />
+      <br /><br />
+        <xar:mlstring>Available hooks for this module</xar:mlstring>&nbsp;&nbsp;
+        [<a href="#$DetailsURL#">#$DetailsLabel#</a>] 
+        <br /><br />
+        <xar:loop name="$hooklist">
+          <xar:if condition="$checked eq 1">
+              <input type="checkbox" name="hooks_#$modname#" id="hooks_#$modname#" value="#$checked#" checked="checked" tabindex="2" />
+            <xar:else />
+              <input type="checkbox" name="hooks_#$modname#" id="hooks_#$modname#" value="#$checked#" tabindex="2" />
+            </xar:if>
+        <xar:ml>
+              <xar:mlstring>Enable hooks from #(1)</xar:mlstring>
+            <xar:mlvar>#$modname#</xar:mlvar>
+            </xar:ml>	
+            <br /><br />
+            <xar:if condition="$details eq 1">
+              <xar:loop name="$hooks">
+                  &nbsp;&nbsp;#$hook#<br />
+                </xar:loop>
+            </xar:if>
+        </xar:loop>
+        <br /><br />
+        <input type="submit" value="Save Changes" align="middle" tabindex="9" />
+</div>

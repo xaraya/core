@@ -1,32 +1,35 @@
-<b><xar:mlstring>Extend the functionality of your modules via one of the following available hooks :</xar:mlstring></b>
-<p />
-<ul>
-<xar:loop name="$hookmodules">
-    <li><a href="#$modlink#">#$modname#</a> : #$modtitle# </li>
-    <xar:if condition="$modname eq $curhook">
-        <xar:mlstring>Use this functionality in the following modules</xar:mlstring> : 	[<a href="#$DetailsURL#">#$DetailsLabel#</a>]<br />
-        <xar:if condition="count($hooktypes) gt 0">
-            <br />
-            <xar:mlstring>This module offers the following hooks</xar:mlstring> :<br />
-            <ul>
-            <xar:loop name="$hooktypes">
-                <li>#$hooktype# </li>
-            </xar:loop>
-            </ul>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Xaraya Modules System</xar:mlstring></span></div>
+<div class="xar-mod-body">
+    <h2><xar:mlstring>Modules' Hooks Configuration</xar:mlstring></h2>
+    <b><xar:mlstring>Extend the functionality of your modules via one of the following available hooks :</xar:mlstring></b>
+    <p />
+    <ul>
+    <xar:loop name="$hookmodules">
+        <li><a href="#$modlink#">#$modname#</a> : #$modtitle# </li>
+        <xar:if condition="$modname eq $curhook">
+            <xar:mlstring>Use this functionality in the following modules</xar:mlstring> : 	[<a href="#$DetailsURL#">#$DetailsLabel#</a>]<br />
+            <xar:if condition="count($hooktypes) gt 0">
+                <br />
+                <xar:mlstring>This module offers the following hooks</xar:mlstring> :<br />
+                <ul>
+                <xar:loop name="$hooktypes">
+                    <li>#$hooktype# </li>
+                </xar:loop>
+                </ul>
+            </xar:if>
+            <form action="&xar-modurl-modules-admin-updatehooks;" method="post">
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="curhook" id="curhook" value="#$curhook#" />
+                <xar:loop name="$hookedmodules">
+                    <xar:if condition="!empty($header)">
+                        <br /><b>#$header#</b><br />
+                    </xar:if>
+                    <input type="checkbox" name="hooked_#$name#" id="hooked_#$name#" value="1"#$checked# />#$name# : #$description#<br />
+                </xar:loop>
+                <br />
+                <input type="submit" value="Save Changes" />
+            </form>
         </xar:if>
-        <form action="&xar-modurl-modules-admin-updatehooks;" method="post">
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="curhook" id="curhook" value="#$curhook#" />
-            <xar:loop name="$hookedmodules">
-                <xar:if condition="!empty($header)">
-                    <br /><b>#$header#</b><br />
-                </xar:if>
-                <input type="checkbox" name="hooked_#$name#" id="hooked_#$name#" value="1"#$checked# />#$name# : #$description#<br />
-            </xar:loop>
-            <br />
-            <input type="submit" value="Save Changes" />
-        </form>
-    </xar:if>
-</xar:loop>
-</ul>
-
+    </xar:loop>
+    </ul>
+</div>
