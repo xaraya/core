@@ -146,33 +146,30 @@ function xarBlockIsCached($args)
     extract($args);
 
     $systemPrefix = xarDBGetSystemTablePrefix();
-    //$blocksettings = $systemPrefix . '_cache_blocks';
+    $blocksettings = $systemPrefix . '_cache_blocks';
+    // NOTE TO SELF:  add table create to upgrade script or use xarDataDict to determine if table is available - jsb
     $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-    if (isset($xartable['cache_blocks'])) {
-    $blocksettings = $xartable['cache_blocks'];
     $query = "SELECT xar_nocache,
-                     xar_dynamic,
-                     xar_priv,
+                     xar_page,
+                     xar_user,
                      xar_expire
              FROM $blocksettings WHERE xar_bid = $blockid ";
     $result =& $dbconn->Execute($query);
     if ($result) {
-        list ($noCache, $blockDynamics, $blockPriv, $blockCacheExpireTime) = $result->fields;
-    }
+        list ($noCache, $pageShared, $userShared, $blockCacheExpireTime) = $result->fields;
     }
 
     if (!isset($noCache)) {
         $noCache = 0;
     }
-    if (!isset($blockDynamics)) {
-    	$blockDynamics = 1;
+    if (!isset($pageShared)) {
+    	$pageShared = 0;
     }
-    if (!isset($blockPriv)) {
-    	$blockPriv = 2;
+    if (!isset($userShared)) {
+    	$userShared = 0;
     }
-    if (!isset($blockCacheExpireTime)) {
-        $blockCacheExpireTime = $xarBlock_cacheTime;
+    if (isset($blockCacheExpireTime)) {
+        $xarBlock_cacheTime = $blockCacheExpireTime;
     }
 
     if ($noCache == 1) {
@@ -182,14 +179,17 @@ function xarBlockIsCached($args)
 
     $factors = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir;
 
-    if ($blockDynamics == 1) {
+    if ($pageShared == 0) {
         $factors .= xarServerGetVar('REQUEST_URI');
         $param = xarServerGetVar('QUERY_STRING');
         if (!empty($param)) {
             $factors .= '?' . $param;
         }
     }
-    if ($blockPriv == 1) {
+
+    if ($userShared == 2) {
+        $factors .= 0;
+    } elseif ($userShared == 1) {
         $systemPrefix = xarDBGetSystemTablePrefix();
         $rolemembers = $systemPrefix . '_rolemembers';
         $currentuid = xarSessionGetVar('uid');
@@ -205,11 +205,10 @@ function xarBlockIsCached($args)
         }
         $result->Close();
         $factors .=$gids;
-    } elseif ($blockPriv == 2) {
-        $factors .= xarSessionGetVar('uid');
     } else {
-        $factors .= 0;
+        $factors .= xarSessionGetVar('uid');
     }
+
     $xarBlock_cacheCode = md5($factors);
 
     // CHECKME: use $name for something someday ?
@@ -219,7 +218,7 @@ function xarBlockIsCached($args)
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         file_exists($cache_file) &&
         filesize($cache_file) > 0 &&
-        ($blockCacheExpireTime == 0 || filemtime($cache_file) > time() - $blockCacheExpireTime)) {
+        ($xarBlock_cacheTime == 0 || filemtime($cache_file) > time() - $xarBlock_cacheTime)) {
         return true;
     } else {
         return false;
