@@ -646,8 +646,18 @@
 			return 0; // formerly returns false pre 1.60
 		}
 		
+        // XARAYA MODIFICATION START - TURN OFF/ON ERROR HANDLER
+        // execute is allowed to fail getting the next sequence 
+        // as it will create it if it does not exist
+		$errorfn = $this->raiseErrorFn;
+        $this->raiseErrorFn = false;
+
 		$getnext = sprintf($this->_genIDSQL,$seqname);
 		$rs = @$this->Execute($getnext);
+
+        $this->raiseErrorFn = $errorfn;
+        // XARAYA MODIFICATION END  - TURN OFF/ON ERROR HANDLER
+
 		if (!$rs) {
 			$u = strtoupper($seqname);
 			$createseq = $this->Execute(sprintf($this->_genSeqSQL,$seqname,$startID));

@@ -51,9 +51,8 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
 
     include_once 'xaradodb/adodb.inc.php';
 
-		// ADODB-to-Xaraya error-to-exception bridge
-		// FIXME: This creates breakage in the tree, until furhter notice commented out
-		//define('ADODB_ERROR_HANDLER', 'xarDB__adodbErrorHandler');
+	// ADODB-to-Xaraya error-to-exception bridge
+	define('ADODB_ERROR_HANDLER', 'xarDB__adodbErrorHandler');
 
     // Database connection is a global (for now)
     global $dbconn;
