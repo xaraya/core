@@ -1198,11 +1198,10 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
  * @param path string of path to decode looking for args
  * @return array of unencoded arguments
  */
-function xarMod__URLGetUnencodedArgs ( $args, $path )
+function xarMod__URLGetUnencodedArgs($args, $path)
 {
-    // This first part is ripped from xarServer.php lines 413 through 434
-    // ideally this code should be refactored from here and from xarServer.php so that
-    // the two sets of code don't get out of sink
+    // This first part is ripped from xarServer.php lines 413 through 434.
+    // This code should be refactored so that it is only coded once.
 
     $modName = NULL;
     $modType = 'user';
@@ -1213,32 +1212,35 @@ function xarMod__URLGetUnencodedArgs ( $args, $path )
     if (count($params) > 0)
     {
         $modName = $params[0];
+
         // if the second part is not admin, it's user by default
-        if (isset($params[1]) && $params[1] == 'admin') $modType = 'admin';
-        else $modType = 'user';
+        if (isset($params[1]) && $params[1] == 'admin') {
+            $modType = 'admin';
+        } else {
+            $modType = 'user';
+        }
+
         // Check if this is an alias for some other module
         $modName = xarRequest__resolveModuleAlias($modName);
+
         // Call the appropriate decode_shorturl function
-        if (   xarModIsAvailable($modName)
+        if (xarModIsAvailable($modName)
             && xarModGetVar($modName, 'SupportShortURLs')
             && xarModAPILoad($modName, $modType)
-            )
-        {
-            $loopHole = array($modName,$modType,$funcName);
-        // don't throw exception on missing file or function anymore
+        ) {
+            $loopHole = array($modName, $modType, $funcName);
+            // don't throw exception on missing file or function anymore
             $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params, 0);
         }
     }
 
-    if( isset($res) && (count($res)>=2) )
+    if (isset($res) && (count($res) >= 2))
     {
-        $resolvedParams         = $res[1];
+        $resolvedParams = $res[1];
         $resolvedParams['func'] = $res[0];
     } else {
         $resolvedParams = array();
     }
-//    echo "resolved params\n";
-//    print_r($resolvedParams);
 
     return array_diff($args, $resolvedParams);
 }
