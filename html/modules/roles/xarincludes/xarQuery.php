@@ -881,3 +881,4 @@ class xarQuery
         echo $this->getstatement();
     }
 }
+?>
