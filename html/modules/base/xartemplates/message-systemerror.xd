@@ -6,13 +6,12 @@
 * it correctly, leading to unexpected results
 ***********
 --->
-<xar:set name="$icon">xarTplGetImage("exception.jpg", "base")</xar:set>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Error Message</xar:mlstring></span></div>
 <div class="xar-mod-body">
     <h2>#$type#</h2>
     <div class="xar-norm-outline">
         <div style="float:right;padding:10px;">
-            <img src="#$icon#" alt="Exception Icon" />
+            <img src="modules/base/xarimages/exception.jpg" alt="Exception Icon" />
         </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
              #$title#

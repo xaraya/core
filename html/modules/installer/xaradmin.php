@@ -178,8 +178,8 @@ function installer_admin_phase5()
     if (!xarVarFetch('install_create_database','checkbox',$createDb,false,XARVAR_NOT_REQUIRED)) return;
 
     if ($dbName == '') {
-        $msg = xarML('No database was specified');
-        xarCore_die($msg);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+             new SystemException("No database was specified"));
         return;
     }
     // Save config data
@@ -374,7 +374,7 @@ function installer_admin_create_administrator()
 
     if ($pass != $pass1) {
         $msg = xarML('The passwords do not match');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 

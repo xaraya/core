@@ -62,13 +62,13 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
     }
 
     $GLOBALS['xarTpl_additionalStyles'] = '';
-    
+
     // Bug 1109: xarTpl_JavaScript deprecates xarTpl_{head|body}JavaScript
     $GLOBALS['xarTpl_JavaScript'] = array('head'=>array(), 'body'=>array());
     // Bug 1109: (deprecated) next 2 lines to be removed soon.
     $GLOBALS['xarTpl_headJavaScript'] = '';
     $GLOBALS['xarTpl_bodyJavaScript'] = '';
-   
+
     // This is wrong here as well, but it's better at least than in xarMod
     include "includes/xarTheme.php";
 
@@ -77,7 +77,7 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
 
 /**
  * Get theme name
- * 
+ *
  * @access public
  * @global xarTpl_themeName string
  * @return string themename
@@ -98,7 +98,7 @@ function xarTplGetThemeName()
 
 /**
  * Set theme name
- * 
+ *
  * @access public
  * @global xarTpl_themesBaseDir string
  * @global xarTpl_themeName string
@@ -119,7 +119,7 @@ function xarTplSetThemeName($themeName)
 
 /**
  * Set theme dir
- * 
+ *
  * @access public
  * @global xarTpl_themesBaseDir string
  * @global xarTpl_themeName string
@@ -139,7 +139,7 @@ function xarTplSetThemeDir($themeDir)
 
 /**
  * Get theme directory
- * 
+ *
  * @access public
  * @global xarTpl_themeDir string
  * @return sring theme directory
@@ -163,7 +163,7 @@ function xarTplGetPageTemplateName()
 
 /**
  * Set page template name
- * 
+ *
  * @access public
  * @global xarTpl_pageTemplateName string
  * @global xarTpl_themeDir string
@@ -181,7 +181,7 @@ function xarTplSetPageTemplateName($templateName)
 }
 
 /**
- * Set page title 
+ * Set page title
  *
  * @access public
  * @global xarTpl_pageTitle string
@@ -201,7 +201,7 @@ function xarTplSetPageTitle($title = NULL, $module = NULL)
         }
         switch(strtolower($order)) {
             case 'default':
-            default:    
+            default:
                 $GLOBALS['xarTpl_pageTitle'] = xarModGetVar('themes', 'SiteName') . $separator . $module . $separator . $title;
             break;
             case 'sp':
@@ -223,14 +223,14 @@ function xarTplSetPageTitle($title = NULL, $module = NULL)
 
 /**
  * Add stylesheet link for a module
- * 
+ *
  * @access public
  * @global xarTpl_additionalStyles string
  * @param modName string
  * @param styleName string
  * @param fileExt string
  * @return bool
- */ 
+ */
 function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css')
 {
     $info = xarMod_getBaseInfo($modName);
@@ -247,7 +247,7 @@ function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css')
 
 /**
  * Add JavaScript code to template output
- * 
+ *
  * @access public
  * @global xarTpl_headJavaScript string (deprecated)
  * @global xarTpl_bodyJavaScript string (deprecated)
@@ -273,7 +273,7 @@ function xarTplAddJavaScriptCode($position, $owner, $code)
  * @param data string (pathname or raw JavaScript)
  * @param index string optional (unique key and/or ordering)
  * @return bool
- */ 
+ */
 function xarTplAddJavaScript($position, $type, $data, $index = '')
 {
     if (empty($position) || empty($type) || empty($data)) {return;}
@@ -299,13 +299,13 @@ function xarTplAddJavaScript($position, $type, $data, $index = '')
 
 /**
  * Get JavaScript code or links cached for template output
- * 
+ *
  * @access public
  * @global xarTpl_JavaScript array
  * @param position string optional
  * @param index string optional
  * @return array or NULL
- */ 
+ */
 function xarTplGetJavaScript($position = '', $index = '')
 {
     if (empty($position)) {return $GLOBALS['xarTpl_JavaScript'];}
@@ -347,13 +347,13 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
         // fall back to default template if necessary
         if (!empty($templateName) && !file_exists($sourceFileName)) {
             $tplName = "$modType-$funcName";
-			
-			//check if theme overides default template		
-		    $sourceFileName = $GLOBALS['xarTpl_themeDir']."/modules/$modOsDir/$modType-$funcName" .'.xt';
-			if(!file_exists($sourceFileName))
-			{
-	            $sourceFileName = "modules/$modOsDir/xartemplates/$modType-$funcName.xd";
-			}
+
+            //check if theme overides default template
+            $sourceFileName = $GLOBALS['xarTpl_themeDir']."/modules/$modOsDir/$modType-$funcName" .'.xt';
+            if(!file_exists($sourceFileName))
+            {
+                $sourceFileName = "modules/$modOsDir/xartemplates/$modType-$funcName.xd";
+            }
         }
         if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates', $tplName) === NULL) return;
     } /*else {
@@ -363,7 +363,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     $tplData['_bl_module_name'] = $modName;
     $tplData['_bl_module_type'] = $modType;
     $tplData['_bl_module_func'] = $funcName;
-    
+
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -409,7 +409,7 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
  * $my_module_image = xarTplGetImage('button1.png');
  * $other_module_image = xarTplGetImage('set1/info.png','modules');
  *
- * Correct practices: 
+ * Correct practices:
  *
  * 1. module developers should never rely on theme's images, but instead
  * provide their own artwork inside modules/<module>/xarimages/ directory
@@ -417,8 +417,8 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
  * Such reference can then be safely passed to the module template.
  *
  * 2. theme developers should always check for the modules images
- * (at least for all core modules) and provide replacements images 
- * inside the corresponding themes/<theme>/modules/<module>/images/ 
+ * (at least for all core modules) and provide replacements images
+ * inside the corresponding themes/<theme>/modules/<module>/images/
  * directories as necessary
  *
  * Note : your module is still responsible for taking care that "images"
@@ -491,7 +491,7 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
     if (is_numeric($blockOptions)) {
         $pageBlockSize = $blockOptions;
     }
-    
+
     if (is_array($blockOptions)) {
         if (!empty($blockOptions['blocksize'])) {$blockSize = $blockOptions['blocksize'];}
         if (!empty($blockOptions['firstitem'])) {$firstItem = $blockOptions['firstitem'];}
@@ -551,7 +551,7 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
 
     // Initialise data array.
     $data = array();
-    
+
     $data['middleitems'] = array();
     $pageNum = (int)ceil(($blockFirstItem - $firstItem + 1) / $itemsPerPage) + $firstPage - 1;
     for ($i = $blockFirstItem; $i <= $blockLastItem; $i += $itemsPerPage) {
@@ -598,7 +598,7 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
 
     $data['firstpagenum'] = $firstPage;
     $data['lastpagenum'] = ($totalPages + $firstPage - 1);
-    
+
     // Data for previous page of items.
     if ($currentPage > $firstPage) {
         $data['prevpageitems'] = $itemsPerPage;
@@ -633,7 +633,7 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
     } else {
         $data['prevblockpages'] = 0;
     }
-    
+
     // Data for next block of pages.
     if ($currentBlock < $totalBlocks) {
         $nextBlockLastItem = ($blockLastItem + $itemsPerBlock);
@@ -690,7 +690,7 @@ function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $bl
     if ($data['prevblockpages'] > 0) {
         xarVarSetCached('Pager.first', 'leftarrow', $data['firsturl']);
     }
-    
+
     // Links for next block of pages.
     if ($data['nextblockpages'] > 0) {
         xarVarSetCached('Pager.last', 'rightarrow', $data['lasturl']);
@@ -792,7 +792,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
 
 /**
  * Render a block box
- * 
+ *
  * @access protected
  * @global xarTpl_themeDir string
  * @param blockInfo string
@@ -816,7 +816,7 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
 
 /**
  * Render a widget
- * 
+ *
  * @access protected
  * @global xarTpl_themeDir string
  * @param widgetName string
@@ -854,7 +854,7 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
 
 /**
  * Get BL compiler instance
- * 
+ *
  * @access private
  * @return object xarTpl__Compiler()
  */
@@ -900,13 +900,13 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '')
     // Kick it
     eval('?>' . $templateCode);
 
-	if($sourceFileName != '') {
-	    $tplOutput = ob_get_contents();
-	    ob_end_clean();
-		ob_start();
-        // this outputs the template and deals with start comments accordingly.        
-	    echo xarTpl_outputTemplate($sourceFileName, $tplOutput);
-	}
+    if($sourceFileName != '') {
+        $tplOutput = ob_get_contents();
+        ob_end_clean();
+        ob_start();
+        // this outputs the template and deals with start comments accordingly.
+        echo xarTpl_outputTemplate($sourceFileName, $tplOutput);
+    }
 
     // Fetch output and clean buffer
     $output = ob_get_contents();
@@ -955,7 +955,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
         }
         if ($GLOBALS['xarTpl_cacheTemplates']) {
             $fd = fopen($cachedFileName, 'w');
-			if(xarTpl_outputPHPCommentBlockInTemplates()) {
+            if(xarTpl_outputPHPCommentBlockInTemplates()) {
                 $commentBlock = "<?php\n/*"
                               . "\n * Source:     " . $sourceFileName
                               . "\n * Theme:      " . xarTplGetThemeName()
@@ -1100,7 +1100,7 @@ function xarTpl_outputTemplateFilenames()
  * found.
  *
  * @todo it is possible that the first regex <!DOCTYPE[^>].*]> is too
- *		 greedy in more complex xml documents and others.
+ *       greedy in more complex xml documents and others.
  * @access private
  * @param sourceFileName string
  * @param tplOutput string
@@ -1135,8 +1135,8 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
             break;
         }
     }
-    
-	return $foundHeaderContent;
+
+    return $foundHeaderContent;
 }
 /**
  * Load template from file (e.g. for use with recurring template snippets someday,
@@ -1212,11 +1212,11 @@ define ('XAR_TPL_ANY', XAR_TPL_STRING|XAR_TPL_BOOLEAN|XAR_TPL_INTEGER|XAR_TPL_FL
 class xarTemplateAttribute {
     var $_name;     // Attribute name
     var $_flags;    // Attribute flags (datatype, required/optional, etc.)
-        
+
     function xarTemplateAttribute($name, $flags = NULL)
     {
         // FIXME: It seems that the expr ^[a-z][a-z0-9\-_]*$ doesn *NOT* match the string 'bid'
-        // and the expr ^[a-z][-_a-z0-9]*$ *DOES* 
+        // and the expr ^[a-z][-_a-z0-9]*$ *DOES*
         // this was on the server on xaraya
         // FIXME: Move this expression out of the class and define() it.
         if (!eregi('^[a-z][-_a-z0-9]*$', $name)) {
@@ -1225,17 +1225,17 @@ class xarTemplateAttribute {
                            new SystemException($msg));
             return;
         }
-        
+
         if (!is_integer($flags) && $flags != NULL) {
             $msg = xarML("Illegal attribute flags ('#(1)'): flags must be of integer type.", $flags);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
             return;
         }
-        
+
         $this->_name  = $name;
         $this->_flags = $flags;
-        
+
         // FIXME: <marco> Why do you need both XAR_TPL_REQUIRED and XAR_TPL_OPTIONAL when XAR_TPL_REQUIRED = ~XAR_TPL_OPTIONAL?
         if ($this->_flags == NULL) {
             $this->_flags = XAR_TPL_ANY|XAR_TPL_REQUIRED;
@@ -1243,27 +1243,27 @@ class xarTemplateAttribute {
             $this->_flags = XAR_TPL_ANY|XAR_TPL_OPTIONAL;
         }
     }
-    
+
     function getFlags()
     {
         return $this->_flags;
     }
-    
+
     function getAllowedTypes()
     {
         return ($this->getFlags() & (~ XAR_TPL_OPTIONAL));
     }
-    
+
     function getName()
     {
         return $this->_name;
     }
-    
+
     function isRequired()
     {
         return !$this->isOptional();
     }
-    
+
     function isOptional()
     {
         if ($this->_flags & XAR_TPL_OPTIONAL) {
@@ -1275,7 +1275,7 @@ class xarTemplateAttribute {
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTemplateTag {
@@ -1294,11 +1294,11 @@ class xarTemplateTag {
             $this->_name = NULL;
             return;
         }
-        
+
         $this->_name = $name;
         $this->_handler = $handler;
         $this->_module = $module;
-       
+
         // FIXME: pass this along at template registration someday
         if (preg_match("/($module)_(\w+)api_(.*)/",$handler,$matches)) {
             $this->_type = $matches[2];
@@ -1310,19 +1310,19 @@ class xarTemplateTag {
             $this->_name = NULL;
             return;
         }
- 
+
         $this->_attributes = array();
-        
+
         if (is_array($attributes)) {
             $this->_attributes = $attributes;
         }
     }
-    
+
     function getAttributes()
     {
         return $this->_attributes;
     }
-    
+
     function getName()
     {
         return $this->_name;
@@ -1363,12 +1363,12 @@ class xarTemplateTag {
 /**
  * Registers a tag to the theme system
  *
- * @access public 
- * @param tag_module parent module of tag to register 
+ * @access public
+ * @param tag_module parent module of tag to register
  * @param tag_name tag to register with the system
  * @param tag_attrs array of attributes associated with tag (xarTemplateAttribute objects)
  * @param tag_handler function of the tag
- * @return bool 
+ * @return bool
  **/
 function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_handler = NULL)
 {
@@ -1382,7 +1382,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     }
 
     $tag = new xarTemplateTag($tag_module, $tag_name, $tag_attrs, $tag_handler);
-    
+
     list($tag_name,
          $tag_module,
          $tag_func,
@@ -1393,7 +1393,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
-    
+
     // FIXME: temp fix, installer doesn't know about it
     //$tag_table = $xartable['template_tags'];
     $systemPrefix = xarDBGetSystemTablePrefix();
@@ -1401,7 +1401,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
 
     // Get next ID in table
     $tag_id = $dbconn->GenId($tag_table);
-    
+
     $query = "INSERT INTO $tag_table
                 (xar_id,
                  xar_name,
@@ -1424,10 +1424,10 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
 /**
  * Unregisters a tag to the theme system
  *
- * @access public 
+ * @access public
  * @param tag tag to remove
  * @param tag_func function of the tag to remove
- * @return bool 
+ * @return bool
  **/
 function xarTplUnregisterTag($tag_name)
 {
@@ -1435,14 +1435,14 @@ function xarTplUnregisterTag($tag_name)
         // throw exception
         return false;
     }
-    
+
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
-    
+
     $tag_table = $xartable['template_tags'];
-    
+
     $query = "DELETE FROM $tag_table WHERE xar_name = '$tag_name';";
-                 
+
     $result = $dbconn->Execute($query);
     if (!$result) return;
 
@@ -1508,13 +1508,13 @@ function xarTplGetTagObjectFromName($tag_name)
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
-    
+
     // FIXME: during installer the template_tag table wasn't there, didn't investigate
     //$tag_table = $xartable['template_tags'];
     $systemPrefix = xarDBGetSystemTablePrefix();
     $tag_table = $systemPrefix . '_template_tags';
     $query = "SELECT xar_data FROM $tag_table WHERE xar_name='$tag_name'";
-    
+
     $result =& $dbconn->SelectLimit($query, 1);
     if (!$result) return;
 
@@ -1547,7 +1547,7 @@ function xarTplGetTagObjectFromName($tag_name)
 function xarTplPrint($template_sourcefile, $args = array())
 {
     $template_file = 'cache/templates/' . md5($template_sourcefile) . '.php';
-    
+
     if (!file_exists($template_sourcefile)) {
         $msg = xarML('Template source not found: #(1).', $template_sourcefile);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
@@ -1571,7 +1571,7 @@ function xarTplPrint($template_sourcefile, $args = array())
     include $template_file;
 
     return true;
-} 
+}
 
 function xarTplPrintWidget($module, $widget_sourcefile, $args = array())
 {

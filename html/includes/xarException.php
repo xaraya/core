@@ -296,7 +296,6 @@ function xarErrorRender($format,$thisstack = "ERROR")
             include_once "includes/exceptions/textexceptionrendering.class.php";
             $rendering = new TextExceptionRendering($error);
         }
-
         $data = array();
         $data['type'] = $type;
         $data['title'] = $rendering->getTitle();
@@ -308,7 +307,7 @@ function xarErrorRender($format,$thisstack = "ERROR")
         $data['component'] = $rendering->getComponent();
     }
     if ($format == 'html') {
-        return  xarTplModule('base','message', $template, $data);
+        return  xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
     }
     else {
         return $data;
