@@ -575,33 +575,6 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
     if (strcmp($md5pass, $realPassword) == 0)
         return $md5pass;
 
-// TODO: re-evaluate whether we want to keep this, e.g. for PAM/external DB/... authentication
-//       If so, we'll need an updateUserPass() function again somewhere
-/*
-    $compare2crypt = true;
-    $compare2text = true;
-
-    // FIXME: <marco> What's this for?
-    $system = xarConfigGetVar('system');
-
-    $md5pass = md5($givenPassword);
-    if (strcmp($md5pass, $realPassword) == 0)
-        return $md5pass;
-    elseif ($compare2crypt && $system != '1' ){
-        $crypted = false;
-        if (strcmp(crypt($givenPassword, $cryptSalt), $realPassword) == 0) {
-            $crypted = true;
-        }
-        if ($crypted){
-            updateUserPass($userName, $md5pass);
-            return $md5pass;
-        }
-    } elseif ($compare2text && strcmp($givenPassword, $realPassword) == 0) {
-             updateUserPass($userName, $md5pass);
-             return $md5pass;
-    }
-*/
-
     return false;
 }
 
