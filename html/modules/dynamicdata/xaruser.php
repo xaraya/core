@@ -168,7 +168,7 @@ function dynamicdata_user_view()
         $label = xarML('Dynamic Data Objects');
         $param = '';
     }
-	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item','$modid:$itemtype:All')) return;
+	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return;
 
     $data = dynamicdata_user_menu();
     $data['objectid'] = $objectid;

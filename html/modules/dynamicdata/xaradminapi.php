@@ -54,7 +54,7 @@ function dynamicdata_adminapi_create($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-	if(!xarSecurityCheck('AddDynamicDataItem',1,'Item','$modid:$itemtype:$itemid')) return;
+	if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
 
     if (!isset($fields) || !is_array($fields)) {
         $fields = array();
@@ -117,7 +117,7 @@ function dynamicdata_adminapi_delete($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-	if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item','$modid:$itemtype:$itemid')) return;
+	if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
 
 // TODO: test this
     $myobject = new Dynamic_Object(array('moduleid' => $modid,
@@ -175,7 +175,7 @@ function dynamicdata_adminapi_update($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-	if(!xarSecurityCheck('EditDynamicDataItem',1,'Item','$modid:$itemtype:$itemid')) return;
+	if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
 
     if (!isset($fields) || !is_array($fields)) {
         $fields = array();
@@ -290,7 +290,7 @@ function dynamicdata_adminapi_createproperty($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-	if(!xarSecurityCheck('AdminDynamicDataField',1,'Field','$name:$type:All')) return;
+	if(!xarSecurityCheck('AdminDynamicDataField',1,'Field',"$name:$type:All")) return;
 
     if (empty($moduleid)) {
         // defaults to the current module
@@ -303,7 +303,7 @@ function dynamicdata_adminapi_createproperty($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-	if(!xarSecurityCheck('AdminDynamicDataItem',1,'Item','$moduleid:$itemtype:All')) return;
+	if(!xarSecurityCheck('AdminDynamicDataItem',1,'Item',"$moduleid:$itemtype:All")) return;
 
     // get the properties of the 'properties' object
     $fields = xarModAPIFunc('dynamicdata','user','getprop',
@@ -384,7 +384,7 @@ function dynamicdata_adminapi_updateprop($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-	if(!xarSecurityCheck('EditDynamicDataField',1,'Field','$name:$type:$prop_id')) return;
+	if(!xarSecurityCheck('EditDynamicDataField',1,'Field',"$name:$type:$prop_id")) return;
 
     // Get database setup - note that both xarDBGetConn() and xarDBGetTables()
     // return arrays but we handle them differently.  For xarDBGetConn()
@@ -473,7 +473,7 @@ function dynamicdata_adminapi_deleteprop($args)
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
 // TODO: check based on other arguments too
-	if(!xarSecurityCheck('DeleteDynamicDataField',1,'Field','All:All:$prop_id')) return;
+	if(!xarSecurityCheck('DeleteDynamicDataField',1,'Field',"All:All:$prop_id")) return;
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
@@ -806,7 +806,7 @@ function dynamicdata_adminapi_removehook($args)
         return $extrainfo;
     }
 
-	if(!xarSecurityCheck('DeleteDynamicDataItem',0,'Item','$modid:All:All')) {
+	if(!xarSecurityCheck('DeleteDynamicDataItem',0,'Item',"$modid:All:All")) {
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;
@@ -1125,7 +1125,7 @@ function dynamicdata_adminapi_showform($args)
     }
 
     // throw an exception if you can't edit this
-	if(!xarSecurityCheck('EditDynamicDataItem',1,'Item','$modid:$itemtype:$itemid')) return;
+	if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
 
     $object = new Dynamic_Object(array('moduleid'  => $modid,
                                        'itemtype'  => $itemtype,
@@ -1253,7 +1253,7 @@ function dynamicdata_adminapi_showlist($args)
 
 // TODO: what kind of security checks do we want/need here ?
     // don't bother if you can't edit anything anyway
-	if(!xarSecurityCheck('EditDynamicDataItem',1,'Item','$modid:$itemtype:All')) return;
+	if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$modid:$itemtype:All")) return;
 
     // try getting the item id list via input variables if necessary
     if (!isset($itemids)) {

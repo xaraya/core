@@ -62,7 +62,7 @@ class Dynamic_Property_Master
         $properties = array();
         while (!$result->EOF) {
             list($name, $label, $type, $id, $default, $source, $fieldstatus, $order, $validation) = $result->fields;
-			if(xarSecurityCheck('ReadDynamicDataField',1,'Field','$name:$type:$id')) {
+			if(xarSecurityCheck('ReadDynamicDataField',1,'Field',"$name:$type:$id")) {
                 $property = array('name' => $name,
                                   'label' => $label,
                                   'type' => $type,

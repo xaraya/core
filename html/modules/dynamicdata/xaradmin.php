@@ -164,7 +164,7 @@ function dynamicdata_admin_new($args)
 
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
-	if(!xarSecurityCheck('AddDynamicDataItem',1,'Item','$modid:$itemtype:All')) return;
+	if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$modid:$itemtype:All")) return;
 
     $data = dynamicdata_admin_menu();
 
@@ -292,7 +292,7 @@ function dynamicdata_admin_modify($args)
 
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
-	if(!xarSecurityCheck('EditDynamicDataItem',1,'Item','$modid:$itemtype:$itemid')) return;
+	if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
 
     $data = dynamicdata_admin_menu();
 
@@ -444,7 +444,7 @@ function dynamicdata_admin_delete($args)
 
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
-	if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item','$modid:$itemtype:$itemid')) return;
+	if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
 
     if (empty($confirm)) {
         $data = dynamicdata_admin_menu();

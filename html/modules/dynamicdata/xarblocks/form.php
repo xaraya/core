@@ -38,7 +38,7 @@ function dynamicdata_formblock_info()
 function dynamicdata_formblock_display($blockinfo)
 {
     // Security check
-    if(!xarSecurityCheck('ReadDynamicDataBlock',1,'Block','$blockinfo[title]:All:All')) return;
+    if(!xarSecurityCheck('ReadDynamicDataBlock',1,'Block',"$blockinfo[title]:All:All")) return;
 
     // Get variables from content block
     $vars = @unserialize($blockinfo['content']);
@@ -75,8 +75,8 @@ function dynamicdata_formblock_display($blockinfo)
     for (; !$result->EOF; $result->MoveNext()) {
         list($exid, $name) = $result->fields;
 
-        if(!xarSecurityCheck('ViewDynamicDataBlocks',0,'Block','$name:All:$exid')) {
-            if(!xarSecurityCheck('ReadDynamicDataBlock',0,'Block','$name:All:$exid')) {
+        if(!xarSecurityCheck('ViewDynamicDataBlocks',0,'Block',"$name:All:$exid")) {
+            if(!xarSecurityCheck('ReadDynamicDataBlock',0,'Block',"$name:All:$exid")) {
                 $output->URL(xarModURL('dynamicdata',
                                       'user',
                                       'display',

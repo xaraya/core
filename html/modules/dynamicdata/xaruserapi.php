@@ -66,7 +66,7 @@ function &dynamicdata_userapi_getitem($args)
         return;
     }
 
-	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item','$modid:$itemtype:$itemid')) return;
+	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:$itemid")) return;
 
     // check the optional field list
     if (empty($fieldlist)) {
@@ -168,7 +168,7 @@ function &dynamicdata_userapi_getitems($args)
         return;
     }
 
-	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item','$modid:$itemtype:All')) return;
+	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return;
 
     if (empty($itemids)) {
         $itemids = array();
@@ -177,7 +177,7 @@ function &dynamicdata_userapi_getitems($args)
     }
 
     foreach ($itemids as $itemid) {
-		if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item','$modid:$itemtype:$itemid')) return;
+		if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:$itemid")) return;
     }
 
     // check the optional field list
@@ -519,7 +519,7 @@ function dynamicdata_userapi_getmodules($args)
 
     while (!$result->EOF) {
         list($modid, $itemtype, $count) = $result->fields;
-		if(xarSecurityCheck('ViewDynamicDataItems',0,'Item','$modid:$itemtype:All')) {
+		if(xarSecurityCheck('ViewDynamicDataItems',0,'Item',"$modid:$itemtype:All")) {
             $modules[] = array('modid' => $modid,
                                'itemtype' => $itemtype,
                                'numitems' => $count);
@@ -735,7 +735,7 @@ function dynamicdata_userapi_showdisplay($args)
     }
 
 // TODO: what kind of security checks do we want/need here ?
-	if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item','$modid:$itemtype:$itemid')) return;
+	if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
 
     // we got everything via template parameters
     if (isset($fields) && is_array($fields) && count($fields) > 0) {
@@ -958,7 +958,7 @@ function dynamicdata_userapi_showview($args)
     }
 
 // TODO: what kind of security checks do we want/need here ?
-	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item','$modid:$itemtype:All')) return;
+	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return;
 
     // try getting the item id list via input variables if necessary
     if (!isset($itemids)) {
