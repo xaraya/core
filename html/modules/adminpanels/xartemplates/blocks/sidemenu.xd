@@ -1,3 +1,7 @@
+<xar:if condition="!empty($menustyle)">
+    &xar-var-menustyle;
+</xar:if>
+<br />
 <xar:loop name="$adminmods">
     <strong>&middot;</strong>
     <xar:if condition="empty($link)">

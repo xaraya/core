@@ -57,6 +57,8 @@ function adminpanels_adminmenublock_display($blockinfo){
 	}
     
     // TODO: display content sensitive link to the manual-online_help
+    
+    // are we marking currently loaded module? why not..
     $marker = xarModGetVar('adminpanels', 'marker');
     if(!isset($marker)){
         xarModSetVar('adminpanels' ,'marker', '[x]');
@@ -88,7 +90,8 @@ function adminpanels_adminmenublock_display($blockinfo){
             }
         }
         // prepare the data for template(s)
-        $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods));
+        $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
+        $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
     }else if ($menustyle == 'bycat'){
         // sort by categories
         xarModAPILoad('adminpanels', 'admin');
