@@ -32,7 +32,7 @@ class ADODB_xarmysql extends ADODB_mysql
         }
 
         // Execute the standard driver.
-        $result = ADODB_mysql::_Execute($sql, $inputar);
+        $result = ADODB_mysql::_Execute($sql, $inputarr);
 
         if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
             $lmtime = explode(' ', microtime());
