@@ -27,8 +27,8 @@
 //quick hack to show some of what the functions are doing
 //set to 1 to activate
 define('XARDBG_WINNOW', 0);
-//define('XARDBG_TEST', 0);
-//define('XARDBG_TESTDENY', 0);
+define('XARDBG_TEST', 0);
+define('XARDBG_TESTDENY', 0);
 
 class xarMasks
 {
@@ -503,30 +503,43 @@ class xarMasks
     {
         $matched = false;
         foreach ($privilegeset['privileges'] as $privilege) {
-//        echo "<BR>Comparing " . $privilege->present() . " against " . $mask->present() . ". ";
-//        if ($privilege->includes($mask)) echo $privilege->getName() . " wins. ";
-//        elseif ($mask->includes($privilege)) echo $mask->getName() . " wins. ";
-//        else echo "no match. ";
+            if(XARDBG_TEST) {
+                echo "<BR />Comparing <BR />" . $privilege->present() . " and <BR />" . $mask->present() . ". <BR />";
+            }
             if($privilege->implies($mask)) {
                 $pass = $privilege;
                 $matched = true;
+                if(XARDBG_TEST) {
+                    echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <BR />";
+                }
                 break;
             }
             elseif ($mask->includes($privilege)) {
                 if ($privilege->getLevel() >= $mask->getLevel()) {
                     $pass = $privilege;
                     $matched = true;
+                    if(XARDBG_TEST) {
+                        echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <BR />";
+                    }
                 }
             }
             elseif ($privilege->includes($mask)) {
                 $matched = true;
+                if(XARDBG_TEST) {
+                    echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <BR />";
+                }
                 break;
+            }
+            if(XARDBG_TEST) {
+                echo "<font color='red'>no match</font>. Continuing...<BR />";
             }
         }
         foreach ($privilegeset['privileges'] as $privilege) {
-//            echo "<BR>Comparing " . $privilege->present() . " against " . $mask->present() . " <B>for deny</B>. ";
-//            if (($privilege->getLevel() == 0) && ($privilege->includes($mask))) echo $privilege->getName() . " found. ";
-//            else echo "not found. ";
+            if(XARDBG_TESTDENY) {
+                echo "<BR />Comparing " . $privilege->present() . " against " . $mask->present() . " <B>for deny</B>. ";
+                if (($privilege->getLevel() == 0) && ($privilege->includes($mask))) echo $privilege->getName() . " found. ";
+                else echo "not found. ";
+            }
             if (($privilege->getLevel() == 0) && ($privilege->includes($mask))) {
             $pass = false;
             $matched = true;
@@ -1444,17 +1457,15 @@ class xarPrivileges extends xarMasks
         $normalform[] = strtolower($this->getRealm());
         $normalform[] = strtolower($this->getModule());
         $normalform[] = strtolower($this->getComponent());
-        $normalform = array_merge($normalform,explode(':',strtolower($this->getInstance())));
+        $thisinstance = strtolower($this->getInstance());
+        $thisinstance = str_replace('myself',xarSessionGetVar('uid'),$thisinstance);
+        $normalform = array_merge($normalform,explode(':',$thisinstance));
         for ($i=0;$i<$adds;$i++) $normalform[] = 'all';
         return $normalform;
     }
 
 /**
- * canonical: returns 2 normalized privileges or masks that can be compared
- *
- * Returns two normalized privileges or masks with an equal number of elements
- * The 2 can be compared element by element
- * The function does a tiny bit of error checking to make sure the 2 are well formed.
+ * canonical: returns 2 normalized privileges or masks as arrays for comparison
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -1489,13 +1500,14 @@ class xarPrivileges extends xarMasks
     {
         list($p1,$p2) = $this->canonical($mask);
         $match = true;
+        if (count($p1)!=count($p2)) return false;
         for ($i=1;$i<count($p1);$i++) $match = $match && ($p1[$i]==$p2[$i]);
 //        echo $this->present() . $mask->present() . $match;exit;
         return $match;
     }
 
 /**
- * matches: checks the structure of one privilege against another
+ * matchesexactly: checks the structure of one privilege against another
  *
  * Checks whether two privileges, or a privilege and a mask, are equal
  * in all respects
@@ -1553,7 +1565,8 @@ class xarPrivileges extends xarMasks
                                    new SystemException($msg));
                 }
             }
-            for ($i=4;$i<count($p1);$i++) $match = $match && (($p1[$i]==$p2[$i]) || ($p1[$i] == 'all'));
+
+        for ($i=4;$i<count($p1);$i++) $match = $match && (($p1[$i]==$p2[$i]) || ($p1[$i] == 'all'));
         }
         return $match;
     }
