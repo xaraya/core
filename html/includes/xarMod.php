@@ -1329,7 +1329,7 @@ function xarModIsAvailable($modName, $type = 'module')
     }
     xarLogMessage("xarModIsAvailable: end $type:$modName");
 
-    return $modAvailableCache[$modBaseInfo['name']];
+    return $modAvailableCache[$modName];
 }
 
 /**
