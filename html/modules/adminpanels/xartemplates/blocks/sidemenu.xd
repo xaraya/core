@@ -12,7 +12,7 @@
 		&xar-var-label;
 		</xar:if>
 	</xar:if>
-	<xar:if condition="!empty($marker) and !empty($indlinks)">
+	<xar:if condition="!empty($marker)">
 		&xar-var-marker;<br />
 			<xar:if condition="!empty($indlinks)">
 				<xar:loop name="$indlinks">
