@@ -1250,7 +1250,11 @@ function xarMod_getFileInfo($modOsDir)
     $modFileInfo['class']          = isset($modversion['class']) ? $modversion['class'] : false;
     $modFileInfo['category']       = isset($modversion['category']) ? $modversion['category'] : false;
     $modFileInfo['locale']         = isset($modversion['locale']) ? $modversion['locale'] : 'en_US.iso-8859-1';
-
+    // EXTRA INFO: required by components mod and possibly other core modules; added by <andyv>
+    $modFileInfo['author']         = isset($modversion['author']) ? $modversion['author'] : false;
+    $modFileInfo['contact']        = isset($modversion['contact']) ? $modversion['contact'] : false;
+    $modFileInfo['dependency']     = isset($modversion['dependency']) ? $modversion['dependency'] : false;
+    
     return $modFileInfo;
 }
 
