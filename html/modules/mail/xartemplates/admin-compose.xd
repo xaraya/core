@@ -18,7 +18,7 @@
 			<span class="help" title="#xarML('Enter the subject for the message.')#"><label for="subject"><xar:mlstring>Subject</xar:mlstring></label>:</span>
 		</span>
 		<span style="float: right; width: 78%; text-align: left;">
-			<input type="text" name="subject" id="subject">
+			<input type="text" name="subject" id="subject" />
 		</span>
 		</div>
 

@@ -122,7 +122,7 @@
 								<xar:if condition="$selstyle eq 'pro'">
 									<xar:if condition="$loop:item['coretheme']">
 										<select name="action" id="action" disabled="disabled"> 
-											<option label="Disabled" selected disabled="disabled">
+											<option label="Disabled" selected="selected" disabled="disabled">
 											</option>
 											<option label="Initialise" disabled="disabled">
 											</option>
@@ -138,7 +138,7 @@
 										</noscript>
 										<xar:else />
 										<select name="action" id="action" onchange="this.form.submit()"> 
-											<option label="Initialise" selected>
+											<option label="Initialise" selected="selected">
 											</option>
 											<option label="Activate">
 											</option>

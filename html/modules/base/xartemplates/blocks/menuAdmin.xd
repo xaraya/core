@@ -12,9 +12,9 @@
 	</span>
 	<span style="float: right; width: 78%; text-align: left;">
 		<xar:if condition="!empty($displaymodules)">
-			<input type="checkbox" value="1" name="displaymodules" checked="checked" />
+			<input type="checkbox" value="1" name="displaymodules" id="displaymodules" checked="checked" />
 			<xar:else />
-			<input type="checkbox" value="1" name="displaymodules" />
+			<input type="checkbox" value="1" name="displaymodules" id="displaymodules" />
 		</xar:if>
 	</span>
 </p>
@@ -31,9 +31,9 @@
 	</span>
 	<span style="float: right; width: 78%; text-align: left;">
 		<xar:if condition="!empty($displayprint)">
-			<input type="checkbox" value="1" name="displayprint" checked="checked" />
+			<input type="checkbox" value="1" name="displayprint" id="displayprint" checked="checked" />
 			<xar:else />
-			<input type="checkbox" value="1" name="displayprint" />
+			<input type="checkbox" value="1" name="displayprint" id="displayprint" />
 		</xar:if>
 	</span>
 </p>
@@ -50,9 +50,9 @@
 	</span>
 	<span style="float: right; width: 78%; text-align: left;">
 		<xar:if condition="!empty($displayrss)">
-			<input type="checkbox" value="1" name="displayrss" checked="checked" />
+			<input type="checkbox" value="1" name="displayrss" id="displayrss" checked="checked" />
 			<xar:else />
-			<input type="checkbox" value="1" name="displayrss" />
+			<input type="checkbox" value="1" name="displayrss" id="displayrss" />
 		</xar:if>
 	</span>
 </p>
@@ -69,7 +69,7 @@
 			</span>
 		</span>
 		<span style="float: right; width: 78%; text-align: left;">
-			<input type="text" name="marker" value="#xarVarPrepForDisplay($marker)#" size="20" />
+			<input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" size="20" />
 		</span>
 	</p>
 </xar:if>
@@ -122,47 +122,47 @@
 		<xar:loop name="$contentlines">
 			<tr>
 				<td valign="top">
-					<input type="text" name="linkname[#$loop:index+1#]" maxlength="255" value="#xarVarPrepForDisplay($loop:item[1])#" class="xar-norm" />
+					<input type="text" name="linkname[#$loop:index+1#]" id="linkname[#$loop:index+1#]" maxlength="255" value="#xarVarPrepForDisplay($loop:item[1])#" class="xar-norm" />
 				</td>
 				<td valign="top">
-					<input type="text" name="linkurl[#$loop:index+1#]" maxlength="255" value="#xarVarPrepForDisplay($loop:item[0])#" class="xar-norm" />
+					<input type="text" name="linkurl[#$loop:index+1#]" id="linkurl[#$loop:index+1#]" maxlength="255" value="#xarVarPrepForDisplay($loop:item[0])#" class="xar-norm" />
 				</td>
 				<td valign="top">
-					<input type="text" name="linkdesc[#$loop:index+1#]" maxlength="255" value="#xarVarPrepForDisplay($loop:item[2])#" class="xar-norm" />
+					<input type="text" name="linkdesc[#$loop:index+1#]" id="linkdesc[#$loop:index+1#]" maxlength="255" value="#xarVarPrepForDisplay($loop:item[2])#" class="xar-norm" />
 				</td>
 				<td valign="top">
-					<input type="checkbox" name="linkdelete[#$loop:index+1#]" value="1" class="xar-norm" />
+					<input type="checkbox" name="linkdelete[#$loop:index+1#]" id="linkdelete[#$loop:index+1#]" value="1" class="xar-norm" />
 				</td>
 				<td valign="top">
 					<xar:if condition="empty($loop:item[3])">
-						<input type="checkbox" name="linkchild[#$loop:index+1#]" value="1" class="xar-norm" />
+						<input type="checkbox" name="linkchild[#$loop:index+1#]" id="linkchild[#$loop:index+1#]" value="1" class="xar-norm" />
 						<xar:else />
-						<input type="checkbox" name="linkchild[#$loop:index+1#]" value="1" class="xar-norm" checked="checked" />
+						<input type="checkbox" name="linkchild[#$loop:index+1#]" id="linkchild[#$loop:index+1#]" value="1" class="xar-norm" checked="checked" />
 					</xar:if>
 				</td>
 				<td valign="top">
-					<input type="checkbox" name="linkinsert[#$loop:index+1#]" value="1" class="xar-norm" />
+					<input type="checkbox" name="linkinsert[#$loop:index+1#]" id="linkinsert[#$loop:index+1#]" value="1" class="xar-norm" />
 				</td>
 			</tr>
 		</xar:loop>
 	</xar:if>
 	<tr>
 		<td>
-			<input type="text" name="new_linkname" maxlength="255" class="xar-norm" />
+			<input type="text" name="new_linkname" id="new_linkname" maxlength="255" class="xar-norm" />
 		</td>
 		<td>
-			<input type="text" name="new_linkurl" maxlength="255" class="xar-norm" />
+			<input type="text" name="new_linkurl" id="new_linkurl" maxlength="255" class="xar-norm" />
 		</td>
 		<td class="xar-norm">
-			<input type="text" name="new_linkdesc" maxlength="255" class="xar-norm" />
+			<input type="text" name="new_linkdesc" id="new_linkdesc" maxlength="255" class="xar-norm" />
 		</td>
 		<td align="center" class="xar-norm">
-			<xar:mlstring>
+			<label for="new_linkinsert"><xar:mlstring>
 				New Line 
-			</xar:mlstring>
+			</xar:mlstring></label>
 		</td>
 		<td class="xar-norm">
-			<input type="checkbox" name="new_linkinsert" value="1" class="xar-norm" />
+			<input type="checkbox" name="new_linkinsert" id="new_linkinsert" value="1" class="xar-norm" />
 		</td>
 	</tr>
 </table>

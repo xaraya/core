@@ -22,9 +22,9 @@
     <input type="hidden" name="table" id="table" value="#$object->table#" />
     <input type="hidden" name="itemid" id="itemid" value="#$object->itemid#" />
 
-    <input type="submit" name="confirm" value=" #xarML('Yes')# " />
+    <input type="submit" name="confirm" id="confirm" value=" #xarML('Yes')# " />
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="submit" name="noconfirm" value="  #xarML('No')#  " />
+    <input type="submit" name="noconfirm" id="noconfirm" value="  #xarML('No')#  " />
     </div>
 </form>
 </div>

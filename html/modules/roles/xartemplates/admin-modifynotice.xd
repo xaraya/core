@@ -32,7 +32,7 @@
 			<xar:else />
 				<input type="checkbox" name="askpendingemail" id="askpendingemail" value="1" />
 			</xar:if>
-            "pending"</td>
+            <label for="askpendingemail">"<xar:mlstring>pending</xar:mlstring>"</label></td>
         </tr>
        <tr>
             <td></td>
@@ -42,7 +42,7 @@
 			<xar:else />
 				<input type="checkbox" name="askwelcomeemail" id="askwelcomeemail" value="1" />
 			</xar:if>
-            "active"</td>
+            <label for="askwelcomeemail">"<xar:mlstring>active</xar:mlstring>"</label></td>
         </tr>
         <tr>
             <td></td>
@@ -52,7 +52,7 @@
 			<xar:else />
 				<input type="checkbox" name="askdeactivationemail" id="askdeactivationemail" value="1" />
 			</xar:if>
-            "inactive"</td>
+            <label for="askdeactivationemail">"<xar:mlstring>inactive</xar:mlstring>"</label></td>
         </tr>
          <tr>
             <td></td>
@@ -62,10 +62,10 @@
 			<xar:else />
 				<input type="checkbox" name="askvalidationemail" id="askvalidationemail" value="1" />
 			</xar:if>
-            "Not validated"</td>
+            <label for="askvalidationemail">"<xar:mlstring>Not validated</xar:mlstring>"</label></td>
         </tr>
         <tr>
-            <td><label for="ask"><xar:mlstring>Ask about sending a notification when an administrator change the password of a user</xar:mlstring> :</label></td>
+            <td><label for="askpasswordemail"><xar:mlstring>Ask about sending a notification when an administrator change the password of a user</xar:mlstring> :</label></td>
             <td style="text-align: left">
             <xar:if condition="xarModGetVar('roles', 'askpasswordemail')">
 				<input type="checkbox" name="askpasswordemail" id="askpasswordemail" value="1" checked="checked" />

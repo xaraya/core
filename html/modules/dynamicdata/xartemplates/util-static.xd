@@ -35,7 +35,7 @@
                <input type="hidden" name="modid" value="#$modid#" />
                <input type="hidden" name="itemtype" value="#$itemtype#" />
                <input type="hidden" name="table" value="#$table#" />
-               <input type="submit" value=" #xarML('Import table')# #$table# ">
+               <input type="submit" value=" #xarML('Import table')# #$table# " />
                </div>
            </form>
        </td>

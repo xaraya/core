@@ -44,18 +44,18 @@ document.forms['privilegeform'].submit();}
 			<xar:if condition="$ptype eq 'empty'">
 				<tr>
 					<td colspan="2">
-						<input type="radio" name="ptype" id="ptype_empty" value="empty" checked="checked" onClick="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
+						<input type="radio" name="ptype" id="ptype_empty" value="empty" checked="checked" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
 						<label for="ptype_empty"><xar:mlstring>empty</xar:mlstring></label><br />
-						<input type="radio" name="ptype" id="ptype_full" value="full" onClick="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
+						<input type="radio" name="ptype" id="ptype_full" value="full" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
 						<label for="ptype_full"><xar:mlstring>with rights</xar:mlstring></label>
 					</td>
 				</tr>
 			<xar:else />
 				<tr>
 					<td colspan="2">
-						<input type="radio" name="ptype" id="ptype_empty" value="empty" onClick="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
+						<input type="radio" name="ptype" id="ptype_empty" value="empty" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
 						<label for="ptype_empty"><xar:mlstring>empty</xar:mlstring></label><br />
-						<input type="radio" name="ptype" id="ptype_full" value="full" checked="checked" onClick="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
+						<input type="radio" name="ptype" id="ptype_full" value="full" checked="checked" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
 						<label for="ptype_full"><xar:mlstring>with rights</xar:mlstring></label>
 					</td>
 				</tr>
@@ -64,7 +64,7 @@ document.forms['privilegeform'].submit();}
 						<label for="pparentid"><xar:mlstring>Member of</xar:mlstring></label>
 					</td>
 					<td>
-						<select name="pparentid" id="pparentid" size="1" tabindex="2" onChange="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();">
+						<select name="pparentid" id="pparentid" size="1" tabindex="2" onchange="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();">
 							<xar:loop name="$privileges">
 							  <xar:if condition="$loop:item['pid'] eq $pparentid">
 								<option value="#$loop:item['pid']#" selected="selected">#$loop:item['name']#</option>
@@ -96,7 +96,7 @@ document.forms['privilegeform'].submit();}
 						<label for="pmodule"><xar:mlstring>Module</xar:mlstring></label>
 					</td>
 					<td>
-						<select name="pmodule" id="pmodule" size="1" tabindex="4" onChange="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();">
+						<select name="pmodule" id="pmodule" size="1" tabindex="4" onchange="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();">
 							<xar:loop name="$modules">
 								<xar:if condition="strtolower($loop:item['name']) eq strtolower($pmodule)">
 									<option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
@@ -112,7 +112,7 @@ document.forms['privilegeform'].submit();}
 						<label for="pcomponent"><xar:mlstring>Component</xar:mlstring></label>
 					</td>
 					<td>
-						<select name="pcomponent" id="pcomponent" size="1" tabindex="5" onChange="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();">
+						<select name="pcomponent" id="pcomponent" size="1" tabindex="5" onchange="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();">
 							<xar:loop name="$components">
 								<xar:if condition="$loop:item['name'] eq $pcomponent">
 									<option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>

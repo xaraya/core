@@ -57,8 +57,8 @@
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<input type="hidden" name="uid" id="uid" value="#$uid#" />
 		<input type="hidden" name="state" id="state" value="#$state#" />
-		<p><input type="checkbox" name="includesubgroups" value="1"><xar:mlstring>Include Subgroups</xar:mlstring></p>
-		<p><label for="subject"><xar:mlstring>Subject</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="subject" id="subject"></p>
+		<p><input type="checkbox" name="includesubgroups" id="includesubgroups" value="1" /><label for="includesubgroups"><xar:mlstring>Include Subgroups</xar:mlstring></label></p>
+		<p><label for="subject"><xar:mlstring>Subject</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="subject" id="subject" /></p>
 		<p><label for="message"><xar:mlstring>Message</xar:mlstring></label>:</p>
 		<p><textarea name="message" id="message" rows="20" cols="50"></textarea></p>
                 <xar:set name="$tmpsubmitvalue"><xar:mlstring>Submit</xar:mlstring></xar:set>

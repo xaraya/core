@@ -15,7 +15,7 @@
 
 	<table width="100%">
 		<tr>
-			<td><xar:mlstring>Module</xar:mlstring></td>
+			<td><label for="tag_module"><xar:mlstring>Module</xar:mlstring></label></td>
 			<td><input style="width:100%;" 
 			           type="text" 
 			           name="tag_module"
@@ -23,7 +23,7 @@
 			           value="#$module#" /></td>
 		</tr>
 		<tr>
-			<td><xar:mlstring>Tag</xar:mlstring></td>
+			<td><label for="tag_name"><xar:mlstring>Tag</xar:mlstring></label></td>
 			<td><input style="width:100%;" 
 			           type="text" 
 			           name="tag_name" 
@@ -31,7 +31,7 @@
 			           value="#$tagname#" /></td>
 		</tr>
 		<tr>
-			<td><xar:mlstring>Handler</xar:mlstring></td>
+			<td><label for="tag_handler"><xar:mlstring>Handler</xar:mlstring></label></td>
 			<td><input style="width:100%;" 
 			           type="text" 
 			           name="tag_handler" 
@@ -63,7 +63,7 @@
 				<input type="submit" 
 				       value="#xarMl('Save')#" />
 				<input type="Button" 
-				       value="#xarMl('cancel')#" 
+				       value="#xarMl('Cancel')#" 
 				       onclick="history.back(-1);" />
 			</td>
 		</tr>

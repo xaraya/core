@@ -131,9 +131,9 @@
       </xar:foreach>
     </select>
     <xar:elseif condition="!empty($field[$name])"/>
-      <input type="checkbox" name="field[#$name#]" id="field[#$name#]" value="1" checked="checked"/> <label for="field[#$name#]"><xar:data-label property="$properties[$name]" /></label>
+      <input type="checkbox" name="field[#$name#]" id="field_#$name#" value="1" checked="checked"/> <label for="field_#$name#"><xar:data-label property="$properties[$name]" /></label>
     <xar:else/>
-      <input type="checkbox" name="field[#$name#]" id="field[#$name#]" value="1" /> <label for="field[#$name#]"><xar:data-label property="$properties[$name]" /></label>
+      <input type="checkbox" name="field[#$name#]" id="field_#$name#" value="1" /> <label for="field_#$name#"><xar:data-label property="$properties[$name]" /></label>
     </xar:if>
   </td>
   </xar:foreach>
@@ -145,7 +145,7 @@
   </td>
   <xar:foreach in="$properties" key="$name">
   <td>
-    <select name="operation[#$name#]">
+    <select name="operation[#$name#]" id="operation_#$name#">
       <option value=""></option>
       <xar:foreach in="$operationoptions" value="$option">
         <xar:if condition="!empty($operation[$name]) and $operation[$name] eq $option['id']">
@@ -154,7 +154,7 @@
           <option value="#$option['id']#">#$option['name']#</option>
         </xar:if>
       </xar:foreach>
-    </select>
+    </select> <label for="operation_#$name#">
   </td>
   </xar:foreach>
 </tr>
@@ -165,7 +165,7 @@
   </td>
   <xar:foreach in="$properties" key="$name">
   <td>
-    <select name="where[#$name#]">
+    <select name="where[#$name#]" id="where_#$name#">
       <option value=""></option>
       <xar:foreach in="$whereoptions" value="$option">
         <xar:if condition="!empty($where[$name]) and $where[$name] eq $option['id']">
@@ -174,7 +174,7 @@
           <option value="#$option['id']#">#$option['name']#</option>
         </xar:if>
       </xar:foreach>
-    </select>
+    </select> <label for="where_#$name#">
   </td>
   </xar:foreach>
 </tr>
@@ -185,9 +185,9 @@
   <xar:foreach in="$properties" key="$name">
   <td>
     <xar:if condition="isset($value[$name])">
-      <input name="value[#$name#]" value="#$value[$name]#" type="text" size="13"/>
+      <input name="value[#$name#]" id="value_#$name#" value="#$value[$name]#" type="text" size="13"/>
     <xar:else/>
-      <input name="value[#$name#]" value="" type="text" size="13"/>
+      <input name="value[#$name#]" id="value_#$name#" value="" type="text" size="13"/>
     </xar:if>
   </td>
   </xar:foreach>
@@ -198,7 +198,7 @@
   </td>
   <xar:foreach in="$properties" key="$name">
   <td>
-    <select name="sort[#$name#]">
+    <select name="sort[#$name#]" id="sort_#$name#">
       <option value=""></option>
       <xar:foreach in="$sortoptions" value="$option">
         <xar:if condition="!empty($sort[$name]) and $sort[$name] eq $option['id']">

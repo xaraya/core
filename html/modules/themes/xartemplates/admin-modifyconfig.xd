@@ -6,7 +6,7 @@
     <div>
 	<input type="hidden" name="authid" id="authid" value="#$authid#" />
 	<h3><xar:mlstring>Site Display Options</xar:mlstring></h3>
-	<p>#$defaultthemelabel# 
+	<p><label for="defaulttheme"><xar:mlstring>Default Theme</xar:mlstring></label>:
 		<select name="defaulttheme" id="defaulttheme" size="1">
 			<xar:loop name="$themes">
 				<xar:if condition="$loop:item['name'] eq $defaulttheme">
@@ -21,15 +21,15 @@
 			</xar:loop>
 		</select>
 	</p>
-    <p><xar:mlstring>Site Name</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="sitename" id="sitename" value="#xarModGetVar('themes', 'SiteName', 1)#" size="30" maxlength="100" /></p>
-        <p><xar:mlstring>Site Slogan</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="slogan" id="slogan" value="#xarModGetVar('themes', 'SiteSlogan', 1)#" size="30" maxlength="100" />
-	<p><xar:mlstring>Copyright</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="copyright" id="copyright" value="#xarModGetVar('themes', 'SiteCopyRight', 1)#" size="30" maxlength="100" /></p>
+    <p><label for="sitename"><xar:mlstring>Site Name</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="sitename" id="sitename" value="#xarModGetVar('themes', 'SiteName', 1)#" size="30" maxlength="100" /></p>
+    <p><label for="slogan"><xar:mlstring>Site Slogan</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="slogan" id="slogan" value="#xarModGetVar('themes', 'SiteSlogan', 1)#" size="30" maxlength="100" />
+	<p><label for="copyright"><xar:mlstring>Copyright</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="copyright" id="copyright" value="#xarModGetVar('themes', 'SiteCopyRight', 1)#" size="30" maxlength="100" /></p>
 	#xarVarDelCached('Mod.Variables.themes','SiteCopyRight')#
-	<p><xar:mlstring>Footer Note</xar:mlstring>:&nbsp;&nbsp;<br /><textarea name="footer" id="footer" cols="60" rows="5" class="xar-norm">#xarModGetVar('themes', 'SiteFooter', 1)#</textarea></p>
+	<p><xar:mlstring>Footer Note</xar:mlstring></label>:&nbsp;&nbsp;<br /><textarea name="footer" id="footer" cols="60" rows="5" class="xar-norm">#xarModGetVar('themes', 'SiteFooter', 1)#</textarea></p>
 	#xarVarDelCached('Mod.Variables.themes','SiteFooter')#
 	<h3><xar:mlstring>Page Title Options</xar:mlstring></h3>
-	<p><xar:mlstring>Page Title Separator</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="separator" id="separator" value="#xarModGetVar('themes', 'SiteTitleSeparator', 1)#" size="10" maxlength="15" /></p>
-	<p><xar:mlstring>Page Title Order</xar:mlstring>:
+	<p><label for="separator"><xar:mlstring>Page Title Separator</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="separator" id="separator" value="#xarModGetVar('themes', 'SiteTitleSeparator', 1)#" size="10" maxlength="15" /></p>
+	<p><label for="pagetitle"><xar:mlstring>Page Title Order</xar:mlstring></label>:
 	<select name="pagetitle" id="pagetitle" size="1">
 		<xar:if condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'default'">
 			<option value="default" selected="selected"><xar:mlstring>Site Name - Module Name - Page Name</xar:mlstring></option>
@@ -76,8 +76,8 @@
 	</select></p>
 	<h3><xar:mlstring>Template Debugging options</xar:mlstring></h3>
     <xar:if condition="xarConfigGetVar('Site.BL.CacheTemplates')">
-    <p>
-      <xar:mlstring>Show php comment block header in compiled templates</xar:mlstring>
+    <p><label for="showphpcbit">
+      <xar:mlstring>Show php comment block header in compiled templates</xar:mlstring></label>:
         <xar:if condition="xarModGetVar('themes', 'ShowPHPCommentBlockInTemplates')">
           <input type="checkbox" name="showphpcbit" id="showphpcbit" value="1" checked="checked" />
         <xar:else />
@@ -85,16 +85,16 @@
         </xar:if>
     </p>
     </xar:if>
-    <p>
-      <xar:mlstring>Show template filenames in HTML comments</xar:mlstring>
+    <p><label for="showtemplates">
+      <xar:mlstring>Show template filenames in HTML comments</xar:mlstring></label>:
         <xar:if condition="xarModGetVar('themes', 'ShowTemplates')">
           <input type="checkbox" name="showtemplates" id="showtemplates" value="1" checked="checked" />
         <xar:else />
           <input type="checkbox" name="showtemplates" id="showtemplates" value="1" />
         </xar:if>
 	</p>
-    <p>
-      <xar:mlstring>Cache templates</xar:mlstring>
+    <p><label for="cachetemplates">
+      <xar:mlstring>Cache templates</xar:mlstring></label>:
       <xar:if condition="xarConfigGetVar('Site.BL.CacheTemplates')">
         <input type="checkbox" name="cachetemplates" id="cachetemplates" value="1" checked="checked"/>
       <xar:else/>
@@ -103,7 +103,7 @@
     </p>
 	<xar:if condition="xarThemeIsAvailable('atom')">
 		<!-- This should be moved if we ever fully support the atom spec -->
-		<p><xar:mlstring>Atom Tag</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="AtomTag" id="AtomTag" value="#xarModGetVar('themes', 'AtomTag', 1)#" size="30" maxlength="100" /></p>
+		<p><label for="AtomTag"><xar:mlstring>Atom Tag</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="AtomTag" id="AtomTag" value="#xarModGetVar('themes', 'AtomTag', 1)#" size="30" maxlength="100" /></p>
 	</xar:if>
     <input type="submit" value="#$submitbutton#" />
    </div>

@@ -27,18 +27,18 @@
                             <tr>
                                 <xar:if condition="$loop:item['option'] eq ''">
                                     <td width="100%" class="xar-normal">
-                                        #$loop:item['comment']# 
+                                        #$loop:item['comment']#
                                     </td>
                                     <xar:else />
                                     <td width="10%" valign="top" class="xar-normal">
                                         <xar:if condition="$loop:item['option'] == 'true'">
-                                            <input type="checkbox" name="chosen[]" value="#$loop:item['item']#" checked="checked" />
+                                            <input type="checkbox" name="chosen[]" id="chosen_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
                                             <xar:else />
-                                            <input type="checkbox" name="chosen[]" value="#$loop:item['item']#" />
+                                            <input type="checkbox" name="chosen[]" id="chosen_#$loop:index#" value="#$loop:item['item']#" />
                                         </xar:if>
                                     </td>
                                     <td width="90%" class="xar-normal">
-                                        #$loop:item['comment']# 
+                                        <label for="chosen_#$loop:index#"">#$loop:item['comment']#</label>
                                     </td>
                                 </xar:if>
                             </tr>
@@ -90,13 +90,13 @@
                                         <xar:else />
                                         <td width="10%" valign="top" class="xar-normal">
                                             <xar:if condition="$loop:item['option'] == 'true'">
-                                                <input type="checkbox" name="chosen[]" value="#$loop:item['item']#" checked="checked" />
+                                                <input type="checkbox" name="chosen[]" id="chosen_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
                                                 <xar:else />
-                                                <input type="checkbox" name="chosen[]" value="#$loop:item['item']#" />
+                                                <input type="checkbox" name="chosen[]" id="chosen_#$loop:index#" value="#$loop:item['item']#" />
                                             </xar:if>
                                         </td>
                                         <td width="90%" class="xar-normal">
-                                            #$loop:item['comment']# 
+                                            <lable for="chosen_#">$loop:index#"#$loop:item['comment']#</label>
                                         </td>
                                     </xar:if>
                                 </tr>
@@ -160,13 +160,13 @@
                                         <xar:else />
                                         <td width="10%" valign="top" class="xar-normal">
                                             <xar:if condition="$loop:item['option'] == 'true'">
-                                                <input type="checkbox" name="chosen[]" value="#$loop:item['item']#" checked="checked" />
+                                                <input type="checkbox" name="chosen[]" id="chosen_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
                                                 <xar:else />
-                                                <input type="checkbox" name="chosen[]" value="#$loop:item['item']#" />
+                                                <input type="checkbox" name="chosen[]" id="chosen_#$loop:index#" value="#$loop:item['item']#" />
                                             </xar:if>
                                         </td>
                                         <td width="90%" class="xar-normal">
-                                            #$loop:item['comment']# 
+                                            <label for="chosen_#">$loop:index#"#$loop:item['comment']#</label>
                                         </td>
                                     </xar:if>
                                 </tr>

@@ -16,9 +16,9 @@
 </td><td valign="top">
     </xar:if>
     <xar:if condition="!empty($field['checked'])">
-        <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check[#$field['id']#]" value="1" checked="checked" /> <label for="dd_check[#$field['id']#]">#$field['label']#</label><br />
+        <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check_#$field['id']#" value="1" checked="checked" /> <label for="dd_check_#$field['id']#">#$field['label']#</label><br />
     <xar:else />
-        <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check[#$field['id']#]" value="1" /> <label for="dd_check[#$field['id']#]">#$field['label']#</label><br />
+        <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check_#$field['id']#" value="1" /> <label for="dd_check_#$field['id']#">#$field['label']#</label><br />
     </xar:if>
 </xar:foreach>
 </xar:if>

@@ -107,13 +107,13 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 				<xar:loop name="$locales">
 					<tr>
 						<td align="center">
-							&nbsp;#$loop:item['name']#
+							<label for="locale_#$loop:index#">&nbsp;#$loop:item['name']#</label>
 						</td>
 						<td align="center">
 							 <xar:if condition="$loop:item['active'] == 'true'">
-								  <input type="checkbox" name="active[]" value=#$loop:item['name']# checked />
+								  <input type="checkbox" name="active[]" id="locale_#$loop:index#" value="#$loop:item['name']#" checked="checked" />
 							<xar:else />
-								  <input type="checkbox" name="active[]" value=#$loop:item['name']# />
+								  <input type="checkbox" name="active[]" id="locale_#$loop:index#" value=#$loop:item['name']# />
 							</xar:if>
 						</td>
 					</tr>

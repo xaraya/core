@@ -8,52 +8,52 @@
 <div>
 
 <xar:if condition="$what eq 1">
-<input type="radio" name="what" id="what" value="1" checked="checked" />
+<input type="radio" name="what" id="what_general" value="1" checked="checked" />
 <xar:else />
-<input type="radio" name="what" id="what" value="1"  />
-</xar:if><xar:mlstring>General info</xar:mlstring>
+<input type="radio" name="what" id="what_general" value="1"  />
+</xar:if><label for="what_general"><xar:mlstring>General info</xar:mlstring></label>
 
 <xar:if condition="$what eq 2">
-<input type="radio" name="what" id="what" value="2" checked="checked" />
+<input type="radio" name="what" id="what_credits" value="2" checked="checked" />
 <xar:else />
-<input type="radio" name="what" id="what" value="2"  />
-</xar:if><xar:mlstring>Credits</xar:mlstring>
+<input type="radio" name="what" id="what_credits" value="2"  />
+</xar:if><label for="what_credits"><xar:mlstring>Credits</xar:mlstring></label>
 
 <xar:if condition="$what eq 4">
-<input type="radio" name="what" id="what" value="4" checked="checked" />
+<input type="radio" name="what" id="what_config" value="4" checked="checked" />
 <xar:else />
-<input type="radio" name="what" id="what" value="4"  />
-</xar:if><xar:mlstring>Configuration</xar:mlstring>
+<input type="radio" name="what" id="what_config" value="4"  />
+</xar:if><label for="what_config"><xar:mlstring>Configuration</xar:mlstring></label>
 
 <xar:if condition="$what eq 8">
-<input type="radio" name="what" id="what" value="8" checked="checked" />
+<input type="radio" name="what" id="what_mods" value="8" checked="checked" />
 <xar:else />
-<input type="radio" name="what" id="what" value="8"  />
-</xar:if><xar:mlstring>Modules</xar:mlstring>
+<input type="radio" name="what" id="what_mods" value="8"  />
+</xar:if><label for="what_mods"><xar:mlstring>Modules</xar:mlstring></label>
 
 <xar:if condition="$what eq 16">
-<input type="radio" name="what" id="what" value="16" checked="checked" />
+<input type="radio" name="what" id="what_env" value="16" checked="checked" />
 <xar:else />
-<input type="radio" name="what" id="what" value="16"  />
-</xar:if><xar:mlstring>Environment</xar:mlstring>
+<input type="radio" name="what" id="what_env" value="16"  />
+</xar:if><label for="what_env"><xar:mlstring>Environment</xar:mlstring></label>
 
 <xar:if condition="$what eq 32">
-<input type="radio" name="what" id="what" value="32" checked="checked" />
+<input type="radio" name="what" id="what_vars" value="32" checked="checked" />
 <xar:else />
-<input type="radio" name="what" id="what" value="32"  />
-</xar:if><xar:mlstring>Variables</xar:mlstring>
+<input type="radio" name="what" id="what_vars" value="32"  />
+</xar:if><label for="what_vars"><xar:mlstring>Variables</xar:mlstring></label>
 
 <xar:if condition="$what eq 64">
-<input type="radio" name="what" id="what" value="64" checked="checked" />
+<input type="radio" name="what" id="what_license" value="64" checked="checked" />
 <xar:else />
-<input type="radio" name="what" id="what" value="64"  />
-</xar:if><xar:mlstring>License</xar:mlstring>
+<input type="radio" name="what" id="what_license" value="64"  />
+</xar:if><label for="what_license"><xar:mlstring>License</xar:mlstring></label>
 
 <xar:if condition="$what eq -1">
-<input type="radio" name="what" id="what" value="-1" checked="checked" />
+<input type="radio" name="what" id="what_all" value="-1" checked="checked" />
 <xar:else />
-<input type="radio" name="what" id="what" value="-1"  />
-</xar:if><xar:mlstring>All</xar:mlstring>
+<input type="radio" name="what" id="what_all" value="-1"  />
+</xar:if><label for="what_all"><xar:mlstring>All</xar:mlstring></label>
 &nbsp;&nbsp;<input type="submit" value="Refresh" />
 </div>
 </form>

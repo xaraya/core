@@ -32,7 +32,7 @@
                                         <select name="configuration" size="5" style="width:250px;">
                                             <xar:loop name="$names">
                                                 <xar:if condition="$loop:item['display'] eq 'Community Site'">
-                                                    <option value="#$loop:item['value']#" selected>
+                                                    <option value="#$loop:item['value']#"selected="selected">
                                                         #$loop:item['display']# 
                                                     </option>
                                                     <xar:else />
