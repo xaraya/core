@@ -202,7 +202,7 @@ class xarLog__Logger
         // Calling xarExceptionRender() directly is causing a
         // recursive loop because the args array is not set correctly.
         //$msg = xarExceptionRender($this->format);
-        $this->logMessage($msg, false);
+        //$this->logMessage($msg, false);
     }
 
     function logVariable($name, $var)
