@@ -27,6 +27,9 @@
 </table>
 </form>
 	
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+<tr>
+<td>
 <b><xar:mlstring>Show</xar:mlstring>: </b>
 
 <xar:if condition="$phase eq 'active'">
@@ -36,7 +39,12 @@
 <a href="#xarModURL('roles', 'user', 'view')#&amp;phase=active&letter=#$letter#&search=#$search#&order=#$order#"><xar:mlstring>Active Users</xar:mlstring></a>&nbsp;|
 <b><xar:mlstring>All Users</xar:mlstring></b>
 </xar:if>
-</p>
+</td>
+<td align="right">
+#$total# <xar:mlstring>selected</xar:mlstring>
+</td>
+</tr>
+</table>
 <xar:if condition="!empty($message)">
 	<p>#$message#</p>
 <xar:else />
