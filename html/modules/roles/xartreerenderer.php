@@ -269,7 +269,7 @@ class xarTreeRenderer
             xarModURL('roles',
                 'admin',
                 'showusers',
-                array('uid' => $this->treenode['uid'], 'reload' => 1)) . '" title="' . xarML('Show the Users in this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/users.gif" style="vertical-align: middle;" /></a>';
+                array('uid' => $this->treenode['uid'], 'reload' => 1)) . '" title="' . xarML('Show the Users in this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/users.gif" style="vertical-align: middle;" alt="" /></a>';
         }
         return $html;
     }
@@ -283,7 +283,7 @@ class xarTreeRenderer
             xarModURL('roles',
                 'admin',
                 'deleterole',
-                array('uid' => $this->treenode['uid'])) . '" title="' . xarML('Delete this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>';
+                array('uid' => $this->treenode['uid'])) . '" title="' . xarML('Delete this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" alt="" /></a>';
         }
         return $html;
     }
@@ -297,7 +297,7 @@ class xarTreeRenderer
             xarModURL('roles',
                 'admin',
                 'createmail',
-                array('uid' => $this->treenode['uid'])) . '" title="' . xarML('Email the Users in this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/email.gif" style="vertical-align: middle;" /></a>';
+                array('uid' => $this->treenode['uid'])) . '" title="' . xarML('Email the Users in this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/email.gif" style="vertical-align: middle;" alt=""/></a>';
         }
         return $html;
     }
@@ -311,7 +311,7 @@ class xarTreeRenderer
             xarModURL('roles',
                 'admin',
                 'showprivileges',
-                array('uid' => $this->treenode['uid'])) . '" title="' . xarML('Show the Privileges assigned to this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>';
+                array('uid' => $this->treenode['uid'])) . '" title="' . xarML('Show the Privileges assigned to this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" alt="" /></a>';
         }
         return $html;
     }
@@ -325,7 +325,7 @@ class xarTreeRenderer
             xarModURL('roles',
                 'admin',
                 'testprivileges',
-                array('uid' => $this->treenode['uid'])) . '" title="' . xarML('Test this Groups\'s Privileges') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>';
+                array('uid' => $this->treenode['uid'])) . '" title="' . xarML('Test this Groups\'s Privileges') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" alt=""/></a>';
         }
         return $html;
     }
@@ -336,7 +336,7 @@ class xarTreeRenderer
             xarModURL('roles',
                 'admin',
                 'modifyrole',
-                array('uid' => $this->treenode['uid'])) .'" title="' . xarML('Modify this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/infoicon.gif" style="vertical-align: middle;" /></a>';
+                array('uid' => $this->treenode['uid'])) .'" title="' . xarML('Modify this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/infoicon.gif" style="vertical-align: middle;" alt=""/></a>';
         return $html;
     }
 
