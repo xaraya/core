@@ -1816,43 +1816,89 @@ function xarMod_getBaseInfo($modName, $type = 'module')
  * @return mixed true on success
  * @raise DATABASE_ERROR, BAD_PARAM
  */
-function xarMod_getVarsByModule($modName)
+function xarMod_getVarsByModule($modName, $type = 'module')
 {
     if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        $msg = xarML('Empty theme or module name (#(1)).', $modName);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) {
-        return; // throw back
+    switch(strtolower($type)) {
+        case 'module':
+            default:
+            $modBaseInfo = xarMod_getBaseInfo($modName);
+            if (!isset($modBaseInfo)) {
+                return; // throw back
+            }
+            break;
+        case 'theme':
+            $modBaseInfo = xarMod_getBaseInfo($modName, $type = 'theme');
+            if (!isset($modBaseInfo)) {
+                return; // throw back
+            }
+            break;
     }
 
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
 
-    // Takes the right table basing on module mode
-    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_varstable = $tables['system/module_vars'];
-    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_varstable = $tables['site/module_vars'];
+    switch(strtolower($type)) {
+        case 'module':
+            default:
+            // Takes the right table basing on module mode
+            if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+                $module_varstable = $tables['system/module_vars'];
+            } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+                $module_varstable = $tables['site/module_vars'];
+            }
+
+            $query = "SELECT xar_name,
+                             xar_value
+                      FROM $module_varstable
+                      WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'";
+            $result =& $dbconn->Execute($query);
+            if (!$result) return;
+
+            while (!$result->EOF) {
+                list($name,$value) = $result->fields;
+                xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
+                $result->MoveNext();
+            }
+            $result->Close();
+
+            xarVarSetCached('Mod.GetVarsByModule', $modName, true);
+            break;
+        case 'theme':
+            // Takes the right table basing on theme mode
+            if ($themeBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
+                $theme_varsTable = $tables['theme_vars'];
+            } elseif ($themeBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
+                $theme_varsTable = $tables['site/theme_vars'];
+            }
+
+            $query = "SELECT xar_name,
+                             xar_prime,
+                             xar_value,
+                             xar_description
+                      FROM $theme_varsTable
+                      WHERE xar_themeName = '" . xarVarPrepForStore($themeName) . "'";
+            $result =& $dbconn->Execute($query);
+            if (!$result) return;
+
+            $themevars = array();
+            while (!$result->EOF) {
+                list($name,$prime,$value,$description) = $result->fields;
+                $themevars[] = array('name' => $name, 'prime' => $prime, 'value' => $value, 'description' => $description);
+                xarVarSetCached('Theme.Variables.' . $themeName, $name, $value);
+                $result->MoveNext();
+            }
+            $result->Close();
+
+            xarVarSetCached('Theme.GetVarsByTheme', $themeName, true);
+            break;
     }
 
-    $query = "SELECT xar_name,
-                     xar_value
-              FROM $module_varstable
-              WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    while (!$result->EOF) {
-        list($name,$value) = $result->fields;
-        xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
-        $result->MoveNext();
-    }
-    $result->Close();
-
-    xarVarSetCached('Mod.GetVarsByModule', $modName, true);
     return true;
 }
 
@@ -1866,38 +1912,95 @@ function xarMod_getVarsByModule($modName)
  * @raise DATABASE_ERROR, BAD_PARAM
  * @todo <marco> #1 fetch from site table too ?
  */
-function xarMod_getVarsByName($name)
+function xarMod_getVarsByName($name, $type = 'module')
 {
-    // MrB: This couldn't possibly have worked, what gives?
-    //if (empty($modName)) {
-    //    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-    //    return;
-    //}
+    if (empty($name)) {
+        $msg = xarML('Empty Theme or Module name (#(1)).', $name);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        return;
+    }
+
+    switch(strtolower($type)) {
+        case 'module':
+            default:
+            $modBaseInfo = xarMod_getBaseInfo($modName);
+            if (!isset($modBaseInfo)) {
+                return; // throw back
+            }
+            break;
+        case 'theme':
+            $modBaseInfo = xarMod_getBaseInfo($modName, $type = 'themename');
+            if (!isset($modBaseInfo)) {
+                return; // throw back
+            }
+            break;
+    }
 
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
 
-    $module_table = $tables['system/modules'];
-    $module_varstable = $tables['system/module_vars'];
+    switch(strtolower($type)) {
+        case 'module':
+            default:
 
-    // TODO: fetch from site table too ?
-    //    $module_varstable = $tables['site/module_vars'];
+            // Takes the right table basing on module mode
+            if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+                $module_varstable = $tables['system/module_vars'];
+                $module_table = $tables['system/modules'];
+            } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+                $module_varstable = $tables['site/module_vars'];
+                $module_table = $tables['site/modules'];
+            }
+            $query = "SELECT mods.xar_name, vars.xar_value
+                      FROM $module_table as mods , $module_varstable as vars
+                      WHERE mods.xar_id = vars.xar_modid AND
+                            vars.xar_name = '" . xarVarPrepForStore($name) . "'";
+            break;
+        case 'theme':
+            if ($modBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
+                $theme_varsTable = $tables['system/theme_vars'];
+            } elseif ($modBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
+                $theme_varsTable = $tables['site/theme_vars'];
+            }
+            $query = "SELECT xar_themeName,
+                             xar_value
+                      FROM $theme_varsTable
+                      WHERE xar_name = '" . xarVarPrepForStore($name) . "'";
+                     break;
+    }
 
-    $query = "SELECT mods.xar_name, vars.xar_value
-              FROM $module_table as mods , $module_varstable as vars
-              WHERE mods.xar_id = vars.xar_modid AND
-                    vars.xar_name = '" . xarVarPrepForStore($name) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    while (!$result->EOF) {
-        list($modName,$value) = $result->fields;
-        xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
-        $result->MoveNext();
+    switch(strtolower($type)) {
+        case 'module':
+            default:
+            while (!$result->EOF) {
+                list($modName,$value) = $result->fields;
+                xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
+                $result->MoveNext();
+            }
+            break;
+        case 'theme':
+            while (!$result->EOF) {
+                list($modName,$value) = $result->fields;
+                xarVarSetCached('Theme.Variables.' . $modName, $name, $value);
+                $result->MoveNext();
+            }
+            break;
     }
-    $result->Close();
 
-    xarVarSetCached('Mod.GetVarsByName', $name, true);
+    $result->Close();
+    switch(strtolower($type)) {
+        case 'module':
+            default:
+            xarVarSetCached('Mod.GetVarsByName', $name, true);
+            break;
+        case 'theme':
+            xarVarSetCached('Theme.GetVarsByName', $name, true);
+            break;
+    }
+    
     return true;
 }
 
