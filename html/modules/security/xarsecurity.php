@@ -80,7 +80,8 @@ class xarSchemas
 			}
 			else {
 				$query = "SELECT *
-						FROM $this->schemastable WHERE xar_module = '$module'";
+						FROM $this->schemastable WHERE xar_module = '$module'
+						ORDER BY xar_name";
 			}
 
 			$result = $this->dbconn->Execute($query);
@@ -278,49 +279,74 @@ class xarSchemas
 	//Get the inherited permissions
 		$ancestors = $participant->getAncestors();
 
-		$ancestors = array_reverse($ancestors);
-
-//		foreach($ancestors as $perm){
-//		echo $perm->getName() . $perm->getLevel();
-//		}
-
-		$final = array();
-		$top = $ancestors[0]->getLevel();
-		foreach ($ancestors as $ancestor) {
-			$perms = $ancestor->getAssignedPermissions();
-			$permissions = array();
-			foreach ($perms as $perm) {
-				$permissions = $this->winnow(array($perm),$permissions);
-				$permissions = $this->winnow($perm->getAncestors(),$permissions);
-			}
-			$groupname = $ancestor->getName();
-			$grouplevel = $ancestor->getLevel();
-			array_push($final,array('permissions'=>$permissions,
-								'name'=>$groupname,
-								'level'=>$grouplevel));
-		}
-
+// set up an array to hold the permissions
 		$irreducibleset = array();
-		foreach ($final as $step) {
-			if ($step['level']) {
-				$irreducibleset = $this->winnow($irreducibleset,$step['permissions']);
+
+// if there are ancestors, look for their permissions
+		if (count($ancestors) >0) {
+
+// need to process the last ones first
+			$ancestors = array_reverse($ancestors);
+
+// set up a temporary array to hold results
+			$final = array();
+
+// begin with the guy at the top of the pyramid
+			$top = $ancestors[0]->getLevel();
+
+// begin processing an ancestor
+			foreach ($ancestors as $ancestor) {
+
+// get the ancestors assigned permissions
+				$perms = $ancestor->getAssignedPermissions();
+				$permissions = array();
+// for each one winnow the  assigned permissions and then the inherited
+				foreach ($perms as $perm) {
+					$permissions = $this->winnow(array($perm),$permissions);
+					$permissions = $this->winnow($perm->getAncestors(),$permissions);
+				}
+
+// add some info on the group they belong to and stick it all in an array
+				$groupname = $ancestor->getName();
+				$grouplevel = $ancestor->getLevel();
+				array_push($final,array('permissions'=>$permissions,
+									'name'=>$groupname,
+									'level'=>$grouplevel));
 			}
-			else {
-				$irreducibleset = $this->trump($irreducibleset,$step['permissions']);
-				$top = $step['level'];
+
+// winnow all permissions of a given level above the participant
+				foreach ($final as $step) {
+				if ($step['level']) {
+					$irreducibleset = $this->winnow($irreducibleset,$step['permissions']);
+				}
+
+// or trump the previous permissions with those of a lower level
+// TODO: this is a bug.Probably should winnow the lowerlevel and THEN trump against
+// the higher level
+				else {
+					$irreducibleset = $this->trump($irreducibleset,$step['permissions']);
+					$top = $step['level'];
+				}
 			}
 		}
+
+// get the assigned permissions and winnow them
 		$participantpermissions = $participant->getAssignedPermissions();
 		$partpermissions = $this->winnow($participantpermissions,$participantpermissions);
 
+// trump them against the accumulated permissions from higher levels
 		$irreducibleset = $this->trump($irreducibleset,$participantpermissions);
 
+// check against the schema
 		$pass = false;
 		foreach ($irreducibleset as $chiave) {
 			if ($chiave->implies($this->getSchema($schemaname))) {
-				return $chiave;
+
+// found a permission that admits: return the permission
+			return $chiave;
 			}
 		}
+// nothing found: return false
 		return $pass;
 	}
 
@@ -483,7 +509,8 @@ class xarPermissions extends xarSchemas
 						xar_permissions.xar_description,
 						xar_permmembers.xar_parentid
 						FROM $this->permissionstable INNER JOIN $this->permmemberstable
-						ON xar_permissions.xar_pid = xar_permmembers.xar_pid";
+						ON xar_permissions.xar_pid = xar_permmembers.xar_pid
+						ORDER BY xar_permissions.xar_name";
 
 			$result = $this->dbconn->Execute($query);
 			if (!$result) return;
