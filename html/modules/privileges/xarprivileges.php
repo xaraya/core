@@ -391,7 +391,10 @@ class xarMasks
             }
         }
         foreach ($privilegeset['privileges'] as $privilege) {
-            if (($privilege->getLevel() == 0) && ($privilege->includes($mask))) $pass = false;
+           if (($privilege->getLevel() == 0) && ($privilege->includes($mask))) {
+            $pass = false;
+            break;
+           }
         }
         if (!$matched && ($privilegeset['children'] != array())) $pass = $this->testprivileges($mask,$privilegeset['children'],$pass);
         return $pass;
