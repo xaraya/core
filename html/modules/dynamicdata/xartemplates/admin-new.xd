@@ -22,7 +22,12 @@
 </table>
 </xar:if>
 
+<xar:set name="$isupload">#$object->upload#</xar:set>
+<xar:if condition="!empty($isupload)">
+<form method="POST" action="#xarModURL('dynamicdata', 'admin', 'create')#" enctype="multipart/form-data">
+<xar:else />
 <form method="POST" action="#xarModURL('dynamicdata', 'admin', 'create')#">
+</xar:if>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="modid" id="modid" value="#$object->moduleid#" />
     <input type="hidden" name="itemtype" id="itemtype" value="#$object->itemtype#" />

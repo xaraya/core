@@ -103,6 +103,10 @@ class Dynamic_Property_Master
 
             // add it to the list of properties
             $objectref->properties[$property->name] =& $property;
+
+            if (isset($property->upload)) {
+                $objectref->upload = true;
+            }
         }
     }
 
@@ -275,6 +279,12 @@ class Dynamic_Property_Master
             case 37: // (userlist) User List
                 require_once "includes/properties/Dynamic_UserList_Property.php";
                 $property = new Dynamic_UserList_Property($args);
+                break;
+            case 38: // (textupload) Text Upload
+                // large textarea by default here
+                $args['rows'] = 20;
+                require_once "includes/properties/Dynamic_TextUpload_Property.php";
+                $property = new Dynamic_TextUpload_Property($args);
                 break;
             default:
                 $property = new Dynamic_Property($args);
@@ -615,6 +625,14 @@ class Dynamic_Property_Master
                               'name'       => 'userlist',
                               'label'      => 'User List',
                               'format'     => '37',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[38] = array(
+                              'id'         => 38,
+                              'name'       => 'textupload',
+                              'label'      => 'Text Upload',
+                              'format'     => '38',
                               'validation' => '',
                               // ...
                              );

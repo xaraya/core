@@ -45,6 +45,9 @@ class Dynamic_Object_Master
 
     var $primary = null;
 
+    // flag indicating if this object has some property that provides file upload
+    var $upload = false;
+
     /**
      * Default constructor to set the object variables, retrieve the dynamic properties
      * and get the corresponding data stores for those properties
