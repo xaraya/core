@@ -32,7 +32,7 @@ function base_admin_release()
     require_once('modules/base/xarclass/feedParser.php');
     // Check and see if a feed has been supplied to us.
     // Need to change the url once release module is moved to 
-    $feedfile = "http://www.xaraya.com/index.php/articles/rnid/?theme=rss";
+    $feedfile = "http://www.xaraya.com/index.php?module=release&func=rssviewids&theme=rss";
     // Get the feed file (from cache or from the remote site)
     $feeddata = xarModAPIFunc('base', 'user', 'getfile',
                               array('url' => $feedfile,
