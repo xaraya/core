@@ -477,20 +477,69 @@ class Dynamic_Object_Master
     }
 
     /**
-     * Class method to retrieve a particular object definition
+     * Class method to retrieve a particular object definition, with sub-classing
      * (= the same as creating a new Dynamic Object with itemid = null)
      *
      * @param $args['objectid'] id of the object you're looking for, or
      * @param $args['moduleid'] module id of the object to retrieve +
      * @param $args['itemtype'] item type of the object to retrieve
+     * @param $args['classname'] optional classname (e.g. <module>_Dynamic_Object)
      * @returns object
      * @return the requested object definition
      */
     function &getObject($args)
     {
-        $args['itemid'] = null;
+        if (!isset($args['itemid'])) $args['itemid'] = null;
+        $classname = 'Dynamic_Object';
+        if (!empty($args['classname']) && class_exists($args['classname'])) {
+            $classname = $args['classname'];
+/*
+        // TODO: automatic sub-classing per module (and itemtype) ?
+        } elseif (!empty($args['moduleid'])) {
+            $modInfo = xarModGetInfo($args['moduleid']);
+            $modName = strtolower($modInfo['name']);
+            if ($modName != 'dynamicdata') {
+                $classname = "{$modName}_Dynamic_Object";
+                if (!class_exists($classname))
+                    $classname = 'Dynamic_Object';
+            }
+*/
+        }
         // here we can use our own classes to retrieve this
-        $object = new Dynamic_Object($args);
+        $object = new $classname($args);
+        return $object;
+    }
+
+    /**
+     * Class method to retrieve a particular object list definition, with sub-classing
+     * (= the same as creating a new Dynamic Object List)
+     *
+     * @param $args['objectid'] id of the object you're looking for, or
+     * @param $args['moduleid'] module id of the object to retrieve +
+     * @param $args['itemtype'] item type of the object to retrieve
+     * @param $args['classname'] optional classname (e.g. <module>_Dynamic_Object_List)
+     * @returns object
+     * @return the requested object definition
+     */
+    function &getObjectList($args)
+    {
+        $classname = 'Dynamic_Object_List';
+        if (!empty($args['classname']) && class_exists($args['classname'])) {
+            $classname = $args['classname'];
+/*
+        // TODO: automatic sub-classing per module (and itemtype) ?
+        } elseif (!empty($args['moduleid'])) {
+            $modInfo = xarModGetInfo($args['moduleid']);
+            $modName = strtolower($modInfo['name']);
+            if ($modName != 'dynamicdata') {
+                $classname = "{$modName}_Dynamic_Object_List";
+                if (!class_exists($classname))
+                    $classname = 'Dynamic_Object_List';
+            }
+*/
+        }
+        // here we can use our own classes to retrieve this
+        $object = new $classname($args);
         return $object;
     }
 
@@ -506,13 +555,26 @@ class Dynamic_Object_Master
      * @param $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
      * @param $args['config'] some configuration for the object (free to define and use)
      * @param $args['isalias'] flag to indicate whether the object name is used as alias for short URLs
+     * @param $args['classname'] optional classname (e.g. <module>_Dynamic_Object)
      * @returns integer
      * @return the object id of the created item
      */
     function createObject($args)
     {
+        if (!isset($args['moduleid'])) {
+            $args['moduleid'] = null;
+        }
+        if (!isset($args['itemtype'])) {
+            $args['itemtype'] = null;
+        }
+        if (!isset($args['classname'])) {
+            $args['classname'] = null;
+        }
         // create the Dynamic Objects item corresponding to this object
-        $object = new Dynamic_Object(array('objectid' => 1)); // the Dynamic Objects = 1
+        $object =& Dynamic_Object_Master::getObject(array('objectid' => 1, // the Dynamic Objects = 1
+                                                          'moduleid' => $args['moduleid'],
+                                                          'itemtype' => $args['itemtype'],
+                                                          'classname' => $args['classname']));
         $objectid = $object->createItem($args);
         return $objectid;
     }
@@ -522,8 +584,20 @@ class Dynamic_Object_Master
         if (empty($args['objectid'])) {
             return;
         }
+        if (!isset($args['moduleid'])) {
+            $args['moduleid'] = null;
+        }
+        if (!isset($args['itemtype'])) {
+            $args['itemtype'] = null;
+        }
+        if (!isset($args['classname'])) {
+            $args['classname'] = null;
+        }
         // update the Dynamic Objects item corresponding to this object
-        $object = new Dynamic_Object(array('objectid' => 1)); // the Dynamic Objects = 1
+        $object =& Dynamic_Object_Master::getObject(array('objectid' => 1, // the Dynamic Objects = 1
+                                                          'moduleid' => $args['moduleid'],
+                                                          'itemtype' => $args['itemtype'],
+                                                          'classname' => $args['classname']));
         $itemid = $object->getItem(array('itemid' => $args['objectid']));
         if (empty($itemid)) return;
         $itemid = $object->updateItem($args);
@@ -535,15 +609,30 @@ class Dynamic_Object_Master
         if (empty($args['objectid'])) {
             return;
         }
+        if (!isset($args['moduleid'])) {
+            $args['moduleid'] = null;
+        }
+        if (!isset($args['itemtype'])) {
+            $args['itemtype'] = null;
+        }
+        if (!isset($args['classname'])) {
+            $args['classname'] = null;
+        }
         // get the Dynamic Objects item corresponding to this object
-        $object = new Dynamic_Object(array('objectid' => 1)); // the Dynamic Objects = 1
+        $object =& Dynamic_Object_Master::getObject(array('objectid' => 1, // the Dynamic Objects = 1
+                                                          'moduleid' => $args['moduleid'],
+                                                          'itemtype' => $args['itemtype'],
+                                                          'classname' => $args['classname']));
         if (empty($object)) return;
 
         $itemid = $object->getItem(array('itemid' => $args['objectid']));
         if (empty($itemid)) return;
 
         // get an object list for the object itself, so we can delete its items
-        $mylist = new Dynamic_Object_List(array('objectid' => $args['objectid']));
+        $mylist =& Dynamic_Object_Master::getObjectList(array('objectid' => $args['objectid'],
+                                                              'moduleid' => $args['moduleid'],
+                                                              'itemtype' => $args['itemtype'],
+                                                              'classname' => $args['classname']));
         if (empty($mylist)) return;
 
         // TODO: delete all the (dynamic ?) data for this object

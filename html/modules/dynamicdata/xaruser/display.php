@@ -42,7 +42,7 @@ function dynamicdata_user_display($args)
         if(!xarSecurityCheck('AdminDynamicData')) return;
     }
 
-    $myobject = new Dynamic_Object(array('objectid' => $objectid,
+    $myobject = & Dynamic_Object_Master::getObject(array('objectid' => $objectid,
                                          'moduleid' => $modid,
                                          'itemtype' => $itemtype,
                                          'join'     => $join,

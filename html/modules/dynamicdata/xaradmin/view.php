@@ -54,7 +54,7 @@ function dynamicdata_admin_view($args)
     $data = xarModAPIFunc('dynamicdata','admin','menu');
 
 /*
-    $mylist = new Dynamic_Object_List(array('objectid' => $itemid,
+    $mylist = & Dynamic_Object_Master::getObjectList(array('objectid' => $itemid,
                                             'moduleid' => $modid,
                                             'itemtype' => $itemtype));
     $data['mylist'] = & $mylist;

@@ -57,7 +57,7 @@ function dynamicdata_adminapi_create($args)
     }
 
 // TODO: test this
-    $myobject = new Dynamic_Object(array('moduleid' => $modid,
+    $myobject = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
                                          'itemtype' => $itemtype,
                                          'itemid'   => $itemid));
     if (empty($myobject)) return;

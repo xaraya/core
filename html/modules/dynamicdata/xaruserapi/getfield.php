@@ -58,7 +58,7 @@ function dynamicdata_userapi_getfield($args)
         return;
     }
 
-    $object = new Dynamic_Object(array('moduleid'  => $modid,
+    $object = & Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
                                        'itemtype'  => $itemtype,
                                        'itemid'    => $itemid,
                                        'fieldlist' => array($name)));

@@ -98,7 +98,7 @@ function dynamicdata_adminapi_showform($args)
     // throw an exception if you can't edit this
 	if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
 
-    $object = new Dynamic_Object(array('moduleid'  => $modid,
+    $object = & Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
                                        'itemtype'  => $itemtype,
                                        'itemid'    => $itemid,
                                        'join'      => $join,

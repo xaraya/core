@@ -38,7 +38,7 @@ function dynamicdata_util_export($args)
     $data = array();
     $data['menutitle'] = xarML('Dynamic Data Utilities');
 
-    $myobject = new Dynamic_Object(array('objectid' => $objectid,
+    $myobject = & Dynamic_Object_Master::getObject(array('objectid' => $objectid,
                                          'moduleid' => $modid,
                                          'itemtype' => $itemtype,
                                          'itemid'   => $itemid,
@@ -128,7 +128,7 @@ function dynamicdata_util_export($args)
     } elseif ($itemid == 'all') {
         $data['label'] = xarML('Export Data for all #(1) Items', $myobject->label);
 
-        $mylist = new Dynamic_Object_List(array('objectid' => $objectid,
+        $mylist = & Dynamic_Object_Master::getObjectList(array('objectid' => $objectid,
                                                 'moduleid' => $modid,
                                                 'itemtype' => $itemtype));
         $mylist->getItems();

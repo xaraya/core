@@ -63,7 +63,7 @@ function dynamicdata_admin_newhook($args)
     } else {
         $itemid = 0;
     }
-    $object = new Dynamic_Object(array('moduleid' => $modid,
+    $object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
                                        'itemtype' => $itemtype,
                                        'itemid'   => $itemid));
     if (!isset($object)) return;

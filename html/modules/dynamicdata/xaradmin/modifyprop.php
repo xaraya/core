@@ -40,7 +40,7 @@ function dynamicdata_admin_modifyprop()
     } else {
         $where = 'moduleid eq '.$modid.' and itemtype eq '.$itemtype;
     }
-    $myobject = new Dynamic_Object_List(array('objectid' => 2,
+    $myobject = & Dynamic_Object_Master::getObjectList(array('objectid' => 2,
                                               'fieldlist' => array('id','label','type','default','source','validation','status','objectid','moduleid','itemtype'),
                                               'where' => $where));
     if ($myobject->items) {

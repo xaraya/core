@@ -2,7 +2,7 @@
 /**
  * File: $Id$
  *
- * Get a dynamic object
+ * Get a dynamic object list
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
@@ -13,7 +13,7 @@
  * @author mikespub <mikespub@xaraya.com>
 */
 /**
- * get a dynamic object
+ * get a dynamic object list
  *
  * @author the DynamicData module development team
  * @param $args['objectid'] id of the object you're looking for, or
@@ -22,7 +22,7 @@
  * @returns object
  * @return a particular Dynamic Object
  */
-function &dynamicdata_userapi_getobject($args)
+function &dynamicdata_userapi_getobjectlist($args)
 {
     if (empty($args['moduleid']) && !empty($args['module'])) {
        $args['moduleid'] = xarModGetIDFromName($args['module']);
@@ -30,7 +30,7 @@ function &dynamicdata_userapi_getobject($args)
     if (empty($args['moduleid']) && !empty($args['modid'])) {
        $args['moduleid'] = $args['modid'];
     }
-    return Dynamic_Object_Master::getObject($args);
+    return Dynamic_Object_Master::getObjectList($args);
 }
 
 ?>

@@ -250,7 +250,7 @@ function dynamicdata_utilapi_import($args)
             } elseif (preg_match("#</$closeitem>#",$line)) {
                 // let's create the item now...
                 if (!isset($objectcache[$objectid])) {
-                    $objectcache[$objectid] = new Dynamic_Object(array('objectid' => $objectid));
+                    $objectcache[$objectid] = & Dynamic_Object_Master::getObject(array('objectid' => $objectid));
                 }
                 // set the item id to 0
             // TODO: keep the item id if we set some flag

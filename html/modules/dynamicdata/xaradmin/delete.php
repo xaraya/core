@@ -30,7 +30,7 @@ function dynamicdata_admin_delete($args)
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
 
-    $myobject = new Dynamic_Object(array('moduleid' => $modid,
+    $myobject = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
                                          'itemtype' => $itemtype,
                                          'join'     => $join,
                                          'table'    => $table,
@@ -58,7 +58,7 @@ function dynamicdata_admin_delete($args)
         $data = xarModAPIFunc('dynamicdata','admin','menu');
         $data['object'] = & $myobject;
         if ($myobject->objectid == 1) {
-            $mylist = new Dynamic_Object_List(array('objectid' => $itemid));
+            $mylist = & Dynamic_Object_Master::getObjectList(array('objectid' => $itemid));
             if (count($mylist->properties) > 0) {
                 $data['related'] = xarML('Warning : there are #(1) properties and #(2) items associated with this object !', count($mylist->properties), $mylist->countItems());
             }
@@ -75,7 +75,7 @@ function dynamicdata_admin_delete($args)
     // special case for a dynamic object : delete its properties too // TODO: and items
 // TODO: extend to any parent-child relation ?
     if ($myobject->objectid == 1) {
-        $mylist = new Dynamic_Object_List(array('objectid' => $itemid));
+        $mylist = & Dynamic_Object_Master::getObjectList(array('objectid' => $itemid));
         foreach (array_keys($mylist->properties) as $name) {
             $propid = $mylist->properties[$name]->id;
             $propid = Dynamic_Property_Master::deleteProperty(array('itemid' => $propid));
