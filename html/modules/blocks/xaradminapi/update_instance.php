@@ -91,7 +91,7 @@ function blocks_adminapi_update_instance($args)
     
     $args['module'] = 'blocks';
 
-    xarModCallHooks('item', 'update', $id, $args);
+    xarModCallHooks('item', 'update', $bid, $args);
     
     return true;
 }
