@@ -161,7 +161,7 @@ class xarQuery
                     return;
                 }
                 else {
-                    $newtable = explode(' as ',$table);
+                    $newtable = explode(' ',$table);
                     if (count($newtable) > 1) {
                         $argsarray = array('name' => trim($newtable[0]), 'alias' => trim($newtable[1]));
                     }
