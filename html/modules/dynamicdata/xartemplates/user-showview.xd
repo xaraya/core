@@ -1,12 +1,12 @@
 <xar:if condition="empty($layout) or $layout eq 'default'">
-    <table width="100%" border="0" cellspacing="0" cellpadding="4">
+    <table border="0" cellspacing="0" cellpadding="4" style="width: 100%">
     <xar:foreach in="$items" value="$item">
     <tr>
         <td>
-            <table width="100%" border="0" cellspacing="0" cellpadding="4">
+            <table border="0" cellspacing="0" cellpadding="4" style="width: 100%">
             <xar:foreach in="$item['fields']" value="$field">
             <tr>
-                <td align="right" valign="top" width="15%"><b>#$field['label']# :</b></td>
+                <td align="right" valign="top" style="width: 15%"><b>#$field['label']# :</b></td>
                 <td><xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" /></td>
             </tr>
             </xar:foreach>
