@@ -22,6 +22,8 @@
  */
 function modules_adminapi_getalldependencies($args)
 {
+    static $checked_ids = array();
+
     $mainId = $args['regid'];
 
     // Security Check
@@ -46,6 +48,12 @@ function modules_adminapi_getalldependencies($args)
     $dependency_array['unsatisfiable'] = array();
     $dependency_array['satisfiable']   = array();
     $dependency_array['satisfied']     = array();
+
+    if(in_array($mainId,$checked_ids)) {
+        xarLogMessage("Already got the dependencies of $mainId, skipping");
+        return $dependency_array; // Done that, been there
+    }
+    $checked_ids[] = $mainId;
 
     // Get module information
     $modInfo = xarModGetInfo($mainId);
@@ -77,6 +85,7 @@ function modules_adminapi_getalldependencies($args)
             $modId = $conditions;
         }
 
+        // RECURSIVE CALL
         $output = xarModAPIFunc('modules', 'admin', 'getalldependencies', array('regid'=>$modId));
         if (!$output) {
             $msg = xarML('Unable to get dependencies for module with ID (#(1)).', $modId);
@@ -86,6 +95,7 @@ function modules_adminapi_getalldependencies($args)
         //This is giving : recursing detected.... ohh well
 //        $dependency_array = array_merge_recursive($dependency_array, $output);
 
+        // FIXME: as the array uses numeric keys, this creates duplicates
         $dependency_array['satisfiable'] = array_merge(
             $dependency_array['satisfiable'],
             $output['satisfiable']);
@@ -133,7 +143,7 @@ function modules_adminapi_getalldependencies($args)
             break;
         }
     }
-
+    
     return $dependency_array;
 }
 

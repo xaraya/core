@@ -1,7 +1,7 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>Module Instalation with unmet Dependencies</xar:mlstring></h2>
+    <h2><xar:mlstring>Module Installation with unmet Dependencies</xar:mlstring></h2>
     <!-- The form for editting the module settings and hooks -->
     <form action="#xarModURL('modules','admin','install')#" method="post" enctype="application/x-www-form-urlencoded">
        <div>
