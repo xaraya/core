@@ -43,6 +43,7 @@
     </xar:if>
 </xar:loop>
 </xar:if>
+
 <!-- Logout only if not admin or anomymous -->
 <xar:if condition="$showlogout">
     <br />

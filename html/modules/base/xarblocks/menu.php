@@ -336,7 +336,7 @@ function base_menublock_modify($blockinfo)
 */
 function base_menublock_insert($blockinfo)
 {
-    //Should be boolean, but needs to review the where this variable is coming from to change it.
+    // Should be boolean, but needs to review the where this variable is coming from to change it.
     if (!xarVarFetch('displaymodules', 'str:1', $vars['displaymodules'], 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('marker', 'str:1', $vars['marker'], '[x]', XARVAR_NOT_REQUIRED)) return;
 

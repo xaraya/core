@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Unregister block type
  *
