@@ -54,9 +54,9 @@ class xarQuery
 
         $this->key = mktime();
         $this->tables = array();
-        $this->addtables($tables);
+        $this->_addtables($tables);
         $this->fields = array();
-        $this->addfields($fields);
+        $this->_addfields($fields);
         $this->conditions = array();
         $this->conjunctions = array();
         $this->bindings = array();
@@ -216,7 +216,8 @@ class xarQuery
         $notdone = true;
         $limit = count($this->tables);
         for ($i=0;$i<$limit;$i++) {
-            if ($this->tables[$i]['name'] == $argsarray['name']) {
+            if ($this->tables[$i]['name'] == $argsarray['name'] &&
+                $this->tables[$i]['alias'] == $argsarray['alias']) {
                 $this->tables[$i] = $argsarray;
                 $notdone = false;
                 break;
@@ -267,43 +268,13 @@ class xarQuery
         $this->fields[$argsarray['name']] = $argsarray;
     }
 
-    function addfields($fields)
+    function addfields($tables)
     {
-        if (!is_array($fields)) {
-            if (!is_string($fields)) {
-            //error msg
-            }
-            else {
-                if ($fields != '') {
-                    $newfields = explode(',',$fields);
-                    foreach ($newfields as $field) $this->addfield($field);
-                }
-            }
-        }
-        else {
-            if ($this->type == 'SELECT') {
-                foreach ($fields as $field) $this->addfield($field);
-            }
-            else {
-                foreach ($fields as $field) $this->addfield($field);
-//            $this->fields = array_merge($this->fields,$fields);
-            }
-        }
+        $this->_addfields($tables);
     }
-
     function addtables($tables)
     {
-        if (!is_array($tables)) {
-            if (!is_string($tables)) {
-            //error msg
-            }
-            elseif ($tables=='') {}//error msg
-            else {$this->addtable($tables);}
-        }
-        else {
-            foreach ($tables as $table) $this->addtable($table);
-//            $this->tables = array_merge($this->tables,$tables);
-        }
+        $this->_addtables($tables);
     }
 
     function join($field1,$field2)
@@ -528,6 +499,45 @@ class xarQuery
     }
 
 // ------ Private methods -----
+    function _addfields($fields)
+    {
+        if (!is_array($fields)) {
+            if (!is_string($fields)) {
+            //error msg
+            }
+            else {
+                if ($fields != '') {
+                    $newfields = explode(',',$fields);
+                    foreach ($newfields as $field) $this->addfield($field);
+                }
+            }
+        }
+        else {
+            if ($this->type == 'SELECT') {
+                foreach ($fields as $field) $this->addfield($field);
+            }
+            else {
+                foreach ($fields as $field) $this->addfield($field);
+//            $this->fields = array_merge($this->fields,$fields);
+            }
+        }
+    }
+
+    function _addtables($tables)
+    {
+        if (!is_array($tables)) {
+            if (!is_string($tables)) {
+            //error msg
+            }
+            elseif ($tables=='') {}//error msg
+            else {$this->addtable($tables);}
+        }
+        else {
+            foreach ($tables as $table) $this->addtable($table);
+//            $this->tables = array_merge($this->tables,$tables);
+        }
+    }
+
     function _getbinding($key)
     {
         $binding = $this->binding[$key];
@@ -560,7 +570,10 @@ class xarQuery
             $sqlfield = $condition['field2'];
             $condition['op'] = $condition['op'] == 'join' ? '=' : $condition['op'];
         }
-        if ($condition['op'] == 'in') $sqlfield = '(' . $sqlfield . ')';
+        if ($condition['op'] == 'in') {
+            foreach ($condition['field2'] as $element) $elements[] = $this->dbconn->qstr($element);
+            $sqlfield = '(' . implode(',',$elements) . ')';
+        }
         return $condition['field1'] . " " . $condition['op'] . " " . $sqlfield;
     }
 
