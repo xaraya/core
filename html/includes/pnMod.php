@@ -167,8 +167,13 @@ function pnModSetVar($modName, $name, $value)
                        new SystemException($msg));return;
     }
 
+    $modBaseInfo = pnMod_getBaseInfo($modName);
+    if (!isset($modBaseInfo)) {
+        return; // throw back
+    }
+
     list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    $tables = pnDBGetTables();
 
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == PNMOD_MODE_SHARED) {
@@ -235,8 +240,13 @@ function pnModDelVar($modName, $name)
                        new SystemException($msg));return;
     }
 
+    $modBaseInfo = pnMod_getBaseInfo($modName);
+    if (!isset($modBaseInfo)) {
+        return; // throw back
+    }
+
     list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    $tables = pnDBGetTables();
 
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == PNMOD_MODE_SHARED) {
