@@ -247,8 +247,7 @@ function xarOutputFlushCached($cacheKey, $dir = false)
 /**
  * clean the cache of old entries
  * note: for blocks, this only gets called when the cache size limit has been
- *       reached, and when called by blocks, the global cache timeout takes
- *       precedents 
+ *       reached, and when called by blocks, all cached blocks are flushed.
  *
  * @access  public
  * @param   string $cacheType
@@ -258,7 +257,13 @@ function xarOutputCleanCached($cacheType)
 {
     global $xarOutput_cacheCollection, ${'xar' . $cacheType . '_cacheTime'};
 
-    $touch_file = $xarOutput_cacheCollection . '/cache.' . strtolower($cacheType) . 'level';
+    $sl_cacheType = strtolower($cacheType);
+    $cacheOutputTypeDir = $xarOutput_cacheCollection . '/' . $sl_cacheType;
+    $touch_file = $xarOutput_cacheCollection . '/cache.' . $sl_cacheType . 'level';
+
+    if ($cacheType == 'Block') {
+        xarOutputFlushCached('', $cacheOutputTypeDir);
+    }
 
     if (${'xar' . $cacheType . '_cacheTime'} == 0 ||
         (file_exists($touch_file) &&
@@ -272,7 +277,7 @@ function xarOutputCleanCached($cacheType)
         error_log('Error from Xaraya::xarCache::xarOutputCleanCached
                   - web process can not touch ' . $touch_file);
     }
-    $cacheOutputTypeDir = $xarOutput_cacheCollection . '/' .strtolower($cacheType);
+
     if ($handle = @opendir($cacheOutputTypeDir)) {
         while (($file = readdir($handle)) !== false) {
             $cache_file = $cacheOutputTypeDir . '/' . $file;
@@ -304,13 +309,15 @@ function xarCacheDirSize($dir = FALSE, $cacheType)
     if (xarCore_IsCached('Output.Caching', 'size')) {
         $size = xarCore_GetCached('Output.Caching', 'size');
     } else {
-        $size = xarCacheGetDirSize($dir, $cacheType);
+        $size = xarCacheGetDirSize($dir);
         xarCore_SetCached('Output.Caching', 'size', $size);
     }
-
+    
     if($size >= $xarOutput_cacheSizeLimit) {
-        xarOutputCleanCached($cacheType);
-        //xarOutputFlushCached('articles-user-view');
+        if (!xarCore_IsCached($cacheType . '.Caching', 'cleaned')) {
+            xarOutputCleanCached($cacheType);
+            xarCore_SetCached($cacheType . '.Caching', 'cleaned', TRUE);
+        }
     }
 
     return $size;
@@ -328,7 +335,7 @@ function xarCacheDirSize($dir = FALSE, $cacheType)
  * @author jsb
  * @todo   $dir changes type
  */
-function xarCacheGetDirSize($dir = FALSE, $cacheType)
+function xarCacheGetDirSize($dir = FALSE)
 {
 
     static $blksize = 0;
@@ -356,7 +363,7 @@ function xarCacheGetDirSize($dir = FALSE, $cacheType)
                             $filestat = stat($dir . $item);
                             $size += ($filestat['blocks'] * $blksize);
                         if (is_dir($dir . $item)) {
-                            $size += xarCacheGetDirSize($dir . $item, $cacheType);
+                            $size += xarCacheGetDirSize($dir . $item);
                         }
                     }
                 }
@@ -370,7 +377,7 @@ function xarCacheGetDirSize($dir = FALSE, $cacheType)
                 while (($item = readdir($dirId)) !== FALSE) {
                     if ($item != "." && $item != "..") {
                         if (is_dir($dir . $item)) {
-                            $size += xarCacheGetDirSize($dir . $item, $cacheType);
+                            $size += xarCacheGetDirSize($dir . $item);
                         } else {
                             $size += filesize($dir . $item);
                         }
