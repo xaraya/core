@@ -9,6 +9,7 @@ with the mbstring extension compiled in.</xar:mlstring></p>
 Xaraya itself is completely legacy free, but other modules may still yet use them.</xar:mlstring></p>
 <form method="post" action="&xar-modurl-base-admin-updateconfig;" enctype="application/x-www-form-urlencoded" />
     <input type="hidden" name="authid" value="&xar-var-authid;" />
+        <a name="website"></a>
 	<h4><xar:mlstring>Website Display Configuration</xar:mlstring></h4>
 	<p><xar:mlstring>Default Module</xar:mlstring>:&nbsp;&nbsp;
 	<select name="defaultmodule" id="defaultmodule" size="1">
@@ -52,6 +53,8 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 	<xar:else />
 		<input type="checkbox" name="secureserver" id="secureserver" value="1" />
 	</xar:if></p>
+
+        <a name="sessions"></a>
 	<h4><xar:mlstring>Sessions and Security</xar:mlstring></h4>
 	<p><xar:mlstring>Security Level</xar:mlstring>:
 	<select name="securitylevel" id="securitylevel" size="1">
@@ -76,6 +79,7 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 	<p><label for="sessiontimeout"><xar:mlstring>Session Inactivity Time Out</xar:mlstring></label>:
     <input type="text" name="sessiontimeout" value="#xarConfigGetVar('Site.Session.InactivityTimeout')#" size="5" maxlength="3" /></p>
 
+    <a name="locale"></a>
     <h4><xar:mlstring>Language/Locale Configuration</xar:mlstring></h4>
 	<table>
 		<tr>
@@ -136,6 +140,8 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 			</td>
 		</tr>
 	</table>
+
+        <a name="legacy"></a>
 	<h4><xar:mlstring>Legacy Configuration</xar:mlstring></h4>
 	<p><label for="loadlegacy"><xar:mlstring>Load Legacy Support for Postnuke (7.1x, 7.2x)</xar:mlstring></label>:
 	<xar:if condition="xarConfigGetVar('Site.Core.LoadLegacy')">
@@ -144,6 +150,7 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 		<input type="checkbox" name="loadlegacy" id="loadlegacy" value="1" />
 	</xar:if></p>
 
+        <a name="proxy"></a>
 	<h4><xar:mlstring>Proxy Configuration</xar:mlstring></h4>
 	<p><xar:mlstring>If your webserver allows outgoing network connections (for retrieving headlines, checking links etc.) only via a proxy server, specify its hostname and port number here</xar:mlstring></p>
 	<p><label for="proxyhost"><xar:mlstring>Proxy Server</xar:mlstring></label>:
