@@ -58,42 +58,6 @@ function roles_user_search()
     // remember what we selected before
     $data['checked'] = array();
 
-    if (isset($name)){
-        $data['checked']['name'] = 1;
-        // Get user information
-        $user = xarModAPIFunc('roles',
-                              'user',
-                              'get',
-                              array('name' => $q));
-        if (!empty($user)) {
-            $data['users'][$user['uid']] = $user;
-        }
-    }
-
-    if (isset($uname)){
-        $data['checked']['uname'] = 1;
-        // Get user information
-        $user = xarModAPIFunc('roles',
-                              'user',
-                              'get',
-                              array('uname' => $q));
-        if (!empty($user)) {
-            $data['users'][$user['uid']] = $user;
-        }
-    }
-
-    if (isset($email)){
-        $data['checked']['email'] = 1;
-        // Get user information
-        $user = xarModAPIFunc('roles',
-                              'user',
-                              'get',
-                              array('email' => $q));
-        if (!empty($user)) {
-            $data['users'][$user['uid']] = $user;
-        }
-    }
-
     if (xarModIsHooked('dynamicdata','roles')) {
         // make sure the DD classes are loaded
         if (!xarModAPILoad('dynamicdata','user')) return $data;
@@ -112,7 +76,7 @@ function roles_user_search()
             foreach (array_keys($object->properties) as $field) {
                 $checkfield = xarVarCleanFromInput($field);
                 if (!empty($checkfield)) {
-                    $where[] = $field . " eq '$q'";
+                    $where[] = $field . " LIKE '%" . $q . "%'";
                     // remember what we selected before
                     $data['checked'][$field] = 1;
                 }
@@ -137,6 +101,37 @@ function roles_user_search()
             }
         }
     }
+
+    $selection = " AND (";
+    $selection .= "(xar_name LIKE '%" . $q . "%')";
+    $selection .= " OR (xar_uname LIKE '%" . $q . "%')";
+    $selection .= " OR (xar_email LIKE '%" . $q . "%')";
+    $selection .= ")";
+
+    $data['total'] = xarModAPIFunc('roles',
+                                   'user',
+                                   'countall',
+                                   array('selection'   => $selection,
+                                         'include_anonymous' => false,
+                                         'include_myself' => false));
+
+    if (!$data['total']){
+        $data['status'] = xarML('No Users Found Matching Search Criteria');
+        $data['total'] = 0;
+        return $data;
+    }
+
+    $users = xarModAPIFunc('roles',
+                           'user',
+                           'getall',
+                            array('startnum' => $startnum,
+                                  'selection'   => $selection,
+                                  'include_anonymous' => false,
+                                  'include_myself' => false,
+                                  'numitems' => xarModGetVar('roles',
+                                                             'rolesperpage')));
+
+    $data['users'] = $users;
 
     if (count($data['users']) == 0){
         $data['status'] = xarML('No Users Found Matching Search Criteria');
