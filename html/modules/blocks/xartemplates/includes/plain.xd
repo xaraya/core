@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <div class="xar-norm-outline" style="padding: 0px 0px 5px 0px;">
     <table border="0" width="100%">
         <tr>
@@ -34,7 +34,7 @@
                     #$loop:item['module']# 
                 </td>
                 <td>
-                    #$loop:item['type']# 
+                    <a href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">#$loop:item['type']#</a>
                 </td>
                 <td>
                     <xar:if condition="$loop:item['template'] ne NULL">

@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>View Block Types</xar:mlstring></h2>
 
@@ -17,14 +17,20 @@
             </tr>
             <xar:if condition="!empty($info['text_type'])">
                 <tr>
-                    <td><xar:mlstring>Title:</xar:mlstring></td>
+                    <td><xar:mlstring>Short title:</xar:mlstring></td>
                     <td>#xarVarPrepForDisplay($info['text_type'])#</td>
                 </tr>
             </xar:if>
             <xar:if condition="!empty($info['text_type_long'])">
                 <tr>
-                    <td><xar:mlstring>Description:</xar:mlstring></td>
+                    <td><xar:mlstring>Long title:</xar:mlstring></td>
                     <td>#xarVarPrepForDisplay($info['text_type_long'])#</td>
+                </tr>
+            </xar:if>
+            <xar:if condition="!empty($info['notes'])">
+                <tr>
+                    <td><xar:mlstring>Notes:</xar:mlstring></td>
+                    <td>#xarVarPrepForDisplay($info['notes'])#</td>
                 </tr>
             </xar:if>
             <xar:if condition="isset($info['allow_multiple'])">

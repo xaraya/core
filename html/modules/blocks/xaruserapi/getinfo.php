@@ -97,15 +97,29 @@ function blocks_userapi_getinfo($args)
     if (!is_null($state)) {$blockinfo['state'] = $state;}
 
     // Now do the custom overrides.
-    // TODO: until ALL blocks accept a non-serialized content array, we will
-    // need a hack here to unserialize (IFF it starts serialized) update the
-    // fields then reserialize (IFF it started serialized). The problem is,
+    // We have a hack here to unserialize the content string, update the
+    // fields then reserialize (if it started serialized). The problem is,
     // until ALL blocks can accept arrays as content, then passing arrays
-    // from here will cause blocks to fail.
+    // from here will cause blocks to fail. This hack will work until all
+    // blocks are converted.
 
-    // The content at this point will be either completely empty or
-    // an array - don't try and set array elements for anything else.
-    if (empty($blockinfo['content']) || is_array($blockinfo['content'])) {
+    // Not sure how this will work - there is no reliable way of recognising
+    // a string of serialised data. We will make a guess that is starts
+    // 'a:[number]:{' and ends '}'.
+    $serialize_flag = false;
+    if (is_string($blockinfo['content']) && preg_match('/^a:[0-9]+:\{.*\}$/', $blockinfo['content'])) {
+        // We think this is serialized data - try expanding it.
+        $content2 = @unserialize($blockinfo['content']);
+        if (!is_null($content2)) {
+            // Looks like it was successful.
+            $blockinfo['content'] =& $content2;
+            $serialize_flag = true;
+        }
+    }
+
+    // The content at this point will be, completely empty, a string or
+    // an array - only try and set array elements for an array.
+    if (is_array($blockinfo['content'])) {
         foreach($content as $pname => $pvalue) {
             // If the array element exists, then override it.
             // There is no validation here (yet) - so arrays can
@@ -115,12 +129,16 @@ function blocks_userapi_getinfo($args)
             // Such validation would also be able to convert numbers
             // into booleans, string lists into arrays etc.
             // Only override non-array and empty elements for now.
-            if (
-                is_array($blockinfo['content'])
-                && (empty($blockinfo['content'][$pname]) || !is_array($blockinfo['content'][$pname]))
-            ) {
+            if (empty($blockinfo['content'][$pname]) || !is_array($blockinfo['content'][$pname])) {
                 $blockinfo['content'][$pname] = $pvalue;
             }
+        }
+
+        if ($serialize_flag) {
+            // We need to serialize the content again.
+            // TODO: when all blocks support serialized content data,
+            // remove this re-serialization.
+            $blockinfo['content'] = @serialize($blockinfo['content']);
         }
     }
 

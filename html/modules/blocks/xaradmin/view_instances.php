@@ -33,6 +33,10 @@ function blocks_admin_view_instances()
             'blocks', 'admin', 'delete_instance',
             array('bid' => $instance['bid'], 'authid' => $authid)
         );
+        $instances[$index]['typeurl'] = xarModUrl(
+            'blocks', 'admin', 'view_types',
+            array('tid' => $instance['tid'])
+        );
         $instances[$index]['deleteconfirm'] = xarML('Delete instance "#(1)"', addslashes($instance['name']));
     }
 
@@ -44,8 +48,8 @@ function blocks_admin_view_instances()
     $data['authid'] = $authid;
     
     // Select vars for drop-down menus.
-    $data['style']['plain']                         = xarML('Plain');
-    $data['style']['compact']                       = xarML('Compact');
+    $data['style']['plain'] = xarML('Plain');
+    $data['style']['compact'] = xarML('Compact');
 
     // State descriptions.
     $data['state_desc'][0] = xarML('Hidden');
