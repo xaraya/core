@@ -61,6 +61,16 @@ function dynamicdata_utilapi_import($args)
                     return;
                 }
                 $object[$key] = $value;
+            } elseif (preg_match('#<config>#',$line)) {
+                if (isset($object['config'])) {
+                    $msg = xarML('Duplicate definition for #(1) key #(2) on line #(3)','object','config',$count);
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                    new SystemException($msg));
+                    fclose($fp);
+                    return;
+                }
+                $config = array();
+                $what = 'config';
             } elseif (preg_match('#<properties>#',$line)) {
                 // let's create the object now...
                 if (empty($object['name']) || empty($object['moduleid'])) {
@@ -97,6 +107,26 @@ function dynamicdata_utilapi_import($args)
                 $what = 'item';
             } elseif (preg_match('#</object>#',$line)) {
                 $what = '';
+            } else {
+                // multi-line entries not relevant here
+            }
+
+        } elseif ($what == 'config') {
+            if (preg_match('#<([^>]+)>(.*)</\1>#',$line,$matches)) {
+                $key = $matches[1];
+                $value = $matches[2];
+                if (isset($config[$key])) {
+                    $msg = xarML('Duplicate definition for #(1) key #(2) on line #(3)','config',xarVarPrepForDisplay($key),$count);
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                    new SystemException($msg));
+                    fclose($fp);
+                    return;
+                }
+                $config[$key] = $value;
+            } elseif (preg_match('#</config>#',$line)) {
+                $object['config'] = serialize($config);
+                $config = array();
+                $what = 'object';
             } else {
                 // multi-line entries not relevant here
             }
