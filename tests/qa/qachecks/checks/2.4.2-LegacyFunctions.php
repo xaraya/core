@@ -12,7 +12,7 @@
 
 class LegacyFunctions extends QACheckRegexp
 {
-    var $id = '2.4.3';
+    var $id = '2.4.2';
     var $name = "Legacy Functions (from other CMS's)";
     var $fatal = true;
     var $filetype = 'all';

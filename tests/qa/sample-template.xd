@@ -1,8 +1,0 @@
-<!-- hello -->
-
-<!-- 2.4 shouldn't be any <?php echo "php" ?> in these files -->
-<!-- 2.10 <? echo "php ?> is even worse
-    <?="php"?> would be just as bad -->
-
- 1.4 Hello #there# ! don't forget your dollar signs 
- inside #xarModAPI('template', 'tags')# !

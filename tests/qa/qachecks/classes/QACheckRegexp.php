@@ -32,5 +32,15 @@ class QACheckRegexp extends QACheck
 	 */
 	var $failedlines = array();
 
+    /**
+     * Check comments also?
+     */
+    var $checkcomments = false;
+
+    /**
+     * Negate the result of the regexp (by default, matching lines cause the
+     * check to fail.
+     */
+    var $negate = false;
 } 
 ?>

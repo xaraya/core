@@ -26,7 +26,7 @@ class StartAndEndPHP extends QACheck
      */
     function execute()
     {
-        $file = fopen($this->filename);
+        $file = fopen($this->filename, 'r');
         $text = fread($file, filesize($this->filename));
         fclose($file);
 

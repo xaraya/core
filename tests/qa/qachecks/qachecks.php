@@ -35,6 +35,7 @@ $basedir = dirname(__FILE__); /* base path of qachecks source  */
 /* required classes */
 require_once("$basedir/classes/QACheck.php");
 require_once("$basedir/classes/QACheckRegexp.php");
+require_once("$basedir/classes/QACheckShellCommand.php");
 
 /* parse command line args */
 $filenames = array();
@@ -91,6 +92,13 @@ foreach ($checks as $index => $check) {
     }
 }
 
+echo "
+XARAYA QA CHECKS.
+
+These QA checks are based on the Code Review Checklist (v0.2.0), found in
+/tests/qa/doc.
+";
+
 /* process each file on the command line */
 foreach ($filenames as $filename) {
     echo "
@@ -124,8 +132,11 @@ Checking $filename...
         /* run the check */
         if ($check->enabled && ($check->filetype == 'all' || 
                 $check->filetype == $filetype)) {
+            $result = false;
             $run++;
             $check->filename = $filename;
+
+            /* results of check */
             if (!$check->execute()) {
                 $failed++;
                 echo "  FAILED Check ".$check->id." (".$check->name.").";
@@ -172,7 +183,6 @@ Checking $filename...
         } else if ($filetype == 'template') {
 
             /* TODO: strip comments from template */
-            $nocomments = $text;
         }
         
         /* create array from uncommented version */
@@ -213,6 +223,9 @@ Checking $filename...
                         } else {
                             $fail = preg_match($regexp,
                                     $nocommentlines[$number]);
+                        }
+                        if ($check->negate) {
+                            $fail = !$fail;
                         }
                         if ($fail) {
 

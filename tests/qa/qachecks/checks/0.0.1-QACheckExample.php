@@ -22,7 +22,7 @@ class QACheckExample extends QACheck
     var $fatal = false;
     var $score = 1;
     var $filetype = 'php';
-    var $enabled = true;
+    var $enabled = false;
 
     /**
      * Run the test.

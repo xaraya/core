@@ -10,7 +10,7 @@
 
 class DeprecatedFunctions extends QACheckRegexp
 {
-    var $id = '2.4.1a';
+    var $id = '2.4.1';
     var $name = "Deprecated Functions";
     var $fatal = true;
     var $filetype = 'all';
