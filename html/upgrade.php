@@ -358,7 +358,7 @@ if (empty($step)) {
     echo "<h5>Checking Table Structure</h5>";
     list($dbconn) = xarDBGetConn();
     // create and populate the security levels table
-    $table_name['security_levels'] = $sitePrefix . '_security_levels'; 
+    $table_name['security_levels'] = $sitePrefix . '_security_levels';
 
     $upgrade['security_levels'] = xarModAPIFunc('installer',
                                                 'admin',
@@ -389,7 +389,7 @@ if (empty($step)) {
                                           'null'        => false,
                                           'default'     => '')));
         $result = $dbconn->Execute($query);
-        if (!$result){ 
+        if (!$result){
             echo "failed</font><br/>\r\n";
         } else {
             echo "done!</font><br/>\r\n";
@@ -572,7 +572,7 @@ if (empty($step)) {
             echo "done!</font><br/>\r\n";
         }
     } else {
-        echo "$table_name[security_privsets] has been dropped previously, moving to next check. <br />";  
+        echo "$table_name[security_privsets] has been dropped previously, moving to next check. <br />";
     }
 
     // Dynamic Data Change to prop type.
@@ -597,13 +597,13 @@ if (empty($step)) {
                      AND xar_prop_name='default'";
         // Check for db errors
         $result =& $dbconn->Execute($query);
-        if (!$result){ 
+        if (!$result){
             echo "failed</font><br/>\r\n";
         } else {
             echo "done!</font><br/>\r\n";
         }
     } else {
-        echo "Dynamic Data table 'default' property with objectid 2 has correct property type of 3, moving to next check. <br />";  
+        echo "Dynamic Data table 'default' property with objectid 2 has correct property type of 3, moving to next check. <br />";
     }
 
     // Add the syndicate block type and syndicate block for RSS display.
@@ -656,13 +656,13 @@ if (empty($step)) {
                                                     'state'    => 2))) {
             return;
         }
-        if (!$result){ 
+        if (!$result){
             echo "failed</font><br/>\r\n";
         } else {
             echo "done!</font><br/>\r\n";
         }
     } else {
-        echo "Syndicate block type exists, moving to next check. <br />";  
+        echo "Syndicate block type exists, moving to next check. <br />";
     }
 
     // Set any empty modvars.
@@ -704,7 +704,7 @@ if (empty($step)) {
                        array('name'    =>  'expertlist',
                              'module'  =>  'modules',
                              'set'     =>  0));
- 
+
     foreach($modvars as $modvar){
         foreach($modvar as $var){
             $currentvar = xarModGetVar("$var[module]", "$var[name]");
@@ -722,7 +722,7 @@ if (empty($step)) {
                                 'set'     =>  $roleanon->getID()),
                           array('name'    =>  'System.Core.VersionNum',
                                 'set'     =>  '.9.1.2'));
- 
+
     foreach($configvars as $configvar){
         foreach($configvar as $var){
             $currentvar = xarConfigGetVar("$var[name]");
@@ -747,13 +747,13 @@ if (empty($step)) {
         //This creates the new Myself role and makes it a child of Everybody
         $result = xarMakeUser('Myself','myself','myself@xaraya.com','password');
         $result .= xarMakeRoleMemberByName('Myself','Everybody');
-        if (!$result){ 
+        if (!$result){
             echo "failed</font><br/>\r\n";
         } else {
             echo "done!</font><br/>\r\n";
         }
     } else {
-        echo "Myself role has been created previously, moving to next check. <br />";  
+        echo "Myself role has been created previously, moving to next check. <br />";
     }
 
     // Check the installed privs and masks.
@@ -810,7 +810,7 @@ if (empty($step)) {
         xarRegisterMask('DeleteCategoryLink','All','categories','Link','All:All:All:All','ACCESS_DELETE');
         xarRegisterMask('AdminCategories','All','categories','Category','All:All','ACCESS_ADMIN');
     } else {
-        echo "Category Masks have been created previously, moving to next check. <br />";  
+        echo "Category Masks have been created previously, moving to next check. <br />";
     }
 
     $upgrade['priv_masks'] = xarMaskExists('AssignPrivilege',$module='privileges');
@@ -822,7 +822,7 @@ if (empty($step)) {
         xarRegisterMask('AssignPrivilege','All','privileges','All','All','ACCESS_ADD');
         xarRegisterMask('DeassignPrivilege','All','privileges','All','All','ACCESS_DELETE');
     } else {
-        echo "Priviliges Masks have been created previously, moving to next check. <br />";  
+        echo "Priviliges Masks have been created previously, moving to next check. <br />";
     }
 
     $upgrade['priv_locks'] = xarPrivExists('GeneralLock');
@@ -848,9 +848,9 @@ if (empty($step)) {
         xarAssignPrivilege('GeneralLock','Everybody');
         xarAssignPrivilege('GeneralLock','Administrators');
         xarAssignPrivilege('GeneralLock','Users');
-       
+
     } else {
-        echo "Priviliges Locks have been created previously, moving to next check. <br />";  
+        echo "Priviliges Locks have been created previously, moving to next check. <br />";
     }
     // Check the installed privs and masks.
     echo "<h5>Checking Hook Structure</h5>";
@@ -867,6 +867,24 @@ if (empty($step)) {
         echo "Setting Ratings Delete All Hook... done! <br />";
     }
 
+    // Check if site lock has been installed
+    echo "<h5>Checking Site Lock Installation</h5>";
+
+    $upgrade['sitelock'] = xarModGetVar('roles', 'lockdata');
+    if (!$upgrade['sitelock']) {
+        echo "Site Lock is not installed, attempting to install... ";
+        $lockdata = array('roles' => array( array('uid' => 2,
+                                                  'name' => 'Administrators',
+                                                  'notify' => TRUE)
+                                           ),
+                          'message' => '',
+                          'locked' => 0,
+                          'notifymsg' => '');
+        xarModSetVar('roles', 'lockdata', serialize($lockdata));
+        echo "done! <br />";
+    } else {
+        echo "Site Lock is already installed, moving to next check. <br />";
+    }
 
 
 ?>
