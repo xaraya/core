@@ -19,30 +19,30 @@
 * @returns array
 */
 
-  
+
 function themes_admin_cssconfig()
 {
     // Security Check
     if (!xarSecurityCheck('AdminTheme',0)) return;
     // Generate security key
     $data['authid'] = xarSecGenAuthKey();
-    
-    
+
+
     // where are we?
     if (!xarVarFetch('component', 'str::', $component, '', XARVAR_NOT_REQUIRED)) return;
-    
+
     $data['component'] = $component;
     // is configurable enabled?
     if (!xarVarFetch('configurable', 'bool', $configurable, false, XARVAR_NOT_REQUIRED)) return;
     $data['configurable'] = $configurable;
-    
+
     // labels and defaults
     $data['submitbutton'] = xarVarPrepForDisplay(xarML('Submit'));
     $data['resetbutton'] = xarVarPrepForDisplay(xarML('Reset to defaults'));
-    $data['unmanagednote'] = xarVarPrepForDisplay(xarML('No configurable options are available in unmanaged mode.'));     
+    $data['unmanagednote'] = xarVarPrepForDisplay(xarML('No configurable options are available in unmanaged mode.'));
 
     switch($component) {
-        case "core":
+        case "common":
             // get and verify modvars and files - all reporting inline in the form
             $data['csslinkoption'] = xarModGetVar('themes', 'csslinkoption');
             $cssfilepath = 'modules/themes/xarstyles/';
@@ -74,7 +74,7 @@ function themes_admin_cssconfig()
             } else {
                 $data['currentcssfile'] = xarVarPrepForDisplay($notlinked);
             }
-            
+
 
             break;
         case "modules":
@@ -84,15 +84,15 @@ function themes_admin_cssconfig()
         default:
             // reset tags to defaults
             if (!xarVarFetch('resetcsstags', 'str::', $resetcsstags, '', XARVAR_NOT_REQUIRED)) return;
-            
+
             $data['resettagsurl'] = xarModURL('themes', 'admin', 'cssconfig', array('resetcsstags'=>'all'));
-            
+
             if($resetcsstags == 'all') {
                 xarModAPIFunc('themes', 'css', 'registercsstags');
                 $data['resettagsurlstatus'] = xarML('All tags have been restored');
             } else {
                 $data['resettagsurlstatus'] = xarML('Restore defaults');
-            }        
+            }
             break;
     }
 
