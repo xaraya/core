@@ -524,7 +524,8 @@ class ADODB_mysql extends ADOConnection
      Class Name: Recordset
 --------------------------------------------------------------------------------------*/
 
-class ADORecordSet_mysql extends ADORecordSet{
+class ADORecordSet_mysql extends ADORecordSet
+{
 
     var $databaseType = "mysql";
     var $canSeek = true;
