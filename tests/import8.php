@@ -137,6 +137,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         $dbconn->Execute("DELETE FROM " . $tables['roles'] . " WHERE xar_uid > 5"); // TODO: VERIFY !
         $dbconn->Execute('FLUSH TABLE ' . $tables['roles']);
         $dbconn->Execute('OPTIMIZE TABLE ' . $tables['roles']);
+        $dbconn->Execute("DELETE FROM " . $tables['rolemembers'] . " WHERE xar_uid > 5 OR xar_parentid > 5"); // TODO: VERIFY !
+        $dbconn->Execute('FLUSH TABLE ' . $tables['rolemembers']);
+        $dbconn->Execute('OPTIMIZE TABLE ' . $tables['rolemembers']);
     }
     // check if there's a dynamic object defined for users
     $myobject =& xarModAPIFunc('dynamicdata','user','getobject',
@@ -158,7 +161,24 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
                       array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
     }
     // Check for the default users group
-    $usergroup = xarModGetVar('roles', 'defaultgroup'); 
+    $defaultgid = xarModGetVar('installer', 'defaultgid');
+    if (empty($defaultgid)) {
+        $userRole = xarModGetVar('roles', 'defaultgroup');
+
+        // Get the group id
+        $defaultRole = xarModAPIFunc('roles',
+                                     'user',
+                                     'get',
+                                     array('uname'  => $userRole,
+                                           'type'   => 1));
+        if (empty($defaultRole)) {
+            echo "Unable to find default group id : " . xarExceptionRender('text') . "<br>\n";
+            die('Oops');
+        }
+        $defaultgid = $defaultRole['uid'];
+        xarModSetVar('installer','defaultgid',$defaultgid);
+    }
+
     $users = xarModGetVar('installer', 'userid');
     if (!empty($users)) {
         $userid = unserialize($users);
@@ -226,6 +246,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
                                'extra_info' => $extra_info,
                               );
         $myobject->createItem($dynamicvalues);
+
+        // add user to the default group
+        xarMakeRoleMemberByID($newuid, $defaultgid);
 
 /*    // TODO: import groups once roles/privileges are ok
         if (!xarModAPIFunc('groups',
