@@ -28,4 +28,4 @@
     </xar:if>
 </xar:loop>
 <!-- Logout -->
-<p style="font-size:smaller;">[<a href="#$logouturl#">#$logoutlabel#</a>]</p>
+[<a href="#$logouturl#">#$logoutlabel#</a>]
