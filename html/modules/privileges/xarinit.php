@@ -149,14 +149,14 @@ function privileges_init()
 
     xarDB_importTables(array('privmembers' => xarDBGetSiteTablePrefix() . '_privmembers'));
 
-    $index = array('name'      => 'xar_pid',
-                   'fields'    => array('idx_privmembers_pid'),
+    $index = array('name'      => 'idx_privmembers_pid',
+                   'fields'    => array('xar_pid'),
                    'unique'    => FALSE);
     $query = xarDBCreateIndex($tables['privmembers'],$index);
     if (!$dbconn->Execute($query)) return;
 
-    $index = array('name'      => 'xar_parentid',
-                   'fields'    => array('idx_privmembers_parentid'),
+    $index = array('name'      => 'idx_privmembers_parentid',
+                   'fields'    => array('xar_parentid'),
                    'unique'    => FALSE);
     $query = xarDBCreateIndex($tables['privmembers'],$index);
     if (!$dbconn->Execute($query)) return;
