@@ -68,7 +68,6 @@ function base_init()
 //    xar_decimals,
 
     $query = xarDBCreateTable($tablesTable,$fields);
-
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -218,7 +217,6 @@ function base_init()
                    'fields' => array('xar_name'));
 
     $query = xarDBCreateIndex($allowedVarsTable,$index);
-
     $result =& $dbconn->Execute($query);
     if (!$result) return;
     
@@ -454,23 +452,13 @@ function base_init()
     $query = "INSERT INTO $userPermsTable VALUES ($id,$id_admin,0,0,'.*','.*',800,0)";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-
-    /**************************************************************
-    * Install the blocks module
-    **************************************************************/
-    if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
-	                       array('directory'=>'blocks', 'initfunc'=>'init'))) {
-	    return;
-	}
+    
     /**************************************************************
     * Install modules table and insert the modules module
     **************************************************************/
-    if (!xarInstallAPIFunc('installer',
-                           'admin',
-                           'initialise',
-                           array('directory' => 'modules',
-                                 'initfunc'  => 'init'))) {
-        return NULL;
+    if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
+                           array('directory' => 'modules', 'initfunc'  => 'init'))) {
+        return;
     }
     $modulesTable = $systemPrefix .'_modules';
     $systemModuleStatesTable = $systemPrefix .'_module_states';
@@ -490,7 +478,6 @@ function base_init()
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-
     // Install authsystem module
     $seqId = $dbconn->GenId($modulesTable);
     $query = "INSERT INTO $modulesTable
@@ -523,6 +510,30 @@ function base_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
+    // Install blocks module
+    $seqId = $dbconn->GenId($modulesTable);
+    $query = "INSERT INTO $modulesTable
+              (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
+     ) VALUES ('".$seqId."', 'blocks', 13, 'blocks', '1.0', 1, 'Core Utility', 'Global', 1, 0)";
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    // Set blocks to active
+    $query = "INSERT INTO $systemModuleStatesTable (xar_regid, xar_state
+              ) VALUES (13,3)";
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+    
+    /**************************************************************
+    * Install the blocks module
+    **************************************************************/
+    // FIXME: the installation of the blocks module depends on the modules module
+    // to be present, doh !
+    if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
+	                       array('directory'=>'blocks', 'initfunc'=>'init'))) {
+	    return;
+	}  
+
     // Fill language list(?)
 
     // Initialisation successful
@@ -539,7 +550,6 @@ function base_init()
  */
 function base_activate()
 {
-
     // Set up default user properties, etc.
 
     // load modules admin API
@@ -552,76 +562,50 @@ function base_activate()
         return NULL;
     }
 
-    // Activate the groups module
-    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => xarModGetIDFromName('groups'),
-                                                              'state' => XARMOD_STATE_INACTIVE))) {
-        return;
-    }
-    if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => xarModGetIDFromName('groups')))) {
-        return;
-    }
-
-    // Activate the permissions module
-    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => xarModGetIDFromName('permissions'),
-                                                              'state' => XARMOD_STATE_INACTIVE))) {
-        return;
-    }
-    if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => xarModGetIDFromName('permissions')))) {
-        return;
-    }
-
-    // initialize blocks module
-    $modRegId = xarModGetIDFromName('blocks');
-
-/*    if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $modRegId))) {
-        return NULL;
-    }*/
-
-    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $modRegId,
-                                                              'state' => XARMOD_STATE_INACTIVE))) {
-        return;
-    }
-    if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $modRegId))) {
-        return NULL;
+    // Set the state and activate the following modules
+    $modlist=array('groups','permissions','blocks','users');
+    foreach ($modlist as $mod) {
+        // Set state to inactive
+        $regid=xarModGetIDFromName($mod);
+        if (!xarModAPIFunc('modules','admin','setstate', array('regid'=> $regid,
+                                                               'state'=> XARMOD_STATE_INACTIVE))) 
+            {
+                return;
+            }
+        // Activate the module
+        if (!xarModAPIFunc('modules','admin','activate', array('regid'=> $regid)))
+            {
+                return;
+            }
     }
 
+    // Initialise and activate adminpanels
+    $apid = xarModGetIDFromName('adminpanels');
     // initialize & activate adminpanels module
-    if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => xarModGetIDFromName('adminpanels')))) {
-        return NULL;
-    }
-
-
-    if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => xarModGetIDFromName('adminpanels')))) {
-        return NULL;
-    }
-
-    // Activate the user's module
-    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => xarModGetIDFromName('users'),
-                                                              'state' => XARMOD_STATE_INACTIVE))) {
+    if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $apid))) {
         return;
     }
-
-    if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => xarModGetIDFromName('users')))) {
+       
+    if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $apid))) {
         return;
     }
-
+    
     //initialise and activate base module by setting the states
-    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => xarModGetIDFromName('base'),
+    $baseid=xarModGetIDFromName('base');
+    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseid,
                                                              'state' => XARMOD_STATE_INACTIVE))) {
         return;
     }
-    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => xarModGetIDFromName('base'),
+    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseid,
                                                               'state' => XARMOD_STATE_ACTIVE))) {
         return;
     }
 
-    // initialize installer module
-
+    
     // Register Block types
     $blocks = array('finclude','html','menu','php','rss','text');
 
     foreach ($blocks as $block) {
-
         if (!xarBlockTypeRegister('base', $block)) {
             return NULL;
         }
@@ -649,7 +633,7 @@ function base_activate()
                                                                 'template' => 'right'))) {
         return NULL;
     }
-
+  
     return true;
 }
 /**

@@ -44,7 +44,11 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     $dbpass = $args['password'];
 
     // ADODB configuration
-    define('ADODB_DIR', 'xaradodb');
+    // FIXME: do we need a check if the constant is defined whether it has the 
+    //        right value?
+    if (!defined('ADODB_DIR')) {
+        define('ADODB_DIR', 'xaradodb');
+    }
 
     include_once 'xaradodb/adodb.inc.php';
 

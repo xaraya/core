@@ -215,7 +215,7 @@ function xarModSetVar($modName, $name, $value)
                   WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
                   AND xar_name = '" . xarVarPrepForStore($name) . "'";
     }
-
+    
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -345,7 +345,7 @@ function xarModGetInfo($modRegId)
     // Shortcut for os prepared directory
     // TODO: <marco> get rid of it since useless
     $modInfo['osdirectory'] = $modInfo['directory'];
-
+    
     $modState = xarMod__getState($modInfo['regid'], $modInfo['mode']);
     if (!isset($modState)) return; // throw back
     $modInfo['state'] = $modState;
@@ -618,7 +618,7 @@ function xarModLoad($modName, $modType = 'user')
 function xarModAPILoad($modName, $modType = 'user')
 {
     static $loadedAPICache = array();
-
+    
     if (empty($modName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
@@ -637,7 +637,7 @@ function xarModAPILoad($modName, $modType = 'user')
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back
-
+        
     if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', $modName);
         return;
@@ -1152,6 +1152,9 @@ function xarMod_getBaseInfo($modName)
         return;
     }
 
+    // FIXME: <MrB> I've seen cases where the cache info is not in sync
+    // with reality. I've take a couple ones out, but I haven't testen all
+    // the way through.
     if (xarVarIsCached('Mod.BaseInfos', $modName)) {
         return xarVarGetCached('Mod.BaseInfos', $modName);
     }
@@ -1167,7 +1170,7 @@ function xarMod_getBaseInfo($modName)
               WHERE xar_name = '" . xarVarPrepForStore($modName) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-
+    
     if ($result->EOF) {
         $result->Close();
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', $modName);
@@ -1185,11 +1188,10 @@ function xarMod_getBaseInfo($modName)
     // Shortcut for os prepared directory
     // TODO: <marco> get rid of it since useless
     $modBaseInfo['osdirectory'] = $modBaseInfo['directory'];
-
+    
     $modState = xarMod__getState($modBaseInfo['regid'], $modBaseInfo['mode']);
     if (!isset($modState)) return; // throw back
     $modBaseInfo['state'] = $modState;
-
     xarVarSetCached('Mod.BaseInfos', $modName, $modBaseInfo);
 
     return $modBaseInfo;
@@ -1368,12 +1370,17 @@ function xarMod__getState($modRegId, $modMode)
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    // Should never happen!
-    assert(!$result->EOF);
-
-    list($modState) = $result->fields;
-    $result->Close();
-
-    return (int) $modState;
+    //assert(!$result->EOF);
+    // the module is not in the table
+    // set state to XARMOD_STATE_UNINITIALISED
+    // FIXME: CHECK whether this has no side-effects, 
+    // it was only put in to get the installer running.
+    if (!$result->EOF) {
+        list($modState) = $result->fields;
+        $result->Close();
+        return (int) $modState;
+    } else {
+        return (int) XARMOD_STATE_UNINITIALISED;
+    }
 }
 

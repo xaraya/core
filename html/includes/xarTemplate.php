@@ -675,7 +675,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
                        new SystemException($msg));
         return false;
     }
-
+    
     $tag = new xarTemplateTag($tag_module, $tag_name, $tag_attrs, $tag_handler);
     
     list($tag_name,
@@ -689,8 +689,10 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
     
-    $tag_table = $xartable['template_tags'];
-    
+    // FIXME: temp fix, installer doesn't know about it
+    //$tag_table = $xartable['template_tags'];
+    $tag_table = xarConfigGetVar('prefix') . '_template_tags';
+
     // Get next ID in table
     $tag_id = $dbconn->GenId($tag_table);
     
@@ -709,7 +711,6 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
 
     $result = $dbconn->Execute($query);
     if (!$result) return;
-
     return true;
 }
 
@@ -800,19 +801,21 @@ function xarTplGetTagObjectFromName($tag_name)
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
-
-    $tag_table = $xartable['template_tags'];
-
+    
+    // FIXME: during installer the template_tag table wasn't there, didn't investigate
+    //$tag_table = $xartable['template_tags'];
+    $tag_table = xarConfigGetVar('prefix') . '_template_tags';
     $query = "SELECT xar_data FROM $tag_table WHERE xar_name='$tag_name'";
     
-    $result = $dbconn->SelectLimit($query, 1);
+    $result =& $dbconn->SelectLimit($query, 1);
+    
     if (!$result) return;
-
+    
     if ($result->EOF) {
         $result->Close();
         return NULL; // tag does not exist
     }
-
+    
     list($obj) = $result->fields;
 
     $obj = unserialize($obj);

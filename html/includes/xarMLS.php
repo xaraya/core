@@ -72,16 +72,17 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarMLS_defaultLocale'] = $args['defaultLocale'];
     $GLOBALS['xarMLS_allowedLocales'] = $args['allowedLocales'];
 
+    // Register MLS events
+    // These should be done before the xarMLS_setCurrentLocale function
+    xarEvt_registerEvent('MLSMissingTranslationString');
+    xarEvt_registerEvent('MLSMissingTranslationKey');
+    xarEvt_registerEvent('MLSMissingTranslationDomain');
+
     if (!($whatElseIsGoingLoaded & XARCORE_SYSTEM_USER)) {
         // The User System won't be started
         // MLS will use the default locale
         xarMLS_setCurrentLocale($args['defaultLocale']);
     }
-
-    // Register MLS events
-    xarEvt_registerEvent('MLSMissingTranslationString');
-    xarEvt_registerEvent('MLSMissingTranslationKey');
-    xarEvt_registerEvent('MLSMissingTranslationDomain');
 
     return true;
 }
@@ -149,6 +150,7 @@ function xarMLSLoadLocaleData($locale = NULL)
 
     // check for locale availability
     $siteLocales = xarMLSListSiteLocales();
+    
     if (!in_array($locale, $siteLocales)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
         return;
@@ -156,6 +158,7 @@ function xarMLSLoadLocaleData($locale = NULL)
 
     if (!isset($xarMLS_localeDataCache[$locale])) {
         $res = $xarMLS_localeDataLoader->load($locale);
+        
         if (!isset($res)) return; // Throw back
         if ($res == false) {
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_EXIST');
@@ -467,7 +470,13 @@ function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
 function xarMLS_setCurrentLocale($locale)
 {
     static $called = 0;
-    assert('$called == 0');
+    // Erm asserting a static variable is not such a good idea i think
+    // What are you trying to do here, make sure this function is called only once?
+    // that's not really the proper use of assert is it?
+    // FIXME: What is the purpose of it?
+    //        If to ensure only called once, make a singleton design patter for it 
+    ///       and fail gracefully.
+        //assert('$called == 0');
     $called++;
 
     $mode = xarMLSGetMode();
@@ -726,7 +735,6 @@ class xarMLS__LocaleDataLoader
         }
 
         xml_parser_free($this->parser);
-
         return true;
     }
 

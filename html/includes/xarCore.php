@@ -189,8 +189,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     if ($whatToLoad & XARCORE_SYSTEM_SESSION) {
         // {ML_dont_parse 'includes/xarSession2.php'}
-        include_once 'includes/xarSession2.php';
-
+        // FIXME: LOOK AT xarSession2 code it has a catch22 situation!!
+        // It wants to store sessions into the database, which is good,
+        // but during the installation procedure there is no database
+        //include_once 'includes/xarSession2.php';
+        include_once 'includes/xarSession.php';
         // Start Session Support
         $systemArgs = array('securityLevel' => xarCore_getSiteVar('Session.SecurityLevel'),
                             'duration' => xarCore_getSiteVar('Session.Duration'),
