@@ -138,6 +138,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     //USER_EXCEPTION -> find if there is a defaultValue set.
     if ($result === FALSE) {
         if ($flags & XARVAR_DONT_SET) {
+            xarExceptionHandled(); //<- We should have an USER_EXCEPTION on the stack
             return true;
         }
 
