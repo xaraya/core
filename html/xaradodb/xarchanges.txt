@@ -45,6 +45,7 @@ adodb.inc.php, lines 868-876:
 Reason:
         Gathering xaraya specific debug information
         when the sql debug flag is set
+        Changes were made by proca (2001-2002)
 
 Upstream:    
         No, xaraya specific, not a general issue
@@ -75,6 +76,8 @@ adodb.inc.php lines 906- 920:
 
 Reason:
         ??
+        Change was made by wb9tpg (Dec 23 15:49:28 2002)
+        Comment: "Add ADODB exceptions"
 
 Upstream:
         ??
@@ -94,6 +97,11 @@ drivers/adodb-postgres64.inc.php lines 84-96:
 Reason:
         prefixing the sequence number (number?) to make it unique
 
+        Change was made by wb9tpg (Mon Oct 28 02:07:59 2002)
+        Comment: "Prefix the sequence number for postgers so
+        it'll be different than the table name.  
+        It'll fail with adodb if they are the same."
+
 Upstream:         
         seems like a general issue, not sure
 
@@ -109,6 +117,8 @@ drivers/adodb-postgres64.inc.php lines 144-149:
 
 Reason:
         ??
+        Change was made by wb9tpg (Oct 29 00:52:44 2002)
+        Comment: "Postgres Specific Updates"
 
 Upstream:
         ??
@@ -122,6 +132,7 @@ drivers/adodb-postgres64.inc.php lines 580-584:
 
 Reason:
         the statement failed
+        Change was made by wb9tpg (Mon Oct 28 02:07:59 2002)
 
 Upstream:
         not literally i think, but once we know why it fails this seems like a general problem
@@ -140,29 +151,31 @@ drivers/adodb-oci8.inc.php lines 54-61:
 
 Reason:
         making the sequences unique?
+        Change was made by rcave (Aug 18 18:07:34 2003)
+        Comment: "Prefix Oracle sequence names with 'seq' as we do in PostgreSQL"
 
 Upstream:
         ??
 
 
 adodb-datadict.inc.php lines 16-24:
-// XARAYA MODIFICATION - START
-// Fallback function for ctype_alnum (necessary for some earlier versions of PHP)
-// This could be moved to a core script to allow support for other modules too.
-if (!function_exists('ctype_alnum')) {
-    function ctype_alnum($text) {
-        return preg_match('/^[a-z0-9]*$/i', $text);
+
+    // XARAYA MODIFICATION - START
+    // Fallback function for ctype_alnum (necessary for some earlier versions of PHP)
+    // This could be moved to a core script to allow support for other modules too.
+    if (!function_exists('ctype_alnum')) {
+        function ctype_alnum($text) {
+            return preg_match('/^[a-z0-9]*$/i', $text);
+        }
     }
-}
-// XARAYA MODIFICATION - END
+    // XARAYA MODIFICATION - END
 
 Reason:
-        ctype_alnum function is not always present in
-        php installs
+        ctype_alnum function is not always present in php installs
+        Change was made by judgej (Dec 29 22:17:35 2003)
 
 Upstream:
         yes
-
 
 
 adodb-datadict.inc.php lines 577-585:
@@ -180,6 +193,9 @@ adodb-datadict.inc.php lines 577-585:
 Reason:
         inserting exception code for xaraya
 
+        Change was made by judgej (Nov 29 22:09:39 2003)
+        Comment: "ChangeTableSQL() - handle Xaraya exception raised when table needs creating"
+
 Upstream:
         no, xaraya specific
 
@@ -193,26 +209,30 @@ drivers/adodb-mysql.inc.php lines 28-31:
 
 Reason:
         legacy change, makes things easier for us
+        Change was made by proca (Apr 13 23:09:17 2002)
+        Comment: "Fix for GenID"
 
 Upstream:
         no
 
-drivers/adodb-mysql.inc.php lines 49-55:
+drivers/adodb-mysql.inc.php lines 49-52:
 
 // XARAYA MODIFICATION - START
 		//$arr['description'] = $this->GetOne("select version()");
-		$arr['description'] = $this->_query('select version()', false);
-		$result = $this->_query('select version()', false);
-		$resultfields = mysql_fetch_row($result);
-		$arr['description'] = $resultfields[0];
+        $arr['description'] = ADOConnection::GetOne("select version()");
 // XARAYA MODIFICATION - END
 
 Reason:
         on versions 3 and 4 of mysql behaviour is different
+        Change was made by judgej (Jan  1 12:35:48 2004)
+        Comment: "neater solution: force use of parent object method"
 
 Upstream:
-        probably, our change seems a bit clumsy, re-evaluate
+        yes
 
+        judgej: I'm pushing a change to this, as recommended by John Lim,
+        that simply forces a fallback to the parent object. That particular
+        change will be incorporated into future versions of ADODB.
 
 drivers/adodb-mysql.inc.php lines 194-198:
 
@@ -224,7 +244,16 @@ drivers/adodb-mysql.inc.php lines 194-198:
 
 Reason:
         legacy change?
+        Change was made by proca (Apr 13 23:09:17 2002)
+        Comment: "Fix for GenID"
 
 Upstream:
         no
 
+
+Misc changes:
+        index.html was added to all cats
+        Reason: security reason
+
+        copy all icons from cute_icons_for_site/* to xaradodb
+        Reason: legacy change
