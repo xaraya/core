@@ -9,14 +9,14 @@ a:link:hover, a:visited:hover { color: #E54000; }
 h1, h2, h3, h4 { color: #996600; }
 
 .xar-mod-head {
-	color: #7F5300;
-	background-color: #E7E2C6;
-	border-color: #7F5300;
+    color: #7F5300;
+    background-color: #E7E2C6;
+    border-color: #7F5300;
 }
 
 th {
     color: #7F5300;
-    background-color: #F2EADD;
+    background-color: #F8F6DF;
 }
 
 .xar-alt { background-color: #F8E8B8; }
