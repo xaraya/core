@@ -30,7 +30,6 @@ define('XAR_TOKEN_ENTITY_END'        , ';'      ); // End of an entity
 define('XAR_TOKEN_NONMARKUP_START'   , '!'      ); // Start of non markup inside tag
 define('XAR_TOKEN_PI_DELIM'          , '?'      ); // Processing instruction delimiter inside tag
 define('XAR_TOKEN_NS_DELIM'          , ':'      ); // Namespace delimiter
-define('XAR_TOKEN_BLCOMMENT_DELIM'   , '---'    ); // Blocklayout comment
 define('XAR_TOKEN_HTMLCOMMENT_DELIM' , '--'     ); // HTML comment
 
 define('XAR_TOKEN_CDATA_START'       , '[CDATA['); // CDATA start inside non markup section
@@ -575,15 +574,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         //        it can be simpler now. We spent a lot of time figuring out
                         //        what kind of comment we have on our hands.
                         switch($buildup) {
-                        case XAR_TOKEN_BLCOMMENT_DELIM:
-                            $identifier = XAR_TOKEN_BLCOMMENT_DELIM;
-                            break 2; // done
                         case XAR_TOKEN_HTMLCOMMENT_DELIM:
-                            if(($buildup . $this->peek()) != XAR_TOKEN_BLCOMMENT_DELIM) {
-                                $identifier = XAR_TOKEN_HTMLCOMMENT_DELIM;
-                                break 2; // done
-                            }
-                            break;
+                            $identifier = XAR_TOKEN_HTMLCOMMENT_DELIM;
+                            break 2; // done
                         case XAR_TOKEN_CDATA_START:
                             // Treat it as text
                             // FIXME: total hack here, we dont check whether it ends properly for example, let's give the client
@@ -597,7 +590,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Remember what was after the buildup
                         $remember = $nextChar;
                     }
-                    // identifier is now a token or free form (in our case  -- or --- or the first whitespace char
+                    // identifier is now a token or free form (in our case  -- or the first whitespace char)
 
                     // Get the rest of the non markup tag, recording along the way
                     $matchToken=''; $match = '';
@@ -623,16 +616,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $matchToken = $remember;
                         $identifier = $remember;
                     }
-
+                    
                     // Was it properly ended?
                     if($matchToken == $identifier && $nextChar == XAR_TOKEN_TAG_END) {
                         // the tag was properly ended.
                         $invalid = strpos($tagrest,$matchToken);
                         switch($identifier) {
-                        case XAR_TOKEN_BLCOMMENT_DELIM:
-                            // <!--- Blocklayout comment, ignore completely if properly ended
-                            $token=''; $text=trim($text);
-                            break;
                         case XAR_TOKEN_HTMLCOMMENT_DELIM:
                             // <!-- HTML comment, copy to output
                             $token .= $identifier . $tagrest . $matchToken . $nextChar;
