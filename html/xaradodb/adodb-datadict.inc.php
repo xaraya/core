@@ -562,7 +562,13 @@ own.
 		if (!$conn) return false;
 		
 		$colarr = $conn->MetaColumns($tabname);
-		if (!$colarr) return $this->CreateTableSQL($tablename,$flds);
+		if (!$colarr) {
+            // XARAYA MODIFICATION
+            if (xarExceptionId()) {
+                xarExceptionHandled();
+            }
+            return $this->CreateTableSQL($tablename,$flds);
+        }
 		foreach($colarr as $col) $cols[strtoupper($col->name)] = " ALTER ";
 		
 		$sql = array();
