@@ -57,6 +57,7 @@
                     <input type="hidden" name="install_database_name" id="dbName" value="#$dbName#" />
                     <input type="hidden" name="install_database_username" id="dbUname" value="#$dbUname#" />
                     <input type="hidden" name="install_database_password" id="dbPass" value="#$dbPass#" />
+                    <input type="hidden" name="install_database_password2" id="dbPass2" value="#$dbPass#" />
                     <input type="hidden" name="install_database_prefix" id="dbPrefix" value="#$dbPrefix#" />
                     <input type="hidden" name="install_database_type" id="dbType" value="#$dbType#" />
                     <input type="hidden" name="confirmDB" id="confirmDB" value="true" />
