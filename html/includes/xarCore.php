@@ -156,7 +156,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Flags can be OR-ed together
      */
     xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT );
-    
+
     /*
      * If there happens something we want to be able to log it
      *
@@ -238,7 +238,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $systemArgs = array();
         xarConfig_init($systemArgs, $whatToLoad);
 
-        // Start Variables utilities  
+        // Start Variables utilities
         include 'includes/xarVar.php';
         xarVar_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
@@ -395,11 +395,11 @@ function xarCore__shutdown_handler()
     // session tables or removing online status flags etc.
     // A carefully constructed combo with ignore_user_abort() and
     // a check afterward will get all requests atomic which might save
-    // some headaches. 
+    // some headaches.
 
     // This handler is guaranteed to be registered as the last one, which
     // means that is also guaranteed to run last in the sequence of shutdown
-    // handlers, the last statement in this function 
+    // handlers, the last statement in this function
     // is guaranteed to be the last statement of Xaraya ;-)
 }
 
@@ -470,7 +470,7 @@ function xarCoreIsDebuggerActive()
     if(array_key_exists('xarDebug',$GLOBALS)) {
         return $GLOBALS['xarDebug'] & XARDBG_ACTIVE;
     } else return false;
-    
+
 }
 
 /**
@@ -541,10 +541,10 @@ function xarCore_getSystemVar($name, $returnNull = false)
  * @param  bool   $flags    can this file only be loaded once, or multiple times? XAR_INCLUDE_ONCE and  XAR_INCLUDE_MAY_NOT_EXIST are the possible flags right now, INCLUDE_MAY_NOT_EXISTS makes the function succeed even in te absense of the file
  * @return bool   true if file was loaded successfully, false on error (NO exception)
  */
-function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE) 
+function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)
 {
     // If the file isn't there return according to the flags
-    if (!file_exists($fileName)) 
+    if (!file_exists($fileName))
         return ($flags & XAR_INCLUDE_MAY_NOT_EXIST);
 
     //Commeting this to speed this function
@@ -563,7 +563,7 @@ function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)
 
 //    $error_msg = strip_tags(ob_get_contents());
 //    ob_end_clean();
-    
+
     if (empty($r) || !$r) {
         return false;
     }
@@ -639,7 +639,7 @@ EOM;
  * @todo   See if we can get rid of this, nobody is using this
  * @return bool
  */
-function xarCoreIsApiAllowed($apiType) 
+function xarCoreIsApiAllowed($apiType)
 {
     // Testing for an empty API type just returns false
     if (empty($apiType)) return false;
@@ -721,7 +721,7 @@ function xarCore_DelCached($cacheKey, $name)
         unset($GLOBALS['xarCore_cacheCollection'][$cacheKey][$name]);
     }
     //This unsets the key that said that collection had already been retrieved
-    
+
     //Seems to have caused a problem because of the expected behaviour of the old code
     //FIXME: Change how this works for a mainstream function, stop the hacks
     if (isset($GLOBALS['xarCore_cacheCollection'][$cacheKey][0])) {
@@ -771,4 +771,4 @@ function xarFuncIsDisabled($funcName)
 
     return (isset($disabled[$funcName]) ? true : false);
 }
-
+?>

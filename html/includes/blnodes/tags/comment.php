@@ -20,9 +20,9 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
             // We found it, eat that leave next lines to be able to check easily
             //$end = $parser->peek(strlen($endMarker));
             //xarLogMessage("BL: next should read '$endMarker' : '$end'");
-        } 
+        }
     }
-    
+
     function renderBeginTag()
     {
         // Clear the children array
@@ -34,36 +34,37 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
         $this->children = array();
         return '';
     }
-    
+
     function renderEndTag()
     {
         return '';
     }
-    
+
     function render()
     {
         // This is just here to prevent the abstract method to kick in
         // FIXME: see above
         return '';
     }
-    
+
     function hasChildren()
     {
         return true;
     }
-    
+
     function hasText()
     {
         return true;
     }
-    
+
     function isPHPCode()
     {
         return false;
     }
-    
+
     function isAssignable()
     {
         return false;
     }
 }
+?>
