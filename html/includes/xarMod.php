@@ -130,14 +130,8 @@ function xarModGetVar($modName, $name)
               FROM $module_varsTable
               WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
               AND xar_name = '" . xarVarPrepForStore($name) . "'";
-    $result = $dbconn->Execute($query);
+    if (!$result = $dbconn->Execute($query)) return;
 
-    if($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
     if ($result->EOF) {
         $result->Close();
         xarVarSetCached('Mod.Variables.' . $modName, $name, '*!*MiSSiNG*!*');
