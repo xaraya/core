@@ -1,13 +1,14 @@
 <?php
 /**
- * File: $Id: s.xarTemplate.php 1.83 03/01/26 11:36:03+00:00 mikespub@sasquatch.pulpcontent.com $
+ * File: $Id$
  *
  * BlockLayout Template Engine
  * 
  * @package blocklayout
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.org
+ * @link http://www.xaraya.com
+ * @subpackage BlockLayout Template Engine
  * @author Paul Rosania <paul@xaraya.com>
  * @author Marco Canini <marco@xaraya.com>
  */
