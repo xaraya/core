@@ -37,8 +37,9 @@ function modules_admin_list()
     $data['selsort']                                = xarModGetUserVar('modules', 'selsort');
 
     // select vars for drop-down menus
-    $data['style']['plain']                         = xarML('Plain (fast)');
-    $data['style']['icons']                         = xarML('Pro ICONS');
+    $data['style']['plain']                         = xarML('Plain');
+    $data['style']['icons']                         = xarML('Icons');
+    $data['style']['compact']                       = xarML('Compact');
 /*     $data['style']['pro']                           = xarML('Pro HTML'); */
 /*     $data['style']['dogs']                           = xarML('Dog\'s Bollocks'); */
     
@@ -134,10 +135,11 @@ function modules_admin_list()
                                             'authid'    => $authid));
         
         // link to module main admin function if any
-        if($mod['admin']){
-            $modconfigurl = xarModURL($mod['name'], 'admin');
-        } else {
-            $modconfigurl = '';
+        $listrows[$i]['modconfigurl'] = '';
+        if($mod['admin'] == 1 && $mod['state'] == 3){
+            $listrows[$i]['modconfigurl'] = xarModURL($mod['name'], 'admin');
+            // link title for modules main admin function - common
+            $listrows[$i]['adminurltitle'] = xarML('Go to administration of ');
         }
         
         // common urls
@@ -197,12 +199,6 @@ function modules_admin_list()
             // this module is 'Active'          - set labels and links
             $statelabel = xarML('Active');
             $listrows[$i]['state'] = 3;
-            
-            // passing along url to module admin main function if any
-            $listrows[$i]['modconfigurl']       = $modconfigurl;
-            // link title for modules main admin function - common
-            $listrows[$i]['adminurltitle']      = xarML('Go to administration of ');
-            
             // here we are checking for module class 
             // to prevent ppl messing with the core modules
             if(!$coremod){
