@@ -375,7 +375,8 @@ function dynamicdata_init()
     /**
      * Register blocks
      */
-    xarBlockTypeRegister('dynamicdata', 'form');
+// TODO ?
+//    xarBlockTypeRegister('dynamicdata', 'form');
 
     /**
      * Register hooks
