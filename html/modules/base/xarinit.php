@@ -194,7 +194,7 @@ function base_init()
     // FIXME: <marco> Temporary config vars, ask them at install time
     xarConfigSetVar('Site.MLS.MLSMode', 'SINGLE');
     xarConfigSetVar('Site.MLS.DefaultLocale', 'en_US.iso-8859-1');
-    $allowedLocales = array('en_US.iso-8858-1');
+    $allowedLocales = array('en_US.iso-8859-1');
     xarConfigSetVar('Site.MLS.AllowedLocales',$allowedLocales);
 
     $authModules = array('authsystem');
