@@ -350,8 +350,12 @@ function xarExceptionRender($format)
                 $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at '.$function.'(';
                 $text .= basename($stack[$j]['file']).':';
                 $text .= $stack[$j]['line'].')<br />';
-                if ($showParams) {
-                    $text .= htmlspecialchars(join(', ', $stack[$i]['args']));
+                if ($showParams && isset($stack[$i]['args']) && is_array($stack[$i]['args']) && count($stack[$i]['args']) > 0) {
+                    ob_start();
+                    print_r($stack[$i]['args']);
+                    $dump = ob_get_contents();
+                    ob_end_clean();
+                    $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . htmlspecialchars($dump);
                     $text .= '<br />';
                 }
             }
@@ -367,8 +371,12 @@ function xarExceptionRender($format)
                 $text .= '     at '.$function.'(';
                 $text .= basename($stack[$j]['file']).':';
                 $text .= $stack[$j]['line'].")\n";
-                if ($showParams) {
-                    $text .= join(', ', $stack[$i]['args']);
+                if ($showParams && isset($stack[$i]['args']) && is_array($stack[$i]['args']) && count($stack[$i]['args']) > 0) {
+                    ob_start();
+                    print_r($stack[$i]['args']);
+                    $dump = ob_get_contents();
+                    ob_end_clean();
+                    $text .= $dump;
                     $text .= "\n";
                 }
             }
