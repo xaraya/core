@@ -27,6 +27,9 @@ function dynamicdata_admin_query($args)
     if(!xarVarFetch('numitems', 'isset', $numitems, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('startnum', 'isset', $startnum, NULL, XARVAR_DONT_SET)) {return;}
 
+    if(!xarVarFetch('groupby', 'isset', $groupby, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('operation', 'isset', $operation, NULL, XARVAR_DONT_SET)) {return;}
+
     $reset = false;
     // changed selected object
     if ($itemid != $olditemid) {
@@ -93,6 +96,8 @@ function dynamicdata_admin_query($args)
         $sort = array();
         $numitems = 20;
         $startnum = 1;
+        $groupby = 0;
+        $operation = array();
     }
 
     if (!empty($query) && $query == $newquery) {
@@ -276,6 +281,14 @@ function dynamicdata_admin_query($args)
         $sortlist = null;
     }
 
+// TODO: add groupby, operation and extra support
+    $data['groupby'] = $groupby;
+    $data['operation'] = $operation;
+
+    if (!empty($groupby)) {
+        array_push($data['properties'], array('_extra_' => null));
+    }
+
     // TODO: clean up generation of dummy object
     if ( (!empty($itemid) && $itemid == $olditemid) ||
          (!empty($table) && $table == $oldtable) ) {
@@ -342,6 +355,8 @@ function dynamicdata_admin_query($args)
         $queryvars['numitems'] = $numitems;
     // don't save the start number here
     //   $queryvars['startnum'] = $startnum;
+        $queryvars['groupby'] = $groupby;
+        $queryvars['operation'] = $operation;
     // TODO: clean up query cleaning
         if (count($data['queries']) >= 20) {
             $dropquery = array_pop($data['queries']);
@@ -385,6 +400,16 @@ function dynamicdata_admin_query($args)
                                  array('id' => '-2', 'name' => xarML('sort #(1) - down', 2)),
                                  array('id' => '3', 'name' => xarML('sort #(1) - up', 3)),
                                  array('id' => '-3', 'name' => xarML('sort #(1) - down', 3)),
+                                );
+    $data['operationoptions'] = array(
+                                 array('id' => '1', 'name' => xarML('group by #(1)',1)),
+                                 array('id' => '2', 'name' => xarML('group by #(1)',2)),
+                                 array('id' => '3', 'name' => xarML('group by #(1)',3)),
+                                 array('id' => 'count', 'name' => xarML('count')),
+                                 array('id' => 'min', 'name' => xarML('minimum')),
+                                 array('id' => 'max', 'name' => xarML('maximum')),
+                                 array('id' => 'avg', 'name' => xarML('average')),
+                                 array('id' => 'sum', 'name' => xarML('sum')),
                                 );
     $data['submit'] = xarML('Update Query');
 

@@ -42,6 +42,16 @@
   <td>
     <input type="text" name="numitems" id="numitems" value="#$numitems#" size="5" />
   </td>
+  <td>
+    <label for="groupby"><xar:mlstring>Group By:</xar:mlstring></label>
+  </td>
+  <td>
+    <xar:if condition="!empty($groupby)">
+      <input type="checkbox" name="groupby" id="groupby" value="1" checked="checked" onchange="submit()" /> TODO :)
+    <xar:else/>
+      <input type="checkbox" name="groupby" id="groupby" value="1" onchange="submit()" />
+    </xar:if>
+  </td>
 </tr>
 <xar:if condition="!empty($jointables)">
 <tr>
@@ -61,7 +71,7 @@
     </xar:foreach>
     </select>
   </td>
-  <td colspan="4">
+  <td colspan="6">
     &nbsp;
   </td>
 </tr>
@@ -95,6 +105,9 @@
   <td>
     <input type="text" name="startnum" id="startnum" value="#$startnum#" size="5" />
   </td>
+  <td colspan="2">
+    &nbsp;
+  </td>
 </tr>
 </table>
 <table border="0" cellpadding="5">
@@ -105,7 +118,18 @@
   </td>
   <xar:foreach in="$properties" key="$name">
   <td>
-    <xar:if condition="!empty($field[$name])">
+    <xar:if condition="$name eq '_extra_'">
+    <select name="field[$name]">
+      <option value=""><xar:mlstring>Select:</xar:mlstring></option>
+      <xar:foreach in="$properties" key="$name2">
+        <xar:if condition="!empty($field[$name]) and $field[$name] eq $name2">
+          <option value="#$name2#" selected="selected"><xar:data-label property="$properties[$name2]" /></option>
+        <xar:else/>
+          <option value="#$name2#"><xar:data-label property="$properties[$name2]" /></option>
+        </xar:if>
+      </xar:foreach>
+    </select>
+    <xar:elseif condition="!empty($field[$name])"/>
       <input type="checkbox" name="field[#$name#]" id="field[#$name#]" value="1" checked="checked"/> <label for="field[#$name#]"><xar:data-label property="$properties[$name]" /></label>
     <xar:else/>
       <input type="checkbox" name="field[#$name#]" id="field[#$name#]" value="1" /> <label for="field[#$name#]"><xar:data-label property="$properties[$name]" /></label>
@@ -113,6 +137,27 @@
   </td>
   </xar:foreach>
 </tr>
+<xar:if condition="!empty($groupby)">
+<tr>
+  <td>
+    <xar:mlstring>Operation:</xar:mlstring>
+  </td>
+  <xar:foreach in="$properties" key="$name">
+  <td>
+    <select name="operation[#$name#]">
+      <option value=""></option>
+      <xar:foreach in="$operationoptions" value="$option">
+        <xar:if condition="!empty($operation[$name]) and $operation[$name] eq $option['id']">
+          <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+        <xar:else/>
+          <option value="#$option['id']#">#$option['name']#</option>
+        </xar:if>
+      </xar:foreach>
+    </select>
+  </td>
+  </xar:foreach>
+</tr>
+</xar:if>
 <tr>
   <td>
     <xar:mlstring>Conditions:</xar:mlstring>
