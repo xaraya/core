@@ -349,6 +349,15 @@ class Dynamic_Property_Master
                 $property = new Dynamic_SendToFriend_Property($args);
                 break;
 
+            case 142: // (countrylist) Country Listing, Stored as Abbr
+                require_once "includes/properties/Dynamic_CountryAbbrList_Property.php";
+                $property = new Dynamic_CountryAbbrList_Property($args);
+                break;
+            case 143: // (statelist) State & Province/Territory Listing, Stored as Abbr
+                require_once "includes/properties/Dynamic_StateProvinceList_Property.php";
+                $property = new Dynamic_StateProvinceList_Property($args);
+                break;
+
             // Using 200 range for experimental
             case 201: // (htmlarea_small) Small GUI Editor
                 $args['rows'] = 2;
@@ -891,6 +900,25 @@ class Dynamic_Property_Master
                               // ...
                              );
         }
+
+	// New State List (Expanded) and Country List that store using Abbrievations
+        $proptypes[142] = array(
+                              'id'         => 142,
+                              'name'       => 'countryabbrlisting',
+                              'label'      => 'Country Dropdown (Abbr)',
+                              'format'     => '42',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[143] = array(
+                              'id'         => 143,
+                              'name'       => 'stateprovincelisting',
+                              'label'      => 'State/Province Dropdown  (Abbr)',
+                              'format'     => '43',
+                              'validation' => '',
+                              // ...
+                             );
+	
 
     // Integrate WYSIWYG Editor, if available
         if( file_exists('htmlarea/htmlarea.js') )
