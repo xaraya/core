@@ -1,0 +1,67 @@
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <th align="center">#$menutitle#</th>
+    </tr>
+</table>
+<br />
+
+<h2><xar:mlstring>Meta Table Definitions</xar:mlstring> </h2>
+
+<xar:if condition="empty($export)">
+
+<table border="0" width="100%" cellpadding="2" cellspacing="0">
+<xar:foreach in="$tables" key="$table" value="$fields">
+    <tr>
+       <th colspan="3" align="left">
+           #$table# 
+       </th>
+       <form>
+       <th colspan="3" align="right">
+           <input type="hidden" name="from" value="#$table#">
+           <xar:mlstring>add relationship with</xar:mlstring>
+           <select name="with">
+           <xar:foreach in="$tablelist" value="$with">
+               <option>#$with#
+           </xar:foreach>
+           </select>
+       </th>
+       </form>
+    </tr>
+    <xar:foreach in="$fields" value="$field">
+    <tr>
+        <td>#$field['name']#</td>
+        <td>#$field['label']#</td>
+        <td><xar:data-output type="fieldtype" name="dummy" value="$field['type']" /></td>
+        <td>#$field['default']#</td>
+        <td>#$field['source']#</td>
+        <td>#$field['validation']#</td>
+    </tr>
+    </xar:foreach>
+</xar:foreach>
+</table>
+<br />
+<div align="center"><a href="#xarModURL('dynamicdata','admin','meta',array('export' => 1))#"><xar:mlstring>Export to XML</xar:mlstring></a></div>
+
+<xar:else />
+
+<form>
+<textarea name="xml" rows="30" cols="80">
+&lt;objects&gt;
+<xar:foreach in="$tables" key="$table" value="$fields">
+    &lt;object id="#$table#"&gt;
+<xar:foreach in="$fields" key="$name" value="$field">
+        &lt;property id="#$name#"&gt;
+<xar:foreach in="$field" key="$key" value="$value">
+            &lt;#$key#&gt;#$value#&lt;/#$key#&gt;
+</xar:foreach>
+        &lt;/property&gt;
+</xar:foreach>
+    &lt;/object&gt;
+</xar:foreach>
+&lt;/objects&gt;
+</textarea>
+</form>
+<br />
+<div align="center"><a href="#xarModURL('dynamicdata','admin','meta')#"><xar:mlstring>Show Table Definitions</xar:mlstring></a></div>
+
+</xar:if>

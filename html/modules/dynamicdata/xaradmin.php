@@ -1199,6 +1199,33 @@ function dynamicdata_admin_import($args)
 }
 
 /**
+ * Return meta data (test only)
+ */
+function dynamicdata_admin_meta($args)
+{
+    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
+        return;
+    }
+
+    $export = xarVarCleanFromInput('export');
+
+    extract($args);
+    if (empty($export)) {
+        $export = 0;
+    }
+
+    $data = dynamicdata_admin_menu();
+
+    if (!xarModAPILoad('dynamicdata','user')) return;
+    $data['tables'] = xarModAPIFunc('dynamicdata','user','getmeta');
+    $data['tablelist'] = array_keys($data['tables']);
+
+    $data['export'] = $export;
+    return $data;
+}
+
+/**
  * generate the common admin menu configuration
  */
 function dynamicdata_admin_menu()
