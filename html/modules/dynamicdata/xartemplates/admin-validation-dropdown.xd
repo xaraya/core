@@ -49,6 +49,18 @@
   </tr>
   <tr>
     <td>
+      <xar:mlstring>Override</xar:mlstring> 
+    </td>
+    <td>
+      <xar:if condition="empty($override)">
+        <xar:mlstring>no</xar:mlstring>
+      <xar:else/>
+        <xar:mlstring>yes</xar:mlstring>
+      </xar:if>
+    </td>
+  </tr>
+  <tr>
+    <td>
       <xar:mlstring>Other rule</xar:mlstring>
     </td>
     <td>

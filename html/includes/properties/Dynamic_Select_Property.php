@@ -22,6 +22,7 @@ class Dynamic_Select_Property extends Dynamic_Property
     var $options;
     var $func;
     var $file;
+    var $override = false; // allow values other than those in the options
 
     function Dynamic_Select_Property($args)
     {
@@ -46,6 +47,11 @@ class Dynamic_Select_Property extends Dynamic_Property
                 return true;
             }
         }
+        // check if we allow values other than those in the options
+        if ($this->override) {
+            $this->value = $value;
+            return true;
+        }
         $this->invalid = xarML('selection');
         $this->value = null;
         return false;
@@ -66,6 +72,19 @@ class Dynamic_Select_Property extends Dynamic_Property
             $data['options'] = $this->options;
         } else {
             $data['options'] = $options;
+        }
+        // check if we need to add the current value to the options
+        if (!empty($data['value']) && $this->override) {
+            $found = false;
+            foreach ($data['options'] as $option) {
+                if ($option['id'] == $data['value']) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                $data['options'][] = array('id' => $data['value'], 'name' => $data['value']);
+            }
         }
         if (empty($name)) {
             $data['name'] = 'dd_' . $this->id;
@@ -125,6 +144,10 @@ class Dynamic_Select_Property extends Dynamic_Property
                 //$out .= $join . xarVarPrepForDisplay($option['name']);
                 $join = ' | ';
             }
+        }
+        // check if we need to show the current value instead
+        if (!empty($value) && $this->override && empty($join)) {
+            $data['option']['name'] = xarVarPrepForDisplay($value);
         }
 
         $template="dropdown";
@@ -259,6 +282,8 @@ class Dynamic_Select_Property extends Dynamic_Property
         } else {
             $data['other'] = xarVarPrepForDisplay($this->validation);
         }
+        // read-only value set by the property type (for now)
+        $data['override'] = $this->override;
 
         // allow template override by child classes
         if (!isset($template)) {

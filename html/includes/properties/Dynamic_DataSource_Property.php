@@ -38,6 +38,8 @@ class Dynamic_DataSource_Property extends Dynamic_Select_Property
                 $this->options[] = array('id' => $source, 'name' => $source);
             }
         }
+        // allow values other than those in the options
+        $this->override = true;
     }
 
     // default methods from Dynamic_Select_Property
