@@ -7,13 +7,13 @@ class ADODB_xarpostgres64 extends ADODB_postgres64
     // Prefix the sequence number to make it unique
     var $_genIDSQL = "SELECT NEXTVAL('seq%s')";
     var $_genSeqSQL = "CREATE SEQUENCE seq%s START %s";
-	var $_dropSeqSQL = "DROP SEQUENCE seq%s";
+    var $_dropSeqSQL = "DROP SEQUENCE seq%s";
 
-	function _insertid()
-	{
+    function _insertid()
+    {
         // return the GenID value
         return $this->genID;
-	}
+    }
 
     function &Execute($sql,$inputarr=false)
     {
