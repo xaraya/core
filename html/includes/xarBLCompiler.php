@@ -1192,6 +1192,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         default:
             // FIXME: check if this is how you want to support module-registered tags
             $node =& new xarTpl__XarOtherNode($tagName);
+            if(!isset($node->tagobject)) unset($node);
             break;
         }
         if (isset($node)) {
@@ -3212,10 +3213,6 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
     {
         xarLogMessage("Constructing custom tag: $tagName");
         $this->tagobject = xarTplGetTagObjectFromName($tagName);
-        if(!isset($this->tagobject)) {
-            // Unset the node so the callee can except
-            $this = NULL;;
-        }
     }
     
     function render()
