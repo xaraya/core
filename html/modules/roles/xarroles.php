@@ -267,10 +267,9 @@ function drawbranch($node){
 	$isbranch = count($node['children'])>0 ? true : false;
 
 // now begin adding rows to the string
-	$this->html .= '<div class="xarbranch" id="x' . $this->nodeindex . '">';
+	$this->html .= '<div class="xarbranch" id="branch' . $this->nodeindex . '" style="position: relative;">';
 
 // this table hold the index, the tree drawing gifs and the info about the role
-	$this->html .= '<div style="position: relative;">';
 	$this->html .= $this->drawindent();
 	if ($isbranch) {
 		if ($this->nodeindex != 1){
@@ -297,16 +296,11 @@ function drawbranch($node){
 		$this->html .= ' see the entry above';
 	}
 	else{
-		if($object['pid'] < 5) {
-			$this->html .= '<b>' . $object['name'] . '</b>: ';
-		}
-		else {
-			$this->html .= '<a href="' .
-						xarModURL('roles',
-							 'admin',
-							 'modifyrole',
-							 array('ppid'=>$object['pid'])) .' ">' .$object['name'] . '</a>: &nbsp;';
-		}
+		$this->html .= '<a href="' .
+					xarModURL('roles',
+						 'admin',
+						 'modifyrole',
+						 array('ppid'=>$object['pid'])) .' ">' .$object['name'] . '</a>: &nbsp;';
 		$this->html .= count($this->getsubgroups($object['pid'])) . ' subgroups';
 		$this->html .= ' | ' . $object['users'] . ' users</span>';
 	}
@@ -370,11 +364,11 @@ function drawbranch($node){
 				 array('ppid'=>$object['pid'])) .
 				 '" title="Test this Groups\'s Privileges">Test</a>';
 	}
-	$this->html .= '</span></div>';
+	$this->html .= '</span>';
 
 
 // we've finished this row; now do the children of this role
-	$this->html .= $isbranch ? '<div class="xarleaf" id="x' . $this->nodeindex . '" >' : '';
+	$this->html .= $isbranch ? '<div class="xarleaf" id="leaf' . $this->nodeindex . '" >' : '';
 	$ind=0;
 	foreach($node['children'] as $subnode){
 		$ind = $ind + 1;

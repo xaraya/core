@@ -1117,10 +1117,9 @@ function drawbranch($node){
 	$isbranch = count($node['children'])>0 ? true : false;
 
 // now begin adding rows to the string
-	$this->html .= '<div class="xarbranch" id="x' . $this->nodeindex . '" style="align: left">';
+	$this->html .= '<div class="xarbranch" id="branch' . $this->nodeindex . '" style="position: relative;">';
 
 // this table holds the index, the tree drawing gifs and the info about the privilege
-	$this->html .= '<div style="position: relative;">';
 	$this->html .= $this->drawindent();
 	if (count($node['children']) > 0) {
 		if ($this->nodeindex != 1){
@@ -1190,10 +1189,10 @@ function drawbranch($node){
 				 '" title="Show the Groups/Users this Privilege is assigned to">Groups/Users</a>';
 
 // close the html row
-	$this->html .= '</span></div>';
+	$this->html .= '</span>';
 
 // we've finished this row; now do the children of this privilege
-	$this->html .= $isbranch ? '<div class="xarleaf" id="x' . $this->nodeindex . '" >' : '';
+	$this->html .= $isbranch ? '<div class="xarleaf" id="leaf' . $this->nodeindex . '" >' : '';
 	$ind=0;
 	foreach($node['children'] as $subnode){
 		$ind = $ind + 1;

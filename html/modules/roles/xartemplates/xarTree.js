@@ -58,8 +58,7 @@ function xarTree_buildTree(tree) {
 			var titlenode = currNode.parentNode;
 			var j = 0;
 			while(j < titlenode.childNodes.length) {
-					var branch = titlenode.childNodes[0];
-					branch = branch.childNodes[j];
+				var branch = titlenode.childNodes[j];
 				if (branch.className == xarTree_config.clickname) {
 					xarTree_getParent(branch).setAttribute(xarTree_config.attr, "visible");
 					if (xarTree_config.is.ie) {

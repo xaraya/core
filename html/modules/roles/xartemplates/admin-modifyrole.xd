@@ -32,8 +32,25 @@ document.forms[0].submit();}
 
 	<br /><br />
 	<form action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
+		<input type="hidden" name="ppid" id="ppid" value="#$ppid#" />
+		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 
 		<table border="0" cellpadding="5">
+			<xar:if condition="$ppid lt 5">
+			<tr>
+				<td>
+					<xar:mlstring>Name</xar:mlstring>
+				</td>
+				<td>
+					<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="20" tabindex="1" />
+				</td>
+			</tr>
+				<tr>
+					<td colspan="2">
+							This role cannot be edited or deleted
+					</td>
+				</tr>
+			<xar:else />
 			<tr>
 				<td>
 					<xar:mlstring>Name</xar:mlstring>
@@ -105,11 +122,19 @@ document.forms[0].submit();}
 					</td>
 				</tr>
 			</xar:if>
+			<tr>
+				<td colspan="5">
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td align="center" colspan="5">
+					<input type="submit" value="Update" align="middle" tabindex="2" />
+				</td>
+			</tr>
+			</xar:if>
 		</table>
 
-		<br /><br />
-
-		<input type="submit" value="Update" align="middle" tabindex="2" />
 	</form>
 </div>
 
@@ -120,46 +145,48 @@ document.forms[0].submit();}
 		</td>
 	</tr>
 	<tr>
-		<td valign="top" width ="50%">
-			<table border="0" width="100%">
-				</tr>
-				<tr>
-					<td  align="middle" colspan="4">
-						<xar:mlstring>Add</xar:mlstring>
-						<xar:if condition="$ptype eq 0">
-							<xar:mlstring>User</xar:mlstring>
-						<xar:else />
-							<xar:mlstring>Group</xar:mlstring>
-						</xar:if>
-						 <b>'#$pname#'</b> <xar:mlstring>to a Group</xar:mlstring>
-					</td>
-				</tr>
-			</table>
-			<div align="center">
-			<form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
-
-				<table border="0" cellpadding="5">
-
+		<xar:if condition="$ppid gt 4">
+			<td valign="top" width ="50%">
+				<table border="0" width="100%">
+					</tr>
 					<tr>
-						<td  align="middle">
-							<xar:mlstring>Group:</xar:mlstring>
-						</td>
-						<td>
-							<select name="roleid" id="roleid">
-								<xar:loop name="$groups">
-									<option value="#$pid#">#$name#
-								</xar:loop>
-							</select>
+						<td  align="middle" colspan="4">
+							<xar:mlstring>Add</xar:mlstring>
+							<xar:if condition="$ptype eq 0">
+								<xar:mlstring>User</xar:mlstring>
+							<xar:else />
+								<xar:mlstring>Group</xar:mlstring>
+							</xar:if>
+							 <b>'#$pname#'</b> <xar:mlstring>to a Group</xar:mlstring>
 						</td>
 					</tr>
 				</table>
-				<br />
-				<input type="submit" value="Add" align="middle" tabindex="2" />
-				<input type="hidden" name="authid" id="authid" value="#$authid#" />
-				<input type="hidden" name="ppid" id="ppid" value="#$ppid#" />
-			</form>
-			</div>
-		</td>
+				<div align="center">
+				<form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
+
+					<table border="0" cellpadding="5">
+
+						<tr>
+							<td  align="middle">
+								<xar:mlstring>Group:</xar:mlstring>
+							</td>
+							<td>
+								<select name="roleid" id="roleid">
+									<xar:loop name="$groups">
+										<option value="#$pid#">#$name#
+									</xar:loop>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<br />
+					<input type="submit" value="Add" align="middle" tabindex="2" />
+					<input type="hidden" name="authid" id="authid" value="#$authid#" />
+					<input type="hidden" name="ppid" id="ppid" value="#$ppid#" />
+				</form>
+				</div>
+			</td>
+		</xar:if>
 		<td  valign="top" width ="50%">
 			<table border="0" width="100%">
 				<tr>
@@ -221,18 +248,15 @@ document.forms[0].submit();}
 		</td>
 		<td valign="bottom" width="80" align="right">
 			<a href="javascript:xarTree_exec('RolesTree',1);">
-			Expand
-			</a>  &nbsp;
+			Expand</a>  &nbsp;
 		</td>
 		<td valign="bottom" width="70" align="right">
 			<a href="javascript:xarTree_exec('RolesTree',0);">
-			Collapse
-			</a>  &nbsp;
+			Collapse</a>  &nbsp;
 		</td>
 		<td valign="bottom" width="60" align="right">
 			<a href="javascript:xarTree_exec('RolesTree',2);">
-			Toggle
-			</a>  &nbsp;
+			Toggle</a>  &nbsp;
 		</td>
 	</tr>
 	<tr>

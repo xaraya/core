@@ -19,13 +19,13 @@ function initializeSetup() {
     *********************************************************************/
 
     makeGroup('Everybody');
-    makeGroup('Administrators');
+	makeUser('Anonymous','anonymous','anonymous@xaraya.com');
 	makeUser('Admin','admin','admin@xaraya.com','xaraya');
+    makeGroup('Administrators');
     makeGroup('Oversight');
 	makeUser('Overseer','overseer','overseer@xaraya.com');
     makeGroup('Users');
 	makeUser('User','user','user@xaraya.com');
-	makeUser('Anonymous','anonymous','anonymous@xaraya.com');
 //	makeUser('Current','current','current@xaraya.com');
 
     /*********************************************************************
@@ -139,7 +139,7 @@ function initializeSetup() {
     xarDefineInstance('base','Base',$query);
 
 // the follwing are apparently used in the base module
-	$query = "SELECT types.xar_type,instances.xar_title, FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id";
+	$query = "SELECT types.xar_type,instances.xar_title FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id";
     xarDefineInstance('blocks','PHPBlock',$query);
     xarDefineInstance('blocks','Block',$query);
     xarDefineInstance('blocks','HTMLBlock',$query);
