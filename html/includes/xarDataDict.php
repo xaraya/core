@@ -533,15 +533,119 @@ class xarDataDict {
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
+     * @param   xartables true if only Xaraya tables, false for all tables
+     * @returns array on success, false on failure
+     * @return  array of tables available in the database, false otherwise
+     * @throws  none
+     * @todo    flag for Xaraya system vs site tables
+    */
+    function getTables($xartables = true)
+    {
+        if ($xartables) {
+            // Retrieve only Xaraya system tables
+            $tables = $this->getSystemTables();
+            if (!$tables) {
+                return false;
+            }
+        } else { 
+            $tables = $this->dict->MetaTables();
+
+            if (!isset($tables)) {
+                return false;
+            }
+
+            // Sort tables
+            sort($tables);
+        }
+        return $tables;
+    }
+
+    /**
+     * getSystemTables
+     *
+     * Retrieve all the Xaraya system tables in a database
+     *
+     * @author  Richard Cave <rcave@xaraya.com>
+     * @access  public
      * @param   none
      * @returns array on success, false on failure
      * @return  array of tables available in the database, false otherwise
      * @throws  none
      * @todo    none
     */
-    function getTables()
+    function getSystemTables()
     {
-        $tables = $this->dict->MetaTables();
+        $metatables = $this->dict->MetaTables();
+        if (!isset($metatables)) {
+            return false;
+        }
+
+        // Sort tables
+        sort($metatables);
+
+        // Since mask only works for a few databases when
+        // retrieving with MetaTables, parse out the tables
+        // based on the system table prefix
+        $tables = array();
+        $systemPrefix = xarDBGetSystemTablePrefix();
+        $prefixLength = strlen($systemPrefix);
+
+        if ($prefixLength > 0) {
+            foreach ($metatables as $metatable) {
+                // Check for system prefix
+                if (strncmp($systemPrefix, $metatable, $prefixLength) == 0)
+                    $tables[] = $metatable;
+            }
+        } else {
+            $tables = $metatables;
+        }
+
+        return $tables;
+    }
+
+    /**
+     * getSiteTables
+     *
+     * Retrieve all the Xaraya site tables in a database
+     *
+     * @author  Richard Cave <rcave@xaraya.com>
+     * @access  public
+     * @param   none
+     * @returns array on success, false on failure
+     * @return  array of tables available in the database, false otherwise
+     * @throws  none
+     * @todo    none
+    */
+    function getSiteTables()
+    {
+        $metatables = $this->dict->MetaTables();
+        if (!isset($metatables)) {
+            return false;
+        }
+
+        // Sort tables
+        sort($metatables);
+
+        // Since mask only works for a few databases when
+        // retrieving with MetaTables, parse out the tables
+        // based on the system table prefix
+        $tables = array();
+    
+        // Currently, xarDBGetSiteTablePrefix() returns the same prefix
+        // as xarDBGetSystemTablePrefix()
+        $systemPrefix = xarDBGetSiteTablePrefix(); 
+        $prefixLength = strlen($systemPrefix);
+
+        if ($prefixLength > 0) {
+            foreach ($metatables as $metatable) {
+                // Check for system prefix
+                if (strncmp($systemPrefix, $metatable, $prefixLength) == 0)
+                    $tables[] = $metatable;
+            }
+        } else {
+            $tables = $metatables;
+        }
+
         return $tables;
     }
 
@@ -552,43 +656,26 @@ class xarDataDict {
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   xartables true if Xaraya tables, false for all tables
+     * @param   xartables true if only Xaraya tables, false for all tables
      * @returns array on success, false on failure
      * @return  array of columns names for the table, false otherwise
      * @throws  none
-     * @todo    none
+     * @todo    flag for Xaraya system vs site tables
     */
     function getTableDefinitions($xartables = true)
     {
-        // Get all the tables 
-        $metatables = $this->getTables();
-        if (!isset($metatables)) {
-            return false;
-        }
-
-        // Sort tables
-        sort($metatables);
-
-        // Check if we want all tables or only Xaraya tables
         if ($xartables) {
-            // Since mask only works for a few databases when
-            // retrieving with MetaTables, parse out the tables
-            // based on the system table prefix
-            $tables = array();
-            $systemPrefix = xarDBGetSystemTablePrefix();
-            $prefixLength = strlen($systemPrefix);
-
-            if ($prefixLength > 0) {
-                foreach ($metatables as $metatable) {
-                    // Check for system prefix
-                    if (strncmp($systemPrefix, $metatable, $prefixLength) == 0)
-                        $tables[] = $metatable;
-                }
-            } else {
-                $tables = $metatables;
+            // Retrieve Xaraya system tables
+            $tables = $this->getSystemTables();
+            if (!$tables) {
+                return false;
             }
-        } else {
-            $tables = $metatables;
+        } else { 
+            // Get all the tables 
+            $tables = $this->getTables();
+            if (!$tables) {
+                return false;
+            }
         }
 
         $tableDefs = array();
@@ -725,6 +812,10 @@ class xarMetaData {
         if (!isset($tables)) {
             return;
         }
+
+        // Sort tables
+        sort($tables);
+
         return $tables;
     }
 
