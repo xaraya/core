@@ -361,7 +361,7 @@ function xarExceptionRender($format)
                     }
                 }
 
-                break 2;
+                continue 2;
             default:
                 continue 2;
         }
