@@ -402,6 +402,19 @@ if (empty($step)) {
                 return false;
             }
 
+        /**
+         * dynamicdata changes
+         */
+
+            $dynproptable = xarDBGetSiteTablePrefix() . '_dynamic_properties';
+            $query = "UPDATE $dynproptable
+                         SET xar_prop_type=3
+                       WHERE xar_prop_objectid=2
+                         AND xar_prop_name='default'";
+            // Check for db errors
+            $result =& $dbconn->Execute($query);
+            if (!$result) return;
+
             break;
     }
 

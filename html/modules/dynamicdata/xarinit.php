@@ -251,7 +251,7 @@ function dynamicdata_init()
         "'moduleid','Module',$objectid[2],182,1,19,'','" . $dynamic_properties . ".xar_prop_moduleid',2,5,'integer'",
         "'itemtype','Item Type',$objectid[2],182,1,20,'','" . $dynamic_properties . ".xar_prop_itemtype',2,6,'integer'",
         "'type','Property Type',$objectid[2],182,1,22,'','" . $dynamic_properties . ".xar_prop_type',1,7,'integer'",
-        "'default','Default',$objectid[2],182,1,2,'','" . $dynamic_properties . ".xar_prop_default',1,8,'varchar (254)'",
+        "'default','Default',$objectid[2],182,1,3,'','" . $dynamic_properties . ".xar_prop_default',1,8,'varchar (254)'",
         "'source','Source',$objectid[2],182,1,23,'dynamic_data','" . $dynamic_properties . ".xar_prop_source',1,9,'varchar (254)'",
         "'status','Status',$objectid[2],182,1,25,'1','" . $dynamic_properties . ".xar_prop_status',1,10,'integer (tiny)'",
         "'order','Order',$objectid[2],182,1,15,'','" . $dynamic_properties . ".xar_prop_order',2,11,'integer (tiny)'",

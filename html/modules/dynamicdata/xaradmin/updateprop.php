@@ -89,6 +89,10 @@ function dynamicdata_admin_updateprop()
             // update property in xaradminapi.php
             if (!isset($dd_default[$id])) {
                 $dd_default[$id] = null;
+            } elseif (!empty($dd_default[$id]) && preg_match('/\[LF\]/',$dd_default[$id])) {
+                // replace [LF] with line-feed again
+                $lf = chr(10);
+                $dd_default[$id] = preg_replace('/\[LF\]/',$lf,$dd_default[$id]);
             }
             if (!isset($dd_validation[$id])) {
                 $dd_validation[$id] = null;

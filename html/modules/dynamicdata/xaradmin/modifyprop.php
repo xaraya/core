@@ -97,9 +97,14 @@ function dynamicdata_admin_modifyprop()
 
     $isprimary = 0;
     foreach (array_keys($data['fields']) as $field) {
+        // replace newlines with [LF] for textbox
+        if (!empty($data['fields'][$field]['default']) && preg_match("/\n/",$data['fields'][$field]['default'])) {
+            // Note : we could use addcslashes here, but that could lead to a whole bunch of other issues...
+            $data['fields'][$field]['default'] = preg_replace("/\r?\n/",'[LF]',$data['fields'][$field]['default']);
+        }
         if ($data['fields'][$field]['type'] == 21) { // item id
             $isprimary = 1;
-            break;
+        //    break;
         }
     }
     if ($isprimary) {
