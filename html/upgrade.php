@@ -2,13 +2,13 @@
 /**
  * File: $Id$
  *
- * Quick & dirty import of PN .71x data into Xaraya test sites
+ * Core Database Upgrade File
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  *
- * @subpackage import
+ * @subpackage html
  * @author mikespub <mikespub@xaraya.com>
 */
 
