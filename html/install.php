@@ -21,7 +21,7 @@
  * 4. input database information
  * ---verify, write config.php, install basic dataset (inc. default admin), bootstrap
  * 5. create administrator
- * ---modify administrator information in nuke_users
+ * ---modify administrator information in xar_users
  * 6. pick optional components
  * ---call optional components' init funcs, disable non-reusable areas of install module
  * 7. finished!
@@ -43,9 +43,9 @@ define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
  * Entry function for the installer
  *
  * @access private
- * @param phase the install phase to load
- * @returns bool
- * @return true on success, false on failure
+ * @param phase integer the install phase to load
+ * @return bool true on success, false on failure
+ * @todo <johnny> use non caching templates until they are set to yes
  */
 function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 {
@@ -71,8 +71,8 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     $modName = 'installer';
     $modType = 'admin';
 
-    // Build functioname from phase
-    $funcName = 'phase'.$phase;
+    // Build function name from phase
+    $funcName = 'phase' . $phase;
 
     // Handle language setting
 
@@ -135,9 +135,8 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 if (!isset($phase)) {
     $phase = XARINSTALL_PHASE_WELCOME;
 }
-$res = xarInstallMain($phase);
 
-if (!isset($res)) {
+if (!xarInstallMain($phase)) {
 
     // If we're here there must be surely an uncaught exception
     $text = xarML('Caught exception');

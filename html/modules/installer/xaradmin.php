@@ -14,7 +14,6 @@
  * Dead
  *
  * @access public
- * @param none
  * @returns array
  * @return an array of template values
  */
@@ -26,17 +25,14 @@ function installer_admin_main()
 /**
  * Phase 1: Welcome (Set Language and Locale) Page
  *
- * @param none
- * @returns array
- * @return array of language values
+ * @access private
+ * @return data array of language values
+ * @todo <johnny> Find way to convert locale string into language, country, etc..
  */
 function installer_admin_phase1()
 {
     //$locales = xarMLSListSiteLocales();
 
-    /*
-     * TODO: Find way to convert locale string into language, country, etc..
-     */
     $data['languages'] = array('eng' => 'English');
     
     return $data;
@@ -45,17 +41,13 @@ function installer_admin_phase1()
 /**
  * Phase 2: Accept License Page
  *
- * @param none
- * @returns array
+ * @access private
+ * @return array
+ * @todo <johnny> FIX Installer ML
+ * @todo <johnny> accept locale and run the rest of the install using that locale if the locale exists.
  */
 function installer_admin_phase2()
-{
-    /*
-     * TODO: accept locale and run the rest of the install
-     *       using that locale if the locale exists.
-     */
-    // Might have to unset some cached variables.
-    
+{   
     // TODO: fix installer ML
     $data['language'] = 'English';
     
@@ -65,8 +57,11 @@ function installer_admin_phase2()
 /**
  * Phase 3: Check system settings and ability to write config
  *
- * @param agree
+ * @access private
+ * @param args[agree] string
  * @returns array
+ * @todo <johnny> FIX Installer ML
+ * @todo <johnny> decide what to about var dir
  */
 function installer_admin_phase3()
 {
@@ -78,21 +73,25 @@ function installer_admin_phase3()
     }
     
     //Defaults
-    $systemConfigIsWritable = false;
+    $systemConfigIsWritable   = false;
+    $siteConfigIsWritable     = true;
+    $cacheTemplatesIsWritable = true;
     
-    $systemVarDir     = xarCoreGetVarDirPath();
-    $systemConfigFile = $systemVarDir . '/config.system.php';
-    $siteConfigFile   = $systemVarDir . '/config.site.xml';
+    $systemVarDir             = xarCoreGetVarDirPath();
+    $cacheTemplatesDir        = $systemVarDir . '/cache/templates';
+    $systemConfigFile         = $systemVarDir . '/config.system.php';
+    $siteConfigFile           = $systemVarDir . '/config.site.xml';
     
     if (is_writable($systemConfigFile)) {
         $systemConfigIsWritable = true;
     }
     
+    $data['cacheTemplatesIsWritable'] = $cacheTemplatesIsWritable;
     $data['systemConfigFile'] = $systemConfigFile;
     $data['siteConfigFile']   = $siteConfigFile;
+    $data['siteConfigIsWritable'] = $siteConfigIsWritable;
     $data['systemConfigIsWritable'] = $systemConfigIsWritable;
     
-    // TODO: fix installer ML
     $data['language'] = 'English';
     
     return $data;
@@ -101,8 +100,9 @@ function installer_admin_phase3()
 /**
  * Phase 4: Database Settings Page
  *
- * @returns array
+ * @access private
  * @return array of default values for the database creation
+ * @todo FIX installer ML
  */
 function installer_admin_phase4()
 {
@@ -118,7 +118,6 @@ function installer_admin_phase4()
                                          'oci8'     => 'Oracle',
                                          'postgres' => 'Postgres');
                                          
-    // TODO: fix installer ML
     $data['language'] = 'English';
 
     return $data;
@@ -127,6 +126,7 @@ function installer_admin_phase4()
 /**
  * Phase 5: Pre-Boot, Modify Configuration
  *
+ * @access private
  * @param dbHost
  * @param dbName
  * @param dbUname
@@ -135,8 +135,9 @@ function installer_admin_phase4()
  * @param dbType
  * @param intranetMode
  * @param createDb
- *
- * @returns
+ * @todo FIX installer ML
+ * @todo better error checking on arguments
+ * @todo Fix intranet mode
  */
 function installer_admin_phase5()
 {
@@ -166,13 +167,8 @@ function installer_admin_phase5()
     if (empty($dbHost) || empty($dbName) || empty($dbUname) || empty($dbPrefix) || empty($dbType)) {
        $msg = xarML('Empty dbHost (#(1)) or dbName (#(2)) or dbUname (#(3)) or dbPrefix (#(4)) or dbType (#(5)).'
               , $dbHost, $dbName, $dbUname, $dbPrefix, $dbType);
-       // TODO: better error checking
        xarCore_die($msg);
     }
-
-
-    // FIXME: Pre-Setup of intranet mode
-
 
     if (!xarInstallAPILoad('installer','admin')) {
         return;
@@ -210,7 +206,6 @@ function installer_admin_phase5()
     session_start(); 
     session_destroy();
 
-    // TODO: fix installer ML
     $data['language'] = 'English';
     
     return $data;
@@ -219,8 +214,7 @@ function installer_admin_phase5()
 /**
  * Bootstrap Xaraya
  *
- * @param none
- * @returns bool
+ * @access private
  */
 function installer_admin_bootstrap()
 {
@@ -253,7 +247,7 @@ function installer_admin_bootstrap()
  *
  * @access public
  * @param create
- * @returns bool
+ * @return bool
  */
 function installer_admin_create_administrator()
 {

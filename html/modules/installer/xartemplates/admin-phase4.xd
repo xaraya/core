@@ -74,9 +74,9 @@
         </td>
         <td>
             <select name="install_database_type">
-                <?php while (list ($key, $name) = each ($database_types)) { ?>
-                    <option value="<?php echo $key; ?>">&nbsp;<?php echo $name; ?>&nbsp;</option>
-                <?php } ?>
+                <xar:foreach in="$database_types" key="$key" value="$value"> 
+                    <option value="#$key#">#$value#</option>
+                </xar:foreach>
             </select>
         </td>
     </tr>
