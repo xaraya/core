@@ -168,10 +168,7 @@ function modules_adminapi_GetList($args)
                 xarVarSetCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
 
                 $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
-                if (!isset($modFileInfo)) {
-//                    $modInfo['state'] = XARMOD_STATE_MISSING;
-//                    $modList[] = $modInfo;
-                } else {
+                if (isset($modFileInfo)) {
                     //     $modInfo = array_merge($modInfo, $modFileInfo);
                     $modInfo = array_merge($modFileInfo, $modInfo);
                     xarVarSetCached('Mod.Infos', $modInfo['regid'], $modInfo);
@@ -189,8 +186,8 @@ function modules_adminapi_GetList($args)
                             $modInfo['state'] = XARMOD_STATE_UPGRADED;
                             break;
                     }
-                    $modList[] = $modInfo;
                 }
+                $modList[] = $modInfo;
             }
             $modInfo = array();
             $result->MoveNext();
