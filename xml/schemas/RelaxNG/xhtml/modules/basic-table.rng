@@ -39,6 +39,15 @@
     <ref name="tr.attlist"/>
     <oneOrMore>
       <choice>
+        <!-- Xaraya Modification
+             This will not check very well if the xhtml document inside
+             the bl tags is valid...
+             We needed a way to be able to reference td, th as possible
+             grandchildren.
+             Or someway to make BL tags 'transparent'
+             -->
+        <ref name="nonchildTemplate_nonXHTML"/>
+        <!-- End of Xaraya Modification -->
         <ref name="th"/>
         <ref name="td"/>
       </choice>
@@ -108,9 +117,9 @@
   <optional>
     <attribute name="align">
       <choice>
-	<value>left</value>
-	<value>center</value>
-	<value>right</value>
+    <value>left</value>
+    <value>center</value>
+    <value>right</value>
       </choice>
     </attribute>
   </optional>
@@ -120,9 +129,9 @@
   <optional>
     <attribute name="valign">
       <choice>
-	<value>top</value>
-	<value>middle</value>
-	<value>bottom</value>
+    <value>top</value>
+    <value>middle</value>
+    <value>bottom</value>
       </choice>
     </attribute>
   </optional>
@@ -132,8 +141,8 @@
   <optional>
     <attribute name="scope">
       <choice>
-	<value>row</value>
-	<value>col</value>
+    <value>row</value>
+    <value>col</value>
       </choice>
     </attribute>
   </optional>

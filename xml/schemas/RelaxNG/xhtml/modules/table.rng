@@ -8,33 +8,51 @@ implementation. -->
 
   <define name="table">
     <element name="table">
-      <ref name="table.attlist"/>
       <optional>
-	<ref name="caption"/>
+        <ref name="caption"/>
       </optional>
+      <ref name="table.attlist"/>
       <choice>
-	<zeroOrMore>
-	  <ref name="col"/>
-	</zeroOrMore>
-	<zeroOrMore>
-	  <ref name="colgroup"/>
-	</zeroOrMore>
+        <zeroOrMore>
+          <choice>
+            <ref name="col"/>
+            <ref name="nonchildTemplate_nonXHTML"/>
+          </choice>
+        </zeroOrMore>
+        <zeroOrMore>
+          <choice>
+            <ref name="colgroup"/>
+            <ref name="nonchildTemplate_nonXHTML"/>
+          </choice>
+        </zeroOrMore>
       </choice>
       <choice>
-	<group>
-	  <optional>
-	    <ref name="thead"/>
-	  </optional>
-	  <optional>
-	    <ref name="tfoot"/>
-	  </optional>
-	  <oneOrMore>
-	    <ref name="tbody"/>
-	  </oneOrMore>
-	</group>
-	<oneOrMore>
-	  <ref name="tr"/>
-	</oneOrMore>
+        <group>
+          <optional>
+            <choice>
+              <ref name="thead"/>
+              <ref name="nonchildTemplate_nonXHTML"/>
+            </choice>
+          </optional>
+          <optional>
+            <choice>
+              <ref name="tfoot"/>
+              <ref name="nonchildTemplate_nonXHTML"/>
+            </choice>
+          </optional>
+          <oneOrMore>
+            <choice>
+              <ref name="tbody"/>
+              <ref name="nonchildTemplate_nonXHTML"/>
+            </choice>
+          </oneOrMore>
+        </group>
+        <oneOrMore>
+          <choice>
+            <ref name="tr"/>
+            <ref name="nonchildTemplate_nonXHTML"/>
+          </choice>
+        </oneOrMore>
       </choice>
     </element>
   </define>
@@ -56,23 +74,23 @@ implementation. -->
   <define name="CellHAlign.attrib">
     <optional>
       <attribute name="align">
-	<choice>
-	  <value>left</value>
-	  <value>center</value>
-	  <value>right</value>
-	  <value>justify</value>
-	  <value>char</value>
-	</choice>
+    <choice>
+      <value>left</value>
+      <value>center</value>
+      <value>right</value>
+      <value>justify</value>
+      <value>char</value>
+    </choice>
       </attribute>
     </optional>
     <optional>
       <attribute name="char">
-	<ref name="Character.datatype"/>
+    <ref name="Character.datatype"/>
       </attribute>
     </optional>
     <optional>
       <attribute name="charoff">
-	<ref name="Length.datatype"/>
+    <ref name="Length.datatype"/>
       </attribute>
     </optional>
   </define>
@@ -80,12 +98,12 @@ implementation. -->
   <define name="CellVAlign.attrib">
     <optional>
       <attribute name="valign">
-	<choice>
-	  <value>top</value>
-	  <value>middle</value>
-	  <value>bottom</value>
-	  <value>baseline</value>
-	</choice>
+    <choice>
+      <value>top</value>
+      <value>middle</value>
+      <value>bottom</value>
+      <value>baseline</value>
+    </choice>
       </attribute>
     </optional>
   </define>
@@ -93,12 +111,12 @@ implementation. -->
   <define name="scope.attrib">
     <optional>
       <attribute name="scope">
-	<choice>
-	  <value>row</value>
-	  <value>col</value>
-	  <value>rowgroup</value>
-	  <value>colgroup</value>
-	</choice>
+    <choice>
+      <value>row</value>
+      <value>col</value>
+      <value>rowgroup</value>
+      <value>colgroup</value>
+    </choice>
       </attribute>
     </optional>
   </define>

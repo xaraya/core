@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE grammar SYSTEM "http://164.41.103.24/xaraya/xml/schemas/relaxng.dtd">
+<!DOCTYPE grammar SYSTEM "http://127.0.0.1/xaraya/xml/schemas/dtd/relaxng.dtd">
 <grammar xmlns="http://relaxng.org/ns/structure/1.0"
          xmlns:xar="http://www.xaraya.com/2003/blocklayout"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
@@ -28,7 +28,7 @@
 
 
 <define name="blocklayout">
-  <element name="blocklayout">
+  <element name="xar:blocklayout">
     <zeroOrMore>
       <ref name="nonchildTemplate"/>
     </zeroOrMore>
