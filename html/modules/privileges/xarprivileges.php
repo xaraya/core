@@ -30,7 +30,7 @@ define('XARDBG_WINNOW', 0);
 define('XARDBG_TEST', 0);
 define('XARDBG_TESTDENY', 0);
 define('XARDBG_MASK', 'ViewThemes');
-define('XAR_ENABLE_WINNOW', 1);
+define('XAR_ENABLE_WINNOW', 0);
 
 class xarMasks
 {
@@ -486,7 +486,6 @@ class xarMasks
             }
             $coreset['privileges'] = $this->winnow($coreset['privileges'],$privileges);
             $parents = array_merge($parents,$role->getParents());
-
         }
         $coreset['children'] = $this->irreducibleset(array('roles' => $parents));
         return $coreset;
