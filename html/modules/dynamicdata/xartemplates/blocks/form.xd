@@ -1,0 +1,9 @@
+<xar:foreach in="$items" value="$item">
+    &bull;
+    <xar:if condition="empty($item['link'])">
+        #$item['title']#
+    <xar:else />
+        <a href="#$item['link']#">#$item['title']#</a>
+    </xar:if>
+    <br />
+</xar:foreach>
