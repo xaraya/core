@@ -20,10 +20,8 @@ require_once 'modules/dynamicdata/class/objects.php';
  */
 function dynamicdata_admin_main()
 {
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_EDIT)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+// Security Check
+	if(!securitycheck('Edit')) return;
 
     $data = dynamicdata_admin_menu();
 
@@ -91,10 +89,8 @@ function dynamicdata_admin_view($args)
 
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_EDIT)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+// Security Check
+	if(!securitycheck('Edit')) return;
 
     // show other modules
     $data['modlist'] = array();
