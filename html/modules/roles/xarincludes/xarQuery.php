@@ -69,7 +69,8 @@ class xarQuery
     {
         $this->setstatement($statement);
         if ($this->type != 'SELECT') {
-            if(!$this->dbconn->Execute($this->statement)) return;
+            $result = $this->dbconn->Execute($this->statement);
+            if(!$result) return;
             $this->rows = $result->_numOfRows;
             return true;
         }
