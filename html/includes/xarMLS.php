@@ -503,6 +503,7 @@ function xarLocaleGetFormattedDate($length = 'short',$timestamp = null)
     $locale_format = str_replace('d','%d',$locale_format);
     $locale_format = str_replace('yyyy','%Y',$locale_format);
     $locale_format = str_replace('yy','%y',$locale_format);
+    
     return xarMLS_strftime($locale_format,$timestamp);
 }
 
@@ -525,17 +526,18 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null)
     // grab the right set of locale data
     $locale_format = $localeData["/timeFormats/$length"];
     // replace the locale formatting style with valid strftime() style
-    $locale_format = str_replace('hh','%I',$locale_format);
-    $locale_format = str_replace('h','%I',$locale_format);
     $locale_format = str_replace('HH','%H',$locale_format);
-    $locale_format = str_replace('H','%H',$locale_format);
+    $locale_format = str_replace('hh','%I',$locale_format);
     $locale_format = str_replace('mm','%M',$locale_format);
-    $locale_format = str_replace('m','%M',$locale_format);
     $locale_format = str_replace('ss','%S',$locale_format);
-    $locale_format = str_replace('s','%S',$locale_format);
     $locale_format = str_replace('a','%p',$locale_format);
     $locale_format = str_replace('z','%Z',$locale_format);
-        
+    // format the single digit flags
+    $locale_format = str_replace('H',sprintf('%1d',gmstrftime('%H',$timestamp)),$locale_format);
+    $locale_format = str_replace('h',sprintf('%1d',gmstrftime('%I',$timestamp)),$locale_format);
+    $locale_format = str_replace('m',sprintf('%1d',gmstrftime('%M',$timestamp)),$locale_format);
+    $locale_format = str_replace('s',sprintf('%1d',gmstrftime('%S',$timestamp)),$locale_format);
+    
     return xarMLS_strftime($locale_format,$timestamp);
 }
 
@@ -725,17 +727,16 @@ function xarMLS_strftime($format=null,$timestamp=null)
                 $format = str_replace($modifier,xarLocaleGetFormattedDate('short',$timestamp),$format);
                 break;
             
-            /*
             case '%e' :
-                // implement %e for windows - grab the day number
-                $e = xarMLS_strftime('%d',$timestamp);
-                // remove the preceeding 0 (zero)
-                
-                $format = str_replace($modifier,,$format);
-                
+                // implement %e for windows - grab the day number and remove the preceding zero
+                $e = sprintf('%1d',gmstrftime('%d',$timestamp));
+                // pad with a space if necessary
+                if(strlen($e) < 2) {
+                    $e = '&nbsp;'.$e;
+                }
+                $format = str_replace($modifier,$e,$format);
                 break;
-            */
-             
+            
             case '%r' :
                 // recursively call the xarMLS_strftime function
                 $format = str_replace($modifier,xarMLS_strftime('%I:%M %p',$timestamp),$format);
