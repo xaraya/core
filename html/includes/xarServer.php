@@ -475,7 +475,7 @@ function xarRequestGetInfo()
                 // causing a lot of exceptions to be hidden, i commented this one out as well
                 // but i haven't been able to trace exception hiding back to this line. If it behaves
                 // wrong, and is still needed uncomment it (MrB)
-                //xarExceptionFree();
+                //xarErrorFree();
 
                 // <mikespub> see above :)
             }
