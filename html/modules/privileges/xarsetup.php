@@ -113,8 +113,8 @@ function initializeSetup()
     xarDefineInstance('blocks','BlockGroups',$instances);
 
     $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable ";
-    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as types ON types.xar_id = instances.xar_type_id";
-    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as types ON types.xar_id = instances.xar_type_id";
+    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id";
+    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id";
     $instances = array(array('header' => 'Block Type:',
                              'query' => $query1,
                              'limit' => 20),
@@ -129,8 +129,8 @@ function initializeSetup()
     //--------------------------------- Adminpanels Module
 
     $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_module = 'adminpanels'";
-    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'adminpanels'";
-    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'adminpanels'";
+    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'adminpanels'";
+    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'adminpanels'";
     $instances = array(array('header' => 'Block Type:',
                              'query' => $query1,
                              'limit' => 20),
@@ -154,8 +154,8 @@ function initializeSetup()
 
    //--------------------------------- Roles Module
     $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_module = 'roles'";
-    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'roles'";
-    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'roles'";
+    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'roles'";
+    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'roles'";
     $instances = array(array('header' => 'Block Type:',
                              'query' => $query1,
                              'limit' => 20),
@@ -182,8 +182,8 @@ function initializeSetup()
 
     // ----------------------------- Base Module
     $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_module = 'base'";
-    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'base'";
-    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'base'";
+    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'base'";
+    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'base'";
     $instances = array(array('header' => 'Block Type:',
                              'query' => $query1,
                              'limit' => 20),
@@ -207,8 +207,8 @@ function initializeSetup()
     xarDefineInstance('themes','Themes',$instances);
 
     $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_module = 'themes'";
-    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'themes'";
-    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'themes'";
+    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'themes'";
+    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'themes'";
     $instances = array(array('header' => 'Block Type:',
                              'query' => $query1,
                              'limit' => 20),

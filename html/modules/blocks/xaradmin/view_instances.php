@@ -23,18 +23,18 @@ function blocks_admin_view_instances()
                         inst.xar_content as content,
                         inst.xar_last_update as last_update,
                         inst.xar_state as state,
-                        groups.xar_name as group_name,
-                        groups.xar_id as group_id,
+                        bgroups.xar_name as group_name,
+                        bgroups.xar_id as group_id,
                         group_inst.xar_position as position,
                         inst.xar_template as template,
-                        groups.xar_template as group_template
+                        bgroups.xar_template as group_template
               FROM      $block_group_instances_table as group_inst
-              LEFT JOIN $block_groups_table as groups
-              ON        groups.xar_id = group_inst.xar_group_id
+              LEFT JOIN $block_groups_table as bgroups
+              ON        bgroups.xar_id = group_inst.xar_group_id
               LEFT JOIN $block_instances_table as inst
               ON        inst.xar_id = group_inst.xar_instance_id
-              LEFT JOIN $block_types_table as types
-              ON        types.xar_id = inst.xar_type_id
+              LEFT JOIN $block_types_table as btypes
+              ON        btypes.xar_id = inst.xar_type_id
               ORDER BY  group_inst.xar_group_id ASC,
                         group_inst.xar_position ASC";
 
