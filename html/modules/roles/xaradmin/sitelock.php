@@ -40,7 +40,10 @@ function roles_admin_sitelock($args)
             if (isset($newname)) {
                 $r = xaruFindRole($newname);
                 if (!$r) $r = xarFindRole($newname);
-                if($r) $newuid = $r->getID();
+                if($r) {
+                    $newuid = $r->getID();
+                    $newname = $r->getUser();
+                }
                 else $newuid = 0;
 
                 $newelement = array('uid' => $newuid, 'name' => $newname , 'notify' => TRUE);
@@ -79,8 +82,9 @@ function roles_admin_sitelock($args)
                 if ($roletotell->isUser()) $notify[] = $roletotell;
                 else $notify = array_merge($notify,$roletotell->getUsers());
             }
+            $admin = xarUFindRole('Admin');
             $mailinfo = array('subject' => 'Site Lock',
-                              'from' => 'mfl@netspan.ch'
+                              'from' => $admin->getEmail()
             );
 
             if ($toggle == 1) {
@@ -95,10 +99,10 @@ function roles_admin_sitelock($args)
                      new SystemException($msg));
                      return;
                 }
-                $mailinfo['message'] = 'The site has been locked.';
+                $mailinfo['message'] = 'The site ' . xarModGetVar('themes','SiteName') . ' has been locked.';
             }
             else {
-               $mailinfo['message'] = 'The site has been unlocked.';
+               $mailinfo['message'] = 'The site ' . xarModGetVar('themes','SiteName') . ' has been unlocked.';
             }
 
             $mailinfo['message'] .= "\n\n" . $notifymsg;

@@ -102,7 +102,7 @@ function roles_user_login()
                 }
 
                 break;
-			default:
+            default:
                 // some other auth module is being used.  We're going to assume
                 // that xaraya will be the slave to the other system and
                 // if the user is successfully retrieved from that auth system,
@@ -146,6 +146,34 @@ function roles_user_login()
         default:
 
             // User is active.
+
+            // Check if the site is locked and this user is allowed in
+            $lockvars = unserialize(xarModGetVar('roles','lockdata'));
+            if ($lockvars['locked'] ==1) {
+                $rolesarray = array();
+                $rolemaker = new xarRoles();
+                $roles = $lockvars['roles'];
+                for($i=0;$i<count($roles);$i++)
+                        $rolesarray[] = $rolemaker->getRole($roles[$i]['uid']);
+                $letin = array();
+                foreach($rolesarray as $roletoletin) {
+                    if ($roletoletin->isUser()) $letin[] = $roletoletin;
+                    else $letin = array_merge($letin,$roletoletin->getUsers());
+                }
+                $letthru = false;
+                foreach ($letin as $roletoletin) {
+                    if (strtolower($uname) == strtolower($roletoletin->getUser())) {
+                        $letthru = true;
+                        break;
+                    }
+                }
+
+                if (!$letthru) {
+                    xarResponseRedirect($redirecturl);
+                    return true;
+                }
+            }
+
             // Log the user in
             $res = xarModAPIFunc('roles','user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
             if ($res === NULL) return;
