@@ -17,4 +17,17 @@ $systemConfiguration['DB.TablePrefix'] = 'xar';
 // 0 = not encoded
 // 1 = encoded
 $systemConfiguration['DB.Encoded'] = '0';
+// Logger Options
+$systemConfiguration['Log.LogLevel'] = 'DEBUG';
+$systemConfiguration['Log.LoggerName'] = 'dummy';
+$systemConfiguration['Log.LoggerArgs'] = array();
+
+/*
+ * if you set this to true the core will be able to
+ * trap every message that comes  from PHP and if
+ * possible to show a gracefully error page.
+ * This is an advanced option, leave it to false if unsure.
+ * TODO: review this in code, it is known to hide some errors
+ */
+$systemConfiguration['Exception.EnablePHPErrorHandler'] = '0';
 ?>
