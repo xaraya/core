@@ -8,16 +8,16 @@
             <table width="100%" border="0" cellspacing="0" cellpadding="2">
               <tr>
                 <th nowrap="nowrap">
-                    <label class="xar-mod-title" for="selstyle"><xar:mlstring>Style</xar:mlstring></label>
+                    <label for="selstyle"><xar:mlstring>Style</xar:mlstring></label>
                 </th>
                 <th nowrap="nowrap">
-                    <label class="xar-mod-title" for="selfilter"><xar:mlstring>View</xar:mlstring></label>
+                    <label for="selfilter"><xar:mlstring>View</xar:mlstring></label>
                 </th>
                 <th nowrap="nowrap">
-                    <label class="xar-mod-title" for="selsort"><xar:mlstring>Sort by</xar:mlstring></label>
+                    <label for="selsort"><xar:mlstring>Sort by</xar:mlstring></label>
                 </th>
-                <th nowrap="nowrap" colspan="2" class="xar-mod-title">
-                    <xar:mlstring>Specific Actions</xar:mlstring>
+                <th nowrap="nowrap" colspan="2">
+                    <xar:mlstring>Force</xar:mlstring>
                 </th>
               </tr>
               <tr>
@@ -74,24 +74,27 @@
     </form>
         <!-- the Module List table -->
         <div style="border: 1px solid #B3B3B3; padding: 0px 0px 5px 0px;">
-            <table border="0" width="100%" cellspacing="0" cellpadding="2">
+            <table border="0" width="100%" cellspacing="1" cellpadding="2">
                 <tr>
-                    <th style="text-align: center;">
+                    <th style="text-align: left;padding-left: 1em;">
                         <xar:mlstring>Name</xar:mlstring>
                     </th>
-                    <th style="text-align: center;">
+                    <th style="text-align: left;padding-left: 0.5em;">
                         <xar:mlstring>Version</xar:mlstring>
                     </th>
-                    <th style="text-align: center;">
+                    <th style="text-align: left;padding-left: 0.5em;">
+                        <xar:mlstring>Reg.ID</xar:mlstring>
+                    </th>
+                    <th style="text-align: left;padding-left: 0.5em;">
                         <xar:mlstring>Upgrade</xar:mlstring>
                     </th>
                     <th style="text-align: center;">
                         <xar:mlstring>Info</xar:mlstring>
                     </th>
-                    <th style="text-align: center;">
+                    <th style="text-align: right;padding-right: 0.5em;">
                         <xar:mlstring>Status</xar:mlstring>
                     </th>	
-                    <th style="text-align: center;" nowrap="nowrap">
+                    <th style="text-align: left;white-space: nowrap;padding-left: 0.5em;">
                         <xar:mlstring>Actions</xar:mlstring>
                     </th>
                 </tr>
@@ -100,14 +103,17 @@
                         <!--- skip the row --->
                     <xar:else />
                         <tr>
-                            <td class="xar-mod-title" style="vertical-align: middle; text-align: left; padding-left: 1em; margin:auto; height: 20px;border-bottom: 1px dotted #B3B3B3;">
+                            <td class="xar-mod-title" style="vertical-align: middle; text-align: left; padding-left: 1em; margin:auto; height: 20px;border-bottom: 1px dotted #B3B3B3;white-space: nowrap;">
                                 #$displayname#
                             </td>
-                            <td style="text-align: center;width: 100px;border-bottom: 1px dotted #B3B3B3;">
+                            <td style="text-align: left;width: 70px;border-bottom: 1px dotted #B3B3B3;padding-left: 0.5em;">
                                 #$version#
                             </td>
-                            <td style="text-align: center;width: 100px;border-bottom: 1px dotted #B3B3B3;">
-                                <xar:mlstring>RSS n/a</xar:mlstring>
+                            <td style="text-align: left;width: 70px;border-bottom: 1px dotted #B3B3B3;padding-left: 0.5em;">
+                                #$regid#
+                            </td>
+                            <td style="text-align: left;width: 50px;border-bottom: 1px dotted #B3B3B3;padding-left: 0.5em;">
+                                <xar:mlstring>n/a</xar:mlstring>
                             </td>
                             <td style="text-align: center;width: 35px;border-bottom: 1px dotted #B3B3B3;">
                                 <xar:if condition="$selstyle eq 'pro'">
@@ -119,11 +125,11 @@
                                 </xar:if>
                             </td>
                             <td style="text-align: right;width: 100px;vertical-align: middle;border-bottom: 1px dotted #B3B3B3;">
-                                <div style="padding-right: 1em;">
+                                <div style="padding-right: 0.5em;">
                                     #$statelabel#
                                 </div>
                             </td>
-                            <td style="text-align: left;border-bottom: 1px dotted #B3B3B3;" nowrap="nowrap">
+                            <td style="text-align: left;border-bottom: 1px dotted #B3B3B3;white-space: nowrap;">
                                 <xar:if condition="$selstyle eq 'pro'">
                                     <xar:if condition="$coremod">
                                         <select name="action" id="action" disabled="disabled">
@@ -159,7 +165,7 @@
                                             <a href="#$removeurl#"><img src="#$actionimg2#" alt="#$actionlabel#" /></a>
                                         </xar:if>
                                 <xar:else />
-                                    <div style="padding-left: 1em;">
+                                    <div style="padding-left: 0.5em;padding-right: 1em;">
                                         <xar:if condition="$coremod">
                                             #$actionlabel#
                                         <xar:else />
