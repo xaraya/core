@@ -221,6 +221,16 @@ if (empty($step)) {
                 xarRegisterMask('DeleteCategoryLink','All','categories','Link','All:All:All:All',ACCESS_DELETE);
 
                 xarRegisterMask('AdminCategories','All','categories','Category','All:All',ACCESS_ADMIN);
+
+                if (xarModIsAvailable('ratings')) {
+                    // when a whole module is removed, e.g. via the modules admin screen
+                    // (set object ID to the module name !)
+                    if (!xarModRegisterHook('module', 'remove', 'API',
+                                            'ratings', 'admin', 'deleteall')) {
+                        return false;
+                    }
+                }
+
             break;
 
     }
