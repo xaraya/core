@@ -1072,82 +1072,85 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
     {
         // Core tags
         switch ($tagName) {
-            case 'var':
-                $node =& new xarTpl__XarVarNode();
-                break;
-            case 'loop':
-                $node =& new xarTpl__XarLoopNode();
-                break;
-            case 'sec':
-                $node =& new xarTpl__XarSecNode();
-                break;
+        case 'blocklayout':
+            $node =& new xarTpl__XarBlocklayoutNode();
+            break;
+        case 'var':
+            $node =& new xarTpl__XarVarNode();
+            break;
+        case 'loop':
+            $node =& new xarTpl__XarLoopNode();
+            break;
+        case 'sec':
+            $node =& new xarTpl__XarSecNode();
+            break;
             // marco: this should be deleted right, it's not in spec
-            case 'ternary':
-                $node =& new xarTpl__XarTernaryNode();
-                break;
-            case 'if':
-                $node =& new xarTpl__XarIfNode();
-                break;
-            case 'elseif':
-                $node =& new xarTpl__XarElseifNode();
-                break;
-            case 'else':
-                $node =& new xarTpl__XarElseNode();
-                break;
-            case 'while':
-                $node =& new xarTpl__XarWhileNode();
-                break;
-            case 'for':
-                $node =& new xarTpl__XarForNode();
-                break;
-            case 'foreach':
-                $node =& new xarTpl__XarForEachNode();
-                break;
-            case 'block':
-                $node =& new xarTpl__XarBlockNode();
-                break;
-            case 'blockgroup':
-                $node =& new xarTpl__XarBlockGroupNode();
-                break;
-            case 'ml':
-                $node =& new xarTpl__XarMlNode();
-                break;
-            case 'mlkey':
-                $node =& new xarTpl__XarMlkeyNode();
-                break;
-            case 'mlstring':
-                $node =& new xarTpl__XarMlstringNode();
-                break;
-            case 'mlvar':
-                $node =& new xarTpl__XarMlvarNode();
-                break;
-            case 'comment':
-                $node =& new xarTpl__XarCommentNode();
-                break;
-            case 'module':
-                $node =& new xarTpl__XarModuleNode();
-                break;
-            case 'event':
-                $node =& new xarTpl__XarEventNode();
-                break;
-            case 'template':
-                $node =& new xarTpl__XarTemplateNode();
-                break;
-            case 'set':
-                $node =& new xarTpl__XarSetNode();
-                break;
-            case 'break':
-                $node =& new xarTpl__XarBreakNode();
-                break;
-            case 'continue':
-                $node =& new xarTpl__XarContinueNode();
-                break;
-          // <Dracos>  Widgets begin here
-
-            default:
-                // FIXME: check if this is how you want to support module-registered tags
-                $node =& new xarTpl__XarOtherNode($tagName);
-                break;
+        case 'ternary':
+            $node =& new xarTpl__XarTernaryNode();
+            break;
+        case 'if':
+            $node =& new xarTpl__XarIfNode();
+            break;
+        case 'elseif':
+            $node =& new xarTpl__XarElseifNode();
+            break;
+        case 'else':
+            $node =& new xarTpl__XarElseNode();
+            break;
+        case 'while':
+            $node =& new xarTpl__XarWhileNode();
+            break;
+        case 'for':
+            $node =& new xarTpl__XarForNode();
+            break;
+        case 'foreach':
+            $node =& new xarTpl__XarForEachNode();
+            break;
+        case 'block':
+            $node =& new xarTpl__XarBlockNode();
+            break;
+        case 'blockgroup':
+            $node =& new xarTpl__XarBlockGroupNode();
+            break;
+        case 'ml':
+            $node =& new xarTpl__XarMlNode();
+            break;
+        case 'mlkey':
+            $node =& new xarTpl__XarMlkeyNode();
+            break;
+        case 'mlstring':
+            $node =& new xarTpl__XarMlstringNode();
+            break;
+        case 'mlvar':
+            $node =& new xarTpl__XarMlvarNode();
+            break;
+        case 'comment':
+            $node =& new xarTpl__XarCommentNode();
+            break;
+        case 'module':
+            $node =& new xarTpl__XarModuleNode();
+            break;
+        case 'event':
+            $node =& new xarTpl__XarEventNode();
+            break;
+        case 'template':
+            $node =& new xarTpl__XarTemplateNode();
+            break;
+        case 'set':
+            $node =& new xarTpl__XarSetNode();
+            break;
+        case 'break':
+            $node =& new xarTpl__XarBreakNode();
+            break;
+        case 'continue':
+            $node =& new xarTpl__XarContinueNode();
+            break;
+            // <Dracos>  Widgets begin here
+            
+        default:
+            // FIXME: check if this is how you want to support module-registered tags
+            $node =& new xarTpl__XarOtherNode($tagName);
+            break;
         }
         if (isset($node)) {
             $node->tagName = $tagName;
@@ -3181,6 +3184,39 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
     function isPHPCode()
     {
         return true;
+    }
+}
+
+/**
+ * xarTpl__XarBlocklayoutNode : blocklayouts root tag
+ *
+ * xar:blocklayout is the root tage for the blocklayout xml dialect
+ *
+ * @package blocklayout
+ * @access  private
+ * 
+ */
+class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
+{
+
+    function hasChildren()
+    {
+        return true;
+    }
+    
+    function hasText()
+    {
+        return true;
+    }
+
+    function renderBeginTag()
+    {
+        return "'<!-- Rendered for xar:blocklayout tag -->';\n";
+    }
+
+    function renderEndTag()
+    {
+        return "'<!-- Rendered end for xar:blocklayout tag -->';\n";
     }
 }
 
