@@ -53,7 +53,7 @@
                     <p>
                         <span class="xar-normal">
                             <xar:mlstring>
-                                Each configuration will load a predefined set of modules, menus, hooks etc. as well as create an initial configuration of the security system. On the next page you can change some of the options of chosen configuration.
+                                Each configuration will load a predefined set of modules, menus, hooks etc. as well as create an initial configuration of the security system. On the next page you can change some of the options of your chosen configuration.
                             </xar:mlstring>
                         </span>
                     </p>

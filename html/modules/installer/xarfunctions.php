@@ -40,7 +40,7 @@ function xarInstallFunc($modName, $modType = 'user', $funcName = 'main', $args =
     // Build function name and call function
     $modFunc = "{$modName}_{$modType}_{$funcName}";
     if (!function_exists($modFunc)) {
-        $msg = xarML('Module function #(1) doesn\'t exist.', $modFunc);
+        $msg = xarML('Module function #(1) does not exist.', $modFunc);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
                        new SystemException($msg));
         return;
@@ -76,7 +76,7 @@ function xarInstallAPIFunc($modName, $modType = 'user', $funcName = 'main', $arg
         xarInstallAPILoad($modName,$modType);
         // let's check for the function again to be sure
         if (!function_exists($modAPIFunc)) {
-            $msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
+            $msg = xarML('Module API function #(1) does not exist.', $modAPIFunc);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
                             new SystemException($msg));
             return;
@@ -135,7 +135,7 @@ function xarInstallAPILoad($modName, $modType = 'user')
     $osfile = "modules/$modOsDir/xar{$modOsType}api.php";
     if (!file_exists($osfile)) {
         // File does not exist
-        $msg = xarML('Module file #(1) doesn\'t exist.', $osfile);
+        $msg = xarML('Module file #(1) does not exist.', $osfile);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
                        new SystemException($msg));
         return;
@@ -208,7 +208,7 @@ function xarInstallLoad($modName, $modType = 'user')
     $osfile = "modules/$modOsDir/xar$modOsType.php";
     if (!file_exists($osfile)) {
         // File does not exist
-        $msg = xarML('Module file #(1) doesn\'t exist.', $osfile);
+        $msg = xarML('Module file #(1) does not exist.', $osfile);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
                        new SystemException($msg));
         return;
