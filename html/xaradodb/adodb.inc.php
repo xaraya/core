@@ -170,7 +170,8 @@
 	/**
 	 * Helper class for FetchFields -- holds info on a column
 	 */
-	class ADOFieldObject { 
+	class ADOFieldObject
+        { 
 		var $name = '';
 		var $max_length=0;
 		var $type="";
@@ -1828,7 +1829,8 @@
 	 *
 	 * @return true if succeeded or false if database does not support transactions
 	 */
-	function BeginTrans() {return false;}
+	function BeginTrans()
+        {return false;}
 	
 	
 	/**
