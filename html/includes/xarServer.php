@@ -97,12 +97,13 @@ function xarServerGetBaseURI()
     //what's wrong with a path (cfr. Indexes index.php, mod_rewrite etc.) ?
     if (empty($path)) {
         // REQUEST_URI was empty or pointed to a path
-        // Try looking at PATH_INFO
-        $path = xarServerGetVar('PATH_INFO');
+        // adapted patch from Chris van de Steeg for IIS
+        // Try SCRIPT_NAME
+        $path = xarServerGetVar('SCRIPT_NAME');
         if (empty($path)) {
             // No luck there either
-            // Try SCRIPT_NAME
-            $path = xarServerGetVar('SCRIPT_NAME');
+            // Try looking at PATH_INFO
+            $path = xarServerGetVar('PATH_INFO');
         }
     }
 
@@ -194,10 +195,17 @@ function xarServerGetCurrentURL($args = array())
     $request = xarServerGetVar('REQUEST_URI');
     
     if (empty($request)) {
-        $request = xarServerGetVar('SCRIPT_NAME');
-        if (!empty($request)) {
-            $qs = xarServerGetVar('QUERY_STRING');
-            if (!empty($qs)) $request .= "?$qs";
+        // adapted patch from Chris van de Steeg for IIS
+    // TODO: please test this :)
+        $scriptname = xarServerGetVar('SCRIPT_NAME');
+        $pathinfo = xarServerGetVar('PATH_INFO');
+        if ($pathinfo == $scriptname) {
+            $pathinfo = '';
+        }
+        if (!empty($scriptname)) {
+            $request = $scriptname . $pathinfo;
+            $querystring = xarServerGetVar('QUERY_STRING');
+            if (!empty($querystring)) $request .= '?'.$querystring;
         } else {
             $request = '/';
         }
