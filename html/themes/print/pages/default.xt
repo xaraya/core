@@ -4,12 +4,12 @@
     <head>
         <xar:blockgroup name="header" id="header" />
         <title>#$tpl:pageTitle#</title>
-        <base href="&xar-baseurl;index.php">
+        <base href="&xar-baseurl;index.php" />
         <style type="text/css">@import url(&xar-baseurl;themes/print/style/style.css); </style>
     </head>
     <body>
 
-<h2><xar:mlstring>Document From </xar:mlstring> <a href="#xarServerGetCurrentURL()#">#xarModGetVar('themes', 'SiteName')#</a></h2>
+<h2><xar:mlstring>Document From </xar:mlstring> <a href="index.php">#xarModGetVar('themes', 'SiteName')#</a></h2>
 
 <div id="main">
 	<xar:module id="modulespace" main="true" />
