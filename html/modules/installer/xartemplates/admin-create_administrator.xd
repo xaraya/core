@@ -60,7 +60,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_admin_url" id="install_admin_url" maxlength="80" value="#$xarServerGetBaseURI()#" />
+            <input type="text" name="install_admin_url" id="install_admin_url" maxlength="80" value="#xarServerGetBaseURI()#" />
         </td>
     </tr>
     <tr>

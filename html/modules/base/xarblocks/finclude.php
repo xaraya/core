@@ -42,10 +42,21 @@ function base_fincludeblock_info()
  */
 function base_fincludeblock_display($blockinfo)
 {
-    if (!file_exists($blockinfo['url'])) {
-        return;
+    if (empty($blockinfo['title'])){
+        $blockinfo['title'] = xarML('File Include');
     }
-    $blockinfo['content'] = implode(file($blockinfo['url']), '');
+
+    if (empty($blockinfo['url'])){
+        $blockinfo['content'] = xarML('Block has no file defined to include');
+    } else {
+
+        if (!file_exists($blockinfo['url'])) {
+            $blockinfo['content'] = xarML('Block has no file defined to include');
+        }
+
+        $blockinfo['content'] = implode(file($blockinfo['url']), '');
+    }
+
     return $blockinfo;
 }
 
@@ -70,9 +81,13 @@ function base_fincludeblock_modify($blockinfo)
  * Updates the Block config from the Blocks Admin
  * @param $blockinfo array containing title,content
  */
-function base_htmlblock_update($blockinfo)
+function base_fincludeblock_update($blockinfo)
 {
     $vars['url'] = xarVarCleanFromInput('url');
+
+    if (empty($blockinfo['title'])){
+        $blockinfo['title'] = xarML('File Include');
+    }
 
     // Defaults
     if (empty($vars['url'])) {

@@ -2,7 +2,7 @@
 // $Id: s.xarversion.php 1.10 02/11/28 23:18:27+00:00 miko@miko.homelinux.org $
 $modversion['name'] = 'Themes Administration';
 $modversion['id'] = '70';
-$modversion['version'] = '1.1';
+$modversion['version'] = '1.2';
 $modversion['description'] = 'Enable/disable themes, view install/docs/credits.';
 $modversion['credits'] = 'xardocs/credits.txt';
 $modversion['help'] = '';

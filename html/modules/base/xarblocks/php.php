@@ -44,10 +44,20 @@ function base_phpblock_display($blockinfo)
     if (!xarSecAuthAction(0, 'base:PHPblock', "$blockinfo[title]::", ACCESS_READ)) {
         return;
     }
+
+    if (empty($blockinfo['title'])){
+        $blockinfo['title'] = xarML('PHP Block');
+    }
+
     ob_start();
     print eval($blockinfo['content']);
     $blockinfo['content'] = ob_get_contents();
     ob_end_clean();
+
+    if (empty($blockinfo['content'])){
+        $blockinfo['content'] = xarML('Content is empty');
+    }
+
     return $blockinfo;
 }
 ?>
