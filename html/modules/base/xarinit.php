@@ -175,12 +175,9 @@ function base_init()
     /*****************************************************************
     * Set site configuration variables
     ******************************************************************/
-    xarConfigSetVar('Site.BL.DefaultTheme','installer');
     xarConfigSetVar('Site.BL.ThemesDirectory','themes');
     xarConfigSetVar('Site.BL.CacheTemplates','true');
     xarConfigSetVar('Site.Core.TimeZone', 'Europe/Rome');
-    xarConfigSetVar('Site.Core.SiteName', 'Your Site Name');
-    xarConfigSetVar('Site.Core.Slogan', 'Your slogan here');
     xarConfigSetVar('Site.Core.EnableShortURLsSupport', 'false');
     // FIXME: which to use ... one config var.. or 3? it seemeth that one is better..
     xarConfigSetVar('Site.Core.DefaultModule', array('module'=>'base', 'type'=>'user', 'func'=>'main'));
