@@ -43,7 +43,6 @@ function roles_loginblock_display($blockinfo)
     if (xarUserIsLoggedIn()) {
         if (!empty($vars['showlogout'])) {
             $args['name'] = xarUserGetVar('name');
-            $args['search'] = 'Search';
             $blockinfo['content'] = xarTplBlock('roles', 'logout', $args);
             if (!empty($vars['logouttitle'])) {
                 $blockinfo['title'] = $vars['logouttitle'];
@@ -56,7 +55,8 @@ function roles_loginblock_display($blockinfo)
 
     // URL of this page
     $args['return_url'] = xarServerGetCurrentURL();
-    $args['signinlabel'] = xarML('Sign In');
+    $args['signinlabel']= xarML('Sign in');
+    $args['blockid'] = $blockinfo['bid'];
 
     $blockinfo['content'] = xarTplBlock('roles', 'login', $args);
 
