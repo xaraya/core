@@ -474,7 +474,16 @@ function xarBlockSetCached($cacheKey, $name, $value)
 
     }
 }
-
+/**
+ * Set the contents of some output in the cache
+ *
+ * @access public
+ * @param  string $cacheKey
+ * @param  string $cache_file
+ * @param  string $cacheType
+ * @param  string $value
+ *
+ */
 function xarOutputSetCached($cacheKey, $cache_file, $cacheType, $value)
 {
     global $xarOutput_cacheCollection,
