@@ -102,6 +102,11 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $value = $this->value;
         }
         $upname = $name .'_upload';
+
+        // inform anyone that we're showing a file upload field, and that they need to use
+        // <form ... enctype="multipart/form-data" ... > in their input form
+        xarVarSetCached('Hooks.dynamicdata','withupload',1);
+
         // we're using a hidden field to keep track of any previously uploaded file here
         return (!empty($value) ? xarML('Uploaded file : #(1)',$value) . '<br /><input type="hidden" name="'.$name.'" value="'.$value.'" />' : '') .
                '<input type="hidden" name="MAX_FILE_SIZE"'.

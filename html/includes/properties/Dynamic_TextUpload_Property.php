@@ -64,6 +64,11 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             $value = $this->value;
         }
         $upname = $name .'_upload';
+
+        // inform anyone that we're showing a file upload field, and that they need to use
+        // <form ... enctype="multipart/form-data" ... > in their input form
+        xarVarSetCached('Hooks.dynamicdata','withupload',1);
+
         // we're using a textarea field to keep track of any previously uploaded file here
         return '<textarea' .
                ' name="' . $name . '"' .
