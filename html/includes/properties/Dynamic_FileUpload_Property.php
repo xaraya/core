@@ -35,6 +35,9 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 $this->filetype = '';
             }
         }
+        if (empty($this->basedir)) {
+            $this->basedir = 'var/uploads';
+        }
         // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/Xaraya_Classic/images
         if (!empty($this->basedir) && preg_match('/\{theme\}/',$this->basedir)) {
             $curtheme = xarTplGetThemeDir();
