@@ -373,10 +373,11 @@ function base_menublock_insert($blockinfo)
     if (!xarVarFetch('displayprint', 'str:1', $vars['displayprint'], 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('marker', 'str:1', $vars['marker'], '[x]', XARVAR_NOT_REQUIRED)) return;
 
-    if (!xarVarFetch('linkname', 'str:1', $linkname, NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('linkdelete', 'str', $linkdelete, NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('linkinsert', 'str', $linkinsert, NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('linkname', 'isset', $linkname, NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('new_linkname', 'str', $new_linkname, NULL, XARVAR_NOT_REQUIRED)) return;
+
+    if (!xarVarFetch('linkdelete', 'isset', $linkdelete, NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('linkinsert', 'isset', $linkinsert, NULL, XARVAR_NOT_REQUIRED)) return;
 
     // User links
     $content = array();
@@ -389,7 +390,8 @@ function base_menublock_insert($blockinfo)
 
         foreach ($linkname as $v) {
             if (!isset($linkdelete[$c])) {
-                // FIXME: MrB, i added the @ to avoid testing whether all fields contains something usefull
+                // FIXME: MrB, i added the @ to avoid testing whether all fields contains something useful
+                // JJ: xarVarFetch() should be able to provide defaults for us.
                 @$content[] = "$linkurl[$c]|$linkname[$c]|$linkdesc[$c]|$linkchild[$c]";
             }
             if (isset($linkinsert[$c])) {
@@ -400,16 +402,22 @@ function base_menublock_insert($blockinfo)
     }
 
     if ($new_linkname) {
-       $content[] = xarVarCleanFromInput('new_linkurl').'|'.xarVarCleanFromInput('new_linkname').'|'.xarVarCleanFromInput('new_linkdesc').'|'.xarVarCleanFromInput('new_linkchild');
+        if (!xarVarFetch('new_linkname', 'str', $new_linkname, NULL, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('new_linkurl', 'str', $new_linkurl, NULL, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('new_linkdesc', 'str', $new_linkdesc, NULL, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('new_linkchild', 'str', $new_linkchild, NULL, XARVAR_NOT_REQUIRED)) return;
+
+        $content[] = $new_linkurl . '|' . $new_linkname . '|' . $new_linkdesc . '|' . $new_linkchild;
     }
+
+    if (!xarVarFetch('new_linkinsert', 'isset', $new_linkinsert, NULL, XARVAR_NOT_REQUIRED)) return;
+    if (isset($new_linkinsert)) {
+        $content[] = "||";
+    }
+
     $vars['content'] = implode("LINESPLIT", $content);
 
-    $blockinfo['content']= serialize($vars);
-
-    // Ensure we have a title for the block.
-    if (empty($blockinfo['title'])){
-        $blockinfo['title'] = xarML('Main Menu');
-    }
+    $blockinfo['content'] = serialize($vars);
 
     return($blockinfo);
 }
