@@ -1,10 +1,5 @@
-<table border="0" width="100%">
-    <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>Users Administration</xar:mlstring>            
-        </th>
-    </tr>
-</table>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Users Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2>Modify COnfig</h2><br />
 
 <center>
 <form method="post" action="#xarModURL('users', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded" />
@@ -149,10 +144,12 @@
 						        <textarea name="disallowedemails" id="disallowedemails" tabindex="4" rows="10" cols="30" />#$emails#</textarea> 
 						</td>
 					</tr>
+					#$hooks#
 				</table>
 			</td>
 		</tr>
 	</table>
+
 	<br /><br />
 	<input type="submit" value="<xar:mlstring>Update Users Configuration</xar:mlstring>" align="middle" tabindex="5" />
 </form>
