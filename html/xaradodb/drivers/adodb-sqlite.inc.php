@@ -251,6 +251,35 @@ class ADODB_sqlite extends ADOConnection {
 		return @sqlite_close($this->_connectionID);
 	}
 
+    // XARAYA MODIFICATION
+    /*
+     * SQLite doesn't have an ALTER TABLE statement and we do want to have it, 
+     * try to detect it in the incoming $sql and translate this into SQLite 
+     * equivalent statements
+     * The alter table emulation was taken from: http://code.jenseng.com/db/sql.txt
+     */
+    function &Execute($sql,$inputarr=false)
+    {
+        if(strtolower(substr(ltrim($sql),0,5))=='alter') {
+            $queryparts = preg_split("/[\s]+/",$sql,4,PREG_SPLIT_NO_EMPTY);
+            $tablename = $queryparts[2];
+            $alterdefs = $queryparts[3];
+            if(strtolower($queryparts[1]) != 'table' || $queryparts[2] == '') {
+                ADOConnection::outp( "Syntax error in ALTER TABLE statement: ".htmlspecialchars($sql));
+                return false;
+            }
+            $result = $this->_altertable($tablename,$alterdefs);
+            return $result;
+        } 
+        // Otherwise use the normal execute method
+        return parent::Execute($sql,$inputarr);
+    }
+    
+    function _altertable($tablename, $alterdefs)
+    {
+        die("TODO: Implement the private _altertable function");
+    }
+    // END XARAYA MODIFICATION
 
 }
 
