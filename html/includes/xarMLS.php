@@ -29,6 +29,7 @@ define('XARMLS_DNTYPE_THEME', 2);
 define('XARMLS_DNTYPE_MODULE', 3);
 
 // This class represents the MLS environment on the site
+/* FIXME: delete class after testing
 class MLSEnvironment {
     var $mlsdata;
     var $mlsobjects;
@@ -59,7 +60,7 @@ class MLSEnvironment {
     function getBackend() { return $this->backend; }
     function getDomain() { return $this->domain; }
 }
-
+*/
 /**
  * Initializes the Multi Language System
  *
@@ -69,7 +70,7 @@ class MLSEnvironment {
  */
 function xarMLS_init($args, $whatElseIsGoingLoaded)
 {
-// <mrb> Why do we have two formats here?
+    // <mrb> Why do we have two formats here?
     // FIXME: use constants also for the configvars
     switch ($args['MLSMode']) {
     case 'SINGLE':
@@ -181,8 +182,8 @@ function xarMLSLoadLocaleData($locale = NULL)
     // check for locale availability
     $siteLocales = xarMLSListSiteLocales();
 
-// TODO: figure out why we go through this function for xarModIsAvailable
-//       (this one breaks on upper/lower-case issues, BTW)
+    // TODO: figure out why we go through this function for xarModIsAvailable
+    //       (this one breaks on upper/lower-case issues, BTW)
     if (!in_array($locale, $siteLocales)) {
         if (preg_match('/ISO/',$locale)) {
             $locale = preg_replace('/ISO/','iso',$locale);
@@ -1412,7 +1413,19 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
         // CHECKME: make sure we can cache this (e.g. set $this->domainlocation here first ?)
         //    return $this->domaincache["$dnType.$dnName"];
         //}
-        $this->spacedir = $GLOBALS['MLS']->getSpace($dnType);
+
+        // FIXME: voll delete this line after testing $this->spacedir = $GLOBALS['MLS']->getSpace($dnType);
+        switch ($dnType) {
+        case XARMLS_DNTYPE_MODULE:
+            $this->spacedir = "modules";
+        case XARMLS_DNTYPE_THEME:
+            $this->spacedir = "themes";
+        case XARMLS_DNTYPE_CORE:
+            $this->spacedir = "core";
+        default:
+            $this->spacedir = NULL;
+        }
+
         foreach ($this->locales as $locale) {
             if($this->spacedir == "core" || $this->spacedir == "xaraya") {
                 $this->domainlocation  = xarCoreGetVarDirPath() . "/locales/"
