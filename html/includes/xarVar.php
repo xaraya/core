@@ -251,17 +251,6 @@ function xarVarCleanUntrusted($var)
  */
 function xarVarCleanFromInput()
 {
-    $search = array('|</?\s*SCRIPT[^>]*>|si',
-                    '|</?\s*FRAME[^>]*>|si',
-                    '|</?\s*OBJECT[^>]*>|si',
-                    '|</?\s*META[^>]*>|si',
-                    '|</?\s*APPLET[^>]*>|si',
-                    '|</?\s*LINK[^>]*>|si',
-                    '|</?\s*IFRAME[^>]*>|si',
-                    '|STYLE\s*=\s*"[^"]*"|si');
-    // <?
-    $replace = array('');
-
     $resarray = array();
     foreach (func_get_args() as $name) {
         if (empty($name)) {
@@ -277,7 +266,7 @@ function xarVarCleanFromInput()
 
         // TODO: <marco> Document this security check!
         if (!function_exists('xarSecurityCheck') || !xarSecurityCheck('AdminAll',0)) {
-            $var = preg_replace($search, $replace, $var);
+            $var = xarVarCleanUntrusted($var);
         }
 
         // Add to result array
