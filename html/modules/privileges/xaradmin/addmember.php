@@ -28,8 +28,11 @@ function privileges_admin_addmember()
     $member = $privs->getPrivilege($privid);
 
 // assign the child to the parent and bail if an error was thrown
-//    $newrole = $priv->addMember($member);
-    if (!$priv->addMember($member)) {return;}
+// we bail if the child is already a member of the *parent*
+// if the child was a member of an ancestor further up that would be OK.
+    $children = $priv->getChildren();
+    foreach ($children as $child) if ($child->getID() == $member->getID()) $found = true;
+    if (!isset($found)) if (!$priv->addMember($member)) {return;}
 
 // set the session variable
     xarSessionSetVar('privileges_statusmsg', xarML('Added to Privilege',
