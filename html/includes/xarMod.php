@@ -1335,7 +1335,7 @@ function xarModIsAvailable($modName)
         return;
     }
 
-    if (!isset($modAvailableCache[$modName])) {
+    if (!empty($GLOBALS['xarMod_noCacheState']) || !isset($modAvailableCache[$modName])) {
 
         $modBaseInfo = xarMod_getBaseInfo($modName);
         if (!isset($modBaseInfo)) return; // throw back
@@ -1646,7 +1646,7 @@ function xarMod_getBaseInfo($modName)
     // FIXME: <MrB> I've seen cases where the cache info is not in sync
     // with reality. I've take a couple ones out, but I haven't tested all
     // the way through.
-    if (xarVarIsCached('Mod.BaseInfos', $modName)) {
+    if (empty($GLOBALS['xarMod_noCacheState']) && xarVarIsCached('Mod.BaseInfos', $modName)) {
         return xarVarGetCached('Mod.BaseInfos', $modName);
     }
 

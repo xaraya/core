@@ -34,23 +34,26 @@ $configuration_options = $options;
  */
 function installer_public_configuration_load($args)
 {
+// disable caching of module state in xarMod.php
+    $GLOBALS['xarMod_noCacheState'] = true;
+
 // the following needs to be done in any case
     xarModAPIFunc('modules','admin','regenerate');
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>147));    // categories
-    xarModAPIFunc('modules','admin','activate',array('regid'=>147));
-// TODO: figure out an elegant way for loading articles
-//    xarModAPIFunc('modules','admin','activate',array('regid'=>147));
-//    xarModAPIFunc('modules','admin','initialise',array('regid'=>151));    // articles
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>14));     // comments
-    xarModAPIFunc('modules','admin','activate',array('regid'=>14));
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>41));     // ratings
-    xarModAPIFunc('modules','admin','activate',array('regid'=>41));
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>177));    // hitcount
-    xarModAPIFunc('modules','admin','activate',array('regid'=>177));
     xarModAPIFunc('modules','admin','initialise',array('regid'=>11));     // autolinks
     xarModAPIFunc('modules','admin','activate',array('regid'=>11));
+    xarModAPIFunc('modules','admin','initialise',array('regid'=>147));    // categories
+    xarModAPIFunc('modules','admin','activate',array('regid'=>147));
+    xarModAPIFunc('modules','admin','initialise',array('regid'=>14));     // comments
+    xarModAPIFunc('modules','admin','activate',array('regid'=>14));
+    xarModAPIFunc('modules','admin','initialise',array('regid'=>177));    // hitcount
+    xarModAPIFunc('modules','admin','activate',array('regid'=>177));
+    xarModAPIFunc('modules','admin','initialise',array('regid'=>41));     // ratings
+    xarModAPIFunc('modules','admin','activate',array('regid'=>41));
     xarModAPIFunc('modules','admin','initialise',array('regid'=>32));     // search
     xarModAPIFunc('modules','admin','activate',array('regid'=>32));
+
+    xarModAPIFunc('modules','admin','initialise',array('regid'=>151));    // articles
+    xarModAPIFunc('modules','admin','activate',array('regid'=>151));
     xarModAPIFunc('modules','admin','initialise',array('regid'=>36));     // example
     xarModAPIFunc('modules','admin','activate',array('regid'=>36));
 
