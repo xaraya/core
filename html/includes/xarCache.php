@@ -300,13 +300,15 @@ function xarBlockGetCached($cacheKey, $name = '')
     // CHECKME: use $name for something someday ?
     $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarBlock_cacheCode.php";
     
-    //$blockCachedOutput = file_get_contents($cache_file); //ouch, only available in php >= 4.3, bummer 
-    
-    $blockCachedOutput = '';
-    $file = @fopen($cache_file, "rb");
-    if ($file) {
-        while (!feof($file)) $blockCachedOutput .= fread($file, 1024);
-        fclose($file);
+    if (function_exists('file_get_contents')) {
+    	$blockCachedOutput = file_get_contents($cache_file);
+    } else {
+        $blockCachedOutput = '';
+        $file = @fopen($cache_file, "rb");
+        if ($file) {
+            while (!feof($file)) $blockCachedOutput .= fread($file, 1024);
+            fclose($file);
+        }
     }
 
     return $blockCachedOutput;
