@@ -1,8 +1,8 @@
 body {
 	background-color: #B6A4BB;
 	color: #7a7a7a;
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	font-size: 16px;
+	font-family: "Trebuchet MS", Arial, Helvetica, Tahoma, sans-serif;
+	font-size: 18px;
 	text-align: center;
 	margin: 0;
 	padding: 0;
@@ -52,6 +52,8 @@ h1,h2,h3,h4 {
 	text-align: center;
 	padding: 0 0 .4em 0;
 	margin: 0;
+	width: 460px;
+	text-shadow: -1px 3px 3px silver;
 }
 
 h1 { font-size: 1.4em; }
@@ -70,7 +72,7 @@ form p.center { text-align: center; }
 form label {
 	font-weight: bold;
 	margin: 0 .5em;
-	color: grey;
+	color: gray;
 }
 
 textarea#license, select#configuration {
@@ -104,9 +106,10 @@ div.simpleform p {
 	padding: .35em 0;
 	margin: 0 auto;
 	text-align: left;
-	border-bottom: #B6A4BB;
+	border-bottom: #ffffff;
 	border-width: 0 0 1px 0;
 	border-style: none none solid none;
+	background-color: #f0f0f0;
 }
 
 div.simpleform label {
@@ -135,7 +138,6 @@ div.scroller p, div.scroller input {
 	line-height: 1em;
 	padding: .25em 0;
 	margin: 0;
-/* 	vertical-align: top; */
 }
 
 p.complete, p.active, p.greyed {
@@ -204,5 +206,5 @@ p.complete, p.active, p.greyed {
 	margin: 0;
 }
 
-.xar-sub { font-size: 10px; }
+.xar-sub { font-size: .7em; }
 .clear { clear: both; height:0px; }
