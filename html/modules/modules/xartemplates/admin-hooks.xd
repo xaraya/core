@@ -127,9 +127,7 @@ function setDisplayOff(id)
                         </xar:if>
                     </div>
                 </xar:foreach>
-                <br />
-                <a name="hooks_savebutton"/>
-                <input type="submit" value="#$savechangeslabel#" />
+                <input type="submit" value="#$savechangeslabel#" /><br/> <br/>
             </div>
         </form>
     </xar:if>
