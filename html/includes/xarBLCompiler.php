@@ -2696,7 +2696,7 @@ class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
             return;
         }
 
-        return "xarMLByKey('$key'";
+        return "xarMLByKey(\"$key\"";
     }
 
     function renderEndTag()
