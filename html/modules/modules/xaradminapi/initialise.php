@@ -36,7 +36,14 @@ function modules_adminapi_initialise($args)
 
     // Get module database info
     xarModDBInfoLoad($modInfo['name'], $modInfo['directory']);
-
+    
+    if (!xarModAPIFunc('modules','admin','verifydependency',array('regid'=>$regid))) {
+		//TODO: Add description of the dependencies
+    	$msg = xarML('The dependencies to initialize the module "#(1)" were not met.', $modInfo['displayname']);
+        xarExceptionSet(XAR_USER_EXCEPTION, 'MODULE_NOT_EXIST', $msg);
+        return;
+    }
+    
     // Include module initialisation file
     //FIXME: added module File not exist exception
 

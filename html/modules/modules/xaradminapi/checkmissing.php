@@ -9,6 +9,12 @@
  */
 function modules_adminapi_checkmissing()
 {
+	static $check = false;
+	
+	//Now with dependency checking, this function may be called multiple times
+	//Let's check if it already return ok and stop the processing here
+	if ($check) {return true;}
+
     // Security Check
     // need to specify the module because this function is called by the installer module
     if(!xarSecurityCheck('AdminModules',1,'All','All','modules')) return;
@@ -38,6 +44,8 @@ function modules_adminapi_checkmissing()
             if (!isset($set)) return;
         }
     }
+    
+    $check = true;
     
     return true;
 }

@@ -2,14 +2,17 @@
 
 /**
  * Verifies if all dependencies of a module are satisfied.
+ * To be used before initializing a module.
  *
  * @param $maindId int ID of the module to look dependents for
  * @returns bool
  * @return true on dependencies verified and ok, false for not
  * @raise NO_PERMISSION
  */
-function modules_adminapi_verifydependency($mainId)
+function modules_adminapi_verifydependency($args)
 {
+	$mainId = $args['regid'];
+	
     // Security Check
     // need to specify the module because this function is called by the installer module
     if(!xarSecurityCheck('AdminModules',1,'All','All','modules')) return;
@@ -29,8 +32,6 @@ function modules_adminapi_verifydependency($mainId)
                        return;
     }
     
-    $dependency = $modInfo['denpendency'];
-
     // See if we have lost any modules since last generation
     if (!xarModAPIFunc('modules','admin','checkmissing')) {return;}
     
@@ -42,13 +43,20 @@ function modules_adminapi_verifydependency($mainId)
 
     $dbMods = array();
 
+	//Find the modules which are active
     foreach ($dbModules as $name => $dbInfo) {
         if ($dbInfo['state'] == XARMOD_STATE_ACTIVE) {
             $dbMods[$dbInfo['regid']] = $dbInfo;
         }
     }
     
-    foreach ($dependecy as $module_id => $conditions) {
+    $dependency = $modInfo['dependency'];
+    
+	if (empty($dependency)) {
+		$dependency = array();
+	}
+
+    foreach ($dependency as $module_id => $conditions) {
     
         if (is_array($conditions)) {
 

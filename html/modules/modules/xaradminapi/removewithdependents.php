@@ -1,15 +1,19 @@
 <?php
 
 /**
- * Verifies if each of its dependents are ok with its version
+ * Remove module and its dependents
+ * To be used after the user assured he wants to unitialize the module
+ * and all its dependents (should show a list of them to the user)
  *
  * @param $maindId int ID of the module to look dependents for
  * @returns array
  * @return array with dependents
  * @raise NO_PERMISSION
  */
-function modules_adminapi_verifydependents($mainId)
+function modules_adminapi_removewithdependents($args)
 {
+	$mainId = $args['regid'];
+	
     // Do you think we should store these in the DB?
     // They should be rarely used, only for initialising/deactivating
 
@@ -36,7 +40,7 @@ function modules_adminapi_verifydependents($mainId)
 
     $dbMods = array();
     
-    //Finds out the modules
+    //Finds out the active/upgraded/inactive modules 
     foreach ($dbModules as $name => $dbInfo) {
         if ($dbInfo['state'] == XARMOD_STATE_ACTIVE ||
             $dbInfo['state'] == XARMOD_STATE_UPGRADED ||
@@ -49,9 +53,12 @@ function modules_adminapi_verifydependents($mainId)
 
     foreach ($dependecy as $module_id => $conditions) {
         //First unitialize its dependents
-        if (!xarModAPIFunc('modules','admin','unitializedependents',$module_id)) {return;}
+        if (!xarModAPIFunc('modules','admin','removewithdependents',$module_id)) {return;}
 
     }
+
+	//Now remove the main module
+    if (!xarModAPIFunc('modules','admin','remove',array('regid'=>$mainId))) {return;}
 
     return true;
 }

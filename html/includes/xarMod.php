@@ -743,6 +743,7 @@ function xarModGetInfo($modRegId)
         $modFileInfo['category'] = xarML('Unknown');
         $modFileInfo['author'] = xarML('Unknown');
         $modFileInfo['contact'] = xarML('Unknown');
+        $modFileInfo['dependecy'] = array();
     } 
     $modInfo = array_merge($modFileInfo, $modInfo);
 

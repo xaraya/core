@@ -1,14 +1,18 @@
 <?php
 
 /**
- * Initialize all of the modules dependencies if possible.
+ * Initialize moduel with its dependencies.
  *
  * @param $maindId int ID of the module to look dependents for
  * @returns bool
  * @return true on dependencies activated, false for not
  * @raise NO_PERMISSION
  */
-function modules_adminapi_initializedependency($mainId) {
+function modules_adminapi_initialisewithdependencies($args) 
+{
+	
+	$mainId = $args['regid'];
+
 	// Security Check
 	// need to specify the module because this function is called by the installer module
 	if (!xarSecurityCheck('AdminModules', 1, 'All', 'All', 'modules'))
@@ -27,7 +31,7 @@ function modules_adminapi_initializedependency($mainId) {
 	}
 
 	// Check if all dependencies are ok
-	if (!xarModAPIFunc('modules', 'admin', 'verifydependencies', $mainId)) {
+	if (!xarModAPIFunc('modules', 'admin', 'verifydependency', $mainId)) {
 		return;
 	}
 
@@ -51,7 +55,7 @@ function modules_adminapi_initializedependency($mainId) {
 			$modId = $conditions;
 		}
 
-		if (!xarModAPIFunc('modules', 'admin', 'activatedependency', $modId)) {
+		if (!xarModAPIFunc('modules', 'admin', 'initialisewithdependents', array('regid'=>$modId))) {
 			$msg = xarML('Unable to activate module with ID (#(1)).', $modId);
 			xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
 			return;
