@@ -1675,13 +1675,15 @@ class xarPrivileges extends xarMasks
         }
 		
         // now match the instances
-        if(count($p1) != count($p2)) {
-            if(count($p1) > count($p2)) {
+        $p1count = count($p1);
+        $p2count = count($p2);
+        if($p1count != $p2count) {
+            if($p1count > $p2count) {
                 $p = $p2;
-                $p2 = $mask->normalize(count($p1) - count($p2));
+                $p2 = $mask->normalize($p1count - $p2count);
             } else {
                 $p = $p1;
-                $p1 = $this->normalize(count($p2) - count($p1));
+                $p1 = $this->normalize($p2count - $p1count);
             }
             if (count($p) != 5) {
                 $msg = xarML('#(1) and #(2) do not have the same instances. #(3) | #(4) | #(5)',$mask->getName(),$this->getName(),implode(',',$p2),implode(',',$p1),$this->present() . "|" . $mask->present());
@@ -1689,7 +1691,7 @@ class xarPrivileges extends xarMasks
                                new SystemException($msg));
             }
         }
-        for ( $i = 4; $i < count($p1); $i++) {
+        for ( $i = 4, $p1count = count($p1); $i < $p1count; $i++) {
             if (($p1[$i] != 'all') && ($p1[$i]!=$p2[$i])) {
                 return false;
             }
