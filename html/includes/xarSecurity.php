@@ -322,7 +322,7 @@ $schemas = array();
         return $roles->getgroups();
     }
 
- * xarFindRole: returns a role object by its name
+/* xarFindRole: returns a role object by its name
  *
  * This is a wrapper function
  *
