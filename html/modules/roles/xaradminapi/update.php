@@ -80,7 +80,7 @@ function roles_adminapi_update($args)
                 SET xar_name = ?, xar_uname = ?, xar_email = ?,
                     xar_valcode = ?, xar_state = ?
                 WHERE xar_uid = ?";
-        $bindvars = arry($name,$uname,$email,$valcode,$state,$uid);
+        $bindvars = array($name,$uname,$email,$valcode,$state,$uid);
     }
 
     $result =& $dbconn->Execute($query,$bindvars);
