@@ -1,3 +1,21 @@
+<script type="text/javascript" src="modules/security/xartemplates/xarTree.js">
+</script>
+<script language="JavaScript">
+ var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
+ function doOnLoad() {
+      oldOnLoadFunction();      
+      xarTree_init('PermissionsTree');
+      }
+ var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
+ function doOnUnload() {
+      oldOnUnloadFunction();      
+      xarTree_init('PermissionsTree');
+      }
+ 
+ window.onload = doOnLoad;
+ window.onunload = doOnUnload;
+</script>
+
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
@@ -67,7 +85,15 @@
 	</tr>
 	<tr>
 		<td>
-			#$tree#
+			<xar:loop name="$trees">
+				<table border="0" cellspacing="2" cellpadding = "0" width="100%">
+					<tr>
+						<td>
+							&xar-var-tree;
+						</td>
+					</tr>
+				</table>			
+			</xar:loop>
 		</td>
 	</tr>
 </table>			

@@ -209,15 +209,15 @@ function security_init()
 
 	$permissions->makeEntry('NoPermissions');
 	$permissions->makeEntry('FullPermissions');
-	$permissions->makeMember('NoPermissions','FullPermissions');
+	//$permissions->makeMember('NoPermissions','FullPermissions');
 	$permissions->makeEntry('ReadAll');
-	$permissions->makeMember('NoPermissions','ReadAll');
+	//$permissions->makeMember('NoPermissions','ReadAll');
 	$permissions->makeEntry('EditAll');
-	$permissions->makeMember('NoPermissions','EditAll');
+	//$permissions->makeMember('NoPermissions','EditAll');
 	$permissions->makeEntry('AddAll');
-	$permissions->makeMember('NoPermissions','AddAll');
+	//$permissions->makeMember('NoPermissions','AddAll');
 	$permissions->makeEntry('DeleteAll');
-	$permissions->makeMember('NoPermissions','DeleteAll');
+	//$permissions->makeMember('NoPermissions','DeleteAll');
 
     /*********************************************************************
     * Assign the default permissions to groups/users

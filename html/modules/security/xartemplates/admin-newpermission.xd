@@ -1,10 +1,27 @@
-<SCRIPT LANGUAGE="JavaScript">
+<script type="text/javascript" src="modules/security/xartemplates/xarTree.js">
+</script>
+<script language="JavaScript">
+ var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
+ function doOnLoad() {
+      oldOnLoadFunction();      
+      xarTree_init();
+      }
+ var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
+ function doOnUnload() {
+      oldOnUnloadFunction();      
+      xarTree_init();
+      }
+ 
+ window.onload = doOnLoad;
+ window.onunload = doOnUnload;
+</script>
+<script language="JavaScript">
 <!--
 function setaction(target){
 document.forms[0].action = target;
 document.forms[0].submit();}
 //-->
-</SCRIPT>
+</script>
 
 <table border="0" width="100%">
     <tr>

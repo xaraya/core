@@ -203,10 +203,10 @@ class xarSchemas
 */
  	function winnow($perms1, $perms2)
 	{
-		if ($perms1 == array() &&
-			(($perms1 == array()) || ($perms2 == ''))) return false;
+		if ((($perms1 == array()) || ($perms1 == '')) &&
+			(($perms2 == array()) || ($perms2 == ''))) return array();
 		if ($perms1 == array()) return $perms2 = array_pop($perms1);
-		if ($perms2 == array()) return $perms1 = array_pop($perms2);;
+		if ($perms2 == array()) return $perms1 = array_pop($perms2);
 
 		foreach ($perms1 as $perm1) {
 			$isimplied = false;
@@ -833,6 +833,8 @@ class xarPermissions extends xarSchemas
 */
 	function addbranches($node){
 		$object = $node['parent'];
+		$node['expanded'] = false;
+		$node['selected'] = false;
 		$node['children'] = array();
 		foreach($this->getsubpermissions($object['pid']) as $subnode){
 			array_push($node['children'],$this->addbranches(array('parent'=>$subnode)));
@@ -879,27 +881,28 @@ var $indent;
 var $level;
 
 // convenience variables to hold strings referring to pictures
-var $el = '<img src="modules/security/xarimages/el.gif">';
-var $tee = '<img src="modules/security/xarimages/T.gif">';
-var $aye = '<img src="modules/security/xarimages/I.gif">';
-var $bar = '<img src="modules/security/xarimages/s.gif">';
-var $emptybox = '<img src="modules/security/xarimages/k1.gif">';
-var $fullbox = '<img src="modules/security/xarimages/k2.gif">';
-var $blank = '<img src="modules/security/xarimages/blank.gif">';
+var $el = '<img src="modules/security/xarimages/el.gif" style="vertical-align: middle">';
+var $tee = '<img src="modules/security/xarimages/T.gif" style="vertical-align: middle">';
+var $aye = '<img src="modules/security/xarimages/I.gif" style="vertical-align: middle">';
+var $bar = '<img src="modules/security/xarimages/s.gif" style="vertical-align: middle">';
+var $emptybox = '<img name="box" src="modules/security/xarimages/k1.gif" style="vertical-align: middle">';
+var $expandedbox = '<img name="box" src="modules/security/xarimages/k2.gif" style="vertical-align: middle">';
+var $blank = '<img src="modules/security/xarimages/blank.gif" style="vertical-align: middle">';
+var $collapsedbox = '<img name="box" src="modules/security/xarimages/k3.gif" style="vertical-align: middle">';
 
 // we'll use this to check whether a group has already been processed
 var	$alreadydone;
 
 function drawtree($node) {
 
-	$this->html = '<table border="0" cellspacing="0" cellpadding="0" width="100%">';
+	$this->html = '<div name="PermissionsTree" id="PermissionsTree" style="padding-left: 1em">';
 	$this->nodeindex = 0;
 	$this->indent = array();
 	$this->level = 0;
 	$this->alreadydone = array();
 
-	$this->drawbranch($node, false);
-	$this->html .= '</table>';
+	$this->drawbranch($node);
+	$this->html .= '</div>';
 	return $this->html;
 }
 
@@ -917,26 +920,29 @@ function drawtree($node) {
  * @todo    none
 */
 
-function drawbranch($node, $expand){
+function drawbranch($node){
 
 	$this->level = $this->level + 1;
 	$this->nodeindex = $this->nodeindex + 1;
 	$object = $node['parent'];
 
-// if we want a collapsed tree, remove the children
-	if (!$expand) $node['children'] = array();
-/*	if (in_array($object['pid'],$this->alreadydone)) {
+// check if we've aleady processed this entry
+	if (in_array($object['pid'],$this->alreadydone)) {
+		$drawchildren = false;
 		$node['children'] = array();
 	}
 	else {
+		$drawchildren = true;
 		array_push($this->alreadydone,$object['pid']);
 	}
-*/
+
+// is this a branch?
+	$isbranch = count($node['children'])>0 ? true : false;
+
 // now begin adding rows to the string
-	$this->html .= '<tr><td>';
+	$this->html .= '<div name="xarBranch" style="align: left;">';
 
 // this table holds the index, the tree drawing gifs and the info about the permission
-	$this->html .= '<table cellspacing="0" cellpadding="0" border="0"><tr><td width="20">' . $this->nodeindex . '</td><td width="$indentwidth">';
 	$this->html .= $this->drawindent();
 	if (count($node['children']) > 0) {
 		if ($this->nodeindex != 1){
@@ -949,15 +955,15 @@ function drawbranch($node, $expand){
 			}
 			$this->html .= $this->bar;
 		}
-		$this->html .= $this->fullbox . '</td>';
+		$this->html .= $this->expandedbox;
 	}
 	else {
 		if ($this->nodeindex != 1){
 			$this->html .= $this->bar;
 		}
-		$this->html .= $this->emptybox . '</td>';
+		$this->html .= $this->emptybox;
 	}
-	$this->html .=  '<td valign="middle">&nbsp;';
+	$this->html .=  '<span name="titletext" style="padding-left: 1em">';
 
 // draw the name of the object and make a link
 	if($object['pid'] < 3) {
@@ -970,12 +976,11 @@ function drawbranch($node, $expand){
 						 'modifypermission',
 						 array('pid'=>$object['pid'])) .' ">' .$object['name'] . '</a>: &nbsp;';
 	}
-	$this->html .= count($this->getsubpermissions($object['pid'])) . ' components';
-	$this->html .= '</td></tr></table></td>';
+	$this->html .= count($this->getsubpermissions($object['pid'])) . ' components</span>';
 
 // this next table holds the Delete, Users and Permissions links
 // don't allow deletion of certain permissions
-	$this->html .= '<td></td><td align="right"><table><tr><td width="40">';
+	$this->html .=  '<span name="deletelink" style="position: absolute; right: 11em">';
 	if(($object['pid'] < 3)) {
 		$this->html .= '&nbsp;';
 	}
@@ -987,10 +992,11 @@ function drawbranch($node, $expand){
 				 array('pid'=>$object['pid'])) .
 				 '" title="Delete this Permission">&nbsp;Delete&nbsp;</a>';
 	}
-	$this->html .= '</td>';
+	$this->html .= '</span>';
 
-// offer to show the permissions of this group
-	$this->html .= '<td width="60"><a href="' .
+// offer to show the users/groups of this group
+	$this->html .=  '<span name="userslink" style="position: absolute; right: 2em">';
+	$this->html .= '<a href="' .
 			xarModURL('security',
 				 'admin',
 				 'showparticipants',
@@ -998,9 +1004,10 @@ function drawbranch($node, $expand){
 				 '" title="Show the Groups/Users this Permission is assigned to">&nbsp;Groups/Users</a>';
 
 // close the html row
-	$this->html .= '</td></tr></table></td></tr>';
+	$this->html .= '</span>';
 
 // we've finished this row; now do the children of this permission
+	$this->html .= $isbranch ? '<div name="xarLeaf">' : '';
 	$ind=0;
 	foreach($node['children'] as $subnode){
 		$ind = $ind + 1;
@@ -1014,12 +1021,17 @@ function drawbranch($node, $expand){
 		}
 
 // draw this child
-		$this->drawbranch($subnode, $expand);
+		$this->drawbranch($subnode);
 
 // we're done; remove the indent string
 		array_pop($this->indent);
 	}
 		$this->level = $this->level - 1;
+
+// write the closing tags
+	$this->html .= $isbranch ? '</div>' : '';
+// close the html row
+	$this->html .= '</div>';
 
 }
 

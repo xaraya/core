@@ -1,10 +1,27 @@
-<SCRIPT LANGUAGE="JavaScript">
+<script type="text/javascript" src="modules/security/xartemplates/xarTree.js">
+</script>
+<script language="JavaScript">
+ var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
+ function doOnLoad() {
+      oldOnLoadFunction();      
+      xarTree_init('PermissionsTree');
+      }
+ var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
+ function doOnUnload() {
+      oldOnUnloadFunction();      
+      xarTree_init('PermissionsTree');
+      }
+ 
+ window.onload = doOnLoad;
+ window.onunload = doOnUnload;
+</script>
+<script language="JavaScript">
 <!--
 function setaction(target){
 document.forms[0].action = target;
 document.forms[0].submit();}
 //-->
-</SCRIPT>
+</script>
 
 <table border="0" width="100%">
     <tr>
@@ -186,17 +203,54 @@ document.forms[0].submit();}
 
 <table border="0" width="100%">
 	<tr>
-		<td colspan="5">
+		<td colspan="2">
 			<hr>
 		</td>
 	</tr>
 	<tr>
-		<td colspan="5">			
-			<xar:mlstring>Permission</xar:mlstring>
-			<b>'&xar-var-pname;'</b>
-			<xar:mlstring>contains the following Permissios:</xar:mlstring>			
+		<td width="50%" valign="top">		
+	<form action="&xar-modurl-security-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
+		<table border="0" cellpadding="5">
+		<tr>
+		<td colspan="2" align="center">
+            <xar:mlstring>Add a Permission to Permission</xar:mlstring>
+             <b>'&xar-var-pname;'</b>  
+             </td>
+             </tr>
+
+
+			<tr>
+				<td>
+					<xar:mlstring>Permission:</xar:mlstring>
+				</td>
+				<td>
+					<select name="permid">
+						<xar:loop name="$permissions">
+							<option value="&xar-var-pid;">&xar-var-name;
+						</xar:loop>
+					</select>
+				</td>
+			</tr>
+			<tr>
+			<td colspan="2" align="center">
+		<br />
+		<input type="submit" value="<xar:mlstring>Add</xar:mlstring>" align="middle" tabindex="2" />
+		<input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
+		<input type="hidden" name="ppid" id="ppid" value="&xar-var-ppid;" />
 		</td>
-	</tr>
+		</tr>
+		</table>			
+	</form>
+		</td>
+		<td width="50%" valign="top">		
+	<table width="100%">
+		<tr>
+			<td colspan="5">			
+				<xar:mlstring>Permission</xar:mlstring>
+				<b>'&xar-var-pname;'</b>
+				<xar:mlstring>contains the following Permissions:</xar:mlstring>			
+			</td>
+		</tr>
 	<xar:loop name="$parents">
 		<tr>
 			<td width="150">
@@ -228,45 +282,12 @@ document.forms[0].submit();}
 			</td>
 		</tr>
 	</xar:loop>
-</table>
-<table border="0" width="100%">
-    <tr>
-        <td colspan="4" align="center">
-        	<hr>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="4" align="center">
-            <xar:mlstring>Add a Permission to Permission</xar:mlstring>
-             <b>'&xar-var-pname;'</b>                  
-        </td>
-    </tr>
+	</table>
+		</td>
+		</tr>
 </table>
 
-<center>
-	<form action="&xar-modurl-security-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
-		
-		<table border="0" cellpadding="5">
 
-			<tr>
-				<td>
-					<xar:mlstring>Permission:</xar:mlstring>
-				</td>
-				<td>
-					<select name="permid">
-						<xar:loop name="$permissions">
-							<option value="&xar-var-pid;">&xar-var-name;
-						</xar:loop>
-					</select>
-				</td>
-			</tr>
-		</table>			
-		<br />
-		<input type="submit" value="<xar:mlstring>Add</xar:mlstring>" align="middle" tabindex="2" />
-		<input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
-		<input type="hidden" name="ppid" id="ppid" value="&xar-var-ppid;" />
-	</form>
-</center>
 
 <table border="0" width="100%">
 	<tr>
