@@ -1335,12 +1335,8 @@ function xarVarPrepHTMLDisplay__callback($matches)
  */
 function xarVarPrepForStore()
 {
-    //Does the quoting change from database to database?
-    //If so, this should be done thru ADODB instead of an API functions like this
-    //FIXME: This should be done thru our database interface, ADODB!
-    //FIXME: Different databases DO quote differently! Sybase, MySQL (MySQl is too lenient on quoting
-    // allowing things other databases wont)
-
+    // Issue a WARNING as this function is deprecated
+    xarLogMessage('Using deprecated function xarVarPrepForStore',XARLOG_LEVEL_WARNING);
     $resarray = array();
     foreach (func_get_args() as $var) {
 
