@@ -11,7 +11,7 @@
     </p>
 
     <div class="xar-align-center">
-		[<a href="&xar-modurl-roles-user-logout;"><xar:mlstring>Logout</xar:mlstring></a>] 
-		[<a href="javascript:top.history.go(-1)"><xar:mlstring>Cancel</xar:mlstring></a>] 
+        [<a href="&xar-modurl-roles-user-logout;"><xar:mlstring>Logout</xar:mlstring></a>] 
+        [<a href="javascript:top.history.go(-1)"><xar:mlstring>Cancel</xar:mlstring></a>] 
     </div>
 </div>

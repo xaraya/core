@@ -31,12 +31,12 @@
                     </xar:if>
                 </xar:foreach>
             </select>
-			<xar:mlstring>(Overrule this setting in the specific block instance, this setting will only apply when it has not been set there) 
-			</xar:mlstring>       
-		</div>
+            <xar:mlstring>(Overrule this setting in the specific block instance, this setting will only apply when it has not been set there) 
+            </xar:mlstring>       
+        </div>
         <div>
-			<xar:mlstring>The 'show logout' setting can now be adjusted in each instance of the adminmenu block</xar:mlstring>
-		</div>
+            <xar:mlstring>The 'show logout' setting can now be adjusted in each instance of the adminmenu block</xar:mlstring>
+        </div>
 
     </fieldset>
 
