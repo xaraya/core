@@ -213,7 +213,7 @@ function xarDB_importTables($tables)
 function xarDB__adodbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $param1 = false, $param2 = false)
 {
     if ($funcName == 'EXECUTE') {
-        $msg = xarMLByKey('DATABASE_ERROR_QUERY', $param1, $errMsg);
+        $msg = xarML('Database error while executing: \'#(1)\'; error description is: \'#(2)\'.', $param1, $errMsg);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemException("ErrorNo: ".$errNo.", Message:".$msg));
     } else {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', $errMsg);
