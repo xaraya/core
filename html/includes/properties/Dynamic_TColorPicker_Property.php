@@ -113,6 +113,30 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
          return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }
 
+
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 44,
+                              'name'       => 'tcolorpicker',
+                              'label'      => 'Tigra Color Picker',
+                              'format'     => '44',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							'requiresmodule' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

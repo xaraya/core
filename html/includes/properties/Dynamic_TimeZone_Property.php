@@ -125,6 +125,30 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         //return $out;
     }
 
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 32,
+                              'name'       => 'timezone',
+                              'label'      => 'Time Zone',
+                              'format'     => '32',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							'requiresmodule' => '',
+							'aliases' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

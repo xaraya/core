@@ -28,19 +28,42 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
 {
     function Dynamic_FieldType_Property($args)
     {
-        $this->Dynamic_Select_Property($args);
-        if (count($this->options) == 0) {
-            $proptypes = Dynamic_Property_Master::getPropertyTypes();
-            if (!isset($proptypes)) {
-                $proptypes = array();
-            }
-            foreach ($proptypes as $propid => $proptype) {
-                $this->options[] = array('id' => $propid, 'name' => $proptype['label']);
-            }
-        }
+		if( !isset($args['skipInit']) || ($args['skipInit'] != true) )
+		{
+			$this->Dynamic_Select_Property($args);
+			if (count($this->options) == 0) {
+				$proptypes = Dynamic_Property_Master::getPropertyTypes();
+				if (!isset($proptypes)) {
+					$proptypes = array();
+				}
+				foreach ($proptypes as $propid => $proptype) {
+					$this->options[] = array('id' => $propid, 'name' => $proptype['label']);
+				}
+			}
+		}
     }
 
     // default methods from Dynamic_Select_Property
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 22,
+                              'name'       => 'fieldtype',
+                              'label'      => 'Field Type',
+                              'format'     => '22',
+							'validation' => '',
+							'source'     => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
 }
 
 ?>

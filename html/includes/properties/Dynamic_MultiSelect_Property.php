@@ -151,6 +151,29 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }
 
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 39,
+                              'name'       => 'multiselect',
+                              'label'      => 'Multi Select',
+                              'format'     => '39',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
+
 }
 
 

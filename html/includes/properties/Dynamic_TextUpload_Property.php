@@ -233,6 +233,33 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
 
     }
 
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+		$args['rows'] = 20;
+	 
+	 	$baseInfo = array(
+                              'id'         => 38,
+                              'name'       => 'textupload',
+                              'label'      => 'Text Upload',
+                              'format'     => '38',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							'requiresmodule' => '',
+							'aliases' => '',
+							'args' => serialize( $args ),
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

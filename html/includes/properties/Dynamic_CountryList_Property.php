@@ -351,6 +351,27 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         }*/
     }
 
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 42,
+                              'name'       => 'countrylisting',
+                              'label'      => 'Country Dropdown',
+                              'format'     => '42',
+                              'validation' => '',
+							'source'     => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

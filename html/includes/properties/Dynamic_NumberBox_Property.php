@@ -69,6 +69,29 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
     // default showInput() from Dynamic_TextBox_Property
 
     // default showOutput() from Dynamic_TextBox_Property
+
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 15,
+                              'name'       => 'integerbox',
+                              'label'      => 'Number Box',
+                              'format'     => '15',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

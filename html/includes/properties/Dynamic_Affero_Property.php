@@ -116,6 +116,27 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
         }
         return '';
     }
+
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+							'id'         => 40,
+							'name'       => 'affero',
+							'label'      => 'Affero Username',
+							'format'     => '40',
+							'validation' => '',
+							'source'     => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
 }
 
 ?>

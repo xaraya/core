@@ -45,6 +45,27 @@ class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
         return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
     }
     // default methods from Dynamic_NumberBox_Property
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 21,
+                              'name'       => 'itemid',
+                              'label'      => 'Item ID',
+                              'format'     => '21',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
 }
 
 ?>

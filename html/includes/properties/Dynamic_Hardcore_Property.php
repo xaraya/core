@@ -74,5 +74,30 @@ class Dynamic_Hardcore_Property extends Dynamic_Property
         }
     }
 
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+		$args['rows'] = 20;
+		$args['cols'] = 80;
+	 	$baseInfo = array(
+							'id'         => 204,
+							'name'       => 'hardcore',
+							'label'      => 'Harcore GUI Editor',
+							'format'     => '5',
+							'validation' => '',
+							'source'     => '',
+							'dependancies' => 'hardcore/webeditor/webeditor.js',
+							'args' => serialize( $args ),
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 ?>

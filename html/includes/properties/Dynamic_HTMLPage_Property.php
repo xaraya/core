@@ -165,6 +165,31 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
 
     }
 
+
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 13,
+                              'name'       => 'webpage',
+                              'label'      => 'HTML Page',
+                              'format'     => '13',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							'requiresmodule' => '',
+							'aliases' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

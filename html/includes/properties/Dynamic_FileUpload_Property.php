@@ -293,6 +293,27 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         }
     }
 
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 9,
+                              'name'       => 'fileupload',
+                              'label'      => 'File Upload',
+                              'format'     => '9',
+                              'validation' => '',
+							'source'     => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

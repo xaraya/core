@@ -122,6 +122,30 @@ class Dynamic_Username_Property extends Dynamic_Property
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }
 
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 7,
+                              'name'       => 'username',
+                              'label'      => 'Username',
+                              'format'     => '7',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							'requiresmodule' => '',
+							'aliases' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

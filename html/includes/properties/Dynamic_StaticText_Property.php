@@ -64,6 +64,30 @@ class Dynamic_StaticText_Property extends Dynamic_Property
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
 
     }
+
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 1,
+                              'name'       => 'static',
+                              'label'      => 'Static Text',
+                              'format'     => '1',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							'requiresmodule' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

@@ -116,6 +116,31 @@ class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
         }
         return '';
     }
+
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 31,
+                              'name'       => 'yahoo',
+                              'label'      => 'Yahoo Messenger',
+                              'format'     => '31',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							'requiresmodule' => '',
+							'aliases' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

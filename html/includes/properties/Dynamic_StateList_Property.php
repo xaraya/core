@@ -196,6 +196,30 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
 
     }
 
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 43,
+                              'name'       => 'statelisting',
+                              'label'      => 'State Dropdown',
+                              'format'     => '43',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							'requiresmodule' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
+
+
 }
 
 ?>

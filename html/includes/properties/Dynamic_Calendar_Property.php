@@ -160,6 +160,25 @@ var '.$jsID.'_cal = new xar_base_calendar(document.getElementById("'.$id.'_input
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }
 
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 8,
+                              'name'       => 'calendar',
+                              'label'      => 'Calendar',
+                              'format'     => '8',
+                              'validation' => '',
+							'source'     => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
 }
 
 ?>

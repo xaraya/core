@@ -123,6 +123,28 @@ class Dynamic_PassBox_Property extends Dynamic_Property
 	//return '';
     }
 
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                                 'id'         => 46,
+                                 'name'       => 'password',
+                                 'label'      => 'Password Text Box',
+								 'format'     => '46',
+                                 'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

@@ -119,6 +119,27 @@ else
         $template="icq";
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 28,
+                              'name'       => 'icq',
+                              'label'      => 'ICQ Number',
+                              'format'     => '28',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
 }
 
 ?>

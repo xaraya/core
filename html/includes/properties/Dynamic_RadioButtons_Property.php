@@ -71,6 +71,31 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
     }
 
     // default methods from Dynamic_Select_Property
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 34,
+                              'name'       => 'radio',
+                              'label'      => 'Radio Buttons',
+                              'format'     => '34',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							'requiresmodule' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
+
 }
+
 
 ?>

@@ -117,4 +117,24 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
     }
 }
 
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 29,
+                              'name'       => 'aim',
+                              'label'      => 'AIM Address',
+                              'format'     => '29',
+                              'validation' => '',
+							'source'     => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 ?>

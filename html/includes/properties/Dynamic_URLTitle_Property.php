@@ -204,5 +204,29 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         $template="urltitle";
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 41,
+                              'name'       => 'urltitle',
+                              'label'      => 'URL + Title',
+                              'format'     => '41',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							'requiresmodule' => '',
+							'aliases' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 ?>

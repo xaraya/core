@@ -41,6 +41,29 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
     }
 
     // default methods from Dynamic_Select_Property
+
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 24,
+                              'name'       => 'object',
+                              'label'      => 'Object',
+                              'format'     => '24',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

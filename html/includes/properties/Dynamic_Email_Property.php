@@ -112,6 +112,26 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
         $template="email";
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 26,
+                              'name'       => 'email',
+                              'label'      => 'E-Mail',
+                              'format'     => '26',
+                              'validation' => '',
+							'source'     => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
 }
 
 ?>

@@ -119,6 +119,30 @@ class Dynamic_TextBox_Property extends Dynamic_Property
 
     }
 
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 2,
+                              'name'       => 'textbox',
+                              'label'      => 'Text Box',
+                              'format'     => '2',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							'requiresmodule' => '',
+							'aliases' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

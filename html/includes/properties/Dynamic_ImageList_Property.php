@@ -167,6 +167,26 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
 
     }
 
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 35,
+                              'name'       => 'imagelist',
+                              'label'      => 'Image List',
+                              'format'     => '35',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
 }
 
 ?>

@@ -65,6 +65,27 @@ class Dynamic_Hidden_Property extends Dynamic_Property
 
     }
 
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 18,
+                              'name'       => 'hidden',
+                              'label'      => 'Hidden',
+                              'format'     => '18',
+                              'validation' => '',
+							'source'     => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

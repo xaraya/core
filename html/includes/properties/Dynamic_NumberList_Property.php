@@ -97,6 +97,29 @@ class Dynamic_NumberList_Property extends Dynamic_Select_Property
     // default showInput() from Dynamic_Select_Property
 
     // default showOutput() from Dynamic_Select_Property
+
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 16,
+                              'name'       => 'integerlist',
+                              'label'      => 'Number List',
+                              'format'     => '16',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

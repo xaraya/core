@@ -160,6 +160,27 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
 
     }
 
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         =>45,
+                              'name'       => 'grouplist',
+                              'label'      => 'Group List',
+                              'format'     => '45',
+                              'validation' => '',
+							'source'     => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
 }
 
 ?>

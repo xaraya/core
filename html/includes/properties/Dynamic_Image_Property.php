@@ -110,6 +110,26 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
 
     }
 
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$baseInfo = array(
+                              'id'         => 12,
+                              'name'       => 'image',
+                              'label'      => 'Image',
+                              'format'     => '12',
+                              'validation' => '',
+							'source'     => '',
+							'dependancies' => '',
+							// ...
+						   );
+		return $baseInfo;
+	 }
 }
 
 ?>
