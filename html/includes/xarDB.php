@@ -178,10 +178,13 @@ function xarDBGetSystemTablePrefix()
  *
  * @access public
  * @return string
+ * @todo change it back to return site table prefix
+ *       when we decide how to store site information
  */
 function xarDBGetSiteTablePrefix()
 {
-    return $GLOBALS['xarDB_systemArgs']['siteTablePrefix'];
+    //return $GLOBALS['xarDB_systemArgs']['siteTablePrefix'];
+    return xarDBGetSystemTablePrefix();
 }
 
 /**

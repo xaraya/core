@@ -96,7 +96,7 @@ define('_XAR_ID_UNREGISTERED', '2');
  * @access public
  * @param whatToLoad integer What optional systems to load.
  * @return bool true
- * @todo <johnny> remove LC_TIME code if we don't need it anymore
+ * @todo <johnny> fix up sitetable prefix when we have a place to store it
  */
 function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 {
@@ -127,13 +127,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     //xarCoreActivateDebugger(XARDBG_EXCEPTIONS /*| XARDBG_SQL*/);
     xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT);
     //xarCoreActivateDebugger(0);
-
-    //Johnny: POSSIBLY LEGACY????? i guess we'll test it now
-    // Hack for some weird PHP systems that should have the
-    // LC_* constants defined, but don't
-    /*if (!defined('LC_TIME')) {
-        define('LC_TIME', 'LC_TIME');
-    }*/
 
     // Basic systems alway loaded
     // {ML_dont_parse 'includes/xarLog.php'}
@@ -188,7 +181,10 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                             'databaseType' => xarCore_getSystemVar('DB.Type'),
                             'databaseName' => xarCore_getSystemVar('DB.Name'),
                             'systemTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'),
-                            'siteTablePrefix' => xarCore_getSiteVar('DB.TablePrefix'));
+                            // uncomment this and remove the next line when we can store
+                            // site vars that are pre DB
+                            //'siteTablePrefix' => xarCore_getSiteVar('DB.TablePrefix'));
+                            'siteTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'));
         // Connect to database
         xarDB_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_ADODB;
