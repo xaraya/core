@@ -196,12 +196,13 @@ function xarBlock_renderGroup($groupName)
             }
             $output .= $blockoutput;
 
-// don't throw back exception for broken blocks
-//        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            $output .= xarExceptionRender('template');
-            // We handled the exception(s) so we can clear it
-            xarExceptionFree();
+            // don't throw back exception for broken blocks
+            //if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
+            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+                $output .= xarExceptionRender('template');
+                // We handled the exception(s) so we can clear it
+                xarExceptionFree();
+            }
         }
 
         $result->MoveNext();
