@@ -119,10 +119,9 @@ function base_menublock_display($blockinfo)
         $contentlines = explode("LINESPLIT", $vars['content']);
         foreach ($contentlines as $contentline) {
             //list($url, $title, $comment, $child) = explode('|', $contentline);
-            // FIXME: make sure we don't generate content lines with missing pieces elsewhere
+        // FIXME: make sure we don't generate content lines with missing pieces elsewhere
             $parts = explode('|', $contentline);
             $url = $parts[0];
-            // FIXME: this causes bug 3326 probably ( base url can be specified as index.php and / )  
             $here = (substr($truecurrenturl, -strlen($url)) == $url) ? 'true' : '';
             if (!empty($url)){
                 switch ($url[0])
@@ -146,7 +145,6 @@ function base_menublock_display($blockinfo)
                     {
                         $url = explode(':', substr($url, 1,  - 1));
                         // Get current pubtype type (if any)
-                        
                         if (xarVarIsCached('Blocks.articles', 'ptid')) {
                             $ptid = xarVarGetCached('Blocks.articles', 'ptid');
                         }
