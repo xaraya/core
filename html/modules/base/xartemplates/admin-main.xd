@@ -1,15 +1,15 @@
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
-            <pnt:mlstring>Base Xaraya Administration</pnt:mlstring>            
+            <xar:mlstring>Base Xaraya Administration</xar:mlstring>            
         </th>
     </tr>
     <tr align="center">
         <td align="center">
-            <a href="&pnt-modurl-base-admin-modifyconfig;"><pnt:mlstring>Modify Xaraya Site Configuration</pnt:mlstring></a>
+            <a href="&xar-modurl-base-admin-modifyconfig;"><xar:mlstring>Modify Xaraya Site Configuration</xar:mlstring></a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-base-admin-sysinfo;"><pnt:mlstring>View System Information</pnt:mlstring></a>
+            <a href="&xar-modurl-base-admin-sysinfo;"><xar:mlstring>View System Information</xar:mlstring></a>
         </td>
     </tr>
 </table>
@@ -20,6 +20,6 @@
 
 <center>
 
-<b><pnt:var scope="session" name="base_statusmsg" /></b>
+<b><xar:var scope="session" name="base_statusmsg" /></b>
 
 </center>

@@ -14,7 +14,7 @@
 function base_textblock_init()
 {
     // Security
-    pnSecAddSchema('base:Textblock', 'Block title::');
+    xarSecAddSchema('base:Textblock', 'Block title::');
 }
 /**
  * Block info array
@@ -34,7 +34,7 @@ function base_textblock_info()
  */
 function base_textblock_display($blockinfo)
 {
-    if (!pnSecAuthAction(0,'base:Textblock', "$blockinfo[title]::", ACCESS_OVERVIEW)){
+    if (!xarSecAuthAction(0,'base:Textblock', "$blockinfo[title]::", ACCESS_OVERVIEW)){
         return;
     }
     return $blockinfo;

@@ -14,7 +14,7 @@
  */
 function base_menublock_init()
 {
-    pnSecAddSchema('base:Menublock', 'Block title:Link name:');
+    xarSecAddSchema('base:Menublock', 'Block title:Link name:');
 }
 /**
  * Block info array
@@ -35,11 +35,11 @@ function base_menublock_info()
  */
 function base_menublock_display($blockinfo)
 {
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
     // Generic check
-    if (!pnSecAuthAction(0, 'base:Menublock', '::', ACCESS_READ)) {
+    if (!xarSecAuthAction(0, 'base:Menublock', '::', ACCESS_READ)) {
         return;
     }
 
@@ -73,8 +73,8 @@ function base_menublock_display($blockinfo)
         $contentlines = explode("LINESPLIT", $vars['content']);
         foreach ($contentlines as $contentline) {
             list($url, $title, $comment) = explode('|', $contentline);
-            if (pnSecAuthAction(0, 'base:Menublock', "$blockinfo[title]:$title:", ACCESS_READ)) {
-                $block['content'] .= addMenuStyledUrl($vars['style'], pnVarPrepForDisplay($title), $url, pnVarPrepForDisplay($comment));
+            if (xarSecAuthAction(0, 'base:Menublock', "$blockinfo[title]:$title:", ACCESS_READ)) {
+                $block['content'] .= addMenuStyledUrl($vars['style'], xarVarPrepForDisplay($title), $url, xarVarPrepForDisplay($comment));
                 $content = 1;
             }
         }
@@ -82,7 +82,7 @@ function base_menublock_display($blockinfo)
 
     // Modules
     if (!empty($vars['displaymodules'])) {
-        $mods = pnModGetList(array('UserCapable' => 1));
+        $mods = xarModGetList(array('UserCapable' => 1));
 
         // Separate from current content, if any
         if ($content == 1) {
@@ -95,18 +95,18 @@ function base_menublock_display($blockinfo)
 //                include "modules/$mod/modname.php";
 //            } else {
 
-            if (pnSecAuthAction(0, "$mod[name]::", "::", ACCESS_OVERVIEW)) {
+            if (xarSecAuthAction(0, "$mod[name]::", "::", ACCESS_OVERVIEW)) {
 
 /*                        $block['content'] .= addMenuStyledUrl($vars['style'],
-                                                              pnVarPrepForDisplay($mod['displayname']),
-                                                              pnModURL($mod['name'],
+                                                              xarVarPrepForDisplay($mod['displayname']),
+                                                              xarModURL($mod['name'],
                                                                        'user',
                                                                        'main'),
-                                                              pnVarPrepForDisplay($mod['description']));
+                                                              xarVarPrepForDisplay($mod['description']));
 */
                         $block['content'] .= addMenuStyledUrl($vars['style'],
-                                                              pnVarPrepForDisplay($mod['displayname']),
-                                                              pnModURL($mod['name'],
+                                                              xarVarPrepForDisplay($mod['displayname']),
+                                                              xarModURL($mod['name'],
                                                                        'user',
                                                                        'main'),
                                                                        '');
@@ -129,10 +129,10 @@ function base_menublock_display($blockinfo)
 
 function base_menublock_modify($blockinfo)
 {
-    global $pntheme;
+    global $xartheme;
 
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
     // Break out options from our content field
     $vars = unserialize($blockinfo['content']);
@@ -144,27 +144,27 @@ function base_menublock_modify($blockinfo)
     }
 
     // What style of menu
-    $output = '<tr><td class="pn-title">'._MENU_FORMAT.'</td><td></td></tr>';
+    $output = '<tr><td class="xar-title">'._MENU_FORMAT.'</td><td></td></tr>';
 
-    $output .= '<tr><td class="pn-normal">'._MENU_AS_LIST.':</td><td><input type="radio" name="style" value="1"';
+    $output .= '<tr><td class="xar-normal">'._MENU_AS_LIST.':</td><td><input type="radio" name="style" value="1"';
     if ($vars['style'] == 1) {
         $output .= ' checked';
     }
-    $output .= '></td></tr><tr><td class="pn-normal">'._MENU_AS_DROPDOWN.':</td><td><input type="radio" name="style" value="2"';
+    $output .= '></td></tr><tr><td class="xar-normal">'._MENU_AS_DROPDOWN.':</td><td><input type="radio" name="style" value="2"';
     if ($vars['style'] == 2) {
         $output .= ' checked';
     }
     $output .= ' /></td></tr>';
 
     // What to display
-    $output .= '<tr><td class="pn-title">'._DISPLAY.'</td><td></td></tr>';
+    $output .= '<tr><td class="xar-title">'._DISPLAY.'</td><td></td></tr>';
 
-    $output .= '<tr><td class="pn-normal">'._MENU_MODULES.':</td><td><input type="checkbox" value="1" name="displaymodules"';
+    $output .= '<tr><td class="xar-normal">'._MENU_MODULES.':</td><td><input type="checkbox" value="1" name="displaymodules"';
     if (!empty($vars['displaymodules'])) {
         $output .= ' checked';
     }
 
-    $output .= ' /></td></tr><tr><td class="pn-normal">'._WAITINGCONT.':</td><td><input type="checkbox" value="1" name="displaywaiting"';
+    $output .= ' /></td></tr><tr><td class="xar-normal">'._WAITINGCONT.':</td><td><input type="checkbox" value="1" name="displaywaiting"';
     if (!empty($vars['displaywaiting'])) {
         $output .= ' checked';
     }
@@ -173,22 +173,22 @@ function base_menublock_modify($blockinfo)
     // Content
     $c=1;
     $output .= "</table><table>";
-    $output .= "<tr><td valign=\"top\" class=\"pn-title\">"._MENU_CONTENT
-    .":</td><td><table border=\"1\"><tr><td align=\"center\" class=\"pn-normal\" style=\"color:$pntheme[table_header_text]; background-color:$pntheme[table_header]; text-align:center\"><b>"
-    ._TITLE."</b></td><td align=\"center\" class=\"pn-normal\" style=\"color:$pntheme[table_header_text]; background-color:$pntheme[table_header]; text-align:center\"><b>"
-    ._URL."</b></td><td align=\"center\" class=\"pn-normal\" style=\"color:$pntheme[table_header_text]; background-color:$pntheme[table_header]; text-align:center\"><b>"
-    ._MENU_DESCRIPTION."&nbsp;</b><span class=\"pn-sub\"><b>("._OPTIONAL.")</b></span></td><td align=\"center\" class=\"pn-normal\" style=\"color:$pntheme[table_header_text]; background-color:$pntheme[table_header]; text-align:center\"><b>"
-    ._DELETE."</b></td><td align=\"center\" class=\"pn-normal\" style=\"color:$pntheme[table_header_text]; background-color:$pntheme[table_header]; text-align:center\"><b>"._INSERT_BLANK_AFTER."</b></td></tr>";
+    $output .= "<tr><td valign=\"top\" class=\"xar-title\">"._MENU_CONTENT
+    .":</td><td><table border=\"1\"><tr><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
+    ._TITLE."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
+    ._URL."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
+    ._MENU_DESCRIPTION."&nbsp;</b><span class=\"xar-sub\"><b>("._OPTIONAL.")</b></span></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
+    ._DELETE."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"._INSERT_BLANK_AFTER."</b></td></tr>";
     if (!empty($vars['content'])) {
         $contentlines = explode("LINESPLIT", $vars['content']);
         foreach ($contentlines as $contentline) {
             $link = explode('|', $contentline);
-            $output .= "<tr><td valign=\"top\"><input type=\"text\" name=\"linkname[$c]\" size=\"30\" maxlength=\"255\" value=\"" . pnVarPrepForDisplay($link[1]) . "\" class=\"pn-normal\"></td><td valign=\"top\"><input type=\"text\" name=\"linkurl[$c]\" size=\"30\" maxlength=\"255\" value=\"" . pnVarPrepForDisplay($link[0]) . "\" class=\"pn-normal\"></td><td valign=\"top\"><input type=\"text\" name=\"linkdesc[$c]\" size=\"30\" maxlength=\"255\" value=\"" . pnVarPrepForDisplay($link[2]) . "\" class=\"pn-normal\" /></td><td valign=\"top\"><input type=\"checkbox\" name=\"linkdelete[$c]\" value=\"1\" class=\"pn-normal\"></td><td valign=\"top\"><input type=\"checkbox\" name=\"linkinsert[$c]\" value=\"1\" class=\"pn-normal\" /></td></tr>\n";
+            $output .= "<tr><td valign=\"top\"><input type=\"text\" name=\"linkname[$c]\" size=\"30\" maxlength=\"255\" value=\"" . xarVarPrepForDisplay($link[1]) . "\" class=\"xar-normal\"></td><td valign=\"top\"><input type=\"text\" name=\"linkurl[$c]\" size=\"30\" maxlength=\"255\" value=\"" . xarVarPrepForDisplay($link[0]) . "\" class=\"xar-normal\"></td><td valign=\"top\"><input type=\"text\" name=\"linkdesc[$c]\" size=\"30\" maxlength=\"255\" value=\"" . xarVarPrepForDisplay($link[2]) . "\" class=\"xar-normal\" /></td><td valign=\"top\"><input type=\"checkbox\" name=\"linkdelete[$c]\" value=\"1\" class=\"xar-normal\"></td><td valign=\"top\"><input type=\"checkbox\" name=\"linkinsert[$c]\" value=\"1\" class=\"xar-normal\" /></td></tr>\n";
             $c++;
         }
     }
 
-    $output .= "<tr><td><input type=\"text\" name=\"new_linkname\" size=\"30\" maxlength=\"255\" class=\"pn-normal\" /></td><td><input type=\"text\" name=\"new_linkurl\" size=\"30\" maxlength=\"255\" class=\"pn-normal\" /></td><td class=\"pn-normal\"><input type=\"text\" name=\"new_linkdesc\" size=\"30\" maxlength=\"255\" class=\"pn-normal\" /></td><td class=\"pn-normal\">"._NEWONE."</td><td class=\"pn-normal\"><input type=\"checkbox\" name=\"new_linkinsert\" value=\"1\" class=\"pn-normal\" /></td></tr>\n";
+    $output .= "<tr><td><input type=\"text\" name=\"new_linkname\" size=\"30\" maxlength=\"255\" class=\"xar-normal\" /></td><td><input type=\"text\" name=\"new_linkurl\" size=\"30\" maxlength=\"255\" class=\"xar-normal\" /></td><td class=\"xar-normal\"><input type=\"text\" name=\"new_linkdesc\" size=\"30\" maxlength=\"255\" class=\"xar-normal\" /></td><td class=\"xar-normal\">"._NEWONE."</td><td class=\"xar-normal\"><input type=\"checkbox\" name=\"new_linkinsert\" value=\"1\" class=\"xar-normal\" /></td></tr>\n";
     $output .= '</table></td></tr>';
 
     return $output;
@@ -199,7 +199,7 @@ function base_menublock_insert($blockinfo)
 {
     list($vars['displaymodules'],
          $vars['displaywaiting'],
-         $vars['style']) = pnVarCleanFromInput('displaymodules',
+         $vars['style']) = xarVarCleanFromInput('displaymodules',
 					       'displaywaiting',
 					       'style');
 
@@ -218,7 +218,7 @@ function base_menublock_insert($blockinfo)
     $content = array();
     $c = 1;
     if (isset($blockinfo['linkname'])) {
-        list($linkurl, $linkname, $linkdesc) = pnVarCleanFromInput('linkurl', 'linkname', 'linkdesc');
+        list($linkurl, $linkname, $linkdesc) = xarVarCleanFromInput('linkurl', 'linkname', 'linkdesc');
         foreach ($blockinfo['linkname'] as $v) {
             if (!isset($blockinfo['linkdelete'][$c])) {
                 $content[] = "$linkurl[$c]|$linkname[$c]|$linkdesc[$c]";
@@ -230,7 +230,7 @@ function base_menublock_insert($blockinfo)
         }
     }
     if ($blockinfo['new_linkname']) {
-       $content[] = pnVarCleanFromInput('new_linkurl').'|'.pnVarCleanFromInput('new_linkname').'|'.pnVarCleanFromInput('new_linkdesc');
+       $content[] = xarVarCleanFromInput('new_linkurl').'|'.xarVarCleanFromInput('new_linkname').'|'.xarVarCleanFromInput('new_linkdesc');
     }
     $vars['content'] = implode("LINESPLIT", $content);
 
@@ -244,7 +244,7 @@ function startMenuStyle($style)
     // Nothing to do for style == 1 (bullet list)
     $content = "";
     if ($style == 2) {
-        $content = "<br><center><form method=\"post\" action=\"index.php\"><select class=\"pn-text\" name=\"newlanguage\" onChange=\"top.location.href=this.options[this.selectedIndex].value\">";
+        $content = "<br><center><form method=\"post\" action=\"index.php\"><select class=\"xar-text\" name=\"newlanguage\" onChange=\"top.location.href=this.options[this.selectedIndex].value\">";
     }
 
     return $content;
@@ -274,7 +274,7 @@ function addMenuStyledUrl($style, $name, $url, $comment)
             }
         } else {
 	    // End Bracket Linking
-            $content = "<strong><big>&middot;</big></strong>&nbsp;<a class=\"pn-normal\" href=\"$url\" title=\"$comment\">$name</a><br />";
+            $content = "<strong><big>&middot;</big></strong>&nbsp;<a class=\"xar-normal\" href=\"$url\" title=\"$comment\">$name</a><br />";
         }
     } else if ($style == 2) {
         // Drop-down lilst

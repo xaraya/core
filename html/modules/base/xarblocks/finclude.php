@@ -11,7 +11,7 @@
 
 function base_fincludeblock_init()
 {
-    pnSecAddSchema('base:Includeblock', 'Block title::');
+    xarSecAddSchema('base:Includeblock', 'Block title::');
 
 }
 /**
@@ -43,6 +43,6 @@ function base_fincludeblock_display($blockinfo)
  */
 function base_fincludeblock_modify($blockinfo)
 {
-    return '<tr><td class="pn-normal">File:</td><td><input type="text" name="url" size="30" maxlength="255" value="'.$blockinfo['url'].'" /></td></tr>';
+    return '<tr><td class="xar-normal">File:</td><td><input type="text" name="url" size="30" maxlength="255" value="'.$blockinfo['url'].'" /></td></tr>';
 }
 ?>
