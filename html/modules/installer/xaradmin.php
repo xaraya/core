@@ -197,8 +197,9 @@ function installer_admin_phase5()
     if (!xarVarFetch('install_database_password','pre:trim:passthru:str',$dbPass,'',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_prefix','pre:trim:passthru:str',$dbPrefix,'xar',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_type','str:1:',$dbType)) return;
-    if (!xarVarFetch('install_create_database','checkbox',$createDb,false,XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('install_create_database','checkbox',$createDB,false,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('confirmDB','bool',$confirmDB,false,XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('newDB', 'int',$newDB, 0,XARVAR_NOT_REQUIRED)) return;
 
     if ($dbName == '') {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
@@ -217,8 +218,42 @@ function installer_admin_phase5()
         return;
     }
 
+    //Do we already have a db?
+    //TODO: rearrange the loading sequence so that I can use xar functions
+    //rather than going directly to adodb
+    // Load in ADODB
+    // FIXME: This is also in xarDB init, does it need to be here?
+    if (!defined('ADODB_DIR')) {
+        define('ADODB_DIR','xaradodb');
+    }
+    include_once ADODB_DIR . '/adodb.inc.php';
+    $ADODB_CACHE_DIR = xarCoreGetVarDirPath() . "/cache/adodb";
+    $dbconn = ADONewConnection($dbType);
+    $dbExists = $dbconn->Connect($dbHost, $dbUname, $dbPass, $dbName);
+        if (!$createDB && !$dbExists) {
+            $msg = xarML('Database connection to database #(1) failed. Either the infomration supplied was erroneous, such as a bad or missing password, or there is no database available. If you cannot create a database notify your system administrator.', $dbName);
+            xarCore_die($msg);
+            return;
+        }
+
+    $data['confirmDB']  = $confirmDB;
+    if ($dbExists && !$confirmDB) {
+        $data['dbHost']     = $dbHost;
+        $data['dbName']     = $dbName;
+        $data['dbUname']    = $dbUname;
+        $data['dbPass']     = $dbPass;
+        $data['dbPrefix']   = $dbPrefix;
+        $data['dbType']     = $dbType;
+        $data['newDB']      = $createDB;
+        return $data;
+    }
+    else {
+        $newDB = $createDB;
+    }
+//    echo $dbType;exit;
+
     // Create the database if necessary
-    if ($createDb) {
+    if ($newDB) {
         $data['confirmDB']  = true;
         //Let's pass all input variables thru the function argument or none, as all are stored in the system.config.php
         //Now we are passing all, let's see if we gain consistency by loading config.php already in this phase?
@@ -232,17 +267,7 @@ function installer_admin_phase5()
         }
     }
     else {
-        $data['confirmDB']  = $confirmDB;
-        if(!$confirmDB) {
-            $data['dbHost']     = $dbHost;
-            $data['dbName']     = $dbName;
-            $data['dbUname']    = $dbUname;
-            $data['dbPass']     = $dbPass;
-            $data['dbPrefix']   = $dbPrefix;
-            $data['dbType']     = $dbType;
-            $data['createDb']   = $createDb;
-            return $data;
-        }
+        $removetables = true;
     }
 
     // Start the database
@@ -262,6 +287,25 @@ function installer_admin_phase5()
     // Connect to database
     $whatToLoad = XARCORE_SYSTEM_NONE;
     xarDB_init($systemArgs, $whatToLoad);
+
+    // drop all the tables that have this prefix
+    //TODO: in the future need to replace this with a check further down the road
+    // for which modules are already installed
+    if (isset($removetables) && $removetables) {
+        $dbconn =& xarDBGetConn();
+        $result = $dbconn->Execute($dbconn->metaTablesSQL);
+        if(!$result) return;
+        $tables = array();
+        while(!$result->EOF) {
+            list($table) = $result->fields;
+            $parts = explode('_',$table);
+            if ($parts[0] == $dbPrefix) $tables[] = $table;
+            $result->MoveNext();
+        }
+        foreach ($tables as $table) {
+            if (!$dbconn->Execute('DROP TABLE ' . $table)) return;
+        }
+    }
 
     // install the security stuff here, but disable the registerMask and
     // and xarSecurityCheck functions until we've finished the installation process
@@ -462,12 +506,24 @@ function installer_admin_create_administrator()
     if (xarVarIsCached('Mod.BaseInfos', 'blocks')) xarVarDelCached('Mod.BaseInfos', 'blocks');
 
     // Create default block groups/instances
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'left')))                                    return;
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'right',     'template' => 'right')))        return;
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'header',    'template' => 'header')))       return;
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'admin')))                                   return;
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'center',    'template' => 'center')))       return;
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'topnav',    'template' => 'topnav')))       return;
+    if (!xarModAPIFunc('blocks', 'user', 'groupgetinfo', array('name'  => 'left'))) {
+        if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'left')))                                    return;
+    }
+    if (!xarModAPIFunc('blocks', 'user', 'groupgetinfo', array('name'  => 'right'))) {
+        if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'right',     'template' => 'right')))        return;
+    }
+    if (!xarModAPIFunc('blocks', 'user', 'groupgetinfo', array('name'  => 'header'))) {
+        if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'header',    'template' => 'header')))       return;
+    }
+    if (!xarModAPIFunc('blocks', 'user', 'groupgetinfo', array('name'  => 'admin'))) {
+        if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'admin')))                                   return;
+    }
+    if (!xarModAPIFunc('blocks', 'user', 'groupgetinfo', array('name'  => 'center'))) {
+        if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'center',    'template' => 'center')))       return;
+    }
+    if (!xarModAPIFunc('blocks', 'user', 'groupgetinfo', array('name'  => 'topnav'))) {
+        if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'topnav',    'template' => 'topnav')))       return;
+    }
 
     // Load up database
     $dbconn =& xarDBGetConn();
@@ -502,15 +558,17 @@ function installer_admin_create_administrator()
 
     $adminBlockTypeId = $adminBlockType['tid'];
 
-    if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
-                       array('title'    => 'Admin',
-                             'name'     => 'adminpanel',
-                             'type'     => $adminBlockTypeId,
-                             'groups'   => array(array('gid'      => $leftBlockGroup,
-                                                       'template' => '')),
-                             'template' => '',
-                             'state'    =>  2))) {
-        return;
+    if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'adminpanel'))) {
+        if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
+                           array('title'    => 'Admin',
+                                 'name'     => 'adminpanel',
+                                 'type'     => $adminBlockTypeId,
+                                 'groups'   => array(array('gid'      => $leftBlockGroup,
+                                                           'template' => '')),
+                                 'template' => '',
+                                 'state'    =>  2))) {
+            return;
+        }
     }
 
     $now = time();
@@ -529,18 +587,19 @@ function installer_admin_create_administrator()
 
     $htmlBlockTypeId = $htmlBlockType['tid'];
 
-    if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
-                       array('title'    => 'Reminder',
-                             'name'     => 'reminder',
-                             'content'  => $msg,
-                             'type'     => $htmlBlockTypeId,
-                             'groups'   => array(array('gid'      => $leftBlockGroup,
-                                                       'template' => '')),
-                             'template' => '',
-                             'state'    => 2))) {
-        return;
+    if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'reminder'))) {
+        if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
+                           array('title'    => 'Reminder',
+                                 'name'     => 'reminder',
+                                 'content'  => $msg,
+                                 'type'     => $htmlBlockTypeId,
+                                 'groups'   => array(array('gid'      => $leftBlockGroup,
+                                                           'template' => '')),
+                                 'template' => '',
+                                 'state'    => 2))) {
+            return;
+        }
     }
-
     xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration', array('theme' => 'installer')));
 }
 
@@ -654,11 +713,17 @@ function installer_admin_confirm_configuration()
     $fileModules = unserialize(xarModGetVar('installer','modulelist'));
     $func = "installer_" . basename(strval($configuration),'.conf.php') . "_moduleoptions";
     $modules = $func();
-    $availablemodules = $awolmodules = array();
+    $availablemodules = $awolmodules = $installedmodules = array();
     foreach ($modules as $module) {
         if (in_array($module['name'],array_keys($fileModules))) {
             if ($module['regid'] == $fileModules[$module['name']]['regid']) {
-                $availablemodules[] = $module;
+                if (xarMod_getState($module['regid']) == XARMOD_STATE_ACTIVE ||
+                xarMod_getState($module['regid']) == XARMOD_STATE_INACTIVE) {
+                    $installedmodules[] = ucfirst($module['name']);
+                }
+                else {
+                    $availablemodules[] = $module;
+                }
                 unset($fileModules[$module['name']]);
             }
         }
@@ -692,6 +757,7 @@ function installer_admin_confirm_configuration()
         $data['options1'] = $func();
         $data['options2'] = $options2;
         $data['options3'] = $options3;
+        $data['installed'] = implode(', ',$installedmodules);
         $data['missing'] = implode(', ',$awolmodules);
         $data['configuration'] = $configuration;
         return $data;
@@ -822,16 +888,18 @@ function installer_admin_confirm_configuration()
 
         $menuBlockTypeId = $menuBlockType['tid'];
 
-        if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
-                      array('title' => 'Main Menu',
-                            'name'  => 'mainmenu',
-                            'type'  => $menuBlockTypeId,
-                            'groups' => array(array('gid' => $leftBlockGroup,
-                                                    'template' => '',)),
-                            'template' => '',
-                            'content' => serialize($content),
-                            'state' => 2))) {
-            return;
+        if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'mainmenu'))) {
+            if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
+                          array('title' => 'Main Menu',
+                                'name'  => 'mainmenu',
+                                'type'  => $menuBlockTypeId,
+                                'groups' => array(array('gid' => $leftBlockGroup,
+                                                        'template' => '',)),
+                                'template' => '',
+                                'content' => serialize($content),
+                                'state' => 2))) {
+                return;
+            }
         }
 
         xarResponseRedirect(xarModURL('installer', 'admin', 'finish', array('theme' => 'installer')));

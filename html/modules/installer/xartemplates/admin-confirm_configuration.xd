@@ -74,6 +74,14 @@
 							</xar:loop>
 						</xar:if>
 					</div>
+					<xar:if condition="$installed ne ''">
+						<p class="xar-normal">
+							<xar:mlstring>
+								The following modules for this configuration are already installed 
+							</xar:mlstring>
+							: #$installed# 
+						</p>
+					</xar:if>
 					<xar:if condition="$missing ne ''">
 						<p class="xar-normal">
 							<xar:mlstring>
