@@ -261,34 +261,49 @@ class Dynamic_Object_Master
     }
 
     /**
-     * Class method to retrieve all object definitions
+     * Class method to retrieve information about all Dynamic Objects
      *
      * @returns array
      * @return array of object definitions
      */
     function &getObjects()
     {
-        // here we can use our own classes to retrieve this :-)
-        $objects = new Dynamic_Object_List(array('objectid' => 1));
-        return $objects->getItems();
-    }
+        list($dbconn) = xarDBGetConn();
+        $xartable = xarDBGetTables();
 
-    /**
-     * Class method to retrieve a particular object definition
-     * (= the same as creating a new Dynamic Object with itemid = null)
-     *
-     * @param $args['objectid'] id of the object you're looking for, or
-     * @param $args['moduleid'] module id of the object to retrieve +
-     * @param $args['itemtype'] item type of the object to retrieve
-     * @returns object
-     * @return the requested object definition
-     */
-    function &getObject($args)
-    {
-        $args['itemid'] = null;
-        // here we can use our own classes to retrieve this
-        $object = new Dynamic_Object($args);
-        return $object;
+        $dynamicobjects = $xartable['dynamic_objects'];
+
+        $query = "SELECT xar_object_id,
+                         xar_object_name,
+                         xar_object_label,
+                         xar_object_moduleid,
+                         xar_object_itemtype,
+                         xar_object_urlparam,
+                         xar_object_maxid,
+                         xar_object_config,
+                         xar_object_isalias
+                  FROM $dynamicobjects ";
+        $result =& $dbconn->Execute($query);
+
+        if (!$result) return;
+
+        $objects = array();
+        while (!$result->EOF) {
+            $info = array();
+            list($info['objectid'],
+                 $info['name'],
+                 $info['label'],
+                 $info['moduleid'],
+                 $info['itemtype'],
+                 $info['urlparam'],
+                 $info['maxid'],
+                 $info['config'],
+                 $info['isalias']) = $result->fields;
+             $objects[$info['objectid']] = $info;
+             $result->MoveNext();
+        }
+        $result->Close();
+        return $objects;
     }
 
     /**
@@ -349,6 +364,24 @@ class Dynamic_Object_Master
 
         $result->Close();
         return $info;
+    }
+
+    /**
+     * Class method to retrieve a particular object definition
+     * (= the same as creating a new Dynamic Object with itemid = null)
+     *
+     * @param $args['objectid'] id of the object you're looking for, or
+     * @param $args['moduleid'] module id of the object to retrieve +
+     * @param $args['itemtype'] item type of the object to retrieve
+     * @returns object
+     * @return the requested object definition
+     */
+    function &getObject($args)
+    {
+        $args['itemid'] = null;
+        // here we can use our own classes to retrieve this
+        $object = new Dynamic_Object($args);
+        return $object;
     }
 
     /**
