@@ -779,7 +779,7 @@ Password : %%password%%
             if (isset($currentvar)){
                 if (isset($var['override'])) {
                     xarModSetVar($var['module'], $var['name'], $var['set']);
-                    echo "$var[module] -> $var[name] has been overriden, proceeding to next check<br />";
+                    echo "$var[module] -> $var[name] has been overridden, proceeding to next check<br />";
                 }
                 else echo "$var[module] -> $var[name] is set, proceeding to next check<br />";
             } else {
