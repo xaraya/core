@@ -120,6 +120,9 @@ function roles_user_login()
                         $state = $rolestate;
                     }
                 }
+                // reinserting this for the moment until we can fix this ldap issue
+                $rolestate = $user['state'];
+                $state = $rolestate;
 
                 break;
             default:
