@@ -65,7 +65,7 @@ class xarCharset
             $binBuf = '';
             for ($b=0;$b<8;$b++) { // for each byte in MB string...
                 $ord = $ord << 1;  // Shift it left
-                if ($ord & 128)	{  // if 8th bit is set, there are still bytes in sequence.
+                if ($ord & 128) {  // if 8th bit is set, there are still bytes in sequence.
                     $binBuf .= substr('00000000'.decbin(ord(substr($utf8char,$b+1,1))),-6);
                 } else break;
             }
