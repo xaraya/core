@@ -16,9 +16,9 @@
  * Note : this file is part of import_phpbb.php and cannot be run separately
  */
 
-    echo "<strong>$step. Cleaning up</strong><br>\n";
+    echo "<strong>$step. Cleaning up</strong><br/>\n";
 
-    echo "<strong>TODO : import the rest (private messages, groups, ranks, ...)</strong><br><br>\n";
+    echo "<strong>TODO : import the rest (private messages, groups, ranks, ...)</strong><br/><br/>\n";
     //xarModDelVar('installer','userobjectid');
     xarModDelVar('installer','oldprefix');
     xarModDelVar('installer','userid');
@@ -37,6 +37,6 @@
     }
     xarModDelVar('installer','ptid');
     echo '<a href="import_phpbb.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="'.$url.'">Go to your imported forums</a><br>';
+          <a href="'.$url.'">Go to your imported forums</a><br/>';
 
 ?>

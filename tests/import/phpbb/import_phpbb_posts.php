@@ -16,7 +16,7 @@
  * Note : this file is part of import_phpbb.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing posts</strong><br>\n";
+    echo "<strong>$step. Importing posts</strong><br/>\n";
 
     $users = xarModGetVar('installer','userid');
     if (!isset($users)) {
@@ -87,7 +87,7 @@
             $result->MoveNext();
             continue;
         } elseif (!isset($topicid[$sid])) {
-            echo "Unknown topic id $sid for post ($tid) $subject<br>\n";
+            echo "Unknown topic id $sid for post ($tid) $subject<br/>\n";
             $num++;
             $result->MoveNext();
             continue;
@@ -124,11 +124,11 @@
 
         $cid = xarModAPIFunc('comments','user','add',$data);
         if (empty($cid)) {
-            echo "Failed inserting post ($sid $pid) $uname - $subject : ".$dbconn->ErrorMsg()."<br>\n";
+            echo "Failed inserting post ($sid $pid) $uname - $subject : ".$dbconn->ErrorMsg()."<br/>\n";
         } elseif ($count < 200) {
-            echo "Inserted post ($sid $pid) $uname - $subject<br>\n";
+            echo "Inserted post ($sid $pid) $uname - $subject<br/>\n";
         } elseif ($num % 100 == 0) {
-            echo "Inserted post " . ($num + $startnum) . "<br>\n";
+            echo "Inserted post " . ($num + $startnum) . "<br/>\n";
             flush();
         }
 // no threading in phpBB !?
@@ -142,10 +142,10 @@
     if ($count > $numitems && $startnum + $numitems < $count) {
         xarModSetVar('installer','commentid',serialize($pid2cid));
         $startnum += $numitems;
-        echo '<a href="import_phpbb.php?step=' . $step . '&module=articles&startnum=' . $startnum . '">Go to step ' . $step . ' - comments ' . $startnum . '+ of ' . $count . '</a><br>';
+        echo '<a href="import_phpbb.php?step=' . $step . '&module=articles&startnum=' . $startnum . '">Go to step ' . $step . ' - comments ' . $startnum . '+ of ' . $count . '</a><br/>';
     } else {
         xarModDelVar('installer','commentid');
-        echo '<a href="import_phpbb.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+        echo '<a href="import_phpbb.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br/>';
     }
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['comments']);
 

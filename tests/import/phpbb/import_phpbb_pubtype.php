@@ -16,7 +16,7 @@
  * Note : this file is part of import_phpbb.php and cannot be run separately
  */
 
-    echo "<strong>$step. Creating publication type for phpBB forums in articles</strong><br>\n";
+    echo "<strong>$step. Creating publication type for phpBB forums in articles</strong><br/>\n";
 
     $pubtypes = xarModAPIFunc('articles','user','getpubtypes');
     $ptid = '';
@@ -80,7 +80,7 @@
                               )
                              );
         if (empty($ptid)) {
-            echo "Creating publication type 'forums' failed : " . xarExceptionRender('text') . "<br>\n";
+            echo "Creating publication type 'forums' failed : " . xarExceptionRender('text') . "<br/>\n";
         } else {
             $settings = array (
                          'itemsperpage' => '40',

@@ -16,10 +16,10 @@
  * Note : this file is part of import_phpbb.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing vote descriptions</strong><br>\n";
+    echo "<strong>$step. Importing vote descriptions</strong><br/>\n";
 
     if (!xarModIsAvailable('polls')) {
-        echo "The polls module is not activated in Xaraya<br>\n";
+        echo "The polls module is not activated in Xaraya<br/>\n";
         return;
     }
 
@@ -74,11 +74,11 @@
                                       'itemid' => $topicid[$tid],
                                       'votes' => $votes));
         if (empty($newpid)) {
-            echo "Insert vote ($pid) $title failed : " . xarExceptionRender('text') . "<br>\n";
+            echo "Insert vote ($pid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
         } elseif ($count < 200) {
-            echo "Inserted vote ($pid) $title<br>\n";
+            echo "Inserted vote ($pid) $title<br/>\n";
         } elseif ($num % 100 == 0) {
-            echo "Inserted vote $num<br>\n";
+            echo "Inserted vote $num<br/>\n";
             flush();
         }
 

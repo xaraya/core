@@ -16,10 +16,10 @@
  * Note : this file is part of import_phpbb.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing vote results</strong><br>\n";
+    echo "<strong>$step. Importing vote results</strong><br/>\n";
 
     if (!xarModIsAvailable('polls')) {
-        echo "The polls module is not activated in Xaraya<br>\n";
+        echo "The polls module is not activated in Xaraya<br/>\n";
         $step++;
         return;
     }
@@ -57,11 +57,11 @@
                                       'option' => $text,
                                       'votes' => $count));
         if (empty($newvid)) {
-            echo "Insert vote result ($pid $vid) $text failed : " . xarExceptionRender('text') . "<br>\n";
+            echo "Insert vote result ($pid $vid) $text failed : " . xarExceptionRender('text') . "<br/>\n";
         } elseif ($count < 100) {
-            echo "Inserted vote result ($pid $vid) $text<br>\n";
+            echo "Inserted vote result ($pid $vid) $text<br/>\n";
         } elseif ($num % 100 == 0) {
-            echo "Inserted vote result $num<br>\n";
+            echo "Inserted vote result $num<br/>\n";
             flush();
         }
         $num++;
@@ -71,7 +71,7 @@
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['polls']);
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['polls_info']);
     echo '<a href="import_phpbb.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
-    echo '<a href="import_phpbb.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+    echo '<a href="import_phpbb.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br/>';
 
     // Enable polls hooks for 'forums' pubtype of articles
     xarModAPIFunc('modules','admin','enablehooks',

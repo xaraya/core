@@ -16,7 +16,7 @@
  * Note : this file is part of import_phpbb.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing phpBB categories into categories</strong><br>\n";
+    echo "<strong>$step. Importing phpBB categories into categories</strong><br/>\n";
 
     $regid = xarModGetIDFromName('articles');
     $categories = xarModAPIFunc('categories', 'admin', 'create',
@@ -47,7 +47,7 @@
                                     array('name' => $title,
                                           'description' => $title,
                                           'parent_id' => $categories));
-        echo "Creating category ($id) $title<br>\n";
+        echo "Creating category ($id) $title<br/>\n";
         $result->MoveNext();
     }
     $result->Close();

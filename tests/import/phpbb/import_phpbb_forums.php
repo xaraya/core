@@ -16,7 +16,7 @@
  * Note : this file is part of import_phpbb.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing phpBB forums into categories</strong><br>\n";
+    echo "<strong>$step. Importing phpBB forums into categories</strong><br/>\n";
 
     $query = 'SELECT forum_id, cat_id, forum_name, forum_desc, forum_order
               FROM ' . $oldprefix . '_forums
@@ -36,13 +36,13 @@
                               'name' => $name,
                               'description' => $descr,
                               'parent_id' => $catid[$cid]));
-        echo "Creating forum ($fid) $name - $descr<br>\n";
+        echo "Creating forum ($fid) $name - $descr<br/>\n";
         $result->MoveNext();
     }
     $result->Close();
     xarModSetVar('installer','forumid',serialize($forumid));
     echo '<a href="import_phpbb.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import_phpbb.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+          <a href="import_phpbb.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br/>';
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories']);
     if (!empty($docounter)) {
         $dbconn->Execute('OPTIMIZE TABLE ' . $tables['hitcount']);

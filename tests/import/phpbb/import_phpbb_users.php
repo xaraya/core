@@ -16,7 +16,7 @@
  * Note : this file is part of import_phpbb.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing users</strong><br>\n";
+    echo "<strong>$step. Importing users</strong><br/>\n";
 
     $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_users';
     $result =& $dbconn->Execute($query);
@@ -74,7 +74,7 @@
                                      array('uname'  => $userRole,
                                            'type'   => 1));
         if (empty($defaultRole)) {
-            echo "Unable to find default group id : " . xarExceptionRender('text') . "<br>\n";
+            echo "Unable to find default group id : " . xarExceptionRender('text') . "<br/>\n";
             die('Oops');
         }
         $defaultgid = $defaultRole['uid'];
@@ -135,16 +135,16 @@
                                     'create',
                                     $user);
             if (empty($newuid)) {
-                echo "failed<br>\n";
+                echo "failed<br/>\n";
                 flush();
                 continue;
             }
-            echo "succeeded<br>\n";
+            echo "succeeded<br/>\n";
             flush();
         } elseif ($count < 200) {
-            echo "Inserted user ($uid) $name - $uname<br>\n";
+            echo "Inserted user ($uid) $name - $uname<br/>\n";
         } elseif ($num % 100 == 0) {
-            echo "Inserted user " . ($num + $startnum) . "<br>\n";
+            echo "Inserted user " . ($num + $startnum) . "<br/>\n";
             flush();
         }
         $userid[$uid] = $newuid;
@@ -181,7 +181,7 @@
                            'user',
                            'newuser', array('gname' => $usergroup,
                                             'uid'   => $uid))) {
-            echo "Insert user ($uid) $uname in group $usergroup failed : " . xarExceptionRender('text') . "<br>\n";
+            echo "Insert user ($uid) $uname in group $usergroup failed : " . xarExceptionRender('text') . "<br/>\n";
         }
 */
     }
@@ -191,16 +191,16 @@
         xarExceptionHandled();
     }
     xarModSetVar('installer','userid',serialize($userid));
-    echo "<strong>TODO : import groups and ranks</strong><br><br>\n";
+    echo "<strong>TODO : import groups and ranks</strong><br/><br/>\n";
     echo '<a href="import_phpbb.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
         $startnum += $numitems;
-        echo '<a href="import_phpbb.php?module=roles&step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - users ' . $startnum . '+ of ' . $count . '</a><br>';
+        echo '<a href="import_phpbb.php?module=roles&step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - users ' . $startnum . '+ of ' . $count . '</a><br/>';
     } else {
         // Enable dynamicdata hooks for roles
         xarModAPIFunc('modules','admin','enablehooks',
                       array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
-        echo '<a href="import_phpbb.php?module=categories&step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+        echo '<a href="import_phpbb.php?module=categories&step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br/>';
     }
 
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['roles']);

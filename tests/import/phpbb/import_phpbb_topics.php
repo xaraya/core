@@ -16,7 +16,7 @@
  * Note : this file is part of import_phpbb.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing topics</strong><br>\n";
+    echo "<strong>$step. Importing topics</strong><br/>\n";
 
     $users = xarModGetVar('installer','userid');
     if (!isset($users)) {
@@ -112,11 +112,11 @@
                                      )
                                );
         if (!isset($newaid)) {
-            echo "Insert topic ($tid) $title failed : " . xarExceptionRender('text') . "<br>\n";
+            echo "Insert topic ($tid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
         } elseif ($count < 200) {
-            echo "Inserted topic ($tid) $title<br>\n";
+            echo "Inserted topic ($tid) $title<br/>\n";
         } elseif ($num % 100 == 0) {
-            echo "Inserted topic " . ($num + $startnum) . "<br>\n";
+            echo "Inserted topic " . ($num + $startnum) . "<br/>\n";
             flush();
         }
         if (!empty($newaid)) {
@@ -130,13 +130,13 @@
     $result->Close();
     xarModSetVar('installer','topicid',serialize($topicid));
     xarModSetVar('installer','postid',serialize($postid));
-    //echo "<strong>TODO : add comments etc.</strong><br><br>\n";
+    //echo "<strong>TODO : add comments etc.</strong><br/><br/>\n";
     echo '<a href="import_phpbb.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
         $startnum += $numitems;
-        echo '<a href="import_phpbb.php?step=' . $step . '&module=articles&startnum=' . $startnum . '">Go to step ' . $step . ' - articles ' . $startnum . '+ of ' . $count . '</a><br>';
+        echo '<a href="import_phpbb.php?step=' . $step . '&module=articles&startnum=' . $startnum . '">Go to step ' . $step . ' - articles ' . $startnum . '+ of ' . $count . '</a><br/>';
     } else {
-        echo '<a href="import_phpbb.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+        echo '<a href="import_phpbb.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br/>';
     }
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);
