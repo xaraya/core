@@ -57,6 +57,7 @@ function roles_admin_showprivileges()
     // extract the info for display by the template
     $currentprivileges = array();
     foreach ($curprivileges as $priv) {
+        $frozen = !xarSecurityCheck('DeassignPrivilege',0,'Privileges',$priv->getName());
         if ($priv->getModule() == "empty") {
             $currentprivileges[] = array('privid' => $priv->getID(),
                 'name' => $priv->getName(),
@@ -65,9 +66,8 @@ function roles_admin_showprivileges()
                 'component' => "",
                 'instance' => "",
                 'level' => "",
-                'frozen' => "");
+                'frozen' => $frozen);
         } else {
-            $frozen = !xarSecurityCheck('DeassignPrivilege',0,'Privileges',$priv->getName());
             $currentprivileges[] = array('privid' => $priv->getID(),
                 'name' => $priv->getName(),
                 'realm' => $priv->getRealm(),
