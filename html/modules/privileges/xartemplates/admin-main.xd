@@ -10,9 +10,8 @@
             </xar:if>
         </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <xar:mlstring>What is it?</xar:mlstring>
+            <p><xar:mlstring>What is it?</xar:mlstring></p>
         </div>
-        <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
             <p><xar:mlstring>The Privileges module lets you manage <b>access rights</b> on your site.  Privileges give roles access to certain resources of your choosing. They are the basic components of the security system.</xar:mlstring></p>
 			<xar:mlstring>Here are some of the things you can do with privileges</xar:mlstring>:
@@ -24,11 +23,9 @@
 			</ul>
 
 		</div>
-        <br />
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <xar:mlstring>How to use it?</xar:mlstring>
+            <p><xar:mlstring>How to use it?</xar:mlstring></p>
         </div>
-        <br />
          <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
             <p><xar:mlstring>Clicking on the View Privileges link gives you an overview of all the privileges on your system. Compound privileges are collapsed, but you can click on them to open them up and view their components.</xar:mlstring></p>
 			<p><xar:mlstring>When adding or modifying a privilege, you can define it to have its own access rights, or simply to serve as a container for other privileges</xar:mlstring></p>
@@ -37,28 +34,23 @@
                     <li><xar:mlstring><b>NoAccess</b>: a privileges that represents no access to any resources on the site. This privilege is assigned to the role Everybody by the installer.</xar:mlstring></li>
                     <li><xar:mlstring><b>Administration</b>: a privilege that gives a role complete access to all resources on the site. At installation this privilege is assigned to the role Administrators and is inherited by the user Admin.</xar:mlstring></li>
                     <li><xar:mlstring><b>CasualAccess</b>: this is the privilege assigned to unregistered users on the site. It is initially defined to allow viewing access of the front page, as well as access to the login block.</xar:mlstring></li>
-					<xar:mlstring>The preconfigured privileges cannot be changed or removed. You can, however, use them as elements to create compound privileges, or make new privileges of your choosing. There is no limit to the number of privileges you can create or their levels of nesting.</xar:mlstring>
+			<p><xar:mlstring>The preconfigured privileges cannot be changed or removed. You can, however, use them as elements to create compound privileges, or make new privileges of your choosing. There is no limit to the number of privileges you can create or their levels of nesting.</xar:mlstring></p>
                 </ul>
         </div>
-        <br />
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <xar:mlstring>Included Blocks</xar:mlstring>
+            <p><xar:mlstring>Included Blocks</xar:mlstring></p>
         </div>
-        <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-			<xar:mlstring>There are no included blocks</xar:mlstring>
+            <p><xar:mlstring>There are no included blocks</xar:mlstring></p>
         </div>
-        <br />
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <xar:mlstring>Included Hooks</xar:mlstring>
+            <p><xar:mlstring>Included Hooks</xar:mlstring></p>
         </div>
-        <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <xar:mlstring>There are no included hooks.</xar:mlstring>
+            <p><xar:mlstring>There are no included hooks.</xar:mlstring></p>
         </div>
-        <br />
         <div class="xar-norm-outline xar-accent" style="text-align: center; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-            <xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring>
+            <p><xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring></p>
         </div>
     </div>
 </div>

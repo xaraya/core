@@ -8,12 +8,12 @@
 	<input type="hidden" name="confirm" id="confirm" value="1" />
 	<input type="hidden" name="confirmation" id="confirmation" value="1" />
 
-	<span class="xar-title"><xar:mlstring>Confirm the deletion of all instances of Privilege</xar:mlstring>  '#$name#'</span>
-	<br /><br />
+	<p><span class="xar-title"><xar:mlstring>Confirm the deletion of all instances of Privilege</xar:mlstring>  '#$name#'</span></p>
+	<br />
 
-	<input type="submit" value="Confirm"  tabindex="1" /><br /><br />
+	<input type="submit" value="Confirm"  tabindex="1" /><br />
 	
-	<a href="&xar-modurl-privileges-admin-newprivilege;"><xar:mlstring>Cancel the deletion</xar:mlstring></a>
+	<p><a href="&xar-modurl-privileges-admin-newprivilege;"><xar:mlstring>Cancel the deletion</xar:mlstring></a></p>
    </div>
 </form>        
 </div>

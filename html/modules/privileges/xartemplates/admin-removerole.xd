@@ -8,16 +8,16 @@
 	<input type="hidden" name="pid" id="pid" value="#$pid#" />
 	<input type="hidden" name="confirmation" id="confirmation" value="1" />
 
-	<span class="xar-title"><xar:mlstring>Confirm the removal of Privilege</xar:mlstring>  '#$privname#' <xar:mlstring>from</xar:mlstring>
+	<p><span class="xar-title"><xar:mlstring>Confirm the removal of Privilege</xar:mlstring>  '#$privname#' <xar:mlstring>from</xar:mlstring>
 	<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
 	<xar:else /><xar:mlstring>User</xar:mlstring>
 	</xar:if>
-	'#$rolename#'</span>
-	<br /><br />
+	'#$rolename#'</span></p>
+	<br />
 
-	<input type="submit" value="Confirm"  tabindex="1" /><br /><br />
+	<input type="submit" value="Confirm"  tabindex="1" /><br />
 	
-	<a href="&xar-modurl-privileges-admin-viewroles;&amp;pid=#$pid#"><xar:mlstring>Cancel the removal</xar:mlstring></a>
+	<p><a href="&xar-modurl-privileges-admin-viewroles;&amp;pid=#$pid#"><xar:mlstring>Cancel the removal</xar:mlstring></a></p>
 </div>
 </form>        
 </div>
