@@ -55,7 +55,7 @@ function installer_admin_phase3()
     global $HTTP_POST_VARS;
     if ($HTTP_POST_VARS['agree'] != 'agree') {
         // didn't agree to license, don't install
-        pnRedirect('install.php');
+        pnResponseRedirect('install.php');
     }
 
     return array();
@@ -85,30 +85,17 @@ function installer_admin_phase4()
                                            'postgres' => 'Postgres'));
 }
 
-function installer_adminapi_phase5()
+function installer_admin_phase5()
 {
     global $HTTP_POST_VARS;
 
-    $dbInfo['dbHost'] = $HTTP_POST_VARS['install_database_host'];
-    $dbInfo['dbName'] = $HTTP_POST_VARS['install_database_name'];
-    $dbInfo['dbUname'] = $HTTP_POST_VARS['install_database_username'];
-    $dbInfo['dbPass'] = $HTTP_POST_VARS['install_database_password'];
-    $dbInfo['prefix'] = $HTTP_POST_VARS['install_database_prefix'];
-    $dbInfo['dbType'] = $HTTP_POST_VARS['install_database_type'];
-
-    if (isset($HTTP_POST_VARS['install_create_database'])) {
-    //Ugly Switch... until we write a database connection wrapper
-    //Needed because ADONewConnection requires a database to connect to
-        switch($dbtype){
-            case 'mysql':
-            //TODO: add error checking (prolly wait til the connection wrapper)
-            mysql_connect($dbhost,$dbuser,$dbpass);
-            break;
-        }
-
-        //TODO: add error checking and replace with pnDBCreateDB
-        mysql_create_db($dbname);
-    }
+    $dbHost      = $HTTP_POST_VARS['install_database_host'];
+    $dbName      = $HTTP_POST_VARS['install_database_name'];
+    $dbUname     = $HTTP_POST_VARS['install_database_username'];
+    $dbPass      = $HTTP_POST_VARS['install_database_password'];
+    $dbPrefix    = $HTTP_POST_VARS['install_database_prefix'];
+    $dbType      = $HTTP_POST_VARS['install_database_type'];
+    $installType = $HTTP_POST_VARS['install_type'];
 
     if (isset($HTTP_POST_VARS['install_intranet'])) {
         $intranet = true;
@@ -116,147 +103,61 @@ function installer_adminapi_phase5()
         $intranet = false;
     }
 
-    // Save config data
-    installer_adminapi_modifyconfig($dbInfo);
+    pnInstallAPILoad('installer','admin');
 
-    // Kick it
+    // Save config data
+    $modified = pnInstallAPIFunc('installer',
+                                 'admin',
+                                 'modifyconfig',
+                                 array('dbHost'    => $dbHost,
+                                       'dbName'    => $dbName,
+                                       'dbUname'   => $dbUname,
+                                       'dbPass'    => $dbPass,
+                                       'dbPrefix'  => $dbPrefix,
+                                       'dbType'    => $dbType));
+    // throw back
+    if (!isset($modified)) return;
+
+
+
+    if (isset($HTTP_POST_VARS['install_create_database'])) {
+        $res = pnInstallAPIFunc('installer',
+                                'admin',
+                                'createdb');
+        // TODO: Exception!
+        if (!isset($res)) die('could not create a database');
+    }
+
+    switch($HTTP_POST_VARS['install_type']){
+        case 'new':
+                $initFunc = 'init';
+                 break;
+        case 'upgrade':
+                 $initFunc = 'upgrade';
+                 break;
+    }
+
+
+    // Start the database
     pnCoreInit(PNCORE_SYSTEM_ADODB);
 
-    // install modules module
-    $mod_init_file = 'modules/modules/pninit.php';
-
-    if (file_exists($mod_init_file)) {
-        include_once ($mod_init_file);
-    } else {
-        // modules/base/pninit.php not found?!
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
-                       new SystemException(__FILE__."(".__LINE__."): Module file $mod_init_file doesn't exist."));return;
-    }
-
-    // Run the function, check for existence
-    $mod_func = 'modules_init';
-
-    if (function_exists($mod_func)) {
-        $res = $mod_func();
-        // Handle exceptions
-        if (pnExceptionMajor() != PN_NO_EXCEPTION) {
-            return;
-        }
-        if ($res == false) {
-            // exception
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException(__FILE__.'('.__LINE__.'): core initialization failed!'));return;
-        }
-    } else {
-        // modules_init() not found?!
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-                       new SystemException(__FILE__."(".__LINE__."): Module API function $mod_func doesn't exist."));return;
-    }
+    // Load in modules/installer/pninit.php and choose a new install or upgrade
+    $res = pnInstallAPIFunc('installer',
+                            'admin',
+                            'initialise',
+                            array('directory' => 'installer',
+                                  'initfunc'  => $initFunc));
+    if(!isset($res)) die('could not install or upgrade');
 
     // Initialize *minimal* tableset
-    // Load the installer module, the hard way - file check too
-    $base_init_file = 'modules/base/pninit.php';
-
-    if (file_exists($base_init_file)) {
-        include_once ($base_init_file);
-    } else {
-        // modules/base/pninit.php not found?!
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
-                       new SystemException(__FILE__."(".__LINE__."): Module file $base_init_file doesn't exist."));return;
-    }
-
-    // Run the function, check for existence
-    $mod_func = 'base_init';
-
-    if (function_exists($mod_func)) {
-        $res = $mod_func();
-        // Handle exceptions
-        if (pnExceptionMajor() != PN_NO_EXCEPTION) {
-            return;
-        }
-        if ($res == false) {
-            // exception
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException(__FILE__.'('.__LINE__.'): core initialization failed!'));return;
-        }
-    } else {
-        // base_init() not found?!
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-                       new SystemException(__FILE__."(".__LINE__."): Module API function $mod_func doesn't exist."));return;
-    }
 
     // log user in
-
-    pnRedirect('index.php?module=installer&type=admin&func=bootstrap');
-}
-function installer_admin_bootstrap()
-{
-    // log in admin user
-    $res = pnUserLogIn('admin', 'password', false);
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
-    }
-
-    // load modules API
-    $res = pnModAPILoad('modules', 'admin');
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
-    }
-
-    // initialize & activate adminpanels module
-    $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('adminpanels')));
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
-    }
-
-    $res = pnModAPIFunc('modules', 'admin', 'setstate', array('regid' => pnModGetIDFromName('adminpanels'),
-                                                              'state' => _PNMODULE_STATE_ACTIVE));
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
-    }
-
-    pnRedirect(pnModURL('installer', 'admin', 'create_administrator'));
-    return array();
+    pnResponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
 }
 
-function installer_admin_create_administrator()
-{
-    if (!pnSecAuthAction(0, 'Installer::', '::', ACCESS_ADMIN)) {
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException(__FILE__."(".__LINE__."): You do not have permission to access the Installer module."));return;
-    }
-    
-    if (!pnVarCleanFromInput('create')) {
-        return array();
-    }
-    
-    list ($username,
-          $name,
-          $password,
-          $email,
-          $url) = pnVarCleanFromInput('install_admin_username',
-                                       'install_admin_name',
-                                       'install_admin_password',
-                                       'install_admin_email',
-                                       'install_admin_url');
 
-    $res = pnModAPILoad('users', 'admin');
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
-    }
-    /*
-    $res = pnModAPIFunc('users', 'admin', 'update', array('uid'   => 2,
-                                                          'name'  => $name,
-                                                          'uname' => $username,
-                                                          'email' => $email,
-                                                          'pass'  => $password,
-                                                          'url'   => $url));
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
-    }
-    */
-    pnRedirect(pnModURL('installer', 'admin', 'finish'));
-}
+
+
 
 function installer_admin_finish()
 {
@@ -264,12 +165,12 @@ function installer_admin_finish()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     // Load up database
     list($dbconn) = pnDBGetConn();
     $pntable = pnDBGetTables();
     $block_groups_table          = $pntable['block_groups'];
-    
+
     $query = "SELECT    pn_id as id
               FROM      $block_groups_table
               WHERE     pn_name = 'left'";
@@ -293,9 +194,9 @@ function installer_admin_finish()
     }
 
     list ($group_id) = $result->fields;
-    
+
     $type_id = pnBlockTypeExists('adminpanels', 'adminmenu');
-    
+
     $block_id = pnModAPIFunc('blocks',
                              'admin',
                              'create_instance', array('title'    => 'Admin',
@@ -306,9 +207,9 @@ function installer_admin_finish()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     $msg = pnML('Reminder message body will go here.');
-    
+
     $type_id = pnBlockTypeExists('base', 'html');
     $block_id = pnModAPIFunc('blocks',
                              'admin',
@@ -321,7 +222,7 @@ function installer_admin_finish()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     return array();
 }
 

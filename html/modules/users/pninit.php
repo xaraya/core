@@ -23,21 +23,22 @@
 // ----------------------------------------------------------------------
 
 /**
- * initialise the users module
- * This function is only ever called once during the lifetime of a particular
- * module instance
+ * Initialise the users module
+ *
+ * @access public
+ * @param none
+ * @returns bool
+ * @raise DATABASE_ERROR
  */
 function users_init()
 {
     // Get datbase setup
     list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
-
-    $prefix = pnConfigGetVar('prefix');
+    $tables = pnDBGetTables();
 
     // Create the table
     // *_users
-    $query = pnDBCreateTable($prefix . '_users',
+    $query = pnDBCreateTable($tables['users'],
                              array('pn_uid'         => array('type'        => 'integer',
                                                              'null'        => false,
                                                              'default'     => '0',
@@ -68,7 +69,7 @@ function users_init()
                                                              'null'        => false,
                                                              'default'     => '')));
     $dbconn->Execute($query);
-        
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -76,13 +77,13 @@ function users_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
-    $query = pnDBCreateIndex($prefix . '_users',
+
+    $query = pnDBCreateIndex($tables['users'],
                              array('name'   => 'pn_uname_index',
                                    'fields' => array('pn_uid'),
                                    'unique' => 'true'));
     $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -90,9 +91,9 @@ function users_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     // *_user_data
-    $query = pnDBCreateTable($prefix . '_user_data',
+    $query = pnDBCreateTable($tables['user_data'],
                              array('pn_uda_id'     => array('type'        => 'integer',
                                                             'null'        => false,
                                                             'default'     => '0',
@@ -108,7 +109,7 @@ function users_init()
                                                             'size'        => 'medium',
                                                             'null'        => 'false')));
     $dbconn->Execute($query);
-        
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -116,9 +117,9 @@ function users_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     // *_user_property
-    $query = pnDBCreateTable($prefix . '_user_property',
+    $query = pnDBCreateTable($tables['user_property'],
                              array('pn_prop_id'         => array('type'        => 'integer',
                                                                  'null'        => false,
                                                                  'default'     => '0',
@@ -138,21 +139,7 @@ function users_init()
                                                                  'size'        => 255,
                                                                  'default'     => NULL)));
     $dbconn->Execute($query);
-        
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
-    
-    $query = pnDBCreateIndex($prefix . '_user_property',
-                             array('name'   => 'pn_prop_label_index',
-                                   'fields' => array('pn_prop_label'),
-                                   'unique' => 'true'));
-    $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -161,6 +148,26 @@ function users_init()
         return NULL;
     }
 
+    $query = pnDBCreateIndex($tables['user_property'],
+                             array('name'   => 'pn_prop_label_index',
+                                   'fields' => array('pn_prop_label'),
+                                   'unique' => 'true'));
+    $dbconn->Execute($query);
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
+    // Initialisation successful
+    return true;
+}
+
+function users_activate()
+{
     // Set up an initial value for module variables.
     pnModSetVar('users', 'usersperpage', 20);
     pnModSetVar('users', 'showtacs', 0);
@@ -170,18 +177,21 @@ function users_init()
     pnBlockTypeRegister('users', 'login');
     pnBlockTypeRegister('users', 'online');
     pnBlockTypeRegister('users', 'user');
-    
-    // Initialisation successful
+
     return true;
 }
-
 /**
- * upgrade the users module from an old version
+ * Upgrade the users module from an old version
+ *
+ * @access public
+ * @param oldVersion
+ * @returns bool
+ * @raise DATABASE_ERROR
  */
-function users_upgrade($oldversion)
+function users_upgrade($oldVersion)
 {
     // Upgrade dependent on old version number
-    switch($oldversion) {
+    switch($oldVersion) {
         case 1.0:
             // Code to upgrade from version 1.0 goes here
             break;
@@ -195,7 +205,12 @@ function users_upgrade($oldversion)
 }
 
 /**
- * delete the users module
+ * Delete the users module
+ *
+ * @access public
+ * @param none
+ * @returns bool
+ * @raise DATABASE_ERROR
  */
 function users_delete()
 {

@@ -88,20 +88,7 @@ function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
         from '.$installerTheme.' to installer');
     }
 
-    // Handle installation phase designation
-    $phase = (int) pnRequestGetVar('install_phase', 'POST');
-    if ($phase == 0) {
-        $phase = 1;
-    }
-    // Build functioname from phase
-    $funcName = 'phase'.$phase;
-
     // Handle language setting
-
-    // Make sure we should still be here
-    if ($phase >= PNINSTALL_PHASE_ADMIN_CREATION) {
-        pnResponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
-    }
 
     // Load installer module
     $res = pnInstallLoad($modName, $modType);
@@ -109,12 +96,25 @@ function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
         return; // throw back
     }
 
+    // Handle installation phase designation
+    $phase = (int) pnRequestGetVar('install_phase', 'POST');
+    if ($phase == 0) {
+        $phase = 1;
+    }
+
+    // Build functioname from phase
+    $funcName = 'phase'.$phase;
+
+
     // if the debugger is active, start it
     if (pnCoreIsDebuggerActive()) {
        ob_start();
     }
 
-
+    // Make sure we should still be here
+    if ($phase >= PNINSTALL_PHASE_ADMIN_CREATION) {
+        $funcName = 'bootstrap';
+    }
     // Run installer function
     $mainModuleOutput = pnInstallFunc($modName, $modType, $funcName);
 

@@ -35,20 +35,17 @@ function installer_init()
     // Get database information
     list($dbconn) = pnDBGetConn();
     $tables = pnDBGetTables();
-    
+
     // Load in installer API
     pnInstallAPILoad('installer','admin');
 
-    // Install module tables
     $res = pnInstallAPIFunc('installer',
                             'admin',
                             'initialise',
-                            array('directory' => 'modules',
+                            array('directory' => 'base',
                                   'initfunc'  => 'init'));
+    if (!isset($res)) die('could not install Xaraya');
 
-    unset($GLOBALS['PNSVuid']);
-    unset($GLOBALS['PNSVnavigationLocale']);
-    pnCoreInit(PNCORE_SYSTEM_MODULES);
 
     // Initialisation successful
     return true;
@@ -61,7 +58,7 @@ function installer_init()
  * @returns bool
  */
 function installer_upgrade($oldVersion)
-{   
+{
     // Get database information
     list($dbconn) = pnDBGetConn();
     $tables = pnDBGetTables();

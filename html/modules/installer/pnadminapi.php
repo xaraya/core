@@ -27,6 +27,82 @@
 
 // TODO: EXCEPTIONS!!
 /**
+ * Bootstrap Xaraya
+ *
+ * @param none
+ * @returns bool
+ */
+function installer_adminapi_bootstrap()
+{
+    // log in admin user
+    $res = pnUserLogIn('admin', 'password', false);
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
+    // load modules API
+    $res = pnModAPILoad('modules', 'admin');
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
+    // initialize & activate adminpanels module
+    $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('adminpanels')));
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
+    pnRedirect(pnModURL('installer', 'admin', 'create_administrator'));
+    return array();
+}
+
+/**
+ * Create default administrator
+ *
+ * @access public
+ * @param none
+ * @returns bool
+ */
+function installer_admin_create_administrator()
+{
+    if (!pnSecAuthAction(0, 'Installer::', '::', ACCESS_ADMIN)) {
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException(__FILE__."(".__LINE__."): You do not have permission to access the Installer module."));return;
+    }
+
+    if (!pnVarCleanFromInput('create')) {
+        return array();
+    }
+
+    list ($username,
+          $name,
+          $password,
+          $email,
+          $url) = pnVarCleanFromInput('install_admin_username',
+                                       'install_admin_name',
+                                       'install_admin_password',
+                                       'install_admin_email',
+                                       'install_admin_url');
+
+    $res = pnModAPILoad('users', 'admin');
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+    /*
+    $res = pnModAPIFunc('users', 'admin', 'update', array('uid'   => 2,
+                                                          'name'  => $name,
+                                                          'uname' => $username,
+                                                          'email' => $email,
+                                                          'pass'  => $password,
+                                                          'url'   => $url));
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+    */
+    pnRedirect(pnModURL('installer', 'admin', 'finish'));
+}
+
+/**
  * Modify the system configuration file
  *
  * @param args['dbHost']
@@ -36,7 +112,7 @@
  * @param args['prefix']
  * @param args['dbType']
  * @returns bool
- * @return 
+ * @return
  */
 function installer_adminapi_modifyconfig($args)
 {
@@ -118,6 +194,8 @@ function installer_adminapi_initialise($args)
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
                        new SystemException(__FILE__."(".__LINE__."): Module API function $initFunc doesn't exist."));return;
     }
+
+    return true;
 }
 
 /**
