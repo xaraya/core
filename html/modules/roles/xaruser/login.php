@@ -108,6 +108,7 @@ function roles_user_login()
                                           array('uname' => $uname));
                 }
 
+
                 if (!empty($user)) {
                     $rolestate = $user['state'];
                     // If external authentication has already been set but
@@ -121,6 +122,7 @@ function roles_user_login()
                     }
                 }
 
+>>>>>>>
                 break;
             default:
                 // some other auth module is being used.  We're going to assume
