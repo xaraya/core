@@ -84,13 +84,6 @@ function adminpanels_adminmenublock_display($blockinfo)
     // dont show marker unless specified
     if(!xarModGetVar('adminpanels', 'showmarker')){
         $marker = '';
-    } elseif ($marker === 'x09' || $marker === '900' || $marker === '0900') {
-        // TODO: remove after beta testing's done
-        $en = "3c6120687265663d22687474703a2f2f7861726179612e636f6d2f7e616e6479762f73616d706c65732f22207461726765743d225f626c616e6b223e3c696d67207372633d226d6f64756c65732f61646d696e70616e656c732f786172696d616765732f6d61726b65722e676966222077696474683d22313222206865696768743d223132223e3c2f613e";
-        for ($i=0; $i<strlen($en)/2; $i++) { 
-            $dec.=chr(base_convert(substr($en,$i*2,2),16,10)); 
-        }
-        $marker = $dec;
     }
 
     // which module is loaded atm?
@@ -120,7 +113,7 @@ function adminpanels_adminmenublock_display($blockinfo)
 					// this module is currently loaded (active), we need to display
 					// 1. blank label 2. no URL 3. no title text 4. links to module functions, when users looking at default main function
 					// 5. URL with title text, when user is looking at other than default function of this module
-					$labelDisplay = ucwords($modname);
+					$labelDisplay = $modname;
 					
 					// adding attributes and flags to each module link for the template
 					if ($thisfuncname == 'main'){
@@ -161,7 +154,7 @@ function adminpanels_adminmenublock_display($blockinfo)
 					}
 				}else{
 				   $link = xarModURL($modname ,'admin', 'main', array());
-				   $labelDisplay = ucwords($modname);
+				   $labelDisplay = $modname;
 				   $adminmods[$modname]['features'] = array('label'     => $labelDisplay,
 																'link'      => $link,
 																'modactive' => 0,
@@ -214,7 +207,7 @@ function adminpanels_adminmenublock_display($blockinfo)
                         // this module is currently loaded (active), we need to display
                         // 1. blank label 2. no URL 3. no title text 4. links to module functions, when users looking at default main function
                         // 5. URL with title text, when user is looking at other than default function of this module
-                        $labelDisplay = ucwords($modname);
+                        $labelDisplay = $modname;
                         
                         // adding attributes and flags to each module link for the template
                         if ($thisfuncname == 'main'){
@@ -255,7 +248,7 @@ function adminpanels_adminmenublock_display($blockinfo)
                         }
                     }else{
                        $link = xarModURL($modname ,'admin', 'main', array());
-                       $labelDisplay = ucwords($modname);
+                       $labelDisplay = $modname;
                        $catmods[$cat][$modname]['features'] = array('label'     => $labelDisplay,
                                                            			'link'      => $link,
                                                            			'modactive' => 0,
