@@ -62,6 +62,20 @@ TD {
    font-size:11px;
    font-family: Verdana,Arial,Helvetica,sans-serif;
 }
+TABLE {
+	border: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+THEAD {}
+TBODY {}
+TFOOT {
+   color: #000000;
+   font-size:12px;
+   font-family: Verdana,Arial,Helvetica,sans-serif;
+   font-weight: bolder;
+   background-color:#CDD5F8;
+}
 P {
    color: #000000;
    font-size:11px;
@@ -73,7 +87,7 @@ PRE {
    font-family: Courier,fixed-width;
 }
 INPUT {
-   background-color: none;
+   background-color: #f0f0f0;
    border-bottom-width: 1px;
    border-color: #000000;
    border-left-width: 1px;
@@ -81,32 +95,39 @@ INPUT {
    border-top-width: 1px;
    color: #000000;
    font-family: Verdana,Arial,Helvetica,sans-serif;
-   font-size: 10px;
+   font-size: 11px;
    font-weight: normal;
    text-indent: 2px;
 }
+BUTTON {
+   border: 2px outset #f0f0f0;
+   background-color: #CDD5F8;
+   color: #000000;
+   font-size: 10px;
+   font-family: Verdana,Arial,Helvetica,sans-serif;
+}
+
 SELECT {
-   background-color: none;
+   background-color: #f0f0f0;
    border-bottom-width: 1px;
    border-color: #000000;
    border-left-width: 1px;
    border-right-width: 1px;
-   border-style: solid;
    border-top-width: 1px;
    font-family: Verdana,Arial,Helvetica,sans-serif;
-   font-size: 10px;
+   font-size: 11px;
    font-weight: normal;
+   color: #191970;
 }
 TEXTAREA {
-   background-color: none;
+   background-color: #f0f0f0;
    border-bottom-width: 1px;
    border-color: #000000;
    border-left-width: 1px;
    border-right-width: 1px;
-   border-style: solid;
    border-top-width: 1px;
    font-family: Verdana,Arial,Helvetica,sans-serif;
-   font-size: 10px;
+   font-size: 11px;
    font-weight: normal;
    text-indent: 0px;
 }
@@ -131,15 +152,15 @@ OL {
    line-height: 150%;
    margin-bottom: 10px;
 }
+SUP {
+   font-size: 6px;
+}
+SUB {
+   font-size: 6px;
+}
+
 
 /*  THEME SPECIFIC CLASSES */
-TFOOT {
-   color: #000000;
-   font-size:12px;
-   font-family: Verdana,Arial,Helvetica,sans-serif;
-   font-weight: bolder;
-  background-color:#CDD5F8;
-}
 H5, H6 {
    color: #191970;
    font-size: 11px;
@@ -161,68 +182,80 @@ CHECKBOX {
 }
 
 /*  XARAYA REQUIRED INDIVIDUAL CLASSES */
-A.xar-title {}
-A.xar-title-block-left {}
-A.xar-title-block-right {}
-// A.xar-title-<block> {}
-A.xar-normal {}
-A.xar-normal-block-left {}
-A.xar-normal-block-right {}
-// A.xar-normal-<block> {}
-A.xar-sub {}
-A.xar-sub-block-left {}
-A.xar-sub-block-right {}
-// A.xar-sub-<block> {}
-BLOCKQUOTE.xar-normal {}
-CODE.xar-normal {}
-TH.xar-normal {}
-TH.xar-normal-block-left {}
-TH.xar-normal-block-right {}
-// TH.xar-normal-<block> {}
-TD.xar-normal {}
-TD.xar-normal-block-left {}
-TD.xar-normal-block-right {}
-// TD.xar-normal-<block> {}
+TD.xar-norm {}
 TD.xar-alt {}
-TD.xar-alt-block-left {}
-TD.xar-alt-block-right {}
-TD.xar-alt-<block> {}
-SPAN.xar-normal {}
-SPAN.xar-normal-block-left {}
-SPAN.xar-normal-block-right {}
-// SPAN.xar-normal-<block> {}
-P.xar-normal {}
-PRE.xar-normal {}
-IMG.xar-normal {}
-INPUT.xar-normal {}
-INPUT.xar-normal-block-left {}
-INPUT.xar-normal-block-right {}
-// INPUT.xar-normal-<block> {}
-SELECT.xar-normal {}
-SELECT.xar-normal-block-left {}
-SELECT.xar-normal-block-right {}
-// SELECT.xar-normal-<block> {}
-LI.xar-normal {}
-LI.xar-normal-block-left {}
-LI.xar-normal-block-right {}
-// LI.xar-normal-<block> {}
 
 
 /*  XARAYA REQUIRED ANONYMOUS CLASSES  */
-.xar-title {}
-.xar-title-block-left {}
-.xar-title-block-right {}
-// .xar-title-<block> {}
-.xar-normal {}
+.xar-block-head{}
+.xar-block-title {}
+.xar-block-body {}
+.xar-block-foot {}
+.xar-mod-head {
+   border: 2px solid #a0a0a0;
+   background-color: #CDD5F8;
+   padding: 3px;
+   text-align: center;
+   font-weight: bold;
+   font-size: 12px;
+}
+.xar-mod-title {}
+.xar-mod-body {}
+.xar-mod-foot {}
 .xar-alt {background-color: #E47C55; }
-.xar-quote {}
-.xar-normal-block-left {}
-.xar-normal-block-right {}
-// .xar-normal-<block> {}
 .xar-sub {}
-.xar-sub-block-left {}
-.xar-sub-block-right {}
-// .xar-sub-<block> {}
+.xar-menu-section {
+   color: #191970;
+   font-size: 12px;
+   font-weight: bold;
+   font-family: Verdana,Arial,Helvetica,sans-serif;
+   border-bottom: thin dotted #a0a0a0;
+   line-height: 170%;
+   width: 100%;
+   margin-top: 4px;
+   margin-bottom: 4px;
+}
+.xar-menu-item {
+   font-size: 11px;
+   font-weight: bold;
+   font-family: Verdana,Arial,Helvetica,sans-serif;
+   padding-left: .5em;
+}
+.xar-menu-subitem {
+   font-size: 10px;
+   font-weight: bold;
+   font-family: Verdana,Arial,Helvetica,sans-serif;
+   margin-left: 4px;
+   padding-left: 0px;
+}
+.xar-menu-section-current {
+   background-color: #CCE6FF;
+   color: #191970;
+   font-size: 12px;
+   font-weight: bold;
+   font-family: Verdana,Arial,Helvetica,sans-serif;
+   border-bottom: thin double #191970;
+   line-height: 170%;
+}
+.xar-menu-item-current {
+   background-color: #CCE6FF;
+   font-size: 11px;
+   font-weight: bold;
+   font-family: Verdana,Arial,Helvetica,sans-serif;
+   padding-left: .5em;
+   padding-bottom: .5em;
+}
+.xar-menu-subitem-current {}
+
+.xar-block-head-left {}
+.xar-block-title-left {}
+.xar-block-body-left {}
+.xar-block-foot-left {}
+
+.xar-block-head-right {}
+.xar-block-title-right {}
+.xar-block-body-right {}
+.xar-block-foot-right {}
 
 /*  THEME SPECIFIC ANONYMOUS CLASSES  */
 .txttitle {

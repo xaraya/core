@@ -4,21 +4,23 @@
 <br />
 <xar:loop name="$adminmods">
 	<xar:if condition="empty($link) and empty($marker)">
-		<h4 style="display:inline;">&xar-var-label;</h4><br />
+		<div class="xar-menu-section">&xar-var-label;</div>
 	<xar:else />
 		<xar:if condition="!empty($link)">
-		<a href="&xar-var-link;" title="&xar-var-desc;">&xar-var-label;</a><br />
+		<div class="xar-menu-item"><a href="&xar-var-link;" title="&xar-var-desc;">&xar-var-label;</a></div>
 		<xar:else/>
-		&xar-var-label;
+		<div class="xar-menu-item-current">&xar-var-label;
 		</xar:if>
 	</xar:if>
 	<xar:if condition="!empty($marker)">
 		&xar-var-marker;<br />
 			<xar:if condition="!empty($indlinks)">
 				<xar:loop name="$indlinks">
-					<a href="&xar-var-adminlink;" style="font-size:smaller;padding-left:1.5em;" title="&xar-var-admintitle;">&xar-var-adminlabel;</a><br />
+					<div class="xar-menu-subitem"><a href="&xar-var-adminlink;" title="&xar-var-admintitle;">&xar-var-adminlabel;</a></div>
 				</xar:loop>
 			</xar:if>
+         </div>
+
 	</xar:if>
 </xar:loop>
 <br />
