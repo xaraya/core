@@ -271,25 +271,20 @@ topnav block group classes
 center block group classes 
 -------------------------------------------------------------------------[comment] */
 .xar-block-head-center {
-	height: 6px;
 	width: 100%;
 }
 
 .xar-block-title-center {
-	color: #e47c55;
 	background-color: inherit;
 	font-weight: bold;
-	text-align: center;
 }
 
-.xar-block-body-center {
-	background-color: #E7EAEE;
-}
+.xar-block-body-center {}
 
 .xar-block-foot-center {
-	height: 3px;
 	width: 100%;
 	margin-bottom: 4px;
+	border-bottom: 1px solid #A0B8E5;
 }
 
 /*

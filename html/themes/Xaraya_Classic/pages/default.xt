@@ -79,15 +79,15 @@ ________________________________________________________________________________
 					<img src="#$classicthemedir#/images/blue.gif" id="butbl" alt="#$changecoltoblue#" />
 				</a>
 			</div>
-            <a href="&amp;xar-baseurl;" rel="" title="#$sitename#">
+            <a href="&xar-baseurl;" rel="" title="#$sitename#">
                 <!-- in this theme we just use a transparent gif to overlay the logo -->
                 <img src="#$classicthemedir#/images/transparent_pix.gif" alt="#$sitename#" />
             </a>
         </div>
         <xar:if condition="!empty($topnavblocksgroup)">
-<!--            <div id="classictopnavigation"> -->
+           <div id="classictopnavigation">
                 #$topnavblocksgroup#
-<!--            </div> -->
+           </div>
         </xar:if>
         <table id="classiccontentarea">
             <tr>
