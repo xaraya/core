@@ -230,9 +230,11 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     {
         
         // If we've just been previewed, then use the value that was passed in :)
-        if (!is_null($value) && !empty($value) && (is_numeric($value) || stristr($value, ';'))) {
-            $this->value = $value;
-            return true;
+        if (!empty($value)) {
+            if (stristr($value, ';') && ';' == $value{0}) {
+                $this->value = $value;
+                return true;
+            }                 
         }        
         
         xarModAPILoad('uploads', 'user');
@@ -286,7 +288,10 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
 
                 if (!xarVarFetch('attach_stored', 'list:str:1:', $fileList)) return;
 
-                $this->value = implode(';', $fileList);
+                // We prepend a semicolon onto the list of fileId's so that
+                // we can tell, in the future, that this is a list of fileIds 
+                // and not just a filename
+                $this->value = ';' . implode(';', $fileList);
 
                 return true;
                 break;
@@ -318,7 +323,10 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 }
             } 
             if (is_array($storeList) && count($storeList)) {
-                $this->value = implode(';', $storeList);
+                // We prepend a semicolon onto the list of fileId's so that
+                // we can tell, in the future, that this is a list of fileIds 
+                // and not just a filename
+                $this->value = ';' . implode(';', $storeList);
             } else {
                 $this->value = NULL;
 
@@ -354,16 +362,18 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         
 
         if (!empty($value)) {
-            $value = explode(';', $value);
+            // We use array_filter to remove any values from 
+            // the array that are empty, null, or false
+            $aList = array_filter(explode(';', $value));
             
-            if (is_array($value)) {
+            if (is_array($aList) && count($aList)) {
                 $data['inodeType']['DIRECTORY']   = _INODE_TYPE_DIRECTORY;
                 $data['inodeType']['FILE']        = _INODE_TYPE_FILE;
-                $Attachments = xarModAPIFunc('uploads', 'user', 'db_get_file', array('fileId' => $value));
-                $data['Attachments'] = $Attachments;
-                $list = $this->showOutput(array('value' => implode(';', $value)));
+                $data['Attachments'] = xarModAPIFunc('uploads', 'user', 'db_get_file', 
+                                                      array('fileId' => $aList));
+                $list = $this->showOutput(array('value' => $value));
                 
-                foreach ($value as $fileId) {
+                foreach ($aList as $fileId) {
                     if (isset($data['storedList'][$fileId])) {
                         $data['storedList'][$fileId]['selected'] = TRUE;
                     }
@@ -377,18 +387,15 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     
     function _UploadModule_showOutput($value) 
     {
+        $value = array_filter(explode(';', $value));
         
-        //echo "<br /><pre>value => "; print_r($value); echo "</pre>";
-        $value = explode(';', $value);
-       // echo "<br /><pre>value => "; print_r($value); echo "</pre>";  
-        
-        if (is_array($value) && !empty($value[0])) {
+        if (is_array($value) && count($value)) {
             $data['Attachments'] = xarModAPIFunc('uploads', 'user', 'db_get_file', array('fileId' => $value));    
         } else {
             $data['Attachments'] = '';
         } 
                 
-        return xarTplModule('dynamicdata', 'dd-output', 'attachment-list', $data, NULL);        
+        return xarTplModule('uploads', 'user', 'attachment-list', $data, NULL);        
     }
 
 }
