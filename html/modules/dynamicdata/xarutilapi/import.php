@@ -15,6 +15,12 @@
 
 /**
  * Import an object definition or an object item from XML
+ *
+ * @param $args['file'] location of the .xml file containing the object definition, or
+ * @param $args['xml'] XML string containing the object definition
+ * @param $args['keepitemid'] (try to) keep the item id of the different items (default false)
+ * @returns mixed
+ * @return object id on success, null on failure
  */
 function dynamicdata_utilapi_import($args)
 {
@@ -242,9 +248,9 @@ function dynamicdata_utilapi_import($args)
                 }
                 $objectid = $objectname2objectid[$objectname];
                 $item = array();
-                // don't save the item id for now...
-            // TODO: keep the item id if we set some flag
-                //$item['itemid'] = $itemid;
+                if (!empty($keepitemid)) {
+                    $item['itemid'] = $itemid;
+                }
                 $closeitem = $objectname;
                 $closetag = 'N/A';
             } elseif (preg_match("#</$closeitem>#",$line)) {
@@ -252,9 +258,17 @@ function dynamicdata_utilapi_import($args)
                 if (!isset($objectcache[$objectid])) {
                     $objectcache[$objectid] = & Dynamic_Object_Master::getObject(array('objectid' => $objectid));
                 }
-                // set the item id to 0
-            // TODO: keep the item id if we set some flag
-                $item['itemid'] = 0;
+                if (empty($keepitemid)) {
+                    // set the item id to 0
+                    $item['itemid'] = 0;
+                    // for dynamic objects, set the primary field to 0 too
+                    if (isset($objectcache[$objectid]->primary)) {
+                        $primary = $objectcache[$objectid]->primary;
+                        if (!empty($item[$primary])) {
+                            $item[$primary] = 0;
+                        }
+                    }
+                }
                 // create the item
                 $itemid = $objectcache[$objectid]->createItem($item);
                 if (empty($itemid)) {

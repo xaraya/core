@@ -20,19 +20,23 @@ function dynamicdata_util_import($args)
 // Security Check
 	if(!xarSecurityCheck('AdminDynamicData')) return;
 
-    if(!xarVarFetch('import', 'isset', $import,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('xml', 'isset', $xml,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('basedir',    'isset', $basedir,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('import',     'isset', $import,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('xml',        'isset', $xml,         NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('refresh',    'isset', $refresh,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('keepitemid', 'isset', $keepitemid,  NULL, XARVAR_DONT_SET)) {return;}
 
     extract($args);
 
     $data = array();
-    $data['menutitle'] = xarML('Dynamic Data Utilities');
 
     $data['warning'] = '';
     $data['options'] = array();
-    $data['authid'] = xarSecGenAuthKey();
 
-    $basedir = 'modules/dynamicdata';
+    if (empty($basedir)) {
+        $basedir = 'modules/dynamicdata';
+    }
+    $data['basedir'] = $basedir;
     $filetype = 'xml';
     $files = xarModAPIFunc('dynamicdata','admin','browse',
                            array('basedir' => $basedir,
@@ -42,9 +46,12 @@ function dynamicdata_util_import($args)
         return $data;
     }
 
-    if (!empty($import) || !empty($xml)) {
+    if (empty($refresh) && (!empty($import) || !empty($xml))) {
         if (!xarSecConfirmAuthKey()) return;
 
+        if (empty($keepitemid)) {
+            $keepitemid = 0;
+        }
         if (!empty($import)) {
             $found = '';
             foreach ($files as $file) {
@@ -60,10 +67,12 @@ function dynamicdata_util_import($args)
                 return;
             }
             $objectid = xarModAPIFunc('dynamicdata','util','import',
-                                      array('file' => $basedir . '/' . $file));
+                                      array('file' => $basedir . '/' . $file,
+                                            'keepitemid' => $keepitemid));
         } else {
             $objectid = xarModAPIFunc('dynamicdata','util','import',
-                                      array('xml' => $xml));
+                                      array('xml' => $xml,
+                                            'keepitemid' => $keepitemid));
         }
         if (empty($objectid)) return;
 
@@ -72,7 +81,6 @@ function dynamicdata_util_import($args)
         if (empty($objectinfo)) return;
 
         $data['warning'] = xarML('Object #(1) was successfully imported',xarVarPrepForDisplay($objectinfo['label']));
-        return $data;
     }
 
     natsort($files);
@@ -81,6 +89,8 @@ function dynamicdata_util_import($args)
          $data['options'][] = array('id' => $file,
                                     'name' => $file);
     }
+
+    $data['authid'] = xarSecGenAuthKey();
 
     xarTplSetPageTemplateName('admin');
 

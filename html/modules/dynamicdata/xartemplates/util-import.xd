@@ -5,24 +5,52 @@
 
 <p>#$warning#</p>
 
-<xar:if condition="count($options) gt 0">
 <form method="post" action="#xarModURL('dynamicdata','util','import')#">
 <div>
-<input type="hidden" name="authid" id="authid" value="#$authid#" />
-<xar:mlstring>Filter</xar:mlstring> : <b>modules/dynamicdata/*.xml</b><br /><br />
-<xar:mlstring>File</xar:mlstring> :
-<select name="import" id="import">
-<xar:foreach in="$options" value="$option">
-    <option value="#$option['id']#">#$option['name']#</option>
-</xar:foreach>
-</select>
-<br /><br />
-<input type="submit" value="#xarML('Import Definition')#" />
+<table width="100%" border="0" cellpadding="2" cellspacing="1">
+    <tr>
+        <td style="text-align: left;">
+            <label for="basedir"><xar:mlstring>Base directory</xar:mlstring>
+        </td>
+        <td style="text-align: left;">
+            <input type="text" name="basedir" id="basedir" value="#$basedir#" size="50" maxlength="250" />
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="submit" name="refresh" id="refresh" value="#xarML('Refresh')#" />
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: left;">
+            <label for="import"><xar:mlstring>Available .xml files</xar:mlstring>
+        </td>
+        <td style="text-align: left;">
+            <select name="import" id="import">
+            <xar:foreach in="$options" value="$option">
+                <option value="#$option['id']#">#$option['name']#</option>
+            </xar:foreach>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: left;">
+            <label for="keepitemid"><xar:mlstring>Preserve item ids if possible</xar:mlstring>
+        </td>
+        <td style="text-align: left;">
+            <input type="checkbox" name="keepitemid" id="keepitemid" value="1" />
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: left;">
+            &nbsp;
+        </td>
+        <td style="text-align: left;">
+            <input type="submit" value="#xarML('Import Definition')#" />
+        </td>
+    </tr>
+</table>
 <br /><br />
 <xar:mlstring>Select a file in the list above, or paste the object definition in here</xar:mlstring> :<br/>
 <textarea name="xml" id="xml" rows="30" cols="80"></textarea>
 </div>
 </form>
-</xar:if>
 </div>
 </div>
