@@ -539,7 +539,7 @@ function installer_admin_choose_configuration()
     }
 
     //quick hack to determine what to display
-    if (!file_exists('modules/articles/xaruser.php')){
+    if (!file_exists('modules/articles/xarinit.php')){
         $names = array();
         include 'modules/installer/xarconfigurations/core.conf.php';
         $names[] = array('value' => 'modules/installer/xarconfigurations/core.conf.php',

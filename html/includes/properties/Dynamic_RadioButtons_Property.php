@@ -35,7 +35,7 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
         foreach ($options as $option) {
             $out .= '<input type="radio" name="'.$name.'" value="'.$option['id'].'"';
             if ($option['id'] == $value) {
-                $out .= ' checked> '.$option['name'].' </input>';
+                $out .= ' checked=\"checked\"> '.$option['name'].' </input>';
             } else {
                 $out .= '> '.$option['name'].' </input>';
             }
