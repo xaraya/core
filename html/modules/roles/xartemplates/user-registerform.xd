@@ -5,7 +5,7 @@
 <xar:if condition="isset($withupload) AND $withupload">
     <xar:set name="enc_type">'multipart/form-data'</xar:set>
 <xar:else/>
-    <xar:set nmame="enc_type">'application/x-www-form-urlencoded'</xar:set>
+    <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
 </xar:if>
 
 <form method="post" name="post" id="post" action="#xarModURL('roles', 'user', 'register')#" enctype="#$enc_type#">
