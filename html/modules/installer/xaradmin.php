@@ -547,23 +547,20 @@ function installer_admin_create_administrator()
     if (xarVarIsCached('Mod.BaseInfos', 'blocks')) xarVarDelCached('Mod.BaseInfos', 'blocks');
 
     // Create default block groups/instances
-    if (!xarModAPIFunc('blocks', 'user', 'groupgetinfo', array('name'  => 'left'))) {
-        if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'left')))                                    return;
-    }
-    if (!xarModAPIFunc('blocks', 'user', 'groupgetinfo', array('name'  => 'right'))) {
-        if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'right',     'template' => 'right')))        return;
-    }
-    if (!xarModAPIFunc('blocks', 'user', 'groupgetinfo', array('name'  => 'header'))) {
-        if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'header',    'template' => 'header')))       return;
-    }
-    if (!xarModAPIFunc('blocks', 'user', 'groupgetinfo', array('name'  => 'admin'))) {
-        if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'admin')))                                   return;
-    }
-    if (!xarModAPIFunc('blocks', 'user', 'groupgetinfo', array('name'  => 'center'))) {
-        if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'center',    'template' => 'center')))       return;
-    }
-    if (!xarModAPIFunc('blocks', 'user', 'groupgetinfo', array('name'  => 'topnav'))) {
-        if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'topnav',    'template' => 'topnav')))       return;
+    //                            name        template
+    $default_blockgroups = array ('left'   => '',
+                                  'right'  => 'right',
+                                  'header' => 'header',
+                                  'admin'  => '',
+                                  'center' => 'center',
+                                  'topnav' => 'topnav'
+                                  );
+    
+    foreach ($default_blockgroups as $name => $template) {
+        if(!xarModAPIFunc('blocks','user','groupgetinfo', array('name' => $name))) {
+            // Not there yet
+            if(!xarModAPIFunc('blocks','admin','create_group', array('name' => $name, 'template' => $template))) return;
+        }
     }
 
     // Load up database
