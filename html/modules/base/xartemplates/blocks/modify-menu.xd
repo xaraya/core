@@ -20,6 +20,25 @@
 </p>
 <p style="float:left; width:100%;">
 	<span style="float: left; width: 20%; text-align: right;">
+		<span class="help" title="#xarML('Select if you would like Xaraya to generate a logout link for non-administrative users at the bottom of the menu.')#">
+			<label for="showlogout">
+				<xar:mlstring>
+					Display Non-Admin User Logout 
+				</xar:mlstring>
+			</label>
+			: 
+		</span>
+	</span>
+	<span style="float: right; width: 78%; text-align: left;">
+		<xar:if condition="!empty($showlogout)">
+			<input type="checkbox" value="1" name="showlogout" id="showlogout" checked="checked" />
+			<xar:else />
+			<input type="checkbox" value="1" name="showlogout" id="showlogout" />
+		</xar:if>
+	</span>
+</p>
+<p style="float:left; width:100%;">
+	<span style="float: left; width: 20%; text-align: right;">
 		<span class="help" title="#xarML('Select if you would like Xaraya to generate a link to your print page at the bottom of the menu.')#">
 			<label for="displayprint">
 				<xar:mlstring>

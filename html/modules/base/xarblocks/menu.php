@@ -26,6 +26,7 @@ function base_menublock_init()
 {
     return array(
         'displaymodules' => false,
+        'displayprint' => true,
         'displayrss' => false,
         'displayprint' => false,
         'marker' => '[x]',
@@ -290,7 +291,9 @@ function base_menublock_display($blockinfo)
     // we dont want to show logout link if the user is anonymous or admin
     // admins have their own logout method, which is more robust
     // Security Check
-    if (xarSecurityCheck('AdminPanel',0,'adminmenu',"$blockinfo[title]:All:All") or !xarUserIsLoggedIn()){
+    if (xarSecurityCheck('AdminPanel',0,'adminmenu',"$blockinfo[title]:All:All") or
+        !xarUserIsLoggedIn() or
+        empty($vars['showlogout'])) {
         $showlogout = false;
     }else{
         $showlogout = true;
@@ -357,6 +360,10 @@ function base_menublock_modify($blockinfo)
         $vars['style'] = 1;
     }
 
+    if (!isset($vars['showlogout'])) {
+        $vars['showlogout'] = 1;
+    }
+
     if (empty($vars['marker'])) {
         $vars['marker'] = '[x]';
     }
@@ -389,6 +396,7 @@ function base_menublock_insert($blockinfo)
 {
     // Global options.
     if (!xarVarFetch('displaymodules', 'checkbox', $vars['displaymodules'], false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('showlogout', 'checkbox', $vars['showlogout'], true, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('displayrss', 'checkbox', $vars['displayrss'], false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('displayprint', 'checkbox', $vars['displayprint'], false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('marker', 'str:1', $vars['marker'], '[x]', XARVAR_NOT_REQUIRED)) return;
