@@ -158,6 +158,11 @@ class xarCache_MemCached_Storage extends xarCache_Storage
             }
         }
     }
+
+    function getCachedList()
+    {
+        return array();
+    }
 }
 
 ?>

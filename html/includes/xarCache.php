@@ -222,6 +222,9 @@ function xarCacheGetDirSize($dir = FALSE)
     } elseif (preg_match('/block\/?$/',$dir)) {
         $size = $GLOBALS['xarBlock_cacheStorage']->getCacheSize();
 
+    } elseif (preg_match('/mod\/?$/',$dir)) {
+        $size = 0;
+
     } elseif (preg_match('/output\/?$/',$dir)) {
         $size = $GLOBALS['xarPage_cacheStorage']->getCacheSize();
         $size += $GLOBALS['xarBlock_cacheStorage']->getCacheSize();

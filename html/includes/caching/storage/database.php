@@ -323,6 +323,36 @@ class xarCache_Database_Storage extends xarCache_Storage
             }
         }
     }
+
+    function getCachedList()
+    {
+        $table = $this->getTable();
+        if (empty($table)) return false;
+
+        $dbconn =& xarDBGetConn();
+        // we actually retrieve the value here too
+        $query = "SELECT xar_id, xar_time, xar_key, xar_code, xar_size, xar_check
+                  FROM $table
+                  WHERE xar_type = ?";
+        $bindvars = array($this->type);
+        $result =& $dbconn->Execute($query, $bindvars);
+
+        if (!$result) return;
+
+        $list = array();
+        while (!$result->EOF) {
+            list($id,$time,$key,$code,$size,$check) = $result->fields;
+            $list[$id] = array('key'   => $key,
+                               'code'  => $code,
+                               'time'  => $time,
+                               'size'  => $size,
+                               'check' => $check);
+            $result->MoveNext();
+        }
+        $result->Close();
+        return $list;
+    }
+
 }
 
 ?>

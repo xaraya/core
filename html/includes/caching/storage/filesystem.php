@@ -296,6 +296,31 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         return $size;
     }
 
+    function getCachedList()
+    {
+        $list = array();
+        if ($handle = @opendir($this->dir)) {
+            while (($file = readdir($handle)) !== false) {
+                if (!preg_match('/^(.*)-(\w*)\.php$/',$file,$matches)) {
+                    continue;
+                }
+                $key = $matches[1];
+                $code = $matches[2];
+                $cache_file = $this->dir . '/' . $file;
+                $time = filemtime($cache_file);
+                $size = filesize($cache_file);
+                $check = '';
+                $list[] = array('key'   => $key,
+                                'code'  => $code,
+                                'time'  => $time,
+                                'size'  => $size,
+                                'check' => $check);
+            }
+            closedir($handle);
+        }
+        return $list;
+    }
+
 }
 
 ?>

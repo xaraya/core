@@ -155,6 +155,11 @@ class xarCache_Storage
     function saveFile($key = '', $filename = '')
     {
     }
+
+    function getCachedList()
+    {
+        return array();
+    }
 }
 
 ?>
