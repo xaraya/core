@@ -1,4 +1,4 @@
-<style>.adminpanels-rednote {color: #CC0000;}</style> 
+<style>.adminpanels-rednote {color: #CC0000;}</style>
 <div class="xar-mod-head">
     <span class="xar-mod-title"> 
         <xar:mlstring>
@@ -11,7 +11,7 @@
 <!--     <br /> -->
     <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
         <input type="hidden" name="authid" id="authid" value="#$authid#" /> <input type="hidden" name="formname" id="formname" value="adminmenu" /> 
-        <table border="0" cellspacing="1" cellpadding="4" align="left" width="100%">
+        <table border="0" cellspacing="1" cellpadding="4" align="center" width="100%">
             <tr>
                 <td align="right" width="180">
                     &nbsp; 
