@@ -95,14 +95,7 @@ function adminpanels_adminmenublock_display($blockinfo)
     $showlogout = false;
     if(isset($vars['showlogout']) && $vars['showlogout']) $showlogout = true;
     
-    // SETTING 2: Show markers for active menu-items?
-    $showmarker = false;
-    if(isset($vars['showmarker']) && $vars['showmarker']) $showmarker = true;
-    // TODO: Move this out completely?
-    $marker = '';
-    if ($showmarker) $marker = xarModGetVar('adminpanels', 'marker');
-    
-    // SETTING 3: Menustyle 
+    // SETTING 2: Menustyle 
     if(!isset($vars['menustyle'])) {
         // If it is not set, revert to the default setting
         $vars['menustyle'] = xarModGetVar('adminpanels', 'menustyle');
@@ -295,8 +288,6 @@ function adminpanels_adminmenublock_display($blockinfo)
 
     // Populate block info and pass to BlockLayout.
     $data['showlogout'] = $showlogout;
-    $data['showmarder'] = $showmarker;
-    $data['marker']     = $marker; // Not used in the internal templates btw, which is good imvho ;-)
     $data['menustyle']  = $vars['menustyle'];
     $blockinfo['content'] = $data;
     return $blockinfo;

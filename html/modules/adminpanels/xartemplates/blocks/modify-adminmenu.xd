@@ -15,19 +15,6 @@
 <p class="param">
     <label for="showmarker#$blockid#">
         <span class="help" title="#xarML('By checking this box the active menu will be indicated by a marker (if any) in this adminmenu instance.')#">
-            <xar:mlstring>Show a marker next to the active menu item</xar:mlstring>:
-        </span>
-    </label>
-    <xar:if condition="$showmarker eq 1">
-        <input type="checkbox" name="showmarker" id="showmarker#$blockid#" value="1" checked="checked" />
-    <xar:else />
-        <input type="checkbox" name="showmarker" id="showmarker#$blockid#" value="1" />
-    </xar:if>
-</p>
-
-<p class="param">
-    <label for="showmarker#$blockid#">
-        <span class="help" title="#xarML('By checking this box the active menu will be indicated by a marker (if any) in this adminmenu instance.')#">
             <xar:mlstring>Sort admin menu items</xar:mlstring>:
         </span>
     </label>

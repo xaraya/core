@@ -30,7 +30,6 @@ function adminpanels_adminmenublock_modify($blockinfo)
     
     // Set the config values
     $args['showlogout'] = $vars['showlogout'];
-    $args['showmarker'] = $vars['showmarker'];
     $args['menustyle']  = $vars['menustyle'];
     
     // Set the template data we need
@@ -48,7 +47,6 @@ function adminpanels_adminmenublock_modify($blockinfo)
 function adminpanels_adminmenublock_update($blockinfo)
 {
     if (!xarVarFetch('showlogout', 'int:0:1', $vars['showlogout'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('showmarker', 'int:0:1', $vars['showmarker'], 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('menustyle' , 'str::'  , $vars['menustyle'] , xarModGetVar('adminpanels','menustyle'), XARVAR_NOT_REQUIRED)) return;
     
     $blockinfo['content'] = $vars;
