@@ -60,13 +60,13 @@
 					</tr>
 					<tr align="left" valign="middle">
 						<td>
-							<xar:mlstring>Send confirmation email before successful registration of user</xar:mlstring>
+							<xar:mlstring>Send notice to admin when new user registers?</xar:mlstring>
 						</td>
 						<td>
-							<xar:if condition="xarModGetVar('users', 'sendconfirmationemail')">
-								<input type="checkbox" name="sendconfirmationemail" id="sendconfirmationemail" value="1" checked="checked" tabindex="1" />
+							<xar:if condition="xarModGetVar('users', 'sendnotice')">
+								<input type="checkbox" name="sendnotice" id="sendnotice" value="1" checked="checked" tabindex="1" />
 							<xar:else />
-								<input type="checkbox" name="sendconfirmationemail" id="sendconfirmationemail" value="1" tabindex="1" />
+								<input type="checkbox" name="sendnotice" id="sendnotice" value="1" tabindex="1" />
 							</xar:if>
 						</td>
 					</tr>
