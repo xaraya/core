@@ -1219,21 +1219,6 @@ function xarVarPrepForDisplay()
 function xarVarPrepHTMLDisplay()
 {
 // <nuncanada> Moving email obscurer functionality somewhere else : autolinks, transforms or whatever
-/*
-    // This search and replace finds the text 'x@y' and replaces
-    // it with HTML entities, this provides protection against
-    // email harvesters
-    //
-    // Note that the use of \024 and \022 are needed to ensure that
-    // this does not break HTML tags that might be around either
-    // the username or the domain name
-    static $search = array('/([^\024])@([^\022])/se');
-
-    static $replace = array('"&#" .
-                            sprintf("%03d", ord("\\1")) .
-                            ";&#064;&#" .
-                            sprintf("%03d", ord("\\2")) . ";";');
-*/
     static $allowedtags = NULL;
 
     if (!isset($allowedtags)) {
@@ -1271,8 +1256,6 @@ function xarVarPrepHTMLDisplay()
 
         // Prepare var
         $var = htmlspecialchars($var);
-//        $var = preg_replace($search, $replace, $var);
-//        $var = strtr($var,array('@' => '&#064;'));
 
         // Fix the HTML that we want
 /*
@@ -1313,6 +1296,51 @@ function xarVarPrepHTMLDisplay__callback($matches)
                              '&quot;' => '"',
                              '&amp;' => '&'))
            . '>';
+}
+
+/**
+ * Ready obfuscated e-mail output
+ *
+ * Gets a variable, cleaning it up such that e-mail addresses are
+ * slightly obfuscated against e-mail harvesters.
+ *
+ * @access public
+ * @return mixed prepared variable if only one variable passed
+ * in, otherwise an array of prepared variables
+ */
+function xarVarPrepEmailDisplay()
+{
+/*
+    // This search and replace finds the text 'x@y' and replaces
+    // it with HTML entities, this provides protection against
+    // email harvesters
+    //
+    // Note that the use of \024 and \022 are needed to ensure that
+    // this does not break HTML tags that might be around either
+    // the username or the domain name
+    static $search = array('/([^\024])@([^\022])/se');
+
+    static $replace = array('"&#" .
+                            sprintf("%03d", ord("\\1")) .
+                            ";&#064;&#" .
+                            sprintf("%03d", ord("\\2")) . ";";');
+
+*/
+    $resarray = array();
+    foreach (func_get_args() as $var) {
+        // Prepare var
+//        $var = preg_replace($search, $replace, $var);
+        $var = strtr($var,array('@' => '&#064;'));
+        // Add to array
+        array_push($resarray, $var);
+    }
+
+    // Return vars
+    if (func_num_args() == 1) {
+        return $resarray[0];
+    } else {
+        return $resarray;
+    }
 }
 
 /**
