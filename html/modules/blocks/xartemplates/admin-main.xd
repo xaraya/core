@@ -18,10 +18,10 @@
     <ul>
         <li><xar:mlstring>View Instances: View the current instances that are actively in use by your Xaraya System.</xar:mlstring></li>
         <li><xar:mlstring>Add instance: Add a new block instance to be displayed on your site.</xar:mlstring></li>
-        <li><xar:mlstring>Add Group: Add a new block group for template positioning.</xar:mlstring></li>
         <li><xar:mlstring>View Groups: View the defined Block Groups.</xar:mlstring></li>
-        <li><xar:mlstring>Add Block Type: Register a block that was not included in a module's installation.</xar:mlstring></li>
+        <li><xar:mlstring>Add Group: Add a new block group for template positioning.</xar:mlstring></li>
         <li><xar:mlstring>View Block Types: List of all available Block types.</xar:mlstring></li>
+        <li><xar:mlstring>Add Block Type: Register a block that was not included in a module's installation.</xar:mlstring></li>
     </ul>
 
     <h3><xar:mlstring>Included Blocks</xar:mlstring></h3>
