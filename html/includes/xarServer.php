@@ -65,32 +65,23 @@ function xarServer__shutdown_handler()
  * {@link http://www.php.net/manual/en/reserved.variables.html#reserved.variables.server PHP manual}.
  * If the server variable doesn't exist void is returned.
  *
- * @author Marco Canini <marco@xaraya.com>, Michel Dalle
+ * @author Marco Canini <marco@xaraya.com>
+ * @author Michel Dalle
  * @access public
  * @param name string the name of the variable
  * @return mixed value of the variable
  */
 function xarServerGetVar($name)
 {
-    // Try the new stuff first, see link above
+    assert('version_compare("4.1.2",phpversion()) <= 0; /* The minimum PHP version supported by Xaraya is 4.1.2 */');
     if (isset($_SERVER[$name])) {
         return $_SERVER[$name];
     }
-    // Make it work with older php versions
-    // FIXME: 4.1.2 is our requirement, superglobals were available
-    // in 4.1.0 and higher, i think we can move this out.
-    if (isset($GLOBALS['HTTP_SERVER_VARS'][$name])) {
-        return $GLOBALS['HTTP_SERVER_VARS'][$name];
-    }
+
     if (isset($_ENV[$name])) {
         return $_ENV[$name];
     }
 
-    // FIXME: 4.1.2 is our requirement, superglobals were available
-    // in 4.1.0 and higher, i think we can move this out.
-    if (isset($GLOBALS['HTTP_ENV_VARS'][$name])) {
-        return $HTTP_ENV_VARS[$name];
-    }
     if ($val = getenv($name)) {
         return $val;
     }
