@@ -326,10 +326,8 @@ function privileges_init()
                                       'default'     => '0',
                                       'increment'   => true,
                                       'primary_key' => true),
-                   'xar_set' => array('type'        => 'text',
-                                      'size'        => 'long',
-                                      'null'        => false,
-                                      'default'     => '')));
+                   'xar_set' => array('type'        => 'text')));
+
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 

@@ -633,7 +633,7 @@ class xarPrivileges extends xarMasks
 */
     function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
-        $nextID = $this->dbconn->genID($this->maskstable);
+        $nextID = $this->dbconn->genID($this->privilegestable);
         $nextIDprep = xarVarPrepForStore($nextID);
         $nameprep = xarVarPrepForStore($name);
         $realmprep = xarVarPrepForStore($realm);
