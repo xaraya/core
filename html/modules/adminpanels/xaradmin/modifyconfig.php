@@ -29,7 +29,6 @@ function adminpanels_admin_modifyconfig()
     $data['authid'] = xarSecGenAuthKey();
 
     // prepare labels and values for display by the template
-    $data['showmarker']             = xarModGetVar('adminpanels', 'showmarker');
     $data['marker']                 = xarModGetVar('adminpanels', 'marker');
 
     $data['sortorder'] = array();

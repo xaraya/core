@@ -13,3 +13,17 @@
         </xar:if>
     </span>
 </div>
+<div style="clear: both; padding-top: 10px;">
+    <span style="float: left; width: 20%; text-align: right;">
+        <span class="help" title="#xarML('By checking this box the active menu will be indicated by a marker (if any) in this adminmenu instance.')#">
+            <label for="showmarker#$blockid#"><xar:mlstring>Show a marker next to the active menu item</xar:mlstring></label>:
+        </span>
+    </span>
+    <span style="float: right; width: 78%; text-align: left;">
+        <xar:if condition="$showmarker eq 1">
+            <input type="checkbox" name="showmarker" id="showmarker#$blockid#" value="1" checked="checked" />
+        <xar:else />
+            <input type="checkbox" name="showmarker" id="showmarker#$blockid#" value="1" />
+        </xar:if>
+    </span>
+</div>

@@ -24,11 +24,13 @@ function adminpanels_adminmenublock_modify($blockinfo)
     }
     
     // Defaults
-    if (empty($vars['showlogout'])) {
-        $vars['showlogout'] = 0;
-    }
+    if(empty($vars['showlogout'])) $vars['showlogout'] = 0;
+    if(empty($vars['showmarker'])) $vars['showmarker'] = 0;
     
+    // Set the config values
     $args['showlogout'] = $vars['showlogout'];
+    $args['showmarker'] = $vars['showmarker'];
+    
     $args['blockid'] = $blockinfo['bid'];
     return $args;
 }
@@ -40,6 +42,7 @@ function adminpanels_adminmenublock_modify($blockinfo)
 function adminpanels_adminmenublock_update($blockinfo)
 {
     if (!xarVarFetch('showlogout', 'int:0:1', $vars['showlogout'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('showmarker', 'int:0:1', $vars['showmarker'], 0, XARVAR_NOT_REQUIRED)) return;
     
     $blockinfo['content'] = $vars;
     

@@ -91,13 +91,6 @@ function adminpanels_adminmenublock_display($blockinfo)
     // <mrb> How would this happen? adminpanels is here :-)
     if (empty($mods)) return;
 
-    // this is how we are marking the currently loaded module
-    // dont show marker unless specified
-    $marker = '';
-    if (xarModGetVar('adminpanels', 'showmarker')) {
-        $marker = xarModGetVar('adminpanels', 'marker');
-    }
-
     // which module is loaded atm?
     // we need it's name, type and function - dealing only with admin type mods, aren't we?
     list($thismodname, $thismodtype, $thisfuncname) = xarRequestGetInfo();
@@ -107,9 +100,15 @@ function adminpanels_adminmenublock_display($blockinfo)
 
     // SETTING 1: Show a logout link in the block?
     $showlogout = false;
-    if(isset($vars['showlogout']) && $vars['showlogout']) {
-        $showlogout = true;
-    }
+    if(isset($vars['showlogout']) && $vars['showlogout']) $showlogout = true;
+    
+    // SETTING 2: Show markers for active menu-items?
+    $showmarker = false;
+    if(isset($vars['showmarker']) && $vars['showmarker']) $showmarker = true;
+    // dont show marker unless specified
+    $marker = '';
+    if ($showmarker) $marker = xarModGetVar('adminpanels', 'marker');
+
     
     // Get current URL for later comparisons because we need to compare
     // xhtml compliant url, we fetch the default 'XML'-formatted URL.
@@ -175,8 +174,7 @@ function adminpanels_adminmenublock_display($blockinfo)
             $template = 'verticallistbyname';
             $data = array(
                 'adminmods'     => $adminmods,
-                'menustyle'     => $menustyle,
-                'marker'        => $marker
+                'menustyle'     => $menustyle
             );
             // this should do for now
             break;
@@ -255,8 +253,7 @@ function adminpanels_adminmenublock_display($blockinfo)
 
             $template = 'verticallistbycats';
             $data = array(
-                'catmods'       => $catmods,
-                'marker'        => $marker
+                'catmods'       => $catmods
             );
             break;
 
@@ -274,8 +271,7 @@ function adminpanels_adminmenublock_display($blockinfo)
                 $data = array(
                     'adminmods'     => $adminmods = array(),
                     'indlinks'      => $indlinks ='',
-                    'menustyle'     => $menustyle,
-                    'marker'        => $marker
+                    'menustyle'     => $menustyle
                 );
                 break;
 
@@ -293,8 +289,7 @@ function adminpanels_adminmenublock_display($blockinfo)
                 $data = array(
                     'adminmods'     => $adminmods = array(),
                     'indlinks'      => $indlinks ='',
-                    'menustyle'     => $menustyle,
-                    'marker'        => $marker
+                    'menustyle'     => $menustyle
                 );
                 break;
 
@@ -306,6 +301,8 @@ function adminpanels_adminmenublock_display($blockinfo)
 
     // Populate block info and pass to BlockLayout.
     $data['showlogout'] = $showlogout;
+    $data['showmarder'] = $showmarker;
+    $data['marker'] = $marker; // Not used in the internal templates btw, which is good imvho ;-)
     $blockinfo['content'] = $data;
     return $blockinfo;
 }
