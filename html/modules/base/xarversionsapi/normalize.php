@@ -14,12 +14,11 @@
  * @todo none
  */
 
-function base_versionsapi__normalize($ver, $sep, $strict)
+function base_versionsapi__normalize($ver, $sep, $rule)
 {
     $sep2 = preg_quote($sep);
 
-    // TODO: I don't now if caching the arrays is useful or not;
-    // removed for now.
+    $strict = ($rule == 'numeric') ? true : false;
 
     return preg_replace(
        array(
@@ -53,7 +52,7 @@ function base_versionsapi__normalize($ver, $sep, $strict)
  * @author Jason Judge
  * @param $args['ver'] 
  * @param $args['vers'] 
- * @param $args['strict'] indicates strict numeric-only comparisons (default: true)
+ * @param $args['rule'] allow only 'numeric' levels or 'alpha' strings (default: numeric)
  * @param $args['sep'] level separator character (default: '.')
  * @returns array or string of normalized version numbers
  * @return number indicating which parameter is the latest version
@@ -62,13 +61,11 @@ function base_versionsapi_normalize($args)
 {
     extract($args);
 
-    // Set this flag if checking should be strictly numeric.
-    // With strict set (true), non-numeric characters will be stripped prior to
-    // the comparison.
-    // With strict reset (false), then string comparisons will be
-    // performed where one or both version levels are not numeric.
-    if (!isset($strict)) {
-        $strict = true;
+    // TODO: use xarVarFetch() for the validation.
+
+    // The rule specifies the way the normalization is applied.
+    if (!isset($rule)) {
+        $rule = 'numeric';
     }
 
     // Default the level separator to '.' if none valid passed in.
@@ -76,12 +73,12 @@ function base_versionsapi_normalize($args)
         $sep = '.';
     }
 
-    // Options are:
+    // Version formats that could be passed in are:
     // a) $ver = '1.2.3'
     // b) $ver = array(1,2,3)
     // c) $vers = array('1.2.3', '4.5.6', ...)
     // d) $vers = array('1.2.3', array(4,5,6), ...)
-    // Get all these options into format a) or c).
+    // Get all these options into format a) or c) for the preg_replace.
 
     if (isset($vers) && is_array($vers)) {
         foreach ($vers as $key => $verval) {
@@ -90,13 +87,13 @@ function base_versionsapi_normalize($args)
             if (is_array($verval)) {
                 $verval = implode($sep, $verval);
             }
-            $result[$key] = base_versionsapi__normalize($verval, $sep, $strict);
+            $result[$key] = base_versionsapi__normalize($verval, $sep, $rule);
         }
     } elseif (isset($ver)) {
         if (is_array($ver)) {
             $ver = implode($sep, $ver);
         }
-        $result = base_versionsapi__normalize($ver, $sep, $strict);
+        $result = base_versionsapi__normalize($ver, $sep, $rule);
     } else {
         $result = false;
     }

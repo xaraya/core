@@ -25,7 +25,7 @@
  * @param $args['levels'] maxiumum levels to compare (default: 0/all levels)
  * @param $args['strict'] *removed* - see 'normalize'
  * @param $args['sep'] level separator character (default: '.')
- * @param $args['normalize'] parse the versions into a standard format 'strict'/'loose'/false (default: false/none)
+ * @param $args['normalize'] parse the versions into a standard format 'numeric'/'alpha'/false (default: false/none)
  * @param $args['validate'] validation rule to apply (default: false/none)
  * @param $args['reverse'] *removed* see 'order'
  * @param $args['order'] the order in which to compare (number or array)
@@ -44,9 +44,7 @@ function base_versionsapi_compare($args)
     extract($args, EXTR_PREFIX_INVALID, 'p');
 
     // Flag to enable normalization of version strings.
-    if (isset($normalize)) {
-        $strict = ($normalize == 'strict') ? true : false;
-    } else {
+    if (!isset($normalize)) {
         $normalize = false;
     }
 
@@ -94,7 +92,7 @@ function base_versionsapi_compare($args)
 
     if ($normalize) {
         list($ver1, $ver2) = xarModAPIfunc('base', 'versions', 'normalize',
-            array('sep'=>$sep, 'strict'=>$strict, 'vers'=>array($ver1, $ver2))
+            array('sep'=>$sep, 'rule'=>$normalize, 'vers'=>array($ver1, $ver2))
         );
     }
 
