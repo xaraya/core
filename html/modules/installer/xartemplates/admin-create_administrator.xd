@@ -41,7 +41,7 @@
        		</div>
        		<br />
        		<div style="text-align:justify;">
-       		  <span class="xar-normal">Your Administrator password is the key to your Xaraya installation. Choose something that you will remember and do not share it or write it down. As a rule of thumb, it should not contain any words, and should contain a mix of upper and lower case letters, numbers and punctuation.</span><br /><br />
+       		  <span class="xar-normal"><p>Your Administrator password is the key to your Xaraya installation. Choose something that you will remember and do not share it or write it down. As a rule of thumb, it should not contain any words, and should contain a mix of upper and lower case letters, numbers and punctuation.</p></span>
       		</div>
       		<div style="text-align:center;">
       		  <input type="submit" name="create" id="create" value="Continue &gt;" />

@@ -5,13 +5,11 @@
   		  <div style="text-align:center;">
 				  <input type="hidden" name="install_language" id="install_language" value="#$language#" />
   				  <div style="text-align:justify;">
-		  			<span class="xar-normal">
-      			Please enter your database settings. If you do not have root access to your database (due to virtual hosting, etc.), you will need to have a pre-existing one configured before you proceed.
-      			<br /><br />
-      			UPGRADE NOTE: If you plan on upgrading to Xaraya from a previous version or another Weblog/CMS, install as normal, then run the provided upgrade script.
+		  			<span class="xar-normal"><p>
+      			Please enter your database settings. If you do not have root access to your database (due to virtual hosting, etc.), you will need to have a pre-existing one configured before you proceed.</p>
+      			<p>UPGRADE NOTE: If you plan on upgrading to Xaraya from a previous version or another Weblog/CMS, install as normal, then run the provided upgrade script.</p>
       			</span>
 					</div>
-					<br /><br />
 					<div style="text-align:justify;">
       		  <table cellspacing="0" border="0" summary="For entering required database information">
 						  <thead>
@@ -55,8 +53,8 @@
 					<br />
 					<div style="text-align:justify;">
 					  <input type="checkbox" name="install_create_database" id="install_create_database" value="1" />
-						<span class="xar-normal"><label for="install_create_database">Create the database</label></span><br />
-						<span class="xar-sub">This option specifies whether you need the install to create the empty database for you first or whether it can just populate an already existing database. If you cannot create databases through phpMyAdmin because of virtual hosting or MySQL security settings, the installer will not be able to create the database for you. It will be able to populate an already existing one though.</span><br /><br />
+						<span class="xar-normal"><label for="install_create_database">Create the database</label></span>
+						<span class="xar-sub"><p>This option specifies whether you need the install to create the empty database for you first or whether it can just populate an already existing database. If you cannot create databases through phpMyAdmin because of virtual hosting or MySQL security settings, the installer will not be able to create the database for you. It will be able to populate an already existing one though.</p></span>
     			</div>
 					<div style="text-align:center;">
 					  <input type="hidden" name="install_phase" id="install_phase" id="install_phase" value="5" />

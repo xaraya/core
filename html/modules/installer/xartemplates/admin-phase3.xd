@@ -5,39 +5,34 @@
 			  <div style="text-align:center;">
     		<input type="hidden" name="install_language" value="#$language#" />
     		  <div style="text-align:justify;">
-            <span class="xar-normal">For Xaraya to function properly, the installer must write your database information to the #$systemConfigFile# file.  If your settings are not correct, this script will not be able to do so. The installer needs write access for steps 3 and 4 only.</span><br /><br />
+            <span class="xar-normal"><p>For Xaraya to function properly, the installer must write your database information to the #$systemConfigFile# file.  If your settings are not correct, this script will not be able to do so. The installer needs write access for steps 3 and 4 only.</p></span>
        			<span class="xar-title">
        			  <xar:if condition="$metRequiredPHPVersion">
-         			  SUCCESS: PHP Version is greater than or equal to 4.1.2. Your PHP Version is #$phpVersion#.
+         			  <p>SUCCESS: PHP Version is greater than or equal to 4.1.2. Your PHP Version is #$phpVersion#.</p>
          			<xar:else />
-         			  FAILURE: PHP Version is less than 4.1.2. Your PHP Version is #$phpVersion#. Please upgrade PHP.
+         			  <p>FAILURE: PHP Version is less than 4.1.2. Your PHP Version is #$phpVersion#. Please upgrade PHP.</p>
          			</xar:if>
-         			<br /><br />
          			<xar:if condition="$systemConfigIsWritable">
-         			  SUCCESS: The installer can write to the configuration file.
+         			  <p>SUCCESS: The installer can write to the configuration file.</p>
          			<xar:else />
-         			  FAILURE: The installer cannot write to the configuration file. Please verify that your webserver has write access to the #$systemConfigFile#  file.
+         			  <p>FAILURE: The installer cannot write to the configuration file. Please verify that your webserver has write access to the #$systemConfigFile#  file.</p>
          			</xar:if>
-         			<br /><br />
          			<xar:if condition="$cacheTemplatesIsWritable">
-         			  SUCCESS: The installer can write to the #$cacheTemplatesDir# directory.
+         			  <p>SUCCESS: The installer can write to the #$cacheTemplatesDir# directory.</p>
          			<xar:else />
-         			  FAILURE: The installer cannot write to the #$cacheTemplatesDir# Please verify that your webserver has write access to the #$cacheTemplatesDir#  directory.
+         			  <p>FAILURE: The installer cannot write to the #$cacheTemplatesDir# Please verify that your webserver has write access to the #$cacheTemplatesDir#  directory.</p>
          			</xar:if>
-					<br /><br />
          			<xar:if condition="$rssTemplatesIsWritable">
-         			  SUCCESS: The installer can write to the #$rssTemplatesDir# directory.
+         			  <p>SUCCESS: The installer can write to the #$rssTemplatesDir# directory.</p>
          			<xar:else />
-         			  FAILURE: The installer cannot write to the #$rssTemplatesDir# Please verify that your webserver has write access to the #$rssTemplatesDir#  directory.
+         			  <p>FAILURE: The installer cannot write to the #$rssTemplatesDir# Please verify that your webserver has write access to the #$rssTemplatesDir#  directory.</p>
          			</xar:if>
-					<br /><br />
          			<xar:if condition="$adodbTemplatesIsWritable">
-         			  SUCCESS: The installer can write to the #$adodbTemplatesDir# directory.
+         			  <p>SUCCESS: The installer can write to the #$adodbTemplatesDir# directory.</p>
          			<xar:else />
-         			  FAILURE: The installer cannot write to the #$adodbTemplatesDir# Please verify that your webserver has write access to the #$adodbTemplatesDir#  directory.
+         			  <p>FAILURE: The installer cannot write to the #$adodbTemplatesDir# Please verify that your webserver has write access to the #$adodbTemplatesDir#  directory.</p>
          			</xar:if>
        			</span>
-						<br /><br />
           </div>
           <div style="text-align:center;">
       		  <span class="xar-normal">

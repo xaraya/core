@@ -35,7 +35,7 @@
        		</div>
        		<br />
        		<div style="text-align:justify;">
-      		  <span class="xar-normal">Each configuration will load a predefined set of modules, menus, hooks etc. as well as create an initial configuration of the security system. On the next page you can change some of the options of chosen configuration.</span><br /><br />
+      		  <p><span class="xar-normal">Each configuration will load a predefined set of modules, menus, hooks etc. as well as create an initial configuration of the security system. On the next page you can change some of the options of chosen configuration.</span></p>
       		</div>
       		<div style="text-align:center;">
       		  <input type="submit" name="create" id="create" value="Continue &gt;" />

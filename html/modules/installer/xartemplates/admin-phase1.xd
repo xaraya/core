@@ -2,7 +2,7 @@
 	  <div style="padding:10px;">
       <div style="text-align:center;"><span class="xar-pagetitle">Select your Language</span></div><br /><br />
       <div style="text-align:justify;">
-			  <span class="xar-normal">This script will install the Xaraya database and configure the settings you need to get started. This process will take approximately ten (10) minutes. If you need assistance at any point, visit the support forums or live IRC support for help.<br /><br /></span>
+			  <span class="xar-normal"><p>This script will install the Xaraya database and configure the settings you need to get started. This process will take approximately ten (10) minutes. If you need assistance at any point, visit the support forums or live IRC support for help.</p></span>
       </div>
 			<div style="text-align:center;">
 			  <form action="install.php" method="post">
