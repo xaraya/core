@@ -3,6 +3,8 @@
 <!-- FIXME: use proper nesting in the data, not the elseif constructs -->
 <xar:if condition="!empty($usercontent)">
     <ul class="xar-menu-section">
+    <li class="xar-menu-section">
+    <ul class="xar-menu-item">
     <xar:loop name="$usercontent">
         <xar:if condition="empty($loop:item['url'])">
             <li class="xar-menu-section">#$loop:item['title']#</li>
@@ -11,11 +13,13 @@
         <xar:elseif condition="!empty($loop:item['child'])" />
             <li class="xar-menu-subitem">&nbsp;<a href="#$loop:item['url']#" title="#$loop:item['comment']#">#$loop:item['title']#</a></li>
         <xar:elseif condition="($loop:item['url'] eq $loop:item['here'])" />
-            <li class="xar-menu-item-current">#$loop:item['title']#</li>
+            <li class="xar-menu-item-current"><a name="activeitem" title="#$loop:item['comment']#">#$loop:item['title']#</a></li>
         <xar:else />
             <li class="xar-menu-item"><a href="#$loop:item['url']#" title="#$loop:item['comment']#">#$loop:item['title']#</a></li>
         </xar:if>
     </xar:loop>
+    </ul>
+    </li>
     </ul>
 </xar:if>
 
