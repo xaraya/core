@@ -26,6 +26,8 @@ function installer_public_moduleoptions() {
         array('name' => "ratings",              'regid' => 41),
         array('name' => "search",               'regid' => 32),
         array('name' => "soapserver",           'regid' => 748),
+        array('name' => "sniffer",              'regid' => 755),
+        array('name' => "stats",                'regid' => 34),
         array('name' => "wiki",                 'regid' => 28),
         array('name' => "xmlrpcserver",         'regid' => 743),
         array('name' => "xmlrpcsystemapi",      'regid' => 744),
