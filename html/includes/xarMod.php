@@ -1031,10 +1031,10 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'callerModName');
         return;
     }
-    if ($hookObject != 'item' && $hookObject != 'category') {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookObject');
-        return;
-    }
+    //if ($hookObject != 'item' && $hookObject != 'category') {
+    //    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookObject');
+    //    return;
+    //}
     //if ($hookAction != 'create' && $hookAction != 'delete' && $hookAction != 'transform' && $hookAction != 'display') {
     //    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookAction');
     //    return;
