@@ -305,9 +305,10 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
         } else {
             // If there are no children or no text, we can render it as is.
             $code = $node->render();
-            if(!isset($code)) xarLogVariable('offending node:', $node);
+
+            // Either the tag handler (node) returns code or an exception is pending.
+            if(xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
             assert('isset($code); /* The rendering code for a node is not working properly */');
-            if (!isset($code))  return; // throw back
         }
         return $code;
     }
