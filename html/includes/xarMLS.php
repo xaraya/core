@@ -747,6 +747,7 @@ function xarMLS_userOffset()
  *
  *  @todo unsupported strftime() format rules
  *  %Z - time zone or name or abbreviation - we should use the user or site's info for this
+ *  %z - time zone or name or abbreviation - we should use the user or site's info for this
  */
 function xarMLS_strftime($format=null,$timestamp=null)
 {
@@ -768,7 +769,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
             $format =& $admin_defined;
         } else {
         */
-            $format = '%a, %d %B %Y %H:%M %Z';
+            $format = '%c';
         /*
         }
         */
@@ -829,8 +830,8 @@ function xarMLS_strftime($format=null,$timestamp=null)
 
             case '%c' :
                 // TODO: we want to display the user or site's timezone not the servers
-                $fdate = xarLocaleGetFormattedUTCDate('short',$timestamp);
-                $ftime = xarLocaleGetFormattedUTCTime('short',$timestamp);
+                $fdate = xarLocaleGetFormattedUTCDate('medium',$timestamp);
+                $ftime = xarLocaleGetFormattedUTCTime('medium',$timestamp);
                 $format = str_replace($modifier,$fdate.' '.$ftime,$format);
                 break;
 
@@ -870,9 +871,27 @@ function xarMLS_strftime($format=null,$timestamp=null)
                 break;
 
             case '%Z' :
-// TODO: we want to display the user or site's timezone not the servers
+// TODO: we want to display the user or site's timezone, not the servers
 // TODO: we'll just push empty text for now
                 $format = str_replace($modifier,'',$format);
+                break;
+
+            case '%z' :
+                $user_offset = (string) xarMLS_userOffset();
+                // check to see if this is a negative or positive offset
+                $f_offset = strstr($user_offset,'-')  ? '-' : '+';
+                $user_offset = str_replace('-','',$user_offset); // replace the - if it exists
+                // check for 1/2 hour offsets
+                if(strpos($user_offset,'.')) {
+                   $fragments = explode('.',$user_offset);
+                   $f_offset .= sprintf('%02d',$fragments[0]).'30';
+                } elseif( (int) $user_offset < 10) {
+                    $f_offset .= "0{$user_offset}00";
+                } else {
+                    $f_offset .= "{$user_offset}00";
+                }
+
+                $format = str_replace($modifier,$f_offset,$format);
                 break;
 
             case '%p' :
