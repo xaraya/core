@@ -46,7 +46,7 @@
 			</td>
 		</tr>
     </xar:if>
-	<xar:if condition="xarModGetVar('roles','showtac') eq 0 and xarModGetVar('roles','showprivacy') eq 1">
+	<xar:if condition="xarModGetVar('roles','showterms') eq 0 and xarModGetVar('roles','showprivacy') eq 1">
 		<tr>
 			<td colspan="2"><input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" />&nbsp;
                <label for="agreetoterms">
@@ -57,7 +57,7 @@
 				</xar:if>
 			</td>
 		</tr>
-	<xar:elseif condition="xarModGetVar('roles','showprivacy') eq 0 and xarModGetVar('roles','showtac') eq 1" />
+	<xar:elseif condition="xarModGetVar('roles','showprivacy') eq 0 and xarModGetVar('roles','showterms') eq 1" />
 		<tr>
 			<td><input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" /></td>
 			<td>
@@ -69,7 +69,7 @@
 					</xar:if>
 			</td>
 		</tr>
-	<xar:elseif condition="xarModGetVar('roles','showprivacy') eq 1 and xarModGetVar('roles','showtac') eq 1" />
+	<xar:elseif condition="xarModGetVar('roles','showprivacy') eq 1 and xarModGetVar('roles','showterms') eq 1" />
 		<tr>
 			<td><input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" /></td>
 			<td>
