@@ -206,6 +206,34 @@ class Dynamic_DataStore
         $this->primary = $name;
     }
 
+    function getItem($args)
+    {
+    }
+
+    function createItem($args)
+    {
+        return $args['itemid'];
+    }
+
+    function updateItem($args)
+    {
+        return $args['itemid'];
+    }
+
+    function deleteItem($args)
+    {
+        return $args['itemid'];
+    }
+
+    function getItems($args = array())
+    {
+    }
+
+    function countItems($args = array())
+    {
+        return null;
+    }
+
     /**
      * Add a sort criteria for this data store (for getItems)
      */

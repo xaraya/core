@@ -591,7 +591,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             $bindvars[] = $modid; $bindvars[] = $itemtype;
         }
 
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,$bindvars);
         if (!$result || $result->EOF) return;
 
         $nextid = $result->fields[0];

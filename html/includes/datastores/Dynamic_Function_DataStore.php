@@ -27,6 +27,9 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
         // not applicable !?
     }
 
+// TODO: support different functions for the different methods,
+//       and/or pass an 'action' argument to the function, and/or...
+
     function getItem($args)
     {
         $modid = $args['modid'];
