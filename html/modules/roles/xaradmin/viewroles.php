@@ -20,9 +20,8 @@ function roles_admin_viewroles()
     // Clear Session Vars
     xarSessionDelVar('roles_statusmsg');
     // Security Check
-    if (!xarSecurityCheck('ViewRoles')) return;
+    if (!xarSecurityCheck('EditRoles')) return;
     // Call the Roles class
-    // should be static, but apparently not doable in php?
     $roles = new xarRoles();
 
     include_once 'modules/roles/xartreerenderer.php';
@@ -31,6 +30,6 @@ function roles_admin_viewroles()
     $data['authid'] = xarSecGenAuthKey();
     $data['tree'] = $renderer->drawtree($renderer->maketree());
     return $data;
-} 
+}
 
 ?>

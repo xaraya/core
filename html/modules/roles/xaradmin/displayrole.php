@@ -17,7 +17,7 @@
 function roles_admin_displayrole()
 {
     if (!xarVarFetch('uid','int:1:',$uid)) return;
-    
+
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
     // get the array of parents of this role
@@ -27,22 +27,26 @@ function roles_admin_displayrole()
         $parents[] = array('parentid' => $parent->getID(),
             'parentname' => $parent->getName());
     }
+    $name = $role->getName();
+// Security Check
+    if(!xarSecurityCheck('EditRole',0,'Roles',$name)) return;
+
     $data['uid'] = $role->getID();
     $data['type'] = $role->getType();
-    $data['name'] = $role->getName();
+    $data['name'] = $name;
     //get the data for a user
     if ($data['type'] == 0) {
-	    $data['uname'] = $role->getUser();
-	    $data['type'] = $role->getType();
-	    $data['email'] = xarVarPrepForDisplay($role->getEmail());
-		$data['state'] = $role->getState();
-		$data['valcode'] = $role->getValCode();
+        $data['uname'] = $role->getUser();
+        $data['type'] = $role->getType();
+        $data['email'] = xarVarPrepForDisplay($role->getEmail());
+        $data['state'] = $role->getState();
+        $data['valcode'] = $role->getValCode();
     } else {
-    	//get the data for a group
-    	
+        //get the data for a group
+
     }
-    
-    
+
+
 
     $item = $data;
     $item['module'] = 'roles';

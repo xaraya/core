@@ -18,14 +18,15 @@
  */
 function roles_admin_purge($args)
 {
+    // Security Check
+    if(!xarSecurityCheck('DeleteRole')) return;
+
     // Get parameters from whatever input we need
     if (!xarVarFetch('state', 'int:1:', $state, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('confirmation', 'isset', $confirmation, NULL, XARVAR_DONT_SET)) return;
 
     extract($args);
 
-    // Security Check
-    if(!xarSecurityCheck('DeleteRole')) return;
 
     // Check for confirmation.
     if (empty($confirmation)) {

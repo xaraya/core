@@ -52,7 +52,9 @@ function roles_admin_modifyrole()
     if (empty($name)) $name = $role->getName();
     $data['pname'] = $name;
 
-    // Security Check
+// Security Check
+    if(!xarSecurityCheck('EditRole',0,'Roles',$name)) return;
+
     $data['frozen'] = !xarSecurityCheck('EditRole',0,'Roles',$name);
 
     if (!empty($type)) {

@@ -34,7 +34,7 @@ function roles_admin_testprivileges()
     if (!xarVarFetch('test', 'str:1:35:', $test, '', XARVAR_NOT_REQUIRED)) return;
 
     // Security Check
-    if (!xarSecurityCheck('ReadRole')) return;
+    if (!xarSecurityCheck('EditRole')) return;
     // Call the Roles class and get the role
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
