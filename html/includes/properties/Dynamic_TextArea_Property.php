@@ -31,12 +31,18 @@ class Dynamic_TextArea_Property extends Dynamic_Property
     function showInput($args = array())
     {
         extract($args);
+        if (empty($name)) {
+            $name = 'dd_' . $this->id;
+        }
+        if (empty($id)) {
+            $id = $name;
+        }
         return '<textarea' .
-               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
+               ' name="' . $name . '"' .
                ' rows="'. (!empty($rows) ? $rows : $this->rows) . '"' .
                ' cols="'. (!empty($cols) ? $cols : $this->cols) . '"' .
                ' wrap="'. (!empty($wrap) ? $wrap : $this->wrap) . '"' .
-               (!empty($id) ? ' id="'.$id.'"' : '') .
+               ' id="'. $id . '"' .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                '>' . (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '</textarea>' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');

@@ -49,12 +49,18 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
         if (empty($value)) {
             $value = '';
         }
+        if (empty($name)) {
+            $name = 'dd_' . $this->id;
+        }
+        if (empty($id)) {
+            $id = $name;
+        }
         return '<input type="text"'.
-               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
+               ' name="' . $name . '"' .
                ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
                ' size="'. (!empty($size) ? $size : $this->size) . '"' .
                ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
-               (!empty($id) ? ' id="'.$id.'"' : '') .
+               ' id="'. $id . '"' .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');

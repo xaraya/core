@@ -32,10 +32,11 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
             $name = 'dd_'.$this->id;
         }
         $out = '';
+    // CHECKME: can you use id="..." here ? For the first radio-button perhaps ?
         foreach ($options as $option) {
             $out .= '<input type="radio" name="'.$name.'" value="'.$option['id'].'"';
             if ($option['id'] == $value) {
-                $out .= ' checked=\"checked\"> '.$option['name'].' </input>';
+                $out .= ' checked="checked"> '.$option['name'].' </input>';
             } else {
                 $out .= '> '.$option['name'].' </input>';
             }

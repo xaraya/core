@@ -35,12 +35,18 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
         if (!isset($value)) {
             $value = $this->value;
         }
+        if (empty($name)) {
+            $name = 'dd_' . $this->id;
+        }
+        if (empty($id)) {
+            $id = $name;
+        }
         return '<input type="checkbox"'.
-               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
+               ' name="' . $name . '"' .
                ' value="1"' .
-               (!empty($id) ? ' id="'.$id.'"' : '') .
+               ' id="'. $id . '"' .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               (!empty($value) ? ' checked' : '') .
+               (!empty($value) ? ' checked="checked"' : '') .
                ' />' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }

@@ -71,9 +71,15 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         if (!isset($options) || count($options) == 0) {
             $options = $this->options;
         }
+        if (empty($name)) {
+            $name = 'dd_' . $this->id;
+        }
+        if (empty($id)) {
+            $id = $name;
+        }
         $out = '<select' .
-               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
-               (!empty($id) ? ' id="'.$id.'"' : '') .
+               ' name="' . $name . '"' .
+               ' id="'. $id . '"' .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
                '>';
         $now = time();
@@ -84,7 +90,7 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
             }
             $time = gmdate('H:i',$now + $option['id']*60*60);
             if ($option['id'] == $value) {
-                $out .= ' selected>'.$time.' ('.$option['name'].')</option>';
+                $out .= ' selected="selected">'.$time.' ('.$option['name'].')</option>';
             } else {
                 $out .= '>'.$time.' ('.$option['name'].')</option>';
             }

@@ -130,6 +130,9 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         if (empty($name)) {
             $name = 'dd_'.$this->id;
         }
+        if (empty($id)) {
+            $id = $name;
+        }
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -162,7 +165,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                '<input type="file"'.
                ' name="'.$upname.'"' .
                ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               (!empty($id) ? ' id="'.$id.'_upload"' : '') .
+               ' id="'. $id . '"' .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' /> ' . $allowed .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');

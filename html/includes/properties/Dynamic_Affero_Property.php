@@ -49,12 +49,18 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
         } else {
             $link = '';
         }
+        if (empty($name)) {
+            $name = 'dd_' . $this->id;
+        }
+        if (empty($id)) {
+            $id = $name;
+        }
         return '<input type="text"'.
-               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
+               ' name="' . $name . '"' .
                ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
                ' size="'. (!empty($size) ? $size : $this->size) . '"' .
                ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
-               (!empty($id) ? ' id="'.$id.'"' : '') .
+               ' id="'. $id . '"' .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
                (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .

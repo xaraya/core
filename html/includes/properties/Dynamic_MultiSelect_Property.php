@@ -63,9 +63,15 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
                 $value = $tmp;
             }
         }
+        if (empty($name)) {
+            $name = 'dd_' . $this->id;
+        }
+        if (empty($id)) {
+            $id = $name;
+        }
         $out = '<select' .
-               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '[]"' .
-               (!empty($id) ? ' id="'.$id.'"' : '') .
+               ' name="' . $name . '[]"' .
+               ' id="'. $id . '"' .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
                ' multiple>';
         foreach ($options as $option) {
@@ -74,7 +80,7 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
                 $out .= ' value="'.$option['id'].'"';
             }
             if (in_array($option['id'],$value)) {
-                $out .= ' selected>'.$option['name'].'</option>';
+                $out .= ' selected="selected">'.$option['name'].'</option>';
             } else {
                 $out .= '>'.$option['name'].'</option>';
             }

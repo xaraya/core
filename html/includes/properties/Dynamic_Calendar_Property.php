@@ -55,6 +55,9 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         if (empty($name)) {
             $name = 'dd_'.$this->id;
         }
+        if (empty($id)) {
+            $id = $name;
+        }
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -75,7 +78,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $output .= '<br />';
         $localtime = localtime($value,1);
         $output .= xarML('Date') . ' <select name="'.$name.'[year]"'.
-                   (!empty($id) ? ' id="'.$id.'"' : '') .
+                   ' id="'.$id.'"' .
                    (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') . '>';
         if (empty($minyear)) {
             $minyear = $localtime['tm_year'] + 1900 - 2;
@@ -85,7 +88,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         }
         for ($i = $minyear; $i <= $maxyear; $i++) {
             if ($i == $localtime['tm_year'] + 1900) {
-                $output .= '<option selected>' . $i;
+                $output .= '<option selected="selected">' . $i;
             } else {
                 $output .= '<option>' . $i;
             }
@@ -93,7 +96,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $output .= '</select> - <select name="'.$name.'[mon]">';
         for ($i = 1; $i <= 12; $i++) {
             if ($i == $localtime['tm_mon'] + 1) {
-                $output .= '<option selected>' . $i;
+                $output .= '<option selected="selected">' . $i;
             } else {
                 $output .= '<option>' . $i;
             }
@@ -101,7 +104,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $output .= '</select> - <select name="'.$name.'[mday]">';
         for ($i = 1; $i <= 31; $i++) {
             if ($i == $localtime['tm_mday']) {
-                $output .= '<option selected>' . $i;
+                $output .= '<option selected="selected">' . $i;
             } else {
                 $output .= '<option>' . $i;
             }
@@ -110,7 +113,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $output .= xarML('Time') . ' <select name="'.$name.'[hour]">';
         for ($i = 0; $i < 24; $i++) {
             if ($i == $localtime['tm_hour']) {
-                $output .= '<option selected>' . sprintf("%02d",$i);
+                $output .= '<option selected="selected">' . sprintf("%02d",$i);
             } else {
                 $output .= '<option>' . sprintf("%02d",$i);
             }
@@ -118,7 +121,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $output .= '</select> : <select name="'.$name.'[min]">';
         for ($i = 0; $i < 60; $i++) {
             if ($i == $localtime['tm_min']) {
-                $output .= '<option selected>' . sprintf("%02d",$i);
+                $output .= '<option selected="selected">' . sprintf("%02d",$i);
             } else {
                 $output .= '<option>' . sprintf("%02d",$i);
             }
@@ -126,7 +129,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $output .= '</select> : <select name="'.$name.'[sec]">';
         for ($i = 0; $i < 60; $i++) {
             if ($i == $localtime['tm_sec']) {
-                $output .= '<option selected>' . sprintf("%02d",$i);
+                $output .= '<option selected="selected">' . sprintf("%02d",$i);
             } else {
                 $output .= '<option>' . sprintf("%02d",$i);
             }

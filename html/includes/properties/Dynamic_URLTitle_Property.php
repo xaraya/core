@@ -68,6 +68,9 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         if (empty($name)) {
             $name = 'dd_' . $this->id;
         }
+        if (empty($id)) {
+            $id = $name;
+        }
         if (empty($size)) {
             $size = $this->size;
         }
@@ -99,7 +102,7 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
             $title = '';
         }
         return '<input type="text" name="' . $name . '[title]" value="'. xarVarPrepForDisplay($title) . '" size="'. $size . '" maxlength="'. $maxlength . '"' .
-               (!empty($id) ? ' id="'.$id.'"' : '') .
+               ' id="'. $id . '"' .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' /> <br />' .
                '<input type="text" name="' . $name . '[link]" value="'. xarVarPrepForDisplay($link) . '" size="'. $size . '" maxlength="'. $maxlength . '" />' .

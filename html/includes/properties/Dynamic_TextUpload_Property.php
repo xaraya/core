@@ -98,6 +98,9 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         if (empty($name)) {
             $name = 'dd_'.$this->id;
         }
+        if (empty($id)) {
+            $id = $name;
+        }
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -125,7 +128,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                ' rows="'. (!empty($rows) ? $rows : $this->rows) . '"' .
                ' cols="'. (!empty($cols) ? $cols : $this->cols) . '"' .
                ' wrap="'. (!empty($wrap) ? $wrap : $this->wrap) . '"' .
-               (!empty($id) ? ' id="'.$id.'"' : '') .
+               ' id="'. $id . '"' .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                '>' . xarVarPrepForDisplay($value) . '</textarea><br /><br />' .
                '<input type="hidden" name="MAX_FILE_SIZE"'.
