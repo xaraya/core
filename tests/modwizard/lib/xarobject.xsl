@@ -96,7 +96,7 @@
                                <xsl:otherwise><xsl:value-of select="@name" /></xsl:otherwise>
                 </xsl:choose></label>
             <type><xsl:apply-templates mode="xarobject_proptype" select="." /></type>
-            <default></default>
+            <default><xsl:value-of select="@default" /></default>
             <source>xar_<xsl:value-of select="$module_prefix" />_<xsl:value-of select="$table_name" />.xar_<xsl:value-of select="@name" /></source>
             <status></status>
             <order></order>

@@ -20,7 +20,7 @@
 
 <!-- ENTRY POINT    print out progress and call module template -->
 <xsl:template match="/" mode="xaritemtypeapi" xml:space="default">
-    <xsl:apply-templates mode="xaritemtypeapi" select="xaraya_module" />
+### Generating itemtype apis <xsl:apply-templates mode="xaritemtypeapi" select="xaraya_module" />
 </xsl:template>
 
 
@@ -33,21 +33,7 @@
 <xsl:template match="xaraya_module" mode="xaritemtypeapi">
     <xsl:for-each select="database/table[ @user='true' or @admin='true' ]">
 
-        <xsl:variable name="itemtype" select="@name" />
-
-    generating xar<xsl:value-of select="$itemtype" />api.php ...  <xsl:document href="{$output}/xar{$itemtype}api.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
-
-        <!-- call template for file header -->
-        <xsl:call-template name="xaraya_standard_php_file_header" select="../../../../xaraya_module">
-            <xsl:with-param name="filename">xar<xsl:value-of select="$itemtype" />api.php</xsl:with-param>
-        </xsl:call-template>
-
         <xsl:apply-templates mode="xaritemtypeapi" select="." />
-
-        <!-- call template for file footer -->
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
-
-        </xsl:processing-instruction></xsl:document> ... finished
 
     </xsl:for-each>
 </xsl:template>
@@ -55,23 +41,128 @@
 
 <xsl:template match="table" mode="xaritemtypeapi">
 
+    <xsl:variable name="itemtype" select="@name" />
+    for itemtype <xsl:value-of select="$itemtype" />
+
     <xsl:if test="@admin = 'true'">
-        <xsl:apply-templates mode="xaritemtypeapi_modify" select="." />
-        <xsl:apply-templates mode="xaritemtypeapi_update" select="." />
 
-        <xsl:apply-templates mode="xaritemtypeapi_delete" select="." />
-        <xsl:apply-templates mode="xaritemtypeapi_confirmdelete" select="." />
+        <xsl:document href="{$output}/xar{$itemtype}api/modify.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
-        <xsl:apply-templates mode="xaritemtypeapi_new" select="." />
-        <xsl:apply-templates mode="xaritemtypeapi_create" select="." />
+            <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+                <xsl:with-param name="filename">xar<xsl:value-of select="$itemtype" />api/modify.php</xsl:with-param>
+            </xsl:call-template>
 
-        <xsl:apply-templates mode="xaritemtypeapi_config" select="." />
+            <xsl:apply-templates mode="xaritemtypeapi_modify" select="." />
+
+            <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+        </xsl:processing-instruction></xsl:document>
+
+
+        <xsl:document href="{$output}/xar{$itemtype}api/update.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+            <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+                <xsl:with-param name="filename">xar<xsl:value-of select="$itemtype" />api/update.php</xsl:with-param>
+            </xsl:call-template>
+
+            <xsl:apply-templates mode="xaritemtypeapi_update" select="." />
+
+            <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+        </xsl:processing-instruction></xsl:document>
+
+
+        <xsl:document href="{$output}/xar{$itemtype}api/delete.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+            <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+                <xsl:with-param name="filename">xar<xsl:value-of select="$itemtype" />api/delete.php</xsl:with-param>
+            </xsl:call-template>
+
+            <xsl:apply-templates mode="xaritemtypeapi_delete" select="." />
+
+            <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+        </xsl:processing-instruction></xsl:document>
+
+
+        <xsl:document href="{$output}/xar{$itemtype}api/confirmdelete.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+            <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+                <xsl:with-param name="filename">xar<xsl:value-of select="$itemtype" />api/confirmdelete.php</xsl:with-param>
+            </xsl:call-template>
+
+            <xsl:apply-templates mode="xaritemtypeapi_confirmdelete" select="." />
+
+            <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+        </xsl:processing-instruction></xsl:document>
+
+        <xsl:document href="{$output}/xar{$itemtype}api/new.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+            <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+                <xsl:with-param name="filename">xar<xsl:value-of select="$itemtype" />api/new.php</xsl:with-param>
+            </xsl:call-template>
+
+            <xsl:apply-templates mode="xaritemtypeapi_new" select="." />
+
+            <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+        </xsl:processing-instruction></xsl:document>
+
+
+        <xsl:document href="{$output}/xar{$itemtype}api/create.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+            <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+                <xsl:with-param name="filename">xar<xsl:value-of select="$itemtype" />api/create.php</xsl:with-param>
+            </xsl:call-template>
+
+            <xsl:apply-templates mode="xaritemtypeapi_create" select="." />
+
+            <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+        </xsl:processing-instruction></xsl:document>
+
+
+        <xsl:document href="{$output}/xar{$itemtype}api/config.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+            <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+                <xsl:with-param name="filename">xar<xsl:value-of select="$itemtype" />api/config.php</xsl:with-param>
+            </xsl:call-template>
+
+            <xsl:apply-templates mode="xaritemtypeapi_config" select="." />
+
+            <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+        </xsl:processing-instruction></xsl:document>
 
     </xsl:if>
 
     <xsl:if test="@user = 'true' or @admin='true'">
-        <xsl:apply-templates mode="xaritemtypeapi_display" select="." />
-        <xsl:apply-templates mode="xaritemtypeapi_view" select="." />
+
+        <xsl:document href="{$output}/xar{$itemtype}api/display.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+            <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+                <xsl:with-param name="filename">xar<xsl:value-of select="$itemtype" />api/display.php</xsl:with-param>
+            </xsl:call-template>
+
+            <xsl:apply-templates mode="xaritemtypeapi_display" select="." />
+
+            <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+        </xsl:processing-instruction></xsl:document>
+
+
+        <xsl:document href="{$output}/xar{$itemtype}api/view.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+            <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+                <xsl:with-param name="filename">xar<xsl:value-of select="$itemtype" />api/view.php</xsl:with-param>
+            </xsl:call-template>
+
+            <xsl:apply-templates mode="xaritemtypeapi_view" select="." />
+
+            <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+        </xsl:processing-instruction></xsl:document>
     </xsl:if>
 
 </xsl:template>
@@ -107,14 +198,14 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
                 ,'main' ));
     }
 
-    switch ( $type ) {
-        case 'admin':
-            $data =&amp; <xsl:value-of select="$module_prefix" />_admin_common( 'View <xsl:value-of select="label" />' );
-            break;
-
-        default:
-            $data =&amp; <xsl:value-of select="$module_prefix" />_user_common( 'View <xsl:value-of select="label" />' );
-    }
+    $data =&amp; xarModAPIFunc(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'private'
+        ,'common'
+        ,array(
+            'title' => 'View <xsl:value-of select="label" />'
+            ,'type' => $type
+            ));
 
     $itemsperpage = xarModGetVar(
             '<xsl:value-of select="$module_prefix" />'
@@ -175,7 +266,14 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
  */
 function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_config( $args ) {
 
-    $data = <xsl:value-of select="$module_prefix" />_admin_common( '<xsl:value-of select="label" /> Configuration' );
+    $data =&amp; xarModAPIFunc(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'private'
+        ,'common'
+        ,array(
+            'title' => 'View <xsl:value-of select="label" /> Configuration'
+            ,'type' => 'admin'
+            ));
 
     list( $itemtype, $authid ) = xarVarCleanFromInput( 'itemtype', 'authid' );
     extract( $args );
@@ -261,7 +359,11 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
      * Populate the rest of the template
      */
     $data['common']['menu_label'] = 'Configure';
-    $data['common']['menu']       = <xsl:value-of select="$module_prefix" />_adminpriv_configmenu();
+    $data['common']['menu']       = xarModAPIFunc(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'private'
+        ,'adminconfigmenu'
+        ,array() );
     $data['action']     = xarModURL( '<xsl:value-of select="$module_prefix" />', 'admin', 'config' );
     $data['authid']     = xarSecGenAuthKey();
     $data['_bl_template'] = '<xsl:value-of select="@name" />';
@@ -409,7 +511,14 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,array(
             'object'    =>  $object
             ,'itemtype' =>  $itemtype ));
-    $data = <xsl:value-of select="$module_prefix" />_admin_common( 'Modify <xsl:value-of select="label" /> ' .$item_title );
+    $data = xarModAPIFunc(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'private'
+        ,'common'
+        ,array(
+            'title' => 'Modify <xsl:value-of select="label" /> ' . $item_title
+            ,'type' => 'admin'
+            ));
 
     // check if authid is set.
     if ( isset( $authid ) ) {
@@ -421,7 +530,6 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
          * We create the preview with the <xsl:value-of select="$module_prefix" />_userapi_view<xsl:value-of select="@name" />()
          * function.
          */
-        if ( !xarModLoad( '<xsl:value-of select="../../registry/name" />', 'user' ) ) return;
         $preview = xarModFunc(
             '<xsl:value-of select="../../registry/name" />'
             ,'user'
@@ -485,7 +593,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
  */
 function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_confirmdelete( $args ) {
 
-    if (!xarSecurityCheck( 'Edit<xsl:value-of select="$module_prefix" />')) return;
+    if (!xarSecurityCheck( 'Delete<xsl:value-of select="$module_prefix" />')) return;
 
     list ( $itemid,  $itemtype ) = xarVarCleanFromInput( 'itemid', 'itemtype' );
     extract($args);
@@ -508,23 +616,14 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,array(
             'object'    =>  $object
             ,'itemtype' =>  $itemtype ));
-    $data = <xsl:value-of select="$module_prefix" />_admin_common( 'Delete <xsl:value-of select="label" /> '. $item_title );
-
-    <xsl:if test="@hooks = 'enable'">
-    /*
-     * call the hook 'item:delete:GUI'
-     */
-    $args = array(
-        'module'        =>  '<xsl:value-of select="$module_prefix" />'
-        ,'itemid'       =>  $itemid
-        ,'itemtype'     =>  '<xsl:value-of select="@itemtype" />' );
-    $data['hooks'] = xarModCallHooks(
-        'item'
-        ,'delete'
-        ,$itemid
-        ,$args
-        ,'<xsl:value-of select="$module_prefix" />' );
-    </xsl:if>
+    $data = xarModAPIFunc(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'private'
+        ,'common'
+        ,array(
+            'title' => 'Delete <xsl:value-of select="label" /> ' .$item_title
+            ,'type' => 'admin'
+            ));
 
     /*
      * Compose the data for the template
@@ -560,12 +659,8 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
  */
 function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_delete( $args ) {
 
-    if (!xarSecurityCheck( 'Edit<xsl:value-of select="$module_prefix" />')) return;
+    if (!xarSecurityCheck( 'Delete<xsl:value-of select="$module_prefix" />')) return;
 
-    // Get parameters from whatever input we need.  All arguments to this
-    // function should be obtained from xarVarCleanFromInput(), getting them
-    // from other places such as the environment is not allowed, as that makes
-    // assumptions that will not hold in future versions of Xaraya
     list ( $itemid, $itemtype ) = xarVarCleanFromInput( 'itemid', 'itemtype' );
     extract($args);
 
@@ -587,7 +682,6 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,array(
             'object'    =>  $object
             ,'itemtype' =>  $itemtype ));
-    $data = <xsl:value-of select="$module_prefix" />_admin_common( 'Delete <xsl:value-of select="label" /> '. $item_title );
 
     /*
      * The user confirmed the deletion so let's go.
@@ -595,22 +689,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
     $itemid = $object->deleteItem();
     if ( empty( $itemid ) ) return;
 
-    <xsl:if test="@hooks = 'enable'">
-    /*
-     * call the hook 'item:update:API'
-     */
-    $args = array(
-        'module'        =>  '<xsl:value-of select="$module_prefix" />'
-        ,'itemid'       =>  $itemid
-        ,'itemtype'     =>  '<xsl:value-of select="@itemtype" />' );
-    $data['hooks'] = xarModCallHooks(
-        'item'
-        ,'update'
-        ,$itemid
-        ,$args
-        ,'<xsl:value-of select="$module_prefix" />' );
-    </xsl:if>
-
+    <xsl:if test="@hooks = 'enable'">// The 'api:delete' hook is called from dynamic data during createItem() !</xsl:if>
     /*
      * Set the status message
      */
@@ -666,7 +745,14 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
     /*
      * Initialize the data array();
      */
-    $data = <xsl:value-of select="$module_prefix" />_admin_common( 'New <xsl:value-of select="label" /> ' );
+    $data = xarModAPIFunc(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'private'
+        ,'common'
+        ,array(
+            'title' => 'New <xsl:value-of select="label" /> '
+            ,'type' => 'user'
+            ));
 
     // These function is called under different contexts.
     // 1. first time ( authid is not set )
@@ -681,7 +767,6 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
          * We create the preview with the <xsl:value-of select="$module_prefix" />_userapi_view<xsl:value-of select="@name" />()
          * function.
          */
-        if ( !xarModLoad( '<xsl:value-of select="../../registry/name" />', 'user' ) ) return;
         $preview = xarModFunc(
             '<xsl:value-of select="../../registry/name" />'
             ,'user'
@@ -770,21 +855,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         $itemid = $object->createItem();
         if (empty( $itemid) ) return; // throw back
 
-        <xsl:if test="@hooks = 'enable'">
-        /*
-         * call the hook 'item:create:API'
-         */
-        $args = array(
-            'module'        =>  '<xsl:value-of select="$module_prefix" />'
-            ,'itemid'       =>  $itemid
-            ,'itemtype'     =>  '<xsl:value-of select="@itemtype" />' );
-        $hooks = xarModCallHooks(
-            'item'
-            ,'create'
-            ,$itemid
-            ,$args
-            ,'<xsl:value-of select="$module_prefix" />' );
-        </xsl:if>
+        <xsl:if test="@hooks = 'enable'">// The 'api:create' hook is called from dynamic data during createItem() !</xsl:if>
 
         $item_title = xarModAPIFunc(
             '<xsl:value-of select="$module_prefix" />'
@@ -891,7 +962,14 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,array(
                 'object'    =>  $object
                 ,'itemtype' =>  $itemtype ));
-        $data =&amp; <xsl:value-of select="$module_prefix" />_user_common( '<xsl:value-of select="label" /> ' . $item_title );
+        $data = xarModAPIFunc(
+            '<xsl:value-of select="$module_prefix" />'
+            ,'private'
+            ,'common'
+            ,array(
+                'title' => '<xsl:value-of select="label" />' . $item_title
+                ,'type' => 'user'
+                ));
 
         <xsl:if test="@hooks = 'enable'">
         /*

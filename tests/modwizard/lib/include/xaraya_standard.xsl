@@ -40,12 +40,17 @@
     </xsl:if>
 
 /**
- * <xsl:value-of select="$filename" />
+ * <xsl:value-of select="about/name" />
  *
  * @copyright   <xsl:value-of select="about/copyright" />
  * @license     <xsl:value-of select="about/license" />
  * @author      <xsl:value-of select="about/author/name" />
+ * @link        <xsl:value-of select="about/author/link" />
+ *
+ * @package     Xaraya eXtensible Management System
+ * @subpackage  <xsl:value-of select="about/name" />
  * @version     $Id$
+ *
  */
 </xsl:template>
 

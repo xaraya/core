@@ -54,7 +54,7 @@
 
 $modversion['name']           = '<xsl:value-of select="$module_prefix" />';
 $modversion['id']             = '<xsl:value-of select="registry/id" />';
-$modversion['version']        = '0.1';
+$modversion['version']        = '0.0.1';
 $modversion['description']    = '<xsl:value-of select="about/description/short" />';
 $modversion['credits']        = 'xardocs/credits.txt';
 $modversion['help']           = 'xardocs/help.txt';

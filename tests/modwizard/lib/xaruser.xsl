@@ -20,7 +20,7 @@
 
 <!-- ENTRY POINT    print out progress and call module template -->
 <xsl:template match="/" mode="xaruser" xml:space="default">
-    generating xaruser.php ... <xsl:apply-templates mode="xaruser" select="xaraya_module" /> ... finished
+### Generating user interfaces <xsl:apply-templates mode="xaruser" select="xaraya_module" />
 </xsl:template>
 
 
@@ -31,29 +31,45 @@
 
 -->
 <xsl:template match="xaraya_module" mode="xaruser">
-<xsl:document href="{$output}/xaruser.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
-    <!-- call template for file header -->
-    <xsl:call-template name="xaraya_standard_php_file_header" select=".">
-        <xsl:with-param name="filename">xaruser.php</xsl:with-param>
-    </xsl:call-template>
+    <xsl:document href="{$output}/xaruser/main.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
-    <!-- call template for module_admin_main() function -->
-    <xsl:apply-templates mode="xaruser_main" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaruser/main.php</xsl:with-param>
+        </xsl:call-template>
 
-    <!-- call template for module_user_common() function -->
-    <xsl:apply-templates mode="xaruser_common" select="." />
+        <xsl:apply-templates mode="xaruser_main" select="." />
 
-    <!-- call template for module_user_display() function -->
-    <xsl:apply-templates mode="xaruser_display" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
 
-    <!-- call template for module_user_view() function -->
-    <xsl:apply-templates mode="xaruser_view" select="." />
+    </xsl:processing-instruction></xsl:document>
 
-    <!-- call template for file footer -->
-    <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
 
-</xsl:processing-instruction></xsl:document>
+    <xsl:document href="{$output}/xaruser/display.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaruser/display.php</xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:apply-templates mode="xaruser_display" select="." />
+
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+    </xsl:processing-instruction></xsl:document>
+
+
+    <xsl:document href="{$output}/xaruser/view.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaruser/view.php</xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:apply-templates mode="xaruser_view" select="." />
+
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+    </xsl:processing-instruction></xsl:document>
+
 </xsl:template>
 
 
@@ -72,51 +88,14 @@ function <xsl:value-of select="$module_prefix" />_user_main() {
     // generally either 'edit' or 'delete'. </xsl:if>
     if (!xarSecurityCheck( 'View<xsl:value-of select="$module_prefix" />')) return;
 
-    $data = <xsl:value-of select="$module_prefix" />_user_common( 'Splash Page' );
+    $data = xarModAPIFunc(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'private'
+        ,'common'
+        ,array(
+            'title' =>  'Splash Page' ));
 
     return $data;
-}
-</xsl:template>
-
-
-<!-- ========================================================================
-
-        MODE: xaruser_common               MATCH: xaraya_module
-
--->
-<xsl:template mode="xaruser_common" match="xaraya_module">
-    <xsl:variable name="module_prefix" select="registry/name" />
-/**
- * This function provides information to the templates which are common to all
- * pageviews.
- *
- * It provides the following informations:
- *
- *      'menu'      => Array with information about the module menu
- *      'statusmsg' => Status message if set
- */
-function <xsl:value-of select="$module_prefix" />_user_common( $title = 'Undefined' ) {
-
-    $common = array();
-
-    $common['menu'] = array();
-
-    // Initialize the statusmessage
-    $statusmsg = xarSessionGetVar( '<xsl:value-of select="$module_prefix" />_statusmsg' );
-    if ( isset( $statusmsg ) ) {
-        xarSessionDelVar( '<xsl:value-of select="$module_prefix" />_statusmsg' );
-        $common['statusmsg'] = $statusmsg;
-    }
-
-    <xsl:if test="not( boolean( configuration/capabilities/setpagetitle ) ) or configuration/capabilities/setpagetitle/text() = 'yes'">
-    // Set the page title
-    xarTplSetPageTitle( '<xsl:value-of select="$module_prefix" /> :: ' . $title );
-    </xsl:if>
-
-    // Initilaize the title
-    $common['pagetitle'] = $title;
-
-    return array( 'common' => $common );
 }
 </xsl:template>
 

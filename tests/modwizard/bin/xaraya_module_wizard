@@ -1,21 +1,35 @@
 #!/usr/bin/perl -w
 
 use strict;
-use File::Basename;
 
-#
-# CHANGE TO WORKING DIRECTORY
-#
-my $wd = File::Basename::dirname( $ARGV[0] );
-chdir ( $wd );
+use vars qw/ $OUTPUT_DIR $INPUT_FILE $WIZARD_DIR/;
+
+BEGIN {
+    require Cwd;
+    require File::Basename;
+
+    $INPUT_FILE = Cwd::abs_path( $ARGV[0] );
+    $OUTPUT_DIR = File::Basename::dirname( $INPUT_FILE );
+
+    $WIZARD_DIR = Cwd::abs_path(
+            File::Basename::dirname(
+                File::Basename::dirname( $0  )
+                ));
+}
 
 #
 # FIND LIBRARY
 #
-my $lib = File::Basename::dirname( File::Basename::dirname( $0 ) ) . '/lib';
+print "[MSG] Starting validation of your xml file.\n";
+print qx/ pwd && xmlproc_val $INPUT_FILE /;
+print "[MSG] Finished validation of your xml file.\n";
 
-print "Validating you xml file";
-print qx/ xmlproc_val $ARGV[0] /;
+if ( not -e "$OUTPUT_DIR/modwizard.dtd" )
+    {
+    print STDERR "Copy modwizard.dtd to $OUTPUT_DIR and try again!";
+    exit 1;
+    }
 
-print "Executing the wizard";
-print qx/ xsltproc --stringparam output $wd $lib\/xarmodule.xsl $ARGV[0] /;
+print "[MSG] Executing the wizard\n";
+print qx/ xsltproc --stringparam output $OUTPUT_DIR $WIZARD_DIR\/lib\/xarmodule.xsl $INPUT_FILE /;
+print "[MSG] Finished the wizard\n";

@@ -20,7 +20,7 @@
 
 <!-- ENTRY POINT    print out progress and call module template -->
 <xsl:template match="/" mode="xaradmin" xml:space="default">
-    generating xaradmin.php ... <xsl:apply-templates mode="xaradmin" select="xaraya_module" /> ... finished
+### Generating admin interfaces <xsl:apply-templates mode="xaradmin" select="xaraya_module" />
 </xsl:template>
 
 
@@ -31,86 +31,86 @@
 
 -->
 <xsl:template match="xaraya_module" mode="xaradmin">
-<xsl:document href="{$output}/xaradmin.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
-    <!-- call template for file header -->
-    <xsl:call-template name="xaraya_standard_php_file_header" select=".">
-        <xsl:with-param name="filename">xaradmin.php</xsl:with-param>
-    </xsl:call-template>
+    <xsl:document href="{$output}/xaradmin/main.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
-    <!-- call template for module_admin_main() function -->
-    <xsl:apply-templates mode="xaradmin_main" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaradmin/view.php</xsl:with-param>
+        </xsl:call-template>
 
-    <!-- call template for module_admin_view() function -->
-    <xsl:apply-templates mode="xaradmin_view" select="." />
+        <xsl:apply-templates mode="xaradmin_main" select="." />
 
-    <!-- call template for module_admin_common() function -->
-    <xsl:apply-templates mode="xaradmin_common" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
 
-    <!-- call template for module_admin_new() function -->
-    <xsl:apply-templates mode="xaradmin_new" select="." />
+    </xsl:processing-instruction></xsl:document>
 
-    <!-- call template for module_admin_modify() function -->
-    <xsl:apply-templates mode="xaradmin_modify" select="." />
 
-    <!-- call template for module_admin_delete() function -->
-    <xsl:apply-templates mode="xaradmin_delete" select="." />
+    <xsl:document href="{$output}/xaradmin/view.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
-    <!-- call template for module_admin_config() function -->
-    <xsl:apply-templates mode="xaradmin_config" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaradmin/view.php</xsl:with-param>
+        </xsl:call-template>
 
-    <xsl:apply-templates mode="xaradminpriv_configmenu" select="." />
+        <xsl:apply-templates mode="xaradmin_view" select="." />
 
-    <!-- call template for file footer -->
-    <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
 
-</xsl:processing-instruction></xsl:document>
+    </xsl:processing-instruction></xsl:document>
+
+
+    <xsl:document href="{$output}/xaradmin/new.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaradmin/view.php</xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:apply-templates mode="xaradmin_new" select="." />
+
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+    </xsl:processing-instruction></xsl:document>
+
+
+    <xsl:document href="{$output}/xaradmin/modify.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaradmin/view.php</xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:apply-templates mode="xaradmin_modify" select="." />
+
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+    </xsl:processing-instruction></xsl:document>
+
+
+    <xsl:document href="{$output}/xaradmin/delete.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaradmin/view.php</xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:apply-templates mode="xaradmin_delete" select="." />
+
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+    </xsl:processing-instruction></xsl:document>
+
+
+    <xsl:document href="{$output}/xaradmin/config.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaradmin/view.php</xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:apply-templates mode="xaradmin_config" select="." />
+
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+    </xsl:processing-instruction></xsl:document>
+
+
 </xsl:template>
-
-
-<!-- ========================================================================
-
-        MODE: xaradmin_common               MATCH: xaraya_module
-
--->
-<xsl:template mode="xaradmin_common" match="xaraya_module">
-    <xsl:variable name="module_prefix" select="registry/name" />
-/**
- * This function provides information to the templates which are common to all
- * pageviews.
- *
- * It provides the following informations:
- *
- *      'menu'      => Array with information about the module menu
- *      'statusmsg' => Status message if set
- */
-function <xsl:value-of select="$module_prefix" />_admin_common( $title = 'Undefined' ) {
-
-    $common = array();
-
-    $common['menu'] = array();
-
-    // Initialize the statusmessage
-    $statusmsg = xarSessionGetVar( '<xsl:value-of select="$module_prefix" />_statusmsg' );
-    if ( isset( $statusmsg ) ) {
-        xarSessionDelVar( '<xsl:value-of select="$module_prefix" />_statusmsg' );
-        $common['statusmsg'] = $statusmsg;
-    }
-
-    <xsl:if test="not( boolean( configuration/capabilities/setpagetitle ) ) or configuration/capabilities/setpagetitle/text() = 'yes'">
-    // Set the page title
-    xarTplSetPageTitle( '<xsl:value-of select="$module_prefix" /> :: ' . $title );
-    </xsl:if>
-
-    // Initialize the title
-    $common['pagetitle'] = $title;
-    $common['type']      = '<xsl:value-of select="about/name" /> Administration';
-
-    return array( 'common' => $common );
-}
-</xsl:template>
-
-
 
 <!-- =========================================================================
 
@@ -138,23 +138,26 @@ function <xsl:value-of select="$module_prefix" />_admin_main() {
     if (xarModGetVar('adminpanels', 'overview') == 0) {
 
         // Yes we should
-        $data = <xsl:value-of select="$module_prefix" />_admin_common( 'Overview' );
+        $data = xarModAPIFunc(
+            '<xsl:value-of select="$module_prefix" />'
+            ,'private'
+            ,'common'
+            ,array(
+                'title' => 'Overview'
+                ,'type' => 'admin'
+                ));
         return $data;
-
     }
 
     // No we shouldn't. So we redirect to the admin_view() function.
-    xarResponseRedirect(
+    return xarResponseRedirect(
         xarModURL(
             '<xsl:value-of select="registry/name" />'
             ,'admin'
             ,'view' ));
-    return true;
 
 }
 </xsl:template>
-
-
 
 
 <!-- =========================================================================
@@ -189,7 +192,16 @@ function <xsl:value-of select="$module_prefix" />_admin_view($args) {
     </xsl:for-each>
 
         default:
-            return <xsl:value-of select="$module_prefix" />_admin_common('Main Page'); }
+            return
+                $data = xarModAPIFunc(
+                    '<xsl:value-of select="$module_prefix" />'
+                    ,'private'
+                    ,'common'
+                    ,array(
+                        'title' => 'Main Page'
+                        ,'type' => 'admin'
+                        ));
+    }
 }
 
 
@@ -197,43 +209,6 @@ function <xsl:value-of select="$module_prefix" />_admin_view($args) {
 
 
 
-<!-- ========================================================================
-
-        MODE: xaradminpriv_configmenu             MATCH: xaraya_module
-
--->
-<xsl:template mode="xaradminpriv_configmenu" match="xaraya_module">
-    <xsl:variable name="module_prefix" select="registry/name" />
-/**
- * Create a little submenu for the configuration screen.
- */
-function <xsl:value-of select="$module_prefix" />_adminpriv_configmenu() {
-
-    /*
-     * Build the configuration submenu
-     */
-    $menu = array(
-        array(
-            'label' =>  'Config',
-            'url'   =>  xarModURL(
-                '<xsl:value-of select="$module_prefix" />',
-                'admin',
-                'config' )));
-
-    <xsl:for-each select="database/table[@admin='true']">
-    $menu[] = array(
-            'label' =>  '<xsl:value-of select="label/text()" />',
-            'url'   =>  xarModURL(
-                '<xsl:value-of select="$module_prefix" />',
-                'admin',
-                'config'
-                ,array( 'itemtype' => '<xsl:value-of select="@itemtype" />' )));
-    </xsl:for-each>
-
-    return $menu;
-
-}
-</xsl:template>
 
 
 
@@ -257,7 +232,7 @@ function <xsl:value-of select="$module_prefix" />_admin_config( $args ) {
 
         // This function generated no output, and so now it is complete we redirect
         // the user to an appropriate page for them to carry on their work
-        xarResponseRedirect(
+        return xarResponseRedirect(
             xarModURL(
                 '<xsl:value-of select="$module_prefix" />'
                 ,'admin'
@@ -287,7 +262,14 @@ function <xsl:value-of select="$module_prefix" />_admin_config( $args ) {
  */
 function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args ) {
 
-    $data = <xsl:value-of select="$module_prefix" />_admin_common( 'Module Configuration' );
+    $data = xarModAPIFunc(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'private'
+        ,'common'
+        ,array(
+            'title' => 'Module Configuration'
+            ,'type' => 'admin'
+            ));
 
     list( $itemtype, $authid ) = xarVarCleanFromInput( 'itemtype', 'authid' );
     extract( $args );
@@ -337,7 +319,7 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args ) {
         /*
          * Finished. Back to the sender!
          */
-        xarResponseRedirect(
+        return xarResponseRedirect(
             xarModURL(
                 '<xsl:value-of select="$module_prefix" />'
                 ,'admin'
@@ -365,8 +347,10 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args ) {
     </xsl:if>
 
     $data['common']['menu_label'] = 'Configure';
-    $data['common']['menu']       = <xsl:value-of select="$module_prefix" />_adminpriv_configmenu();
-
+    $data['common']['menu']       = xarModAPIFunc(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'private'
+        ,'adminconfigmenu' );
 
     /*
      * Populate the rest of the template
@@ -429,7 +413,7 @@ function <xsl:value-of select="$module_prefix" />_admin_modify( $args ) {
 
         // This function generated no output, and so now it is complete we redirect
         // the user to an appropriate page for them to carry on their work
-        xarResponseRedirect(
+        return xarResponseRedirect(
             xarModURL(
                 '<xsl:value-of select="$module_prefix" />'
                 ,'admin'
@@ -459,7 +443,7 @@ function <xsl:value-of select="$module_prefix" />_admin_modify( $args ) {
             </xsl:for-each>
                 default:
                     // TODO // Add statusmessage
-                    xarResponseRedirect(
+                    return xarResponseRedirect(
                         xarModURL(
                             '<xsl:value-of select="$module_prefix" />'
                             ,'admin'
@@ -479,7 +463,7 @@ function <xsl:value-of select="$module_prefix" />_admin_modify( $args ) {
     </xsl:for-each>
         default:
             // TODO // Add statusmessage
-            xarResponseRedirect(
+            return xarResponseRedirect(
                 xarModURL(
                     '<xsl:value-of select="$module_prefix" />'
                     ,'admin'
@@ -533,7 +517,7 @@ function <xsl:value-of select="$module_prefix" />_admin_delete( $args ) {
 
         // This function generated no output, and so now it is complete we redirect
         // the user to an appropriate page for them to carry on their work
-        xarResponseRedirect(
+        return xarResponseRedirect(
             xarModURL(
                 '<xsl:value-of select="$module_prefix" />'
                 ,'admin'
@@ -566,7 +550,7 @@ function <xsl:value-of select="$module_prefix" />_admin_delete( $args ) {
 
                 default:
                     // TODO // Add statusmessage
-                    xarResponseRedirect(
+                    return xarResponseRedirect(
                         xarModURL(
                             '<xsl:value-of select="$module_prefix" />'
                             ,'admin'
@@ -587,7 +571,7 @@ function <xsl:value-of select="$module_prefix" />_admin_delete( $args ) {
     </xsl:for-each>
         default:
             // TODO // Add statusmessage
-            xarResponseRedirect(
+            return xarResponseRedirect(
                 xarModURL(
                     '<xsl:value-of select="$module_prefix" />'
                     ,'admin'
@@ -638,7 +622,7 @@ function <xsl:value-of select="$module_prefix" />_admin_new( $args ) {
 
         // This function generated no output, and so now it is complete we redirect
         // the user to an appropriate page for them to carry on their work
-        xarResponseRedirect(
+        return xarResponseRedirect(
             xarModURL(
                 '<xsl:value-of select="$module_prefix" />'
                 ,'admin'
@@ -670,7 +654,7 @@ function <xsl:value-of select="$module_prefix" />_admin_new( $args ) {
             </xsl:for-each>
                 default:
                     // TODO // Add statusmessage
-                    xarResponseRedirect(
+                    return xarResponseRedirect(
                         xarModURL(
                             '<xsl:value-of select="$module_prefix" />'
                             ,'admin'
@@ -691,7 +675,7 @@ function <xsl:value-of select="$module_prefix" />_admin_new( $args ) {
     </xsl:for-each>
         default:
             // TODO // Add statusmessage
-            xarResponseRedirect(
+            return xarResponseRedirect(
                 xarModURL(
                     '<xsl:value-of select="$module_prefix" />'
                     ,'admin'

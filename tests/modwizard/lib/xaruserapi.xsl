@@ -20,7 +20,7 @@
 
 <!-- ENTRY POINT    print out progress and call module template -->
 <xsl:template match="/" mode="xaruserapi" xml:space="default">
-    generating xaruserapi.php ... <xsl:apply-templates mode="xaruserapi" select="xaraya_module" /> ... finished
+### Generating user api <xsl:apply-templates mode="xaruserapi" select="xaraya_module" />
 </xsl:template>
 
 
@@ -31,18 +31,20 @@
 
 -->
 <xsl:template match="xaraya_module" mode="xaruserapi">
-<xsl:document href="{$output}/xaruserapi.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
-
-    <!-- FILE HEADER
-    -->
-    <xsl:call-template name="xaraya_standard_php_file_header" select=".">
-        <xsl:with-param name="filename">xaruserapi.php</xsl:with-param>
-    </xsl:call-template>
-
 
     <!-- UTILITY FUNCTIONS
     -->
-    <xsl:apply-templates select="." mode="xaruserapi_getmenulinks" />
+    <xsl:document href="{$output}/xaruserapi/getmenulinks.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaruserapiapi/getmenulinks.php</xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:apply-templates select="." mode="xaruserapi_getmenulinks" />
+
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+    </xsl:processing-instruction></xsl:document>
 
 
     <!-- // FUNC // ShortURLSupport
@@ -51,34 +53,106 @@
          support
     -->
     <xsl:if test="not( boolean( configuration/capabilities/supportshorturls ) ) or configuration/capabilities/supportshorturls/text() = 'yes'">
-        <xsl:apply-templates select="." mode="xaruserapi_encode_shorturl" />
-        <xsl:apply-templates select="." mode="xaruserapi_decode_shorturl" />
-    </xsl:if>
+        <xsl:document href="{$output}/xaruserapi/encode_shorturl.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
+            <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+                <xsl:with-param name="filename">xaruserapiapi/encode_shorturl.php</xsl:with-param>
+            </xsl:call-template>
+
+            <xsl:apply-templates select="." mode="xaruserapi_encode_shorturl" />
+
+            <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+        </xsl:processing-instruction></xsl:document>
+
+
+        <xsl:document href="{$output}/xaruserapi/decode_shorturl.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+            <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+                <xsl:with-param name="filename">xaruserapiapi/decode_shorturl.php</xsl:with-param>
+            </xsl:call-template>
+
+            <xsl:apply-templates select="." mode="xaruserapi_decode_shorturl" />
+
+            <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+        </xsl:processing-instruction></xsl:document>
+
+    </xsl:if>
 
     <!-- EVENT FUNCTIONS
     -->
-    <xsl:apply-templates select="." mode="xaruserapi_onServerRequest" />
-
-
 
     <!-- GENERIC DATA ACCESS FUNCTIONS
     -->
     <xsl:if test="boolean( database/table[@user='true'] )">
-    <xsl:apply-templates mode="xaruserapi_count" select="." />
-    <xsl:apply-templates mode="xaruserapi_getall" select="." />
-    <xsl:apply-templates mode="xaruserapi_get" select="." />
-    <xsl:apply-templates mode="xaruserapi_gettitle" select="." />
-    <xsl:apply-templates select="." mode="xaruserapi_getitemlinks" />
+    <xsl:document href="{$output}/xaruserapi/count.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaruserapiapi/count.php</xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:apply-templates mode="xaruserapi_count" select="." />
+
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+    </xsl:processing-instruction></xsl:document>
+
+
+    <xsl:document href="{$output}/xaruserapi/getall.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaruserapiapi/getall.php</xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:apply-templates mode="xaruserapi_getall" select="." />
+
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+    </xsl:processing-instruction></xsl:document>
+
+
+    <xsl:document href="{$output}/xaruserapi/get.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaruserapiapi/get.php</xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:apply-templates mode="xaruserapi_get" select="." />
+
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+    </xsl:processing-instruction></xsl:document>
+
+
+    <xsl:document href="{$output}/xaruserapi/gettitle.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaruserapiapi/gettitle.php</xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:apply-templates mode="xaruserapi_gettitle" select="." />
+
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+    </xsl:processing-instruction></xsl:document>
+
+
+    <xsl:document href="{$output}/xaruserapi/getitemlinks.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaruserapiapi/getitemlinks.php</xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:apply-templates select="." mode="xaruserapi_getitemlinks" />
+
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+    </xsl:processing-instruction></xsl:document>
+
     </xsl:if>
 
 
-    <!-- END OF FILE
-    -->
-    <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
-
-
-</xsl:processing-instruction></xsl:document>
 </xsl:template>
 
 
@@ -402,23 +476,6 @@ function <xsl:value-of select="$module_prefix" />_userapi_getall( $args ) {
 
     return $objects;
 }
-</xsl:template>
-
-
-
-<!-- =========================================================================
-
-    MODE: xaruserapi_onServerRequest        MATCH:  xaraya_module
-
--->
-<xsl:template mode="xaruserapi_onServerRequest" match="xaraya_module">
-    <xsl:variable name="module_prefix" select="registry/name" />
-/**
- * This function is called whenever the module is loaded.
-function <xsl:value-of select="$module_prefix" />_userapievt_onServerRequest() {
-
-}
- */
 </xsl:template>
 
 

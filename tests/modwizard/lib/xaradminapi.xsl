@@ -20,25 +20,27 @@
 
 <!-- ENTRY POINT    print out progress and call module template -->
 <xsl:template match="/" mode="xaradminapi" xml:space="default">
-    generating xaradminapi.php ... <xsl:apply-templates mode="xaradminapi" select="xaraya_module" /> ... finished
+### Generating adminstration api<xsl:apply-templates mode="xaradminapi" select="xaraya_module" />
 </xsl:template>
 
 
 
 <!-- MODULE POINT
 
-     Create a new file called xaradminapi.php.
-
 -->
 <xsl:template match="xaraya_module" mode="xaradminapi">
-<xsl:document href="{$output}/xaradminapi.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
-    <!-- call template for file header -->
-    <xsl:call-template name="xaraya_standard_php_file_header" select=".">
-        <xsl:with-param name="filename">xaradminapi.php</xsl:with-param>
-    </xsl:call-template>
+    <xsl:document href="{$output}/xaradminapi/getmenulinks.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
-    <xsl:apply-templates select="." mode="xaradminapi_getmenulinks" />
+        <xsl:call-template name="xaraya_standard_php_file_header" select=".">
+            <xsl:with-param name="filename">xaradminapi/getmenulinks.php</xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:apply-templates select="." mode="xaradminapi_getmenulinks" />
+
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+
+    </xsl:processing-instruction></xsl:document>
 
     <xsl:for-each select="database/table">
 
@@ -47,9 +49,7 @@
     </xsl:for-each>
 
     <!-- call template for file footer -->
-    <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
 
-</xsl:processing-instruction></xsl:document>
 </xsl:template>
 
 

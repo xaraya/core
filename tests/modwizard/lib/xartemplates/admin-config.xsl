@@ -29,7 +29,7 @@
     COMMON HEADER
 
 -->
-<xar:template file="admin-header" type="module" />
+<xar:template file="header" type="module" />
 
 <form method="post" action="#$action#">
 

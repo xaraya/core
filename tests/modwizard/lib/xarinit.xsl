@@ -63,7 +63,9 @@
 <xsl:template mode="xarinit_init_security" match="xaraya_module">
     <xsl:variable name="module_prefix" select="registry/name" />
     // for module access
+    xarRegisterMask( 'Read<xsl:value-of select="$module_prefix" />' ,'All' ,'<xsl:value-of select="$module_prefix" />' ,'All' ,'All', 'ACCESS_READ' );
     xarRegisterMask( 'View<xsl:value-of select="$module_prefix" />' ,'All' ,'<xsl:value-of select="$module_prefix" />' ,'All' ,'All', 'ACCESS_OVERVIEW' );
+    xarRegisterMask( 'Delete<xsl:value-of select="$module_prefix" />' ,'All' ,'<xsl:value-of select="$module_prefix" />' ,'All' ,'All', 'ACCESS_DELETE' );
     xarRegisterMask( 'Edit<xsl:value-of select="$module_prefix" />' ,'All' ,'<xsl:value-of select="$module_prefix" />' ,'All' ,'All', 'ACCESS_EDIT' );
     xarRegisterMask( 'Add<xsl:value-of select="$module_prefix" />' ,'All' ,'<xsl:value-of select="$module_prefix" />' ,'All' ,'All', 'ACCESS_ADD' );
     xarRegisterMask( 'Admin<xsl:value-of select="$module_prefix" />' ,'All' ,'<xsl:value-of select="$module_prefix" />' ,'All' ,'All', 'ACCESS_ADMIN' );
@@ -168,7 +170,7 @@
 -->
 <xsl:template mode="xarinit_init_tables" match="xaraya_module">
     <xsl:variable name="module_prefix" select="registry/name" />
-    $dbconn =& xarDBGetConn();
+    $dbconn =&amp; xarDBGetConn();
     $xartables = xarDBGetTables();
     xarDBLoadTableMaintenanceAPI();
 
@@ -188,6 +190,7 @@
             <xsl:if test="@width">'width'     =>  <xsl:value-of select="@width" />, </xsl:if>
             <xsl:if test="@width">'decimals'  =>  <xsl:value-of select="@decimals" />, </xsl:if>
             <xsl:if test="@default">'default'   =>  '<xsl:value-of select="@default" />', </xsl:if>
+            <xsl:if test="@unsigned = 'true'">'unsigned'   =>  true, </xsl:if>
             <xsl:if test="@primary_key = 'true'">'primary_key'   =>  true </xsl:if>
             )<xsl:if test="position() != last()">,</xsl:if>
     </xsl:for-each>
@@ -342,7 +345,7 @@ function <xsl:value-of select="$module_prefix" />_upgrade($oldversion)
     /*
      * REMOVE THE DATABASE TABLES AND DD OBJECTS
      */
-    $dbconn =& xarDBGetConn();
+    $dbconn =&amp; xarDBGetConn();
     $xartables = xarDBGetTables();
 
     // adodb does not provide the functionality to abstract table creates

@@ -56,6 +56,7 @@
 <!-- Template for xaradmin.php -->                      <xsl:include href="xaradmin.xsl" />
 <!-- Template for xaruserapi.php -->                    <xsl:include href="xaruserapi.xsl" />
 <!-- Template for xaruser.php -->                       <xsl:include href="xaruser.xsl" />
+<!-- Template for xarprivateapi.php -->                 <xsl:include href="xarprivateapi.xls" />
 <!-- Template for xartemplates/admin-main.xd -->        <xsl:include href="xartemplates/admin-main.xsl" />
 <!-- Template for xartemplates/admin-view.xd -->        <xsl:include href="xartemplates/admin-view.xsl" />
 <!-- Template for xartemplates/admin-view-table.xd -->  <xsl:include href="xartemplates/admin-view-table.xsl" />
@@ -67,8 +68,7 @@
 <!-- Template for xartemplates/user-main.xd -->         <xsl:include href="xartemplates/user-main.xsl" />
 <!-- Template for xartemplates/user-display-table.xd --><xsl:include href="xartemplates/user-display-table.xsl" />
 <!-- Template for xartemplates/user-view-table.xd -->   <xsl:include href="xartemplates/user-view-table.xsl" />
-<!-- Template for xartemplates/includes/admin-header.xd -->   <xsl:include href="xartemplates/includes/admin-header.xsl" />
-<!-- Template for xartemplates/includes/user-header.xd -->    <xsl:include href="xartemplates/includes/user-header.xsl" />
+<!-- Template for xartemplates/includes/header.xd -->   <xsl:include href="xartemplates/includes/header.xsl" />
 <!-- Template for xarblocks/block.php -->               <xsl:include href="xarblocks/block.xsl" />
 <!-- Template for xartemplates/blocks/block.php -->     <xsl:include href="xartemplates/blocks/block.xsl" />
 
@@ -114,11 +114,11 @@
 
     <!-- xaruserapi.php -->                     <xsl:apply-templates mode="xaruserapi"            select="/" />
     <!-- xaruser.php -->                        <xsl:apply-templates mode="xaruser"               select="/" />
+    <!-- xaruserprivateapi.php -->              <xsl:apply-templates mode="xarprivateapi"         select="/" />
     <!-- xartemplates/user-main.xd -->          <xsl:apply-templates mode="xd_user-main"          select="/" />
     <!-- xartemplates/user-display-table.xd --> <xsl:apply-templates mode="xd_user-display-table" select="/" />
     <!-- xartemplates/user-view-table.xd -->    <xsl:apply-templates mode="xd_user-view-table"    select="/" />
-    <!-- xartemplates/includes/admin-header.xd -->   <xsl:apply-templates mode="xd_includes_admin-header"    select="/" />
-    <!-- xartemplates/includes/user-header.xd -->    <xsl:apply-templates mode="xd_includes_user-header"    select="/" />
+    <!-- xartemplates/includes/header.xd -->    <xsl:apply-templates mode="xd_includes_header"    select="/" />
 
     <!-- xarblocks/block.php -->                <xsl:apply-templates mode="xarblocks_block"       select="/" />
     <!-- xartemplates/blocks/block.php -->      <xsl:apply-templates mode="xd_blocks_block"       select="/" />

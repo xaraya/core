@@ -79,7 +79,8 @@
      decimals    CDATA #IMPLIED
      default     CDATA #IMPLIED
      increment   ( true | false ) 'false'
-     overview    ( true | false ) 'true' >
+     overview    ( true | false ) 'true'
+     unsigned    ( true | false ) 'false' >
 
 <!ELEMENT dd_type       ( #PCDATA )>
 <!ELEMENT dd_validation ( #PCDATA )>
