@@ -2573,13 +2573,19 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
             return;
         }
 
+        if (!isset($value)) {
+            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+                           new xarTpl__ParserError('Missing \'name\' attribute in <xar:set> tag.', $this));
+            return;
+        }
+
         if (count($this->children) != 1) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                            new xarTpl__ParserError('The <xar:set> tag can contain only one child tag.', $this));
             return;
         }
 
-        return '$'.$name;
+        return '$'.$name.'='.$value;
     }
 
     function renderEndTag()
@@ -2594,12 +2600,12 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
 
     function hasChildren()
     {
-        return true;
+        return false;
     }
 
     function needAssignment()
     {
-        return true;
+        return false;
     }
 }
 
