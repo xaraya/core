@@ -1550,7 +1550,7 @@ class xarPrivileges extends xarMasks
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   none
+ * @param   integer   adds  Number of additional instance parts to add to the array 
  * @return  array of strings
  * @throws  none
  * @todo    none
@@ -1567,10 +1567,14 @@ class xarPrivileges extends xarMasks
             $normalform[] = strtolower($this->getComponent());
             $thisinstance = strtolower($this->getInstance());
             $thisinstance = str_replace('myself',xarSessionGetVar('uid'),$thisinstance);
-            $normalform = array_merge($normalform,explode(':',$thisinstance));
+            $normalform   = array_merge($normalform, explode(':', $thisinstance));
             $this->normalform = $normalform;
         }
-        for ($i=0;$i<$adds;$i++) $normalform[] = 'all';
+        
+        for ($i=0;$i<$adds;$i++) {
+            $normalform[] = 'all';
+        }
+        
         return $normalform;
     }
 
@@ -1662,21 +1666,20 @@ class xarPrivileges extends xarMasks
         } else {
             $p2 = $mask->normalize();
         }
-
+        
         // match realm, module and component. bail if no match.
         for ($i=1;$i<4;$i++) {
             if (($p1[$i] != 'all') && ($p1[$i]!=$p2[$i])) {
                 return false;
             }
         }
-
+		
         // now match the instances
         if(count($p1) != count($p2)) {
             if(count($p1) > count($p2)) {
                 $p = $p2;
                 $p2 = $mask->normalize(count($p1) - count($p2));
-            }
-            else {
+            } else {
                 $p = $p1;
                 $p1 = $this->normalize(count($p2) - count($p1));
             }
@@ -1686,7 +1689,7 @@ class xarPrivileges extends xarMasks
                                new SystemException($msg));
             }
         }
-        for ($i=4;$i<count($p1);$i++) {
+        for ( $i = 4; $i < count($p1); $i++) {
             if (($p1[$i] != 'all') && ($p1[$i]!=$p2[$i])) {
                 return false;
             }
