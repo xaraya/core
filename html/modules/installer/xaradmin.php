@@ -202,6 +202,7 @@ function installer_admin_phase5()
 
     // Start the database
     xarCoreInit(XARCORE_SYSTEM_ADODB);
+	xarTplSetThemeName('installer');
 
     // Load in modules/installer/xarinit.php and choose a new install or upgrade
     if (!xarInstallAPIFunc('installer',
@@ -217,7 +218,7 @@ function installer_admin_phase5()
 
 function installer_admin_phase6()
 {
-
+	xarTplSetThemeName('installer');
 
     return array();
 }
@@ -230,6 +231,7 @@ function installer_admin_phase6()
  */
 function installer_admin_bootstrap()
 {
+	xarTplSetThemeName('installer');
 
     // log in admin user
     if (!xarUserLogIn('Admin', 'password', 0)) {
@@ -262,6 +264,8 @@ function installer_admin_bootstrap()
  */
 function installer_admin_create_administrator()
 {
+	xarTplSetThemeName('installer');
+
     if (!xarSecAuthAction(0, 'Installer::', '::', ACCESS_ADMIN)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                        new SystemException(__FILE__."(".__LINE__."): You do not have permission to access the Installer module."));
