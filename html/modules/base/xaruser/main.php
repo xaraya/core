@@ -22,6 +22,8 @@ function base_user_main($args)
     if (!xarVarFetch('page','str',$page,'',XARVAR_NOT_REQUIRED)) return;
     if (!empty($page)){
         xarTplSetPageTitle($page);
+        /* Cache the custom page name so it is accessible elsewhere */
+        xarVarSetCached('Base.pages','page',$page);        
     } else {
         xarTplSetPageTitle(xarML('Welcome'));
     }
