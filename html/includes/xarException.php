@@ -259,7 +259,7 @@ function xarExceptionRender($format) { return xarErrorRender($format); }    // d
 
 function xarErrorRender($format,$stacktype = "ERROR")
 {
-    assert('$format == "template" || $format = "rawhtml" || $format = "text"; /* Improper format passed to xarErrorRender */');
+    assert('$format == "template" || $format == "rawhtml" || $format == "text"; /* Improper format passed to xarErrorRender */');
 
     $msgs = xarException__formatStack($format,$stacktype);
     $error = $msgs[0];
@@ -327,18 +327,17 @@ function xarErrorRender($format,$stacktype = "ERROR")
 function xarErrorGet($stacktype = "ERROR",$format='data')
 {
     $msgs = xarException__formatStack($format,$stacktype);
-    $items = count($msgs);
     $datamsgs = array();
 
-    for($i=0;$i<$items;$i++) {
-        $data['type'] = $msgs[$i]->getType();
-        $data['title'] = $msgs[$i]->getTitle();
-        $data['short'] = $msgs[$i]->getShort();
-        $data['long'] = $msgs[$i]->getLong();
-        $data['hint'] = $msgs[$i]->getHint();
-        $data['stack'] = $msgs[$i]->getStack();
-        $data['product'] = $msgs[$i]->getProduct();
-        $data['component'] = $msgs[$i]->getComponent();
+    foreach($msgs as $msg) {
+        $data['type'] = $msg->getType();
+        $data['title'] = $msg->getTitle();
+        $data['short'] = $msg->getShort();
+        $data['long'] = $msg->getLong();
+        $data['hint'] = $msg->getHint();
+        $data['stack'] = $msg->getStack();
+        $data['product'] = $msg->getProduct();
+        $data['component'] = $msg->getComponent();
         $datamsgs[] = $data;
     }
     return $datamsgs;
