@@ -39,7 +39,9 @@ function modules_admin_list()
     // select vars for drop-down menus
     $data['style']['plain']                         = xarML('Plain');
     $data['style']['icons']                         = xarML('Icons');
-    $data['style']['compact']                       = xarML('Compact');
+    $data['style']['compacta']                      = xarML('Compact-A');
+    $data['style']['compactb']                      = xarML('Compact-B');
+    
 /*     $data['style']['pro']                           = xarML('Pro HTML'); */
 /*     $data['style']['dogs']                           = xarML('Dog\'s Bollocks'); */
     
@@ -106,6 +108,9 @@ function modules_admin_list()
         }else{
             $coremod = false;
         }
+        
+        // lets omit core modules if a user chosen to hide them from the list
+        if($coremod && $data['hidecore']) continue;
         
         // for the sake of clarity, lets prepare all our links in advance
         $initialiseurl              = xarModURL('modules',
@@ -251,13 +256,29 @@ function modules_admin_list()
         $i++;
     }
     
-    // detailed info image url
-    $data['infoimage'] = xarTplGetImage('help.gif');
+    // total count of items
+    $data['totalitems'] = $i;
     
+    // detailed info image url
+    $data['infoimage'] = xarTplGetImage('help.gif');    
  
     // not ideal but would do for now - reverse sort by module names
     if($data['selsort'] == 'namedesc') krsort($data['listrowsitems']);
-
+    
+    // special sort for compact-b style
+    if($data['selstyle'] == 'compactb'){
+        if($i >= 2){
+        // more than 2 items in the array, we need to sort it, dont bother is less
+            $temparray = array_chunk($data['listrowsitems'], $i/2+1);
+            $newarray = array();
+            for($j = 0; $j <= $i/2; $j++){
+                if(!empty($temparray[0][$j])) array_push($newarray,$temparray[0][$j]);
+                if(!empty($temparray[1][$j])) array_push($newarray,$temparray[1][$j]);
+            }
+            $data['listrowsitems'] = $newarray;
+        }
+    }
+    
     // Send to BL.
     return $data;
 }
