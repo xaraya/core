@@ -64,7 +64,7 @@ class xarLogger_sql extends xarLogger
     {
         parent::setConfig($conf);
 
-        list($this->_dbconn) = xarDBGetConn();
+        $this->_dbconn =& xarDBGetConn();
 
         $this->_table = $conf['table'];
 //        $xartable =& xarDBGetTables();

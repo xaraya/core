@@ -61,10 +61,9 @@ function dynamicdata_adminapi_updateprop($args)
 	if(!xarSecurityCheck('EditDynamicDataField',1,'Field',"All:$type:$prop_id")) return;
     }
 
-    // Get database setup - note that both xarDBGetConn() and xarDBGetTables()
-    // return arrays but we handle them differently.  For xarDBGetConn()
-    // we currently just want the first item, which is the official
-    // database handle.  For xarDBGetTables() we want to keep the entire
+    // Get database setup - note that xarDBGetTables()
+    // returns an array but we handle it differently.   
+    // For xarDBGetTables() we want to keep the entire
     // tables array together for easy reference later on
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();

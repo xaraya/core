@@ -33,7 +33,7 @@ function blocks_adminapi_groupgetinfo($args)
         return xarVarGetCached('Block.Group.Infos', $blockGroupId);
     }
 
-    list ($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     $blockInstancesTable      = $tables['block_instances'];
