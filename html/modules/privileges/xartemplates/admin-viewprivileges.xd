@@ -1,6 +1,8 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<style type="text/css">@import url(modules/privileges/xartemplates/includes/privtree.css);</style>
-<script type="text/javascript" src="modules/privileges/xartemplates/xarTree.js"></script>
+<xar:if condition="xarTplAddStyleLink('privileges', 'privtree')">
+	<xar:comment>No action needed if successful</xar:comment>
+</xar:if>
+<xar:base-include-javascript module="privileges" filename="xarTree.js" />
 <script type="text/javascript">
 <!--
     var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
@@ -13,34 +15,38 @@
         oldOnUnloadFunction();      
         xarTree_init();
     }
-    
-    window.onload = doOnLoad;
-    window.onunload = doOnUnload;
-    function setaction(target){
-    document.forms['privilegeform'].action = target;
-    document.forms['privilegeform'].submit();}
 // -->
 </script>
-
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
+<div class="xar-mod-head">
+	<span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
+</div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>View Privileges</xar:mlstring></h2>
+    <h2>
+    	<xar:mlstring>View Privileges</xar:mlstring>
+    </h2>
+
     <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-viewprivileges;" method="post" enctype="application/x-www-form-urlencoded">
         <p>
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <xar:mlstring>Show Privileges that are:</xar:mlstring> 
-            <xar:if condition="$show eq 'assigned'">
-                <input type="radio" name="show" id="show_assigned" value="assigned" checked="checked" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-viewprivileges;';this.form.submit();"/>
-            <xar:else />
-                <input type="radio" name="show" id="show_assigned" value="assigned" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-viewprivileges;';this.form.submit();" />
-            </xar:if>
-            <label for="show_assigned"><xar:mlstring>Assigned</xar:mlstring></label>
-            <xar:if condition="$show eq 'all'">
-                <input type="radio" name="show" id="show_all" value="all" checked="checked" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-viewprivileges;';this.form.submit();"/>
-            <xar:else />
-                <input type="radio" name="show" id="show_all" value="all" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-viewprivileges;';this.form.submit();" />
-            </xar:if>
-            <label for="show_all"><xar:mlstring>All</xar:mlstring></label>
+			<input type="hidden" name="authid" id="authid" value="#$authid#" />
+			<xar:mlstring>Show Privileges that are:</xar:mlstring> 
+			
+			<xar:if condition="$show eq 'assigned'">
+			    <input type="radio" name="show" id="show_assigned" value="assigned" checked="checked" onclick="this.form.submit();"/>
+			<xar:else />
+			    <input type="radio" name="show" id="show_assigned" value="assigned" onclick="this.form.submit();" />
+			</xar:if>
+			<label for="show_assigned">
+				<xar:mlstring>Assigned</xar:mlstring>
+			</label>
+			
+			<xar:if condition="$show eq 'all'">
+			    <input type="radio" name="show" id="show_all" value="all" checked="checked" onclick="this.form.submit();"/>
+			<xar:else />
+			    <input type="radio" name="show" id="show_all" value="all" onclick="this.form.submit();" />
+			</xar:if>
+			<label for="show_all">
+				<xar:mlstring>All</xar:mlstring>
+			</label>
         </p>
     </form>
     <xar:loop name="$trees">

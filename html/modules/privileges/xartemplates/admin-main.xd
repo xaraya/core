@@ -1,57 +1,92 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<div class="xar-mod-head">
+	<span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
+</div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>Overview</xar:mlstring></h2>
-    <div style="padding: 1px;" class="xar-norm-outline">
-        <div style="float:right;padding:10px;">
-            <xar:if condition="file_exists('modules/privileges/xarimages/admin.gif')" >
-                <img src="modules/privileges/xarimages/admin.gif" alt="official icon" width="96" height="96" />
-            <xar:else />
-                <img src="modules/privileges/xarimages/admin_generic.gif" alt="official icon" width="96" height="96" />
-            </xar:if>
-        </div>
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>What is it?</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>The Privileges module lets you manage <b>access rights</b> on your site.  Privileges give roles access to certain resources of your choosing. They are the basic components of the security system.</xar:mlstring></p>
-            <xar:mlstring>Here are some of the things you can do with privileges</xar:mlstring>:
-            <ul>
-            <li><xar:mlstring>Xaraya's privileges are extremely flexible. You can define privileges at the level of site, modules, component classes within modules, or single instances of those classes.</xar:mlstring></li>
-            <li><xar:mlstring>You can use privileges as building blocks. Assemble them into compound privileges tailored to any specific role on the site.</xar:mlstring></li>
-            <li><xar:mlstring>You can assign privileges to roles which then pass them on to their children in the roles hierarchy through inheritance.</xar:mlstring></li>
-            <li><xar:mlstring>Using the realms functionality you can subdivide one site into many "virtual" sites sharing the same resources.</xar:mlstring></li>
-            </ul>
+    <img src="#xarTplGetImage('admin.gif', 'privileges')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
 
-        </div>
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>How to use it?</xar:mlstring></p>
-        </div>
-         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>Clicking on the View Privileges link gives you an overview of all the privileges on your system. Compound privileges are collapsed, but you can click on them to open them up and view their components.</xar:mlstring></p>
-            <p><xar:mlstring>When adding or modifying a privilege, you can define it to have its own access rights, or simply to serve as a container for other privileges</xar:mlstring></p>
-            <p><xar:mlstring>Xaraya comes preconfigured with a minimal set of privileges that are loaded when you run the installer. These will vary according to the configuration you chose. Examples are</xar:mlstring>:</p>
-                <ul>
-                    <li><xar:mlstring><b>Administration</b>: a privilege that gives a role complete access to all resources on the site. At installation this privilege is assigned to the role Administrators and is inherited by the user Admin.</xar:mlstring></li>
-                    <li><xar:mlstring><b>CasualAccess</b>: this is the privilege assigned to unregistered users on the site. It is initially defined to allow viewing access of the front page, as well as access to the login block.</xar:mlstring></li>
-                    <li><xar:mlstring><b>GeneralLock</b>: a privilege that restricts access to certain basic roles and privileges the system requires, such as the default admin. This is to avoid inadvertent removal.</xar:mlstring></li>
-           </ul>
-            <p><xar:mlstring>All privileges in the system can be changed or removed. (For those protected by GeneralLock above this takes a bit more doing.) You can also combine privileges by using them as elements to create compound privileges, or make new privileges of your choosing. There is no limit to the number of privileges you can create or their levels of nesting.</xar:mlstring></p>
-        </div>
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>Included Blocks</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>There are no included blocks</xar:mlstring></p>
-        </div>
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>Included Hooks</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>There are no included hooks.</xar:mlstring></p>
-        </div>
-        <div class="xar-norm-outline xar-accent" style="text-align: center; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-            <p><xar:mlstring>Extended information about this module can be found in</xar:mlstring> <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html">RFC-30</a>.</p>
-        </div>
-    </div>
+    <h2>
+    	<xar:mlstring>Overview</xar:mlstring>
+    </h2>
+
+    <h3>
+    	<xar:mlstring>What is it?</xar:mlstring>
+    </h3>
+
+    <p>
+    	<xar:mlstring>The Privileges module lets you manage access rights on your site.  Privileges give roles access to certain resources of your choosing. They are the basic components of the security system.</xar:mlstring>
+    </p>
+
+	<p>
+	    <xar:mlstring>Here are some of the things you can do with privileges:</xar:mlstring>
+	</p>
+
+    <ul>
+	    <li>
+	    	<xar:mlstring>Xaraya's privileges are extremely flexible. You can define privileges at the level of site, modules, component classes within modules, or single instances of those classes.</xar:mlstring>
+	    </li>
+	    <li>
+	    	<xar:mlstring>You can use privileges as building blocks. Assemble them into compound privileges tailored to any specific role on the site.</xar:mlstring>
+	    </li>
+	    <li>
+	    	<xar:mlstring>You can assign privileges to roles which then pass them on to their children in the roles hierarchy through inheritance.</xar:mlstring>
+	    </li>
+	    <li>
+	    	<xar:mlstring>Using the realms functionality you can subdivide one site into many "virtual" sites sharing the same resources.</xar:mlstring>
+	    </li>
+    </ul>
+
+    <h3>
+    	<xar:mlstring>How to use it?</xar:mlstring>
+    </h3>
+
+    <p>
+    	<xar:mlstring>Clicking on the View Privileges link gives you an overview of all the privileges on your system. Compound privileges are collapsed, but you can click on them to open them up and view their components.</xar:mlstring>
+    </p>
+
+    <p>
+    	<xar:mlstring>When adding or modifying a privilege, you can define it to have its own access rights, or simply to serve as a container for other privileges.</xar:mlstring>
+    </p>
+
+    <p>
+    	<xar:mlstring>Xaraya comes preconfigured with a minimal set of privileges that are loaded when you run the installer. These will vary according to the configuration you chose. Examples are:</xar:mlstring>
+    </p>
+
+    <ul>
+        <li>
+        	<xar:mlstring>Administration: a privilege that gives a role complete access to all resources on the site. At installation this privilege is assigned to the role Administrators and is inherited by the user Admin.</xar:mlstring>
+        </li>
+        <li>
+        	<xar:mlstring>CasualAccess: this is the privilege assigned to unregistered users on the site. It is initially defined to allow viewing access of the front page, as well as access to the login block.</xar:mlstring>
+        </li>
+        <li>
+        	<xar:mlstring>GeneralLock: a privilege that restricts access to certain basic roles and privileges the system requires, such as the default admin. This is to avoid inadvertent removal.</xar:mlstring>
+        </li>
+    </ul>
+
+    <p>
+    	<xar:mlstring>All privileges in the system can be changed or removed. (For those protected by GeneralLock above this takes a bit more doing.) You can also combine privileges by using them as elements to create compound privileges, or make new privileges of your choosing. There is no limit to the number of privileges you can create or their levels of nesting.</xar:mlstring>
+    </p>
+
+    <h3>
+    	<xar:mlstring>Included Blocks</xar:mlstring>
+    </h3>
+
+    <p>
+    	<xar:mlstring>There are no included blocks.</xar:mlstring>
+    </p>
+
+    <h3>
+    	<xar:mlstring>Included Hooks</xar:mlstring>
+    </h3>
+
+    <p>
+    	<xar:mlstring>There are no included hooks.</xar:mlstring>
+    </p>
+
+</div>
+<div class="xar-mod-foot xar-align-center xar-padding-thick">
+    <p>
+        <xar:mlstring>Extended information about this module can be found in</xar:mlstring> <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html">RFC-30</a>.
+    </p>
 </div>
