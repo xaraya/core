@@ -163,8 +163,7 @@ class ExceptionRendering
           $message = "One or more PHP errors were encountered." . $this->linebreak . $this->linebreak;
           foreach($collection as $collecteditem) {
               $message .= $collecteditem['id'] . $this->linebreak;
-              // FIXME: Dependency!
-              $message .= xarVarPrepForDisplay($collecteditem['value']->msg) . $this->linebreak;
+              $message .= htmlspecialchars($collecteditem['value']->msg) . $this->linebreak;
           }
           return $message;
         }

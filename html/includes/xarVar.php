@@ -1186,27 +1186,10 @@ function xarVarCleanFromInput()
  */
 function xarVarPrepForDisplay()
 {
-// <nuncanada> Moving email obscurer functionality somewhere else : autolinks, transforms or whatever
-/*
-    // This search and replace finds the text 'x@y' and replaces
-    // it with HTML entities, this provides protection against
-    // email harvesters
-    static $search = array('/(.)@(.)/se');
-
-    static $replace = array('"&#" .
-                            sprintf("%03d", ord("\\1")) .
-                            ";&#064;&#" .
-                            sprintf("%03d", ord("\\2")) . ";";');
-
-*/
     $resarray = array();
     foreach (func_get_args() as $var) {
-
         // Prepare var
         $var = htmlspecialchars($var);
-
-//        $var = preg_replace($search, $replace, $var);
-
         // Add to array
         array_push($resarray, $var);
     }

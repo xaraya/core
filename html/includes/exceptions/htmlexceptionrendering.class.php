@@ -18,26 +18,23 @@ class HTMLExceptionRendering extends ExceptionRendering
 
     function getTitle() 
     { 
-        // Dependency!
-        return xarVarPrepForDisplay(parent::getTitle()); 
+        return htmlspecialchars(parent::getTitle()); 
     }
     
     function getShort() 
     {
         if (substr($this->exception->getID(),0,2) == "E_") return parent::getShort();
-        else return xarVarPrepForDisplay(parent::getShort()); // Dependency!
+        else return htmlspecialchars(parent::getShort());
     }
     
     function getHint() 
     { 
-        // Dependency!
-        return xarVarPrepForDisplay(parent::getHint()); 
+        return htmlspecialchars(parent::getHint()); 
     }
     
     function getMsg() 
     { 
-        // Dependency!
-        return xarVarPrepForDisplay(parent::getMsg()); 
+        return htmlspecialchars(parent::getMsg()); 
     }
 
 }

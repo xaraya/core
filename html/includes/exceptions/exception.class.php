@@ -48,8 +48,7 @@ class xarException
 
     function toHTML()
     {
-        // Dependency!!
-        return nl2br(xarVarPrepForDisplay($this->msg)) . '<br/>';
+        return nl2br(htmlspecialchars($this->msg)) . '<br/>';
     }
 
     function getID()
