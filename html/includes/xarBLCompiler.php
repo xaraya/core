@@ -83,6 +83,8 @@ class xarTpl__CompilerError extends SystemException
  *
  * @package blocklayout
  * @access private
+ * @todo evaluate whether the exception needs to be a system exception
+ * @todo ML for the error message?
  */
 class xarTpl__ParserError extends SystemException
 {
@@ -380,9 +382,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             if (!isset($token)) break;
 
             // At the start of parsing we can have:
-            // < -> opening tag
-            // & -> entity
-            // # -> replacement (variable or function)
+            // <  ==> opening tag,  
+            // &  ==> entity
+            // #  ==> replacement (variable or function)
             switch ($token) {
             // Parsing begins with the opening < for a tag
             case XAR_TOKEN_TAG_START:
@@ -393,11 +395,10 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 // / -> end tag
                 // other -> rest
                 $nextToken = $this->getNextToken();
-                if ($nextToken == XAR_TOKEN_PI_DELIM) {
+                if ($nextToken == XAR_TOKEN_PI_DELIM) { // <?
                     $target = $this->getNextToken(3);
                     switch ($target) {
-                    case 'xar':
-                        // <?xar processing instruction
+                    case 'xar': // <?xar processing instruction
                         $variables = $this->parseHeaderTag();
                         if (!isset($variables))  return; // throw back
 
@@ -408,8 +409,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Here we set token to an empty string so that $text .= $token will result in $text
                         $token = '';
                         break;
-                    case 'xml':
-                        // <?xml header tag
+                    case 'xml': // <?xml header tag
                         // Wind forward to first > and copy to output if we have seen the root tag, otherwise, just wind forward
                         $between = $this->windTo(XAR_TOKEN_TAG_END);
                         if(!isset($between)) return; // throw back
@@ -465,7 +465,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // NOTE: WHITESPACE EATER HERE
                         $trimmer='xmltrim'; 
                         // If we're in native php tags which always have xar children, trim it
-                        if($parent->tagName == 'set' || $parent->tagName == 'ml' || $parent->tagName == 'blockgroup' ) $trimmer='trim';
+                        $natives = array('set','ml','blockgroup');
+                        if(in_array($parent->tagName, $natives,true)) $trimmer='trim';
                         if ($trimmer($text) != '') {
                             if ($parent->hasText()) {
                                 $children[] =& $this->nodesFactory->createTextNode($trimmer($text), $this);
@@ -531,7 +532,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Add text to parent
                         // Situation: [...text...]</xar:...
                         $trimmer='xmltrim';
-                        if($parent->tagName == 'set' || $parent->tagName =='ml' || $parent->tagName == 'mlvar') $trimmer='trim';
+                        $natives = array('set', 'ml', 'mlvar');
+                        if(in_array($parent->tagName, $natives,true)) $trimmer='trim';
                         if ($trimmer($text) != '') {
                             if ($parent->hasText()) {
                                 $children[] =& $this->nodesFactory->createTextNode($trimmer($text), $this);
@@ -722,7 +724,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     $trimmer='noop'; 
                     // FIXME: The above is wrong, should be xmltrim, 
                     // but otherwise the export of DD objects will look really ugly 
-                    if($parent->tagName == 'set' || $parent->tagName == 'ml') $trimmer='trim';
+                    $natives = array('set','ml');
+                    if(in_array($parent->tagName,$natives,true)) $trimmer='trim';
                     if ($trimmer($text) != '') {
                         if ($parent->hasText()) {
                             $children[] = $this->nodesFactory->createTextNode($trimmer($text), $this);
