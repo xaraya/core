@@ -978,7 +978,7 @@ function xarUserGetLang()
 {
     // FIXME: <marco> DEPRECATED?
     $locale = xarUserGetNavigationLocale();
-    $data = xarMLSLoadLocaleData($locale);
+    $data =& xarMLSLoadLocaleData($locale);
     if (!isset($data)) return; // throw back
     return $data['/language/iso3code'];
 }

@@ -50,7 +50,7 @@ function roles_languageblock_display($blockinfo)
     asort($site_locales);
 
     foreach ($site_locales as $locale) {
-        $locale_data = xarMLSLoadLocaleData($locale);
+        $locale_data =& xarMLSLoadLocaleData($locale);
 
         $selected = ($current_locale == $locale);
 
