@@ -37,8 +37,7 @@ function adminpanels_adminmenublock_info(){
  */
 function adminpanels_adminmenublock_display($blockinfo){
     // ToDo: 
-    // 1. Convert to BL
-    // 2. Implement left, centre and right position
+    // 1. Implement centre and right position
 
     // Security check
     if (!xarSecAuthAction(0,
