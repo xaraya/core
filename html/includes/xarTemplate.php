@@ -475,7 +475,6 @@ function xarTplGetImage($modImage, $modName = NULL)
 
     // get module directory (could be different from module name)
     if(function_exists('xarMod_getBaseInfo')) {
-        xarLogMessage('xarMod_getBaseInfo exists already?');
         $modBaseInfo = xarMod_getBaseInfo($modName);
         if (!isset($modBaseInfo)) return; // throw back
         $modOsDir = $modBaseInfo['osdirectory'];

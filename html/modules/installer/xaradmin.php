@@ -344,9 +344,7 @@ function installer_admin_phase5()
 function installer_admin_bootstrap()
 {
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
-
     xarVarSetCached('installer','installing', true);
-    //    xarTplSetThemeName('installer');
 
     // create the default roles and privileges setup
     include 'modules/privileges/xarsetup.php';
@@ -430,7 +428,6 @@ function installer_admin_create_administrator()
 
     xarVarSetCached('installer','installing', true);
 
-    //    xarTplSetThemeName('installer');
     $data['language'] = $install_language;
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Create Administrator');
@@ -609,7 +606,6 @@ function installer_admin_choose_configuration()
 {
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
-    //    xarTplSetThemeName('installer');
     $data['language'] = $install_language;
     $data['phase'] = 7;
     $data['phase_label'] = xarML('Choose your configuration');
@@ -651,8 +647,8 @@ function installer_admin_choose_configuration()
         $data['warning'] = xarML('There are currently no configuration files available.');
         return $data;
     }
-
-        xarModSetVar('installer','modulelist',serialize($fileModules));
+    
+    xarModSetVar('installer','modulelist',serialize($fileModules));
     if (count($fileModules) == 0){
     // No non-core modules present. Show only the minimal configuration
         $names = array();
@@ -699,7 +695,6 @@ function installer_admin_confirm_configuration()
     if(!xarVarFetch('chosen',        'isset', $chosen,        array(),  XARVAR_NOT_REQUIRED))  return;
     if(!xarVarFetch('options',       'isset', $options,       NULL, XARVAR_DONT_SET))   return;
 
-    //    xarTplSetThemeName('installer');
     $data['language'] = $install_language;
     $data['phase'] = 8;
     $data['phase_label'] = xarML('Choose configuration options');
@@ -918,7 +913,6 @@ function installer_admin_cleanup()
         return false;
     }
 
-    //    xarTplSetThemeName('installer');
     $remove = xarModDelVar('roles','adminpass');
     $remove = xarModDelVar('installer','modules');
 
