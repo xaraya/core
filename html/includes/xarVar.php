@@ -705,6 +705,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
  */
 function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $description = NULL, $uid = NULL, $type = 'modvar')
 {
+    assert('!is_null($value); /* Not allowed to set a variable to NULL value */');
     if (empty($name)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
@@ -781,7 +782,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             if(!$modvarid) return;
 
             // First delete it.
-        // FIXME: do we really want that ?
+            // FIXME: do we really want that ?
             xarModDelUserVar($modName,$name,$uid);
 
             // Only store setting if different from global setting
@@ -804,7 +805,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
                 $theme_varsTable = $tables['site/theme_vars'];
             }
 
-        // FIXME: do we really want that ?
+            // FIXME: do we really want that ?
             xarThemeDelVar($modName, $name);
 
             $seqId = $dbconn->GenId($theme_varsTable);
@@ -826,7 +827,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             break;
         case 'configvar':
 
-        // FIXME: do we really want that ?
+            // FIXME: do we really want that ?
             xarVar__DelVarByAlias($modname = NULL, $name, $uid = NULL, $type = 'configvar');
 
             $config_varsTable = $tables['config_vars'];
