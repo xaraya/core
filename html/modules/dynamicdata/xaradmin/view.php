@@ -27,7 +27,7 @@ function dynamicdata_admin_view($args)
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('catid',    'isset', $catid,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('layout',   'str:1' , $layout,    'list', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('layout',   'str:1' , $layout,    'default', XARVAR_NOT_REQUIRED)) {return;}
 
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');
