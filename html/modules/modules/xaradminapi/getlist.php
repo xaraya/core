@@ -140,8 +140,8 @@ function modules_adminapi_getlist($args)
 
         $query = "SELECT mods.xar_regid, mods.xar_name, mods.xar_directory,
                          mods.xar_version, mods.xar_id, states.xar_state
-                  FROM $modulestable AS mods
-                  LEFT JOIN $module_statesTable AS states ON mods.xar_regid = states.xar_regid";
+                  FROM $modulestable mods
+                  LEFT JOIN $module_statesTable states ON mods.xar_regid = states.xar_regid";
 
         // Add the first mode to the where clauses and join it into one string
         array_unshift($whereClauses, 'mods.xar_mode = ?');

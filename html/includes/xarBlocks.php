@@ -187,12 +187,12 @@ function xarBlock_renderGroup($groupname, $template = NULL)
                         bgroups.xar_template        AS group_bl_template,
                         inst.xar_template           AS inst_bl_template,
                         group_inst.xar_template     AS group_inst_bl_template
-              FROM      $blockGroupInstancesTable as group_inst
-              LEFT JOIN $blockGroupsTable as bgroups
+              FROM      $blockGroupInstancesTable group_inst
+              LEFT JOIN $blockGroupsTable bgroups
               ON        group_inst.xar_group_id = bgroups.xar_id
-              LEFT JOIN $blockInstancesTable as inst
+              LEFT JOIN $blockInstancesTable inst
               ON        inst.xar_id = group_inst.xar_instance_id
-              LEFT JOIN $blockTypesTable as btypes
+              LEFT JOIN $blockTypesTable btypes
               ON        btypes.xar_id = inst.xar_type_id
               WHERE     bgroups.xar_name = ?
               AND       inst.xar_state > 0

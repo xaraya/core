@@ -913,7 +913,7 @@ class xarPrivileges extends xarMasks
                         p.xar_level,
                         p.xar_description,
                         pm.xar_parentid
-                        FROM $this->privilegestable AS p, $this->privmemberstable AS pm
+                        FROM $this->privilegestable p, $this->privmemberstable pm
                         WHERE p.xar_pid = pm.xar_pid
                         ORDER BY p.xar_name";
 
@@ -962,13 +962,13 @@ class xarPrivileges extends xarMasks
     {
 //    if ((!isset($alltoplevelprivileges)) || count($alltoplevelprivileges)==0) {
         if($arg == "all") {
-             $fromclause = "FROM $this->privilegestable AS p,$this->privmemberstable AS pm
+             $fromclause = "FROM $this->privilegestable p,$this->privmemberstable pm
                         WHERE p.xar_pid = pm.xar_pid
                         AND pm.xar_parentid = 0
                         ORDER BY p.xar_name";
         }
         elseif ($arg == "assigned"){
-             $fromclause = "FROM $this->privilegestable AS p,$this->privmemberstable AS pm,
+             $fromclause = "FROM $this->privilegestable p,$this->privmemberstable pm,
                             $this->acltable acl
                             WHERE p.xar_pid = pm.xar_pid
                             AND p.xar_pid = acl.xar_permid
@@ -1083,7 +1083,7 @@ class xarPrivileges extends xarMasks
     if ((!isset($allmodules)) || count($allmodules)==0) {
             $query = "SELECT modules.xar_id,
                         modules.xar_name
-                        FROM $this->modulestable AS modules LEFT JOIN $this->modulestatestable AS states
+                        FROM $this->modulestable modules LEFT JOIN $this->modulestatestable states
                         ON modules.xar_regid = states.xar_regid
                         WHERE states.xar_state = 3
                         ORDER BY modules.xar_name";
@@ -2248,7 +2248,7 @@ class xarPrivilege extends xarMask
                     r.xar_email,
                     r.xar_pass,
                     r.xar_auth_module
-                    FROM $this->rolestable AS r, $this->acltable AS acl
+                    FROM $this->rolestable r, $this->acltable acl
                     WHERE r.xar_uid = acl.xar_partid
                     AND acl.xar_permid = ?";
 //Execute the query, bail if an exception was thrown
@@ -2314,7 +2314,7 @@ class xarPrivilege extends xarMask
 
 // if this is a user just perform a SELECT on the rolemembers table
         $query = "SELECT p.*, pm.xar_parentid
-                    FROM $this->privilegestable AS p, $this->privmemberstable AS pm
+                    FROM $this->privilegestable p, $this->privmemberstable pm
                     WHERE p.xar_pid = pm.xar_parentid
                       AND pm.xar_pid = ?";
         $result = $this->dbconn->Execute($query,array($this->getID()));
@@ -2405,7 +2405,7 @@ class xarPrivilege extends xarMask
 
         // if this is a user just perform a SELECT on the rolemembers table
         $query = "SELECT p.*, pm.xar_parentid
-                    FROM $this->privilegestable AS p, $this->privmemberstable AS pm
+                    FROM $this->privilegestable p, $this->privmemberstable pm
                     WHERE p.xar_pid = pm.xar_pid";
         // retrieve all children of everyone at once
         //              AND pm.xar_parentid = " . $cacheId;

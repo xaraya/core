@@ -39,24 +39,24 @@ function blocks_userapi_getall($args)
     $block_groups_table = $xartable['block_groups'];
 
     // Fetch instance details.
-    $query = 'SELECT inst.xar_id,
-                     inst.xar_name,
-                     inst.xar_title,
-                     inst.xar_template,
-                     inst.xar_content,
-                     inst.xar_refresh,
-                     inst.xar_state,
+    $query = 'SELECT binst.xar_id,
+                     binst.xar_name,
+                     binst.xar_title,
+                     binst.xar_template,
+                     binst.xar_content,
+                     binst.xar_refresh,
+                     binst.xar_state,
                      btypes.xar_id,
                      btypes.xar_module,
                      btypes.xar_type
-              FROM   '.$block_instances_table.' as inst
-              LEFT JOIN '.$block_types_table.' as btypes
-              ON        btypes.xar_id = inst.xar_type_id ' . $orderby;
+              FROM   '.$block_instances_table.' binst
+              LEFT JOIN '.$block_types_table.' btypes
+              ON        btypes.xar_id = binst.xar_type_id ' . $orderby;
 
     if (!empty($bid)) {
-        $query .= ' WHERE inst.xar_id = ' . $bid;
+        $query .= ' WHERE binst.xar_id = ' . $bid;
     } elseif (!empty($name)) {
-        $query .= ' WHERE inst.xar_name = \'' . $name . '\'';
+        $query .= ' WHERE binst.xar_name = \'' . $name . '\'';
     }
 
     // Return if no details retrieved.
@@ -86,16 +86,16 @@ function blocks_userapi_getall($args)
         $instance['type'] = $type;
 
         // Fetch group details - there may be none, one or many groups.
-        $querygroup = 'SELECT group_inst.xar_id,
-                         group_inst.xar_group_id,
-                         group_inst.xar_position,
-                         group_inst.xar_template as xar_group_inst_template,
-                         groups.xar_name,
-                         groups.xar_template as xar_group_template
-                  FROM   '.$block_group_instances_table.' as group_inst
-                  LEFT JOIN '.$block_groups_table.' as groups
-                  ON        groups.xar_id = group_inst.xar_group_id
-                  WHERE     group_inst.xar_instance_id = ' . $bid;
+        $querygroup = 'SELECT bgroup_inst.xar_id,
+                         bgroup_inst.xar_group_id,
+                         bgroup_inst.xar_position,
+                         bgroup_inst.xar_template as xar_group_inst_template,
+                         bgroups.xar_name,
+                         bgroups.xar_template as xar_group_template
+                  FROM   '.$block_group_instances_table.' bgroup_inst
+                  LEFT JOIN '.$block_groups_table.' bgroups
+                  ON        bgroups.xar_id = bgroup_inst.xar_group_id
+                  WHERE     bgroup_inst.xar_instance_id = ' . $bid;
 
         $resultgroup =& $dbconn->Execute($querygroup);
         if ($resultgroup) {

@@ -784,7 +784,7 @@ class xarRole
     {
         $query = "SELECT xar_pid, xar_name, xar_realm, xar_module,
                     xar_component, xar_instance, xar_level, xar_description
-                  FROM $this->privilegestable AS p, $this->acltable AS acl
+                  FROM $this->privilegestable p, $this->acltable acl
                   WHERE p.xar_pid = acl.xar_permid AND acl.xar_partid = ?";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($this->uid));
@@ -920,7 +920,7 @@ class xarRole
                         r.xar_valcode,
                         r.xar_state,
                         r.xar_auth_module
-                        FROM $this->rolestable AS r, $this->rolememberstable AS rm
+                        FROM $this->rolestable r, $this->rolememberstable rm
                         WHERE r.xar_uid = rm.xar_uid
                         AND r.xar_type = 0
                         AND r.xar_state != " . ROLES_STATE_DELETED .
@@ -937,7 +937,7 @@ class xarRole
                         r.xar_valcode,
                         r.xar_state,
                         r.xar_auth_module
-                        FROM $this->rolestable AS r, $this->rolememberstable AS rm
+                        FROM $this->rolestable r, $this->rolememberstable rm
                         WHERE r.xar_uid = rm.xar_uid
                         AND r.xar_type = 0 AND r.xar_state = ?
                         AND rm.xar_parentid = ?";
@@ -1047,7 +1047,7 @@ class xarRole
         if ($this->getID() == 1) return $parents;
         // if this is a user just perform a SELECT on the rolemembers table
         $query = "SELECT r.*
-                    FROM $this->rolestable AS r, $this->rolememberstable AS rm
+                    FROM $this->rolestable r, $this->rolememberstable rm
                     WHERE r.xar_uid = rm.xar_parentid
                     AND rm.xar_uid = ?";
         $result = $this->dbconn->Execute($query,array($this->uid));

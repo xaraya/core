@@ -49,10 +49,10 @@ function roles_userapi_get($args)
     // Get user
     $q = new xarQuery('SELECT',$rolestable);
     $q->addfields(array(
-                  'xar_uid AS uid',
+                  'xar_uid', // UID is a reserved word in Oracle (cannot be redefined)
                   'xar_uname AS uname',
                   'xar_name AS name',
-                  'xar_type AS type',
+                  'xar_type', // TYPE is a key word in several databases (avoid for the future)
                   'xar_email AS email',
                   'xar_pass AS pass',
                   'xar_date_reg AS date_reg',
@@ -83,6 +83,9 @@ function roles_userapi_get($args)
     // Check for no rows found, and if so return
     $user = $q->row();
     if ($user == array()) return false;
+    // uid and type are reserved/key words in Oracle et al.
+    $user['uid'] = $user['xar_uid'];
+    $user['type'] = $user['xar_type'];
     return $user;
 }
 

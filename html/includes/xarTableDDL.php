@@ -73,6 +73,7 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
     switch($databaseType) {
         case 'mysql':
         case 'oci8':
+        case 'oci8po':
             $sql = 'CREATE DATABASE '.$databaseName;
             break;
         case 'postgres':
@@ -176,6 +177,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
             $sql = xarDB__postgresqlAlterTable($tableName, $args);
             break;
         case 'oci8':
+        case 'oci8po':
             $sql = xarDB__oracleAlterTable($tableName, $args);
             break;
         case 'sqlite':
@@ -255,6 +257,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
             $sql = xarDB__postgresqlCreateTable($tableName, $fields);
             break;
         case 'oci8':
+        case 'oci8po':
             $sql = xarDB__oracleCreateTable($tableName, $fields);
             break;
         case 'sqlite':
@@ -305,6 +308,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
         case 'mysql':
         case 'postgres':
         case 'oci8':
+        case 'oci8po':
         case 'sqlite':
             $sql = 'DROP TABLE '.$tableName;
             break;
@@ -365,6 +369,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
             break;
         case 'postgres':
         case 'oci8':
+        case 'oci8po':
         case 'sqlite':
             if ($index['unique'] == true) {
                 $sql = 'CREATE UNIQUE INDEX '.$index['name'].' ON '.$tableName;
@@ -420,6 +425,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
             break;
         case 'postgres':
         case 'oci8':
+        case 'oci8po':
         case 'sqlite':
             $sql = 'DROP INDEX '.$index['name'];
             break;
@@ -1493,19 +1499,19 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
             if (isset($parameters['size'])) {
                 switch ($parameters['size']) {
                     case 'tiny':
-                        $this_field['type'] = 'NUMBER(8)';
+                        $this_field['type'] = 'NUMBER(3)';
                         break;
                     case 'small':
-                        $this_field['type'] = 'NUMBER(8)';
+                        $this_field['type'] = 'NUMBER(5)';
                         break;
                     case 'big':
-                        $this_field['type'] = 'NUMBER(8)';
+                        $this_field['type'] = 'NUMBER(20)';
                         break;
                     default:
-                        $this_field['type'] = 'NUMBER(8)';
+                        $this_field['type'] = 'NUMBER(11)';
                 }
             } else {
-                $this_field['type'] = 'NUMBER(8)';
+                $this_field['type'] = 'NUMBER(11)';
             }
             break;
 
@@ -1659,7 +1665,15 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
     // Test for NO NULLS - Oracle does not support No Nulls on an alter table add
     if (isset($parameters['null']) && $parameters['null'] == false) {
         if ($parameters['command'] != 'add') {
-            $this_field['null'] = 'NOT NULL';
+            // Since Oracle doesn't distinguish between empty strings and NULLs,
+            // and Xaraya does make that distinction, we need to remove NOT NULL
+            // for Oracle when dealing with char/varchar/text fields !
+            if ($parameters['type'] != 'char' &&
+                $parameters['type'] != 'varchar' &&
+                $parameters['type'] != 'text') {
+
+                $this_field['null'] = 'NOT NULL';
+            }
         }
     }
 

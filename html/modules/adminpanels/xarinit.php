@@ -80,52 +80,52 @@ function adminpanels_init()
 
     // Fill admin menu
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'adminpanels', 'Global', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'adminpanels', 'Global', 0, 1)";
     $result =& $dbconn->Execute($query,array($id));
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'mail', 'Global', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'mail', 'Global', 0, 1)";
     $result =& $dbconn->Execute($query,array($id));
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'dynamicdata', 'Content', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'dynamicdata', 'Content', 0, 1)";
     $result =& $dbconn->Execute($query,array($id));
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'themes', 'Global', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'themes', 'Global', 0, 1)";
     $result =& $dbconn->Execute($query,array($id));
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'authsystem', 'Global', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'authsystem', 'Global', 0, 1)";
     $result =& $dbconn->Execute($query,array($id));
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'base', 'Global', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'base', 'Global', 0, 1)";
     $result =& $dbconn->Execute($query,array($id));
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'blocks', 'Global', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'blocks', 'Global', 0, 1)";
     $result =& $dbconn->Execute($query,array($id));
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'modules', 'Global', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'modules', 'Global', 0, 1)";
     $result =& $dbconn->Execute($query,array($id));
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'privileges', 'Users & Groups', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'privileges', 'Users & Groups', 0, 1)";
     $result =& $dbconn->Execute($query,array($id));
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'roles', 'Users & Groups', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'roles', 'Users & Groups', 0, 1)";
     $result =& $dbconn->Execute($query,array($id));
     if (!$result) return;
 

@@ -476,9 +476,20 @@ function xarSession__phpWrite($sessionId, $vars)
 
     $sessioninfoTable = $xartable['session_info'];
 
-    $query = "UPDATE $sessioninfoTable SET xar_vars = ?, xar_lastused = ? WHERE xar_sessid = ?";
-    $result =& $dbconn->Execute($query,array($vars, time(), $sessionId));
-    if (!$result) return;
+    $dbtype = xarDBGetType();
+    if (substr($dbtype,0,4) == 'oci8') {
+        $query = "UPDATE $sessioninfoTable SET xar_lastused = ? WHERE xar_sessid = ?";
+        $result =& $dbconn->Execute($query,array(time(), $sessionId));
+        if (!$result) return;
+        $id = $dbconn->qstr($sessionId);
+        // Note: not sure why we use BLOB instead of TEXT (aka CLOB) for this field
+        $result =& $dbconn->UpdateBlob($sessioninfoTable, 'xar_vars', $vars, "xar_sessid = $id");
+        if (!$result) return;
+    } else {
+        $query = "UPDATE $sessioninfoTable SET xar_vars = ?, xar_lastused = ? WHERE xar_sessid = ?";
+        $result =& $dbconn->Execute($query,array($vars, time(), $sessionId));
+        if (!$result) return;
+    }
 
     return true;
 }
