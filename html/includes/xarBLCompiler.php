@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: xarBLCompiler.php 1.184 04/06/10 22:36:42+02:00 marcel@hsdev.com $
  *
  * BlockLayout Template Engine Compiler
  *
@@ -739,12 +739,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have children.", $parent);
                         return;
                     }
-                    // Add text to parent
+                    // Add text to parent, if applicable
                     // Situation: [...text...]#$....# or [...text...]#xarFunction()#
-                    if (trim($text) != '') {
+                    if (xmltrim($text) != '') {
                         if ($parent->hasText()) {
                             $children[] = $this->nodesFactory->createTextNode(xmltrim($text), $this);
-                        } else {
+                        } elseif(trim($text) != '') {
                             $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                             return;
                         }
@@ -3261,7 +3261,6 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
 */
 function xmltrim($input='')
 {
-    // Remember the first char
     // Let's first determine if there is space at all.
     $hasleftspace = (strlen(ltrim($input)) != strlen($input));
     $hasrightspace = (strlen(rtrim($input)) != strlen($input));
