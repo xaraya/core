@@ -197,7 +197,9 @@ function base_init()
         return NULL;
     }
     
-    $query = "INSERT INTO ".$tables['users']." VALUES (1,'','Anonymous','','','','')";
+    $id_anonymous = $dbconn->GenId($tables['users']);
+    //$query = "INSERT INTO ".$tables['users']." VALUES (1 ,'','Anonymous','','','','')";
+    $query = "INSERT INTO ".$tables['users']." VALUES ($id_anonymous ,'','Anonymous','','','','')";
     
     $dbconn->Execute($query);
     // Check for db errors
@@ -207,8 +209,11 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
+    $id_anonymous = $dbconn->PO_Insert_ID($tables['users'],'pn_uid');
 
-    $query = "INSERT INTO ".$tables['users']." VALUES (2,'Admin','Admin','none@none.com','5f4dcc3b5aa765d61d8327deb882cf99','http://www.postnuke.com','authsystem')";
+    $id_admin = $dbconn->GenId($tables['users']);
+    //$query = "INSERT INTO ".$tables['users']." VALUES (2,'Admin','Admin','none@none.com','5f4dcc3b5aa765d61d8327deb882cf99','http://www.postnuke.com','authsystem')";
+    $query = "INSERT INTO ".$tables['users']." VALUES ($id_admin,'Admin','Admin','none@none.com','5f4dcc3b5aa765d61d8327deb882cf99','http://www.postnuke.com','authsystem')";
 
     $dbconn->Execute($query);
     // Check for db errors
@@ -218,6 +223,8 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
+    $id_admin = $dbconn->PO_Insert_ID($tables['users'],'pn_uid');
+
     /***************************************************************
     * Install groups module and setup default groups
     ***************************************************************/
@@ -230,7 +237,36 @@ function base_init()
         return NULL;
     }
 
-    $query = "INSERT INTO ".$tables['groups']." (pn_gid, pn_name) VALUES (1, 'Users');";
+    $group_users = $dbconn->GenId($tables['groups']);
+    //$query = "INSERT INTO ".$tables['groups']." (pn_gid, pn_name) VALUES (1, 'Users');";
+    $query = "INSERT INTO ".$tables['groups']." (pn_gid, pn_name) VALUES ($group_users, 'Users');";
+    $dbconn->Execute($query);
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+    $group_users = $dbconn->PO_Insert_ID($tables['groups'],'pn_gid');
+
+    $group_admin = $dbconn->GenId($tables['groups']);
+    //$query = "INSERT INTO ".$tables['groups']." (pn_gid, pn_name) VALUES (2, 'Admins');";
+    $query = "INSERT INTO ".$tables['groups']." (pn_gid, pn_name) VALUES ($group_admin, 'Admins');";
+    $dbconn->Execute($query);
+    $group_admin = $dbconn->PO_Insert_ID($tables['groups'],'pn_gid');
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
+    //$query = "INSERT INTO ".$tables['group_membership']." (pn_gid, pn_uid) VALUES (1, 1);";
+    $query = "INSERT INTO ".$tables['group_membership']." (pn_gid, pn_uid) VALUES ($group_users, $id_anonymous);";
     $dbconn->Execute($query);
 
     // Check for db errors
@@ -241,29 +277,8 @@ function base_init()
         return NULL;
     }
 
-    $query = "INSERT INTO ".$tables['groups']." (pn_gid, pn_name) VALUES (2, 'Admins');";
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
-
-    $query = "INSERT INTO ".$tables['group_membership']." (pn_gid, pn_uid) VALUES (1, 1);";
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
-
-    $query = "INSERT INTO ".$tables['group_membership']." (pn_gid, pn_uid) VALUES (2, 2);";
+    //$query = "INSERT INTO ".$tables['group_membership']." (pn_gid, pn_uid) VALUES (2, 2);";
+    $query = "INSERT INTO ".$tables['group_membership']." (pn_gid, pn_uid) VALUES ($group_admin, $id_admin);";
     $dbconn->Execute($query);
 
     // Check for db errors
@@ -285,10 +300,12 @@ function base_init()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return NULL;
     }
-
+    
+    $id = $dbconn->GenId($tables['group_perms']);
     $query = "INSERT INTO ".$tables['group_perms']."
              (pn_pid, pn_gid, pn_sequence, pn_realm, pn_component, pn_instance, pn_level, pn_bond)
-              VALUES (1, 2, 1, 0, '.*', '.*', 800, 0);";
+              VALUES ($id, $group_admin, 1, 0, '.*', '.*', 800, 0);";
+              //VALUES (1, 2, 1, 0, '.*', '.*', 800, 0);";
 
     $dbconn->Execute($query);
     // Check for db errors
@@ -299,8 +316,30 @@ function base_init()
         return NULL;
     }
 
-    $query = "INSERT INTO pn_user_perms VALUES (1,-1,1,0,'.*','.*',200,0)";
-    $query = "INSERT INTO pn_user_perms VALUES (2,2,0,0,'.*','.*',800,0)";
+    $id = $dbconn->GenId($tables['user_perms']);
+    //$query = "INSERT INTO ".$tables['user_perms']." VALUES (1,-1,1,0,'.*','.*',200,0)";
+    $query = "INSERT INTO ".$tables['user_perms']." VALUES ($id,-1,1,0,'.*','.*',200,0)";
+    $dbconn->Execute($query);
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
+    $id = $dbconn->GenId($tables['user_perms']);
+    //$query = "INSERT INTO ".$tables['user_perms']." VALUES (2,2,0,0,'.*','.*',800,0)";
+    $query = "INSERT INTO ".$tables['user_perms']." VALUES ($id,$id_admin,0,0,'.*','.*',800,0)";
+    $dbconn->Execute($query);
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
     /**************************************************************
     * Install modules table and insert the modules module
     **************************************************************/
@@ -318,7 +357,7 @@ function base_init()
     $seqId = $dbconn->GenId($tables['modules']);
     $query = "INSERT INTO " . $tables['modules'] ."
               (pn_id, pn_name, pn_regid, pn_directory, pn_version, pn_mode, pn_class, pn_category, pn_admin_capable, pn_user_capable
-     ) VALUES ('".$seqId."', 'modules', 1, 'modules', '2.02', 1, 'Core Admin', 'Global', 1, 0)";
+     ) VALUES ($seqId, 'modules', 1, 'modules', '2.02', 1, 'Core Admin', 'Global', 1, 0)";
 
     $dbconn->Execute($query);
 
@@ -348,7 +387,7 @@ function base_init()
     $seqId = $dbconn->GenId($tables['modules']);
     $query = "INSERT INTO " . $tables['modules'] ."
               (pn_id, pn_name, pn_regid, pn_directory, pn_version, pn_mode, pn_class, pn_category, pn_admin_capable, pn_user_capable
-     ) VALUES ('".$seqId."', 'authsystem', 42, 'authsystem', '0.91', 1, 'Core Utility', 'Global', 0, 0)";
+     ) VALUES ($seqId, 'authsystem', 42, 'authsystem', '0.91', 1, 'Core Utility', 'Global', 0, 0)";
 
     $dbconn->Execute($query);
 
