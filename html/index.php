@@ -86,15 +86,15 @@ function xarMain()
     // Here we check for exceptions even if $res isn't empty
     if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
 
+    // Note : the page template may be set to something else in the module function
+    if (xarTplGetPageTemplateName() == 'default') {
+        xarTplSetPageTemplateName($modName);
+    }
+
     // Set page template
     if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
         // Use the admin.xt page if available when $modType is admin
         xarTplSetPageTemplateName('admin');
-    }
-
-    // Note : the page template may be set to something else in the module function
-    if (xarTplGetPageTemplateName() == 'default') {
-        xarTplSetPageTemplateName($modName);
     }
 
     // Render page
