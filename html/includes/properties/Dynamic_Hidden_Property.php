@@ -37,7 +37,7 @@ class Dynamic_Hidden_Property extends Dynamic_Property
 
     function showOutput($args = array())
     {
-	    	extract($args);
+         extract($args);
         return '';
     }
 

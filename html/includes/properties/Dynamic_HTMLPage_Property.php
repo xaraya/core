@@ -108,7 +108,7 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
 
     function showOutput($args = array())
     {
-	    	extract($args);
+         extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }

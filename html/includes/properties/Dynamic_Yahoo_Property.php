@@ -70,7 +70,7 @@ class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
 
     function showOutput($args = array())
     {
-	    	extract($args);
+         extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }

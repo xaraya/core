@@ -50,7 +50,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
 
     function showOutput($args = array())
     {
-	    	extract($args);
+         extract($args);
         if (isset($value)) {
             return xarVarPrepHTMLDisplay($value);
         } else {

@@ -74,7 +74,7 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
 
     function showOutput($args = array())
     {
-		    extract($args);
+         extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }

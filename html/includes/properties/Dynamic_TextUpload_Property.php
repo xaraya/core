@@ -144,7 +144,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
 
     function showOutput($args = array())
     {
-	    	extract($args);
+         extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }

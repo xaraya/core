@@ -72,7 +72,7 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
 
     function showOutput($args = array())
     {
-	    	extract($args);
+         extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }
