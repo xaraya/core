@@ -142,6 +142,21 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     include 'includes/xarPHPCompat.php';
     xarPHPCompat::loadAll('includes/phpcompat');
     
+    /**
+        * At this point we should be able to catch all low level errors, so we can start the debugger
+     *
+     * FLAGS:
+     *
+     * XARDBG_INACTIVE          disable  the debugger
+     * XARDBG_ACTIVE            enable   the debugger
+     * XARDBG_EXCEPTIONS        debug exceptions
+     * XARDBG_SQL               debug SQL statements
+     * XARDBG_SHOW_PARAMS_IN_BT show parameters in the backtrace
+     * 
+     * Flags can be OR-ed together
+     */
+    xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT );
+    
     /*
      * If there happens something we want to be able to log it
      *
@@ -162,21 +177,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     include 'includes/xarException.php';
     $systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
     xarError_init($systemArgs, $whatToLoad);
-
-    /**
-     * At this point we should be able to catch all low level errors, so we can start the debugger
-     *
-     * FLAGS:
-     *
-     * XARDBG_INACTIVE          disable  the debugger
-     * XARDBG_ACTIVE            enable   the debugger
-     * XARDBG_EXCEPTIONS        debug exceptions
-     * XARDBG_SQL               debug SQL statements
-     * XARDBG_SHOW_PARAMS_IN_BT show parameters in the backtrace
-     * 
-     * Flags can be OR-ed together
-     */
-    xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT );
 
 
     /*
@@ -464,7 +464,10 @@ function xarCoreActivateDebugger($flags)
  */
 function xarCoreIsDebuggerActive()
 {
-    return $GLOBALS['xarDebug'] & XARDBG_ACTIVE;
+    if(array_key_exists('xarDebug',$GLOBALS)) {
+        return $GLOBALS['xarDebug'] & XARDBG_ACTIVE;
+    } else return false;
+    
 }
 
 /**

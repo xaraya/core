@@ -198,7 +198,7 @@ class xarLogger_simple extends xarLogger
         }
 
         if (file_exists($this->_filename)) {
-            if (!touch($this->_filename)) {
+            if (!is_writable($this->_filename)) {
                 xarCore_die (
                     'Unable to write to logger file: ' . $this->_filename
                     . (!empty($php_errormsg) ? ' (' . $php_errormsg . ')' : '')
