@@ -1,4 +1,4 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="$modstatus">xarSessionGetVar('statusmsg')</xar:set>
 <xar:set name="$messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
 <div class="xar-mod-head">
@@ -23,7 +23,7 @@
 		<br />
 		<form method="post" action="#xarModUrl('roles', 'admin', 'createmail')#">
 		<div class="xar-norm-outline" style="padding: 0px;">
-		    <!--- Module List Sort and Filter Controls table --->
+		    <xar:comment> Module List Sort and Filter Controls table </xar:comment>
 		    <table width="100%" border="0" cellspacing="1" cellpadding="1">
 		      <tr>
 			<th nowrap="nowrap">
@@ -218,7 +218,7 @@
 		
 		</form>
 		<xar:if condition="$modstatus">
-			<!--- lets display latest status --->
+			<xar:comment> lets display latest status </xar:comment>
 			<div class="xar-norm-outline" style="margin-top:1px;">
 					<p class="xar-accent" style="margin:.25em;text-align:center;">
 						#$modstatus#
@@ -232,7 +232,7 @@
 			    </span>
 			    </div>
 		<xar:else/>
-			<!--- the Roles Lists table-based styles (borrow from the Modules list)--->
+			<xar:comment> the Roles Lists table-based styles (borrow from the Modules list)</xar:comment>
 			<xar:if condition="$selstyle eq '1'">
 				<div style="clear: both; padding-top: 10px;">
 					<span style="float: right; width: 95%; text-align: left;">
@@ -329,7 +329,7 @@
 		<input type="hidden" name="state" id="state" value="#$state#" />
 		<input type="hidden" name="includesubgroups" id="includesubgroups" value="#$includesubgroups#"/>
 		<!--<input type="hidden" name="uids" id="uids" value="#$uids#" />-->
-		 <div style="float:left;width:100%"> <!--- containing float - quick fix for JC's css layouts [andyv] --->
+		 <div style="float:left;width:100%"> <xar:comment> containing float - quick fix for JC's css layouts [andyv] </xar:comment>
 			<div style="clear: both; padding-top: 10px;">
 			   <span style="float: right; width: 95%; text-align: left;">
 				<xar:mlstring>Once the users/groups selected, type your message below :</xar:mlstring>

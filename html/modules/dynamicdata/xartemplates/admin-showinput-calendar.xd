@@ -1,4 +1,4 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="alttext"><xar:mlstring>Click Here to Pick up the date</xar:mlstring></xar:set>
 
 <input type="text" name="#$name#" id="#$id#_input" value="#$timeval#" size="20" maxlength="19" />

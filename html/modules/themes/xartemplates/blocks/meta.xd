@@ -1,8 +1,8 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
-  <!--- The equiv meta tag now sets text/html as content, but this is determined
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+  <xar:comment> The equiv meta tag now sets text/html as content, but this is determined
         by the page template, in our current setup compiled to late to pull it in here, 
         this is addressed in the tpl_order scenario, no choice but to leave or delete,
-        leaving it for now --->
+        leaving it for now </xar:comment>
 	<meta http-equiv="Content-Type" content="text/html; charset=#$charset#" />
 	<meta name="Generator" content="#$generator#" />
 	<meta name="Keywords" content="#$keywords#" />

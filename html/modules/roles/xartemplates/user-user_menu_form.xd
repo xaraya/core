@@ -1,4 +1,4 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Account Information</xar:mlstring></span></div>
 <h2><xar:mlstring>Edit User</xar:mlstring>: #$uname#</h2>
 <xar:if condition="isset($withupload) AND $withupload">

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xar type="page" ?>
 <xar:blocklayout version="1.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!---
+<xar:comment>
     Default theme - main template [rev2]
     
     .. processing the page data BEFORE we actually START delivering page LAYOUT can only improve user exprerience
    
     1) get data for the default blockgroups and set local variables to hold the data
-_____________________________________________________________________________________________________________[comment]--->
+_____________________________________________________________________________________________________________[comment]</xar:comment>
 <xar:set name="$rightblocksgroup"><xar:blockgroup name="right" id="right" /></xar:set>
 <xar:set name="$leftblocksgroup"><xar:blockgroup name="left" id="left" /></xar:set>
 <xar:set name="$centerblocksgroup"><xar:blockgroup name="center" id="center" /></xar:set>
 <xar:set name="$topnavblocksgroup"><xar:blockgroup name="topnav" id="topnav" /></xar:set>
-<!---
+<xar:comment>
     2) set local variables to hold some multilingual text that we intend to use in titles and alt attributes
-_____________________________________________________________________________________________________________[comment]--->
+_____________________________________________________________________________________________________________[comment]</xar:comment>
 <xar:set name="$changetexttosmall"><xar:mlstring>Small text (default)</xar:mlstring></xar:set>
 <xar:set name="$changetexttomedium"><xar:mlstring>Medium text</xar:mlstring></xar:set>
 <xar:set name="$changetexttolarge"><xar:mlstring>Large text</xar:mlstring></xar:set>
@@ -24,26 +24,26 @@ ________________________________________________________________________________
 <xar:set name="$changecoltoorange"><xar:mlstring>Orange hues</xar:mlstring></xar:set>
 <xar:set name="$validatexhtml"><xar:mlstring>Validate XHTML 1.0 Strict</xar:mlstring></xar:set>
 <xar:set name="$validatecss"><xar:mlstring>Validate CSS</xar:mlstring></xar:set>
-<!---
+<xar:comment>
     3) prepare some common local variables once, then use them as many times as required
-_____________________________________________________________________________________________________________[comment]--->
+_____________________________________________________________________________________________________________[comment]</xar:comment>
 <xar:set name="$classicthemedir">#xarTplGetThemeDir()#</xar:set>
 <xar:set name="$sitename">#xarModGetVar('themes', 'SiteName')#</xar:set>
 <xar:set name="$sitefooter">#xarModGetVar('themes', 'SiteFooter')#</xar:set>
 <xar:set name="$siteslogan">#xarModGetVar('themes', 'SiteSlogan')#</xar:set>
 <xar:set name="$sitecopyright">#xarModGetVar('themes', 'SiteCopyRight')#</xar:set>
-<!---
+<xar:comment>
     and finally, start building a beautiful layout by inserting the data into a carefully crafted markup :-)
-_____________________________________________________________________________________________________________[comment]--->
+_____________________________________________________________________________________________________________[comment]</xar:comment>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <xar:blockgroup name="header" id="header" />
         <title>#$tpl:pageTitle#</title> 
         <base href="&xar-baseurl;index.php" />
-        <!--- Main CSS rules --->
+        <xar:comment> Main CSS rules </xar:comment>
         <style type="text/css" media="screen">@import url(&xar-baseurl;#$classicthemedir#/style/style.css);</style>
-        <!--- Styleswitcher CSS rules --->
+        <xar:comment> Styleswitcher CSS rules </xar:comment>
         <link rel="stylesheet" type="text/css" href="#$classicthemedir#/style/style_textsmall.css" title="Small classictext" media="screen" />
         <link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/style_textmedium.css" title="Medium classictext" media="screen" />
         <link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/style_textlarge.css" title="Large classictext" media="screen" />
@@ -52,9 +52,9 @@ ________________________________________________________________________________
         <link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_highcontrast.css" title="Contrast classiccolors" media="screen" />
         <link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_green.css" title="Green classiccolors" media="screen" />
         <link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_orange.css" title="Orange classiccolors" media="screen" />
-        <!--- Additional CSS rules promoted by Xaraya modules - be careful, these may alter the main theme rules --->
+        <xar:comment> Additional CSS rules promoted by Xaraya modules - be careful, these may alter the main theme rules </xar:comment>
         #$tpl:additionalStyles#
-        <!--- Head JavaScript --->
+        <xar:comment> Head JavaScript </xar:comment>
         <xar:base-render-javascript position="head" />
     </head>
     <body>
@@ -174,9 +174,9 @@ ________________________________________________________________________________
                 </p>
             </div>
         </div>
-        <!--- Body JavaScript --->
+        <xar:comment> Body JavaScript </xar:comment>
         <xar:base-render-javascript position="body" />
-        <!--- Styleswitcher JavaScript --->
+        <xar:comment> Styleswitcher JavaScript </xar:comment>
         <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script>
     </body>
 </html>

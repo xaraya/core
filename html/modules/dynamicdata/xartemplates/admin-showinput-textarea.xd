@@ -1,4 +1,4 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
 <textarea name="#$name#" rows="#$rows#" cols="#$cols#" wrap="#$wrap#" id="#$id#" #$tabindex# >#$value#</textarea>
     <xar:if condition="!empty($invalid)">

@@ -1,11 +1,11 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
-<!--- Legend --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment> Legend </xar:comment>
 <div class="xar-accent-outline xar-sub" style="margin-top:5px;margin-bottom:5px;padding:3px;text-align:center;">
     <xar:mlstring>
         Actions: [E]dit [R]emove [D]efault [H]idden [M]aximized
     </xar:mlstring>
 </div>
-<!--- two pseudo-columns compact layout (tested in css compliant browser) --->
+<xar:comment> two pseudo-columns compact layout (tested in css compliant browser) </xar:comment>
 <div>
     <xar:loop name="$blocks">
         <xar:if condition="(($loop:index + 1) % 2)">

@@ -1,12 +1,12 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
-<!--- Pager for displaying page links on multi-page documents --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment> Pager for displaying page links on multi-page documents </xar:comment>
 
-<!--- Display first-page link if there is more than one page and we are not on that page --->
+<xar:comment> Display first-page link if there is more than one page and we are not on that page </xar:comment>
 <xar:if condition="$currentpagenum ne $firstpagenum">
     &nbsp;&nbsp;<a title="#xarML('First page')#" href="#$firsturl#">#xarML('First')#</a>
 </xar:if>
 
-<!--- Display previous-block link if there is more than one block --->
+<xar:comment> Display previous-block link if there is more than one block </xar:comment>
 <xar:if condition="$currentblock ne $firstblock">
     <xar:set name="$prevblocklabel"><xar:ml>
         <xar:mlstring>Previous #(1) pages</xar:mlstring>
@@ -15,7 +15,7 @@
     &nbsp;&nbsp;<a title="#$prevblocklabel#" href="#$prevblockurl#">&lt;&lt;</a>
 </xar:if>
 
-<!--- Display previous-page link if we are not on the first page --->
+<xar:comment> Display previous-page link if we are not on the first page </xar:comment>
 <xar:if condition="$currentpagenum ne $firstpagenum">
     &nbsp;&nbsp;<a title="#xarML('Previous page')#" href="#$prevpageurl#">&lt;</a>
 </xar:if>
@@ -32,12 +32,12 @@
     </xar:if>
 </xar:foreach>
 
-<!--- Display next-page link if we are not on the last page --->
+<xar:comment> Display next-page link if we are not on the last page </xar:comment>
 <xar:if condition="$currentpagenum ne $lastpagenum">
     &nbsp;&nbsp;<a title="#xarML('Next page')#" href="#$nextpageurl#">&gt;</a>
 </xar:if>
 
-<!--- Display next-block link if there is more than one block --->
+<xar:comment> Display next-block link if there is more than one block </xar:comment>
 <xar:if condition="$currentblock ne $lastblock">
     <xar:set name="$nextblocklabel"><xar:ml>
         <xar:mlstring>Next #(1) pages</xar:mlstring>
@@ -46,9 +46,9 @@
     &nbsp;&nbsp;<a title="#$nextblocklabel#" href="#$nextblockurl#">&gt;&gt;</a>
 </xar:if>
 
-<!--- Display last-page link if we are not on it --->
-<!---
+<xar:comment> Display last-page link if we are not on it </xar:comment>
+<xar:comment>
 <xar:if condition="$currentpagenum ne $lastpagenum">
     &nbsp;&nbsp;<a title="#xarML('Last page')#" href="#$lasturl#">&gt;|</a>
 </xar:if>
---->
+</xar:comment>

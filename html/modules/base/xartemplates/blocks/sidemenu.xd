@@ -1,4 +1,4 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <!-- User content section -->
 <!-- FIXME: use proper nesting in the data, not the elseif constructs -->
 <xar:if condition="!empty($usercontent)">
@@ -69,7 +69,7 @@
 							<xar:if condition="$indlinks ne ''">
 								<ul class="xar-menu-subitem">
 									<xar:foreach in="$indlinks" value="$sublinks" key="$sublink">
-										<!--- determine and indicate current states of module functions display --->
+										<xar:comment> determine and indicate current states of module functions display </xar:comment>
 										<xar:if condition="$sublinks['funcactive']">
 											<li class="xar-menu-subitem-current"><a name="activesubitem" title="#$sublinks['usertitle']#">#$sublinks['userlabel']# #$marker#</a></li>
 										<xar:else />

@@ -1,4 +1,4 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <p>
     <textarea name=#$name# rows="#$rows#" cols="#$cols#" wrap="#$wrap#" id="#$id#" #$tabindex#>#$value#</textarea>
 </p>

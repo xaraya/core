@@ -1,4 +1,4 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:comment>
     DATA:
     This part contains essential data preparation for the template.
@@ -6,9 +6,9 @@
     It is, therefore, reserved for use by Xaraya Core Development Team only.
 </xar:comment>
 
-<!--- TEMPLATE VARIABLES --->
+<xar:comment> TEMPLATE VARIABLES </xar:comment>
 
-<!--- $list_options_url - URL for list configuration form --->
+<xar:comment> $list_options_url - URL for list configuration form </xar:comment>
 <xar:set name="$list_options_url">#xarModUrl('themes', 'admin', 'settings')#</xar:set>
 
 
@@ -38,7 +38,7 @@
                     List Options - [work in progress..]
                 </xar:mlstring>
             </span>
-            <!--- Other options were considered non-essential, moved to listconfig template [andyv] --->     
+            <xar:comment> Other options were considered non-essential, moved to listconfig template [andyv] </xar:comment>     
 		</p>
     </form>
 <!-- the Themes List table -->
@@ -83,7 +83,7 @@
 				</tr>
 				<xar:loop name="$listrowsitems">
 					<xar:if condition="$loop:item['coretheme'] and $loop:item['hidecore']">
-<!--- skip the row --->
+<xar:comment> skip the row </xar:comment>
 						<xar:else />
 						<tr>
 							<td class="xar-mod-title xar-norm-outline" style="vertical-align: middle; text-align: left; padding-left: 1em; margin:auto; height: 20px;border-width: 0px 0px 1px 0px;border-style: dotted;white-space: nowrap;">
@@ -187,12 +187,12 @@
 			</xar:mlstring>
 			<xar:if condition="$selstyle eq 'icons'">
 				<br />
-<!--- TODO: de-hardcode --->
+<xar:comment> TODO: de-hardcode </xar:comment>
 				<div class="xar-alt-outline xar-norm" style="vertical-align: middle;margin:5px; padding: 3px;">
 					<img src="modules/themes/xarimages/set1/disabled.png" alt="disabled" hspace="5" />Disabled <img src="modules/themes/xarimages/set1/activate.png" alt="activate" hspace="5" />Activate <img src="modules/themes/xarimages/set1/deactivate.png" alt="deactivate" hspace="5" />Deactivate <img src="modules/themes/xarimages/set1/upgrade.png" alt="upgrade" hspace="5" />Upgrade <img src="modules/themes/xarimages/set1/initialise.png" alt="initialise" hspace="5" />Initialise <img src="modules/themes/xarimages/set1/remove.png" alt="remove" hspace="5" />Remove 
 				</div>
 			</xar:if>
 		</div>
-<!--- END of the Module List --->
+<xar:comment> END of the Module List </xar:comment>
 	</form>
 </div>

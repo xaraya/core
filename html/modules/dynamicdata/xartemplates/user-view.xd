@@ -1,4 +1,4 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:if condition="!empty($object)">
 <!-- here we retrieve the complete object list in the function, and we only pass a reference of it to the data-view tag -->
 <h2><xar:mlstring>View</xar:mlstring> <xar:data-label object="$object" /></h2>

@@ -1,3 +1,3 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
 #xarLocaleFormatDate('%a, %d %B %Y %H:%M:%S %Z',$value)#

@@ -1,4 +1,4 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="$modstatus">xarSessionGetVar('statusmsg')</xar:set>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
@@ -18,7 +18,7 @@
 	</h2>
     <form method="post" action="#xarModUrl('modules', 'admin', 'settings')#">
         <div class="xar-norm-outline" style="padding: 0px;">
-            <!--- Module List Sort and Filter Controls table --->
+            <xar:comment> Module List Sort and Filter Controls table </xar:comment>
             <table width="100%" border="0" cellspacing="1" cellpadding="1">
               <tr>
                 <th nowrap="nowrap">
@@ -88,7 +88,7 @@
             </table>
         </div>
         <xar:if condition="$modstatus">
-        	<!--- lets display latest status on core modules upgrades if any --->
+        	<xar:comment> lets display latest status on core modules upgrades if any </xar:comment>
         	<div class="xar-norm-outline" style="margin-top:1px;">
         		<p style="margin:.25em;text-align:center;">
         			<xar:mlstring>
@@ -100,11 +100,11 @@
 				</p>
         	</div>
         </xar:if>
-        <!--- the Module Lists css-based styles --->
+        <xar:comment> the Module Lists css-based styles </xar:comment>
         <xar:if condition="$selstyle eq 'compacta' or $selstyle eq 'compactb'">
             <xar:template file="compactlist-ab" type="module" />
         <xar:else />
-        <!--- the Module Lists table-based styles --->
+        <xar:comment> the Module Lists table-based styles </xar:comment>
 			<div class="xar-norm-outline" style="margin-top:1px;">
 				<table style="width:100%; border-collapse:collapse; border-spacing:1px; padding:0;">
 					<tr>
@@ -129,9 +129,9 @@
 					</tr>
 					<xar:foreach in="$listrowsitems" value="$modinfo">
 						<tr>
-							<!--- please note any element can be a named anchor as long as it has id (and name for some browsers) so we shouldnt waste space with empty anchors here --->
+							<xar:comment> please note any element can be a named anchor as long as it has id (and name for some browsers) so we shouldnt waste space with empty anchors here </xar:comment>
 							<td name="#$modinfo['displayname']#" id="#$modinfo['displayname']#" class="xar-norm-outline xar-mod-title" style="vertical-align: middle; text-align: left; padding-left: .5em; margin:auto; height: 20px;border-width: 0px 0px 1px 0px;border-style: solid;">
-								<!--- if module is active and configurable (admin type) make its name a link to module main admin function --->
+								<xar:comment> if module is active and configurable (admin type) make its name a link to module main admin function </xar:comment>
 								<xar:if condition="$modinfo['modconfigurl'] ne ''">
 									<a href="#$modinfo['modconfigurl']#" title="#$modinfo['adminurltitle']#&nbsp;#$modinfo['displayname']#">#$modinfo['displayname']#</a>
 								<xar:else />

@@ -1,4 +1,4 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 		<div style="clear: both; padding-top: 10px;">
 		<span style="float: left; width: 20%; text-align: right;">
 			<span class="help" title="#xarML('Add the meta description.')#"><label for="metadescription#$blockid#"><xar:mlstring>Meta Description</xar:mlstring></label>:</span>

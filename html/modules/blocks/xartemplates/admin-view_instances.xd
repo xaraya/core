@@ -1,4 +1,4 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:base-include-javascript module="base" filename="confirmlink.js" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
@@ -9,7 +9,7 @@
     <h2><xar:mlstring>View Block Instances</xar:mlstring></h2>
     <form method="post" action="#xarModUrl('blocks', 'admin', 'settings')#">
         <p class="xar-norm-outline" style="padding: .5em;">
-            <!--- Module List Sort and Filter Controls --->
+            <xar:comment> Module List Sort and Filter Controls </xar:comment>
             <label class="xar-mod-title" for="filter">
                 <xar:mlstring>Style</xar:mlstring>
             </label>

@@ -1,4 +1,4 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <form action="#$form_action#" method="post">
    <div>
     <input type="hidden" name="return_url" value="#$return_url#" />

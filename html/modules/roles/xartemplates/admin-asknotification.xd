@@ -1,4 +1,4 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="$messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
 <div class="xar-mod-head">
 	<span class="xar-mod-title"><xar:mlstring>Send notification</xar:mlstring></span>
@@ -37,7 +37,7 @@
 	<input type="hidden" name="ip" id="ip" value="#$ip#" />
 	<input type="hidden" name="groupuid" id="groupuid" value="#$groupuid#" />
 	 <input type="hidden" name="state" id="state" value="#$state#" />
-	 <div style="float:left;width:100%"> <!--- containing float - quick fix for JC's css layouts [andyv] --->
+	 <div style="float:left;width:100%"> <xar:comment> containing float - quick fix for JC's css layouts [andyv] </xar:comment>
                 <div style="clear: both; padding-top: 10px;">
 		   <span style="float: right; width: 95%; text-align: left;">
                         <xar:mlstring>The changes have been made to the selected user(s), you can now send a notification by submitting the form or go back to the</xar:mlstring> <a href="#xarModURL('roles', 'admin', 'showusers', array('state' => $state, 'uid' => $groupuid))#"><xar:mlstring>members list</xar:mlstring></a>.

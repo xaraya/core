@@ -1,4 +1,4 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="$mina">xarModGetVar('roles','minage')</xar:set>
 <xar:set name="$a0"><xar:mlstring>zero</xar:mlstring></xar:set>
 <xar:set name="$a1"><xar:mlstring>one</xar:mlstring></xar:set>

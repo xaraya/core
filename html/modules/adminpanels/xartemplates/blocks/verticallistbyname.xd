@@ -1,4 +1,4 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:comment>
     this is a simplified version of vertical list template
     for full comments and examples see file verticallistbycats.xd
@@ -12,7 +12,7 @@
                         <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
                             <ul class="xar-menu-subitem">
                                 <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
-                                    <!--- determine and indicate current states of module functions display --->
+                                    <xar:comment> determine and indicate current states of module functions display </xar:comment>
                                     <xar:if condition="$sublinks['funcactive']">
                                         <li class="xar-menu-subitem-current"><a name="activesubitem" title="#$sublinks['adminlabel']#">#$sublinks['adminlabel']#</a></li>
                                     <xar:else />
@@ -27,7 +27,7 @@
                         <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
                             <ul class="xar-menu-subitem">
                                 <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
-                                    <!--- determine and indicate current states of module functions display --->
+                                    <xar:comment> determine and indicate current states of module functions display </xar:comment>
                                     <xar:if condition="$sublinks['funcactive']">
                                         <li class="xar-menu-subitem-current"><a name="activesubitem" title="#$sublinks['adminlabel']#">#$sublinks['adminlabel']#</a></li>
                                     <xar:else />
@@ -42,7 +42,7 @@
                         <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
                             <ul class="xar-menu-subitem">
                                 <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
-                                    <!--- determine and indicate current states of module functions display --->
+                                    <xar:comment> determine and indicate current states of module functions display </xar:comment>
                                     <xar:if condition="$sublinks['funcactive']">
                                         <li class="xar-menu-subitem-current"><a name="activesubitem" title="#$sublinks['adminlabel']#">#$sublinks['adminlabel']#</a></li>
                                     <xar:else />
