@@ -17,7 +17,7 @@ function modules_admin_upgrade()
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) return;
 
-    if (!xarVarFetch('id', 'int:1:', $id)) return; 
+    if (!xarVarFetch('id', 'int:1:', $id)) {return;}
 
     // Upgrade module
     $upgraded = xarModAPIFunc('modules',
@@ -25,10 +25,15 @@ function modules_admin_upgrade()
                              'upgrade',
                              array('regid' => $id));
     //throw back
-    if(!isset($upgraded)) return;
-    $minfo=xarModGetInfo($id);
+    // Bug 1222: check for exceptions in the exception stack.
+    // If there are any, then return NULL to display them (even if
+    // the upgrade worked).
+    if(!isset($upgraded) || xarExceptionMajor()) {return;}
+
     // set the target location (anchor) to go to within the page 
+    $minfo=xarModGetInfo($id);
     $target=$minfo['name'];
+
     // Hmmm, I wonder if the target adding is considered a hack
     // it certainly depends on the implementation of xarModUrl
     //    xarResponseRedirect(xarModURL('modules', 'admin', "list#$target"));
