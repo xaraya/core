@@ -209,10 +209,7 @@ document.forms['privilegeform'].submit();}
                 <p>
                 <xar:set name="$targetlinktitle"><xar:mlstring>Use Wizard</xar:mlstring></xar:set>
                 <xar:set name="$targetlink">"href=\"$target\" title=\"$targetlinktitle\""</xar:set>
-                <xar:ml>
-                    <xar:mlstring>Specify the <a #(1)>instances that apply</a> for this privilege</xar:mlstring>
-                    <xar:mlvar>#$targetlink#</xar:mlvar>
-                </xar:ml>
+                <a #$targetlink#><xar:mlstring>Specify the instances that apply for this privilege</xar:mlstring></a>
                 </p>
             </xar:if>
         </xar:if>
