@@ -14,8 +14,7 @@
  */
 function roles_languageblock_init()
 {
-    // Security
-    xarSecAddSchema('roles:Languageblock:', 'Block title::');
+    return true;
 }
 
 /**
@@ -43,25 +42,25 @@ function roles_languageblock_display($blockinfo)
     $current_locale = xarMLSGetCurrentLocale();
 
     $site_locales = xarMLSListSiteLocales();
-    
+
     asort($site_locales);
 
     foreach ($site_locales as $locale) {
         $locale_data = xarMLSLoadLocaleData($locale);
-        
+
         $selected = ($current_locale == $locale);
-        
+
         $locales[] = array('locale'   => $locale,
                            'country'  => $locale_data['/country/display'],
                            'name'     => $locale_data['/language/display'],
                            'selected' => $selected);
     }
-    
-    
+
+
     $tplData['form_action'] = xarModURL('roles', 'user', 'changeLanguage');
     $tplData['form_picker_name'] = 'locale';
     $tplData['locales'] = $locales;
-    
+
     // URL of this page
     $tplData['return_url'] = xarServerGetCurrentURL();
 

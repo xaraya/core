@@ -14,8 +14,7 @@
  */
 function adminpanels_waitingcontentblock_init()
 {
-    // Security
-    xarSecAddSchema('adminpanels:Waitingcontentblock', 'Block title::');
+    return true;
 }
 /**
  * Block info array
@@ -36,7 +35,7 @@ function adminpanels_waitingcontentblock_info()
 function adminpanels_waitingcontentblock_display($blockinfo)
 {
 // Security Check
-	if(!xarSecurityCheck('EditPanel',0,'Waitingcontentblock','$blockinfo[title]:All:All')) return;
+    if(!xarSecurityCheck('EditPanel',0,'Waitingcontentblock','$blockinfo[title]:All:All')) return;
 
     $moditems = array();
 

@@ -24,8 +24,7 @@
 */
 function themes_metablock_init()
 {
-    // Security
-    xarSecAddSchema('themes:metablock', 'Block title::');
+    return true;
 }
 
 /**
@@ -41,13 +40,13 @@ function themes_metablock_init()
 function themes_metablock_info()
 {
     return array('text_type' => 'Meta',
-		 'text_type_long' => 'Meta',
-		 'module' => 'themes',
+         'text_type_long' => 'Meta',
+         'module' => 'themes',
          'func_update' => 'themes_metablock_update',
-		 'allow_multiple' => false,
-		 'form_content' => false,
-		 'form_refresh' => false,
-		 'show_preview' => true);
+         'allow_multiple' => false,
+         'form_content' => false,
+         'form_refresh' => false,
+         'show_preview' => true);
 
 }
 
@@ -64,7 +63,7 @@ function themes_metablock_info()
 function themes_metablock_display($blockinfo)
 {
 // Security Check
-	if(!xarSecurityCheck('ViewThemes',0,'metablock','$blockinfo[title]:All:All','All')) return;
+    if(!xarSecurityCheck('ViewThemes',0,'metablock','$blockinfo[title]:All:All','All')) return;
 
     // Get current content
     $vars = @unserialize($blockinfo['content']);
@@ -82,7 +81,7 @@ function themes_metablock_display($blockinfo)
     $incomingkey = xarVarGetCached('Blocks.articles','body');
 
     if ((!empty($incomingkey)) and ($vars['usedk'] == 1)){
-        
+
         // Keywords generated from articles module
         $meta['keywords'] = xarVarGetCached('Blocks.articles','body');
 

@@ -17,8 +17,7 @@
  */
 function roles_onlineblock_init()
 {
-    // Security
-    xarSecAddSchema('roles:Onlineblock:', 'Block title::');
+    return true;
 }
 
 /**
@@ -51,7 +50,7 @@ function roles_onlineblock_display($blockinfo)
     $sql = "SELECT COUNT(1)
             FROM $sessioninfotable
             WHERE xar_lastused > $activetime AND xar_uid > 2
-		    GROUP BY xar_uid
+            GROUP BY xar_uid
             ";
     $result = $dbconn->Execute($sql);
 
@@ -64,8 +63,8 @@ function roles_onlineblock_display($blockinfo)
    $query2 = "SELECT count( 1 )
              FROM $sessioninfotable
               WHERE xar_lastused > $activetime AND xar_uid = '2'
-			  GROUP BY xar_ipaddr
-			 ";
+              GROUP BY xar_ipaddr
+             ";
    $result2 = $dbconn->Execute($query2);
    $args['numguests'] = $result2->RecordCount();
    $result2->Close();

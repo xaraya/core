@@ -14,7 +14,7 @@
  */
 function roles_userblock_init()
 {
-    xarSecAddSchema(0, 'roles:userblock', 'Block title');
+    return true;
 }
 
 /**
@@ -23,12 +23,12 @@ function roles_userblock_init()
 function roles_userblock_info()
 {
     return array('text_type' => 'User',
-		 'text_type_long' => "User's Custom Box",
-		 'module' => 'roles',
-		 'allow_multiple' => false,
-		 'form_content' => false,
-		 'form_refresh' => false,
-		 'show_preview' => true);
+         'text_type_long' => "User's Custom Box",
+         'module' => 'roles',
+         'allow_multiple' => false,
+         'form_content' => false,
+         'form_refresh' => false,
+         'show_preview' => true);
 }
 
 /**

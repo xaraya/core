@@ -57,12 +57,8 @@
 * pnConfigDelVar -> xarConfigDelVar
 *
 * SECURITY FUNCTIONS
-* pnSecAddSchema -> xarSecAddSchema
-* pnSecAuthAction -> xarSecAuthAction
 * pnSecConfirmAuthKey -> xarSecConfirmAuthKey
 * pnSecGenAuthKey -> xarSecGenAuthKey
-* pnSecGetAuthInfo -> xarSecGetAuthInfo
-* pnSecGetLevel -> xarSecGetLevel
 *
 * SERVER FUNCTIONS (URL URI)
 * pnGetBaseURI -> xarServerGetBaseURI

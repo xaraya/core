@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * File: $Id$
  *
@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage Base Module
  * @author Patrick Kellum
 */
@@ -17,8 +17,7 @@
  */
 function base_fincludeblock_init()
 {
-    xarSecAddSchema('base:Includeblock', 'Block title::');
-
+    return true;
 }
 
 /**
@@ -43,7 +42,7 @@ function base_fincludeblock_info()
 function base_fincludeblock_display($blockinfo)
 {
     // Security Check
-	if(!xarSecurityCheck('ViewBase',0,'Includeblock','$blockinfo[title]:All:All')) return;
+    if(!xarSecurityCheck('ViewBase',0,'Includeblock','$blockinfo[title]:All:All')) return;
 
     if (empty($blockinfo['title'])){
         $blockinfo['title'] = xarML('File Include');
@@ -74,7 +73,7 @@ function base_fincludeblock_modify($blockinfo)
     } else {
         $url = '';
     }
-    
+
     $content = xarTplBlock('base','fincludeAdmin', array('url' => $url));
 
     return $content;
@@ -96,7 +95,7 @@ function base_fincludeblock_update($blockinfo)
     if (empty($vars['url'])) {
         $vars['url'] = 'Error - No Url Specified';
     }
-    
+
     $blockinfo['content'] = serialize($vars);
 
     return $blockinfo;
