@@ -45,57 +45,81 @@ function xarMain()
         xarVarSetCached('Themes.name','CurrentTheme', $themeName);
     }
 
-    // Load the module
-    if (!xarModLoad($modName, $modType)) return; // throw back
-
-    // if the debugger is active, start it
-    if (xarCoreIsDebuggerActive()) {
-        ob_start();
-    }
-
-    $mainModuleOutput = xarModFunc($modName, $modType, $funcName);
-
-
-    if (xarCoreIsDebuggerActive()) {
-        if (ob_get_length() > 0) {
-            $rawOutput = ob_get_contents();
-            $mainModuleOutput = 'The following lines were printed in raw mode by module, however this
-                                 should not happen. The module is probably directly calling functions
-                                 like echo, print, or printf. Please modify the module to exclude direct output.
-                                 The module is violating Xaraya architecture principles.<br /><br />'.
-                                 $rawOutput.
-                                 '<br /><br />This is the real module output:<br /><br />'.
-                                 $mainModuleOutput;
+    $caching = 0;
+    
+    // Set up caching if enabled
+    if (file_exists('var/cache/output/cache.touch')) {
+        $caching = 1;
+        include 'includes/xarCache.php';
+        if (xarCache_init(array('cacheDir' => 'var/cache/output')) == false) {
+            $caching = 0;
         }
-        ob_end_clean();
+        $cacheKey = "$modName-$modType-$funcName";
     }
+    
+    if ($caching == 1 && xarPageIsCached($cacheKey,'page')) {
+        // output the cached page *or* a 304 Not Modified status
+        xarPageGetCached($cacheKey,'page');
 
-    // We're all done, one ServerRequest made
-    xarEvt_trigger('ServerRequest');
+    } else {
 
-    if (xarResponseIsRedirected()) return true;
-    // Here we check for exceptions even if $res isn't empty
-    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
+        // Load the module
+        if (!xarModLoad($modName, $modType)) return; // throw back
 
-    // Note : the page template may be set to something else in the module function
-    if (xarTplGetPageTemplateName() == 'default') {
-        xarTplSetPageTemplateName($modName);
+        // if the debugger is active, start it
+        if (xarCoreIsDebuggerActive()) {
+            ob_start();
+        }
+
+        $mainModuleOutput = xarModFunc($modName, $modType, $funcName);
+
+
+        if (xarCoreIsDebuggerActive()) {
+            if (ob_get_length() > 0) {
+                $rawOutput = ob_get_contents();
+                $mainModuleOutput = 'The following lines were printed in raw mode by module, however this
+                                     should not happen. The module is probably directly calling functions
+                                     like echo, print, or printf. Please modify the module to exclude direct output.
+                                     The module is violating Xaraya architecture principles.<br /><br />'.
+                                     $rawOutput.
+                                     '<br /><br />This is the real module output:<br /><br />'.
+                                     $mainModuleOutput;
+            }
+            ob_end_clean();
+        }
+
+        // We're all done, one ServerRequest made
+        xarEvt_trigger('ServerRequest');
+
+        if (xarResponseIsRedirected()) return true;
+        // Here we check for exceptions even if $res isn't empty
+        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
+
+        // Note : the page template may be set to something else in the module function
+        if (xarTplGetPageTemplateName() == 'default') {
+            xarTplSetPageTemplateName($modName);
+        }
+
+        // Set page template
+        if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
+            // Use the admin.xt page if available when $modType is admin
+            xarTplSetPageTemplateName('admin');
+        }
+
+        // Render page
+        //$pageOutput = xarTpl_renderPage($mainModuleOutput, NULL, $template);
+        $pageOutput = xarTpl_renderPage($mainModuleOutput);
+
+        // Handle exceptions (the bubble at the top handler
+        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
+
+        if ($caching == 1) {
+            // save the output in cache *before* sending it to the client
+            xarPageSetCached($cacheKey,'page',$pageOutput);
+        }
+
+        echo $pageOutput;
     }
-
-    // Set page template
-    if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
-        // Use the admin.xt page if available when $modType is admin
-        xarTplSetPageTemplateName('admin');
-    }
-
-    // Render page
-    //$pageOutput = xarTpl_renderPage($mainModuleOutput, NULL, $template);
-    $pageOutput = xarTpl_renderPage($mainModuleOutput);
-
-     // Handle exceptions (the bubble at the top handler
-    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
-
-    echo $pageOutput;
 
     return true;
 }
