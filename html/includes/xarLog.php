@@ -152,15 +152,15 @@ function logger_adminapi_parseArgsString($string)
 function xarLogMessage($msg, $level = XARLOG_LEVEL_DEBUG)
 {
     if ($level >= $GLOBALS['xarLog_level']) {
-        if ($level == XARLOG_LEVEL_DEBUG && !xarCoreIsDebuggerActive()) return;
+        if (($level == XARLOG_LEVEL_DEBUG) && !xarCoreIsDebuggerActive()) return;
         $GLOBALS['xarLog_logger']->logMessage($msg);
-    }
+    } 
 }
 
 function xarLogException($level = XARLOG_LEVEL_DEBUG)
 {
     if ($level >= $GLOBALS['xarLog_level']) {
-        if ($level == XARLOG_LEVEL_DEBUG && !xarCoreIsDebuggerActive()) return;
+        if (($level == XARLOG_LEVEL_DEBUG) && !xarCoreIsDebuggerActive()) return;
         $GLOBALS['xarLog_logger']->logException();
     }
 }
@@ -168,7 +168,7 @@ function xarLogException($level = XARLOG_LEVEL_DEBUG)
 function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
 {
     if ($level >= $GLOBALS['xarLog_level']) {
-        if ($level == XARLOG_LEVEL_DEBUG && !xarCoreIsDebuggerActive()) return;
+        if (($level == XARLOG_LEVEL_DEBUG) && !xarCoreIsDebuggerActive()) return;
         $GLOBALS['xarLog_logger']->logVariable($name, $var);
     }
 }
