@@ -62,6 +62,7 @@ function roles_loginblock_display($blockinfo)
             $args['name'] = xarUserGetVar('name');
 
             // Since we are logged in, set the template base to 'logout'.
+            // FIXME: not allowed to set BL variables directly
             $blockinfo['_bl_template_base'] = 'logout';
 
             if (!empty($vars['logouttitle'])) {
