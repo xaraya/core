@@ -28,7 +28,11 @@ function mail_adminapi_getmenulinks()
                 'compose'),
             'title' => xarML('Test your email configuration'),
             'label' => xarML('Test Configuration'));
-
+        $menulinks[] = Array('url' => xarModURL('mail',
+                'admin',
+                'template'),
+            'title' => xarML('Change the mail template for notifications'),
+            'label' => xarML('Notification Template'));
         $menulinks[] = Array('url' => xarModURL('mail',
                 'admin',
                 'modifyconfig'),
@@ -42,5 +46,4 @@ function mail_adminapi_getmenulinks()
 
     return $menulinks;
 }
-
 ?>
