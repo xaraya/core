@@ -2732,7 +2732,7 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
             $this->raiseError(XAR_BL_INVALID_TAG,'Missing content in <xar:mlstring> tag.', $this);
             return;
         }
-        return "'$leftspace' . xarML(\"".xarVar_addslashes($totranslate)."\"";
+        return "'$leftspace' . xarML('".xarVar_addslashes($totranslate)."'";
     }
 
     function renderEndTag()
