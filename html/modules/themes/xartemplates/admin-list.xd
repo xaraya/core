@@ -1,3 +1,32 @@
+<!--- DATA AREA --->
+<xar:comment> 
+    This part contains essential data preparation for the template.
+    WARNING: Normally, this part should not be changed by theme developers and users!!
+    It is, therefore, reserved for use by Xaraya Core Development Team only.
+</xar:comment>
+
+<!--- $list_options_url - URL for list configuration form [andyv] --->
+<xar:set name="$list_options_url">#xarModUrl('themes', 'admin', 'settings')#</xar:set>
+
+
+
+
+<!--- PRESENTATION AREA --->
+<xar:comment>
+    Below this comment is the part of themplate that theme developers and users can override in their own version of template.
+    Notice that we do not include any template specific styles here any longer. Also notice that:
+    - all template variables are commented in the data area to ease customisation of this template
+    - core developers make every effort to ensure that this template validates as XHTML1.0 strict when markup is compiled
+    - only xaraya required css classes and rules are used throughout template
+    - all formatting conform to RFC10 rules and best known to us (X)HTML coding practices
+        - all linefeeds are executed in UNIX standard
+        - all indentations are executed as 4 spaces per 1 tab (no actual tabs used)
+    - any inconsistencies or non-compliance with the above statements can be reported to Xaraya QA team or filed as a bug
+    
+    Enjoy your user experience with Xaraya CMS! :-)
+    [andyv@xaraya.com - core developer]
+</xar:comment>
+
 <div class="xar-mod-head">
 	<span class="xar-mod-title"> 
 		<xar:mlstring>
@@ -11,115 +40,20 @@
 			View Themes (list mode) 
 		</xar:mlstring>
 	</h2> 
-	<form method="post" action="#xarModUrl('themes', 'admin', 'settings')#">
-		<div class="xar-norm-outline">
-<!--- Themes List Sort and Filter Controls table --->
-			<table width="100%" border="0" cellspacing="0" cellpadding="2">
-				<tr>
-					<th nowrap="nowrap">
-						<label class="xar-mod-title" for="filter"> 
-							<xar:mlstring>
-								Style 
-							</xar:mlstring>
-						</label> 
-					</th>
-					<th nowrap="nowrap">
-						<label class="xar-mod-title" for="filter"> 
-							<xar:mlstring>
-								View 
-							</xar:mlstring>
-						</label> 
-					</th>
-					<th nowrap="nowrap">
-						<label class="xar-mod-title" for="sort"> 
-							<xar:mlstring>
-								Sort by 
-							</xar:mlstring>
-						</label> 
-					</th>
-					<th nowrap="nowrap" colspan="2">
-						<label class="xar-mod-title" for="hide"> 
-							<xar:mlstring>
-								Hide 
-							</xar:mlstring>
-						</label> 
-					</th>
-					<th nowrap="nowrap" colspan="3">
-						<label class="xar-mod-title" for="reload"> 
-							<xar:mlstring>
-								Action 
-							</xar:mlstring>
-						</label> 
-					</th>
-				</tr>
-				<tr>
-					<td style="text-align: center;">
-						<select name="selstyle" id="selstyle" onchange="this.form.submit()"> 
-							<xar:foreach in="$style" key="$key" value="$value">
-								<xar:if condition="$key eq $selstyle">
-									<option value="#$key#" selected="selected">
-										#$value# 
-									</option>
-									<xar:else />
-									<option value="#$key#">
-										#$value# 
-									</option>
-								</xar:if>
-							</xar:foreach>
-						</select> 
-					</td>
-					<td style="text-align: center;">
-						<select name="selfilter" id="selfilter" onchange="this.form.submit()"> 
-							<xar:foreach in="$filter" key="$key" value="$value">
-								<xar:if condition="$key eq $selfilter">
-									<option value="#$key#" selected="selected">
-										#$value# 
-									</option>
-									<xar:else />
-									<option value="#$key#">
-										#$value# 
-									</option>
-								</xar:if>
-							</xar:foreach>
-						</select> 
-					</td>
-					<td style="text-align: center;">
-						<select name="selsort" id="selsort" onchange="this.form.submit()"> 
-							<xar:foreach in="$sort" key="$key" value="$value">
-								<xar:if condition="$key eq $selsort">
-									<option value="#$key#" selected="selected">
-										#$value# 
-									</option>
-									<xar:else />
-									<option value="#$key#">
-										#$value# 
-									</option>
-								</xar:if>
-							</xar:foreach>
-						</select> 
-					</td>
-					<td style="text-align: right; vertical-align: middle;">
-						<xar:if condition="$hidecore eq 1">
-<!-- disabled for now -->
-							<input disabled="disabled" type="checkbox" name="hidecore" id="hidecore" value="1" checked="checked" style="vertical-align: middle;" /> 
-							<xar:else />
-<!-- disabled for now -->
-							<input disabled="disabled" type="checkbox" name="hidecore" id="hidecore" value="1" style="vertical-align: middle;" /> 
-						</xar:if>
-					</td>
-					<td style="text-align: left;vertical-align: middle;">
-						<label for="hidecore"> 
-							<xar:mlstring>
-								Core Themes 
-							</xar:mlstring>
-						</label> 
-					</td>
-					<td colspan="3" style="text-align: center;vertical-align: middle;">
-						<input type="submit" name="reload" id="reload" value="#$reloadlabel#"> 
-					</td>
-				</tr>
-			</table>
-		</div>
+	<form method="post" action="#$list_options_url#">
+		<p class="xar-norm-outline">
+            <span>
+                <xar:mlstring>
+                    List Options 
+                </xar:mlstring>
+            </span>
+            <!--- Other options were considered non-essential, moved to listconfig template [andyv] --->     
+		</p><dl compact="compact">
+<dd>
+blah
+</dd>
+</dl>
+    </form>
 <!-- the Themes List table -->
 		<div class="xar-norm-outline" style="padding: 0px 0px 5px 0px;">
 			<table border="0" width="100%" cellspacing="1" cellpadding="2">
@@ -266,12 +200,12 @@
 			</xar:mlstring>
 			<xar:if condition="$selstyle eq 'icons'">
 				<br />
-<!--- need to de-hardcode --->
+<!--- TODO: de-hardcode --->
 				<div class="xar-alt-outline xar-norm" style="vertical-align: middle;margin:5px; padding: 3px;">
 					<img src="modules/themes/xarimages/set1/disabled.png" alt="disabled" hspace="5" />Disabled <img src="modules/themes/xarimages/set1/activate.png" alt="activate" hspace="5" />Activate <img src="modules/themes/xarimages/set1/deactivate.png" alt="deactivate" hspace="5" />Deactivate <img src="modules/themes/xarimages/set1/upgrade.png" alt="upgrade" hspace="5" />Upgrade <img src="modules/themes/xarimages/set1/initialise.png" alt="initialise" hspace="5" />Initialise <img src="modules/themes/xarimages/set1/remove.png" alt="remove" hspace="5" />Remove 
 				</div>
 			</xar:if>
 		</div>
-<!--- END of the Module List table --->
+<!--- END of the Module List --->
 	</form>
 </div>

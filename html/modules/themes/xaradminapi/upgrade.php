@@ -49,14 +49,12 @@ function themes_adminapi_upgrade($args)
 */
 
     // Update state of theme
-    $res = xarModAPIFunc('themes',
-                        'admin',
-                        'setstate',
-                        array('regid' => $regid,
-                              'state' => XARTHEME_STATE_INACTIVE));
+    $res = xarModAPIFunc('themes', 'admin', 'setstate',
+                        array('regid' => $regid, 'state' => XARTHEME_STATE_INACTIVE));
+    
     if (!isset($res)) return;
 
-    return true;
+/*     return true; */
     // Get the new version information...
     $themeFileInfo = xarTheme_getFileInfo($themeInfo['osdirectory']);
     if (!isset($themeFileInfo)) return;
@@ -65,13 +63,18 @@ function themes_adminapi_upgrade($args)
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
-    $sql = "UPDATE $xartable[themes]
+/*     $sql = "UPDATE $xartable[themes] */
+/*             SET xar_version = '" . xarVarPrepForStore($themeFileInfo['version']) . "', */
+/*                 xar_admin_capable = '" . xarVarPrepForStore($themeFileInfo['admin_capable']) . "', */
+/*                 xar_user_capable = '" . xarVarPrepForStore($themeFileInfo['user_capable']) . "', */
+/*                 xar_class = '". xarVarPrepForStore($themeFileInfo['class']) . "', */
+/*                 xar_category '". xarVarPrepForStore($themeFileInfo['category']) . "' */
+/*             WHERE xar_regid = " . xarVarPrepForStore($regid); */
+     $sql = "UPDATE $xartable[themes]
             SET xar_version = '" . xarVarPrepForStore($themeFileInfo['version']) . "',
-                xar_admin_capable = '" . xarVarPrepForStore($themeFileInfo['admin_capable']) . "',
-                xar_user_capable = '" . xarVarPrepForStore($themeFileInfo['user_capable']) . "',
-                xar_class = '". xarVarPrepForStore($themeFileInfo['class']) . "',
-                xar_category '". xarVarPrepForStore($themeFileInfo['category']) . "'
-            WHERE xar_regid = " . xarVarPrepForStore($regid);
+                xar_class = ". xarVarPrepForStore($themeFileInfo['class']) . " 
+            WHERE xar_regid = " . xarVarPrepForStore($regid);        
+            
     $result = $dbconn->Execute($sql);
     if (!$result) return;
 

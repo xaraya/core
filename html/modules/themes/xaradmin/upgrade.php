@@ -18,11 +18,10 @@ function themes_admin_upgrade()
     if (!xarSecConfirmAuthKey()) return;
 
     if (!xarVarFetch('id', 'int:1:', $id)) return; 
+    
     // Upgrade theme
-    $upgraded = xarModAPIFunc('themes',
-                             'admin',
-                             'upgrade',
-                             array('regid' => $id));
+    $upgraded = xarModAPIFunc('themes', 'admin', 'upgrade', array('regid' => $id));
+    
     //throw back
     if(!isset($upgraded)) return;
 

@@ -189,22 +189,16 @@ function themes_upgrade($oldversion)
     switch ($oldversion) {
         case 1.0:
 
-            if (!xarModRegisterHook('item', 'usermenu', 'GUI',
-                    'themes', 'user', 'usermenu')) {
+            if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
                 return false;
             } 
 
-            break;
         case 1.1:
 
-            if (!xarModAPIFunc('blocks',
-                    'admin',
-                    'register_block_type',
-                    array('modName' => 'themes',
-                        'blockType' => 'meta'))) return; 
-            break;
-	case 1.2:
-	    break;
+            if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
+				array('modName' => 'themes', 'blockType' => 'meta'))) return; 
+		case 1.2:
+
     } 
     // Update successful
     return true;

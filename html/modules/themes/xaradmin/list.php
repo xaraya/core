@@ -10,8 +10,9 @@ function themes_admin_list()
     if(!xarSecurityCheck('AdminTheme')) return;
 
     // form parameters
-    if (!xarVarFetch('startnum', 'isset', $startnum, NULL,  XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('regen',    'isset', $regen,    NULL,  XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('startnum', 'isset', $startnum,    NULL,  XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('regen',    'isset', $regen,       NULL,  XARVAR_DONT_SET)) return;
+/*     if (!xarVarFetch('selfilter','isset', $selfilter,   NULL,  XARVAR_DONT_SET)) return; */
 
     $data['items'] = array();
 
@@ -34,12 +35,12 @@ function themes_admin_list()
     $data['style']['icons']                         = xarML('Icons');
     $data['style']['dev']                           = xarML('Developer');
     
-    $data['filter'][XARTHEME_STATE_ANY]                         = xarML('All Themes');
-    $data['filter'][XARTHEME_STATE_INSTALLED]                   = xarML('All Installed');
-    $data['filter'][XARTHEME_STATE_ACTIVE]                      = xarML('All Active');
-    $data['filter'][XARTHEME_STATE_INACTIVE]                    = xarML('All Inactive');
-    $data['filter'][XARTHEME_STATE_UNINITIALISED]               = xarML('Not Installed');
-    $data['filter'][XARTHEME_STATE_MISSING_FROM_UNINITIALISED]  = xarML('Missing (Not Installed)');
+    $data['filter'][XARTHEME_STATE_ANY]                         = xarML('All');
+    $data['filter'][XARTHEME_STATE_INSTALLED]                   = xarML('Installed');
+    $data['filter'][XARTHEME_STATE_ACTIVE]                      = xarML('Active');
+    $data['filter'][XARTHEME_STATE_INACTIVE]                    = xarML('Inactive');
+    $data['filter'][XARTHEME_STATE_UNINITIALISED]               = xarML('Uninitialised');
+    $data['filter'][XARTHEME_STATE_MISSING_FROM_UNINITIALISED]  = xarML('Missing (Not Inited)');
     $data['filter'][XARTHEME_STATE_MISSING_FROM_INACTIVE]       = xarML('Missing (Inactive)');
     $data['filter'][XARTHEME_STATE_MISSING_FROM_ACTIVE]         = xarML('Missing (Active)');
     $data['filter'][XARTHEME_STATE_MISSING_FROM_UPGRADED]       = xarML('Missing (Upgraded)');
@@ -55,7 +56,7 @@ function themes_admin_list()
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
                 return;
         }
-        $themelist = xarModAPIFunc('themes','admin','GetList');
+        $themelist = xarModAPIFunc('themes','admin','getthemelist',  array('filter'=> array('State' => $data['selfilter'])));
 /*         , array('filter'=> array('State' => $data['selfilter'][0]))); */
 /*     }else{ */
 /*         // or just fetch the quicker old list */
@@ -88,12 +89,12 @@ function themes_admin_list()
         
         // if this module has been classified as 'Core'
         // we will disable certain actions
-        $themeinfo = xarThemeGetInfo($thisthemeid);
-        if(substr($themeinfo['class'], 0, 4)  == 'Core'){
-            $coretheme = true;
-        }else{
+/*         $themeinfo = xarThemeGetInfo($thisthemeid); */
+/*         if(substr($themeinfo['class'], 0, 4)  == 'Core'){ */
+/*             $coretheme = true; */
+/*         }else{ */
             $coretheme = false;
-        }
+/*         } */
         
         // for the sake of clarity, lets prepare all our links in advance
         $initialiseurl              = xarModURL('themes',
@@ -177,8 +178,8 @@ function themes_admin_list()
             // this theme is 'Active'          - set labels and links
             $statelabel = xarML('Active');
             $listrows[$i]['state'] = 3;
-            // here we are checking for module class 
-            // to prevent ppl messing with the core modules
+            // here we are checking for theme class 
+            // to prevent ppl messing with the core themes
             if(!$coretheme){
                 $listrows[$i]['actionlabel']    = xarML('Deactivate');
                 $listrows[$i]['actionurl']      = $deactivateurl;
@@ -194,7 +195,10 @@ function themes_admin_list()
                 $listrows[$i]['actionimg1']     = $img_disabled;
                 $listrows[$i]['actionimg2']     = $img_disabled;
             }
-        }elseif($theme['state'] == 4){
+        }elseif($theme['state'] == 4 ||
+                $theme['state'] == 7 ||
+                $theme['state'] == 8 ||
+                $theme['state'] == 9){
             // this theme is 'Missing'         - set labels and links
             $statelabel = xarML('Missing');
             $listrows[$i]['state'] = 4;

@@ -17,10 +17,10 @@ function themes_admin_settings()
     if (!xarVarFetch('selsort',   'str:1:', $selsort,   'namedesc',           XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('regen',     'str:1:', $regen,     false,                XARVAR_NOT_REQUIRED)) return;
     
-    xarModSetVar('themes', 'hidecore', $hidecore);
-    xarModSetVar('themes', 'selstyle', $selstyle);
-    xarModSetVar('themes', 'selfilter', $selfilter);
-    xarModSetVar('themes', 'selsort', $selsort);
+    if (!xarModSetUserVar('themes', 'hidecore', $hidecore)) return;
+    if (!xarModSetUserVar('themes', 'selstyle', $selstyle)) return;
+    if (!xarModSetUserVar('themes', 'selfilter', $selfilter)) return;
+    if (!xarModSetUserVar('themes', 'selsort', $selsort)) return;
 
     xarResponseRedirect(xarModURL('themes', 'admin', 'list', array('regen' => $regen = 1)));
 }
