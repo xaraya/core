@@ -143,23 +143,25 @@
                         </label>
                     </td>
                 </tr>
-<!--                 <tr> -->
-<!--                     <td align="right"> -->
-<!--                         &nbsp;  -->
-<!--                     </td> -->
-<!--                     <td colspan="2"> -->
-<!--                         <xar:if condition="$showhelp eq 1"> -->
-<!--                             <input type="checkbox" name="showhelp" id="showhelp" value="1" checked="checked" /> -->
-<!--                             <xar:else /> -->
-<!--                             <input type="checkbox" name="showhelp" id="showhelp" value="1" /> -->
-<!--                         </xar:if> -->
-<!--                         <label for="showhelp"> -->
-<!--                             <xar:mlstring> -->
-<!--                                 Display "Help" link in the menus -->
-<!--                             </xar:mlstring> -->
-<!--                         </label> -->
-<!--                     </td> -->
-<!--                 </tr> -->
+<xar:comment>
+                <tr>
+                    <td align="right">
+                        &nbsp;
+                    </td>
+                    <td colspan="2">
+                        <xar:if condition="$showhelp eq 1">
+                            <input type="checkbox" name="showhelp" id="showhelp" value="1" checked="checked" />
+                            <xar:else />
+                            <input type="checkbox" name="showhelp" id="showhelp" value="1" />
+                        </xar:if>
+                        <label for="showhelp">
+                            <xar:mlstring>
+                                Display "Help" link in the menus
+                            </xar:mlstring>
+                        </label>
+                    </td>
+                </tr>
+</xar:comment>
                 <tr>
                     <td align="right">
                         &nbsp; 
