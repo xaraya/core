@@ -1,5 +1,5 @@
 <xar:if condition="isset($menustyle)">
-	#$menustyle#
+    #$menustyle#
 </xar:if>
 <br />
 <!-- NEW WAY - MORE ROBUST LOGIC - MARKING TRUELY ACTIVE LINKS NOW -->

@@ -27,13 +27,13 @@ function base_htmlblock_init()
 function base_htmlblock_info()
 {
     return array('text_type' => 'HTML',
-		 'text_type_long' => 'HTML',
-		 'module' => 'base',
+         'text_type_long' => 'HTML',
+         'module' => 'base',
          'func_update' => 'base_htmlblock_update',
-		 'allow_multiple' => true,
-		 'form_content' => false,
-		 'form_refresh' => false,
-		 'show_preview' => true);
+         'allow_multiple' => true,
+         'form_content' => false,
+         'form_refresh' => false,
+         'show_preview' => true);
 
 }
 
@@ -44,7 +44,7 @@ function base_htmlblock_info()
 function base_htmlblock_display($blockinfo)
 {
     // Security Check
-	if(!xarSecurityCheck('ViewBase',0,'HTMLblock','$blockinfo[title]::')) return;
+    if(!xarSecurityCheck('ViewBase',0,'HTMLblock','$blockinfo[title]::')) return;
 
     // Get variables from content block
     $vars = unserialize($blockinfo['content']);

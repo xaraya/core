@@ -39,13 +39,13 @@ function base_menublock_init()
 function base_menublock_info()
 {
     return array('text_type' => 'Menu',
-		 'text_type_long' => 'Generic menu',
-		 'module' => 'base',
-		 'func_update' => 'base_menublock_insert',
-		 'allow_multiple' => true,
-		 'form_content' => false,
-		 'form_refresh' => false,
-		 'show_preview' => true);
+         'text_type_long' => 'Generic menu',
+         'module' => 'base',
+         'func_update' => 'base_menublock_insert',
+         'allow_multiple' => true,
+         'form_content' => false,
+         'form_refresh' => false,
+         'show_preview' => true);
 }
 
 /**
@@ -65,7 +65,7 @@ function base_menublock_display($blockinfo)
     $xartable = xarDBGetTables();
 
 // Security Check
-	if(!xarSecurityCheck('ReadBase',0,'Menublock','$blockinfo[title]::')) return;
+    if(!xarSecurityCheck('ReadBase',0,'Menublock','$blockinfo[title]::')) return;
 
     // Break out options from our content field
     $vars = unserialize($blockinfo['content']);
@@ -73,10 +73,10 @@ function base_menublock_display($blockinfo)
     // are there any admin modules, then get their names
     // checking as early as possible :)
     $mods = xarModGetList(array('UserCapable' => 1));
-	if(empty($mods)) {
-	// there aren't any admin modules, dont display adminmenu
-	    return;
-	}
+    if(empty($mods)) {
+    // there aren't any admin modules, dont display adminmenu
+        return;
+    }
 
     // Get the marker for the main menu
     if (empty($vars['marker'])) {
@@ -134,7 +134,7 @@ function base_menublock_display($blockinfo)
                         $comment = $parts[2];
                         $child = isset($parts[3]) ? $parts[3] : '';
                         // Security Check
-		    			if (xarSecurityCheck('ReadBase',0,'Menublock','$blockinfo[title]:$title:')) {
+                        if (xarSecurityCheck('ReadBase',0,'Menublock','$blockinfo[title]:$title:')) {
                             $title = xarVarPrepForDisplay($title);
                             $url = xarVarPrepForDisplay($url);
                             $comment = xarVarPrepForDisplay($comment);
@@ -179,12 +179,12 @@ function base_menublock_display($blockinfo)
                                     // Compare with current URL
                                     if ($menulink['url'] == $currenturl) {
                                         $funcactive = 1;
-                                    }else{
+                                    } else {
                                         $funcactive = 0;
                                     }
 
-						// Security Check
-		    						if (xarSecurityCheck('ReadBase',0,'Menublock','$menulink[title]:$blockinfo[title]:')) {
+                        // Security Check
+                                    if (xarSecurityCheck('ReadBase',0,'Menublock','$menulink[title]:$blockinfo[title]:')) {
                                         $indlinks[] = array('userlink'      => $menulink['url'],
                                                             'userlabel'     => $menulink['label'],
                                                             'usertitle'     => $menulink['title'],
@@ -221,8 +221,8 @@ function base_menublock_display($blockinfo)
 
                 // we dont want to show logout link if the user is anonymous or admin
                 // admins have their own logout method, which is more robust
-				// Security Check
-							if (xarSecurityCheck('ReadBase',0,'Menublock','$blockinfo[title]:$blockinfo[title]:') or !xarUserIsLoggedIn()){
+                // Security Check
+                if (xarSecurityCheck('ReadBase',0,'Menublock','$blockinfo[title]:$blockinfo[title]:') or !xarUserIsLoggedIn()){
                     $showlogout = false;
                 }else{
                     $showlogout = true;
@@ -334,7 +334,7 @@ function base_menublock_insert($blockinfo)
 {
     list($vars['displaymodules'],
          $vars['marker']) = xarVarCleanFromInput('displaymodules',
-					                             'marker');
+                                                 'marker');
 
     // Defaults
     if (empty($vars['displaymodules'])) {

@@ -27,12 +27,12 @@ function base_phpblock_init()
 function base_phpblock_info()
 {
     return array('text_type' => 'PHP',
-		 'text_type_long' => 'PHP Script',
-		 'module' => 'base',
-		 'allow_multiple' => true,
-		 'form_content' => true,
-		 'form_refresh' => false,
-		 'show_preview' => true);
+         'text_type_long' => 'PHP Script',
+         'module' => 'base',
+         'allow_multiple' => true,
+         'form_content' => true,
+         'form_refresh' => false,
+         'show_preview' => true);
 }
 
 /**
@@ -42,7 +42,7 @@ function base_phpblock_info()
 function base_phpblock_display($blockinfo)
 {
     // Security Check
-	if(!xarSecurityCheck('ViewBase',0,'PHPblock','$blockinfo[title]::')) return;
+    if(!xarSecurityCheck('ViewBase',0,'PHPblock','$blockinfo[title]::')) return;
 
     if (empty($blockinfo['title'])){
         $blockinfo['title'] = xarML('PHP Block');

@@ -1,35 +1,35 @@
 <tr align="left" valign="middle">
-	<td>
-		<xar:mlstring>Block Expiration</xar:mlstring>
-	</td>
-	<td>
-	<select name="expire" id="expire">
-		<option name="expire" id="expire" value="86400"><xar:mlstring>1 Day</xar:mlstring></option>
-		<option name="expire" id="expire" value="172800"><xar:mlstring>2 Days</xar:mlstring></option>
-		<option name="expire" id="expire" value="432000"><xar:mlstring>5 Days</xar:mlstring></option>
-		<option name="expire" id="expire" value="1296000"><xar:mlstring>15 Days</xar:mlstring></option>
-		<option name="expire" id="expire" value="2592000"><xar:mlstring>30 Days</xar:mlstring></option>
-		<option name="expire" id="expire" value="0" selected="selected"><xar:mlstring>Unlimited</xar:mlstring></option>
+    <td>
+        <xar:mlstring>Block Expiration</xar:mlstring>
+    </td>
+    <td>
+    <select name="expire" id="expire">
+        <option name="expire" id="expire" value="86400"><xar:mlstring>1 Day</xar:mlstring></option>
+        <option name="expire" id="expire" value="172800"><xar:mlstring>2 Days</xar:mlstring></option>
+        <option name="expire" id="expire" value="432000"><xar:mlstring>5 Days</xar:mlstring></option>
+        <option name="expire" id="expire" value="1296000"><xar:mlstring>15 Days</xar:mlstring></option>
+        <option name="expire" id="expire" value="2592000"><xar:mlstring>30 Days</xar:mlstring></option>
+        <option name="expire" id="expire" value="0" selected="selected"><xar:mlstring>Unlimited</xar:mlstring></option>
     </select>
-	</td>
+    </td>
 </tr>
 <tr align="left" valign="middle">
-	<td>
-		<xar:mlstring>Block Expiration</xar:mlstring>
-	</td>
-	<td>
-		<xar:if condition="$expirein eq 0">
-		<xar:mlstring>Block set to 'Unlimited'</xar:mlstring>
-		<xar:else />
-		#$expirein# <xar:mlstring>Hours</xar:mlstring>
-		</xar:if>
-	</td>
+    <td>
+        <xar:mlstring>Block Expiration</xar:mlstring>
+    </td>
+    <td>
+        <xar:if condition="$expirein eq 0">
+        <xar:mlstring>Block set to 'Unlimited'</xar:mlstring>
+        <xar:else />
+        #$expirein# <xar:mlstring>Hours</xar:mlstring>
+        </xar:if>
+    </td>
 </tr>
 <tr align="left" valign="middle">
-	<td>
-		<xar:mlstring>Text</xar:mlstring>
-	</td>
-	<td colspan="2">
-		<textarea name="text_content" id="text_content" style="width:300px;height:150px;">#$text_content#</textarea>
+    <td>
+        <xar:mlstring>Text</xar:mlstring>
+    </td>
+    <td colspan="2">
+        <textarea name="text_content" id="text_content" style="width:300px;height:150px;">#$text_content#</textarea>
     </td>
 </tr>

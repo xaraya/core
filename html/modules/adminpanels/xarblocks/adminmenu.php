@@ -61,24 +61,24 @@ function adminpanels_adminmenublock_info(){
 function adminpanels_adminmenublock_display($blockinfo){
 
 // Security Check
-	if(!xarSecurityCheck('AdminPanel',0,'adminmenu','$blockinfo[title]::')) return;
+    if(!xarSecurityCheck('AdminPanel',0,'adminmenu','$blockinfo[title]::')) return;
 
     // are there any admin modules, then get the whole list sorted by names
     // checking this as early as possible
     $mods = xarModGetList(array('AdminCapable' => 1), NULL, NULL, 'name');
-	if(empty($mods)) {
+    if(empty($mods)) {
         // there aren't any admin modules, dont display adminmenu
-	    return;
-	}
+        return;
+    }
 
-	// due to shortcomings of modules module, we need this workaround
-	// if our module deactivated intentionally or by accident
-	// we just switch to the block mode that is not dependent on the module's api
-	// the only such mode at the moment is sort by name
-	// TODO: eradicate dependency on module api for other sort orders too
-	if(!xarModIsAvailable('adminpanels')){
-	     xarModSetVar('adminpanels', 'menustyle', 'byname');
-	}
+    // due to shortcomings of modules module, we need this workaround
+    // if our module deactivated intentionally or by accident
+    // we just switch to the block mode that is not dependent on the module's api
+    // the only such mode at the moment is sort by name
+    // TODO: eradicate dependency on module api for other sort orders too
+    if(!xarModIsAvailable('adminpanels')){
+         xarModSetVar('adminpanels', 'menustyle', 'byname');
+    }
 
     // this is how we are marking the currently loaded module
     $marker = xarModGetVar('adminpanels', 'marker');

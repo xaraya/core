@@ -27,13 +27,13 @@ function base_textblock_init()
 function base_textblock_info()
 {
     return array('text_type' => 'Text',
-		 'text_type_long' => 'Plain Text',
-		 'module' => 'base',
+         'text_type_long' => 'Plain Text',
+         'module' => 'base',
          'func_update' => 'base_textblock_update',
-		 'allow_multiple' => true,
-		 'form_content' => false,
-		 'form_refresh' => false,
-		 'show_preview' => true);
+         'allow_multiple' => true,
+         'form_content' => false,
+         'form_refresh' => false,
+         'show_preview' => true);
 }
 
 /**
@@ -43,7 +43,7 @@ function base_textblock_info()
 function base_textblock_display($blockinfo)
 {
     // Security Check
-	if(!xarSecurityCheck('ViewBase',0,'Textblock','$blockinfo[title]::')) return;
+    if(!xarSecurityCheck('ViewBase',0,'Textblock','$blockinfo[title]::')) return;
 
     // Get variables from content block
     $vars = unserialize($blockinfo['content']);

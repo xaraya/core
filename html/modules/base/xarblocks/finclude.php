@@ -27,13 +27,13 @@ function base_fincludeblock_init()
 function base_fincludeblock_info()
 {
     return array('text_type' => 'finclude',
-		 'text_type_long' => 'Simple File Include',
-		 'module' => 'base',
+         'text_type_long' => 'Simple File Include',
+         'module' => 'base',
          'func_update' => 'base_fincludeblock_update',
-		 'allow_multiple' => true,
-		 'form_content' => false,
-		 'form_refresh' => false,
-		 'show_preview' => true);
+         'allow_multiple' => true,
+         'form_content' => false,
+         'form_refresh' => false,
+         'show_preview' => true);
 }
 
 /**
@@ -43,7 +43,7 @@ function base_fincludeblock_info()
 function base_fincludeblock_display($blockinfo)
 {
     // Security Check
-	if(!xarSecurityCheck('ViewBase',0,'Includeblock','$blockinfo[title]::')) return;
+    if(!xarSecurityCheck('ViewBase',0,'Includeblock','$blockinfo[title]::')) return;
 
     if (empty($blockinfo['title'])){
         $blockinfo['title'] = xarML('File Include');

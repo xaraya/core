@@ -1,30 +1,30 @@
 <br />
 <xar:if condition="!empty($usercontent)">
-	<xar:loop name="$usercontent">
-		<xar:if condition="empty($url)">
-			<div class="xar-menu-section">#$title#</div>
-		<xar:elseif condition="!empty($child)" />
-			 <div class="xar-menu-subitem"><a href="#$url#" title="#$comment#">#$title#</a></div>
-		<xar:else />
-			<div class="xar-menu-item"><a href="#$url#" title="#$comment#">#$title#</a></div>
-		</xar:if>
-	</xar:loop>
-	<br />
+    <xar:loop name="$usercontent">
+        <xar:if condition="empty($url)">
+            <div class="xar-menu-section">#$title#</div>
+        <xar:elseif condition="!empty($child)" />
+             <div class="xar-menu-subitem"><a href="#$url#" title="#$comment#">#$title#</a></div>
+        <xar:else />
+            <div class="xar-menu-item"><a href="#$url#" title="#$comment#">#$title#</a></div>
+        </xar:if>
+    </xar:loop>
+    <br />
 </xar:if>
 
 <xar:if condition="!empty($usermods)">
-	<div class="xar-menu-section"><xar:mlstring>Modules</xar:mlstring></div>
-	<xar:loop name="$usermods">
-		<xar:if condition="$modactive">
-			<div class="xar-menu-item-current">
-			#$label#
-			<xar:if condition="$indlinks ne ''">
-				<xar:loop name="$indlinks">
-					<xar:if condition="$funcactive">
-						<div class="xar-menu-subitem-current">#$userlabel# #$marker#</div>
-					<xar:else />
-						<div class="xar-menu-subitem"><a href="#$userlink#" title="#$usertitle#">#$userlabel#</a></div>
-					</xar:if>
+    <div class="xar-menu-section"><xar:mlstring>Modules</xar:mlstring></div>
+    <xar:loop name="$usermods">
+        <xar:if condition="$modactive">
+            <div class="xar-menu-item-current">
+            #$label#
+            <xar:if condition="$indlinks ne ''">
+                <xar:loop name="$indlinks">
+                    <xar:if condition="$funcactive">
+                        <div class="xar-menu-subitem-current">#$userlabel# #$marker#</div>
+                    <xar:else />
+                        <div class="xar-menu-subitem"><a href="#$userlink#" title="#$usertitle#">#$userlabel#</a></div>
+                    </xar:if>
             </xar:loop>
         </xar:if>
         </div>

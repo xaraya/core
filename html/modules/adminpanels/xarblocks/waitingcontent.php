@@ -23,12 +23,12 @@ function adminpanels_waitingcontentblock_init()
 function adminpanels_waitingcontentblock_info()
 {
     return array('text_type' => 'Waiting Content',
-		 'text_type_long' => 'Displays Waiting Content for All Modules',
-		 'module' => 'adminpanels',
-		 'allow_multiple' => false,
-		 'form_content' => false,
-		 'form_refresh' => false,
-		 'show_preview' => true);
+         'text_type_long' => 'Displays Waiting Content for All Modules',
+         'module' => 'adminpanels',
+         'allow_multiple' => false,
+         'form_content' => false,
+         'form_refresh' => false,
+         'show_preview' => true);
 }
 /**
  * Display func.
@@ -36,7 +36,7 @@ function adminpanels_waitingcontentblock_info()
 function adminpanels_waitingcontentblock_display($blockinfo)
 {
 // Security Check
-	if(!xarSecurityCheck('EditPanel',0,'Waitingcontentblock','$blockinfo[title]::')) return;
+    if(!xarSecurityCheck('EditPanel',0,'Waitingcontentblock','$blockinfo[title]::')) return;
 
     $moditems = array();
 
