@@ -82,8 +82,9 @@ define('XARDBG_SQL', 2);
 define('XARDBG_EXCEPTIONS', 4);
 define('XARDBG_SHOW_PARAMS_IN_BT', 8);
 
-//The unregistered user
-define('_XARSEC_UNREGISTERED', '2');
+//'All' and 'Anonymous' roles
+//define('_XARSEC_ALL', '-1');
+define('_XAR_ID_UNREGISTERED', '2');
 
 /**
  * Initializes the core engine

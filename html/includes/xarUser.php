@@ -158,7 +158,7 @@ function xarUserLogOut()
     $xartable = xarDBGetTables();
 
     // Reset user session information
-    $res = xarSession_setUserInfo(_XARSEC_UNREGISTERED, 0);
+    $res = xarSession_setUserInfo(_XAR_ID_UNREGISTERED, 0);
     if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back
     }
@@ -179,7 +179,7 @@ global $installing;
 
 function xarUserIsLoggedIn()
 {
-    return xarSessionGetVar('uid') != _XARSEC_UNREGISTERED;
+    return xarSessionGetVar('uid') != _XAR_ID_UNREGISTERED;
 }
 
 /**

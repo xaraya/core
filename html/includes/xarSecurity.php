@@ -23,8 +23,6 @@
  *
  */
 
-//'All' and 'unregistered' for user and group permissions
-define('_XARSEC_ALL', '-1');
 
 /*
  * Defines for access levels

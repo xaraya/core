@@ -428,9 +428,9 @@ function xarSession__phpRead($sessionId)
         // a session variable even if it's not registered as so!
         if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
             global $XARSVuid;
-            $XARSVuid = _XARSEC_UNREGISTERED;
+            $XARSVuid = _XAR_ID_UNREGISTERED;
         } else {
-            $_SESSION['uid'] = _XARSEC_UNREGISTERED;
+            $_SESSION['uid'] = _XAR_ID_UNREGISTERED;
         }
         $GLOBALS['xarSession_ipAddress'] = '';
         $vars = '';

@@ -322,7 +322,7 @@ class xarMasks
 		if ($rolename == '') {
 			$userID = xarSessionGetVar('uid');
 			if (empty($userID)) {
-				$userID = _XARSEC_UNREGISTERED;
+				$userID = _XAR_ID_UNREGISTERED;
 			}
 			$role = $roles->getRole($userID);
 		}
