@@ -56,7 +56,7 @@
 					<div style="text-align:justify;">
 					  <input type="checkbox" name="install_create_database" id="install_create_database" value="1" />
 						<span class="xar-normal"><label for="install_create_database">Create the database</label></span><br />
-						<span class="xar-sub">If you cannot create databases through phpMyAdmin because of virtual hosting or MySQL security settings, the installer will not be able to create the database for you.</span><br /><br />
+						<span class="xar-sub">This option specifies whether you need the install to create the empty database for you first or whether it can just populate an already existing database. If you cannot create databases through phpMyAdmin because of virtual hosting or MySQL security settings, the installer will not be able to create the database for you. It will be able to populate an already existing one though.</span><br /><br />
     			</div>
 					<div style="text-align:center;">
 					  <input type="hidden" name="install_phase" id="install_phase" id="install_phase" value="5" />
