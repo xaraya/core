@@ -135,6 +135,8 @@ function installer_adminapi_createdb($args)
 {
     extract($args);
 
+    //All variables are comming thru $args right now.
+/*
     if (!isset($dbName)) {
         $dbName = xarCore_getSystemVar('DB.Name');
     }
@@ -148,6 +150,7 @@ function installer_adminapi_createdb($args)
     $dbUname = xarCore_getSystemVar('DB.UserName');
     $dbPass  = xarCore_getSystemVar('DB.Password');
     $dbType  = xarCore_getSystemVar('DB.Type');
+*/
     // Load in Table Maintainance API
     include_once 'includes/xarTableDDL.php';
 

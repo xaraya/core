@@ -178,19 +178,25 @@ function installer_admin_phase5()
     if (!xarVarFetch('install_create_database','checkbox',$createDb,false,XARVAR_NOT_REQUIRED)) return;
 
     // Save config data
-    if (!xarInstallAPIFunc('installer', 'admin', 'modifyconfig',
-                                                 array('dbHost'    => $dbHost,
-                                                       'dbName'    => $dbName,
-                                                       'dbUname'   => $dbUname,
-                                                       'dbPass'    => $dbPass,
-                                                       'dbPrefix'  => $dbPrefix,
-                                                       'dbType'    => $dbType))) {
+    $config_args = array('dbHost'    => $dbHost,
+                         'dbName'    => $dbName,
+                         'dbUname'   => $dbUname,
+                         'dbPass'    => $dbPass,
+                         'dbPrefix'  => $dbPrefix,
+                         'dbType'    => $dbType);
+
+    if (!xarInstallAPIFunc('installer', 'admin', 'modifyconfig', $config_args)) {
         return;
     }
 
     // Create the database if necessary
     if ($createDb) {
-        if (!xarInstallAPIFunc('installer', 'admin', 'createdb', array('dbName' => $dbName, 'dbType' => $dbType))) {
+        //Let's pass all input variables thru the function argument or none, as all are stored in the system.config.php
+        //Now we are passing all, let's see if we gain consistency by loading config.php already in this phase?
+        //Probably there is already a core function that can make that for us...
+        //the config.system.php is lazy loaded in xarCore_getSystemVar($name), which means we cant reload the values
+        // in this phase... Not a big deal 'though.
+        if (!xarInstallAPIFunc('installer', 'admin', 'createdb', $config_args)) {
             $msg = xarML('Could not create database (#(1)).', $dbName);
             xarCore_die($msg);
             return;
