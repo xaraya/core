@@ -235,8 +235,6 @@ function installer_admin_phase5()
     $data['phase'] = 5;
     $data['phase_label'] = xarML('Step Five');
 
-    xarVarDelCached('installer','installing');
-
     return $data;
 }
 
@@ -261,6 +259,8 @@ function installer_admin_bootstrap()
                        new SystemException($msg));
         return false;
     }
+
+    xarVarDelCached('installer','installing');
 
     // Set up default user properties, etc.
 

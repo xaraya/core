@@ -327,7 +327,7 @@ class xarMasks
  * @todo    none
 */
 
-    function xarSecurityCheck($mask,$catch=1,$component='', $instance='',$module='',$rolename='',$pnrealm,$pnlevel)
+    function xarSecurityCheck($mask,$catch=1,$component='', $instance='',$module='',$rolename='',$pnrealm='',$pnlevel='')
     {
         $mask =  $this->getMask($mask);
         if (!$mask) {
