@@ -19,7 +19,7 @@
 	<input type="hidden" name="uid" id="uid" value="#$uid#" />
 	<input type="hidden" name="confirmation" id="confirmation" value="1" />
 
-	<span class="xar-title"><xar:mlstring>Confirm the deletion of</xar:mlstring>&nbsp;
+	<span class="xar-title"><xar:mlstring>Confirm the deletion of </xar:mlstring>
 	<xar:if condition="$ptype eq 1">
 		<xar:mlstring>Group</xar:mlstring>
 	<xar:else />
