@@ -383,7 +383,7 @@ function xarSession__new($sessionId, $ipAddress)
 
     // Congratulations. We have created a new session
     xarEvt_trigger('SessionCreate');
-    
+
     return true;
 }
 
@@ -420,7 +420,7 @@ function xarSession__phpRead($sessionId)
 
     // FIXME: in session2 the uid is not used anymore, can we safely migrate this 
     //        out? At least the roles/privileges modules are using it actively
-    $query = "SELECT xar_uid, xar_ipaddr, xar_vars
+    $query = "SELECT xar_uid, xar_ipaddr, xar_lastused, xar_vars
               FROM $sessioninfoTable WHERE xar_sessid = ?";
     $result =& $dbconn->Execute($query,array($sessionId));
     if (!$result) return;
@@ -430,7 +430,18 @@ function xarSession__phpRead($sessionId)
         if (xarSession__UseOldSessions()) {
             global $XARSVuid;
         }
-        list($XARSVuid, $GLOBALS['xarSession_ipAddress'], $vars) = $result->fields;
+        list($XARSVuid, $GLOBALS['xarSession_ipAddress'], $lastused, $vars) = $result->fields;
+        // in case garbage collection didn't have the opportunity to do its job
+        if (!empty($GLOBALS['xarSession_systemArgs']['securityLevel']) &&
+            $GLOBALS['xarSession_systemArgs']['securityLevel'] == 'High') {
+            $timeoutSetting = time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60);
+            if ($lastused < $timeoutSetting) {
+                // force a reset of the userid (but use the same sessionid)
+                xarSession_setUserInfo(_XAR_ID_UNREGISTERED, 0);
+                $GLOBALS['xarSession_ipAddress'] = '';
+                $vars = '';
+            }
+        }
     } else {
         $GLOBALS['xarSession_isNewSession'] = true;
         // NOTE: <marco> Since it's useless to save the same information twice into
