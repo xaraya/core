@@ -65,6 +65,7 @@ function roles_adminapi_delete($args)
     // Let any hooks
     $item['module'] = 'roles';
     $item['itemid'] = $uid;
+    $item['method'] = 'delete';
     xarModCallHooks('item', 'delete', $uid, $item);
 
     //finished successfully

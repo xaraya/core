@@ -58,6 +58,7 @@ function roles_adminapi_purge($args)
         // Let any hooks
         $item['module'] = 'roles';
         $item['itemid'] = $item['uid'];
+        $item['method'] = 'purge';
         xarModCallHooks('item', 'delete', $item['uid'], $item);
     }
 
