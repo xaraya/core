@@ -44,7 +44,7 @@ function initializeSetup()
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    xarRegisterPrivilege('Administration','All','All','All','All',ACCESS_ADMIN,'The base privilege granting full access');
+    xarRegisterPrivilege('Administration','All','All','All','All',ACCESS_ADMIN,'Admin access to all modules');
 
     /*********************************************************************
     * Arrange the  privileges in a hierarchy
