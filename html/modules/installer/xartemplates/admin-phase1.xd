@@ -39,53 +39,5 @@
         </div>
     </div>
 </div>
-<div id="status">
-    <p class="active">
-        <img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />
-        <xar:mlstring>
-            Selecting Language 
-        </xar:mlstring>
-    </p>
-    <p class="greyed">
-        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-        <xar:mlstring>
-            Agreeing to License 
-        </xar:mlstring>
-    </p>
-    <p class="greyed">
-        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-        <xar:mlstring>
-            Checking System Settings 
-        </xar:mlstring>
-    </p>
-    <p class="greyed">
-        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-        <xar:mlstring>
-            Collecting Database Settings 
-        </xar:mlstring>
-    </p>
-    <p class="greyed">
-        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-        <xar:mlstring>
-            Beginning Initialization 
-        </xar:mlstring>
-    </p>
-    <p class="greyed">
-        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-        <xar:mlstring>
-            Creating an Administrator 
-        </xar:mlstring>
-    </p>
-    <p class="greyed">
-        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-        <xar:mlstring>
-            Choosing a Configuration 
-        </xar:mlstring>
-    </p>
-    <p class="greyed">
-        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-        <xar:mlstring>
-            Choosing Options 
-        </xar:mlstring>
-    </p>
-</div>
+<xar:set name="active_step">1</xar:set>
+<xar:template file="status"/>

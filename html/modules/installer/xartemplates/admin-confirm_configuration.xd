@@ -195,53 +195,5 @@
         </form>
     </div>
 </div>
-<div id="status">
-    <p class="completed">
-        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-        <xar:mlstring>
-            Selecting Language
-        </xar:mlstring> 
-    </p>
-    <p class="completed">
-        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-        <xar:mlstring>
-            Agreeing to License
-        </xar:mlstring> 
-    </p>
-    <p class="completed">
-        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-        <xar:mlstring>
-            Checking System Settings
-        </xar:mlstring> 
-    </p>
-    <p class="completed">
-        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-        <xar:mlstring>
-            Collecting Database Settings
-        </xar:mlstring> 
-    </p>
-    <p class="completed">
-        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-        <xar:mlstring>
-            Beginning Initialization
-        </xar:mlstring> 
-    </p>
-    <p class="completed">
-        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-        <xar:mlstring>
-            Creating an Administrator
-        </xar:mlstring> 
-    </p>
-    <p class="completed">
-        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-        <xar:mlstring>
-            Choosing a Configuration 
-        </xar:mlstring>
-    </p>
-    <p class="active">
-        <img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />
-        <xar:mlstring>
-            Choosing Options
-        </xar:mlstring> 
-    </p>
-</div>
+<xar:set name="active_step">8</xar:set>
+<xar:template file="status"/>

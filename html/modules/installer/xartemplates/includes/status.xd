@@ -1,0 +1,34 @@
+<xar:set name="steptext[1]"><xar:mlstring>Selecting Language</xar:mlstring></xar:set>
+<xar:set name="steptext[2]"><xar:mlstring>Agreeing to License</xar:mlstring></xar:set>
+<xar:set name="steptext[3]"><xar:mlstring>Checking System Settings</xar:mlstring></xar:set>
+<xar:set name="steptext[4]"><xar:mlstring>Collecting Database Settings</xar:mlstring></xar:set>
+<xar:set name="steptext[5]"><xar:mlstring>Beginning Initialization</xar:mlstring></xar:set>
+<xar:set name="steptext[6]"><xar:mlstring>Creating an Administrator</xar:mlstring></xar:set>
+<xar:set name="steptext[7]"><xar:mlstring>Choosing a Configuration</xar:mlstring></xar:set>
+<xar:set name="steptext[8]"><xar:mlstring>Choosing Options</xar:mlstring></xar:set>
+
+<div id="status">
+
+  <!-- loop for the completed items -->
+  <xar:for start="$phase = 1" test="$phase lt $active_step" iter="$phase++">
+	  <p class="completed">
+		  <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+		  #$steptext[$phase]#
+	  </p>
+  </xar:for>
+
+  <!-- the active item -->
+	<p class="active">
+		<img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />
+		#$steptext[$active_step]#
+	</p>
+
+  <!-- loop for the greyed items -->
+  <xar:for start="$phase = $active_step + 1" test="$phase le 8" iter="$phase++">
+	  <p class="greyed">
+		  <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="incomplete step" />
+		  #$steptext[$phase]#
+	  </p>
+  </xar:for>
+
+</div>

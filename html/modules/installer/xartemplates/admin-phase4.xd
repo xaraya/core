@@ -165,37 +165,5 @@
 		</form>
 	</div>
 </div>
-<div id="status">
-	<p class="completed">
-		<img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-		Selecting Language 
-	</p>
-	<p class="completed">
-		<img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-		Agreeing to License 
-	</p>
-	<p class="completed">
-		<img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-		Checking System Settings 
-	</p>
-	<p class="active">
-		<img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />
-		Collecting Database Settings 
-	</p>
-	<p class="greyed">
-		<img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-		Beginning Initialization 
-	</p>
-	<p class="greyed">
-		<img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-		Creating an Administrator 
-	</p>
-	<p class="greyed">
-		<img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-		Choosing a Configuration 
-	</p>
-	<p class="greyed">
-		<img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-		Choosing Options 
-	</p>
-</div>
+<xar:set name="active_step">4</xar:set>
+<xar:template file="status"/>
