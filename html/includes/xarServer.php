@@ -352,10 +352,13 @@ function xarRequestGetInfo()
     if (empty($modName)) {
         // Get Start Page -- Defined in Base Config or from config.site.xml
         // TODO -- Allow user select start page
-        $modName = xarConfigGetVar('Site.Core.DefaultModuleName');
-        if (empty($modName)){
-            $modName = $xarRequest_defaultModule['module'];
-        }        
+        if (function_exists('xarConfigGetVar')){
+            $modName = xarConfigGetVar('Site.Core.DefaultModuleName');
+        } else {
+            if (empty($modName)){
+                $modName = $xarRequest_defaultModule['module'];
+            }
+        }
         if (isset($xarRequest_defaultModule['type'])) $modType = $xarRequest_defaultModule['type'];
         if (isset($xarRequest_defaultModule['func'])) $funcName = $xarRequest_defaultModule['func'];
     }

@@ -209,6 +209,125 @@ function base_init()
         return NULL;
     }
 
+    // Insert Allowed Vars
+    $id_configvar = $dbconn->GenId($configVarsTable);
+    $htmltags = array('!--',
+                  'a',
+                  'abbr',
+                  'acronym',
+                  'address',
+		          'applet',
+		          'area',
+                  'b',
+		          'base',
+		          'basefont',
+		          'bdo',
+                  'big',
+                  'blockquote',
+                  'br',
+		          'button',
+                  'caption',
+                  'center',
+                  'cite',
+                  'code',
+		          'col',
+		          'colgroup',
+		          'del',
+                  'dfn',
+		          'dir',
+                  'div',
+                  'dl',
+                  'dd',
+                  'dt',
+                  'em',
+                  'embed',
+		          'fieldset',
+                  'font',
+		          'form',
+                  'h1',
+                  'h2',
+                  'h3',
+                  'h4',
+                  'h5',
+                  'h6',
+                  'hr',
+                  'i',
+                  'iframe',
+                  'img',
+		          'input',
+		          'ins',
+		          'kbd',
+		          'label',
+		          'legend',
+                  'li',
+		          'map',
+                  'marquee',
+		          'menu',
+		          'nobr',
+                  'object',
+                  'ol',
+		          'optgroup',
+		          'option',
+                  'p',
+                  'param',
+                  'pre',
+                  'q',
+                  's',
+                  'samp',
+                  'script',
+		          'select',
+                  'small',
+                  'span',
+                  'strike',
+                  'strong',
+                  'sub',
+                  'sup',
+                  'table',
+		          'tbody',
+                  'td',
+		          'textarea',
+		          'tfoot',
+                  'th',
+		          'thead',
+                  'tr',
+		          'tt',
+                  'u',
+		          'ul',
+		          'var');
+    
+    foreach ($htmltags as $htmltag) {
+        $query = "INSERT INTO $configVarsTable VALUES ($id_configvar,'$htmltag','html')";
+        $dbconn->Execute($query);
+        if ($dbconn->ErrorNo() != 0) {
+            $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+            return NULL;
+        }
+    }
+
+    $censortags = array('fuck',
+                  'fucked',
+                  'motherfucker',
+                  'pussy',
+                  'cock',
+		          'cunt',
+		          'cocksucker',
+                  'cum');
+    
+    foreach ($censortags as $censortag) {
+        $query = "INSERT INTO $configVarsTable VALUES ($id_configvar,'$censortag','censored')";
+        $dbconn->Execute($query);
+        if ($dbconn->ErrorNo() != 0) {
+            $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+            return NULL;
+        }
+    }
+
+
+
     $templateTagsTable = $systemPrefix . '_template_tags';
     /*********************************************************************
     * CREATE TABLE xar_template_tags (
