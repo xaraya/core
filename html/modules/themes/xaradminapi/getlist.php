@@ -159,12 +159,15 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
                 xarVarSetCached('Theme.BaseInfos', $themeInfo['name'], $themeInfo);
 
                 $themeFileInfo = xarTheme_getFileInfo($themeInfo['osdirectory']);
-                if (!isset($themeFileInfo)) return; // throw back
-                $themeInfo = array_merge($themeInfo, $themeFileInfo);
-
-                xarVarSetCached('Theme.Infos', $themeInfo['regid'], $themeInfo);
-
-                $themeList[] = $themeInfo;
+                if (!isset($themeFileInfo)) {
+                    // There was an entry in the database which was not in the file system,
+                    // remove the entry from the database
+                    xarModAPIFunc('themes','admin','remove',array('regid' => $themeInfo['regid']));
+                } else {
+                    $themeInfo = array_merge($themeInfo, $themeFileInfo);
+                    xarVarSetCached('Theme.Infos', $themeInfo['regid'], $themeInfo);
+                    $themeList[] = $themeInfo;
+                }
             }
             $themeInfo = array();
             $result->MoveNext();
