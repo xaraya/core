@@ -1,9 +1,13 @@
-<div class="xar-mod-body" align="center"><br/>
-
-<table border="0" width="30%" cellspacing="1" cellpadding="2">
+<h2>#$name# <xar:mlstring>Basic Information</xar:mlstring></h2> 
+<form action="#xarModURL('users', 'user', 'usermenu')#" method="post" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="authid" id="authid" value="#$authid#" />	
+<input type="hidden" name="uid" id="uid" value="#$uid#" />
+<input type="hidden" name="phase" id="phase" value="updatebasic" />
+<div class="xar-accent">
+<table border="0" width="100%" cellspacing="1" cellpadding="4">
 	<tr class="xar-norm" valign="top">
-		<td>
-			<xar:mlstring>User Name</xar:mlstring>: 
+		<td width="30%">
+			<b><xar:mlstring>User Name</xar:mlstring>:</b> 
 		</td>
 		<td>
 			#$uname#
@@ -11,10 +15,39 @@
 	</tr>
 	<tr class="xar-norm" valign="top">
 		<td>
-			<xar:mlstring>Email</xar:mlstring>: 
+			<b><xar:mlstring>Email</xar:mlstring>:</b>
 		</td>
 		<td>
 			#$email#	
 		</td>
 	</tr>
+	<tr>
+		<td>
+			<b><xar:mlstring>Real Name</xar:mlstring>:</b>
+		</td>
+		<td>
+			<input type="text" name="name" id="name" value="#$name#" size="20" maxlength="60" tabindex="1" />
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b><xar:mlstring>Password</xar:mlstring></b>
+		</td>
+		<td>
+			<input type="password" name="pass1" id="pass1" value="" size="20" maxlength="40" tabindex="2" />
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b><xar:mlstring>Retype Password</xar:mlstring></b>
+		</td>
+		<td>
+			<input type="password" name="pass2" id="pass2" value="" size="20" maxlength="40" tabindex="3" />
+		</td>
+	</tr>
+	<tr>
 </table>
+</div>
+<br /><br />
+<input type="submit" value="<xar:mlstring>Modify Account Information</xar:mlstring>" align="middle" tabindex="2" />
+</form>
