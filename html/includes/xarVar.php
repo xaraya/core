@@ -175,7 +175,7 @@ function xarVarBatchFetch()
  *   XARVAR_PREP_FOR_DISPLAY:    xarVarPrepForDisplay($value)
  *   XARVAR_PREP_FOR_HTML:       xarVarPrepHTMLDisplay($value)
  *  // FIXME: DELETE THIS once deprecation is complete
- *   XARVAR_PREP_FOR_STORE:      xarVarPrepForStore($value)
+ *   XARVAR_PREP_FOR_STORE:      dbconn->qstr($value)
  *   XARVAR_PREP_TRIM:           trim($value)
  *
  * @author Marco Canini
@@ -185,7 +185,7 @@ function xarVarBatchFetch()
  * @param value mixed contains the converted value of fetched variable
  * @param defaultValue mixed the default value
  * @param flags integer bitmask which modify the behaviour of function
- * @param prep will prep the value with xarVarPrepForDisplay, xarVarPrepHTMLDisplay, or xarVarPrepForStore
+ * @param prep will prep the value with xarVarPrepForDisplay, xarVarPrepHTMLDisplay, or dbconn->qstr()
  * @return mixed
  * @raise BAD_PARAM
  */
@@ -248,9 +248,9 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
             $value = xarVarPrepHTMLDisplay($value);
         }
 
-        // FIXME: DELETE THIS once deprecation is complete
         if ($prep & XARVAR_PREP_FOR_STORE) {
-            $value = xarVarPrepForStore($value);
+            $dbconn =& xarDBGetConn();
+            $value = $dbconn->qstr($value);
         }
 
         if ($prep & XARVAR_PREP_TRIM) {
