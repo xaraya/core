@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * File: $Id$
  *
@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage Base Module
  * @author Patrick Kellum
 */
@@ -28,7 +28,7 @@ function base_phpblock_info()
 {
     return array('text_type' => 'PHP',
 		 'text_type_long' => 'PHP Script',
-		 'module' => 'base',	
+		 'module' => 'base',
 		 'allow_multiple' => true,
 		 'form_content' => true,
 		 'form_refresh' => false,
@@ -41,9 +41,8 @@ function base_phpblock_info()
  */
 function base_phpblock_display($blockinfo)
 {
-    if (!xarSecAuthAction(0, 'base:PHPblock', "$blockinfo[title]::", ACCESS_READ)) {
-        return;
-    }
+// Security Check
+	if(!xarSecurityCheck('ReadBase',0,'PHPblock','$blockinfo[title]::')) return;
 
     if (empty($blockinfo['title'])){
         $blockinfo['title'] = xarML('PHP Block');

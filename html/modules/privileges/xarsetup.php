@@ -138,7 +138,16 @@ function initializeSetup() {
 	$query = "SELECT xar_name,xar_id FROM xar_allowed_vars";
     xarDefineInstance('base','Base',$query);
 
+// the follwing are apparently used in the base module
+	$query = "SELECT types.xar_type,instances.xar_title, FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id";
+    xarDefineInstance('blocks','PHPBlock',$query);
+    xarDefineInstance('blocks','Block',$query);
+    xarDefineInstance('blocks','HTMLBlock',$query);
+
 //    xarDefineInstance('xproject','Projects','xar_xproject','xar_projectid','xar_name');
+
+	$query = "SELECT xar_name,xar_regid FROM xar_themes";
+    xarDefineInstance('themes','Themes',$query);
 
 
     /*********************************************************************
@@ -152,6 +161,8 @@ function initializeSetup() {
     xarRegisterMask('AddBlock','All','base','Block','All',ACCESS_ADD);
     xarRegisterMask('DeleteBlock','All','base','Block','All',ACCESS_DELETE);
     xarRegisterMask('AdminBlock','All','base','Block','All',ACCESS_ADMIN);
+    xarRegisterMask('ViewBase','All','base','All','All',ACCESS_OVERVIEW);
+    xarRegisterMask('ReadBase','All','base','All','All',ACCESS_READ);
     xarRegisterMask('AdminBase','All','base','All','All',ACCESS_ADMIN);
 
 	xarRegisterMask('AdminInstaller','All','installer','All','All',ACCESS_ADMIN);
@@ -175,9 +186,12 @@ function initializeSetup() {
 
     xarRegisterMask('EditMail','All','mail','All','All',ACCESS_EDIT);
     xarRegisterMask('AdminMail','All','mail','All','All',ACCESS_ADMIN);
+    xarRegisterMask('DeleteMailPanel','adminpanels','mail','All','All',ACCESS_DELETE);
 
-    xarRegisterMask('ViewBase','All','base','All','All',ACCESS_OVERVIEW);
-
+    xarRegisterMask('EditBlock','All','blocks','All','All',ACCESS_EDIT);
+    xarRegisterMask('AddBlock','All','blocks','All','All',ACCESS_ADD);
+    xarRegisterMask('DeleteBlock','All','blocks','All','All',ACCESS_DELETE);
+    xarRegisterMask('AdminBlock','All','blocks','All','All',ACCESS_DELETE);
 
     xarRegisterMask('PrivilegesGateway','All','Privileges','All','All',ACCESS_READ);
     xarRegisterMask('ViewPrivileges','All','Privileges','ViewPrivileges','All',ACCESS_READ);
