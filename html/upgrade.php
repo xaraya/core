@@ -138,6 +138,42 @@ if (empty($step)) {
           echo "Dynamic Data module not available - no checking of dynamic data instances carried out.<br />";
       } // endif modavailable
 
+  // upgrades for the base module (since it is a core module, and they cannot be upgraded in the normal way)
+  // - theme tags for JavaScript
+  if (xarModIsAvailable('base')) {
+    // Add theme tags that do not yet exist.
+    // Leave the attributes open for now, until we know how it's going to work.
+    $module_base_update_count = 0;
+
+    // Include a JavaScript file in a page,
+    $base_update_theme_tag = 'base-include-javascript';
+    if (!xarTplGetTagObjectFromName($base_update_theme_tag)) {
+        xarTplRegisterTag(
+            'base', $base_update_theme_tag, array(),
+            'base_javascriptapi_handlemodulejavascript'
+        );
+        $module_base_update_count += 1;
+        echo "Base module: added theme tag '$base_update_theme_tag'.<br />";
+    }
+    // Render JavaScript in a page
+    $base_update_theme_tag = 'base-render-javascript';
+    if (!xarTplGetTagObjectFromName($base_update_theme_tag)) {
+        xarTplRegisterTag(
+            'base', $base_update_theme_tag, array(),
+            'base_javascriptapi_handlerenderjavascript'
+        );
+        $module_base_update_count += 1;
+        echo "Base module: added theme tag '$base_update_theme_tag'.<br />";
+    }
+
+    if ($module_base_update_count == 0) {
+        echo "Base module does not require updating.<br />";
+    }
+
+  } else {
+      echo "Base module not available - no upgrade carried out.<br />";
+  } // endif modavailable('base')
+
    //now check modules instances - only affected if their site prefix is other than 'xar'
  if ($sprefix == 'xar') { // check ratings, hitcount, articles and categories
   echo "Categories, Articles, Hitcount and Ratings security_instances do not require updating.<br />";
