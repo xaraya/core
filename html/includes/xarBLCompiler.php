@@ -1240,6 +1240,13 @@ class xarTpl__ExpressionTransformer
         if (preg_match_all("/\\\$([a-z_][0-9a-z_]*(?:[:|\\.][$]{0,1}[0-9a-z_]+)*)/i", $phpExpression, $matches)) {
             // Resolve BL expressions inside the php Expressions
             $numMatches = count($matches[0]);
+            
+            // Make sure we replace in order of descending length of the matches
+            // to prevent overlapping matches to disturb eachother.
+            // NOTE: only needed for php versions < 4.3.0 otherwise use OFFSET flag for preg_match_all
+            usort($matches[0], array('xarTpl__ExpressionTransformer', 'rlensort'));
+            usort($matches[1], array('xarTpl__ExpressionTransformer', 'rlensort'));
+            
             for ($i = 0; $i < $numMatches; $i++) {
                 $resolvedName =& xarTpl__ExpressionTransformer::transformBLExpression($matches[1][$i]);
                 if (!isset($resolvedName)) return; // throw back
@@ -1254,6 +1261,14 @@ class xarTpl__ExpressionTransformer
         $phpExpression = str_replace($findLogic, $replaceLogic, $phpExpression);
 
         return $phpExpression;
+    }
+    
+    function rlensort($a, $b) 
+    {
+        if(strlen($a) == strlen($b)) {
+            return 0;
+        }
+        return (strlen($a) < strlen($b)) ? 1 : -1;
     }
 }
 

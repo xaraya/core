@@ -36,22 +36,32 @@ function trphp($phpExpression)
     //  3. (            => this starts a captured subpattern - results in $matches[1]
     //  4.  [a-z_]      => matches a letter or underscore
     //  5.  [0-9a-z_]*  => matches a number, letter of underscore, zero or more occurrences
-    //  6.  (?:         => start property access non-captured subpattern
+    //  6.  (?:         => start array key/objectmember non-captured subpattern
     //  7.   :|\\.      => matches the colon or the dot notation
     //  8.   [$]{0,1}   => the array key or object member may be a variable
-    //  9.   [0-9a-z_]+ => matches number,letter or underscore, one or more occurrences (TODO: if variable, make sure it starts with a letter)
+    //  9.   [0-9a-z_]+ => matches number,letter or underscore, one or more occurrences 
     // 10.  )           => matches right brace
     // 11.  *           => match zero or more occurences of the property access / array key notation (colon notation)
     // 12. )            => ends the current pattern
     // TODO: of course, if all this was between #...# it would be a lot easier ;-)
     // TODO: $a[$b]:c doesn't work properly should be: $a[$b]->c Is: $a[$b]:c
+    // TODO: if array key / object member is variable, make sure it starts with a letter like identifiers should (it will generate an error anyway, but alas)
     if (preg_match_all("/\\\$([a-z_][0-9a-z_]*(?:[:|\\.][$]{0,1}[0-9a-z_]+)*)/i", $phpExpression, $matches)) {
         // Resolve BL expresions inside the php Expressions
         $numMatches = count($matches[0]);
+        
+        // Make sure we replace stuff from longest length to shortest to prevent overlapping
+        // matches to disturb eachother.
+        usort($matches[0],'rlensort'); usort($matches[1],'rlensort');
+        
+        // Make sure the longest matches come first in the array
         for ($i = 0; $i < $numMatches; $i++) {
+            
             $resolvedName =testit($matches[1][$i]);
+            //echo $matches[1][$i] . " = " . $resolvedName . "\n";
             if (!isset($resolvedName)) return; // throw back
             
+            // THIS IS NOT SAFE IF SOME PARTS OVERLAP
             $phpExpression = str_replace($matches[0][$i], $resolvedName, $phpExpression);
         }
     }
@@ -64,29 +74,34 @@ function trphp($phpExpression)
     return $phpExpression;
 }
 
+function rlensort($a, $b) 
+{
+    if(strlen($a) == strlen($b)) {
+        return 0;
+    }
+    return (strlen($a) < strlen($b)) ? 1 : -1;
+}
+
+
 $tests = array (
-                '$a.b',
-                '$a:b',
-                '$a.$b',
-                '$a:$b',
-                '$a.4',
-                '$a.4b',
-                '$a.b.c.d',
-                '$a.b.c:d',
-                '$a.b:c.d',
-                '$a.b:c:d',
-                '$a:b.c.d',
-                '$a:b.c:d',
-                '$a.', 
-                'a..', 
-                'a.b.4',
-                'a.$b.4',
-                '$a[$b]:c',
-                '$a.$b:c',
-                '$a[$b]',
-                '$a[$b.c]',
-                '$a[$b:c]'
+                '$a'       , 'a',
+                '.$a'      , '$a.'   , 'a..' , '..a',
+                '$a.b'     , '$a:b'  , 'a.$b', 'a:$b', 
+                '$a.$b'    , '$a:$b' ,
+                '$a.4'     , '$a.4b' ,
+                '$a.b:c', 
+                'a.b.4'    , 'a.b.$4',
+                'a.$b.4'   , 'a.$b.c',
+                '$a[$b]:c' , '$a[$b].c',
+                '$a.$b:c'  ,
+                '$a[\'b\']', '$a[$b]'  ,
+                '$a[$b.c]' , '$a[$b:c]',          
+                '$a.b.c.d' , '$a.b.c:d','$a.b:c.d','$a.b:c:d','$a:b.c.d','$a:b.c:d',
+                '$o:m()'   , '$o:m($a.b)', '$o:m($a.b)',
+                '$o:m($a.b.c)', '$o:m($a:b:c)',
+                '$o:m($a.b, $a:b, $a.b:c, $a:b.c )' 
 );
+
 
 foreach($tests as $test) {
    echo str_pad($test, 15, ' ') . " ~ " . trphp($test) ."\n";
