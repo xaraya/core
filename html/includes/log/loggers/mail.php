@@ -31,7 +31,7 @@ include_once ('./includes/log/loggers/xarLogger.php');
  *
  * @package logging
  */
-class xarLog_mail extends xarLogger 
+class xarLogger_mail extends xarLogger 
 {
 
     /** 
@@ -58,6 +58,11 @@ class xarLog_mail extends xarLogger
      */
     var $_message = '';
 
+    /**
+     * @var boolean Holds wether the message was already opened or not.
+     */
+    var $_opened = false;
+
 
     /**
      * Constructs a new Log_mail object.
@@ -77,7 +82,7 @@ class xarLog_mail extends xarLogger
     {
         parent::setConfig($conf);
 
-        $this->_recipient = $config['to'];
+        $this->_recipient = $conf['to'];
 
         if (!empty($conf['from'])) {
             $this->_from = $conf['from'];
@@ -158,10 +163,12 @@ class xarLog_mail extends xarLogger
             $this->open();
         }
 
-        $entry = sprintf("%s %s [%s] %s\n", $tis->getTime(),
+        $entry = sprintf("%s %s [%s] %s\n", $this->getTime(),
             $this->_ident, $this->levelToString($level), $message);
 
         $this->_message .= $entry;
+        
+        $this->close();
 
         return true;
     }
