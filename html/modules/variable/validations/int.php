@@ -3,7 +3,7 @@
 /**
  * Interger Validation Class
  */
-function variable_validations_int {$subject, $parameters, &$convValue) {
+function variable_validations_int ($subject, $parameters, &$convValue) {
 
     $value = intval($subject);
 
