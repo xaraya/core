@@ -6,7 +6,7 @@
 function blocks_admin_view_types()
 {
 
-// Security Check
+    // Security Check
 	if(!xarSecurityCheck('EditBlock')) return;
 
     // Load up database

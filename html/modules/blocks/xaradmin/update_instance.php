@@ -5,31 +5,21 @@
  */
 function blocks_admin_update_instance()
 {
+
     // Get parameters
-    list($bid,
-         $title,
-         $template,
-         $content,
-         $refresh,
-         $state,
-         $group_id) = xarVarCleanFromInput('bid',
-                                          'block_title',
-                                          'block_template',
-                                          'block_content',
-                                          'block_refresh',
-                                          'block_state',
-                                          'block_group');
+    if (!xarVarFetch('bid','int:1:',$bid)) return;
+    if (!xarVarFetch('block_group','str:1:',$group_id)) return;
+    if (!xarVarFetch('block_state','str:1:',$state)) return;
+    if (!xarVarFetch('block_title','str:1:',$title,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('block_template','str:1:',$template,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('block_content','str:1:',$content,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('block_refresh','str:1:',$refresh,'0',XARVAR_NOT_REQUIRED)) return;
 
     // Confirm Auth Key
     if (!xarSecConfirmAuthKey()) return;
 
-// Security Check
+    // Security Check
 	if(!xarSecurityCheck('AddBlock',0,'Instance')) return;
-
-    // FIXME: the whole refresh thing seems to need some clean-up :)
-    if (!isset($refresh)) {
-        $refresh = 0;
-    }
 
     // Get and update block info
     $blockinfo = xarBlockGetInfo($bid);
@@ -43,7 +33,6 @@ function blocks_admin_update_instance()
     if ($blockinfo['group_id'] != $group_id) {
         // Changed group, not worth keeping track of position, IMO
         $blockinfo['position'] = '0';
-        $resequence = 1;
         $blockinfo['group_id'] = $group_id;
     }
 
@@ -70,19 +59,16 @@ function blocks_admin_update_instance()
     }
 
     // Pass to API
-    if (xarModAPIFunc('blocks',
-                     'admin',
-                     'update_instance',
-                     $blockinfo)) {
-        // Success
-        xarSessionSetVar('statusmsg', xarML('Block instance updated.'));
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'update_instance',
+                       $blockinfo)) return;
 
-        if (!empty($resequence)) {
-            // Also need to resequence
-            xarModAPIFunc('blocks', 'admin', 'resequence');
-        }
-    }
-		// Return
+    // Resequence
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'resequence')) return;
+
     xarResponseRedirect(xarModURL('blocks', 'admin', 'modify_instance',array('bid'=>$bid)));
 
     return true;

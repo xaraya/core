@@ -7,9 +7,9 @@ function blocks_admin_update_group()
 {
     // Get parameters
     if (!xarVarFetch('gid','int:1:',$gid)) return;
-    if (!xarVarFetch('authid','int:1:',$authid)) return;
+    if (!xarVarFetch('authid','str:1:',$authid)) return;
     if (!xarVarFetch('group_instance_order','str:1:',$group_instance_order)) return;
-    if (!xarVarFetch('name','str:1:',$name)) return;
+    if (!xarVarFetch('group_name','str:1:',$name)) return;
     if (!xarVarFetch('template','str:1:',$template,'',XARVAR_NOT_REQUIRED)) return;
 
     // Confirm Auth Key

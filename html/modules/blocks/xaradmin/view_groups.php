@@ -5,16 +5,13 @@
  */
 function blocks_admin_view_groups()
 {
-// Security Check
+    // Security Check
 	if(!xarSecurityCheck('AdminBlock',0,'Instance')) return;
 
     // Load up database
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
-    $block_group_instances_table = $xartable['block_group_instances'];
-    $block_instances_table = $xartable['block_instances'];
     $block_groups_table = $xartable['block_groups'];
-    $block_types_table = $xartable['block_types'];
 
     $query = "SELECT    xar_id as id,
                         xar_name as name,
