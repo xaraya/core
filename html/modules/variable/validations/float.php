@@ -9,7 +9,7 @@ function variable_validations_float (&$subject, $parameters) {
 
         if ("$subject" != "$value") {
             $msg = xarML('Not a Float Type: "#(1)"', $subject);
-//            xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+            xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
             return false;
         }
 
@@ -20,7 +20,7 @@ function variable_validations_float (&$subject, $parameters) {
                 return;
             } elseif ($value < (float) $parameters[0]) {
                 $msg = xarML('Float Value "#(1)" is smaller than the specified minimum "#(2)"', $value, $parameters[0]);
-//                xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+                xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
                 return false;
             }
         }
@@ -32,7 +32,7 @@ function variable_validations_float (&$subject, $parameters) {
                 return;
             } elseif ($value > (float) $parameters[1]) {
                 $msg = xarML('Float Value "#(1)" is bigger than the specified maximum "#(2)"', $value, $parameters[1]);
-//                xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+                xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
                 return false;
             }
         }

@@ -14,7 +14,7 @@ function variable_validations_regexp (&$subject, $parameters) {
     }
 
     $msg = xarML('Variable "#(1)" didnt match pattern "#(2)"', $subject, $parameters[0]);
-//    xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+    xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
     return false;
 }
 

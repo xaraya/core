@@ -90,30 +90,39 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
  */
 function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST)
 {
+    //<nuncanada> XARVAR_NOT_REQUIRED is useless in the logic used here, just put the
+    // default value and it will work fine
+    // XARVAR_NOTREQUIRED should be some idependent integer so it could be mixed(!) with XARVAR_GET_OR_POST
+    // What about cookie/env/request/server variables?
+
     assert('is_int($flags)');
 
     $allowOnlyMethod = NULL;
     if ($flags & XARVAR_GET_ONLY) $allowOnlyMethod = 'GET';
     if ($flags & XARVAR_POST_ONLY) $allowOnlyMethod = 'POST';
+
     $subject = xarRequestGetVar($name, $allowOnlyMethod);
 
     if ($subject == NULL) {
         if ($flags & XARVAR_NOT_REQUIRED || isset($defaultValue)) {
             $value = $defaultValue;
+            
+            return true;
         } else {
             // Raise an exception
             $msg = xarML('The required input variable \'#(1)\' could not be found.', $name);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
             return;
         }
     }
 
     $result = xarVarValidate($validation, $subject, $value);
-    if ($result === NULL) {
-        return;
-    } elseif ($result === false) {
-        if ($flags & XARVAR_NOT_REQUIRED || isset($defaultValue)) {
+
+    if ($result === NULL) {return;} //SYSTEM_EXCEPTION -> throw back
+
+    //USER_EXCEPTION -> find if there is a defaultValue set.
+    if ($result === FALSE) {
+        if (($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)) {
             $value = $defaultValue;
         } else {
             // Raise an exception
@@ -173,8 +182,8 @@ function xarVarValidate($validation, $subject, &$convValue) {
     if (empty($valType)) {
         // Raise an exception
         $msg = xarML('No validation type present.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                        new SystemException($msg)); return;
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        return;
     }
 
     $function_file = 'modules/variable/validations/'.$valType.'.php';
@@ -194,8 +203,8 @@ function xarVarValidate($validation, $subject, &$convValue) {
     } else {
         // Raise an exception
         $msg = xarML('The validation type \'#(1)\' couldn\'t be found.', $valType);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                        new SystemException($msg)); return;
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        return;
     }
 }
 
