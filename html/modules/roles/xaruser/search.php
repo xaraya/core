@@ -139,7 +139,7 @@ function roles_user_search()
     }
 
     if (count($data['users']) == 0){
-        $data['status'] = xarML('No Users Found Matching Search');
+        $data['status'] = xarML('No Users Found Matching Search Criteria');
     }
 
     return $data;

@@ -13,7 +13,7 @@
             <td><input type="text" name="rolesperpage" id="rolesperpage" value="#xarModGetVar('roles', 'rolesperpage')#" size="3" maxlength="3" /></td>
         </tr>
 	    <tr>
-            <td><label for="shorturls"><xar:mlstring>Enable Short Url's</xar:mlstring>:</label></td>
+            <td><label for="shorturls"><xar:mlstring>Enable Short URLs</xar:mlstring>:</label></td>
             <td>
 		<xar:if condition="xarModGetVar('roles', 'SupportShortURLs')">
 			<input type="checkbox" name="shorturls" id="shorturls" value="1" checked="checked" />

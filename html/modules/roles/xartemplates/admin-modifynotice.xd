@@ -25,7 +25,7 @@
 	<h4><xar:mlstring>Notification email :</xar:mlstring></h4>
     <table border="0" cellpadding="2" cellspacing="0">
         <tr>
-            <td><label for="ask"><xar:mlstring>Ask about sending a notification when an administrator change the state of a user to</xar:mlstring> :</label></td>
+            <td><label for="ask"><xar:mlstring>Ask about sending a notification when an administrator changes the state of a user to</xar:mlstring> :</label></td>
             <td style="text-align: left">
             <xar:if condition="xarModGetVar('roles', 'askpendingemail')">
 				<input type="checkbox" name="askpendingemail" id="askpendingemail" value="1" checked="checked" />
@@ -65,7 +65,7 @@
             <label for="askvalidationemail">"<xar:mlstring>Not validated</xar:mlstring>"</label></td>
         </tr>
         <tr>
-            <td><label for="askpasswordemail"><xar:mlstring>Ask about sending a notification when an administrator change the password of a user</xar:mlstring> :</label></td>
+            <td><label for="askpasswordemail"><xar:mlstring>Ask about sending a notification when an administrator changes the password of a user</xar:mlstring> :</label></td>
             <td style="text-align: left">
             <xar:if condition="xarModGetVar('roles', 'askpasswordemail')">
 				<input type="checkbox" name="askpasswordemail" id="askpasswordemail" value="1" checked="checked" />

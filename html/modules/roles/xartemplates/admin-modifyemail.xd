@@ -8,7 +8,7 @@
 	<div><a href="#xarModURL('roles', 'admin', 'createmail')#"><xar:mlstring>Send mail</xar:mlstring></a></div>
 	<div><a href="#xarModURL('roles', 'admin', 'modifynotice')#"><xar:mlstring>Configure</xar:mlstring></a></div>
 	<div><xar:if condition="$mailtype eq 'validation'">
-		<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when they re-validate their account (IE, change email address)</xar:mlstring></xar:set>
+		<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when they re-validate their account (i.e. change email address)</xar:mlstring></xar:set>
 		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'validation'))#" class="active">
 	<xar:else/>	
 		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'validation'))#">
@@ -50,7 +50,7 @@
 	</xar:if>
 	<xar:mlstring>Deactivation</xar:mlstring></a></div>
 	<div><xar:if condition="$mailtype eq 'password'">
-	<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when an administrator change their password</xar:mlstring></xar:set>
+	<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when an administrator changes their password</xar:mlstring></xar:set>
 		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'password'))#" class="active">
 	<xar:else/>	
 		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'password'))#">

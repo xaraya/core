@@ -4,9 +4,9 @@
 <div style="margin: auto;">
 	<p>
 		<xar:if condition="$uid eq -1">
-            <xar:mlstring>Passwords don't match.</xar:mlstring>
+            <xar:mlstring>Passwords do not match.</xar:mlstring>
 		<xar:elseif condition="$uid eq 0" />
-			<xar:mlstring>User could not be created. Most likely the username exists already</xar:mlstring>.
+			<xar:mlstring>User could not be created. Most likely the username already exists.</xar:mlstring>.
 		<xar:else />
 			<xar:mlstring>User successfully created with UID</xar:mlstring> #$uid#	
 		</xar:if>

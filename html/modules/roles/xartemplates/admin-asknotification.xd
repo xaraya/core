@@ -4,7 +4,7 @@
 <br />
 <!-- Contextual text
 <xar:if condition="$mailtype eq 'validation'">
-	<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when they re-validate their account (IE, change email address)</xar:mlstring></xar:set>
+	<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when they re-validate their account (i.e. change email address)</xar:mlstring></xar:set>
 <xar:elseif condition="$mailtype eq 'confirmation'"/>
 	<xar:set name="$explanation"><xar:mlstring>This email will be sent to users to complete their registration by a link in the email</xar:mlstring></xar:set>
 <xar:elseif condition="$mailtype eq 'welcome'"/>
@@ -16,7 +16,7 @@
 <xar:elseif condition="$mailtype eq 'deactivation'"/>
 	<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when their accounts are deactivated</xar:mlstring></xar:set>
 <xar:elseif condition="$mailtype eq 'password'"/>
-	<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when an administrator change their password</xar:mlstring></xar:set>
+	<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when an administrator changes their password</xar:mlstring></xar:set>
 </xar:if>-->
 <div style="border: 1px solid #ccc; border-top : none;padding: 10px;">
 <br />

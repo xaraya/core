@@ -2,7 +2,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Send notification</xar:mlstring></h2>
 <div style="text-align: left; margin: auto;">
-	<p><xar:mlstring>This page allow you to send a notification to the changed user(s)</xar:mlstring>.</p>
+	<p><xar:mlstring>This page allows  you to send a notification to the changed user(s)</xar:mlstring>.</p>
 	<form name="updatestate" action="#xarModURL('roles', 'admin', 'updatestate')#" method="post" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
     	<input type="hidden" name="updatephase" id="updatephase" value="notify" />

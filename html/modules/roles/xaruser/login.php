@@ -131,7 +131,7 @@ function roles_user_login()
         case '0':
 
             // User is deleted by all means.  Return a message that says the same.
-            $msg = xarML('Your account has been terminated by your request or by the adminstrators discression.');
+            $msg = xarML('Your account has been terminated by your request or at the adminstrator\'s discression.');
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
 
@@ -218,7 +218,7 @@ function roles_user_login()
         case '4':
 
             // User is pending activation
-            $msg = xarML('Your account has not activated by the site administrator');
+	    $msg = xarML('Your account has not yet been activated by the site administrator');
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
 

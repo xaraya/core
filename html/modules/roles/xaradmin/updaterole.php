@@ -50,13 +50,13 @@ function roles_admin_updaterole()
         }
         // check for valid username
         if ((!$puname) || !(!preg_match("/[[:space:]]/", $puname))) {
-            $msg = xarML('There is an error in username');
+            $msg = xarML('There is an error in the username');
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
         }
 
         if (strrpos($puname, ' ') > 0) {
-            $msg = xarML('There is a space in username');
+            $msg = xarML('There is a space in the username');
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
         }
@@ -64,7 +64,7 @@ function roles_admin_updaterole()
         // check for valid email address
         $res = preg_match('/.*@.*/', $pemail);
         if ($res == false) {
-            $msg = xarML('There is an error in email address');
+            $msg = xarML('There is an error in the email address');
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
         }
