@@ -1221,6 +1221,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                     $this->properties[$criteria]->datastore = $storename;
                     $this->datastores[$storename]->addField($this->properties[$criteria]); // use reference to original property
                     $datastore = $storename;
+                } elseif ($this->properties[$name]->type == 21) {
+                    $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
                 }
                 $this->datastores[$datastore]->addSort($this->properties[$criteria],$sortorder);
                 // if we're sorting on some field, we should start querying by the data store that holds it
@@ -1269,6 +1271,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                     $this->properties[$name]->datastore = $storename;
                     $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
                     $datastore = $storename;
+                } elseif ($this->properties[$name]->type == 21) {
+                    $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
                 }
                 $this->datastores[$datastore]->addWhere($this->properties[$name],
                                                         join(' ',$pieces),
@@ -1299,6 +1303,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                     $this->properties[$name]->datastore = $storename;
                     $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
                     $datastore = $storename;
+                } elseif ($this->properties[$name]->type == 21) {
+                    $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
                 }
                 $this->datastores[$datastore]->addGroupBy($this->properties[$name]);
                 // if we're grouping by some field, we should start querying by the data store that holds it
