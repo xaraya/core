@@ -49,6 +49,7 @@
 <xsl:include href="xartables.xsl" />
 <xsl:include href="xarinit.xsl" />
 <xsl:include href="xarobject.xsl" />
+<xsl:include href="xarblocks.xsl" />
 <xsl:include href="xarversion.xsl" />
 <xsl:include href="xaritemtypeapi.xsl" />
 <xsl:include href="xarprivateapi.xsl" />
@@ -61,8 +62,6 @@
 <xsl:include href="xaradminapi.xsl" />
 <xsl:include href="xartemplates/includes/header.xsl" />
 
-<xsl:include href="xarblocks/block.xsl" />
-<xsl:include href="xartemplates/blocks/block.xsl" />
 
 
 <xsl:template match="/">
@@ -87,29 +86,31 @@
     <!-- CREATE -->
     <xsl:apply-templates select="xaraya_module" />
 
+    <xsl:message>
+### End of code generation
+
+</xsl:message>
+
 </xsl:template>
 
 <!-- ENTRY POINT    print out progress and call module template -->
-<xsl:template match="xaraya_module" xml:space="preserve">
+<xsl:template match="xaraya_module" xml:space="default">
 
-    <!-- CALL THE TEMPLATES -->
-    <!-- xartables.php -->                      <xsl:apply-templates mode="xartables"             select="." />
-    <!-- xarinit.php -->                        <xsl:apply-templates mode="xarinit"               select="." />
-    <!-- xarobject.xml -->                      <xsl:apply-templates mode="xarobject"             select="." />
-    <!-- xarversion.php -->                     <xsl:apply-templates mode="xarversion"            select="." />
-    <!-- xaritemtypeapi.php -->                 <xsl:apply-templates mode="xaritemtypeapi"        select="." />
-    <!-- xarprivateapi.php -->                  <xsl:apply-templates mode="xarprivateapi"         select="." />
-    <!-- xarhookapi.php -->                     <xsl:apply-templates mode="xarhookapi"            select="." />
+    <xsl:apply-templates mode="xartables"             select="." />
+    <xsl:apply-templates mode="xarinit"               select="." />
+    <xsl:apply-templates mode="xarobject"             select="." />
+    <xsl:apply-templates mode="xarversion"            select="." />
+    <xsl:apply-templates mode="xaritemtypeapi"        select="." />
+    <xsl:apply-templates mode="xarprivateapi"         select="." />
+    <xsl:apply-templates mode="xarhookapi"            select="." />
 
-    <!-- xaradminapi.php -->                    <xsl:apply-templates mode="xaradminapi"           select="." />
-    <!-- xaradmin.php -->                       <xsl:apply-templates mode="xaradmin"              select="." />
+    <xsl:apply-templates mode="xaradminapi"           select="." />
+    <xsl:apply-templates mode="xaradmin"              select="." />
 
-    <!-- xaruserapi.php -->                     <xsl:apply-templates mode="xaruserapi"            select="." />
-    <!-- xaruser.php -->                        <xsl:apply-templates mode="xaruser"               select="." />
-    <!-- xartemplates/includes/header.xd -->    <xsl:apply-templates mode="xd_includes_header"    select="." />
-
-    <!-- xarblocks/block.php -->                <xsl:apply-templates mode="xarblocks_block"       select="." />
-    <!-- xartemplates/blocks/block.php -->      <xsl:apply-templates mode="xd_blocks_block"       select="." />
+    <xsl:apply-templates mode="xaruserapi"            select="." />
+    <xsl:apply-templates mode="xaruser"               select="." />
+    <xsl:apply-templates mode="xarblocks"               select="." />
+    <xsl:apply-templates mode="xd_includes_header"    select="." />
 
 </xsl:template>
 

@@ -20,16 +20,16 @@ BEGIN {
 #
 # FIND LIBRARY
 #
-print "[MSG] Starting validation of your xml file.\n";
-print qx/ xmlproc_val $INPUT_FILE /;
-print "[MSG] Finished validation of your xml file.\n";
+print STDERR "[MSG] Starting validation of your xml file.\n\n";
+print STDERR qx/ xmlproc_val $INPUT_FILE /;
+print STDERR "[MSG] Finished validation of your xml file.\n\n";
 
 if ( not -e "$OUTPUT_DIR/modwizard.dtd" )
     {
-    print STDERR "Copy modwizard.dtd to $OUTPUT_DIR and try again!";
+    print STDERR "Copy modwizard.dtd to $OUTPUT_DIR and try again!\n\n";
     exit 1;
     }
 
-print "[MSG] Executing the wizard\n";
-print qx/ xsltproc --stringparam output $OUTPUT_DIR $WIZARD_DIR\/lib\/xarmodule.xsl $INPUT_FILE /;
-print "[MSG] Finished the wizard\n";
+print STDERR "[MSG] Executing the wizard\n\n";
+print STDERR qx/ xsltproc --stringparam output $OUTPUT_DIR $WIZARD_DIR\/lib\/xarmodule.xsl $INPUT_FILE /;
+print STDERR "[MSG] Finished the wizard\n\n";
