@@ -302,7 +302,7 @@ function adminpanels_adminmenublock_display($blockinfo){
                                     array(  'adminmods'     => $adminmods = array(),  
                                             'indlinks'      => $indlinks ='',
                                             'menustyle'     => $menustyle,
-                                            'logouturl'     => $logouturl ='index.php?module=adminpanels&type=admin&func=modifyconfig',
+                                            'logouturl'     => $logouturl ='index.php?module=adminpanels&amp;type=admin&amp;func=modifyconfig',
                                             'logoutlabel'   => $logoutlabel ='not implemented',
                                             'marker'        => $marker));
                 break;
@@ -320,7 +320,7 @@ function adminpanels_adminmenublock_display($blockinfo){
                                     array(  'adminmods'     => $adminmods = array(),  
                                             'indlinks'      => $indlinks ='',
                                             'menustyle'     => $menustyle,
-                                            'logouturl'     => $logouturl ='index.php?module=adminpanels&type=admin&func=modifyconfig',
+                                            'logouturl'     => $logouturl ='index.php?module=adminpanels&amp;type=admin&amp;func=modifyconfig',
                                             'logoutlabel'   => $logoutlabel ='not implemented',
                                             'marker'        => $marker));
                 break;
