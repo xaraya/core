@@ -69,8 +69,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     <input type="hidden" name="module" value="articles">
     </form>
     <p>Note : you must at least activate the 'categories' and 'articles' modules first. Activating 'comments' and 'hitcount' is also a good idea :-)</p>
-    <p>Note2: this script sets your Documents publication type category to the new ContentExpress root, you may edit this later manually to get your other docs back (for exmaple move the Sections category into ContentExpress).
-    <p>Images: copy your img_repository folder into var/img_repository, image tags will be directly copied into your articles text by this script.
+    <p>Note2: this script sets your Documents publication type category to the new ContentExpress root, you may edit this later manually to get your other docs back (for exmaple move the Sections category into ContentExpress).</p>
+    <p>Images: copy your img_repository folder into var/img_repository, image tags will be directly copied into your articles text by this script.</p>
     <p>Warning: please make a backup of your database before running this script and restore it if the script fails or you are not satisfied with the result.</p>
 <?php
 } else {
