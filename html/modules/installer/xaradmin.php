@@ -495,6 +495,9 @@ function installer_admin_finish()
     if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'header',
                                                                 'template' => 'header'))) return;
 
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'syndicate',
+                                                                'template' => 'syndicate'))) return;
+
     if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'admin'))) return;
 
     if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'center',
@@ -645,6 +648,44 @@ function installer_admin_finish()
                        'create_instance', array('title'    => 'Meta',
                                                 'type'     => $metaBlockId,
                                                 'group'    => $headerBlockGroup,
+                                                'template' => '',
+                                                'state'    => 2))) {
+        return;
+    }
+
+    $query = "SELECT    xar_id as id
+              FROM      $blockGroupsTable
+              WHERE     xar_name = 'syndicate'";
+
+    // Check for db errors
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    // Freak if we don't get one and only one result
+    if ($result->PO_RecordCount() != 1) {
+        $msg = xarML("Group 'syndicate' not found.");
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return;
+    }
+
+    list ($syndicateBlockGroup) = $result->fields;
+
+    $syndicateBlockId= xarModAPIFunc('blocks',
+                                     'admin',
+                                     'block_type_exists',
+                                     array('modName'  => 'themes',
+                                           'blockType'=> 'syndicate'));
+
+    if (!isset($syndicateBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        return;
+    }
+
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'create_instance', array('title'    => 'Syndicate',
+                                                'type'     => $syndicateBlockId,
+                                                'group'    => $syndicateBlockGroup,
                                                 'template' => '',
                                                 'state'    => 2))) {
         return;

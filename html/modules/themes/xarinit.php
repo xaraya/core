@@ -176,6 +176,13 @@ function themes_activate()
                        array('modName'  => 'themes',
                              'blockType'=> 'meta'))) return;
 
+    // Register blocks
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'register_block_type',
+                       array('modName'  => 'themes',
+                             'blockType'=> 'syndicate'))) return;
+
     return true;
 
 }
