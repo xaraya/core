@@ -8,8 +8,8 @@
         <td align="center">
         
         </td>
-        <td align="center" width="25%">
-            <a href="&xar-modurl-modules-admin-regenerate;">Regenerate module list</a>
+        <td align="center">
+            <a href="&xar-modurl-modules-admin-list;"><xar:mlstring>View Installed Modules</xar:mlstring></a>
         </td>
         <td align="center">
             <a href="&xar-modurl-modules-admin-regenerate&;authid=&xar-var-authid;"><xar:mlstring>Regenerate Available Modules</xar:mlstring></a>
@@ -17,7 +17,6 @@
 
     </tr>
 </table>
-
 <form action="&xar-modurl-modules-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
 	<input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
 	<input type="hidden" name="id" id="id" value="&xar-var-id;" />
@@ -26,7 +25,7 @@
 	<input type="text" name="newdisplayname" id="newdisplayname" value="&xar-var-displayname;" size="30" maxlength="30" tabindex="1" />
 		<br /><br />
 		<xar:mlstring>Available hooks for this module</xar:mlstring>&nbsp;&nbsp;
-		<!-- TODO~  Not Working:( [<a href="&xar-var-DetailsURL;">&xar-var-DetailsLabel;</a>] -->
+		[<a href="&xar-var-DetailsURL;">&xar-var-DetailsLabel;</a>] 
 		<br /><br />
 			<xar:loop name="$hooklist">
 				Enable hooks from &xar-var-modname; 
