@@ -21,7 +21,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     var $UploadsModule_isHooked = FALSE;
     var $basePath;
     var $multiple = TRUE;
-    
+
     // this is used by Dynamic_Property_Master::addProperty() to set the $object->upload flag
     var $upload = true;
 
@@ -29,15 +29,22 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     {
         parent::Dynamic_Property($args);
 
+        if (empty($this->id)) {
+            $this->id = $this->name;
+        }
+
         if (!empty($this->validation)) {
-            if ('single' == $this->validation) {
+            $options = explode(';', strtolower($this->validation));
+            if (in_array('single', $options)) {
                 $this->multiple = FALSE;
             } else {
                 $this->multiple = TRUE;
-            } 
-        }     
+            }
+            unset($options);
+        }
+
         // Determine if the uploads module is hooked to the calling module
-        // if so, we will use the uploads modules functionality 
+        // if so, we will use the uploads modules functionality
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
             $this->UploadsModule_isHooked = TRUE;
         } else {
@@ -50,19 +57,19 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 }
             }
         }
-        
+
         if(xarServerGetVar('PATH_TRANSLATED')) {
             $base_directory = dirname(realpath(xarServerGetVar('PATH_TRANSLATED')));
         } elseif(xarServerGetVar('SCRIPT_FILENAME')) {
             $base_directory = dirname(realpath(xarServerGetVar('SCRIPT_FILENAME')));
         } else {
             $base_directory = './';
-        }        
-        
+        }
+
         $this->basePath = $base_directory;
-        
-        // specify base directory and optional file types in validation 
-        // field - e.g. this/dir or this/dir;(gif|jpg|png|bmp). 
+
+        // specify base directory and optional file types in validation
+        // field - e.g. this/dir or this/dir;(gif|jpg|png|bmp).
         if (empty($this->basedir) && !empty($this->validation)) {
             if (strchr($this->validation,';')) {
                 list($dir,$type) = explode(';',$this->validation);
@@ -73,11 +80,11 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 $this->filetype = '';
             }
         }
-        
+
         if (empty($this->basedir)) {
             $this->basedir = 'var/uploads';
         }
-        
+
         if (empty($this->filetype)) {
             $this->filetype = '';
         }
@@ -139,7 +146,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
 
         $upname = $name .'_upload';
         $filetype = $this->filetype;
-        
+
         if (isset($_FILES[$upname])) {
             $file =& $_FILES[$upname];
         } else {
@@ -189,7 +196,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     }
 
 //    function showInput($name = '', $value = null, $size = 0, $maxSize = 0, $id = '', $tabindex = '')
-    function showInput($args = array()) 
+    function showInput($args = array())
     {
         extract($args);
         if (empty($name)) {
@@ -245,28 +252,29 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                '<input type="file" name="'.$upname.'" size="'. $size . '" id="'. $id . '"' . $tabindex . ' /> ' . $allowed . $invalid);
     }
 
-    function showOutput($args = array()) 
+    function showOutput($args = array())
     {
-        
+
         extract($args);
-        
+
         if (!isset($value)) {
             $value = $this->value;
         }
-        
+
         if ($this->UploadsModule_isHooked) {
-            return xarModAPIFunc('uploads','user','showoutput',
+            return = xarModAPIFunc('uploads','user','showoutput',
                                  array('value' => $value,
-                                       'format' => 'fileupload'));
-        } 
-        
+                                       'format' => 'fileupload',
+                                       'multiple' => $this->multiple));
+        }
+
         // Note: you can't access files directly in the document root here
         if (!empty($value)) {
             if (is_numeric($value) || stristr($value, ';')) {
                 // user must have unhooked the uploads module
                 // remove any left over values
                 return '';
-            } 
+            }
             // if the uploads module is hooked (to be verified and set by the calling module)
             if (!empty($this->basedir) && file_exists($this->basedir . '/'. $value) && is_file($this->basedir . '/'. $value)) {
                 $value = xarVarPrepForDisplay($value);
