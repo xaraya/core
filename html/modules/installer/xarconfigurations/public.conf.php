@@ -38,8 +38,9 @@ function installer_public_configuration_load($args)
     xarModAPIFunc('modules','admin','regenerate');
     xarModAPIFunc('modules','admin','initialise',array('regid'=>147));    // categories
     xarModAPIFunc('modules','admin','activate',array('regid'=>147));
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>151));    // articles
-    xarModAPIFunc('modules','admin','activate',array('regid'=>151));
+// TODO: figure out an elegant way for loading articles
+//    xarModAPIFunc('modules','admin','activate',array('regid'=>147));
+//    xarModAPIFunc('modules','admin','initialise',array('regid'=>151));    // articles
     xarModAPIFunc('modules','admin','initialise',array('regid'=>14));     // comments
     xarModAPIFunc('modules','admin','activate',array('regid'=>14));
     xarModAPIFunc('modules','admin','initialise',array('regid'=>41));     // ratings

@@ -37,8 +37,9 @@ function installer_community_configuration_load($args)
 // the following needs to be done in any case
     xarModAPIFunc('modules','admin','regenerate');
     xarModAPIFunc('modules','admin','initialise',array('regid'=>147));    // categories
-    xarModAPIFunc('modules','admin','activate',array('regid'=>147));
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>151));    // articles
+// TODO: figure out an elegant way for loading articles
+//    xarModAPIFunc('modules','admin','activate',array('regid'=>147));
+//    xarModAPIFunc('modules','admin','initialise',array('regid'=>151));    // articles
     xarModAPIFunc('modules','admin','activate',array('regid'=>151));
     xarModAPIFunc('modules','admin','initialise',array('regid'=>14));     // comments
     xarModAPIFunc('modules','admin','activate',array('regid'=>14));
