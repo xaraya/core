@@ -13,6 +13,7 @@ $modversion['author'] = 'Jim McDonald,Marco Canini';
 $modversion['contact'] = 'http://www.mcdee.net/,marco@xaraya.com';
 $modversion['admin'] = 1;
 $modversion['user'] = 1;
+$modversion['user_menu'] = 1;
 $modversion['securityschema'] = array('users::' => 'User uname::User uid',
                                       'users::Field' => '::',
 				      'users::Variables' => 'User variable name::');

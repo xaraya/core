@@ -1263,6 +1263,7 @@ function xarMod_getFileInfo($modOsDir)
     $modFileInfo['admin_capable']  = isset($modversion['admin']) ? $modversion['admin'] : false;
     $modFileInfo['user']           = isset($modversion['user']) ? $modversion['user'] : false;
     $modFileInfo['user_capable']   = isset($modversion['user']) ? $modversion['user'] : false;
+    $modFileInfo['user_menu']      = isset($modversion['user_menu']) ? $modversion['user_menu'] : false;
     $modFileInfo['securityschema'] = isset($modversion['securityschema']) ? $modversion['securityschema'] : false;
     $modFileInfo['class']          = isset($modversion['class']) ? $modversion['class'] : false;
     $modFileInfo['category']       = isset($modversion['category']) ? $modversion['category'] : false;

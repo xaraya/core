@@ -47,6 +47,10 @@
 			<br /><br />
 			<input type="hidden" name="authid" id="authid" value="#$authid#">
 			<input type="hidden" name="phase" id="phase" value="createuser">
+			<input type="hidden" name="uname" id="uname" value="#$uname#">
+			<input type="hidden" name="realname" id="realname" value="realname">
+			<input type="hidden" name="email" id="email" value="#$email#">
+			<input type="hidden" name="pass" id="pass" value="#$pass#">
 			<input type="submit" value="<xar:mlstring>Create Account</xar:mlstring>">
 		</td>
 	</tr>

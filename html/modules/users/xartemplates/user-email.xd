@@ -1,4 +1,4 @@
-<b><xar:mlstring>Send a message to</xar:mlstring> #$name#</b>
+<b><xar:mlstring>Send an email to</xar:mlstring> #$name#</b>
 <br /><br />
 	<form action="&xar-modurl-users-user-sendmail;" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
