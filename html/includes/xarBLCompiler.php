@@ -554,7 +554,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 if(!isset($xarToken)) return;
                                 // Situation: [...text...]</xar:...
                                 $trimmer='xmltrim';
-                                $natives = array('set', 'ml', 'mlvar');
+                                $natives = array('set', 'ml', 'mlvar','blockgroup');
                                 if(in_array($parent->tagName, $natives,true)) $trimmer='trim';
                                 if ($trimmer($text) != '') {
                                     if(!$this->canHaveText($parent)) return;
