@@ -1693,6 +1693,10 @@ class pnTpl__PntIfNode extends pnTpl__TplTagNode
             return; // throw back
         }
 
+        $findLogic      = array(' eq ', ' neq ', ' lt ', ' gt ', ' id ', ' nid ', ' lte ', ' gte ');
+        $replaceLogic   = array(' == ', ' != ',  ' < ',  ' > ', ' === ', ' !== ', ' <= ', ' >= ');
+        $condition = str_replace($findLogic, $replaceLogic, $condition);
+        
         return "if ($condition) {\n";
     }
 
@@ -1733,7 +1737,11 @@ class pnTpl__PntElseifNode extends pnTpl__TplTagNode
         if (!isset($condition)) {
             return; // throw back
         }
-
+        
+        $findLogic      = array(' eq ', ' neq ', ' lt ', ' gt ', ' id ', ' nid ', ' lte ', ' gte ');
+        $replaceLogic   = array(' == ', ' != ',  ' < ',  ' > ', ' === ', ' !== ', ' <= ', ' >= ');
+        $condition = str_replace($findLogic, $replaceLogic, $condition);
+        
         return "} elseif ($condition) {\n";
     }
 
@@ -1790,6 +1798,10 @@ class pnTpl__PntWhileNode extends pnTpl__TplTagNode
         if (!isset($condition)) {
             return; // throw back
         }
+        
+        $findLogic      = array(' eq ', ' neq ', ' lt ', ' gt ', ' id ', ' nid ', ' lte ', ' gte ');
+        $replaceLogic   = array(' == ', ' != ',  ' < ',  ' > ', ' === ', ' !== ', ' <= ', ' >= ');
+        $condition = str_replace($findLogic, $replaceLogic, $condition);
 
         return "while ($condition) {\n";
     }
@@ -1851,7 +1863,11 @@ class pnTpl__PntForNode extends pnTpl__TplTagNode
         if (!isset($iter)) {
             return; // throw back
         }
-
+        
+        $findLogic      = array(' eq ', ' neq ', ' lt ', ' gt ', ' id ', ' nid ', ' lte ', ' gte ');
+        $replaceLogic   = array(' == ', ' != ',  ' < ',  ' > ', ' === ', ' !== ', ' <= ', ' >= ');
+        $test = str_replace($findLogic, $replaceLogic, $test);
+        
         return "for ($start; $test; $iter) {\n";
     }
 
