@@ -20,8 +20,7 @@ function roles_adminapi_recall($args)
     // Get arguments
     extract($args);
 
-
-    if (!isset($uid) || $uid != 0) {
+    if (!isset($uid) || $uid == 0) {
         $msg = xarML('The user to be recalled does not exist or is not deleted');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new SystemException($msg));
         return;
@@ -31,6 +30,13 @@ function roles_adminapi_recall($args)
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new SystemException($msg));
         return;
     }
+
+    // Get database setup
+    $dbconn =& xarDBGetConn();
+    $xartable =& xarDBGetTables();
+    $rolestable = $xartable['roles'];
+
+    $deleted = '[' . xarML('deleted') . ']';
 
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
