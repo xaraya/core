@@ -12,6 +12,7 @@
 class xarQuery
 {
 
+    var $version = "1.0";
     var $type;
     var $tables;
     var $fields;
@@ -19,11 +20,14 @@ class xarQuery
     var $sorts;
     var $result;
     var $rows;
-    var $rowstodo;
-    var $startat;
+    var $rowstodo = 0;
+    var $startat = 1;
     var $output;
     var $row;
     var $dbconn;
+    var $statement;
+    var $result;
+    var $limits = 1;
 
 //---------------------------------------------------------
 // Constructor
@@ -50,56 +54,85 @@ class xarQuery
     }
 
 
-    function run($statement='')
+    function run($statement='',$pretty=1)
     {
-        if ($statement != '') {
-            $st = $statement;
-        }
-        else {
-            $st = $this->statement();
-            if (stristr($st,'*MISSING*')) {
-                $this->result = array();
-                return $this->result;
-            }
-        }
-        $result =& $this->dbconn->Execute($st);
-        $this->rows = $result->_numOfRows;
-        if($this->startat != 0 && $this->rowstodo != 0) {
-            $result =& $this->dbconn->SelectLimit($st, $this->rowstodo, $this->startat-1);
-        }
-        if (!$result) return;
-        $this->output = array();
-        if (($result->fields) === false) $numfields = 0;
-        else $numfields = $result->_numOfFields;
-        $this->result = $result;
+        $this->setstatement($statement);
+
+        $result = $this->dbconn->Execute($this->statement);
+
         if ($this->type == 'SELECT') {
-            if ($this->fields == array() && $numfields > 0) {
-                $colnames = array();
-                foreach ($this->tables as $table) {
-                    $colnames += $this->dbconn->MetaColumnNames($table);
-                }
-                if (count($colnames) == $numfields) {
-                    for ($i=0;$i<$numfields;$i++) {
-                        $this->fields[$i]['name'] = $colnames[$i];
-                   }
+            $this->rows = $result->_numOfRows;
+            if($this->rowstodo != 0 && $this->limits == 1) {
+                $begin = $this->startat-1;
+                $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
+                $this->statement .= " LIMIT " . $begin . "," . $this->rowstodo;
+            }
+            if (!$result) return;
+            $this->result =& $result;
+
+            if (($result->fields) === false) $numfields = 0;
+            else $numfields = $result->_numOfFields;
+            $this->output = array();
+            if ($pretty == 1) {
+                if ($statement == '') {
+                    if ($this->fields == array() && $numfields > 0) {
+                        $colnames = array();
+                        foreach ($this->tables as $table) {
+                            $colnames += $this->dbconn->MetaColumnNames($table['name']);
+                        }
+                        if (count($colnames) == $numfields) {
+                            for ($i=0;$i<$numfields;$i++) {
+                                $this->fields[$i]['name'] = $colnames[$i];
+                           }
+                        }
+                        else {
+                            $msg = xarML('SELECT with total of columns different from the number retrieved.');
+                            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
+                            return;
+                        }
+                    }
+                    while (!$result->EOF) {
+                        for ($i=0;$i<$numfields;$i++) {
+                            $line[$this->fields[$i]['name']] = $result->fields[$i];
+                        }
+                        $this->output[] = $line;
+                        $result->MoveNext();
+                    }
                 }
                 else {
-                    $msg = xarML('SELECT with total of columns different from the number retrieved.');
-                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
-                    echo $msg . var_dump($colnames) . $numfields;exit;
-                    return;
+                    while (!$result->EOF) {
+                        $line = array();
+                        for ($i=0;$i<$numfields;$i++) {
+                            $line[] = $result->fields[$i];
+                        }
+                        $this->output[] = $line;
+                        $result->MoveNext();
+                    }
                 }
-            }
-            while (!$result->EOF) {
-                for ($i=0;$i<$numfields;$i++) {
-                    $line[$this->fields[$i]['name']] = $result->fields[$i];
-                }
-                $this->output[] = $line;
-                $result->MoveNext();
             }
         }
-        return $this->result;
+        return true;
 
+    }
+
+    function close()
+    {
+        return $this->dbconn->close();
+    }
+
+    function open()
+    {
+        $this->openconnection(xarDBGetConn());
+    }
+
+    function uselimits()
+    {
+        $this->limits = 1;
+    }
+
+    function nolimits()
+    {
+        $this->limits = 0;
     }
 
     function row($row=0)
@@ -227,13 +260,20 @@ class xarQuery
             //error msg
             }
             elseif ($tables=='') {}//error msg
-            else {$this->tables[]=$tables;}
+            else {$this->addtable($tables);}
         }
         else {
-            $this->tables = array_merge($this->tables,$tables);
+            foreach ($tables as $table) $this->addtable($table);
+//            $this->tables = array_merge($this->tables,$tables);
         }
     }
 
+    function join($field1,$field2)
+    {
+        $this->conditions[]=array('field1' => $field1,
+                                  'field2' => $field2,
+                                  'op' => 'join');
+    }
     function eq($field1,$field2)
     {
         $this->conditions[]=array('field1' => $field1,
@@ -320,11 +360,12 @@ class xarQuery
         $c = "";
         foreach ($this->conditions as $condition) {
             if (is_array($condition)) {
-                if (gettype($condition['field2']) == 'string') {
+                if (gettype($condition['field2']) == 'string' && $condition['op'] != 'join') {
                     $sqlfield = $this->dbconn->qstr($condition['field2']);
                 }
                 else {
                     $sqlfield = $condition['field2'];
+                    $condition['op'] = $condition['op'] == 'join' ? '=' : $condition['op'];
                 }
                 $c .= $condition['field1'] . " " . $condition['op'] . " " . $sqlfield . " AND ";
             }
@@ -334,7 +375,9 @@ class xarQuery
         if ($c != "") $c = substr($c,0,strlen($c)-5);
         return $c;
     }
-    function statement()
+
+// ------ Private methods -----
+    function _statement()
     {
         $st =  $this->type . " ";
         switch ($this->type) {
@@ -357,6 +400,8 @@ class xarQuery
             $st .= " FROM ";
             $st .= $this->assembledtables();
             break;
+        case "CREATE" :
+        case "DROP" :
         default :
         }
         $st .= $this->assembledconditions();
@@ -364,7 +409,6 @@ class xarQuery
         return $st;
     }
 
-// ------ Private methods -----
     function assembledtables()
     {
         if (count($this->tables) == 0) return "*MISSING*";
@@ -476,55 +520,78 @@ class xarQuery
     }
 
     // ------ Gets and sets -----
-        function gettype()
-        {
-            return $this->type;
-        }
-        function getstartat()
-        {
-            return $this->startat;
-        }
-        function getto()
-        {
-            return $this->type;
-        }
-        function getpagerows()
-        {
-            return $this->pagerows;
-        }
-        function getrows()
-        {
-            return $this->rows;
-        }
-        function getrowstodo()
-        {
-            return $this->rowstodo;
-        }
+    function result()
+    {
+        return $this->result;
+    }
+    function gettype()
+    {
+        return $this->type;
+    }
+    function getstartat()
+    {
+        return $this->startat;
+    }
+    function getto()
+    {
+        return $this->type;
+    }
+    function getpagerows()
+    {
+        return $this->pagerows;
+    }
+    function getrows()
+    {
+        return $this->rows;
+    }
+    function getrowstodo()
+    {
+        return $this->rowstodo;
+    }
+    function getversion()
+    {
+        return $this->version;
+    }
 
-        function addorder($x = '', $y = 'ASC')
-        {
-            if ($x != '') {
-                $this->sorts[] = array('name' => $x, 'order' => $y);
-            }
+    function addorder($x = '', $y = 'ASC')
+    {
+        if ($x != '') {
+            $this->sorts[] = array('name' => $x, 'order' => $y);
         }
-        function setorder($x = '',$y = 'ASC')
-        {
-            if ($x != '') {
-                $this->sorts = array(); $this->addorder($x,$y);
-            }
+    }
+    function setorder($x = '',$y = 'ASC')
+    {
+        if ($x != '') {
+            $this->sorts = array(); $this->addorder($x,$y);
         }
-        function setstartat($x = 0)
-        {
-            $this->startat = $x;
+    }
+    function setstartat($x = 0)
+    {
+        $this->startat = $x;
+    }
+    function setrowstodo($x = 0)
+    {
+        $this->rowstodo = $x;
+    }
+    function openconnection($x = '')
+    {
+        if ($x == '') $this->dbconn =& xarDBGetConn();
+        else $this->dbconn = $x;
+    }
+    function getstatement()
+    {
+        return $this->statement;
+    }
+    function setstatement($statement='')
+    {
+        if ($statement != '') {
+            $this->statement = $statement;
+            $st = explode(" ",$statement);
+            $this->type = strtoupper($st[0]);
         }
-        function setrowstodo($x = 0)
-        {
-            $this->rowstodo = $x;
+        else {
+            $this->statement = $this->_statement();
         }
-        function setconnection($x = '')
-        {
-            if ($x == '') $this->dbconn =& xarDBGetConn();
-            else $this->dbconn = $x;
-        }
+    }
 }
 ?>
