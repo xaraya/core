@@ -726,6 +726,23 @@ if (empty($step)) {
             }
         }
     }
+
+    // Delete any empty modvars.
+    $delmodvars[] = array(array('name'    =>  'showtacs',
+                                'module'  =>  'roles'));
+
+    foreach($delmodvars as $delmodvar){
+        foreach($delmodvar as $var){
+            $currentvar = xarModGetVar("$var[module]", "$var[name]");
+            if (isset($currentvar)){
+                echo "$var[module] -> $var[name] is deleted, proceeding to next check<br />";
+            } else {
+                xarModDelVar($var['module'], $var['name']);
+                echo "$var[module] -> $var[name] has value, attempting to delete.... done!<br />";
+            }
+        }
+    }
+
     // Set Config Vars
     $roleanon = xarFindRole('Anonymous');
     $configvars[] = array(array('name'    =>  'Site.User.AnonymousUID',
@@ -835,6 +852,16 @@ if (empty($step)) {
         echo "Priviliges Masks have been created previously, moving to next check. <br />";
     }
 
+    $upgrade['priv_masks'] = xarMaskExists('pnLegacyMask',$module='All');
+    if (!$upgrade['priv_masks']) {
+        echo "pnLegacy Masks do not exist, attempting to create... done! <br />";
+
+        // create a couple of new masks
+        xarRegisterMask('pnLegacyMask','All','All','All','All','ACCESS_NONE');
+    } else {
+        echo "pnLegacy Masks have been created previously, moving to next check. <br />";
+    }
+
     $upgrade['priv_locks'] = xarPrivExists('GeneralLock');
     if (!$upgrade['priv_locks']) {
         echo "Priviliges Locks do not exist, attempting to create... done! <br />";
@@ -876,6 +903,34 @@ if (empty($step)) {
     } else {
         echo "Setting Ratings Delete All Hook... done! <br />";
     }
+
+    // Check the installed privs and masks.
+    echo "<h5>Checking Time / Date Structure</h5>";
+
+    include 'includes/xarDate.php';
+    list($dbconn) = xarDBGetConn();
+    $sitePrefix = xarDBGetSiteTablePrefix();
+    $rolestable = $sitePrefix . '_roles';
+
+    $query = " SELECT xar_uid, xar_date_reg FROM $rolestable";
+    $result = &$dbconn->Execute($query);
+    if (!$result) return;
+
+    while (!$result->EOF) {
+        list($uid,$datereg) = $result->fields;
+        $thisdate = new xarDate();
+        if(!is_numeric($datereg)) {
+            $thisdate->DBtoTS($datereg);
+            $datereg = $thisdate->getTimestamp();
+            $query = "UPDATE $rolestable SET xar_date_reg = $datereg WHERE xar_uid = $uid";
+            if(!$dbconn->Execute($query)) return;
+        }
+        $result->MoveNext();
+    }
+
+    echo "Time / Date structure verified in Roles. <br /> ";
+
+
 
 ?>
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
