@@ -165,7 +165,7 @@ function xarErrorSet($major, $errorID, $value = NULL)
         // TODO: remove again once xarLogException works
         if ($errorID == "ErrorCollection") $obj = $obj->exceptions[0];
         xarLogMessage("Logged error: " . $obj->toString(), XARLOG_LEVEL_ERROR);
-        if (!empty($stack)) 
+        if (!empty($stack) && $major != XAR_USER_EXCEPTION) 
             xarLogMessage(
                 "Logged error backtrace: \n" . xarException__formatBacktrace($stack), 
                 XARLOG_LEVEL_ERROR);
