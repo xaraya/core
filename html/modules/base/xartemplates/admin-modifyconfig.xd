@@ -63,7 +63,7 @@ with the mbstring extension compiled in.</xar:mlstring></p>
 
 		<div style="clear: both; padding-top: 10px;">
 		<span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#xarML('The default function of module to be loaded.')#"><label for="themefir"><xar:mlstring>Default Theme Directory</xar:mlstring></label>:</span>
+			<span class="help" title="#xarML('The default directory for site themes - no trailing slash.')#"><label for="themefir"><xar:mlstring>Default Theme Directory</xar:mlstring></label>:</span>
 		</span>
 		<span style="float: right; width: 78%; text-align: left;">
 			<input type="text" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" size="30" maxlength="100" />
