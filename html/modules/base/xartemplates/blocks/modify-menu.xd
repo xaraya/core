@@ -103,26 +103,26 @@
         <xar:loop name="$contentlines">
             <tr>
                 <td valign="top">
-                    <input class="xar-norm fullright" type="text" name="linkname[#$loop:index#]" id="linkname_#$loop:index+1#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[1])#" />
+                    <input class="xar-norm fullright" type="text" name="linkname[#$loop:index#]" id="linkname_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[1])#" />
                 </td>
                 <td valign="top">
-                    <input class="xar-norm fullright" type="text" name="linkurl[#$loop:index#]" id="linkurl_#$loop:index+1#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[0])#" />
+                    <input class="xar-norm fullright" type="text" name="linkurl[#$loop:index#]" id="linkurl_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[0])#" />
                 </td>
                 <td valign="top">
-                    <input class="xar-norm fullright" type="text" name="linkdesc[#$loop:index#]" id="linkdesc_#$loop:index+1#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[2])#" />
+                    <input class="xar-norm fullright" type="text" name="linkdesc[#$loop:index#]" id="linkdesc_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[2])#" />
                 </td>
                 <td valign="top">
-                    <input type="checkbox" name="linkdelete[#$loop:index+1#]" id="linkdelete_#$loop:index+1#" value="1" class="xar-norm" />
+                    <input type="checkbox" name="linkdelete[#$loop:index#]" id="linkdelete_#$loop:index#" value="1" class="xar-norm" />
                 </td>
                 <td valign="top">
                     <xar:if condition="empty($loop:item[3])">
-                        <input type="checkbox" name="linkchild[#$loop:index+1#]" id="linkchild_#$loop:index+1#" value="1" class="xar-norm" />
+                        <input type="checkbox" name="linkchild[#$loop:index#]" id="linkchild_#$loop:index#" value="1" class="xar-norm" />
                         <xar:else />
-                        <input type="checkbox" name="linkchild[#$loop:index+1#]" id="linkchild_#$loop:index+1#" value="1" class="xar-norm" checked="checked" />
+                        <input type="checkbox" name="linkchild[#$loop:index#]" id="linkchild_#$loop:index#" value="1" class="xar-norm" checked="checked" />
                     </xar:if>
                 </td>
                 <td valign="top">
-                    <input type="checkbox" name="linkinsert[#$loop:index+1#]" id="linkinsert_#$loop:index+1#" value="1" class="xar-norm" />
+                    <input type="checkbox" name="linkinsert[#$loop:index#]" id="linkinsert_#$loop:index#" value="1" class="xar-norm" />
                 </td>
             </tr>
         </xar:loop>
