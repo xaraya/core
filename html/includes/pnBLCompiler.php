@@ -1874,9 +1874,9 @@ class pnTpl__PntForNode extends pnTpl__TplTagNode
 
 class pnTpl__PntBlockNode extends pnTpl__TplTagNode
 {
-    function render()
+    function renderBeginTag()
     {
-        extract($this->attributes);
+    	extract($this->attributes);
 
         if (!isset($name)) {
             pnExceptionSet(PN_USER_EXCEPTION, 'MissingAttribute',
@@ -1905,16 +1905,39 @@ class pnTpl__PntBlockNode extends pnTpl__TplTagNode
         // Calculate block ID - theme dependent
         // FIXME: <marco> What is this for?
         $bid = md5(pnUserGetTheme().$id);
+		
+		$contentNode = $this->children[0];
+        if (isset($contentNode)) {
+			$content = trim(addslashes($contentNode->render()));
+        }
+
+        $this->children = array();
+
 
         return "pnBlock_render(array('module' => '$module', 'type' => '$name', 'bid' => '$bid',
                                      'title' => \"".addslashes($title)."\", 'content' => '$content',
                                      '_bl_template' => '$template'))";
     }
-
-    function needExceptionsControl()
+	
+	function renderEndTag()
+	{
+		return '';
+	}
+	
+	function render()
+	{
+		return $this->renderBeginTag();
+	}
+	
+	function needExceptionsControl()
     {
         return true;
     }
+	
+	function hasText()
+	{
+		return true;
+	}
 }
 
 class pnTpl__PntBlockGroupNode extends pnTpl__TplTagNode
