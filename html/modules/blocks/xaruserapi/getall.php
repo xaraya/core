@@ -10,6 +10,7 @@
  * @link http://www.xaraya.com
  * @param args[$bid] optional block instance ID
  * @param args[$name] optional block instance name
+ * @param args[$order] optional ordering
  *
  * @subpackage Blocks administration
  * @author Jim McDonald, Paul Rosania
@@ -22,6 +23,12 @@ function blocks_userapi_getall($args)
     // Check parameters.
     if (!empty($bid) && !xarVarValidate('int:1:', $bid)) {return;}
     if (!empty($name) && !xarVarValidate('str', $name)) {return;}
+
+    if (!empty($order) && xarVarValidate('strlist:,|:enum:name:title:id', $order, true)) {
+        $orderby = ' ORDER BY xar_' . implode(', inst.xar_', explode(',', $order));
+    } else {
+        $orderby = '';
+    }
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
@@ -44,7 +51,7 @@ function blocks_userapi_getall($args)
                      btypes.xar_type
               FROM   '.$block_instances_table.' as inst
               LEFT JOIN '.$block_types_table.' as btypes
-              ON        btypes.xar_id = inst.xar_type_id';
+              ON        btypes.xar_id = inst.xar_type_id ' . $orderby;
 
     if (!empty($bid)) {
         $query .= ' WHERE inst.xar_id = ' . $bid;

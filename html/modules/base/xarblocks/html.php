@@ -18,7 +18,7 @@
  */
 function base_htmlblock_init()
 {
-    return true;
+    return array();
 }
 
 /**
@@ -44,10 +44,14 @@ function base_htmlblock_info()
 function base_htmlblock_display($blockinfo)
 {
     // Security Check
-    if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"html:$blockinfo[title]:All")) return;
+    if (!xarSecurityCheck('ViewBaseBlocks', 0, 'Block', "html:$blockinfo[title]:All")) {return;}
 
     // Get variables from content block
-    $vars = unserialize($blockinfo['content']);
+    if (!is_array($blockinfo['content'])) {
+        $vars = unserialize($blockinfo['content']);
+    } else {
+        $vars = $blockinfo['content'];
+    }
 
     $now = time();
 
@@ -72,7 +76,11 @@ function base_htmlblock_display($blockinfo)
 function base_htmlblock_modify($blockinfo)
 {
     // Get current content
-    $vars = @unserialize($blockinfo['content']);
+    if (!is_array($blockinfo['content'])) {
+        $vars = @unserialize($blockinfo['content']);
+    } else {
+        $vars = $blockinfo['content'];
+    }
 
     // Defaults
     if (empty($vars['expire'])) {
@@ -93,9 +101,8 @@ function base_htmlblock_modify($blockinfo)
     }
 
     $vars['blockid'] = $blockinfo['bid'];
-    $content = xarTplBlock('base', 'htmlAdmin', $vars);
+    return $vars;
 
-    return $content;
 }
 
 /**
@@ -104,8 +111,8 @@ function base_htmlblock_modify($blockinfo)
  */
 function base_htmlblock_update($blockinfo)
 {
-   if (!xarVarFetch('expire','str:1', $vars['expire'], 0, XARVAR_NOT_REQUIRED)) {return;}
-   if (!xarVarFetch('html_content','str:1', $vars['html_content'], '', XARVAR_NOT_REQUIRED)) {return;}
+   if (!xarVarFetch('expire', 'str:1', $vars['expire'], 0, XARVAR_NOT_REQUIRED)) {return;}
+   if (!xarVarFetch('html_content', 'str:1', $vars['html_content'], '', XARVAR_NOT_REQUIRED)) {return;}
 
     // Defaults
     if ($vars['expire'] != 0){
@@ -113,7 +120,7 @@ function base_htmlblock_update($blockinfo)
         $vars['expire'] = $vars['expire'] + $now;
     }
 
-    $blockinfo['content'] = serialize($vars);
+    $blockinfo['content'] = $vars;
 
     return $blockinfo;
 }

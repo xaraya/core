@@ -22,7 +22,7 @@ function blocks_admin_view_instances()
     $authid = xarSecGenAuthKey();
 
     // Get all block instances (whether they have group membership or not.
-    $instances =& xarModAPIfunc('blocks', 'user', 'getall');
+    $instances =& xarModAPIfunc('blocks', 'user', 'getall', array('order' => 'name'));
 
     // Get current style.
     $data['selstyle'] = xarModGetUserVar('blocks', 'selstyle');

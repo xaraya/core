@@ -18,7 +18,7 @@
  */
 function base_phpblock_init()
 {
-    return true;
+    return array();
 }
 
 /**
@@ -63,11 +63,13 @@ function base_phpblock_display($blockinfo)
 function base_phpblock_modify($blockinfo)
 {
     // Get current content
-    $vars = @unserialize($blockinfo['content']);
+    if (!is_array($blockinfo['content'])) {
+        $vars = @unserialize($blockinfo['content']);
+    } else {
+        $vars = $blockinfo['content'];
+    }
 
     $vars['blockid'] = $blockinfo['bid'];
-    $content = xarTplBlock('base', 'phpAdmin', $vars);
-
-    return $content;
+    return $vars;
 }
 ?>
