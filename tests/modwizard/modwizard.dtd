@@ -102,7 +102,7 @@
 -->
 <!ELEMENT configuration ( dependency?, capabilities, modvars, hooks, security )>
 
-<!ELEMENT capabilities ( supportshorturls, setpagetitle, item_hooks, module_hooks, search_hook, transform_hooks, user_menu_hook, waiting_content_hook )* >
+<!ELEMENT capabilities ( supportshorturls, setpagetitle, gui+, item_hooks, module_hooks, search_hook, transform_hooks, user_menu_hook, waiting_content_hook )* >
 <!ELEMENT supportshorturls ( #PCDATA )>
 <!ELEMENT dependency ( #PCDATA )>
 <!ELEMENT setpagetitle ( #PCDATA )>
@@ -114,6 +114,11 @@
 <!ELEMENT search_hook ( #PCDATA )>
 
 <!ELEMENT modvars ( var )*>
+
+<!ELEMENT gui ( #PCDATA )>
+<!ATTLIST gui
+    type ( user | admin | lazy ) 'lazy'
+    >
 
 <!ELEMENT var ( #PCDATA )>
 <!ATTLIST var

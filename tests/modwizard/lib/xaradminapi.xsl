@@ -19,13 +19,18 @@
     <xsl:message>
 ### Generating adminstration api</xsl:message>
 
-    <xsl:apply-templates select="." mode="xaradminapi_getmenulinks" />
+    <xsl:if test="configuration/capabilities/gui[@type='admin']/text() = 'yes' ">
+
+        <xsl:apply-templates select="." mode="xaradminapi_getmenulinks" />
+
+    </xsl:if>
 
     <xsl:for-each select="database/table">
 
         <!-- NOTHING TO DO -->
 
     </xsl:for-each>
+
 
 </xsl:template>
 

@@ -28,31 +28,36 @@
     <xsl:message>
 ### Generating user api</xsl:message>
 
-    <!-- // FUNC // ShortURLSupport
+    <xsl:if test="configuration/capabilities/gui[ @type = 'user']/text() = 'yes' ">
 
-         create the following functions only if the user enabled short url
-         support
-    -->
-    <xsl:if test="not( boolean( configuration/capabilities/supportshorturls ) ) or configuration/capabilities/supportshorturls/text() = 'yes'">
+        <!-- // FUNC // ShortURLSupport
 
-            <xsl:apply-templates select="." mode="xaruserapi_encode_shorturl" />
-            <xsl:apply-templates select="." mode="xaruserapi_decode_shorturl" />
+             create the following functions only if the user enabled short url
+             support. Short URL are only supported for user gui, So skip this
+             when no user gui.
+        -->
+        <xsl:if test="not( boolean( configuration/capabilities/supportshorturls ) ) or configuration/capabilities/supportshorturls/text() = 'yes'">
+
+                <xsl:apply-templates select="." mode="xaruserapi_encode_shorturl" />
+                <xsl:apply-templates select="." mode="xaruserapi_decode_shorturl" />
+
+        </xsl:if>
+
+        <!-- GENERIC DATA ACCESS FUNCTIONS
+        -->
+        <xsl:apply-templates mode="xaruserapi_getmenulinks" select="." />
 
     </xsl:if>
 
-    <!-- EVENT FUNCTIONS
-    -->
-
-    <!-- GENERIC DATA ACCESS FUNCTIONS
-    -->
     <xsl:if test="boolean( database/table[@user='true'] )">
 
-        <xsl:apply-templates mode="xaruserapi_count"    select="." />
-        <xsl:apply-templates mode="xaruserapi_getall"   select="." />
-        <xsl:apply-templates mode="xaruserapi_get"      select="." />
-        <xsl:apply-templates mode="xaruserapi_gettitle" select="." />
-        <xsl:apply-templates mode="xaruserapi_getitemlinks" select="." />
-        <xsl:apply-templates mode="xaruserapi_getmenulinks" select="." />
+        <xsl:if test="count( database/table ) > 0">
+            <xsl:apply-templates mode="xaruserapi_count"    select="." />
+            <xsl:apply-templates mode="xaruserapi_getall"   select="." />
+            <xsl:apply-templates mode="xaruserapi_get"      select="." />
+            <xsl:apply-templates mode="xaruserapi_gettitle" select="." />
+            <xsl:apply-templates mode="xaruserapi_getitemlinks" select="." />
+        </xsl:if>
 
     </xsl:if>
 

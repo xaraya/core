@@ -33,6 +33,10 @@
             *   # no hooks
             *   # no blocks
             *   </long>
+
+            <category>Content</category>
+            <class>Complete</class>
+
         </description>
 
     </about>
@@ -64,8 +68,11 @@
             <!-- Add code to change <head> -> <title> tag for each page? -->
             <setpagetitle>yes</setpagetitle>
 
+            <gui type="admin">yes</gui>
+            <gui type="user">yes</gui>
+
             <item_hooks>no</item_hooks>
-            <module_hooks>no</user_menu_hook>
+            <module_hooks>no</module_hooks>
             <search_hook>no</search_hook>
             <transform_hooks>no</transform_hooks>
             <user_menu_hook>no</user_menu_hook>

@@ -71,6 +71,9 @@
             <!-- Add code to change <head> -> <title> tag for each page? -->
             <setpagetitle>yes</setpagetitle>
 
+            <gui type="admin">yes</gui>
+            <gui type="user">yes</gui>
+
             <!-- Code for hooks ?
 
                  module hooks are generated if either transform_hooks or item_hooks are generated

@@ -28,16 +28,22 @@
     <xsl:message>
 ### Generating admin interfaces</xsl:message>
 
+    <xsl:if test="configuration/capabilities/gui[@type='admin']/text() = 'yes' ">
+
         <xsl:apply-templates mode="xaradmin_main"   select="." />
         <xsl:apply-templates mode="xaradmin_view"   select="." />
-        <xsl:apply-templates mode="xaradmin_new"    select="." />
-        <xsl:apply-templates mode="xaradmin_modify" select="." />
-        <xsl:apply-templates mode="xaradmin_delete" select="." />
         <xsl:apply-templates mode="xaradmin_config" select="." />
-
         <xsl:apply-templates mode="xd_admin-main"         select="." />
         <xsl:apply-templates mode="xd_admin-view"         select="." />
         <xsl:apply-templates mode="xd_admin-config"       select="." />
+
+        <xsl:if test="count( database/table ) > 0">
+            <xsl:apply-templates mode="xaradmin_new"    select="." />
+            <xsl:apply-templates mode="xaradmin_modify" select="." />
+            <xsl:apply-templates mode="xaradmin_delete" select="." />
+        </xsl:if>
+
+    </xsl:if>
 
 </xsl:template>
 
