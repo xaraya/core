@@ -21,8 +21,11 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         $this->storage = 'filesystem';
     }
 
-    function isCached($key = '')
+    function isCached($key = '', $expire = 0, $log = 1)
     {
+        if (empty($expire)) {
+            $expire = $this->expire;
+        }
         $oldkey = $key;
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
@@ -35,21 +38,24 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
             // the file has something in it AND
             filesize($cache_file) > 0 &&
             // (cached files don't expire OR this file hasn't expired yet) AND
-            ($this->expire == 0 ||
-             filemtime($cache_file) > time() - $this->expire)) {
+            ($expire == 0 ||
+             filemtime($cache_file) > time() - $expire)) {
 
             $this->modtime = filemtime($cache_file);
-            $this->logStatus('HIT', $oldkey);
+            if ($log) $this->logStatus('HIT', $oldkey);
             return true;
 
         } else {
-            $this->logStatus('MISS', $oldkey);
+            if ($log) $this->logStatus('MISS', $oldkey);
             return false;
         }
     }
 
-    function getCached($key = '')
+    function getCached($key = '', $output = 0, $expire = 0)
     {
+        if (empty($expire)) {
+            $expire = $this->expire;
+        }
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
         }
@@ -60,10 +66,10 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
             // CHECKME: the file will be included in xarTemplate.php ?
             $data = '';
 
-        } elseif ($this->type == 'page') {
+        } elseif ($output) {
             // output the file directly to the browser
             @readfile($cache_file);
-            $data = '';
+            return true;
 
         } elseif (function_exists('file_get_contents')) {
             $data = file_get_contents($cache_file);
@@ -79,8 +85,11 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         return $data;
     }
 
-    function setCached($key = '', $value = '')
+    function setCached($key = '', $value = '', $expire = 0)
     {
+        if (empty($expire)) {
+            $expire = $this->expire;
+        }
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
         }
@@ -118,16 +127,39 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
     function flushCached($key = '')
     {
         $this->_flushDirCached($key, $this->dir);
+
+        // check the cache size and clear the lockfile set by sizeLimitReached()
+        $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
+        if ($this->getCacheSize() < $this->sizelimit && file_exists($lockfile)) {
+            @unlink($lockfile);
+        }
     }
 
-    function cleanCached()
+    function cleanCached($expire = 0)
     {
-        if (empty($this->expire)) {
+        if (empty($expire)) {
+            $expire = $this->expire;
+        }
+        if (empty($expire)) {
             // TODO: delete oldest entries if we're at the size limit ?
             return;
         }
 
-        $time = time() - ($this->expire + 60); // take some margin here
+        $touch_file = $this->cachedir . '/cache.' . $this->type . 'level';
+
+        // If the cache type has already been cleaned within the expiration time,
+        // don't bother checking again
+        if (file_exists($touch_file) && filemtime($touch_file) > time() - $expire) {
+            return;
+        }
+        if (!@touch($touch_file)) {
+            // hmm, somthings amiss... better let the administrator know,
+            // without disrupting the site
+            error_log('Error from Xaraya::xarCache::storage::filesystem
+                      - web process can not touch ' . $touch_file);
+        }
+
+        $time = time() - ($expire + 60); // take some margin here
 
         if ($handle = @opendir($this->dir)) {
             while (($file = readdir($handle)) !== false) {
@@ -138,6 +170,12 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
                 }
             }
             closedir($handle);
+        }
+
+        // check the cache size and clear the lockfile set by sizeLimitReached()
+        $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
+        if ($this->getCacheSize() < $this->sizelimit && file_exists($lockfile)) {
+            @unlink($lockfile);
         }
     }
 

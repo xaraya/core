@@ -27,24 +27,25 @@ function xarBlockCache_init($args = array())
 
     $xarBlock_cacheTime = isset($args['Block.TimeExpiration']) ?
         $args['Block.TimeExpiration'] : 7200;
+    $xarBlock_cacheSizeLimit = isset($args['Block.SizeLimit']) ?
+        $args['Block.SizeLimit'] : 2097152;
 
-/*
     global $xarOutput_cacheCollection;
-    global $xarBlock_cacheStorage;
 
     $storage = !empty($args['Block.CacheStorage']) ?
         $args['Block.CacheStorage'] : 'filesystem';
     $logfile = !empty($args['Block.LogFile']) ?
         $args['Block.LogFile'] : null;
-    $xarBlock_cacheStorage =& xarCache_getStorage(array('storage'  => $storage,
-                                                        'type'     => 'block',
-                                                        'cachedir' => $xarOutput_cacheCollection,
-                                                        'expire'   => $xarBlock_cacheTime,
-                                                        'logfile'  => $logfile));
-    if (empty($xarBlock_cacheStorage)) {
+    $GLOBALS['xarBlock_cacheStorage'] = xarCache_getStorage(array('storage'   => $storage,
+                                                                  'type'      => 'block',
+                                                                  'cachedir'  => $xarOutput_cacheCollection,
+                                                                  'expire'    => $xarBlock_cacheTime,
+                                                                  'sizelimit' => $xarBlock_cacheSizeLimit,
+                                                                  'logfile'   => $logfile));
+    if (empty($GLOBALS['xarBlock_cacheStorage'])) {
         return false;
     }
-*/
+
     return true;
 }
 
@@ -106,6 +107,21 @@ function xarBlockIsCached($args)
         $pageShared = $blocks[$blockid]['pageshared'];
         $userShared = $blocks[$blockid]['usershared'];
         $blockCacheExpireTime = $blocks[$blockid]['cacheexpire'];
+
+    // cfr. bug 4021
+    } elseif (!empty($blockinfo['content']) && is_array($blockinfo['content'])) {
+        if (isset($blockinfo['content']['nocache'])) {
+            $noCache = $blockinfo['content']['nocache'];
+        }
+        if (isset($blockinfo['content']['pageshared'])) {
+            $pageShared = $blockinfo['content']['pageshared'];
+        }
+        if (isset($blockinfo['content']['usershared'])) {
+            $userShared = $blockinfo['content']['usershared'];
+        }
+        if (isset($blockinfo['content']['cacheexpire'])) {
+            $blockCacheExpireTime = $blockinfo['content']['cacheexpire'];
+        }
     }
 
     if (!empty($noCache)) {
@@ -147,39 +163,24 @@ function xarBlockIsCached($args)
     }
 
     $xarBlock_cacheCode = md5($factors);
+    $GLOBALS['xarBlock_cacheStorage']->setCode($xarBlock_cacheCode);
 
-    // CHECKME: use $name for something someday ?
-    $cache_file = "$xarOutput_cacheCollection/block/$cacheKey-$xarBlock_cacheCode.php";
+    // Note: we pass along the expiration time here, because it may be different for each block
+    $result = $GLOBALS['xarBlock_cacheStorage']->isCached($cacheKey, $blockCacheExpireTime);
 
-    if (
-        file_exists($cache_file) &&
-        ($blockCacheExpireTime == 0 ||
-         filemtime($cache_file) > time() - $blockCacheExpireTime)) {
-        return true;
-    } else {
-        return false;
-    }
+    return $result;
 }
 
 function xarBlockGetCached($cacheKey, $name = '')
 {
-    global $xarOutput_cacheCollection, $xarBlock_cacheCode;
-    
-    // CHECKME: use $name for something someday ?
-    $cache_file = "$xarOutput_cacheCollection/block/$cacheKey-$xarBlock_cacheCode.php";
-    
-    if (function_exists('file_get_contents')) {
-        $blockCachedOutput = file_get_contents($cache_file);
-    } else {
-        $blockCachedOutput = '';
-        $file = @fopen($cache_file, "rb");
-        if ($file) {
-            while (!feof($file)) $blockCachedOutput .= fread($file, 1024);
-            fclose($file);
-        }
+    if (empty($GLOBALS['xarBlock_cacheStorage'])) {
+        return '';
     }
 
-    return $blockCachedOutput;
+    global $blockCacheExpireTime;
+
+    // Note: we pass along the expiration time here, because it may be different for each block
+    return $GLOBALS['xarBlock_cacheStorage']->getCached($cacheKey, 0, $blockCacheExpireTime);
 }
 
 /**
@@ -193,9 +194,7 @@ function xarBlockGetCached($cacheKey, $name = '')
  */
 function xarBlockSetCached($cacheKey, $name, $value)
 {
-    global $xarOutput_cacheCollection,
-           $xarOutput_cacheSizeLimit,
-           $xarBlock_cacheCode,
+    global $xarBlock_cacheTime,
            $blockCacheExpireTime,
            $xarBlock_noCache;
     
@@ -204,19 +203,29 @@ function xarBlockSetCached($cacheKey, $name, $value)
         return;
     }
 
-    // CHECKME: use $name for something someday ?
-    $cache_file = "$xarOutput_cacheCollection/block/$cacheKey-$xarBlock_cacheCode.php";
-    if (
+    if (// the http request is a GET AND
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
-        (!file_exists($cache_file) ||
-        ($blockCacheExpireTime != 0 &&
-         filemtime($cache_file) < time() - $blockCacheExpireTime)) &&
-        !xarCache_SizeLimit($xarOutput_cacheCollection, 'Block')
-        ) {
+    // CHECKME: do we really want to check this again, or do we ignore it ?
+        // the cache entry doesn't exist or has expired (no log here) AND
+        !($GLOBALS['xarBlock_cacheStorage']->isCached($cacheKey, $blockCacheExpireTime, 0)) &&
+        // the cache collection directory hasn't reached its size limit...
+        !($GLOBALS['xarBlock_cacheStorage']->sizeLimitReached()) ) {
 
-        xarOutputSetCached($cacheKey, $cache_file, 'Block', $value);
-
+        // Note: we pass along the expiration time here, because it may be different for each block
+        $GLOBALS['xarBlock_cacheStorage']->setCached($cacheKey, $value, $blockCacheExpireTime);
     }
+}
+
+/**
+ * Flush block cache entries
+ */
+function xarBlockFlushCached($cacheKey)
+{
+    if (empty($GLOBALS['xarBlock_cacheStorage'])) {
+        return;
+    }
+
+    $GLOBALS['xarBlock_cacheStorage']->flushCached($cacheKey);
 }
 
 ?>

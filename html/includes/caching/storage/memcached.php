@@ -29,8 +29,11 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         $this->storage = 'memcached';
     }
 
-    function isCached($key = '')
+    function isCached($key = '', $expire = 0, $log = 1)
     {
+        if (empty($expire)) {
+            $expire = $this->expire;
+        }
         $oldkey = $key;
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
@@ -40,25 +43,37 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         if ($value) {
 // FIXME: memcached doesn't keep track of modification times !
             //$this->modtime = 0;
-            $this->logStatus('HIT', $oldkey);
+            if ($log) $this->logStatus('HIT', $oldkey);
             return true;
         } else {
-            $this->logStatus('MISS', $oldkey);
+            if ($log) $this->logStatus('MISS', $oldkey);
             return false;
         }
     }
 
-    function getCached($key = '')
+    function getCached($key = '', $output = 0, $expire = 0)
     {
+        if (empty($expire)) {
+            $expire = $this->expire;
+        }
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
         }
         $value = $this->memcache->get($key);
-        return $value;
+        if ($output) {
+            // output the value directly to the browser
+            echo $value;
+            return true;
+        } else {
+            return $value;
+        }
     }
 
-    function setCached($key = '', $value = '')
+    function setCached($key = '', $value = '', $expire = 0)
     {
+        if (empty($expire)) {
+            $expire = $this->expire;
+        }
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
         }
@@ -67,8 +82,8 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         } else {
             $flag = false;
         }
-        if (!empty($this->expire)) {
-            $this->memcache->set($key, $value, $flag, $this->expire);
+        if (!empty($expire)) {
+            $this->memcache->set($key, $value, $flag, $expire);
         } else {
             $this->memcache->set($key, $value, $flag);
         }
@@ -84,13 +99,25 @@ class xarCache_MemCached_Storage extends xarCache_Storage
 
     function flushCached($key = '')
     {
-        // we can't really flush part of the cache here, unless we
-        // keep track of all cache entries, perhaps ?
+    // CHECKME: we can't really flush part of the cache here, unless we
+    //          keep track of all cache entries, perhaps ?
+
+        // check the cache size and clear the lockfile set by sizeLimitReached()
+        $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
+        if ($this->getCacheSize() < $this->sizelimit && file_exists($lockfile)) {
+            @unlink($lockfile);
+        }
     }
 
-    function cleanCached()
+    function cleanCached($expire = 0)
     {
         // we rely on the expire value here
+
+        // check the cache size and clear the lockfile set by sizeLimitReached()
+        $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
+        if ($this->getCacheSize() < $this->sizelimit && file_exists($lockfile)) {
+            @unlink($lockfile);
+        }
     }
 
     function getCacheSize($countitems = false)

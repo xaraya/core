@@ -28,8 +28,11 @@ class xarCache_Database_Storage extends xarCache_Storage
         }
     }
 
-    function isCached($key = '')
+    function isCached($key = '', $expire = 0, $log = 1)
     {
+        if (empty($expire)) {
+            $expire = $this->expire;
+        }
         $table = $this->getTable();
         if (empty($table)) return false;
 
@@ -49,7 +52,7 @@ class xarCache_Database_Storage extends xarCache_Storage
             $result->Close();
             $this->lastid = null;
             $this->value = null;
-            $this->logStatus('MISS', $key);
+            if ($log) $this->logStatus('MISS', $key);
             return false;
         }
         list($id,$time,$size,$check,$data) = $result->fields;
@@ -58,23 +61,32 @@ class xarCache_Database_Storage extends xarCache_Storage
         // TODO: process $size and $check if compressed ?
 
         $this->lastid = $id;
-        if (!empty($this->expire) && $time < time() - $this->expire) {
+        if (!empty($expire) && $time < time() - $expire) {
             $this->value = null;
-            $this->logStatus('MISS', $key);
+            if ($log) $this->logStatus('MISS', $key);
             return false;
         } else {
             $this->value = $data;
             $this->modtime = $time;
-            $this->logStatus('HIT', $key);
+            if ($log) $this->logStatus('HIT', $key);
             return true;
         }
     }
 
-    function getCached($key = '')
+    function getCached($key = '', $output = 0, $expire = 0)
     {
+        if (empty($expire)) {
+            $expire = $this->expire;
+        }
         if ($key == $this->lastkey && isset($this->value)) {
             $this->lastkey = null;
-            return $this->value;
+            if ($output) {
+                // output the value directly to the browser
+                echo $this->value;
+                return true;
+            } else {
+                return $this->value;
+            }
         }
         $table = $this->getTable();
         if (empty($table)) return;
@@ -94,7 +106,7 @@ class xarCache_Database_Storage extends xarCache_Storage
             $result->Close();
             $this->lastid = null;
             $this->value = null;
-            return false;
+            return;
         }
         list($id,$time,$size,$check,$data) = $result->fields;
         $result->Close();
@@ -102,15 +114,22 @@ class xarCache_Database_Storage extends xarCache_Storage
         // TODO: process $size and $check if compressed ?
 
         $this->lastid = $id;
-        if (!empty($this->expire) && $time < time() - $this->expire) {
+        if (!empty($expire) && $time < time() - $expire + 10) { // take some margin here
             return;
+        } elseif ($output) {
+            // output the value directly to the browser
+            echo $data;
+            return true;
         } else {
             return $data;
         }
     }
 
-    function setCached($key = '', $value = '')
+    function setCached($key = '', $value = '', $expire = 0)
     {
+        if (empty($expire)) {
+            $expire = $this->expire;
+        }
         $time = time();
         $size = strlen($value);
         if ($this->compressed) {
@@ -190,21 +209,44 @@ class xarCache_Database_Storage extends xarCache_Storage
         }
         $result =& $dbconn->Execute($query, $bindvars);
         if (!$result) return;
+
+        // check the cache size and clear the lockfile set by sizeLimitReached()
+        $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
+        if ($this->getCacheSize() < $this->sizelimit && file_exists($lockfile)) {
+            @unlink($lockfile);
+        }
         $this->lastkey = null;
     }
 
-    function cleanCached()
+    function cleanCached($expire = 0)
     {
-        if (empty($this->expire)) {
+        if (empty($expire)) {
+            $expire = $this->expire;
+        }
+        if (empty($expire)) {
             // TODO: delete oldest entries if we're at the size limit ?
             return;
         }
         $table = $this->getTable();
         if (empty($table)) return;
 
+        $touch_file = $this->cachedir . '/cache.' . $this->type . 'level';
+
+        // If the cache type has already been cleaned within the expiration time,
+        // don't bother checking again
+        if (file_exists($touch_file) && filemtime($touch_file) > time() - $expire) {
+            return;
+        }
+        if (!@touch($touch_file)) {
+            // hmm, somthings amiss... better let the administrator know,
+            // without disrupting the site
+            error_log('Error from Xaraya::xarCache::storage::filesystem
+                      - web process can not touch ' . $touch_file);
+        }
+
         $dbconn =& xarDBGetConn();
 
-        $time = time() - ($this->expire + 60); // take some margin here
+        $time = time() - ($expire + 60); // take some margin here
 
         $query = "DELETE FROM $table
                         WHERE xar_type = ? AND xar_time < ?";
@@ -212,6 +254,11 @@ class xarCache_Database_Storage extends xarCache_Storage
         $result =& $dbconn->Execute($query, $bindvars);
         if (!$result) return;
 
+        // check the cache size and clear the lockfile set by sizeLimitReached()
+        $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
+        if ($this->getCacheSize() < $this->sizelimit && file_exists($lockfile)) {
+            @unlink($lockfile);
+        }
         $this->lastkey = null;
     }
 

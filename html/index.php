@@ -67,11 +67,17 @@ function xarMain()
         $cacheKey = "$modName-$modType-$funcName";
     }
 
+    $run = 1;
     if ($pageCaching == 1 && xarPageIsCached($cacheKey,'page')) {
         // output the cached page *or* a 304 Not Modified status
-        xarPageGetCached($cacheKey,'page');
+        if (xarPageGetCached($cacheKey,'page')) {
+            // we could return true here, but we'll continue just in case
+            // processing changes below someday...
+            $run = 0;
+        }
+    }
 
-    } else {
+    if ($run) {
 
         // Load the module
         if (!xarModLoad($modName, $modType)) return; // throw back

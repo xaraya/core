@@ -9,6 +9,8 @@ class xarCache_Storage
     var $size = null;
     var $numitems = 0;
     var $compressed = false;
+    var $sizelimit = 10000000;
+    var $reached = null;
     var $expire = 0;
     var $logfile = null;
     var $logsize = 2000000; // for each logfile
@@ -31,6 +33,9 @@ class xarCache_Storage
         if (!empty($args['expire'])) {
             $this->expire = $args['expire'];
         }
+        if (!empty($args['sizelimit'])) {
+            $this->sizelimit = $args['sizelimit'];
+        }
         if (!empty($args['logfile'])) {
             $this->logfile = realpath($args['logfile']);
         }
@@ -50,22 +55,22 @@ class xarCache_Storage
         $this->expire = $expire;
     }
 
-    function getModTime()
+    function getLastModTime()
     {
         return $this->modtime;
     }
 
-    function isCached($key = '')
+    function isCached($key = '', $expire = 0, $log = 1)
     {
         return false;
     }
 
-    function getCached($key = '')
+    function getCached($key = '', $output = 0, $expire = 0)
     {
         return '';
     }
 
-    function setCached($key = '', $value = '')
+    function setCached($key = '', $value = '', $expire = 0)
     {
     }
 
@@ -77,7 +82,7 @@ class xarCache_Storage
     {
     }
 
-    function cleanCached()
+    function cleanCached($expire = 0)
     {
     }
 
@@ -91,8 +96,35 @@ class xarCache_Storage
         return $this->numitems;
     }
 
-    function sizeLimit()
+    function sizeLimitReached()
     {
+        if (isset($this->reached)) {
+            return $this->reached;
+        }
+
+        $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
+        if (file_exists($lockfile)) {
+            $value = TRUE;
+        } elseif (mt_rand(1,5) > 1) {
+            // on average, 4 out of 5 pages go by without checking
+            $value = FALSE;
+        } else {
+            $size = $this->getCacheSize();
+            if ($size >= $this->sizelimit) {
+                $value = TRUE;
+                @touch($lockfile);
+            } else {
+                $value = FALSE;
+            }
+        }
+        $this->reached = $value;
+
+    // CHECKME: we don't need this cached variable anymore, do we ?
+        if ($value && !xarCore_IsCached($this->type . '.Caching', 'cleaned')) {
+            $this->cleanCached();
+            xarCore_SetCached($this->type . '.Caching', 'cleaned', TRUE);
+        }
+        return $value;
     }
 
     function logStatus($status = 'MISS', $key = '')

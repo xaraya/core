@@ -47,28 +47,28 @@ function xarPageCache_init($args = array())
         $args['Page.SessionLess'] : '';
     $xarPage_autoCachePeriod = isset($args['AutoCache.Period']) ?
         $args['AutoCache.Period'] : 0;
+    $xarPage_cacheSizeLimit = isset($args['Page.SizeLimit']) ?
+        $args['Page.SizeLimit'] : 2097152;
 
     // Note : we may already exit here if session-less page caching is enabled
     xarPageCache_sessionLess();
 
-/*
     global $xarOutput_cacheCollection;
-    global $xarPage_cacheStorage;
 
     $storage = !empty($args['Page.CacheStorage']) ?
         $args['Page.CacheStorage'] : 'filesystem';
     $logfile = !empty($args['Page.LogFile']) ?
         $args['Page.LogFile'] : null;
     // Note: make sure this isn't used before core loading if we use database storage
-    $xarPage_cacheStorage =& xarCache_getStorage(array('storage'  => $storage,
-                                                       'type'     => 'page',
-                                                       'cachedir' => $xarOutput_cacheCollection,
-                                                       'expire'   => $xarPage_cacheTime,
-                                                       'logfile'  => $logfile));
-    if (empty($xarPage_cacheStorage)) {
+    $GLOBALS['xarPage_cacheStorage'] = xarCache_getStorage(array('storage'   => $storage,
+                                                                 'type'      => 'page',
+                                                                 'cachedir'  => $xarOutput_cacheCollection,
+                                                                 'expire'    => $xarPage_cacheTime,
+                                                                 'sizelimit' => $xarPage_cacheSizeLimit,
+                                                                 'logfile'   => $logfile));
+    if (empty($GLOBALS['xarPage_cacheStorage'])) {
         return false;
     }
-*/
 
     return true;
 }
@@ -91,6 +91,10 @@ function xarPageIsCached($cacheKey, $name = '')
            $xarPage_cacheCode,
            $xarPage_cacheGroups;
 
+    if (empty($GLOBALS['xarPage_cacheStorage'])) {
+        return false;
+    }
+
     $xarTpl_themeDir = xarTplGetThemeDir();
 
     $page = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir .
@@ -112,9 +116,7 @@ function xarPageIsCached($cacheKey, $name = '')
     // based on different $cacheKey (and $name if necessary) in one page request
     // - e.g. for module and block caching
     $xarPage_cacheCode = md5($page);
-
-    // CHECKME: use $name for something someday ?
-    $cache_file = "$xarOutput_cacheCollection/page/$cacheKey-$xarPage_cacheCode.php";
+    $GLOBALS['xarPage_cacheStorage']->setCode($xarPage_cacheCode);
 
     if (// if this page is a user type page AND
         strpos($cacheKey, '-user-') &&
@@ -125,28 +127,23 @@ function xarPageIsCached($cacheKey, $name = '')
         // (we're caching the output of all themes OR this is the theme we're caching) AND
         (empty($xarOutput_cacheTheme) ||
          strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
-        // the file is present AND
-        file_exists($cache_file) &&
-        // the file has something in it AND
-        filesize($cache_file) > 0 &&
-        // (cached pages don't expire OR this file hasn't expired yet) AND
-        ($xarPage_cacheTime == 0 ||
-         filemtime($cache_file) > time() - $xarPage_cacheTime) &&
+        // the cache entry exists and hasn't expired yet AND
+        ($GLOBALS['xarPage_cacheStorage']->isCached($cacheKey)) &&
         // the current user is eligible for receiving cached pages...
         xarPage_checkUserCaching()) {
 
         // create another copy for session-less page caching if necessary
         if (!empty($GLOBALS['xarPage_cacheNoSession'])) {
-            $cacheKey = 'static';
-            $cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-            $cache_file2 = "$xarOutput_cacheCollection/page/$cacheKey-$cacheCode.php";
+            $cacheKey2 = 'static';
+            $cacheCode2 = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+            $cache_file2 = "$xarOutput_cacheCollection/page/$cacheKey2-$cacheCode2.php";
         // Note that if we get here, the first-time visitor will receive a session cookie,
         // so he will no longer benefit from this himself ;-)
-            @copy($cache_file, $cache_file2);
+            $GLOBALS['xarPage_cacheStorage']->saveFile($cacheKey, $cache_file2);
         }
 
+        $modtime = $GLOBALS['xarPage_cacheStorage']->getLastModTime();
         // this may already exit if we have a 304 Not Modified
-        $modtime = filemtime($cache_file);
         xarPageCache_sendHeaders($modtime);
 
         return true;
@@ -161,18 +158,20 @@ function xarPageIsCached($cacheKey, $name = '')
  * @access public
  * @param key the key identifying the particular cache you want to access
  * @param name the name of the page in that particular cache
- * @returns mixed
- * @return content of the page, or void if page isn't cached
+ * @returns bool
+ * @return true if succeeded, false otherwise
  */
 function xarPageGetCached($cacheKey, $name = '')
 {
-    global $xarOutput_cacheCollection, $xarPage_cacheCode;
+    if (empty($GLOBALS['xarPage_cacheStorage'])) {
+        return false;
+    }
 
-    // CHECKME: use $name for something someday ?
-    $cache_file = "$xarOutput_cacheCollection/page/$cacheKey-$xarPage_cacheCode.php";
-    @readfile($cache_file);
+    // output the content directly to the browser here
+    $result = $GLOBALS['xarPage_cacheStorage']->getCached($cacheKey, 1);
 
-    xarCache_CleanCached('Page');
+    $GLOBALS['xarPage_cacheStorage']->cleanCached();
+    return $result;
 }
 
 /**
@@ -204,8 +203,9 @@ function xarPageSetCached($cacheKey, $name, $value)
         if (!xarModIsHooked('xarcachemanager', $modName)) { return; }
     }
 
-    // CHECKME: use $name for something someday ?
-    $cache_file = "$xarOutput_cacheCollection/page/$cacheKey-$xarPage_cacheCode.php";
+    if (empty($GLOBALS['xarPage_cacheStorage'])) {
+        return;
+    }
 
     if (// if this page is a user type page AND
         strpos($cacheKey, '-user-') &&
@@ -216,15 +216,14 @@ function xarPageSetCached($cacheKey, $name, $value)
         // (we're caching the output of all themes OR this is the theme we're caching) AND
         (empty($xarOutput_cacheTheme) ||
          strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
-        // ((the cache file doesn't exist) OR (expires AND has expired)) AND
-        (!file_exists($cache_file) ||
-         ($xarPage_cacheTime != 0 &&
-          filemtime($cache_file) < time() - $xarPage_cacheTime)) &&
+    // CHECKME: do we really want to check this again, or do we ignore it ?
+        // the cache entry doesn't exist or has expired (no log here) AND
+        !($GLOBALS['xarPage_cacheStorage']->isCached($cacheKey, 0, 0)) &&
         // the current user's page views are eligible for caching AND
         xarPage_checkUserCaching() &&
         // the cache collection directory hasn't reached its size limit...
-        !xarCache_SizeLimit($xarOutput_cacheCollection, 'Page')) {
-        
+        !($GLOBALS['xarPage_cacheStorage']->sizeLimitReached()) ) {
+
         // if request, modify the end of the file with a time stamp
         if ($xarPage_cacheShowTime == 1) {
             $now = xarML('Last updated on #(1)',
@@ -235,28 +234,46 @@ function xarPageSetCached($cacheKey, $name, $value)
                                   $value);
         }
 
-        xarOutputSetCached($cacheKey, $cache_file, 'Page', $value);
+        $GLOBALS['xarPage_cacheStorage']->setCached($cacheKey, $value);
 
-        $modtime = filemtime($cache_file);
+        // create another copy for session-less page caching if necessary
+        if (!empty($GLOBALS['xarPage_cacheNoSession'])) {
+            $cacheKey2 = 'static';
+            $cacheCode2 = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+            $cache_file2 = "$xarOutput_cacheCollection/page/$cacheKey2-$cacheCode2.php";
+        // Note that if we get here, the first-time visitor will receive a session cookie,
+        // so he will no longer benefit from this himself ;-)
+            $GLOBALS['xarPage_cacheStorage']->saveFile($cacheKey, $cache_file2);
+        }
+
+        $modtime = time();
         xarPageCache_sendHeaders($modtime);
 
     }
 }
 
 /**
- * aliased depricated function
+ * Delete a page cache entry (unused)
  */
 function xarPageDelCached($cacheKey, $name)
 {
-    xarOutputDelCached($cacheKey, $name);
+    if (empty($GLOBALS['xarPage_cacheStorage'])) {
+        return;
+    }
+
+    $GLOBALS['xarPage_cacheStorage']->delCached($cacheKey);
 }
 
 /**
- * aliased depricated function
+ * Flush page cache entries
  */
 function xarPageFlushCached($cacheKey)
 {
-    xarOutputFlushCached($cacheKey);
+    if (empty($GLOBALS['xarPage_cacheStorage'])) {
+        return;
+    }
+
+    $GLOBALS['xarPage_cacheStorage']->flushCached($cacheKey);
 }
 
 /**
@@ -454,7 +471,7 @@ function xarPageCache_sendHeaders($modtime = 0)
            $xarPage_cacheTime;
 
     if (empty($modtime)) {
-    // CHECKME: this means 304 will never apply - is that what we want here ?
+    // CHECKME: this means 304 will never apply then - is that what we want here ?
         // default to current time
         $modtime = time();
     }
@@ -528,21 +545,26 @@ function xarPageCache_sessionLess()
         $cacheKey = 'static';
         $xarPage_cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
         $cache_file = "$xarOutput_cacheCollection/page/$cacheKey-$xarPage_cacheCode.php";
+    // Note: we stick to filesystem for session-less caching
         if (file_exists($cache_file) &&
             filesize($cache_file) > 0 &&
             ($xarPage_cacheTime == 0 ||
              filemtime($cache_file) > time() - $xarPage_cacheTime)) {
 
-            // this may already exit if we have a 304 Not Modified
             $modtime = filemtime($cache_file);
+            // this may already exit if we have a 304 Not Modified
             xarPageCache_sendHeaders($modtime);
 
-            // CHECKME: so we'll never log those 304 Not Modified's here at the moment !? :-)
+        // CHECKME: so we'll never log those 304 Not Modified's here at the moment !? :-)
             if (file_exists($xarOutput_cacheCollection.'/autocache.start')) {
                 xarPage_autoCacheLogStatus('HIT');
             }
 
-            xarPageGetCached($cacheKey);
+            // send the content of the cache file to the browser
+            @readfile($cache_file);
+        // FIXME: separate cache cleaning for session-less caching if necessary
+            //xarCache_CleanCached('Page');
+
             // we're done here !
             exit;
 
