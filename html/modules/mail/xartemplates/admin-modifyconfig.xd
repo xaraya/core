@@ -1,3 +1,4 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <script language="JavaScript">
 <!--
 	// Enter name of mandatory fields
@@ -254,7 +255,7 @@
 
 		<div style="clear: both; padding-top: 10px;">
 		<span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#xarML('Enter each string on a single line.  Do not separate with comma, etc.  Best use is %%string%% to ensure no conflict exists.')#"><label for="searchstrings"><xar:mlstring>Stings for search</xar:mlstring></label>:</span>
+			<span class="help" title="#xarML('Enter each string on a single line.  Do not separate with comma, etc.  Best use is %%string%% to ensure no conflict exists.')#"><label for="searchstrings"><xar:mlstring>Strings for search</xar:mlstring></label>:</span>
 		</span>
 		<span style="float: right; width: 78%; text-align: left;">
 			<textarea name="searchstrings" id="searchstrings" rows="10" cols="30" />#$searchstrings#</textarea> 
@@ -263,7 +264,7 @@
 
 		<div style="clear: both; padding-top: 10px;">
 		<span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#xarML('Enter each string on a single line in the same order as the search.  Do not separate with comma, etc.')#"><label for="replacestrings"><xar:mlstring>Stings for replacement</xar:mlstring></label>:</span>
+			<span class="help" title="#xarML('Enter each string on a single line in the same order as the search.  Do not separate with comma, etc.')#"><label for="replacestrings"><xar:mlstring>Strings for replacement</xar:mlstring></label>:</span>
 		</span>
 		<span style="float: right; width: 78%; text-align: left;">
 			<textarea name="replacestrings" id="replacestrings" rows="10" cols="40" />#$replacestrings#</textarea> 
