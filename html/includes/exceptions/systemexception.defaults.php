@@ -14,7 +14,7 @@
     $this->defaults = array(
         'ASSERT_FAILURE' => array(
             'title' => xarML('Assertion in code failed'),
-            'short' => xarML('A assertion evaluated to false, which indicates a coding error.'),
+            'short' => xarML('An assertion evaluated to false, which indicates a coding error.'),
             'long' => xarML('While executing, an asserted condition failed. This means that a definite error in some code exists.')),
         'BAD_PARAM' => array(
             'title' => xarML('Bad Parameter'),
@@ -27,7 +27,7 @@
         'CONFIG_ERROR' => array(
 	    'title' => xarML('Xaraya is not properly configured'),
             'short' => xarML('The combination of configuration settings has led to a conflict'),
-            'long'  => xarML('Xaraya is configured with some settings which lead to a conflicting situation. Some configuration settings cannot be used simultanously') ),	    
+            'long'  => xarML('Xaraya is configured with some settings which lead to a conflicting situation. Some configuration settings cannot be used simultaneously') ),	    
         'CONTEXT_NOT_EXIST' => array(
             'title' => xarML('Context does not exist'),
             'short' => xarML('A context element was not found.'),
@@ -185,7 +185,7 @@
         'NOT_IMPLEMENTED' => array(
             'title' => xarML('Not implemented'),
             'short' => xarML('The requested feature is not available.'),
-            'long' => xarML('An request was made to access a feature that is not available in this installation. The feature is either missing or unavailable in the current version of Xaraya.')),
+            'long' => xarML('A request was made to access a feature that is not available in this installation. The feature is either missing or unavailable in the current version of Xaraya.')),
         'SYSTEM_ERROR' => array(
             'title' => xarML('System error'),
             'short' => xarML('A system error was encountered.'),

@@ -17,7 +17,7 @@ function variable_validations_int (&$subject, $parameters, $supress_soft_exc) {
     $value = intval($subject);
 
     if ("$subject" != "$value") {
-        $msg = xarML('Not a Integer Type: "#(1)"', $subject);
+        $msg = xarML('Not an Integer Type: "#(1)"', $subject);
         if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
         return false;
     }

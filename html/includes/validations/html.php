@@ -35,7 +35,7 @@ function variable_validations_html (&$subject, $parameters, $supress_soft_exc) {
             } elseif (isset($match[2]) && $allowedTags[$tag] == XARVAR_ALLOW_NO_ATTRIBS && trim($match[2]) != '') {
                 // We should check for on* attributes
                 // Attributes should be restricted too, shouldnt they?
-                $msg = xarML('Attributes are not allowed fo this tag : "#(1)"', $tag);
+                $msg = xarML('Attributes are not allowed for this tag : "#(1)"', $tag);
                 if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
                 return false;
             }

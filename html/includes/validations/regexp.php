@@ -23,7 +23,7 @@ function variable_validations_regexp (&$subject, $parameters, $supress_soft_exc)
         return true;
     }
 
-    $msg = xarML('Variable "#(1)" didnt match pattern "#(2)"', $subject, $parameters[0]);
+    $msg = xarML('Variable "#(1)" did not match pattern "#(2)"', $subject, $parameters[0]);
     if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
     return false;
 }

@@ -566,7 +566,7 @@ function xarModGetInfo($modRegId, $type = 'module')
         // We couldn't get file info, fill in unknowns.
         // The exception for this is logged in getFileInfo
         $modFileInfo['class'] = xarML('Unknown');
-        $modFileInfo['description'] = xarML('This module isn\'t installed properly. Not all info could be retrieved');
+        $modFileInfo['description'] = xarML('This module is not installed properly. Not all info could be retrieved');
         $modFileInfo['category'] = xarML('Unknown');
         $modFileInfo['author'] = xarML('Unknown');
         $modFileInfo['contact'] = xarML('Unknown');
@@ -836,7 +836,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     if (!$found) {
         // if it's loaded but not found, then set the error message to that
         if (!$isLoaded || empty($msg)) {
-            $msg = xarML('Module function #(1) doesn\'t exist.', $modFunc);
+            $msg = xarML('Module function #(1) does not exist.', $modFunc);
         }
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
         return;
@@ -931,7 +931,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
     if (!$found) {
         if ($throwException) {
             if (!$isLoaded || empty($msg)) {
-                $msg = xarML('Module API function #(1) doesn\'t exist or couldn\'t be loaded.', $modAPIFunc);
+                $msg = xarML('Module API function #(1) does not exist or could not be loaded.', $modAPIFunc);
             }
 
             // MrB: When there is a parse error in the api file we sometimes end up
@@ -1485,7 +1485,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
                 if (file_exists($fileName)) {
                     $fd = fopen($fileName, 'r');
                     if (!$fd){
-                        $msg = xarML('Cannot open file (#1).', $fd);
+                        $msg = xarML('Can not open file (#1).', $fd);
                         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FILE_NOT_EXIST', new SystemException($msg));
                         return;
                     }
@@ -1636,14 +1636,14 @@ function xarMod_getBaseInfo($modName, $type = 'module')
             case 'module':
                 default:
 
-/*                $msg = xarML('Module #(1) doesn\'t exist.', $modName);
+/*                $msg = xarML('Module #(1) does not exist.', $modName);
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', new SystemException($msg));
 */                return;
 
                 break;
             case 'theme':
 /*
-                $msg = xarML('Theme #(1) doesn\'t exist.', $themeName);
+                $msg = xarML('Theme #(1) does not exist.', $themeName);
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'THEME_NOT_EXIST', new SystemException($msg));
 */                return;
 

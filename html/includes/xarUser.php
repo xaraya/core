@@ -344,7 +344,7 @@ function xarUserGetVar($name, $userId = NULL)
                                        array('uid' => $userId));
 
             if (empty($userRole) || $userRole['uid'] != $userId) {
-                $msg = xarML('User identified by uid #(1) doesn\'t exist.', $userId);
+                $msg = xarML('User identified by uid #(1) does not exist.', $userId);
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
@@ -365,7 +365,7 @@ function xarUserGetVar($name, $userId = NULL)
             // retrieve the user item
             $itemid = $GLOBALS['xarUser_objectRef']->getItem(array('itemid' => $userId));
             if (empty($itemid) || $itemid != $userId) {
-                $msg = xarML('User identified by uid #(1) doesn\'t exist.', $userId);
+                $msg = xarML('User identified by uid #(1) does not exist.', $userId);
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
@@ -504,7 +504,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
         // retrieve the user item
         $itemid = $GLOBALS['xarUser_objectRef']->getItem(array('itemid' => $userId));
         if (empty($itemid) || $itemid != $userId) {
-            $msg = xarML('User identified by uid #(1) doesn\'t exist.', $userId);
+            $msg = xarML('User identified by uid #(1) does not exist.', $userId);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
