@@ -51,6 +51,9 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
         $this->Dynamic_Property($args);
 
         // Handle user options if supplied.
+        if (!isset($this->options)) {
+            $this->options = array();
+        }
 
         if (!empty($this->validation)) {
             foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {
