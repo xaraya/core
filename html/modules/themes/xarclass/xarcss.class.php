@@ -11,13 +11,6 @@
  * @author Andy Varganov <andyv@xaraya.com>
  */
 
-/**
- * Base CSS class
- *
- *
- * @package themes
- */
-
 define("CSSRELSTYLESHEET", "stylesheet");
 define("CSSRELALTSTYLESHEET", "alternate stylesheet");
 define("CSSTYPETEXT", "text/css");
@@ -32,6 +25,12 @@ define("CSSMEDIABRAILLE", "braille");
 define("CSSMEDIAHANDHELD", "handheld");
 define("CSSMEDIAPROJECTION", "projection");
 
+/**
+ * Base CSS class
+ *
+ *
+ * @package themes
+ */
 class xarCSS
 {
     // class vars and their defaults

@@ -95,25 +95,25 @@ div#xc-center {
 }
 
 div#xc-header {
-	position: relative;
-	z-index: 13;
-	height: 90px;
-	margin: 0 25px 5px 25px;
-	background-color: transparent;
-	background-image: url(../images/xc_logo.png);
-	background-repeat: repeat-x;
-	background-position: 0px -90px;
+    position: relative;
+    z-index: 13;
+    height: 90px;
+    margin: 0 25px 5px 25px;
+    background-color: transparent;
+    background-image: url(../images/xc_logo.png);
+    background-repeat: repeat-x;
+    background-position: 0px -90px;
 }
 
 div#xc-header-rightbevel {
-	float: right;
-	width: 25px;
-	height: 90px;
-	margin-right:-25px;
-	background-color: transparent;
-	background-image: url(../images/xc_logo.png);
-	background-repeat: no-repeat;
-	background-position: 100% 0%;
+    float: right;
+    width: 25px;
+    height: 90px;
+    margin-right:-25px;
+    background-color: transparent;
+    background-image: url(../images/xc_logo.png);
+    background-repeat: no-repeat;
+    background-position: 100% 0%;
 }
 
 div#xc-header h1,
