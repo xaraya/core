@@ -8,7 +8,10 @@
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>, Michel Dalle
+ * @author Jim McDonald
+ * @author Marco Canini <m.canini@libero.it>
+ * @author Michel Dalle
+ * @author Marcel van der Boom <marcel@xaraya.com>
  */
 
 /**
@@ -403,6 +406,8 @@ function xarSession__phpRead($sessionId)
 
     $sessioninfoTable = $xartable['session_info'];
 
+    // FIXME: in session2 the uid is not used anymore, can we safely migrate this 
+    //        out? At least the roles/privileges modules are using it actively
     $query = "SELECT xar_uid,
                      xar_ipaddr,
                      xar_vars
@@ -515,8 +520,11 @@ function xarSession__phpGC($maxlifetime)
 }
 
 /**
- * Use the sessions from befor php 4.2?
+ * Use the sessions from before php 4.2?
  *
+ * @author Marcel van der Boom <marcel@xaraya.com>
+ * @link http://www.php.net/manual/en/ref.session.php
+ * @return bool 
  */
 function xarSession__UseOldSessions() {
     return (phpversion() < "4.2.0");
