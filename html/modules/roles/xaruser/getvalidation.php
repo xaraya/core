@@ -120,11 +120,11 @@ function roles_user_getvalidation()
 
                 $adminname = xarModGetVar('mail', 'adminname');
                 $adminemail = xarModGetVar('mail', 'adminmail');
-                $message = "".xarML('A new user has registered.  Here are the details')." \n\n";
+                $message = "".xarML('A new user has registered or changed their email address.  Here are the details')." \n\n";
                 $message .= "".xarML('Username')." = $status[name]\n";
                 $message .= "".xarML('Email Address')." = $status[email]";
 
-                $messagetitle = "".xarML('A New User Has Registered')."";
+                $messagetitle = "".xarML('A user has registered or updated information')."";
 
                 if (!xarModAPIFunc('mail',
                                    'admin',
