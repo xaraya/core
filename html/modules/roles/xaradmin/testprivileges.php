@@ -33,7 +33,7 @@ function roles_admin_testprivileges()
     // Call the Masks class
     $masks = new xarMasks(); 
     // we want to do test
-    if (isset($test)) {
+    if (!empty($test)) {
         // get the mask to test against
         $mask = $masks->getMask($name);
         $component = $mask->getComponent(); 
