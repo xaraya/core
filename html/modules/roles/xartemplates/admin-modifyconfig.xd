@@ -53,13 +53,26 @@
             <xar:if condition="$tab eq 'hooks'">
                 <dd class="active">
                     <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'hooks'))#">
-                        <xar:mlstring>Hooks</xar:mlstring>
+                        <xar:mlstring>User Hooks</xar:mlstring>
                     </a>
                 </dd>    
             <xar:else />
                 <dd>
                     <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'hooks'))#">    
-                        <xar:mlstring>Hooks</xar:mlstring>
+                        <xar:mlstring>User Hooks</xar:mlstring>
+                    </a>
+                </dd>    
+            </xar:if>
+            <xar:if condition="$tab eq 'grouphooks'">
+                <dd class="active">
+                    <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'grouphooks'))#">
+                        <xar:mlstring>Group Hooks</xar:mlstring>
+                    </a>
+                </dd>    
+            <xar:else />
+                <dd>
+                    <a href="#xarModURL('roles', 'admin', 'modifyconfig', array('tab' => 'grouphooks'))#">    
+                        <xar:mlstring>Group Hooks</xar:mlstring>
                     </a>
                 </dd>    
             </xar:if>
@@ -318,7 +331,7 @@
             </form>
         </xar:if>
 
-<xar:comment> ----------------- Begin Hooks Options ------------------- </xar:comment>
+<xar:comment> ----------------- Begin User Hooks Options ------------------- </xar:comment>
     <xar:elseif condition="$tab eq 'hooks'" />
         <xar:if condition="!empty($hooks)">
             <h4><xar:mlstring>Configuration of Hooked Modules</xar:mlstring></h4>
@@ -334,7 +347,26 @@
                 <input type="submit" value="#$updatelabel#"  />
             </form>
         <xar:else />
-            <xar:mlstring>No modules are hooked to this one</xar:mlstring>:
+            <xar:mlstring>No modules are hooked to this one</xar:mlstring>
+        </xar:if>                
+
+<xar:comment> ----------------- Begin Group Hooks Options ------------------- </xar:comment>
+    <xar:elseif condition="$tab eq 'grouphooks'" />
+        <xar:if condition="!empty($hooks)">
+            <h4><xar:mlstring>Configuration of Hooked Modules</xar:mlstring></h4>
+            <form method="post" action="#xarModURL('roles', 'admin', 'modifyconfig')#" enctype="application/x-www-form-urlencoded">
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="phase" id="phase" value="update" />
+                <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                <xar:mlstring>Default hooks for group roles</xar:mlstring>:
+                <xar:foreach in="$hooks" key="$hookmodule">
+                    #$hooks[$hookmodule]#
+                </xar:foreach>
+                <br /><br />
+                <input type="submit" value="#$updatelabel#"  />
+            </form>
+        <xar:else />
+            <xar:mlstring>No modules are hooked to this one</xar:mlstring>
         </xar:if>                
 
 <xar:comment> ----------------- Begin Member List Options ------------------- </xar:comment>

@@ -99,9 +99,22 @@ function roles_admin_modifyconfig()
             $data['authid'] = xarSecGenAuthKey();
             $data['updatelabel'] = xarML('Update Roles Configuration');
 
-            // Item type 0 is the default itemtype for 'user' roles.
-            $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
-                array('module' => 'roles', 'itemtype' => 0));
+            switch ($data['tab']) {
+                case 'hooks':
+                    // Item type 0 is the default itemtype for 'user' roles.
+                    $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
+                                             array('module' => 'roles',
+                                                   'itemtype' => 0));
+                    break;
+                case 'grouphooks':
+                    // Item type 1 is the (current) itemtype for 'group' roles.
+                    $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
+                                             array('module' => 'roles',
+                                                   'itemtype' => 1));
+                    break;
+                default:
+                    break;
+            }
 
             if (empty($hooks)) {
                 $hooks = array();
@@ -165,6 +178,16 @@ function roles_admin_modifyconfig()
                     xarModSetVar('roles', 'disallowedips', $disallowedips);
                     break;
                 case 'hooks':
+                    // Role type 'user' (itemtype 0).
+                    xarModCallHooks('module', 'updateconfig', 'roles',
+                                    array('module' => 'roles',
+                                          'itemtype' => 0));
+                    break;
+                case 'grouphooks':
+                    // Role type 'group' (itemtype 1).
+                    xarModCallHooks('module', 'updateconfig', 'roles',
+                                    array('module' => 'roles',
+                                          'itemtype' => 1));
                     break;
                 case 'memberlist':
                     if (!xarVarFetch('searchbyemail', 'checkbox', $searchbyemail, false, XARVAR_NOT_REQUIRED)) return;
@@ -175,11 +198,6 @@ function roles_admin_modifyconfig()
 //            if (!xarVarFetch('allowinvisible', 'checkbox', $allowinvisible, false, XARVAR_NOT_REQUIRED)) return;
             // Update module variables
 //            xarModSetVar('roles', 'allowinvisible', $allowinvisible);
-
-
-            // Role type 'user' (itemtype 0).
-            xarModCallHooks('module', 'updateconfig', 'roles',
-                array('module' => 'roles', 'itemtype' => 0));
 
             xarResponseRedirect(xarModURL('roles', 'admin', 'modifyconfig',array('tab' => $data['tab'])));
             // Return
