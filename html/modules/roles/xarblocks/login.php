@@ -69,7 +69,7 @@ function roles_loginblock_display($blockinfo)
     } else {
         // URL of this page
         // TODO: check this - it doesn't look quite right.
-        $args['return_url'] = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL());
+        $args['return_url'] = xarServerGetCurrentURL();
     }
 
     // Used in the templates.

@@ -103,11 +103,9 @@ function adminpanels_adminmenublock_display($blockinfo)
     $logoutlabel = xarVarPrepForDisplay(xarML('Admin Logout'));
     $logouturl = xarModURL('adminpanels' ,'admin', 'confirmlogout', array());
 
-    // Get current URL for later comparisons
-    // because we need to compare xhtml compliant url, we replace '&' instances with '&amp;'
-    // TODO: fix this. The &amp; should only be an issue when rendering a URL in a web page,
-    // i.e. within a template. We shouldn't be handling it internally here.
-    $currenturl = str_replace('&', '&amp;', xarServerGetCurrentURL());
+    // Get current URL for later comparisons because we need to compare
+    // xhtml compliant url, we fetch the default 'XML'-formatted URL.
+    $currenturl = xarServerGetCurrentURL();
 
     // TODO: why isn't the menustyle part of the block admin?
     // Set up like it is, means we are forced to use global menu
@@ -325,8 +323,7 @@ function adminpanels_adminmenublock_display($blockinfo)
                     'adminmods'     => $adminmods = array(),
                     'indlinks'      => $indlinks ='',
                     'menustyle'     => $menustyle,
-                    // TODO: use xarModURL()
-                    'logouturl'     => $logouturl ='index.php?module=adminpanels&amp;type=admin&amp;func=modifyconfig',
+                    'logouturl'     => $logouturl = xarModURL('adminpanels', 'admin', 'modifyconfig'),
                     'logoutlabel'   => $logoutlabel ='not implemented',
                     'marker'        => $marker
                 );
@@ -347,8 +344,7 @@ function adminpanels_adminmenublock_display($blockinfo)
                     'adminmods'     => $adminmods = array(),
                     'indlinks'      => $indlinks ='',
                     'menustyle'     => $menustyle,
-                    // TODO: use xarModURL()
-                    'logouturl'     => $logouturl = 'index.php?module=adminpanels&amp;type=admin&amp;func=modifyconfig',
+                    'logouturl'     => $logouturl = xarModURL('adminpanels', 'admin', 'modifyconfig'),
                     'logoutlabel'   => $logoutlabel = xarML('not implemented'),
                     'marker'        => $marker
                 );

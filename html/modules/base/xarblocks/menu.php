@@ -110,8 +110,8 @@ function base_menublock_display($blockinfo)
     $loggedin = xarUserIsLoggedIn();
 
     // Get current URL
-    $truecurrenturl = xarServerGetCurrentURL();
-    $currenturl = str_replace('&', '&amp;', $truecurrenturl);
+    $truecurrenturl = xarServerGetCurrentURL(array(), false);
+    $currenturl = xarServerGetCurrentURL();
 
     // Added Content For non-modules list.
     if (!empty($vars['content'])) {
@@ -189,6 +189,11 @@ function base_menublock_display($blockinfo)
                         $url = xarModUrl('articles', 'user', 'view', array('catid' => $url[0]));
                         break;
                     }
+                    default : // standard URL
+                        // BUG 2023: Make sure manual URLs are prepped for XML, consistent with xarModURL()
+                        if (!empty($GLOBALS['xarMod_generateXMLURLs'])) {
+                            $url = xarVarPrepForDisplay($url);
+                        }
                 }
             }
             $title = $parts[1];
@@ -315,9 +320,8 @@ function base_menublock_display($blockinfo)
         $showlogout = true;
     }
 
-    //$meta['activepage'] = preg_replace('/&[^amp;]/', '&amp;', xarServerGetCurrentURL());
-    $rssurl         = str_replace('&', '&amp;', xarServerGetCurrentURL(array('theme' => 'rss')));
-    $printurl       = str_replace('&', '&amp;', xarServerGetCurrentURL(array('theme' => 'print')));
+    $rssurl         = xarServerGetCurrentURL(array('theme' => 'rss'));
+    $printurl       = xarServerGetCurrentURL(array('theme' => 'print'));
 
     if (isset($vars['displayprint'])) {
         $displayprint = $vars['displayprint'];
@@ -431,7 +435,6 @@ function base_menublock_insert($blockinfo)
         foreach ($linkname as $v) {
             if (!isset($linkdelete[$c])) {
                 // FIXME: MrB, i added the @ to avoid testing whether all fields contains something useful
-                // JJ: xarVarFetch() should be able to provide defaults for us.
                 @$content[] = "$linkurl[$c]|$linkname[$c]|$linkdesc[$c]|$linkchild[$c]";
             }
             if (!empty($linkinsert[$c])) {

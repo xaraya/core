@@ -99,10 +99,9 @@ function themes_metablock_display($blockinfo)
     $meta['longitude'] = $vars['longitude'];
     $meta['latitude'] = $vars['latitude'];
     // Active Page
-    //$meta['activepage'] = preg_replace('/&[^amp;]/', '&amp;', xarServerGetCurrentURL());
-    $meta['activepagerss'] = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'rss')));
-    $meta['activepageatom'] = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'atom')));
-    $meta['activepageprint'] = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'print')));
+    $meta['activepagerss'] = xarServerGetCurrentURL(array('theme' => 'rss'));
+    $meta['activepageatom'] = xarServerGetCurrentURL(array('theme' => 'atom'));
+    $meta['activepageprint'] = xarServerGetCurrentURL(array('theme' => 'print'));
 
     $meta['baseurl'] = xarServerGetBaseUrl();
     if (isset($vars['copyrightpage'])){

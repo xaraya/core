@@ -218,11 +218,12 @@ function xarServerGetBaseURL()
  *
  * @access public
  * @param args array additional parameters to be added to/replaced in the URL (e.g. theme, ...)
+ * @param generateXMLURL boolean over-ride Server default setting for generating XML URLs (true/false/NULL)
+ * @param target string add a 'target' component to the URL
  * @return string current URL
  * @todo cfr. BaseURI() for other possible ways, or try PHP_SELF
- * @todo two extra params: disable XML encoding flag and #-anchor support
  */
-function xarServerGetCurrentURL($args = array())
+function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL)
 {
     $server = xarServerGetHost();
     $protocol = xarServerGetProtocol();
@@ -285,7 +286,17 @@ function xarServerGetCurrentURL($args = array())
         $request = substr($request, 0, -1);
     }
 
-    if ($GLOBALS['xarServer_generateXMLURLs']) {$request = htmlspecialchars($request);}
+    if (!isset($generateXMLURL)) {
+        $generateXMLURL = $GLOBALS['xarServer_generateXMLURLs'];
+    }
+
+    if (isset($target)) {
+        $request .= '#' . urlencode($target);
+    }
+
+    if ($generateXMLURL) {
+        $request = htmlspecialchars($request);
+    }
 
     return $baseurl . $request;
 }
