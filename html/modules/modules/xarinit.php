@@ -28,11 +28,11 @@ function modules_init()
     $sitePrefix   = xarDBGetSiteTablePrefix();
     $systemPrefix = xarDBGetSystemTablePrefix();
 
-    $tables['modules']       = $systemPrefix . '_modules';
-    $tables['module_states'] = $sitePrefix . '_module_states';
-    $tables['module_vars']   = $sitePrefix . '_module_vars';
-    $tables['module_uservars'] = $sitePrefix . '_module_uservars';
-    $tables['hooks']         = $sitePrefix . '_hooks';
+    $tables['modules']          = $systemPrefix . '_modules';
+    $tables['module_states']    = $sitePrefix   . '_module_states';
+    $tables['module_vars']      = $sitePrefix   . '_module_vars';
+    $tables['module_uservars']  = $sitePrefix   . '_module_uservars';
+    $tables['hooks']            = $sitePrefix   . '_hooks';
     // Create tables
     /*********************************************************************
      * Here we create all the tables for the module system
@@ -169,7 +169,53 @@ function modules_init()
 
     $result =& $dbconn->Execute($query);
     if(!$result) return;
-
+    
+    // Add module variables for default user/admin, used in modules list
+    /********************************************************************
+    * at this stage of installer mod vars cannot be set, so we use DB calls
+    * <andyv> prolly need to move this close to installer, not sure yet
+    *********************************************************************/
+    // default show-hide core modules
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
+    VALUES (1,'modules','hidecore',0)";
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
+    // default regenerate command
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
+    VALUES (2,'modules','regen',0)";
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
+    // default style of module list
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
+    VALUES (3,'modules','selstyle','plain')";
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
+    // default filtering based on module states
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
+    VALUES (4,'modules','selfilter', 0)";
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
+    // default list sorting order
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
+    VALUES (5,'modules','selsort','nameasc')";
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
+    // default show-hide module statistics
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
+    VALUES (6,'modules','hidestats',0)";
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
+    // default maximum number of modules listing per page
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
+    VALUES (7,'modules','selmax','all')";
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
+    // default start page
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
+    VALUES (8,'modules','startpage','overview')";
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
+    
     // Initialisation successful
     return true;
 }
@@ -179,6 +225,7 @@ function modules_init()
  *
  * @param oldversion the old version to upgrade from
  * @returns bool
+ * @todo include setting moduservars in next upgrade (2.1)
  */
 function modules_upgrade($oldversion)
 {
