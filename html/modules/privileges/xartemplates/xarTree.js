@@ -1,8 +1,8 @@
 var xarTree_config = {
     persistance   : true,                                // Toogle cookie-based persistence
     images        : true,                                // Toggle list-style-image support
-    img_collapsed : "modules/security/xarimages/k3.gif", // URI for collapsed tree subhead
-    img_expanded  : "modules/security/xarimages/k2.gif", // URI for expanded tree subhead
+    img_collapsed : "modules/privileges/xarimages/k3.gif", // URI for collapsed tree subhead
+    img_expanded  : "modules/privileges/xarimages/k2.gif", // URI for expanded tree subhead
     attr          : "showhide",                          // Attribute used for display tracking
     ignore        : "ignore",                            // Attribute used to ignore tree nodes when saving/loading
     is            : new xarTree_browsersniffer(),        // Browser sniffer object
@@ -13,12 +13,12 @@ var xarTree_config = {
 
 function xarTree_init() {
 	if (!xarTree_config.is.dom || xarTree_config.is.mac) return;
-		var trees = document.getElementsByName('PermissionsTree');
+		var trees = document.getElementsByName('PrivilegesTree');
 		var i=0;
 		while( i < trees.length ) {
 			if (xarTree_config.is.norm) trees[i].normalize();
 			xarTree_buildTree(trees[i]);
-			var treeID = 'PermissionsTree' & i;
+			var treeID = 'PrivilegesTree' & i;
 //			if (xarTree_config.persistance) xarTree_open(treeID);
 			i++
 		}

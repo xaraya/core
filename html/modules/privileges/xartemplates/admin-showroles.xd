@@ -1,15 +1,15 @@
-<script type="text/javascript" src="modules/security/xartemplates/xarTree.js">
+<script type="text/javascript" src="modules/privileges/xartemplates/xarTree.js">
 </script>
 <script language="JavaScript">
  var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
  function doOnLoad() {
       oldOnLoadFunction();      
-      xarTree_init('PermissionsTree');
+      xarTree_init('PrivilegesTree');
       }
  var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
  function doOnUnload() {
       oldOnUnloadFunction();      
-      xarTree_init('PermissionsTree');
+      xarTree_init('PrivilegesTree');
       }
  
  window.onload = doOnLoad;
@@ -19,17 +19,17 @@
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
-            <xar:mlstring>Assignments of Permission</xar:mlstring>
+            <xar:mlstring>Assignments of Privilege</xar:mlstring>
             '&xar-var-pname;'
         </th>
     </tr>
 </table>
 
 <table border="0" width="100%" cellpadding="2">
-	<xar:if condition="count($participants) eq 0">
+	<xar:if condition="count($roles) eq 0">
 		<tr>
 			<td colspan="3">
-				<xar:mlstring>This permission is not assigned to any user or group.</xar:mlstring>            
+				<xar:mlstring>This privilege is not assigned to any user or group.</xar:mlstring>            
 			</td>
 		</tr>
 	<xar:else />
@@ -44,7 +44,7 @@
 				&nbsp;            
 			</td>
 		</tr>
-		<xar:loop name="$participants">
+		<xar:loop name="$roles">
 			<tr>
 				<td width="150">
 					<xar:if condition="$type eq 0">
@@ -58,7 +58,7 @@
 				</td>
 			<td align="right">
 				<a href="&xar-var-removeurl;&partid=&xar-var-partid;"
-				title="Remove this Permission assignment">				
+				title="Remove this Privilege assignment">				
 					Remove    
 				</a>
 			</td>
@@ -71,15 +71,15 @@
 <table border="0" width="100%">
 	<tr>
 		<th align="center">
-			<xar:mlstring>Current Permissions</xar:mlstring>
+			<xar:mlstring>Current Privileges</xar:mlstring>
 		</th>
 	</tr>
 </table>
 <table border="0" cellspacing="5" width="100%">
 	<tr>
 		<td>
-			<a href="&xar-modurl-security-admin-newpermission;">
-				<xar:mlstring>Add Permission</xar:mlstring>
+			<a href="&xar-modurl-privileges-admin-newprivilege;">
+				<xar:mlstring>Add Privilege</xar:mlstring>
 			</a>
 		</td>
 	</tr>

@@ -2,7 +2,7 @@
 /**
  * File: $Id$
  *
- * Purpose of file:  Security administration API
+ * Purpose of file:  Privileges administration API
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
@@ -13,29 +13,29 @@
 */
 
 /**
- * xarSchemas: class for the schema repository
+ * xarMasks: class for the mask repository
  *
- * Represents the repository containing all security schemas
+ * Represents the repository containing all security masks
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @throws  none
  * @todo    none
 */
-class xarSchemas
+class xarMasks
 {
 	var $dbconn;
-	var $permissionstable;
-	var $permmemberstable;
-	var $schemastable;
+	var $privilegestable;
+	var $privmemberstable;
+	var $maskstable;
 	var $modulestable;
 	var $realmstable;
 	var $acltable;
-	var $allschemas;
+	var $allmasks;
 	var $levels;
 
 /**
- * xarSchemas: constructor for the class
+ * xarMasks: constructor for the class
  *
  * Just sets up the db connection and initializes some variables
  * This should really be a static class
@@ -43,16 +43,16 @@ class xarSchemas
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param	none
- * @return  the schemas object
+ * @return  the masks object
  * @throws  none
  * @todo    none
 */
-	function xarSchemas() {
+	function xarMasks() {
 		list($this->dbconn) = xarDBGetConn();
 		$xartable = xarDBGetTables();
-		$this->permissionstable = $xartable['permissions'];
-		$this->permmemberstable = $xartable['permmembers'];
-		$this->schemastable = $xartable['schemas'];
+		$this->privilegestable = $xartable['privileges'];
+		$this->privmemberstable = $xartable['privmembers'];
+		$this->maskstable = $xartable['masks'];
 		$this->modulestable = $xartable['modules'];
 		$this->realmstable = $xartable['realms'];
 		$this->acltable = $xartable['acl'];
@@ -70,42 +70,42 @@ class xarSchemas
 	}
 
 /**
- * getschemas: returns all the current schemas.
+ * getmasks: returns all the current masks.
  *
- * Returns an array of all the schemas in the schemas repository
- * The repository contains an entry for each schema.
- * This function will initially load the schemas from the db into an array and return it.
+ * Returns an array of all the masks in the masks repository
+ * The repository contains an entry for each mask.
+ * This function will initially load the masks from the db into an array and return it.
  * On subsequent calls it just returns the array .
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   none
- * @return  array of schemas
+ * @return  array of masks
  * @throws  list of exception identifiers which can be thrown
  * @todo    list of things which must be done to comply to relevant RFC
 */
-    function getschemas($module = 'All') {
+    function getmasks($module = 'All') {
 
-	if ((!isset($allschemas)) || count($allschemas)==0) {
+	if ((!isset($allmasks)) || count($allmasks)==0) {
 			if ($module == '' || $module == 'All') {
-				$query = "SELECT * FROM $this->schemastable";
+				$query = "SELECT * FROM $this->maskstable";
 			}
 			else {
 				$query = "SELECT *
-						FROM $this->schemastable WHERE xar_module = '$module'
+						FROM $this->maskstable WHERE xar_module = '$module'
 						ORDER BY xar_name";
 			}
 
 			$result = $this->dbconn->Execute($query);
 			if (!$result) return;
 
-			$schemas = array();
+			$masks = array();
 			$ind = 0;
 			while(!$result->EOF) {
 				list($sid, $name, $realm, $module, $component, $instance, $level,
 						$description) = $result->fields;
 				$ind = $ind + 1;
-				$schemas[$ind] = array('sid' => $sid,
+				$masks[$ind] = array('sid' => $sid,
 								   'name' => $name,
 								   'realm' => $realm,
 								   'module' => $module,
@@ -115,58 +115,58 @@ class xarSchemas
 								   'description' => $description);
 				$result->MoveNext();
 			}
-			$allschemas = $schemas;
-			return $schemas;
+			$allmasks = $masks;
+			return $masks;
 		}
 		else {
-			return $allschemas;
+			return $allmasks;
 		}
     }
 
 /**
- * register: register a schema
+ * register: register a mask
  *
- * Creates a schema entry in the schemas table
+ * Creates a mask entry in the masks table
  * This function should be invoked every time a new instance is created
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   schema
+ * @param   mask
  * @return  boolean
  * @throws  none
  * @todo    none
 */
-/*	function register($schema)
+/*	function register($mask)
 	{
-		$query = "INSERT INTO xar_schemas VALUES ($schema->getID(),
+		$query = "INSERT INTO xar_masks VALUES ($mask->getID(),
 												'',
-												'$schema->getRealm()',
-												'$schema->getModule()',
-												'$schema->getComponent()',
-												'$schema->getInstance()',
-												$schema->getLevel(),
-												'$schema->getDescription()')";
+												'$mask->getRealm()',
+												'$mask->getModule()',
+												'$mask->getComponent()',
+												'$mask->getInstance()',
+												$mask->getLevel(),
+												'$mask->getDescription()')";
 		if (!$this->dbconn->Execute($query)) return;
 		return true;
 	}
 */
 
 /**
- * register: register a schema
+ * register: register a mask
  *
- * Creates a schema entry in the schemas table
+ * Creates a mask entry in the masks table
  * This function should be invoked every time a new instance is created
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   array of schema values
+ * @param   array of mask values
  * @return  boolean
  * @throws  none
  * @todo    none
 */
 	function register($name,$realm,$module,$component,$instance,$level,$description='')
 	{
-		$nextID = $this->dbconn->genID($this->schemastable);
+		$nextID = $this->dbconn->genID($this->maskstable);
 		$nextIDprep = xarVarPrepForStore($nextID);
 		$nameprep = xarVarPrepForStore($name);
 		$realmprep = xarVarPrepForStore($realm);
@@ -175,7 +175,7 @@ class xarSchemas
 		$instanceprep = xarVarPrepForStore($instance);
 		$levelprep = xarVarPrepForStore($level);
 		$descriptionprep = xarVarPrepForStore($description);
-		$query = "INSERT INTO $this->schemastable VALUES ($nextIDprep,
+		$query = "INSERT INTO $this->maskstable VALUES ($nextIDprep,
 												'$nameprep',
 												'$realmprep',
 												'$moduleprep',
@@ -188,36 +188,36 @@ class xarSchemas
 	}
 
 /**
- * unregister: unregister a schema
+ * unregister: unregister a mask
  *
- * Removes a schema entry from the schemas table
+ * Removes a mask entry from the masks table
  * This function should be invoked every time an instance is removed
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   string representing a schema name
+ * @param   string representing a mask name
  * @return  boolean
  * @throws  none
  * @todo    none
 */
 	function unregister($name)
 	{
-		$query = "DELETE FROM $this->schemastable WHERE xar_name = '$name'";
+		$query = "DELETE FROM $this->maskstable WHERE xar_name = '$name'";
 		if (!$this->dbconn->Execute($query)) return;
 		return true;
 	}
 
 /**
- * winnow: merges two arrays of permissions to a single array of permissions
+ * winnow: merges two arrays of privileges to a single array of privileges
  *
- * The permissions are compared for implication and the less mighty are discarded
- * This is the way permissions hierarchies are contracted.
+ * The privileges are compared for implication and the less mighty are discarded
+ * This is the way privileges hierarchies are contracted.
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   array of permissions objects
- * @param   array of permissions objects
- * @return  array of permissions objects
+ * @param   array of privileges objects
+ * @param   array of privileges objects
+ * @return  array of privileges objects
  * @throws  none
  * @todo    create exceptions for bad input
 */
@@ -254,17 +254,17 @@ class xarSchemas
 	}
 
 /**
- * trump: merges two arrays of permissions to a single array of permissions
+ * trump: merges two arrays of privileges to a single array of privileges
  *
- * The permissions are compared for implication and the less recent are discarded.
+ * The privileges are compared for implication and the less recent are discarded.
  * The less recent are assumed to be in the first array
- * This is the way permissions hierarchies in participant hierarchies are contracted.
+ * This is the way privileges hierarchies in role hierarchies are contracted.
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   array of permissions objects
- * @param   array of permissions objects
- * @return  array of permissions objects
+ * @param   array of privileges objects
+ * @param   array of privileges objects
+ * @return  array of privileges objects
  * @throws  none
  * @todo    create exceptions for bad input
 */
@@ -293,10 +293,10 @@ class xarSchemas
 	}
 
 /**
- * challenge: challenge a participant against a component
+ * challenge: challenge a role against a component
  *
- * Checks the current group or user's permissions against a component
- * This function should be invoked every time a a permissions check needs to be done
+ * Checks the current group or user's privileges against a component
+ * This function should be invoked every time a a privileges check needs to be done
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -306,33 +306,34 @@ class xarSchemas
  * @todo    none
 */
 
-	function challenge($schemaname,$participant='')
+	function challenge($maskname,$role='')
 	{
-//	return $this->getSchema($schemaname);
+//	return $this->getMask($maskname);
 
-// get the Participants class
-		include_once 'modules/participants/xarparticipants.php';
-    	$parts = new xarParticipants();
+// get the Roles class
+		include_once 'modules/roles/xarroles.php';
+    	$roles = new xarRoles();
 
 // get the uid of the current user
-		define('_XARSEC_UNREGISTERED', '8');
+//		define('_XARSEC_UNREGISTERED', '8');
 		if (empty($userID)) {
 			$userID = xarSessionGetVar('uid');
 			if (empty($userId)) {
-				$userID = _XARSEC_UNREGISTERED;
+//				$userID = _XARSEC_UNREGISTERED;
+				$userID = 8;
 			}
 		}
 
-// an empty participant means take the current user
-		if ($participant == '') $participant = $parts->getParticipant($userID);
+// an empty role means take the current user
+		if ($role == '') $role = $roles->getRole($userID);
 
-// get the inherited ancestors of the participant
-		$ancestors = $participant->getAncestors();
+// get the inherited ancestors of the role
+		$ancestors = $role->getAncestors();
 
-// set up an array to hold the permissions
+// set up an array to hold the privileges
 		$irreducibleset = array();
 
-// if there are ancestors, look for their permissions
+// if there are ancestors, look for their privileges
 		if (count($ancestors) >0) {
 
 // need to process the last ones first
@@ -347,52 +348,52 @@ class xarSchemas
 // begin processing an ancestor
 			foreach ($ancestors as $ancestor) {
 
-// get the ancestors assigned permissions
-				$perms = $ancestor->getAssignedPermissions();
-				$permissions = array();
-// for each one winnow the  assigned permissions and then the inherited
+// get the ancestors assigned privileges
+				$perms = $ancestor->getAssignedPrivileges();
+				$privileges = array();
+// for each one winnow the  assigned privileges and then the inherited
 				foreach ($perms as $perm) {
-					$permissions = $this->winnow(array($perm),$permissions);
-					$permissions = $this->winnow($perm->getDescendants(),$permissions);
+					$privileges = $this->winnow(array($perm),$privileges);
+					$privileges = $this->winnow($perm->getDescendants(),$privileges);
 				}
 
 // add some info on the group they belong to and stick it all in an array
 				$groupname = $ancestor->getName();
 				$grouplevel = $ancestor->getLevel();
-				array_push($final,array('permissions'=>$permissions,
+				array_push($final,array('privileges'=>$privileges,
 									'name'=>$groupname,
 									'level'=>$grouplevel));
 			}
 
-// winnow all permissions of a given level above the participant
+// winnow all privileges of a given level above the role
 				foreach ($final as $step) {
 				if ($step['level']) {
-					$irreducibleset = $this->winnow($irreducibleset,$step['permissions']);
+					$irreducibleset = $this->winnow($irreducibleset,$step['privileges']);
 				}
 
-// or trump the previous permissions with those of a lower level
+// or trump the previous privileges with those of a lower level
 // TODO: this is a bug.Probably should winnow the lowerlevel and THEN trump against
 // the higher level
 				else {
-					$irreducibleset = $this->trump($irreducibleset,$step['permissions']);
+					$irreducibleset = $this->trump($irreducibleset,$step['privileges']);
 					$top = $step['level'];
 				}
 			}
 		}
 
-// get the assigned permissions and winnow them
-		$participantpermissions = $participant->getAssignedPermissions();
-		$partpermissions = $this->winnow($participantpermissions,$participantpermissions);
+// get the assigned privileges and winnow them
+		$roleprivileges = $role->getAssignedPrivileges();
+		$roleprivileges = $this->winnow($roleprivileges,$roleprivileges);
 
-// trump them against the accumulated permissions from higher levels
-		$irreducibleset = $this->trump($irreducibleset,$participantpermissions);
+// trump them against the accumulated privileges from higher levels
+		$irreducibleset = $this->trump($irreducibleset,$roleprivileges);
 
-// check against the schema
+// check against the mask
 		$pass = false;
 		foreach ($irreducibleset as $chiave) {
-			if ($chiave->implies($this->getSchema($schemaname))) {
+			if ($chiave->implies($this->getMask($maskname))) {
 
-// found a permission that admits: return the permission
+// found a privilege that admits: return the privilege
 			return $chiave;
 			}
 		}
@@ -401,33 +402,33 @@ class xarSchemas
 	}
 
 /**
- * getSchema: gets a single schema
+ * getMask: gets a single mask
  *
- * Retrieves a single schema from the Schemas repository
+ * Retrieves a single mask from the Masks repository
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string
- * @return  schema object
+ * @return  mask object
  * @throws  none
  * @todo    none
 */
-	function getSchema($name)
+	function getMask($name)
 	{
-//Set up the query and get the data from the xarschemas table
-		$query = "SELECT * FROM $this->schemastable
-					WHERE xar_schemas.xar_name= '$name'";
+//Set up the query and get the data from the xarmasks table
+		$query = "SELECT * FROM $this->maskstable
+					WHERE xar_masks.xar_name= '$name'";
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
 
 		if (count($result->fields) == 0) {
-			$msg = xarML('Unknown schema name: ') . $name;
+			$msg = xarML('Unknown mask name: ') . $name;
 			xarExceptionSet(XAR_USER_EXCEPTION, 'NO_SCHEMA',
 						   new SystemException($msg));
         return;
     }
 
-// reorganize the data into an array and create the schemas object
+// reorganize the data into an array and create the masks object
 		list($sid, $name, $realm, $module, $component, $instance, $level,$description) = $result->fields;
 		$pargs = array('sid' => $sid,
 							'name' => $name,
@@ -439,15 +440,15 @@ class xarSchemas
 						   'description'=>$description);
 
 // done
-		return new xarSchema($pargs);
+		return new xarMask($pargs);
 	}
 }
 
 
 /**
- * xarPermissions: class for the permissions repository
+ * xarPrivileges: class for the privileges repository
  *
- * Represents the repository containing all permissions
+ * Represents the repository containing all privileges
  * The constructor is the constructor of the parent object
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
@@ -456,25 +457,25 @@ class xarSchemas
  * @todo    none
 */
 
-class xarPermissions extends xarSchemas
+class xarPrivileges extends xarMasks
 {
 
 /**
- * register: register a permission
+ * register: register a privilege
  *
- * Creates an entry in the permissions table
+ * Creates an entry in the privileges table
  * This function should be invoked every time a new instance is created
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   array of permission values
+ * @param   array of privilege values
  * @return  boolean
  * @throws  none
  * @todo    none
 */
 	function register($name,$realm,$module,$component,$instance,$level,$description='')
 	{
-		$nextID = $this->dbconn->genID($this->schemastable);
+		$nextID = $this->dbconn->genID($this->maskstable);
 		$nextIDprep = xarVarPrepForStore($nextID);
 		$nameprep = xarVarPrepForStore($name);
 		$realmprep = xarVarPrepForStore($realm);
@@ -483,7 +484,7 @@ class xarPermissions extends xarSchemas
 		$instanceprep = xarVarPrepForStore($instance);
 		$levelprep = xarVarPrepForStore($level);
 		$descriptionprep = xarVarPrepForStore($description);
-		$query = "INSERT INTO $this->permissionstable VALUES ($nextIDprep,
+		$query = "INSERT INTO $this->privilegestable VALUES ($nextIDprep,
 												'$nameprep',
 												'$realmprep',
 												'$moduleprep',
@@ -496,7 +497,7 @@ class xarPermissions extends xarSchemas
 	}
 
 /**
- * assign: assign a permission to a user/group
+ * assign: assign a privilege to a user/group
  *
  * Creates an entry in the acl table
  * This is a convenience function that can be used by module developers
@@ -510,68 +511,68 @@ class xarPermissions extends xarSchemas
  * @throws  none
  * @todo    none
 */
-	function assign($permission,$participant)
+	function assign($privilege,$role)
 	{
 
-// get the ID of the permission to be assigned
-		$perm = $this->findPermission($permission);
+// get the ID of the privilege to be assigned
+		$perm = $this->findPrivilege($privilege);
 		$permid = $perm->getID();
 
-// get the Participants class
-		include_once 'modules/participants/xarparticipants.php';
-    	$parts = new xarParticipants();
+// get the Roles class
+		include_once 'modules/roles/xarroles.php';
+    	$roles = new xarRoles();
 
-// find the participant for the assignation and get its ID
-		$part = $parts->findParticipant($participant);
-		$partid = $part->getID();
+// find the role for the assignation and get its ID
+		$role = $roles->findRole($role);
+		$roleid = $role->getID();
 
 // Add the assignation as an entry to the acl table
-		$query = "INSERT INTO $this->acltable VALUES ($partid,
+		$query = "INSERT INTO $this->acltable VALUES ($roleid,
 												$permid)";
 		if (!$this->dbconn->Execute($query)) return;
 		return true;
 	}
 
 /**
- * getpermissions: returns all the current permissions.
+ * getprivileges: returns all the current privileges.
  *
- * Returns an array of all the permissions in the permissions repository
- * The repository contains an entry for each permission.
- * This function will initially load the permissions from the db into an array and return it.
+ * Returns an array of all the privileges in the privileges repository
+ * The repository contains an entry for each privilege.
+ * This function will initially load the privileges from the db into an array and return it.
  * On subsequent calls it just returns the array .
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   none
- * @return  array of permissions
+ * @return  array of privileges
  * @throws  none
  * @todo    none
 */
-    function getpermissions() {
-	if ((!isset($allpermissions)) || count($allpermissions)==0) {
-			$query = "SELECT xar_permissions.xar_pid,
-						xar_permissions.xar_name,
-						xar_permissions.xar_realm,
-						xar_permissions.xar_module,
-						xar_permissions.xar_component,
-						xar_permissions.xar_instance,
-						xar_permissions.xar_level,
-						xar_permissions.xar_description,
-						xar_permmembers.xar_parentid
-						FROM $this->permissionstable INNER JOIN $this->permmemberstable
-						ON xar_permissions.xar_pid = xar_permmembers.xar_pid
-						ORDER BY xar_permissions.xar_name";
+    function getprivileges() {
+	if ((!isset($allprivileges)) || count($allprivileges)==0) {
+			$query = "SELECT xar_privileges.xar_pid,
+						xar_privileges.xar_name,
+						xar_privileges.xar_realm,
+						xar_privileges.xar_module,
+						xar_privileges.xar_component,
+						xar_privileges.xar_instance,
+						xar_privileges.xar_level,
+						xar_privileges.xar_description,
+						xar_privmembers.xar_parentid
+						FROM $this->privilegestable INNER JOIN $this->privmemberstable
+						ON xar_privileges.xar_pid = xar_privmembers.xar_pid
+						ORDER BY xar_privileges.xar_name";
 
 			$result = $this->dbconn->Execute($query);
 			if (!$result) return;
 
-			$permissions = array();
+			$privileges = array();
 			$ind = 0;
 			while(!$result->EOF) {
 				list($pid, $name, $realm, $module, $component, $instance, $level,
 						$description,$parentid) = $result->fields;
 				$ind = $ind + 1;
-				$permissions[$ind] = array('pid' => $pid,
+				$privileges[$ind] = array('pid' => $pid,
 								   'name' => $name,
 								   'realm' => $realm,
 								   'module' => $module,
@@ -582,55 +583,55 @@ class xarPermissions extends xarSchemas
 								   'parentid' => $parentid);
 				$result->MoveNext();
 			}
-			$allpermissions = $permissions;
-			return $permissions;
+			$allprivileges = $privileges;
+			return $privileges;
 		}
 		else {
-			return $allpermissions;
+			return $allprivileges;
 		}
     }
 
 /**
- * gettoplevelpermissions: returns all the current permissions that have no parent.
+ * gettoplevelprivileges: returns all the current privileges that have no parent.
  *
- * Returns an array of all the permissions in the permissions repository
+ * Returns an array of all the privileges in the privileges repository
  * that are top level entries, i.e. have no parent
- * This function will initially load the permissions from the db into an array and return it.
+ * This function will initially load the privileges from the db into an array and return it.
  * On subsequent calls it just returns the array .
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   none
- * @return  array of permissions
+ * @return  array of privileges
  * @throws  none
  * @todo    none
 */
-    function gettoplevelpermissions() {
-	if ((!isset($alltoplevelpermissions)) || count($alltoplevelpermissions)==0) {
-			$query = "SELECT xar_permissions.xar_pid,
-						xar_permissions.xar_name,
-						xar_permissions.xar_realm,
-						xar_permissions.xar_module,
-						xar_permissions.xar_component,
-						xar_permissions.xar_instance,
-						xar_permissions.xar_level,
-						xar_permissions.xar_description,
-						xar_permmembers.xar_parentid
-						FROM $this->permissionstable INNER JOIN $this->permmemberstable
-						ON xar_permissions.xar_pid = xar_permmembers.xar_pid
-						WHERE xar_permmembers.xar_parentid = 0
-						ORDER BY xar_permissions.xar_name";
+    function gettoplevelprivileges() {
+	if ((!isset($alltoplevelprivileges)) || count($alltoplevelprivileges)==0) {
+			$query = "SELECT xar_privileges.xar_pid,
+						xar_privileges.xar_name,
+						xar_privileges.xar_realm,
+						xar_privileges.xar_module,
+						xar_privileges.xar_component,
+						xar_privileges.xar_instance,
+						xar_privileges.xar_level,
+						xar_privileges.xar_description,
+						xar_privmembers.xar_parentid
+						FROM $this->privilegestable INNER JOIN $this->privmemberstable
+						ON xar_privileges.xar_pid = xar_privmembers.xar_pid
+						WHERE xar_privmembers.xar_parentid = 0
+						ORDER BY xar_privileges.xar_name";
 
 			$result = $this->dbconn->Execute($query);
 			if (!$result) return;
 
-			$permissions = array();
+			$privileges = array();
 			$ind = 0;
 			while(!$result->EOF) {
 				list($pid, $name, $realm, $module, $component, $instance, $level,
 						$description,$parentid) = $result->fields;
 				$ind = $ind + 1;
-				$permissions[$ind] = array('pid' => $pid,
+				$privileges[$ind] = array('pid' => $pid,
 								   'name' => $name,
 								   'realm' => $realm,
 								   'module' => $module,
@@ -641,11 +642,11 @@ class xarPermissions extends xarSchemas
 								   'parentid' => $parentid);
 				$result->MoveNext();
 			}
-			$alltoplevelpermissions = $permissions;
-			return $permissions;
+			$alltoplevelprivileges = $privileges;
+			return $privileges;
 		}
 		else {
-			return $alltoplevelpermissions;
+			return $alltoplevelprivileges;
 		}
     }
 
@@ -751,8 +752,8 @@ class xarPermissions extends xarSchemas
  * getcomponents: returns all the current components of a module.
  *
  * Returns an array of all the components that have been registered for a given module.
- * The components correspond to schemas in the schemas table. Each one can be used to
- * construct a permissions challenge.
+ * The components correspond to masks in the masks table. Each one can be used to
+ * construct a privileges challenge.
  * They are used to populate dropdowns in displays
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
@@ -763,10 +764,10 @@ class xarPermissions extends xarSchemas
  * @todo    this isn't really the right place for this function
 */
     function getcomponents($module) {
-		$query = "SELECT xar_schemas.xar_sid,
-					xar_schemas.xar_component
-					FROM $this->schemastable
-					WHERE xar_schemas.xar_module= '$module'";
+		$query = "SELECT xar_masks.xar_sid,
+					xar_masks.xar_component
+					FROM $this->maskstable
+					WHERE xar_masks.xar_module= '$module'";
 
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
@@ -789,6 +790,7 @@ class xarPermissions extends xarSchemas
 							   'name' => 'None');
 			$ind = 2;
 			while(!$result->EOF) {
+			echo $name;
 				list($mid, $name) = $result->fields;
 				$ind = $ind + 1;
 				$components[$ind] = array('id' => $mid,
@@ -799,29 +801,29 @@ class xarPermissions extends xarSchemas
 		return $components;
     }
 
-	function getpermissionfast($pid){
-		foreach($this->getpermissions() as $permission){
-			if ($permission['pid'] == $pid) return $permission;
+	function getprivilegefast($pid){
+		foreach($this->getprivileges() as $privilege){
+			if ($privilege['pid'] == $pid) return $privilege;
 		}
 		return false;
 	}
 
-	function getsubpermissions($pid){
-		$subpermissions = array();
+	function getsubprivileges($pid){
+		$subprivileges = array();
 		$ind = 0;
-		foreach($this->getpermissions() as $subpermission){
-			if ($subpermission['parentid'] == $pid) {
+		foreach($this->getprivileges() as $subprivilege){
+			if ($subprivilege['parentid'] == $pid) {
 				$ind = $ind + 1;
-				$subpermissions[$ind] = $subpermission;
+				$subprivileges[$ind] = $subprivilege;
 			}
 		}
-		return $subpermissions;
+		return $subprivileges;
 	}
 
 /**
- * maketrees: create an array of all the permission trees
+ * maketrees: create an array of all the privilege trees
  *
- * Makes a tree representation of each permissions tree
+ * Makes a tree representation of each privileges tree
  * Returns an array of the trees
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
@@ -833,16 +835,16 @@ class xarPermissions extends xarSchemas
 */
 	function maketrees() {
 		$trees = array();
-		foreach ($this->gettoplevelpermissions() as $entry) {
-			array_push($trees,$this->maketree($this->getPermission($entry['pid'])));
+		foreach ($this->gettoplevelprivileges() as $entry) {
+			array_push($trees,$this->maketree($this->getPrivilege($entry['pid'])));
 		}
 		return $trees;
 	}
 
 /**
- * maketree: make a tree of permissions
+ * maketree: make a tree of privileges
  *
- * Makes a tree representation of a permissions hierarchy
+ * Makes a tree representation of a privileges hierarchy
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  private
@@ -851,14 +853,14 @@ class xarPermissions extends xarSchemas
  * @throws  none
  * @todo    none
 */
-	function maketree($permission) {
-		return $this->addbranches(array('parent'=>$this->getpermissionfast($permission->getID())));
+	function maketree($privilege) {
+		return $this->addbranches(array('parent'=>$this->getprivilegefast($privilege->getID())));
 	}
 
 /**
  * addbranches: given an initial tree node, add on the branches
  *
- * Adds branches to a tree representation of permissions
+ * Adds branches to a tree representation of privileges
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  private
@@ -872,7 +874,7 @@ class xarPermissions extends xarSchemas
 		$node['expanded'] = false;
 		$node['selected'] = false;
 		$node['children'] = array();
-		foreach($this->getsubpermissions($object['pid']) as $subnode){
+		foreach($this->getsubprivileges($object['pid']) as $subnode){
 			array_push($node['children'],$this->addbranches(array('parent'=>$subnode)));
 		}
 		return $node;
@@ -897,7 +899,7 @@ class xarPermissions extends xarSchemas
 	}
 
 /**
- * drawtree: create a crude html drawing of the permissions tree
+ * drawtree: create a crude html drawing of the privileges tree
  *
  * We use the data from maketree to create a tree layout
  * This should be in a template or at least in the xaradmin file, but it's easier here
@@ -917,21 +919,21 @@ var $indent;
 var $level;
 
 // convenience variables to hold strings referring to pictures
-var $el = '<img src="modules/security/xarimages/el.gif" style="vertical-align: middle">';
-var $tee = '<img src="modules/security/xarimages/T.gif" style="vertical-align: middle">';
-var $aye = '<img src="modules/security/xarimages/I.gif" style="vertical-align: middle">';
-var $bar = '<img src="modules/security/xarimages/s.gif" style="vertical-align: middle">';
-var $emptybox = '<img name="box" src="modules/security/xarimages/k1.gif" style="vertical-align: middle">';
-var $expandedbox = '<img name="box" src="modules/security/xarimages/k2.gif" style="vertical-align: middle">';
-var $blank = '<img src="modules/security/xarimages/blank.gif" style="vertical-align: middle">';
-var $collapsedbox = '<img name="box" src="modules/security/xarimages/k3.gif" style="vertical-align: middle">';
+var $el = '<img src="modules/privileges/xarimages/el.gif" style="vertical-align: middle">';
+var $tee = '<img src="modules/privileges/xarimages/T.gif" style="vertical-align: middle">';
+var $aye = '<img src="modules/privileges/xarimages/I.gif" style="vertical-align: middle">';
+var $bar = '<img src="modules/privileges/xarimages/s.gif" style="vertical-align: middle">';
+var $emptybox = '<img name="box" src="modules/privileges/xarimages/k1.gif" style="vertical-align: middle">';
+var $expandedbox = '<img name="box" src="modules/privileges/xarimages/k2.gif" style="vertical-align: middle">';
+var $blank = '<img src="modules/privileges/xarimages/blank.gif" style="vertical-align: middle">';
+var $collapsedbox = '<img name="box" src="modules/privileges/xarimages/k3.gif" style="vertical-align: middle">';
 
 // we'll use this to check whether a group has already been processed
 var	$alreadydone;
 
 function drawtree($node) {
 
-	$this->html = '<div name="PermissionsTree" id="PermissionsTree" style="padding-left: 1em">';
+	$this->html = '<div name="PrivilegesTree" id="PrivilegesTree" style="padding-left: 1em">';
 	$this->nodeindex = 0;
 	$this->indent = array();
 	$this->level = 0;
@@ -943,7 +945,7 @@ function drawtree($node) {
 }
 
 /**
- * drawbranch: draw a branch of the permissions tree
+ * drawbranch: draw a branch of the privileges tree
  *
  * This is a recursive function
  * This should be in a template or at least in the xaradmin file, but it's easier here
@@ -978,7 +980,7 @@ function drawbranch($node){
 // now begin adding rows to the string
 	$this->html .= '<div name="xarBranch" id="' . $object['name'] . '" style="align: left;">';
 
-// this table holds the index, the tree drawing gifs and the info about the permission
+// this table holds the index, the tree drawing gifs and the info about the privilege
 	$this->html .= $this->drawindent();
 	if (count($node['children']) > 0) {
 		if ($this->nodeindex != 1){
@@ -1007,18 +1009,18 @@ function drawbranch($node){
 	}
 	else {
 		$this->html .= '<a href="' .
-					xarModURL('security',
+					xarModURL('privileges',
 						 'admin',
-						 'modifypermission',
+						 'modifyprivilege',
 						 array('pid'=>$object['pid'])) .' ">' .$object['name'] . '</a>: &nbsp;';
 	}
-	$this->html .= count($this->getsubpermissions($object['pid'])) . ' components</span>';
+	$this->html .= count($this->getsubprivileges($object['pid'])) . ' components</span>';
 
-// this next table holds the Delete, Users and Permissions links
+// this next table holds the Delete, Users and Privileges links
 
 // toggle the tree
 	$this->html .=  '<span name="togglelink" style="position: absolute; right: 16em">';
-	if(count($this->getsubpermissions($object['pid'])) == 0) {
+	if(count($this->getsubprivileges($object['pid'])) == 0) {
 		$this->html .= '&nbsp;';
 	}
 	else {
@@ -1028,34 +1030,34 @@ function drawbranch($node){
 	}
 	$this->html .= '</span>';
 
-// don't allow deletion of certain permissions
+// don't allow deletion of certain privileges
 	$this->html .=  '<span name="deletelink" style="position: absolute; right: 11em">';
 	if($object['pid'] < 3) {
 		$this->html .= '&nbsp;';
 	}
 	else {
 		$this->html .= '<a href="' .
-			xarModURL('security',
+			xarModURL('privileges',
 				 'admin',
-				 'deletepermission',
+				 'deleteprivilege',
 				 array('pid'=>$object['pid'])) .
-				 '" title="Delete this Permission">&nbsp;Delete&nbsp;</a>';
+				 '" title="Delete this Privilege">&nbsp;Delete&nbsp;</a>';
 	}
 	$this->html .= '</span>';
 
 // offer to show the users/groups of this group
 	$this->html .=  '<span name="userslink" style="position: absolute; right: 2em">';
 	$this->html .= '<a href="' .
-			xarModURL('security',
+			xarModURL('privileges',
 				 'admin',
-				 'showparticipants',
+				 'showroles',
 				 array('pid'=>$object['pid'])) .
-				 '" title="Show the Groups/Users this Permission is assigned to">&nbsp;Groups/Users</a>';
+				 '" title="Show the Groups/Users this Privilege is assigned to">&nbsp;Groups/Users</a>';
 
 // close the html row
 	$this->html .= '</span>';
 
-// we've finished this row; now do the children of this permission
+// we've finished this row; now do the children of this privilege
 	$this->html .= $isbranch ? '<div name="xarLeaf">' : '';
 	$ind=0;
 	foreach($node['children'] as $subnode){
@@ -1105,21 +1107,21 @@ function drawindent() {
 }
 
 /**
- * getPermission: gets a single permission
+ * getPrivilege: gets a single privilege
  *
- * Retrieves a single permission object from the Permissions repository
+ * Retrieves a single privilege object from the Privileges repository
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   integer
- * @return  permission object
+ * @return  privilege object
  * @throws  none
  * @todo    none
 */
- 	function getPermission($pid)
+ 	function getPrivilege($pid)
 	{
 		$query = "SELECT *
-                  FROM $this->permissionstable
+                  FROM $this->privilegestable
                   WHERE xar_pid = $pid";
 		//Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
@@ -1134,26 +1136,26 @@ function drawindent() {
 						'level'=>$level,
 						'description'=>$description,
 						'parentid'=>0);
-		return new xarPermission($pargs);
+		return new xarPrivilege($pargs);
 	}
 
 /**
- * findPermission: finds a single permission based on its name
+ * findPrivilege: finds a single privilege based on its name
  *
- * Retrieves a single permission object from the Permissions repository
+ * Retrieves a single privilege object from the Privileges repository
  * This is a convenience class for module developers
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string
- * @return  permission object
+ * @return  privilege object
  * @throws  none
  * @todo    none
 */
- 	function findPermission($name)
+ 	function findPrivilege($name)
 	{
 		$query = "SELECT *
-                  FROM $this->permissionstable
+                  FROM $this->privilegestable
                   WHERE xar_name = '$name'";
 		//Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
@@ -1168,13 +1170,13 @@ function drawindent() {
 						'level'=>$level,
 						'description'=>$description,
 						'parentid'=>0);
-		return new xarPermission($pargs);
+		return new xarPrivilege($pargs);
 	}
 
 /**
- * makeMember: makes a permission a child of another permission
+ * makeMember: makes a privilege a child of another privilege
  *
- * Creates an entry in the permmembers table
+ * Creates an entry in the privmembers table
  * This is a convenience class for module developers
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
@@ -1189,7 +1191,7 @@ function drawindent() {
 	{
 // get the data for the parent object
 		$query = "SELECT *
-                  FROM $this->permissionstable
+                  FROM $this->privilegestable
                   WHERE xar_name = '$parentname'";
 		//Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
@@ -1206,11 +1208,11 @@ function drawindent() {
 						'level'=>$level,
 						'description'=>$description,
 						'parentid'=>0);
-		$parent =  new xarPermission($pargs);
+		$parent =  new xarPrivilege($pargs);
 
 // get the data for the child object
 		$query = "SELECT *
-                  FROM $this->permissionstable
+                  FROM $this->privilegestable
                   WHERE xar_name = '$childname'";
 		//Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
@@ -1227,16 +1229,16 @@ function drawindent() {
 						'level'=>$level,
 						'description'=>$description,
 						'parentid'=>0);
-		$child =  new xarPermission($pargs);
+		$child =  new xarPrivilege($pargs);
 
 // done
 		return $parent->addMember($child);
 	}
 
 /**
- * makeEntry: defines a top level entry of the permissions hierarchy
+ * makeEntry: defines a top level entry of the privileges hierarchy
  *
- * Creates an entry in the permmembers table
+ * Creates an entry in the privmembers table
  * This is a convenience class for module developers
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
@@ -1250,7 +1252,7 @@ function drawindent() {
 	{
 // get the data for the root object
 		$query = "SELECT xar_pid
-                  FROM $this->permissionstable
+                  FROM $this->privilegestable
                   WHERE xar_name = '$rootname'";
 		//Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
@@ -1258,7 +1260,7 @@ function drawindent() {
 
 // create the entry
 		list($pid) = $result->fields;
-		$query = "INSERT INTO $this->permmemberstable
+		$query = "INSERT INTO $this->privmemberstable
 				VALUES ($pid,0)";
 		//Execute the query, bail if an exception was thrown
 		if (!$this->dbconn->Execute($query)) return;
@@ -1270,9 +1272,9 @@ function drawindent() {
 }
 
 /**
- * xarSchema: class for the schema object
+ * xarMask: class for the mask object
  *
- * Represents a single security schema
+ * Represents a single security mask
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -1280,46 +1282,46 @@ function drawindent() {
  * @todo    none
 */
 
-  class xarSchema
+  class xarMask
 {
-	var $sid;           //the id of this permission
-	var $name;          //the name of this permission
-	var $realm;         //the realm of this permission
-	var $module;        //the module of this permission
-	var $component;     //the component of this permission
-	var $instance;      //the instance of this permission
-	var $level;         //the access level of this permission
-	var $description;   //the long description of this permission
+	var $sid;           //the id of this privilege
+	var $name;          //the name of this privilege
+	var $realm;         //the realm of this privilege
+	var $module;        //the module of this privilege
+	var $component;     //the component of this privilege
+	var $instance;      //the instance of this privilege
+	var $level;         //the access level of this privilege
+	var $description;   //the long description of this privilege
 
 	var $dbconn;
-	var $permissionstable;
-	var $permmemberstable;
+	var $privilegestable;
+	var $privmemberstable;
 
 /**
- * xarSchema: constructor for the class
+ * xarMask: constructor for the class
  *
- * Creates a security schema
+ * Creates a security mask
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param	array of values
- * @return  schema
+ * @return  mask
  * @throws  none
  * @todo    none
 */
 
-    function xarSchema($pargs)
+    function xarMask($pargs)
     {
 		extract($pargs);
 
 //TODO: check this line
-		if (!xarSecAuthAction(0, 'Permissions::', "::", ACCESS_ADD)) {return;}
+		if (!xarSecAuthAction(0, 'Privileges::', "::", ACCESS_ADD)) {return;}
 
 		list($this->dbconn) = xarDBGetConn();
 		$xartable = xarDBGetTables();
-		$this->permissionstable = $xartable['permissions'];
-		$this->permmemberstable = $xartable['permmembers'];
-		$this->participantstable = $xartable['participants'];
+		$this->privilegestable = $xartable['privileges'];
+		$this->privmemberstable = $xartable['privmembers'];
+		$this->rolestable = $xartable['roles'];
 		$this->acltable = $xartable['acl'];
 
         $this->sid          = $sid;
@@ -1333,52 +1335,52 @@ function drawindent() {
     }
 
 /**
- * implies: compares two schemas
+ * implies: compares two masks
  *
- * Checks whether this schema is mighter than $schema
+ * Checks whether this mask is mighter than $mask
  * Returns true if it is.
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   schema
+ * @param   mask
  * @return  boolean
  * @throws  none
  * @todo    none
 */
-	function implies($schema) {
+	function implies($mask) {
 		if (
 			($this->getRealm() == 'All') ||
-			($this->getRealm() == 'None') && ($schema->getRealm() != 'All')
+			($this->getRealm() == 'None') && ($mask->getRealm() != 'All')
 			)
 		{$xRealm = true;}
 		else {$xRealm = false;}
 
 		if (
 			($this->getModule() == 'All') ||
-			($this->getModule() == 'None') && ($schema->getModule() != 'All')
+			($this->getModule() == 'None') && ($mask->getModule() != 'All')
 			)
 		{$xModule = true;}
 		else {$xModule = false;}
 
 		if (
 			($this->getComponent() == 'All') ||
-			($this->getComponent() == 'None') && ($schema->getComponent() != 'All')
+			($this->getComponent() == 'None') && ($mask->getComponent() != 'All')
 			)
 		{$xComponent = true;}
 		else {$xComponent = false;}
 
 		if (
 			($this->getInstance() == 'All') ||
-			($this->getInstance() == 'None') && ($schema->getInstance() != 'All')
+			($this->getInstance() == 'None') && ($mask->getInstance() != 'All')
 			)
 		{$xInstance = true;}
 		else {$xInstance = false;}
 
-		$xLevel = $this->getLevel() >= $schema->getLevel();
+		$xLevel = $this->getLevel() >= $mask->getLevel();
 
 		$implies = $xRealm && $xModule && $xComponent && $xInstance && $xLevel;
 
-//		echo $this->getName() . " implies " . $schema->getName() . ": " . $implies;
+//		echo $this->getName() . " implies " . $mask->getName() . ": " . $implies;
 
 		return $implies;
 	}
@@ -1404,9 +1406,9 @@ function drawindent() {
 
 
 /**
- * xarPermission: class for the permissions object
+ * xarPrivilege: class for the privileges object
  *
- * Represents a single permissions object
+ * Represents a single privileges object
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -1414,47 +1416,47 @@ function drawindent() {
  * @todo    none
 */
 
-class xarPermission extends xarSchema
+class xarPrivilege extends xarMask
 {
 
-	var $pid;           //the id of this permission
-	var $name;          //the name of this permission
-	var $realm;         //the realm of this permission
-	var $module;        //the module of this permission
-	var $component;     //the component of this permission
-	var $instance;      //the instance of this permission
-	var $level;         //the access level of this permission
-	var $description;   //the long description of this permission
-	var $parentid;      //the pid of the parent of this permission
+	var $pid;           //the id of this privilege
+	var $name;          //the name of this privilege
+	var $realm;         //the realm of this privilege
+	var $module;        //the module of this privilege
+	var $component;     //the component of this privilege
+	var $instance;      //the instance of this privilege
+	var $level;         //the access level of this privilege
+	var $description;   //the long description of this privilege
+	var $parentid;      //the pid of the parent of this privilege
 
 	var $dbconn;
-	var $permissionstable;
-	var $permmemberstable;
+	var $privilegestable;
+	var $privmemberstable;
 
 /**
- * xarPermission: constructor for the class
+ * xarPrivilege: constructor for the class
  *
  * Just sets up the db connection and initializes some variables
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param	array of values
- * @return  the permission object
+ * @return  the privilege object
  * @throws  none
  * @todo    none
 */
-    function xarPermission($pargs)
+    function xarPrivilege($pargs)
     {
 		extract($pargs);
 
 //TODO: check this line
-		if (!xarSecAuthAction(0, 'Permissions::', "::", ACCESS_ADD)) {return;}
+		if (!xarSecAuthAction(0, 'Privileges::', "::", ACCESS_ADD)) {return;}
 
 		list($this->dbconn) = xarDBGetConn();
 		$xartable = xarDBGetTables();
-		$this->permissionstable = $xartable['permissions'];
-		$this->permmemberstable = $xartable['permmembers'];
-		$this->participantstable = $xartable['participants'];
+		$this->privilegestable = $xartable['privileges'];
+		$this->privmemberstable = $xartable['privmembers'];
+		$this->rolestable = $xartable['roles'];
 		$this->acltable = $xartable['acl'];
 
         $this->pid          = $pid;
@@ -1469,9 +1471,9 @@ class xarPermission extends xarSchema
     }
 
 /**
- * add: add a new permissions object to the repository
+ * add: add a new privileges object to the repository
  *
- * Creates an entry in the repository for a permissions object that has been created
+ * Creates an entry in the repository for a privileges object that has been created
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -1484,7 +1486,7 @@ class xarPermission extends xarSchema
 
 		if(empty($this->name)) {
 			$msg = xarML('You must enter a name.',
-						'security');
+						'privileges');
 			xarExceptionSet(XAR_USER_EXCEPTION,
 						'DUPLICATE_DATA',
 						 new DefaultUserException($msg));
@@ -1493,8 +1495,8 @@ class xarPermission extends xarSchema
 		}
 
 
-// Confirm that this permission name does not already exist
-		$query = "SELECT COUNT(*) FROM $this->permissionstable
+// Confirm that this privilege name does not already exist
+		$query = "SELECT COUNT(*) FROM $this->privilegestable
 			  WHERE xar_name = '$this->name'";
 
 		$result = $this->dbconn->Execute($query);
@@ -1504,7 +1506,7 @@ class xarPermission extends xarSchema
 
 		if ($count == 1) {
 			$msg = xarML('This entry already exists.',
-						'security');
+						'privileges');
 			xarExceptionSet(XAR_USER_EXCEPTION,
 						'DUPLICATE_DATA',
 						 new DefaultUserException($msg));
@@ -1513,7 +1515,7 @@ class xarPermission extends xarSchema
 		}
 
 // set up the variables for inserting the object into the repository
-			$nextId = $this->dbconn->genID($this->permissionstable);
+			$nextId = $this->dbconn->genID($this->privilegestable);
 
 			$nextIdprep = xarVarPrepForStore($nextId);
 			$nameprep = xarVarPrepForStore($this->name);
@@ -1524,7 +1526,7 @@ class xarPermission extends xarSchema
 			$levelprep = xarVarPrepForStore($this->level);
 
 // create the insert query
-		$query = "INSERT INTO $this->permissionstable
+		$query = "INSERT INTO $this->privilegestable
 					(xar_pid, xar_name, xar_realm, xar_module, xar_component, xar_instance, xar_level)
 				  VALUES ($nextIdprep, '$nameprep', '$realmprep', '$moduleprep', '$componentprep', '$instanceprep', $levelprep)";
 		//Execute the query, bail if an exception was thrown
@@ -1532,25 +1534,25 @@ class xarPermission extends xarSchema
 
 // the insert created a new index value
 // retrieve the value
-		$query = "SELECT MAX(xar_pid) FROM $this->permissionstable";
+		$query = "SELECT MAX(xar_pid) FROM $this->privilegestable";
 		//Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
 		if (!result) return;
 
-// use the index to get the permissions object created from the repository
+// use the index to get the privileges object created from the repository
 		list($pid) = $result->fields;
 		$this->pid = $pid;
-		$perms = new xarPermissions();
-		$parentperm = $perms->getpermission($this->parentid);
+		$perms = new xarPrivileges();
+		$parentperm = $perms->getprivilege($this->parentid);
 
-// make this permission a child of its parent
+// make this privilege a child of its parent
 		return $this->makeEntry();
 	}
 
 /**
- * makeEntry: sets up a permission without parents
+ * makeEntry: sets up a privilege without parents
  *
- * Sets up a permission as a root entry (no parent)
+ * Sets up a privilege as a root entry (no parent)
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -1561,7 +1563,7 @@ class xarPermission extends xarSchema
 */
     function makeEntry() {
 
-		$query = "INSERT INTO $this->permmemberstable
+		$query = "INSERT INTO $this->privmemberstable
 				VALUES (" . $this->getID() . ",0)";
 		//Execute the query, bail if an exception was thrown
 		if (!$this->dbconn->Execute($query)) return;
@@ -1569,21 +1571,21 @@ class xarPermission extends xarSchema
     }
 
 /**
- * addMember: adds a permission to a permission
+ * addMember: adds a privilege to a privilege
  *
- * Make a permission a member of another permission.
- * A permission can have any number of parents or children..
+ * Make a privilege a member of another privilege.
+ * A privilege can have any number of parents or children..
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   permission object
+ * @param   privilege object
  * @return  boolean
  * @throws  none
  * @todo    check to make sure the child is not a parent of the parent
 */
     function addMember($member) {
 
-		$query = "INSERT INTO $this->permmemberstable
+		$query = "INSERT INTO $this->privmemberstable
 				VALUES (" . $member->getID() . "," . $this->getID() . ")";
 		//Execute the query, bail if an exception was thrown
 		if (!$this->dbconn->Execute($query)) return;
@@ -1591,9 +1593,9 @@ class xarPermission extends xarSchema
     }
 
 /**
- * removeMember: removes a permission from a permission
+ * removeMember: removes a privilege from a privilege
  *
- * Removes a permission as an entry of another permission.
+ * Removes a privilege as an entry of another privilege.
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -1604,7 +1606,7 @@ class xarPermission extends xarSchema
 */
     function removeMember($member) {
 
-		$query = "DELETE FROM $this->permmemberstable
+		$query = "DELETE FROM $this->privmemberstable
               WHERE xar_pid=" . $member->getID() .
               " AND xar_parentid=" . $this->getID();
 		//Execute the query, bail if an exception was thrown
@@ -1613,9 +1615,9 @@ class xarPermission extends xarSchema
     }
 
 /**
- * update: updates a permission in the repository
+ * update: updates a privilege in the repository
  *
- * Updates a permission in the permissions repository
+ * Updates a privilege in the privileges repository
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -1626,7 +1628,7 @@ class xarPermission extends xarSchema
 */
     function update()
     {
-		$query = 	"UPDATE " . $this->permissionstable .
+		$query = 	"UPDATE " . $this->privilegestable .
 					" SET " .
 					"xar_name = '$this->name'," .
 					"xar_realm = '$this->realm'," .
@@ -1642,9 +1644,9 @@ class xarPermission extends xarSchema
     }
 
 /**
- * remove: deletes a permission in the repository
+ * remove: deletes a privilege in the repository
  *
- * Deletes a permission's entry in the permissions repository
+ * Deletes a privilege's entry in the privileges repository
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -1656,23 +1658,23 @@ class xarPermission extends xarSchema
 	function remove(){
 
 // set up the DELETE query
-		$query = "DELETE FROM $this->permissionstable
+		$query = "DELETE FROM $this->privilegestable
               WHERE xar_pid=" . $this->pid;
 //Execute the query, bail if an exception was thrown
 		if (!$this->dbconn->Execute($query)) return;
 
 // set up a query to get all the parents of this child
-		$query = "SELECT xar_parentid FROM $this->permmemberstable
+		$query = "SELECT xar_parentid FROM $this->privmemberstable
               WHERE xar_pid=" . $this->getID();
 		//Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
 		if (!result) return;
 
 // remove this child from all the parents
-		$perms = new xarPermissions();
+		$perms = new xarPrivileges();
 		while(!$result->EOF) {
 			list($parentid) = $result->fields;
-			$parentperm = $perms->getPermission($parentid);
+			$parentperm = $perms->getPrivilege($parentid);
 			$parentperm->removeMember($this);
 			$result->MoveNext();
 		}
@@ -1680,9 +1682,9 @@ class xarPermission extends xarSchema
 	}
 
 /**
- * getParticipants: returns an array of participants
+ * getRoles: returns an array of roles
  *
- * Returns an array of participants this permission is assigned to
+ * Returns an array of roles this privilege is assigned to
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -1691,33 +1693,33 @@ class xarPermission extends xarSchema
  * @throws  none
  * @todo    none
 */
-	function getParticipants(){
+	function getRoles(){
 
-// set up a query to select the participants this permission
+// set up a query to select the roles this privilege
 // is linked to in the acl table
-		$query = "SELECT xar_participants.xar_pid,
-					xar_participants.xar_name,
-					xar_participants.xar_type,
-					xar_participants.xar_uname,
-					xar_participants.xar_email,
-					xar_participants.xar_pass,
-					xar_participants.xar_url,
-					xar_participants.xar_auth_module
-					FROM $this->participantstable INNER JOIN $this->acltable
-					ON xar_participants.xar_pid = xar_acl.xar_partid
+		$query = "SELECT xar_roles.xar_pid,
+					xar_roles.xar_name,
+					xar_roles.xar_type,
+					xar_roles.xar_uname,
+					xar_roles.xar_email,
+					xar_roles.xar_pass,
+					xar_roles.xar_url,
+					xar_roles.xar_auth_module
+					FROM $this->rolestable INNER JOIN $this->acltable
+					ON xar_roles.xar_pid = xar_acl.xar_partid
 					WHERE xar_acl.xar_permid = $this->pid";
 //Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
 
 // make objects from the db entries retrieved
-		include_once 'modules/participants/xarparticipants.php';
-		$participants = array();
+		include_once 'modules/roles/xarroles.php';
+		$roles = array();
 //		$ind = 0;
 		while(!$result->EOF) {
 			list($pid,$name,$type,$uname,$email,$pass,$url,$auth_module) = $result->fields;
 //			$ind = $ind + 1;
-			$part = new xarParticipant(array('pid' => $pid,
+			$role = new xarRole(array('pid' => $pid,
 							   'name' => $name,
 							   'type' => $type,
 							   'uname' => $uname,
@@ -1727,38 +1729,38 @@ class xarPermission extends xarSchema
 							   'auth_module' => $auth_module,
 							   'parentid' => 0));
 			$result->MoveNext();
-			array_push($participants, $part);
+			array_push($roles, $role);
 		}
 // done
-		return $participants;
+		return $roles;
 	}
 
 /**
- * removeParticipant: removes a participant
+ * removeRole: removes a role
  *
- * Removes a participant this permission is assigned to
+ * Removes a role this privilege is assigned to
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   participant object
+ * @param   role object
  * @return  boolean
  * @throws  none
  * @todo    none
 */
-    function removeParticipant($part) {
+    function removeRole($role) {
 
-// use the equivalent method from the participants object
-		return $part->removePermission($this);
+// use the equivalent method from the roles object
+		return $role->removePrivilege($this);
     }
 
 /**
- * getParents: returns the parent objects of a permission
+ * getParents: returns the parent objects of a privilege
  *
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   none
- * @return  array of permission objects
+ * @return  array of privilege objects
  * @throws  none
  * @todo    none
 */
@@ -1770,15 +1772,15 @@ class xarPermission extends xarSchema
 // if this is the root return an empty array
 		if ($this->getID() == 1) return $parents;
 
-// if this is a user just perform a SELECT on the partmembers table
-		$query = "SELECT xar_permissions.*, xar_permmembers.xar_parentid
-					FROM $this->permissionstable INNER JOIN $this->permmemberstable
-					ON xar_permissions.xar_pid = xar_permmembers.xar_parentid
-					WHERE xar_permmembers.xar_pid = " . $this->getID();
+// if this is a user just perform a SELECT on the rolemembers table
+		$query = "SELECT xar_privileges.*, xar_privmembers.xar_parentid
+					FROM $this->privilegestable INNER JOIN $this->privmemberstable
+					ON xar_privileges.xar_pid = xar_privmembers.xar_parentid
+					WHERE xar_privmembers.xar_pid = " . $this->getID();
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
 
-// collect the table values and use them to create new participant objects
+// collect the table values and use them to create new role objects
 		$ind = 0;
 			while(!$result->EOF) {
 			list($pid,$name,$realm,$module,$component,$instance,$level,$description,$parentid) = $result->fields;
@@ -1792,7 +1794,7 @@ class xarPermission extends xarSchema
 							'description'=>$description,
 							'parentid' => $parentid);
 			$ind = $ind + 1;
-			array_push($parents, new xarPermission($pargs));
+			array_push($parents, new xarPrivilege($pargs));
 			$result->MoveNext();
 			}
 // done
@@ -1800,14 +1802,14 @@ class xarPermission extends xarSchema
 	}
 
 /**
- * getAncestors: returns all objects in the permissions hierarchy above a permission
+ * getAncestors: returns all objects in the privileges hierarchy above a privilege
  *
- * The returned permissions are automatically winnowed
+ * The returned privileges are automatically winnowed
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   none
- * @return  array of permission objects
+ * @return  array of privilege objects
  * @throws  none
  * @todo    none
 */
@@ -1820,7 +1822,7 @@ class xarPermission extends xarSchema
 		$parents = $this->getParents();
 
 //Get the parent field for each parent
-		$schemas = new xarSchemas();
+		$masks = new xarMasks();
 		while (list($key, $parent) = each($parents)) {
 			$ancestors = $parent->getParents();
 			foreach ($ancestors as $ancestor) {
@@ -1830,18 +1832,18 @@ class xarPermission extends xarSchema
 
 //done
 		$ancestors = array();
-		$parents = $schemas->winnow($ancestors,$parents);
+		$parents = $masks->winnow($ancestors,$parents);
 		return $ancestors;
     }
 
 /**
- * getChildren: returns the child objects of a permission
+ * getChildren: returns the child objects of a privilege
  *
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   none
- * @return  array of permission objects
+ * @return  array of privilege objects
  * @throws  none
  * @todo    none
 */
@@ -1850,15 +1852,15 @@ class xarPermission extends xarSchema
 // create an array to hold the objects to be returned
 		$children = array();
 
-// if this is a user just perform a SELECT on the partmembers table
-		$query = "SELECT xar_permissions.*, xar_permmembers.xar_parentid
-					FROM $this->permissionstable INNER JOIN $this->permmemberstable
-					ON xar_permissions.xar_pid = xar_permmembers.xar_pid
-					WHERE xar_permmembers.xar_parentid = " . $this->getID();
+// if this is a user just perform a SELECT on the rolemembers table
+		$query = "SELECT xar_privileges.*, xar_privmembers.xar_parentid
+					FROM $this->privilegestable INNER JOIN $this->privmemberstable
+					ON xar_privileges.xar_pid = xar_privmembers.xar_pid
+					WHERE xar_privmembers.xar_parentid = " . $this->getID();
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
 
-// collect the table values and use them to create new participant objects
+// collect the table values and use them to create new role objects
 			while(!$result->EOF) {
 			list($pid,$name,$realm,$module,$component,$instance,$level,$description,$parentid) = $result->fields;
 			$pargs = array('pid'=>$pid,
@@ -1870,7 +1872,7 @@ class xarPermission extends xarSchema
 							'level'=>$level,
 							'description'=>$description,
 							'parentid' => $parentid);
-			array_push($children, new xarPermission($pargs));
+			array_push($children, new xarPrivilege($pargs));
 			$result->MoveNext();
 			}
 // done
@@ -1878,14 +1880,14 @@ class xarPermission extends xarSchema
 	}
 
 /**
- * getDescendants: returns all objects in the permissions hierarchy below a permission
+ * getDescendants: returns all objects in the privileges hierarchy below a privilege
  *
- * The returned permissions are automatically winnowed
+ * The returned privileges are automatically winnowed
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   none
- * @return  array of permission objects
+ * @return  array of privilege objects
  * @throws  none
  * @todo    none
 */
@@ -1895,7 +1897,7 @@ class xarPermission extends xarSchema
 		$children = $this->getChildren();
 
 //Get the child field for each child
-		$schemas = new xarSchemas();
+		$masks = new xarMasks();
 		while (list($key, $child) = each($children)) {
 			$descendants = $child->getChildren();
 			foreach ($descendants as $descendant) {
@@ -1905,14 +1907,14 @@ class xarPermission extends xarSchema
 
 //done
 		$descendants = array();
-		$children = $schemas->winnow($descendants,$children);
+		$children = $masks->winnow($descendants,$children);
 		return $descendants;
     }
 
 /**
- * isEqual: checks whether two permissions are equal
+ * isEqual: checks whether two privileges are equal
  *
- * Two permission objects are considered equal if they have the same pid.
+ * Two privilege objects are considered equal if they have the same pid.
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -1921,13 +1923,13 @@ class xarPermission extends xarSchema
  * @throws  none
  * @todo    none
 */
-    function isEqual($permission)
+    function isEqual($privilege)
     {
-    	return $this->getID() == $permission->getID();
+    	return $this->getID() == $privilege->getID();
 	}
 
 /**
- * getID: returns the ID of this permission
+ * getID: returns the ID of this privilege
  *
  * This overrides the method of the same name in the parent class
  *

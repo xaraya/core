@@ -1,4 +1,4 @@
-<script type="text/javascript" src="modules/security/xartemplates/xarTree.js">
+<script type="text/javascript" src="modules/privileges/xartemplates/xarTree.js">
 </script>
 <script language="JavaScript">
  var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
@@ -26,14 +26,14 @@ document.forms[0].submit();}
 <table border="0" width="100%">
     <tr>
         <th colspan="10" align="center">
-            <xar:mlstring>Add a Permission</xar:mlstring>           
+            <xar:mlstring>Add a Privilege</xar:mlstring>           
         </th>
     </tr>
 </table>
 
 <center>
 	<br /><br />
-	<form action="&xar-modurl-security-admin-addpermission;" method="post" enctype="application/x-www-form-urlencoded">
+	<form action="&xar-modurl-privileges-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
 		
 		<table border="0" cellpadding="5">
 			<tr>
@@ -69,7 +69,7 @@ document.forms[0].submit();}
 				</td>
 				<td>
 					<select name="pparentid" id="pparentid" size="1" tabindex="2">
-					<xar:loop name="$permissions">
+					<xar:loop name="$privileges">
 								<option value="&xar-var-pid;">&xar-var-name;
 					</xar:loop>
 					</select>
@@ -81,7 +81,7 @@ document.forms[0].submit();}
 					<xar:mlstring>Module</xar:mlstring>
 				</td>
 				<td>
-					<select name="pmodule" id="pmodule" size="1" tabindex="4" onChange="javascript:setaction('&xar-modurl-security-admin-newpermission;')">
+					<select name="pmodule" id="pmodule" size="1" tabindex="4" onChange="javascript:setaction('&xar-modurl-privileges-admin-newprivilege;')">
 						<xar:loop name="$modules">
 							<xar:if condition="$name eq $pmodule">
 								<option value="&xar-var-name;" selected>&xar-var-name;</option>
@@ -210,7 +210,7 @@ document.forms[0].submit();}
 <table border="0" width="100%">
 	<tr>
 		<th align="center">
-			<xar:mlstring>Current Permissions</xar:mlstring>
+			<xar:mlstring>Current Privileges</xar:mlstring>
 		</th>
 	</tr>
 </table>

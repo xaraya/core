@@ -1,23 +1,23 @@
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
-            <xar:mlstring>Delete a Permission</xar:mlstring>            
+            <xar:mlstring>Delete a Privilege</xar:mlstring>            
         </th>
     </tr>
 </table>
 
 <center>
-<form method="post" action="&xar-modurl-security-admin-deletepermission;" method="post" enctype="application/x-www-form-urlencoded" />
+<form method="post" action="&xar-modurl-privileges-admin-deleteprivilege;" method="post" enctype="application/x-www-form-urlencoded" />
     <input type="hidden" name="authid" value="&xar-var-authid;" />
 	<input type="hidden" name="pid" id="pid" value="&xar-var-pid;" />
 	<input type="hidden" name="confirm" id="confirm" value="1"/>
 	<input type="hidden" name="confirmation" id="confirmation" value="1"/>
 
-	<font class="xar-title"><xar:mlstring>Confirm the deletion of Permission</xar:mlstring>  '&xar-var-name;'</font>
+	<font class="xar-title"><xar:mlstring>Confirm the deletion of Privilege</xar:mlstring>  '&xar-var-name;'</font>
 	<br /><br />
 
 	<input type="submit" value="<xar:mlstring>Confirm</xar:mlstring>" align="middle" tabindex="1" /><br /><br />
 	
-	<a href="&xar-modurl-security-admin-newpermission;"><xar:mlstring>Cancel the deletion</xar:mlstring></a>
+	<a href="&xar-modurl-privileges-admin-newprivilege;"><xar:mlstring>Cancel the deletion</xar:mlstring></a>
 </form>        
 </center>

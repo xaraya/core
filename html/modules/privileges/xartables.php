@@ -2,7 +2,7 @@
 /**
  * File: $Id$
  *
- * Purpose of file:  Table information for security module
+ * Purpose of file:  Table information for privileges module
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
@@ -16,25 +16,25 @@
  * This function is called internally by the core whenever the module is
  * loaded.  It adds in the information
  */
-function security_xartables()
+function privileges_xartables()
 {
     // Initialise table array
     $xartable = array();
 
-    $permissions = xarDBGetSiteTablePrefix() . '_permissions';
-    $permmembers = xarDBGetSiteTablePrefix() . '_permmembers';
-    $participants = xarDBGetSiteTablePrefix() . '_participants';
-    $partmembers = xarDBGetSiteTablePrefix() . 'partmembers';
+    $privileges = xarDBGetSiteTablePrefix() . '_privileges';
+    $privmembers = xarDBGetSiteTablePrefix() . '_privmembers';
+    $roles = xarDBGetSiteTablePrefix() . '_roles';
+    $rolemembers = xarDBGetSiteTablePrefix() . 'rolemembers';
     $acl = xarDBGetSiteTablePrefix() . '_acl';
-    $schemas = xarDBGetSiteTablePrefix() . '_schemas';
+    $masks = xarDBGetSiteTablePrefix() . '_masks';
 
     // Set the table name
-    $xartable['permissions'] = $permissions;
-    $xartable['permmembers'] = $permmembers;
-    $xartable['participants'] = $participants;
-    $xartable['partmembers'] = $partmembers;
+    $xartable['privileges'] = $privileges;
+    $xartable['privmembers'] = $privmembers;
+    $xartable['roles'] = $roles;
+    $xartable['rolemembers'] = $rolemembers;
     $xartable['acl'] = $acl;
-    $xartable['schemas'] = $schemas;
+    $xartable['masks'] = $masks;
 
 	// Return the table information
     return $xartable;
