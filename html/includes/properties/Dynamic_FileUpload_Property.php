@@ -16,7 +16,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
 {
     var $size = 40;
     var $maxSize = 1000000;
-    var $basedir;
+    var $basedir = '';
     var $filetype;
     var $UploadsModule_isHooked = FALSE;
     var $basePath;

@@ -25,7 +25,7 @@ include_once "includes/properties/Dynamic_Select_Property.php";
  */
 class Dynamic_ImageList_Property extends Dynamic_Select_Property
 {
-    var $basedir;
+    var $basedir = '';
     var $filetype = '(gif|jpg|jpeg|png|bmp)';
 
     function Dynamic_ImageList_Property($args)

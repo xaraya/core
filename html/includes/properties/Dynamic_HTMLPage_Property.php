@@ -25,7 +25,7 @@ include_once "includes/properties/Dynamic_Select_Property.php";
  */
 class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
 {
-    var $basedir;
+    var $basedir = '';
     var $filetype = '((xml)|(html))?';
 
     function Dynamic_HTMLPage_Property($args)
