@@ -1,7 +1,7 @@
 <!-- modules module template: file admin-list.xd -->
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>View Modules (classic list)</xar:mlstring></h2>
+    <h2><xar:mlstring>View Modules</xar:mlstring></h2>
     <form method="post" action="&xar-modurl-modules-admin-settings;">
         <div class="xar-mod-body" style="border-width: thin; border-style: solid; border-color: ##B3B3B3; padding: 0px;">
             <!--- Module List Sort and Filter Controls table --->
