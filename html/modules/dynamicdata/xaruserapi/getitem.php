@@ -23,7 +23,7 @@ function &dynamicdata_userapi_getitem($args)
 {
     extract($args);
 
-    if (empty($modid)) {
+    if (empty($modid) && empty($moduleid)) {
         if (empty($module)) {
             $modname = xarModGetName();
         } else {
@@ -34,6 +34,8 @@ function &dynamicdata_userapi_getitem($args)
         } else {
             $modid = xarModGetIDFromName($modname);
         }
+    } elseif (empty($modid)) {
+        $modid = $moduleid;
     }
     $modinfo = xarModGetInfo($modid);
 
