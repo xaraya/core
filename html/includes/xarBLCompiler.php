@@ -1865,15 +1865,12 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
 {
     function render()
     {
+        $scope = 'local';
         extract($this->attributes);
 
         if (!isset($name)) {
             $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'name\' attribute in <xar:var> tag.', $this);
             return;
-        }
-
-        if (!isset($scope)) {
-            $scope = 'local';
         }
 
         switch ($scope) {
@@ -2029,6 +2026,9 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
     {
+        $catch = 1;       // Catch exceptions by default
+        $component = '';  // Component is empty by default
+        $instance = '';   // Instance is empty by default
         extract($this->attributes);
 
         if (!isset($mask)) {
@@ -2036,32 +2036,18 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
             return;
         }
 
-        if (!isset($catch)) {
+        if ($catch == 'true') {
             $catch = 1;
+        } elseif ($catch == 'false') {
+            $catch = 0;
         } else {
-            if ($catch == 'true') {
-                $catch = 1;
-            } elseif ($catch == 'false') {
-                $catch = 0;
-            } else {
-                $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'Invalid \'catch\' attribute in <xar:sec> tag.'.
-                                        ' \'catch\' must be boolean (true or false).', $this);
-                return;
-            }
+            $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'Invalid \'catch\' attribute in <xar:sec> tag.'.
+                              ' \'catch\' must be boolean (true or false).', $this);
+            return;
         }
 
-
-        if (isset($component)) {
-            $component = xarTpl__ExpressionTransformer::transformPHPExpression($component);
-        } else {
-            $component = '';
-        }
-
-        if (isset($instance)) {
-            $instance = xarTpl__ExpressionTransformer::transformPHPExpression($instance);
-        } else {
-            $instance = '';
-        }
+        $component = xarTpl__ExpressionTransformer::transformPHPExpression($component);
+        $instance = xarTpl__ExpressionTransformer::transformPHPExpression($instance);
 
         return "if (xarSecurityCheck(\"$mask\", $catch, \"$component\", \"$instance\")) { ";
     }
@@ -2464,6 +2450,9 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
     {
+        $content = '';  // Content attribute is empty by default
+        $title = '';    // Title attribute is empty by default        
+        $template = ''; // Template attribute is empty by default
         extract($this->attributes);
 
         if (!isset($name)) {
@@ -2474,18 +2463,6 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
         if (!isset($module)) {
             $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'module\' attribute in <xar:block> tag.', $this);
             return;
-        }
-
-        if (!isset($content)) {
-            $content = '';
-        }
-
-        if (!isset($title)) {
-            $title = '';
-        }
-
-        if (!isset($template)) {
-            $template = '';
         }
 
         // If the block instance attribute is specified in the tag, render it directly 
@@ -2940,6 +2917,7 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
 {
     function render()
     {
+        $subdata = '$_bl_data';  // Subdata defaults to the data of the current template
         extract($this->attributes);
 
         if (!isset($file)) {
@@ -2950,10 +2928,6 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
         if (!isset($type)) {
             $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'type\' attribute in <xar:template> tag.', $this);
             return;
-        }
-
-        if (!isset($subdata)) {
-            $subdata = '$_bl_data';
         }
 
         if ($type == 'theme') {
