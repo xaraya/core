@@ -64,6 +64,10 @@ function base_menublock_display($blockinfo)
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
+    if (empty($blockinfo['bid'])){
+        $blockinfo['bid'] = '';
+    }
+
 // Security Check
     if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) return;
 
