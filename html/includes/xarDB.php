@@ -124,7 +124,13 @@ function &xarDBNewConn($args = NULL)
     $dbPass  = $args['password'];
     $persistent = !empty($args['persistent']) ? true : false;
 
+    // Check if there is a xar- version of the driver.
+    if (xarDBdriverExists('xar'.$dbType, 'adodb')) {
+        $dbType = 'xar'.$dbType;
+    }
+
     $conn =& ADONewConnection($dbType);
+
     if ($persistent) {
         if (!$conn->PConnect($dbHost, $dbUname, $dbPass, $dbName)) {
             // FIXME: <mrb> theoretically we could raise an exceptions here, but due to the dependencies we can't right now
@@ -140,6 +146,10 @@ function &xarDBNewConn($args = NULL)
     // which causes problems in postgres drivers (and possibly others). reason being that these drivers,
     // don't actually use the setFetchMode method everywhere - instead opting for the global (which can be out 
     // of sync with the latter). -- rabbitt
+    // With the ADODB 4.60 onwards, this option can be set individually for each connection object.
+    // It may be better to remove the global completely, and set the property against each
+    // connection object as they are created. We may now be in the position to restore the
+    // commented-out line below.
     $GLOBALS['ADODB_FETCH_MODE'] = ADODB_FETCH_NUM;
 
     // Commented out due to FIXME above.
@@ -151,9 +161,59 @@ function &xarDBNewConn($args = NULL)
         $conn->Execute("ALTER session SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
     }
 
+    // Store the connection for global access.
     $GLOBALS['xarDB_connections'][] =& $conn;
+    // Fetch the key for this this connection.
+    $key = key($GLOBALS['xarDB_connections']);
+    // Store the key in the connection object so the caller knows how to fetch it again.
+    $conn->database_key = $key;
+
     xarLogMessage("New connection created, now serving " . count($GLOBALS['xarDB_connections']) . " connections");
     return $conn;
+}
+
+/**
+ * Check whether an ADOdb driver exists.
+ * Checks the driver by looking for its file, without attempting to load it.
+ * It would be nice if this were a public function of ADOdb, because we
+ * should not have to keep this code updated.
+ *
+ * @access private
+ * @return boolean true if the driver exists
+ * @todo this is a copy of private ADOdb code, must keep it updated
+ * @todo expand the handler types as necessary (e.g. for creole)
+ */
+function xarDBdriverExists($dbType, $handler = 'adodb') 
+{
+    if (empty($dbType) || $handler != 'adodb') {return false;}
+
+    // Strip off and save the 'xar' prefix, if it exists.
+    if (strpos($dbType, 'xar') === 0) {
+        $prefix = 'xar';
+        $dbType = substr ($dbType, 3);
+    } else {
+        $prefix = '';
+    }
+
+    // Do some ADOdb-specific mapping.
+    // This mapping is for version 4.60.
+    $db = strtolower($dbType);
+    switch ($db) {
+        case 'ado': 
+            if (PHP_VERSION >= 5) $db = 'ado5';
+            $class = 'ado'; 
+            break;
+        case 'ifx':
+        case 'maxsql': $class = $db = 'mysqlt'; break;
+        case 'postgres':
+        case 'postgres8':
+        case 'pgsql': $class = $db = 'postgres7'; break;
+        default:
+            $class = $db; break;
+    }
+    $file = ADODB_DIR . "/drivers/adodb-" . $prefix . $db . ".inc.php";
+
+    return (file_exists($file) ? true : false);
 }
 
 /**
