@@ -3,17 +3,18 @@
 /**
  * Checkbox Validation Class
  */
-function variable_validations_checkbox ($subject, $parameters, &$convValue) {
+function variable_validations_checkbox (&$subject, $parameters) {
 
     if (is_string($subject)) {
         $subject = true;
     } elseif (empty($subject) || is_null($subject)) {
         $subject = false;
     } else {
+        $msg = xarML('Not a checkbox Type: "#(1)"', $subject);
+        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return false;
     }
 
-    $convValue = $subject;
     return true;
 }
 

@@ -187,7 +187,10 @@ function xarVarValidate($validation, $subject, &$convValue) {
     }
 
     if (function_exists($function_name)) {
-        return $function_name($subject, $valParams, $convValue);
+        $return = $function_name($subject, $valParams);
+        //The helper functions already have a nicer interface, let´s change the main function too?
+        $convValue = $subject;
+        return $return;
     } else {
         // Raise an exception
         $msg = xarML('The validation type \'#(1)\' couldn\'t be found.', $valType);

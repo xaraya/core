@@ -3,7 +3,7 @@
 /**
  * HTML Validation Class
  */
-function variable_validations_html ($subject, $parameters, &$convValue) {
+function variable_validations_html (&$subject, $parameters) {
 
         assert('($parameters[0] == "restricted" ||
                  $parameters[0] == "basic" ||
@@ -20,19 +20,19 @@ function variable_validations_html ($subject, $parameters, &$convValue) {
         foreach ($matches as $match) {
             $tag = strtolower($match[1]);
             if (!isset($allowedTags[$tag])) {
-                // Errormsg: Tag not allowed $tag
+                $msg = xarML('Tag not allowed: "#(1)"', $tag);
+                xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
                 return false;
             } elseif (isset($match[2]) && $allowedTags[$tag] == XARVAR_ALLOW_NO_ATTRIBS && trim($match[2]) != '') {
-                // Errormsg: Atrributes not allowed for tag $tag
+                // We should check for on* attributes
+                // Attributes should be restricted too, shouldnt they?
+                $msg = xarML('Attributes are not allowed fo this tag : "#(1)"', $tag);
+                xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
                 return false;
             }
         }
 
-        $convValue = $subject;
         return true;
 }
-
-
-
 
 ?>
