@@ -39,6 +39,7 @@ function privileges_init()
     $tables['privmembers'] = $sitePrefix . '_privmembers';
     $tables['acl'] = $sitePrefix . '_acl';
     $tables['masks'] = $sitePrefix . '_masks';
+    $tables['instances'] = $sitePrefix . '_instances';
 
     // Create tables
     /*********************************************************************
@@ -148,6 +149,13 @@ function privileges_init()
     *   xar_module varchar(100) NOT NULL default '',
     *   xar_component varchar(100) NOT NULL default '',
     *   xar_instance varchar(100) NOT NULL default '',
+    *   xar_instancetable1 varchar(100) NOT NULL default '',
+    *   xar_instancevaluefield1 varchar(100) NOT NULL default '',
+    *   xar_instancedisplayfield1 varchar(100) NOT NULL default '',
+    *   xar_instanceapplication int(11) NOT NULL default '0',
+    *   xar_instancetable2 varchar(100) NOT NULL default '',
+    *   xar_instancevaluefield2 varchar(100) NOT NULL default '',
+    *   xar_instancedisplayfield2 varchar(100) NOT NULL default '',
     *   xar_level int(11) NOT NULL default '0',
     *   xar_description varchar(255) NOT NULL default '',
     *   PRIMARY KEY  (xar_sid)
@@ -183,6 +191,68 @@ function privileges_init()
                    'xar_level' => array('type'      => 'integer',
                                       'null'        => false,
                                       'default'     => '0'),
+                   'xar_description' => array('type'=> 'varchar',
+                                      'size'        => 255,
+                                      'null'        => false,
+                                      'default'     => '')));
+
+    if (!$dbconn->Execute($query)) return;
+
+    // prefix_instances
+    /*********************************************************************
+    * CREATE TABLE xar_instances (
+    *   xar_iid int(11) NOT NULL default '0',
+    *   xar_name varchar(100) NOT NULL default '',
+    *   xar_module varchar(100) NOT NULL default '',
+    *   xar_instancetable1 varchar(100) NOT NULL default '',
+    *   xar_instancevaluefield1 varchar(100) NOT NULL default '',
+    *   xar_instancedisplayfield1 varchar(100) NOT NULL default '',
+    *   xar_instanceapplication int(11) NOT NULL default '0',
+    *   xar_instancetable2 varchar(100) NOT NULL default '',
+    *   xar_instancevaluefield2 varchar(100) NOT NULL default '',
+    *   xar_instancedisplayfield2 varchar(100) NOT NULL default '',
+    *   xar_description varchar(255) NOT NULL default '',
+    *   PRIMARY KEY  (xar_sid)
+    * )
+    *********************************************************************/
+
+    $query = xarDBCreateTable($tables['instances'],
+             array('xar_iid'  => array('type'       => 'integer',
+                                      'null'        => false,
+                                      'default'     => '0',
+                                      'increment'   => true,
+                                      'primary_key' => true),
+                   'xar_module' => array('type'     => 'varchar',
+                                      'size'        => 100,
+                                      'null'        => false,
+                                      'default'     => ''),
+                   'xar_instancetable1' => array('type'   => 'varchar',
+                                      'size'        => 100,
+                                      'null'        => false,
+                                      'default'     => ''),
+                   'xar_instancevaluefield' => array('type'   => 'varchar',
+                                      'size'        => 100,
+                                      'null'        => false,
+                                      'default'     => ''),
+                   'xar_instancedisplayfield' => array('type'   => 'varchar',
+                                      'size'        => 100,
+                                      'null'        => false,
+                                      'default'     => ''),
+                   'xar_instanceapplication' => array('type'      => 'integer',
+                                      'null'        => false,
+                                      'default'     => '0'),
+                   'xar_instancetable2' => array('type'   => 'varchar',
+                                      'size'        => 100,
+                                      'null'        => false,
+                                      'default'     => ''),
+                   'xar_instancechildid' => array('type'   => 'varchar',
+                                      'size'        => 100,
+                                      'null'        => false,
+                                      'default'     => ''),
+                   'xar_instanceparentid' => array('type'   => 'varchar',
+                                      'size'        => 100,
+                                      'null'        => false,
+                                      'default'     => ''),
                    'xar_description' => array('type'=> 'varchar',
                                       'size'        => 255,
                                       'null'        => false,
@@ -234,6 +304,16 @@ function privileges_init()
 	$privileges->assign('NoPrivileges','Everybody');
 	$privileges->assign('FullPrivileges','Oversight');
 	$privileges->assign('FullPrivileges','Overseer');
+
+    /*********************************************************************
+    * Define instances for some modules
+    * Format is
+    * setInstance(Module,ModuleTable,IDField,NameField,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
+    *********************************************************************/
+
+    $privileges->setInstance('roles','xar_roles','xar_pid','xar_name',0,'xar_rolemembers','xar_pid','xar_parentid','Instances of the roles module, including multilevel nesting');
+    $privileges->setInstance('privileges','xar_privileges','xar_pid','xar_name',0,'xar_privmembers','xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
+    $privileges->setInstance('categories','xar_categories','xar_cid','xar_name',0,'xar_categories','xar_cid','xar_parent','Instances of the categories module, including multilevel nesting');
 
     /*********************************************************************
     * Register the module components that are privileges objects
@@ -306,6 +386,10 @@ function privileges_delete()
     if (!$dbconn->Execute($query)) return;
 
     $query = xarDBDropTable($tables['masks']);
+    if (empty($query)) return; // throw back
+    if (!$dbconn->Execute($query)) return;
+
+    $query = xarDBDropTable($tables['instances']);
     if (empty($query)) return; // throw back
     if (!$dbconn->Execute($query)) return;
 

@@ -131,7 +131,15 @@ document.forms[0].submit();}
 					<xar:mlstring>Instance</xar:mlstring>
 				</td>
 				<td>
-					<input type="text" name="pinstance" id="pinstance" value="&xar-var-pinstance;" size="36" maxlength="255" tabindex="6" />
+					<select name="pinstance" id="pinstance" size="1" tabindex="5">
+						<xar:loop name="$instances">
+							<xar:if condition="$name eq $pinstance">
+								<option value="&xar-var-name;" selected>&xar-var-name;</option>
+							<xar:else />
+								<option value="&xar-var-name;">&xar-var-name;</option>
+							</xar:if>
+						</xar:loop>
+					</select>
 				</td>
 			</tr>
 			<tr>

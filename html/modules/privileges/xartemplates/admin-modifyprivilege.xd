@@ -43,7 +43,7 @@ document.forms[0].submit();}
 				<td>
 					<input type="text" name="pname" id="pname" value="&xar-var-pname;" size="20" maxlength="20" tabindex="1" />
 					<input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
-					<input type="hidden" name="pid" id="pid" value="&xar-var-pid;" />
+					<input type="hidden" name="pid" id="pid" value="&xar-var-ppid;" />
 				</td>
 				<td width="20">
 					&nbsp;
@@ -127,7 +127,15 @@ document.forms[0].submit();}
 					<xar:mlstring>Instance</xar:mlstring>
 				</td>
 				<td>
-					<input type="text" name="pinstance" id="pinstance" value="&xar-var-pinstance;" size="36" maxlength="255" tabindex="6" />
+					<select name="pinstance" id="pinstance" size="1" tabindex="5">
+						<xar:loop name="$instances">
+							<xar:if condition="$name eq $pinstance">
+								<option value="&xar-var-name;" selected>&xar-var-name;</option>
+							<xar:else />
+								<option value="&xar-var-name;">&xar-var-name;</option>
+							</xar:if>
+						</xar:loop>
+					</select>
 				</td>
 			</tr>
 			<tr>

@@ -33,6 +33,7 @@ class xarMasks
 	var $acltable;
 	var $allmasks;
 	var $levels;
+	var $instancestable;
 
 /**
  * xarMasks: constructor for the class
@@ -56,6 +57,8 @@ class xarMasks
 		$this->modulestable = $xartable['modules'];
 		$this->realmstable = $xartable['realms'];
 		$this->acltable = $xartable['acl'];
+		$this->instancestable = $xartable['instances'];
+
 // hack this for display purposes
 // probably should be defined elsewhere
 		$this->levels = array(0=>'No Access (0)',
@@ -122,34 +125,6 @@ class xarMasks
 			return $allmasks;
 		}
     }
-
-/**
- * register: register a mask
- *
- * Creates a mask entry in the masks table
- * This function should be invoked every time a new instance is created
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   mask
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-/*	function register($mask)
-	{
-		$query = "INSERT INTO xar_masks VALUES ($mask->getID(),
-												'',
-												'$mask->getRealm()',
-												'$mask->getModule()',
-												'$mask->getComponent()',
-												'$mask->getInstance()',
-												$mask->getLevel(),
-												'$mask->getDescription()')";
-		if (!$this->dbconn->Execute($query)) return;
-		return true;
-	}
-*/
 
 /**
  * register: register a mask
@@ -461,6 +436,46 @@ class xarPrivileges extends xarMasks
 {
 
 /**
+ * setInstance: define how a module's instances are registered
+ *
+ * Creates an entry in the instances table
+ * This function should be invoked at module initialisation time
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   array of values to register instance
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+	function setInstance($module,$table1,$valuefield,$displayfield,$appvar=0,$table2,$childID='xar_id',$parentID='parentID',$description='')
+	{
+		$nextID = $this->dbconn->genID($this->instancestable);
+		$nextIDprep = xarVarPrepForStore($nextID);
+		$moduleprep = xarVarPrepForStore($module);
+		$table1prep = xarVarPrepForStore($table1);
+		$valueprep = xarVarPrepForStore($valuefield);
+		$displayprep = xarVarPrepForStore($displayfield);
+		$appvarprep = xarVarPrepForStore($appvar);
+		$table2prep = xarVarPrepForStore($table2);
+		$childIDprep = xarVarPrepForStore($childID);
+		$parentIDprep = xarVarPrepForStore($parentID);
+		$descriptionprep = xarVarPrepForStore($description);
+		$query = "INSERT INTO $this->instancestable VALUES ($nextIDprep,
+												'$moduleprep',
+												'$table1prep',
+												'$valueprep',
+												'$displayprep',
+												$appvarprep,
+												'$table2prep',
+												'$childIDprep',
+												'$parentIDprep',
+												'$descriptionprep')";
+		if (!$this->dbconn->Execute($query)) return;
+		return true;
+	}
+
+/**
  * register: register a privilege
  *
  * Creates an entry in the privileges table
@@ -714,9 +729,10 @@ class xarPrivileges extends xarMasks
 */
     function getmodules() {
 	if ((!isset($allmodules)) || count($allmodules)==0) {
-			$query = "SELECT xar_modules.xar_id,
-						xar_modules.xar_name
-						FROM $this->modulestable";
+			$query = "SELECT xar_id,
+						xar_name
+						FROM $this->modulestable
+						ORDER BY xar_name";
 
 			$result = $this->dbconn->Execute($query);
 			if (!$result) return;
@@ -758,7 +774,7 @@ class xarPrivileges extends xarMasks
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   none
+ * @param   string with module name
  * @return  array of component ids and names
  * @throws  none
  * @todo    this isn't really the right place for this function
@@ -767,7 +783,8 @@ class xarPrivileges extends xarMasks
 		$query = "SELECT xar_masks.xar_sid,
 					xar_masks.xar_component
 					FROM $this->maskstable
-					WHERE xar_masks.xar_module= '$module'";
+					WHERE xar_masks.xar_module= '$module'
+					ORDER BY xar_component";
 
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
@@ -791,13 +808,78 @@ class xarPrivileges extends xarMasks
 			$ind = 2;
 			while(!$result->EOF) {
 				list($mid, $name) = $result->fields;
-				$ind = $ind + 1;
-				$components[$ind] = array('id' => $mid,
-								   'name' => $name);
+				if (($name != 'All') && ($name != 'None')){
+					$ind = $ind + 1;
+					$components[$ind] = array('id' => $mid,
+									   'name' => $name);
+				}
 				$result->MoveNext();
 			}
 		}
 		return $components;
+    }
+
+/**
+ * getinstances: returns all the current instances of a module.
+ *
+ * Returns an array of all the instances that have been defined for a given module.
+ * The instances for each module are registered at initialization.
+ * They are used to populate dropdowns in displays
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   string with module name
+ * @return  array of instance ids and names for the module
+ * @throws  none
+ * @todo    this isn't really the right place for this function
+*/
+    function getinstances($module) {
+		$query = "SELECT xar_instancetable1,
+					xar_instancevaluefield,
+					xar_instancedisplayfield
+					FROM $this->instancestable
+					WHERE xar_module= '$module'";
+
+		$result = $this->dbconn->Execute($query);
+		if (!$result) return;
+
+		$instances = array();
+		if ($module ==''){
+			$instances[1] = array('id' => -2,
+							   'name' => '');
+		}
+		elseif((count($result->fields) == 0) || ($result->fields[0] =='')) {
+			$instances[1] = array('id' => -1,
+							   'name' => 'All');
+			$instances[2] = array('id' => 0,
+							   'name' => 'None');
+		}
+		else {
+			list($table, $valuefield, $displayfield) = $result->fields;
+			$query = "SELECT $valuefield,
+						$displayfield
+						FROM $table
+						ORDER BY $displayfield";
+
+			$result = $this->dbconn->Execute($query);
+			if (!$result) return;
+
+			$instances[1] = array('id' => -1,
+							   'name' => 'All');
+			$instances[2] = array('id' => 0,
+							   'name' => 'None');
+			$ind = 2;
+			while(!$result->EOF) {
+				list($id, $name) = $result->fields;
+				if (($name != 'All') && ($name != 'None')){
+					$ind = $ind + 1;
+					$instances[$ind] = array('id' => $id,
+									   'name' => $name);
+				}
+				$result->MoveNext();
+			}
+		}
+		return $instances;
     }
 
 	function getprivilegefast($pid){
