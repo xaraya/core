@@ -1770,7 +1770,9 @@ function xarMod_getFileInfo($modOsDir)
  */
 function xarMod_getBaseInfo($modName)
 {
-    if (empty($modName)) {
+	static $modList = false;
+
+	if (empty($modName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
@@ -1783,47 +1785,66 @@ function xarMod_getBaseInfo($modName)
     // installation), since the state changes of those modules weren't taken
     // into account. The GLOBALS['xarMod_noCacheState'] flag tells Xaraya *not*
     // to cache module (+state) information in that case...
-    if (empty($GLOBALS['xarMod_noCacheState']) && xarVarIsCached('Mod.BaseInfos', $modName)) {
-        return xarVarGetCached('Mod.BaseInfos', $modName);
-    }
+    if (!$modList) {
 
-    list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
-    $modulestable = $tables['modules'];
+    	list($dbconn) = xarDBGetConn();
+        $tables = xarDBGetTables();
+        $modulestable = $tables['modules'];
 
-    $query = "SELECT xar_regid,
-                     xar_directory,
-                     xar_mode,
-                     xar_id
-              FROM $modulestable
-              WHERE xar_name = '" . xarVarPrepForStore($modName) . "'";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
+        $query = "SELECT xar_name,
+		                 xar_regid,
+                         xar_directory,
+                         xar_mode,
+                         xar_id
+                    FROM $modulestable";
+        $result =& $dbconn->Execute($query);
 
-    if ($result->EOF) {
-        $result->Close();
+		if (!$result) return;
+
+		$modList = array();
+
+		while (!$result->EOF) {
+            list($name,
+			     $regid,
+                 $directory,
+                 $mode,
+                 $systemid) = $result->fields;
+
+			$modList[$name] = array();
+			$modList[$name]['regid'] = $regid;
+			$modList[$name]['directory'] = $directory;
+			$modList[$name]['mode'] = $mode;
+			$modList[$name]['systemid'] = $systemid;
+
+			$result->MoveNext();
+		}
+
+		$result->Close();
+	}
+
+	if (!isset($modList[$modName])) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', $modName);
         return;
-    }
+	}
+  
+    if (!empty($GLOBALS['xarMod_noCacheState']) || !isset($modList[$modName]['state'])) {
+        $modState = xarMod__getState($modList[$modName]['regid'], $modList[$modName]['mode']);
+        if (!isset($modState)) return; // throw back
+        $modList[$modName]['state'] = $modState;
 
-    list($modBaseInfo['regid'],
-         $modBaseInfo['directory'],
-         $mode,
-         $modBaseInfo['systemid']) = $result->fields;
-    $result->Close();
+    	$modList[$modName]['name'] = $modName;
+        $modList[$modName]['mode'] = (int) $modList[$modName]['mode'];
+        $modList[$modName]['displayname'] = xarModGetDisplayableName($modName);
 
-    $modBaseInfo['name'] = $modName;
-    $modBaseInfo['mode'] = (int) $mode;
-    $modBaseInfo['displayname'] = xarModGetDisplayableName($modName);
-    // Shortcut for os prepared directory
-    // TODO: <marco> get rid of it since useless
-    $modBaseInfo['osdirectory'] = $modBaseInfo['directory'];
+    	// Shortcut for os prepared directory
+        // TODO: <marco> get rid of it since useless
+        $modList[$modName]['osdirectory'] = $modList[$modName]['directory'];
 
-    $modState = xarMod__getState($modBaseInfo['regid'], $modBaseInfo['mode']);
-    if (!isset($modState)) return; // throw back
-    $modBaseInfo['state'] = $modState;
-    xarVarSetCached('Mod.BaseInfos', $modName, $modBaseInfo);
-    return $modBaseInfo;
+	}
+
+	xarVarSetCached('Mod.BaseInfos', $modName, $modList[$modName]);
+
+	return $modList[$modName];
 }
 
 /**
@@ -1976,6 +1997,8 @@ function xarMod__loadDbInfo($modName, $modDir)
  */
 function xarMod__getState($modRegId, $modMode)
 {
+	static $stateList = false;
+	
     if ($modRegId < 1) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modRegId');
         return;
@@ -1985,34 +2008,64 @@ function xarMod__getState($modRegId, $modMode)
         return;
     }
 
-    list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+	if (!$stateList) { 
+    	list($dbconn) = xarDBGetConn();
+    	$tables = xarDBGetTables();
 
-    if ($modMode == XARMOD_MODE_SHARED) {
+		//XARMOD_MODE_SHARED
         $module_statesTable = $tables['system/module_states'];
-    } elseif ($modMode == XARMOD_MODE_PER_SITE) {
-        $module_statesTable = $tables['site/module_states'];
-    }
 
-    $query = "SELECT xar_state
-              FROM $module_statesTable
-              WHERE xar_regid = '" . xarVarPrepForStore($modRegId) . "'";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
+	    $query = "SELECT xar_regid, xar_state
+              	            FROM $module_statesTable";
+    	$result =& $dbconn->Execute($query);
+    	
+    	if (!$result) return;
 
-    //assert(!$result->EOF);
-    // the module is not in the table
-    // set state to XARMOD_STATE_UNINITIALISED
-    // FIXME: CHECK whether this has no side-effects,
-    // it was only put in to get the installer running.
-    if (!$result->EOF) {
-        list($modState) = $result->fields;
-        $result->Close();
-        return (int) $modState;
-    } else {
-        $result->Close();
-        return (int) XARMOD_STATE_UNINITIALISED;
+		$stateList = array();
+		$stateList[XARMOD_MODE_SHARED] = array();
+    	while (!$result->EOF) {
+        	list($regId, $modState) = $result->fields;
+        	$regId = (int) $regId;
+			$stateList[XARMOD_MODE_SHARED] [$regId] = (int) $modState;
+			$result->moveNext();
+    	}
+    	
+    	$result->Close();
+		
+        //XARMOD_MODE_PER_SITE
+	    $module_statesTable = $tables['site/module_states'];
+
+	    $query = "SELECT xar_regid, xar_state
+              	            FROM $module_statesTable";
+    	$result =& $dbconn->Execute($query);
+    	
+    	if (!$result) return;
+
+		$stateList = array();
+		$stateList[XARMOD_MODE_PER_SITE] = array();
+    	while (!$result->EOF) {
+        	list($regId, $modState) = $result->fields;
+        	$regId = (int) $regId;
+			$stateList[XARMOD_MODE_PER_SITE] [$regId] = (int) $modState;
+			$result->moveNext();
+    	}
+    	
+    	$result->Close();
+	}
+
+	$modMode = XARMOD_MODE_PER_SITE;
+
+	$modRegId = (int) $modRegId;
+
+    if (!isset($stateList[$modMode][$modRegId])) {
+	    // the module is not in the table
+	    // set state to XARMOD_STATE_UNINITIALISED
+	    // FIXME: CHECK whether this has no side-effects,
+	    // it was only put in to get the installer running.
+       	return (int) XARMOD_STATE_UNINITIALISED;
     }
+    
+    return $stateList[$modMode][$modRegId];
 }
 
 /**
