@@ -7,7 +7,7 @@
 </table>
 
 <center>
-<form method="post" action="&xar-modurl-participants-admin-removeparticipant;" method="post" enctype="application/x-www-form-urlencoded" />
+<form method="post" action="&xar-modurl-security-admin-removeparticipant;" method="post" enctype="application/x-www-form-urlencoded" />
     <input type="hidden" name="authid" value="&xar-var-authid;" />
 	<input type="hidden" name="partid" id="partid" value="&xar-var-partid;" />
 	<input type="hidden" name="permid" id="permid" value="&xar-var-permid;" />
