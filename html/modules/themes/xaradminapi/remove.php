@@ -43,6 +43,21 @@ function themes_adminapi_remove($args)
         return;
     }
     
+    // Bail out if we're trying to remove while one of our users
+    // has it set to their default theme
+    $mvid = xarModGetVarId('themes','default');
+    $sql = "SELECT COUNT(*) FROM $tables[module_uservars] WHERE xar_mvid=? AND xar_value = ?";
+    $result =& $dbconn->Execute($sql, array($mvid,$defaultTheme););
+    if(!$result) return;
+    // count should be zero
+    $count = $result->fields[0];
+    if($count != 0 ) {
+        xarErrorSet(XAR_USER_EXCEPTION, 'FORBIDDEN_OPERATION',
+                    xarML('The theme you are trying to remove is used by #(1) users on this site as their default theme. Theme cannot be removed.',$count));
+        return;
+    }        
+    
+    
     // Get theme database info
     xarThemeDBInfoLoad($themeInfo['name'], $themeInfo['directory']);
 
