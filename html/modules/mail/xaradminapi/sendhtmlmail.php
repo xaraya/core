@@ -37,6 +37,39 @@ function mail_adminapi_sendhtmlmail($args)
     // Get arguments from argument array
     extract($args);
 
+    // Check for required arguments
+    $invalid = array();
+    if (!isset($info) && !isset($recipients))
+        $invalid[] = 'info/recipients';
+    if (!isset($subject))
+        $invalid[] = 'subject';
+    if (!isset($message))
+        $invalid[] = 'message';
+
+    if (count($invalid) > 0) {
+        $msg = xarML('Wrong arguments to mail_adminapi', join(', ', $invalid), 'admin', 'sendhtmlmail', 'Mail');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        return;
+    }
+
+    // Set variables if they don't exist
+    if (!isset($recipients)){
+        $recipients = '';
+    }
+    if (!isset($wordwrap)) {
+        $wordwrap = xarModGetVar('mail', 'wordwrap');
+    }
+    if (!isset($priority)) {
+        $priority = xarModGetVar('mail', 'priority');
+    }
+    if (!isset($encoding)) {
+        $encoding = xarModGetVar('mail', 'encoding');
+        if (empty($encoding)) {
+            $encoding = '8bit';
+            xarModSetVar('mail', 'encoding', $encoding);
+        }
+    }
+
     // Check if HTML mail has been configured by the admin
     $adminhtml = xarModGetVar('mail', 'html');
 
@@ -68,7 +101,7 @@ function mail_adminapi_sendhtmlmail($args)
     // Call private sendmail
     return xarModAPIFunc('mail', 'admin', '_sendmail',
         array('info'        => $info,
-            'recipients'  => $recipients,
+            'recipients'    => $recipients,
             'subject'       => $subject,
             'message'       => $message,
             'htmlmessage'   => $parsedmessage, // set to $parsedmessage

@@ -70,7 +70,11 @@ function mail_adminapi_hookmailcreate($args)
     $slogan = xarModGetVar('themes', 'SiteSlogan');
     $wordwrap = xarModGetVar('mail', 'wordwrap');
     $priority = xarModGetVar('mail', 'priority');
-    $encoding = '8bit';
+    $encoding = xarModGetVar('mail', 'encoding');
+    if (empty($encoding)) {
+        $encoding = '8bit';
+        xarModSetVar('mail', 'encoding', $encoding);
+    }
     $from = xarModGetVar('mail', 'adminmail');
     $fromname = xarModGetVar('mail', 'adminname');
     $subject = xarML('A new item was created');

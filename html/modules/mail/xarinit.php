@@ -31,6 +31,7 @@ function mail_init()
     xarModSetVar('mail', 'priority', '3');
     xarModSetVar('mail', 'smtpPort', '25');
     xarModSetVar('mail', 'smtpHost', 'Your SMTP Host'); 
+    xarModSetVar('mail', 'encoding', '8bit'); 
     // when a module item is created
     if (!xarModRegisterHook('item', 'create', 'API',
             'mail', 'admin', 'hookmailcreate')) {
@@ -92,13 +93,12 @@ function mail_delete()
 {
 // TODO: delete separate xar_mail_queue table here someday
     xarModDelVar('mail', 'server');
-    xarModDelVar('mail', 'adminname');
-    xarModDelVar('mail', 'adminmail');
+    xarModDelVar('mail', 'replyto');
     xarModDelVar('mail', 'wordwrap');
     xarModDelVar('mail', 'priority');
-    xarModDelVar('mail', 'replyto');
-    xarModDelVar('mail', 'replytoname');
-    xarModDelVar('mail', 'replytoemail'); 
+    xarModDelVar('mail', 'smtpPort');
+    xarModDelVar('mail', 'smtpHost');
+    xarModDelVar('mail', 'encoding');
     // Remove Masks and Instances
     xarRemoveMasks('mail');
     xarRemoveInstances('mail');

@@ -84,7 +84,11 @@ function mail_adminapi__sendmail($args)
         $priority = xarModGetVar('mail', 'priority');
     }
     if (empty($encoding)) {
-        $encoding = '8bit';
+        $encoding = xarModGetVar('mail', 'encoding');
+        if (empty($encoding)) {
+            $encoding = '8bit';
+            xarModSetVar('mail', 'encoding', $encoding);
+        }
     }
     if (empty($from)) {
         $from = xarModGetVar('mail', 'adminmail');
