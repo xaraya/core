@@ -100,7 +100,7 @@ document.forms['privilegeform'].submit();}
 	</form>
 	<tr>
 		<td>
-			<hr>
+			<hr/>
 		</td>
 	</tr>
 </table>			
