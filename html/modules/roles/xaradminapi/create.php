@@ -15,6 +15,7 @@
  * @returns int
  * @return user ID on success, false on failure
  */
+
 function roles_adminapi_create($args)
 {
     // Get arguments
@@ -69,7 +70,12 @@ function roles_adminapi_create($args)
     }
 
     // Put registratation date in timestamp format
-    $date_reg = $dbconn->DBTimeStamp($date);
+    //$date_reg = $dbconn->DBTimeStamp($date);
+    $date_reg = $date;
+
+    // TODO: for now, convert the timestamp to a simple string since we are
+    // storing the date in a varchar field
+    //$date_reg = trim($date_reg,"'");
 
     $query = "INSERT INTO $rolestable (
               xar_uid,

@@ -1,5 +1,7 @@
 <?php
 
+include 'includes/xarDate.php';
+
 /**
  * showusers - display the users of this role
  */
@@ -75,15 +77,27 @@ function roles_admin_showusers()
             break;
     }
     // assemble the info for the display
+    $thisdate = new xarDate();
     $users = array();
     while (list($key, $user) = each($usrs)) {
+
+        // adjust the display format
+        // TODO: needs to be made variable
+        if(is_numeric($user->getDateReg())) {
+            $thisdate->setTimestamp($user->getDateReg());
+        }
+        else {
+            $thisdate->DBtoTS($user->getDateReg());
+        }
+        $regdate = $thisdate->display("m-d-Y");
+
         $users[] = array('uid' => $user->getID(),
             'name' => $user->getName(),
             'uname' => $user->getUser(),
             'email' => $user->getEmail(),
-            'date_reg' => $user->getDateReg(),
+            'date_reg' => $regdate,
             'frozen' => !xarSecurityCheck('EditRole',0,'Roles',$user->getName())
-            );
+        );
     }
 
     // Load Template
