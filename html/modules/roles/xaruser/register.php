@@ -301,51 +301,70 @@ function roles_user_register()
             
             $requireValidation = xarModGetVar('roles', 'requirevalidation');
             if ($requireValidation == false) {
-                // Create user and then log them in.  No sense in hesitating when its not required.
-                if (!xarModAPIFunc('roles',
-                                   'admin',
-                                   'create',
-                                    array('uname' => $username,
-                                          'realname' => $realname,
-                                          'email' => $email,
-                                          'pass'  => $pass,
-                                          'date'     => $now,
-                                          'valcode'  => $confcode,
-                                          'state'   => 3))) return;
+                $pending = xarModGetVar('roles', 'explicitapproval');
+                if ($pending == 1){
 
-                // check for user and grab uid if exists
-                $user = xarModAPIFunc('roles',
-                                      'user',
-                                      'get',
-                                       array('uname' => $username));
+                    // Update the user status table to reflect a pending account.
+                    if (!xarModAPIFunc('roles',
+                                       'admin',
+                                       'create',
+                                        array('uname' => $username,
+                                              'realname' => $realname,
+                                              'email' => $email,
+                                              'pass'  => $pass,
+                                              'date'     => $now,
+                                              'valcode'  => $confcode,
+                                              'state'   => 4))) return;
 
-                // Check for user creation failure
-                if (empty($user)) return;
+                    $data = xarTplModule('roles','user', 'getvalidation');
 
-                //Insert the user into the default users role
-                $userRole = xarModGetVar('roles', 'defaultgroup');
+                } else {
+                    // Update the user status table to reflect a validated account.
+                    if (!xarModAPIFunc('roles',
+                                       'admin',
+                                       'create',
+                                        array('uname' => $username,
+                                              'realname' => $realname,
+                                              'email' => $email,
+                                              'pass'  => $pass,
+                                              'date'     => $now,
+                                              'valcode'  => $confcode,
+                                              'state'   => 3))) return;
 
-                // Get the group id
-                $defaultRole = xarModAPIFunc('roles',
-                                             'user',
-                                             'get',
-                                             array('uname'  => $userRole,
-                                                   'type'   => 1));
+                    // check for user and grab uid if exists
+                    $user = xarModAPIFunc('roles',
+                                          'user',
+                                          'get',
+                                           array('uname' => $username));
 
-                if (empty($defaultRole)) return;
+                    // Check for user creation failure
+                    if (empty($user)) return;
 
-                // Make the user a member of the users role
-                if(!xarMakeRoleMemberByID($user['uid'], $defaultRole['uid'])) return;
-                
-                xarModAPIFunc('roles',
-                              'user',
-                              'login',
-                              array('uname' => $username,
-                                    'pass' => $pass,
-                                    'rememberme' => 0));
+                    //Insert the user into the default users role
+                    $userRole = xarModGetVar('roles', 'defaultgroup');
 
-                xarModSetVar('roles', 'lastuser', $username);
-                xarResponseRedirect('index.php');
+                    // Get the group id
+                    $defaultRole = xarModAPIFunc('roles',
+                                                 'user',
+                                                 'get',
+                                                 array('uname'  => $userRole,
+                                                       'type'   => 1));
+
+                    if (empty($defaultRole)) return;
+
+                    // Make the user a member of the users role
+                    if(!xarMakeRoleMemberByID($user['uid'], $defaultRole['uid'])) return;
+                    
+                    xarModAPIFunc('roles',
+                                  'user',
+                                  'login',
+                                  array('uname' => $username,
+                                        'pass' => $pass,
+                                        'rememberme' => 0));
+
+                    xarModSetVar('roles', 'lastuser', $username);
+                    xarResponseRedirect('index.php');
+                }
 
             } else {
                 // Create user - this will also create the dynamic properties (if any) via the create hook

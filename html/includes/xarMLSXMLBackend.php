@@ -120,8 +120,8 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
 
         $this->parser = xml_parser_create('utf-8');
         xml_set_object($this->parser, $this);
-        xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, 0);
-        xml_set_element_handler($this->parser, "beginElement", "endElement");
+        xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING,0);
+        xml_set_element_handler($this->parser, "beginElement","endElement");
         xml_set_character_data_handler($this->parser, "characterData");
 
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
