@@ -8,7 +8,6 @@ class xarCache_MemCached_Storage extends xarCache_Storage
     var $port = 11211;
     var $memcache = null;
     var $persistent = false;
-    var $expire = 0;
 
     function xarCache_MemCached_Storage($args = array())
     {
@@ -24,15 +23,12 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         if (isset($args['persistent'])) {
             $this->persistent = $args['persistent'];
         }
-        if (!empty($args['expire'])) {
-            $this->expire = $args['expire'];
-        }
         if ($this->persistent) {
             $this->memcache = memcache_pconnect($this->host, $this->port);
         } else {
             $this->memcache = memcache_connect($this->host, $this->port);
         }
-        $this->storage = 'ms';
+        $this->storage = 'memcached';
     }
 
     function isCached($key = '')
@@ -58,11 +54,8 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         return $value;
     }
 
-    function setCached($key = '', $value = '', $expire = null)
+    function setCached($key = '', $value = '')
     {
-        if (isset($expire)) {
-            $this->expire = $expire;
-        }
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
         }
@@ -96,6 +89,8 @@ class xarCache_MemCached_Storage extends xarCache_Storage
     {
         // this is the size of the whole cache
         $stats = $this->memcache->getstats();
+
+        $this->size = $stats['bytes'];
         return $stats['bytes'];
     }
 }
