@@ -20,7 +20,7 @@
 define('XARMOD_STATE_UNINITIALISED', 1);
 define('XARMOD_STATE_INACTIVE', 2);
 define('XARMOD_STATE_ACTIVE', 3);
-define('XARMOD_STATE_MISSING', 4);
+define('XARMOD_STATE_MISSING_FROM_UNINITIALISED', 4);
 define('XARMOD_STATE_UPGRADED', 5);
 // This isn't a module state, but only a convenient definition to indicates,
 // where it's used, that we don't care about state, any state is good
@@ -31,6 +31,9 @@ define('XARMOD_STATE_ANY', 0);
 // in fact we dont even need a record as it's an exact reverse of state 1
 // tell me if there is something wrong with my (twisted) logic ;-)
 define('XARMOD_STATE_INSTALLED', 6);
+define('XARMOD_STATE_MISSING_FROM_INACTIVE', 7);
+define('XARMOD_STATE_MISSING_FROM_ACTIVE', 8);
+define('XARMOD_STATE_MISSING_FROM_UPGRADED', 9);
 
 /**
  * Define these here for now
