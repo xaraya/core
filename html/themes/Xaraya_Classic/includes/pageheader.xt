@@ -1,7 +1,13 @@
 <div id="xc-header">
+    <xar:comment>Right bevel is somewhat decorational - needs extra div</xar:comment>
+    <div id="xc-header-rightbevel">
+        &nbsp;
+    </div>
+    <xar:comment>See if we need the styleswitcher controls here</xar:comment>
     <xar:if condition="$styleswitchertype ne 'none'">
         <xar:template file="styleswitchercontrols" type="theme" />
     </xar:if>
+    <xar:comment>Logo and bevel are combined and positioned with css</xar:comment>
     <h1>
         <a href="&xar-baseurl;" title="#$sitename#">
             <span>#$sitename#</span>

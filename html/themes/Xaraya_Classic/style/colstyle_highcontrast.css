@@ -1,7 +1,12 @@
 body {
     color: #000000;
     background-color: #666666;
-    background-image: url(../images/page_bg_hicontrast.gif);
+}
+
+div#pagegradient {
+    background-image: url(../images/pagegardients.jpg);
+    background-repeat: repeat-x;
+    background-position: 0px -600px;
 }
 
 a { color: #CC3333; }
@@ -31,17 +36,27 @@ th {
 .xar-block-title, .xar-block-title-right {
     color: #333333;
     background-color: #f0f0f0;
-    background-image: url(../images/page_bg_hicontrast.gif);
+    background-image: url(../images/pagegardients.jpg);
+    background-position: 0px -610px;
 }
 
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
-div#xc-header { background-color: #ffffff; }
-div#xc-header h1 a { background-image: url(../images/xaraya_logo_contrast.gif); }
+div#xc-header {
+    background-image: url(../images/xc_logo.png);
+    background-position: 0px -690px;
+}
+
+div#xc-header-rightbevel { background-position: -220px -600px; }
+
+div#xc-header h1 a {
+    background-image: url(../images/xc_logo.png);
+    background-position: 0px -600px;
+}
 
 div#xc-footer {
-    background-image: url(../images/page_bg_hicontrast.gif);
+    background-image: url(../images/pagegardients.jpg);
     background-repeat: repeat-x;
-    background-position: 0% 20%;
+    background-position: 0px -640px;
 }
 
 p#footermsg { background-position: -306px 0px; }

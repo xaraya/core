@@ -11,15 +11,10 @@ body {
     font-family: "trebuchet ms", "luxi sans", verdana, helvetica, sans-serif;
     font-size: 100.01%;
     line-height: 145%;
-    margin: 15px 2%;
+    margin:0;
     padding: 0;
     color: #333333;
-    background-color: #333366;
-    background-image: url(../images/page_bg.gif);
-    background-repeat: repeat-x;
-    background-position: 0% 0%;
-    background-attachment: fixed;
-    text-align: center;
+    background-color: #666699;
 }
 
 a {
@@ -192,9 +187,9 @@ these defaults apply to the left and right block group
     padding: 0 4px;
     color: #333366;
     background-color: #DDDDF0;
-    background-image: url(../images/page_bg.gif);
+    background-image: url(../images/pagegardients.jpg);
+    background-position: 0px -10px;
     background-repeat: repeat-x;
-    background-position: 0% 10%;
 }
 
 .xar-block-body,
@@ -298,8 +293,8 @@ div#classicthemecontrols {
     position: relative;
     width: 187px;
     float: right;
-    padding: 0 3px 0 0;
-    margin: 0;
+    padding: 0 1px 0 0;
+    margin: 69px -15px 0 0;
 }
 
 div#classicthemecontrols img {
@@ -343,9 +338,9 @@ positioning and minimal styling of footer
 -------------------------------------------------------------------------[comment] */
 
 div#xc-footer {
-    background-image: url(../images/page_bg.gif);
+    background-image: url(../images/pagegardients.jpg);
+    background-position: 0px -40px;
     background-repeat: repeat-x;
-    background-position: 0% 20%;
 }
 
 /*
@@ -355,17 +350,17 @@ p#footermsg,
 p#footermsg a {
     display:block;
     width: 102px;
-	height: 47px;
+    height: 47px;
 }
 
 p#footermsg {
-	float: right;
-	padding: 0;
-	margin: 1px 1px 0 0;
-	text-align: right;
-	background-image: url(../images/xar_badge.gif);
-	background-color: transparent;
-	background-position: 0px 0px;
+    float: right;
+    padding: 0;
+    margin: 1px 1px 0 0;
+    text-align: right;
+    background-image: url(../images/xar_badge.gif);
+    background-color: transparent;
+    background-position: 0px 0px;
 }
 
 /* hide logo image in case when css is enabled - we display nicer multicoloured version as per rule above */
