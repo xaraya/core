@@ -184,6 +184,7 @@ class xarRoles
 
         // set the data in an array
         $row = $q->row();
+        if (empty($row)) return;
 
         $pargs = array(
             'uid' =>         $row['xar_uid'],
