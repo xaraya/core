@@ -136,7 +136,7 @@ function xarSecGenAuthKey($modName = NULL)
 
 // Date gives extra security but leave it out for now
 //    $key = xarSessionGetVar('rand') . $modName . date ('YmdGi');
-    $key = xarSessionGetVar('rand') . $modName;
+    $key = xarSessionGetVar('rand') . strtolower($modName);
 
     // Encrypt key
     $authid = md5($key);
@@ -160,7 +160,7 @@ function xarSecConfirmAuthKey($authIdVarName = 'authid')
     $authid = xarRequestGetVar($authIdVarName);
 
     // Regenerate static part of key
-    $partkey = xarSessionGetVar('rand') . $modName;
+    $partkey = xarSessionGetVar('rand') . strtolower($modName);
 
 // Not using time-sensitive keys for the moment
 //    // Key life is 5 minutes, so search backwards and forwards 5
@@ -188,7 +188,10 @@ function xarSecConfirmAuthKey($authIdVarName = 'authid')
         return true;
     }
     // Not found, assume invalid
-    return false;
+        $msg = xarML('Invalid authorization key for modifying item');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return;
 }
 
 /*
@@ -241,12 +244,6 @@ function xarSec__getAuthInfo($userId)
     // Set userId infos
     $userIds[] = $userId;
     
-    // if the userId is empty or zero, then the user must
-    // be the anonymous user so, set the id == -1
-    if (empty($userId)) {
-        $userId = (int) -1;
-    }
-    
     // FIXME: <marco> This still be an undocumented feature.
     $vars['Active User'] = $userId;
     $userIds = implode(',', $userIds);
@@ -257,7 +254,7 @@ function xarSec__getAuthInfo($userId)
                      xar_instance,
                      xar_level
               FROM $userpermtable
-              WHERE xar_uid='" . xarVarPrepForStore($userId) . "'
+              WHERE xar_uid IN (" . xarVarPrepForStore($userIds) . ")
               ORDER by xar_sequence";
     $result =& $dbconn->Execute($query);
     if (!$result) return;

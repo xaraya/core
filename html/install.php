@@ -51,6 +51,8 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 {
     xarCoreInit(XARCORE_SYSTEM_NONE); // Does not initialise any optional system
 
+    // Make sure we can render a page
+    xarTplSetPageTitle('Xaraya installer');
     if (!xarTplSetThemeName('installer')) {
         xarCore_die('You need the installer theme if you want to install Xaraya.');
     }

@@ -3433,6 +3433,8 @@ BK|tests/xuser/pnuser.php|19700101030959|03887|2e1cefb2c872250f
 BK|tests/xuser/pnuserapi.php|19700101030959|03888|d1eaca984d23e365
 BK|tests/xuser/pnversion.php|19700101030959|03889|a1c09e7d783b9be
 BK|tests/xuser/readmefirst.txt|19700101030959|03881|41e7e14a4602a61
+BitKeeper/custom/phpDocumentor/Smarty/Smarty.class.php~
+BitKeeper/custom/phpdoc/Smarty/Smarty.class.php~
 John.Cox@d38yrl11.|html/modules/autolinks/pntemplates/admin-create.pnd|20021101120307|30792|74a6a374
 John.Cox@d38yrl11.|html/modules/base/init.txt|20021108010824|34847|e979bd54
 John.Cox@d38yrl11.|html/modules/base/pnadminapi.php|20021116165342|11812|a99dac91
@@ -3453,12 +3455,14 @@ anon@numenor.|docs/blocklayout/blocklayout_spec.html|20021015161043|26321|dc726d
 anon@numenor.|docs/blocklayout/blocklayoutsm.jpg|20021015061608|63464|f33c866b
 anon@numenor.|docs/blocklayout/templates.gif|20021015062454|36138|18b3cdec
 anon@numenor.|docs/blocklayout/xaraya.gif|20021015061608|38710|f33daadf
+html/var/cache/templates/index.html
 jan@jack.iwr.uni-heidelberg.de|docs/rfc/images/rfc0007_2.png|20021126191341|35994|fc55b7d32f9f732f
 jan@jack.iwr.uni-heidelberg.de|docs/rfc/images/rfc0007_3.dia~|20021126191024|27897|9bd80ccec8dd4190
 johnny@falling.local.lan|html/images/index.html|20021003154139|20688|ca7c306767ddff11
 johnny@falling.local.lan|html/index.html|20021003153845|26519|1b682d56eaba4d7e
 marcel@hsdev.com|BitKeeper/custom/phpdoc/Smarty/Smarty.class.php~|20030120152301|29309|a87207e0db4e309e
 marcel@hsdev.com|docs/bk/bk-decisions.txt~|20030123015816|58682|6e354e8290649c22
+marcel@hsdev.com|html/var/cache/templates/index.html|20030203085125|46538|5592895c37061f27
 marcel@hsdev.com|tests/bk/tobedeletd3|20021201185524|27771|2ad34953b9eb374d
 marcel@hsdev.com|tests/bk/tobedelted1|20021201185524|23311|4964bad518a1862a
 marcel@hsdev.com|tests/bk/tobedleted2|20021201185524|24280|230730a268eb4cc3

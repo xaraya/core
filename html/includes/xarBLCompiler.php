@@ -1790,6 +1790,13 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
                     return;
                 }
                 return "xarModGetVar('".$module."', '".$name."')";
+            // MrB: Johnny, merged this in, not sure if it needs to be here, check this.
+        
+            case 'theme':
+                if (!isset($themeName)) {
+                    $themeName = xarCore_getSiteVar('BL.DefaultTheme');
+                }
+                return "xarThemeGetVar('".$themeName."', '".$name."')";
             case 'local':
                 $name = xarTpl__ExpressionTransformer::transformPHPExpression($name);
                 if (!isset($name)) {
@@ -2529,6 +2536,7 @@ class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
     function renderBeginTag()
     {
         $key = '';
+        // MrB: these two ifs are in review, not in main, let them be in the merge.
         if (count($this->children) == 0) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                            new xarTpl__ParserError('Missing the key inside <xar:mlkey> tag.', $this));
@@ -2578,6 +2586,7 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
     function renderBeginTag()
     {
         $string = '';
+	// MrB: these two ifs are in review, not in main, let them be in the merge
         if (count($this->children) == 0) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                            new xarTpl__ParserError('Missing the string inside <xar:mlstring> tag.', $this));
@@ -2634,12 +2643,13 @@ class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
         if (isset($this->cachedOutput)) {
             return $this->cachedOutput;
         }
-
+        // MrB: in main the check is > 1, the check below is better, let it be in the merge
         if (count($this->children) != 1) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                            new xarTpl__ParserError('The <xar:mlvar> tag can contain only one child tag.', $this));
             return;
         }
+        // MrB: in main there is no check, this is better, let it be in the merge
         if (count($this->attributes) != 0) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                            new xarTpl__ParserError('The <xar:mlvar> tag takes no attributes.', $this));
@@ -2767,7 +2777,7 @@ class xarTpl__XarIncludeNode extends xarTpl__TplTagNode
     function render()
     {
         extract($this->attributes);
-
+        // MrB: this is in review, this is right, include is indeed deprecated, let it like this in the merge
         xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                            new xarTpl__ParserError('The <xar:include> tag has been deprecated, you must use <xar:template>.', $this));
         return;
@@ -2785,22 +2795,13 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
     function render()
     {
         extract($this->attributes);
-
-        // <mrb> good idea to replace file with name, but not according to spec, postponed.
-//         if (isset($file)) {
-//             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
-//                            new xarTpl__ParserError('The \'file\' attribute has been deprecated, use \'name\' instead.', $this));
-//             return;
-//         }
-
-        //  if (!isset($name)) {
+        // MrB: review contained a change from marce replacing file with name, although a good idea, not according to spec,
+	// the thing below is the right code for now.
         if (!isset($file)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
                            new xarTpl__ParserError('Missing \'file\' attribute in <xar:template> tag.', $this));
             return;
         }
-        // <mrb> also look here when updating to new spec 
-        $name=$file;
 
         if (!isset($type)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
@@ -2903,13 +2904,9 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
             return;
         }
         if (!xarTplCheckTagAttributes($this->tagName, $this->attributes)) return;
-        // FIXME: we need the type somewhere in tag registration too
-        xarModAPILoad($that->_module);
-        $func = $that->_handler;
-        if (!function_exists($func)) {
-            xarModAPILoad($that->_module,'admin');
-        }
-        return $func($this->attributes);
+        // let xarTemplate worry about calling the right function :)
+        // MrB: mike is right here, this was merged into review from main.
+        return $that->callHandler($this->attributes);
     }
 
     function isAssignable()
@@ -3127,3 +3124,4 @@ class xarTpl__WidgetPostfield extends xarTpl__TplWidgetNode
     }
 }
 
+?>

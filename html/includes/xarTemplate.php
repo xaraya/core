@@ -340,10 +340,10 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
     $sourceFileName = $GLOBALS['xarTpl_themeDir']."/pages/$templateName.xt";
 
     if ($GLOBALS['xarTpl_headJavaScript'] !='') {
-        $GLOBALS['xarTpl_headJavaScript'] = "<script type=\"text/javascript\">\n<!--\n{$GLOBALS[xarTpl_headJavaScript]}\n// -->\n</script>";
+        $GLOBALS['xarTpl_headJavaScript'] = "<script type=\"text/javascript\">\n<!--\n{$GLOBALS['xarTpl_headJavaScript']}\n// -->\n</script>";
     }
     if ($GLOBALS['xarTpl_bodyJavaScript'] !='') {
-        $GLOBALS['xarTpl_bodyJavaScript'] = "<script type=\"text/javascript\">\n<!--\n{$GLOBALS[xarTpl_bodyJavaScript]}\n// -->\n</script>";
+        $GLOBALS['xarTpl_bodyJavaScript'] = "<script type=\"text/javascript\">\n<!--\n{$GLOBALS['xarTpl_bodyJavaScript']}\n// -->\n</script>";
     }
     
     $tplData = array('_bl_mainModuleOutput' => $mainModuleOutput,
@@ -654,7 +654,19 @@ class xarTemplateTag {
         $this->_name = $name;
         $this->_handler = $handler;
         $this->_module = $module;
-        
+       
+        // FIXME: pass this along at template registration someday
+        if (preg_match("/($module)_(\w+)api_(.*)/",$handler,$matches)) {
+            $this->_type = $matches[2];
+            $this->_func = $matches[3];
+        } else {
+            $msg = xarML("Illegal tag definition: '#(1)' is an invalid handler.", $handler);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+                           new SystemException($msg));
+            $this->_name = NULL;
+            return;
+        }
+ 
         $this->_attributes = array();
         
         if (is_array($attributes)) {
@@ -684,11 +696,23 @@ class xarTemplateTag {
 
     function callHandler($args)
     {
-        // FIXME: <marco> how do you think to handle exceptions here?
-        //                you should use xarModAPIFunc!
-        xarModAPILoad($this->_module);
-        $func = $this->_handler;
-        return $func($args);
+        // FIXME: get rid of this once installation includes the right serialized info
+        if (empty($this->_type) || empty($this->_func)) {
+            $handler = $this->_handler;
+            $module = $this->_module;
+            if (preg_match("/($module)_(\w+)api_(.*)/",$handler,$matches)) {
+                $this->_type = $matches[2];
+                $this->_func = $matches[3];
+            } else {
+                $msg = xarML("Illegal tag definition: '#(1)' is an invalid handler.", $handler);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+                               new SystemException($msg));
+                $this->_name = NULL;
+                return;
+            }
+        }
+        //xarModAPILoad($this->_module, $this->_type);
+        return xarModAPIFunc($this->_module, $this->_type, $this->_func, $args);
     }
 }
 

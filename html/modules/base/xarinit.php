@@ -435,11 +435,18 @@ function base_init()
     }
     $groupPermsTable = $systemPrefix . '_group_perms';
 
+    // Set up an Admin Group Permission
     $id = $dbconn->GenId($groupPermsTable);
     $query = "INSERT INTO $groupPermsTable
              (xar_pid, xar_gid, xar_sequence, xar_realm, xar_component, xar_instance, xar_level, xar_bond)
               VALUES ($id, $group_admin, 1, 0, '.*', '.*', 800, 0);";
 
+    // Set up an 'All Users' group perm with, component = .*, instance = .* and level ACCESS_COMMENT
+    $id = $dbconn->GenId($groupPermsTable);
+    $query = "INSERT INTO $groupPermsTable
+             (xar_pid, xar_gid, xar_sequence, xar_realm, xar_component, xar_instance, xar_level, xar_bond)
+              VALUES ($id, -1, 2, 0, '.*', '.*', 300, 0);";
+              
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -627,10 +634,6 @@ function base_activate()
     }
 
     // Create default block groups/instances
-    if (!xarModAPILoad('blocks', 'admin')) {
-        return NULL;
-    }
-
     if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name' => 'left'))) {
         return NULL;
     }
@@ -664,3 +667,4 @@ function base_delete()
     return false;
 }
 
+?>

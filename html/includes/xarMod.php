@@ -551,9 +551,8 @@ function xarModLoad($modName, $modType = 'user')
         return;
     }
 
-    xarLogMessage("xarModLoad: loading $modName:$modType");
-
-    if (isset($loadedModuleCache["$modName$modType"])) {
+    // Make sure we access the cache with lower case key
+    if (isset($loadedModuleCache[strtolower("$modName$modType")])) {
         // Already loaded from somewhere else
         return true;
     }
@@ -579,7 +578,9 @@ function xarModLoad($modName, $modType = 'user')
 
     // Load file
     include $fileName;
-    $loadedModuleCache["$modName$modType"] = true;
+    // MrB: this was a fix in main (the strtolower thing)
+    // Make sure we access the case with lower case key
+    $loadedModuleCache[strtolower("$modName$modType")] = true;
 
     // Load the module translations files
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_FILE, $modType) === NULL) return;
@@ -621,10 +622,8 @@ function xarModAPILoad($modName, $modType = 'user')
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
         return;
     }
-
-    xarLogMessage("xarModAPILoad: loading $modName:$modType");
-
-    if (isset($loadedAPICache["$modName$modType"])) {
+    // MrB: strtolower fix in main, merged into review
+    if (isset($loadedAPICache[strtolower("$modName$modType")])) {
         // Already loaded from somewhere else
         return true;
     }
@@ -647,8 +646,9 @@ function xarModAPILoad($modName, $modType = 'user')
     }
 
     // Load the file
-    include $fileName;
-    $loadedAPICache["$modName$modType"] = true;
+    // MrB: strtolower fix from main
+    include $osfile;
+    $loadedAPICache[strtolower("$modName$modType")] = true;
 
     // Load the API translations files
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_FILE, $modType.'api') === NULL) return;
@@ -1490,3 +1490,4 @@ function xarMod__getState($modRegId, $modMode)
     }
 }
 
+?>

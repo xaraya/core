@@ -49,6 +49,14 @@ function xarMain()
         xarTplSetThemeName($themeName);
     }
 
+	// onPageView event would go here
+	if (xarModIsAvailable('sniffer')) {
+		xarModAPIFunc('sniffer','user','sniff');
+		if(xarModIsAvailable('stats')) {
+			xarModAPIFunc('stats', 'user', 'count');
+		}
+	}
+
     // Load the module
     if (!xarModLoad($modName, $modType)) return; // throw back
 

@@ -2,7 +2,7 @@
 /**
  * File: $Id: s.xarBlocks.php 1.76 03/01/21 13:54:43+00:00 johnny@falling.local.lan $
  * 
- * Blocks Support
+ * Display Blocks
  *
  * @package blocks
  * @copyright (C) 2002 by the Xaraya Development Team.
@@ -15,11 +15,11 @@
 /**
  * Initialize blocks subsystem
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Paul Rosania
  * @access protected
  * @param args 
  * @param whatElseIsGoingLoaded integer
- * @return bool true
+ * @returns bool
  * @todo    FIXME: <marco> Paul do you wanna move xarBlockTypeExists, 
  *          Register and Unregister out of this file?
  * @todo    And why are you using $blockType instead of $blockName, 
@@ -91,7 +91,7 @@ function xarBlockGetInfo($blockId)
         $result->Close();
         $msg = xarML('Block identified by bid #(1) doesn\'t exist.', $blockId);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
-                        new SystemException($msg));
+                       new SystemException($msg));
 	    return NULL;
     }
 
@@ -138,8 +138,10 @@ function xarBlockGroupGetInfo($blockGroupId)
 
     // Freak if we don't get one and only one result
     if ($result->PO_RecordCount() != 1) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN');
-        return;
+        $msg = xarML("Group ID $blockGroupId not found.", $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return NULL;
     }
 
     $group = $result->GetRowAssoc(false);
@@ -178,6 +180,8 @@ function xarBlockGroupGetInfo($blockGroupId)
 
     return $group;
 }
+
+// XarBlockType functions are now in xarLegacy, they should be in the blocks module
 
 // PROTECTED FUNCTIONS
 
@@ -223,6 +227,7 @@ function xarBlock_load($modName, $blockName)
     $loaded["$modName$blockName"] = 1;
 
     // Load the block language files
+    // MrB: this is new functionality in review, we want this
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_BLOCK, $blockName) === NULL) return;
 
     // Initialise block (security schema) if required.
@@ -338,8 +343,7 @@ function xarBlock_render($blockInfo)
 	}
 
     // Handle block state
-    if (!xarModAPILoad('blocks')) return; // throw back
-
+    // MrB: review contained xarModAPILoad, not needed anymore.
     $res = xarModAPIFunc('blocks', 'user', 'getState', $blockInfo);
     if (!isset($res)) {
         if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
@@ -419,5 +423,4 @@ function xarBlock_renderGroup($groupName)
 
     return $output;
 }
-
 ?>
