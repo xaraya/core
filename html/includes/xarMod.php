@@ -268,7 +268,7 @@ function xarModDelVar($modName, $name)
 
     // Delete the user variables first
     $modvarid = xarModGetVarId($modName, $name);
-    
+
     if(!$modvarid) return;
     // MrB: we could use xarModDelUserVar in a loop here, but this is
     //      much faster.
@@ -299,13 +299,13 @@ function xarModDelVar($modName, $name)
  * @raise DATABASE_ERROR, BAD_PARAM
  * @todo Add caching for user variables?
  */
-function xarModDelAllVars($modName) 
+function xarModDelAllVars($modName)
 {
     if(empty($modName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    
+
     $modBaseInfo = xarMod_getBaseInfo($modName);
     //if (!isset($modBaseInfo)) return; // throw back
 
@@ -341,8 +341,8 @@ function xarModDelAllVars($modName)
 
             $sql = "DELETE FROM $module_uservarstable WHERE $module_uservarstable.xar_mvid IN (".$idlist.")";
             $result =& $dbconn->Execute($sql);
-            if(!$result) return; 
-            $result->Close;
+            if(!$result) return;
+            $result->Close();
     }
 
     // Now delete the module vars
@@ -955,7 +955,7 @@ function xarModPrivateLoad($modName, $modType)
     if (!file_exists($fileName)){
         $fileName = "modules/$modDir/pn$modType.php";
     }
-    
+
     // Removed the execption.  Causing some wierd results with modules without an api.
     if (file_exists($fileName)) {
         // Load file
@@ -1576,7 +1576,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL)
                   WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'";
         $result =& $dbconn->Execute($query);
         if (!$result) return;
-    
+
         $modHookedCache[$callerModName] = array();
         while(!$result->EOF) {
             list($modname) = $result->fields;
@@ -1779,7 +1779,7 @@ function xarMod_getVarsByName($name)
 
     $module_table = $tables['system/modules'];
     $module_varstable = $tables['system/module_vars'];
-    
+
     // TODO: fetch from site table too ?
     //    $module_varstable = $tables['site/module_vars'];
 
