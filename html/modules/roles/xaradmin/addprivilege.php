@@ -43,15 +43,23 @@ function roles_admin_addprivilege()
         if (!$role->assignPrivilege($priv)) return;
     }
 
+// CHECKME: do we really want to do that here (other than for flushing the cache) ?
     // call update hooks and let them know that the role has changed
     $pargs['module'] = 'roles';
+    $pargs['itemtype'] = $role->getType();
     $pargs['itemid'] = $roleid;
     xarModCallHooks('item', 'update', $roleid, $pargs);
 
+    if (!xarVarFetch('return_url', 'isset', $return_url, '', XARVAR_NOT_REQUIRED)) return;
+
+    if (empty($return_url)) {
+        $return_url = xarModURL('roles',
+                                'admin',
+                                'showprivileges',
+                                array('uid' => $roleid));
+    }
+
     // redirect to the next page
-    xarResponseRedirect(xarModURL('roles',
-            'admin',
-            'showprivileges',
-            array('uid' => $roleid)));
+    xarResponseRedirect($return_url);
 }
 ?>

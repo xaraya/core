@@ -90,6 +90,29 @@ document.forms['privilegeform'].submit();}
 				</tr>
 			</xar:foreach>
 		</xar:if>
+			<tr>
+				<td colspan="3">
+				&nbsp;
+				</td>
+			</tr>
+		<form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
+			<tr>
+				<td colspan="3">
+				<xar:mlstring>Assign to Group</xar:mlstring>
+				<select name="roleid" id="roleid">
+				<xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
+					<option value="#$groups[$i]['uid']#">
+						#$groups[$i]['name']# - #$groups[$i]['users']#
+					</option>
+				</xar:for>
+				</select>
+				<input type="submit" value="#xarML('Assign')#" />
+				<input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('roles')#" />
+				<input type="hidden" name="privid" id="privid" value="#$pid#" />
+				<input type="hidden" name="return_url" id="return_url" value="#xarModURL('privileges','admin','viewroles',array('pid' => $pid))#" />
+				</td>
+			</tr>
+		</form>
 	</table>
 </div>
 <br />
@@ -121,7 +144,6 @@ document.forms['privilegeform'].submit();}
 			<xar:else />
 			<input type="radio" name="show" id="show_assigned" value="assigned" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-viewroles;';this.form.submit();" />
 			</xar:if><label for="show_assigned"><xar:mlstring>Assigned</xar:mlstring></label>
-
 			<xar:if condition="$show eq 'all'">
 			<input type="radio" name="show" id="show_all" value="all" checked="checked" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-viewroles;';this.form.submit();"/>
 			<xar:else />

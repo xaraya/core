@@ -65,13 +65,8 @@ function privileges_admin_viewroles()
                              array('pid'=>$pid));
     $data['trees'] = $renderer->drawtrees($data['show']);
     $data['parents'] = $parents;
+    $data['groups'] = xarModAPIFunc('roles','user','getallgroups');
     return $data;
-
-    xarSessionSetVar('privileges_statusmsg', xarML('Privilege Modified',
-                    'privileges'));
-
-// redirect to the next page
-    xarResponseRedirect(xarModURL('privileges', 'admin', 'viewroles'));
 }
 
 ?>
