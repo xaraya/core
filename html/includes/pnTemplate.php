@@ -130,9 +130,19 @@ function pnTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $pageNa
     if (empty($pageName)) {
         $pageName = 'default';
     }
+    /* TODO => This will set all 'admin' type templates to just 
+    $modType = pnVarCleanUntrusted(pnRequestGetVar('type')); 
+    if (empty($modType)) {
+        $modType = 'user';
+    }
 
-    $pageName = pnVarPrepForOS($pageName);
-    $sourceFileName = "$pnTpl_themeDir/pages/$pageName.pnt";
+    if($modType == 'admin'){
+        $pageName = pnVarPrepForOS($pageName);
+        $sourceFileName = "admin/pages/$pageName.pnt";
+    } else {*/
+        $pageName = pnVarPrepForOS($pageName);
+        $sourceFileName = "$pnTpl_themeDir/pages/$pageName.pnt";
+    //}
 
     $tplData = array('_bl_mainModuleOutput' => $mainModuleOutput);
 
