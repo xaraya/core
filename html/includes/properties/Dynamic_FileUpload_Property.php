@@ -145,7 +145,8 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     }
 
 //    function showInput($name = '', $value = null, $size = 0, $maxSize = 0, $id = '', $tabindex = '')
-    function showInput($args = array()) {
+    function showInput($args = array()) 
+    {
         extract($args);
         if (empty($name)) {
             $name = 'dd_'.$this->id;
@@ -191,7 +192,8 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                '<input type="file" name="'.$upname.'" size="'. $size . '" id="'. $id . '"' . $tabindex . ' /> ' . $allowed . $invalid);
     }
 
-    function showOutput($args = array()) {
+    function showOutput($args = array()) 
+    {
         
         extract($args);
         
@@ -224,7 +226,8 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         }
     }
         
-    function _UploadModule_validateValue($value) {
+    function _UploadModule_validateValue($value) 
+    {
         
         // If we've just been previewed, then use the value that was passed in :)
         if (!is_null($value) && !empty($value) && (is_numeric($value) || stristr(';', $value))) {
@@ -330,7 +333,8 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         return true;
     }
 
-    function _UploadModule_showInput($value = NULL) {
+    function _UploadModule_showInput($value = NULL) 
+    {
             
         $trusted_dir = xarModGetVar('uploads', 'path.imports-directory');
         $descend = TRUE;
@@ -371,7 +375,8 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         
     }
     
-    function _UploadModule_showOutput($value) {
+    function _UploadModule_showOutput($value) 
+    {
         
         //echo "<br /><pre>value => "; print_r($value); echo "</pre>";
         $value = explode(';', $value);
