@@ -23,6 +23,45 @@ include_once ('./includes/log/loggers/xarLogger.php');
 class xarLogger_javascript extends xarLogger
 {
     /**
+    * Buffer for logging messages
+    */
+    var $_buffer;
+
+    /**
+    * The level of load of the core systems.
+    */
+    var $_loadLevel;
+
+    /**
+    * Write out the buffer if it is possible (the template system is already loaded)
+    *
+    * @access public
+    */
+    function writeOut()
+    {
+        if ($this->_loadLevel & XARCORE_BIT_TEMPLATE) return false;
+        xarTplAddJavaScript('head', 'code', $this->_buffer);
+        $this->_buffer = '';
+        
+        return true;
+    }
+
+    /**
+     * Sets up the configuration specific parameters for each driver
+     *
+     * @param array     $conf               Configuration options for the specific driver.
+     *
+     * @access public
+     * @return boolean
+     */
+    function setConfig(&$conf) 
+    {
+        parent::setConfig($conf);
+        $this->_loadLevel = & $conf['loadLevel'];
+        $this->_buffer = $this->getCommonCode();
+    }
+    
+    /**
     * Common Code. This will create the javascript debug window.
     *
     * @access private
@@ -49,27 +88,22 @@ class xarLogger_javascript extends xarLogger
     * @return boolean  True on success or false on failure.
     * @access public
     */
-
     function notify($message, $level)
     {
+        $strings = array ("\r\n", "\r", "\n");
+        $replace = array ("<br />", "<br />", "<br />");
+        
         // Abort early if the level of priority is above the maximum logging level.
         if (!$this->doLogLevel($level)) return false;
 
-      static $first = true;
-
-      if ($first) {
-            xarTplAddJavaScript('head', 'code', $this->getCommonCode());
-            $first = false;
-      }
-
-        $code = "if (debugWindow) {\n".
-                "    debugWindow.document.write(\"".$this->getTime().
+        $this->_buffer .= "if (debugWindow) {\n".
+                "    debugWindow.document.write('".$this->getTime().
                 ' - ('.$this->levelToString($level).')<br/>'.
-                nl2br(addslashes($message)) . "<br/><br/>\");\n".
+                addslashes(str_replace($strings, $replace, $message) ). "<br/><br/>');\n".
                 "    debugWindow.scrollBy(0,100000);\n".
                 "}\n";
 
-        xarTplAddJavaScript('head', 'code', $code);
+        $this->writeOut();
     }
 }
 

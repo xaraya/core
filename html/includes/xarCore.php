@@ -69,7 +69,7 @@ define('XARCORE_SYSTEM_USER', 4 | XARCORE_SYSTEM_SESSION);
 define('XARCORE_SYSTEM_CONFIGURATION', 8 | XARCORE_SYSTEM_ADODB);
 define('XARCORE_SYSTEM_BLOCKS', 16 | XARCORE_SYSTEM_CONFIGURATION);
 define('XARCORE_SYSTEM_MODULES', 32 | XARCORE_SYSTEM_CONFIGURATION);
-define('XARCORE_SYSTEM_ALL', 63); // bit OR of all optional systems
+define('XARCORE_SYSTEM_ALL', 127); // bit OR of all optional systems (includes templates now)
 
 define('XARCORE_BIT_ADODB', 1);
 define('XARCORE_BIT_SESSION', 2);
@@ -77,6 +77,9 @@ define('XARCORE_BIT_USER', 4 );
 define('XARCORE_BIT_CONFIGURATION', 8);
 define('XARCORE_BIT_BLOCKS', 16);
 define('XARCORE_BIT_MODULES', 32);
+
+// Extra needed bit to figure out if this sub system was already loaded or not
+define('XARCORE_BIT_TEMPLATE', 64);
 
 /*
  * Debug flags
@@ -338,6 +341,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'themesBaseDirectory'    => xarConfigGetVar('Site.BL.ThemesDirectory'),
                         'defaultThemeDir'        => xarModGetVar('themes','default'));
     xarTpl_init($systemArgs, $whatToLoad);
+    $whatToLoad ^= XARCORE_BIT_TEMPLATE;
 
 
     /**

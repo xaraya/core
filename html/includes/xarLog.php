@@ -30,7 +30,7 @@ define('XARLOG_LEVEL_NOTICE',    32);
 define('XARLOG_LEVEL_INFO',      64);
 define('XARLOG_LEVEL_DEBUG',     128);
 
-function xarLog_init($args, $whatElseIsGoingLoaded) 
+function xarLog_init($args, &$whatElseIsGoingLoaded) 
 {
 
     $GLOBALS['xarLog_loggers'] = array();
@@ -80,7 +80,9 @@ function xarLog_init($args, $whatElseIsGoingLoaded)
 
     // If none of these => do nothing.
      foreach ($xarLogConfig as $logger) {
-         xarLog__add_logger($logger['type'], $logger['config']);
+        $config = array_merge(array(
+            'loadLevel' => &$whatElseIsGoingLoaded), $logger['config']);
+         xarLog__add_logger($logger['type'], $config);
      }
 
     // Subsystem initialized, register a shutdown function

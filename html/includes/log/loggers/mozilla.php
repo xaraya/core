@@ -24,11 +24,44 @@ include_once ('./includes/log/loggers/xarLogger.php');
  */
 class xarLogger_mozilla extends xarLogger
 {
-
     var $loggerdesc = "Mozilla Javascript Console Logger";
 
-    var $commoncodeinserted = false;
+    /**
+    * Buffer for logging messages
+    */
+    var $_buffer;
 
+    /**
+    * The level of load of the core systems.
+    */
+    var $_loadLevel;
+
+    /**
+    * Write out the buffer if it is possible (the template system is already loaded)
+    * @access public
+    */
+    function writeOut()
+    {
+        if ($this->_loadLevel & XARCORE_BIT_TEMPLATE) return false;
+        xarTplAddJavaScript('body', 'code', $this->_buffer);
+        $this->_buffer = '';
+        
+        return true;
+    }
+
+    /**
+     * Sets up the configuration specific parameters for each driver
+     * @param array     $conf               Configuration options for the specific driver.
+     * @access public
+     * @return boolean
+     */
+    function setConfig(&$conf) 
+    {
+        parent::setConfig($conf);
+        $this->_loadLevel = & $conf['loadLevel'];
+        $this->_buffer = $this->getCommonCode();
+    }
+    
     function getCommonCode()
     {
         // Common javascript to get a variable which has the logmessage method
@@ -51,23 +84,19 @@ class xarLogger_mozilla extends xarLogger
     {
         if (!$this->doLogLevel($level)) return false;
 
-        static $commoncodeinserted = false;
         // FIXME: this code depends on a user setting to use principal codebase support (same origin policy)
         // it should be done with a signed script eventually, but this is rather complex
         // TODO: check on windows and browsers other than mozilla, to fall back gracefully
-        if (!$commoncodeinserted) {
-            $code = $this->getCommonCode();
-            xarTplAddJavaScript('body', 'code', $code);
-            $commoncodeinserted = true;
-        }
+
         $logentry = $this->getTime(). " - (" .$this->levelToString($level).")".$message;
 
         // Add \ for problematic chars and for each newline format unix, mac and windows
         $logentry = addslashes($logentry);
         $trans = array("\n" => "\\\n","\r" => "\\\r","\r\n" => "\\\r\n");
         $logentry = strtr($logentry,$trans);
-        $code = "jsconsole.logStringMessage('$logentry');\n";
-        xarTplAddJavaScript('body', 'code', $code);
+        $this->_buffer .= "jsconsole.logStringMessage('$logentry');\n";
+       
+        $this->writeOut();
     }
  }
 
