@@ -339,7 +339,7 @@ document.forms[0].submit();}
 				&nbsp;
 			</td>
 			<td width="50" align="right">
-					<a href="&xar-modurl-privileges-admin-removemember;&amp;childid=#$ppid#&amp;parentid=#$parentid#&amp;authid=#$authid#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
+					<a href="&xar-modurl-privileges-admin-removemember;&amp;childid=#$ppid#&amp;parentid=#$parentid#&amp;authid=#$authid#"><img src="modules/privileges/xarimages/remove.gif" title="Remove #$pname# from #$parentname#" style="vertical-align: middle;" /></a>
 			</td>
 		</tr>
 	</xar:loop>

@@ -316,7 +316,23 @@ class xarMasks
 
 // get the masks pertaining to the current module and the component requested
 		if ($module == '') list($module) = xarRequestGetInfo();
-		$mask =  $this->getMask($mask);
+/*		$temppriv = new xarPrivileges();
+		if ($module == '') {
+		    $path = strrev(dirname(__FILE__));
+		    $module = strtok($path,"/\\");
+		    if(!in_array(strrev($module),$temppriv->getmodules())) {
+				$module = strtok("/\\");
+				if(!in_array(strrev($module),$temppriv->getmodules())) {
+					$msg = xarML('Module not found for mask ' . $mask);
+					xarExceptionSet(XAR_USER_EXCEPTION, 'NO_MASK',
+								   new DefaultUserException($msg));
+					return;
+				}
+			}
+		    $module = strrev($module);
+		}
+*/
+$mask =  $this->getMask($mask);
 		if (!$mask) {
 			if ($component == "") {
 				$msg = xarML('Did not find a mask registered for an unspecified component in module ') . $module;

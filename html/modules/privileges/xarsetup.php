@@ -303,9 +303,9 @@ function initializeSetup() {
 
     xarRegisterMask('AdminAll','All','All','All','All',ACCESS_ADMIN);
 
-    xarRegisterMask('ViewBlocks','All','base','Block','All:All:ALL',ACCESS_OVERVIEW);
-    xarRegisterMask('EditBlock','All','base','Block','All:All:ALL',ACCESS_EDIT);
-    xarRegisterMask('AddBlock','All','base','Block','All:All:ALL',ACCESS_ADD);
+    xarRegisterMask('ViewBlocks','All','base','Block','All:All:All',ACCESS_OVERVIEW);
+    xarRegisterMask('EditBlock','All','base','Block','All:All:All',ACCESS_EDIT);
+    xarRegisterMask('AddBlock','All','base','Block','All:All:All',ACCESS_ADD);
     xarRegisterMask('DeleteBlock','All','base','Block','All:All:ALL',ACCESS_DELETE);
     xarRegisterMask('AdminBlock','All','base','Block','All:All:ALL',ACCESS_ADMIN);
     xarRegisterMask('ViewBase','All','base','All','All',ACCESS_OVERVIEW);
@@ -341,16 +341,14 @@ function initializeSetup() {
     xarRegisterMask('DeleteBlock','All','blocks','All','All',ACCESS_DELETE);
     xarRegisterMask('AdminBlock','All','blocks','All','All',ACCESS_ADMIN);
 
-    xarRegisterMask('PrivilegesGateway','All','Privileges','All','All',ACCESS_READ);
-    xarRegisterMask('ViewPrivileges','All','Privileges','ViewPrivileges','All',ACCESS_READ);
-    xarRegisterMask('EditPrivilege','All','Privileges','EditPrivilege','All',ACCESS_EDIT);
-    xarRegisterMask('AddPrivilege','All','Privileges','AddPrivilege','All',ACCESS_ADD);
-    xarRegisterMask('DeletePrivilege','All','Privileges','DeletePrivilege','All',ACCESS_DELETE);
-    xarRegisterMask('ViewPrivilegeRoles','All','Privileges','ViewRoles','All',ACCESS_READ);
-    xarRegisterMask('RemoveRole','All','Privileges','RemoveRole','All',ACCESS_DELETE);
-
-    xarRegisterMask('AssignPrivAll','All','Privileges','AssignPrivilege','All',ACCESS_ADD);
-    xarRegisterMask('RemovePrivAll','All','Privileges','RemovePrivilege','All',ACCESS_DELETE);
+//    xarRegisterMask('PrivilegesGateway','All','Privileges','All','All',ACCESS_READ);
+    xarRegisterMask('ViewPrivileges','All','privileges','All','All',ACCESS_READ);
+    xarRegisterMask('EditPrivilege','All','privileges','All','All',ACCESS_EDIT);
+    xarRegisterMask('AddPrivilege','All','privileges','All','All',ACCESS_ADD);
+    xarRegisterMask('DeletePrivilege','All','privileges','All','All',ACCESS_DELETE);
+//    xarRegisterMask('ViewPrivilegeRoles','All','privileges','ViewRoles','All',ACCESS_READ);
+    xarRegisterMask('EditRole','All','privileges','All','All',ACCESS_EDIT);
+    xarRegisterMask('AssignRole','All','privileges','All','All',ACCESS_ADD);
 
 //    xarRegisterMask('RolesGateway','All','Roles','All','All',ACCESS_READ);
 

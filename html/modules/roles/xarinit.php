@@ -45,7 +45,10 @@ function roles_init()
 	*   xar_uname varchar(100) NOT NULL default '',
 	*   xar_email varchar(100) NOT NULL default '',
 	*   xar_pass varchar(100) NOT NULL default '',
-	*   xar_url varchar(100) NOT NULL default '',
+	*   xar_url varchar(255) NOT NULL default '',
+	*   xar_url date_reg(25) NOT NULL default '',
+	*   xar_url valcode(35) NOT NULL default '',
+	*   xar_state int(3) NOT NULL default '0',
 	*   xar_auth_module varchar(100) NOT NULL default '',
 	*   PRIMARY KEY  (xar_uid)
 	* )
@@ -80,7 +83,7 @@ function roles_init()
                                       'null'        => false,
                                       'default'     => ''),
                    'xar_url' => array('type'        => 'varchar',
-                                      'size'        => 100,
+                                      'size'        => 255,
                                       'null'        => false,
                                       'default'     => ''),
                    'xar_date_reg' => array('type'        => 'varchar',
