@@ -86,6 +86,8 @@ xarTpl_init($systemArgs, $whatToLoad);
 
 
 // Get the install language everytime
+// We need the var to init MLS, but we need MLS for this, DOH
+$GLOBALS['xarMLS_mode'] = 'SINGLE'; // set temporary
 xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
 
 // Start Multi Language System
