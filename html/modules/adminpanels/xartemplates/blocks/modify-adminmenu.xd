@@ -20,7 +20,7 @@
                 <option value="#$k#" selected="selected">
                     #$v# 
                 </option>
-                <xar:else />
+            <xar:else />
                 <option value="#$k#">
                     #$v# 
                 </option>
