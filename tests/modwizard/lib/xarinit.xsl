@@ -63,10 +63,10 @@
 <xsl:template mode="xarinit_init_security" match="xaraya_module">
     <xsl:variable name="module_prefix" select="registry/name" />
     // for module access
-    xarRegisterMask( 'View<xsl:value-of select="$module_prefix" />' ,'All' ,'<xsl:value-of select="$module_prefix" />' ,'All' ,'All', ACCESS_OVERVIEW );
-    xarRegisterMask( 'Edit<xsl:value-of select="$module_prefix" />' ,'All' ,'<xsl:value-of select="$module_prefix" />' ,'All' ,'All', ACCESS_EDIT );
-    xarRegisterMask( 'Add<xsl:value-of select="$module_prefix" />' ,'All' ,'<xsl:value-of select="$module_prefix" />' ,'All' ,'All', ACCESS_ADD );
-    xarRegisterMask( 'Admin<xsl:value-of select="$module_prefix" />' ,'All' ,'<xsl:value-of select="$module_prefix" />' ,'All' ,'All', ACCESS_ADMIN );
+    xarRegisterMask( 'View<xsl:value-of select="$module_prefix" />' ,'All' ,'<xsl:value-of select="$module_prefix" />' ,'All' ,'All', 'ACCESS_OVERVIEW' );
+    xarRegisterMask( 'Edit<xsl:value-of select="$module_prefix" />' ,'All' ,'<xsl:value-of select="$module_prefix" />' ,'All' ,'All', 'ACCESS_EDIT' );
+    xarRegisterMask( 'Add<xsl:value-of select="$module_prefix" />' ,'All' ,'<xsl:value-of select="$module_prefix" />' ,'All' ,'All', 'ACCESS_ADD' );
+    xarRegisterMask( 'Admin<xsl:value-of select="$module_prefix" />' ,'All' ,'<xsl:value-of select="$module_prefix" />' ,'All' ,'All', 'ACCESS_ADMIN' );
 
 </xsl:template>
 

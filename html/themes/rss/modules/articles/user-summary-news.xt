@@ -5,7 +5,6 @@
 <content:format rdf:resource="http://www.w3.org/1999/xhtml" />
 <content:encoded><![CDATA[ #$summary# ]]></content:encoded>
 <description>#$rsssummary#</description>
-<comments>#$rsscomment#</comments>
 <guid isPermaLink="true">#$link#</guid>
 <xar:if condition="!empty($categories) and count($categories) gt 0">
 <xar:loop name="$categories">
