@@ -249,40 +249,14 @@ if (empty($step)) {
                     return false;
                 }
 
-                //This creates the new Myself role and makes it a child of Everybody
-                xarMakeUser('Myself','myself','myself@xaraya.com','password');
-                xarMakeRoleMemberByName('Myself','Everybody');
-
-                // This creates the new lock privileges and assigns them to the relevant roles
-                /*
-                xarRegisterPrivilege('GeneralLock','All','empty','All','All','ACCESS_NONE',xarML('A container privilege for denying access to certain roles'));
-                xarRegisterPrivilege('LockMyself','All','roles','Roles','Myself','ACCESS_NONE',xarML('Deny access to Myself role'));
-                xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody','ACCESS_NONE',xarML('Deny access to Everybody role'));
-                xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous','ACCESS_NONE',xarML('Deny access to Anonymous role'));
-                xarRegisterPrivilege('LockAdministrators','All','roles','Roles','Administrators','ACCESS_NONE',xarML('Deny access to Administrators role'));
-                xarRegisterPrivilege('LockAdministration','All','privileges','Privileges','Administration','ACCESS_NONE',xarML('Deny access to Administration privilege'));
-                xarRegisterPrivilege('LockGeneralLock','All','privileges','Privileges','GeneralLock','ACCESS_NONE',xarML('Deny access to GeneralLock privilege'));
-                xarMakePrivilegeRoot('GeneralLock');
-                //xarMakePrivilegeRoot('Administration');
-                xarMakePrivilegeMember('LockMyself','GeneralLock');
-                xarMakePrivilegeMember('LockEverybody','GeneralLock');
-                xarMakePrivilegeMember('LockAnonymous','GeneralLock');
-                xarMakePrivilegeMember('LockAdministrators','GeneralLock');
-                xarMakePrivilegeMember('LockAdministration','GeneralLock');
-                xarMakePrivilegeMember('LockGeneralLock','GeneralLock');
-                //xarAssignPrivilege('Administration','Administrators');
-                //xarAssignPrivilege('GeneralLock','Everybody');
-                //xarAssignPrivilege('GeneralLock','Administrators');
-                //xarAssignPrivilege('GeneralLock','Users');
-
-                //Make sure we have the correct stuff for Anonymous and Everybody
-                //xarModDelVar('roles', 'Everybody');
-                //xarModDelVar('roles', 'Anonymous');
-                */
                 $role = xarFindRole('Everybody');
                 xarModSetVar('roles', 'everybody', $role->getID());
                 $role = xarFindRole('Anonymous');
                 xarConfigSetVar('Site.User.AnonymousUID', $role->getID());
+
+                //This creates the new Myself role and makes it a child of Everybody
+                xarMakeUser('Myself','myself','myself@xaraya.com','password');
+                xarMakeRoleMemberByName('Myself','Everybody');
 
                 // create and populate the security levels table
                 $leveltable = $tables['security_levels'];
@@ -357,6 +331,39 @@ if (empty($step)) {
                 $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
                           VALUES ($nextId, 800, 'ACCESS_ADMIN', 'Admin Access', '')";
                 if (!$dbconn->Execute($query)) return;
+
+                // remove this table. we're not doing caching yet
+                $query = xarDBDropTable($tables['security_privsets']);
+                if (empty($query)) return; // throw back
+                if (!$dbconn->Execute($query)) return;
+
+                // create a couple of new masks
+                xarRegisterMask('AssignPrivilege','All','privileges','All','All','ACCESS_ADD');
+                xarRegisterMask('DeassignPrivilege','All','privileges','All','All','ACCESS_DELETE');
+
+                // This creates the new lock privileges and assigns them to the relevant roles
+                xarRegisterPrivilege('GeneralLock','All','empty','All','All','ACCESS_NONE',xarML('A container privilege for denying access to certain roles'));
+                xarRegisterPrivilege('LockMyself','All','roles','Roles','Myself','ACCESS_NONE',xarML('Deny access to Myself role'));
+                xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody','ACCESS_NONE',xarML('Deny access to Everybody role'));
+                xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous','ACCESS_NONE',xarML('Deny access to Anonymous role'));
+                xarRegisterPrivilege('LockAdministrators','All','roles','Roles','Administrators','ACCESS_NONE',xarML('Deny access to Administrators role'));
+                xarRegisterPrivilege('LockAdministration','All','privileges','Privileges','Administration','ACCESS_NONE',xarML('Deny access to Administration privilege'));
+                xarRegisterPrivilege('LockGeneralLock','All','privileges','Privileges','GeneralLock','ACCESS_NONE',xarML('Deny access to GeneralLock privilege'));
+                xarMakePrivilegeRoot('GeneralLock');
+                xarMakePrivilegeMember('LockMyself','GeneralLock');
+                xarMakePrivilegeMember('LockEverybody','GeneralLock');
+                xarMakePrivilegeMember('LockAnonymous','GeneralLock');
+                xarMakePrivilegeMember('LockAdministrators','GeneralLock');
+                xarMakePrivilegeMember('LockAdministration','GeneralLock');
+                xarMakePrivilegeMember('LockGeneralLock','GeneralLock');
+                xarAssignPrivilege('Administration','Administrators');
+                xarAssignPrivilege('GeneralLock','Everybody');
+                xarAssignPrivilege('GeneralLock','Administrators');
+                xarAssignPrivilege('GeneralLock','Users');
+
+                //Make sure we have the correct stuff for Anonymous and Everybody
+                //xarModDelVar('roles', 'Everybody');
+                //xarModDelVar('roles', 'Anonymous');
 
                 // Note to self, roles datereg field needs to be changed to a date/time field.
 
