@@ -2,15 +2,16 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Member List</xar:mlstring></h2>
 <div style="margin: auto;">
 
-<center>
-[&nbsp;<a href="#xarModURL('roles','user','view')#&amp;letter=&amp;phase=#$phase#&amp;order=#$order#"><xar:mlstring>All</xar:mlstring></a>&nbsp;|&nbsp
+<div style="text-align: center">
+[&nbsp;<a href="#xarModURL('roles','user','view')#&amp;letter=&amp;phase=#$phase#&amp;order=#$order#"><xar:mlstring>All</xar:mlstring></a>&nbsp;|
+&nbsp;
 <xar:foreach in="$alphabet" value="$ltr">
-	<a href="#xarModURL('roles','user','view')#&amp;letter=#$ltr#&amp;phase=#$phase#&amp;order=#$order#">#$ltr#</a>&nbsp;|&nbsp
+	<a href="#xarModURL('roles','user','view')#&amp;letter=#$ltr#&amp;phase=#$phase#&amp;order=#$order#">#$ltr#</a>&nbsp;|&nbsp;
 </xar:foreach>
-<a href="#xarModURL('roles','user','view')#&amp;letter=&amp;phase=#$phase#&amp;order=#$order#"><xar:mlstring>Other</xar:mlstring></a>&nbsp]
-</center>
+<a href="#xarModURL('roles','user','view')#&amp;letter=&amp;phase=#$phase#&amp;order=#$order#"><xar:mlstring>Other</xar:mlstring></a>&nbsp;]
+</div>
 
-<form method="POST" action="#xarModURL('roles','user','view')#">
+<form method="post" action="#xarModURL('roles','user','view')#">
 <input type="hidden" name="phase" id="phase" value="#$phase#" />
 <input type="hidden" name="order" id="order" value="#$order#" />
 <table width="100%" border="0" cellspacing="2" cellpadding="2">
@@ -18,7 +19,7 @@
 <td>
 	<xar:mlstring>Search: </xar:mlstring>
 	<input type="text" name="search" id="search" value="" size="40" maxlength="255" tabindex="1" />
-	<input type="submit" value="#$searchlabel#" align="middle" tabindex="2" />
+	<input type="submit" value="#$searchlabel#" />
 </td>
 <td align="left">
 <b>#$msg#</b>
