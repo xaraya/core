@@ -62,18 +62,15 @@ function base_htmlblock_display($blockinfo)
     //$args['module'] = 'base';
     //$vars['html_content'] = xarModCallHooks('item', 'transform', $blockinfo['bid'], $args);
 
-    if ($now > $vars['expire']){
+    if (isset($vars['expire']) && $now > $vars['expire']){
         if ($vars['expire'] != 0){
             return;
-        } else {
-            $blockinfo['content'] = $vars['html_content'];
-            return $blockinfo;
-        }
-    } else {
-        $blockinfo['content'] = $vars['html_content'];
-        return $blockinfo;
+        } 
     }
-
+    if(isset($vars['html_content'])) {
+        $blockinfo['content'] = $vars['html_content'];
+    }
+    return $blockinfo;
 }
 
 /**
