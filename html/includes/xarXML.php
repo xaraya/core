@@ -21,7 +21,7 @@
  *             subsystem can be reused by them all
  */
 
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 
 /**
  * Defines make our life a bit easier.
@@ -128,7 +128,7 @@ function xarXml_init($args, $whatElseIsGoingLoaded)
 class xarXmlParser 
 {
     var $encoding;      // Which input encoding are we gonna use for parsing?
-    var $handler;       // Which handler object is attached to this parser (of class xarXMLHandler)
+    var $handler;       // Which handler object is attached to this parser?
     var $parser=NULL;   // The parser object itself
     var $tree=array();  // Resulting parse tree
     
@@ -136,8 +136,7 @@ class xarXmlParser
      * Construct the xarXmlParser object
      *
      * For xaraya we need to be able to set encoding, 
-     * and have support for namespaces, this isn't in 
-     * the base class.
+     * and have support for namespaces
      *
      * @access public
      * @param string $encoding character encoding to use (see top of file) 
@@ -149,7 +148,7 @@ class xarXmlParser
         $this->encoding=$encoding;
                
         $defHandlerClass = XARXML_DEFAULTHANDLER;
-        if($handler)
+        if(is_object($handler) && is_subclass_of($handler,XARXML_HANDLERCLASS))
             $this->handler =& $handler;
         else
             $this->handler =& new $defHandlerClass();
@@ -239,7 +238,12 @@ class xarXmlParser
         }
     }
 
-
+    /**
+     * Construct error information
+     *
+     * @access private
+     *
+     */
     function __getErrorInfo() 
     {
         $error = xml_get_error_code($this->parser);
@@ -608,12 +612,18 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
                 // couldn't find it directly through absolute reference, try relative
                 // if that doesn't help, the parser will raise an error for us
                 if($this->_resolve_base) $system_id=$this->_resolve_base ."/". $system_id;
-            }           
-            
-            if(!$ee_parser->parseFile($system_id)) {
-                return false;
+            } 
+            if(!file_exists($system_id)) return false;
+
+            // External entities may be empty
+            $ee_tree = array();
+            if(filesize($system_id) != 0) {
+                if(!$ee_parser->parseFile($system_id)) {
+                    //echo $system_id .":". $ee_parser->lastmsg."\n";
+                    return false;
+                }
+                $ee_tree = $ee_parser->tree;
             }
-            $ee_tree = $ee_parser->tree;
         }
         // The node in the parent is an entity reference
         $this->_tagindex = $ee_parser->handler->_tagindex;
