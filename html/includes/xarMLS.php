@@ -512,6 +512,7 @@ function xarLocaleGetFormattedDate($length = 'short',$timestamp = null)
     $length = strtolower($length);
     $validLengths = array('short','medium','long');
     if(!in_array($length,$validLengths)) {
+//TODO: We should throw a USER exception here
         return '';
     }
    
@@ -542,7 +543,7 @@ function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null)
 {
     if(!isset($timestamp)) {
         // get UTC timestamp
-        //TODO : Take into account System.Core.TimeZone
+//TODO : Take into account System.Core.TimeZone
         $timestamp = time();
     }
 
@@ -590,11 +591,6 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null)
     return xarLocaleFormatDate($locale_format,$timestamp);
 }
 
-//function xarMLS_getLocaleFormat($locale_format) 
-//{
-//
-//}
-
 function xarLocaleFormatUTCDate($format = null, $time = null)
 {
     if(!isset($time)) {
@@ -616,33 +612,12 @@ function xarLocaleFormatUTCDate($format = null, $time = null)
  */
 function xarLocaleFormatDate($format = null, $timestamp = null)
 {
-    if (empty($timestamp)) { // yes, null or 0 or whatever :)
-//TODO: we should really get the user/site time based on timezone settings
-//TODO: this will require UTC timestamps to be generated and then modified
+    if (empty($timestamp)) {
         $timestamp = xarMLS_userTime();
-    } elseif (!is_numeric($timestamp)) {
-        // strtotime creates a timestamp based on the server's locale settings
-        $timestamp = strtotime($timestamp);
-        // we need to adjust for the server's timezone offset because
-        // we'll be using the gmstrftime function later.
-        // doing so will allow for the correct time to be displayed
-// TODO: does this work everywhere or just on my machine???
-        $timestamp += date('Z',$timestamp);
-        if ($timestamp < 0) {
-            return ''; // return empty string here (no exception)
-        }
     } else {
         // adjust for the user's timezone offset
         $timestamp += xarMLS_userOffset() * 3600;
     }
-
-// TODO: locale-dependent, and/or configurable by admin, and/or selectable by user ?
-//       let this be handled by the xarMLS_strftime function?
-    //if (empty($format)) {
-    //    $format = '%a, %d %B %Y %H:%M:%S %Z';
-    //    $format = '%a, %d %B %Y %H:%M %Z';
-    //}
-
     return xarMLS_strftime($format,$timestamp);
 }
 
@@ -746,7 +721,6 @@ function xarMLS_strftime($format=null,$timestamp=null)
     // the locale data should already be a static var in the main loader script
     // so we no longer need to make it a static in this function
     $localeData =& xarMLSLoadLocaleData();  // rraymond : assign by reference for large array (memory issues)
-
     // TODO
     // if no $format is provided we need to use the default for the locale
 
