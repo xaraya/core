@@ -2,7 +2,7 @@
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
         <td align="center" colspan="6">
-            <b>#$labels['dynamicdata']#</b> [ <a href="#$link#" target="hook">#$labels['config']#</a> ]
+            <b>#$labels['dynamicdata']#</b> [ <a href="#$link#">#$labels['config']#</a> ]
         </td>
     </tr>
 <xar:if condition="!empty($fields)">
