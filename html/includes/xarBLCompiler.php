@@ -1844,10 +1844,9 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         }
         $output = $loopName.'->index=-1; '.$loopName.'->number='.$loopCounter.';
                   foreach ('.$name.' as '.$loopName.'->key => '.$loopName.'->item ) {
-                       '. $loopName.'->index++;
+                       $loop->index = '.$loopName.'->index++;
                        $loop->key   = '.$loopName.'->key; 
                        $loop->item  =& '.$loopName.'->item; 
-                       $loop->index = '.$loopName.'->index;
                        $loop->number= '.$loopName.'->number;
                        '. $idpart;
         return $output;
