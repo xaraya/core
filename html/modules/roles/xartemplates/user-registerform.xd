@@ -22,7 +22,7 @@
 	</tr>
 	<tr>
 		<td>
-			<xar:mlstring>Real Name</xar:mlstring>
+			<xar:mlstring>Display Name</xar:mlstring>
 		</td>
 		<td>
 			<input type="text" name="realname" id="realname" value="#$values['realname']#" size="25" maxlength="60" />

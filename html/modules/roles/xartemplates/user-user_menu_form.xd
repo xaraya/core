@@ -23,7 +23,7 @@
 	</tr>
 	<tr>
 		<td>
-			<b><xar:mlstring>Real Name</xar:mlstring>:</b>
+			<b><xar:mlstring>Display Name</xar:mlstring>:</b>
 		</td>
 		<td>
 			<input type="text" name="name" id="name" value="#$name#" size="20" maxlength="60" tabindex="1" />
