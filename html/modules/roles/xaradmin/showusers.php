@@ -76,7 +76,7 @@ function roles_admin_showusers()
 
     // Check if we already have a selection
     $q = xarSessionGetVar('rolesquery');
-    if (empty($q) || isset($reload)) {
+    if (!isset($q) || empty($q) || isset($reload)) {
         $xartable =& xarDBGetTables();
         $q = new xarQuery('SELECT');
         $q->addtable($xartable['roles'],'r');
