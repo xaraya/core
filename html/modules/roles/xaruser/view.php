@@ -165,7 +165,7 @@ function roles_user_view($args)
 
         $items[$i]['emailicon'] = '<img src="' . xarTplGetImage('emailicon.gif') . '" alt="Email" title="Email" />';
 
-        $items[$i]['infoicon'] = '<img src="' . xarTplGetImage('infoicon.gif') . '" />';
+        $items[$i]['infoicon'] = '<img src="' . xarTplGetImage('infoicon.gif') . '" alt="Info" title="Info" />';
 
     }
 

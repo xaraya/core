@@ -38,7 +38,7 @@
 		In addition, if you are using a particular service on or through this web site, you will be subject to any rules or guidelines applicable to those services and they shall be incorporated by reference into these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a>. 
         <xar:if condition="xarModGetVar('roles', 'showprivacy')">		
 		    <xar:mlstring>Please see our</xar:mlstring>
-		    <a href="&xar-modurl-roles-user-privacy;"><xar:mlstring>Privacy Policy</xar:mlstring></a>, <xar:mlstring>which is incorporated into these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> by reference</a>.</p>
+		    <a href="&xar-modurl-roles-user-privacy;"><xar:mlstring>Privacy Policy</xar:mlstring></a>, <xar:mlstring>which is incorporated into these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> by reference.</p>
         </xar:if>
     <xar:set name="$curnum">++$curnum</xar:set>
 	<h3 id="service">#$curnum#<xar:mlstring>.&nbsp;Our Service</xar:mlstring></h3>
@@ -59,7 +59,7 @@
 
 <xar:if condition="xarModGetVar('roles', 'showprivacy')">
     <xar:set name="$curnum">++$curnum</xar:set>		
-	<h3 id=" ">#$curnum#<xar:mlstring>.&nbsp;Privacy Policy</xar:mlstring></h3>
+	<h3 id="privacy">#$curnum#<xar:mlstring>.&nbsp;Privacy Policy</xar:mlstring></h3>
 	<p><xar:mlstring>Registration data and other personally identifiable information that we may collect is subject to the terms of our</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Privacy Policy</xar:mlstring></a>.</p>
 </xar:if>
 
@@ -96,7 +96,7 @@
 
     <xar:set name="$curnum">++$curnum</xar:set>
 	<h3 id="indemnify">#$curnum#<xar:mlstring>.&nbsp;Indemnification</xar:mlstring></h3>
-	    <p><xar:mlstring>You agree to indemnify and hold us harmless, our subsidiaries, affiliates, related parties, officers, directors, employees, agents, independent contractors, advertisers,   partners, and co-branders from any claim or demand, including reasonable attorney's fees, that may be made by any third party, that is due to or arising out of your conduct or connection with this web site or service, your provision of Content, your violation of this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>or any other violation of the rights of another person or party.</xar:mlstring></a></p>
+	    <p><xar:mlstring>You agree to indemnify and hold us harmless, our subsidiaries, affiliates, related parties, officers, directors, employees, agents, independent contractors, advertisers,   partners, and co-branders from any claim or demand, including reasonable attorney's fees, that may be made by any third party, that is due to or arising out of your conduct or connection with this web site or service, your provision of Content, your violation of this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>or any other violation of the rights of another person or party.</xar:mlstring></p>
 
     <xar:set name="$curnum">++$curnum</xar:set>
 	    <h3 id="disclaimer">#$curnum#<xar:mlstring>.&nbsp;DISCLAIMER OF WARRANTIES</xar:mlstring></h3>
@@ -108,7 +108,7 @@
 
     <xar:set name="$curnum">++$curnum</xar:set>
 	<h3 id="limits">#$curnum#<xar:mlstring>.&nbsp;LIMITATION OF LIABILITY</xar:mlstring></h3>
-	    <p><xar:mlstring>YOU EXPRESSLY UNDERSTAND AND AGREE THAT WE SHALL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INDICENTAL, CONSEQUENTIAL OR EXEMPLARY DAMAGES, INCLUDING BUT NOT LIMITED TO, DAMAGES FOR LOSS OF PROFITS, GOODWILL, USE, DATA OR OTHER INTANGIBLE LOSS (EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES),   RESULTING FROM OR ARISING OUT OF (I) THE USE OF OR THE INABILITY TO USE THE SERVICE, (II) THE COST TO OBTAIN SUBSTITUTE GOODS AND/OR SERVICES RESULTING FROM ANY TRANSACTION ENTERED INTO ON THROUGH THE SERVICE, (III) UNAUTHORIZED ACCESS TO OR ALTERATION OF YOUR DATA TRANSMISSIONS, (IV) STATEMENTS OR CONDUCT OF ANY THIRD PARTY ON THE SERVICE, OR (V) ANY OTHER MATTER RELATING TO THE SERVICE.</xar:mlstring></a>.</p>
+	    <p><xar:mlstring>YOU EXPRESSLY UNDERSTAND AND AGREE THAT WE SHALL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INDICENTAL, CONSEQUENTIAL OR EXEMPLARY DAMAGES, INCLUDING BUT NOT LIMITED TO, DAMAGES FOR LOSS OF PROFITS, GOODWILL, USE, DATA OR OTHER INTANGIBLE LOSS (EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES),   RESULTING FROM OR ARISING OUT OF (I) THE USE OF OR THE INABILITY TO USE THE SERVICE, (II) THE COST TO OBTAIN SUBSTITUTE GOODS AND/OR SERVICES RESULTING FROM ANY TRANSACTION ENTERED INTO ON THROUGH THE SERVICE, (III) UNAUTHORIZED ACCESS TO OR ALTERATION OF YOUR DATA TRANSMISSIONS, (IV) STATEMENTS OR CONDUCT OF ANY THIRD PARTY ON THE SERVICE, OR (V) ANY OTHER MATTER RELATING TO THE SERVICE.</xar:mlstring>.</p>
 
 	    <p><xar:mlstring>In some jurisdictions, it is not permitted to limit liability and therefore such limitations may not apply to you.</xar:mlstring></p>
 
@@ -126,7 +126,7 @@
 
     <xar:set name="$curnum">++$curnum</xar:set>
 	<h3 id="misc">#$curnum#<xar:mlstring>.&nbsp;Miscellaneous Information</xar:mlstring></h3>
-	    <p><xar:mlstring>In the event that this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>conflicts with any law under which any provision may be held invalid by a court with jurisdiction over the parties, such provision will be interpreted to reflect the original intentions of the parties in accordance with applicable law, and the remainder of this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>will remain valid and intact; (ii) The failure of either party to assert any right under this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>shall not be considered a waiver of any that party's right and that right will remain in full force and effect; (iii) You agree that without regard to any statue or contrary law that any claim or cause arising out of this web site or its services must be filed within one (1) year after such claim or cause arose or the claim shall be forever barred; (iv) We may assign our rights and obligations under this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>and we shall be relieved of any further obligation.</xar:mlstring></a></p>
+	    <p><xar:mlstring>In the event that this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>conflicts with any law under which any provision may be held invalid by a court with jurisdiction over the parties, such provision will be interpreted to reflect the original intentions of the parties in accordance with applicable law, and the remainder of this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>will remain valid and intact; (ii) The failure of either party to assert any right under this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>shall not be considered a waiver of any that party's right and that right will remain in full force and effect; (iii) You agree that without regard to any statue or contrary law that any claim or cause arising out of this web site or its services must be filed within one (1) year after such claim or cause arose or the claim shall be forever barred; (iv) We may assign our rights and obligations under this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>and we shall be relieved of any further obligation.</xar:mlstring></p>
 
 <xar:else />
 	<xar:mlstring>Terms of Service not active</xar:mlstring>
