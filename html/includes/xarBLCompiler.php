@@ -2467,7 +2467,7 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 
         // If the block instance attribute is specified in the tag, render it directly 
         // NOTE: $id is also an attribute, but that is an id attribute in XML sense, not in DB sense
-        if ($instance != 0)) {
+        if ($instance != 0) {
             return "xarBlock_renderBlock(array('bid' => '$instance'))";
         }
 
