@@ -9,7 +9,7 @@
 <table border="0" cellpadding="2" cellspacing="0">
     <tr align="left" valign="top">
         <td>
-            #$defaultthemelabel# #$defaulttheme#
+            #$defaultthemelabel#
         </td>
         <td>
             <select name="defaulttheme" id="defaulttheme" size="1">

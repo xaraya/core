@@ -29,7 +29,7 @@ document.forms[0].submit();}
 		<table border="0" cellpadding="5">
 			<tr>
 				<td>
-					<xar:mlstring>Name</xar:mlstring>
+					<xar:mlstring>Display Name</xar:mlstring>
 				</td>
 				<td>
 					<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="50" tabindex="1" />

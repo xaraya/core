@@ -227,6 +227,12 @@ president@whitehouse.gov';
         return false;
     }
 
+    xarModAPIFunc('modules','admin','enablehooks',
+                  array('callerModName' => 'roles', 'hookModName' => 'roles'));
+
+    xarModAPIFunc('modules','admin','enablehooks',
+                  array('callerModName' => 'dynamicdata', 'hookModName' => 'roles'));
+
     return true;
 }
 
