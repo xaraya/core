@@ -809,7 +809,7 @@ function pnUserGetLang()
     return xarUserGetLang();
 }
 
-function pnUserGetVar($name, $uid=-1)
+function pnUserGetVar($name, $uid = NULL)
 {
     return xarUserGetVar($name, $uid);
 }
