@@ -438,9 +438,9 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10)
     // Show startnum link
     if ($startnum != 1) {
         $url = preg_replace('/%%/', 1, $urltemplate);
-        $out .= '<a href="'.$url.'">&lt;&lt;</a>&nbsp;&nbsp;';
+        $out .= xarTplModule('base','user', 'pagerbegin', array('arrowurl' => $url));
     } else {
-        $out .= '&lt;&lt;';
+        $out .= xarTplModule('base','user', 'pagerbegin', array('arrowurl' => ''));
     }
     $out .= ' ';
 
@@ -453,18 +453,18 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10)
         {
             // Not on this page - show link
             $url = preg_replace('/%%/', $curnum, $urltemplate);
-            $out .= '<a href="'.$url.'"> '.$pagenum.' </a> &nbsp;';
+            $out .= xarTplModule('base','user', 'pagermiddle', array('numberurl' => $url, 'pagenum' => $pagenum));
         } else {
             // On this page - show text
-            $out .= ' '.$pagenum.' &nbsp;';
+            $out .= xarTplModule('base','user', 'pagermiddle', array('pagenum' => $pagenum, 'numberurl' => ''));
         }
         $pagenum++;
     }
     if (($curnum >= $perpage+1) && ($startnum < $curnum-$perpage)) {
         $url = preg_replace('/%%/', $curnum-$perpage, $urltemplate);
-        $out .= '<a href="'.$url.'">&gt;&gt;</a>';
+        $out .= xarTplModule('base','user', 'pagerending', array('arrowurl' => $url));
     } else {
-        $out .= '&gt;&gt;';
+        $out .= xarTplModule('base','user', 'pagerending', array('arrowurl' => ''));
     }
 
     return $out;

@@ -141,8 +141,12 @@ function themes_admin_list()
         $listrows[$i]['version']        = $mod['version'];
         $listrows[$i]['edit']           = xarML('Edit');
         
+        if (empty($mod['state'])){
+            $mod['state'] = 1;
+        }
+
         // conditional data
-        if(     $mod['state'] == 1){
+        if($mod['state'] == 1){
             // this module is 'Uninitialised'   - set labels and links
             $statelabel = xarML('Uninitialised');
             $listrows[$i]['state'] = 1;
@@ -226,7 +230,6 @@ function themes_admin_list()
     // detailed info image url
     $data['infoimage'] = xarTplGetImage('help.gif');
     
- 
     // not ideal but would do for now - reverse sort by module names
     if($data['selsort'] == 'namedesc') krsort($data['listrowsitems']);
 

@@ -43,16 +43,18 @@ function themes_adminapi_initialise($args)
     }
     @include $xarinitfilename;
 
-    foreach($themevars as $var => $value){
-        $value['prime'] = 1;
-        if(!isset($value['name']) || !isset($value['value'])){
-            $msg = xarML('Malformed Theme Variable (#(1)).', $var);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return;
+    if (!empty($themevars)) {
+        foreach($themevars as $var => $value){
+            $value['prime'] = 1;
+            if(!isset($value['name']) || !isset($value['value'])){
+                $msg = xarML('Malformed Theme Variable (#(1)).', $var);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+                return;
+            }
+            $set = xarThemeSetVar($themeInfo['name'], $value['name'], $value['prime'], $value['value'], $value['description']);
+            if(!$set) return;
         }
-        $set = xarThemeSetVar($themeInfo['name'], $value['name'], $value['prime'], $value['value'], $value['description']);
-        if(!$set) return;
     }
     // Update state of theme
     $set = xarModAPIFunc('themes',
