@@ -581,8 +581,11 @@ function dynamicdata_adminapi_deletehook($args)
  */
 function dynamicdata_adminapi_updateconfighook($args)
 {
+    if (!isset($args['extrainfo'])) {
+        $args['extrainfo'] = array();
+    }
     // Return the extra info
-    return $extrainfo;
+    return $args['extrainfo'];
 
 /*
  * currently NOT used (we're going through the 'normal' updateconfig for now)
