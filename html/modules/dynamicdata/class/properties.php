@@ -40,7 +40,6 @@ class Dynamic_Property_Master
         $dynamicprop = $xartable['dynamic_properties'];
 
         $bindvars = array();
-        $bindvars = array();
         $query = "SELECT xar_prop_name,
                          xar_prop_label,
                          xar_prop_type,
@@ -162,7 +161,8 @@ class Dynamic_Property_Master
         {
             $propertyInfo  = $proptypes[$args['type']];
             $propertyClass = $propertyInfo['propertyClass'];
-            require_once 'includes/properties/'.$propertyClass.'.php';
+            // Filepath is complete rel path to the php file, and decouple from the class name
+            require_once $propertyInfo['filepath'];
             
             if( isset($propertyInfo['args']) && ($propertyInfo['args'] != '') )
             {
@@ -261,6 +261,7 @@ class Dynamic_Property_Master
                 $property['name']           = $name;
                 $property['label']          = $label;
                 $property['format']         = $format;
+                $property['filepath']       = $filepath;
                 $property['validation']     = $validation;
                 $property['source']         = $source;
                 $property['dependancies']   = $reqfiles;
