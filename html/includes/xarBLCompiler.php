@@ -508,6 +508,20 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             }
                             $this->tagIds[$attributes['id']] = true;
                         }
+
+                        $tplType = $this->tplVars->get('type');
+                        if($tplType == 'module' && $tagName == 'blocklayout') {
+                            // root tag found in module template
+                            $this->raiseError(XAR_BL_INVALID_SYNTAX,
+                                              'Root tag found in module template or before <?xar type="page" ?> instruction',$this);
+                            return;
+                        }
+
+                        if($tplType == 'page' && $tagName != 'blocklayout' && !$this->tagRootSeen) {
+                            $this->raiseError(XAR_BL_INVALID_SYNTAX,"Found a  xar:$tagName tag before the xar:blocklayout tag, this is invalid",$this);
+                            return;
+                        }
+
                         $node = $this->nodesFactory->createTplTagNode($tagName, $attributes, $parent->tagName, $this);
                         if (!isset($node)) {
                             return; // throw back
