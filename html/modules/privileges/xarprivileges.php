@@ -1424,8 +1424,8 @@ function drawindent() {
     {
 		extract($pargs);
 
-//TODO: check this line
-		if (!xarSecAuthAction(0, 'Privileges::', "::", ACCESS_ADD)) {return;}
+// Security Check
+	if(!securitycheck('Add')) return;
 
 		list($this->dbconn) = xarDBGetConn();
 		$xartable = xarDBGetTables();
@@ -1561,8 +1561,8 @@ class xarPrivilege extends xarMask
     {
 		extract($pargs);
 
-//TODO: check this line
-		if (!xarSecAuthAction(0, 'Privileges::', "::", ACCESS_ADD)) {return;}
+// Security Check
+	if(!securitycheck('Add')) return;
 
 		list($this->dbconn) = xarDBGetConn();
 		$xartable = xarDBGetTables();
