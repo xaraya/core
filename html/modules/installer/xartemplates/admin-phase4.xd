@@ -98,9 +98,11 @@
                     </label>
                     <select name="install_database_type" id="install_database_type">
                         <xar:foreach in="$database_types" key="$key" value="$value">
-                            <option value="#$key#">
-                                #$value# 
-                            </option>
+                            <xar:if condition="$database_type == $key">
+                                <option selected="selected" value="#$key#">#$value#</option>
+                            <xar:else/>
+                                <option value="#$key#">#$value#</option>
+                            </xar:if>
                         </xar:foreach>
                     </select>
                     <br class="clear" />

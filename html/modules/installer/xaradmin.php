@@ -158,7 +158,7 @@ function installer_admin_phase4()
     $data['database_password']   = xarCore_getSystemvar('DB.Password');
     $data['database_name']       = xarCore_getSystemvar('DB.Name');
     $data['database_prefix']     = xarCore_getSystemvar('DB.TablePrefix');
-
+    $data['database_type']       = xarCore_getSystemvar('DB.Type');
     // Supported  Databases:
     $data['database_types']      = array('mysql'    => 'MySQL',
                                          //'oci8'     => 'Oracle',
