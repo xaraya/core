@@ -158,11 +158,9 @@ function installer_admin_phase4()
  * @param dbPass
  * @param dbPrefix
  * @param dbType
- * @param intranetMode
  * @param createDb
  * @todo FIX installer ML
  * @todo better error checking on arguments
- * @todo Fix intranet mode
  */
 function installer_admin_phase5()
 {
@@ -173,7 +171,6 @@ function installer_admin_phase5()
     if (!xarVarFetch('install_database_password','str::',$dbPass,'',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_prefix','str:1:',$dbPrefix)) return;
     if (!xarVarFetch('install_database_type','str:1:',$dbType)) return;
-    if (!xarVarFetch('install_intranet','checkbox',$intranetMode,false,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_create_database','checkbox',$createDb,false,XARVAR_NOT_REQUIRED)) return;
 
     // Save config data
