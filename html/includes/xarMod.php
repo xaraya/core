@@ -132,7 +132,19 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
         xarMod_getVarsByName('SupportShortURLs');
     }
     */
+    // Subsystem initialized, register a handler to run when the request is over
+    register_shutdown_function ('xarMod__shutdown_handler');
     return true;
+}
+
+/**
+ * Shutdown handler for the modules subsystem
+ *
+ * @access private
+ */
+function xarMod__shutdown_handler()
+{
+    xarLogMessage("xarMod shutdown handler");
 }
 
 /**
@@ -675,8 +687,8 @@ function xarModPrivateLoad($modName, $modType, $flags = 0)
     // Load database info
     xarMod__loadDbInfo($modName, $modDir);
 
-    // Module loaded successfully, notify the proper event
-    xarEvt_notify($modName, $modType, 'ModLoad', NULL);
+    // Module loaded successfully, trigger the proper event
+    xarEvt_trigger('ModLoad',$modName);
 
     return true;
 }
@@ -1120,7 +1132,9 @@ function xarModIsAvailable($modName, $type = 'module')
 
     static $modAvailableCache = array();
 
-    $modName = strtolower($modName);
+    if ('theme' != $type) {
+        $modName = strtolower($modName);
+    }
 
     if (empty($modName)) {
         $msg = xarML('Empty Module or Theme Name (#(1)).', $modName);
