@@ -192,7 +192,8 @@ document.forms['privilegeform'].submit();}
 						</td>
 						<td>
 							<xar:if condition="$loop:item['type'] eq 'manual'">
-								<input type="text" name="pinstance#$loop:index#" id="pinstance#$loop:index#" size="20" />
+								<input type="text" name="pinstance#$loop:index#" id="pinstance#$loop:index#" size="20" value="All"/>
+								&nbsp;<xar:mlstring>This field must contain a value</xar:mlstring>
 							<xar:else />
 								<select name="pinstance#$loop:index#" size="1">
 									<xar:loop name="$loop:item['dropdown']">
