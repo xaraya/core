@@ -51,7 +51,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
 ?>
     Requirement : you must be using the same database, but a different prefix...
     <p></p>
-    <form method="POST" action="import8.php">
+    <form method="POST" action="import_pn.php">
     <table border="0" cellpadding="4">
     <tr><td align="right">Prefix used in your PN .71+ site</td><td>
     <input type="text" name="oldprefix" value="nuke"></td></tr>
@@ -79,7 +79,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
 </ul>
 [do not modify the default privileges, hooks etc. yet]
 </li>
-    <li>copy the import8.php file to your Xaraya html directory and run it. Adapt the prefix and images directory of your old PN site if necessary, and leave both Reset options checked.</li>
+    <li>copy the import_pn.php file to your Xaraya html directory and run it. Adapt the prefix and images directory of your old PN site if necessary, and leave both Reset options checked.</li>
     <li>???</li>
     <li>profit ;-)</li>
 </ol>
@@ -330,15 +330,15 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
     xarModSetVar('installer','userid',serialize($userid));
     echo "<strong>TODO : import user_data</strong><br><br>\n";
-    echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
+    echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
         $startnum += $numitems;
-        echo '<a href="import8.php?module=roles&step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - users ' . $startnum . '+ of ' . $count . '</a><br>';
+        echo '<a href="import_pn.php?module=roles&step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - users ' . $startnum . '+ of ' . $count . '</a><br>';
     } else {
         // Enable dynamicdata hooks for roles
         xarModAPIFunc('modules','admin','enablehooks',
                       array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
-        echo '<a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+        echo '<a href="import_pn.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
     }
 
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['roles']);
@@ -448,8 +448,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     xarModSetVar('installer','topicid',serialize($topicid));
     xarModSetVar('installer','categories',$categories);
     xarModSetVar('installer','catid',serialize($catid));
-    echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+    echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;
+          <a href="import_pn.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories']);
     if (!empty($docounter)) {
         $dbconn->Execute('OPTIMIZE TABLE ' . $tables['hitcount']);
@@ -554,12 +554,12 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
     $result->Close();
     //echo "<strong>TODO : add comments etc.</strong><br><br>\n";
-    echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
+    echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
         $startnum += $numitems;
-        echo '<a href="import8.php?step=' . $step . '&module=articles&startnum=' . $startnum . '">Go to step ' . $step . ' - articles ' . $startnum . '+ of ' . $count . '</a><br>';
+        echo '<a href="import_pn.php?step=' . $step . '&module=articles&startnum=' . $startnum . '">Go to step ' . $step . ' - articles ' . $startnum . '+ of ' . $count . '</a><br>';
     } else {
-        echo '<a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+        echo '<a href="import_pn.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
     }
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);
@@ -650,12 +650,12 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
     $result->Close();
     //echo "<strong>TODO : add comments etc.</strong><br><br>\n";
-    echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
+    echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
         $startnum += $numitems;
-        echo '<a href="import8.php?step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - articles ' . $startnum . '+ of ' . $count . '</a><br>';
+        echo '<a href="import_pn.php?step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - articles ' . $startnum . '+ of ' . $count . '</a><br>';
     } else {
-        echo '<a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+        echo '<a href="import_pn.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
     }
     }
 
@@ -698,8 +698,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     echo "<strong>TODO : copy the section images to modules/categories/pnimages or elsewhere someday</strong><br><br>\n";
     xarModSetVar('installer','sections',$sections);
     xarModSetVar('installer','sectionid',serialize($sectionid));
-    echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+    echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;
+          <a href="import_pn.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
     }
 
     if ($step == 6) {
@@ -756,8 +756,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         $result->MoveNext();
     }
     $result->Close();
-    echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+    echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;
+          <a href="import_pn.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);
     if (!empty($docounter)) {
@@ -811,8 +811,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
     xarModSetVar('installer','faqs',$faqs);
     xarModSetVar('installer','faqid',serialize($faqid));
-    echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+    echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;
+          <a href="import_pn.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories']);
     }
 
@@ -870,8 +870,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
     $result->Close();
     echo "<strong>TODO : do something with FAQ display</strong><br><br>\n";
-    echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+    echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;
+          <a href="import_pn.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);
     if (!empty($docounter)) {
@@ -960,14 +960,14 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     $result->Close();
 
     echo "<strong>TODO : import other comments</strong><br><br>\n";
-    echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
+    echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
         xarModSetVar('installer','commentid',serialize($pid2cid));
         $startnum += $numitems;
-        echo '<a href="import8.php?step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - comments ' . $startnum . '+ of ' . $count . '</a><br>';
+        echo '<a href="import_pn.php?step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - comments ' . $startnum . '+ of ' . $count . '</a><br>';
     } else {
         xarModDelVar('installer','commentid');
-        echo '<a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+        echo '<a href="import_pn.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
     }
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['comments']);
     }
@@ -1011,8 +1011,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     xarModSetVar('articles', 'number_of_categories.6', 1);
     xarModSetVar('articles', 'mastercids.6', $weblinks[0]);
 
-    echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+    echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;
+          <a href="import_pn.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories']);
     }
 
@@ -1082,8 +1082,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
     $result->Close();
     echo "<strong>TODO : import ratings, editorials, new links and modifications etc.</strong><br><br>\n";
-    echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+    echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;
+          <a href="import_pn.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);
     if (!empty($docounter)) {
@@ -1292,8 +1292,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     $result->Close();
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['comments']);
 
-    echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+    echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;
+          <a href="import_pn.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
     // Enable comments hooks for polls
     xarModAPIFunc('modules','admin','enablehooks',
                   array('callerModName' => 'polls', 'hookModName' => 'comments'));
@@ -1320,7 +1320,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     xarModDelVar('installer','faqs');
     xarModDelVar('installer','faqid');
     xarModDelVar('installer','weblinks');
-    echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
+    echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="index.php">Go to your imported site</a><br>';
     }
 }
