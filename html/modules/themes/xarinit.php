@@ -152,6 +152,17 @@ function themes_activate()
         return false;
     }
 
+    // make sure we dont miss empty variables (which were not passed thru)
+    if(empty($selstyle)) $selstyle                  = 'plain';
+    if(empty($selfilter)) $selfilter                = XARMOD_STATE_ANY;
+    if(empty($hidecore)) $hidecore                  = 0;
+    if(empty($selsort)) $selsort                    = 'namedesc';
+
+    xarModSetVar('themes', 'hidecore', $hidecore);
+    xarModSetVar('themes', 'selstyle', $selstyle);
+    xarModSetVar('themes', 'selfilter', $selfilter);
+    xarModSetVar('themes', 'selsort', $selsort);
+
     xarModSetVar('themes', 'SiteName', 'Your Site Name');
     xarModSetVar('themes', 'SiteSlogan', 'Your Site Slogan');
     xarModSetVar('themes', 'SiteCopyRight', '2003');
