@@ -259,6 +259,8 @@ function xarExceptionRender($format) { return xarErrorRender($format); }    // d
 
 function xarErrorRender($format,$stacktype = "ERROR")
 {
+    assert('$format == "template" || $format = "rawhtml" || $format = "text"; /* Improper format passed to xarErrorRender */');
+
     $msgs = xarException__formatStack($format,$stacktype);
     $error = $msgs[0];
 
@@ -291,7 +293,7 @@ function xarErrorRender($format,$stacktype = "ERROR")
     if ($format == 'template') {
         return  xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
     }
-    elseif ($format == 'plain') {
+    elseif ($format == 'rawhtml') {
         $msg = "<b><u>" . $data['title'] . "</u></b><br /><br />";
         $msg .= "<b>Description:</b> " . $data['short'] . "<br /><br />";
         $msg .= "<b>Explanation:</b> " . $data['long'] . "<br /><br/>";
@@ -301,17 +303,20 @@ function xarErrorRender($format,$stacktype = "ERROR")
         if ($data['component'] != '') $msg .= "<b>Component:</b> " . $data['component'] . "<br /><br />";
         return $msg;
     }
-    else {
-        return $data;
+    elseif ($format == 'text') {
+        $msg = $data['title'] . "\n\n";
+        $msg .= "Description: " . $data['short'] . "\n\n";
+        $msg .= "Explanation: " . $data['long'] . "<br /><br/>";
+        if ($data['hint'] != '') $msg .= "Hint: " . $data['hint'] . "\n\n";
+        if ($data['stack'] != '') $msg .= "Stack:\n" . $data['stack'] . "\n\n";
+        if ($data['product'] != '') $msg .= "Product: " . $data['product'] . "\n\n";
+        if ($data['component'] != '') $msg .= "Component: " . $data['component'] . "\n\n";
+        return $msg;
     }
 }
 
 /**
  * Gets a formatted array of errors
- *
- * Returns a string formatted according to the $format parameter that provides all the information
- * available on current error.
- * If there is no error currently raised an empty string is returned.
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
@@ -319,7 +324,7 @@ function xarErrorRender($format,$stacktype = "ERROR")
  * @param stacktype string one of CORE or ERROR
  * @return array of formatted errors
  */
-function xarGetErrors($stacktype = "ERROR",$format='data')
+function xarErrorGet($stacktype = "ERROR",$format='data')
 {
     $msgs = xarException__formatStack($format,$stacktype);
     $items = count($msgs);
@@ -362,7 +367,7 @@ function xarException__formatStack($format,$stacktype = "ERROR")
 
         $error = $stack->pop();
 
-        if ($format == 'template' || $format == 'plain') {
+        if ($format == 'template' || $format == 'rawhtml') {
             include_once "includes/exceptions/htmlexceptionrendering.class.php";
             $msg = new HTMLExceptionRendering($error);
         }

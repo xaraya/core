@@ -225,7 +225,7 @@ if (!xarInstallMain($phase)) {
             // Fallback to raw html
             $msg = '<span style="color: #FF0000;">The current page is shown because the Blocklayout Template Engine failed to render the page, however this could be due to a problem not in BL itself but in the template. BL has raised or has left uncaught the following exception:</span>';
             $msg .= '<br /><br />';
-            $msg .= xarExceptionRender('plain');
+            $msg .= xarExceptionRender('rawhtml');
             $msg .= '<br />';
             $msg .= '<span style="color: #FF0000;">The following exception is instead the exception caught from the main catch clause (Please note that they could be the same if they were raised inside BL or inside the template):</span>';
             $msg .= '<br /><br />';
