@@ -65,9 +65,12 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
                     'system/module_states' => $systemPrefix . '_module_states',
                     'system/module_vars' => $systemPrefix . '_module_vars',
                     'site/module_states' => $sitePrefix . '_module_states',
-                    'site/module_vars' => $sitePrefix . '_module_vars');
+                    'site/module_vars' => $sitePrefix . '_module_vars',
+                    'system/module_uservars' => $systemPrefix . '_module_uservars',
+                    'site/module_uservars' => $sitePrefix . '_module_uservars');
     // Old tables
     $tables['module_vars']           = $systemPrefix . '_module_vars';
+    $tables['module_uservars']       = $systemPrefix . '_module_uservars';
     $tables['hooks']                 = $systemPrefix . '_hooks';
 
     xarDB_importTables($tables);
@@ -165,6 +168,7 @@ function xarModGetVar($modName, $name)
  * @returns bool
  * @return true on success
  * @raise DATABASE_ERROR, BAD_PARAM
+ * @todo  We could delete the user vars for the module with the new value to save space?
  */
 function xarModSetVar($modName, $name, $value)
 {
@@ -231,6 +235,7 @@ function xarModSetVar($modName, $name, $value)
  * @returns bool
  * @return true on success
  * @raise DATABASE_ERROR, BAD_PARAM
+ * @todo Add caching for user variables?
  */
 function xarModDelVar($modName, $name)
 {
@@ -252,10 +257,23 @@ function xarModDelVar($modName, $name)
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
         $module_varsTable = $tables['system/module_vars'];
+        $module_uservarsTable = $tables['system/module_uservars']; 
     } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
         $module_varsTable = $tables['site/module_vars'];
+        $module_uservarsTable = $tables['site/module_uservars'];
     }
 
+    // Delete the user variables first
+    $modvarid = xarModGetVarId($modName, $name);
+    if(!$modvarid) return;
+    // MrB: we could use xarModDelUserVar in a loop here, but this is 
+    //      much faster.
+    $query = "DELETE FROM $module_uservarsTable
+              WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'";
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
+
+    // Now delete the module var 
     $query = "DELETE FROM $module_varsTable
               WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
               AND xar_name = '" . xarVarPrepForStore($name) . "'";
@@ -266,6 +284,291 @@ function xarModDelVar($modName, $name)
 
     return true;
 }
+
+
+/**
+ * Get a user variable for a module
+ *
+ * This is basically the same as xarModSetVar, but this
+ * allows for getting variable values which are tied to
+ * a specific user for a certain module. Typical usage
+ * is storing user preferences.
+ *
+ * @access public
+ * @param modName The name of the module
+ * @param name    The name of the variable to get
+ * @param uid     User id for which value is to be retrieved
+ * @returns mixed Teh value of the variable or void if variable doesn't exist.
+ * @raise  DATABASE_ERROR, BAD_PARAM (indirect)
+ * @see  xarModGetVar
+ * @todo Mrb : Add caching? 
+ */
+function xarModGetUserVar($modName, $name, $uid=NULL)
+{
+	// Module name and variable name are necessary
+    if (empty($modName)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        return;
+    }
+    if (empty($name)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
+        return;
+    }
+	
+    // If uid not specified take the current user
+    if ($uid == NULL) $uid=xarUserGetVar('uid');
+
+	// Anonymous user always uses the module default setting
+    if ($uid==0) return xarModGetVar($modName,$name);
+    
+    // Retrieve the info for the module to see where we need to retrieve the values
+    $modBaseInfo = xarMod_getBaseInfo($modName);
+    if (!isset($modBaseInfo)) {
+        return; // throw back
+    }
+
+    list($dbconn) = xarDBGetConn();
+	$tables = xarDBGetTables();
+	
+    // Takes the right table basing on module mode
+    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+        $module_uservarsTable = $tables['system/module_user_vars'];
+    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+        $module_uservarsTable = $tables['site/module_user_vars'];
+    }
+
+    // We need the id of the module variable
+    unset($modvarid); // is this necessary?
+	$modvarid = xarModGetVarId($modName, $name);
+	if (!$modvarid) return;
+
+	$query = "SELECT xar_value
+              FROM $module_uservarstable
+              WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'
+              AND xar_uid ='" . xarVarPrepForStore($uid). "'";
+	$result =& $dbconn->Execute($query);
+	if (!$result) return;
+
+    // If there is no such thing, return the global setting.
+	if ($result->EOF) {
+		// return global setting
+		return xarModGetVar($modName, $name);
+	}
+	
+	list($value) = $result->fields;
+	$result->Close();
+	
+	return $value;
+}
+
+/**
+ * Set a user variable for a module
+ * 
+ * This is basically the same as xarModSetVar, but this
+ * allows for setting variable values which are tied to
+ * a specific user for a certain module. Typical usage
+ * is storing user preferences.
+ * Only deviations from the module vars are stored.
+ *
+ * @access public
+ * @param modName The name of the module to set a user variable for
+ * @param name    The name of the variable to set
+ * @param value   Value to set the variable to.
+ * @param uid     User id for which value needs to be set
+ * @returns boolean
+ * @return  true on success false on failure
+ * @raise BAD_PARAM
+ * @see xarModSetVar
+ * @todo Add caching?
+ */
+function xarModSetUserVar($modName, $name, $value, $uid=NULL)
+{
+	// Module name and variable name are necessary
+    if (empty($modName)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        return;
+    }
+    if (empty($name)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
+        return;
+    }
+  
+	// If no uid specified assume current user
+    if ($uid == NULL) $uid = xarUserGetVar('uid');
+
+    // For anonymous users no preference can be set
+    // MrB: should we raise an exception here?
+    if ($uid==0) return false;
+
+    // Get the info for the module so we can determine where we need to set 
+    // the variable
+    $modBaseInfo = xarMod_getBaseInfo($modName);
+    if (!isset($modBaseInfo)) return; // throw back
+
+	list($dbconn) = xarDBGetConn();
+	$tables = xarDBGetTables();
+	
+    // Takes the right table basing on module mode
+    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+        $module_uservarsTable = $tables['system/module_uservars'];
+    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+        $module_uservarsTable = $tables['site/module_uservars'];
+    }
+	
+    // Get the default setting to compare the value against.
+	$modsetting = xarModGetVar($modName, $name);
+    // We need the variable id
+    unset($modvarid);
+	$modvarid = xarModGetVarId($modName, $name);
+	if(!$modvarid) return;
+
+	// Only store setting if different from global setting
+	if ($value != $modsetting) {
+        // First delete it.
+        // We could first retrieve and then compare the new value to
+        // both oldvalue and the module default, but this leads to 
+        // simpler code and assuming the two queries are equal performing
+        // this looks better. 
+        // FIXME: check this for performance (compare with xarModSetVar
+        //        performance which uses either update or insert statement.
+        xarModDelUserVar($modName,$name,$uid);
+		$query = "INSERT INTO $module_uservarstable
+                 (xar_mvid, xar_uid, xar_value)
+                VALUES
+                 ('" . xarVarPrepForStore($modvarid) . "',
+                  '" . xarVarPrepForStore($uid) . "',
+                  '" . xarVarPrepForStore($value) . "');";
+		
+		if (! $dbconn->Execute($query)) return;
+	}
+	
+	return true;
+}
+
+/**
+ * Delete a user variable for a module
+ *
+ * This is the same as xarModDelVar but this allows
+ * for deleting a specific user variable, effectively
+ * setting the value for that user to the default setting
+ *
+ * @access public
+ * @param modName The name of the module to set a variable for
+ * @param name    The name of the variable to set
+ * @param uid     User id of the user to delete the variable for.
+ * @returns bool
+ * @return true on success
+ * @raise BAD_PARAM
+ * @see xarModDelVar
+ * @todo Add caching?
+ */
+function xarModDelUserVar($modName, $name, $uid=NULL)
+{
+    // ModName and name are required
+    if (empty($modName)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        return;
+    }
+    if (empty($name)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
+        return;
+    }
+
+    // If uid is not set assume current user
+    if ($uid == NULL) $uid = xarUserGetVar('uid');
+    
+    // Deleting for anonymous user is useless return true
+    // MrB: should we continue, can't harm either and we have
+    //      a failsafe that records are deleted, bit dirty, but
+    //      it would work.
+    if ($uid == 0 ) return true;
+
+    // Get the module info so we know where to delete the value
+    $modBaseInfo = xarMod_getBaseInfo($modName);
+    if (!isset($modBaseInfo)) return; // throw back
+   
+
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
+
+    // Takes the right table basing on module mode
+    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+        $module_uservarsTable = $tables['system/module_uservars'];
+    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+        $module_uservarsTable = $tables['site/module_uservars'];
+    }
+        
+    // We need the variable id
+    unset($modvarid); // is this necessary?
+    $modvarid = xarModGetVarId($modName, $name);
+    if(!$modVarid) return;
+ 
+    $query = "DELETE FROM $module_uservarstable
+              WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'
+              AND xar_uid = '" . xarVarPrepForStore($uid) . "'";
+    if(!$dbconn->Execute($query)) return;
+
+    return true;
+}
+
+/**
+ * Support function for xarModUser*Var functions
+ * 
+ * private function which delivers a module user variable
+ * id based on the module name and the variable name
+ *
+ * @access private
+ * @param modName The name of the module
+ * @param name    The name of the variable
+ * @returns id identifier for the variable
+ * @raise BAD_PARAM
+ * @see xarModUserSetVar, xarModUserGetVar, xarModUserDelVar
+*/
+function xarModGetVarId($modName, $name)
+{
+    // Module name and variable name are both necesary
+    if (empty($modName)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        return;
+    }
+    if (empty($name)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
+        return;
+    }
+
+    // Retrieve module info, so we can decide where to look
+    $modBaseInfo = xarMod_getBaseInfo($modName);
+    if (!isset($modBaseInfo)) return; // throw back
+    
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
+
+    // Takes the right table basing on module mode
+    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+        $module_uservarsTable = $tables['system/module_uservars'];
+    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+        $module_uservarsTable = $tables['site/module_uservars'];
+    }
+
+	$query = "SELECT xar_id 
+            FROM $module_uservarstable
+            WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
+            AND xar_name = '" . xarVarPrepForStore($name) . "'";
+	$result = $dbconn -> Execute($query);
+	if(!$result) return;
+
+	// If there was no such thing return 
+	if ($result->EOF) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_FOUND', 'modvarid');
+        return;
+   	}
+
+	list($modvarid) = $result->fields;
+	$result->Close();
+	
+    return $modvarid;
+}
+
 
 /**
  * Get module registry ID by name
@@ -1503,5 +1806,8 @@ function xarMod__getState($modRegId, $modMode)
         return (int) XARMOD_STATE_UNINITIALISED;
     }
 }
+
+
+
 
 ?>

@@ -212,7 +212,8 @@ function xarML($string/*, ...*/)
         $trans = $string;
     }
     if (empty($trans)) {
-        xarEvt_fire('MLSMissingTranslationString', $string);
+        // FIXME: postpone
+        //xarEvt_fire('MLSMissingTranslationString', $string);
         $trans = $string;
     }
     if (func_num_args() > 1) {
@@ -248,7 +249,8 @@ function xarMLByKey($key/*, ...*/)
         $trans = $key;
     }
     if (empty($trans)) {
-        xarEvt_fire('MLSMissingTranslationKey', $key);
+        // FIXME: postpone
+        //xarEvt_fire('MLSMissingTranslationKey', $key);
         $trans = $key;
     }
     if (func_num_args() > 1) {
@@ -551,8 +553,9 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
         if (!$GLOBALS['xarMLS_backend']->loadContext($ctxType, $ctxName)) return; // throw back
         return true;
     }
-
-    xarEvt_fire('MLSMissingTranslationDomain', array($dnType, $dnName));
+    
+    // FIXME: postpone
+    //xarEvt_fire('MLSMissingTranslationDomain', array($dnType, $dnName));
 
     return false;
 }
