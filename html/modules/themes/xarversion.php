@@ -14,6 +14,6 @@ $modversion['contact'] = '';
 $modversion['admin'] = 1;
 $modversion['user'] = 0;
 $modversion['securityschema'] = array('Themes::' => '::');
-$modversion['class'] = 'Core Admin';
+$modversion['class'] = 'General Admin';
 $modversion['category'] = 'Global'; 
 ?>
