@@ -344,47 +344,13 @@ complementary styling - backgrounds and outlines
 /*
 system menus and related rules 
 -------------------------------------------------------------------------[comment] */
-.xar-menu-section {
-	color: #BB8296;
-	font-weight: bold;
-	font-family: Helvetica,Arial,sans-serif;
-	line-height: 140%;
-	list-style-type: none;
-	padding: 2px;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #A9AFBA;
-}
-
-ul.xar-menu-section, ol.xar-menu-section { margin: 1px 0px; }
-li.xar-menu-section { border: 0px; }
-
-.xar-menu-section-current {
-/* 	background-color: #E9E7EE; */
-	color: #191970;
-	font-weight: bold;
-	border-bottom: 1px solid #191970;
-	line-height: 140%;
-	list-style-type: none;
-}
 
 .xar-menu-item {
 	font-weight: bold;
-	padding-left: 0px;
-	line-height: 120%;
-	list-style-type: none;
-	margin: 0px;
-/* 	background-color: #E9E7EE; */
+/* 	background-color: #E7EAEE; */
 }
 
 
-
-.xar-menu-item-current {
-	background-color: #FFFFFF;
-	font-weight: bold;
-/* 	padding-left: 1em; */
-	list-style-type: none;
-}
 
 /* li.xar-menu-item a { */
 /* 	color: #FFFFFF; */
@@ -396,28 +362,80 @@ li.xar-menu-section { border: 0px; }
 /* } */
 
 .xar-menu-subitem {
-	font-size:95%;
-	font-weight: bold;
-	margin: 2px .5em;
 	padding: 0;
-	list-style-type: none;
-	background-color: #FFFFFF;
-	line-height: 120%;
 }
 
-.xar-menu-subitem:hover { background-color: transparent; }
+/* .xar-menu-subitem:hover { background-color: transparent; } */
 
-.xar-menu-subitem-current {
-	font-size: 95%;
-	font-weight: bold;
-	margin: 2px .5em;
-	padding: 0;
+
+
+
+.xar-menu-section {
 	list-style-type: none;
-	background-color: #FFFFFF;
-	line-height: 120%;
+	margin: 0;
+	padding:0;
 }
 
+.xar-menu-section ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+/* 	font-family: helvetica, verdana, arial, sans-serif; */
+}
 
+.xar-menu-section li {
+	margin: 0 0 1px 0;
+}
+
+.xar-menu-section a {
+	display: block;
+	padding: 1px 10px;
+	width: 150px;
+	color: #003780;
+	background-color: #E7EAEE;
+	text-decoration: none;
+}
+
+.xar-menu-section a:hover {
+	color: #fff;
+	background-color: #8296BB;
+	text-decoration: none;
+}
+
+.xar-menu-section ul ul li {
+	margin: 0 0 1px 10px;
+}
+
+.xar-menu-section ul ul a, li.xar-menu-subitem-current {
+	display: block;
+	padding: 1px 10px;
+	width: 140px;
+	color: #fff;
+	background-color: #8296BB;
+	font-family: helvetica, arial, verdana, sans-serif;
+	font-size: 10px; 
+	font-weight: bold;
+	text-decoration: none;
+} /* this is the only rule where we currently use absolute font size,
+	 this is done only because of the horisontal space restriction in side menus
+------------------------------------------------------------------[important note] */
+
+.xar-menu-section-current, li.xar-menu-subitem-current {
+	color: #2C3F58;
+	background-color: #B1C2E3;
+}
+
+.xar-menu-section ul ul a:hover {
+	color: #fff;
+	background-color: #FF6B00;
+	text-decoration: none;
+}
+
+/* li.xar-menu-item-current, .xar-menu-item-current a { background-color: #B1C2E3; } */
+
+/*
+this was the original method used in old classic, but it never worked in IE/Win 
+-------------------------------------------------------------------------[comment] */
 /* .xar-menu-item > a, .xar-menu-subitem > a { display: block; } */
 /* .xar-menu-item-current > .xar-menu-subitem > a { color: #193970; } */
 /* .xar-menu-subitem > a:hover { background-color: #cce6ff; } */
