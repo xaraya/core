@@ -75,11 +75,12 @@ define('XARDBG_SHOW_PARAMS_IN_BT', 8);
 
 
 /**
- * Start the core engine.
+ * Initializes the core engine
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
  * @param whatToLoad integer What optional systems to load.
- * @return bool true on success,false on failure
+ * @return bool true
  * @todo <johnny> remove LC_TIME code if we don't need it anymore
  */
 function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
@@ -193,6 +194,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // but during the installation procedure there is no database
         //include_once 'includes/xarSession2.php';
         include_once 'includes/xarSession.php';
+
         // Start Session Support
         $systemArgs = array('securityLevel' => xarCore_getSiteVar('Session.SecurityLevel'),
                             'duration' => xarCore_getSiteVar('Session.Duration'),
@@ -264,6 +266,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 /**
  * Returns the relative path name for the var directory
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
  * @return string the var directory path name
  */

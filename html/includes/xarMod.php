@@ -212,7 +212,7 @@ function xarModSetVar($modName, $name, $value)
                   WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
                   AND xar_name = '" . xarVarPrepForStore($name) . "'";
     }
-    
+
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -281,7 +281,6 @@ function xarModGetIDFromName($modName)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back
     return $modBaseInfo['regid'];
@@ -335,16 +334,15 @@ function xarModGetInfo($modRegId)
     $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
 
     // Shortcut for os prepared directory
-    // TODO: <marco> get rid of it since useless
-    $modInfo['osdirectory'] = $modInfo['directory'];
-    
+    $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
+
     $modState = xarMod__getState($modInfo['regid'], $modInfo['mode']);
     if (!isset($modState)) return; // throw back
     $modInfo['state'] = $modState;
 
     xarVarSetCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
 
-    $modFileInfo = xarMod_getFileInfo($modInfo['directory']);
+    $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
     if (!isset($modFileInfo)) return; // throw back
 //    $modInfo = array_merge($modInfo, $modFileInfo);
     $modInfo = array_merge($modFileInfo, $modInfo);
@@ -384,7 +382,7 @@ function xarModGetInfo($modRegId)
  * first by class, then by category and lastly by name you pass
  * 'class/category/name' as orderBy parameter
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @param filter array of criteria used to filter the entire list of installed
  *        modules.
  * @param startNum integer the start offset in the list
@@ -397,6 +395,12 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
 {
     static $validOrderFields = array('name' => 'mods', 'regid' => 'mods',
                                      'class' => 'mods', 'category' => 'mods');
+    if (!is_array($filter)) {
+        $msg = xarML('Parameter filter must be an array.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return;
+    }
 
     // Optional arguments.
     if (!isset($startNum)) $startNum = 1;
@@ -496,14 +500,13 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
                     $modInfo['mode'] = (int) $mode;
                     $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
                     // Shortcut for os prepared directory
-                    // TODO: <marco> get rid of it since useless
-                    $modInfo['osdirectory'] = $modInfo['directory'];
+                    $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
 
                     $modInfo['state'] = (int) $modState;
 
                     xarVarSetCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
 
-                    $modFileInfo = xarMod_getFileInfo($modInfo['directory']);
+                    $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
                     if (!isset($modFileInfo)) return; // throw back
                //     $modInfo = array_merge($modInfo, $modFileInfo);
                     $modInfo = array_merge($modFileInfo, $modInfo);
@@ -536,6 +539,8 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
 function xarModLoad($modName, $modType = 'user')
 {
     static $loadedModuleCache = array();
+
+    xarLogMessage("xarModLoad: loading $modName:$modType");
 
     if (empty($modName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
@@ -776,10 +781,17 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
 
     // Build function name and call function
     $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
-    if (!function_exists($modAPIFunc)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $modAPIFunc);
-        return;
-    }
+	if (!function_exists($modAPIFunc)) {
+		// attempt to load the module's api
+		xarModAPILoad($modName,$modType);
+		// let's check for that function again to be sure
+		if (!function_exists($modAPIFunc)) {
+			$msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
+			xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+							new SystemException($msg));
+			return;
+		}
+	}
 
     return $modAPIFunc($args);
 }
@@ -1069,19 +1081,137 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
     return $resarray;
 }
 
-// PROTECTED FUNCTIONS
+/**
+ * check if a module name is an alias for some other module
+ *
+ * (only used for short URL support at the moment)
+ *
+ * @access private
+ * @param modName name of the module
+ * @returns mixed
+ * @return string containing the module name, or null if database error
+ * @raise BAD_PARAM
+ */
+function xarModGetAlias($modName)
+{
+    if (empty($modName)) {
+        $msg = xarML('Invalid module name');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return;
+    }
+
+    $aliases = xarConfigGetVar('System.ModuleAliases');
+
+    if (isset($aliases) && !empty($aliases[$modName])) {
+        return $aliases[$modName];
+    } else {
+        return $modName;
+    }
+}
 
 /**
- * Get info from xarversion.php
+ * Define a module name as an alias for some other module
+ *
+ * (only used for short URL support at the moment)
+ *
+ * @access public
+ * @param modName string name of the 'fake' module you want to define
+ * @param alias string name of the 'real' module you want to assign it to
+ * @return mixed true on success
+ * @raise BAD_PARAM
+ * @todo <marco> <mikespub> #1 what if 2 modules want to use the same aliases ?
+ */
+function xarModSetAlias($modName, $alias)
+{
+    if (empty($modName) || empty($alias)) {
+        $msg = xarML('Invalid module name or alias');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return false;
+    }
+
+    // Check if the module name we want to define is already in use
+    $modid = xarModGetIDFromName($modName);
+    if (isset($modid)) {
+        $msg = xarML('Module name #(1) is already in use',
+                    xarVarPrepForDisplay($modName));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return false;
+    }
+    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        // Ignore exceptions here!
+        xarExceptionFree();
+    }
+
+    // Check if the alias we want to set it to *does* exist
+    $modid = xarModGetIDFromName($alias);
+    if (!isset($modid)) {
+        $msg = xarML('Alias #(1) is unknown',
+                    xarVarPrepForDisplay($alias));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return false;
+    }
+
+    // Get the list of current aliases
+    $aliases = xarConfigGetVar('System.ModuleAliases');
+
+    if (!isset($aliases)) {
+        $aliases = array();
+    }
+
+    // TODO: #1
+    $aliases[$modName] = $alias;
+    xarConfigSetVar('System.ModuleAliases', $aliases);
+
+    return true;
+}
+
+/**
+ * Remove an alias for a module name
+ *
+ * (only used for short URL support at the moment)
+ *
+ * @access public
+ * @param modName string name of the 'fake' module you want to remove
+ * @param alias string name of the 'real' module it was assigned to (= verification)
+ * @return mixed true on success
+ * @raise BAD_PARAM
+ */
+function xarModDelAlias($modName, $alias)
+{
+    if (empty($modName) || empty($alias)) {
+        $msg = xarML('Invalid module name or alias');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return false;
+    }
+
+    $aliases = xarConfigGetVar('System.ModuleAliases');
+
+    // Make sure we only delete it *if* it was assigned to the right alias
+    if (isset($aliases) && !empty($aliases[$modName]) &&
+        $aliases[$modName] == $alias) {
+        unset($aliases[$modName]);
+        xarConfigSetVar('System.ModuleAliases',$aliases);
+    }
+
+    return true;
+}
+
+/**
+ * Get info from xarversion.php for module specified by modOsDir
  *
  * @access protected
- * @param modDir the module's directory
+ * @param modOSdir the module's directory
  * @returns array
  * @return an array of module file information
  * @raise MODULE_FILE_NOT_EXIST
  * @todo <marco> #1 FIXME: admin or admin capable?
  */
-function xarMod_getFileInfo($modDir)
+function xarMod_getFileInfo($modOsDir)
 {
     if (empty($modDir)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modDir');
@@ -1360,4 +1490,3 @@ function xarMod__getState($modRegId, $modMode)
     }
 }
 
-?>
