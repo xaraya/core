@@ -86,7 +86,9 @@
 			</select>
 		</span>
 		</div>
-		<span style="float: left; width: 30%; text-align: right;"><p><input type="submit" value="#$createlabel#" /></p></span>
+		<div>
+			<span style="float: left; width: 30%; text-align: right;"><p><input type="submit" value="#$createlabel#" /></p></span>
+		</div>
 		</form>
 	</div>
 </div>
