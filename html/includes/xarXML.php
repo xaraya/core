@@ -21,7 +21,7 @@
  *             subsystem can be reused by them all
  */
 
-//error_reporting(E_ALL);
+error_reporting(E_ALL);
 
 /**
  * Defines make our life a bit easier.
@@ -123,14 +123,13 @@ function xarXml_init($args, $whatElseIsGoingLoaded)
  *
  * @access public
  * @package xml
- * @todo do not assume the result will be a parse tree, it's non-sax-like
  */
 class xarXmlParser 
 {
     var $encoding;      // Which input encoding are we gonna use for parsing?
     var $handler;       // Which handler object is attached to this parser?
     var $parser=NULL;   // The parser object itself
-    var $tree=array();  // Resulting parse tree
+    var $parsed_result; // Parsed output
     
     /**
      * Construct the xarXmlParser object
@@ -314,8 +313,8 @@ class xarXmlParser
     function __deactivate() 
     {
         $this->__geterrorinfo();
-        $this->tree = $this->handler->_tree;
-        $this->handler->_reset();
+        $this->parsed_result = $this->handler->output;
+        //$this->handler->_reset();
         return $this->__free();
     }
 
@@ -359,7 +358,8 @@ class xarXmlParser
  *
  * This class forms the base for defining handlers. Override
  * this class with your own methods with the same name to create
- * a xml handler object which handles the parsing for you.
+ * a xml handler object which handles the parsing for you. The default
+ * behaviour of this handler is to do nothing.
  * 
  * @package xml
  * @todo test,test,test
@@ -367,6 +367,8 @@ class xarXmlParser
  */
 class xarAbstractXmlHandler
 {
+    var $output;    // The output the handler produces.
+
     // Abstract functions
     function default_handler(){}
     function character_data(){}
@@ -375,9 +377,122 @@ class xarAbstractXmlHandler
     function process_instruction(){}
     function unparsed_entity(){}
     function notation_declaraion(){}
-    function external_entity_declaraion(){}
+    function external_entity_reference(){}
     function start_namespace(){}
     function end_namespace(){}
+}
+
+/**
+ * XML Copy handler
+ *
+ * This handler just copies the input XML document to it's output 
+ * producing a *syntactically* equivalent output document, mainly for
+ * your overriding pleasure
+ *
+ * @todo evaluate whether <tag/> to <tag></tag> is bad
+ */
+class xarXmlCopyHandler extends xarAbstractXmlHandler
+{
+    var $_nsregister = array();  // Total available namespaces
+    var $_nsdecl     = array();  // Namespaces declarations
+
+    function xarXmlCopyHandler() { $this->output = ''; }
+    function default_handler($parser,$data) { $this->output .= $data; }
+    function character_data($parser,$data) {  $this->output .= $data; }
+    function process_instruction($parser, $target, $data) { $this->output .= "<?$target $data ?>";}
+
+    function open_tag($parser, $tagname, $attribs)
+    {
+        $tag  = $this->__resolveTagPrefix($tagname);
+        $this->output .="<$tag";
+
+        // Handle namespace declarations.
+        if(count($this->_nsdecl) > 0 ) {
+            foreach($this->_nsdecl as $prefix => $uri) {
+                $this->output .= " xmlns";
+                if($prefix) $this->output .= XARXML_NAMESPACE_SEP . "$prefix";
+                $this->output .= "=\"$uri\"";
+            }
+        }
+        $this->_nsdecl = array();
+
+        foreach($attribs as $attrib => $value) {
+            $this->output .= " $attrib=\"$value\"";
+        }
+        $this->output .= ">";
+    }
+
+    function close_tag($parser, $tagname) 
+    {
+        $tag = $this->__resolveTagPrefix($tagname);
+        $this->output .= "</$tag>";
+    }
+  
+    function external_entity_reference($parser, $entity_names, $system_id, $public_id)
+    {
+        $entity = array_pop(explode(XARXML_ENTITY_SEP, $entity_names));
+        $this->output .= "&$entity;";
+        return true;
+    }
+
+    function start_namespace($parser, $prefix, $uri) 
+    {
+        // We found a namespace declaration, register them so, the open tag can handle it
+        $this->_nsregister[$prefix] = $uri;
+        $this->_nsdecl[$prefix] = $uri;
+        return true;
+    }   
+
+    function __resolveTagPrefix($tagname) 
+    {
+        $tag_parts = explode(XARXML_NAMESPACE_SEP,$tagname);
+        $tag = array_pop($tag_parts);
+        $uri = implode(XARXML_NAMESPACE_SEP, $tag_parts);
+        $prefix = array_search($uri,$this->_nsregister);
+        if($prefix == '0') $prefix=false;
+        if($prefix) 
+            return $prefix. XARXML_NAMESPACE_SEP .$tag;
+        else 
+            return $tag;
+    }
+
+}
+
+/** 
+ * External entity resolver
+ *
+ * This handlers takes the xml document and inserts the content
+ * of all referenced external entities into the xml document 
+ * producing a new xml document
+ *
+ */
+class xarXmlEntityHandler extends xarXmlCopyHandler
+{
+    function external_entity_reference($parser, $entity_names,  $resolve_base, $system_id, $public_id)
+    {
+        $entity_content = '';
+        //echo "External entity ref handler\n";
+        if($system_id) {
+            // FIXME: I don't know the logic when to use public id and when to use system_id
+            //        for now i only use system_id, which is a filename.
+            // system_id is a filename, and as the $resolve_base is always empty we have to cope here
+            if(!file_exists($system_id)) {
+                // couldn't find it directly through absolute reference, try relative
+                // if that doesn't help, the parser will raise an error for us
+                if($this->_resolve_base) $system_id=$this->_resolve_base ."/". $system_id;
+            } 
+            if(!file_exists($system_id)) return false;
+
+            // External entities may be empty
+            if(filesize($system_id) != 0) {
+                $fp = fopen($system_id,"r");
+                $entity_content = fread($fp,filesize($system_id));
+                fclose($fp);
+            }
+        }
+        // What to do with this content?
+        $this->output .= $content;
+    }     
 }
 
 /**
@@ -618,11 +733,18 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
             // External entities may be empty
             $ee_tree = array();
             if(filesize($system_id) != 0) {
-                if(!$ee_parser->parseFile($system_id)) {
-                    //echo $system_id .":". $ee_parser->lastmsg."\n";
-                    return false;
+                $fp = fopen($system_id,"r");
+                $content = trim(fread($fp,filesize($system_id)));
+                fclose($fp);
+                str_replace("\r\n", "\n", $content);
+                str_replace("\r", "\n", $content);
+                if(strlen($content)) {
+                    if(!$ee_parser->parseString($content)) {
+                        echo $system_id .":". $ee_parser->lastmsg."\n";
+                        return false;
+                    }
+                    $ee_tree = $ee_parser->parsed_result;
                 }
-                $ee_tree = $ee_parser->tree;
             }
         }
         // The node in the parent is an entity reference
