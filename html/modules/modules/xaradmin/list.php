@@ -178,7 +178,7 @@ function modules_admin_list()
         $listrows[$i]['displayname']    = $mod['name'];
         $listrows[$i]['version']        = $mod['version'];
         $listrows[$i]['edit']           = xarML('On/Off');
-        $listrows[$i]['prop']           = xarML('Set');
+        $listrows[$i]['prop']           = xarML('Modify');
 
         // conditional data
         if($mod['state'] == XARMOD_STATE_UNINITIALISED){
