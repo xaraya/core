@@ -159,7 +159,11 @@ class Dynamic_Select_Property extends Dynamic_Property
     {
         // if the validation field starts with xarModAPIFunc, we'll assume that this is
         // a function call that returns an array of names, or an array of id => name
-        if (preg_match('/^xarModAPIFunc/i',$validation)) {
+        if(is_array($validation)) {
+            foreach($validation as $id => $name) {
+                array_push($this->options, array('id' => $id, 'name' => $name));
+            }
+        } elseif (preg_match('/^xarModAPIFunc/i',$validation)) {
             $this->func = $validation;
             eval('$options = ' . $validation .';');
             if (isset($options) && count($options) > 0) {
@@ -193,7 +197,7 @@ class Dynamic_Select_Property extends Dynamic_Property
             $filePath = $fileMatch[1];
             $this->file = $filePath;
             $fileLines = file($filePath);
-            foreach ($fileLines as $option) 
+            foreach ($fileLines as $option)
             {
                 // allow escaping \, for values that need a comma
                 if (preg_match('/(?<!\\\),/', $option)) {
