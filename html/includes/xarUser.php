@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id$
- * 
+ *
  * User System
- * 
+ *
  * @package user
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -40,10 +40,10 @@ define('XARUSER_AUTH_FAILED', -1);
 
 /**
  * Initialise the User System
- * 
+ *
  * @access protected
- * @global xarUser_authentication modules array 
- * @param args[authenticationModules] array 
+ * @global xarUser_authentication modules array
+ * @param args[authenticationModules] array
  * @return bool true on success
  */
 function xarUser_init($args, $whatElseIsGoingLoaded)
@@ -620,28 +620,28 @@ function xarUser__getAuthModule($userId)
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
-        // Get user auth_module name
-        $rolestable = $xartable['roles'];
+	// Get user auth_module name
+	$rolestable = $xartable['roles'];
 
-        $query = "SELECT xar_auth_module
-                  FROM $rolestable
-                  WHERE xar_pid = '" . xarVarPrepForStore($userId) . "'";
-        $result =& $dbconn->Execute($query);
-        if (!$result) return;
+	$query = "SELECT xar_auth_module
+			  FROM $rolestable
+			  WHERE xar_pid = '" . xarVarPrepForStore($userId) . "'";
+	$result =& $dbconn->Execute($query);
+	if (!$result) return;
 
-        if ($result->EOF) {
-            // That user has never logon, strange, don't you think?
-            // However fallback to authsystem
-            $authModName = 'authsystem';
-        } else {
-            list($authModName) = $result->fields;
-            // TODO: remove when issue of Anonymous users is resolved
-            if (empty($authModName)) {
-                $authModName = 'authsystem';
-            }
-        }
-        $result->Close();
-    }
+	if ($result->EOF) {
+		// That user has never logon, strange, don't you think?
+		// However fallback to authsystem
+		$authModName = 'authsystem';
+	} else {
+		list($authModName) = $result->fields;
+		// TODO: remove when issue of Anonymous users is resolved
+		if (empty($authModName)) {
+			$authModName = 'authsystem';
+		}
+	}
+	$result->Close();
+
     if (!xarModAPILoad($authModName, 'user')) return;
 
     return $authModName;
@@ -970,7 +970,7 @@ function xarUser__validationApply($validation, $valueToCheck)
 // Simple data structure used by validation stuff
 /**
  *
- * 
+ *
  * @package user
  */
 class xarUser__ValEntry

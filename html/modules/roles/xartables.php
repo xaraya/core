@@ -1,4 +1,4 @@
-<?php 
+<?php
 // File: $Id$
 // ----------------------------------------------------------------------
 // Xaraya eXtensible Management System
@@ -22,16 +22,16 @@ function roles_xartables()
     $masks = xarDBGetSiteTablePrefix() . '_masks';
     $instances = xarDBGetSiteTablePrefix() . '_instances';
     $xartable['users_column'] = array(
-        'uid'            => $users . '.xar_uid',
-        'name'           => $users . '.xar_name',
-        'uname'          => $users . '.xar_uname',
-        'email'          => $users . '.xar_email',
-        'pass'           => $users . '.xar_pass',
-        'url'            => $users . '.xar_url',
-        'date_reg'       => $users . '.xar_date_reg',
-        'valcode'        => $users . '.xar_valcode',
-        'state'          => $users . '.xar_state',
-        'auth_module'    => $users . '.xar_auth_module'
+        'uid'            => $roles . '.xar_uid',
+        'name'           => $roles . '.xar_name',
+        'uname'          => $roles . '.xar_uname',
+        'email'          => $roles . '.xar_email',
+        'pass'           => $roles . '.xar_pass',
+        'url'            => $roles . '.xar_url',
+        'date_reg'       => $roles . '.xar_date_reg',
+        'valcode'        => $roles . '.xar_valcode',
+        'state'          => $roles . '.xar_state',
+        'auth_module'    => $roles . '.xar_auth_module'
      );
 
     // Get the name for the user data table

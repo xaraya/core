@@ -156,6 +156,8 @@ function initializeSetup() {
     * xarregisterMask(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
+    xarRegisterMask('AdminAll','All','All','All','All',ACCESS_ADMIN);
+
     xarRegisterMask('ViewBlocks','All','base','HTMLBlock','All',ACCESS_OVERVIEW);
     xarRegisterMask('EditBlock','All','base','Block','All',ACCESS_EDIT);
     xarRegisterMask('AddBlock','All','base','Block','All',ACCESS_ADD);

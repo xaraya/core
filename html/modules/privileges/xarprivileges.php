@@ -1160,7 +1160,7 @@ function drawbranch($node){
 	}
 	else {
 		$this->html .= '<a href="javascript:xarTree_exec(\''. $object['name'] .'\',2);" title="Expand or collapse this tree">
-			&nbsp;Toggle&nbsp;
+			Toggle
 			</a>';
 	}
 	$this->html .= '</span>';
@@ -1176,7 +1176,7 @@ function drawbranch($node){
 				 'admin',
 				 'deleteprivilege',
 				 array('pid'=>$object['pid'])) .
-				 '" title="Delete this Privilege">&nbsp;Delete&nbsp;</a>';
+				 '" title="Delete this Privilege">Delete</a>';
 	}
 	$this->html .= '</span>';
 
@@ -1187,7 +1187,7 @@ function drawbranch($node){
 				 'admin',
 				 'viewroles',
 				 array('pid'=>$object['pid'])) .
-				 '" title="Show the Groups/Users this Privilege is assigned to">&nbsp;Groups/Users</a>';
+				 '" title="Show the Groups/Users this Privilege is assigned to">Groups/Users</a>';
 
 // close the html row
 	$this->html .= '</span></div>';

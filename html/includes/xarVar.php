@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id$
- * 
+ *
  * Variable utilities
- * 
+ *
  * @package variables
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -34,7 +34,7 @@ define('XARVAR_NOT_REQUIRED', 64);
  * @global xarVar_enableCensoringWords bool
  * @global xarVar_censoredWords array
  * @global xarVar_censoredWordsReplacers array
- * @param args array 
+ * @param args array
  * @param whatElseIsGoingLoaded integer
  * @return bool
  * @todo <johnny> fix the load level stuff here... it's inconsistant to the rest of the core
@@ -126,7 +126,7 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
  * the $flag parameter to XARVAR_NOT_REQUIRED.
  * By default $flag is XARVAR_GET_OR_POST which means tha xarVarFetch will lookup both GET and POST parameters and
  * that if the variable is not present or doesn't validate correctly an exception will be raised.
- * 
+ *
  * @author Marco Canini
  * @access public
  * @param name string the variable name
@@ -193,7 +193,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
 function xarVarValidate($validation, $subject, &$convValue) {
 
     global $_xarValidationList;
-    
+
     if (!isset($_xarValidationList)) {
         $xarValidationList = array();
     }
@@ -283,7 +283,7 @@ function xarVarRegisterValidation ($validation_name, $object_name) {
 
 
     $_xarValidationList[$validation_name] =& $obj;
-    
+
     return true;
 
 }
@@ -292,7 +292,7 @@ function xarVarRegisterValidation ($validation_name, $object_name) {
 
 /**
  *
- * 
+ *
  * @package variables
  */
 class xarVarValidator {
@@ -314,12 +314,12 @@ class xarVarValidator {
 
 class xarVarValidator_int extends xarVarValidator {
     function validate (&$convValue) {
-    
+
         $value = intval($this->subject);
         if ("$this->subject" != "$value") {
             return false;
         }
-        
+
         if (isset($this->parameters[0]) && !empty($this->parameters[0])) {
             if ($value < (int) $this->parameters[0]) {
                 return false;
@@ -350,7 +350,7 @@ class xarVarValidator_float extends xarVarValidator {
         if ("$this->subject" != "$value") {
             return false;
         }
-        
+
         $this->subject = $value;
 
         if (isset($this->parameters[0]) && !empty($this->parameters[0])) {
@@ -403,7 +403,7 @@ class xarVarValidator_str extends xarVarValidator {
                 return false;
             }
         }
-        
+
         $convValue = (string) $this->subject;
         return true;
     }
@@ -450,18 +450,18 @@ xarVarRegisterValidation ('html', 'xarVarValidator_html');
 
 /**
  *
- * 
+ *
  * @package variables
  */
 class xarVarGroupValidator extends xarVarValidator
 {
     var $validations;
-    
+
     function xarVarGroupValidator(/*...*/)
     {
         $this->validations = func_get_args();
     }
-    
+
     function validate($subject, &$convValue)
     {
         foreach ($this->validations as $validation) {
@@ -538,7 +538,7 @@ function xarVarCleanFromInput()
         }
 
         // TODO: <marco> Document this security check!
-        if (!function_exists('xarSecAuthAction') || !xarSecAuthAction(0, '::', '::', ACCESS_ADMIN)) {
+		if(!function_exists('xarSecurityCheck') || !xarSecurityCheck('AdminAll',0)) {
             $var = preg_replace($search, $replace, $var);
         }
 

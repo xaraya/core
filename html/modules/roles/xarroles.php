@@ -353,7 +353,7 @@ function drawbranch($node){
 				 'admin',
 				 'showprivileges',
 				 array('ppid'=>$object['pid'])) .
-				 '" title="Show the Privileges assigned to this Group">&nbsp;Privileges&nbsp;</a>';
+				 '" title="Show the Privileges assigned to this Group">Privileges</a>';
 	}
 	$this->html .= '</span>';
 
@@ -368,7 +368,7 @@ function drawbranch($node){
 				 'admin',
 				 'testprivileges',
 				 array('ppid'=>$object['pid'])) .
-				 '" title="Test this Groups\'s Privileges">&nbsp;Test&nbsp;</a>';
+				 '" title="Test this Groups\'s Privileges">Test</a>';
 	}
 	$this->html .= '</span></div>';
 
