@@ -4,16 +4,4 @@
             <xar:mlstring>Modules Administration</xar:mlstring>            
         </th>
     </tr>
-    <tr align="center">
-        <td align="center">
-        
-        </td>
-        <td align="center">
-            <a href="&xar-modurl-modules-admin-list;"><xar:mlstring>View Installed Modules</xar:mlstring></a>
-        </td>
-        <td align="center">
-            <a href="&xar-modurl-modules-admin-regenerate&;authid=&xar-var-authid;"><xar:mlstring>Regenerate Available Modules</xar:mlstring></a>
-        </td>
-
-    </tr>
 </table>

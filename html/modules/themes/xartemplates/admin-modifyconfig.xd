@@ -7,20 +7,6 @@
             &xar-var-title;
         </th>
     </tr>
-    <tr>
-        <td align="center" valign="top">
-<table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <td align="center">
-            <a href="&xar-modurl-themes-admin-list;"><xar:mlstring>View Installed Themes</xar:mlstring></a>
-        </td>
-        <td align="center">
-            <a href="&xar-modurl-themes-admin-regenerate;&authid=&xar-var-authid;"><xar:mlstring>Regenerate Available Themes</xar:mlstring></a>
-        </td>
-        <td align="center">
-            <b><xar:mlstring>Themes Configuration</xar:mlstring></b>
-        </td>
-    </tr>
 </table>
         </td>
     </tr>

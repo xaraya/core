@@ -5,20 +5,6 @@
             <xar:mlstring>Themes Administration</xar:mlstring>            
         </th>
     </tr>
-    <tr align="center">
-        <td align="center">
-<table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <td align="center">
-            <b><xar:mlstring>View Installed Themes</xar:mlstring></b>
-        </td>
-        <td align="center">
-            <a href="&xar-modurl-themes-admin-regenerate;&authid=&xar-var-authid;"><xar:mlstring>Regenerate Available Themes</xar:mlstring></a>
-        </td>
-        <td align="center">
-            <a href="&xar-modurl-themes-admin-modifyconfig;"><xar:mlstring>Themes Configuration</xar:mlstring></a>
-        </td>
-    </tr>
 </table>
         </td>
     </tr>

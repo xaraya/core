@@ -4,42 +4,6 @@
             <xar:mlstring>Users Administration</xar:mlstring>
         </th>
     </tr>
-    <tr align="center">
-        <td align="center">
-
-        </td>
-        <td align="center">
-            <a href="&xar-modurl-users-admin-new;"><xar:mlstring>Add
-User</xar:mlstring></a>
-        </td>
-        <td align="center">
-            <a href="&xar-modurl-users-admin-view;"><xar:mlstring>View
-Users</xar:mlstring></a>
-        </td>
-        <td align="center">
-            <a
-href="&xar-modurl-users-admin-modifyconfig;"><xar:mlstring>Modify Users
-Configuration</xar:mlstring></a>
-        </td>
-    </tr>
-    <tr align="center">
-        <td align="center">
-
-        </td>
-        <td align="center">
-			Extra Link TaC Removed
-        </td>
-        <td align="center">
-            <a
-href="&xar-modurl-users-admin-modifyconfirmationemail;"><xar:mlstring>Modify
-Confirmation Email</xar:mlstring></a>
-        </td>
-        <td align="center">
-            <a
-href="&xar-modurl-users-admin-modifywelcomeemail;"><xar:mlstring>Modify
-Welcome Email</xar:mlstring></a>
-        </td>
-    </tr>
 </table>
 
 <center>
