@@ -1,7 +1,7 @@
 <?php
 /**
  * File: $Id$
- *
+ * 
  * HTTP Protocol Server/Request/Response utilities
  *
  * @package server
