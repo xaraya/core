@@ -126,7 +126,9 @@ function base_menublock_display($blockinfo)
                             if (!empty($menulinks)) {
                                 $indlinks = array();
                                 foreach($menulinks as $menulink){
-                                    $indlinks[] = array('userlink' => $menulink['url'], 'userlabel' => $menulink['label'], 'usertitle' => $menulink['title']);
+                                    if (xarSecAuthAction(0, 'base:Menublock', "$menulink[title]:$title:", ACCESS_READ)) {
+                                        $indlinks[] = array('userlink' => $menulink['url'], 'userlabel' => $menulink['label'], 'usertitle' => $menulink['title']);
+                                    }
                                 } 
                             } else {
                                 $indlinks= '';

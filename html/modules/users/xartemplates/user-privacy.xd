@@ -1,46 +1,5 @@
 <xar:if condition="xarModGetVar('users', 'showprivacy')">
 
-	<table border="0" width="100%">
-		<tr>
-			<th colspan="4" align="center">
-				<xar:mlstring>Users Area</xar:mlstring>            
-			</th>
-		</tr>
-		<tr align="center">
-			<td align="center">
-			
-			</td>
-			<td align="center">
-				<a href="&xar-modurl-users-user-new;"><xar:mlstring>New Account</xar:mlstring></a>
-			</td>
-			<td align="center">
-				<a href="&xar-modurl-users-user-modify;"><xar:mlstring>Modify Account</xar:mlstring></a>
-			</td>
-			<td align="center">
-				<a href="&xar-modurl-users-user-view;"><xar:mlstring>View Current Users</xar:mlstring></a>
-			</td>
-		</tr>
-		<tr align="center">
-			<td align="center">
-			
-			</td>
-			<xar:if condition="xarModGetVar('users', 'showterms')">
-				<td align="center">
-					<a href="&xar-modurl-users-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a>
-				</td>
-			<xar:else />
-				<td align="center">
-				</td>
-			</xar:if>
-			<td align="center">
-				<b><xar:mlstring>Privacy Policy</xar:mlstring></b>
-			</td>
-			<td align="center">
-				<a href="&xar-modurl-users-user-logout;"><xar:mlstring>Logout</xar:mlstring></a>
-			</td>
-		</tr>
-	</table>
-
 	<h2><xar:mlstring>Privacy Policy v1.11 for</xar:mlstring> &xar-config-display.sitename;</h2>
 	<h3><xar:mlstring>Introduction.</xar:mlstring></h3>
 	<xar:mlstring>We take your right to privacy seriously and want you to feel comfortable using our web site. This Privacy Policy deals with personally identifiable information (referred to as "Data" below) that may be collected by us on our site. This Policy does not apply to other entities that we do not own or control or persons that are not our employees, agents or within our control. Please take time to read our</xar:mlstring> <a href="&xar-modurl-users-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a>.
