@@ -41,6 +41,8 @@ define('XAR_TOKEN_CDATA_END'         , ']]'     ); // CDATA end marker
 // Other
 define('XAR_TOKEN_VAR_START'         , '$'    );          // Start of a variable
 define('XAR_TOKEN_CI_DELIM'          , '#'    );          // Delimiter for variables, functions and other the CI stands for Code Item
+define('XAR_TOKEN_MLVAR_START'       , '('    );          // Start of MLS placeholders like #(1)
+define('XAR_TOKEN_MLVAR_END'         , ')'    );          // End of MLS placeholders like #(1)
 define('XAR_NAMESPACE_PREFIX'        , 'xar'  );          // Our own default namespace prefix
 define('XAR_FUNCTION_PREFIX'         , 'xar'  );          // Function prefix (used in check for allowed functions)
 define('XAR_ROOTTAG_NAME'            , 'blocklayout');    // Default name of the root tag
@@ -747,29 +749,25 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     $text.=XAR_TOKEN_ENTITY_START.$this->windTo(XAR_TOKEN_ENTITY_END).$this->getNextToken();$token=''; 
                     break;
                 case XAR_TOKEN_CI_DELIM:
-                    $nextToken = $this->getNextToken();
-
-                    // Break out of processing if # is escaped as ##
-                    if ($nextToken == XAR_TOKEN_CI_DELIM) break;
+                    // Take a peek what comes after the # and deal with the special situations
+                    $peek = $this->peek();
+                    
+                    // Break out of processing if # is escaped as ##, by eating the second one
+                    if ($peek == XAR_TOKEN_CI_DELIM) {$this->getNextToken();break;}
                 
                     // Break out of processing if nextToken is (, because #(.) is used by MLS
-                    if ($nextToken == '(') {
-                        $token .= '(';
+                    if ($peek == XAR_TOKEN_MLVAR_START) {
+                        $token .= $this->getNextToken();
                         break;
                     }
-                    $this->stepBack();
-                
-                    // Get what what is between #.....#
-                    if ($nextToken == XAR_TOKEN_VAR_START || $nextToken == 'x') { // for href="#" for example
-                        $between = $this->windTo(XAR_TOKEN_CI_DELIM);
-                        if(!isset($between)) {
-                            // set an exception and return
-                            $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
-                            return; // throw back
-                        }
-                        $this->getNextToken(); // eat the matching #
-                        $instruction = $between;
                     
+                    // Get what what is between #.....#
+                    if ($peek == XAR_TOKEN_VAR_START || $peek == 'x') { // for href="#" for example
+                        $between = $this->windTo(XAR_TOKEN_CI_DELIM);
+                        if(!isset($between)) return;
+                        $instruction = $between;
+                        $this->getNextToken(); // eat the matching #
+                                            
                         if(!$this->canbeChild($parent)) return;
 
                         // Add text to parent, if applicable
