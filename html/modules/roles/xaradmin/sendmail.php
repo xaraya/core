@@ -25,7 +25,7 @@ function roles_admin_sendmail()
     $subject = xarVarPrepForDisplay($subject);
 
     // Confirm authorisation code.
-//    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) return;
     // Security check
     if (!xarSecurityCheck('MailRoles')) return;
     // Get user information

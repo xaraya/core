@@ -6,6 +6,3 @@
 
 <xar:set name="$myname">xarUserGetVar('name')</xar:set>
 <xar:set name="$myuid">xarUserGetVar('uid')</xar:set>
-
-<xar:set name="$validationlink">"dick"</xar:set>
-<xar:set name="$valcode">"dick"</xar:set>

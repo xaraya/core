@@ -37,37 +37,32 @@ function roles_adminapi_senduseremail($args)
     }
 
     // Get the predefined email if none is defined
-    if (!isset($message)) $message = xarModGetVar('roles', $mailtype.'email');
-    if (!isset($subject)) $subject = xarModGetVar('roles', $mailtype.'title');
+    $strings = xarModAPIFunc('roles','admin','getmessagestrings', array('template' => $mailtype));
+
+    $vars  = xarModAPIFunc('roles','admin','getmessageincludestring', array('template' => 'message-vars'));
+
+    if (!isset($subject)) $subject = xarTplCompileString($vars . $strings['subject']);
+    if (!isset($message)) $message = xarTplCompileString($vars . $strings['message']);
 
     //Get the common search and replace values
-    $sitename = xarModGetVar('themes', 'SiteName');
-    $siteadmin = xarModGetVar('mail', 'adminname');
-    $adminmail = xarModGetVar('mail', 'adminmail');
-    $siteurl = xarServerGetBaseURL();
-    $search = array('/%%sitename%%/','/%%siteadmin%%/', '/%%adminmail%%/','/%%siteurl%%/');
-    $replace = array("$sitename", "$siteadmin", "$adminmail", "$siteurl");
-    $message = preg_replace($search,
-                              $replace,
-                              $message);
-    $subject = preg_replace($search,
-                              $replace,
-                              $subject);
     //if (is_array($uid)) {
         foreach ($uid as $userid => $val) {
             ///get the user info
             $user = xarModAPIFunc('roles','user','get', array('uid' => $userid));
             if (!isset($pass)) $pass = '';
             if (!isset($ip)) $ip = '';
-            if (isset($user['valcode'])) $validationlink = $siteurl."val.php?v=".$user['valcode']."&u=".$userid;
+            if (isset($user['valcode'])) $validationlink = xarServerGetBaseURL() . "val.php?v=".$user['valcode']."&u=".$userid;
             else $validationlink = '';
 
             //user specific data
-            $usersearch = array('/%%myname%%/','/%%username%%/','/%%useremail%%/', '/%%userstate%%/',
-                    '/%%password%%/', '/%%ipaddress%%/', '/%%valcode%%/', '/%%validationlink%%/');
-
-            $userreplace = array($user['name'],$user['uname'], $user['email'], $user['state'],
-                     $pass, $ip, $user['valcode'], $validationlink);
+            $data = array('myname' => $user['name'],
+                          'myusername' => $user['uname'],
+                          'myemail' => $user['email'],
+                          'mystate' => $user['state'],
+                          'mypassword' => $pass,
+                          'myipaddress' => $ip,
+                          'myvalcode' => $user['valcode'],
+                          'myvalidationlink' => $validationlink);
 
             // retrieve the dynamic properties (if any) for use in the e-mail too
             if (xarModIsAvailable('dynamicdata')) {
@@ -85,19 +80,15 @@ function roles_adminapi_senduseremail($args)
                         foreach (array_keys($properties) as $key) {
                             // add the property name/value to the search/replace lists
                             if (isset($properties[$key]->value)) {
-                                $usersearch[] = '/%%'.$key . '%%/';
-                                $userreplace[] = $properties[$key]->value; // we'll use the raw value here, not ->showOutput();
+                                $data[$key] = $properties[$key]->value; // we'll use the raw value here, not ->showOutput();
                             }
                         }
                     }
                 }
             }
-            $usermessage = preg_replace($usersearch,
-                              $userreplace,
-                              $message);
-            $usersubject = preg_replace($usersearch,
-                              $userreplace,
-                              $subject);
+
+            $subject = xarTplString($subject, $data);
+            $message = xarTplString($message, $data);
             // TODO Make HTML Message.
             // Send confirmation email
             if (!xarModAPIFunc('mail',
@@ -105,8 +96,8 @@ function roles_adminapi_senduseremail($args)
                                'sendmail',
                                array('info' => $user['email'],
                                      'name' => $user['name'],
-                                     'subject' => $usersubject,
-                                     'message' => $usermessage))) return false;
+                                     'subject' => $subject,
+                                     'message' => $message))) return false;
     }
     return true;
 }
