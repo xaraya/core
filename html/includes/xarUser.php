@@ -284,7 +284,7 @@ function xarUserGetVar($name, $userId = NULL)
         // User id for Anonymous is NULL, so we check later for this
         return $userId;
     }
-    if ($userId == 0) {
+    if ($userId == _XAR_ID_UNREGISTERED) {
         // Anonymous user => only uid, name and uname allowed, for other variable names
         // an exception of type NOT_LOGGED_IN is raised
         if ($name == 'name' || $name == 'uname') {
