@@ -1119,9 +1119,11 @@ function xarTplPrint($template_sourcefile, $args = array())
         return;
     }
 
+   if (!xarVarFetch('regenerate','bool', $regenerate)) return;
+
    if (!file_exists($template_file) ||
         filemtime($template_sourcefile) > filemtime($template_file) ||
-        xarVarCleanFromInput('regenerate') == true) {
+        $regenerate) {
 
         if (!xarTplCompile($template_sourcefile)) {
             return; // Throw back
