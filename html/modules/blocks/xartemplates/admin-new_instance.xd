@@ -54,7 +54,7 @@
             </td>
             <td>
                 <select name="block_type" style="width:150px;">
-                    <xar:loop name="block_types">
+                    <xar:loop name="$block_types">
                         <option value="&xar-var-id;">
                             &xar-var-module;\&xar-var-type;
                         </option>
@@ -68,7 +68,7 @@
             </td>
             <td>
                 <select name="block_group" style="width:150px;">
-                    <xar:loop name="block_groups">
+                    <xar:loop name="$block_groups">
                         <option value="&xar-var-id;">
                             &xar-var-name;
                         </option>
