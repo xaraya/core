@@ -1,0 +1,44 @@
+<object name="users">
+  <objectid>17</objectid>
+  <label>Users</label>
+  <moduleid>27</moduleid>
+  <itemtype>0</itemtype>
+  <urlparam>uid</urlparam>
+  <maxid>0</maxid>
+  <config></config>
+  <isalias>0</isalias>
+  <properties>
+    <property name="picture">
+      <id>190</id>
+      <label>Picture</label>
+      <type>12</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>1</order>
+      <validation></validation>
+    </property>
+    <property name="icq">
+      <id>191</id>
+      <label>ICQ</label>
+      <type>28</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>2</order>
+      <validation>modules/users/xarimages/infoicon.gif</validation>
+    </property>
+    <property name="timezone">
+      <id>192</id>
+      <label>Time Zone</label>
+      <type>32</type>
+      <default>0</default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>3</order>
+      <validation></validation>
+    </property>
+  </properties>
+</object>
+
+
