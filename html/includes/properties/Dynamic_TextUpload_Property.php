@@ -44,7 +44,15 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         if (!empty($_FILES) && !empty($_FILES[$upname]) && !empty($_FILES[$upname]['tmp_name'])
             // is_uploaded_file() : PHP 4 >= 4.0.3
             && is_uploaded_file($_FILES[$upname]['tmp_name']) && $_FILES[$upname]['size'] > 0 && $_FILES[$upname]['size'] < 1000000) {
-            $this->value = join('', @file($_FILES[$upname]['tmp_name']));
+            // this doesn't work on some configurations
+            //$this->value = join('', @file($_FILES[$upname]['tmp_name']));
+            $tmpdir = xarCoreGetVarDirPath();
+            $tmpdir .= '/cache/templates';
+            $tmpfile = tempnam($tmpdir, 'dd');
+            if (move_uploaded_file($_FILES[$upname]['tmp_name'], $tmpfile) && file_exists($tmpfile)) {
+                $this->value = join('', file($tmpfile));
+                unlink($tmpfile);
+            }
         } elseif (!empty($value)) {
             $this->value = $value;
         } else {
