@@ -328,7 +328,7 @@ class xarMasks
         }
 // get the privileges and test against them
         $privileges = $this->irreducibleset(array('roles' => array($role)));
-        $pass = $this->testprivileges($mask,$this->irreducibleset(array('roles' => array($role))),false);
+        $pass = $this->testprivileges($mask,$privileges,false);
 
 // check if the exception needs to be caught here or not
         if ($catch && !$pass) {
