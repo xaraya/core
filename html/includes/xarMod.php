@@ -1132,6 +1132,8 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
                 // TODO: swap the order here? i.e. put the 'leftovers' at the end.
                 //
                 // Commented out at the request of Jason and mikespub
+                // <jojodee> Please don't uncomment here until the encoding is fixed and tested
+                //           At this time incorrect short URL encoding for articles occurs with a ? appended
                 // $unencodedArgs = xarMod__URLGetUnencodedArgs($encoderArgs, $path);
                 // $path = xarMod__URLaddParametersToPath($unencodedArgs, $path, $pini, $psep);
 
