@@ -20,7 +20,8 @@ function blocks_init()
     // Get database information
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
-    $prefix = xarConfigGetVar('prefix');
+    $prefix = xarDBGetSystemTablePrefix();
+
     // Create tables
 
     // *_block_groups
