@@ -148,66 +148,78 @@ function base_menublock_display($blockinfo)
 
                 // Added list of modules if selected.
                 if (!empty($vars['displaymodules'])) {
-                    foreach($mods as $mod){
-                        $label = $mod['name'];
-                        $link = xarModURL($mod['name'] ,'user', 'main', array());
-                        // depending on which module is currently loaded we display accordingly
-                        if($label == $thismodname && $thismodtype == 'user'){
-                            // Get list of links for modules
-                            $labelDisplay = ucwords($label);
-                            $usermods[] = array(   'label'     => $labelDisplay,
-                                                   'link'      => '',
-                                                   'modactive' => 1);
+                    if (xarSecurityCheck('ReadBaseBlock',0,'Block','$blockinfo[title]:$title:All')) {
+                        foreach($mods as $mod){
+                            $label = $mod['name'];
+                            $link = xarModURL($mod['name'] ,'user', 'main', array());
+                            // depending on which module is currently loaded we display accordingly
+                            if($label == $thismodname && $thismodtype == 'user'){
+                                // Get list of links for modules
+                                $labelDisplay = ucwords($label);
+                                $usermods[] = array(   'label'     => $labelDisplay,
+                                                       'link'      => '',
+                                                       'modactive' => 1);
 
-                            // Lets check to see if the function exists and just skip it if it doesn't
-                            // with the new api load, it causes some problems.  We need to load the api
-                            // in order to do it right.
-                            xarModAPILoad($label, 'user');
-                            if (function_exists($label.'_userapi_getmenulinks')){
-                                // The user API function is called.
-                                $menulinks = xarModAPIFunc($label,
-                                                           'user',
-                                                           'getmenulinks');
-                            } else {
-                                $menulinks = '';
-                            }
-
-                            if (!empty($menulinks)) {
-                                $indlinks = array();
-                                foreach($menulinks as $menulink){
-
-                                    // Compare with current URL
-                                    if ($menulink['url'] == $currenturl) {
-                                        $funcactive = 1;
-                                    } else {
-                                        $funcactive = 0;
-                                    }
-
-                        // Security Check
-                                    if (xarSecurityCheck('ReadBaseBlock',0,'Block','$blockinfo[title]:$menulink[title]:All')) {
-                                        $indlinks[] = array('userlink'      => $menulink['url'],
-                                                            'userlabel'     => $menulink['label'],
-                                                            'usertitle'     => $menulink['title'],
-                                                            'funcactive'    => $funcactive);
-                                    }
+                                // Lets check to see if the function exists and just skip it if it doesn't
+                                // with the new api load, it causes some problems.  We need to load the api
+                                // in order to do it right.
+                                xarModAPILoad($label, 'user');
+                                if (function_exists($label.'_userapi_getmenulinks')){
+                                    // The user API function is called.
+                                    $menulinks = xarModAPIFunc($label,
+                                                               'user',
+                                                               'getmenulinks');
+                                } else {
+                                    $menulinks = '';
                                 }
-                            } else {
-                                $indlinks= '';
-                            }
 
-                        }else{
-                            $modid = xarModGetIDFromName($mod['name']);
-                            $modinfo = xarModGetInfo($modid);
-                            if($modinfo){
-                                $desc = $modinfo['description'];
-                            }
+                                if (!empty($menulinks)) {
+                                    $indlinks = array();
+                                    foreach($menulinks as $menulink){
 
-                            $labelDisplay = ucwords($label);
-                            $usermods[] = array('label' => $labelDisplay,
-                                                'link' => $link,
-                                                'desc' => $desc,
-                                                'modactive' => 0);
+                                        // Compare with current URL
+                                        if ($menulink['url'] == $currenturl) {
+                                            $funcactive = 1;
+                                        } else {
+                                            $funcactive = 0;
+                                        }
+
+                            // Security Check
+                                        if (xarSecurityCheck('ReadBaseBlock',0,'Block','$blockinfo[title]:$menulink[title]:All')) {
+                                            $indlinks[] = array('userlink'      => $menulink['url'],
+                                                                'userlabel'     => $menulink['label'],
+                                                                'usertitle'     => $menulink['title'],
+                                                                'funcactive'    => $funcactive);
+                                        }
+                                    }
+                                } else {
+                                    $indlinks= '';
+                                }
+
+                            }else{
+                                $modid = xarModGetIDFromName($mod['name']);
+                                $modinfo = xarModGetInfo($modid);
+                                if($modinfo){
+                                    $desc = $modinfo['description'];
+                                }
+
+                                $labelDisplay = ucwords($label);
+                                $usermods[] = array('label' => $labelDisplay,
+                                                    'link' => $link,
+                                                    'desc' => $desc,
+                                                    'modactive' => 0);
+                            }
                         }
+                    } else {
+                        $modid = xarModGetIDFromName('roles');
+                        $modinfo = xarModGetInfo($modid);
+                        if($modinfo){
+                            $desc = $modinfo['description'];
+                        }
+                        $usermods[] = array('label' => 'roles',
+                            'link' => xarModUrl('roles', 'user', 'main'),
+                            'desc' => $desc,
+                            'modactive' => 0);
                     }
                 } else {
                     $usermods = '';
@@ -222,7 +234,7 @@ function base_menublock_display($blockinfo)
                 // we dont want to show logout link if the user is anonymous or admin
                 // admins have their own logout method, which is more robust
                 // Security Check
-                            if (xarSecurityCheck('ReadBaseBlock',0,'Block','$blockinfo[title]:All:All') or !xarUserIsLoggedIn()){
+                if (xarSecurityCheck('ReadBaseBlock',0,'Block','$blockinfo[title]:All:All') or !xarUserIsLoggedIn()){
                     $showlogout = false;
                 }else{
                     $showlogout = true;
