@@ -67,17 +67,7 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
  */
 function xarTplGetThemeName()
 {
-    if (function_exists('xarModGetVar')){
-        //$uid = xarUserGetVar('uid');
-        $defaultTheme = xarModGetVar('themes', 'default');
-        if (!empty($defaultTheme)){
-            return $defaultTheme;
-        } else {
-            return $GLOBALS['xarTpl_themeName'];
-        }
-    } else {
-        return $GLOBALS['xarTpl_themeName'];
-    }
+    return $GLOBALS['xarTpl_themeName'];
 }
 
 /**
@@ -298,14 +288,14 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
  * Correct practices: 
  *
  * 1. module developers should never rely on theme's images, but instead
- * provide their own inside <module name>/xarimage/ directory and use
+ * provide their own inside <module name>/xarimages/ directory and use
  * this function to reference their images in the module's functions.
  * Such reference can then be safely passed to the module template.
  *
  * 2. theme developers should always check for the modules images
  * (at least for all core modules) and provide replacements images 
- * inside the corresponding theme modules/<module name>/images/ 
- * directories as required
+ * inside the corresponding theme modules/<module name>/xarimages/ 
+ * directories as necessary
  *
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
@@ -313,29 +303,48 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
  * @param   modName string, the module to check for the image <optional>
  * @returns theme image url if it exists
  * @returns module image url if it exists and theme image not found
- * @returns NULL if neither image exists
+ * @returns NULL if either image or module doesn't exist
  * @todo    provide examples, test and improve description
 */
 function xarTplGetImage($modImage, $modName = NULL)
 {
-    // obtain module name if not specified
+    // obtain current theme directory
+    $themedir = xarTplGetThemeDir();
+    
+    
+    // obtain current module name if not specified
     if(!isset($modName)){
     
-    list($thismodname) = xarRequestGetInfo();
+        list($thismodname) = xarRequestGetInfo();
+        
+        // get module directory
+        $modBaseInfo = xarMod_getBaseInfo($thismodname);
+        
+        if (!isset($modBaseInfo)) return; // throw back
+        
+        $modOsDir = $modBaseInfo['osdirectory'];
+        
+        // relative url to this module's image
+        $modImage = 'modules/'.$modOsDir.'/xarimages/'.$modImage;
+        
+        // relative url to the replacement theme image
+        $themeImage = $themedir . '/' . $modImage;
+        
+        // check if replacement image exists in the theme
+        if(file_exists($themeImage)){
+            // image found, return its path in the theme
+            return $themeImage;
+        }else{
+            // image not found, return it's path in the module
+            return $modImage;
+        }
     
-    // lets not hardcode module directory
-    $modBaseInfo = xarMod_getBaseInfo($thismodname);
-    if (!isset($modBaseInfo)) return; // throw back
-    $modOsDir = $modBaseInfo['osdirectory'];
-    
-    // make relative url (path) to this module's image
-    $modImage = 'modules/'.$modOsDir.'/xarimages/'.$modImage;
-    
+    // module name was specified
     }else{
-    // check if this image file exists
-    
-    // make relative url (path) to this module image
-    $modImage = 'modules/'.$modName.'/xarimages/'.$modImage;
+        // check if this image file exists in the module
+        
+        // make relative url (path) to this module image
+        $modImage = 'modules/'.$modName.'/xarimages/'.$modImage;
     }
     
     return $modImage;

@@ -128,7 +128,7 @@
                     </th>
                     <th align="center">
                         <div style="vertical-align: middle; margin:auto; height: 20px;">
-                            <xar:mlstring>Extra</xar:mlstring>
+                            <xar:mlstring>Info</xar:mlstring>
                         </div>
                     </th>
                     <th align="center">
@@ -137,13 +137,13 @@
                         </div>
                     </th>	
                     <th align="left" nowrap="nowrap">
-                        <div style="vertical-align: middle; text-align: center; margin:auto; height: 20px;">
-                            <xar:mlstring>Module Action</xar:mlstring>
+                        <div style="vertical-align: middle; text-align: left; padding-left: 0.3em; margin:auto; height: 20px;">
+                            <xar:mlstring>Actions</xar:mlstring>
                         </div>
                     </th>
                     <th align="center">
                         <div style="vertical-align: middle; text-align: center; margin:auto; height: 20px;">
-                            <xar:mlstring>Hooks</xar:mlstring>
+                            <xar:mlstring>X-tend</xar:mlstring>
                         </div>
                     </th>
                 </tr>
@@ -167,7 +167,7 @@
                                 <xar:if condition="$selstyle eq 'pro'">
                                     <input type="submit" name="info" value="Info" />
                                 <xar:elseif condition="$selstyle eq 'icons'" />
-                                    <input type="image" name="info" value="#$infolabel#" src="#$infoimage#">
+                                    <input type="image" name="info" value="#$infolabel#" src="#$infoimage#" />
                                 <xar:else />
                                     <a href="#$infourl#"><xar:mlstring>Info</xar:mlstring></a>
                                 </xar:if>
@@ -203,7 +203,12 @@
                                         </noscript>
                                     </xar:if>
                                 <xar:elseif condition="$selstyle eq 'icons'"/>
-                                
+                                    <input type="image" name="activate" value="activate" src="modules/modules/xarimages/set1/activate.png" />
+                                    <input type="image" name="activate" value="activate" src="modules/modules/xarimages/set1/deactivate.png" />
+                                    <input type="image" name="activate" value="activate" src="modules/modules/xarimages/set1/upgrade.png" />
+                                    <input type="image" name="activate" value="activate" src="modules/modules/xarimages/set1/initialise.png" />
+                                    <input type="image" name="activate" value="activate" src="modules/modules/xarimages/set1/remove.png" />
+                                    
                                 <xar:else />
                                     <div style="padding-left: 1em;">
                                         <xar:if condition="$coremod">
