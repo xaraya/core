@@ -107,7 +107,9 @@
             <xar:comment>
                 Main CSS rules (note: all default parameters in the tag can be omitted) ___________________[comment] 
             </xar:comment>
-            <xar:import-theme-stylesheet />
+            <xar:comment>
+            </xar:comment>
+            	<xar:import-theme-stylesheet />
             <xar:comment>
                 Styleswitcher CSS files to link to_________________________________________________________[comment] 
             </xar:comment>
@@ -199,3 +201,4 @@
             <xar:base-render-javascript position="body" />
         </body>
     </html>
+</xar:blocklayout>
