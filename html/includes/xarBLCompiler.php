@@ -759,8 +759,28 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         }
                         $instruction .= $nextToken;
                     }
-                    if(strpos($instruction, ';')){
-                        $this->raiseError(XAR_BL_INVALID_TAG,"Injected PHP detected in: $instruction", $this);
+                    // Convert decimal entities for ASCII characters.
+                    // Character encoding could be ASCII or UTF-8, so only expand
+                    // the shared ASCII character for now.
+                    // (Actually this doesn't work due to the way the file is parsed. We should
+                    // actually parse the XML first, converting entities as appropriate, *THEN* 
+                    // start looking for BL processing statements. Even then, entities should be
+                    // recognised in context, so &amp;#123; in a BL processing instruction is
+                    // handled as a literal string '&#123;' and not as a processing instruction
+                    // terminator.)
+                    //$instruction = preg_replace('/&#(\d+);/me', "chr('\\1')", $instruction);
+                    // Replace XML entities with their ASCII equivalents.
+                    // An XML parser would do this for us automatically.
+                    $instruction = str_replace(
+                        array('&amp;', '&gt;', '&lt;', '&quot;'),
+                        array('&', '>', '<', '"'),
+                        $instruction
+                    );
+                    // The following is a bit of a sledge-hammer approach. See bug 1273.
+                    // TODO: allow unparsed entities through without triggering the 'injected PHP' error.
+                    // TODO: parse the PHP so the semi-colon can be tested in context.
+                    if (strpos($instruction, ';')) {
+                        $this->raiseError(XAR_BL_INVALID_TAG, "Injected PHP detected in: $instruction", $this);
                         return;
                     }
                     // Instruction is now set to $varname of xFunction(.....)
@@ -949,6 +969,13 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 }
             }
         }
+        // Replace XML entities with their ASCII equivalents.
+        // An XML parser would do this for us automatically.
+        $value = str_replace(
+            array('&amp;', '&gt;', '&lt;', '&quot;'),
+            array('&', '>', '<', '"'),
+            $value
+        );
         return array($name, $value);
     }
 
