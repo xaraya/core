@@ -10,14 +10,14 @@
 // ----------------------------------------------------------------------
 
 /*
- * FIXME: <marco> Paul do you wanna move pnBlockTypeExists, Register and Unregister out of this file?
+ * FIXME: <marco> Paul do you wanna move xarBlockTypeExists, Register and Unregister out of this file?
  * And why are you using $blockType instead of $blockName, when I said you to change I meant use $blockName everywhere, in the end it's the block name, not the block type, don't you think?
  */
 
-function pnBlock_init($args)
+function xarBlock_init($args)
 {
     // Blocks Support Tables
-    $systemPrefix = pnDBGetSystemTablePrefix();
+    $systemPrefix = xarDBGetSystemTablePrefix();
 
     $tables = array('blocks' => $systemPrefix . '_blocks',
                     'block_instances' => $systemPrefix . '_block_instances',
@@ -25,7 +25,7 @@ function pnBlock_init($args)
                     'block_group_instances' => $systemPrefix . '_block_group_instances',
                     'block_types' => $systemPrefix . '_block_types');
 
-    pnDB_importTables($tables);
+    xarDB_importTables($tables);
 }
 
 /**
@@ -37,54 +37,54 @@ function pnBlock_init($args)
  * @return resarray array of block information
  * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  */
-function pnBlockGetInfo($blockId)
+function xarBlockGetInfo($blockId)
 {
     if (empty($blockId)) {
-        $msg = pnML('Empty bid.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty bid.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
 	    return NULL;
     }
-    list ($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list ($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $block_instances_table = $pntable['block_instances'];
-    $block_types_table = $pntable['block_types'];
-    $block_groups_table = $pntable['block_groups'];
-    $block_group_instances_table = $pntable['block_group_instances'];
+    $block_instances_table = $xartable['block_instances'];
+    $block_types_table = $xartable['block_types'];
+    $block_groups_table = $xartable['block_groups'];
+    $block_group_instances_table = $xartable['block_group_instances'];
 
-    $query = "SELECT    inst.pn_id as id,
-                        inst.pn_title as title,
-                        inst.pn_template as template,
-                        inst.pn_content as content,
-                        inst.pn_refresh as refresh,
-                        inst.pn_state as state,
-                        inst.pn_last_update as last_update,
-                        group_inst.pn_group_id as group_id,
-                        type.pn_module as module,
-                        type.pn_type as type,
-                        groups.pn_name as group_name
+    $query = "SELECT    inst.xar_id as id,
+                        inst.xar_title as title,
+                        inst.xar_template as template,
+                        inst.xar_content as content,
+                        inst.xar_refresh as refresh,
+                        inst.xar_state as state,
+                        inst.xar_last_update as last_update,
+                        group_inst.xar_group_id as group_id,
+                        type.xar_module as module,
+                        type.xar_type as type,
+                        groups.xar_name as group_name
               FROM      $block_instances_table as inst
               LEFT JOIN $block_group_instances_table as group_inst
-              ON        group_inst.pn_instance_id = inst.pn_id
+              ON        group_inst.xar_instance_id = inst.xar_id
               LEFT JOIN $block_types_table as type
-              ON        type.pn_id = inst.pn_type_id
+              ON        type.xar_id = inst.xar_type_id
               LEFT JOIN $block_groups_table as groups
-              ON        groups.pn_id = group_inst.pn_group_id
-              WHERE     inst.pn_id = $blockId";
+              ON        groups.xar_id = group_inst.xar_group_id
+              WHERE     inst.xar_id = $blockId";
 
     $result = $dbconn->Execute($query);
     echo $dbconn->ErrorMsg();
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return NULL;
     }
     if ($result->EOF) {
         $result->Close();
-        $msg = pnML('Block identified by bid #(1) doesn\'t exist.', $blockId);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
+        $msg = xarML('Block identified by bid #(1) doesn\'t exist.', $blockId);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
                        new SystemException($msg));
 	    return NULL;
     }
@@ -107,43 +107,43 @@ function pnBlockGetInfo($blockId)
  * @return resarray array of block information
  * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  */
-function pnBlockGroupGetInfo($blockGroupId)
+function xarBlockGroupGetInfo($blockGroupId)
 {
     if (empty($blockGroupId)) {
-        $msg = pnML('Empty group ID (gid).');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty group ID (gid).');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
 	    return NULL;
     }
 
-    list ($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list ($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $block_instances_table = $pntable['block_instances'];
-    $block_types_table = $pntable['block_types'];
-    $block_groups_table = $pntable['block_groups'];
-    $block_group_instances_table = $pntable['block_group_instances'];
+    $block_instances_table = $xartable['block_instances'];
+    $block_types_table = $xartable['block_types'];
+    $block_groups_table = $xartable['block_groups'];
+    $block_group_instances_table = $xartable['block_group_instances'];
 
-    $query = "SELECT    pn_id as id,
-                        pn_name as name,
-                        pn_template as template
+    $query = "SELECT    xar_id as id,
+                        xar_name as name,
+                        xar_template as template
               FROM      $block_groups_table
-              WHERE     pn_id = $blockGroupId";
+              WHERE     xar_id = $blockGroupId";
 
     $result = $dbconn->Execute($query);
 
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return NULL;
     }
 
     // Freak if we don't get one and only one result
     if ($result->PO_RecordCount() != 1) {
-        $msg = pnML("Group ID $blockGroupId not found.", $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML("Group ID $blockGroupId not found.", $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return NULL;
     }
@@ -153,27 +153,27 @@ function pnBlockGroupGetInfo($blockGroupId)
     $result->Close();
 
     // Query for instances in this group
-    $query = "SELECT    inst.pn_id as id,
-                        types.pn_type as type,
-                        types.pn_module as module,
-                        inst.pn_title as title,
-                        group_inst.pn_position as position
+    $query = "SELECT    inst.xar_id as id,
+                        types.xar_type as type,
+                        types.xar_module as module,
+                        inst.xar_title as title,
+                        group_inst.xar_position as position
               FROM      $block_group_instances_table as group_inst
               LEFT JOIN $block_groups_table as groups
-              ON        group_inst.pn_group_id = groups.pn_id
+              ON        group_inst.xar_group_id = groups.xar_id
               LEFT JOIN $block_instances_table as inst
-              ON        inst.pn_id = group_inst.pn_instance_id
+              ON        inst.xar_id = group_inst.xar_instance_id
               LEFT JOIN $block_types_table as types
-              ON        types.pn_id = inst.pn_type_id
-              WHERE     groups.pn_id = '$blockGroupId'
-              ORDER BY  group_inst.pn_position ASC";
+              ON        types.xar_id = inst.xar_type_id
+              WHERE     groups.xar_id = '$blockGroupId'
+              ORDER BY  group_inst.xar_position ASC";
 
     $result = $dbconn->Execute($query);
 
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return NULL;
     }
@@ -202,31 +202,31 @@ function pnBlockGroupGetInfo($blockGroupId)
  * @return true if exists, false if not found
  * @raise DATABASE_ERROR, BAD_PARAM
  */
-function pnBlockTypeExists($modName, $blockType)
+function xarBlockTypeExists($modName, $blockType)
 {
     if (empty($modName) || empty($blockType)) {
-        $msg = pnML('Empty module name (#(0)) or type (#(1))', $modName, $blockType);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty module name (#(0)) or type (#(1))', $modName, $blockType);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
 	    return;
     }
 
-    list ($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list ($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $block_types_table = $pntable['block_types'];
+    $block_types_table = $xartable['block_types'];
 
-    $query = "SELECT    pn_id as id
+    $query = "SELECT    xar_id as id
               FROM      $block_types_table
-              WHERE     pn_module = '$modName'
-              AND       pn_type = '$blockType'";
+              WHERE     xar_module = '$modName'
+              AND       xar_type = '$blockType'";
 
     $result = $dbconn->Execute($query);
 
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
     }
@@ -239,8 +239,8 @@ function pnBlockTypeExists($modName, $blockType)
 
     // Freak if we don't get zero or one one result
     if ($result->PO_RecordCount() > 1) {
-        $msg = pnML('Multiple instances of block type #(0) found in module #(1)!', $blockType, $modName);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Multiple instances of block type #(0) found in module #(1)!', $blockType, $modName);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
@@ -258,35 +258,35 @@ function pnBlockTypeExists($modName, $blockType)
  * @return true on success, false on failure
  * @raise DATABASE_ERROR, BAD_PARAM
  */
-function pnBlockTypeRegister($modName, $blockType)
+function xarBlockTypeRegister($modName, $blockType)
 {
     if (empty($modName) || empty($blockType)) {
-        $msg = pnML('Empty module name (#(1)) or type (#(2))', $modName, $blockType);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty module name (#(1)) or type (#(2))', $modName, $blockType);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
 	    return;
     }
 
-    if (pnBlockTypeExists($modName, $blockType)) {
-        $msg = pnML('Block type #(1) already exists in the #(2) module', $blockType, $modName);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+    if (xarBlockTypeExists($modName, $blockType)) {
+        $msg = xarML('Block type #(1) already exists in the #(2) module', $blockType, $modName);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
 	    return;
     }
 
-    list ($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list ($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $block_types_table = $pntable['block_types'];
+    $block_types_table = $xartable['block_types'];
 
     $seq_id = $dbconn->GenId($block_types_table);
-    $query = "INSERT INTO $block_types_table (pn_id, pn_module, pn_type) VALUES ('$seq_id', '$modName', '$blockType');";
+    $query = "INSERT INTO $block_types_table (xar_id, xar_module, xar_type) VALUES ('$seq_id', '$modName', '$blockType');";
     $dbconn->Execute($query);
 
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
     }
@@ -304,24 +304,24 @@ function pnBlockTypeRegister($modName, $blockType)
  * @return true on success, false on failure
  * @raise DATABASE_ERROR, BAD_PARAM
  */
-function pnBlockTypeUnregister($modName, $blockType)
+function xarBlockTypeUnregister($modName, $blockType)
 {
-    if (!pnBlockTypeExists($modName, $blockType)) {
+    if (!xarBlockTypeExists($modName, $blockType)) {
         return true;
     }
 
-    list ($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list ($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $block_types_table = $pntable['block_types'];
+    $block_types_table = $xartable['block_types'];
 
-    $query = "DELETE FROM $block_types_table WHERE pn_module = '$modName' AND pn_type = '$blockType';";
+    $query = "DELETE FROM $block_types_table WHERE xar_module = '$modName' AND xar_type = '$blockType';";
     $dbconn->Execute();
 
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
     }
@@ -341,11 +341,11 @@ function pnBlockTypeUnregister($modName, $blockType)
  * @return true|false
  * @raise BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
-function pnBlock_load($modName, $blockName)
+function xarBlock_load($modName, $blockName)
 {
     /*if (empty($modName) || empty($blockName)) {
-        $msg = pnML('Empty modname (#(1)) or block (#(2)).', $modName, $blockName);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty modname (#(1)) or block (#(2)).', $modName, $blockName);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
 	    return;
     }*/
@@ -354,19 +354,19 @@ function pnBlock_load($modName, $blockName)
     if (isset($loaded["$modName$blockName"])) {
         return true;
     }
-    $modBaseInfo = pnMod_getBaseInfo($modName);
+    $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) {
         return; // throw back exception
     }
-    $moddir = 'modules/' . $modBaseInfo['osdirectory'] . '/pnblocks';
+    $moddir = 'modules/' . $modBaseInfo['osdirectory'] . '/xarblocks';
 
     // Load the block
     $incfile = $blockName . ".php";
-    $filepath = $moddir . '/' . pnVarPrepForOS($incfile);
+    $filepath = $moddir . '/' . xarVarPrepForOS($incfile);
 
     if (!file_exists($filepath)) {
-        $msg = pnML('Block file #(1) doesn\'t exist.', $filepath);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
+        $msg = xarML('Block file #(1) doesn\'t exist.', $filepath);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
                        new SystemException($msg));
         return;
     }
@@ -374,7 +374,7 @@ function pnBlock_load($modName, $blockName)
     $loaded["$modName$blockName"] = 1;
 
     // Load the block language files
-    pnMLS_loadBlockTranslations($blockName, $modBaseInfo['osdirectory']);
+    xarMLS_loadBlockTranslations($blockName, $modBaseInfo['osdirectory']);
 
     // Initialise block (security schema) if required.
     $initfunc = "{$modName}_{$blockName}block_init";
@@ -392,30 +392,30 @@ function pnBlock_load($modName, $blockName)
  * @return blocks_modules the aray of blocks on success, false otherwise
  * @raise DATABASE_ERROR
  */
-function pnBlock_loadAll()
+function xarBlock_loadAll()
 {
     // Load blocks
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $modNametable = $pntable['modules'];
+    $modNametable = $xartable['modules'];
 
-    $query = "SELECT pn_name,
-                   pn_directory,
-                   pn_regid
+    $query = "SELECT xar_name,
+                   xar_directory,
+                   xar_regid
             FROM $modNametable";
     $result = $dbconn->Execute($query);
 
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
     }
     while (!$result->EOF) {
         list($name, $directory, $mid) = $result->fields;
         $result->MoveNext();
-        $blockDir = 'modules/' . pnVarPrepForOS($directory) . '/pnblocks';
+        $blockDir = 'modules/' . xarVarPrepForOS($directory) . '/xarblocks';
         if (!@is_dir($blockDir)) {
             continue;
         }
@@ -423,7 +423,7 @@ function pnBlock_loadAll()
         while($f = readdir($dib)) {
             if (preg_match('/\.php$/', $f)) {
                 $blockName = preg_replace('/\.php$/', '', $f);
-                if (!pnBlock_load($name, $blockName)) {
+                if (!xarBlock_load($name, $blockName)) {
                     // Block load failed
                     return false;
                 }
@@ -451,19 +451,19 @@ function pnBlock_loadAll()
  * @return output the block to show
  * @raise BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
-function pnBlock_render($blockInfo)
+function xarBlock_render($blockInfo)
 {
     $modName = $blockInfo['module'];
     $blockType = $blockInfo['type'];
 
     if (empty($modName) || empty($blockType)) {
-        $msg = pnML('Empty modname (#(1)) or block type (#(2)).', $modName, $blockType);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty modname (#(1)) or block type (#(2)).', $modName, $blockType);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
-    $res = pnBlock_load($modName, $blockType);
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $res = xarBlock_load($modName, $blockType);
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back exception
     }
 
@@ -474,14 +474,14 @@ function pnBlock_render($blockInfo)
         $blockInfo = $displayFuncName($blockInfo);
 
         if (empty($blockInfo)) {
-            if (pnExceptionMajor() != PN_NO_EXCEPTION) {
+            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back exception
             }
             return '';
         }
         if (!is_array($blockInfo)) {
-            $msg = pnML('The block function #(1) didn\'t produce a valid block info type result.', $displayFuncName);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+            $msg = xarML('The block function #(1) didn\'t produce a valid block info type result.', $displayFuncName);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
             return;
         }
@@ -492,22 +492,22 @@ function pnBlock_render($blockInfo)
             if (isset($blockInfo['content']['_bl_template'])) {
                 $templateName = $blockInfo['content']['_bl_template'];
             }
-            $blockInfo['content'] = pnTplBlock($modName, $blockType, $blockInfo['content'], $templateName);
+            $blockInfo['content'] = xarTplBlock($modName, $blockType, $blockInfo['content'], $templateName);
         }
     } else {
-		$msg = pnML('Module block function #(1) doesn\'t exist.', $displayFuncName);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+		$msg = xarML('Module block function #(1) doesn\'t exist.', $displayFuncName);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
                        new SystemException($msg));
         return;
 	}
 
     // Handle block state
-    $res = pnModAPILoad('blocks');
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) return; // throw back
+    $res = xarModAPILoad('blocks');
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
 
-    $res = pnModAPIFunc('blocks', 'user', 'getState', $blockInfo);
+    $res = xarModAPIFunc('blocks', 'user', 'getState', $blockInfo);
     if (!$res) {
-        if (pnExceptionMajor() != PN_NO_EXCEPTION) return; // throw back
+        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
         $blockInfo['content'] = '';
     }
 
@@ -515,7 +515,7 @@ function pnBlock_render($blockInfo)
     // FIXME: <marco> Remove this!
     if (!empty($blockInfo['template'])) {
         $msg = 'You must use _bl_template instead of template.';
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
@@ -524,7 +524,7 @@ function pnBlock_render($blockInfo)
         $templateName = $blockInfo['_bl_template'];
     }
 
-    return pnTpl_renderBlockBox($blockInfo, $templateName);
+    return xarTpl_renderBlockBox($blockInfo, $templateName);
 }
 
 /**
@@ -534,49 +534,49 @@ function pnBlock_render($blockInfo)
  * @param groupName the name of the block group
  * @raise BAD_PARAM, DATABASE_ERROR
  */
-function pnBlock_renderGroup($groupName)
+function xarBlock_renderGroup($groupName)
 {
     /*if (!isset($groupName)){
-        $msg = pnML('Empty group_name (#(1)).', $groupName);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty group_name (#(1)).', $groupName);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }*/
 
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $block_group_instances_table = $pntable['block_group_instances'];
-    $block_instances_table = $pntable['block_instances'];
-    $block_groups_table = $pntable['block_groups'];
-    $block_types_table = $pntable['block_types'];
+    $block_group_instances_table = $xartable['block_group_instances'];
+    $block_instances_table = $xartable['block_instances'];
+    $block_groups_table = $xartable['block_groups'];
+    $block_types_table = $xartable['block_types'];
 
     // FIXME: Should use UNION instead of LEFT JOIN(?) - Paul
-    $query = "SELECT    inst.pn_id as bid,
-                        types.pn_type as type,
-                        types.pn_module as module,
-                        inst.pn_title as title,
-                        inst.pn_content as content,
-                        inst.pn_last_update as last_update,
-                        inst.pn_state as state,
-                        group_inst.pn_position as position,
-                        groups.pn_template as _bl_template
+    $query = "SELECT    inst.xar_id as bid,
+                        types.xar_type as type,
+                        types.xar_module as module,
+                        inst.xar_title as title,
+                        inst.xar_content as content,
+                        inst.xar_last_update as last_update,
+                        inst.xar_state as state,
+                        group_inst.xar_position as position,
+                        groups.xar_template as _bl_template
               FROM      $block_group_instances_table as group_inst
               LEFT JOIN $block_groups_table as groups
-              ON        group_inst.pn_group_id = groups.pn_id
+              ON        group_inst.xar_group_id = groups.xar_id
               LEFT JOIN $block_instances_table as inst
-              ON        inst.pn_id = group_inst.pn_instance_id
+              ON        inst.xar_id = group_inst.xar_instance_id
               LEFT JOIN $block_types_table as types
-              ON        types.pn_id = inst.pn_type_id
-              WHERE     groups.pn_name = '$groupName'
-              AND       inst.pn_state > 0
-              ORDER BY  group_inst.pn_position ASC";
+              ON        types.xar_id = inst.xar_type_id
+              WHERE     groups.xar_name = '$groupName'
+              AND       inst.xar_state > 0
+              ORDER BY  group_inst.xar_position ASC";
 
     $result = $dbconn->Execute($query);
 
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return NULL;
     }
@@ -586,8 +586,8 @@ function pnBlock_renderGroup($groupName)
         $blockInfo = $result->GetRowAssoc(false);
         $blockInfo['last_update'] = $result->UnixTimeStamp($blockInfo['last_update']);
 
-        $output .= pnBlock_render($blockInfo);
-        if (pnExceptionMajor() != PN_NO_EXCEPTION) {
+        $output .= xarBlock_render($blockInfo);
+        if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return NULL; // throw back exception
         }
 

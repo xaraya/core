@@ -22,8 +22,8 @@
  */
 
 //'All' and 'unregistered' for user and group permissions
-define('_PNSEC_ALL', '-1');
-define('_PNSEC_UNREGISTERED', '0');
+define('_XARSEC_ALL', '-1');
+define('_XARSEC_UNREGISTERED', '0');
 /*
  * Defines for access levels
  */
@@ -57,20 +57,20 @@ $schemas = array();
  * @return true if authorised, false if not
  * @raise DATABASE_ERROR
  */
-function pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
+function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
 {
     // FIXME: <marco> BAD_PARAM?
 
     if (empty($userId)) {
-        $userId = pnSessionGetVar('uid');
+        $userId = xarSessionGetVar('uid');
         if (empty($userId)) {
             $userId = 0;
         }
     }
-    if (!pnVarIsCached('Permissions', $userId)) {
+    if (!xarVarIsCached('Permissions', $userId)) {
         // First time here - get auth info
-        $perms = pnSec__getAuthInfo($userId);
-        if (!isset($perms) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        $perms = xarSec__getAuthInfo($userId);
+        if (!isset($perms) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back
         }
         if ((count($perms[0]) == 0) &&
@@ -78,13 +78,13 @@ function pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, 
                 // No permissions
                 return;
         }
-        pnVarSetCached('Permissions', $userId, $perms);
+        xarVarSetCached('Permissions', $userId, $perms);
     }
 
-    list($userPerms, $groupPerms) = pnVarGetCached('Permissions', $userId);
+    list($userPerms, $groupPerms) = xarVarGetCached('Permissions', $userId);
 
     // Get user access level
-    $userlevel = pnSec__getLevel($userPerms, $testRealm, $testComponent, $testInstance);
+    $userlevel = xarSec__getLevel($userPerms, $testRealm, $testComponent, $testInstance);
 
     // User access level is override, so return that if it exists
     if ( $userlevel > ACCESS_INVALID ) {
@@ -101,7 +101,7 @@ function pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, 
     }
 
     // User access level not defined. Now check group access level
-    $grouplevel = pnSec__getLevel($groupPerms, $testRealm, $testComponent, $testInstance);
+    $grouplevel = xarSec__getLevel($groupPerms, $testRealm, $testComponent, $testInstance);
     if ($grouplevel >= $testLevel) {
         // permission is granted to associated group
         return true;
@@ -119,7 +119,7 @@ function pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, 
  * action could be made (e.g. a form or a 'delete' button) this function
  * must be called and the resultant string passed to the client as either
  * a GET or POST variable.  When the action then takes place it first calls
- * <code>pnSecConfirmAuthKey()</code> to ensure that the operation has
+ * <code>xarSecConfirmAuthKey()</code> to ensure that the operation has
  * indeed been manually requested by the user and that the key is valid
  *
  * @public
@@ -127,15 +127,15 @@ function pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, 
  * @returns string
  * @return an encrypted key for use in authorisation of operations
  */
-function pnSecGenAuthKey($modName = NULL)
+function xarSecGenAuthKey($modName = NULL)
 {
     if (empty($modName)) {
-        list($modName) = pnGetRequestInfo();
+        list($modName) = xarGetRequestInfo();
     }
 
 // Date gives extra security but leave it out for now
-//    $key = pnSessionGetVar('rand') . $modName . date ('YmdGi');
-    $key = pnSessionGetVar('rand') . $modName;
+//    $key = xarSessionGetVar('rand') . $modName . date ('YmdGi');
+    $key = xarSessionGetVar('rand') . $modName;
 
     // Encrypt key
     $authid = md5($key);
@@ -147,19 +147,19 @@ function pnSecGenAuthKey($modName = NULL)
 /**
  * confirm an authorisation key is valid
  * <br>
- * See description of <code>pnSecGenAuthKey</code> for information on
+ * See description of <code>xarSecGenAuthKey</code> for information on
  * this function
  * @public
  * @returns bool
  * @return true if the key is valid, false if it is not
  */
-function pnSecConfirmAuthKey($authIdVarName = 'authid')
+function xarSecConfirmAuthKey($authIdVarName = 'authid')
 {
-    list($modName) = pnRequestGetInfo();
-    $authid = pnRequestGetVar($authIdVarName);
+    list($modName) = xarRequestGetInfo();
+    $authid = xarRequestGetVar($authIdVarName);
 
     // Regenerate static part of key
-    $partkey = pnSessionGetVar('rand') . $modName;
+    $partkey = xarSessionGetVar('rand') . $modName;
 
 // Not using time-sensitive keys for the moment
 //    // Key life is 5 minutes, so search backwards and forwards 5
@@ -174,7 +174,7 @@ function pnSecConfirmAuthKey($authIdVarName = 'authid')
 //            // We've used up the current random
 //            // number, make up a new one
 //            srand((double)microtime()*1000000);
-//            pnSessionSetVar('rand', rand());
+//            xarSessionSetVar('rand', rand());
 //
 //            return true;
 //        }
@@ -182,7 +182,7 @@ function pnSecConfirmAuthKey($authIdVarName = 'authid')
     if ((md5($partkey)) == $authid) {
         // Match - generate new random number for next key and leave happy
         srand((double)microtime()*1000000);
-        pnSessionSetVar('rand', rand());
+        xarSessionSetVar('rand', rand());
 
         return true;
     }
@@ -199,7 +199,7 @@ function pnSecConfirmAuthKey($authIdVarName = 'authid')
  *
  * Will fail if an attempt is made to overwrite an existing schema
  */
-function pnSecAddSchema($component, $schema)
+function xarSecAddSchema($component, $schema)
 {
     $schemas = array();
 
@@ -221,16 +221,16 @@ function pnSecAddSchema($component, $schema)
  * @return two-element array of user and group permissions
  * @raise DATABASE_ERROR
  */
-function pnSec__getAuthInfo($userId)
+function xarSec__getAuthInfo($userId)
 {
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
     // Tables we use
-    $userpermtable = $pntable['user_perms'];
-    $groupmembershiptable = $pntable['group_membership'];
-    $grouppermtable = $pntable['group_perms'];
-    $realmtable = $pntable['realms'];
+    $userpermtable = $xartable['user_perms'];
+    $groupmembershiptable = $xartable['group_membership'];
+    $grouppermtable = $xartable['group_perms'];
+    $realmtable = $xartable['realms'];
 
     // Empty arrays
     $userPerms = array();
@@ -244,18 +244,18 @@ function pnSec__getAuthInfo($userId)
     $userIds = implode(',', $userIds);
 
     // Get user permissions
-    $query = "SELECT pn_realm,
-                     pn_component,
-                     pn_instance,
-                     pn_level
+    $query = "SELECT xar_realm,
+                     xar_component,
+                     xar_instance,
+                     xar_level
               FROM $userpermtable
-              WHERE pn_uid IN (" . pnVarPrepForStore($userIds) . ")
-              ORDER by pn_sequence";
+              WHERE xar_uid IN (" . xarVarPrepForStore($userIds) . ")
+              ORDER by xar_sequence";
     $result = $dbconn->Execute($query);
 
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
     }
@@ -281,15 +281,15 @@ function pnSec__getAuthInfo($userId)
     }
 
     // Get all groups that user is in
-    $query = "SELECT pn_gid
+    $query = "SELECT xar_gid
               FROM $groupmembershiptable
-              WHERE pn_uid IN (" . pnVarPrepForStore($userIds) . ")";
+              WHERE xar_uid IN (" . xarVarPrepForStore($userIds) . ")";
 
     $result = $dbconn->Execute($query);
 
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
     }
@@ -308,18 +308,18 @@ function pnSec__getAuthInfo($userId)
     $usergroups = implode(',', $usergroups);
 
     // Get all group permissions
-    $query = "SELECT pn_realm,
-                     pn_component,
-                     pn_instance,
-                     pn_level
+    $query = "SELECT xar_realm,
+                     xar_component,
+                     xar_instance,
+                     xar_level
               FROM $grouppermtable
-              WHERE pn_gid IN (" . pnVarPrepForStore($usergroups) . ")
-              ORDER by pn_sequence";
+              WHERE xar_gid IN (" . xarVarPrepForStore($usergroups) . ")
+              ORDER by xar_sequence";
     $result = $dbconn->Execute($query);
 
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
     }
@@ -364,7 +364,7 @@ function pnSec__getAuthInfo($userId)
  * @returns int
  * @return matching security level
  */
-function pnSec__getLevel($perms, $testRealm, $testComponent, $testInstance)
+function xarSec__getLevel($perms, $testRealm, $testComponent, $testInstance)
 {
     // FIXME: <marco> BAD_PARAM?
 
@@ -449,7 +449,7 @@ function pnSec__getLevel($perms, $testRealm, $testComponent, $testInstance)
 // FIXME: <marco> Who use this?
 // <niceguyeddie> -- used for the schema breakdown in permissions module.
 //function getinstanceschemainfo()
-function pnSec__getBlocksInstanceSchemaInfo()
+function xarSec__getBlocksInstanceSchemaInfo()
 {
     // FIXME: <marco> Exceptions
 
@@ -458,10 +458,10 @@ function pnSec__getBlocksInstanceSchemaInfo()
 
     if ($gotschemas == 0) {
         // Get all module schemas
-        pnSec__getModulesInstanceSchemaInfo();
+        xarSec__getModulesInstanceSchemaInfo();
 
         // Get all block schemas
-        pnBlock_loadAll();
+        xarBlock_loadAll();
 
         $gotschemas = 1;
     }
@@ -476,16 +476,16 @@ function pnSec__getBlocksInstanceSchemaInfo()
 // FIXME: <marco> Who use this?
 // <niceguyeddie> -- Used for the schema breakdown for permissions.
 //function getmodulesinstanceschemainfo()
-function pnSec__getModulesInstanceSchemaInfo()
+function xarSec__getModulesInstanceSchemaInfo()
 {
 
     $moddir = opendir('modules/');
     while ($modName = readdir($moddir)) {
-        $osfile = 'modules/' . pnVarPrepForOS($modName) . '/pnversion.php';
+        $osfile = 'modules/' . xarVarPrepForOS($modName) . '/xarversion.php';
         @include $osfile;
         if (!empty($modversion['securityschema'])) {
             foreach ($modversion['securityschema'] as $component => $instance) {
-                pnSecAddSchema($component, $instance);
+                xarSecAddSchema($component, $instance);
             }
         }
         $modversion['securityschema'] = '';

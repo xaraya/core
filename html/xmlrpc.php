@@ -6,28 +6,28 @@
 // http://www.xaraya.org
 // ----------------------------------------------------------------------
 
-include 'includes/pnCore.php';
+include 'includes/xarCore.php';
 
-function pnXMLRPCMain()
+function xarXMLRPCMain()
 {
-    pnCoreInit(PNCORE_SYSTEM_ALL);
+    xarCoreInit(XARCORE_SYSTEM_ALL);
 
     // Load user API for xmlrpc module
-    if (!pnModAPILoad('xmlrpc', 'user')) {
-        die('Could not load xmlrpc module');
+    if (!xarModAPILoad('xmlrpc', 'user')) {
+        xarCore_die('Could not load xmlrpc module');
     }
 
     /* create an instance of an xmlrpc server and define the apis we export
     and the mapping to the functions.
     */
-    $server = pnModAPIFunc('xmlrpc','user','initServer');
+    $server = xarModAPIFunc('xmlrpc','user','initServer');
     if (!$server) {
-        die('Could not load server');
+        xarCore_die('Could not load server');
     }
 }
 
-pnXMLRPCMain();
+xarXMLRPCMain();
 
-pnCore_disposeDebugger();
+xarCore_disposeDebugger();
 
 ?>

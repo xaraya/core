@@ -18,21 +18,21 @@
 /*
  * Public Functions:
  * 
- * pnDBCreateDatabase($databaseName, $databaseType = NULL)  
- * pnDBCreateTable($tableName, $fields, $databaseType = NULL)
- * pnDBDropTable($tableName, $databaseType = NULL)
- * pnDBAlterTable($tableName, $args, $databaseType = NULL)
- * pnDBCreateIndex($tableName, $index, $databaseType = NULL)
- * pnDBDropIndex($tableName, $databaseType = NULL)
+ * xarDBCreateDatabase($databaseName, $databaseType = NULL)  
+ * xarDBCreateTable($tableName, $fields, $databaseType = NULL)
+ * xarDBDropTable($tableName, $databaseType = NULL)
+ * xarDBAlterTable($tableName, $args, $databaseType = NULL)
+ * xarDBCreateIndex($tableName, $index, $databaseType = NULL)
+ * xarDBDropIndex($tableName, $databaseType = NULL)
  * 
  */
 
 /*
-$sql = pnDBAlterTable($pntable['nascar_tracks'],
+$sql = xarDBAlterTable($xartable['nascar_tracks'],
     array(
         'command'           => 'add',
-        'field_name'        => 'pn_track_name',
-        'new_field_name'    => 'pn_track_name1'
+        'field_name'        => 'xar_track_name',
+        'new_field_name'    => 'xar_track_name1'
         'type'              => 'integer',
         'null'              => false,
         'increment'         => true,
@@ -49,17 +49,17 @@ $sql = pnDBAlterTable($pntable['nascar_tracks'],
  * @return sql statement for database creation
  * @raise BAD_PARAM
  */
-function pnDBCreateDatabase($databaseName, $databaseType = NULL)
+function xarDBCreateDatabase($databaseName, $databaseType = NULL)
 {
     // perform validations on input arguments
     if (empty($databaseName)) {
-        $msg = pnML('Empty database_name.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty database_name.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
     if (empty($databaseType)) {
-        $databaseType = pnDBGetType();
+        $databaseType = xarDBGetType();
     }
 
     switch($databaseType) {
@@ -69,8 +69,8 @@ function pnDBCreateDatabase($databaseName, $databaseType = NULL)
             break;
         // Other DBs go here
         default:
-            $msg = pnML('Unknown database type: \'#(1)\'.', $databaseType);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -94,37 +94,37 @@ function pnDBCreateDatabase($databaseName, $databaseType = NULL)
  * @returns string
  * @return generated sql
  */
-function pnDBAlterTable($tableName, $args, $databaseType = NULL)
+function xarDBAlterTable($tableName, $args, $databaseType = NULL)
 {
     // perform validations on input arguments
     if (empty($tableName)) {
-        $msg = pnML('Empty tableName.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty tableName.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
     if (!is_array($args) || !is_array($args['command'])) {
-        $msg = pnML('Invalid args (must be an array, command key must be set).');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Invalid args (must be an array, command key must be set).');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
 
     if (empty($databaseType)) {
-        $databaseType = pnDBGetType();
+        $databaseType = xarDBGetType();
     }
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
-            $sql = pnDB__mysqlAlterTable($tableName, $args);
+            $sql = xarDB__mysqlAlterTable($tableName, $args);
             break;
         case 'postgres':
-            $sql = pnDB__postgresqlAlterTable($tableName, $args);
+            $sql = xarDB__postgresqlAlterTable($tableName, $args);
             break;
         // Other DBs go here
         default:
-            $msg = pnML('Unknown database type: \'#(1)\'.', $databaseType);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -141,37 +141,37 @@ function pnDBAlterTable($tableName, $args, $databaseType = NULL)
  * @returns string|false
  * @return the generated SQL statement, or false on failure
  */
-function pnDBCreateTable($tableName, $fields, $databaseType="")
+function xarDBCreateTable($tableName, $fields, $databaseType="")
 {
     // perform validations on input arguments
     if (empty($tableName)) {
-        $msg = pnML('Empty tableName.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty tableName.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
     if (!is_array($fields)) {
-        $msg = pnML('Not array fields.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Not array fields.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
 
     if (empty($databaseType)) {
-        $databaseType = pnDBGetType();
+        $databaseType = xarDBGetType();
     }
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
-            $sql = pnDB__mysqlCreateTable($tableName, $fields);
+            $sql = xarDB__mysqlCreateTable($tableName, $fields);
             break;
         case 'postgres':
-            $sql = pnDB__postgresqlCreateTable($tableName, $fields);
+            $sql = xarDB__postgresqlCreateTable($tableName, $fields);
             break;
         // Other DBs go here
         default:
-            $msg = pnML('Unknown database type: \'#(1)\'.', $databaseType);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -187,17 +187,17 @@ function pnDBCreateTable($tableName, $fields, $databaseType="")
  * @returns data|false
  * @return the generated SQL statement, or false on failure
  */
-function pnDBDropTable($tableName, $databaseType = NULL)
+function xarDBDropTable($tableName, $databaseType = NULL)
 {
     // perform validations on input arguments
     if (empty($tableName)) {
-        $msg = pnML('Empty tableName.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty tableName.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
     if (empty($databaseType)) {
-        $databaseType = pnDBGetType();
+        $databaseType = xarDBGetType();
     }
 
     switch($databaseType) {
@@ -207,8 +207,8 @@ function pnDBDropTable($tableName, $databaseType = NULL)
             break;
         // Other DBs go here
         default:
-            $msg = pnML('Unknown database type: \'#(1)\'.', $databaseType);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -225,18 +225,18 @@ function pnDBDropTable($tableName, $databaseType = NULL)
  * @returns string|false
  * @return the generated SQL statement, or false on failure
  */
-function pnDBCreateIndex($tableName, $index, $databaseType = NULL) {
+function xarDBCreateIndex($tableName, $index, $databaseType = NULL) {
 
     // perform validations on input arguments
     if (empty($tableName)) {
-        $msg = pnML('Empty tableName.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty tableName.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
     if (!is_array($index) || !is_array($index['fields']) || empty($index['name'])) {
-        $msg = pnML('Invalid index (must be an array, fields key must be an array, name key must be set).');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Invalid index (must be an array, fields key must be an array, name key must be set).');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -246,7 +246,7 @@ function pnDBCreateIndex($tableName, $index, $databaseType = NULL) {
     }
 
     if (empty($databaseType)) {
-        $databaseType = pnDBGetType();
+        $databaseType = xarDBGetType();
     }
 
     // Select the correct database type
@@ -263,8 +263,8 @@ function pnDBCreateIndex($tableName, $index, $databaseType = NULL) {
 
         // Other DBs go here
         default:
-            $msg = pnML('Unknown database type: \'#(1)\'.', $databaseType);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -281,23 +281,23 @@ function pnDBCreateIndex($tableName, $index, $databaseType = NULL) {
  * @return generated sql to drop an index
  * @raise BAD_PARAM
  */
-function pnDBDropIndex($tableName, $fields, $databaseType = NULL)
+function xarDBDropIndex($tableName, $fields, $databaseType = NULL)
 {
     // perform validations on input arguments
     if (empty($tableName)) {
-        $msg = pnML('Empty tableName.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty tableName.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
     if (!is_array($index) || !is_array($index['fields']) || empty($index['name'])) {
-        $msg = pnML('Invalid index (must be an array, fields key must be an array, name key must be set).');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Invalid index (must be an array, fields key must be an array, name key must be set).');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
     if (empty($databaseType)) {
-        $databaseType = pnDBGetType();
+        $databaseType = xarDBGetType();
     }
 
     // Select the correct database type
@@ -310,8 +310,8 @@ function pnDBDropIndex($tableName, $fields, $databaseType = NULL)
             break;
         // Other DBs go here
         default:
-            $msg = pnML('Unknown database type: \'#(1)\'.', $databaseType);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -333,18 +333,18 @@ function pnDBDropIndex($tableName, $fields, $databaseType = NULL)
  * @return mysql specific sql to alter a table
  * @raise BAD_PARAM
  */
-function pnDB__mysqlAlterTable($tableName, $args)
+function xarDB__mysqlAlterTable($tableName, $args)
 {
     switch ($args['command']) {
         case 'add':
             if (empty($args['field'])) {
-                $msg = pnML('Invalid args (field key must be set).');
-                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                $msg = xarML('Invalid args (field key must be set).');
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
             $sql = 'ALTER TABLE '.$tableName.' ADD ';
-            $sql .= join(' ', pnDB__mysqlColumnDefinition($args['field'], $args));
+            $sql .= join(' ', xarDB__mysqlColumnDefinition($args['field'], $args));
             if ($args['first'] == true) {
                 $sql .= ' FIRST';
             } elseif (!empty($args['after_field'])) {
@@ -354,20 +354,20 @@ function pnDB__mysqlAlterTable($tableName, $args)
         /* Disabled July 12, 2002 by Gary Mitchell - not supported by postgres
         case 'modify':
             if (empty($args['field'])) {
-              $msg = pnML('Invalid args (field key must be set).');
-                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+              $msg = xarML('Invalid args (field key must be set).');
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
             $sql = 'ALTER TABLE '.$tableName.' CHANGE ';
-            $sql .= join(' ', pnDB__mysqlColumnDefinition($args['field'], $args));
+            $sql .= join(' ', xarDB__mysqlColumnDefinition($args['field'], $args));
             break;
         */
         /* Disabled July 12, 2002 by Gary Mitchell - not supported by postgres
         case 'drop':
             if (empty($args['field'])) {
-              $msg = pnML('Invalid args (field key must be set).');
-                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+              $msg = xarML('Invalid args (field key must be set).');
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
@@ -376,16 +376,16 @@ function pnDB__mysqlAlterTable($tableName, $args)
         */
         case 'rename':
             if (empty($args['new_name'])) {
-                $msg = pnML('Invalid args (new_name key must be set.)');
-                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                $msg = xarML('Invalid args (new_name key must be set.)');
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
             $sql = 'ALTER TABLE '.$tableName.' RENAME TO '.$args['new_name'];
             break;
         default:
-            $msg = pnML('Unknown command: \'#(1)\'.', $args['command']);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            $msg = xarML('Unknown command: \'#(1)\'.', $args['command']);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -404,31 +404,31 @@ function pnDB__mysqlAlterTable($tableName, $args)
  * @return postgres specific sql to alter a table
  * @raise BAD_PARAM
  */
-function pnDB_postgresqlAlterTable($tableName, $args)
+function xarDB_postgresqlAlterTable($tableName, $args)
 {
     switch ($args['command']) {
         case 'add':
             if (empty($args['field'])) {
-                $msg = pnML('Invalid args (field key must be set).');
-                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                $msg = xarML('Invalid args (field key must be set).');
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
             $sql = 'ALTER TABLE '.$tableName.' ADD ';
-            $sql .= join(' ', pnDB__postgresColumnDefinition($args['field'], $args));
+            $sql .= join(' ', xarDB__postgresColumnDefinition($args['field'], $args));
             break;
         case 'rename':
             if (empty($args['new_name'])) {
-                $msg = pnML('Invalid args (new_name key must be set.)');
-                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                $msg = xarML('Invalid args (new_name key must be set.)');
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
             $sql = 'ALTER TABLE '.$tableName.' RENAME TO '.$args['new_name'];
             break;
         default:
-            $msg = pnML('Unknown command: \'#(1)\'.', $args['command']);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            $msg = xarML('Unknown command: \'#(1)\'.', $args['command']);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -444,13 +444,13 @@ function pnDB_postgresqlAlterTable($tableName, $args)
  * @returns string|false
  * @return the generated SQL statement, or false on failure
  */
-function pnDB__mysqlCreateTable($tableName, $fields)
+function xarDB__mysqlCreateTable($tableName, $fields)
 {
     $sql_fields = array();
 
     while (list($field_name, $parameters) = each($fields)) {
         $parameters['command'] = 'create';
-        $this_field = pnDB__mysqlColumnDefinition($field_name, $parameters);
+        $this_field = xarDB__mysqlColumnDefinition($field_name, $parameters);
         $sql_fields[] = implode(' ', $this_field);
     }
     $sql = 'CREATE TABLE '.$tableName.' ('.implode(',', $sql_fields).')';
@@ -465,7 +465,7 @@ function pnDB__mysqlCreateTable($tableName, $fields)
  * @param parameters
  *
  */
-function pnDB__mysqlColumnDefinition($field_name, $parameters)
+function xarDB__mysqlColumnDefinition($field_name, $parameters)
 {
     $this_field = array($field_name);
 
@@ -674,13 +674,13 @@ function pnDB__mysqlColumnDefinition($field_name, $parameters)
  * @returns string|false
  * @return the generated SQL statement, or false on failure
  */
-function pnDB__postgresqlCreateTable($tableName, $fields)
+function xarDB__postgresqlCreateTable($tableName, $fields)
 {
     $sql_fields = array();
 
     while (list($field_name, $parameters) = each($fields)) {
         $parameters['command'] = 'create';
-        $this_field = pnDB__postgresColumnDefinition($field_name, $parameters);
+        $this_field = xarDB__postgresColumnDefinition($field_name, $parameters);
         $sql_fields[] = implode(' ', $this_field);
     }
     $sql = 'CREATE TABLE '.$tableName.' ('.implode(',', $sql_fields).')';
@@ -695,7 +695,7 @@ function pnDB__postgresqlCreateTable($tableName, $fields)
  * @param parameters
  *
  */
-function pnDB__postgresColumnDefinition($field_name, $parameters)
+function xarDB__postgresColumnDefinition($field_name, $parameters)
 {
     $this_field = array($field_name);
 

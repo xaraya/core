@@ -14,65 +14,65 @@
  * @returns bool
  * @return true on success
  */
-function pnSession_init($args)
+function xarSession_init($args)
 {
-    global $pnSession_systemArgs;
-    $pnSession_systemArgs = $args;
+    global $xarSession_systemArgs;
+    $xarSession_systemArgs = $args;
 
     // Session Support Tables
-    $systemPrefix = pnDBGetSystemTablePrefix();
+    $systemPrefix = xarDBGetSystemTablePrefix();
 
     $tables = array('session_info' => $systemPrefix . '_session_info');
 
-    pnDB_importTables($tables);
+    xarDB_importTables($tables);
 
-    pnSession__setup($args);
+    xarSession__setup($args);
 
     // First thing we do is ensure that there is no attempted pollution
     // of the session namespace (yes, we still need this for now)
     foreach($GLOBALS as $k=>$v) {
-        if (preg_match('/^PNSV/', $k)) {
-            pnCore_die('pnSession_init: Session Support initialisation failed.');
+        if (preg_match('/^XARSV/', $k)) {
+            xarCore_die('xarSession_init: Session Support initialisation failed.');
         }
     }
 
-    // Start the session, this will call pnSession__phpRead, and
+    // Start the session, this will call xarSession__phpRead, and
     // it will tell us if we need to start a new session or just
     // to continue the current session
     session_start();
 
     $sessionId = session_id();
 
-    global $pnSession_isNewSession, $pnSession_ownerUserId, $pnSession_ipAddress;
+    global $xarSession_isNewSession, $xarSession_ownerUserId, $xarSession_ipAddress;
 
     // TODO : add an admin option to re-activate this e.g. for
     //        Security Level "High" ?
 
     // Get  client IP addr
-    $forwarded = pnServerGetVar('HTTP_X_FORWARDED_FOR');
+    $forwarded = xarServerGetVar('HTTP_X_FORWARDED_FOR');
     if (!empty($forwarded)) {
         $ipAddress = preg_replace('/,.*/', '', $forwarded);
     } else {
-        $ipAddress = pnServerGetVar('REMOTE_ADDR');
+        $ipAddress = xarServerGetVar('REMOTE_ADDR');
     }
 
-    if ($pnSession_isNewSession) {
-        pnSession__new($sessionId, $ipAddress);
+    if ($xarSession_isNewSession) {
+        xarSession__new($sessionId, $ipAddress);
 
         // Generate a random number, used for
         // some authentication
         srand((double) microtime() * 1000000);
 
-        pnSessionSetVar('rand', rand());
+        xarSessionSetVar('rand', rand());
     } else {
         // same remark as in .71x branch : AOL, NZ and other ISPs don't
         // necessarily have a fixed IP (or a reliable X_FORWARDED_FOR)
-        // if ($ipAddress == $pnSession_ipAddress) {
-            pnSession__current($sessionId);
+        // if ($ipAddress == $xarSession_ipAddress) {
+            xarSession__current($sessionId);
         // } else {
             // Mismatch - destroy the session
             //  session_destroy();
-            //  pnRedirect('index.php');
+            //  xarRedirect('index.php');
             //  return false;
         // }
     }
@@ -80,11 +80,11 @@ function pnSession_init($args)
     return true;
 }
 
-function pnSessionGetSecurityLevel()
+function xarSessionGetSecurityLevel()
 {
-    global $pnSession_systemArgs;
+    global $xarSession_systemArgs;
 
-    return $pnSession_systemArgs['securityLevel'];
+    return $xarSession_systemArgs['securityLevel'];
 }
 
 /*
@@ -100,10 +100,10 @@ function pnSessionGetSecurityLevel()
  *
  * @param name name of the session variable to get
  */
-function pnSessionGetVar($name)
+function xarSessionGetVar($name)
 {
 //    global $HTTP_SESSION_VARS;
-    $var = 'PNSV' . $name;
+    $var = 'XARSV' . $name;
 
 // forget about $_SESSION for now - doesn't work for PHP 4.0.6
 // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
@@ -125,13 +125,13 @@ function pnSessionGetVar($name)
  * @param name name of the session variable to set
  * @param value value to set the named session variable
  */
-function pnSessionSetVar($name, $value)
+function xarSessionSetVar($name, $value)
 {
     if ($name == 'uid') {
         return false;
     }
 //    global $HTTP_SESSION_VARS;
-    $var = 'PNSV' . $name;
+    $var = 'XARSV' . $name;
 
 // forget about $_SESSION for now - doesn't work for PHP 4.0.6
 // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
@@ -148,13 +148,13 @@ function pnSessionSetVar($name, $value)
  * Delete a session variable
  * @param name name of the session variable to delete
  */
-function pnSessionDelVar($name)
+function xarSessionDelVar($name)
 {
     if ($name == 'uid') {
         return false;
     }
 //    global $HTTP_SESSION_VARS;
-    $var = 'PNSV' . $name;
+    $var = 'XARSV' . $name;
 
 // forget about $_SESSION for now - doesn't work for PHP 4.0.6
 // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
@@ -172,38 +172,38 @@ function pnSessionDelVar($name)
     return true;
 }
 
-function pnSessionGetId()
+function xarSessionGetId()
 {
     return session_id();
 }
 
 // PROTECTED FUNCTIONS
 
-function pnSession_setUserInfo($userId, $rememberSession)
+function xarSession_setUserInfo($userId, $rememberSession)
 {
-    global $PNSVuid;
+    global $XARSVuid;
 
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $sessioninfoTable = $pntable['session_info'];
+    $sessioninfoTable = $xartable['session_info'];
     $query = "UPDATE $sessioninfoTable
-              SET pn_uid = " . pnVarPrepForStore($userId) . ",
-                  pn_remembersess = " . pnVarPrepForStore($rememberSession) . "
-              WHERE pn_sessid = '" . pnVarPrepForStore(session_id()) . "'";
+              SET xar_uid = " . xarVarPrepForStore($userId) . ",
+                  xar_remembersess = " . xarVarPrepForStore($rememberSession) . "
+              WHERE xar_sessid = '" . xarVarPrepForStore(session_id()) . "'";
     $dbconn->Execute($query);
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
     }
 
-    $PNSVuid = $userId;
+    $XARSVuid = $userId;
     return true;
 }
 
-function pnSession_close()
+function xarSession_close()
 {
     session_write_close();
 }
@@ -219,9 +219,9 @@ function pnSession_close()
  * @param $args['inactivityTimeout']
  * @returns bool
  */
-function pnSession__setup($args)
+function xarSession__setup($args)
 {
-    $path = pnServerGetBaseURI();
+    $path = xarServerGetBaseURI();
     if (empty($path)) {
         $path = '/';
     }
@@ -249,7 +249,7 @@ function pnSession__setup($args)
             // Session lasts duration of browser
             $lifetime = 0;
             // Referer check
-            $host = pnServerGetVar('HTTP_HOST');
+            $host = xarServerGetVar('HTTP_HOST');
             $host = preg_replace('/:.*/', '', $host);
             // this won't work for non-standard ports
             //ini_set('session.referer_check', "$host$path");
@@ -276,7 +276,7 @@ function pnSession__setup($args)
         ini_set('session.cookie_path', $path);
 
         // Cookie domain
-        $domain = pnServerGetVar('HTTP_HOST');
+        $domain = xarServerGetVar('HTTP_HOST');
         $domain = preg_replace('/:.*/', '', $domain);
         // this is only necessary for sharing sessions across multiple servers,
         // and should be configurable for multi-site setups
@@ -296,12 +296,12 @@ function pnSession__setup($args)
     ini_set('session.auto_start', 1);
 
     // Session handlers
-    session_set_save_handler("pnSession__phpOpen",
-                             "pnSession__phpClose",
-                             "pnSession__phpRead",
-                             "pnSession__phpWrite",
-                             "pnSession__phpDestroy",
-                             "pnSession__phpGC");
+    session_set_save_handler("xarSession__phpOpen",
+                             "xarSession__phpClose",
+                             "xarSession__phpRead",
+                             "xarSession__phpWrite",
+                             "xarSession__phpDestroy",
+                             "xarSession__phpGC");
     return true;
 }
 
@@ -310,17 +310,17 @@ function pnSession__setup($args)
  * @private
  * @param sessionId the session ID
  */
-function pnSession__current($sessionId)
+function xarSession__current($sessionId)
 {
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $sessioninfoTable = $pntable['session_info'];
+    $sessioninfoTable = $xartable['session_info'];
 
     // Touch the last used time
     $query = "UPDATE $sessioninfoTable
-              SET pn_lastused = " . time() . "
-              WHERE pn_sessid = '" . pnVarPrepForStore($sessionId) . "'";
+              SET xar_lastused = " . time() . "
+              WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
 
     $result = $dbconn->Execute($query);
 
@@ -337,22 +337,22 @@ function pnSession__current($sessionId)
  * @param sessionId the session ID
  * @param ipAddress the IP address of the host with this session
  */
-function pnSession__new($sessionId, $ipAddress)
+function xarSession__new($sessionId, $ipAddress)
 {
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $sessioninfoTable = $pntable['session_info'];
+    $sessioninfoTable = $xartable['session_info'];
 
     $query = "INSERT INTO $sessioninfoTable
-                 (pn_sessid,
-                  pn_ipaddr,
-                  pn_uid,
-                  pn_firstused,
-                  pn_lastused)
+                 (xar_sessid,
+                  xar_ipaddr,
+                  xar_uid,
+                  xar_firstused,
+                  xar_lastused)
               VALUES
-                 ('" . pnVarPrepForStore($sessionId) . "',
-                  '" . pnVarPrepForStore($ipAddress) . "',
+                 ('" . xarVarPrepForStore($sessionId) . "',
+                  '" . xarVarPrepForStore($ipAddress) . "',
                   0,
                   " . time() . ",
                   " . time() . ")";
@@ -370,7 +370,7 @@ function pnSession__new($sessionId, $ipAddress)
  * PHP function to open the session
  * @private
  */
-function pnSession__phpOpen($path, $name)
+function xarSession__phpOpen($path, $name)
 {
     // Nothing to do - database opened elsewhere
     return true;
@@ -380,7 +380,7 @@ function pnSession__phpOpen($path, $name)
  * PHP function to close the session
  * @private
  */
-function pnSession__phpClose()
+function xarSession__phpClose()
 {
     // Nothing to do - database closed elsewhere
     return true;
@@ -390,21 +390,21 @@ function pnSession__phpClose()
  * PHP function to read a set of session variables
  * @private
  */
-function pnSession__phpRead($sessionId)
+function xarSession__phpRead($sessionId)
 {
-    global $pnSession_isNewSession, $pnSession_ipAddress;
-    global $PNSVuid;
+    global $xarSession_isNewSession, $xarSession_ipAddress;
+    global $XARSVuid;
 
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $sessioninfoTable = $pntable['session_info'];
+    $sessioninfoTable = $xartable['session_info'];
 
-    $query = "SELECT pn_uid,
-                     pn_ipaddr,
-                     pn_vars
+    $query = "SELECT xar_uid,
+                     xar_ipaddr,
+                     xar_vars
               FROM $sessioninfoTable
-              WHERE pn_sessid = '" . pnVarPrepForStore($sessionId) . "'";
+              WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
     $result = $dbconn->Execute($query);
 
     if ($dbconn->ErrorNo() != 0) {
@@ -412,15 +412,15 @@ function pnSession__phpRead($sessionId)
     }
 
     if (!$result->EOF) {
-        $pnSession_isNewSession = false;
-        list($PNSVuid, $pnSession_ipAddress, $vars) = $result->fields;
+        $xarSession_isNewSession = false;
+        list($XARSVuid, $xarSession_ipAddress, $vars) = $result->fields;
     } else {
-        $pnSession_isNewSession = true;
+        $xarSession_isNewSession = true;
         // NOTE: <marco> Since it's useless to save the same information twice into
-        // the session_info table, we use a little hack: $PNSVuid will appear to be
+        // the session_info table, we use a little hack: $XARSVuid will appear to be
         // a session variable even if it's not registered as so!
-        $PNSVuid = 0;
-        $pnSession_ipAddress = '';
+        $XARSVuid = 0;
+        $xarSession_ipAddress = '';
         $vars = '';
     }
     $result->Close();
@@ -432,16 +432,16 @@ function pnSession__phpRead($sessionId)
  * PHP function to write a set of session variables
  * @private
  */
-function pnSession__phpWrite($sessionId, $vars)
+function xarSession__phpWrite($sessionId, $vars)
 {
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $sessioninfoTable = $pntable['session_info'];
+    $sessioninfoTable = $xartable['session_info'];
 
     $query = "UPDATE $sessioninfoTable
-              SET pn_vars = '" . pnVarPrepForStore($vars) . "'
-              WHERE pn_sessid = '" . pnVarPrepForStore($sessionId) . "'";
+              SET xar_vars = '" . xarVarPrepForStore($vars) . "'
+              WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
     $dbconn->Execute($query);
 
     if ($dbconn->ErrorNo() != 0) {
@@ -455,15 +455,15 @@ function pnSession__phpWrite($sessionId, $vars)
  * PHP function to destroy a session
  * @private
  */
-function pnSession__phpDestroy($sessionId)
+function xarSession__phpDestroy($sessionId)
 {
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $sessioninfoTable = $pntable['session_info'];
+    $sessioninfoTable = $xartable['session_info'];
 
     $query = "DELETE FROM $sessioninfoTable
-              WHERE pn_sessid = '" . pnVarPrepForStore($sessionId) . "'";
+              WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
     $dbconn->Execute($query);
 
     if ($dbconn->ErrorNo() != 0) {
@@ -477,34 +477,34 @@ function pnSession__phpDestroy($sessionId)
  * PHP function to garbage collect session information
  * @private
  */
-function pnSession__phpGC($maxlifetime)
+function xarSession__phpGC($maxlifetime)
 {
-    global $pnSession_systemArgs;
+    global $xarSession_systemArgs;
 
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $sessioninfoTable = $pntable['session_info'];
+    $sessioninfoTable = $xartable['session_info'];
 
-    switch ($pnSession_systemArgs['securityLevel']) {
+    switch ($xarSession_systemArgs['securityLevel']) {
         case 'Low':
             // Low security - delete session info if user decided not to
             //                remember themself
-            $where = "WHERE pn_remembersess = 0
-                      AND pn_lastused < " . (time() - ($pnSession_systemArgs['inactivityTimeout'] * 60));
+            $where = "WHERE xar_remembersess = 0
+                      AND xar_lastused < " . (time() - ($xarSession_systemArgs['inactivityTimeout'] * 60));
             break;
         case 'Medium':
             // Medium security - delete session info if session cookie has
             //                   expired or user decided not to remember
             //                   themself
-            $where = "WHERE (pn_remembersess = 0
-                        AND pn_lastused < " . (time() - ($pnSession_systemArgs['inactivityTimeout'] * 60)) . ")
-                      OR pn_firstused < " . (time() - ($pnSession_systemArgs['duration'] * 86400));
+            $where = "WHERE (xar_remembersess = 0
+                        AND xar_lastused < " . (time() - ($xarSession_systemArgs['inactivityTimeout'] * 60)) . ")
+                      OR xar_firstused < " . (time() - ($xarSession_systemArgs['duration'] * 86400));
             break;
         case 'High':
         default:
             // High security - delete session info if user is inactive
-            $where = "WHERE pn_lastused < " . (time() - ($pnSession_systemArgs['inactivityTimeout'] * 60));
+            $where = "WHERE xar_lastused < " . (time() - ($xarSession_systemArgs['inactivityTimeout'] * 60));
             break;
     }
     $query = "DELETE FROM $sessioninfoTable $where";

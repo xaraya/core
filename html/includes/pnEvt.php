@@ -25,13 +25,13 @@
  * @param args['loadLevel']
  * returns bool
  */
-function pnEvt_init($args)
+function xarEvt_init($args)
 {
-    global $pnEvt_subscribed, $pnEvt_knownEvents;
+    global $xarEvt_subscribed, $xarEvt_knownEvents;
 
-    $pnEvt_subscribed = array();
+    $xarEvt_subscribed = array();
 
-    $pnEvt_knownEvents = array();
+    $xarEvt_knownEvents = array();
 
     return true;
 }
@@ -45,17 +45,17 @@ function pnEvt_init($args)
  * @param modType
  * @returns
  */
-function pnEvtSubscribe($eventName, $modName, $modType)
+function xarEvtSubscribe($eventName, $modName, $modType)
 {
-    global $pnEvt_subscribed;
-    if (!pnEvt__checkEvent($eventName)) {
-        $msg = pnML('Unknown event.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+    global $xarEvt_subscribed;
+    if (!xarEvt__checkEvent($eventName)) {
+        $msg = xarML('Unknown event.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                        new SystemException($msg));
         return;
     }
 
-    $pnEvt_subscribed[$eventName][] = array($modName, $modType);
+    $xarEvt_subscribed[$eventName][] = array($modName, $modType);
 }
 
 /**
@@ -67,41 +67,41 @@ function pnEvtSubscribe($eventName, $modName, $modType)
  * @param modType
  * @returns
  */
-function pnEvtUnsubscribe($eventName, $modName, $modType)
+function xarEvtUnsubscribe($eventName, $modName, $modType)
 {
-    global $pnEvt_subscribed;
-    if (!isset($pnEvt_subscribed[$eventName])) return;
+    global $xarEvt_subscribed;
+    if (!isset($xarEvt_subscribed[$eventName])) return;
 
-    for ($i = 0; $i < count($pnEvt_subscribed[$eventName]); $i++) {
-        list($mn, $mt) = $pnEvt_subscribed[$eventName][$i];
+    for ($i = 0; $i < count($xarEvt_subscribed[$eventName]); $i++) {
+        list($mn, $mt) = $xarEvt_subscribed[$eventName][$i];
         if ($modName == $mn && $modType == $mt) {
-            unset($pnEvt_subscribed[$eventName][$i]);
+            unset($xarEvt_subscribed[$eventName][$i]);
             break;
         }
     }
 }
 
 // PROTECTED FUNCTIONS
-function pnEvt_fire($eventName, $value = NULL)
+function xarEvt_fire($eventName, $value = NULL)
 {
-    global $pnEvt_subscribed;
-    if (!isset($pnEvt_subscribed[$eventName])) return;
+    global $xarEvt_subscribed;
+    if (!isset($xarEvt_subscribed[$eventName])) return;
 
-    for ($i = 0; $i < count($pnEvt_subscribed[$eventName]); $i++) {
-        $funcName = $pnEvt_subscribed[$eventName][$i];
+    for ($i = 0; $i < count($xarEvt_subscribed[$eventName]); $i++) {
+        $funcName = $xarEvt_subscribed[$eventName][$i];
         if (is_array($funcName)) {
             list($modName, $modType) = $funcName;
 
-            pnModFunc($modName, $modType, '_On'.$eventName, array('value'=>$value));
-            if (pnExceptionMajor() != PN_NO_EXCEPTION) {
-                if (pnExceptionId() == 'MODULE_FUNCTION_NOT_EXIST') {
-                    pnExceptionFree();
+            xarModFunc($modName, $modType, '_On'.$eventName, array('value'=>$value));
+            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+                if (xarExceptionId() == 'MODULE_FUNCTION_NOT_EXIST') {
+                    xarExceptionFree();
                 } else {
                     return; // throw back
                 }
             }
-            pnModFunc($modName, $modType, '_OnEvent', array('eventName'=>$eventName, 'value'=>$value));
-            if (pnExceptionMajor() != PN_NO_EXCEPTION) {
+            xarModFunc($modName, $modType, '_OnEvent', array('eventName'=>$eventName, 'value'=>$value));
+            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back
             }
         } else {
@@ -114,48 +114,48 @@ function pnEvt_fire($eventName, $value = NULL)
 
 }
 
-function pnEvt_notify($modName, $modType, $eventName, $value)
+function xarEvt_notify($modName, $modType, $eventName, $value)
 {
-    pnModFunc($modName, $modType, '_On'.$eventName, array('value'=>$value));
-    if (pnExceptionMajor() != PN_NO_EXCEPTION) {
-        if (pnExceptionId() == 'MODULE_FUNCTION_NOT_EXIST') {
-            pnExceptionFree();
+    xarModFunc($modName, $modType, '_On'.$eventName, array('value'=>$value));
+    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        if (xarExceptionId() == 'MODULE_FUNCTION_NOT_EXIST') {
+            xarExceptionFree();
         } else {
             return; // throw back
         }
     }
-    pnModFunc($modName, $modType, '_OnEvent', array('eventName'=>$eventName, 'value'=>$value));
-    if (pnExceptionMajor() != PN_NO_EXCEPTION) {
-        if (pnExceptionId() == 'MODULE_FUNCTION_NOT_EXIST') {
-            pnExceptionFree();
+    xarModFunc($modName, $modType, '_OnEvent', array('eventName'=>$eventName, 'value'=>$value));
+    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        if (xarExceptionId() == 'MODULE_FUNCTION_NOT_EXIST') {
+            xarExceptionFree();
         } else {
             return; // throw back
         }
     }
 }
 
-function pnEvt_subscribeRawCallback($eventName, $funcName)
+function xarEvt_subscribeRawCallback($eventName, $funcName)
 {
-    global $pnEvt_subscribed;
-    if (!pnEvt__checkEvent($eventName)) {
-        pnCore_die("pnEvt_subscribeRawCallback: Cannot subscribe to unexistent event $eventName.");
+    global $xarEvt_subscribed;
+    if (!xarEvt__checkEvent($eventName)) {
+        xarCore_die("xarEvt_subscribeRawCallback: Cannot subscribe to unexistent event $eventName.");
     }
 
-    $pnEvt_subscribed[$eventName][] = $funcName;
+    $xarEvt_subscribed[$eventName][] = $funcName;
 }
 
-function pnEvt_registerEvent($eventName)
+function xarEvt_registerEvent($eventName)
 {
-    global $pnEvt_knownEvents;
-    $pnEvt_knownEvents[$eventName] = true;
+    global $xarEvt_knownEvents;
+    $xarEvt_knownEvents[$eventName] = true;
 }
 
 // PRIVATE FUNCTIONS
 
-function pnEvt__checkEvent($eventName)
+function xarEvt__checkEvent($eventName)
 {
-    global $pnEvt_knownEvents;
-    return isset($pnEvt_knownEvents[$eventName]);
+    global $xarEvt_knownEvents;
+    return isset($xarEvt_knownEvents[$eventName]);
     /*
     Current list is:
     ModLoad

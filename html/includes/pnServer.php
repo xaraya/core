@@ -9,18 +9,18 @@
 // Purpose of file: HTTP Protocol Server/Request/Response utilities
 // ----------------------------------------------------------------------
 
-function pnSerReqRes_init($args)
+function xarSerReqRes_init($args)
 {
-    global $pnRequest_allowShortURLs, $pnRequest_defaultModule,
-           $pnRequest_shortURLVariables;
+    global $xarRequest_allowShortURLs, $xarRequest_defaultModule,
+           $xarRequest_shortURLVariables;
 
-    $pnRequest_allowShortURLs = $args['enableShortURLsSupport'];
+    $xarRequest_allowShortURLs = $args['enableShortURLsSupport'];
 
-    $pnRequest_defaultModule = array('module' => $args['defaultModuleName'],
+    $xarRequest_defaultModule = array('module' => $args['defaultModuleName'],
                                      'type' => $args['defaultModuleType'],
                                      'func' => $args['defaultModuleFunction']);
 
-    $pnRequest_shortURLVariables = array();
+    $xarRequest_shortURLVariables = array();
 
     return true;
 }
@@ -36,7 +36,7 @@ function pnSerReqRes_init($args)
  * @param name the name of the variable
  * @return mixed value of the variable, or void if variable doesn't exist
  */
-function pnServerGetVar($name)
+function xarServerGetVar($name)
 {
     if (isset($_SERVER[$name])) {
         return $_SERVER[$name];
@@ -66,10 +66,10 @@ function pnServerGetVar($name)
  * @returns string
  * @return base URI for PostNuke
  */
-function pnServerGetBaseURI()
+function xarServerGetBaseURI()
 {
     // Get the name of this URI
-    $path = pnServerGetVar('REQUEST_URI');
+    $path = xarServerGetVar('REQUEST_URI');
 
 //    if ((empty($path)) ||
 //        (substr($path, -1, 1) == '/')) {
@@ -77,11 +77,11 @@ function pnServerGetBaseURI()
     if (empty($path)) {
         // REQUEST_URI was empty or pointed to a path
         // Try looking at PATH_INFO
-        $path = pnServerGetVar('PATH_INFO');
+        $path = xarServerGetVar('PATH_INFO');
         if (empty($path)) {
             // No luck there either
             // Try SCRIPT_NAME
-            $path = pnServerGetVar('SCRIPT_NAME');
+            $path = xarServerGetVar('SCRIPT_NAME');
         }
     }
 
@@ -107,10 +107,10 @@ function pnServerGetBaseURI()
  * @returns string
  * @return base URL for PostNuke
  */
-function pnServerGetBaseURL()
+function xarServerGetBaseURL()
 {
-    $server = pnServerGetVar('HTTP_HOST');
-    $isHTTPS = pnServerGetVar('HTTPS');
+    $server = xarServerGetVar('HTTP_HOST');
+    $isHTTPS = xarServerGetVar('HTTPS');
 
     // IIS seems to set HTTPS = off for some reason
     if (!empty($isHTTPS) && $isHTTPS != 'off') {
@@ -119,7 +119,7 @@ function pnServerGetBaseURL()
         $proto = 'http://';
     }
 
-    $path = pnServerGetBaseURI();
+    $path = xarServerGetBaseURI();
 
     // TODO : this still doesn't work for non-standard ports !
     return "$proto$server$path/";
@@ -133,15 +133,15 @@ function pnServerGetBaseURL()
  * @returns string
  * @return current URL
  */
-function pnServerGetCurrentURL($args = array())
+function xarServerGetCurrentURL($args = array())
 {
     // get base URL
-    $baseurl = pnServerGetBaseURL();
+    $baseurl = xarServerGetBaseURL();
     // strip off everything except protocol, server (and port)
     $baseurl = preg_replace('#^(https?://[^/]+)/.*$#','\\1',$baseurl);
 
     // get current URI
-    $request = pnServerGetVar('REQUEST_URI');
+    $request = xarServerGetVar('REQUEST_URI');
 // TODO: cfr. BaseURI() for other possible ways, or try PHP_SELF
     if (empty($request)) {
         $request = '/';
@@ -172,14 +172,14 @@ function pnServerGetCurrentURL($args = array())
 
 // REQUEST FUNCTIONS
 
-function pnRequestGetVar($name, $allowOnlyMethod = NULL)
+function xarRequestGetVar($name, $allowOnlyMethod = NULL)
 {
-    global $pnRequest_shortURLVariables, $pnRequest_allowShortURLs;
+    global $xarRequest_shortURLVariables, $xarRequest_allowShortURLs;
 
     if ($allowOnlyMethod == 'GET') {
         // Short URLs variables override GET variables
-        if ($pnRequest_allowShortURLs && isset($pnRequest_shortURLVariables[$name])) {
-            $value = $pnRequest_shortURLVariables[$name];
+        if ($xarRequest_allowShortURLs && isset($xarRequest_shortURLVariables[$name])) {
+            $value = $xarRequest_shortURLVariables[$name];
         // Then check in $_GET
         } elseif (isset($_GET[$name])) {
             $value = $_GET[$name];
@@ -206,8 +206,8 @@ function pnRequestGetVar($name, $allowOnlyMethod = NULL)
     } else {
 // TODO: change order (POST normally overrides GET)
         // Short URLs variables override GET and POST variables
-        if ($pnRequest_allowShortURLs && isset($pnRequest_shortURLVariables[$name])) {
-            $value = $pnRequest_shortURLVariables[$name];
+        if ($xarRequest_allowShortURLs && isset($xarRequest_shortURLVariables[$name])) {
+            $value = $xarRequest_shortURLVariables[$name];
             $method = 'GET';
         // Then check in $_GET
         } elseif (isset($_GET[$name])) {
@@ -231,10 +231,10 @@ function pnRequestGetVar($name, $allowOnlyMethod = NULL)
         }
     }
 
-    $value = pnMLS_convertFromInput($value, $method);
+    $value = xarMLS_convertFromInput($value, $method);
 
     if (get_magic_quotes_gpc()) {
-        pnVar_stripSlashes($value);
+        xarVar_stripSlashes($value);
     }
 
     return $value;
@@ -248,9 +248,9 @@ function pnRequestGetVar($name, $allowOnlyMethod = NULL)
  * @returns array
  * @return requested module, type and func
  */
-function pnRequestGetInfo()
+function xarRequestGetInfo()
 {
-    global $pnRequest_allowShortURLs, $pnRequest_defaultModule;
+    global $xarRequest_allowShortURLs, $xarRequest_defaultModule;
 
     static $requestInfo = NULL;
     if (is_array($requestInfo)) {
@@ -258,10 +258,10 @@ function pnRequestGetInfo()
     }
 
     // Get variables
-    // FIXME: <marco> Do we want to use pnVarCleanUntrusted here?
-    $modName =  pnVarCleanUntrusted(pnRequestGetVar('module'));
-    $modType =  pnVarCleanUntrusted(pnRequestGetVar('type'));
-    $funcName = pnVarCleanUntrusted(pnRequestGetVar('func'));
+    // FIXME: <marco> Do we want to use xarVarCleanUntrusted here?
+    $modName =  xarVarCleanUntrusted(xarRequestGetVar('module'));
+    $modType =  xarVarCleanUntrusted(xarRequestGetVar('type'));
+    $funcName = xarVarCleanUntrusted(xarRequestGetVar('func'));
     // Defaults for variables
     if (empty($modType)) {
         $modType = 'user';
@@ -272,13 +272,13 @@ function pnRequestGetInfo()
 
     // Example of short URL support :
     //
-    // index.php/<module>/<something translated in pnuserapi.php of that module>, or
-    // index.php/<module>/admin/<something translated in pnadminapi.php>
+    // index.php/<module>/<something translated in xaruserapi.php of that module>, or
+    // index.php/<module>/admin/<something translated in xaradminapi.php>
     //
     // We rely on function <module>_<type>_decode_shorturl() to translate PATH_INFO
     // into something the module can work with for the input variables.
     // On output, the short URLs are generated by <module>_<type>_encode_shorturl(),
-    // that is called automatically by pnModURL().
+    // that is called automatically by xarModURL().
     //
     // Short URLs are enabled/disabled globally based on a base configuration
     // setting, and can be disabled per module via its admin configuration
@@ -286,11 +286,11 @@ function pnRequestGetInfo()
     // TODO: evaluate and improve this, obviously :-)
     // + check security impact of people combining PATH_INFO with func/type param
 
-    if ($pnRequest_allowShortURLs && empty($modName)) {
-        $path = pnServerGetVar('PATH_INFO');
+    if ($xarRequest_allowShortURLs && empty($modName)) {
+        $path = xarServerGetVar('PATH_INFO');
         if (!empty($path)) {
-            // FIXME: <marco> Do we want to use pnVarCleanUntrusted here?
-            $path = pnVarCleanUntrusted($path);
+            // FIXME: <marco> Do we want to use xarVarCleanUntrusted here?
+            $path = xarVarCleanUntrusted($path);
             $path = trim($path, '/');
             $params = explode('/', $path);
             if (count($params) > 0 &&
@@ -307,42 +307,42 @@ function pnRequestGetInfo()
                 }
                 // FIXME: <marco> Investigate this aliases thing before to integrate and promote it!
                 // Check if this is an alias for some other module
-                $modName = pnModGetAlias($modName);
+                $modName = xarModGetAlias($modName);
                 // Call the appropriate decode_shorturl function
-                if (pnModGetVar($modName, 'SupportShortURLs') &&
-                    pnModAPILoad($modName, $modType)) {
+                if (xarModGetVar($modName, 'SupportShortURLs') &&
+                    xarModAPILoad($modName, $modType)) {
 
-                    $res = pnModAPIFunc($modName, $modType, 'decode_shorturl', $params);
+                    $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params);
                     if (is_array($res)) {
                         list($funcName, $args) = $res;
                         if (!empty($funcName)) { // bingo
-                            // Forward decoded args to pnRequestGetVar
+                            // Forward decoded args to xarRequestGetVar
                             if (isset($args) && is_array($args)) {
                                 $args['module'] = $modName;
                                 $args['type'] = $modType;
                                 $args['func'] = $funcName;
-                                pnRequest__setShortURLVars($args);
+                                xarRequest__setShortURLVars($args);
                             } else {
-                                pnRequest__setShortURLVars(array('module' => $modName,
+                                xarRequest__setShortURLVars(array('module' => $modName,
                                                                  'type' => $modType,
                                                                  'func' => $funcName));
                             }
                         }
                     }
                 }
-                if (pnExceptionMajor() != PN_NO_EXCEPTION) {
+                if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
                     // If exceptionId is MODULE_FUNCTION_NOT_EXIST there's no problem,
                     // this exception means that the module does not support short urls
                     // for this $modType.
                     // If exceptionId is MODULE_FILE_NOT_EXIST there's no problem too,
                     // this exception means that the module does not have the $modType API.
-                    if (pnExceptionId() != 'MODULE_FUNCTION_NOT_EXIST' &&
-                        pnExceptionId() != 'MODULE_FILE_NOT_EXIST') {
+                    if (xarExceptionId() != 'MODULE_FUNCTION_NOT_EXIST' &&
+                        xarExceptionId() != 'MODULE_FILE_NOT_EXIST') {
                         // In all other cases we just log the exception since we must always
                         // return a valid request info.
-                        pnLogException(PNDBG_LEVEL_ERROR);
+                        xarLogException(XARDBG_LEVEL_ERROR);
                     }
-                    pnExceptionFree();
+                    xarExceptionFree();
                 }
             }
         }
@@ -350,9 +350,9 @@ function pnRequestGetInfo()
 
     // If $modName is still empty we use the default module/type/func to be loaded in that such case
     if (empty($modName)) {
-        $modName = $pnRequest_defaultModule['module'];
-        if (isset($pnRequest_defaultModule['type'])) $modType = $pnRequest_defaultModule['type'];
-        if (isset($pnRequest_defaultModule['func'])) $funcName = $pnRequest_defaultModule['func'];
+        $modName = $xarRequest_defaultModule['module'];
+        if (isset($xarRequest_defaultModule['type'])) $modType = $xarRequest_defaultModule['type'];
+        if (isset($xarRequest_defaultModule['func'])) $funcName = $xarRequest_defaultModule['func'];
     }
 
     // Cache values into info static var
@@ -367,10 +367,10 @@ function pnRequestGetInfo()
  * @returns bool
  * @return true if locally referred, false if not
  */
-function pnRequestIsLocalReferer()
+function xarRequestIsLocalReferer()
 {
-    $server = pnServerGetVar('HTTP_HOST');
-    $referer = pnServerGetVar('HTTP_REFERER');
+    $server = xarServerGetVar('HTTP_HOST');
+    $referer = xarServerGetVar('HTTP_REFERER');
 
     if (!empty($referer) && preg_match("!^https?://$server(:\d+|)/!", $referer)) {
         return true;
@@ -381,11 +381,11 @@ function pnRequestIsLocalReferer()
 
 // REQUEST PRIVATE FUNCTIONS
 
-function pnRequest__setShortURLVars($vars)
+function xarRequest__setShortURLVars($vars)
 {
-    global $pnRequest_shortURLVariables;
+    global $xarRequest_shortURLVariables;
 
-    $pnRequest_shortURLVariables = $vars;
+    $xarRequest_shortURLVariables = $vars;
 }
 
 // RESPONSE FUNCTIONS
@@ -397,13 +397,13 @@ function pnRequest__setShortURLVars($vars)
  * @param the URL to redirect to
  * @returns bool
  */
-function pnResponseRedirect($redirectURL)
+function xarResponseRedirect($redirectURL)
 {
-    global $pnResponse_redirectCalled;
-    if (isset($pnResponse_redirectCalled) && $pnResponse_redirectCalled == true) {
+    global $xarResponse_redirectCalled;
+    if (isset($xarResponse_redirectCalled) && $xarResponse_redirectCalled == true) {
         if (headers_sent() == true) return false;
     }
-    $pnResponse_redirectCalled = true;
+    $xarResponse_redirectCalled = true;
 
     if (preg_match('!^http!', $redirectURL)) {
         // Absolute URL - simple redirect
@@ -414,7 +414,7 @@ function pnResponseRedirect($redirectURL)
         $redirectURL = preg_replace('!^/*!', '', $redirectURL);
 
         // Get base URL
-        $baseurl = pnServerGetBaseURL();
+        $baseurl = xarServerGetBaseURL();
 
         $header = "Location: $baseurl$redirectURL";
     }
@@ -431,10 +431,10 @@ function pnResponseRedirect($redirectURL)
  * @author Marco Canini
  * @returns bool
  */
-function pnResponseIsRedirected()
+function xarResponseIsRedirected()
 {
-    global $pnResponse_redirectCalled;
-    if (isset($pnResponse_redirectCalled) && $pnResponse_redirectCalled == true) {
+    global $xarResponse_redirectCalled;
+    if (isset($xarResponse_redirectCalled) && $xarResponse_redirectCalled == true) {
         return true;
     }
     return false;

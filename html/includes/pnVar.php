@@ -19,43 +19,43 @@
  * @returns
  * @returns
  */
-function pnVar_init($args)
+function xarVar_init($args)
 {
-    global $pnVar_allowableHTML, $pnVar_fixHTMLEntities,
-           $pnVar_enableCensoringWords, $pnVar_censoredWords,
-           $pnVar_censoredWordsReplacers;
+    global $xarVar_allowableHTML, $xarVar_fixHTMLEntities,
+           $xarVar_enableCensoringWords, $xarVar_censoredWords,
+           $xarVar_censoredWordsReplacers;
     /*
-    $pnVar_allowableHTML = $args['allowableHTML'];
-    $pnVar_fixHTMLEntities = $args['fixHTMLEntities'];
+    $xarVar_allowableHTML = $args['allowableHTML'];
+    $xarVar_fixHTMLEntities = $args['fixHTMLEntities'];
 
-    $pnVar_enableCensoringWords = $args['enableCensoringWords'];
-    $pnVar_censoredWords = $args['censoredWords'];
-    $pnVar_censoredWordsReplacers = $args['censoredWordsReplacers'];
+    $xarVar_enableCensoringWords = $args['enableCensoringWords'];
+    $xarVar_censoredWords = $args['censoredWords'];
+    $xarVar_censoredWordsReplacers = $args['censoredWordsReplacers'];
 
     return true;
     */
 
-    $pnVar_allowableHTML = pnConfigGetVar('Site.Core.AllowableHTML');
-    if (!isset($pnVar_allowableHTML) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $xarVar_allowableHTML = xarConfigGetVar('Site.Core.AllowableHTML');
+    if (!isset($xarVar_allowableHTML) && xarExceptionMajor() != PN_NO_EXCEPTION) {
         return; // throw back exception
     }
 
-    $pnVar_fixHTMLEntities = pnConfigGetVar('Site.Core.FixHTMLEntities');
-    if (!isset($pnVar_fixHTMLEntities) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $xarVar_fixHTMLEntities = xarConfigGetVar('Site.Core.FixHTMLEntities');
+    if (!isset($xarVar_fixHTMLEntities) && xarExceptionMajor() != PN_NO_EXCEPTION) {
         return; // throw back exception
     }
 
-    $pnVar_enableCensoringWords = pnConfigGetVar('Site.Core.EnableCensoring');
-    if (!isset($pnVar_enableCensoringWords) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $xarVar_enableCensoringWords = xarConfigGetVar('Site.Core.EnableCensoring');
+    if (!isset($xarVar_enableCensoringWords) && xarExceptionMajor() != PN_NO_EXCEPTION) {
         return; // throw back exception
     }
 
-    $pnVar_censoredWords = pnConfigGetVar('Site.Core.CensoredWords');
-    if (!isset($pnVar_censoredWords) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $xarVar_censoredWords = xarConfigGetVar('Site.Core.CensoredWords');
+    if (!isset($xarVar_censoredWords) && xarExceptionMajor() != PN_NO_EXCEPTION) {
         return; // throw back exception
     }
-    $pnVar_censoredWordsReplacers = pnConfigGetVar('Site.Core.CensoredWordReplacers');
-    if (!isset($pnVar_censoredWordsReplacers) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $xarVar_censoredWordsReplacers = xarConfigGetVar('Site.Core.CensoredWordReplacers');
+    if (!isset($xarVar_censoredWordsReplacers) && xarExceptionMajor() != PN_NO_EXCEPTION) {
         return; // throw back exception
     }
 
@@ -73,7 +73,7 @@ function pnVar_init($args)
  * @returns string
  * @return prepared variable
  */
-function pnVarCleanUntrusted($var)
+function xarVarCleanUntrusted($var)
 {
     $search = array('|</?\s*SCRIPT.*?>|si',
                     '|</?\s*FRAME.*?>|si',
@@ -104,7 +104,7 @@ function pnVarCleanUntrusted($var)
  * in, otherwise an array of prepared variables
  */
 // FIXME: <marco> This function will not work is the security system is not loaded!
-function pnVarCleanFromInput()
+function xarVarCleanFromInput()
 {
     $search = array('|</?\s*SCRIPT.*?>|si',
                     '|</?\s*FRAME.*?>|si',
@@ -124,14 +124,14 @@ function pnVarCleanFromInput()
             return;
         }
 
-        $var = pnRequestGetVar($name);
+        $var = xarRequestGetVar($name);
         if (!isset($var)) {
             array_push($resarray, NULL);
             continue;
         }
 
         // TODO: <marco> Document this security check!
-        if (!function_exists('pnSecAuthAction') || !pnSecAuthAction(0, '::', '::', ACCESS_ADMIN)) {
+        if (!function_exists('xarSecAuthAction') || !xarSecAuthAction(0, '::', '::', ACCESS_ADMIN)) {
             $var = preg_replace($search, $replace, $var);
         }
 
@@ -158,7 +158,7 @@ function pnVarCleanFromInput()
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  */
-function pnVarPrepForDisplay()
+function xarVarPrepForDisplay()
 {
     // This search and replace finds the text 'x@y' and replaces
     // it with HTML entities, this provides protection against
@@ -203,9 +203,9 @@ function pnVarPrepForDisplay()
  * in, otherwise an array of prepared variables
  * @raise DATABASE_ERROR, BAD_PARAM
  */
-function pnVarPrepHTMLDisplay()
+function xarVarPrepHTMLDisplay()
 {
-    global $pnVar_allowableHTML, $pnVar_fixHTMLEntities;
+    global $xarVar_allowableHTML, $xarVar_fixHTMLEntities;
 
     // This search and replace finds the text 'x@y' and replaces
     // it with HTML entities, this provides protection against
@@ -226,7 +226,7 @@ function pnVarPrepHTMLDisplay()
     if (!isset($allowedHTML)) {
         $allowedHTML = array();
 
-        foreach($pnVar_allowableHTML as $k=>$v) {
+        foreach($xarVar_allowableHTML as $k=>$v) {
             switch($v) {
                 case 0:
                     break;
@@ -259,7 +259,7 @@ function pnVarPrepHTMLDisplay()
                                . '>';", $var);
 
         // Fix entities if required
-        if ($pnVar_fixHTMLEntities) {
+        if ($xarVar_fixHTMLEntities) {
             $var = preg_replace('/&amp;([a-z#0-9]+);/i', "&\\1;", $var);
         }
 
@@ -286,7 +286,7 @@ function pnVarPrepHTMLDisplay()
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  */
-function pnVarPrepForStore()
+function xarVarPrepForStore()
 {
     $resarray = array();
     foreach (func_get_args() as $var) {
@@ -320,7 +320,7 @@ function pnVarPrepForStore()
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  */
-function pnVarPrepForOS()
+function xarVarPrepForOS()
 {
     static $search = array('!\.\./!si',  // .. (directory traversal)
                            '!^.*://!si', // .*:// (start of URL)
@@ -367,11 +367,11 @@ function pnVarPrepForOS()
  * in, otherwise an array of prepared variables
  * @raise DATABASE_ERROR, BAD_PARAM
  */
-function pnVarCensor()
+function xarVarCensor()
 {
-    global $pnVar_enableCensoringWords, $pnVar_censoredWords, $pnVar_censoredWordsReplacers;
+    global $xarVar_enableCensoringWords, $xarVar_censoredWords, $xarVar_censoredWordsReplacers;
 
-    if (!$pnVar_enableCensoringWords) {
+    if (!$xarVar_enableCensoringWords) {
         $args = func_get_args();
         if (func_num_args() == 1) {
             return $args[0];
@@ -391,7 +391,7 @@ function pnVarCensor()
                             '@',
                             '1');
 
-        foreach ($pnVar_censoredWords as $censoredWord) {
+        foreach ($xarVar_censoredWords as $censoredWord) {
             // Simple word
             $search[] = "/\b$censoredWord\b/i";
 
@@ -406,9 +406,9 @@ function pnVarCensor()
     $resarray = array();
     foreach (func_get_args() as $var) {
 
-        if ($pnVar_enableCensoringWords) {
+        if ($xarVar_enableCensoringWords) {
             // Parse out nasty words
-            $var = preg_replace($search, $pnVar_censoredWordsReplacers, $var);
+            $var = preg_replace($search, $xarVar_censoredWordsReplacers, $var);
         }
 
         // Add to array
@@ -430,15 +430,15 @@ function pnVarCensor()
  *
  * Example :
  *
- * if (pnVarIsCached('MyCache', 'myvar')) {
- *     $var = pnVarGetCached('MyCache', 'myvar');
+ * if (xarVarIsCached('MyCache', 'myvar')) {
+ *     $var = xarVarGetCached('MyCache', 'myvar');
  * }
  * ...
- * pnVarSetCached('MyCache', 'myvar', 'this value');
+ * xarVarSetCached('MyCache', 'myvar', 'this value');
  * ...
- * pnVarDelCached('MyCache', 'myvar');
+ * xarVarDelCached('MyCache', 'myvar');
  * ...
- * pnVarFlushCached('MyCache');
+ * xarVarFlushCached('MyCache');
  * ...
  *
  */
@@ -446,7 +446,7 @@ function pnVarCensor()
 /**
  * Initialise the variable cache
  */
-$GLOBALS['pnVar_cacheCollection'] = array();
+$GLOBALS['xarVar_cacheCollection'] = array();
 
 /**
  * check if the value of a variable is available in cache or not
@@ -457,14 +457,14 @@ $GLOBALS['pnVar_cacheCollection'] = array();
  * @returns bool
  * @return true if the variable is available in cache, false if not
  */
-function pnVarIsCached($cacheKey, $name)
+function xarVarIsCached($cacheKey, $name)
 {
-    global $pnVar_cacheCollection;
-    if (!isset($pnVar_cacheCollection[$cacheKey])) {
-        $pnVar_cacheCollection[$cacheKey] = array();
+    global $xarVar_cacheCollection;
+    if (!isset($xarVar_cacheCollection[$cacheKey])) {
+        $xarVar_cacheCollection[$cacheKey] = array();
         return false;
     }
-    return isset($pnVar_cacheCollection[$cacheKey][$name]);
+    return isset($xarVar_cacheCollection[$cacheKey][$name]);
 }
 
 /**
@@ -476,13 +476,13 @@ function pnVarIsCached($cacheKey, $name)
  * @returns mixed
  * @return value of the variable, or void if variable isn't cached
  */
-function pnVarGetCached($cacheKey, $name)
+function xarVarGetCached($cacheKey, $name)
 {
-    global $pnVar_cacheCollection;
-    if (!isset($pnVar_cacheCollection[$cacheKey][$name])) {
+    global $xarVar_cacheCollection;
+    if (!isset($xarVar_cacheCollection[$cacheKey][$name])) {
         return;
     }
-    return $pnVar_cacheCollection[$cacheKey][$name];
+    return $xarVar_cacheCollection[$cacheKey][$name];
 }
 
 /**
@@ -494,10 +494,10 @@ function pnVarGetCached($cacheKey, $name)
  * @param value the new value for that variable
  * @returns void
  */
-function pnVarSetCached($cacheKey, $name, $value)
+function xarVarSetCached($cacheKey, $name, $value)
 {
-    global $pnVar_cacheCollection;
-    $pnVar_cacheCollection[$cacheKey][$name] = $value;
+    global $xarVar_cacheCollection;
+    $xarVar_cacheCollection[$cacheKey][$name] = $value;
 }
 
 /**
@@ -508,12 +508,12 @@ function pnVarSetCached($cacheKey, $name, $value)
  * @param name the name of the variable in that particular cache
  * @returns void
  */
-function pnVarDelCached($cacheKey, $name)
+function xarVarDelCached($cacheKey, $name)
 {
-    global $pnVar_cacheCollection;
+    global $xarVar_cacheCollection;
     // TODO: check if we don't need to work with $GLOBALS here for some PHP ver
-    if (isset($pnVar_cacheCollection[$cacheKey][$name])) {
-        unset($pnVar_cacheCollection[$cacheKey][$name]);
+    if (isset($xarVar_cacheCollection[$cacheKey][$name])) {
+        unset($xarVar_cacheCollection[$cacheKey][$name]);
     }
 }
 
@@ -524,12 +524,12 @@ function pnVarDelCached($cacheKey, $name)
  * @param key the key identifying the particular cache you want to wipe out
  * @returns void
  */
-function pnVarFlushCached($cacheKey)
+function xarVarFlushCached($cacheKey)
 {
-    global $pnVar_cacheCollection;
+    global $xarVar_cacheCollection;
     // TODO: check if we don't need to work with $GLOBALS here for some PHP ver
-    if (isset($pnVar_cacheCollection[$cacheKey])) {
-        unset($pnVar_cacheCollection[$cacheKey]);
+    if (isset($xarVar_cacheCollection[$cacheKey])) {
+        unset($xarVar_cacheCollection[$cacheKey]);
     }
 }
 
@@ -538,17 +538,17 @@ function pnVarFlushCached($cacheKey)
 /**
  * stripslashes on multidimensional arrays.
  *
- * Used in conjunction with pnVarCleanFromInput
+ * Used in conjunction with xarVarCleanFromInput
  *
  * @access protected
  * @param any variables or arrays to be stripslashed
  */
-function pnVar_stripSlashes(&$var)
+function xarVar_stripSlashes(&$var)
 {
     if(!is_array($var)) {
         $var = stripslashes($var);
     } else {
-        array_walk($var,'pnVar_stripSlashes');
+        array_walk($var,'xarVar_stripSlashes');
     }
 }
 

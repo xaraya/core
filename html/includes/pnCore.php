@@ -13,9 +13,9 @@
  * Core version informations - should be upgraded on each release for
  * better control on config settings
  */
-define('PNCORE_VERSION_NUM', '0.8');
-define('PNCORE_VERSION_ID',  'Xaraya');
-define('PNCORE_VERSION_SUB', 'adam_baum');
+define('XARCORE_VERSION_NUM', '0.8');
+define('XARCORE_VERSION_ID',  'Xaraya');
+define('XARCORE_VERSION_SUB', 'adam_baum');
 
 /*
  * System dependencies for optional systems
@@ -50,34 +50,34 @@ define('PNCORE_VERSION_SUB', 'adam_baum');
  * system dependancies. (see system dependancy 
  * diagram above for more info). 
  */
-define('PNCORE_SYSTEM_NONE', 0);
-define('PNCORE_SYSTEM_ADODB', 1);
-define('PNCORE_SYSTEM_SESSION', 3);
-define('PNCORE_SYSTEM_USER', 7);
-define('PNCORE_SYSTEM_CONFIGURATION', 9);
-define('PNCORE_SYSTEM_BLOCKS', 25);
-define('PNCORE_SYSTEM_MODULES', 41);
-define('PNCORE_SYSTEM_ALL', 63); // bit OR of all optional systems
+define('XARCORE_SYSTEM_NONE', 0);
+define('XARCORE_SYSTEM_ADODB', 1);
+define('XARCORE_SYSTEM_SESSION', 3);
+define('XARCORE_SYSTEM_USER', 7);
+define('XARCORE_SYSTEM_CONFIGURATION', 9);
+define('XARCORE_SYSTEM_BLOCKS', 25);
+define('XARCORE_SYSTEM_MODULES', 41);
+define('XARCORE_SYSTEM_ALL', 63); // bit OR of all optional systems
 
  /*
  * In order for the bitwise operations to work, we need
  * the specific bits to test against - below
  * are the bits that will be tested against
  */ 
-define('PNCORE_BIT_NONE', 0x0);           // (00000000)
-define('PNCORE_BIT_ADODB', 0x1);          // (00000001)
-define('PNCORE_BIT_SESSION', 0x2);        // (00000010)
-define('PNCORE_BIT_USER', 0x4);           // (00000100)
-define('PNCORE_BIT_CONFIGURATION', 0x8);  // (00001000)
-define('PNCORE_BIT_BLOCKS', 0x10);        // (00010000)
-define('PNCORE_BIT_MODULES', 0x20);       // (00100000)
+define('XARCORE_BIT_NONE', 0x0);           // (00000000)
+define('XARCORE_BIT_ADODB', 0x1);          // (00000001)
+define('XARCORE_BIT_SESSION', 0x2);        // (00000010)
+define('XARCORE_BIT_USER', 0x4);           // (00000100)
+define('XARCORE_BIT_CONFIGURATION', 0x8);  // (00001000)
+define('XARCORE_BIT_BLOCKS', 0x10);        // (00010000)
+define('XARCORE_BIT_MODULES', 0x20);       // (00100000)
 
 /*
  * Debug flags
  */
-define('PNDBG_ACTIVE', 1);
-define('PNDBG_SQL', 2);
-define('PNDBG_EXCEPTIONS', 4);
+define('XARDBG_ACTIVE', 1);
+define('XARDBG_SQL', 2);
+define('XARDBG_EXCEPTIONS', 4);
 
 
 /**
@@ -88,15 +88,15 @@ define('PNDBG_EXCEPTIONS', 4);
  * @returns bool
  * @return true on success,false on failure
  */
-function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
+function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 {
     // FIXME: <marco> Shouldn't we use include instead of include_once?
-    // Since pnCoreInit is supposed to be called once per request there's
+    // Since xarCoreInit is supposed to be called once per request there's
     // no need to get this more overhead from include_once
     
     //Comment this line to disable debugging
-//    pnCoreActivateDebugger(PNDBG_EXCEPTIONS /*| PNDBG_SQL*/);
-    pnCoreActivateDebugger(PNDBG_SQL);
+//    xarCoreActivateDebugger(XARDBG_EXCEPTIONS /*| XARDBG_SQL*/);
+    xarCoreActivateDebugger(XARDBG_SQL);
 
     // Hack for some weird PHP systems that should have the
     // LC_* constants defined, but don't
@@ -105,153 +105,153 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
     }
 
     // Basic systems alway loaded
-    // {ML_dont_parse 'includes/pnLog.php'}
-    include_once 'includes/pnLog.php';
-    // {ML_dont_parse 'includes/pnEvt.php'}
-    include_once 'includes/pnEvt.php';
-    // {ML_dont_parse 'includes/pnException.php'}
-    include_once 'includes/pnException.php';
-    // {ML_dont_parse 'includes/pnVar.php'}
-    include_once 'includes/pnVar.php';
-    // {ML_dont_parse 'includes/pnServer.php'}
-    include_once 'includes/pnServer.php';
-    // {ML_dont_parse 'includes/pnMLS.php'}
-    include_once 'includes/pnMLS.php';
-    include_once 'includes/pnTemplate.php';
+    // {ML_dont_parse 'includes/xarLog.php'}
+    include_once 'includes/xarLog.php';
+    // {ML_dont_parse 'includes/xarEvt.php'}
+    include_once 'includes/xarEvt.php';
+    // {ML_dont_parse 'includes/xarException.php'}
+    include_once 'includes/xarException.php';
+    // {ML_dont_parse 'includes/xarVar.php'}
+    include_once 'includes/xarVar.php';
+    // {ML_dont_parse 'includes/xarServer.php'}
+    include_once 'includes/xarServer.php';
+    // {ML_dont_parse 'includes/xarMLS.php'}
+    include_once 'includes/xarMLS.php';
+    include_once 'includes/xarTemplate.php';
 
     // Legacy systems
     // {ML_dont_parse 'includes/pnHTML.php'}
     include_once 'includes/pnHTML.php';
-    // {ML_dont_parse 'includes/pnLegacy.php'}
+    // {ML_dont_parse 'includes/xarLegacy.php'}
     include_once 'includes/pnLegacy.php';
 
     // Initialise system args array
     //$systemArgs = array();
 
-    if ((int) $whatToLoad & PNCORE_BIT_ADODB) {
-        // {ML_dont_parse 'includes/pnDB.php'}
-        include_once 'includes/pnDB.php';
+    if ((int) $whatToLoad & XARCORE_BIT_ADODB) {
+        // {ML_dont_parse 'includes/xarDB.php'}
+        include_once 'includes/xarDB.php';
 
         // Decode encoded DB parameters
-        $userName = pnCore_getSystemVar('DB.UserName');
-        $password = pnCore_getSystemVar('DB.Password');
+        $userName = xarCore_getSystemVar('DB.UserName');
+        $password = xarCore_getSystemVar('DB.Password');
         $systemArgs = array('userName' => $userName,
                             'password' => $password,
-                            'databaseHost' => pnCore_getSystemVar('DB.Host'),
-                            'databaseType' => pnCore_getSystemVar('DB.Type'),
-                            'databaseName' => pnCore_getSystemVar('DB.Name'),
-                            'systemTablePrefix' => pnCore_getSystemVar('DB.TablePrefix'),
-                            'siteTablePrefix' => pnCore_getSiteVar('DB.TablePrefix'));
+                            'databaseHost' => xarCore_getSystemVar('DB.Host'),
+                            'databaseType' => xarCore_getSystemVar('DB.Type'),
+                            'databaseName' => xarCore_getSystemVar('DB.Name'),
+                            'systemTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'),
+                            'siteTablePrefix' => xarCore_getSiteVar('DB.TablePrefix'));
         // Connect to database
-        pnDB_init($systemArgs);
+        xarDB_init($systemArgs);
     }
 
     // Start Event Messaging System
     $systemArgs = array('loadLevel' => $whatToLoad);
-    pnEvt_init($systemArgs);
+    xarEvt_init($systemArgs);
 
-    pnEvt_registerEvent('PostBodyStart');
-    pnEvt_registerEvent('PreBodyEnd');
+    xarEvt_registerEvent('PostBodyStart');
+    xarEvt_registerEvent('PreBodyEnd');
 
     // Start Logging Facilities
-    $systemArgs = array('loggerName' => pnCore_getSiteVar('Log.LoggerName'),
-                        'loggerArgs' => pnCore_getSiteVar('Log.LoggerArgs'),
-                        'level' => pnCore_getSiteVar('Log.LogLevel'));
-    pnLog_init($systemArgs);
+    $systemArgs = array('loggerName' => xarCore_getSiteVar('Log.LoggerName'),
+                        'loggerArgs' => xarCore_getSiteVar('Log.LoggerArgs'),
+                        'level' => xarCore_getSiteVar('Log.LogLevel'));
+    xarLog_init($systemArgs);
 
     // Start Exception Handling System
-    $systemArgs = array('enablePHPErrorHandler' => pnCore_getSiteVar('Exception.EnablePHPErrorHandler'));
-    pnException_init($systemArgs);
+    $systemArgs = array('enablePHPErrorHandler' => xarCore_getSiteVar('Exception.EnablePHPErrorHandler'));
+    xarException_init($systemArgs);
 
     // Start Variables utilities
     // FIXME: <marco> No more sure of this!
     /*
-    $systemArgs = array('allowableHTML' => pnCore_getSiteVar('Var.AllowableHTML'),
-                        'fixHTMLEntities' => pnCore_getSiteVar('Var.FixHTMLEntities'),
-                        'enableCensoringWords' => pnCore_getSiteVar('Var.EnableCensoringWords'),
-                        'censoredWords' => pnCore_getSiteVar('Var.CensoredWords'),
-                        'censoredWordsReplacers' => pnCore_getSiteVar('Var.CensoredWordsReplacers'));
+    $systemArgs = array('allowableHTML' => xarCore_getSiteVar('Var.AllowableHTML'),
+                        'fixHTMLEntities' => xarCore_getSiteVar('Var.FixHTMLEntities'),
+                        'enableCensoringWords' => xarCore_getSiteVar('Var.EnableCensoringWords'),
+                        'censoredWords' => xarCore_getSiteVar('Var.CensoredWords'),
+                        'censoredWordsReplacers' => xarCore_getSiteVar('Var.CensoredWordsReplacers'));
     */
-    //pnVar_init($systemArgs);
+    //xarVar_init($systemArgs);
 
     // Start HTTP Protocol Server/Request/Response utilities
-    $systemArgs = array('enableShortURLsSupport' => pnCore_getSiteVar('Core.EnableShortURLsSupport'),
-                        'defaultModuleName' => pnCore_getSiteVar('Core.DefaultModuleName'),
-                        'defaultModuleType' => pnCore_getSiteVar('Core.DefaultModuleType'),
-                        'defaultModuleFunction' => pnCore_getSiteVar('Core.DefaultModuleFunction'));
-    pnSerReqRes_init($systemArgs);
+    $systemArgs = array('enableShortURLsSupport' => xarCore_getSiteVar('Core.EnableShortURLsSupport'),
+                        'defaultModuleName' => xarCore_getSiteVar('Core.DefaultModuleName'),
+                        'defaultModuleType' => xarCore_getSiteVar('Core.DefaultModuleType'),
+                        'defaultModuleFunction' => xarCore_getSiteVar('Core.DefaultModuleFunction'));
+    xarSerReqRes_init($systemArgs);
 
-    if ((int)$whatToLoad & PNCORE_BIT_SESSION) {
-        // {ML_dont_parse 'includes/pnSession.php'}
-        include_once 'includes/pnSession.php';
+    if ((int)$whatToLoad & XARCORE_BIT_SESSION) {
+        // {ML_dont_parse 'includes/xarSession.php'}
+        include_once 'includes/xarSession.php';
 
         // Start Session Support
-        $systemArgs = array('securityLevel' => pnCore_getSiteVar('Session.SecurityLevel'),
-                            'duration' => pnCore_getSiteVar('Session.Duration'),
-                            'enableIntranetMode' => pnCore_getSiteVar('Session.EnableIntranetMode'),
-                            'inactivityTimeout' => pnCore_getSiteVar('Session.InactivityTimeout'));
-        pnSession_init($systemArgs);
+        $systemArgs = array('securityLevel' => xarCore_getSiteVar('Session.SecurityLevel'),
+                            'duration' => xarCore_getSiteVar('Session.Duration'),
+                            'enableIntranetMode' => xarCore_getSiteVar('Session.EnableIntranetMode'),
+                            'inactivityTimeout' => xarCore_getSiteVar('Session.InactivityTimeout'));
+        xarSession_init($systemArgs);
     }
 
     // Start Multi Language System
-    $systemArgs = array('translationsBackend' => pnCore_getSiteVar('MLS.TranslationsBackend'),
-                        'MLSMode' => pnCore_getSiteVar('MLS.MLSMode'),
-                        'defaultLocale' => pnCore_getSiteVar('MLS.DefaultLocale'),
-                        'allowedLocales' => pnCore_getSiteVar('MLS.AllowedLocales'));
-    pnMLS_init($systemArgs);
+    $systemArgs = array('translationsBackend' => xarCore_getSiteVar('MLS.TranslationsBackend'),
+                        'MLSMode' => xarCore_getSiteVar('MLS.MLSMode'),
+                        'defaultLocale' => xarCore_getSiteVar('MLS.DefaultLocale'),
+                        'allowedLocales' => xarCore_getSiteVar('MLS.AllowedLocales'));
+    xarMLS_init($systemArgs);
 
     // allow theme override in URL first
-    $themeName = pnVarCleanFromInput('theme');
+    $themeName = xarVarCleanFromInput('theme');
     if (!empty($themeName)) {
-        $themeName = pnVarPrepForOS($themeName);
+        $themeName = xarVarPrepForOS($themeName);
     }
 
-    if ((int)$whatToLoad & PNCORE_BIT_CONFIGURATION) {
-        include_once 'includes/pnConfig.php';
+    if ((int)$whatToLoad & XARCORE_BIT_CONFIGURATION) {
+        include_once 'includes/xarConfig.php';
 
         // Start Configuration Unit
         $systemArgs = array();
-        pnConfig_init($systemArgs);
+        xarConfig_init($systemArgs);
 
-        pnVar_init(array());
+        xarVar_init(array());
 
         // Get theme from config FIXME: make sure this is site specific
         if (empty($themeName)) {
-            $configTheme = pnConfigGetVar('Site.BL.DefaultTheme');
+            $configTheme = xarConfigGetVar('Site.BL.DefaultTheme');
         }
     }
 
-    if ((int)$whatToLoad & PNCORE_BIT_MODULES) {
-        include_once 'includes/pnMod.php';
+    if ((int)$whatToLoad & XARCORE_BIT_MODULES) {
+        include_once 'includes/xarMod.php';
 
         // Start Modules Support
         // TODO: <marco> Figure out how to dynamically compute generateXMLURLs argument based on browser request
         // or XHTML site compliance. For now just pass false.
-        $systemArgs = array('enableShortURLsSupport' => pnCore_getSiteVar('Core.EnableShortURLsSupport'),
+        $systemArgs = array('enableShortURLsSupport' => xarCore_getSiteVar('Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => false);
-        pnMod_init($systemArgs);
+        xarMod_init($systemArgs);
     }
 
-    if ((int)$whatToLoad & PNCORE_BIT_USER) {
-        include_once 'includes/pnUser.php';
-        // {ML_dont_parse 'includes/pnSecurity.php'}
-        include_once 'includes/pnSecurity.php';
+    if ((int)$whatToLoad & XARCORE_BIT_USER) {
+        include_once 'includes/xarUser.php';
+        // {ML_dont_parse 'includes/xarSecurity.php'}
+        include_once 'includes/xarSecurity.php';
 
         // Start User System
-        $systemArgs = array('authenticationModules' => pnCore_getSiteVar('User.AuthenticationModules'));
-        pnUser_init($systemArgs);
+        $systemArgs = array('authenticationModules' => xarCore_getSiteVar('User.AuthenticationModules'));
+        xarUser_init($systemArgs);
 
         // Retrive user theme name
         if (empty($themeName)) {
-            $themeName = pnUser_getThemeName();
+            $themeName = xarUser_getThemeName();
         }
     }
 
-    if ((int)$whatToLoad & PNCORE_BIT_BLOCKS) {
-        include_once 'includes/pnBlocks.php';
+    if ((int)$whatToLoad & XARCORE_BIT_BLOCKS) {
+        include_once 'includes/xarBlocks.php';
         // Start Blocks Support Sytem
         $systemArgs = array();
-        pnBlock_init($systemArgs);
+        xarBlock_init($systemArgs);
     }
 
     // Might want to reorganize these theme details
@@ -261,11 +261,11 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
 
     if (empty($themeName)) {
         // Use the default theme for this site
-        $themeName = pnCore_getSiteVar('BL.DefaultTheme');
+        $themeName = xarCore_getSiteVar('BL.DefaultTheme');
     }
     $systemArgs = array('enableTemplatesCaching' => true);
-    $systemArgs['themeDirectory'] = pnCore_getSiteVar('BL.ThemesDirectory') . '/' . $themeName;
-    pnTpl_init($systemArgs);
+    $systemArgs['themeDirectory'] = xarCore_getSiteVar('BL.ThemesDirectory') . '/' . $themeName;
+    xarTpl_init($systemArgs);
 
     return true;
 }
@@ -277,7 +277,7 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
  * @returns string
  * @return the var directory path name
  */
-function pnCoreGetVarDirPath()
+function xarCoreGetVarDirPath()
 {
     if (file_exists('var/.key.php')) {
         include 'var/.key.php';
@@ -293,15 +293,15 @@ function pnCoreGetVarDirPath()
  * @param flags bit mask for the debugger flags to render actives
  * @returns void
  */
-function pnCoreActivateDebugger($flags)
+function xarCoreActivateDebugger($flags)
 {
-    global $pnDebug, $pnDebug_sqlCalls, $pnDebug_startTime;
-    $pnDebug = PNDBG_ACTIVE | $flags;
+    global $xarDebug, $xarDebug_sqlCalls, $xarDebug_startTime;
+    $xarDebug = XARDBG_ACTIVE | $flags;
     // Proper error reporting
     error_reporting(E_ALL);
-    $pnDebug_sqlCalls = 0;
+    $xarDebug_sqlCalls = 0;
     $lmtime = explode(' ', microtime());
-    $pnDebug_startTime = $lmtime[1] + $lmtime[0];
+    $xarDebug_startTime = $lmtime[1] + $lmtime[0];
 }
 
 /**
@@ -311,11 +311,11 @@ function pnCoreActivateDebugger($flags)
  * @returns bool
  * @return true if the debugger is active, false otherwise
  */
-function pnCoreIsDebuggerActive()
+function xarCoreIsDebuggerActive()
 {
-    global $pnDebug;
+    global $xarDebug;
 
-    return $pnDebug & PNDBG_ACTIVE;
+    return $xarDebug & XARDBG_ACTIVE;
 }
 
 /**
@@ -326,11 +326,11 @@ function pnCoreIsDebuggerActive()
  * @returns bool
  * @return true if the flag is active, false otherwise
  */
-function pnCoreIsDebugFlagSet($flag)
+function xarCoreIsDebugFlagSet($flag)
 {
-    global $pnDebug;
+    global $xarDebug;
 
-    return $pnDebug & $flag;
+    return $xarDebug & $flag;
 }
 
 // PROTECTED FUNCTIONS
@@ -343,22 +343,22 @@ function pnCoreIsDebugFlagSet($flag)
  * @returns mixed
  * @return variable on success, die with error on failure
  */
-function pnCore_getSystemVar($name)
+function xarCore_getSystemVar($name)
 {
     static $systemVars = NULL;
     if (!isset($systemVars)) {
         /*
-        $configLoader = new pnCore__ConfigFileLoader();
-        $fileName = pnCoreGetVarDirPath() . '/config.system.xml';
+        $configLoader = new xarCore__ConfigFileLoader();
+        $fileName = xarCoreGetVarDirPath() . '/config.system.xml';
         $configLoader->load($fileName);
         $systemVars = $configLoader->getConfigVars();
         */
-        $fileName = pnCoreGetVarDirPath() . '/config.system.php';
+        $fileName = xarCoreGetVarDirPath() . '/config.system.php';
         include $fileName;
         $systemVars = $systemConfiguration;
     }
     if (!isset($systemVars[$name])) {
-        pnCore_die("pnCore_getSystemVar: Unknown system variable: ".$name);
+        xarCore_die("xarCore_getSystemVar: Unknown system variable: ".$name);
     }
     return $systemVars[$name];
 }
@@ -371,21 +371,21 @@ function pnCore_getSystemVar($name)
  * @returns bool
  * @return variable on success, die with error on failure
  */
-function pnCore_getSiteVar($name)
+function xarCore_getSiteVar($name)
 {
     static $siteVars = NULL;
     if (!isset($siteVars)) {
-        $configLoader = new pnCore__ConfigFileLoader();
-        $serverName = pnServerGetVar('SERVER_NAME');
-        $fileName = pnCoreGetVarDirPath() . "/config.$serverName.xml";
+        $configLoader = new xarCore__ConfigFileLoader();
+        $serverName = xarServerGetVar('SERVER_NAME');
+        $fileName = xarCoreGetVarDirPath() . "/config.$serverName.xml";
         if (!file_exists($fileName)) {
-            $fileName = pnCoreGetVarDirPath() . "/config.site.xml";
+            $fileName = xarCoreGetVarDirPath() . "/config.site.xml";
         }
         $configLoader->load($fileName);
         $siteVars = $configLoader->getConfigVars();
     }
     if (!isset($siteVars[$name])) {
-        pnCore_die("pnCore_getSiteVar: Unknown site variable: ".$name);
+        xarCore_die("xarCore_getSiteVar: Unknown site variable: ".$name);
     }
     return $siteVars[$name];
 
@@ -397,27 +397,27 @@ function pnCore_getSiteVar($name)
  * @access protected
  * @returns void
  */
-function pnCore_disposeDebugger()
+function xarCore_disposeDebugger()
 {
-    global $pnDebug, $pnDebug_sqlCalls, $pnDebug_startTime;
-    if ($pnDebug & PNDBG_SQL) {
-        pnLogMessage("Total SQL queries: $pnDebug_sqlCalls.");
+    global $xarDebug, $xarDebug_sqlCalls, $xarDebug_startTime;
+    if ($xarDebug & XARDBG_SQL) {
+        xarLogMessage("Total SQL queries: $xarDebug_sqlCalls.");
     }
-    if ($pnDebug & PNDBG_ACTIVE) {
+    if ($xarDebug & XARDBG_ACTIVE) {
         $lmtime = explode(' ', microtime());
         $endTime = $lmtime[1] + $lmtime[0];
-        $totalTime = ($endTime - $pnDebug_startTime);
-        pnLogMessage("Response was served in $totalTime seconds.");
+        $totalTime = ($endTime - $xarDebug_startTime);
+        xarLogMessage("Response was served in $totalTime seconds.");
     }
 }
 
-function pnCore_die($msg)
+function xarCore_die($msg)
 {
     // TODO: <marco> Write a good text here! Can we send the 500 http code from php?
     $errPage = "<html><head><title>Fatal Error</title></head><body><p>
                 A fatal error occurred bla bla, we're sorry bla bla, retry,
                 or contact us bla bla</p>";
-    if (pnCoreIsDebuggerActive()) {
+    if (xarCoreIsDebuggerActive()) {
         $errPage .= "<p><b>Technical motivation is</b>: " . nl2br($msg) . "</p>";
     }
     $errPage .= "</body></html";
@@ -431,7 +431,7 @@ function pnCore_die($msg)
  * This class loads a configuration file and returns its content
  * in the form of a configuration array
  */
-class pnCore__ConfigFileLoader
+class xarCore__ConfigFileLoader
 {
     var $curNode;
     var $curData;
@@ -453,14 +453,14 @@ class pnCore__ConfigFileLoader
         xml_set_character_data_handler($this->parser, "characterData");
 
         if (!($fp = fopen($fileName, 'r'))) {
-            pnCore_die("pnCore__ConfigFileLoader: cannot open configuration file $fileName.");
+            xarCore_die("xarCore__ConfigFileLoader: cannot open configuration file $fileName.");
         }
 
         while ($data = fread($fp, 4096)) {
             if (!xml_parse($this->parser, $data, feof($fp))) {
                 $errstr = xml_error_string(xml_get_error_code($this->parser));
                 $line = xml_get_current_line_number($this->parser);
-                pnCore_die("pnCore__ConfigFileLoader: XML parser error in $fileName: $errstr at line $line.");
+                xarCore_die("xarCore__ConfigFileLoader: XML parser error in $fileName: $errstr at line $line.");
                 return;
             }
         }
@@ -481,25 +481,25 @@ class pnCore__ConfigFileLoader
         if ($tag == 'variable') {
             if (!isset($attribs['name'])) {
                 $line = xml_get_current_line_number($this->parser);
-                pnCore_die("pnCore__ConfigFileLoader: Invalid config variable in ".
+                xarCore_die("xarCore__ConfigFileLoader: Invalid config variable in ".
                     "$fileName at line $line: attribute 'name' not found.");
             }
             if (!isset($attribs['type'])) {
                 $line = xml_get_current_line_number($this->parser);
-                pnCore_die("pnCore__ConfigFileLoader: Invalid config variable in ".
+                xarCore_die("xarCore__ConfigFileLoader: Invalid config variable in ".
                     "$fileName at line $line: attribute 'type' not found.");
             }
             if ($attribs['type'] != 'string' && $attribs['type'] != 'boolean' &&
                 $attribs['type'] != 'args_string' && $attribs['type'] != 'scs_string' &&
                 $attribs['type'] != 'integer' && $attribs['type'] != 'double') {
                 $line = xml_get_current_line_number($this->parser);
-                pnCore_die("pnCore__ConfigFileLoader: Invalid config variable in ".
+                xarCore_die("xarCore__ConfigFileLoader: Invalid config variable in ".
                     "$fileName at line $line: unknown value for attribute 'type': $attribs[type].");
             }
             if (isset($attribs['encoded']) && $attribs['encoded'] == 'true') {
                 if ($attribs['type'] != 'string') {
                     $line = xml_get_current_line_number($this->parser);
-                    pnCore_die("pnCore__ConfigFileLoader: Invalid config variable in "
+                    xarCore_die("xarCore__ConfigFileLoader: Invalid config variable in "
                         ."$fileName at line $line: only variables of type string can be encoded.");
                 }
                 $encoded = true;

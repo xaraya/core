@@ -14,7 +14,7 @@
  * <br>
  * This function loads up ADODB  and starts the database
  * connection using the required parameters then it sets 
- * the table prefixes and pntables up and returns true
+ * the table prefixes and xartables up and returns true
  * <br>
  * @access private
  * @param args[databaseType] database type to use
@@ -27,10 +27,10 @@
  * @returns bool
  * @return true on success, false on failure
  */
-function pnDB_init($args)
+function xarDB_init($args)
 {
-    global $pnDB_systemArgs;
-    $pnDB_systemArgs = $args;
+    global $xarDB_systemArgs;
+    $xarDB_systemArgs = $args;
 
     // Get database parameters
     $dbtype = $args['databaseType'];
@@ -40,16 +40,16 @@ function pnDB_init($args)
     $dbpass = $args['password'];
     
     // Decode username and password if necessary
-    if (1 == pnCore_getSystemVar('DB.Encoded')) {
+    if (1 == xarCore_getSystemVar('DB.Encoded')) {
         $dbuname = base64_decode($dbuname);
         $dbpass  = base64_decode($dbpass);
     }
     // ADODB configuration
     if (!defined('ADODB_DIR')) {
-        define('ADODB_DIR', 'pnadodb');
+        define('ADODB_DIR', 'xaradodb');
     }
     
-    include_once 'pnadodb/adodb.inc.php';
+    include_once 'xaradodb/adodb.inc.php';
 
     // Database connection is a global (for now)
     global $dbconn;
@@ -58,7 +58,7 @@ function pnDB_init($args)
     $dbconn = ADONewConnection($dbtype);
     $dbh = $dbconn->Connect($dbhost, $dbuname, $dbpass, $dbname);
     if (!$dbh) {
-        pnCore_die("pnDB_init: Failed to connect to $dbtype://$dbuname@$dbhost/$dbname, error message: " . $dbconn->ErrorMsg());
+        xarCore_die("xarDB_init: Failed to connect to $dbtype://$dbuname@$dbhost/$dbname, error message: " . $dbconn->ErrorMsg());
     }
     global $ADODB_FETCH_MODE;
     $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
@@ -68,11 +68,11 @@ function pnDB_init($args)
         $dbconn->Execute("alter session set NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
     }
 
-    // Initialise pntables
-    // FIXME: <marco> Can we get rid of globale $prefix? $pntable should become $pnDB_tables
-    global $pntable, $prefix;
+    // Initialise xartables
+    // FIXME: <marco> Can we get rid of globale $prefix? $xartable should become $xarDB_tables
+    global $xartable, $prefix;
     $prefix = $args['systemTablePrefix'];
-    $pntable = array();
+    $xartable = array();
 
     $systemPrefix = $args['systemTablePrefix'];
     $sitePrefix   = $args['siteTablePrefix'];
@@ -82,15 +82,15 @@ function pnDB_init($args)
     // Core tables
 
     // BlockLayout Template Engine Tables
-    $pntable['template_tags']         = $systemPrefix . '_template_tags';
+    $xartable['template_tags']         = $systemPrefix . '_template_tags';
 
     // FIXME: <marco> I think that those tables are not part of core, and should go into
     //        their proper module
-    $pntable['admin_menu']            = $systemPrefix . '_admin_menu';
+    $xartable['admin_menu']            = $systemPrefix . '_admin_menu';
     // FIXME: <marco> I don't need this in MLS, should we drop it?
-    $pntable['languages']             = $systemPrefix . '_languages';
+    $xartable['languages']             = $systemPrefix . '_languages';
     // FIXME: <marco> Paul do we need it?
-    $pntable['userblocks']            = $systemPrefix . '_userblocks';
+    $xartable['userblocks']            = $systemPrefix . '_userblocks';
 
     return true;
 }
@@ -103,7 +103,7 @@ function pnDB_init($args)
  * @return array array of database connections
  * @returns
  */
-function pnDBGetConn()
+function xarDBGetConn()
 {
     global $dbconn;
 
@@ -117,11 +117,11 @@ function pnDBGetConn()
  * @param none
  * @return array array of database tables
  */
-function pnDBGetTables()
+function xarDBGetTables()
 {
-    global $pntable;
+    global $xartable;
 
-    return $pntable;
+    return $xartable;
 }
 
 /**
@@ -130,10 +130,10 @@ function pnDBGetTables()
  * @access public
  * @return true
  */
-function pnDBLoadTableMaintenanceAPI()
+function xarDBLoadTableMaintenanceAPI()
 {
     // Include Table Maintainance API file
-    include_once 'includes/pnTableDDL.php';
+    include_once 'includes/xarTableDDL.php';
 
     return true;
 }
@@ -145,11 +145,11 @@ function pnDBLoadTableMaintenanceAPI()
  * @returns string
  * @return database host
  */
-function pnDBGetHost()
+function xarDBGetHost()
 {
-    global $pnDB_systemArgs;
+    global $xarDB_systemArgs;
 
-    return $pnDB_systemArgs['databaseHost'];
+    return $xarDB_systemArgs['databaseHost'];
 }
 
 /**
@@ -158,11 +158,11 @@ function pnDBGetHost()
  * @access public
  * @return string database type
  */
-function pnDBGetType()
+function xarDBGetType()
 {
-    global $pnDB_systemArgs;
+    global $xarDB_systemArgs;
 
-    return $pnDB_systemArgs['databaseType'];
+    return $xarDB_systemArgs['databaseType'];
 }
 
 /**
@@ -171,11 +171,11 @@ function pnDBGetType()
  * @access public
  * @return string database name
  */
-function pnDBGetName()
+function xarDBGetName()
 {
-    global $pnDB_systemArgs;
+    global $xarDB_systemArgs;
 
-    return $pnDB_systemArgs['databaseName'];
+    return $xarDB_systemArgs['databaseName'];
 }
 
 /**
@@ -184,11 +184,11 @@ function pnDBGetName()
  * @access public
  * @return string database name
  */
-function pnDBGetSystemTablePrefix()
+function xarDBGetSystemTablePrefix()
 {
-    global $pnDB_systemArgs;
+    global $xarDB_systemArgs;
 
-    return $pnDB_systemArgs['systemTablePrefix'];
+    return $xarDB_systemArgs['systemTablePrefix'];
 }
 
 /**
@@ -197,11 +197,11 @@ function pnDBGetSystemTablePrefix()
  * @access public
  * @return string database name
  */
-function pnDBGetSiteTablePrefix()
+function xarDBGetSiteTablePrefix()
 {
-    global $pnDB_systemArgs;
+    global $xarDB_systemArgs;
 
-    return $pnDB_systemArgs['siteTablePrefix'];
+    return $xarDB_systemArgs['siteTablePrefix'];
 }
 
 // PROTECTED FUNCTIONS
@@ -212,11 +212,11 @@ function pnDBGetSiteTablePrefix()
  * @access private
  * @return array
  */
-function pnDB_importTables($tables)
+function xarDB_importTables($tables)
 {
-    global $pntable;
+    global $xartable;
     
-    $pntable = array_merge($pntable, $tables);
+    $xartable = array_merge($xartable, $tables);
 }
 
 ?>

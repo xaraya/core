@@ -9,14 +9,14 @@
 // Purpose of file: Configuration Unit
 // ----------------------------------------------------------------------
 
-function pnConfig_init($args)
+function xarConfig_init($args)
 {
     // Configuration Unit Tables
-    $sitePrefix = pnDBGetSiteTablePrefix();
+    $sitePrefix = xarDBGetSiteTablePrefix();
 
     $tables = array('config_vars' => $sitePrefix . '_config_vars');
 
-    pnDB_importTables($tables);
+    xarDB_importTables($tables);
 
     return true;
 }
@@ -29,7 +29,7 @@ function pnConfig_init($args)
  * @return mixed value of the variable, or void if variable doesn't exist
  * @raise DATABASE_ERROR, BAD_PARAM
  */
-function pnConfigGetVar($name)
+function xarConfigGetVar($name)
 {
     static $aliases = array('sitename' => 'Site.Core.SiteName',
                             'slogan' => 'Site.Core.Site.Slogan',
@@ -40,8 +40,8 @@ function pnConfigGetVar($name)
                             'Version_Sub' => 'System.Core.VersionSub');
 
     if (empty($name)) {
-        $msg = pnML('Empty name.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty name.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
@@ -50,45 +50,45 @@ function pnConfigGetVar($name)
         $name = $aliases[$name];
     }
 
-    if (pnVarIsCached('Config.Variables', $name)) {
-        return pnVarGetCached('Config.Variables', $name);
+    if (xarVarIsCached('Config.Variables', $name)) {
+        return xarVarGetCached('Config.Variables', $name);
     }
 
     if ($name == 'Site.DB.TablePrefix') {
-        return pnCore_getSiteVar('DB.TablePrefix');
+        return xarCore_getSiteVar('DB.TablePrefix');
     } elseif ($name == 'System.Core.VersionNumber') {
-        return PNCORE_VERSION_NUM;
+        return XARCORE_VERSION_NUM;
     } elseif ($name == 'System.Core.VersionId') {
-        return PNCORE_VERSION_ID;
+        return XARCORE_VERSION_ID;
     } elseif ($name == 'System.Core.VersionSub') {
-        return PNCORE_VERSION_SUB;
+        return XARCORE_VERSION_SUB;
     }
 
-    list($dbconn) = pnDBGetConn();
-    $tables = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
 
     $config_varsTable = $tables['config_vars'];
 
-    $query = "SELECT pn_value
+    $query = "SELECT xar_value
               FROM $config_varsTable
-              WHERE pn_name='" . pnVarPrepForStore($name) . "'";
+              WHERE xar_name='" . xarVarPrepForStore($name) . "'";
     $result = $dbconn->Execute($query);
 
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
         $msg.= $name;
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
     }
     if ($result->EOF) {
         $result->Close();
         // FIXME: <marco> Trying to force strong check over config var names
-        /*$msg = pnML('Unexistent config variable: #(1).', $name);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
+        /*$msg = xarML('Unexistent config variable: #(1).', $name);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
                        new SystemException($msg));
         return;*/
-        pnVarSetCached('Config.Variables', $name, NULL);
+        xarVarSetCached('Config.Variables', $name, NULL);
         return;
     }
 
@@ -100,7 +100,7 @@ function pnConfigGetVar($name)
     $value = unserialize($value);
 
     //Some caching
-    pnVarSetCached('Config.Variables', $name, $value);
+    xarVarSetCached('Config.Variables', $name, $value);
 
     return $value;
 }
@@ -114,25 +114,25 @@ function pnConfigGetVar($name)
  * @return bool true on success, or false if you're trying to set unallowed variables
  * @raise DATABASE_ERROR, BAD_PARAM
  */
-function pnConfigSetVar($name, $value)
+function xarConfigSetVar($name, $value)
 {
     if (empty($name)) {
-        $msg = pnML('Empty name.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty name.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
 
     // see if the variable has already been set
-    $oldValue = pnConfigGetVar($name);
+    $oldValue = xarConfigGetVar($name);
     $mustInsert = false;
     if (!isset($oldValue)) {
-        if (pnExceptionMajor()) return; // thorw back
+        if (xarExceptionMajor()) return; // thorw back
         $mustInsert = true;
     }
 
-    list($dbconn) = pnDBGetConn();
-    $tables = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
     $config_varsTable = $tables['config_vars'];
 
     //Here we serialize the configuration variables
@@ -145,29 +145,29 @@ function pnConfigSetVar($name, $value)
         //Insert
         $seqId = $dbconn->GenId($config_varsTable);
         $query = "INSERT INTO $config_varsTable
-                  (pn_id,
-                   pn_name,
-                   pn_value)
+                  (xar_id,
+                   xar_name,
+                   xar_value)
                   VALUES ('$seqId',
-                          '" . pnVarPrepForStore($name) . "',
-                          '" . pnVarPrepForStore($value). "')";
+                          '" . xarVarPrepForStore($name) . "',
+                          '" . xarVarPrepForStore($value). "')";
     } else {
          //Update
          $query = "UPDATE $config_varsTable
-                   SET pn_value='" . pnVarPrepForStore($value) . "'
-                   WHERE pn_name='" . pnVarPrepForStore($name) . "'";
+                   SET xar_value='" . xarVarPrepForStore($value) . "'
+                   WHERE xar_name='" . xarVarPrepForStore($name) . "'";
     }
 
     $dbconn->Execute($query);
     if($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
     }
 
     //Update configuration variables
-    pnVarSetCached('Config.Variables', $name, $value);
+    xarVarSetCached('Config.Variables', $name, $value);
 
     return true;
 }

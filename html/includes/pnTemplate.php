@@ -12,21 +12,21 @@
 //  Find specifications at the following address
 //  http://developer.hostnuke.com/modules.php?op=modload&name=Sections&file=index&req=viewarticle&artid=1&page=1
 
-function pnTpl_init($args)
+function xarTpl_init($args)
 {
-    global $pnTpl_cacheTemplates, $pnTpl_themeDir;
+    global $xarTpl_cacheTemplates, $xarTpl_themeDir;
 
-    $pnTpl_themeDir = $args['themeDirectory'];
-    if (!file_exists($pnTpl_themeDir)) {
-        pnCore_die("pnTpl_init: Unexistent theme directory '$pnTpl_themeDir'.");
+    $xarTpl_themeDir = $args['themeDirectory'];
+    if (!file_exists($xarTpl_themeDir)) {
+        xarCore_die("xarTpl_init: Unexistent theme directory '$xarTpl_themeDir'.");
     }
-    if (!is_writeable(pnCoreGetVarDirPath().'/cache/templates')) {
-        pnCore_die("pnTpl_init: Cannot write in cache/templates directory '".
-                   pnCoreGetVarDirPath().'/cache/templates'.
+    if (!is_writeable(xarCoreGetVarDirPath().'/cache/templates')) {
+        xarCore_die("xarTpl_init: Cannot write in cache/templates directory '".
+                   xarCoreGetVarDirPath().'/cache/templates'.
                    "'. Control directory permissions.");
     }
 
-    $pnTpl_cacheTemplates = $args['enableTemplatesCaching'];
+    $xarTpl_cacheTemplates = $args['enableTemplatesCaching'];
 }
 
 /**
@@ -41,30 +41,30 @@ function pnTpl_init($args)
  * @returns string
  * @return output of the template
  **/
-function pnTplModule($modName, $modType, $funcName, $tplData = array(), $templateName = NULL)
+function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templateName = NULL)
 {
-    global $pnTpl_themeDir;
+    global $xarTpl_themeDir;
 
     if (!empty($templateName)) {
-        $templateName = pnVarPrepForOS($templateName);
+        $templateName = xarVarPrepForOS($templateName);
     }
 
-    $modBaseInfo = pnMod_getBaseInfo($modName);
+    $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back
     $modOsDir = $modBaseInfo['osdirectory'];
 
     // Try theme template
-    $sourceFileName = "$pnTpl_themeDir/modules/$modOsDir/$modType-$funcName" . (empty($templateName) ? '.pnt' : "-$templateName.pnt");
+    $sourceFileName = "$xarTpl_themeDir/modules/$modOsDir/$modType-$funcName" . (empty($templateName) ? '.xar' : "-$templateName.xar");
     if (!file_exists($sourceFileName)) {
         // Use internal template
-        $sourceFileName = "modules/$modOsDir/pntemplates/$modType-$funcName" . (empty($templateName) ? '.pnd' : "-$templateName.pnd");
+        $sourceFileName = "modules/$modOsDir/xaremplates/$modType-$funcName" . (empty($templateName) ? '.xrd' : "-$templateName.xrd");
     }
 
     $tplData['_bl_module_name'] = $modName;
     $tplData['_bl_module_type'] = $modType;
     $tplData['_bl_module_func'] = $funcName;
     
-    return pnTpl__executeFromFile($sourceFileName, $tplData);
+    return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
 /**
@@ -78,36 +78,36 @@ function pnTplModule($modName, $modType, $funcName, $tplData = array(), $templat
  * @returns string
  * @return output of the template
  **/
-function pnTplBlock($modName, $blockName, $tplData = array(), $templateName = NULL)
+function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = NULL)
 {
-    global $pnTpl_themeDir;
+    global $xarTpl_themeDir;
 
     if (!empty($templateName)) {
-        $templateName = pnVarPrepForOS($templateName);
+        $templateName = xarVarPrepForOS($templateName);
     }
 
-    $modBaseInfo = pnMod_getBaseInfo($modName);
+    $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back
     $modOsDir = $modBaseInfo['osdirectory'];
 
     // Try theme template
-    $sourceFileName = "$pnTpl_themeDir/modules/$modOsDir/blocks/$blockName" . (empty($templateName) ? '.pnt' : "-$templateName.pnt");
+    $sourceFileName = "$xarTpl_themeDir/modules/$modOsDir/blocks/$blockName" . (empty($templateName) ? '.xar' : "-$templateName.xar");
     if (!file_exists($sourceFileName)) {
         // Use internal template
-        $sourceFileName = "modules/$modOsDir/pntemplates/pnblocks/$blockName" . (empty($templateName) ? '.pnd' : "-$templateName.pnd");
+        $sourceFileName = "modules/$modOsDir/xartemplates/xarblocks/$blockName" . (empty($templateName) ? '.xrd' : "-$templateName.xrd");
     }
 
-    return pnTpl__executeFromFile($sourceFileName, $tplData);
+    return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
-function pnTplString($templateCode, $tplData)
+function xarTplString($templateCode, $tplData)
 {
-    return pnTpl__execute($templateCode, $tplData);
+    return xarTpl__execute($templateCode, $tplData);
 }
 
-function pnTplFile($fileName, $tplData)
+function xarTplFile($fileName, $tplData)
 {
-    return pnTpl__executeFromFile($fileName, $tplData);
+    return xarTpl__executeFromFile($fileName, $tplData);
 }
 
 
@@ -123,74 +123,74 @@ function pnTplFile($fileName, $tplData)
  * @returns string
  * @return page output
  **/
-function pnTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $pageName = NULL)
+function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $pageName = NULL)
 {
-    global $pnTpl_themeDir;
+    global $xarTpl_themeDir;
 
     if (empty($pageName)) {
         $pageName = 'default';
     }
     // Grab module Type Whether admin or user. 
-    $modType = pnVarCleanUntrusted(pnRequestGetVar('type')); 
+    $modType = xarVarCleanUntrusted(xarRequestGetVar('type')); 
     if (empty($modType)) {
         $modType = 'user';
     }
     // Override all admin modules types to is pages/admin exist.
     // TODO --> Allow master admin template.
     if($modType == 'admin'){
-        $pageName = pnVarPrepForOS($pageName);
-        $sourceFileName = "$pnTpl_themeDir/admin/$pageName.pnt";
+        $pageName = xarVarPrepForOS($pageName);
+        $sourceFileName = "$xarTpl_themeDir/admin/$pageName.xar";
         if (!file_exists($sourceFileName)) {
             // Revert to main theme
-            $pageName = pnVarPrepForOS($pageName);
-            $sourceFileName = "$pnTpl_themeDir/pages/$pageName.pnt";
+            $pageName = xarVarPrepForOS($pageName);
+            $sourceFileName = "$xarTpl_themeDir/pages/$pageName.xar";
         }
     } else {
-        $pageName = pnVarPrepForOS($pageName);
-        $sourceFileName = "$pnTpl_themeDir/pages/$pageName.pnt";
+        $pageName = xarVarPrepForOS($pageName);
+        $sourceFileName = "$xarTpl_themeDir/pages/$pageName.xar";
     }
 
     $tplData = array('_bl_mainModuleOutput' => $mainModuleOutput);
 
-    return pnTpl__executeFromFile($sourceFileName, $tplData);
+    return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
-function pnTpl_renderBlockBox($blockInfo, $templateName = NULL)
+function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
 {
-    global $pnTpl_themeDir;
+    global $xarTpl_themeDir;
 
     if (empty($templateName)) {
         $templateName = 'default';
     }
 
-    $templateName = pnVarPrepForOS($templateName);
+    $templateName = xarVarPrepForOS($templateName);
 
-    $sourceFileName = "$pnTpl_themeDir/blocks/$templateName.pnt";
+    $sourceFileName = "$xarTpl_themeDir/blocks/$templateName.xar";
     // FIXME: <marco> I'm removing the code to fall back to 'default' template since
     // I don't think it's what we need to do here.
 
-    return pnTpl__executeFromFile($sourceFileName, $blockInfo);
+    return xarTpl__executeFromFile($sourceFileName, $blockInfo);
 }
 
-function pnTpl_renderWidget($widgetName, $tplData)
+function xarTpl_renderWidget($widgetName, $tplData)
 {
-    global $pnTpl_themeDir;
+    global $xarTpl_themeDir;
 
-    $sourceFileName = "$pnTpl_themeDir/widgets/$widgetName.pnt";
+    $sourceFileName = "$xarTpl_themeDir/widgets/$widgetName.xar";
 
-    return pnTpl__executeFromFile($sourceFileName, $tplData);
+    return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
 // PRIVATE FUNCTIONS
 
-function pnTpl__getCompilerInstance()
+function xarTpl__getCompilerInstance()
 {
-    include_once 'includes/pnBLCompiler.php';
-    return new pnTpl__Compiler();
+    include_once 'includes/xarBLCompiler.php';
+    return new xarTpl__Compiler();
 }
 
 // Now featuring *eval()* for your anti-caching pleasure :-)
-function pnTpl__execute($templateCode, $tplData)
+function xarTpl__execute($templateCode, $tplData)
 {
     $tplData['_bl_data'] = $tplData;
 
@@ -200,7 +200,7 @@ function pnTpl__execute($templateCode, $tplData)
         extract($tplData, EXTR_OVERWRITE);
     } else {  
         $msg = 'Incorrect format for tplData, it must be an associative array of arguments';
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
@@ -219,14 +219,14 @@ function pnTpl__execute($templateCode, $tplData)
     return $output;
 }
 
-function pnTpl__executeFromFile($sourceFileName, $tplData)
+function xarTpl__executeFromFile($sourceFileName, $tplData)
 {
-    global $pnTpl_cacheTemplates;
+    global $xarTpl_cacheTemplates;
 
     $needCompilation = true;
 
-    if ($pnTpl_cacheTemplates) {
-        $varDir = pnCoreGetVarDirPath();
+    if ($xarTpl_cacheTemplates) {
+        $varDir = xarCoreGetVarDirPath();
         $cacheKey = md5($sourceFileName);
         $cachedFileName = $varDir . '/cache/templates/' . $cacheKey . '.php';
         if (file_exists($cachedFileName)
@@ -236,25 +236,25 @@ function pnTpl__executeFromFile($sourceFileName, $tplData)
     }
     
     if (!file_exists($sourceFileName) && $needCompilation == true) {
-        $msg = pnML('Could not locate template source, missing file path is: \'#(1)\'.', $sourceFileName);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST',
+        $msg = xarML('Could not locate template source, missing file path is: \'#(1)\'.', $sourceFileName);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST',
                        new SystemException($msg));
         return;
     }
     
-    //pnLogVariable('needCompilation', $needCompilation, PNLOG_LEVEL_ERROR);
+    //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
     if ($needCompilation) {
-        $blCompiler = pnTpl__getCompilerInstance();
+        $blCompiler = xarTpl__getCompilerInstance();
         $templateCode = $blCompiler->compileFile($sourceFileName);
         if (!isset($templateCode)) {
             return; // exception! throw back
         }
-        if ($pnTpl_cacheTemplates) {
+        if ($xarTpl_cacheTemplates) {
             $fd = fopen($cachedFileName, 'w');
             fwrite($fd, $templateCode);
             fclose($fd);
         } else {
-            return pnTpl__execute($templateCode, $tplData);
+            return xarTpl__execute($templateCode, $tplData);
         }
     }
         $tplData['_bl_data'] = $tplData;
@@ -264,7 +264,7 @@ function pnTpl__executeFromFile($sourceFileName, $tplData)
         extract($tplData, EXTR_OVERWRITE);
     } else {
         $msg = 'Incorrect format for tplData, it must be an associative array of arguments';
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
@@ -273,7 +273,7 @@ function pnTpl__executeFromFile($sourceFileName, $tplData)
     ob_start();
     
     // Load cached template file
-    if (pnCoreIsDebuggerActive()) {
+    if (xarCoreIsDebuggerActive()) {
         $res = include $cachedFileName;
     } else {
         // Suppress error report when debugger is not active to prevent
@@ -289,31 +289,31 @@ function pnTpl__executeFromFile($sourceFileName, $tplData)
     return $output;
 }
 
-define ('PN_TPL_OPTIONAL', 2);
-define ('PN_TPL_REQUIRED', 0); // default for attributes
+define ('XAR_TPL_OPTIONAL', 2);
+define ('XAR_TPL_REQUIRED', 0); // default for attributes
 
-define ('PN_TPL_STRING', 64);
-define ('PN_TPL_BOOLEAN', 128);
-define ('PN_TPL_INTEGER', 256);
-define ('PN_TPL_FLOAT', 512);
-define ('PN_TPL_ANY', PN_TPL_STRING|PN_TPL_BOOLEAN|PN_TPL_INTEGER|PN_TPL_FLOAT);
+define ('XAR_TPL_STRING', 64);
+define ('XAR_TPL_BOOLEAN', 128);
+define ('XAR_TPL_INTEGER', 256);
+define ('XAR_TPL_FLOAT', 512);
+define ('XAR_TPL_ANY', XAR_TPL_STRING|XAR_TPL_BOOLEAN|XAR_TPL_INTEGER|XAR_TPL_FLOAT);
 
-class pnTemplateAttribute {
+class xarTemplateAttribute {
     var $_name;     // Attribute name
     var $_flags;    // Attribute flags (datatype, required/optional, etc.)
         
-    function pnTemplateAttribute($name, $flags = NULL)
+    function xarTemplateAttribute($name, $flags = NULL)
     {
         if (!eregi('^[a-z][a-z0-9\-_]*$', $name)) {
-            $msg = pnML("Illegal attribute name ('#(1)'): Tag name may contain letters, numbers, _ and -, and must start with a letter.", $name);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+            $msg = xarML("Illegal attribute name ('#(1)'): Tag name may contain letters, numbers, _ and -, and must start with a letter.", $name);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
             return;
         }
         
         if (!is_integer($flags) && $flags != NULL) {
-            $msg = pnML("Illegal attribute flags ('#(1)'): flags must be of integer type.", $flags);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+            $msg = xarML("Illegal attribute flags ('#(1)'): flags must be of integer type.", $flags);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
             return;
         }
@@ -321,11 +321,11 @@ class pnTemplateAttribute {
         $this->_name  = $name;
         $this->_flags = $flags;
         
-        // FIXME: <marco> Why do you need both PN_TPL_REQUIRED and PN_TPL_OPTIONAL when PN_TPL_REQUIRED = ~PN_TPL_OPTIONAL?
+        // FIXME: <marco> Why do you need both XAR_TPL_REQUIRED and XAR_TPL_OPTIONAL when XAR_TPL_REQUIRED = ~XAR_TPL_OPTIONAL?
         if ($this->_flags == NULL) {
-            $this->_flags = PN_TPL_ANY|PN_TPL_REQUIRED;
-        } elseif ($this->_flags == PN_TPL_OPTIONAL) {
-            $this->_flags = PN_TPL_ANY|PN_TPL_OPTIONAL;
+            $this->_flags = XAR_TPL_ANY|XAR_TPL_REQUIRED;
+        } elseif ($this->_flags == XAR_TPL_OPTIONAL) {
+            $this->_flags = XAR_TPL_ANY|XAR_TPL_OPTIONAL;
         }
     }
     
@@ -336,7 +336,7 @@ class pnTemplateAttribute {
     
     function getAllowedTypes()
     {
-        return ($this->getFlags() & (~ PN_TPL_OPTIONAL));
+        return ($this->getFlags() & (~ XAR_TPL_OPTIONAL));
     }
     
     function getName()
@@ -351,24 +351,24 @@ class pnTemplateAttribute {
     
     function isOptional()
     {
-        if ($this->_flags & PN_TPL_OPTIONAL) {
+        if ($this->_flags & XAR_TPL_OPTIONAL) {
             return true;
         }
         return false;
     }
 }
 
-class pnTemplateTag {
+class xarTemplateTag {
     var $_name;
     var $_attributes;
     var $_handler;
     var $_module;
 
-    function pnTemplateTag($module, $name, $attributes = array(), $handler = NULL)
+    function xarTemplateTag($module, $name, $attributes = array(), $handler = NULL)
     {
         if (!eregi('^[a-z][-_a-z0-9]*$', $name)) {
-            $msg = pnML("Illegal tag definition: '#(1)' is an invalid tag name.", $name);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+            $msg = xarML("Illegal tag definition: '#(1)' is an invalid tag name.", $name);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
             $this->_name = NULL;
             return;
@@ -408,8 +408,8 @@ class pnTemplateTag {
     function callHandler($args)
     {
         // FIXME: <marco> how do you think to handle exceptions here?
-        //                you should use pnModAPIFunc!
-        pnModAPILoad($this->_module);
+        //                you should use xarModAPIFunc!
+        xarModAPILoad($this->_module);
         $func = $this->_handler;
         return $func($args);
     }
@@ -421,45 +421,45 @@ class pnTemplateTag {
  * @access public 
  * @param tag_module parent module of tag to register 
  * @param tag_name tag to register with the system
- * @param tag_attrs array of attributes associated with tag (pnTemplateAttribute objects)
+ * @param tag_attrs array of attributes associated with tag (xarTemplateAttribute objects)
  * @param tag_handler function of the tag
  * @return bool 
  **/
-function pnTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_handler = NULL)
+function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_handler = NULL)
 {
     // Check to make sure tag does not exist first
-    if (pnTplGetTagObjectFromName($tag_name) != NULL) {
+    if (xarTplGetTagObjectFromName($tag_name) != NULL) {
         // Already registered
-        $msg = pnML('<pnt:#(1)> tag is already defined.', $tag_name);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+        $msg = xarML('<xar:#(1)> tag is already defined.', $tag_name);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                        new SystemException($msg));
         return false;
     }
 
-    $tag = new pnTemplateTag($tag_module, $tag_name, $tag_attrs, $tag_handler);
+    $tag = new xarTemplateTag($tag_module, $tag_name, $tag_attrs, $tag_handler);
     
     list($tag_name,
 	 $tag_module,
 	 $tag_func,
-	 $tag_data) = pnVarPrepForStore($tag->getName(),
+	 $tag_data) = xarVarPrepForStore($tag->getName(),
 					$tag->getModule(),
 					$tag->getHandler(),
 					serialize($tag));
 
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
     
-    $tag_table = $pntable['template_tags'];
+    $tag_table = $xartable['template_tags'];
     
     // Get next ID in table
     $tag_id = $dbconn->GenId($tag_table);
     
     $query = "INSERT INTO $tag_table
-                (pn_id,
-                 pn_name,
-                 pn_module,
-                 pn_handler,
-                 pn_data)
+                (xar_id,
+                 xar_name,
+                 xar_module,
+                 xar_handler,
+                 xar_data)
               VALUES
                 ('$tag_id',
                  '$tag_name',
@@ -484,19 +484,19 @@ function pnTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_han
  * @param tag_func function of the tag to remove
  * @return bool 
  **/
-function pnTplUnregisterTag($tag_name)
+function xarTplUnregisterTag($tag_name)
 {
     if (!eregi('^[a-z][a-z\-_]*$', $tag_name)) {
         // throw exception
         return false;
     }
     
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
     
-    $tag_table = $pntable['template_tags'];
+    $tag_table = $xartable['template_tags'];
     
-    $query = "DELETE FROM $tag_table WHERE pn_name = '$tag_name';";
+    $query = "DELETE FROM $tag_table WHERE xar_name = '$tag_name';";
                  
     $dbconn->Execute($query);
     
@@ -507,13 +507,13 @@ function pnTplUnregisterTag($tag_name)
     return true;
 }
 
-function pnTplCheckTagAttributes($name, $args)
+function xarTplCheckTagAttributes($name, $args)
 {
-    $tag_ref = pnTplGetTagObjectFromName($name);
+    $tag_ref = xarTplGetTagObjectFromName($name);
 
     if ($tag_ref == NULL) {
-        $msg = pnML('<pnt:#(1)> tag is not defined.', $name);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+        $msg = xarML('<xar:#(1)> tag is not defined.', $name);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                        new SystemException($msg));
         return;
     }
@@ -526,28 +526,28 @@ function pnTplCheckTagAttributes($name, $args)
         // check that type matches
         $attr_types = $attr->getAllowedTypes();
 
-        if ($attr_types & PN_TPL_STRING) {
+        if ($attr_types & XAR_TPL_STRING) {
             continue;
-        } elseif (($attr_types & PN_TPL_BOOLEAN)
+        } elseif (($attr_types & XAR_TPL_BOOLEAN)
                   && eregi ('^(true|false|1|0)$', $args[$attr_name])) {
             continue;
-        } elseif (($attr_types & PN_TPL_INTEGER)
+        } elseif (($attr_types & XAR_TPL_INTEGER)
                   && eregi('^\-?[0-9]+$', $args[$attr_name])) {
             continue;
-        } elseif (($attr_types & PN_TPL_FLOAT)
+        } elseif (($attr_types & XAR_TPL_FLOAT)
                   && eregi('^\-?[0-9]*.[0-9]+$', $args[$attr_name])) {
             continue;
         }
 
         // bad type for attribute
-        $msg = pnML("'#(1)' attribute in <pnt:#(2)> tag does not have correct type. See tag documentation.", $attr_name, $name);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+        $msg = xarML("'#(1)' attribute in <xar:#(2)> tag does not have correct type. See tag documentation.", $attr_name, $name);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
 			           new SystemException($msg));
 	    return false;
 	} elseif ($attr->isRequired()) {
 	    // required attribute is missing!
-	    $msg = pnML("Required '#(1)' attribute is missing from <pnt:#(2)> tag. See tag documentation.", $attr_name, $name);
-	    pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+	    $msg = xarML("Required '#(1)' attribute is missing from <xar:#(2)> tag. See tag documentation.", $attr_name, $name);
+	    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
 			           new SystemException($msg));
 	    return false;
 	}
@@ -556,7 +556,7 @@ function pnTplCheckTagAttributes($name, $args)
     return true;
 }
 
-function pnTplGetTagObjectFromName($tag_name)
+function xarTplGetTagObjectFromName($tag_name)
 {
     // cache tags for compile performance
     static $tag_objects = array();
@@ -564,12 +564,12 @@ function pnTplGetTagObjectFromName($tag_name)
         return $tag_objects[$tag_name];
     }
 
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $tag_table = $pntable['template_tags'];
+    $tag_table = $xartable['template_tags'];
 
-    $query = "SELECT pn_data FROM $tag_table WHERE pn_name='$tag_name'";
+    $query = "SELECT xar_data FROM $tag_table WHERE xar_name='$tag_name'";
     
     $result = $dbconn->SelectLimit($query, 1);
 
@@ -604,22 +604,22 @@ function pnTplGetTagObjectFromName($tag_name)
  * @access private
  * @return bool
  **/
-function pnTplPrint($template_sourcefile, $args = array())
+function xarTplPrint($template_sourcefile, $args = array())
 {
     $template_file = 'cache/templates/' . md5($template_sourcefile) . '.php';
     
     if (!file_exists($template_sourcefile)) {
-        $msg = pnML('Template source not found: #(1).', $template_sourcefile);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+        $msg = xarML('Template source not found: #(1).', $template_sourcefile);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                        new SystemException($msg));
         return;
     }
 
    if (!file_exists($template_file) ||
         filemtime($template_sourcefile) > filemtime($template_file) ||
-        pnVarCleanFromInput('regenerate') == true) {
+        xarVarCleanFromInput('regenerate') == true) {
 
-        if (!pnTplCompile($template_sourcefile)) {
+        if (!xarTplCompile($template_sourcefile)) {
             return; // Throw back
         }
     }
@@ -631,10 +631,10 @@ function pnTplPrint($template_sourcefile, $args = array())
     return true;
 } 
 
-function pnTplPrintWidget($module, $widget_sourcefile, $args = array())
+function xarTplPrintWidget($module, $widget_sourcefile, $args = array())
 {
-    $widget_sourcefile = "modules/$module/pnwidgets/$widget_sourcefile";
-    return pnTplPrint($widget_sourcefile, $args);
+    $widget_sourcefile = "modules/$module/xarwidgets/$widget_sourcefile";
+    return xarTplPrint($widget_sourcefile, $args);
 }
 
 ?>

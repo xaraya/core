@@ -12,57 +12,57 @@
 /* TODO:
  * Document functions
  * Add options to simple & html logger
- * When calendar & pnLocaleFormatDate is done complete simple logger
+ * When calendar & xarLocaleFormatDate is done complete simple logger
  * and html logger
- * When pnMail is done do email logger
+ * When xarMail is done do email logger
  */
 
-define('PNLOG_LEVEL_DEBUG', 1);
-define('PNLOG_LEVEL_NOTICE', 2);
-define('PNLOG_LEVEL_WARNING', 4);
-define('PNLOG_LEVEL_ERROR', 8);
+define('XARLOG_LEVEL_DEBUG', 1);
+define('XARLOG_LEVEL_NOTICE', 2);
+define('XARLOG_LEVEL_WARNING', 4);
+define('XARLOG_LEVEL_ERROR', 8);
 
-function pnLog_init($args)
+function xarLog_init($args)
 {
-    global $pnLog_logger, $pnLog_level;
+    global $xarLog_logger, $xarLog_level;
 
     $loggerName = $args['loggerName'];
     $loggerArgs = $args['loggerArgs'];
     switch ($args['level']) {
         case 'DEBUG':
-            $pnLog_level = PNLOG_LEVEL_DEBUG;
+            $xarLog_level = XARLOG_LEVEL_DEBUG;
             break;
         case 'NOTICE':
-            $pnLog_level = PNLOG_LEVEL_NOTICE;
+            $xarLog_level = XARLOG_LEVEL_NOTICE;
             break;
         case 'WARNING':
-            $pnLog_level = PNLOG_LEVEL_WARNING;
+            $xarLog_level = XARLOG_LEVEL_WARNING;
             break;
         case 'ERROR':
-            $pnLog_level = PNLOG_LEVEL_ERROR;
+            $xarLog_level = XARLOG_LEVEL_ERROR;
             break;
         default:
-            pnCore_die('pnLog_init: Unknown logger level: '.$args['level']);
+            xarCore_die('xarLog_init: Unknown logger level: '.$args['level']);
     }
 
     switch ($loggerName) {
         case 'dummy':
-            $pnLog_logger = new pnLog__Logger($loggerArgs);
+            $xarLog_logger = new xarLog__Logger($loggerArgs);
             break;
         case 'simple':
-            $pnLog_logger = new pnLog__SimpleLogger($loggerArgs);
+            $xarLog_logger = new xarLog__SimpleLogger($loggerArgs);
             break;
         case 'html':
-            $pnLog_logger = new pnLog__HTMLLogger($loggerArgs);
+            $xarLog_logger = new xarLog__HTMLLogger($loggerArgs);
             break;
         case 'javascript':
-            $pnLog_logger = new pnLog__JavaScriptLogger($loggerArgs);
+            $xarLog_logger = new xarLog__JavaScriptLogger($loggerArgs);
             break;
         case 'email':
-            $pnLog_logger = new pnLog__EmailLogger($loggerArgs);
+            $xarLog_logger = new xarLog__EmailLogger($loggerArgs);
             break;
         default:
-            pnCore_die('pnLog_init: Unknown logger name: '.$loggerName);
+            xarCore_die('xarLog_init: Unknown logger name: '.$loggerName);
     }
 
     return true;
@@ -73,10 +73,10 @@ function pnLog_init($args)
  * @access public
  * @return log level
  */
-function pnLogGetLevel()
+function xarLogGetLevel()
 {
-    global $pnLog_level;
-    return $pnLog_level;
+    global $xarLog_level;
+    return $xarLog_level;
 }
 
 // TODO: <marco> Move to logger module
@@ -84,21 +84,21 @@ function pnLogGetLevel()
 function logger_adminapi_getLogLevelInfo($level)
 {
     switch ($level) {
-        case PNLOG_LEVEL_DEBUG:
-            $name = pnML('Debug level');
-            $description = pnML('Logs everuthing.');
+        case XARLOG_LEVEL_DEBUG:
+            $name = xarML('Debug level');
+            $description = xarML('Logs everuthing.');
             break;
-        case PNLOG_LEVEL_NOTICE:
-            $name = pnML('Notice level');
-            $description = pnML('Logs all except debugging messages.');
+        case XARLOG_LEVEL_NOTICE:
+            $name = xarML('Notice level');
+            $description = xarML('Logs all except debugging messages.');
             break;
-        case PNLOG_LEVEL_WARNING:
-            $name = pnML('Warning level');
-            $description = pnML('Logs only warning and errors.');
+        case XARLOG_LEVEL_WARNING:
+            $name = xarML('Warning level');
+            $description = xarML('Logs only warning and errors.');
             break;
-        case PNLOG_LEVEL_ERROR:
-            $name = pnML('Error level');
-            $description = pnML('Logs only errors.');
+        case XARLOG_LEVEL_ERROR:
+            $name = xarML('Error level');
+            $description = xarML('Logs only errors.');
             break;
     }
     return array('name'=>$name, 'description'=>$description);
@@ -110,19 +110,19 @@ function logger_adminapi_listLoggers()
 {
     $dummy = array('id' => 'dummy',
                    'name' => 'Dummy logger',
-                   'description' => pnML('Doesn\'t log anything.'));
+                   'description' => xarML('Doesn\'t log anything.'));
     $simple = array('id' => 'simple',
                     'name' => 'Simple logger',
-                    'description' => pnML('Logs in a file in plain text.'));
+                    'description' => xarML('Logs in a file in plain text.'));
     $html = array('id' => 'html',
                   'name' => 'Html logger',
-                  'description' => pnML('Logs in a file in html.'));
+                  'description' => xarML('Logs in a file in html.'));
     $javascript = array('id' => 'javascript',
                         'name' => 'JavaScript logger',
-                        'description' => pnML('Logs into a browser window (useful for debug).'));
+                        'description' => xarML('Logs into a browser window (useful for debug).'));
     $email = array('id' => 'email',
                    'name' => 'Email logger',
-                   'description' => pnML('Logs as plain text and send it as an email message.'));
+                   'description' => xarML('Logs as plain text and send it as an email message.'));
     return array($dummy, $simple, $html, $javascript, $email);
 }
 */
@@ -147,40 +147,40 @@ function logger_adminapi_parseArgsString($string)
 }
 */
 
-function pnLogMessage($msg, $level = PNLOG_LEVEL_DEBUG)
+function xarLogMessage($msg, $level = XARLOG_LEVEL_DEBUG)
 {
-    global $pnLog_logger, $pnLog_level;
-    if ($level >= $pnLog_level) {
-       if ($level == PNLOG_LEVEL_DEBUG && !pnCoreIsDebuggerActive()) return;
-       $pnLog_logger->logMessage($msg);
+    global $xarLog_logger, $xarLog_level;
+    if ($level >= $xarLog_level) {
+       if ($level == XARLOG_LEVEL_DEBUG && !xarCoreIsDebuggerActive()) return;
+       $xarLog_logger->logMessage($msg);
     }
 }
 
-function pnLogException($level = PNLOG_LEVEL_DEBUG)
+function xarLogException($level = XARLOG_LEVEL_DEBUG)
 {
-    global $pnLog_logger, $pnLog_level;
-    if ($level >= $pnLog_level) {
-       if ($level == PNLOG_LEVEL_DEBUG && !pnCoreIsDebuggerActive()) return;
-       $pnLog_logger->logException();
+    global $xarLog_logger, $xarLog_level;
+    if ($level >= $xarLog_level) {
+       if ($level == XARLOG_LEVEL_DEBUG && !xarCoreIsDebuggerActive()) return;
+       $xarLog_logger->logException();
     }
 }
 
-function pnLogVariable($name, $var, $level = PNLOG_LEVEL_DEBUG)
+function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
 {
-    global $pnLog_logger, $pnLog_level;
-    if ($level >= $pnLog_level) {
-       if ($level == PNLOG_LEVEL_DEBUG && !pnCoreIsDebuggerActive()) return;
-       $pnLog_logger->logVariable($name, $var);
+    global $xarLog_logger, $xarLog_level;
+    if ($level >= $xarLog_level) {
+       if ($level == XARLOG_LEVEL_DEBUG && !xarCoreIsDebuggerActive()) return;
+       $xarLog_logger->logVariable($name, $var);
     }
 }
 
-class pnLog__Logger
+class xarLog__Logger
 {
     // private
     var $depth = 0;
     var $format = 'text';
 
-    function pnLog__Logger($args)
+    function xarLog__Logger($args)
     { /* nothing do do */ }
 
     function logMessage($msg, $callPrepForDisplay = true)
@@ -188,7 +188,7 @@ class pnLog__Logger
 
     function logException()
     {
-        $msg = pnExceptionRender($this->format);
+        $msg = xarExceptionRender($this->format);
         $this->logMessage($msg, false);
     }
 
@@ -211,15 +211,15 @@ class pnLog__Logger
      */
     function formatLevel()
     {
-        $level = pnLogGetLevel();
+        $level = xarLogGetLevel();
         switch ($level) {
-            case PNLOG_LEVEL_DEBUG:
+            case XARLOG_LEVEL_DEBUG:
                 return 'DEBUG';
-            case PNLOG_LEVEL_NOTICE:
+            case XARLOG_LEVEL_NOTICE:
                 return 'NOTICE';
-            case PNLOG_LEVEL_WARNING:
+            case XARLOG_LEVEL_WARNING:
                 return 'WARNING';
-            case PNLOG_LEVEL_ERROR:
+            case XARLOG_LEVEL_ERROR:
                 return 'ERROR';
         }
     }
@@ -321,11 +321,11 @@ class pnLog__Logger
 }
 
 // Implements a concrete logger, the most simple text based file logger.
-class pnLog__SimpleLogger extends pnLog__Logger
+class xarLog__SimpleLogger extends xarLog__Logger
 {
     var $fileName;
 
-    function pnLog__SimpleLogger($args)
+    function xarLog__SimpleLogger($args)
     {
         // TODO: <marco> Base fileName & one log file per month or per week
         $this->fileName = $args['fileName'];
@@ -360,11 +360,11 @@ class pnLog__SimpleLogger extends pnLog__Logger
     }
 }
 
-class pnLog__HTMLLogger extends pnLog__Logger
+class xarLog__HTMLLogger extends xarLog__Logger
 {
     var $fileName;
 
-    function pnLog__HTMLLogger($args)
+    function xarLog__HTMLLogger($args)
     {
         // TODO: <marco> Base fileName & one log file per month or per week
         $this->fileName = $args['fileName'];
@@ -381,7 +381,7 @@ class pnLog__HTMLLogger extends pnLog__Logger
         if (!($fd = @fopen($this->fileName, 'a'))) return;
         $str = $this->getTimestamp().' - ('.$this->formatLevel().')<br/>';
         if ($callPrepForDisplay) {
-            $msg = pnVarPrepForDisplay($msg);
+            $msg = xarVarPrepForDisplay($msg);
         }
         $str .= nl2br($msg).'<br/>';
         fwrite($fd, $str);
@@ -390,29 +390,29 @@ class pnLog__HTMLLogger extends pnLog__Logger
 
 }
 
-function pnLog__JavaScriptLogger_OnPostBodyStart($value)
+function xarLog__JavaScriptLogger_OnPostBodyStart($value)
 {
     // This function is called whenever the <body> tag has being sent to the browser
-    global $pnLog_logger;
-    echo $pnLog_logger->getWindowLoaderScript();
+    global $xarLog_logger;
+    echo $xarLog_logger->getWindowLoaderScript();
 }
 
-function pnLog__JavaScriptLogger_OnPreBodyEnd($value)
+function xarLog__JavaScriptLogger_OnPreBodyEnd($value)
 {
     // This function is called whenever the </body> tag is going to be sent to the browser
-    global $pnLog_logger;
-    echo $pnLog_logger->getBuffer();
+    global $xarLog_logger;
+    echo $xarLog_logger->getBuffer();
 }
 
-class pnLog__JavaScriptLogger extends pnLog__Logger
+class xarLog__JavaScriptLogger extends xarLog__Logger
 {
     var $buffer = '';
 
-    function pnLog__JavaScriptLogger($args)
+    function xarLog__JavaScriptLogger($args)
     {
         // Register proper callback functions at EMS
-        pnEvt_subscribeRawCallback('PostBodyStart', 'pnLog__JavaScriptLogger_OnPostBodyStart');
-        pnEvt_subscribeRawCallback('PreBodyEnd', 'pnLog__JavaScriptLogger_OnPreBodyEnd');
+        xarEvt_subscribeRawCallback('PostBodyStart', 'xarLog__JavaScriptLogger_OnPostBodyStart');
+        xarEvt_subscribeRawCallback('PreBodyEnd', 'xarLog__JavaScriptLogger_OnPreBodyEnd');
         // Set the HTML format
         $this->setFormat('html');
     }
@@ -450,7 +450,7 @@ class pnLog__JavaScriptLogger extends pnLog__Logger
         $str = "    debugWindow.document.write(\"".$this->getTimestamp().
                ' - ('.$this->formatLevel().')<br/>';
         if ($callPrepForDisplay) {
-            $msg = pnVarPrepForDisplay($msg);
+            $msg = xarVarPrepForDisplay($msg);
         }
         $msg = str_replace("\n", '', nl2br(addslashes($msg)));
         $str .= $msg . "<br/><br/>\");\n";
@@ -459,9 +459,9 @@ class pnLog__JavaScriptLogger extends pnLog__Logger
 
 }
 
-class pnLog__EmailLogger extends pnLog__Logger
+class xarLog__EmailLogger extends xarLog__Logger
 {
-    function pnLog__EmailLogger($args)
+    function xarLog__EmailLogger($args)
     { die('TODO'); }
 
     function logMessage($msg, $callPrepForDisplay = true)

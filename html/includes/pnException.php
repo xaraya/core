@@ -12,9 +12,9 @@
 // NOTE: Single threaded policy guarantees that this stuff will work
 //       This implementation is NOT thread safe.
 
-define('PN_NO_EXCEPTION', 0);
-define('PN_USER_EXCEPTION', 1);
-define('PN_SYSTEM_EXCEPTION', 2);
+define('XAR_NO_EXCEPTION', 0);
+define('XAR_USER_EXCEPTION', 1);
+define('XAR_SYSTEM_EXCEPTION', 2);
 
 /* PostNuke System Exceptions */
 
@@ -36,7 +36,7 @@ class SystemException
     
     function toHTML()
     {
-        return nl2br(pnVarPrepForDisplay($this->msg)) . '<br/>';
+        return nl2br(xarVarPrepForDisplay($this->msg)) . '<br/>';
     }
 
 }
@@ -78,7 +78,7 @@ class DefaultUserException
     
     function toHTML()
     {
-        return nl2br(pnVarPrepForDisplay($this->msg)) . '<br/>';
+        return nl2br(xarVarPrepForDisplay($this->msg)) . '<br/>';
     }
 
 }
@@ -125,80 +125,80 @@ class ErrorCollection
 /**
  * Initialise the Exception Handling System
  */
-function pnException_init($args)
+function xarException_init($args)
 {
-    global $pnException_useXDebug;
+    global $xarException_useXDebug;
     if (function_exists('xdebug_enable')) {
         xdebug_enable();
-        $pnException_useXDebug = true;
+        $xarException_useXDebug = true;
     } else {
-        $pnException_useXDebug = false;
+        $xarException_useXDebug = false;
         if ($args['enablePHPErrorHandler'] == true) {
-            set_error_handler('pnException__phpErrorHandler');
+            set_error_handler('xarException__phpErrorHandler');
         }
     }
-    pnExceptionFree();
+    xarExceptionFree();
     return true;
 }
 
 /**
  * allow a function to raise an exception
  * The caller must supply a value for the major parameter.
- * @param major can have one of the values PN_NO_EXCEPTION, PN_USER_EXCEPTION, or PN_SYSTEM_EXCEPTION
+ * @param major can have one of the values XAR_NO_EXCEPTION, XAR_USER_EXCEPTION, or XAR_SYSTEM_EXCEPTION
  * @param exceptionId identifier representing the exception type
  * @param value PHP class containing exception value
  * @returns void
  */
-function pnExceptionSet($major, $exceptionId, $value = NULL)
+function xarExceptionSet($major, $exceptionId, $value = NULL)
 {
-    global $pnException_major, $pnException_exceptionId;
-    global $pnException_value, $pnException_useXDebug;
+    global $xarException_major, $xarException_exceptionId;
+    global $xarException_value, $xarException_useXDebug;
 
-    if ($major != PN_NO_EXCEPTION &&
-        $major != PN_USER_EXCEPTION &&
-        $major != PN_SYSTEM_EXCEPTION) {
-            die('pnExceptionSet: Invalid major value: ' . $major);
+    if ($major != XAR_NO_EXCEPTION &&
+        $major != XAR_USER_EXCEPTION &&
+        $major != XAR_SYSTEM_EXCEPTION) {
+            die('xarExceptionSet: Invalid major value: ' . $major);
     }
 
-    if ($pnException_useXDebug) {
+    if ($xarException_useXDebug) {
         $stack = xdebug_get_function_stack();
     }
 
     if (!is_object($value)) {
-        if ($major == PN_SYSTEM_EXCEPTION) {
+        if ($major == XAR_SYSTEM_EXCEPTION) {
             $value = new SystemException('No further information available.');
-        } elseif ($major == PN_USER_EXCEPTION) {
+        } elseif ($major == XAR_USER_EXCEPTION) {
             $value = new DefaultUserException('No further information available.');
         }
     }
 
-    if ($pnException_useXDebug) {
+    if ($xarException_useXDebug) {
         $value->__stack = array_reverse($stack);
     }
 
     // Set new status
-    $pnException_major = $major;
-    $pnException_exceptionId = $exceptionId;
-    $pnException_value = $value;
+    $xarException_major = $major;
+    $xarException_exceptionId = $exceptionId;
+    $xarException_value = $value;
 
-    // If the PNDBG_EXCEPTIONS flag is set we log every raised exception.
+    // If the XARDBG_EXCEPTIONS flag is set we log every raised exception.
     // This can be useful in debugging since EHS is not so perfect as a native
     // EHS could be (read damned PHP language :).
-    if (pnCoreIsDebugFlagSet(PNDBG_EXCEPTIONS)) {
-        pnLogMessage('The following exception is logged because the PNDBG_EXCEPTIONS flag is set.');
-        pnLogException();
+    if (xarCoreIsDebugFlagSet(XARDBG_EXCEPTIONS)) {
+        xarLogMessage('The following exception is logged because the XARDBG_EXCEPTIONS flag is set.');
+        xarLogException();
     }
 }
 
 /**
  * allow the caller to establish whether an exception was raised, and to get the type of raised exception
  * @returns integer
- * @return the major value of raised exception, PN_NO_EXCEPTION identifies the state in wich no exception was raised
+ * @return the major value of raised exception, XAR_NO_EXCEPTION identifies the state in wich no exception was raised
  */
-function pnExceptionMajor()
+function xarExceptionMajor()
 {
-    global $pnException_major;
-    return $pnException_major;
+    global $xarException_major;
+    return $xarException_major;
 }
 
 /**
@@ -206,10 +206,10 @@ function pnExceptionMajor()
  * @returns string
  * @return the string identifying the exception, if invoked when no exception was raised a void value is returned
  */
-function pnExceptionId()
+function xarExceptionId()
 {
-    global $pnException_exceptionId;
-    return $pnException_exceptionId;
+    global $xarException_exceptionId;
+    return $xarException_exceptionId;
 }
 
 /**
@@ -217,23 +217,23 @@ function pnExceptionId()
  * @returns object
  * @return an object corresponding to this exception, if invoked when no exception or an exception for which there is no associated information was raised, a void value is returned
  */
-function pnExceptionValue()
+function xarExceptionValue()
 {
-    global $pnException_value;
-    return $pnException_value;
+    global $xarException_value;
+    return $xarException_value;
 }
 
 /**
- * reset current exception status, it's a shortcut for pnExceptionSet(PN_NO_EXCEPTION, NULL, NULL)
+ * reset current exception status, it's a shortcut for xarExceptionSet(XAR_NO_EXCEPTION, NULL, NULL)
  * @note you must always call this function when you handle a catched exception or equivalently you don't throw the exception back to the caller
  * @returns void
  */
-function pnExceptionFree()
+function xarExceptionFree()
 {
-    global $pnException_major, $pnException_exceptionId, $pnException_value;
-    $pnException_major = PN_NO_EXCEPTION;
-    $pnException_exceptionId = NULL;
-    $pnException_value = NULL;
+    global $xarException_major, $xarException_exceptionId, $xarException_value;
+    $xarException_major = XAR_NO_EXCEPTION;
+    $xarException_exceptionId = NULL;
+    $xarException_value = NULL;
 }
 
 /**
@@ -241,30 +241,30 @@ function pnExceptionFree()
  * @param format one of html or text
  * @returns string
  * @return the string representing the raised exception or an empty string if the exception status
- * is PN_NO_EXCEPTION
+ * is XAR_NO_EXCEPTION
  */
-function pnExceptionRender($format)
+function xarExceptionRender($format)
 {
-    global $pnException_major, $pnException_exceptionId;
-    global $pnException_value, $pnException_useXDebug;
+    global $xarException_major, $xarException_exceptionId;
+    global $xarException_value, $xarException_useXDebug;
 
-    switch ($pnException_major) {
-        case PN_SYSTEM_EXCEPTION:
+    switch ($xarException_major) {
+        case XAR_SYSTEM_EXCEPTION:
             $type = 'SYSTEM Exception';
             break;
-        case PN_USER_EXCEPTION:
+        case XAR_USER_EXCEPTION:
             $type = 'USER Exception';
             break;
         default:
             return '';
     }
     if ($format == 'html') {
-        $text = '<font color="purple">('.$type.')</font> <b>'.$pnException_exceptionId.'</b>:<br />';
-        if (method_exists($pnException_value, 'toHTML')) {
-            $text .= '<font color="red">'.$pnException_value->toHTML().'</font>';
+        $text = '<font color="purple">('.$type.')</font> <b>'.$xarException_exceptionId.'</b>:<br />';
+        if (method_exists($xarException_value, 'toHTML')) {
+            $text .= '<font color="red">'.$xarException_value->toHTML().'</font>';
         }
-        if ($pnException_useXDebug) {
-            $stack = $pnException_value->__stack;
+        if ($xarException_useXDebug) {
+            $stack = $xarException_value->__stack;
             for ($i = 1, $j = 0; $i < count($stack); $i++, $j++) {
                 $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at '.$stack[$i]['function'].'(';
                 $file = basename($stack[$j]['file']);
@@ -273,12 +273,12 @@ function pnExceptionRender($format)
             }
         }
     } else /*if ($format == 'text')*/ {
-        $text = '('.$type.') '.$pnException_exceptionId.":\n";
-        if (method_exists($pnException_value, 'toString')) {
-            $text .= $pnException_value->toString();
+        $text = '('.$type.') '.$xarException_exceptionId.":\n";
+        if (method_exists($xarException_value, 'toString')) {
+            $text .= $xarException_value->toString();
         }
-        if ($pnException_useXDebug) {
-            $stack = $pnException_value->__stack;
+        if ($xarException_useXDebug) {
+            $stack = $xarException_value->__stack;
             for ($i = 1, $j = 0; $i < count($stack); $i++, $j++) {
                 $text .= '     at '.$stack[$i]['function'].'(';
                 $file = basename($stack[$j]['file']);
@@ -296,20 +296,20 @@ function pnExceptionRender($format)
 /**
  * PHP error handler bridge to PostNuke exceptions
  */
-function pnException__phpErrorHandler($errorType, $errorString, $file, $line)
+function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
 {
     switch($errorType) {
         case 2: // Warning
         case 8: // Notice
             $msg = $file.'('.$line."):\n".$errorString;
-            if (pnExceptionMajor() != PN_NO_EXCEPTION) {
-                $id = pnExceptionId();
-                $value = pnExceptionValue();
+            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+                $id = xarExceptionId();
+                $value = xarExceptionValue();
                 if ($id == 'ERROR_COLLECTION') {
                     // add an exception to error collection
                     $value->exceptions[] = array('id' => 'PHP_ERROR', 
                                                  'value' => new SystemException($msg));
-                    pnExceptionSet(PN_USER_EXCEPTION, 'ErrorCollection', $value);
+                    xarExceptionSet(XAR_USER_EXCEPTION, 'ErrorCollection', $value);
                 } else {
                     // raise an error collection
                     $exc = new ErrorCollection();
@@ -317,14 +317,14 @@ function pnException__phpErrorHandler($errorType, $errorString, $file, $line)
                                                'value' => $value);
                     $exc->exceptions[] = array('id' => 'PHP_ERROR', 
                                                'value' => new SystemException($msg));
-                    pnExceptionSet(PN_USER_EXCEPTION, 'ErrorCollection', $exc);
+                    xarExceptionSet(XAR_USER_EXCEPTION, 'ErrorCollection', $exc);
                 }
             } else {
                 // raise an error collection
                 $exc = new ErrorCollection();
                 $exc->exceptions[] = array('id' => 'PHP_ERROR', 
                                            'value' => new SystemException($msg));
-                pnExceptionSet(PN_USER_EXCEPTION, 'ErrorCollection', $exc);
+                xarExceptionSet(XAR_USER_EXCEPTION, 'ErrorCollection', $exc);
             }
             break;
         default:

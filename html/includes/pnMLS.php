@@ -13,7 +13,7 @@
  * This is the list of things that need to be done:
  * Dynamic Translations
  * Timezone and DST support
- * Patch module loader to use pnML_Load, integrate old style language pack into pnML_Load
+ * Patch module loader to use xarML_Load, integrate old style language pack into xarML_Load
  * Write standard core translations
  * Integrate ML support into BL
  * Translation context is changed, change translations module properly
@@ -23,9 +23,9 @@
  * finish phpdoc tags
  */
 
-define('PNMLS_SINGLE_LANGUAGE_MODE', 1);
-define('PNMLS_BOXED_MULTI_LANGUAGE_MODE', 2);
-define('PNMLS_UNBOXED_MULTI_LANGUAGE_MODE', 4);
+define('XARMLS_SINGLE_LANGUAGE_MODE', 1);
+define('XARMLS_BOXED_MULTI_LANGUAGE_MODE', 2);
+define('XARMLS_UNBOXED_MULTI_LANGUAGE_MODE', 4);
 
 /**
  * Initialise the Multi Language System
@@ -33,56 +33,56 @@ define('PNMLS_UNBOXED_MULTI_LANGUAGE_MODE', 4);
  * @returns bool
  * @return true on success
  */
-function pnMLS_init($args)
+function xarMLS_init($args)
 {
-    global $pnMLS_mode, $pnMLS_backend;
-    global $pnMLS_localeDataLoader, $pnMLS_localeDataCache;
-    global $pnMLS_currentLocale, $pnMLS_defaultLocale, $pnMLS_allowedLocales;
+    global $xarMLS_mode, $xarMLS_backend;
+    global $xarMLS_localeDataLoader, $xarMLS_localeDataCache;
+    global $xarMLS_currentLocale, $xarMLS_defaultLocale, $xarMLS_allowedLocales;
 
     switch ($args['MLSMode']) {
         case 'SINGLE':
-            $pnMLS_mode = PNMLS_SINGLE_LANGUAGE_MODE;
+            $xarMLS_mode = XARMLS_SINGLE_LANGUAGE_MODE;
             break;
         case 'BOXED':
-            $pnMLS_mode = PNMLS_BOXED_MULTI_LANGUAGE_MODE;
+            $xarMLS_mode = XARMLS_BOXED_MULTI_LANGUAGE_MODE;
             break;
         case 'UNBOXED':
-            $pnMLS_mode = PNMLS_UNBOXED_MULTI_LANGUAGE_MODE;
+            $xarMLS_mode = XARMLS_UNBOXED_MULTI_LANGUAGE_MODE;
             if (!function_exists('mb_http_input')) {
                 // mbstring required
-                pnCore_die('pnMLS_init: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
+                xarCore_die('xarMLS_init: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
             }
             break;
         default:
-            pnCore_die('pnMLS_init: Unknown MLS mode: '.$args['MLSMode']);
+            xarCore_die('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
 
     $backendName = $args['translationsBackend'];
     switch ($backendName) {
         case 'xml':
-            $pnMLS_backend = new pnMLS__XMLTranslationsBackend();
+            $xarMLS_backend = new xarMLS__XMLTranslationsBackend();
             break;
         case 'php':
-            $pnMLS_backend = new pnMLS__PHPTranslationsBackend();
+            $xarMLS_backend = new xarMLS__PHPTranslationsBackend();
             break;
         default:
-            pnCore_die('pnML_init: Unknown translations backend: '.$backendName);
+            xarCore_die('xarML_init: Unknown translations backend: '.$backendName);
     }
 
-    $pnMLS_localeDataLoader = new pnMLS__LocaleDataLoader();
-    $pnMLS_localeDataCache = array();
+    $xarMLS_localeDataLoader = new xarMLS__LocaleDataLoader();
+    $xarMLS_localeDataCache = array();
 
-    $pnMLS_defaultLocale = $args['defaultLocale'];
-    $pnMLS_allowedLocales = $args['allowedLocales'];
+    $xarMLS_defaultLocale = $args['defaultLocale'];
+    $xarMLS_allowedLocales = $args['allowedLocales'];
 
     // TODO: <marco> Choose how to detect current locale!
 
-    //$pnMLS_currentLocale = $pnMLS_defaultLocale;
+    //$xarMLS_currentLocale = $xarMLS_defaultLocale;
 
     // Register MLS events
-    pnEvt_registerEvent('MLSMissingTranslationString');
-    pnEvt_registerEvent('MLSMissingTranslationKey');
-    pnEvt_registerEvent('MLSMissingTranslationContext');
+    xarEvt_registerEvent('MLSMissingTranslationString');
+    xarEvt_registerEvent('MLSMissingTranslationKey');
+    xarEvt_registerEvent('MLSMissingTranslationContext');
 
     return true;
 }
@@ -94,11 +94,11 @@ function pnMLS_init($args)
  * @returns string
  * @return MLS Mode
  */
-function pnMLSGetMode()
+function xarMLSGetMode()
 {
-    global $pnMLS_mode;
+    global $xarMLS_mode;
 
-    return $pnMLS_mode;
+    return $xarMLS_mode;
 }
 
 /**
@@ -110,11 +110,11 @@ function pnMLSGetMode()
  * @return the site locale
  */
 // TODO: check
-function pnMLSGetSiteLocale()
+function xarMLSGetSiteLocale()
 {
-    global $pnMLS_defaultLocale;
+    global $xarMLS_defaultLocale;
 
-    return $pnMLS_defaultLocale;
+    return $xarMLS_defaultLocale;
 }
 
 /**
@@ -125,14 +125,14 @@ function pnMLSGetSiteLocale()
  * @return array of locales
  */
 // TODO: check
-function pnMLSListSiteLocales()
+function xarMLSListSiteLocales()
 {
-    global $pnMLS_defaultLocale, $pnMLS_allowedLocales;
-    $mode = pnMLSGetMode();
-    if ($mode == PNMLS_SINGLE_LANGUAGE_MODE) {
-        return array($pnMLS_defaultLocale);
+    global $xarMLS_defaultLocale, $xarMLS_allowedLocales;
+    $mode = xarMLSGetMode();
+    if ($mode == XARMLS_SINGLE_LANGUAGE_MODE) {
+        return array($xarMLS_defaultLocale);
     } else {
-        return $pnMLS_allowedLocales;
+        return $xarMLS_allowedLocales;
     }
 }
 
@@ -146,34 +146,34 @@ function pnMLSListSiteLocales()
  * @return locale data
  * @raise LOCALE_NOT_FOUNT
  */
-function pnMLSLoadLocaleData($locale = NULL)
+function xarMLSLoadLocaleData($locale = NULL)
 {
-    global $pnMLS_localeDataLoader, $pnMLS_localeDataCache;
+    global $xarMLS_localeDataLoader, $xarMLS_localeDataCache;
     if (!isset($locale)) {
-        $locale = pnMLSGetCurrentLocale();
+        $locale = xarMLSGetCurrentLocale();
     }
 
     // check for locale availability
-    $siteLocales = pnMLSListSiteLocales();
+    $siteLocales = xarMLSListSiteLocales();
     if (!in_array($locale, $siteLocales)) {
-        $msg = pnML('Unavailable locale.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'LOCALE_NOT_FOUND',
+        $msg = xarML('Unavailable locale.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_FOUND',
                        new SystemException($msg));
         return;
     }
 
-    if (!isset($pnMLS_localeDataCache[$locale])) {
-        $res = $pnMLS_localeDataLoader->load($locale);
+    if (!isset($xarMLS_localeDataCache[$locale])) {
+        $res = $xarMLS_localeDataLoader->load($locale);
         if (!isset($res)) return; // Throw back
         if ($res == false) {
-            $msg = pnML('Cannot find the requested locale (#(1)).', $locale);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'LOCALE_NOT_FOUND',
+            $msg = xarML('Cannot find the requested locale (#(1)).', $locale);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_FOUND',
             new SystemException($msg));
             return;
         }
-        $pnMLS_localeDataCache[$locale] = $pnMLS_localeDataLoader->getLocaleData();
+        $xarMLS_localeDataCache[$locale] = $xarMLS_localeDataLoader->getLocaleData();
     }
-    return $pnMLS_localeDataCache[$locale];
+    return $xarMLS_localeDataCache[$locale];
 }
 /**
  * Gets the current locale TODO: <marco> please check this description
@@ -183,11 +183,11 @@ function pnMLSLoadLocaleData($locale = NULL)
  * @return current locale
  */
 
-function pnMLSGetCurrentLocale()
+function xarMLSGetCurrentLocale()
 {
-    global $pnMLS_currentLocale;
+    global $xarMLS_currentLocale;
 
-    return $pnMLS_currentLocale;
+    return $xarMLS_currentLocale;
 }
 
 /**
@@ -199,15 +199,15 @@ function pnMLSGetCurrentLocale()
  * @raise BAD_PARAM
  */
 
-function pnMLSGetCharsetFromLocale($locale)
+function xarMLSGetCharsetFromLocale($locale)
 {
     if (empty($locale)) {
-        $msg = pnML('Empty locale.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty locale.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
-    $parsedLocale = pnMLS__parseLocaleString($locale);
+    $parsedLocale = xarMLS__parseLocaleString($locale);
     if (!isset($parsedLocale)) return; // throw back
     return $parsedLocale['charset'];
 }
@@ -221,25 +221,25 @@ function pnMLSGetCharsetFromLocale($locale)
  * @returns string
  * @return the translated string, or the original string if no translation is available
  */
-function pnML($string)
+function xarML($string)
 {
-    global $pnMLS_backend;
+    global $xarMLS_backend;
 
-    if (isset($pnMLS_backend)) {
-        $trans = $pnMLS_backend->translate($string);
+    if (isset($xarMLS_backend)) {
+        $trans = $xarMLS_backend->translate($string);
     } else {
-        // This happen in rare cases when pnML is called before pnMLInit was called
+        // This happen in rare cases when xarML is called before xarMLInit was called
         $trans = $string;
     }
     if (!isset($trans) || $trans == '') {
-        pnEvt_fire('MLSMissingTranslationString', $string);
+        xarEvt_fire('MLSMissingTranslationString', $string);
         $trans = $string;
     }
     if (func_num_args() > 1) {
         $args = func_get_args();
         unset($args[0]); // Unset $string argument
         if (is_array($args[1])) $args = $args[1]; // Only the second argument is considered if it's an array
-        $trans = pnMLS__bindVariables($trans, $args);
+        $trans = xarMLS__bindVariables($trans, $args);
     }
 
     return $trans;
@@ -252,41 +252,41 @@ function pnML($string)
  * @returns string
  * @return the translation string, or the key if no translation is available
  */
-function pnMLByKey($key)
+function xarMLByKey($key)
 {
-    global $pnMLS_backend;
+    global $xarMLS_backend;
 
-    if (isset($pnMLS_backend)) {
-        $trans = $pnMLS_backend->translateByKey($key);
+    if (isset($xarMLS_backend)) {
+        $trans = $xarMLS_backend->translateByKey($key);
     } else {
-        // This happen in rare cases when pnMLByKey is called before pnMLInit was called
+        // This happen in rare cases when xarMLByKey is called before xarMLInit was called
         $trans = $key;
     }
     if (!isset($trans) || $trans == '') {
-        pnEvt_fire('MLSMissingTranslationKey', $key);
+        xarEvt_fire('MLSMissingTranslationKey', $key);
         $trans = $key;
     }
     if (func_num_args() > 1) {
         $args = func_get_args();
         unset($args[0]); // Unset $string argument
         if (is_array($args[1])) $args = $args[1]; // Only the second argument is considered if it's an array
-        $trans = pnMLS__bindVariables($trans, $args);
+        $trans = xarMLS__bindVariables($trans, $args);
     }
 
     return $trans;
 }
 
 /*
-function pnMLGetDynamic($refid, $table_name, $fields)
+function xarMLGetDynamic($refid, $table_name, $fields)
 {
     $table_name .= '_mldata';
     $fields = implode(',', $fields);
 
-    $query = "SELECT $fields FROM $table_name WHERE pn_refid = $refid";
+    $query = "SELECT $fields FROM $table_name WHERE xar_refid = $refid";
     $dbresult = $dbconn->Execute($query);
 
     if($dbconn->ErrorNo() != 0) {
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__."(".__LINE__."): Database error while querying: $query"));
         return;
     }
@@ -304,13 +304,13 @@ function pnMLGetDynamic($refid, $table_name, $fields)
  * @returns string
  * @return formatted currency
  */
-function pnLocaleFormatCurrency($currency, $localeData = NULL)
+function xarLocaleFormatCurrency($currency, $localeData = NULL)
 {
     if (!isset($localeData)) {
-        $localeData = pnMLSLoadLocaleData();
+        $localeData = xarMLSLoadLocaleData();
     }
     $currencySym = $localeData['/monetary/currencySymbol'];
-    return $currencySym.' '.pnLocaleFormatNumber($currency, $localeData, true);
+    return $currencySym.' '.xarLocaleFormatNumber($currency, $localeData, true);
 }
 
 /**
@@ -321,16 +321,16 @@ function pnLocaleFormatCurrency($currency, $localeData = NULL)
  * @return formatted number
  * @raise BAD_PARAM
  */
-function pnLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
+function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
 {
     if (!is_numeric($number)) {
-        $msg = pnML('Number is not of numeric type.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Number is not of numeric type.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
     if (!isset($localeData)) {
-        $localeData = pnMLSLoadLocaleData();
+        $localeData = xarMLSLoadLocaleData();
     }
     if ($isCurrency == true) {
         $bp = 'monetary';
@@ -417,30 +417,30 @@ function pnLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
  * @access private
  * @param locale site locale
  */
-function pnMLS_setCurrentLocale($locale)
+function xarMLS_setCurrentLocale($locale)
 {
-    global $pnMLS_currentLocale;
+    global $xarMLS_currentLocale;
 
-    $mode = pnMLSGetMode();
+    $mode = xarMLSGetMode();
     switch ($mode) {
-        case PNMLS_SINGLE_LANGUAGE_MODE:
-            $locale  = pnMLSGetSiteLocale();
+        case XARMLS_SINGLE_LANGUAGE_MODE:
+            $locale  = xarMLSGetSiteLocale();
             break;
-        case PNMLS_UNBOXED_MULTI_LANGUAGE_MODE:
-        case PNMLS_BOXED_MULTI_LANGUAGE_MODE:
+        case XARMLS_UNBOXED_MULTI_LANGUAGE_MODE:
+        case XARMLS_BOXED_MULTI_LANGUAGE_MODE:
             // check for locale availability
-            $siteLocales = pnMLSListSiteLocales();
+            $siteLocales = xarMLSListSiteLocales();
             if (!in_array($locale, $locales)) {
                 // Locale not available, use the default
-                $locale = pnMLSGetSiteLocale();
+                $locale = xarMLSGetSiteLocale();
             }
     }
-    if ($locale != $pnMLS_currentLocale) {
+    if ($locale != $xarMLS_currentLocale) {
         // Adjust new current locale
-        $pnMLS_currentLocale = $locale;
+        $xarMLS_currentLocale = $locale;
 
-        if ($mode == PNMLS_UNBOXED_MULTI_LANGUAGE_MODE) {
-            $curCharset = pnMLSGetCharsetFromLocale($locale);
+        if ($mode == XARMLS_UNBOXED_MULTI_LANGUAGE_MODE) {
+            $curCharset = xarMLSGetCharsetFromLocale($locale);
             if (substr($curCharset, 0, 9) != 'iso-8859-' &&
                 $curCharset != 'koi8-r') {
                 // Do not use mbstring for single byte charsets
@@ -450,10 +450,10 @@ function pnMLS_setCurrentLocale($locale)
         }
 
         // Load core translations
-        pnMLS_loadModuleTranslations('base', 'base', 'core');
+        xarMLS_loadModuleTranslations('base', 'base', 'core');
 
         // Load global language defines
-        $localeData = pnMLSLoadLocaleData($locale);
+        $localeData = xarMLSLoadLocaleData($locale);
         if (!isset($localeData)) return; // throw back
         $lang = $localeData['/language/iso3code'];
         $fileName = "language/$lang/global.php";
@@ -480,51 +480,51 @@ function pnMLS_setCurrentLocale($locale)
  * @returns bool
  * @return
  */
-function pnMLS_loadModuleTranslations($modName, $modOsDir, $modType)
+function xarMLS_loadModuleTranslations($modName, $modOsDir, $modType)
 {
-    global $pnMLS_backend;
+    global $xarMLS_backend;
     static $loadedCommons = array();
 
     if (!isset($loadedCommons[$modName])) {
         $loadedCommons[$modName] = true;
-        $res = pnMLS_loadModuleTranslations($modName, $modOsDir, 'common');
+        $res = xarMLS_loadModuleTranslations($modName, $modOsDir, 'common');
         if (!isset($res)) {
             return; // throw back
         }
     }
 
-    $locale = pnMLSGetCurrentLocale();
+    $locale = xarMLSGetCurrentLocale();
 
-    $alternatives = pnMLS__getLocaleAlternatives($locale);
+    $alternatives = xarMLS__getLocaleAlternatives($locale);
     foreach ($alternatives as $testLocale) {
         $ctx = array('name' => $modName,
                      'baseDir' => 'modules/'.$modOsDir,
                      'type' => $modType,
                      'locale' => $testLocale);
 
-        $res = $pnMLS_backend->load($ctx);
+        $res = $xarMLS_backend->load($ctx);
         if (!isset($res)) {
             return; // throw back
         }
         if ($res == true) {
             return true;
         }
-        pnEvt_fire('MLSMissingTranslationContext', $ctx);
+        xarEvt_fire('MLSMissingTranslationContext', $ctx);
     }
 
     // No valid translations set loaded, try with old style translations
 
     /* Old style language packs */
-    $localeData = pnMLSLoadLocaleData($locale);
+    $localeData = xarMLSLoadLocaleData($locale);
     if (!isset($localeData)) return; // throw back
     $lang = $localeData['/language/iso3code'];
-    $fileName = "modules/$modOsDir/pnlang/$lang/$modType.php";
+    $fileName = "modules/$modOsDir/xarlang/$lang/$modType.php";
     if (file_exists($fileName)) {
         include $fileName;
     } else {
         // Oh, bad thing guys
         // Now since all this will become obsolete we can load eng and don't care of details
-        $fileName = "modules/$modOsDir/pnlang/eng/$modType.php";
+        $fileName = "modules/$modOsDir/xarlang/eng/$modType.php";
         if (file_exists($fileName)) {
             include $fileName;
         }
@@ -533,56 +533,56 @@ function pnMLS_loadModuleTranslations($modName, $modOsDir, $modType)
     return false;
 }
 
-function pnMLS_loadTemplateTranslations($tplName, $baseOsDir)
+function xarMLS_loadTemplateTranslations($tplName, $baseOsDir)
 {
-    global $pnMLS_backend;
+    global $xarMLS_backend;
 
-    $locale = pnMLSGetCurrentLocale();
+    $locale = xarMLSGetCurrentLocale();
     $ctx = array('name' => $tplName,
                  'baseDir' => $baseOsDir,
                  'type' => 'template',
                  'locale' => $locale);
-    $res = $pnMLS_backend->load($ctx);
+    $res = $xarMLS_backend->load($ctx);
     if (!isset($res)) {
         return; // throw back
     }
     if ($res == true) {
         return true;
     }
-    pnEvt_fire('MLSMissingTranslationContext', $ctx);
+    xarEvt_fire('MLSMissingTranslationContext', $ctx);
     return false;
 }
 
-function pnMLS_loadBlockTranslations($blockName, $modOsDir)
+function xarMLS_loadBlockTranslations($blockName, $modOsDir)
 {
-    global $pnMLS_backend;
+    global $xarMLS_backend;
 
-    $locale = pnMLSGetCurrentLocale();
+    $locale = xarMLSGetCurrentLocale();
     $ctx = array('name' => $blockName,
                  'baseDir' => 'modules/'.$modOsDir,
                  'type' => 'block',
                  'locale' => $locale);
-    $res = $pnMLS_backend->load($ctx);
+    $res = $xarMLS_backend->load($ctx);
     if (!isset($res)) {
         return; // throw back
     }
     if ($res == true) {
         return true;
     }
-    pnEvt_fire('MLSMissingTranslationContext', $ctx);
+    xarEvt_fire('MLSMissingTranslationContext', $ctx);
 
     // Old Style of loading the block language files
-    $localeData = pnMLSLoadLocaleData($locale);
+    $localeData = xarMLSLoadLocaleData($locale);
     if (!isset($localeData)) return; // throw back
     $lang = $localeData['/language/iso3code'];
-    $osname = pnVarPrepForOS($blockName);
-    $fileName = "modules/$modOsDir/pnlang/$lang/$osname.php";
+    $osname = xarVarPrepForOS($blockName);
+    $fileName = "modules/$modOsDir/xarlang/$lang/$osname.php";
     if (file_exists($fileName)) {
         include $fileName;
     } else {
         // Oh, bad thing guys
         // Now since all this will become obsolete we can load eng and don't care of details
-        $fileName = "modules/$modOsDir/pnlang/eng/$osname.php";
+        $fileName = "modules/$modOsDir/xarlang/eng/$osname.php";
         if (file_exists($fileName)) {
             include $fileName;
         }
@@ -591,16 +591,16 @@ function pnMLS_loadBlockTranslations($blockName, $modOsDir)
     return false;
 }
 
-function pnMLS_convertFromInput($var, $method)
+function xarMLS_convertFromInput($var, $method)
 {
     // FIXME: <marco> Can we trust browsers?
-    if (pnMLSGetMode() == PNMLS_SINGLE_LANGUAGE_MODE ||
+    if (xarMLSGetMode() == XARMLS_SINGLE_LANGUAGE_MODE ||
         !function_exists('mb_http_input')) {
         return $var;
     }
     // Cookies must contain only US-ASCII characters
     $inputCharset = strtolower(mb_http_input($method));
-    $curCharset = pnMLGetCurrentCharset();
+    $curCharset = xarMLGetCurrentCharset();
     if ($inputCharset != $curCharset) {
         $var = mb_convert_encoding($var, $curCharset, $inputCharset);
     }
@@ -609,11 +609,11 @@ function pnMLS_convertFromInput($var, $method)
 
 // PRIVATE FUNCTIONS
 
-function pnMLS__setup($args)
+function xarMLS__setup($args)
 {
     $mode = $args['MLSMode'];
     if (function_exists('mb_http_input')) {
-        $curCharset = pnMLSGetCharsetFromLocale(pnMLSGetCurrentLocale());
+        $curCharset = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
         if (substr($curCharset, 0, 9) != 'iso-8859-' &&
             $curCharset != 'koi8-r') {
             // Do not use mbstring for single byte charsets
@@ -621,24 +621,24 @@ function pnMLS__setup($args)
             mb_internal_encoding(strtoupper($curCharset));
         }
     } else {
-        if ($mode == PNMLS_UNBOXED_MULTI_LANGUAGE_MODE) {
+        if ($mode == XARMLS_UNBOXED_MULTI_LANGUAGE_MODE) {
             // mbstring reuired
-            pnCore_die('pnMLS__setup: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
+            xarCore_die('xarMLS__setup: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
         }
     }
 }
 
-function pnMLS__convertFromCharset($var, $charset)
+function xarMLS__convertFromCharset($var, $charset)
 {
     // FIXME: <marco> Can we trust browsers?
-    if (pnMLSGetMode() == PNMLS_SINGLE_LANGUAGE_MODE ||
+    if (xarMLSGetMode() == XARMLS_SINGLE_LANGUAGE_MODE ||
         !function_exists('mb_convert_encoding')) return $var;
-    $curCharset = pnMLGetCurrentCharset();
+    $curCharset = xarMLGetCurrentCharset();
     $var = mb_convert_encoding($var, $curCharset, $charset);
     return $var;
 }
 
-function pnMLS__bindVariables($string, $args)
+function xarMLS__bindVariables($string, $args)
 {
     // FIXME: <marco> Consider to use strtr to do the same, can we?
     $i = 1;
@@ -657,9 +657,9 @@ function pnMLS__bindVariables($string, $args)
  * @returns array
  * @return array of alternative locales
  */
-function pnMLS__getLocaleAlternatives($locale)
+function xarMLS__getLocaleAlternatives($locale)
 {
-    $parsedLocale = pnMLS__parseLocaleString($locale);
+    $parsedLocale = xarMLS__parseLocaleString($locale);
     if (!isset($parsedLocale)) return; // throw back
     extract($parsedLocale); // $lang, $country, $charset
 
@@ -679,7 +679,7 @@ function pnMLS__getLocaleAlternatives($locale)
  * @returns array
  * @return parsed locale
  */
-function pnMLS__parseLocaleString($locale)
+function xarMLS__parseLocaleString($locale)
 {
     $size = strlen($locale);
     $cur_pos = 0;
@@ -714,13 +714,13 @@ function pnMLS__parseLocaleString($locale)
     }
 
     if (empty($res['lang'])) {
-        $msg = pnML('Invalid locale.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Invalid locale.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
     if (empty($res['charset'])) {
-        $res['charset'] = '.'.pnMLS__getSingleByteCharset($res['lang']);
+        $res['charset'] = '.'.xarMLS__getSingleByteCharset($res['lang']);
         if ($res['charset'] == '.') $res['charset'] = '.utf-8';
         $locale .= $res['charset'];
     }
@@ -734,7 +734,7 @@ function pnMLS__parseLocaleString($locale)
  * @returns string
  * @return the charset
  */
-function pnMLS__getSingleByteCharset($langISO2Code) {
+function xarMLS__getSingleByteCharset($langISO2Code) {
     static $charsets = array('af' => 'iso-8859-1', 'sq' => 'iso-8859-1',
     'ar' => 'iso-8859-6',  'eu' => 'iso-8859-1',  'bg' => 'iso-8859-5',
     'be' => 'iso-8859-5',  'ca' => 'iso-8859-1',  'hr' => 'iso-8859-2',
@@ -759,7 +759,7 @@ function pnMLS__getSingleByteCharset($langISO2Code) {
  * This class loads a valid locale descriptor XML file and returns its content
  * in the form of a locale data array
  */
-class pnMLS__LocaleDataLoader
+class xarMLS__LocaleDataLoader
 {
     var $curData;
     var $curPath;
@@ -788,7 +788,7 @@ class pnMLS__LocaleDataLoader
         // TRICK: <marco> Since this xml parser sucks, we obviously use UTF-8 for utf-8 charset
         // and ISO-8859-1 for other charsets, even if they're not singl byte.
         // The only important thing here is to split utf-8 from other charsets.
-        $charset = pnMLSGetCharsetFromLocale($locale);
+        $charset = xarMLSGetCharsetFromLocale($locale);
         // FIXME: <marco> try, re-try and re-re-try this!
         if ($charset == 'utf-8') {
             $this->parser = xml_parser_create('UTF-8');
@@ -808,7 +808,7 @@ class pnMLS__LocaleDataLoader
             if (!xml_parse($this->parser, $data, feof($fp))) {
                 $errstr = xml_error_string(xml_get_error_code($this->parser));
                 $line = xml_get_current_line_number($this->parser);
-                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'XML_PARSER_ERROR',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'XML_PARSER_ERROR',
                                new SystemException("XML parser error in $fileName: $errstr at line $line."));
                 return;
             }
@@ -931,7 +931,7 @@ class pnMLS__LocaleDataLoader
  * It defines a simple interface used by the Multi Language System to fetch both
  * string and key based translations.
  */
-class pnMLS__TranslationsBackend
+class xarMLS__TranslationsBackend
 {
     /**
      * Gets the string based translation associated to the string param.
@@ -953,13 +953,13 @@ class pnMLS__TranslationsBackend
 }
 
 /*
- * This abstract class inherits from pnMLS__TranslationsBackend and provides
+ * This abstract class inherits from xarMLS__TranslationsBackend and provides
  * a powerful access to metadata associated to every translation entry.
  * A translation entry is an array that contains not only the translation,
  * but also the a list of references where it appears in the source by
  * reporting the file name and the line number.
  */
-class pnMLS__ReferencesBackend extends pnMLS__TranslationsBackend
+class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
 {
     /**
      * Gets a translation entry for a string based translation.
@@ -999,7 +999,7 @@ class pnMLS__ReferencesBackend extends pnMLS__TranslationsBackend
  * All xml files are encoded in UTF-8. This backend is useful only when
  * running PostNuke in the multi-language mode (UTF-8).
  */
-class pnMLS__XMLTranslationsBackend extends pnMLS__ReferencesBackend
+class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
 {
     var $curEntry;
     var $curData;
@@ -1033,16 +1033,16 @@ class pnMLS__XMLTranslationsBackend extends pnMLS__ReferencesBackend
 
     function load($translationCtx)
     {
-        list($ostype, $oslocale) = pnVarPrepForOS($translationCtx['type'],
+        list($ostype, $oslocale) = xarVarPrepForOS($translationCtx['type'],
                                                   $translationCtx['locale']);
 
-        $fileName = "$translationCtx[baseDir]/pnlang/xml/$oslocale/";
+        $fileName = "$translationCtx[baseDir]/xarlang/xml/$oslocale/";
         if ($ostype == 'block') {
-            $fileName .= 'blocks/'.pnVarPrepForOS($translationCtx['name']).'.xml';
+            $fileName .= 'blocks/'.xarVarPrepForOS($translationCtx['name']).'.xml';
         } elseif ($ostype == 'template') {
-            $fileName .= 'templates/'.pnVarPrepForOS($translationCtx['name']).'.xml';
+            $fileName .= 'templates/'.xarVarPrepForOS($translationCtx['name']).'.xml';
         } else {
-            $fileName .= "pn$ostype.xml";
+            $fileName .= "xar$ostype.xml";
         }
         if (!file_exists($fileName)) {
             return false;
@@ -1061,10 +1061,10 @@ class pnMLS__XMLTranslationsBackend extends pnMLS__ReferencesBackend
 
         while ($data = fread($fp, 4096)) {
             if (!xml_parse($this->parser, $data, feof($fp))) {
-                // NOTE: <marco> Of course don't use pnML here!
+                // NOTE: <marco> Of course don't use xarML here!
                 $errstr = xml_error_string(xml_get_error_code($this->parser));
                 $line = xml_get_current_line_number($this->parser);
-                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'TRANSLATION_EXCEPTION',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'TRANSLATION_EXCEPTION',
                                new SystemException("XML parser error in $fileName: $errstr at line $line."));
                 return;
             }
@@ -1204,34 +1204,34 @@ class pnMLS__XMLTranslationsBackend extends pnMLS__ReferencesBackend
 
 /**
  * This is the default translations backend and should be used for production sites.
- * Note that it does not support the pnMLS__ReferencesBackend interface.
+ * Note that it does not support the xarMLS__ReferencesBackend interface.
  */
-class pnMLS__PHPTranslationsBackend extends pnMLS__TranslationsBackend
+class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
 {
     function translate($string)
     {
-        global $pnML_PHPBackend_entries;
-        return @$pnML_PHPBackend_entries[$string];
+        global $xarML_PHPBackend_entries;
+        return @$xarML_PHPBackend_entries[$string];
     }
 
     function translateByKey($key)
     {
-        global $pnML_PHPBackend_keyEntries;
-        return @$pnML_PHPBackend_keyEntries[$key];
+        global $xarML_PHPBackend_keyEntries;
+        return @$xarML_PHPBackend_keyEntries[$key];
     }
 
     function load($translationCtx)
     {
-        list($ostype, $oslocale) = pnVarPrepForOS($translationCtx['type'],
+        list($ostype, $oslocale) = xarVarPrepForOS($translationCtx['type'],
                                                   $translationCtx['locale']);
 
-        $fileName = "$translationCtx[baseDir]/pnlang/php/$oslocale/";
+        $fileName = "$translationCtx[baseDir]/xarlang/php/$oslocale/";
         if ($ostype == 'block') {
-            $fileName .= 'blocks/'.pnVarPrepForOS($translationCtx['name']).'.php';
+            $fileName .= 'blocks/'.xarVarPrepForOS($translationCtx['name']).'.php';
         } elseif ($ostype == 'template') {
-            $fileName .= 'templates/'.pnVarPrepForOS($translationCtx['name']).'.php';
+            $fileName .= 'templates/'.xarVarPrepForOS($translationCtx['name']).'.php';
         } else {
-            $fileName .= "pn$ostype.php";
+            $fileName .= "xar$ostype.php";
         }
         if (!file_exists($fileName)) {
             return false;

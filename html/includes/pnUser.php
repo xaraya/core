@@ -21,38 +21,38 @@
  * Dynamic User Data types for User Properties
  */
 
-define('PNUSER_DUD_TYPE_CORE', 0); // indicates a core field
-define('PNUSER_DUD_TYPE_STRING', 1);
-define('PNUSER_DUD_TYPE_TEXT', 2);
-define('PNUSER_DUD_TYPE_DOUBLE', 4);
-define('PNUSER_DUD_TYPE_INTEGER', 8);
+define('XARUSER_DUD_TYPE_CORE', 0); // indicates a core field
+define('XARUSER_DUD_TYPE_STRING', 1);
+define('XARUSER_DUD_TYPE_TEXT', 2);
+define('XARUSER_DUD_TYPE_DOUBLE', 4);
+define('XARUSER_DUD_TYPE_INTEGER', 8);
 
 /*
  * Authentication modules capabilities
  */
-define('PNUSER_AUTH_AUTHENTICATION', 1);
-define('PNUSER_AUTH_DYNAMIC_USER_DATA_HANDLER', 2);
-define('PNUSER_AUTH_PERMISSIONS_OVERRIDER', 16);
-define('PNUSER_AUTH_USER_CREATEABLE', 32);
-define('PNUSER_AUTH_USER_DELETEABLE', 64);
-define('PNUSER_AUTH_USER_ENUMERABLE', 128);
+define('XARUSER_AUTH_AUTHENTICATION', 1);
+define('XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER', 2);
+define('XARUSER_AUTH_PERMISSIONS_OVERRIDER', 16);
+define('XARUSER_AUTH_USER_CREATEABLE', 32);
+define('XARUSER_AUTH_USER_DELETEABLE', 64);
+define('XARUSER_AUTH_USER_ENUMERABLE', 128);
 
 /*
  * Error codes
  */
-define('PNUSER_AUTH_FAILED', -1);
+define('XARUSER_AUTH_FAILED', -1);
 
 /**
  * Initialise the User System
  * @returns bool
  * @return true on success
  */
-function pnUser_init($args)
+function xarUser_init($args)
 {
-    global $pnUser_authenticationModules;
+    global $xarUser_authenticationModules;
 
     // User System and Security Service Tables
-    $systemPrefix = pnDBGetSystemTablePrefix();
+    $systemPrefix = xarDBGetSystemTablePrefix();
 
     $tables = array('users'            => $systemPrefix . '_users',
                     'user_data'        => $systemPrefix . '_user_data',
@@ -63,11 +63,11 @@ function pnUser_init($args)
                     'group_perms'      => $systemPrefix . '_group_perms',
                     'group_membership' => $systemPrefix . '_group_membership');
 
-    pnDB_importTables($tables);
+    xarDB_importTables($tables);
 
-    $pnUser_authenticationModules = $args['authenticationModules'];
+    $xarUser_authenticationModules = $args['authenticationModules'];
 
-    pnMLS_setCurrentLocale(pnUserGetNavigationLocale());
+    xarMLS_setCurrentLocale(xarUserGetNavigationLocale());
 
     return true;
 }
@@ -84,43 +84,43 @@ function pnUser_init($args)
  * @return true if the user successfully logged in
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
  */
-function pnUserLogIn($userName, $password, $rememberMe)
+function xarUserLogIn($userName, $password, $rememberMe)
 {
-    global $pnUser_authenticationModules;
+    global $xarUser_authenticationModules;
 
-    if (pnUserLoggedIn()) {
+    if (xarUserLoggedIn()) {
         return true;
     }
 
     if (empty($userName)) {
-        $msg = pnML('Empty uname.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty uname.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
 
-    $userId = PNUSER_AUTH_FAILED;
-    foreach($pnUser_authenticationModules as $authModName) {
+    $userId = XARUSER_AUTH_FAILED;
+    foreach($xarUser_authenticationModules as $authModName) {
         // Every authentication module must at least implement the
         // Authentication interface so there's at least the authenticate_user
         // user api function
 
-        $res = pnModAPILoad($authModName, 'user');
-        if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        $res = xarModAPILoad($authModName, 'user');
+        if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back
         }
 
-        $userId = pnModAPIFunc($authModName, 'user', 'authenticate_user',
+        $userId = xarModAPIFunc($authModName, 'user', 'authenticate_user',
                             array('uname' => $userName, 'pass' => $password));
-        if (!isset($userId) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        if (!isset($userId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return;
-        } elseif ($userId != PNUSER_AUTH_FAILED) {
+        } elseif ($userId != XARUSER_AUTH_FAILED) {
             // Someone authenticated us
     	    break;
     	}
-        // $userId is PNUSER_AUTH_FAILED, try with next auth module
+        // $userId is XARUSER_AUTH_FAILED, try with next auth module
     }
-    if ($userId == PNUSER_AUTH_FAILED) {
+    if ($userId == XARUSER_AUTH_FAILED) {
         return false;
     }
 
@@ -132,24 +132,24 @@ function pnUserLogIn($userName, $password, $rememberMe)
     }
 
     // Set user session information
-    $res = pnSession_setUserInfo($userId, $rememberMe);
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $res = xarSession_setUserInfo($userId, $rememberMe);
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back
     }
 
     // Set user auth module information
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $userstable = $pntable['users'];
+    $userstable = $xartable['users'];
 
     $query = "UPDATE $userstable
-              SET pn_auth_module = '" . pnVarPrepForStore($authModName) . "'
-              WHERE pn_uid = '" . pnVarPrepForStore($userId) . "'";
+              SET xar_auth_module = '" . xarVarPrepForStore($authModName) . "'
+              WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
     $dbconn->Execute($query);
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
     }
@@ -157,11 +157,11 @@ function pnUserLogIn($userName, $password, $rememberMe)
     // Set session variables
 
     // Keep a reference to auth module that authenticates successfully
-    pnSessionSetVar('authenticationModule', $authModName);
+    xarSessionSetVar('authenticationModule', $authModName);
 
     // Sync core fields that're duplicates in users table
-    $res = pnUser__syncUsersTableFields();
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $res = xarUser__syncUsersTableFields();
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back
     }
 
@@ -177,21 +177,21 @@ function pnUserLogIn($userName, $password, $rememberMe)
  * @return true if the user successfully logged out
  * @raise DATABASE_ERROR
  */
-function pnUserLogOut()
+function xarUserLogOut()
 {
-    if (!pnUserLoggedIn()) {
+    if (!xarUserLoggedIn()) {
         return true;
     }
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
     // Reset user session information
-    $res = pnSession_setUserInfo(0, 0);
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $res = xarSession_setUserInfo(0, 0);
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back
     }
 
-    pnSessionDelVar('authenticationModule');
+    xarSessionDelVar('authenticationModule');
 
     return true;
 }
@@ -202,9 +202,9 @@ function pnUserLogOut()
  * @returns bool
  * @return true if the user is logged in, false if they are not
  */
-function pnUserIsLoggedIn()
+function xarUserIsLoggedIn()
 {
-    if (pnSessionGetVar('uid') != 0) {
+    if (xarSessionGetVar('uid') != 0) {
         return true;
     } else {
         return false;
@@ -218,11 +218,11 @@ function pnUserIsLoggedIn()
  * @return the name of the user's language
  * @raise DATABASE_ERROR
  */
-function pnUserGetLang()
+function xarUserGetLang()
 {
     // FIXME: <marco> DEPRECATED?
-    $locale = pnUserGetNavigationLocale();
-    $data = pnMLSLoadLocaleData($locale);
+    $locale = xarUserGetNavigationLocale();
+    $data = xarMLSLoadLocaleData($locale);
     if (!isset($data)) return; // throw back
     return $data['/language/iso3code'];
 }
@@ -230,24 +230,24 @@ function pnUserGetLang()
 /**
  * Gets the user navigation locale
  */
-function pnUserGetNavigationLocale()
+function xarUserGetNavigationLocale()
 {
-    $locale = pnSessionGetVar('navigationLocale');
+    $locale = xarSessionGetVar('navigationLocale');
     if (!isset($locale)) {
-        if (pnUserIsLoggedIn()) {
-            $locale = pnUserGetVar('locale');
+        if (xarUserIsLoggedIn()) {
+            $locale = xarUserGetVar('locale');
         }
         if (!isset($locale)) {
-            if (pnExceptionMajor() != PN_NO_EXCEPTION) {
+            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 // Here we need to return always a meaningfull result,
                 // so what we can do here is only to log the exception
-                // and call pnExceptionFree
-                pnLogException(PNLOG_LEVEL_ERROR);
-                pnExceptionFree();
+                // and call xarExceptionFree
+                xarLogException(XARLOG_LEVEL_ERROR);
+                xarExceptionFree();
             }
-            $locale = pnMLSGetSiteLocale();
+            $locale = xarMLSGetSiteLocale();
         }
-        pnSessionSetVar('navigationLocale', $locale);
+        xarSessionSetVar('navigationLocale', $locale);
     }
     return $locale;
 }
@@ -255,11 +255,11 @@ function pnUserGetNavigationLocale()
 /**
  * Sets the user navigation locale
  */
-function pnUserSetNavigationLocale($locale)
+function xarUserSetNavigationLocale($locale)
 {
-    $mode = pnMLSGetMode();
-    if ($mode == PNMLS_BOXED_MULTI_LANGUAGE_MODE) {
-        pnSessionSetVar('navigationLocale', $locale);
+    $mode = xarMLSGetMode();
+    if ($mode == XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
+        xarSessionSetVar('navigationLocale', $locale);
     }
 }
 
@@ -277,17 +277,17 @@ function pnUserSetNavigationLocale($locale)
  * @return the value of the user variable if the variable exists, void if the variable doesn't exist
  * @raise BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION, UNKNOWN, DATABASE_ERROR, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST, VARIABLE_NOT_REGISTERED
  */
-function pnUserGetVar($name, $userId = NULL)
+function xarUserGetVar($name, $userId = NULL)
 {
     if (empty($name)) {
-        $msg = pnML('Empty name.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty name.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
 
     if (empty($userId)) {
-        $userId = pnSessionGetVar('uid');
+        $userId = xarSessionGetVar('uid');
     }
     if ($name == 'uid') {
         // User id for Anonymous is NULL, so we check later for this
@@ -297,68 +297,68 @@ function pnUserGetVar($name, $userId = NULL)
         // Anonymous user => only uid, name and uname allowed, for other variable names
         // an exception of type NOT_LOGGED_IN is raised
         if ($name == 'name' || $name == 'uname') {
-            return pnML('Anonymous');
+            return xarML('Anonymous');
         }
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN',
                        new SystemException(__FILE__.'('.__LINE__.')'));
         return;
     }
 
 /* TODO: figure out why this fails all the time now (marco ?)
-    if ($userId != pnSessionGetVar('uid')) {
+    if ($userId != xarSessionGetVar('uid')) {
         // Security check
         // Here we use a trick
         // One user can make private some of its data by creating a permission with ACCESS_NONE as level
         // The trick is that this permission is applied to other users
-        if (!pnSecAuthAction(0, 'users::Variables', "$name::", ACCESS_READ, $userId)) {
-            if (pnExceptionMajor() != PN_NO_EXCEPTION) {
+        if (!xarSecAuthAction(0, 'users::Variables', "$name::", ACCESS_READ, $userId)) {
+            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back
             }
-            $msg = pnML('No permission to get value of #(1) user variable for uid #(2).', $name, $userId);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+            $msg = xarML('No permission to get value of #(1) user variable for uid #(2).', $name, $userId);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                            new SystemException($msg));
             return;
         }
     }
 */
 
-    if (!pnVarIsCached('User.Variables.'.$userId, $name)) {
+    if (!xarVarIsCached('User.Variables.'.$userId, $name)) {
         // check that $name variable appears in the dynamic user data fields
-        $infos = pnUser__getUserVarInfo($name);
+        $infos = xarUser__getUserVarInfo($name);
         if (!isset($infos)) {
         // FIXME: ignoring unknown user variables for now...
-            if (pnExceptionMajor() != PN_NO_EXCEPTION &&
-                pnExceptionId() == 'VARIABLE_NOT_REGISTERED') {
-                pnVarSetCached('User.Variables.'.$userId, $name, false);
+            if (xarExceptionMajor() != XAR_NO_EXCEPTION &&
+                xarExceptionId() == 'VARIABLE_NOT_REGISTERED') {
+                xarVarSetCached('User.Variables.'.$userId, $name, false);
                 // Here we can't raise an exception
                 // so what we can do here is only to log the exception
-                // and call pnExceptionFree
-                pnLogException(PNLOG_LEVEL_ERROR);
-                pnExceptionFree();
+                // and call xarExceptionFree
+                xarLogException(XARLOG_LEVEL_ERROR);
+                xarExceptionFree();
             }
             // Of sure got an exception
             return; // throw back
         }
         extract($infos); // $prop_id, $prop_dtype, $prop_default, $prop_validation
 
-        $authModName = pnUser__getAuthModule($userId);
-        if (!isset($authModName) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        $authModName = xarUser__getAuthModule($userId);
+        if (!isset($authModName) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back
         }
         $useAuthSystem = false; // Used for debug
         //$useAuthSystem = ($authModName == 'authsystem') ? true : false;
 
         if (!$useAuthSystem) {
-            $res = pnModAPIFunc($authModName, 'user', 'has_capability',
-                                array('capability' => PNUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
-            if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+            $res = xarModAPIFunc($authModName, 'user', 'has_capability',
+                                array('capability' => XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
+            if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back
             }
             if ($res) {
                 // $authModName supports the UserDataHandler interface
-                $res = pnModAPIFunc($authModName, 'user', 'is_valid_variable',
+                $res = xarModAPIFunc($authModName, 'user', 'is_valid_variable',
                                     array('name' => $name));
-                if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+                if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
                     return; // throw back
                 }
                 if ($res == false) {
@@ -373,18 +373,18 @@ function pnUserGetVar($name, $userId = NULL)
 
         if ($useAuthSystem == true) {
             $authModName = 'authsystem';
-            $res = pnModAPILoad($authModName, 'user');
-            if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+            $res = xarModAPILoad($authModName, 'user');
+            if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back
             }
         }
 
-        $value = pnModAPIFunc($authModName, 'user', 'get_user_variable',
+        $value = xarModAPIFunc($authModName, 'user', 'get_user_variable',
                               array('uid' => $userId,
                                     'name' => $name,
                                     'prop_id' => $prop_id,
                                     'prop_dtype' => $prop_dtype));
-        if (!isset($value) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        if (!isset($value) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back
         }
 
@@ -396,27 +396,27 @@ function pnUserGetVar($name, $userId = NULL)
             // else
             // Variable doesn't exist
             // false is here a special value to denote that variable was searched
-            // but wasn't found so pnUserGetVar'll return void
-            // will be called: pnVarSetCached('User.Variables.'.$userId, $name, false)
+            // but wasn't found so xarUserGetVar'll return void
+            // will be called: xarVarSetCached('User.Variables.'.$userId, $name, false)
         } else {
             switch ($prop_dtype) {
-                case PNUSER_DUD_TYPE_DOUBLE:
+                case XARUSER_DUD_TYPE_DOUBLE:
                     $value = (float) $value;
                     break;
-                case PNUSER_DUD_TYPE_INTEGER:
+                case XARUSER_DUD_TYPE_INTEGER:
                     $value = (int) $value;
                     break;
             }
         }
 
-        pnVarSetCached('User.Variables.'.$userId, $name, $value);
+        xarVarSetCached('User.Variables.'.$userId, $name, $value);
     }
 
-    if (!pnVarIsCached('User.Variables.'.$userId, $name)) {
+    if (!xarVarIsCached('User.Variables.'.$userId, $name)) {
         return false; //failure
     }
 
-    $cachedValue = pnVarGetCached('User.Variables.'.$userId, $name);
+    $cachedValue = xarVarGetCached('User.Variables.'.$userId, $name);
     if ($cachedValue === false) {
         // Variable already searched but doesn't exist and has no default
         return;
@@ -436,34 +436,34 @@ function pnUserGetVar($name, $userId = NULL)
  * @return true if the set was successful, false if validation fails
  * @raise BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION, UNKNOWN, DATABASE_ERROR, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST, VARIABLE_NOT_REGISTERED
  */
-function pnUserSetVar($name, $value, $userId = NULL)
+function xarUserSetVar($name, $value, $userId = NULL)
 {
     // check that $name is valid
     if (empty($name) || $name == 'uid' || $name == 'authenticationModule') {
-        $msg = pnML('Empty name (#(1)) or invalid name.', $name);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty name (#(1)) or invalid name.', $name);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
 
     if (empty($userId)) {
-        $userId = pnSessionGetVar('uid');
+        $userId = xarSessionGetVar('uid');
     }
     if (empty($userId)) {
         // Anonymous user
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN',
                        new SystemException(__FILE__.'('.__LINE__.')'));return;
     }
-    if ($userId != pnSessionGetVar('uid')) {
+    if ($userId != xarSessionGetVar('uid')) {
         // If you want to set a variable owned by another user
         // you must have ACCESS_EDIT permission
         // Security check
-        if (!pnSecAuthAction(0, 'users::Variables', "$name::", ACCESS_EDIT)) {
-            if (pnExceptionMajor() != PN_NO_EXCEPTION) {
+        if (!xarSecAuthAction(0, 'users::Variables', "$name::", ACCESS_EDIT)) {
+            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back
             }
-            $msg = pnML('No permission to set value of #(1) user variable for uid #(2).', $name, $userId);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+            $msg = xarML('No permission to set value of #(1) user variable for uid #(2).', $name, $userId);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                            new SystemException($msg));
             return;
         }
@@ -471,7 +471,7 @@ function pnUserSetVar($name, $value, $userId = NULL)
 
 
     // check that $name variable appears in the dynamic user data fields
-    $infos = pnUser__getUserVarInfo($name);
+    $infos = xarUser__getUserVarInfo($name);
     if (!isset($infos)) {
         // Of sure got an exception
         return; // throw back
@@ -486,40 +486,40 @@ function pnUserSetVar($name, $value, $userId = NULL)
     }
     */
 
-    if (!pnUserValidateVar($name, $value)) {
-        if (pnExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!xarUserValidateVar($name, $value)) {
+        if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back
         }
         // Validation failed
         return false;
     }
 
-    if ($prop_dtype == PNUSER_DUD_TYPE_CORE) {
+    if ($prop_dtype == XARUSER_DUD_TYPE_CORE) {
         // Keep in sync core fields
-        $res = pnUser__setUsersTableUserVar($name, $value, $userId);
-        if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        $res = xarUser__setUsersTableUserVar($name, $value, $userId);
+        if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back
         }
     }
 
-    $authModName = pnUser__getAuthModule($userId);
-    if (!isset($authModName) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $authModName = xarUser__getAuthModule($userId);
+    if (!isset($authModName) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back
     }
     $useAuthSystem = false; // Used for debug
     //$useAuthSystem = ($authModName == 'authsystem') ? true : false;
 
     if (!$useAuthSystem) {
-        $res = pnModAPIFunc($authModName, 'user', 'has_capability',
-        array('capability' => PNUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
-        if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        $res = xarModAPIFunc($authModName, 'user', 'has_capability',
+        array('capability' => XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
+        if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back
         }
         if ($res) {
             // $authModName supports the UserDataHandler interface
-            $res = pnModAPIFunc($authModName, 'user', 'is_valid_variable',
+            $res = xarModAPIFunc($authModName, 'user', 'is_valid_variable',
             array('name' => $name));
-            if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+            if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back
             }
             if ($res == false) {
@@ -533,35 +533,35 @@ function pnUserSetVar($name, $value, $userId = NULL)
     }
 
     if ($useAuthSystem == true) {
-        if ($prop_dtype == PNUSER_DUD_TYPE_CORE) {
+        if ($prop_dtype == XARUSER_DUD_TYPE_CORE) {
             // Already updated
             return true;
         }
         $authModName = 'authsystem';
-        $res = pnModAPILoad($authModName, 'user');
-        if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        $res = xarModAPILoad($authModName, 'user');
+        if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back
         }
     }
 
-    $res = pnModAPIFunc($authModName, 'user', 'set_user_variable',
+    $res = xarModAPIFunc($authModName, 'user', 'set_user_variable',
                         array('uid' => $userId,
                               'name' => $name,
                               'value' => $value,
                               'prop_id' => $prop_id,
                               'prop_dtype' => $prop_dtype));
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back
     }
 
     if ($res != true) {
-        $msg = pnML('For an unknown reason the function set_user_variable of module #(1) didn\'t return true and didn\'t throw an exception.', $authModName);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+        $msg = xarML('For an unknown reason the function set_user_variable of module #(1) didn\'t return true and didn\'t throw an exception.', $authModName);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                        new SystemException($msg));
         return;
     }
     // Keep in sync the UserVariables cache
-    pnVarSetCached('User.Variables.'.$userId, $name, $value);
+    xarVarSetCached('User.Variables.'.$userId, $name, $value);
 
     return true;
 }
@@ -577,23 +577,23 @@ function pnUserSetVar($name, $value, $userId = NULL)
  * @return true when validation was successfully accomplished, false otherwise
  * @raise ID_NOT_EXIST, DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST, UNKNOWN
  */
-function pnUserValidateVar($name, $value)
+function xarUserValidateVar($name, $value)
 {
     // check that $name is valid
     if (empty($name)) {
-        $msg = pnML('Empty name.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty name.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
 
-    if (pnVarIsCached('User.Variables.Validated', $name) &&
-        pnVarGetCached('User.Variables.Validated', $name) == $value) {
+    if (xarVarIsCached('User.Variables.Validated', $name) &&
+        xarVarGetCached('User.Variables.Validated', $name) == $value) {
         return true;
     }
 
     // check that $name variable appears in the dynamic user data fields
-    $infos = pnUser__getUserVarInfo($name);
+    $infos = xarUser__getUserVarInfo($name);
     if (!isset($infos)) {
         // Of sure got an exception
         return; // throw back
@@ -602,17 +602,17 @@ function pnUserValidateVar($name, $value)
 
     if (isset($prop_validation)) {
         switch ($prop_dtype) {
-            case PNUSER_DUD_TYPE_DOUBLE:
+            case XARUSER_DUD_TYPE_DOUBLE:
                 $value = (float) $value;
                 break;
-            case PNUSER_DUD_TYPE_INTEGER:
+            case XARUSER_DUD_TYPE_INTEGER:
                 $value = (int) $value;
                 break;
         }
 
         // Do validation
-        $res = pnUser__validationApply($prop_validation, $value);
-        if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        $res = xarUser__validationApply($prop_validation, $value);
+        if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back
         }
         if ($res == false) {
@@ -621,7 +621,7 @@ function pnUserValidateVar($name, $value)
         }
     }
 
-    pnVarSetCached('User.Variables.Validated', $name, $value);
+    xarVarSetCached('User.Variables.Validated', $name, $value);
 
     return true;
 }
@@ -632,12 +632,12 @@ function pnUserValidateVar($name, $value)
  * @access public
  * @return bool true if the passwords match, false otherwise
  */
-function pnUserComparePasswords($givenPassword, $realPassword, $userName, $cryptSalt = '')
+function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryptSalt = '')
 {
     $compare2crypt = true;
     $compare2text = true;
 
-    $system = pnConfigGetVar('system');
+    $system = xarConfigGetVar('system');
 
     $md5pass = md5($givenPassword);
     if (strcmp($md5pass, $realPassword) == 0)
@@ -667,18 +667,18 @@ function pnUserComparePasswords($givenPassword, $realPassword, $userName, $crypt
  * @returns string
  * @return the user's theme directory path if successful, void otherwise
  */
-function pnUser_getThemeName()
+function xarUser_getThemeName()
 {
-    if (!pnUserLoggedIn()) {
+    if (!xarUserLoggedIn()) {
         return;
     }
-    $themeName = pnUserGetVar('Theme');
-    if (pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $themeName = xarUserGetVar('Theme');
+    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
         // Here we can't raise an exception
         // so what we can do here is only to log the exception
-        // and call pnExceptionFree
-        pnLogException(PNLOG_LEVEL_ERROR);
-        pnExceptionFree();
+        // and call xarExceptionFree
+        xarLogException(XARLOG_LEVEL_ERROR);
+        xarExceptionFree();
         return;
     }
     return $themeName;
@@ -690,33 +690,33 @@ function pnUser_getThemeName()
  * @access private
  * @raise UNKNOWN, DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
-function pnUser__getAuthModule($userId)
+function xarUser__getAuthModule($userId)
 {
     // FIXME: what happens for anonymous users ???
     // TODO: check coherence 1 vs. 0 for Anonymous users !!!
-    if ($userId == pnSessionGetVar('uid')) {
-        $authModName = pnSessionGetVar('authenticationModule');
+    if ($userId == xarSessionGetVar('uid')) {
+        $authModName = xarSessionGetVar('authenticationModule');
         if (!isset($authModName)) {
             // Should never happen, however ...
-            $msg = pnML('Auth module isn\'t set as session variable.');
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+            $msg = xarML('Auth module isn\'t set as session variable.');
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
             return;
         }
     } else {
-        list($dbconn) = pnDBGetConn();
-        $pntable = pnDBGetTables();
+        list($dbconn) = xarDBGetConn();
+        $xartable = xarDBGetTables();
 
         // Get user auth_module name
-        $userstable = $pntable['users'];
+        $userstable = $xartable['users'];
 
-        $query = "SELECT pn_auth_module
+        $query = "SELECT xar_auth_module
                   FROM $userstable
-                  WHERE pn_uid = '" . pnVarPrepForStore($userId) . "'";
+                  WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
         $result = $dbconn->Execute($query);
         if ($dbconn->ErrorNo() != 0) {
-            $msg = pnMLByKey('DATABASE_ERROR', $query);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+            $msg = xarMLByKey('DATABASE_ERROR', $query);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                            new SystemException($msg));
             return;
         }
@@ -734,8 +734,8 @@ function pnUser__getAuthModule($userId)
         }
         $result->Close();
     }
-    $res = pnModAPILoad($authModName, 'user');
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $res = xarModAPILoad($authModName, 'user');
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back
     }
 
@@ -746,11 +746,11 @@ function pnUser__getAuthModule($userId)
  * @access private
  * @raise DATABASE_ERROR, ID_NOT_EXIST
  */
-function pnUser__getUserVarInfo($name)
+function xarUser__getUserVarInfo($name)
 {
-    $pntable = pnDBGetTables();
+    $xartable = xarDBGetTables();
 
-    $userstable = $pntable['users'];
+    $userstable = $xartable['users'];
 
     // Core fields aren't handled with Dynamic User Data
     if ($name == 'name' || $name == 'uname' ||
@@ -758,33 +758,33 @@ function pnUser__getUserVarInfo($name)
         // You're asking metainfo for a core field
         // We can safely return a default value
         // prop_id = 0 means variable won't go in user_data table
-        return array('prop_id' => 0, 'prop_dtype' => PNUSER_DUD_TYPE_CORE);
+        return array('prop_id' => 0, 'prop_dtype' => XARUSER_DUD_TYPE_CORE);
     }
 
-    if (!pnVarIsCached('User.Variables.Info', $name)) {
-        pnVarSetCached('User.Variables.Info', $name, false); // If at the end of operations it still
+    if (!xarVarIsCached('User.Variables.Info', $name)) {
+        xarVarSetCached('User.Variables.Info', $name, false); // If at the end of operations it still
                                                              // be false we're sure that the property
                                                              // was searched but not found
 
-        list($dbconn) = pnDBGetConn();
+        list($dbconn) = xarDBGetConn();
 
-        $propertiestable = $pntable['user_property'];
+        $propertiestable = $xartable['user_property'];
 
         if (($ind = strpos($name, '_')) > 0) {
             // Here we do a pre-caching
             $name_prefix = substr($name, 0, $ind + 1);
             // Select all user vars that begins with $name_prefix
-            $query = "SELECT pn_prop_id,
-                             pn_prop_label,
-                             pn_prop_dtype,
-                             pn_prop_default,
-                             pn_prop_validation
+            $query = "SELECT xar_prop_id,
+                             xar_prop_label,
+                             xar_prop_dtype,
+                             xar_prop_default,
+                             xar_prop_validation
                              FROM $propertiestable
-                             WHERE pn_prop_label LIKE '" . pnVarPrepForStore($name_prefix) ."%%'";
+                             WHERE xar_prop_label LIKE '" . xarVarPrepForStore($name_prefix) ."%%'";
             $result = $dbconn->Execute($query);
             if ($dbconn->ErrorNo() != 0) {
-                $msg = pnMLByKey('DATABASE_ERROR', $query);
-                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                $msg = xarMLByKey('DATABASE_ERROR', $query);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                                new SystemException($msg));
                 return;
             }
@@ -796,21 +796,21 @@ function pnUser__getUserVarInfo($name)
                 $info['prop_dtype'] = (int) $prop_dtype;
                 if (isset($prop_default)) {
                     switch($info['prop_dtype']) {
-                        case PNUSER_DUD_TYPE_STRING:
-                        case PNUSER_DUD_TYPE_TEXT:
+                        case XARUSER_DUD_TYPE_STRING:
+                        case XARUSER_DUD_TYPE_TEXT:
                             $info['prop_default'] = $prop_default;
                             break;
-                        case PNUSER_DUD_TYPE_DOUBLE:
+                        case XARUSER_DUD_TYPE_DOUBLE:
                             $info['prop_default'] = (float) $prop_default;
                             break;
-                        case PNUSER_DUD_TYPE_INTEGER:
+                        case XARUSER_DUD_TYPE_INTEGER:
                             $info['prop_default'] = (int) $prop_default;
                             break;
                     }
                 }
                 $info['prop_validation'] = $prop_validation;
                 // Cache info
-                pnVarSetCached('User.Variables.Info', $prop_label, $info);
+                xarVarSetCached('User.Variables.Info', $prop_label, $info);
 
                 $result->MoveNext();
             }
@@ -818,16 +818,16 @@ function pnUser__getUserVarInfo($name)
             $result->Close();
         } else {
             // Confirm that this is a known value
-            $query = "SELECT pn_prop_id,
-                      pn_prop_dtype,
-                      pn_prop_default,
-                      pn_prop_validation
+            $query = "SELECT xar_prop_id,
+                      xar_prop_dtype,
+                      xar_prop_default,
+                      xar_prop_validation
                       FROM $propertiestable
-                      WHERE pn_prop_label = '" . pnVarPrepForStore($name) ."'";
+                      WHERE xar_prop_label = '" . xarVarPrepForStore($name) ."'";
             $result = $dbconn->Execute($query);
             if ($dbconn->ErrorNo() != 0) {
-                $msg = pnMLByKey('DATABASE_ERROR', $query);
-                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                $msg = xarMLByKey('DATABASE_ERROR', $query);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                                new SystemException($msg));
                 return;
             }
@@ -839,31 +839,31 @@ function pnUser__getUserVarInfo($name)
                 $info['prop_dtype'] = (int) $prop_dtype;
                 if (isset($prop_default)) {
                     switch($info['prop_dtype']) {
-                        case PNUSER_DUD_TYPE_STRING:
-                        case PNUSER_DUD_TYPE_TEXT:
+                        case XARUSER_DUD_TYPE_STRING:
+                        case XARUSER_DUD_TYPE_TEXT:
                         $info['prop_default'] = $prop_default;
                         break;
-                        case PNUSER_DUD_TYPE_DOUBLE:
+                        case XARUSER_DUD_TYPE_DOUBLE:
                         $info['prop_default'] = (float) $prop_default;
                         break;
-                        case PNUSER_DUD_TYPE_INTEGER:
+                        case XARUSER_DUD_TYPE_INTEGER:
                         $info['prop_default'] = (int) $prop_default;
                         break;
                     }
                 }
                 $info['prop_validation'] = $prop_validation;
                 // Cache info
-                pnVarSetCached('User.Variables.Info', $name, $info);
+                xarVarSetCached('User.Variables.Info', $name, $info);
 
                 $result->Close();
             }
         }
     }
 
-    $info = pnVarGetCached('User.Variables.Info', $name);
+    $info = xarVarGetCached('User.Variables.Info', $name);
     if ($info == false) {
-        $msg = pnML('Metadata for user variable #(1) are not correctly registered in database.', $name);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'VARIABLE_NOT_REGISTERED',
+        $msg = xarML('Metadata for user variable #(1) are not correctly registered in database.', $name);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'VARIABLE_NOT_REGISTERED',
                        new SystemException($msg));
         return;
     }
@@ -876,17 +876,17 @@ function pnUser__getUserVarInfo($name)
  * @return true
  * @raise NOT_LOGGED_IN, UNKNOWN, DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
-function pnUser__syncUsersTableFields()
+function xarUser__syncUsersTableFields()
 {
-    $userId = pnSessionGetVar('uid');
+    $userId = xarSessionGetVar('uid');
     if (empty($userId)) {
-        $msg = pnML('Empty uid.');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN',
+        $msg = xarML('Empty uid.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN',
                        new SystemException($msg));return;
     }
 
-    $authModName = pnUser__getAuthModule($userId);
-    if (!isset($authModName) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $authModName = xarUser__getAuthModule($userId);
+    if (!isset($authModName) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back
     }
     if ($authModName == 'authsystem') {
@@ -894,9 +894,9 @@ function pnUser__syncUsersTableFields()
         return true;
     }
 
-    $res = pnModAPIFunc($authModName, 'user', 'has_capability',
-                        array('capability' => PNUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $res = xarModAPIFunc($authModName, 'user', 'has_capability',
+                        array('capability' => XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back
     }
     if ($res == false) {
@@ -904,27 +904,27 @@ function pnUser__syncUsersTableFields()
         return true;
     }
 
-    $name = pnUserGetVar('name');
+    $name = xarUserGetVar('name');
     if (!isset($name)) {
         return; // throw back
     }
-    $res = pnUser__setUsersTableUserVar('name', $name, $userId);
+    $res = xarUser__setUsersTableUserVar('name', $name, $userId);
     if (!isset($res)) {
         return; // throw back
     }
-    $uname = pnUserGetVar('uname');
+    $uname = xarUserGetVar('uname');
     if (!isset($uname)) {
         return; // throw back
     }
-    $res = pnUser__setUsersTableUserVar('uname', $uname, $userId);
+    $res = xarUser__setUsersTableUserVar('uname', $uname, $userId);
     if (!isset($res)) {
         return; // throw back
     }
-    $email = pnUserGetVar('email');
+    $email = xarUserGetVar('email');
     if (!isset($email)) {
         return; // throw back
     }
-    $res = pnUser__setUsersTableUserVar('email', $email, $userId);
+    $res = xarUser__setUsersTableUserVar('email', $email, $userId);
     if (!isset($res)) {
         return; // throw back
     }
@@ -938,21 +938,21 @@ function pnUser__syncUsersTableFields()
  * @return true
  * @raise DATABASE_ERROR
  */
-function pnUser__setUsersTableUserVar($name, $value, $userId)
+function xarUser__setUsersTableUserVar($name, $value, $userId)
 {
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $userstable = $pntable['users'];
+    $userstable = $xartable['users'];
 
     $query = "UPDATE $userstable
-              SET pn_name = '" . pnVarPrepForStore($value) . "'
-              WHERE pn_uid = '" . pnVarPrepForStore($userId) . "'";
+              SET xar_name = '" . xarVarPrepForStore($value) . "'
+              WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
     $dbconn->Execute($query);
 
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
     }
@@ -985,19 +985,19 @@ function pnUser__setUsersTableUserVar($name, $value, $userId)
  * @access private
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST, UNKNOWN
  */
-function pnUser__validationApply($validation, $valueToCheck)
+function xarUser__validationApply($validation, $valueToCheck)
 {
     // TODO: set a ML errmsg on failure
 
     // Syntax trees of parsed validation strings are cached
-    if (!pnVarIsCached('User.Variables.Validators', $validation)) {
-        $val_stack = pnUser__validationParse($validation);
+    if (!xarVarIsCached('User.Variables.Validators', $validation)) {
+        $val_stack = xarUser__validationParse($validation);
         if (!isset($val_stack)) {
             return;
         }
-        pnVarSetCached('User.Variables.Validators', $validation, $val_stack);
+        xarVarSetCached('User.Variables.Validators', $validation, $val_stack);
     }
-    $val_stack = pnVarGetCached('User.Variables.Validators', $validation);
+    $val_stack = xarVarGetCached('User.Variables.Validators', $validation);
 
     foreach($val_stack as $val_entry) {
         $res = false;
@@ -1027,8 +1027,8 @@ function pnUser__validationApply($validation, $valueToCheck)
             } elseif ($val_entry->operator == '>=') {
                 $res = ($value >= $param) ? true : false;
             } else {
-                $msg = pnML('Invalid operator \'#(1)\' for type \'num\'.', $val_entry->operator);
-                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+                $msg = xarML('Invalid operator \'#(1)\' for type \'num\'.', $val_entry->operator);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                        new SystemException($msg));
                 return;
             }
@@ -1048,7 +1048,7 @@ function pnUser__validationApply($validation, $valueToCheck)
                 }
             } elseif ($val_entry->operator == 'like') {
                 // FIXME: How to implement this?
-                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NOT_IMPLEMENTED',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NOT_IMPLEMENTED',
                                new SystemException(__FILE__.'('.__LINE__."): Operator like isn't implemented."));
                 return;
             } elseif ($val_entry->operator == 'regex') {
@@ -1059,8 +1059,8 @@ function pnUser__validationApply($validation, $valueToCheck)
                     $res = true;
                 }
             } else {
-                $msg = pnML('Invalid operator \'#(1)\' for type \'string\'.', $val_entry->operator);
-                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+                $msg = xarML('Invalid operator \'#(1)\' for type \'string\'.', $val_entry->operator);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                        new SystemException($msg));
                 return;
             }
@@ -1068,8 +1068,8 @@ function pnUser__validationApply($validation, $valueToCheck)
             list($modname, $funcname) = explode(',', $val_entry->param);
 
             // Load module
-            $res = pnModAPILoad($modname, 'user');
-            if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+            $res = xarModAPILoad($modname, 'user');
+            if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back
             }
 
@@ -1079,13 +1079,13 @@ function pnUser__validationApply($validation, $valueToCheck)
             }
 
             // Call module API function
-            $res = pnModAPIFunc($modname, 'user', $funcname, $args);
-            if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+            $res = xarModAPIFunc($modname, 'user', $funcname, $args);
+            if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back
             }
         } else {
-            $msg = pnML('Invalid type \'#(1)\'.', $val_entry->type);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+            $msg = xarML('Invalid type \'#(1)\'.', $val_entry->type);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
             return;
         }
@@ -1103,7 +1103,7 @@ function pnUser__validationApply($validation, $valueToCheck)
 }
 
 // Simple data structure used by validation stuff
-class pnUser__ValEntry
+class xarUser__ValEntry
 {
     var $negation = false;
     var $type;
@@ -1114,7 +1114,7 @@ class pnUser__ValEntry
 /**
  * @access private
  */
-function pnUser__validationExplodeEsc($delimiter, $str)
+function xarUser__validationExplodeEsc($delimiter, $str)
 {
     $ind = strpos($str, "\\$delimiter");
     if ($ind === false) {
@@ -1148,20 +1148,20 @@ function pnUser__validationExplodeEsc($delimiter, $str)
  * @return validation string parsed tree or void on failure
  * @raise UNKNOWN
  */
-function pnUser__validationParse($validationString)
+function xarUser__validationParse($validationString)
 {
     $val_stack = array();
 
-    $validator_list = pnUser__validationExplodeEsc('&', $validationString);
+    $validator_list = xarUser__validationExplodeEsc('&', $validationString);
 
     foreach($validator_list as $validator_string) {
-        $val_entry = new pnUser__ValEntry();
+        $val_entry = new xarUser__ValEntry();
 
-        $validator = pnUser__validationExplodeEsc(':', $validator_string);
+        $validator = xarUser__validationExplodeEsc(':', $validator_string);
 
         if (count($validator) != 3) {
-            $msg = pnML('Parse failed for validation string: \'#(1)\'.', $validationString);
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+            $msg = xarML('Parse failed for validation string: \'#(1)\'.', $validationString);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
             return;
         }
