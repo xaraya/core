@@ -55,7 +55,7 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
 
     // ADODB-to-Xaraya error-to-exception bridge
     if (!defined('ADODB_ERROR_HANDLER')) {
-        define('ADODB_ERROR_HANDLER', 'xarDB__adodbErrorHandler');
+        define('ADODB_ERROR_HANDLER', 'xarException__dbErrorHandler');
     }
 
     include_once ADODB_DIR .'/adodb.inc.php';
@@ -88,7 +88,7 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     // BlockLayout Template Engine Tables
     $GLOBALS['xarDB_tables']['template_tags'] = $systemPrefix . '_template_tags';
 
-    // All initialize register the shutdown function
+    // All initialized register the shutdown function
     register_shutdown_function('xarDB__shutdown_handler');
 
     return true;
@@ -268,27 +268,5 @@ function xarDB_importTables($tables)
     $GLOBALS['xarDB_tables'] = array_merge($GLOBALS['xarDB_tables'], $tables);
 }
 
-/**
- * ADODB error handler bridge
- *
- * @access private
- * @param string databaseName
- * @param string funcName
- * @param integer errNo
- * @param string errMsg
- * @param bool param1
- * @param bool param2
- * @raise DATABASE_ERROR
- * @todo  <marco> complete it
- * @todo  can we let the exception system handle this, so we have all error handlers in one place?
- */
-function xarDB__adodbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $param1 = false, $param2 = false)
-{
-    if ($funcName == 'EXECUTE') {
-        $msg = xarML('Database error while executing: \'#(1)\'; error description is: \'#(2)\'.', $param1, $errMsg);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemException("ErrorNo: ".$errNo.", Message:".$msg));
-    } else {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', $errMsg);
-    }
-}
+
 ?>

@@ -463,6 +463,63 @@ function xarException__formatStack($format,$stacktype = "ERROR")
     return $formattedmsgs;
 }
 
+/** 
+ * Error handlers section
+ *
+ * For several areas there are specific bridges to route errors into
+ * the exception subsystem:
+ *
+ * Handlers:
+ * 1. assert failures -> xarException__assertErrorHandler($script,$line,$code)
+ * 2. ado db errors   -> xarException__dbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $param1 = fail, $param2 = false)
+ * 3. php Errors      -> xarException__phpErrorHandler($errorType, $errorString, $file, $line)
+ *
+ * @todo Use trigger_error functionality for them all and take php5 into account
+ */
+
+/**
+ * Error handler for assert failures
+ *
+ * This handler is called when assertions in code fail.
+ *
+ * @author Marcel van der Boom <marcel@xaraya.com>
+ * @access private
+ * @param  string  $script filename in which assertion failed
+ * @param  integer $line   linenumber on which assertion is made
+ * @param  string  $code   the assertion expressed in code which evaluated to false
+ * @return void
+ */
+function xarException__assertErrorHandler($script,$line,$code)
+{
+    // Redirect the assertion to a system exception
+    $msg = "ASSERTION FAILED: $script [$line] : $code";
+    xarErrorSet(XAR_SYSTEM_EXCEPTION,'ASSERT_FAILURE',$msg);
+}
+
+/**
+ * ADODB error handler bridge
+ *
+ * @access private
+ * @param  string databaseName
+ * @param  string funcName
+ * @param  integer errNo
+ * @param  string errMsg
+ * @param  bool param1
+ * @param  bool param2
+ * @raise  DATABASE_ERROR
+ * @return void
+ * @todo   <marco> complete it
+ */
+function xarException__dbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $param1 = false, $param2 = false)
+{
+    if ($funcName == 'EXECUTE') {
+        $msg = xarML('Database error while executing: \'#(1)\'; error description is: \'#(2)\'.', $param1, $errMsg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemException("ErrorNo: ".$errNo.", Message:".$msg));
+    } else {
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', $errMsg);
+    }
+}
+
 /**
  * PHP error handler bridge to Xaraya exceptions
  *
@@ -566,6 +623,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
                 }
             }
         }
+        // CHECKME: <mrb> This introduces a dependency to 2 subsystems
         xarResponseRedirect(xarModURL('base','user','systemexit',
         array('code' => $errorType,
               'exception' => urlencode($msg),
