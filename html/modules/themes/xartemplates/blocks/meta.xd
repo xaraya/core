@@ -25,7 +25,12 @@
     <xar:if condition="xarThemeIsAvailable('print')">
         <link rel="alternate" type="text/html" title="Print" href="#$activepageprint#" />
     </xar:if>
-    <link rel="EditURI" type="application/rsd+xml" title="RSD" href="#$baseurl#var/rsd.xml" />
+    
+    <xar:comment> The XMLRPC-server module takes case of filling the RSD information </xar:comment>
+    <xar:if condition="xarModIsAvailable('xmlrpcserver')">
+        <link rel="EditURI" type="application/rsd+xml" title="RSD" href="#xarModUrl('xmlrpcserver','user','rsd',array(),false)#" />
+    </xar:if>
+    
     <link rel="pingback" href="&xar-baseurl;ws.php" />
     <link rel="Top" type="text/html" href="#$baseurl#" />
     <link rel="Parent" type="text/html" href="#$baseurl#" />
