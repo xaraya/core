@@ -763,8 +763,19 @@ class xarRole {
             $result->MoveNext();
         }
         // delete the relevant entry in the roles table
-        $query = "DELETE FROM $this->rolestable
-              WHERE xar_uid=" . $this->getID();
+        //$query = "DELETE FROM $this->rolestable
+        //      WHERE xar_uid=" . $this->getID();
+
+        //Let's not remove the role yet.  Instead, we want to deactivate it
+        // and then purge it at a later time.
+
+        $query = "UPDATE $this->rolestable
+        SET xar_email   = '',
+            xar_pass    = '',
+            xar_valcode = '',
+            xar_state   = '0'
+        WHERE xar_uid   = " . $this->getID();
+
         // Execute the query, bail if an exception was thrown
         if (!$this->dbconn->Execute($query)) return;
         // done
