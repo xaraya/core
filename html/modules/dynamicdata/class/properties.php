@@ -366,6 +366,12 @@ class Dynamic_Property_Master
                 require_once "includes/properties/Dynamic_HTMLArea_Property.php";
                 $property = new Dynamic_HTMLArea_Property($args);
                 break;
+            case 204: // (hardcore editor) Large GUI Editor
+                $args['rows'] = 20;
+                $args['cols'] = 80;
+                require_once "includes/properties/Dynamic_Hardcore_Property.php";
+                $property = new Dynamic_Hardcore_Property($args);
+                break;
 
            // Using 800 range for PayPal and E-Commerce.  Module Dependant
             case 800: // PayPal Now
@@ -909,6 +915,18 @@ class Dynamic_Property_Master
                                   'id'         => 203,
                                   'name'       => 'htmlarea_large',
                                   'label'      => 'Large GUI Editor',
+                                  'format'     => '5',
+                                  'validation' => '',
+                                  // ...
+                                 );
+        }
+        // HardCore Web Editor
+        if( file_exists('hardcore/webeditor/webeditor.js') )
+        {
+            $proptypes[204] = array(
+                                  'id'         => 204,
+                                  'name'       => 'hardcore',
+                                  'label'      => 'Harcore GUI Editor',
                                   'format'     => '5',
                                   'validation' => '',
                                   // ...
