@@ -22,7 +22,8 @@
  * @throws  no exceptions
  * @todo    nothing
 */
-function adminpanels_admin_confirmlogout(){
+function adminpanels_admin_confirmlogout()
+{
 
     // first we display a pseudo modal-dialogue with Yes/No choice
     // if answer is Logout, we logout as the admin/user..

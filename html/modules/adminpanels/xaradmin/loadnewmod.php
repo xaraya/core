@@ -22,7 +22,8 @@
  * @throws  no exceptions
  * @todo    nothing
 */
-function adminpanels_admin_loadnewmod(){
+function adminpanels_admin_loadnewmod()
+{
     // Get vars
 
     if (!xarVarFetch('mname','str:1:',$mname,'adminpanels')) return;

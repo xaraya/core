@@ -22,7 +22,8 @@
  * @throws none
  * @todo none
  */
-class xarRoles {
+class xarRoles 
+{
     var $allgroups = array();
     var $users = array();
     var $dbconn;
@@ -469,7 +470,8 @@ class xarRoles {
  * @throws none
  * @todo none
  */
-class xarRole {
+class xarRole 
+{
     var $uid; //the id of this user or group
     var $name; //the name of this user or group
     var $type; //the type of this role (0=user, 1=group)

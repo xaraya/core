@@ -20,7 +20,8 @@
  * @returns array
  * @todo some facelift
  */
-function modules_admin_modinfonew(){
+function modules_admin_modinfonew()
+{
     
     // Security check - not needed here, imo 
     // we just show some info here, not changing anything

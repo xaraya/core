@@ -22,7 +22,8 @@
  * @throws  no exceptions
  * @todo    stub atm, needs to be completed
 */
-function adminpanels_admin_config_modgroups(){
+function adminpanels_admin_config_modgroups()
+{
     // Get vars
 
     // redirect back to adminpanels configuration

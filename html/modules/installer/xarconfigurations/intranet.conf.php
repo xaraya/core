@@ -14,7 +14,8 @@
 
 $configuration_name = 'Intranet';
 
-function installer_intranet_moduleoptions() {
+function installer_intranet_moduleoptions() 
+{
     return array(
         array('name' => "autolinks",            'regid' => 11),
         array('name' => "bloggerapi",           'regid' => 745),
@@ -34,7 +35,9 @@ function installer_intranet_moduleoptions() {
         array('name' => "articles",             'regid' => 151)
     );
 }
-function installer_intranet_privilegeoptions() {
+
+function installer_intranet_privilegeoptions() 
+{
     return array(
                      array(
                            'item' => 'p1',

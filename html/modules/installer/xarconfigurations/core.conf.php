@@ -13,10 +13,13 @@
 
 $configuration_name = 'Core Xaraya install (aka minimal)';
 
-function installer_core_moduleoptions() {
+function installer_core_moduleoptions() 
+{
     return array();
 }
-function installer_core_privilegeoptions() {
+
+function installer_core_privilegeoptions() 
+{
     return array(
         array(
             'item' => 'p1',

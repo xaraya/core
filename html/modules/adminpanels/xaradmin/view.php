@@ -21,7 +21,8 @@
  * @return  data for template or void on failure
  * @throws  XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION'
 */
-function adminpanels_admin_view(){
+function adminpanels_admin_view()
+{
 
     // Security Check
     if(!xarSecurityCheck('EditPanel')) return;

@@ -64,7 +64,8 @@ class xarMasks
  * @throws  none
  * @todo    none
 */
-    function xarMasks() {
+    function xarMasks() 
+    {
         list($this->dbconn) = xarDBGetConn();
         $xartable =& xarDBGetTables();
         $this->privilegestable = $xartable['privileges'];
@@ -107,7 +108,8 @@ class xarMasks
  * @throws  list of exception identifiers which can be thrown
  * @todo    list of things which must be done to comply to relevant RFC
 */
-    function getmasks($module = 'All',$component='All') {
+    function getmasks($module = 'All',$component='All') 
+    {
 
         if ($module == '' || $module == 'All') {
             if ($component == '' || $component == 'All') {
@@ -827,7 +829,8 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    none
 */
-    function getprivileges() {
+    function getprivileges() 
+    {
     if ((!isset($allprivileges)) || count($allprivileges)==0) {
             $query = "SELECT p.xar_pid,
                         p.xar_name,
@@ -883,7 +886,8 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    none
 */
-    function gettoplevelprivileges($arg) {
+    function gettoplevelprivileges($arg) 
+    {
 //    if ((!isset($alltoplevelprivileges)) || count($alltoplevelprivileges)==0) {
         if($arg == "all") {
              $fromclause = "FROM $this->privilegestable AS p,$this->privmemberstable AS pm
@@ -953,7 +957,8 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    this isn't really the right place for this function
 */
-    function getrealms() {
+    function getrealms() 
+    {
     if ((!isset($allrealms)) || count($allrealms)==0) {
             $query = "SELECT xar_rid,
                             xar_name
@@ -1001,7 +1006,8 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    this isn't really the right place for this function
 */
-    function getmodules() {
+    function getmodules() 
+    {
     if ((!isset($allmodules)) || count($allmodules)==0) {
             $query = "SELECT modules.xar_id,
                         modules.xar_name
@@ -1053,7 +1059,8 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    this isn't really the right place for this function
 */
-    function getcomponents($module) {
+    function getcomponents($module) 
+    {
         $query = "SELECT DISTINCT xar_component
                     FROM $this->instancestable
                     WHERE xar_module= '$module'
@@ -1106,7 +1113,8 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    this isn't really the right place for this function
 */
-    function getinstances($module, $component) {
+    function getinstances($module, $component) 
+    {
 
 
         if ($component =="All") {
@@ -1188,14 +1196,16 @@ class xarPrivileges extends xarMasks
         return $instances;
     }
 
-    function getprivilegefast($pid){
+    function getprivilegefast($pid)
+    {
         foreach($this->getprivileges() as $privilege){
             if ($privilege['pid'] == $pid) return $privilege;
         }
         return false;
     }
 
-    function getsubprivileges($pid){
+    function getsubprivileges($pid)
+    {
         $subprivileges = array();
         $ind = 0;
         foreach($this->getprivileges() as $subprivilege){
@@ -1216,7 +1226,8 @@ class xarPrivileges extends xarMasks
  * @param   strings with pid, name, realm, module, component, instances and level
  * @return  mixed pid if OK, void if not
 */
-    function returnPrivilege($pid,$name,$realm,$module,$component,$instances,$level) {
+    function returnPrivilege($pid,$name,$realm,$module,$component,$instances,$level) 
+    {
 
         $instance = "";
         foreach ($instances as $inst) {
@@ -1532,7 +1543,8 @@ class xarPrivileges extends xarMasks
         $this->description  = $description;
     }
 
-    function present() {
+    function present() 
+    {
         $display = $this->getName();
         $display .= "-" . strtolower($this->getLevel());
         $display .= ":" . strtolower($this->getRealm());
@@ -1556,7 +1568,8 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    none
 */
-    function normalize($adds=0) {
+    function normalize($adds=0) 
+    {
         if (isset($this->normalform)) {
             if (empty($adds)) return $this->normalform;
             $normalform = $this->normalform;
@@ -1724,22 +1737,80 @@ class xarPrivileges extends xarMasks
         return $match && ($this->getLevel() >= $mask->getLevel()) && ($mask->getLevel() > 0);
     }
 
-    function getID()              {return $this->sid;}
-    function getName()            {return $this->name;}
-    function getRealm()           {return $this->realm;}
-    function getModule()          {return $this->module;}
-    function getComponent()       {return $this->component;}
-    function getInstance()        {return $this->instance;}
-    function getLevel()           {return $this->level;}
-    function getDescription()     {return $this->description;}
+    function getID()              
+    {
+        return $this->sid;
+    }
+    
+    function getName()            
+    {
+        return $this->name;
+    }
+    
+    function getRealm()           
+    {
+        return $this->realm;
+    }
+    
+    function getModule()          
+    {
+        return $this->module;
+    }
+    
+    function getComponent()       
+    {
+        return $this->component;
+    }
+    
+    function getInstance()        
+    {
+        return $this->instance;
+    }
+    
+    function getLevel()           
+    {
+        return $this->level;
+    }
+    
+    function getDescription()     
+    {
+        return $this->description;
+    }
 
-    function setName($var)        {$this->name = $var;}
-    function setRealm($var)       {$this->realm = $var;}
-    function setModule($var)      {$this->module = $var;}
-    function setComponent($var)   {$this->component = $var;}
-    function setInstance($var)    {$this->instance = $var;}
-    function setLevel($var)       {$this->level = $var;}
-    function setDescription($var) {$this->description = $var;}
+    function setName($var)        
+    {
+        $this->name = $var;
+    }
+    
+    function setRealm($var)       
+    {
+        $this->realm = $var;
+    }
+    
+    function setModule($var)      
+    {
+        $this->module = $var;
+    }
+    
+    function setComponent($var)   
+    {
+        $this->component = $var;
+    }
+    
+    function setInstance($var)    
+    {
+        $this->instance = $var;
+    }
+    
+    function setLevel($var)       
+    {
+        $this->level = $var;
+    }
+    
+    function setDescription($var) 
+    {
+        $this->description = $var;
+    }
 
 }
 
@@ -1826,7 +1897,8 @@ class xarPrivilege extends xarMask
  * @throws  none
  * @todo    none
 */
-   function add(){
+   function add()
+   {
 
         if(empty($this->name)) {
             $msg = xarML('You must enter a name.',
@@ -1909,7 +1981,8 @@ class xarPrivilege extends xarMask
  * @throws  none
  * @todo    check to make sure the child is not a parent of the parent
 */
-    function makeEntry() {
+    function makeEntry() 
+    {
 
         $query = "INSERT INTO $this->privmemberstable
                 VALUES (" . $this->getID() . ",0)";
@@ -1931,7 +2004,8 @@ class xarPrivilege extends xarMask
  * @throws  none
  * @todo    check to make sure the child is not a parent of the parent
 */
-    function addMember($member) {
+    function addMember($member) 
+    {
 
         $query = "INSERT INTO $this->privmemberstable
                 VALUES (" . $member->getID() . "," . $this->getID() . ")";
@@ -1957,7 +2031,8 @@ class xarPrivilege extends xarMask
  * @throws  none
  * @todo    none
 */
-    function removeMember($member) {
+    function removeMember($member) 
+    {
 
         $query = "DELETE FROM $this->privmemberstable
               WHERE xar_pid=" . $member->getID() .
@@ -2013,7 +2088,8 @@ class xarPrivilege extends xarMask
  * @throws  none
  * @todo    none
 */
-    function remove(){
+    function remove()
+    {
 
 // set up the DELETE query
         $query = "DELETE FROM $this->privilegestable
@@ -2076,7 +2152,8 @@ class xarPrivilege extends xarMask
  * @throws  none
  * @todo    none
 */
-    function getRoles(){
+    function getRoles()
+    {
 
 // set up a query to select the roles this privilege
 // is linked to in the acl table
@@ -2128,7 +2205,8 @@ class xarPrivilege extends xarMask
  * @throws  none
  * @todo    none
 */
-    function removeRole($role) {
+    function removeRole($role) 
+    {
 
 // use the equivalent method from the roles object
         return $role->removePrivilege($this);
@@ -2345,7 +2423,10 @@ class xarPrivilege extends xarMask
  * @throws  none
  * @todo    none
 */
-    function getID()              {return $this->pid;}
+    function getID()              
+    {
+        return $this->pid;
+    }
 
 /**
  * isEmpty: returns the type of this privilege
@@ -2359,7 +2440,10 @@ class xarPrivilege extends xarMask
  * @throws  none
  * @todo    none
 */
-    function isEmpty()              {return $this->module == 'empty';}
+    function isEmpty()              
+    {
+        return $this->module == 'empty';
+    }
 }
 
 ?>

@@ -15,7 +15,8 @@
 
 include_once 'modules/privileges/xarprivileges.php';
 
-class xarTreeRenderer {
+class xarTreeRenderer 
+{
 
     var $privs;
 
@@ -43,7 +44,8 @@ class xarTreeRenderer {
      * Constructor
      *
     */
-        function xarTreeRenderer() {
+        function xarTreeRenderer() 
+        {
             $this->privs = new xarPrivileges();
         }
 
@@ -60,7 +62,8 @@ class xarTreeRenderer {
      * @throws  none
      * @todo    none
     */
-        function maketrees($arg) {
+        function maketrees($arg) 
+        {
             $trees = array();
             foreach ($this->privs->gettoplevelprivileges($arg) as $entry) {
                 array_push($trees,$this->maketree($this->privs->getPrivilege($entry['pid'])));
@@ -80,7 +83,8 @@ class xarTreeRenderer {
      * @throws  none
      * @todo    none
     */
-        function maketree($privilege) {
+        function maketree($privilege) 
+        {
             return $this->addbranches(array('parent'=>$this->privs->getprivilegefast($privilege->getID())));
         }
 
@@ -96,7 +100,8 @@ class xarTreeRenderer {
      * @throws  none
      * @todo    none
     */
-        function addbranches($node){
+        function addbranches($node)
+        {
             $object = $node['parent'];
             $node['expanded'] = false;
             $node['selected'] = false;
@@ -117,7 +122,8 @@ class xarTreeRenderer {
      * @throws  none
      * @todo    none
     */
-        function drawtrees($arg){
+        function drawtrees($arg)
+        {
             $drawntrees = array();
             foreach($this->maketrees($arg) as $tree){
                 $drawntrees[] = array('tree'=>$this->drawtree($tree));
@@ -139,7 +145,8 @@ class xarTreeRenderer {
      * @todo    none
     */
 
-    function drawtree($node) {
+    function drawtree($node) 
+    {
 
         $this->html = "\n".'<div name="PrivilegesTree_'.$node['parent']['pid'].'" id="PrivilegesTree_'.$node['parent']['pid'].'" style="position: relative;">';
         $this->nodeindex = 0;
@@ -166,7 +173,8 @@ class xarTreeRenderer {
      * @todo    none
     */
 
-    function drawbranch($node){
+    function drawbranch($node)
+    {
         $this->level = $this->level + 1;
 /*if($this->level > 1){ var_dump($node);exit;}*/
         $this->nodeindex = $this->nodeindex + 1;
@@ -297,7 +305,8 @@ class xarTreeRenderer {
      * @todo    none
     */
 
-    function drawindent() {
+    function drawindent() 
+    {
         $html = '';
         foreach ($this->indent as $column) {$html .= $column;}
         return $html;

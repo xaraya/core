@@ -21,7 +21,8 @@
  * @return  true on success or void on falure
  * @throws  XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION'
 */
-function adminpanels_admin_main(){
+function adminpanels_admin_main()
+{
 
     // Security Check
     if(!xarSecurityCheck('AdminPanel')) return;

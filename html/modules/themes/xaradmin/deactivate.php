@@ -25,7 +25,8 @@
  * @returns	
  * @return 
  */
-function themes_admin_deactivate(){ 
+function themes_admin_deactivate()
+{ 
 	// Security	and	sanity checks
 	if (!xarSecConfirmAuthKey()) return;
 

@@ -19,7 +19,8 @@
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  */
-function adminpanels_adminmenublock_init(){
+function adminpanels_adminmenublock_init()
+{
     return true;
 }
 
@@ -33,7 +34,8 @@ function adminpanels_adminmenublock_init(){
  * @throws  no exceptions
  * @todo    nothing
 */
-function adminpanels_adminmenublock_info(){
+function adminpanels_adminmenublock_info()
+{
     // Values
     return array('text_type' => 'adminmenu',
                  'module' => 'adminpanels',
@@ -52,7 +54,8 @@ function adminpanels_adminmenublock_info(){
  * @return  data array on success or void on failure
  * @todo    implement centre menu position
 */
-function adminpanels_adminmenublock_display($blockinfo){
+function adminpanels_adminmenublock_display($blockinfo)
+{
 
     // Security Check
     if(!xarSecurityCheck('AdminPanel',0,'adminmenu',"$blockinfo[title]:All:All")) return;

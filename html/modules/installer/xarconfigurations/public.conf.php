@@ -14,7 +14,8 @@
 
 $configuration_name = 'Public Site';
 
-function installer_public_moduleoptions() {
+function installer_public_moduleoptions() 
+{
     return array(
         array('name' => "autolinks",            'regid' => 11),
         array('name' => "bloggerapi",           'regid' => 745),
@@ -35,7 +36,9 @@ function installer_public_moduleoptions() {
         array('name' => "articles",             'regid' => 151)
     );
 }
-function installer_public_privilegeoptions() {
+
+function installer_public_privilegeoptions() 
+{
     return array(
                   array(
                         'item' => 'p1',

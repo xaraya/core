@@ -54,7 +54,8 @@ class SMTP
      * @access public
      * @return void
      */
-    function SMTP() {
+    function SMTP() 
+    {
         $this->smtp_conn = 0;
         $this->error = null;
         $this->helo_rply = null;
@@ -79,7 +80,8 @@ class SMTP
      * @access public
      * @return bool
      */
-    function Connect($host,$port=0,$tval=30) {
+    function Connect($host,$port=0,$tval=30) 
+    {
         # set the error val to null so there is no confusion
         $this->error = null;
 
@@ -141,7 +143,8 @@ class SMTP
      * @access public
      * @return bool
      */
-    function Authenticate($username, $password) {
+    function Authenticate($username, $password) 
+    {
         // Start authentication
         fputs($this->smtp_conn,"AUTH LOGIN" . $this->CRLF);
 
@@ -204,7 +207,8 @@ class SMTP
      * @access private
      * @return bool
      */
-    function Connected() {
+    function Connected() 
+    {
         if(!empty($this->smtp_conn)) {
             $sock_status = socket_get_status($this->smtp_conn);
             if($sock_status["eof"]) {
@@ -229,7 +233,8 @@ class SMTP
      * @access public
      * @return void
      */
-    function Close() {
+    function Close() 
+    {
         $this->error = null; # so there is no confusion
         $this->helo_rply = null;
         if(!empty($this->smtp_conn)) {
@@ -263,7 +268,8 @@ class SMTP
      * @access public
      * @return bool
      */
-    function Data($msg_data) {
+    function Data($msg_data) 
+    {
         $this->error = null; # so no confusion is caused
 
         if(!$this->connected()) {
@@ -396,7 +402,8 @@ class SMTP
      * @access public
      * @return string array
      */
-    function Expand($name) {
+    function Expand($name) 
+    {
         $this->error = null; # so no confusion is caused
 
         if(!$this->connected()) {
@@ -447,7 +454,8 @@ class SMTP
      * @access public
      * @return bool
      */
-    function Hello($host="") {
+    function Hello($host="") 
+    {
         $this->error = null; # so no confusion is caused
 
         if(!$this->connected()) {
@@ -479,7 +487,8 @@ class SMTP
      * @access private
      * @return bool
      */
-    function SendHello($hello, $host) {
+    function SendHello($hello, $host) 
+    {
         fputs($this->smtp_conn, $hello . " " . $host . $this->CRLF);
 
         $rply = $this->get_lines();
@@ -521,7 +530,8 @@ class SMTP
      * @access public
      * @return string
      */
-    function Help($keyword="") {
+    function Help($keyword="") 
+    {
         $this->error = null; # to avoid confusion
 
         if(!$this->connected()) {
@@ -573,7 +583,8 @@ class SMTP
      * @access public
      * @return bool
      */
-    function Mail($from) {
+    function Mail($from) 
+    {
         $this->error = null; # so no confusion is caused
 
         if(!$this->connected()) {
@@ -615,7 +626,8 @@ class SMTP
      * @access public
      * @return bool
      */
-    function Noop() {
+    function Noop() 
+    {
         $this->error = null; # so no confusion is caused
 
         if(!$this->connected()) {
@@ -658,7 +670,8 @@ class SMTP
      * @access public
      * @return bool
      */
-    function Quit($close_on_error=true) {
+    function Quit($close_on_error=true) 
+    {
         $this->error = null; # so there is no confusion
 
         if(!$this->connected()) {
@@ -712,7 +725,8 @@ class SMTP
      * @access public
      * @return bool
      */
-    function Recipient($to) {
+    function Recipient($to) 
+    {
         $this->error = null; # so no confusion is caused
 
         if(!$this->connected()) {
@@ -756,7 +770,8 @@ class SMTP
      * @access public
      * @return bool
      */
-    function Reset() {
+    function Reset() 
+    {
         $this->error = null; # so no confusion is caused
 
         if(!$this->connected()) {
@@ -805,7 +820,8 @@ class SMTP
      * @access public
      * @return bool
      */
-    function Send($from) {
+    function Send($from) 
+    {
         $this->error = null; # so no confusion is caused
 
         if(!$this->connected()) {
@@ -853,7 +869,8 @@ class SMTP
      * @access public
      * @return bool
      */
-    function SendAndMail($from) {
+    function SendAndMail($from) 
+    {
         $this->error = null; # so no confusion is caused
 
         if(!$this->connected()) {
@@ -901,7 +918,8 @@ class SMTP
      * @access public
      * @return bool
      */
-    function SendOrMail($from) {
+    function SendOrMail($from) 
+    {
         $this->error = null; # so no confusion is caused
 
         if(!$this->connected()) {
@@ -946,7 +964,8 @@ class SMTP
      * @access public
      * @return bool
      */
-    function Turn() {
+    function Turn() 
+    {
         $this->error = array("error" => "This method, TURN, of the SMTP ".
                                         "is not implemented");
         if($this->do_debug >= 1) {
@@ -968,7 +987,8 @@ class SMTP
      * @access public
      * @return int
      */
-    function Verify($name) {
+    function Verify($name) 
+    {
         $this->error = null; # so no confusion is caused
 
         if(!$this->connected()) {
@@ -1013,7 +1033,8 @@ class SMTP
      * @access private
      * @return string
      */
-    function get_lines() {
+    function get_lines() 
+    {
         $data = "";
         while($str = fgets($this->smtp_conn,515)) {
             if($this->do_debug >= 4) {

@@ -14,7 +14,8 @@
 
 include_once 'modules/roles/xarroles.php';
 
-class xarTreeRenderer {
+class xarTreeRenderer 
+{
     var $roles;
     var $tree;
     var $treenode;

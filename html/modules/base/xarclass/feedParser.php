@@ -21,7 +21,8 @@
  */
 
 
-class feedParser {
+class feedParser 
+{
 
     var $version = "0.5";
     var $entities = array(
@@ -131,7 +132,8 @@ class feedParser {
         'RDF2' => 'http://my.netscape.com/rdf/simple/0.9/'
     );
 
-    function buildStruct($xmldata) {
+    function buildStruct($xmldata) 
+    {
         // Create a parser object
         $p = new XMLParser;
     
@@ -156,7 +158,8 @@ class feedParser {
     
     }
 
-    function parseEntities(&$data) {
+    function parseEntities(&$data) 
+    {
 
         foreach($this->entities as $entity => $replace) {
             $data = preg_replace('/&' . $entity . ';/',$replace,$data);
@@ -167,7 +170,8 @@ class feedParser {
     }
 
 
-    function parseFeed($xmldata) {
+    function parseFeed($xmldata) 
+    {
         $data =& $this->buildStruct($xmldata);
         if(is_array($data) && count($data) > 0) {
             foreach($data as $child) {
@@ -195,7 +199,8 @@ class feedParser {
     
     }
 
-    function parseRDF(&$data) {
+    function parseRDF(&$data) 
+    {
         if(is_array($data['children'])) {
             foreach($data['children'] as $child) {
                 if(is_array($child)) {
@@ -220,7 +225,8 @@ class feedParser {
             
     }
 
-    function parseRSS(&$data) {
+    function parseRSS(&$data) 
+    {
         if(is_array($data['children'])) {
             foreach($data['children'] as $child) {
                 if(is_array($child)) {
@@ -242,7 +248,8 @@ class feedParser {
             
     }
 
-    function getRDFChannel($data) {
+    function getRDFChannel($data) 
+    {
         if(is_array($data['children'])) {
             foreach($data['children'] as $child) {
                 if(is_array($child)) {
@@ -288,7 +295,8 @@ class feedParser {
         return $channel;
     }
 
-    function getRSSChannel($data) {
+    function getRSSChannel($data) 
+    {
         if(is_array($data['children'])) {
             foreach($data['children'] as $child) {
                 if(is_array($child)) {
@@ -344,7 +352,8 @@ class feedParser {
         return array('channel' => $channel, 'item' => $item);
     }
 
-    function getRDFItem($data) {
+    function getRDFItem($data) 
+    {
         if(is_array($data['children'])) {
             foreach($data['children'] as $child) {
                 if(is_array($child)) {
@@ -387,7 +396,8 @@ class feedParser {
         return $item;
     }
     
-    function getRSSItem($data) {
+    function getRSSItem($data) 
+    {
         if(is_array($data['children'])) {
             foreach($data['children'] as $child) {
                 if(is_array($child)) {
@@ -439,7 +449,8 @@ class feedParser {
         return $item;
     }
 
-    function dcDateToUnixTime($dcdate,$cvttz = 1) {
+    function dcDateToUnixTime($dcdate,$cvttz = 1) 
+    {
         list($date,$time) = explode("T",$dcdate);
         preg_match(
             "/([0-9]{2}:[0-9]{2}:[0-9]{2})(\-?\+?)([0-9]{2}):([0-9]{2})/",

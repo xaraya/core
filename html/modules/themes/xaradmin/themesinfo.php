@@ -21,7 +21,8 @@
  * @returns array
  * @todo some facelift
  */
-function themes_admin_themesinfo(){
+function themes_admin_themesinfo()
+{
     
     // Security check - not needed here, imo 
     // we just show some info here, not changing anything

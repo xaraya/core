@@ -93,7 +93,8 @@ function roles_admin_sendmail()
     return true;
 }
 
-function roles_admin_sendmail__getsubusers($uid, $state){
+function roles_admin_sendmail__getsubusers($uid, $state)
+{
 
     $roles = new xarRoles();
     $role = $roles->getRole($uid);

@@ -19,7 +19,8 @@
  * @returns array
  * @todo some facelift
  */
-function modules_admin_tools(){
+function modules_admin_tools()
+{
     
     // Security check - not needed here
 

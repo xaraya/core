@@ -21,7 +21,8 @@
 *  http://revjim.net/code/xmlParser/
 */
 
-class XMLParser {
+class XMLParser 
+{
     var $ns2uri = array();
     var $uri2ns = array();
     var $unkcnt = 0;
@@ -30,7 +31,8 @@ class XMLParser {
     var $version = "0.3";
 
 
-    function defineNs($ident, $uri = "") {
+    function defineNs($ident, $uri = "") 
+    {
         if ($uri == "") {
             $uri = "::UNDEFINED::";
         }
@@ -38,7 +40,8 @@ class XMLParser {
         $this->uri2ns[$uri] = strtoupper($ident);
     }
 
-    function _getXmlChildren(&$vals, $ns, &$i) {
+    function _getXmlChildren(&$vals, $ns, &$i) 
+    {
         $children = array();
 
         if (isset($vals[$i]['value'])) {
@@ -88,7 +91,8 @@ class XMLParser {
         }
     }
 
-    function _convertTagNs($tag,$ns) {
+    function _convertTagNs($tag,$ns) 
+    {
         if($pos = strpos($tag,':')) {
             $docns = substr($tag,0,$pos);
             $doctag = substr($tag,$pos+1);
@@ -115,15 +119,18 @@ class XMLParser {
         
     }
 
-    function getXmlTree() {
+    function getXmlTree() 
+    {
         return $this->data;
     }
 
-    function setXmlData($data) {
+    function setXmlData($data) 
+    {
         $this->xmldata = $data;
     }
 
-    function buildXmlTree() {
+    function buildXmlTree() 
+    {
         $p = xml_parser_create();
         xml_parser_set_option($p, XML_OPTION_SKIP_WHITE, 1);
         xml_parse_into_struct($p, $this->xmldata, $vals, $index);
@@ -140,7 +147,8 @@ class XMLParser {
         ));
     }     
 
-    function getnamespaces($attribs,$ns = array()) {
+    function getnamespaces($attribs,$ns = array()) 
+    {
         if (is_array($attribs)) {
             foreach($attribs as $key => $value) {
                 $key = strtoupper($key);

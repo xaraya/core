@@ -22,7 +22,8 @@
  * @throws  NO_PERMISSION exception
  * @todo    nothing
 */
-function adminpanels_adminapi_create($args){
+function adminpanels_adminapi_create($args)
+{
 
     /* extract($args); */
 

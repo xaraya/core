@@ -16,7 +16,8 @@
  * List themes and current settings
  * @param none
  */
-function themes_admin_list() {
+function themes_admin_list() 
+{
 
 /* TODO (till 1.0): 
 

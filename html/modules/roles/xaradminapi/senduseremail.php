@@ -25,7 +25,8 @@
  * @return true on success, false on failures
  * @raise BAD_PARAM
  */
-function roles_adminapi_senduseremail($args) {
+function roles_adminapi_senduseremail($args) 
+{
 
 	// Send Email
 	extract($args);

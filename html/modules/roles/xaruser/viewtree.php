@@ -40,7 +40,8 @@ function roles_user_viewtree()
     $tree = xarTree();
 
     // We need to extend the renderer class because we need to add some stuff
-    class orgChart extends xarTreeRenderer {
+    class orgChart extends xarTreeRenderer 
+    {
 
         // This defines an item for displaying the name of each group and the number of users
         // it contains

@@ -14,7 +14,8 @@
 
 $configuration_name = 'Community Site';
 
-function installer_community_moduleoptions() {
+function installer_community_moduleoptions() 
+{
     return array(
         array('name' => "autolinks",            'regid' => 11),
         array('name' => "bloggerapi",           'regid' => 745),
@@ -35,7 +36,9 @@ function installer_community_moduleoptions() {
         array('name' => "articles",             'regid' => 151)
     );
 }
-function installer_community_privilegeoptions() {
+
+function installer_community_privilegeoptions() 
+{
     return array(
               array(
                     'item' => 'p1',
