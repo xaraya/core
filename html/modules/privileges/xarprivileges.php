@@ -200,7 +200,7 @@ class xarMasks
                 $description
             );
         }
-                                               
+
         if (!$this->dbconn->Execute($query,$bindvars)) return;
         return true;
     }
@@ -530,7 +530,7 @@ class xarMasks
             }
             $privs = array();
             foreach ($privileges as $priv)
-                if ($priv->getModule() == "All" || $priv->getModule() != $module)
+                if ($priv->getModule() == "All" || $priv->getModule() == $module)
                     $privs[] = $priv;
             $coreset['privileges'] = $this->winnow($coreset['privileges'],$privs);
             $parents = array_merge($parents,$role->getParents());
@@ -2109,7 +2109,7 @@ class xarPrivilege extends xarMask
                           xar_module = ?, xar_component = ?,
                           xar_instance = ?, xar_level = ?
                       WHERE xar_pid = ?";
-        $bindvars = array($this->name, $this->realm, $this->module, 
+        $bindvars = array($this->name, $this->realm, $this->module,
                           $this->component, $this->instance, $this->level,
                           $this->getID());
         //Execute the query, bail if an exception was thrown
