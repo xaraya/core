@@ -1283,7 +1283,10 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
 
     foreach($headerTagRegexes as $headerTagRegex) {
         if(preg_match("/$headerTagRegex/smix", $tplOutput, $matchedHeaderTag)) {
-            $startComment = '<!-- start(output actually commenced before header(s)): ' . $sourceFileName . ' -->';
+            // FIXME: the next line assumes that we are not in a comment already, no way of knowing that, 
+            // keep the functionality for now, but dont change more than necessary (see bug #3559)
+            // $startComment = '<!-- start(output actually commenced before header(s)): ' . $sourceFileName . ' -->';
+            $startComment ='';
             // replace matched tag with an appended start comment tag in the first match
             // in the template output $tplOutput
             $tplOutput = preg_replace("/$headerTagRegex/smix", $matchedHeaderTag[0] . $startComment, $tplOutput, 1);
