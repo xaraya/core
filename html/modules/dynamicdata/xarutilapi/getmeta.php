@@ -139,6 +139,7 @@ function dynamicdata_utilapi_getmeta($args)
                     break;
                 case 'enum':
                     $proptype = 6; // Dropdown
+                    $validation = strtr($validation,array('enum(' => '', ')' => '', "'" => '', ',' => ';'));
                     break;
                 default:
                     $proptype = 1; // Static Text
