@@ -42,9 +42,10 @@ function modules_admin_list()
 /*     $data['style']['pro']                           = xarML('Pro HTML'); */
 /*     $data['style']['dogs']                           = xarML('Dog\'s Bollocks'); */
     
-    $data['filter'][XARMOD_STATE_ANY]               = xarML('All modules');
-    $data['filter'][XARMOD_STATE_ACTIVE]            = xarML('Active');
-    $data['filter'][XARMOD_STATE_INACTIVE]          = xarML('Inactive');
+    $data['filter'][XARMOD_STATE_ANY]               = xarML('All Modules');
+    $data['filter'][XARMOD_STATE_INSTALLED]         = xarML('All Installed');
+    $data['filter'][XARMOD_STATE_ACTIVE]            = xarML('All Active');
+    $data['filter'][XARMOD_STATE_INACTIVE]          = xarML('All Inactive');
     $data['filter'][XARMOD_STATE_UNINITIALISED]     = xarML('Not Installed');
     $data['filter'][XARMOD_STATE_MISSING]           = xarML('Missing files');
 
@@ -159,7 +160,7 @@ function modules_admin_list()
         
         // conditional data
         if(     $mod['state'] == 1){
-            // this module is 'Uninitialised'   - set labels and links
+            // this module is 'Uninitialised' or 'Not Installed' - set labels and links
             $statelabel = xarML('Not Installed');
             $listrows[$i]['state'] = 1;
             
