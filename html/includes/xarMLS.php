@@ -135,31 +135,37 @@ function xarMLSListSiteLocales()
  * @return array locale data
  * @raise LOCALE_NOT_EXIST
  */
-function xarMLSLoadLocaleData($locale = NULL)
+function &xarMLSLoadLocaleData($locale = NULL)
 {
     if (!isset($locale)) {
         $locale = xarMLSGetCurrentLocale();
     }
-
-    // check for locale availability
-    $siteLocales = xarMLSListSiteLocales();
-
+    
     // TODO: figure out why we go through this function for xarModIsAvailable
     //       (this one breaks on upper/lower-case issues, BTW)
-    if (!in_array($locale, $siteLocales)) {
-        if (preg_match('/ISO/',$locale)) {
-            $locale = preg_replace('/ISO/','iso',$locale);
-            if (!in_array($locale, $siteLocales)) {
+    
+    // rraymond : move the check for the loaded locale before processing as
+    //          : all of this would have been taken care of the first time
+    //          : the locale data was loaded - saves processing time
+    if (!isset($GLOBALS['xarMLS_localeDataCache'][$locale])) {
+        
+        // check for locale availability
+        $siteLocales = xarMLSListSiteLocales();
+        
+        if (!in_array($locale, $siteLocales)) {
+            if (strstr($locale,'ISO')) {
+                $locale = str_replace('ISO','iso',$locale);
+                if (!in_array($locale, $siteLocales)) {
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
+                    return;
+                }
+            } else {
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
                 return;
             }
-        } else {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
-            return;
         }
-    }
 
-    if (!isset($GLOBALS['xarMLS_localeDataCache'][$locale])) {
+    
         $res = $GLOBALS['xarMLS_localeDataLoader']->load($locale);
 
         if (!isset($res)) return; // Throw back
@@ -170,7 +176,9 @@ function xarMLSLoadLocaleData($locale = NULL)
             return;
         }
         $GLOBALS['xarMLS_localeDataCache'][$locale] = $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
-    }
+    
+    } // end if (!isset($GLOBALS['xarMLS_localeDataCache'][$locale]))
+    
     return $GLOBALS['xarMLS_localeDataCache'][$locale];
 }
 
@@ -372,7 +380,9 @@ function xarLocaleGetList($filter)
  */
 function xarLocaleFormatCurrency($currency, $localeData = NULL)
 {
-    if ($localeData == NULL) $localeData = xarMLSLoadLocaleData();
+    if ($localeData == NULL) {
+        $localeData =& xarMLSLoadLocaleData(); // rraymond : assign by reference for large array (memory issues)
+    }
     $currencySym = $localeData['/monetary/currencySymbol'];
     return $currencySym.' '.xarLocaleFormatNumber($currency, $localeData, true);
 }
@@ -391,7 +401,9 @@ function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
         $number = (float) $number;
     }
 
-    if ($localeData == NULL) $localeData = xarMLSLoadLocaleData();
+    if ($localeData == NULL) {
+        $localeData =& xarMLSLoadLocaleData(); // rraymond : assign by reference for large array (memory issues)
+    }
 
     if ($isCurrency == true) $bp = 'monetary';
     else $bp = 'numeric';
@@ -497,16 +509,16 @@ function xarLocaleGetFormattedUTCDate($length = 'short',$timestamp = null)
  */
 function xarLocaleGetFormattedDate($length = 'short',$timestamp = null)
 {
-    static $localeData;
     $length = strtolower($length);
     $validLengths = array('short','medium','long');
     if(!in_array($length,$validLengths)) {
         return '';
     }
-    // load the locale date
-    if(!isset($localeData)) {
-        $localeData = xarMLSLoadLocaleData();
-    }
+   
+    // the locale data should already be a static var in the main loader script
+    // so we no longer need to make it a static in this function
+    $localeData =& xarMLSLoadLocaleData();  // rraymond : assign by reference for large array (memory issues)
+    
     // grab the right set of locale data
     $locale_format = $localeData["/dateFormats/$length"];
     // replace the locale formatting style with valid strftime() style
@@ -518,7 +530,7 @@ function xarLocaleGetFormattedDate($length = 'short',$timestamp = null)
     $locale_format = str_replace('d','%d',$locale_format);
     $locale_format = str_replace('yyyy','%Y',$locale_format);
     $locale_format = str_replace('yy','%y',$locale_format);
-
+    
     return xarLocaleFormatDate($locale_format,$timestamp);
 }
 
@@ -550,16 +562,16 @@ function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null)
  */
 function xarLocaleGetFormattedTime($length = 'short',$timestamp = null)
 {
-    static $localeData;
     $length = strtolower($length);
     $validLengths = array('short','medium','long');
     if(!in_array($length,$validLengths)) {
         return '';
     }
-    // load the locale date
-    if(!isset($localeData)) {
-        $localeData = xarMLSLoadLocaleData();
-    }
+    
+    // the locale data should already be a static var in the main loader script
+    // so we no longer need to make it a static in this function
+    $localeData =& xarMLSLoadLocaleData();  // rraymond : assign by reference for large array (memory issues)
+    
     // grab the right set of locale data
     $locale_format = $localeData["/timeFormats/$length"];
     // replace the locale formatting style with valid strftime() style
@@ -578,7 +590,8 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null)
     return xarLocaleFormatDate($locale_format,$timestamp);
 }
 
-//function xarMLS_getLocaleFormat($locale_format) {
+//function xarMLS_getLocaleFormat($locale_format) 
+//{
 //
 //}
 
@@ -709,7 +722,6 @@ function xarMLS_userOffset()
  */
 function xarMLS_strftime($format=null,$timestamp=null)
 {
-    static $localeDate;
     // if we don't have a timestamp, get the user's current time
     if(!isset($timestamp)) {
         $timestamp = xarMLS_userTime();
@@ -731,11 +743,9 @@ function xarMLS_strftime($format=null,$timestamp=null)
         */
     }
 
-    // load the locale date
-    // FIXME: <mrb> this can return an empty array silently
-    if(!isset($localeData)) {
-        $localeData = xarMLSLoadLocaleData();
-    }
+    // the locale data should already be a static var in the main loader script
+    // so we no longer need to make it a static in this function
+    $localeData =& xarMLSLoadLocaleData();  // rraymond : assign by reference for large array (memory issues)
 
     // TODO
     // if no $format is provided we need to use the default for the locale
@@ -1058,7 +1068,8 @@ function xarMLS__parseLocaleString($locale)
  * @author Marco Canini <marco@xaraya.com>
  * @return string the charset
  */
-function xarMLS__getSingleByteCharset($langISO2Code) {
+function xarMLS__getSingleByteCharset($langISO2Code) 
+{
     static $charsets = array(
                              'af' => 'iso-8859-1', 'sq' => 'iso-8859-1',
                              'ar' => 'iso-8859-6',  'eu' => 'iso-8859-1',  'bg' => 'iso-8859-5',
@@ -1405,8 +1416,11 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
         return false;
     }
 
-    function getDomainLocation() { return $this->domainlocation; }
-    function getContextLocation() { return $this->contextlocation; }
+    function getDomainLocation() 
+    { return $this->domainlocation; }
+
+    function getContextLocation() 
+    { return $this->contextlocation; }
 
     function hasContext($ctxType, $ctxName)
     {
