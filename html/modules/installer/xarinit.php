@@ -59,7 +59,7 @@ function installer_upgrade($oldVersion)
  */
 function installer_delete()
 {
-    return false;
+    return true;
 }
 
 ?>
