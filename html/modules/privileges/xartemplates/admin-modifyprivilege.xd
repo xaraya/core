@@ -42,7 +42,7 @@ document.forms['privilegeform'].submit();}
                     </xar:if>
                     <xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
                 </xar:for>
-            </d1>
+            </dl>
         </div>
     </xar:if>
 </xar:if>
@@ -64,7 +64,7 @@ document.forms['privilegeform'].submit();}
             <dd>
                 <a href="#xarModURL('privileges', 'admin', 'viewroles', array('pid' => $ppid))#"><xar:mlstring>Groups/Users</xar:mlstring></a>
             </dd>    
-        </d1>
+        </dl>
     </div>
 </xar:if>
 <div style="border: 1px solid #ccc; text-align: left; width: 100%; border-top : none; padding-left: 5px;">
@@ -159,7 +159,7 @@ document.forms['privilegeform'].submit();}
                                             <xar:mlstring>Component</xar:mlstring>
                                         </td>
                                         <td>
-                                            <select name="pcomponent" id="pcomponent" size="1" tabindex="5"onchange="javascript:this.form.action = '&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();">
+                                            <select name="pcomponent" id="pcomponent" size="1" tabindex="5" onchange="javascript:this.form.action = '&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();">
                                                 <xar:loop name="$components">
                                                     <xar:if condition="strtolower($loop:item['name']) eq strtolower($pcomponent)">
                                                         <option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>

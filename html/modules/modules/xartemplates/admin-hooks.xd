@@ -120,7 +120,7 @@ function setDisplayOff(id)
                                     <!-- Store the disabled attribute -->
                                     <xar:set name="hookmoddisabled">'disabled="disabled"'</xar:set>
                                     <xar:if condition="$hookmod['modstatus'] eq 1"><xar:set name="hookmoddisabled">''</xar:set></xar:if>
-                                    <!- Show the proper check box -->
+                                    <!-- Show the proper check box -->
                                     <input type="checkbox" name="hooked_#$hookedmod['name']#[#$typeid#]" id="hooked_#$hookedmod['name']#_#$typeid#" value="1" #$itemtypechecked# style="vertical-align: middle;" #$hookmoddisabled# />
                                     <label for="hooked_#$hookedmod['name']#_#$typeid#">#$itemtype['label']#</label><br />
                                 </xar:foreach>
