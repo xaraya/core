@@ -157,6 +157,7 @@ function initializeSetup() {
     * xarregisterMask(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
+    xarRegisterMask('ViewLogin','All','All','Loginblock','All',ACCESS_OVERVIEW);
     xarRegisterMask('AdminAll','All','All','All','All',ACCESS_ADMIN);
 
     xarRegisterMask('ViewBlocks','All','base','HTMLBlock','All',ACCESS_OVERVIEW);

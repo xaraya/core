@@ -34,7 +34,7 @@ function roles_loginblock_info()
 function roles_loginblock_display($blockinfo)
 {
 // Security Check
-	if(!xarSecurityCheck('ReadLogin',1,'Loginblock','$blockinfo[title]::','All')) return;
+	if(!xarSecurityCheck('ViewLogin',1,'Loginblock','$blockinfo[title]::','All')) return;
 
     // Get variables from content block
     $vars = unserialize($blockinfo['content']);

@@ -8,7 +8,7 @@
  * @package installer
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @author John Robeson
  * @author Marcel van der Boom <marcel@hsdev.com>
 */

@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id$
- * 
+ *
  * The Core
- * 
+ *
  * @package core
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -13,7 +13,7 @@
 */
 
 /**
- * Core version informations 
+ * Core version informations
  *
  * should be upgraded on each release for
  * better control on config settings
@@ -51,7 +51,7 @@ define('XARCORE_VERSION_SUB', 'adam_baum');
  *      |- MODULES      (00101001)
  *
  */
- 
+
 /*
  * Optional systems defines that can be used as parameter for xarCoreInit
  * System dependancies are yet present in the define, so you don't
@@ -82,6 +82,8 @@ define('XARDBG_SQL', 2);
 define('XARDBG_EXCEPTIONS', 4);
 define('XARDBG_SHOW_PARAMS_IN_BT', 8);
 
+//The unregistered user
+define('_XARSEC_UNREGISTERED', '2');
 
 /**
  * Initializes the core engine
@@ -97,7 +99,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     static $current_load_level = XARCORE_SYSTEM_NONE;
     static $first_load = true;
     $new_load_level = $whatToLoad;
-    
+
     // Make sure it only loads the current load level (or less than the current
     // load level) once.
     if ($whatToLoad <= $current_load_level) {
@@ -108,15 +110,15 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         }
     } else {
         // if we are loading a load level higher than the
-        // current one, make sure to XOR out everything 
+        // current one, make sure to XOR out everything
         // that we've already loaded
         $whatToLoad ^= $current_load_level;
     }
-    
+
     // FIXME: <marco> Shouldn't we use include instead of include_once?
     // Since xarCoreInit is supposed to be called once per request there's
     // no need to get this more overhead from include_once
-    
+
     //Comment this line to disable debugging
     //xarCoreActivateDebugger(XARDBG_EXCEPTIONS /*| XARDBG_SQL*/);
     xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT);
@@ -269,7 +271,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 // TODO (marcinmilan): review what pasts of the old user system need to be retained
 		if ($whatToLoad & XARCORE_SYSTEM_USER) {
         // {ML_dont_parse 'includes/xarUser.php'}
-        include_once 'includes/xarUser.php';
+		include_once 'includes/xarUser.php';
         // {ML_dont_parse 'includes/xarSecurity.php'}
         include_once 'includes/xarSecurity.php';
 
@@ -288,7 +290,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         xarBlock_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_BLOCKS;
     }
-    
+
     // Make the current load level == the new load level
     $current_load_level = $new_load_level;
     return true;
@@ -453,7 +455,7 @@ function xarCore_disposeDebugger()
  *
  * @access protected
  * @param msg string message to print as an error
- */ 
+ */
 function xarCore_die($msg)
 {
     $url = xarServerGetBaseURL() . 'index.php';
@@ -491,15 +493,15 @@ EOM;
 }
 
 /**
- * Check whether a certain API type is allowed 
+ * Check whether a certain API type is allowed
  *
  * Check whether an API type is allowed to load
- * normally the api types are 'user' and 'admin' but modules 
+ * normally the api types are 'user' and 'admin' but modules
  * may define other API types which do not fall in either of
  * those categories. (for example: visual or soap)
  * The list of API types is read from the Core configuration variable
  * Core.AllowedAPITypes.
- * 
+ *
  * @access protected
  * @param  apiType string Type of API to check whether allowed to load
  * @author Marcel van der Boom marcel@hsdev.com

@@ -158,7 +158,7 @@ function xarUserLogOut()
     $xartable = xarDBGetTables();
 
     // Reset user session information
-    $res = xarSession_setUserInfo(0, 0);
+    $res = xarSession_setUserInfo(_XARSEC_UNREGISTERED, 0);
     if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back
     }
@@ -174,9 +174,12 @@ function xarUserLogOut()
  * @access public
  * @return bool true if the user is logged in, false if they are not
  */
+
+global $installing;
+
 function xarUserIsLoggedIn()
 {
-    return xarSessionGetVar('uid') != 0;
+    return xarSessionGetVar('uid') != _XARSEC_UNREGISTERED;
 }
 
 /**
@@ -188,12 +191,12 @@ function xarUserGetNavigationThemeName()
 {
     $themeName = xarTplGetThemeName();
 
-    if (xarUserIsLoggedIn()){
+  	if (xarUserIsLoggedIn()){
         $uid = xarUserGetVar('uid');
         $themeName = xarModGetUserVar('themes', 'default', $uid);
     }
 
-    return $themeName;
+	return $themeName;
 }
 
 /**

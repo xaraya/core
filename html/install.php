@@ -40,7 +40,6 @@ define ('XARINSTALL_PHASE_SYSTEM_CHECK',        '4');
 define ('XARINSTALL_PHASE_SETTINGS_COLLECTION', '5');
 define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
 
-        global $installing;
 /**
  * Entry function for the installer
  *
@@ -51,6 +50,7 @@ define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
  */
 function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 {
+
     xarCoreInit(XARCORE_SYSTEM_NONE); // Does not initialise any optional system
 
     // Make sure we can render a page
@@ -61,6 +61,7 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 
 	// Handle installation phase designation
     $phase = (int) xarRequestGetVar('install_phase', 'POST');
+
     if ($phase == 0) {
         $phase = 1;
     }
@@ -75,14 +76,16 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     $modName = 'installer';
     $modType = 'admin';
 
+
     // Build function name from phase
     $funcName = 'phase' . $phase;
 
-    // Handle language setting
+	// Handle language setting
 
     // Load installer module
     $res = xarInstallLoad($modName, $modType);
     if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+
         return; // throw back
     }
 
