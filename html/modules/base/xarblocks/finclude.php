@@ -58,10 +58,10 @@ function base_fincludeblock_display($blockinfo)
     } else {
         $blockinfo['url'] = $blockinfo['content']['url'];
         if (!file_exists($blockinfo['url'])) {
-            $blockinfo['content'] = xarML('Block has no file defined to include');
+            $blockinfo['content'] = xarML('Warning: File to include does not exist. Check file definition in finclude block instance.');
+        } else {
+            $blockinfo['content'] = implode(file($blockinfo['url']), '');
         }
-
-        $blockinfo['content'] = implode(file($blockinfo['url']), '');
     }
 
     return $blockinfo;
