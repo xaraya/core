@@ -1,14 +1,14 @@
 <br />
 <xar:if condition="!empty($usercontent)">
     <xar:loop name="$usercontent">
-        <xar:if condition="empty($url)">
-            <div class="xar-menu-section">#$title#</div>
-        <xar:elseif condition="!empty($child)" />
+        <xar:if condition="empty($loop:item['url'])">
+            <div class="xar-menu-section">#$loop:item['title']#</div>
+        <xar:elseif condition="!empty($loop:item['child'])" />
 			<div class="xar-menu-item-current">
-				<div class="xar-menu-subitem"><a href="#$url#" title="#$comment#">#$title#</a></div>
+				<div class="xar-menu-subitem"><a href="#$loop:item['url']#" title="#$loop:item['comment']#">#$loop:item['title']#</a></div>
 			</div>
         <xar:else />
-            <div class="xar-menu-item"><a href="#$url#" title="#$comment#">#$title#</a></div>
+            <div class="xar-menu-item"><a href="#$loop:item['url']#" title="#$loop:item['comment']#">#$loop:item['title']#</a></div>
         </xar:if>
     </xar:loop>
     <br />
@@ -17,23 +17,23 @@
 <xar:if condition="!empty($usermods)">
     <div class="xar-menu-section"><xar:mlstring>Modules</xar:mlstring></div>
     <xar:loop name="$usermods">
-        <xar:if condition="$modactive">
+        <xar:if condition="$loop:item['modactive']">
             <div class="xar-menu-item-current">
-            #$label#
+            #$loop:item['label']#
             <xar:if condition="$indlinks ne ''">
                 <xar:loop name="$indlinks">
-                    <xar:if condition="$funcactive">
-                        <div class="xar-menu-subitem-current">#$userlabel# #$marker#</div>
+                    <xar:if condition="$loop:item['funcactive']">
+                        <div class="xar-menu-subitem-current">#$loop:item['userlabel']# #$marker#</div>
                     <xar:else />
-                        <div class="xar-menu-subitem"><a href="#$userlink#" title="#$usertitle#">#$userlabel#</a></div>
+                        <div class="xar-menu-subitem"><a href="#$loop:item['userlink']#" title="#$loop:item['usertitle']#">#$loop:item['userlabel']#</a></div>
                     </xar:if>
             </xar:loop>
         </xar:if>
         </div>
-    <xar:elseif condition="!$modactive and !$link" />
-        <div class="xar-menu-section">#$label#</div>
+    <xar:elseif condition="!$loop:item['modactive'] and !$loop:item['link']" />
+        <div class="xar-menu-section">#$loop:item['label']#</div>
     <xar:else />
-        <div class="xar-menu-item"><a href="#$link#" title="#$desc#">#$label#</a></div>
+        <div class="xar-menu-item"><a href="#$loop:item['link']#" title="#$loop:item['desc']#">#$loop:item['label']#</a></div>
     </xar:if>
 </xar:loop>
 </xar:if>

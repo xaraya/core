@@ -13,7 +13,7 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 	<p><xar:mlstring>Default Module</xar:mlstring>:&nbsp;&nbsp;
 	<select name="defaultmodule" id="defaultmodule" size="1">
 	<xar:loop name="$mods">
-		<xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleName ') eq $displayname">
+		<xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleName ') eq $loop:item['displayname']">
 			<option value="&xar-var-displayname;" selected="selected">&xar-var-displayname;</option>
 		<xar:else />
 			<option value="&xar-var-displayname;">&xar-var-displayname;</option>
