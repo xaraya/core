@@ -44,11 +44,12 @@ function roles_user_view($args)
         if ($letter == 'Other') {
         // TODO: check for syntax in other databases
             $selection = " AND xar_name REGEXP '^[^A-Z]'";
+            $data['msg'] = xarML('Members whose Display Name begins with character not listed in alphabet above (labeled as "Other")', $letter);
         } else {
         // TODO: handle case-sensitive databases
             $selection = " AND xar_name LIKE '" . $letter . "%'";
+            $data['msg'] = xarML('Members whose Display Name begins with "#(1)"', $letter);
         }
-        $data['msg'] = xarML("Members starting with '#(1)'", $letter);
     }
     elseif ($search) {
         $selection = " AND (";
@@ -56,7 +57,7 @@ function roles_user_view($args)
         $selection .= " OR (xar_uname LIKE '%" . $search . "%')";
         $selection .= " OR (xar_email LIKE '%" . $search . "%')";
         $selection .= ")";
-        $data['msg'] = xarML('Members containing #(1)', $search);
+        $data['msg'] = xarML('Members whose Display Name or User Name or Email Address contains "#(1)"', $search);
     }
     else {
         $data['msg'] = xarML("All members");
@@ -92,10 +93,10 @@ function roles_user_view($args)
                                           'numitems' => xarModGetVar('roles',
                                                                      'rolesperpage')));
 
-            xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Active Users')));
+            xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Active Members')));
 
             if (!$items){
-                $data['message'] = xarML('There are no active users selected');
+                $data['message'] = xarML('There are no online members selected');
                 $data['total'] = 0;
                 return $data;
             }
@@ -129,12 +130,12 @@ function roles_user_view($args)
                                                  'include_myself' => false));
 
             if (!$data['total']){
-                $data['message'] = xarML('There are no users selected');
+                $data['message'] = xarML('There are no members selected');
                 $data['total'] = 0;
                 return $data;
             }
 
-            xarTplSetPageTitle(xarVarPrepForDisplay(xarML('All Users')));
+            xarTplSetPageTitle(xarVarPrepForDisplay(xarML('All Members')));
 
             // Now get the actual records to be displayed
             $items = xarModAPIFunc('roles',

@@ -1,170 +1,178 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Member List</xar:mlstring></h2>
-<div style="margin: auto;">
-
-<div style="text-align: center">
-[&nbsp;<a href="#xarModURL('roles','user','view',array('phase' => $phase))#"><xar:mlstring>All</xar:mlstring></a>&nbsp;|
-&nbsp;
-<xar:foreach in="$alphabet" value="$ltr">
-	<a href="#xarModURL('roles','user','view',array('phase' => '$phase', 'letter' => $letter, 'search' => $search, 'order' => $order))#">#$ltr#</a>&nbsp;|&nbsp;
-</xar:foreach>
-<a href="#xarModURL('roles','user','view',array('phase' => $phase, 'letter' => 'Other', 'search' => $search, 'order' => $order))#"><xar:mlstring>Other</xar:mlstring></a>&nbsp;]
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Roles</xar:mlstring></span>
 </div>
-
-<form method="post" action="#xarModURL('roles','user','view')#">
-<div>
-<table border="0" cellspacing="2" cellpadding="2">
-<tr>
-<td>
-	<label for="search"><xar:mlstring>Search:</xar:mlstring></label>
-	<input type="hidden" name="phase" id="phase" value="#$phase#" />
-	<input type="hidden" name="order" id="order" value="#$order#" />
-	<input type="text" name="search" id="search" value="" size="40" maxlength="255" tabindex="1" />
-	<input type="submit" value="#$searchlabel#" />
-</td>
-<td style="text-align: left; padding: 50px">
-<b>#$msg#</b>
-</td>
-</tr>
-</table>
-</div>
-</form>
-	
-<table width="100%" border="0" cellspacing="2" cellpadding="2">
-<tr>
-<td>
-<b><xar:mlstring>Show</xar:mlstring>: </b>
-
-<xar:if condition="$phase eq 'active'">
-<b><xar:mlstring>Active Members</xar:mlstring></b>&nbsp;|
-<a href="#xarModURL('roles', 'user', 'view',array('phase' => 'viewall', 'letter' => $letter, 'search' => $search, 'order' => $order))#"><xar:mlstring>All Members</xar:mlstring></a>
-<xar:else />
-<a href="#xarModURL('roles', 'user', 'view',array('phase' => 'active', 'letter' => $letter, 'search' => $search, 'order' => $order))#"><xar:mlstring>Active Members</xar:mlstring></a>&nbsp;|
-<b><xar:mlstring>All Members</xar:mlstring></b>
-</xar:if>
-</td>
-<td align="right">
-#$total# <xar:mlstring>selected</xar:mlstring>
-</td>
-</tr>
-</table>
-<xar:if condition="!empty($message)">
-	<p>#$message#</p>
-<xar:else />
-
-<xar:if condition="xarModIsAvailable('dynamicdata')">
-    <xar:data-getitems name="$properties" value="$values" module="roles" itemids="$uidlist" />
-</xar:if>
-
-	<table width="100%" border="0" cellspacing="0" cellpadding="2">
-		<tr>
-			<xar:if condition="$phase eq 'active' and xarSecurityCheck('AdminPanel',0)">
-				<th style="width: 30%;" align="left">
-					<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=#$phase#&amp;letter=#$letter#&amp;search=#$search#&amp;order=name">
-						<xar:mlstring>Name</xar:mlstring>
-					</a>
-				</th>
-				<th style="width: 40%;">
-					<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=#$phase#&amp;letter=#$letter#&amp;search=#$search#&amp;order=uname">
-						<xar:mlstring>IP Address</xar:mlstring>
-					</a>
-				</th>
-			<xar:else />
-				<th style="width: 70%;" align="left">
-					<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=#$phase#&amp;letter=#$letter#&amp;search=#$search#&amp;order=name">
-						<xar:mlstring>Name</xar:mlstring>
-					</a>
-				</th>
-			</xar:if>
-			<th style="width: 10%;">
-				<xar:mlstring>Email</xar:mlstring>
-			</th>
-		    <xar:if condition="isset($properties) and count($properties) gt 0">
-	<!-- TODO: adapt % of column widths -->
-		    <xar:foreach in="$properties" key="$key">
-			<th style="width: 10%;">
-				<xar:data-label property="$properties[$key]" />
-			</th>
-		    </xar:foreach>
-		    </xar:if>
-		</tr>
-		<xar:loop name="$items">
-			<xar:if condition="(($loop:index + 1) % 2)">
-				<tr>
-					<xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
-						<td class="xar-norm">
-							<a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
-						</td>
-						<td class="xar-norm" style="text-align: center;">
-							<a href="http://www.geektools.com/cgi-bin/proxy.cgi?query=#$loop:item['ipaddr']#&amp;targetnic=auto">#$loop:item['ipaddr']#</a>
-						</td>
-					<xar:else />
-						<td class="xar-norm">
-							<a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
-						</td>
-					</xar:if>
-					<td class="xar-norm" style="text-align: center;">
-					   <xar:if condition="empty($loop:item['emailurl'])">
-						   #$loop:item['emailicon']#
-						<xar:else />
-							<a href="#$loop:item['emailurl']#">#$loop:item['emailicon']#</a>
-						</xar:if>
-					</td>
-				    <xar:if condition="isset($properties) and count($properties) gt 0">
-                                    <xar:set name="$uid">#$loop:item['uid']#</xar:set>
-				    <xar:foreach in="$properties" key="$key">
-					<td class="xar-norm">
-					    <xar:if condition="isset($values[$uid][$key])">
-						<xar:data-output property="$properties[$key]" value="$values[$uid][$key]" />
-					    <xar:else />
-						&nbsp;&nbsp;
-					    </xar:if>
-					</td>
-				    </xar:foreach>
-				    </xar:if>
-				</tr>
-			<xar:else />
-				<tr>
-					<xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
-						<td class="xar-accent">
-							<a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
-						</td>
-						<td class="xar-accent" style="text-align: center;">
-							<a href="http://www.geektools.com/cgi-bin/proxy.cgi?query=#$loop:item['ipaddr']#&amp;targetnic=auto">#$loop:item['ipaddr']#</a>
-						</td>
-					<xar:else />
-						<td class="xar-accent">
-							<a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
-						</td>
-					</xar:if>
-					<td class="xar-accent" style="text-align: center;">
-					   <xar:if condition="empty($loop:item['emailurl'])">
-						   #$loop:item['emailicon']#
-						<xar:else />
-							<a href="#$loop:item['emailurl']#">#$loop:item['emailicon']#</a>
-						</xar:if>
-					</td>
-				    <xar:if condition="isset($properties) and count($properties) gt 0">
-                                    <xar:set name="$uid">#$loop:item['uid']#</xar:set>
-				    <xar:foreach in="$properties" key="$key">
-					<td class="xar-accent">
-					    <xar:if condition="isset($values[$uid][$key])">
-						<xar:data-output property="$properties[$key]" value="$values[$uid][$key]" />
-					    <xar:else />
-						&nbsp;&nbsp;
-					    </xar:if>
-					</td>
-				    </xar:foreach>
-				    </xar:if>
-				</tr>
-			</xar:if>
-		</xar:loop>
-	</table>
-	<br />
-
-	<!-- add the pager here -->
-	<div style="text-align: center">#$pager#</div>
-</xar:if>
-</div>
+<div class="xar-mod-body">
+    <h2><xar:mlstring>Member List</xar:mlstring></h2>
+    <div style="margin: auto;">
+        <div style="text-align: center">[&nbsp;
+            <a href="#xarModURL('roles','user','view',array('phase' => $phase, 'letter' => '', 'order' => $order))#">
+                <xar:mlstring>All</xar:mlstring>
+            </a>&nbsp;|&nbsp;
+            <xar:foreach in="$alphabet" value="$ltr">
+            <a href="#xarModURL('roles','user','view',array('phase' => $phase, 'letter' => $ltr, 'order' => $order))#">
+                #$ltr#
+            </a>&nbsp;|&nbsp;
+            </xar:foreach>
+            <a href="#xarModURL('roles','user','view',array('phase' => $phase, 'letter' => 'Other', 'order' => $order))#">
+                <xar:mlstring>Other</xar:mlstring>
+            </a>&nbsp;]
+        </div>
+        <div>
+            <p>
+            <form method="post" action="#xarModURL('roles', 'user', 'view')#">
+                <label for="search"><xar:mlstring>Search:</xar:mlstring></label>
+                <input type="hidden" name="phase" id="phase" value="#$phase#" />
+                <input type="hidden" name="order" id="order" value="#$order#" />
+                <input type="hidden" name="letter" id="letter" value="" />
+                <input type="text" name="search" id="search" value="" size="40" maxlength="255" tabindex="1" />
+                <input type="submit" value="#$searchlabel#" />
+            </form>
+            </p>
+            <p>
+                <xar:mlstring>Search condition</xar:mlstring>: <b>#$msg#</b>
+            </p>
+        </div>
+        <div>
+        <table width="100%" border="0" cellspacing="2" cellpadding="2">
+            <tr>
+                <td>
+                    <xar:mlstring>Show</xar:mlstring>: 
+                    <xar:if condition="$phase eq 'active'">
+                    <xar:mlstring><b>Online</b></xar:mlstring>|
+                    <a href="#xarModURL('roles', 'user', 'view',array('phase' => 'viewall', 'letter' => $letter, 'search' => $search, 'order' => $order))#">
+                        <xar:mlstring>All</xar:mlstring>
+                    </a>
+                    <xar:else />
+                    <a href="#xarModURL('roles', 'user', 'view',array('phase' => 'active', 'letter' => $letter, 'search' => $search, 'order' => $order))#">
+                        <xar:mlstring>Online</xar:mlstring>
+                    </a>|
+                    <xar:mlstring><b>All</b></xar:mlstring>
+                    </xar:if>
+                </td>
+                <td align="right">
+                    <xar:ml>
+                        <xar:mlstring>#(1) selected</xar:mlstring>
+                        <xar:mlvar>#$total#</xar:mlvar>
+                    </xar:ml>
+                </td>
+            </tr>
+        </table>
+        </div>
+    <xar:if condition="!empty($message)">
+        <p>#$message#</p>
+    <xar:else />
+        <xar:if condition="xarModIsAvailable('dynamicdata')">
+            <xar:data-getitems name="$properties" value="$values" module="roles" itemids="$uidlist" />
+        </xar:if>
+        <table width="100%" border="0" cellspacing="0" cellpadding="2">
+            <tr>
+            <xar:if condition="$phase eq 'active' and xarSecurityCheck('AdminPanel',0)">
+                <th style="width: 30%;" align="left">
+                    <a href="#xarModURL('roles', 'user', 'view',array('phase' => $phase, 'letter' => '', 'search' => $search, 'order' => 'name'))#">
+                        <xar:mlstring>Display Name</xar:mlstring>
+                    </a>
+                </th>
+                <th style="width: 40%;">
+                    <a href="#xarModURL('roles', 'user', 'view',array('phase' => $phase, 'letter' => '', 'search' => $search, 'order' => 'uname'))#">
+                        <xar:mlstring>IP Address</xar:mlstring>
+                    </a>
+                </th>
+            <xar:else />
+                <th style="width: 70%;" align="left">
+                    <a href="#xarModURL('roles', 'user', 'view',array('phase' => $phase, 'letter' => '', 'search' => $search, 'order' => 'name'))#">
+                        <xar:mlstring>Display Name</xar:mlstring>
+                    </a>
+                </th>
+            </xar:if>
+                <th style="width: 10%;">
+                    <xar:mlstring>Email</xar:mlstring>
+                </th>
+            <xar:if condition="isset($properties) and count($properties) gt 0">
+                <!-- TODO: adapt % of column widths -->
+                <xar:foreach in="$properties" key="$key">
+                <th style="width: 10%;">
+                    <xar:data-label property="$properties[$key]" />
+                </th>
+                </xar:foreach>
+            </xar:if>
+            </tr>
+            <xar:loop name="$items">
+            <xar:if condition="(($loop:index + 1) % 2)">
+            <tr>
+                <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
+                <td class="xar-norm">
+                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
+                </td>
+                <td class="xar-norm" style="text-align: center;">
+                    <!-- TODO: add link to working whois service -->
+                    #$loop:item['ipaddr']#
+                </td>
+                <xar:else />
+                <td class="xar-norm">
+                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
+                </td>
+                </xar:if>
+                <td class="xar-norm" style="text-align: center;">
+                <xar:if condition="empty($loop:item['emailurl'])">
+                    #$loop:item['emailicon']#
+                <xar:else />
+                    <a href="#$loop:item['emailurl']#">#$loop:item['emailicon']#</a>
+                </xar:if>
+                </td>
+                <xar:if condition="isset($properties) and count($properties) gt 0">
+                <xar:set name="$uid">#$loop:item['uid']#</xar:set>
+                <xar:foreach in="$properties" key="$key">
+                <td class="xar-norm">
+                    <xar:if condition="isset($values[$uid][$key])">
+                        <xar:data-output property="$properties[$key]" value="$values[$uid][$key]" />
+                    <xar:else />
+                        &nbsp;&nbsp;
+                    </xar:if>
+                </td>
+                </xar:foreach>
+                </xar:if>
+            </tr>
+            <xar:else />
+            <tr>
+                <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
+                <td class="xar-accent">
+                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
+                </td>
+                <td class="xar-accent" style="text-align: center;">
+                    <!-- TODO: add link to working whois service -->
+                    #$loop:item['ipaddr']#
+                </td>
+                <xar:else />
+                <td class="xar-accent">
+                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
+                </td>
+                </xar:if>
+                <td class="xar-accent" style="text-align: center;">
+                    <xar:if condition="empty($loop:item['emailurl'])">
+                        #$loop:item['emailicon']#
+                    <xar:else />
+                        <a href="#$loop:item['emailurl']#">#$loop:item['emailicon']#</a>
+                    </xar:if>
+                </td>
+                <xar:if condition="isset($properties) and count($properties) gt 0">
+                <xar:set name="$uid">#$loop:item['uid']#</xar:set>
+                <xar:foreach in="$properties" key="$key">
+                <td class="xar-accent">
+                    <xar:if condition="isset($values[$uid][$key])">
+                        <xar:data-output property="$properties[$key]" value="$values[$uid][$key]" />
+                    <xar:else />
+                        &nbsp;&nbsp;
+                    </xar:if>
+                </td>
+                </xar:foreach>
+                </xar:if>
+            </tr>
+            </xar:if>
+            </xar:loop>
+        </table>
+        <!-- add the pager here -->
+        <p><div style="text-align: center">#$pager#</div></p>
+    </xar:if>
+    </div>
 </div>
