@@ -254,9 +254,11 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                 // be relevant
                 if($child->tagName != 'TextNode') {
                     $childCode = trim($this->generateNode($child));
-                } else {
-                    // But do compress space, preserving the type of whitespace
+                } elseif($node->tagName == 'set') {
+                    // preserve one whitespace on the outer rim of xar:set if there was one.
                     $childCode = _compress_space($this->generateNode($child));
+                } else {
+                    $childCode = $this->generateNode($child);
                 }
 
                 if (!isset($childCode)) return; // throw back
