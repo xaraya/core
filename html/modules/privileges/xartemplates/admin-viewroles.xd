@@ -81,6 +81,7 @@ document.forms['privilegeform'].submit();}
 		</td>
 	</tr>
 	<form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-viewroles;" method="post" enctype="application/x-www-form-urlencoded">
+             <div>
 		<input type="hidden" name="pid" id="pid" value="#$pid#" />
 	<tr>
 		<td align="left">Show Privileges that are: 
@@ -97,6 +98,7 @@ document.forms['privilegeform'].submit();}
 			</xar:if><xar:mlstring>All</xar:mlstring>
 		</td>
 	</tr>
+        </div>
 	</form>
 	<tr>
 		<td>

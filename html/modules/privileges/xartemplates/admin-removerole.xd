@@ -2,6 +2,7 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Remove</xar:mlstring></h2><br />
 <div style="text-align: center; margin: auto;">
 <form method="post" action="&xar-modurl-privileges-admin-removerole;" method="post" enctype="application/x-www-form-urlencoded" />
+   <div>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
 	<input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
 	<input type="hidden" name="pid" id="pid" value="#$pid#" />
@@ -17,6 +18,7 @@
 	<input type="submit" value="Confirm" align="middle" tabindex="1" /><br /><br />
 	
 	<a href="&xar-modurl-privileges-admin-viewroles;&amp;pid=#$pid#"><xar:mlstring>Cancel the removal</xar:mlstring></a>
+</div>
 </form>        
 </div>
 </div>
