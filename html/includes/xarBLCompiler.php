@@ -475,7 +475,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Add text to parent, if there is any
                         // Situation: [...text...]<xar:...
                         // NOTE: WHITESPACE EATER HERE
-                        $trimmer='xmltrim';
+                        $trimmer='noop'; // Don't touch the text by default
                         if($parent->tagName == 'set' || $parent->tagName == 'ml' || $parent->tagName == 'blockgroup') $trimmer='trim';
                         if ($trimmer($text) != '') {
                             if ($parent->hasText()) {
@@ -738,7 +738,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     }
                     // Add text to parent, if applicable
                     // Situation: [...text...]#$....# or [...text...]#xarFunction()#
-                    $trimmer='xmltrim';
+                    $trimmer='xmltrim'; 
                     if($parent->tagName == 'set' || $parent->tagName == 'ml') $trimmer='trim';
                     if ($trimmer($text) != '') {
                         if ($parent->hasText()) {
@@ -1121,6 +1121,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
 
         if (isset($node)) {
             $node->parentTagName = $parentTagName;
+            // FIXME: do sanity check on the values here? (like spaces and crs)
             $node->attributes = $attributes;
             return $node;
         }
@@ -3227,4 +3228,14 @@ function xmltrim($input='')
     $input = $leftspace . trim($input) . $rightspace;
     return $input;
 }
+
+/**
+ * This doesn't do anything on purpose, please leave it in
+ *
+ */
+function noop($input)
+{
+    return $input;
+}
+
 ?>
