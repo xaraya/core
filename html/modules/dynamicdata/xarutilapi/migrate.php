@@ -92,6 +92,8 @@ function dynamicdata_utilapi_migrate($args)
     }
     $moduleto = $modinfo['name'];
 
+// TODO: find some easier way to handle migration to/from other modules
+
     $items = array();
     switch ($modulefrom)
     {
@@ -114,6 +116,22 @@ function dynamicdata_utilapi_migrate($args)
                                          'itemtype' => $from['itemtype'],
                                          'itemids' => $itemids));
             if (!isset($items)) return;
+            break;
+
+        case 'xarbb':
+            $topics = xarModAPIFunc('xarbb','user','getalltopics',
+                                   array('tids' => $itemids));
+            if (!isset($topics)) return;
+            // re-assign by itemid
+            foreach ($topics as $topic) {
+                $items[$topic['tid']] = $topic;
+            }
+            unset($topics);
+            // Note: although xarbb is normally not hooked to comments,
+            // we'll want to move the original replies for the topic too
+            if ($moduleto != 'xarbb') {
+                $hookmap['comments'] = 'comments';
+            }
             break;
 
         default:
@@ -241,6 +259,86 @@ function dynamicdata_utilapi_migrate($args)
             }
             break;
 
+        case 'xarbb':
+            if ($modulefrom == 'xarbb') { // only allow updates within xarbb atm, not copies
+                $sameid = true;
+                foreach ($items as $itemid => $item) {
+                    $topic = array('tid' => $itemid);
+                    if ($from['itemtype'] != $to['itemtype']) {
+                        $topic['fid'] = $to['itemtype'];
+                    }
+                    foreach ($fieldmap as $fromfield => $tofield) {
+                        if (empty($fromfield) || empty($tofield)) continue;
+                        if (!isset($item[$fromfield])) continue;
+                        // we only need to pass updated fields to the xarbb updatetopic function
+                        if ($fromfield == $tofield) continue;
+                        // Note: this will also set any DD fields for the update hooks
+                        $topic[$tofield] = $item[$fromfield];
+                    }
+                    if (count($topic) < 2) {
+                        continue;
+                    }
+                    // fix inconsistency in field names between get/create and update
+                    if (isset($topic['ttime'])) {
+                        $topic['time'] = $topic['ttime'];
+                    }
+                    if (empty($debug)) {
+                        if (!xarModAPIFunc('xarbb','user','updatetopic',$topic)) return;
+                    } else {
+                        $debug .= xarML('Updating topic #(1) :', $itemid);
+                        $debug .= "\n";
+                        foreach ($topic as $field => $value) {
+                            $debug .= "$field = $value\n";
+                        }
+                    }
+                    // Note: updatetopic will also remap comments if necessary,
+                    // so we don't need to do it twice (in case comments was hooked)
+                    if (isset($hookmap['comments'])) {
+                        unset($hookmap['comments']);
+                    }
+                    $newitemids[$itemid] = $itemid;
+                }
+            } else {
+                foreach ($items as $itemid => $item) {
+                    $topic = array();
+                    $topic['fid'] = $to['itemtype'];
+                    foreach ($fieldmap as $fromfield => $tofield) {
+                        if (empty($fromfield) || empty($tofield)) continue;
+                        if (!isset($item[$fromfield])) continue;
+                        // Note: this will also set any DD fields for the update hooks
+                        $topic[$tofield] = $item[$fromfield];
+                    }
+                    if (count($article) < 2) {
+                        continue;
+                    }
+                    if (!empty($to['itemid'])) {
+                        $topic['tid'] = $itemid; // this may give us trouble with create hooks
+                    }
+                    if (empty($debug)) {
+                        $newid = xarModAPIFunc('xarbb','user','createtopic',$topic);
+                        if (empty($newid)) return;
+                    } else {
+                        $newid = -$itemid; // simulate some new itemid :-)
+                        $debug .= xarML('Creating topic #(1) :', $newid);
+                        $debug .= "\n";
+                        foreach ($topic as $field => $value) {
+                            $debug .= "$field = $value\n";
+                        }
+                    }
+                    // Note: although xarbb is normally not hooked to comments,
+                    // we'll want to move the original comments to the topic too
+                    if (isset($hookmap['comments'])) {
+                        $hookmap['comments'] = 'comments';
+                    }
+                    // Note: xarbb topics are not assigned directly to categories
+                    if (isset($hookmap['categories'])) {
+                        unset($hookmap['categories']);
+                    }
+                    $newitemids[$itemid] = $newid;
+                }
+            }
+            break;
+
         default:
             break;
     }
@@ -262,8 +360,9 @@ function dynamicdata_utilapi_migrate($args)
     // delete old items now
     foreach ($newitemids as $itemid => $newid) {
         if (empty($itemid) || empty($newid)) continue;
-        if ($from['module'] == $to['module'] && $newid == $itemid && $moduleto == 'articles') {
-            // don't delete articles when moving itemtypes
+        if ($from['module'] == $to['module'] && $newid == $itemid &&
+            ($moduleto == 'articles' || $moduleto == 'xarbb')) {
+            // don't delete articles or topics when moving itemtypes
             continue;
         } elseif ($from['module'] == $to['module'] && $from['itemtype'] == $to['itemtype'] && $newid == $itemid) {
             // don't delete identical items either
@@ -301,8 +400,63 @@ function dynamicdata_utilapi_migrate($args)
                 }
                 break;
 
+            case 'xarbb':
+                if (empty($debug)) {
+                    if (!xarModAPIFunc('xarbb','admin','deletetopics',
+                                       array('tid'  => $itemid))) {
+                        return;
+                    }
+                } else {
+                    $debug .= xarML('Deleting topic #(1) from forum #(2)',
+                                    $itemid, $from['itemtype']);
+                    $debug .= "\n";
+                }
+                break;
+
             default:
                 break;
+        }
+    }
+
+    if ($modulefrom == 'xarbb') {
+        if (empty($debug)) {
+            // re-sync original forum
+            if (!xarModAPIFunc('xarbb','admin','sync',
+                               array('fid' => $from['itemtype']))) {
+                return;
+            }
+        } else {
+            $debug .= xarML('Re-synchronizing forum #(1)',
+                            $from['itemtype']);
+            $debug .= "\n";
+        }
+    }
+    if ($moduleto == 'xarbb' && ($modulefrom != 'xarbb' || $from['itemtype'] != $to['itemtype'])) {
+        if (empty($debug)) {
+            foreach ($newitemids as $itemid => $newid) {
+                if (empty($itemid) || empty($newid)) continue;
+                if (!xarModAPIFunc('xarbb','user','updatetopicsview',
+                                   array('tid' => $newid))) {
+                    return;
+                }
+            }
+            // re-sync new forum
+            if (!xarModAPIFunc('xarbb','admin','sync',
+                               array('fid' => $to['itemtype']))) {
+                return;
+            }
+        } else {
+            $itemlist = array();
+            foreach ($newitemids as $itemid => $newid) {
+                if (empty($itemid) || empty($newid)) continue;
+                $itemlist[] = $newid;
+            }
+            $debug .= xarML('Updating topic view for items #(1)',
+                            join(',',$itemlist));
+            $debug .= "\n";
+            $debug .= xarML('Re-synchronizing forum #(1)',
+                            $to['itemtype']);
+            $debug .= "\n";
         }
     }
 
