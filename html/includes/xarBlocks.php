@@ -52,7 +52,7 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
  */
 function xarBlockGetInfo($blockId)
 {
-    if ($modRegId < 1) {
+    if ($blockId < 1) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'blockId');
         return;
     }
