@@ -78,13 +78,14 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
     {
         $this->curData = '';
 
-        if (!isset($locale)) {
-            $locale = xarMLSGetCurrentLocale();
+        if (!isset($this->locale)) {
+            $this->locale = xarMLSGetCurrentLocale();
         }
 
         // Patch from Camille Perinel
-        $charset = xarMLSGetCharsetFromLocale($locale);
+        $charset = xarMLSGetCharsetFromLocale($this->locale);
 
+            $this->parser = xml_parser_create('utf-8');
         if ($charset == 'utf-8') {
             $this->parser = xml_parser_create('utf-8');
         } else {
@@ -96,7 +97,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         xml_set_character_data_handler($this->parser, "characterData");
 
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
-            die("Error arises here");
+            die("Could not load context:" . $ctxName . " in " . $this->locale);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($ctxType.': '.$ctxName));
             return;
         }
@@ -105,7 +106,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
 
         while ($data = fread($fp, 4096)) {
             if ($charset == 'utf-8') {
-                $data = utf8_encode($data);
+//                $data = utf8_encode($data);
             } else {
                 $data = utf8_decode($data);
             }

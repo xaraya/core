@@ -1485,7 +1485,10 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
                 $this->domainlocation  = xarCoreGetVarDirPath() . "/locales/"
                 . $locale . "/" . $this->backendtype . "/" . $this->spacedir . "/" . $dnName;
             }
-            if (file_exists($this->domainlocation)) return true;
+            if (file_exists($this->domainlocation)) {
+                $this->locale = $locale;
+                return true;
+            }
         }
     }
 
