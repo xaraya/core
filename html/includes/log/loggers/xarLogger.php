@@ -116,7 +116,7 @@ class xarLogger
 
         $secs = ((float)$microtime[0] + (float)$microtime[1]); 
 
-        return strftime($this->_timeFormat) . ' ' . $microtime[0] . ' +' . round($secs - $this->_elapsed, 3);
+        return strftime($this->_timeFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->_elapsed, 3),3);
     }
 }
 
