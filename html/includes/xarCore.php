@@ -442,6 +442,10 @@ function xarCoreIsDebugFlagSet($flag)
 /**
  * Gets a core system variable
  *
+ * System variables are REQUIRED to be set, if they cannot be found
+ * the system cannot continue. Only use variables for this which are
+ * absolutely necessary to be set. Otherwise use other types of variables
+ *
  * @access protected
  * @static systemVars array
  * @param string name name of core system variable to get
@@ -453,7 +457,6 @@ function xarCore_getSystemVar($name)
     if (xarVarIsCached('Core.getSystemVar', $name)) {
         return xarVarGetCached('Core.getSystemVar', $name);
     }
-
     if (!isset($systemVars)) {
         $fileName = xarCoreGetVarDirPath() . '/config.system.php';
         if (!file_exists($fileName)) {
@@ -462,6 +465,7 @@ function xarCore_getSystemVar($name)
         include $fileName;
         $systemVars = $systemConfiguration;
     }
+
     if (!isset($systemVars[$name])) {
         xarCore_die("xarCore_getSystemVar: Unknown system variable: ".$name);
     }
@@ -537,17 +541,14 @@ function xarCore_disposeDebugger()
  */
 function xarCore_die($msg)
 {
-    static $dying = false;
-    if ($dying) {
-    //    echo $msg;
-        return;
-    }
-    $dying = true;
-
-    //Cant we stardatize errors for both this and Exceptions????
+    // Cant we standardize errors for both this and Exceptions????
     // It is useful for the developer to know this is happening before the
     // Exceptions is loaded, still for the end user it is still just an error.
-    $url = xarServerGetBaseURL() . 'index.php';
+    
+    // Sorry, this is a no go here: The core died!
+    //$url = xarServerGetBaseURL() . 'index.php';
+
+    // This is allowed, in core itself
     if (xarCoreIsDebuggerActive()) {
         $msg = nl2br($msg);
 $debug = <<<EOD
@@ -568,7 +569,7 @@ $errPage = <<<EOM
   <body>
     <p>A fatal error occurred while serving your request.</p>
     <p>We are sorry for this inconvenience.</p>
-    <p>If this is the first time you see this message try to <a href="$url">click here to continue.</a><br/>
+    <p>If this is the first time you see this message, you can try to access the site directly through index.php<br/>
     If you see this message every time you tried to access to this service, it is probable that our server
     is experiencing heavy problems, for this reason we ask you to retry in some hours.<br/>
     If you see this message for days, we ask you to report the unavailablity of service to our webmaster. Thanks.
