@@ -371,6 +371,14 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return $documentTree;
     }
 
+    /**
+     * parseProcessingInstruction
+     *
+     * We've just identified a target for a processing instruction, handle it here.
+     *
+     * @access private
+     * @todo deprecate the strange <?xar type PI over time, there are better ways for tpl vars
+     */
     function parseProcessingInstruction($target)
     {
         $result = '';
@@ -379,8 +387,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 $variables = $this->parseHeaderTag();
                 if (!isset($variables))  return; // throw back
                     
-                // Register the attributes of <?xar as template variables
-                // FIXME: this is awkward syntax juggling
                 foreach ($variables as $name => $value) $this->tplVars->set($name, $value);
                 break;
             case 'xml': // <?xml header tag
@@ -447,7 +453,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $res = $this->parseProcessingInstruction($this->getNextToken(3));
                         if(!isset($res)) return; //throw back
                         $token = $res;
-                        // If we get here, we have handled the processing instruction and we can break the outer switch
                         break;
                     } elseif ($nextToken == 'x') {
                         // Check for xar tag (<xar:)
