@@ -57,6 +57,18 @@ class ExceptionRendering
                     $this->hint = "";
                 }
                 break;
+            case XAR_SYSTEM_MESSAGE:
+                include "includes/exceptions/systemmessage.defaults.php";
+                if (array_key_exists($this->id, $this->defaults)) {
+                    $this->load();
+                }
+                else {
+                    $this->title = $this->id;
+                    $this->short = xarML("No further information available");
+                    $this->long = "";
+                    $this->hint = "";
+                }
+                break;
             default:
                 include "includes/exceptions/systemexception.defaults.php";
                 break;

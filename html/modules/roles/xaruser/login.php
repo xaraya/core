@@ -169,8 +169,10 @@ function roles_user_login()
                 }
 
                 if (!$letthru) {
-                    xarResponseRedirect($redirecturl);
-                    return true;
+                    xarExceptionSet(XAR_SYSTEM_MESSAGE,
+                    'SITE_LOCKED',
+                     new SystemMessage($lockvars['message']));
+                     return;
                 }
             }
 

@@ -23,6 +23,10 @@ define('XAR_USER_EXCEPTION', 1);
  * System exception
  */
 define('XAR_SYSTEM_EXCEPTION', 2);
+/**
+ * System message
+ */
+define('XAR_SYSTEM_MESSAGE', 3);
 
 /* Xaraya System Exceptions */
 
@@ -30,6 +34,7 @@ include "includes/exceptions/exceptionstack.class.php";
 global $ExceptionStack;
 $ExceptionStack = new xarExceptionStack();
 
+include "includes/exceptions/systemmessage.class.php";
 include "includes/exceptions/systemexception.class.php";
 include "includes/exceptions/defaultuserexception.class.php";
 include "includes/exceptions/noexception.class.php";
@@ -72,7 +77,8 @@ function xarExceptionSet($major, $exceptionId, $value = NULL)
     global $ExceptionStack;
     if ($major != XAR_NO_EXCEPTION &&
         $major != XAR_USER_EXCEPTION &&
-        $major != XAR_SYSTEM_EXCEPTION) {
+        $major != XAR_SYSTEM_EXCEPTION &&
+        $major != XAR_SYSTEM_MESSAGE) {
             xarCore_die('xarExceptionSet: Invalid major value: ' . $major);
     }
 
@@ -100,6 +106,8 @@ function xarExceptionSet($major, $exceptionId, $value = NULL)
             $obj = new SystemException($value);
         } elseif ($major == XAR_USER_EXCEPTION){
             $obj = new DefaultUserException($value);
+        } elseif ($major == XAR_SYSTEM_MESSAGE){
+            $obj = new SystemMessage($value);
         } else {
             $obj = new NoException($value);
         }
@@ -237,11 +245,7 @@ function xarExceptionRender($format)
     global $ExceptionStack;
 
     while (!$ExceptionStack->isempty()) {
-//    if ($ExceptionStack->size() == 1) {
-//        $exception = $ExceptionStack->peek();
-//        echo $exception->getTitle();
-//        exit;
-//    }
+
         $exception = $ExceptionStack->pop();
 
         switch ($exception->getMajor()) {
@@ -252,6 +256,10 @@ function xarExceptionRender($format)
             case XAR_USER_EXCEPTION:
                 $type = 'User Error';
                 $template = "user";
+                break;
+            case XAR_SYSTEM_MESSAGE:
+                $type = 'System Message';
+                $template = "message";
                 break;
             case XAR_NO_EXCEPTION:
                 continue 2;
@@ -275,7 +283,6 @@ function xarExceptionRender($format)
         $data['long'] = $rendering->getLong();
         $data['hint'] = $rendering->getHint();
         $data['stack'] = $rendering->getStack();
-//        echo $ExceptionStack->size();exit;
     }
    return  xarTplModule('base',$template, 'exception', $data);
 }

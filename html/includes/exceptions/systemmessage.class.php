@@ -1,0 +1,46 @@
+<?php
+/**
+ * File: $Id$
+ *
+ * Exception Handling System
+ *
+ * @package exceptions
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ */
+
+include_once "includes/exceptions/exception.class.php";
+
+class SystemMessage extends Exception
+{
+    var $link;
+
+    function SystemMessage($msg = '', $link = NULL)
+    {
+        parent::Exception();
+        $this->msg = $msg;
+        $this->link = $link;
+    }
+
+    function load($id) {
+        if (array_key_exists($id, $this->defaults)) parent::load($id);
+        else {
+            $this->title = $id;
+            $this->short = "No further information available";
+        }
+    }
+
+    function toHTML()
+    {
+        $str = "<pre>\n" . xarVarPrepForDisplay($this->msg) . "\n</pre><br/>";
+        if ($this->link) {
+            $str .= '<a href="'.$this->link[1].'">'.$this->link[0].'</a><br/>';
+        }
+        return $str;
+    }
+
+}
+
+?>
