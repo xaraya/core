@@ -46,20 +46,26 @@ class Exception
     }
 
     function toString() { return $this->msg; }
-    function setID($id) { $this->id = $id; }
     function load($id) {
         $this->title = $this->defaults[$id]['title'];
         $this->short = $this->defaults[$id]['short'];
         $this->long = $this->defaults[$id]['long'];
         $this->hint = $this->defaults[$id]['hint'];
     }
-    function getTitle($id) { return $this->title; }
-    function getShort($id) {
+    function getTitle() { return $this->title; }
+    function getShort() {
         if ($this->msg != '') return $this->msg;
         else return $this->short;
     }
-    function getLong($id) { return $this->long; }
-    function getHint($id) { return $this->hint; }
+    function getLong() { return $this->long; }
+    function getHint() { return $this->hint; }
+
+    function setID($id) { $this->id = $id; }
+    function setTitle($id) { $this->title = $id; }
+    function setShort($id) { $this->short = $id; }
+    function setLong($id) { $this->long = $id; }
+    function setHint($id) { $this->hint = $id; }
+    function setMsg($id) { $this->msg = $id; }
 }
 
 class SystemException extends Exception
@@ -161,33 +167,39 @@ class SystemException extends Exception
             'MODULE_FILE_NOT_EXIST' => array(
                 'title' => xarML('Module file does not exist'),
                 'short' => xarML('An operation requires a module file that cannot be found.'),
-                'long' => xarML('The file may be missing, or its name may have changed.') ),
+                'long' => xarML('The file may be missing, or its name may have changed.')),
             'MODULE_FUNCTION_NOT_EXIST' => array(
                 'title' => xarML('Module function does not exist'),
                 'short' => xarML('A call has been made to a module function that cannot be found.'),
-                'long' => xarML('The file in which the function was expected may be missing. If not, then the error may have occurred because the actual function has a different name, or does not exist.') ),
+                'long' => xarML('The file in which the function was expected may be missing. If not, then the error may have occurred because the actual function has a different name, or does not exist.')),
             'MODULE_NOT_ACTIVE' => array(
                 'title' => xarML('Module is not active'),
                 'short' => xarML('A call has been made to a module that is not active.'),
-                'long' => xarML('A module was called that has not yet been activated/installed. Use the activate link in the modules module (Modules->ViewAll) to install modules.') ),
+                'long' => xarML('A module was called that has not yet been activated/installed. Use the activate link in the modules module (Modules->ViewAll) to install modules.')),
             'MODULE_NOT_EXIST' => array(
                 'title' => xarML('Module does not exist'),
                 'short' => xarML('A call has been made to a module that cannot be found'),
-                'long' => xarML('A module was called that has not yet been installed or is not present. Use the activate link in the modules module (Modules->ViewAll) to install modules.') ),
+                'long' => xarML('A module was called that has not yet been installed or is not present. Use the activate link in the modules module (Modules->ViewAll) to install modules.')),
             'NO_PERMISSION' => array(
                 'title' => xarML('No Privilege'),
                 'short' => xarML('You do not have the privileges for this operation.'),
-                'long' => xarML('An operation was attempted for which your user has not been assigned privileges. Privileges must be assigned by the system administrator(s).') ),
+                'long' => xarML('An operation was attempted for which your user has not been assigned privileges. Privileges must be assigned by the system administrator(s).')),
             'NOT_LOGGED_IN' => array(
                 'title' => xarML('Not logged in'),
                 'short' => xarML('You are attempting an operation that is not allowed for the Anonymous user.'),
-                'long' => xarML('An operation was encountered that requires the user to be logged in. If you are currently logged in please report this as a bug.') ),
+                'long' => xarML('An operation was encountered that requires the user to be logged in. If you are currently logged in please report this as a bug.')),
             'NOT_IMPLEMENTED' => array(
-                'title' => xarML('Not implemented') ),
+                'title' => xarML('Not implemented'),
+                'short' => xarML('The requested feature is not available.'),
+                'long' => xarML('An request was made to access a feature that is not available in this installation. The feature is either missing or unavailable in the current version of Xaraya.')),
+            'PHP_ERROR' => array(
+                'title' => xarML('PHP error'),
+                'short' => xarML('A system error was received from the PHP interpreter.'),
+                'long' => xarML('There is an error in the PHP code that is being processed.')),
             'SYSTEM_ERROR' => array(
                 'title' => xarML('System error'),
                 'short' => xarML('A system error was encountered.'),
-                'long' => xarML('No further information is available.') ),
+                'long' => xarML('No further information is available.')),
             'TEMPLATE_NOT_EXIST' => array(
                 'title' => xarML('Template does not exist'),
                 'short' => xarML('An unknown template name was encountered.'),
@@ -292,7 +304,7 @@ class DefaultUserException extends Exception
  * for now it's used only by the PHP error handler bridge
  * @package exceptions
  */
-class ErrorCollection extends Exception
+class ErrorCollection extends SystemException
 {
     var $exceptions = array();
 
@@ -543,6 +555,14 @@ function xarExceptionRender($format)
         else $imadmin = true;
         if ($format == 'html') {
           if ($exception['major'] != XAR_USER_EXCEPTION && $imadmin) {
+              if (xarExceptionId() == "ErrorCollection") {
+                  $exception['exceptionId'] = "PHP_ERROR";
+                  $collecteditems = "One or more PHP errors were encountered. <BR /><BR />";
+                  foreach($exception['value']->exceptions as $collecteditem) {
+                      $collecteditems .= $collecteditem['value']->getShort() . "<BR />";
+                  }
+                  $exception['value']->setMsg($collecteditems);
+              }
                 $stack = $exception['stack'];
                 $text = "";
                 for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
