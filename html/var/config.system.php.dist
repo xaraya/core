@@ -51,7 +51,7 @@ $systemConfiguration['DB.UseADODBCache'] = false;
  *
  * Comment them out to use Xaraya's built-in/auto values
  */
-$systemConfiguration['BaseURI'] = '';
-$systemConfiguration['BaseModURL'] = '';
+//$systemConfiguration['BaseURI'] = '';
+//$systemConfiguration['BaseModURL'] = '';
 
 ?>
