@@ -1787,6 +1787,14 @@ class xarPrivilege extends xarMask
         $this->rolestable = $xartable['roles'];
         $this->acltable = $xartable['security_acl'];
 
+// CHECKME: pid and description are undefined when adding a new privilege
+        if (empty($pid)) {
+            $pid = 0;
+        }
+        if (empty($description)) {
+            $description = '';
+        }
+
         $this->pid          = $pid;
         $this->name         = $name;
         $this->realm        = $realm;
@@ -1865,7 +1873,7 @@ class xarPrivilege extends xarMask
         $query = "SELECT MAX(xar_pid) FROM $this->privilegestable";
         //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
-        if (!result) return;
+        if (!$result) return;
 
 // use the index to get the privileges object created from the repository
         list($pid) = $result->fields;
@@ -2000,7 +2008,7 @@ class xarPrivilege extends xarMask
               WHERE xar_pid=" . $this->getID();
         //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
-        if (!result) return;
+        if (!$result) return;
 
 // remove this child from all the parents
         $perms = new xarPrivileges();
