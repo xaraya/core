@@ -14,7 +14,7 @@
 /**
  * Shows the user login form when login block is not active
  */
-function roles_user_showloginform()
+function roles_user_showloginform($args = array())
 {
     #redirecturl
     extract($args);
