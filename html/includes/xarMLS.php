@@ -1543,12 +1543,16 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
     function bindDomain($dnType, $dnName='xaraya')
     {
         if (parent::bindDomain($dnType, $dnName)) return true;
-        if ($dnType == XARMLS_DNTYPE_MODULE) {
-            $this->loadKEYS($dnName);
-        }
+// FIXME: I should comment it because it creates infinite loop
+// MLS -> xarMod_getBaseInfo -> xarDisplayableName -> xarMod_getFileInfo -> MLS
+// We don't use and don't translate KEYS files now,
+// but I will recheck this code in the menus clone
+//        if ($dnType == XARMLS_DNTYPE_MODULE) {
+//            $this->loadKEYS($dnName);
+//        }
         return false;
     }
-
+/*
     function loadKEYS($dnName)
     {
         $modBaseInfo = xarMod_getBaseInfo($dnName);
@@ -1565,7 +1569,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
             }
         }
     }
-
+*/
     function loadContext($ctxType, $ctxName)
     {
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
