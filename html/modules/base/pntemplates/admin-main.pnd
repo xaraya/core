@@ -8,6 +8,9 @@
         <td align="center">
             <a href="&pnt-modurl-base-admin-modifyconfig;"><pnt:mlstring>Modify Xaraya Site Configuration</pnt:mlstring></a>
         </td>
+        <td align="center">
+            <a href="&pnt-modurl-base-admin-sysinfo;"><pnt:mlstring>View System Information</pnt:mlstring></a>
+        </td>
     </tr>
 </table>
 
