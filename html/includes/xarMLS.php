@@ -29,7 +29,7 @@ define('XARMLS_DNTYPE_CORE', 1);
 define('XARMLS_DNTYPE_THEME', 2);
 define('XARMLS_DNTYPE_MODULE', 3);
 
-require_once "includes/transforms/ConvertCharset.php";
+require_once "includes/transforms/xarCharset.php";
 
 /**
  * Initializes the Multi Language System
@@ -69,7 +69,7 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarMLS_defaultLocale'] = $args['defaultLocale'];
     $GLOBALS['xarMLS_allowedLocales'] = $args['allowedLocales'];
 
-    $GLOBALS['xarMLS_newEncoding'] = new ConvertCharset;
+    $GLOBALS['xarMLS_newEncoding'] = new xarCharset;
 
     $GLOBALS['xarMLS_defaultTimeZone'] = isset($args['defaultTimeZone']) ?
                                          $args['defaultTimeZone'] : '';
@@ -209,12 +209,7 @@ function &xarMLSLoadLocaleData($locale = NULL)
                 $tempArray = $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
                 if ($siteCharset != 'utf-8') {
                     foreach ( $tempArray as $tempKey => $tempValue ) {
-                        if (function_exists('iconv')) {
-                            $tempValue = @iconv('utf-8', $siteCharset, $tempValue);
-                            if ($tempValue === false) $tempValue = '';
-                        } else {
-                            $tempValue = $GLOBALS['xarMLS_newEncoding']->Convert($tempValue, 'utf-8', $siteCharset, 0);
-                        }
+                        $tempValue = $GLOBALS['xarMLS_newEncoding']->convert($tempValue, 'utf-8', $siteCharset, 0);
                         $tempArray[$tempKey] = $tempValue;
                     }
                 }
@@ -2124,13 +2119,7 @@ class PHPBackendGenerator
                 } elseif ($node['tag'] == 'TRANSLATION') {
                     if (!array_key_exists('value',$node)) $node['value'] = '';
                     if ($this->outCharset != 'utf-8') {
-                        if (function_exists('iconv')) {
-                            $node['value'] = @iconv('utf-8', $this->outCharset, $node['value']);
-                            // FIXME add info about error to log file
-                            if ($node['value'] === false) $node['value'] = '';
-                        } else {
-                            $node['value'] = $GLOBALS['xarMLS_newEncoding']->Convert($node['value'], 'utf-8', $this->outCharset, 0);
-                        }
+                        $node['value'] = $GLOBALS['xarMLS_newEncoding']->convert($node['value'], 'utf-8', $this->outCharset, 0);
                     }
                     fputs($fp2, " = '".addslashes($node['value'])."';\n");
                 }
