@@ -33,19 +33,11 @@ function xarMain()
     // Get module parameters
     list($modName, $modType, $funcName) = xarRequestGetInfo();
 
-    // Adjust BL settings
-    // TODO: 1
-    // Line below was manually merged in, so if merge was wrong,
-    // it's easy to recover
+    // Default Page Title
     xarTplSetPageTitle(xarModGetVar('themes', 'SiteSlogan'));
 
-    // ANSWER <marco>: Who's gonna use that?
-    // EXAMPLE <mikespub>: print, rss, wap, ...
-    // <marco> That's wrong! All those things are pages and not themes, and however you 
-    // have 2 APIs fro changing both of them at run-time. I'm really against having the 
-    // core to know about this theme get variable.
-    // Allow theme override in URL first
-    $themeName = xarVarCleanFromInput('theme');
+    // Theme Override
+    xarVarFetch('theme','str:1:',$themeName,'',XARVAR_NOT_REQUIRED);
     if (!empty($themeName)) {
         $themeName = xarVarPrepForOS($themeName);
         xarTplSetThemeName($themeName);
