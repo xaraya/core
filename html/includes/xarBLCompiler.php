@@ -10,6 +10,7 @@
  * @link http://www.xaraya.com
  * @subpackage BlockLayout Template Engine Compiler
  * @author Marco Canini <marco@xaraya.com>
+ * @author Paul Rosania  <paul@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @author Marty Vance <dracos@xaraya.com>
  * @author Garrett Hunter <garrett@blacktower.com>
@@ -25,10 +26,12 @@ define('XAR_TOKEN_HTML_COMMENT_OPEN', '<!--');
 define('XAR_TOKEN_HTML_COMMENT_CLOSE', '-->');
 
 /**
+ * xarTpl__CompilerError
  *
- *
+ * For now just a stub class to a default user exception
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__CompilerError extends DefaultUserException
 {
@@ -39,9 +42,13 @@ class xarTpl__CompilerError extends DefaultUserException
 }
 
 /**
+ * xarTpl__ParserError
  *
+ * class to hold parser errors, the constructor makes up
+ * the msg to pass on as the exception message.
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__ParserError extends DefaultUserException
 {
@@ -61,9 +68,12 @@ class xarTpl__ParserError extends DefaultUserException
 }
 
 /**
+ * xarTpl_PositionInfo
  *
+ * Instance of this class record where we are doing what in the templates
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__PositionInfo
 {
@@ -74,9 +84,13 @@ class xarTpl__PositionInfo
 }
 
 /**
+ * xarTpl__Compiler - the abstraction of the BL compiler
  *
+ * The compiler holds the parser and the code generator as objects
  *
  * @package blocklayout
+ * @access private
+ * @todo should this be a singleton?
  */
 class xarTpl__Compiler
 {
@@ -91,6 +105,7 @@ class xarTpl__Compiler
 
     function compileFile($fileName)
     {
+        // FIXME: can we get rid of the @?
         if (!($fp = @fopen($fileName, 'r'))) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'CompilerError',
                             new xarTpl__CompilerError("Cannot open template file '$fileName'."));
@@ -113,9 +128,12 @@ class xarTpl__Compiler
 }
 
 /**
+ * xarTpl__CodeGenerator
  *
+ * part of the compiler, this generates the code for each tag found
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__CodeGenerator
 {
@@ -264,9 +282,14 @@ class xarTpl__CodeGenerator
 }
 
 /**
+ * xarTpl__Parser - the BL parser
  *
+ * modelled as extension to the position info class, 
+ * parses a template source file and constructs a document tree
  *
  * @package blocklayout
+ * @access private
+ * @todo this is an xml parser type functionality, can't we use an xml parser for this?
  */
 class xarTpl__Parser extends xarTpl__PositionInfo
 {
@@ -1058,9 +1081,10 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 }
 
 /**
- *
+ * xarTpl__NodesFactory - class which constructs nodes in the document tree
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__NodesFactory
 {
@@ -1127,7 +1151,7 @@ class xarTpl__NodesFactory
             case 'event':
                 $node = new xarTpl__XarEventNode();
                 break;
-           // marco: inlude was replaced by template right?
+            // <MrB>: include is deprecated, replaced by template, this is handled in the node itself
             case 'include':
                 $node = new xarTpl__XarIncludeNode();
                 break;
@@ -1255,9 +1279,14 @@ class xarTpl__NodesFactory
 }
 
 /**
+ * xarTpl__SpecialVariableNameResolver
  *
+ * This resolves special variables in the template to their real values
+ * a mapping is used to keep this information.
+ * This class is a singleton
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__SpecialVariableNamesResolver
 {
@@ -1296,9 +1325,15 @@ class xarTpl__SpecialVariableNamesResolver
 }
 
 /**
+ * xarTpl__TemplateVariables
  *
+ * Handle template variables
  *
  * @package blocklayout
+ * @access private
+ * @todo code the version number somewhere more central
+ * @todo is the encoding fixed?
+ * 
  */
 class xarTpl__TemplateVariables
 {
@@ -1327,9 +1362,12 @@ class xarTpl__TemplateVariables
 }
 
 /**
+ * xarTpl__ExpressionTransformer
  *
+ * Transforms BL and php expressions from templates.
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__ExpressionTransformer
 {
@@ -1394,6 +1432,8 @@ class xarTpl__ExpressionTransformer
 /**
  * xarTpl__Node
  *
+ * Base class for all nodes, sets the base properties, methods are
+ * abstract and should be overridden by each specific node class
  *
  * @package blocklayout
  * hasChildren -> false
@@ -1573,9 +1613,12 @@ class xarTpl__InstructionNode extends xarTpl__Node
 }
 
 /**
+ * xarTpl__XarVarInstructionNode
  *
+ * models variables in the template, treats them as php expressions
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarVarInstructionNode extends xarTpl__InstructionNode
 {
@@ -1595,9 +1638,12 @@ class xarTpl__XarVarInstructionNode extends xarTpl__InstructionNode
 }
 
 /**
+ * xarTpl__XarApiInstructionNode
  *
+ * API function node, treated as php expression
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
 {
@@ -1616,9 +1662,12 @@ class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
 }
 
 /**
+ * xarTpl__XarVarEntityNode
  *
+ * Variable entities, treated as BL expression
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarVarEntityNode extends xarTpl__EntityNode
 {
@@ -1639,9 +1688,13 @@ class xarTpl__XarVarEntityNode extends xarTpl__EntityNode
 }
 
 /**
+ * xarTpl__XarConfigEntityNode
  *
+ * Configuration entities, treated as BL expression, basically
+ * a wrapping to xarConfigGetVar()
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarConfigEntityNode extends xarTpl__EntityNode
 {
@@ -1663,9 +1716,12 @@ class xarTpl__XarConfigEntityNode extends xarTpl__EntityNode
 }
 
 /**
+ * xarTpl__XarModEntityNode
  *
+ * Module variables entities, basically wraps xarModGetVar($module,$varname)
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarModEntityNode extends xarTpl__EntityNode
 {
@@ -1688,9 +1744,12 @@ class xarTpl__XarModEntityNode extends xarTpl__EntityNode
 }
 
 /**
+ * xarTpl__XarSessionEntityNode
  *
+ * Session variables entities, wrapps xarSessionGetVar()
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarSessionEntityNode extends xarTpl__EntityNode
 {
@@ -1707,9 +1766,12 @@ class xarTpl__XarSessionEntityNode extends xarTpl__EntityNode
 }
 
 /**
+ * xarTpl__XarModUrlEntityNode
  *
+ * Module url entities, wraps xarModUrl(module, type, func)
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarModurlEntityNode extends xarTpl__EntityNode
 {
@@ -1728,9 +1790,14 @@ class xarTpl__XarModurlEntityNode extends xarTpl__EntityNode
 }
 
 /**
+ * xarTpl_XarUrlEntityNode
  *
+ * More generic than ModUrlEntityNode, supports args
+ * this wraps xarModURL('$module', '$type', '$func'$args)
  *
  * @package blocklayout
+ * @access private
+ * @todo model this class and the xarTpl__XarModUrlEntityNode as parent/derived pair.
  */
 class xarTpl__XarUrlEntityNode extends xarTpl__EntityNode
 {
@@ -1768,9 +1835,12 @@ class xarTpl__XarUrlEntityNode extends xarTpl__EntityNode
 }
 
 /**
+ * xarTpl__XarBaseUrlEntityNode
  *
+ * wraps xarServerGetBaseURL()
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarBaseurlEntityNode extends xarTpl__EntityNode
 {
@@ -1782,6 +1852,9 @@ class xarTpl__XarBaseurlEntityNode extends xarTpl__EntityNode
 
 /**
  * xarTpl__TplTagNode
+ *
+ * Base class for tag nodes
+ *
  * hasChildren -> false
  * hasText -> false
  * isAssignable -> true
@@ -1804,6 +1877,7 @@ class xarTpl__TplTagNode extends xarTpl__Node
 }
 
 /**
+ * xarTpl__XarVarNode: <xar:var> tag class
  *
  *
  * @package blocklayout
@@ -1813,49 +1887,47 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
     function render()
     {
         extract($this->attributes);
-
+        
         if (!isset($name)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
-                           new xarTpl__ParserError('Missing \'name\' attribute in <xar:var> tag.', $this));
+                            new xarTpl__ParserError('Missing \'name\' attribute in <xar:var> tag.', $this));
             return;
         }
-
+        
         if (!isset($scope)) {
             $scope = 'local';
         }
-
+        
         switch ($scope) {
-            case 'config':
-                return "xarConfigGetVar('".$name."')";
-            case 'session':
-                return "xarSessionGetVar('".$name."')";
-            case 'module':
-                if (!isset($module)) {
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
-                                   new xarTpl__ParserError('Missing \'module\' attribute in <xar:var> tag.', $this));
-                    return;
-                }
-                return "xarModGetVar('".$module."', '".$name."')";
-            // MrB: Johnny, merged this in, not sure if it needs to be here, check this.
-
-            case 'theme':
-                if (!isset($themeName)) {
-                    $themeName = xarCore_getSiteVar('BL.DefaultTheme');
-                }
-                return "xarThemeGetVar('".$themeName."', '".$name."')";
-            case 'local':
-                $name = xarTpl__ExpressionTransformer::transformPHPExpression($name);
-                if (!isset($name)) {
-                    return; // throw back
-                }
-                return $name;
-            default:
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
-                               new xarTpl__ParserError('Invalid value for \'local\' attribute in <xar:var> tag.', $this));
+        case 'config':
+            return "xarConfigGetVar('".$name."')";
+        case 'session':
+            return "xarSessionGetVar('".$name."')";
+        case 'module':
+            if (!isset($module)) {
+                xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+                                new xarTpl__ParserError('Missing \'module\' attribute in <xar:var> tag.', $this));
                 return;
+            }
+            return "xarModGetVar('".$module."', '".$name."')";
+        case 'theme':
+            if (!isset($themeName)) {
+                $themeName = xarCore_getSiteVar('BL.DefaultTheme');
+            }
+            return "xarThemeGetVar('".$themeName."', '".$name."')";
+        case 'local':
+            $name = xarTpl__ExpressionTransformer::transformPHPExpression($name);
+            if (!isset($name)) {
+                return; // throw back
+            }
+            return $name;
+        default:
+            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
+                            new xarTpl__ParserError('Invalid value for \'local\' attribute in <xar:var> tag.', $this));
+            return;
         }
     }
-
+    
     function needExceptionsControl()
     {
         if (!isset($this->attributes['scope'])) {
@@ -1866,7 +1938,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarLoopNode: <xar:loop> tag class
  *
  * @package blocklayout
  */
@@ -1972,7 +2044,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarSecNode: <xar:sec> tag class
  *
  * @package blocklayout
  */
@@ -2042,9 +2114,12 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
 }
 
 /**
+ * xarTpl__XarTernaryNode: <xar:ternary> tag class
  *
+ * Wraps (condition) ? ops : otherops;
  *
  * @package blocklayout
+ * @deprecated
  */
 class xarTpl__XarTernaryNode extends xarTpl__TplTagNode
 {
@@ -2089,7 +2164,7 @@ class xarTpl__XarTernaryNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarIfNode : <xar:if> tag class
  *
  * @package blocklayout
  */
@@ -2135,9 +2210,12 @@ class xarTpl__XarIfNode extends xarTpl__TplTagNode
 }
 
 /**
+ * xarTpl__XarElseIfNode: <xar:elseif> tag class
  *
+ * Takes care of ean } elseif(condition) { construct
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarElseifNode extends xarTpl__TplTagNode
 {
@@ -2166,9 +2244,12 @@ class xarTpl__XarElseifNode extends xarTpl__TplTagNode
 }
 
 /**
+ * xarTpl__XarElseNode: <xar:else/> tag class
  *
+ * Takes care of the "} else {" construct for both if, else and ternary tags
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarElseNode extends xarTpl__TplTagNode
 {
@@ -2202,9 +2283,12 @@ class xarTpl__XarElseNode extends xarTpl__TplTagNode
 }
 
 /**
+ * xarTpl__XarWhileNode: <xar:while> tag class
  *
+ * takes care of the "while(condition) {" construct
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarWhileNode extends xarTpl__TplTagNode
 {
@@ -2248,9 +2332,12 @@ class xarTpl__XarWhileNode extends xarTpl__TplTagNode
 }
 
 /**
+ * xarTpl__XarForNode: <xar:for> tag class
  *
+ * Takes care of the "for(start, test, iteration) {"  construct
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarForNode extends xarTpl__TplTagNode
 {
@@ -2314,9 +2401,12 @@ class xarTpl__XarForNode extends xarTpl__TplTagNode
 }
 
 /**
+ * xarTpl__XarForEachNode: <xar:foreach> tag class
  *
+ * Takes care of the "foreach($array as $key=>$value) { " construct
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarForEachNode extends xarTpl__TplTagNode
 {
@@ -2373,9 +2463,10 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarBlockNode: <xar:block> tag class
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 {
@@ -2449,10 +2540,10 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarBlockGroupNode: <xar:blockgroup> tag class
  *
  * @package blocklayout
- *
+ * @access private
  */
 class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
 {
@@ -2511,7 +2602,7 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarMlNode: <xar:ml> tag class
  *
  * @package blocklayout
  */
@@ -2573,9 +2664,10 @@ class xarTpl__XarMlNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarMlKeyNode: <xar:mlkey> tag class
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
 {
@@ -2587,7 +2679,7 @@ class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
     function renderBeginTag()
     {
         $key = '';
-        // MrB: these two ifs are in review, not in main, let them be in the merge.
+        
         if (count($this->children) == 0) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                            new xarTpl__ParserError('Missing the key inside <xar:mlkey> tag.', $this));
@@ -2635,9 +2727,10 @@ class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarMlStringNode: <xar:mlstring> tag class
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
 {
@@ -2665,7 +2758,7 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
     function renderBeginTag()
     {
         $string = '';
-        // MrB: these two ifs are in review, not in main, let them be in the merge
+        
         // Dracos:  these two ifs are never true????
         if (count($this->children) == 0) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
@@ -2702,9 +2795,10 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarMlVarNode: <xar:mlvar> tag class
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
 {
@@ -2762,9 +2856,11 @@ class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarCommentNode: <xar:comment> tag class
  *
  * @package blocklayout
+ * @access private
+ * @todo let this class or derived ones also handle <!-- and <!---
  */
 class xarTpl__XarCommentNode extends xarTpl__TplTagNode
 {
@@ -2801,9 +2897,10 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarModuleNode: <xar:module> tag class
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarModuleNode extends xarTpl__TplTagNode
 {
@@ -2822,9 +2919,10 @@ class xarTpl__XarModuleNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarEventNode: <xar:event> tag class
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarEventNode extends xarTpl__TplTagNode
 {
@@ -2848,16 +2946,18 @@ class xarTpl__XarEventNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarIncludeNode: <xar:include> tag
  *
  * @package blocklayout
+ * @access private
+ * @deprecated
  */
 class xarTpl__XarIncludeNode extends xarTpl__TplTagNode
 {
     function render()
     {
         extract($this->attributes);
-        // MrB: this is in review, this is right, include is indeed deprecated, let it like this in the merge
+        
         xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                            new xarTpl__ParserError('The <xar:include> tag has been deprecated, you must use <xar:template>.', $this));
         return;
@@ -2866,17 +2966,17 @@ class xarTpl__XarIncludeNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarTemplateNode: <xar:template> tag class
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
 {
     function render()
     {
         extract($this->attributes);
-        // MrB: review contained a change from marce replacing file with name, although a good idea, not according to spec,
-        // the thing below is the right code for now.
+        
         if (!isset($file)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
                            new xarTpl__ParserError('Missing \'file\' attribute in <xar:template> tag.', $this));
@@ -2911,9 +3011,10 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarSetNode: <xar:set> tag class
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarSetNode extends xarTpl__TplTagNode
 {
@@ -2970,10 +3071,10 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarBreakNode: <xar:break/> tag class
  *
  * @package blocklayout
- * @todo FIXME: check if this is how we want to support module-registered tags
+ * @access private
  */
 class xarTpl__XarBreakNode extends xarTpl__TplTagNode
 {
@@ -3001,9 +3102,10 @@ class xarTpl__XarBreakNode extends xarTpl__TplTagNode
 }
 
 /**
- *
+ * xarTpl__XarContinueNode: <xar:continue/> tag class
  *
  * @package blocklayout
+ * @access private
  */
 class xarTpl__XarContinueNode extends xarTpl__TplTagNode
 {
@@ -3032,9 +3134,10 @@ class xarTpl__XarContinueNode extends xarTpl__TplTagNode
 
 
 /**
- *
+ * xarTpl__XarOtheNode: handle module registered tags
  *
  * @package blocklayout
+ * @access private
  * @todo FIXME: check if this is how we want to support module-registered tags
  */
 class xarTpl__XarOtherNode extends xarTpl__TplTagNode
