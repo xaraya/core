@@ -252,6 +252,12 @@ function adminpanels_adminmenublock_display($blockinfo){
         $output->Text('<font class="pn-sub">['.pnVarPrepForDisplay(pnML('by group')).']</font>');
         $output->Linebreak();
         $output->Text($data);
+    } else {
+        // default view by categories
+        $data = pnModAPIFunc('adminpanels', 'admin', 'buildbycat');
+        $output->Text('<font class="pn-sub">['.pnVarPrepForDisplay(pnML('by category')).']</font>');
+        $output->Linebreak();
+        $output->Text($data);
     }
     
     $output->SetInputMode(_PNH_PARSEINPUT);
