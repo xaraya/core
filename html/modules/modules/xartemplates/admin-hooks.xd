@@ -29,18 +29,23 @@
                     <xar:else />
                         <input type="checkbox" name="hooked_#$name#[0]" id="hooked_#$name#[0]" value="1" style="vertical-align: middle;" />
                     </xar:if>
-                    <label for="hooked_#$name#[0]">#$name# : #$description#</label><br />
-                    <div style="padding-left: 2em;">
-                    <xar:foreach in="$itemtypes" key="$typeid" value="$itemtype">
-                        &nbsp;&nbsp;
-                        <xar:if condition="!empty($checked[$typeid])">
-                            <input type="checkbox" name="hooked_#$name#[#$typeid#]" id="hooked_#$name#[#$typeid#]" value="1" checked="checked" style="vertical-align: middle;" />
-                        <xar:else />
-                            <input type="checkbox" name="hooked_#$name#[#$typeid#]" id="hooked_#$name#[#$typeid#]" value="1" style="vertical-align: middle;" />
-                        </xar:if>
-                        <label for="hooked_#$name#[#$typeid#]">#$itemtype['label']#</label><br />
-                    </xar:foreach>
-                    </div>
+                    <xar:if condition="count($itemtypes) gt 0">
+                        <label for="hooked_#$name#[0]"><xar:mlstring>all</xar:mlstring> #$name# : #$description# </label><br />
+                        <div style="padding-left: 2em;">
+                        <xar:mlstring>or for individual item types</xar:mlstring> :<br />
+                        <xar:foreach in="$itemtypes" key="$typeid" value="$itemtype">
+                            &nbsp;&nbsp;
+                            <xar:if condition="!empty($checked[$typeid])">
+                                <input type="checkbox" name="hooked_#$name#[#$typeid#]" id="hooked_#$name#[#$typeid#]" value="1" checked="checked" style="vertical-align: middle;" />
+                            <xar:else />
+                                <input type="checkbox" name="hooked_#$name#[#$typeid#]" id="hooked_#$name#[#$typeid#]" value="1" style="vertical-align: middle;" />
+                            </xar:if>
+                            <label for="hooked_#$name#[#$typeid#]">#$itemtype['label']#</label><br />
+                        </xar:foreach>
+                        </div>
+                    <xar:else />
+                        <label for="hooked_#$name#[0]">#$name# : #$description#</label><br />
+                    </xar:if>
                 </xar:loop>
                 <br />
                 <input type="submit" value="#$savechangeslabel#" />

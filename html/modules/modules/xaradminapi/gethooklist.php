@@ -39,6 +39,8 @@ function modules_adminapi_gethooklist($args)
                        OR xar_smodule = '" . xarVarPrepForStore($modName) . "'
                  ORDER BY xar_tmodule,
                           xar_smodule DESC";
+    } else {
+        $query .= " ORDER BY xar_tmodule";
     }
 
     $result =& $dbconn->Execute($query);
