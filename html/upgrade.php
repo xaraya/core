@@ -1048,6 +1048,11 @@ Password : %%password%%
     } else {
         echo "Privileges Locks have been created previously, moving to next check. <br />";
     }
+
+    //Move this mask from privilges to roles module
+    xarUnregisterMask('AssignRole');
+    xarRegisterMask('AssignRole','All','roles','All','All','ACCESS_MODERATE');
+
     // Check the installed privs and masks.
     echo "<h5>Checking Hook Structure</h5>";
 

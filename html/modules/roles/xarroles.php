@@ -736,7 +736,7 @@ class xarRole
     }
 
     /**
-     * remove: remove a role from the repository
+     * remove: make a role deleted
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @access public
@@ -770,13 +770,11 @@ class xarRole
         //      WHERE xar_uid=" . $this->getID();
 
         //Let's not remove the role yet.  Instead, we want to deactivate it
-        // and then purge it at a later time.
 
+        $deleted = xarML('deleted');
         $query = "UPDATE $this->rolestable
-        SET xar_email   = '',
-            xar_pass    = '',
-            xar_valcode = '',
-            xar_state   = '0'
+        SET xar_uname   =  '" . $this->getUser() . "[" . $deleted . "]" . xarLocaleGetFormattedDate() . "',
+            xar_state   = 0
         WHERE xar_uid   = " . $this->getID();
 
         // Execute the query, bail if an exception was thrown
