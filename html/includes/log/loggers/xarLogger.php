@@ -49,15 +49,18 @@ class xarLogger
     {
         $this->_logLevel = $conf['logLevel'];
 
-        /* If no identity is given yet to this page view, then create it */
+/*
+        // If no identity is given yet to this page view, then create it 
         if (!isset($GLOBALS['_xar_logging_ident'])) {
             $GLOBALS['_xar_logging_ident'] = md5(microtime());
         }
 
-        /* Assigns the page view identity to be logged as the logger identity*/
+        // Assigns the page view identity to be logged as the logger identity
         $this->_ident = $GLOBALS['_xar_logging_ident'];
-
-        /* If a custom time format has been provided, use it. */
+*/
+        $this->_ident = '';
+        
+        // If a custom time format has been provided, use it. 
         if (!empty($conf['timeFormat'])) {
             $this->_timeFormat = $conf['timeFormat'];
         }

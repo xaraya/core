@@ -69,7 +69,7 @@ function xarLog_init($args, $whatElseIsGoingLoaded)
         //the user might now have logging yet installed, or for some reason we
         //should be able to have a way to get error messages back => installation?!
         $logFile = xarCoreGetVarDirPath() . '/logs/log.html';
-        if (file_exists($logFile)) {
+        if (file_exists($logFile) && is_writeable($logFile)) {
             $xarLogConfig[] = array('type' => 'html',
                                                      'config' =>array('fileName' => $logFile,
                                                                                   'logLevel'  => (2 * XARLOG_LEVEL_DEBUG -1)));
@@ -107,6 +107,14 @@ function xarLog__shutdown_handler()
         $totalTime = ($endTime - $GLOBALS['xarDebug_startTime']);
         xarLogMessage("Response was served in $totalTime seconds.");
     }
+
+/*
+     xarLogMessage("xarLog shutdown handler: Ending all logging.");
+
+    foreach (array_keys($GLOBALS['xarLog_loggers']) as $id) {
+       $GLOBALS['xarLog_loggers'][$id]->;
+    }
+ */
 }
 
 function xarLog__add_logger($type, $config_args)
