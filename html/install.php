@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id$
- * 
+ *
  * Xaraya Installer
- * 
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -64,8 +64,9 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     }
 
     // Make sure we should still be here
+    echo $phase;
     if ($phase >= XARINSTALL_PHASE_BOOTSTRAP) {
-        xarCoreInit(XARCORE_SYSTEM_ALL);      
+        xarCoreInit(XARCORE_SYSTEM_ALL);
         xarResponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
     }
 
@@ -96,9 +97,9 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     $mainModuleOutput = xarInstallFunc($modName, $modType, $funcName);
 
     // Make sure we've got the installer theme selected
-    // FIXME: <rabbitt> this is just a hack to make it so 
+    // FIXME: <rabbitt> this is just a hack to make it so
     // that the theme doesn't go to Xaraya_Classic. Somewhere
-    // within the the above xarInstallFunc() something is 
+    // within the the above xarInstallFunc() something is
     // switching the theme to Xaraya_Classic and I can't find where...
     if (xarTplGetThemeName() != 'installer') {
         xarTplSetThemeName('installer');

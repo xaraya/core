@@ -155,9 +155,7 @@ function modules_init()
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    $masks = new xarMasks();
-
-    $masks->register('Admin','All','modules','All','All',ACCESS_ADMIN);
+    registerMask('Admin','All','modules','All','All',ACCESS_ADMIN);
 
     // Initialisation successful
     return true;

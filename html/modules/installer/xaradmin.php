@@ -198,12 +198,21 @@ function installer_admin_phase5()
     // Start the database
     xarCoreInit(XARCORE_SYSTEM_ADODB);
 
+// install the security stuff here, but disable the registerMask and
+// and securitycheck functions until we've finished the installation process
+	global $installing;
+	$installing = true;
+	include_once 'includes/xarSecurity.php';
+	xarSecurity_init();
+
     // Load in modules/installer/xarinit.php and start the install
     if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
                                                  array('directory' => 'installer',
                                                        'initfunc'  => 'init'))) {
         return;
     }
+
+	$installing = false;
 
     //session_start();
     //session_destroy();

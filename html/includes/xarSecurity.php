@@ -85,10 +85,41 @@ $schemas = array();
  * @todo    none
 */
 
-	function securitycheck($component,$showexception=1,$instancetype='',instance='',$role='',$module='')
+	function securitycheck($component,$showexception=1,$instancetype='',$instance='',$role='',$module='')
 	{
-		$masks = new xarMasks();
-		return $masks->securitycheck($component,$showexception,$instancetype,instance='',$role,$module);
+		global $installing;
+
+		if(isset($installing) && ($installing == true)) {
+			return true;
+		}
+		else {
+			$masks = new xarMasks();
+			return $masks->securitycheck($component,$showexception,$instancetype,$instance='',$role,$module);
+		}
+	}
+
+/**
+ * registerMask: wrapper function for registering a mask
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   component string
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+	function registerMask($name,$realm,$module,$component,$instance,$level,$description='')
+	{
+		global $installing;
+
+		if(isset($installing) && ($installing == true)) {
+			return true;
+		}
+		else {
+			$masks = new xarMasks();
+			return $masks->register($name,$realm,$module,$component,$instance,$level,$description='');
+		}
 	}
 
 /**
