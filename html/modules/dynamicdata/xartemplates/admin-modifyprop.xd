@@ -20,6 +20,7 @@ Tip : empty label -> delete field for all items
        <td><strong>&xar-var-labels.label;</strong></td>
        <td><strong>&xar-var-labels.type;</strong></td>
        <td><strong>&xar-var-labels.default;</strong></td>
+       <td><strong>&xar-var-labels.source;</strong></td>
        <td><strong>&xar-var-labels.validation;</strong></td>
     </tr>
 
@@ -29,6 +30,17 @@ Tip : empty label -> delete field for all items
         <td><input type="text" name="dd_label[&xar-var-id;]" size="15" value="&xar-var-label;" /></td>
         <td><xar:data-input type="fieldtype" name="dd_type['.$id.']" value="$type" /></td>
         <td><input type="text" name="dd_default[&xar-var-id;]" size="15" value="&xar-var-default;" /></td>
+        <td>
+            <select name="dd_source[#$id#]">
+            <xar:foreach var="$sources" as="$mysource">
+                <xar:if condition="$mysource eq $source">
+                    <option selected>#$mysource#</option>
+                <xar:else />
+                    <option>#$mysource#</option>
+                </xar:if>
+            </xar:foreach>
+            </select>
+        </td>
         <td><input type="text" name="dd_validation[&xar-var-id;]" size="15" value="&xar-var-validation;" /></td>
     </tr>
 </xar:loop>
@@ -38,6 +50,13 @@ Tip : empty label -> delete field for all items
         <td><input type="text" name="dd_label[0]" size="15" /></td>
         <td><xar:data-input type="fieldtype" name="dd_type[0]" value="" /></td>
         <td><input type="text" name="dd_default[0]" size="15" /></td>
+        <td>
+            <select name="dd_source[0]">
+            <xar:foreach var="$sources" as="$mysource">
+                <option>#$mysource#</option>
+            </xar:foreach>
+            </select>
+        </td>
         <td><input type="text" name="dd_validation[0]" size="15" /></td>
     </tr>
 

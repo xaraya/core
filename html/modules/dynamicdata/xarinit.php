@@ -121,6 +121,10 @@ function dynamicdata_init()
                     'xar_prop_default'    => array('type'        => 'varchar',
                                                   'size'        => 254,
                                                   'default'     => NULL),
+                    'xar_prop_source'     => array('type'        => 'varchar',
+                                                  'size'        => 254,
+                                                  'null'        => false,
+                                                  'default'     => 'dynamic_data'),
                     'xar_prop_validation' => array('type'        => 'varchar',
                                                   'size'        => 254,
                                                   'default'     => NULL)
@@ -239,6 +243,9 @@ function dynamicdata_init()
     xarTplRegisterTag('dynamicdata', 'data-display',
                       array(),
                       'dynamicdata_userapi_handleDisplayTag');
+    xarTplRegisterTag('dynamicdata', 'data-list',
+                      array(),
+                      'dynamicdata_userapi_handleListTag');
 
     // Initialisation successful
     return true;
@@ -365,6 +372,7 @@ function dynamicdata_delete()
     xarTplUnregisterTag('data-output');
     xarTplUnregisterTag('data-form');
     xarTplUnregisterTag('data-display');
+    xarTplUnregisterTag('data-list');
 
     // Deletion successful
     return true;

@@ -56,6 +56,7 @@ function dynamicdata_adminapi_create($args)
 
     $dynamicdata = $xartable['dynamic_data'];
 
+// TODO: verify that the data source is in dynamic_data
     foreach ($values as $prop_id => $value) {
         // invalid prop_id or undefined value (empty is OK, though !)
         if (empty($prop_id) || !is_numeric($prop_id) || !isset($value)) {
@@ -154,6 +155,7 @@ function dynamicdata_adminapi_delete($args)
 
     $dynamicdata = $xartable['dynamic_data'];
 
+// TODO: don't delete if the data source is not in dynamic_data
     $sql = "DELETE FROM $dynamicdata
             WHERE xar_dd_propid IN (" . join(', ',$ids) . ")
               AND xar_dd_itemid = " . xarVarPrepForStore($itemid);
@@ -216,6 +218,8 @@ function dynamicdata_adminapi_update($args)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
+
+// TODO: don't delete if the data source is not in dynamic_data
 
 // TODO: be a bit more efficient in how we update fields here :-)
     if (!xarModAPIFunc('dynamicdata', 'admin', 'delete',
@@ -761,6 +765,7 @@ function dynamicdata_adminapi_removehook($args)
 
     $dynamicdata = $xartable['dynamic_data'];
 
+// TODO: don't delete if the data source is not in dynamic_data
     // Delete the item fields
     $sql = "DELETE FROM $dynamicdata
             WHERE xar_dd_propid IN (" . join(', ',$ids) . ")";
@@ -808,6 +813,7 @@ function dynamicdata_adminapi_removehook($args)
  * @param $args['label'] name of the field to create
  * @param $args['type'] type of the field to create
  * @param $args['default'] default of the field to create
+ * @param $args['source'] data source for the field (dynamic_data table or other)
  * @param $args['validation'] validation of the field to create
  * @returns int
  * @return dynamicdata prop ID on success, false on failure
@@ -842,6 +848,10 @@ function dynamicdata_adminapi_createprop($args)
     }
     if (!isset($default) || !is_string($default)) {
         $default = '';
+    }
+// TODO: verify that the data source exists
+    if (!isset($source) || !is_string($source)) {
+        $source = 'dynamic_data';
     }
     if (!isset($validation) || !is_string($validation)) {
         $validation = '';
@@ -883,6 +893,7 @@ function dynamicdata_adminapi_createprop($args)
               xar_prop_label,
               xar_prop_dtype,
               xar_prop_default,
+              xar_prop_source,
               xar_prop_validation)
             VALUES (
               $nextId,
@@ -891,6 +902,7 @@ function dynamicdata_adminapi_createprop($args)
               '" . xarVarPrepForStore($label) . "',
               " . xarVarPrepForStore($type) . ",
               '" . xarVarPrepForStore($default) . "',
+              '" . xarVarPrepForStore($source) . "',
               '" . xarVarPrepForStore($validation) . "')";
     $dbconn->Execute($sql);
 
@@ -922,6 +934,7 @@ function dynamicdata_adminapi_createprop($args)
  * @param $args['label'] name of the field to update
  * @param $args['type'] type of the field to update
  * @param $args['default'] default of the field to update (optional)
+ * @param $args['source'] data source of the field to update (optional)
  * @param $args['validation'] validation of the field to update (optional)
  * @returns bool
  * @return true on success, false on failure
@@ -976,6 +989,10 @@ function dynamicdata_adminapi_updateprop($args)
     if (isset($default) && is_string($default)) {
         $sql .= ", xar_prop_default = '" . xarVarPrepForStore($default) . "'";
     }
+// TODO: verify that the data source exists
+    if (isset($source) && is_string($source)) {
+        $sql .= ", xar_prop_source = '" . xarVarPrepForStore($source) . "'";
+    }
     if (isset($validation) && is_string($validation)) {
         $sql .= ", xar_prop_validation = '" . xarVarPrepForStore($validation) . "'";
     }
@@ -1014,6 +1031,7 @@ function dynamicdata_adminapi_updateprop($args)
  * @param $args['label'] name of the field to delete
  * @param $args['type'] type of the field to delete
  * @param $args['default'] default of the field to delete
+ * @param $args['source'] data source of the field to delete
  * @param $args['validation'] validation of the field to delete
  * @returns bool
  * @return true on success, false on failure
@@ -1066,6 +1084,7 @@ function dynamicdata_adminapi_deleteprop($args)
         return;
     }
 
+// TODO: don't delete if the data source is not in dynamic_data
     // delete all data too !
     $dynamicdata = $xartable['dynamic_data'];
 

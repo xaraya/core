@@ -76,11 +76,15 @@ function dynamicdata_admin_modifyprop()
         $data['fields'] = array();
     }
 
+    // get possible data sources
+    $data['sources'] = xarModAPIFunc('dynamicdata','user','getsources');
+
     $data['labels'] = array(
                             'id' => xarML('ID'),
                             'label' => xarML('Label'),
                             'type' => xarML('Property Type'),
                             'default' => xarML('Default'),
+                            'source' => xarML('Data Source'),
                             'validation' => xarML('Validation'),
                             'new' => xarML('New'),
                       );
@@ -106,11 +110,13 @@ function dynamicdata_admin_updateprop()
          $dd_label,
          $dd_type,
          $dd_default,
+         $dd_source,
          $dd_validation) = xarVarCleanFromInput('modid',
                                                'itemtype',
                                                'dd_label',
                                                'dd_type',
                                                'dd_default',
+                                               'dd_source',
                                                'dd_validation');
 
     // Confirm authorisation code.  This checks that the form had a valid
@@ -169,6 +175,7 @@ function dynamicdata_admin_updateprop()
                                     'label' => $dd_label[$id],
                                     'type' => $dd_type[$id],
                                     'default' => $dd_default[$id],
+                                    'source' => $dd_source[$id],
                                     'validation' => $dd_validation[$id]))) {
                 return;
             }
@@ -184,6 +191,7 @@ function dynamicdata_admin_updateprop()
                                       'label' => $dd_label[0],
                                       'type' => $dd_type[0],
                                       'default' => $dd_default[0],
+                                      'source' => $dd_source[0],
                                       'validation' => $dd_validation[0]));
         if (empty($prop_id)) {
             return;
@@ -456,6 +464,7 @@ function dynamicdata_admin_modifyconfighook($args)
                     'label' => xarML('Label'),
                     'type' => xarML('Field Format'),
                     'default' => xarML('Default'),
+                    'source' => xarML('Data Source'),
                     'validation' => xarML('Validation'),
                    );
 
