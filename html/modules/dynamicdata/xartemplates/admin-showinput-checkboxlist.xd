@@ -8,7 +8,7 @@
             <xar:set name="theID">$id.'_'.$key</xar:set>
         </xar:if>
     
-        <xar:if condition="$option['checked']">
+        <xar:if condition="isset($option['checked']) && !empty($option['checked']) && ($option['checked']==true)">
             <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="true" />
         <xar:else />
             <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
