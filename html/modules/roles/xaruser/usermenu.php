@@ -74,7 +74,7 @@ function roles_user_usermenu($args)
             if (!empty($pass1)){
                 $minpasslength = xarModGetVar('roles', 'minpasslength');
                 if (strlen($pass2) < $minpasslength) {
-                    $msg = xarML('Your password must be ' . $minpasslength . ' characters long.');
+                    $msg = xarML('Your password must be #(1) characters long.', $minpasslength);
                     xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                     return;
                 }
