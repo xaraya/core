@@ -26,18 +26,19 @@ function modules_adminapi_getdbmodules()
     $dbModules = array();
 
     // Get all modules in DB
-    $sql = "SELECT $xartable[modules].xar_regid, xar_name, xar_directory, xar_version, xar_mode, xar_state
+    $sql = "SELECT $xartable[modules].xar_regid, xar_name, xar_directory, xar_class, xar_version, xar_mode, xar_state
               FROM $xartable[modules] LEFT JOIN $xartable[module_states] ON $xartable[modules].xar_regid = $xartable[module_states].xar_regid";
     $result = $dbconn->Execute($sql);
     if (!$result) return;
 
     while(!$result->EOF) {
-        list($regid, $name, $directory, $version, $mode, $state) = $result->fields;
+        list($regid, $name, $directory, $class, $version, $mode, $state) = $result->fields;
 
         //Push it into array (should we change to index by regid instead?)
         $dbModules[$name] = array('name'    => $name,
                                   'regid'   => $regid,
                                   'version' => $version,
+                                  'class'	=> $class,
                                   'mode'    => $mode,
                                   'state'   => $state);
         $result->MoveNext();

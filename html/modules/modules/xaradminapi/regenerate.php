@@ -59,7 +59,7 @@ function modules_adminapi_regenerate()
                 return;
             }
         }
-// If this is a new module, i.e. not in the db list, add it
+		// If this is a new module, i.e. not in the db list, add it
         if (empty($dbModules[$name])) {
             // New module
             $modId = $dbconn->GenId($xartable['modules']);
@@ -97,7 +97,7 @@ function modules_adminapi_regenerate()
             if (!isset($set)) return;
 
         } else {
-// From here on we have something in the file system or the db
+			// From here on we have something in the file system or the db
 
             switch ($dbModules[$name]['state']) {
                 case XARMOD_STATE_MISSING_FROM_UNINITIALISED:
@@ -115,11 +115,9 @@ function modules_adminapi_regenerate()
             }
 
             if (isset($newstate)) {
-                $set = xarModAPIFunc('modules',
-                                    'admin',
-                                    'setstate',
-                                     array('regid' => $dbModules[$name]['regid'],
-                                           'state' => $newstate));
+                $set = xarModAPIFunc('modules', 'admin', 'setstate',
+                                     array(	'regid'	=> $dbModules[$name]['regid'],
+                                           	'state' => $newstate));
             }
             // Check if there was a version change and adjust
             xarModAPIFunc('modules','admin','checkversion');

@@ -70,9 +70,9 @@ function modules_adminapi_upgrade($args)
     if (!$modFileInfo['user_capable'])
         $modFileInfo['user_capable'] = 0;
     if (!$modFileInfo['class'])
-        $modFileInfo['class'] = 'Unknown';
+        $modFileInfo['class'] = 'Miscellaneous';
     if (!$modFileInfo['category'])
-        $modFileInfo['category'] = 'Unknown';
+        $modFileInfo['category'] = 'Miscellaneous';
 
     // Note the changes in the database...
     list($dbconn) = xarDBGetConn();
@@ -88,9 +88,16 @@ function modules_adminapi_upgrade($args)
     $result = $dbconn->Execute($sql);
     if (!$result) return;
 
-    // Message
-    xarSessionSetVar('statusmsg', xarML('Module has been upgraded, now inactive'));
-
+    // Message to display in the module list view (only for core modules atm)
+    if(!xarSessionGetVar('statusmsg')){
+    	if(substr($modFileInfo['class'], 0, 4)  == 'Core'){
+    		xarSessionSetVar('statusmsg', $modInfo['name']);
+    	}
+	} else {
+		if(substr($modFileInfo['class'], 0, 4)  == 'Core'){
+    		xarSessionSetVar('statusmsg', xarSessionGetVar('statusmsg') . ', '. $modInfo['name']);
+    	}
+	}
     // Success
     return true;
 }

@@ -1,4 +1,5 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:set name="$modstatus">xarSessionGetVar('statusmsg')</xar:set>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
 	<h2 style="width:100%;height:1.5em;">
@@ -86,6 +87,19 @@
               </tr>
             </table>
         </div>
+        <xar:if condition="$modstatus">
+        	<!--- lets display latest status on core modules upgrades if any --->
+        	<div class="xar-norm-outline" style="margin-top:1px;">
+        		<p style="margin:.25em;text-align:center;">
+        			<xar:mlstring>
+        			    Latest status - the following core modules have been successfully upgraded:
+        			</xar:mlstring>
+				</p>
+				<p class="xar-accent" style="margin:.25em;text-align:center;">
+					#$modstatus#
+				</p>
+        	</div>
+        </xar:if>
         <!--- the Module Lists css-based styles --->
         <xar:if condition="$selstyle eq 'compacta' or $selstyle eq 'compactb'">
             <xar:template file="compactlist-ab" type="module" />
