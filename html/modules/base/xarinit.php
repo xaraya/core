@@ -246,9 +246,6 @@ function base_init()
         return;
     }
     
-    // Load in installer API
-    if (!xarInstallAPILoad('installer','admin')) return;
-
     /****************************************************************
     * Install roles module and set up default roles
     ****************************************************************/

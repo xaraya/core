@@ -70,7 +70,7 @@ function xarInstallAPIFunc($funcName = 'main', $args = array())
     $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
     if (!function_exists($modAPIFunc)) {
         // attempt to load the install api
-        xarInstallAPILoad($modName,$modType);
+        xarInstallAPILoad();
         // let's check for the function again to be sure
         if (!function_exists($modAPIFunc)) {
             $msg = xarML('Module API function #(1) does not exist.', $modAPIFunc);
@@ -96,41 +96,20 @@ function xarInstallAPIFunc($funcName = 'main', $args = array())
  * @return true on success
  * @raise BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
-function xarInstallAPILoad($modName, $modType = 'user')
+function xarInstallAPILoad()
 {
+    $modName    = 'installer';
+    $modOsDir   = 'installer';
+    $modType  = 'admin';
+
     static $loadedAPICache = array();
-
-    //xarLogMessage("xarModAPILoad: loading $modName:$modType");
-
-    if (empty($modName)) {
-        $msg = xarML('Empty modname.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
 
     if (isset($loadedAPICache[strtolower("$modName$modType")])) {
         // Already loaded from somewhere else
         return true;
     }
 
-    /*
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) {
-        return; // throw back
-    }
-
-    if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE) {
-        $msg = xarML('Module #(1) is not active.', $modName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE',
-                       new SystemException($msg));
-        return;
-    }
-    */
-
     $modOsType = xarVarPrepForOS($modType);
-    //$modOsDir = $modBaseInfo['osdirectory'];
-    $modOsDir = 'installer';
 
     $osfile = "modules/$modOsDir/xar{$modOsType}api.php";
     if (!file_exists($osfile)) {
@@ -145,18 +124,6 @@ function xarInstallAPILoad($modName, $modType = 'user')
     include $osfile;
     $loadedAPICache[strtolower("$modName$modType")] = true;
 
-    // Load the API translations files
-   /* $res = xarMLS_loadModuleTranslations($modName, $modOsDir, $modType.'api');
-    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return; // throw back exception
-    }
-
-    // Load database info
-    xarMod__loadDbInfo($modName, $modOsDir);
-
-    // Module API loaded successfully, notify the proper event
-    xarEvt_notify($modName, $modType, 'ModAPILoad', NULL);
-    */
     return true;
 }
 
