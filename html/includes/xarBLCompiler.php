@@ -279,10 +279,10 @@ class xarTpl__CodeGenerator
                 $this->setPendingExceptionsControl(false);
             }
         } else {
+            // If there are no children or no text, we can render it as is.
             $code = $node->render();
-            if (!isset($code)) {
-                return; // throw back
-            }
+            assert('isset($code); /* The rendering code for a node is not working properly */');
+            if (!isset($code))  return; // throw back
         }
         //xarLogMessage('exiting generateNode', XARLOG_LEVEL_ERROR);
         return $code;
@@ -446,7 +446,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     $nextToken = $this->getNextToken(3);
                     if ($nextToken == 'ar:') {
                         // <xar: tag
-                        //xarLogMessage('found '.$nextToken, XARLOG_LEVEL_ERROR);
                         if (!$parent->hasChildren()) {
                             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                             new xarTpl__ParserError("The '".$parent->tagName."' tag cannot have children.", $parent));
@@ -517,7 +516,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $nextToken = $this->getNextToken(3);
                         if ($nextToken == 'ar:') {
                             // </xar: tag
-                            //xarLogMessage('found </pnt:', XARLOG_LEVEL_ERROR);
                             // Add text to parent
                             if ($text != '') {
                                 if ($parent->hasText()) {
@@ -1206,7 +1204,7 @@ class xarTpl__NodesFactory
 
             default:
                 // FIXME: check if this is how you want to support module-registered tags
-                $node = new xarTpl__XarOtherNode();
+                $node = new xarTpl__XarOtherNode($tagName);
                 break;
         }
         if (isset($node)) {
@@ -3182,24 +3180,33 @@ class xarTpl__XarContinueNode extends xarTpl__TplTagNode
 
 
 /**
- * xarTpl__XarOtheNode: handle module registered tags
+ * xarTpl__XarOtherNode: handle module registered tags
  *
  * @package blocklayout
  * @access private
- * @todo FIXME: check if this is how we want to support module-registered tags
+ * @todo improve the flexibility for registered tags/foreign tags
+ * @todo add the possibility to be 'relaxed', just ignoring unknown tags?
  */
 class xarTpl__XarOtherNode extends xarTpl__TplTagNode
 {
+    var $tagobject;
+
+    function xarTpl__XarOtherNode($tagName)
+    {
+        xarLogMessage("Constructing custom tag: $tagName");
+        $this->tagobject = xarTplGetTagObjectFromName($tagName);
+        if(!isset($this->tagobject)) {
+            // Unset the node so the callee can except
+            $this = NULL;;
+        }
+    }
+    
     function render()
     {
-        $that = xarTplGetTagObjectFromName($this->tagName);
-        if (!isset($that)) {
-            return;
-        }
+        assert('isset($this->tagobject); /* The tagobject should have been set when constructing */');
         if (!xarTplCheckTagAttributes($this->tagName, $this->attributes)) return;
         // let xarTemplate worry about calling the right function :)
-        // MrB: mike is right here, this was merged into review from main.
-        return $that->callHandler($this->attributes);
+        return $this->tagobject->callHandler($this->attributes);
     }
 
     function isAssignable()
