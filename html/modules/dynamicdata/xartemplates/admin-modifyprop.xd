@@ -16,7 +16,7 @@
 </xar:if>
 
 <br />
-Tip : empty label -> delete field for all items
+<xar:mlstring>Hint : empty the Label to delete a property for all items</xar:mlstring>
 <br />
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
 <form method="post" action="&xar-modurl-dynamicdata-admin-updateprop;">
@@ -98,6 +98,19 @@ Tip : empty label -> delete field for all items
 
 </table>
 <br />
+
+<xar:mlstring>
+When DD is used to extend some item (e.g. roles), then you should definitely
+avoid re-using property names that are already in the original item - just like
+you can't have 2 fields called 'state' in "static" items either. You should
+also avoid 'module', 'itemtype', 'itemid', 'transform' and 'returnurl' when
+using DD via hooks, because those are pre-defined parameters in hook calls.
+</xar:mlstring>
+<br />
+<xar:mlstring>
+Hint : after you create a property, the label and name are independent from
+each other. You can adapt the property name by clicking on the ID link above. 
+</xar:mlstring>
 
 <!-- xar:data-list object="$myobject" layout="'cells'" template="''" /-->
 
