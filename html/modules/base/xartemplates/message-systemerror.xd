@@ -51,8 +51,5 @@
 				<p><a href="http://bugs.xaraya.com/enter_bug.cgi">Click here to raise a bug</a></p>
 			</xar:if>
 		</div>
-		<div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-			<p><a href="javascript:history.back(-1)">Click here to go back</a></p>
-		</div>
     </div>
 </div>
