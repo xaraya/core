@@ -148,7 +148,7 @@ if (empty($step)) {
                 $query = xarDBCreateIndex($tables['roles'],$index);
                 $result =& $dbconn->Execute($query);
                 if (!$result) return;
-            break;
+            continue;
 
         case .902:
                 xarConfigSetVar('System.Core.VersionNum', '.9.0.3');
@@ -203,7 +203,7 @@ if (empty($step)) {
                     return;
                 }
 
-            break;
+            continue;
 
         case '0.903':  // this is how it's defined in modules/base/xarinit.php
         case '.9.0.3': // this is how it's defined in upgrade.php
@@ -236,7 +236,7 @@ if (empty($step)) {
                     }
                 }
 
-            break;
+            continue;
 
         case '.9.0.4': // this is how it's defined in upgrade.php
 
@@ -423,6 +423,10 @@ if (empty($step)) {
             $result =& $dbconn->Execute($query);
             if (!$result) return;
 
+            continue;
+
+        case '.9.0.5':
+            xarConfigSetVar('System.Core.VersionNum', '.9.0.6');
             break;
     }
 
