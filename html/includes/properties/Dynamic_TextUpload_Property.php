@@ -51,42 +51,73 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         } else {
             $name = 'dd_'.$this->id;
         }
+
+        // retrieve new value for preview + new/modify combinations
+        if (xarVarIsCached('DynamicData.TextUpload',$name)) {
+            $this->value = xarVarGetCached('DynamicData.TextUpload',$name);
+            return true;
+        }
+
+        // if the uploads module is hooked (to be verified and set by the calling module)
+        // any uploaded files will be referenced in the text as #...:NN# for transform hooks
+        if (xarVarGetCached('Hooks.uploads','ishooked')) {
+            $return = xarModAPIFunc('uploads','admin','validatevalue',
+                                    array('id' => $name, // not $this->id
+                                          'value' => null, // we don't keep track of values here
+                                          'multiple' => true, // not relevant here
+                                          'format' => 'textupload',
+                                          'maxsize' => $this->maxsize));
+            if (!isset($return) || !is_array($return) || count($return) < 2) {
+                $this->value = null;
+            // CHECKME: copied from autolinks :)
+                // 'text' rendering will return an array
+                $errorstack = xarErrorGet();
+                $errorstack = array_shift($errorstack);
+                $this->invalid = $errorstack['short'];
+                xarErrorHandled();
+                return false;
+            }
+            if (empty($return[0])) {
+                $this->value = null;
+                $this->invalid = xarML('value');
+                return false;
+            }
+            // show magic link #...:NN# to file in text (cfr. transform hook in uploads module)
+            $magiclinks = '';
+            if (!empty($return[1])) {
+                $magiclinks = xarModAPIFunc('uploads','user','showoutput',
+                                            array('value' => $return[1],
+                                                  'format' => 'textupload'));
+                $magiclinks = trim($magiclinks);
+            }
+            if (!empty($value) && !empty($magiclinks)) {
+                $value .= ' ' . $magiclinks;
+            } elseif (!empty($magiclinks)) {
+                $value = $magiclinks;
+            }
+            $this->value = $value;
+            // save new value for preview + new/modify combinations
+            xarVarSetCached('DynamicData.TextUpload',$name,$value);
+            return true;
+        }
+
         $upname = $name .'_upload';
         if (!empty($_FILES) && !empty($_FILES[$upname]) && !empty($_FILES[$upname]['tmp_name'])
             // is_uploaded_file() : PHP 4 >= 4.0.3
             && is_uploaded_file($_FILES[$upname]['tmp_name']) && $_FILES[$upname]['size'] > 0 && $_FILES[$upname]['size'] < 1000000) {
 
-            // if the uploads module is hooked (to be verified and set by the calling module)
-            if (xarVarGetCached('Hooks.uploads','ishooked')) {
-                $magicLink = xarModAPIFunc('uploads',
-                                           'user',
-                                           'uploadmagic',
-                                           array('uploadfile'=>$upname,
-                                                 'mod'=>'dynamicdata',
-                                                 'modid'=>0,
-                                                 'utype'=>'file'));
-                if (!empty($value)) {
-                    $value .= ' ' . $magicLink;
-                } else {
-                    $value = $magicLink;
-                }
-                $this->value = $value;
-                // save new value for preview + new/modify combinations
-                xarVarSetCached('DynamicData.TextUpload',$name,$value);
-            } else {
-                // this doesn't work on some configurations
-                //$this->value = join('', @file($_FILES[$upname]['tmp_name']));
-                $tmpdir = xarCoreGetVarDirPath();
-                $tmpdir .= '/cache/templates';
-                $tmpfile = tempnam($tmpdir, 'dd');
-            // no verification of file types here
-                if (move_uploaded_file($_FILES[$upname]['tmp_name'], $tmpfile) && file_exists($tmpfile)) {
-                    $this->value = join('', file($tmpfile));
-                    unlink($tmpfile);
-                }
-                // save new value for preview + new/modify combinations
-                xarVarSetCached('DynamicData.TextUpload',$name,$this->value);
+            // this doesn't work on some configurations
+            //$this->value = join('', @file($_FILES[$upname]['tmp_name']));
+            $tmpdir = xarCoreGetVarDirPath();
+            $tmpdir .= '/cache/templates';
+            $tmpfile = tempnam($tmpdir, 'dd');
+        // no verification of file types here
+            if (move_uploaded_file($_FILES[$upname]['tmp_name'], $tmpfile) && file_exists($tmpfile)) {
+                $this->value = join('', file($tmpfile));
+                unlink($tmpfile);
             }
+            // save new value for preview + new/modify combinations
+            xarVarSetCached('DynamicData.TextUpload',$name,$this->value);
         // retrieve new value for preview + new/modify combinations
         } elseif (xarVarIsCached('DynamicData.TextUpload',$name)) {
             $this->value = xarVarGetCached('DynamicData.TextUpload',$name);
@@ -121,12 +152,17 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         xarVarSetCached('Hooks.dynamicdata','withupload',1);
 
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
-            $extensions = xarModGetVar('uploads','allowed_types');
-            $data['extensions']= $extensions;
-            if (!empty($extensions)) {
-                $allowed = '<br />' . xarML('Allowed extensions : #(1)',$extensions);
-            } else {
-                $allowed = '';
+            // relevant input fields are handled directly by the uploads module
+            //$extensions = xarModGetVar('uploads','allowed_types');
+            $data['extensions']= '';
+            $allowed = '';
+            $uploads = xarModAPIFunc('uploads','admin','showinput',
+                                     array('id' => $name, // not $this->id
+                                           'value' => null, // we don't keep track of values here
+                                           'multiple' => true, // not relevant here
+                                           'format' => 'textupload'));
+            if (!empty($uploads)) {
+                $data['uploads_hooked'] = $uploads;
             }
         } else {
             // no verification of file types here
@@ -175,6 +211,8 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
     {
         extract($args);
         $data = array();
+
+        // no uploads-specific code here - cfr. transform hook in uploads module
 
         if (!isset($value)) {
             $data['value'] = $this->value;
