@@ -629,7 +629,8 @@ function pnConfigSetVar($name, $value)
  */
 function pnDBGetConn()
 {
-    return xarDBGetConn();
+    $dbconn =& xarDBGetConn();
+    return array($dbconn);
 }
 
 /**
