@@ -33,7 +33,7 @@ function roles_user_login()
     $extAuthentication = false;
     foreach($xarUser_authenticationModules as $authModName) {
 
-        switch(strtolower($authModName)) {
+       switch(strtolower($authModName)) {
 
             case 'authldap':
 
@@ -50,7 +50,6 @@ function roles_user_login()
 
             case 'authimap':
             case 'authsystem':
-            default:
 
                 // Still need to check if user exists as the user may be
                 // set to inactive in the user table
@@ -81,6 +80,16 @@ function roles_user_login()
                     $state = $rolestate;
                 }
 
+                break;
+			default:
+                // some other auth module is being used.  We're going to assume
+                // that xaraya will be the slave to the other system and
+                // if the user is successfully retrieved from that auth system,
+                // then a corresponding entry will be created in the
+                // roles table.  So set the user state to allow for
+                // login.
+                $state = 3;
+                $extAuthentication = true;
                 break;
         }
     }
