@@ -456,8 +456,6 @@ class xarLog__MozJSConsoleLogger extends xarLog__Logger
     {
         // Set the HTML format
         $this->setFormat('html');
-				$code='<script language="javascript" src="includes/mozlogger.js"></script>';
-				xarTplAddJavaScriptCode('head',$this->loggerdesc,$code);
 		}
 
 //     function getBuffer()
