@@ -99,7 +99,7 @@ function roles_init()
 
     // role type is used in all group look-ups (e.g. security checks)
     $index = array(
-                   'name'      => 'i_xar_type',
+                   'name'      => 'i_xar_roles_type',
                    'fields'    => array('xar_type')
                   );
     $query = xarDBCreateIndex($tables['roles'],$index);
@@ -108,7 +108,7 @@ function roles_init()
 
     // username must be unique (for login) + don't allow groupname to be the same either
     $index = array(
-                   'name'      => 'i_xar_uname',
+                   'name'      => 'i_xar_roles_uname',
                    'fields'    => array('xar_uname'),
                    'unique'    => true
                   );
@@ -118,7 +118,7 @@ function roles_init()
 
     // allow identical "real names" here
     $index = array(
-                   'name'      => 'i_roles_xar_name',
+                   'name'      => 'i_xar_roles_name',
                    'fields'    => array('xar_name'),
                    'unique'    => false
                   );
@@ -128,7 +128,7 @@ function roles_init()
 
     // allow identical e-mail here (???) + is empty for groups !
     $index = array(
-                   'name'      => 'i_xar_email',
+                   'name'      => 'i_xar_roles_email',
                    'fields'    => array('xar_email'),
                    'unique'    => false
                   );
@@ -153,13 +153,13 @@ function roles_init()
                                            'default'     => '0')));
     if (!$dbconn->Execute($query)) return;
 
-    $index = array('name'      => 'i_roles_xar_uid',
+    $index = array('name'      => 'i_xar_rolememb_uid',
                    'fields'    => array('xar_uid'),
                    'unique'    => FALSE);
     $query = xarDBCreateIndex($tables['rolemembers'],$index);
     if (!$dbconn->Execute($query)) return;
 
-    $index = array('name'      => 'i_xar_parentid',
+    $index = array('name'      => 'i_xar_rolememb_parentid',
                    'fields'    => array('xar_parentid'),
                    'unique'    => FALSE);
     $query = xarDBCreateIndex($tables['rolemembers'],$index);
