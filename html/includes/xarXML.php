@@ -378,6 +378,7 @@ class xarAbstractXmlHandler
     function external_entity_declaraion(){}
     function start_namespace(){}
     function end_namespace(){}
+    function _reset(){}
 }
 
 /**
