@@ -37,7 +37,7 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
          *  see the xar:template tag how this will work and bug 1120 for all the details
          */
         // FIXME: add some checking whether $name already is a template variable
-        return ' $_bl_data[\''.$this->_name.'\'] = '. XAR_TOKEN_VAR_START . $this->_name.';';
+        return ' $_bl_data[\''.$this->_name.'\'] =& '. XAR_TOKEN_VAR_START . $this->_name.';';
    }
     
     function isAssignable()
