@@ -361,7 +361,7 @@ function pnModUnregisterHook($hookObject,
 /**
  * get status message from previous operation
  *
- * @deprec
+ * @deprecated
  * Obtains any status message, and also destroys
  * it from the session to prevent duplication
  * @public

@@ -495,7 +495,7 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10)
  * @access public
  * @param templateCode string
  * @param tplData string
- * @return 
+ * @return  string
  */
 function xarTplString($templateCode, $tplData)
 {
@@ -508,7 +508,7 @@ function xarTplString($templateCode, $tplData)
  * @access public
  * @param templateCode string
  * @param tplData string
- * @return 
+ * @return string
  */
 function xarTplFile($fileName, $tplData)
 {
@@ -520,7 +520,7 @@ function xarTplFile($fileName, $tplData)
  *
  * @access public
  * @param templateSource string
- * @return 
+ * @return string
  */
 function xarTplCompileString($templateSource)
 {
