@@ -1,7 +1,8 @@
-<table border="0" width="100%">
+<table border="0" width="100%" cellpadding="2" cellspacing="0">
     <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>Users Administration</xar:mlstring>            
-        </th>
+        <th align="center">#$menutitle#</th>
+    </tr>
+    <tr>
+        <td>#$help#</td>
     </tr>
 </table>

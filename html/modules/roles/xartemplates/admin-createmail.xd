@@ -1,7 +1,7 @@
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
-            <xar:mlstring>Users Administration</xar:mlstring>            
+            <xar:mlstring>Roles Administration</xar:mlstring>            
         </th>
     </tr>
 </table>
