@@ -19,7 +19,7 @@
                     <label class="xar-mod-title" for="hide"><xar:mlstring>Hide</xar:mlstring></label>
                 </th>
                 <th nowrap="nowrap" colspan="3">
-                    <label class="xar-mod-title" for="reload"><xar:mlstring>Force</xar:mlstring></label>
+                    <label class="xar-mod-title" for="reload"><xar:mlstring>Action</xar:mlstring></label>
                 </th>
               </tr>
               <tr>
@@ -68,19 +68,7 @@
                     <label for="hidecore"><xar:mlstring>Core Modules</xar:mlstring></label>
                   </label>
                 </td>
-                <td style="text-align: right;">
-                  <xar:if condition="$regen eq 1">
-                    <input type="checkbox" name="regen" id="regen" value="1" checked="checked" style="vertical-align: middle;" />
-                  <xar:else />
-                    <input type="checkbox" name="regen" id="regen" value="1" style="vertical-align: middle;" />
-                  </xar:if>
-                </td>
-                <td style="text-align: left;vertical-align: middle;">
-                  <label for="regen">
-                    <label for="regen"><xar:mlstring>Regenerate</xar:mlstring></label>
-                  </label>
-                </td>
-                <td>
+                <td colspan="3" style="text-align: center;vertical-align: middle;">
                   <input type="submit" name="reload" id="reload" value="#$reloadlabel#" />
                 </td>
               </tr>
