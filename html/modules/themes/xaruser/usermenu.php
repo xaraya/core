@@ -14,11 +14,11 @@
 */
 /**
  * main themes module function
- * 
+ *
  * @return themes _admin_main
  */
 function themes_user_usermenu($args)
-{ 
+{
     extract($args);
     // Security Check
     if (!xarSecurityCheck('ViewThemes',0)) return '';
@@ -33,7 +33,7 @@ function themes_user_usermenu($args)
 
             break;
 
-        case 'form': 
+        case 'form':
             // Get list of themes
             $filter['Class'] = 2;
             $data['themes'] = xarModAPIFunc('themes',
@@ -45,7 +45,7 @@ function themes_user_usermenu($args)
 
             $name = xarUserGetVar('name');
             $uid = xarUserGetVar('uid');
-            $authid = xarSecGenAuthKey();
+            $authid = xarSecGenAuthKey('themes');
             $data = xarTplModule('themes', 'user', 'usermenu_form', array('authid' => $authid,
                     'name' => $name,
                     'uid' => $uid,
@@ -55,19 +55,19 @@ function themes_user_usermenu($args)
 
         case 'update':
             if (!xarVarFetch('uid', 'int:1:', $uid)) return;
-            if (!xarVarFetch('defaulttheme', 'str:1:100', $defaulttheme, '', XARVAR_NOT_REQUIRED)) return; 
+            if (!xarVarFetch('defaulttheme', 'str:1:100', $defaulttheme, '', XARVAR_NOT_REQUIRED)) return;
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
             $themeInfo = xarThemeGetInfo($defaulttheme);
 
-            xarModSetUserVar('themes', 'default', $themeInfo['name'], $uid); 
+            xarModSetUserVar('themes', 'default', $themeInfo['name'], $uid);
             // Redirect
             xarResponseRedirect(xarModURL('roles', 'user', 'account'));
 
             break;
-    } 
+    }
 
     return $data;
-} 
+}
 
 ?>
