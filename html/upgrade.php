@@ -51,101 +51,6 @@ if (empty($step)) {
 <?php
 } else {
 
-   list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
-
-//Begin Upgrades -- needs to be a switch after this first upgrade.
-    switch($xarVersion) {
-        case .901:
-
-            // Remove Masks and Instances
-            xarRemoveMasks('articles');
-            xarRemoveInstances('articles');
-
-            $instances = array(
-                               array('header' => 'external', // this keyword indicates an external "wizard"
-                                     'query'  => xarModURL('articles', 'admin', 'privileges'),
-                                     'limit'  => 0
-                                    )
-                            );
-            xarDefineInstance('articles', 'Article', $instances);
-
-            $query = "SELECT DISTINCT instances.xar_title FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'articles'";
-            $instances = array(
-                                array('header' => 'Article Block Title:',
-                                        'query' => $query,
-                                        'limit' => 20
-                                    )
-                            );
-            xarDefineInstance('articles','Block',$instances);
-
-            xarRegisterMask('ViewArticles','All','articles','Article','All','ACCESS_OVERVIEW');
-            xarRegisterMask('ReadArticles','All','articles','Article','All','ACCESS_READ');
-            xarRegisterMask('SubmitArticles','All','articles','Article','All','ACCESS_COMMENT');
-            xarRegisterMask('EditArticles','All','articles','Article','All','ACCESS_EDIT');
-            xarRegisterMask('DeleteArticles','All','articles','Article','All','ACCESS_DELETE');
-            xarRegisterMask('AdminArticles','All','articles','Article','All','ACCESS_ADMIN');
-            xarRegisterMask('ReadArticlesBlock','All','articles','Block','All','ACCESS_READ');
-            continue;
-
-        case '0.903':  // this is how it's defined in modules/base/xarinit.php
-        case '.9.0.3': // this is how it's defined in upgrade.php
-                $instances = array(
-                                   array('header' => 'external', // this keyword indicates an external "wizard"
-                                         'query'  => xarModURL('categories', 'admin', 'privileges'),
-                                         'limit'  => 0
-                                        )
-                                  );
-                xarDefineInstance('categories', 'Link', $instances);
-
-                xarRegisterMask('ViewCategoryLink','All','categories','Link','All:All:All:All','ACCESS_OVERVIEW');
-                xarRegisterMask('SubmitCategoryLink','All','categories','Link','All:All:All:All','ACCESS_COMMENT');
-                xarRegisterMask('EditCategoryLink','All','categories','Link','All:All:All:All','ACCESS_EDIT');
-                xarRegisterMask('DeleteCategoryLink','All','categories','Link','All:All:All:All','ACCESS_DELETE');
-
-                xarRegisterMask('AdminCategories','All','categories','Category','All:All','ACCESS_ADMIN');
-
-                if (xarModIsAvailable('ratings')) {
-                    // when a whole module is removed, e.g. via the modules admin screen
-                    // (set object ID to the module name !)
-                    if (!xarModRegisterHook('module', 'remove', 'API',
-                                            'ratings', 'admin', 'deleteall')) {
-                        return false;
-                    }
-                }
-
-            continue;
-
-        case '.9.0.4': // this is how it's defined in upgrade.php
-
-                // create a couple of new masks
-                xarRegisterMask('ViewPanel','All','adminpanels','All','All','ACCESS_OVERVIEW');
-                xarRegisterMask('AssignPrivilege','All','privileges','All','All','ACCESS_ADD');
-                xarRegisterMask('DeassignPrivilege','All','privileges','All','All','ACCESS_DELETE');
-
-                // This creates the new lock privileges and assigns them to the relevant roles
-                xarRegisterPrivilege('GeneralLock','All','empty','All','All','ACCESS_NONE',xarML('A container privilege for denying access to certain roles'));
-                xarRegisterPrivilege('LockMyself','All','roles','Roles','Myself','ACCESS_NONE',xarML('Deny access to Myself role'));
-                xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody','ACCESS_NONE',xarML('Deny access to Everybody role'));
-                xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous','ACCESS_NONE',xarML('Deny access to Anonymous role'));
-                xarRegisterPrivilege('LockAdministrators','All','roles','Roles','Administrators','ACCESS_NONE',xarML('Deny access to Administrators role'));
-                xarRegisterPrivilege('LockAdministration','All','privileges','Privileges','Administration','ACCESS_NONE',xarML('Deny access to Administration privilege'));
-                xarRegisterPrivilege('LockGeneralLock','All','privileges','Privileges','GeneralLock','ACCESS_NONE',xarML('Deny access to GeneralLock privilege'));
-                xarMakePrivilegeRoot('GeneralLock');
-                xarMakePrivilegeMember('LockMyself','GeneralLock');
-                xarMakePrivilegeMember('LockEverybody','GeneralLock');
-                xarMakePrivilegeMember('LockAnonymous','GeneralLock');
-                xarMakePrivilegeMember('LockAdministrators','GeneralLock');
-                xarMakePrivilegeMember('LockAdministration','GeneralLock');
-                xarMakePrivilegeMember('LockGeneralLock','GeneralLock');
-                xarAssignPrivilege('Administration','Administrators');
-                xarAssignPrivilege('GeneralLock','Everybody');
-                xarAssignPrivilege('GeneralLock','Administrators');
-                xarAssignPrivilege('GeneralLock','Users');
-
-            continue;
-    }
-
 // Fini
     $in_process = xarML('Checking and Correcting');
     $complete = xarML('Upgrades Complete');
@@ -560,11 +465,115 @@ if (empty($step)) {
         echo "Myself role has been created previously, moving to next check. <br />";  
     }
 
-
-
-
     // Check the installed privs and masks.
     echo "<h5>Checking Privilege Structure</h5>";
+
+    $upgrade['article_masks'] = xarMaskExists('ReadArticlesBlock',$module='articles');
+    if (!$upgrade['article_masks']) {
+        echo "Articles Masks do not exist, attempting to create... done! <br />";
+            // Remove Masks and Instances
+            xarRemoveMasks('articles');
+            xarRemoveInstances('articles');
+            $instances = array(
+                               array('header' => 'external', // this keyword indicates an external "wizard"
+                                     'query'  => xarModURL('articles', 'admin', 'privileges'),
+                                     'limit'  => 0
+                                    )
+                            );
+            xarDefineInstance('articles', 'Article', $instances);
+
+            $query = "SELECT DISTINCT instances.xar_title FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'articles'";
+            $instances = array(
+                                array('header' => 'Article Block Title:',
+                                        'query' => $query,
+                                        'limit' => 20
+                                    )
+                            );
+            xarDefineInstance('articles','Block',$instances);
+
+            xarRegisterMask('ViewArticles','All','articles','Article','All','ACCESS_OVERVIEW');
+            xarRegisterMask('ReadArticles','All','articles','Article','All','ACCESS_READ');
+            xarRegisterMask('SubmitArticles','All','articles','Article','All','ACCESS_COMMENT');
+            xarRegisterMask('EditArticles','All','articles','Article','All','ACCESS_EDIT');
+            xarRegisterMask('DeleteArticles','All','articles','Article','All','ACCESS_DELETE');
+            xarRegisterMask('AdminArticles','All','articles','Article','All','ACCESS_ADMIN');
+            xarRegisterMask('ReadArticlesBlock','All','articles','Block','All','ACCESS_READ');
+    } else {
+        echo "Articles Masks have been created previously, moving to next check. <br />";  
+    }
+
+    $upgrade['category_masks'] = xarMaskExists('ViewCategoryLink',$module='categories');
+    if (!$upgrade['category_masks']) {
+        echo "Category Masks do not exist, attempting to create... done! <br />";
+            // Remove Masks and Instances
+        $instances = array(
+                           array('header' => 'external', // this keyword indicates an external "wizard"
+                                 'query'  => xarModURL('categories', 'admin', 'privileges'),
+                                 'limit'  => 0
+                                )
+                          );
+        xarDefineInstance('categories', 'Link', $instances);
+        xarRegisterMask('ViewCategoryLink','All','categories','Link','All:All:All:All','ACCESS_OVERVIEW');
+        xarRegisterMask('SubmitCategoryLink','All','categories','Link','All:All:All:All','ACCESS_COMMENT');
+        xarRegisterMask('EditCategoryLink','All','categories','Link','All:All:All:All','ACCESS_EDIT');
+        xarRegisterMask('DeleteCategoryLink','All','categories','Link','All:All:All:All','ACCESS_DELETE');
+        xarRegisterMask('AdminCategories','All','categories','Category','All:All','ACCESS_ADMIN');
+    } else {
+        echo "Category Masks have been created previously, moving to next check. <br />";  
+    }
+
+    $upgrade['priv_masks'] = xarMaskExists('AssignPrivilege',$module='privileges');
+    if (!$upgrade['priv_masks']) {
+        echo "Priviliges Masks do not exist, attempting to create... done! <br />";
+
+        // create a couple of new masks
+        xarRegisterMask('ViewPanel','All','adminpanels','All','All','ACCESS_OVERVIEW');
+        xarRegisterMask('AssignPrivilege','All','privileges','All','All','ACCESS_ADD');
+        xarRegisterMask('DeassignPrivilege','All','privileges','All','All','ACCESS_DELETE');
+    } else {
+        echo "Priviliges Masks have been created previously, moving to next check. <br />";  
+    }
+
+    $upgrade['priv_locks'] = xarPrivExists('GeneralLock');
+    if (!$upgrade['priv_locks']) {
+        echo "Priviliges Locks do not exist, attempting to create... done! <br />";
+
+        // This creates the new lock privileges and assigns them to the relevant roles
+        xarRegisterPrivilege('GeneralLock','All','empty','All','All','ACCESS_NONE',xarML('A container privilege for denying access to certain roles'));
+        xarRegisterPrivilege('LockMyself','All','roles','Roles','Myself','ACCESS_NONE',xarML('Deny access to Myself role'));
+        xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody','ACCESS_NONE',xarML('Deny access to Everybody role'));
+        xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous','ACCESS_NONE',xarML('Deny access to Anonymous role'));
+        xarRegisterPrivilege('LockAdministrators','All','roles','Roles','Administrators','ACCESS_NONE',xarML('Deny access to Administrators role'));
+        xarRegisterPrivilege('LockAdministration','All','privileges','Privileges','Administration','ACCESS_NONE',xarML('Deny access to Administration privilege'));
+        xarRegisterPrivilege('LockGeneralLock','All','privileges','Privileges','GeneralLock','ACCESS_NONE',xarML('Deny access to GeneralLock privilege'));
+        xarMakePrivilegeRoot('GeneralLock');
+        xarMakePrivilegeMember('LockMyself','GeneralLock');
+        xarMakePrivilegeMember('LockEverybody','GeneralLock');
+        xarMakePrivilegeMember('LockAnonymous','GeneralLock');
+        xarMakePrivilegeMember('LockAdministrators','GeneralLock');
+        xarMakePrivilegeMember('LockAdministration','GeneralLock');
+        xarMakePrivilegeMember('LockGeneralLock','GeneralLock');
+        xarAssignPrivilege('Administration','Administrators');
+        xarAssignPrivilege('GeneralLock','Everybody');
+        xarAssignPrivilege('GeneralLock','Administrators');
+        xarAssignPrivilege('GeneralLock','Users');
+       
+    } else {
+        echo "Priviliges Locks have been created previously, moving to next check. <br />";  
+    }
+    // Check the installed privs and masks.
+    echo "<h5>Checking Hook Structure</h5>";
+
+    if (xarModIsAvailable('ratings')) {
+        $ratings['deleteall'] = xarModRegisterHook('module', 'remove', 'API', 'ratings', 'admin', 'deleteall');
+    }
+
+    if (!$ratings['deleteall']) {
+        echo "Ratings Delete All Hook already exists, moving to next check. <br /> ";
+    } else {
+        echo "Setting Ratings Delete All Hook... done! <br />";  
+    }
+
 ?>
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
 Thank you, the upgrades are complete.
