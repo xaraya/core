@@ -53,8 +53,6 @@ function roles_user_search()
 
     // TODO: support wild cards / boolean / quotes / ... (cfr. articles) ?
 
-    // TODO: provide roles API to search on several criteria ?
-
     // remember what we selected before
     $data['checked'] = array();
 
@@ -77,6 +75,10 @@ function roles_user_search()
                 $checkfield = xarVarCleanFromInput($field);
                 if (!empty($checkfield)) {
                     $where[] = $field . " LIKE '%" . $q . "%'";
+                    $where[] = $field . " LIKE '%" . strtoupper($q) . "%'";
+                    $where[] = $field . " LIKE '%" . strtolower($q) . "%'";
+                    $where[] = $field . " LIKE '%" . ucfirst($q) . "%'";
+                    $where[] = $field . " LIKE '%" . ucwords($q) . "%'";
                     // remember what we selected before
                     $data['checked'][$field] = 1;
                 }
