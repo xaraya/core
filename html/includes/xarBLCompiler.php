@@ -3097,14 +3097,10 @@ class xarTpl__XarContinueNode extends xarTpl__TplTagNode
 {
     function render()
     {
+        $depth = 1;
         extract($this->attributes);
 
-        if(isset($depth) && $depth > 1){
-            $output = " continue $depth; ";
-        } else {
-            $output = " continue; ";
-        }
-        return $output;
+        return  " continue $depth; ";
     }
 
     function isAssignable()
