@@ -1,5 +1,5 @@
 <!-- User content section -->
-<!-- FIXME: user proper nesting in the data, not the elseif constructs -->
+<!-- FIXME: use proper nesting in the data, not the elseif constructs -->
 <xar:if condition="!empty($usercontent)">
     <ul class="xar-menu-section">
     <xar:loop name="$usercontent">
@@ -20,28 +20,33 @@
 
 <!-- User modules section -->
 <xar:if condition="!empty($usermods)">
-    <ul class="xar-menu-section"><xar:mlstring>Modules</xar:mlstring>
-    <xar:loop name="$usermods">
-        <xar:if condition="$loop:item['modactive']">
-            <li class="xar-menu-item-current">#$loop:item['label']#</li>
-            <xar:if condition="$indlinks ne ''">
-                <ul>
-                <xar:loop name="$indlinks">
+  <ul class="xar-menu-section">
+    <li class="xar-menu-section"><xar:mlstring>Modules</xar:mlstring>
+      <ul class="xar-menu-item">
+        <xar:loop name="$usermods">
+          <xar:if condition="$loop:item['modactive']">
+            <li class="xar-menu-item-current">#$loop:item['label']#
+              <xar:if condition="$indlinks ne ''">
+                <ul class="xar-menu-subitem">
+                  <xar:loop name="$indlinks">
                     <xar:if condition="$loop:item['funcactive']">
-                        <li class="xar-menu-subitem-current">#$loop:item['userlabel']# #$marker#</li>
+                      <li class="xar-menu-subitem-current">#$loop:item['userlabel']# #$marker#</li>
                     <xar:else />
-                        <li class="xar-menu-subitem"><a href="#$loop:item['userlink']#" title="#$loop:item['usertitle']#">#$loop:item['userlabel']#</a></li>
+                      <li class="xar-menu-subitem"><a href="#$loop:item['userlink']#" title="#$loop:item['usertitle']#">#$loop:item['userlabel']#</a></li>
                     </xar:if>
-                </xar:loop>
+                  </xar:loop>
                 </ul>
-            </xar:if>
-        <xar:elseif condition="!$loop:item['modactive'] and !$loop:item['link']" />
-          <li class="xar-menu-section">#$loop:item['label']#</li>
-        <xar:else />
-          <li class="xar-menu-item"><a href="#$loop:item['link']#" title="#$loop:item['desc']#">#$loop:item['label']#</a></li>
-        </xar:if>
-    </xar:loop>
-    </ul>
+              </xar:if>
+            </li>
+          <xar:elseif condition="!$loop:item['modactive'] and !$loop:item['link']" />
+            <li class="xar-menu-section">#$loop:item['label']#</li>
+          <xar:else />
+            <li class="xar-menu-item"><a href="#$loop:item['link']#" title="#$loop:item['desc']#">#$loop:item['label']#</a></li>
+          </xar:if>
+        </xar:loop>
+      </ul>
+    </li>
+  </ul>
 </xar:if>
 
 <!-- Logout only if not admin or anomymous -->
