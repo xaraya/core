@@ -128,6 +128,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     if ($result === FALSE) {
         if (($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)) {
             $value = $defaultValue;
+            xarExceptionHandled(); //<- We should have an USER_EXCEPTION on the stack
         } else {
             // Raise an exception
             $msg = xarML('The required input variable \'#(1)\' contained invalid data.', $name);
