@@ -1508,7 +1508,6 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
         }
     } else {
         $modName = $callerModName;
-        $extraInfo['module'] = $modName;
     }
     // retrieve the item type from $extraInfo if necessary (e.g. for articles, xarbb, ...)
     if (empty($callerItemType) && isset($extraInfo) &&
