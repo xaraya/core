@@ -1031,7 +1031,8 @@ class xarPrivileges extends xarMasks
 //          $modules[] = array('id' => -2,
 //                             'name' => ' ');
             $modules[] = array('id' => -1,
-                               'name' => 'All');
+                               'name' => 'All',
+                               'display' => 'All');
 //          $modules[] = array('id' => 0,
 //                             'name' => 'None');
 
@@ -1040,7 +1041,9 @@ class xarPrivileges extends xarMasks
             while(!$result->EOF) {
                 list($mid, $name) = $result->fields;
                 $modules[] = array('id' => $mid,
-                                   'name' => ucfirst($name));
+                                   'name' => $name,
+                                   //'display' => xarModGetDisplayableName($name),
+                                   'display' => ucfirst($name));
                 $result->MoveNext();
             }
             $allmodules = $modules;

@@ -99,9 +99,9 @@ document.forms['privilegeform'].submit();}
 						<select name="pmodule" id="pmodule" size="1" tabindex="4" onchange="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();">
 							<xar:loop name="$modules">
 								<xar:if condition="strtolower($loop:item['name']) eq strtolower($pmodule)">
-									<option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
+									<option value="#$loop:item['name']#" selected="selected">#$loop:item['display']#</option>
 								<xar:else />
-									<option value="#$loop:item['name']#">#$loop:item['name']#</option>
+									<option value="#$loop:item['name']#">#$loop:item['display']#</option>
 								</xar:if>
 							</xar:loop>
 						</select>
