@@ -76,10 +76,8 @@ function roles_user_lostpassword()
                 xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             }
   			// Send Reminder Email
-            if (!xarModAPIFunc('roles', 'admin','senduseremail', array('uid' => array($user['uid'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) {         
-   					$msg =xarML('Problem sending the reminder email');                
-					xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));            
-            }
+            if (!xarModAPIFunc('roles', 'admin','senduseremail', array('uid' => array($user['uid'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) return;
+
             // Let user know that they have an email on the way.   
             $data = xarTplModule('roles','user','requestpwconfirm');
           break;
