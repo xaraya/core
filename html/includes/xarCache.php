@@ -285,7 +285,6 @@ function xarBlockIsCached($args)
     $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarBlock_cacheCode.php";
 
     if (
-        //xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         file_exists($cache_file) &&
         ($blockCacheExpireTime == 0 ||
          filemtime($cache_file) > time() - $blockCacheExpireTime)) {
