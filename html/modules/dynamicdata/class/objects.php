@@ -112,6 +112,10 @@ class Dynamic_Object_Master
                 }
             }
         }
+        // use the object name as default template override (*-*-[template].x*)
+        if (empty($this->template) && !empty($this->name)) {
+            $this->template = $this->name;
+        }
         // get the properties defined for this object
         if (count($this->properties) == 0 &&
             (isset($this->objectid) || (isset($this->moduleid) && isset($this->itemtype)))
@@ -861,19 +865,39 @@ class Dynamic_Object extends Dynamic_Object_Master
             $this->checkInput();
         }
         if (count($args['fieldlist']) > 0 || !empty($this->status)) {
-            $properties = array();
+            $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
-                    $properties[$name] = & $this->properties[$name];
+                    $args['properties'][$name] = & $this->properties[$name];
                 }
             }
         } else {
-            $properties = & $this->properties;
+            $args['properties'] = & $this->properties;
+        }
+
+        // pass some extra template variables for use in BL tags, API calls etc.
+        $args['moduleid'] = $this->moduleid;
+        $modinfo = xarModGetInfo($this->moduleid);
+        $args['modname'] = $modinfo['name'];
+        if (empty($this->itemtype)) {
+            $args['itemtype'] = null; // don't add to URL
+        } else {
+            $args['itemtype'] = $this->itemtype;
+        }
+        $args['itemid'] = $this->itemid;
+        if (!empty($this->primary)) {
+            $args['isprimary'] = true;
+        } else {
+            $args['isprimary'] = false;
+        }
+        if (!empty($this->catid)) {
+            $args['catid'] = $this->catid;
+        } else {
+            $args['catid'] = null;
         }
 
         return xarTplModule('dynamicdata','admin','objectform',
-                            array('properties' => $properties,
-                                  'layout'     => $args['layout']),
+                            $args,
                             $args['template']);
     }
 
@@ -906,6 +930,8 @@ class Dynamic_Object extends Dynamic_Object_Master
             $args['properties'] = & $this->properties;
         }
 
+        // pass some extra template variables for use in BL tags, API calls etc.
+        $args['moduleid'] = $this->moduleid;
         $modinfo = xarModGetInfo($this->moduleid);
         $args['modname'] = $modinfo['name'];
         if (empty($this->itemtype)) {
@@ -1592,6 +1618,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $dummy_mode = 0;
         }
 
+        // pass some extra template variables for use in BL tags, API calls etc.
+        $args['moduleid'] = $this->moduleid;
+
         $itemtype = $this->itemtype;
         if (empty($itemtype)) {
             $itemtype = null; // don't add to URL
@@ -1746,6 +1775,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['linkfield'])) {
             $args['linkfield'] = '';
         }
+
+        // pass some extra template variables for use in BL tags, API calls etc.
+        $args['moduleid'] = $this->moduleid;
 
         $modinfo = xarModGetInfo($this->moduleid);
         $modname = $modinfo['name'];
