@@ -338,6 +338,7 @@ if (empty($step)) {
                 if (!$dbconn->Execute($query)) return;
 
                 // create a couple of new masks
+                xarRegisterMask('ViewPanel','All','adminpanels','All','All','ACCESS_OVERVIEW');
                 xarRegisterMask('AssignPrivilege','All','privileges','All','All','ACCESS_ADD');
                 xarRegisterMask('DeassignPrivilege','All','privileges','All','All','ACCESS_DELETE');
 

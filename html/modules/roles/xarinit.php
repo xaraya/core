@@ -80,7 +80,7 @@ function roles_init()
             'xar_date_reg' => array('type' => 'varchar',
                 'size' => 100,
                 'null' => false,
-                'default' => ''),
+                'default' => '0000-00-00 00:00:00'),
             'xar_valcode' => array('type' => 'varchar',
                 'size' => 35,
                 'null' => false,
