@@ -6,10 +6,6 @@
 // http://www.xaraya.org
 // ----------------------------------------------------------------------
 
-// INSTALLER THEME
-define('XARINSTALL_THEME','installer');
-
-
 // 1. select language
 // ---set language
 // 2. read license agreement
@@ -69,17 +65,13 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     // Get module parameters
     list($modName, $modType, $funcName) = xarRequestGetInfo();
 
-    $modName = 'installer';
-
-    $modType = 'admin';
-
     // Build functioname from phase
     $funcName = 'phase'.$phase;
 
     // Check for installer theme
     //TODO: use main function as the gateway to the phases and the location for this check
     $installerTheme = xarCore_getSiteVar('BL.DefaultTheme');
-    if (strcmp(XARINSTALL_THEME, $installerTheme)) {
+    if (strcmp('installer', $installerTheme)) {
         $varDir = xarCoreGetVarDirPath();
         xarCore_die('Please change the BL.DefaultTheme variable in ' .$varDir.'/config.site.xml
         from '.$installerTheme.' to installer');
