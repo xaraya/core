@@ -8,8 +8,8 @@ single_host:
 compression: gzip
 autofix:yes
 checkout:edit
-contact: 
-email: marcel@hsdev.com
+contact: Marcel van der Boom
+email: marcel@xaraya.com
 street: 
 city: 
 state: 
