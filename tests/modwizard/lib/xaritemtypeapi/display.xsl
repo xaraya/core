@@ -76,6 +76,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,array(
                  'itemtype'  => <xsl:value-of select="@itemtype" />
                 ,'itemid'    => $itemid
+                ,'getobject' => 1
             ));
         if ( empty( $object ) ) return;
 
@@ -122,11 +123,29 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,'<xsl:value-of select="$module_prefix" />' );
         if ( !isset( $hooks ) ) { return; }
         $data['hooks'] = $hooks;
+
     }
 
-    $data['object_props'] =&amp; $object->getProperties();
-    $data['itemtype'] = <xsl:value-of select="@itemtype" />;
-    $data['itemid']   = $itemid;
+    $values = $object->getFieldValues();
+
+    /*
+     * Call the hook 'item:transform:API'.
+     */
+    $values['module']     =  '<xsl:value-of select="$module_prefix" />';
+    $values['itemid']     =  $itemid;
+    $values['itemtype']   =  <xsl:value-of select="@itemtype" />;
+    $values['transform']  =  array( <xsl:for-each select="structure/field[@transform = 'true']">'<xsl:value-of select="@name" />'<xsl:if test="position() != last()">,</xsl:if></xsl:for-each> );
+    $values = xarModCallHooks(
+        'item'
+        ,'transform'
+        ,$itemid
+        ,$values
+        ,'<xsl:value-of select="$module_prefix" />' );
+
+    $data['object_props']   =&amp; $object->getProperties();
+    $data['object_values']  =&amp; $values;
+    $data['itemtype']       = <xsl:value-of select="@itemtype" />;
+    $data['itemid']         = $itemid;
     return $data;
 }
 </xsl:template>

@@ -113,7 +113,8 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
     /*
      * Compose the data for the template
      */
-    $data['object_props'] =&amp; $object->getProperties();
+    $data['object_props']   =&amp; $object->getProperties();
+    $data['object_values']  =&amp; $values;
     $data['itemid'] = $itemid;
     $data['action'] = xarModURL(
         '<xsl:value-of select="$module_prefix" />'
