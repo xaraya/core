@@ -13,10 +13,14 @@ class xarQuery
 {
 
     var $version = "1.1";
+    var $id;
     var $type;
     var $tables;
     var $fields;
     var $conditions;
+    var $conjunctions;
+    var $implicitconjunction = "AND";
+    var $bindings;
     var $sorts;
     var $result;
     var $rows;
@@ -40,11 +44,14 @@ class xarQuery
             return;
         }
 
+        $this->key = mktime();
         $this->tables = array();
         $this->addtables($tables);
         $this->fields = array();
         $this->addfields($fields);
         $this->conditions = array();
+        $this->conjunctions = array();
+        $this->bindings = array();
         $this->sorts = array();
         $this->result = array();
         $this->output = array();
@@ -269,22 +276,26 @@ class xarQuery
 
     function join($field1,$field2)
     {
+        $key = $this->key;
+        $this->key++;
         $numargs = func_num_args();
         if ($numargs == 2) {
-            $this->conditions[]=array('field1' => $field1,
+            $this->bindings[$key]=array('field1' => $field1,
                                       'field2' => $field2,
                                       'op' => 'join');
         }
         elseif ($numargs == 4) {
-            $this->conditions[]=array('field1' => func_get_arg(0) . "." . func_get_arg(1),
+            $this->bindings[$key]=array('field1' => func_get_arg(0) . "." . func_get_arg(1),
                                       'field2' => func_get_arg(2) . "." . func_get_arg(3),
                                       'op' => 'join');
         }
+        return $key;
     }
     function eq($field1,$field2)
     {
+        $key = $this->_addcondition();
         $limit = count($this->conditions);
-        for ($i=0;$i<$limit;$i++) {
+/*        for ($i=0;$i<$limit;$i++) {
             if ($this->conditions[$i]['field1'] == $field1) {
                 $this->conditions[$i]=array('field1' => $field1,
                                           'field2' => $field2,
@@ -292,51 +303,102 @@ class xarQuery
                 return;
             }
         }
-        $this->conditions[]=array('field1' => $field1,
+*/        $this->conditions[$key]=array('field1' => $field1,
                                   'field2' => $field2,
                                   'op' => '=');
+        return $key;
     }
     function ne($field1,$field2)
     {
-        $this->conditions[]=array('field1' => $field1,
+        $key = $this->_addcondition();
+        $this->conditions[$key]=array('field1' => $field1,
                                   'field2' => $field2,
                                   'op' => '!=');
+        return $key;
     }
     function gt($field1,$field2)
     {
-        $this->conditions[]=array('field1' => $field1,
+        $key = $this->_addcondition();
+        $this->conditions[$key]=array('field1' => $field1,
                                   'field2' => $field2,
                                   'op' => '>');
+        return $key;
     }
     function ge($field1,$field2)
     {
-        $this->conditions[]=array('field1' => $field1,
+        $key = $this->_addcondition();
+        $this->conditions[$key]=array('field1' => $field1,
                                   'field2' => $field2,
                                   'op' => '>=');
+        return $key;
     }
     function le($field1,$field2)
     {
-        $this->conditions[]=array('field1' => $field1,
+        $key = $this->_addcondition();
+        $this->conditions[$key]=array('field1' => $field1,
                                   'field2' => $field2,
                                   'op' => '<=');
+        return $key;
     }
     function lt($field1,$field2)
     {
-        $this->conditions[]=array('field1' => $field1,
+        $key = $this->_addcondition();
+        $this->conditions[$key]=array('field1' => $field1,
                                   'field2' => $field2,
                                   'op' => '<');
+        return $key;
     }
     function like($field1,$field2)
     {
-        $this->conditions[]=array('field1' => $field1,
+        $key = $this->_addcondition();
+        $this->conditions[$key]=array('field1' => $field1,
                                   'field2' => $field2,
                                   'op' => 'like');
+        return $key;
     }
     function regex($field1,$field2)
     {
-        $this->conditions[]=array('field1' => $field1,
+        $key = $this->_addcondition();
+        $this->conditions[$key]=array('field1' => $field1,
                                   'field2' => $field2,
                                   'op' => 'regexp');
+        return $key;
+    }
+    function qand()
+    {
+        $key = $this->_addcondition();
+        $numargs = func_num_args();
+        if ($numargs == 2) {
+        }
+        elseif ($numargs == 1) {
+            $field = func_get_arg(0);
+            $this->conjunction[$key] = array('conditions' => $field,
+                                             'conj' => 'AND');
+            if (!is_array($field)) $field = array($field);
+            foreach ($field as $conkey) {
+                if ($this->conjunction[$conkey]['conj'] == 'IMPLICIT')
+                    unset($this->conjunction[$conkey]);
+            }
+        }
+        return $key;
+    }
+    function qor()
+    {
+        $key = $this->_addcondition();
+        $numargs = func_num_args();
+        if ($numargs == 2) {
+        }
+        elseif ($numargs == 1) {
+            $field = func_get_arg(0);
+            $this->conjunctions[$key] = array('conditions' => $field,
+                                             'conj' => 'OR');
+            if (!is_array($field)) $field = array($field);
+            foreach ($field as $conkey) {
+                if ($this->conjunctions[$conkey]['conj'] == 'IMPLICIT')
+                    unset($this->conjunctions[$conkey]);
+            }
+        }
+        return $key;
     }
     function addorders($sorts)
     {
@@ -394,6 +456,7 @@ class xarQuery
                 break;
             }
     }
+
     function getconditions()
     {
         $c = "";
@@ -416,6 +479,82 @@ class xarQuery
     }
 
 // ------ Private methods -----
+    function _getbinding($key)
+    {
+        $binding = $this->binding[$key];
+        if (gettype($binding['field2']) == 'string' && $binding['op'] != 'join') {
+            $sqlfield = $this->dbconn->qstr($binding['field2']);
+        }
+        else {
+            $sqlfield = $condition['field2'];
+            $binding['op'] = $binding['op'] == 'join' ? '=' : $binding['op'];
+        }
+        return $binding['field1'] . " " . $binding['op'] . " " . $sqlfield;
+    }
+    function _getbindings()
+    {
+        $this->bstring = "";
+        foreach ($this->bindings as $binding) {
+           $binding['op'] = $binding['op'] == 'join' ? '=' : $binding['op'];
+           $this->bstring .= $binding['field1'] . " " . $binding['op'] . " " . $binding['field2'] . " AND ";
+        }
+        if ($this->bstring != "") $this->bstring = substr($this->bstring,0,strlen($this->bstring)-5);
+        return $this->bstring;
+    }
+    function _getcondition($key)
+    {
+        $condition = $this->conditions[$key];
+        if (gettype($condition['field2']) == 'string' && $condition['op'] != 'join') {
+            $sqlfield = $this->dbconn->qstr($condition['field2']);
+        }
+        else {
+            $sqlfield = $condition['field2'];
+            $condition['op'] = $condition['op'] == 'join' ? '=' : $condition['op'];
+        }
+        return $condition['field1'] . " " . $condition['op'] . " " . $sqlfield;
+    }
+
+    function _getconditions()
+    {
+        $this->cstring = "";
+        foreach ($this->conjunctions as $conjunction) {
+            if (is_array($conjunction['conditions'])) {
+                $this->cstring .= "(";
+                $count = count($conjunction['conditions']);
+                $i=0;
+                foreach ($conjunction['conditions'] as $condition) {
+                    $i++;
+                    $this->cstring .= $this->_getcondition($condition);
+                    if ($i<$count) $this->cstring .= " " . $conjunction['conj'] . " ";
+                    else $this->cstring .= ") ";
+                }
+            }
+            elseif (!is_array($conjunction['conditions'])) {
+                if ($this->cstring == "") $conj = "";
+                else {
+                    if ($conjunction['conj'] == "IMPLICIT") $conj = $this->implicitconjunction;
+                    else $conj = $conjunction['conj'];
+                }
+                $this->cstring .= $conj . " " . $this->_getcondition($conjunction['conditions']) . " ";
+            }
+        }
+        return $this->cstring;
+    }
+
+    function _addcondition()
+    {
+        $key = $this->_getkey();
+        $this->conjunctions[$key]=array('conditions' => $key,
+                                        'conj' => 'IMPLICIT');
+        return $key;
+    }
+    function _getkey()
+    {
+        $key = $this->key;
+        $this->key++;
+        return $key;
+    }
+
     function _statement()
     {
         $st =  $this->type . " ";
@@ -536,9 +675,14 @@ class xarQuery
     function assembledconditions()
     {
         $c = "";
-        if (count($this->conditions)>0) {
+        if (count($this->bindings)>0) {
             $c = " WHERE ";
-            $c .= $this->getconditions();
+            $c .= $this->_getbindings();
+        }
+        if (count($this->conditions)>0) {
+            if ($c == '') $c = " WHERE ";
+            else $c .= " AND ";
+            $c .= $this->_getconditions();
         }
         return $c;
     }

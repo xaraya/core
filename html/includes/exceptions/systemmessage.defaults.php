@@ -14,6 +14,9 @@
     $this->defaults = array(
         'SITE_LOCKED' => array(
             'title' => xarML('The site is locked'),
+            'short' => ''),
+        'NO_ACCESS' => array(
+            'title' => xarML('No access at this time'),
             'short' => '')
     );
 ?>
