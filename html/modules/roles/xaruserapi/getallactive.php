@@ -39,21 +39,23 @@ function roles_userapi_getallactive($args)
 
     $sessioninfoTable = $xartable['session_info'];
 
-    $query = "SELECT xar_uid,
-                     xar_ipaddr
-              FROM $sessioninfoTable
-              WHERE xar_lastused > $filter AND xar_uid > 1";
+    $query = "SELECT a.*,
+                     b.xar_ipaddr,
+              FROM $rolestable a, $sessioninfoTable b,
+              WHERE b. xar_lastused > $filter AND a. xar_uid > 1";
+
+    if (isset($selection)) $query .= $selection;
 
     // if we aren't including anonymous in the query,
     // then find the anonymous user's uid and add
     // a where clause to the query
     if (!$include_anonymous) {
         $anon = xarModAPIFunc('roles','user','get',array('uname'=>'anonymous'));
-        $query .= " AND xar_uid != $anon[uid]";
+        $query .= " AND a.xar_uid != $anon[uid]";
     }
     if (!$include_myself) {
         $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'myself'));
-        $query .= " AND xar_uid != $thisrole[uid]";
+        $query .= " AND a.xar_uid != $thisrole[uid]";
     }
 
     $result = $dbconn->SelectLimit($query, $numitems, $startnum-1);

@@ -1,6 +1,21 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Member List</xar:mlstring></h2>
 <div style="margin: auto;">
+
+<center>
+[&nbsp;<a href="#xarModURL('roles','user','view')#"><xar:mlstring>All</xar:mlstring></a>&nbsp;|&nbsp
+<xar:foreach in="$alphabet" value="$letter">
+	<a href="#xarModURL('roles','user','view')#&letter=#$letter#">#$letter#</a>&nbsp;|&nbsp
+</xar:foreach>
+<a href="#xarModURL('roles','user','view')#"><xar:mlstring>Other</xar:mlstring></a>&nbsp]
+</center>
+
+<form method="POST" action="#xarModURL('roles','user','view')#">
+	<xar:mlstring>Search: </xar:mlstring>
+	<input type="text" name="search" id="search" value="" size="40" maxlength="255" tabindex="1" />
+	<input type="submit" value="#$searchlabel#" align="middle" tabindex="2" />
+</form>
+	
 <p><b><xar:mlstring>Sort Options</xar:mlstring>:</b>
 
 <a href="#xarModURL('roles', 'user', 'view')#&amp;phase=active"><xar:mlstring>Active Users</xar:mlstring></a>&nbsp;|

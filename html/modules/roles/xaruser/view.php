@@ -13,6 +13,9 @@ function roles_user_view()
     //It is set later on.
     if(!xarVarFetch('filter',   'str',   $filter,   NULL,     XARVAR_DONT_SET)) {return;}
 
+    if(!xarVarFetch('letter',   'str',   $letter,   NULL,     XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('search',   'str',   $search,   NULL,     XARVAR_DONT_SET)) {return;}
+
     $data['items'] = array();
 
     // Specify some labels for display
@@ -26,6 +29,19 @@ function roles_user_view()
 
 // Security Check
     if(!xarSecurityCheck('ReadRole')) return;
+
+    if ($letter) $selection = " AND xar_name LIKE '" . $letter . "%'";
+    elseif ($search) {
+        $selection = " AND (";
+        $selection .= "(xar_name LIKE '%" . $search . "%')";
+        $selection .= " OR (xar_uname LIKE '%" . $search . "%')";
+        $selection .= " OR (xar_email LIKE '%" . $search . "%')";
+        $selection .= ")";
+    }
+
+    $data['searchlabel'] = xarML('Go');
+    $data['alphabet'] = array ("A","B","C","D","E","F","G","H","I","J","K","L","M",
+                            "N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
 
     switch(strtolower($phase)) {
 
@@ -41,6 +57,7 @@ function roles_user_view()
                                    'getallactive',
                                     array('startnum' => $startnum,
                                           'filter'   => $filter,
+                                          'selection'   => $selection,
                                           'include_anonymous' => false,
                                           'include_myself' => false,
                                           'numitems' => xarModGetVar('roles',
@@ -64,6 +81,7 @@ function roles_user_view()
                                    'getall',
                                     array('startnum' => $startnum,
                                           'state'   => 3,
+                                          'selection'   => $selection,
                                           'include_anonymous' => false,
                                           'include_myself' => false,
                                           'numitems' => xarModGetVar('roles',
@@ -146,9 +164,6 @@ function roles_user_view()
         $data['pager'] .= '<a href="' . xarModURL('roles','user','view',array('phase' => $phase, 'startnum' => $startnum + $perpage)) . '">';
         $data['pager'] .= xarML('next') . ' &gt;&gt;</a>';
     }
-    $data['searchlabel'] = xarML('Go');
-    $data['alphabet'] = array ("A","B","C","D","E","F","G","H","I","J","K","L","M",
-                            "N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
 
     return $data;
 }

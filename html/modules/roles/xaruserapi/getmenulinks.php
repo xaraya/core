@@ -3,8 +3,6 @@
 function roles_userapi_getmenulinks()
 {
 
-    // get the admin part of the menu
-    $menulinks = xarModAPIFunc('roles','admin','getmenulinks');
     if (xarModGetVar('roles', 'allowregistration')){
     // Security check
         if (true) {

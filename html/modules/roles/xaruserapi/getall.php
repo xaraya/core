@@ -47,6 +47,9 @@ function roles_userapi_getall($args)
         FROM $rolestable
                 WHERE xar_state != 0 ";
     }
+
+    if (isset($selection)) $query .= $selection;
+
     // if we aren't including anonymous in the query,
     // then find the anonymous user's uid and add
     // a where clause to the query
