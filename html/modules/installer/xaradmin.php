@@ -365,7 +365,11 @@ function installer_admin_finish()
 
     list ($leftBlockGroup) = $result->fields;
 
-    $adminBlockId = xarBlockTypeExists('adminpanels', 'adminmenu');
+    $adminBlockId= xarModAPIFunc('blocks',
+                                 'admin',
+                                 'block_type_exists',
+                                 array('modName'  => 'adminpanels',
+                                       'blockType'=> 'adminmenu'));
 
     if (!isset($adminBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
@@ -388,7 +392,11 @@ function installer_admin_finish()
     $varshtml['expire'] = $now + 24000;
     $msg = serialize($varshtml);
 
-    $htmlBlockId = xarBlockTypeExists('base', 'html');
+    $htmlBlockId= xarModAPIFunc('blocks',
+                                 'admin',
+                                 'block_type_exists',
+                                 array('modName'  => 'base',
+                                       'blockType'=> 'html'));
 
     if (!isset($htmlBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
@@ -423,7 +431,11 @@ function installer_admin_finish()
 
     list ($rightBlockGroup) = $result->fields;
 
-    $loginBlockId = xarBlockTypeExists('roles', 'login');
+    $loginBlockId= xarModAPIFunc('blocks',
+                                 'admin',
+                                 'block_type_exists',
+                                 array('modName'  => 'roles',
+                                       'blockType'=> 'login'));
 
     if (!isset($loginBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
@@ -457,7 +469,11 @@ function installer_admin_finish()
 
     list ($headerBlockGroup) = $result->fields;
 
-    $metaBlockId = xarBlockTypeExists('themes', 'meta');
+    $metaBlockId= xarModAPIFunc('blocks',
+                                 'admin',
+                                 'block_type_exists',
+                                 array('modName'  => 'themes',
+                                       'blockType'=> 'meta'));
 
     if (!isset($metaBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
@@ -487,3 +503,4 @@ function installer_admin_finish()
 
 function installer_admin_modifyconfig(){}
 
+?>
