@@ -110,9 +110,11 @@ function &xarDBGetConn($index=0)
  * @access public
  * @todo   do we need the global?
  */
-function &xarDBNewConn()
+function &xarDBNewConn($args = NULL)
 {
-    $args =  $GLOBALS['xarDB_systemArgs'];
+    if (!isset($args)) {
+        $args =  $GLOBALS['xarDB_systemArgs'];
+    }
     // Get database parameters
     $dbType  = $args['databaseType'];
     $dbHost  = $args['databaseHost'];
