@@ -10,6 +10,9 @@
  * @link http://www.xaraya.org
 */
 
+/**
+ * Main WebServices Function
+*/
 include 'includes/xarCore.php';
 
 function xarWebservicesMain()

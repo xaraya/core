@@ -11,19 +11,21 @@
  * @author Johnny Robeson
 */
 
-// 1. select language
-// ---set language
-// 2. read license agreement
-// ---check agreement state
-// 3. set config.php permissions
-// ---check permissions
-// 4. input database information
-// ---verify, write config.php, install basic dataset (inc. default admin), bootstrap
-// 5. create administrator
-// ---modify administrator information in nuke_users
-// 6. pick optional components
-// ---call optional components' init funcs, disable non-reusable areas of install module
-// 7. finished!
+/**
+ * 1. select language
+ * ---set language
+ * 2. read license agreement
+ * ---check agreement state
+ * 3. set config.php permissions
+ * ---check permissions
+ * 4. input database information
+ * ---verify, write config.php, install basic dataset (inc. default admin), bootstrap
+ * 5. create administrator
+ * ---modify administrator information in nuke_users
+ * 6. pick optional components
+ * ---call optional components' init funcs, disable non-reusable areas of install module
+ * 7. finished!
+*/
 
 include 'includes/xarCore.php';
 // Include extra functions
