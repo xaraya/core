@@ -320,6 +320,23 @@ function xarFindRole($name)
     return $roles->findRole($name);
 }
 
+/* xarReturnPrivilege: stores a privilege from an external wizard in the repository.
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   integer pid,level
+ * @param   strings pid,name,realm,module,component
+ * @param   array instance
+ * @return  boolean
+ */
+function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$level)
+{
+    $privs = new xarPrivileges();
+    return $privs->returnPrivilege($pid,$name,$realm,$module,$component,$instance,$level);
+}
+
 /**
  * xarSecurityCheck: check a role's privileges against the masks of a component
  *
