@@ -151,13 +151,15 @@ function xarEvt__notify($modName, $eventName, $value)
         xarInclude($xarapifile, XAR_INCLUDE_MAY_NOT_EXIST + XAR_INCLUDE_ONCE);
         if(function_exists($funcSpecific ))  $funcToRun = $funcSpecific;
         if(function_exists($funcGeneral  ))  $funcToRun = $funcGeneral;
+    } 
+    if($funcToRun != '') {
+        //LAZY LOAD!
         // We may need the tables
         xarInclude($xartabfile, XAR_INCLUDE_MAY_NOT_EXIST + XAR_INCLUDE_ONCE);
         $xartabfunc = $modName.'_xartables';
         if (function_exists($xartabfunc)) 
             xarDB_importTables($xartabfunc());
-    } 
-    if($funcToRun != '') {
+
         $funcToRun($value);
         if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
     }
