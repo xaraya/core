@@ -44,3 +44,15 @@
 	</td>
 </tr>
 </xar:if>
+<tr align="left" valign="middle">
+	<td>
+		<xar:mlstring>Use Dynamic Keywords</xar:mlstring>
+	</td>
+	<td>
+		<xar:if condition="!empty($usedk)">
+			<input type="checkbox" name="usedk" id="usedk" value="1" checked="checked" tabindex="1" />
+		<xar:else />
+			<input type="checkbox" name="usedk" id="usedk" value="1" tabindex="1" />
+		</xar:if>
+	</td>
+</tr>

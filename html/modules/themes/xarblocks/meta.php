@@ -2,19 +2,26 @@
 /**
  * File: $Id$
  *
- * Displays a HTML editible Block
+ * Displays a Editible Meta Values
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  * 
- * @subpackage Base Module
- * @author Patrick Kellum
+ * @subpackage Themes Module
+ * @author Carl Corliss, John Cox
 */
 
 /**
- * Block init - holds security.
- */
+ * initialise block
+ *
+ * @author  John Cox
+ * @access  public
+ * @param   none
+ * @return  nothing
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function themes_metablock_init()
 {
     // Security
@@ -22,8 +29,15 @@ function themes_metablock_init()
 }
 
 /**
- * block information array
- */
+ * get information on block
+ *
+ * @author  John Cox
+ * @access  public
+ * @param   none
+ * @return  data array
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function themes_metablock_info()
 {
     return array('text_type' => 'Meta',
@@ -38,9 +52,15 @@ function themes_metablock_info()
 }
 
 /**
- * Display func.
- * @param $blockinfo array containing title,content
- */
+ * display adminmenu block
+ *
+ * @author  Carl Corliss, John Cox
+ * @access  public
+ * @param   $blockinfo array containing usegeo, metakeywords, metadescription, longitude, latitude, usedk.
+ * @return  data array on success or void on failure
+ * @throws  no exceptions
+ * @todo    complete
+*/
 function themes_metablock_display($blockinfo)
 {
     if (!xarSecAuthAction(0, 'themes:metablock', "$blockinfo[title]::", ACCESS_OVERVIEW)) {
@@ -52,7 +72,7 @@ function themes_metablock_display($blockinfo)
 
     $incomingdesc = xarVarGetCached('Blocks.articles','summary');
 
-    if (!empty($incomingdesc)){
+    if ((!empty($incomingdesc)) and ($vars['usedk'] == 1)){
         // Strip -all- html
         $htmlless = strip_tags($incomingdesc);
         $meta['description'] = $htmlless;
@@ -62,7 +82,7 @@ function themes_metablock_display($blockinfo)
 
     $incomingkey = xarVarGetCached('Blocks.articles','body');
 
-    if (!empty($incomingkey)){
+    if ((!empty($incomingkey)) and ($vars['usedk'] == 1)){
        
         // Strip -all- html
         $htmlless = strip_tags($incomingkey);
@@ -95,10 +115,12 @@ function themes_metablock_display($blockinfo)
     $meta['generator'] .= ' :: ';
     $meta['generator'] .= xarConfigGetVar('System.Core.VersionID');
 
-    if (!empty($args['geourl'])){
-        $meta['longitude'] = $args['longitude'];
-        $meta['latitude'] = $args['latitude'];
+    if (!empty($vars['usegeo'])){
+        $meta['longitude'] = $vars['longitude'];
+        $meta['latitude'] = $vars['latitude'];
     }
+
+    $meta['geourl'] = $vars['usegeo'];
 
     $meta['activepage'] = xarServerGetCurrentURL();
     
@@ -108,9 +130,15 @@ function themes_metablock_display($blockinfo)
 }
 
 /**
- * Modify Function to the Blocks Admin
- * @param $blockinfo array containing title,content
- */
+ * modify block settings
+ *
+ * @author  John Cox
+ * @access  public
+ * @param   $blockinfo
+ * @return  $blockinfo data array
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function themes_metablock_modify($blockinfo)
 {
     // Get current content
@@ -129,6 +157,10 @@ function themes_metablock_modify($blockinfo)
         $vars['usegeo'] = '';
     }
     // Defaults
+    if (empty($vars['usedk'])) {
+        $vars['usedk'] = '';
+    }
+    // Defaults
     if (empty($vars['longitude'])) {
         $vars['longitude'] = '';
     }
@@ -143,18 +175,26 @@ function themes_metablock_modify($blockinfo)
 }
 
 /**
- * Updates the Block config from the Blocks Admin
- * @param $blockinfo array containing title,content
- */
+ * update block settings
+ *
+ * @author  John Cox
+ * @access  public
+ * @param   $blockinfo
+ * @return  $blockinfo data array
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function themes_metablock_update($blockinfo)
 {
     list($vars['metakeywords'],
          $vars['metadescription'],
          $vars['usegeo'],
+         $vars['usedk'],
          $vars['longitude'],
          $vars['latitude']) = xarVarCleanFromInput('metakeywords',
                                                    'metadescription',
                                                    'usegeo',
+                                                   'usedk',
                                                    'longitude',
                                                    'latitude');
 
@@ -177,6 +217,10 @@ function themes_metablock_update($blockinfo)
 
     if (empty($vars['latitude'])) {
         $vars['latitude'] = '';
+    }
+
+    if (empty($vars['usedk'])) {
+        $vars['usedk'] = '';
     }
 
     $blockinfo['content'] = serialize($vars);
