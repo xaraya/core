@@ -86,7 +86,7 @@ define('XARDBG_SQL', 2);
 define('XARDBG_EXCEPTIONS', 4);
 define('XARDBG_SHOW_PARAMS_IN_BT', 8);
 
-define('_XAR_ID_UNREGISTERED', '2');
+define('_XAR_ID_UNREGISTERED', '3');
 
 /**
  * Initializes the core engine

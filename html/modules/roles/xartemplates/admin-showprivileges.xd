@@ -92,7 +92,7 @@
 				<xar:mlstring>Level</xar:mlstring>            
 			</th>
 			<th>
-				<xar:mlstring>From Group</xar:mlstring>            
+				<xar:mlstring>&nbsp;</xar:mlstring>            
 			</th>
 		</tr>
 	<xar:if condition="count($privileges) eq 0">
@@ -124,9 +124,13 @@
 			</td>
 			<td style="text-align: center;">
 				<xar:if condition="in_array($privid,$directassigned)">
-					<a href="#$removeurl#&amp;privid=#$privid#" title="Remove this Privilege assignment">				
-						Remove    
-					</a>
+					<xar:if condition="!$frozen">
+						<a href="#$removeurl#&amp;privid=#$privid#" title="Remove this Privilege assignment">				
+							Remove    
+						</a>
+					<xar:else />
+							cannot be removed
+					</xar:if>
 				<xar:else />
 						not directly assigned
 				</xar:if>

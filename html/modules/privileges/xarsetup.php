@@ -18,7 +18,7 @@ function initializeSetup()
     * Enter some default groups and users
     *********************************************************************/
 
-    xarMakeUser('Self','self','self@xaraya.com','password');
+    xarMakeUser('Myself','myself','myself@xaraya.com','password');
     xarMakeGroup('Everybody');
     xarMakeUser('Anonymous','anonymous','anonymous@xaraya.com');
     xarMakeUser('Admin','Admin','admin@xaraya.com','password');
@@ -36,7 +36,7 @@ function initializeSetup()
     xarMakeRoleMemberByName('Admin','Administrators');
     xarMakeRoleMemberByName('Users','Everybody');
     xarMakeRoleMemberByName('Anonymous','Everybody');
-    xarMakeRoleMemberByName('Self','Everybody');
+    xarMakeRoleMemberByName('Myself','Everybody');
 
     /*********************************************************************
     * Enter some default privileges
@@ -44,13 +44,13 @@ function initializeSetup()
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    xarRegisterPrivilege('Administration','All','All','All','All',ACCESS_ADMIN,'Admin access to all modules');
-    xarRegisterPrivilege('GeneralLock','All','empty','All','All',ACCESS_NONE,'A container privilege for denying access to certain roles');
-    xarRegisterPrivilege('LockSelf','All','roles','Roles','Self',ACCESS_NONE,'Deny access to Self');
-    xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody',ACCESS_NONE,'Deny access to Everybody role');
-    xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous',ACCESS_NONE,'Deny access to Anonymous role');
-    xarRegisterPrivilege('LockAdministrators','All','roles','Roles','Administrators',ACCESS_NONE,'Deny access to Administrators role');
-    xarRegisterPrivilege('LockAdministration','All','privileges','Privileges','Administration',ACCESS_NONE,'Deny access to Administration privilege');
+    xarRegisterPrivilege('Administration','All','All','All','All',ACCESS_ADMIN,xarML('Admin access to all modules'));
+    xarRegisterPrivilege('GeneralLock','All','empty','All','All',ACCESS_NONE,xarML('A container privilege for denying access to certain roles'));
+    xarRegisterPrivilege('LockMyself','All','roles','Roles','Myself',ACCESS_NONE,xarML('Deny access to Myself role'));
+    xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody',ACCESS_NONE,xarML('Deny access to Everybody role'));
+    xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous',ACCESS_NONE,xarML('Deny access to Anonymous role'));
+    xarRegisterPrivilege('LockAdministrators','All','roles','Roles','Administrators',ACCESS_NONE,xarML('Deny access to Administrators role'));
+    xarRegisterPrivilege('LockAdministration','All','privileges','Privileges','Administration',ACCESS_NONE,xarML('Deny access to Administration privilege'));    xarRegisterPrivilege('LockDeassignAdministration','All','privileges','Privileges','Administration',ACCESS_NONE,xarML('Deny removing Administration privilege'));
 
     /*********************************************************************
     * Arrange the  privileges in a hierarchy
@@ -61,11 +61,12 @@ function initializeSetup()
 
     xarMakePrivilegeRoot('Administration');
     xarMakePrivilegeRoot('GeneralLock');
-    xarMakePrivilegeMember('LockSelf','GeneralLock');
+    xarMakePrivilegeMember('LockMyself','GeneralLock');
     xarMakePrivilegeMember('LockEverybody','GeneralLock');
     xarMakePrivilegeMember('LockAnonymous','GeneralLock');
     xarMakePrivilegeMember('LockAdministrators','GeneralLock');
     xarMakePrivilegeMember('LockAdministration','GeneralLock');
+    xarMakePrivilegeMember('LockDeassignAdministration','GeneralLock');
 
     /*********************************************************************
     * Assign the default privileges to groups/users
@@ -249,6 +250,8 @@ function initializeSetup()
 
     xarRegisterMask('ViewLogin','All','roles','Block','login:Login:All',ACCESS_OVERVIEW);
     xarRegisterMask('ViewRolesBlocks','All','roles','Block','All',ACCESS_OVERVIEW);
+    xarRegisterMask('AssignPrivilege','All','roles','All','All',ACCESS_ADD);
+    xarRegisterMask('DeassignPrivilege','All','roles','All','All',ACCESS_DELETE);
     xarRegisterMask('ReadRole','All','roles','Block','All',ACCESS_READ);
     xarRegisterMask('ViewRoles','All','roles','All','All',ACCESS_OVERVIEW);
     xarRegisterMask('ReadRole','All','roles','All','All',ACCESS_READ);
