@@ -106,15 +106,8 @@ function themes_init()
     );
 
     $query = xarDBCreateTable($tables['theme_states'],$fields);
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $res =& $dbconn->Execute($query);
+    if (!$res) return;
 
     // prefix_theme_vars
     /********************************************************************
@@ -139,15 +132,8 @@ function themes_init()
 
     $query = xarDBCreateTable($tables['theme_vars'],$fields);
 
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $res =& $dbconn->Execute($query);
+    if(!$res) return;
 
     // Initialisation successful
     return true;
