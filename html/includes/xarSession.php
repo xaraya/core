@@ -157,9 +157,13 @@ function xarSessionSetVar($name, $value)
 
     $var = 'XARSV' . $name;
 
+    // also needed for PHP 4.1.2 - cfr. bug 3679
+    if (isset($_SESSION)) {
+        $_SESSION[$var] = $value;
+    }
+
     // Try to handle through _SESSION
     if (!xarSession__UseOldSessions()) {
-        $_SESSION[$var] = $value;
         return true;
     }
 
@@ -170,7 +174,6 @@ function xarSessionSetVar($name, $value)
     if (!session_is_registered($var)) {
         session_register($var);
     }
-
     return true;
 }
 
