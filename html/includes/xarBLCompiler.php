@@ -1119,7 +1119,9 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
             $node =& new xarTpl__XarApiInstructionNode($parser, 'InstructionNode');
         }
 
+        // FIXME: this is not a good test and will never happen (the lines above will err out when the class doesnt exist)
         if (isset($node)) {
+            // FIXME: this needs to be in the construction
             $node->instruction = $instruction;
             return $node;
         }
@@ -1131,8 +1133,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
 
     function createTextNode($content, &$parser)
     {
-        $node =& new xarTpl__TextNode($parser, 'TextNode');
-        $node->content = $content;  
+        $node =& new xarTpl__TextNode($parser, 'TextNode', $content);
         return $node;
     }
 
@@ -1502,6 +1503,12 @@ class xarTpl__TextNode extends xarTpl__Node
 {
     var $content;
 
+    function xarTpl__TextNode(&$parser, $tagName, $content)
+    {
+        parent::constructor($parser, $tagName);
+        $this->content = $content;
+    }
+    
     function render()
     {
         return $this->content;
