@@ -126,7 +126,10 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     if (!isset($value) || ($flags & XARVAR_DONT_REUSE)) {
         $inputValue = xarRequestGetVar($name, $allowOnlyMethod);
 
-        if ($inputValue === NULL) {
+        // Need to handle the checkbox as a special case. Otherwise, if someone tries to 'default' a checkbox 
+        // to TRUE, it will always remain TRUE and you will NOT be able to uncheck it. NULL is the 
+        // correct state of an unchecked checkbox.
+        if (($inputValue === NULL) && ($validation != 'checkbox')) {
             if ($flags & XARVAR_DONT_SET) {
                 return true;
             }
