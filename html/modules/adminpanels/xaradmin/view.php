@@ -11,7 +11,7 @@
 */
 function adminpanels_admin_view(){
 
-// Security Check
+    // Security Check
     if(!xarSecurityCheck('EditPanel')) return;
 
     // TODO: prepare the overview based on what is configured by config

@@ -12,7 +12,9 @@
 */
 function adminpanels_admin_loadnewmod(){
     // Get vars
-    $mname = xarVarCleanFromInput('modname');
+
+    if (!xarVarFetch('mname','str:1:',$mname,'adminpanels')) return;
+
     xarResponseRedirect(xarModURL($mname, 'admin', 'main'));
     return true;
 }

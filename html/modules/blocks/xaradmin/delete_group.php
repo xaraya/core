@@ -8,8 +8,8 @@ function blocks_admin_delete_group()
 // Security Check
 	if(!xarSecurityCheck('DeleteBlock',0,'Instance')) return;
 
-    // Get parameters
-    list($gid, $confirm) = xarVarCleanFromInput('gid', 'confirm');
+    if (!xarVarFetch('gid','int:1:',$gid)) return;
+    if (!xarVarFetch('confirm','str:1:',$confirm,'',XARVAR_NOT_REQUIRED)) return;
 
     // Check for confirmation
     if (empty($confirm)) {

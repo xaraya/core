@@ -6,31 +6,27 @@
 function blocks_admin_update_group()
 {
     // Get parameters
-    list($authid,
-         $gid,
-         $group_instance_order,
-         $template,
-         $name) = $foo = xarVarCleanFromInput('authid',
-                                      'gid',
-                                      'group_instance_order',
-                                      'group_template',
-                                      'group_name');
+    if (!xarVarFetch('gid','int:1:',$gid)) return;
+    if (!xarVarFetch('authid','int:1:',$authid)) return;
+    if (!xarVarFetch('group_instance_order','str:1:',$group_instance_order)) return;
+    if (!xarVarFetch('name','str:1:',$name)) return;
+    if (!xarVarFetch('template','str:1:',$template,'',XARVAR_NOT_REQUIRED)) return;
 
     // Confirm Auth Key
     if (!xarSecConfirmAuthKey()) return;
 
-// Security Check
+    // Security Check
 	if(!xarSecurityCheck('EditBlock',0,'Instance')) return;
 
     // Pass to API
-    xarModAPIFunc('blocks',
-                  'admin',
-                  'update_group', array('id' => $gid,
-                                        'template' => $template,
-                                        'name' => $name,
-                                        'instance_order' => $group_instance_order));
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'update_group', array('id' => $gid,
+                                             'template' => $template,
+                                             'name' => $name,
+                                             'instance_order' => $group_instance_order))) return;
  
-   xarResponseRedirect(xarModURL('blocks', 'admin', 'view_groups'));
+    xarResponseRedirect(xarModURL('blocks', 'admin', 'view_groups'));
 
     return true;
 }

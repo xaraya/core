@@ -6,9 +6,10 @@
 function blocks_admin_delete_instance()
 {
     // Get parameters
-    list($bid, $confirm) = xarVarCleanFromInput('bid', 'confirm');
+    if (!xarVarFetch('bid','int:1:',$bid)) return;
+    if (!xarVarFetch('confirm','str:1:',$confirm,'',XARVAR_NOT_REQUIRED)) return;
 
-// Security Check
+    // Security Check
 	if(!xarSecurityCheck('DeleteBlock',0,'Instance')) return;
 
     // Check for confirmation

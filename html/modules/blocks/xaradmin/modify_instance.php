@@ -2,13 +2,14 @@
 
 /**
  * modify a block instance
+ * @TODO Need to sperate this out to API calls.
  */
 function blocks_admin_modify_instance()
 {
     // Get parameters
-    $bid = xarVarCleanFromInput('bid');
+    if (!xarVarFetch('bid','int:1:',$bid)) return;
 
-// Security Check
+    // Security Check
 	if(!xarSecurityCheck('EditBlock',0,'Instance')) return;
 
     list($dbconn) = xarDBGetConn();

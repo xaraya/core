@@ -11,7 +11,7 @@
 */
 function adminpanels_admin_main(){
 
-// Security Check
+    // Security Check
     if(!xarSecurityCheck('AdminPanel')) return;
 
     // we only really need to show the default view (overview in this case)
@@ -19,7 +19,6 @@ function adminpanels_admin_main(){
         // display default overvieww template
         // not ideal but would do for now - doing bug #472 fixing <andyv>
         return array();
-/*         xarResponseRedirect(xarModURL('adminpanels', 'admin', 'main')); */
     } else {
         xarResponseRedirect(xarModURL('adminpanels', 'admin', 'modifyconfig'));
     }
