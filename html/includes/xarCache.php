@@ -146,7 +146,6 @@ function xarBlockIsCached($args)
 
     $systemPrefix = xarDBGetSystemTablePrefix();
     $blocksettings = $systemPrefix . '_cache_blocks';
-    // NOTE TO SELF:  add table create to upgrade script or use xarDataDict to determine if table is available - jsb
     $dbconn =& xarDBGetConn();
     $query = "SELECT xar_nocache,
                      xar_page,
@@ -260,7 +259,8 @@ function xarBlockGetCached($cacheKey, $name = '')
         fclose($file);
     }
 
-    xarOutputCleanCached('Block');
+    // jsb: don't clean output cache from block functions for now
+    //xarOutputCleanCached('Block');
     return $blockCachedOutput;
 }
 
@@ -330,7 +330,8 @@ function xarBlockSetCached($cacheKey, $name, $value)
             @fwrite($fp, $value);
             @fclose($fp);
         }
-        xarOutputCleanCached('Block');
+        // jsb: don't clean output cache from block functions unless cache size limit is reached
+        //xarOutputCleanCached('Block');
     }
 }
 
