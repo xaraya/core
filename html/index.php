@@ -99,8 +99,6 @@ function xarMain()
         xarEvt_trigger('ServerRequest');
 
         if (xarResponseIsRedirected()) return true;
-        // Here we check for exceptions even if $res isn't empty
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
 
         // Note : the page template may be set to something else in the module function
         if (xarTplGetPageTemplateName() == 'default' && $modType != 'admin') {
@@ -121,6 +119,9 @@ function xarMain()
                 xarTplSetPageTemplateName('admin');
             }
         }
+
+        // Here we check for exceptions even if $res isn't empty
+        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
 
         xarVarFetch('pageName','str:1:', $pageName, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
         if (!empty($pageName)){
