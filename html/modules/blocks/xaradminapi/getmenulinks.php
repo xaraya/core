@@ -9,14 +9,6 @@
  */
 function blocks_adminapi_getmenulinks()
 {
-    if (xarSecurityCheck('EditBlock',0)) {
-
-        $menulinks[] = Array('url'   => xarModURL('blocks',
-                                                   'admin',
-                                                   'view_types'),
-                              'title' => xarML('View the different registered block types available'),
-                              'label' => xarML('View Types'));
-    }
 	if (xarSecurityCheck('EditBlock',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('blocks',
@@ -24,14 +16,6 @@ function blocks_adminapi_getmenulinks()
                                                    'view_instances'),
                               'title' => xarML('View or edit all block instances'),
                               'label' => xarML('View Instances'));
-    }
-	if (xarSecurityCheck('EditBlock',0)) {
-
-        $menulinks[] = Array('url'   => xarModURL('blocks',
-                                                   'admin',
-                                                   'view_groups'),
-                              'title' => xarML('View or edit all block groups'),
-                              'label' => xarML('View Groups'));
     }
 	if (xarSecurityCheck('AddBlock',0)) {
 

@@ -1,4 +1,4 @@
-<script type="text/javascript" src="modules/blocks/xartemplates/functions.js"></script>
+<script type="text/javascript" src="modules/base/xartemplates/functions.js"></script>
 <script language="JavaScript">
 <!--
 	// Enter name of mandatory fields

@@ -1,4 +1,4 @@
-<script language="javascript" type="text/javascript" src="modules/blocks/xarincludes/blocks.js"></script>
+<script language="javascript" type="text/javascript" src="modules/base/xarincludes/blocks.js"></script>
 <script type="text/javascript">
 warningmsg = '#xarML('You must select the block to move.')#';
 </script>

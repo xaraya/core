@@ -13,8 +13,9 @@ function blocks_adminapi_activate($args)
 
     // Argument check
     if (!isset($bid)) {
-        xarSessionSetVar('errormsg', _MODARGSERROR);
-        return false;
+        $msg = xarML('Invalid Parameter Count', join(', ', $invalid), 'admin', 'create', 'blocks');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        return;
     }
 
     // Security

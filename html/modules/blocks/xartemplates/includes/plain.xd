@@ -1,0 +1,73 @@
+<br />
+<div class="xar-norm-outline" style="padding: 0px 0px 5px 0px;">
+	<table border="0" width="100%" cellspacing="0" cellpadding="2">
+		<tr>
+			<th style="text-align: left; padding-left: 10px;">
+				<xar:mlstring>Name</xar:mlstring>
+			</th>
+			<th style="text-align: center;">
+				<xar:mlstring>Group</xar:mlstring>
+			</th>
+			<th style="text-align: center;">
+				<xar:mlstring>Module</xar:mlstring>
+			</th>
+			<th style="text-align: center;">
+				<xar:mlstring>Type</xar:mlstring>
+			</th>
+			<th style="text-align: center;">
+				<xar:mlstring>Template</xar:mlstring>
+			</th>
+			<th style="text-align: center; padding-right: 10px;">
+				<xar:mlstring>Status</xar:mlstring>
+			</th>	
+			<th style="text-align: center;padding-left: 10px;" nowrap="nowrap">
+				<xar:mlstring>Actions</xar:mlstring>
+			</th>
+		</tr>
+		<xar:loop name="$blocks">
+<!--                         <xar:if condition="$modinfo['coremod'] and $hidecore"> -->
+				<!--- skip the row --->
+<!--                         <xar:else /> -->
+				<tr>
+					<td class="xar-norm-outline xar-mod-title" style="vertical-align: middle; text-align: left; padding-left: 10px; margin:auto; height: 20px;border-width: 0px 0px 1px 0px;border-style: dotted;">
+					<xar:if condition="empty($loop:item['title'])">
+						&nbsp;
+					<xar:else />
+						#$loop:item['title']#
+					</xar:if>
+					</td>
+					<td class="xar-norm-outline" style="text-align: center;width: 50px;border-width: 0px 0px 1px 0px;border-style: dotted;">
+						<a href="&xar-modurl-blocks-admin-modify_group;&amp;gid=#$loop:item['group_id']#">#$loop:item['group_name']#</a>
+					</td>
+					<td class="xar-norm-outline" style="text-align: center;width: 100px;border-width: 0px 0px 1px 0px;border-style: dotted;">
+						#$loop:item['module']#
+					</td>
+					<td class="xar-norm-outline" style="text-align: center;width: 100px;border-width: 0px 0px 1px 0px;border-style: dotted;">
+						#$loop:item['type']#
+					</td>
+					<td class="xar-norm-outline" style="text-align: center; width: 50px;border-width: 0px 0px 1px 0px;border-style: dotted;vertical-align: middle;">
+						<div style="padding-right: 10px;">
+						<xar:if condition="$loop:item['template'] ne NULL">
+							#$loop:item['template']# &nbsp;
+						<xar:else />
+							<xar:if condition="empty($loop:item['group_template'])">
+								[ <xar:mlstring> default </xar:mlstring> ]
+							<xar:else />
+								#$loop:item['group_template']# &nbsp;
+							</xar:if>
+						</xar:if>
+						</div>
+					</td>
+					<td class="xar-norm-outline" style="text-align: center; border-width: 0px 0px 1px 0px;border-style: dotted;white-space: nowrap;">
+						#$loop:item['state_desc']#
+					</td>
+					<td class="xar-norm-outline" style="text-align: center; width: 100px;border-width: 0px 0px 1px 0px;border-style: dotted;">
+						<a href="#xarModUrl('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['id']))#"><xar:mlstring>Edit</xar:mlstring></a>  |
+						<a href="#$loop:item['deleteurl']#" onClick="#$loop:item['javascript']#">Delete</a>
+					</td>
+				</tr>
+<!--                         </xar:if> -->
+		</xar:loop>
+		</tr>
+	</table>
+</div>

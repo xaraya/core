@@ -1,0 +1,82 @@
+<!--- Legend --->
+<div class="xar-accent-outline xar-sub" style="margin-top:5px;margin-bottom:5px;padding:3px;text-align:center;">
+    <xar:mlstring>
+        Actions: [E]dit [R]emove [D]efault [H]idden [M]aximized
+    </xar:mlstring>
+</div>
+<!--- two pseudo-columns compact layout (tested in css compliant browser) --->
+<div>
+    <xar:loop name="$blocks">
+        <xar:if condition="(($loop:index + 1) % 2)">
+            <div class="xar-accent-outline" style="position:relative;left:0px;width:49%;height:1.5em;border-width:0px 0px 1px 0px;">
+                <div class="xar-sub" style="float:right;width:auto;height:1.5em;text-align:right;">
+                    [ <a href="&xar-modurl-blocks-admin-modify_group;&amp;gid=#$loop:item['group_id']#">#$loop:item['group_name']#</a> |
+					<xar:if condition="$loop:item['template'] ne NULL">
+						#$loop:item['template']# &nbsp;
+					<xar:else />
+						<xar:if condition="empty($loop:item['group_template'])">
+							<xar:mlstring> D </xar:mlstring>
+						<xar:else />
+							#$loop:item['group_template']# &nbsp;
+						</xar:if>
+					</xar:if> |
+					<xar:if condition="$loop:item['state_desc'] eq 'Hidden'">
+						<xar:mlstring> H </xar:mlstring>
+					<xar:else />
+						<xar:mlstring> M </xar:mlstring>
+					</xar:if> |
+                        <a href="#xarModUrl('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['id']))#">
+                            <xar:mlstring>
+                                E
+                            </xar:mlstring>
+                        </a>|<a href="#$loop:item['deleteurl']#" onClick="#$loop:item['javascript']#">
+                            <xar:mlstring>
+                                R
+                            </xar:mlstring>
+                        </a>
+                    ] 
+                </div>
+					<xar:if condition="empty($loop:item['title'])">
+						#$loop:item['module']# \ #$loop:item['type']#
+					<xar:else />
+						#$loop:item['title']#
+					</xar:if>
+            </div>
+            <xar:else />
+            <div class="xar-accent-outline" style="position:relative;top:-1.5em;left:51%;width:49%;height:1.5em;margin-bottom:-1.3em;border-width:0px 0px 1px 0px;">
+                <div class="xar-sub" style="float:right;width:auto;height:1.5em;text-align:right;">
+                    [ <a href="&xar-modurl-blocks-admin-modify_group;&amp;gid=#$loop:item['group_id']#">#$loop:item['group_name']#</a> |
+					<xar:if condition="$loop:item['template'] ne NULL">
+						#$loop:item['template']# &nbsp;
+					<xar:else />
+						<xar:if condition="empty($loop:item['group_template'])">
+							<xar:mlstring> D </xar:mlstring>
+						<xar:else />
+							#$loop:item['group_template']# &nbsp;
+						</xar:if>
+					</xar:if> |
+					<xar:if condition="$loop:item['state_desc'] eq 'Hidden'">
+						<xar:mlstring> H </xar:mlstring>
+					<xar:else />
+						<xar:mlstring> M </xar:mlstring>
+					</xar:if> |
+                        <a href="#xarModUrl('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['id']))#">
+                            <xar:mlstring>
+                                E
+                            </xar:mlstring>
+                        </a>|<a href="#$loop:item['deleteurl']#" onClick="#$loop:item['javascript']#">
+                            <xar:mlstring>
+                                R
+                            </xar:mlstring>
+                        </a>
+                    ] 
+                </div>
+					<xar:if condition="empty($loop:item['title'])">
+						#$loop:item['module']# \ #$loop:item['type']#
+					<xar:else />
+						#$loop:item['title']#
+					</xar:if>
+            </div>
+			</xar:if>
+    </xar:loop>
+</div>

@@ -64,7 +64,18 @@ function blocks_admin_view_instances()
         $result->MoveNext();
     }
 
-    return array('blocks' => $blocks);
+    $data['selstyle']                               = xarModGetUserVar('blocks', 'selstyle');
+    if (empty($data['selstyle'])){
+        $data['selstyle'] = 'plain';
+    }
+    
+    // select vars for drop-down menus
+    $data['style']['plain']                         = xarML('Plain');
+    $data['style']['compact']                       = xarML('Compact');
+
+
+    $data['blocks'] = $blocks;
+    return $data;
 }
 
 ?>
