@@ -1017,7 +1017,7 @@ function pnModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerMo
         }
     }
 
-    if ($hookAction == 'display') {
+    if ($hookAction == 'display' || $hookAction == 'search') {
         return $output;
     } else {
         return $extraInfo;
