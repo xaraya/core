@@ -63,7 +63,7 @@
             </dd>    
             <xar:if condition="$ptype eq 1">
                 <dd>
-                    <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $uid))#">
+                    <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $uid, 'reload' => 'reload'))#">
                         <xar:mlstring>Users</xar:mlstring>
                     </a>
                 </dd>   
@@ -103,7 +103,7 @@
                 <xar:else />
                   <tr>
                       <td>
-                          <label for="pname"><xar:mlstring>Name</xar:mlstring></label>
+                          <label for="pname"><xar:mlstring>Name</xar:mlstring></label>:
                       </td>
                       <td>
                           <input type="text" name="pname" id="pname" value="#xarVarPrepForDisplay($pname)#" size="20" maxlength="255" tabindex="1" />
@@ -111,7 +111,7 @@
                     </tr>
                     <tr>
                       <td>
-                          <label for="ptype"><xar:mlstring>Type</xar:mlstring></label>
+                          <label for="ptype"><xar:mlstring>Type</xar:mlstring></label>:
                       </td>
                   <td>
                       <xar:if condition="$ptype eq 1 and $haschildren">

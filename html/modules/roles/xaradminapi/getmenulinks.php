@@ -30,7 +30,6 @@ function roles_adminapi_getmenulinks()
                               'label' => xarML('View All Groups'));
     }*/
 
-    // Security Check
     if (xarSecurityCheck('EditRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
@@ -39,7 +38,6 @@ function roles_adminapi_getmenulinks()
                               'label' => xarML('View Groups/Users'));
     }
 
-// Security Check
     if (xarSecurityCheck('AddRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
@@ -48,7 +46,6 @@ function roles_adminapi_getmenulinks()
                               'label' => xarML('Add Group/User'));
     }
 
-// Security Check
     if (xarSecurityCheck('AdminRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
@@ -74,12 +71,11 @@ function roles_adminapi_getmenulinks()
                               'label' => xarML('Site Lock'));
     }
 
-// Security Check
     if (xarSecurityCheck('AdminRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
                                                   'modifyconfig'),
-                              'title' => xarML('Modify the user module configuration'),
+                              'title' => xarML('Modify the roles module configuration'),
                               'label' => xarML('Modify Config'));
     }
 

@@ -42,7 +42,15 @@ function roles_admin_deleterole()
 // Security Check
     $data['frozen'] = !xarSecurityCheck('DeleteRole',0,'Roles',$name);
 
-// Prohibit removal of any groups the system needs
+// Prohibit removal of any groups that have children
+    if($role->countChildren()) {
+        $msg = xarML('The group #(1) has children. If you want to remove this group you have to delete the children first.', $role->getName());
+        xarErrorSet(XAR_USER_EXCEPTION,
+                    'CANNOT_CONTINUE',
+                     new SystemException($msg));
+        return false;
+    }
+// Prohibit removal of any groups or users the system needs
     if($uid == xarModGetVar('roles','admin')) {
         $msg = xarML('The user #(1) is the designated site administrator. If you want to remove this user change the site admin in the roles configuration setting first.', $role->getName());
         xarErrorSet(XAR_USER_EXCEPTION,
