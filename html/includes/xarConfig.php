@@ -110,6 +110,8 @@ function xarConfigSetVar($name, $value)
  * @return bool true on success, or void on database error
  * @raise DATABASE_ERROR
  */
+//FIXME: We need someway to delete configuration (useless without a certain module) 
+//variables from the table!!!
 function xarConfig_loadVars()
 {
     $cacheCollection = 'Config.Variables';
