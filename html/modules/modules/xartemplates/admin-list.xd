@@ -73,7 +73,7 @@
 <!-- 					<td nowrap> -->
 					    <!-- due to popular demand we dont show remove link for core mods atm -->
 					    |
-					    <xar:if condition="($state eq 4) and ($class neq 'Core Admin') and ($class neq 'Core Utility') and ($class neq 'Core Complete') and ($class neq 'Core Other')">
+					    <xar:if condition="($state eq 4) and ($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
                             <a href="#$removeurl#">#$remove#</a>
 						</xar:if>
 						<xar:if condition="$state eq 3">
@@ -81,7 +81,7 @@
 						</xar:if>
 						<xar:if condition="$state eq 2">
                             <a href="#$activateurl#">#$activate#</a>
-                            <xar:if condition="($class neq 'Core Admin') and ($class neq 'Core Utility') and ($class neq 'Core Complete') and ($class neq 'Core Other')">
+                            <xar:if condition="($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
                                 |
                                 <a href="#$removeurl#">#$remove#</a>
                             </xar:if>
