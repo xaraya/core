@@ -141,7 +141,11 @@ function modules_admin_list()
                                     'modinfo',
                                      array( 'id'        => $thismodid,
                                             'authid'    => $authid));
-        
+        // added due to the feature request - opens info in new window
+        $listrows[$i]['infourlnew'] = xarModURL('modules',
+                                    'admin',
+                                    'modinfonew',
+                                    array( 'id'        => $thismodid));
         // image urls
         
         
@@ -221,8 +225,8 @@ function modules_admin_list()
             $listrows[$i]['actionurl']          = $upgradeurl;
             $listrows[$i]['removeurl']          = '';
             
-            $listrows[$i]['actionimg1']         = $img_none;
-            $listrows[$i]['actionimg2']         = $img_upgrade;
+            $listrows[$i]['actionimg2']         = $img_none;
+            $listrows[$i]['actionimg1']         = $img_upgrade;
 
         }
         

@@ -92,7 +92,7 @@
         <div class="xar-norm-outline" style="padding: 0px 0px 5px 0px;">
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
                 <tr>
-                    <th style="text-align: center;">
+                    <th style="text-align: left; padding-left: 10px;">
                         <xar:mlstring>Name</xar:mlstring>
                     </th>
                     <th style="text-align: center;">
@@ -104,10 +104,10 @@
                     <th style="text-align: center;">
                         <xar:mlstring>Info</xar:mlstring>
                     </th>
-                    <th style="text-align: center;">
+                    <th style="text-align: right; padding-right: 10px;">
                         <xar:mlstring>Status</xar:mlstring>
                     </th>	
-                    <th style="text-align: center;" nowrap="nowrap">
+                    <th style="text-align: left;padding-left: 10px;" nowrap="nowrap">
                         <xar:mlstring>Actions</xar:mlstring>
                     </th>
                     <th style="text-align: center;">
@@ -119,26 +119,32 @@
                         <!--- skip the row --->
                     <xar:else />
                         <tr>
-                            <td class="xar-norm-outline xar-mod-title" style="vertical-align: middle; text-align: left; padding-left: 1em; margin:auto; height: 20px;border-width: 0px 0px 1px 0px;border-style: dotted;">
+                            <td class="xar-norm-outline xar-mod-title" style="vertical-align: middle; text-align: left; padding-left: 10px; margin:auto; height: 20px;border-width: 0px 0px 1px 0px;border-style: dotted;">
                                 <a name="#$displayname#" id="#$displayname#" style="text-decoration:none">&nbsp;</a>#$displayname#
                             </td>
                             <td class="xar-norm-outline" style="text-align: center;width: 100px;border-width: 0px 0px 1px 0px;border-style: dotted;">
                                 #$version#
                             </td>
                             <td class="xar-norm-outline" style="text-align: center;width: 100px;border-width: 0px 0px 1px 0px;border-style: dotted;">
-                                <xar:mlstring>RSS n/a</xar:mlstring>
+                                <xar:mlstring>N/A</xar:mlstring>
                             </td>
                             <td class="xar-norm-outline" style="text-align: center;width: 35px;border-width: 0px 0px 1px 0px;border-style: dotted;">
                                 <xar:if condition="$selstyle eq 'pro'">
                                     <input type="submit" name="info" id="info" value="#$infolabel#" />
                                 <xar:elseif condition="$selstyle eq 'icons'" />
-                                    <a href="#$infourl#"><img src="#$infoimg#" alt="#$infolabel#" /></a>
+                                    <a href="#$infourlnew#&theme=print" target="_new"><img src="#$infoimg#" alt="#$infolabel#" /></a>
+                                    <noscript>
+                                        <a href="#$infourl#"><img src="#$infoimg#" alt="#$infolabel#" /></a>
+                                    </noscript>
                                 <xar:else />
-                                    <a href="#$infourl#"><xar:mlstring>Info</xar:mlstring></a>
+                                    <a href="#$infourlnew#&theme=print" target="_new"><xar:mlstring>Info</xar:mlstring></a>
+                                    <noscript>
+                                        <a href="#$infourl#"><xar:mlstring>Info</xar:mlstring></a>
+                                    </noscript>
                                 </xar:if>
                             </td>
                             <td class="xar-norm-outline" style="text-align: right;width: 100px;border-width: 0px 0px 1px 0px;border-style: dotted;vertical-align: middle;">
-                                <div style="padding-right: 1em;">
+                                <div style="padding-right: 10px;">
                                     #$statelabel#
                                 </div>
                             </td>
@@ -178,9 +184,13 @@
                                             <a href="#$removeurl#"><img src="#$actionimg2#" alt="#$actionlabel2#" /></a>
                                         </xar:if>
                                 <xar:else />
-                                    <div style="padding-left: 1em;">
+                                    <div style="padding-left: 10px;">
                                         <xar:if condition="$coremod">
-                                            #$actionlabel#
+                                            <xar:if condition="$state eq 5 or $state eq 2">
+                                                <a href="#$actionurl#">#$actionlabel#</a>
+                                            <xar:else />
+                                                #$actionlabel#
+                                            </xar:if>
                                         <xar:else />
                                             <a href="#$actionurl#">#$actionlabel#</a>
                                             <xar:if condition="$state eq 2">
@@ -212,12 +222,12 @@
             <xar:if condition="$selstyle eq 'icons'"><br />
                 <!--- need to de-hardcode ---> 
                 <div class="xar-alt-outline xar-norm" style="vertical-align: middle;margin:5px; padding: 3px;">
-                    <img src="modules/modules/xarimages/set1/disabled.png" alt="disabled" hspace="5" />Disabled
-                    <img src="modules/modules/xarimages/set1/activate.png" alt="activate" hspace="5" />Activate
-                    <img src="modules/modules/xarimages/set1/deactivate.png" alt="deactivate" hspace="5" />Deactivate
-                    <img src="modules/modules/xarimages/set1/upgrade.png" alt="upgrade" hspace="5" />Upgrade
-                    <img src="modules/modules/xarimages/set1/initialise.png" alt="initialise" hspace="5" />Initialise
-                    <img src="modules/modules/xarimages/set1/remove.png" alt="remove" hspace="5" />Remove
+                    <img src="#xarTplGetImage('set1/disabled.png')#"    alt="disabled" hspace="5" /><xar:mlstring>Disabled</xar:mlstring>
+                    <img src="#xarTplGetImage('set1/activate.png')#"    alt="activate" hspace="5" /><xar:mlstring>Activate</xar:mlstring>
+                    <img src="#xarTplGetImage('set1/deactivate.png')#"  alt="deactivate" hspace="5" /><xar:mlstring>Deactivate</xar:mlstring>
+                    <img src="#xarTplGetImage('set1/upgrade.png')#"     alt="upgrade" hspace="5" /><xar:mlstring>Upgrade</xar:mlstring>
+                    <img src="#xarTplGetImage('set1/initialise.png')#"  alt="initialise" hspace="5" /><xar:mlstring>Initialise</xar:mlstring>
+                    <img src="#xarTplGetImage('set1/remove.png')#"      alt="remove" hspace="5" /><xar:mlstring>Remove</xar:mlstring>
                 </div>
             </xar:if>
         </div>

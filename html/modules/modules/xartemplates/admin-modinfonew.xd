@@ -1,0 +1,139 @@
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
+<div class="xar-mod-body">
+    <h2><xar:mlstring>Detailed Module Information</xar:mlstring></h2>
+    <div class="xar-norm-outline" style="margin: auto;text-align: center;">
+        <!-- Icon -->
+        <div style="margin: auto;height:120px; width: 90%; text-align: center;">
+            <div style="float: left; width: 30%; text-align: left; display: inline;">
+                <p><span class="xar-mod-title"><xar:mlstring>Icon</xar:mlstring>:</span></p>
+                <div class="xar-error">
+                    #$modiconmsg#
+                </div>
+            </div>
+            <div style="float: right; width: 30%; text-align: right; display: inline;">
+                <p><img alt="icon" border="0" src="#$modiconurl#" /></p>
+            </div>
+        </div>
+<!--         <br clear="all" /> -->
+        <!-- Module Name -->
+        <div class="xar-norm-outline" style="margin: auto;height:40px; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
+            <div style="float: left; width: 30%; text-align: left; display: inline;">
+                <p><span class="xar-mod-title"><xar:mlstring>Name</xar:mlstring>:</span></p>
+            </div>
+            <div style="float: right; width: 60%; text-align: right; display: inline;">
+                <p><span class="xar-mod-title">#$modname#</span></p>
+            </div>
+        </div>
+<!--         <br clear="all" /> -->
+        <!-- Description -->
+        <div class="xar-norm-outline" style="margin: auto;height:40px; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
+            <div style="float: left; width: 30%; text-align: left; display: inline;">
+                <p><span class="xar-mod-title"><xar:mlstring>Description</xar:mlstring>:</span></p>
+            </div>
+            <div style="float: right; width: 60%; text-align: right; display: inline;">
+                <p><span class="xar-mod-title">#$moddescr#</span></p>
+            </div>
+        </div>
+<!--         <br clear="all" /> -->
+        <!-- Module Display Name -->
+        <div class="xar-norm-outline" style="margin: auto;height:40px; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
+            <div style="float: left; width: 30%; text-align: left; display: inline;">
+                <p><span class="xar-mod-title"><xar:mlstring>Display Name</xar:mlstring>:</span></p>
+            </div>
+            <div style="float: right; width: 60%; text-align: right; display: inline;">
+                <p><span class="xar-mod-title">#$moddispname#</span></p>
+            </div>
+        </div>
+<!--         <br clear="all" /> -->
+        <!-- Module Directory -->
+        <div class="xar-norm-outline" style="margin: auto;height:40px; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
+            <div style="float: left; width: 30%; text-align: left; display: inline;">
+                <p><span class="xar-mod-title"><xar:mlstring>Directory</xar:mlstring>:</span></p>
+            </div>
+            <div style="float: right; width: 60%; text-align: right; display: inline;">
+                <p><span class="xar-mod-title">#$moddir#</span></p>
+            </div>
+        </div>
+<!--         <br clear="all" /> -->
+        <!-- Module ID -->
+        <div class="xar-norm-outline" style="margin: auto;height:40px; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
+            <div style="float: left; width: 30%; text-align: left; display: inline;">
+                <p><span class="xar-mod-title"><xar:mlstring>Module ID</xar:mlstring>:</span></p>
+            </div>
+            <div style="float: right; width: 60%; text-align: right; display: inline;">
+                <p><span class="xar-mod-title">#$modid#</span></p>
+            </div>
+        </div>
+<!--         <br clear="all" /> -->
+        <!-- Module Class -->
+        <div class="xar-norm-outline" style="margin: auto;height:40px; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
+            <div style="float: left; width: 30%; text-align: left; display: inline;">
+                <p><span class="xar-mod-title"><xar:mlstring>Class</xar:mlstring>:</span></p>
+            </div>
+            <div style="float: right; width: 60%; text-align: right; display: inline;">
+                <p><span class="xar-mod-title">#$modclass#</span></p>
+            </div>
+        </div>
+<!--         <br clear="all" /> -->
+        <!-- Module Category -->
+        <div class="xar-norm-outline" style="margin: auto;height:40px; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
+            <div style="float: left; width: 30%; text-align: left; display: inline;">
+                <p><span class="xar-mod-title"><xar:mlstring>Category</xar:mlstring>:</span></p>
+            </div>
+            <div style="float: right; width: 60%; text-align: right; display: inline;">
+                <p><span class="xar-mod-title">#$modcat#</span></p>
+            </div>
+        </div>
+<!--         <br clear="all" /> -->
+        <!-- Module Version -->
+        <div class="xar-norm-outline" style="margin: auto;height:40px; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
+            <div style="float: left; width: 30%; text-align: left; display: inline;">
+                <p><span class="xar-mod-title"><xar:mlstring>Version</xar:mlstring>:</span></p>
+            </div>
+            <div style="float: right; width: 60%; text-align: right; display: inline;">
+                <p><span class="xar-mod-title">#$modver#</span></p>
+            </div>
+        </div>
+<!--         <br clear="all" /> -->
+        <!-- Module Author -->
+        <div class="xar-norm-outline" style="margin: auto;height:40px; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
+            <div style="float: left; width: 30%; text-align: left; display: inline;">
+                <p><span class="xar-mod-title"><xar:mlstring>Author(s)</xar:mlstring>:</span></p>
+            </div>
+            <div style="float: right; width: 60%; text-align: right; display: inline;">
+                <p><span class="xar-mod-title">#$modauthor#</span></p>
+            </div>
+        </div>
+<!--         <br clear="all" /> -->
+        <!-- Module Contact -->
+        <div class="xar-norm-outline" style="margin: auto;height:40px; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
+            <div style="float: left; width: 30%; text-align: left; display: inline;">
+                <p><span class="xar-mod-title"><xar:mlstring>Contact(s)</xar:mlstring>:</span></p>
+            </div>
+            <div style="float: right; width: 60%; text-align: right; display: inline;">
+                <p><span class="xar-mod-title">#$modcontact#</span></p>
+            </div>
+        </div>
+<!--         <br clear="all" /> -->
+        <!-- Module Dependency -->
+        <div class="xar-norm-outline" style="margin: auto;height:40px; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
+            <div style="float: left; width: 30%; text-align: left; display: inline;">
+                <p><span class="xar-mod-title"><xar:mlstring>Dependency</xar:mlstring>:</span></p>
+            </div>
+            <div style="float: right; width: 60%; text-align: right; display: inline;">
+                <p><span class="xar-mod-title">#$moddependency#</span></p>
+            </div>
+        </div>
+<!--         <br clear="all" /> -->
+        <!-- Module Navigation -->
+<!--         <div class="xar-norm-outline" style="margin: auto;height:40px; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;"> -->
+<!--             <div style="float: left; width: 30%; text-align: left; display: inline;"> -->
+<!--                 <p><span class="xar-mod-title"><xar:mlstring>Modules List</xar:mlstring>:</span></p> -->
+<!--             </div> -->
+<!--             <div style="float: right; width: 60%; text-align: right; display: inline;"> -->
+<!--                 <p><span class="xar-mod-title"><a href="#$modlisturl#"><xar:mlstring>View</xar:mlstring></a></span></p> -->
+<!--             </div> -->
+<!--         </div> -->
+    </div>
+<!--     <br clear="all" /> -->
+</div>
