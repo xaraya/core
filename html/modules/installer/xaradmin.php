@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.xaradmin.php 1.67 03/04/19 16:34:00-04:00 johnny@falling.local.lan $
  *
  * Installer admin display functions
  *
@@ -495,6 +495,12 @@ function installer_admin_finish()
                                                                 'template' => 'header'))) return;
 
     if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'admin'))) return;
+
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'center',
+                                                                'template' => 'center'))) return;
+
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'topnav',
+                                                                'template' => 'topnav'))) return;
 
     // Load up database
     list($dbconn) = xarDBGetConn();

@@ -11,30 +11,13 @@
         #$tpl:headJavaScript#
     </head>
     <body>
-<table width="100%" cellpadding="0" cellspacing="0" border="0">
-    <tr>
-        <td style="text-align:left; background-image:url(themes/Xaraya_Classic/images/header_fill.gif)">
-            <a href="&xar-baseurl;">
+<div style="background-image:url(themes/Xaraya_Classic/images/header_fill.gif);width: 100%;height: 52px;"><div style="float: left;width: 187px; height: 52px;"><a href="&xar-baseurl;">
             <img src="themes/Xaraya_Classic/images/header_logo1.gif" alt="#xarModGetVar('themes', 'SiteName')#" width="187" height="52" style="align:left; vertical-align:top; border:0px" />
-            </a>
-        </td>
-        <td style="width:100%; background-image:url(themes/Xaraya_Classic/images/header_fill.gif)">
-            <img src="themes/Xaraya_Classic/images/dot.gif" alt="" style="align:middle; vertical-align:top; width:1px; height:1px; border:0px" />
-        </td>
-        <td style="align:right; background-image:url(themes/Xaraya_Classic/images/header_fill.gif)">
-            <a href="http://www.xaraya.com">
-            <img src="themes/Xaraya_Classic/images/header_logo2.gif" alt="#xarModGetVar('themes', 'SiteName')#" style="vertical-align:top; width:259; height:52" />
-            </a>			
-        </td>
-    </tr>
-<!--
-    <tr>
-        <td align="center" colspan="3">-->
-            <!--xar:blockgroup name="top" id="top" /-->
-        <!--</td>
-    </tr>
--->
-</table>
+            </a></div><div style="float: right;width: 259px; height: 52px;"><a href="&xar-baseurl;">
+            <img src="themes/Xaraya_Classic/images/header_logo2.gif" alt="#xarModGetVar('themes', 'SiteName')#" width="259" height="52" style="align:left; vertical-align:top; border:0px" />
+            </a></div><br clear="all" />
+        <!-- xar:blockgroup name="topnav" id="topnav" / -->
+<br clear="all" />
 
 <!-- start body -->
 
