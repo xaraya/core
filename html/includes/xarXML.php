@@ -29,10 +29,10 @@ error_reporting(E_ALL);
  */
 define('XARXML_VERSION','0.0.1');
 define('XARXML_PARSERCLASS' ,'xarXmlParser');
-define('XARXML_HANDLERCLASS','xarXmlHandler');
+define('XARXML_HANDLERCLASS','xarAbstractXmlHandler');
 
 // What class are we instatiating as the default handler?
-define('XARXML_DEFAULTHANDLER','xarXmlHandler');
+define('XARXML_DEFAULTHANDLER','xarXmlDefaultHandler');
 
 // PHP xml extension supports only three encodings
 define('XARXML_CHARSET_USASCII'  ,'US-ASCII');
@@ -122,10 +122,12 @@ function xarXml_init($args, $whatElseIsGoingLoaded)
  * in that it isn't configured to handle a specific XML variety
  * Using the public methods modules can instantiate a parser
  * and set the handlers of it, so it can parse a certain XML
- * document structure and actt accordingly.
+ * document structure and act accordingly.
  *
  * @access public
  * @package xml
+ * @todo do not assume the result will be a parse tree, it's non-sax-like
+ * @todo move out the dom like functions to the appropriate handler class
  */
 class xarXmlParser 
 {
@@ -133,8 +135,7 @@ class xarXmlParser
     var $handler;       // Which handler object is attached to this parser (of class xarXMLHandler)
     var $parser=NULL;   // The parser object itself
     var $tree=array();  // Resulting parse tree
-    var $indexstart;
-
+    
     /**
      * Construct the xarXmlParser object
      *
@@ -144,13 +145,13 @@ class xarXmlParser
      *
      * @access public
      * @param string $encoding character encoding to use (see top of file) 
+     * @param object $handler which handler object handles the events generated
+     * @todo build in recognition of domxml availability and set that as default handler
      */
-    function xarXmlParser($encoding=XARXML_CHARSET_DEFAULT,$handler=NULL,$indexstart=1) 
+    function xarXmlParser($encoding=XARXML_CHARSET_DEFAULT,$handler=NULL) 
     {
         $this->encoding=$encoding;
-        $this->indexstart=$indexstart;
-        // TODO : based on capabilities instantiate other handler here as default
-        //        for example the DOMXML if available :-)
+               
         $defHandlerClass = XARXML_DEFAULTHANDLER;
         if($handler)
             $this->handler =& $handler;
@@ -352,7 +353,6 @@ class xarXmlParser
         $this->setOption(XML_OPTION_SKIP_WHITE,true);
         $this->__activateHandlers();
         $this->handler->_resolve_base = $resolve_base;
-        $this->handler->_tagindex = $this->indexstart;
     }
 
     /**
@@ -396,7 +396,7 @@ class xarXmlParser
         xml_set_character_data_handler($par,        'character_data');
         xml_set_element_handler($par,               'open_tag',
                                                     'close_tag');
-        xml_set_processing_instruction_handler($par,'proces_instruction');
+        xml_set_processing_instruction_handler($par,'process_instruction');
         xml_set_unparsed_entity_decl_handler($par,  'unparsed_entity');
         xml_set_notation_decl_handler($par,         'notation_declaration');
         xml_set_external_entity_ref_handler($par,   'external_entity_reference');
@@ -416,7 +416,29 @@ class xarXmlParser
  * @todo test,test,test
  * @todo document the strange xml_set_object thingie
  */
-class xarXmlHandler 
+class xarAbstractXmlHandler
+{
+    // Abstract functions
+    function default_handler(){}
+    function character_data(){}
+    function open_tag(){}
+    function close_tag(){}
+    function process_instruction(){}
+    function unparsed_entity(){}
+    function notation_declaraion(){}
+    function external_entity_declaraion(){}
+    function start_namespace(){}
+    function end_namespace(){}
+}
+
+/**
+ * The default xml handler constructs a tree out of the
+ * parsed xml
+ *
+ * @package xml
+ * 
+ */
+class xarXmlDefaultHandler extends xarAbstractXmlHandler
 {
     var $_tree = array();
     var $_depth = 1;
@@ -433,6 +455,16 @@ class xarXmlHandler
      * 3. url?
      */
     var $_resolve_base=NULL;     
+
+    /**
+     * Constructor
+     *
+     * @param integer $indexstart where to start counting
+     */
+    function xarXmlDefaultHandler($indexstart=1) 
+    {
+        $this->_tagindex=$indexstart;
+    }
 
     /**
      * The default handler catches everything which is not handled by others
@@ -592,7 +624,7 @@ class xarXmlHandler
      * @param string $target the part after the <? in the document
      * @param string $data   the contents of the processing instruction
      */
-    function proces_instruction($parser, $target , $data) 
+    function process_instruction($parser, $target , $data) 
     {
         $this->open_tag($parser,$target,array(), XML_PI_NODE);
         $this->character_data($parser,$data);
@@ -619,8 +651,8 @@ class xarXmlHandler
         if($system_id) {
             // Which handler are we in?
             $ee_handlername = get_class($this);
-            $ee_handler = new $ee_handlername();
-            $ee_parser = new xarXmlParser($parser->encoding,$ee_handler,$this->_tagindex+1);
+            $ee_handler = new $ee_handlername($this->_tagindex);
+            $ee_parser = new xarXmlParser($parser->encoding,$ee_handler);
             // FIXME: I don't know the logic when to use public id and when to use system_id
             //        for now i only use system_id, which is a filename.
             // system_id is a filename, and as the $resolve_base is always empty we have to cope here
