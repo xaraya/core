@@ -21,6 +21,7 @@ function base_admin_modifyconfig()
 {
     // Security Check
     if(!xarSecurityCheck('AdminBase')) return;
+    if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'display', XARVAR_NOT_REQUIRED)) return;
 
     if (xarConfigGetVar('Site.Core.DefaultModuleType') == 'admin'){
     // Get list of user capable mods
@@ -56,6 +57,9 @@ function base_admin_modifyconfig()
     }
     closedir($dd);
 
+    $data['editor'] = xarModGetVar('base','editor');
+    $data['editors'] = array(array('displayname' => xarML('none')));
+    if(xarModIsAvailable('htmlarea')) $data['editors'][] = array('displayname' => 'htmlarea');
     $allowedlocales = xarConfigGetVar('Site.MLS.AllowedLocales');
     foreach($locales as $locale) {
         if (in_array($locale, $allowedlocales)) $active = true;
