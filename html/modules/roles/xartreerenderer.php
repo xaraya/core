@@ -269,7 +269,7 @@ class xarTreeRenderer
             xarModURL('roles',
                 'admin',
                 'showusers',
-                array('uid' => $this->treenode['uid'])) . '" title="' . xarML('Show the Users in this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/users.gif" style="vertical-align: middle;" /></a>';
+                array('uid' => $this->treenode['uid'], 'reload' => 1)) . '" title="' . xarML('Show the Users in this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/users.gif" style="vertical-align: middle;" /></a>';
         }
         return $html;
     }

@@ -93,6 +93,7 @@ function roles_userapi_getall($args)
                     roletab.xar_uname,
                     roletab.xar_name,
                     roletab.xar_email,
+                    roletab.xar_pass,
                     roletab.xar_state,
                     roletab.xar_date_reg';
         $query .= ' FROM ' . $rolestable . ' AS roletab';
@@ -103,6 +104,7 @@ function roles_userapi_getall($args)
                     roletab.xar_uname,
                     roletab.xar_name,
                     roletab.xar_email,
+                    roletab.xar_pass,
                     roletab.xar_state,
                     roletab.xar_date_reg';
         // Restrict by group(s) - join to the group_members table.
@@ -180,7 +182,7 @@ function roles_userapi_getall($args)
     // Put users into result array
     $roles = array();
     for (; !$result->EOF; $result->MoveNext()) {
-        list($uid, $uname, $name, $email, $state, $date_reg) = $result->fields;
+        list($uid, $uname, $name, $email, $pass, $state, $date_reg) = $result->fields;
         if (xarSecurityCheck('ReadRole', 0, 'All', "$uname:All:$uid")) {
             if (!empty($uidlist)) {
                 $roles[$uid] = array(
@@ -188,6 +190,7 @@ function roles_userapi_getall($args)
                     'uname'     => $uname,
                     'name'      => $name,
                     'email'     => $email,
+                    'pass'      => $pass,
                     'state'     => $state,
                     'date_reg'  => $date_reg
                 );
@@ -197,6 +200,7 @@ function roles_userapi_getall($args)
                     'uname'     => $uname,
                     'name'      => $name,
                     'email'     => $email,
+                    'pass'      => $pass,
                     'state'     => $state,
                     'date_reg'  => $date_reg
                 );

@@ -36,6 +36,7 @@ function roles_admin_showusers()
     if (!xarVarFetch('invalid', 'str:0:', $data['invalid'], NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('order', 'str:0:', $data['order'], 'xar_name', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('search', 'str:0:', $data['search'], NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('reload', 'str:0:', $reload, NULL, XARVAR_DONT_SET)) return;
 
     if (empty($data['selstyle'])) $data['selstyle'] = 0;
     xarSessionSetVar('rolesdisplay', $data['selstyle']);
@@ -73,49 +74,56 @@ function roles_admin_showusers()
         $data['groupname'] = '';
     }
 
-    // Initialize a query
-    $xartable =& xarDBGetTables();
-    $q = new xarQuery('SELECT');
-    $q->addtable($xartable['roles'],'r');
-    $q->addfields(array(
-        'r.xar_uid AS uid',
-        'r.xar_name AS name',
-        'r.xar_uname AS uname',
-        'r.xar_email AS email',
-        'r.xar_state AS state',
-        'r.xar_date_reg AS date_reg'));
+    // Check if we already have a selection
+    $q = xarSessionGetVar('rolesquery');
+    if (empty($q) || isset($reload)) {
+        $xartable =& xarDBGetTables();
+        $q = new xarQuery('SELECT');
+        $q->addtable($xartable['roles'],'r');
+        $q->addfields(array(
+            'r.xar_uid AS uid',
+            'r.xar_name AS name',
+            'r.xar_uname AS uname',
+            'r.xar_email AS email',
+            'r.xar_state AS state',
+            'r.xar_date_reg AS date_reg'));
 
-    //Create the selection
-    if (!empty($data['search'])) {
-        $c[1] = $q->like('xar_name','%' . $data['search'] . '%');
-        $c[2] = $q->like('xar_uname','%' . $data['search'] . '%');
-        $c[3] = $q->like('xar_email','%' . $data['search'] . '%');
-        $q->qor($c);
+        //Create the selection
+        if (!empty($data['search'])) {
+            $c[1] = $q->like('xar_name','%' . $data['search'] . '%');
+            $c[2] = $q->like('xar_uname','%' . $data['search'] . '%');
+            $c[3] = $q->like('xar_email','%' . $data['search'] . '%');
+            $q->qor($c);
+        }
+
+        $q->setorder($data['order']);
+        $q->eq('xar_type',0);
+
+        // Add state
+        if ($data['state'] == ROLES_STATE_CURRENT) $q->ne('xar_state',ROLES_STATE_DELETED);
+        elseif ($data['state'] == ROLES_STATE_ALL) {}
+        else $q->eq('xar_state',$data['state']);
+
+        // If a group was chosen, get only the users of that group
+        if ($uid != 0) {
+            $q->addtable($xartable['rolemembers'],'rm');
+            $q->join('r.xar_uid','rm.xar_uid');
+            $q->eq('rm.xar_parentid',$uid);
+        }
+
+        // Save the query so we can reuse it somewhere
+        xarSessionSetVar('rolesquery', serialize($q));
+    } else {
+        $q = unserialize($q);
+        //FIXME: remove this line once the security scenario is merged (becomes unnecessary)
+        $q->openconnection();
     }
 
-    // Add limits and order
+    // Add limits
     $numitems = xarModGetVar('roles', 'rolesperpage');
     $q->setrowstodo($numitems);
     $q->setstartat($startnum);
-    $q->setorder($data['order']);
-    $q->eq('xar_type',0);
-
-    // Add state
-    if ($data['state'] == ROLES_STATE_CURRENT) $q->ne('xar_state',ROLES_STATE_DELETED);
-    elseif ($data['state'] == ROLES_STATE_ALL) {}
-    else $q->eq('xar_state',$data['state']);
-
-    // If a group was chosen, get only the users of that group
-    if ($uid != 0) {
-        $q->addtable($xartable['rolemembers'],'rm');
-        $q->join('r.xar_uid','rm.xar_uid');
-        $q->eq('rm.xar_parentid',$uid);
-    }
-
     $q->run();
-
-    // Save the query so we can reuse it somewhere
-    xarSessionSetVar('rolesquery', serialize($q));
 
     $data['totalselect'] = $q->getrows();
 

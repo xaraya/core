@@ -48,6 +48,17 @@ function roles_userapi_get($args)
 
     // Get user
     $q = new xarQuery('SELECT',$rolestable);
+    $q->addfields(array(
+                  'xar_uid AS uid',
+                  'xar_uname AS uname',
+                  'xar_name AS name',
+                  'xar_type AS type',
+                  'xar_email AS email',
+                  'xar_pass AS pass',
+                  'xar_date_reg AS date_reg',
+                  'xar_valcode AS valcode',
+                  'xar_state AS state'
+                ));
     if (!empty($uid) && is_numeric($uid)) {
         $q->eq('xar_uid',(int)$uid);
     }
@@ -67,30 +78,11 @@ function roles_userapi_get($args)
         $q->eq('xar_state',(int)$state);
     }
     $q->eq('xar_type',$type);
-//    $q->qecho();
     if (!$q->run()) return;
 
     // Check for no rows found, and if so return
-    $row = $q->row();
-    if ($row == array()) return false;
-
-    // Obtain the item information from the result set
-
-    // Security check
-//    if (xarSecurityCheck('ReadRole',1,'All',"$row['uname']:All:$row['uid']")) return;
-//    if (xarSecurityCheck('ViewRoles')) return;
-
-// Create the user array
-    $user = array('uid'         => (int) $row['xar_uid'],
-                  'uname'       => $row['xar_uname'],
-                  'name'        => $row['xar_name'],
-                  'type'        => $row['xar_type'],
-                  'email'       => $row['xar_email'],
-                  'pass'        => $row['xar_pass'],
-                  'date_reg'    => $row['xar_date_reg'],
-                  'valcode'     => $row['xar_valcode'],
-                  'state'       => (int) $row['xar_state']);
-    // Return the user array
+    $user = $q->row();
+    if ($user == array()) return false;
     return $user;
 }
 
