@@ -13,7 +13,7 @@
  * Initialise the database connection.
  * <br>
  * This function loads up ADODB  and starts the database
- * connection using the required parameters then it sets 
+ * connection using the required parameters then it sets
  * the table prefixes and xartables up and returns true
  * <br>
  * @access private
@@ -38,7 +38,7 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     $dbname = $args['databaseName'];
     $dbuname = $args['userName'];
     $dbpass = $args['password'];
-    
+
     // Decode username and password if necessary
     if (1 == xarCore_getSystemVar('DB.Encoded')) {
         $dbuname = base64_decode($dbuname);
@@ -48,7 +48,7 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     if (!defined('ADODB_DIR')) {
         define('ADODB_DIR', 'xaradodb');
     }
-    
+
     include_once 'xaradodb/adodb.inc.php';
 
 		// ADODB-to-Xaraya error-to-exception bridge
@@ -83,18 +83,8 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     // TODO: <marco> for now i'm leaving all the tables to use the system prefix
     //       which of them could be site prefixed?
 
-    // Core tables
-
     // BlockLayout Template Engine Tables
     $xartable['template_tags']         = $systemPrefix . '_template_tags';
-
-    // FIXME: <marco> I think that those tables are not part of core, and should go into
-    //        their proper module
-    $xartable['admin_menu']            = $systemPrefix . '_admin_menu';
-    // FIXME: <marco> I don't need this in MLS, should we drop it?
-    $xartable['languages']             = $systemPrefix . '_languages';
-    // FIXME: <marco> Paul do we need it?
-    $xartable['userblocks']            = $systemPrefix . '_userblocks';
 
     return true;
 }
@@ -219,7 +209,7 @@ function xarDBGetSiteTablePrefix()
 function xarDB_importTables($tables)
 {
     global $xartable;
-    
+
     $xartable = array_merge($xartable, $tables);
 }
 
@@ -228,6 +218,6 @@ function xarDB_importTables($tables)
 function xarDB__adodbErrorHandler($dbms, $fn, $errno, $errmsg, $p1=false, $p2=false)
 {
     // I need to complete it.
-    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DB_ERROR', new SystemException($errmsg));
+    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', new SystemException($errmsg));
 }
 ?>

@@ -28,7 +28,8 @@ include 'modules/installer/xarfunctions.php';
 define ('XARINSTALL_PHASE_WELCOME',             '1');
 define ('XARINSTALL_PHASE_LANGUAGE_SELECT',     '2');
 define ('XARINSTALL_PHASE_LICENSE_AGREEMENT',   '3');
-/*TODO: rename to XARINSTALL_PHASE_SYSTEM_CHECK unless we want to implement another
+/*
+TODO: rename to XARINSTALL_PHASE_SYSTEM_CHECK unless we want to implement another
 phase for php settings check ..magic quotes, register globals, etc..
 */
 define ('XARINSTALL_PHASE_PERMISSIONS_CHECK',   '4');
@@ -72,17 +73,6 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 
     // Build functioname from phase
     $funcName = 'phase'.$phase;
-
-    // Check for installer theme
-    //TODO: use main function as the gateway to the phases and the location for this check
-    /*
-    $installerTheme = xarCore_getSiteVar('BL.DefaultTheme');
-    if (strcmp('installer', $installerTheme)) {
-        $varDir = xarCoreGetVarDirPath();
-        xarCore_die('Please change the BL.DefaultTheme variable in ' .$varDir.'/config.site.xml
-        from '.$installerTheme.' to installer');
-    }
-    */
 
     // Handle language setting
 
