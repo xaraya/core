@@ -1511,7 +1511,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
                 if (file_exists($fileName)) {
                     $fd = fopen($fileName, 'r');
                     if (!$fd){
-                        $msg = xarML('Can not open file (#1).', $fd);
+                        $msg = xarML('Cannot open file (#1).', $fd);
                         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FILE_NOT_EXIST', new SystemException($msg));
                         return;
                     }

@@ -143,7 +143,7 @@ function xarThemeGetInfo($regId)
 //     $fileName = xarConfigGetVar('Site.BL.ThemesDirectory'). '/' . $themeName . '/xarthemeapi.php';
 
 //     if (!file_exists($fileName)) {
-//         $msg = xarML('Theme API function #(1) doesn\'t exist.', $modAPIFunc);
+//         $msg = xarML('Theme API function #(1) does not exist.', $modAPIFunc);
 //         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
 //         return;
 //     } else {
