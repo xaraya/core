@@ -47,6 +47,9 @@ foreach($diff as $func) {
 	$skel[] = ' ';
 }
 
+// FIXME: We might consider generating a specific testsuite for this file
+// otherwise all tests will fall under the default testcase which can get
+// messy.
 $skel[] = '}';
 $skel[] = ' ';
 $skel[] = '$suite->AddTestCase(\''.$testClassName.'\',\'Testing [enter your testcase name]\');';
