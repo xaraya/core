@@ -1330,17 +1330,20 @@ function drawindent() {
         //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
-        list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
-        $pargs = array('pid'=>$pid,
-                        'name'=>$name,
-                        'realm'=>$realm,
-                        'module'=>$module,
-                        'component'=>$component,
-                        'instance'=>$instance,
-                        'level'=>$level,
-                        'description'=>$description,
-                        'parentid'=>0);
-        return new xarPrivilege($pargs);
+        if (!$result->EOF) {
+            list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
+            $pargs = array('pid'=>$pid,
+                           'name'=>$name,
+                           'realm'=>$realm,
+                           'module'=>$module,
+                           'component'=>$component,
+                           'instance'=>$instance,
+                           'level'=>$level,
+                           'description'=>$description,
+                           'parentid'=>0);
+            return new xarPrivilege($pargs);
+        }
+        return;
     }
 
 /**
@@ -1364,17 +1367,20 @@ function drawindent() {
         //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
-        list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
-        $pargs = array('pid'=>$pid,
-                        'name'=>$name,
-                        'realm'=>$realm,
-                        'module'=>$module,
-                        'component'=>$component,
-                        'instance'=>$instance,
-                        'level'=>$level,
-                        'description'=>$description,
-                        'parentid'=>0);
-        return new xarPrivilege($pargs);
+        if (!$result->EOF) {
+            list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
+            $pargs = array('pid'=>$pid,
+                           'name'=>$name,
+                           'realm'=>$realm,
+                           'module'=>$module,
+                           'component'=>$component,
+                           'instance'=>$instance,
+                           'level'=>$level,
+                           'description'=>$description,
+                           'parentid'=>0);
+            return new xarPrivilege($pargs);
+        }
+        return;
     }
 
 /**
