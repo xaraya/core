@@ -243,8 +243,9 @@ function startMenuStyle($style)
 {
     // Nothing to do for style == 1 (bullet list)
     $content = "";
+
     if ($style == 2) {
-        $content = "<br><center><form method=\"post\" action=\"index.php\"><select class=\"xar-text\" name=\"newlanguage\" onChange=\"top.location.href=this.options[this.selectedIndex].value\">";
+        $content = xarTplBlock('base','startMenuStyle', array('style' => $style));
     }
 
     return $content;
@@ -252,10 +253,10 @@ function startMenuStyle($style)
 
 function endMenuStyle($style)
 {
-    // Nothing to do for style == 1 (bullet list)
     $content = "";
-    if ($style == 2) {
-        $content = "</select></form></center>";
+
+    if ($style == 2){
+        $content = xarTplBlock('base','endMenuStyle', array('style' => $style));
     }
 
     return $content;
@@ -263,32 +264,11 @@ function endMenuStyle($style)
 
 function addMenuStyledUrl($style, $name, $url, $comment)
 {
-    if ($style == 1) {
-        // Bullet list
-        if (empty($url)) {
-            // Separator
-            if (empty($name)) {
-                $content = "<br />";
-            } else {
-                $content = "<br /><b>$name</b><br />";
-            }
-        } else {
-	    // End Bracket Linking
-            $content = "<strong><big>&middot;</big></strong>&nbsp;<a class=\"xar-normal\" href=\"$url\" title=\"$comment\">$name</a><br />";
-        }
-    } else if ($style == 2) {
-        // Drop-down lilst
-        if (empty($url)) {
-            // Separator
-            $content = "<option>-----</option>";
-            if (!empty($name)) {
-                $content .= "<option>$name</option>";
-                $content .= "<option>-----</option>";
-            }
-        } else {
-            $content = "<option value=\"$url\">$name</option>";
-        }
-    }
+    $content = xarTplBlock('base','MenuStyledUrl', array('style' => $style, 
+                                                         'name' => $name,
+                                                         'url' => $url,
+                                                         'comment' => $comment));
+
     return $content;
 }
 ?>

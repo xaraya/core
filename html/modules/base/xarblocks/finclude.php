@@ -43,7 +43,14 @@ function base_fincludeblock_display($blockinfo)
  */
 function base_fincludeblock_modify($blockinfo)
 {
-    // Return information to BlockLayout
-    return array();
+    if (!empty($blockinfo['url'])) {
+        $url = $blockinfo['url'];
+    } else {
+        $url = '';
+    }
+    
+    $content = xarTplBlock('base','fincludeAdmin', array('url' => $url));
+
+    return $content;
 }
 ?>
