@@ -1100,7 +1100,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         $fileName = "$translationCtx[baseDir]/locales/$translationCtx[locale]/xml/";
         switch ($translationCtx['subtype']) {
             case 'file':
-                $fileName .= 'xar'.$translationCtx['subname'];
+                $fileName .= $translationCtx['subname'];
             break;
             case 'template':
                 $fileName .= "templates/$translationCtx[subname]";
@@ -1304,7 +1304,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
         $fileName = "$translationCtx[baseDir]/locales/$translationCtx[locale]/php/";
         switch ($translationCtx['subtype']) {
             case 'file':
-                $fileName .= 'xar'.$translationCtx['subname'];
+                $fileName .= $translationCtx['subname'];
             break;
             case 'template':
                 $fileName .= "templates/$translationCtx[subname]";
