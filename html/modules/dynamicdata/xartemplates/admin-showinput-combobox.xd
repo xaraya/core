@@ -1,0 +1,35 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+
+<xar:set name="optionSelected">false</xar:set>
+
+
+<select name="#$name#" id="#$id#" #$tabindex# >
+    <xar:foreach in="$options" value="$option" >
+        <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
+            <xar:if condition="$option['id'] eq $value" >
+                <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+				<xar:set name="optionSelected">true</xar:set>
+            <xar:else />
+                <option value="#$option['id']#">#$option['name']#</option>
+            </xar:if>
+        <xar:elseif condition="$option['id'] eq $value" />
+            <option selected="selected">#$option['name']#</option>
+			<xar:set name="optionSelected">true</xar:set>
+        <xar:else />
+            <option>#$option['name']#</option>
+        </xar:if>
+    </xar:foreach>
+	<xar:if condition="($optionSelected eq false) and !empty($value)">
+		<option value="" selected>Text Specified ==&gt;</option>
+	</xar:if>
+</select>
+
+<xar:if condition="$optionSelected eq false">
+	<input type="text" name="#$name#_tb" id="#$id#_tb" value="#$value#">
+<xar:else />
+	<input type="text" name="#$name#_tb" id="#$id#_tb" >
+</xar:if>
+
+<xar:if condition="!empty($invalid)">
+    <span class="xar-error">#$invalid#</span>
+</xar:if>

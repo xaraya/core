@@ -1,0 +1,13 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+
+<xar:foreach in="$options" value="$option" >
+	<xar:if condition="$option['checked']">
+		<input type="checkbox" name="#$name#[]" id="#$id#" value="#$option['id']#" checked="true"> #$option['name']#
+	<xar:else />
+		<input type="checkbox" name="#$name#[]" id="#$id#" value="#$option['id']#"> #$option['name']#
+	</xar:if>
+</xar:foreach>
+
+<xar:if condition="!empty($invalid)">
+    <span class="xar-error">#$invalid#</span>
+</xar:if>
