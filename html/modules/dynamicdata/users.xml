@@ -8,6 +8,16 @@
   <config></config>
   <isalias>0</isalias>
   <properties>
+    <property name="website">
+      <id>144</id>
+      <label>Website</label>
+      <type>27</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>1</order>
+      <validation>modules/roles/xarimages/urlicon.gif</validation>
+    </property>
     <property name="timezone">
       <id>145</id>
       <label>Timezone</label>
@@ -15,7 +25,7 @@
       <default>0</default>
       <source>dynamic_data</source>
       <status>2</status>
-      <order>1</order>
+      <order>2</order>
       <validation></validation>
     </property>
     <property name="avatar">
@@ -25,7 +35,7 @@
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
-      <order>2</order>
+      <order>3</order>
       <validation>{theme}/modules/roles/images</validation>
     </property>
     <property name="icq">
@@ -35,7 +45,7 @@
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
-      <order>3</order>
+      <order>4</order>
       <validation>modules/roles/xarimages/infoicon.gif</validation>
     </property>
     <property name="aim">
@@ -45,7 +55,7 @@
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
-      <order>4</order>
+      <order>5</order>
       <validation>modules/roles/xarimages/infoicon.gif</validation>
     </property>
     <property name="yim">
@@ -55,7 +65,7 @@
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
-      <order>5</order>
+      <order>6</order>
       <validation>modules/roles/xarimages/infoicon.gif</validation>
     </property>
     <property name="msnm">
@@ -65,7 +75,7 @@
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
-      <order>6</order>
+      <order>7</order>
       <validation>modules/roles/xarimages/infoicon.gif</validation>
     </property>
     <property name="location">
@@ -75,7 +85,7 @@
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
-      <order>7</order>
+      <order>8</order>
       <validation>0:100</validation>
     </property>
     <property name="occupation">
@@ -85,7 +95,7 @@
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
-      <order>8</order>
+      <order>9</order>
       <validation>0:100</validation>
     </property>
     <property name="interests">
@@ -95,7 +105,7 @@
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
-      <order>9</order>
+      <order>10</order>
       <validation>0:150</validation>
     </property>
     <property name="signature">
@@ -105,7 +115,7 @@
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
-      <order>10</order>
+      <order>11</order>
       <validation>0:254</validation>
     </property>
     <property name="extra_info">
@@ -115,7 +125,7 @@
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
-      <order>11</order>
+      <order>12</order>
       <validation>0:254</validation>
     </property>
   </properties>

@@ -27,6 +27,6 @@ $modversion['admin'] = 1;
 $modversion['user'] = 1;
 $modversion['securityschema'] = array('DynamicData::Item' => 'ModuleID:ItemType:ItemID',
                                       'DynamicData::Field' => 'FieldName:FieldType:FieldID');
-$modversion['class'] = 'Complete';
+$modversion['class'] = 'Core Complete';
 $modversion['category'] = 'Content';
 ?>
