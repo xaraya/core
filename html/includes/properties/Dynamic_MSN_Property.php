@@ -1,10 +1,17 @@
 <?php
 /**
- * Dynamic MSN Messenger Property
+ * File: $Id$
  *
- * @package dynamicdata
- * @subpackage properties
- */
+ * Dynamic Data MSN Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 
 /**
  * include the base class
@@ -47,7 +54,6 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
             $value = $this->value;
         }
         $data=array();
-        $data['showoutput']=false;
 
         if (!empty($value)) {
 // TODO: what's the link to use for MSN Messenger ??
@@ -64,12 +70,11 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
         $data['name']     = $name;
         $data['id']       = $id;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['link']     = $link;
         $data['tabindex'] = !empty($tabindex) ? $tabindex=$tabindex : '';
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
         $data['size']     = !empty($size) ? $size : $this->size;
-
+        $data['link']     = xarVarPrepForDisplay($link);
 /*       return '<input type="text"'.
                ' name="' . $name . '"' .
                ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
@@ -82,32 +87,37 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
 
 */
-
-      $fileName="modules/dynamicdata/xartemplates/includes/dynamic-msn_property.xd";
-       return xarTplFile($fileName, $data);    }
+      $template="msn";
+      return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+    }
 
     function showOutput($args = array())
     {
-	    	extract($args);
+            extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }
-        $data=array();
-        $data['showoutput']=true;
-        if (!empty($value)) {
 
+        $data=array();
+
+        if (!empty($value)) {
             $link = "TODO: what's the link for MSN ?".$value;
+            $data['link'] = xarVarPrepForDisplay($link);
+
             if (!empty($this->icon)) {
-                $data['image']=xarVarPrepForDisplay($this->icon);
-                $data['link']=$link;
+                $data['value']= $this->value;
+                $data['icon'] = $this->icon;
+                $data['name'] = $this->name;
+                $data['id']   = $this->id;
+                $data['image']= xarVarPrepForDisplay($this->icon);
+
 /*          return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="'.xarML('MSN').'"/></a>';
 */
+            $template="msn";
+            return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+
             }
         }
-       $fileName="modules/dynamicdata/xartemplates/includes/dynamic-msn_property.xd";
-       return xarTplFile($fileName, $data);
-/*     return '';
-*/
     }
 }
 
