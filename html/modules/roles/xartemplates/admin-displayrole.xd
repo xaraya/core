@@ -1,49 +1,49 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:if condition="xarTplAddStyleLink('roles', 'tabs')"></xar:if>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>User Information</xar:mlstring></span></div>
-<div class="xar-mod-body">
-  <h2>
-    <xar:if condition="$type eq 0"><xar:mlstring>Manage the user</xar:mlstring>
-    <xar:else/><xar:mlstring>Manage the group</xar:mlstring></xar:if>
-    : #$name#
-  </h2>
-
-<xar:if condition="count($parents) ne 0">
-    <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
-    <div>
-        <dl class="xar-tabs">
-            <xar:set name="pgtitle">
-                xarML('These are the groups that #(1) is a member of', xarVarPrepForDisplay($name))
-            </xar:set>
-            <dt class="help" title="#$pgtitle#">
-                <xar:mlstring>
-                    Parent Groups
-                </xar:mlstring>
-                : 
-            </dt>
-            <xar:set name="prevgroup">""</xar:set>
-            <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
-                <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                    <dd>
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;uid=#$parents.$i.parentid#" title="#xarML('Show this group')#">
-                            #$parents[$i]['parentname']#
-                        </a>
-                    </dd>
-                </xar:if>
-                <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
-            </xar:for>
-        </dl>
-    </div>
-    </xar:if>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
 </xar:if>
-    <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+<xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+</xar:if>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>User Information</xar:mlstring></span>
+</div>
+<div class="xar-mod-body">
+    <h2>
+        <xar:if condition="$type eq 0">
+            <xar:mlstring>Manage User:</xar:mlstring>
+        <xar:else/>
+            <xar:mlstring>Manage Group:</xar:mlstring>
+        </xar:if>
+        #$name#
+    </h2>
+
+    <xar:if condition="count($parents) ne 0">
+        <div>
+            <dl class="xar-tabs">
+                <xar:set name="pgtitle">
+                    xarML('These are the groups that #(1) is a member of', xarVarPrepForDisplay($name))
+                </xar:set>
+                <dt class="help" title="#$pgtitle#">
+                    <xar:mlstring>Parent Groups:</xar:mlstring>
+                </dt>
+                <xar:set name="prevgroup">""</xar:set>
+                <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
+                    <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
+                        <dd>
+                            <a href="&xar-modurl-roles-admin-showusers;&amp;uid=#$parents.$i.parentid#" title="#xarML('Show this group')#">
+                                #$parents[$i]['parentname']#
+                            </a>
+                        </dd>
+                    </xar:if>
+                    <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
+                </xar:for>
+            </dl>
+        </div>
+    </xar:if>
+
     <div>
         <dl class="xar-tabs">
             <dt class="help">
-                <xar:mlstring>
-                    Actions
-                </xar:mlstring>
-                : 
+                <xar:mlstring>Actions:</xar:mlstring>
             </dt>
             <dd class="active">
                 <a href="&xar-modurl-roles-admin-displayrole;&amp;uid=#$uid#">
@@ -74,38 +74,44 @@
             </xar:if>
         </dl>
     </div>
-    </xar:if>
-<div>&nbsp;</div>
-  <div style="border: 1px solid #ccc; border-top : none; padding-left: 5px;">
-    <br />
-    <table>
-        <tr>
-            <td><xar:mlstring>Real Name</xar:mlstring> :</td>
-            <td>#xarVarPrepForDisplay($name)#</td>
-        </tr>
+
+    <div class="xar-form-input-wrapper">
+        <span class="xar-form-label">
+            <xar:mlstring>Real Name:</xar:mlstring>
+        </span>
+        #xarVarPrepForDisplay($name)#
+    </div>
+
     <xar:if condition="$type eq 0">
-        <tr>
-            <td><xar:mlstring>Login</xar:mlstring> :</td>
-            <td>#xarVarPrepForDisplay($uname)#</td>
-        </tr>
-        <tr>
-            <td><xar:mlstring>Email</xar:mlstring> :</td>
-            <td>#xarVarPrepForDisplay($email)#</td>
-        </tr>
+        <div class="xar-form-input-wrapper">
+            <span class="xar-form-label">
+                <xar:mlstring>Login:</xar:mlstring>
+            </span>
+            #xarVarPrepForDisplay($uname)#
+        </div>
+
+        <div class="xar-form-input-wrapper">
+            <span class="xar-form-label">
+                <xar:mlstring>Email:</xar:mlstring>
+            </span>
+            #xarVarPrepForDisplay($email)#
+        </div>
     </xar:if>
-    <br />
+
     <xar:if condition="xarModIsAvailable('dynamicdata')">
         <xar:data-getitem name="$properties" module="roles" itemtype="$type" itemid="$uid" />
         <xar:if condition="isset($properties) and count($properties) gt 0">
             <xar:foreach in="$properties" key="$name">
-                <tr>
-              <td><xar:data-label property="$properties[$name]" /> : </td>
-                    <td><xar:data-output property="$properties[$name]" /></td>
-                </tr>
+                <div class="xar-form-input-wrapper">
+                    <span class="xar-form-label">
+                        <xar:data-label property="$properties[$name]" />:
+                    </span>
+                    <xar:data-output property="$properties[$name]" />
+                </div>
             </xar:foreach>
           </xar:if>
-      </xar:if>
-    </table>
+    </xar:if>
+
     #$hooks#
-  </div>
+    <br class="xar-clearboth" />
 </div>

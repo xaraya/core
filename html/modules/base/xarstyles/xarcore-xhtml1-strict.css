@@ -95,6 +95,13 @@ floater height clearing - use with caution, see Hint (3) above
 .xar-clearboth { clear: both; }
 
 /*
+overflow control
+*/
+.xar-overflow-auto { overflow: auto; }
+.xar-overflow-scroll { overflow: scroll; }
+
+
+/*
 this class may be deprecated in future in favour of more specific 
 rules
 */
@@ -128,6 +135,13 @@ common form elements
     height: 40ex;
     width: 90%;
 }
+
+/*
+scrollable area heights
+*/
+.xar-area-small { height: 10ex; }
+.xar-area-medium { height: 20ex; }
+.xar-area-large { height: 40ex; }
 
 /*
 minimal formatting - relative padding
