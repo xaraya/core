@@ -34,15 +34,16 @@
     while (!$result->EOF) {
         list($id, $parent, $title, $descr) = $result->fields;
         // See if there is parent category associated with this category
-        if (!isset($parent)) {
+        if (empty($parent)) {
             // Set parent category to the weblinks category we just created
             $parent = $weblinks[0];
+        } elseif (isset($weblinks[$parent])) {
+            // Set parent category to the equivalent weblinks category
+            $parent = $weblinks[$parent];
         } else {
-            // TODO:
-            // Find the parent category in xar_categories as it won't 
-            // have the same cat_id
+            // TODO: now what ?
+            $parent = $weblinks[0];
         }
-
 
         $weblinks[$id] = xarModAPIFunc('categories', 'admin', 'create', array(
                                       'name' => $title,

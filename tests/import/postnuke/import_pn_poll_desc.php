@@ -36,9 +36,10 @@
     $dbtype = xarModGetVar('installer','dbtype');
     switch ($dbtype) {
         case 'mysql':
-                $groupby = 'GROUP BY pdata.pollID';
+                $groupby = 'GROUP BY pdesc.pn_pollid';
             break;
         case 'postgres':
+// FIXME: where do these columns names come from ?
                 $groupby = 'GROUP BY pdesc.pollID, pollTitle, timeStamp, voters';
             break;
         default:
