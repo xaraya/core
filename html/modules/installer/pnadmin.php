@@ -22,9 +22,144 @@
 // Purpose of file: Installer display functions
 // ----------------------------------------------------------------------
 
-function installer_admin_main(){}
+function installer_admin_main(){
+    return array();
+}
 // entry point for the installer
 
+function installer_admin_phase1() {
+    return array('languages' => array('eng' => 'English'));
+}
+
+function installer_admin_phase2() {
+    return array();
+}
+
+function installer_admin_phase3()
+{
+    global $HTTP_POST_VARS;
+    if ($HTTP_POST_VARS['agree'] != 'agree') {
+        // didn't agree to license, don't install
+        pnRedirect('install.php');
+    }
+
+    return array();
+}
+
+function installer_admin_phase4()
+{
+    return array('database_host' => 'localhost',
+                 'database_username' => 'root',
+                 'database_password' => '',
+                 'database_name' => 'Xaraya2',
+                 'database_prefix' => 'pn',
+                 'database_types' => array('mysql'    => 'MySQL',
+                                           'postgres' => 'Postgres'));
+}
+
+function installer_adminapi_phase5()
+{
+    global $HTTP_POST_VARS;
+
+    $dbhost = $HTTP_POST_VARS['install_database_host'];
+    $dbname = $HTTP_POST_VARS['install_database_name'];
+    $dbuser = $HTTP_POST_VARS['install_database_username'];
+    $dbpass = $HTTP_POST_VARS['install_database_password'];
+    $prefix = $HTTP_POST_VARS['install_database_prefix'];
+    $dbtype = $HTTP_POST_VARS['install_database_type'];
+    if (isset($HTTP_POST_VARS['install_create_database'])) {
+    //Ugly Switch... until we write a database connection wrapper
+    //Needed because ADONewConnection requires a database to connect to
+        switch($dbtype){
+            case 'mysql':
+            //TODO: add error checking (prolly wait til the connection wrapper)
+            mysql_connect($dbhost,$dbuser,$dbpass);
+            break;
+        }
+
+        //TODO: add error checking and replace with pnDBCreateDB
+        mysql_create_db($dbname);
+    }
+
+    if (isset($HTTP_POST_VARS['install_intranet'])) {
+        $intranet = true;
+    } else {
+        $intranet = false;
+    }
+
+    // Save config data
+    installer_adminapi_modifyconfig($dbhost, $dbuser, $dbpass, $dbname, $prefix, $dbtype);
+
+    // Kick it
+    pnCoreInit(PNCORE_SYSTEM_ADODB);
+
+    // install modules module
+    $mod_init_file = 'modules/modules/pninit.php';
+
+    if (file_exists($mod_init_file)) {
+        include_once ($mod_init_file);
+    } else {
+        // modules/base/pninit.php not found?!
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
+                       new SystemException(__FILE__."(".__LINE__."): Module file $mod_init_file doesn't exist."));return;
+    }
+
+    // Run the function, check for existence
+    $mod_func = 'modules_init';
+
+    if (function_exists($mod_func)) {
+        $res = $mod_func();
+        // Handle exceptions
+        if (pnExceptionMajor() != PN_NO_EXCEPTION) {
+            return;
+        }
+        if ($res == false) {
+            // exception
+            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+                           new SystemException(__FILE__.'('.__LINE__.'): core initialization failed!'));return;
+        }
+    } else {
+        // modules_init() not found?!
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+                       new SystemException(__FILE__."(".__LINE__."): Module API function $mod_func doesn't exist."));return;
+    }
+
+    // Initialize *minimal* tableset
+    // Load the installer module, the hard way - file check too
+    $base_init_file = 'modules/base/pninit.php';
+
+    if (file_exists($base_init_file)) {
+        include_once ($base_init_file);
+    } else {
+        // modules/base/pninit.php not found?!
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
+                       new SystemException(__FILE__."(".__LINE__."): Module file $base_init_file doesn't exist."));return;
+    }
+
+    // Run the function, check for existence
+    $mod_func = 'base_init';
+
+    if (function_exists($mod_func)) {
+        $res = $mod_func();
+        // Handle exceptions
+        if (pnExceptionMajor() != PN_NO_EXCEPTION) {
+            return;
+        }
+        if ($res == false) {
+            // exception
+            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+                           new SystemException(__FILE__.'('.__LINE__.'): core initialization failed!'));return;
+        }
+    } else {
+        // base_init() not found?!
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+                       new SystemException(__FILE__."(".__LINE__."): Module API function $mod_func doesn't exist."));return;
+    }
+
+    // log user in
+
+    pnRedirect('index.php?module=installer&type=admin&func=bootstrap');
+}
 function installer_admin_bootstrap()
 {
     // log in admin user
