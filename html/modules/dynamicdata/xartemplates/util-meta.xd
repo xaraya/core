@@ -1,85 +1,145 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Meta Table Definitions</xar:mlstring></h2><br />
-<div style="margin: auto;">
-
-<xar:if condition="empty($export)">
-
-<xar:set name="$prop">#xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'))#</xar:set>
-
-<table border="0" width="100%" cellpadding="2" cellspacing="0">
-<xar:foreach in="$tables" key="$curtable" value="$fields">
-    <tr>
-       <th colspan="3" align="left">
-           <a href="#xarModURL('dynamicdata','util','meta',array('table' => $curtable))#">#$curtable# </a>
-       </th>
-       <th colspan="3" align="right">
-           <a href="#xarModURL('dynamicdata','admin','view',array('table' => $curtable))#">
-           <xar:mlstring>View</xar:mlstring>
-           </a> |
-           <a href="#xarModURL('dynamicdata','admin','query',array('table' => $curtable))#">
-           <xar:mlstring>Query</xar:mlstring>
-           </a> |
-           <a href="#xarModURL('dynamicdata','util','meta',array('table' => $curtable, 'export' => 1))#">
-           <xar:mlstring>Export XML</xar:mlstring>
-           </a> |
-           <a href="#xarModURL('dynamicdata','util','relations',array('table' => $curtable))#">
-           <xar:mlstring>Add Relation</xar:mlstring>
-           </a>
-       </th>
-    </tr>
-<xar:if condition="!empty($table) and $curtable eq $table">
-    <xar:foreach in="$fields" value="$field">
-    <tr>
-        <td>#$field['name']#</td>
-        <td>#$field['label']#</td>
-        <td><xar:data-output property="$prop" value="$field['type']" /></td>
-        <td>#$field['default']#</td>
-        <td>#$field['source']#</td>
-        <td>#$field['validation']#</td>
-    </tr>
-    </xar:foreach>
+<xar:comment>
+    License: GPL http://www.gnu.org/copyleft/gpl.html 
+</xar:comment>
+<xar:if condition="xarTplAddStyleLink('dynamicdata', 'dd')">
+    <xar:comment>
+        no action required if external file was not added 
+    </xar:comment>
 </xar:if>
-</xar:foreach>
-</table>
-<br />
-<div align="center"><a href="#xarModURL('dynamicdata','util','meta',array('export' => 1))#"><xar:mlstring>Export all tables to XML</xar:mlstring></a></div>
-
-<xar:else />
-
-<form>
-<div>
-<textarea name="xml" id="xml" rows="30" cols="80">
-<objects>
-<xar:foreach in="$tables" key="$curtable" value="$fields">
-  <object name="#$curtable#">
-    <label>#$curtable#</label>
-    <moduleid>182&lt/moduleid>
-    <itemtype>-1</itemtype>
-    <urlparam>itemid</urlparam>
-    <maxid>0</maxid>
-    <config></config>
-    <isalias>0</isalias>
-    <properties>
-        <xar:foreach in="$fields" key="$name" value="$field">
-      <property name="#$name#">
-            <xar:foreach in="$field" key="$key" value="$value">
-                <xar:if condition="$key ne 'name'">
-        <#$key#>#$value#</#$key#>
+<div class="xar-mod-head">
+    <span class="xar-mod-title">
+        <xar:mlstring>
+            Dynamic Data Administration 
+        </xar:mlstring>
+    </span>
+</div>
+<div class="xar-mod-body">
+    <h2>
+        <xar:mlstring>
+            Meta Table Definitions 
+        </xar:mlstring>
+    </h2>
+    <xar:if condition="empty($export)">
+        <xar:set name="$prop">
+            #xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'))# 
+        </xar:set>
+        <table class="xar-norm">
+            <xar:foreach in="$tables" key="$curtable" value="$fields">
+                <tr>
+                    <th colspan="3" align="left">
+                        <a href="#xarModURL('dynamicdata','util','meta',array('table' => $curtable))#">
+                            #$curtable# 
+                        </a>
+                    </th>
+                    <th colspan="3" align="right">
+                        <a href="#xarModURL('dynamicdata','admin','view',array('table' => $curtable))#">
+                            <xar:mlstring>
+                                View 
+                            </xar:mlstring>
+                        </a>
+                        | 
+                        <a href="#xarModURL('dynamicdata','admin','query',array('table' => $curtable))#">
+                            <xar:mlstring>
+                                Query 
+                            </xar:mlstring>
+                        </a>
+                        | 
+                        <a href="#xarModURL('dynamicdata','util','meta',array('table' => $curtable, 'export' => 1))#">
+                            <xar:mlstring>
+                                Export XML 
+                            </xar:mlstring>
+                        </a>
+                        | 
+                        <a href="#xarModURL('dynamicdata','util','relations',array('table' => $curtable))#">
+                            <xar:mlstring>
+                                Add Relation 
+                            </xar:mlstring>
+                        </a>
+                    </th>
+                </tr>
+                <xar:if condition="!empty($table) and $curtable eq $table">
+                    <xar:foreach in="$fields" value="$field">
+                        <tr>
+                            <td>
+                                #$field['name']# 
+                            </td>
+                            <td>
+                                #$field['label']# 
+                            </td>
+                            <td>
+                                <xar:data-output property="$prop" value="$field['type']" />
+                            </td>
+                            <td>
+                                #$field['default']# 
+                            </td>
+                            <td>
+                                #$field['source']# 
+                            </td>
+                            <td>
+                                #$field['validation']# 
+                            </td>
+                        </tr>
+                    </xar:foreach>
                 </xar:if>
             </xar:foreach>
-      </property>
-        </xar:foreach>
-    </properties>
-  </object>
-</xar:foreach>
-</objects>
-</textarea>
-</div>
-</form>
-<br />
-<div align="center"><a href="#xarModURL('dynamicdata','util','meta')#"><xar:mlstring>Show Table Definitions</xar:mlstring></a></div>
-
-</xar:if>
-</div>
+        </table>
+        <p>
+            <a href="#xarModURL('dynamicdata','util','meta',array('export' => 1))#">
+                <xar:mlstring>
+                    Export all tables to XML 
+                </xar:mlstring>
+            </a>
+        </p>
+        <xar:else />
+        <form class="dd-modifyprop-form">
+            <fieldset>
+                <textarea name="xml" id="xml" rows="30" cols="80">
+                    <objects>
+                        <xar:foreach in="$tables" key="$curtable" value="$fields">
+                            <object name="#$curtable#">
+                                <label>
+                                    #$curtable# 
+                                </label>
+                                <moduleid>
+                                    182&lt/moduleid> 
+                                    <itemtype>
+                                        -1 
+                                    </itemtype>
+                                    <urlparam>
+                                        itemid 
+                                    </urlparam>
+                                    <maxid>
+                                        0 
+                                    </maxid>
+                                    <config>
+                                    </config>
+                                    <isalias>
+                                        0 
+                                    </isalias>
+                                    <properties>
+                                        <xar:foreach in="$fields" key="$name" value="$field">
+                                            <property name="#$name#">
+                                                <xar:foreach in="$field" key="$key" value="$value">
+                                                    <xar:if condition="$key ne 'name'">
+                                                        <#$key#>#$value# 
+                                                    </#$key#>
+                                                </xar:if>
+                                            </xar:foreach>
+                                        </property>
+                                    </xar:foreach>
+                                </properties>
+                            </object>
+                        </xar:foreach>
+                    </objects>
+                </textarea>
+            </fieldset>
+        </form>
+        <p>
+            <a href="#xarModURL('dynamicdata','util','meta')#">
+                <xar:mlstring>
+                    Show Table Definitions 
+                </xar:mlstring>
+            </a>
+        </p>
+    </xar:if>
 </div>
