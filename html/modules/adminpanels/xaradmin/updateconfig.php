@@ -16,28 +16,28 @@ function adminpanels_admin_updateconfig()
 
     // obsolete, need to comment out or delete after upgrade..
     // but for now we just re-use it to indicate if we want a marker against active module
-    if(!xarVarFetch('showold', 'str', $showold, false, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('showold', 'isset', $showold, NULL, XARVAR_DONT_SET)) {return;}
 
     // true if we want to always display adminmenu on top
-    if(!xarVarFetch('showontop', 'str', $showontop, false, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('showontop', 'isset', $showontop, NULL, XARVAR_DONT_SET)) {return;}
 
     // type of the marker symbol(s)
-    if(!xarVarFetch('marker', 'str', $marker, '[x]', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('marker', 'isset', $marker, '[x]', XARVAR_NOT_REQUIRED)) {return;}
 
     // this is actually a sort order switch, which of course affect the style of the menu
-    if(!xarVarFetch('menustyle', 'str', $menustyle, 'byname', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('menustyle', 'isset', $menustyle, 'byname', XARVAR_NOT_REQUIRED)) {return;}
 
     // left, centre or right.. hmm we definately dont want it upside down, do we?
-    if(!xarVarFetch('menuposition', 'str', $menuposition, 'r', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('menuposition', 'isset', $menuposition, 'r', XARVAR_NOT_REQUIRED)) {return;}
 
     // show or hide a link in adminmenu to a contectual on-line help for the active module
-    if(!xarVarFetch('showhelp', 'str', $showhelp, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('showhelp', 'isset', $showhelp, NULL, XARVAR_DONT_SET)) {return;}
 
     // enable or disable overviews
-    if(!xarVarFetch('overview', 'str', $overview, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('overview', 'isset', $overview, NULL, XARVAR_DONT_SET)) {return;}
 
     // which form is this data coming from (we have more than one) - lets find out
-    if(!xarVarFetch('formname', 'str', $formname, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('formname', 'isset', $formname, NULL, XARVAR_DONT_SET)) {return;}
 
     // Confirm authorisation code
     if (!xarSecConfirmAuthKey()) return;

@@ -19,10 +19,8 @@ function privileges_admin_addmember()
 // Check for authorization code
     if (!xarSecConfirmAuthKey()) return;
 
-    // <nuncanada> Are these required or not? I am assuming so...
-    if(!xarVarFetch('ppid','id', $pid)) {return;}
-    if(!xarVarFetch('privid','id', $privid)) {return;}
-
+    if(!xarVarFetch('ppid',   'isset', $pid   , NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('privid', 'isset', $privid, NULL, XARVAR_DONT_SET)) {return;}
 
 // call the Privileges class and get the parent and child objects
     $privs = new xarPrivileges();

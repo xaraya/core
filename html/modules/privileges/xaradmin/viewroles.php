@@ -7,8 +7,8 @@ function privileges_admin_viewroles()
 {
     $data = array();
 
-    if (!xarVarFetch('pid',  'id',   $pid,          0,          XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('show', 'bool', $data['show'], 'assigned')) {return;}
+    if (!xarVarFetch('pid',  'isset', $pid,          NULL,       XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('show', 'isset', $data['show'], 'assigned', XARVAR_NOT_REQUIRED)) {return;}
 
     // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');

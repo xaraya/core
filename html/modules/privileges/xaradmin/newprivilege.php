@@ -8,16 +8,16 @@ function privileges_admin_newprivilege()
 {
     $data = array();
     
-    if (!xarVarFetch('pid',        'id',  $data['pid'],        '',         XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('pname',      'str', $data['pname'],      '',         XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('prealm',     'str', $data['prealm'],     'All',      XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('pmodule',    'str', $module,             NULL,       XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('pcomponent', 'str', $data['pcomponent'], 'All',      XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('pinstance',  'str', $data['pinstance'],  '',         XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('plevel',     'str', $data['plevel'],     '',         XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('ptype',      'str', $data['ptype'],      'empty',    XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('show',       'str', $data['show'],       'assigned', XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('trees',      'str', $trees,              NULL,       XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('pid',        'isset', $data['pid'],        '',         XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('pname',      'isset', $data['pname'],      '',         XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('prealm',     'isset', $data['prealm'],     'All',      XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('pmodule',    'isset', $module,             NULL,       XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('pcomponent', 'isset', $data['pcomponent'], 'All',      XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('pinstance',  'isset', $data['pinstance'],  '',         XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('plevel',     'isset', $data['plevel'],     '',         XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('ptype',      'isset', $data['ptype'],      'empty',    XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('show',       'isset', $data['show'],       'assigned', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('trees',      'isset', $trees,              NULL,       XARVAR_NOT_REQUIRED)) {return;}
 
     if ($module !== NULL) {$data['pmodule'] = strtolower($module);}
     else {$data['pmodule'] = 'All';}

@@ -16,17 +16,17 @@ function privileges_admin_modifyprivilege()
     if(!xarVarFetch('show',          'isset', $show,          NULL, XARVAR_DONT_SET)) {return;}
 
 
-    if(!xarVarFetch('pid',           'str', $pid,          NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pname',         'str', $name,         NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('prealm',        'str', $realm,        NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pmodule',       'str', $module,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pcomponent',    'str', $component,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('poldcomponent', 'str', $oldcomponent, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('ptype',         'str', $type,         NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('plevel',        'str', $level,        NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pid',           'isset', $pid,          NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pname',         'isset', $name,         NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('prealm',        'isset', $realm,        NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pmodule',       'isset', $module,       NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pcomponent',    'isset', $component,    NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('poldcomponent', 'isset', $oldcomponent, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('ptype',         'isset', $type,         NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('plevel',        'isset', $level,        NULL, XARVAR_DONT_SET)) {return;}
 
 
-    if(!xarVarFetch('pparentid',  'str', $pparentid,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pparentid',     'isset', $pparentid,    NULL, XARVAR_DONT_SET)) {return;}
 
 
     $i = 0;

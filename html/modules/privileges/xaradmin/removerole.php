@@ -6,9 +6,9 @@
  */
 function privileges_admin_removerole()
 {
-   if (!xarVarFetch('pid',          'id',    $pid,          NULL, XARVAR_NOT_REQUIRED)) {return;}
-   if (!xarVarFetch('roleid',       'id',    $roleid,       NULL, XARVAR_NOT_REQUIRED)) {return;}
-   if (!xarVarFetch('confirmation', 'str:1', $confirmation, NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('pid',          'isset', $pid,          NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('roleid',       'isset', $roleid,       NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('confirmation', 'isset', $confirmation, NULL, XARVAR_DONT_SET)) {return;}
 
 //Call the Roles class and get the role to be removed
     $roles = new xarRoles();

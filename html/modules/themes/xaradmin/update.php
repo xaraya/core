@@ -25,9 +25,9 @@ function themes_admin_update()
     $delvars = array(); 
     // build array of updated and to-be-deleted theme vars
     foreach($themevars as $themevar) {
-        if (!xarVarFetch($themevar['name'], 'str', $varname)) {return;}
+        if (!xarVarFetch($themevar['name'], 'isset', $varname)) {return;}
 
-        if (!xarVarFetch($themevar['name'] . '-del', 'str', $delvar, NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch($themevar['name'] . '-del', 'isset', $delvar, NULL, XARVAR_NOT_REQUIRED)) {return;}
 
         if ($delvar == 'delete' && $themevar['prime'] != 1) {
             $delvars[] = $themevar['name'];

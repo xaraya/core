@@ -17,7 +17,7 @@ function modules_admin_modinfonew(){
 
     $data = array();
     
-    if(!xarVarFetch('id', 'id', $id)) return;
+    if (!xarVarFetch('id', 'notempty', $id)) {return;}
 
     // obtain maximum information about module
     $modinfo = xarModGetInfo($id);

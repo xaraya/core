@@ -86,7 +86,7 @@ function base_fincludeblock_modify($blockinfo)
  */
 function base_fincludeblock_update($blockinfo)
 {
-    if (!xarVarFetch('url', 'str:1', $vars['url'], '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('url', 'isset', $vars['url'], NULL, XARVAR_DONT_SET)) return;
 
     if (empty($blockinfo['title'])){
         $blockinfo['title'] = xarML('File Include');

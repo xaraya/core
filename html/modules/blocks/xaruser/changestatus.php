@@ -3,7 +3,7 @@
 /*
 function blocks_user_changestatus()
 {
-    if (!xarVarFetch('bid', 'str:1:', $bid,'', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('bid', 'isset', $bid, NULL, XARVAR_DONT_SET)) return;
 
     xarModAPIFunc('blocks',
          'user',

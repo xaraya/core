@@ -6,7 +6,7 @@ function roles_user_usermenu()
     // Security check
     if (!xarSecurityCheck('ViewRoles')) return;
 
-    if(!xarVarFetch('phase','str:1', $phase, 'menu', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('phase','notempty', $phase, 'menu', XARVAR_NOT_REQUIRED)) {return;}
 
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Your Account Preferences')));
 

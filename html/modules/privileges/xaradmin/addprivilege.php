@@ -6,13 +6,13 @@
  */
 function privileges_admin_addprivilege()
 {
-    if(!xarVarFetch('pname',      'str', $pname,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('prealm',     'str', $prealm,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pmodule',    'str', $pmodule,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pcomponent', 'str', $pcomponent, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('ptype',      'str', $type,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('plevel',     'str', $plevel,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pparentid',  'str', $pparentid,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pname',      'isset', $pname,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('prealm',     'isset', $prealm,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pmodule',    'isset', $pmodule,    NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pcomponent', 'isset', $pcomponent, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('ptype',      'isset', $type,       NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('plevel',     'isset', $plevel,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pparentid',  'isset', $pparentid,  NULL, XARVAR_DONT_SET)) {return;}
 
     $i = 0;
     $instance = "";

@@ -11,7 +11,7 @@ function modules_admin_hooks()
 // Security Check
     if(!xarSecurityCheck('AdminModules')) return;
 
-    if (!xarVarFetch('hook', 'str', $curhook, '', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('hook', 'isset', $curhook, '', XARVAR_NOT_REQUIRED)) {return;}
 
     // Get the list of all hook modules, and the current hooks enabled for all modules
     $hooklist = xarModAPIFunc('modules','admin','gethooklist');

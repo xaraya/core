@@ -6,8 +6,8 @@
  */
 function privileges_admin_deleteprivilege()
 {
-    if (!xarVarFetch('pid', 'id', $pid)) return;
-    if (!xarVarFetch('confirmation', 'str', $confirmation, '')) return;
+    if (!xarVarFetch('pid',          'isset', $pid,          NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('confirmation', 'isset', $confirmation, NULL, XARVAR_DONT_SET)) return;
 
 // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');

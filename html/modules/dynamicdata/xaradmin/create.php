@@ -11,12 +11,12 @@ function dynamicdata_admin_create($args)
 
     extract($args);
 
-    if (!xarVarFetch('objectid',    'id',      $objectid,   null,   XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('modid',       'id',      $modid,      xarModGetIDFromName('dynamicdata'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemtype',    'int',     $itemtype,   0,      XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemid',      'id',      $itemid,     0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('preview',     'id',      $preview,    0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('return_url',  'str:1',   $return_url,
+    if (!xarVarFetch('objectid',    'id',       $objectid,   NULL,                               XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('modid',       'notempty', $modid,      xarModGetIDFromName('dynamicdata'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemtype',    'notempty', $itemtype,   0,                                  XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemid',      'notempty', $itemid,     0,                                  XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('preview',     'notempty', $preview,    0,                                  XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('return_url',  'notempty', $return_url,
                      xarModURL('dynamicdata', 'admin', 'view',
                                array('itemid' => $myobject->objectid)), XARVAR_NOT_REQUIRED)) return;
 

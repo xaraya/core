@@ -9,10 +9,10 @@ function modules_admin_list()
 {
     // Security Check
     if(!xarSecurityCheck('AdminModules')) return;
+
     // form parameters
-    if (!xarVarFetch('startnum', 'int', $startnum, NULL, XARVAR_NOT_REQUIRED)) {return;}
-    //Should be changed to 'bool' -> have to check template where this is coming from.
-    if (!xarVarFetch('regen', 'str', $regen, NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('startnum', 'isset', $startnum, NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('regen',    'isset', $regen,    NULL, XARVAR_DONT_SET)) {return;}
 
     // Specify labels for display (most are done in template now)
     $data['infolabel']      = xarVarPrepForDisplay(xarML('Info'));

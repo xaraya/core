@@ -356,7 +356,7 @@ function installer_admin_create_administrator()
     include_once 'modules/roles/xarroles.php';
     $role = xarFindRole('Admin');
 
-    if (!xarVarFetch('create', 'str', $create, FALSE, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('create', 'isset', $create, FALSE, XARVAR_NOT_REQUIRED)) return;
     if (!$create) {
         // create a role from the data
 
@@ -554,10 +554,13 @@ function installer_admin_choose_configuration()
  */
 function installer_admin_confirm_configuration()
 {
-    if(!xarVarFetch('configuration', 'str',   $configuration, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('confirmed',     'bool',  $confirmed, FALSE, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('chosen',        'array', $chosen, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('options',       'bool',  $options, FALSE, XARVAR_NOT_REQUIRED)) {return;}
+    //We should probably break here if $configuration is not set.
+    if(!xarVarFetch('configuration', 'isset', $configuration, NULL,  XARVAR_DONT_SET)) {return;}
+
+    //I am not sure if these should these break
+    if(!xarVarFetch('confirmed',     'isset', $confirmed,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('chosen',        'isset', $chosen,        NULL,  XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('options',       'isset', $options,       NULL, XARVAR_DONT_SET)) {return;}
 
     xarTplSetThemeName('installer');
     $data['language'] = 'English';

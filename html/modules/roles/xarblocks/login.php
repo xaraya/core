@@ -43,7 +43,7 @@ function roles_loginblock_display($blockinfo)
     if (xarUserIsLoggedIn()) {
         if (!empty($vars['showlogout'])) {
             $args['name'] = xarUserGetVar('name');
-	    $args['blockid'] = $blockinfo['bid'];
+        $args['blockid'] = $blockinfo['bid'];
             $blockinfo['content'] = xarTplBlock('roles', 'logout', $args);
             if (!empty($vars['logouttitle'])) {
                 $blockinfo['title'] = $vars['logouttitle'];
@@ -95,8 +95,8 @@ function roles_loginblock_modify($blockinfo)
  */
 function roles_loginblock_update($blockinfo)
 {
-    if (!xarVarFetch('showlogout', 'checkbox', $vars['showlogout'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('logouttitle', 'str', $vars['logouttitle'], '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('showlogout', 'notempty', $vars['showlogout'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('logouttitle', 'notempty', $vars['logouttitle'], '', XARVAR_NOT_REQUIRED)) return;
 
     $blockinfo['content'] = serialize($vars);
 
