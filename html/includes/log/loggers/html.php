@@ -50,7 +50,7 @@ class xarLogger_html extends xarLogger_simple
                         <th>Logging Level</th>
                         <th>Message</th>
                     </tr>';
-        $this->_buffer     = "\r\n".'<tr style="background-color:#e3e3e3;"><th colspan="3">New Page View</th></tr>';
+        $this->_buffer     = "\r\n".'<tr style="background-color:#e3e3e3;"><th>New Page View</th><th colspan="2">'.$_SERVER["REQUEST_URI"].'</th></tr>';
     }
     
     /**
