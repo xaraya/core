@@ -56,27 +56,30 @@ function modules_adminapi_update($args)
     if (!$result) return;
 
     for (; !$result->EOF; $result->MoveNext()) {
-            list($hookid,
-                     $hooksmodname,
-                     $hookstype,
-                     $hookobject,
-                     $hookaction,
-                     $hooktarea,
-                     $hooktmodule,
-                     $hookttype,
-                     $hooktfunc) = $result->fields;
+        list($hookid,
+             $hooksmodname,
+             $hookstype,
+             $hookobject,
+             $hookaction,
+             $hooktarea,
+             $hooktmodule,
+             $hookttype,
+             $hooktfunc) = $result->fields;
 
-            // Get selected value of hook
-            $hookvalue = xarVarCleanFromInput("hooks_$hooktmodule");
-            xarLogMessage("Hookvalue: $hookvalue");
-            // See if this is checked and isn't in the database
-            if ((isset($hookvalue)) && (empty($hooksmodname))) {
-                // Insert hook if required
+        // Get selected value of hook
+        $hookvalue = xarVarCleanFromInput("hooks_$hooktmodule");
+
+        // See if this is checked and isn't in the database
+        if ((isset($hookvalue)) && (is_array($hookvalue)) && (empty($hooksmodname))) {
+            // Insert hook if required
+            foreach (array_keys($hookvalue) as $itemtype) {
+                if ($itemtype == 0) $itemtype = '';
                 $sql = "INSERT INTO $xartable[hooks] (
                       xar_id,
                       xar_object,
                       xar_action,
                       xar_smodule,
+                      xar_stype,
                       xar_tarea,
                       xar_tmodule,
                       xar_ttype,
@@ -86,6 +89,7 @@ function modules_adminapi_update($args)
                       '" . xarVarPrepForStore($hookobject) . "',
                       '" . xarVarPrepForStore($hookaction) . "',
                       '" . xarVarPrepForStore($modinfo['name']) . "',
+                      '" . xarVarPrepForStore($itemtype) . "',
                       '" . xarVarPrepForStore($hooktarea) . "',
                       '" . xarVarPrepForStore($hooktmodule) . "',
                       '" . xarVarPrepForStore($hookttype) . "',
@@ -93,6 +97,7 @@ function modules_adminapi_update($args)
                 $subresult =& $dbconn->Execute($sql);
                 if (!$subresult) return;
             }
+        }
     }
     $result->Close();
 

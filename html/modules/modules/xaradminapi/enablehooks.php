@@ -2,8 +2,10 @@
 
 /**
  * Enable hooks between a caller module and a hook module
+ * Note : hooks will be enabled for all item types if no specific item type is given
  *
  * @param $args['callerModName'] caller module
+ * @param $args['callerItemType'] optional item type for the caller module
  * @param $args['hookModName'] hook module
  * @returns bool
  * @return true if successfull
@@ -23,16 +25,18 @@ function modules_adminapi_enablehooks($args)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
         return;
     }
+    if (empty($callerItemType)) {
+        $callerItemType = '';
+    }
 
     // Rename operation
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
-// TODO: per item type
-
     // Delete hooks regardless
     $sql = "DELETE FROM $xartable[hooks]
             WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'
+              AND xar_stype = '" . xarVarPrepForStore($callerItemType) . "'
               AND xar_tmodule = '" . xarVarPrepForStore($hookModName) . "'";
 
     $result =& $dbconn->Execute($sql);
@@ -70,6 +74,7 @@ function modules_adminapi_enablehooks($args)
                       xar_object,
                       xar_action,
                       xar_smodule,
+                      xar_stype,
                       xar_tarea,
                       xar_tmodule,
                       xar_ttype,
@@ -79,6 +84,7 @@ function modules_adminapi_enablehooks($args)
                       '" . xarVarPrepForStore($hookobject) . "',
                       '" . xarVarPrepForStore($hookaction) . "',
                       '" . xarVarPrepForStore($callerModName) . "',
+                      '" . xarVarPrepForStore($callerItemType) . "',
                       '" . xarVarPrepForStore($hooktarea) . "',
                       '" . xarVarPrepForStore($hooktmodule) . "',
                       '" . xarVarPrepForStore($hookttype) . "',

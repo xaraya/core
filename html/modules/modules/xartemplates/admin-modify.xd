@@ -8,33 +8,55 @@
         <label for="newdisplayname"><xar:mlstring>Enter new display name (Does not work)</xar:mlstring></label>
         <br />
         <input type="text" name="newdisplayname" id="newdisplayname" value="#$displayname#" size="30" maxlength="30" tabindex="1" />
-        <xar:if condition="$nohooks ne 1">
+        <xar:if condition="count($hooklist) eq 0">
+            <p><xar:mlstring>No hooks available for this module</xar:mlstring></p>
+        <xar:else />
             <p><xar:mlstring>Available hooks for this module</xar:mlstring>&nbsp;&nbsp;
             [ <a href="#$DetailsURL#">#$DetailsLabel#</a> ]</p>
-        <xar:else />
-            <p><xar:mlstring>No hooks available for this module</xar:mlstring></p>
-        </xar:if>
+            <table border="1" cellpadding="5" cellspacing="0">
+            <tr>
+                <th><xar:mlstring>Enable hooks from module</xar:mlstring></th>
+                <th><xar:mlstring>All</xar:mlstring></th>
+            <xar:foreach in="$itemtypes" value="$itemtype">
+                <th>#$itemtype#</th>
+            </xar:foreach>
+            </tr>
             <xar:loop name="$hooklist">
-                <xar:if condition="$checked eq 1">
-                    <input type="checkbox" name="hooks_#$modname#" id="hooks_#$modname#" value="#$checked#" checked="checked" tabindex="2" />
-                <xar:else />
-                    <input type="checkbox" name="hooks_#$modname#" id="hooks_#$modname#" value="#$checked#" tabindex="2" />
-                </xar:if>
-                <label for="hooks_#$modname#">
-                <xar:ml>
-                    <xar:mlstring>Enable hooks from #(1)</xar:mlstring>
-                    <xar:mlvar>#$modname#</xar:mlvar>
-                </xar:ml>   
+            <tr>
+                <td>
+                <label for="hooks_#$modname#[0]">
+                    #$modname#
                 </label>
-                <br /><br />
                 <xar:if condition="$details eq 1">
+                    <br /><br />
                     <div style="padding-left: 2em;">
-                    <xar:loop name="$hooks">
+                    <xar:foreach in="$hooks" key="$hook">
                         &nbsp;&nbsp;#$hook#<br />
-                    </xar:loop><br />
+                    </xar:foreach><br />
                     </div>
                 </xar:if>
+                </td>
+                <td style="text-align: center;">
+                <xar:if condition="!empty($checked[0])">
+                    <input type="checkbox" name="hooks_#$modname#[0]" id="hooks_#$modname#[0]" value="1" checked="checked" />
+                <xar:else />
+                    <input type="checkbox" name="hooks_#$modname#[0]" id="hooks_#$modname#[0]" value="1" />
+                </xar:if>
+                </td>
+            <xar:foreach in="$itemtypes" key="$typeid" value="$itemtype">
+                <td style="text-align: center;">
+                <xar:if condition="!empty($checked[$typeid])">
+                    <input type="checkbox" name="hooks_#$modname#[#$typeid#]" id="hooks_#$modname#[#$typeid#]" value="1" checked="checked" />
+                <xar:else />
+                    <input type="checkbox" name="hooks_#$modname#[#$typeid#]" id="hooks_#$modname#[#$typeid#]" value="1" />
+                </xar:if>
+                </td>
+            </xar:foreach>
+            </tr>
             </xar:loop>
+            </table>
+            <br /><br />
+        </xar:if>
         <input type="submit" value="#$savechangeslabel#" align="middle" tabindex="9" />
     </form>
 </div>

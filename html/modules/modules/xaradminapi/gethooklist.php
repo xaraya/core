@@ -27,7 +27,7 @@ function modules_adminapi_gethooklist($args)
     // TODO: allow finer selection of hooks based on type etc., and
     //       filter out irrelevant ones (like module remove, search...)
     // MrB: changed the IS NULL statement to ='', query returned no records.
-    $query = "SELECT DISTINCT xar_smodule,
+    $query = "SELECT DISTINCT xar_smodule, xar_stype,
                             xar_tmodule,
                             xar_object,
                             xar_action,
@@ -47,12 +47,16 @@ function modules_adminapi_gethooklist($args)
     // hooklist will hold the available hooks
     $hooklist = array();
     for (; !$result->EOF; $result->MoveNext()) {
-        list($smodName, $tmodName,$object,$action,$area) = $result->fields;
+        list($smodName, $itemType, $tmodName,$object,$action,$area) = $result->fields;
 
         if (!isset($hooklist[$tmodName])) $hooklist[$tmodName] = array();
         if (!isset($hooklist[$tmodName]["$object:$action:$area"])) $hooklist[$tmodName]["$object:$action:$area"] = array();
         // if the smodName has a value the hook is active
-        if (!empty($smodName)) $hooklist[$tmodName]["$object:$action:$area"][$smodName] = 1;
+        if (!empty($smodName)) {
+            if (!isset($hooklist[$tmodName]["$object:$action:$area"][$smodName])) $hooklist[$tmodName]["$object:$action:$area"][$smodName] = array();
+            if (empty($itemType)) $itemType = 0;
+            $hooklist[$tmodName]["$object:$action:$area"][$smodName][$itemType] = 1;
+        }
     }
     $result->Close();
 

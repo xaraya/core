@@ -2,8 +2,10 @@
 
 /**
  * Disable hooks between a caller module and a hook module
+ * Note : generic hooks will not be disabled if a specific item type is given
  *
  * @param $args['callerModName'] caller module
+ * @param $args['callerItemType'] optional item type for the caller module
  * @param $args['hookModName'] hook module
  * @returns bool
  * @return true if successfull
@@ -23,16 +25,18 @@ function modules_adminapi_disablehooks($args)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
         return;
     }
+    if (empty($callerItemType)) {
+        $callerItemType = '';
+    }
 
     // Rename operation
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
-// TODO: per item type
-
     // Delete hooks regardless
     $sql = "DELETE FROM $xartable[hooks]
             WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'
+              AND xar_stype = '" . xarVarPrepForStore($callerItemType) . "'
               AND xar_tmodule = '" . xarVarPrepForStore($hookModName) . "'";
 
     $result =& $dbconn->Execute($sql);

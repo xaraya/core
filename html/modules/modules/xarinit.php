@@ -210,6 +210,7 @@ function modules_init()
     'xar_object'  => array('type'=>'varchar','size'=>64,'null'=>false),
     'xar_action'  => array('type'=>'varchar','size'=>64,'null'=>false),
     'xar_smodule' => array('type'=>'varchar','size'=>64,'null'=>false,'default'=>''),
+// TODO: switch to integer for itemtype (see also xarMod.php)
     'xar_stype'   => array('type'=>'varchar','size'=>64,'null'=>false,'default'=>''),
     'xar_tarea'   => array('type'=>'varchar','size'=>64,'null'=>false),
     'xar_tmodule' => array('type'=>'varchar','size'=>64,'null'=>false),

@@ -1150,10 +1150,11 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
  * @param modType string type of function to run
  * @param funcName string specific function to run
  * @param args array arguments to pass to the function
+ * @param throwException boolean optional flag to throw an exception if the function doesn't exist or not (default = 1)
  * @return mixed The output of the function, or false on failure
  * @raise BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
  */
-function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
+function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = array(), $throwException = 1)
 {
     if (empty($modName)) {
         //die("$modName, $modType, $funcName");
@@ -1193,11 +1194,13 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
         }
     }
     if (!$found) {
-        // MrB: When there is a parse error in the api file we sometimes end up
-        // here, the error is never shown !!!! (xmlrpc for example)
-        $msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-                        new SystemException($msg));
+        if ($throwException) {
+            // MrB: When there is a parse error in the api file we sometimes end up
+            // here, the error is never shown !!!! (xmlrpc for example)
+            $msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+                            new SystemException($msg));
+        }
         return;
     }
 
@@ -1452,6 +1455,7 @@ function xarModIsAvailable($modName)
  * @param hookId integer the id of the object the hook is called for (module-specific)
  * @param extraInfo mixed extra information for the hook, dependent on hookAction
  * @param callerModName string for what module are we calling this (used by modules admin)
+ * @param callerItemType string optional item type for the calling module (default = none)
  * @return mixed output from hooks, or null if there are no hooks
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
  * @todo <marco> #1 add BAD_PARAM exception
@@ -1459,7 +1463,7 @@ function xarModIsAvailable($modName)
  * @todo <marco> <mikespub> re-evaluate how GUI / API hooks are handled
  * @todo add itemtype (in extrainfo or as additional parameter)
  */
-function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerModName = NULL)
+function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerModName = NULL, $callerItemType = '')
 {
     //if ($hookObject != 'item' && $hookObject != 'category') {
     //    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookObject');
@@ -1476,8 +1480,13 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
     } else {
         $modName = $callerModName;
     }
-    xarLogMessage("xarModCallHooks: getting hooks for $modName");
-    $hooklist = xarModGetHookList($modName, $hookObject, $hookAction);
+    // retrieve the item type from $extraInfo if necessary
+    if (empty($callerItemType) && isset($extraInfo) &&
+        is_array($extraInfo) && !empty($extraInfo['itemtype'])) {
+        $callerItemType = $extraInfo['itemtype'];
+    }
+    xarLogMessage("xarModCallHooks: getting $hookObject $hookAction hooks for $modName.$callerItemType");
+    $hooklist = xarModGetHookList($modName, $hookObject, $hookAction, $callerItemType);
 
     // TODO: #2
     if (!isset($hooklist) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
@@ -1535,10 +1544,11 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
  * @param callerModName string name of the calling module
  * @param object string the hook object
  * @param action string the hook action
+ * @param callerItemType string optional item type for the calling module (default = none)
  * @return array of hook information arrays, or null if database error
  * @raise DATABASE_ERROR
  */
-function xarModGetHookList($callerModName, $hookObject, $hookAction)
+function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItemType = '')
 {
     static $hookListCache = array();
 
@@ -1555,8 +1565,8 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
     //    return;
     //}
 
-    if (isset($hookListCache["$callerModName$hookObject$hookAction"])) {
-        return $hookListCache["$callerModName$hookObject$hookAction"];
+    if (isset($hookListCache["$callerModName$callerItemType$hookObject$hookAction"])) {
+        return $hookListCache["$callerModName$callerItemType$hookObject$hookAction"];
     }
 
     // Get database info
@@ -1565,14 +1575,20 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
     $hookstable = $xartable['hooks'];
 
     // Get applicable hooks
-    $query = "SELECT xar_tarea,
+    $query = "SELECT DISTINCT xar_tarea,
                    xar_tmodule,
                    xar_ttype,
                    xar_tfunc
               FROM $hookstable
-              WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'
-              AND xar_object = '" . xarVarPrepForStore($hookObject) . "'
-              AND xar_action = '" . xarVarPrepForStore($hookAction) . "'
+              WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'";
+    if (empty($callerItemType)) {
+        $query .= " AND xar_stype = ''";
+    } else {
+        // hooks can be enabled for all or for a particular item type
+        $query .= " AND (xar_stype = '' OR xar_stype = '" . xarVarPrepForStore($callerItemType) . "')";
+    }
+    $query .= " AND xar_object = '" . xarVarPrepForStore($hookObject) . "'
+                AND xar_action = '" . xarVarPrepForStore($hookAction) . "'
               ORDER BY xar_order ASC";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
@@ -1593,7 +1609,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
         $result->MoveNext();
     }
     $result->Close();
-    $hookListCache["$callerModName$hookObject$hookAction"] = $resarray;
+    $hookListCache["$callerModName$callerItemType$hookObject$hookAction"] = $resarray;
     return $resarray;
 }
 
@@ -1604,10 +1620,11 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
  * @static modHookedCache array
  * @param hookModName string name of the hook module we're looking for
  * @param callerModName string name of the calling module (default = current)
+ * @param callerItemType string optional item type for the calling module (default = none)
  * @return mixed true if the module is hooked
  * @raise DATABASE_ERROR, BAD_PARAM
  */
-function xarModIsHooked($hookModName, $callerModName = NULL)
+function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '')
 {
     static $modHookedCache = array();
 
@@ -1619,7 +1636,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL)
         list($callerModName) = xarRequestGetInfo();
     }
 
-    if (!isset($modHookedCache[$callerModName])) {
+    if (!isset($modHookedCache[$callerModName.$callerItemType])) {
         // Get database info
         list($dbconn) = xarDBGetConn();
         $xartable = xarDBGetTables();
@@ -1629,18 +1646,25 @@ function xarModIsHooked($hookModName, $callerModName = NULL)
         $query = "SELECT DISTINCT xar_tmodule
                   FROM $hookstable
                   WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'";
+        if (empty($callerItemType)) {
+            $query .= " AND xar_stype = ''";
+        } else {
+        // hooks can be enabled for all or for a particular item type
+            $query .= " AND (xar_stype = '' OR xar_stype = '" . xarVarPrepForStore($callerItemType) . "')";
+        }
+
         $result =& $dbconn->Execute($query);
         if (!$result) return;
 
-        $modHookedCache[$callerModName] = array();
+        $modHookedCache[$callerModName.$callerItemType] = array();
         while(!$result->EOF) {
             list($modname) = $result->fields;
-            $modHookedCache[$callerModName][$modname] = 1;
+            $modHookedCache[$callerModName.$callerItemType][$modname] = 1;
             $result->MoveNext();
         }
         $result->Close();
     }
-    if (isset($modHookedCache[$callerModName][$hookModName])) {
+    if (isset($modHookedCache[$callerModName.$callerItemType][$hookModName])) {
         return true;
     } else {
         return false;

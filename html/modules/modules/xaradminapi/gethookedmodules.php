@@ -28,7 +28,7 @@ function modules_adminapi_gethookedmodules($args)
     list($dbconn) = xarDBGetConn();
     $xartable      = xarDBGetTables();
 
-    $query = "SELECT DISTINCT xar_smodule
+    $query = "SELECT DISTINCT xar_smodule, xar_stype
               FROM $xartable[hooks] 
               WHERE xar_tmodule= '" . xarVarPrepForStore($hookModName) . "'";
     if (!empty($hookObject)) {
@@ -47,10 +47,12 @@ function modules_adminapi_gethookedmodules($args)
     // modlist will hold the hooked modules
     $modlist = array();
     for (; !$result->EOF; $result->MoveNext()) {
-        list($callerModName) = $result->fields;
+        list($callerModName,$callerItemType) = $result->fields;
         if (empty($callerModName)) continue;
-// TODO: per item type
-        $modlist[$callerModName] = 1;
+        if (empty($callerItemType)) {
+            $callerItemType = 0;
+        }
+        $modlist[$callerModName][$callerItemType] = 1;
     }
     $result->Close();
 

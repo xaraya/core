@@ -43,9 +43,21 @@ function modules_admin_hooks()
             } else {
                 $modList[$i]['header'] = '';
             }
+            // Get the list of all item types for this module (if any)
+            $itemtypes = xarModAPIFunc($modList[$i]['name'],'user','getitemtypes',
+                                       // don't throw an exception if this function doesn't exist
+                                       array(), 0);
+            if (isset($itemtypes)) {
+                $modList[$i]['itemtypes'] = $itemtypes;
+            } else {
+                $modList[$i]['itemtypes'] = array();
+            }
+            $modList[$i]['checked'] = array();
             foreach ($hooklist[$curhook] as $hook => $hookedmods) {
                 if (!empty($hookedmods[$modList[$i]['name']])) {
-                    $modList[$i]['checked'] = ' checked';
+                    foreach ($hookedmods[$modList[$i]['name']] as $itemType => $val) {
+                        $modList[$i]['checked'][$itemType] = 1;
+                    }
                     break;
                 }
             }

@@ -55,7 +55,7 @@ function modules_adminapi_updatehooks($args)
         // Get selected value of hook
         $ishooked = xarVarCleanFromInput("hooked_" . $mod['name']);
         if (!empty($ishooked)) {
-            $todo[] = $mod['name'];
+            $todo[$mod['name']] = $ishooked;
         }
     }
 
@@ -93,13 +93,17 @@ function modules_adminapi_updatehooks($args)
 
         // See if this is checked and isn't in the database
         if (empty($hooksmodname)) {
-            foreach ($todo as $modname) {
+            foreach ($todo as $modname => $hookvalue) {
                 // Insert hook if required
-                $sql = "INSERT INTO $xartable[hooks] (
+                foreach (array_keys($hookvalue) as $itemtype) {
+                    if ($itemtype == 0) $itemtype = '';
+
+                    $sql = "INSERT INTO $xartable[hooks] (
                           xar_id,
                           xar_object,
                           xar_action,
                           xar_smodule,
+                          xar_stype,
                           xar_tarea,
                           xar_tmodule,
                           xar_ttype,
@@ -109,12 +113,14 @@ function modules_adminapi_updatehooks($args)
                           '" . xarVarPrepForStore($hookobject) . "',
                           '" . xarVarPrepForStore($hookaction) . "',
                           '" . xarVarPrepForStore($modname) . "',
+                          '" . xarVarPrepForStore($itemtype) . "',
                           '" . xarVarPrepForStore($hooktarea) . "',
                           '" . xarVarPrepForStore($hooktmodule) . "',
                           '" . xarVarPrepForStore($hookttype) . "',
                           '" . xarVarPrepForStore($hooktfunc) . "')";
-                $subresult =& $dbconn->Execute($sql);
-                if (!$subresult) return;
+                    $subresult =& $dbconn->Execute($sql);
+                    if (!$subresult) return;
+                }
             }
         }
     }

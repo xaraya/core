@@ -42,7 +42,17 @@ function modules_admin_modify()
     // Get the list of all hook modules, and the current hooks enabled for this module
     $hooklist = xarModAPIFunc('modules','admin','gethooklist',
                               array('modName' => $modName));
-    
+
+    // Get the list of all item types for this module (if any)
+    $itemtypes = xarModAPIFunc($modName,'user','getitemtypes',
+                               // don't throw an exception if this function doesn't exist
+                               array(), 0);
+    if (isset($itemtypes)) {
+        $data['itemtypes'] = $itemtypes;
+    } else {
+        $data['itemtypes'] = array();
+    }
+
     // $data[hooklist] is the master array which holds all info
     // about the registered hooks.
     $data['hooklist'] = array();
@@ -55,26 +65,17 @@ function modules_admin_modify()
     // TODO: make the different hooks selectable per type of hook
     foreach ($hooklist as $hookmodname => $hooks) {
         $data['hooklist'][$hookmodname]['modname'] = $hookmodname;
-        $data['hooklist'][$hookmodname]['checked'] = 0;
+        $data['hooklist'][$hookmodname]['checked'] = array();
         $data['hooklist'][$hookmodname]['hooks'] = array();
         // Fill in the details for the different hooks
         foreach ($hooks as $hook => $modules) {
             if (!empty($modules[$modName])) {
-                $checked = 1;
-                $data['hooklist'][$hookmodname]['checked'] = 1;
-            } else {
-                $checked = 0;
+                foreach ($modules[$modName] as $itemType => $val) {
+                    $data['hooklist'][$hookmodname]['checked'][$itemType] = 1;
+                }
             }
-            $data['hooklist'][$hookmodname]['hooks'][$hook] = array('hook' => $hook,
-                                                                    'value' => 1,
-                                                                    'checked' =>$checked);
+            $data['hooklist'][$hookmodname]['hooks'][$hook] = 1;
         }
-    }
-    if(count($data['hooklist']) == 0){
-        $data['nohooks'] = 1;
-    }
-    else{
-        $data['nohooks'] = 0;
     }
   //print_r($data['hooklist']);
     // End form
