@@ -1,9 +1,13 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-<div class="xar-mod-body" style="display:block;">
+<div class="xar-mod-body">
     <h2><xar:mlstring>Overview</xar:mlstring></h2>
     <div style="border-width: 1px; border-style: solid; border-color: ##B3B3B3; padding: 1px;">
         <div style="float:right;display:block;background-color:##ffffff;padding:10px;">
-            <img src="modules/privileges/xarimages/admin.gif" alt="official icon" width="96" height="96" />
+            <xar:if condition="file_exists('modules/roles/xarimages/admin.gif')" >
+                <img src="modules/roles/xarimages/admin.gif" alt="official icon" width="96" height="96" />
+            <xar:else />
+                <img src="modules/roles/xarimages/admin_generic.gif" alt="official icon" width="96" height="96" />
+            </xar:if>
         </div>
         <div class="xar-mod-title" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
             <xar:mlstring>What is it?</xar:mlstring>
@@ -16,7 +20,6 @@
 			<li><xar:mlstring>Roles can be assigned <b>privileges</b>. By doing so, you define what a given role may or may not do on the site. You can use the test functionality of the Roles module to see what parts of the site a role with a given set of privileges has access to.</xar:mlstring></li>
 			<li><xar:mlstring>Roles have <b>inheritance</b>. A role inherits all the privileges of all of its parents, but can override them. If you give a group editing privileges, for instance, any other role that is a member of that group inherits the editing privileges. If you want to restrict the privileges of some of the members, simply assign them a different set of privileges (say reading), and the privileges of the parent will be overridden.</xar:mlstring></li>
 			</ul>
-
 		</div>
         <br />
         <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">

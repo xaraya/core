@@ -1,7 +1,7 @@
 <!-- modules module template: file admin-list.xd -->
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>Modules List</xar:mlstring></h2>
+    <h2><xar:mlstring>View Modules (classic list)</xar:mlstring></h2>
     <form method="post" action="&xar-modurl-modules-admin-settings;">
         <div class="xar-mod-body" style="border-width: thin; border-style: solid; border-color: ##B3B3B3; padding: 0px;">
             <!--- Module List Sort and Filter Controls table --->
@@ -20,7 +20,7 @@
                     <label class="xar-mod-title" for="hide"><xar:mlstring>Hide</xar:mlstring></label>
                 </th>
                 <th nowrap="nowrap" colspan="3">
-                    <label class="xar-mod-title" for="reload"><xar:mlstring>Specific Actions</xar:mlstring></label>
+                    <label class="xar-mod-title" for="reload"><xar:mlstring>Enforce</xar:mlstring></label>
                 </th>
               </tr>
               <tr>
@@ -111,7 +111,7 @@
                         <xar:mlstring>Actions</xar:mlstring>
                     </th>
                     <th style="text-align: center;">
-                        <xar:mlstring>Extend</xar:mlstring>
+                        <xar:mlstring>Hooks</xar:mlstring>
                     </th>
                 </tr>
                 <xar:loop name="$listrowsitems">

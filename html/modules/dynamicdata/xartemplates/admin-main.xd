@@ -2,7 +2,11 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Overview</xar:mlstring></h2><br />
 <div style="margin: auto;">
     <div style="float:right;display:block;background-color:##ffffff;padding:10px;">
-        <img src="modules/dynamicdata/xarimages/admin.gif" alt="official icon" width="96" height="96" />
+        <xar:if condition="file_exists('modules/dynamicdata/xarimages/admin.gif')" >
+                <img src="modules/dynamicdata/xarimages/admin.gif" alt="official icon" width="96" height="96" />
+            <xar:else />
+                <img src="modules/dynamicdata/xarimages/admin_generic.gif" alt="official icon" width="96" height="96" />
+            </xar:if>
     </div>
     #$help#
 </div>

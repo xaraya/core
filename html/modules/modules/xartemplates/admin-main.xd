@@ -3,14 +3,18 @@
     <h2><xar:mlstring>Overview</xar:mlstring></h2>
     <div style="border-width: 1px; border-style: solid; border-color: ##B3B3B3; padding: 1px;">
         <div style="float:right;display:block;background-color:##ffffff;padding:10px;">
-            <img src="modules/modules/xarimages/admin.gif" alt="official icon" width="96" height="96" />
+            <xar:if condition="file_exists('modules/modules/xarimages/admin.gif')" >
+                <img src="modules/modules/xarimages/admin.gif" alt="official icon" width="96" height="96" />
+            <xar:else />
+                <img src="modules/modules/xarimages/admin_generic.gif" alt="official icon" width="96" height="96" />
+            </xar:if>
         </div>
         <div class="xar-mod-title" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
             <xar:mlstring>What is it?</xar:mlstring>
         </div>
         <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <xar:mlstring>The Modules Module controls the modules that you have installed on your Xaraya System.  It basically controls the install, upgrades, and removal of modules.</xar:mlstring>
+            <xar:mlstring>The Modules Module controls the modules that you have installed on your Xaraya System. It basically controls the install, upgrades, and removal of modules.</xar:mlstring>
 		</div>
         <br />
         <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">

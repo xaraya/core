@@ -178,9 +178,7 @@
             </table>
         </div>
         <div class="xar-accent" style="text-align: center; border-width: thin; border-style: solid; border-color: ##B3B3B3; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-            <xar:mlstring>Note to module developers: removal of all core modules is currently disabled;</xar:mlstring>
-            <xar:mlstring>you may need to re-classify your modules in accordance with</xar:mlstring>
-            <a href="http://docs.xaraya.com/docs/rfcs/rfc0013.html">RFC-13</a>
+            <xar:mlstring>You can make your theme loading as default by selecting it in Themes - Modify Config panel</xar:mlstring>
             <xar:if condition="$selstyle eq 'icons'"><br />
                 <!--- need to de-hardcode ---> 
                 <div style="vertical-align: middle; background-color: ##FFFFFF; margin:5px; padding: 3px; border-width: thin; border-style: solid; border-color: ##B3B3B3;">
