@@ -14,8 +14,7 @@
  */
 function variable_validations_float (&$subject, $parameters, $supress_soft_exc) 
 {
-
-        $value = floatval($subject);
+        $value = (float)$subject;
 
         if ("$subject" != "$value") {
             $msg = xarML('Not a Float Type: "#(1)"', $subject);
