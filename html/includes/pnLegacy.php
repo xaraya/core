@@ -10,67 +10,63 @@
 // ----------------------------------------------------------------------
 
 /***********************************************************************
-* This file is for legacy functions and constants needed to make it
+* This file is for legacy functions needed to make it
 * easier to use pn modules in Xaraya. Please don't fill it with useless
 * stuff or deprecated API funcs except as wrappers, and also.. please
 * do not duplicated constants that already exist in xaraya core
 * If a function did not exist in pn before...don't prefix it with pn
 ***********************************************************************/
 
-// LEGACY CONSTANTS
-
-define('_PN_VERSION_NUM', '0.8');
-define('_PN_VERSION_ID',  'Xaraya');
-define('_PN_VERSION_SUB', 'adam_baum');
-
-// FIXME: <marco> i think we could remove it, now validation does this job
-define('_UDCONST_MANDATORY',1024); // indicates a cord field that can't be removed'
-
-define('_UDCONST_CORE', 0); // indicates a core field
-define('_UDCONST_STRING', 1);
-define('_UDCONST_TEXT', 2);
-define('_UDCONST_FLOAT', 4);
-define('_UDCONST_INTEGER', 8);
-
-
-define('_PNAUTH_AUTHENTICATION', 1);
-define('_PNAUTH_DYNAMIC_USER_DATA_HANDLER', 2);
-define('_PNAUTH_PERMISSIONS_OVERRIDER', 16);
-define('_PNAUTH_USER_CREATEABLE', 32);
-define('_PNAUTH_USER_DELETEABLE', 64);
-define('_PNAUTH_USER_ENUMERABLE', 128);
-
-define('_XARAUTH_AUTHENTICATION', 1);
-define('_XARAUTH_DYNAMIC_USER_DATA_HANDLER', 2);
-define('_XARAUTH_PERMISSIONS_OVERRIDER', 16);
-define('_XARAUTH_USER_CREATEABLE', 32);
-define('_XARAUTH_USER_DELETEABLE', 64);
-define('_XARAUTH_USER_ENUMERABLE', 128);
-
-
-/*
- * Error codes
- */
-define('_PNAUTH_FAILED', -1);
-define('_XARAUTH_FAILED', -1);
-
-// LEGACY FUNCTIONS
-
-
-/**
- * get request info for current page
- *
- * @deprec
- * @author Marco Canini, Michel Dalle
- * @access private
- * @returns array
- * @return requested module, type and func
- */
-function pnGetRequestInfo()
-{
-    return xarRequestGetInfo();
-}
-
+/**********************************************************************
+* WARNING: THIS FILE IS A WORK IN PROGRESS!!!!!!!!!!!!!!!!!!!
+* Please mark all stuff that you need in this file or file a bug report
+*
+* Necessary functions to duplicate
+* MODULE SYSTEM FUNCTIONS
+* pnModGetVar -> xarModGetVar
+* pnModSetVar -> xarModSetVar
+* pnModDelVar -> xarModDelVar
+* pnModURL -> xarModURL
+* pnModGetName -> xarRequestGetInfo (use list() = $modName = xarRequestGetInfo() )
+* pnModGetIDFromName -> xarModGetIDFromName
+* pnModLoad -> xarModLoad
+* pnModAPILoad -> xarModAPILoad
+* pnModFunc -> xarModFunc
+* pnModAPIFunc -> xarModAPIFunc
+* pnModAvailable -> xarModIsAvailable
+*
+* SESSION FUNCTIONS
+* pnSessionDelVar -> xarSessionDelVar
+* pnSessionSetVar -> xarSessionSetVar
+* pnSessionGetVar -> xarSessionGetVar
+*
+* CONFIG FUNCTIONS
+* pnConfigSetVar -> xarConfigSetVar
+* pnConfigGetVar -> xarConfigGetVar
+*
+* SERVER FUNCTIONS (URL URI)
+* pnGetBaseURI -> xarServerGetBaseURI
+* pnGetBaseURL -> xarServerGetBaseURL
+* pnRedirect -> xarResponseRedirect
+* pnIsRedirected -> xarResponseIsRedirected CHECK THIS ONE!
+*
+* USER FUNCTIONS
+* pnUserLoggedIn -> xarUserIsLoggedIn
+* pnUserLogIn -> xarUserLogIn
+* pnUserLogOut -> xarUserLogOut
+*
+* BLOCKS
+*
+* VAR
+* pnVarPrepForStore -> xarPrepForStore
+* pnVarPrepForOS -> xarPrepForOs
+* pnVarPrepForDisplay -> xarPrepForDisplay
+* pnVarPrepHTMLDisplay -> xarPrepHTMLDisplay
+* pnVarCleanFromInput -> xarCleanFromInput
+* pnVarCensor -> xarVarCeonsor CHECK THIS ONE!
+*
+*
+*/
 /**
  * get base URI for PostNuke
  *
@@ -680,85 +676,6 @@ function pnConfigDelVar($name)
     return false;
 }
 
-/**
- * get the user's theme
- *
- * @returns string
- * @return the name of the user's theme
- * @raise DATABASE_ERROR
- * modified May the 15th,
- * return the name of the folder where themes are stored, defined in
- * modules_vars, themesfolder ("themes/" by default).
- */
-function pnUserGetTheme()
-{
-    // Order of theme priority:
-    // - page-specific
-    // - user
-    // - system
-    // Page-specific theme
-
-    /***********
-    * modification  of May the 15th.
-    * pnUserGetTheme() return the folder where the theme is stored.
-    * a fresh install create the var themesfolder in modules_vars.
-    * an update should also :-(
-    * if it not happens, uncomment these lines and comment them later. */
-    $themesfolder = pnConfigGetVar('themesfolder');
-    if (empty($themesfolder)) {
-        pnConfigSetVar('themesfolder','themes/');
-    }
-    /*********************************************/
-
-// Q: where was this pagetheme originally supposed to come from ?
-    $pagetheme = pnVarCleanFromInput('theme');
-
-    if (!empty($pagetheme)) {
-	$pagetheme = pnConfigGetVar('themesfolder').pnVarPrepForOS(pnVarCleanFromInput('theme'));
-	if (file_exists($pagetheme)) {
-	    return $pagetheme;
-	}
-    }
-    if (pnUserLoggedIn()) {
-        $usertheme = pnUserGetVar('theme');
-        if (!isset($usertheme) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-            if (pnExceptionId() == 'DATABASE_ERROR') {
-                return; // throw back
-            }
-            // Ingnore other exceptions
-            pnExceptionFree();
-        }
-        if (!empty($usertheme)) {
-	    $usertheme = pnConfigGetVar('themesfolder').pnVarPrepForOS($usertheme);
-	    if (file_exists($usertheme)) {
-		return $usertheme;
-	    }
-        }
-    }
-    $defaulttheme = pnConfigGetVar('Default_Theme');
-    if (!isset($defaulttheme) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        if (pnExceptionId() == 'DATABASE_ERROR') {
-            return; // throw back
-        }
-        // Ingnore other exceptions
-        pnExceptionFree();
-    }
-    if (!empty($defaulttheme)) {
-	$defaulttheme = pnConfigGetVar('themesfolder').pnVarPrepForOS($defaulttheme);
-	if (file_exists($defaulttheme)) {
-	    return $defaulttheme;
-	}
-    }
-    // Try to fallback with 'PostNuke'
-    if (file_exists(pnConfigGetVar('themesfolder').'PostNuke')) {
-        return pnConfigGetVar('themesfolder').'PostNuke';
-    }
-    $msg = pnML('Cannot find a suitable theme name.');
-    pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
-                   new SystemException($msg));
-    return;
-}
-
 // Stubs for pnAPI compatibility testing
 
 function pnBlockGetInfo($bid)
@@ -959,16 +876,6 @@ function pnSessionGetVar($name)
 function pnSessionSetVar($name, $value)
 {
     return xarSessionSetVar($name, $value);
-}
-
-function pnThemeGetVar($name)
-{
-    return xarThemeGetVar($name);
-}
-
-function pnThemeLoad($thistheme)
-{
-    return xarThemeLoad($thistheme);
 }
 
 function pnUserGetLang()
