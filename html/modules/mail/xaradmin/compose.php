@@ -37,6 +37,10 @@ function mail_admin_compose()
         array('module'=>'base', 'filename'=>'formcheck.js')
     );
 
+    // Get the admin email address
+    $data['email']  = xarModGetVar('mail', 'adminmail');
+    $data['name']   = xarModGetVar('mail', 'adminname');
+     
 	// everything else happens in Template for now
 	return $data;
 } 

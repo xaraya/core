@@ -28,14 +28,20 @@ function mail_admin_sendtest()
     if (!xarVarFetch('message', 'str:1:', $message)) return;
     if (!xarVarFetch('htmlmessage', 'str::', $htmlmessage)) return;
     if (!xarVarFetch('subject', 'str:1', $subject)) return;
+    if (!xarVarFetch('email', 'str:1', $email, '')) return;
+    if (!xarVarFetch('name', 'str:1', $name, '')) return;
 
     // Confirm authorisation code.
     if (!xarSecConfirmAuthKey()) return;
     // Security check
     if (!xarSecurityCheck('AdminMail')) return;
 
-    $email  = xarModGetVar('mail', 'adminmail');
-    $name   = xarModGetVar('mail', 'adminname');
+    if (empty($email)) {
+        $email = xarModGetVar('mail', 'adminmail');
+    }
+    if (empty($name)) {
+        $name = xarModGetVar('mail', 'adminname');
+    }
 
     if (!xarVarFetch('when', 'str:1', $when, '', XARVAR_NOT_REQUIRED)) return;
     if (!empty($when)) {
