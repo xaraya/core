@@ -96,26 +96,34 @@ function roles_admin_purge($args)
         $recallroles = array();
         foreach ($q->output() as $role) {
             if (xarSecurityCheck('ReadRole', 0, 'All', $role['xar_uname'] . ":All:" . $role['xar_uid'])) {
+                $skip = 0;
                 $unique = 1;
                 if ($role['xar_type']) {
                      $role['xar_uname'] = "";
                 }
                 else {
                     $uname1 = explode($deleted,$role['xar_uname']);
+                    if($uname1[0] == '') {
+                        $existinguser = 0;
+                        $skip = 1;
+                    }
+                    else
                     $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $uname1[0]));
                     if (is_array($existinguser)) $unique = 0;
                     $role['xar_uname'] = $uname1[0];
                }
-                $role['xar_type'] = $role['xar_type'] ? "Group" : "User";
+                if (!$skip) {
+                    $role['xar_type'] = $role['xar_type'] ? "Group" : "User";
 // Not elegant, but this version of xarQuery doesn't support field aliases
-                $recallroles[] = array(
-                    'uid'       => $role['xar_uid'],
-                    'uname'     => $role['xar_uname'],
-                    'name'      => $role['xar_name'],
-                    'email'     => $role['xar_email'],
-                    'type'      => $role['xar_type'],
-                    'date_reg'  => $role['xar_date_reg'],
-                    'unique'    => $unique);
+                    $recallroles[] = array(
+                        'uid'       => $role['xar_uid'],
+                        'uname'     => $role['xar_uname'],
+                        'name'      => $role['xar_name'],
+                        'email'     => $role['xar_email'],
+                        'type'      => $role['xar_type'],
+                        'date_reg'  => $role['xar_date_reg'],
+                        'unique'    => $unique);
+                }
             }
         }
 // --- send to template
