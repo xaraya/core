@@ -26,7 +26,7 @@
 	<table border="0" width="100%">
 		<tr align="left" valign="middle">
 			<td>
-				%%link%%
+				%%validationlink%%
 			</td>
 			<td>
 				<xar:mlstring>The link for the user to click on to complete their registration</xar:mlstring>
