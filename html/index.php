@@ -103,14 +103,14 @@ function xarMain()
         if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
 
         // Note : the page template may be set to something else in the module function
-        if (xarTplGetPageTemplateName() == 'default') {
-            xarTplSetPageTemplateName($modName);
+        if (xarTplGetPageTemplateName() == 'default' && $modType != 'admin') {
+            xarTplSetPageTemplateName('user-'.$modName);
         }
 
         // Set page template
         if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
             // Use the admin.xt page if available when $modType is admin
-            xarTplSetPageTemplateName('admin');
+            xarTplSetPageTemplateName('admin-'.$modName);
         }
 
         xarVarFetch('pageName','str:1:', $pageName, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
