@@ -23,7 +23,7 @@ ob_start();
 }
 ?>
 
-<h3>Quick and dirty import of .8 test data from an existing .71 site</h3>
+<h3>Quick and dirty import of test data from an existing .71 site</h3>
 
 <?php
 $prefix = xarDBGetSystemTablePrefix();
@@ -51,10 +51,10 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     <input type="submit" value=" Import Data "></td></tr>
     </table>
     <input type="hidden" name="step" value="1">
+    <input type="hidden" name="module" value="roles">
     </form>
     <p></p>
-    You must also have activated categories and users, and added the articles
-    module from postnuke_modules first.
+    Note : you must at least activate the 'categories' and 'articles' modules first. Activating 'comments' and 'hitcount' is also a good idea :-)
 <?php
 } else {
     if ($step == 1 && !isset($startnum)) {
@@ -67,14 +67,16 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         xarModSetVar('installer','imgurl',$imgurl);
     }
 
+/*
     // log in admin user
     if (!xarUserLogIn('Admin', 'password', 0)) {
         die('Unable to log in');
     }
+*/
 
     list($dbconn) = xarDBGetConn();
 
-    if (!xarModAPILoad('users','admin')) {
+    if (!xarModAPILoad('roles','admin')) {
         die("Unable to load the users admin API");
     }
     if (!xarModAPILoad('categories','user')) {
@@ -88,6 +90,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     }
     if (!xarModAPILoad('comments','user')) {
         die("Unable to load the comments user API");
+    }
+    if (!xarModAPILoad('dynamicdata','util')) {
+        die("Unable to load the dynamicdata util API");
     }
     if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','admin')) {
         $docounter = 1;
@@ -110,7 +115,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     }
     $count = $result->fields[0];
     $result->Close();
-    $query = 'SELECT pn_uid, pn_name, pn_uname, pn_email, pn_pass, pn_url 
+    $query = 'SELECT pn_uid, pn_name, pn_uname, pn_email, pn_pass, pn_url, pn_user_regdate,
+                     pn_timezone_offset, pn_user_avatar, pn_user_icq, pn_user_aim, pn_user_yim, pn_user_msnm,
+                     pn_user_from, pn_user_occ, pn_user_intrest, pn_user_sig, pn_bio
               FROM ' . $oldprefix . '_users 
               WHERE pn_uid > 2
               ORDER BY pn_uid ASC';
@@ -127,42 +134,122 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         die("Oops, select users failed : " . $dbconn->ErrorMsg());
     }
     if ($reset && $startnum == 0) {
-        $dbconn->Execute("DELETE FROM " . $tables['users'] . " WHERE xar_uid > 2");
-        $dbconn->Execute('FLUSH TABLE ' . $tables['users']);
-        $dbconn->Execute('OPTIMIZE ' . $tables['users']);
+        $dbconn->Execute("DELETE FROM " . $tables['roles'] . " WHERE xar_uid > 8"); // TODO: VERIFY !
+        $dbconn->Execute('FLUSH TABLE ' . $tables['roles']);
+        $dbconn->Execute('OPTIMIZE TABLE ' . $tables['roles']);
     }
-    $num = 1;
+    // check if there's a dynamic object defined for users
+    $myobject =& xarModAPIFunc('dynamicdata','user','getobject',
+                               array('moduleid' => xarModGetIDFromName('roles'), // it's this module
+                                     'itemtype' => 0));                          // with no item type
+    if (empty($myobject) || empty($myobject->objectid)) {
+        // if not, import the dynamic properties for users
+        $objectid = xarModAPIFunc('dynamicdata','util','import',
+                                  array('file' => 'modules/dynamicdata/users.xml'));
+        if (empty($objectid)) {
+            die('Error creating the dynamic user properties');
+        }
+        $myobject =& xarModAPIFunc('dynamicdata','user','getobject',
+                                   array('objectid' => $objectid));
+    }
+    // Disable dynamicdata hooks for roles (to avoid create + update)
+    if (xarModIsHooked('dynamicdata','roles')) {
+        xarModAPIFunc('modules','admin','disablehooks',
+                      array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
+    }
+    // Check for the default users group
+    $usergroup = xarModGetVar('roles', 'defaultgroup'); 
+    $users = xarModGetVar('installer', 'userid');
+    if (!empty($users)) {
+        $userid = unserialize($users);
+    } else {
+        $userid = array();
+        $userid[0] = _XAR_ID_UNREGISTERED; // Anonymous account
+        $userid[1] = _XAR_ID_UNREGISTERED; // Anonymous account
+        $userid[2] = _XAR_ID_UNREGISTERED + 1; // Admin account - VERIFY !
+    }
+    $num = 0;
     while (!$result->EOF) {
-        list($uid,$name,$uname,$email,$pass,$url) = $result->fields;
-        $newuid = xarModAPIFunc('users',
+        list($uid,$name,$uname,$email,$pass,$url,$date,
+             $timezone,$avatar,$icq,$aim,$yim,$msnm,
+             $location,$occupation,$interests,$signature,$extra_info) = $result->fields;
+        if (empty($name)) {
+            $name = $uname;
+        }
+        if (empty($date)) {
+            $date = time();
+        }
+        $user = array(//'uid'        => $uid,
+                      'uname'      => $uname,
+                      'realname'   => $name,
+                      'email'      => $email,
+                      'cryptpass'  => $pass,
+                      'date'       => $date,
+                      'valcode'    => 'createdbyadmin',
+                      'authmodule' => 'authsystem',
+                      'state'      => 3);
+
+        // this will *not* fill in the dynamic properties now
+        $newuid = xarModAPIFunc('roles',
                                 'admin',
                                 'create',
-                                array('uid' => $uid,
-                                      'uname' => $uname,
-                                      'realname' => $name,
-                                      'email' => $email,
-                                      'pass'  => $pass,
-                                      'date'     => time(),
-                                      'valcode'  => 'createdbyadmin',
-                                      'state'   => 3));
+                                $user);
+
+        $userid[$uid] = $newuid;
+        $num++;
+        $result->MoveNext();
+
         if (!isset($newuid)) {
-            echo "Insert user ($uid) $name failed : " . xarExceptionRender('text') . "<br>\n";
+            echo "Insert user ($uid) $uname failed : " . xarExceptionRender('text') . "<br>\n";
+            continue;
         } elseif ($count < 200) {
             echo "Inserted user ($uid) $name - $uname<br>\n";
         } elseif ($num % 100 == 0) {
             echo "Inserted user " . ($num + $startnum) . "<br>\n";
             flush();
         }
-        $num++;
-        $result->MoveNext();
+
+        // fill in the dynamic properties - cfr. users.xml !
+        $dynamicvalues = array(
+                               'itemid'     => $newuid,
+                               'timezone'   => $timezone - 12.0,
+                               'avatar'     => $avatar,
+                               'icq'        => $icq,
+                               'aim'        => $aim,
+                               'yim'        => $yim,
+                               'msnm'       => $msnm,
+                               'location'   => $location,
+                               'occupation' => $occupation,
+                               'interests'  => $interests,
+                               'signature'  => $signature,
+                               'extra_info' => $extra_info,
+                              );
+        $myobject->createItem($dynamicvalues);
+
+/*    // TODO: import groups once roles/privileges are ok
+        if (!xarModAPIFunc('groups',
+                           'user',
+                           'newuser', array('gname' => $usergroup,
+                                            'uid'   => $uid))) {
+            echo "Insert user ($uid) $uname in group $usergroup failed : " . xarExceptionRender('text') . "<br>\n";
+        }
+*/
     }
     $result->Close();
+    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        xarExceptionRender('text');
+        xarExceptionFree();
+    }
+    xarModSetVar('installer','userid',serialize($userid));
     echo "<strong>TODO : import user_data</strong><br><br>\n";
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
         $startnum += $numitems;
-        echo '<a href="import8.php?step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - users ' . $startnum . '+ of ' . $count . '</a><br>';
+        echo '<a href="import8.php?module=roles&step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - users ' . $startnum . '+ of ' . $count . '</a><br>';
     } else {
+        // Enable dynamicdata hooks for roles
+        xarModAPIFunc('modules','admin','enablehooks',
+                      array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
         echo '<a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
     }
     }
@@ -274,6 +361,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     }
 
     if ($step == 3) {
+    $userid = unserialize(xarModGetVar('installer','userid'));
     $topics = xarModGetVar('installer','topics');
     $topicid = unserialize(xarModGetVar('installer','topicid'));
     $categories = xarModGetVar('installer','categories');
@@ -323,6 +411,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         } else {
             $status = 2;
         }
+        if (isset($userid[$authorid])) {
+            $authorid = $userid[$authorid];
+        } // else we're lost :)
         $cids = array();
         if (isset($topicid[$topic])) {
             $cids[] = $topicid[$topic];
@@ -371,6 +462,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     }
 
     if ($step == 4) {
+    $userid = unserialize(xarModGetVar('installer','userid'));
     $topics = xarModGetVar('installer','topics');
     $topicid = unserialize(xarModGetVar('installer','topicid'));
     $categories = xarModGetVar('installer','categories');
@@ -410,6 +502,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         } else {
             $status = 1;
         }
+        if (isset($userid[$authorid])) {
+            $authorid = $userid[$authorid];
+        } // else we're lost :)
         $notes = '';
         $cids = array();
         if (isset($topicid[$topic])) {
@@ -465,6 +560,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         $settings = unserialize(xarModGetVar('articles', 'settings.2'));
         $settings['number_of_categories'] = 1;
         $settings['cids'] = array($sections);
+        $settings['defaultview'] = 'c' . $sections;
         xarModSetVar('articles', 'settings.2', serialize($settings));
         xarModSetVar('articles', 'number_of_categories.2', 1);
         xarModSetVar('articles', 'mastercids.2', $sections);
@@ -533,7 +629,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
                                       'status' => $status,
                                       'ptid' => 2,
                                       'pubdate' => 0,
-                                      'authorid' => 1,
+                                      'authorid' => _XAR_ID_UNREGISTERED,
                                       'language' => $language,
                                       'cids' => $cids,
                                       'hits' => $counter
@@ -562,6 +658,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         $settings = unserialize(xarModGetVar('articles', 'settings.4'));
         $settings['number_of_categories'] = 1;
         $settings['cids'] = array($faqs);
+        $settings['defaultview'] = 'c' . $faqs;
         xarModSetVar('articles', 'settings.4', serialize($settings));
         xarModSetVar('articles', 'number_of_categories.4', 1);
         xarModSetVar('articles', 'mastercids.4', $faqs);
@@ -636,7 +733,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
                                       'status' => $status,
                                       'ptid' => 4,
                                       'pubdate' => 0,
-                                      'authorid' => 1,
+                                      'authorid' => _XAR_ID_UNREGISTERED,
                                       'language' => $language,
                                       'cids' => $cids,
                                       'hits' => $counter
@@ -656,6 +753,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     }
 
     if ($step == 9) {
+    $userid = unserialize(xarModGetVar('installer','userid'));
     $regid = xarModGetIDFromName('articles');
     $pid2cid = array();
 // TODO: fix issue for large # of comments
@@ -701,6 +799,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         if (empty($uid)) {
             $uid = 0;
         }
+        if (isset($userid[$uid])) {
+            $uid = $userid[$uid];
+        } // else we're lost :)
         $data['modid'] = $regid;
         $data['objectid'] = $sid;
         if (!empty($pid) && !empty($pid2cid[$pid])) {
@@ -708,9 +809,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         }
         $data['pid'] = $pid;
         $data['author'] = $uid;
-        $data['subject'] = xarVarPrepForStore($subject);
-        $data['comment'] = xarVarPrepForStore($comment);
-        $data['hostname'] = xarVarPrepForStore($hostname);
+        $data['subject'] = $subject;
+        $data['comment'] = $comment;
+        $data['hostname'] = $hostname;
         //$data['cid'] = $tid;
         $data['date'] = $date;
         $data['postanon'] = 0;
@@ -786,6 +887,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     }
 
     if ($step == 11) {
+    $userid = unserialize(xarModGetVar('installer','userid'));
     echo "<strong>11. Importing old web links</strong><br>\n";
     if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','admin')) {
         $docounter = 1;
@@ -811,6 +913,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         if (empty($uid)) {
             $uid = 0;
         }
+        if (isset($userid[$uid])) {
+            $uid = $userid[$uid];
+        } // else we're lost :)
         if (!empty($email)) {
             $email = ' <' . $email . '>';
         }
@@ -852,7 +957,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
 
     if ($step == 12) {
     echo "<strong>12. Optimizing database tables</strong><br>\n";
-    $result =& $dbconn->Execute('OPTIMIZE TABLE ' . $tables['users']);
+    $result =& $dbconn->Execute('OPTIMIZE TABLE ' . $tables['roles']);
     if (!$result) {
         echo $dbconn->ErrorMsg();
     }
@@ -865,10 +970,12 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['comments']);
 
     echo "<strong>TODO : import the rest...</strong><br><br>\n";
+    //xarModDelVar('installer','userobjectid');
     xarModDelVar('installer','oldprefix');
     xarModDelVar('installer','reset');
     xarModDelVar('installer','resetcat');
     xarModDelVar('installer','imgurl');
+    xarModDelVar('installer','userid');
     xarModDelVar('installer','topics');
     xarModDelVar('installer','topicid');
     xarModDelVar('installer','categories');
@@ -892,6 +999,11 @@ if (!isset($step)) {
 $return = ob_get_contents();
 ob_end_clean();
 
+xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarML('Import Site'));
+
+//xarTplSetThemeName('Xaraya_Classic');
+//xarTplSetPageTemplateName('admin');
+
 // render the page
 echo xarTpl_renderPage($return);
 }
@@ -899,7 +1011,7 @@ echo xarTpl_renderPage($return);
 // Close the session
 xarSession_close();
 
-$dbconn->Close();
+//$dbconn->Close();
 
 flush();
 
