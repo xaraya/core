@@ -1,4 +1,4 @@
-<span style="color: #FF0000;">This is an over-ridden template.  See themes/Xaraya_Classic/modules/example/user-main.xt for the example</span>
+<span style="color: #FF0000;">This is an over-ridden template.  See #xarConfigGetVar('Site.BL.ThemesDirectory')/Xaraya_Classic/modules/example/user-main.xt for the example</span>
 
 <br />
 <br />
