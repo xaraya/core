@@ -1,12 +1,12 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
-<textarea name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" #$tabindex#>#$value#</textarea>
+<textarea name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
 
 <xar:if condition="!empty($uploads_hooked)">
     #$uploads_hooked#
 <xar:else/>
     <input type="hidden" name="MAX_FILE_SIZE" value="#$maxsize#" />
-    <input type="file" name="#$upname#" size="#$size#" id="#$upid#" #$tabindex# />
+    <input type="file" name="#$upname#" size="#$size#" id="#$upid#" tabindex="#$tabindex#" />
     #$allowed#
 </xar:if>
 
