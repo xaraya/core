@@ -1,134 +1,139 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>
+    License: GPL http://www.gnu.org/copyleft/gpl.html 
+</xar:comment>
 <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
 </xar:if>
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>Utilities Menu</xar:mlstring>
+        <xar:mlstring>
+            Utilities Menu
+        </xar:mlstring>
     </span>
 </div>
 <xar:if condition="empty($option)">
-    <xar:set name="option">'query'</xar:set>
+    <xar:set name="option">
+        'query'
+    </xar:set>
 </xar:if>
-<div class="xar-mod-body"><h2>Dynamic Data Utilities</h2>
-    <div style="margin: auto;">
-        <div>
-            <dl class="xar-tabs">
-                <dt class="help">
-                    <xar:mlstring>
-                        Options
-                    </xar:mlstring>
-                    : 
-                </dt>
-                <xar:if condition="$option eq 'query'">
-                    <dd class="active">
-                        <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'query'))#">
-                            <xar:mlstring>
-                                Query
-                            </xar:mlstring>
-                        </a>
-                    </dd>    
+<div class="xar-mod-body">
+    <h2>
+        Dynamic Data Utilities
+    </h2>
+    <div>
+        <dl class="xar-tabs">
+            <dt class="help">
+                <xar:mlstring>
+                    Options 
+                </xar:mlstring>
+                : 
+            </dt>
+            <xar:if condition="$option eq 'query'">
+                <dd class="active">
+                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'query'))#">
+                        <xar:mlstring>
+                            Query 
+                        </xar:mlstring>
+                    </a>
+                </dd>
                 <xar:else />
-                    <dd>
-                        <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'query'))#">
-                            <xar:mlstring>
-                                Query
-                            </xar:mlstring>
-                        </a>
-                    </dd>    
-                </xar:if>
-                <xar:if condition="$option eq 'import'">
-                    <dd class="active">
-                        <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'import'))#">
-                            <xar:mlstring>
-                                Import
-                            </xar:mlstring>
-                        </a>
-                    </dd>    
+                <dd>
+                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'query'))#">
+                        <xar:mlstring>
+                            Query 
+                        </xar:mlstring>
+                    </a>
+                </dd>
+            </xar:if>
+            <xar:if condition="$option eq 'import'">
+                <dd class="active">
+                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'import'))#">
+                        <xar:mlstring>
+                            Import 
+                        </xar:mlstring>
+                    </a>
+                </dd>
                 <xar:else />
-                    <dd>
-                        <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'import'))#">
-                            <xar:mlstring>
-                                Import
-                            </xar:mlstring>
-                        </a>
-                    </dd>    
-                </xar:if>
-                <xar:if condition="$option eq 'export'">
-                    <dd class="active">
-                        <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'export'))#">
-                            <xar:mlstring>
-                                Export
-                            </xar:mlstring>
-                        </a>
-                    </dd>    
+                <dd>
+                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'import'))#">
+                        <xar:mlstring>
+                            Import 
+                        </xar:mlstring>
+                    </a>
+                </dd>
+            </xar:if>
+            <xar:if condition="$option eq 'export'">
+                <dd class="active">
+                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'export'))#">
+                        <xar:mlstring>
+                            Export 
+                        </xar:mlstring>
+                    </a>
+                </dd>
                 <xar:else />
-                    <dd>
-                        <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'export'))#">
-                            <xar:mlstring>
-                                Export
-                            </xar:mlstring>
-                        </a>
-                    </dd>    
-                </xar:if>
-                <xar:if condition="$option eq 'static'">
-                    <dd class="active">
-                        <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'static'))#">
-                            <xar:mlstring>
-                                Table Definition
-                            </xar:mlstring>
-                        </a>
-                    </dd>    
+                <dd>
+                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'export'))#">
+                        <xar:mlstring>
+                            Export 
+                        </xar:mlstring>
+                    </a>
+                </dd>
+            </xar:if>
+            <xar:if condition="$option eq 'static'">
+                <dd class="active">
+                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'static'))#">
+                        <xar:mlstring>
+                            Table Definition 
+                        </xar:mlstring>
+                    </a>
+                </dd>
                 <xar:else />
-                    <dd>
-                        <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'static'))#">
-                            <xar:mlstring>
-                                Table Definition
-                            </xar:mlstring>
-                        </a>
-                    </dd>    
-                </xar:if>
-                <xar:if condition="$option eq 'relations'">
-                    <dd class="active">
-                        <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'relations'))#">
-                            <xar:mlstring>
-                                Relationships
-                            </xar:mlstring>
-                        </a>
-                    </dd>    
+                <dd>
+                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'static'))#">
+                        <xar:mlstring>
+                            Table Definition 
+                        </xar:mlstring>
+                    </a>
+                </dd>
+            </xar:if>
+            <xar:if condition="$option eq 'relations'">
+                <dd class="active">
+                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'relations'))#">
+                        <xar:mlstring>
+                            Relationships 
+                        </xar:mlstring>
+                    </a>
+                </dd>
                 <xar:else />
-                    <dd>
-                        <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'relations'))#">
-                            <xar:mlstring>
-                                Relationships
-                            </xar:mlstring>
-                        </a>
-                    </dd>    
-                </xar:if>
-                <xar:if condition="$option eq 'meta'">
-                    <dd class="active">
-                        <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'meta'))#">
-                            <xar:mlstring>
-                                Meta Definitions
-                            </xar:mlstring>
-                        </a>
-                    </dd>    
+                <dd>
+                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'relations'))#">
+                        <xar:mlstring>
+                            Relationships 
+                        </xar:mlstring>
+                    </a>
+                </dd>
+            </xar:if>
+            <xar:if condition="$option eq 'meta'">
+                <dd class="active">
+                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'meta'))#">
+                        <xar:mlstring>
+                            Meta Definitions 
+                        </xar:mlstring>
+                    </a>
+                </dd>
                 <xar:else />
-                    <dd>
-                        <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'meta'))#">
-                            <xar:mlstring>
-                                Meta Definitions
-                            </xar:mlstring>
-                        </a>
-                    </dd>    
-                </xar:if>
-            </dl>
-        </div>
-        <xar:if condition="empty($option)">
-            <div>&nbsp;</div>
-            <xar:module main="false" module="dynamicdata" type="util" func="query" />
-        <xar:else />
-            <div>&nbsp;</div>
-            <xar:module main="false" module="dynamicdata" type="util" func="$option" />
-        </xar:if>
+                <dd>
+                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'meta'))#">
+                        <xar:mlstring>
+                            Meta Definitions 
+                        </xar:mlstring>
+                    </a>
+                </dd>
+            </xar:if>
+        </dl>
     </div>
+    <xar:if condition="empty($option)">
+        <xar:module main="false" module="dynamicdata" type="util" func="query" />
+        <xar:else />
+        <xar:module main="false" module="dynamicdata" type="util" func="$option" />
+    </xar:if>
 </div>
