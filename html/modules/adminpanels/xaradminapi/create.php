@@ -12,7 +12,7 @@
 */
 function adminpanels_adminapi_create($args){
 
-    extract($args);
+    /* extract($args); */
 
     // Security Check
     if(!xarSecurityCheck('AddPanel',1,'Item',"$name:All:All")) return;
