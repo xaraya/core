@@ -1004,13 +1004,14 @@ function drawindent() {
 
     function update()
     {
+        $pass = md5($this->pass);
         $query =    "UPDATE " . $this->rolestable .
                     " SET " .
                     "xar_name = '$this->name'," .
                     "xar_type = $this->type," .
                     "xar_uname = '$this->uname'," .
                     "xar_email = '$this->email'," .
-                    "xar_pass = '$this->pass'," .
+                    "xar_pass = '$pass'," .
                     "xar_state = '$this->state'" .
                     " WHERE xar_uid = " . $this->getID();
 

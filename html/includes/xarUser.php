@@ -326,7 +326,7 @@ function xarUserGetVar($name, $userId = NULL)
             $userRole = xarModAPIFunc('roles',
                                       'user',
                                       'get',
-                                       array('uid' => $userId)); 
+                                       array('uid' => $userId));
 
             if (empty($userRole) || $userRole['uid'] != $userId) {
                 $msg = xarML('User identified by uid #(1) doesn\'t exist.', $userId);

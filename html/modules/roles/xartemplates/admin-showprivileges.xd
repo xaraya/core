@@ -174,45 +174,46 @@
 </table>
 <br />
 
-<table border="0" width="100%">
-    <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>Assign a Privilege to </xar:mlstring>            
-			<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
-			<xar:else /><xar:mlstring>User</xar:mlstring>
-			</xar:if>
-            '#$pname#'
-        </th>
-    </tr>
-</table>
+<xar:if condition="$roleid gt 1">
+	<table border="0" width="100%">
+		<tr>
+			<th colspan="4" align="center">
+				<xar:mlstring>Assign a Privilege to </xar:mlstring>            
+				<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
+				<xar:else /><xar:mlstring>User</xar:mlstring>
+				</xar:if>
+				'#$pname#'
+			</th>
+		</tr>
+	</table>
 
-<div align="center">
-	<br />
-	<form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
-		
-		<table border="0" cellpadding="5">
-
-			<tr>
-				<td>
-					<xar:mlstring>Privilege</xar:mlstring>
-				</td>
-				<td>
-					<select name="privid" id="privid">
-						<xar:loop name="$allprivileges">
-							<option value="#$pid#">#$name#
-						</xar:loop>
-					</select>
-				</td>
-			</tr>
-		</table>			
-					
+	<div align="center">
 		<br />
-		<input type="submit" value="Add" align="middle" tabindex="2" />
-		<input type="hidden" name="authid" id="authid" value="#$authid#" />
-		<input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
-	</form>
-</div>
+		<form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
 
+			<table border="0" cellpadding="5">
+
+				<tr>
+					<td>
+						<xar:mlstring>Privilege</xar:mlstring>
+					</td>
+					<td>
+						<select name="privid" id="privid">
+							<xar:loop name="$allprivileges">
+								<option value="#$pid#">#$name#
+							</xar:loop>
+						</select>
+					</td>
+				</tr>
+			</table>			
+
+			<br />
+			<input type="submit" value="Add" align="middle" tabindex="2" />
+			<input type="hidden" name="authid" id="authid" value="#$authid#" />
+			<input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
+		</form>
+	</div>
+</xar:if >
 <table border="0" width="100%">
 	<tr>
 		<th align="center">
