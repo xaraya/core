@@ -569,6 +569,7 @@ function xarDB__mysqlCreateTable($tableName, $fields)
 {
     $sql_fields = array();
     $primary_key = array();
+    $increment_start = false;
 
     while (list($field_name, $parameters) = each($fields)) {
         $parameters['command'] = 'create';
@@ -582,6 +583,9 @@ function xarDB__mysqlCreateTable($tableName, $fields)
                       . $this_field['auto_increment'];
         if ($this_field['primary_key'] == true) {
             $primary_key[] = $field_name;
+        }
+        if ($this_field['increment_start'] != false) {
+            $increment_start = $this_field['increment_start'];
         }
     }
 
@@ -597,7 +601,13 @@ function xarDB__mysqlCreateTable($tableName, $fields)
     if (!empty($primary_key)) {
         $sql .= ', PRIMARY KEY ('.implode(',',$primary_key).')';
     }
+
     $sql .= ')';
+
+    // Bug #744 - Check "increment_start" field so that MySQL increment field will start at the appropriate startid
+    if ($increment_start) {
+        $sql .= ' AUTO_INCREMENT=' . $increment_start;
+    }
 
     return $sql;
 }
@@ -800,6 +810,12 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
     $this_field['auto_increment'] = (isset($parameters['increment']) && $parameters['increment'] == true)
                                   ? 'AUTO_INCREMENT'
                                   : '';
+
+    // Bug #744 - Check "increment_start" field so that MySQL increment field will start at the appropriate startid
+    if (isset($parameters['increment_start']))
+        $this_field['increment_start'] = $parameters['increment_start'];
+    else
+        $this_field['increment_start'] = 0;
 
     // Bug #408 - MySQL 4.1 Alpha bug fix reported by matrix9180@deskmod.com (Chad Ingram)
     if (!empty($this_field['auto_increment'])) {
