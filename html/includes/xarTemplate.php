@@ -349,7 +349,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
 	            $sourceFileName = "modules/$modOsDir/xartemplates/$modType-$funcName.xd";
 			}
         }
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_TEMPLATE, $tplName) === NULL) return;
+        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates', $tplName) === NULL) return;
     } /*else {
         TODO: <marco> Handle i18n for this case
     }*/
@@ -794,7 +794,7 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
     $sourceFileName = "$GLOBALS[xarTpl_themeDir]/modules/$modName/includes/$templateName.xt";
     if (!file_exists($sourceFileName)) {
         $sourceFileName = "modules/$modName/xartemplates/includes/$templateName.xd";
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_INCLTEMPL, $templateName) === NULL) return;
+        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates/includes', $templateName) === NULL) return;
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }

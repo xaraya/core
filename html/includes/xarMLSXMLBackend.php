@@ -143,6 +143,9 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         $context = $GLOBALS['MLS']->getContextByType($ctxType);
         $this->contextlocation = $this->domainlocation . "/" . $context->getDir();
         $ctxNames = array();
+        if (!file_exists($this->contextlocation)) {
+            return $ctxNames;
+        }
         $dd = opendir($this->contextlocation);
         while ($fileName = readdir($dd)) {
             if (!preg_match('/^(.+)\.xml$/', $fileName, $matches)) continue;

@@ -42,56 +42,67 @@ define('XARMLS_CTXTYPE_VISUALAPI', 10);
 $MLSData = array(
                 'file' => array(
                           'type' => XARMLS_CTXTYPE_FILE,
+                          'xtype' => 'php',
                           'dir' => '',
-                          'label' => '',
+                          'label' => ''
                          ),
                 'core' => array(
                           'type' => XARMLS_CTXTYPE_FILE,
+                          'xtype' => 'php',
                           'dir' => '',
                           'label' => 'Common'
                          ),
-                'templates' => array(
+                'modules:templates' => array(
                           'type' => XARMLS_CTXTYPE_TEMPLATE,
+                          'xtype' => 'xd',
                           'dir' => 'templates',
                           'label' => 'Templates'
                          ),
-                'blocks' => array(
+                'modules:blocks' => array(
                           'type' => XARMLS_CTXTYPE_BLOCK,
+                          'xtype' => 'php',
                           'dir' => 'blocks',
                           'label' => 'Blocks'
                          ),
-                'templateincludes' => array(
+                'modules:templates/includes' => array(
                           'type' => XARMLS_CTXTYPE_INCLTEMPL,
+                          'xtype' => 'xd',
                           'dir' => 'templates/includes',
                           'label' => 'Included Templates'
                          ),
-                'templateblocks' => array(
+                'modules:templates/blocks' => array(
                           'type' => XARMLS_CTXTYPE_BLKTEMPL,
+                          'xtype' => 'xd',
                           'dir' => 'templates/blocks',
                           'label' => 'Block Templates'
                          ),
-                'admin' => array(
+                'modules:admin' => array(
                           'type' => XARMLS_CTXTYPE_ADMIN,
+                          'xtype' => 'php',
                           'dir' => 'admin',
                           'label' => 'Admin'
                          ),
-                'adminapi' => array(
+                'modules:adminapi' => array(
                           'type' => XARMLS_CTXTYPE_ADMINAPI,
+                          'xtype' => 'php',
                           'dir' => 'adminapi',
                           'label' => 'AdminAPI'
                          ),
-                'user' => array(
+                'modules:user' => array(
                           'type' => XARMLS_CTXTYPE_USER,
+                          'xtype' => 'php',
                           'dir' => 'user',
                           'label' => 'User'
                          ),
-                'userapi' => array(
+                'modules:userapi' => array(
                           'type' => XARMLS_CTXTYPE_USERAPI,
+                          'xtype' => 'php',
                           'dir' => 'userapi',
                           'label' => 'UserAPI'
                          ),
-                'visualapi' => array(
+                'modules:visualapi' => array(
                           'type' => XARMLS_CTXTYPE_VISUALAPI,
+                          'xtype' => 'php',
                           'dir' => 'visualapi',
                           'label' => 'VisualAPI'
                          )
@@ -141,22 +152,26 @@ class MLSObject {
     var $name;
     var $label;
     var $type;
+    var $xtype;
     var $dir;
 
     function MLSObject($name,$data) {
         $this->name = $name;
         $this->type = $data['type'];
+        $this->xtype = $data['xtype'];
         $this->label = $data['label'];
         $this->dir = $data['dir'];
     }
 
     function setName($x) { $this->name = $x; }
     function setType($x) { $this->type = $x; }
+    function setXtype($x) { $this->xtype = $x; }
     function setLabel($x) { $this->label = $x; }
     function setDir($x) { $this->dir = $x; }
 
     function getName() { return $this->name; }
     function getType() { return $this->type; }
+    function getXtype() { return $this->xtype; }
     function getLabel() { return $this->label; }
     function getDir() { return $this->dir; }
 }
@@ -1510,10 +1525,16 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
 
     function findContext($ctxType, $ctxName)
     {
-        $context = $GLOBALS['MLS']->getContextByType($ctxType);
-        $fileName = $this->getDomainLocation() . "/";
-        if ($context->getDir() != "") $fileName .= $context->getDir() . "/";
-        $fileName .= $ctxName . "." . $this->backendtype;
+        if (strpos($ctxType, 'modules:') !== false) {
+            list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
+            $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
+        } else {
+            $context = $GLOBALS['MLS']->getContextByType($ctxType);
+            $fileName = $this->getDomainLocation() . "/";
+            if ($context->getDir() != "") $fileName .= $context->getDir() . "/";
+            $fileName .= $ctxName . "." . $this->backendtype;
+        }
+
         if (!file_exists($fileName)) {
 //            die("File does not exist:" . $fileName);
             return false;
@@ -1616,6 +1637,9 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
         $context = $GLOBALS['MLS']->getContextByType($ctxType);
         $this->contextlocation = $this->domainlocation . "/" . $context->getDir();
         $ctxNames = array();
+        if (!file_exists($this->contextlocation)) {
+            return $ctxNames;
+        }
         $dd = opendir($this->contextlocation);
         while ($fileName = readdir($dd)) {
             if (!preg_match('/^(.+)\.php$/', $fileName, $matches)) continue;
