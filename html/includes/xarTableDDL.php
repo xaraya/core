@@ -163,6 +163,43 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
     if (empty($databaseType)) {
         $databaseType = xarDBGetType();
     }
+
+    // save table definition
+    $systemPrefix = xarDBGetSystemTablePrefix();
+    $metaTable = $systemPrefix . '_tables';
+    if ($tableName != $metaTable) {
+        list($dbconn) = xarDBGetConn();
+        while (list($field_name, $parameters) = each($fields)) {
+            $nextId = $dbconn->GenId($metaTable);
+            $query = "INSERT INTO $metaTable (
+                      xar_tableid,
+                      xar_table,
+                      xar_field,
+                      xar_type,
+                      xar_size,
+                      xar_default,
+                      xar_null,
+                      xar_unsigned,
+                      xar_increment,
+                      xar_primary_key)
+                    VALUES (
+                      $nextId,
+                      '" . xarVarPrepForStore($tableName) . "',
+                      '" . xarVarPrepForStore($field_name) . "',
+                      '" . (empty($parameters['type']) ? '' : xarvarPrepForStore($parameters['type'])) . "',
+                      '" . (empty($parameters['size']) ? '' : xarvarPrepForStore($parameters['size'])) . "',
+                      '" . (empty($parameters['default']) ? '' : xarvarPrepForStore($parameters['default'])) . "', " .
+                      (empty($parameters['null']) ? '0' : '1') . ", " .
+                      (empty($parameters['unsigned']) ? '0' : '1') . ", " .
+                      (empty($parameters['increment']) ? '0' : '1') . ", " .
+                      (empty($parameters['primary_key']) ? '0' : '1') .
+                      ")";
+                  //    xar_width,
+                  //    xar_decimals,
+            $result =& $dbconn->Execute($query);
+        }
+    }
+
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
@@ -204,6 +241,15 @@ function xarDBDropTable($tableName, $databaseType = NULL)
     }
     if (empty($databaseType)) {
         $databaseType = xarDBGetType();
+    }
+
+    // remove table definition
+    $systemPrefix = xarDBGetSystemTablePrefix();
+    $metaTable = $systemPrefix . '_tables';
+    if ($tableName != $metaTable) {
+        list($dbconn) = xarDBGetConn();
+        $query = "DELETE FROM $metaTable WHERE xar_table='" . xarVarPrepForStore($tableName) . "'";
+        $result =& $dbconn->Execute($query);
     }
 
     switch($databaseType) {
