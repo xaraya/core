@@ -1,3 +1,3 @@
 <xar:mlstring>Select Your Theme</xar:mlstring>:<br /><br />
-<a href="#xarModURL('themes', 'user', 'usermenu', array('phase' => 'form'))#"><img src="#$icon#" /></a>
+<a href="#xarModURL('themes', 'user', 'usermenu', array('phase' => 'form'))#"><img src="#$icon#" border="0" /></a>
 <br /><br />

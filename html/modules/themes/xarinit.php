@@ -149,6 +149,12 @@ function themes_init()
         return NULL;
     }
 
+    // Initialisation successful
+    return true;
+}
+
+function themes_activate()
+{
     if(file_exists('themes/Xaraya_Classic/xartheme.php')){
         xarModSetVar('themes', 'default', 'Xaraya_Classic');
     }
@@ -160,8 +166,8 @@ function themes_init()
 
     xarBlockTypeRegister('themes', 'meta');
 
-    // Initialisation successful
     return true;
+    
 }
 
 /**
