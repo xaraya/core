@@ -6,7 +6,7 @@
     </tr>
 </table>
 <h2><xar:mlstring>List of All Modules</xar:mlstring></h2>
-Click on status label to sort by states.
+Click on status label to filter by states.
 <br /><br />
 <div class="xar-accent">
 <!--  -->
