@@ -444,7 +444,7 @@ $mask =  $this->getMask($mask);
 // nothing found: return false
 // check if the exception needs to be caught here or not
         if ($showexception) {
-        $msg = xarML('No privilege for modifying this item');
+        $msg = xarML('No privilege for #(1)',$mask->getName());
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         }
