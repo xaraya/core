@@ -111,7 +111,7 @@ function xarModGetVar($modName, $name)
 
     if (xarVarIsCached('Mod.Variables.' . $modName, $name)) {
         $value = xarVarGetCached('Mod.Variables.' . $modName, $name);
-        if ($value == '*!*MiSSiNG*!*') {
+        if ($value === '*!*MiSSiNG*!*') {
             return;
         } else {
             return $value;
@@ -198,7 +198,6 @@ function xarModSetVar($modName, $name, $value)
     }
 
     $oldValue = xarModGetVar($modName, $name);
-
     if (!isset($oldValue)) {
         if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
 
