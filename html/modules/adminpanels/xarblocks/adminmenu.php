@@ -121,9 +121,19 @@ function adminpanels_adminmenublock_display($blockinfo){
                                                 'link'      => '', 
                                                 'modactive' => 1);
                                                 
-                        // For active module we need to display the mod functions links
-                        // call the api function to obtain function links
-                        $menulinks = xarModAPIFunc($label, 'admin', 'getmenulinks');
+                        // Little bug fix since we wrapped the load API calls
+                        // Lets check to see if the function exists and just skip it if it doesn't
+                        // with the new api load, it causes some problems.  We need to load the api 
+                        // in order to do it right.
+                        xarModAPILoad($label, 'admin');
+                        if (function_exists($label.'_adminapi_getmenulinks')){ 
+                            // The user API function is called.
+                            $menulinks = xarModAPIFunc($label,
+                                                       'admin',
+                                                       'getmenulinks');
+                        } else {
+                            $menulinks = '';
+                        }
                         // scan array and prepare the links
                         if (!empty($menulinks)){
                             $indlinks = array();
