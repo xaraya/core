@@ -60,7 +60,7 @@ function adminpanels_adminmenublock_info(){
 */
 function adminpanels_adminmenublock_display($blockinfo){
 
-// Security Check
+    // Security Check
 	if(!xarSecurityCheck('AdminPanel',0,'adminmenu','$blockinfo[title]:All:All')) return;
 
     // are there any admin modules, then get the whole list sorted by names
@@ -97,8 +97,9 @@ function adminpanels_adminmenublock_display($blockinfo){
     $logoutlabel = xarVarPrepForDisplay(xarML('admin logout'));
     $logouturl = xarModURL('adminpanels' ,'admin', 'confirmlogout', array());
 
-    // Get current URL
-    $currenturl = preg_replace('/&/', '&amp;', xarServerGetCurrentURL());
+    // Get current URL for later comparisons
+    // because we need to compare xhtml compliant url, we replace '&' instances with '&amp;'
+    $currenturl = str_replace('&', '&amp;', xarServerGetCurrentURL());
 
     switch(strtolower($menustyle)){
         case 'byname':
