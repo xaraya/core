@@ -136,7 +136,7 @@ function xarPageIsCached($cacheKey, $name = '')
 //function xarBlockIsCached($cacheKey, $blockDynamics, $blockPermission, $name = '')
 function xarBlockIsCached($args)
 {
-    global $xarOutput_cacheCollection, $xarBlock_cacheCode, $xarBlock_cacheTime, $xarBlock_noCache;
+    global $xarOutput_cacheCollection, $xarBlock_cacheCode, $xarBlock_cacheTime, $blockCacheExpireTime, $xarBlock_noCache;
     
     $xarTpl_themeDir = xarTplGetThemeDir();
     
@@ -185,8 +185,8 @@ function xarBlockIsCached($args)
     if (empty($userShared)) {
     	$userShared = 0;
     }
-    if (!empty($blockCacheExpireTime)) {
-        $xarBlock_cacheTime = $blockCacheExpireTime;
+    if (!isset($blockCacheExpireTime)) {
+        $blockCacheExpireTime = $xarBlock_cacheTime;
     }
 
     if ($noCache == 1) {
@@ -240,7 +240,7 @@ function xarBlockIsCached($args)
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         file_exists($cache_file) &&
         filesize($cache_file) > 0 &&
-        ($xarBlock_cacheTime == 0 || filemtime($cache_file) > time() - $xarBlock_cacheTime)) {
+        ($blockCacheExpireTime == 0 || filemtime($cache_file) > time() - $blockCacheExpireTime)) {
         return true;
     } else {
         return false;
@@ -283,7 +283,6 @@ function xarBlockGetCached($cacheKey, $name = '')
         fclose($file);
     }
 
-    xarOutputCleanCached('Block', $cacheKey);
     return $blockCachedOutput;
 }
 
@@ -329,7 +328,7 @@ function xarPageSetCached($cacheKey, $name, $value)
 
 function xarBlockSetCached($cacheKey, $name, $value)
 {
-    global $xarOutput_cacheCollection, $xarOutput_cacheSizeLimit, $xarBlock_cacheCode, $xarBlock_cacheTime, $xarBlock_noCache;
+    global $xarOutput_cacheCollection, $xarOutput_cacheSizeLimit, $xarBlock_cacheCode, $blockCacheExpireTime, $xarBlock_noCache;
     
     if ($xarBlock_noCache == 1) {
         $xarBlock_noCache = '';
@@ -337,13 +336,13 @@ function xarBlockSetCached($cacheKey, $name, $value)
     }
 
     $xarTpl_themeDir = xarTplGetThemeDir();
-    
+
     // CHECKME: use $name for something someday ?
     $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarBlock_cacheCode.php";
     if (
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         (!file_exists($cache_file) ||
-        ($xarBlock_cacheTime != 0 && filemtime($cache_file) < time() - $xarBlock_cacheTime)) &&
+        ($blockCacheExpireTime != 0 && filemtime($cache_file) < time() - $blockCacheExpireTime)) &&
         xarCacheDirSize($xarOutput_cacheCollection, 'Block', $cacheKey) <= $xarOutput_cacheSizeLimit
         ) {
         $fp = @fopen($cache_file,"w");
@@ -395,6 +394,8 @@ function xarPageFlushCached($cacheKey)
 
 /**
  * clean the cache of old entries
+ * note: for blocks, this only gets called when the cache size limit has been reached,
+ *       and when called by blocks, the global cache timeout takes precedents 
  *
  * @access public
  * @returns void
@@ -414,7 +415,7 @@ function xarOutputCleanCached($type, $cacheKey = '')
             $cache_file = $xarOutput_cacheCollection . '/' . $file;
             if (filemtime($cache_file) < time() - (${'xar' . $type . '_cacheTime'} + 60) &&
                 (strstr($file, '.php') !== false) &&
-                (($type == 'Block' && strstr($file, $cacheKey) !== false) || 
+                ($type == 'Block' || 
                 ($type == 'Page' && strstr($file, 'block') == false))) {
                 @unlink($cache_file);
             }
