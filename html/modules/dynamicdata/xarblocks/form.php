@@ -53,7 +53,7 @@ function dynamicdata_formblock_display($blockinfo)
 
     // Database information
     xarModDBInfoLoad('dynamicdata');
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
     $dynamicdata = $xartable['dynamic_data'];
 

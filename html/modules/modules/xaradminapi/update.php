@@ -36,7 +36,7 @@ function modules_adminapi_update($args)
 	if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regid")) return;
 
     // Rename operation
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
     // Hooks

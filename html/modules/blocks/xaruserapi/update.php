@@ -25,7 +25,7 @@ function blocks_userapi_update($args)
         xarSessionSetVar('errmsg', 'Error in API');
         return false;
     }
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
     $uid = xarUserGetVar('uid');

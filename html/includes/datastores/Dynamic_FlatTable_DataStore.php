@@ -77,7 +77,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
-        list($dbconn) = xarDBGetConn();
+        $dbconn =& xarDBGetConn(0);
 
         $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
                     FROM " . join(', ', $tables) . $more . "
@@ -130,7 +130,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
-        list($dbconn) = xarDBGetConn();
+        $dbconn =& xarDBGetConn(0);
 
     // TODO: this won't work for objects with several static tables !
         if (empty($itemid)) {
@@ -202,7 +202,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
-        list($dbconn) = xarDBGetConn();
+        $dbconn =& xarDBGetConn(0);
 
         $query = "UPDATE $table ";
         $join = 'SET ';
@@ -241,7 +241,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
-        list($dbconn) = xarDBGetConn();
+        $dbconn =& xarDBGetConn(0);
 
         $query = "DELETE FROM $table 
                    WHERE $itemidfield = " . xarVarPrepForStore($itemid);
@@ -329,7 +329,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             }
         }
 
-        list($dbconn) = xarDBGetConn();
+        $dbconn =& xarDBGetConn(0);
 
         if ($isgrouped) {
             $query = "SELECT " . join(', ', $newfields) . "
@@ -443,7 +443,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
-        list($dbconn) = xarDBGetConn();
+        $dbconn =& xarDBGetConn(0);
 
         $query = "SELECT COUNT(DISTINCT $itemidfield)
                     FROM $table ";
@@ -481,7 +481,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         $table = $this->name;
 
-        list($dbconn) = xarDBGetConn();
+        $dbconn =& xarDBGetConn(0);
 
         $systemPrefix = xarDBGetSystemTablePrefix();
         $metaTable = $systemPrefix . '_tables';
@@ -539,7 +539,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
                 $itemids = array();
             }
 
-            list($dbconn) = xarDBGetConn();
+            $dbconn =& xarDBGetConn(0);
 
             $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
                         FROM $table ";

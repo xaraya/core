@@ -21,7 +21,7 @@
  */
 function blocks_userapi_reactivate_menus()
 {
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
     $ublockstable = $xartable['userblocks'];
 

@@ -97,8 +97,11 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
  * @global array xarDB_connections array of database connection objects
  * @return array array of database connection objects
  */
-function xarDBGetConn()
+function &xarDBGetConn($conn=null)
 {
+    if(isset($conn) && isset($GLOBALS['xarDB_connections'][$conn])) {
+            return $GLOBALS['xarDB_connections'][$conn];
+    }
     return $GLOBALS['xarDB_connections'];
 }
 

@@ -22,7 +22,7 @@
  */
 function dynamicdata_userapi_getmodules($args)
 {
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
     $dynamicprop = $xartable['dynamic_properties'];

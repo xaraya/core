@@ -27,7 +27,7 @@ xarDBLoadTableMaintenanceAPI();
 function base_init()
 {
     // Get database information
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $tables =& xarDBGetTables();
 
     $systemPrefix = xarDBGetSystemTablePrefix();

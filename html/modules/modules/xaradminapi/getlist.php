@@ -91,7 +91,7 @@ function modules_adminapi_GetList($args)
         }
     }
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $tables =& xarDBGetTables();
     $modulestable = $tables['modules'];
 

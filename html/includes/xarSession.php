@@ -213,7 +213,7 @@ function xarSessionGetId()
 
 function xarSession_setUserInfo($userId, $rememberSession)
 {
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
     $sessioninfoTable = $xartable['session_info'];
@@ -338,7 +338,7 @@ function xarSession__setup($args)
  */
 function xarSession__current($sessionId)
 {
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
     $sessioninfoTable = $xartable['session_info'];
@@ -362,7 +362,7 @@ function xarSession__current($sessionId)
  */
 function xarSession__new($sessionId, $ipAddress)
 {
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
     $sessioninfoTable = $xartable['session_info'];
@@ -420,7 +420,7 @@ function xarSession__phpClose()
  */
 function xarSession__phpRead($sessionId)
 {
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
     $sessioninfoTable = $xartable['session_info'];
@@ -466,7 +466,7 @@ function xarSession__phpRead($sessionId)
  */
 function xarSession__phpWrite($sessionId, $vars)
 {
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
     $sessioninfoTable = $xartable['session_info'];
@@ -486,7 +486,7 @@ function xarSession__phpWrite($sessionId, $vars)
  */
 function xarSession__phpDestroy($sessionId)
 {
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
     $sessioninfoTable = $xartable['session_info'];
@@ -505,7 +505,7 @@ function xarSession__phpDestroy($sessionId)
  */
 function xarSession__phpGC($maxlifetime)
 {
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
     $sessioninfoTable = $xartable['session_info'];

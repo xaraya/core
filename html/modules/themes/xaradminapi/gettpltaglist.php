@@ -22,7 +22,7 @@
  */
 function themes_adminapi_gettpltaglist($args)
 {
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 		
 		extract($args);

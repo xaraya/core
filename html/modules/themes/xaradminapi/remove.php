@@ -29,7 +29,7 @@ function themes_adminapi_remove($args)
 	if(!xarSecurityCheck('AdminTheme')) return;
 
     // Remove variables and theme
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $tables =& xarDBGetTables();
 
     // Get theme information

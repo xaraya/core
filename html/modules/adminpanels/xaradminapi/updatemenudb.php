@@ -36,7 +36,7 @@ function adminpanels_adminapi_updatemenudb($args){
         // happy return
         return true;
     }else{
-        list($dbconn) = xarDBGetConn();
+        $dbconn =& xarDBGetConn(0);
         $xartable =& xarDBGetTables();
         $menutable = $xartable['admin_menu'];
 

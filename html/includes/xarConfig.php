@@ -98,7 +98,7 @@ function xarConfig_loadVars()
 {
     $cacheCollection = 'Config.Variables';
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $tables =& xarDBGetTables();
 
     $query = "SELECT xar_name,

@@ -59,7 +59,7 @@ function dynamicdata_adminapi_removehook($args)
     }
 
     // Get database setup
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
     $dynamicprop = $xartable['dynamic_properties'];

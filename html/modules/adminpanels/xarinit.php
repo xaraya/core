@@ -26,7 +26,7 @@
 function adminpanels_init()
 {
     // Get database information
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $table =& xarDBGetTables();
 
     // Load Table Maintaince API

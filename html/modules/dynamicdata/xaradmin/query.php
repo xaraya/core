@@ -148,7 +148,7 @@ function dynamicdata_admin_query($args)
     $data['olditemid'] = $itemid;
     $data['objects'] = xarModAPIFunc('dynamicdata','user','getobjects');
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $data['table'] = $table;
     $data['oldtable'] = $table;
     $data['tables'] = $dbconn->MetaTables();

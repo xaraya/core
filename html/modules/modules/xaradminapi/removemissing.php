@@ -31,7 +31,7 @@ function modules_adminapi_removemissing($args)
 //    if (!xarVarFetch('remove', 'str', $remove, NULL, XARVAR_NOT_REQUIRED)) return;
     // Get module information
 //    $modinfo = xarModGetInfo($regid);
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $tables =& xarDBGetTables();
 
     $query = "DELETE FROM " . $tables['modules'] . " WHERE xar_regid = $regid";

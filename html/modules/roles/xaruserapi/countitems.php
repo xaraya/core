@@ -19,7 +19,7 @@
 function roles_userapi_countitems()
 {
     // Get database setup
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
     $rolestable = $xartable['roles'];

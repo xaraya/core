@@ -554,7 +554,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
     }
     
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $tables =& xarDBGetTables();
 
     switch(strtolower($type)) {
@@ -714,7 +714,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             break;
     }
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $tables =& xarDBGetTables();
 
     switch(strtolower($type)) {
@@ -898,7 +898,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
             break;
     }
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $tables =& xarDBGetTables();
 
     switch(strtolower($type)) {

@@ -45,7 +45,7 @@ function roles_userapi_get($args)
         $type = 0;
     }
     // Get database setup
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
     $rolestable = $xartable['roles'];

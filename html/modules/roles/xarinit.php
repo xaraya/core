@@ -26,7 +26,7 @@
 function roles_init()
 {
     // Get database setup
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $tables =& xarDBGetTables();
 
     $sitePrefix = xarDBGetSiteTablePrefix();
@@ -410,7 +410,7 @@ function roles_delete()
      * Drop the tables
      */
     // Get database information
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $tables =& xarDBGetTables();
 
     $query = xarDBDropTable($tables['roles']);

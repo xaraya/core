@@ -36,7 +36,7 @@ function modules_adminapi_gethookedmodules($args)
         return;
     }
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable      =& xarDBGetTables();
 
     $query = "SELECT DISTINCT xar_smodule, xar_stype
