@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.xarMLS.php 1.38 03/06/01 14:42:42+02:00 marcel@hsdev.com $
  *
  * Multi Language System
  *
@@ -522,7 +522,7 @@ function xarMLS_setCurrentLocale($locale)
     }
     //if ($mode == XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
     //if (substr($curCharset, 0, 9) != 'iso-8859-' &&
-    //$curCharset != 'koi8-r') {
+    //$curCharset != 'windows-1251') {
     // Do not use mbstring for single byte charsets
 
     //}
@@ -685,7 +685,7 @@ function xarMLS__getSingleByteCharset($langISO2Code) {
                              'ga' => 'iso-8859-1',  'it' => 'iso-8859-1',  //'ja' => '',
                              'lv' => 'iso-8859-13', 'lt' => 'iso-8859-13', 'mk' => 'iso-8859-5',
                              'mt' => 'iso-8859-3',  'no' => 'iso-8859-1',  'pl' => 'iso-8859-2',
-                             'pt' => 'iso-8859-1',  'ro' => 'iso-8859-2',  'ru' => 'koi8-r',
+                             'pt' => 'iso-8859-1',  'ro' => 'iso-8859-2',  'ru' => 'windows-1251',
                              'gd' => 'iso-8859-1',  'sr' => 'iso-8859-2',  'sk' => 'iso-8859-2',
                              'sl' => 'iso-8859-2',  'es' => 'iso-8859-1',  'sv' => 'iso-8859-1',
                              'tr' => 'iso-8859-9',  'uk' => 'iso-8859-5'

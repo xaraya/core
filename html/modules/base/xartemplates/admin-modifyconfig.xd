@@ -90,7 +90,7 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
     <p><label for="mlsmode"><xar:mlstring>Default Locale</xar:mlstring></label>:&nbsp;&nbsp;
 	<select name="defaultlocale" id="defaultlocale" size="1">
          <xar:foreach in="$locales" value="$locale">
-         <xar:if condition="xarMLSGetCurrentLocale() eq $locale">
+         <xar:if condition="xarMLSGetSiteLocale() eq $locale">
              <option value="#$locale#" selected="selected">#$locale#</option>
          <xar:else />
              <option value="#$locale#">#$locale#</option>
