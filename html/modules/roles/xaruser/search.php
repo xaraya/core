@@ -47,6 +47,9 @@ function roles_user_search()
         $numitems = 20;
     }
 
+    // Need the database connection for quoting strings.
+    $dbconn =& xarDBGetConn();
+
     // TODO: support wild cards / boolean / quotes / ... (cfr. articles) ?
 
     // remember what we selected before
@@ -63,22 +66,29 @@ function roles_user_search()
             // save the properties for the search form
             $data['properties'] =& $object->getProperties();
 
+            // quote the search string (in different variations here)
+            $quotedlike = $dbconn->qstr('%'.$q.'%');
+            $quotedupper = $dbconn->qstr('%'.strtoupper($q).'%');
+            $quotedlower = $dbconn->qstr('%'.strtolower($q).'%');
+            $quotedfirst = $dbconn->qstr('%'.ucfirst($q).'%');
+            $quotedwords = $dbconn->qstr('%'.ucwords($q).'%');
+
             // run the search query
-            // FIXME: this still errors out when search string contains single quote
-            $q = xarVar_addslashes($q);
             $where = array();
             // see which properties we're supposed to search in
             foreach (array_keys($object->properties) as $field) {
                 if (!xarVarFetch($field, 'checkbox', $checkfield,  NULL, XARVAR_NOT_REQUIRED)) {return;}
                 if ($checkfield) {
-                    $where[] = $field . " LIKE '%" . $q . "%'";
-                    $where[] = $field . " LIKE '%" . strtoupper($q) . "%'";
-                    $where[] = $field . " LIKE '%" . strtolower($q) . "%'";
-                    $where[] = $field . " LIKE '%" . ucfirst($q) . "%'";
-                    $where[] = $field . " LIKE '%" . ucwords($q) . "%'";
+                    $where[] = $field . " LIKE " . $quotedlike;
+                    $where[] = $field . " LIKE " . $quotedupper;
+                    $where[] = $field . " LIKE " . $quotedlower;
+                    $where[] = $field . " LIKE " . $quotedfirst;
+                    $where[] = $field . " LIKE " . $quotedwords;
                     // remember what we selected before
                     $data['checked'][$field] = 1;
                 }
+                // reset the checkfield value
+                $checkfield = NULL;
             }
             if (count($where) > 0) {
             // TODO: refresh fieldlist of datastore(s) before getting items
@@ -101,12 +111,15 @@ function roles_user_search()
         }
     }
 
+    // quote the search string
+    $quotedlike = $dbconn->qstr('%'.$q.'%');
+
     $selection = " AND (";
-    $selection .= "(xar_name LIKE '%" . $q . "%')";
-    $selection .= " OR (xar_uname LIKE '%" . $q . "%')";
+    $selection .= "(xar_name LIKE " . $quotedlike . ")";
+    $selection .= " OR (xar_uname LIKE " . $quotedlike . ")";
 
     if (xarModGetVar('roles', 'searchbyemail')) {
-        $selection .= " OR (xar_email LIKE '%" . $q . "%')";
+        $selection .= " OR (xar_email LIKE " . $quotedlike . ")";
     }
     
     $selection .= ")";
@@ -119,8 +132,10 @@ function roles_user_search()
                                          'include_myself' => false));
 
     if (!$data['total']){
-        $data['status'] = xarML('No Users Found Matching Search Criteria');
-        $data['total'] = 0;
+        if (count($data['users']) == 0){
+            $data['status'] = xarML('No Users Found Matching Search Criteria');
+        }
+        $data['total'] = count($data['users']);
         return $data;
     }
 
@@ -134,7 +149,18 @@ function roles_user_search()
                                   'numitems' => xarModGetVar('roles',
                                                              'rolesperpage')));
 
-    $data['users'] = $users;
+    // combine search results with DD
+    if (!empty($users) && count($data['users']) > 0) {
+        foreach ($users as $user) {
+            $uid = $user['uid'];
+            if (isset($data['users'][$uid])) {
+                continue;
+            }
+            $data['users'][$uid] = $user;
+        }
+    } else {
+        $data['users'] = $users;
+    }
 
     if (count($data['users']) == 0){
         $data['status'] = xarML('No Users Found Matching Search Criteria');
