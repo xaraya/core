@@ -19,9 +19,7 @@
         <input type="hidden" name="bid" id="bid" value="#$bid#" />
         <fieldset>
             <legend>
-                <xar:mlstring>
-                    Instance Parameters 
-                </xar:mlstring>
+                <xar:mlstring>Instance Parameters</xar:mlstring>
             </legend>
 
             <div class="xar-form-input-wrapper">
@@ -86,10 +84,10 @@
                 </select>
             </div>
 
-	        <xar:comment>
-	            It is likely this section will be removed, since blocks generally do not use it. 
-	        </xar:comment>
-	        <xar:if condition="isset($block_settings['form_refresh']) and $block_settings['form_refresh'] eq true">
+            <xar:comment>
+                It is likely this section will be removed, since blocks generally do not use it. 
+            </xar:comment>
+            <xar:if condition="isset($block_settings['form_refresh']) and $block_settings['form_refresh'] eq true">
  
                 <div class="xar-form-input-wrapper">
                     <label for="block_refresh" title="#xarML('If your block uses a refresh time, this field needs to be filled in.')#" class="xar-form-label">
@@ -110,9 +108,9 @@
                         </xar:loop>
                     </select>
                 </div>
-			</xar:if>
+            </xar:if>
 
-		</fieldset>
+        </fieldset>
 
        <fieldset>
             <legend>

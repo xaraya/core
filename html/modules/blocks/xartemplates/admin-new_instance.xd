@@ -1,6 +1,4 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:base-include-javascript module="base" filename="formcheck.js" />
 <script type="text/javascript">
 <!--
@@ -17,85 +15,61 @@
 </xar:if>
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>
-            Blocks Administration 
-        </xar:mlstring>
+        <xar:mlstring>Blocks Administration</xar:mlstring>
     </span>
 </div>
 <div class="xar-mod-body">
+
     <h2>
-        <xar:mlstring>
-            New Instance 
-        </xar:mlstring>
+        <xar:mlstring>Add Instance</xar:mlstring>
     </h2>
-    <form class="xar-blocks-admin" action="#xarModURL('blocks', 'admin', 'create_instance')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
-        <fieldset class="formelements">
-            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-            <p class="param">
-                <label for="block_name" class="required">
-                    <span class="help" title="#xarML('Every block instance requires a unique name')#">
-                        <xar:mlstring>
-                            Name 
-                        </xar:mlstring>
-                        : 
-                    </span>
-                </label>
-                <input type="text" name="block_name" id="block_name" size="30" value="" maxlength="100" />
-            </p>
-            <p class="param">
-                <label for="block_title">
-                    <span class="help" title="#xarML('The title of the block as you want it to appear on your website')#">
-                        <xar:mlstring>
-                            Title 
-                        </xar:mlstring>
-                        : 
-                    </span>
-                </label>
-                <input type="text" name="block_title" id="block_title" size="30" value="" maxlength="255" />
-            </p>
-            <p class="param">
-                <label for="block_type">
-                    <span class="help" title="#xarML('The type of block that you wish to add.')#">
-                        <xar:mlstring>
-                            Type 
-                        </xar:mlstring>
-                        : 
-                    </span>
+
+    <form action="#xarModURL('blocks', 'admin', 'create_instance')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
+        <fieldset>
+            <legend>Instance Properties</legend>
+
+            <div class="xar-form-input-wrapper">
+                <label for="block_type" title="#xarML('The type of block that you wish to add.')#" class="xar-form-label">
+                    <xar:mlstring>Parent Module / Type:</xar:mlstring>
                 </label>
                 <select name="block_type" id="block_type">
                     <xar:loop name="$block_types">
                         <option value="#$loop:item['tid']#">
-                            #xarVarPrepForDisplay($loop:item['module'])#/#xarVarPrepForDisplay($loop:item['type'])# 
+                            #xarVarPrepForDisplay($loop:item['module'])# / #xarVarPrepForDisplay($loop:item['type'])# 
                         </option>
                     </xar:loop>
                 </select>
-            </p>
-            <p class="param">
-                <label for="block_template">
-                    <span class="help" title="#xarML('This field is optional.  This is a specific override template that you want to use for this block.')#">
-                        <xar:mlstring>
-                            Template (optional) 
-                        </xar:mlstring>
-                        : 
-                    </span>
+            </div>
+
+            <div class="xar-form-input-wrapper">
+                <label for="block_name" title="#xarML('Every block instance requires a unique name')#" class="xar-form-label">
+                    <xar:mlstring>Name:</xar:mlstring>
                 </label>
-                <input type="text" name="block_template" id="block_template" size="30" value="" maxlength="255" />
-            </p>
-            <p class="param">
-                <label for="block_type">
-                    <span class="help" title="#xarML('Initial block group to place this block into (optional)')#">
-                        <xar:mlstring>
-                            Block group (optional) 
-                        </xar:mlstring>
-                        : 
-                    </span>
+                <input type="text" name="block_name" id="block_name" value="" maxlength="100" class="xar-form-textmedium" />
+            </div>
+
+            <div class="xar-form-input-wrapper">
+                <label for="block_title" title="#xarML('The title of the block as you want it to appear on your website')#" class="xar-form-label">
+                    <xar:mlstring>Title:</xar:mlstring>
+                </label>
+                <input type="text" name="block_title" id="block_title" value="" maxlength="255" class="xar-form-textmedium" />
+            </div>
+
+            <div class="xar-form-input-wrapper">
+                <label for="block_template" title="#xarML('This field is optional.  This is a specific override template that you want to use for this block.')#" class="xar-form-label">
+                    <xar:mlstring>Template (optional):</xar:mlstring>
+                </label>
+                <input type="text" name="block_template" id="block_template" value="" maxlength="255" class="xar-form-textlong" />
+            </div>
+
+            <div class="xar-form-input-wrapper">
+                <label for="block_groups" title="#xarML('Initial block group to place this block into (optional)')#" class="xar-form-label">
+                    <xar:mlstring>Block Group (optional):</xar:mlstring>
                 </label>
                 <select name="block_groups[][gid]" id="block_groups">
                     <option value="">
                         -- 
-                        <xar:mlstring>
-                            no group 
-                        </xar:mlstring>
+                        <xar:mlstring>no group</xar:mlstring>
                         -- 
                     </option>
                     <xar:loop name="$block_groups">
@@ -104,37 +78,31 @@
                         </option>
                     </xar:loop>
                 </select>
-            </p>
-            <p class="param">
-                <label for="block_state">
-                    <span class="help" title="#xarML('This field is used to determine whether the block is shown (maximized) or hidden.')#">
-                        <xar:mlstring>
-                            Default state 
-                        </xar:mlstring>
-                        : 
-                    </span>
+            </div>
+
+            <div class="xar-form-input-wrapper">
+                <label for="block_state" title="#xarML('This field is used to determine whether the block is shown (maximized) or hidden.')#" class="xar-form-label">
+                    <xar:mlstring>Default State:</xar:mlstring>
                 </label>
                 <select name="block_state" id="block_state">
                     <option value="0">
-                        <xar:mlstring>
-                            Hidden 
-                        </xar:mlstring>
+                        <xar:mlstring>Hidden</xar:mlstring>
                     </option>
                     <option value="1">
-                        <xar:mlstring>
-                            Minimized 
-                        </xar:mlstring>
+                        <xar:mlstring>Minimized</xar:mlstring>
                     </option>
                     <option value="2" selected="selected">
-                        <xar:mlstring>
-                            Maximized 
-                        </xar:mlstring>
+                        <xar:mlstring>Maximized</xar:mlstring>
                     </option>
                 </select>
-            </p>
-            <p>
-                <input type="submit" value="#$createlabel#" />
-            </p>
+            </div>
+
         </fieldset>
+
+        <div class="xar-clear-both xar-align-center">
+            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+            <input type="submit" value="#xarML('Create Instance')#" class="xar-margin-thickright" />
+        </div>
+
     </form>
 </div>

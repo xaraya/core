@@ -14,9 +14,9 @@
     </h2>
     <form method="post" action="#xarModUrl('blocks', 'admin', 'settings')#">
 
-	<fieldset>
-		<legend><xar:mlstring>View Options</xar:mlstring></legend>
-		
+    <fieldset>
+        <legend><xar:mlstring>View Options</xar:mlstring></legend>
+        
         <div class="xar-form-input-wrapper">
             <label for="selstyle" title="#xarML('Choose how Block instances are displayed.')#" class="xar-form-label">
                 <xar:mlstring>Preferred Layout:</xar:mlstring>
@@ -36,7 +36,7 @@
             <input type="submit" value="#xarML('Refresh')#" />
         </div>
 
-	</fieldset>
+    </fieldset>
 
         <xar:if condition="$selstyle eq 'compact'">
             <xar:template file="compact" type="module" />

@@ -1,44 +1,42 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Delete Group</xar:mlstring></h2>
-<div style="margin: auto;">
-<form method="post" action="&xar-modurl-blocks-admin-delete_group;">
-    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-    <input type="hidden" name="confirm" id="confirm" value="true" />
-    <input type="hidden" name="gid" id="gid" value="#$group['id']#" />
-    <div style="text-align: center;">
-    <h3><xar:ml>
-            <xar:mlstring>Really delete group "#(1)"?</xar:mlstring>
-            <xar:mlvar>#$group['name']#</xar:mlvar>
-        </xar:ml></h3>
-    <table border="0" cellpadding="2" cellspacing="0" style="margin: auto;">
-        <tr>
-            <td>
-                <xar:mlstring>Members</xar:mlstring>:
-            </td>
-            <td>
-                <xar:loop name="$group['instances']">
-                    <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item['id']#">#$loop:item['title']#</a><br />
-                </xar:loop>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <xar:mlstring>Template</xar:mlstring>:
-            </td>
-            <td>
-                <xar:var name="$group['template']" />
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center"><br />
-                <input type="submit" value="OK"  />
-            </td>
-        </tr>
-    </table>
-    <br /><br />
-    <a href="#xarModURL('blocks', 'admin', 'view_groups')#"><xar:mlstring>Cancel deletion of Block Group</xar:mlstring></a>
-    </div>
-</form>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span>
 </div>
+<div class="xar-mod-body">
+    <h2>
+        <xar:mlstring>Delete Group</xar:mlstring>
+    </h2>
+
+    <h3 class="xar-align-center">
+        <xar:mlstring>Confirm deleting this group?</xar:mlstring>
+    </h3>
+
+    <form method="post" action="&xar-modurl-blocks-admin-delete_group;">
+        <p>
+            <xar:mlstring>Name:</xar:mlstring>
+            <xar:var name="$group['name']" />
+        </p>
+        <p>
+            <xar:mlstring>Members:</xar:mlstring>
+                <xar:if condition="!empty($group['instances'])">
+                    <xar:loop name="$group['instances']">
+                        #$loop:item['title']#
+                    </xar:loop>
+                <xar:else />
+                    [ <xar:mlstring>none</xar:mlstring> ]
+                </xar:if>
+        </p>
+        <p>
+            <xar:mlstring>Template:</xar:mlstring>
+            <xar:var name="$group['template']" />
+        </p>
+        <div class="xar-clear-both xar-align-center">
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="confirm" id="confirm" value="true" />
+            <input type="hidden" name="gid" id="gid" value="#$group['id']#" />
+            <input type="submit" value="#xarML('Delete Group')#" class="xar-margin-thick" />
+            <xar:set name="$returnurl">#xarModURL('blocks', 'admin', 'view_groups')#</xar:set>
+            <input type="button" value="#xarML('Cancel')#" class="xar-margin-thick" onclick="window.location='#$returnurl#';" />
+        </div>
+    </form>
 </div>

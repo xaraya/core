@@ -5,7 +5,7 @@
 </script>
 
 <div class="xar-mod-head">
-	<span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span>
+    <span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span>
 </div>
 
 <div class="xar-mod-body">
@@ -30,33 +30,33 @@
                 <xar:mlstring>Members:</xar:mlstring>
             </label>
             <xar:if condition="$instance_count gt 0">
-	            <div class="xar-floatleft">
-	                <div class="xar-floatleft">
-	                    <button onclick="return xar_base_reorder('group_instances', true, 'group_instance_order');" title="#$moveuplabel#" class="xar-displayblock xar-margin-thickbottom">
-	                        <img src="#$up_arrow_src#" alt="#xarML('Up Arrow')#" />
-	                    </button>
-	                    <button onclick="return xar_base_reorder('group_instances', false, 'group_instance_order');" title="#$movedownlabel#" class="xar-displayblock xar-margin-thicktop">
-	                        <img src="#$down_arrow_src#" alt="#xarML('Down Arrow')#" />
-	                    </button>
-						<br style="clear: both;" />
-	                </div>
-	                <div class="xar-floatleft xar-margin-thickleft">
-	                    <xar:if condition="$instance_count gt 2">
-	                        <xar:set name="list_size">#$instance_count#</xar:set>
-	                    <xar:else />
-	                        <xar:set name="list_size">3</xar:set>
-	                    </xar:if>
-	                    <select name="group_instances" id="group_instances" size="#$instance_count#">
-	                        <xar:loop name="$group['instances']">
-	                            <xar:if condition="empty($loop:item['title'])">
-	                                <option value="#$loop:item['id']#">#$loop:item['name']#</option>
-	                            <xar:else />
-	                                <option value="#$loop:item['id']#">#$loop:item['name']# (#$loop:item['title']#)</option>
-	                            </xar:if>
-	                        </xar:loop>
-	                    </select>
-	                </div>
-	            </div>
+                <div class="xar-floatleft">
+                    <div class="xar-floatleft">
+                        <button onclick="return xar_base_reorder('group_instances', true, 'group_instance_order');" title="#$moveuplabel#" class="xar-displayblock xar-margin-thickbottom">
+                            <img src="#$up_arrow_src#" alt="#xarML('Up Arrow')#" />
+                        </button>
+                        <button onclick="return xar_base_reorder('group_instances', false, 'group_instance_order');" title="#$movedownlabel#" class="xar-displayblock xar-margin-thicktop">
+                            <img src="#$down_arrow_src#" alt="#xarML('Down Arrow')#" />
+                        </button>
+                        <br style="clear: both;" />
+                    </div>
+                    <div class="xar-floatleft xar-margin-thickleft">
+                        <xar:if condition="$instance_count gt 2">
+                            <xar:set name="list_size">#$instance_count#</xar:set>
+                        <xar:else />
+                            <xar:set name="list_size">3</xar:set>
+                        </xar:if>
+                        <select name="group_instances" id="group_instances" size="#$instance_count#">
+                            <xar:loop name="$group['instances']">
+                                <xar:if condition="empty($loop:item['title'])">
+                                    <option value="#$loop:item['id']#">#$loop:item['name']#</option>
+                                <xar:else />
+                                    <option value="#$loop:item['id']#">#$loop:item['name']# (#$loop:item['title']#)</option>
+                                </xar:if>
+                            </xar:loop>
+                        </select>
+                    </div>
+                </div>
             <xar:else />
                 [ <xar:mlstring>none</xar:mlstring> ]
             </xar:if>

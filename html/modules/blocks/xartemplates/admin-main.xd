@@ -1,10 +1,10 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head">
-	<span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span>
+    <span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-	<img src="modules/blocks/xarimages/admin.gif" class="xar-module-icon" alt="official icon" width="96" height="96" />
-	
+    <img src="modules/blocks/xarimages/admin.gif" class="xar-module-icon" alt="official icon" width="96" height="96" />
+    
     <h2><xar:mlstring>Overview</xar:mlstring></h2>
 
     <h3><xar:mlstring>What is it?</xar:mlstring></h3>

@@ -1,47 +1,46 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Delete Instance</xar:mlstring></h2>
-<div style="margin: auto;">
-<form method="post" action="&xar-modurl-blocks-admin-delete_instance;">
-    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-    <input type="hidden" name="confirm" id="confirm" value="true" />
-    <input type="hidden" name="bid" id="bid" value="#$instance['bid']#" />
-    <div style="text-align: center;">
-    <h3><xar:ml>
-            <xar:mlstring>Really delete block #(1) [#(2)]?</xar:mlstring>
-            <xar:mlvar>#xarVarPrepForDisplay($instance['name'])#</xar:mlvar>
-            <xar:mlvar>#xarVarPrepForDisplay($instance['title'])#</xar:mlvar>
-        </xar:ml></h3>
-    <table border="0" cellpadding="2" cellspacing="0" style="margin: auto;">
-        <xar:if condition="!empty($instance['groups'])">
-            <tr>
-                <td>
-                    <xar:mlstring>Groups</xar:mlstring>:
-                </td>
-                <td>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span>
+</div>
+<div class="xar-mod-body">
+    <h2><xar:mlstring>Delete Instance</xar:mlstring></h2>
+
+    <h3 class="xar-align-center">
+        <xar:mlstring>Confirm deleting this block?</xar:mlstring>
+    </h3>
+
+    <form method="post" action="&xar-modurl-blocks-admin-delete_instance;">
+        <p>
+            <xar:mlstring>Name:</xar:mlstring>
+            #xarVarPrepForDisplay($instance['name'])#
+        </p>
+        <xar:if condition="!empty($instance['title'])">
+            <p>
+                <xar:mlstring>Title:</xar:mlstring>
+                #xarVarPrepForDisplay($instance['title'])#
+            </p>
+        </xar:if>
+            <p>
+                <xar:mlstring>Groups:</xar:mlstring>
+                <xar:if condition="!empty($instance['groups'])">
                     <xar:loop name="$instance['groups']">
                         #xarVarPrepForDisplay($loop:item.name)#
                     </xar:loop>
-                </td>
-            </tr>
-        </xar:if>
-        <tr>
-            <td>
-                <xar:mlstring>Type</xar:mlstring>:
-            </td>
-            <td>
-                #xarVarPrepForDisplay($instance['module'])#\#xarVarPrepForDisplay($instance['type'])#
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center"><br />
-                <input type="submit" value="#$deletelabel#"  />
-            </td>
-        </tr>
-    </table>
-    <br /><br />
-    <a href="#xarModURL('blocks', 'admin', 'view_instances')#"><xar:mlstring>Cancel</xar:mlstring></a>
-    </div>
-</form>
-</div>
+                <xar:else />
+                    [ <xar:mlstring>none</xar:mlstring> ]
+                </xar:if>
+            </p>
+        <p>
+            <xar:mlstring>Type:</xar:mlstring>
+            #xarVarPrepForDisplay($instance['module'])# / #xarVarPrepForDisplay($instance['type'])#
+        </p>
+        <div class="xar-clear-both xar-align-center">
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="confirm" id="confirm" value="true" />
+            <input type="hidden" name="bid" id="bid" value="#$instance['bid']#" />
+            <input type="submit" value="#xarML('Delete Block')#" class="xar-margin-thick" />
+            <xar:set name="$returnurl">#xarModURL('blocks', 'admin', 'view_instances')#</xar:set>
+            <input type="button" value="#xarML('Cancel')#" class="xar-margin-thick" onclick="window.location='#$returnurl#';" />
+        </div>
+    </form>
 </div>
