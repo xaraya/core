@@ -23,6 +23,9 @@
 // Purpose of file:  Initialisation functions for modules module
 // ----------------------------------------------------------------------
 
+// Load Table Maintainance API
+pnDBLoadTableMaintenanceAPI();
+
 /**
  * Initialise the modules module
  *
@@ -35,9 +38,6 @@ function modules_init()
     // Get database information
     list($dbconn) = pnDBGetConn();
     $tables = pnDBGetTables();
-
-    // Load Table Maintainance API
-    pnDBLoadTableMaintenanceAPI();
 
     // Create tables
     /*********************************************************************
@@ -65,45 +65,20 @@ function modules_init()
     *  PRIMARY KEY  (pn_id)
     * )
     *********************************************************************/
-    $query = pnDBCreateTable($tables['modules'],
-             array('pn_id'            => array('type'        => 'integer',
-                                               'null'        => false,
-                                               'default'     => ''
-                                               'primary_key' => true),
-                   'pn_name'          => array('type'        => 'varchar',
-                                               'size'        => 64,
-                                               'null'        => false,
-                                               'default'     => ''),
-                   'pn_regid'         => array('type'        => 'integer',
-                                               'unsigned'    => true,
-                                               'null'        => false,
-                                               'default'     => '0'),
-                   'pn_directory'     => array('type'        => 'varchar',
-                                               'size'        => 64,
-                                               'null'        => false,
-                                               'default'     => ''),
-                   'pn_version'       => array('type'        => 'varchar',
-                                               'null'        => false,
-                                               'default'     => '0'),
-                   'pn_mode'          => array('type'        => 'integer',
-                                               'null'        => false,
-                                               'default'     => '0'),
-                   'pn_class'         => array('type'        => 'varchar',
-                                               'size'        => 64,
-                                               'null'        => false,
-                                               'default'     => ''),
-                   'pn_category'      => array('type'        => 'varchar',
-                                               'size'        => 64,
-                                               'null'        => false,
-                                               'default'     => ''),
-                   'pn_admin_capable' => array('type'        => 'integer',
-                                               'size'        => 'tiny',
-                                               'null'        => false,
-                                               'default'     => '0'),
-                   'pn_user_capable'  => array('type'        => 'integer',
-                                               'size'        => 'tiny',
-                                               'null'        => false,
-                                               'default'     => '0')));
+    $fields = array(
+    'pn_id'             => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
+    'pn_name'           => array('type'=>'varchar','size'=>64,'null'=>false),
+    'pn_regid'          => array('type'=>'integer','unsigned'=>true,'null'=>false,'default'=>'0'),
+    'pn_directory'      => array('type'=>'varchar','size'=>64,'null'=>false),
+    'pn_version'        => array('type'=>'varchar','size'=>10,'null'=>false),
+    'pn_mode'           => array('type'=>'integer','size'=>'small','null'=>false,'default'=>'1'),
+    'pn_class'          => array('type'=>'varchar','size'=>64,'null'=>false),
+    'pn_category'       => array('type'=>'varchar','size'=>64,'null'=>false),
+    'pn_admin_capable'  => array('type'=>'integer','size'=>'tiny','null'=>false,'default'=>'0'),
+    'pn_user_capable'   => array('type'=>'integer','size'=>'tiny','null'=>false,'default'=>'0')
+    );
+
+    $query = pnDBCreateTable($tables['modules'],$fields);
     $dbconn->Execute($query);
 
     // Check for db errors
@@ -122,15 +97,13 @@ function modules_init()
     *  PRIMARY KEY  (pn_regid)
     * )
     ********************************************************************/
-    $query = pnDBCreateTable($tables['system/module_states'],
-              array('pn_regid' => array('type'        => 'integer',
-                                        'null'        => false,
-                                        'default'     => '0',
-                                        'primary_key' => true),
-                    'pn_state' => array('type'        => 'integer',
-                                        'null'        => false,
-                                        'suze'        => 'tiny',
-                                        'default'     => '0')));
+    $fields = array(
+    'pn_regid' => array('type'=>'integer','null'=>false,'unsigned'=>true,'primary_key'=>false),
+    'pn_state' => array('type'=>'integer','null'=>false,'default'=>'0')
+    );
+
+    $query = pnDBCreateTable($tables['system/module_states'],$fields);
+    
     $dbconn->Execute($query);
 
     // Check for db errors
@@ -151,20 +124,15 @@ function modules_init()
     *  PRIMARY KEY  (pn_id)
     * )
     ********************************************************************/
-    $query = pnDBCreateTable($tables['system/module_vars'],
-             array('pn_id'      => array('type'        => 'integer',
-                                         'null'        => false,
-                                         'default'     => ''
-                                         'primary_key' => true),
-                   'pn_modname' => array('type'        => 'varchar',
-                                         'size'        => 64,
-                                         'null'        => false,
-                                         'default'     => ''),
-                   'pn_name'    => array('type'        => 'varchar',
-                                         'size'        => 64,
-                                         'null'        => false,
-                                         'default'     => ''),
-                   'pn_value'   => array('type'     => 'blob')));
+    $fields = array(
+    'pn_id'      => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
+    'pn_modname' => array('type'=>'varchar','size'=>64,'null'=>false),
+    'pn_name'    => array('type'=>'varchar','size'=>64,'null'=>false),
+    'pn_value'   => array('type'=>'text','size'=>'long')
+    );
+
+    $query = pnDBCreateTable($tables['module_vars'],$fields);
+
     $dbconn->Execute($query);
 
     // Check for db errors
@@ -190,43 +158,19 @@ function modules_init()
     *  PRIMARY KEY  (pn_id)
     * )
     *********************************************************************/
-    $query = pnDBCreateTable($prefix . '_hooks',
-             array('pn_id'      => array('type'        => 'integer',
-                                         'unsigned'    => true,
-                                         'null'        => false,
-                                         'default'     => '0',
-                                         'increment'   => true,
-                                         'primary_key' => true),
-                   'pn_object'  => array('type'        => 'varchar',
-                                         'size'        => 64,
-                                         'null'        => false,
-                                         'default'     => ''),
-                   'pn_action'  => array('type'        => 'varchar',
-                                         'size'        => 64,
-                                         'null'        => false,
-                                         'default'     => ''),
-                   'pn_smodule' => array('type'        => 'varchar',
-                                         'size'        => 64,
-                                         'default'     => NULL),
-                   'pn_stype'   => array('type'        => 'varchar',
-                                         'size'        => 64,
-                                         'default'     => NULL),
-                   'pn_tarea'   => array('type'        => 'varchar',
-                                         'size'        => 64,
-                                         'null'        => false,
-                                         'default'     => ''),
-                   'pn_tmodule' => array('type'        => 'varchar',
-                                         'size'        => 64,
-                                         'null'        => false,
-                                         'default'     => ''),
-                   'pn_ttype'   => array('type'        => 'varchar',
-                                         'size'        => 64,
-                                         'null'        => false,
-                                         'default'     => ''),
-                   'pn_tfunc'   => array('type'        => 'varchar',
-                                         'size'        => 64,
-                                         'null'        => false,
-                                         'default'     => '')));
+    $fields = array(
+    'pn_id'      => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
+    'pn_object'  => array('type'=>'varchar','size'=>64,'null'=>false),
+    'pn_action'  => array('type'=>'varchar','size'=>64,'null'=>false),
+    'pn_smodule' => array('type'=>'varchar','size'=>64,'null'=>false),
+    'pn_stype'   => array('type'=>'varchar','size'=>64,'null'=>false),
+    'pn_tarea'   => array('type'=>'varchar','size'=>64,'null'=>false),
+    'pn_tmodule' => array('type'=>'varchar','size'=>64,'null'=>false),
+    'pn_ttype'   => array('type'=>'varchar','size'=>64,'null'=>false),
+    'pn_tfunc'   => array('type'=>'varchar','size'=>64,'null'=>false)
+    );
+     
+    $query = pnDBCreateTable($tables['hooks'],$fields);
 
     $dbconn->Execute($query);
 

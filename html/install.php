@@ -25,7 +25,7 @@
 // ----------------------------------------------------------------------
 
 // INSTALLER THEME
-define('PNINSTALL_THEME','SeaBreeze');
+define('PNINSTALL_THEME','installer');
 
 
 // 1. select language
@@ -72,12 +72,20 @@ define ('PNINSTALL_PHASE_FINISHED',            '8');
 function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
 {
     pnCoreInit(PNCORE_SYSTEM_NONE); // Does not initialise any optional system
-    
+
+    // Get module parameters
+    list($modName, $modType, $funcName) = pnRequestGetInfo();
+
+    $modName = 'installer';
+    $modType = 'admin';
+
     // Check for installer theme
     //TODO: use main function as the gateway to the phases and the location for this check
-    if (pnCore_getSiteVar('BL.Theme.Name') != 'installer') {
+    $installerTheme = pnCore_getSiteVar('BL.Theme.Name');
+    if (strcmp(PNINSTALL_THEME, $installerTheme)) {
         $varDir = pnCoreGetVarDirPath();
-        die('Please set the BL.Theme.Name variable in ' .$varDir.'/config.site.xml to installer');
+        die('Please change the BL.Theme.Name variable in ' .$varDir.'/config.site.xml
+        from '.$installerTheme.' to installer');
     }
 
     // Handle installation phase designation
@@ -85,33 +93,30 @@ function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
     if ($phase == 0) {
         $phase = 1;
     }
+    // Build functioname from phase
+    $funcName = 'phase'.$phase;
 
     // Handle language setting
-    /*
-    if (empty($HTTP_POST_VARS['install_language']) || !is_string($HTTP_POST_VARS['install_language'])) {
-        $language = 'eng';
-    } else {
-        $language = $HTTP_POST_VARS['install_language'];
-    }
-    */
 
     // Make sure we should still be here
     if ($phase >= PNINSTALL_PHASE_ADMIN_CREATION) {
         pnResponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
     }
 
-    // Load installer
-    $loaded = pnInstallLoad('installer','admin');
+    // Load installer module
+    $res = pnInstallLoad($modName, $modType);
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return; // throw back
+    }
 
     // if the debugger is active, start it
     if (pnCoreIsDebuggerActive()) {
        ob_start();
     }
-    // Build functioname from phase
-    $funcName = 'phase'.$phase;
+
 
     // Run installer function
-    $mainModuleOutput = pnInstallFunc('installer', 'admin', $funcName);
+    $mainModuleOutput = pnInstallFunc($modName, $modType, $funcName);
 
     if (pnCoreIsDebuggerActive()) {
         if (ob_get_length() > 0) {

@@ -107,7 +107,7 @@
     <tr>
         <td align="center" colspan="2">
             <span class="pn-normal">
-                <input type="radio" name="install_type" value="new" />&nbsp;New install
+                <input type="radio" name="install_type" value="new" checked />&nbsp;New install
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" name="install_type" value="upgrade" />&nbsp;Upgrade
             </span><br /><br />
