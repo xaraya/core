@@ -332,9 +332,9 @@ function xarModGetUserVar($modName, $name, $uid=NULL)
 	
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_uservarsTable = $tables['system/module_user_vars'];
+        $module_uservarstable = $tables['system/module_uservars'];
     } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_uservarsTable = $tables['site/module_user_vars'];
+        $module_uservarstable = $tables['site/module_uservars'];
     }
 
     // We need the id of the module variable
@@ -410,18 +410,19 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
 	
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_uservarsTable = $tables['system/module_uservars'];
+        $module_uservarstable = $tables['system/module_uservars'];
     } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_uservarsTable = $tables['site/module_uservars'];
+        $module_uservarstable = $tables['site/module_uservars'];
     }
 	
     // Get the default setting to compare the value against.
 	$modsetting = xarModGetVar($modName, $name);
+    
     // We need the variable id
     unset($modvarid);
 	$modvarid = xarModGetVarId($modName, $name);
-	if(!$modvarid) return;
-
+    if(!$modvarid) return;
+    
 	// Only store setting if different from global setting
 	if ($value != $modsetting) {
         // First delete it.
@@ -503,7 +504,7 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
     $modvarid = xarModGetVarId($modName, $name);
     if(!$modVarid) return;
  
-    $query = "DELETE FROM $module_uservarstable
+    $query = "DELETE FROM $module_uservarsTable
               WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'
               AND xar_uid = '" . xarVarPrepForStore($uid) . "'";
     if(!$dbconn->Execute($query)) return;
@@ -545,16 +546,17 @@ function xarModGetVarId($modName, $name)
 
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_uservarsTable = $tables['system/module_uservars'];
+        $module_varstable = $tables['system/module_vars'];
     } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_uservarsTable = $tables['site/module_uservars'];
+        $module_varstable = $tables['site/module_vars'];
     }
 
 	$query = "SELECT xar_id 
-            FROM $module_uservarstable
+            FROM $module_varstable
             WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
             AND xar_name = '" . xarVarPrepForStore($name) . "'";
 	$result = $dbconn -> Execute($query);
+    
 	if(!$result) return;
 
 	// If there was no such thing return 
