@@ -80,6 +80,12 @@ function roles_user_lostpassword()
                 xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                 return;
             }
+
+            // We need to tell some hooks that we are coming from the lost password screen
+            // and not the update the actual roles screen.  Right now, the keywords vanish
+            // into thin air.  Bug 1960 and 3161
+            xarVarSetCached('Hooks.all','noupdate',1);
+
             //Update user password
             // check for user and grab uid if exists
             if (!xarModAPIFunc('roles','admin','update',$user)) {
