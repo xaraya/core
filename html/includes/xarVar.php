@@ -821,7 +821,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         break;
     }
     if (xarVarIsCached($cacheCollection, $cacheName)) {
-        $value = xarVarGetCached($cacheCollection, $name);
+        $value = xarVarGetCached($cacheCollection, $cacheName);
         if ($value === $missing) {
             return;
         } else {
@@ -838,12 +838,12 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
     switch(strtolower($type)) {
     case 'themevar':
         if (xarVarIsCached('Theme.GetVarsByTheme', $modName)) return;
-        if (xarVarIsCached('Theme.GetVarsByName', $name)) return;
+        if (xarVarIsCached('Theme.GetVarsByName', $cacheName)) return;
         break;
     case 'modvar':
     default:
         if (xarVarIsCached('Mod.GetVarsByModule', $modName)) return;
-        if (xarVarIsCached('Mod.GetVarsByName', $name)) return;
+        if (xarVarIsCached('Mod.GetVarsByName', $cacheName)) return;
         break;
     }
     
@@ -970,7 +970,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
     }
     if ($result->EOF) {
         $result->Close();
-        xarVarSetCached($cacheCollection, $name, $setTo);
+        xarVarSetCached($cacheCollection, $cacheName, $setTo);
         return;
     }
     
@@ -982,17 +982,17 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
     switch(strtolower($type)) {
         case 'modvar':
             default:
-            xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
+            xarVarSetCached('Mod.Variables.' . $modName, $cacheName, $value);
             break;
         case 'moduservar':
-            xarVarSetCached('ModUser.Variables.' . $modName, $cachename, $value);
+            xarVarSetCached('ModUser.Variables.' . $modName, $cacheName, $value);
             break;
         case 'themevar':
-            xarVarSetCached('Theme.Variables.' . $modName, $name, $value);
+            xarVarSetCached('Theme.Variables.' . $modName, $cacheName, $value);
             break;
         case 'configvar':
             $value = unserialize($value);
-            xarVarSetCached('Config.Variables', $name, $value);
+            xarVarSetCached('Config.Variables', $cacheName, $value);
             break;
 
     }
