@@ -364,7 +364,9 @@ function xarOutputCleanCached($type)
     if ($handle = @opendir($xarOutput_cacheCollection)) {
         while (($file = readdir($handle)) !== false) {
             $cache_file = $xarOutput_cacheCollection . '/' . $file;
-            if (filemtime($cache_file) < time() - (${'xar' . $type . '_cacheTime'} + 60) && (strstr($file, '.php') !== false)) {
+            if (filemtime($cache_file) < time() - (${'xar' . $type . '_cacheTime'} + 60) &&
+                (strstr($file, '.php') !== false) &&
+                (($type == 'Block' && strstr($file, 'block') !== false) || ($type == 'Page' && strstr($file, 'block') == false))) {
                 @unlink($cache_file);
             }
         }
