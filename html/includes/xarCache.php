@@ -132,20 +132,32 @@ function xarPageIsCached($cacheKey, $name = '')
     }
 }
 
-function xarBlockIsCached($cacheKey, $name = '')
+//function xarBlockIsCached($cacheKey, $blockDynamics, $blockPermission, $name = '')
+function xarBlockIsCached($args)
 {
     global $xarPage_cacheCollection, $xarPage_cacheTime, $xarPage_cacheTheme, $xarBlock_cacheCode;
     
     global $xarTpl_themeDir;
+    
+    extract($args);
+    
     $factors = $xarTpl_themeDir;
-    //if (xarBlockDynamic == 1) {
+    
+    if (!isset($blockDynamics)) {
+    	$blockDynamics = 1;
+    }
+    if (!isset($blockPermission)) {
+    	$blockPermission = 2;
+    }
+    
+    if ($blockDynamics == 1) {
         $factors .= xarServerGetVar('REQUEST_URI');
         $param = xarServerGetVar('QUERY_STRING');
         if (!empty($param)) {
             $factors .= '?' . $param;
         }
-    //}
-    //if (xarBlockPermissions == 1) {
+    }
+    if ($blockPermission == 1) {
         $systemPrefix = xarDBGetSystemTablePrefix();
         $rolemembers = $systemPrefix . '_rolemembers';
         $cuid = xarSessionGetVar('uid');
@@ -161,11 +173,11 @@ function xarBlockIsCached($cacheKey, $name = '')
         }
         $result->Close();
         $factors .=$gids;
-    //} elseif (xarBlockPermission == 2) {
-    //    $factors .= xarSessionGetVar('uid');
-    //} else {
-    //    $factors .= 0;
-    //}
+    } elseif ($blockPermission == 2) {
+        $factors .= xarSessionGetVar('uid');
+    } else {
+        $factors .= 0;
+    }
     $xarBlock_cacheCode = md5($factors);
     
     // CHECKME: use $name for something someday ?
@@ -210,9 +222,18 @@ function xarBlockGetCached($cacheKey, $name = '')
     
     // CHECKME: use $name for something someday ?
     $cache_file = "$xarPage_cacheCollection/$cacheKey-$xarBlock_cacheCode.php";
-    @readfile($cache_file);
     
+    //$blockCachedOutput = file_get_contents($cache_file); //ouch, only available in php >= 4.3, bummer 
+    
+    $blockCachedOutput = '';
+    $file = @fopen($cache_file, "rb");
+    if ($file) {
+        while (!feof($file)) $blockCachedOutput .= fread($file, 1024);
+        fclose($file);
+    }
+        
     xarPageCleanCached();
+    return $blockCachedOutput;
 }
 
 /**
@@ -257,7 +278,7 @@ function xarPageSetCached($cacheKey, $name, $value)
 
 function xarBlockSetCached($cacheKey, $name, $value)
 {
-    global $xarPage_cacheCollection, $xarPage_cacheTime, $xarPage_cacheTheme, $xarPage_cacheShowTime, $xarOutput_cacheSizeLimit, $xarBlock_cacheCode;
+    global $xarPage_cacheCollection, $xarPage_cacheTime, $xarPage_cacheTheme, $xarOutput_cacheSizeLimit, $xarBlock_cacheCode;
     global $xarTpl_themeDir;
     
     // CHECKME: use $name for something someday ?
@@ -271,7 +292,7 @@ function xarBlockSetCached($cacheKey, $name, $value)
         ) {
         $fp = @fopen($cache_file,"w");
         if (!empty($fp)) {
-            @fwrite($fp,$value);
+            @fwrite($fp, trim($value));
             @fclose($fp);
         }
         xarPageCleanCached();

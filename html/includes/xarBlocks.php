@@ -173,9 +173,10 @@ function xarBlock_renderGroup($groupName)
         if (file_exists(xarCoreGetVarDirPath() . '/cache/output/cache.touch')) {
             $caching = 1;
             $cacheKey = $blockInfo['module']."-blockid".$blockInfo['bid'];
+            $args = array('cacheKey' => $cacheKey, 'name' => 'block');
         }
  
-        if ($caching == 1 && xarBlockIsCached($cacheKey,'block')) {
+        if ($caching == 1 && xarBlockIsCached($args)) {
             // output the cached block
             $output .= xarBlockGetCached($cacheKey,'block');
             
@@ -191,17 +192,17 @@ function xarBlock_renderGroup($groupName)
             $blockoutput = xarBlock_render($blockInfo);
             
             if ($caching == 1) {
-                xarBlockSetCached($cacheKey,'block', $blockoutput);
+                xarBlockSetCached($cacheKey, 'block', $blockoutput);
             }
             $output .= $blockoutput;
-        }
 
-        // don't throw back exception for broken blocks
-        //if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            $output .= xarExceptionRender('html');
-            // We handled the exception(s) so we can clear it
-            xarExceptionFree();
+        	// don't throw back exception for broken blocks
+        	//if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
+        	if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            	$output .= xarExceptionRender('html');
+            	// We handled the exception(s) so we can clear it
+            	xarExceptionFree();
+        	}
         }
 
         $result->MoveNext();
