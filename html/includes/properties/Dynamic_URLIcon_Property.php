@@ -1,0 +1,78 @@
+<?php
+/**
+ * Dynamic URL Icon Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+ */
+
+include_once "includes/properties/Dynamic_TextBox_Property.php";
+
+class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
+{
+    var $icon;
+
+    function Dynamic_URLIcon_Property($args)
+    {
+        $this->Dynamic_Property($args);
+        // check validation field for icon to use !
+        if (!empty($this->validation)) {
+           $this->icon = $this->validation;
+        } else {
+           $this->icon = xarML('Please specify the icon to use in the validation field');
+        }
+    }
+
+    function validateValue($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!empty($value)) {
+            $this->value = $value;
+        } else {
+            $this->value = '';
+        }
+        return true;
+    }
+
+    function showInput($args = array())
+    {
+        extract($args);
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!empty($value)) {
+            $link = $value;
+        } else {
+            $link = '';
+        }
+        return '<input type="text"'.
+               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
+               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
+               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
+               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
+               (!empty($id) ? ' id="'.$id.'"' : '') .
+               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
+               ' />' .
+               (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+    }
+
+    function showOutput($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+    // TODO: use redirect function here ?
+        if (!empty($value)) {
+            $link = $value;
+            if (!empty($this->icon)) {
+                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" /></a>';
+            }
+        }
+        return '';
+    }
+}
+
+?>

@@ -1,0 +1,57 @@
+<?php
+/**
+ * Dynamic Checkbox Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+ */
+class Dynamic_Checkbox_Property extends Dynamic_Property
+{
+    function validateValue($value = null)
+    {
+        // this won't do for check boxes !
+        //if (!isset($value)) {
+        //    $value = $this->value;
+        //}
+    // TODO: allow different values here, and verify $checked ?
+        if (!empty($value)) {
+            $this->value = 1;
+        } else {
+            $this->value = 0;
+        }
+        return true;
+    }
+
+//    function showInput($name = '', $value = null, $id = '', $tabindex = '')
+    function showInput($args = array())
+    {
+        extract($args);
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        return '<input type="checkbox"'.
+               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
+               ' value="1"' .
+               (!empty($id) ? ' id="'.$id.'"' : '') .
+               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
+               (!empty($value) ? ' checked' : '') .
+               ' />' .
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+    }
+
+    function showOutput($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+    // TODO: allow different values here, and verify $checked ?
+        if (!empty($value)) {
+            return xarML('yes');
+        } else {
+            return xarML('no');
+        }
+    }
+
+}
+
+?>
