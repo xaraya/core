@@ -922,10 +922,10 @@ var $el = '<img src="modules/privileges/xarimages/el.gif" style="vertical-align:
 var $tee = '<img src="modules/privileges/xarimages/T.gif" style="vertical-align: middle">';
 var $aye = '<img src="modules/privileges/xarimages/I.gif" style="vertical-align: middle">';
 var $bar = '<img src="modules/privileges/xarimages/s.gif" style="vertical-align: middle">';
-var $emptybox = '<img name="box" src="modules/privileges/xarimages/k1.gif" style="vertical-align: middle">';
-var $expandedbox = '<img name="box" src="modules/privileges/xarimages/k2.gif" style="vertical-align: middle">';
+var $emptybox = '<img class="box" src="modules/privileges/xarimages/k1.gif" style="vertical-align: middle">';
+var $expandedbox = '<img class="box" src="modules/privileges/xarimages/k2.gif" style="vertical-align: middle">';
 var $blank = '<img src="modules/privileges/xarimages/blank.gif" style="vertical-align: middle">';
-var $collapsedbox = '<img name="box" src="modules/privileges/xarimages/k3.gif" style="vertical-align: middle">';
+var $collapsedbox = '<img class="box" src="modules/privileges/xarimages/k3.gif" style="vertical-align: middle">';
 
 // we'll use this to check whether a group has already been processed
 var	$alreadydone;
@@ -977,7 +977,7 @@ function drawbranch($node){
 	$isbranch = count($node['children'])>0 ? true : false;
 
 // now begin adding rows to the string
-	$this->html .= '<div name="xarbranch" id="' . $object['name'] . '" style="align: left;">';
+	$this->html .= '<div class="xarbranch" id="x' . $this->nodeindex . '" style="align: left">';
 
 // this table holds the index, the tree drawing gifs and the info about the privilege
 	$this->html .= $this->drawindent();
@@ -1057,7 +1057,7 @@ function drawbranch($node){
 	$this->html .= '</span>';
 
 // we've finished this row; now do the children of this privilege
-	$this->html .= $isbranch ? '<div name="xarleaf">' : '';
+	$this->html .= $isbranch ? '<div class="xarleaf" id="x' . $this->nodeindex . '" >' : '';
 	$ind=0;
 	foreach($node['children'] as $subnode){
 		$ind = $ind + 1;

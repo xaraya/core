@@ -1,15 +1,21 @@
+//
+// Adapted from original code found at http://www.peterbailey.net/
+//
+
 var xarTree_config = {
-    persistance   : true,                                // Toogle cookie-based persistence
-    images        : true,                                // Toggle list-style-image support
-    img_collapsed : "modules/privileges/xarimages/k3.gif", // URI for collapsed tree subhead
-    img_expanded  : "modules/privileges/xarimages/k2.gif", // URI for expanded tree subhead
-    attr          : "showhide",                          // Attribute used for display tracking
-    ignore        : "ignore",                            // Attribute used to ignore tree nodes when saving/loading
-    is            : new xarTree_browsersniffer(),        // Browser sniffer object
-    count         : 0,                                   // Placeholder for counting
-    parseType     : null,                                // Placeholder for open/save parsing type
-    operation     : null                                 // Placeholder for operation type
-    }
+    persistance   : true,                                    // Toogle cookie-based persistence
+    img_collapsed : "modules/privileges/xarimages/k3.gif", // URI for collapsed menu subhead
+    img_expanded  : "modules/privileges/xarimages/k2.gif", // URI for expanded menu subhead
+    branchname    : "xarbranch",                             // How we tag branches
+    leafname      : "xarleaf",                               // How we tag leaves
+    clickname     : "box",                                   // How we tag the tag that receives clicks
+    attr          : "showhide",                              // Attribute used for display tracking
+    ignore        : "ignore",                                // Attribute used to ignore tree nodes when saving/loading
+    is            : new xarTree_browsersniffer(),            // Browser sniffer object
+    count         : 0,                                       // Placeholder for counting
+    parseType     : null,                                    // Placeholder for open/save parsing type
+    operation     : null                                     // Placeholder for operation type
+}
 
 function xarTree_init() {
 	if (!xarTree_config.is.dom || xarTree_config.is.mac) return;
@@ -28,7 +34,7 @@ function xarTree_open(treeID) {
     xarTree_config.parseType = 'open';
     xarTree_config.count = 0;
     xarTree_saveLoad(document.getElementById(treeID));
-    }
+}
 
 function xarTree_save(treeID) {
     xarTree_config.parseType = 'save';
@@ -36,7 +42,7 @@ function xarTree_save(treeID) {
     var tree = document.getElementById(treeID)
     if (tree == null) return;
     xarTree_saveLoad(tree);
-    }
+}
 
 function xarTree_browsersniffer() {
     this.dom    = Boolean( document.getElementById );
@@ -44,7 +50,7 @@ function xarTree_browsersniffer() {
     this.gecko  = Boolean( ( navigator.product ) && ( navigator.product.toLowerCase()=="gecko" ) );
     this.norm   = Boolean( document.normalize );
     this.mac    = Boolean( navigator.userAgent.indexOf("Mac") > -1 );
-    }
+}
 
 function xarTree_buildTree(tree) {
     var i = 0;
@@ -52,22 +58,22 @@ function xarTree_buildTree(tree) {
         var currNode = tree.childNodes[i];
 		if (currNode.childNodes.length > 0)
             xarTree_buildTree(currNode);
-       	if (currNode.name == "xarleaf"){
+		if (currNode.className == xarTree_config.leafname){
 			var titlenode = currNode.parentNode;
 			var j = 0;
 			while(j < titlenode.childNodes.length) {
-				if (titlenode.childNodes[j].name == "box") {
 					var branch = titlenode.childNodes[j];
+				if (branch.className == xarTree_config.clickname) {
+					xarTree_getParent(branch).setAttribute(xarTree_config.attr, "visible");
+					if (xarTree_config.is.ie) {
+						branch.attachEvent("onclick", xarTree_doEvent);}
+					else if (xarTree_config.is.gecko) {
+						branch.addEventListener("click", xarTree_doEvent, false);}
+					else return;
 					break;
 				}
 				j++;    
 			}
-            branch.setAttribute(xarTree_config.attr, "hidden");
-            if (xarTree_config.is.ie) {
-                branch.attachEvent("onclick", xarTree_doEvent);}
-            else if (xarTree_config.is.gecko)
-                branch.addEventListener("click", xarTree_doEvent, false);
-            else return;
 		}
 	i++;
 	}
@@ -78,13 +84,13 @@ function xarTree_toggleDisplay(branch, leaf, clicked) {
             leaf.style.display = 'block';
             branch.setAttribute(xarTree_config.attr, "visible");
             clicked.src = xarTree_config.img_expanded;
-            }
+		}
         else {
             leaf.style.display = 'none';
             branch.setAttribute(xarTree_config.attr, "hidden");
             clicked.src = xarTree_config.img_collapsed;
-            }
-    }
+		}
+}
 
 function xarTree_doEvent(e) {
     if (xarTree_config.is.ie) e = window.event;
@@ -95,19 +101,19 @@ function xarTree_doEvent(e) {
     var leaf = xarTree_getChild(branch.childNodes);
     if (typeof leaf == 'undefined' || leaf.nodeType == 3) return;
     xarTree_toggleDisplay(branch, leaf, clicked);
-    }
+}
 
 function xarTree_getParent(node) {
-    while (node.parentNode.name != "xarbranch")
+    while (node.parentNode.className != xarTree_config.branchname)
         node = node.parentNode;
     return node.parentNode;
-    }
+}
 
 function xarTree_getChild(branch) {
 	var node = branch[0];
-	while (node.name != "xarleaf") node = node.nextSibling;
+	while (node.className != xarTree_config.leafname) node = node.nextSibling;
 	return(node);
-	}	
+}	
 
 function xarTree_exec(id, op) { 
     xarTree_config.operation = op; 
@@ -122,7 +128,7 @@ function xarTree_commands(thisnode) {
         var currNode = thisnode.childNodes[i];
         if (currNode.childNodes.length > 0)
             xarTree_commands(currNode);
-        if (currNode.name == "box"){
+        if (currNode.className == xarTree_config.clickname){
         var branch = xarTree_getParent(currNode);
             switch (parseInt(xarTree_config.operation)) {
                 case 0 : // Hide all
@@ -139,20 +145,20 @@ function xarTree_commands(thisnode) {
 	}
 }
 
-function xarTree_saveLoad(thisnode) {
+/*function xarTree_saveLoad(thisnode) {
     var i = 0;
     while( i < thisnode.childNodes.length ) {
         var currNode = thisnode.childNodes[i];
         if (currNode.childNodes.length > 0)
             xarTree_saveLoad(currNode);
-        if (currNode.nodeName == "xarbranch" && currNode.className == xarTree_config.branchtitle && currNode.getAttribute(xarTree_config.ignore) != "true") {
+        if (currNode.className == xarTree_config.branchname) {
             if (xarTree_config.parseType == 'save')
                     setCookie("subtree_" + xarTree_config.count, currNode.getAttribute(xarTree_config.attr));
             if (xarTree_config.parseType == 'open')
                 if (getCookie("subtree_" + xarTree_config.count) == 'visible')
                     currNode.click();
             xarTree_config.count++;
-            }
-        i++;
-        }
-    }
+		}
+	i++;
+	}
+}*/
