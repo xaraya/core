@@ -21,10 +21,6 @@ function base_admin_updateconfig()
     if (!xarVarFetch('securitylevel','str:1:',$securityLevel)) return;
     if (!xarVarFetch('sessionduration','int:1:',$sessionDuration,30,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('sessiontimeout','int:1:',$sessionTimeout,10,XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('mlsmode','str:1:',$MLSMode,'SINGLE',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('defaultlocale','str:1:',$defaultLocale)) return;
-    if (!xarVarFetch('localeslist','str:1:',$localesList)) return;
-    if (!xarVarFetch('translationsbackend','str:1:',$translationsBackend)) return;
     if (!xarVarFetch('loadlegacy','checkbox',$loadLegacy,true,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('secureserver','checkbox',$secureServer,true,XARVAR_NOT_REQUIRED)) return;
 
@@ -42,6 +38,7 @@ function base_admin_updateconfig()
     xarConfigSetVar('Site.Core.LoadLegacy', $loadLegacy);
     xarConfigSetVar('Site.Core.EnableSecureServer', $secureServer);
     xarConfigSetVar('Site.BL.ThemesDirectory', $defaultThemeDir);
+    // FIXME: Where has this moved to??? It's not settable now, very inconvenient
     //xarConfigSetVar('Site.BL.CacheTemplates', $cacheTemplates);
     xarConfigSetVar('Site.Core.DefaultModuleName', $defaultModuleName);
     xarConfigSetVar('Site.Core.DefaultModuleType', $defaultModuleType);
@@ -54,13 +51,6 @@ function base_admin_updateconfig()
     xarConfigSetVar('Site.Session.SecurityLevel', $securityLevel);
     xarConfigSetVar('Site.Session.Duration', $sessionDuration);
     xarConfigSetVar('Site.Session.InactivityTimeout', $sessionTimeout);
-
-    // MLS variables
-    xarConfigSetVar('Site.MLS.MLSMode', $MLSMode);
-    xarConfigSetVar('Site.MLS.DefaultLocale', $defaultLocale);
-    $allowedLocales = split(',',$localesList);
-    xarConfigSetVar('Site.MLS.AllowedLocales', $allowedLocales);
-    xarConfigSetVar('Site.MLS.TranslationsBackend', $translationsBackend);
 
     //$authModules = array('authsystem');
     //xarConfigSetVar('Site.User.AuthenticationModules',$authModules);

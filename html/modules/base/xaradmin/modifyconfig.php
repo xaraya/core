@@ -31,20 +31,6 @@ function base_admin_modifyconfig()
         }
     }
 
-    $locales = xarMLSListSiteLocales();
-    $i = 0; $j = 0;
-    foreach($locales as $locale) {
-        $data['locales'][] = $locale; $i++;
-    }
-    $data['localeslist'] = '';
-    foreach($locales as $locale) {
-        $data['localeslist'] .= $locale; 
-        $j++;
-        if ($j < $i) $data['localeslist'] .= ',';
-    }
-
-    $data['translationsBackend'] = xarConfigGetVar('Site.MLS.TranslationsBackend');
-    
     $data['authid'] = xarSecGenAuthKey();
     $data['updatelabel'] = xarML('Update Base Configuration');
 

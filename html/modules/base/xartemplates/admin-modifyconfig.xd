@@ -77,46 +77,7 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
     <input type="text" name="sessiontimeout" value="#xarConfigGetVar('Site.Session.InactivityTimeout')#" size="5" maxlength="3" /></p>
 
     <h4><xar:mlstring>Multi-Language Configuration</xar:mlstring></h4>
-	<p><label for="mlsmode"><xar:mlstring>Mode</xar:mlstring></label>:
-    <select name="mlsmode" id="mlsmode" size="1">
-    	<xar:if condition="xarConfigGetVar('Site.MLS.MLSMode') eq 'SINGLE'">
-			<option value="SINGLE" selected="selected">SINGLE</option>
-			<option value="BOXED">BOXED</option>
-			<option value="UNBOXED">UNBOXED</option>
-		<xar:elseif condition="xarConfigGetVar('Site.MLS.MLSMode') eq 'BOXED'" />
-			<option value="SINGLE">SINGLE</option>
-			<option value="BOXED" selected="selected">BOXED</option>
-			<option value="UNBOXED">UNBOXED</option>
-		<xar:elseif condition="xarConfigGetVar('Site.MLS.MLSMode') eq 'UNBOXED'" />
-			<option value="SINGLE">SINGLE</option>
-			<option value="BOXED">BOXED</option>
-			<option value="UNBOXED" selected="selected">UNBOXED</option>
-		</xar:if>
-    </select></p>
-    <p><label for="mlsmode"><xar:mlstring>Default Locale</xar:mlstring></label>:&nbsp;&nbsp;
-	<select name="defaultlocale" id="defaultlocale" size="1">
-         <xar:foreach in="$locales" value="$locale">
-         <xar:if condition="xarMLSGetSiteLocale() eq $locale">
-             <option value="#$locale#" selected="selected">#$locale#</option>
-         <xar:else />
-             <option value="#$locale#">#$locale#</option>
-         </xar:if>
-         </xar:foreach>
-    </select></p>
-    <p><label for="mlsmode"><xar:mlstring>Available Locales (comma-delimited)</xar:mlstring></label>:&nbsp;&nbsp;
-         <input type="text" name="localeslist" value="#$localeslist#" size="40" maxlength="100" />
-    </p>
-	<p><xar:mlstring>Translations Backend</xar:mlstring>:
-	<select name="translationsbackend" id="translationsbackend" size="1">
-		<xar:if condition="xarConfigGetVar('Site.MLS.TranslationsBackend') eq 'xml'">
-			<option value="xml" selected="selected">XML</option>
-			<option value="php">PHP</option>
-		<xar:elseif condition="xarConfigGetVar('Site.MLS.TranslationsBackend') eq 'php'" />
-			<option value="xml">XML</option>
-			<option value="php" selected="selected">PHP</option>
-		</xar:if>
-	</select></p>
-
+	  <p>This is now handled by the <a href="&xar-modurl-translations-admin-modifyconfig;">translations module</a>
 	<h4><xar:mlstring>Legacy Configuration</xar:mlstring></h4>
 	<p><label for="loadlegacy"><xar:mlstring>Load Legacy Support</xar:mlstring></label>:
 	<xar:if condition="xarConfigGetVar('Site.Core.LoadLegacy')">
