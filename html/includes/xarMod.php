@@ -1922,11 +1922,8 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    //assert(!$result->EOF);
     // the module is not in the table
-    // set state to XARMOD_STATE_UNINITIALISED
-    // FIXME: CHECK whether this has no side-effects,
-    // it was only put in to get the installer running.
+    // set state to XARMOD_STATE_MISSING
     if (!$result->EOF) {
         list($modState) = $result->fields;
         $result->Close();

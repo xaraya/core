@@ -15,92 +15,136 @@
 $configuration_name = 'Public Site';
 
 $options  = array(
-    array(
-        'item' => '1',
-        'option' => 'true',
-        'comment' => xarML('Registered users have moderate access to all modules of the site, i.e. they can submit and edit submitted items. If this option is not chosen registered users only have read access in non-core modules.')
-        ),
-    array(
-        'item' => '2',
-        'option' => 'true',
-        'comment' => xarML('Unregistered users have comment access to the non-core modules of the site, i.e. they can only submit items. If this option is not chosen unregistered users only have read access in non-core modules.')
-        ),
-    array(
-        'item' => 'm151',
-        'option' => 'true',
-        'comment' => xarML('Install the Articles module. Categories will also automatically be installed.')
-    ),
-    array(
-        'item' => 'm11',
-        'option' => 'true',
-        'comment' => xarML('Install the Autolinks module.')
-    ),
-    array(
-        'item' => 'm745',
-        'option' => 'true',
-        'comment' => xarML('Install the Bloggerapi module.')
-    ),
-    array(
-        'item' => 'm147',
-        'option' => 'true',
-        'comment' => xarML('Install the Categories module.')
-    ),
-    array(
-        'item' => 'm14',
-        'option' => 'true',
-        'comment' => xarML('Install the Comments module.')
-    ),
-    array(
-        'item' => 'm36',
-        'option' => 'true',
-        'comment' => xarML('Install the Example module.')
-    ),
-    array(
-        'item' => 'm177',
-        'option' => 'true',
-        'comment' => xarML('Install the Hitcount module.')
-    ),
-    array(
-        'item' => 'm747',
-        'option' => 'true',
-        'comment' => xarML('Install the Metaweblogapi module.')
-    ),
-    array(
-        'item' => 'm41',
-        'option' => 'true',
-        'comment' => xarML('Install the Ratings module.')
-    ),
-    array(
-        'item' => 'm32',
-        'option' => 'true',
-        'comment' => xarML('Install the Search module.')
-    ),
-    array(
-        'item' => 'm748',
-        'option' => 'true',
-        'comment' => xarML('Install the Soapserver module.')
-    ),
-    array(
-        'item' => 'm28',
-        'option' => 'true',
-        'comment' => xarML('Install the Wiki module.')
-    ),
-    array(
-        'item' => 'm743',
-        'option' => 'true',
-        'comment' => xarML('Install the Xmlrpcserver module.')
-    ),
-    array(
-        'item' => 'm744',
-        'option' => 'true',
-        'comment' => xarML('Install the Xmlrpcsystemapi module.')
-    ),
-    array(
-        'item' => 'm746',
-        'option' => 'true',
-        'comment' => xarML('Install the Xmlrpcvalidatorapi module.')
-    )
-);
+                  array(
+                        'item' => '1',
+                        'option' => 'true',
+                        'comment' => xarML('Registered users have read access to all modules of the site.')
+                        ),
+                  array(
+                        'item' => '2',
+                        'option' => 'false',
+                        'comment' => xarML('Unregistered users have read access to the non-core modules of the site. If this option is not chosen unregistered users see only the first page.')
+                        )
+                  );
+                  
+                  if (xarMod_getState(151) != XARMOD_STATE_MISSING) {
+                      $options[] = array('item' => 'm151',
+                                         'option' => 'true',
+                                         'comment' => xarML('Install the Articles module. Categories will also automatically be installed.')
+                                         );
+                  }
+
+if(xarMod_getState(11) != XARMOD_STATE_MISSING) {
+    $options[] =array(
+                      'item' => 'm11',
+                      'option' => 'true',
+                      'comment' => xarML('Install the Autolinks module.')
+                      );
+}
+
+if(xarMod_getState(745) != XARMOD_STATE_MISSING) {
+    $options[] =array(
+                      'item' => 'm745',
+                      'option' => 'true',
+                      'comment' => xarML('Install the Bloggerapi module.')
+                      );
+        }
+
+if(xarMod_getState(147) != XARMOD_STATE_MISSING) {
+    $options[] =array(
+                      'item' => 'm147',
+                      'option' => 'true',
+                      'comment' => xarML('Install the Categories module.')
+                      );
+}
+if(xarMod_getState(14) != XARMOD_STATE_MISSING) {
+    $options[] =array(
+                      'item' => 'm14',
+                      'option' => 'true',
+                      'comment' => xarML('Install the Comments module.')
+                      );
+}
+
+if(xarMod_getState(36) != XARMOD_STATE_MISSING) {
+    $options[] =array(
+                      'item' => 'm36',
+                      'option' => 'true',
+                      'comment' => xarML('Install the Example module.')
+                      );
+}
+
+if(xarMod_getState(177) != XARMOD_STATE_MISSING) {
+    $options[] =array(
+                      'item' => 'm177',
+                      'option' => 'true',
+                      'comment' => xarML('Install the Hitcount module.')
+                      );
+}
+
+if(xarMod_getState(747) != XARMOD_STATE_MISSING) {
+    $options[] = array(
+                       'item' => 'm747',
+                       'option' => 'true',
+                       'comment' => xarML('Install the Metaweblogapi module.')
+                       );
+}
+
+if(xarMod_getState(41) != XARMOD_STATE_MISSING) {
+    $options[] = array(
+                       'item' => 'm41',
+                       'option' => 'true',
+                       'comment' => xarML('Install the Ratings module.')
+                       );
+}
+
+if(xarMod_getState(32) != XARMOD_STATE_MISSING) {
+    $options[] = array(
+                       'item' => 'm32',
+                       'option' => 'true',
+                       'comment' => xarML('Install the Search module.')
+                       );
+}
+
+if(xarMod_getState(748) != XARMOD_STATE_MISSING) {
+    $options[] = array(
+                       'item' => 'm748',
+                       'option' => 'true',
+                       'comment' => xarML('Install the Soapserver module.')
+                       );
+}
+ 
+if(xarMod_getState(28) != XARMOD_STATE_MISSING) {
+    $options[] = array(
+                       'item' => 'm28',
+                       'option' => 'true',
+                       'comment' => xarML('Install the Wiki module.')
+                       );
+}
+
+if(xarMod_getState(743) != XARMOD_STATE_MISSING) {
+    $options[] = array(
+                       'item' => 'm743',
+                       'option' => 'true',
+                       'comment' => xarML('Install the Xmlrpcserver module.')
+                       );
+}
+
+if(xarMod_getState(744) != XARMOD_STATE_MISSING) {
+    $options[] = array(
+                       'item' => 'm744',
+                       'option' => 'true',
+                       'comment' => xarML('Install the Xmlrpcsystemapi module.')
+                       );
+}
+ 
+if(xarMod_getState(746) != XARMOD_STATE_MISSING) {
+    $options[] = array(
+                       'item' => 'm746',
+                       'option' => 'true',
+                       'comment' => xarML('Install the Xmlrpcvalidatorapi module.')
+                       );
+}
+
 $configuration_options = $options;
 
 /**
