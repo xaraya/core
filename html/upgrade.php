@@ -106,74 +106,14 @@ if (empty($step)) {
     $sprefix=xarDBGetSiteTablePrefix();
 
     echo "Table Prefix is : ".$sprefix."<br /><br />";
-    echo "Checking for a missing 'underscore' in the dynamicdata security_instance table name entries.<br />";
-    echo "Checking hard coded table prefixes in security_instances table for dynamicdata, categories, articles, ratings and hitcount modules.<br /><br />";
+    echo "Checking hard coded table prefixes in security_instances table for categories, articles, ratings and hitcount modules.<br /><br />";
     $instancestable = $sprefix."_security_instances";
-    $ddtable=$sprefix.'_dynamic_properties';
-    $ddobjecttable=$sprefix.'_dynamic_objects';
     $modulestable=$sprefix.'_modules';
     $categorytable=$sprefix.'_categories';
     $blockinstancetable=$sprefix.'_block_instances';
     $blocktypestable=$sprefix.'_block_types';
     $hitcounttable =$sprefix.'_hitcount';
     $ratingstable=$sprefix.'_ratings';
-
-   //check dynamic properties - for 'underscore bug' which affects all site prefixed tables, and hardcoded prefix bug
-  if (xarModIsAvailable('dynamicdata')) {
-       $ddupdate=false;
-       $ddinstances[]  =array(array ('ccomponent'  => 'Item',
-                                     'cheader'     => 'Module Name:',
-                                     'cquery'      => 'SELECT DISTINCT xar_prop_name FROM '.$ddtable.''),
-                              array ('ccomponent'  => 'Type',
-                                     'cheader'     => 'Property Name:',
-                                     'cquery'      => 'SELECT DISTINCT xar_prop_name FROM '.$ddtable.''),
-                              array ('ccomponent'  => 'Type',
-                                     'cheader'     => 'Property Type:',
-                                     'cquery'      => 'SELECT DISTINCT xar_prop_name FROM '.$ddtable.''),
-                              array ('ccomponent'  => 'Type',
-                                     'cheader'     => 'Property ID:',
-                                     'cquery'      => 'SELECT DISTINCT xar_prop_name FROM '.$ddtable.''),
-                              array ('ccomponent'  => 'Item',
-                                     'cheader'     => 'Object Type:',
-                                     'cquery'      => 'SELECT DISTINCT xar_object_itemtype FROM '.$ddobjecttable.''),
-                              array ('ccomponent'  => 'Item',
-                                     'cheader'     => 'Object ID:',
-                                     'cquery'      => 'SELECT DISTINCT xar_object_id FROM '.$ddobjecttable.''));
-
-
-          foreach($ddinstances as $ddinstance){
-              foreach ($ddinstance as $instance) {
-                  $dbconn =& xarDBGetConn();
-                  $query = "SELECT xar_iid, xar_header, xar_query
-                            FROM $instancestable
-                            WHERE xar_module= 'dynamicdata' AND xar_component = '{$instance['ccomponent']}' AND xar_header='{$instance['cheader']}'";
-                  $result =&$dbconn->Execute($query);
-
-                  list($iid, $header, $xarquery) = $result->fields;
-
-                  if ($instance['cquery'] != $xarquery) {
-                      echo "Attempting to update dynamicdata instance  with component ".$instance['ccomponent']. " and header ".$instance['cheader'];
-                      $ddupdate=true;
-                      $query="UPDATE $instancestable SET xar_query= '{$instance['cquery']}'
-                              WHERE xar_module='dynamicdata' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
-                      $result =& $dbconn->Execute($query);
-
-                      if (!$result) {
-                          echo "...update failed!</font><br/>\r\n";
-                      } else {
-                        echo "...done!</font><br/>\r\n";
-                      }
-                  }
-              }
-
-          }//end foreach
-          if (!$ddupdate) {
-              echo "Dynamic Data security_instance entries do not require updating.<br />";
-          }
-
-      } else {
-          echo "Dynamic Data module not available - no checking of dynamic data instances carried out.<br />";
-      } // endif modavailable
 
   // upgrades for the base module (since it is a core module, and they cannot be upgraded in the normal way)
   // - theme tags for JavaScript
