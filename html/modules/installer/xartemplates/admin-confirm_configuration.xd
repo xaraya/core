@@ -35,9 +35,9 @@
 					<xar:else />
 						  <td valign="top">
 						  <xar:if condition="$option == 'true'">
-							  <input type="checkbox" name="options" value=1 checked />
+							  <input type="checkbox" name="chosen[]" value=#$item# checked />
 						  <xar:else />
-							  <input type="checkbox" name="options" value=1 />
+							  <input type="checkbox" name="chosen[]" value=#$item# />
 						  </xar:if>
 						  </td>
 						  <td>

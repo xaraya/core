@@ -26,7 +26,8 @@
                   <xar:if condition="isset($warning)">
                   	#$warning#
                   <xar:else />
-					  <select name="configuration"size="5">
+					  <select name="configuration"size="5" style="width: 
+250px;">
 					  <xar:loop name="$names">
 					  <option value="#$value#">#$display#</option>
 					  </xar:loop>
