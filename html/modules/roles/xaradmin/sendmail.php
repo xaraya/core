@@ -83,10 +83,10 @@ function roles_admin_sendmail()
 // now send the mails
     foreach ($users as $user) {
         //Get the common search and replace values
-        $data{'recipientuid'} = $user['uid'];
-        $data{'recipientname'} = $user['name'];
-        $data{'recipientusername'} = $user['username'];
-        $data{'recipientemail'} = $user['email'];
+        $data['recipientuid'] = $user['uid'];
+        $data['recipientname'] = $user['name'];
+        $data['recipientusername'] = $user['username'];
+        $data['recipientemail'] = $user['email'];
         $subject = xarTplString($subject, $data);
         $message = xarTplString($message, $data);
         if (!xarModAPIFunc('mail',

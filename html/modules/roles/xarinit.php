@@ -196,35 +196,6 @@ function roles_activate()
     // But I need the line break to come into play without the tab.
 
 /*---------------------------------------------------------------
-* Set welcome email
-*/
-    xarModSetVar('roles', 'welcomeemail', 'Your account is now active.  Thank you, and welcome to our community.');
-    xarModSetVar('roles', 'welcometitle', 'Welcome to %%sitename%%');
-/*---------------------------------------------------------------
-* Set confirmation email
-*/
-    $confirmationemail = 'Your account has been created for %%sitename%% and needs to be activated.
-You can either do this now, or on the first time that you log in.
-If you prefer to do it now, then you will need to follow this link :
-%%validationlink%%
-Here are the details that were provided.
-
-IP Address of the person creating that account: %%ipaddress%%
-User Name:  %%username%%
-Password:  %%password%%
-
-Validation Code to activate your account:  %%valcode%%
-
-If you did not create this account, then do nothing.  The account will be deemed
-inactive after a period of time and deleted from our records.  You will recieve
-no further emails from us.Thank you,
-
-%%siteadmin%%';
-
-    xarModSetVar('roles', 'confirmationemail', $confirmationemail);
-    xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');
-
-/*---------------------------------------------------------------
 * Set disallowed names
 */
     $names = 'Admin
@@ -237,88 +208,6 @@ Linux';
 president@whitehouse.gov';
     $disallowedemails = serialize($emails);
     xarModSetVar('roles', 'disallowedemails', $disallowedemails);
-
-/*---------------------------------------------------------------
-* Set reminder email
-*/
-
-    $remindertitle = 'Replacement login information for %%recipientname%% at
-%%sitename%%';
-    $reminderemail = '%%recipientname%%,
-
-Here is your new password for %%sitename%%. You may now login to %%siteurl%%
-using the following username and password:
-username: %%username%%
-password: %%password%%
-
--- %%siteadmin%%';
-
-    xarModSetVar('roles', 'reminderemail', $reminderemail);
-    xarModSetVar('roles', 'remindertitle', $remindertitle);
-
-/*---------------------------------------------------------------
-* Set notification values
-*/
-    $validationtitle = 'Validate your account %%recipientname%% at %%sitename%%';
-    $validationemail = '%%recipientname%%,
-
-Your account must be validated again because your e-mail address has changed or
-an administrator has unvalidated it. You can either do this now, or on the next
-time that you log in. If you prefer to do it now, then you will need to follow
-this link : %%validationlink%%
-Validation Code to activate your account:  %%valcode%%
-
-You will receive an email has soon as your account is activated again.
-
-%%siteadmin%%';
-    xarModSetVar('roles', 'validationemail', $validationemail);
-    xarModSetVar('roles', 'validationtitle', $validationtitle);
-
-/*---------------------------------------------------------------
-* Set deactivation email
-*/
-    $deactivationtitle = '%%recipientname%% deactivated at %%sitename%%';
-    $deactivationemail = '%%recipientname%%,
-
-Your account was deactivated by the administrator.
-If you want to know the reason, contact %%adminmail%%
-You will receive an email as soon as your account is activated again.
-
-%%siteadmin%%';
-    xarModSetVar('roles', 'deactivationemail', $deactivationemail);
-    xarModSetVar('roles', 'deactivationtitle', $deactivationtitle);
-
-/*---------------------------------------------------------------
-* Set pending email
-*/
-    $pendingtitle = 'Pending state of %%recipientname%% at %%sitename%%';
-    $pendingemail = '%%recipientname%%,
-
-Your account is pending.
-You\'ll have to wait for the explicit approval of the administrator to log
-again.
-If you want to know the reason, contact %%adminmail%%
-You will receive an email has soon as your account is activated again.
-
-%%siteadmin%%';
-    xarModSetVar('roles', 'pendingemail', $pendingemail);
-    xarModSetVar('roles', 'pendingtitle', $pendingtitle);
-
-/*---------------------------------------------------------------
-* Set password reminder email
-*/
-    $passwordtitle = 'Your password at %%sitename%% has been changed';
-    $passwordemail = '%%recipientname%%,
-
-Your password has been changed by an administrator.
-You can now login at %%siteurl%% with the following information:
-Login : %%username%%
-Password : %%password%%
-
-%%siteadmin%%';
-
-    xarModSetVar('roles', 'passwordemail', $passwordemail);
-    xarModSetVar('roles', 'passwordtitle', $passwordtitle);
 
 /*---------------------------------------------------------------
 * Set disallowed IPs

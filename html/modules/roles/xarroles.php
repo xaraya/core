@@ -80,7 +80,6 @@ class xarRoles
             if (!$q->run()) return;
 
             // arrange the data in an array
-//            echo var_dump($q->output());exit;
             $groups = array();
             foreach ($q->output() as $row) {
                 $groups[] = array('uid' => $row['r.xar_uid'],
@@ -622,8 +621,8 @@ class xarRole
 
         // add the necessary entry to the rolemembers table
         $q = new xarQuery('INSERT',$this->rolememberstable);
-        $q->addfield('xar_uid',$member->getID);
-        $q->addfield('xar_parentid',$this->getID);
+        $q->addfield('xar_uid',$member->getID());
+        $q->addfield('xar_parentid',$this->getID());
         if (!$q->run()) return;
 
         // for children that are users

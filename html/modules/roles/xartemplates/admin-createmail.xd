@@ -339,32 +339,13 @@
 			</div>
 			<div style="clear: both; padding-top: 10px;">
 				   <span style="float: right; width: 95%; text-align: left;">
-					<xar:mlstring>The following variables will be replaced in the text with specific information</xar:mlstring> :
+					<xar:mlstring>Look in the file var/messaging/roles/includes/message-vars.xd to see how the different variables used in the templates are defined.</xar:mlstring>
 				    </span>
 			 </div>
 			<div style="clear: both; padding-top: 10px;">
-			    <span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#$messagetitle#">%%sitename%%</span>
-			    </span>
-			    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Name of the site</xar:mlstring></span>
-			 </div>
-			 <div style="clear: both; padding-top: 10px;">
-			    <span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#$messagetitle#">%%siteadmin%%</span>
-			    </span>
-			    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Name of the administrator</xar:mlstring></span>
-			 </div>
-			 <div style="clear: both; padding-top: 10px;">
-			    <span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#$messagetitle#">%%adminmail%%</span>
-			    </span>
-			    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Email address of the administrator</xar:mlstring></span>
-			 </div>
-			 <div style="clear: both; padding-top: 10px;">
-			    <span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#$messagetitle#">%%siteurl%%</span>
-			    </span>
-			    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>URL of the site</xar:mlstring>(#xarServerGetBaseURL()#)</span>
+				   <span style="float: right; width: 95%; text-align: left;">
+					<xar:mlstring>Note that some variables (e.g. "myusername" in the confirmation template) are defined dynamically during Xaraya processes, such as registration. You cannot use those variables, nor can you send messages that contain them from here.</xar:mlstring>
+				    </span>
 			 </div>
 		</div>
 		</form>
