@@ -97,9 +97,9 @@ function modules_init()
 
     $index = array('name'   => 'i_xar_regid',
                    'fields' => array('xar_regid'));
-    
+
     $query = xarDBCreateIndex($tables['module_states'],$index);
-   
+
     $result =& $dbconn->Execute($query);
     if(!$result) return;
 
@@ -119,20 +119,20 @@ function modules_init()
     'xar_name'    => array('type'=>'varchar','size'=>64,'null'=>false),
     'xar_value'   => array('type'=>'text','size'=>'long')
     );
-    
+
     $query = xarDBCreateTable($tables['module_vars'],$fields);
     $result =& $dbconn->Execute($query);
     if(!$result) return;
 
     $index = array('name'   => 'i_xar_modid',
                    'fields' => array('xar_modid'));
-    
+
     $query = xarDBCreateIndex($tables['module_vars'],$index);
-   
+
     $result =& $dbconn->Execute($query);
     if(!$result) return;
 
-    
+
 
     // prefix_module_uservars
     /********************************************************************
@@ -260,6 +260,7 @@ function modules_upgrade($oldversion)
  */
 function modules_delete()
 {
+    // this module cannot be removed
     return false;
 }
 ?>
