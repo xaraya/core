@@ -2979,10 +2979,10 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
 
         switch($type) {
         case 'theme':
-            return "xarTpl_includeThemeTemplate('$file', $subdata)";
+            return "xarTpl_includeThemeTemplate(\"$file\", $subdata)";
             break;
         case 'module':
-            return "xarTpl_includeModuleTemplate(\$_bl_module_name, '$file', $subdata)";
+            return "xarTpl_includeModuleTemplate(\$_bl_module_name, \"$file\", $subdata)";
             break;
         default:
             $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,"Invalid value '$type' for 'type' attribute in <xar:template> tag.", $this);
