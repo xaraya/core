@@ -11,6 +11,7 @@ $modversion['official'] = 1;
 $modversion['author'] = 'John Cox via phpMailer';
 $modversion['contact'] = 'niceguyeddie@xaraya.com';
 $modversion['admin'] = 1;
+$modversion['user'] = 0;
 $modversion['securityschema'] = array('mail::' => '::');
 $modversion['class'] = 'Core Complete';
 $modversion['category'] = 'Global';
