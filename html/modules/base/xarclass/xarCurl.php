@@ -171,7 +171,8 @@ class xarCurl
     // Initialize a new session.
     // This only needs to be called to reopen a new session after the initial
     // session is closed. Alternatively, discard the object and create a new one.
-    function init() {
+    function init()
+    {
         // Close any old session.
         $this->close();
         
@@ -194,7 +195,8 @@ class xarCurl
 
     // Set an option.
     // The session must be open to set an option.
-    function setopt($option, $value) {
+    function setopt($option, $value)
+    {
         if (!isset($this->curl)) {
             return false;
         }
@@ -203,7 +205,8 @@ class xarCurl
     }
 
     // Add GET or POST parameters (name/value pair or an array)
-    function _param($name = '', $value = '', $type = '') {
+    function _param($name = '', $value = '', $type = '')
+    {
         if (!isset($name) || $name == '') {
             return false;
         }
@@ -237,7 +240,8 @@ class xarCurl
     }
 
     // Set the URL.
-    function seturl($url) {
+    function seturl($url)
+    {
         // TODO: Do a quick check: we don't want XML-encoded
         // URLs here, just a plain URL.
         $this->url = $url;
@@ -389,7 +393,8 @@ class xarCurl
     // Get info fields from the curl object.
     // These info fields will remain available even after the curl session
     // has been closed.
-    function getinfo($option = NULL) {
+    function getinfo($option = NULL)
+    {
         // Info values and elements.
         // Some of these constants are only available on later
         // versions of curl/PHP.
