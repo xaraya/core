@@ -8,15 +8,15 @@
 <body bgcolor=white>
 <h1>Tutorial: Moving from MySQL to ADODB</h1>
 
-<pre>        You say eether and I say eyether, 
-        You say neether and I say nyther; 
-        Eether, eyether, neether, nyther - 
-        Let's call the whole thing off ! 
+<pre>		You say eether and I say eyether, 
+		You say neether and I say nyther; 
+		Eether, eyether, neether, nyther - 
+		Let's call the whole thing off ! 
 <br>
-        You like potato and I like po-tah-to, 
-        You like tomato and I like to-mah-to; 
-        Potato, po-tah-to, tomato, to-mah-to - 
-        Let's call the whole thing off ! 
+		You like potato and I like po-tah-to, 
+		You like tomato and I like to-mah-to; 
+		Potato, po-tah-to, tomato, to-mah-to - 
+		Let's call the whole thing off ! 
 </pre>
 <p>I love this song, especially the version with Louis Armstrong and Ella singing 
   duet. It is all about how hard it is for two people in love to be compatible 
@@ -53,7 +53,7 @@
 if ($result === false) die(&quot;failed&quot;);</font></code> 
 <font color="#006666"><b>while</b> ($fields =<b> mysql_fetch_row</b>($result)) &#123;
  <b>for</b> ($i=0, $max=sizeof($fields); $i &lt; $max; $i++) &#123;
-        <b>print</b> $fields[$i].' ';
+		<b>print</b> $fields[$i].' ';
  &#125;
  <b>print</b> &quot;&lt;br&gt;\n&quot;;
 &#125;</font> 
@@ -69,10 +69,10 @@ if ($result === false) die(&quot;failed&quot;);</font></code>
  <font color="#663300">$result = $db-&gt;<b>Execute</b>(&quot;SELECT * FROM employees&quot;);
  </font><font color="#663300"></font><code><font color="#663300">if ($result === false) die(&quot;failed&quot;)</font></code><code><font color="#663300">;</font></code>  
  <font color="#006666"><b>while</b> (!$result-&gt;EOF) &#123;
-    <b>for</b> ($i=0, $max=$result-&gt;<b>FieldCount</b>(); $i &lt; $max; $i++)
-           <b>print</b> $result-&gt;fields[$i].' ';
-    $result-&gt;<b>MoveNext</b>();
-    <b>print</b> &quot;&lt;br&gt;\n&quot;;
+	<b>for</b> ($i=0, $max=$result-&gt;<b>FieldCount</b>(); $i &lt; $max; $i++)
+		   <b>print</b> $result-&gt;fields[$i].' ';
+	$result-&gt;<b>MoveNext</b>();
+	<b>print</b> &quot;&lt;br&gt;\n&quot;;
  &#125;</font> </pre>
 <p></p>
 <p>Now porting to Oracle is as simple as changing the second line to <code>NewADOConnection('oracle')</code>. 
@@ -116,7 +116,7 @@ $db-&gt;<b>Connect</b>(&quot;localhost&quot;, &quot;root&quot;, &quot;password&q
 </h3>
 <pre><font color="#006666"><b>while</b> (!$result-&gt;EOF) &#123;
    <b>for</b> ($i=0, $max=$result-&gt;<b>FieldCount</b>(); $i &lt; $max; $i++)
-       <b>print</b> $result-&gt;fields[$i].' ';
+	   <b>print</b> $result-&gt;fields[$i].' ';
    $result-&gt;<b>MoveNext</b>();
    <b>print</b> &quot;&lt;br&gt;\n&quot;;
 &#125;</font></pre>
@@ -239,47 +239,47 @@ $connection->CacheSelectLimit($secs2cache,$sql,$nrows,$offset).
 <pre>
    Refrain 
 <br>
-        You say eether and I say eyether, 
-        You say neether and I say nyther; 
-        Eether, eyether, neether, nyther - 
-        Let's call the whole thing off ! 
+		You say eether and I say eyether, 
+		You say neether and I say nyther; 
+		Eether, eyether, neether, nyther - 
+		Let's call the whole thing off ! 
 <br>
-        You like potato and I like po-tah-to, 
-        You like tomato and I like to-mah-to; 
-        Potato, po-tah-to, tomato, to-mah-to - 
-        Let's call the whole thing off ! 
+		You like potato and I like po-tah-to, 
+		You like tomato and I like to-mah-to; 
+		Potato, po-tah-to, tomato, to-mah-to - 
+		Let's call the whole thing off ! 
 <br>
 But oh, if we call the whole thing off, then we must part. 
 And oh, if we ever part, then that might break my heart. 
 <br>
-        So, if you like pajamas and I like pa-jah-mas, 
-        I'll wear pajamas and give up pa-jah-mas. 
-        For we know we 
-        Need each other, so we 
-        Better call the calling off off. 
-        Let's call the whole thing off ! 
+		So, if you like pajamas and I like pa-jah-mas, 
+		I'll wear pajamas and give up pa-jah-mas. 
+		For we know we 
+		Need each other, so we 
+		Better call the calling off off. 
+		Let's call the whole thing off ! 
 <br>
    Second Refrain 
 <br>
-        You say laughter and I say lawfter, 
-        You say after and I say awfter; 
-        Laughter, lawfter, after, awfter - 
-        Let's call the whole thing off ! 
+		You say laughter and I say lawfter, 
+		You say after and I say awfter; 
+		Laughter, lawfter, after, awfter - 
+		Let's call the whole thing off ! 
 <br>
-        You like vanilla and I like vanella, 
-        You, sa's'parilla and I sa's'parella; 
-        Vanilla, vanella, choc'late, strawb'ry - 
-        Let's call the whole thing off ! 
+		You like vanilla and I like vanella, 
+		You, sa's'parilla and I sa's'parella; 
+		Vanilla, vanella, choc'late, strawb'ry - 
+		Let's call the whole thing off ! 
 <br>
 But oh, if we call the whole thing off, then we must part. 
 And oh, if we ever part, then that might break my heart. 
 <br>
-        So, if you go for oysters and I go for ersters, 
-        I'll order oysters and cancel the ersters. 
-        For we know we 
-        Need each other, so we 
-        Better call the calling off off. 
-        Let's call the whole thing off ! 
+		So, if you go for oysters and I go for ersters, 
+		I'll order oysters and cancel the ersters. 
+		For we know we 
+		Need each other, so we 
+		Better call the calling off off. 
+		Let's call the whole thing off ! 
   </pre>
 <p><font size=2>Song and lyrics by George and Ira Gershwin, introduced by Fred Astaire and Ginger Rogers
 in the film "Shall We Dance?"  </font><p>

@@ -1,6 +1,6 @@
 <?php
 /* 
-V2.50 14 Nov 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
+V3.60 16 June 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. 
@@ -32,34 +32,34 @@ Set tabs to 4 for best viewing.
 // 	   CONVERT(char(12),datecol,120)
 //----------------------------------------------------------------
 
-global $ADODB_mssql_date_order; // 'dmy' and 'mdy' supported
 
-$ADODB_mssql_has_datetimeconvert = (strnatcmp(PHP_VERSION,'4.2.0')>=0);
-if ($ADODB_mssql_has_datetimeconvert) {
+// has datetime converstion to YYYY-MM-DD format, and also mssql_fetch_assoc
+if (ADODB_PHPVER >= 0x4300) {
+// docs say 4.2.0, but testing shows only since 4.3.0 does it work!
 	ini_set('mssql.datetimeconvert',0); 
 } else {
 global $ADODB_mssql_mths;		// array, months must be upper-case
-global $ADODB_mssql_has_datetimeconvert;
+
 
 	$ADODB_mssql_date_order = 'mdy'; 
 	$ADODB_mssql_mths = array(
 		'JAN'=>1,'FEB'=>2,'MAR'=>3,'APR'=>4,'MAY'=>5,'JUN'=>6,
 		'JUL'=>7,'AUG'=>8,'SEP'=>9,'OCT'=>10,'NOV'=>11,'DEC'=>12);
 }
+
 //---------------------------------------------------------------------------
 // Call this to autoset $ADODB_mssql_date_order at the beginning of your code,
-// just after you connect to the database. Supports mdy and dmy only
+// just after you connect to the database. Supports mdy and dmy only.
+// Not required for PHP 4.2.0 and above.
 function AutoDetect_MSSQL_Date_Order($conn)
 {
 global $ADODB_mssql_date_order;
-
 	$adate = $conn->GetOne('select getdate()');
-	
 	if ($adate) {
 		$anum = (int) $adate;
 		if ($anum > 0) {
 			if ($anum > 31) {
-				ADOConnection::outp( "MSSQL: YYYY-MM-DD date format not supported currently");
+				//ADOConnection::outp( "MSSQL: YYYY-MM-DD date format not supported currently");
 			} else
 				$ADODB_mssql_date_order = 'dmy';
 		} else
@@ -75,11 +75,16 @@ class ADODB_mssql extends ADOConnection {
 	var $fmtTimeStamp = "'Y-m-d h:i:sA'";
 	var $hasInsertID = true;
 	var $hasAffectedRows = true;
-	var $metaTablesSQL="select name from sysobjects where type='U' or type='V' and (name not in ('sysallocations','syscolumns','syscomments','sysdepends','sysfilegroups','sysfiles','sysfiles1','sysforeignkeys','sysfulltextcatalogs','sysindexes','sysindexkeys','sysmembers','sysobjects','syspermissions','sysprotects','sysreferences','systypes','sysusers','sysalternates','sysconstraints','syssegments','REFERENTIAL_CONSTRAINTS','CHECK_CONSTRAINTS','CONSTRAINT_TABLE_USAGE','CONSTRAINT_COLUMN_USAGE','VIEWS','VIEW_TABLE_USAGE','VIEW_COLUMN_USAGE','SCHEMATA','TABLES','TABLE_CONSTRAINTS','TABLE_PRIVILEGES','COLUMNS','COLUMN_DOMAIN_USAGE','COLUMN_PRIVILEGES','DOMAINS','DOMAIN_CONSTRAINTS','KEY_COLUMN_USAGE'))";
-	var $metaColumnsSQL = "select c.name,t.name,c.length from syscolumns c join systypes t on t.xusertype=c.xusertype join sysobjects o on o.id=c.id where o.name='%s'";
+	var $metaDatabasesSQL = "select name from sysdatabases where name <> 'master'";
+	var $metaTablesSQL="select name from sysobjects where (type='U' or type='V') and (name not in ('sysallocations','syscolumns','syscomments','sysdepends','sysfilegroups','sysfiles','sysfiles1','sysforeignkeys','sysfulltextcatalogs','sysindexes','sysindexkeys','sysmembers','sysobjects','syspermissions','sysprotects','sysreferences','systypes','sysusers','sysalternates','sysconstraints','syssegments','REFERENTIAL_CONSTRAINTS','CHECK_CONSTRAINTS','CONSTRAINT_TABLE_USAGE','CONSTRAINT_COLUMN_USAGE','VIEWS','VIEW_TABLE_USAGE','VIEW_COLUMN_USAGE','SCHEMATA','TABLES','TABLE_CONSTRAINTS','TABLE_PRIVILEGES','COLUMNS','COLUMN_DOMAIN_USAGE','COLUMN_PRIVILEGES','DOMAINS','DOMAIN_CONSTRAINTS','KEY_COLUMN_USAGE','dtproperties'))";
+	var $metaColumnsSQL = # xtype==61 is datetime
+"select c.name,t.name,c.length,
+	(case when c.xusertype=61 then 0 else c.xprec end),
+	(case when c.xusertype=61 then 0 else c.xscale end) 
+	from syscolumns c join systypes t on t.xusertype=c.xusertype join sysobjects o on o.id=c.id where o.name='%s'";
 	var $hasTop = 'top';		// support mssql SELECT TOP 10 * FROM TABLE
 	var $hasGenID = true;
-	var $sysDate = 'convert(datetime,convert(char,getdate(),102),102)';
+	var $sysDate = 'convert(datetime,convert(char,GetDate(),102),102)';
 	var $sysTimeStamp = 'GetDate()';
 	var $_has_mssql_init;
 	var $maxParameterLen = 4000;
@@ -88,25 +93,75 @@ class ADODB_mssql extends ADOConnection {
 	var $leftOuter = '*=';
 	var $rightOuter = '=*';
 	var $ansiOuter = true; // for mssql7 or later
+	var $poorAffectedRows = true;
+	var $identitySQL = 'select @@IDENTITY'; // 'select SCOPE_IDENTITY'; # for mssql 2000
+	var $uniqueOrderBy = true;
 	
 	function ADODB_mssql() 
-	{			
+	{		
 		$this->_has_mssql_init = (strnatcmp(PHP_VERSION,'4.1.0')>=0);	
 	}
 
-	// might require begintrans -- committrans
+	function ServerInfo()
+	{
+	global $ADODB_FETCH_MODE;
+	
+		$stmt = $this->PrepareSP('sp_server_info');
+		$val = 2;
+		if ($this->fetchMode === false) {
+			$savem = $ADODB_FETCH_MODE;
+			$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
+		} else 
+			$savem = $this->SetFetchMode(ADODB_FETCH_NUM);
+		
+		
+		$this->Parameter($stmt,$val,'attribute_id');
+		$row = $this->GetRow($stmt);
+		
+		//$row = $this->GetRow("execute sp_server_info 2");
+		
+		if ($this->fetchMode === false) {
+			$ADODB_FETCH_MODE = $savem;
+		} else
+			$this->SetFetchMode($savem);
+		
+		$arr['description'] = $row[2];
+		$arr['version'] = ADOConnection::_findvers($arr['description']);
+		return $arr;
+	}
+	
 	function _insertid()
 	{
-			return $this->GetOne('select @@identity');
+	// SCOPE_IDENTITY()
+	// Returns the last IDENTITY value inserted into an IDENTITY column in 
+	// the same scope. A scope is a module -- a stored procedure, trigger, 
+	// function, or batch. Thus, two statements are in the same scope if 
+	// they are in the same stored procedure, function, or batch.
+			return $this->GetOne($this->identitySQL);
 	}
-	  // might require begintrans -- committrans
+
 	function _affectedrows()
 	{
 		return $this->GetOne('select @@rowcount');
 	}
+
+	var $_dropSeqSQL = "drop table %s";
 	
+	function CreateSequence($seq='adodbseq',$start=1)
+	{
+		$start -= 1;
+		$this->Execute("create table $seq (id float(53))");
+		$ok = $this->Execute("insert into $seq with (tablock,holdlock) values($start)");
+		if (!$ok) {
+				$this->Execute('ROLLBACK TRANSACTION adodbseq');
+				return false;
+		}
+		$this->Execute('COMMIT TRANSACTION adodbseq'); 
+		return true;
+	}
+
 	function GenID($seq='adodbseq',$start=1)
-	{	
+	{
 		//$this->debug=1;
 		$this->Execute('BEGIN TRANSACTION adodbseq');
 		$ok = $this->Execute("update $seq with (tablock,holdlock) set id = id + 1");
@@ -131,7 +186,7 @@ class ADODB_mssql extends ADOConnection {
 	// Format date column in sql string given an input format that understands Y M D
 	function SQLDate($fmt, $col=false)
 	{	
-		if (!$col) $col = $this->sysDate;
+		if (!$col) $col = $this->sysTimeStamp;
 		$s = '';
 		
 		$len = strlen($fmt);
@@ -144,6 +199,8 @@ class ADODB_mssql extends ADOConnection {
 				$s .= "datename(yyyy,$col)";
 				break;
 			case 'M':
+				$s .= "convert(char(3),$col,0)";
+				break;
 			case 'm':
 				$s .= "replace(str(month($col),2),' ','0')";
 				break;
@@ -155,6 +212,25 @@ class ADODB_mssql extends ADOConnection {
 			case 'd':
 				$s .= "replace(str(day($col),2),' ','0')";
 				break;
+			case 'h':
+				$s .= "substring(convert(char(14),$col,0),13,2)";
+				break;
+			
+			case 'H':
+				$s .= "replace(str(datepart(mi,$col),2),' ','0')";
+				break;
+				
+			case 'i':
+				$s .= "replace(str(datepart(mi,$col),2),' ','0')";
+				break;
+			case 's':
+				$s .= "replace(str(datepart(ss,$col),2),' ','0')";
+				break;
+			case 'a':
+			case 'A':
+				$s .= "substring(convert(char(19),$col,0),18,2)";
+				break;
+				
 			default:
 				if ($ch == '\\') {
 					$i++;
@@ -214,7 +290,7 @@ class ADODB_mssql extends ADOConnection {
 	function MetaDatabases() 
 	{ 
 		if(@mssql_select_db("master")) { 
-				 $qry="select name from sysdatabases where name <> 'master'"; 
+				 $qry=$this->metaDatabasesSQL; 
 				 if($rs=@mssql_query($qry)){ 
 						 $tmpAr=$ar=array(); 
 						 while($tmpAr=@mssql_fetch_row($rs)) 
@@ -232,6 +308,22 @@ class ADODB_mssql extends ADOConnection {
 		 return(false); 
 	} 
 
+	// "Stein-Aksel Basma" <basma@accelero.no>
+	// tested with MSSQL 2000
+	function MetaPrimaryKeys($table)
+	{
+		$sql = "select k.column_name from information_schema.key_column_usage k,
+		information_schema.table_constraints tc 
+		where tc.constraint_name = k.constraint_name and tc.constraint_type =
+		'PRIMARY KEY' and k.table_name = '$table'";
+		
+		$a = $this->GetCol($sql);
+		if ($a && sizeof($a)>0) return $a;
+		return false;	  
+	}
+
+
+ 
 	function SelectDB($dbName) 
 	{
 		$this->databaseName = $dbName;
@@ -240,8 +332,7 @@ class ADODB_mssql extends ADOConnection {
 		}
 		else return false;	
 	}
-	/*	Returns: the last error message from previous database operation
-		Note: This function is NOT available for Microsoft SQL Server.	*/
+	
 	function ErrorMsg() 
 	{
 		if (empty($this->_errorMsg)){
@@ -367,9 +458,10 @@ class ADODB_mssql extends ADOConnection {
 	// returns query ID if successful, otherwise false
 	function _query($sql,$inputarr)
 	{
-		$this->_errorMsg = false;
-		if (is_array($sql)) return mssql_execute($sql[1]);
-		return mssql_query($sql,$this->_connectionID);
+		$this->_errorMsg = false; 
+		if (is_array($sql)) $rez = mssql_execute($sql[1]);
+		else $rez = mssql_query($sql,$this->_connectionID);
+		return $rez;
 	}
 	
 	// returns true or false
@@ -401,15 +493,30 @@ class ADORecordset_mssql extends ADORecordSet {
 
 	var $databaseType = "mssql";
 	var $canSeek = true;
+	var $hasFetchAssoc; // see http://phplens.com/lens/lensforum/msgs.php?id=6083
 	// _mths works only in non-localised system
 		
-	function ADORecordset_mssql($id)
+	function ADORecordset_mssql($id,$mode=false)
 	{
-	GLOBAL $ADODB_FETCH_MODE;
-	
-		$this->fetchMode = $ADODB_FETCH_MODE;
-		return $this->ADORecordSet($id);
+		// freedts check...
+		$this->hasFetchAssoc = function_exists('mssql_fetch_assoc');
+
+		if ($mode === false) { 
+			global $ADODB_FETCH_MODE;
+			$mode = $ADODB_FETCH_MODE;
+		}
+		$this->fetchMode = $mode;
+		return $this->ADORecordSet($id,$mode);
 	}
+	
+	
+	function _initrs()
+	{
+	GLOBAL $ADODB_COUNTRECS;	
+		$this->_numOfRows = ($ADODB_COUNTRECS)? @mssql_num_rows($this->_queryID):-1;
+		$this->_numOfFields = @mssql_num_fields($this->_queryID);
+	}
+	
 
 	//Contributed by "Sven Axelsson" <sven.axelsson@bokochwebb.se>
 	// get next resultset - requires PHP 4.0.5 or later
@@ -454,13 +561,6 @@ class ADORecordset_mssql extends ADORecordSet {
 		return null;
 	}
 	
-	function _initrs()
-	{
-	GLOBAL $ADODB_COUNTRECS;
-		$this->_numOfRows = ($ADODB_COUNTRECS)? @mssql_num_rows($this->_queryID):-1;
-		$this->_numOfFields = @mssql_num_fields($this->_queryID);
-	}
-	
 	function _seek($row) 
 	{
 		return @mssql_data_seek($this->_queryID, $row);
@@ -469,13 +569,19 @@ class ADORecordset_mssql extends ADORecordSet {
 	// speedup
 	function MoveNext() 
 	{
-		if (!$this->EOF) {		
-			$this->_currentRow++;
-			if ($this->fetchMode & ADODB_FETCH_ASSOC) {
-			global $ADODB_mssql_has_datetimeconvert;
-				if ($ADODB_mssql_has_datetimeconvert) // only for PHP 4.2.0 or later
-					$this->fields = @mssql_fetch_assoc($this->_queryID);
-				else {
+		if ($this->EOF) return false;
+		
+		$this->_currentRow++;
+		
+		if ($this->fetchMode & ADODB_FETCH_ASSOC) {
+			if ($this->fetchMode & ADODB_FETCH_NUM) {
+				//ADODB_FETCH_BOTH mode
+				$this->fields = @mssql_fetch_array($this->_queryID);
+			}
+			else {
+				if ($this->hasFetchAssoc) {// only for PHP 4.2.0 or later
+					 $this->fields = @mssql_fetch_assoc($this->_queryID);
+				} else {
 					$flds = @mssql_fetch_array($this->_queryID);
 					if (is_array($flds)) {
 						$fassoc = array();
@@ -484,15 +590,28 @@ class ADORecordset_mssql extends ADORecordSet {
 							$fassoc[$k] = $v;
 						}
 						$this->fields = $fassoc;
-					} else 
-						$this->fields = $flds;
+					} else
+						$this->fields = false;
 				}
-			} else {
-				$this->fields = @mssql_fetch_row($this->_queryID);
 			}
-			if (is_array($this->fields)) return true;
-			$this->EOF = true;
+			
+			if (is_array($this->fields)) {
+				if (ADODB_ASSOC_CASE == 0) {
+					foreach($this->fields as $k=>$v) {
+						$this->fields[strtolower($k)] = $v;
+					}
+				} else if (ADODB_ASSOC_CASE == 1) {
+					foreach($this->fields as $k=>$v) {
+						$this->fields[strtoupper($k)] = $v;
+					}
+				}
+			}
+		} else {
+			$this->fields = @mssql_fetch_row($this->_queryID);
 		}
+		if ($this->fields) return true;
+		$this->EOF = true;
+		
 		return false;
 	}
 
@@ -502,33 +621,48 @@ class ADORecordset_mssql extends ADORecordSet {
 	function _fetch($ignore_fields=false) 
 	{
 		if ($this->fetchMode & ADODB_FETCH_ASSOC) {
-		global $ADODB_mssql_has_datetimeconvert;
-			if ($ADODB_mssql_has_datetimeconvert) // only for PHP 4.2.0 or later
-				$this->fields = @mssql_fetch_assoc($this->_queryID);
-			else {
-				$flds = @mssql_fetch_array($this->_queryID);
-				if (is_array($flds)) {
-					$fassoc = array();
-					foreach($flds as $k => $v) {
-						if (is_integer($k)) continue;
-						$fassoc[$k] = $v;
+			if ($this->fetchMode & ADODB_FETCH_NUM) {
+				//ADODB_FETCH_BOTH mode
+				$this->fields = @mssql_fetch_array($this->_queryID);
+			} else {
+				if ($this->hasFetchAssoc) // only for PHP 4.2.0 or later
+					$this->fields = @mssql_fetch_assoc($this->_queryID);
+				else {
+					$this->fields = @mssql_fetch_array($this->_queryID);
+					if (is_array($$this->fields)) {
+						$fassoc = array();
+						foreach($$this->fields as $k => $v) {
+							if (is_integer($k)) continue;
+							$fassoc[$k] = $v;
+						}
+						$this->fields = $fassoc;
 					}
-					$this->fields = $fassoc;
-				} else
-					$this->fields = $flds;
+				}
+			}
+			
+			if (!$this->fields) {
+			} else if (ADODB_ASSOC_CASE == 0) {
+				foreach($this->fields as $k=>$v) {
+					$this->fields[strtolower($k)] = $v;
+				}
+			} else if (ADODB_ASSOC_CASE == 1) {
+				foreach($this->fields as $k=>$v) {
+					$this->fields[strtoupper($k)] = $v;
+				}
 			}
 		} else {
 			$this->fields = @mssql_fetch_row($this->_queryID);
 		}
-		return (!empty($this->fields));
+		return $this->fields;
 	}
 	
 	/*	close() only needs to be called if you are worried about using too much memory while your script
 		is running. All associated result memory for the specified result identifier will automatically be freed.	*/
 
-	function _close() {
-		$rez = @mssql_free_result($this->_queryID);	
-		$this->_queryID = false;	
+	function _close() 
+	{
+		$rez = mssql_free_result($this->_queryID);	
+		$this->_queryID = false;
 		return $rez;
 	}
 	// mssql uses a default date like Dec 30 2000 12:00AM
@@ -546,16 +680,16 @@ class ADORecordset_mssql extends ADORecordSet {
 
 
 class ADORecordSet_array_mssql extends ADORecordSet_array {
-	function ADORecordSet_array_mssql($id=-1) 
+	function ADORecordSet_array_mssql($id=-1,$mode=false) 
 	{
-		$this->ADORecordSet_array($id);
+		$this->ADORecordSet_array($id,$mode);
 	}
 	
 		// mssql uses a default date like Dec 30 2000 12:00AM
 	function UnixDate($v)
 	{
-	global $ADODB_mssql_has_datetimeconvert;
-		if ($ADODB_mssql_has_datetimeconvert) return parent::UnixDate($v);
+	
+		if (is_numeric(substr($v,0,1)) && ADODB_PHPVER >= 0x4200) return parent::UnixDate($v);
 		
 	global $ADODB_mssql_mths,$ADODB_mssql_date_order;
 	
@@ -585,8 +719,8 @@ class ADORecordSet_array_mssql extends ADORecordSet_array {
 	
 	function UnixTimeStamp($v)
 	{
-	global $ADODB_mssql_has_datetimeconvert;
-		if ($ADODB_mssql_has_datetimeconvert) return parent::UnixTimeStamp($v);
+	
+		if (is_numeric(substr($v,0,1)) && ADODB_PHPVER >= 0x4200) return parent::UnixTimeStamp($v);
 		
 	global $ADODB_mssql_mths,$ADODB_mssql_date_order;
 	

@@ -1,6 +1,6 @@
 <?php
 /*
-V2.50 14 Nov 2002  (c) 2000-2002 John Lim. All rights reserved.
+V3.60 16 June 2003  (c) 2000-2003 John Lim. All rights reserved.
   Released under both BSD license and Lesser GPL library license.
   Whenever there is any discrepancy between the two licenses,
   the BSD license will take precedence.
@@ -100,16 +100,27 @@ class ADODB_informix72 extends ADOConnection {
 		return $this->_errorMsg;
 	}
 
-   function ErrorNo() {
+   function ErrorNo() 
+   {
 	  return ifx_error();
    }
 
-   function MetaColumns($table)
+   function &MetaColumns($table)
    {
 		return ADOConnection::MetaColumns($table,false);
    }
 
+   function UpdateBlob($table, $column, $val, $where, $blobtype = 'BLOB')
+   {
+   		$type = ($blobtype == 'TEXT') ? 1 : 0;
+		$blobid = ifx_create_blob($type,0,$val);
+		return $this->Execute("UPDATE $table SET $column=(?) WHERE $where",array($blobid));
+   }
 
+   function BlobDecode($blobid)
+   {
+   		return @ifx_get_blob($blobid);
+   }
 	// returns true or false
    function _connect($argHostname, $argUsername, $argPassword, $argDatabasename)
 	{
@@ -157,7 +168,7 @@ class ADODB_informix72 extends ADOConnection {
 
 	  // In case of select statement, we use a scroll cursor in order
 	  // to be able to call "move", or "movefirst" statements
-	  if (!$ADODB_COUNTRECS && preg_match("/^\s*select/i", $sql)) {
+	  if (!$ADODB_COUNTRECS && preg_match("/^\s*select/is", $sql)) {
 		 if ($inputarr) {
 			$this->lastQuery = ifx_query($sql,$this->_connectionID, IFX_SCROLL, $tab);
 		 }
@@ -201,11 +212,13 @@ class ADORecordset_informix72 extends ADORecordSet {
 	var $canSeek = true;
 	var $_fieldprops = false;
 
-	function ADORecordset_informix72($id)
+	function ADORecordset_informix72($id,$mode=false)
 	{
-	global $ADODB_FETCH_MODE;
-
-		$this->fetchMode = $ADODB_FETCH_MODE;
+		if ($mode === false) { 
+			global $ADODB_FETCH_MODE;
+			$mode = $ADODB_FETCH_MODE;
+		}
+		$this->fetchMode = $mode;
 		return $this->ADORecordSet($id);
 	}
 
@@ -226,6 +239,7 @@ class ADORecordset_informix72 extends ADORecordSet {
 				$o->type = $arr[0];
 				$o->max_length = $arr[1];
 				$this->_fieldprops[] = $o;
+				$o->not_null = $arr[4]=="N";
 			}
 		}
 		return $this->_fieldprops[$fieldOffset];
