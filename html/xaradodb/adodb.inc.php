@@ -590,7 +590,7 @@
 
             // XARAYA MODIFICATION - START
             //  time to render SQL by proca
-            if (xarCoreIsDebugFlagSet(PNDBG_SQL)) {
+            if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
                 $lmtime = explode(" ", microtime());
                 $lendtime = $lmtime[1] + $lmtime[0];
                 $ltotaltime = ($lendtime - $lstarttime);
@@ -620,7 +620,7 @@
 		}
         // XARAYA MODIFICATION - START
         //  time to render SQL by proca
-        if (xarCoreIsDebugFlagSet(PNDBG_SQL)) {
+        if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
             $lmtime = explode(' ', microtime());
             $lendtime = $lmtime[1] + $lmtime[0];
             $ltotaltime = ($lendtime - $lstarttime);
