@@ -308,26 +308,37 @@ class xarMasks
         // insert any instance overrides
         if ($instance != '') $mask->setInstance($instance);
 
-    // check if we already have the irreducible set of privileges for the current user
-    if (!xarVarIsCached('Security.Variables','privilegeset') || !empty($rolename)) {
-// get the Roles class
-        include_once 'modules/roles/xarroles.php';
-        $roles = new xarRoles();
+        // check if we already have the irreducible set of privileges for the current user
+        if (!xarVarIsCached('Security.Variables','privilegeset') || !empty($rolename)) {
+            // get the Roles class
+            include_once 'modules/roles/xarroles.php';
+            $roles = new xarRoles();
 
-// get the uid of the role we will check against
-// an empty role means take the current user
-        if ($rolename == '') {
-            $userID = xarSessionGetVar('uid');
-            if (empty($userID)) {
-                $userID = _XAR_ID_UNREGISTERED;
+            // get the uid of the role we will check against
+            // an empty role means take the current user
+            if ($rolename == '') {
+                $userID = xarSessionGetVar('uid');
+                if (empty($userID)) {
+                    $userID = _XAR_ID_UNREGISTERED;
+                }
+                $role = $roles->getRole($userID);
+            } else {
+                $role = $roles->findRole($rolename);
             }
-            $role = $roles->getRole($userID);
+
+            // get the irreducible set of privileges that apply for this role
+            $privileges = $this->irreducibleset(array('roles' => array($role)));
+
+            // if this is the current user, save the irreducible set of privileges to cache
+            if ($rolename == '') {
+                xarVarSetCached('Security.Variables','privilegeset',$privileges);
+            }
+        } else {
+            // get the irreducible set of privileges for the current user from cache
+            $privileges = xarVarGetCached('Security.Variables','privilegeset');
         }
-        else {
-            $role = $roles->findRole($rolename);
-        }
-// get the privileges and test against them
-        $privileges = $this->irreducibleset(array('roles' => array($role)));
+
+        // test the current mask (and instance) against the privileges
         $pass = $this->testprivileges($mask,$privileges,false);
 
 // check if the exception needs to be caught here or not
@@ -339,7 +350,6 @@ class xarMasks
 
 // done
         return $pass;
-        }
     }
 
     function irreducibleset($coreset)
