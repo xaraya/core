@@ -2918,23 +2918,22 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
     function render()
     {
         $subdata = '$_bl_data';  // Subdata defaults to the data of the current template
+        $type = 'module';        // Default type is module included template.
         extract($this->attributes);
 
         if (!isset($file)) {
             $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'file\' attribute in <xar:template> tag.', $this);
             return;
         }
-
-        if (!isset($type)) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'type\' attribute in <xar:template> tag.', $this);
-            return;
-        }
-
-        if ($type == 'theme') {
+        
+        switch($type) {
+        case 'theme':
             return "xarTpl_includeThemeTemplate('$file', $subdata)";
-        } elseif ($type == 'module') {
+            break;
+        case 'module':
             return "xarTpl_includeModuleTemplate(\$_bl_module_name, '$file', $subdata)";
-        } else {
+            break;
+        default:
             $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,"Invalid value '$type' for 'type' attribute in <xar:template> tag.", $this);
             return;
         }
