@@ -326,6 +326,16 @@ function pnUserGetVar($name, $userId = NULL)
         // check that $name variable appears in the dynamic user data fields
         $infos = pnUser__getUserVarInfo($name);
         if (!isset($infos)) {
+        // FIXME: ignoring unknown user variables for now...
+            if (pnExceptionMajor() != PN_NO_EXCEPTION &&
+                pnExceptionId() == 'VARIABLE_NOT_REGISTERED') {
+                pnVarSetCached('User.Variables.'.$userId, $name, false);
+                // Here we can't raise an exception
+                // so what we can do here is only to log the exception
+                // and call pnExceptionFree
+                pnLogException(PNLOG_LEVEL_ERROR);
+                pnExceptionFree();
+            }
             // Of sure got an exception
             return; // throw back
         }
