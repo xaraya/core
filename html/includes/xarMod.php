@@ -1878,7 +1878,7 @@ function xarMod__loadDbInfo($modName, $modDir)
  * @raise DATABASE_ERROR, MODULE_NOT_EXIST
  * @todo implement the xarMod__setState reciproke
  */
-function xarMod__getState($modRegId, $modMode, $type = 'module')
+function xarMod__getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
 {
     if ($modRegId < 1) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modRegId');
@@ -1933,7 +1933,7 @@ function xarMod__getState($modRegId, $modMode, $type = 'module')
         return (int) $modState;
     } else {
         $result->Close();
-        return (int) XARMOD_STATE_UNINITIALISED;
+        return (int) XARMOD_STATE_MISSING;
     }
 }
 
