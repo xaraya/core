@@ -1,5 +1,16 @@
 <?php
-// $Id$
+/**
+ * File: $Id: s.xaradmin.php 1.28 03/02/08 17:38:40-05:00 John.Cox@mcnabb. $
+ *
+ * Authentication System
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage authentication module
+ * @author Marco Canini
+*/
 $modversion['name'] = 'AuthSystem';
 $modversion['id'] = '42';
 $modversion['version'] = '0.91';

@@ -1,13 +1,16 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Paul Rosania
-// Purpose of file:  Initialisation functions for blocks
-// ----------------------------------------------------------------------
+/**
+ * File: $Id: s.xaradmin.php 1.28 03/02/08 17:38:40-05:00 John.Cox@mcnabb. $
+ *
+ * Blocks System
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage blocks module
+ * @author Jim McDonald, Paul Rosania
+*/
 
 /**
  * initialise the blocks module
