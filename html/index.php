@@ -13,20 +13,23 @@
  */
 
 /**
- * Load the Xaraya core
- */
-include 'includes/xarCore.php';
-
-/**
  * Set up output caching if enabled
+ * Note: this happens first so we can serve cached pages to first-time visitors
+ *       without loading the core
+ * todo: replace hard-coded var references
  */    
-if (file_exists(xarCoreGetVarDirPath() . '/cache/output/cache.touch')) {
+if (file_exists('var/cache/output/cache.touch')) {
     include_once('includes/xarCache.php');
     // Note : we may already exit here if session-less page caching is enabled
-    if (xarCache_init(array('cacheDir' => xarCoreGetVarDirPath() . '/cache/output'))) {
+    if (xarCache_init(array('cacheDir' => 'var/cache/output'))) {
         define('XARCACHE_IS_ENABLED',1);
     }
 }
+
+/**
+ * Load the Xaraya core
+ */
+include 'includes/xarCore.php';
 
 /**
  * Main Xaraya Entry
