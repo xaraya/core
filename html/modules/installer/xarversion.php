@@ -1,8 +1,16 @@
 <?php
 // $Id: s.xarversion.php 1.7 03/01/17 16:29:55+00:00 johnny@falling.local.lan $
+
+/* WARNING
+ * Modification of this file is not supported.
+ * Any modification is at your own risk and
+ * may lead to inablity of the system to process
+ * the file correctly, resulting in unexpected results.
+ * /
 $modversion['name'] = 'Xaraya Installer';
 $modversion['id'] = '200';
 $modversion['version'] = '1.0.0';
+$modversion['displayname'] = xarML('Installer');
 $modversion['description'] = 'Install and customize Xaraya.';
 $modversion['credits'] = '';
 $modversion['help'] = '';

@@ -13,9 +13,15 @@
  * @author Jim McDonald, Paul Rosania
 */
 
+/* WARNING
+ * Modification of this file is not supported.
+ * Any modification is at your own risk and
+ * may lead to inablity of the system to process
+ * the file correctly, resulting in unexpected results.
+ * /
 $modversion['name'] = 'Blocks administration';
 $modversion['id'] = '13';
-$modversion['displayname'] = 'Blocks';
+$modversion['displayname'] = xarML('Blocks');
 $modversion['version'] = '1.0.0';
 $modversion['description'] = 'Administration of block instances and groups';
 $modversion['credits'] = '';

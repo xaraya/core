@@ -12,7 +12,15 @@
  * @subpackage authsystem
  * @author Marco Canini
 */
+
+/* WARNING
+ * Modification of this file is not supported.
+ * Any modification is at your own risk and
+ * may lead to inablity of the system to process
+ * the file correctly, resulting in unexpected results.
+ * /
 $modversion['name'] = 'AuthSystem';
+$modversion['displayname'] = xarML('Authentication');
 $modversion['id'] = '42';
 $modversion['version'] = '0.91.0';
 $modversion['description'] = 'Xaraya default authentication module';

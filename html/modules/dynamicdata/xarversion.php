@@ -12,10 +12,15 @@
  * @subpackage dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
 */
-
+/* WARNING
+ * Modification of this file is not supported.
+ * Any modification is at your own risk and
+ * may lead to inablity of the system to process
+ * the file correctly, resulting in unexpected results.
+ * /
 $modversion['name'] = 'Dynamic Data';
 $modversion['id'] = '182';
-$modversion['displayname'] = 'Dynamic Data';
+$modversion['displayname'] = xarML('Dynamic Data');
 $modversion['version'] = '1.2.0';
 $modversion['description'] = 'Dynamic Data Module';
 $modversion['credits'] = 'xardocs/credits.txt';

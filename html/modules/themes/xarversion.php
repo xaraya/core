@@ -12,9 +12,17 @@
  * @subpackage Themes
  * @author Marty Vance
 */
+
+/* WARNING
+ * Modification of this file is not supported.
+ * Any modification is at your own risk and
+ * may lead to inablity of the system to process
+ * the file correctly, resulting in unexpected results.
+ * /
 $modversion['name']           = 'Themes Administration';
 $modversion['id']             = '70';
 $modversion['version']        = '1.3.0';
+$modversion['displayname']    = xarML('Themes Admin');
 $modversion['description']    = 'Configure themes, change site appearance';
 $modversion['credits']        = 'xardocs/credits.txt';
 $modversion['help']           = '';

@@ -12,10 +12,17 @@
  * @subpackage Privileges Module
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
-
+ 
+/* WARNING
+ * Modification of this file is not supported.
+ * Any modification is at your own risk and
+ * may lead to inablity of the system to process
+ * the file correctly, resulting in unexpected results.
+ * /
 $modversion['name'] = 'Privileges Adminstration';
 $modversion['id'] = '1098';
 $modversion['version'] = '0.1.0';
+$modversion['displayname'] = xarML('Privileges Admin');
 $modversion['description'] = 'Modify privileges security';
 $modversion['official'] = 1;
 $modversion['author'] = 'Marc Lutolf';

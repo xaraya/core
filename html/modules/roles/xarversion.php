@@ -12,9 +12,16 @@
  * @author Jan Schrage, John Cox, Gregor Rothfuss
  */
 
+/* WARNING
+ * Modification of this file is not supported.
+ * Any modification is at your own risk and
+ * may lead to inablity of the system to process
+ * the file correctly, resulting in unexpected results.
+ * /
 $modversion['name']           = 'Members';
 $modversion['id']             = '27';
 $modversion['version']        = '1.1.0';
+$modversion['displayname']    = xarML('Members');
 $modversion['description']    = 'User and Group registration and handling';
 $modversion['credits']        = 'xardocs/credits.txt';
 $modversion['help']           = 'xardocs/help.txt';
