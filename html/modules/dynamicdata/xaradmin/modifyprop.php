@@ -18,7 +18,7 @@ function dynamicdata_admin_modifyprop()
 
     if(!xarVarFetch('itemid',   'isset', $itemid,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('modid',    'isset', $modid,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype', 'isset', $itemtype, 0,    XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype', 'isset', $itemtype, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('details',  'isset', $details,  NULL, XARVAR_DONT_SET)) {return;}
 
 
