@@ -31,13 +31,6 @@
             </a>
         </dd>
         <dd>
-            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 1))#">
-                <xar:mlstring>
-                    General info 
-                </xar:mlstring>
-            </a>
-        </dd>
-        <dd>
             <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 2))#">
                 <xar:mlstring>
                     Credits 
