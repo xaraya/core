@@ -2786,17 +2786,21 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
     {
         extract($this->attributes);
 
-        if (isset($file)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
-                           new xarTpl__ParserError('The \'file\' attribute has been deprecated, use \'name\' instead.', $this));
-            return;
-        }
+        // <mrb> good idea to replace file with name, but not according to spec, postponed.
+//         if (isset($file)) {
+//             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
+//                            new xarTpl__ParserError('The \'file\' attribute has been deprecated, use \'name\' instead.', $this));
+//             return;
+//         }
 
-        if (!isset($name)) {
+        //  if (!isset($name)) {
+        if (!isset($file)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
-                           new xarTpl__ParserError('Missing \'name\' attribute in <xar:template> tag.', $this));
+                           new xarTpl__ParserError('Missing \'file\' attribute in <xar:template> tag.', $this));
             return;
         }
+        // <mrb> also look here when updating to new spec 
+        $name=$file;
 
         if (!isset($type)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',

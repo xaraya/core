@@ -2,7 +2,7 @@
 // $Id: s.xarversion.php 1.10 03/01/17 16:29:55+00:00 johnny@falling.local.lan $
 $modversion['name'] = 'Blocks administration';
 $modversion['id'] = '13';
-$modversion['version'] = '2.0';
+$modversion['version'] = '1.0';
 $modversion['description'] = 'Administration of block instances and groups';
 $modversion['credits'] = '';
 $modversion['help'] = '';
