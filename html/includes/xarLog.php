@@ -93,6 +93,6 @@ function xarLogException($level = XARLOG_LEVEL_DEBUG)
 function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
 {
     $args = array('name'=>$name, 'var'=>$var, 'format'=>'html');
-    xarLogMessage(xarModAPIFunc('logger','admin','dumpVariable', $args), $level);
+    xarLogMessage(xarModAPIFunc('logger','admin','dumpvariable', $args), $level);
 }
 ?>
