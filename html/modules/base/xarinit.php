@@ -364,7 +364,7 @@ function base_init()
     // Register BL user tags
     // Include a JavaScript file in a page
     xarTplRegisterTag(
-        'base', 'include-javascript', array(),
+        'base', 'base-include-javascript', array(),
         'base_javascriptapi_handlemodulejavascript'
     );
 
