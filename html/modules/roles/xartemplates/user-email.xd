@@ -1,10 +1,9 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Send Email To</xar:mlstring> #$name#</h2><br />
 <div style="margin: auto;">
-	<form action="&xar-modurl-roles-user-email;" method="post" enctype="application/x-www-form-urlencoded">
+	<form action="&xar-modurl-roles-user-view;" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<input type="hidden" name="name" id="name" value="#$name#" />
 		<input type="hidden" name="uid" id="uid" value="#$uid#" />
-		<input type="hidden" name="phase" id="phase" value="update" />
 		<input type="hidden" name="fname" id="fname" value="#xarUserGetVar('name')#" />
 		<input type="hidden" name="femail" id="femail" value="#xarUserGetVar('email')#" />
 		<table width="90%">
