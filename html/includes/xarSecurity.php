@@ -500,7 +500,7 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
     }
     else {
        $masks = new xarMasks();
-       $return = $masks->xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
+       return $masks->xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
     }
 }
 

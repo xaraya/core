@@ -312,9 +312,7 @@ class xarMasks
     }
 
 /**
- * xarSecLevel: check a role's privileges against the masks of a component
- *
- * Return an access level based on its name
+ * xarSecLevel: Return an access level based on its name
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
