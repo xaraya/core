@@ -14,7 +14,7 @@
 
 include_once 'modules/roles/xarroles.php';
 
-class xarTreeRenderer 
+class xarTreeRenderer
 {
     var $roles;
     var $tree;
@@ -48,14 +48,16 @@ class xarTreeRenderer
      */
     function xarTreeRenderer($allowtoggle=0)
     {
-        $this->el = '<img src="' . xarTplGetImage("el.gif") . '" alt="" style="vertical-align: middle" />';
-        $this->tee = '<img src="' . xarTplGetImage("T.gif") . '" alt="" style="vertical-align: middle" />';
-        $this->aye = '<img src="' . xarTplGetImage("I.gif") . '" alt="" style="vertical-align: middle" />';
-        $this->bar = '<img src="' . xarTplGetImage("s.gif") . '" alt="" style="vertical-align: middle" />';
+        $boxwidth = '1em';
+        $boxheight = '21px';
+        $this->el = '<img src="' . xarTplGetImage("el.gif") . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
+        $this->tee = '<img src="' . xarTplGetImage("T.gif") . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
+        $this->aye = '<img src="' . xarTplGetImage("I.gif") . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
+        $this->bar = '<img src="' . xarTplGetImage("s.gif") . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
         $this->emptybox = '<img src="' . xarTplGetImage("k1.gif") . '" alt="" style="vertical-align: middle" />';
         $this->blank = '<img src="' . xarTplGetImage("blank.gif") . '" alt="" style="vertical-align: middle" />';
         $this->bigblank = '<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="' . xarTplGetImage("blank.gif") . '" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
-        $this->smallblank     = '<span style="padding-left: 0em; padding-right: 0em;"><img src="' . xarTplGetImage("blank.gif") . '" alt="" style="vertical-align: middle; width: 1em; height: 16px;" /></span>';
+        $this->smallblank     = '<span style="padding-left: 0em; padding-right: 0em;"><img src="' . xarTplGetImage("blank.gif") . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" /></span>';
         $this->roles = new xarRoles();
         $this->setitem(1, "deleteitem");
         $this->setitem(2, "leafitem");
@@ -218,6 +220,7 @@ class xarTreeRenderer
             } else {
                 $this->indent[] = $this->tee;
             }
+            echo count($this->indent) . " " . $this->level . " " . $this->nodeindex . "<br />";
             // draw this child
             $this->drawbranch($subnode);
             // we're done; remove the indent string
@@ -368,9 +371,9 @@ class xarTreeRenderer
             if ($this->nodeindex != 1) {
                 $lastindent = array_pop($this->indent);
                 if ($lastindent == $this->el) {
-                    $this->indent[] = $this->blank . $this->blank;
+                    $this->indent[] = $this->smallblank . $this->smallblank;
                 } else {
-                    $this->indent[] = $this->aye . $this->blank;
+                    $this->indent[] = $this->aye . $this->smallblank;
                 }
                 $html .= $this->bar;
             }
