@@ -119,6 +119,14 @@
 		</xar:loop>
 	</xar:if>
 </table>
+<table border="0" width="100%">
+	<tr>
+		<th align="center">
+	<!-- add the pager here -->
+	<div align="center">#$pager#</div>
+		</th>
+	</tr>
+</table>
 <br />
 
 <table border="0" width="100%">

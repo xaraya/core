@@ -121,7 +121,8 @@ function roles_init()
     $query = xarDBCreateTable($tables['rolemembers'],
              array('xar_uid'       => array('type'       => 'integer',
                                            'null'        => false,
-                                           'default'     => '0'),
+                                           'default'     => '0',
+										   'primary_key' => true),
                    'xar_parentid'      => array('type'   => 'integer',
                                            'null'        => false,
                                            'default'     => '0')));

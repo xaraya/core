@@ -62,9 +62,9 @@
 						r.xar_name,
 						r.xar_users,
 						rm.xar_parentid
-						FROM $this->rolestable r INNER JOIN $this->rolememberstable rm
-						ON r.xar_uid = rm.xar_uid
-						WHERE r.xar_type = 1
+						FROM $this->rolestable r, $this->rolememberstable rm
+						WHERE r.xar_uid = rm.xar_uid
+						AND r.xar_type = 1
 						ORDER BY r.xar_name";
 
 			$result = $this->dbconn->Execute($query);
@@ -72,11 +72,9 @@
 
 // arrange the data in an array
 			$groups = array();
-			$ind = 0;
 			while(!$result->EOF) {
 				list($uid,$name, $users, $parentid) = $result->fields;
-				$ind = $ind + 1;
-				$groups[$ind] = array('uid' => $uid,
+				$groups[] = array('uid' => $uid,
 								   'name' => $name,
 								   'users' => $users,
 								   'parentid' => $parentid);
@@ -126,11 +124,10 @@
 	function getsubgroups($uid){
 
 		$subgroups = array();
-		$ind = 0;
-		foreach($this->getgroups() as $subgroup){
+		$groups = $this->getgroups();
+		foreach($groups as $subgroup){
 			if ($subgroup['parentid'] == $uid) {
-				$ind = $ind + 1;
-				$subgroups[$ind] = $subgroup;
+				$subgroups[] = $subgroup;
 			}
 		}
 		return $subgroups;
@@ -168,7 +165,7 @@
 		$object = $node['parent'];
 		$node['children'] = array();
 		foreach($this->getsubgroups($object['uid']) as $subnode){
-			array_push($node['children'],$this->addbranches(array('parent'=>$subnode)));
+			$node['children'][] = $this->addbranches(array('parent'=>$subnode));
 		}
 		return $node;
 	}
@@ -1176,10 +1173,10 @@ function drawindent() {
  * @throws  none
  * @todo    none
 */
-    function getUsers($state='') {
+    function getUsers($state=0,$startnum=0,$numitems=0) {
 
 // set up the query and get the data
-	if ($state == '') {
+	if ($state == 0) {
 		$query = "SELECT r.xar_uid,
 						r.xar_name,
 						r.xar_type,
@@ -1191,7 +1188,7 @@ function drawindent() {
 						ON r.xar_uid = rm.xar_uid
 						WHERE r.xar_type = 0
 						AND rm.xar_parentid = $this->uid";
-	}
+}
 	else {
 		$query = "SELECT r.xar_uid,
 						r.xar_name,
@@ -1205,7 +1202,12 @@ function drawindent() {
 						WHERE r.xar_type = 0 AND r.xar_state = $state
 						AND rm.xar_parentid = $this->uid";
 	}
+    if ($startnum != 0) {
+    	$result = $this->dbconn->SelectLimit($query, $numitems, $startnum-1);
+    }
+    else {
 		$result = $this->dbconn->Execute($query);
+	}
 		if (!$result) return;
 
 // arrange the data in an array of role objects
@@ -1224,7 +1226,7 @@ function drawindent() {
 						'val_code'=>$val_code,
 						'state'=>$state,
 						'auth_module'=>$auth_module);
-			array_push($users,new xarRole($pargs));
+			$users[] = new xarRole($pargs);
 			$result->MoveNext();
 		}
 

@@ -43,12 +43,12 @@ define('ACCESS_ADMIN', 800);
 
     include_once 'modules/privileges/xarprivileges.php';
     include_once 'modules/roles/xarroles.php';
-    $tables = array('security_masks' => 'xar' . '_security_masks',
-                    'security_acl' => 'xar'. '_security_acl',
-                    'privileges' => 'xar'. '_privileges',
-                    'privmembers' => 'xar'. '_privmembers',
-                    'security_realms' => 'xar'. '_security_realms',
-                    'security_instances' => 'xar'. '_security_instances');
+    $tables = array('security_masks' => xarDBGetSiteTablePrefix() . '_security_masks',
+                    'security_acl' => xarDBGetSiteTablePrefix() . '_security_acl',
+                    'privileges' => xarDBGetSiteTablePrefix() . '_privileges',
+                    'privmembers' => xarDBGetSiteTablePrefix() . '_privmembers',
+                    'security_realms' => xarDBGetSiteTablePrefix() . '_security_realms',
+                    'security_instances' => xarDBGetSiteTablePrefix() . '_security_instances');
 
     xarDB_importTables($tables);
 

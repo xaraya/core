@@ -22,7 +22,7 @@ document.forms[0].submit();}
 
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Add</xar:mlstring></h2><br />
-<div style="margin: auto;">
+<div style="text-align: center; margin: auto;">
 	<br />
 	<form action="&xar-modurl-roles-admin-addrole;" method="post" enctype="application/x-www-form-urlencoded">
 		
