@@ -215,6 +215,7 @@ function xarExceptionHandled()
 //    }
 
     global $ExceptionStack;
+    if (!$ExceptionStack->isempty())
     $ExceptionStack->pop();
 }
 

@@ -1,5 +1,5 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Site Locks</xar:mlstring></h2>
+<div class="xar-mod-body"><h2><xar:mlstring>Site Lock</xar:mlstring></h2>
 <div style="margin: auto;">
 	<form action="#xarModURL('roles', 'admin', 'sitelock')#" method="post" enctype="application/x-www-form-urlencoded">
 		
@@ -55,9 +55,9 @@
 					<tr>
 						<td width="100" align="center">
 							<xar:if condition="count($roles) gt 1">
-								<input type="button" value="#$deletelabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;uid=#$loop:item['uid']#';this.form.submit();"/>
+								<input type="button" value="#$deletelabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;uid=#$loop:item['uid']#';this.form.submit();" />
 							<xar:else />
-								&nbsp;
+								<input type="button" value="#$deletelabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;uid=#$loop:item['uid']#';this.form.submit();" disabled />
 							</xar:if>
 						</td>
 						<td align="center">
@@ -102,7 +102,23 @@
 		</tr>
 		<tr>
 			<td>
-				<xar:mlstring>The following message will be displayed to members who are locked out:</xar:mlstring>			
+				<xar:mlstring>The following message will be emailed to members in the above list when the site is locked or unlocked.
+				<br />
+				It is prefaced by a short: "Site &lt;sitename&gt; has been locked/unlocked".</xar:mlstring>			
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<textarea name="notifymsg" id="notifymsg" wrap="soft" rows="5" cols="80" tabindex="1">#$notifymsg#</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<xar:mlstring>The following message will be displayed to members who are locked out when they try to login:</xar:mlstring>			
 			</td>
 		</tr>
 		<tr>
@@ -110,6 +126,7 @@
 				<textarea name="lockedoutmsg" id="lockedoutmsg" wrap="soft" rows="5" cols="80" tabindex="1">#$lockedoutmsg#</textarea>
 			</td>
 		</tr>
+		<tr>
 		<tr>
 			<td>
 				<input type="button" value="#$savelabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&cmd=save';this.form.submit();"/>

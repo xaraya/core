@@ -1,34 +1,26 @@
 <?php
 
-/**
- * lock the site except for certain groups
-function getuid($rolename) {
-    echo $r->getName();exit;
-    $r = xaruFindRole($rolename);
-    if (!$r) $r = xarFindRole($rolename);
-    if($r) return $r->getID();
-    else return 0
-}
- */
-
 function roles_admin_sitelock($args)
 {
     // Security Check
     if(!xarSecurityCheck('AdminRole')) return;
 
-    if (!xarVarFetch('cmd', 'str', $cmd, NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('cmd', 'isset', $cmd, NULL, XARVAR_DONT_SET)) return;
+
     if(!isset($cmd)) {
     // Get parameters from the db
         $lockvars = unserialize(xarModGetVar('roles','lockdata'));
         $toggle = $lockvars['locked'];
         $roles = $lockvars['roles'];
         $lockedoutmsg = (!isset($lockvars['message']) || $lockvars['message'] == '') ? xarML('The site is currently locked. Thank you for your patience.') : $lockvars['message'];
+        $notifymsg = $lockvars['notifymsg'];
     }
     else {
     // Get parameters from input
         if (!xarVarFetch('serialroles', 'str', $serialroles, NULL, XARVAR_NOT_REQUIRED)) return;
         $roles = unserialize($serialroles);
         if (!xarVarFetch('lockedoutmsg', 'str', $lockedoutmsg, NULL, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('notifymsg', 'str', $notifymsg, NULL, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('toggle', 'str', $toggle, NULL, XARVAR_NOT_REQUIRED)) return;
 
         if ($cmd == 'delete') {
@@ -58,22 +50,36 @@ function roles_admin_sitelock($args)
         }
 
         if ($cmd == 'save') {
-            foreach($roles as $role) $role['notify'] = TRUE;
+            if (!xarVarFetch('notify', 'isset', $notify, NULL, XARVAR_DONT_SET)) return;
+            if(!isset($notify)) $notify = array();
+            for($i=0;$i<count($roles);$i++) $roles[$i]['notify'] = in_array($roles[$i]['uid'],$notify);
             $lockdata = array('roles' => $roles,
                               'message' => $lockedoutmsg,
-                              'locked' => $toggle);
+                              'locked' => $toggle,
+                              'notifymsg' => $notifymsg);
             xarModSetVar('roles', 'lockdata', serialize($lockdata));
             xarResponseRedirect(xarModURL('roles', 'admin', 'sitelock'));
         }
 
         if ($cmd == 'toggle') {
             $toggle = $toggle ? 0 : 1;
+            $spared = array();
+            for($i=0;$i<count($roles);$i++) $spared[] = $roles[$i]['uid'];
+            if ($toggle == 1) {
+                if(!xarModAPIFunc('roles','admin','clearsessions', $spared)) {
+                    $msg = xarML('Could not clear sessions table');
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+                    'BAD_PARAM',
+                     new SystemException($msg));
+                }
+            }
         }
     }
 
         $data['roles'] = $roles;
         $data['serialroles'] = xarVarPrepForDisplay(serialize($roles));
         $data['lockedoutmsg'] = $lockedoutmsg;
+        $data['notifymsg'] = $notifymsg;
         $data['toggle'] = $toggle;
         if ($toggle == 1) {
             $data['togglelabel']    = xarML('Unlock the Site');

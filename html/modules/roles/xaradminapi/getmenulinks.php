@@ -69,6 +69,14 @@ function roles_adminapi_getmenulinks()
                               'label' => xarML('Purge Users'));
     }
 
+    if (xarSecurityCheck('EditRole',0)) {
+        $menulinks[] = Array('url'   => xarModURL('roles',
+                                                  'admin',
+                                                  'sitelock'),
+                              'title' => xarML('Lock the site to all but selected users'),
+                              'label' => xarML('Site Lock'));
+    }
+
 // Security Check
     if (xarSecurityCheck('AdminRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',
