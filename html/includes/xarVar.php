@@ -1106,6 +1106,8 @@ function xarVarEscape ($string, $targetContext, $extras = array())
  */
 function xarVarCleanUntrusted($var)
 {
+    // Issue a WARNING as this function is deprecated
+    xarLogMessage('Using deprecated function xarVarCleanUntrusted, use ??? instead',XARLOG_LEVEL_WARNING);
     $search = array('|</?\s*SCRIPT[^>]*>|si',
                     '|</?\s*FRAME[^>]*>|si',
                     '|</?\s*OBJECT[^>]*>|si',
@@ -1135,6 +1137,8 @@ function xarVarCleanUntrusted($var)
  */
 function xarVarCleanFromInput()
 {
+    // Issue a WARNING as this function is deprecated
+    xarLogMessage('Using deprecated function xarVarCleanFromInput, use xarVarFetch instead',XARLOG_LEVEL_WARNING);
     $resarray = array();
     foreach (func_get_args() as $name) {
         if (empty($name)) {
@@ -1336,7 +1340,7 @@ function xarVarPrepHTMLDisplay__callback($matches)
 function xarVarPrepForStore()
 {
     // Issue a WARNING as this function is deprecated
-    xarLogMessage('Using deprecated function xarVarPrepForStore',XARLOG_LEVEL_WARNING);
+    xarLogMessage('Using deprecated function xarVarPrepForStore, use bind variables instead',XARLOG_LEVEL_WARNING);
     $resarray = array();
     foreach (func_get_args() as $var) {
 
