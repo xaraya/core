@@ -141,7 +141,20 @@ function themes_adminapi_getthemelist($args)
                     // Following changes were applied by <andyv> on 21st May 2003
                     // as per the patch by Garrett Hunter
                     // Credits: Garrett Hunter <Garrett.Hunter@Verizon.net>
-                    $themeInfo['state'] = (int) XARTHEME_STATE_MISSING;
+                    switch ($themeInfo['state']) {
+                        case XARTHEME_STATE_UNINITIALISED:
+                            $themeInfo['state'] = XARTHEME_STATE_MISSING_FROM_UNINITIALISED;
+                            break;
+                        case XARTHEME_STATE_INACTIVE:
+                            $themeInfo['state'] = XARTHEME_STATE_MISSING_FROM_INACTIVE;
+                            break;
+                        case XARTHEME_STATE_ACTIVE:
+                            $themeInfo['state'] = XARTHEME_STATE_MISSING_FROM_ACTIVE;
+                            break;
+                        case XARTHEME_STATE_UPGRADED:
+                            $themeInfo['state'] = XARTHEME_STATE_MISSING_FROM_UPGRADED;
+                            break;
+                    }
                     $themeInfo['class'] = "";
                     $themeInfo['version'] = "&nbsp;";
                     // end patch
