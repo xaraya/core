@@ -1771,7 +1771,6 @@ function drawindent() {
 
         if($match) {
 // now match the instances
-if($mask->getName() =="ViewArticles") echo $mask->present();
             if(count($p1) != count($p2)) {
                 if(count($p1) > count($p2)) {
                     $p = $p2;
