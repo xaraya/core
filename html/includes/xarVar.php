@@ -100,10 +100,11 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
  * @param value mixed contains the converted value of fetched variable
  * @param defaultValue mixed the default value
  * @param flags integer bitmask which modify the behaviour of function
+ * @param prep will prep the var with xarVarPrepForDisplay (1) or xarVarPrepHTMLDisplay(2)
  * @return mixed
  * @raise BAD_PARAM
  */
-function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST)
+function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST, $prep = NULL)
 {
     /*
      nuncanada: XARVAR_NOT_REQUIRED is useless in the logic used here, just put the
@@ -125,6 +126,12 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     //The FLAG here, stops xarVarFetch from reusing the variable if already present
     if (!isset($value) || ($flags & XARVAR_DONT_REUSE)) {
         $value = xarRequestGetVar($name, $allowOnlyMethod);
+    }
+
+    if ($prep == 1){
+        $value = xarVarPrepForDisplay($value);
+    } elseif ($prep == 2){
+        $value = xarVarPrepHTMLDisplay($value);
     }
 
     $result = xarVarValidate($validation, $value);

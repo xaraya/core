@@ -6,17 +6,17 @@
 function roles_user_view()
 {
     // Get parameters
-    if(!xarVarFetch('startnum', 'isset',    $startnum, 1,     XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('phase',    'notempty', $phase,    'active', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('name',    'notempty', $data['name'],'', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('startnum', 'isset',    $startnum, 1,     XARVAR_NOT_REQUIRED, 1)) {return;}
+    if(!xarVarFetch('phase',    'notempty', $phase,    'active', XARVAR_NOT_REQUIRED, 1)) {return;}
+    if(!xarVarFetch('name',    'notempty', $data['name'],'', XARVAR_NOT_REQUIRED, 1)) {return;}
     //This $filter variable isnt being used for anything...
     //It is set later on.
-    if(!xarVarFetch('filter',   'str',   $filter,   NULL,     XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('filter',   'str',   $filter,   NULL,     XARVAR_DONT_SET, 1)) {return;}
 
-    if(!xarVarFetch('letter',   'str',   $letter,   NULL,     XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('search',   'str',   $search,   NULL,     XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('order',    'str',   $order,    "name",   XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('selection','str',   $selection,  "",     XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('letter',   'str',   $letter,   NULL,     XARVAR_NOT_REQUIRED, 1)) {return;}
+    if(!xarVarFetch('search',   'str',   $search,   NULL,     XARVAR_NOT_REQUIRED, 1)) {return;}
+    if(!xarVarFetch('order',    'str',   $order,    "name",   XARVAR_NOT_REQUIRED, 1)) {return;}
+    if(!xarVarFetch('selection','str',   $selection,  "",     XARVAR_DONT_SET, 1)) {return;}
 
     $data['items'] = array();
 
