@@ -1175,7 +1175,7 @@ class Dynamic_Username_Property extends Dynamic_Property
             $user = xarUserGetVar('uname', $value);
         }
         if ($value > 1) {
-            return '<a href="'.xarModURL('users','user','display',
+            return '<a href="'.xarModURL('roles','user','display',
                                          array('uid' => $value))
                     . '">'.xarVarPrepForDisplay($user).'</a>';
         } else {
