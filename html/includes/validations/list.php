@@ -18,14 +18,8 @@ function variable_validations_list (&$subject, $parameters, $supress_soft_exc)
 
     if (!is_array($subject)) {
         $msg = xarML('Not an array: "#(1)"', $subject);
-
-        // NULL is a special case. Perform a 'soft' fail should we encounter a NULL
-        if (!($subject === NULL && $supress_soft_exc)) {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-            return;
-        } else {
-            return false;
-        }
+        if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+        return false;
     }
 
     if (isset($parameters[0]) && trim($parameters[0]) != '') {
