@@ -396,7 +396,8 @@ exit;
 // Parent id = -1 at start to start with root CE categories
 // categ_parent is set to te current Category ID, if 0 $contentexpress root is used
 
-function walk_ce_menutree($parent_id, $categ_parent = 0) {
+function walk_ce_menutree($parent_id, $categ_parent = 0) 
+{
 
     GLOBAL $dbconn, $oldprefix, $contentexpress, $ce_menus;
 
