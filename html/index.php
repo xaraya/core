@@ -40,6 +40,9 @@ function xarMain()
         ob_start();
     }
 
+    // Set the default page title before calling the module function
+    xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarConfigGetVar('Site.Core.Slogan'));
+
     // FIXME: <marco> What's this insanity for?
     // Run the function - also handle cancel button clicking
     if (xarVarCleanFromInput('cancel')) {
@@ -76,28 +79,13 @@ function xarMain()
         return; // throw back
     }
 
-// FIXME: <mikespub> should modules call xarTplSetPageTitle() directly, if they want to override the page title ?
-    // Set page title
-    if (xarVarIsCached('PageSettings','title')) {
-        // Override default page title
-        xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarVarGetCached('PageSettings','title'));
-    } else {
-        // Set the default page title
-        xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarConfigGetVar('Site.Core.Slogan'));
-    }
-
-// FIXME: <mikespub> should modules call xarTplSetPageTemplateName() directly, if they want to override the page template ?
     // Set page template
-    if (xarVarIsCached('PageSettings','template')) {
-        // Override default page template
-        xarTplSetPageTemplateName(xarVarGetCached('PageSettings','template'));
-    }
-
     if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
         // Use the admin.xt page if available when $modType is admin
         xarTplSetPageTemplateName('admin');
     }
 
+    // Note : the page template may be set to something else in the module function
     if (xarTplGetPageTemplateName() == 'default') {
         xarTplSetPageTemplateName($modName);
     }
