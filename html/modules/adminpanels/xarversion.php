@@ -21,7 +21,7 @@
  */
 $modversion['name'] = 'Administration';
 $modversion['description'] = 'Taking care of the admin navigation';
-$modversion['displayname'] = xarML('Administration Panel');
+$modversion['displayname'] = xarML('Admin Panels');
 $modversion['displaydescription'] = xarML('Taking care of the admin navigation');
 $modversion['id'] = '9';
 $modversion['version'] = '1.2.1';
