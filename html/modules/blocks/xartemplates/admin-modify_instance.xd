@@ -265,22 +265,21 @@
                     </p>
                 </fieldset>
             </xar:if>
-            <fieldset class="formelements extra">
-                <legend>
-                    <strong>
-                        <xar:mlstring>
-                            Extra parameters 
-                        </xar:mlstring>
-                    </strong>
-                </legend>
-                <xar:if condition="!empty($extra_fields)">
+            <xar:if condition="!empty($extra_fields)">
+                <fieldset class="formelements extra">
+                    <legend>
+                        <strong>
+                            <xar:mlstring>
+                                Extra parameters 
+                            </xar:mlstring>
+                        </strong>
+                    </legend>
                     <xar:comment>
                         Blocks can send more fields to be shown and configured the extra_fields var shows those values 
                     </xar:comment>
-                    #$extra_fields# 
-                </xar:if>
-                #$hooks# 
-            </fieldset>
+                    #$extra_fields# #$hooks# 
+                </fieldset>
+            </xar:if>
             <input type="submit" value="#xarML('Update')#" />
         </fieldset>
     </form>
