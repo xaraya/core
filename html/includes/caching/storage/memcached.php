@@ -31,14 +31,17 @@ class xarCache_MemCached_Storage extends xarCache_Storage
 
     function isCached($key = '')
     {
+        $oldkey = $key;
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
         }
         // we actually retrieve the value here too
         $value = $this->memcache->get($key);
         if ($value) {
+            $this->logStatus('HIT', $oldkey);
             return true;
         } else {
+            $this->logStatus('MISS', $oldkey);
             return false;
         }
     }
@@ -83,12 +86,15 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         // we rely on the expire value here
     }
 
-    function getCacheSize()
+    function getCacheSize($countitems = false)
     {
         // this is the size of the whole cache
         $stats = $this->memcache->getstats();
 
         $this->size = $stats['bytes'];
+        if ($countitems) {
+            $this->numitems = $stats['curr_items'];
+        }
         return $stats['bytes'];
     }
 }

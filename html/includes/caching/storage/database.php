@@ -32,6 +32,7 @@ class xarCache_Database_Storage extends xarCache_Storage
 
         if ($result->EOF) {
             $result->Close();
+            $this->logStatus('MISS', $key);
             $this->lastid = null;
             $this->value = null;
             return false;
@@ -43,9 +44,11 @@ class xarCache_Database_Storage extends xarCache_Storage
 
         $this->lastid = $id;
         if (!empty($this->expire) && $time < time() - $this->expire) {
+            $this->logStatus('MISS', $key);
             $this->value = null;
             return false;
         } else {
+            $this->logStatus('HIT', $key);
             $this->value = $data;
             return true;
         }
@@ -186,20 +189,34 @@ class xarCache_Database_Storage extends xarCache_Storage
         $this->lastkey = null;
     }
 
-    function getCacheSize()
+    function getCacheSize($countitems = false)
     {
         $dbconn =& xarDBGetConn();
         $table = $this->table;
 
-        $query = "SELECT SUM(xar_size)
-                    FROM $table
-                   WHERE xar_type = ?";
-        $bindvars = array($this->type);
-        $result =& $dbconn->Execute($query, $bindvars);
-        if (!$result) return;
+        if ($countitems) {
+            $query = "SELECT SUM(xar_size), COUNT(xar_id)
+                        FROM $table
+                       WHERE xar_type = ?";
+            $bindvars = array($this->type);
+            $result =& $dbconn->Execute($query, $bindvars);
+            if (!$result) return;
 
-        list($size) = $result->fields;
-        $result->Close();
+            list($size,$count) = $result->fields;
+            $result->Close();
+
+            $this->numitems = $count;
+        } else {
+            $query = "SELECT SUM(xar_size)
+                        FROM $table
+                       WHERE xar_type = ?";
+            $bindvars = array($this->type);
+            $result =& $dbconn->Execute($query, $bindvars);
+            if (!$result) return;
+
+            list($size) = $result->fields;
+            $result->Close();
+        }
 
         $this->size = $size;
         return $size;

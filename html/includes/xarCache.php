@@ -82,10 +82,15 @@ function xarCache_init($args = false)
         // Note : we may already exit here if session-less page caching is enabled
         xarPage_sessionLess();
 /*
-        $xarPage_storage =& xarCache_getStorage(array('storage'  => 'filesystem',
+        $storage = !empty($cachingConfiguration['Page.CacheStorage']) ?
+                   $cachingConfiguration['Page.CacheStorage'] : 'filesystem';
+        $logfile = !empty($cachingConfiguration['Page.LogFile']) ?
+                   $cachingConfiguration['Page.LogFile'] : null;
+        $xarPage_storage =& xarCache_getStorage(array('storage'  => $storage,
                                                       'type'     => 'page',
                                                       'cachedir' => $xarOutput_cacheCollection,
-                                                      'expire'   => $xarPage_cacheTime));
+                                                      'expire'   => $xarPage_cacheTime,
+                                                      'logfile'  => $logfile));
 */
     }
 
@@ -93,10 +98,15 @@ function xarCache_init($args = false)
         define('XARCACHE_BLOCK_IS_ENABLED',1);
         require_once('includes/caching/block.php');
 /*
-        $xarBlock_storage =& xarCache_getStorage(array('storage'  => 'filesystem',
+        $storage = !empty($cachingConfiguration['Block.CacheStorage']) ?
+                   $cachingConfiguration['Block.CacheStorage'] : 'filesystem';
+        $logfile = !empty($cachingConfiguration['Block.LogFile']) ?
+                   $cachingConfiguration['Block.LogFile'] : null;
+        $xarBlock_storage =& xarCache_getStorage(array('storage'  => $storage,
                                                        'type'     => 'block',
                                                        'cachedir' => $xarOutput_cacheCollection,
-                                                       'expire'   => $xarBlock_cacheTime));
+                                                       'expire'   => $xarBlock_cacheTime,
+                                                       'logfile'  => $logfile));
 */
     }
 

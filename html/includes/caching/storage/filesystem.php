@@ -23,6 +23,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
 
     function isCached($key = '')
     {
+        $oldkey = $key;
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
         }
@@ -37,9 +38,11 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
             ($this->expire == 0 ||
              filemtime($cache_file) > time() - $this->expire)) {
 
+            $this->logStatus('HIT', $oldkey);
             return true;
 
         } else {
+            $this->logStatus('MISS', $oldkey);
             return false;
         }
     }
@@ -148,7 +151,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         }
     }
 
-    function getCacheSize()
+    function getCacheSize($countitems = false)
     {
         if (empty($this->blksize)) {
             $dirstat = stat($this->dir);
@@ -162,7 +165,11 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
             }
         }
 
-        $this->size = $this->_getCacheDirSize($this->dir);
+        if ($countitems) {
+            $this->numitems = 0;
+        }
+
+        $this->size = $this->_getCacheDirSize($this->dir, $countitems);
 
         return $this->size;
     }
@@ -197,9 +204,10 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
     /**
      * private function for use in getCacheSize()
      */
-    function _getCacheDirSize($dir = FALSE)
+    function _getCacheDirSize($dir = FALSE, $countitems = false)
     {
         $size = 0;
+        $count = 0;
 
         if ($this->bsknown) {
             if ($dir && is_dir($dir)) {
@@ -210,7 +218,9 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
                             $filestat = stat($dir . $item);
                             $size += ($filestat['blocks'] * $this->blksize);
                             if (is_dir($dir . $item)) {
-                                $size += $this->_getCacheDirSize($dir . $item);
+                                $size += $this->_getCacheDirSize($dir . $item, $countitems);
+                            } elseif ($countitems) {
+                                $count++;
                             }
                         }
                     }
@@ -224,9 +234,12 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
                     while (($item = readdir($dirId)) !== FALSE) {
                         if ($item != "." && $item != "..") {
                             if (is_dir($dir . $item)) {
-                                $size += $this->_getCacheDirSize($dir . $item);
+                                $size += $this->_getCacheDirSize($dir . $item, $countitems);
                             } else {
                                 $size += filesize($dir . $item);
+                                if ($countitems) {
+                                    $count++;
+                                }
                             }
                         }
                     }
@@ -234,7 +247,9 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
                 }
             }
         }
-
+        if ($countitems) {
+            $this->numitems = $this->numitems + $count;
+        }
         return $size;
     }
 
