@@ -706,13 +706,27 @@ class xarPrivileges extends xarMasks
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   none
+ * @param   string $arg indicates what types of elements to get
  * @return  array of privileges
  * @throws  none
  * @todo    none
 */
-    function gettoplevelprivileges() {
-    if ((!isset($alltoplevelprivileges)) || count($alltoplevelprivileges)==0) {
+    function gettoplevelprivileges($arg) {
+//    if ((!isset($alltoplevelprivileges)) || count($alltoplevelprivileges)==0) {
+        if($arg == "all") {
+             $fromclause = "FROM $this->privilegestable p,$this->privmemberstable pm
+                        WHERE p.xar_pid = pm.xar_pid
+                        AND pm.xar_parentid = 0
+                        ORDER BY p.xar_name";
+        }
+        elseif ($arg == "assigned"){
+             $fromclause = "FROM $this->privilegestable p,$this->privmemberstable pm,
+                            $this->acltable acl
+                            WHERE p.xar_pid = pm.xar_pid
+                            AND p.xar_pid = acl.xar_permid
+                            AND pm.xar_parentid = 0
+                            ORDER BY p.xar_name";
+        }
             $query = "SELECT p.xar_pid,
                         p.xar_name,
                         p.xar_realm,
@@ -721,22 +735,16 @@ class xarPrivileges extends xarMasks
                         p.xar_instance,
                         p.xar_level,
                         p.xar_description,
-                        pm.xar_parentid
-                        FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm
-                        ON p.xar_pid = pm.xar_pid
-                        WHERE pm.xar_parentid = 0
-                        ORDER BY p.xar_name";
-
+                        pm.xar_parentid ";
+            $query .= $fromclause;
             $result = $this->dbconn->Execute($query);
             if (!$result) return;
 
             $privileges = array();
-            $ind = 0;
             while(!$result->EOF) {
                 list($pid, $name, $realm, $module, $component, $instance, $level,
                         $description,$parentid) = $result->fields;
-                $ind = $ind + 1;
-                $privileges[$ind] = array('pid' => $pid,
+                $privileges[] = array('pid' => $pid,
                                    'name' => $name,
                                    'realm' => $realm,
                                    'module' => $module,
@@ -749,10 +757,10 @@ class xarPrivileges extends xarMasks
             }
             $alltoplevelprivileges = $privileges;
             return $privileges;
-        }
-        else {
-            return $alltoplevelprivileges;
-        }
+//        }
+//        else {
+//            return $alltoplevelprivileges;
+//        }
     }
 
 /**
@@ -1077,14 +1085,14 @@ class xarPrivileges extends xarMasks
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  private
- * @param   none
+ * @param   string $arg indicates what types of elements to get
  * @return  array of trees
  * @throws  none
  * @todo    none
 */
-    function maketrees() {
+    function maketrees($arg) {
         $trees = array();
-        foreach ($this->gettoplevelprivileges() as $entry) {
+        foreach ($this->gettoplevelprivileges($arg) as $entry) {
             array_push($trees,$this->maketree($this->getPrivilege($entry['pid'])));
         }
         return $trees;
@@ -1134,15 +1142,15 @@ class xarPrivileges extends xarMasks
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  private
- * @param   none
+ * @param   string $arg indicates what types of elements to get
  * @return  array of tree drawings
  * @throws  none
  * @todo    none
 */
-    function drawtrees(){
+    function drawtrees($arg){
         $drawntrees = array();
-        foreach($this->maketrees() as $tree){
-            array_push($drawntrees,array('tree'=>$this->drawtree($tree)));
+        foreach($this->maketrees($arg) as $tree){
+            $drawntrees[] = array('tree'=>$this->drawtree($tree));
         }
         return $drawntrees;
     }

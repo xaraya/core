@@ -26,6 +26,7 @@ document.forms[0].submit();}
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Current</xar:mlstring></h2><br />
 <div style="margin: auto;">
+<form action="&xar-modurl-privileges-admin-viewprivileges;" method="post" enctype="application/x-www-form-urlencoded">
 <table border="0" cellspacing="5" width="100%">
 	<tr>
 		<td>
@@ -37,21 +38,15 @@ document.forms[0].submit();}
 	<tr>
 		<td>Show Privileges that are: 
 			<xar:if condition="$show eq 'assigned'">
-			<input type="radio" name="show" id="show" value="assigned" checked="checked" />
+			<input type="radio" name="show" id="show" value="assigned" checked="checked" onClick="javascript:setaction('&xar-modurl-privileges-admin-viewprivileges;')"/>
 			<xar:else />
-			<input type="radio" name="show" id="show" value="assigned"  />
+			<input type="radio" name="show" id="show" value="assigned" onClick="javascript:setaction('&xar-modurl-privileges-admin-viewprivileges;')" />
 			</xar:if><xar:mlstring>Assigned</xar:mlstring>
 
-			<xar:if condition="$show eq 'unassigned'">
-			<input type="radio" name="show" id="show" value="unassigned" checked="checked" />
-			<xar:else />
-			<input type="radio" name="show" id="show" value="unassigned"  />
-			</xar:if><xar:mlstring>Unassigned</xar:mlstring>
-
 			<xar:if condition="$show eq 'all'">
-			<input type="radio" name="show" id="show" value="all" checked="checked" />
+			<input type="radio" name="show" id="show" value="all" checked="checked" onClick="javascript:setaction('&xar-modurl-privileges-admin-viewprivileges;')"/>
 			<xar:else />
-			<input type="radio" name="show" id="show" value="all"  />
+			<input type="radio" name="show" id="show" value="all" onClick="javascript:setaction('&xar-modurl-privileges-admin-viewprivileges;')" />
 			</xar:if><xar:mlstring>All</xar:mlstring>
 		</td>
 	</tr>
@@ -61,6 +56,8 @@ document.forms[0].submit();}
 		</td>
 	</tr>
 </table>			
+</form>
+
 <xar:loop name="$trees">
 	&xar-var-tree;
 </xar:loop>
