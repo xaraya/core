@@ -1,5 +1,16 @@
 <?php
-
+/**
+ * File: $Id$
+ *
+ * Check if a user is active or not
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ * @subpackage Roles Module
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ */
 /**
  * check if a user is active or not on the site
  * @param bool $include_anonymous whether or not to include anonymous user

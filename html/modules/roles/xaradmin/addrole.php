@@ -1,5 +1,16 @@
 <?php
-
+/**
+ * File: $Id$
+ *
+ * Add a role
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ * @subpackage Roles Module
+ * @author Jan Schrage, Marc Lutolf <marcinmilan@xaraya.com>
+ */
 /**
  * addRole - add a role
  * This function tries to create a user and provides feedback on the

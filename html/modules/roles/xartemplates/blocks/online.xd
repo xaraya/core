@@ -1,3 +1,4 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <p><xar:ml>
     <xar:mlstring>There are currently #(1) #(2) and #(3) #(4) online.</xar:mlstring>
     <xar:mlvar>#$numguests#</xar:mlvar>

@@ -1,5 +1,16 @@
 <?php
-
+/**
+ * File: $Id$
+ *
+ * Return the field names and correct values fo joining on users table
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ * @subpackage Roles Module
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ */
 /**
  * return the field names and correct values for joining on users table
  * example : SELECT ..., $name, $email,...

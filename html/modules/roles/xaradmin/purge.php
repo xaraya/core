@@ -1,5 +1,16 @@
 <?php
-
+/**
+ * File: $Id$
+ *
+ * Purge users by status
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ * @subpackage Roles Module
+ * @author Xaraya Team
+ */
 /**
  * purge users by status
  * @param 'status' the status we are purging

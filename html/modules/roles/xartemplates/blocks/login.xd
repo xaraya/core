@@ -1,3 +1,4 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <form action="&xar-modurl-roles-user-login;" method="post" enctype="application/x-www-form-urlencoded">
 <div>
     <table border="0" width="100%">

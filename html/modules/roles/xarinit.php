@@ -2,10 +2,11 @@
 /**
  * File: $Id: s.xarinit.php 1.27 03/01/17 15:18:04-08:00 rcave@lxwdev-1.schwabfoundation.org $
  *
- * Short description of purpose of file
+ * Initialise the roles module
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2002 by the Xaraya Development Team.
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @subpackage Roles Module
  * @author Jan Schrage, John Cox, Gregor Rothfuss

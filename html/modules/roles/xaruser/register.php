@@ -1,5 +1,16 @@
 <?php
-
+/**
+ * File: $Id$
+ *
+ * Add a new user
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ * @subpackage Roles Module
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ */
 /**
  * add new user
  * Multiple steps to create a new user, as follows:
