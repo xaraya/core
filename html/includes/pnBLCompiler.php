@@ -1,5 +1,5 @@
 <?php
-// File: $Id$
+// File: $Id: s.pnBLCompiler.php 1.18 02/10/27 12:16:22-05:00 John.Cox@d38yrl11. $
 // ----------------------------------------------------------------------
 // Xaraya eXtensible Management System
 // Copyright (C) 2002 by the Xaraya Development Team.
@@ -300,8 +300,7 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                                 return;
                             }
                             // Add text to parent
-                            //if (trim($text) != '') {
-                            if ($text != '') {
+                            if (trim($text) != '') {
                                 if (!$parent->hasText()) {
                                     pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                    new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
@@ -363,8 +362,7 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                                 return;
                             }
                             // Add text to parent
-                            //if (trim($text) != '') {
-                            if ($text != '') {
+                            if (trim($text) != '') {
                                 if (!$parent->hasText()) {
                                     pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                    new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
@@ -427,8 +425,7 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                                 // </pnt: tag
                                 //pnLogMessage('found </pnt:', PNLOG_LEVEL_ERROR);
                                 // Add text to parent
-                                //if (trim($text) != '') {
-                                if ($text != '') {
+                                if (trim($text) != '') {
                                     if (!$parent->hasText()) {
                                         pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                        new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
@@ -460,8 +457,7 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                             if ($nextToken == 'idget:') {
                                 // </widget: tag
                                 // Add text to parent
-                                //if (trim($text) != '') {
-                                if ($text != '') {
+                                if (trim($text) != '') {
                                     if (!$parent->hasText()) {
                                         pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                        new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
@@ -503,8 +499,7 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                             return;
                         }
                         // Add text to parent
-                        //if (trim($text) != '') {
-                        if ($text != '') {
+                        if (trim($text) != '') {
                             if (!$parent->hasText()) {
                                 pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
