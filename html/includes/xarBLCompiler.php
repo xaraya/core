@@ -437,6 +437,15 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return true;
     }
     
+    function canHaveText(&$node)
+    {
+        if(!$node->hasText()) {
+            $this->raiseError(XAR_BL_INVALID_TAG,"The '".$node->tagName."' tag cannot have text.", $node);
+            return;
+        }
+        return true;
+    }
+    
     /**
      * parseNode
      * 
@@ -476,12 +485,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 $natives = array('set','ml','blockgroup');
                                 if(in_array($parent->tagName, $natives,true)) $trimmer='trim';
                                 if ($trimmer($text) != '') {
-                                    if ($parent->hasText()) {
-                                        $children[] =& $this->nodesFactory->createTextNode($trimmer($text), $this);
-                                    } else {
-                                        $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
-                                        return;
-                                    }
+                                    if(!$this->canHaveText($parent)) return;
+                                    $children[] =& $this->nodesFactory->createTextNode($trimmer($text), $this);
                                     $text = '';
                                 }
 
@@ -543,12 +548,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 $natives = array('set', 'ml', 'mlvar');
                                 if(in_array($parent->tagName, $natives,true)) $trimmer='trim';
                                 if ($trimmer($text) != '') {
-                                    if ($parent->hasText()) {
-                                        $children[] =& $this->nodesFactory->createTextNode($trimmer($text), $this);
-                                    } else {
-                                        $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
-                                        return;
-                                    }
+                                    if(!$this->canHaveText($parent)) return;
+                                    $children[] =& $this->nodesFactory->createTextNode($trimmer($text), $this);
                                     $text = '';
                                 }
                                 // Handle End Tag
@@ -574,12 +575,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 switch($buildup) {
                                     case XAR_TOKEN_HTMLCOMMENT_DELIM:
                                         $identifier = XAR_TOKEN_HTMLCOMMENT_DELIM;
-                                        break 3; // done
+                                        break 2; // done
                                     case XAR_TOKEN_CDATA_START:
                                         // Treat it as text
                                         // FIXME: CDATA should really be skipped, but our RSS theme depends on the resolving inside
                                         $token = XAR_TOKEN_TAG_START . XAR_TOKEN_NONMARKUP_START .  $buildup;
-                                        break 4;
+                                        break 3;
                                 }
                                 $nextChar = $this->getNextToken();
                             }
@@ -671,12 +672,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Add text to parent
                         // Situation: [...text...]&xar-...
                         if (trim($text) != '') {
-                            if ($parent->hasText()) {
-                                $children[] = $this->nodesFactory->createTextNode(xmltrim($text), $this);
-                            } else {
-                                $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
-                                return;
-                            }
+                            if(!$this->canHaveText($parent)) return;
+                            $children[] = $this->nodesFactory->createTextNode(xmltrim($text), $this);
                             $text = '';
                         }
                         // Handle Entity
@@ -729,7 +726,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         if ($trimmer($text) != '') {
                             if ($parent->hasText()) {
                                 $children[] = $this->nodesFactory->createTextNode($trimmer($text), $this);
-                            } elseif(trim($text) != '') {
+                            } elseif(trim($text) != '') { // ???
                                 $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                                 return;
                             }
@@ -768,12 +765,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         // Add the final text as a text node 
         $trimmer = 'xmltrim';
         if ($trimmer($text) != '') {
-            if($parent->hasText()) {
-                $children[] = $this->nodesFactory->createTextNode($trimmer($text),$this);
-            } else {
-                $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text inside.", $parent);
-                return;
-            }
+            if(!$this->canHaveText($parent)) return;
+            $children[] = $this->nodesFactory->createTextNode($trimmer($text),$this);
         }
         // Check if there is something left at the stack
         $stackTagName = array_pop($this->tagNamesStack);
