@@ -3,7 +3,7 @@
 /**
  * Checkbox Validation Class
  */
-function variable_validations_checkbox {$subject, $parameters, &$convValue) {
+function variable_validations_checkbox ($subject, $parameters, &$convValue) {
 
     if (is_string($subject)) {
         $subject = true;

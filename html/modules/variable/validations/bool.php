@@ -4,7 +4,7 @@
 /**
  * Boolean Validation Function
  */
-function variable_validations_bool {$subject, $parameters, &$convValue) {
+function variable_validations_bool ($subject, $parameters, &$convValue) {
 
         if ($subject == 'true') {
             $subject = true;

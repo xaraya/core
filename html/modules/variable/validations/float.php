@@ -3,7 +3,7 @@
 /**
  * Float Validation Function
  */
-function variable_validations_float {$subject, $parameters, &$convValue) {
+function variable_validations_float ($subject, $parameters, &$convValue) {
 
         $value = floatval($subject);
 

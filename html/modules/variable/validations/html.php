@@ -3,7 +3,7 @@
 /**
  * HTML Validation Class
  */
-function variable_validations_html {$subject, $parameters, &$convValue) {
+function variable_validations_html ($subject, $parameters, &$convValue) {
 
         assert('($parameters[0] == "restricted" ||
                  $parameters[0] == "basic" ||

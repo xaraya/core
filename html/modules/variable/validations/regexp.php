@@ -3,7 +3,7 @@
 /**
  * Regular Expression Validation Class
  */
-function variable_validations_regexp {$subject, $parameters, &$convValue) {
+function variable_validations_regexp ($subject, $parameters, &$convValue) {
 
     if (!isset($parameters[0]) || trim($parameters[0]) == '') {
             $msg = 'There is no parameter to check against in Regexp validation';
