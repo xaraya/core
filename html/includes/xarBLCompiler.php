@@ -278,10 +278,8 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                         $code .= "if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return false; ";
                         $this->setPendingExceptionsControl(false);
                     }
-                } else {
-                    if ($child->needExceptionsControl()) {
+                } elseif ($child->needExceptionsControl()) {
                         $this->setPendingExceptionsControl(true);
-                    }
                 }
             }
 
@@ -890,14 +888,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             }
             if ($ok) {
                 $value .= $token;
-            } else {
-                if ($token == '"') {
-                    $quote = '"';
-                    $ok = true;
-                } elseif ($token == "'") {
-                    $quote = "'";
-                    $ok = true;
-                }
+            } elseif ($token == '"') {
+                $quote = '"';
+                $ok = true;
+            } elseif ($token == "'") {
+                $quote = "'";
+                $ok = true;
             }
         }
         // Replace XML entities with their ASCII equivalents.
@@ -1387,6 +1383,7 @@ class xarTpl__TplTagNode extends xarTpl__Node
     
     function constructor(&$parser, $tagName, $parentTagName, $attributes)
     {
+        // TplNode has no parent, nor attributes, separation is here.
         parent::constructor($parser, $tagName);
         $this->parentTagName = $parentTagName;
         $this->attributes = $attributes;  
