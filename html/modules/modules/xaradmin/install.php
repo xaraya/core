@@ -52,6 +52,11 @@ function modules_admin_install()
 		return;	
 	} // Else
 
+    // Bug 1222: give exceptions raised during the install a chance to be displayed.
+    if (xarExceptionMajor()) {
+        return;
+    }
+
     $minfo = xarModGetInfo($id);
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
