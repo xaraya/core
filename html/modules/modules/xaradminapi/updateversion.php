@@ -1,0 +1,59 @@
+<?php
+/**
+ * File: $Id$
+ *
+ * Update the module version in the database
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @subpackage modules module
+ * @author Xaraya Team 
+ */
+/**
+ * Update the module version in the database
+ * @param $args['regId'] the id number of the module to update
+ * @returns bool
+ * @return true on success, false on failure
+ */
+function modules_adminapi_updateversion($args)
+{
+    // Get arguments from argument array
+    extract($args);
+
+    // Argument check
+    if (!isset($regId)) {
+        $msg = xarML('Empty regId (#(1)).', $regId);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return;
+    }
+
+    // Security Check
+	if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regId")) return;
+
+    //  Get database connection and tables
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
+    $modules_table = $xartable['modules'];
+
+    // Get module information from the filesystem
+    $fileModule = xarModAPIFunc('modules',
+                                'admin',
+                                'getfilemodules',
+                                array('regId' => $regId));
+    if (!isset($fileModule)) return;
+
+    // Update database version
+    $sql = "UPDATE $modules_table
+            SET xar_version = '" . xarVarPrepForStore($fileModule['version']) ."'
+            WHERE xar_regid = " . xarVarPrepForStore($fileModule['regid']);
+
+    $result =& $dbconn->Execute($sql);
+    if (!$result) return;
+
+    return true;
+}
+
+?>

@@ -22,12 +22,21 @@
  * SCCS - where Bitkeeper stores source files
  * PENDING - where Bitkeeper stores pending merges
  *
- * @param none
+ * @param $args['regid'] - optional regid to retrieve
  * @returns array
  * @return an array of modules from the file system
  */
-function modules_adminapi_getfilemodules()
+function modules_adminapi_getfilemodules($args)
 {
+    // Get arguments
+    extract($args);
+
+    // Check for $regId
+    $modregid = 0;
+    if (isset($regId)) {
+        $modregid = $regId;
+    }
+
     $fileModules = array();
     $dh = opendir('modules');
 
@@ -118,17 +127,33 @@ function modules_adminapi_getfilemodules()
                                            new SystemException($msg));
                         }
                     }
-                    $fileModules[$name] = array('directory'     => $modOsDir,
-                                                'name'          => $name,
-                                                'nameinfile'    => $nameinfile,
-                                                'regid'         => $regId,
-                                                'version'       => $version,
-                                                'mode'          => $mode,
-                                                'class'         => $class,
-                                                'category'      => $category,
-                                                'admin_capable' => $adminCapable,
-                                                'user_capable'  => $userCapable,
-                                                'dependency'    => $dependency);
+                    if ($modregid == $regId) {
+                            closedir($dh);
+                            // Just return array without module name index
+                            return array('directory'     => $modOsDir,
+                                         'name'          => $name,
+                                         'nameinfile'    => $nameinfile,
+                                         'regid'         => $regId,
+                                         'version'       => $version,
+                                         'mode'          => $mode,
+                                         'class'         => $class,
+                                         'category'      => $category,
+                                         'admin_capable' => $adminCapable,
+                                         'user_capable'  => $userCapable,
+                                         'dependency'    => $dependency);
+                    } else {
+                            $fileModules[$name] = array('directory'     => $modOsDir,
+                                                        'name'          => $name,
+                                                        'nameinfile'    => $nameinfile,
+                                                        'regid'         => $regId,
+                                                        'version'       => $version,
+                                                        'mode'          => $mode,
+                                                        'class'         => $class,
+                                                        'category'      => $category,
+                                                        'admin_capable' => $adminCapable,
+                                                        'user_capable'  => $userCapable,
+                                                        'dependency'    => $dependency);
+                    } // if
                 } // if
         } // switch
     } // while

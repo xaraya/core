@@ -59,6 +59,10 @@ function modules_admin_list()
     $data['filter'][XARMOD_STATE_MISSING_FROM_INACTIVE] = xarML('Missing (Inactive)');
     $data['filter'][XARMOD_STATE_MISSING_FROM_ACTIVE]   = xarML('Missing (Active)');
     $data['filter'][XARMOD_STATE_MISSING_FROM_UPGRADED] = xarML('Missing (Upgraded)');
+    $data['filter'][XARMOD_STATE_ERROR_UNINITIALISED]  = xarML('Update (Not Installed)');
+    $data['filter'][XARMOD_STATE_ERROR_INACTIVE]       = xarML('Update (Inactive)');
+    $data['filter'][XARMOD_STATE_ERROR_ACTIVE]         = xarML('Update (Active)');
+    $data['filter'][XARMOD_STATE_ERROR_UPGRADED]       = xarML('Update (Upgraded)');
 
 
     $data['sort']['nameasc']                        = xarML('Name [a-z]');
@@ -130,9 +134,16 @@ function modules_admin_list()
                                      array( 'id'        => $thismodid,
                                             'authid'    => $authid));
 
+        $errorurl                   = xarModURL('modules',
+                                    'admin',
+                                    'viewerror',
+                                     array( 'id'        => $thismodid,
+                                            'authid'    => $authid));
+
+
         // link to module main admin function if any
         $listrows[$i]['modconfigurl'] = '';
-        if(isset($mod['admin']) && $mod['admin'] == 1 && $mod['state'] == 3){
+        if(isset($mod['admin']) && $mod['admin'] == 1 && $mod['state'] == XARMOD_STATE_ACTIVE){
             $listrows[$i]['modconfigurl'] = xarModURL($mod['name'], 'admin');
             // link title for modules main admin function - common
             $listrows[$i]['adminurltitle'] = xarML('Go to administration of');
@@ -164,10 +175,10 @@ function modules_admin_list()
         $listrows[$i]['edit']           = xarML('On/Off');
 
         // conditional data
-        if($mod['state'] == 1){
+        if($mod['state'] == XARMOD_STATE_UNINITIALISED){
             // this module is 'Uninitialised' or 'Not Installed' - set labels and links
             $statelabel = xarML('Not Installed');
-            $listrows[$i]['state'] = 1;
+            $listrows[$i]['state'] = XARMOD_STATE_UNINITIALISED;
 
             $listrows[$i]['actionlabel']        = xarML('Install');
             $listrows[$i]['actionurl']          = $installurl;
@@ -177,10 +188,10 @@ function modules_admin_list()
             $listrows[$i]['actionimg2']         = $img_none;
 
 
-        }elseif($mod['state'] == 2){
+        }elseif($mod['state'] == XARMOD_STATE_INACTIVE){
             // this module is 'Inactive'        - set labels and links
             $statelabel = xarML('Inactive');
-            $listrows[$i]['state'] = 2;
+            $listrows[$i]['state'] = XARMOD_STATE_INACTIVE;
 
             $listrows[$i]['removelabel']        = xarML('Remove');
             $listrows[$i]['removeurl']          = $removeurl;
@@ -191,10 +202,10 @@ function modules_admin_list()
 
             $listrows[$i]['actionimg1']         = $img_activate;
             $listrows[$i]['actionimg2']         = $img_remove;
-        }elseif($mod['state'] == 3){
+        }elseif($mod['state'] == XARMOD_STATE_ACTIVE){
             // this module is 'Active'          - set labels and links
             $statelabel = xarML('Active');
-            $listrows[$i]['state'] = 3;
+            $listrows[$i]['state'] = XARMOD_STATE_ACTIVE;
             // here we are checking for module class
             // to prevent ppl messing with the core modules
             if(!$coremod){
@@ -212,13 +223,13 @@ function modules_admin_list()
                 $listrows[$i]['actionimg1']     = $img_disabled;
                 $listrows[$i]['actionimg2']     = $img_disabled;
             }
-        }elseif($mod['state'] == 4 ||
-                $mod['state'] == 7 ||
-                $mod['state'] == 8 ||
-                $mod['state'] == 9){
+        }elseif($mod['state'] == XARMOD_STATE_MISSING_FROM_UNINITIALISED ||
+                $mod['state'] == XARMOD_STATE_MISSING_FROM_INACTIVE ||
+                $mod['state'] == XARMOD_STATE_MISSING_FROM_ACTIVE ||
+                $mod['state'] == XARMOD_STATE_MISSING_FROM_UPGRADED){
             // this module is 'Missing'         - set labels and links
             $statelabel = xarML('Missing');
-            $listrows[$i]['state'] = 4;
+            $listrows[$i]['state'] = XARMOD_STATE_MISSING_FROM_UNINITIALISED;
 
             $listrows[$i]['actionlabel']        = xarML('Remove');
             $listrows[$i]['actionlabel2']       = xarML('Remove');
@@ -227,11 +238,25 @@ function modules_admin_list()
 
             $listrows[$i]['actionimg1']         = $img_none;
             $listrows[$i]['actionimg2']         = $img_remove;
+        }elseif($mod['state'] == XARMOD_STATE_ERROR_UNINITIALISED ||
+                $mod['state'] == XARMOD_STATE_ERROR_INACTIVE ||
+                $mod['state'] == XARMOD_STATE_ERROR_ACTIVE ||
+                $mod['state'] == XARMOD_STATE_ERROR_UPGRADED){
+            // Bug 1664 - this module db version is greater than file version
+            // 'Error' - set labels and links
+            $statelabel = xarML('Error');
+            $listrows[$i]['state'] = XARMOD_STATE_ERROR_UNINITIALISED;
 
-        }elseif($mod['state'] == 5){
+            $listrows[$i]['actionlabel']        = xarML('View Error');
+            $listrows[$i]['actionurl']          = $errorurl;
+            $listrows[$i]['removeurl']          = '';
+
+            $listrows[$i]['actionimg1']         = $img_disabled;
+            $listrows[$i]['actionimg2']         = $img_disabled;
+        }elseif($mod['state'] == XARMOD_STATE_UPGRADED){
             // this module is 'Upgraded'        - set labels and links
             $statelabel = xarML('New version');
-            $listrows[$i]['state'] = 5;
+            $listrows[$i]['state'] = XARMOD_STATE_UPGRADED;
 
             $listrows[$i]['actionlabel']        = xarML('Upgrade');
             $listrows[$i]['actionurl']          = $upgradeurl;
