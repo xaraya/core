@@ -23,22 +23,22 @@
 <xar:foreach in="$fields" value="$field">
     <tr align="left" valign="middle">
         <td>#$field['id']#</td>
-        <td><input type="text" name="name[#$field['id']#]" id="name[#$field['id']#]" size="15" value="#$field['name']#" /></td>
-        <td><input type="text" name="label[#$field['id']#]" id="label[#$field['id']#]" size="20" value="#$field['label']#" /></td>
+        <td><input type="text" name="name[#$field['id']#]" id="name_#$field['id']#" size="15" value="#$field['name']#" /></td>
+        <td><input type="text" name="label[#$field['id']#]" id="label_#$field['id']#" size="20" value="#$field['label']#" /></td>
         <td><xar:data-input property="$fieldtypeprop" name="format['.$field['id'].']" value="$field['format']" /></td>
         <td>&lt;-- see input</td>
-        <td><input type="text" name="validation[#$field['id']#]" id="validation[#$field['id']#]" size="20" value="#$field['validation']#" /></td>
+        <td><input type="text" name="validation[#$field['id']#]" id="validation_#$field['id']#" size="20" value="#$field['validation']#" /></td>
         <td>...</td>
     </tr>
 </xar:foreach>
 
     <tr align="left" valign="middle">
         <td>#$labels['new']#</td>
-        <td><input type="text" name="name[0]" id="name[0]" size="15" /></td>
-        <td><input type="text" name="label[0]" id="label[0]" size="20" /></td>
+        <td><input type="text" name="name[0]" id="name_0" size="15" /></td>
+        <td><input type="text" name="label[0]" id="label_0" size="20" /></td>
         <td><xar:data-input type="fieldtype" name="format[0]" value="" /></td>
         <td>&lt;-- see input</td>
-        <td><input type="text" name="validation[0]" id="validation[0]" size="20" value="" /></td>
+        <td><input type="text" name="validation[0]" id="validation_0" size="20" value="" /></td>
         <td>...</td>
     </tr>
 

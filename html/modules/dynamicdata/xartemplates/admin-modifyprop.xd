@@ -47,29 +47,29 @@ Tip : empty label -> delete field for all items
 <xar:foreach in="$fields" value="$field">
     <tr align="left" valign="middle">
         <td><a href="#xarModURL('dynamicdata','admin','modify',array('objectid' => 2, 'itemid' => $field['id']))#">#$field['id']#</a></td>
-        <td><input type="text" name="dd_label[#$field['id']#]" id="dd_label[#$field['id']#]" size="10" value="#$field['label']#" /></td>
-        <td><xar:data-input property="$fieldtypeprop" name="dd_type['.$field['id'].']" id="dd_type['.$field['id'].']" value="$field['type']" /></td>
-        <td><input type="text" name="dd_default[#$field['id']#]" id="dd_default[#$field['id']#]" size="10" value="#xarVarPrepForDisplay($field['default'])#" /></td>
+        <td><input type="text" name="dd_label[#$field['id']#]" id="dd_label_#$field['id']#" size="10" value="#$field['label']#" /></td>
+        <td><xar:data-input property="$fieldtypeprop" name="dd_type['.$field['id'].']" id="dd_type_'.$field['id'].'" value="$field['type']" /></td>
+        <td><input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" size="10" value="#xarVarPrepForDisplay($field['default'])#" /></td>
         <td>#$field['source']#</td>
-        <td><input type="text" name="dd_validation[#$field['id']#]" id="dd_validation[#$field['id']#]" size="10" value="#xarVarPrepForDisplay($field['validation'])#" /></td>
+        <td><input type="text" name="dd_validation[#$field['id']#]" id="dd_validation_#$field['id']#" size="10" value="#xarVarPrepForDisplay($field['validation'])#" /></td>
         <td><xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" size="15" value="$field['status']" /></td>
     </tr>
 </xar:foreach>
 
     <tr align="left" valign="middle">
         <td>#$labels['new']#</td>
-        <td><input type="text" name="dd_label[0]" id="dd_label[0]" size="10" /></td>
+        <td><input type="text" name="dd_label[0]" id="dd_label_0" size="10" /></td>
         <td><xar:data-input property="$fieldtypeprop" name="dd_type[0]" value="" /></td>
-        <td><input type="text" name="dd_default[0]" id="dd_default[0]" size="10" /></td>
+        <td><input type="text" name="dd_default[0]" id="dd_default_0" size="10" /></td>
         <td>
-            <select name="dd_source[0]" id="dd_source[0]">
+            <select name="dd_source[0]" id="dd_source_0">
             <xar:foreach in="$sources" value="$mysource">
                 <option>#$mysource#</option>
             </xar:foreach>
             </select>
         </td>
-        <td><input type="text" name="dd_validation[0]" id="dd_validation[0]" size="10" /></td>
-        <td><xar:data-input property="$fieldstatusprop" name="dd_status[0]" value="1" /></td>
+        <td><input type="text" name="dd_validation[0]" id="dd_validation_0" size="10" /></td>
+        <td><xar:data-input property="$fieldstatusprop" name="dd_status_0" value="1" /></td>
     </tr>
 
 <xar:if condition="$modid eq 182">
@@ -159,7 +159,7 @@ Tip : empty label -> delete field for all items
 </xar:if>
 </table>
 <br />
-</xar:if> 
+</xar:if>
 
 
 <xar:if condition="count($relations) gt 0">
@@ -202,6 +202,6 @@ Tip : empty label -> delete field for all items
 </form>
 </table>
 <br />
-</xar:if> 
+</xar:if>
 </div>
 </div>
