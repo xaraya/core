@@ -1,7 +1,7 @@
 <xar:if condition="$number gt 0">
-    <xar:loop name="$columns">
-        <xar:loop name="$colitems">
-            #$colitem#
-        </xar:loop>
-    </xar:loop>
+    <xar:foreach in="$columns" key="$col">
+        <xar:foreach in="$columns[$col]" key="$row">
+            #$columns[$col][$row]#
+        </xar:foreach>
+    </xar:foreach>
 </xar:if>
