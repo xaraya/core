@@ -115,9 +115,9 @@
                 </xar:if>
                 <td class="xar-norm" style="text-align: center;">
                 <xar:if condition="empty($loop:item['emailurl'])">
-                    #$loop:item['emailicon']#
+                    <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/>
                 <xar:else />
-                    <a href="#$loop:item['emailurl']#">#$loop:item['emailicon']#</a>
+                    <a href="#$loop:item['emailurl']#"><img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/></a>
                 </xar:if>
                 </td>
                 <xar:if condition="isset($properties) and count($properties) gt 0">
@@ -150,9 +150,9 @@
                 </xar:if>
                 <td class="xar-accent" style="text-align: center;">
                     <xar:if condition="empty($loop:item['emailurl'])">
-                        #$loop:item['emailicon']#
+                        <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/>
                     <xar:else />
-                        <a href="#$loop:item['emailurl']#">#$loop:item['emailicon']#</a>
+                        <a href="#$loop:item['emailurl']#"><img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/></a>
                     </xar:if>
                 </td>
                 <xar:if condition="isset($properties) and count($properties) gt 0">

@@ -171,8 +171,8 @@ function roles_user_view($args)
         if (empty($items[$i]['ipaddr'])){
             $items[$i]['ipaddr'] = '';
         }
-        $items[$i]['emailicon'] = '<img src="' . xarTplGetImage('emailicon.gif') . '" alt="Email" title="Email" />';
-        $items[$i]['infoicon'] = '<img src="' . xarTplGetImage('infoicon.gif') . '" alt="Info" title="Info" />';
+        $items[$i]['emailicon'] = xarTplGetImage('emailicon.gif');
+        $items[$i]['infoicon'] = xarTplGetImage('infoicon.gif');
     }
     $data['pmicon'] = '';
     // Add the array of items to the template variables
