@@ -207,6 +207,9 @@ if (empty($step)) {
             case '.9.0.3': // this is how it's defined in upgrade.php
 //                xarConfigSetVar('System.Core.VersionNum', '.9.0.4');
 
+                xarModSetVar('themes', 'SiteTitleSeparator', ' :: ');
+                xarModSetVar('themes', 'SiteTitleOrder', 'default');
+
                 $instances = array(
                                    array('header' => 'external', // this keyword indicates an external "wizard"
                                          'query'  => xarModURL('categories', 'admin', 'privileges'),
