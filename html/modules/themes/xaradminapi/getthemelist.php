@@ -42,11 +42,9 @@ function themes_adminapi_getthemelist($args)
     if (!isset($numItems)) $numItems = -1;
     if (!isset($orderBy)) $orderBy = 'name';
 
-    $extraSelectClause = '';
-    $whereClauses = array();
-
+    // Construct order by clause
     $orderFields = explode('/', $orderBy);
-    $orderByClauses = array();
+    $orderByClauses = array(); $extraSelectClause = '';
     foreach ($orderFields as $orderField) {
         if (!isset($validOrderFields[$orderField])) {
             $msg = xarML('Parameter orderBy can contain only \'name\' or \'regid\' or \'class\' as items.');
@@ -60,33 +58,38 @@ function themes_adminapi_getthemelist($args)
             $extraSelectClause .= ', ' . $validOrderFields[$orderField] . '.xar_' . $orderField;
         }
     }
-
+    $orderByClause = join(', ', $orderByClauses);
+    
+    // Determine the tables we are going to use
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
     $themestable = $tables['themes'];
-
     $theme_statesTables = array($tables['system/theme_states'], $tables['site/theme_states']);
 
+    // Construct arrays for the where conditions and their bind variables
+    $whereClauses = array(); $bindvars = array();
     if (isset($filter['Mode'])) {
-        $whereClauses[] = 'themes.xar_mode = '.xarVarPrepForStore($filter['Mode']);
+        $whereClauses[] = 'themes.xar_mode = ?';
+        $bindvars[] = $filter['Mode'];
     }
 
     if (isset($filter['Class'])) {
-        $whereClauses[] = 'themes.xar_class = '.xarVarPrepForStore($filter['Class']);
+        $whereClauses[] = 'themes.xar_class = ?';
+        $bindvars[] = $filter['Class'];
     }
 
     if (isset($filter['State'])) {
         if ($filter['State'] != XARTHEME_STATE_ANY) {
-            $whereClauses[] = 'states.xar_state = '.xarVarPrepForStore($filter['State']);
+            $whereClauses[] = 'states.xar_state = ?';
+            $bindvars[] = $filter['State'];
         }
     } else {
-        $whereClauses[] = 'states.xar_state = '.XARTHEME_STATE_ACTIVE;
+        $whereClauses[] = 'states.xar_state = ?';
+        $bindvars[] = XARTHEME_STATE_ACTIVE;
     }
 
-    $orderByClause = join(', ', $orderByClauses);
 
     $mode = XARTHEME_MODE_SHARED;
-
     $themeList = array();
 
     // Here we do 2 SELECTs: one for SHARED moded themes and
@@ -98,22 +101,20 @@ function themes_adminapi_getthemelist($args)
         $query = "SELECT themes.xar_regid,
                          themes.xar_name,
                          themes.xar_directory,
-                         states.xar_state";
-
-
-        $query .= " FROM $themestable AS themes";
-        array_unshift($whereClauses, 'themes.xar_mode = '.$mode);
-
-        // Do join
-        $query .= " LEFT JOIN $theme_statesTable AS states ON themes.xar_regid = states.xar_regid";
+                         states.xar_state
+                  FROM $themestable AS themes
+                  LEFT JOIN $theme_statesTable AS states 
+                    ON themes.xar_regid = states.xar_regid";       
+        array_unshift($whereClauses, 'themes.xar_mode = ?');
+        array_unshift($bindvars,$mode);
 
         $whereClause = join(' AND ', $whereClauses);
         if($whereClause != ''){
         $query .= " WHERE $whereClause";
         }
-
         $query .= " ORDER BY $orderByClause";
-        $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1);
+        
+        $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1,$bindvars);
         if (!$result) return;
 
         while(!$result->EOF) {
@@ -158,6 +159,7 @@ function themes_adminapi_getthemelist($args)
 
         $mode = XARTHEME_MODE_PER_SITE;
         array_shift($whereClauses);
+        array_shift($bindvars);
     }
 
     return $themeList;

@@ -40,16 +40,13 @@ function themes_adminapi_remove($args)
 
     // Delete any theme variables that the theme cleanup function might
     // have missed
-    $sql = "DELETE FROM $tables[theme_vars]
-            WHERE xar_themeName = '" . xarVarPrepForStore($themeInfo['name']) . "'";
-
-    $result = $dbconn->Execute($sql);
+    $sql = "DELETE FROM $tables[theme_vars] WHERE xar_themeName = ?";
+    $result = $dbconn->Execute($sql,array($themeInfo['name']));
     if (!$result) return;
 
     // Delete the theme from the themes table
-    $sql = "DELETE FROM $tables[themes]
-            WHERE xar_regid = " . xarVarPrepForStore($regid);
-    $result = $dbconn->Execute($sql);
+    $sql = "DELETE FROM $tables[themes] WHERE xar_regid = ?";
+    $result = $dbconn->Execute($sql,array($regid));
     if (!$result) return;
 
     // Delete the theme state from the theme states table
@@ -69,10 +66,9 @@ function themes_adminapi_remove($args)
     */
 
     $theme_statesTable = $tables['site/theme_states'];
-    $sql = "DELETE FROM $theme_statesTable
-            WHERE xar_regid = " . xarVarPrepForStore($regid);
+    $sql = "DELETE FROM $theme_statesTable  WHERE xar_regid = ?";
 
-    $result = $dbconn->Execute($sql);
+    $result = $dbconn->Execute($sql,array($regid));
     if (!$result) return;
 
     return true;

@@ -94,18 +94,15 @@ function themes_adminapi_setstate($args)
             if ($oldState != XARTHEME_STATE_INACTIVE) {
                 // New Module
                 $theme_statesTable = $xartable['system/theme_states'];
-                $query = "SELECT * FROM $theme_statesTable WHERE xar_regid = $regid";
-                $result =& $dbconn->Execute($query);
+                $query = "SELECT * FROM $theme_statesTable WHERE xar_regid = ?";
+                $result =& $dbconn->Execute($query,array($regid));
                 if (!$result) return;
                 if ($result->EOF) {
                     $query = "INSERT INTO $theme_statesTable
-                       (xar_regid,
-                        xar_state)
-                        VALUES
-                        ('" . xarVarPrepForStore($regid) . "',
-                         '" . xarVarPrepForStore($state) . "')";
-
-                    $result =& $dbconn->Execute($query);
+                       (xar_regid, xar_state)
+                        VALUES (?,?)";
+                    $bindvars = array($regid,$state);
+                    $result =& $dbconn->Execute($query,$bindvars);
                     if (!$result) return;
                 }
                 return true;
@@ -146,9 +143,8 @@ function themes_adminapi_setstate($args)
         $theme_statesTable = $xartable['site/theme_states'];
     }
 
-    $sql = "UPDATE $theme_statesTable
-            SET xar_state = " . xarVarPrepForStore($state) . "
-            WHERE xar_regid = " . xarVarPrepForStore($regid);
+    $sql = "UPDATE $theme_statesTable SET xar_state = ? WHERE xar_regid =?";
+    $bindvars = array($state,$regid);
     $result = $dbconn->Execute($sql);
     if (!$result) return;
     return true;

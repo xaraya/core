@@ -55,11 +55,13 @@ function themes_adminapi_upgrade($args)
     $xartable =& xarDBGetTables();
 
      $sql = "UPDATE $xartable[themes]
-            SET xar_version = '" . xarVarPrepForStore($themeFileInfo['version']) . "',
-                xar_class = ". xarVarPrepForStore($themeFileInfo['class']) . " 
-            WHERE xar_regid = " . xarVarPrepForStore($regid);        
+            SET xar_version = ?, xar_class = ?
+            WHERE xar_regid = ?";     
+    $bindvars = array($themeFileInfo['version'],
+                      $themeFileInfo['class'],
+                      $regid);
             
-    $result = $dbconn->Execute($sql);
+    $result = $dbconn->Execute($sql,$bindvars);
     if (!$result) return;
 
     // Message
