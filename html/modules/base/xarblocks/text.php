@@ -24,8 +24,9 @@ function base_textblock_info()
     return array('text_type' => 'Text',
 		 'text_type_long' => 'Plain Text',
 		 'module' => 'base',
+         'func_update' => 'base_textblock_update',
 		 'allow_multiple' => true,
-		 'form_content' => true,
+		 'form_content' => false,
 		 'form_refresh' => false,
 		 'show_preview' => true);
 }
@@ -37,6 +38,76 @@ function base_textblock_display($blockinfo)
     if (!xarSecAuthAction(0,'base:Textblock', "$blockinfo[title]::", ACCESS_OVERVIEW)){
         return;
     }
+
+    // Get variables from content block
+    $vars = unserialize($blockinfo['content']);
+
+    $now = time();
+
+    if ($now > $vars['expire']){
+        if ($vars['expire'] != 0){
+            return;
+        } else {
+            $blockinfo['content'] = xarVarPrepForDisplay($vars['text_content']);
+            return $blockinfo;
+        }
+    } else {
+        $blockinfo['content'] = xarVarPrepForDisplay($vars['text_content']);
+        return $blockinfo;
+    }
+
+}
+
+function base_textblock_modify($blockinfo)
+{
+    // Get current content
+    $vars = @unserialize($blockinfo['content']);
+
+    // Defaults
+    if (empty($vars['expire'])) {
+        $vars['expire'] = 0;
+    }
+    // Defaults
+    if (empty($vars['text_content'])) {
+        $vars['text_content'] = '';
+    }
+
+    $now = time();
+    if ($vars['expire'] == 0){
+        $vars['expirein'] = 0;
+    } else {
+        $soon = $vars['expire'] - $now ;
+        $sooner = $soon / 3600;
+        $vars['expirein'] =  round($sooner);
+    }
+     
+    $content = xarTplBlock('base', 'textAdmin', $vars);
+
+    return $content;
+}
+
+function base_textblock_update($blockinfo)
+{
+    list($vars['expire'],
+         $vars['text_content']) = xarVarCleanFromInput('expire',
+                                                       'text_content');
+    // Defaults
+    if (empty($vars['expire'])) {
+        $vars['expire'] = 0;
+    }
+    
+    if ($vars['expire'] != 0){
+        $now = time();
+        $vars['expire'] = $vars['expire'] + $now;
+    }
+
+    if (empty($vars['text_content'])) {
+        $vars['text_content'] = '';
+    }
+
+    $blockinfo['content'] = serialize($vars);
+
     return $blockinfo;
 }
+
 ?>

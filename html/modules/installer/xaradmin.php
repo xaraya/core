@@ -351,8 +351,12 @@ function installer_admin_finish()
     if (!isset($block_id) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
+    
+    $now = time();
 
-    $msg = xarML('Reminder message body will go here.');
+    $varshtml['html_content'] = 'Reminder message body will go here.';
+    $varshtml['expire'] = $now + 24000;
+    $msg = serialize($varshtml);
 
     $htmlBlockId = xarBlockTypeExists('base', 'html');
     $block_id = xarModAPIFunc('blocks',

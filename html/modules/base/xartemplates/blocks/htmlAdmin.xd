@@ -1,0 +1,35 @@
+<tr align="left" valign="middle">
+	<td>
+		<xar:mlstring>Block Expiration</xar:mlstring>
+	</td>
+	<td>
+	<select name="expire">
+		<option name="expire" value="86400"><xar:mlstring>1 Day</xar:mlstring></option>
+		<option name="expire" value="172800"><xar:mlstring>2 Days</xar:mlstring></option>
+		<option name="expire" value="432000"><xar:mlstring>5 Days</xar:mlstring></option>
+		<option name="expire" value="1296000"><xar:mlstring>15 Days</xar:mlstring></option>
+		<option name="expire" value="2592000"><xar:mlstring>30 Days</xar:mlstring></option>
+		<option name="expire" value="0" selected><xar:mlstring>Unlimited</xar:mlstring></option>
+    </select>
+	</td>
+</tr>
+<tr align="left" valign="middle">
+	<td>
+		<xar:mlstring>Block Expiration</xar:mlstring>
+	</td>
+	<td>
+		<xar:if condition="$expirein eq 0">
+		<xar:mlstring>Block set to 'Unlimited'</xar:mlstring>
+		<xar:else />
+		&xar-var-expirein; <xar:mlstring>Hours</xar:mlstring>
+		</xar:if>
+	</td>
+</tr>
+<tr align="left" valign="middle">
+	<td>
+		<xar:mlstring>HTML</xar:mlstring>
+	</td>
+	<td colspan="2">
+		<textarea name="html_content" style="width:300px;height:150px;">&xar-var-html_content;</textarea>
+    </td>
+</tr>
