@@ -54,12 +54,28 @@ define ('PNINSTALL_PHASE_FINISHED',            '8');
 function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
 {
     pnCoreInit(PNCORE_SYSTEM_NONE); // Does not initialise any optional system
+    
+    // Handle installation phase designation
+    $phase = (int) pnRequestGetVar('install_phase', 'POST');
+    if ($phase == 0) {
+        $phase = 1;
+    }
+
+    // Make sure we should still be here
+    if ($phase >= PNINSTALL_PHASE_ADMIN_CREATION) {
+        die('movin to boot');
+        pnReponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
+    }
 
     // Get module parameters
     list($modName, $modType, $funcName) = pnRequestGetInfo();
 
     $modName = 'installer';
+
     $modType = 'admin';
+    
+    // Build functioname from phase
+    $funcName = 'phase'.$phase;
 
     // Check for installer theme
     //TODO: use main function as the gateway to the phases and the location for this check
@@ -78,25 +94,11 @@ function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
         return; // throw back
     }
 
-    // Handle installation phase designation
-    $phase = (int) pnRequestGetVar('install_phase', 'POST');
-    if ($phase == 0) {
-        $phase = 1;
-    }
-
-    // Build functioname from phase
-    $funcName = 'phase'.$phase;
-
-
     // if the debugger is active, start it
     if (pnCoreIsDebuggerActive()) {
        ob_start();
     }
 
-    // Make sure we should still be here
-    if ($phase >= PNINSTALL_PHASE_SETTINGS_COLLECTION) {
-        pnReponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
-    }
     // Run installer function
     $mainModuleOutput = pnInstallFunc($modName, $modType, $funcName);
 

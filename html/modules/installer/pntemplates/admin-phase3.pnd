@@ -1,22 +1,22 @@
 <div align="center">
-<span class="pn-pagetitle">PostNuke Installation</font><br />
+<span class="pn-pagetitle">Xaraya Installation</font><br />
 <span class="pn-sub">Page 3/6</font><br /><br />
 <span class="pn-title">File Permissions Check</span><br /><br />
 <form action="install.php" method="post">
 <input type="hidden" name="install_language" value="<?php echo $language; ?>" />
 <table width="50%" align="center">
     <tr>
+        <?php $systemConfigFile = pnCoreGetVarDirPath() . '/config.system.php'; ?>
         <td align="center" style="text-align:justify;">
             <span class="pn-normal">
-                For PostNuke to function properly, the installer must write your database information to the config.php file in the installation directory.
+                For Xaraya to function properly, the installer must write your database information to the <?php echo $systemConfigFile; ?> file.
                 If your settings are not correct, this script will not be able to do so. The installer needs write access for steps 3 and 4 only.
             </span><br /><br />
-            <?php $systemConfigFile = pnCoreGetVarDirPath() . '/config.system.php'; ?>
             <span class="pn-title">
                 <?php if(is_writable($systemConfigFile)) { ?>
                     SUCCESS: The installer can write to the configuration file.
                 <?php } else { ?>
-                    FAILURE: The installer cannot write to the configuration file. Please verify that your webserver has write access to the config.php file.
+                    FAILURE: The installer cannot write to the configuration file. Please verify that your webserver has write access to the <?php echo $systemConfigFile; ?>  file.
                 <?php } ?>
             </span><br /><br />
         </td>
@@ -34,5 +34,5 @@
     </tr>
 </table>
 </form>
-<font class="pn-sub">Thank you for trying PostNuke, and welcome to our community.</font>
+<font class="pn-sub">Thank you for trying Xaraya.</font>
 </div>

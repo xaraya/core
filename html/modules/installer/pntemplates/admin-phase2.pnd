@@ -1,14 +1,14 @@
 <div align="center">
-<span class="pn-pagetitle">PostNuke Installation</span><br />
+<span class="pn-pagetitle">Xaraya Installation</span><br />
 <span class="pn-sub">Page 2/6</span><br /><br />
 <span class="pn-title">Our License</span><br />
 <table width="50%" align="center">
     <tr>
         <td style="text-align:justify;">
             <span class="pn-normal">
-                Please read through the GNU General Public License. PostNuke is developed as free software, but there are certain requirements for redistribution and modification.
+                Please read through the GNU General Public License. Xaraya is developed as free software, but there are certain requirements for redistribution and modification.
                 <br /><br />
-                This script will install the PostNuke database and configure the settings you need to get started. This process will take approximately ten (10) minutes. If you need assistance at any point, visit the support forums or live IRC support for help.
+                This script will install the Xaryaa database and configure the settings you need to get started. This process will take approximately ten (10) minutes. If you need assistance at any point, visit the support forums or live IRC support for help.
             </span>
         </td>
     </tr>
@@ -125,5 +125,5 @@ END OF TERMS AND CONDITIONS
         </tr>
     </form>
 </table><br /><br />
-<font class="pn-sub">Thank you for trying PostNuke, and welcome to our community.</font>
+<font class="pn-sub">Thank you for trying Xaraya.</font>
 </div>

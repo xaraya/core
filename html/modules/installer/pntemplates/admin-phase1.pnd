@@ -1,5 +1,5 @@
 <div align="center">
-<font class="pn-pagetitle">PostNuke Installation</font><br />
+<font class="pn-pagetitle">Xaraya Installation</font><br />
 <font class="pn-sub">Step 1/6</font><br /><br />
 <font class="pn-title">Select your language.</font>
 <form action="install.php" method="post">
@@ -18,5 +18,5 @@
     </tr>
 </table>
 </form><br /><br />
-<font class="pn-sub">Thank you for trying PostNuke, and welcome to our community.</font>
+<font class="pn-sub">Thank you for trying Xaraya.</font>
 </div>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 // File: $Id$
 // ----------------------------------------------------------------------
 // Xaraya eXtensible Management System
@@ -9,38 +9,64 @@
 // Purpose of file: Installer display functions
 // ----------------------------------------------------------------------
 
-//TODO: make this phpdoc true, right now phase 1 is the entry
+
 /**
- * Entry function for the installer module
+ * Dead
  *
  * @access public
  * @param none
  * @returns array
  * @return an array of template values
  */
-function installer_admin_main(){
+function installer_admin_main()
+{
     return array();
 }
 
 /**
- * Phase 1 of the installer
+ * Phase 1: Welcome (Set Language and Locale) Page
  *
- * @param
+ * @param none
  * @returns array
  * @return array of language values
  */
-function installer_admin_phase1() {
+function installer_admin_phase1()
+{
+    //$locales = pnMLSListSiteLocales();
+
+    /*
+     * TODO: Find way to convert locale string into language, country, etc..
+     */
+
     return array('languages' => array('eng' => 'English'));
 }
 
+/**
+ * Phase 2: Accept License Page
+ *
+ * @param none
+ * @returns array
+ */
 function installer_admin_phase2() {
+    /*
+     * TODO: accept locale and run the rest of the install
+     *       using that locale if the locale exists.
+     */
+    // Might have to unset some cached variables.
     return array();
 }
 
+/**
+ * Phase 3: Check system settings and ability to write config
+ *
+ * @param agree
+ * @returns array
+ */
 function installer_admin_phase3()
 {
-    global $HTTP_POST_VARS;
-    if ($HTTP_POST_VARS['agree'] != 'agree') {
+    $agree = pnVarCleanFromInput('agree');
+
+    if ($agree != 'agree') {
         // didn't agree to license, don't install
         pnResponseRedirect('install.php');
     }
@@ -49,7 +75,7 @@ function installer_admin_phase3()
 }
 
 /**
- * Phase 4 of the installer
+ * Phase 4: Database Settings Page
  *
  * @returns array
  * @return array of default values for the database creation
@@ -72,62 +98,107 @@ function installer_admin_phase4()
                                            'postgres' => 'Postgres'));
 }
 
+/**
+ * Phase 5: Pre-Boot, Modify Configuration
+ *    INSTALL: create minimal tables, direct to bootstrap
+ *    UPGRADE: upgrade tables, direct to bootstrap
+ *
+ * @param dbHost
+ * @param dbName
+ * @param dbUname
+ * @param dbPass
+ * @param dbPrefix
+ * @param dbType
+ * @param installType
+ * @param intranetMode
+ * @param createDb
+ *
+ * @returns
+ */
 function installer_admin_phase5()
 {
-    global $HTTP_POST_VARS;
+    // Get arguments
+    list($dbHost,
+         $dbName,
+         $dbUname,
+         $dbPass,
+         $dbPrefix,
+         $dbType,
+         $installType,
+         $intranetMode,
+         $createDb)    = pnVarCleanFromInput('install_database_host',
+                                             'install_database_name',
+                                             'install_database_username',
+                                             'install_database_password',
+                                             'install_database_prefix',
+                                             'install_database_type',
+                                             'install_type',
+                                             'install_intranet',
+                                             'install_create_database');
+    
+    // Check necessary arguments
+    if (empty($dbHost) || empty($dbName) || empty($dbUname)
+        || empty($dbPrefix) || empty($dbType) || empty($installType)) {
 
-    $dbHost      = $HTTP_POST_VARS['install_database_host'];
-    $dbName      = $HTTP_POST_VARS['install_database_name'];
-    $dbUname     = $HTTP_POST_VARS['install_database_username'];
-    $dbPass      = $HTTP_POST_VARS['install_database_password'];
-    $dbPrefix    = $HTTP_POST_VARS['install_database_prefix'];
-    $dbType      = $HTTP_POST_VARS['install_database_type'];
-    $installType = $HTTP_POST_VARS['install_type'];
-
-    if (isset($HTTP_POST_VARS['install_intranet'])) {
-        $intranet = true;
-    } else {
-        $intranet = false;
+       $msg = pnML('Empty dbHost (#(1)) or dbName (#(2)) or dbUname (#(3))
+                   or dbPrefix (#(4)) or dbType (#(5)) or installType (#(6)).'
+                  , $dbHost, $dbName, $dbUname, $dbPrefix, $dbType, $installType);
+       die($msg);
     }
+
+    // Set default for password
+    if (!isset($dbPass)) {
+        $dbPass = '';
+    }
+
+    // Set defaults for createdb
+    if (isset($createDb)) {
+        $createDb = TRUE;
+    } else {
+        $createDb = FALSE;
+    }
+
+    // Pre-Setup of intranet mode
+    if (isset($intranetMode)) {
+        $intranetMode = TRUE;
+    } else {
+        $intranetMode = FALSE;
+    }
+    
+    if ('new' == $installType) {
+        $initFunc = 'init';
+    } elseif ('upgrade' == $installType) {
+        $initfunc = 'upgrade';
+    }
+
+
 
     pnInstallAPILoad('installer','admin');
 
     // Save config data
-    $modified = pnInstallAPIFunc('installer',
-                                 'admin',
-                                 'modifyconfig',
-                                 array('dbHost'    => $dbHost,
-                                       'dbName'    => $dbName,
-                                       'dbUname'   => $dbUname,
-                                       'dbPass'    => $dbPass,
-                                       'dbPrefix'  => $dbPrefix,
-                                       'dbType'    => $dbType));
+    $res = pnInstallAPIFunc('installer',
+                            'admin',
+                            'modifyconfig',
+                            array('dbHost'    => $dbHost,
+                                  'dbName'    => $dbName,
+                                  'dbUname'   => $dbUname,
+                                  'dbPass'    => $dbPass,
+                                  'dbPrefix'  => $dbPrefix,
+                                  'dbType'    => $dbType));
     // throw back
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return NULL;
     }
 
-
-
-    if (isset($HTTP_POST_VARS['install_create_database'])) {
+    // Create the database if necessary
+    if ($createDb) {
         $res = pnInstallAPIFunc('installer',
                                 'admin',
                                 'createdb');
-        // TODO: Exception!
         if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
             return NULL;
         }
     }
-
-    switch($HTTP_POST_VARS['install_type']){
-        case 'new':
-                $initFunc = 'init';
-                 break;
-        case 'upgrade':
-                 $initFunc = 'upgrade';
-                 break;
-    }
-
 
     // Start the database
     pnCoreInit(PNCORE_SYSTEM_ADODB);
@@ -141,8 +212,8 @@ function installer_admin_phase5()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return NULL;
     }
-
-    return array();
+    $GLOBALS['phase'] = 6;
+    pnResponseRedirect('install.php');
 }
 
 /*function installer_admin_phase6
@@ -161,7 +232,6 @@ function installer_admin_phase5()
 function installer_admin_bootstrap()
 {
 
-
     // log in admin user
     $res = pnUserLogIn('admin', 'password', 0);
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
@@ -177,7 +247,7 @@ function installer_admin_bootstrap()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-
+    die('activat');
     pnResponseRedirect(pnModURL('installer', 'admin', 'create_administrator'));
 
     return array();
@@ -187,7 +257,7 @@ function installer_admin_bootstrap()
  * Create default administrator
  *
  * @access public
- * @param none
+ * @param create
  * @returns bool
  */
 function installer_admin_create_administrator()
