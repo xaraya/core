@@ -85,7 +85,7 @@
                         Provide a 'new group' drop-down list. 
                     </xar:comment>
                     <p class="param">
-                        <label for="block_template">
+                        <label for="block_new_group">
                             <span class="help" title="#xarML('Add this block instance to the selected block group.')#">
                                 <xar:mlstring>
                                     Add to group: 
