@@ -1,16 +1,6 @@
-<table border="0" width="100%">
-    <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>Roles Administration</xar:mlstring>            
-        </th>
-    </tr>
-</table>
-
-<div align="center">
-	<br /><br />
-	<xar:mlstring>Send an email to a user or group of users</xar:mlstring>
-	<br /><br />
-	<br /><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Send Email</xar:mlstring></h2><br />
+<div style="margin: auto;">
 	<form action="#xarModURL('roles', 'admin', 'sendmail')#" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<table>
@@ -38,4 +28,5 @@
 		<br />
 		<input type="submit" value="Submit new confirmation email" align="middle" tabindex="2" />
 	</form>
+</div>
 </div>

@@ -16,14 +16,9 @@
  window.onunload = doOnUnload;
 </script>
 
-<table border="0" width="100%">
-    <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>Assignments of Privilege</xar:mlstring>
-            '#$pname#'
-        </th>
-    </tr>
-</table>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Priviledges Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Assignment</xar:mlstring></h2><br />
+<div style="margin: auto;">
 
 <table border="0" width="100%" cellpadding="2">
 	<xar:if condition="count($roles) eq 0">
@@ -102,3 +97,5 @@
 		</td>
 	</tr>
 </table>			
+</div>
+</div>

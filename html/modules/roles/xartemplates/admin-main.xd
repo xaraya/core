@@ -1,8 +1,6 @@
-<table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">#$menutitle#</th>
-    </tr>
-    <tr>
-        <td>#$help#</td>
-    </tr>
-</table>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Overview</xar:mlstring></h2><br />
+<div style="margin: auto;">
+#$help#
+</div>
+</div>

@@ -1,12 +1,6 @@
-<table border="0" width="100%">
-    <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>Delete a Group/User</xar:mlstring>            
-        </th>
-    </tr>
-</table>
-
-<div align="center">
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Delete</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <form method="post" action="&xar-modurl-roles-admin-deleterole;" method="post" enctype="application/x-www-form-urlencoded" />
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
 	<input type="hidden" name="uid" id="uid" value="#$uid#" />
@@ -23,4 +17,5 @@
 	
 	<a href="&xar-modurl-roles-admin-newrole;"><xar:mlstring>Cancel the deletion</xar:mlstring></a>
 </form>        
+</div>
 </div>

@@ -1,12 +1,6 @@
-<table border="0" width="100%">
-    <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>Remove a Group/User</xar:mlstring>            
-        </th>
-    </tr>
-</table>
-
-<div align="center">
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Priviledges Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Remove</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <form method="post" action="&xar-modurl-privileges-admin-removerole;" method="post" enctype="application/x-www-form-urlencoded" />
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
 	<input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
@@ -24,4 +18,5 @@
 	
 	<a href="&xar-modurl-privileges-admin-showroles;&amp;pid=#$privid#"><xar:mlstring>Cancel the removal</xar:mlstring></a>
 </form>        
+</div>
 </div>

@@ -23,15 +23,9 @@ document.forms[0].submit();}
 //-->
 </script>
 
-<table border="0" width="100%">
-    <tr>
-        <th colspan="10" align="center">
-            <xar:mlstring>Modify Privilege</xar:mlstring> '#$pname#'           
-        </th>
-    </tr>
-</table>
-
-<div align="center">
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Priviledges Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Modify</xar:mlstring></h2><br />
+<div style="margin: auto;">
 	<br /><br />
 	<form action="&xar-modurl-privileges-admin-updateprivilege;" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -403,3 +397,5 @@ document.forms[0].submit();}
 		</td>
 	</tr>
 </table>			
+</div>
+</div>

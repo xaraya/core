@@ -20,15 +20,9 @@ document.forms[0].submit();}
 //-->
 </script>
 
-<table border="0" width="100%">
-    <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>Add a Group/User</xar:mlstring>            
-        </th>
-    </tr>
-</table>
-
-<div align="center">
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Add</xar:mlstring></h2><br />
+<div style="margin: auto;">
 	<br />
 	<form action="&xar-modurl-roles-admin-addrole;" method="post" enctype="application/x-www-form-urlencoded">
 		
@@ -201,3 +195,5 @@ document.forms[0].submit();}
 	</tr>
 </table>
 #$tree#
+</div>
+</div>

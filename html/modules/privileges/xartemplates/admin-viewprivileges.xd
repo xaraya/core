@@ -23,13 +23,9 @@ document.forms[0].submit();}
 //-->
 </script>
 
-<table border="0" width="100%">
-	<tr>
-		<th align="center">
-			<xar:mlstring>Current Privileges</xar:mlstring>
-		</th>
-	</tr>
-</table>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Priviledges Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Current</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <table border="0" cellspacing="5" width="100%">
 	<tr>
 		<td>
@@ -76,3 +72,5 @@ document.forms[0].submit();}
 		</td>
 	</tr>
 </table>			
+</div>
+</div>
