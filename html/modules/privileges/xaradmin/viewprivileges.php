@@ -26,6 +26,7 @@ function privileges_admin_viewprivileges()
 
     $data['authid'] = xarSecGenAuthKey();
     $data['trees'] = $renderer->drawtrees($data['show']);
+    $data['refreshlabel'] = xarML('Refresh');
     return $data;
 }
 

@@ -118,12 +118,12 @@ function privileges_admin_modifyprivilege()
 
     $data['oldcomponent'] = $component;
     $data['authid'] = xarSecGenAuthKey();
-    $data['trees'] = $renderer->drawtrees($data['show']);
     $data['parents'] = $parents;
     $data['privileges'] = $privileges;
     $data['realms'] = $privs->getrealms();
     $data['modules'] = $privs->getmodules();
     $data['components'] = $privs->getcomponents($data['pmodule']);
+    $data['refreshlabel'] = xarML('Refresh');
     return $data;
 }
 
