@@ -1393,7 +1393,8 @@ class xarTpl__ExpressionTransformer
         } else {
             $expression = '$'.$expression;
         }
-        for ($i = 1; $i < count($chunks); $i++) {
+        $numChunks = count($chunks);
+        for ($i = 1; $i < $numChunks; $i++) {
             $expression .= "['".$chunks[$i]."']";
         }
         return $expression;
@@ -1425,7 +1426,8 @@ class xarTpl__ExpressionTransformer
         // 16. )            => ends the current pattern
         if (preg_match_all("/\\\$([a-z_][0-9a-z_]*(?::[0-9a-z_]+){0,2}(?:\\.[0-9a-z_]+)*)/i", $phpExpression, $matches)) {
             // Get xarTpl__SpecialVariableNamesResolver instance but via transformBLExpression()
-            for ($i = 0; $i < count($matches[0]); $i++) {
+            $numMatches = count($matches[0]);
+            for ($i = 0; $i < $numMatches; $i++) {
                 $resolvedName =& xarTpl__ExpressionTransformer::transformBLExpression($matches[1][$i]);
                 if (!isset($resolvedName)) {
                     return; // throw back
