@@ -71,12 +71,12 @@ function roles_userapi_getallactive($args)
     if (!$include_anonymous) {
         $anon = xarModAPIFunc('roles','user','get',array('uname'=>'anonymous'));
         $query .= " AND a.xar_uid != ?";
-        $bindvars[] = $anon['uid'];
+        $bindvars[] = (int) $anon['uid'];
     }
     if (!$include_myself) {
         $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'myself'));
         $query .= " AND a.xar_uid != ?";
-        $bindvars[] = $thisrole['uid'];
+        $bindvars[] = (int) $thisrole['uid'];
     }
 
     $query .= " AND xar_type = 0 ORDER BY xar_" . $order;

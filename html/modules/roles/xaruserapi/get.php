@@ -49,7 +49,7 @@ function roles_userapi_get($args)
     // Get user
     $q = new xarQuery('SELECT',$rolestable);
     if (!empty($uid) && is_numeric($uid)) {
-        $q->eq('xar_uid',$uid);
+        $q->eq('xar_uid',(int)$uid);
     }
     if (!empty($name)) {
         $q->eq('xar_name',$name);
@@ -64,7 +64,7 @@ function roles_userapi_get($args)
         $q->ne('xar_state',ROLES_STATE_DELETED);
     }
     elseif (!empty($state) && $state != ROLES_STATE_ALL) {
-        $q->eq('xar_state',$state);
+        $q->eq('xar_state',(int)$state);
     }
     $q->eq('xar_type',$type);
 //    $q->qecho();
