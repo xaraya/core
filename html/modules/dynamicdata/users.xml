@@ -1,5 +1,5 @@
 <object name="users">
-  <objectid>17</objectid>
+  <objectid>20</objectid>
   <label>Users</label>
   <moduleid>27</moduleid>
   <itemtype>0</itemtype>
@@ -8,37 +8,116 @@
   <config></config>
   <isalias>0</isalias>
   <properties>
-    <property name="picture">
-      <id>190</id>
-      <label>Picture</label>
-      <type>12</type>
-      <default></default>
+    <property name="timezone">
+      <id>145</id>
+      <label>Timezone</label>
+      <type>32</type>
+      <default>0</default>
       <source>dynamic_data</source>
       <status>2</status>
       <order>1</order>
       <validation></validation>
     </property>
+    <property name="avatar">
+      <id>146</id>
+      <label>Avatar</label>
+      <type>35</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>2</order>
+      <validation>{theme}/modules/users/images</validation>
+    </property>
     <property name="icq">
-      <id>191</id>
-      <label>ICQ</label>
+      <id>147</id>
+      <label>ICQ Number</label>
       <type>28</type>
       <default></default>
       <source>dynamic_data</source>
-      <status>1</status>
-      <order>2</order>
-      <validation>modules/users/xarimages/infoicon.gif</validation>
-    </property>
-    <property name="timezone">
-      <id>192</id>
-      <label>Time Zone</label>
-      <type>32</type>
-      <default>0</default>
-      <source>dynamic_data</source>
       <status>2</status>
       <order>3</order>
-      <validation></validation>
+      <validation>modules/users/xarimages/infoicon.gif</validation>
+    </property>
+    <property name="aim">
+      <id>148</id>
+      <label>AIM Address</label>
+      <type>29</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>4</order>
+      <validation>modules/users/xarimages/infoicon.gif</validation>
+    </property>
+    <property name="yim">
+      <id>149</id>
+      <label>Yahoo Messenger</label>
+      <type>31</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>5</order>
+      <validation>modules/users/xarimages/infoicon.gif</validation>
+    </property>
+    <property name="msnm">
+      <id>150</id>
+      <label>MSN Messenger</label>
+      <type>30</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>6</order>
+      <validation>modules/users/xarimages/infoicon.gif</validation>
+    </property>
+    <property name="location">
+      <id>151</id>
+      <label>Location</label>
+      <type>2</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>7</order>
+      <validation>0:100</validation>
+    </property>
+    <property name="occupation">
+      <id>152</id>
+      <label>Occupation</label>
+      <type>2</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>8</order>
+      <validation>0:100</validation>
+    </property>
+    <property name="interests">
+      <id>153</id>
+      <label>Interests</label>
+      <type>2</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>9</order>
+      <validation>0:150</validation>
+    </property>
+    <property name="signature">
+      <id>154</id>
+      <label>Signature</label>
+      <type>4</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>10</order>
+      <validation>0:254</validation>
+    </property>
+    <property name="extra_info">
+      <id>155</id>
+      <label>Extra info</label>
+      <type>4</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>11</order>
+      <validation>0:254</validation>
     </property>
   </properties>
 </object>
-
 
