@@ -31,7 +31,7 @@ function roles_adminapi_senduseremail($args)
     // Send Email
     extract($args);
     if ((!isset($uid)) || (!isset($mailtype))) {
-        $msg = xarML('Wrong arguments to roles_adminapi_senduseremail. uid: #(1) type: #(2),$uid,$mailtype);
+        $msg = xarML('Wrong arguments to roles_adminapi_senduseremail. uid: #(1) type: #(2)',$uid,$mailtype);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return false;
     }
