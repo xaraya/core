@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * File: $Id$
  * 
@@ -849,8 +849,11 @@ class pnHTML
      */
     function FormStart($action)
     {
+	//Removed a xarVarPrepForDisplay, as xarModURL is already dealing with the &amps;
+	//Still, there might be problems in here with bad input? (probably not)
+
         $output = '<form'
-            .' action="'.xarVarPrepForDisplay($action).'"'
+            .' action="'.$action.'"'
             .' method="post"'
             .' enctype="'.((empty ($this->fileupload)) ? 'application/x-www-form-urlencoded' : 'multipart/form-data').'"'
             .'><div>'
