@@ -1,8 +1,20 @@
 <xar:if condition="isset($menustyle)">
-<!--    #$menustyle# -->
+    #$menustyle# 
 </xar:if>
+
 <xar:if condition="empty($catmods) or !is_array($catmods)">
-<xar:mlstring>to be completed by Dracos</xar:mlstring>
+<ul class="xar-menu-section">
+  <xar:foreach in="$adminmods" value="$mod">
+    <li class="xar-menu-item"><a href="#$mod['link']#">#$mod['label']#</a>
+    <xar:if condition="isset($indlinks) and count($indlinks) gt 0 and $mod['modactive'] eq 1">
+      <ul class="xar-menu-subitem">
+        <xar:foreach in="$indlinks" value="$sublinks" key="$sublink">
+          <li class="xar-menu-subitem"><a href="#$sublinks['adminlink']#" title="#$sublinks['admintitle']#">#$sublinks['adminlabel']#</a></li>
+        </xar:foreach>
+      </ul>
+    </xar:if></li>
+  </xar:foreach>
+</ul>
 <xar:else/>
 <!-- NEW WAY - MORE ROBUST LOGIC - MARKING TRULY ACTIVE LINKS NOW -->
 <xar:foreach in="$catmods" key="$catname" value="$cats">
