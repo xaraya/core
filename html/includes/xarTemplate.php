@@ -227,7 +227,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
     $templateName = xarVarPrepForOS($templateName);
     $sourceFileName = "$xarTpl_themeDir/pages/$templateName.xt";
 
-    if ($xarTpl_headJavaScript != '') {
+    if ($xarTpl_headJavaScript) {
         $xarTpl_headJavaScript = "<script type=\"text/javascript\">\n<!--\n{$xarTpl_headJavaScript}\n// -->\n</script>";
     }
     if ($xarTpl_bodyJavaScript) {

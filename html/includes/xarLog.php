@@ -58,6 +58,9 @@ function xarLog_init($args, $whatElseIsGoingLoaded)
         case 'javascript':
             $xarLog_logger = new xarLog__JavaScriptLogger($loggerArgs);
             break;
+		    case 'mozjsconsole':
+					$xarLog_logger = new xarLog__MozJSConsoleLogger($loggerArgs);
+					break;
         case 'email':
             $xarLog_logger = new xarLog__EmailLogger($loggerArgs);
             break;
@@ -426,7 +429,7 @@ class xarLog__JavaScriptLogger extends xarLog__Logger
                "    debugWindow.scrollBy(0,100000);\n".
                "}\n".
                "</script>\n";
-        return $str;
+        return $code;
     }
 
     function logMessage($msg, $callPrepForDisplay = true)
@@ -440,6 +443,43 @@ class xarLog__JavaScriptLogger extends xarLog__Logger
         $msg = str_replace("\n", '', nl2br(addslashes($msg)));
         $code .= $msg . "<br/><br/>\");\n}\n";
         xarTplAddJavaScriptCode('body', 'JavaScriptLogger', $code);
+    }
+
+}
+
+class xarLog__MozJSConsoleLogger extends xarLog__Logger
+{
+    var $buffer = '';
+		var $loggerdesc="Mozilla Javascript Console Logger";
+
+    function xarLog__MozJSConsoleLogger($args)
+    {
+        // Set the HTML format
+        $this->setFormat('html');
+				$code='<script language="javascript" src="includes/mozlogger.js"></script>';
+				xarTplAddJavaScriptCode('head',$this->loggerdesc,$code);
+		}
+
+//     function getBuffer()
+//     {
+//         $code = "<script language=\"javascript\">\n".
+// 					$this->buffer.
+// 					"</script>\n";
+//         return $str;
+//     }
+
+    function logMessage($msg, $callPrepForDisplay = true)
+    {
+			// FIXME: this code depends on a user setting to use principal codebase support (same origin policy)
+			// it should be done with a signed script eventually, but this is rather complex 
+			// TODO: check on windows and browsers other than mozilla, to fall back gracefully
+			$code="netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');\n".
+				"var con_service_class = Components.classes['@mozilla.org/consoleservice;1'];\n".
+				"var iface = Components.interfaces.nsIConsoleService;\n".
+				"var jsconsole = con_service_class.getService(iface);\n";
+			$logentry=$this->getTimestamp(). " - (" .$this->formatLevel().")".$msg;
+		  $code.= "jsconsole.logStringMessage('$logentry');\n";
+			xarTplAddJavaScriptCode('body', 'Mozilla JS console logger', $code);
     }
 
 }
