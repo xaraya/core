@@ -6,7 +6,7 @@
  * Any modification is at your own risk and
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
- * /
+ */
 $modversion['name'] = 'Xaraya Installer';
 $modversion['id'] = '200';
 $modversion['version'] = '1.0.0';
