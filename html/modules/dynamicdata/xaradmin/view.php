@@ -90,6 +90,11 @@ function dynamicdata_admin_view($args)
         }
     }
 
+    if (xarSecurityCheck('AdminDynamicData',0)) {
+        $data['querylink'] = xarModURL('dynamicdata','admin','query',
+                                       array('itemid' => $objectid));
+    }
+
     // Return the template variables defined in this function
     return $data;
 }

@@ -1,0 +1,105 @@
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Query</xar:mlstring> #$label#</h2><br />
+<div style="margin: auto;">
+<form method="post">
+<table border="0" cellpadding="5">
+<tr>
+  <td>
+    <label for="itemid"><xar:mlstring>Object:</xar:mlstring></label>
+  </td>
+  <td colspan="#$numfields#">
+    <input type="hidden" name="olditemid" value="#$olditemid#"/>
+    <select name="itemid" id="itemid" onchange="submit()">
+    <xar:foreach in="$objects" value="$item">
+      <xar:if condition="!empty($itemid) and $itemid eq $item['objectid']">
+        <option value="#$item['objectid']#" selected="selected">#$item['label']#</option>
+      <xar:else/>
+        <option value="#$item['objectid']#">#$item['label']#</option>
+      </xar:if>
+    </xar:foreach>
+    </select>
+  </td>
+</tr>
+<xar:if condition="!empty($properties)">
+<tr>
+  <td>
+    <xar:mlstring>Properties:</xar:mlstring>
+  </td>
+  <xar:foreach in="$properties" key="$name">
+  <td>
+    <xar:if condition="!empty($field[$name])">
+      <input type="checkbox" name="field[#$name#]" id="field[#$name#]" value="1" checked="checked"/> <label for="field[#$name#]"><xar:data-label property="$properties[$name]" /></label>
+    <xar:else/>
+      <input type="checkbox" name="field[#$name#]" id="field[#$name#]" value="1" /> <label for="field[#$name#]"><xar:data-label property="$properties[$name]" /></label>
+    </xar:if>
+  </td>
+  </xar:foreach>
+</tr>
+<tr>
+  <td>
+    <xar:mlstring>Conditions:</xar:mlstring>
+  </td>
+  <xar:foreach in="$properties" key="$name">
+  <td>
+    <select name="where[#$name#]">
+      <option value=""></option>
+      <xar:foreach in="$whereoptions" value="$option">
+        <xar:if condition="!empty($where[$name]) and $where[$name] eq $option['id']">
+          <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+        <xar:else/>
+          <option value="#$option['id']#">#$option['name']#</option>
+        </xar:if>
+      </xar:foreach>
+    </select>
+  </td>
+  </xar:foreach>
+</tr>
+<tr>
+  <td>
+    &nbsp;
+  </td>
+  <xar:foreach in="$properties" key="$name">
+  <td>
+    <xar:if condition="isset($value[$name])">
+      <input name="value[#$name#]" value="#$value[$name]#" type="text" size="13"/>
+    <xar:else/>
+      <input name="value[#$name#]" value="" type="text" size="13"/>
+    </xar:if>
+  </td>
+  </xar:foreach>
+</tr>
+<tr>
+  <td>
+    <xar:mlstring>Sort Order:</xar:mlstring>
+  </td>
+  <xar:foreach in="$properties" key="$name">
+  <td>
+    <select name="sort[#$name#]">
+      <option value=""></option>
+      <xar:foreach in="$sortoptions" value="$option">
+        <xar:if condition="!empty($sort[$name]) and $sort[$name] eq $option['id']">
+          <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+        <xar:else/>
+          <option value="#$option['id']#">#$option['name']#</option>
+        </xar:if>
+      </xar:foreach>
+    </select>
+  </td>
+  </xar:foreach>
+</tr>
+<tr>
+  <td><label for="numitems"><xar:mlstring>Items:</xar:mlstring></label></td>
+  <td colspan="#$numfields#"><input type="text" name="numitems" id="numitems" value="#$numitems#" size="5" /></td>
+</tr>
+</xar:if>
+<tr>
+  <td>&nbsp;</td>
+  <td colspan="#$numfields#" align="center"><input type="submit" value="#$submit#" /></td>
+</tr>
+</table>
+</form>
+<xar:if condition="isset($mylist)">
+<xar:data-list object="$mylist" />
+</xar:if>
+</div>
+</div>
