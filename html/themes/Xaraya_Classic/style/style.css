@@ -195,32 +195,32 @@ TD.xar-alt {}
 
 /* these defaults apply to the left block group */
 .xar-block-head{
-    border: 1px solid #E47C55;
-    background-color: #efefef;
+    border-bottom: 1px solid #191970;
+    color: #191970;
 }
 .xar-block-title {
     font-weight: bold;
+    font-style: italic;
     font-size: 11pt;
 }
 .xar-block-body {}
 .xar-block-foot {
-    border-bottom: 2px dotted #cccccc;
+    border-bottom: 2px dotted #dddddd;
     margin-bottom: 8px;
 }
 
 /* right block group classes */
 .xar-block-head-right{
-    border-bottom: 1px solid #191970;
-    color: #191970;
+    border: 1px solid #E47C55;
+    background-color: #efefef;
 }
 .xar-block-title-right {
     font-weight: bold;
-    font-style: italic;
     font-size: 11pt;
 }
 .xar-block-body-right {}
 .xar-block-foot-right {
-    border-bottom: 2px solid #dddddd;
+    border-bottom: 2px solid #cccccc;
     margin-bottom: 8px;
 }
 
@@ -348,16 +348,6 @@ TD.xar-alt {}
 .xar-error {
    color: #FF0000;
 }
-
-.xar-block-head-left {}
-.xar-block-title-left {}
-.xar-block-body-left {}
-.xar-block-foot-left {}
-
-.xar-block-head-right {}
-.xar-block-title-right {}
-.xar-block-body-right {}
-.xar-block-foot-right {}
 
 /*  THEME SPECIFIC ANONYMOUS CLASSES  */
 .txttitle {
