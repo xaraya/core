@@ -255,9 +255,7 @@ function base_init()
     if (!$result) return;
 
     // Load in installer API
-    if (!xarInstallAPILoad('installer','admin')) {
-        return NULL;
-    }
+    if (!xarInstallAPILoad('installer','admin')) return;
 
     /****************************************************************
     * Install roles module and set up default roles
@@ -382,9 +380,9 @@ function base_init()
         return;
     }
 
-//     /**************************************************************
-//     * Install the sniffer module
-//     **************************************************************/
+    /**************************************************************
+    * Install the sniffer module
+    **************************************************************/
     if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
                            array('directory'=>'sniffer', 'initfunc'=>'init'))) {
         return;
@@ -396,113 +394,6 @@ function base_init()
     return true;
 }
 
-/**
- * Activate the base module
- *
- * @access public
- * @param none
- * @returns bool
- * @raise DATABASE_ERROR
- */
-function base_activate()
-{
-
-    // Set up default user properties, etc.
-
-    // load modules admin API
-    if (!xarModAPILoad('modules', 'admin')) {
-        return NULL;
-    }
-
-    // load modules into *_modules table
-    if (!xarModAPIFunc('modules', 'admin', 'regenerate')) {
-        return NULL;
-    }
-
-    // Set the state and activate the following modules
-    $modlist=array('roles','privileges','blocks','sniffer', 'themes');
-    foreach ($modlist as $mod) {
-        // Set state to inactive
-        $regid=xarModGetIDFromName($mod);
-
-        if (!xarModAPIFunc('modules','admin','setstate', array('regid'=> $regid,
-                                                               'state'=> XARMOD_STATE_INACTIVE)))
-            {
-                return;
-            }
-        // Activate the module
-        if (!xarModAPIFunc('modules','admin','activate', array('regid'=> $regid)))
-            {
-                return;
-            }
-    }
-
-    // Initialise and activate adminpanels, mail, dynamic data
-    $modlist = array('adminpanels','mail', 'dynamicdata');
-    foreach ($modlist as $mod) {
-        // Initialise the module
-        $regid = xarModGetIDFromName($mod);
-        if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) {
-            return;
-        }
-        if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) {
-            return;
-        }
-    }
-
-    //initialise and activate base module by setting the states
-    $baseid=xarModGetIDFromName('base');
-    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseid,
-                                                             'state' => XARMOD_STATE_INACTIVE))) {
-        return;
-    }
-    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseid,
-                                                              'state' => XARMOD_STATE_ACTIVE))) {
-        return;
-    }
-
-    // Register Block types
-    $blocks = array('finclude','html','menu','php','text');
-
-    foreach ($blocks as $block) {
-    // Register blocks
-        if (!xarModAPIFunc('blocks',
-                           'admin',
-                           'register_block_type',
-                           array('modName'  => 'base',
-                                 'blockType'=> $block))) return;
-    }
-
-    //$res = xarBlockTypeRegister('base', 'thelang'); // FIXME <paul> should this be here???
-    //if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-    //    return;
-    //}
-
-    if (xarVarIsCached('Mod.BaseInfos', 'blocks')) {
-        xarVarDelCached('Mod.BaseInfos', 'blocks');
-    }
-
-    // Create default block groups/instances
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name' => 'left'))) {
-        return NULL;
-    }
-
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'right',
-                                                                'template' => 'right'))) {
-        return NULL;
-    }
-
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'header',
-                                                                'template' => 'header'))) {
-        return NULL;
-    }
-
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'admin'))) {
-        return NULL;
-    }
-
-    return true;
-}
 /**
  * Upgrade the base module from an old version
  *
