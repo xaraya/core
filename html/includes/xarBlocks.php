@@ -137,6 +137,7 @@ function xarBlock_renderGroup($groupName)
                         btypes.xar_type as type,
                         btypes.xar_module as module,
                         inst.xar_title as title,
+                        inst.xar_template as template,
                         inst.xar_content as content,
                         inst.xar_last_update as last_update,
                         inst.xar_state as state,
