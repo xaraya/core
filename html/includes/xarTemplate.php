@@ -345,6 +345,73 @@ function xarTplGetImage($modImage, $modName = NULL)
 }
 
 /**
+ * Equivalent of pnHTML()'s Pager function (to get rid of pnHTML calls in modules while waiting for widgets)
+ *
+ * @author Greg 'Adam Baum'
+ * @since 1.13 - 2002/01/23
+ * @access public
+ * @param integer $startnum start iteam
+ * @param integer $total total number of items present
+ * @param string $urltemplate template for url, will replace '%%' with item number
+ * @param integer $perpage number of links to display (default=10)
+ */
+function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10)
+{
+    // Sanity check on perpage to prevent infinite loops
+    if($perpage < 1) {
+        $perpage = 10;
+    }
+    if($startnum < 1) {
+        $startnum = 1;
+    }
+
+    // Quick check to ensure that we have work to do
+    if ($total <= $perpage) {
+        return '';
+    }
+
+    // TODO - various fixes required
+    // Make << and >> do paging properly
+    // Display subset of pages if large number
+
+    $out = '';
+
+    // Show startnum link
+    if ($startnum != 1) {
+        $url = preg_replace('/%%/', 1, $urltemplate);
+        $out .= '<a href="'.$url.'">&lt;&lt;</a>';
+    } else {
+        $out .= '&lt;&lt;';
+    }
+    $out .= ' ';
+
+    // Show following items
+    $pagenum = 1;
+
+    for ($curnum = 1; $curnum <= $total; $curnum += $perpage)
+    {
+        if (($startnum < $curnum) || ($startnum > ($curnum + $perpage - 1)))
+        {
+            // Not on this page - show link
+            $url = preg_replace('/%%/', $curnum, $urltemplate);
+            $out .= '<a href="'.$url.'"> '.$pagenum.' </a> ';
+        } else {
+            // On this page - show text
+            $out .= ' '.$pagenum.' ';
+        }
+        $pagenum++;
+    }
+    if (($curnum >= $perpage+1) && ($startnum < $curnum-$perpage)) {
+        $url = preg_replace('/%%/', $curnum-$perpage, $urltemplate);
+        $out .= '<a href="'.$url.'">&gt;&gt;</a>';
+    } else {
+        $out .= '&gt;&gt;';
+    }
+
+    return $out;
+}
+
+/**
  * TODO: add this description
  *
  * @access public
@@ -756,12 +823,12 @@ class xarTemplateTag {
 
     function getModule()
     {
-	return $this->_module;
+    return $this->_module;
     }
 
     function getHandler()
     {
-	return $this->_handler;
+    return $this->_handler;
     }
 
     function callHandler($args)
@@ -810,12 +877,12 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     $tag = new xarTemplateTag($tag_module, $tag_name, $tag_attrs, $tag_handler);
     
     list($tag_name,
-	 $tag_module,
-	 $tag_func,
-	 $tag_data) = xarVarPrepForStore($tag->getName(),
-					$tag->getModule(),
-					$tag->getHandler(),
-					serialize($tag));
+     $tag_module,
+     $tag_func,
+     $tag_data) = xarVarPrepForStore($tag->getName(),
+    				$tag->getModule(),
+    				$tag->getHandler(),
+    				serialize($tag));
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
@@ -889,35 +956,35 @@ function xarTplCheckTagAttributes($name, $args)
 
     foreach ($tag_attrs as $attr) {
         $attr_name = $attr->getName();
-	if (isset($args[$attr_name])) {
-        // check that type matches
-        $attr_types = $attr->getAllowedTypes();
+        if (isset($args[$attr_name])) {
+            // check that type matches
+            $attr_types = $attr->getAllowedTypes();
 
-        if ($attr_types & XAR_TPL_STRING) {
-            continue;
-        } elseif (($attr_types & XAR_TPL_BOOLEAN)
-                  && eregi ('^(true|false|1|0)$', $args[$attr_name])) {
-            continue;
-        } elseif (($attr_types & XAR_TPL_INTEGER)
-                  && eregi('^\-?[0-9]+$', $args[$attr_name])) {
-            continue;
-        } elseif (($attr_types & XAR_TPL_FLOAT)
-                  && eregi('^\-?[0-9]*.[0-9]+$', $args[$attr_name])) {
-            continue;
+            if ($attr_types & XAR_TPL_STRING) {
+                continue;
+            } elseif (($attr_types & XAR_TPL_BOOLEAN)
+                      && eregi ('^(true|false|1|0)$', $args[$attr_name])) {
+                continue;
+            } elseif (($attr_types & XAR_TPL_INTEGER)
+                      && eregi('^\-?[0-9]+$', $args[$attr_name])) {
+                continue;
+            } elseif (($attr_types & XAR_TPL_FLOAT)
+                      && eregi('^\-?[0-9]*.[0-9]+$', $args[$attr_name])) {
+                continue;
+            }
+
+            // bad type for attribute
+            $msg = xarML("'#(1)' attribute in <xar:#(2)> tag does not have correct type. See tag documentation.", $attr_name, $name);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+        		           new SystemException($msg));
+            return false;
+        } elseif ($attr->isRequired()) {
+            // required attribute is missing!
+            $msg = xarML("Required '#(1)' attribute is missing from <xar:#(2)> tag. See tag documentation.", $attr_name, $name);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+        		           new SystemException($msg));
+            return false;
         }
-
-        // bad type for attribute
-        $msg = xarML("'#(1)' attribute in <xar:#(2)> tag does not have correct type. See tag documentation.", $attr_name, $name);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-			           new SystemException($msg));
-	    return false;
-	} elseif ($attr->isRequired()) {
-	    // required attribute is missing!
-	    $msg = xarML("Required '#(1)' attribute is missing from <xar:#(2)> tag. See tag documentation.", $attr_name, $name);
-	    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-			           new SystemException($msg));
-	    return false;
-	}
     }
 
     return true;
