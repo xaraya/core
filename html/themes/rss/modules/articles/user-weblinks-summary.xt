@@ -3,6 +3,6 @@
 <link>#$notes#</link>
 <description>#$summary#</description>
 <author>#$author#</author>
-<pubDate>#$date#</pubDate>
+<pubDate>#xarLocaleFormatUTCDate("%a, %d %b %Y %H:%M:%S GMT",$pubdate)#</pubDate>
 <comments>&xar-modurl-comments-user-view;</comments>
 </item>

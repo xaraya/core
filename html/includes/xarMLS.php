@@ -613,7 +613,7 @@ function xarLocaleFormatDate($format = null, $timestamp = null)
         // we'll be using the gmstrftime function later.
         // doing so will allow for the correct time to be displayed
 // TODO: does this work everywhere or just on my machine???
-        $timestamp += date('Z',$time);
+        $timestamp += date('Z',$timestamp);
         if ($timestamp < 0) {
             return ''; // return empty string here (no exception)
         }
