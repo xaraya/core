@@ -3210,7 +3210,12 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
     }
 
     function renderBeginTag()
-    {
+    {        
+        extract($this->attributes);
+        if(!isset($version)) {
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'version\' attribute in <xar:blocklayout> tag.', $this);
+            return;
+        }
         return "'<!-- Rendered for xar:blocklayout tag -->';\n";
     }
 
