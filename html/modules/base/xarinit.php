@@ -90,6 +90,8 @@ function base_init()
     'xar_value' => array('type'=>'text','size'=>'long')
     );
 
+    $query = xarDBCreateTable($configVarsTable,$fields);
+
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -151,7 +153,7 @@ function base_init()
     * Here we install the allowed vars table and fill it with some
     * standard config values.
     *********************************************************************/
-    $configVarsTable  = $systemPrefix . '_allowed_vars';
+    $allowedVarsTable  = $systemPrefix . '_allowed_vars';
     /*********************************************************************
     * CREATE TABLE xar_allowed_vars (
     *  xar_id int(11) unsigned NOT NULL auto_increment,
@@ -168,7 +170,7 @@ function base_init()
     'xar_type' => array('type'=>'varchar','size'=>64,'null'=>false)
     );
 
-    $query = xarDBCreateTable($configVarsTable,$fields);
+    $query = xarDBCreateTable($allowedVarsTable,$fields);
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -176,11 +178,12 @@ function base_init()
     $index = array('name'   => 'i_xar_name',
                    'fields' => array('xar_name'));
 
-    $query = xarDBCreateIndex($configVarsTable,$index);
+    $query = xarDBCreateIndex($allowedVarsTable,$index);
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-
+    
+    $id_allowedvar = $dbconn->GenId($allowedVarsTable);
     // Insert Allowed Vars
     $htmltags = array('!--',
                   'a',
@@ -267,11 +270,9 @@ function base_init()
 		          'var');
 
     foreach ($htmltags as $htmltag) {
-        $id_configvar = $dbconn->GenId($configVarsTable);
-        $query = "INSERT INTO $configVarsTable VALUES ($id_configvar,'$htmltag','html')";
+        $query = "INSERT INTO $allowedVarsTable VALUES ($id_allowedvar,'$htmltag','html')";
         $result =& $dbconn->Execute($query);
         if (!$result) return;
-        }
     }
 
     $censoredWords = array('fuck',
@@ -284,8 +285,7 @@ function base_init()
                            'cum');
 
     foreach ($censoredWords as $censoredWord) {
-        $id_configVar = $dbconn->GenId($configVarsTable);
-        $query = "INSERT INTO $configVarsTable VALUES ($id_configVar,'$censoredWords','censored')";
+        $query = "INSERT INTO $allowedVarsTable VALUES ($id_allowedvar,'$censoredWord','censored')";
         $result =& $dbconn->Execute($query);
         if (!$result) return;
     }
