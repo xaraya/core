@@ -24,10 +24,7 @@ function dynamicdata_admin_modifyconfig()
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
     if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
-        $msg = xarML('Not authorized to modify #(1) configuration settings',
-                               'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 
@@ -463,10 +460,7 @@ function dynamicdata_admin_main()
     // for administration depends on the particular module, but it is generally
     // either 'edit' or 'delete'
     if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_EDIT)) {
-        $msg = xarML('Not authorized to access to #(1)',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 
@@ -525,10 +519,7 @@ function dynamicdata_admin_view()
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
     if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_EDIT)) {
-        $msg = xarML('Not authorized to access to #(1)',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 
@@ -614,10 +605,7 @@ function dynamicdata_admin_new()
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
     if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_EDIT)) {
-        $msg = xarML('Not authorized to access to #(1)',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 
@@ -778,10 +766,7 @@ function dynamicdata_admin_modify($args)
     // complete the instance information so this is the first chance we get to
     // do the check
     if (!xarSecAuthAction(0, 'DynamicData::Item', "$item[name]::$exid", ACCESS_EDIT)) {
-        $msg = xarML('Not authorized to modify #(1) item #(2)',
-                    'DynamicData', xarVarPrepForDisplay($exid));
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 
@@ -962,10 +947,7 @@ function dynamicdata_admin_delete($args)
     // complete the instance information so this is the first chance we get to
     // do the check
     if (!xarSecAuthAction(0, 'DynamicData::Item', "$item[name]::$exid", ACCESS_DELETE)) {
-        $msg = xarML('Not authorized to delete #(1) item #(2)',
-                    'DynamicData', xarVarPrepForDisplay($exid));
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 

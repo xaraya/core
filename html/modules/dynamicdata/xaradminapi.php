@@ -47,10 +47,7 @@ function dynamicdata_adminapi_create($args)
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
     if (!xarSecAuthAction(0, 'DynamicData::Item', "::$itemid", ACCESS_ADD)) {
-        $msg = xarML('Not authorized to add #(1) items',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 
@@ -132,10 +129,7 @@ function dynamicdata_adminapi_delete($args)
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
     if (!xarSecAuthAction(0, 'DynamicData::Item', "::$itemid", ACCESS_DELETE)) {
-        $msg = xarML('Not authorized to delete #(1) items',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 
@@ -219,10 +213,7 @@ function dynamicdata_adminapi_update($args)
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
     if (!xarSecAuthAction(0, 'DynamicData::Item', "::$itemid", ACCESS_ADD)) {
-        $msg = xarML('Not authorized to add #(1) items',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 
@@ -640,10 +631,7 @@ function dynamicdata_adminapi_removehook($args)
     }
 
     if (!xarSecAuthAction(0, "DynamicData::Item", "$modid::", ACCESS_DELETE)) {
-        $msg = xarML('Not authorized to delete #(1) for #(2)',
-                    'category items',xarVarPrepForStore($modid));
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;
@@ -773,10 +761,7 @@ function dynamicdata_adminapi_createprop($args)
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
     if (!xarSecAuthAction(0, 'DynamicData::Field', "$label:$type:", ACCESS_ADD)) {
-        $msg = xarML('Not authorized to add #(1) items',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 
@@ -879,10 +864,7 @@ function dynamicdata_adminapi_updateprop($args)
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
     if (!xarSecAuthAction(0, 'DynamicData::Field', "$label:$type:$prop_id", ACCESS_EDIT)) {
-        $msg = xarML('Not authorized to update #(1) items',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 
@@ -969,10 +951,7 @@ function dynamicdata_adminapi_deleteprop($args)
     // avoid potential security holes or just too much wasted processing
 // TODO: check based on other arguments too
     if (!xarSecAuthAction(0, 'DynamicData::Field', "::$prop_id", ACCESS_DELETE)) {
-        $msg = xarML('Not authorized to update #(1) items',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 

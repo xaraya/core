@@ -260,8 +260,7 @@ function installer_admin_create_administrator()
 	xarTplSetThemeName('installer');
 
     if (!xarSecAuthAction(0, 'Installer::', '::', ACCESS_ADMIN)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException(__FILE__."(".__LINE__."): You do not have permission to access the Installer module."));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 

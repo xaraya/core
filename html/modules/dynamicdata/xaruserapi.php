@@ -52,10 +52,7 @@ function dynamicdata_userapi_getall($args)
     }
 
     if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:$itemid", ACCESS_OVERVIEW)) {
-        $msg = xarML('Not authorized to access #(1) fields',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 
@@ -200,10 +197,7 @@ function dynamicdata_userapi_get($args)
     $result->Close();
 
     if (!xarSecAuthAction(0, 'DynamicData::Field', "$label:$type:$id", ACCESS_READ)) {
-        $msg = xarML('Not authorized to access #(1) fields',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
     if (!isset($value)) {

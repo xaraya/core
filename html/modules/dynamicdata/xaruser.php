@@ -122,10 +122,7 @@ function dynamicdata_user_main()
     // level of access for users depends on the particular module, but it is
     // generally either 'overview' or 'read'
     if (!xarSecAuthAction(0, 'Example::', '::', ACCESS_OVERVIEW)) {
-        $msg = xarML('Not authorized to access to #(1)',
-                    'Example');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 
@@ -187,10 +184,7 @@ function dynamicdata_user_view()
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
     if (!xarSecAuthAction(0, 'Examples::', '::', ACCESS_OVERVIEW)) {
-        $msg = xarML('Not authorized to access to #(1)',
-                    'Example');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 
