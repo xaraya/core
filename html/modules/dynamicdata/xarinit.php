@@ -541,43 +541,21 @@ function dynamicdata_init()
     * setInstance(Module,Component,Query,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
     *********************************************************************/
 
-    $query1 = "SELECT DISTINCT xar_prop_name FROM " . $dynamic_properties;
-    $query2 = "SELECT DISTINCT xar_prop_type FROM " . $dynamic_properties;
-    $query3 = "SELECT DISTINCT xar_prop_id FROM " . $dynamic_properties;
     $instances = array(
-                        array('header' => 'Property Name:',
-                                'query' => $query1,
-                                'limit' => 20
-                            ),
-                        array('header' => 'Property Type:',
-                                'query' => $query2,
-                                'limit' => 20
-                            ),
-                        array('header' => 'Property ID:',
-                                'query' => $query3,
-                                'limit' => 20
-                            )
-                    );
-    xarDefineInstance('dynamicdata','Type',$instances);
-
-    $query1 = "SELECT DISTINCT xar_name FROM " . $modulestable;
-    $query2 = "SELECT DISTINCT xar_object_itemtype FROM " . $dynamic_objects;
-    $query3 = "SELECT DISTINCT xar_object_id FROM " . $dynamic_objects ;
-    $instances = array(
-                        array('header' => 'Module Name:',
-                                'query' => $query1,
-                                'limit' => 20
-                            ),
-                        array('header' => 'Object Type:',
-                                'query' => $query2,
-                                'limit' => 20
-                            ),
-                        array('header' => 'Object ID:',
-                                'query' => $query3,
-                                'limit' => 20
+                       array('header' => 'external', // this keyword indicates an external "wizard"
+                             'query'  => xarModURL('dynamicdata', 'admin', 'privileges'),
+                             'limit'  => 0
                             )
                     );
     xarDefineInstance('dynamicdata','Item',$instances);
+
+    $instances = array(
+                       array('header' => 'external', // this keyword indicates an external "wizard"
+                             'query'  => xarModURL('dynamicdata', 'admin', 'privileges'),
+                             'limit'  => 0
+                            )
+                    );
+    xarDefineInstance('dynamicdata','Type',$instances);
 
     xarModAPIFunc('modules','admin','enablehooks',
                   array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
@@ -606,13 +584,32 @@ function dynamicdata_upgrade($oldVersion)
         xarTplRegisterTag('dynamicdata', 'data-getitems',
                           array(),
                           'dynamicdata_userapi_handleGetItemsTag');
-        break;
         
         // for the switch from blob to text of the xar_dd_value field, no upgrade is necessary for MySQL,
         // and no simple upgrade is possible for PostgreSQL
     case '1.1':
-        // compatability upgrade, nothiing to be done 
-        break;
+        // Fall through to next upgrade
+
+    case '1.1.0':
+        xarRemoveInstances('dynamicdata');
+        $instances = array(
+                           array('header' => 'external', // this keyword indicates an external "wizard"
+                                 'query'  => xarModURL('dynamicdata', 'admin', 'privileges'),
+                                 'limit'  => 0
+                                )
+                        );
+        xarDefineInstance('dynamicdata','Type',$instances);
+
+        $instances = array(
+                           array('header' => 'external', // this keyword indicates an external "wizard"
+                                 'query'  => xarModURL('dynamicdata', 'admin', 'privileges'),
+                                 'limit'  => 0
+                                )
+                        );
+        xarDefineInstance('dynamicdata','Item',$instances);
+
+        // Fall through to next upgrade
+
     case '2.0.0':
         // Code to upgrade from version 2.0.0 goes here
         break;
