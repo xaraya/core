@@ -144,29 +144,50 @@ function xarBlockIsCached($args)
     
     extract($args);
 
-    $systemPrefix = xarDBGetSystemTablePrefix();
-    $blocksettings = $systemPrefix . '_cache_blocks';
-    $dbconn =& xarDBGetConn();
-    $query = "SELECT xar_nocache,
-                     xar_page,
-                     xar_user,
-                     xar_expire
-             FROM $blocksettings WHERE xar_bid = $blockid ";
-    $result =& $dbconn->Execute($query);
-    if ($result) {
-        list ($noCache, $pageShared, $userShared, $blockCacheExpireTime) = $result->fields;
+    if (xarVarIsCached('Blocks.Caching', 'settings')) {
+        $blocks = xarVarGetCached('Blocks.Caching', 'settings');
+    } else {
+        $systemPrefix = xarDBGetSystemTablePrefix();
+        $blocksettings = $systemPrefix . '_cache_blocks';
+        $dbconn =& xarDBGetConn();
+        $query = "SELECT xar_bid,
+                         xar_nocache,
+                         xar_page,
+                         xar_user,
+                         xar_expire
+                 FROM $blocksettings";
+        $result =& $dbconn->Execute($query);
+        if (!$result) return;
+        $blocks = array();
+        while (!$result->EOF) {
+            list ($bid, $noCache, $pageShared, $userShared, $blockCacheExpireTime) = $result->fields;
+            $blocks[$bid] = array('bid'         => $bid,
+                                  'nocache'     => $noCache,
+                                  'pageshared'  => $pageShared,
+                                  'usershared'  => $userShared,
+                                  'cacheexpire' => $blockCacheExpireTime);
+            $result->MoveNext();
+        }
+        $result->Close();
+        xarVarSetCached('Blocks.Caching', 'settings', $blocks);
+    }
+    if (isset($blocks[$blockid])) {
+        $noCache = $blocks[$blockid]['nocache'];
+        $pageShared = $blocks[$blockid]['pageshared'];
+        $userShared = $blocks[$blockid]['usershared'];
+        $blockCacheExpireTime = $blocks[$blockid]['cacheexpire'];
     }
 
-    if (!isset($noCache)) {
+    if (empty($noCache)) {
         $noCache = 0;
     }
-    if (!isset($pageShared)) {
+    if (empty($pageShared)) {
     	$pageShared = 0;
     }
-    if (!isset($userShared)) {
+    if (empty($userShared)) {
     	$userShared = 0;
     }
-    if (isset($blockCacheExpireTime)) {
+    if (!empty($blockCacheExpireTime)) {
         $xarBlock_cacheTime = $blockCacheExpireTime;
     }
 
@@ -188,20 +209,25 @@ function xarBlockIsCached($args)
     if ($userShared == 2) {
         $factors .= 0;
     } elseif ($userShared == 1) {
-        $systemPrefix = xarDBGetSystemTablePrefix();
-        $rolemembers = $systemPrefix . '_rolemembers';
         $currentuid = xarSessionGetVar('uid');
-        $dbconn =& xarDBGetConn();
-        $query = "SELECT xar_parentid FROM $rolemembers WHERE xar_uid = $currentuid ";
-        $result =& $dbconn->Execute($query);
-        if (!$result) return;
-        $gids ='';
-        while(!$result->EOF) {
-            $parentid = $result->GetRowAssoc(false);
-            $gids .= $parentid['xar_parentid'];
-            $result->MoveNext();
+        if (xarVarIsCached('User.Variables.'.$currentuid, 'parentlist')) {
+            $gids = xarVarGetCached('User.Variables.'.$currentuid, 'parentlist');
+        } else {
+            $systemPrefix = xarDBGetSystemTablePrefix();
+            $rolemembers = $systemPrefix . '_rolemembers';
+            $dbconn =& xarDBGetConn();
+            $query = "SELECT xar_parentid FROM $rolemembers WHERE xar_uid = $currentuid ";
+            $result =& $dbconn->Execute($query);
+            if (!$result) return;
+            $gids ='';
+            while(!$result->EOF) {
+                $parentid = $result->GetRowAssoc(false);
+                $gids .= $parentid['xar_parentid'];
+                $result->MoveNext();
+            }
+            $result->Close();
+            xarVarSetCached('User.Variables.'.$currentuid, 'parentlist',$gids);
         }
-        $result->Close();
         $factors .=$gids;
     } else {
         $factors .= xarSessionGetVar('uid');
