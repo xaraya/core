@@ -1,6 +1,6 @@
 <?php
 /*
-V2.20 09 July 2002 (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
+V2.42 4 Oct 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -18,14 +18,14 @@ if (! defined("_ADODB_MYSQL_LAYER")) {
 class ADODB_mysql extends ADOConnection {
 	var $databaseType = 'mysql';
 	var $dataProvider = 'mysql';
-    var $hasInsertID = true;
-    var $hasAffectedRows = true;	
+	var $hasInsertID = true;
+	var $hasAffectedRows = true;	
 	var $metaTablesSQL = "SHOW TABLES";	
 	var $metaColumnsSQL = "SHOW COLUMNS FROM %s";
 	var $fmtTimeStamp = "'Y-m-d H:i:s'";
 	var $hasLimit = true;
 	var $hasMoveFirst = true;
-	var $hasGenID = false;
+	var $hasGenID = true;
 	var $upperCase = 'upper';
 	var $isoDates = true; // accepts dates in ISO format
 	var $sysDate = 'CURDATE()';
@@ -36,15 +36,15 @@ class ADODB_mysql extends ADOConnection {
 	{			
 	}
 	
-    function _insertid()
-    {
-            return mysql_insert_id($this->_connectionID);
-    }
-    
-    function _affectedrows()
-    {
-            return mysql_affected_rows($this->_connectionID);
-    }
+	function _insertid()
+	{
+			return mysql_insert_id($this->_connectionID);
+	}
+	
+	function _affectedrows()
+	{
+			return mysql_affected_rows($this->_connectionID);
+	}
   
  	// See http://www.mysql.com/doc/M/i/Miscellaneous_functions.html
 	// Reference on Last_Insert_ID on the recommended way to simulate sequences
@@ -55,8 +55,6 @@ class ADODB_mysql extends ADOConnection {
 	function GenID($seqname='adodbseq',$startID=1)
 	{
 		//if (!$this->hasGenID) return false;
-		// temporal fix proca
-		if (!$this->hasGenID) return 0;
 		$getnext = sprintf($this->_genIDSQL,$seqname);
 		$rs = @$this->Execute($getnext);
 		if (!$rs) {
@@ -84,6 +82,53 @@ class ADODB_mysql extends ADOConnection {
 		}
 		return $arr;
 	}
+	
+		
+	// Format date column in sql string given an input format that understands Y M D
+	function SQLDate($fmt, $col=false)
+	{	
+		if (!$col) $col = $this->sysDate;
+		$s = 'DATE_FORMAT('.$col.",'";
+		$concat = false;
+		$len = strlen($fmt);
+		for ($i=0; $i < $len; $i++) {
+			$ch = $fmt[$i];
+			switch($ch) {
+			case 'Y':
+			case 'y':
+				$s .= '%Y';
+				break;
+			case 'Q':
+			case 'q':
+				$s .= "'),Quarter($col)";
+				
+				if ($len > $i+1) $s .= ",DATE_FORMAT($col,'";
+				else $s .= ",('";
+				$concat = true;
+				break;
+			case 'M':
+			case 'm':
+				$s .= '%m';
+				break;
+			case 'D':
+			case 'd':
+				$s .= '%d';
+				break;
+			default:
+				
+				if ($ch == '\\') {
+					$i++;
+					$ch = substr($fmt,$i,1);
+				}
+				$s .= $ch;
+				break;
+			}
+		}
+		$s.="')";
+		if ($concat) $s = "CONCAT($s)";
+		return $s;
+	}
+	
 
 	// returns concatenated string
 	// much easier to run "mysqld --ansi" or "mysqld --sql-mode=PIPES_AS_CONCAT" and use || operator
@@ -101,7 +146,7 @@ class ADODB_mysql extends ADOConnection {
 		}*/
 		
 		// suggestion by andrew005@mnogo.ru
-	    $s = implode(',',$arr); 
+		$s = implode(',',$arr); 
 		if (strlen($s) > 0) return "CONCAT($s)";
 		else return '';
 	}
@@ -154,7 +199,7 @@ class ADODB_mysql extends ADOConnection {
 				$fld = new ADOFieldObject();
 				$fld->name = $rs->fields[0];
 				$fld->type = $rs->fields[1];
-					
+				
 				// split type into type(length):
 				if (preg_match("/^(.+)\((\d+)\)$/", $fld->type, $query_array)) {
 					$fld->type = $query_array[1];
@@ -205,6 +250,7 @@ class ADODB_mysql extends ADOConnection {
 		
 	}
 	
+	
 	// returns queryID or false
 	function _query($sql,$inputarr)
 	{
@@ -218,7 +264,7 @@ class ADODB_mysql extends ADOConnection {
 	{
 		if (empty($this->_connectionID)) $this->_errorMsg = @mysql_error();
 		else $this->_errorMsg = @mysql_error($this->_connectionID);
-	    return $this->_errorMsg;
+		return $this->_errorMsg;
 	}
 	
 	/*	Returns: the last error number from previous database operation	*/	

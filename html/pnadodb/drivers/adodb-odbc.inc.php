@@ -1,6 +1,6 @@
 <?php
 /* 
-V2.20 09 July 2002 (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
+V2.42 4 Oct 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. 
@@ -25,7 +25,7 @@ class ADODB_odbc extends ADOConnection {
 	var $hasAffectedRows = true;
 	var $binmode = ODBC_BINMODE_RETURN;
 	//var $longreadlen = 8000; // default number of chars to return for a Blob/Long field
-	var $_bindInputArray = false;    
+	var $_bindInputArray = false;	
 	var $curmode = SQL_CUR_USE_DRIVER; // See sqlext.h, SQL_CUR_DEFAULT == SQL_CUR_USE_DRIVER == 2L
 	var $_genSeqSQL = "create table %s (id integer)";
 	var $_autocommit = true;
@@ -121,16 +121,16 @@ class ADODB_odbc extends ADOConnection {
 	}
 
 	function BeginTrans()
-	{      
+	{	  
 		$this->_autocommit = false;
-        return odbc_autocommit($this->_connectionID,false);
+		return odbc_autocommit($this->_connectionID,false);
 	}
 	
 	function CommitTrans($ok=true) 
 	{ 
 		if (!$ok) return $this->RollbackTrans();
 		$this->_autocommit = true;
-        $ret = odbc_commit($this->_connectionID);
+		$ret = odbc_commit($this->_connectionID);
 		odbc_autocommit($this->_connectionID,true);
 		return $ret;
 	}
@@ -138,9 +138,32 @@ class ADODB_odbc extends ADOConnection {
 	function RollbackTrans()
 	{
 		$this->_autocommit = true;
-        $ret = odbc_rollback($this->_connectionID);
+		$ret = odbc_rollback($this->_connectionID);
 		odbc_autocommit($this->_connectionID,true);
 		return $ret;
+	}
+	
+	function MetaPrimaryKeys($table)
+	{
+	global $ADODB_FETCH_MODE;
+	
+		$savem = $ADODB_FETCH_MODE;
+		$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
+		$qid = odbc_primarykeys($this->_connectionID,'','',$table);
+		$ADODB_FETCH_MODE = $savem;
+		
+		$rs = new ADORecordSet_odbc($qid);
+		if (!$rs) return false;
+		$rs->_has_stupid_odbc_fetch_api_change = $this->_has_stupid_odbc_fetch_api_change;
+		
+		$arr = $rs->GetArray();
+		$rs->Close();
+		print_r($arr);
+		$arr2 = array();
+		for ($i=0; $i < sizeof($arr); $i++) {
+			if ($arr[$i][3]) $arr2[] = $arr[$i][3];
+		}
+		return $arr2;
 	}
 	
 	function MetaTables()
@@ -170,23 +193,23 @@ class ADODB_odbc extends ADOConnection {
 /*
 / SQL data type codes /
 #define	SQL_UNKNOWN_TYPE	0
-#define SQL_CHAR            1
-#define SQL_NUMERIC         2
-#define SQL_DECIMAL         3
-#define SQL_INTEGER         4
-#define SQL_SMALLINT        5
-#define SQL_FLOAT           6
-#define SQL_REAL            7
-#define SQL_DOUBLE          8
+#define SQL_CHAR			1
+#define SQL_NUMERIC		 2
+#define SQL_DECIMAL		 3
+#define SQL_INTEGER		 4
+#define SQL_SMALLINT		5
+#define SQL_FLOAT		   6
+#define SQL_REAL			7
+#define SQL_DOUBLE		  8
 #if (ODBCVER >= 0x0300)
-#define SQL_DATETIME        9
+#define SQL_DATETIME		9
 #endif
-#define SQL_VARCHAR        12
+#define SQL_VARCHAR		12
 
 / One-parameter shortcuts for date/time data types /
 #if (ODBCVER >= 0x0300)
-#define SQL_TYPE_DATE      91
-#define SQL_TYPE_TIME      92
+#define SQL_TYPE_DATE	  91
+#define SQL_TYPE_TIME	  92
 #define SQL_TYPE_TIMESTAMP 93
 */
 	function ODBCTypes($t)
@@ -257,6 +280,7 @@ class ADODB_odbc extends ADOConnection {
 		
 		$retarr = array();
 		while (!$rs->EOF) {
+			//print_r($rs->fields);
 			if (strtoupper($rs->fields[2]) == $table) {
 				$fld = new ADOFieldObject();
 				$fld->name = $rs->fields[3];
@@ -342,10 +366,10 @@ class ADODB_odbc extends ADOConnection {
 		return $ret;
 	}
 
-    function _affectedrows()
-    {
-            return  odbc_num_rows($this->_queryID);
-    }
+	function _affectedrows()
+	{
+			return  odbc_num_rows($this->_queryID);
+	}
 	
 }
 	
@@ -401,7 +425,7 @@ class ADORecordSet_odbc extends ADORecordSet {
 	function _initrs()
 	{
 	global $ADODB_COUNTRECS;
-		$this->_numOfRows = ($ADODB_COUNT_RECS) ? @odbc_num_rows($this->_queryID) : -1;
+		$this->_numOfRows = ($ADODB_COUNTRECS) ? @odbc_num_rows($this->_queryID) : -1;
 		$this->_numOfFields = @odbc_num_fields($this->_queryID);
 		
 		$this->_has_stupid_odbc_fetch_api_change = $this->connection->_has_stupid_odbc_fetch_api_change;
@@ -485,8 +509,6 @@ class ADORecordSet_odbc extends ADORecordSet {
 		
 		return @odbc_free_result($this->_queryID);		
 	}
-	
-
 
 }
 

@@ -1,6 +1,6 @@
 <?php
 /*
-V2.20 09 July 2002 (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.  
+V2.42 4 Oct 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.  
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -22,6 +22,7 @@ V2.20 09 July 2002 (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights rese
    $id = $rs->fields[0];
    $conn->Execute("insert into table (id, col1,...) values ($id, $val1,...)");
 */
+
 
 class ADODB_ibase extends ADOConnection {
 	var $databaseType = "ibase";
@@ -172,11 +173,11 @@ class ADODB_ibase extends ADOConnection {
 	   // returns true or false
 	function _connect($argHostname, $argUsername, $argPassword, $argDatabasename)
 	{  
-		//if ($this->charSet !== false)
-			$this->_connectionID = ibase_connect($argHostname,$argUsername,$argPassword,$this->charSet,$this->buffers,$this->dialect);
-	  //  else		
-		//	$this->_connectionID = ibase_connect($argHostname,$argUsername,$argPassword);
-				 	
+
+		$this->_connectionID = ibase_connect($argHostname,$argUsername,$argPassword,$this->charSet,$this->buffers,$this->dialect);
+	 	if ($this->dialect != 1) { // http://www.ibphoenix.com/ibp_60_del_id_ds.html
+			$this->replaceQuote = "''";
+		}
 		if ($this->_connectionID === false) {
 			$this->_handleerror();
 			return false;
@@ -187,11 +188,10 @@ class ADODB_ibase extends ADOConnection {
 	   // returns true or false
 	function _pconnect($argHostname, $argUsername, $argPassword, $argDatabasename)
 	{
-		//if ($this->charSet !== false)
-			$this->_connectionID = ibase_pconnect($argHostname,$argUsername,$argPassword,$this->charSet,$this->buffers,$this->dialect);
-	  //  else		
-		//	$this->_connectionID = ibase_pconnect($argHostname,$argUsername,$argPassword);
-					 
+		$this->_connectionID = ibase_pconnect($argHostname,$argUsername,$argPassword,$this->charSet,$this->buffers,$this->dialect);
+		if ($this->dialect != 1) { // http://www.ibphoenix.com/ibp_60_del_id_ds.html
+			$this->replaceQuote = "''";
+		}
 		if ($this->_connectionID === false) {
 			$this->_handleerror();
 			return false;
@@ -301,16 +301,23 @@ class ADODB_ibase extends ADOConnection {
 		return false;
 	}
 	
-	// no longer needed in php 4.1.0, but still backward compatible
-	function &BlobEncode( $blob ) 
+	function BlobEncode( $blob ) 
 	{
 		$blobid = ibase_blob_create( $this->_connectionID);
 		ibase_blob_add( $blobid, $blob );
 		return ibase_blob_close( $blobid );
 	}
 	
-	// no longer needed in php 4.1.0, but still backward compatible
-	function &BlobDecode( $blob ) 
+	// since we auto-decode all blob's since 2.42, 
+	// BlobDecode should not do any transforms
+	function BlobDecode($blob)
+	{
+		return $blob; 
+	}
+	
+	// old blobdecode function
+	// still used to auto-decode all blob's
+	function _BlobDecode( $blob ) 
 	{
 		$blobid = ibase_blob_open( $blob );
 		$realblob = ibase_blob_get( $blobid,MAX_BLOB_SIZE); // 2nd param is max size of blob -- Kevin Boillet <kevinboillet@yahoo.fr>
@@ -346,55 +353,79 @@ class ADORecordset_ibase extends ADORecordSet
 
 	var $databaseType = "ibase";
 	var $bind=false;
+	var $_cacheType;
 	
-		function ADORecordset_ibase($id)
-		{
-		global $ADODB_FETCH_MODE;
+	function ADORecordset_ibase($id)
+	{
+	global $ADODB_FETCH_MODE;
+	
+			$this->fetchMode = $ADODB_FETCH_MODE;
+			return $this->ADORecordSet($id);
+	}
+
+	/*		Returns: an object containing field information.
+			Get column information in the Recordset object. fetchField() can be used in order to obtain information about
+			fields in a certain query result. If the field offset isn't specified, the next field that wasn't yet retrieved by
+			fetchField() is retrieved.		*/
+
+	function &FetchField($fieldOffset = -1)
+	{
+			 $fld = new ADOFieldObject;
+			 $ibf = ibase_field_info($this->_queryID,$fieldOffset);
 		
-				$this->fetchMode = $ADODB_FETCH_MODE;
-				return $this->ADORecordSet($id);
-		}
+			 $fld->name = strtolower($ibf['alias']);
+			 if (empty($fld->name)) $fld->name = strtolower($ibf['name']);
+			 $fld->type = $ibf['type'];
+			 $fld->max_length = $ibf['length'];
+			 return $fld;
+	}
 
-		/*		Returns: an object containing field information.
-				Get column information in the Recordset object. fetchField() can be used in order to obtain information about
-				fields in a certain query result. If the field offset isn't specified, the next field that wasn't yet retrieved by
-				fetchField() is retrieved.		*/
-
-		function &FetchField($fieldOffset = -1)
-		{
-				 $fld = new ADOFieldObject;
-				 $ibf = ibase_field_info($this->_queryID,$fieldOffset);
+	function _initrs()
+	{
+			$this->_numOfRows = -1;
+			$this->_numOfFields = @ibase_num_fields($this->_queryID);
 			
-				 $fld->name = strtolower($ibf['alias']);
-				 if (empty($fld->name)) $fld->name = strtolower($ibf['name']);
-				 $fld->type = $ibf['type'];
-				 $fld->max_length = $ibf['length'];
-				 if ($this->debug) print_r($fld);
-				 return $fld;
-		}
+			// cache types for blob decode check
+			for ($i=0, $max = $this->_numOfFields; $i < $max; $i++) { 
+				$f1 = $this->FetchField($i); 
+				$this->_cacheType[] = $f1->type;
+			}				
+	}
 
-		function _initrs()
-		{
-				$this->_numOfRows = -1;
-				$this->_numOfFields = @ibase_num_fields($this->_queryID);
-		}
+	function _seek($row)
+	{
+		return false;
+	}
 
-		function _seek($row)
-		{
-				return false;
+	function _fetch() 
+	{
+		$f = ibase_fetch_row($this->_queryID); 
+		if ($f === false) return false;
+		
+		// OPN stuff start - optimized
+		// fix missing nulls and decode blobs automatically 
+		// WARNING - this could break bc.
+		for ($i=0, $max = $this->_numOfFields; $i < $max; $i++) { 
+			if ($this->_cacheType[$i]=="BLOB") { 
+				if (isset($f[$i])) { 
+					$f[$i] = ADODB_ibase::_BlobDecode($f[$i]); 
+				} else { 
+					$f[$i] = null; 
+				} 
+			} else { 
+				if (!isset($f[$i])) { 
+					$f[$i] = null; 
+				} 
+			} 
+		} 
+		// OPN stuff end 
+		
+		$this->fields = $f;
+		if ($this->fetchMode & ADODB_FETCH_ASSOC) {
+			$this->fields = $this->GetRowAssoc(false);
 		}
-
-		function _fetch() {
-
-				$f = ibase_fetch_row($this->_queryID); 
-				if ($f === false) return false;
-				
-				$this->fields = $f;
-				if ($this->fetchMode & ADODB_FETCH_ASSOC) {
-					$this->fields = $this->GetRowAssoc(false);
-				}
-				return true;
-		}
+		return true;
+	}
 
 	/* Use associative array to get fields array */
 	function Fields($colname)
@@ -412,37 +443,38 @@ class ADORecordset_ibase extends ADORecordSet
 		
 	}
 	
-	
-		function _close() 
-		{
-				return @ibase_free_result($this->_queryID);
-		}
 
-		function MetaType($t,$len=-1)
-		{
-			switch (strtoupper($t)) {
-			case 'CHAR':
-				return 'C';
+	function _close() 
+	{
+			return @ibase_free_result($this->_queryID);
+	}
+
+	function MetaType($t,$len=-1)
+	{
+		switch (strtoupper($t)) {
+		case 'CHAR':
+			return 'C';
+			
+		case 'TEXT':
+		case 'VARCHAR':
+		case 'VARYING':
+		if ($len <= $this->blobSize) return 'C';
+			return 'X';
+		case 'BLOB':
+			return 'B';
+			   
+		case 'TIMESTAMP':
+		case 'DATE': return 'D';
 				
-			case 'TEXT':
-			case 'VARCHAR':
-			case 'VARYING':
-			if ($len <= $this->blobSize) return 'C';
-				return 'X';
-			case 'BLOB':
-				return 'B';
-				   
-			case 'TIMESTAMP':
-			case 'DATE': return 'D';
-					
-					//case 'T': return 'T';
-	
-					//case 'L': return 'L';
-			case 'INT': 
-			case 'SHORT':
-			case 'INTEGER': return 'I';
-					default: return 'N';
+				//case 'T': return 'T';
+
+				//case 'L': return 'L';
+		case 'INT': 
+		case 'SHORT':
+		case 'INTEGER': return 'I';
+		default: return 'N';
 		}
-		}
+	}
+
 }
 ?>

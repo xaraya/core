@@ -2,17 +2,16 @@
 <head>
 <title>ADODB Manual</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<STYLE>
+<XSTYLE
 	body,td {font-family:Arial,Helvetica,sans-serif;font-size:11pt}
 	pre {font-size:9pt}
 	.toplink {font-size:8pt}
-	</STYLE>
-</head>
-  
+	/>
+</head>	
 <body bgcolor="#FFFFFF">
 
 <h2>ADOdb Library for PHP</h2>
-<p>V2.30 1 Aug 2002 (c) 2000-2002 John Lim (<a href="mailto:jlim@natsoft.com.my">jlim@natsoft.com.my</a>)</p>
+<p>V2.42 4 Oct 2002 (c) 2000-2002 John Lim (<a href="mailto:jlim@natsoft.com.my">jlim@natsoft.com.my</a>)</p>
 <p>This software is dual licensed using BSD-Style and LGPL. 
 Where there is any discrepancy, the BSD-Style license will take precedence. 
 This means you can use it in proprietary and commercial products.</p>
@@ -34,66 +33,70 @@ This means you can use it in proprietary and commercial products.</p>
   <a href="#ex7">Example 7: Generating Update and Insert SQL</a> <br>
   <a href="#ex8">Example 8: Implementing Scrolling with Next and Previous</a><br>
   <a href="#ex9">Example 9: Exporting in CSV or Tab-Delimited Format</a> <br>
+  <a href="#ex10">Example 10: Custom filters</a> <br>
   <b> <a href="#errorhandling">Using Custom Error Handlers and PEAR_Error</a><br>
   <a href="#DSN">Data Source Names</a><br>
   <a href="#caching">Caching</a><br>
   <a href="#pivot">Pivot Tables</a></b><p></p>
 <p><a href="#ref"><b>REFERENCE</b></a><br>
-  <a href="#ADOConnection"><b><br>
-  ADOConnection</b></a><br>
-  <font size="2">Connections: <a href="#connect">Connect</a> <a href="#pconnect">PConnect</a> 
-  <br>
-  Executing SQL: <a href="#execute">Execute</a> <a href="#cacheexecute"><i>CacheExecute</i></a> 
-  <a href="#SelectLimit">SelectLimit</a> <a href="#cacheSelectLimit"><i>CacheSelectLimit</i></a> 
-  <a href="#prepare">Prepare</a> <a href=#preparesp>PrepareSP</a> <a href="#parameter">Parameter</a><br>
-  &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#getone">GetOne</a> 
-  <a href="#cachegetone"><i>CacheGetOne</i></a> <a href="#getrow">GetRow</a> <a href="#cachegetrow"><i>CacheGetRow</i></a> 
-  <a href="#getall">GetAll</a> <a href="#cachegetall"><i>CacheGetAll</i></a> 
-  <a href="#getcol">GetCol</a> <a href="#cachegetcol"><i>CacheGetCol</i></a>  <a href="#replace">Replace</a> 
-  <br>
-  Generates SQL: <a href="#getupdatesql">GetUpdateSQL</a> <a href="#getinsertsql">GetInsertSQL</a></font><font size="2"><br>
-  Blobs: <a href="#updateblob">UpdateBlob</a> <a href="#updateclob">UpdateClob</a> 
-  <a href="#updateblobfile">UpdateBlobFile</a> <br>
-  Paging/Scrolling: <a href="#pageexecute">PageExecute</a> <a href="#cachepageexecute">CachePageExecute</a><br>
-  Cleanup: <a href="#CacheFlush">CacheFlush</a> <a href="#Close">Close</a><br>
-  Transactions: <a href="#begintrans">BeginTrans</a> <a href="#committrans">CommitTrans</a> 
-  <a href="#rollbacktrans">RollbackTrans</a> <br>
-  Fetching Data: <a href="#adodb_fetch_mode">$ADODB_FETCH_MODE</a></font> <br>
-  Strings: <a href="#concat"><font size="2">concat</font></a> <font size="2"><a href="#qstr">qstr</a> 
-  <a href="#quote">quote</a></font><br>
-  Dates: <a href="#dbdate"><font size="2">DBDate</font></a> <font size="2"><a href="#dbtimestamp">DBTimeStamp</a> 
-  <a href="#unixdate">UnixDate</a> <a href="#unixtimestamp">UnixTimeStamp</a> 
-  <a href="#OffsetDate">OffsetDate</a> </font><br>
-  Rows Management: <a href="#affected_rows"><font size="2">Affected_Rows</font></a> 
-  <font size="2"><a href="#inserted_id">Insert_ID</a> <a href="#genid">GenID</a> 
-  </font><font size="2"><br>
-  Error Handling: </font><font size="2"><a href="#errormsg">ErrorMsg</a> <a href="#errorno">ErrorNo</a><br>
-  Data Dictionary (metadata): <a href="#metadatabases">MetaDatabases</a> <a href="#metatables">MetaTables</a> 
-  <a href="#metacolumns">MetaColumns</a> <a href="#metacolumnames">MetaColumnNames</a> 
-  </font><br>
-  <font size="2">Deprecated: <a href="#bind">Bind</a> <a href="#blankrecordset">BlankRecordSet</a></font> 
-  <br>
-  <a href="#ADORecordSet"><b><br>
-  ADORecordSet</b></a><br>
-  <font size="2">Returns one row:</font><font size="2"><a href="#fetchrow">FetchRow</a> 
-  <a href="#fetchinto">FetchInto</a> <a href="#fetchobject">FetchObject</a> <a href="#fetchnextobject">FetchNextObject</a> 
-  </font><font size="2"><br>
-  Returns all rows:</font><font size="2"><a href="#getarray">GetArray</a> <a href="#getrows">GetRows</a> 
-  </font><font size="2"><a href="#getassoc">GetAssoc</a><br>
-  Scrolling:</font><font size="2"><a href="#move">Move</a> <a href="#movenext">MoveNext</a> 
-  <a href="#movefirst">MoveFirst</a> <a href="#movelast">MoveLast</a> <a href="#abspos">AbsolutePosition</a> 
-  <a href="#currentrow">CurrentRow</a> <a href="#atfirstpage">AtFirstPage</a> 
-  <a href="#atlastpage">AtLastPage</a> <a href="#absolutepage">AbsolutePage</a> 
-  </font> <font size="2"><br>
-  Menu generation:<a href="#getmenu">GetMenu</a> <a href="#getmenu2">GetMenu2</a><br>
-  Dates:<a href="#userdate">UserDate</a> <a href="#usertimestamp">UserTimeStamp</a> 
-  <a href="#unixdate">UnixDate</a> <a href="#unixtimestamp">UnixTimeStamp<br>
-  </a>Recordset Info:<a href="#recordcount">RecordCount</a></font><font size="2"> 
-  <a href="#po_recordcount">PO_RecordSet</a><br>
-  Field Info:</font><font size="2"><a href="#fieldcount">FieldCount</a> <a href="#fetchfield">FetchField</a> 
-  <a href="#metatype">MetaType</a></font><font size="2"><br>
-  Cleanup: </font><font size="2"><a href="#rsclose">Close</a></font> <br>
-  <font size="2">Deprecated: <a href="#getrowassoc">GetRowAssoc</a> <a href="#fields">Fields</a></font> 
+	<a href="#ADOConnection"><b><br>
+	ADOConnection</b></a><br>
+	<font size="2">Connections: <a href="#connect">Connect</a> <a href="#pconnect">PConnect</a> 
+	<br>
+	Executing SQL: <a href="#execute">Execute</a> <a href="#cacheexecute"><i>CacheExecute</i></a> 
+	<a href="#SelectLimit">SelectLimit</a> <a href="#cacheSelectLimit"><i>CacheSelectLimit</i></a> 
+	<a href="#prepare">Prepare</a> <a href=#preparesp>PrepareSP</a> <a href="#parameter">Parameter</a><br>
+	&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	<a href="#getone">GetOne</a> <a href="#cachegetone"><i>CacheGetOne</i></a> 
+	<a href="#getrow">GetRow</a> <a href="#cachegetrow"><i>CacheGetRow</i></a> 
+	<a href="#getall">GetAll</a> <a href="#cachegetall"><i>CacheGetAll</i></a> 
+	<a href="#getcol">GetCol</a> <a href="#cachegetcol"><i>CacheGetCol</i></a> 
+	<a href="#replace">Replace</a> <br>
+	&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	<a href="#executecursor">ExecuteCursor</a> (oci8 only)<br>
+	Generates SQL: <a href="#getupdatesql">GetUpdateSQL</a> <a href="#getinsertsql">GetInsertSQL</a></font><font size="2"><br>
+	Blobs: <a href="#updateblob">UpdateBlob</a> <a href="#updateclob">UpdateClob</a> 
+	<a href="#updateblobfile">UpdateBlobFile</a> <br>
+	Paging/Scrolling: <a href="#pageexecute">PageExecute</a> <a href="#cachepageexecute">CachePageExecute</a><br>
+	Cleanup: <a href="#CacheFlush">CacheFlush</a> <a href="#Close">Close</a><br>
+	Transactions: <a href="#begintrans">BeginTrans</a> <a href="#committrans">CommitTrans</a> 
+	<a href="#rollbacktrans">RollbackTrans</a> <br>
+	Fetching Data: <a href="#adodb_fetch_mode">$ADODB_FETCH_MODE</a></font> <br>
+	Strings: <a href="#concat"><font size="2">concat</font></a> <font size="2"><a href="#qstr">qstr</a> 
+	<a href="#quote">quote</a></font><br>
+	Dates: <a href="#dbdate"><font size="2">DBDate</font></a> <font size="2"><a href="#dbtimestamp">DBTimeStamp</a> 
+	<a href="#unixdate">UnixDate</a> <a href="#unixtimestamp">UnixTimeStamp</a> 
+	<a href="#OffsetDate">OffsetDate</a> <a href="#SQLDate">SQLDate</a> </font><br>
+	Rows Management: <a href="#affected_rows"><font size="2">Affected_Rows</font></a> 
+	<font size="2"><a href="#inserted_id">Insert_ID</a> <a href="#genid">GenID</a> 
+	</font><font size="2"><br>
+	Error Handling: </font><font size="2"><a href="#errormsg">ErrorMsg</a> <a href="#errorno">ErrorNo</a><br>
+	Data Dictionary (metadata): <a href="#metadatabases">MetaDatabases</a> <a href="#metatables">MetaTables</a> 
+	<a href="#metacolumns">MetaColumns</a> <a href="#metacolumnames">MetaColumnNames</a> 
+	</font><br>
+	<font size="2">Deprecated: <a href="#bind">Bind</a> <a href="#blankrecordset">BlankRecordSet</a></font> 
+	<br>
+	<a href="#ADORecordSet"><b><br>
+	ADORecordSet</b></a><br>
+	<font size="2">Returns one row:</font><font size="2"><a href="#fetchrow">FetchRow</a> 
+	<a href="#fetchinto">FetchInto</a> <a href="#fetchobject">FetchObject</a> 
+	<a href="#fetchnextobject">FetchNextObject</a> </font><font size="2"><br>
+	Returns all rows:</font><font size="2"><a href="#getarray">GetArray</a> <a href="#getrows">GetRows</a> 
+	</font><font size="2"><a href="#getassoc">GetAssoc</a><br>
+	Scrolling:</font><font size="2"><a href="#move">Move</a> <a href="#movenext">MoveNext</a> 
+	<a href="#movefirst">MoveFirst</a> <a href="#movelast">MoveLast</a> <a href="#abspos">AbsolutePosition</a> 
+	<a href="#currentrow">CurrentRow</a> <a href="#atfirstpage">AtFirstPage</a> 
+	<a href="#atlastpage">AtLastPage</a> <a href="#absolutepage">AbsolutePage</a> 
+	</font> <font size="2"><br>
+	Menu generation:<a href="#getmenu">GetMenu</a> <a href="#getmenu2">GetMenu2</a><br>
+	Dates:<a href="#userdate">UserDate</a> <a href="#usertimestamp">UserTimeStamp</a> 
+	<a href="#unixdate">UnixDate</a> <a href="#unixtimestamp">UnixTimeStamp<br>
+	</a>Recordset Info:<a href="#recordcount">RecordCount</a></font><font size="2"> 
+	<a href="#po_recordcount">PO_RecordSet</a><br>
+	Field Info:</font><font size="2"><a href="#fieldcount">FieldCount</a> <a href="#fetchfield">FetchField</a> 
+	<a href="#metatype">MetaType</a></font><font size="2"><br>
+	Cleanup: </font><font size="2"><a href="#rsclose">Close</a></font> <br>
+	<font size="2">Deprecated: <a href="#getrowassoc">GetRowAssoc</a> <a href="#fields">Fields</a></font> 
 <p><font size="2"><a href="#rs2html"><b>rs2html</b></a>&nbsp; <a href="#exrs2html">example</a></font><br>
   <a href="#adodiff">Differences between ADOdb and ADO</a><br>
   <a href="#driverguide"><b>Database Driver Guide<br>
@@ -163,9 +166,9 @@ visit <a href="http://php.weblogs.com/adodb-cool-applications">http://php.weblog
    print &quot;&lt;/pre&gt;&quot;;
 ?&gt;</pre>
 <h3>Code Initialization<a name="coding"></a></h3>
-<p>When running ADOdb, at least two files are loaded. First is adodb.inc.php, 
+<p>When running ADOdb, at least two files are loaded. First is adodb/adodb.inc.php, 
  which contains all functions used by all database classes. The code specific 
- to a particular database is in the adodb-????.inc.php file.</p>
+ to a particular database is in the adodb/driver/adodb-????.inc.php file.</p>
 <p>For example, to connect to a mysql database:</p>
 <pre>
 include('/path/to/set/here/adodb.inc.php');
@@ -353,15 +356,17 @@ You will use <code>$conn-><a href=#connect>Connect()</a></code> or
   <tr valign="top"> 
 	<td><b><font size="2">oci8</font></b></td>
 	<td><font size="2">A</font></td>
-	<td><font size="2">Oracle 8/9. Has more functionality than <i>oracle</i> driver 
-	  (eg. Affected_Rows). You might have to putenv('ORACLE_HOME=...') before 
-	  Connect/PConnect. </font> 
-	  <p><font size="2"> There are 2 ways of connecting - with server IP and service 
-		name: <br>
-		<i>PConnect('serverip:1521','scott','tiger','service'</i>)<br>
-		or using an entry in TNSNAMES.ORA or ONAMES or HOSTNAMES: <br>
-		<i>PConnect(false, 'scott', 'tiger', $oraname)</i>. </font> 
-	</td>
+	    <td><font size="2">Oracle 8/9. Has more functionality than <i>oracle</i> driver 
+			(eg. Affected_Rows). You might have to putenv('ORACLE_HOME=...') before 
+			Connect/PConnect. </font> 
+			<p><font size="2"> There are 2 ways of connecting - with server IP 
+				and service name: <br>
+				<i>PConnect('serverip:1521','scott','tiger','service'</i>)<br>
+				or using an entry in TNSNAMES.ORA or ONAMES or HOSTNAMES: <br>
+				<i>PConnect(false, 'scott', 'tiger', $oraname)</i>. </font>
+			<p><font size="2">Since 2.31, we support Oracle REF cursor variables directly 
+				(see <a href="#executecursor">ExecuteCursor</a>).</font>
+			</td>
 	<td><font size="2">Y/N</font></td>
 	<td><font size="2">Oracle client</font></td>
 	<td><font size="2">Unix and Windows</font></td>
@@ -839,6 +844,7 @@ $pager->Render($rows_per_page=5);</pre>
   The ADODB_Pager code can be adapted by a programmer so that the text links can 
   be replaced by images, and the dull white background be replaced with more interesting 
   colors.
+<p>You can also allow display of html by setting $pager->htmlSpecialChars = false.
 <p>Some of the code used here was contributed by Iv&aacute;n Oliva and Cornel 
   G. </p>
 <h3><a name=ex9></a>Example 9: Exporting in CSV or Tab-Delimited Format</h3>
@@ -863,7 +869,32 @@ if ($fp) {<br>  <b>rs2csvfile</b>($rs, $fp); # write to file (there is also an r
 <p>All the above functions take as an optional last parameter, $addtitles which 
   defaults to <i>true</i>. When set to <i>false</i> field names in the first line 
   are suppressed. <br>
+<h3>Example 10: Recordset Filters<a name="ex10"></a></h3>
+<p>Sometimes we want to pre-process all rows in a recordset before we use it. For example,
+we want to ucwords all text in recordset.
+<pre>
+include_once('adodb/rsfilter.inc.php');
+include_once('adodb/adodb.inc.php');
 
+// ucwords() every element in the recordset
+function do_ucwords(&$arr,$rs)
+&#123;
+	foreach($arr as $k => $v) &#123;
+		$arr[$k] = ucwords($v);
+	&#125;
+&#125;
+
+$db = NewADOConnection('mysql');
+$db->PConnect('server','user','pwd','db');
+
+$rs = $db->Execute('select ... from table');
+$rs = <b>RSFilter</b>($rs,'do_ucwords');
+</pre>
+<p>The <i>RSFilter</i> function takes 2 parameters, the recordset, and the name of the <i>filter</i>
+function. It returns the processed recordset scrolled to the first record.  The <i>filter</i> function takes two parameters,
+the current row as an array, and the recordset object. For future compatibility,
+you should not use the original recordset object.
+</p>
 <h2><a name="errorhandling"></a>Using Custom Error Handlers and PEAR_Error</h2>
 Apart from the old $con->debug = true; way of debugging, ADOdb 1.50 onwards provides 
 another way of handling errors using ADOdb's custom error handlers. 
@@ -1004,10 +1035,11 @@ to 60 minutes.
 <font color="#000000"> 
 <h2><a name="pivot"></a>Pivot Tables</h2>
 </font>
-<p><font color="#000000">Since ADOdb 2.3, we support the generation of SQL to 
-  create pivot tables, also known as cross-tabulations. For further explanation 
-  read this DevShed <a href=http://www.devshed.com/Server_Side/MySQL/MySQLWiz/>Cross-Tabulation 
-  tutorial</a>. We assume that your database supports the SQL case-when expression.</font></p>
+<p><font color="#000000">Since ADOdb 2.30, we support the generation of SQL to 
+	create pivot tables, also known as cross-tabulations. For further explanation 
+	read this DevShed <a href=http://www.devshed.com/Server_Side/MySQL/MySQLWiz/>Cross-Tabulation 
+	tutorial</a>. We assume that your database supports the SQL case-when expression. 
+	</font></p>
 <font color="#000000"> 
 <p>In this example, we will use the Northwind database from Microsoft. In the 
   database, we have a products table, and we want to analyze this table by <i>suppliers 
@@ -1028,10 +1060,10 @@ to 60 minutes.
 		</tr>
 		<tr> 
 		  <td>supplier2</td>
-		  <td>category1</td>
+		  			<td>category1</td>
 		</tr>
 		<tr> 
-		  <td>supplier3</td>
+		  			<td>supplier2</td>
 		  <td>category2</td>
 		</tr>
 	  </table>
@@ -1101,9 +1133,10 @@ to 60 minutes.
   SUM(1) as Total <br>
   FROM products p ,categories c ,suppliers s WHERE p.CategoryID = c.CategoryID 
   and s.SupplierID= p.SupplierID <br>
-  GROUP BY CompanyName,QuantityPerUnit</font></code></p>
+  GROUP BY CompanyName</font></code></p>
 <p> You can also pivot on <i>numerical columns</i> and <i>generate totals</i> 
-  by using ranges. The second example shows this:</p>
+	by using ranges. <font color="#000000">This code was revised in ADODB 2.41 
+	and is not backward compatible.</font> The second example shows this:</p>
 <pre>
  $sql = PivotTableSQL(
  	$gDB,                                       # adodb connection
@@ -1114,38 +1147,31 @@ to 60 minutes.
 	"1 to 5"   => '0 < UnitsInStock and UnitsInStock <= 5',
 	"6 to 10"  => '5 < UnitsInStock and UnitsInStock <= 10',
 	"11 to 15" => '10 < UnitsInStock and UnitsInStock <= 15',
-	"16+" =>'15 < UnitsInStock'
+	"16+"      => '15 < UnitsInStock'
 	),
 	' p.CategoryID = c.CategoryID and s.SupplierID= p.SupplierID', # joins/where
 	'UnitsInStock',                             # sum this field
-	'Sum'                                       # sum label prefix
+	'Sum '                                      # sum label prefix
 );
 </pre> 
 <p>Which generates: </p>
 <p> <code> <font size="2">SELECT CompanyName, <br>
-  SUM(CASE WHEN UnitsInStock &lt;= 0 THEN 1 ELSE 0 END) AS &quot; 0 &quot;, <br>
-  SUM(CASE WHEN UnitsInStock &lt;= 0 THEN UnitsInStock ELSE 0 END) AS &quot;Sum 
-  0 &quot;, <br>
-  SUM(CASE WHEN 0 &lt; UnitsInStock and UnitsInStock &lt;= 5 THEN 1 ELSE 0 END) 
-  AS &quot;1 to 5&quot;, <br>
-  SUM(CASE WHEN 0 &lt; UnitsInStock and UnitsInStock &lt;= 5 THEN UnitsInStock 
-  ELSE 0 END) AS &quot;Sum 1to 5&quot;, <br>
-  SUM(CASE WHEN 5 &lt; UnitsInStock and UnitsInStock &lt;= 10 THEN 1 ELSE 0 END) 
-  AS &quot;6 to 10&quot;, <br>
-  SUM(CASE WHEN 5 &lt; UnitsInStock and UnitsInStock &lt;= 10 THEN UnitsInStock 
-  ELSE 0 END) AS &quot;Sum 6 to 10&quot;, <br>
-  SUM(CASE WHEN 10 &lt; UnitsInStock and UnitsInStock &lt;= 15 THEN 1 ELSE 0 END) 
-  AS &quot;11 to 15&quot;, <br>
-  SUM(CASE WHEN 10 &lt; UnitsInStock and UnitsInStock &lt;= 15 THEN UnitsInStock 
-  ELSE 0 END) AS &quot;Sum _11 to 15&quot;, <br>
-  SUM(CASE WHEN 15 &lt; UnitsInStock THEN 1 ELSE 0 END) AS &quot;16+&quot;, <br>
-  SUM(CASE WHEN 15 &lt; UnitsInStock THEN UnitsInStock ELSE 0 END) AS &quot;Sum 
-  16+&quot;, <br>
-  SUM(1) as Total <br>
-  FROM products p ,categories c ,suppliers s WHERE p.CategoryID = c.CategoryID 
-  and s.SupplierID= p.SupplierID <br>
-  GROUP BY CompanyName,QuantityPerUnit</font></code><font size="2"><br>
-  </font> </p>
+	SUM(CASE WHEN UnitsInStock &lt;= 0 THEN UnitsInStock ELSE 0 END) AS &quot;Sum 
+	0 &quot;, <br>
+	SUM(CASE WHEN 0 &lt; UnitsInStock and UnitsInStock &lt;= 5 THEN UnitsInStock 
+	ELSE 0 END) AS &quot;Sum 1 to 5&quot;,<br>
+	SUM(CASE WHEN 5 &lt; UnitsInStock and UnitsInStock &lt;= 10 THEN UnitsInStock 
+	ELSE 0 END) AS &quot;Sum 6 to 10&quot;,<br>
+	SUM(CASE WHEN 10 &lt; UnitsInStock and UnitsInStock &lt;= 15 THEN UnitsInStock 
+	ELSE 0 END) AS &quot;Sum 11 to 15&quot;, <br>
+	SUM(CASE WHEN 15 &lt; UnitsInStock THEN UnitsInStock ELSE 0 END) AS &quot;Sum 
+	16+&quot;, <br>
+	SUM(UnitsInStock) AS "Sum UnitsInStock", <br>
+	SUM(1) as Total,<br>
+	FROM products p ,categories c ,suppliers s WHERE p.CategoryID = c.CategoryID 
+	and s.SupplierID= p.SupplierID <br>
+	GROUP BY CompanyName</font></code><font size="2"><br>
+	</font> </p>
 <font color="#000000"><hr>
 <h1>Class Reference<a name="Ref"></a></h1>
 <p>Function parameters with [ ] around them are optional.</p>
@@ -1299,16 +1325,16 @@ to 60 minutes.
   persistent connections are used. This is implemented in Oracle, 
   MySQL, PgSQL, MSSQL, ODBC currently. 
 </p>
-<font color="#000000">
+<font color="#000000"> 
 <p><b>Execute<a name="Execute"></a>($sql,$inputarr=false)</b></p>
 <p>Execute SQL statement $<b>sql</b> and return derived class of ADORecordSet 
-  if successful. Note that a record set is always returned on success, even if 
-  we are executing an insert or update statement.</p>
+	if successful. Note that a record set is always returned on success, even 
+	if we are executing an insert or update statement.</p>
 <p>Returns derived class of ADORecordSet. Eg. if connecting via mysql, then ADORecordSet_mysql 
-  would be returned. False is returned if there was an error in executing the 
-  sql.</p>
+	would be returned. False is returned if there was an error in executing the 
+	sql.</p>
 <p>The $inputarr parameter can be used for binding variables to parameters. Below 
-  is an Oracle example:</p>
+	is an Oracle example:</p>
 <pre>
  $conn->Execute("SELECT * FROM TABLE WHERE COND=:val", array('val'=> $val));
  </pre>
@@ -1331,9 +1357,9 @@ $rs = $db->Execute('select name from table where val=:key',
 </pre>
 <p><b>CacheExecute<a name="CacheExecute"></a>([$secs2cache,]$sql,$inputarr=false)</b></p>
 <p>Similar to Execute, except that the recordset is cached for $secs2cache seconds 
-  in the $ADODB_CACHE_DIR directory. If CacheExecute() is called again with the 
-  same parameters, same database, same userid, same password, and the cached recordset 
-  has not expired, the cached recordset is returned. 
+	in the $ADODB_CACHE_DIR directory. If CacheExecute() is called again with 
+	the same parameters, same database, same userid, same password, and the cached 
+	recordset has not expired, the cached recordset is returned. 
 <pre>
   include('adodb.inc.php'); 
   include('tohtml.inc.php');
@@ -1353,32 +1379,46 @@ Note that the $secs2cache parameter is optional. If omitted, we use the value
 in $connection-&gt;cacheSecs (default is 3600 seconds, or 1 hour). Use CacheExecute() 
 only with SELECT statements. 
 <p>Performance note: I have done some benchmarks and found that they vary so greatly 
-  that it's better to talk about when caching is of benefit. When your database 
-  server is <i>much slower </i>than your Web server or the database is <i>very 
-  overloaded </i>then ADOdb's caching is good because it reduces the load on your 
-  database server. If your database server is lightly loaded or much faster than 
-  your Web server, then caching could actually reduce performance. </p>
+	that it's better to talk about when caching is of benefit. When your database 
+	server is <i>much slower </i>than your Web server or the database is <i>very 
+	overloaded </i>then ADOdb's caching is good because it reduces the load on 
+	your database server. If your database server is lightly loaded or much faster 
+	than your Web server, then caching could actually reduce performance. </p>
+<p><b>ExecuteCursor<a name="executecursor"></a>($sql,$cursorName='rs')</b></p>
+<p>Execute an Oracle stored procedure, and returns an Oracle REF cursor variable as 
+	a regular ADOdb recordset. Does not work with any other database except oci8. 
+	Thanks to Robert Tuttle for the design.
+<pre>
+    $db = ADONewConnection("oci8"); 
+    $db->Connect("foo.com:1521", "uid", "pwd", "FOO"); 
+    $rs = $db->ExecuteCursor("begin :cursorvar := getdata('param1'); end;", 'cursorvar'); 
+    # $rs is now just like any other ADOdb recordset object<br>    rs2html($rs);</pre>
+<p>ExecuteCursor() is a helper function that does the following internally: 
+<pre>
+	$stmt = $db->Prepare("BEGIN :RS := SP_FOO(); END;");
+	$db->Parameter($stmt, $cur, 'RS', false, -1, OCI_B_CURSOR);
+	$rs = $db->Execute($stmt);</pre>
 <p><b>SelectLimit<a name="SelectLimit"></a>($sql,$numrows=-1,$offset=-1,$inputarr=false)</b></p>
 <p>Returns a recordset if successful. Returns false otherwise. Performs a select 
-  statement, simulating PostgreSQL's SELECT statement, LIMIT $numrows OFFSET $offset 
-  clause.</p>
+	statement, simulating PostgreSQL's SELECT statement, LIMIT $numrows OFFSET 
+	$offset clause.</p>
 <p>In PostgreSQL, SELECT * FROM TABLE LIMIT 3 will return the first 3 records 
-  only. The equivalent is <code>$connection->SelectLimit('SELECT * FROM TABLE',3)</code>. 
-  This functionality is simulated for databases that do not possess this feature.</p>
+	only. The equivalent is <code>$connection->SelectLimit('SELECT * FROM TABLE',3)</code>. 
+	This functionality is simulated for databases that do not possess this feature.</p>
 <p>And SELECT * FROM TABLE LIMIT 3 OFFSET 2 will return records 3, 4 and 5 (eg. 
-  after record 2, return 3 rows). The equivalent in ADOdb is <code>$connection->SelectLimit('SELECT 
-  * FROM TABLE',3,2)</code>.</p>
+	after record 2, return 3 rows). The equivalent in ADOdb is <code>$connection->SelectLimit('SELECT 
+	* FROM TABLE',3,2)</code>.</p>
 <p>Note that this is the <i>opposite</i> of MySQL's LIMIT clause. You can also 
-  set <code>$connection->SelectLimit('SELECT * FROM TABLE',-1,10)</code> to get 
-  rows 11 to the last row.</p>
+	set <code>$connection->SelectLimit('SELECT * FROM TABLE',-1,10)</code> to 
+	get rows 11 to the last row.</p>
 <p>The last parameter $inputarr is for databases that support variable binding 
-  such as Oracle oci8. This substantially reduces SQL compilation overhead. Below 
-  is an Oracle example:</p>
+	such as Oracle oci8. This substantially reduces SQL compilation overhead. 
+	Below is an Oracle example:</p>
 <pre>
  $conn->SelectLimit("SELECT * FROM TABLE WHERE COND=:val", 100,-1,array('val'=> $val));
  </pre>
 <p>The oci8po driver (oracle portable driver) uses the more standard bind variable 
-  of ?: 
+	of ?: 
 <pre>
  $conn->SelectLimit("SELECT * FROM TABLE WHERE COND=?", 100,-1,array('val'=> $val));
 </pre>
@@ -1386,9 +1426,9 @@ only with SELECT statements.
 <p>Ron Wilson reports that SelectLimit does not work with UNIONs. 
 <p><b>CacheSelectLimit<a name="CacheSelectLimit"></a>([$secs2cache,] $sql, $numrows=-1,$offset=-1,$inputarr=false)</b></p>
 <p>Similar to SelectLimit, except that the recordset returned is cached for $secs2cache 
-  seconds in the $ADODB_CACHE_DIR directory. </p>
+	seconds in the $ADODB_CACHE_DIR directory. </p>
 <p>Since 1.80, $secs2cache has been optional, and you can define the caching time 
-  in $connection-&gt;cacheSecs.</p>
+	in $connection-&gt;cacheSecs.</p>
 </font> 
 <pre><font color="#000000">	$conn-&gt;Connect(...);
    	$conn-&gt;cacheSecs = 3600*24; // cache 24 hours
@@ -1419,9 +1459,8 @@ only with SELECT statements.
   # are more than 7 days old. <br>
   #------------------------------------------------------ <br>
   AGED=7 <br>
-  if [[ ${AGED} -lt 31 ]] then <br>
-  find ${TMPPATH} -mtime $AGED | grep &quot;\.cache&quot; | xargs rm -f <br>
-  fi</font></p>
+  find ${TMPPATH} -mtime +$AGED | grep &quot;\.cache&quot; | xargs rm -f <br>
+</font>
 <p><b>ErrorMsg<a name="ErrorMsg"></a>()</b></p>
 <p>Returns the last status or error message. This can return a string even if 
   no error occurs. In general you do not need to call this function unless an 
@@ -1487,7 +1526,7 @@ Similar to UpdateBlob (see above), but for Character Large OBjects.
 <p>Try to update a record, and if the record is not found,
 an insert statement is generated and executed. 
 Returns 0 on failure, 1 if update statement worked, 2 if no record
-was found and the insert was executed successfully. This differs from the MySQL replace which deletes
+was found and the insert was executed successfully. This differs from MySQL's replace which deletes
 the record and inserts a new record. This also means you cannot update the primary key. The only exception
 to this is Interbase and its derivitives, which uses delete and insert because of some Interbase API
 limitations.
@@ -1804,17 +1843,17 @@ If get_magic_quotes_gpc() is set, then we do not quote the string.
 <p>row1: Apple, Fruit, Edible<br>
   row2: Cactus, Plant, Inedible<br>
   row3: Rose, Flower, Edible</p>
-<p>GetAssociation will generate the following associative array:</p>
+<p>GetAssoc will generate the following associative array:</p>
 <p>Apple =&gt; [Fruit, Edible]<br>
   Cactus =&gt; [Plant, Inedible]<br>
   Rose =&gt; [Flower,Edible]</p>
 <p>Returns:</p>
 <p>The associative array, or false if an error occurs.</p>
 <p><b>GetArray<a name="GetArray"></a>([$number_of_rows])</b></p>
-<p>Generate an array of records from the current cursor position, indexed from 
+<p>Generate a 2-dimensional array of records from the current cursor position, indexed from 
   0 to $number_of_rows - 1. If $number_of_rows is undefined, till EOF.</p>
 <p><b>GetRows<a name="GetRows"></a>([$number_of_rows])</b></p>
-Generate an array of records from the current cursor position. Synonym for GetArray() 
+Generate a 2-dimensional array of records from the current cursor position. Synonym for GetArray() 
 for compatibility with Microsoft ADO. 
 <p> <b>GetMenu<a name="GetMenu"></a>($name, [$default_str=''], [$blank1stItem=true], 
   [$multiple_select=false], [$size=0], [$moreAttr=''])</b></p>
@@ -1896,6 +1935,23 @@ $conn-&gt;Execute(&quot;UPDATE TABLE SET dodate=$fld WHERE ID=$id&quot;);</pre>
   since 2.13. It might work with other drivers<font color="#000000"> provided 
   they allow performing numeric day arithmetic on dates.</font></p>
 <font color="#000000">
+<p><font color="#000000"><b>SQLDate<a name="sqldate"></a>($dateFormat, 
+  $basedate=false)</b></font></p>
+ Use the native SQL functions to format a date or date column $basedate,
+  using a case-insensitive $dateFormat, which supports:
+ <pre>
+ Y: 4-digit Year
+ Q: Quarter (1-4)
+ M: Month (01-12)
+ D: Day (01-31)</pre>
+ <p>All other characters are treated as strings. You can also use \ to escape characters. Available
+ on selected databases, including mysql, postgresql, mssql, oci8 and DB2.
+ <p>This is useful in writing portable sql statements that GROUP BY on dates. For example to display
+ total cost of goods sold broken by quarter (dates are stored in a field called postdate):
+ <pre>
+ $sqlfn = $db->SQLDate('Y-\QQ','postdate'); # get sql that formats postdate to output 2002-Q1
+ $sql = "SELECT $sqlfn,SUM(cogs) FROM table GROUP BY $sqlfn ORDER BY 1 desc";
+ </pre>
 <p><b>MoveNext<a name="MoveNext"></a>( )</b></p>
 <p>Move the internal cursor to the next row. The <b>fields</b> array is automatically 
   updated. Return false if unable to do so, otherwise true.</p>
@@ -2155,6 +2211,46 @@ $<font color="#663300">rs</font>   = $<font color="#663300">conn</font>->Execute
   PHP</a>. </p>
 </font> 
 <h2>Change Log<a name="Changes"></a><a name=ChangeLog></a></h2>
+<p>2.42, 4 Oct 2002</p>
+<p>Fixed ibase_fetch() problem with nulls. Also interbase now does automatic blob decoding,
+and is backward compatible. Suggested by Heinz Hombergs heinz#hhombergs.de.
+<p>Fixed postgresql MoveNext() problems when called repeatedly after EOF. 
+Also suggested by Heinz Hombergs.
+<p>PageExecute() does not rewrite queries if SELECT DISTINCT is used. Requested by hans#velum.net
+<p>Added additional fixes to oci8 SelectLimit handling with aggregate functions - thx to Christian Bugge
+for reporting the problem.
+<p><b>2.41, 2 Oct 2002</b></p>
+<p>Fixed ADODB_COUNTRECS bug in odbc. Thx to Joshua Zoshi jzoshi#hotmail.com.
+<p>Increased buffers for adodb-csvlib.inc.php for extremely long sql from 8192 to 32000.
+<p>Revised pivottable.inc.php code. Added better support for aggregate fields.
+<p>Fixed mysql text/blob types problem in MetaTypes base class - thx to horacio degiorgi.
+<p>Added SQLDate($fmt,$date) function, which allows an sql date format string to be generated - 
+useful for group by's.
+<p>Fixed bug in oci8 SelectLimit when offset>100.
+<p><b>2.40 4 Sept 2002</b></p>
+<p>Added new NLS_DATE_FORMAT property to oci8. Suggested by Laurent NAVARRO ln#altidev.com
+<p>Now use bind parameters in oci8 selectlimit for better performance.
+<p>Fixed interbase replaceQuote for dialect !=  1. Thx to 
+"BEGUIN Pierre-Henri - INFOCOB" phb#infocob.com.
+<p>Added white-space check to QA.
+<p>Changed unixtimestamp to support fractional seconds (we always round down/floor the seconds).
+	Thanks to beezly#beezly.org.uk.
+<p>Now you can set the trigger_error type your own user-defined type in adodb-errorhandler.inc.php.
+Suggested by Claudio Bustos  clbustos#entelchile.net.
+<p>Added recordset filters with rsfilter.inc.php.
+<p>$conn->_rs2rs does not create a new recordset when it detects it is of type array. Some
+trickery there as there seems to be a bug in Zend Engine
+<p>Added render_pagelinks to adodb-pager.inc.php. Code by "Pablo Costa" pablo#cbsp.com.br.
+<p>MetaType() speedup in adodb.inc.php by using hashing instead of switch. Best performance
+if constant arrays are supported, as they are in PHP5.
+<p>adodb-session.php now updates only the expiry date if the crc32 check indicates that the data
+has not been modified.
+<p><b>2.31 20 Aug 2002</b></p>
+<p>Made changes to pivottable.inc.php due to daniel lucuzaeu's suggestions (we sum the pivottable column if desired).
+<p>Fixed ErrorNo() in postgres so it does not depend on _errorMsg property.
+<p>Robert Tuttle added support for oracle cursors. See ExecuteCursor().
+<p>Fixed Replace() so it works with mysql when updating record where data has not changed. Reported by
+Cal Evans (cal#calevans.com).
 <p><b>2.30 1 Aug 2002</b></p>
 <p>Added pivottable.inc.php. Thanks to daniel.lucazeau#ajornet.com for the original 
   concept.

@@ -1,6 +1,6 @@
 <?php
 /*
- V2.20 09 July 2002 (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
+ V2.42 4 Oct 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -127,6 +127,46 @@ a different OID if a database must be reloaded. */
 		return @pg_Exec($this->_connectionID, "rollback");
 	}
 	
+			// Format date column in sql string given an input format that understands Y M D
+	function SQLDate($fmt, $col=false)
+	{	
+		if (!$col) $col = $this->sysDate;
+		$s = '';
+		
+		$len = strlen($fmt);
+		for ($i=0; $i < $len; $i++) {
+			if ($s) $s .= '||';
+			$ch = $fmt[$i];
+			switch($ch) {
+			case 'Y':
+			case 'y':
+				$s .= "(date_part('year',$col)";
+				break;
+			case 'Q':
+			case 'q':
+				$s .= "lpad(date_part('quarter',$col),2,'0')";
+				break;
+				
+			case 'M':
+			case 'm':
+				$s .= "lpad(date_part('month',$col),2,'0')";
+				break;
+			case 'D':
+			case 'd':
+				$s .= "lpad(date_part('day',$col),2,'0')";
+				break;
+			default:
+				if ($ch == '\\') {
+					$i++;
+					$ch = substr($fmt,$i,1);
+				}
+				$s .= $this->qstr($ch);
+				break;
+			}
+		}
+		return $s;
+	}
+	
 	/* 
 	* Load a Large Object from a file 
 	* - the procedure stores the object id in the table and imports the object using 
@@ -171,7 +211,7 @@ a different OID if a database must be reloaded. */
 	{
 	global $ADODB_FETCH_MODE;
 	
-		if (!empty($this->metaColumnsSQL)) {
+		if (!empty($this->metaColumnsSQL)) { 
 			// the following is the only difference -- we lowercase it
 			$save = $ADODB_FETCH_MODE;
 			$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
@@ -221,9 +261,9 @@ a different OID if a database must be reloaded. */
 				}
 				unset($rsdef);
 			}
-
+		
 			$retarr = array();
-			while (!$rs->EOF) { //print_r($rs->fields);
+			while (!$rs->EOF) { 	
 				$fld = new ADOFieldObject();
 				$fld->name = $rs->fields[0];
 				$fld->type = $rs->fields[1];
@@ -271,7 +311,7 @@ a different OID if a database must be reloaded. */
 		$rs = $this->Execute($sql);
 		if (!$rs) return false;
 		while (!$rs->EOF) {
-			$arr[] = $rs->fields[0];
+			$arr[] = reset($rs->fields);
 			$rs->MoveNext();
 		}
 		
@@ -343,6 +383,11 @@ a different OID if a database must be reloaded. */
 		if (empty($this->_connectionID)) $this->_errorMsg = @pg_errormessage();
 		else $this->_errorMsg = @pg_errormessage($this->_connectionID);
 		return $this->_errorMsg;
+	}
+	
+	function ErrorNo()
+	{
+		return (strlen($this->ErrorMsg())) ? -1 : 0;
 	}
 
 	// returns true or false
@@ -472,12 +517,18 @@ class ADORecordSet_postgres64 extends ADORecordSet{
 	{
 		if (!$this->EOF) {		
 			$this->_currentRow++;
-			$this->fields = @pg_fetch_array($this->_queryID,$this->_currentRow,$this->fetchMode);
-			if (is_array($this->fields)) return true;
+			
+			$f = @pg_fetch_array($this->_queryID,$this->_currentRow,$this->fetchMode);
+			
+			if (is_array($f)) {
+				$this->fields = $f;
+				return true;
+			}
 		}
 		$this->EOF = true;
 		return false;
-	}	
+	}		
+	
 	function _fetch()
 	{
 		$this->fields = @pg_fetch_array($this->_queryID,$this->_currentRow,$this->fetchMode);
