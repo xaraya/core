@@ -45,7 +45,7 @@ document.forms['privilegeform'].submit();}
 						<input type="radio" name="ptype" id="ptype_empty" value="empty" checked="checked" onClick="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
 						<label for="ptype_empty"><xar:mlstring>empty</xar:mlstring></label><br />
 						<input type="radio" name="ptype" id="ptype_full" value="full" onClick="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
-						<label for="ptype_full"><xar:mlstring>with child Privileges</xar:mlstring></label>
+						<label for="ptype_full"><xar:mlstring>with rights</xar:mlstring></label>
 					</td>
 				</tr>
 			<xar:else />
