@@ -195,7 +195,7 @@ function dynamicdata_admin_updateconfig()
         }
     }
 
-    xarRedirect(xarModURL('dynamicdata', 'admin', 'modifyconfig',
+    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyconfig',
                         array('modid' => $modid,
                               'itemtype' => $itemtype)));
 
@@ -707,7 +707,7 @@ function dynamicdata_admin_create($args)
 
     // This function generated no output, and so now it is complete we redirect
     // the user to an appropriate page for them to carry on their work
-    xarRedirect(xarModURL('dynamicdata', 'admin', 'view'));
+    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view'));
 
     // Return
     return true;
@@ -887,7 +887,7 @@ function dynamicdata_admin_update($args)
 
     // This function generated no output, and so now it is complete we redirect
     // the user to an appropriate page for them to carry on their work
-    xarRedirect(xarModURL('dynamicdata', 'admin', 'view'));
+    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view'));
 
     // Return
     return true;
@@ -1036,7 +1036,7 @@ function dynamicdata_admin_delete($args)
 
     // This function generated no output, and so now it is complete we redirect
     // the user to an appropriate page for them to carry on their work
-    xarRedirect(xarModURL('dynamicdata', 'admin', 'view'));
+    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view'));
 
     // Return
     return true;
