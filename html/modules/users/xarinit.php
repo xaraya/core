@@ -144,11 +144,11 @@ function users_init()
                                                              'null'        => false,
                                                              'default'     => ''),
                                    'xar_date_reg'    => array('type'        => 'varchar',
-                                                             'size'        => 60,
+                                                             'size'        => 25,
                                                              'null'        => false,
                                                              'default'     => ''),
                                    'xar_valcode'     => array('type'        => 'varchar',
-                                                             'size'        => 25,
+                                                             'size'        => 35,
                                                              'null'        => false,
                                                              'default'     => ''),
                                    'xar_state'       => array('type'        => 'integer',
@@ -175,6 +175,7 @@ function users_init()
 function users_activate()
 {
     // Set up an initial value for module variables.
+    xarModSetVar('users', 'welcomeemail', 'Your account is now active.  Thank you, and welcome to our community.');
     xarModSetVar('users', 'usersperpage', 20);
     xarModSetVar('users', 'showtacs', 0);
     xarModSetVar('users', 'defaultgroup', 'Users');

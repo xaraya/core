@@ -1,0 +1,9 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <xar:mlstring>Start Validation of Your Account</xar:mlstring>            
+        </th>
+    </tr>
+</table>
+<br /><br />
+<xar:mlstring>Your account has not yet been activated.  You need to finish these final steps in order to complete your registration.  To continue, please follow</xar:mlstring> <a href="#xarModURL('users', 'user', 'getvalidation', array('phase' => 'getvalidate', 'uname' => $uname, 'valcode' => $valcode))#"> &nbsp; <xar:mlstring>this link</xar:mlstring></a>
