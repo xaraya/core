@@ -19,7 +19,7 @@
 			</td>
 		</tr>
 		</table>
-		<textarea name="welcomeemail" id="welcomeemail" wrap="soft" rows="20" cols="80" tabindex="1">#$welcomeemail#</textarea>
+		<textarea name="welcomeemail" id="welcomeemail" rows="20" cols="80" tabindex="1">#$welcomeemail#</textarea>
 		<br /><br />
 		<input type="submit" value="#$submitlabel#" align="middle" tabindex="2" />
             </div>

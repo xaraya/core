@@ -22,7 +22,7 @@
 					<label for="message"><xar:mlstring>Message</xar:mlstring></label>:
 				</td>
 				<td>
-					<textarea name="message" id="message" wrap="soft" rows="20" cols="60"></textarea>
+					<textarea name="message" id="message" rows="20" cols="60"></textarea>
 				</td>
 			</tr>
             <tr>
