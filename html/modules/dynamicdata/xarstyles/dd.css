@@ -1,0 +1,72 @@
+form.dd-modifyprop-form {
+    margin: 0;
+    padding: 0;
+}
+
+form.dd-modifyprop-form  legend {
+    padding: .5em;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+}
+
+form.dd-modifyprop-form fieldset { border: 1px solid #cccccc; }
+
+form.dd-modifyprop-form fieldset.item {
+    background-color: #ffffff;
+    margin: .5em 0 0 0;
+    float: left;
+    width: 100%;
+    padding: 0;
+    text-align: center;
+    border: 0 none;
+}
+
+form.dd-modifyprop-form fieldset.item legend {
+    background-color: #f0f0f0;
+    border: 0 none;
+    padding: 0;
+    margin: 0;
+    float: left;
+    height: 1.8em;
+    line-height: 1.7em;
+    width: 100%;
+    text-align: left;
+}
+
+form.dd-modifyprop-form fieldset.item legend strong { margin-left: 1em; }
+
+form.dd-modifyprop-form label {
+    float: left;
+    display: inline;
+    padding: 1px 0;
+    width: 20%;
+}
+
+form.dd-modifyprop-form select,
+form.dd-modifyprop-form input { width: 95%; }
+form.dd-modifyprop-form label strong { display: block; }
+form.dd-modifyprop-form .dd-norm { width: auto; }
+
+div.dd-singlecolumn, div.dd-singlecolumn p {
+    padding: 1px;
+    margin: 1px 0;
+}
+
+div.dd-singlecolumn { border: 1px solid #cccccc; }
+
+div.dd-singlecolumn label {
+    display: block;
+    background-color: #ffffff;
+    margin: 2px .5em;
+    padding-left: 1em;
+}
+
+div.dd-singlecolumn label strong {
+    float: left;
+    width: 40%;
+    border-right: 1px solid #f0f0f0;
+    margin-right: 1em;
+}
+
+div.dd-singlecolumn label, div.dd-singlecolumn label strong { height: 1.4em; }
+.dd-clear { clear: both; }
