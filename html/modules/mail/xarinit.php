@@ -23,6 +23,7 @@
  */
 function mail_init()
 {
+// TODO: create separate xar_mail_queue table here someday
     xarModSetVar('mail', 'server', 'mail');
     xarModSetVar('mail', 'replyto', '0');
     xarModSetVar('mail', 'wordwrap', '78');
@@ -68,6 +69,7 @@ function mail_activate()
  */
 function mail_upgrade($oldversion)
 {
+// TODO: create separate xar_mail_queue table here someday
     return false;
 } 
 
@@ -82,6 +84,7 @@ function mail_upgrade($oldversion)
  */
 function mail_delete()
 {
+// TODO: delete separate xar_mail_queue table here someday
     xarModDelVar('mail', 'server');
     xarModDelVar('mail', 'adminname');
     xarModDelVar('mail', 'adminmail');

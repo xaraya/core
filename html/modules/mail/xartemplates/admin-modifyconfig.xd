@@ -222,6 +222,33 @@
 		</span>
 		</div>
 	</xar:if>
+
+		<div style="clear: both; padding-top: 10px;">
+		<span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#xarML('Specify the interval to check for mails to send.')#"><label for="interval"><xar:mlstring>Support scheduled mail</xar:mlstring></label>:</span>
+		</span>
+		<span style="float: right; width: 78%; text-align: left;">
+		<xar:if condition="xarModIsAvailable('scheduler')">
+			<select name="interval" id="interval">
+				<option value=""><xar:mlstring>not supported</xar:mlstring></option>
+			<xar:foreach in="$intervals" key="$id" value="$name">
+				<xar:if condition="!empty($interval) and $interval eq $id">
+					<option value="#$id#" selected="selected">#$name#</option>
+				<xar:else/>
+					<option value="#$id#">#$name#</option>
+				</xar:if>
+			</xar:foreach>
+			</select>
+		<xar:else/>
+			<input type="hidden" name="interval" value="" />
+			<xar:mlstring>You need to install the 'scheduler' module for this</xar:mlstring>
+		</xar:if>
+		<xar:if condition="!empty($unsent)">
+			(<xar:ml><xar:mlstring>mails scheduled : #(1)</xar:mlstring><xar:mlvar>#$unsent#</xar:mlvar></xar:ml>)
+			<br/><xar:mlstring>Please note that if you stop the scheduler or if it isn't triggered, previously scheduled mails will not be sent.</xar:mlstring>
+		</xar:if>
+		</span>
+		</div>
 </xar:if>
 <div style="clear: both; padding-top: 10px;"><h4><xar:mlstring>Filtering Options</xar:mlstring></h4></div>
 

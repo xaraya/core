@@ -28,6 +28,20 @@
         </div>
         <br />
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
+            <xar:mlstring>Scheduling mail</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <xar:mlstring>Other modules can request that a certain mail be sent no earlier than a specific time.</xar:mlstring>
+            <xar:if condition="!xarModIsAvailable('scheduler')">
+                 <xar:mlstring>This will have no effect unless you install the 'scheduler' module first.</xar:mlstring>
+            <xar:else/>
+                 <xar:mlstring>In order to support that, you can configure the mail module to use the 'scheduler' and check if any mails need to be sent e.g. every x hours. Otherwise, those mails will be sent immediately.
+                 <br/><br/>Please note that if you stop the scheduler or if it isn't triggered, previously scheduled mails will not be sent.</xar:mlstring>
+            </xar:if>
+        </div>
+        <br />
+        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
             <xar:mlstring>Included Blocks</xar:mlstring>
         </div>
         <br />

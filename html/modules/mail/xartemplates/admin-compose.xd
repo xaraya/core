@@ -30,6 +30,17 @@
 		</span>
 		</div>
 
+		<xar:if condition="xarModIsAvailable('scheduler')">
+		<div style="clear: both; padding-top: 10px;">
+		<span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#xarML('Test scheduled mails.')#"><label for="when"><xar:mlstring>No earlier than</xar:mlstring></label>:</span>
+		</span>
+		<span style="float: right; width: 78%; text-align: left;">
+			<xar:data-input name="when" type="calendar" value="" />
+		</span>
+		</div>
+		</xar:if>
+
 		<div style="float: left; width: 30%; text-align: right; margin-top: 5px;"><input type="submit" value="#$createlabel#" /></div>
 	</form>
 </div>
