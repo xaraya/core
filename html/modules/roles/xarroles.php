@@ -984,8 +984,8 @@ class xarRole
                         FROM $this->rolestable AS r, $this->rolememberstable AS rm
                         WHERE r.xar_uid = rm.xar_uid
                         AND r.xar_type = 0
-                        AND r.xar_state != ROLES_STATE_CURRENT
-                        AND rm.xar_parentid = $this->uid";
+                        AND r.xar_state != " . ROLES_STATE_DELETED .
+                        " AND rm.xar_parentid = $this->uid";
         } else {
             $query = "SELECT COUNT(r.xar_uid)
                         FROM $this->rolestable AS r, $this->rolememberstable AS rm
