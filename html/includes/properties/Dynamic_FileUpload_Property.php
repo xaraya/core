@@ -59,8 +59,23 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         if (!empty($_FILES) && !empty($_FILES[$upname]) && !empty($_FILES[$upname]['tmp_name'])
             // is_uploaded_file() : PHP 4 >= 4.0.3
             && is_uploaded_file($_FILES[$upname]['tmp_name']) && $_FILES[$upname]['size'] > 0 && $_FILES[$upname]['size'] < 1000000) {
-        //    $this->value = join('', @file($_FILES[$upname]['tmp_name']));
-            if (!empty($_FILES[$upname]['name'])) {
+
+            // if the uploads module is hooked (to be verified and set by the calling module)
+            if (xarVarGetCached('Hooks.uploads','ishooked')) {
+                $magicLink = xarModAPIFunc('uploads',
+                                           'user',
+                                           'uploadmagic',
+                                           array('uploadfile'=>$upname,
+                                                 'mod'=>'dynamicdata',
+                                                 'modid'=>0,
+                                                 'utype'=>'file'));
+                if (!empty($value)) {
+                    $value .= ' ' . $magicLink;
+                } else {
+                    $value = $magicLink;
+                }
+                $this->value = $value;
+            } elseif (!empty($_FILES[$upname]['name'])) {
                 $file = xarVarPrepForOS(basename($_FILES[$upname]['name']));
                 if (!empty($filetype) && !preg_match("/\.$filetype$/",$file)) {
                     $this->invalid = xarML('file type');
@@ -79,7 +94,10 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 return false;
             }
         } elseif (!empty($value)) {
-            if (!empty($filetype) && !preg_match("/\.$filetype$/",$value)) {
+            // if the uploads module is hooked (to be verified and set by the calling module)
+            if (xarVarGetCached('Hooks.uploads','ishooked') && preg_match("/#ulid\:\d+#/",$value)) {
+                // nothing wrong here...
+            } elseif (!empty($filetype) && !preg_match("/\.$filetype$/",$value)) {
                 $this->invalid = xarML('file type');
                 $this->value = null;
                 return false;
@@ -130,10 +148,17 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $value = $this->value;
         }
         // Note: you can't access files directly in the document root here
-        if (!empty($value) && !empty($this->basedir)) {
-            $value = xarVarPrepForDisplay($value);
-        // TODO: convert basedir to base URL when necessary ?
-            return '<a href="'.$this->basedir.'/'.$value.'" title="'.xarML('Download').'">'.$value.'</a>';
+        if (!empty($value)) {
+            // if the uploads module is hooked (to be verified and set by the calling module)
+            if (xarVarGetCached('Hooks.uploads','ishooked') && preg_match("/#ulid\:\d+#/",$value)) {
+                return xarVarPrepForDisplay($value); // we'll let the transform hook handle the conversion
+            } elseif (!empty($this->basedir) && file_exists($this->basedir . '/'. $value) && is_file($this->basedir . '/'. $value)) {
+                $value = xarVarPrepForDisplay($value);
+            // TODO: convert basedir to base URL when necessary ?
+                return '<a href="'.$this->basedir.'/'.$value.'" title="'.xarML('Download').'">'.$value.'</a>';
+            } else {
+                return xarVarPrepForDisplay($value); // something went wrong here
+            }
         } else {
             return '';
         }
