@@ -75,7 +75,7 @@ function modules_adminapi_GetList($args)
     $tables =& xarDBGetTables();
     $modulestable = $tables['modules'];
     $module_statesTables = array($tables['system/module_states'], $tables['site/module_states']);
-    
+
     // Construct the order by clause and join it up into one string
     $orderFields = explode('/', $orderBy);
     $orderByClauses = array(); $extraSelectClause = '';
@@ -120,8 +120,10 @@ function modules_adminapi_GetList($args)
                 $whereClauses[] = 'states.xar_state = ?';
                 $bindvars[] = $filter['State'];
             } else {
-                $whereClauses[] = 'states.xar_state != ?';
+                $whereClauses[] = 'states.xar_state != ? AND states.xar_state < ? AND states.xar_state != ?';
                 $bindvars[] = XARMOD_STATE_UNINITIALISED;
+                $bindvars[] = XARMOD_STATE_MISSING_FROM_INACTIVE;
+                $bindvars[] = XARMOD_STATE_MISSING_FROM_UNINITIALISED;
             }
         }
     } else {
@@ -140,13 +142,13 @@ function modules_adminapi_GetList($args)
                          mods.xar_version, mods.xar_id, states.xar_state
                   FROM $modulestable AS mods
                   LEFT JOIN $module_statesTable AS states ON mods.xar_regid = states.xar_regid";
-        
+
         // Add the first mode to the where clauses and join it into one string
         array_unshift($whereClauses, 'mods.xar_mode = ?');
         array_unshift($bindvars,$mode);
         $whereClause = join(' AND ', $whereClauses);
         $query .= " WHERE $whereClause ORDER BY $orderByClause";
-        
+
         $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1,$bindvars);
         if (!$result) return;
 
