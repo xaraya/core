@@ -1,19 +1,26 @@
 <?php 
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Patrick Kellum
-// Purpose of file: Include a file
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Includes a file into a block
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ * 
+ * @subpackage Base Module
+ * @author Patrick Kellum
+*/
 
+/**
+ * Block init - holds security.
+ */
 function base_fincludeblock_init()
 {
     xarSecAddSchema('base:Includeblock', 'Block title::');
 
 }
+
 /**
  * Block info array
  */
@@ -22,13 +29,16 @@ function base_fincludeblock_info()
     return array('text_type' => 'finclude',
 		 'text_type_long' => 'Simple File Include',
 		 'module' => 'base',
+         'func_update' => 'base_fincludeblock_update',
 		 'allow_multiple' => true,
 		 'form_content' => false,
 		 'form_refresh' => false,
 		 'show_preview' => true);
 }
+
 /**
  * Display func.
+ * @param $blockinfo array containing title,content
  */
 function base_fincludeblock_display($blockinfo)
 {
@@ -38,8 +48,10 @@ function base_fincludeblock_display($blockinfo)
     $blockinfo['content'] = implode(file($blockinfo['url']), '');
     return $blockinfo;
 }
+
 /**
- * Edit func
+ * Modify Function to the Blocks Admin
+ * @param $blockinfo array containing title,content
  */
 function base_fincludeblock_modify($blockinfo)
 {
@@ -52,5 +64,23 @@ function base_fincludeblock_modify($blockinfo)
     $content = xarTplBlock('base','fincludeAdmin', array('url' => $url));
 
     return $content;
+}
+
+/**
+ * Updates the Block config from the Blocks Admin
+ * @param $blockinfo array containing title,content
+ */
+function base_htmlblock_update($blockinfo)
+{
+    $vars['url'] = xarVarCleanFromInput('url');
+
+    // Defaults
+    if (empty($vars['url'])) {
+        $vars['url'] = 'Error - No Url Specified';
+    }
+    
+    $blockinfo['content'] = serialize($vars);
+
+    return $blockinfo;
 }
 ?>

@@ -1,13 +1,17 @@
 <?php 
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Patrick Kellum
-// Purpose of file: Display the text content of the block
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Displays a Text editible Block
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ * 
+ * @subpackage Base Module
+ * @author Patrick Kellum
+*/
+
 /**
  * init func
  */
@@ -16,6 +20,7 @@ function base_textblock_init()
     // Security
     xarSecAddSchema('base:Textblock', 'Block title::');
 }
+
 /**
  * Block info array
  */
@@ -30,8 +35,10 @@ function base_textblock_info()
 		 'form_refresh' => false,
 		 'show_preview' => true);
 }
+
 /**
  * Display func.
+ * @param $blockinfo array containing title,content
  */
 function base_textblock_display($blockinfo)
 {
@@ -58,6 +65,10 @@ function base_textblock_display($blockinfo)
 
 }
 
+/**
+ * Modify Function to the Blocks Admin
+ * @param $blockinfo array containing title,content
+ */
 function base_textblock_modify($blockinfo)
 {
     // Get current content
@@ -86,6 +97,10 @@ function base_textblock_modify($blockinfo)
     return $content;
 }
 
+/**
+ * Updates the Block config from the Blocks Admin
+ * @param $blockinfo array containing title,content
+ */
 function base_textblock_update($blockinfo)
 {
     list($vars['expire'],

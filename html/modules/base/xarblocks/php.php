@@ -1,13 +1,17 @@
 <?php 
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Patrick Kellum
-// Purpose of file: Execute very simple PHP code
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Displays a PHP Block
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ * 
+ * @subpackage Base Module
+ * @author Patrick Kellum
+*/
+
 /**
  * init func
  */
@@ -16,6 +20,7 @@ function base_phpblock_init()
     // Security
     xarSecAddSchema('base:PHPblock', 'Block title::');
 }
+
 /**
  * Block info array
  */
@@ -29,8 +34,10 @@ function base_phpblock_info()
 		 'form_refresh' => false,
 		 'show_preview' => true);
 }
+
 /**
- * display func
+ * Display func.
+ * @param $blockinfo array containing title,content
  */
 function base_phpblock_display($blockinfo)
 {
