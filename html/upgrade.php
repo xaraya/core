@@ -1239,7 +1239,7 @@ Password : %%password%%
                                    array('module'  => 'base',
                                          'type'    => 'html'));
 
-    if (empty($htmlBlockType) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (empty($htmlBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return;
     }
 

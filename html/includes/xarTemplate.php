@@ -1533,7 +1533,7 @@ function xarTplGetTagObjectFromName($tag_name)
 
     $systemPrefix = xarDBGetSystemTablePrefix();
     $tag_table = $systemPrefix . '_template_tags';
-    $query = "SELECT xar_data FROM $tag_table WHERE xar_name='$tag_name'";
+    $query = "SELECT xar_data, xar_module FROM $tag_table WHERE xar_name='$tag_name'";
 
     $result =& $dbconn->SelectLimit($query, 1);
     if (!$result) return;
@@ -1543,9 +1543,12 @@ function xarTplGetTagObjectFromName($tag_name)
         return NULL; // tag does not exist
     }
 
-    list($obj) = $result->fields;
+    list($obj,$module) = $result->fields;
     $result->Close();
 
+    // Module must be active for the tag to be active
+    if(!xarModIsAvailable($module)) return; //throw back
+    
     $obj = unserialize($obj);
 
     $tag_objects[$tag_name] = $obj;

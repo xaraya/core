@@ -78,7 +78,7 @@ function xarBlock_render($blockInfo)
         $blockInfo = $displayFuncName($blockInfo);
 
         if (!isset($blockInfo)) {
-            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {return;} // throw back
+            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {return;} // throw back
             return '';
         }
 
@@ -220,8 +220,8 @@ function xarBlock_renderGroup($groupName)
             $output .= $blockoutput;
 
             // don't throw back exception for broken blocks
-            //if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
-            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            //if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back
+            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
                 $output .= xarExceptionRender('template');
                 // We handled the exception(s) so we can clear it
                 xarExceptionFree();

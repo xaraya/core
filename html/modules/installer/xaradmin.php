@@ -442,7 +442,7 @@ function installer_admin_create_administrator()
                                     array('module'  => 'adminpanels',
                                           'type'    => 'adminmenu'));
 
-    if (empty($adminBlockType) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (empty($adminBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return;
     }
 
@@ -469,7 +469,7 @@ function installer_admin_create_administrator()
                                  array('module'  => 'base',
                                        'type'    => 'html'));
 
-    if (empty($htmlBlockType) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (empty($htmlBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return;
     }
 
@@ -760,7 +760,7 @@ function installer_admin_confirm_configuration()
                                      array('module'  => 'base',
                                            'type'=> 'menu'));
 
-        if (empty($menuBlockType) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        if (empty($menuBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
             return;
         }
 
@@ -839,7 +839,7 @@ function installer_admin_cleanup()
                                     array('module' => 'roles',
                                           'type'   => 'login'));
 
-    if (empty($loginBlockType) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (empty($loginBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return;
     }
 
@@ -878,7 +878,7 @@ function installer_admin_cleanup()
                                    array('module' => 'themes',
                                          'type'   => 'meta'));
 
-    if (empty($metaBlockType) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (empty($metaBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return;
     }
 
@@ -917,7 +917,7 @@ function installer_admin_cleanup()
                                         array('module' => 'themes',
                                               'type'   => 'syndicate'));
 
-    if (empty($syndicateBlockType) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (empty($syndicateBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return;
     }
 
