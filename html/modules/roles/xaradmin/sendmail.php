@@ -65,8 +65,7 @@ function roles_admin_sendmail()
         }
     }
 
-
-// Get the template that defines the substitution vars
+    // Get the template that defines the substitution vars
     $messaginghome = "var/messaging/roles";
     if (!file_exists($messaginghome . "/includes/message-vars.xd")) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The variables template was not found.'));
@@ -77,6 +76,7 @@ function roles_admin_sendmail()
         $line = fgets($fd, 1024);
         $string .= $line;
     }
+    
     $subject  = xarTplCompileString($string . $subject);
     $message  = xarTplCompileString($string . $message);
 
@@ -89,6 +89,7 @@ function roles_admin_sendmail()
         $data['recipientemail'] = $user['email'];
         $subject = xarTplString($subject, $data);
         $message = xarTplString($message, $data);
+
         if (!xarModAPIFunc('mail',
             'admin',
             'sendmail',

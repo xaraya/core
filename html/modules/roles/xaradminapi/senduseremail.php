@@ -56,13 +56,22 @@ function roles_adminapi_senduseremail($args)
 
             //user specific data
             $data = array('myname' => $user['name'],
+                          'name' => $user['name'],
                           'myusername' => $user['uname'],
+                          'username' => $user['uname'],
                           'myemail' => $user['email'],
+                          'email' => $user['email'],
                           'mystate' => $user['state'],
+                          'state' => $user['state'],
                           'mypassword' => $pass,
+                          'password' => $pass,
                           'myipaddress' => $ip,
+                          'ipaddress' => $ip,
                           'myvalcode' => $user['valcode'],
-                          'myvalidationlink' => $validationlink);
+                          'valcode' => $user['valcode'],
+                          'myvalidationlink' => $validationlink,
+                          'validationlink' => $validationlink,
+                          'recipientname' => $user['name']);
 
             // retrieve the dynamic properties (if any) for use in the e-mail too
             if (xarModIsAvailable('dynamicdata')) {
