@@ -9,8 +9,8 @@ echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
 <link><?php echo pnVarPrepForDisplay(pnGetBaseURL()) ?></link>
 <description>&pnt-config-backend_title;</description>
 <language>&pnt-config-locale;</language>
-<copyright>&pnt-config-foot;</copyright>
-<managingEditor>&pnt-config-sitemanagingeditor;</managingEditor>
+<copyright>&pnt-config-copyright;</copyright>
+<managingEditor>&pnt-config-manemail;</managingEditor>
 <webMaster>&pnt-config-adminmail;</webMaster>
 <generator>Xaraya 1.0</generator>
 <docs>http://backend.userland.com/rss</docs>
