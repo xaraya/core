@@ -441,27 +441,52 @@ class Dynamic_Property
     function showOutput($args = array())
     {
         extract($args);
+
+        $data = array();
+        $data['id']   = $this->id;
+        $data['name'] = $this->name;
         if (isset($value)) {
-            return xarVarPrepForDisplay($value);
+            $data['value'] = xarVarPrepForDisplay($value);
         } else {
-            return xarVarPrepForDisplay($this->value);
+            $data['value'] = xarVarPrepForDisplay($this->value);
         }
+
+        if (!isset($template)) {
+            $template = null;
+        }
+        return xarTplModule('dynamicdata', 'user', 'showoutput', $data , $template);
     }
 
     /**
      * Show the label for this property
      *
-     * @param $label label of the property (default is the current label)
+     * @param $args['label'] label of the property (default is the current label)
+     * @param $args['for'] label id to use for this property (id, name or nothing)
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showLabel($label = null)
+    function showLabel($args = array())
     {
-        if (isset($label)) {
-            return xarVarPrepForDisplay($label);
-        } else {
-            return xarVarPrepForDisplay($this->label);
+        if (empty($args)) {
+
+        // old syntax was showLabel($label = null)
+        } elseif (is_string($args)) {
+            $label = $args;
+
+        } elseif (is_array($args)) {
+            extract($args);
         }
+
+        $data = array();
+        $data['id']    = $this->id;
+        $data['name']  = $this->name;
+        $data['label'] = isset($label) ? xarVarPrepForDisplay($label) : xarVarPrepForDisplay($this->label);
+        $data['for']   = isset($for) ? $for : null;
+
+        if (!isset($template)) {
+            $template = null;
+        }
+        return xarTplModule('dynamicdata', 'user', 'label', $data , $template);
     }
 
     /**
