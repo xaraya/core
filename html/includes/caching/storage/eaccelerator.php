@@ -1,43 +1,20 @@
 <?php
 
 /**
- * Cache data using the PHP Memcache extension [http://www.php.net/memcache]
- * and a memcached server [http://www.danga.com/memcached/]
+ * Cache data using eAccelerator [http://eaccelerator.net/]
  */
 
-class xarCache_MemCached_Storage extends xarCache_Storage
+class xarCache_eAccelerator_Storage extends xarCache_Storage
 {
-    var $host = 'localhost';
-    var $port = 11211;
-    var $memcache = null;
-    var $persistent = false;
-
-    function xarCache_MemCached_Storage($args = array())
+    function xarCache_eAccelerator_Storage($args = array())
     {
         $this->xarCache_Storage($args);
 
-        if (!empty($args['host'])) {
-            $this->host = $args['host'];
-        }
-        if (!empty($args['port'])) {
-            $this->port = $args['port'];
-        }
-        // true or false
-        if (isset($args['persistent'])) {
-            $this->persistent = $args['persistent'];
-        }
-        if ($this->persistent) {
-            $this->memcache = @memcache_pconnect($this->host, $this->port);
-        } else {
-            $this->memcache = @memcache_connect($this->host, $this->port);
-        }
-        $this->storage = 'memcached';
+        $this->storage = 'eaccelerator';
     }
 
     function isCached($key = '', $expire = 0, $log = 1)
     {
-        if (empty($this->memcache)) return false;
-
         if (empty($expire)) {
             $expire = $this->expire;
         }
@@ -46,9 +23,9 @@ class xarCache_MemCached_Storage extends xarCache_Storage
             $key .= '-' . $this->code;
         }
         // we actually retrieve the value here too
-        $value = $this->memcache->get($key);
+        $value = eaccelerator_get($key);
         if ($value) {
-// FIXME: memcached doesn't keep track of modification times !
+// FIXME: eaccelerator doesn't keep track of modification times !
             //$this->modtime = 0;
             if ($log) $this->logStatus('HIT', $oldkey);
             return true;
@@ -60,15 +37,13 @@ class xarCache_MemCached_Storage extends xarCache_Storage
 
     function getCached($key = '', $output = 0, $expire = 0)
     {
-        if (empty($this->memcache)) return;
-
         if (empty($expire)) {
             $expire = $this->expire;
         }
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
         }
-        $value = $this->memcache->get($key);
+        $value = eaccelerator_get($key);
         if ($output) {
             // output the value directly to the browser
             echo $value;
@@ -80,34 +55,25 @@ class xarCache_MemCached_Storage extends xarCache_Storage
 
     function setCached($key = '', $value = '', $expire = 0)
     {
-        if (empty($this->memcache)) return;
-
         if (empty($expire)) {
             $expire = $this->expire;
         }
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
         }
-        if ($this->compressed) {
-            $flag = MEMCACHE_COMPRESSED;
-        } else {
-            $flag = false;
-        }
         if (!empty($expire)) {
-            $this->memcache->set($key, $value, $flag, $expire);
+            eaccelerator_put($key, $value, $expire);
         } else {
-            $this->memcache->set($key, $value, $flag);
+            eaccelerator_put($key, $value);
         }
     }
 
     function delCached($key = '')
     {
-        if (empty($this->memcache)) return;
-
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
         }
-        $this->memcache->delete($key);
+        eaccelerator_rm($key);
     }
 
     function flushCached($key = '')
@@ -124,7 +90,30 @@ class xarCache_MemCached_Storage extends xarCache_Storage
 
     function cleanCached($expire = 0)
     {
+        if (empty($expire)) {
+            $expire = $this->expire;
+        }
+        if (empty($expire)) {
+            // TODO: delete oldest entries if we're at the size limit ?
+            return;
+        }
+
+        $touch_file = $this->cachedir . '/cache.' . $this->type . 'level';
+
+        // If the cache type has already been cleaned within the expiration time,
+        // don't bother checking again
+        if (file_exists($touch_file) && filemtime($touch_file) > time() - $expire) {
+            return;
+        }
+        if (!@touch($touch_file)) {
+            // hmm, somthings amiss... better let the administrator know,
+            // without disrupting the site
+            error_log('Error from Xaraya::xarCache::storage::eaccelerator
+                      - web process can not touch ' . $touch_file);
+        }
+
         // we rely on the expire value here
+        eaccelerator_gc();
 
         // check the cache size and clear the lockfile set by sizeLimitReached()
         $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
@@ -135,29 +124,29 @@ class xarCache_MemCached_Storage extends xarCache_Storage
 
     function getCacheSize($countitems = false)
     {
-        if (empty($this->memcache)) return;
-
         // this is the size of the whole cache
-        $stats = $this->memcache->getstats();
-
-        $this->size = $stats['bytes'];
-        if ($countitems) {
-            $this->numitems = $stats['curr_items'];
+        ob_start();
+        eaccelerator();
+        $output = ob_get_contents();
+        ob_end_clean();
+        if (preg_match('/Memory Allocated<.+?>([0-9,]+) Bytes/',$output,$matches)) {
+            $this->size = strtr($matches[1],array(',' => ''));
         }
-        return $stats['bytes'];
+        if ($countitems && preg_match('/Cached Keys<.+?>(\d+)/',$output,$matches)) {
+            $this->numitems = $matches[1];
+        }
+        return $this->size;
     }
 
     function saveFile($key = '', $filename = '')
     {
-        if (empty($this->memcache)) return;
-
         if (empty($filename)) return;
 
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
         }
     // FIXME: avoid getting the value for the 2nd/3rd time here
-        $value = $this->memcache->get($key);
+        $value = eaccelerator_get($key);
         if (empty($value)) return;
 
         $tmp_file = $filename . '.tmp';

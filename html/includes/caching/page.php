@@ -474,6 +474,10 @@ function xarPageCache_sendHeaders($modtime = 0)
     // CHECKME: this means 304 will never apply then - is that what we want here ?
         // default to current time
         $modtime = time();
+        if (!empty($xarPage_cacheTime)) {
+            // rounded down to the nearest multiple of $xarPage_cacheTime
+            $modtime -= ($modtime % $xarPage_cacheTime);
+        }
     }
     // doesn't seem to be taken into account ?
     $etag = $xarPage_cacheCode.$modtime;

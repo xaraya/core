@@ -308,8 +308,33 @@ function xarCache_getStorage($args)
             break;
 
         case 'memcached':
-            include_once 'includes/caching/storage/memcached.php';
-            $classname = 'xarCache_MemCached_Storage';
+            if (extension_loaded('memcache')) {
+                include_once 'includes/caching/storage/memcached.php';
+                $classname = 'xarCache_MemCached_Storage';
+            } else {
+                include_once 'includes/caching/storage/filesystem.php';
+                $classname = 'xarCache_FileSystem_Storage';
+            }
+            break;
+
+        case 'mmcache':
+            if (function_exists('mmcache')) {
+                include_once 'includes/caching/storage/mmcache.php';
+                $classname = 'xarCache_MMCache_Storage';
+            } else {
+                include_once 'includes/caching/storage/filesystem.php';
+                $classname = 'xarCache_FileSystem_Storage';
+            }
+            break;
+
+        case 'eaccelerator':
+            if (function_exists('eaccelerator')) {
+                include_once 'includes/caching/storage/eaccelerator.php';
+                $classname = 'xarCache_eAccelerator_Storage';
+            } else {
+                include_once 'includes/caching/storage/filesystem.php';
+                $classname = 'xarCache_FileSystem_Storage';
+            }
             break;
 
         case 'filesystem':

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Cache data in the database using the xar_cache_data table
+ */
+
 class xarCache_Database_Storage extends xarCache_Storage
 {
     var $table = '';

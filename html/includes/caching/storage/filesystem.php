@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Cache data on the filesystem (can also be a ramdisk/tmpfs/shmfs/...)
+ */
+
 class xarCache_FileSystem_Storage extends xarCache_Storage
 {
     var $dir = '';
