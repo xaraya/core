@@ -4,12 +4,7 @@
  *
  * Run the QA checks on input files.
  *
- * Usage: php qachecks.php [options] filename1 [filename2] [filename3]...
- *
- * Options:
- *   --checks=x,y,z   comma separated list of checker ids to run
- *   --working=path   path to where the script is being run from
- *
+*
  * @package qachecks
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -19,6 +14,8 @@
  */
 
 /* local variables */
+$all = false;            /* default to run all checks?         */
+$verbose = false;        /* use verbose output?                */
 $fatal = false;          /* has a critical check failed?       */
 $checks = array();       /* array of QACheck instances         */
 $regexpchecks = array(); /* array of QACheckRegexp instances   */
@@ -45,14 +42,28 @@ foreach($_SERVER['argv'] as $index => $arg) {
         $requested = split(',', substr($arg, 9));
     } else if (substr($arg, 0, 10) == '--working=') {
         chdir(substr($arg, 10));
+    } else if (substr($arg, 0, 5) == '--all') {
+        $all = true;
+    } else if (substr($arg, 0, 9) == '--verbose') {
+        $verbose = true;
     } else if ($index != 0){
         $filenames[] = $arg;
     }
 }
 
-/* failure conditions */
+
+/* display help if given no files to work with */
 if (empty($filenames)) {
-    echo "No files provided!\n";
+    echo "
+Usage: php qachecks.php [options] filename1 [filename2] [filename3]...
+
+Options:
+  --checks=x,y,z   comma separated list of checker ids to run
+  --working=path   path to where the script is being run from
+  --verbose        use verbose output
+  --all            default to all checks if none are listed
+                   (otherwise, only the default checks are run)
+";             
     exit(1);
 }
 
@@ -73,15 +84,30 @@ foreach($filelist as $file) {
     include_once "$basedir/checks/$file";
 }
 
-/* no requested checks means all checks */
-if (!empty($requested)) {
+/* filter for requested checks, or default checks */
+if ($all == false) {
+
+    /* default checks */
+    if (empty($requested)) {
+        $requested = array(
+                '2.3.4', // Start and end with PHP tag
+                '2.4.1', // Deprecated / removed functions
+                '2.4.2', // Legacy functions
+                '2.4.3', // $dbconn assigned correctly
+                '3.4.1', // no use of short php tag
+                '5.1.4', // no use of perl comments
+                '5.2.1', // no tabs
+                '5.2.4', // use unix line endings
+                '5.2.6', // one true brace
+                '5.4.9', // no use of --->
+                );        
+    }
 
     /* filter checks to only those that were requested */
     foreach ($checks as $index => $check) {
         if (!in_array($check->id, $requested)) {
             unset($checks[$index]);
         }
-
     }
 } /* filter checks */
 
@@ -90,6 +116,16 @@ foreach ($checks as $index => $check) {
     if (get_parent_class($check) == 'qacheckregexp') {
         $regexpchecks[] =& $checks[$index];
     }
+}
+
+/*
+ * For multiline comments we need to know how many blank lines to
+ * insert. We do this with a callback function.
+ */
+function blank_comments($matches)
+{
+    /* remove everything except newlines from match */
+    return preg_replace(':[^\n]:', '', $matches[0]);
 }
 
 echo "
@@ -168,15 +204,7 @@ Checking $filename...
             $nocomments = preg_replace(':^[ \011]*#.*$:m', "", $nocomments);
             $nocomments = preg_replace(':^[ \011]*//.*$:m', "", $nocomments);
 
-            /*
-             * For multiline comments we need to know how many blank lines to
-             * insert. We do this with a callback function.
-             */
-            function blank_comments($matches)
-            {
-                /* remove everything except newlines from match */
-                return preg_replace(':[^\n]:', '', $matches[0]);
-            }
+            /* multiline comments use a callback function */
             $nocomments = preg_replace_callback(':/\*.*?\*/:s',
                     "blank_comments", $nocomments);
 
@@ -203,7 +231,7 @@ Checking $filename...
             echo "\nERROR: line count difference after removing comments. ".
                  "\n(lines = ".count($lines).", but nocommentlines = ".
                  count($nocommentlines). ". This is a bug, please report at".
-                 "\nhttp://bugs.xaraya.com/enter_bug.cgi?product=App%20-%20Core&component=QA\n\n";
+                 "\nhttp://bugs.xaraya.com/enter_bug.cgi?product=App%20-%20Core&component=QA)\n\n";
         }
         foreach ($lines as $number => $line) {
 
@@ -241,7 +269,10 @@ Checking $filename...
                                 }
                                 echo "\n";
                             }
-                            echo "    ".sprintf("%4d", $number + 1).":  $line";
+                            if ($verbose) {
+                                echo "    ".sprintf("%4d", $number + 1).
+                                        ":  $line";
+                            }
                         }
                     } /* each regexp */
                 } /* run check? */
@@ -285,7 +316,8 @@ echo "\nTotal checks passed: $totalpassed\n";
 echo "Total checks failed: $totalfailed ($totalfatal fatal)\n";
 echo "Total checks run: $totalrun\n";
 if ($fatal) {
-    echo "\nOne or more fatal errors occurred.\n\n";
+    echo "\nOne or more fatal errors occurred.".(($verbose) ? "" :
+            " Use --verbose for more detail.") . "\n\n";
     exit(1);
 } else {
     echo "\n";

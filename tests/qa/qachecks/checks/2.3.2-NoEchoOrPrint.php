@@ -12,7 +12,7 @@
 
 class NoEchoOrPrint extends QACheckRegexp
 {
-    var $id = '2.1.5';
+    var $id = '2.3.2';
     var $name = "No use of echo() or print()";
     var $fatal = true;
     var $filetype = 'php';

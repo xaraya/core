@@ -19,11 +19,21 @@
       div#blurb { display: none; }
       @page { size: landscape; }
    }
-
+   html { background: navy; }
+   body {
+      margin: 0px 0px 0px 30px;
+      padding: 4px;
+      background: white;
+      border-left: 1px solid #000071;
+   }
+   h1 { color: navy; margin: 2px; }
+   h2 { color: #6868a8; border-bottom: 1px solid #ccc; }
+   h3 { color: #6868a8; }
+   h4 { color: #6868a8; }
   </style>
 </head>
 <body>
-<h1>Xaraya Code Review Checklist v0.2.0</h1>
+<h1>Xaraya Code Review Checklist v0.2.1</h1>
 <div id="blurb">
 <h2>Using this checklist</h2>
 The idea of having this code review checklist is that it makes you stop
@@ -38,9 +48,7 @@ time it takes; print this checklist and then print the code you have
 just written. The unix tool 'a2ps' is excellent for printing source
 code and is also available under cygwin. An excellent way to start is
 to highlight the items in the list that are most relevant to your code
-and cross off those that are not relevant at all. The checklist has a
-number of columns marked X where you can check off items so that the
-list can be used on many files.<br>
+and cross off those that are not relevant at all. <br>
 <br>
 The checklist has to be used <span style="font-style: italic;">before</span>
 you start testing though!<br>
@@ -67,67 +75,39 @@ to the Personal Software Process</span> by Watts S Humphrey
 </h2>
 <pre>                      Date ___________<br>                  Reviewer ______________________<br>                    Author ______________________<br>                      File ______________________<br>              File Version ___________<br>                LOC(total) ______<br>             LOC(comments) ______<br>                LOC(blank) ______<br> comments:non-blank ratio: ______<br></pre>
 <h2>2 Common Xaraya Errors</h2>
-<table>
+<table border="1">
   <tbody>
     <tr>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>BK<br>
-      </td>
-      <td style="vertical-align: top; text-align: center;">#<br>
+      <td
+ style="background-color: rgb(51, 0, 153); color: rgb(255, 255, 255);"><span
+ style="font-weight: bold;">BK</span><br>
       </td>
       <td
- style="vertical-align: top; font-weight: bold; text-align: center;">Description<br>
+ style="vertical-align: top; text-align: center; background-color: rgb(51, 0, 153); color: rgb(255, 255, 255);">#<br>
       </td>
       <td
- style="vertical-align: top; font-weight: bold; text-align: center;">Explanation<br>
+ style="vertical-align: top; font-weight: bold; text-align: center; background-color: rgb(51, 0, 153); color: rgb(255, 255, 255);">Description<br>
+      </td>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center; background-color: rgb(51, 0, 153); color: rgb(255, 255, 255);">Explanation<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; font-weight: bold; background-color: rgb(204, 204, 255);">2.1<br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">API</span><br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top; font-weight: bold;">2.1<br>
-      </td>
-      <td style="vertical-align: top;"><span style="font-weight: bold;">API</span><br>
-      </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;"><br>
       </td>
       <td style="vertical-align: top;">2.1.1<br>
@@ -161,18 +141,6 @@ existing $value<br>
     <tr>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">2.1.2<br>
       </td>
       <td style="vertical-align: top;">Correctly handle return value
@@ -184,18 +152,6 @@ if a validation fails and the default value was subsituted.<br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Req?<br>
       </td>
       <td>2.1.3<br>
@@ -205,18 +161,6 @@ if a validation fails and the default value was subsituted.<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;"><br>
       </td>
       <td style="vertical-align: top;">2.1.4<br>
@@ -230,18 +174,6 @@ in place.</span><br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Req<br>
       </td>
       <td>2.1.5<br>
@@ -261,32 +193,23 @@ or <span style="font-family: monospace;">exit()</span>.</td>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; font-weight: bold; background-color: rgb(204, 204, 255);">2.2<br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; font-weight: bold; background-color: rgb(204, 204, 255);">Input
+handling<br>
       </td>
-      <td style="vertical-align: top; font-weight: bold;">2.2<br>
-      </td>
-      <td style="vertical-align: top; font-weight: bold;">Input handling<br>
-      </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;"><br>
       </td>
       <td style="vertical-align: top;">2.2.1<br>
@@ -306,18 +229,6 @@ foo in module bar</span>". Make sure '<span
     <tr>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">2.2.2<br>
       </td>
       <td style="vertical-align: top;">GUI functions should also `<span
@@ -335,18 +246,6 @@ provided in templates. The recommended method is to extract them after <span
     <tr>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">2.2.3<br>
       </td>
       <td style="vertical-align: top;">Check for required variables in
@@ -360,18 +259,6 @@ and valid.<br>
     <tr>
       <td><br>
       </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>2.2.4<br>
       </td>
       <td>Checkboxes from cgi input have an <code><br>
@@ -383,18 +270,6 @@ variable when it is not checked.<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;"><br>
       </td>
       <td style="vertical-align: top;">2.2.5<br>
@@ -420,33 +295,23 @@ details of each.<br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; font-weight: bold; background-color: rgb(204, 204, 255);">2.3<br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top; font-weight: bold;">2.3<br>
-      </td>
-      <td style="vertical-align: top; font-weight: bold;">Output
+      <td
+ style="vertical-align: top; font-weight: bold; background-color: rgb(204, 204, 255);">Output
 handling<br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;"><br>
       </td>
       <td style="vertical-align: top;">2.3.1<br>
@@ -462,18 +327,6 @@ into variables which are then displayed to the user.<br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Req<br>
       </td>
       <td>2.3.2<br>
@@ -485,18 +338,6 @@ into variables which are then displayed to the user.<br>
 you can use <span style="font-family: monospace;">xarLogMessage()</span>.</td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Opt?<br>
       </td>
       <td>2.3.3<br>
@@ -507,18 +348,6 @@ templates, not hard coded in php source files.<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">Req?<br>
       </td>
       <td style="vertical-align: top;">2.3.4<br>
@@ -540,33 +369,25 @@ outside of php tags.<br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">2.4</span><br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><span style="font-weight: bold;">2.4</span><br>
-      </td>
-      <td style="vertical-align: top;"><span style="font-weight: bold;">Deprecated
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">Deprecated
 Code</span><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">Req<br>
       </td>
       <td style="vertical-align: top;">2.4.1<br>
@@ -582,18 +403,6 @@ script. Commonly used deprecated functions are <span
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">Req*<br>
 Opt<br>
       </td>
@@ -607,18 +416,6 @@ functions is maintained in the <span style="font-family: monospace;">qachecks</s
 script.</td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">Req?<br>
       </td>
       <td style="vertical-align: top;">2.4.3<br>
@@ -632,18 +429,6 @@ returns an array.<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">Req?<br>
       </td>
       <td style="vertical-align: top;">2.4.4<br>
@@ -655,18 +440,6 @@ returns an array.<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;"><br>
       </td>
       <td style="vertical-align: top;">2.4.5<br>
@@ -688,18 +461,21 @@ sure if I made this up of if it is a real problem.</span><br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">2.5</span><br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><span style="font-weight: bold;">2.5</span><br>
-      </td>
-      <td style="vertical-align: top; font-weight: bold;">Exception
+      <td
+ style="vertical-align: top; font-weight: bold; background-color: rgb(204, 204, 255);">Exception
 Handling<br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
     </tr>
     <tr>
@@ -711,32 +487,24 @@ Handling<br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">2.6</span><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">Other</span><br>
       </td>
-      <td style="vertical-align: top;"><span style="font-weight: bold;">2.6</span><br>
-      </td>
-      <td style="vertical-align: top;"><span style="font-weight: bold;">Other</span><br>
-      </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Opt<br>
       </td>
       <td>2.6.1<br>
@@ -748,18 +516,6 @@ Handling<br>
     <tr>
       <td><br>
       </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>2.6.1<br>
       </td>
       <td>Static texts are all correctly translated.</td>
@@ -768,18 +524,6 @@ Handling<br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td><br>
       </td>
       <td>2.6.2<br>
@@ -793,18 +537,6 @@ don't no how to explain it with an example.</span><br>
     <tr>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">2.6.3<br>
       </td>
       <td style="vertical-align: top;">All installed masks, instances,
@@ -815,66 +547,49 @@ dynamic data objects and module variables removed.<br>
  style="font-family: monospace;">xarinit.php</span>.<br>
       </td>
     </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
   </tbody>
 </table>
 <br>
 <h2><span style="font-weight: bold;"></span>3 Common PHP Errors</h2>
-<table>
+<table border="1">
   <tbody>
     <tr>
-      <th style="font-weight: normal;">X</th>
-      <td>X<br>
+      <td
+ style="background-color: rgb(51, 0, 153); color: rgb(255, 255, 255);"><span
+ style="font-weight: bold;">BK</span><br>
       </td>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>BK<br>
-      </td>
-      <th>#</th>
-      <th>Description</th>
-      <th>Explanation<br>
+      <th
+ style="background-color: rgb(51, 0, 153); color: rgb(255, 255, 255);">#</th>
+      <th
+ style="background-color: rgb(51, 0, 153); color: rgb(255, 255, 255);">Description</th>
+      <th style="background-color: rgb(51, 0, 153);"><span
+ style="color: rgb(255, 255, 255);">Explanation</span><br>
       </th>
     </tr>
     <tr>
-      <td><br>
+      <td style="background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td><br>
+      <td
+ style="font-weight: bold; background-color: rgb(204, 204, 255);">3.1<br>
       </td>
-      <td><br>
+      <td
+ style="font-weight: bold; background-color: rgb(204, 204, 255);">Syntax
+Errors<br>
       </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td style="font-weight: bold;">3.1<br>
-      </td>
-      <td style="font-weight: bold;">Syntax Errors<br>
-      </td>
-      <td><br>
+      <td style="background-color: rgb(204, 204, 255);"><br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Req<br>
       </td>
       <td>3.1.1<br>
@@ -887,18 +602,6 @@ have a closing <span style="font-family: monospace;">?&gt;</span> tag.</td>
       </code></td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Opt<br>
       </td>
       <td>3.1.2<br>
@@ -910,18 +613,6 @@ equality comparison.</td>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Req<br>
       </td>
       <td>3.1.3<br>
@@ -931,18 +622,6 @@ equality comparison.</td>
       </code></td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td><br>
       </td>
       <td>3.1.4<br>
@@ -960,18 +639,6 @@ you are using:<br>
       <span style="font-family: monospace;"></span></td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td><br>
       </td>
       <td>3.1.5<br>
@@ -994,62 +661,38 @@ instead of <span style="font-family: monospace;">$i</span></li>
     <tr>
       <td><br>
       </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>3.1.6<br>
       </td>
       <td>Proper use of single and double quotes.</td>
       <td>Single quotes do not allow variable expansion and use of many
 control characters.<br>
-See <a href="http://www.php.net/manual/en/language.types.string.php">http://www.net/manual/en/language.types.string</a>
+See <a href="http://www.php.net/manual/en/language.types.string.php">http://www.php.net/manual/en/language.types.string</a>
 for exact details.<br>
       </td>
     </tr>
     <tr>
-      <td><br>
+      <td style="vertical-align: top;"><br>
       </td>
-      <td><br>
+      <td style="vertical-align: top;"><br>
       </td>
-      <td><br>
+      <td style="vertical-align: top;"><br>
       </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><span style="font-weight: bold;">3.2</span><br>
-      </td>
-      <td><span style="font-weight: bold;">Logic Errors</span><br>
-      </td>
-      <td><br>
+      <td style="vertical-align: top;"><br>
       </td>
     </tr>
     <tr>
-      <td><br>
+      <td style="background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td><br>
+      <td style="background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">3.2</span><br>
       </td>
-      <td><br>
+      <td style="background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">Logic Errors</span><br>
       </td>
-      <td><br>
+      <td style="background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
+    </tr>
+    <tr>
       <td><br>
       </td>
       <td>3.2.1<br>
@@ -1066,18 +709,6 @@ comment their purpose.<br>
     <tr>
       <td><br>
       </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>3.2.2<br>
       </td>
       <td>When
@@ -1087,18 +718,6 @@ fetched before the end of the block. </td>
 infinite loop.</td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td><br>
       </td>
       <td>3.2.3<br>
@@ -1111,7 +730,7 @@ infinite loop.</td>
 variable on the LHS. When you assign a variable using the <span
  style="font-family: monospace;">&amp;</span> operator, you are <span
  style="font-style: italic;">assigning by reference</span>. See <a
- href="http://www.php.net/manual/en/language.variables.php">http://www.net/manual/en/language.variables</a>
+ href="http://www.php.net/manual/en/language.variables.php">http://www.php.net/manual/en/language.variables</a>
 for details.<br>
       <br>
 The <span style="font-family: monospace;">$$</span> syntax allows you
@@ -1120,22 +739,10 @@ example:<br>
       <pre>&nbsp;$x = "foo";<br>&nbsp;echo $$x;</pre>
 would print the content of the variable <span
  style="font-family: monospace;">$foo</span>. See <a
- href="http://www.php.net/manual/en/language.variables.variable.php">http://www.net/manual/en/language.variables.variable</a><br>
+ href="http://www.php.net/manual/en/language.variables.variable.php">http://www.php.net/manual/en/language.variables.variable</a><br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Opt<br>
       </td>
       <td>3.2.4<br>
@@ -1146,40 +753,28 @@ in preference to <tt>include</tt> and <tt>require</tt>.</td>
       </i> </code></td>
     </tr>
     <tr>
-      <td><br>
+      <td style="vertical-align: top;"><br>
       </td>
-      <td><br>
+      <td style="vertical-align: top;"><br>
       </td>
-      <td><br>
+      <td style="vertical-align: top;"><br>
       </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><span style="font-weight: bold;">3.3</span><br>
-      </td>
-      <td><span style="font-weight: bold;">Documentation Errors</span><br>
-      </td>
-      <td><br>
+      <td style="vertical-align: top;"><br>
       </td>
     </tr>
     <tr>
-      <td><br>
+      <td style="background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td><br>
+      <td style="background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">3.3</span><br>
       </td>
-      <td><br>
+      <td style="background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">Documentation Errors</span><br>
       </td>
-      <td><br>
+      <td style="background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
+    </tr>
+    <tr>
       <td><br>
       </td>
       <td>3.3.1<br>
@@ -1192,18 +787,6 @@ developers aren't tempted to 'improve' your code.<br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td><br>
       </td>
       <td>3.3.2<br>
@@ -1221,32 +804,22 @@ developers aren't tempted to 'improve' your code.<br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; font-weight: bold; background-color: rgb(204, 204, 255);">3.4<br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; font-weight: bold; background-color: rgb(204, 204, 255);">Portability<br>
       </td>
-      <td style="vertical-align: top; font-weight: bold;">3.4<br>
-      </td>
-      <td style="vertical-align: top; font-weight: bold;">Portability<br>
-      </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Req<br>
       </td>
       <td>3.4.1<br>
@@ -1260,71 +833,52 @@ preference of <span style="font-family: monospace;">&lt;?</span><br>
 portable.<br>
       </td>
     </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
   </tbody>
 </table>
 <h2>4 Common Databases Errors<br>
 </h2>
-<table>
+<table border="1">
   <tbody>
     <tr>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>BK<br>
-      </td>
-      <td style="vertical-align: top; text-align: center;">#<br>
+      <td
+ style="background-color: rgb(51, 0, 153); color: rgb(255, 255, 255);"><span
+ style="font-weight: bold;">BK</span><br>
       </td>
       <td
- style="vertical-align: top; font-weight: bold; text-align: center;">Description<br>
+ style="vertical-align: top; text-align: center; background-color: rgb(51, 0, 153); color: rgb(255, 255, 255);">#<br>
       </td>
       <td
- style="vertical-align: top; font-weight: bold; text-align: center;">Explanation<br>
+ style="vertical-align: top; font-weight: bold; text-align: center; background-color: rgb(51, 0, 153); color: rgb(255, 255, 255);">Description<br>
+      </td>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center; background-color: rgb(51, 0, 153); color: rgb(255, 255, 255);">Explanation<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; font-weight: bold; background-color: rgb(204, 204, 255);">4.1<br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; font-weight: bold; background-color: rgb(204, 204, 255);">Security<br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top; font-weight: bold;">4.1<br>
-      </td>
-      <td style="vertical-align: top; font-weight: bold;">Security<br>
-      </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;"><br>
       </td>
       <td style="vertical-align: top;">4.1.1<br>
@@ -1338,7 +892,7 @@ quoting variables is to use bind variables method like so:<br>
  class="toowide"> xar_id = ?';</span><br>          $dbconn-&gt;Execute($query, array($notes, $id));</pre>
 See also <a href="http://bugs.xaraya.com/show_bug.cgi?id=2275">bug 2275</a>
 and <a
- href="http://docs.xaraya.com/docs/rfcs/rfc0045.html#rfc.section.6">RFC
+ href="http://www.xaraya.com/documentation/rfcs/rfc0045.html#rfc.section.6">RFC
 45 Section 6</a>.<br>
       </td>
     </tr>
@@ -1351,32 +905,22 @@ and <a
       </td>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; font-weight: bold; background-color: rgb(204, 204, 255);">4.2<br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; font-weight: bold; background-color: rgb(204, 204, 255);">Portability<br>
       </td>
-      <td style="vertical-align: top; font-weight: bold;">4.2<br>
-      </td>
-      <td style="vertical-align: top; font-weight: bold;">Portability<br>
-      </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;"><br>
       </td>
       <td style="vertical-align: top;">4.2.1<br>
@@ -1394,18 +938,6 @@ See also <a href="http://bugs.xaraya.com/show_bug.cgi?id=486">bug 486</a>.<br>
     <tr>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">4.2.2<br>
       </td>
       <td style="vertical-align: top;">All columns prefixed with <span
@@ -1416,18 +948,6 @@ reserved names. e.g the word 'position' is reserved in PostgreSQL.<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;"><br>
       </td>
       <td style="vertical-align: top;">4.2.3<br>
@@ -1442,18 +962,6 @@ other databases do.<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;"><br>
       </td>
       <td style="vertical-align: top;">4.2.4<br>
@@ -1474,32 +982,22 @@ database fields.<br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; font-weight: bold; background-color: rgb(204, 204, 255);">4.3<br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; font-weight: bold; background-color: rgb(204, 204, 255);">Performance<br>
       </td>
-      <td style="vertical-align: top; font-weight: bold;">4.3<br>
-      </td>
-      <td style="vertical-align: top; font-weight: bold;">Performance<br>
-      </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;"><br>
       </td>
       <td style="vertical-align: top;">4.3.1<br>
@@ -1514,18 +1012,6 @@ module for examples of creating an index using <span
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">Opt?<br>
       </td>
       <td style="vertical-align: top;">4.3.2<br>
@@ -1542,134 +1028,71 @@ large, and you can save memory space by assigning them by reference:<br>
 </table>
 <span></span>
 <h2>5 Coding Standards</h2>
-<table>
+<table border="1">
   <tbody>
     <tr>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>X<br>
-      </td>
-      <td>BK<br>
-      </td>
-      <td style="vertical-align: top; text-align: center;">#<br>
+      <td
+ style="background-color: rgb(51, 0, 153); color: rgb(255, 255, 255);"><span
+ style="font-weight: bold;">BK</span><br>
       </td>
       <td
- style="vertical-align: top; font-weight: bold; text-align: center;">Description<br>
+ style="vertical-align: top; text-align: center; background-color: rgb(51, 0, 153); color: rgb(255, 255, 255);">#<br>
       </td>
       <td
- style="vertical-align: top; font-weight: bold; text-align: center;">Explanation<br>
+ style="vertical-align: top; font-weight: bold; text-align: center; background-color: rgb(51, 0, 153); color: rgb(255, 255, 255);">Description<br>
+      </td>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center; background-color: rgb(51, 0, 153); color: rgb(255, 255, 255);">Explanation<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">5.1</span><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">Commenting</span><br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><span style="font-weight: bold;">5.1</span><br>
-      </td>
-      <td style="vertical-align: top;"><span style="font-weight: bold;">Commenting</span><br>
-      </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td><br>
       </td>
       <td>5.1.1<br>
       </td>
       <td>Standard file header.</td>
       <td>See <a
- href="http://docs.xaraya.com/docs/rfcs/rfc0044.html#rfc.section.3">RFC
+ href="http://www.xaraya.com/documentation/rfcs/rfc0044.html#rfc.section.3">RFC
 44 section 3</a>.</td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td><br>
       </td>
       <td>5.1.2<br>
       </td>
       <td>Function header.</td>
       <td>See <a
- href="http://docs.xaraya.com/docs/rfcs/rfc0044.html#rfc.section.3">RFC
+ href="http://www.xaraya.com/documentation/rfcs/rfc0044.html#rfc.section.3">RFC
 44 section 3</a>.</td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td><br>
       </td>
       <td>5.1.3<br>
       </td>
       <td>Classes have the standard header.</td>
       <td>See <a
- href="http://docs.xaraya.com/docs/rfcs/rfc0044.html#rfc.section.3">RFC
+ href="http://www.xaraya.com/documentation/rfcs/rfc0044.html#rfc.section.3">RFC
 44 section 3</a>.<br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Opt<br>
       </td>
       <td>5.1.4<br>
@@ -1687,32 +1110,24 @@ large, and you can save memory space by assigning them by reference:<br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">5.2</span><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">Formatting</span><br>
       </td>
-      <td style="vertical-align: top;"><span style="font-weight: bold;">5.2</span><br>
-      </td>
-      <td style="vertical-align: top;"><span style="font-weight: bold;">Formatting</span><br>
-      </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">Req<br>
       </td>
       <td style="vertical-align: top;">5.2.1<br>
@@ -1723,18 +1138,6 @@ differently.<br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Opt<br>
       </td>
       <td>5.2.2<br>
@@ -1744,41 +1147,17 @@ differently.<br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Opt?<br>
       </td>
       <td>5.2.3<br>
       </td>
       <td>Use structural indentation, not visual.</td>
       <td>See <a
- href="http://docs.xaraya.com/docs/rfcs/rfc0044.html#rfc.section.4.1">RFC
+ href="http://www.xaraya.com/documentation/rfcs/rfc0044.html#rfc.section.4.1">RFC
 44 section 4.1</a>.<br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Req<br>
       </td>
       <td>5.2.4<br>
@@ -1790,61 +1169,26 @@ differently.<br>
     <tr>
       <td><br>
       </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>5.2.5<br>
       </td>
       <td>Correct use of whitespace in function calls.</td>
       <td>See <a
- href="http://docs.xaraya.com/docs/rfcs/rfc0044.html#rfc.section.4.2">RFC
+ href="http://www.xaraya.com/documentation/rfcs/rfc0044.html#rfc.section.4.2">RFC
 44 section 4.2</a>. An example of the standard syntax is<br>
       <pre>$var = foo($bar, $baz, $quux);</pre>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Req<br>
       </td>
       <td>5.2.6<br>
       </td>
-      <td>Function declaration use the 'one true brace'
+      <td>Function and class declarations use the 'one true brace'
 convention.</td>
-      <td>Braces after function declaration appear on a new line.<code></code></td>
+      <td>Braces after function and class declarations appear on a new
+line.<code></code></td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td><br>
       </td>
       <td>5.2.7<br>
@@ -1854,18 +1198,6 @@ parameter list.</td>
       <td>This reduces the number of required arguments.</td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Req<br>
       </td>
       <td>5.2.8<br>
@@ -1877,23 +1209,13 @@ parameter list.</td>
     <tr>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td style="vertical-align: top;">5.2.9<br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td style="vertical-align: top;">No other characters than ?&gt;
+at the end of php file<br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><span style="font-weight: bold;">5.3</span><br>
-      </td>
-      <td style="vertical-align: top;"><span style="font-weight: bold;">Naming</span><br>
-      </td>
-      <td style="vertical-align: top;"><br>
+      <td style="vertical-align: top;">Whitespace and other characters
+accidentally inserted after the ?&gt; make the patches messy.<br>
       </td>
     </tr>
     <tr>
@@ -1905,10 +1227,24 @@ parameter list.</td>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">5.3</span><br>
       </td>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">Naming</span><br>
+      </td>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
+      </td>
+    </tr>
+    <tr>
       <td style="vertical-align: top;">Req?<br>
       </td>
       <td style="vertical-align: top;">5.3.1<br>
@@ -1922,18 +1258,6 @@ or <span style="font-family: monospace;">mymodule/adminapi/create.php</span>.<br
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">Req?<br>
       </td>
       <td style="vertical-align: top;">5.3.2<br>
@@ -1945,18 +1269,6 @@ matching [a-z_-.]*<br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td><br>
       </td>
       <td>5.3.3<br>
@@ -1974,18 +1286,6 @@ matching [a-z_-.]*<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;"><br>
       </td>
       <td style="vertical-align: top;">5.3.4<br>
@@ -2009,32 +1309,24 @@ of the privilege.<br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">5.4</span><br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><span
+ style="font-weight: bold;">Templates</span><br>
       </td>
-      <td style="vertical-align: top;"><span style="font-weight: bold;">5.4</span><br>
-      </td>
-      <td style="vertical-align: top;"><span style="font-weight: bold;">Templates</span><br>
-      </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; background-color: rgb(204, 204, 255);"><br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">Opt?<br>
       </td>
       <td style="vertical-align: top;">5.4.1<br>
@@ -2049,18 +1341,6 @@ version="1.0" content="text/html" xmlns:xar=<a
  class="moz-txt-link-rfc2396E" href="http://xaraya.com/2004/blocklayout">"http://xaraya.com/2004/blocklayout"</a>&gt;</td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Req?<br>
       </td>
       <td>5.4.2<br>
@@ -2075,39 +1355,15 @@ possible anymore?</span><br>
     <tr>
       <td><br>
       </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>5.4.3<br>
       </td>
       <td>Templates are self-containable.</td>
       <td>See <a
- href="http://docs.xaraya.com/docs/rfcs/rfc0044.html#rfc.section.2">RFC
+ href="http://www.xaraya.com/documentation/rfcs/rfc0044.html#rfc.section.2">RFC
 44 section 2</a>.<br>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Opt?<br>
       </td>
       <td>5.4.4<br>
@@ -2121,18 +1377,6 @@ for variables.</td>
     <tr>
       <td><br>
       </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>5.4.5<br>
       </td>
       <td>Common code in templates separated and included
@@ -2141,18 +1385,6 @@ using <span style="font-family: monospace;">&lt;xar:template /&gt;</span></td>
       </td>
     </tr>
     <tr>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
-      <td><br>
-      </td>
       <td>Opt?<br>
       </td>
       <td>5.4.6<br>
@@ -2167,18 +1399,6 @@ using <span style="font-family: monospace;">&lt;xar:template /&gt;</span></td>
     <tr>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">5.4.7<br>
       </td>
       <td style="vertical-align: top;">Avoid using inline styles for
@@ -2191,18 +1411,6 @@ and feel as the rest of Xaraya.<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
       <td style="vertical-align: top;">Opt?<br>
       </td>
       <td style="vertical-align: top;">5.4.8<br>
@@ -2214,6 +1422,16 @@ character.<br>
       <td style="vertical-align: top;">Templates are XML documents
 themselves, so if you want an ampersand character (for example, in a
 url) you need to use <span style="font-family: monospace;">&amp;amp;</span><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
       </td>
     </tr>
   </tbody>
