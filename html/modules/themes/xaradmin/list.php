@@ -48,13 +48,13 @@ function themes_admin_list()
         xarModAPIFunc('themes', 'admin', 'regenerate');
         $modlist = xarModAPIFunc('themes', 
                           'admin', 
-                          'GetList', 
+                          'GetThemeList', 
                           array('filter'     => array('State' => $data['selfilter'])));
     }else{
         // or just fetch the quicker old list
         $modlist = xarModAPIFunc('themes', 
                           'admin', 
-                          'GetList', 
+                          'GetThemeList', 
                           array('filter'     => array('State' => $data['selfilter'])));
     }
 
