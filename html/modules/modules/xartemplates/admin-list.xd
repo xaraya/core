@@ -1,7 +1,20 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>View Modules (list mode)</xar:mlstring></h2>
+	<h2 style="width:100%">
+		<span style="width:49%">
+			<xar:mlstring>
+				View Modules (list mode)
+			</xar:mlstring>
+		</span>
+		<span style="width:49%;float:right;text-align:right;">
+			<xar:mlstring>
+				Total: 
+			</xar:mlstring>
+			<xar:set name="$modscount">count($listrowsitems)</xar:set>
+			#$modscount#
+		</span>
+	</h2>
     <form method="post" action="#xarModUrl('modules', 'admin', 'settings')#">
         <div class="xar-norm-outline" style="padding: 0px;">
             <!--- Module List Sort and Filter Controls table --->
@@ -78,35 +91,32 @@
             <xar:template file="compactlist-ab" type="module" />
         <xar:else />
         <!--- the Module Lists table-based styles --->
-            <br />
-            <div class="xar-norm-outline" style="padding: 0px 0px 5px 0px;">
-                <table border="0" width="100%" cellspacing="0" cellpadding="2">
-                    <tr>
-                        <th style="text-align: left; padding-left: 10px;">
-                            <xar:mlstring>Name</xar:mlstring>
-                        </th>
-                        <th style="text-align: center;">
-                            <xar:mlstring>Version</xar:mlstring>
-                        </th>
-                        <th style="text-align: center;">
-                            <xar:mlstring>Upgrade</xar:mlstring>
-                        </th>
-                        <th style="text-align: center;">
-                            <xar:mlstring>Info</xar:mlstring>
-                        </th>
-                        <th style="text-align: right; padding-right: 10px;">
-                            <xar:mlstring>Status</xar:mlstring>
-                        </th>	
-                        <th style="text-align: left;padding-left: 10px;" nowrap="nowrap">
-                            <xar:mlstring>Actions</xar:mlstring>
-                        </th>
-                        <th style="text-align: center;">
-                            <xar:mlstring>Hooks</xar:mlstring>
-                        </th>
-                    </tr>
-                    <xar:foreach in="$listrowsitems" value="$modinfo">
+			<div class="xar-norm-outline" style="margin-top:1px;">
+				<table style="width:100%; border-collapse:collapse; border-spacing:1px; padding:0;">
+					<tr>
+						<th style="text-align: left; padding-left: .5em;">
+							<xar:mlstring>Name</xar:mlstring>
+						</th>
+						<th style="text-align: left; padding-left: .5em;">
+							<xar:mlstring>Version</xar:mlstring>
+						</th>
+						<th style="text-align: center;">
+							<xar:mlstring>Info</xar:mlstring>
+						</th>
+						<th style="text-align: right; padding-right: .5em;">
+							<xar:mlstring>Status</xar:mlstring>
+						</th>	
+						<th style="text-align: left;padding-left: .5em;">
+							<xar:mlstring>Actions</xar:mlstring>
+						</th>
+						<th style="text-align: center;">
+							<xar:mlstring>Hooks</xar:mlstring>
+						</th>
+					</tr>
+					<xar:foreach in="$listrowsitems" value="$modinfo">
 						<tr>
-							<td id="#$modinfo['displayname']#" class="xar-norm-outline xar-mod-title" style="vertical-align: middle; text-align: left; padding-left: 10px; margin:auto; height: 20px;border-width: 0px 0px 1px 0px;border-style: dotted;">
+							<!--- please note any element can be a named anchor as long as it has id (and name for some browsers) so we shouldnt waste space with empty anchors here --->
+							<td name="#$modinfo['displayname']#" id="#$modinfo['displayname']#" class="xar-norm-outline xar-mod-title" style="vertical-align: middle; text-align: left; padding-left: .5em; margin:auto; height: 20px;border-width: 0px 0px 1px 0px;border-style: solid;">
 								<!--- if module is active and configurable (admin type) make its name a link to module main admin function --->
 								<xar:if condition="$modinfo['modconfigurl'] ne ''">
 									<a href="#$modinfo['modconfigurl']#" title="#$modinfo['adminurltitle']#&nbsp;#$modinfo['displayname']#">#$modinfo['displayname']#</a>
@@ -114,13 +124,10 @@
 									#$modinfo['displayname']#
 								</xar:if>
 							</td>
-							<td class="xar-norm-outline" style="text-align: center;width: 100px;border-width: 0px 0px 1px 0px;border-style: dotted;">
+							<td class="xar-norm-outline" style="text-align: left; padding-left: .5em; width: 5em;border-width: 0px 0px 1px 0px;border-style: solid;">
 								#$modinfo['version']#
 							</td>
-							<td class="xar-norm-outline" style="text-align: center;width: 100px;border-width: 0px 0px 1px 0px;border-style: dotted;">
-								<xar:mlstring>N/A</xar:mlstring>
-							</td>
-							<td class="xar-norm-outline" style="text-align: center;width: 35px;border-width: 0px 0px 1px 0px;border-style: dotted;">
+							<td class="xar-norm-outline" style="text-align: center;width: 35px;border-width: 0px 0px 1px 0px;border-style: solid;">
 								<xar:if condition="$selstyle eq 'pro'">
 									<input type="submit" name="info" id="info" value="#$infolabel#" />
 								<xar:elseif condition="$selstyle eq 'icons'" />
@@ -135,12 +142,12 @@
 									</noscript>
 								</xar:if>
 							</td>
-							<td class="xar-norm-outline" style="text-align: right;width: 100px;border-width: 0px 0px 1px 0px;border-style: dotted;vertical-align: middle;">
-								<div style="padding-right: 10px;">
+							<td class="xar-norm-outline" style="text-align: right;width: 100px;border-width: 0px 0px 1px 0px;border-style: solid;vertical-align: middle;">
+								<div style="padding-right: .5em;">
 									#$modinfo['statelabel']#
 								</div>
 							</td>
-							<td class="xar-norm-outline" style="text-align: left;border-width: 0px 0px 1px 0px;border-style: dotted;white-space: nowrap;">
+							<td class="xar-norm-outline" style="text-align: left;border-width: 0px 0px 1px 0px;border-style: solid;white-space: nowrap;">
 								<xar:if condition="$selstyle eq 'pro'">
 									<xar:if condition="$modinfo['coremod']">
 										<select name="action" id="action" disabled="disabled">
@@ -176,7 +183,7 @@
 											<a href="#$modinfo['removeurl']#"><img src="#$modinfo['actionimg2']#" alt="#$modinfo['actionlabel2']#" /></a>
 										</xar:if>
 								<xar:else />
-									<div style="padding-left: 10px;">
+									<div style="padding-left: .5em;">
 										<xar:if condition="$modinfo['coremod']">
 											<xar:if condition="$modinfo['state'] eq 5 or $modinfo['state'] eq 2">
 												<a href="#$modinfo['actionurl']#">#$modinfo['actionlabel']#</a>
@@ -192,7 +199,7 @@
 									</div>
 								</xar:if>
 							</td>
-							<td class="xar-norm-outline" style="text-align: center;width: 65px;border-width: 0px 0px 1px 0px;border-style: dotted;">
+							<td class="xar-norm-outline" style="text-align: center;width: 65px;border-width: 0px 0px 1px 0px;border-style: solid;">
 								<xar:if condition="$selstyle eq 'pro'">
 									<input type="submit" name="edit" id="edit" value="Edit" />
 								<xar:elseif condition="$selstyle eq 'icons'"/>
@@ -202,14 +209,13 @@
 								</xar:if>
 							</td>
 						</tr>
-                    </xar:foreach>
-                    </tr>
-                </table>
-            </div>
+					</xar:foreach>
+					</tr>
+				</table>
+			</div>
         </xar:if>
-        <div class="xar-norm-outline xar-accent" style="text-align: center;margin-top: 5px;padding:1em;">
-            <xar:mlstring>Note to module developers: removal (and upgrades) of all core modules is currently disabled from GUI;</xar:mlstring>
-            <xar:mlstring>you may need to re-classify your modules in accordance with</xar:mlstring>
+        <div class="xar-norm-outline xar-accent" style="text-align: center;margin-top: 1px;padding:.5em;">
+            <xar:mlstring>Note to module developers: removal of all core modules is currently disabled from GUI; you may need to re-classify your modules in accordance with</xar:mlstring>
             <a href="http://docs.xaraya.com/docs/rfcs/rfc0013.html">RFC-13</a>
             <xar:if condition="$selstyle eq 'icons'"><br />
                 <div class="xar-alt-outline xar-norm" style="vertical-align: middle;margin:5px; padding: 3px;">
