@@ -57,7 +57,7 @@ function blocks_admin_view_instances()
                 $block['state_desc'] = 'Maximized';
                 break;
         }
-        $block['javascript'] = "return confirmLink(this, '" . xarML('Delete instance') . " $block[title] ?')";
+        $block['javascript'] = "return xar_base_confirmLink(this, '" . xarML('Delete instance') . " $block[title] ?')";
         $block['deleteurl'] = xarModUrl('blocks', 'admin', 'delete_instance', array('bid' => $block['id'], 'authid' => $authid));
         $blocks[] = $block;
 
@@ -73,8 +73,15 @@ function blocks_admin_view_instances()
     $data['style']['plain']                         = xarML('Plain');
     $data['style']['compact']                       = xarML('Compact');
 
-
     $data['blocks'] = $blocks;
+
+    // Include 'confirmlink' JavaScript.
+    // TODO: move this to a template widget when available.
+    xarModAPIfunc(
+        'base', 'javascript', 'modulefile',
+        array('module'=>'base', 'filename'=>'confirmlink.js')
+    );
+
     return $data;
 }
 

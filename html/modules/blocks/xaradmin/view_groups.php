@@ -31,12 +31,19 @@ function blocks_admin_view_groups()
                                'admin', 
                                'groupgetinfo', array('blockGroupId' => $group['id']));
         $group['membercount'] = count($group['instances']);
-        $group['javascript'] = "return confirmLink(this, '" . xarML('Delete group') ." : $group[name] ?')";
+        $group['javascript'] = "return xar_base_confirmLink(this, '" . xarML('Delete group') ." : $group[name] ?')";
         $group['deleteurl'] = xarModUrl('blocks', 'admin', 'delete_group', array('gid' => $group['id'], 'authid' => $authid));
         $block_groups[] = $group;
 
         $result->MoveNext();
     }
+
+    // Include 'confirmlink' JavaScript.
+    // TODO: move this to a template widget when available.
+    xarModAPIfunc(
+        'base', 'javascript', 'modulefile',
+        array('module'=>'base', 'filename'=>'confirmlink.js')
+    );
 
     return array('block_groups' => $block_groups);
 }

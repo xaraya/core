@@ -1,16 +1,15 @@
-<script type="text/javascript" src="modules/base/xartemplates/functions.js"></script>
 <script language="JavaScript">
 <!--
 	// Enter name of mandatory fields
-	var fieldRequired = Array("group_name");
+	var blocks_fieldRequired = Array("group_name");
 	// Enter field description to appear in the dialog box
-	var fieldDescription = Array("Name");
+	var blocks_fieldDescription = Array("Name");
 //-->
 </script>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>New Group</xar:mlstring></h2>
 	<div style="margin: auto;">
-	<form action="#xarModURL('blocks', 'admin', 'create_group')#" method="post" onsubmit="return formCheck(this, fieldRequired, fieldDescription);" enctype="application/x-www-form-urlencoded" />
+	<form action="#xarModURL('blocks', 'admin', 'create_group')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded" />
 		<div style="clear: both; padding-top: 10px;">
 		<input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
 		<span style="float: left; width: 20%; text-align: right;">
