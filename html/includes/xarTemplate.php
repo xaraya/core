@@ -1018,7 +1018,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     $needCompilation = true;
 
     if ($GLOBALS['xarTpl_cacheTemplates']) {
-        $cacheKey = md5($sourceFileName);
+        $cacheKey = xarTpl__GetCacheKey($sourceFileName);
         $cachedFileName = XAR_TPL_CACHE_DIR . '/' . $cacheKey . '.php';
         if (file_exists($cachedFileName)
             && (!file_exists($sourceFileName) || (filemtime($sourceFileName) < filemtime($cachedFileName)))) {
@@ -1054,9 +1054,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             fwrite($fd, $templateCode);
             fclose($fd);
             // Add an entry into CACHEKEYS
-            $fd = fopen(XAR_TPL_CACHE_DIR . '/CACHEKEYS', 'a');
-            fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
-            fclose($fd);
+            xarTpl__SetCacheKey($sourceFileName);
         } else {
             return xarTpl__execute($templateCode, $tplData, $sourceFileName);
         }
@@ -1311,7 +1309,7 @@ function xarTpl__loadFromFile($sourceFileName)
     $needCompilation = true;
 
     if ($GLOBALS['xarTpl_cacheTemplates']) {
-        $cacheKey = md5($sourceFileName);
+        $cacheKey = xarTpl__SetCacheKey($sourceFileName);
         $cachedFileName = XAR_TPL_CACHE_DIR . '/' . $cacheKey . '.php';
         if (file_exists($cachedFileName)
             && (!file_exists($sourceFileName) || (filemtime($sourceFileName) < filemtime($cachedFileName)))) {
@@ -1336,9 +1334,7 @@ function xarTpl__loadFromFile($sourceFileName)
             fwrite($fd, $templateCode);
             fclose($fd);
             // Add an entry into CACHEKEYS
-            $fd = fopen(XAR_TPL_CACHE_DIR . '/CACHEKEYS', 'a');
-            fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
-            fclose($fd);
+            xarTpl__SetCacheKey($sourceFileName);
         }
         return $templateCode;
     }
@@ -1350,6 +1346,35 @@ function xarTpl__loadFromFile($sourceFileName)
     return $output;
 }
 
+/**
+ * Set the cache key for a sourcefile
+ *
+ * @access private
+ * @param  string $cacheKey        The key to add
+ * @param  string $sourceFileName  For which file are we entering the key?
+ * @return boolean
+ */
+function xarTpl__SetCacheKey($sourceFileName) 
+{
+    $cacheKey = xarTpl__getCacheKey($sourceFileName);
+    $fd = fopen(XAR_TPL_CACHE_DIR . '/CACHEKEYS', 'a');
+    fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
+    fclose($fd);
+    return true;
+}
+
+/** Get the cache key for a sourcefile
+ *
+ * @access private
+ * @param  string $sourceFileName  For which file do we need the key?
+ * @return string                  The cache key for this sourcefilename
+ *
+ * @todo  consider using a static array
+ */
+function xarTpl__getCacheKey($sourceFileName)
+{
+    return md5($sourceFileName);
+}
 
 /**
  * Model of a tag attribute
