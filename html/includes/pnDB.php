@@ -160,79 +160,81 @@ function pnDBGetTables()
 }
 
 /**
- * loads the Table Maintenance API sub-system
+ * Load the Table Maintenance API
  *
  * @access public
  * @return true
  */
 function pnDBLoadTableMaintenanceAPI()
 {
+    // Include Table Maintainance API file
     include_once 'includes/pnTableDDL.php';
 
     return true;
 }
 
 /**
- * Gets the database host
+ * Get the database host
  *
  * @access public
+ * @returns string
  * @return database host
  */
 function pnDBGetHost()
 {
-    global $pnDB_systemArgs;;
+    global $pnDB_systemArgs;
 
     return $pnDB_systemArgs['databaseHost'];
 }
 
 /**
- * Gets the database type
+ * Get the database type
  *
  * @access public
- * @return database type
+ * @return string database type
  */
 function pnDBGetType()
 {
-    global $pnDB_systemArgs;;
+    global $pnDB_systemArgs;
 
     return $pnDB_systemArgs['databaseType'];
 }
 
 /**
- * Gets the database name
+ * Get the database name
  *
  * @access public
- * @return database name
+ * @return string database name
  */
 function pnDBGetName()
 {
-    global $pnDB_systemArgs;;
+    global $pnDB_systemArgs;
 
     return $pnDB_systemArgs['databaseName'];
 }
 
 /**
- * Gets the system table prefix
+ * Get the system table prefix
  *
  * @access public
- * @return database name
+ * @return string database name
  */
 function pnDBGetSystemTablePrefix()
 {
-    global $pnDB_systemArgs;;
+    global $pnDB_systemArgs;
 
     return $pnDB_systemArgs['systemTablePrefix'];
 }
 
 /**
- * Gets the site table prefix
+ * Get the site table prefix
  *
  * @access public
- * @return database name
+ * @return string database name
  */
 function pnDBGetSiteTablePrefix()
 {
-    global $pnDB_systemArgs;;
+    global $pnDB_systemArgs;
 
     return $pnDB_systemArgs['siteTablePrefix'];
 }
@@ -240,7 +242,7 @@ function pnDBGetSiteTablePrefix()
 // PROTECTED FUNCTIONS
 
 /**
- * Imports module tables in the array of known tables
+ * Import module tables in the array of known tables
  *
  * @access private
  * @return array
@@ -248,6 +250,7 @@ function pnDBGetSiteTablePrefix()
 function pnDB_importTables($tables)
 {
     global $pntable;
+    
     $pntable = array_merge($pntable, $tables);
 }
 
