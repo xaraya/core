@@ -69,8 +69,6 @@ function xarConfigGetVar($name, $prep = NULL)
         $name = $aliases[$name];
     }
 
- 
-
     if ($name == 'Site.DB.TablePrefix') {
         return xarCore_getSystemVar('DB.TablePrefix');
     } elseif ($name == 'System.Core.VersionNumber') {
@@ -132,6 +130,12 @@ function xarConfig_loadVars()
         $result->MoveNext();
     }
     $result->Close();
+
+    //Tells the cache system it has already checked this particular table
+    //(It's a escape when you are caching at a higher level than that of the
+    //individual variables)
+    //This whole cache systems must be remade to a central one.    
+    xarCore_SetCached($cacheCollection, 0, true);
 
     return true;
 }
