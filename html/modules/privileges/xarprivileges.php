@@ -940,6 +940,12 @@ class xarPrivileges extends xarMasks
         $instances = array();
         while(!$result->EOF) {
             list($header,$selection,$limit) = $result->fields;
+
+// check if an external instance wizard is requested, if so redirect
+//            if (substr($header,0,9) == 'external:') {
+//                eval(substr($header,9));
+//            }
+
             $result1 = $this->dbconn->Execute($selection);
             if (!$result1) return;
 
