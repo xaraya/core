@@ -16,9 +16,8 @@
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
-    if(!xarVarFetch('step',     'isset', $step,      NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-
+if(!xarVarFetch('step',     'isset', $step,      NULL, XARVAR_NOT_REQUIRED)) {return;}
+if(!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_NOT_REQUIRED)) {return;}
 
 // pre-fill the module name (if any) for hooks
 xarRequestGetInfo();
@@ -40,16 +39,19 @@ xarModSetVar('installer','dbtype',$dbtype);
 
 if (isset($step)) {
     if ($step == 1 && !isset($startnum)) {
-    if(!xarVarFetch('oldprefix', 'isset', $oldprefix,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('reset',     'isset', $reset,      NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('resetcat',  'isset', $resetcat,   NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('imgurl',    'isset', $imgurl,     NULL, XARVAR_NOT_REQUIRED)) {return;}
-
+        if (!xarVarFetch('oldprefix',     'isset', $oldprefix,     NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('reset',         'isset', $reset,         NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('resetcat',      'isset', $resetcat,      NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('imgurl',        'isset', $imgurl,        NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('importphpbb14', 'isset', $importphpbb14, NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('importmodule',  'str:1:', $importmodule)) {return;}
     } elseif ($step > 1 || isset($startnum)) {
         $oldprefix = xarModGetVar('installer','oldprefix');
         $reset = xarModGetVar('installer','reset');
         $resetcat = xarModGetVar('installer','resetcat');
         $imgurl = xarModGetVar('installer','imgurl');
+        $importphpbb14 = xarModGetVar('installer','importphpbb14');
+        $importmodule = xarModGetVar('installer','importmodule');
     }
 }
 if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i',$oldprefix)) {
@@ -66,6 +68,13 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     <input type="checkbox" name="reset" checked></td></tr>
     <tr><td align="right">Reset existing Xaraya categories ?</td><td>
     <input type="checkbox" name="resetcat" checked></td></tr>
+    <tr><td align="right">Import phpBB_14 module data ?</td><td>
+    <input type="checkbox" name="importphpbb14" checked></td></tr>
+    <tr><td align="right">Import into</td><td>
+    <select name="importmodule">
+    <option value="articles">articles</option>
+    <option value="xarbb" selected="selected">xarBB</option>
+    </select></td></tr>
     <tr><td colspan=2 align="middle">
     <input type="submit" value=" Import Data "></td></tr>
     </table>
@@ -99,6 +108,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         xarModSetVar('installer','resetcat',$resetcat);
         if (!isset($imgurl)) { $imgurl = 0; }
         xarModSetVar('installer','imgurl',$imgurl);
+        if (!isset($importphpbb14)) { $importphpbb14 = 0; }
+        xarModSetVar('installer','importphpbb14',$importphpbb14);
+        xarModSetVar('installer','importmodule',$importmodule);
     }
 
     $dbconn =& xarDBGetConn();
@@ -114,6 +126,11 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
     if (!xarModAPILoad('articles','admin')) {
         die("Unable to load the articles admin API");
+    }
+    if ($importphpbb14) {
+        if ($importmodule == 'xarbb' && !xarModAPILoad('xarbb','admin')) {
+            die("Unable to load the xarbb admin API");
+        }
     }
     if (!xarModAPILoad('comments','user')) {
         die("Unable to load the comments user API");
@@ -135,8 +152,12 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     if (!isset($resetcat)) {
         $resetcat = 0;
     }
+    if (!isset($importphpbb14)) {
+        $importphpbb14 = 0;
+    }
 
-    $importfiles = array(
+    if ($importphpbb14) {
+        $importfiles = array(
                          1 => array('import_pn_users.php'),
                          //2 => array('import_pn_topics.php','import_pn_stories_cat.php'),
                          2 => array('import_pn_topicscat.php'),
@@ -149,14 +170,45 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
                          9 => array('import_pn_comments.php'),
                          10 => array('import_pn_links_categories.php'),
                          11 => array('import_pn_links_links.php'),
+                         12 => array('import_pn_downloads_categories.php'),
+                         13 => array('import_pn_downloads_downloads.php'),
                     // TODO: split into separate steps if you have many of those :)
-                         12 => array('import_pn_poll_desc.php',
+                         14 => array('import_pn_poll_desc.php',
                                      'import_pn_poll_data.php',
                                      'import_pn_pollcomments.php'),
-// TODO: add the rest :-)
-                         13 => array('import_pn_cleanup.php'),
+                         15 => array('import_pn_phpbb14_pubtype.php',
+                                     'import_pn_phpbb14_categories.php',
+                                     'import_pn_phpbb14_forums.php'),
+                         16 => array('import_pn_phpbb14_topics.php'),
+                         17 => array('import_pn_phpbb14_posts.php'),
+                    // TODO: add the rest (groups, ranks, ...) :-)
+                    // TODO: add the rest :-)
+                         18 => array('import_pn_cleanup.php'),
                         );
-
+    } else {
+        $importfiles = array(
+                         1 => array('import_pn_users.php'),
+                         //2 => array('import_pn_topics.php','import_pn_stories_cat.php'),
+                         2 => array('import_pn_topicscat.php'),
+                         3 => array('import_pn_stories.php'),
+                         4 => array('import_pn_queue.php'),
+                         5 => array('import_pn_sections.php'),
+                         6 => array('import_pn_seccont.php'),
+                         7 => array('import_pn_faqcategories.php'),
+                         8 => array('import_pn_faqanswer.php'),
+                         9 => array('import_pn_comments.php'),
+                         10 => array('import_pn_links_categories.php'),
+                         11 => array('import_pn_links_links.php'),
+                         12 => array('import_pn_downloads_categories.php'),
+                         13 => array('import_pn_downloads_downloads.php'),
+                    // TODO: split into separate steps if you have many of those :)
+                         14 => array('import_pn_poll_desc.php',
+                                     'import_pn_poll_data.php',
+                                     'import_pn_pollcomments.php'),
+                    // TODO: add the rest :-)
+                         15 => array('import_pn_cleanup.php'),
+                        );
+    }
     if (isset($importfiles[$step]) && count($importfiles[$step]) > 0) {
         foreach ($importfiles[$step] as $file) {
             if (!is_file($file)) {

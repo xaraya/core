@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Import PostNuke .71+ cleanup for your Xaraya test site
  *
  * @package Xaraya eXtensible Management System
@@ -34,6 +32,36 @@
     xarModDelVar('installer','faqs');
     xarModDelVar('installer','faqid');
     xarModDelVar('installer','weblinks');
+
+    // phpBB_14 cleanup
+    xarModDelVar('installer','importmodule');
+    xarModDelVar('installer','forumid');
+    xarModDelVar('installer','postid');
+
+    // CHECKME - this vars used in two places - topics and phpbb14
+    // xarModDelVar('installer','categories');
+    // xarModDelVar('installer','catid');
+    // xarModDelVar('installer','topicid');
+
+    if ($importmodule == 'articles') {
+        $ptid = xarModGetVar('installer','ptid');
+        $url = xarModURL('articles','user','view',
+                         array('ptid' => $ptid));
+        // Enable bbcode hooks for 'forums' pubtype of articles
+        if (xarModIsAvailable('bbcode') && !xarModIsHooked('bbcode','articles',$ptid)) {
+            xarModAPIFunc('modules','admin','enablehooks',
+                          array('callerModName' => 'articles', 'callerItemType' => $ptid, 'hookModName' => 'bbcode'));
+        }
+    } else {
+        if (xarModIsAvailable('bbcode') && !xarModIsHooked('bbcode','xarbb')) {
+            xarModAPIFunc('modules','admin','enablehooks',
+                          array('callerModName' => 'xarbb', 'hookModName' => 'bbcode'));
+        }
+        $url = xarModURL('xarbb','user','main');
+    }
+    
+    xarModDelVar('installer','ptid');
+
     echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="index.php">Go to your imported site</a><br/>';
 
