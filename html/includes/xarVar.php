@@ -796,111 +796,76 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         return;
     }
 
+    // FIXME: <mrb> Has this a specific historic reason to do it like this?
+    $missing = '*!*MiSSiNG*!*';
+
     if (empty($prep)) {
         $prep = XARVAR_PREP_FOR_NOTHING;
     }
 
     // Lets first check to see if any of our type vars are alread set in the cache.
+    $cacheName = $name;
     switch(strtolower($type)) {
-    case 'modvar':
-    default:
-        if (xarVarIsCached('Mod.Variables.' . $modName, $name)) {
-            $value = xarVarGetCached('Mod.Variables.' . $modName, $name);
-            if ($value === '*!*MiSSiNG*!*') {
-                return;
-            } else {
-                if ($prep == XARVAR_PREP_FOR_DISPLAY){
-                    $value = xarVarPrepForDisplay($value);
-                } elseif ($prep == XARVAR_PREP_FOR_HTML){
-                    $value = xarVarPrepHTMLDisplay($value);
-                }
-                return $value;
-            }
-        } elseif (xarVarIsCached('Mod.GetVarsByModule', $modName)) {
-            // we already got everything for this module, and didn't find it above
-            return;
-        } elseif (xarVarIsCached('Mod.GetVarsByName', $name)) {
-            // we already got everything for this name, and didn't find it above
-            return;
-        }
-        
-        break;
     case 'moduservar':
-        $cachename = $uid . $name;
-        if (xarVarIsCached('ModUser.Variables.' . $modName, $cachename)) {
-            $value = xarVarGetCached('ModUser.Variables.' . $modName, $cachename);
-            if ($value === '*!*MiSSiNG*!*') {
-                return;
-            } else {
-                if ($prep == XARVAR_PREP_FOR_DISPLAY){
-                    $value = xarVarPrepForDisplay($value);
-                } elseif ($prep == XARVAR_PREP_FOR_HTML){
-                    $value = xarVarPrepHTMLDisplay($value);
-                }
-                return $value;
-            }
-        }
+        $cacheCollection = 'ModUser.Variables.' . $modName;
+        $cacheName = $uid . $name;
         break;
     case 'themevar':
-        if (xarVarIsCached('Theme.Variables.' . $modName, $name)) {
-            $value = xarVarGetCached('Theme.Variables.' . $modName, $name);
-            if ($value === '*!*MiSSiNG*!*') {
-                return;
-            } else {
-                if ($prep == XARVAR_PREP_FOR_DISPLAY){
-                    $value = xarVarPrepForDisplay($value);
-                } elseif ($prep == XARVAR_PREP_FOR_HTML){
-                    $value = xarVarPrepHTMLDisplay($value);
-                }
-                return $value;
-            }
-        } elseif (xarVarIsCached('Theme.GetVarsByTheme', $modName)) {
-            // we already got everything for this module, and didn't find it above
-            return;
-        } elseif (xarVarIsCached('Theme.GetVarsByName', $name)) {
-            // we already got everything for this name, and didn't find it above
-            return;
-        }
-        
+        $cacheCollection = 'Theme.Variables.' . $modName;  // This is kinda confusing
         break;
     case 'configvar':
-        if (xarVarIsCached('Config.Variables', $name)) {
-            return xarVarGetCached('Config.Variables', $name);
-            if ($value === '*!*MiSSiNG*!*') {
-                return;
-            } else {
-                if ($prep == XARVAR_PREP_FOR_DISPLAY){
-                    $value = xarVarPrepForDisplay($value);
-                } elseif ($prep == XARVAR_PREP_FOR_HTML){
-                    $value = xarVarPrepHTMLDisplay($value);
-                }
-                return $value;
+        $cacheCollection = 'Config.Variables';
+        break;
+    default:
+        $cacheCollection = 'Mod.Variables.' . $modName;
+        break;
+    }
+    if (xarVarIsCached($cacheCollection, $cacheName)) {
+        $value = xarVarGetCached($cacheCollection, $name);
+        if ($value === $missing) {
+            return;
+        } else {
+            if ($prep == XARVAR_PREP_FOR_DISPLAY){
+                $value = xarVarPrepForDisplay($value);
+            } elseif ($prep == XARVAR_PREP_FOR_HTML){
+                $value = xarVarPrepHTMLDisplay($value);
             }
+            return $value;
         }
-        
+    }
+    
+    // We didn't find it in the single var cache, let's check the cached collection by whole/name
+    switch(strtolower($type)) {
+    case 'themevar':
+        if (xarVarIsCached('Theme.GetVarsByTheme', $modName)) return;
+        if (xarVarIsCached('Theme.GetVarsByName', $name)) return;
+        break;
+    case 'modvar':
+    default:
+        if (xarVarIsCached('Mod.GetVarsByModule', $modName)) return;
+        if (xarVarIsCached('Mod.GetVarsByName', $name)) return;
         break;
     }
     
+
+    // Still no luck, let's do the hard work then
     switch(strtolower($type)) {
-    case 'modvar':
-    case 'moduservar':
+    case 'themevar':
+        $baseinfotype = 'theme';
+        break;
     default:
-        $modBaseInfo = xarMod_getBaseInfo($modName);
-        if (!isset($modBaseInfo)) {
-            return; // throw back
-        }
+        $baseinfotype = 'module';
         break;
         
-    case 'themevar':
-        $modBaseInfo = xarMod_getBaseInfo($modName, $baseinfotype = 'theme');
+    }
+    if($type != 'configvar') {
+        $modBaseInfo = xarMod_getBaseInfo($modName, $baseinfotype);
         if (!isset($modBaseInfo)) {
             return; // throw back
         }
-        break;
-    case 'configvar':
-        break;
     }
     
+
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
     
@@ -962,6 +927,8 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         
     }
     
+    // TODO : Explain the cache logic behind this, why exclude moduservars?
+    // TODO : why have cache period 1 week ?
     if (xarCore_getSystemVar('DB.UseADODBCache')){
         switch(strtolower($type)) {
         case 'modvar':
@@ -980,7 +947,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         if (!$result) return;
     }
     
-    $setTo = '*!*MiSSiNG!*';
+    $setTo = $missing;
     switch(strtolower($type)) {
     case 'moduservar':
         // If there is no such thing, return the global setting.
@@ -1011,6 +978,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
     list($value) = $result->fields;
     $result->Close();
     
+    // We finally found it, update the appropriate cache
     switch(strtolower($type)) {
         case 'modvar':
             default:
@@ -1029,6 +997,9 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
 
     }
     
+    // Optionally prepare it
+    // FIXME: This may sound convenient now, feels wrong though, prepping introduces
+    //        an unnecessary dependency here.
     if ($prep == XARVAR_PREP_FOR_DISPLAY){
         $value = xarVarPrepForDisplay($value);
     } elseif ($prep == XARVAR_PREP_FOR_HTML){
