@@ -892,7 +892,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
             break;
 
         case 'themevar':
-            $modBaseInfo = xarMod_getBaseInfo($modName, $type = 'theme');
+            $modBaseInfo = xarMod_getBaseInfo($modName, $baseinfotype = 'theme');
             if (!isset($modBaseInfo)) {
                 return; // throw back
             }
@@ -1039,7 +1039,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
  * @raise DATABASE_ERROR, BAD_PARAM
  * @todo  We could delete the user vars for the module with the new value to save space?
  */
-function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $uid = NULL, $type = 'modvar')
+function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $description = NULL, $uid = NULL, $type = 'modvar')
 {
     if (empty($name)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
@@ -1054,7 +1054,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $u
             if (!isset($modBaseInfo)) return; // throw back
             break;
         case 'themevar':
-            $modBaseInfo = xarMod_getBaseInfo($modName, $type = 'theme');
+            $modBaseInfo = xarMod_getBaseInfo($modName, $baseinfotype = 'theme');
             if (!isset($modBaseInfo)) return; // throw back
             break;
         case 'configvar':
@@ -1122,9 +1122,9 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $u
             break;
         case 'themevar':
             // Takes the right table basing on theme mode
-            if ($themeBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
+            if ($modBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
                 $theme_varsTable = $tables['theme_vars'];
-            } elseif ($themeBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
+            } elseif ($modBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
                 $theme_varsTable = $tables['site/theme_vars'];
             }
 
@@ -1140,7 +1140,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $u
                           xar_description)
                       VALUES
                          ('$seqId',
-                          '" . xarVarPrepForStore($themeName) . "',
+                          '" . xarVarPrepForStore($modName) . "',
                           '" . xarVarPrepForStore($name) . "',
                           '" . xarVarPrepForStore($prime) . "',
                           '" . xarVarPrepForStore($value) . "',
@@ -1218,7 +1218,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
             if (!isset($modBaseInfo)) return; // throw back
             break;
         case 'themevar':
-            $modBaseInfo = xarMod_getBaseInfo($modName, $type = 'theme');
+            $modBaseInfo = xarMod_getBaseInfo($modName, $baseinfotype = 'theme');
             if (!isset($modBaseInfo)) return; // throw back
             break;
         case 'configvar':
@@ -1264,14 +1264,14 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
             break;
         case 'themevar':
             // Takes the right table basing on theme mode
-            if ($themeBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
+            if ($modBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
                 $theme_varsTable = $tables['system/theme_vars'];
-            } elseif ($themeBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
+            } elseif ($modBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
                 $theme_varsTable = $tables['site/theme_vars'];
             }
 
             $query = "DELETE FROM $theme_varsTable
-                      WHERE xar_themename = '" . xarVarPrepForStore($themeName) . "'
+                      WHERE xar_themename = '" . xarVarPrepForStore($modName) . "'
                       AND xar_name = '" . xarVarPrepForStore($name) . "'";
             break;
         case 'configvar':
