@@ -33,9 +33,6 @@ class Exception
 
     function Exception() {
         $this->stack = array();
-        if (isset($msg)){
-            $this->msg = $msg;
-        }
     }
 
     function toString() {
