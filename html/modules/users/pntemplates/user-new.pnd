@@ -1,0 +1,87 @@
+<pnt:if condition="$stage eq 1">
+  <center>
+        <pnt:mlstring>Terms and Conditions</pnt:mlstring>
+	<br /><br />
+        <pnt:template file="user-terms" type="module" />
+	<br /><br />
+<!---this shit shouldnt print        <a href="##pntModURL('users',
+                           'user',
+                           'new',
+                            array('stage' => 2,
+                                  'authid' => pnSecGenAuthKey()))##">
+                            <pnt:mlstring>Accept terms and conditions</pnt:mlstring></a> --->
+        <a href="index.php"><pnt:mlstring>Do not accept terms and conditions</pnt:mlstring></a>
+
+<pnt:elseif condition="$stage eq 2" />
+
+  <center>
+        <pnt:mlstring>Create User Account</pnt:mlstring>
+	<br /><br />
+	<form action="&pnt-modurl-users-user-new;" method="post" enctype="application/x-www-form-urlencoded">
+		<input type="hidden" name="stage" id="stage" value="3" />		
+		<input type="hidden" name="authid" id="authid" value="&pnt-var-authid;" />		
+		<table border="0" cellpadding="5">
+			<tr>
+				<td>
+					<pnt:mlstring>User Name</pnt:mlstring>
+				</td>
+				<td>
+					<input type="text" name="uname" id="uname" value="" size="25" maxlength="25" tabindex="1" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<pnt:mlstring>Real Name</pnt:mlstring>
+				</td>
+				<td>
+					<input type="text" name="realname" id="realname" value="" size="25" maxlength="60" tabindex="2" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<pnt:mlstring>E-Mail</pnt:mlstring>
+				</td>
+				<td>
+					<input type="text" name="email" id="email" value="" size="25" maxlength="100" tabindex="3" />
+				</td>
+			</tr>
+                       <pnt:if condition="pnModGetVar('users', 'chooseownpassword')" >
+			<tr>
+				<td>
+					<pnt:mlstring>Password</pnt:mlstring>
+				</td>
+				<td>
+					<input type="password" name="pass1" id="pass1" value="" size="25" maxlength="40" tabindex="4" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<pnt:mlstring>Retype Password</pnt:mlstring>
+				</td>
+				<td>
+					<input type="password" name="pass2" id="pass2" value="" size="25" maxlength="40" tabindex="5" />
+				</td>
+			</tr>
+                        </pnt:if>
+		</table>			
+					
+		<br /><br />
+
+
+		<input type="submit" value="<pnt:mlstring>Create User</pnt:mlstring>" align="middle" tabindex="6" />
+	</form>
+  </center>
+
+<pnt:elseif condition="$stage eq 3" /> 
+
+    #$errortext#
+
+<pnt:elseif condition="$stage eq 4" />
+<pnt:elseif condition="$stage eq 5" />
+    <pnt:mlstring>This account is awaiting approval from an administrater before being activated.</pnt:mlstring>
+    <pnt:if condition="pnModGetVar('users', 'sendwelcomeemail')">
+        <br /><br />
+        <pnt:mlstring>You will be sent an email when the account is activated.</pnt:mlstring>
+    </pnt:if>
+</pnt:if>
+

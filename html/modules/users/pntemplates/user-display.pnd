@@ -1,0 +1,19 @@
+<pnt:include file="user-menu" type="module"/>
+
+<table>
+<tr><pnt:mlstring>User Name</pnt:mlstring>: #$data['uname']#</tr>
+<tr><pnt:mlstring>Real Name</pnt:mlstring>: #$data['name']#</tr>
+<tr><pnt:mlstring>Email</pnt:mlstring>: #$data['email']#</tr>
+<tr><pnt:mlstring>Home Page</pnt:mlstring>: #$data['url']#</tr>
+</table>
+
+TODO: call hooks
+
+pnModCallHooks('item',
+                                 'display',
+                                 $uid,
+                                 pnModURL('users',
+                                          'user',
+                                          'display',
+                                          array('uid' => $uid))));
+
