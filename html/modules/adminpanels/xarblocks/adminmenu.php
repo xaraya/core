@@ -94,7 +94,7 @@ function adminpanels_adminmenublock_display($blockinfo){
 //    $thismod = xarModGetName(); // moved to xaradminapi
     
     
-    // TODO: display link to the manual (do we need it here?)
+    // TODO: display content sensitive link to the manual-online_help
     
     // prepare the show
     xarModAPILoad('adminpanels', 'admin');

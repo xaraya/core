@@ -181,6 +181,13 @@ function adminpanels_init()
         return;
     }
     
+    // Set module variables
+    xarModSetVar('adminpanels','showold', 1);
+    xarModSetVar('adminpanels','menuposition', 'l');
+    xarModSetVar('adminpanels','menustyle', 'bycat');
+    xarModSetVar('adminpanels','showontop', 1);
+    xarModSetVar('adminpanels','showhelp', 1);
+    
     // Initialisation successful
     return true;
 }
