@@ -88,6 +88,9 @@ class ExceptionRendering
     function getShort() { return $this->exception->getShort() == '' ? $this->short : $this->exception->getShort(); }
 
     function isadmin(){
+    	if (!class_exists("xarRoles"))
+    		return false;
+    	
         if(!xarVarGetCached('installer','installing')) {
             $roles = new xarRoles();
             $admins = "Administrators";
