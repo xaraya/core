@@ -380,6 +380,109 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         return $field;
     }
 
+    function getNext($args = array())
+    {
+        static $temp = array();
+
+        $table = $this->name;
+        $itemidfield = $this->primary;
+
+        // can't really do much without the item id field at the moment
+        if (empty($itemidfield)) {
+            return;
+        }
+
+        $fieldlist = array_keys($this->fields);
+        if (count($fieldlist) < 1) {
+            return;
+        }
+
+        if (!isset($temp['result'])) {
+            if (!empty($args['numitems'])) {
+                $numitems = $args['numitems'];
+            } else {
+                $numitems = 0;
+            }
+            if (!empty($args['startnum'])) {
+                $startnum = $args['startnum'];
+            } else {
+                $startnum = 1;
+            }
+            if (!empty($args['itemids'])) {
+                $itemids = $args['itemids'];
+            } elseif (isset($this->itemids)) {
+                $itemids = $this->itemids;
+            } else {
+                $itemids = array();
+            }
+
+            list($dbconn) = xarDBGetConn();
+
+            $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
+                        FROM $table ";
+
+            if (count($itemids) > 1) {
+                $query .= " WHERE $itemidfield IN (" . join(', ',$itemids) . ") ";
+            } elseif (count($itemids) == 1) {
+                $query .= " WHERE $itemidfield = " . xarVarPrepForStore($itemids[0]) . " ";
+            } elseif (count($this->where) > 0) {
+                $query .= " WHERE ";
+                foreach ($this->where as $whereitem) {
+                    $query .= $whereitem['join'] . ' ' . $whereitem['field'] . ' ' . $whereitem['clause'] . ' ';
+                }
+            }
+
+            // TODO: GROUP BY, LEFT JOIN, ... ? -> cfr. relationships
+
+            if (count($this->sort) > 0) {
+                $query .= " ORDER BY ";
+                $join = '';
+                foreach ($this->sort as $sortitem) {
+                    $query .= $join . $sortitem['field'] . ' ' . $sortitem['sortorder'];
+                    $join = ', ';
+                }
+            } else {
+                $query .= " ORDER BY $itemidfield";
+            }
+
+            if ($numitems > 0) {
+                $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1);
+            } else {
+                $result =& $dbconn->Execute($query);
+            }
+            if (!$result) return;
+            $temp['result'] =& $result;
+        }
+
+        $result =& $temp['result'];
+
+        if ($result->EOF) {
+            $result->Close();
+
+            $temp['result'] = null;
+            return;
+        }
+
+        $values = $result->fields;
+        $itemid = array_shift($values);
+        // oops, something went seriously wrong here...
+        if (empty($itemid) || count($values) != count($this->fields)) {
+            $result->Close();
+
+            $temp['result'] = null;
+            return;
+        }
+
+        $this->fields[$itemidfield]->setValue($itemid);
+        foreach ($fieldlist as $field) {
+            // set the value for this property
+            $this->fields[$field]->setValue(array_shift($values));
+        }
+
+        $result->MoveNext();
+        return $itemid;
+    }
+
 }
 
 ?>

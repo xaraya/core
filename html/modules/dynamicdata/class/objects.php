@@ -768,6 +768,7 @@ class Dynamic_Object extends Dynamic_Object_Master
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
  */
+//class Dynamic_Object_List extends Dynamic_Object
 class Dynamic_Object_List extends Dynamic_Object_Master
 {
     var $itemids;           // the list of item ids used in data stores
@@ -1259,6 +1260,56 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             }
         }
         return array($prevurl,$nexturl,$sorturl);
+    }
+
+    /**
+     * Get items one at a time, instead of storing everything in $this->items
+     */
+    function getNext($args = array())
+    {
+        static $start = true;
+
+        if ($start) {
+            // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
+            $this->setArguments($args);
+
+            if (empty($args['numitems'])) {
+                $args['numitems'] = $this->numitems;
+            }
+            if (empty($args['startnum'])) {
+                $args['startnum'] = $this->startnum;
+            }
+
+            // if we don't have a start store yet, but we do have a primary datastore, we'll start there
+            if (empty($this->startstore) && !empty($this->primary)) {
+                $this->startstore = $this->properties[$this->primary]->datastore;
+            }
+
+            $start = false;
+        }
+
+        $itemid = null;
+        // first get the items from the start store (if any)
+        if (!empty($this->startstore)) {
+            $itemid = $this->datastores[$this->startstore]->getNext($args);
+
+            // check if we found something - if not, no sense looking further
+            if (empty($itemid)) {
+                return;
+            }
+        }
+/* skip this for now !
+        // then retrieve the other info about those items
+        foreach (array_keys($this->datastores) as $name) {
+            if (!empty($this->startstore) && $name == $this->startstore) {
+                continue;
+            }
+            //$this->datastores[$name]->getItems($args);
+            $args['itemid'] = $itemid;
+            $this->datastores[$name]->getItem($args);
+        }
+*/
+        return $itemid;
     }
 
 }
