@@ -21,3 +21,5 @@ cell:
 pager: 
 hours: 
 homepage: http://www.xaraya.com
+bkweb:  http://www.xaraya.com:15000/stable
+           
