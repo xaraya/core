@@ -211,6 +211,8 @@
             // at the last sid from nuke_stories.  Otherwise the next import
             // into xar_articles will fail because the aid already exists.
             // This isn't a problem for MySQL as it has an auto_increment column.
+// FIXME: this doesn't seem to set the sequence number
+// use select setval('seqxar_articles',max(xar_aid)) from xar_articles; ?
             $dbconn->GenID($tables['articles'], $stoid);
 
             $query = 'VACUUM ANALYZE ' . $tables['articles'];
