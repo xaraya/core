@@ -68,6 +68,15 @@ function modules_adminapi_getalldependencies($args)
         return $dependency_array;
     }
 
+    if (!empty($modInfo['extensions'])) {
+        foreach ($modInfo['extensions'] as $extension) {
+            if (!empty($extension) && !extension_loaded($extension)) {
+                //Add this extension to the unsatisfiable list
+                $dependency_array['unsatisfiable'][] = $extension;
+            }
+        }
+    }
+
     $dependency = $modInfo['dependency'];
 
     if (empty($dependency)) {

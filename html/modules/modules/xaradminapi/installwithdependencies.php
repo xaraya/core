@@ -74,6 +74,17 @@ function modules_adminapi_installwithdependencies ($args)
             break;
     }
 
+    if (!empty($modInfo['extensions'])) {
+        foreach ($modInfo['extensions'] as $extension) {
+            if (!empty($extension) && !extension_loaded($extension)) {
+                xarErrorSet(
+                    XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
+                    new SystemException(xarML("Required PHP extension '#(1)' is missing for module '#(2)'", $extension, $modInfo['displayname']))
+                );
+                return;
+            }
+        }
+    }
 
     $dependency = $modInfo['dependency'];
 
