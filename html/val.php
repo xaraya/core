@@ -28,9 +28,10 @@ $user = xarModAPIFunc('roles',
 xarResponseRedirect(xarModURL('roles',
                               'user',
                               'getvalidation',
-                              array('stage'   => 'getvalidation',
+                              array('stage'   => 'getvalidate',
                                     'valcode' => $v,
-                                    'uname'   => $user['uname'])));
+                                    'uname'   => $user['uname'],
+                                    'phase'   => 'getvalidate')));
 
 // Kill the debugger
 xarCore_disposeDebugger();
