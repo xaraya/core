@@ -29,11 +29,7 @@ function dynamicdata_userapi_handleLabelTag($args)
         return 'echo xarVarPrepForDisplay('.$args['object'].'->label); ';
     } elseif (!empty($args['property'])) {
         if (!empty($args['label'])) {
-            if ($args['label'] == 'id') {
-                return 'echo \'<label for="dd_\' . '.$args['property'].'->id . \'">\' . xarVarPrepForDisplay('.$args['property'].'->label) . \'</label>\'; ';
-            } else {
-                return 'echo \'<label for="\' . '.$args['property'].'->name . \'">\' . xarVarPrepForDisplay('.$args['property'].'->label) . \'</label>\'; ';
-            }
+            return 'echo '.$args['property'].'->showLabel(array(\'for\' => \''.$args['label'].'\')); ';
         } else {
             return 'echo xarVarPrepForDisplay('.$args['property'].'->label); ';
         }

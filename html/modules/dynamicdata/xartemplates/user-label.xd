@@ -1,0 +1,10 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+
+<xar:if condition="!empty($for) and $for eq 'id' and !empty($id)">
+    <label for="dd_#$id#">#$label#</label>
+<xar:elseif condition="!empty($for) and $for eq 'name' and !empty($name)"/>
+    <label for="#$name#">#$label#</label>
+<xar:else/>
+    #$label#
+</xar:if>
+
