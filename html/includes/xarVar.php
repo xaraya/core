@@ -742,6 +742,7 @@ function xarVarPrepHTMLDisplay()
  * @access public
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
+ * @todo are we allowing arrays and objects for real?
  */
 function xarVarPrepForStore()
 {
@@ -750,6 +751,7 @@ function xarVarPrepForStore()
 
         // Prepare var
         if (!get_magic_quotes_runtime()) {
+            // FIXME: allow other than strings?
             $var = addslashes($var);
         }
 
