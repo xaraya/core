@@ -181,7 +181,7 @@ function xarPageSetCached($cacheKey, $name, $value)
         if (!empty($fp)) {
             $now = xarML('Last updated on #(1)',strftime('%a, %d %B %Y %H:%M:%S %Z',time()));
             if ($xarPage_cacheShowTime == 1) {
-                $value = preg_replace('#</body>#','<br /><center>'.$now.'</center></body>',$value);
+                $value = preg_replace('#</body>#','<div class="xar-sub" style="text-align: center; padding: 8px; ">'.$now.'</div></body>',$value);
             } else {
                 $value = preg_replace('#</body>#','<!--'.$now.'--></body>',$value);
             }
