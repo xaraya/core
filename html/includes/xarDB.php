@@ -18,7 +18,7 @@
  * This function loads up ADODB  and starts the database
  * connection using the required parameters then it sets
  * the table prefixes and xartables up and returns true
- * <br>
+ * 
  * @access protected
  * @global array xarDB_systemArgs
  * @global object dbconn database connection object
