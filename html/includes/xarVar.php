@@ -57,12 +57,12 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
     return true;
     */
         $GLOBALS['xarVar_allowableHTML'] = xarConfigGetVar('Site.Core.AllowableHTML');
-        if (!isset($GLOBALS['xarVar_allowableHTML']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        if (!isset($GLOBALS['xarVar_allowableHTML']) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
             return; // throw back exception
         }
 
         $GLOBALS['xarVar_fixHTMLEntities'] = xarConfigGetVar('Site.Core.FixHTMLEntities');
-        if (!isset($GLOBALS['xarVar_fixHTMLEntities']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        if (!isset($GLOBALS['xarVar_fixHTMLEntities']) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
             return; // throw back exception
         }
 
@@ -200,7 +200,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
 
     $result = xarVarValidate($validation, $value, $supress);
 
-    if (xarExceptionMajor()) {return;} //Throw back
+    if (xarCurrentErrorType()) {return;} //Throw back
 
     // Check prep of $value
     if ($prep & XARVAR_PREP_FOR_DISPLAY) {

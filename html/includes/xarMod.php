@@ -853,7 +853,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType, $funcName) === NULL) return;
 
     $tplData = $modFunc($args);
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
+    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
 
     if (!is_array($tplData)) {
         return $tplData;
@@ -1047,7 +1047,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
         }
     }
     
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         // If exceptionId is MODULE_FUNCTION_NOT_EXIST there's no problem,
         // this exception means that the module does not support short urls
         // for this $modType.
@@ -1117,7 +1117,7 @@ function xarModEmailURL($modName = NULL, $modType = 'user', $funcName = 'main', 
         return xarServerGetBaseURL() . 'index.php';
     }
 
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         // If exceptionId is MODULE_FUNCTION_NOT_EXIST there's no problem,
         // this exception means that the module does not support short urls
         // for this $modType.
@@ -1208,7 +1208,7 @@ function xarModIsAvailable($modName, $type = 'module')
 /*        // Catch the MODULE_NOT_EXIST exception first,
         // because that is what we're testing
         // here, we don't want to except on that.
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
             if (xarExceptionId() != 'MODULE_NOT_EXIST') {
                 // Other exceptions are still thrown however
                 return;
@@ -1294,7 +1294,7 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
     $hooklist = xarModGetHookList($modName, $hookObject, $hookAction, $callerItemType);
 
     // TODO: #2
-    if (!isset($hooklist) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!isset($hooklist) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return;
     }
 

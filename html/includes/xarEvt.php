@@ -196,10 +196,10 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
     if(function_exists($funcSpecific)) {
 
         $funcSpecific($value);
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
+        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
 //    } elseif (function_exists($funcGeneral)) {
 //        $funcGeneral($eventName,$value);
-//        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
+//        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
     } elseif (file_exists($xarapifile)) {
 
         include_once($xarapifile);
@@ -216,11 +216,11 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
 
             $funcSpecific($value);
 
-            if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
+            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
 
 //        } elseif (function_exists($funcGeneral)) {
 //            $funcGeneral($eventName,$value);
-//            if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
+//            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
         }
     }   
 }

@@ -446,7 +446,7 @@ function xarRequestGetInfo()
                 }
                 $loopHole = NULL;
             }
-            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
                 // If exceptionId is MODULE_FUNCTION_NOT_EXIST there's no problem,
                 // this exception means that the module does not support short urls
                 // for this $modType.
@@ -541,7 +541,7 @@ function xarResponseRedirect($redirectURL)
 {
 
     // First checks if there's a pending exception, if so does not redirect browser
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) return false;
+    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return false;
 
 
     if (headers_sent() == true) return false;

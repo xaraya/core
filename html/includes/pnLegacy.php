@@ -994,7 +994,7 @@ function xarUser_getThemeName()
         return;
     }
     $themeName = xarUserGetVar('Theme');
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         // Here we can't raise an exception
         // so what we can do here is only to log the exception
         // and call xarExceptionFree

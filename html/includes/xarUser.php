@@ -180,7 +180,7 @@ function xarUserLogOut()
 
     // Reset user session information
     $res = xarSession_setUserInfo(_XAR_ID_UNREGISTERED, 0);
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return; // throw back
     }
 
@@ -251,7 +251,7 @@ function xarUserGetNavigationLocale()
             $locale = xarUserGetVar('locale');
         }
         if (!isset($locale)) {
-            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
                 // Here we need to return always a meaningfull result,
                 // so what we can do here is only to log the exception
                 // and call xarExceptionFree
@@ -569,7 +569,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
                              'value' => $value,
                              'prop_id' => $prop_id,
                              'prop_dtype' => $prop_dtype))) {
-        assert('xarExceptionMajor() != XAR_NO_EXCEPTION');
+        assert('xarCurrentErrorType() != XAR_NO_EXCEPTION');
         return;
     }
 
