@@ -321,6 +321,14 @@ function xarBlock_renderBlock($args)
                 xarBlockSetCached($cacheKey, 'block', $blockoutput);
             }
             $output = $blockoutput;
+
+            // don't throw back exception for broken blocks
+            //if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back
+            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+                $output .= xarExceptionRender('template');
+                // We handled the exception(s) so we can clear it
+                xarExceptionFree();
+            }
         }
     } else {
         // TODO: return NULL to indicate no block found?
