@@ -164,6 +164,11 @@ function themes_activate()
         return false;
     }
 
+    xarModSetVar('themes', 'SiteName', 'Your Site Name');
+    xarModSetVar('themes', 'SiteSlogan', 'Your Site Slogan');
+    xarModSetVar('themes', 'SiteCopyRight', '2003');
+    xarModSetVar('themes', 'SiteFooter', 'Your Footer');
+
     xarBlockTypeRegister('themes', 'meta');
 
     return true;
