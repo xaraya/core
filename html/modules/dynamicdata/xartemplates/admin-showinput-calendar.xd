@@ -2,9 +2,9 @@
 <xar:set name="alttext"><xar:mlstring>Click Here to Pick up the date</xar:mlstring></xar:set>
 
 <xar:if condition="isempty($tabindex)">
-	<input type="text" name="#$name#" id="#$id#_input" value="#xarLocaleFormatDate($dateformat,$value)#" size="20" maxlength="19" />
+    <input type="text" name="#$name#" id="#$id#_input" value="#xarLocaleFormatDate($dateformat,$value)#" size="20" maxlength="19" />
 <xar:else />
-	<input type="text" name="#$name#" id="#$id#_input" value="#xarLocaleFormatDate($dateformat,$value)#" size="20" maxlength="19" tabindex="#$tabindex#" />
+    <input type="text" name="#$name#" id="#$id#_input" value="#xarLocaleFormatDate($dateformat,$value)#" size="20" maxlength="19" tabindex="#$tabindex#" />
 </xar:if>
 
 
