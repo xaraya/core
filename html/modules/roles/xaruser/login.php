@@ -44,7 +44,7 @@ function roles_user_login()
     foreach($xarUser_authenticationModules as $authModName) {
 
        switch(strtolower($authModName)) {
-
+       // Ooof, didn't realize we were doing this.  We really need a hook here.
             case 'authldap':
 
                 // The authldap module allows the admin to allow an
