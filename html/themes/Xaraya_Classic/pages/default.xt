@@ -18,7 +18,7 @@
         <xar:set name="$topnavblocksgroup"><xar:blockgroup name="topnav" id="topnav" /></xar:set>
         
         <!--- build layout depending on availability of the relevant data --->
-        <div id="header">
+        <div id="classicheader">
             <div id="themecontrols">
                 <span>
                     <xar:mlstring>
@@ -93,7 +93,7 @@
             </tr>
         </table>
         <div id="footerwrapper">
-            <div id="footer">
+            <div id="classicfooter">
                 <div class="validators">
                     <a href="http://validator.w3.org:8001/check?uri=referer" title="Validate XHTML 1.0 Strict">
                         <img src="#xarTplGetThemeDir()#/images/xhtml.jpg" alt="#xarModGetVar('themes', 'SiteName')#" style="align:left; border:0px" />
