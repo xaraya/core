@@ -7,7 +7,7 @@
 </xar:comment>
 <xar:if condition="$content_type eq 'text' and $custom_format eq ''">
     <div><xar:loop name="$content_lines">
-        <xar:if condition="$loop:number gt 1"><br /></xar:if>#xarVarPrepForDisplay($loop:item)#
+        <xar:if condition="$loop:index gt 0"><br /></xar:if>#xarVarPrepForDisplay($loop:item)#
     </xar:loop></div>
 </xar:if>
 
@@ -43,6 +43,6 @@
 </xar:comment>
 <xar:if condition="$content_type eq 'php' and $custom_format eq 'text'">
     <div><xar:loop name="$content_lines">
-        <xar:if condition="$loop:number gt 1"><br /></xar:if>#xarVarPrepForDisplay($loop:item)#
+        <xar:if condition="$loop:index gt 0"><br /></xar:if>#xarVarPrepForDisplay($loop:item)#
     </xar:loop></div>
 </xar:if>
