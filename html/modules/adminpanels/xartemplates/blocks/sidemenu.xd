@@ -23,6 +23,5 @@
         <div class="xar-menu-item"><a href="#$link#" title="#$desc#">#$label#</a></div>
     </xar:if>
 </xar:loop>
-<br />
 <!-- Logout -->
-[<a href="#$logouturl#">#$logoutlabel#</a>]
+<p style="font-size:smaller;">[<a href="#$logouturl#">#$logoutlabel#</a>]</p>
