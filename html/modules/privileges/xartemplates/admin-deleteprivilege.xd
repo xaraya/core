@@ -10,7 +10,7 @@
 		<xar:set name="$prevgroup">""</xar:set>
 		<xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
 			<xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-				<div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $parents[$i]['parentid']))#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a></div>
+				<div><a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $parents[$i]['parentid']))#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a></div>
 			</xar:if>
 			<xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
 		</xar:for>

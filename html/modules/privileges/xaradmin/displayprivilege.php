@@ -44,6 +44,10 @@ function privileges_admin_displayprivilege()
     if(isset($pid)) {$data['ppid'] = $pid;}
     else {$data['ppid'] = $priv->getID();}
 
+    include_once 'modules/privileges/xartreerenderer.php';
+    $renderer = new xarTreeRenderer();
+
+    $data['tree'] = $renderer->drawtree($renderer->maketree($priv));
     $data['pname'] = $priv->getName();
     $data['prealm'] = $priv->getRealm();
     $data['pmodule'] = $priv->getModule();

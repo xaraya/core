@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id:
- * 
+ *
  * Modify privilege details
- * 
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -90,7 +90,7 @@ function privileges_admin_modifyprivilege()
 
     $instances = $privs->getinstances($data['pmodule'],$data['pcomponent']);
     $numInstances = count($instances); // count the instances to use in later loops
-    
+
     if(count($instance) > 0) {$default = $instance;}
     else {
         $default = array();
@@ -126,6 +126,7 @@ function privileges_admin_modifyprivilege()
     include_once 'modules/privileges/xartreerenderer.php';
     $renderer = new xarTreeRenderer();
 
+    $data['tree'] = $renderer->drawtree($renderer->maketree($priv));
     $data['oldcomponent'] = $component;
     $data['authid'] = xarSecGenAuthKey();
     $data['parents'] = $parents;
