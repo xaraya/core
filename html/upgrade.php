@@ -93,10 +93,10 @@ if (empty($step)) {
     }
 
     // Now we can check whether people are logged in
-    if(XARCORE_VERSION_NUM == $xarVersion){
-        echo xarML('You have already upgraded to ');
-        echo $xarVersion;
-        echo xarML('.  The upgrade script only needs to run once.');
+    // TODO: allow the user to over-ride this message if need be - many problems
+    // can be solved by running the upgrade more than once.
+    if (XARCORE_VERSION_NUM == $xarVersion) {
+        echo xarML('You have already upgraded to #(1). The upgrade script only needs to run once.', $xarVersion);
         echo '</div></div>';
         // catch the output
         CatchOutput();
@@ -564,84 +564,103 @@ if (empty($step)) {
         echo "Dynamic Data table 'default' property with objectid 2 has correct property type of 3, moving to next check. <br />";
     }
 
-    // Bugs 1581/1586/1838: Update the blocks table definitions.
-    // Use the data dictionary to do the checking and altering.
-    echo "<h5>Checking Block Table Definitions</h5>";
-    $dbconn =& xarDBGetConn();
-    $datadict =& xarDBNewDataDict($dbconn, 'CREATE');
+    // ****************************
+    // * Changes to blocks tables *
+    // ****************************
 
-    // Upgrade the xar_block_instances table.
-    $blockinstancestable = xarDBGetSiteTablePrefix() . '_block_instances';
-    // Get column definitions for block instances table.
-    $columns = $datadict->getColumns($blockinstancestable);
-    // Do we have a xar_name column?
-    $blocks_column_found = false;
-    foreach($columns as $column) {
-        if ($column->name == 'xar_name') {
-            $blocks_column_found = true;
-            break;
-        }
-    }
-    // Upgrade the table (xar_block_instances) if the name column is not found.
-    if (!$blocks_column_found) {
-        // Create the column.
-        $result = $datadict->addColumn($blockinstancestable, 'xar_name C(100) Null');
-        // Update the name column with unique values.
-        $query = "UPDATE $blockinstancestable"
-            . " SET xar_name = " . $dbconn->Concat("'block_'", 'xar_id')
-            . " WHERE xar_name IS NULL";
-        $dbconn->Execute($query);
-        // Now make it mandatory, and add a unique index.
-        $result = $datadict->alterColumn($blockinstancestable, 'xar_name C(100) NotNull');
-        $result = $datadict->createIndex(
-            'i_'.xarDBGetSiteTablePrefix().'_block_instances_u2',
-            $blockinstancestable,
-            'xar_name',
-            array('UNIQUE')
-        );
-        echo "Added column xar_name to table $blockinstancestable<br/>";
-    } else {
-        echo "Table $blockinstancestable is up-to-date<br/>";
-    }
+    {
+        // Bugs 1581/1586/1838: Update the blocks table definitions.
+        // Use the data dictionary to do the checking and altering.
+        echo "<h5>Checking Block Table Definitions</h5>";
+        $dbconn =& xarDBGetConn();
+        $datadict =& xarDBNewDataDict($dbconn, 'CREATE');
 
-    // Upgrade the xar_block_group_instances table.
-    $blockgroupinstancestable = xarDBGetSiteTablePrefix() . '_block_group_instances';
-    // Get column definitions for block instances table.
-    $columns = $datadict->getColumns($blockgroupinstancestable);
-    // Do we have a xar_template column?
-    $blocks_column_found = false;
-    foreach($columns as $column) {
-        if ($column->name == 'xar_template') {
-            $blocks_column_found = true;
-            break;
+        // Upgrade the xar_block_instances table.
+        $blockinstancestable = xarDBGetSiteTablePrefix() . '_block_instances';
+        // Get column definitions for block instances table.
+        $columns = $datadict->getColumns($blockinstancestable);
+        // Do we have a xar_name column?
+        $blocks_column_found = false;
+        foreach($columns as $column) {
+            if ($column->name == 'xar_name') {
+                $blocks_column_found = true;
+                break;
+            }
         }
-    }
-    if (!$blocks_column_found) {
-        // Create the column.
-        $result = $datadict->addColumn($blockgroupinstancestable, 'xar_template C(100) Null');
-        echo "Added column xar_template to table $blockgroupinstancestable<br/>";
-    } else {
-        echo "Table $blockgroupinstancestable is up-to-date<br/>";
-    }
+        // Upgrade the table (xar_block_instances) if the name column is not found.
+        if (!$blocks_column_found) {
+            // Create the column.
+            $result = $datadict->addColumn($blockinstancestable, 'xar_name C(100) Null');
+            // Update the name column with unique values.
+            $query = "UPDATE $blockinstancestable"
+                . " SET xar_name = " . $dbconn->Concat("'block_'", 'xar_id')
+                . " WHERE xar_name IS NULL";
+            $dbconn->Execute($query);
+            // Now make it mandatory, and add a unique index.
+            $result = $datadict->alterColumn($blockinstancestable, 'xar_name C(100) NotNull');
+            $result = $datadict->createIndex(
+                'i_'.xarDBGetSiteTablePrefix().'_block_instances_u2',
+                $blockinstancestable,
+                'xar_name',
+                array('UNIQUE')
+            );
+            echo "Added column xar_name to table $blockinstancestable<br/>";
+        } else {
+            echo "Table $blockinstancestable is up-to-date<br/>";
+        }
 
-    // Upgrade the xar_block_types table.
-    $blocktypestable = xarDBGetSiteTablePrefix() . '_block_types';
-    // Get column definitions for block instances table.
-    $columns = $datadict->getColumns($blocktypestable);
-    // Do we have a xar_template column?
-    $blocks_column_found = false;
-    foreach($columns as $column) {
-        if ($column->name == 'xar_info') {
-            $blocks_column_found = true;
-            break;
+        // Upgrade the xar_block_group_instances table.
+        $blockgroupinstancestable = xarDBGetSiteTablePrefix() . '_block_group_instances';
+        // Get column definitions for block instances table.
+        $columns = $datadict->getColumns($blockgroupinstancestable);
+        // Do we have a xar_template column?
+        $blocks_column_found = false;
+        foreach($columns as $column) {
+            if ($column->name == 'xar_template') {
+                $blocks_column_found = true;
+                break;
+            }
         }
-    }
-    if (!$blocks_column_found) {
-        // Create the column.
-        $result = $datadict->addColumn($blocktypestable, 'xar_info X(2000) Null');
-        echo "Added column xar_info to table $blocktypestable<br/>";
-    } else {
-        echo "Table $blocktypestable is up-to-date<br/>";
+        if (!$blocks_column_found) {
+            // Create the column.
+            $result = $datadict->addColumn($blockgroupinstancestable, 'xar_template C(100) Null');
+            echo "Added column xar_template to table $blockgroupinstancestable<br/>";
+        } else {
+            echo "Table $blockgroupinstancestable is up-to-date<br/>";
+        }
+
+        // Upgrade the xar_block_types table.
+        $blocktypestable = xarDBGetSiteTablePrefix() . '_block_types';
+        // Get column definitions for block instances table.
+        $columns = $datadict->getColumns($blocktypestable);
+
+        // Do we have a xar_template column?
+        $blocks_column_found = false;
+        foreach($columns as $column) {
+            if ($column->name == 'xar_info') {
+                $blocks_column_found = true;
+                break;
+            }
+        }
+
+        if (!$blocks_column_found) {
+            // Create the column.
+            $result = $datadict->addColumn($blocktypestable, 'xar_info X(2000) Null');
+            echo "Added column xar_info to table $blocktypestable<br/>";
+        } else {
+            echo "Table $blocktypestable already has a xar_info column<br/>";
+        }
+
+        // Ensure the module and type columns are the correct length.
+        $data = 'xar_type C(64) NotNull DEFAULT \'\', 
+        xar_module C(64) NotNull DEFAULT \'\'';
+        $result = $datadict->changeTable($blocktypestable, $data);
+        echo "Table $blocktypestable xar_module and xar_type columns are correct<br/>";
+
+        // * TODO:
+        // * At this point we want to drop index i_xar_block_types and create
+        // * unique compound index i_xar_block_types2 on xar_type and xar_module.
+        // * Support for this is not in the DataDict yet (updates are available).
     }
 
 

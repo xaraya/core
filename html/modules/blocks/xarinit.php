@@ -111,13 +111,13 @@ function blocks_init()
             ),
             'xar_type' => array(
                 'type'          => 'varchar',
-                'size'          => 255,
+                'size'          => 64,
                 'null'          => false,
                 'default'       => ''
             ),
             'xar_module' => array(
                 'type'          => 'varchar',
-                'size'          => 255,
+                'size'          => 64,
                 'null'          => false,
                 'default'       => ''
             ),
@@ -132,7 +132,7 @@ function blocks_init()
     if (!$result) return;
 
     $query = xarDBCreateIndex($prefix . '_block_types',
-                             array('name'   => 'i_' . $prefix . '_block_types',
+                             array('name'   => 'i_' . $prefix . '_block_types2',
                                    'fields' => array('xar_module', 'xar_type'),
                                    'unique' => 'false'));
     $result =& $dbconn->Execute($query);
