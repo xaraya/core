@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * File: $Id$
+ *
+ * Get a list of themes that match required criteria
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage Themes
+ * @author Marty Vance
+*/
 /**
  * Gets a list of themes that matches required criteria.
  * Supported criteria are Mode, UserCapable, AdminCapable, Class, Category, State.

@@ -1,7 +1,19 @@
 <?php
-
 /**
- * Checks missing modules, and updates the status of them if any is found
+ * File: $Id$
+ *
+ * Checks missing themes
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage Themes
+ * @author Marty Vance
+*/
+/**
+ * Checks missing themes, and updates the status of them if any is found
  *
  * @param none
  * @return bool null on exceptions, true on sucess to update
