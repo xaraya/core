@@ -56,10 +56,10 @@ function dynamicdata_user_displayhook($args)
 
     // When called via hooks, the module name may be empty, so we get it from
     // the current module
-    if (empty($extrainfo['module']) || !is_array($extrainfo['module'])) {
-        $modname = xarModGetName();
-    } else {
+    if (is_array($extrainfo) && !empty($extrainfo['module']) && is_string($extrainfo['module'])) {
         $modname = $extrainfo['module'];
+    } else {
+        $modname = xarModGetName();
     }
 
     $modid = xarModGetIDFromName($modname);
@@ -71,7 +71,7 @@ function dynamicdata_user_displayhook($args)
         return $msg;
     }
 
-    if (!empty($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
+    if (is_array($extrainfo) && isset($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
         $itemtype = $extrainfo['itemtype'];
 // TODO: find some better way to do this !
     } elseif (xarVarIsCached('Hooks.display','itemtype')) {
@@ -80,7 +80,7 @@ function dynamicdata_user_displayhook($args)
         $itemtype = null;
     }
 
-    if (!empty($extrainfo['itemid']) && is_numeric($extrainfo['itemid'])) {
+    if (is_array($extrainfo) && isset($extrainfo['itemid']) && is_numeric($extrainfo['itemid'])) {
         $itemid = $extrainfo['itemid'];
     } else {
         $itemid = $objectid;
