@@ -1033,7 +1033,32 @@ Password : %%password%%
 
     echo "Time / Date structure verified in Roles. <br /> ";
 
+    // Bug 630, let's throw the reminder back up after upgrade.
 
+    $now = time();
+
+    $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot .';
+    $varshtml['expire'] = $now + 24000;
+    $msg = serialize($varshtml);
+
+    $htmlBlockId= xarModAPIFunc('blocks',
+                                 'admin',
+                                 'block_type_exists',
+                                 array('modName'  => 'base',
+                                       'blockType'=> 'html'));
+
+    if (!isset($htmlBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        return;
+    }
+
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'create_instance', array('title'    => 'Reminder',
+                                                'content'  => $msg,
+                                                'type'     => $htmlBlockId,
+                                                'group'    => 1,
+                                                'template' => '',
+                                                'state'    => 2))) return;
 
 ?>
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
