@@ -32,21 +32,28 @@ class xarTreeRenderer {
     // convenience variables to hold strings referring to pictures
     var $expandedbox;
     var $collapsedbox;
-    var $el             = '<img src="modules/roles/xarimages/el.gif" alt="" style="vertical-align: middle" />';
-    var $tee            = '<img src="modules/roles/xarimages/T.gif" alt="" style="vertical-align: middle" />';
-    var $aye            = '<img src="modules/roles/xarimages/I.gif" alt="" style="vertical-align: middle" />';
-    var $bar            = '<img src="modules/roles/xarimages/s.gif" alt="" style="vertical-align: middle" />';
-    var $emptybox       = '<img class="xar-roletree-box" src="modules/roles/xarimages/k1.gif" alt="" style="vertical-align: middle" />';
-    var $blank          = '<img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle" />';
-    var $bigblank       = '<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
-    var $smallblank     = '<span style="padding-left: 0em; padding-right: 0em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 1em; height: 16px;" /></span>';
-    // we'll use this to check whether a group has already been processed
+    var $el;
+    var $tee;
+    var $aye;
+    var $bar;
+    var $emptybox;
+    var $blank;
+    var $bigblank;
+    var $smallblank;
 
     /**
      * Constructor
      */
     function xarTreeRenderer($allowtoggle=0)
     {
+        $this->el = '<img src="' . xarTplGetImage("el.gif") . '" alt="" style="vertical-align: middle" />';
+        $this->tee = '<img src="' . xarTplGetImage("T.gif") . '" alt="" style="vertical-align: middle" />';
+        $this->aye = '<img src="' . xarTplGetImage("I.gif") . '" alt="" style="vertical-align: middle" />';
+        $this->bar = '<img src="' . xarTplGetImage("s.gif") . '" alt="" style="vertical-align: middle" />';
+        $this->emptybox = '<img src="' . xarTplGetImage("k1.gif") . '" alt="" style="vertical-align: middle" />';
+        $this->blank = '<img src="' . xarTplGetImage("blank.gif") . '" alt="" style="vertical-align: middle" />';
+        $this->bigblank = '<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="' . xarTplGetImage("blank.gif") . '" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
+        $this->smallblank     = '<span style="padding-left: 0em; padding-right: 0em;"><img src="' . xarTplGetImage("blank.gif") . '" alt="" style="vertical-align: middle; width: 1em; height: 16px;" /></span>';
         $this->roles = new xarRoles();
         $this->setitem(1, "deleteitem");
         $this->setitem(2, "leafitem");
