@@ -167,6 +167,7 @@ class ExceptionRendering
           $message = "One or more PHP errors were encountered." . $this->linebreak . $this->linebreak;
           foreach($collection as $collecteditem) {
               $message .= $collecteditem['id'] . $this->linebreak;
+              // QUESTION: does the htmlspecialchars belong here?
               $message .= htmlspecialchars($collecteditem['value']->msg) . $this->linebreak;
           }
           return $message;
@@ -195,6 +196,7 @@ class ExceptionRendering
                     print_r($stack[$i]['args']);
                     $dump = ob_get_contents();
                     ob_end_clean();
+                    // FIXME: guess ;-)
                     $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->openpre . htmlspecialchars($dump) . $this->closepre;
                     $text .= $this->linebreak;
                 }
