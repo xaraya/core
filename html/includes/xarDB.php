@@ -121,7 +121,10 @@ function &xarDBNewConn()
     $dbPass  = $args['password'];
 
     $conn =& ADONewConnection($dbType);
-    if (!$conn->Connect($dbHost, $dbUname, $dbPass, $dbName)) {
+    //We should persistent connections
+    //Is there any module using transactions? If so we should open
+    //specially for it a normal connection  
+    if (!$conn->PConnect($dbHost, $dbUname, $dbPass, $dbName)) {
         // FIXME: <mrb> theoretically we could raise an exceptions here, but due to the dependencies we can't right now
         xarCore_die("xarDB_init: Failed to connect to $dbType://$dbUname@$dbHost/$dbName, error message: " . $conn->ErrorMsg());
     }
