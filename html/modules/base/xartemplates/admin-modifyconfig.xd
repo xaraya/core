@@ -121,7 +121,7 @@
                     <label for="alternatepagetemplatename" title="#xarML('The name of the alternate page template to use.')#" class="xar-form-label">
                         <xar:mlstring>Alternate Page Template Name:</xar:mlstring>
                     </label>
-                    <input type="text" id="alternatepagetemplatename" name="alternatepagetemplatename" value="#xarModGetVar('base', 'AlternatePageTemplateName')#" class="xar-from-textlong" />
+                    <input type="text" id="alternatepagetemplatename" name="alternatepagetemplatename" value="#xarModGetVar('base', 'AlternatePageTemplateName')#" class="xar-form-textlong" />
                 </div>
 
             </xar:if>

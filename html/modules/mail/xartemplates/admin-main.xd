@@ -1,55 +1,78 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span></div>
+<div class="xar-mod-head">
+	<span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span>
+</div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>Overview</xar:mlstring></h2>
-    <div style="padding: 1px;" class="xar-norm-outline">
-        <div style="float:right;padding:10px;">
-            <xar:if condition="file_exists('modules/mail/xarimages/admin.gif')" >
-                <img src="modules/mail/xarimages/admin.gif" alt="official icon" width="96" height="96" />
-            <xar:else />
-                <img src="modules/mail/xarimages/admin_generic.gif" alt="official icon" width="96" height="96" />
-            </xar:if>
-        </div>
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>What is it?</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>The mail module controls the ways that your Xaraya system sends mail to users or groups of users.  This module is a utility module and takes information from other modules installed on your Xaraya system and formats the mail for them.  This module at its heart is using the</xar:mlstring> <a href="http://phpmailer.sourceforge.net" target="_BLANK"><xar:mlstring>phpmailer</xar:mlstring></a> <xar:mlstring> classes for processing.  These classes extend Xaraya to allow you to use SMTP, SendMail or the normal PHP Mail functions.</xar:mlstring></p>
-        </div>
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>How to use it?</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>From the menu, you have two choices. </xar:mlstring></p>
-            <p><xar:mlstring>"Modify Configuration".  From this menu option, you can update the necessary configuration options, such as the email address that you want to send from, reply to address, type of mail system to use, etc.</xar:mlstring></p>
-            <p><xar:mlstring>"Test Configuration".  From this menu option you can test your mail system configuration.</xar:mlstring></p>
-        </div>
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>Scheduling mail</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>Other modules can request that a certain mail be sent no earlier than a specific time.</xar:mlstring></p>
-            <xar:if condition="!xarModIsAvailable('scheduler')">
-                 <p><xar:mlstring>This will have no effect unless you install the 'scheduler' module first.</xar:mlstring></p>
-            <xar:else/>
-                 <p><xar:mlstring>In order to support that, you can configure the mail module to use the 'scheduler' and check if any mails need to be sent e.g. every x hours. Otherwise, those mails will be sent immediately.</xar:mlstring></p>
-                 <p><xar:mlstring>Please note that if you stop the scheduler or if it isn't triggered, previously scheduled mails will not be sent.</xar:mlstring></p>
-            </xar:if>
-        </div>
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>Included Blocks</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>The Mail Module has no blocks included at this time.</xar:mlstring></p>
-        </div>
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>Included Hooks</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>The mail hook allows you to send an email to the site admin when something (content, users, etc) is created or deleted.  This can be configured in the modules module.</xar:mlstring></p>
-        </div>
-        <div class="xar-norm-outline xar-accent" style="text-align: center; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-            <p><xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring></p>
-        </div>
-    </div>
+    <img src="#xarTplGetImage('admin.gif', 'mail')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
+
+    <h2>
+    	<xar:mlstring>Overview</xar:mlstring>
+    </h2>
+
+    <h3>
+    	<xar:mlstring>What is it?</xar:mlstring>
+    </h3>
+
+    <p>
+    	<xar:mlstring>The mail module controls the ways that your Xaraya system sends mail to users or groups of users.  This module is a utility module and takes information from other modules installed on your Xaraya system and formats the mail for them.  This module at its heart is using the</xar:mlstring> <a href="http://phpmailer.sourceforge.net" onclick="window.open(this.getAttribute('href'));return false;"><xar:mlstring>phpmailer</xar:mlstring></a> <xar:mlstring> classes for processing.  These classes extend Xaraya to allow you to use SMTP, SendMail or the normal PHP Mail functions.</xar:mlstring>
+    </p>
+
+    <h3><xar:mlstring>How to use it?</xar:mlstring></h3>
+
+    <p>
+    	<xar:mlstring>From the menu, you have three choices. </xar:mlstring>
+    </p>
+
+	<ul>
+	    <li>
+	    	<xar:mlstring>Test Configuration:  From this menu option you can test your mail system configuration.</xar:mlstring>
+	    </li>
+	
+	    <li>
+	    	<xar:mlstring>Notification Template:  From this menu option you can edit the templates of mail messages sent for notifications.</xar:mlstring>
+	    </li>
+	
+	    <li>
+	    	<xar:mlstring>Modify Configuration:  From this menu option, you can update the necessary configuration options, such as the email address that you want to send from, reply to address, type of mail system to use, etc.</xar:mlstring>
+	    </li>
+	</ul>
+    <h3>
+    	<xar:mlstring>Scheduling Mail</xar:mlstring>
+    </h3>
+
+    <p>
+    	<xar:mlstring>Other modules can request that a certain mail be sent no earlier than a specific time.</xar:mlstring>
+    </p>
+
+    <xar:if condition="!xarModIsAvailable('scheduler')">
+         <p>
+         	<xar:mlstring>This will have no effect unless you install the 'scheduler' module first.</xar:mlstring>
+         </p>
+    <xar:else/>
+         <p>
+         	<xar:mlstring>In order to support that, you can configure the mail module to use the 'scheduler' and check if any mails need to be sent e.g. every x hours. Otherwise, those mails will be sent immediately.</xar:mlstring>
+         </p>
+
+         <p>
+         	<xar:mlstring>Please note that if you stop the scheduler or if it isn't triggered, previously scheduled mails will not be sent.</xar:mlstring>
+         </p>
+    </xar:if>
+
+    <h3><xar:mlstring>Included Blocks</xar:mlstring></h3>
+
+    <p>
+    	<xar:mlstring>The Mail Module has no blocks included at this time.</xar:mlstring>
+    </p>
+
+    <h3>
+    	<xar:mlstring>Included Hooks</xar:mlstring>
+    </h3>
+
+    <p><xar:mlstring>The mail hook allows you to send an email to the site admin when something (content, users, etc) is created or deleted.  This can be configured in the modules module.</xar:mlstring></p>
+
+	<div class="xar-mod-foot xar-align-center xar-padding-thick">
+	    <p>
+	        <xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring>
+	    </p>
+	</div>
 </div>

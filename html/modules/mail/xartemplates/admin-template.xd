@@ -3,148 +3,143 @@
     <xar:template file="htmlarea_insert" module="htmlarea" type="module" />
 </xar:if>
 <xar:set name="messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Configure Notification Template</xar:mlstring></h2><br />
-<div style="margin: auto;width:100%">
-    <div style="float:left;width:100%"> <xar:comment> containing float - quick fix for JC's css layouts [andyv] </xar:comment>
-        <div style="clear: both; padding-top: 10px;">
-            <span style="float: right; width: 95%; text-align: left;">
-        <xar:if condition="!empty($settings)">
-            <xar:mlstring>The mail module is currently hooked to the following modules :</xar:mlstring>
-            <ul>
+<div class="xar-mod-head">
+	<span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span>
+</div>
+<div class="xar-mod-body">
+	<h2>
+		<xar:mlstring>Configure Notification Template</xar:mlstring>
+	</h2>
+
+    <xar:if condition="!empty($settings)">
+        <p>
+        	<xar:mlstring>The mail module is currently hooked to the following modules :</xar:mlstring>
+        </p>
+        <ul>
             <xar:foreach in="$settings" key="$modname" value="$config">
-                <li><a href="#$config['link']#">
-                    #$config['modname']#
-                    <xar:if condition="!empty($config['type'])">
-                        - #$config['type']#
+                <li><a href="#$config.link#">
+                    #$config.modname#
+                    <xar:if condition="!empty($config.type)">
+                        : #$config.type#
                     </xar:if>
                 </a></li> 
             </xar:foreach>
-            </ul>
-        <xar:else/>
-            <xar:mlstring>The mail module is currently not hooked to any module</xar:mlstring>
-        </xar:if>
-            </span>
-        </div>
-        <div style="clear: both; padding-top: 10px;">
-        <form method="post" action="&xar-modurl-mail-admin-template;">
-                    <span style="float: left; width: 20%; text-align: right;">
-                        <span class="help" title="#xarML('Select the template to edit')#">
-                            <label for="mailtype"><xar:mlstring>Template</xar:mlstring></label>:
-                        </span>
-                    </span>
-                    <span style="float: right; width: 78%; text-align: left;">
-                <select name="mailtype" id="mailtype" size="1" tabindex="5"  onchange="this.form.submit()">
-                <xar:loop name="$templates">
-                    <xar:if condition="$mailtype eq $loop:item['key']">
-                        <option value="#$loop:item['key']#" selected="selected">
-                            #$loop:item['value']#
-                        </option>
-                    <xar:else/>
-                        <option value="#$loop:item['key']#">
-                            #$loop:item['value']#
-                        </option>
-                    </xar:if>
-                </xar:loop>
-                </select>
+        </ul>
+    <xar:else/>
+    	<p>
+        	<xar:mlstring>The mail module is currently not hooked to any module</xar:mlstring>
+        </p>
+    </xar:if>
 
-                <xar:if condition="$mailtype eq 'createhook'">
-                    <xar:set name="explanation"><xar:ml><xar:mlstring>This email will be sent to #(1) [#(2)] when a hooked item is created</xar:mlstring><xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar><xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar></xar:ml></xar:set>
-                <xar:elseif condition="$mailtype eq 'changehook'" />
-                    <xar:set name="explanation"><xar:ml><xar:mlstring>This email will be sent to #(1) [#(2)] when a hooked item is updated</xar:mlstring><xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar><xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar></xar:ml></xar:set>
-                <xar:elseif condition="$mailtype eq 'deletehook'" />
-                    <xar:set name="explanation"><xar:ml><xar:mlstring>This email will be sent to #(1) [#(2)] when a hooked item is deleted</xar:mlstring><xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar><xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar></xar:ml></xar:set>
+    <form method="post" action="&xar-modurl-mail-admin-template;">
+	    <div class="xar-form-input-wrapper">
+	        <label for="mailtype" title="#xarML('Select the template to edit')#" class="xar-form-label">
+	            <xar:mlstring>Name:</xar:mlstring>
+	        </label>
+            <select name="mailtype" id="mailtype" onchange="this.form.submit()">
+            <xar:loop name="$templates">
+                <xar:if condition="$mailtype eq $loop:item['key']">
+                    <option value="#$loop:item['key']#" selected="selected">
+                        #$loop:item['value']#
+                    </option>
                 <xar:else/>
-                    <xar:set name="explanation"><xar:ml><xar:mlstring>This email will be sent to #(1) [#(2)]</xar:mlstring><xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar><xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar></xar:ml></xar:set>
+                    <option value="#$loop:item['key']#">
+                        #$loop:item['value']#
+                    </option>
                 </xar:if>
-              </span>
-         </form>
-    </div>    
+            </xar:loop>
+            </select>
+	    </div>
+
+		<p>
+	        <xar:if condition="$mailtype eq 'createhook'">
+	            <xar:ml>
+	            	<xar:mlstring>This email will be sent to #(1) [ #(2) ] when a hooked item is created.</xar:mlstring>
+	            	<xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar>
+	            	<xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar>
+	            </xar:ml>
+	        <xar:elseif condition="$mailtype eq 'changehook'" />
+            	<xar:ml>
+            		<xar:mlstring>This email will be sent to #(1) [ #(2) ] when a hooked item is updated.</xar:mlstring>
+            		<xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar>
+            		<xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar>
+            	</xar:ml>
+	        <xar:elseif condition="$mailtype eq 'deletehook'" />
+            	<xar:ml>
+            		<xar:mlstring>This email will be sent to #(1) [ #(2) ] when a hooked item is deleted.</xar:mlstring>
+            		<xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar>
+            		<xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar>
+            	</xar:ml>
+	        <xar:else/>
+	            <xar:ml>
+	            	<xar:mlstring>This email will be sent to #(1) [ #(2) ].</xar:mlstring>
+	            	<xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar>
+	            	<xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar>
+	            </xar:ml>
+	        </xar:if>
+	    </p>
+     </form>
+
     <form action="&xar-modurl-mail-admin-template;" method="post" enctype="application/x-www-form-urlencoded">
-        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-        <input type="hidden" name="phase" id="phase" value="update" />
-        <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#" />
-        <div style="clear: both; padding-top: 10px;">
-            <span style="float: right; width: 95%; text-align: left;font-weight: bold;">
-                #$explanation#.
-            </span>
-         </div>
-         <div style="clear: both; padding-top: 10px;">
-            <span style="float: left; width: 20%; text-align: right;">
-                <span class="help" title="#xarML('Title of the notification')#">
-                    <label for="subject"><xar:mlstring>Subject</xar:mlstring></label>:
-                </span>
-            </span>
-            <span style="float: right; width: 78%; text-align: left;">
-                <input type="text" name="subject" id="subject" size="50" value="#xarVarPrepForDisplay($subject)#"  maxlength="150" />
-            </span>
-         </div>
-         <div style="clear: both; padding-top: 10px;">
-            <span style="float: left; width: 20%; text-align: right;">
-                <span class="help" title="#xarML('Body of the notification')#">
-                    <label for="message"><xar:mlstring>Message</xar:mlstring></label>:
-                </span>
-            </span>
-            <span style="float: right; width: 78%; text-align: left;">
-                <textarea name="message" id="message" rows="10" cols="50">#xarVarPrepForDisplay($message)#</textarea>
-            </span>
-         </div>
-         <div style="clear: both; padding-top: 10px;">
-            <div style="float: left; width: 50%; text-align: right; margin-top: 5px;"><input type="submit" value="#xarML('Update')#" /></div>
-         </div>
-         <div style="clear: both; padding-top: 10px;">
-            <span style="float: right; width: 95%; text-align: left;">
-                <xar:mlstring>The following variables will be replaced in the text with specific information</xar:mlstring> :
-            </span>
-         </div>
-         <div style="clear: both; padding-top: 10px;">
-            <span style="float: left; width: 20%; text-align: right;">
-                <span class="help" title="#$messagetitle#">$sitename</span>
-            </span>
-            <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Name of the site</xar:mlstring></span>
-         </div>
-         <div style="clear: both; padding-top: 10px;">
-            <span style="float: left; width: 20%; text-align: right;">
-            <span class="help" title="#$messagetitle#">$siteslogan</span>
-            </span>
-            <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Slogan of the site</xar:mlstring></span>
-         </div>
-         <div style="clear: both; padding-top: 10px;">
-            <span style="float: left; width: 20%; text-align: right;">
-            <span class="help" title="#$messagetitle#">$siteurl</span>
-            </span>
-            <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>URL of the site</xar:mlstring>(#xarServerGetBaseURL()#)</span>
-         </div>
-         <div style="clear: both; padding-top: 10px;">
-            <span style="float: left; width: 20%; text-align: right;">
-            <span class="help" title="#$messagetitle#">$siteadmin</span>
-            </span>
-            <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Name of the administrator</xar:mlstring></span>
-         </div>
-         <div style="clear: both; padding-top: 10px;">
-            <span style="float: left; width: 20%; text-align: right;">
-            <span class="help" title="#$messagetitle#">$adminmail</span>
-            </span>
-            <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Email address of the administrator</xar:mlstring></span>
-         </div>
-         <div style="clear: both; padding-top: 10px;">
-            <span style="float: left; width: 20%; text-align: right;">
-            <span class="help" title="#$messagetitle#">$modulename</span>
-            </span>
-            <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Name of the module</xar:mlstring></span>
-         </div>
-         <div style="clear: both; padding-top: 10px;">
-            <span style="float: left; width: 20%; text-align: right;">
-            <span class="help" title="#$messagetitle#">$objectid</span>
-            </span>
-            <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>ID of the created/updated/deleted item</xar:mlstring></span>
-         </div>
-         <div style="clear: both; padding-top: 10px;">
-               <span style="float: right; width: 95%; text-align: left;">
-                <xar:mlstring>Note: other variables may be available depending on the module</xar:mlstring>
-                </span>
-         </div>
+
+	    <div class="xar-form-input-wrapper">
+	        <label for="subject" title="#xarML('Title of the notification')#" class="xar-form-label">
+	            <xar:mlstring>Subject:</xar:mlstring>
+	        </label>
+            <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#"  maxlength="150" class="xar-form-textxlong" />
+	    </div>
+
+	    <div class="xar-form-input-wrapper">
+	        <label for="message" title="#xarML('Body of the notification')#" class="xar-form-label">
+	            <xar:mlstring>Message:</xar:mlstring>
+	        </label>
+            <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
+	    </div>
+
+        <div class="xar-clear-both xar-align-center">
+	        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+	        <input type="hidden" name="phase" id="phase" value="update" />
+	        <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#" />
+            <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
+            <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft"  />
+        </div>
+
+        <p>
+            <xar:mlstring>The following variables will be replaced in the text with specific information:</xar:mlstring>
+        </p>
+
+         <p>
+            <span class="xar-form-label" title="#$messagetitle#">$sitename</span>
+            <xar:mlstring>Name of the site</xar:mlstring>
+         </p>
+
+         <p>
+            <span class="xar-form-label" title="#$messagetitle#">$siteslogan</span>
+            <xar:mlstring>Slogan of the site</xar:mlstring>
+         </p>
+
+         <p>
+            <span class="xar-form-label" title="#$messagetitle#">$siteurl</span>
+            <xar:mlstring>URL of the site</xar:mlstring>( #xarServerGetBaseURL()# )
+         </p>
+         <p>
+            <span class="xar-form-label" title="#$messagetitle#">$siteadmin</span>
+            <xar:mlstring>Name of the administrator</xar:mlstring>
+         </p>
+         <p>
+            <span class="xar-form-label" title="#$messagetitle#">$adminmail</span>
+            <xar:mlstring>Email address of the administrator</xar:mlstring>
+         </p>
+         <p>
+            <span class="xar-form-label" title="#$messagetitle#">$modulename</span>
+            <xar:mlstring>Name of the module</xar:mlstring>
+         </p>
+         <p>
+            <span class="xar-form-label" title="#$messagetitle#">$objectid</span>
+            <xar:mlstring>ID of the created/updated/deleted item</xar:mlstring>
+         </p>
+         <p class="xar-align-center">
+             <xar:mlstring>Note: other variables may be available depending on the module</xar:mlstring>
+         </p>
     </form>
-</div>
-</div>
 </div>
