@@ -19,7 +19,7 @@ function roles_admin_createmail()
 
     if (!xarVarFetch('uid', 'int:0:', $uid, -1, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('uids', 'isset', $uids, NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state', 'int:0:', $state, ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('state', 'int:0:', $state, -1, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('startnum', 'int:1:', $startnum, 1, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('order', 'str:0:', $data['order'], 'xar_name', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('includesubgroups', 'int:0:', $data['includesubgroups'],0, XARVAR_NOT_REQUIRED)) return;
@@ -63,10 +63,13 @@ function roles_admin_createmail()
         $q->setorder($data['order']);
 
         // Add state
-        $q->removecondition('xar_state');
-        if ($state == ROLES_STATE_CURRENT) $q->ne('xar_state',ROLES_STATE_DELETED);
-        elseif ($state == ROLES_STATE_ALL) {}
-        else $q->eq('xar_state',$state);
+        if ($uid != -1) {
+            $q->removecondition('xar_state');
+            if ($state == ROLES_STATE_CURRENT) $q->ne('xar_state',ROLES_STATE_DELETED);
+            elseif ($state == ROLES_STATE_ALL) {}
+            else $q->eq('xar_state',$state);
+        }
+        else $state = -1;
 
         if ($uid != -1) {
             if ($uid != 0) {

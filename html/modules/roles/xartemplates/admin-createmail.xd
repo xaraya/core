@@ -101,6 +101,15 @@
 			</td>
 			<td style="text-align: center;">
 				<select name="state" id="state" size="1" tabindex="5"  onchange="this.form.submit()">
+					<xar:if condition="$uid eq -1">
+						<option value="#$state#" selected="selected">
+							<xar:mlstring>&nbsp;</xar:mlstring>
+						</option>
+					<xar:elseif condition="$state eq -1" />
+						<option value="#$state#" selected="selected">
+							<xar:mlstring>-- choose --</xar:mlstring>
+						</option>
+					</xar:if>
 					<xar:if condition="$state eq $statecurrent">
 						<option value="#$statecurrent#" selected="selected">
 							<xar:mlstring>All</xar:mlstring>
@@ -285,7 +294,7 @@
 							</a>
 						</th>
 						<th style="text-align: center;" colspan="2">
-							<xar:mlstring>Action</xar:mlstring>
+							<xar:mlstring>&nbsp;</xar:mlstring>
 						</th>
 					</tr>
 					<xar:if condition="count($users)==0">
