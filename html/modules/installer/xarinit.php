@@ -67,7 +67,8 @@ function installer_upgrade($oldVersion)
  */
 function installer_delete()
 {
-    return true;
+    // this module cannot be removed
+    return false;
 }
 
 ?>

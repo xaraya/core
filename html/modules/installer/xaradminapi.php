@@ -15,14 +15,16 @@
 /**
  * Modify the system configuration file
  *
- * @param args['dbHost']
- * @param args['dbName']
- * @param args['dbUname']
- * @param args['dbPass']
- * @param args['prefix']
- * @param args['dbType']
- * @returns bool
- * @return
+ * @param args['dbHost'] string
+ * @param args['dbName'] string
+ * @param args['dbUname'] string
+ * @param args['dbPass'] string
+ * @param args['prefix'] string
+ * @param args['dbType'] string
+ * @return bool
+ * @todo use proper debug levels for release
+ * @todo make sure php exception handler is off for release
+ * @todo make sure logger stuff can be changed later
  */
 function installer_adminapi_modifyconfig($args)
 {
@@ -30,11 +32,6 @@ function installer_adminapi_modifyconfig($args)
 
     $systemConfigFile = xarCoreGetVarDirPath() . '/config.system.php';
     $config_php = join('', file($systemConfigFile));
-    if (isset($HTTP_ENV_VARS['OS']) && strstr($HTTP_ENV_VARS['OS'], 'Win')) {
-        $system = 1;
-    } else {
-        $system = 0;
-    }
 
     //$dbUname = base64_encode($dbUname);
     //$dbPass = base64_encode($dbPass);
@@ -45,8 +42,12 @@ function installer_adminapi_modifyconfig($args)
     $config_php = preg_replace('/\[\'DB.Password\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Password'] = '$dbPass';", $config_php);
     $config_php = preg_replace('/\[\'DB.Name\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Name'] = '$dbName';", $config_php);
     $config_php = preg_replace('/\[\'DB.TablePrefix\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.TablePrefix'] = '$dbPrefix';", $config_php);
-    // $config_php = preg_replace('/\[\'system\'\]\s*=\s*(\'|\")(.*)\\1;/', "['system'] = '$system';", $config_php);
-    // $config_php = preg_replace('/\[\'DB.Encoded\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Encoded'] = '1';", $config_php);
+    //$config_php = preg_replace('/\[\'DB.Encoded\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Encoded'] = '1';", $config_php);
+    $config_php = preg_replace('/\[\'Log.LogLevel\'\]\s*=\s*(\'|\")(.*)\\1;/', "['Log.LogLevel'] = 'DEBUG';", $config_php);
+    $config_php = preg_replace('/\[\'Log.LoggerName\'\]\s*=\s*(\'|\")(.*)\\1;/', "['Log.LoggerName'] = 'dummy';", $config_php);
+    $config_php = preg_replace('/\[\'Log.LoggerArgs\'\]\s*=\s*(\'|\")(.*)\\1;/', "['Log.LoggerArgs'] = 'array()';", $config_php);
+    $config_php = preg_replace('/\[\'Exception.EnablePHPErrorHandler\'\]\s*=\s*(\'|\")(.*)\\1;/', "['Exception.EnablePHPErrorHandler'] = true;", $config_php);
+
 
     $fp = fopen ($systemConfigFile, 'w+');
     fwrite ($fp, $config_php);

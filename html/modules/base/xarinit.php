@@ -110,9 +110,9 @@ function base_init()
 
     $index = array('name'   => 'i_xar_uid',
                    'fields' => array('xar_uid'));
-    
+
     $query = xarDBCreateIndex($sessionInfoTable,$index);
-   
+
     $result =& $dbconn->Execute($query);
     if(!$result) return;
 
@@ -413,7 +413,8 @@ function base_upgrade($oldVersion)
  */
 function base_delete()
 {
-    return false;
+  //this module cannot be removed
+  return false;
 }
 
 ?>
