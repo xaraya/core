@@ -65,7 +65,7 @@ function base_menublock_display($blockinfo)
     $xartable = xarDBGetTables();
 
 // Security Check
-    if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"$blockinfo[title]:All:All")) return;
+    if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$blockinfo[title]:All")) return;
 
     // Break out options from our content field
     $vars = unserialize($blockinfo['content']);
