@@ -21,7 +21,7 @@
                 <li><xar:mlstring>List Modules - See what modules are currently installed on your system and control the current state that they are in.</xar:mlstring></li>
                 <li><xar:mlstring>Configure Hooks - Extend modules capabilities via 'hooks' [advanced features]</xar:mlstring></li>
                 <li><xar:mlstring>Releases - View information about recently released 'certified' modules.</xar:mlstring></li>
-                <li><xar:mlstring>Preferences - Your persinalised settings for this module.</xar:mlstring></li>
+                <li><xar:mlstring>Preferences - Your personalised settings for this module.</xar:mlstring></li>
             </ul>
         </div>
         <br />

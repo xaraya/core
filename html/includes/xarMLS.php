@@ -714,7 +714,7 @@ class xarMLS__LocaleDataLoader
 
     function load($locale)
     {
-        $fileName = "locales/$locale/locale.xml";
+        $fileName = "var/locales/$locale/locale.xml";
         if (!file_exists($fileName)) {
             return false;
         }
