@@ -71,8 +71,8 @@
 	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Agreeing to License</span><br />
 	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Checking System Settings</span><br />
 	  <span class="active"><img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />Collecting Database Settings</span><br />
-	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Beginning the Boot Process</span><br />
+	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Beginning Initialization</span><br />
 	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Creating an Administrator</span><br />
 	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Choosing a Configuration</span><br />
-	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Choosing Configuration Options</span><br />
+	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Choosing Options</span><br />
 	</div>
