@@ -41,20 +41,38 @@
             </td>
         </tr>
     </table>
+	<h4><xar:mlstring>Designated Site Administrator</xar:mlstring></h4>
+    <table border="0" cellpadding="2" cellspacing="0">
+        <tr>
+            <td><label for="siteadmin"><xar:mlstring>The designated site admin cannot be deleted</xar:mlstring>:</label></td>
+            <td>
+				<select name="siteadmin" id="siteadmin">
+				<xar:loop name="$siteadmins">
+					<xar:if condition="$loop:item['id'] eq xarModGetVar('roles','admin')">
+						<option name="#$loop:item['id']#" id="#$loop:item['id']#" value="#$loop:item['id']#" selected="selected">#$loop:item['name']#</option>
+					<xar:else />
+						<option name="#$loop:item['id']#" id="#$loop:item['id']#" value="#$loop:item['id']#">#$loop:item['name']#</option>
+					</xar:if>
+				</xar:loop>
+				</select>
+			</td>
+        </tr>
+    </table>
 	<h4><xar:mlstring>User Registration Options</xar:mlstring></h4>
     <table border="0" cellpadding="2" cellspacing="0">
 	    <tr>
             <td><label for="defaultgroup"><xar:mlstring>Default Group for New Users</xar:mlstring>:</label></td>
             <td>
-		<select name="defaultgroup" id="defaultgroup">
-		<xar:loop name="$groups">
-			<xar:if condition="$loop:item['name'] eq $defaultgroup">
-				<option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
-			<xar:else />
-				<option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#">#$loop:item['name']#</option>
-			</xar:if>
-		</xar:loop>
-		</select></td>
+				<select name="defaultgroup" id="defaultgroup">
+				<xar:loop name="$groups">
+					<xar:if condition="$loop:item['name'] eq $defaultgroup">
+						<option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
+					<xar:else />
+						<option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#">#$loop:item['name']#</option>
+					</xar:if>
+				</xar:loop>
+				</select>
+			</td>
         </tr>
 	    <tr>
             <td><label for="allowregistration"><xar:mlstring>Allow registration</xar:mlstring></label>:</td>

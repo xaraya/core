@@ -23,10 +23,57 @@ function roles_admin_modifyconfig()
 
     switch (strtolower($phase)) {
         case 'modify':
-        default: 
+        default:
+            // get a list of everyone with admin privileges
+            // TODO: find a more elegant way to do this
+            // first find the id of the admin privilege
+            $roles = new xarRoles();
+            $role = $roles->getRole(xarModGetVar('roles','admin'));
+            $privs = $role->getInheritedPrivileges();
+            foreach ($privs as $priv)
+            {
+                if ($priv->getLevel() == 800)
+                {
+                    $adminpriv = $priv->getID();
+                    break;
+                }
+            }
+
+            $dbconn =& xarDBGetConn();
+            $xartable =& xarDBGetTables();
+            $acltable = xarDBGetSiteTablePrefix() . '_security_acl';
+            $query = "SELECT xar_partid FROM $acltable
+                    WHERE xar_permid   = " . $adminpriv;
+            $result =& $dbconn->Execute($query);
+            if (!$result) return;
+
+
+            // so now we have the list of all roles with *assigned* admin privileges
+            // now we have to find which ones ar candidates for admin:
+            // 1. They are users, not groups
+            // 2. They inherit the admin privilege
+            $admins = array();
+            while (!$result->EOF)
+            {
+                list($id) = $result->fields;
+                $role = $roles->getRole($id);
+                $admins[] = $role;
+                $admins = array_merge($admins,$role->getDescendants());
+                $result->MoveNext();
+            }
+
+            $siteadmins = array();
+            $adminids = array();
+            foreach ($admins as $admin)
+            {
+                if($admin->isUser() && !in_array($admin->getID(),$adminids)){
+                    $siteadmins[] = array('name' => $admin->getName(),
+                                     'id'   => $admin->getID()
+                                    );
+                }
+            }
+
             // create the dropdown of groups for the template display
-            // call the Roles class
-            $roles = new xarRoles(); 
             // get the array of all groups
             // remove duplicate entries from the list of groups
             $groups = array();
@@ -36,14 +83,15 @@ function roles_admin_modifyconfig()
                 if (!in_array($nam, $names)) {
                     array_push($names, $nam);
                     array_push($groups, $temp);
-                } 
-            } 
+                }
+            }
 
             $checkip = xarModGetVar('roles', 'disallowedips');
             if (empty($checkip)) {
                 $ip = serialize('10.0.0.1');
                 xarModSetVar('roles', 'disallowedips', $ip);
-            } 
+            }
+            $data['siteadmins'] = $siteadmins;
             $data['defaultgroup'] = xarModGetVar('roles', 'defaultgroup');
             $data['groups'] = $groups;
             $data['emails'] = unserialize(xarModGetVar('roles', 'disallowedemails'));
@@ -68,6 +116,7 @@ function roles_admin_modifyconfig()
             if (!xarVarFetch('showterms', 'checkbox', $showterms, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('shorturls', 'checkbox', $shorturls, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('showprivacy', 'checkbox', $showprivacy, false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('siteadmin', 'int:1', $siteadmin, xarModGetVar('roles','admin'), XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('chooseownpassword', 'checkbox', $chooseownpassword, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('allowregistration', 'checkbox', $allowregistration, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('explicitapproval', 'checkbox', $explicitapproval, false, XARVAR_NOT_REQUIRED)) return;
@@ -82,12 +131,13 @@ function roles_admin_modifyconfig()
             if (!xarVarFetch('rolesperpage', 'str:1:4:', $rolesperpage, '20', XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('disallowedemails', 'str:1', $disallowedemails, '', XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('disallowednames', 'str:1', $disallowednames, '', XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('disallowedips', 'str:1', $disallowedips, '', XARVAR_NOT_REQUIRED)) return; 
+            if (!xarVarFetch('disallowedips', 'str:1', $disallowedips, '', XARVAR_NOT_REQUIRED)) return;
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) return; 
+            if (!xarSecConfirmAuthKey()) return;
             // Update module variables
             xarModSetVar('roles', 'showterms', $showterms);
             xarModSetVar('roles', 'showprivacy', $showprivacy);
+            xarModSetVar('roles', 'admin', $siteadmin);
             xarModSetVar('roles', 'allowregistration', $allowregistration);
             xarModSetVar('roles', 'minage', $minage);
             xarModSetVar('roles', 'minpasslength', $minpasslength);
@@ -115,14 +165,14 @@ function roles_admin_modifyconfig()
             xarModCallHooks('module', 'updateconfig', 'roles',
                 array('module' => 'roles', 'itemtype' => 0));
 
-            xarResponseRedirect(xarModURL('roles', 'admin', 'modifyconfig')); 
+            xarResponseRedirect(xarModURL('roles', 'admin', 'modifyconfig'));
             // Return
             return true;
 
             break;
-    } 
+    }
 
     return $data;
-} 
+}
 
 ?>

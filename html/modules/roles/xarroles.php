@@ -22,7 +22,7 @@
  * @throws none
  * @todo none
  */
-class xarRoles 
+class xarRoles
 {
     var $allgroups = array();
     var $users = array();
@@ -470,7 +470,7 @@ class xarRoles
  * @throws none
  * @todo none
  */
-class xarRole 
+class xarRole
 {
     var $uid; //the id of this user or group
     var $name; //the name of this user or group
@@ -858,6 +858,7 @@ class xarRole
                 array_push($inherited, $perm);
             }
         }
+        return $inherited;
     }
 
     /**

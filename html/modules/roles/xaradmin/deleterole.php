@@ -41,8 +41,15 @@ function roles_admin_deleterole()
     if(!xarSecurityCheck('DeleteRole',0,'Roles',$name)) return;
 
 // Prohibit removal of any groups the system needs
+    if($uid == xarModGetVar('roles','admin')) {
+        $msg = xarML('The user #(1) is the designated site administrator. If you want to remove this user change the site admin in the roles configuration setting first.', $role->getName());
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+                    'BAD_PARAM',
+                     new SystemException($msg));
+        return false;
+    }
     if(strtolower($role->getName()) == strtolower(xarModGetVar('roles','defaultgroup'))) {
-        $msg = xarML('The group #(1) is the default group for new users. If you want to remove it change the appropriate configuration setting first.', $role->getName());
+        $msg = xarML('The group #(1) is the default group for new users. If you want to remove this group change the roles configuration setting first.', $role->getName());
         xarExceptionSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));

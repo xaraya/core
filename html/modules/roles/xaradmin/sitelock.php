@@ -110,7 +110,7 @@ function roles_admin_sitelock($args)
                 if ($roletotell->isUser()) $notify[] = $roletotell;
                 else $notify = array_merge($notify,$roletotell->getUsers());
             }
-            $admin = xarUFindRole('Admin');
+            $admin = $rolemaker->getRole(xarModGetVar('roles','admin'));
             $mailinfo = array('subject' => 'Site Lock',
                               'from' => $admin->getEmail()
             );
