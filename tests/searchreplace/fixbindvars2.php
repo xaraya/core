@@ -5,8 +5,7 @@ $GLOBALS['called'] = false;
 
 set_time_limit(900);
 
-function first_replace ( $matches )
-{
+function first_replace ( $matches ) {
     $match = $matches[2];
 
     $exploded = explode('"', $match);
@@ -16,7 +15,7 @@ function first_replace ( $matches )
     for ($i=0; $i<$size; $i++) {
         if (!($i % 2)) {
             //Inside quotes
-            $exploded[$i] = preg_replace_callback("/\\{(\\\$[^ \\n\\r,\\)]*)\\}|'(\\\$[^ \\n\\r,\\)]*)'|(\\\$[^ \\n\\r,\\)]*)/m", 'replace_inside_quotes', $exploded[$i] );
+            $exploded[$i] = preg_replace_callback("/\\{(\\\$[^ \\n\\r,\\)\\.]*)\\}|'(\\\$[^ \\n\\r,\\)\\.]*)'|(\\\$[^ \\n\\r,\\)\\.]*)/m", 'replace_inside_quotes', $exploded[$i] );
         } else {
             //Outside quotes
             $exploded[$i] = preg_replace_callback("/[ ]*\\.[ ]*([^\\. ]*)[ ]*\\.[ ]*/m", 'replace_outside_quotes', $exploded[$i] );

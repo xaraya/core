@@ -4,12 +4,11 @@ $GLOBALS['called'] = false;
 
 set_time_limit(360);
 
-function replace( $matches )
-{
+function replace( $matches ) {
     $GLOBALS['called'] = true;
     $list1 = explode(',', $matches[1]);
     $list2 = explode(',', $matches[2]);
-    
+
     $max1 = 0;
     $max2 = 0;
 
@@ -22,7 +21,7 @@ function replace( $matches )
         $list2[$key] = trim($list2[$key]);
         if (strlen($list2[$key]) > $max2) $max2 = strlen($list2[$key]);
     }
-    
+
     $text = '';
     foreach ($list1 as $key => $value) {
         $localmax1 = $max1-strlen($list1[$key]) + 1;
@@ -59,7 +58,7 @@ function searchDir($path) {
                 $file = file ("$path/$entry");
 
                 $file_contents = implode ('', $file);
-                
+
                 //This is to know if something was replace or not
                 $GLOBALS['called'] = false;
 
