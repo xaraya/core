@@ -33,7 +33,7 @@
     $result->Close();
     $regid = xarModGetIDFromName('articles');
     $query = 'SELECT sid, title, hometext, bodytext, aid,
-                     UNIX_TIMESTAMP(time), language, catid, topic,
+                     UNIX_TIMESTAMP(time), alanguage, catid, topic,
                      notes, ihome, counter
               FROM ' . $oldprefix . '_stories
               ORDER BY sid ASC';

@@ -51,7 +51,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
 ?>
     Requirement : you must be using the same database, but a different prefix...
     <p></p>
-    <form method="POST" action="import_pn.php">
+    <form method="POST" action="import_nuke.php">
     <table border="0" cellpadding="4">
     <tr><td align="right">Prefix used in your Nuke 6.5 site</td><td>
     <input type="text" name="oldprefix" value="nuke"></td></tr>
@@ -79,7 +79,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
 </ul>
 [do not modify the default privileges, hooks etc. yet]
 </li>
-    <li>copy the import_pn.php file to your Xaraya html directory and run it. Adapt the prefix and images directory of your old PHP-Nuke site if necessary, and leave both Reset options checked.</li>
+    <li>copy the import_nuke.php file to your Xaraya html directory and run it. Adapt the prefix and images directory of your old PHP-Nuke site if necessary, and leave both Reset options checked.</li>
     <li>???</li>
     <li>profit ;-)</li>
 </ol>

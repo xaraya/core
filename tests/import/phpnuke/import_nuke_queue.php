@@ -32,8 +32,8 @@
     $count = $result->fields[0];
     $result->Close();
     $regid = xarModGetIDFromName('articles');
-    $query = 'SELECT qid, subject, story, storytext, uid,
-                     UNIX_TIMESTAMP(timestamp), language, topic
+    $query = 'SELECT qid, subject, story, storyext, uid,
+                     UNIX_TIMESTAMP(timestamp), alanguage, topic
               FROM ' . $oldprefix . '_queue
               ORDER BY qid ASC';
     $numitems = 1000;
