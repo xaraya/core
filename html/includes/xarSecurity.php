@@ -24,6 +24,12 @@
  *
  */
 
+    //Maybe changing this touch to a centralized API would be a good idea?
+    //Even if in the end it would use touched files too...
+    if (file_exists('./var/cache/security/security.touch')) {
+        include_once('./includes/xarCacheSecurity.php');
+    }
+
     // FIXME: Can we reverse this? (i.e. the module loading the files from here?)
     //        said another way, can we move the two files to /includes (partially preferably)
     include_once 'modules/privileges/xarprivileges.php';
@@ -477,8 +483,27 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
     if(isset($installing) && ($installing == true)) {
        return true;
     } else {
+ 
        $masks = new xarMasks();
-       return $masks->xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
+       $return = $masks->xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
+
+        if (file_exists('./var/cache/security/security.touch')) {
+            $cache_return = xarCacheSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
+//            if ($cache_return !== null) return $cache_return;
+            //This is a temporary construct to allow a lot of ppl to test if the cache if
+            //truthfully reflecting the security scheme
+            if (($cache_return === null) OR
+                 ($cache_return != (bool) $return)) {
+                xarLogMessage("xarSecurityCache ERROR! Returns are different.", XARLOG_LEVEL_ERROR);
+                xarLogVariable("cache_return", $cache_return);
+                xarLogVariable("return", $return);
+                xarLogVariable("mask", $mask);
+                xarLogVariable("instance", $instance);
+                xarLogVariable("component", $component);
+                xarLogVariable("role", $role);
+            }
+       }
+       return $return; 
     }
 }
 
