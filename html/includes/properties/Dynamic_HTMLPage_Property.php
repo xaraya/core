@@ -29,7 +29,42 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         if (empty($this->basedir) && !empty($this->validation)) {
             $this->basedir = $this->validation;
         }
-        if (count($this->options) == 0 && !empty($this->basedir)) {
+    }
+
+    function validateValue($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        $basedir = $this->basedir;
+        $filetype = $this->filetype;
+        if (!empty($value) &&
+            preg_match('/^[a-zA-Z0-9_\/.-]+$/',$value) &&
+            preg_match("/$filetype$/",$value) &&
+            file_exists($basedir.'/'.$value) &&
+            is_file($basedir.'/'.$value)) {
+            $this->value = $value;
+            return true;
+        } elseif (empty($value)) {
+            $this->value = $value;
+            return true;
+        }
+        $this->invalid = xarML('selection');
+        $this->value = null;
+        return false;
+    }
+
+//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
+    function showInput($args = array())
+    {
+        extract($args);
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!isset($options) || count($options) == 0) {
+            $options = $this->options;
+        }
+        if (count($options) == 0 && !empty($this->basedir)) {
             $files = xarModAPIFunc('dynamicdata','admin','browse',
                                    array('basedir' => $this->basedir,
                                          'filetype' => $this->filetype));
@@ -39,14 +74,31 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
             natsort($files);
             array_unshift($files,'');
             foreach ($files as $file) {
-                $this->options[] = array('id' => $file,
-                                         'name' => $file);
+                $options[] = array('id' => $file,
+                                   'name' => $file);
             }
             unset($files);
         }
+        $out = '<select' .
+               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
+               (!empty($id) ? ' id="'.$id.'"' : '') .
+               (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
+               '>';
+        foreach ($options as $option) {
+            $out .= '<option';
+            if (empty($option['id']) || $option['id'] != $option['name']) {
+                $out .= ' value="'.$option['id'].'"';
+            }
+            if ($option['id'] == $value) {
+                $out .= ' selected>'.$option['name'].'</option>';
+            } else {
+                $out .= '>'.$option['name'].'</option>';
+            }
+        }
+        $out .= '</select>' .
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+        return $out;
     }
-
-    // default showInput() from Dynamic_Select_Property
 
     function showOutput($value = null)
     {
