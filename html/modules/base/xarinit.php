@@ -68,6 +68,7 @@ function base_init()
 //    xar_decimals,
 
     $query = xarDBCreateTable($tablesTable,$fields);
+
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -217,6 +218,7 @@ function base_init()
                    'fields' => array('xar_name'));
 
     $query = xarDBCreateIndex($allowedVarsTable,$index);
+
     $result =& $dbconn->Execute($query);
     if (!$result) return;
     
@@ -452,7 +454,7 @@ function base_init()
     $query = "INSERT INTO $userPermsTable VALUES ($id,$id_admin,0,0,'.*','.*',800,0)";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-    
+
     /**************************************************************
     * Install modules table and insert the modules module
     **************************************************************/
@@ -478,6 +480,7 @@ function base_init()
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
+
     // Install authsystem module
     $seqId = $dbconn->GenId($modulesTable);
     $query = "INSERT INTO $modulesTable
@@ -533,7 +536,6 @@ function base_init()
 	                       array('directory'=>'blocks', 'initfunc'=>'init'))) {
 	    return;
 	}  
-
     // Fill language list(?)
 
     // Initialisation successful
@@ -550,6 +552,7 @@ function base_init()
  */
 function base_activate()
 {
+
     // Set up default user properties, etc.
 
     // load modules admin API
@@ -579,15 +582,17 @@ function base_activate()
             }
     }
 
-    // Initialise and activate adminpanels
-    $apid = xarModGetIDFromName('adminpanels');
-    // initialize & activate adminpanels module
-    if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $apid))) {
-        return;
-    }
-       
-    if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $apid))) {
-        return;
+    // Initialise and activate adminpanels, mail
+    $modlist = array('adminpanels','mail');
+    foreach ($modlist as $mod) {
+        // Initialise the module
+        $regid = xarModGetIDFromName($mod);
+        if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) {
+            return;
+        }
+        if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) {
+            return;
+        }
     }
     
     //initialise and activate base module by setting the states
@@ -606,6 +611,7 @@ function base_activate()
     $blocks = array('finclude','html','menu','php','text');
 
     foreach ($blocks as $block) {
+
         if (!xarBlockTypeRegister('base', $block)) {
             return NULL;
         }
@@ -633,7 +639,7 @@ function base_activate()
                                                                 'template' => 'right'))) {
         return NULL;
     }
-  
+
     return true;
 }
 /**
@@ -658,4 +664,3 @@ function base_delete()
     return false;
 }
 
-?>
