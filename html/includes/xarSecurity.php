@@ -460,6 +460,21 @@ function xarMaskExists($name,$module="All")
     else return FALSE;
 }
 
+/* xarQueryMask: returns a mask suitable for inclusion in a structured query
+ *
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   string name of mask
+ * @param   string module of mask
+ * @return  boolean
+ */
+function xarQueryMask($mask, $showException=1, $component='', $instance='', $module='', $role='')
+{
+   $masks = new xarMasks();
+   $return = $masks->querymask($mask, $component, $instance, $module, $role,$pnrealm,$pnlevel);
+}
+
 /**
  * xarSecurityCheck: check a role's privileges against the masks of a component
  *
@@ -482,28 +497,10 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
 
     if(isset($installing) && ($installing == true)) {
        return true;
-    } else {
- 
+    }
+    else {
        $masks = new xarMasks();
        $return = $masks->xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
-
-        if (file_exists('./var/security/on.touch')) {
-            $cache_return = xarCacheSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
-//            if ($cache_return !== null) return $cache_return;
-            //This is a temporary construct to allow a lot of ppl to test if the cache if
-            //truthfully reflecting the security scheme
-            if (($cache_return === null) OR
-                 ($cache_return != (bool) $return)) {
-                xarLogMessage("xarSecurityCache ERROR! Returns are different.", XARLOG_LEVEL_ERROR);
-                xarLogVariable("cache_return", $cache_return);
-                xarLogVariable("return", $return);
-                xarLogVariable("mask", $mask);
-                xarLogVariable("instance", $instance);
-                xarLogVariable("component", $component);
-                xarLogVariable("role", $role);
-            }
-       }
-       return $return; 
     }
 }
 
