@@ -1239,7 +1239,8 @@ exit;
  * Helper function to render the output as we have it so far
  *
  */
-function CatchOutput() {
+function CatchOutput() 
+{
     $out = ob_get_contents();
     ob_end_clean();
     xarTplSetPageTitle(xarML('Upgrade Xaraya'));

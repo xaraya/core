@@ -23,7 +23,8 @@
  * @throws none
  * @todo none
  */
-class xarDataDict {
+class xarDataDict 
+{
     var $dict;
 
     /**
@@ -752,7 +753,8 @@ class xarDataDict {
  * @throws none
  * @todo none
  */
-class xarMetaData {
+class xarMetaData 
+{
     var $dbconn;
 
     /**

@@ -595,7 +595,7 @@ function installer_admin_confirm_configuration()
 
     include $configuration;
     $fileModules = unserialize(xarModGetVar('installer','modulelist'));
-    $func = "installer_" . basename("$configuration",'.conf.php') . "_moduleoptions";
+    $func = "installer_" . basename(strval($configuration),'.conf.php') . "_moduleoptions";
     $modules = $func();
     $availablemodules = $awolmodules = array();
     foreach ($modules as $module) {
@@ -631,7 +631,7 @@ function installer_admin_confirm_configuration()
 
     if (!$confirmed) {
 
-        $func = "installer_" . basename("$configuration",'.conf.php') . "_privilegeoptions";
+        $func = "installer_" . basename(strval($configuration),'.conf.php') . "_privilegeoptions";
         $data['options1'] = $func();
         $data['options2'] = $options2;
         $data['options3'] = $options3;
@@ -806,7 +806,8 @@ function installer_admin_finish()
 }
 
 
-function installer_admin_cleanup() {
+function installer_admin_cleanup() 
+{
     $remove = xarModDelVar('roles','adminpass');
     $remove = xarModDelVar('installer','modules');
 
@@ -934,5 +935,9 @@ function installer_admin_cleanup() {
     }
     xarResponseRedirect('index.php');
 }
-function installer_admin_modifyconfig() {}
+
+
+function installer_admin_modifyconfig() 
+{}
+
 ?>

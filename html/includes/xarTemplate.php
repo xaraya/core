@@ -1233,7 +1233,8 @@ function xarTpl__loadFromFile($sourceFileName)
  *
  * @package blocklayout
  */
-class xarTemplateAttribute {
+class xarTemplateAttribute 
+{
     var $_name;     // Attribute name
     var $_flags;    // Attribute flags (datatype, required/optional, etc.)
 
@@ -1299,7 +1300,8 @@ class xarTemplateAttribute {
  *
  * @package blocklayout
  */
-class xarTemplateTag {
+class xarTemplateTag 
+{
     var $_name;
     var $_attributes;
     var $_handler;
