@@ -126,14 +126,13 @@
     <h4><xar:mlstring>Timezone Configuration</xar:mlstring></h4>
 </div>
 
-<xar:comment> TODO: replace with actual timezone once daylight saving is clarified ? </xar:comment>
 <div style="clear: both; padding-top: 10px;">
     <span style="float: left; width: 20%; text-align: right;">
-        <span class="help" title="#xarML('Default Time Offset')#"><label for="defaultoffset"><xar:mlstring>Default Time Offset</xar:mlstring></label>:</span>
+        <span class="help" title="#xarML('Default Timezone')#"><label for="defaulttimezone"><xar:mlstring>Default Timezone</xar:mlstring></label>:</span>
     </span>
     <span style="float: right; width: 78%; text-align: left;">
-        <xar:set name="timeoffset">#xarConfigGetVar('Site.MLS.DefaultTimeOffset')#</xar:set>
-        <xar:data-input type="timezone" name="defaultoffset" id="defaultoffset" value="$timeoffset" />
+        <xar:set name="timezone">#xarConfigGetVar('Site.Core.TimeZone')#</xar:set>
+        <xar:data-input type="dropdown" name="defaulttimezone" id="defaulttimezone" value="$timezone" options="$timezones" />
     </span>
 </div>
 

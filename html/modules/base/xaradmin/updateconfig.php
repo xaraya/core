@@ -105,12 +105,36 @@ function base_admin_updateconfig()
             xarConfigSetVar('Site.MLS.AllowedLocales', $localesList);
             xarConfigSetVar('Site.MLS.TranslationsBackend', $translationsBackend);
 
-            if (!xarVarFetch('defaultoffset','int',$defaultoffset,0,XARVAR_NOT_REQUIRED)) return;
-        // CHECKME: see also Site.Core.TimeZone (currently unused) - we *could* load
-        //          all timezone info and set some daylight saving information here !
-            xarConfigSetVar('Site.MLS.DefaultTimeOffset', $defaultoffset);
-            //xarConfigSetVar('Site.MLS.DaylightStartInfo', ...); // when daylight savings start each year ?
-            //xarConfigSetVar('Site.MLS.DaylightEndInfo', ...); // when daylight savings end each year ?
+            // Timezone, offset and DST
+            if (!xarVarFetch('defaulttimezone','str:1:',$defaulttimezone,'',XARVAR_NOT_REQUIRED)) return;
+            if (!empty($defaulttimezone)) {
+                $timezoneinfo = xarModAPIFunc('base','user','timezones',
+                                              array('timezone' => $defaulttimezone));
+                if (!empty($timezoneinfo)) {
+                    xarConfigSetVar('Site.Core.TimeZone', $defaulttimezone);
+                    list($hours,$minutes) = explode(':',$timezoneinfo[0]);
+                    $offset = ((int) $hours * 60 + (int) $minutes) * 60;
+                    xarConfigSetVar('Site.MLS.DefaultTimeOffset', $offset);
+                    if (!empty($timezoneinfo[1]) && $timezoneinfo[1] != '-') {
+                        $dstrules = xarModAPIFunc('base','user','dstrules',
+                                                  array('rule' => $timezoneinfo[1]));
+                // TODO: analyze DST rules and do something with them, e.g.
+                //       array('1974', 'max', '-', 'Oct', 'lastSun', '2:00', '0', 'S'),
+                //       array('1987', 'max', '-', 'Apr', 'Sun>=1', '2:00', '1:00', 'D'),
+                        //xarConfigSetVar('Site.MLS.DaylightStartInfo', ...); // when daylight savings start each year ?
+                        //xarConfigSetVar('Site.MLS.DaylightEndInfo', ...); // when daylight savings end each year ?
+                    } else {
+                        xarConfigSetVar('Site.MLS.DaylightStartInfo', ''); // when daylight savings start each year ?
+                        xarConfigSetVar('Site.MLS.DaylightEndInfo', ''); // when daylight savings end each year ?
+                    }
+                } else {
+                    // unknown/invalid timezone
+                }
+            } else {
+                xarConfigSetVar('Site.MLS.DefaultTimeOffset', 0);
+                xarConfigSetVar('Site.MLS.DaylightStartInfo', ''); // when daylight savings start each year ?
+                xarConfigSetVar('Site.MLS.DaylightEndInfo', ''); // when daylight savings end each year ?
+            }
 
             break;
         case 'other':
