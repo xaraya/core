@@ -957,6 +957,8 @@ function xarModPrivateLoad($modName, $modType)
     }
 
     // Removed the execption.  Causing some wierd results with modules without an api.
+    // <nuncanada> But now we wont know if something was loaded or not!
+    // <nuncanada> We need some way to find it out.
     if (file_exists($fileName)) {
         // Load file
         include_once($fileName);
