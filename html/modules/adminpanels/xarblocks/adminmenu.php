@@ -73,16 +73,20 @@ function adminpanels_adminmenublock_display($blockinfo){
         // there aren't any admin modules, dont display adminmenu
 	    return;
 	}
+	
+	// due to shortcomings of modules module, we need this workaround
+	// if our module deactivated intentionally or by accident
+	// we just switch to the block mode that is not dependent on the module's api
+	// the only such mode at the moment is sort by name
+	// TODO: think of possibility to not depent on module api for other modes too
+	if(!xarModIsAvailable('adminpanels')){
+	     xarModSetVar('adminpanels', 'menustyle', 'byname');
+	}
         
     // this is how we are marking the currently loaded module
     $marker = xarModGetVar('adminpanels', 'marker');
     
-    // TODO: put in init
-    if(!isset($marker)){
-        xarModSetVar('adminpanels' ,'marker', '[x]');
-        $marker = '[x]';
-    }
-    
+    // dont show marker unless specified
     if(!xarModGetVar('adminpanels', 'showold')){
         $marker = '';
     }

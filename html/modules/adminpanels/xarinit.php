@@ -12,9 +12,6 @@
  * @author Andy Varganov <andyv@xaraya.com>
 */
 
-// Load Table Maintaince API
-xarDBLoadTableMaintenanceAPI();
-
 /**
  * Initialise the adminpanels module
  *
@@ -30,6 +27,9 @@ function adminpanels_init()
     // Get database information
     list($dbconn) = xarDBGetConn();
     $table = xarDBGetTables();
+    
+    // Load Table Maintaince API
+    xarDBLoadTableMaintenanceAPI();
 
     // Create tables
     $adminMenuTable = xarDBGetSiteTablePrefix() . '_admin_menu';
@@ -136,6 +136,7 @@ function adminpanels_init()
     xarModSetVar('adminpanels','menustyle', 'bycat');
     xarModSetVar('adminpanels','showontop', 1);
     xarModSetVar('adminpanels','showhelp', 1);
+    xarModSetVar('adminpanels','marker', '[x]');
     
     /* Create the table and hooks for the waiting content block */
 
@@ -220,7 +221,38 @@ function adminpanels_init()
 */
 function adminpanels_upgrade($oldVersion)
 {
-    return false;
+    // Upgrade dependent on old version number
+    switch($oldversion) {
+        case 1.0:
+            // Code to upgrade from version 1.0 goes here
+            break;
+        // TODO : remove for release version
+        case 1.1:
+            // Code to upgrade from version 1.1 goes here
+            xarSessionSetVar('errormsg', xarML('Please remove and re-initialize'));
+            return false;
+            break;
+        case 1.2:
+//            if (!xarModRegisterHook('item', 'search', 'GUI',
+//                                   'articles', 'user', 'search')) {
+//                return false;
+//            }
+            break;
+        case 1.3:
+            // Register BL tags
+//            xarTplRegisterTag('articles', 'articles-field',
+//                              //array(new xarTemplateAttribute('bid', XAR_TPL_STRING|XAR_TPL_REQUIRED)),
+//                              array(),
+//                              'articles_userapi_handleFieldTag');
+            break;
+        case 1.4:
+            // Code to upgrade from version 1.4 goes here
+            break;
+        case 1.5:
+            // Code to upgrade from version 1.5 goes here
+            break;
+    }
+    return true;
 }
 
 /**
@@ -230,12 +262,52 @@ function adminpanels_upgrade($oldVersion)
  * @access  public
  * @param   no parameters
  * @return  true on success or false on failure
- * @todo    nothing
+ * @todo    restore the default behaviour prior to 1.0 release
 */
-
 function adminpanels_delete()
 {
-    return false;
+    // temporary workaround to enable deactivate and upgrade
+    // TODO: remove prior to xarays 1.0 release
+    
+    // removal of module stuff from version 1.0
+    xarModDelVar('adminpanels', 'showold');
+    xarModDelVar('adminpanels', 'menuposition');
+    xarModDelVar('adminpanels', 'menustyle');
+    xarModDelVar('adminpanels', 'showontop');
+    xarModDelVar('adminpanels', 'showhelp');
+    xarModDelVar('adminpanels', 'marker');
+    
+    // need to drop the module tables too
+    // Get database information
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
+    
+    //Load Table Maintainance API
+    xarDBLoadTableMaintenanceAPI();
+    
+    // Generate the SQL to drop the table using the API
+    $query = xarDBDropTable($xartable['admin_menu']);
+    if (empty($query)) return; // throw back
+    
+    // Drop the table and send exception if returns false.
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+    
+     // Generate the SQL to drop the table using the API
+    $query = xarDBDropTable($xartable['waiting_content']);
+    if (empty($query)) return; // throw back
+    
+    // Drop the table and send exception if returns false.
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+    
+    // unregister our blocks.. maybe not
+    // xarBlockTypeUnregister('adminpanels', 'adminmenu');
+    // xarBlockTypeUnregister('articles', 'waitingcontent');
+    
+    // we are done with removing stuff from version 1.0
+    
+    return true;
 }
 
 ?>
