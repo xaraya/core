@@ -275,7 +275,8 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
 
                 //What is the PHP operator precedence?
                 //Couldnt we use parenthesis to not depend on that??
-                if ($child->isAssignable() && !($checkNode->needParameter()) || $checkNode->needAssignment()) {
+                if ($child->isAssignable() && !($checkNode->needParameter()) || $checkNode->needAssignment()) 
+                {
                     $code .= "; ";
                     if ($child->needExceptionsControl() || $this->isPendingExceptionsControl()) {
                         $code .= "if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return false; ";

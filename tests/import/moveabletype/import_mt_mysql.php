@@ -14,7 +14,8 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
-    function find_cat($needle, &$haystack) {
+    function find_cat($needle, &$haystack) 
+    {
         foreach ($haystack as $key => $value) {
             if (array_search($needle, $value) !== FALSE) {
                 return $value['cid'];
