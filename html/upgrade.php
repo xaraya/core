@@ -57,7 +57,6 @@ if (empty($step)) {
 //Begin Upgrades -- needs to be a switch after this first upgrade.
     switch($xarVersion) {
         case .901:
-            xarConfigSetVar('System.Core.VersionNum', '.902');
 
             // Remove Masks and Instances
             xarRemoveMasks('articles');
@@ -87,56 +86,10 @@ if (empty($step)) {
             xarRegisterMask('DeleteArticles','All','articles','Article','All','ACCESS_DELETE');
             xarRegisterMask('AdminArticles','All','articles','Article','All','ACCESS_ADMIN');
             xarRegisterMask('ReadArticlesBlock','All','articles','Block','All','ACCESS_READ');
-
-            // Roles
-
-            $index = array(
-               'name'      => 'i_xar_roles_type',
-               'fields'    => array('xar_type')
-              );
-                $query = xarDBCreateIndex($tables['roles'],$index);
-                $result =& $dbconn->Execute($query);
-                if (!$result) return;
-
-                // username must be unique (for login) + don't allow groupname to be the same either
-                $index = array(
-                               'name'      => 'i_xar_roles_uname',
-                               'fields'    => array('xar_uname'),
-                               'unique'    => true
-                              );
-                $query = xarDBCreateIndex($tables['roles'],$index);
-                $result =& $dbconn->Execute($query);
-                if (!$result) return;
-
-                // allow identical "real names" here
-                $index = array(
-                               'name'      => 'i_xar_roles_name',
-                               'fields'    => array('xar_name'),
-                               'unique'    => false
-                              );
-                $query = xarDBCreateIndex($tables['roles'],$index);
-                $result =& $dbconn->Execute($query);
-                if (!$result) return;
-
-                // allow identical e-mail here (???) + is empty for groups !
-                $index = array(
-                               'name'      => 'i_xar_roles_email',
-                               'fields'    => array('xar_email'),
-                               'unique'    => false
-                              );
-                $query = xarDBCreateIndex($tables['roles'],$index);
-                $result =& $dbconn->Execute($query);
-                if (!$result) return;
-            continue;
-
-        case .902:
-                xarConfigSetVar('System.Core.VersionNum', '.9.0.3');
             continue;
 
         case '0.903':  // this is how it's defined in modules/base/xarinit.php
         case '.9.0.3': // this is how it's defined in upgrade.php
-                xarConfigSetVar('System.Core.VersionNum', '.9.0.4');
-
                 $instances = array(
                                    array('header' => 'external', // this keyword indicates an external "wizard"
                                          'query'  => xarModURL('categories', 'admin', 'privileges'),
@@ -165,21 +118,6 @@ if (empty($step)) {
 
         case '.9.0.4': // this is how it's defined in upgrade.php
 
-        /**
-         * privileges changes
-         */
-                xarConfigSetVar('System.Core.VersionNum', '.9.0.5');
-
-
-                $role = xarFindRole('Everybody');
-                xarModSetVar('roles', 'everybody', $role->getID());
-                $role = xarFindRole('Anonymous');
-                xarConfigSetVar('Site.User.AnonymousUID', $role->getID());
-
-                //This creates the new Myself role and makes it a child of Everybody
-                xarMakeUser('Myself','myself','myself@xaraya.com','password');
-                xarMakeRoleMemberByName('Myself','Everybody');
-
                 // create a couple of new masks
                 xarRegisterMask('ViewPanel','All','adminpanels','All','All','ACCESS_OVERVIEW');
                 xarRegisterMask('AssignPrivilege','All','privileges','All','All','ACCESS_ADD');
@@ -205,30 +143,7 @@ if (empty($step)) {
                 xarAssignPrivilege('GeneralLock','Administrators');
                 xarAssignPrivilege('GeneralLock','Users');
 
-                //Make sure we have the correct stuff for Anonymous and Everybody
-                //xarModDelVar('roles', 'Everybody');
-                //xarModDelVar('roles', 'Anonymous');
-
-                // Note to self, roles datereg field needs to be changed to a date/time field.
-
-        /**
-         * dynamicdata changes
-         */
-
-            $dynproptable = xarDBGetSiteTablePrefix() . '_dynamic_properties';
-            $query = "UPDATE $dynproptable
-                         SET xar_prop_type=3
-                       WHERE xar_prop_objectid=2
-                         AND xar_prop_name='default'";
-            // Check for db errors
-            $result =& $dbconn->Execute($query);
-            if (!$result) return;
-
             continue;
-
-        case '.9.0.5':
-            xarConfigSetVar('System.Core.VersionNum', '.9.0.6');
-            break;
     }
 
 // Fini
@@ -247,59 +162,7 @@ if (empty($step)) {
     // Upgrade will check to make sure that upgrades in the past have worked, and if not, correct them now.
     $sitePrefix = xarDBGetSiteTablePrefix();
     echo "<h5>Checking Table Structure</h5>";
-    // Drop the admin_wc table and the hooks for the admin panels.
-    $table_name['admin_wc'] = $sitePrefix . '_admin_wc'; 
-
-    $upgrade['waiting_content'] = xarModAPIFunc('installer',
-                                                'admin',
-                                                'CheckTableExists',
-                                                array('table_name' => $table_name['admin_wc']));
-    if ($upgrade['waiting_content']) {
-        echo "$table_name[admin_wc] table still exists, attempting to drop... ";
-            xarModRegisterHook('item', 'waitingcontent', 'GUI',
-                               'articles', 'admin', 'waitingcontent');
-            xarModUnregisterHook('item', 'create', 'API',
-                                 'adminpanels', 'admin', 'createwc');
-            xarModUnregisterHook('item', 'update', 'API',
-                                 'adminpanels', 'admin', 'deletewc');
-            xarModUnregisterHook('item', 'delete', 'API',
-                                 'adminpanels', 'admin', 'deletewc');
-            xarModUnregisterHook('item', 'remove', 'API',
-                                 'adminpanels', 'admin', 'deletewc');
-
-            // Generate the SQL to drop the table using the API
-            $query = xarDBDropTable($table_name['admin_wc']);
-            $result =& $dbconn->Execute($query);
-            if (!$result){ 
-                echo "failed</font><br>\r\n";
-            } else {
-                echo "done!</font><br>\r\n";
-            }
-    } else {
-        echo "$table_name[admin_wc] has been dropped previously, moving to next check. <br />";  
-    }
-
-    // Drop the security_privsets table
-    $table_name['security_privsets'] = $sitePrefix . '_security_privsets'; 
-
-    $upgrade['security_privsets'] = xarModAPIFunc('installer',
-                                                'admin',
-                                                'CheckTableExists',
-                                                array('table_name' => $table_name['security_privsets']));
-    if ($upgrade['security_privsets']) {
-        echo "$table_name[security_privsets] table still exists, attempting to drop... ";
-        // Generate the SQL to drop the table using the API
-        $query = xarDBDropTable($table_name['security_privsets']);
-        $result =& $dbconn->Execute($query);
-        if (!$result){ 
-            echo "failed</font><br>\r\n";
-        } else {
-            echo "done!</font><br>\r\n";
-        }
-    } else {
-        echo "$table_name[security_privsets] has been dropped previously, moving to next check. <br />";  
-    }
-
+    list($dbconn) = xarDBGetConn();
     // create and populate the security levels table
     $table_name['security_levels'] = $sitePrefix . '_security_levels'; 
 
@@ -406,6 +269,147 @@ if (empty($step)) {
         echo "$table_name[security_levels] already exists, moving to next check. <br />";  
     }
 
+    // Set indexes on roles table.
+    $table_name['roles'] = $sitePrefix . '_roles'; 
+
+    $index = array(
+       'name'      => 'i_xar_roles_type',
+       'fields'    => array('xar_type')
+      );
+        $query = xarDBCreateIndex($table_name['roles'],$index);
+        $result =& $dbconn->Execute($query);
+
+    if (!$result) {
+        echo "$table_name[roles] table already has index set for xar_type, moving to next check. <br /> ";
+    } else {
+        echo "Setting index on $table_name[roles]... done! <br />";  
+    }
+    
+    $index = array(
+                   'name'      => 'i_xar_roles_uname',
+                   'fields'    => array('xar_uname'),
+                   'unique'    => true
+                  );
+    $query = xarDBCreateIndex($table_name['roles'],$index);
+    $result =& $dbconn->Execute($query);
+
+    if (!$result) {
+        echo "$table_name[roles] table already has index set for xar_uname, moving to next check. <br /> ";
+    } else {
+        echo "Setting index on $table_name[roles]... done! <br />";  
+    }
+
+    $index = array(
+                   'name'      => 'i_xar_roles_name',
+                   'fields'    => array('xar_name'),
+                   'unique'    => false
+                  );
+    $query = xarDBCreateIndex($table_name['roles'],$index);
+    $result =& $dbconn->Execute($query);
+
+    if (!$result) {
+        echo "$table_name[roles] table already has index set for xar_name, moving to next check. <br /> ";
+    } else {
+        echo "Setting index on $table_name[roles]... done! <br />";  
+    }
+
+    $index = array(
+                   'name'      => 'i_xar_roles_email',
+                   'fields'    => array('xar_email'),
+                   'unique'    => false
+                  );
+    $query = xarDBCreateIndex($table_name['roles'],$index);
+    $result =& $dbconn->Execute($query);
+
+    if (!$result) {
+        echo "$table_name[roles] table already has index set for xar_email, moving to next check. <br /> ";
+    } else {
+        echo "Setting index on $table_name[roles]... done! <br />";  
+    }
+
+    // Drop the admin_wc table and the hooks for the admin panels.
+    $table_name['admin_wc'] = $sitePrefix . '_admin_wc'; 
+
+    $upgrade['waiting_content'] = xarModAPIFunc('installer',
+                                                'admin',
+                                                'CheckTableExists',
+                                                array('table_name' => $table_name['admin_wc']));
+    if ($upgrade['waiting_content']) {
+        echo "$table_name[admin_wc] table still exists, attempting to drop... ";
+            xarModRegisterHook('item', 'waitingcontent', 'GUI',
+                               'articles', 'admin', 'waitingcontent');
+            xarModUnregisterHook('item', 'create', 'API',
+                                 'adminpanels', 'admin', 'createwc');
+            xarModUnregisterHook('item', 'update', 'API',
+                                 'adminpanels', 'admin', 'deletewc');
+            xarModUnregisterHook('item', 'delete', 'API',
+                                 'adminpanels', 'admin', 'deletewc');
+            xarModUnregisterHook('item', 'remove', 'API',
+                                 'adminpanels', 'admin', 'deletewc');
+
+            // Generate the SQL to drop the table using the API
+            $query = xarDBDropTable($table_name['admin_wc']);
+            $result =& $dbconn->Execute($query);
+            if (!$result){ 
+                echo "failed</font><br>\r\n";
+            } else {
+                echo "done!</font><br>\r\n";
+            }
+    } else {
+        echo "$table_name[admin_wc] has been dropped previously, moving to next check. <br />";  
+    }
+
+    // Drop the security_privsets table
+    $table_name['security_privsets'] = $sitePrefix . '_security_privsets'; 
+
+    $upgrade['security_privsets'] = xarModAPIFunc('installer',
+                                                'admin',
+                                                'CheckTableExists',
+                                                array('table_name' => $table_name['security_privsets']));
+    if ($upgrade['security_privsets']) {
+        echo "$table_name[security_privsets] table still exists, attempting to drop... ";
+        // Generate the SQL to drop the table using the API
+        $query = xarDBDropTable($table_name['security_privsets']);
+        $result =& $dbconn->Execute($query);
+        if (!$result){ 
+            echo "failed</font><br>\r\n";
+        } else {
+            echo "done!</font><br>\r\n";
+        }
+    } else {
+        echo "$table_name[security_privsets] has been dropped previously, moving to next check. <br />";  
+    }
+
+    // Dynamic Data Change to prop type.
+    $dynproptable = xarDBGetSiteTablePrefix() . '_dynamic_properties';
+
+    $query = "SELECT xar_prop_type
+              FROM $dynproptable
+              WHERE xar_prop_objectid=2";
+    // Check for db errors
+    $result =& $dbconn->Execute($query);
+
+    $prop_type = $result->fields;
+    $result->Close();
+
+    if ($prop_type != 3){
+        echo "Dynamic Data table objectid 2 is not set to property type 3, attempting to change... ";
+        // Generate the SQL to drop the table using the API
+        $query = "UPDATE $dynproptable
+                     SET xar_prop_type=3
+                   WHERE xar_prop_objectid=2
+                     AND xar_prop_name='default'";
+        // Check for db errors
+        $result =& $dbconn->Execute($query);
+        if (!$result){ 
+            echo "failed</font><br>\r\n";
+        } else {
+            echo "done!</font><br>\r\n";
+        }
+    } else {
+        echo "Dynamic Data table objectid 2 has correct property type, moving to next check. <br />";  
+    }
+
     // Add the syndicate block type and syndicate block for RSS display.
     echo "<h5>Checking Installed Blocks</h5>";
 
@@ -466,7 +470,8 @@ if (empty($step)) {
     }
 
     // Set any empty modvars.
-    echo "<h5>Setting Module Variables</h5>";
+    echo "<h5>Checking Module and Config Variables</h5>";
+    $role = xarFindRole('Everybody');
     $modvars[] = array(array('name'    =>  'hidecore',
                              'module'  =>  'themes',
                              'set'     =>  0),
@@ -488,14 +493,20 @@ if (empty($step)) {
                        array('name'    =>  'SiteFooter',
                              'module'  =>  'themes',
                              'set'     =>  '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" style="border:0px;" /></a>'),
+                       array('name'    =>  'everybody',
+                             'module'  =>  'roles',
+                             'set'     =>  $role->getID()),
+                       array('name'    =>  'allowregistration',
+                             'module'  =>  'roles',
+                             'set'     =>  1),
                        array('name'    =>  'ShowTemplates',
                              'module'  =>  'themes',
                              'set'     =>  0),
                        array('name'    =>  'CollapsedBranches',
                              'module'  =>  'comments',
                              'set'     =>  serialize(array())),
-                       array('name'    =>  'modules',
-                             'module'  =>  'expertlist',
+                       array('name'    =>  'expertlist',
+                             'module'  =>  'modules',
                              'set'     =>  0));
  
     foreach($modvars as $modvar){
@@ -509,6 +520,51 @@ if (empty($step)) {
             }
         }
     }
+    // Set Config Vars
+    $roleanon = xarFindRole('Anonymous');
+    $configvars[] = array(array('name'    =>  'Site.User.AnonymousUID',
+                                'set'     =>  $roleanon->getID()),
+                          array('name'    =>  'System.Core.VersionNum',
+                                'set'     =>  '.9.0.6'));
+ 
+    foreach($configvars as $configvar){
+        foreach($configvar as $var){
+            $currentvar = xarConfigGetVar("$var[name]");
+            if ($currentvar == $var['set']){
+                echo "$var[name] is set, proceeding to next check<br />";
+            } else {
+                xarConfigSetVar($var['name'], $var['set']);
+                echo "$var[name] incorrect, attempting to set.... done!<br />";
+            }
+        }
+    }
+
+    // Check the installed roles
+    echo "<h5>Checking Role Structure</h5>";
+
+    $upgrade['myself'] = xarModAPIFunc('roles',
+                                       'user',
+                                       'get',
+                                       array('uname' => 'myself'));
+    if (!$upgrade['myself']) {
+        echo "Myself role does not exist, attempting to create... ";
+        //This creates the new Myself role and makes it a child of Everybody
+        $result = xarMakeUser('Myself','myself','myself@xaraya.com','password');
+        $result .= xarMakeRoleMemberByName('Myself','Everybody');
+        if (!$result){ 
+            echo "failed</font><br>\r\n";
+        } else {
+            echo "done!</font><br>\r\n";
+        }
+    } else {
+        echo "Myself role has been created previously, moving to next check. <br />";  
+    }
+
+
+
+
+    // Check the installed privs and masks.
+    echo "<h5>Checking Privilege Structure</h5>";
 ?>
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
 Thank you, the upgrades are complete.
@@ -522,10 +578,7 @@ Thank you, the upgrades are complete.
 $return = ob_get_contents();
 ob_end_clean();
 
-xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarML('Upgrade Xaraya'));
-
-//xarTplSetThemeName('Xaraya_Classic');
-//xarTplSetPageTemplateName('admin');
+xarTplSetPageTitle(xarML('Upgrade Xaraya'));
 
 // render the page
 echo xarTpl_renderPage($return);
