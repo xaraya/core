@@ -36,8 +36,10 @@ function roles_loginblock_info()
  */
 function roles_loginblock_display($blockinfo)
 {
-// Security Check
-    if(!xarSecurityCheck('ViewLogin',1,'Block',"All:" . $blockinfo['title'] . ":All",'All')) return;
+    // Security Check
+    if(!xarSecurityCheck('ViewLogin',1,'Block',"Login:" . $blockinfo['title'] . ":All",'All')) return;
+    // Bug 1961 Fix
+    //if(!xarSecurityCheck('ViewLogin',1,'Block',"All:" . $blockinfo['title'] . ":All",'All')) return;
 
     // Get variables from content block
     $vars = unserialize($blockinfo['content']);
