@@ -236,6 +236,10 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $systemArgs = array();
         xarConfig_init($systemArgs, $whatToLoad);
 
+        // Pre-load site config variables
+    // CHECKME: see if this doesn't hurt install before activating :-)
+        //xarConfig_loadVars();
+
         // Start Variables utilities
         xarVar_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
@@ -339,6 +343,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         xarMod_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_MODULES;
 
+        // Pre-load themes module variables 
+    // CHECKME: see if this doesn't hurt install before activating :-)
+        //xarMod_getVarsByModule('themes');
     }
 
     /**

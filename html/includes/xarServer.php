@@ -1,7 +1,7 @@
 <?php
 /**
  * File: $Id$
- * 
+ *
  * HTTP Protocol Server/Request/Response utilities
  *
  * @package server
@@ -439,12 +439,8 @@ function xarRequestGetInfo()
                 // for this $modType.
                 // If exceptionId is MODULE_FILE_NOT_EXIST there's no problem too,
                 // this exception means that the module does not have the $modType API.
-                if (xarExceptionId() != 'MODULE_FUNCTION_NOT_EXIST' && xarExceptionId() != 'MODULE_FILE_NOT_EXIST') {
-                    // In all other cases we just log the exception since we must always
-                    // return a valid request info.
-                    xarLogException(XARLOG_LEVEL_ERROR);
-                }
-                // IMPORTANT: As this is exactly the same construct as in xarModUrl and that was 
+
+                // IMPORTANT: As this is exactly the same construct as in xarModUrl and that was
                 // causing a lot of exceptions to be hidden, i commented this one out as well
                 // but i haven't been able to trace exception hiding back to this line. If it behaves
                 // wrong, and is still needed uncomment it (MrB)
