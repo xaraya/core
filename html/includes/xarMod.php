@@ -1169,7 +1169,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 
     if ($GLOBALS['xarMod_generateShortURLs'] &&
         // WATCH OUT! : the encode_shorturl should be in userapi, so don't pass $modType
-        xarModGetVar($modName, 'SupportShortURLs') &&
+        xarModGetVar($modName, 'SupportShortURLs') && ($modType == 'user') &&
         xarModAPILoad($modName, 'user')) {
 
         $encoderArgs = $args;
