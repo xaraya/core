@@ -1,0 +1,24 @@
+# Enabling even shorter urls by stripping "index.php".
+# Apache's mod_rewrite required.
+
+# Edit var/config.system.php in your favorite text editor
+# Towards the end you'll see:
+#      //$systemConfiguration['BaseURI'] = '';
+#      //$systemConfiguration['BaseModURL'] = '';
+# Remove the two leading forward slashes on each so you have
+#      $systemConfiguration['BaseURI'] = '';
+#      $systemConfiguration['BaseModURL'] = '';
+#
+# Note: if xaraya is in a sub-directory (such as http://www.example.com/xar/)
+# you'll want to change $systemConfiguration['BaseURI'] = ''; to reflect that.
+# For the above example it would need to read
+#     $systemConfiguration['BaseURI'] = '/xar';
+
+# Copy this file to your xaraya root and rename it to .htaccess or add the
+# following to your existing .htaccess file.
+
+# This sends all requests that aren't otherwise fulfilled to xaraya
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.+) index.php/$1 [L]
