@@ -304,6 +304,8 @@ function xarErrorRender($format,$thisstack = "ERROR")
         $data['long'] = $rendering->getLong();
         $data['hint'] = $rendering->getHint();
         $data['stack'] = $rendering->getStack();
+        $data['product'] = $rendering->getProduct();
+        $data['component'] = $rendering->getComponent();
     }
     if ($format == 'html') {
         return  xarTplModule('base','message', $template, $data);

@@ -78,6 +78,8 @@ class ExceptionRendering
     function getLong() { return $this->exception->getLong() == '' ? $this->long : $this->exception->getLong(); }
     function getHint() { return $this->exception->getHint() == '' ? $this->hint : $this->exception->getHint(); }
     function getShort() { return $this->exception->getShort() == '' ? $this->short : $this->exception->getShort(); }
+    function getProduct() { return $this->exception->getProduct(); }
+    function getComponent() { return $this->exception->getComponent(); }
 
     function isadmin(){
         if (!class_exists("xarRoles"))

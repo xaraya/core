@@ -25,8 +25,11 @@ class Exception
     var $title = '';
     var $short = '';
     var $long = '';
-    var $hint= '';
+    var $hint = '';
     var $stack;
+    var $product = '';
+    var $component = '';
+    var $module = '';
 
     function Exception() {
     }
@@ -47,6 +50,8 @@ class Exception
     function getLong() { return $this->long; }
     function getHint() { return $this->hint; }
     function getStack() { return $this->stack; }
+    function getProduct() { return $this->product; }
+    function getComponent() { return $this->component; }
 
     function setID($id) { $this->id = $id; }
     function setMajor($id) { $this->major = $id; }

@@ -18,6 +18,23 @@ class SystemException extends Exception
 {
     function SystemException($msg = '') {
         $this->msg = $msg;
+        $info = xarRequestGetInfo();
+        $this->module = $info[0];
+        include("xarayacomponents.php");
+        foreach ($core as $corecomponent) {
+            if ($corecomponent['name'] == $this->module) {
+                $this->component = $corecomponent['fullname'];
+                $this->product = "App - Core";
+                return;
+            }
+        }
+        foreach ($apps as $appscomponent) {
+            if ($appscomponent['name'] == $this->module) {
+                $this->component = $appscomponent['fullname'];
+                $this->product = "App - Modules";
+                return;
+            }
+        }
     }
 }
 
