@@ -1,4 +1,4 @@
-<form action="&xar-modurl-users-user-login;" method="post" enctype="application/x-www-form-urlencoded">
+<form action="&xar-modurl-roles-user-login;" method="post" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="redirecturl" id="returnurl" value="#$return_url#" />
     <table border="0" width="100%">
         <tr>
@@ -31,7 +31,7 @@
         </tr>
         <tr>
             <td colspan="2" align="justify">
-                <xar:mlstring>Need an account?</xar:mlstring> <a href="&xar-modurl-users-user-main;"><xar:mlstring>Register here</xar:mlstring></a>.
+                <xar:mlstring>Need an account?</xar:mlstring> <a href="&xar-modurl-roles-user-main;"><xar:mlstring>Register here</xar:mlstring></a>.
             </td>
         </tr>
     </table>

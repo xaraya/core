@@ -114,7 +114,7 @@ function adminpanels_init()
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'users', 'Structure', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'roles', 'Structure', 0, 1);";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 

@@ -6,4 +6,4 @@
 	</form>
 </xar:if>
 
-<xar:mlstring>Welcome</xar:mlstring> <b>#$name#</b>&nbsp;-&nbsp;<a href="&xar-modurl-users-user-logout;"><xar:mlstring>Logout</xar:mlstring></a>
+<xar:mlstring>Welcome</xar:mlstring> <b>#$name#</b>&nbsp;-&nbsp;<a href="&xar-modurl-roles-user-logout;"><xar:mlstring>Logout</xar:mlstring></a>

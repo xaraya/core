@@ -401,8 +401,6 @@ class xarMasks
 // nothing found: return false
 // check if the exception needs to be caught here or not
 		if ($showexception) {
-//		echo "A".xarSessionGetVar('pid')."A".count($ancestors) . "B" . count($roles) . "b" . count($roleprivileges);exit;
-
         $msg = xarML('No privilege for modifying this item');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
