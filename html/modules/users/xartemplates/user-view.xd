@@ -1,40 +1,40 @@
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>        
 		<th width="20%">
-			&xar-var-numberlabel;
+			<xar:mlstring>Real Name</xar:mlstring>
 		</th>
         <th width="20%">
-			&xar-var-namelabel;
+			<xar:mlstring>Nick Name</xar:mlstring>
 		</th>
-        <th width="50%">
-			&xar-var-emaillabel;
+        <th width="40%">
+			<xar:mlstring>saved for icons, NEED SOME DUD HERE</xar:mlstring>
 		</th>
-        <th width="10%">
-			&xar-var-optionslabel;
+        <th width="20%">
+			<xar:mlstring>Options</xar:mlstring>
 		</th>
 	</tr>
     <xar:loop name="$items">
     <tr>
         <td>
-			&xar-var-uname;
+			#$uname#
 		</td>
         <td>
-			&xar-var-name;
+			#$name#
 		</td>
         <td>
-			&xar-var-email;
+			<a href="#$emailurl#">#$email#</a>
 		</td>
 		<td>
            <xar:if condition="empty($editurl)">
-               &xar-var-edittitle;
-               <xar:else />
-                   <a href="&xar-var-editurl;">&xar-var-edittitle;</a>
+               #$edittitle#
+           <xar:else />
+               <a href="#$editurl#">#$edittitle#</a>
            </xar:if>
            |
            <xar:if condition="empty($deleteurl)">
-               &xar-var-deletetitle;
-               <xar:else />
-                   <a href="&xar-var-deleteurl;">&xar-var-deletetitle;</a>
+               #$deletetitle#
+           <xar:else />
+               <a href="#$deleteurl#">#$deletetitle#</a>
            </xar:if>
         </td>
     </tr>
@@ -43,4 +43,4 @@
 <br />
 
 <!-- add the pager here -->
-&xar-var-pager;
+#$pager#
