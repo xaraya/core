@@ -9,21 +9,27 @@
     <body>
 <table width=100% border=0 cellpadding=0 cellspacing=0>
     <tr>
-        <td align="left" background="/images/header_fill.gif">
-            <table width=732 border=0 cellpadding=0 cellspacing=0>
-                <tr>
-                    <td valign=top width=144>
-                        <a href="http://www.xaraya.com" target=_top>
-                        <img src="themes/Xaraya_Classic/images/header_logo.gif" alt="Xaraya :: Content Management Solutions" width="732" height="53" border="0" align="top">
-                        </a>
-                    </td>
-                </tr>
-            </table>
+        <td align="left" background="themes/Xaraya_Classic/images/header_fill.gif">
+            <a href="http://www.xaraya.com" target=_top>
+            <img src="themes/Xaraya_Classic/images/header_logo1.gif" alt="Xaraya :: Content Management Solutions" width="187" height="52" border="0" align="top">
+            </a>
         </td>
-        <td width=100% background="/images/header_fill.gif">
+        <td width=100% background="themes/Xaraya_Classic/images/header_fill.gif">
             <img src="themes/Xaraya_Classic/images/dot.gif" alt="" width="1" height="1" border="0" align="top">
         </td>
+        <td align="right" background="themes/Xaraya_Classic/images/header_fill.gif">
+            <a href="http://www.xaraya.com" target=_top>
+            <img src="themes/Xaraya_Classic/images/header_logo2.gif" alt="Xaraya :: Content Management Solutions" width="259" height="52" border="0" align="top">
+            </a>
+        </td>
     </tr>
+<!--
+    <tr>
+        <td align="middle" colspan="3">
+            <!--pnt:blockgroup name="top" id="top" /-->
+        </td>
+    </tr>
+-->
 </table>
 <BR />
 
@@ -34,7 +40,7 @@
         <td width=20% align=left valign=top>
             <pnt:blockgroup name="left" id="left" />
         </td>
-        <td width=60% background="_clear" class=main_copy valign=top>
+        <td width=60% class=main_copy valign=top>
             <pnt:blockgroup name="center" id="center" />
             <pnt:module id="modulespace" main="true" />
         </td>
