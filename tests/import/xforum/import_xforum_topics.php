@@ -53,7 +53,7 @@
     echo "Total number of threads is ".$count."<br /><br />";
     $result->Close();
     $regid = xarModGetIDFromName('xarbb');
-    $query = 'SELECT t.tid, t.fid, t.subject, t.lastpost, t.views, t.replies, t.author, t.message, t.dateline, t.closed, useip,bbcodeoff,m.uid,f.fup
+    $query = 'SELECT t.tid, t.fid, t.subject, t.lastpost, t.views, t.replies, t.author, t.message, t.dateline, t.closed, t.topped, useip,bbcodeoff,m.uid,f.fup
               FROM ' . $oldprefix . '_XForum_threads as t
               LEFT JOIN ' . $oldprefix . '_XForum_forums as f
               ON f.fid = t.fid
@@ -76,7 +76,7 @@
 
     $num = 1;
     while (!$result->EOF) {
-        list($tid, $fid, $title, $lastpost, $views, $replies, $authorid, $text, $postdate, $status, $userip, $bbcode, $uid, $fcid) = $result->fields;
+        list($tid, $fid, $title, $lastpost, $views, $replies, $authorid, $text, $postdate, $closed, $topped, $userip, $bbcode, $uid, $fcid) = $result->fields;
         if (empty($title)) {
                 $title = xarML('[none]');
         }
@@ -98,11 +98,13 @@
        //Let's try and find the last poster
        $lastposted=array();
        $lastposted  = explode('|',$lastpost);
-       $lastposttime   = isset($lastposted[0]) ? date('Y-m-d G:i:s',$lastposted[0]): date('Y-m-d G:i:s',now());
+       $lastposttime   = isset($lastposted[0]) ? $lastposted[0]:time();
        $lastpostuser = isset($lastposted[1])? $lastposted[1] : 'Admin';
 
-      //get the lastposter
-      $oldmemberstable=$oldprefix."_XForum_members";
+       //Date of first post
+       $firstpostdate   = isset($postdate) ? $postdate:time();
+       //get the lastposter
+       $oldmemberstable=$oldprefix."_XForum_members";
        $query2 = "SELECT uid
               FROM $oldmemberstable
               WHERE username = '".$lastpostuser."'";
@@ -128,7 +130,14 @@
        //Assumes xaraya v0.9.8
       //  $luid=xarModGetVar('roles','admin');
       // }
-
+       //Work out status
+       if ($topped==1) {
+           $tstatus=2;
+       }elseif ($closed==1) {
+           $tstatus=3;
+       }else {
+           $tstatus=0;
+       }
        $newtid=xarModAPIFunc('xarbb',
                                'user',
                                'createtopic',
@@ -137,9 +146,10 @@
                                      'tpost'    => $text,
                                      'tposter'  => $fuid,
                                      'ttime'    => $lastposttime,
+                                     'tftime'   => $firstpostdate,
                                      'treplies' => $replies,
                                      'treplier' => $luid,
-                                     'tstatus' => 0));
+                                     'tstatus'  => $tstatus));
 
        echo "The new topic for $title is ". $newtid."<br />";
 

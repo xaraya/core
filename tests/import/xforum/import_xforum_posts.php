@@ -40,6 +40,7 @@
     }
      $regid = xarModGetIDFromName('xarbb');
     $pid2cid = array();
+            @set_time_limit(600);
 // TODO: fix issue for large # of comments (64 KB limit)
     $pids = xarModGetVar('installer','commentid');
     if (!empty($pids)) {
@@ -150,7 +151,7 @@
             flush();
         }
 
-// no threading in phpBB !?
+// no threading
         $pid2cid[$pid] = $cid;
         $num++;
         $result->MoveNext();
