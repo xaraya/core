@@ -127,6 +127,14 @@ function roles_init()
     $query = xarDBCreateIndex($tables['roles'], $index);
     $result = &$dbconn->Execute($query);
     if (!$result) return;
+    // role state is used in many user lookups
+    $index = array('name' => 'i_' . $sitePrefix . '_roles_state',
+        'fields' => array('xar_state'),
+        'unique' => false
+        );
+    $query = xarDBCreateIndex($tables['roles'], $index);
+    $result = &$dbconn->Execute($query);
+    if (!$result) return;
 
     // prefix_rolemembers
     /**
