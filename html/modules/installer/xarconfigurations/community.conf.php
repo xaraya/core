@@ -18,11 +18,11 @@ $configuration_name = 'CommunitySite';
     array(
         'item' => '1',
         'option' => 'true',
-        'comment' => 'Registered users have read access to all modules of the site.'),
+        'comment' => xarML('Registered users have read access to all modules of the site.')),
     array(
         'item' => '2',
         'option' => 'false',
-        'comment' => 'Unregistered users have read access to the non-core modules of the site.')
+        'comment' => xarML('Unregistered users have read access to the non-core modules of the site. If this option is not chosen unregistered users see only the first page.'))
     );
 $configuration_options = $options;
 
@@ -38,64 +38,76 @@ function installer_community_configuration_load($args)
 
 // now do the necessary loading for each item
 
-    if(in_array(2,$args)) {
-        xarRegisterPrivilege('ReadAccess','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
-        xarMakePrivilegeRoot('ReadAccess');
+    if(in_array(1,$args)) {
+        installer_community_readaccess();
         xarAssignPrivilege('ReadAccess','Users');
     }
     else {
-    echo "no"; exit;
+        installer_community_casualaccess();
+        xarAssignPrivilege('CasualAccess','Users');
     }
 
     if(in_array(2,$args)) {
-    echo "yes"; exit;
-    }
+        installer_community_readnoncore();
+        xarAssignPrivilege('ReadNonCore','Anonymous');
+   }
     else {
-    echo "no"; exit;
+        if(in_array(1,$args)) installer_community_casualaccess();
+        xarAssignPrivilege('CasualAccess','Anonymous');
     }
-
-    //xarRegisterPrivilege('Oversight','All','empty','All','All',ACCESS_NONE,'The privileges for the Obersight group');
-    //xarRegisterPrivilege('DenyRoles','All','Roles','All','All',ACCESS_NONE,'Exclude access to the Roles module');
-    //xarRegisterPrivilege('DenyPrivileges','All','Privileges','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
-    //xarRegisterPrivilege('DenyRolesPrivileges','All','empty','All','All',ACCESS_NONE,'Exclude access to the Roles and Privileges modules');
-    //xarRegisterPrivilege('Editing','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
-
-    xarRegisterPrivilege('ViewLogin','All','roles','Block','login:Login:All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
-    xarRegisterPrivilege('ViewBlocks','All','base','Block','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
-    xarRegisterPrivilege('ViewLoginItems','All','dynamicdata','Item','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
-    xarRegisterPrivilege('CasualAccess','All','themes','Block','All',ACCESS_OVERVIEW,'The base privilege for the Anonymous user');
-    //xarRegisterPrivilege('AddAll','All','All','All','All',ACCESS_ADD,'The base privilege granting add access');
-    //xarRegisterPrivilege('DeleteAll','All','All','All','All',ACCESS_DELETE,'The base privilege granting delete access');
-    //xarRegisterPrivilege('ModPrivilege','All','Privileges','All','All',ACCESS_EDIT,'');
-    //xarRegisterPrivilege('AddPrivilege','All','Privileges','All','All',ACCESS_ADD,'');
-    //xarRegisterPrivilege('DelPrivilege','All','Privileges','All','All',ACCESS_DELETE,'');
-    //xarRegisterPrivilege('AdminPrivilege','All','Privileges','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Privileges for Anonymous');
-    //xarRegisterPrivilege('AdminRole','All','Roles','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Roles for Anonymous');
-
-    //xarMakePrivilegeRoot('Oversight');
-    //xarMakePrivilegeRoot('DenyRolesPrivileges');
-    //xarMakePrivilegeRoot('DenyRoles');
-    //xarMakePrivilegeRoot('DenyPrivileges');
-    //xarMakePrivilegeRoot('Editing');
-    xarMakePrivilegeRoot('CasualAccess');
-    xarMakePrivilegeRoot('ViewLogin');
-    xarMakePrivilegeRoot('ViewBlocks');
-    xarMakePrivilegeRoot('ViewLoginItems');
-    //xarMakePrivilegeMember('DenyRoles','DenyRolesPrivileges');
-    //xarMakePrivilegeMember('DenyPrivileges','DenyRolesPrivileges');
-    //xarMakePrivilegeMember('DenyRolesPrivileges','Oversight');
-    //xarMakePrivilegeMember('Administration','Oversight');
-    //xarMakePrivilegeMember('DenyRolesPrivileges','Editing');
-    //xarMakePrivilegeMember('DenyRolesPrivileges','Reading');
-    xarMakePrivilegeMember('ViewLogin','CasualAccess');
-    xarMakePrivilegeMember('ViewBlocks','CasualAccess');
-    xarMakePrivilegeMember('ViewLoginItems','CasualAccess');
-
-    //xarAssignPrivilege('Oversight','Oversight');
-    xarAssignPrivilege('CasualAccess','Anonymous');
 
     return true;
 }
 
+function installer_community_casualaccess()
+{
+    xarRegisterPrivilege('CasualAccess','All','themes','Block','All',ACCESS_OVERVIEW,'The base privilege for the Anonymous user');
+    xarRegisterPrivilege('ViewLogin','All','roles','Block','login:Login:All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
+    xarRegisterPrivilege('ViewBlocks','All','base','Block','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
+    xarRegisterPrivilege('ViewLoginItems','All','dynamicdata','Item','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
+    xarMakePrivilegeRoot('CasualAccess');
+    xarMakePrivilegeRoot('ViewLogin');
+    xarMakePrivilegeRoot('ViewBlocks');
+    xarMakePrivilegeRoot('ViewLoginItems');
+    xarMakePrivilegeMember('ViewLogin','CasualAccess');
+    xarMakePrivilegeMember('ViewBlocks','CasualAccess');
+    xarMakePrivilegeMember('ViewLoginItems','CasualAccess');
+}
 
+function installer_community_readnoncore()
+{
+    xarRegisterPrivilege('ReadNonCore','All','empty','All','All',ACCESS_NONE,'Exclude access to the core modules');
+    xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
+    xarRegisterPrivilege('DenyAdminPanels','All','adminpanels','All','All',ACCESS_NONE,'Exclude access to the AdminPanels module');
+    xarRegisterPrivilege('DenyBase','All','base','All','All',ACCESS_NONE,'Exclude access to the Base module');
+    xarRegisterPrivilege('DenyBlocks','All','blocks','All','All',ACCESS_NONE,'Exclude access to the Blocks module');
+    xarRegisterPrivilege('DenyMail','All','mail','All','All',ACCESS_NONE,'Exclude access to the Mail module');
+    xarRegisterPrivilege('DenyModules','All','modules','All','All',ACCESS_NONE,'Exclude access to the Modules module');
+    xarRegisterPrivilege('DenyThemes','All','themes','All','All',ACCESS_NONE,'Exclude access to the Themes module');
+    xarRegisterPrivilege('DenyDynamicData','All','dynamicdata','All','All',ACCESS_NONE,'Exclude access to the AdminPanels module');
+    xarMakePrivilegeRoot('ReadNonCore');
+    xarMakePrivilegeRoot('DenyPrivileges');
+    xarMakePrivilegeRoot('DenyAdminPanels');
+    xarMakePrivilegeRoot('DenyBase');
+    xarMakePrivilegeRoot('DenyBlocks');
+    xarMakePrivilegeRoot('DenyMail');
+    xarMakePrivilegeRoot('DenyModules');
+    xarMakePrivilegeRoot('DenyThemes');
+    xarMakePrivilegeRoot('DenyDynamicData');
+    xarMakePrivilegeMember('ReadAccess','ReadNonCore');
+    xarMakePrivilegeMember('DenyPrivileges','ReadNonCore');
+    xarMakePrivilegeMember('DenyAdminPanels','ReadNonCore');
+    xarMakePrivilegeMember('DenyBase','ReadNonCore');
+    xarMakePrivilegeMember('DenyBlocks','ReadNonCore');
+    xarMakePrivilegeMember('DenyMail','ReadNonCore');
+    xarMakePrivilegeMember('DenyModules','ReadNonCore');
+    xarMakePrivilegeMember('DenyThemes','ReadNonCore');
+    xarMakePrivilegeMember('DenyDynamicData','ReadNonCore');
+}
+
+function installer_community_readaccess()
+{
+        xarRegisterPrivilege('ReadAccess','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
+        xarMakePrivilegeRoot('ReadAccess');
+}
 ?>
