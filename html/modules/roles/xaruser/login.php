@@ -122,7 +122,6 @@ function roles_user_login()
                     }
                 }
 
->>>>>>>
                 break;
             default:
                 // some other auth module is being used.  We're going to assume
