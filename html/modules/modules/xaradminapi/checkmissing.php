@@ -29,6 +29,11 @@ function modules_adminapi_checkmissing()
 
     // See if we have lost any modules since last generation
     foreach ($dbModules as $name => $modInfo) {
+
+		//TODO: Add check for any module that might depend on this one
+		// If found, change its state to something inoperative too
+		// New state? XAR_MODULE_DEPENDENCY_MISSING?
+		
         if (empty($fileModules[$name])) {
             // Old module
 

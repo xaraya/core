@@ -23,29 +23,34 @@ function modules_admin_initialise()
     if (!xarModAPIFunc('modules','admin','verifydependency',array('regid'=>$id))) {
     	//Oops, we got problems...
     	//Checking if we have already sent a GUI to the user:
-    	xarVarFetch('command', 'enum', $command, 0, XARVAR_NOT_REQUIRED);
-    	
-    	//Let's make a nice GUI to show the user the options
-    	$data = array();
-    	$data['id'] = $id;
-    	$data['dependencies'] = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$id));
-    	foreach ($data['dependencies'] as $dep) {
-    		if ($dep 
-    	}
-    	return $data;
+    	xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
+    } else {
+    	//No dependencies problems, jump dependency GUI
+    	$command = true;
     }
 
-    // Initialise module
-    $initialised = xarModAPIFunc('modules',
-                                'admin',
-                                'initialise',
-                                array('regid' => $id));
+   	if (!$command) {
+  		//Let's make a nice GUI to show the user the options
+   		$data = array();
+   		$data['id'] = $id;
+		//They come in 3 arrays: satisfied, satisfiable and unsatisfiable
+		//First 2 have $modInfo under them foreach module,
+		//3rd has only 'regid' key with the ID of the module
+	    $data['authid']       = xarSecGenAuthKey();
+   		$data['dependencies'] = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$id));
+   		return $data;
+   	}
+   	
+   	//Initialize with dependencies, first initialise the necessary dependecies
+   	//then the module itself
+	if (!xarModAPIFunc('modules','admin','initialisewithdependencies',array('regid'=>$id))) {
+		//Call exception
+		return;	
+	} // Else
 
-    // throw back exception (may be NULL or false)
-    if (empty($initialised)) return;
-    $minfo=xarModGetInfo($id);
+    $minfo = xarModGetInfo($id);
     // set the target location (anchor) to go to within the page
-    $target=$minfo['name'];
+    $target = $minfo['name'];
 
     xarResponseRedirect(xarModURL('modules', 'admin', "list", array('state' => 0), NULL, $target));
 

@@ -9,15 +9,16 @@
  * @raise BAD_PARAM, MODULE_NOT_EXIST
  */
 function modules_adminapi_initialise($args)
-{
+{ 
     // Get arguments from argument array
     extract($args);
-
+    
     // Argument check
     if (!isset($regid)) {
        $msg = xarML('Missing module regid (#(1)).', $regid);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));return;
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return;
     }
 
     // Get module information
@@ -37,13 +38,14 @@ function modules_adminapi_initialise($args)
     // Get module database info
     xarModDBInfoLoad($modInfo['name'], $modInfo['directory']);
     
+    //Checks module dependency
     if (!xarModAPIFunc('modules','admin','verifydependency',array('regid'=>$regid))) {
 		//TODO: Add description of the dependencies
     	$msg = xarML('The dependencies to initialize the module "#(1)" were not met.', $modInfo['displayname']);
-        xarExceptionSet(XAR_USER_EXCEPTION, 'MODULE_NOT_EXIST', $msg);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
         return;
     }
-    
+
     // Include module initialisation file
     //FIXME: added module File not exist exception
 
@@ -79,13 +81,15 @@ function modules_adminapi_initialise($args)
         $func = $modInfo['name'] . '_init';
         if (function_exists($func)) {
             if ($func() != true) {
-                xarSessionSetVar('errormsg', xarML('Module initialisation failed because the function returned false'));
-                return false;
+		    	$msg = xarML('Module initialisation failed because the function returned false');
+		        xarExceptionSet(XAR_USER_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
+        		return;
             }
         } else {
             // file exists, but function not found. Exception!
-            xarSessionSetVar('errormsg', xarML('Module initialisation failed because your module did not include an init function'));
-            return false;
+	    	$msg = xarML('Module initialisation failed because your module did not include an init function');
+	        xarExceptionSet(XAR_USER_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
+       		return;
         }
     }
 
@@ -95,10 +99,12 @@ function modules_adminapi_initialise($args)
                         'setstate',
                         array('regid' => $regid,
                               'state' => XARMOD_STATE_INACTIVE));
-    //die(var_dump($set));
+      
+//    die(var_dump($set));
     if (!isset($set)) {
-        xarSessionSetVar('errormsg', xarML('Module state change failed'));
-        return false;
+    	$msg = xarML('Module state change failed');
+        xarExceptionSet(XAR_USER_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
+   		return;
     }
 
     // Success

@@ -30,11 +30,6 @@ function modules_adminapi_initialisewithdependencies($args)
 		return;
 	}
 
-	// Check if all dependencies are ok
-	if (!xarModAPIFunc('modules', 'admin', 'verifydependency', $mainId)) {
-		return;
-	}
-
 	// Get module information
 	$modInfo = xarModGetInfo($mainId);
 	if (!isset($modInfo)) {
@@ -42,11 +37,26 @@ function modules_adminapi_initialisewithdependencies($args)
 		return;
 	}
 
-	$dependency = $modInfo['denpendency'];
+	switch ($modInfo['state']) {
+		case XARMOD_STATE_INACTIVE:
+		case XARMOD_STATE_ACTIVE:
+		case XARMOD_STATE_UPGRADED: 
+			//It is already initialised
+			return true;
+		default:
+		break;
+	}
+
+
+	$dependency = $modInfo['dependency'];
+
+	if (empty($dependency)) {
+		$dependency = array();
+	}
 
 	//The dependencies are ok, they shouldnt change in the middle of the 
 	//script execution, so let's assume this.
-	foreach ($dependecy as $module_id => $conditions) {
+	foreach ($dependency as $module_id => $conditions) {
 		if (is_array($conditions)) {
 			//The module id is in $modId
 			$modId = $module_id;
@@ -63,7 +73,7 @@ function modules_adminapi_initialisewithdependencies($args)
 	}
 
 	// Finally, now that dependencies are dealt with, initialize the module
-	if (!xarModAPIFunc('modules', 'admin', 'initialize', array('regid' => $mainId))) {
+	if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $mainId))) {
 		$msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
 		xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
 		return;

@@ -2,60 +2,69 @@
 <div class="xar-mod-body">
     <h2><xar:mlstring>Module Initialization with unmet Dependencies</xar:mlstring></h2>
     <!-- The form for editting the module settings and hooks -->
-    <form action="#xarModURL('modules','admin','initialize')#" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="#xarModURL('modules','admin','initialise')#" method="post" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="id" id="id" value="#$id#" />
-        <label for="newdisplayname"><xar:mlstring>Enter new display name (Does not work)</xar:mlstring></label>
-        <br />
-        <input type="text" name="newdisplayname" id="newdisplayname" value="#$displayname#" size="30" maxlength="30" tabindex="1" />
-        <xar:if condition="count($hooklist) eq 0">
-            <p><xar:mlstring>No hooks available for this module</xar:mlstring></p>
-        <xar:else />
-            <p><xar:mlstring>Available hooks for this module</xar:mlstring>&nbsp;&nbsp;
-            [ <a href="#$DetailsURL#">#$DetailsLabel#</a> ]</p>
-            <table border="1" cellpadding="5" cellspacing="0">
-            <tr>
-                <th><xar:mlstring>Enable hooks from module</xar:mlstring></th>
-                <th><xar:mlstring>All</xar:mlstring></th>
-            <xar:foreach in="$itemtypes" value="$itemtype">
-                <th>#$itemtype['label']#</th>
-            </xar:foreach>
-            </tr>
-            <xar:loop name="$hooklist">
-            <tr>
-                <td>
-                <label for="hooks_#$modname#[0]">
-                    #$modname#
-                </label>
-                <xar:if condition="$details eq 1">
-                    <br /><br />
-                    <div style="padding-left: 2em;">
-                    <xar:foreach in="$hooks" key="$hook">
-                        &nbsp;&nbsp;#$hook#<br />
-                    </xar:foreach><br />
-                    </div>
-                </xar:if>
-                </td>
-                <td style="text-align: center;">
-                <xar:if condition="!empty($checked[0])">
-                    <input type="checkbox" name="hooks_#$modname#[0]" id="hooks_#$modname#[0]" value="1" checked="checked" />
-                <xar:else />
-                    <input type="checkbox" name="hooks_#$modname#[0]" id="hooks_#$modname#[0]" value="1" />
-                </xar:if>
-                </td>
-            <xar:foreach in="$itemtypes" key="$typeid" value="$itemtype">
-                <td style="text-align: center;">
-                <xar:if condition="!empty($checked[$typeid])">
-                    <input type="checkbox" name="hooks_#$modname#[#$typeid#]" id="hooks_#$modname#[#$typeid#]" value="1" checked="checked" />
-                <xar:else />
-                    <input type="checkbox" name="hooks_#$modname#[#$typeid#]" id="hooks_#$modname#[#$typeid#]" value="1" />
-                </xar:if>
-                </td>
-            </xar:foreach>
-            </tr>
-            </xar:loop>
-            </table>
-            <br /><br />
+        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+
+        <xar:if condition="count($dependencies['satisfied']) ne 0">
+        	<br />
+	        <table border="1" cellpadding="5" cellspacing="0">
+		        <tr>
+			        <th><xar:mlstring>Dependencies already satisfied</xar:mlstring></th>
+			    </tr>
+	
+    	        <xar:foreach in="$dependencies['satisfied']" value="$modInfo">
+			        <tr>
+				        <td>#xarML($modInfo['displayname'])#</td>
+				    </tr>
+	            </xar:foreach>
+			</table>
+        	<br />
+		</xar:if>
+
+        <xar:if condition="count($dependencies['satisfiable']) ne 0">
+        	<br />
+	        <table border="1" cellpadding="5" cellspacing="0">
+		        <tr>
+			        <th><xar:mlstring>Dependencies which can be satisfied</xar:mlstring></th>
+			    </tr>
+	
+    	        <xar:foreach in="$dependencies['satisfiable']" value="$modInfo">
+			        <tr>
+				        <td>#xarML($modInfo['displayname'])#</td>
+				    </tr>
+	            </xar:foreach>
+			</table>
+        	<br />
+		</xar:if>
+
+        <xar:if condition="count($dependencies['unsatisfiable']) ne 0">
+        	<br />
+	        <table border="1" cellpadding="5" cellspacing="0">
+		        <tr>
+			        <th><xar:mlstring>Dependencies which cannot be satisfied</xar:mlstring></th>
+			    </tr>
+	
+    	        <xar:foreach in="$dependencies['satisfied']" value="$modInfo">
+			        <tr>
+				        <xar:if condition="is_array($modInfo)">
+					        <td>#$modInfo['displayname']#</td>
+					    <xar:else />
+					        <td>
+					        	<a href="http://www.xaraya.com/index.php?module=release&func=display&rid=#$modInfo['regid']#>
+						        	#$modInfo['regid']#
+						        </a>
+					        </td>
+					    </xar:if>
+				    </tr>
+	            </xar:foreach>
+			</table>
+        	<br />
+		<xar:else />
+	        <input type="submit" name="command" id="command" value="#xarML('Initiliase All')#" align="middle" tabindex="9" />
+	        <br />
         </xar:if>
-        <input type="submit" value="#$savechangeslabel#" align="middle" tabindex="9" />
+
+        <a href="#xarModURL('modules','admin','list')#>#xarML('Go back to the modules list.')#</a>
     </form>
 </div>

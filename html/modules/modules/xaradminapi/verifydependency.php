@@ -45,7 +45,10 @@ function modules_adminapi_verifydependency($args)
 
 	//Find the modules which are active
     foreach ($dbModules as $name => $dbInfo) {
-        if ($dbInfo['state'] == XARMOD_STATE_ACTIVE) {
+        if ($dbInfo['state'] == XARMOD_STATE_ACTIVE ||
+        	$dbInfo['state'] == XARMOD_STATE_INACTIVE ||
+        	$dbInfo['state'] == XARMOD_STATE_UPGRADED) 
+        {
             $dbMods[$dbInfo['regid']] = $dbInfo;
         }
     }
