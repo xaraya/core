@@ -6,6 +6,7 @@
  *
  * @access public
  * @param aliasModName name of the 'fake' module you want to remove
+ * @param modName name of the 'real' module it was assigned to
  * @returns bool
  * @return true on success, false on failure
  * @raise BAD_PARAM
@@ -21,6 +22,8 @@ function modules_adminapi_delete_module_alias($args)
 
     $aliases = xarConfigGetVar('System.ModuleAliases');
     if (!isset($aliases[$aliasModName])) return false;
+    // don't remove alias if it's already assigned to some other module !
+    if ($aliases[$aliasModName] != $modName) return false;
     unset($aliases[$aliasModName]);
     xarConfigSetVar('System.ModuleAliases',$aliases);
 

@@ -84,13 +84,13 @@ function dynamicdata_admin_update($args)
         if (!empty($isalias)) {
             // no alias defined yet, so we create one
             if ($alias == $name) {
-                $args = array('modName'=>$name, 'aliasModName'=> 'dynamicdata');
+                $args = array('modName'=>'dynamicdata', 'aliasModName'=> $name);
                 xarModAPIFunc('modules', 'admin', 'add_module_alias', $args);
             }
         } else {
             // this was a defined alias, so we remove it
             if ($alias == 'dynamicdata') {
-                $args = array('modName'=>$name, 'aliasModName'=> 'dynamicdata');
+                $args = array('modName'=>'dynamicdata', 'aliasModName'=> $name);
                 xarModAPIFunc('modules', 'admin', 'delete_module_alias', $args);
             }
         }
