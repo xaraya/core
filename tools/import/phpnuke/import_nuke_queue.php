@@ -100,7 +100,7 @@
                                      )
                                );
         if (!isset($newaid)) {
-            echo "Insert queued article ($qid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
+            echo "Insert queued article ($qid) $title failed : " . xarErrorRender('text') . "<br/>\n";
         } elseif ($count < 200) {
             echo "Inserted queued article ($qid) $title<br/>\n";
         } elseif ($num % 100 == 0) {

@@ -57,7 +57,7 @@
                                       'option' => $text,
                                       'votes' => $count));
         if (empty($newvid)) {
-            echo "Insert vote result ($pid $vid) $text failed : " . xarExceptionRender('text') . "<br/>\n";
+            echo "Insert vote result ($pid $vid) $text failed : " . xarErrorRender('text') . "<br/>\n";
         } elseif ($count < 100) {
             echo "Inserted vote result ($pid $vid) $text<br/>\n";
         } elseif ($num % 100 == 0) {

@@ -523,7 +523,7 @@ function walk_ce_articletree ($parent, $latest_ok_category, $cat_string)
 
             // Print status or error
             if (!isset($newaid)) {
-                echo "Insert article ($id) $title failed : " . xarExceptionRender('text') . "<br/>\n";
+                echo "Insert article ($id) $title failed : " . xarErrorRender('text') . "<br/>\n";
             } elseif ($count < 200) {
                 echo "Inserted article ($id) $title into $cids[0]<br/>\n";
             } elseif ($num % 100 == 0) {

@@ -72,7 +72,7 @@
                                       'time' => $time,
                                       'votes' => $realvotes));
         if (empty($newpid)) {
-            echo "Insert poll ($pid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
+            echo "Insert poll ($pid) $title failed : " . xarErrorRender('text') . "<br/>\n";
         } elseif ($count < 200) {
             echo "Inserted poll ($pid) $title<br/>\n";
         } elseif ($num % 100 == 0) {

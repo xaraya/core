@@ -89,7 +89,7 @@
                                      )
                                );
         if (!isset($newaid)) {
-            echo "Insert web link ($lid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
+            echo "Insert web link ($lid) $title failed : " . xarErrorRender('text') . "<br/>\n";
         } else {
             echo "Inserted web link ($lid) $title<br/>\n";
         }

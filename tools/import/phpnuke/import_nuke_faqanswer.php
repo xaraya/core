@@ -64,7 +64,7 @@
                                      )
                                );
         if (!isset($newaid)) {
-            echo "Insert FAQ ($id) $title failed : " . xarExceptionRender('text') . "<br/>\n";
+            echo "Insert FAQ ($id) $title failed : " . xarErrorRender('text') . "<br/>\n";
         } else {
             echo "Inserted FAQ ($id) $title<br/>\n";
         }

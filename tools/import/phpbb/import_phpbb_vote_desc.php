@@ -85,7 +85,7 @@
                                       'itemid' => $topicid[$tid],
                                       'votes' => $votes));
         if (empty($newpid)) {
-            echo "Insert vote ($pid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
+            echo "Insert vote ($pid) $title failed : " . xarErrorRender('text') . "<br/>\n";
         } elseif ($count < 200) {
             echo "Inserted vote ($pid) $title<br/>\n";
         } elseif ($num % 100 == 0) {

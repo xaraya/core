@@ -118,7 +118,7 @@
                                      )
                                );
         if (!isset($newaid) || $newaid != $aid) {
-            echo "Insert article ($aid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
+            echo "Insert article ($aid) $title failed : " . xarErrorRender('text') . "<br/>\n";
         } elseif ($count < 200) {
             echo "Inserted article ($aid) $title<br/>\n";
         } elseif ($num % 100 == 0) {

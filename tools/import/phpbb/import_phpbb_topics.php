@@ -176,7 +176,7 @@ if ($importmodule == 'articles') {
                                      'hits'     => $views));
 }
         if (!isset($newaid)) {
-            echo "Insert topic ($tid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
+            echo "Insert topic ($tid) $title failed : " . xarErrorRender('text') . "<br/>\n";
         } elseif ($count < 200) {
             echo "Inserted topic ($tid) $title<br/>\n";
         } elseif ($num % 100 == 0) {

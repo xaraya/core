@@ -81,7 +81,7 @@ if ($importmodule == 'articles') {
                               )
                              );
         if (empty($ptid)) {
-            echo "Creating publication type 'forums' failed : " . xarExceptionRender('text') . "<br/>\n";
+            echo "Creating publication type 'forums' failed : " . xarErrorRender('text') . "<br/>\n";
         } else {
             $settings = array (
                          'itemsperpage' => '40',

@@ -78,7 +78,7 @@
                                      array('uname'  => $userRole,
                                            'type'   => 1));
         if (empty($defaultRole)) {
-            echo "Unable to find default group id : " . xarExceptionRender('text') . "<br/>\n";
+            echo "Unable to find default group id : " . xarErrorRender('text') . "<br/>\n";
             die('Oops');
         }
         $defaultgid = $defaultRole['uid'];
@@ -154,9 +154,9 @@
 
          if (empty($newuid)) {
              echo "Insert user ($uid) $uname failed - ";
-             if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                 xarExceptionRender('text');
-                 xarExceptionHandled();
+             if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+                 xarErrorRender('text');
+                 xarErrorHandled();
              }
              // same player, shoot again :)
              $user['uname'] .= $uid;
@@ -210,7 +210,7 @@
                            'user',
                            'newuser', array('gname' => $usergroup,
                                             'uid'   => $uid))) {
-            echo "Insert user ($uid) $uname in group $usergroup failed : " . xarExceptionRender('text') . "<br/>\n";
+            echo "Insert user ($uid) $uname in group $usergroup failed : " . xarErrorRender('text') . "<br/>\n";
          }
 */
     } //end if
@@ -219,9 +219,9 @@
 
     } //end while
     $result->Close();
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        xarExceptionRender('text');
-        xarExceptionHandled();
+    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+        xarErrorRender('text');
+        xarErrorHandled();
     }
     xarModSetVar('installer','userid',serialize($userid));
     echo "<strong>TODO : import groups and ranks</strong><br/><br/>\n";

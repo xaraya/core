@@ -64,7 +64,7 @@
                                      )
                                );
         if (!isset($newaid)) {
-            echo "Insert section content ($artid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
+            echo "Insert section content ($artid) $title failed : " . xarErrorRender('text') . "<br/>\n";
         } else {
             echo "Inserted section content ($artid) $title<br/>\n";
         }

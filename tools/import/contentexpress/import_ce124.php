@@ -215,7 +215,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
                                );
         //if (!isset($newaid) || $newaid != $aid) {
         if (!isset($newaid)) {  // Not empty articles, ID will not be the same
-            echo "Insert article ($id) $title failed : " . xarExceptionRender('text') . "<br/>\n";
+            echo "Insert article ($id) $title failed : " . xarErrorRender('text') . "<br/>\n";
         } elseif ($count < 200) {
             echo "Inserted article ($id) $title into $cids[0]<br/>\n";
         } elseif ($num % 100 == 0) {

@@ -179,7 +179,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
                                      )
                                );
             if (!isset($newaid)) {
-                echo "Insert HTMLpages ($artid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
+                echo "Insert HTMLpages ($artid) $title failed : " . xarErrorRender('text') . "<br/>\n";
             } else {
                 echo "Inserted HTMLpages ($artid) $title<br/>\n";
             }

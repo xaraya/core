@@ -375,8 +375,8 @@
             }
         }
         if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            xarExceptionHandled();
-            xarExceptionFree();
+            xarErrorHandled();
+            xarErrorFree();
         }
         echo "<br />Adding Publication settings for pubid: $pubid -- ";
 
