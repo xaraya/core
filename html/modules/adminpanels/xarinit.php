@@ -15,7 +15,7 @@
 /**
  * Initialise the adminpanels module
  *
- * @author  Andy Varganov <andyv@yaraya.com>
+ * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   none
  * @return  true on success or void or false on failure
@@ -216,7 +216,7 @@ function adminpanels_init()
 /**
  * Upgrade the adminpanels module from an old version
  *
- * @author  Andy Varganov <andyv@yaraya.com>
+ * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   $oldVersion
  * @return  true on success or false on failure
@@ -266,7 +266,7 @@ function adminpanels_upgrade($oldVersion)
 /**
  * Delete the adminpanels module
  *
- * @author  Andy Varganov <andyv@yaraya.com>
+ * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   no parameters
  * @return  true on success or false on failure

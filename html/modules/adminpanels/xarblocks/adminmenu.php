@@ -15,7 +15,7 @@
 /**
  * initialise block
  *
- * @author  Andy Varganov <andyv@yaraya.com>
+ * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   none
  * @return  nothing
@@ -30,7 +30,7 @@ function adminpanels_adminmenublock_init(){
 /**
  * get information on block
  *
- * @author  Andy Varganov <andyv@yaraya.com>
+ * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   none
  * @return  data array
@@ -51,12 +51,12 @@ function adminpanels_adminmenublock_info(){
 /**
  * display adminmenu block
  *
- * @author  Andy Varganov <andyv@yaraya.com>
+ * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   none
  * @return  data array on success or void on failure
  * @throws  no exceptions
- * @todo    implement centre and right menu position
+ * @todo    implement centre menu position
 */
 function adminpanels_adminmenublock_display($blockinfo){
 
@@ -78,7 +78,7 @@ function adminpanels_adminmenublock_display($blockinfo){
 	// if our module deactivated intentionally or by accident
 	// we just switch to the block mode that is not dependent on the module's api
 	// the only such mode at the moment is sort by name
-	// TODO: think of possibility to not depent on module api for other modes too
+	// TODO: eradicate dependency on module api for other sort orders too
 	if(!xarModIsAvailable('adminpanels')){
 	     xarModSetVar('adminpanels', 'menustyle', 'byname');
 	}
@@ -337,7 +337,7 @@ function adminpanels_adminmenublock_display($blockinfo){
 /**
  * modify block settings
  *
- * @author  Andy Varganov <andyv@yaraya.com>
+ * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   $blockinfo
  * @return  $blockinfo data array
@@ -353,7 +353,7 @@ function adminpanels_adminmenublock_modify($blockinfo)
 /**
  * update block settings
  *
- * @author  Andy Varganov <andyv@yaraya.com>
+ * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   $blockinfo
  * @return  $blockinfo data array

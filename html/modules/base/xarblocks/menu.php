@@ -51,7 +51,7 @@ function base_menublock_info()
 /**
  * display adminmenu block
  *
- * @author  Andy Varganov <andyv@yaraya.com>
+ * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   none
  * @return  data array on success or void on failure
