@@ -1,13 +1,14 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
-        <td align="center" colspan="6">
+        <td align="center" colspan="7">
             <b>#$labels['dynamicdata']#</b> [ <a href="#$link#">#$labels['config']#</a> ]
         </td>
     </tr>
 <xar:if condition="!empty($fields)">
     <tr>
        <td><b>#$labels['id']#</b></td>
+       <td><b>#$labels['name']#</b></td>
        <td><b>#$labels['label']#</b></td>
        <td><b>#$labels['type']#</b></td>
        <td><b>#$labels['default']#</b></td>
@@ -17,6 +18,7 @@
 <xar:foreach in="$fields" value="$field">
     <tr align="left" valign="middle">
         <td>#$field['id']#</td>
+        <td>#$field['name']#</td>
         <td>#$field['label']#</td>
         <td><xar:data-output property="$fieldtypeprop" value="$field['type']" /></td>
         <td>#xarVarPrepForDisplay($field['default'])#</td>

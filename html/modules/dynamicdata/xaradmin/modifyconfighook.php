@@ -67,6 +67,7 @@ function dynamicdata_admin_modifyconfighook($args)
 
     $labels = array(
                     'id' => xarML('ID'),
+                    'name' => xarML('Name'),
                     'label' => xarML('Label'),
                     'type' => xarML('Field Format'),
                     'default' => xarML('Default'),
