@@ -1,3 +1,4 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <script language="javascript" type="text/javascript" src="modules/blocks/xarincludes/blocks.js"></script>
 <script type="text/javascript">
 warningmsg = '#xarML('You must select the block to move.')#';
