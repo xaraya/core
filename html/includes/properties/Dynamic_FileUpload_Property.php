@@ -127,7 +127,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         // retrieve new value for preview + new/modify combinations
         } elseif (xarVarIsCached('DynamicData.FileUpload',$name)) {
             $this->value = xarVarGetCached('DynamicData.FileUpload',$name);
-        } elseif (!empty($value) &&  !(is_numeric($value) || stristr(';', $value))) {
+        } elseif (!empty($value) &&  !(is_numeric($value) || stristr($value, ';'))) {
             if (!empty($filetype) && !preg_match("/\.$filetype$/",$value)) {
                 $this->invalid = xarML('file type');
                 $this->value = null;
@@ -168,7 +168,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         } else {
             // user must have unhooked the uploads module
             // remove any left over values
-            if (!empty($value) && (is_numeric($value) || stristr(';', $value))) {
+            if (!empty($value) && (is_numeric($value) || stristr($value, ';'))) {
                 $value = '';
             }
             
@@ -207,7 +207,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         
         // Note: you can't access files directly in the document root here
         if (!empty($value)) {
-            if (is_numeric($value) || stristr(';', $value)) {
+            if (is_numeric($value) || stristr($value, ';')) {
                 // user must have unhooked the uploads module
                 // remove any left over values
                 return '';
@@ -230,7 +230,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     {
         
         // If we've just been previewed, then use the value that was passed in :)
-        if (!is_null($value) && !empty($value) && (is_numeric($value) || stristr(';', $value))) {
+        if (!is_null($value) && !empty($value) && (is_numeric($value) || stristr($value, ';'))) {
             $this->value = $value;
             return true;
         }        
