@@ -252,7 +252,7 @@ function installer_admin_bootstrap()
 	initializeSetup();
 
 // log in admin user
-    if (!xarUserLogIn('admin', 'xaraya', 0)) {
+    if (!xarUserLogIn('Admin', 'password', 0)) {
         $msg = xarML('Cannot log in the default administrator. Check your setup.');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
@@ -318,7 +318,7 @@ function installer_admin_create_administrator()
 
 // assemble the args into an array for the role constructor
 	$password = md5($pass);
-	$pargs = array('pid'=>3,
+	$pargs = array('uid'=>3,
 					'name'=>$name,
 					'type'=>0,
 					'uname'=>$username,
