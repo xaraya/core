@@ -67,8 +67,8 @@ if (empty($step)) {
 
     $sprefix=xarDBGetSiteTablePrefix();
     echo "Table Prefix is : ".$sprefix."<br /><br />";
-    echo "Checking for a missing 'underscore' in the dynamicdata security_instance entries, and hard coded table prefixes in security_instances table for dynamicdata, categories, articles, ratings and 
-    hitcount modules.<br /><br />";
+    echo "Checking for a missing 'underscore' in the dynamicdata security_instance table name entries.<br />";
+    echo "Checking hard coded table prefixes in security_instances table for dynamicdata, categories, articles, ratings and hitcount modules.<br /><br />";
     $instancestable = $sprefix."_security_instances";
     $ddtable=$sprefix.'_dynamic_properties';
     $ddobjecttable=$sprefix.'_dynamic_objects';
@@ -113,17 +113,22 @@ if (empty($step)) {
                   list($iid, $header, $xarquery) = $result->fields;
 
                   if ($instance['cquery'] != $xarquery) {
+                      echo "Attempting to update dynamicdata instance  with component ".$instance['ccomponent']. " and header ".$instance['cheader'];
                       $ddupdate=true;
                       $query="UPDATE $instancestable SET xar_query= '{$instance['cquery']}'
                               WHERE xar_module='dynamicdata' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
                       $result =& $dbconn->Execute($query);
+
+                      if (!$result) {
+                          echo "...update failed!</font><br>\r\n";
+                      } else {
+                        echo "...done!</font><br>\r\n";
+                      }
                   }
               }
 
           }//end foreach
-          if ($ddupdate) {
-              echo "Dynamic Data security_instance entries require updating ...attempting to update... DONE! <br />";
-          } else {
+          if (!$ddupdate) {
               echo "Dynamic Data security_instance entries do not require updating.<br />";
           }
 
@@ -157,10 +162,16 @@ if (empty($step)) {
                   $result =&$dbconn->Execute($query);
                   list($iid, $header, $xarquery, $instancetable2) = $result->fields;
                   if (($instance['cquery'] != $xarquery) || ($instance['ctable2'] != $instancetable2)) {
+                     echo "Attempting to update categories instance  with component ".$instance['ccomponent']. " and header ".$instance['cheader'];
                       $categoriesupdate=true;
                       $query="UPDATE $instancestable SET xar_query= '{$instance['cquery']}', xar_instancetable2 = '$instance[ctable2]'
                               WHERE xar_module='categories' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
                       $result =& $dbconn->Execute($query);
+                       if (!$result) {
+                          echo "...update failed!</font><br>\r\n";
+                      } else {
+                        echo "...done!</font><br>\r\n";
+                      }
                   }
               }
 
@@ -177,13 +188,20 @@ if (empty($step)) {
           list($iid, $header, $xarquery) = $result->fields;
           if ($categoryinstance != $xarquery) {
                $categoriesupdate=true;
+               echo "Attempting to update categories instance  with component Block and header Category Block Title: ";
+
                $query="UPDATE $instancestable SET xar_query= 'SELECT DISTINCT instances.xar_title FROM $blockinstancetable as instances LEFT JOIN $blocktypestable as btypes ON  btypes.xar_id = instances.xar_type_id WHERE xar_module = \'categories\''
                        WHERE xar_module='categories' AND xar_component = 'Block' AND xar_header= 'Category Block Title:'";
                $result =& $dbconn->Execute($query);
+
+               if (!$result) {
+                   echo "...update failed!</font><br>\r\n";
+               } else {
+                   echo "...done!</font><br>\r\n";
+               }
+
           }
-          if ($categoriesupdate) {
-              echo "Categories security_instance entries require updating ...attempting to update... DONE! <br />";
-          } else {
+          if (!$categoriesupdate) {
               echo "Categories security_instance entries do not require updating.<br />";
           }
 
@@ -219,16 +237,22 @@ if (empty($step)) {
                 if (($instance['cquery'])==($xarquery)) {
                   } else {
                       $hitcountupdate=true;
+                      echo "Attempting to update hitcount instance  with component ".$instance['ccomponent']. " and header ".$instance['cheader'];
+
                       $query="UPDATE $instancestable SET xar_query= '{$instance['cquery']}'
                               WHERE xar_module='hitcount' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
                       $result =& $dbconn->Execute($query);
+
+                     if (!$result) {
+                          echo "...update failed!</font><br>\r\n";
+                     } else {
+                         echo "...done!</font><br>\r\n";
+                     }
                   }
               }
 
           }//end foreach
-          if ($hitcountupdate) {
-              echo "Hit Count security_instance entries require updating ...attempting to update... DONE! <br />";
-          } else {
+          if (!$hitcountupdate) {
               echo "Hit Count security_instance entries do not require updating.<br />";
           }
 
@@ -271,17 +295,22 @@ if (empty($step)) {
 
                   if ($instance['cquery'] != $xarquery) {
                       $ratingsupdate = true;
+                      echo "Attempting to update ratings instance  with component ".$instance['ccomponent']. " and header ".$instance['cheader'];
+
                        $query="UPDATE $instancestable SET xar_query= '{$instance['cquery']}'
                               WHERE xar_module='ratings' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
                       $result =& $dbconn->Execute($query);
+                      if (!$result) {
+                          echo "...update failed!</font><br>\r\n";
+                       } else {
+                          echo "...done!</font><br>\r\n";
+                      }
                   }
               }//end foreach
 
           }//end foreach
 
-          if ($ratingsupdate) {
-              echo "Ratings security_instance entries require updating ...attempting to update... DONE! <br />";
-          } else {
+          if (!$ratingsupdate) {
               echo "Ratings security_instance entries do not require updating.<br />";
           }//endif updatetrue
 
@@ -303,14 +332,19 @@ if (empty($step)) {
            list($iid, $header, $xarquery) = $result->fields;
                if ($articlesinstance != $xarquery) {
                    $articlesupdate=true;
+                   echo "Attempting to update articles instance  with component Block and header Article Block Title";
+
                    $query="UPDATE $instancestable SET xar_query= 'SELECT DISTINCT instances.xar_title FROM $blockinstancetable as instances LEFT JOIN $blocktypestable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module=\'articles\''
                            WHERE xar_module='articles' AND xar_component = 'Block' AND xar_header= 'Article Block Title:'";
                    $result =& $dbconn->Execute($query);
+                   if (!$result) {
+                       echo "...update failed!</font><br>\r\n";
+                   } else {
+                       echo "...done!</font><br>\r\n";
+                   }
                }
-               if ($articlesupdate) {
-                  echo "Articles security_instance entry required updating ...attempting to update... DONE! <br />";
-               } else {
-                  echo "Articles security_instance entry does not require updating.<br />";
+               if (!$articlesupdate) {
+                   echo "Articles security_instance entry does not require updating.<br />";
                }
 
       } else {
@@ -546,15 +580,16 @@ if (empty($step)) {
 
     $query = "SELECT xar_prop_type
               FROM $dynproptable
-              WHERE xar_prop_objectid=2";
+              WHERE xar_prop_name='default'
+              AND xar_prop_objectid=2";
     // Check for db errors
     $result =& $dbconn->Execute($query);
 
-    $prop_type = $result->fields;
+    list($prop_type) = $result->fields;
     $result->Close();
 
     if ($prop_type != 3){
-        echo "Dynamic Data table objectid 2 is not set to property type 3, attempting to change... ";
+        echo "Dynamic Data table 'default' property with objectid 2 is not set to property type 3, attempting to change... ";
         // Generate the SQL to drop the table using the API
         $query = "UPDATE $dynproptable
                      SET xar_prop_type=3
@@ -568,7 +603,7 @@ if (empty($step)) {
             echo "done!</font><br>\r\n";
         }
     } else {
-        echo "Dynamic Data table objectid 2 has correct property type, moving to next check. <br />";  
+        echo "Dynamic Data table 'default' property with objectid 2 has correct property type of 3, moving to next check. <br />";  
     }
 
     // Add the syndicate block type and syndicate block for RSS display.
@@ -864,5 +899,4 @@ xarCore_disposeDebugger();
 
 // done
 exit;
-
 ?>
