@@ -31,7 +31,7 @@
                         <input type="checkbox" name="hooked_#$hookedmod['name']#[0]" id="hooked_#$hookedmod['name']#[0]" value="1" style="vertical-align: middle;" />
                     </xar:if>
                     <xar:if condition="count($hookedmod['itemtypes']) gt 0">
-                        <label for="hooked_#$hookedmod['name']#[0]"><xar:mlstring>all</xar:mlstring> #$hookedmod['name']# : #$hookedmod['description']# </label><br />
+                        <label for="hooked_#$hookedmod['name']#[0]"><xar:mlstring>all</xar:mlstring>&nbsp;#$hookedmod['name']# : #$hookedmod['description']# </label><br />
                         <div style="padding-left: 2em;">
                         <xar:mlstring>or for individual item types</xar:mlstring> :<br />
                         <xar:foreach in="$hookedmod['itemtypes']" key="$typeid" value="$itemtype">
