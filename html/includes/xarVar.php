@@ -277,10 +277,6 @@ function xarVarValidate($validation, &$subject, $supress = false) {
 // <nuncanada> For now, i have moved all validations to html/modules/variable/validations
 //             I think that will incentivate 3rd party devs to create and send new validations back to us..
 //             As id/int/str are used in every page view, probably they should be here.
-// <nuncanada> For more flexible validations it might be interesting to change how parameters are inserted
-//             to an array?! Although the actual interface seems easier to use...
-// Thinking about it better, this 'array' validation should be changed for 'list', it fits better what it does
-// Array should be there too to check if its an array and give min/max bounds on it.
 
     $valParams = explode(':', $validation);
     $valType = xarVarPrepForOS(strtolower(array_shift($valParams)));
@@ -316,12 +312,6 @@ function xarVarValidate($validation, &$subject, $supress = false) {
 /**
  * Cleans a variable.
  *
- *******************************************************************
- * <nuncanada>
- * This is a bad way to add security!
- * You have to quote/escape/treat the variable upon the change of interpretation, not when
- * getting them from the input!!
- *********************************************************************
  *
  * Cleaning it up to try to ensure that hack attacks
  * don't work. Typically used for cleaning variables
@@ -354,13 +344,6 @@ function xarVarCleanUntrusted($var)
  *
  * Gets a global variable, cleaning it up to try to ensure that
  * hack attacks don't work. Can have as many parameters as needed.
- *
- *******************************************************************
- * <nuncanada>
- * This is a bad way to add security!
- * You have to quote/escape/treat the variable upon the change of interpretation, not when
- * getting them from the input!!
- *********************************************************************
  *
  * @access public
  * @return mixed prepared variable if only one variable passed in, otherwise an array of prepared variables
@@ -410,6 +393,8 @@ function xarVarCleanFromInput()
  */
 function xarVarPrepForDisplay()
 {
+// <nuncanada> Moving email obscurer functionality somewhere else : autolinks, transforms or whatever
+/*
     // This search and replace finds the text 'x@y' and replaces
     // it with HTML entities, this provides protection against
     // email harvesters
@@ -420,13 +405,14 @@ function xarVarPrepForDisplay()
                             ";&#064;&#" .
                             sprintf("%03d", ord("\\2")) . ";";');
 
+*/
     $resarray = array();
     foreach (func_get_args() as $var) {
 
         // Prepare var
         $var = htmlspecialchars($var);
 
-        $var = preg_replace($search, $replace, $var);
+//        $var = preg_replace($search, $replace, $var);
 
         // Add to array
         array_push($resarray, $var);
@@ -454,18 +440,8 @@ function xarVarPrepForDisplay()
  */
 function xarVarPrepHTMLDisplay()
 {
-    // IMO This makes no sense...
-    // Because there are 2 possibilities:
-    //  1) You have already checked if the html tags present in a certain string are ok
-    //     before storing it, in this case, you should just display the text without
-    //     any kind of preparation. (Validation without Preparation)
-    // OR
-    //  2) You havent checked and so, the only thing you should do is to escape whatever
-    //     meaningful html character that is present.... (Preparation for strings without Validation)
-    // If you want to add the possibility of adding html markup to a text, do 1.
-    // Besides that you could have special transform hooks to transform text, but this is not the case
-    // over here...
-
+// <nuncanada> Moving email obscurer functionality somewhere else : autolinks, transforms or whatever
+/*
     // This search and replace finds the text 'x@y' and replaces
     // it with HTML entities, this provides protection against
     // email harvesters
@@ -479,7 +455,7 @@ function xarVarPrepHTMLDisplay()
                             sprintf("%03d", ord("\\1")) .
                             ";&#064;&#" .
                             sprintf("%03d", ord("\\2")) . ";";');
-
+*/
     static $allowedtags = NULL;
 
     if (!isset($allowedHTML)) {
@@ -517,7 +493,7 @@ function xarVarPrepHTMLDisplay()
 
         // Prepare var
         $var = htmlspecialchars($var);
-        $var = preg_replace($search, $replace, $var);
+//        $var = preg_replace($search, $replace, $var);
 //        $var = strtr($var,array('@' => '&#064;'));
 
         // Fix the HTML that we want
