@@ -95,11 +95,6 @@ function roles_init()
 
     if (!$dbconn->Execute($query)) return;
 
-//    $everybodyuid = _XAR_ID_UNREGISTERED - 1;
-//    $query = "ALTER TABLE " . $tables['roles'] . " AUTO_INCREMENT = $everybodyuid";
-//    $result = &$dbconn->Execute($query);
-//    if (!$result) return;
-
     // role type is used in all group look-ups (e.g. security checks)
     $index = array('name' => 'i_' . $sitePrefix . '_roles_type',
         'fields' => array('xar_type')

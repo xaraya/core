@@ -358,7 +358,7 @@ class xarRoles {
         }
         // create an ID for the user
         $nextId = $this->dbconn->genID($this->rolestable);
-        $createdate = $this->dbconn->DBTimeStamp(mktime());
+        $createdate = mktime();
         // set up the query and create the entry
         $nextIdprep = xarVarPrepForStore($nextId);
         $nameprep = xarVarPrepForStore($name);
@@ -413,7 +413,7 @@ class xarRoles {
         }
         // create an ID for the group
         $nextId = $this->dbconn->genID($this->rolestable);
-        $createdate = $this->dbconn->DBTimeStamp(mktime());
+        $createdate = mktime();
         // set up the query and create the entry
         $nextIdprep = xarVarPrepForStore($nextId);
         $nameprep = xarVarPrepForStore($name);
