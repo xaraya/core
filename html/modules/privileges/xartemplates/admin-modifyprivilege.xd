@@ -210,7 +210,7 @@ document.forms[0].submit();}
 		</table>			
 		<xar:if condition="$ptype eq 'empty'">
 		<xar:else />
-			<xar:if condition="$pcomponent ne 'All'">
+			<xar:if condition="$pcomponent ne 'All' and empty($target)">
 			<table border="0" cellpadding="0" width="100%">
 				<tr>
 					<td>
@@ -256,8 +256,23 @@ document.forms[0].submit();}
 						</td>
 					</xar:loop>
 				</tr>
-			</table>			
-		</xar:if>
+			</table>
+			<xar:elseif condition="!empty($target)" />
+			<table border="0" cellpadding="0" width="100%">
+				<tr>
+					<td>
+					<hr>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<xar:mlstring>Current instances</xar:mlstring> <input type="text" name="pinstance0" value="#$curinstance#" />
+					<br /><br />
+					<xar:mlstring>Modify the <a href="$target" title="Use Wizard">instances that apply</a> for this privilege</xar:mlstring>
+					</td>
+				</tr>
+			</table>
+			</xar:if>
 		</xar:if>
 					
 		<br /><br />
