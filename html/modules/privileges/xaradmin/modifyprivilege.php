@@ -5,6 +5,7 @@
  */
 function privileges_admin_modifyprivilege()
 {
+
     if(!xarVarFetch('pid',           'isset', $pid,           NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pname',         'isset', $name,          NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('prealm',        'isset', $realm,         NULL, XARVAR_DONT_SET)) {return;}
@@ -15,7 +16,6 @@ function privileges_admin_modifyprivilege()
     if(!xarVarFetch('plevel',        'isset', $level,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('show',          'isset', $show,          NULL, XARVAR_DONT_SET)) {return;}
 
-
     if(!xarVarFetch('pid',           'isset', $pid,          NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pname',         'isset', $name,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('prealm',        'isset', $realm,        NULL, XARVAR_DONT_SET)) {return;}
@@ -25,9 +25,7 @@ function privileges_admin_modifyprivilege()
     if(!xarVarFetch('ptype',         'isset', $type,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('plevel',        'isset', $level,        NULL, XARVAR_DONT_SET)) {return;}
 
-
     if(!xarVarFetch('pparentid',     'isset', $pparentid,    NULL, XARVAR_DONT_SET)) {return;}
-
 
     $i = 0;
     $instance = array();

@@ -86,7 +86,7 @@ define('XARDBG_SQL', 2);
 define('XARDBG_EXCEPTIONS', 4);
 define('XARDBG_SHOW_PARAMS_IN_BT', 8);
 
-define('_XAR_ID_UNREGISTERED', '3');
+//define('_XAR_ID_UNREGISTERED', 3);
 
 /**
  * Initializes the core engine
@@ -219,6 +219,10 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'allowedLocales' => xarConfigGetVar('Site.MLS.AllowedLocales'));
     xarMLS_init($systemArgs, $whatToLoad);
 
+    $anonuid = xarConfigGetVar('Site.User.AnonynousUID');
+    $anonuid = !empty($anonuid) ? $anonuid : 0;
+    define('_XAR_ID_UNREGISTERED', $anonuid);
+
     // Start Sessions Subsystem
     if ($whatToLoad & XARCORE_SYSTEM_SESSION) {
         // {ML_dont_parse 'includes/xarSession2.php'}
@@ -233,6 +237,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                             'duration' => xarConfigGetVar('Site.Session.Duration'),
                             'inactivityTimeout' => xarConfigGetVar('Site.Session.InactivityTimeout'));
         xarSession_init($systemArgs, $whatToLoad);
+
         $whatToLoad ^= XARCORE_BIT_SESSION;
     }
 

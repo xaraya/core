@@ -342,6 +342,7 @@ function installer_admin_bootstrap()
  */
 function installer_admin_create_administrator()
 {
+
     xarTplSetThemeName('installer');
     $data['language'] = 'English';
     $data['phase'] = 6;
@@ -349,6 +350,8 @@ function installer_admin_create_administrator()
 
     $role = xarFindRole('Everybody');
     xarModSetVar('roles', 'everybody', $role->getID());
+    $role = xarFindRole('Anonymous');
+    xarConfigSetVar('Site.User.AnonynousUID', $role->getID());
 
     // Security Check
     if(!xarSecurityCheck('AdminInstaller')) return;
