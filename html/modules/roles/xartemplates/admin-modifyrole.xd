@@ -8,16 +8,16 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2>
 <xar:if condition="$ptype eq 0"><xar:mlstring>Manage the user</xar:mlstring>
-<xar:else/><xar:mlstring>Manage the group</xar:mlstring></xar:if>: #$pname#</h2>
+<xar:else/><xar:mlstring>Manage the group</xar:mlstring></xar:if>: #xarVarPrepForDisplay($pname)#</h2>
 <xar:if condition="count($parents) ne 0">
   <div id="tabnav">
         <div class="help" title="These are the groups that #$pname# is a member of"><xar:mlstring>Parent Groups</xar:mlstring> :</div>
         <xar:set name="$prevgroup">""</xar:set>
         <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
             <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                <div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $parents[$i]['parentid']))#" title="#xarML('Show this group')#">#$parents[$i]['parentname']#</a></div>
+                <div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $parents[$i]['parentid']))#" title="#xarML('Show this group')#">#xarVarPrepForDisplay($parents[$i]['parentname'])#</a></div>
             </xar:if>
-            <xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
+            <xar:set name="$prevgroup">#xarVarPrepForDisplay($parents[$i]['parentname'])#</xar:set>
         </xar:for>
   </div>
 </xar:if>
@@ -45,7 +45,7 @@
                           <label for="pname"><xar:mlstring>Name</xar:mlstring></label>
                       </td>
                       <td>
-                          <input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="255" tabindex="1" disabled="disabled" />
+                          <input type="text" name="pname" id="pname" value="#xarVarPrepForDisplay($pname)#" size="20" maxlength="255" tabindex="1" disabled="disabled" />
                       </td>
                   </tr>
                     <tr>
@@ -65,7 +65,7 @@
                           <label for="pname"><xar:mlstring>Name</xar:mlstring></label>
                       </td>
                       <td>
-                          <input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="255" tabindex="1" />
+                          <input type="text" name="pname" id="pname" value="#xarVarPrepForDisplay($pname)#" size="20" maxlength="255" tabindex="1" />
                       </td>
                     </tr>
                     <tr>
@@ -98,7 +98,7 @@
                               <label for="puname"><xar:mlstring>User Name</xar:mlstring></label>
                           </td>
                           <td>
-                              <input type="text" name="puname" id="puname" value="#$puname#" size="20" maxlength="255" tabindex="3" />
+                              <input type="text" name="puname" id="puname" value="#xarVarPrepForDisplay($puname)#" size="20" maxlength="255" tabindex="3" />
                           </td>
                       </tr>
                       <tr>
@@ -106,7 +106,7 @@
                               <label for="pemail"><xar:mlstring>Email</xar:mlstring></label>
                           </td>
                           <td>
-                              <input type="text" name="pemail" id="pemail" value="#$pemail#" size="40" maxlength="255" tabindex="4" />
+                              <input type="text" name="pemail" id="pemail" value="#xarVarPrepForDisplay($pemail)#" size="40" maxlength="255" tabindex="4" />
                           </td>
                       </tr>
                       <tr>
@@ -180,7 +180,7 @@
                 <xar:else />
                     <xar:mlstring>Group&nbsp;</xar:mlstring>
                 </xar:if>
-                '#$pname#'&nbsp;<xar:mlstring>To A Group</xar:mlstring></h2>
+                '#xarVarPrepForDisplay($pname)#'&nbsp;<xar:mlstring>To A Group</xar:mlstring></h2>
     <xar:if condition="$frozen">
         <xar:mlstring>Cannot add to this&nbsp;</xar:mlstring>
         <xar:if condition="$ptype eq 0">
@@ -201,7 +201,7 @@
                 <td>
                     <select name="roleid" id="roleid" size="1" tabindex="9">
                         <xar:loop name="$groups">
-                            <option value="#$loop:item['duid']#">#$loop:item['dname']#</option>
+                            <option value="#$loop:item['duid']#">#xarVarPrepForDisplay($loop:item['dname'])#</option>
                         </xar:loop>
                     </select>
                 </td>
@@ -218,7 +218,7 @@
 <h2><xar:if condition="$ptype eq 1"><xar:mlstring>Group&nbsp;</xar:mlstring>
 <xar:else /><xar:mlstring>User&nbsp;</xar:mlstring>
 </xar:if>
- '#$pname#' 
+ '#xarVarPrepForDisplay($pname)#' 
 <xar:mlstring>&nbsp;Group Memberships:</xar:mlstring></h2>
 <table border="0" cellpadding="2" cellspacing="0" class="xar-accent-outline">
     <tr>
@@ -230,10 +230,10 @@
             <td>
                 <xar:if condition="$loop:item['parentid'] gt 4">
                     <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$loop:item['parentid']#">
-                    #$loop:item['parentname']#
+                    #xarVarPrepForDisplay($loop:item['parentname'])#
                     </a>
                 <xar:else />
-                    <b>#$loop:item['parentname']#</b>
+                    <b>#xarVarPrepForDisplay($loop:item['parentname'])#</b>
                 </xar:if>
             </td>
             <td style="text-align: center;">

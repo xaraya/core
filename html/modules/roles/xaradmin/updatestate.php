@@ -23,7 +23,7 @@ function roles_admin_updatestate()
     if(!xarVarFetch('status', 'int:0:', $data['status'],  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('state', 'int:0:', $data['state'], 0, XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('groupuid', 'int:0:', $data['groupuid'], 1, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('updatephase', 'str:1:', $updatephase, 'update', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('updatephase', 'str:1:', $updatephase, 'update', XARVAR_NOT_REQUIRED)) return;
     if(!xarVarFetch('uids', 'isset', $uids, NULL, XARVAR_NOT_REQUIRED)) return;
     $data['authid'] = xarSecGenAuthKey();
     // invalid fields (we'll check this below)

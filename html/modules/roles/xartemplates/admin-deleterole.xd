@@ -5,16 +5,16 @@
 <div class="xar-mod-body"><h2>
 <xar:if condition="$ptype eq 0"><xar:mlstring>Manage the user</xar:mlstring>
 <xar:else/><xar:mlstring>Manage the group</xar:mlstring></xar:if>
-: #$name#</h2>
+: #xarVarPrepForDisplay($name)#</h2>
 <xar:if condition="count($parents) gt 0">
   <div id="tabnav">
         <div class="help" title="These are the groups that #$name# is a member of"><xar:mlstring>Parent Groups</xar:mlstring> :</div>
         <xar:set name="$prevgroup">""</xar:set>
         <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
             <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                <div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $parents[$i]['parentid']))#" title="#xarML('Show this group')#">#$parents[$i]['parentname']#</a></div>
+                <div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $parents[$i]['parentid']))#" title="#xarML('Show this group')#">#xarVarPrepForDisplay($parents[$i]['parentname'])#</a></div>
             </xar:if>
-            <xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
+            <xar:set name="$prevgroup">#xarVarPrepForDisplay($parents[$i]['parentname'])#</xar:set>
         </xar:for>
   </div>
 </xar:if>
@@ -36,7 +36,7 @@
     <xar:set name="$roletype"><xar:mlstring>user</xar:mlstring></xar:set>
 </xar:if>
 <xar:if condition="$frozen">
-    <xar:mlstring>You do not have the privileges to delete</xar:mlstring>&nbsp;#$roletype#&nbsp;#$name#
+    <xar:mlstring>You do not have the privileges to delete</xar:mlstring>&nbsp;#xarVarPrepForDisplay($roletype)#&nbsp;#xarVarPrepForDisplay($name)#
 <xar:else />
     <form method="post" action="&xar-modurl-roles-admin-deleterole;" method="post" enctype="application/x-www-form-urlencoded" >
        <div>
@@ -44,7 +44,7 @@
         <input type="hidden" name="uid" id="uid" value="#$uid#" />
         <input type="hidden" name="confirmation" id="confirmation" value="1" />
 
-        <span class="xar-title"><xar:mlstring>Confirm the deletion of</xar:mlstring>&nbsp;#$roletype#&nbsp;#$name#
+        <span class="xar-title"><xar:mlstring>Confirm the deletion of</xar:mlstring>&nbsp;#xarVarPrepForDisplay($roletype)#&nbsp;#xarVarPrepForDisplay($name)#
         </span>
         <br /><br />
 

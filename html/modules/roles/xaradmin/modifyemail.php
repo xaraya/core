@@ -20,7 +20,7 @@ function roles_admin_modifyemail($args)
     if (!xarSecurityCheck('EditRole')) return;
 
     extract($args);
-    if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;
     if (!isset($mailtype)) xarVarFetch('mailtype', 'str:1:100', $data['mailtype'], 'welcome', XARVAR_NOT_REQUIRED);
     else $data['mailtype'] = $mailtype;
 

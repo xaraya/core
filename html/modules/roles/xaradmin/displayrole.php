@@ -41,7 +41,7 @@ function roles_admin_displayrole()
     if ($data['type'] == 0) {
         $data['uname'] = $role->getUser();
         $data['type'] = $role->getType();
-        $data['email'] = xarVarPrepForDisplay($role->getEmail());
+        $data['email'] = $role->getEmail();
         $data['state'] = $role->getState();
         $data['valcode'] = $role->getValCode();
     } else {

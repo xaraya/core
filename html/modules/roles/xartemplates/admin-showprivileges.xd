@@ -7,16 +7,16 @@
 <div class="xar-mod-body"><h2>
 <xar:if condition="$ptype eq 0"><xar:mlstring>Manage the user</xar:mlstring>
 <xar:else/><xar:mlstring>Manage the group</xar:mlstring></xar:if>
-: #$pname#</h2>
+: #xarVarPrepForDisplay($pname)#</h2>
 <xar:if condition="count($parents) ne 0">
   <div id="tabnav">
         <div class="help" title="These are the groups that #$pname# is a member of"><xar:mlstring>Parent Groups</xar:mlstring> :</div>
         <xar:set name="$prevgroup">""</xar:set>
         <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
             <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                <div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $parents[$i]['parentid']))#" title="#xarML('Show this group')#">#$parents[$i]['parentname']#</a></div>
+                <div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $parents[$i]['parentid']))#" title="#xarML('Show this group')#">#xarVarPrepForDisplay($parents[$i]['parentname'])#</a></div>
             </xar:if>
-            <xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
+            <xar:set name="$prevgroup">#xarVarPrepForDisplay($parents[$i]['parentname'])#</xar:set>
         </xar:for>
   </div>
 </xar:if>
@@ -37,10 +37,10 @@
 </a>
 &nbsp;
 <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$roleid#" title="Test this User's Privileges">
-    <xar:mlstring>Test the privileges of</xar:mlstring>&nbsp;#$pname#
+    <xar:mlstring>Test the privileges of</xar:mlstring>&nbsp;#xarVarPrepForDisplay($pname)#
 </a>
 <br /><br />
-<h3><xar:mlstring>Privileges inherited by</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$roleid#">#$pname#</a>:</h3>
+<h3><xar:mlstring>Privileges inherited by</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$roleid#">#xarVarPrepForDisplay($pname)#</a>:</h3>
 <table border="0" width="100%" cellpadding="2" cellspacing="0" class="xar-accent-outline">
         <tr>
             <td colspan="7" align="right">
@@ -86,10 +86,10 @@
             <tr class="xar-norm">
         </xar:if>
             <td width="150">
-                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['privid']#">#$loop:item['name']#</a>
+                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['privid']#">#xarVarPrepForDisplay($loop:item['name'])#</a>
             </td>
             <td width="50" style="text-align: center;">
-                #$loop:item['realm']#
+                #xarVarPrepForDisplay($loop:item['realm'])#
             </td>
             <td width="100" style="text-align: center;">
                 #$loop:item['module']#
@@ -105,14 +105,14 @@
             </td>
             <td style="text-align: center;">
                 <a href="#$groupurl#&amp;uid=#$loop:item['groupid']#">                
-                #$loop:item['groupname']#
+                #xarVarPrepForDisplay($loop:item['groupname'])#
                 </a>
             </td>
             </tr>
         </xar:loop>
     </xar:if>
     </table>
-            <br /><h3><xar:mlstring>Privileges assigned to</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$roleid#">#$pname#</a>:</h3>            
+            <br /><h3><xar:mlstring>Privileges assigned to</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$roleid#">#xarVarPrepForDisplay($pname)#</a>:</h3>            
 <table border="0" width="100%" cellpadding="2" cellspacing="0" class="xar-accent-outline">
         <tr>
             <td colspan="7" align="right">
@@ -158,10 +158,10 @@
             <tr class="xar-norm">
         </xar:if>
             <td width="150">
-                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['privid']#">#$loop:item['name']#</a>
+                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['privid']#">#xarVarPrepForDisplay($loop:item['name'])#</a>
             </td>
             <td width="50" style="text-align: center;">
-                #$loop:item['realm']#
+                #xarVarPrepForDisplay($loop:item['realm'])#
             </td>
             <td width="100" style="text-align: center;">
                 #$loop:item['module']#
@@ -197,7 +197,7 @@
             <xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
             <xar:else /><xar:mlstring>User</xar:mlstring>
             </xar:if>
-            '#$pname#'</h3>
+            '#xarVarPrepForDisplay($pname)#'</h3>
 
     <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
              <div>
@@ -209,7 +209,7 @@
                 <td>
                     <select name="privid" id="privid">
                         <xar:loop name="$allprivileges">
-                            <option value="#$loop:item['pid']#">#$loop:item['name']#
+                            <option value="#$loop:item['pid']#">#xarVarPrepForDisplay($loop:item['name'])#
                         </xar:loop>
                     </select>
                 </td>

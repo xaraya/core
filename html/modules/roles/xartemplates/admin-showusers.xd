@@ -12,9 +12,9 @@
     <div style="margin: auto;">
         <h2 style="width:100%;height:1.5em;">
             <span style="width:95%;float:left;text-align:left;">
-                    #$title# > <a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $groupuid))#" title="#xarML('Modify role')#" class="active">#$groupname#</a>
+                    #xarVarPrepForDisplay($title)# > <a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $groupuid))#" title="#xarML('Modify role')#" class="active">#xarVarPrepForDisplay($groupname)#</a>
                     <xar:if condition="$search ne ''">
-                            &nbsp;<xar:mlstring>matching</xar:mlstring> '#$search#'
+                            &nbsp;<xar:mlstring>matching</xar:mlstring> '#xarVarPrepForDisplay($search)#'
                         </xar:if>
                     (#$totalselect#)
                     <a href="#xarModURL('roles', 'admin', 'createmail')#" title="#xarML('Email the Users in this Group')#" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/email.gif" style="vertical-align: middle;" /></a>
@@ -65,12 +65,12 @@
                 <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
                     <xar:if condition="$prevgroup ne $groups[$i]['name']">
                         <xar:if condition="$groupuid eq $groups[$i]['uid']">
-                            <div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $groups[$i]['uid'], 'state' => $state, 'order' => $order, 'search' => $search))#" title="#xarML('Display the users in this group')#" class="active">#$groups[$i]['name']# (#$groups[$i]['users']#)</a></div>
+                            <div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $groups[$i]['uid'], 'state' => $state, 'order' => $order, 'search' => $search))#" title="#xarML('Display the users in this group')#" class="active">#xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)</a></div>
                         <xar:else/>
-                            <div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $groups[$i]['uid'], 'state' => $state, 'order' => $order, 'search' => $search))#" title="#xarML('Display the users in this group')#">#$groups[$i]['name']# (#$groups[$i]['users']#)</a></div>
+                            <div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $groups[$i]['uid'], 'state' => $state, 'order' => $order, 'search' => $search))#" title="#xarML('Display the users in this group')#">#xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)</a></div>
                         </xar:if>
                     </xar:if>
-                    <xar:set name="$prevgroup">#$groups[$i]['name']#</xar:set>
+                    <xar:set name="$prevgroup">#xarVarPrepForDisplay($groups[$i]['name'])#</xar:set>
                 </xar:for>
             </div>
             <br />
@@ -125,15 +125,15 @@
                     <xar:if condition="$prevgroup ne $groups[$i]['name']">
                         <xar:if condition="$groups[$i]['uid'] eq $groupuid">
                             <option value="#$groups[$i]['uid']#" selected="selected">
-                                #$groups[$i]['name']# - #$groups[$i]['users']#
+                                #xarVarPrepForDisplay($groups[$i]['name'])# - #$groups[$i]['users']#
                             </option>
                         <xar:else/>
                             <option value="#$groups[$i]['uid']#">
-                                #$groups[$i]['name']# - #$groups[$i]['users']#
+                                #xarVarPrepForDisplay($groups[$i]['name'])# - #$groups[$i]['users']#
                             </option>
                         </xar:if>
                     </xar:if>
-                    <xar:set name="$prevgroup">#$groups[$i]['name']#</xar:set>
+                    <xar:set name="$prevgroup">#xarVarPrepForDisplay($groups[$i]['name'])#</xar:set>
                 </xar:for>
                 </select>
             </td>
@@ -269,15 +269,15 @@
                     <tr class="xar-norm-outline" style="text-align: left; padding-left: .5em; width: 5em;border-width: 0px 0px 1px 0px;border-style: solid;">
                         <td>
                             <xar:if condition="!$loop:item['frozen']">
-                                <a href="#xarModURL('roles','admin','displayrole', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
+                                <a href="#xarModURL('roles','admin','displayrole', array('uid' => $loop:item['uid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>
                                 <xar:else/>
-                                <b>#$loop:item['name']#</b>
+                                <b>#xarVarPrepForDisplay($loop:item['name'])#</b>
                             </xar:if>
                         </td>
-                        <td>#$loop:item['uname']#</td>
+                        <td>#xarVarPrepForDisplay($loop:item['uname'])#</td>
                         <td>
                             <xar:if condition="!$loop:item['frozen']">
-                                <a href="#xarModURL('roles','admin','createmail', array('uid' => $loop:item['uid']))#" title="#xarML('Email this user')#">#$loop:item['email']#</a>
+                                <a href="#xarModURL('roles','admin','createmail', array('uid' => $loop:item['uid']))#" title="#xarML('Email this user')#">#xarVarPrepForDisplay($loop:item['email'])#</a>
                                 <xar:else/>
                                 <xar:mlstring>None</xar:mlstring>
                             </xar:if>
@@ -321,7 +321,7 @@
                 <input type="hidden" name="groupuid" id="groupuid" value="#$groupuid#"/>
                 <input type="hidden" name="state" id="state" value="#$state#"/>
                 <input type="hidden" name="order" id="order" value="#$order#"/>
-                <input type="hidden" name="search" id="search" value="#$search#"/>
+                <input type="hidden" name="search" id="search" value="#xarVarPrepForDisplay($search)#"/>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 </form>
                 <!-- always show the new user link -->

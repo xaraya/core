@@ -19,13 +19,13 @@
  */
 function roles_admin_newrole()
 {
-    if (!xarVarFetch('pparentid', 'str:1:', $pparentid, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('pname', 'str:1:', $name, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('ptype', 'str:1:', $type, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('puname', 'str:1:35:', $uname, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('pemail', 'str:1:', $email, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('ppass1', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return; 
+    if (!xarVarFetch('pparentid', 'str:1:', $pparentid, XARVAR_NOT_REQUIRED,)) return;
+    if (!xarVarFetch('pname', 'str:1:', $name, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('ptype', 'str:1:', $type, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('puname', 'str:1:35:', $uname, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('pemail', 'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('ppass1', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_NOT_REQUIRED)) return; 
     // Security Check
     if (!xarSecurityCheck('AddRole')) return; 
     // Call the Roles class

@@ -10,13 +10,13 @@
 
 <xar:if condition="count($parents) ne 0">
   <div id="tabnav">
-        <div class="help" title="These are the groups that #$name# is a member of"><xar:mlstring>Parent Groups</xar:mlstring> :</div>
+        <div class="help" title="These are the groups that #xarVarPrepForDisplay($name)# is a member of"><xar:mlstring>Parent Groups</xar:mlstring> :</div>
         <xar:set name="$prevgroup">""</xar:set>
         <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
             <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                <div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $parents[$i]['parentid']))#" title="#xarML('Show this group')#">#$parents[$i]['parentname']#</a></div>
+                <div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $parents[$i]['parentid']))#" title="#xarML('Show this group')#">#xarVarPrepForDisplay($parents[$i]['parentname'])#</a></div>
             </xar:if>
-            <xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
+            <xar:set name="$prevgroup">#xarVarPrepForDisplay($parents[$i]['parentname'])#</xar:set>
         </xar:for>
   </div>
 </xar:if>
@@ -35,16 +35,16 @@
     <table>
         <tr>
             <td><xar:mlstring>Real Name</xar:mlstring> :</td>
-            <td>#$name#</td>
+            <td>#xarVarPrepForDisplay($name)#</td>
         </tr>
     <xar:if condition="$type eq 0">
         <tr>
             <td><xar:mlstring>Login</xar:mlstring> :</td>
-            <td>#$uname#</td>
+            <td>#xarVarPrepForDisplay($uname)#</td>
         </tr>
         <tr>
             <td><xar:mlstring>Email</xar:mlstring> :</td>
-            <td>#$email#</td>
+            <td>#xarVarPrepForDisplay($email)#</td>
         </tr>
     </xar:if>
     <br />
