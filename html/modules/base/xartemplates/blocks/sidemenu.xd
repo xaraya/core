@@ -1,46 +1,47 @@
+<!-- User content section -->
+<!-- FIXME: user proper nesting in the data, not the elseif constructs -->
 <xar:if condition="!empty($usercontent)">
+    <ul class="xar-menu-section">
     <xar:loop name="$usercontent">
         <xar:if condition="empty($loop:item['url'])">
-            <div class="xar-menu-section">#$loop:item['title']#</div>
+            <li class="xar-menu-section">#$loop:item['title']#</li>
         <xar:elseif condition="!empty($loop:item['child']) and ($loop:item['url'] eq $loop:item['here'])" />
-            <div style="padding-left: .5em;">
-            <div class="xar-menu-subitem-current">#$loop:item['title']#</div>
-            </div>
+            <li class="xar-menu-subitem-current">#$loop:item['title']#</li>
         <xar:elseif condition="!empty($loop:item['child'])" />
-            <div style="padding-left: .5em;">
-            <div class="xar-menu-subitem">&nbsp;<a href="#$loop:item['url']#" title="#$loop:item['comment']#">#$loop:item['title']#</a></div>
-            </div>
+            <li class="xar-menu-subitem">&nbsp;<a href="#$loop:item['url']#" title="#$loop:item['comment']#">#$loop:item['title']#</a></li>
         <xar:elseif condition="($loop:item['url'] eq $loop:item['here'])" />
-            <div class="xar-menu-item-current">#$loop:item['title']#</div>
+            <li class="xar-menu-item-current">#$loop:item['title']#</li>
         <xar:else />
-            <div class="xar-menu-item"><a href="#$loop:item['url']#" title="#$loop:item['comment']#">#$loop:item['title']#</a></div>
+            <li class="xar-menu-item"><a href="#$loop:item['url']#" title="#$loop:item['comment']#">#$loop:item['title']#</a></li>
         </xar:if>
     </xar:loop>
-    <br />
+    </ul>
 </xar:if>
 
+<!-- User modules section -->
 <xar:if condition="!empty($usermods)">
-    <div class="xar-menu-section"><xar:mlstring>Modules</xar:mlstring></div>
+    <ul class="xar-menu-section"><xar:mlstring>Modules</xar:mlstring>
     <xar:loop name="$usermods">
         <xar:if condition="$loop:item['modactive']">
-            <div class="xar-menu-item-current">
-            #$loop:item['label']#
+            <li class="xar-menu-item-current">#$loop:item['label']#</li>
             <xar:if condition="$indlinks ne ''">
+                <ul>
                 <xar:loop name="$indlinks">
                     <xar:if condition="$loop:item['funcactive']">
-                        <div class="xar-menu-subitem-current">#$loop:item['userlabel']# #$marker#</div>
+                        <li class="xar-menu-subitem-current">#$loop:item['userlabel']# #$marker#</li>
                     <xar:else />
-                        <div class="xar-menu-subitem"><a href="#$loop:item['userlink']#" title="#$loop:item['usertitle']#">#$loop:item['userlabel']#</a></div>
+                        <li class="xar-menu-subitem"><a href="#$loop:item['userlink']#" title="#$loop:item['usertitle']#">#$loop:item['userlabel']#</a></li>
                     </xar:if>
-            </xar:loop>
+                </xar:loop>
+                </ul>
+            </xar:if>
+        <xar:elseif condition="!$loop:item['modactive'] and !$loop:item['link']" />
+          <li class="xar-menu-section">#$loop:item['label']#</li>
+        <xar:else />
+          <li class="xar-menu-item"><a href="#$loop:item['link']#" title="#$loop:item['desc']#">#$loop:item['label']#</a></li>
         </xar:if>
-        </div>
-    <xar:elseif condition="!$loop:item['modactive'] and !$loop:item['link']" />
-        <div class="xar-menu-section">#$loop:item['label']#</div>
-    <xar:else />
-        <div class="xar-menu-item"><a href="#$loop:item['link']#" title="#$loop:item['desc']#">#$loop:item['label']#</a></div>
-    </xar:if>
-</xar:loop>
+    </xar:loop>
+    </ul>
 </xar:if>
 
 <!-- Logout only if not admin or anomymous -->
@@ -53,6 +54,7 @@
     [<a href="#$printurl#" title="Print View"><xar:mlstring>Print View</xar:mlstring></a>]
 </xar:if>
 <xar:if condition="xarThemeIsAvailable('rss')">
+    <!-- TODO check whether a modules supports syndication, do not hardcode in here -->
     <xar:if condition="($where eq 'articles')">
         <br />
         [<a href="#$rssurl#" title="Syndication"><xar:mlstring>Syndication</xar:mlstring></a>]
