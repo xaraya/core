@@ -130,19 +130,24 @@ function pnTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $pageNa
     if (empty($pageName)) {
         $pageName = 'default';
     }
-    /* TODO => This will set all 'admin' type templates to just 
+    // Grab module Type Whether admin or user. 
     $modType = pnVarCleanUntrusted(pnRequestGetVar('type')); 
     if (empty($modType)) {
         $modType = 'user';
     }
-
+    // Override all admin modules types to is pages/admin exist.
+    // TODO --> Allow master admin template.
     if($modType == 'admin'){
-        $pageName = pnVarPrepForOS($pageName);
-        $sourceFileName = "admin/pages/$pageName.pnt";
-    } else {*/
+        $sourceFileName = "$pnTpl_themeDir/pages/admin.pnt";
+        if (!file_exists($sourceFileName)) {
+            // Revert to main theme
+            $pageName = pnVarPrepForOS($pageName);
+            $sourceFileName = "$pnTpl_themeDir/pages/$pageName.pnt";
+        }
+    } else {
         $pageName = pnVarPrepForOS($pageName);
         $sourceFileName = "$pnTpl_themeDir/pages/$pageName.pnt";
-    //}
+    }
 
     $tplData = array('_bl_mainModuleOutput' => $mainModuleOutput);
 
