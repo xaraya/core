@@ -450,7 +450,6 @@ function installer_admin_create_administrator()
     if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'left')))                                    return;
     if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'right',     'template' => 'right')))        return;
     if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'header',    'template' => 'header')))       return;
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'syndicate', 'template' => 'syndicate')))    return;
     if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'admin')))                                   return;
     if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'center',    'template' => 'center')))       return;
     if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'topnav',    'template' => 'topnav')))       return;
@@ -939,48 +938,8 @@ function installer_admin_cleanup()
         return;
     }
 
-    $query = "SELECT    xar_id as id
-              FROM      $blockGroupsTable
-              WHERE     xar_name = 'syndicate'";
-
-    // Check for db errors
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    // Freak if we don't get one and only one result
-    if ($result->PO_RecordCount() != 1) {
-        $msg = xarML("Group 'syndicate' not found.");
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
-
-    list ($syndicateBlockGroup) = $result->fields;
-
-    $syndicateBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                        array('module' => 'themes',
-                                              'type'   => 'syndicate'));
-
-    if (empty($syndicateBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return;
-    }
-
-    $syndicateBlockTypeId = $syndicateBlockType['tid'];
-
-    if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
-                       array('title'    => 'Syndicate',
-                             'name'     => 'syndicate',
-                             'type'     => $syndicateBlockTypeId,
-                             'groups'    => array(array('gid'      => $syndicateBlockGroup,
-                                                       'template' => '')),
-                             'template' => '',
-                             'state'    => 2))) {
-        return;
-    }
     xarResponseRedirect('index.php');
+    return true;
 }
-
-function installer_admin_modifyconfig()
-{}
 
 ?>
