@@ -51,7 +51,7 @@ function dynamicdata_userapi_showdisplay($args)
     }
     if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'user', 'showform', 'dynamicdata');
+                    'module name', 'user', 'showdisplay', 'dynamicdata');
         xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return $msg;
@@ -111,9 +111,9 @@ function dynamicdata_userapi_showdisplay($args)
     }
     // if we are in preview mode, we need to check for any preview values
     //$preview = xarVarCleanFromInput('preview');
-    //if (!empty($preview)) {
-    //    $object->checkInput();
-    //}
+    if (!empty($preview)) {
+        $object->checkInput();
+    }
 
     return $object->showDisplay(array('layout'   => $layout,
                                       'template' => $template));
