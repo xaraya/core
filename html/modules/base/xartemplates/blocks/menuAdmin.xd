@@ -1,125 +1,98 @@
-    <tr>
-        <td class="xar-title">
-            <xar:mlstring>Menu Format</xar:mlstring>
-        </td>
-        <td>
-        </td>
-    </tr>
-    <tr>
-        <td class="xar-normal">
-            <label for="style#$blockid#"><xar:mlstring>Menu as List</xar:mlstring></label>:
-        </td>
-        <td>
-            <xar:if condition="$style eq 1">
-            <input type="radio" name="style" id="style#$blockid#" value="1" checked="checked" />
-            <xar:else />
-            <input type="radio" name="style" id="style#$blockid#" value="1" />
-            </xar:if>
-        </td>
-    </tr>
-    <tr>
-        <td class="xar-normal">
-            <label for="style#$blockid#"><xar:mlstring>Menu as Dropdown</xar:mlstring></label>:
-        </td>
-        <td>
-            <xar:if condition="$style eq 2">
-            <input type="radio" name="style" id="style#$blockid#" value="2" checked="checked" />
-            <xar:else />
-            <input type="radio" name="style" id="style#$blockid#" value="2" />
-            </xar:if>
-        </td>
-    </tr>
-    <tr>
-        <td class="xar-title">
-            <xar:mlstring>Display</xar:mlstring>
-        </td>
-        <td>
-        </td>
-    </tr>
-    <tr>
-        <td class="xar-normal">
-            <label for="displaymodules#$blockid#"><xar:mlstring>Display Modules</xar:mlstring></label>:
-        </td>
-        <td>
-            <xar:if condition="$displaymodules eq 2">
-            <input type="checkbox" value="1" name="displaymodules" id="displaymodules#$blockid#" checked="checked" />
-            <xar:else>
-            <input type="checkbox" value="1" name="displaymodules" id="displaymodulesi#$blockid#" checked="checked" />
-            </xar:if>
-        </td>
-    </tr>
-    <tr>
-        <td class="xar-normal">
-            <label for="displaywaiting#$blockid#"><xar:mlstring>Display Waiting Content</xar:mlstring></label>:
-        </td>
-        <td>
-            <xar:if condition="$displaywaiting eq 2">
-            <input type="checkbox" value="1" name="displaywaiting" id="displaywaiting#$blockid#" checked="checked" />
-            <xar:else>
-            <input type="checkbox" value="1" name="displaywaiting" id="displaywaiting#$blockid#" />
-            </xar:if>
-        </td>
-    </tr>
-</table>
-<table>
-    <tr>
-        <td valign="top" class="xar-title">
-            <xar:mlstring>Menu Content</xar:mlstring>
-        </td>
-        <td>
-            <table border="1">
-                <tr>
-                    <td align="center" class="xar-normal">
-                        <b><xar:mlstring>Title</xar:mlstring></b>
-                    </td>
-                    <td align="center" class="xar-normal">
-                        <b><xar:mlstring>URL</xar:mlstring></b>
-                    </td>
-                    <td align="center" class="xar-normal">
-                        <b><xar:mlstring>Description</xar:mlstring>&nbsp;</b>
-                        <span class="xar-sub"><b><xar:mlstring>Optional</xar:mlstring></b></span>
-                    </td>
-                    <td align="center" class="xar-normal">
-                        <b><xar:mlstring>Delete</xar:mlstring></b>
-                    </td>
-                    <td align="center" class="xar-normal"
-                        <b><xar:mlstring>Insert Blank After</xar:mlstring></b>
-                    </td>
-                </tr>
+<tr>
+    <td class="xar-normal">
+        <xar:mlstring>Display Modules</xar:mlstring>:
+    </td>
+    <td>
+        <xar:if condition="!empty($displaymodules)">
+            <input type="checkbox" value="1" name="displaymodules" checked="checked" />
+        <xar:else />
+            <input type="checkbox" value="1" name="displaymodules" />
+        </xar:if>
+    </td>
+</tr>
+<tr>
+    <td class="xar-normal">
+        <xar:mlstring>Marker</xar:mlstring>:
+    </td>
+    <td>
+        <input type="text" name="marker" value="#$marker#" size="5" />
+    </td>
+</tr>
+</table><table>
+<tr>
+    <td valign="top" class="xar-title">
+        <xar:mlstring>Menu Content</xar:mlstring>
+    </td>
+</tr>
+<tr>
+    <td>
+        <table border="1">
+            <tr>
+                <td align="center" class="xar-normal">
+                    <b><xar:mlstring>Title</xar:mlstring></b>
+                </td>
+                <td align="center" class="xar-normal">
+                    <b><xar:mlstring>URL</xar:mlstring></b>
+                </td>
+                <td align="center" class="xar-normal">
+                    <b><xar:mlstring>Description</xar:mlstring></b>
+                    <span class="xar-sub"><b>(<xar:mlstring>Optional</xar:mlstring>)</b></span>
+                </td>
+                <td align="center" class="xar-normal">
+                    <b><xar:mlstring>Delete</xar:mlstring></b>
+                </td>
+                <td align="center" class="xar-normal">
+                    <b><xar:mlstring>Child</xar:mlstring></b>
+                </td>
+                <td align="center" class="xar-normal">
+                    <b><xar:mlstring>Insert Blank After</xar:mlstring></b>
+                </td>
+            </tr>
+            <xar:if condition="!empty($content)">
+                <xar:loop name="$contentlines">
                 <tr>
                     <td valign="top">
-                        <input type="text" name="linkname[$c]" id="linkname[$c]#$blockid#" size="30" maxlength="255" value="#$link[1]#" class="xar-normal" />
+                        <input type="text" name="linkname[#$loop:index+1#]" size="30" maxlength="255" value="#$loop:item[1]#" class="xar-normal" />
                     </td>
                     <td valign="top">
-                        <input type="text" name="linkurl[$c]" id="linkurl[$c]#$blockid#" size="30" maxlength="255" value="#$link[0]#" class="xar-normal" />
+                        <input type="text" name="linkurl[#$loop:index+1#]" size="30" maxlength="255" value="#$loop:item[0]#" class="xar-normal" />
                     </td>
                     <td valign="top">
-                        <input type="text" name="linkdesc[$c]" id="linkdesc[$c]#$blockid#" size="30" maxlength="255" value="#$link[2]#" class="xar-normal" />
+                        <input type="text" name="linkdesc[#$loop:index+1#]" size="30" maxlength="255" value="#$loop:item[2]#" class="xar-normal" />
                     </td>
                     <td valign="top">
-                        <input type="checkbox" name="linkdelete[$c]" id="linkdelete[$c]#$blockid#" value="1" class="xar-normal" />
+                        <input type="checkbox" name="linkdelete[#$loop:index+1#]" value="1" class="xar-normal" />
                     </td>
                     <td valign="top">
-                        <input type="checkbox" name="linkinsert[$c]" id="linkinsert[$c]#$blockid#" value="1" class="xar-normal" />
+                        <xar:if condition="empty($loop:item[3])">
+                            <input type="checkbox" name="linkchild[#$loop:index+1#]" value="1" class="xar-normal" />
+                        <xar:else />
+                            <input type="checkbox" name="linkchild[#$loop:index+1#]" value="1" class="xar-normal" checked="checked" />
+                        </xar:if>
+                    </td>
+                    <td valign="top">
+                        <input type="checkbox" name="linkinsert[#$loop:index+1#]" value="1" class="xar-normal" />
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <input type="text" name="new_linkname" id="new_linkname#$blockid#" size="30" maxlength="255" class="xar-normal" />
-                    </td>
-                    <td>
-                        <input type="text" name="new_linkurl" id="new_linkurl#$blockid#" size="30" maxlength="255" class="xar-normal" />
-                    </td>
-                    <td class="xar-normal">
-                        <input type="text" name="new_linkdesc" id="new_linkdesc#$blockid#" size="30" maxlength="255" class="xar-normal" />
-                    </td>
-                    <td class="xar-normal">
-                        <label for="new_linkinsert#$blockid#"><xar:mlstring>New Line</xar:mlstring></label>
-                    </td>
-                    <td class="xar-normal">
-                        <input type="checkbox" name="new_linkinsert" id="new_linkinsert#$blockid#" value="1" class="xar-normal" />
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
+                </xar:loop>
+            </xar:if>
+            <tr>
+                <td>
+                    <input type="text" name="new_linkname" size="30" maxlength="255" class="xar-normal" />
+                </td>
+                <td>
+                    <input type="text" name="new_linkurl" size="30" maxlength="255" class="xar-normal" />
+                </td>
+                <td class="xar-normal">
+                    <input type="text" name="new_linkdesc" size="30" maxlength="255" class="xar-normal" />
+                </td>
+                <td class="xar-normal">
+                    <xar:mlstring>New Line</xar:mlstring>
+                </td>
+                <td class="xar-normal">
+                    <input type="checkbox" name="new_linkinsert" value="1" class="xar-normal" />
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>

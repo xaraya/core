@@ -289,9 +289,6 @@ function base_menublock_display($blockinfo)
 */
 function base_menublock_modify($blockinfo)
 {
-    // TODO --> Send output to template.  Template somewhat complete.
-    global $xartheme;
-
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
@@ -304,52 +301,23 @@ function base_menublock_modify($blockinfo)
         $vars['style'] = 1;
     }
 
-    // Defaults
     if (empty($vars['marker'])) {
         $vars['marker'] = '[x]';
     }
 
-    // What to display
-    $output = '<tr><td class="xar-normal">'.xarML('Display Modules').':</td><td><input type="checkbox" value="1" name="displaymodules"';
-    if (!empty($vars['displaymodules'])) {
-        $output .= ' checked';
-    }
-
-    $output .= ' /></td></tr>';
-
-    // Marker
-    $output .= '<tr><td class="xar-normal">'.xarML('Marker').':</td><td><input type="text" name="marker" value='.$vars['marker'].' size="5"></td></tr>';
-
-    // Content
+    // Prepare output array
     $c=1;
-    $output .= "</table><table>";
-    $output .= "<tr><td valign=\"top\" class=\"xar-title\">".xarML('Menu Content')
-    .":</td></tr><tr><td><table border=\"1\"><tr><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
-    .xarML('Title')."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
-    .xarML('URL')."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
-    .xarML('Description')."&nbsp;</b><span class=\"xar-sub\"><b>(".xarML('Optional').")</b></span></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
-    .xarML('Delete')."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>".xarML('Child')."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>".xarML('Insert Blank After')."</b></td></tr>";
     if (!empty($vars['content'])) {
         $contentlines = explode("LINESPLIT", $vars['content']);
+		$vars['contentlines'] = array();
         foreach ($contentlines as $contentline) {
             $link = explode('|', $contentline);
-            $output .= "<tr><td valign=\"top\"><input type=\"text\" name=\"linkname[$c]\" size=\"30\" maxlength=\"255\" value=\"" . xarVarPrepForDisplay($link[1]) . "\" class=\"xar-normal\"></td><td valign=\"top\"><input type=\"text\" name=\"linkurl[$c]\" size=\"30\" maxlength=\"255\" value=\"" . xarVarPrepForDisplay($link[0]) . "\" class=\"xar-normal\"></td><td valign=\"top\"><input type=\"text\" name=\"linkdesc[$c]\" size=\"30\" maxlength=\"255\" value=\"" . xarVarPrepForDisplay($link[2]) . "\" class=\"xar-normal\" /></td><td valign=\"top\"><input type=\"checkbox\" name=\"linkdelete[$c]\" value=\"1\" class=\"xar-normal\"></td><td valign=\"top\">";
-
-            if (empty($link[3])){
-                $output .= "<input type=\"checkbox\" name=\"linkchild[$c]\" value=\"1\" class=\"xar-normal\" /></td>";
-            } else {
-                $output .= "<input type=\"checkbox\" name=\"linkchild[$c]\" value=\"1\" class=\"xar-normal\" checked /></td>";
-            }
-            $output .= "<td valign=\"top\"><input type=\"checkbox\" name=\"linkinsert[$c]\" value=\"1\" class=\"xar-normal\" /></td></tr>\n";
+            $vars['contentlines'][] = $link; 
             $c++;
         }
     }
-
-    $output .= "<tr><td><input type=\"text\" name=\"new_linkname\" size=\"30\" maxlength=\"255\" class=\"xar-normal\" /></td><td><input type=\"text\" name=\"new_linkurl\" size=\"30\" maxlength=\"255\" class=\"xar-normal\" /></td><td class=\"xar-normal\"><input type=\"text\" name=\"new_linkdesc\" size=\"30\" maxlength=\"255\" class=\"xar-normal\" /></td><td class=\"xar-normal\">".xarML('New Line')."</td><td class=\"xar-normal\"><input type=\"checkbox\" name=\"new_linkinsert\" value=\"1\" class=\"xar-normal\" /></td></tr>\n";
-    $output .= '</table></td></tr>';
-
-    return $output;
-
+    
+    return xarTplBlock('base', 'menuAdmin', $vars);
 }
 
 /**
