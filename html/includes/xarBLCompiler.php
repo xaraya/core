@@ -109,7 +109,6 @@ class xarTpl__ParserError extends SystemException
  *
  * @package blocklayout
  * @access private
- * @todo should this be a singleton?
  */
 class xarTpl__Compiler extends xarTpl__CompilerError
 {
@@ -122,6 +121,16 @@ class xarTpl__Compiler extends xarTpl__CompilerError
         $this->codeGenerator =& new xarTpl__CodeGenerator();
     }
 
+    function &instance() 
+    {
+        static $instance = NULL;
+        if(!isset($instance)) {
+            return new xarTpl__Compiler();
+        }
+        return $instance;
+        
+    }
+    
     function compileFile($fileName)
     {
         // The @ makes the code better to handle, leave it.
@@ -341,7 +350,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $this->tagNamesStack = array();  $this->tagIds = array(); $this->tagRootSeen=false;
 
         // Initializing the containers for template variables and the doctree
-        $this->tplVars =& new xarTpl__TemplateVariables();
+        $this->tplVars =& xarTpl__TemplateVariables::instance();
         $documentTree = xarTpl__NodesFactory::createDocumentNode($this);
 
         // Parse the document tree
@@ -1149,6 +1158,16 @@ class xarTpl__TemplateVariables
         $this->tplVars['version'] = '1.0';
         $this->tplVars['encoding'] = 'us-ascii';
         $this->tplVars['type'] = 'module';
+    }
+    
+    function &instance() 
+    {
+        static $instance = NULL;
+        if(!isset($instance)) {
+            return new xarTpl__TemplateVariables();
+        }
+        return $instance;
+            
     }
 
     function get($name)
