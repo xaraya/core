@@ -1279,7 +1279,7 @@ class xarPrivileges extends xarMasks
         return false;
     }
 
-    function getsubprivileges($pid)
+    function getChildren($pid)
     {
         $subprivileges = array();
         $ind = 0;
