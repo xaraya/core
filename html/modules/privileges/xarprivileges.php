@@ -270,9 +270,7 @@ class xarMasks
 					array_splice($perms1,$key);
 					array_push($perms1,$perm2);
 					$isimplied = true;
-					break;
 				}
-			if (!$isimplied) array_push($perms1, $perm2);
 			}
 		}
 
@@ -394,13 +392,13 @@ class xarMasks
 		}
 // trump them against the accumulated privileges from higher levels
 		$irreducibleset = $this->trump($irreducibleset,$roleprivileges);
-
+//		foreach($irreducibleset as $test) echo $test->getName();
 // check each privilege from the irreducible set
 		$pass = false;
 		foreach ($irreducibleset as $chiave) {
 
 // check the mask
-//			echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask);
+//			echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask,false);
 			if ($chiave->implies($mask,false)) {
 
 // found a privilege that admits: return the privilege
@@ -1538,7 +1536,8 @@ function drawindent() {
 
 		$implies = $xRealm && $xModule && $xComponent && $xInstance && $xLevel;
 
-//		echo "Comparing: " . $comparing . $this->getName() . " implies " . $mask->getName() . ": " . $implies;
+//if ($this->getName() == "NoAccess")
+//echo "Comparing: " . $comparing . $this->getName() . " implies " . $mask->getName() . ": " . $implies;
 
 		return $implies;
 	}

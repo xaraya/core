@@ -44,7 +44,7 @@ function base_htmlblock_info()
 function base_htmlblock_display($blockinfo)
 {
     // Security
-	if(!xarSecurityCheck('ViewBlocks','All','HTMLBlock','$blockinfo[title]::')) return;
+	if(!xarSecurityCheck('ViewBlocks','All','Block','$blockinfo[title]::')) return;
 
     // Get variables from content block
     $vars = unserialize($blockinfo['content']);
