@@ -1,5 +1,5 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>View Instances</xar:mlstring></h2><br />
+<div class="xar-mod-body"><h2><xar:mlstring>View Instances</xar:mlstring></h2>
 <div style="margin: auto;">
 <table border="1" width="100%" cellpadding="2" cellspacing="0">
     <tr align="center">
@@ -28,20 +28,20 @@
             <a href="&xar-modurl-blocks-admin-modify_group;&amp;gid=#$loop:item['group_id']#">#$loop:item['group_name']#</a>
         </td>
         <td>
-            <xar:var name="$loop:item['title']" />
+            #$loop:item['title']#
         </td>
         <td>
-            <a href="&xar-modurl-blocks-admin-view_types;"><xar:var name="$loop:item['module']" />\<xar:var name="$loop:item['type']" /></a>
+            <a href="&xar-modurl-blocks-admin-view_types;">#$loop:item['module']# \ #$loop:item['type']#</a>
         </td>
         <td>
             <xar:if condition="$loop:item['template'] ne NULL">
-                <xar:var name="$loop:item['template']" />
+                #$loop:item['template']#
             <xar:else />
-                <xar:var name="$loop:item['group_template']" />
+                #$loop:item['group_template']#
             </xar:if>&nbsp;
         </td>
         <td>
-            <xar:var name="$loop:item['state_desc']" />
+            #$loop:item['state_desc']#
         </td>
         <td>
             <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item['id']#"><xar:mlstring>Edit</xar:mlstring></a> |

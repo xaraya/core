@@ -44,7 +44,8 @@ function blocks_admin_new_instance()
     }
 
     return array('block_types'  => $block_types,
-                 'block_groups' => $block_groups);
+                 'block_groups' => $block_groups,
+                 'createlabel'  => xarML('Create Instance'));
 }
 
 ?>

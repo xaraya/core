@@ -1,10 +1,10 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>New Group</xar:mlstring></h2><br />
+<div class="xar-mod-body"><h2><xar:mlstring>New Group</xar:mlstring></h2>
 <div style="margin: auto;">
 <form method="post" action="&xar-modurl-blocks-admin-create_group;">
     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
     
-    <table border="0" width="300">
+    <table border="0" cellpadding="2" cellspacing="0">
         <tr>
             <td>
                 <label for="group_name"><xar:mlstring>Name</xar:mlstring></label>:
@@ -23,8 +23,8 @@
         </tr>
         <tr>
             <td colspan="2" align="center"><br />
-                    <input type="submit" value="OK" align="middle" />
-                    <input type="submit" name="cancel" value="Cancel" align="middle" />
+                    <input type="submit" value="#$createlabel#" align="middle" />&nbsp;&nbsp;&nbsp;
+                    <input type="submit" name="cancel" value="#$cancellabel#" align="middle" />
             </td>
         </tr>
     </table>

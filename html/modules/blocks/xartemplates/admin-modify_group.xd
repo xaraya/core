@@ -1,15 +1,16 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Modify Group</xar:mlstring></h2><br />
+<div class="xar-mod-body"><h2><xar:mlstring>Modify Group</xar:mlstring></h2>
 <div style="margin: auto;">
-
 <script language="javascript" type="text/javascript" src="modules/blocks/xarincludes/blocks.js"></script>
-
-<div align="center">
+<script type="text/javascript">
+warningmsg = '#xarML('You must select the block to move.')#';
+</script>
+<div style="margin: auto;">
 <form method="post" action="&xar-modurl-blocks-admin-update_group;" onsubmit="saveBlockOrder(this);">
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="gid" id="gid" value="#$group['id']#" />
     <input type="hidden" name="group_instance_order" id="group_instance_order" value="" />
-    <table border="0" width="300">
+    <table border="0" width="300" cellpadding="2" cellspacing="0">
         <tr>
             <td>
                 <label for="group_name"><xar:mlstring>Name</xar:mlstring></label>:
@@ -20,7 +21,7 @@
         </tr>
         <tr>
             <td>
-                <xar:mlstring>Members</xar:mlstring>:
+                <label for="group_instances"><xar:mlstring>Members</xar:mlstring></label>:
             </td>
             <td>
                 <table>
@@ -33,12 +34,12 @@
                             </select>
                         </td>
                         <td>
-                            <input type="image" src="#$up_arrow_src#" onclick="return moveBlock(this.form, true)" />
+                            <input type="image" src="#$up_arrow_src#" onclick="return moveBlock(this.form, true)" title="#$moveuplabel#" />
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <input type="image" src="#$down_arrow_src#" onclick="return moveBlock(this.form, false)" />
+                            <input type="image" src="#$down_arrow_src#" onclick="return moveBlock(this.form, false)" title="#$movedownlabel#" />
                         </td>
                     </tr>
                 </table>
@@ -54,7 +55,7 @@
         </tr>
         <tr>
             <td colspan="2" align="center"><br />
-                    <input type="submit" value="OK" align="middle" />
+                    <input type="submit" value="#$updatelabel#" align="middle" />
             </td>
         </tr>
     </table>

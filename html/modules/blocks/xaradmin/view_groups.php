@@ -30,7 +30,7 @@ function blocks_admin_view_groups()
         $group = xarModAPIFunc('blocks', 
                                'admin', 
                                'groupgetinfo', array('blockGroupId' => $group['id']));
-
+        $group['membercount'] = count($group['instances']);
         $block_groups[] = $group;
 
         $result->MoveNext();

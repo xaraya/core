@@ -1,33 +1,33 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Modify Instance</xar:mlstring></h2><br />
+<div class="xar-mod-body"><h2><xar:mlstring>Modify Instance</xar:mlstring></h2>
 <div style="margin: auto;">
 <form method="post" action="&xar-modurl-blocks-admin-update_instance;">
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="bid" id="bid" value="#$bid#" />
     
-    <table border="0" width="75%">
+    <table border="0" cellpadding="2" cellspacing="0">
         <tr>
-            <td align="left">
+            <td>
                 <label for="block_title"><xar:mlstring>Title</xar:mlstring></label>:
             </td>
-            <td align="left">
+            <td>
                 <input type="text" name="block_title" id="block_title" value="#$instance['title']#" length="40" maxlength="255" style="width:150px;" />
             </td>
         </tr>
         <tr>
-            <td align="left">
+            <td>
                 <xar:mlstring>Type</xar:mlstring>:
             </td>
-            <td align="left">
+            <td>
                 #$instance['module']#\#$instance['type']#
             </td>
         </tr>
         <tr>
-            <td align="left">
-                <xar:mlstring>Group</xar:mlstring>:
+            <td>
+                <label for="block_group"><xar:mlstring>Group</xar:mlstring></label>:
             </td>
-            <td align="left">
-                <select name="block_group" id="block_group" style="width:150px;">
+            <td>
+                <select name="block_group" id="block_group">
                     <xar:loop name="$block_groups">
                         <xar:if condition="$instance['group_id'] eq $loop:item['id']">
                             <option value="#$loop:item['id']#" selected="selected">
@@ -41,19 +41,19 @@
             </td>
         </tr>
         <tr>
-            <td align="left">
+            <td>
                 <label for="block_template"><xar:mlstring>Template (optional)</xar:mlstring></label>:
             </td>
-            <td align="left">
+            <td>
                 <input type="text" name="block_template" id="block_template" value="#$instance['template']#" length="40" maxlength="255" style="width:150px;" />
             </td>
         </tr>
         <xar:if condition="isset($block_settings['form_refresh']) and $block_settings['form_refresh'] eq true">
          <tr>
-            <td align="left">
+            <td>
                 <xar:mlstring>Refresh</xar:mlstring>:
             </td>
-            <td align="left">
+            <td>
                 <select name="block_refresh" id="block_refresh" style="width:150px;">
                     <xar:loop name="$refresh_times">
                         <xar:if condition="$instance['refresh'] eq $loop:item['id']">
@@ -70,11 +70,11 @@
 		</xar:if>
         <tr>
         <tr>
-            <td align="left">
-                <xar:mlstring>Default state</xar:mlstring>:
+            <td>
+                <label for="block_state"><xar:mlstring>Default state</xar:mlstring></label>:
             </td>
-            <td align="left">
-                <select name="block_state" id="block_state" style="width:150px;">
+            <td>
+                <select name="block_state" id="block_state">
                     <xar:if condition="$instance['state'] eq 0">
                         <option value="0" selected="selected">
                     <xar:else />
@@ -92,7 +92,7 @@
         </tr>
         <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
         <tr>
-            <td colspan="2" align="left">
+            <td colspan="2">
                 <label for="block_content"><xar:mlstring>Content</xar:mlstring></label>:
             </td>
         </tr>
@@ -105,7 +105,7 @@
         #$extra_fields#
         <tr>
             <td colspan="2" align="center"><br />
-                    <input type="submit" value="OK" align="middle" />
+                    <input type="submit" value="#$updatelabel#" align="middle" />
             </td>
         </tr>
     </table>

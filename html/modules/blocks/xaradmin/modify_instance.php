@@ -108,13 +108,14 @@ function blocks_admin_modify_instance()
         $result->MoveNext();
     }
 
-    return array('authid'        => xarSecGenAuthKey(),
-                 'bid'          => $bid,
-                 'block_groups' => $block_groups,
-                 'instance'     => $instance,
-                 'extra_fields' => $extra,
-                 'block_settings'=> $block_edit,
-                 'refresh_times' => $refreshtimes);
+    return array('authid'         => xarSecGenAuthKey(),
+                 'bid'            => $bid,
+                 'block_groups'   => $block_groups,
+                 'instance'       => $instance,
+                 'extra_fields'   => $extra,
+                 'block_settings' => $block_edit,
+                 'refresh_times'  => $refreshtimes,
+                 'updatelabel'    => xarML('Update'));
 }
 
 ?>

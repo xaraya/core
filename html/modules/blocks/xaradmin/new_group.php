@@ -8,7 +8,8 @@ function blocks_admin_new_group()
 // Security Check
 	if(!xarSecurityCheck('AddBlock',0,'Instance')) return;
 
-    return array();
+    return array('createlabel' => xarML('Create Group'),
+                 'cancellabel' => xarML('Cancel'));
 }
 
 ?>

@@ -22,7 +22,10 @@ function blocks_admin_modify_group()
                  'instance_count'   => count($group['instances']),
                  'up_arrow_src'     => $up_arrow_src,
                  'down_arrow_src'   => $down_arrow_src,
-                 'authid'           => xarSecGenAuthKey());
+                 'authid'           => xarSecGenAuthKey(),
+                 'moveuplabel'      => xarML('Move selected instance up'),
+                 'movedownlabel'    => xarML('Move selected instance down'),
+                 'updatelabel'      => xarML('Update'));
 
 }
 

@@ -1,5 +1,5 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>New Instance</xar:mlstring></h2><br />
+<div class="xar-mod-body"><h2><xar:mlstring>New Instance</xar:mlstring></h2>
 <div style="margin: auto;">
 <form method="post" action="&xar-modurl-blocks-admin-create_instance;">
     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
@@ -15,13 +15,13 @@
         </tr>
         <tr>
             <td>
-                <xar:mlstring>Type</xar:mlstring>:
+                <label for="block_type"><xar:mlstring>Type</xar:mlstring></label>:
             </td>
             <td>
-                <select name="block_type" id="block_type" style="width:150px;">
+                <select name="block_type" id="block_type">
                     <xar:loop name="$block_types">
                         <option value="#$loop:item['id']#">
-                            #$loop:item['module']#\#$loop:item['type']#
+                            #$loop:item['module']# \ #$loop:item['type']#
                         </option>
                     </xar:loop>                
                 </select>
@@ -29,10 +29,10 @@
         </tr>
         <tr>
             <td>
-                <xar:mlstring>Group</xar:mlstring>:
+                <label for="block_group"><xar:mlstring>Group</xar:mlstring></label>:
             </td>
             <td>
-                <select name="block_group" id="block_group" style="width:150px;">
+                <select name="block_group" id="block_group">
                     <xar:loop name="$block_groups">
                         <option value="#$loop:item['id']#">
                             #$loop:item['name']#
@@ -51,10 +51,10 @@
         </tr>
         <tr>
             <td>
-                <xar:mlstring>Default state</xar:mlstring>:
+                <label for="block_state"><xar:mlstring>Default state</xar:mlstring></label>:
             </td>
             <td>
-                <select name="block_state" id="block_state" style="width:150px;">
+                <select name="block_state" id="block_state">
                     <option value="0"><xar:mlstring>Hidden</xar:mlstring></option>
                     <option value="1"><xar:mlstring>Minimized</xar:mlstring></option>
                     <option value="2" selected="selected"><xar:mlstring>Maximized</xar:mlstring></option>
@@ -63,7 +63,7 @@
         </tr>
         <tr>
             <td colspan="2" align="center"><br />
-                    <input type="submit" value="OK" align="middle" />
+                    <input type="submit" value="#$createlabel#" align="middle" />
             </td>
         </tr>
     </table>

@@ -22,7 +22,8 @@ function blocks_admin_delete_instance()
                                    'getinfo', array('blockId' => $bid));
 
         return array('instance' => $blockinfo,
-                     'authid' => xarSecGenAuthKey());
+                     'authid' => xarSecGenAuthKey(),
+                     'deletelabel' => xarML('Delete'));
     }
 
     // Confirm Auth Key

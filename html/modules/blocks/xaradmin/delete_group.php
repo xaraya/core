@@ -23,7 +23,8 @@ function blocks_admin_delete_group()
         if ($group == NULL) return;
 
         return array('group' => $group,
-                     'authid' => xarSecGenAuthKey());
+                     'authid' => xarSecGenAuthKey(),
+                     'deletelabel' => xarML('Delete'));
     }
 
     // Confirm Auth Key
