@@ -188,13 +188,13 @@ function xarBlock_renderGroup($groupName)
 }
 
 /**
- * Renders a block group
+ * Renders an individual block
  *
- * @author Paul Rosania, Marco Canini <m.canini@libero.it>
+ * @author John Cox
  * @access protected
- * @param string groupName the name of the block group
+ * @param string blockInfo contains id of block to render
  * @return string
- * @raise BAD_PARAM, DATABASE_ERROR
+ * @raise EMPTY_PARAM
  */
 function xarBlock_renderBlock($blockInfo)
 {
