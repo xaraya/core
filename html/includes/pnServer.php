@@ -183,9 +183,9 @@ function pnRequestGetVar($name, $allowOnlyMethod = NULL)
         // Then check in $_GET
         } elseif (isset($_GET[$name])) {
             $value = $_GET[$name];
-        // Try to fallback to global $HTTP_GET_VARIABLES for older php versions
-        } elseif (isset($GLOBALS['HTTP_GET_VARIABLES'][$name])) {
-            $value = $GLOBALS['HTTP_GET_VARIABLES'][$name];
+        // Try to fallback to global $HTTP_GET_VARS for older php versions
+        } elseif (isset($GLOBALS['HTTP_GET_VARS'][$name])) {
+            $value = $GLOBALS['HTTP_GET_VARS'][$name];
         // Nothing found, return void
         } else {
             return;
@@ -195,15 +195,16 @@ function pnRequestGetVar($name, $allowOnlyMethod = NULL)
         // First check in $_POST
         if (isset($_POST[$name])) {
             $value = $_POST[$name];
-        // Try to fallback to global $HTTP_POST_VARIABLES for older php versions
-        } elseif (isset($GLOBALS['HTTP_POST_VARIABLES'][$name])) {
-            $value = $GLOBALS['HTTP_POST_VARIABLES'][$name];
+        // Try to fallback to global $HTTP_POST_VARS for older php versions
+        } elseif (isset($GLOBALS['HTTP_POST_VARS'][$name])) {
+            $value = $GLOBALS['HTTP_POST_VARS'][$name];
         // Nothing found, return void
         } else {
             return;
         }
         $method = $allowOnlyMethod;
     } else {
+// TODO: change order (POST normally overrides GET)
         // Short URLs variables override GET and POST variables
         if ($pnRequest_allowShortURLs && isset($pnRequest_shortURLVariables[$name])) {
             $value = $pnRequest_shortURLVariables[$name];
@@ -216,13 +217,13 @@ function pnRequestGetVar($name, $allowOnlyMethod = NULL)
         } elseif (isset($_POST[$name])) {
             $value = $_POST[$name];
             $method = 'POST';
-        // Try to fallback to global $HTTP_GET_VARIABLES for older php versions
-        } elseif (isset($GLOBALS['HTTP_GET_VARIABLES'][$name])) {
-            $value = $GLOBALS['HTTP_GET_VARIABLES'][$name];
+        // Try to fallback to global $HTTP_GET_VARS for older php versions
+        } elseif (isset($GLOBALS['HTTP_GET_VARS'][$name])) {
+            $value = $GLOBALS['HTTP_GET_VARS'][$name];
             $method = 'GET';
-        // Try to fallback to global $HTTP_POST_VARIABLES for older php versions
-        } elseif (isset($GLOBALS['HTTP_POST_VARIABLES'][$name])) {
-            $value = $GLOBALS['HTTP_POST_VARIABLES'][$name];
+        // Try to fallback to global $HTTP_POST_VARS for older php versions
+        } elseif (isset($GLOBALS['HTTP_POST_VARS'][$name])) {
+            $value = $GLOBALS['HTTP_POST_VARS'][$name];
             $method = 'POST';
         // Nothing found, return void
         } else {
