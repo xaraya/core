@@ -64,10 +64,10 @@
                                     <xar:mlstring>Install that module first, then try this installation again.</xar:mlstring>
                                 </a>
                             <xar:elseif condition="is_numeric($modInfo)" />
-                                <a href="http://www.xaraya.com/index.php/release/#$modInfo['regid']#.html">
+                                <a href="http://www.xaraya.com/index.php/release/#$modInfo#.html">
                                     <xar:ml>
                                         <xar:mlstring>Missing a module with ID #(1). Click this line to get information.</xar:mlstring>
-                                        <xar:mlvar>#$modInfo['regid']#</xar:mlvar>
+                                        <xar:mlvar>#$modInfo#</xar:mlvar>
                                     </xar:ml>
                                     <br />
                                     <xar:mlstring>Install that module first, then try this installation again.</xar:mlstring>
