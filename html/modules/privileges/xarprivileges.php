@@ -1279,6 +1279,46 @@ class xarPrivileges extends xarMasks
     }
 
 /**
+ * findPrivilegesForModule: finds the privileges assigned to a module
+ *
+ * Retrieves an of privilege objects from the Privileges repository
+ * This is a convenience class for module developers
+ *
+ * @author  Richard Cave<rcave@xaraya.com>
+ * @access  public
+ * @param   string
+ * @return  privilege object
+ * @throws  none
+ * @todo    none
+*/
+    function findPrivilegesForModule($module)
+    {
+        $privileges = array();
+        $query = "SELECT *
+                  FROM $this->privilegestable
+                  WHERE xar_module = '$module'";
+        //Execute the query, bail if an exception was thrown
+        $result = $this->dbconn->Execute($query);
+        if (!$result) return;
+        for (; !$result->EOF; $result->MoveNext()) {
+            list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
+            $pargs = array('pid'=>$pid,
+                           'name'=>$name,
+                           'realm'=>$realm,
+                           'module'=>$module,
+                           'component'=>$component,
+                           'instance'=>$instance,
+                           'level'=>$level,
+                           'description'=>$description,
+                           'parentid'=>0);
+            $privileges[] = new xarPrivilege($pargs);
+        }
+        // Close result set
+        $result->Close();
+        return $privileges;
+    }
+
+/**
  * makeMember: makes a privilege a child of another privilege
  *
  * Creates an entry in the privmembers table

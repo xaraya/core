@@ -242,6 +242,27 @@ function xarAssignPrivilege($privilege,$role)
 }
 
 /**
+ * xarRemovePrivileges: removes the privileges registered by a module from the database
+ *
+ * This is a wrapper function
+ *
+ * @author  Richard Cave <rcave@xaraya.com>
+ * @access  public
+ * @param   string module
+ * @return  bool
+ */
+function xarRemovePrivileges($module)
+{
+    $privileges = new xarPrivileges();
+
+    // Get the pids for the module
+    $modulePrivileges = $privileges->findPrivilegesForModule($module);
+    foreach ($modulePrivileges as $modulePrivilege) {
+        $modulePrivilege->remove();
+    }
+}
+
+/**
  * xarDefineInstance: creates an instance definition in the database
  *
  * This is a wrapper function
