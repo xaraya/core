@@ -154,7 +154,7 @@ class xarLogger_simple extends xarLogger
         $this->_isFileWriteable = false;
         $this->_fileheader      = '';
         
-        $this->_filename        = realpath($conf['fileName']);
+        $this->_filename        = $conf['fileName'];
         $this->_ensureFileWriteable();
 
         /* register the destructor */
@@ -242,12 +242,20 @@ class xarLogger_simple extends xarLogger
     */
     function _ensureFileWriteable() 
     {
-        if (!file_exists($this->_filename) && 
-            !is_writable(dirname($this->_filename))) {
-               die ('Logger file path given is not writeable: '.$this->_filename);
+        if (!file_exists($this->_filename)) {
+            if (!is_writable(dirname($this->_filename))) {
+               xarCore_die ('Logger file path given is not writeable: '.$this->_filename);
+            }
+            else 
+            {
+                if (!touch($this->_filename))
+                    xarCore_die ('Unable to create logger file: '.$this->_filename);
+            }
         }
         
         $this->_isFileWriteable = true;
+        $this->_filename = realpath($this->_filename);
+        
         return true;
     }
 
@@ -264,7 +272,7 @@ class xarLogger_simple extends xarLogger
         }   // else {
 
         if (!$this->_isFileWriteable) {
-            die('File is not writeable');
+            xarCore_die('File is not writeable');
         }
         
         if (!file_exists($this->_filename) || filesize($this->_filename) > $this->_maxFileSize) {
@@ -276,7 +284,7 @@ class xarLogger_simple extends xarLogger
         }
         
         if (($this->_fp = fopen($this->_filename, $option)) == false) {
-            die('unable to open log file '.$this->_filename);
+            xarCore_die('unable to open log file '.$this->_filename);
             return false;
         }  // else {
 
