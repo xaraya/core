@@ -48,7 +48,7 @@
 				<xar:mlstring>System create password?</xar:mlstring>
 			</td>
 			<td>
-				<input type="checkbox" name="createpassword" id="createpassword" value="1" tabindex="2" />
+				<input type="checkbox" name="createpassword" id="createpassword" value="1" />
 			</td>
 		</tr> -->
 		<tr>
@@ -56,7 +56,7 @@
 				<xar:mlstring>Password</xar:mlstring>
 			</td>
 			<td>
-				<input type="password" name="pass1" id="pass1" value="#$values['pass1']#"" size="25" maxlength="40" tabindex="4" />
+				<input type="password" name="pass1" id="pass1" value="#$values['pass1']#"" size="25" maxlength="40" />
 				<xar:if condition="!empty($invalid['pass1'])">
 					<span style="color: red">#$invalid['pass1']#</span>
 				</xar:if>
@@ -67,7 +67,7 @@
 				<xar:mlstring>Retype Password</xar:mlstring>
 			</td>
 			<td>
-				<input type="password" name="pass2" id="pass2" value="#$values['pass2']#"" size="25" maxlength="40" tabindex="5" />
+				<input type="password" name="pass2" id="pass2" value="#$values['pass2']#"" size="25" maxlength="40" />
 				<xar:if condition="!empty($invalid['pass2'])">
 					<span style="color: red">#$invalid['pass2']#</span>
 				</xar:if>
