@@ -38,7 +38,7 @@ function saveBlockOrder(f) {
     <table border="0" width="300">
         <tr>
             <td>
-                <xar:mlstring>Name</xar:mlstring>:
+                <label for="group_name"><xar:mlstring>Name</xar:mlstring></label>:
             </td>
             <td>
                 <input type="text" name="group_name" id="group_name" value="#$group['name']#" maxlength="255" style="width:150px;" />
@@ -72,7 +72,7 @@ function saveBlockOrder(f) {
         </tr>
         <tr>
             <td>
-                <xar:mlstring>Template</xar:mlstring>:
+                <label for="group_template"><xar:mlstring>Template</xar:mlstring></label>:
             </td>
             <td>
                 <input type="text" name="group_template" id="group_template" value="#$group['template']#" length="40" maxlength="255" style="width:150px;" />

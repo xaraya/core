@@ -8,7 +8,7 @@
     <table border="0" width="75%">
         <tr>
             <td align="left">
-                <xar:mlstring>Title</xar:mlstring>:
+                <label for="block_title"><xar:mlstring>Title</xar:mlstring></label>:
             </td>
             <td align="left">
                 <input type="text" name="block_title" id="block_title" value="#$instance['title']#" length="40" maxlength="255" style="width:150px;" />
@@ -42,7 +42,7 @@
         </tr>
         <tr>
             <td align="left">
-                <xar:mlstring>Template (optional)</xar:mlstring>:
+                <label for="block_template"><xar:mlstring>Template (optional)</xar:mlstring></label>:
             </td>
             <td align="left">
                 <input type="text" name="block_template" id="block_template" value="#$instance['template']#" length="40" maxlength="255" style="width:150px;" />
@@ -93,7 +93,7 @@
         <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
         <tr>
             <td colspan="2" align="left">
-                <xar:mlstring>Content</xar:mlstring>:
+                <label for="block_content"><xar:mlstring>Content</xar:mlstring></label>:
             </td>
         </tr>
         <tr>
