@@ -175,8 +175,10 @@ function modules_admin_list()
 
         // common listitems
         $listrows[$i]['coremod']        = $coremod;
-        $listrows[$i]['displayname']    = $mod['name'];
+        $listrows[$i]['name']           = $mod['name'];
+        $listrows[$i]['displayname']    = $mod['displayname'];
         $listrows[$i]['version']        = $mod['version'];
+        $listrows[$i]['regid']          = $thismodid;
         $listrows[$i]['edit']           = xarML('On/Off');
         $listrows[$i]['prop']           = xarML('Modify');
 
