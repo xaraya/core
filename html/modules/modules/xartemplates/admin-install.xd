@@ -68,10 +68,7 @@
                 <br />
             <xar:else />
                 <input type="submit" name="command" id="command" value="#xarML('Install All')#" tabindex="9" />
-                <br />
             </xar:if>
-
-            <a href="#xarModURL('modules','admin','list')#">#xarML('Go back to the modules list.')#</a>
            </div>
         </form>
     </xar:if>
@@ -90,4 +87,6 @@
             </xar:if>
         </xar:loop>
     </xar:if>
+
+    <p><a href="#xarModURL('modules','admin','list')#"><xar:mlstring>Go back to the modules list</xar:mlstring></a></p>
 </div>
