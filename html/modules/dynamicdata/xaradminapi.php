@@ -1337,8 +1337,8 @@ function dynamicdata_adminapi_browse($args)
         return;
     }
 
-    // Security check - we require ADMIN rights here for now...
-	if(!xarSecurityCheck('AdminDynamicData')) return;
+    // Security check - we require OVERVIEW rights here for now...
+	if(!xarSecurityCheck('ViewDynamicData')) return;
 
     // Get arguments from argument array
     extract($args);
