@@ -37,8 +37,7 @@
             <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$roleid#">#$pname#</a>
 			</b> 
 			&nbsp;&nbsp;
-			<a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$roleid#"
-			 title="Test this User's Privileges"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>
+			<a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$roleid#" title="Test this User's Privileges"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>
         </td>
     </tr>
 	<xar:if condition="count($inherited) eq 0">
@@ -163,8 +162,7 @@
 				#$level#
 			</td>
 			<td align="right">
-				<a href="#$removeurl#&amp;privid=#$privid#"
-				title="Remove this Privilege assignment">				
+				<a href="#$removeurl#&amp;privid=#$privid#" title="Remove this Privilege assignment">				
 					Remove    
 				</a>
 			</td>
@@ -174,46 +172,44 @@
 </table>
 <br />
 
-<xar:if condition="$roleid gt 1">
-	<table border="0" width="100%">
-		<tr>
-			<th colspan="4" align="center">
-				<xar:mlstring>Assign a Privilege to </xar:mlstring>            
-				<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
-				<xar:else /><xar:mlstring>User</xar:mlstring>
-				</xar:if>
-				'#$pname#'
-			</th>
-		</tr>
-	</table>
+<table border="0" width="100%">
+	<tr>
+		<th colspan="4" align="center">
+			<xar:mlstring>Assign a Privilege to </xar:mlstring>            
+			<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
+			<xar:else /><xar:mlstring>User</xar:mlstring>
+			</xar:if>
+			'#$pname#'
+		</th>
+	</tr>
+</table>
 
-	<div align="center">
+<div align="center">
+	<br />
+	<form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
+
+		<table border="0" cellpadding="5">
+
+			<tr>
+				<td>
+					<xar:mlstring>Privilege</xar:mlstring>
+				</td>
+				<td>
+					<select name="privid" id="privid">
+						<xar:loop name="$allprivileges">
+							<option value="#$pid#">#$name#
+						</xar:loop>
+					</select>
+				</td>
+			</tr>
+		</table>			
+
 		<br />
-		<form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
-
-			<table border="0" cellpadding="5">
-
-				<tr>
-					<td>
-						<xar:mlstring>Privilege</xar:mlstring>
-					</td>
-					<td>
-						<select name="privid" id="privid">
-							<xar:loop name="$allprivileges">
-								<option value="#$pid#">#$name#
-							</xar:loop>
-						</select>
-					</td>
-				</tr>
-			</table>			
-
-			<br />
-			<input type="submit" value="Add" align="middle" tabindex="2" />
-			<input type="hidden" name="authid" id="authid" value="#$authid#" />
-			<input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
-		</form>
-	</div>
-</xar:if >
+		<input type="submit" value="Add" align="middle" tabindex="2" />
+		<input type="hidden" name="authid" id="authid" value="#$authid#" />
+		<input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
+	</form>
+</div>
 <table border="0" width="100%">
 	<tr>
 		<th align="center">
