@@ -7,7 +7,7 @@ function roles_admin_showusers()
 {
     // Get parameters
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
-    if (!xarVarFetch('startnum', 'str:1:', $startnum, 1, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('startnum', 'int:1:', $startnum, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('phase', 'str:1:', $phase, 'viewall', XARVAR_NOT_REQUIRED)) return;
     // Security Check
     if (!xarSecurityCheck('ReadRole')) return;
@@ -76,6 +76,7 @@ function roles_admin_showusers()
             'name' => $user->getName(),
             'uname' => $user->getUser(),
             'email' => $user->getEmail(),
+            'date_reg' => $user->getDateReg(),
             'frozen' => !xarSecurityCheck('EditRole',0,'Roles',$user->getName())
             );
     }

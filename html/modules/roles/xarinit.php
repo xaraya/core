@@ -77,10 +77,9 @@ function roles_init()
                 'size' => 100,
                 'null' => false,
                 'default' => ''),
-            'xar_date_reg' => array('type' => 'varchar',
-                'size' => 25,
-                'null' => false,
-                'default' => ''),
+            'xar_date_reg' => array('type'=>'datetime',
+                'null'=>false, 
+                'default'=>'0000-00-00 00:00:00'),
             'xar_valcode' => array('type' => 'varchar',
                 'size' => 35,
                 'null' => false,
@@ -174,7 +173,7 @@ function roles_activate()
 {
     // Set up an initial value for module variables.
     xarModSetVar('roles', 'welcomeemail', 'Your account is now active.  Thank you, and welcome to our community.');
-    xarModSetVar('roles', 'itemsperpage', 20);
+    xarModSetVar('roles', 'rolesperpage', 20);
     xarModSetVar('roles', 'showtacs', 0);
     xarModSetVar('roles', 'requirevalidation', 1);
     xarModSetVar('roles', 'defaultgroup', 'Users');

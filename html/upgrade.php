@@ -205,7 +205,7 @@ if (empty($step)) {
 
             case '0.903':  // this is how it's defined in modules/base/xarinit.php
             case '.9.0.3': // this is how it's defined in upgrade.php
-//                xarConfigSetVar('System.Core.VersionNum', '.9.0.4');
+                xarConfigSetVar('System.Core.VersionNum', '.9.0.4');
 
                 xarModSetVar('themes', 'SiteTitleSeparator', ' :: ');
                 xarModSetVar('themes', 'SiteTitleOrder', 'default');
@@ -235,6 +235,10 @@ if (empty($step)) {
                 }
 
             break;
+
+            case '.9.0.4': // this is how it's defined in upgrade.php
+                
+                // Note to self, roles datereg field needs to be changed to a date/time field.
 
     }
 

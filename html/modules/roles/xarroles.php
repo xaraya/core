@@ -364,7 +364,7 @@ class xarRoles {
         $unameprep = xarVarPrepForStore($uname);
         $emailprep = xarVarPrepForStore($email);
         $passprep = xarVarPrepForStore(md5($pass));
-        $dateregprep = xarVarPrepForStore($datereg);
+        $dateregprep = date('Y-m-d G:i:s');
         $valcodeprep = xarVarPrepForStore($valcode);
         $stateprep = xarVarPrepForStore($state);
         $authmoduleprep = xarVarPrepForStore($authmodule);

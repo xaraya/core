@@ -10,14 +10,17 @@
 	<xar:else />
 <table border="0" cellpadding="2" cellspacing="0" width="100%" class="xar-accent-outline">
 	<tr>
-		<th width="150">
+		<th width="100">
 			<xar:mlstring>Name</xar:mlstring>            
 		</th>
-		<th width="150">
+		<th width="100">
 			<xar:mlstring>User Name</xar:mlstring>            
 		</th>
 		<th width="200">
 			<xar:mlstring>Email</xar:mlstring>            
+		</th>
+		<th width="200">
+			<xar:mlstring>Date Registered</xar:mlstring>            
 		</th>
 		<th width="20">
 			<xar:mlstring>Delete</xar:mlstring>            
@@ -31,7 +34,7 @@
 	</tr>
 		<xar:loop name="$users">
 			<tr>
-				<td width="150">
+				<td width="100">
 					<xar:if condition="!$frozen">
 						<a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">				
 						#$name#
@@ -40,11 +43,14 @@
 						<b>#$name#</b>
 					</xar:if>
 				</td>
-				<td width="50">
+				<td width="100">
 					#$uname#
 				</td>
-				<td width="100">
+				<td width="200">
 					#$email#
+				</td>
+				<td width="200">
+					#$date_reg#
 				</td>
 				<td style="text-align: center">
 					<xar:if condition="!$frozen">
