@@ -60,30 +60,18 @@ function users_init()
                                                              'size'        => 64,
                                                              'null'        => false,
                                                              'default'     => '')));
-    $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
     $index = array('name'      => 'i_xar_users_1',
                    'fields'    => array('xar_uid'),
                    'unique'    => TRUE);
 
     $query = xarDBCreateIndex($tables['users'],$index);
 
-    $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
     $index = array(
     'name'      => 'i_xar_users_2',
     'fields'    => array('xar_name'),
@@ -92,15 +80,8 @@ function users_init()
 
     $query = xarDBCreateIndex($tables['users'],$index);
 
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // *_user_data
     $query = xarDBCreateTable($tables['user_data'],
@@ -118,15 +99,8 @@ function users_init()
                                    'xar_uda_value'  => array('type'        => 'blob',
                                                             'size'        => 'medium',
                                                             'null'        => 'false')));
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // *_user_property
     $query = xarDBCreateTable($tables['user_property'],
@@ -148,29 +122,15 @@ function users_init()
                                    'xar_prop_validation' => array('type'        => 'varchar',
                                                                  'size'        => 255,
                                                                  'default'     => NULL)));
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     $query = xarDBCreateIndex($tables['user_property'],
                              array('name'   => 'i_xar_user_property_1',
                                    'fields' => array('xar_prop_label'),
                                    'unique' => 'true'));
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // Initialisation successful
     return true;
@@ -234,13 +194,10 @@ function users_delete()
     $xartable = xarDBGetTables();
 
     // Drop the table
-    $sql = "DROP TABLE $xartable[users]";
-    $dbconn->Execute($sql);
+    $query = "DROP TABLE $xartable[users]";
 
-    if ($dbconn->ErrorNo() != 0) {
-        xarSessionSetVar('errormsg', 'Deletion of user table failed');
-        return false;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // Delete any module variables
     xarModDelVar('users', 'tacs');

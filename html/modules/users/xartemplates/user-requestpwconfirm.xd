@@ -1,0 +1,9 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <xar:mlstring>Password Sent</xar:mlstring>            
+        </th>
+    </tr>
+</table>
+<br /><br />
+<xar:mlstring>Your new password has been sent to your email address of record.  You will want to change this new password once your login in.</xar:mlstring>
