@@ -445,7 +445,7 @@ class xarVarValidator_str extends xarVarValidator {
 class xarVarValidator_regexp extends xarVarValidator {
 
     function validate (&$convValue) {
-        if (!isset($this->parameters[0]) || trim($this->parameters[0]) != '') {
+        if (!isset($this->parameters[0]) || trim($this->parameters[0]) == '') {
                 $msg = 'There is no parameter to check against in Regexp validation';
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                 new SystemException($msg));
