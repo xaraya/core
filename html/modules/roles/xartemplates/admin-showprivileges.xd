@@ -30,14 +30,8 @@
 		<div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $roleid))#"><xar:mlstring>Users</xar:mlstring></a></div>	
 	</xar:if>
 </div>
-<div style="margin: auto;">
-<h3><xar:mlstring>Privileges of</xar:mlstring>&nbsp;
-			<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
-			<xar:else /><xar:mlstring>User</xar:mlstring>
-			</xar:if>
-            '#$pname#'
-        </h3>
-<p>
+<div style="border: 1px solid #ccc;  text-align: left; width: 100%; border-top : none; padding-left: 5px;">
+<br />
 <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$roleid#" title="Test this User's Privileges">
 	<img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" />
 </a>
@@ -45,9 +39,8 @@
 <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$roleid#" title="Test this User's Privileges">
 	<xar:mlstring>Test the privileges of</xar:mlstring>&nbsp;#$pname#
 </a>
-</p>
-<p><xar:mlstring>Privileges inherited by</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$roleid#">#$pname#</a>:
-</p>
+<br />
+<xar:mlstring>Privileges inherited by</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$roleid#">#$pname#</a>:
 <table border="0" width="100%" cellpadding="2" cellspacing="0" class="xar-accent-outline">
 		<tr>
 			<td colspan="7" align="right">

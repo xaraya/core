@@ -33,7 +33,7 @@ function roles_admin_testprivileges()
     if (!xarVarFetch('name', 'str:1', $name, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('test', 'str:1:35:', $test, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
 
-    echo $test;// Security Check
+    // Security Check
     if (!xarSecurityCheck('EditRole')) return;
 
     // Call the Roles class and get the role

@@ -28,12 +28,13 @@
 		<div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $uid))#"><xar:mlstring>Users</xar:mlstring></a></div>	
 	</xar:if>
 </div>
-<div style="margin: auto;">
-<p>
+<div style="border: 1px solid #ccc;  text-align: left; width: 100%; border-top : none; padding-left: 5px;">
+<br />
 <a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#" title="Show this User's Privileges"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
 &nbsp;
 <a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#"><xar:mlstring>Show the privileges of</xar:mlstring>&nbsp;#$pname#</a>
-</p>
+<br />
+<br />
 <xar:if condition="!empty($test)">
 <h3><xar:mlstring>Test Result</xar:mlstring>:
 				<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">'#$pname#'</a>
