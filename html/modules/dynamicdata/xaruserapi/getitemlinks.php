@@ -51,6 +51,11 @@ function dynamicdata_userapi_getitemlinks($args)
         }
     }
 
+    // if we didn't have a list of itemids, return all the items we found
+    if (empty($itemids)) {
+        $itemids = array_keys($items);
+    }
+
     foreach ($itemids as $itemid) {
         if (!empty($titlefield) && isset($items[$itemid][$titlefield])) {
             $label = $items[$itemid][$titlefield];
