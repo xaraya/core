@@ -11,7 +11,7 @@
     <property name="id">
       <id>45</id>
       <label>Id</label>
-      <type>21</type>
+      <type>itemid</type>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
@@ -21,7 +21,7 @@
     <property name="name">
       <id>46</id>
       <label>Name</label>
-      <type>2</type>
+      <type>textbox</type>
       <default>please enter your name...</default>
       <source>dynamic_data</source>
       <status>1</status>
@@ -31,7 +31,7 @@
     <property name="age">
       <id>47</id>
       <label>Age</label>
-      <type>15</type>
+      <type>integerbox</type>
       <default></default>
       <source>dynamic_data</source>
       <status>1</status>
@@ -41,7 +41,7 @@
     <property name="location">
       <id>48</id>
       <label>Location</label>
-      <type>12</type>
+      <type>image</type>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
@@ -51,7 +51,7 @@
     <property name="sex">
       <id>49</id>
       <label>Sex</label>
-      <type>34</type>
+      <type>radio</type>
       <default></default>
       <source>dynamic_data</source>
       <status>1</status>
@@ -61,7 +61,7 @@
     <property name="employment_status">
       <id>50</id>
       <label>Employment Status</label>
-      <type>6</type>
+      <type>dropdown</type>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
@@ -71,7 +71,7 @@
     <property name="avatar">
       <id>51</id>
       <label>Logo</label>
-      <type>35</type>
+      <type>imagelist</type>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>

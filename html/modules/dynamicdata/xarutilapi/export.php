@@ -44,6 +44,8 @@ function dynamicdata_utilapi_export($args)
     // get the list of properties for a Dynamic Property
     $property_properties = Dynamic_Property_Master::getProperties(array('objectid' => 2));
 
+    $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
+
     $xml = '';
 
     $xml .= '<object name="'.$myobject->name.'">'."\n";
@@ -65,7 +67,11 @@ function dynamicdata_utilapi_export($args)
         $xml .= '    <property name="'.$name.'">' . "\n";
         foreach (array_keys($property_properties) as $key) {
             if ($key != 'name' && isset($myobject->properties[$name]->$key)) {
-                $xml .= "      <$key>".xarVarPrepForDisplay($myobject->properties[$name]->$key)."</$key>\n";
+                if ($key == 'type') {
+                    $xml .= "      <$key>".xarVarPrepForDisplay($proptypes[$myobject->properties[$name]->$key]['name'])."</$key>\n";
+                } else {
+                    $xml .= "      <$key>".xarVarPrepForDisplay($myobject->properties[$name]->$key)."</$key>\n";
+                }
             }
         }
         $xml .= "    </property>\n";

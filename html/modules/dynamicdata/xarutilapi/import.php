@@ -18,6 +18,12 @@ function dynamicdata_utilapi_import($args)
         return;
     }
 
+    $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
+    $name2id = array();
+    foreach ($proptypes as $propid => $proptype) {
+        $name2id[$proptype['name']] = $propid;
+    }
+
     $fp = @fopen($file, 'r');
     if (!$fp) {
         $msg = xarML('Unable to open import file');
@@ -113,6 +119,14 @@ function dynamicdata_utilapi_import($args)
                 }
                 // make sure we drop the property id, because it might already exist here
                 unset($property['id']);
+                // convert property type to numeric if necessary
+                if (!is_numeric($property['type'])) {
+                    if (isset($name2id[$property['type']])) {
+                        $property['type'] = $name2id[$property['type']];
+                    } else {
+                        $property['type'] = 1;
+                    }
+                }
                 $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
                                          $property);
                 if (!isset($prop_id)) {

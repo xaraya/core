@@ -38,6 +38,8 @@ function dynamicdata_util_export($args)
         return $data;
     }
 
+    $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
+
     $xml = '';
 
     // export object definition
@@ -61,7 +63,11 @@ function dynamicdata_util_export($args)
             $xml .= '    <property name="'.$name.'">' . "\n";
             foreach (array_keys($property_properties) as $key) {
                 if ($key != 'name' && isset($myobject->properties[$name]->$key)) {
-                    $xml .= "      <$key>".$myobject->properties[$name]->$key."</$key>\n";
+                    if ($key == 'type') {
+                        $xml .= "      <$key>".xarVarPrepForDisplay($proptypes[$myobject->properties[$name]->$key]['name'])."</$key>\n";
+                    } else {
+                        $xml .= "      <$key>".xarVarPrepForDisplay($myobject->properties[$name]->$key)."</$key>\n";
+                    }
                 }
             }
             $xml .= "    </property>\n";

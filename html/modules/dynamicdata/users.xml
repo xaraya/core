@@ -1,5 +1,5 @@
 <object name="users">
-  <objectid>20</objectid>
+  <objectid>4</objectid>
   <label>Users</label>
   <moduleid>27</moduleid>
   <itemtype>0</itemtype>
@@ -9,9 +9,9 @@
   <isalias>0</isalias>
   <properties>
     <property name="website">
-      <id>144</id>
+      <id>26</id>
       <label>Website</label>
-      <type>27</type>
+      <type>urlicon</type>
       <default>http://</default>
       <source>dynamic_data</source>
       <status>1</status>
@@ -19,9 +19,9 @@
       <validation>modules/roles/xarimages/urlicon.gif</validation>
     </property>
     <property name="timezone">
-      <id>145</id>
+      <id>27</id>
       <label>Timezone</label>
-      <type>32</type>
+      <type>timezone</type>
       <default>0</default>
       <source>dynamic_data</source>
       <status>2</status>
@@ -29,9 +29,9 @@
       <validation></validation>
     </property>
     <property name="avatar">
-      <id>146</id>
+      <id>28</id>
       <label>Avatar</label>
-      <type>35</type>
+      <type>imagelist</type>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
@@ -39,9 +39,9 @@
       <validation>{theme}/modules/roles/images</validation>
     </property>
     <property name="icq">
-      <id>147</id>
+      <id>29</id>
       <label>ICQ Number</label>
-      <type>28</type>
+      <type>icq</type>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
@@ -49,9 +49,9 @@
       <validation>modules/dynamicdata/xarimages/blank.gif</validation>
     </property>
     <property name="aim">
-      <id>148</id>
+      <id>30</id>
       <label>AIM Address</label>
-      <type>29</type>
+      <type>aim</type>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
@@ -59,9 +59,9 @@
       <validation>modules/dynamicdata/xarimages/icon_aim.gif</validation>
     </property>
     <property name="yim">
-      <id>149</id>
+      <id>31</id>
       <label>Yahoo Messenger</label>
-      <type>31</type>
+      <type>yahoo</type>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
@@ -69,9 +69,9 @@
       <validation>modules/dynamicdata/xarimages/icon_yahoo.gif</validation>
     </property>
     <property name="msnm">
-      <id>150</id>
+      <id>32</id>
       <label>MSN Messenger</label>
-      <type>30</type>
+      <type>msn</type>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
@@ -79,9 +79,9 @@
       <validation>modules/dynamicdata/xarimages/icon_msnm.gif</validation>
     </property>
     <property name="location">
-      <id>151</id>
+      <id>33</id>
       <label>Location</label>
-      <type>2</type>
+      <type>textbox</type>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
@@ -89,9 +89,9 @@
       <validation>0:100</validation>
     </property>
     <property name="occupation">
-      <id>152</id>
+      <id>34</id>
       <label>Occupation</label>
-      <type>2</type>
+      <type>textbox</type>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
@@ -99,9 +99,9 @@
       <validation>0:100</validation>
     </property>
     <property name="interests">
-      <id>153</id>
+      <id>35</id>
       <label>Interests</label>
-      <type>2</type>
+      <type>textbox</type>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
@@ -109,9 +109,9 @@
       <validation>0:150</validation>
     </property>
     <property name="signature">
-      <id>154</id>
+      <id>36</id>
       <label>Signature</label>
-      <type>4</type>
+      <type>textarea_medium</type>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
@@ -119,9 +119,9 @@
       <validation>0:254</validation>
     </property>
     <property name="extra_info">
-      <id>155</id>
+      <id>37</id>
       <label>Extra info</label>
-      <type>4</type>
+      <type>textarea_medium</type>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
