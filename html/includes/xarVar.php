@@ -1360,6 +1360,7 @@ function xarVarPrepHTMLDisplay__callback($matches)
  * Gets a variable, cleaning it up such that the text is
  * stored in a database exactly as expected. Can have as many parameters as desired.
  *
+ * @deprec 2004-02-18
  * @access public
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
@@ -1430,5 +1431,5 @@ function xarVarPrepForOS()
         return $args;
     }
 }
-
 ?>
+
