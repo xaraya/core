@@ -604,6 +604,10 @@ function xarExceptionRender($format)
                         $text .= '<br />';
                     }
                 }
+            } else {
+            // FIXME: this probably needs a bunch of other stuff
+               $thisexception = $exception['value'];
+               $thisexception->load($exception['exceptionId']);
             }
            $data['title'] = xarVarPrepForDisplay($thisexception->getTitle());
            $data['long'] = xarVarPrepForDisplay($thisexception->getLong());
