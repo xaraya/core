@@ -44,11 +44,11 @@
 </xar:if>
     <br />
 	<xar:if condition="xarThemeIsAvailable('print')">
-		[<a href="#xarServerGetCurrentURL(array('theme' => 'print'))#" title="Print View"><xar:mlstring>Print View</xar:mlstring></a>]
+		[<a href="#$printurl#" title="Print View"><xar:mlstring>Print View</xar:mlstring></a>]
 	</xar:if>
 	<xar:if condition="xarThemeIsAvailable('rss')">
-		<xar:if condition="($where eq 'articles') and ($what eq 'view')">
+		<xar:if condition="($where eq 'articles')">
 			<br />
-			[<a href="#xarServerGetCurrentURL(array('theme' => 'rss'))#" title="Syndication"><xar:mlstring>Syndication</xar:mlstring></a>]
+			[<a href="#$rssurl#" title="Syndication"><xar:mlstring>Syndication</xar:mlstring></a>]
 		</xar:if>
 	</xar:if>

@@ -93,7 +93,9 @@ function themes_metablock_display($blockinfo)
     $meta['longitude'] = $vars['longitude'];
     $meta['latitude'] = $vars['latitude'];
     // Active Page
-    $meta['activepage'] = preg_replace('/&[^amp;]/', '&amp;', xarServerGetCurrentURL());
+    //$meta['activepage'] = preg_replace('/&[^amp;]/', '&amp;', xarServerGetCurrentURL());
+    $meta['activepagerss'] = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'rss')));
+    $meta['activepageprint'] = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'print')));
 
     $meta['baseurl'] = xarServerGetBaseUrl();
     if (isset($vars['copyrightpage'])){

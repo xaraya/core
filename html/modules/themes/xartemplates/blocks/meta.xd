@@ -8,8 +8,8 @@
 		<meta name="DC.title" content="#xarModGetVar('themes', 'SiteName', 1)#" />
 	</xar:if>
 	<!-- Linking for Mozilla and related browser site tab -->
-	<link rel="alternate" type="application/rss+xml" title="RSS" href="#$activepage#&amp;theme=rss" />
-	<link rel="alternate" type="application/rss+xml" title="Print" href="#$activepage#&amp;theme=print" />
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="#$activepagerss#" />
+	<link rel="alternate" type="application/rss+xml" title="Print" href="#$activepageprint#" />
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="#$baseurl#var/rsd.xml" />
 	<link rel="pingback" href="&xar-baseurl;ws.php" />
 	<link rel="Top" href="#$baseurl#" />

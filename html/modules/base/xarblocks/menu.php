@@ -251,6 +251,10 @@ function base_menublock_display($blockinfo)
                     $showlogout = true;
                 }
 
+                //$meta['activepage'] = preg_replace('/&[^amp;]/', '&amp;', xarServerGetCurrentURL());
+                $rssurl = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'rss')));
+                $printurl = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'print')));
+
                 if (empty($blockinfo['template'])) {
                     $template = 'sidemenu';
                 } else {
@@ -267,7 +271,9 @@ function base_menublock_display($blockinfo)
                                                             'marker'           => $marker,
                                                             'showlogout'       => $showlogout,
                                                             'where'            => $thismodname,
-                                                            'what'             => $thisfuncname));
+                                                            'what'             => $thisfuncname,
+                                                            'printurl'         => $printurl,
+                                                            'rssurl'           => $rssurl));
                 // this should do for now
                 break;
     }
