@@ -35,7 +35,8 @@
 */
 include 'includes/xarCore.php';
 
-function xarWebservicesMain() {
+function xarWebservicesMain() 
+{
 
     // TODO: don't load the whole core
     xarCoreInit(XARCORE_SYSTEM_ALL);
