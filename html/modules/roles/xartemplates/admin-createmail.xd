@@ -30,31 +30,32 @@
 			</select>
              &nbsp;<xar:mlstring>in state</xar:mlstring> :
              <select name="state" id="state" size="1" tabindex="5">
-             	<option value="0"><xar:mlstring>All</xar:mlstring></option>		
+             	<option value="0"><xar:mlstring>All</xar:mlstring></option>
 		        <xar:if condition="$state eq 1">
 			        <option value="1" selected="selected"><xar:mlstring>Inactive</xar:mlstring></option>
 		        <xar:else />
 			        <option value="1"><xar:mlstring>Inactive</xar:mlstring></option>
-		        </xar:if>						
+		        </xar:if>
 		        <xar:if condition="$state eq 2">
 			        <option value="2" selected="selected"><xar:mlstring>Not Validated</xar:mlstring></option>
 		        <xar:else />
 			        <option value="2"><xar:mlstring>Not Validated</xar:mlstring></option>
-		        </xar:if>						
+		        </xar:if>
 		        <xar:if condition="$state eq 3">
 			        <option value="3" selected="selected"><xar:mlstring>Active</xar:mlstring></option>
 		        <xar:else />
 			        <option value="3"><xar:mlstring>Active</xar:mlstring></option>
-		        </xar:if>						
+		        </xar:if>
 		        <xar:if condition="$state eq 4">
 			        <option value="4" selected="selected"><xar:mlstring>Pending</xar:mlstring></option>
 		        <xar:else />
 			        <option value="4"><xar:mlstring>Pending</xar:mlstring></option>
-		        </xar:if>						
+		        </xar:if>
 	        </select>
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<input type="hidden" name="uid" id="uid" value="#$uid#" />
 		<input type="hidden" name="state" id="state" value="#$state#" />
+		<p><input type="checkbox" name="includesubgroups" value="1"><xar:mlstring>Include Subgroups</xar:mlstring></p>
 		<p><label for="subject"><xar:mlstring>Subject</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="subject" id="subject"></p>
 		<p><label for="message"><xar:mlstring>Message</xar:mlstring></label>:</p>
 		<p><textarea name="message" id="message" wrap="soft" rows="20" cols="50"></textarea></p>
