@@ -1398,7 +1398,8 @@ class xarTpl__ExpressionTransformer
         //  7.   :          => matches the colon
         //  8.   [0-9a-z_]+ => matches number,letter or underscore, one or more occurrences
         //  9.  )           => matches right brace
-        // 10.  {1,2}       => the whole previous subpattern may  appear min. 1 and max 2 times
+        // 10.  {0,2}       => the whole previous subpattern may  appear min. 0 and max 2 times
+        //                     0 is for a normal variable, 1 and 2 times is a 'special variable'
         // 11.  (?:         => start array key non-captured subpattern
         // 12.   \\.        => each array key is separated by a dot, escaped for preg_match and the
         //                     escaping '\' escaped for the double-quoted string
@@ -1406,7 +1407,7 @@ class xarTpl__ExpressionTransformer
         // 14.  )           => end array key subpattern
         // 15.  *           => match zero or more occurances of the array key subpattern
         // 16. )            => ends the current pattern
-        if (preg_match_all("/\\\$([a-z_][0-9a-z_]*(?::[0-9a-z_]+){1,2}(?:\\.[0-9a-z_]+)*)/i", $phpExpression, $matches)) {
+        if (preg_match_all("/\\\$([a-z_][0-9a-z_]*(?::[0-9a-z_]+){0,2}(?:\\.[0-9a-z_]+)*)/i", $phpExpression, $matches)) {
             // Get xarTpl__SpecialVariableNamesResolver instance but via transformBLExpression()
             for ($i = 0; $i < count($matches[0]); $i++) {
                 $resolvedName =& xarTpl__ExpressionTransformer::transformBLExpression($matches[1][$i]);
