@@ -175,7 +175,13 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                 $this->$item = $$item;
             }
         }
-
+// CHECKME: set the value to the itemid by default for childlist ?
+/*
+        if (!empty($this->objectid) && $this->style == 'childlist' &&
+            empty($value) && !empty($this->_itemid)) {
+            $value = $this->_itemid;
+        }
+*/
         $data = array();
         $data['name']      = $name;
         $data['id']        = $id;
@@ -238,6 +244,13 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                 $this->$item = $$item;
             }
         }
+// CHECKME: set the value to the itemid by default for childlist ?
+/*
+        if (!empty($this->objectid) && $this->style == 'childlist' &&
+            empty($value) && !empty($this->_itemid)) {
+            $value = $this->_itemid;
+        }
+*/
         $data = array();
         $data['style'] = $this->style;
         $data['value'] = $value;
@@ -289,6 +302,9 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                     $myobject =& Dynamic_Object_Master::getObjectList(array('objectid'  => $this->objectid,
                                                                             'fieldlist' => $this->fieldlist,
                                                                             'status'    => $status));
+                } else {
+                    // reset the list of item ids
+                    $myobject->itemids = array();
                 }
                 if (!empty($this->link) && !empty($value)) {
                     if (is_numeric($value)) {
@@ -298,7 +314,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                     }
                     $myobject->getItems(array('where' => $where));
                 } else {
-                    // initialize the items array
+                    // re-initialize the items array
                     $myobject->items = array();
                 }
                 break;
