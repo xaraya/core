@@ -535,7 +535,7 @@ function xarMLS_loadModuleTranslations($modName, $modOsDir, $modType)
 
     return false;
 }
-*/
+
 /**
  * Loads translations for the specified context
  *
