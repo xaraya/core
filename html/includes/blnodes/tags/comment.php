@@ -14,8 +14,14 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
         parent::constructor($parser, $tagName, $parentTagName, $attributes);
         // Completely skip the contents of the tag
         // FIXME: This is a temporary solution for bug #3111
-        $res = $parser->windTo(XAR_TOKEN_TAG_START . XAR_TOKEN_ENDTAG_START. XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM .'comment'. XAR_TOKEN_TAG_END);
+        $endMarker = XAR_TOKEN_TAG_START . XAR_TOKEN_ENDTAG_START. XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM .'comment'. XAR_TOKEN_TAG_END;
+        $res = $parser->windTo($endMarker);
+        if(isset($res)) {
+            // We found it, eat that
+            $parser->getNextToken(strlen($endMarker)-1);
+        }
     }
+    
     function renderBeginTag()
     {
         // Clear the children array
