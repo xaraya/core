@@ -215,6 +215,37 @@ class xarRoles {
         }
     }
 
+    function ufindRole($name)
+    {
+        // retrieve the object's data from the repository
+        // set up and execute the query
+        $query = "SELECT *
+                  FROM $this->rolestable
+                  WHERE xar_uname = '$name'";
+        // Execute the query, bail if an exception was thrown
+        $result = $this->dbconn->Execute($query);
+        if (!$result) return;
+
+        if (!$result->EOF) {
+            // set the data in an array
+            list($uid, $name, $type, $parentid, $uname, $email, $pass,
+                $date_reg, $val_code, $state, $auth_module) = $result->fields;
+            $pargs = array('uid' => $uid,
+                'name' => $name,
+                'type' => $type,
+                'parentid' => $parentid,
+                'uname' => $uname,
+                'email' => $email,
+                'pass' => $pass,
+                'date_reg' => $date_reg,
+                'val_code' => $val_code,
+                'state' => $state,
+                'auth_module' => $auth_module);
+            // create and return the role object
+            return new xarRole($pargs);
+        }
+    }
+
     /**
      * makeMemberByName: makes a role a child of a group
      *

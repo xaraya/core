@@ -73,11 +73,11 @@ function xarBlock_render($blockInfo)
     }
 */
 
-    if (!xarModAPIFunc('blocks', 
-                       'admin', 
+    if (!xarModAPIFunc('blocks',
+                       'admin',
                        'load', array('modName' => $modName,
                                      'blockName' => $blockType))) return;
-        
+
     $displayFuncName = "{$modName}_{$blockType}block_display";
 
     // fetch complete blockinfo array
@@ -163,11 +163,11 @@ function xarBlock_renderGroup($groupName)
         $blockInfo = $result->GetRowAssoc(false);
         $blockInfo['last_update'] = $result->UnixTimeStamp($blockInfo['last_update']);
 
-	if (!empty($blockInfo['inst_bl_template'])) {
-	    $blockInfo['_bl_template'] = $blockInfo['inst_bl_template'];
-	} else {
-	    $blockInfo['_bl_template'] = $blockInfo['bgroups_bl_template'];
-	}	
+    if (!empty($blockInfo['inst_bl_template'])) {
+        $blockInfo['_bl_template'] = $blockInfo['inst_bl_template'];
+    } else {
+        $blockInfo['_bl_template'] = $blockInfo['bgroups_bl_template'];
+    }
 
         $output .= xarBlock_render($blockInfo);
 
@@ -204,8 +204,8 @@ function xarBlock_renderBlock($blockInfo)
         return;
     }
 
-    $blockInfo = xarModAPIFunc('blocks', 
-                               'admin', 
+    $blockInfo = xarModAPIFunc('blocks',
+                               'admin',
                                'getInfo', array('blockId' => $blockID));
 
     $output = xarBlock_render($blockInfo);

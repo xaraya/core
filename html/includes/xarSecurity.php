@@ -332,6 +332,12 @@ function xarFindRole($name)
     return $roles->findRole($name);
 }
 
+function xarUFindRole($name)
+{
+    $roles = new xarRoles();
+    return $roles->ufindRole($name);
+}
+
 /* xarReturnPrivilege: stores a privilege from an external wizard in the repository.
  *
  * This is a wrapper function
