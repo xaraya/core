@@ -43,17 +43,27 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
 
     function translate($string, $type = 0)
     {
-        if (!isset($this->transEntries[$string]) && $type = 1) {
-            return $string;
+        if (!isset($this->transEntries[$string])) {
+            if ($type == 1) {
+                return $string;
+            }
+            else {
+                return "";
+            }
         }
         $ind = $this->transEntries[$string];
         return $this->trans[$ind]['translation'];
     }
 
-    function translateByKey($key)
+    function translateByKey($key, $type = 0)
     {
-        if (!isset($this->transKeyEntries[$key]) && $type = 1) {
-            return $key;
+        if (!isset($this->transKeyEntries[$key])) {
+            if ($type == 1) {
+                return $string;
+            }
+            else {
+                return "";
+            }
         }
         $ind = $this->transKeyEntries[$key];
         return $this->trans[$ind]['translation'];

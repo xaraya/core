@@ -1541,14 +1541,28 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
     {
         if (isset($GLOBALS['xarML_PHPBackend_entries'][$string]))
             return $GLOBALS['xarML_PHPBackend_entries'][$string];
-        elseif ($type == 1) return $string;
+        else {
+            if ($type == 1) {
+                return $string;
+            }
+            else {
+                return "";
+            }
+        }
     }
 
     function translateByKey($key, $type = 0)
     {
         if (isset($GLOBALS['xarML_PHPBackend_keyEntries'][$key]))
             return $GLOBALS['xarML_PHPBackend_keyEntries'][$key];
-        elseif ($type == 1) return $key;
+        else {
+            if ($type == 1) {
+                return $key;
+            }
+            else {
+                return "";
+            }
+        }
     }
 
     function clear()
