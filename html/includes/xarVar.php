@@ -692,7 +692,7 @@ function xarVarPrepHTMLDisplay()
                     $allowedHTML[] = "|<(/?$k)\s*/?>|i";
                     break;
                 case 2:
-                    $allowedHTML[] = "|<(/?$k(\s+.*?)?)>|i";
+                    $allowedHTML[] = "|<(/?$k(\s+.*?)?)/?>|i";
                     break;
             }
         }
