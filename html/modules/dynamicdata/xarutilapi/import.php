@@ -32,6 +32,11 @@ function dynamicdata_utilapi_import($args)
     $prefix = xarDBGetSystemTablePrefix();
     $prefix .= '_';
 
+    $specialchars = array('&gt;' => '>',
+                          '&lt;' => '<',
+                          '&quot;' => '"',
+                          '&amp;' => '&');
+
     if (!empty($file)) {
         $fp = @fopen($file, 'r');
         if (!$fp) {
@@ -77,7 +82,7 @@ function dynamicdata_utilapi_import($args)
                     fclose($fp);
                     return;
                 }
-                $object[$key] = $value;
+                $object[$key] = strtr($value,$specialchars);
             } elseif (preg_match('#<config>#',$line)) {
                 if (isset($object['config'])) {
                     $msg = xarML('Duplicate definition for #(1) key #(2) on line #(3)','object','config',$count);
@@ -139,7 +144,7 @@ function dynamicdata_utilapi_import($args)
                     fclose($fp);
                     return;
                 }
-                $config[$key] = $value;
+                $config[$key] = strtr($value,$specialchars);
             } elseif (preg_match('#</config>#',$line)) {
                 $object['config'] = serialize($config);
                 $config = array();
@@ -194,7 +199,7 @@ function dynamicdata_utilapi_import($args)
                     fclose($fp);
                     return;
                 }
-                $property[$key] = $value;
+                $property[$key] = strtr($value,$specialchars);
             } elseif (preg_match('#</properties>#',$line)) {
                 $what = 'object';
             } elseif (preg_match('#<items>#',$line)) {
@@ -259,7 +264,7 @@ function dynamicdata_utilapi_import($args)
                     fclose($fp);
                     return;
                 }
-                $item[$key] = $value;
+                $item[$key] = strtr($value,$specialchars);
                 $closetag = 'N/A';
             } elseif (preg_match('#<([^/>]+)>(.*)#',$line,$matches)) {
                 // multi-line entries *are* relevant here
@@ -272,7 +277,7 @@ function dynamicdata_utilapi_import($args)
                     fclose($fp);
                     return;
                 }
-                $item[$key] = $value;
+                $item[$key] = strtr($value,$specialchars);
                 $closetag = $key;
             } elseif (preg_match("#(.*)</$closetag>#",$line,$matches)) {
                 // multi-line entries *are* relevant here
@@ -284,7 +289,7 @@ function dynamicdata_utilapi_import($args)
                     fclose($fp);
                     return;
                 }
-                $item[$closetag] .= $value;
+                $item[$closetag] .= strtr($value,$specialchars);
                 $closetag = 'N/A';
             } elseif ($closetag != 'N/A') {
                 // multi-line entries *are* relevant here
@@ -295,7 +300,7 @@ function dynamicdata_utilapi_import($args)
                     fclose($fp);
                     return;
                 }
-                $item[$closetag] .= $line;
+                $item[$closetag] .= strtr($line,$specialchars);
             } elseif (preg_match('#</items>#',$line)) {
                 $what = 'object';
             } elseif (preg_match('#</object>#',$line)) {
