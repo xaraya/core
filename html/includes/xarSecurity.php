@@ -581,8 +581,11 @@ function xarSecConfirmAuthKey($authIdVarName = 'authid')
         return true;
     }
     // Not found, assume invalid
-        $msg = xarML('Invalid authorization key for modifying item');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('The operation cannot be completed.') . "\n\n";
+        $msg .= xarML('Possible reasons:');
+        $msg .= "\n1. " . xarML("You clicked on the browser's back button and reattempted an operation that may not be repeated.");
+        $msg .= "\n2. " . xarML('Your browser does not have cookies enabled.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'Forbidden operation',
                        new SystemException($msg));
         return;
 }

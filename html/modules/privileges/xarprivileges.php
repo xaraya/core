@@ -30,6 +30,7 @@ define('XARDBG_WINNOW', 0);
 define('XARDBG_TEST', 0);
 define('XARDBG_TESTDENY', 0);
 define('XARDBG_MASK', 'ViewThemes');
+define('XAR_ENABLE_WINNOW', 1);
 
 class xarMasks
 {
@@ -253,36 +254,39 @@ class xarMasks
         if ((($privs1 == array()) || ($privs1 == '')) &&
             (($privs2 == array()) || ($privs2 == ''))) return array();
 
-        $privs1 = array_merge($privs1,$privs2);
-        $privs2 = array();
-        foreach ($privs1 as $key1 => $priv1) {
-            $matched = false;
-            foreach ($privs2 as $key2 => $priv2) {
-                if(XARDBG_WINNOW) {
-                    $w1 = $priv1->matchesexactly($priv2) ? "<font color='green'>Yes</font>" : "<font color='red'>No</font>";
-                    $w2 = $priv2->matchesexactly($priv1) ? "<font color='green'>Yes</font>"  : "<font color='red'>No</font>";
-                    echo "Winnowing: ";
-                    echo $priv1->getName(). " implies " . $priv2->getName() . ": " . $w1 . "<BR />";
-                    echo $priv2->getName(). " implies " . $priv1->getName() . ": " . $w2 . "<BR /><BR />";
-                }
-                if ($priv1->matchesexactly($priv2)) {
-                    $privs3 = $privs2;
-                    $notmoved = true;
-                    foreach ($privs3 as $priv3) if($priv3->matchesexactly($priv1)) $notmoved = false;
-                    if ($notmoved) $privs2[$key2] = $priv1;
-                    else if (!$priv1->matchesexactly($priv2)) array_splice($privs2,$key2);
-                    $matched = true;
-                }
-                elseif ($priv2->matchesexactly($priv1) || $priv1->matchesexactly($priv2)) {
-                    $matched = true;
-                    break;
-                }
-            }
-            if(!$matched) $privs2[] = $priv1;
+        if (!XAR_ENABLE_WINNOW) {
+            return array_merge($privs1,$privs2);
         }
-
-// done
-        return $privs2;
+        else {
+            $privs1 = array_merge($privs1,$privs2);
+            $privs2 = array();
+            foreach ($privs1 as $key1 => $priv1) {
+                $matched = false;
+                foreach ($privs2 as $key2 => $priv2) {
+                    if(XARDBG_WINNOW) {
+                        $w1 = $priv1->matchesexactly($priv2) ? "<font color='green'>Yes</font>" : "<font color='red'>No</font>";
+                        $w2 = $priv2->matchesexactly($priv1) ? "<font color='green'>Yes</font>"  : "<font color='red'>No</font>";
+                        echo "Winnowing: ";
+                        echo $priv1->getName(). " implies " . $priv2->getName() . ": " . $w1 . "<BR />";
+                        echo $priv2->getName(). " implies " . $priv1->getName() . ": " . $w2 . "<BR /><BR />";
+                    }
+                    if ($priv1->matchesexactly($priv2)) {
+                        $privs3 = $privs2;
+                        $notmoved = true;
+                        foreach ($privs3 as $priv3) if($priv3->matchesexactly($priv1)) $notmoved = false;
+                        if ($notmoved) $privs2[$key2] = $priv1;
+                        else if (!$priv1->matchesexactly($priv2)) array_splice($privs2,$key2);
+                        $matched = true;
+                    }
+                    elseif ($priv2->matchesexactly($priv1) || $priv1->matchesexactly($priv2)) {
+                        $matched = true;
+                        break;
+                    }
+                }
+                if(!$matched) $privs2[] = $priv1;
+            }
+            return $privs2;
+        }
     }
 
 /**
