@@ -25,6 +25,11 @@ define('XARVAR_NOT_REQUIRED', 64);
 define('XARVAR_DONT_SET',     128);
 define('XARVAR_DONT_REUSE',   256);
 
+define('XARVAR_PREP_FOR_NOTHING', 0);
+define('XARVAR_PREP_FOR_DISPLAY', 1);
+define('XARVAR_PREP_FOR_HTML', 2);
+define('XARVAR_PREP_FOR_STORE', 3);
+
 /**
  * Initialise the variable handling options
  *
@@ -90,6 +95,12 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
  * By default $flag is XARVAR_GET_OR_POST which means tha xarVarFetch will lookup both GET and POST parameters and
  * that if the variable is not present or doesn't validate correctly an exception will be raised.
  *
+ * The $prep flag will prepare $value by passing it to one of the following:
+ *   XARVAR_PREP_FOR_NOTHING:    no prep (default)
+ *   XARVAR_PREP_FOR_DISPLAY:    xarVarPrepForDisplay($value)
+ *   XARVAR_PREP_FOR_HTML:       xarVarPrepHTMLDisplay($value)
+ *   XARVAR_PREP_FOR_STORE:      xarVarPrepForStore($value)
+ *
  * @author Marco Canini
  * @access public
  * @param name string the variable name
@@ -97,11 +108,11 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
  * @param value mixed contains the converted value of fetched variable
  * @param defaultValue mixed the default value
  * @param flags integer bitmask which modify the behaviour of function
- * @param prep will prep the var with xarVarPrepForDisplay (1) or xarVarPrepHTMLDisplay(2)
+ * @param prep will prep the value with xarVarPrepForDisplay, xarVarPrepHTMLDisplay, or xarVarPrepForStore
  * @return mixed
  * @raise BAD_PARAM
  */
-function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST, $prep = NULL)
+function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST, $prep = XARVAR_PREP_FOR_NOTHING)
 {
     /*
      nuncanada: XARVAR_NOT_REQUIRED is useless in the logic used here, just put the
@@ -125,10 +136,21 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
         $value = xarRequestGetVar($name, $allowOnlyMethod);
     }
 
-    if ($prep == 1){
-        $value = xarVarPrepForDisplay($value);
-    } elseif ($prep == 2){
-        $value = xarVarPrepHTMLDisplay($value);
+    // Check prep of $value
+    if ($prep != XARVAR_PREP_FOR_NOTHING) {
+        switch ($prep) {
+            case XARVAR_PREP_FOR_DISPLAY:
+                $value = xarVarPrepForDisplay($value);
+                break;
+            case XARVAR_PREP_FOR_HTML:
+                $value = xarVarPrepHTMLDisplay($value);
+                break;
+            case XARVAR_PREP_FOR_STORE:
+                $value = xarVarPrepForStore($value);
+                break;
+            default:
+                break;
+        }
     }
 
     $result = xarVarValidate($validation, $value);
