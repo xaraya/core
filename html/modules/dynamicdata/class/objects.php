@@ -25,8 +25,8 @@ require_once 'modules/dynamicdata/class/datastores.php';
 class Dynamic_Object_Master
 {
     var $objectid = null;
-    var $name;
-    var $label;
+    var $name = null;
+    var $label = null;
     var $moduleid = null;
     var $itemtype = null;
 
@@ -41,8 +41,17 @@ class Dynamic_Object_Master
     var $fieldlist;
     var $status = null;
 
+    // optional layout inside the templates
     var $layout = 'default';
+    // optional sub-template, e.g. user-objectview-[template].xd (defaults to the object name)
     var $template = '';
+    // optional module where the object templates reside (defaults to 'dynamicdata')
+    var $tplmodule = 'dynamicdata';
+
+    // optional module for use in xarModURL() (defaults to the object module)
+    var $urlmodule = '';
+    // optional view function for use in xarModURL() (defaults to 'view')
+    var $viewfunc = 'view';
 
     // primary key is item id
     var $primary = null;
@@ -522,15 +531,21 @@ class Dynamic_Object_Master
      * @param $args['objectid'] id of the object you're looking for, or
      * @param $args['moduleid'] module id of the object to retrieve +
      * @param $args['itemtype'] item type of the object to retrieve
-     * @param $args['classname'] optional classname (e.g. <module>_Dynamic_Object_List)
+     * @param $args['classname'] optional classname (e.g. <module>_Dynamic_Object[_List])
      * @returns object
      * @return the requested object definition
      */
     function &getObjectList($args)
     {
         $classname = 'Dynamic_Object_List';
-        if (!empty($args['classname']) && class_exists($args['classname'])) {
-            $classname = $args['classname'];
+        if (!empty($args['classname'])) {
+            if (class_exists($args['classname'] . '_List')) {
+                // this is a generic classname for the object, list and interface
+                $classname = $args['classname'] . '_List';
+            } elseif (class_exists($args['classname'])) {
+                // this is a specific classname for the list
+                $classname = $args['classname'];
+            }
 /*
         // TODO: automatic sub-classing per module (and itemtype) ?
         } elseif (!empty($args['moduleid'])) {
@@ -540,6 +555,47 @@ class Dynamic_Object_Master
                 $classname = "{$modName}_Dynamic_Object_List";
                 if (!class_exists($classname))
                     $classname = 'Dynamic_Object_List';
+            }
+*/
+        }
+        // here we can use our own classes to retrieve this
+        $object = new $classname($args);
+        return $object;
+    }
+
+    /**
+     * Class method to retrieve a particular object interface definition, with sub-classing
+     * (= the same as creating a new Dynamic Object Interface)
+     *
+     * @param $args['objectid'] id of the object you're looking for, or
+     * @param $args['moduleid'] module id of the object to retrieve +
+     * @param $args['itemtype'] item type of the object to retrieve
+     * @param $args['classname'] optional classname (e.g. <module>_Dynamic_Object[_Interface])
+     * @returns object
+     * @return the requested object definition
+     */
+    function &getObjectInterface($args)
+    {
+        require_once 'modules/dynamicdata/class/interface.php';
+
+        $classname = 'Dynamic_Object_Interface';
+        if (!empty($args['classname'])) {
+            if (class_exists($args['classname'] . '_Interface')) {
+                // this is a generic classname for the object, list and interface
+                $classname = $args['classname'] . '_Interface';
+            } elseif (class_exists($args['classname'])) {
+                // this is a specific classname for the interface
+                $classname = $args['classname'];
+            }
+/*
+        // TODO: automatic sub-classing per module (and itemtype) ?
+        } elseif (!empty($args['moduleid'])) {
+            $modInfo = xarModGetInfo($args['moduleid']);
+            $modName = strtolower($modInfo['name']);
+            if ($modName != 'dynamicdata') {
+                $classname = "{$modName}_Dynamic_Object_Interface";
+                if (!class_exists($classname))
+                    $classname = 'Dynamic_Object_Interface';
             }
 */
         }
@@ -858,6 +914,12 @@ class Dynamic_Object extends Dynamic_Object_Master
         if (empty($args['template'])) {
             $args['template'] = $this->template;
         }
+        if (empty($args['tplmodule'])) {
+            $args['tplmodule'] = $this->tplmodule;
+        }
+        if (empty($args['viewfunc'])) {
+            $args['viewfunc'] = $this->viewfunc;
+        }
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
         }
@@ -877,6 +939,11 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
 
         // pass some extra template variables for use in BL tags, API calls etc.
+        if (empty($this->name)) {
+           $args['objectname'] = null;
+        } else {
+           $args['objectname'] = $this->name;
+        }
         $args['moduleid'] = $this->moduleid;
         $modinfo = xarModGetInfo($this->moduleid);
         $args['modname'] = $modinfo['name'];
@@ -897,7 +964,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             $args['catid'] = null;
         }
 
-        return xarTplModule('dynamicdata','admin','objectform',
+        return xarTplModule($args['tplmodule'],'admin','objectform',
                             $args,
                             $args['template']);
     }
@@ -913,6 +980,12 @@ class Dynamic_Object extends Dynamic_Object_Master
         if (empty($args['template'])) {
             $args['template'] = $this->template;
         }
+        if (empty($args['tplmodule'])) {
+            $args['tplmodule'] = $this->tplmodule;
+        }
+        if (empty($args['viewfunc'])) {
+            $args['viewfunc'] = $this->viewfunc;
+        }
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
         }
@@ -932,6 +1005,11 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
 
         // pass some extra template variables for use in BL tags, API calls etc.
+        if (empty($this->name)) {
+           $args['objectname'] = null;
+        } else {
+           $args['objectname'] = $this->name;
+        }
         $args['moduleid'] = $this->moduleid;
         $modinfo = xarModGetInfo($this->moduleid);
         $args['modname'] = $modinfo['name'];
@@ -952,7 +1030,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             $args['catid'] = null;
         }
 
-        return xarTplModule('dynamicdata','user','objectdisplay',
+        return xarTplModule($args['tplmodule'],'user','objectdisplay',
                             $args,
                             $args['template']);
     }
@@ -1248,6 +1326,11 @@ class Dynamic_Object_List extends Dynamic_Object_Master
     var $startstore = null; // the data store we should start with (for sort)
 
     var $items;             // the result array of itemid => (property name => value)
+
+    // optional URL style for use in xarModURL() (defaults to itemtype=...&...)
+    var $urlstyle = 'itemtype'; // TODO: table or object, or wrapper for all, or all in template, or...
+    // optional display function for use in xarModURL() (defaults to 'display')
+    var $linkfunc = 'display';
 
     /**
      * Inherits from Dynamic_Object_Master and sets the requested item ids, sort, where, ...
@@ -1572,6 +1655,12 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['template'])) {
             $args['template'] = $this->template;
         }
+        if (empty($args['tplmodule'])) {
+            $args['tplmodule'] = $this->tplmodule;
+        }
+        if (empty($args['viewfunc'])) {
+            $args['viewfunc'] = $this->viewfunc;
+        }
 
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
@@ -1591,7 +1680,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
         // add link to display the item
         if (empty($args['linkfunc'])) {
-            $args['linkfunc'] = 'display';
+            $args['linkfunc'] = $this->linkfunc;
         }
         if (empty($args['linklabel'])) {
             $args['linklabel'] = xarML('Display');
@@ -1608,14 +1697,14 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
         // override for viewing dynamic objects
         if ($modname == 'dynamicdata' && $this->itemtype == 0 && empty($this->table)) {
-            $viewtype = 'admin';
-            $viewfunc = 'view';
+            $linktype = 'admin';
+            $linkfunc = 'view';
             // Don't show link to view items that don't belong to the DD module
             // Set to 0 when interested in viewing them anyway...
             $dummy_mode = 1;
         } else {
-            $viewtype = 'user';
-            $viewfunc = 'display';
+            $linktype = 'user';
+            $linkfunc = $args['linkfunc'];
             $dummy_mode = 0;
         }
 
@@ -1631,9 +1720,21 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         } else {
             $table = $this->table;
         }
+        if (empty($this->name)) {
+           $args['objectname'] = null;
+        } else {
+           $args['objectname'] = $this->name;
+        }
         $args['modname'] = $modname;
         $args['itemtype'] = $itemtype;
         $args['links'] = array();
+        if (empty($args['urlmodule'])) {
+            if (!empty($this->urlmodule)) {
+                $args['urlmodule'] = $this->urlmodule;
+            } else {
+                $args['urlmodule'] = $modname;
+            }
+        }
         foreach (array_keys($this->items) as $itemid) {
     // TODO: improve this + SECURITY !!!
             $options = array();
@@ -1648,20 +1749,20 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                                        'ojoin'  => '');
                 } else {
                     $options[] = array('otitle' => xarML('View'),
-                                       'olink'  => xarModURL($modname,$viewtype,$viewfunc,
+                                       'olink'  => xarModURL($args['urlmodule'],$linktype,$linkfunc,
                                                    array('itemtype'     => $itemtype,
                                                          'table'        => $table,
                                                          $args['param'] => $itemid)),
                                        'ojoin'  => '');
                 }
                 $options[] = array('otitle' => xarML('Edit'),
-                                   'olink'  => xarModURL($modname,'admin','modify',
+                                   'olink'  => xarModURL($args['urlmodule'],'admin','modify',
                                                array('itemtype'     => $itemtype,
                                                      'table'        => $table,
                                                      $args['param'] => $itemid)),
                                    'ojoin'  => '|');
                 $options[] = array('otitle' => xarML('Delete'),
-                                   'olink'  => xarModURL($modname,'admin','delete',
+                                   'olink'  => xarModURL($args['urlmodule'],'admin','delete',
                                                array('itemtype'     => $itemtype,
                                                      'table'        => $table,
                                                      $args['param'] => $itemid)),
@@ -1673,14 +1774,14 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                                        'ojoin'  => '');
                 } else {
                     $options[] = array('otitle' => xarML('View'),
-                                       'olink'  => xarModURL($modname,$viewtype,$viewfunc,
+                                       'olink'  => xarModURL($args['urlmodule'],$linktype,$linkfunc,
                                                    array('itemtype'     => $itemtype,
                                                          'table'        => $table,
                                                          $args['param'] => $itemid)),
                                        'ojoin'  => '');
                 }
                 $options[] = array('otitle' => xarML('Edit'),
-                                   'olink'  => xarModURL($modname,'admin','modify',
+                                   'olink'  => xarModURL($args['urlmodule'],'admin','modify',
                                                array('itemtype'     => $itemtype,
                                                      'table'        => $table,
                                                      $args['param'] => $itemid)),
@@ -1692,7 +1793,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                                        'ojoin'  => '');
                 } else {
                     $options[] = array('otitle' => xarML('View'),
-                                       'olink'  => xarModURL($modname,$viewtype,$viewfunc,
+                                       'olink'  => xarModURL($args['urlmodule'],$linktype,$linkfunc,
                                                    array('itemtype'     => $itemtype,
                                                          'table'        => $table,
                                                          $args['param'] => $itemid)),
@@ -1722,7 +1823,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (isset($args['newlink'])) {
         // TODO: improve this + SECURITY !!!
         } elseif (xarSecurityCheck('AddDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':All')) {
-            $args['newlink'] = xarModURL($modname,'admin','new',
+            $args['newlink'] = xarModURL($args['urlmodule'],'admin','new',
                                          array('itemtype' => $itemtype,
                                                'table'    => $table));
         } else {
@@ -1733,7 +1834,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
              $args['nexturl'],
              $args['sorturl']) = $this->getPager();
 
-        return xarTplModule('dynamicdata','admin','objectlist',
+        return xarTplModule($args['tplmodule'],'admin','objectlist',
                             $args,
                             $args['template']);
     }
@@ -1745,6 +1846,12 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         }
         if (empty($args['template'])) {
             $args['template'] = $this->template;
+        }
+        if (empty($args['tplmodule'])) {
+            $args['tplmodule'] = $this->tplmodule;
+        }
+        if (empty($args['viewfunc'])) {
+            $args['viewfunc'] = $this->viewfunc;
         }
 
         if (empty($args['fieldlist'])) {
@@ -1765,7 +1872,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
         // add link to display the item
         if (empty($args['linkfunc'])) {
-            $args['linkfunc'] = 'display';
+            $args['linkfunc'] = $this->linkfunc;
         }
         if (empty($args['linklabel'])) {
             $args['linklabel'] = xarML('Display');
@@ -1791,16 +1898,28 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         } else {
             $table = $this->table;
         }
+        if (empty($this->name)) {
+           $args['objectname'] = null;
+        } else {
+           $args['objectname'] = $this->name;
+        }
         $args['modname'] = $modname;
         $args['itemtype'] = $itemtype;
         $args['links'] = array();
+        if (empty($args['urlmodule'])) {
+            if (!empty($this->urlmodule)) {
+                $args['urlmodule'] = $this->urlmodule;
+            } else {
+                $args['urlmodule'] = $modname;
+            }
+        }
         foreach (array_keys($this->items) as $itemid) {
             if (!empty($this->isgrouped)) {
                 $args['links'][$itemid] = array();
                 continue;
             }
             $args['links'][$itemid]['display'] =  array('otitle' => $args['linklabel'],
-                                                        'olink'  => xarModURL($modname,'user',$args['linkfunc'],
+                                                        'olink'  => xarModURL($args['urlmodule'],'user',$args['linkfunc'],
                                                                               array('itemtype'     => $itemtype,
                                                                                     'table'        => $table,
                                                                                     $args['param'] => $itemid)),
@@ -1829,7 +1948,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
              $args['nexturl'],
              $args['sorturl']) = $this->getPager();
 
-        return xarTplModule('dynamicdata','user','objectview',
+        return xarTplModule($args['tplmodule'],'user','objectview',
                             $args,
                             $args['template']);
     }
@@ -1876,22 +1995,22 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
     // TODO: count items before calling getItems() if we want some better pager
 
-        // Get current URL
+        // Get current URL (this uses &amp; by default now)
         $currenturl = xarServerGetCurrentURL();
 
     // TODO: clean up generation of sort URL
 
         // get rid of current startnum and sort params
         $sorturl = $currenturl;
-        $sorturl = preg_replace('/&startnum=\d+/','',$sorturl);
-        $sorturl = preg_replace('/\?startnum=\d+&/','?',$sorturl);
+        $sorturl = preg_replace('/&amp;startnum=\d+/','',$sorturl);
+        $sorturl = preg_replace('/\?startnum=\d+&amp;/','?',$sorturl);
         $sorturl = preg_replace('/\?startnum=\d+$/','',$sorturl);
-        $sorturl = preg_replace('/&sort=\w+/','',$sorturl);
-        $sorturl = preg_replace('/\?sort=\w+&/','?',$sorturl);
+        $sorturl = preg_replace('/&amp;sort=\w+/','',$sorturl);
+        $sorturl = preg_replace('/\?sort=\w+&amp;/','?',$sorturl);
         $sorturl = preg_replace('/\?sort=\w+$/','',$sorturl);
         // add sort param at the end of the URL
         if (preg_match('/\?/',$sorturl)) {
-            $sorturl = $sorturl . '&sort';
+            $sorturl = $sorturl . '&amp;sort';
         } else {
             $sorturl = $sorturl . '?sort';
         }
@@ -1912,11 +2031,11 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         } elseif (preg_match('/\?/',$currenturl)) {
             if (count($this->items) == $this->numitems) {
                 $next = $this->startnum + $this->numitems;
-                $nexturl = $currenturl . '&startnum=' . $next;
+                $nexturl = $currenturl . '&amp;startnum=' . $next;
             }
             if ($this->startnum > 1) {
                 $prev = $this->startnum - $this->numitems;
-                $prevurl = $currenturl . '&startnum=' . $prev;
+                $prevurl = $currenturl . '&amp;startnum=' . $prev;
             }
         } else {
             if (count($this->items) == $this->numitems) {
@@ -1982,6 +2101,5 @@ class Dynamic_Object_List extends Dynamic_Object_Master
     }
 
 }
-
 
 ?>
