@@ -11,12 +11,8 @@ function base_admin_sysinfo()
 {
     xarVarFetch('what','int:-1:127',$what,INFO_GENERAL, XARVAR_NOT_REQUIRED);
     $data['what'] = $what;
-    // Clear Session Vars
-    xarSessionDelVar('base_statusmsg');
-
-// Security Check
+	// Security Check
     if(!xarSecurityCheck('AdminBase')) return;
-
     // FIXME: dirty dirty
     ob_start();
     // FIXME: can we split this up in more manageable parts?
@@ -29,15 +25,11 @@ function base_admin_sysinfo()
     $val_phpinfo = preg_replace(
         array('/^.*<body[^>]*>/is', '/<\/body[^>]*>.*$/is'), '', $val_phpinfo, 1
     );
-
     // Remove pixel table widths.
     $val_phpinfo = preg_replace(
         '/width="[0-9]+"/i', 'width="80%"', $val_phpinfo
     );
-
     $data['phpinfo'] = $val_phpinfo;
-
     return $data;
 }
-
 ?>
