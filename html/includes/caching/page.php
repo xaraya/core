@@ -431,15 +431,8 @@ function xarPage_httpCacheHeaders($cache_file)
 function xarPage_sessionLess()
 {
     global $xarOutput_cacheCollection;
-    global $xarOutput_cacheTheme;
-    global $xarOutput_cacheSizeLimit;
     global $xarPage_cacheTime;
-    global $xarPage_cacheDisplay;
     global $xarPage_cacheShowTime;
-    global $xarPage_cacheExpireHeader;
-    global $xarPage_cacheGroups;
-    global $xarPage_cacheHookedOnly;
-    global $xarBlock_cacheTime;
     global $xarPage_autoCachePeriod;
     global $cachingConfiguration;
     

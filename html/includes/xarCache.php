@@ -42,16 +42,6 @@ function xarCache_init($args)
         @unlink($cacheDir . '/cache.touch');
         return FALSE;
     }
-    
-    if (file_exists($cacheDir . '/cache.pagelevel')) {
-        define('XARCACHE_PAGE_IS_ENABLED',1);
-        require_once('includes/caching/page.php');
-    }
-
-    if (file_exists($cacheDir . '/cache.blocklevel')) {
-        define('XARCACHE_BLOCK_IS_ENABLED',1);
-        require_once('includes/caching/block.php');
-    }
 
     $xarOutput_cacheCollection = realpath($cacheDir);
     $xarOutput_cacheTheme = isset($cachingConfiguration['Output.DefaultTheme']) ?
@@ -75,8 +65,15 @@ function xarCache_init($args)
     $xarPage_autoCachePeriod = isset($cachingConfiguration['AutoCache.Period']) ?
         $cachingConfiguration['AutoCache.Period'] : 0;
     
-    if (defined('XARCACHE_PAGE_IS_ENABLED')) {
+    if (file_exists($cacheDir . '/cache.pagelevel')) {
+        define('XARCACHE_PAGE_IS_ENABLED',1);
+        require_once('includes/caching/page.php');
         xarPage_sessionLess();
+    }
+
+    if (file_exists($cacheDir . '/cache.blocklevel')) {
+        define('XARCACHE_BLOCK_IS_ENABLED',1);
+        require_once('includes/caching/block.php');
     }
 
     // Subsystem initialized, register a handler to run when the request is over
