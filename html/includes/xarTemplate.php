@@ -395,6 +395,14 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     $tplData['_bl_module_type'] = $modType;
     $tplData['_bl_module_func'] = $funcName;
 
+    if (function_exists('xarModGetVar')){
+        $var_dump = xarModGetVar('themes', 'var_dump');
+        if ($var_dump == true){
+            $pre = var_export($tplData, true); 
+            echo "<pre>$pre</pre>";
+        }
+    }
+
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -451,7 +459,6 @@ function xarTplBlock($modName, $blockType, $tplData = array(), $templateName = N
             return;
         }
     }
-
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
