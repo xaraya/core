@@ -44,11 +44,11 @@ function modules_adminapi_setstate($args)
 
             if ($oldState != XARMOD_STATE_INACTIVE) {
                 // New Module
-                $module_statesTable = $xartable['module_states'];
+                $module_statesTable = $xartable['system/module_states'];
                 $query = "SELECT * FROM $module_statesTable WHERE xar_regid = $regid";
                 $result =& $dbconn->Execute($query);
                 if (!$result) return;
-                if (!$result->EOF) {
+                if ($result->EOF) {
                     $query = "INSERT INTO $module_statesTable
                        (xar_regid,
                         xar_state)

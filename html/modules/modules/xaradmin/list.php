@@ -53,20 +53,20 @@ function modules_admin_list()
 
 
     // obtain list of modules based on filtering criteria
-//    if($regen){
+    if($regen){
         // lets regenerate the list on the fly
         xarModAPIFunc('modules', 'admin', 'regenerate');
         $modlist = xarModAPIFunc('modules',
                           'admin',
                           'GetList',
                           array('filter'     => array('State' => $data['selfilter'])));
-//    }else{
+    }else{
         // or just fetch the quicker old list
-//        $modlist = xarModAPIFunc('modules',
-//                          'admin',
-//                          'GetList',
-//                          array('filter'     => array('State' => $data['selfilter'])));
-//    }
+        $modlist = xarModAPIFunc('modules',
+                          'admin',
+                          'GetList',
+                          array('filter'     => array('State' => $data['selfilter'])));
+    }
 
     // get action icons/images
     $img_disabled       = xarTplGetImage('set1/disabled.png');

@@ -39,7 +39,8 @@ function modules_adminapi_getfilemodules()
                     }
 
                     // Found a directory
-                    $name         = $modFileInfo['name'];
+                    $name         = $modOsDir;
+                    $nameinfile   = $modFileInfo['name'];
                     $regId        = $modFileInfo['id'];
                     $version      = $modFileInfo['version'];
                     $mode         = XARMOD_MODE_SHARED;
@@ -95,20 +96,20 @@ function modules_adminapi_getfilemodules()
 
                     //Check for duplicates
                     foreach ($fileModules as $module) {
-                    echo $regId ." " .$module['regid']."<br/>";
                         if($regId == $module['regid']) {
                             $msg = xarML('The same registered ID (#(1)) was found in two different modules, #(2) and #(3). Please remove one of the modules and regenerate the list.', $regId, $name, $module['name']);
                             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                            new SystemException($msg));
                         }
-                        if($name == $module['name']) {
-                            $msg = xarML('The module #(1) was found under two different registered IDs, #(2) and #(3). Please remove one of the modules and regenerate the list', $name, $regId, $module['regid']);
+                        if($nameinfile == $module['nameinfile']) {
+                            $msg = xarML('The module #(1) was found under two different registered IDs, #(2) and #(3). Please remove one of the modules and regenerate the list', $nameinfile, $regId, $module['regid']);
                             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                            new SystemException($msg));
                         }
                     }
                     $fileModules[$name] = array('directory'     => $modOsDir,
                                                 'name'          => $name,
+                                                'nameinfile'    => $nameinfile,
                                                 'regid'         => $regId,
                                                 'version'       => $version,
                                                 'mode'          => $mode,
