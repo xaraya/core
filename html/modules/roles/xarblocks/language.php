@@ -58,8 +58,8 @@ function roles_languageblock_display($blockinfo)
     }
     
     
-    $tplData['form_action'] = xarModURL('base', 'user', 'change_locale');
-    $tplData['form_picker_name'] = 'newlang';
+    $tplData['form_action'] = xarModURL('roles', 'user', 'changeLanguage');
+    $tplData['form_picker_name'] = 'locale';
     $tplData['locales'] = $locales;
     
     // URL of this page
