@@ -11,7 +11,7 @@
  * @author Marcel van der Boom <marcel@xaraya.com>
  */
 
-$configuration_name = 'Core Xaraya install (aka as minimal)';
+$configuration_name = 'Core Xaraya install (aka minimal)';
 
 $options  = array(
     array(
