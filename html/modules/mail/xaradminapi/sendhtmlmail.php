@@ -57,7 +57,7 @@ function mail_adminapi_sendhtmlmail($args)
 
     if (count($invalid) > 0) {
         $msg = xarML('Wrong arguments to mail_adminapi', join(', ', $invalid), 'admin', 'sendhtmlmail', 'Mail');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 

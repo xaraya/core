@@ -49,7 +49,7 @@ function mail_adminapi__sendmail($args)
 
     if (count($invalid) > 0) {
         $msg = xarML('Wrong arguments to mail_adminapi', join(', ', $invalid), 'admin', '_sendmail', 'Mail');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
@@ -212,7 +212,7 @@ function mail_adminapi__sendmail($args)
     // Send the mail, or send an exception.
     if (!$mail->Send()) {
         $msg = xarML('The message was not sent. Mailer Error: #(1)',$mail->ErrorInfo);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', new SystemException($msg));
         return;
     }
 
