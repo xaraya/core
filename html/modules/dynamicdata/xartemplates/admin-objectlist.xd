@@ -146,7 +146,7 @@
                     <tr>
                         <xar:set name="colspan">count($properties)+2</xar:set>
                         <th style="text-align: left;" colspan="#$colspan#">
-                            <a href="#$newlink#"><strong><xar:mlstring>Create New</xar:mlstring></a>
+                            <a href="#$newlink#"><strong><xar:mlstring>Create New</xar:mlstring></strong></a>
                         </th>
                     </tr>
                 </xar:if>
