@@ -421,9 +421,16 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         // more difficult case where we need to create a pivot table, basically
         } elseif ($numitems > 0 || count($this->sort) > 0 || count($this->where) > 0) {
 
+            $dbtype = xarDBGetType();
+            if (substr($dbtype,0,4) == 'oci8') {
+                $propval = 'TO_CHAR(xar_dd_value)';
+            } else {
+                $propval = 'xar_dd_value';
+            }
+
             $query = "SELECT xar_dd_itemid ";
             foreach ($propids as $propid) {
-                $query .= ", MAX(CASE WHEN xar_dd_propid = $propid THEN xar_dd_value ELSE '' END) AS dd_$propid \n";
+                $query .= ", MAX(CASE WHEN xar_dd_propid = $propid THEN $propval ELSE '' END) AS dd_$propid \n";
             }
             $query .= " FROM $dynamicdata
                        WHERE xar_dd_propid IN (" . join(', ',$propids) . ") 

@@ -344,7 +344,9 @@ if (empty($itemidfield)) {
             $query = "SELECT " . join(', ', $newfields) . "
                         FROM " . join(', ', $tables) . $more . " ";
         } else {
-            $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
+            // Note: Oracle doesn't like having the same field in a sub-query twice,
+            //       so we use an alias for the primary field here
+            $query = "SELECT $itemidfield AS ddprimaryid, " . join(', ', $fieldlist) . "
                         FROM " . join(', ', $tables) . $more . " ";
         }
 
@@ -396,7 +398,7 @@ if (empty($itemidfield)) {
                 $join = ', ';
             }
         } elseif (!$isgrouped) {
-            $query .= " ORDER BY $itemidfield";
+            $query .= " ORDER BY ddprimaryid";
         }
 
         if ($numitems > 0) {
