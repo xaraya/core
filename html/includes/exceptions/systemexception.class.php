@@ -18,8 +18,18 @@ class SystemException extends Exception
 {
     function SystemException($msg = '') {
         $this->msg = $msg;
-        $info = xarRequestGetInfo();
-        $this->module = $info[0];
+        if ($GLOBALS['xarRequest_allowShortURLs'] && isset($GLOBALS['xarRequest_shortURLVariables'][$name])) {
+            $this->module = $GLOBALS['xarRequest_shortURLVariables']['module'];
+        // Then check in $_GET
+        } elseif (isset($_GET['module'])) {
+            $this->module = $_GET['module'];
+        // Try to fallback to $HTTP_GET_VARS for older php versions
+        } elseif (isset($GLOBALS['HTTP_GET_VARS']['module'])) {
+            $this->module = $GLOBALS['HTTP_GET_VARS']['module'];
+        // Nothing found, return void
+        } else {
+            $this->module = '';
+        }
         include("xarayacomponents.php");
         foreach ($core as $corecomponent) {
             if ($corecomponent['name'] == $this->module) {
