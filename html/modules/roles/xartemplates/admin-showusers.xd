@@ -53,16 +53,16 @@
 				<br/>
 				<div>
 					<form method="post" action="#xarModURL('roles','admin','showusers')#">
-						<label for="search" class="help" title="Search or/and apply state filter on displayed users">
+						<label for="search" class="help" title="#xarML('Search or/and apply state filter on displayed users')#">
 							<xar:mlstring>Filter users</xar:mlstring>
 						</label>&nbsp;:&nbsp;
-						&nbsp;<label for="search" class="help" title="Search for users with either their real name, login name or email matching the string">
+						&nbsp;<label for="search" class="help" title="#xarML('Search for users with either their real name, login name or email matching the string')#">
 							<xar:mlstring>Search :</xar:mlstring>
 						</label>&nbsp;
 						<input type="hidden" name="uid" id="uid" value="#$groupuid#"/>
 						<input type="hidden" name="order" id="order" value="#$order#"/>
 						<input type="text" name="search" id="search" value="" size="15" maxlength="255" tabindex="1"/>
-						&nbsp;<label for="search" class="help" title="Select the state of users">
+						&nbsp;<label for="search" class="help" title="#xarML('Select the state of users')#">
 							<xar:mlstring>State :</xar:mlstring>
 						</label>&nbsp;
 						<select name="state" id="state" size="1" tabindex="5">
@@ -112,7 +112,7 @@
 								</option>
 							</xar:if>
 						</select>
-						<input type="submit" value="Go"/>
+						<input type="submit" value="#xarML('Go')#"/>
 					</form>
 				</div>
 				<br/>
@@ -133,7 +133,7 @@
 							<td colspan="8">
 			        #$message# 
 		          <xar:if condition="$search ne ''">
-			          <xar:mlstring>matching </xar:mlstring> '#$search#'
+			          <xar:mlstring>matching</xar:mlstring> '#$search#'
 		          </xar:if>
 							</td>
 						</tr>
