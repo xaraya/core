@@ -385,7 +385,8 @@ function xarBlock_renderGroup($groupName)
                         inst.xar_last_update as last_update,
                         inst.xar_state as state,
                         group_inst.xar_position as position,
-                        bgroups.xar_template as _bl_template
+                        bgroups.xar_template as bgroups_bl_template,
+                        inst.xar_template as inst_bl_template
               FROM      $blockGroupInstancesTable as group_inst
               LEFT JOIN $blockGroupsTable as bgroups
               ON        group_inst.xar_group_id = bgroups.xar_id
@@ -404,6 +405,12 @@ function xarBlock_renderGroup($groupName)
     while(!$result->EOF) {
         $blockInfo = $result->GetRowAssoc(false);
         $blockInfo['last_update'] = $result->UnixTimeStamp($blockInfo['last_update']);
+
+	if (!empty($blockInfo['inst_bl_template'])) {
+	    $blockInfo['_bl_template'] = $blockInfo['inst_bl_template'];
+	} else {
+	    $blockInfo['_bl_template'] = $blockInfo['bgroups_bl_template'];
+	}	
 
         $output .= xarBlock_render($blockInfo);
 
