@@ -60,15 +60,14 @@ define('PNCORE_VERSION_SUB', 'adam_baum');
 
 /*
  * Optional systems defines (including dependencies)
- */ 
+ */
+define('PNCORE_SYSTEM_NONE', 0);
 define('PNCORE_SYSTEM_ADODB', 1);
 define('PNCORE_SYSTEM_SESSION', 3);
 define('PNCORE_SYSTEM_USER', 7);
 define('PNCORE_SYSTEM_CONFIGURATION', 9);
 define('PNCORE_SYSTEM_BLOCKS', 25);
 define('PNCORE_SYSTEM_MODULES', 41);
-
-
 define('PNCORE_SYSTEM_ALL', 63); // bit OR of all optional systems
 
 /*
@@ -87,7 +86,7 @@ define('PNDBG_EXCEPTIONS', 4);
  * @returns bool
  * @return true on success,false on failure
  */
-function pnCoreInit($whatToLoad)
+function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
 {
     //Comment this line to disable debugging
     pnCoreActivateDebugger(PNDBG_EXCEPTIONS /*| PNDBG_SQL*/);
