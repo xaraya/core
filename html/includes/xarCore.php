@@ -531,6 +531,36 @@ function xarCore_getSiteVar($name)
 
 }
 
+
+/**
+ * Load a file and capture any php errors
+ *
+ * @access public
+ * @param  string $fileName name of the file to load
+ * @param  bool   $once     can this file only be loaded once, or multiple times?
+ * @return bool   true if file was loaded successfully, false on error (with exception set)
+ */
+function xarInclude($fileName, $once=false) {
+
+    ob_start();
+
+    if ($once) {
+        $r = include_once($fileName);
+    } else {
+        $r = include($fileName);
+    }
+
+    $error_msg = strip_tags(ob_get_contents());
+    ob_end_clean();
+
+    if (empty($r) || !$r) {
+        $msg = xarML("Could not load file: [#(1)].\n\n Error Caught:\n #(2)", $funcFile, $error_msg);
+        return false;
+    }
+
+    return true;
+}
+
 /**
  * Dispose the debugger
  *
