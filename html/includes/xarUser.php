@@ -265,14 +265,35 @@ function xarUserSetNavigationThemeName($themeName)
  */
 function xarUserGetNavigationLocale()
 {
-    $locale = xarSessionGetVar('navigationLocale');
-    if (!isset($locale)) {
-    // CHECKME: use dynamicdata for roles, module user variable and/or session variable
-    //          (see also 'timezone' in xarMLS_userOffset())
-        if (xarUserIsLoggedIn()) {
-            $locale = xarUserGetVar('locale');
-        }
+    if (xarUserIsLoggedIn()) {
+        $locale = xarModGetUserVar('roles', 'locale');
         if (!isset($locale)) {
+            $siteLocale = xarModGetVar('roles', 'locale');
+            if (!isset($siteLocale)) {
+                xarModSetVar('roles', 'locale', '');
+            }
+        }
+        if (empty($locale)) {
+            $locale = xarSessionGetVar('navigationLocale');
+            if (!isset($locale)) {
+                $locale = xarMLSGetSiteLocale();
+            }
+            xarModSetUserVar('roles', 'locale', $locale);
+        } else {
+            $siteLocales = xarMLSListSiteLocales();
+            if (!in_array($locale, $siteLocales)) {
+                // Locale not available, use the default
+                $locale = xarMLSGetSiteLocale();
+                xarModSetUserVar('roles', 'locale', $locale);
+                xarLogMessage("WARNING: falling back to default locale: $locale in xarUserGetNavigationLocale function");
+            }
+        }
+        xarSessionSetVar('navigationLocale', $locale);
+    } else {
+        $locale = xarSessionGetVar('navigationLocale');
+        if (!isset($locale)) {
+            // CHECKME: use dynamicdata for roles, module user variable and/or
+            // session variable (see also 'timezone' in xarMLS_userOffset())
             if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
                 // Here we need to return always a meaningfull result,
                 // so what we can do here is only to log the exception
@@ -284,8 +305,8 @@ function xarUserGetNavigationLocale()
                 //xarErrorFree();
             }
             $locale = xarMLSGetSiteLocale();
+            xarSessionSetVar('navigationLocale', $locale);
         }
-        xarSessionSetVar('navigationLocale', $locale);
     }
     return $locale;
 }
@@ -295,14 +316,25 @@ function xarUserGetNavigationLocale()
  *
  * @access public
  * @param locale string
+ * @return bool true if the navigation locale is set, false if not
  */
 function xarUserSetNavigationLocale($locale)
 {
-    $mode = xarMLSGetMode();
-    // if ($mode == XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
     if (xarMLSGetMode() != XARMLS_SINGLE_LANGUAGE_MODE) {
         xarSessionSetVar('navigationLocale', $locale);
+        if (xarUserIsLoggedIn()) {
+            $userLocale = xarModGetUserVar('roles', 'locale');
+            if (!isset($userLocale)) {
+                $siteLocale = xarModGetVar('roles', 'locale');
+                if (!isset($siteLocale)) {
+                    xarModSetVar('roles', 'locale', '');
+                }
+            }
+            xarModSetUserVar('roles', 'locale', $locale);
+        }
+        return true;
     }
+    return false;
 }
 
 /*
