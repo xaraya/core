@@ -10,7 +10,19 @@
  * @link http://www.xaraya.com
  * @subpackage BlockLayout Template Engine Compiler
  * @author Marco Canini <marco@xaraya.com>
+ * @author Marcel van der Boom <marcel@xaraya.com>
+ * @author Marty Vance <dracos@xaraya.com>
+ * @author Garett Hunter <garett@blacktower.com>
  */
+
+
+// <garett> define token for comment specifiers
+define('XAR_TOKEN_BL_COMMENT', 1);
+define('XAR_TOKEN_BL_COMMENT_OPEN', '<!---');
+define('XAR_TOKEN_BL_COMMENT_CLOSE', '--->');
+define('XAR_TOKEN_HTML_COMMENT', 2);
+define('XAR_TOKEN_HTML_COMMENT_OPEN', '<!--');
+define('XAR_TOKEN_HTML_COMMENT_CLOSE', '-->');
 
 /**
  *
@@ -28,7 +40,7 @@ class xarTpl__CompilerError extends DefaultUserException
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__ParserError extends DefaultUserException
@@ -50,7 +62,7 @@ class xarTpl__ParserError extends DefaultUserException
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__PositionInfo
@@ -63,20 +75,20 @@ class xarTpl__PositionInfo
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__Compiler
 {
     var $parser;
     var $codeGenerator;
-    
+
     function xarTpl__Compiler()
     {
         $this->parser = new xarTpl__Parser();
         $this->codeGenerator = new xarTpl__CodeGenerator();
     }
-    
+
     function compileFile($fileName)
     {
         if (!($fp = @fopen($fileName, 'r'))) {
@@ -85,11 +97,11 @@ class xarTpl__Compiler
             return;
         }
         $templateSource = fread($fp, filesize($fileName));
-        
+
         $this->parser->setFileName($fileName);
         return $this->compile($templateSource);
     }
-    
+
     function compile($templateSource)
     {
         $documentTree = $this->parser->parse($templateSource);
@@ -102,34 +114,34 @@ class xarTpl__Compiler
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__CodeGenerator
 {
     var $isPHPBlock = false;
     var $pendingExceptionsControl = false;
-    
+
     function isPHPBlock()
     {
         return $this->isPHPBlock;
     }
-    
+
     function setPHPBlock($isPHPBlock)
     {
         $this->isPHPBlock = $isPHPBlock;
     }
-    
+
     function isPendingExceptionsControl()
     {
         return $this->pendingExceptionsControl;
     }
-    
+
     function setPendingExceptionsControl($pendingExceptionsControl)
     {
         $this->pendingExceptionsControl = $pendingExceptionsControl;
     }
-    
+
     function generate($documentTree)
     {
         if ($documentTree->variables->get('type') == 'page') {
@@ -140,12 +152,12 @@ class xarTpl__CodeGenerator
             $resolver->push('tpl:headJavaScript', '$_bl_head_javascript');
             $resolver->push('tpl:bodyJavaScript', '$_bl_body_javascript');
         }
-        
+
         $code = $this->generateNode($documentTree);
         if (!isset($code)) {
             return; // throw back
         }
-        
+
         if (!$this->isPHPBlock()) {
             $code .= "<?php ";
             $this->setPHPBlock(true);
@@ -158,7 +170,7 @@ class xarTpl__CodeGenerator
         //xarLogMessage('generate code: '.$code, XARLOG_LEVEL_ERROR);
         return $code;
     }
-    
+
     function generateNode($node)
     {
         //xarLogMessage('generateNode '.$node->tagName, XARLOG_LEVEL_ERROR);
@@ -188,7 +200,7 @@ class xarTpl__CodeGenerator
                                         new xarTpl__ParserError("The '".$checkNode->tagName."' tag cannot have children of type '".$child->tagName."'.", $child));
                         return;
                     }
-                    
+
                     if ($checkNode->needAssignment()) {
                         $code .= ' = ';
                     }
@@ -211,14 +223,14 @@ class xarTpl__CodeGenerator
                         $this->setPendingExceptionsControl(false);
                     }
                 } else {
-                    
+
                     //xarLogVariable('pass here', $child->tagName, XARLOG_LEVEL_ERROR);
                     if ($child->needExceptionsControl()) {
                         //xarLogVariable('pendingExceptionsControl', $child->tagName, XARLOG_LEVEL_ERROR);
                         $this->setPendingExceptionsControl(true);
                     }
                 }
-                
+
                 //$checkNode = $child;
             }
             if ($node->isPHPCode() && !$this->isPHPBlock()) {
@@ -236,7 +248,7 @@ class xarTpl__CodeGenerator
                     $this->setPHPBlock(true);
                 }
                 //xarLogVariable('final control', $node->tagName, XARLOG_LEVEL_ERROR);
-                //xarLogVariable('final control', $node->needExceptionsControl(), XARLOG_LEVEL_ERROR); 
+                //xarLogVariable('final control', $node->needExceptionsControl(), XARLOG_LEVEL_ERROR);
                 $code .= "if (xarExceptionMajor() != XAR_NO_EXCEPTION) return false; ";
                 $this->setPendingExceptionsControl(false);
             }
@@ -253,53 +265,58 @@ class xarTpl__CodeGenerator
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__Parser extends xarTpl__PositionInfo
 {
     var $nodesFactory;
-    
+
     var $tagNamesStack;
     var $tagIds;
-    
+
     function xarTpl__Parser()
     {
         $this->nodesFactory = new xarTpl__NodesFactory();
     }
-    
+
     function setFileName($fileName)
     {
         $this->fileName = $fileName;
     }
-    
+
     function parse($templateSource)
     {
         //xarLogVariable('templateSource', $templateSource, XARLOG_LEVEL_ERROR);
-        $this->templateSource = $templateSource;
+        // <garrett> make sure we only have to deal with \n as CR tokens, replace \r\n
+        // <MrB> : Macintosh: \r
+        //         Unix     :  \n
+        //         Windows  :  \r\n
+        $this->templateSource = str_replace('\r\n','\n',$templateSource);
+
         $this->line = 1;
         $this->column = 1;
         $this->pos = 0;
         $this->lineText = '';
-        
+
         $this->tagNamesStack = array();
         $this->tagIds = array();
-        
+
         $this->tplVars = new xarTpl__TemplateVariables();
-        
+
         $documentTree = $this->nodesFactory->createDocumentNode($this);
-        
+
         $res = $this->parseNode($documentTree);
         if (!isset($res)) {
             return; // throw back
         }
         $documentTree->children = $res;
         $documentTree->variables = $this->tplVars;
-        
+
         //xarLogVariable('documentTree', $documentTree, XARLOG_LEVEL_ERROR);
         return $documentTree;
     }
-    
+
     function parseNode($parent) {
         $children = array();
         $text = '';
@@ -341,7 +358,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     //                           // <Dracos> No idea how to handle this atm
                     //                           // <Mrb> This is why we need <xar:blocklayout> as the root tag
                     //       in the theme, anything before the <xar:blocklayout>
-                    //       tag will be copied verbatim to the output. 
+                    //       tag will be copied verbatim to the output.
                     //       not to be handled here.
                     //                           $token = '';
                     //                           break;
@@ -385,7 +402,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             }
                             $text = '';
                         }
-                        
+
                         // Handle Begin Tag
                         $res = $this->parseBeginTag();
                         if (!isset($res)) {
@@ -425,7 +442,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         break;
                     }
                     $this->stepBack(3);
-                    
+
                     //
                     // Check for end tag (</)
                     //
@@ -465,24 +482,94 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             return $children;
                         }
                         $this->stepBack(3);
-                    } 
+                    }
                     $this->stepBack(1);
                 }
                 //
                 // Check for comments or doctype
                 //
                 elseif ($nextToken == '!') {
-                    $this->stepBack();
+                    // <garett> handle both <!-- and <!--- comment types 
+                    // (html comments are passed through, BL comments are stripped out)
+
+                    /**
+                     * quick check to see if this is comment candidate
+                     */
+                    $temptoken = $this->getNextToken(1);
+                    if ($temptoken == '-') {
+
+                        /**
+                         * Rewind back to '<' character to symplify handling of BL comments
+                         */
+                        $this->stepBack(3); // puts us back at the '<'
+
+                        $commentTag = '';
+                        $closingTag = '';
+
+                        /**
+                         * Try grabbing the entire token
+                         */
+                        $temptoken = $this->getNextToken(5);
+                        if ($temptoken == XAR_TOKEN_BL_COMMENT_OPEN) {
+                            $commentTag = XAR_TOKEN_BL_COMMENT;
+                            $closingTag = XAR_TOKEN_BL_COMMENT_CLOSE;
+                        } elseif (substr($temptoken,0,4) == XAR_TOKEN_HTML_COMMENT_OPEN) {
+                            $commentTag = XAR_TOKEN_HTML_COMMENT;
+                            $closingTag = XAR_TOKEN_HTML_COMMENT_CLOSE;
+                        }
+
+                        /**
+                         * Rewind to the beginning of the token for consistency
+                         */
+                        $this->stepBack(5);
+
+                        /**
+                         * We clear the token here in the event the token turns out
+                         * to be a BL comment, which are stripped out of compiled source
+                         */
+                        $token = '';
+
+                        $foundClosingTag = FALSE;
+                        while (!$foundClosingTag) {
+                            $temptoken = $this->getNextToken(1);
+
+                            /**
+                             * Check for end of file
+                             */
+                            if (!isset($temptoken)) {
+                                $foundClosingTag = TRUE;
+                            } elseif ($temptoken == '-') {
+                                /**
+                                 * Is this the start of a closing tag?
+                                 */
+                                $endtag = $temptoken . $this->getNextToken(strlen($closingTag)-1);
+
+                                if ($endtag == $closingTag) {
+                                    $foundClosingTag = TRUE;
+                                    $temptoken = $endtag;
+                                } else {
+                                    $this->stepBack(strlen($closingTag)-1);
+                                }
+                            }
+
+                            /**
+                             * We rebuild the token in order to avoid evaluating #$foo#
+                             * inside comments
+                             */
+                            if ($commentTag == XAR_TOKEN_HTML_COMMENT) {
+                                $token .= $temptoken;
+                            }
+
+                        } // END while
+                    } else { // end if '-'
+                        /**
+                         * It's not a comment tag ignore & continue on
+                         */
+                        $this->stepBack(2);
+                    }
                     break;
-                }
-                //}
-                // ORG code for testing
-                //           if ($tagtoken == '!' && $tagcounter == 1 ) {
-                //                         if ($this->getNextToken() == '--') {
-                //                             $this->StepBack(3);
-                //                             break;
-                //                         }
-                //                     }
+                } // end elseif
+
                 //<Dracos>  Stop tag embedding, ie <a href="<xar
                 $tagcounter = 0;
                 while(1){
@@ -545,7 +632,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 break;
             case '#':
                 $nextToken = $this->getNextToken(1);
-                
+
                 // Break out of processing if # is escaped as ##
                 // TODO <Dracos>:  Rip this out when all the templates are stripped of ##
                 if ($nextToken == '#') {
@@ -557,7 +644,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     break;
                 }
                 // We expect a variable after the # now or a function
-                if ($nextToken == '$' || $nextToken == 'x') { 
+                if ($nextToken == '$' || $nextToken == 'x') {
                     // Check if we have a function in here
                     if($nextToken == 'x'){
                         $temptoken = $nextToken . $this->getNextToken(2);
@@ -606,14 +693,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                             new xarTpl__ParserError("Unexpected end of the file.", $this));
                             return;
                         } elseif ($nextToken == '#') {
-                            // We seem to be at the end, peek one further to make sure
-                            $nextToken = $this->getNextToken(1);
-                            if ($nextToken != '#') {
-                                // okidoki
-                                $this->stepBack(1);
-                                break;
-                            }
-                            $instruction .= $nextToken;
+                            // We seem to be at the end, stop here.
+                            break;
+                            // end patch
                         }
                         elseif ($this->peek() == chr(10)) {
                             $this->stepBack($distance);
@@ -641,10 +723,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     $this->stepBack();
                     break;
                 }
-            }
+            } // end switch
             $text .= $token;
-            // xarLogVariable('text', $text, XARLOG_LEVEL_ERROR);
-        }
+        } // end while
         if ($text != '') {
             if (!$parent->hasText()) {
                 xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
@@ -656,7 +737,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         return $children;
     }
-    
+
     function parseHeaderTag() {
         $variables = array();
         while (true) {
@@ -694,7 +775,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         return $variables;
     }
-    
+
     function parseBeginTag() {
         //xarLogMessage('parseBeginTag', XARLOG_LEVEL_ERROR);
         // Tag name
@@ -758,7 +839,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         return array($tagName, $attributes, ($exitToken == '/') ? true : false);
     }
-    
+
     function parseTagAttribute() {
         //xarLogMessage('parseTagAttribute', XARLOG_LEVEL_ERROR);
         // Tag attribute
@@ -826,7 +907,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         return array($name, $value);
     }
-    
+
     function parseEndTag() {
         //xarLogMessage('parseEndTag', XARLOG_LEVEL_ERROR);
         // Tag name
@@ -854,7 +935,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         return $tagName;
     }
-    
+
     function parseEntity() {
         //xarLogMessage('parseEndTag', XARLOG_LEVEL_ERROR);
         // Entity type
@@ -914,13 +995,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         $this->lineText .= $token;
 
-        if ($token == "\r") {
-            if (substr($this->templateSource, $this->pos + 1, 1) == "\n") {
-                // Check for \r\n
-                $this->pos++;
-            }
-            $token = "\n";
-        }
         $this->pos++;
         $this->column++;
         if ($token == "\n") {
@@ -942,7 +1016,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $this->column -= $len;
         $this->lineText = substr($this->lineText, 0, strlen($this->lineText) - $len);
     }
-    
+
     function peek($len = 1, $start = '')
     {
         if ($start == '') {
@@ -951,21 +1025,23 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         if ($start < 0) {
             $start = 0;
         }
-        
+
         $token = substr($this->templateSource, $start, 1);
         if ($token === false) {
             return;
         }
         //$this->lineText .= $token;
 
-        if ($token == "\r") {
-            if (substr($this->templateSource, $start + 1, 1) == "\n") {
-                // Check for \r\n
-                $start++;
-            }
-            $token = "\n";
-        }
-        $start++;
+        // <MrB> The \r\n combo shouldn't happen anymore, as we filter that out, 
+        // commented it out for now.
+//         if ($token == "\r") {
+//             if (substr($this->templateSource, $start + 1, 1) == "\n") {
+//                 // Check for \r\n
+//                 $start++;
+//             }
+//             $token = "\n";
+//         }
+//         $start++;
         //$this->column++;
         /*if ($token == "\n") {
             $this->line++;
@@ -983,7 +1059,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__NodesFactory
@@ -1084,8 +1160,8 @@ class xarTpl__NodesFactory
             $node->attributes = $attributes;
             return $node;
         }
-// FIXME: how do you handle new tags registered by module developers ?
-// TODO: is xarTplRegisterTag still supposed to work for this ?
+        // FIXME: how do you handle new tags registered by module developers ?
+        // TODO: is xarTplRegisterTag still supposed to work for this ?
         //If we get here, the tag doesn't exist so we raise a user exception
         xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                        new xarTpl__ParserError("Cannot instantiate unexistent tag '$tagName'.", $parser));
@@ -1127,13 +1203,13 @@ class xarTpl__NodesFactory
             $node->parameters = $parameters;
             return $node;
         }
-// FIXME: how do you handle new entities registered by module developers ?
-// TODO: how do you register new entities in the first place ?
+        // FIXME: how do you handle new entities registered by module developers ?
+        // TODO: how do you register new entities in the first place ?
         xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidEntity',
                        new xarTpl__ParserError("Cannot instantiate unexistent entity '$entityType'.", $parser));
         return;
     }
-    
+
     function createTplInstructionNode($instruction, $parser)
     {
         if ($instruction[0] == '$') {
@@ -1141,7 +1217,7 @@ class xarTpl__NodesFactory
         } else {
             $node = new xarTpl__XarApiInstructionNode();
         }
-        
+
         if (isset($node)) {
             $node->tagName = 'InstructionNode';
             $node->fileName = $parser->fileName;
@@ -1151,7 +1227,7 @@ class xarTpl__NodesFactory
             $node->instruction = $instruction;
             return $node;
         }
-        
+
         xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidInstruction',
                        new xarTpl__ParserError("Cannot instantiate non-existent instruction '#$instruction#'.", $parser));
         return;
@@ -1180,7 +1256,7 @@ class xarTpl__NodesFactory
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__SpecialVariableNamesResolver
@@ -1221,7 +1297,7 @@ class xarTpl__SpecialVariableNamesResolver
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__TemplateVariables
@@ -1252,7 +1328,7 @@ class xarTpl__TemplateVariables
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__ExpressionTransformer
@@ -1305,12 +1381,12 @@ class xarTpl__ExpressionTransformer
                 $phpExpression = str_replace($matches[0][$i], $resolvedName, $phpExpression);
             }
         }
-        
+
         $findLogic      = array(' eq ', ' ne ', ' lt ', ' gt ', ' id ', ' nd ', ' le ', ' ge ');
 
         $replaceLogic   = array(' == ', ' != ',  ' < ',  ' > ', ' === ', ' !== ', ' <= ', ' >= ');
         $phpExpression = str_replace($findLogic, $replaceLogic, $phpExpression);
-        
+
         return $phpExpression;
     }
 }
@@ -1318,7 +1394,7 @@ class xarTpl__ExpressionTransformer
 /**
  * xarTpl__Node
  *
- * 
+ *
  * @package blocklayout
  * hasChildren -> false
  * hasText -> false
@@ -1441,9 +1517,9 @@ class xarTpl__DocumentNode extends xarTpl__Node
 class xarTpl__TextNode extends xarTpl__Node
 {
     var $content;
-    
+
     function render()
-    {   
+    {
         return $this->content;
     }
 
@@ -1498,7 +1574,7 @@ class xarTpl__InstructionNode extends xarTpl__Node
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarVarInstructionNode extends xarTpl__InstructionNode
@@ -1520,7 +1596,7 @@ class xarTpl__XarVarInstructionNode extends xarTpl__InstructionNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
@@ -1541,7 +1617,7 @@ class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarVarEntityNode extends xarTpl__EntityNode
@@ -1564,7 +1640,7 @@ class xarTpl__XarVarEntityNode extends xarTpl__EntityNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarConfigEntityNode extends xarTpl__EntityNode
@@ -1588,7 +1664,7 @@ class xarTpl__XarConfigEntityNode extends xarTpl__EntityNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarModEntityNode extends xarTpl__EntityNode
@@ -1613,7 +1689,7 @@ class xarTpl__XarModEntityNode extends xarTpl__EntityNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarSessionEntityNode extends xarTpl__EntityNode
@@ -1632,7 +1708,7 @@ class xarTpl__XarSessionEntityNode extends xarTpl__EntityNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarModurlEntityNode extends xarTpl__EntityNode
@@ -1653,7 +1729,7 @@ class xarTpl__XarModurlEntityNode extends xarTpl__EntityNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarUrlEntityNode extends xarTpl__EntityNode
@@ -1693,7 +1769,7 @@ class xarTpl__XarUrlEntityNode extends xarTpl__EntityNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarBaseurlEntityNode extends xarTpl__EntityNode
@@ -1729,7 +1805,7 @@ class xarTpl__TplTagNode extends xarTpl__Node
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarVarNode extends xarTpl__TplTagNode
@@ -1761,7 +1837,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
                 }
                 return "xarModGetVar('".$module."', '".$name."')";
             // MrB: Johnny, merged this in, not sure if it needs to be here, check this.
-        
+
             case 'theme':
                 if (!isset($themeName)) {
                     $themeName = xarCore_getSiteVar('BL.DefaultTheme');
@@ -1791,7 +1867,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarLoopNode extends xarTpl__TplTagNode
@@ -1897,7 +1973,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarSecNode extends xarTpl__TplTagNode
@@ -2014,7 +2090,7 @@ class xarTpl__XarTernaryNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarIfNode extends xarTpl__TplTagNode
@@ -2060,7 +2136,7 @@ class xarTpl__XarIfNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarElseifNode extends xarTpl__TplTagNode
@@ -2079,7 +2155,7 @@ class xarTpl__XarElseifNode extends xarTpl__TplTagNode
         if (!isset($condition)) {
             return; // throw back
         }
-        
+
         return "} elseif ($condition) { ";
     }
 
@@ -2127,7 +2203,7 @@ class xarTpl__XarElseNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarWhileNode extends xarTpl__TplTagNode
@@ -2146,7 +2222,7 @@ class xarTpl__XarWhileNode extends xarTpl__TplTagNode
         if (!isset($condition)) {
             return; // throw back
         }
-        
+
         return "while ($condition) { ";
     }
 
@@ -2173,7 +2249,7 @@ class xarTpl__XarWhileNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarForNode extends xarTpl__TplTagNode
@@ -2212,7 +2288,7 @@ class xarTpl__XarForNode extends xarTpl__TplTagNode
         if (!isset($iter)) {
             return; // throw back
         }
-        
+
         return "for ($start; $test; $iter) { ";
     }
 
@@ -2239,7 +2315,7 @@ class xarTpl__XarForNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarForEachNode extends xarTpl__TplTagNode
@@ -2273,22 +2349,22 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
             return;
         }
     }
-    
+
     function renderEndTag()
     {
         return "} ";
     }
-    
+
     function hasChildren()
     {
         return true;
     }
-    
+
     function hasText()
     {
         return true;
     }
-    
+
     function isAssignable()
     {
         return false;
@@ -2298,7 +2374,7 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarBlockNode extends xarTpl__TplTagNode
@@ -2374,7 +2450,7 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  *
  */
@@ -2389,21 +2465,21 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
                            new xarTpl__ParserError('Must have \'template\' attribute in open <xar:blockgroup> tag.', $this));
             return;
         }
-        
+
         if (isset($name)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                        new xarTpl__ParserError('Cannot have \'name\' attribute in open <xar:blockgroup> tag.', $this));
             return;
         }
-        
+
         return "\$_bl_blockgroup_template = '$template';";
     }
-    
+
     function renderEndTag()
     {
         return 'unset($_bl_blockgroup_template);';
     }
-    
+
     function render()
     {
         extract($this->attributes);
@@ -2413,16 +2489,16 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
                            new xarTpl__ParserError('Missing \'name\' attribute in <xar:blockgroup> tag.', $this));
             return;
         }
-        
+
         if (isset($template)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                        new xarTpl__ParserError('Cannot have \'template\' attribute in closed <xar:blockgroup/> tag.', $this));
             return;
         }
-        
+
         return "xarBlock_renderGroup('$name')";
     }
-    
+
     function hasChildren()
     {
         return true;
@@ -2436,7 +2512,7 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarMlNode extends xarTpl__TplTagNode
@@ -2498,7 +2574,7 @@ class xarTpl__XarMlNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
@@ -2528,11 +2604,11 @@ class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
         foreach($this->children as $child) {
             $key .= $child->render();
         }
-        
-        // FIXME: bug#45 makes this into a parse error if we don't 
+
+        // FIXME: bug#45 makes this into a parse error if we don't
         //        add slashes here.
         // 1. can't be done in xarMLKey-> too late
-        // 2. we can test for it above and raise an exception if we don't 
+        // 2. we can test for it above and raise an exception if we don't
         //    want to allow unescaped quotes in templates (unfriendly but right)
         //    (offer developer to use xarMLString instead)
         // 3. we can silently escape the key -> problem transferred to translators
@@ -2560,7 +2636,7 @@ class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
@@ -2627,7 +2703,7 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
@@ -2687,7 +2763,7 @@ class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarCommentNode extends xarTpl__TplTagNode
@@ -2726,7 +2802,7 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarModuleNode extends xarTpl__TplTagNode
@@ -2747,7 +2823,7 @@ class xarTpl__XarModuleNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarEventNode extends xarTpl__TplTagNode
@@ -2773,7 +2849,7 @@ class xarTpl__XarEventNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarIncludeNode extends xarTpl__TplTagNode
@@ -2791,7 +2867,7 @@ class xarTpl__XarIncludeNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
@@ -2836,7 +2912,7 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarSetNode extends xarTpl__TplTagNode
@@ -2886,7 +2962,7 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
     {
         return true;
     }
-    
+
     function hasText()
     {
         return true;
@@ -2895,7 +2971,7 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  * @todo FIXME: check if this is how we want to support module-registered tags
  */
@@ -2926,7 +3002,7 @@ class xarTpl__XarBreakNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarContinueNode extends xarTpl__TplTagNode
@@ -2957,7 +3033,7 @@ class xarTpl__XarContinueNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  * @todo FIXME: check if this is how we want to support module-registered tags
  */
