@@ -39,7 +39,7 @@ function roles_languageblock_info()
 function roles_languageblock_display($blockinfo)
 {
     // Security check
-    if (!xarSecurityCheck('ReadRole', 1, 'Block', "All:" . $blockinfo['title'] . ":" . $blockinfo['id'])) {return;}
+    if (!xarSecurityCheck('ReadRole', 1, 'Block', "All:" . $blockinfo['title'] . ":" . $blockinfo['bid'])) {return;}
 
     // if (xarMLSGetMode() != XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
     if (xarMLSGetMode() == XARMLS_SINGLE_LANGUAGE_MODE) {

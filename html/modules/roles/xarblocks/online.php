@@ -39,7 +39,7 @@ function roles_onlineblock_info()
 function roles_onlineblock_display($blockinfo)
 {
     // Security check
-    if (!xarSecurityCheck('ViewRoles',0,'Block',"online:$blockinfo[title]:$blockinfo[id]")) {return;}
+    if (!xarSecurityCheck('ViewRoles',0,'Block',"online:$blockinfo[title]:$blockinfo[bid]")) {return;}
 
     // Get variables from content block
     if (!is_array($blockinfo['content'])) {
@@ -90,7 +90,7 @@ function roles_onlineblock_display($blockinfo)
             );
 
             if ($aa['name'] == xarUserGetVar('name')) {
-                if (xarModIsAvailable('messages')) { 
+                if (xarModIsAvailable('messages')) {
                     $args['test1'][$key]['total'] = xarModAPIFunc(
                         'messages', 'user', 'count_total',
                         array('uid'=>$aa['uid'])
