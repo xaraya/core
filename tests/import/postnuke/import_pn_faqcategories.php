@@ -16,9 +16,9 @@
  * Note : this file is part of import_pn.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing old FAQs into categories</strong><br>\n";
+    echo "<strong>$step. Importing old FAQs into categories</strong><br/>\n";
 
-    echo "Creating root for old FAQs<br>\n";
+    echo "Creating root for old FAQs<br/>\n";
     $faqs = xarModAPIFunc('categories', 'admin', 'create', array(
                              'name' => 'FAQs',
                              'description' => 'Frequently Asked Questions (.7x style)',
@@ -48,13 +48,13 @@
                 $parent = 0;
             }
             if (!isset($faqid[$parent])) {
-                echo "Oops, missing parent $parent for FAQ ($id) $name<br>\n";
+                echo "Oops, missing parent $parent for FAQ ($id) $name<br/>\n";
             } else {
                 $faqid[$id] = xarModAPIFunc('categories', 'admin', 'create',
                                            array('name' => $name,
                                            'description' => $name,
                                            'parent_id' => $faqid[$parent]));
-                echo "Creating FAQ ($id) $name [parent $parent]<br>\n";
+                echo "Creating FAQ ($id) $name [parent $parent]<br/>\n";
             }
             $result->MoveNext();
         }
@@ -63,7 +63,7 @@
     xarModSetVar('installer','faqs',$faqs);
     xarModSetVar('installer','faqid',serialize($faqid));
     echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import_pn.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+          <a href="import_pn.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br/>';
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories']);
 
 ?>

@@ -16,7 +16,7 @@
  * Note : this file is part of import_pn.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing comments</strong><br>\n";
+    echo "<strong>$step. Importing comments</strong><br/>\n";
 
     $userid = unserialize(xarModGetVar('installer','userid'));
     $regid = xarModGetIDFromName('articles');
@@ -83,11 +83,11 @@
 
         $cid = xarModAPIFunc('comments','user','add',$data);
         if (empty($cid)) {
-            echo "Failed inserting comment ($sid $pid) $uname - $subject : ".$dbconn->ErrorMsg()."<br>\n";
+            echo "Failed inserting comment ($sid $pid) $uname - $subject : ".$dbconn->ErrorMsg()."<br/>\n";
         } elseif ($count < 200) {
-            echo "Inserted comment ($sid $pid) $uname - $subject<br>\n";
+            echo "Inserted comment ($sid $pid) $uname - $subject<br/>\n";
         } elseif ($num % 100 == 0) {
-            echo "Inserted comment " . ($num + $startnum) . "<br>\n";
+            echo "Inserted comment " . ($num + $startnum) . "<br/>\n";
             flush();
         }
         $pid2cid[$tid] = $cid;
@@ -96,15 +96,15 @@
     }
     $result->Close();
 
-    echo "<strong>TODO : import other comments</strong><br><br>\n";
+    echo "<strong>TODO : import other comments</strong><br/><br/>\n";
     echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
         xarModSetVar('installer','commentid',serialize($pid2cid));
         $startnum += $numitems;
-        echo '<a href="import_pn.php?step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - comments ' . $startnum . '+ of ' . $count . '</a><br>';
+        echo '<a href="import_pn.php?step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - comments ' . $startnum . '+ of ' . $count . '</a><br/>';
     } else {
         xarModDelVar('installer','commentid');
-        echo '<a href="import_pn.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+        echo '<a href="import_pn.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br/>';
     }
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['comments']);
 

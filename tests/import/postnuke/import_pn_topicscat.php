@@ -16,7 +16,7 @@
  * Note : this file is part of import_pn.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing old news topics into categories</strong><br>\n";
+    echo "<strong>$step. Importing old news topics into categories</strong><br/>\n";
 
     if ($resetcat) {
         $dbconn->Execute("DELETE FROM " . $tables['categories']);
@@ -34,12 +34,12 @@
             //$dbconn->Execute('FLUSH TABLE ' . $tables['hitcount']);
         }
     }
-    echo "Creating root for old news topics<br>\n";
+    echo "Creating root for old news topics<br/>\n";
     $topics = xarModAPIFunc('categories', 'admin', 'create', array(
                                'name' => 'Topics',
                                'description' => 'News Topics (.7x style)',
                                'parent_id' => 0));
-    echo "Creating root for old news categories<br>\n";
+    echo "Creating root for old news categories<br/>\n";
     $categories = xarModAPIFunc('categories', 'admin', 'create', array(
                                   'name' => 'Categories',
                                   'description' => 'News Categories (.7x style)',
@@ -55,7 +55,7 @@
     } else {
         // you'll be in trouble with your categories here...
     }
-    echo "Creating old default 'Articles' news category<br>\n";
+    echo "Creating old default 'Articles' news category<br/>\n";
     $catid[0] = xarModAPIFunc('categories', 'admin', 'create', array(
                                  'name' => 'Articles',
                                  'description' => 'Articles',
@@ -75,13 +75,13 @@
                               'description' => $text,
                               'image' => "$imgurl/topics/$image",
                               'parent_id' => $topics));
-        echo "Creating topic ($id) $text - $name [$image]<br>\n";
+        echo "Creating topic ($id) $text - $name [$image]<br/>\n";
         if (!empty($docounter)) {
             $hcid = xarModAPIFunc('hitcount','admin','create',array('modname' => 'categories',
                                                                'objectid' => $topicid[$id],
                                                                'hits' => $counter));
             if (!isset($hcid)) {
-                echo "Couldn't create hit counter $counter for topic $topicid[$id] $text<br>\n";
+                echo "Couldn't create hit counter $counter for topic $topicid[$id] $text<br/>\n";
             }
         }
         $result->MoveNext();
@@ -101,25 +101,25 @@
                               'name' => $title,
                               'description' => $title,
                               'parent_id' => $categories));
-        echo "Creating category ($id) $title - $title<br>\n";
+        echo "Creating category ($id) $title - $title<br/>\n";
         if (!empty($docounter)) {
             $hcid = xarModAPIFunc('hitcount','admin','create',array('modname' => 'categories',
                                                                'objectid' => $catid[$id],
                                                                'hits' => $counter));
             if (!isset($hcid)) {
-                echo "Couldn't create hit counter $counter for category $catid[$id] $title<br>\n";
+                echo "Couldn't create hit counter $counter for category $catid[$id] $title<br/>\n";
             }
         }
         $result->MoveNext();
     }
     $result->Close();
-    echo "<strong>TODO : copy the topic images to modules/categories/xarimages or elsewhere someday</strong><br><br>\n";
+    echo "<strong>TODO : copy the topic images to modules/categories/xarimages or elsewhere someday</strong><br/><br/>\n";
     xarModSetVar('installer','topics',$topics);
     xarModSetVar('installer','topicid',serialize($topicid));
     xarModSetVar('installer','categories',$categories);
     xarModSetVar('installer','catid',serialize($catid));
     echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import_pn.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+          <a href="import_pn.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br/>';
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories']);
     if (!empty($docounter)) {
         $dbconn->Execute('OPTIMIZE TABLE ' . $tables['hitcount']);

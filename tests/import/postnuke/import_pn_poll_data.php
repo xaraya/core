@@ -16,10 +16,10 @@
  * Note : this file is part of import_pn.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing old poll data</strong><br>\n";
+    echo "<strong>$step. Importing old poll data</strong><br/>\n";
 
     if (!xarModIsAvailable('polls')) {
-        echo "The polls module is not activated in Xaraya<br>\n";
+        echo "The polls module is not activated in Xaraya<br/>\n";
         return;
     }
 
@@ -48,11 +48,11 @@
                                       'option' => $text,
                                       'votes' => $count));
         if (empty($newvid)) {
-            echo "Insert poll option ($pid $vid) $text failed : " . xarExceptionRender('text') . "<br>\n";
+            echo "Insert poll option ($pid $vid) $text failed : " . xarExceptionRender('text') . "<br/>\n";
         } elseif ($count < 100) {
-            echo "Inserted poll option ($pid $vid) $text<br>\n";
+            echo "Inserted poll option ($pid $vid) $text<br/>\n";
         } elseif ($num % 100 == 0) {
-            echo "Inserted poll option $num<br>\n";
+            echo "Inserted poll option $num<br/>\n";
             flush();
         }
         $num++;

@@ -16,10 +16,10 @@
  * Note : this file is part of import_pn.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing old poll comments</strong><br>\n";
+    echo "<strong>$step. Importing old poll comments</strong><br/>\n";
 
     if (!xarModIsAvailable('polls')) {
-        echo "The polls module is not activated in Xaraya<br>\n";
+        echo "The polls module is not activated in Xaraya<br/>\n";
         $step++;
         return;
     }
@@ -81,7 +81,7 @@
         list($tid,$sid,$pid,$date,$uname,$uid,$hostname,$subject,$comment) = $result->fields;
 
         if (!isset($pollid[$sid])) {
-            echo "Unknown poll id $sid for comment ($tid) $subject<br>\n";
+            echo "Unknown poll id $sid for comment ($tid) $subject<br/>\n";
             $num++;
             $result->MoveNext();
             continue;
@@ -110,11 +110,11 @@
 
         $cid = xarModAPIFunc('comments','user','add',$data);
         if (empty($cid)) {
-            echo "Failed inserting poll comment ($sid $pid) $uname - $subject : ".$dbconn->ErrorMsg()."<br>\n";
+            echo "Failed inserting poll comment ($sid $pid) $uname - $subject : ".$dbconn->ErrorMsg()."<br/>\n";
         } elseif ($count < 200) {
-            echo "Inserted poll comment ($sid $pid) $uname - $subject<br>\n";
+            echo "Inserted poll comment ($sid $pid) $uname - $subject<br/>\n";
         } elseif ($num % 100 == 0) {
-            echo "Inserted poll comment " . ($num + $startnum) . "<br>\n";
+            echo "Inserted poll comment " . ($num + $startnum) . "<br/>\n";
             flush();
         }
         $pid2cid[$tid] = $cid;
@@ -125,7 +125,7 @@
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['comments']);
 
     echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import_pn.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+          <a href="import_pn.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br/>';
     // Enable comments hooks for polls
     xarModAPIFunc('modules','admin','enablehooks',
                   array('callerModName' => 'polls', 'hookModName' => 'comments'));

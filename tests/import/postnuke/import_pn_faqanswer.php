@@ -16,7 +16,7 @@
  * Note : this file is part of import_pn.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing FAQ questions & answers</strong><br>\n";
+    echo "<strong>$step. Importing FAQ questions & answers</strong><br/>\n";
 
     $regid = xarModGetIDFromName('articles');
     $faqs = xarModGetVar('installer','faqs');
@@ -63,16 +63,16 @@
                                      )
                                );
         if (!isset($newaid)) {
-            echo "Insert FAQ ($id) $title failed : " . xarExceptionRender('text') . "<br>\n";
+            echo "Insert FAQ ($id) $title failed : " . xarExceptionRender('text') . "<br/>\n";
         } else {
-            echo "Inserted FAQ ($id) $title<br>\n";
+            echo "Inserted FAQ ($id) $title<br/>\n";
         }
         $result->MoveNext();
     }
     $result->Close();
-    echo "<strong>TODO : do something with FAQ display</strong><br><br>\n";
+    echo "<strong>TODO : do something with FAQ display</strong><br/><br/>\n";
     echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import_pn.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+          <a href="import_pn.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br/>';
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);
     if (!empty($docounter)) {

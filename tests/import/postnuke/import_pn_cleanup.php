@@ -16,9 +16,9 @@
  * Note : this file is part of import_pn.php and cannot be run separately
  */
 
-    echo "<strong>$step. Cleaning up</strong><br>\n";
+    echo "<strong>$step. Cleaning up</strong><br/>\n";
 
-    echo "<strong>TODO : import the rest...</strong><br><br>\n";
+    echo "<strong>TODO : import the rest...</strong><br/><br/>\n";
     //xarModDelVar('installer','userobjectid');
     xarModDelVar('installer','oldprefix');
     xarModDelVar('installer','reset');
@@ -35,6 +35,6 @@
     xarModDelVar('installer','faqid');
     xarModDelVar('installer','weblinks');
     echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="index.php">Go to your imported site</a><br>';
+          <a href="index.php">Go to your imported site</a><br/>';
 
 ?>
