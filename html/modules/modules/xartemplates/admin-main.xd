@@ -1,36 +1,68 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Xaraya Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
     <h2><xar:mlstring>Overview</xar:mlstring></h2>
-    <table border="0" width="100%">
-        <tr>
-            <td align="left" valign="top" width="100px">
-                <b><xar:mlstring>What is it?</xar:mlstring></b>
-            </td>
-            <td align="left" valign="top">
-                <xar:mlstring>The Modules Module controls the modules that you have installed on your Xaraya System.  It basically controls the install, upgrades, and removal of modules.</xar:mlstring>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" valign="top" width="100px">
-                <b><xar:mlstring>How to use it?</xar:mlstring></b>
-            </td>
-            <td align="left" valign="top">
-                <xar:mlstring>
-                From the menu, you have two choices.  "View" and "Regenerate". 
-                </xar:mlstring>
-                <ul>
-                    <li><xar:mlstring>View -- Allows you to see what modules are currently installed on your system, and the current state that they are in.</xar:mlstring></li>
-                    <li><xar:mlstring>Regenerate -- Allows you to regenerate the module view, to install refresh the list of modules that you have just installed on your system.</xar:mlstring></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" valign="top" width="100px">
-                <b><xar:mlstring>Included Blocks</xar:mlstring></b>
-            </td>
-            <td align="left" valign="top">
-                <xar:mlstring>There are no included blocks with the Modules Module</xar:mlstring>
-            </td>
-        </tr>
-    </table>
+    <div style="border-width: thin; border-style: solid; border-color: ##B3B3B3; padding: 1px;">
+        <div class="xar-mod-title" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-width: thin; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>What is it?</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <xar:mlstring>The Modules Module controls the modules that you have installed on your Xaraya System. It deals with the activation, upgrades, and removal of all modules.</xar:mlstring>
+        </div>
+        <br />
+        
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: thin; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>How to use it?</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <xar:mlstring>From the menu, you can access these pages:</xar:mlstring>
+            <ul>
+                <li><xar:mlstring>List Modules - See what modules are currently installed on your system and control the current state that they are in.</xar:mlstring></li>
+                <li><xar:mlstring>Configure Hooks - Extend modules capabilities via 'hooks' [advanced features]</xar:mlstring></li>
+                <li><xar:mlstring>Releases - View information about recently released 'certified' modules.</xar:mlstring></li>
+                <li><xar:mlstring>Preferences - Your persinalised settings for this module.</xar:mlstring></li>
+            </ul>
+        </div>
+        <br />
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: thin; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>Included Blocks</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <xar:mlstring>There are no included blocks with the Modules Module at the moment; [it's possible that] admin menu blocks may become a part of this module in the future.</xar:mlstring>
+        </div>
+        <br />
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: thin; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>Included Hooks</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <xar:mlstring>[Hooks developers, please provide the description..]</xar:mlstring>
+        </div>
+        <br />
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: thin; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>And more..</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <xar:mlstring>[For Module Developers] In addition, this module attempts to 'show-case' some basic requirements for module administration layouts, provision of custom controls, and other useful interface techniques. Following these practices while designing your own module would enable Xaraya system administrators to instantly recognise the common UI elements and workflow, and to use your module with more comfort and ease..</xar:mlstring>
+        </div>
+        <br />
+        <div class="xar-accent" style="text-align: center; border-width: thin; border-style: solid; border-color: ##B3B3B3; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
+            <form method="post" action="&xar-modurl-modules-admin-main;">
+            <xar:mlstring>Your start page for administering this module:</xar:mlstring>
+            <select name="startup">
+                <option value="#$startpage#" selected="selected">Overview</option>
+                <option value="#$startpage#">Modules List</option>
+                <option value="#$startpage#">Releases</option>
+                <option value="#$startpage#">Configure Hooks</option>
+                <option value="#$startpage#">Preferences</option>
+            </select>
+            <input type="submit" name="setstartpage" value="Set" />
+            <br />
+            <xar:mlstring>Defaults can be restored from 'Preferences'.</xar:mlstring>
+            </form>
+        </div>
+    </div>
 </div>
