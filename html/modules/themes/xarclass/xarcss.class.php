@@ -359,22 +359,7 @@ class xarCSS
         // in absence of a more generic core facility
         require_once "tagmaker.class.php";
 
-        switch($this->method)
-        {
-            case "link":
-                $tag = new linkCSSTag($this);
-                break;
-            case "import":
-                $tag = new importCSSTag($this);
-                break;
-            case "style":
-                $tag = new styleCSSTag($this);
-                break;
-            default:
-                // unrecognised
-                return '';
-                break;
-        }
+        $tag = new htmlCSSTag($this);
         return $tag->render();
     }
 
