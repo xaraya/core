@@ -385,14 +385,12 @@ function xarSession__new($sessionId, $ipAddress)
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-	//<bes> this is the place where the onSessionCreation Event could go
-// doh! this doesnt work here :((((
-//    if (xarModAPILoad('sniffer', 'user')) {
-//    	xarModAPIFunc('sniffer', 'user', 'sniff');
-//    }
-// i dont like it, but i have to do this now:
-	include_once('modules/sniffer/xaruserapi.php');
-	sniffer_userapi_sniff();
+    // Load Sniffer Module and Sniff the session.
+    if (function_exists('xarModAPILoad')){
+        if (xarModAPILoad('sniffer', 'user')) {
+          	xarModAPIFunc('sniffer', 'user', 'sniff');
+        }
+    }
 
     return true;
 }
