@@ -18,10 +18,10 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
-$modversion['name']           = 'Members';
+$modversion['name']           = 'Roles';
 $modversion['id']             = '27';
 $modversion['version']        = '1.1.0';
-$modversion['displayname']    = xarML('Members');
+$modversion['displayname']    = xarML('Roles');
 $modversion['description']    = 'User and Group registration and handling';
 $modversion['displaydescription'] = xarML('User and Group registration and handling');
 $modversion['credits']        = 'xardocs/credits.txt';

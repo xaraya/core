@@ -12,7 +12,7 @@
 class xarQuery
 {
 
-    var $version = "1.1";
+    var $version = "1.2";
     var $id;
     var $type;
     var $tables;
@@ -31,6 +31,7 @@ class xarQuery
     var $dbconn;
     var $statement;
     var $israwstatement = 0;
+    var $usebinding = 0;
     var $bindvars;
     var $bindstring;
     var $limits = 1;
@@ -672,6 +673,7 @@ class xarQuery
             $values = substr($values,0,strlen($values)-2);
             $f .= $names . ") VALUES (" . $values;
             $f .= ")";
+            $bindvalues = substr($bindvalues,0,strlen($values)-2);
             $this->bindstring = $names . ") VALUES (" . $bindvalues;
             $this->bindstring .= ")";
             break;
@@ -868,7 +870,6 @@ class xarQuery
     {
         if ($statement != '') {
             $this->israwstatement = 0;
-            $this->bindvars = array();
             $this->statement = $statement;
             $st = explode(" ",$statement);
             $this->type = strtoupper($st[0]);
@@ -881,7 +882,18 @@ class xarQuery
     function qecho()
     {
         $this->setstatement();
+        if ($usebinding) $this->bindstatement();
         echo $this->getstatement();
+    }
+    function bindstatement()
+    {
+        $pieces = explode('?',$this->statement);
+        $bound = $pieces[0];
+        $limit = count($pieces);
+        for ($i=1;$i<$limit;$i++){
+            $bound .= $this->bindvars[i] . $pieces[i];
+        }
+        $this->statement = $bound;
     }
 }
 ?>

@@ -22,7 +22,7 @@
 $modversion['name']           = 'Themes Administration';
 $modversion['id']             = '70';
 $modversion['version']        = '1.3.0';
-$modversion['displayname']    = xarML('Themes Admin');
+$modversion['displayname']    = xarML('Themes');
 $modversion['description']    = 'Configure themes, change site appearance';
 $modversion['displaydescription'] = xarML('Configure themes, change site appearance');
 $modversion['credits']        = 'xardocs/credits.txt';

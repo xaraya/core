@@ -21,7 +21,7 @@
 $modversion['name']               = 'Modules Administration';
 $modversion['id']                 = '1';
 $modversion['version']            = '2.3.0';
-$modversion['displayname']        = xarML('Modules Admin');
+$modversion['displayname']        = xarML('Modules');
 $modversion['description']        = 'Configure modules, view install/docs/credits.';
 $modversion['displaydescription'] = xarML('Configure modules, view install/docs/credits.');
 $modversion['credits']            = 'xardocs/credits.txt';
