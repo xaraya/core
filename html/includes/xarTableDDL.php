@@ -483,19 +483,22 @@ function xarDB__mysqlCreateTable($tableName, $fields)
         $parameters['command'] = 'create';
         $this_field = xarDB__mysqlColumnDefinition($field_name, $parameters);
 
-		$sql_fields[] = $this_field['name'];
-		$sql_fields[] = $this_field['type'];
-		$sql_fields[] = $this_field['unsigned'];
-		$sql_fields[] = $this_field['null'];
-		$sql_fields[] = $this_field['default'];
-		$sql_fields[] = $this_field['auto_increment'].', ';
+		$sql_fields[] = $this_field['name'] .' '
+					  . $this_field['type'] .' '
+					  . $this_field['unsigned'] .' '
+					  . $this_field['null'] .' '
+					  . $this_field['default'] .' '
+					  . $this_field['auto_increment'];
 		if ($this_field['primary_key'] == true) {
 			$primary_key[] = $this_field['name'];
 		}
     }
 
-    $sql = 'CREATE TABLE '.$tableName.' ('.implode(' ',$sql_fields);
-    $sql .= 'PRIMARY KEY ('.implode(',',$primary_key).'))';
+    $sql = 'CREATE TABLE '.$tableName.' ('.implode(', ',$sql_fields);
+	if (!empty($primary_key)) {
+		$sql .= ', PRIMARY KEY ('.implode(',',$primary_key).')';
+	}
+	$sql .= ')';
 
     return $sql;
 }
