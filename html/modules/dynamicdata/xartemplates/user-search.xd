@@ -1,3 +1,4 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <xar:foreach in="$items" value="$item">
 <h2><xar:ml><xar:mlstring>Search #(1)</xar:mlstring><xar:mlvar>#$item['label']#</xar:mlvar></xar:ml></h2>
 <p></p>

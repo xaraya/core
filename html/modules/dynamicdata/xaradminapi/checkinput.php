@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * File: $Id$
+ *
+ * Check input from dynamic data
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata module
+ * @author mikespub <mikespub@xaraya.com>
+*/
 /**
  * check input from dynamic data (needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input)
  *

@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * File: $Id$
+ *
+ * sample function returning an array of options for a Dropdown or Radio Buttons property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata module
+ * @author mikespub <mikespub@xaraya.com>
+*/
 /**
  * sample function returning an array of options for a Dropdown or Radio Buttons property
  *

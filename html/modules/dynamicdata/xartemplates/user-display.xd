@@ -1,3 +1,4 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <xar:if condition="!empty($object)">
 <!-- here we retrieve the complete object in the function, and we only pass a reference of it to the data-display tag -->
 <h2><xar:data-label object="$object" /></h2>

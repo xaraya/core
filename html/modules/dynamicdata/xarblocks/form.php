@@ -1,14 +1,17 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: mikespub
-// Purpose of file: DynamicData Form Block
-// ----------------------------------------------------------------------
-
+/**
+ * File: $Id$
+ *
+ * Dynamic form block
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata module
+ * @author mikespub <mikespub@xaraya.com>
+*/
 /**
  * initialise block
  */

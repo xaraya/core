@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * File: $Id$
+ *
+ * Browse
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata module
+ * @author mikespub <mikespub@xaraya.com>
+*/
 function dynamicdata_adminapi_browse($args)
 {
     // Argument check - make sure that all required arguments are present
