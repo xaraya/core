@@ -12,14 +12,6 @@
  * @author Marco Canini <marco@xaraya.com>
  */
 
-  /**
-   *
-   * NOTE: <Dracos>  All the widget stuff in here is essentially dead code,
-   *       but *DO NOT* remove it.  I still need to figure it out so I can
-   *       make proper widgets out of it (for r1.1)
-   *
-   *    Thanks
-   */
 
   /**
    * Defines for template handling
@@ -846,19 +838,10 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
 }
 
 /**
- * Render a widget
+ * Include a subtemplate from the theme space
  *
- * @access protected
- * @param widgetName string
- * @param tplData string
- * @return xarTpl__executeFromFile($sourceFileName, $tplData)
+ *
  */
-function xarTpl_renderWidget($widgetName, $tplData)
-{
-    $sourceFileName = xarTplGetThemeDir() . "/widgets/$widgetName.xd";
-    return xarTpl__executeFromFile($sourceFileName, $tplData);
-}
-
 function xarTpl_includeThemeTemplate($templateName, $tplData)
 {
     $templateName = xarVarPrepForOS($templateName);
@@ -866,6 +849,11 @@ function xarTpl_includeThemeTemplate($templateName, $tplData)
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
+/**
+ * Include a subtemplate from the module space
+ *
+ *
+ */
 function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
 {
     $templateName = xarVarPrepForOS($templateName);
@@ -1561,52 +1549,6 @@ function xarTplGetTagObjectFromName($tag_name)
     $tag_objects[$tag_name] = $obj;
 
     return $obj;
-}
-
-
-
-/**
- * print a template to the screen, compile if necessary
- *
- * @param template_sourcefile The template file to use
- * @param args Variables to pass to the template
- * @param regenerate Forces compilation (optional)
- * @access private
- * @return bool
- **/
-function xarTplPrint($template_sourcefile, $args = array())
-{
-    $template_file = 'cache/templates/' . md5($template_sourcefile) . '.php';
-
-    if (!file_exists($template_sourcefile)) {
-        $msg = xarML('Template source not found: #(1).', $template_sourcefile);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                       new SystemException($msg));
-        return;
-    }
-
-   if (!xarVarFetch('regenerate','bool', $regenerate)) return;
-
-   if (!file_exists($template_file) ||
-        filemtime($template_sourcefile) > filemtime($template_file) ||
-        $regenerate) {
-
-        if (!xarTplCompile($template_sourcefile)) {
-            return; // Throw back
-        }
-    }
-
-    extract($args);
-
-    include $template_file;
-
-    return true;
-}
-
-function xarTplPrintWidget($module, $widget_sourcefile, $args = array())
-{
-    $widget_sourcefile = "modules/$module/xarwidgets/$widget_sourcefile";
-    return xarTplPrint($widget_sourcefile, $args);
 }
 
 ?>
