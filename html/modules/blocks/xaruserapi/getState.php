@@ -40,9 +40,9 @@ function blocks_userapi_getState($args)
     if (!isset($userblocks[$uid])) {
         $userblocks[$uid] = array();
 
-        $query = "SELECT xar_bid, xar_active FROM $ublockstable WHERE xar_uid = $uid";
+        $query = "SELECT xar_bid, xar_active FROM $ublockstable WHERE xar_uid = ?";
 
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,array($uid));
         if (!$result) return;
 
         while (!$result->EOF) {
@@ -57,22 +57,13 @@ function blocks_userapi_getState($args)
         }
     }
 
-    $uid = xarVarPrepForStore($uid);
-    $bid = xarVarPrepForStore($bid);
-
     // Check to see if record exists before inserting it
-    $query = "SELECT xar_uid FROM $ublockstable WHERE xar_uid = $uid AND xar_bid='$bid'";
-    $result =& $dbconn->Execute($query);
+    $query = "SELECT xar_uid FROM $ublockstable WHERE xar_uid = ? AND xar_bid=?";
+    $result =& $dbconn->Execute($query,array($uid,$bid));
     if ($result->EOF) {
-        $query="INSERT INTO $ublockstable
-                        (xar_uid,
-                        xar_bid,
-                        xar_active)
-                        VALUES
-                        (".xarVarPrepForStore($uid).",
-                        '$bid',
-                        '1')";
-        $result =& $dbconn->Execute($query);
+        $query="INSERT INTO $ublockstable (xar_uid, xar_bid, xar_active)
+                VALUES (?,?,?)";
+        $result =& $dbconn->Execute($query,array($uid,$bid,1));
         if (!$result) return;
     }
 
