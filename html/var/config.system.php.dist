@@ -19,7 +19,10 @@ $systemConfiguration['DB.TablePrefix'] = 'xar';
 // 1 = encoded
 // TODO: check if this works, havent heard from anyone using it.
 $systemConfiguration['DB.Encoded'] = '0';
- 
+// Persistent database connections - do NOT use this on shared servers, and
+// do NOT use it on your own servers unless your sysadmin + dba teams agree !
+$systemConfiguration['DB.Persistent'] = false;
+
 /* For Logging: 
  * Logging will be done automatically if you create a webserver writable 
  * file in var/logs/log.txt 

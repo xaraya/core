@@ -28,6 +28,7 @@
  * @param string args[databaseName] database name
  * @param string args[userName] database username
  * @param string args[password] database password
+ * @param bool args[persistent] flag to say we want persistent connections (optional)
  * @param string args[systemTablePrefix] system table prefix
  * @param string args[siteTablePrefix] site table prefix
  * @param integer whatElseIsGoingLoaded
@@ -121,9 +122,15 @@ function &xarDBNewConn($args = NULL)
     $dbName  = $args['databaseName'];
     $dbUname = $args['userName'];
     $dbPass  = $args['password'];
+    $persistent = !empty($args['persistent']) ? true : false;
 
     $conn =& ADONewConnection($dbType);
-    if (!$conn->Connect($dbHost, $dbUname, $dbPass, $dbName, true)) {
+    if ($persistent) {
+        if (!$conn->PConnect($dbHost, $dbUname, $dbPass, $dbName)) {
+            // FIXME: <mrb> theoretically we could raise an exceptions here, but due to the dependencies we can't right now
+            xarCore_die("xarDB_init: Failed to pconnect to $dbType://$dbUname@$dbHost/$dbName, error message: " . $conn->ErrorMsg());
+        }
+    } elseif (!$conn->Connect($dbHost, $dbUname, $dbPass, $dbName, true)) {
         // FIXME: <mrb> theoretically we could raise an exceptions here, but due to the dependencies we can't right now
         xarCore_die("xarDB_init: Failed to connect to $dbType://$dbUname@$dbHost/$dbName, error message: " . $conn->ErrorMsg());
     }
