@@ -23,7 +23,7 @@
         <fieldset class="xar-norm">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="bid" id="bid" value="#$bid#" />
-            <fieldset class="formelements xar-alt">
+            <fieldset class="formelements xar-norm">
                 <legend>
                     <strong>
                         <xar:mlstring>
