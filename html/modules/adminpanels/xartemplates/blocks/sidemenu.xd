@@ -1,31 +1,24 @@
 <xar:if condition="isset($menustyle)">
-    #$menustyle#
+<!--    #$menustyle# -->
 </xar:if>
-<br />
-<!-- NEW WAY - MORE ROBUST LOGIC - MARKING TRUELY ACTIVE LINKS NOW -->
-<xar:foreach in="$adminmods" value="$adminmod">
-    <xar:if condition="$adminmod['modactive']">
-        <div class="xar-menu-item-current">
-            <xar:if condition="$adminmod['link'] ne ''">
-                <a href="#$adminmod['link']#" title="#$adminmod['maintitle']#">#$adminmod['label']#</a>
-            <xar:else />
-                #$adminmod['label']# #$marker#
-            </xar:if>
-        <xar:if condition="$indlinks ne ''">
-            <xar:foreach in="$indlinks" value="$menulink">
-                <xar:if condition="$menulink['funcactive']">
-                    <div class="xar-menu-subitem-current">#$menulink['adminlabel']# #$marker#</div>
-                <xar:else />
-                    <div class="xar-menu-subitem"><a href="#$menulink['adminlink']#" title="#$menulink['admintitle']#">#$menulink['adminlabel']#</a></div>
-                </xar:if>
+<!-- NEW WAY - MORE ROBUST LOGIC - MARKING TRULY ACTIVE LINKS NOW -->
+<xar:foreach in="$catmods" key="$catname" value="$cats">
+<ul class="xar-menu-section">
+    <li class="xar-menu-section">#$catname#
+        <ul class="xar-menu-item">
+            <xar:foreach in="$cats" value="$mod" key="$modname">
+                <li class="xar-menu-item"><a href="#$mod[0]['link']#">#$modname#</a>
+                <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
+                    <ul class="xar-menu-subitem">
+                    <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
+                        <li class="xar-menu-subitem"><a href="#$sublinks['adminlink']#" title="#$sublinks['admintitle']#">#$sublinks['adminlabel']#</a></li>
+                    </xar:foreach>
+                    </ul>
+                </xar:if></li>
             </xar:foreach>
-        </xar:if>
-        </div>
-    <xar:elseif condition="!$adminmod['modactive'] and !$adminmod['link']" />
-        <div class="xar-menu-section">#$adminmod['label']#</div>
-    <xar:else />
-        <div class="xar-menu-item"><a href="#$adminmod['link']#" title="#$adminmod['desc']#">#$adminmod['label']#</a></div>
-    </xar:if>
+        </ul>
+    </li>
+</ul>
 </xar:foreach>
 <!-- Logout -->
 [<a href="#$logouturl#">#$logoutlabel#</a>]

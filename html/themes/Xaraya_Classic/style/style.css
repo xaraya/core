@@ -291,23 +291,35 @@ td.xar-alt {}
    border-bottom: thin dotted #a0a0a0;
    line-height: 170%;
    width: 100%;
-   margin-top: 4px;
    margin-bottom: 4px;
+   list-style-type: none;
+padding: 0px;
+}
+ul.xar-menu-section, ol.xar-menu-section {
+margin: 0px;
+}
+li.xar-menu-section {
+   border: 0px;
 }
 .xar-menu-section-current {
+border: 1px solid #f00;
    background-color: #cce6ff;
    color: #191970;
    font-size: 11pt;
    font-weight: bold;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    border-bottom: 1px solid #191970;
-   line-height: 170%;
+   line-height: 130%;
+   list-style-type: none;
 }
 .xar-menu-item {
-   font-size: 9.5pt;
+   font-size: 10pt;
    font-weight: bold;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   padding-left: .5em;
+   padding-left: 0px;
+   line-height: 100%;
+   list-style-type: none;
+   margin: 0px;
 }
 .xar-menu-item-current {
    background-color: #cce6ff;
@@ -316,19 +328,22 @@ td.xar-alt {}
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    padding-left: .5em;
    padding-bottom: .3em;
+   list-style-type: none;
 }
-.xar-menu-item:hover {
+li.xar-menu-item:hover {
    background-color: #f0f0f0;
 }
 .xar-menu-subitem {
    font-size: 8pt;
    font-weight: bold;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   margin-left: 6px;
+   margin: 0px 0px 0px 6px;
    padding-left: 0px;
+   list-style-type: none;
+   background-color: #cdd5f8;
+   line-height: 120%;
 }
 .xar-menu-subitem:hover {
-   background-color: #cdd5f8;
 }
 .xar-menu-subitem-current {
    font-weight: bold;
@@ -337,9 +352,16 @@ td.xar-alt {}
    font-size: 8pt;
    margin-left: 6px;
    padding-left: 0px;
+   list-style-type: none;
+}
+.xar-menu-item > a, .xar-menu-subitem > a {
+display: block;
 }
 .xar-menu-item-current > .xar-menu-subitem > a {
    color: #193970;
+}
+.xar-menu-subitem > a:hover {
+   background-color: #cce6ff;
 }
 .xar-menu-item-current > .xar-menu-subitem > a:visited {
    color: #003366;

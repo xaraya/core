@@ -38,7 +38,7 @@ function adminpanels_adminapi_buildbycat($args){
         if (!$result) return;
 
         // the category label
-        $catdata[] = $cat;
+        $catdata[$cat] = array();
 
         // module urls
         while(!$result->EOF){
@@ -46,10 +46,9 @@ function adminpanels_adminapi_buildbycat($args){
             $result->MoveNext();
             $modinfo = xarModGetInfo(xarModGetIDFromName($mname));
             // new style admin links
-                $catdata[] = $modinfo['displayname'];
+                $catdata[$cat][$modinfo['displayname']] = array();
         }
     }
-
     // return the data
     return $catdata;
 }
