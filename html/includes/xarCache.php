@@ -316,6 +316,10 @@ function xarBlockIsCached($args)
     } else {
         $factors .= xarSessionGetVar('uid');
     }
+    
+    if (isset($blockinfo)) {
+        $factors .= md5(serialize($blockinfo));
+    }
 
     $xarBlock_cacheCode = md5($factors);
 

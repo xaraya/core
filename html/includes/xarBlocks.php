@@ -302,9 +302,12 @@ function xarBlock_renderBlock($args)
     $blockCaching = xarCore_GetCached('xarcache', 'blockCaching');
 
     if (!empty($blockinfo) && $blockinfo['state'] <> 0) {
-    	if ($blockCaching == 1) {
+    	if ($blockCaching) {
             $cacheKey = $blockinfo['module'] . '-blockid' . $blockinfo['bid'] . '-noGroup';
-            $args = array('cacheKey' => $cacheKey, 'name' => 'block', 'blockid' => $blockinfo['bid']);
+            $args = array('cacheKey' => $cacheKey,
+		            	  'name' => 'block',
+		            	  'blockid' => $blockinfo['bid'],
+		            	  'blockinfo' => $blockinfo);
         }
 
         if ($blockCaching && xarBlockIsCached($args)) {
