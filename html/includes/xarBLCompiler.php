@@ -1098,7 +1098,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         if(!class_exists($entityClass)) {
             include_once($entityFile);
         }
-        $node =& new $entityClass($parser,'EntityNode');
+        $node =& new $entityClass($parser,'EntityNode', $entityType, $parameters);
         return $node;
     }
 
