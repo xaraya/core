@@ -37,17 +37,20 @@ function xarInstallFunc($funcName = 'main', $args = array())
     // Build function name and call function
     $modFunc = "{$modName}_{$modType}_{$funcName}";
     if (!function_exists($modFunc)) {
-        $msg = xarML('Module function #(1) does not exist.', $modFunc);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-                       new SystemException($msg));
-        return;
+        // try to load it
+        xarInstallLoad();
+        if(!function_exists($modFunc)) {
+            $msg = xarML('Module function #(1) does not exist.', $modFunc);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+                            new SystemException($msg));
+            return;
+        }
     }
 
     // Load the translations file
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType, $funcName) === NULL) return;
 
     $tplData = $modFunc($args);
-
     if (!is_array($tplData)) {
         return $tplData;
     }
@@ -131,14 +134,14 @@ function xarInstallAPILoad()
  * Loads the modType of installer identified by modName.
  *
  * @access public
- * @param modName - name of module to load
- * @param modType - type of functions to load
  * @returns string
  * @return true
  * @raise BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
-function xarInstallLoad($modName, $modType = 'user')
+function xarInstallLoad()
 {
+    $modName = 'installer';
+    $modType = 'admin';
     static $loadedModuleCache = array();
 
     if (empty($modName)) {

@@ -150,10 +150,6 @@ function xarInstallMain()
     // Build function name from phase
     $funcName = 'phase' . $phase;
 
-    // Load installer module
-    $res = xarInstallLoad($modName, $modType);
-    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back
-  
     // if the debugger is active, start it
     if (xarCoreIsDebuggerActive()) {
        ob_start();
