@@ -13,7 +13,6 @@ $modversion['author'] = 'Jim McDonald, Marco Canini, Jan Schrage';
 $modversion['contact'] = 'http://www.mcdee.net/, marco@xaraya.com, jan@xaraya.com';
 $modversion['admin'] = 1;
 $modversion['user'] = 1;
-$modversion['user_menu'] = 1;
 $modversion['securityschema'] = array('roles::' => 'Role uname:Role uid');
 $modversion['class'] = 'Core Complete';
 $modversion['category'] = 'Users & Groups';
