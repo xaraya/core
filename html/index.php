@@ -111,6 +111,11 @@ function xarMain()
             xarTplSetPageTemplateName('admin');
         }
 
+        xarVarFetch('pageName','str:1:', $pageName, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
+        if (!empty($pageName)){
+            xarTplSetPageTemplateName($pageName);
+        }
+
         // Render page
         //$pageOutput = xarTpl_renderPage($mainModuleOutput, NULL, $template);
         $pageOutput = xarTpl_renderPage($mainModuleOutput);
