@@ -222,29 +222,33 @@ function adminpanels_upgrade($oldVersion)
             // Code to upgrade from version 1.0 goes here
             break;
         // TODO : remove for release version
-        case 1.1:
-            // Code to upgrade from version 1.1 goes here
-            xarSessionSetVar('errormsg', xarML('Please remove and re-initialize'));
-            return false;
+        case 2.0:
+            // Code to upgrade from version 2.0 goes here
             break;
-        case 1.2:
+        case 2.1:
 //            if (!xarModRegisterHook('item', 'search', 'GUI',
 //                                   'articles', 'user', 'search')) {
 //                return false;
 //            }
             break;
-        case 1.3:
+        case 2.2:
+            // Code to upgrade from version 2.2 goes here
+            
+            break;            
+        case 2.3:
             // Register BL tags
 //            xarTplRegisterTag('articles', 'articles-field',
 //                              //array(new xarTemplateAttribute('bid', XAR_TPL_STRING|XAR_TPL_REQUIRED)),
 //                              array(),
 //                              'articles_userapi_handleFieldTag');
             break;
-        case 1.4:
-            // Code to upgrade from version 1.4 goes here
+        case 2.4:
+            // Code to upgrade from version 2.4 goes here
+            
             break;
-        case 1.5:
-            // Code to upgrade from version 1.5 goes here
+        case 2.5:
+            // Code to upgrade from version 2.5 goes here
+            
             break;
     }
     return true;
