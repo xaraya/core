@@ -77,11 +77,29 @@ function users_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
+    $index = array('name'      => 'i_pn_users_1',
+                   'fields'    => array('pn_uid'),
+                   'unique'    => TRUE);
 
-    $query = pnDBCreateIndex($tables['users'],
-                             array('name'   => 'pn_uname_index',
-                                   'fields' => array('pn_uid'),
-                                   'unique' => 'true'));
+    $query = pnDBCreateIndex($tables['users'],$index);
+
+    $dbconn->Execute($query);
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+    $index = array(
+    'name'      => 'i_pn_users_2',
+    'fields'    => array('pn_name'),
+    'unique'    => true
+    );
+
+    $query = pnDBCreateIndex($tables['users'],$index);
+
     $dbconn->Execute($query);
 
     // Check for db errors
@@ -149,7 +167,7 @@ function users_init()
     }
 
     $query = pnDBCreateIndex($tables['user_property'],
-                             array('name'   => 'pn_prop_label_index',
+                             array('name'   => 'i_pn_user_property_1',
                                    'fields' => array('pn_prop_label'),
                                    'unique' => 'true'));
     $dbconn->Execute($query);

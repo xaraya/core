@@ -34,25 +34,23 @@
  */
 function installer_adminapi_bootstrap()
 {
+    unset($GLOBALS['PNSVuid']);
+    unset($GLOBALS['PNSVnavigationLocale']);
+    pnCoreInit(PNCORE_SYSTEM_USER);
+    
     // log in admin user
     $res = pnUserLogIn('admin', 'password', false);
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-
+    die('user loggedin');
     // load modules API
     $res = pnModAPILoad('modules', 'admin');
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
 
-    // initialize & activate adminpanels module
-    $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('adminpanels')));
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
-    }
-
-    pnRedirect(pnModURL('installer', 'admin', 'create_administrator'));
+    pnResponseRedirect(pnModURL('installer', 'admin', 'create_administrator'));
     return array();
 }
 

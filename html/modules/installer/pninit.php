@@ -32,10 +32,6 @@
  */
 function installer_init()
 {
-    // Get database information
-    list($dbconn) = pnDBGetConn();
-    $tables = pnDBGetTables();
-
     // Load in installer API
     pnInstallAPILoad('installer','admin');
 
@@ -44,8 +40,9 @@ function installer_init()
                             'initialise',
                             array('directory' => 'base',
                                   'initfunc'  => 'init'));
-    if (!isset($res)) die('could not install Xaraya');
-
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
 
     // Initialisation successful
     return true;

@@ -116,7 +116,9 @@ function installer_admin_phase5()
                                        'dbPrefix'  => $dbPrefix,
                                        'dbType'    => $dbType));
     // throw back
-    if (!isset($modified)) return;
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return NULL;
+    }
 
 
 
@@ -125,7 +127,9 @@ function installer_admin_phase5()
                                 'admin',
                                 'createdb');
         // TODO: Exception!
-        if (!isset($res)) die('could not create a database');
+        if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+            return NULL;
+        }
     }
 
     switch($HTTP_POST_VARS['install_type']){
@@ -147,12 +151,17 @@ function installer_admin_phase5()
                             'initialise',
                             array('directory' => 'installer',
                                   'initfunc'  => $initFunc));
-    if(!isset($res)) die('could not install or upgrade');
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return NULL;
+    }
 
     // Initialize *minimal* tableset
 
     // log user in
-    pnResponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
+    $res = pnInstallAPIFunc('installer','admin','bootstrap');
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return NULL;
+    }
 }
 
 
@@ -163,7 +172,7 @@ function installer_admin_finish()
 {
     $res = pnModAPILoad('blocks', 'admin');
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
+        return NULL;
     }
 
     // Load up database
