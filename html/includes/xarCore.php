@@ -735,4 +735,34 @@ function xarCore_FlushCached($cacheKey)
     }
 }
 
+/**
+* Checks if a certain function was disabled in php.ini
+ *
+ * xarCore.php function
+ * @access public
+ * @param string The function name
+ */
+function xarFuncIsDisabled($funcName)
+{
+    static $disabled = null;
+
+    if ($disabled == null) {
+        $functions = ini_get('disable_functions');
+        $functions = explode(',', $functions);
+        $disabled = array();
+        foreach ($functions as $function)
+        {
+            $function = trim ($function);
+            if (!empty($function)) 
+            {
+                $disabled[$function] = true;
+            }
+        } 
+    }
+
+    if (isset($disabled[$funcName])) return true;
+    
+    return false;
+}
+
 ?>

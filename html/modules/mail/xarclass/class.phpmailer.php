@@ -430,7 +430,9 @@ class PHPMailer
         if ($this->Sender != "" && strlen(ini_get("safe_mode"))< 1)
         {
             $old_from = ini_get("sendmail_from");
-            ini_set("sendmail_from", $this->Sender);
+            //XARAYA MODIFICATION -- Start
+            if (!xarFuncIsDisabled('ini_set')) ini_set("sendmail_from", $this->Sender);
+            //XARAYA MODIFICATION -- End
             $params = sprintf("-oi -f %s", $this->Sender);
             $rt = @mail($to, $this->EncodeHeader($this->Subject), $body, 
                         $header, $params);
@@ -439,7 +441,9 @@ class PHPMailer
             $rt = @mail($to, $this->EncodeHeader($this->Subject), $body, $header);
 
         if (isset($old_from))
-            ini_set("sendmail_from", $old_from);
+            //XARAYA MODIFICATION -- Start
+            if (!xarFuncIsDisabled('ini_set')) ini_set("sendmail_from", $old_from);
+            //XARAYA MODIFICATION -- End
 
         if(!$rt)
         {

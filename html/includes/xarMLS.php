@@ -934,7 +934,7 @@ function xarMLS_setCurrentLocale($locale)
             xarLogMessage("Resetting MLS mode to BOXED");
             xarConfigSetVar('Site.MLS.MLSMode','BOXED');
         } else {
-            ini_set('mbstring.func_overload', 7);
+            if (!xarFuncIsDisabled('ini_set')) ini_set('mbstring.func_overload', 7);
             mb_internal_encoding($curCharset);
         }
     }

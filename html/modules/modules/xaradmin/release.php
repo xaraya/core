@@ -24,7 +24,12 @@ function modules_admin_release()
     // Security Check
     if(!xarSecurityCheck('EditModules')) return;
     // allow fopen
-    ini_set('allow_url_fopen', 1);
+    if (!xarFuncIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
+    if (!ini_get('allow_url_fopen')) {
+        $msg = xarML('Unable to use fopen to get RSS feeds.');
+        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+        return;
+    }
     // Require the xmlParser class
     require_once('modules/base/xarclass/xmlParser.php');
     // Require the feedParser class
