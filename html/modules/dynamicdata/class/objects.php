@@ -98,6 +98,7 @@ class Dynamic_Object_Master
         }
         // filter on property status if necessary
         if (isset($this->status) && count($this->fieldlist) == 0) {
+            $this->fieldlist = array();
             foreach ($this->properties as $name => $property) {
                 if ($property->status == $this->status) {
                     $this->fieldlist[] = $name;
@@ -116,7 +117,13 @@ class Dynamic_Object_Master
      */
     function &getDataStores()
     {
+        // if we already have the datastores
         if (isset($this->datastores) && count($this->datastores) > 0) {
+            return $this->datastores;
+        }
+
+        // if we're filtering on property status and there are no properties matching this status
+        if (!empty($this->status) && count($this->fieldlist) == 0) {
             return $this->datastores;
         }
 
@@ -194,7 +201,8 @@ class Dynamic_Object_Master
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
         }
-        if (count($args['fieldlist']) > 0) {
+        // return only the properties we're interested in (might be none)
+        if (count($args['fieldlist']) > 0 || !empty($this->status)) {
             $properties = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
@@ -467,7 +475,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
         }
-        if (count($args['fieldlist']) > 0) {
+        if (count($args['fieldlist']) > 0 || !empty($this->status)) {
             $properties = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
@@ -497,7 +505,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
         }
-        if (count($args['fieldlist']) > 0) {
+        if (count($args['fieldlist']) > 0 || !empty($this->status)) {
             $properties = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
@@ -522,7 +530,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             $args['fieldlist'] = $this->fieldlist;
         }
         $displayvalues = array();
-        if (count($args['fieldlist']) > 0) {
+        if (count($args['fieldlist']) > 0 || !empty($this->status)) {
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
                     $label = xarVarPrepForDisplay($this->properties[$name]->label);
@@ -966,7 +974,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
         }
-        if (count($args['fieldlist']) > 0) {
+        if (count($args['fieldlist']) > 0 || !empty($this->status)) {
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
@@ -1066,7 +1074,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
         }
-        if (count($args['fieldlist']) > 0) {
+        if (count($args['fieldlist']) > 0 || !empty($this->status)) {
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
@@ -1125,7 +1133,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
         }
-        if (count($args['fieldlist']) == 0) {
+        if (count($args['fieldlist']) == 0 && empty($this->status)) {
             $args['fieldlist'] = array_keys($this->properties);
         }
 
