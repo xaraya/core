@@ -15,8 +15,8 @@
 function mail_init()
 {
     xarModSetVar('mail', 'server', 'mail');
-    xarModSetVar('mail', 'adminname', 'Your Name');
-    xarModSetVar('mail', 'adminmail', 'Your Email');
+    //xarModSetVar('mail', 'adminname', 'Your Name');
+    //xarModSetVar('mail', 'adminmail', 'Your Email');
     xarModSetVar('mail', 'replyto', '0');
     xarModSetVar('mail', 'wordwrap', '50');
     xarModSetVar('mail', 'priority', '3');

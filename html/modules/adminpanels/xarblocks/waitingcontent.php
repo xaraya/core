@@ -41,7 +41,7 @@ function adminpanels_waitingcontentblock_display($blockinfo)
                          ACCESS_EDIT)) {
         return;
     }
-
+/*
     // Load API
     if (!xarModAPILoad('adminpanels', 'user')) return;
 
@@ -64,7 +64,9 @@ function adminpanels_waitingcontentblock_display($blockinfo)
 
     // Populate block info and pass to BlockLayout.
     $blockinfo['content'] = $data;
-    return $blockinfo;
+    */
+
+    return;
 
 }
 
