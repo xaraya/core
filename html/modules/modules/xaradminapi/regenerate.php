@@ -286,6 +286,9 @@ function modules_adminapi_regenerate()
         }
     }
 
+    // Finds and updates event handlers
+    if (!xarModAPIFunc('modules', 'admin', 'geteventhandlers')) {return;}
+
     return true;
 }
 

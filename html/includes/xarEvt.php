@@ -20,7 +20,6 @@
  * @author Frank Besler <besfred@xaraya.com>
  * @todo Document EMS
  * @todo Document functions
- * @todo Implement discovery functions for modules
  */
 
 /**
@@ -94,24 +93,44 @@ function xarEvt__shutdown_handler()
 */
 function xarEvt_trigger($eventName, $value = NULL)
 {
-    //The active mods should not change during page view
-    static $activemods = false;
     // Must make sure the event exists.
     if (!xarEvt__checkEvent($eventName)) return; // throw back
 
-    // Call the event handlers in the active modules
     //FIXME: MAKE A global variable to tell *all* of the core not to cache anything
     //during page view! (change xarMod_noCacheState for that one)
     //There are case (instalation, module instalation or others?) where the cache during
     //the pageview can be compromised. As these are rare events, a variable to tell
     //everything not to cache would be good enough
-    if (!empty($GLOBALS['xarMod_noCacheState']) || !$activemods) $activemods = xarEvt__GetActiveModsList();
-    
+
+    // Don't trigger events if modules are changing state
+    if (!empty($GLOBALS['xarMod_noCacheState'])) return;
+
     xarLogMessage("Triggered event ($eventName)");
 
-    $nractive=count($activemods);
-    for ($i =0; $i < $nractive; $i++) {
-        xarEvt__notify($activemods[$i]['name'], $eventName, $value);
+    // get the list of event handlers
+    $handlers = xarEvt__GetHandlersList();
+
+    $todo = array();
+
+    // specific event handlers (lower-case in the handlers list)
+    $event = strtolower($eventName);
+    if (!empty($handlers[$event])) {
+        foreach ($handlers[$event] as $modName => $modDir) {
+            $todo[$modName] = $modDir;
+        }
+    }
+
+    // generic event handlers
+    $event = 'event';
+    if (!empty($handlers[$event])) {
+        foreach ($handlers[$event] as $modName => $modDir) {
+            $todo[$modName] = $modDir;
+        }
+    }
+
+    // call the different event handlers
+    foreach ($todo as $modName => $modDir) {
+        xarEvt__notify($modName, $eventName, $value, $modDir);
     }
 
 }
@@ -128,17 +147,21 @@ function xarEvt_trigger($eventName, $value = NULL)
  * @param   $modName   string The name of the module
  * @param   $eventName string The name of the event to send
  * @param   $value     mixed  Optional value to pass to the event handler 
+ * @param   $modDir    string The directory of the module
  * @return  void
  * @throws  BAD_PARAM
  * @todo    Analyze thoroughly for performance issues.
 */
-function xarEvt__notify($modName, $eventName, $value)
+function xarEvt__notify($modName, $eventName, $value, $modDir = NULL)
 {
     if (!xarEvt__checkEvent($eventName)) return; // throw back
 
     if (empty($modName)) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
+    }
+    if (empty($modDir)) {
+        $modDir = $modName;
     }
 
     // We can't rely on the API, the event system IS the API!
@@ -154,8 +177,8 @@ function xarEvt__notify($modName, $eventName, $value)
     $funcGeneral  = "{$modName}_eventapi_OnEvent";
 
     // set which file to load for looking up the event handler
-    $xarapifile="modules/{$modName}/xareventapi.php";
-    $xartabfile="modules/{$modName}/xartables.php";    
+    $xarapifile="modules/{$modDir}/xareventapi.php";
+    $xartabfile="modules/{$modDir}/xartables.php";    
 
     static $loaded = array();
 
@@ -183,7 +206,7 @@ function xarEvt__notify($modName, $eventName, $value)
         $funcToRun($value);
         if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
      } elseif (isset($funcToRunGeneral)) {
-        $funcToRunGeneral($value);
+        $funcToRunGeneral($eventName, $value);
         if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
      }
 
@@ -232,67 +255,39 @@ function xarEvt__checkEvent($eventName)
 }
 
 /**
- * Replicate the functionality of xarModGetList(array('State'=>XARMOD_STATE_ACTIVE));
+ * Get the list of known event handlers
  *
- * @author  Frank Besler
+ * @author  mikespub
  * @access  private
- * @return array of module information arrays
+ * @return array of event handlers
  */
-//FIXME: This should be in module's space, shouldnt it?
-function xarEvt__GetActiveModsList()
+function xarEvt__GetHandlersList()
 {
-    // use vars instead of defines to narrow the scope
-    $XARMOD_STATE_ACTIVE  = 3;
-    $XARMOD_MODE_SHARED   = 1;
-    $XARMOD_MODE_PER_SITE = 2;
-    
-    $dbconn =& xarDBGetConn();
-
-    $systabpre = xarDBGetSystemTablePrefix();
-    $sitetabpre = xarDBGetSiteTablePrefix();
-    $modulestable = $sitetabpre.'_modules';
-    $module_statesTables = array(($systabpre.'_module_states'), ($sitetabpre.'_module_states'));
-    $mode = $XARMOD_MODE_SHARED;
-    $modList = array();
-
-    // Here we do 2 SELECTs: one for SHARED moded modules and
-    // one for PER_SITE moded modules
-    // Maybe this could be done with a single query?
-    for ($i = 0; $i < 2; $i++ ) {
-        $module_statesTable = $module_statesTables[$i];
-
-        $query = "SELECT    mods.xar_regid, mods.xar_name,
-                            mods.xar_directory, mods.xar_version,
-                            states.xar_state
-                  FROM      $modulestable AS mods
-                  LEFT JOIN $module_statesTable AS states 
-                  ON        mods.xar_regid = states.xar_regid
-                  WHERE     states.xar_state = ? AND mods.xar_mode = ?";
-        $result =& $dbconn->Execute($query,array($XARMOD_STATE_ACTIVE,$mode));
+    if (xarCore_IsCached('Evt.Handlers', 'list')) {
+        return xarCore_GetCached('Evt.Handlers', 'list');
+    }
+    if (function_exists('xarConfigGetVar')) {
+        $handlers = xarConfigGetVar('Site.Evt.Handlers');
+    } else {
+        $dbconn =& xarDBGetConn();
+        $sitetabpre = xarDBGetSiteTablePrefix();
+        $configtable = $sitetabpre.'_config_vars';
+        $query = "SELECT xar_value
+                    FROM $configtable
+                   WHERE xar_name = 'Site.Evt.Handlers'";
+        $result =& $dbconn->Execute($query);
         if (!$result) return;
-        
-        while(!$result->EOF) {
-            list($modInfo['regid'],     $modInfo['name'],
-                 $modInfo['directory'], $modInfo['version'],
-                 $modState) = $result->fields;
-                
-            if (xarCore_IsCached('Evt.Mod.Infos', $modInfo['regid'])) {
-                // Get infos from cache
-                $modList[] = xarCore_GetCached('Evt.Mod.Infos', $modInfo['regid']);
-            } else {
-                $modInfo['mode'] = (int) $mode;
-                $modInfo['state'] = (int) $modState;
-                xarCore_SetCached('Evt.Mod.BaseInfos', $modInfo['name'], $modInfo);
-                xarCore_SetCached('Evt.Mod.Infos', $modInfo['regid'], $modInfo);
-                $modList[] = $modInfo;
+        $handlers = array();
+        if (!$result->EOF) {
+            list($value) = $result->fields;
+            if (!empty($value)) {
+                $handlers = unserialize($value);
             }
-            $modInfo = array();
-            $result->MoveNext();
         }
         $result->Close();
-        $mode = $XARMOD_MODE_PER_SITE;
     }
-    return $modList;
+    xarCore_SetCached('Evt.Handlers', 'list', $handlers);
+    return $handlers;
 }
 
 ?>
