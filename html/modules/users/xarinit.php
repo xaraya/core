@@ -209,6 +209,11 @@ president@whitehouse.gov';
         return false;
     }
 
+    if (!xarModRegisterHook('item', 'usermenu', 'GUI',
+                           'users', 'user', 'usermenu')) {
+        return false;
+    }
+
     return true;
 }
 /**
