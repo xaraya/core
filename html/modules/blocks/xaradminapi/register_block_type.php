@@ -18,8 +18,8 @@ function blocks_adminapi_register_block_type($args)
     extract($args);
     if ($res) {
         $msg = xarML('Block type #(1) already exists in the #(2) module', $blockType, $modName);
-        xarExceptionSet(XAR_USER_EXCEPTION, 'AlreadyExists', new DefaultUserException($msg));
-	    return;
+        xarExceptionSet(XAR_USER_EXCEPTION, 'ALREADY_EXISTS', new DefaultUserException($msg));
+        return;
     }
 
     list ($dbconn) = xarDBGetConn();

@@ -107,8 +107,6 @@ if (!xarMain()) {
 
     // If we're here there must be surely an uncaught exception
     if (xarCoreIsDebuggerActive()) {
-//        $text = xarML('Caught exception');
-//        $text .= '<br />';
         $text = xarExceptionRender('html');
     } else {
         $text = xarML('An error occurred while processing your request. The details are:');

@@ -14,7 +14,7 @@ function roles_adminapi_purge($args)
 
     if ($state == 3) {
         $msg = xarML('Cannot Purge Active Users');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new DefaultUserException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new SystemException($msg));
         return;
     }
 

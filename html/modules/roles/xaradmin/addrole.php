@@ -29,7 +29,7 @@ function roles_admin_addrole()
     if ($ptype == 0) {
         // check for valid username
         if ((!$puname) || !(!preg_match("/[[:space:]]/", $puname))) {
-            $msg = xarML('There is an error in username');
+            $msg = xarML('There is an error in the username');
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
         }
@@ -42,13 +42,13 @@ function roles_admin_addrole()
 
         if ($user != false) {
             $msg = xarML('That username is already taken.');
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            xarExceptionSet(XAR_USER_EXCEPTION, 'DUPLICATE_DATA', new DefaultUserException($msg));
             return;
         }
 
         if (strrpos($puname, ' ') > 0) {
-            $msg = xarML('There is a space in username');
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            $msg = xarML('There is a space in the username');
+            xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
             return;
         }
         // check for duplicate email address
@@ -59,7 +59,7 @@ function roles_admin_addrole()
 
         if ($user != false) {
             $msg = xarML('That email address is already registered.');
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            xarExceptionSet(XAR_USER_EXCEPTION, 'DUPLICATE_DATA', new DefaultUserException($msg));
             return;
         }
         // TODO: Replace with DD property type check.
@@ -67,14 +67,14 @@ function roles_admin_addrole()
         $res = preg_match('/.*@.*/', $pemail);
 
         if ($res == false) {
-            $msg = xarML('There is an error in email address');
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            $msg = xarML('There is an error in the email address');
+            xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
             return;
         }
 
         if (strcmp($ppass1, $ppass2) != 0) {
             $msg = xarML('The two password entries are not the same');
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
             return;
         }
     }

@@ -15,13 +15,13 @@
 function variable_validations_enum (&$subject, $parameters, $supress_soft_exc) {
 
     $found = false;
-    
+
     foreach ($parameters as $param) {
         if ($subject == $param) {
             $found = true;
         }
     }
-    
+
     if ($found) {
         return true;
     } else {
@@ -33,7 +33,7 @@ function variable_validations_enum (&$subject, $parameters, $supress_soft_exc) {
 
             $msg .= $param;
         }
-        if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
         return false;
     }
 }

@@ -175,7 +175,6 @@ function roles_activate()
     // Set up an initial value for module variables.
     xarModSetVar('roles', 'welcomeemail', 'Your account is now active.  Thank you, and welcome to our community.');
     xarModSetVar('roles', 'rolesperpage', 20);
-    xarModSetVar('roles', 'showtacs', 0);
     xarModSetVar('roles', 'allowregistration', 1);
     xarModSetVar('roles', 'requirevalidation', 1);
     xarModSetVar('roles', 'defaultgroup', 'Users');
@@ -326,8 +325,6 @@ function roles_delete()
     if (empty($query)) return; // throw back
     if (!$dbconn->Execute($query)) return;
     // Delete any module variables
-    xarModDelVar('roles', 'tacs');
-    xarModDelVar('roles', 'showtacs');
     xarModDelVar('roles', 'rolesperpage');
     xarModDelVar('roles', 'disallowednames');
     xarModDelVar('roles', 'disallowedemails');

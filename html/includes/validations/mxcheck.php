@@ -53,7 +53,7 @@ function variable_validations_mxcheck (&$subject, $parameters=null, $supress_sof
         // If MX record exists, save MX record address.
         // getmxrr function reference : http://www.php.net/manual/en/function.getmxrr.php
         getmxrr ($Domain, $MXHost);
-        
+
         // Getmxrr function does to store MX record address about $Domain in arrangement form to $MXHost.
         // $ConnectAddress socket connection address.
         $ConnectAddress = $MXHost[0];
@@ -97,9 +97,9 @@ function variable_validations_mxcheck (&$subject, $parameters=null, $supress_sof
 
                     //We should add some caching for these cases to avoid an excessive
                     // hardware consumption exploit thru sending many of these e-mails to be checked
-                    
+
                     $msg = xarML('Invalid e-mail #(1), the mail server doesnt recognize it.', $subject);
-                    if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+                    if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
 
                     return false;
                 }
@@ -107,7 +107,7 @@ function variable_validations_mxcheck (&$subject, $parameters=null, $supress_sof
     } else { // Failure in socket connection
 
         $msg = xarML('Unable to connect to the mail server #(1) for e-mail #(2).', $ConnectAddress, $subject);
-        if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
 
         return false;
     }

@@ -30,16 +30,16 @@ define('XAR_TOKEN_HTML_COMMENT_CLOSE', '-->');
 /**
  * xarTpl__CompilerError
  *
- * For now just a stub class to a default user exception
+ * For now just a stub class to a system exception
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__CompilerError extends DefaultUserException
+class xarTpl__CompilerError extends SystemException
 {
     function xarTpl__CompilerError($msg)
     {
-        $this->DefaultUserException($msg);
+        $this->SystemException($msg);
     }
 }
 
@@ -52,7 +52,7 @@ class xarTpl__CompilerError extends DefaultUserException
  * @package blocklayout
  * @access private
  */
-class xarTpl__ParserError extends DefaultUserException
+class xarTpl__ParserError extends SystemException
 {
     function xarTpl__ParserError($msg, $posInfo)
     {
@@ -65,7 +65,7 @@ class xarTpl__ParserError extends DefaultUserException
             $msg .= str_repeat('-', $posInfo->column - 3);
         }
         $msg .= '^';
-        $this->DefaultUserException($msg);
+        $this->SystemException($msg);
     }
 }
 
@@ -109,7 +109,7 @@ class xarTpl__Compiler
     {
         // FIXME: can we get rid of the @?
         if (!($fp = @fopen($fileName, 'r'))) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'CompilerError',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'COMPILER_ERROR',
                             new xarTpl__CompilerError("Cannot open template file '$fileName'."));
             return;
         }
@@ -216,7 +216,7 @@ class xarTpl__CodeGenerator
                 //xarLogVariable('child', $child, XARLOG_LEVEL_ERROR);
                 if ($checkNode->needAssignment() || $checkNode->needParameter()) {
                     if (!$child->isAssignable() && $child->tagName != 'TextNode') {
-                        xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                         new xarTpl__ParserError("The '".$checkNode->tagName."' tag cannot have children of type '".$child->tagName."'.", $child));
                         return;
                     }
@@ -292,7 +292,7 @@ class xarTpl__CodeGenerator
 /**
  * xarTpl__Parser - the BL parser
  *
- * modelled as extension to the position info class, 
+ * modelled as extension to the position info class,
  * parses a template source file and constructs a document tree
  *
  * @package blocklayout
@@ -388,11 +388,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // <Dracos> No idea how to handle this atm
                         // <Mrb> This is why we need <xar:blocklayout> as the root tag
                         //       in the theme, anything before the <xar:blocklayout>
-                        //       will be copied verbatim to the output. 
+                        //       will be copied verbatim to the output.
                         //       (well, almost verbatim)
-                        
+
                         // Wind forward and copy to output
-                        
+
                         $foundEndXmlHeader=false;
                         $copy = '';
                         while(!$foundEndXmlHeader) {
@@ -407,16 +407,16 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             }
                         }
 
-                        // We do the exception check here, so the output is already parsed. 
+                        // We do the exception check here, so the output is already parsed.
                         if($this->line != 1) {
-                            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidSyntax',
+                            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_SYNTAX',
                                             new xarTpl__ParserError('XML header can only be on the first line of the document',$this));
                             $token ='';
                             // Don't return here, do the rest of the document?
-                            break; 
-                        }   
+                            break;
+                        }
 
-                        // Copy the header to the output 
+                        // Copy the header to the output
                         $short_open_allowed = ini_get('short_open_tag');
                         if($short_open_allowed) {
                             $token = "<?php echo '<?xml " . $copy . "?>';?>";
@@ -427,14 +427,14 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     }
                     // <Dracos>  Embedded php killer
                     elseif ($nextToken == 'php') {
-                        xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                         new xarTpl__ParserError("PHP code detected outside allowed syntax ", $this));
                         return;
                     }
                     else {
                         $this->stepBack(3);
                         $nextToken = $this->getNextToken(1);
-                        xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                         new xarTpl__ParserError("PHP code detected outside allowed syntax", $this));
                         return;
                     }
@@ -448,7 +448,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // <xar: tag
                         //xarLogMessage('found '.$nextToken, XARLOG_LEVEL_ERROR);
                         if (!$parent->hasChildren()) {
-                            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                             new xarTpl__ParserError("The '".$parent->tagName."' tag cannot have children.", $parent));
                             return;
                         }
@@ -458,7 +458,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 $node = $this->nodesFactory->createTextNode($text, $this);
                                 $children[] = $node;
                             } elseif (trim($text) != '') {
-                                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                                 new xarTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
                                 return;
                             }
@@ -474,12 +474,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Check for uniqueness of id attribute
                         if (isset($attributes['id'])) {
                             if (isset($this->tagIds[$attributes['id']])) {
-                                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                                 new xarTpl__ParserError("Not unique id in '".$tagName."' tag.", $this));
                                 return;
                             }
                             if ($attributes['id'] == '') {
-                                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                                 new xarTpl__ParserError("Empty id in '".$tagName."' tag.", $this));
                                 return;
                             }
@@ -524,7 +524,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                     $node = $this->nodesFactory->createTextNode($text, $this);
                                     $children[] = $node;
                                 } elseif (trim($text) != '') {
-                                    xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                                     new xarTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
                                     return;
                                 }
@@ -537,7 +537,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             }
                             $stackTagName = array_pop($this->tagNamesStack);
                             if ($tagName != $stackTagName) {
-                                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                                 new xarTpl__ParserError("Found closed '$tagName' tag where close '$stackTagName' was expected.", $this));
                                 return;
                             }
@@ -551,7 +551,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 // Check for comments or doctype
                 //
                 elseif ($nextToken == '!') {
-                    // <garett> handle both <!-- and <!--- comment types 
+                    // <garett> handle both <!-- and <!--- comment types
                     // (html comments are passed through, BL comments are stripped out)
 
                     /**
@@ -643,7 +643,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     // FIXME: this goes bonkers on embedded javascript
                     if($tagtoken == '<'){
                         xarLogVariable('parent tag',$parent);
-                        xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                         new xarTpl__ParserError("Found open tag before close tag.", $this));
                         return;
                     }
@@ -660,7 +660,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 $nextToken = $this->getNextToken(4);
                 if ($nextToken == 'xar-') {
                     if (!$parent->hasChildren()) {
-                        xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                         new xarTpl__ParserError("The '".$parent->tagName."' tag cannot have children.", $parent));
                         return;
                     }
@@ -670,7 +670,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             $node = $this->nodesFactory->createTextNode($text, $this);
                             $children[] = $node;
                         } elseif (trim($text) != '') {
-                            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                             new xarTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
                             return;
                         }
@@ -721,7 +721,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             }
                             // Only allow xar* functions
                             if(!function_exists($func) && substr($func,0,3) != 'xar'){
-                                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                                 new xarTpl__ParserError("Invalid or disallowed API call: $func", $this));
                                 return;
                             }
@@ -729,7 +729,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         }
                     }
                     if (!$parent->hasChildren()) {
-                        xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                         new xarTpl__ParserError("The '".$parent->tagName."' tag cannot have children.", $parent));
                         return;
                     }
@@ -739,7 +739,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             $node = $this->nodesFactory->createTextNode($text, $this);
                             $children[] = $node;
                         } elseif (trim($text) != '') {
-                            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                             new xarTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
                             return;
                         }
@@ -751,7 +751,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $nextToken = $this->getNextToken(1);
                         $distance++;
                         if (!isset($token)) {
-                            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidFile',
+                            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_FILE',
                                             new xarTpl__ParserError("Unexpected end of the file.", $this));
                             return;
                         } elseif ($nextToken == '#') {
@@ -761,14 +761,14 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         }
                         elseif ($this->peek() == chr(10)) {
                             $this->stepBack($distance);
-                            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                             new xarTpl__ParserError("Misplaced '#' character. To print the literal '#', use '##'.", $this));
                             return;
                         }
                         $instruction .= $nextToken;
                     }
                     if(strpos($instruction, ';')){
-                        xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                         new xarTpl__ParserError("Injected PHP detected in: $instruction", $this));
                         return;
                     }
@@ -786,11 +786,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     break;
                 }
             } // end switch
-            $text .= $token;            
+            $text .= $token;
         } // end while
         if ($text != '') {
             if (!$parent->hasText()) {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                 new xarTpl__ParserError("The '".$parent->tagName."' tag cannot have text inside.", $parent));
                 return;
             }
@@ -814,7 +814,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             $variables[$variable[0]] = $variable[1];
         }
         if ($exitToken != '?') {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                             new xarTpl__ParserError("Invalid '$exitToken' character in header tag.", $this));
             return;
         }
@@ -822,12 +822,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         while (true) {
             $token = $this->getNextToken();
             if (!isset($token)) {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidFile',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_FILE',
                                 new xarTpl__ParserError("Unexpected end of the file.", $this));
                 return;
             }
             if ($token == '<') {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                 new xarTpl__ParserError("Unclosed tag.", $this));
                 return;
             }
@@ -845,12 +845,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         while (true) {
             $token = $this->getNextToken();
             if (!isset($token)) {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidFile',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_FILE',
                                 new xarTpl__ParserError("Unexpected end of the file.", $this));
                 return;
             }
             if ($token == '<') {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                 new xarTpl__ParserError("Unclosed tag.", $this));
                 return;
             }
@@ -860,7 +860,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             $tagName .= $token;
         }
         if ($tagName == '') {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                             new xarTpl__ParserError("Unnamed tag.", $this));
             return;
         }
@@ -885,12 +885,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             while (true) {
                 $token = $this->getNextToken();
                 if (!isset($token)) {
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidFile',
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_FILE',
                                     new xarTpl__ParserError("Unexpected end of the file.", $this));
                     return;
                 }
                 if ($token == '<') {
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                     new xarTpl__ParserError("Unclosed tag.", $this));
                     return;
                 }
@@ -909,21 +909,21 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         while (true) {
             $token = $this->getNextToken();
             if (!isset($token)) {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidFile',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_FILE',
                                 new xarTpl__ParserError("Unexpected end of the file.", $this));
                 return;
             } elseif ($token == '"' || $token == "'") {
                 $quote = $token;
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                 new xarTpl__ParserError("Invalid '$token' character in attribute name.", $this));
                 return;
             } elseif ($token == '<') {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                 new xarTpl__ParserError("Unclosed tag.", $this));
                 return;
             } elseif ($token == '>' || $token == '/' || $token == '?') {
                 if (trim($name) != '') {
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                     new xarTpl__ParserError("Invalid '$name' attribute.", $this));
                     return;
                 }
@@ -935,7 +935,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         $name = trim($name);
         if ($name == '') {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ATTRIBUTE',
                             new xarTpl__ParserError("Unnamed attribute.", $this));
             return;
         }
@@ -945,11 +945,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         while (true) {
             $token = $this->getNextToken();
             if (!isset($token)) {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidFile',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_FILE',
                                 new xarTpl__ParserError("Unexpected end of the file.", $this));
                 return;
             } elseif ($token == '>') {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ATTRIBUTE',
                                 new xarTpl__ParserError("Unclosed '$name' attribute.", $this));
                 return;
             } elseif ($token == $quote) {
@@ -977,11 +977,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         while (true) {
             $token = $this->getNextToken();
             if (!isset($token)) {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidFile',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_FILE',
                                 new xarTpl__ParserError("Unexpected end of the file.", $this));
                 return;
             } elseif ($token == '<') {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                 new xarTpl__ParserError("Unclosed tag.", $this));
                 return;
             } elseif ($token == '>') {
@@ -991,7 +991,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         $tagName = rtrim($tagName);
         if ($tagName == '') {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                             new xarTpl__ParserError("Unnamed tag.", $this));
             return;
         }
@@ -1005,7 +1005,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         while (true) {
             $token = $this->getNextToken();
             if (!isset($token)) {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidFile',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_FILE',
                                 new xarTpl__ParserError("Unexpected end of the file.", $this));
                 return;
             } elseif ($token == '-' || $token == ';') {
@@ -1014,7 +1014,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             $entityType .= $token;
         }
         if ($entityType == '') {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidEntity',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ENTITY',
                             new xarTpl__ParserError("Untyped entity.", $this));
             return;
         }
@@ -1024,12 +1024,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             while (true) {
                 $token = $this->getNextToken();
                 if (!isset($token)) {
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidFile',
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_FILE',
                                    new xarTpl__ParserError("Unexpected end of the file.", $this));
                     return;
                 } elseif ($token == ';') {
                     if ($parameter == '') {
-                        xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidEntity',
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ENTITY',
                                        new xarTpl__ParserError("Empty parameter.", $this));
                         return;
                     }
@@ -1094,7 +1094,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         //$this->lineText .= $token;
 
-        // <MrB> The \r\n combo shouldn't happen anymore, as we filter that out, 
+        // <MrB> The \r\n combo shouldn't happen anymore, as we filter that out,
         // commented it out for now.
 //         if ($token == "\r") {
 //             if (substr($this->templateSource, $start + 1, 1) == "\n") {
@@ -1222,7 +1222,7 @@ class xarTpl__NodesFactory
         // FIXME: how do you handle new tags registered by module developers ?
         // TODO: is xarTplRegisterTag still supposed to work for this ?
         //If we get here, the tag doesn't exist so we raise a user exception
-        xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                        new xarTpl__ParserError("Cannot instantiate unexistent tag '$tagName'.", $parser));
         return;
     }
@@ -1264,7 +1264,7 @@ class xarTpl__NodesFactory
         }
         // FIXME: how do you handle new entities registered by module developers ?
         // TODO: how do you register new entities in the first place ?
-        xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidEntity',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ENTITY',
                        new xarTpl__ParserError("Cannot instantiate unexistent entity '$entityType'.", $parser));
         return;
     }
@@ -1287,7 +1287,7 @@ class xarTpl__NodesFactory
             return $node;
         }
 
-        xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidInstruction',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_INSTRUCTION',
                        new xarTpl__ParserError("Cannot instantiate non-existent instruction '#$instruction#'.", $parser));
         return;
     }
@@ -1351,7 +1351,7 @@ class xarTpl__SpecialVariableNamesResolver
     function resolve($specialVarName, $posInfo)
     {
         if (!isset($this->varsMapping[$specialVarName])) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidSpecialVariable',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_SPECIALVARIABLE',
                            new xarTpl__ParserError("Invalid use of '$specialVarName' special variable.", $posInfo));
             return;
         }
@@ -1368,7 +1368,7 @@ class xarTpl__SpecialVariableNamesResolver
  * @access private
  * @todo code the version number somewhere more central
  * @todo is the encoding fixed?
- * 
+ *
  */
 class xarTpl__TemplateVariables
 {
@@ -1459,7 +1459,7 @@ class xarTpl__ExpressionTransformer
 
         $replaceLogic   = array(' == ', ' != ',  ' < ',  ' > ', ' === ', ' !== ', ' <= ', ' >= ');
         $phpExpression = str_replace($findLogic, $replaceLogic, $phpExpression);
-  
+
         return $phpExpression;
     }
 }
@@ -1660,7 +1660,7 @@ class xarTpl__XarVarInstructionNode extends xarTpl__InstructionNode
     function render()
     {
         if (strlen($this->instruction) <= 1) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidInstruction',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_INSTRUCTION',
                            new xarTpl__ParserError('Invalid variable reference instruction.', $this));
             return;
         }
@@ -1685,7 +1685,7 @@ class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
     function render()
     {
         if (strlen($this->instruction) <= 1) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidInstruction',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_INSTRUCTION',
                            new xarTpl__ParserError('Invalid API reference instruction.', $this));
         }
         $instruction = xarTpl__ExpressionTransformer::transformPHPExpression($this->instruction);
@@ -1709,7 +1709,7 @@ class xarTpl__XarVarEntityNode extends xarTpl__EntityNode
     function render()
     {
         if (count($this->parameters) != 1) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingParameter',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_PARAMETER',
                            new xarTpl__ParserError('Parameters mismatch in &xar-var entity.', $this));
             return;
         }
@@ -1736,7 +1736,7 @@ class xarTpl__XarConfigEntityNode extends xarTpl__EntityNode
     function render()
     {
         if (count($this->parameters) != 1) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingParameter',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_PARAMETER',
                            new xarTpl__ParserError('Parameters mismatch in &xar-config entity.', $this));
             return;
         }
@@ -1763,7 +1763,7 @@ class xarTpl__XarModEntityNode extends xarTpl__EntityNode
     function render()
     {
         if (count($this->parameters) != 2) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingParameter',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_PARAMETER',
                            new xarTpl__ParserError('Parameters mismatch in &xar-mod entity.', $this));
             return;
         }
@@ -1791,7 +1791,7 @@ class xarTpl__XarSessionEntityNode extends xarTpl__EntityNode
     function render()
     {
         if (count($this->parameters) != 1) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingParameter',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_PARAMETER',
                            new xarTpl__ParserError('Parameters mismatch in &xar-session entity.', $this));
             return;
         }
@@ -1813,7 +1813,7 @@ class xarTpl__XarModurlEntityNode extends xarTpl__EntityNode
     function render()
     {
         if (count($this->parameters) != 3) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingParameter',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_PARAMETER',
                            new xarTpl__ParserError('Parameters mismatch in &xar-modurl entity.', $this));
             return;
         }
@@ -1839,7 +1839,7 @@ class xarTpl__XarUrlEntityNode extends xarTpl__EntityNode
     function render()
     {
         if (count($this->parameters) < 3) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingParameter',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_PARAMETER',
                            new xarTpl__ParserError('Parameters mismatch in &xar-url entity.', $this));
             return;
         }
@@ -1848,7 +1848,7 @@ class xarTpl__XarUrlEntityNode extends xarTpl__EntityNode
             $tplVars =& xarTpl__TemplateVariables::instance();
             $module = $tplVars->get('module');
             if (empty($module)) {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'MissingParameter',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_PARAMETER',
                                new xarTpl__ParserError('Empty module parameter in &xar-url entity.', $this));
                 return;
             }
@@ -1922,17 +1922,17 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
     function render()
     {
         extract($this->attributes);
-        
+
         if (!isset($name)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                             new xarTpl__ParserError('Missing \'name\' attribute in <xar:var> tag.', $this));
             return;
         }
-        
+
         if (!isset($scope)) {
             $scope = 'local';
         }
-        
+
         switch ($scope) {
         case 'config':
             return "xarConfigGetVar('".$name."')";
@@ -1940,7 +1940,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
             return "xarSessionGetVar('".$name."')";
         case 'module':
             if (!isset($module)) {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                                 new xarTpl__ParserError('Missing \'module\' attribute in <xar:var> tag.', $this));
                 return;
             }
@@ -1957,12 +1957,12 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
             }
             return $name;
         default:
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ATTRIBUTE',
                             new xarTpl__ParserError('Invalid value for \'local\' attribute in <xar:var> tag.', $this));
             return;
         }
     }
-    
+
     function needExceptionsControl()
     {
         if (!isset($this->attributes['scope'])) {
@@ -1998,11 +1998,11 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         extract($this->attributes);
 
         if (!isset($name)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'name\' attribute in <xar:loop> tag.', $this));
             return;
         }
-        
+
         $name = xarTpl__ExpressionTransformer::transformPHPExpression($name);
         if (!isset($name)) {
             return; // throw back
@@ -2086,7 +2086,7 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
         extract($this->attributes);
 
         if (!isset($mask)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'mask\' attribute in <xar:sec> tag.', $this));
             return;
         }
@@ -2099,7 +2099,7 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
             } elseif ($catch == 'false') {
                 $catch = 0;
             } else {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ATTRIBUTE',
                 new xarTpl__ParserError('Invalid \'catch\' attribute in <xar:sec> tag.'.
                                         ' \'catch\' must be boolean (true or false).', $this));
                 return;
@@ -2163,13 +2163,13 @@ class xarTpl__XarTernaryNode extends xarTpl__TplTagNode
         extract($this->attributes);
 
         if (!isset($condition)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'condition\' attribute in <xar:ternary> tag.', $this));
             return;
         }
 
         if (count($this->children) != 3 || $this->children[1]->tagName != 'else') {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                            new xarTpl__ParserError('Missing subexpressions or \'else\' tag in <xar:ternary> tag.', $this));
             return;
         }
@@ -2210,7 +2210,7 @@ class xarTpl__XarIfNode extends xarTpl__TplTagNode
         extract($this->attributes);
 
         if (!isset($condition)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'condition\' attribute in <xar:if> tag.', $this));
             return;
         }
@@ -2259,7 +2259,7 @@ class xarTpl__XarElseifNode extends xarTpl__TplTagNode
         extract($this->attributes);
 
         if (!isset($condition)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'condition\' attribute in <xar:elseif> tag.', $this));
             return;
         }
@@ -2299,7 +2299,7 @@ class xarTpl__XarElseNode extends xarTpl__TplTagNode
                 $output = " : ";
                 break;
             default:
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                            new xarTpl__ParserError("The <xar:else> tag cannot be placed under '".$this->parentTagName."' tag.", $this));
                 return;
         }
@@ -2332,7 +2332,7 @@ class xarTpl__XarWhileNode extends xarTpl__TplTagNode
         extract($this->attributes);
 
         if (!isset($condition)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'condition\' attribute in <xar:while> tag.', $this));
             return;
         }
@@ -2381,19 +2381,19 @@ class xarTpl__XarForNode extends xarTpl__TplTagNode
         extract($this->attributes);
 
         if (!isset($start)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'start\' attribute in <xar:for> tag.', $this));
             return;
         }
 
         if (!isset($test)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'test\' attribute in <xar:for> tag.', $this));
             return;
         }
 
         if (!isset($iter)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'iter\' attribute in <xar:for> tag.', $this));
             return;
         }
@@ -2450,14 +2450,14 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
         extract($this->attributes);
 
         if (!isset($in)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'in\' attribute in <xar:foreach> tag.', $this));
             return;
         }
 
         // FIXME: this doesn't do what you think, and there's no way to test for this at compilation
         if (!array($in)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ATTRIBUTE',
                            new xarTpl__ParserError('Invalid \'in\' attribute in <xar:foreach> tag. \'in\' must be an array', $this));
             return;
         }
@@ -2470,7 +2470,7 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
         } elseif (isset($key)) {
             return "foreach (array_keys($in) as $key) { ";
         } else {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'key\' or \'value\' attribute in <xar:foreach> tag.', $this));
             return;
         }
@@ -2511,13 +2511,13 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
         extract($this->attributes);
 
         if (!isset($name)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'name\' attribute in <xar:block> tag.', $this));
             return;
         }
 
         if (!isset($module)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'module\' attribute in <xar:block> tag.', $this));
             return;
         }
@@ -2596,13 +2596,13 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
         extract($this->attributes);
 
         if (!isset($template)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Must have \'template\' attribute in open <xar:blockgroup> tag.', $this));
             return;
         }
 
         if (isset($name)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                        new xarTpl__ParserError('Cannot have \'name\' attribute in open <xar:blockgroup> tag.', $this));
             return;
         }
@@ -2620,13 +2620,13 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
         extract($this->attributes);
 
         if (!isset($name)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'name\' attribute in <xar:blockgroup> tag.', $this));
             return;
         }
 
         if (isset($template)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                        new xarTpl__ParserError('Cannot have \'template\' attribute in closed <xar:blockgroup/> tag.', $this));
             return;
         }
@@ -2661,13 +2661,13 @@ class xarTpl__XarMlNode extends xarTpl__TplTagNode
         if (count($this->children) == 0 ||
            ($this->children[0]->tagName != 'mlkey' &&
             $this->children[0]->tagName != 'mlstring')) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                            new xarTpl__ParserError('Missing mlkey and mlstring tags in <xar:ml> tag.', $this));
             return;
         }
         $mlNode = $this->children[0];
         if (!isset($mlNode)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                            new xarTpl__ParserError('Missing \'mlkey\' and \'mlstring\' tags in <xar:ml> tag.', $this));
             return;
         }
@@ -2679,7 +2679,7 @@ class xarTpl__XarMlNode extends xarTpl__TplTagNode
                 continue;
             }
             if ($node->tagName != 'mlvar') {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                                new xarTpl__ParserError("The '".$this->tagName."' tag cannot have children of type '".$node->tagName."'.", $node));
                 return;
             }
@@ -2723,14 +2723,14 @@ class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
     function renderBeginTag()
     {
         $key = '';
-        
+
         if (count($this->children) == 0) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                            new xarTpl__ParserError('Missing the key inside <xar:mlkey> tag.', $this));
             return;
         }
         if (count($this->attributes) != 0) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                            new xarTpl__ParserError('The <xar:mlkey> tag takes no attributes.', $this));
             return;
         }
@@ -2751,7 +2751,7 @@ class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
         // FIXME: chose 3 for now, out of laziness.
         $key = trim(addslashes($key));
         if ($key == '') {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                            new xarTpl__ParserError('Missing content in <xar:mlkey> tag.', $this));
             return;
         }
@@ -2784,7 +2784,7 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
         // Dracos: copying exception checking here...it isn't getting checked in renderBeginTag() for some reason
         // Dracos: this is not the right fix for bug 229, but it works for now
         if (count($this->attributes) != 0) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                            new xarTpl__ParserError('The <xar:mlstring> tag takes no attributes.', $this));
             return;
         }
@@ -2793,7 +2793,7 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
             return $output . $this->renderEndTag();
         }
         else {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                            new xarTpl__ParserError('Missing the string inside <xar:mlstring> tag.', $this));
             return;
         }
@@ -2802,15 +2802,15 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
     function renderBeginTag()
     {
         $string = '';
-        
+
         // Dracos:  these two ifs are never true????
         if (count($this->children) == 0) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                            new xarTpl__ParserError('Missing the string inside <xar:mlstring> tag.', $this));
             return;
         }
         if (count($this->attributes) != 0) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                            new xarTpl__ParserError('The <xar:mlstring> tag takes no attributes.', $this));
             return;
         }
@@ -2820,7 +2820,7 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
         }
         $string = trim($string);
         if ($string == '') {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                            new xarTpl__ParserError('Missing content in <xar:mlstring> tag.', $this));
             return;
         }
@@ -2863,13 +2863,13 @@ class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
         }
         // MrB: in main the check is > 1, the check below is better, let it be in the merge
         if (count($this->children) != 1) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                            new xarTpl__ParserError('The <xar:mlvar> tag can contain only one child tag.', $this));
             return;
         }
         // MrB: in main there is no check, this is better, let it be in the merge
         if (count($this->attributes) != 0) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                            new xarTpl__ParserError('The <xar:mlvar> tag takes no attributes.', $this));
             return;
         }
@@ -2953,7 +2953,7 @@ class xarTpl__XarModuleNode extends xarTpl__TplTagNode
         extract($this->attributes);
 
         if (!isset($main)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'main\' attribute in <xar:module> tag.', $this));
             return;
         }
@@ -2975,7 +2975,7 @@ class xarTpl__XarEventNode extends xarTpl__TplTagNode
         extract($this->attributes);
 
         if (!isset($name)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'name\' attribute in <xar:event> tag.', $this));
             return;
         }
@@ -3001,15 +3001,15 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
     function render()
     {
         extract($this->attributes);
-        
+
         if (!isset($file)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'file\' attribute in <xar:template> tag.', $this));
             return;
         }
 
         if (!isset($type)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'type\' attribute in <xar:template> tag.', $this));
             return;
         }
@@ -3023,7 +3023,7 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
         } elseif ($type == 'module') {
             return "xarTpl_includeModuleTemplate(\$_bl_module_name, '$file', $subdata)";
         } else {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ATTRIBUTE',
                            new xarTpl__ParserError("Invalid value '$type' for 'type' attribute in <xar:template> tag.", $this));
             return;
         }
@@ -3053,14 +3053,14 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
         extract($this->attributes);
 
         if (!isset($name)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MISSING_ATTRIBUTE',
                            new xarTpl__ParserError('Missing \'name\' attribute in <xar:set> tag.', $this));
             return;
         }
 
         /*
         if (count($this->children) != 1) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                            new xarTpl__ParserError('The <xar:set> tag can contain only one child tag.', $this));
             return;
         }

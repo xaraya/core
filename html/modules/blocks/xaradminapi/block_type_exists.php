@@ -44,7 +44,7 @@ function blocks_adminapi_block_type_exists($args)
     // Freak if we don't get zero or one one result
     if ($result->PO_RecordCount() > 1) {
         $msg = xarML('Multiple instances of block type #(1) found in module #(2)!', $blockType, $modName);
-        xarExceptionSet(XAR_USER_EXCEPTION, 'MultipleInstances',
+        xarExceptionSet(XAR_USER_EXCEPTION, 'MULTIPLE_INSTANCES',
                        new DefaultUserException($msg));
         return;
     }

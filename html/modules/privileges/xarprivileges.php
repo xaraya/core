@@ -353,7 +353,7 @@ class xarMasks
                 $msg = xarML('No masks registered for component ') . $component .
                 xarML(' in module ') . $module;
             }
-            xarExceptionSet(XAR_USER_EXCEPTION, 'NO_MASK',
+            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA',
                            new DefaultUserException($msg));
             return;
         }
@@ -403,8 +403,8 @@ class xarMasks
         // check if the exception needs to be caught here or not
         if ($catch && !$pass) {
             $msg = xarML('No privilege for #(1)',$mask->getName());
-            xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                           new SystemException($msg));
+            xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA',
+                           new DefaultUserException($msg));
         }
 
         // done
@@ -1093,7 +1093,7 @@ class xarPrivileges extends xarMasks
 // check if the query is there
             if ($selection =='') {
                 $msg = xarML('A query is missing in component ' . $component . ' of module '. $module);
-                xarExceptionSet(XAR_USER_EXCEPTION, 'NO_QUERY',
+                xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA',
                                new DefaultUserException($msg));
                 return;
             }
