@@ -5,7 +5,7 @@
 	 <channel>
 		<title>#xarVarTransform($tpl:pageTitle, 'HTML', 'XML')#</title>
 		<link>#xarVarPrepForDisplay(xarServerGetBaseURL())#</link>
-		<description>#xarVarTransform(htmlentities(xarModGetVar('themes','SiteSlogan')), 'HTML', 'XML')#</description>
+		<description>#xarVarTransform(xarModGetVar('themes','SiteSlogan'), 'HTML', 'XML')#</description>
 		<dc:language>en-us</dc:language> 
 		<dc:creator>#xarVarTransform(xarModGetVar('mail', 'adminname'), 'HTML', 'XML')#</dc:creator> 
 	    <admin:generatorAgent rdf:resource="http://www.xaraya.org" /> 
