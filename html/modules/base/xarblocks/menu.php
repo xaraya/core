@@ -166,18 +166,20 @@ function base_menublock_display($blockinfo)
                             // try to get catid from input
                             xarVarFetch('catid', 'isset', $catid, NULL, XARVAR_DONT_SET);
                         }
+                        if (empty($catid) && xarVarIsCached('Blocks.categories','cids')) {
+                            $cids = xarVarGetCached('Blocks.categories','cids');
+                        } else {
+                            $cids = array();
+                        }                        
                         $ancestors = xarModAPIFunc('categories','user','getancestors',
                                                   array('cid' => $catid,
+                                                        'cids' => $cids,
                                                         'return_itself' => true));
                         if(!empty($ancestors)) {
                             $ancestorcids = array_keys($ancestors);
-                            if (!empty($ancestors)) {
-                                foreach ($ancestorcids as $ancestorcid) {
-                                    // if we are on or below this category, then we are here
-                                    if ($url[0] == $ancestorcid) {
-                                        $here = 'true';
-                                    }
-                                }
+                            if (in_array($url[0], $ancestorcids)) {
+                                // if we are on or below this category, then we are here
+                                $here = 'true';
                             }
                         }
                         $url = xarModUrl('articles', 'user', 'view', array('catid' => $url[0]));
