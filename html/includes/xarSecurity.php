@@ -207,7 +207,7 @@ $schemas = array();
 
 	function makePrivilegeMember($childname, $parentname) {
 			$privileges = new xarPrivileges();
-			return $privileges->makePrivilegeMember($childname, $parentname);
+			return $privileges->makeMember($childname, $parentname);
 	}
 
 /**

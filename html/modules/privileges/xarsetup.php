@@ -52,15 +52,20 @@ function initializeSetup() {
 
     xarRegisterPrivilege('NoPrivileges','All','All','All','All',ACCESS_NONE,'The base privilege granting no access');
     xarRegisterPrivilege('Administration','All','All','All','All',ACCESS_ADMIN,'The base privilege granting full access');
-    xarRegisterPrivilege('ReadAll','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
-    xarRegisterPrivilege('EditAll','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
-    xarRegisterPrivilege('AddAll','All','All','All','All',ACCESS_ADD,'The base privilege granting add access');
-    xarRegisterPrivilege('DeleteAll','All','All','All','All',ACCESS_DELETE,'The base privilege granting delete access');
+    xarRegisterPrivilege('Oversight','All','empty','All','All',ACCESS_NONE,'The privileges for the Obersight group');
+    xarRegisterPrivilege('DenyRoles','All','Roles','All','All',ACCESS_NONE,'Exclude access to the Roles module');
+    xarRegisterPrivilege('DenyPrivileges','All','Roles','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
+    xarRegisterPrivilege('DenyRolesPrivileges','All','empty','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
+    xarRegisterPrivilege('Editing','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
+
+//    xarRegisterPrivilege('ReadAll','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
+//    xarRegisterPrivilege('AddAll','All','All','All','All',ACCESS_ADD,'The base privilege granting add access');
+//    xarRegisterPrivilege('DeleteAll','All','All','All','All',ACCESS_DELETE,'The base privilege granting delete access');
     xarRegisterPrivilege('ModPrivilege','All','Privileges','All','All',ACCESS_EDIT,'');
     xarRegisterPrivilege('AddPrivilege','All','Privileges','All','All',ACCESS_ADD,'');
     xarRegisterPrivilege('DelPrivilege','All','Privileges','All','All',ACCESS_DELETE,'');
-    xarRegisterPrivilege('AdminPrivilege','All','Privileges','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Privileges for Anonymous');
-    xarRegisterPrivilege('AdminRole','All','Roles','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Roles for Anonymous');
+//    xarRegisterPrivilege('AdminPrivilege','All','Privileges','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Privileges for Anonymous');
+//    xarRegisterPrivilege('AdminRole','All','Roles','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Roles for Anonymous');
 
     /*********************************************************************
     * Arrange the  privileges in a hierarchy
@@ -71,17 +76,25 @@ function initializeSetup() {
 
 	makePrivilegeRoot('NoPrivileges');
 	makePrivilegeRoot('Administration');
-	//makePrivilegeMember('NoPrivileges','FullPrivileges');
-	makePrivilegeRoot('ReadAll');
+	makePrivilegeRoot('Oversight');
+	makePrivilegeRoot('DenyRolesPrivileges');
+	makePrivilegeRoot('DenyRoles');
+	makePrivilegeRoot('DenyPrivileges');
+	makePrivilegeRoot('Editing');
+	makePrivilegeMember('DenyRoles','DenyRolesPrivileges');
+	makePrivilegeMember('DenyPrivileges','DenyRolesPrivileges');
+	makePrivilegeMember('DenyRolesPrivileges','Oversight');
+	makePrivilegeMember('Administration','Oversight');
+	makePrivilegeMember('DenyRolesPrivileges','Editing');
+//	makePrivilegeRoot('ReadAll');
 	//makePrivilegeMember('NoPrivileges','ReadAll');
-	makePrivilegeRoot('EditAll');
 	//makePrivilegeMember('NoPrivileges','EditAll');
-	makePrivilegeRoot('AddAll');
+//	makePrivilegeRoot('AddAll');
 	//makePrivilegeMember('NoPrivileges','AddAll');
-	makePrivilegeRoot('DeleteAll');
+//	makePrivilegeRoot('DeleteAll');
 	//makePrivilegeMember('NoPrivileges','DeleteAll');
-	makePrivilegeRoot('AdminPrivilege');
-	makePrivilegeRoot('AdminRole');
+//	makePrivilegeRoot('AdminPrivilege');
+//	makePrivilegeRoot('AdminRole');
 
     /*********************************************************************
     * Assign the default privileges to groups/users
@@ -91,8 +104,9 @@ function initializeSetup() {
 
 	xarAssignPrivilege('NoPrivileges','Everybody');
 	xarAssignPrivilege('Administration','Administrators');
-	xarAssignPrivilege('AdminPrivilege','Anonymous');
-	xarAssignPrivilege('AdminRole','Anonymous');
+	xarAssignPrivilege('Oversight','Oversight');
+//	xarAssignPrivilege('AdminPrivilege','Anonymous');
+//	xarAssignPrivilege('AdminRole','Anonymous');
 
     /*********************************************************************
     * Define instances for some modules
