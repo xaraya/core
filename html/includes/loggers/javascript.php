@@ -28,15 +28,13 @@ class xarLogger_javascript extends xarLogger
     * @access private
     */
     function getCommonCode() {
-        $header = "<table size=\\\"100%\\\" cellspacing=\\\"0\\\" cellpadding=\\\"0\\\" border=\\\"0\\\"><tr><td>".
-                  "<hr size=\\\"1\\\">Xaraya Javascript Logger</hr></td><td width=\\\"1%\\\"><span style=\\\"font-face: Verdana,arial; font-size: 8pt;\\\">".
+        $header = "<hr size=\\\"1\\\"></hr><span style=\\\"font-face: Verdana,arial; font-size: 10pt;\\\">".
                   date("Y-m-d H:i:s").
-                  "</span></td></tr></table>";
+                  "</span>";
 
         $code = "\ndebugWindow = window.open(\"\",".
                 "\"Xaraya_Javascript_Logger\",\"width=450,height=500,scrollbars=yes,resizable=yes\");\n".
                 "if (debugWindow) {\n".
-//                "    debugWindow.focus();\n".
                 "    debugWindow.document.write(\"".$header."\"+'<p><b>'+window.location.href+'</b></p>');\n".
                 "}\n";
         return $code;
