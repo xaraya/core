@@ -85,38 +85,20 @@ function themes_adminapi_regenerate()
             // New theme
             $themeId = $dbconn->GenId($xartable['themes']);
             $sql = "INSERT INTO $xartable[themes]
-                      (xar_id,
-                       xar_name,
-                       xar_regid,
-                       xar_directory,
-                       xar_author,
-                       xar_homepage,
-                       xar_email,
-                       xar_description,
-                       xar_contactinfo,
-                       xar_publishdate,
-                       xar_license,
-                       xar_version,
-                       xar_xaraya_version,
-                       xar_bl_version,
+                      (xar_id, xar_name, xar_regid, xar_directory,
+                       xar_author, xar_homepage, xar_email, xar_description,
+                       xar_contactinfo, xar_publishdate, xar_license,
+                       xar_version, xar_xaraya_version, xar_bl_version,
                        xar_class)
-                    VALUES
-                      (" . xarVarPrepForStore($themeId) . ",
-                       '" . xarVarPrepForStore($themeInfo['name']) . "',
-                       '" . xarVarPrepForStore($themeInfo['regid']) . "',
-                       '" . xarVarPrepForStore($themeInfo['directory']) . "',
-                       '" . xarVarPrepForStore($themeInfo['author']) . "',
-                       '" . xarVarPrepForStore($themeInfo['homepage']) . "',
-                       '" . xarVarPrepForStore($themeInfo['email']) . "',
-                       '" . xarVarPrepForStore($themeInfo['description']) . "',
-                       '" . xarVarPrepForStore($themeInfo['contact_info']) . "',
-                       '" . xarVarPrepForStore($themeInfo['publish_date']) . "',
-                       '" . xarVarPrepForStore($themeInfo['license']) . "',
-                       '" . xarVarPrepForStore($themeInfo['version']) . "',
-                       '" . xarVarPrepForStore($themeInfo['xar_version']) . "',
-                       '" . xarVarPrepForStore($themeInfo['bl_version']) . "',
-                       '" . xarVarPrepForStore($themeInfo['class']) . "')";
-            $result = $dbconn->Execute($sql);
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $bindvars = array($themeId,$themeInfo['name'],$themeInfo['regid'],
+                              $themeInfo['directory'],$themeInfo['author'],
+                              $themeInfo['homepage'],$themeInfo['email'],
+                              $themeInfo['description'],$themeInfo['contact_info'],
+                              $themeInfo['publish_date'],$themeInfo['license'],
+                              $themeInfo['version'],$themeInfo['xar_version'],
+                              $themeInfo['bl_version'],$themeInfo['class']);
+            $result = $dbconn->Execute($sql,$bindvars);
             if (!$result) return;
 
             $set = xarModAPIFunc('themes',
