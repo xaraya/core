@@ -1035,7 +1035,7 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
     } else {
         $finalTemplate .= $tplOutput;
     }
-    return $finalTemplate
+    return $finalTemplate;
 }
 /**
  * Output php comment block in templates
