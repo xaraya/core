@@ -6,7 +6,8 @@
 // TODO: well, just about everything :-)
         </td>
     </tr>
-<xar:loop name="fields">
+<xar:if condition="!empty($fields)">
+<xar:loop name="$fields">
     <tr align="left" valign="middle">
         <td>&xar-var-id;</td>
         <td>&xar-var-label;</td>
@@ -15,6 +16,7 @@
         <td>&xar-var-validation;</td>
     </tr>
 </xar:loop>
+</xar:if>
 </table>
 <br />
 

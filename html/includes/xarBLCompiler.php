@@ -132,7 +132,8 @@ class xarTpl__CodeGenerator
     function generateNode($node)
     {
         //xarLogMessage('generateNode '.$node->tagName, XARLOG_LEVEL_ERROR);
-        if ($node->hasChildren() && $node->children != NULL /*|| $node->hasText()*/) {
+//        if ($node->hasChildren() && $node->children != NULL /*|| $node->hasText()*/) {
+        if ($node->hasChildren() && isset($node->children) /*|| $node->hasText()*/) {
             if ($node->isPHPCode() && !$this->isPHPBlock()) {
                 $code .= "<?php ";
                 $this->setPHPBlock(true);
