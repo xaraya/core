@@ -231,7 +231,7 @@ function adminpanels_init()
 function adminpanels_upgrade($oldVersion)
 {
     // Upgrade dependent on old version number
-    switch($oldversion) {
+    switch($oldVersion) {
         case 1.0:
             // Code to upgrade from version 1.0 goes here
             break;
