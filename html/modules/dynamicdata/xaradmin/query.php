@@ -272,6 +272,8 @@ function dynamicdata_admin_query($args)
         $grouplist = null;
     }
 
+    $dbconn =& xarDBGetConn();
+
 // TODO: clean up passing of where clauses
     $whereclause = '';
     $and = '';
@@ -283,21 +285,37 @@ function dynamicdata_admin_query($args)
             $whereclause .= $and . $name;
             switch($what) {
                 case 'like':
-                    $whereclause .=  " LIKE '%" . $value[$name] . "%'";
+                    $whereclause .=  " LIKE " . $dbconn->qstr("%" . $value[$name] . "%");
                     break;
                 case 'start':
-                    $whereclause .=  " LIKE '" . $value[$name] . "%'";
+                    $whereclause .=  " LIKE " . $dbconn->qstr($value[$name] . "%");
                     break;
                 case 'end':
-                    $whereclause .=  " LIKE '%" . $value[$name] . "'";
+                    $whereclause .=  " LIKE " . $dbconn->qstr("%" . $value[$name]);
                     break;
                 case 'in':
-                    // FIXME: how to get rid of the xarVarPrepForStore here?
-                    $whereclause .=  " IN (" . xarVarPrepForStore($value[$name]) . ")";
+                    $list = preg_split('/\s*,\s*/',$value[$name]);
+                    $newlist = array();
+                    foreach ($list as $part) {
+                        // try to get around problem of leading 0's
+                        if (is_numeric($part) && strlen($part) == strlen((float)$part)) {
+                            $newlist[] = $part;
+                        } else {
+                            $part = preg_replace('/^\'/','',$part);
+                            $part = preg_replace('/\'$/','',$part);
+                            $newlist[] = $dbconn->qstr($part);
+                        }
+                    }
+                    $joined = join(', ',$newlist);
+                    $whereclause .=  " IN (" . $joined . ")";
                     break;
                 default:
-                    // FIXME: how to get rid of the xarVarPrepForStore here?
-                    $whereclause .=  " $what '" . xarVarPrepForStore($value[$name]) . "'";
+                    // try to get around problem of leading 0's
+                    if (is_numeric($value[$name]) && strlen($value[$name]) == strlen((float)$value[$name])) {
+                        $whereclause .=  " $what " . $value[$name];
+                    } else {
+                        $whereclause .=  " $what " . $dbconn->qstr($value[$name]);
+                    }
             }
             $and = ' and ';
         }
