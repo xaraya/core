@@ -136,6 +136,13 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
     
     /*
+     * Load PHP Version Backwards Compatibility Library
+     *
+     */
+    include 'includes/xarPHPCompat.php';
+    xarPHPCompat::loadAll('includes/phpcompat');
+    
+    /*
      * If there happens something we want to be able to log it
      *
      */

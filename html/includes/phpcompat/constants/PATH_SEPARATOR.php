@@ -16,7 +16,7 @@
  * 
  * @link http://php.net/ref.dir
  */
-if (strtoupper(PHP_OS, 0, 3) == 'WIN') {
+if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
     $path_separator = ';';
 } else {
     $path_separator = ':';
