@@ -1845,6 +1845,11 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         $output .= '$_bl_loop_number'.$loopCounter." = 1; ";
         $output .= 'foreach ('.$name.' as $_bl_loop_key'.$loopCounter.' => $_bl_loop_item'.$loopCounter.") { ";
 
+        // FIXME: for bug #47 change below to the following
+        // - if prefix is empty set it to _bl_loop_$id if $id has a value
+        // - if prefix is empty and id is empty set prefix to _bl_loop_loopCounter
+        // - change the EXTR_OVERWRITE to be EXTR_PREFIX_ALL
+        // The above will have the effect that only $loop:id:item etc constructs are allowed inside loops
         if (!isset($prefix)) {
             $output .= 'extract($_bl_loop_item'.$loopCounter.", EXTR_OVERWRITE); ";
         } else {
