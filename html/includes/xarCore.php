@@ -704,6 +704,7 @@ function xarCore_DelCached($cacheKey, $name)
     //This unsets the key that said that collection had already been retrieved
     
     //Seems to have caused a problem because of the expected behaviour of the old code
+    //FIXME: Change how this works for a mainstream function, stop the hacks
     if (isset($GLOBALS['xarCore_cacheCollection'][$cacheKey][0])) {
         unset($GLOBALS['xarCore_cacheCollection'][$cacheKey][0]);
     }
@@ -724,4 +725,3 @@ function xarCore_FlushCached($cacheKey)
     }
 }
 
-?>
