@@ -95,6 +95,7 @@ function installer_admin_phase4()
                  'database_name' => $dbName,
                  'database_prefix' => $dbPrefix,
                  'database_types' => array('mysql'    => 'MySQL',
+                                           'oci8'     => 'Oracle',
                                            'postgres' => 'Postgres'));
 }
 
