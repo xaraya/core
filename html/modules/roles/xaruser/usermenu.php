@@ -74,7 +74,7 @@ function roles_user_usermenu($args)
         case 'updatebasic':
             if(!xarVarFetch('uid',   'isset', $uid,    NULL, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('name',  'isset', $name,   NULL, XARVAR_DONT_SET)) return;
-            if(!xarVarFetch('email',  'isset', $email,   NULL, XARVAR_DONT_SET)) return;
+            if(!xarVarFetch('email', 'isset', $email,   NULL, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('pass1', 'isset', $pass1,  NULL, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('pass2', 'isset', $pass2,  NULL, XARVAR_DONT_SET)) return;
 
@@ -129,7 +129,7 @@ function roles_user_usermenu($args)
                     return;
             }
 
-                        // check for duplicate email address
+            // check for duplicate email address
             $user = xarModAPIFunc('roles',
                                   'user',
                                   'get',
@@ -152,12 +152,9 @@ function roles_user_usermenu($args)
                     return;
                 }
             }
-
-
-
             // Step 3
             $requireValidation = xarModGetVar('roles', 'requirevalidation');
-            if ($requireValidation == false) {
+            if (($requireValidation == false) || (xarUserGetVar('uname') != 'admin')){
                 // The API function is called.
                 if(!xarModAPIFunc('roles',
                                   'admin',
@@ -173,7 +170,6 @@ function roles_user_usermenu($args)
                 xarUserLogOut();
 
                 // Step 3
-
                 // Create confirmation code and time registered
                 $confcode = xarModAPIFunc('roles',
                                           'user',
@@ -197,11 +193,7 @@ function roles_user_usermenu($args)
             		$msg = xarML('Problem sending confirmation email');
                 	xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             	}
-                    
-                                         
-                                         
                 }
-
             } else {
                 $email = xarUserGetVar('email');
                 // The API function is called.

@@ -402,15 +402,15 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
  */
 function xarException__backTrace()
 {
-    $btFuncName = 'array';
+    $btFuncName = array();
 
     if (function_exists('xdebug_enable')) {
         xdebug_enable();
-        $btFuncName = 'xarException__xdebugBackTrace';
+        $btFuncName = xarException__xdebugBackTrace();
     } elseif (function_exists('debug_backtrace')) {
-        $btFuncName = 'debug_backtrace';
+        $btFuncName = debug_backtrace();
     }
-    return  $btFuncName();
+    return $btFuncName;
 }
 
 /**
