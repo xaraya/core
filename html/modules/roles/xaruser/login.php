@@ -100,18 +100,25 @@ function roles_user_login()
                     $msg = xarML('Problem logging in: Invalid username or password.');
                     xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
                     return;
+                } else {
+                    // Check if user has been deleted.
+                    $user = xarModAPIFunc('roles',
+                                          'user',
+                                          'getdeleteduser',
+                                          array('uname' => $uname));
                 }
 
-                $rolestate = $user['state'];
-
-                // If external authentication has already been set but
-                // the Xaraya users table has a different state (ie invalid)
-                // then override the external state
-                if (($extAuthentication == true) && ($state != $rolestate)) {
-                    $state = $rolestate;
-                } else {
-                    // No external authentication, so set state
-                    $state = $rolestate;
+                if (!empty($user)) {
+                    $rolestate = $user['state'];
+                    // If external authentication has already been set but
+                    // the Xaraya users table has a different state (ie invalid)
+                    // then override the external state
+                    if (($extAuthentication == true) && ($state != $rolestate)) {
+                        $state = $rolestate;
+                    } else {
+                        // No external authentication, so set state
+                        $state = $rolestate;
+                    }
                 }
 
                 break;
