@@ -40,8 +40,8 @@ function first_replace ( $matches )
     $result_string = $matches[1] . implode('', $exploded) . $matches[3] .
         $matches[4] . $bindvars . $matches[4] . $matches[5];
 
-    print_r($matches);
-    print_r ($result_string);
+//     print_r($matches);
+//     print_r ($result_string);
 
     //Clean everything...
     //Seems the regex in the main function is catching more than i expected, so this quick
@@ -55,9 +55,9 @@ function first_replace ( $matches )
 function replace_inside_quotes ( $matches ) {
     $GLOBALS['variables_found'][] = $matches[count($matches)-1];
 
-    echo "<br />";
-    print_r($matches);
-    echo "<br />";
+//     echo "<br />";
+//     print_r($matches);
+//     echo "<br />";
 
     if (substr($matches[0], 0, 1) == "'") {
         return "'?'";
@@ -111,11 +111,11 @@ function searchDir($path) {
 
                 if ($GLOBALS['called']) {
                     echo "Changing file $path/$entry\r\n";
-/*
+
                     $fp = fopen ( "$path/$entry", "w+" );
                     fwrite($fp, $new_file_contents);
                     fclose($fp);
-*/
+
                     $GLOBALS['called'] = false;
                     //Something was replaced!
                     //Exchange Contents
@@ -127,9 +127,9 @@ function searchDir($path) {
     closedir($dh);
 }
 
-echo "<PRE>";
+// echo "<PRE>";
 $path = './../../html';
 searchDir ($path);
-echo "</PRE>";
+// echo "</PRE>";
 
 ?>
