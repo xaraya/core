@@ -31,21 +31,24 @@ define('PNCORE_VERSION_SUB', 'adam_baum');
  * ----------------------------------------------
  *
  *
- *   ADODB (00000001)
+ *   ADODB              (00000001)
  *   |
- *   |- SESSION (00000011)
+ *   |- SESSION         (00000011)
  *   |  |
- *   |  |- USER (00000111)
+ *   |  |- USER         (00000111)
  *   |
- *   |- CONFIGURATION (00001001)
+ *   |- CONFIGURATION   (00001001)
  *      |
- *      |- BLOCKS (00011001)
+ *      |- BLOCKS       (00011001)
  *      |
- *      |- MODULES (00101001)
+ *      |- MODULES      (00101001)
  */
-
+ 
 /*
- * Optional systems defines (including dependencies)
+ * Optional systems defines - below are some 
+ * predifined bit combinations taking into account
+ * system dependancies. (see system dependancy 
+ * diagram above for more info). 
  */
 define('PNCORE_SYSTEM_NONE', 0);
 define('PNCORE_SYSTEM_ADODB', 1);
@@ -55,6 +58,19 @@ define('PNCORE_SYSTEM_CONFIGURATION', 9);
 define('PNCORE_SYSTEM_BLOCKS', 25);
 define('PNCORE_SYSTEM_MODULES', 41);
 define('PNCORE_SYSTEM_ALL', 63); // bit OR of all optional systems
+
+ /*
+ * In order for the bitwise operations to work, we need
+ * the specific bits to test against - below
+ * are the bits that will be tested against
+ */ 
+define('PNCORE_BIT_NONE', 0x0);           // (00000000)
+define('PNCORE_BIT_ADODB', 0x1);          // (00000001)
+define('PNCORE_BIT_SESSION', 0x2);        // (00000010)
+define('PNCORE_BIT_USER', 0x4);           // (00000100)
+define('PNCORE_BIT_CONFIGURATION', 0x8);  // (00001000)
+define('PNCORE_BIT_BLOCKS', 0x10);        // (00010000)
+define('PNCORE_BIT_MODULES', 0x20);       // (00100000)
 
 /*
  * Debug flags
@@ -112,7 +128,7 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
     // Initialise system args array
     //$systemArgs = array();
 
-    if ($whatToLoad & PNCORE_SYSTEM_ADODB) {
+    if ((int) $whatToLoad & PNCORE_BIT_ADODB) {
         // {ML_dont_parse 'includes/pnDB.php'}
         include_once 'includes/pnDB.php';
 
@@ -165,7 +181,7 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
                         'defaultModuleFunction' => pnCore_getSiteVar('Core.DefaultModuleFunction'));
     pnSerReqRes_init($systemArgs);
 
-    if ($whatToLoad & PNCORE_SYSTEM_SESSION) {
+    if ((int)$whatToLoad & PNCORE_BIT_SESSION) {
         // {ML_dont_parse 'includes/pnSession.php'}
         include_once 'includes/pnSession.php';
 
@@ -184,7 +200,7 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
                         'allowedLocales' => pnCore_getSiteVar('MLS.AllowedLocales'));
     pnMLS_init($systemArgs);
 
-    if ($whatToLoad & PNCORE_SYSTEM_CONFIGURATION) {
+    if ((int)$whatToLoad & PNCORE_BIT_CONFIGURATION) {
         include_once 'includes/pnConfig.php';
 
         // Start Configuration Unit
@@ -195,7 +211,7 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
         pnVar_init(array());
     }
 
-    if ($whatToLoad & PNCORE_SYSTEM_MODULES) {
+    if ((int)$whatToLoad & PNCORE_BIT_MODULES) {
         include_once 'includes/pnMod.php';
 
         // Start Modules Support
@@ -213,7 +229,7 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
         $themeName = pnVarPrepForOS($themeName);
     }
 
-    if ($whatToLoad & PNCORE_SYSTEM_USER) {
+    if ((int)$whatToLoad & PNCORE_BIT_USER) {
         include_once 'includes/pnUser.php';
         // {ML_dont_parse 'includes/pnSecurity.php'}
         include_once 'includes/pnSecurity.php';
@@ -228,7 +244,7 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
         }
     }
 
-    if ($whatToLoad & PNCORE_SYSTEM_BLOCKS) {
+    if ((int)$whatToLoad & PNCORE_BIT_BLOCKS) {
         include_once 'includes/pnBlocks.php';
         // Start Blocks Support Sytem
         $systemArgs = array();
