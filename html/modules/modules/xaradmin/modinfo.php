@@ -35,7 +35,6 @@ function modules_admin_modinfo(){
     if(file_exists($modicon)){
         $data['modiconurl']     = xarVarPrepForDisplay($modicon);
         $data['modiconmsg'] = xarVarPrepForDisplay(xarML('as provided by the author'));
-        // whatever you do - dont use xarMLByKey('') because it hangs browser - BUG!!!
     }elseif(file_exists($modicongeneric)){
         $data['modiconurl']     = xarVarPrepForDisplay($modicongeneric);
         $data['modiconmsg'] = xarVarPrepForDisplay(xarML('Only generic icon has been provided'));
