@@ -1,18 +1,23 @@
-/* explicit removal of default or inherited borders */
+/*
+explicit removal of default or inherited borders
+*/
 .xar-noborder { border: 0 none; }
 
-/* we use this class when positioning tables inside generic box, so that ie-win can calculate the widths correctly */
-.xar-fullwidth { width: 100%; }
-
-/* good for generic static container-boxes */
+/*
+good for generic static container-boxes
+*/
 .xar-standard-box-padding { padding: 0 1em 1em 1em; }
 
-/* generic alignments */
+/*
+generic alignments
+*/
 .xar-align-center { text-align: center; }
 .xar-align-left { text-align: left; }
 .xar-align-right { text-align: right; }
 
-/* inline boxes alignments */
+/*
+inline boxes alignments
+*/
 .xar-valign-top { vertical-align: top; }
 .xar-valign-middle { vertical-align: middle; }
 .xar-valign-bottom { vertical-align: bottom; }
@@ -22,19 +27,33 @@
 .xar-valign-sub { vertical-align: sub; }
 .xar-valign-super { vertical-align: super; }
 
-/* EXPERIMENTAL RULES - keep them near the bottom!! the following rules arent used anywhere yet, when actually deployed, move near the top */
-.xar-halfwidth { width: 49%; }
-.xar-thirdwidth { width: 33%; }
-.xar-twothirdwidth { width: 66%; }
+/*
+EXPERIMENTAL RULES - keep them near the bottom!! the following rules
+arent used anywhere yet, when actually deployed, move near the top
+*/
 .xar-quarterwidth { width: 24%; }
+.xar-thirdwidth { width: 33%; }
+.xar-halfwidth { width: 49%; }
+.xar-twothirdwidth { width: 66%; }
 .xar-threequarterswidth { width: 75%; }
+/*
+we use this class when positioning tables inside generic box, so that
+ie-win can calculate the widths correctly
+*/
+.xar-fullwidth { width: 100%; }
 
-.xar-fullwidth, .xar-halfwidth, .xar-thirdwidth, .xar-quarterwidth, .xar-threequarterswidth {
+.xar-fullwidth,
+.xar-halfwidth,
+.xar-thirdwidth,
+.xar-quarterwidth,
+.xar-threequarterswidth {
     padding: 0;
     margin: auto 0;
 }
 
-/* generic positioning */
+/*
+generic positioning
+*/
 .xar-left { text-align: left; }
 .xar-right { text-align: right; }
 .xar-center { text-align: center; }
@@ -42,137 +61,210 @@
 .xar-middle { vertical-align: middle; }
 .xar-bottom { vertical-align: bottom; }
 
-/* box elements display */
-.xar-block { display: block; }
-.xar-inline { display: inline; }
-.xar-list { display: list-item; }
+/*
+box elements display
+*/
+.xar-displayblock { display: block; }
+.xar-displayinline { display: inline; }
+.xar-displaylist { display: list-item; }
+.xar-displaynone { display: none; }
 
-/* this class may be deprecated in future in favour of more specific rules */
+/*
+this class may be deprecated in future in favour of more specific 
+rules
+*/
 .xar-none { display: none; }
 
-/* floated box elements positioning */
-.xar-floatleft { float: left; }
+/*
+floated box elements positioning
+*/
+.xar-floatleft { float: left;background-color: #f0f; }
 .xar-floatright { float: right; }
 
-/* floater height clearing - use with caution, see Hint (3) above */
+/*
+floater height clearing - use with caution, see Hint (3) above
+*/
 .xar-clearleft { clear: left; }
 .xar-clearright { clear: right; }
 .xar-clearboth { clear: both; }
 
-/* this class may be deprecated in future in favour of more specific rules */
+/*
+this class may be deprecated in future in favour of more specific 
+rules
+*/
 .xar-clearnone { clear: none; }
 
-/* common form elements */
-.xar-textshort { width: 5em; }
-.xar-textmedium { width: 10em; }
-.xar-textlong { width: 15em; }
-.xar-textxlong { width: 20em; }
-.xar-textxxlong { width: 25em; }
+/*
+common form elements
+*/
+.xar-form-textshort { width: 5em; }
+.xar-form-textmedium { width: 10em; }
+.xar-form-textlong { width: 15em; }
+.xar-form-textxlong { width: 20em; }
+.xar-form-textxxlong { width: 25em; }
 
-.xar-textareasmall {
+.xar-form-textareasmall {
     height: 6ex;
     width: 90%;
 }
 
-.xar-textareamedium {
+.xar-form-textareamedium {
     height: 10ex;
     width: 90%;
 }
 
-.xar-textarealarge {
+.xar-form-textarealarge {
     height: 20ex;
     width: 90%;
 }
 
-.xar-textareaxlarge {
+.xar-form-textareaxlarge {
     height: 40ex;
     width: 90%;
 }
 
-/* minimal formatting - relative padding */
+/*
+minimal formatting - relative padding
+*/
 .xar-padding-thin { padding: 1px; }
+.xar-padding-thintop { padding-top: 1px; }
+.xar-padding-thinright { padding-right: 1px; }
+.xar-padding-thinbottom { padding-bottom: 1px; }
+.xar-padding-thinleft { padding-left: 1px; }
+.xar-padding-thinsides { padding-left: 1px; padding-right: 1px; }
+.xar-padding-thinends { padding-top: 1px; padding-bottom: 1px; }
+
 .xar-padding-medium { padding: 2px; }
+.xar-padding-mediumtop { padding-top: 2px; }
+.xar-padding-mediumright { padding-right: 2px; }
+.xar-padding-mediumbottom { padding-bottom: 2px; }
+.xar-padding-mediumleft { padding-left: 2px; }
+.xar-padding-mediumsides { padding-left: 2px; padding-right: 2px; }
+.xar-padding-mediumends { padding-top: 2px; padding-bottom: 2px; }
+
 .xar-padding-thick { padding: 4px; }
-.xar-padding-thintop { padding: 1px 0 0 0; }
-.xar-padding-thinleft { padding: 0 1px 0 0; }
-.xar-padding-thinbottom { padding: 0 0 1px 0; }
-.xar-padding-thinright { padding: 0 0 0 1px; }
-.xar-padding-thinsides { padding: 0 1px; }
-.xar-padding-thinends { padding: 1px 0; }
-.xar-padding-mediumtop { padding: 2px 0 0 0; }
-.xar-padding-mediumleft { padding: 0 2px 0 0; }
-.xar-padding-mediumbottom { padding: 0 0 2px 0; }
-.xar-padding-mediumright { padding: 0 0 0 2px; }
-.xar-padding-mediumsides { padding: 0 2px; }
-.xar-padding-mediumends { padding: 2px 0; }
-.xar-padding-thicktop { padding: 4px 0 0 0; }
-.xar-padding-thickleft { padding: 0 4px 0 0; }
-.xar-padding-thickbottom { padding: 0 0 4px 0; }
-.xar-padding-thickright { padding: 0 0 0 4px; }
-.xar-padding-thicksides { padding: 0 4px; }
-.xar-padding-thickends { padding: 4px 0; }
+.xar-padding-thicktop { padding-top: 4px; }
+.xar-padding-thickright { padding-right: 4px; }
+.xar-padding-thickbottom { padding-bottom: 4px; }
+.xar-padding-thickleft { padding-left: 4px; }
+.xar-padding-thicksides { padding-left: 4px; padding-right: 4px; }
+.xar-padding-thickends { padding-top: 4px; padding-bottom: 4px; }
 
-/* minimal formatting - relative margin */
+/*
+minimal formatting - relative margin
+*/
 .xar-margin-thin { margin: 1px; }
+.xar-margin-thintop { margin-top: 1px; }
+.xar-margin-thinright { margin-right: 1px; }
+.xar-margin-thinbottom { margin-bottom: 1px; }
+.xar-margin-thinleft { margin-left: 1px; }
+.xar-margin-thinsides { margin-left: 1px; margin-right: 1px; }
+.xar-margin-thinends { margin-top: 1px; margin-bottom: 1px; }
+
 .xar-margin-medium { margin: 2px; }
+.xar-margin-mediumtop { margin-top: 2px; }
+.xar-margin-mediumright { margin-right: 2px; }
+.xar-margin-mediumbottom { margin-bottom: 2px; }
+.xar-margin-mediumleft { margin-left: 2px; }
+.xar-margin-mediumsides { margin-left: 2px; margin-right: 2px; }
+.xar-margin-mediumends { margin-top: 2px; margin-bottom: 2px; }
+
 .xar-margin-thick { margin: 4px; }
-.xar-margin-thintop { margin: 1px 0 0 0; }
-.xar-margin-thinleft { margin: 0 1px 0 0; }
-.xar-margin-thinbottom { margin: 0 0 1px 0; }
-.xar-margin-thinright { margin: 0 0 0 1px; }
-.xar-margin-thinsides { margin: 0 1px; }
-.xar-margin-thinends { margin: 1px 0; }
-.xar-margin-mediumtop { margin: 2px 0 0 0; }
-.xar-margin-mediumleft { margin: 0 2px 0 0; }
-.xar-margin-mediumbottom { margin: 0 0 2px 0; }
-.xar-margin-mediumright { margin: 0 0 0 2px; }
-.xar-margin-mediumsides { margin: 0 2px; }
-.xar-margin-mediumends { margin: 2px 0; }
-.xar-margin-thicktop { margin: 4px 0 0 0; }
-.xar-margin-thickleft { margin: 0 4px 0 0; }
-.xar-margin-thickbottom { margin: 0 0 4px 0; }
-.xar-margin-thickright { margin: 0 0 0 4px; }
-.xar-margin-thicksides { margin: 0 4px; }
-.xar-margin-thickends { margin: 4px 0; }
+.xar-margin-thicktop { margin-top: 4px; }
+.xar-margin-thickright { margin-right: 4px; }
+.xar-margin-thickbottom { margin-bottom: 4px; }
+.xar-margin-thickleft { margin-left: 4px; }
+.xar-margin-thicksides { margin-left: 4px; margin-right: 4px; }
+.xar-margin-thickends { margin-top: 4px; margin-bottom: 4px; }
 
-/* minimal formatting - border control */
+/*
+minimal formatting - border control
+*/
+.xar-border-none { border-width: 0; }
+.xar-border-nonetop { border-top-width: 0; }
+.xar-border-noneright { border-right-width: 0; }
+.xar-border-nonebottom { border-bottom-width: 0; }
+.xar-border-noneleft { border-left-width: 0; }
+.xar-border-nonesides { border-left-width: 0; border-right-width: 0; }
+.xar-border-noneends { border-top-width: 0; border-bottom-width: 0; }
+
 .xar-border-thin { border-width: 1px; }
-.xar-border-medium { border-width: 2px; }
-.xar-border-thick { border-width: 4px; }
-.xar-border-thintop { border-width: 1px 0 0 0; }
-.xar-border-thinleft { border-width: 0 1px 0 0; }
-.xar-border-thinbottom { border-width: 0 0 1px 0; }
-.xar-border-thinright { border-width: 0 0 0 1px; }
-.xar-border-thinsides { border-width: 0 1px; }
-.xar-border-thinends { border-width: 1px 0; }
-.xar-border-mediumtop { border-width: 2px 0 0 0; }
-.xar-border-mediumleft { border-width: 0 2px 0 0; }
-.xar-border-mediumbottom { border-width: 0 0 2px 0; }
-.xar-border-mediumright { border-width: 0 0 0 2px; }
-.xar-border-mediumsides { border-width: 0 2px; }
-.xar-border-mediumends { border-width: 2px 0; }
-.xar-border-thicktop { border-width: 4px 0 0 0; }
-.xar-border-thickleft { border-width: 0 4px 0 0; }
-.xar-border-thickbottom { border-width: 0 0 4px 0; }
-.xar-border-thickright { border-width: 0 0 0 4px; }
-.xar-border-thicksides { border-width: 0 4px; }
-.xar-border-thickends { border-width: 4px 0; }
+.xar-border-thintop { border-top-width: 1px; }
+.xar-border-thinright { border-right-width: 1px; }
+.xar-border-thinbottom { border-bottom-width: 1px; }
+.xar-border-thinleft { border-left-width: 1px; }
+.xar-border-thinsides { border-left-width: 1px; border-right-width: 1px; }
+.xar-border-thinends { border-top-width: 1px; border-bottom-width: 1px; }
 
-/* relative positioning of specific block elements */
+.xar-border-medium { border-width: 2px; }
+.xar-border-mediumtop { border-top-width: 2px; }
+.xar-border-mediumright { border-right-width: 2px; }
+.xar-border-mediumbottom { border-bottom-width: 2px; }
+.xar-border-mediumleft { border-left-width: 2px; }
+.xar-border-mediumsides { border-left-width: 2px; border-right-width: 2px; }
+.xar-border-mediumends { border-top-width: 2px; border-bottom-width: 2px; }
+
+.xar-border-thick { border-width: 4px; }
+.xar-border-thicktop { border-top-width: 4px; }
+.xar-border-thickright { border-right-width: 4px; }
+.xar-border-thickbottom { border-bottom-width: 4px; }
+.xar-border-thickleft { border-left-width: 4px; }
+.xar-border-thicksides { border-left-width: 4px; border-right-width: 4px; }
+.xar-border-thickends { border-top-width: 4px; border-bottom-width: 4px; }
+
+/*
+minimal formatting - border styles
+*/
+.xar-border-inherit { border-style: inherit; }
+.xar-border-none { border-style: none; }
+.xar-border-hidden { border-style: hidden; }
+.xar-border-dotted { border-style: dotted; }
+.xar-border-dashed { border-style: dashed; }
+.xar-border-solid { border-style: solid; }
+.xar-border-groove { border-style: groove; }
+.xar-border-ridge { border-style: ridge; }
+.xar-border-inset { border-style: inset; }
+.xar-border-outset { border-style: outset; }
+.xar-border-double { border-style: double; }
+
+/*
+relative positioning of specific block elements
+*/
 div.xar-center {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
 }
 
-/* lists and related elements */
+/*
+lists and related elements
+*/
 .xar-navlist {
     padding-left: 0;
     margin-left: 0;
 }
+.xar-list-nostyle { list-style: none; }
 
-/* relative positioning of specific inline and block elements */
-label.xar-minpadding span {
-    padding-left: 2px;
-    padding-right: 2px;
+/*
+miscellaneous utility clases
+*/
+.xar-module-icon {
+    float: right;
+    padding: 10px;
 }
+.xar-form-label {
+    width: 15em;
+    display: block;
+    float: left;
+}
+.xar-form-labellong {
+    width: 25em;
+    display: block;
+    float: left;
+}
+.xar-form-input-wrapper {
+    float: left;
+    width: 100%;
+    margin-bottom: 4px;
+}
+    
