@@ -20,6 +20,7 @@
  * and passes the data to the template.
  *
  * @param id registered module id
+ * @param return_url optional return URL after updating the hooks
  * @returns array
  * @return an array of variables to pass to the template
  */
@@ -30,6 +31,7 @@ function modules_admin_modify($args)
     // xarVarFetch does validation if not explicitly set to be not required
     xarVarFetch('id','id',$id);
     xarVarFetch('details','str:0:1',$details,0,XARVAR_NOT_REQUIRED);
+    xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET);
 
     $modInfo = xarModGetInfo($id);
     if (!isset($modInfo)) return;
@@ -92,9 +94,12 @@ function modules_admin_modify($args)
   //print_r($data['hooklist']);
     // End form
     $data['details'] = $details;
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSecGenAuthKey('modules');
     $data['id'] = $id;
     $data['displayname'] = $modInfo['displayname'];
+    if (!empty($return_url)) {
+        $data['return_url'] = $return_url;
+    }
     return $data;
 }
 

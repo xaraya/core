@@ -153,8 +153,7 @@ function modules_admin_list()
         $listrows[$i]['editurl']    = xarModURL('modules',
                                     'admin',
                                     'modify',
-                                     array( 'id'        => $thismodid,
-                                            'authid'    => $authid));
+                                     array( 'id'        => $thismodid));
         $listrows[$i]['infourl']    = xarModURL('modules',
                                     'admin',
                                     'modinfo',

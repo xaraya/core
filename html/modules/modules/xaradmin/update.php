@@ -37,7 +37,12 @@ function modules_admin_update()
     
     if (!isset($updated)) return;
     
-    xarResponseRedirect(xarModURL('modules', 'admin', 'list'));
+    xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET);
+    if (!empty($return_url)) {
+        xarResponseRedirect($return_url);
+    } else {
+        xarResponseRedirect(xarModURL('modules', 'admin', 'list'));
+    }
     
     return true;
 }

@@ -7,7 +7,10 @@
         <div>
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
         <input type="hidden" name="id" id="id" value="#$id#" />
-		<input type="hidden" name="newdisplayname" id="newdisplayname" value="#$displayname#" />
+        <xar:if condition="!empty($return_url)">
+            <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
+        </xar:if>
+        <input type="hidden" name="newdisplayname" id="newdisplayname" value="#$displayname#" />
 <!--         <label for="newdisplayname"><xar:mlstring>Enter new display name (Does not work)</xar:mlstring></label>
         <br />
         <input type="text" name="newdisplayname" id="newdisplayname" value="#$displayname#" size="30" maxlength="30" tabindex="1" /> -->
