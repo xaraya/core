@@ -104,7 +104,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
                 $this->value = $value;
                 return true;
             } else {
-                xarExceptionHandled();
+                xarErrorHandled();
             }
         } elseif (empty($value)) {
             $this->value = $value;
@@ -221,9 +221,9 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         } else {
             $user = xarUserGetVar('name', $value);
             if (empty($user)) {
-                if (!isset($user)) xarExceptionHandled();
+                if (!isset($user)) xarErrorHandled();
                 $user = xarUserGetVar('uname', $value);
-                if (!isset($user)) xarExceptionHandled();
+                if (!isset($user)) xarErrorHandled();
             }
         }
         $data['value']=$value;

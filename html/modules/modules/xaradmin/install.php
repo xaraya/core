@@ -35,7 +35,7 @@ function modules_admin_install()
     if (!xarModAPIFunc('modules','admin','verifydependency',array('regid'=>$id))) {
         //Oops, we got problems...
         //Handle the exception with a nice GUI:
-        xarExceptionHandled();
+        xarErrorHandled();
 
         //Checking if the user has already passed thru the GUI:
         xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);

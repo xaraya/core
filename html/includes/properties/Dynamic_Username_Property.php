@@ -32,7 +32,7 @@ class Dynamic_Username_Property extends Dynamic_Property
         // check that the user exists
         if (is_numeric($value)) {
             $user = xarUserGetVar('uname', $value);
-            if (!isset($user)) xarExceptionHandled();
+            if (!isset($user)) xarErrorHandled();
         }
         if (!is_numeric($value) || empty($user)) {
             $this->invalid = xarML('user');
@@ -65,9 +65,9 @@ class Dynamic_Username_Property extends Dynamic_Property
         $user = xarUserGetVar('name', $value);
 
         if (empty($user)) {
-            if (!isset($user)) xarExceptionHandled();
+            if (!isset($user)) xarErrorHandled();
             $user = xarUserGetVar('uname', $value);
-            if (!isset($user)) xarExceptionHandled();
+            if (!isset($user)) xarErrorHandled();
         }
 
         if ($value > 1) {
@@ -100,9 +100,9 @@ class Dynamic_Username_Property extends Dynamic_Property
         $data=array();
         $user = xarUserGetVar('name', $value);
         if (empty($user)) {
-            if (!isset($user)) xarExceptionHandled();
+            if (!isset($user)) xarErrorHandled();
             $user = xarUserGetVar('uname', $value);
-            if (!isset($user)) xarExceptionHandled();
+            if (!isset($user)) xarErrorHandled();
         }
 
         $data['value'] = $value;

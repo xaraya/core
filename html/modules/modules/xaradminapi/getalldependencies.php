@@ -59,7 +59,7 @@ function modules_adminapi_getalldependencies($args)
     $modInfo = xarModGetInfo($mainId);
     if (!isset($modInfo)) {
         //Handle the Exception Thrown
-        xarExceptionHandled();
+        xarErrorHandled();
 
         //Add this module to the unsatisfiable list
         $dependency_array['unsatisfiable'][] = $mainId;
