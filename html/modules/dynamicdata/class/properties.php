@@ -308,6 +308,25 @@ class Dynamic_Property_Master
                 require_once "includes/properties/Dynamic_Upload_Property.php";
                 $property = new Dynamic_Upload_Property($args);
                 break;
+				
+			// Using 200 range for experimental
+            case 201: // (htmlarea_small) Small GUI Editor
+                $args['rows'] = 2;
+                require_once "includes/properties/Dynamic_HTMLArea_Property.php";
+                $property = new Dynamic_TextArea_Property($args);
+                break;
+            case 202: // (htmlarea_medium) Medium GUI Editor
+                $args['rows'] = 8;
+                require_once "includes/properties/Dynamic_HTMLArea_Property.php";
+                $property = new Dynamic_TextArea_Property($args);
+                break;
+            case 203: // (htmlarea_large) Large GUI Editor
+                $args['rows'] = 20;
+                $args['cols'] = 80;
+                require_once "includes/properties/Dynamic_HTMLArea_Property.php";
+                $property = new Dynamic_TextArea_Property($args);
+                break;
+
 
             default:
                 $property = new Dynamic_Property($args);
@@ -739,6 +758,36 @@ class Dynamic_Property_Master
                                     // ...
                                    );
         }
+
+	// Integrate WYSIWYG Editor, if available
+		if( file_exists('htmlarea/htmlarea.js') )
+		{
+			$proptypes[201] = array(
+								  'id'         => 201,
+								  'name'       => 'htmlarea_small',
+								  'label'      => 'Small GUI Editor',
+								  'format'     => '3',
+								  'validation' => '',
+								  // ...
+								 );
+			$proptypes[202] = array(
+								  'id'         => 202,
+								  'name'       => 'htmlarea_medium',
+								  'label'      => 'Medium GUI Editor',
+								  'format'     => '4',
+								  'validation' => '',
+								  // ...
+								 );
+			$proptypes[203] = array(
+								  'id'         => 203,
+								  'name'       => 'htmlarea_large',
+								  'label'      => 'Large GUI Editor',
+								  'format'     => '5',
+								  'validation' => '',
+								  // ...
+								 );
+		}
+
 
 
     // TODO: yes :)
