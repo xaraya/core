@@ -83,7 +83,8 @@ ________________________________________________________________________________
 				</a>
             </div>
             <a href="&xar-baseurl;">
-                <img src="#$classicthemedir#/images/xa_logo.jpg" alt="#xarModGetVar('themes', 'SiteName')#" />
+            	<!-- atm in this theme we just use a transparent gif to overlay the logo -->
+                <img src="#$classicthemedir#/images/transparent_pix.gif" width="245" height="70" alt="#xarModGetVar('themes', 'SiteName')#" />
             </a>
             <div id="text">
 				<div id="textbut">

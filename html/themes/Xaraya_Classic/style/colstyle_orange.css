@@ -3,7 +3,19 @@
 body {
 	color: #805400;
 	background-color: #E59600;
-	background-image: url(../images/page_bg.jpg);
+	background-image: url(../images/page_bg_orange.jpg);
 	background-repeat: repeat-x;
 	background-position: 100% 0;
 }
+
+/* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
+
+div#classicheader {
+	background-image: url(../images/xa_logo_orange.jpg);
+	background-repeat: no-repeat;
+	background-position: 0 0;
+}
+
+div#classicfooter {
+	background-image: url(../images/footer_bg_orange.jpg);
+} 

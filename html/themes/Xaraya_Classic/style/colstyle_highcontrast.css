@@ -1,6 +1,38 @@
-/*  High contrast style, to somewhat emulate Google and Yahoo - mainly for color-blind people ;-) */
+/*  High contrast style, to somewhat emulate Google'ish and Yahoo'ish simplicity */
+
+/*
+with the styleswitcher in this theme we only need to override default styles 
+------------------------------------------------------------------[important note] */
 
 body {
+	color: #000000;
+	background-color: #FFFFFF;
+	background-image: none;
+}
+
+a { color: #610080; }
+a:link:hover, a:visited:hover { color: #CD2000; }
+
+.xar-menu-section { color: #D5004B;}
+
+.xar-mod-head {
+	color: #ffffff;
+	background-color: #0F0F0F;
+	border-color: #000000;
+	font-weight: bolder;
+}
+
+/* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
+
+div#classicheader {
+	width: 100%;
+	height: 70px;
+	background-image: url(../images/xa_logo_contrast.jpg);
+	background-repeat: no-repeat;
+	background-position: 0 0;
+}
+
+td#leftmenus, td#rightmenus, td#maincontent, div#classicfooter {
 	color: #000000;
 	background-color: #FFFFFF;
 	background-image: none;
