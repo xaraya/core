@@ -21,7 +21,7 @@ include_once "includes/properties/Dynamic_Select_Property.php";
 class Dynamic_UserList_Property extends Dynamic_Select_Property
 {
     var $grouplist = array();
-    var $state = -1;
+    var $userstate = -1;
     var $showlist = array();
     var $orderlist = array();
     var $showglue = '; ';
@@ -60,7 +60,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
                 if (strchr($option, ':')) {
                     list($option_type, $option_value) = explode(':', $option, 2);
                     if ($option_type == 'state' && is_numeric($option_value)) {
-                        $this->state = $option_value;
+                        $this->userstate = $option_value;
                     }
                     if ($option_type == 'showglue') {
                         $this->showglue = $option_value;
@@ -113,6 +113,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         $select_options = array();
 
         extract($args);
+
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -120,8 +121,8 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
             $options = $this->options;
         }
         if (count($options) == 0) {
-            if ($this->state <> -1) {
-                $select_options['state'] = $this->state;
+            if ($this->userstate <> -1) {
+                $select_options['state'] = $this->userstate;
             }
             if (!empty($this->orderlist)) {
                 $select_options['order'] = implode(',', $this->orderlist);
@@ -141,11 +142,11 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
             } else {
                 // Complex case: allow specific fields to be selected.
                 foreach ($users as $user) {
-                    $name = array();
+                    $namevalue = array();
                     foreach ($this->showlist as $showfield) {
-                        $name[] = $user[$showfield];
+                        $namevalue[] = $user[$showfield];
                     }
-                    $options[] = array('id' => $user['uid'], 'name' => implode($this->showglue, $name));
+                    $options[] = array('id' => $user['uid'], 'name' => implode($this->showglue, $namevalue));
                 }
             }
         }
