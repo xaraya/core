@@ -404,7 +404,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                         if( $unserializedvalue === false )
                         {
                             $where = $this->link . " eq '" . $value . "'";
-                        } else {
+                        } elseif (count($unserializedvalue) > 0) {
                             if( is_numeric($unserializedvalue[0]) )
                             {
                                 $where = $this->link . ' IN (' . implode(",",$unserializedvalue) . ')';
@@ -413,7 +413,10 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                             }
                         }
                     }
-                    $myobject->getItems(array('where' => $where));
+                    if( isset($where) )
+                    {
+                        $myobject->getItems(array('where' => $where));
+                    }
                 } else {
                     // re-initialize the items array
                     $myobject->items = array();
