@@ -843,7 +843,9 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
                 ob_end_clean();
 
                 if (empty($r) || !$r) {
-                    $msg = xarML("Could not load function file: [#(1)].\n\n Error Caught:\n #(2)", $funcFile, $error_msg);
+                    $msg = xarML("Could not load function file: [#(1)].", $funcFile) . "\n\n";
+                    $msg .= xarML("Error Caught:") . "\n";
+                    $msg .= $error_msg;
                     $isLoaded = false;
                 }
 
@@ -949,7 +951,9 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
                 ob_end_clean();
 
                 if (empty($r) || !$r) {
-                    $msg = xarML("Could not load function file: [#(1)].\n\n Error Caught:\n #(2)", $funcFile, $error_msg);
+                    $msg = xarML("Could not load function file: [#(1)].", $funcFile) . "\n\n";
+                    $msg .= xarML("Error Caught:") . "\n";
+                    $msg .= $error_msg;
                     $isLoaded = false;
                 }
 
