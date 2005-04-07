@@ -124,6 +124,14 @@ function installer_admin_phase3()
     $rssTemplatesIsWritable = is_writable($rssTemplatesDir);
     $adodbTemplatesIsWritable = is_writable($adodbTemplatesDir);
 
+    // Extension Check
+    $data['xmlextension']             = extension_loaded('xml');
+    $data['mysqlextension']           = extension_loaded('mysql');
+    $data['pgsqlextension']           = extension_loaded ('pgsql');
+    $data['xsltextension']            = extension_loaded ('xslt');
+    $data['ldapextension']            = extension_loaded ('ldap');
+    $data['gdextension']              = extension_loaded ('gd');
+
     $data['metRequiredPHPVersion']    = $metRequiredPHPVersion;
     $data['phpVersion']               = PHP_VERSION;
     $data['cacheTemplatesDir']        = $cacheTemplatesDir;
@@ -807,24 +815,11 @@ function installer_admin_confirm_configuration()
                        );
 //        }
     }
-    foreach ($fileModules as $fileModule) {
-//        if(xarMod_getState($fileModule['regid']) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-        // skip other auth* modules during installation !
-            if (substr($fileModule['name'],0,4) == 'auth') continue;
-            $options3[] = array(
-                       'item' => $fileModule['regid'],
-                       'option' => 'false',
-                       'comment' => xarML('Install the #(1) module.',ucfirst($fileModule['name']))
-                       );
-//        }
-    }
-
     if (!$confirmed) {
 
         $func = "installer_" . basename(strval($configuration),'.conf.php') . "_privilegeoptions";
         $data['options1'] = $func();
         $data['options2'] = $options2;
-        $data['options3'] = $options3;
         $data['installed'] = implode(', ',$installedmodules);
         $data['missing'] = implode(', ',$awolmodules);
         $data['configuration'] = $configuration;
@@ -906,14 +901,6 @@ function installer_admin_confirm_configuration()
                         return;
                    }
                    xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$module['item']));
-//                    xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
-                }
-            }
-        // load any other modules chosen
-            xarModAPIFunc('modules','admin','regenerate');
-            foreach ($options3 as $module) {
-                if(in_array($module['item'],$chosen)) {
-                    xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$module['item']));
 //                    xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
                 }
             }
