@@ -59,6 +59,7 @@ function modules_adminapi_remove($args)
         if (!$result) return;
         $query = "DELETE FROM " . $tables['system/module_states'] ." WHERE xar_regid = ?";
         $result =& $dbconn->Execute($query,array($modinfo['regid']));
+        //NOTE: no use doing site/module_states now: see bug #1507 and xarDB.php for the details
         if (!$result) return;
     }
     else {
