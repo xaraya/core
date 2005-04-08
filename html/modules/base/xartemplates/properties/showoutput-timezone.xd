@@ -10,4 +10,3 @@
 <xar:elseif condition="!empty($option['name'])" />
     #$option['name']#
 </xar:if>
-

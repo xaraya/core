@@ -5,5 +5,3 @@
 <xar:else />
     #$groupname#
 </xar:if>
-
-
