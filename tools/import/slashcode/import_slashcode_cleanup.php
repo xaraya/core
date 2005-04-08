@@ -18,6 +18,10 @@
 
     echo "<strong>$step. Cleaning up</strong><br/>\n";
 
+    // Set maximum_execution_time back to original value
+    $old_max_execution_time = xarModGetVar('installer','old_max_execution_time');
+    ini_set('maximum_execution_time', $old_max_execution_time);
+
     // Drop temporary topics table
     $table_topics_tree = xarDBGetSiteTablePrefix() . '_installer_topics';
     $dbimport->Execute("DROP TABLE " . $table_topics_tree);
@@ -31,6 +35,8 @@
     $dbimport->Execute("DROP TABLE " . $table_commentids);
 
     xarModDelVar('installer','dbtype');
+    xarModDelVar('installer','old_max_execution_time');
+    xarModDelVar('installer','new_max_execution_time');
     xarModDelVar('installer','importdbtype');
     xarModDelVar('installer','importdb');
     xarModDelVar('installer','reset');

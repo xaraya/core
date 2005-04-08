@@ -28,6 +28,10 @@ xarRequestGetInfo();
 if (!isset($step)) {
 // start the output buffer
 ob_start();
+
+// Get max_execution_time from php.ini
+$old_max_execution_time = ini_get('max_execution_time');
+xarModSetVar('installer','old_max_execution_time',$old_max_execution_time);
 }
 ?>
 
@@ -58,6 +62,7 @@ if (isset($step)) {
         if(!xarVarFetch('submissionimport','isset', $submissionimport, NULL, XARVAR_NOT_REQUIRED)) {return;}
         if(!xarVarFetch('commentimport','isset', $commentimport, NULL, XARVAR_NOT_REQUIRED)) {return;}
         if(!xarVarFetch('discussionimport','isset', $discussionimport, NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if(!xarVarFetch('new_max_execution_time','isset', $new_max_execution_time, NULL, XARVAR_NOT_REQUIRED)) {return;}
     } elseif ($step > 1 || isset($startnum)) {
         $reset = xarModGetVar('installer','reset');
         $resetcat = xarModGetVar('installer','resetcat');
@@ -66,12 +71,14 @@ if (isset($step)) {
         $submissionimport = xarModGetVar('installer','submissionimport');
         $commentimport = xarModGetVar('installer','commentimport');
         $discussionimport = xarModGetVar('installer','discussionimport');
+        $new_max_execution_time = xarModGetVar('installer','new_max_execution_time');
     }
 }
 
 // Initialize database settings
 $dbconn =& xarDBGetConn();
 $tables =& xarDBGetTables();
+
 
 // Set some table variables
 $table_users = 'users';
@@ -127,6 +134,8 @@ if (empty($step)) {
         $result->Close();
     }
 
+    $totalcount = $usercount;
+
     // Count number of stories
     $query = 'SELECT COUNT(stoid) FROM ' . $table_stories;
     $result =& $dbimport->Execute($query);
@@ -139,6 +148,10 @@ if (empty($step)) {
         $storycount = $result->fields[0];
         xarModSetVar('installer','storycount',$storycount);
         $result->Close();
+    }
+
+    if ($totalcount < $storycount) {
+        $totalcount = $storycount;
     }
 
     // Count number of submissions (these are also stories)
@@ -155,6 +168,10 @@ if (empty($step)) {
         $result->Close();
     }
 
+    if ($totalcount < $submissioncount) {
+        $totalcount = $submissioncount;
+    }
+
     // Count number of comments
     $query = 'SELECT COUNT(cid) FROM ' . $table_comments;
     $result =& $dbimport->Execute($query);
@@ -167,6 +184,10 @@ if (empty($step)) {
         $commentcount = $result->fields[0];
         xarModSetVar('installer','commentcount',$commentcount);
         $result->Close();
+    }
+
+    if ($totalcount < $commentcount) {
+        $totalcount = $commentcount;
     }
 
     // Count number of discussions
@@ -182,6 +203,12 @@ if (empty($step)) {
         xarModSetVar('installer','discussioncount',$discussioncount);
         $result->Close();
     }
+
+    if ($totalcount < $discussioncount) {
+        $totalcount = $discussioncount;
+    }
+
+    $estimatedtime = ceil($totalcount / 100);
 ?>
 
     <h3>Recommended usage</h3>
@@ -292,6 +319,9 @@ if (empty($step)) {
     <input type="text" name="commentimport" size="10" maxlength="10" value="500"></td></tr>
     <tr><td align="right"><?php echo($discussioncount);?> discussions found in the database<br>Number of discussion to import at a time:</td><td>
     <input type="text" name="discussionimport" size="10" maxlength="10" value="500"></td></tr>
+    <tr><td align="right"><?php echo($estimatedtime);?> seconds estimated to execute import of largest recordset<br>Maximum execute time:</td><td>
+    <input type="text" name="new_max_execution_time" size="10" maxlength="10" value="<?php echo($estimatedtime);?>"></td></tr>
+    <tr><td colspan=2 align="middle">
     <tr><td colspan=2 align="middle">
     <input type="submit" value=" Import Data "></td></tr>
     </table>
@@ -318,6 +348,10 @@ if (empty($step)) {
         xarModSetVar('installer','commentimport',$commentimport);
         if (!isset($discussionimport)) {$discussionimport = 500;}
         xarModSetVar('installer','discussionimport',$discussionimport);
+        if (!isset($new_max_execution_time)) {$new_max_execution_time = 300;}
+        xarModSetVar('installer','new_max_execution_time',$new_max_execution_time);
+        // Set max execution time
+        ini_set('maximum_execution_time', $new_max_execution_time);
     }
 
     if (!xarModAPILoad('roles','admin')) {
