@@ -20,7 +20,7 @@
  * better control on config settings
  *
  */
-define('XARCORE_VERSION_NUM', '0.9.12');
+define('XARCORE_VERSION_NUM', '0.9.13');
 define('XARCORE_VERSION_ID',  'Xaraya');
 define('XARCORE_VERSION_SUB', 'adam_baum');
 
