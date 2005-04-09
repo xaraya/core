@@ -79,7 +79,8 @@ function xarServerGetVar($name)
     if (isset($_SERVER[$name])) {
         return $_SERVER[$name];
     }
-
+    if($name == 'PATH_INFO') return;
+    
     if (isset($_ENV[$name])) {
         return $_ENV[$name];
     }
