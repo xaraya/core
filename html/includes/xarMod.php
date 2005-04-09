@@ -1200,7 +1200,10 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 
                 // Remove the leading / from the path (if any).
                 $path = preg_replace('/^\//', '', $path);
-
+                                         
+                // Workaround for bug 3603
+                // why: template might add extra params we dont see here
+                if(!strpos($path,$pini)) $path .= $pini;
                 // We now have the short form of the URL.
                 // Further custom manipulation of the URL can be added here.
                 // It may be worthwhile allowing for some kind of hook?
