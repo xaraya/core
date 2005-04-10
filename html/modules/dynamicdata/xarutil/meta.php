@@ -50,8 +50,11 @@ function dynamicdata_util_meta($args)
     $data['table'] = $table;
     $data['export'] = $export;
 
-    xarTplSetPageTemplateName('admin');
-
+    if (xarModGetVar('adminpanels','dashboard')) {
+        xarTplSetPageTemplateName('admin');
+    }else {
+        xarTplSetPageTemplateName('default');
+    }
     return $data;
 }
 

@@ -152,7 +152,11 @@ function dynamicdata_util_export($args)
 
     $data['xml'] = xarVarPrepForDisplay($xml);
 
-    xarTplSetPageTemplateName('admin');
+    if (xarModGetVar('adminpanels','dashboard')) {
+        xarTplSetPageTemplateName('admin');
+    }else {
+        xarTplSetPageTemplateName('default');
+    }
 
     return $data;
 }
