@@ -41,7 +41,13 @@ function themes_admin_setdefault()
 
     if (xarVarIsCached('Mod.Variables.themes', 'default')) {
         xarVarDelCached('Mod.Variables.themes', 'default');
-    } 
+    }
+
+    //update the database - activate the theme
+    if (!xarModAPIFunc('themes','admin','install',array('regid'=>$defaulttheme))) {
+        xarResponseRedirect(xarModURL('themes', 'admin', 'modifyconfig'));
+    }
+
     // update the data
     xarTplSetThemeDir($themeInfo['directory']);
     xarModSetVar('themes', 'default', $themeInfo['directory']); 
