@@ -544,7 +544,7 @@ function dynamicdata_init()
     xarRegisterMask('AdminDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_ADMIN');
 
     xarRegisterMask('ViewDynamicDataBlocks','All','dynamicdata','Block','All:All:All','ACCESS_OVERVIEW');
-    xarRegisterMask('ReadDynamicDataBlock','All','dynamicdata','BLock','All:All:All','ACCESS_READ');
+    xarRegisterMask('ReadDynamicDataBlock','All','dynamicdata','Block','All:All:All','ACCESS_READ');
    /*********************************************************************
     * Define instances for this module
     * Format is
