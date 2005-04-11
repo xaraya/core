@@ -55,6 +55,7 @@ function dynamicdata_util_meta($args)
     }else {
         xarTplSetPageTemplateName('default');
     }
+
     return $data;
 }
 
