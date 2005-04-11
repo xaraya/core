@@ -65,6 +65,7 @@ function roles_user_register()
             break;
 
         case 'checkage':
+            $minage = xarModGetVar('roles', 'minage');
             $data = xarTplModule('roles','user', 'checkage', array('minage'    => $minage));
             break;
 
