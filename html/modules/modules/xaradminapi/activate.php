@@ -9,7 +9,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage modules module
- * @author Xaraya Team 
+ * @author Xaraya Team
  */
 /**
  * Activate a module if it has an active function, otherwise just set the state to active
@@ -31,6 +31,10 @@ function modules_adminapi_activate ($args)
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
+    $modInfo = xarModGetInfo($regid);
+    if (!isset($modInfo) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+        return NULL;
+    }
 
     // Module activate function
     if (!xarModAPIFunc('modules',
@@ -38,7 +42,7 @@ function modules_adminapi_activate ($args)
                            'executeinitfunction',
                            array('regid'    => $regid,
                                  'function' => 'activate'))) {
-        $msg = xarML('Unable to execute "activate" function in the xarinit.php file of module (#(1))', $modInfo['displayname']); 
+        $msg = xarML('Unable to execute "activate" function in the xarinit.php file of module (#(1))', $modInfo['displayname']);
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
