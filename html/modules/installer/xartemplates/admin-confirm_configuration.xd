@@ -47,25 +47,25 @@
                         </p>
                     <xar:else />
                         <xar:loop name="$options2">
-                            <xar:if condition="$loop:item['option'] eq ''">
-                                <p>
-                                    #$loop:item['comment']# 
-                                </p>
+                        <xar:if condition="$loop:item['option'] eq ''">
+                            <p class="xar-normal">
+                                #$loop:item['comment']# 
+                            </p>
                             <xar:else />
-                                <p class="xar-normal">
-                                    <xar:if condition="$loop:item['option'] == 'true'">
-                                        <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
+                            <p class="xar-normal">
+                                <xar:if condition="$loop:item['option'] == 'true'">
+                                    <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
                                     <xar:else />
-                                        <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" />
-                                    </xar:if>
-                                    <label for="chosen2_#$loop:index#">
-                                        #$loop:item['comment']# 
-                                    </label>
-                                </p>
-                            </xar:if>
-                        </xar:loop>
-                    </xar:if>
-                </div>
+                                    <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" />
+                                </xar:if>
+                                <label for="chosen2_#$loop:index#">
+                                    #$loop:item['comment']# 
+                                </label>
+                            </p>
+                        </xar:if>
+                    </xar:loop>
+                </xar:if>
+            </div>
             <xar:if condition="$installed ne ''">
                 <p class="xar-normal">
                     <xar:mlstring>The following modules for this configuration are already installed:</xar:mlstring>
@@ -77,35 +77,6 @@
                     <xar:mlstring>The following modules for this configuration are missing in the modules directory:</xar:mlstring>
                     #$missing# 
                 </p>
-            </xar:if>
-            <xar:if condition="count($options3) ne 0">
-                <h4>
-                    <xar:mlstring>Other Modules</xar:mlstring>
-                </h4>
-
-                <p>
-                    <xar:mlstring>The following modules are present that are not part of the configuration you have chosen. If you wish to, you can load them as well.</xar:mlstring>
-                </p>
-                <div class="scroller">
-                    <xar:loop name="$options3">
-                        <xar:if condition="$loop:item['option'] eq ''">
-                            <p>
-                                #$loop:item['comment']# 
-                            </p>
-                        <xar:else />
-                            <p>
-                                <xar:if condition="$loop:item['option'] == 'true'">
-                                    <input type="checkbox" name="chosen[]" id="chosen3_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
-                                <xar:else />
-                                    <input type="checkbox" name="chosen[]" id="chosen3_#$loop:index#" value="#$loop:item['item']#" />
-                                </xar:if>
-                                <label for="chosen3_#$loop:index#">
-                                    #$loop:item['comment']# 
-                                </label>
-                            </p>
-                        </xar:if>
-                    </xar:loop>
-                </div>
             </xar:if>
             </div>
             <p>
