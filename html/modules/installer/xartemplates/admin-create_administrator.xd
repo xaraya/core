@@ -27,6 +27,7 @@
                         <xar:mlstring>Display Name</xar:mlstring>
                     </label>
                     <input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="#xarML('Administrator')#" />
+                    <br class="clear" />
                 </p>
                 <p>
                     <label for="install_admin_username">

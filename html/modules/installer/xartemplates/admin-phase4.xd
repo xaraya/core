@@ -27,24 +27,28 @@
                     <xar:mlstring>Host</xar:mlstring>
                 </label>
                 <input type="text" name="install_database_host" id="install_database_host" maxlength="80" value="#$database_host#" />
+                <br class="clear" />
             </p>
             <p>
                 <label for="install_database_username">
                     <xar:mlstring>Username</xar:mlstring>
                 </label>
                 <input type="text" name="install_database_username" id="install_database_username" maxlength="80" value="#$database_username#" />
+                <br class="clear" />
             </p>
             <p>
                 <label for="install_database_password">
                     <xar:mlstring>Password</xar:mlstring>
                 </label>
                 <input type="password" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#" />
+                <br class="clear" />
             </p>
             <p>
                 <label for="install_database_name">
                     <xar:mlstring>Database Name</xar:mlstring>
                 </label>
                 <input type="text" name="install_database_name" id="install_database_name" maxlength="80" value="#$database_name#" />
+                <br class="clear" />
             </p>
             <p>
                 <label for="install_database_prefix">
