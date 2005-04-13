@@ -26,13 +26,13 @@
                     <label for="install_admin_name">
                         <xar:mlstring>Display Name</xar:mlstring>
                     </label>
-                    <input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="Admin" />
+                    <input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="#xarML('Administrator')#" />
                 </p>
                 <p>
                     <label for="install_admin_username">
                         <xar:mlstring>Username</xar:mlstring>
                     </label>
-                    <input type="text" name="install_admin_username" id="install_admin_username" maxlength="80" value="Admin" />
+                    <input type="text" name="install_admin_username" id="install_admin_username" maxlength="80" value="#xarML('Admin')#" />
                     <br class="clear" />
                 </p>
                 <p>

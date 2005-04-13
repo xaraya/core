@@ -19,6 +19,15 @@
         </head>
         <body>
             <div id="wrapper">
+            <div id="footer">
+                <ul id="navlist">
+                    <li><a href="http://www.xaraya.com/index.php/xarbb">Support Forums</a></li>
+                    <li><a href="news://news.xaraya.com">Newsgroups</a></li>
+                    <li><a href="irc://irc.xaraya.com">IRC Support</a></li>
+                    <li><a href="http://xaraya.com/index.php/documentation/96">Prepare for Install</a></li>
+                    <li><a href="http://xaraya.com/index.php/documentation/97">Install Guide</a></li>
+                </ul>
+            </div>
                 <div id="main">
                     <xar:module main="true" />
                     <br style="clear:both" />

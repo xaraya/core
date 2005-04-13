@@ -1,6 +1,6 @@
 body {
-    background-color: #B6A4BB;
-    color: #000000;
+    background-color: #fff;
+    color: #000;
     font-family: "Trebuchet MS", Arial, Helvetica, Tahoma, sans-serif;
     font-size: 18px;
     text-align: center;
@@ -14,20 +14,14 @@ body {
     margin-right: auto;
     margin-left: auto;
     background-color: #ffffff;
-    background-image: url(../modules/installer/images/top.gif);
+    background-image: url(../modules/installer/images/installerbg.png);
     background-repeat: no-repeat;
 }
 
 #main {
-    border-style: solid;
-    border-width: 1px;
-    border-color: #0f0f0f;
     margin-top: 0px;
     margin-bottom: 0px;
     padding: 70px 0 95px 0;
-    background-image: url(../modules/installer/images/bottom.gif);
-    background-repeat: no-repeat;
-    background-position: 0 100%;
 }
 
 #install { padding: 0 0 0 20px; }
@@ -37,7 +31,7 @@ body {
     float: right;
     border-style: solid;
     border-width: 2px;
-    border-color: #4B0A86;
+    border-color: #D7D7DD;
     width: 225px;
     padding: 5px;
     margin: 0px 20px 0px 10px;
@@ -48,10 +42,10 @@ body {
 h1,h2,h3,h4 {
     font-family: Arial, Helvetica, Tahoma, sans-serif;
     font-weight: bold;
-    color: #A256B8;
+    color: #000;
     line-height: 1.2em;
     text-align: center;
-    padding: 0 0 5px 0;
+    padding: 0 0 .4em 0;
     margin: 0;
     width: 460px;
     text-shadow: -1px 3px 3px silver;
@@ -60,10 +54,10 @@ h1,h2,h3,h4 {
 h1 { font-size: 1.4em; }
 h2 { font-size: 1.2em; }
 h3 { font-size: 1em; }
-h4 { font-size: 80%; }
+h4 { font-size: .8em; }
 
 p {
-    font-size: 80%;
+    font-size: .8em;
     text-align: left;
     line-height: 1.5em;
 }
@@ -72,27 +66,26 @@ form p.center { text-align: center; }
 
 form label {
     font-weight: bold;
-    margin: 0 6px;
-    color: #666;
+    margin: 0 .5em;
+    color: gray;
 }
 
-div#license {
+textarea#license, select#configuration {
+    background-color: #fff;
+    border-color: #D7D7DD;
+    border-width: 1px;
+    font-size: 12px;
+    color: #000;
     width: 440px;
-    height: 220px;
-    padding: 6px;
-    font-size: 80%;
-    overflow: scroll;
-    text-align: left;
-    border: 2px solid #4B0A86;
-}
+    height: 13em;
+    padding: .5em;
+    font-size: .8em;
 
-select#configuration {
-    width: 440px;
 }
 
 label.block {
     display: block;
-    padding: 6px 0;
+    padding: .5em 0;
     clear: both;
 }
 
@@ -106,24 +99,24 @@ div.simpleform {
     padding: 0;
     margin: 0;
     text-align: center;
-    border: 2px solid #B6A4BB;
+    border: 1px solid #B6A4BB;
 }
 
 div.simpleform p {
     width: 460px;
-    padding: 3px 0;
+    padding: .35em 0;
     margin: 0 auto;
     text-align: left;
     border-bottom: #ffffff;
     border-width: 0 0 1px 0;
     border-style: none none solid none;
-    clear: both;
+    background-color: #f0f0f0;
 }
 
 div.simpleform label {
     width: 30%;
     float: left;
-    padding: 0 6px;
+    padding: 0 .5em;
     margin: 0;
 }
 
@@ -131,12 +124,12 @@ div.simpleform input {
     width: 30%;
     float: left;
     padding: 0;
-    margin: 0 3px;
+    margin: 0 .25em;
 }
 
 div.scroller {
     padding: 5px;
-    margin-bottom: 6px;
+    margin-bottom: .5em;
     width:440px;
     overflow: auto;
     height: 150px;
@@ -144,66 +137,66 @@ div.scroller {
 }
 div.scroller p, div.scroller input {
     line-height: 1em;
-    padding: .3px 0;
+    padding: .25em 0;
     margin: 0;
 }
 
 p.complete, p.active, p.greyed {
     padding: 0 0 0 30px;
-    font-size: 80%;
+    font-size: .8em;
     line-height: 30px;
     text-indent: 20px;
     background-repeat: no-repeat;
-    background-position: 0 3px;
+    background-position: 0 .35em;
 }
 
 .complete {
-    color: #999;
+    color: #B0B0B0;
     text-decoration: line-through;
     background-image: url(../modules/installer/images/completed.gif);
 }
 
 .active {
-    color: #8200A8;
+    color: #000;
     background-image: url(../modules/installer/images/active.gif);
 }
 
 .greyed {
-    color: #999;
+    color: #B0B0B0;
     background-image: url(../modules/installer/images/greyed.gif);
 }
 
 .xar-normal {
     color: #000000;
-    font-size: 75%;
+    font-size: .75em;
 }
 
 .xar-normal a:link {
-    color: #8200A8;
+    color: #000;
     font-weight: bold;
     text-decoration: underline;
 }
 
 .xar-normal a:visited {
-    color: #4B0A86;
+    color: #000;
     font-weight: bold;
     text-decoration: underline;
 }
 
 .xar-normal a:hover {
-    color: #4B0A86;
+    color: #B0B0B0;
     font-weight: bold;
     text-decoration: overline underline;
 }
 
 .xar-normal a:active {
-    color: #4B0A86;
+    color: #B0B0B0;
     font-weight: bold;
     text-decoration: overline underline;
 }
 
 .xar-title p strong {
-    color: #4B0A86;
+    color: #B0B0B0;
     font-weight: bold;
 }
 
@@ -214,5 +207,22 @@ p.complete, p.active, p.greyed {
     margin: 0;
 }
 
-.xar-sub { font-size: 70%; }
+.xar-sub { font-size: .7em; }
 .clear { clear: both; height:0px; }
+
+
+#navlist li {
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+}
+
+#navlist li a {
+    color: #B0B0B0;
+    font-size: .75em;
+}
+
+#navlist li a:hover {
+    color: #000;
+    font-size: .75em;
+}
