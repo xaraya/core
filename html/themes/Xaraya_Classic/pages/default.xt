@@ -6,18 +6,19 @@
     <xar:comment>set some common local variables</xar:comment>
     <xar:set name="classicthemedir">#xarTplGetThemeDir()#</xar:set>
     <xar:set name="sitename"><xar:var scope="module" module="themes" name="SiteName" /></xar:set>
-    <xar:comment>Type of styleswitcher to use (if any). Supported values are 'none', 'javascript' or 'php'.</xar:comment>
+    <xar:comment>Type of styleswitcher to use (if any). Supported values are 'none', 'javascript' or 'php' (not yet).</xar:comment>
     <xar:set name="styleswitchertype">'javascript'</xar:set>
     <head>
         <xar:template file="headtagcontent" type="theme" />
     </head>
     <body>
         <div id="pagegradient">
-            <div id="xc-outer-wrapper">
-                <xar:template file="pageheader" type="theme" />
-                <xar:template file="pageblockgroups" type="theme" />
-                <xar:template file="pagefooter" type="theme" />
-            </div>
+            <xar:comment>no content here, it's just used for positioning the background image</xar:comment>
+        </div>
+        <div id="xc-outer-wrapper">
+            <xar:template file="pageheader" type="theme" />
+            <xar:template file="pageblockgroups" type="theme" />
+            <xar:template file="pagefooter" type="theme" />
         </div>
         <xar:comment>Body JavaScript - required for all html themes</xar:comment>
         <xar:base-render-javascript position="body" />

@@ -311,17 +311,14 @@ class xarCSS
 
     // returns relative xaraya path for the desired css file (protected)
     function _xarpath()
-    {
-        static $inspector;
-        
+    {        
         // make sure current module is known in advance
         if(!isset($this->compname)) {
             $path = new xarCSSPath($this);
             $this->compname = $path->currentmoddir();
         }
-        
-        // do we have the instance already?
-        if(!isset($inspector)) $inspector = new cssFileInspector($this);
+
+        $inspector = new cssFileInspector($this);
         
         switch($this->comptype)
         {
@@ -342,9 +339,7 @@ class xarCSS
     // make valid (x)html tag for various css inclusion methods (protected)
     function _htmltag()
     {
-        static $tag;
-
-        if(!isset($tag)) $tag = new htmlCSSTag($this);
+        $tag = new htmlCSSTag($this);
         return $tag->render();
     }
 

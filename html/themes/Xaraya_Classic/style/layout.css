@@ -1,6 +1,7 @@
 div#pagegradient {
     position:absolute;
     top:0;
+    left:0;
     height:200px;
     width:100%;
     text-align: center;
@@ -138,6 +139,21 @@ div#xc-header h1 a {
 div#xc-header h1 a span {
     position: absolute;
     left: -9000px;
+}
+
+div#classicthemecontrols {
+    position: relative;
+    width: 187px;
+    float: right;
+    padding: 0 1px 0 0;
+    margin: 69px -18px 0 0;
+}
+
+div#classicthemecontrols img {
+    position: relative;
+    float: right;
+    width: 26px;
+    height: 21px;
 }
 
 div#xc-footer {

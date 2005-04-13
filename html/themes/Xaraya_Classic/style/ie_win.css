@@ -39,3 +39,21 @@ div#classicthemecontrols img {
 .xar-block-body-right ul ul li.xar-menu-subitem a,
 .xar-block-body ul ul li.xar-menu-subitem-current a, 
 .xar-block-body-right ul ul li.xar-menu-subitem-current a { font-size: 10px; }
+
+/*making sure all are on the same z-index level*/
+div#xc-header { z-index:13; }
+
+div#xc-header-rightbevel {
+    z-index:13;
+    position:relative;
+}
+
+div#classicthemecontrols { z-index:13; }
+
+/*ie-win doesnt play with both padding and marging, so we just use margins*/
+div#xc-outer-wrapper {
+    z-index:13;
+    position:relative;
+    padding: 0 0 15px 0;
+    margin: 15px 2%;
+}

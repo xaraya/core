@@ -1,7 +1,6 @@
 <div id="xc-header">
-    <xar:comment>Right bevel is somewhat decorational - needs extra div</xar:comment>
     <div id="xc-header-rightbevel">
-        &nbsp;
+        <xar:comment>Right bevel is somewhat decorational - needs extra div-box</xar:comment>
     </div>
     <xar:comment>See if we need the styleswitcher controls here</xar:comment>
     <xar:if condition="$styleswitchertype ne 'none'">
