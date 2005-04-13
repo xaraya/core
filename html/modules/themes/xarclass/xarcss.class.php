@@ -76,7 +76,7 @@ class xarCSS
     {
         // DO NOT EVER ATTEMPT to instantiate this class, if you do you'll get a nasty error
         // subclass it instead and let the polymorphism to do its job :-) <andyv>
-        $msg = xarML("you have illegally instantiated class: ") . get_class (&$this);
+        $msg = xarML("you have illegally instantiated class: ") . get_class ($this);
         $this->_error($msg);
     }
 
@@ -287,9 +287,9 @@ class xarCSS
             $htmlstr = '';
         }
 
-        $cssarray = self::_handle_cssdata_var();
+        $cssarray = xarCSS::_handle_cssdata_var();
         $cssarray["$this->comptype"]["$this->compname"][] = $htmlstr;
-        self::_handle_cssdata_var($cssarray);
+        xarCSS::_handle_cssdata_var($cssarray);
 
         // return the result string only if debug is on
         if($this->debug) return $htmlstr;

@@ -176,7 +176,7 @@
                             <td class="xar-norm-outline" style="text-align: left;border-width: 0px 0px 1px 0px;border-style: solid;white-space: nowrap;">
                                 <div style="padding-left: .5em;">
                                     <xar:if condition="$modinfo['class'] eq 2">
-                                        <xar:if condition="$modinfo['directory'] eq $defaulttheme">
+                                        <xar:if condition="$modinfo['directory'] eq $default">
                                             Current Default Theme
                                         <xar:else />
                                             <a href="#$modinfo['defaulturl']#">
