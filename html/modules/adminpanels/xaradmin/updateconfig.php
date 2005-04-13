@@ -36,10 +36,13 @@ function adminpanels_admin_updateconfig()
     // enable or disable overviews
     if(!xarVarFetch('overview', 'isset', $overview, 0, XARVAR_DONT_SET)) {return;}
 
+    // enable or disable overviews
+    if(!xarVarFetch('dashboard', 'isset', $dashboard, 0, XARVAR_DONT_SET)) {return;}
+
     xarModSetVar('adminpanels', 'menustyle', $menustyle);
     xarModSetVar('adminpanels', 'showhelp', (!$showhelp) ? 1 : 0);
     xarModSetVar('adminpanels', 'overview', ($overview) ? 1 : 0);
-
+    xarModSetVar('adminpanels', 'dashboard', ($dashboard) ? 1 : 0);
     // lets update status and display updated configuration
     xarResponseRedirect(xarModURL('adminpanels', 'admin', 'modifyconfig'));
 

@@ -4,7 +4,14 @@
     <xar:mlstring>SUCCESS</xar:mlstring>
 </xar:set>
 <xar:set name="failuretitle">
-    <xar:mlstring>FAILURE</xar:mlstring>
+    <xar:mlstring>
+        FAILURE 
+    </xar:mlstring>
+</xar:set>
+<xar:set name="warningtitle">
+    <xar:mlstring>
+        CAUTION
+    </xar:mlstring>
 </xar:set>
 <div id="install">
     <xar:template file="status" />
@@ -96,6 +103,119 @@
                     #$adodbTemplatesDir# 
                     <xar:mlstring>Please verify that your webserver has write access to the directory</xar:mlstring> 
                     #$adodbTemplatesDir# 
+                </p>
+            </xar:if>
+
+            <h2>
+                <xar:mlstring>
+                    Information on Loaded PHP Extensions
+                </xar:mlstring>
+            </h2>
+            <p>
+                <xar:mlstring>
+                    These extensions may be required for some modules to work; however the Xaraya is not dependant on these extensions for installation.  Refer to <a href="http://www.php.net">PHP.net</a> for further information on these extensions.
+                </xar:mlstring>
+            </p>
+            <xar:if condition="$xmlextension">
+                <p>
+                    <strong>
+                        #$successtitle#</strong>: 
+                    <xar:mlstring>
+                        The XML Extension is loaded.
+                    </xar:mlstring>
+                </p>
+                <xar:else />
+                <p>
+                    <strong style="color: orange">
+                        #$warningtitle#</strong>: 
+                    <xar:mlstring>
+                        The XML Extension is not loaded.
+                    </xar:mlstring>
+                </p>
+            </xar:if>
+            <xar:if condition="$mysqlextension">
+                <p>
+                    <strong>
+                        #$successtitle#</strong>: 
+                    <xar:mlstring>
+                        The MySQL Extension is loaded.
+                    </xar:mlstring>
+                </p>
+                <xar:else />
+                <p>
+                    <strong style="color: orange">
+                        #$warningtitle#</strong>: 
+                    <xar:mlstring>
+                        The MySQL Extension is not loaded.  Xaraya will need either the PGSQL or MySQL extension to be loaded to proceed.
+                    </xar:mlstring>
+                </p>
+            </xar:if>
+            <xar:if condition="$pgsqlextension">
+                <p>
+                    <strong>
+                        #$successtitle#</strong>: 
+                    <xar:mlstring>
+                        The PGSQL Extension is loaded.
+                    </xar:mlstring>
+                </p>
+                <xar:else />
+                <p>
+                    <strong style="color: orange">
+                        #$warningtitle#</strong>: 
+                    <xar:mlstring>
+                        The PGSQL Extension is not loaded.  Xaraya will need either the PGSQL or MySQL extension to be loaded to proceed.
+                    </xar:mlstring>
+                </p>
+            </xar:if>
+            <xar:if condition="$xsltextension">
+                <p>
+                    <strong>
+                        #$successtitle#</strong>: 
+                    <xar:mlstring>
+                        The XSLT Extension is loaded.
+                    </xar:mlstring>
+                </p>
+                <xar:else />
+                <p>
+                    <strong style="color: orange">
+                        #$warningtitle#</strong>: 
+                    <xar:mlstring>
+                        The XSLT Extension is not loaded.  This extension is only needed for the XSLT transform module at this time.
+                    </xar:mlstring>
+                </p>
+            </xar:if>
+            <xar:if condition="$ldapextension">
+                <p>
+                    <strong>
+                        #$successtitle#</strong>: 
+                    <xar:mlstring>
+                        The LDAP Extension is loaded.  
+                    </xar:mlstring>
+                </p>
+                <xar:else />
+                <p>
+                    <strong style="color: orange">
+                        #$warningtitle#</strong>: 
+                    <xar:mlstring>
+                        The LDAP Extension is not loaded.  This extension is only needed if you intend on using LDAP authentication with the Xaraya LDAP Modules.
+                    </xar:mlstring>
+                </p>
+            </xar:if>
+            <xar:if condition="$gdextension">
+                <p>
+                    <strong>
+                        #$successtitle#</strong>: 
+                    <xar:mlstring>
+                        The GD Extension is loaded.
+                    </xar:mlstring>
+                </p>
+                <xar:else />
+                <p>
+                    <strong style="color: orange">
+                        #$warningtitle#</strong>: 
+                    <xar:mlstring>
+                        The GD Extension is not loaded.  This extension is only needed for the images module at this time for resizing of thumbnails.
+                    </xar:mlstring>
                 </p>
             </xar:if>
 

@@ -111,6 +111,9 @@
                         <th>
                             <xar:mlstring>Actions</xar:mlstring>
                         </th>
+                        <th style="text-align: left;padding-left: .5em;">
+                            <xar:mlstring>Default</xar:mlstring>
+                        </th>
                     </tr>
                     <xar:foreach in="$listrowsitems" value="$modinfo">
                         <tr>
@@ -169,6 +172,19 @@
                                             | <a href="#$modinfo['defaulturl']#"><xar:mlstring>Set as Default</xar:mlstring></a>
                                         </xar:if>
                                 </xar:if>
+                            </td>
+                            <td class="xar-norm-outline" style="text-align: left;border-width: 0px 0px 1px 0px;border-style: solid;white-space: nowrap;">
+                                <div style="padding-left: .5em;">
+                                    <xar:if condition="$modinfo['class'] eq 2">
+                                        <xar:if condition="$modinfo['directory'] eq $defaulttheme">
+                                            Current Default Theme
+                                        <xar:else />
+                                            <a href="#$modinfo['defaulturl']#">
+                                                Set as Default Theme
+                                             </a>
+                                         </xar:if>
+                                     </xar:if>
+                                </div>
                             </td>
                         </tr>
                     </xar:foreach>
