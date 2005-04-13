@@ -134,6 +134,15 @@ function dynamicdata_utilapi_migrate($args)
             }
             break;
 
+        case 'xarpages':
+            $items = xarModAPIFunc('xarpages','user','getpages',
+                                   array('itemtype' => $from['itemtype'],
+                                         'pids'     => $itemids,
+                                         'key'      => 'pid',
+                                         'dd_flag'  => false));
+            if (!isset($items)) return;
+            break;
+
         default:
             break;
     }
@@ -203,7 +212,7 @@ function dynamicdata_utilapi_migrate($args)
                     foreach ($fieldmap as $fromfield => $tofield) {
                         if (empty($fromfield) || empty($tofield)) continue;
                         if (!isset($item[$fromfield])) continue;
-                        // Note: this will also set any DD fields for the update hooks
+                        // Note: this will also set any DD fields for the create hooks
                         $article[$tofield] = $item[$fromfield];
                     }
                     if (count($article) < 2) {
@@ -305,7 +314,7 @@ function dynamicdata_utilapi_migrate($args)
                     foreach ($fieldmap as $fromfield => $tofield) {
                         if (empty($fromfield) || empty($tofield)) continue;
                         if (!isset($item[$fromfield])) continue;
-                        // Note: this will also set any DD fields for the update hooks
+                        // Note: this will also set any DD fields for the create hooks
                         $topic[$tofield] = $item[$fromfield];
                     }
                     if (count($article) < 2) {
@@ -339,6 +348,70 @@ function dynamicdata_utilapi_migrate($args)
             }
             break;
 
+        case 'xarpages':
+            if ($modulefrom == 'xarpages') { // only allow updates within xarpages atm, not copies
+                $sameid = true;
+                foreach ($items as $itemid => $item) {
+                    $page = array('pid' => $itemid);
+                    if ($from['itemtype'] != $to['itemtype']) {
+// FIXME: changing itemtype is not supported by xarpages updatepage yet !
+                        $page['itemtype'] = $to['itemtype'];
+                    }
+                    foreach ($fieldmap as $fromfield => $tofield) {
+                        if (empty($fromfield) || empty($tofield)) continue;
+                        if (!isset($item[$fromfield])) continue;
+                        // we only need to pass updated fields to the xarpages updatepage function
+                        if ($fromfield == $tofield) continue;
+                        // Note: this will also set any DD fields for the update hooks
+                        $page[$tofield] = $item[$fromfield];
+                    }
+                    if (count($page) < 2) {
+                        continue;
+                    }
+                    if (empty($debug)) {
+                        if (!xarModAPIFunc('xarpages','admin','updatepage',$page)) return;
+                    } else {
+                        $debug .= xarML('Updating page #(1) :', $itemid);
+                        $debug .= "\n";
+                        foreach ($page as $field => $value) {
+                            $debug .= "$field = $value\n";
+                        }
+                    }
+                    $newitemids[$itemid] = $itemid;
+                }
+            } else {
+                foreach ($items as $itemid => $item) {
+                    $page = array();
+                    $page['itemtype'] = $to['itemtype'];
+                    foreach ($fieldmap as $fromfield => $tofield) {
+                        if (empty($fromfield) || empty($tofield)) continue;
+                        if (!isset($item[$fromfield])) continue;
+                        // Note: this will also set any DD fields for the create hooks
+                        $page[$tofield] = $item[$fromfield];
+                    }
+                    if (count($page) < 2) {
+                        continue;
+                    }
+                    if (!empty($to['itemid'])) {
+// FIXME: specifying pid is not supported by xarpages createpage yet !
+                        $page['pid'] = $itemid; // this may give us trouble with create hooks
+                    }
+                    if (empty($debug)) {
+                        $newid = xarModAPIFunc('xarpages','admin','createpage',$page);
+                        if (empty($newid)) return;
+                    } else {
+                        $newid = -$itemid; // simulate some new itemid :-)
+                        $debug .= xarML('Creating page #(1) :', $newid);
+                        $debug .= "\n";
+                        foreach ($page as $field => $value) {
+                            $debug .= "$field = $value\n";
+                        }
+                    }
+                    $newitemids[$itemid] = $newid;
+                }
+            }
+            break;
+
         default:
             break;
     }
@@ -361,7 +434,7 @@ function dynamicdata_utilapi_migrate($args)
     foreach ($newitemids as $itemid => $newid) {
         if (empty($itemid) || empty($newid)) continue;
         if ($from['module'] == $to['module'] && $newid == $itemid &&
-            ($moduleto == 'articles' || $moduleto == 'xarbb')) {
+            ($moduleto == 'articles' || $moduleto == 'xarbb' || $moduleto == 'xarpages')) {
             // don't delete articles or topics when moving itemtypes
             continue;
         } elseif ($from['module'] == $to['module'] && $from['itemtype'] == $to['itemtype'] && $newid == $itemid) {

@@ -93,7 +93,7 @@ function dynamicdata_util_migrate($args)
     }
 
     // list of modules supported by the migration process (for now)
-    $modsupported = array('articles','dynamicdata','xarbb');
+    $modsupported = array('articles','dynamicdata','xarbb','xarpages');
 
     $data['modulesupported'] = array();
     foreach ($modsupported as $modname) {
