@@ -179,8 +179,13 @@ function roles_user_view($args)
         $item = $items[$i];
         $data['uidlist'][] = $item['uid'];
 
-        // Change email to a human readible entry.  Anti-Spam protection.
+        // Grab the list of groups this role belongs to
+        $groups = xarModAPIFunc('roles', 'user', 'getancestors', array('uid' => $item['uid']));
+        foreach ($groups as $group) {
+            $items[$i]['groups'][$group['uid']] = $group['name'];
+        }
 
+        // Change email to a human readible entry.  Anti-Spam protection.
         if (xarUserIsLoggedIn()) {
             $items[$i]['emailurl'] = xarModURL(
                 'roles', 'user', 'email',
