@@ -19,7 +19,6 @@ error_reporting(E_ALL);
 // initialize the Xaraya core
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
-
 // Use the installer page template in Xaraya_Classic
 xarTplSetThemeName('Xaraya_Classic');
 
@@ -78,7 +77,7 @@ if (empty($step)) {
         echo xarML('You have already upgraded to #(1). The upgrade script only needs to run once.', $xarVersion);
         echo '</div></div>';
         // catch the output
-        CatchOutput();
+        //CatchOutput();
         //return;
     }
 
@@ -97,41 +96,40 @@ if (empty($step)) {
     $hitcounttable =$sprefix.'_hitcount';
     $ratingstable=$sprefix.'_ratings';
 
-  // upgrades for the base module (since it is a core module, and they cannot be upgraded in the normal way)
-  // - theme tags for JavaScript
-  if (xarModIsAvailable('base')) {
-    // Add theme tags that do not yet exist.
-    // Leave the attributes open for now, until we know how it's going to work.
-    $module_base_update_count = 0;
+    // upgrades for the base module (since it is a core module, and they cannot be upgraded in the normal way)
+    // - theme tags for JavaScript
+    if (xarModIsAvailable('base')) {
+        // Add theme tags that do not yet exist.
+        // Leave the attributes open for now, until we know how it's going to work.
+        $module_base_update_count = 0;
 
-    // Include a JavaScript file in a page,
-    $base_update_theme_tag = 'base-include-javascript';
-    if (!xarTplGetTagObjectFromName($base_update_theme_tag)) {
-        xarTplRegisterTag(
-            'base', $base_update_theme_tag, array(),
-            'base_javascriptapi_handlemodulejavascript'
-        );
-        $module_base_update_count += 1;
-        echo "Base module: added theme tag '$base_update_theme_tag'.<br />";
-    }
-    // Render JavaScript in a page
-    $base_update_theme_tag = 'base-render-javascript';
-    if (!xarTplGetTagObjectFromName($base_update_theme_tag)) {
-        xarTplRegisterTag(
-            'base', $base_update_theme_tag, array(),
-            'base_javascriptapi_handlerenderjavascript'
-        );
-        $module_base_update_count += 1;
-        echo "Base module: added theme tag '$base_update_theme_tag'.<br />";
-    }
+        // Include a JavaScript file in a page,
+        $base_update_theme_tag = 'base-include-javascript';
+        if (!xarTplGetTagObjectFromName($base_update_theme_tag)) {
+            xarTplRegisterTag(
+                'base', $base_update_theme_tag, array(),
+                'base_javascriptapi_handlemodulejavascript'
+            );
+            $module_base_update_count += 1;
+            echo "Base module: added theme tag '$base_update_theme_tag'.<br />";
+        }
+        // Render JavaScript in a page
+        $base_update_theme_tag = 'base-render-javascript';
+        if (!xarTplGetTagObjectFromName($base_update_theme_tag)) {
+            xarTplRegisterTag(
+                'base', $base_update_theme_tag, array(),
+                'base_javascriptapi_handlerenderjavascript'
+            );
+            $module_base_update_count += 1;
+            echo "Base module: added theme tag '$base_update_theme_tag'.<br />";
+        }
 
-    if ($module_base_update_count == 0) {
-        echo "Base module does not require updating.<br />";
-    }
-
-  } else {
-      echo "Base module not available - no upgrade carried out.<br />";
-  } // endif modavailable('base')
+        if ($module_base_update_count == 0) {
+            echo "Base module does not require updating.<br />";
+        }
+    } else {
+        echo "Base module not available - no upgrade carried out.<br />";
+    } // endif modavailable('base')
 
     $dbconn =& xarDBGetConn();
 
@@ -148,15 +146,17 @@ if (empty($step)) {
               WHERE xar_module='dynamicdata' AND xar_component='Type'";
     $result =& $dbconn->Execute($query);
 
-   //now check modules instances - only affected if their site prefix is other than 'xar'
- if ($sprefix == 'xar') { // check ratings, hitcount, articles and categories
-  echo "Categories, Articles, Hitcount and Ratings security_instances do not require updating.<br />";
-  echo "Updates are only required if your site prefix is not the default 'xar'.<br />";
- } else {
-  //check categories instances - two bugs - hardcoded prefix bug and also instancetable2 column hardcoded prefix
-      if (xarModIsAvailable('categories')) {
-          $categoriesupdate=false;
-          $categoriesinstances[]= array(array ('ccomponent'  => 'Category',
+    
+
+    //now check modules instances - only affected if their site prefix is other than 'xar'
+    if ($sprefix == 'xar') { // check ratings, hitcount, articles and categories
+        echo "Categories, Articles, Hitcount and Ratings security_instances do not require updating.<br />";
+        echo "Updates are only required if your site prefix is not the default 'xar'.<br />";
+    } else {
+        //check categories instances - two bugs - hardcoded prefix bug and also instancetable2 column hardcoded prefix
+        if (xarModIsAvailable('categories')) {
+            $categoriesupdate=false;
+            $categoriesinstances[]= array(array ('ccomponent'  => 'Category',
                                                'cheader'     => 'Category Name:',
                                                'cquery'      => 'SELECT DISTINCT xar_name FROM '.$categorytable.'',
                                                'ctable2'     => $categorytable),
@@ -165,67 +165,67 @@ if (empty($step)) {
                                                'cquery'      => 'SELECT DISTINCT xar_cid FROM '.$categorytable.'',
                                                'ctable2'     => $categorytable));
 
-          foreach($categoriesinstances as $categoriesinstance){
-              foreach ($categoriesinstance as $instance) {
-                  $dbconn =& xarDBGetConn();
-                  $query = "SELECT xar_iid,xar_header,xar_query, xar_instancetable2
-                            FROM $instancestable
-                            WHERE xar_module= 'categories' AND xar_component = '{$instance['ccomponent']}' AND xar_header='{$instance['cheader']}'";
-                  $result =&$dbconn->Execute($query);
-                  list($iid, $header, $xarquery, $instancetable2) = $result->fields;
-                  if (($instance['cquery'] != $xarquery) || ($instance['ctable2'] != $instancetable2)) {
-                     echo "Attempting to update categories instance  with component ".$instance['ccomponent']. " and header ".$instance['cheader'];
-                      $categoriesupdate=true;
-                      $query="UPDATE $instancestable SET xar_query= '{$instance['cquery']}', xar_instancetable2 = '$instance[ctable2]'
-                              WHERE xar_module='categories' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
-                      $result =& $dbconn->Execute($query);
-                       if (!$result) {
-                          echo "...update failed!</font><br/>\r\n";
-                      } else {
-                        echo "...done!</font><br/>\r\n";
+            foreach($categoriesinstances as $categoriesinstance)
+            {
+                  foreach ($categoriesinstance as $instance) {
+                      $dbconn =& xarDBGetConn();
+                      $query = "SELECT xar_iid,xar_header,xar_query, xar_instancetable2
+                                FROM $instancestable
+                                WHERE xar_module= 'categories' AND xar_component = '{$instance['ccomponent']}' AND xar_header='{$instance['cheader']}'";
+                      $result =&$dbconn->Execute($query);
+                      list($iid, $header, $xarquery, $instancetable2) = $result->fields;
+                      if (($instance['cquery'] != $xarquery) || ($instance['ctable2'] != $instancetable2)) {
+                         echo "Attempting to update categories instance  with component ".$instance['ccomponent']. " and header ".$instance['cheader'];
+                          $categoriesupdate=true;
+                          $query="UPDATE $instancestable SET xar_query= '{$instance['cquery']}', xar_instancetable2 = '$instance[ctable2]'
+                                  WHERE xar_module='categories' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
+                          $result =& $dbconn->Execute($query);
+                           if (!$result) {
+                              echo "...update failed!</font><br/>\r\n";
+                          } else {
+                            echo "...done!</font><br/>\r\n";
+                          }
                       }
                   }
-              }
+            }//end foreach
+             
+            //now do the last one as a separate instance - to get it to work properly
+            $categoryinstance ='SELECT DISTINCT instances.xar_title FROM '.$blockinstancetable.' as instances LEFT JOIN '.$blocktypestable.' as btypes ON  btypes.xar_id = instances.xar_type_id WHERE xar_module = \'categories\'';
 
-          }//end foreach
-          //now do the last one as a separate instance - to get it to work properly
-          $categoryinstance ='SELECT DISTINCT instances.xar_title FROM '.$blockinstancetable.' as instances LEFT JOIN '.$blocktypestable.' as btypes ON  btypes.xar_id = instances.xar_type_id WHERE xar_module = \'categories\'';
+            $dbconn =& xarDBGetConn();
+                      $query = "SELECT xar_iid, xar_header, xar_query
+                                FROM $instancestable
+                                WHERE xar_module= 'categories' AND xar_component = 'Block' AND xar_header='Category Block Title:'";
+                      $result =&$dbconn->Execute($query);
 
-          $dbconn =& xarDBGetConn();
-                  $query = "SELECT xar_iid, xar_header, xar_query
-                            FROM $instancestable
-                            WHERE xar_module= 'categories' AND xar_component = 'Block' AND xar_header='Category Block Title:'";
-                  $result =&$dbconn->Execute($query);
+            list($iid, $header, $xarquery) = $result->fields;
+            if ($categoryinstance != $xarquery) 
+            {
+                   $categoriesupdate=true;
+                   echo "Attempting to update categories instance  with component Block and header Category Block Title: ";
 
-          list($iid, $header, $xarquery) = $result->fields;
-          if ($categoryinstance != $xarquery) {
-               $categoriesupdate=true;
-               echo "Attempting to update categories instance  with component Block and header Category Block Title: ";
+                   $query="UPDATE $instancestable SET xar_query= 'SELECT DISTINCT instances.xar_title FROM $blockinstancetable as instances LEFT JOIN $blocktypestable as btypes ON  btypes.xar_id = instances.xar_type_id WHERE xar_module = \'categories\''
+                           WHERE xar_module='categories' AND xar_component = 'Block' AND xar_header= 'Category Block Title:'";
+                   $result =& $dbconn->Execute($query);
 
-               $query="UPDATE $instancestable SET xar_query= 'SELECT DISTINCT instances.xar_title FROM $blockinstancetable as instances LEFT JOIN $blocktypestable as btypes ON  btypes.xar_id = instances.xar_type_id WHERE xar_module = \'categories\''
-                       WHERE xar_module='categories' AND xar_component = 'Block' AND xar_header= 'Category Block Title:'";
-               $result =& $dbconn->Execute($query);
-
-               if (!$result) {
-                   echo "...update failed!</font><br/>\r\n";
-               } else {
-                   echo "...done!</font><br/>\r\n";
-               }
-
-          }
-          if (!$categoriesupdate) {
+                   if (!$result) {
+                       echo "...update failed!</font><br/>\r\n";
+                   } else {
+                       echo "...done!</font><br/>\r\n";
+                   }
+            }
+            if (!$categoriesupdate) {
               echo "Categories security_instance entries do not require updating.<br />";
-          }
-
-      } else {
+            }
+        } else {
           echo "Categories module not available - no checking of categories instances carried out.<br />";
-       } // endif modavailable
+        } // endif modavailable
 
-
-   //check hitcount instances
-      if (xarModIsAvailable('hitcount')) {
-          $hitcountupdate=false;
-          $hitcountinstances[]=array(array ('ccomponent'  => 'Item',
+        //check hitcount instances
+        if (xarModIsAvailable('hitcount')) 
+        {
+            $hitcountupdate=false;
+            $hitcountinstances[]=array(array ('ccomponent'  => 'Item',
                                             'cheader'     => 'Module Name:',
                                             'cquery'      => 'SELECT DISTINCT '.$modulestable.'.xar_name FROM '.$hitcounttable.' LEFT JOIN '.$modulestable.' ON '.$hitcounttable.'.xar_moduleid = '.$modulestable.'.xar_regid'),
                                      array ('ccomponent'  => 'Item',
@@ -235,47 +235,46 @@ if (empty($step)) {
                                             'cheader'     => 'Item ID:',
                                             'cquery'      => 'SELECT DISTINCT xar_itemtype FROM '.$hitcounttable.''));
 
-          foreach($hitcountinstances as $hitcountinstance){
-              foreach ($hitcountinstance as $instance) {
-                  $dbconn =& xarDBGetConn();
-                  $query = "SELECT xar_iid, xar_header, xar_query
+            foreach($hitcountinstances as $hitcountinstance){
+                foreach ($hitcountinstance as $instance) {
+                    $dbconn =& xarDBGetConn();
+                    $query = "SELECT xar_iid, xar_header, xar_query
                             FROM $instancestable
                             WHERE xar_module= 'hitcount' AND xar_component = '{$instance['ccomponent']}' AND xar_header='{$instance['cheader']}'";
-                  $result =&$dbconn->Execute($query);
+                    $result =&$dbconn->Execute($query);
 
-                  list($iid, $header, $xarquery) = $result->fields;
+                    list($iid, $header, $xarquery) = $result->fields;
 
 
-                if (($instance['cquery'])==($xarquery)) {
-                  } else {
-                      $hitcountupdate=true;
-                      echo "Attempting to update hitcount instance  with component ".$instance['ccomponent']. " and header ".$instance['cheader'];
+                    if (($instance['cquery'])==($xarquery)) {
+                        // nothing
+                    } else {
+                        $hitcountupdate=true;
+                        echo "Attempting to update hitcount instance  with component ".$instance['ccomponent']. " and header ".$instance['cheader'];
 
-                      $query="UPDATE $instancestable SET xar_query= '{$instance['cquery']}'
+                        $query="UPDATE $instancestable SET xar_query= '{$instance['cquery']}'
                               WHERE xar_module='hitcount' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
-                      $result =& $dbconn->Execute($query);
+                        $result =& $dbconn->Execute($query);
 
-                     if (!$result) {
-                          echo "...update failed!</font><br/>\r\n";
-                     } else {
-                         echo "...done!</font><br/>\r\n";
-                     }
-                  }
-              }
+                        if (!$result) {
+                            echo "...update failed!</font><br/>\r\n";
+                        } else {
+                            echo "...done!</font><br/>\r\n";
+                        }
+                    }
+                }
+            }//end foreach
+            if (!$hitcountupdate) {
+                echo "Hit Count security_instance entries do not require updating.<br />";
+            }
+        } else {
+            echo "Hit Count module not available - no checking of hit count instances carried out.<br />";
+        } // endif modavailable
 
-          }//end foreach
-          if (!$hitcountupdate) {
-              echo "Hit Count security_instance entries do not require updating.<br />";
-          }
-
-      } else {
-          echo "Hit Count module not available - no checking of hit count instances carried out.<br />";
-      } // endif modavailable
-
-   //check rating instances
-      if (xarModIsAvailable('ratings')) {
-          $ratingsupdate=false;
-          $ratinginstances[]=array(array ('ccomponent'  => 'Item',
+        //check rating instances
+        if (xarModIsAvailable('ratings')) {
+            $ratingsupdate=false;
+            $ratinginstances[]=array(array ('ccomponent'  => 'Item',
                                           'cheader'     => 'Module Name:',
                                           'cquery'      => 'SELECT DISTINCT '.$modulestable.'.xar_name FROM '.$ratingstable.' LEFT JOIN '.$modulestable.' ON '.$ratingstable.'.xar_moduleid = '.$modulestable.'.xar_regid'),
                                    array ('ccomponent'  => 'Item',
@@ -294,55 +293,55 @@ if (empty($step)) {
                                           'cheader'     => 'Item ID:',
                                           'cquery'      => 'SELECT DISTINCT xar_itemtype FROM '.$ratingstable.''));
 
-          foreach($ratinginstances as $ratingsinstance){
-              foreach ($ratingsinstance as $instance) {
+              foreach($ratinginstances as $ratingsinstance){
+                  foreach ($ratingsinstance as $instance) {
 
-                  $dbconn =& xarDBGetConn();
-                  $query = "SELECT xar_iid, xar_header, xar_query
-                            FROM $instancestable
-                            WHERE xar_module= 'ratings' AND xar_component = '{$instance['ccomponent']}' AND xar_header='{$instance['cheader']}'";
-                  $result =&$dbconn->Execute($query);
+                      $dbconn =& xarDBGetConn();
+                      $query = "SELECT xar_iid, xar_header, xar_query
+                                FROM $instancestable
+                                WHERE xar_module= 'ratings' AND xar_component = '{$instance['ccomponent']}' AND xar_header='{$instance['cheader']}'";
+                      $result =&$dbconn->Execute($query);
 
-                  list($iid, $header, $xarquery) = $result->fields;
+                      list($iid, $header, $xarquery) = $result->fields;
 
-                  if ($instance['cquery'] != $xarquery) {
-                      $ratingsupdate = true;
-                      echo "Attempting to update ratings instance  with component ".$instance['ccomponent']. " and header ".$instance['cheader'];
+                      if ($instance['cquery'] != $xarquery) {
+                          $ratingsupdate = true;
+                          echo "Attempting to update ratings instance  with component ".$instance['ccomponent']. " and header ".$instance['cheader'];
 
-                       $query="UPDATE $instancestable SET xar_query= '{$instance['cquery']}'
-                              WHERE xar_module='ratings' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
-                      $result =& $dbconn->Execute($query);
-                      if (!$result) {
-                          echo "...update failed!</font><br/>\r\n";
-                       } else {
-                          echo "...done!</font><br/>\r\n";
+                           $query="UPDATE $instancestable SET xar_query= '{$instance['cquery']}'
+                                  WHERE xar_module='ratings' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
+                          $result =& $dbconn->Execute($query);
+                          if (!$result) {
+                              echo "...update failed!</font><br/>\r\n";
+                           } else {
+                              echo "...done!</font><br/>\r\n";
+                          }
                       }
-                  }
+                  }//end foreach
+
               }//end foreach
 
-          }//end foreach
+            if (!$ratingsupdate) {
+                echo "Ratings security_instance entries do not require updating.<br />";
+            }//endif updatetrue
 
-          if (!$ratingsupdate) {
-              echo "Ratings security_instance entries do not require updating.<br />";
-          }//endif updatetrue
+        } else {
+            echo "Ratings module not available - no checking of ratings instances carried out.<br />";
+        } // endif modavailable
 
-      } else {
-          echo "Ratings module not available - no checking of ratings instances carried out.<br />";
-      } // endif modavailable
+        //check articles instances
+        if (xarModIsAvailable('articles')) {
+            $articlesupdate=false;
+            $articlesinstance ='SELECT DISTINCT instances.xar_title FROM '.$blockinstancetable.' as instances LEFT JOIN '.$blocktypestable.' as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module=\'articles\'';
 
-   //check articles instances
-      if (xarModIsAvailable('articles')) {
-          $articlesupdate=false;
-          $articlesinstance ='SELECT DISTINCT instances.xar_title FROM '.$blockinstancetable.' as instances LEFT JOIN '.$blocktypestable.' as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module=\'articles\'';
-
-           $dbconn =& xarDBGetConn();
+            $dbconn =& xarDBGetConn();
                   $query = "SELECT xar_iid, xar_header, xar_query
                             FROM $instancestable
                             WHERE xar_module= 'articles' AND xar_component = 'Block' AND xar_header='Article Block Title:'";
                   $result =&$dbconn->Execute($query);
 
-           list($iid, $header, $xarquery) = $result->fields;
-               if ($articlesinstance != $xarquery) {
+            list($iid, $header, $xarquery) = $result->fields;
+            if ($articlesinstance != $xarquery) {
                    $articlesupdate=true;
                    echo "Attempting to update articles instance  with component Block and header Article Block Title";
 
@@ -354,63 +353,61 @@ if (empty($step)) {
                    } else {
                        echo "...done!</font><br/>\r\n";
                    }
-               }
-               if (!$articlesupdate) {
-                   echo "Articles security_instance entry does not require updating.<br />";
-               }
+            }
+            if (!$articlesupdate) {
+                echo "Articles security_instance entry does not require updating.<br />";
+            }
+        } else {
+            echo "Articles module not available - no checking of articles instance carried out.<br />";
+        } // endif modavailable
+    }
 
-      } else {
-          echo "Articles module not available - no checking of articles instance carried out.<br />";
-      } // endif modavailable
+    //check roles instances
+    $rolesupdate=false;
+    $rolesinstance ='SELECT DISTINCT xar_name FROM ' . xarDBGetSystemTablePrefix() . '_roles';
+    $systemPrefix = xarDBGetSystemTablePrefix();
+    $roleMembersTable    = $systemPrefix . '_rolemembers';
+    $dbconn =& xarDBGetConn();
 
-  }
+    // Do the Parent instance
+    $query = "SELECT xar_iid, xar_header, xar_query
+                FROM $instancestable
+                WHERE xar_module= 'roles' AND xar_component = 'Relation' AND xar_header='Parent:'";
+    $result =&$dbconn->Execute($query);
 
-//check roles instances
-  $rolesupdate=false;
-  $rolesinstance ='SELECT DISTINCT xar_name FROM ' . xarDBGetSystemTablePrefix() . '_roles';
-  $systemPrefix = xarDBGetSystemTablePrefix();
-  $roleMembersTable    = $systemPrefix . '_rolemembers';
-  $dbconn =& xarDBGetConn();
-
-// Do the Parent instance
-  $query = "SELECT xar_iid, xar_header, xar_query
-            FROM $instancestable
-            WHERE xar_module= 'roles' AND xar_component = 'Relation' AND xar_header='Parent:'";
-  $result =&$dbconn->Execute($query);
-
-   list($iid, $header, $xarquery) = $result->fields;
-   if ($rolesinstance != $xarquery) {
-       $rolesupdate=true;
-       echo "Attempting to update roles instance with component Relation and header Parent:.<br />";
+    list($iid, $header, $xarquery) = $result->fields;
+    if ($rolesinstance != $xarquery) {
+        $rolesupdate=true;
+        echo "Attempting to update roles instance with component Relation and header Parent:.<br />";
 
         $instances = array(array('header' => 'Parent:',
                                  'query' => $rolesinstance,
                                  'limit' => 20));
         xarDefineInstance('roles','Relation',$instances,0,$roleMembersTable,'xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
-   }
-   if (!$rolesupdate) {
+    }
+    if (!$rolesupdate) {
        echo "Roles security_instance entry Relation/Parent does not require updating.<br />";
-   }
+    }
 
-// Do the Child instance
-  $query = "SELECT xar_iid, xar_header, xar_query
+    // Do the Child instance
+    $query = "SELECT xar_iid, xar_header, xar_query
             FROM $instancestable
             WHERE xar_module= 'roles' AND xar_component = 'Relation' AND xar_header='Child:'";
-  $result =&$dbconn->Execute($query);
+    $result =&$dbconn->Execute($query);
 
-   list($iid, $header, $xarquery) = $result->fields;
-   if ($rolesinstance != $xarquery) {
-       $rolesupdate=true;
-       echo "Attempting to update roles instance with component Relation and header Child:.<br />";
+    list($iid, $header, $xarquery) = $result->fields;
+    if ($rolesinstance != $xarquery) {
+        $rolesupdate=true;
+        echo "Attempting to update roles instance with component Relation and header Child:.<br />";
 
         $instances = array(array('header' => 'Child:',
                                  'query' => $rolesinstance,
                                  'limit' => 20));
         xarDefineInstance('roles','Relation',$instances,0,$roleMembersTable,'xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
-   }
-   if (!$rolesupdate) {
+    }
+    if (!$rolesupdate) {
        echo "Roles security_instance entry Relation/Child does not require updating.<br />";
-   }
+    }
 
     // Upgrade will check to make sure that upgrades in the past have worked, and if not, correct them now.
     $sitePrefix = xarDBGetSiteTablePrefix();
@@ -1370,6 +1367,15 @@ if (empty($step)) {
 
     // Bug 3164, store locale in ModUSerVar
     xarModSetVar('roles', 'locale', '');
+
+    // More or less generic stuff
+    echo "<h5>Generic upgrade activities</h5>";
+    // Propsinplace scenario, flush the property cache, so on upgrade all proptypes
+    // are properly set in the database.
+    echo "Flushing the property cache";
+    if(!xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true))) {
+        echo "WARNING: Flushing property cache failed";
+    }
 
 ?>
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
