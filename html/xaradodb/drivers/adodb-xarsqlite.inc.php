@@ -2,11 +2,12 @@
 
 include_once(ADODB_DIR . '/drivers/adodb-sqlite.inc.php');
 
-class ADODB_xarsqlite extends ADODB_sqlite {
+class ADODB_xarsqlite extends ADODB_sqlite 
+{
     var $dataProvider = 'sqlite';
 
     function _connect($argHostname, $argUsername, $argPassword, $argDatabasename)
-	{
+    {
         if (!function_exists('sqlite_open')) return false;
 
         // It makes more sense to interpret host=directory and dbname=file
@@ -16,25 +17,25 @@ class ADODB_xarsqlite extends ADODB_sqlite {
         return true;
     }
 
-	function _pconnect($argHostname, $argUsername, $argPassword, $argDatabasename)
-	{
-		if (!function_exists('sqlite_open')) return false;
-		
+    function _pconnect($argHostname, $argUsername, $argPassword, $argDatabasename)
+    {
+        if (!function_exists('sqlite_open')) return false;
+        
         // It makes more sense to interpre host=directory and dbname=file
         $this->_connectionID = sqlite_popen($argHostname . "/" . $argDatabasename);
         // END XARAYA MODIFICATION
-		if ($this->_connectionID === false) return false;
-		$this->_createFunctions();
-		return true;
-	}
+        if ($this->_connectionID === false) return false;
+        $this->_createFunctions();
+        return true;
+    }
 
     function SelectDB($dbName)
     {
         return file_exists($this->host . '/' . $this->database);
     }
 
-	function GenID($seq='adodbseq',$start=1)
-	{	
+    function GenID($seq='adodbseq',$start=1)
+    {    
         // If using bindvars, this is perfectly sufficient (and we should use bindvars ;-) )
         return null;
     }
