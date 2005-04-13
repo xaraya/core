@@ -264,7 +264,8 @@ function installer_admin_phase5()
 
     if (!$dbConnected) {
         // Couldn't connect to the specified dbName. Let's try connecting without dbName now
-        // Need to reset dbconn prior to trying just a normal connection 
+        // Need to reset dbconn prior to trying just a normal connection or we'll have 
+        // unexpected results
         unset($dbconn);
         $dbconn = ADONewConnection($dbDriver);
 
