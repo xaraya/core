@@ -73,7 +73,7 @@ function themes_admin_list()
     $data['sort']['nameasc']                        = xarML('Name [a-z]');
     $data['sort']['namedesc']                       = xarML('Name [z-a]');
 
-    $data['defaulttheme']                           = xarModGetVar('themes', 'default', 1); 
+    $data['default']                           = xarModGetVar('themes', 'default', 1); 
 
     // obtain list of modules based on filtering criteria
 /*     if($regen){ */
