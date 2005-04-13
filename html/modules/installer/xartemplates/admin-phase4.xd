@@ -41,12 +41,6 @@
                 <input type="password" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#" />
             </p>
             <p>
-                <label for="install_database_password2">
-                    <xar:mlstring>Re-Enter Password</xar:mlstring>
-                </label>
-                <input type="password" name="install_database_password2" id="install_database_password2" maxlength="80" value="#$database_password#" />
-            </p>
-            <p>
                 <label for="install_database_name">
                     <xar:mlstring>Database Name</xar:mlstring>
                 </label>
