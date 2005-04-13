@@ -64,5 +64,5 @@
         <div class="xar-clear-both xar-align-center">
             <input type="submit" name="submit" value="#xarML('Add Block Type')#" class="xar-margin-thick" />
         </div>
-
     </form>
+</div>

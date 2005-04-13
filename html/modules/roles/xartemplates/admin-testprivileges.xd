@@ -258,7 +258,6 @@
                 <th>
                     <xar:mlstring>Level</xar:mlstring>            
                 </th>
-                <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$uid#&amp;name=#$mask:getName()#&amp;test=true">
             </tr>
             <xar:foreach in="$masks" value="$mask">
                 <tr>

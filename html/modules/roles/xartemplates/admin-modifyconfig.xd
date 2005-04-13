@@ -185,7 +185,7 @@
                         <input type="checkbox" name="uselockout" id="uselockout" value="1" />
                     </xar:if>
                     <label for="uselockout">
-                        <xar:mlstring>Use lockout time on incorrect login attempts?</xar:mlstring></label>:
+                        <xar:mlstring>Use lockout time on incorrect login attempts?</xar:mlstring>
                     </label>
                 </div>
                 <div class="xar-form-input-wrapper">

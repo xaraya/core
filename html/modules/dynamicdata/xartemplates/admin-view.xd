@@ -55,3 +55,4 @@
             </div>
         </xar:foreach>
     </xar:if>
+</div>
