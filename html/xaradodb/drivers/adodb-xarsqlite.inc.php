@@ -1,5 +1,7 @@
 <?php
 
+include_once(ADODB_DIR . '/drivers/adodb-sqlite.inc.php');
+
 class ADODB_xarsqlite extends ADODB_sqlite {
     var $dataProvider = 'sqlite';
 
