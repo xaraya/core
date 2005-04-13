@@ -279,4 +279,5 @@ function themes_admin_list()
     // Send to template
     return $data;
 }
+?>
 
