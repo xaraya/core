@@ -37,7 +37,7 @@ class xarCSS
     var $debug      = false;        // true == debug mode enabled
     var $parse      = false;        // true == parse mode enabled
     var $suppress   = false;        // true == this css is suppressed
-    
+
     var $legacy     = true;         // true == legacy pre-csslib support
 
     var $language   = 'html';       // only (x)html compliant css inclusion is supported out of the box
@@ -45,6 +45,7 @@ class xarCSS
     var $method     = 'link';       // also supported are 'import' and embedded 'style'
 
     // SUPPORTED COMPONENTS ARE MODULE (BLOCK), THEME, CORE (anything else out there?)
+    var $components;                // array of all known and supported components
     var $comptype   = 'module';     // component type - 'module, 'theme' or 'common'
     var $compname   = 'base';       // component name (e.g. module's name 'base')
     var $compcssdir = 'xarstyles';  // component css directory name (e.g. 'xarstyles')
@@ -70,6 +71,8 @@ class xarCSS
     var $cssdecl;                   // TODO: associative array containing css declarations
                                     // $this->componentCSS["body"]["background-color"]
     var $cssconf    = false;        // Use runtime configuration parameters (with db backend)
+
+    var $suppress   = false;        // true == this css method is suppressed
 
     // constructor (defensive)
     function xarCSS()
@@ -311,29 +314,14 @@ class xarCSS
 
     // returns relative xaraya path for the desired css file (protected)
     function _xarpath()
-    {        
+    {
         // make sure current module is known in advance
         if(!isset($this->compname)) {
             $path = new xarCSSPath($this);
-            $this->compname = $path->currentmoddir();
+            $this->compname = xarModGetName();
         }
 
-        $inspector = new cssFileInspector($this);
-        
-        switch($this->comptype)
-        {
-            case "common":
-            case "module":
-                return $inspector->verified_module_csspath();
-                break;
-            case "theme":
-                return $inspector->verified_theme_csspath();
-                break;
-            default:
-                // unrecognised
-                return null;
-                break;
-        }
+        return $this->getcsspath($this->comptype);
     }
 
     // make valid (x)html tag for various css inclusion methods (protected)
@@ -343,8 +331,160 @@ class xarCSS
         return $tag->render();
     }
 
+    function getcsspath($type='module') {
+
+        $msg = xarML("$type css stylesheet file cannot be found in this location: ");
+
+        if ($type == 'common') $type = 'module';
+
+        if ($type == 'theme') {
+            // pretty straightforward
+            $themestylesheet =  xarTplGetThemeDir() . "/style/" . $this->filename . "." . $this->fileext;
+            if(file_exists($themestylesheet)) {
+                // no problem
+                return $themestylesheet;
+            } else {
+                // problem
+                return $this->_error($msg.$themestylesheet);
+            }
+        } else {
+
+            if(!isset($this->compname)){
+                $original = "modules/" . xarModGetName() . "/xarstyles/" . $this->filename . "." . $this->fileext;
+            } else {
+                $original = "modules/". $this->compname . "/xarstyles/" . $this->filename . "." . $this->fileext;
+            }
+            // we do not want to supply path for a non-existent original css file or override a bogus file
+            // so lets check starting from original then fallback if there arent overriden versions
+            if(file_exists($original)) {
+                // how about the overridden one?
+                if($this->altdir != '') {
+                    $overridden = xarTplGetThemeDir() . "/" . $this->altdir . "/" . $this->filename . "." . $this->fileext;
+                } else if(!isset($this->compname)){
+                    $overridden = xarTplGetThemeDir() . "/modules/" . xarModGetName() . "/xarstyles/".$this->filename . "." . $this->fileext;
+                } else {
+                    $overridden = xarTplGetThemeDir() . "/modules/" . $this->compname . "/xarstyles/" . $this->filename . "." . $this->fileext;
+                }
+                if(file_exists($overridden)) {
+                    // prolly need to check if it's not a directory too (?)
+                    return $overridden;
+                } else {
+                    // no problem
+                    return $original;
+                }
+            } else {
+                // problem
+                return $this->_error($msg.$original);
+            }
+        }
+
+
+    // PUBLIC METHODS (that every subclass should inherit and support, modify or override as needed)
+    // Lets document every method well, that's the only way to inform the implementors
+
+    // main extrenal css linking method and a replacement for old xarTplAddStyleLink core API
+    function link_static($args = null)
+    {
+        if(!$this->suppress) {
+            $this->set_method_link();
+            $this->_set_other_method_vars($args);
+            $this->set_method_vars($args);
+            return $this->get_output();
+        }
+    }
+
+    // similar to link_static but it's normally used to hide css from older browsers (like NN4)
+    function import_static($args = null)
+    {
+        if(!$this->suppress) {
+            $this->set_method_import();
+            $this->_set_other_method_vars($args);
+            $this->set_method_vars($args);
+            return $this->get_output();
+        }
+    }
+
+    // embedding is the least preferred of course, but it may be very useful for small tests, checks and quick overrides
+    function embed_style($source = null)
+    {
+        if(!$this->suppress) {
+            $this->set_method_style();
+            $this->set_source($source);
+            return $this->get_output();
+        }
+    }
+
+    // TODO: dynamic css interfaces
+
+
+    // OTHER INTERFACES
+
+    // implement as neccessary in subclasses
+    // you should take care of whatever is not covered by _set_other_method_vars()
+    function set_method_vars($args)
+    {
+        if(is_array($args)) extract($args);
+        // nothing here, see examples in module, theme and common subclasses
+        return null;
+    }
+
+
+    // PRIVATE (for now)
+
+    // we treat these variables as expected by most subclasses and check-set them here, privately
+    // normally there is no need to recheck them in subclasses
+    function _set_other_method_vars($args)
+    {
+        if(is_array($args)) extract($args);
+
+        // media attribute
+        if(isset($media)) $this->set_media_attribute($media);
+
+        // title attribute
+        if(isset($title)) $this->set_tag_title($title);
+
+        // id attribute
+        if(isset($id)) $this->set_tag_id($id);
+
+        // rel attribute
+        if(isset($alternate) && $alternate == true) {
+            $this->set_rel_alternate();
+        } else {
+            $this->set_rel_stylesheet();
+        }
+
+        // stylesheet is located in a non-standard theme folder
+        if(isset($themefolder)) {
+            $this->_set_altdir($themefolder);
+        } else {
+            $this->_set_altdir('');
+        }
+
+        // referenced file has the standard or a non-standard extension
+        if(isset($fileext)) {
+            $this->fileext = $fileext;
+        } else {
+            $this->set_fileext_css();
+        }
+
+        // TODO: remove the already set variables from the $args, perhaps?
+    }
+
+    function _suppress()
+    {
+        $this->suppress = true;
+    }
+
+    function _add_component($compname)
+    {
+        $this->components[] = $compname;
+    }
+
+//-----------------------
+    }
+
     // PROTECTED HELPERS
-    
+
     // handle consolidated static css data array
     // to use static method var in a consistent way (between php4 and 5) we seem to need this helper
     function _handle_cssdata_var($add_data = null)
@@ -356,8 +496,8 @@ class xarCSS
         }
         $cssdata = $add_data;
         return null;
-    }   
-    
+    }
+
     function _error($msg = null)
     {
         if(isset($msg)) xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
@@ -368,12 +508,12 @@ class xarCSS
     {
         $this->legacy = true;
     }
-    
+
     function _nolegacy()
     {
         $this->legacy = false;
     }
-    
+
     function _debug()
     {
         $this->debug = true;
@@ -408,7 +548,7 @@ class htmlCSSTag
     // returns xaraya url for css file
     function href($dir = null)
     {
-        // it's static var already in core 
+        // it's static var already in core
         $url = xarServerGetBaseURL();
 
         if(isset($dir)){
@@ -540,124 +680,5 @@ class htmlCSSTag
     existence of original should be guaranteed to continue processing
 */
 
-class xarCSSPath
-{
-    var $cssobj;
-
-    // constructor
-    function xarCSSPath($cssobj)
-    {
-        $this->cssobj = $cssobj;
-    }
-
-    // returns current var css dir for generated css
-    function varcssdir()
-    {
-        // TODO: error checking + get var from core
-        return 'var/css';
-    }
-
-    // returns current theme dir
-    function themedir()
-    {
-        static $themedir;
-        // once per pageload
-        if(!isset($themedir)) $themedir = xarTplGetThemeDir();
-
-        return $themedir;
-    }
-
-    // returns current module dir
-    function currentmoddir()
-    {
-        // discovered it is a static var already in core
-        // TODO: (remove this function? maybe not, the core one has really bad, non-descriptive name)
-        return xarModGetName();
-    }
-}
-
-class cssComponentPath extends xarCSSPath
-{
-    // returns current theme standard css path
-    function std_themecsspath()
-    {
-        return $this->themedir()."/style/" . $this->cssobj->filename . "." . $this->cssobj->fileext;
-    }
-    // returns current theme alternative css path
-    function alt_themecsspath()
-    {
-        return $this->themedir()."/".$this->cssobj->altdir."/".$this->cssobj->filename . "." . $this->cssobj->fileext;
-    }
-    // returns current module standard css path
-    function currentmodule_csspath()
-    {
-        return "modules/".$this->currentmoddir()."/xarstyles/".$this->cssobj->filename . "." . $this->cssobj->fileext;
-    }
-    // returns current module's overridden css path
-    function overridden_currentmodule_csspath()
-    {
-        return $this->themedir()."/modules/" . $this->currentmoddir() . "/xarstyles/".$this->cssobj->filename . "." . $this->cssobj->fileext;
-    }
-    // returns any module's standard css path
-    function module_csspath()
-    {
-        return "modules/". $this->cssobj->compname . "/xarstyles/" . $this->cssobj->filename . "." . $this->cssobj->fileext;
-    }
-    // returns any module's overridden css path
-    function overridden_module_csspath()
-    {
-        return $this->themedir()."/modules/" . $this->cssobj->compname . "/xarstyles/" . $this->cssobj->filename . "." . $this->cssobj->fileext;
-    }
-}
-
-class cssFileInspector extends cssComponentPath
-{
-    function verified_module_csspath()
-    {
-        $msg = xarML("module css stylesheet file cannot be found in this location: ");
-
-        if(!isset($this->cssobj->compname)){
-            $original = $this->currentmodule_csspath();
-        } else {
-            $original = $this->module_csspath();
-        }
-        // we do not want to supply path for a non-existent original css file or override a bogus file
-        // so lets check starting from original then fallback if there arent overriden versions
-        if(file_exists($original)) {
-            // how about the overridden one?
-            if($this->cssobj->altdir != '') {
-                $overridden = $this->alt_themecsspath();
-            } else if(!isset($this->cssobj->compname)){
-                $overridden = $this->overridden_currentmodule_csspath();
-            } else {
-                $overridden = $this->overridden_module_csspath();
-            }
-            if(file_exists($overridden)) {
-                // prolly need to check if it's not a directory too (?)
-                return $overridden;
-            } else {
-                // no problem
-                return $original;
-            }
-        } else {
-            // problem
-            return $this->cssobj->_error($msg.$original);
-        }
-    }
-
-    function verified_theme_csspath()
-    {
-        // pretty straightforward
-        $themestylesheet = $this->std_themecsspath();
-        $msg = xarML("theme css stylesheet file cannot be found in this location: ");
-        if(file_exists($themestylesheet)) {
-            // no problem
-            return $themestylesheet;
-        } else {
-            // problem
-            return $this->_error($msg.$themestylesheet);
-        }
-    }
-}
 
 ?>
