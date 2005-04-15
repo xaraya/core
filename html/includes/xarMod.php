@@ -1226,8 +1226,15 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
             // a string. It makes sense using existing parameters that way.
             $args = array('type' => $modType) + $args;
         }  else {
+            $baseargs = array('module' => $modName);
+            if ($modType !== 'user') {
+                $baseargs['type'] = $modType;
+            }
+            if ($funcName !== 'main') {
+                $baseargs['func'] = $funcName;
+            }
             // Standard entry point - index.php or BaseModURL if provided in config.system.php
-            $args = array('module' => $modName, 'type' => $modType, 'func' => $funcName) + $args;
+            $args = $baseargs + $args;
         }
 
         // Add GET parameters to the path, ensuring each value is encoded correctly.
