@@ -46,8 +46,8 @@ function roles_user_register()
     xarTplSetPageTitle(xarML('New Account'));
     if (!xarVarFetch('phase','str:1:100',$phase,'request',XARVAR_NOT_REQUIRED)) return;
 
-     //Uncomment so minage var is available in function
-     $minage = xarModGetVar('roles', 'minage');
+    //Minage var is available elsewhere see bug 4323
+    //$minage = xarModGetVar('roles', 'minage');
     // Skip Min Age Requirement when set at 0.
     /*
     if ($minage == 0){
