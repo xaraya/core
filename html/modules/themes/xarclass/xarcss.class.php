@@ -115,6 +115,7 @@ class xarCSS
             $data['styles'] = $tagqueue->deliver($this->sort);
             $data['comments'] = $this->comments;
             $data['legacy'] = $this->legacy;
+            $data['additionalstyles'] = $GLOBALS['xarTpl_additionalStyles'];
             return $data;
         } else {
             $this->tagdata['url'] = $this->geturl();
@@ -138,7 +139,8 @@ class xarCSS
         return $fullurl;
     }
 
-    function getrelativeurl() {
+    function getrelativeurl()
+    {
 
         $msg = xarML("#(1) css stylesheet file cannot be found at this location: ",$this->scope);
 
@@ -194,7 +196,6 @@ class xarCSS
 
 class tagqueue
 {
-
     function queue($op='register', $args)
     {
         static $queue;
