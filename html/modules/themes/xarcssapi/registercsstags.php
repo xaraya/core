@@ -104,7 +104,7 @@ function themes_cssapi_registercsstags($args)
 
 // NEW TAGS
 // use in theme to render all extra styles tags
-   xarTplRegisterTag( 'themes', 'additional-styles', array(), 'themes_userapi_handlecsstags');
+   xarTplRegisterTag( 'themes', 'additional-styles', array(), 'themes_cssapi_delivercss');
 
     // Register the tag which is used to include style information
     $cssTagAttributes = array(  new xarTemplateAttribute('file'     , XAR_TPL_OPTIONAL | XAR_TPL_STRING),
@@ -116,7 +116,7 @@ function themes_cssapi_registercsstags($args)
                                 new xarTemplateAttribute('alternate', XAR_TPL_OPTIONAL | XAR_TPL_BOOLEAN),
                                 new xarTemplateAttribute('media'    , XAR_TPL_OPTIONAL | XAR_TPL_STRING),
                                 new xarTemplateAttribute('title'    , XAR_TPL_OPTIONAL | XAR_TPL_STRING));
-    xarTplRegisterTag( 'themes', 'style', $cssTagAttributes ,'themes_userapi_handlecsstags');
+    xarTplRegisterTag( 'themes', 'style', $cssTagAttributes ,'themes_cssapi_registercss');
    // return
     return true;
 }

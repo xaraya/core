@@ -22,7 +22,7 @@
  * @param none
  * @returns string
  */
-function themes_cssapi_rendercss($args)
+function themes_cssapi_delivercss($args)
 {
     $args['method'] = 'render';
     $args['base'] = 'theme';
