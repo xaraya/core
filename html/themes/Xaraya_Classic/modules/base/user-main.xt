@@ -1,7 +1,7 @@
 <xar:comment>
     include common stylesheet via standard template tag
 </xar:comment>
-<xar:link-common-stylesheet />
+<xar:style scope="common" />
 <h1 class="xar-mod-head">
     <xar:mlstring>
         Thank you for installing and trying Xaraya! 
