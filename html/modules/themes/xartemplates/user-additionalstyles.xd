@@ -28,6 +28,6 @@
         </xar:foreach>
     </xar:foreach>
     <xar:if condition="$legacy and !empty($additionalstyles)">
-		#$additionalstyles#    
+        #$additionalstyles#    
     </xar:if>
 </xar:if>
