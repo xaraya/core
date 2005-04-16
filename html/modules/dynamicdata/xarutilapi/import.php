@@ -74,6 +74,8 @@ function dynamicdata_utilapi_import($args)
     $objectname2objectid = array();
     $objectcache = array();
     $objectmaxid = array();
+    $closeitem = 'N/A';
+    $closetag = 'N/A';
     while ( (!empty($file) && !feof($fp)) || (!empty($xml) && $count < $maxcount) ) {
         if (!empty($file)) {
             $line = fgets($fp, 4096);
