@@ -13,6 +13,11 @@
                         </xar:ml>
                     </a>
                 </p>
+            <xar:else/>
+                <p>
+                    <b><xar:mlstring>Name</xar:mlstring></b>:&nbsp;
+                    #xarVarPrepForDisplay($name)#
+                </p>
             </xar:if>
             <xar:if condition="xarModIsAvailable('dynamicdata')">
             <xar:data-getitem name="$properties" module="roles" itemid="$uid" />
