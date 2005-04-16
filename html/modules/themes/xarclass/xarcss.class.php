@@ -95,6 +95,11 @@ class xarCSS
             $this->base   = $this->commonbase;
             $this->filename   = $this->commonsource;
         }
+
+        if($this->method == 'import') {
+            $this->media = str_replace(' ', ', ', $media);
+        }
+
         $this->tagdata = array(
                             'scope'            => $this->scope,
                             'method'           => $this->method,
