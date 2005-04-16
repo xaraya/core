@@ -26,7 +26,13 @@ function themes_cssapi_delivercss($args)
 {
     $args['method'] = 'render';
     $args['base'] = 'theme';
-    return xarModAPIFunc('themes', 'user', 'handlecsstags', $args);
+
+    $argstring = 'array(';
+    foreach ($args as $key => $value) {
+        $argstring .= "'" . $key . "' => '" . $value . "',";
+    }
+    $argstring .= ")";
+    return "echo xarModAPIFunc('themes', 'user', 'deliver',$argstring);\n";
 }
 
 ?>

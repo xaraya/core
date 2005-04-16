@@ -16,8 +16,12 @@
  */
 function themes_cssapi_registercss($args)
 {
-    $args['method'] = 'render';
-    return xarModAPIFunc('themes', 'user', 'handlecsstags', $args);
+    $argstring = 'array(';
+    foreach ($args as $key => $value) {
+        $argstring .= "'" . $key . "' => '" . $value . "',";
+    }
+    $argstring .= ")";
+    return "xarModAPIFunc('themes', 'user', 'register',$argstring);\n";
 }
 
 ?>

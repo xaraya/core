@@ -2,7 +2,7 @@
 <xar:blockgroup name="header" id="header" />
 <base href="&xar-baseurl;index.php" />
 <xar:comment>Main CSS rules (note: all default parameters in the tag can be omitted)</xar:comment>
-<xar:link-theme-stylesheet />
+<xar:style />
 <xar:comment>Styleswitcher CSS files to link to</xar:comment>
 <xar:template file="styleswitchercsslinks" type="theme" />
 <xar:comment>
