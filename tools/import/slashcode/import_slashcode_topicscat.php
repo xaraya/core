@@ -83,8 +83,9 @@
         xarModSetVar('articles', 'number_of_categories.1', 2);
         xarModSetVar('articles', 'mastercids.1', $sections_cid .';'.$categories_cid);
     } else {
-        // you'll be in trouble with your categories here...
-        die("You must reset your categories to continue." );
+        $settings = unserialize(xarModGetVar('articles', 'settings.1'));
+        $settings['number_of_categories'] = 2;
+        $settings['cids'] = array($sections_cid, $categories_cid);
     }
 
     // Get all sections
@@ -178,8 +179,8 @@
 
     // Set parent_tid to 0 where parent_tid is null to allow sorting for Postgres too (NULL comes later numbers there)
     $query = "UPDATE $table_topics_tree
-                 SET $table_topics_tree.xar_parent_tid=0
-               WHERE $table_topics_tree.xar_parent_tid IS NULL";
+                 SET xar_parent_tid=0
+               WHERE xar_parent_tid IS NULL";
 
     $result =& $dbimport->Execute($query);
     if (!$result) {

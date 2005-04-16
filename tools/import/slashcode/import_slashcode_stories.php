@@ -183,6 +183,10 @@
     //xarModSetVar('installer','articles',serialize($articles));
 
     echo "<strong>TODO : check sequence number for articles in Postgres</strong><br/><br/>\n";
+    echo "             : SELECT xar_aid FROM xar_articles ORDER BY xar_aid DESC;<br/><br/>\n";
+    echo "             :  - first row is the highest xar_aid ## <br/><br/>\n";
+    echo "             : SELECT nextval('seqxar_articles')<br/><br/>\n";
+    echo "             : SELECT pg_catalog.setval('seqxar_articles',##,true);<br/><br/>\n";
 
     echo '<a href="import_slashcode.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($storycount > $numitems && $startnum + $numitems < $storycount) {
