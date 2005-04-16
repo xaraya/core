@@ -1,12 +1,12 @@
 <xar:if condition="isset($styles) and is_array($styles)">
-    <xar:foreach in="$styles" key="$method" value="$style">
-        <xar:if condition="$comments">
-             <!-- #$method# style -->
-        </xar:if>
-        <xar:foreach in="$style" key="$scope" value="$attributes">
-            <xar:if condition="$comments">
-                <!-- the following styles were supplied from component #$scope# -->
-            </xar:if>
+    <xar:foreach in="$styles" key="$scope" value="$style">
+		<xar:if condition="$comments">
+			<!-- the following styles were supplied from component #$scope# -->
+		</xar:if>
+        <xar:foreach in="$style" key="$method" value="$attributes">
+			<xar:if condition="$comments">
+				 <!-- #$method# style -->
+			</xar:if>
             <xar:loop name="$attributes">
                 <xar:if condition="$method eq 'link'">
                     <xar:if condition="$loop:item['title'] ne ''">

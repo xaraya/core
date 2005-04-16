@@ -82,8 +82,6 @@ class xarCSS
     function xarCSS($args)
     {
         extract($args);
-//        echo var_dump($args);
-//        echo "<br />";
         if (isset($scope)) $this->scope                 = $scope;
         if (isset($method)) $this->method               = $method;
         if (isset($media)) $this->media                 = $media;
@@ -109,9 +107,6 @@ class xarCSS
                             'media'            => $this->media,
                             'title'            => $this->title,
                         );
-//        echo var_dump($this->tagdata);
-//        echo "<br />";
-//        echo "<br />";
     }
 
     // The main method for generating tag output
@@ -210,7 +205,7 @@ class tagqueue
         static $queue;
 
         if ($op == 'register') {
-            $queue[$args['method']][$args['scope']][$args['url']] = $args;
+            $queue[$args['scope']][$args['method']][$args['url']] = $args;
             return true;
         } else if ($op == 'deliver') {
             $styles = $queue;
