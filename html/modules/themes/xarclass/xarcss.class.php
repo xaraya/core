@@ -485,7 +485,7 @@ class tagqueue {
 
     function register($args) {
         global $queue;
-        $queue[$args['method']][$args['scope']][] = $args;
+        $queue[$args['method']][$args['scope']][$args['scope']] = $args;
     }
 
     function deliver($sort=true) {
