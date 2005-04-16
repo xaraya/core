@@ -12,7 +12,7 @@
     </h2>
 
     <xar:if condition="!empty($objectid) and $objectid eq 1">
-        <xar:link-module-stylesheet modname="base" filename="navtabs" />
+        <xar:style scope="module" modname="base" filename="navtabs" />
         <div>
             <dl class="xar-tabs">
                 <dt class="help">

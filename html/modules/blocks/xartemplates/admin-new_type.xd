@@ -8,7 +8,7 @@
     //var blocks_fieldDescription = Array("Module Name", "Block Name");
 //-->
 </script>
-<xar:link-common-stylesheet />
+<xar:style scope="common" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>Blocks Administration</xar:mlstring>

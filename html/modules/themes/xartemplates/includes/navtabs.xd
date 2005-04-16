@@ -1,4 +1,4 @@
-<xar:link-module-stylesheet modname="base" filename="navtabs" />
+<xar:style scope="module" modname="base" filename="navtabs" />
 <xar:set name="generalcss">
     <xar:mlstring>
         All

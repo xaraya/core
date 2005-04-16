@@ -1,5 +1,5 @@
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
-<xar:link-module-stylesheet modname="dynamicdata" filename="dd" />
+<xar:style scope="module" modname="dynamicdata" filename="dd" />
 <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
     <xar:template file="catnavigation" />
 </xar:if>

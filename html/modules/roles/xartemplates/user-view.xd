@@ -5,7 +5,7 @@
 <div class="xar-mod-body">
     <h2><xar:mlstring>Member List</xar:mlstring></h2>
     <div style="margin: auto;">
-        <xar:link-module-stylesheet modname="base" filename="navtabs" />
+        <xar:style scope="module" modname="base" filename="navtabs" />
         <dl class="xar-tabs">
             <dt class="help">
                 <xar:mlstring>

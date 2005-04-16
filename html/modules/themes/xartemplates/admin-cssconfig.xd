@@ -4,7 +4,7 @@
 <xar:comment>
     Temporarily using blocks css because it's already implemented in stable scenario.. TODO: convert to native core.css as soon as practicable 
 </xar:comment>
-<xar:link-common-stylesheet />
+<xar:style scope="common" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>

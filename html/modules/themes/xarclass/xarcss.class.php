@@ -41,11 +41,10 @@ class xarCSS
     var $method       = 'link';      // supported are 'link', 'import', 'embed', 'render'
 
     // SUPPORTED SCOPES ARE MODULE, THEME, COMMON
-    var $components;                // array of all known and supported components
-    var $scope      = 'module';     // component type - 'module, 'theme' or 'common'
+    var $scope      = 'theme';      // component type - 'module, 'theme' or 'common'
     var $compcssdir = 'xarstyles';  // component css directory name (e.g. 'xarstyles')
 
-    var $base       = CSSCOMMONBASE;// component name (e.g. module's name 'base')
+    var $base       = 'theme';      // component name (e.g. module's name 'base')
     var $filename   = 'style';      // default css file name (without extension)
     var $fileext    = 'css';        // default css file extension
     var $commonbase = CSSCOMMONBASE;// base dirctory for common css
@@ -83,6 +82,8 @@ class xarCSS
     function xarCSS($args)
     {
         extract($args);
+//        echo var_dump($args);
+//        echo "<br />";
         if (isset($scope)) $this->scope                 = $scope;
         if (isset($method)) $this->method               = $method;
         if (isset($media)) $this->media                 = $media;
@@ -104,6 +105,9 @@ class xarCSS
                             'media'            => $this->media,
                             'title'            => $this->title,
                         );
+//        echo var_dump($this->tagdata);
+//        echo "<br />";
+//        echo "<br />";
     }
 
     // The main method for generating tag output
@@ -179,6 +183,7 @@ class xarCSS
                 }
             } else {
                 // problem
+//                exit;
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException($msg.$original));
                 return;
