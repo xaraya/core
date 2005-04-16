@@ -7,7 +7,6 @@
             <xar:if condition="$comments">
                 <!-- the following styles were supplied from component #$scope# -->
             </xar:if>
-
             <xar:loop name="$attributes">
                 <xar:if condition="$method eq 'link'">
                     <xar:if condition="$loop:item['title'] ne ''">
@@ -28,7 +27,7 @@
 
         </xar:foreach>
     </xar:foreach>
-    <xar:if condition="$legacy and isset($additionalstyles)">
-#$additionalstyles#    
+    <xar:if condition="$legacy and !empty($additionalstyles)">
+		#$additionalstyles#    
     </xar:if>
 </xar:if>

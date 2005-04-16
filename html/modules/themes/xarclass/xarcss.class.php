@@ -38,7 +38,6 @@ class xarCSS
     // class vars and their defaults
     var $language   = 'html';       // only (x)html compliant css inclusion is supported out of the box
 
-    var $tagdata;                   // holds all the parameters that define a tag
     var $method       = 'link';      // supported are 'link', 'import', 'embed', 'render'
 
     // SUPPORTED SCOPES ARE MODULE, THEME, COMMON
@@ -87,6 +86,7 @@ class xarCSS
         if (isset($scope)) $this->scope                 = $scope;
         if (isset($method)) $this->method               = $method;
         if (isset($media)) $this->media                 = $media;
+        if (isset($modname)) $this->base                = $modname;
         if (isset($filename)) $this->filename           = $filename;
         if ($this->scope == 'common') {
             $this->base   = $this->commonbase;
@@ -201,7 +201,7 @@ class tagqueue
         static $queue;
 
         if ($op == 'register') {
-            $queue[$args['method']][$args['scope']][$args['scope']] = $args;
+            $queue[$args['method']][$args['scope']][$args['url']] = $args;
             return true;
         } else if ($op == 'deliver') {
             $styles = $queue;
