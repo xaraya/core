@@ -26,7 +26,7 @@ function themes_cssapi_rendercss($args)
 {
     $args['method'] = 'render';
     $args['base'] = 'theme';
-    return xarModFunc('themes', 'user', 'handlecsstagsatruntime', $args);
+    return xarModAPIFunc('themes', 'user', 'handlecsstags', $args);
 }
 
 ?>

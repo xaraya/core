@@ -13,7 +13,7 @@
  * @author andyv <andyv@xaraya.com>
 */
 
-function themes_user_handlecsstagsatruntime($args)
+function themes_userapi_handlecsstags($args)
 {
     $argstring = 'array(';
     foreach ($args as $key => $value) {
