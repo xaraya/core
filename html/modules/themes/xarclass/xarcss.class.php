@@ -216,11 +216,13 @@ class tagqueue
         }
     }
 
-    function register($args) {
+    function register($args)
+    {
         return $this->queue('register',$args);
     }
 
-    function deliver($sort=true) {
+    function deliver($sort=true)
+    {
         return $this->queue('deliver',$sort);
     }
 }
