@@ -64,7 +64,7 @@ class xarCSS
 
     // BASIC OVERRIDES SETTINGS (still TODO)
     var $overridden = false;        // true == stylesheet has been overridden in theme or elsewhere
-    var $alternatedir     = '';           // alternative directory for overridden css file
+    var $alternatedir     = '';     // alternative directory for overridden css file
 
     // SUPPORT FOR DYNAMIC CSS SERVING AND ADMIN GUI (TODO)
     var $cssdecl;                   // TODO: associative array containing css declarations
@@ -183,293 +183,6 @@ class xarCSS
             }
         }
     }
-
-//-----------------------
-// These methods are currently not used
-// TODO: check what makes  sense to keep for the UI
-
-    function _set_other_method_vars($args)
-    {
-        if(is_array($args)) extract($args);
-
-        // media attribute
-        if(isset($media)) $this->set_media_attribute($media);
-
-        // title attribute
-        if(isset($title)) $this->set_tag_title($title);
-
-        // id attribute
-        if(isset($id)) $this->set_tag_id($id);
-
-        // rel attribute
-        if(isset($alternate) && $alternate == true) {
-            $this->set_rel_alternate();
-        } else {
-            $this->set_rel_stylesheet();
-        }
-
-        // stylesheet is located in a non-standard theme folder
-        if(isset($themefolder)) {
-            $this->_set_altdir($themefolder);
-        } else {
-            $this->_set_altdir('');
-        }
-
-        // referenced file has the standard or a non-standard extension
-        if(isset($fileext)) {
-            $this->fileext = $fileext;
-        } else {
-            $this->set_fileext_css();
-        }
-
-        // TODO: remove the already set variables from the $args, perhaps?
-    }
-
-    function _suppress()
-    {
-        $this->suppress = true;
-    }
-
-    function _add_component($compname)
-    {
-        $this->components[] = $compname;
-    }
-
-    // PUBLIC METHODS
-
-    // CSS REL - public accessors
-    function get_rel_attribute()
-    {
-        return $this->rel;
-    }
-
-    function set_rel_attribute($rel)
-    {
-        $this->rel = $rel;
-    }
-
-    function set_rel_stylesheet()
-    {
-        $this->rel = CSSRELSTYLESHEET;
-    }
-
-    function set_rel_alternate()
-    {
-        $this->rel = CSSRELALTSTYLESHEET;
-    }
-
-    // CSS TYPE - public accessors
-    function get_type_attribute()
-    {
-        return $this->type;
-    }
-
-    function set_type_attribute($type)
-    {
-        $this->type = $type;
-    }
-
-    function set_type_text()
-    {
-        $this->set_type(CSSTYPETEXT);
-    }
-
-    // CSS MEDIA - public accessors
-    function get_media_attribute()
-    {
-        return $this->media;
-    }
-
-    function set_media_attribute($media)
-    {
-        $this->media = $media;
-    }
-
-    function set_media_all()
-    {
-        $this->set_media_attribute(CSSMEDIAALL);
-    }
-
-    function set_media_screen()
-    {
-        $this->set_media_attribute(CSSMEDIASCREEN);
-    }
-
-    function set_media_print()
-    {
-        $this->set_media_attribute(CSSMEDIAPRINT);
-    }
-
-    function set_media_handheld()
-    {
-        $this->set_media_attribute(CSSMEDIAHANDHELD);
-    }
-
-    function set_media_projection()
-    {
-        $this->set_media_attribute(CSSMEDIAPROJECTION);
-    }
-
-    function set_media_aural()
-    {
-        $this->set_media_attribute(CSSMEDIAAURAL);
-    }
-
-    function add_media($media)
-    {
-        // support for comma separated list of multiple media types
-        $previous = $this->get_media_attribute();
-
-        if (isset($previous)) {
-            $extra = $previous . "," . $media;
-            $this->set_media_attribute($extra);
-        } else {
-            // unlikely scenario, but still need to cover for it
-            $this->set_media_attribute($media);
-        }
-    }
-
-    // CSS TAG TITLE ATTRIBUTE - public accessors
-    function get_tag_title()
-    {
-        return $this->title;
-    }
-
-    function set_tag_title($title)
-    {
-        $this->title = $title;
-    }
-
-    // CSS TAG ID ATTRIBUTE - public accessors
-    function get_tag_id()
-    {
-        return $this->id;
-    }
-
-    function set_tag_id($id)
-    {
-        $this->id = $id;
-    }
-
-    // PUBLIC UTILITY METHODS
-
-    // access css inclusion methods
-    function get_method()
-    {
-        return $this->method;
-    }
-
-    function set_method($method)
-    {
-        $this->method = $method;
-    }
-
-    function set_method_link()
-    {
-        $this->set_method('link');
-    }
-
-    function set_method_import()
-    {
-        $this->set_method('import');
-    }
-
-    function set_method_style()
-    {
-        $this->set_method('style');
-    }
-
-    // access css file extension
-    function get_fileext()
-    {
-        return $this->fileext;
-    }
-
-    function set_fileext($fileext)
-    {
-        $this->fileext = $fileext;
-    }
-
-    function set_fileext_css()
-    {
-        $this->set_fileext('css');
-    }
-
-    function set_fileext_php()
-    {
-        $this->set_fileext('php');
-    }
-
-    // access embedded styles source code
-    function get_source()
-    {
-        return $this->source;
-    }
-
-    function set_source($source)
-    {
-        $this->source = $source;
-    }
-
-    // access doc language for output sensitivity (TODO: xml and some other perhaps)
-    function get_language()
-    {
-        return $this->language;
-    }
-
-    function set_language($language)
-    {
-        $this->language = $language;
-    }
-
-
-    // PRIVATE (and PROTECTED) UTILITY METHODS
-
-    // alternative override dir accessor
-    function _altdir()
-    {
-        return $this->alternatedir;
-    }
-
-    function _set_altdir($alternatedir = '')
-    {
-        $this->alternatedir = $alternatedir;
-    }
-
-    // PROTECTED HELPERS
-
-
-    // toggle legacy, debug and parse modes dynamically
-    function _legacy()
-    {
-        $this->legacy = true;
-    }
-
-    function _nolegacy()
-    {
-        $this->legacy = false;
-    }
-
-    function _debug()
-    {
-        $this->debug = true;
-    }
-
-    function _nodebug()
-    {
-        $this->debug = false;
-    }
-
-    function _parse()
-    {
-        $this->parse = true;
-    }
-
-    function _noparse()
-    {
-        $this->parse = false;
-    }
-
 }
 
 /**
@@ -479,24 +192,35 @@ class xarCSS
  * @package themes
  */
 
-global $queue;
+class tagqueue
+{
 
-class tagqueue {
+    function queue($op='register', $args)
+    {
+        static $queue;
+
+        if ($op == 'register') {
+            $queue[$args['method']][$args['scope']][$args['scope']] = $args;
+            return true;
+        } else if ($op == 'deliver') {
+            $styles = $queue;
+            if($args) {
+                krsort($styles);
+                reset($styles);
+            }
+            $queue = array();
+            return $styles;
+        } else {
+            return false;
+        }
+    }
 
     function register($args) {
-        global $queue;
-        $queue[$args['method']][$args['scope']][$args['scope']] = $args;
+        return $this->queue('register',$args);
     }
 
     function deliver($sort=true) {
-        global $queue;
-        $styles = $queue;
-        if($sort) {
-            krsort($styles);
-            reset($styles);
-        }
-        $queue = array();
-        return $styles;
+        return $this->queue('deliver',$sort);
     }
 }
 ?>
