@@ -1,0 +1,40 @@
+<xar:if condition="isset($styles) and is_array($styles)">
+	<xar:foreach in="$styles" key="$method" value="$style">
+		<xar:if condition="$comments">
+			 <!-- #$method# style -->
+		</xar:if>
+		<xar:foreach in="$style" key="$scope" value="$attributes">
+			<xar:if condition="$comments">
+<!-- the following styles were supplied from component #$scope# -->
+			</xar:if>
+
+			<xar:loop name="$attributes">
+				<xar:if condition="$method eq 'link'">
+					<xar:if condition="$loop:item['title'] ne ''">
+	<link rel="#$loop:item['rel']#" type="#$loop:item['type']#" href="#$loop:item['url']#" title="#$loop:item['title']#" />
+					<xar:else />
+	<link rel="#$loop:item['rel']#" type="#$loop:item['type']#" href="#$loop:item['url']#" />
+					</xar:if>
+				<xar:elseif condition="$method eq 'import'" />
+	<style type="#$loop:item['type']#" media="#$loop:item['media']#">
+		@import url(#$loop:item['url']#);
+	</style>
+				<xar:elseif condition="$method eq 'embed'" />
+	<style type="#$loop:item['type']#" media="#$loop:item['media']#">
+		#$loop:item['filecontents']#
+	</style>
+				<xar:elseif condition="$method eq 'pi'" />
+					<xar:if condition="$loop:item['title'] ne ''">
+	<xml-stylesheet alternate="#$loop:item['alternate']#" type="#$loop:item['type']#" href="#$loop:item['url']#" title="#$loop:item['title']#" >
+					<xar:else />
+	<xml-stylesheet alternate="#$loop:item['alternate']#" type="#$loop:item['type']#" href="#$loop:item['url']#" >
+					</xar:if>
+				</xar:if>
+			</xar:loop>
+
+		</xar:foreach>
+	</xar:foreach>
+	<xar:if condition="$legacy and isset($additionalstyles)">
+#$additionalstyles#	
+	</xar:if>
+</xar:if>

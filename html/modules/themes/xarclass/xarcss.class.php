@@ -24,6 +24,8 @@ define("CSSMEDIASCREEN", "screen");
 define("CSSMEDIABRAILLE", "braille");
 define("CSSMEDIAHANDHELD", "handheld");
 define("CSSMEDIAPROJECTION", "projection");
+define("CSSCOMMONSOURCE", "xarcore-xhtml1-strict");
+define("CSSCOMMONBASE", "base");
 
 /**
  * Base CSS class
@@ -34,24 +36,21 @@ define("CSSMEDIAPROJECTION", "projection");
 class xarCSS
 {
     // class vars and their defaults
-    var $debug      = false;        // true == debug mode enabled
-    var $parse      = false;        // true == parse mode enabled
-    var $suppress   = false;        // true == this css is suppressed
-
-    var $legacy     = true;         // true == legacy pre-csslib support
-
     var $language   = 'html';       // only (x)html compliant css inclusion is supported out of the box
 
-    var $method     = 'link';       // also supported are 'import' and embedded 'style'
+    var $tagdata;                   // holds all the parameters that define a tag
+    var $method       = 'link';      // supported are 'link', 'import', 'embed', 'render'
 
-    // SUPPORTED COMPONENTS ARE MODULE (BLOCK), THEME, CORE (anything else out there?)
+    // SUPPORTED SCOPES ARE MODULE, THEME, COMMON
     var $components;                // array of all known and supported components
-    var $comptype   = 'module';     // component type - 'module, 'theme' or 'common'
-    var $compname   = 'base';       // component name (e.g. module's name 'base')
+    var $scope      = 'module';     // component type - 'module, 'theme' or 'common'
     var $compcssdir = 'xarstyles';  // component css directory name (e.g. 'xarstyles')
 
+    var $base       = CSSCOMMONBASE;// component name (e.g. module's name 'base')
     var $filename   = 'style';      // default css file name (without extension)
     var $fileext    = 'css';        // default css file extension
+    var $commonbase = CSSCOMMONBASE;// base dirctory for common css
+    var $commonsource = CSSCOMMONSOURCE;  // filename for common css
 
     var $source     = null;         // empty source should not be included (ideally)
     var $dynfile;
@@ -65,22 +64,175 @@ class xarCSS
 
     // BASIC OVERRIDES SETTINGS (still TODO)
     var $overridden = false;        // true == stylesheet has been overridden in theme or elsewhere
-    var $altdir     = '';           // alternative directory for overridden css file
+    var $alternatedir     = '';           // alternative directory for overridden css file
 
     // SUPPORT FOR DYNAMIC CSS SERVING AND ADMIN GUI (TODO)
     var $cssdecl;                   // TODO: associative array containing css declarations
                                     // $this->componentCSS["body"]["background-color"]
     var $cssconf    = false;        // Use runtime configuration parameters (with db backend)
+    var $suppresstype;              // true == tags of this type are suppressed
+    var $suppressscope;             // true == tags of this scope are suppressed
+    var $sort       = true;         // true == tags will be sorted
+    var $comments   = true;         // true == comments will be shown in the templates
+    var $debug      = false;        // true == debug mode enabled
+    var $parse      = false;        // true == parse mode enabled
+    var $suppress   = false;        // true == this css is suppressed
+    var $legacy     = true;         // true == legacy pre-csslib support
 
-    var $suppress   = false;        // true == this css method is suppressed
 
-    // constructor (defensive)
-    function xarCSS()
+    // constructor
+    function xarCSS($args)
     {
-        // DO NOT EVER ATTEMPT to instantiate this class, if you do you'll get a nasty error
-        // subclass it instead and let the polymorphism to do its job :-) <andyv>
-        $msg = xarML("you have illegally instantiated class: ") . get_class ($this);
-        $this->_error($msg);
+        extract($args);
+        if (isset($scope)) $this->scope                 = $scope;
+        if (isset($method)) $this->method               = $method;
+        if (isset($media)) $this->media                 = $media;
+        if (isset($filename)) $this->filename           = $filename;
+        if ($this->scope == 'common') {
+            $this->base   = $this->commonbase;
+            $this->filename   = $this->commonsource;
+        }
+        $this->tagdata = array(
+                            'scope'            => $this->scope,
+                            'method'           => $this->method,
+                            'base'             => $this->base,
+                            'filename'         => $this->filename,
+                            'fileext'          => $this->fileext,
+                            'source'           => $this->source,
+                            'rel'              => $this->rel,
+                            'type'             => $this->type,
+                            'media'            => $this->media,
+                            'title'            => $this->title,
+                        );
+    }
+
+    // The main method for generating tag output
+    // stick tag data into the tag queue or get it
+    function run_output()
+    {
+        if (!isset($tagqueue)) $tagqueue = new tagqueue();
+        if ($this->method == 'render') {
+            $data['styles'] = $tagqueue->deliver($this->sort);
+            $data['comments'] = $this->comments;
+            $data['legacy'] = $this->legacy;
+            return $data;
+        } else {
+            $this->tagdata['url'] = $this->geturl();
+            $tagqueue->register($this->tagdata);
+            return true;
+        }
+    }
+
+    // returns xaraya url for the file
+    function geturl($dir = null)
+    {
+        // it's static var already in core
+        $url = xarServerGetBaseURL();
+
+        if(isset($dir)){
+            $fullurl = $url.$dir;
+        } else {
+            $fullurl = $url.$this->getrelativeurl();
+        }
+
+        return $fullurl;
+    }
+
+    function getrelativeurl() {
+
+        $msg = xarML("#(1) css stylesheet file cannot be found at this location: ",$this->scope);
+
+        if ($this->scope == 'common') $this->scope = 'module';
+
+        if ($this->scope == 'theme') {
+            // pretty straightforward
+            $themestylesheet =  xarTplGetThemeDir() . "/style/" . $this->filename . "." . $this->fileext;
+            if(file_exists($themestylesheet)) {
+                // no problem
+                return $themestylesheet;
+            } else {
+                // problem
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                           new SystemException($msg.$themestylesheet));
+                return;
+            }
+        } else {
+
+            $original = "modules/" . $this->base . "/xarstyles/" . $this->filename . "." . $this->fileext;
+            // we do not want to supply path for a non-existent original css file or override a bogus file
+            // so lets check starting from original then fallback if there arent overriden versions
+            if(file_exists($original)) {
+                // how about the overridden one?
+                if($this->alternatedir != '') {
+                    $overridden = xarTplGetThemeDir() . "/" . $this->alternatedir . "/" . $this->filename . "." . $this->fileext;
+                } else {
+                    $overridden = xarTplGetThemeDir() . "/modules/" . $this->base . "/xarstyles/" . $this->filename . "." . $this->fileext;
+                }
+                if(file_exists($overridden)) {
+                    // prolly need to check if it's not a directory too (?)
+                    return $overridden;
+                } else {
+                    // no problem
+                    return $original;
+                }
+            } else {
+                // problem
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                           new SystemException($msg.$original));
+                return;
+            }
+        }
+    }
+
+//-----------------------
+// These methods are currently not used
+// TODO: check what makes  sense to keep for the UI
+
+    function _set_other_method_vars($args)
+    {
+        if(is_array($args)) extract($args);
+
+        // media attribute
+        if(isset($media)) $this->set_media_attribute($media);
+
+        // title attribute
+        if(isset($title)) $this->set_tag_title($title);
+
+        // id attribute
+        if(isset($id)) $this->set_tag_id($id);
+
+        // rel attribute
+        if(isset($alternate) && $alternate == true) {
+            $this->set_rel_alternate();
+        } else {
+            $this->set_rel_stylesheet();
+        }
+
+        // stylesheet is located in a non-standard theme folder
+        if(isset($themefolder)) {
+            $this->_set_altdir($themefolder);
+        } else {
+            $this->_set_altdir('');
+        }
+
+        // referenced file has the standard or a non-standard extension
+        if(isset($fileext)) {
+            $this->fileext = $fileext;
+        } else {
+            $this->set_fileext_css();
+        }
+
+        // TODO: remove the already set variables from the $args, perhaps?
+    }
+
+    function _suppress()
+    {
+        $this->suppress = true;
+    }
+
+    function _add_component($compname)
+    {
+        $this->components[] = $compname;
     }
 
     // PUBLIC METHODS
@@ -270,238 +422,22 @@ class xarCSS
         $this->language = $language;
     }
 
-    function set_language_html()
-    {
-        $this->set_language('html');
-    }
-
-    function set_language_xml()
-    {
-        $this->set_language('xml');
-    }
-
-    // output css inclusion string for various languages
-    function get_output()
-    {
-        // only (x)html supported ATM
-        if($this->language == 'html') {
-            $htmlstr = $this->_htmltag();
-        } else {
-            $htmlstr = '';
-        }
-
-        $cssarray = xarCSS::_handle_cssdata_var();
-        $cssarray["$this->comptype"]["$this->compname"][] = $htmlstr;
-        xarCSS::_handle_cssdata_var($cssarray);
-
-        // return the result string only if debug is on
-        if($this->debug) return $htmlstr;
-        return null;
-    }
 
     // PRIVATE (and PROTECTED) UTILITY METHODS
 
     // alternative override dir accessor
     function _altdir()
     {
-        return $this->altdir;
+        return $this->alternatedir;
     }
 
-    function _set_altdir($altdir = '')
+    function _set_altdir($alternatedir = '')
     {
-        $this->altdir = $altdir;
-    }
-
-    // returns relative xaraya path for the desired css file (protected)
-    function _xarpath()
-    {
-        // make sure current module is known in advance
-        if(!isset($this->compname)) {
-            $path = new xarCSSPath($this);
-            $this->compname = xarModGetName();
-        }
-
-        return $this->getcsspath($this->comptype);
-    }
-
-    // make valid (x)html tag for various css inclusion methods (protected)
-    function _htmltag()
-    {
-        $tag = new htmlCSSTag($this);
-        return $tag->render();
-    }
-
-    function getcsspath($type='module') {
-
-        $msg = xarML("$type css stylesheet file cannot be found in this location: ");
-
-        if ($type == 'common') $type = 'module';
-
-        if ($type == 'theme') {
-            // pretty straightforward
-            $themestylesheet =  xarTplGetThemeDir() . "/style/" . $this->filename . "." . $this->fileext;
-            if(file_exists($themestylesheet)) {
-                // no problem
-                return $themestylesheet;
-            } else {
-                // problem
-                return $this->_error($msg.$themestylesheet);
-            }
-        } else {
-
-            if(!isset($this->compname)){
-                $original = "modules/" . xarModGetName() . "/xarstyles/" . $this->filename . "." . $this->fileext;
-            } else {
-                $original = "modules/". $this->compname . "/xarstyles/" . $this->filename . "." . $this->fileext;
-            }
-            // we do not want to supply path for a non-existent original css file or override a bogus file
-            // so lets check starting from original then fallback if there arent overriden versions
-            if(file_exists($original)) {
-                // how about the overridden one?
-                if($this->altdir != '') {
-                    $overridden = xarTplGetThemeDir() . "/" . $this->altdir . "/" . $this->filename . "." . $this->fileext;
-                } else if(!isset($this->compname)){
-                    $overridden = xarTplGetThemeDir() . "/modules/" . xarModGetName() . "/xarstyles/".$this->filename . "." . $this->fileext;
-                } else {
-                    $overridden = xarTplGetThemeDir() . "/modules/" . $this->compname . "/xarstyles/" . $this->filename . "." . $this->fileext;
-                }
-                if(file_exists($overridden)) {
-                    // prolly need to check if it's not a directory too (?)
-                    return $overridden;
-                } else {
-                    // no problem
-                    return $original;
-                }
-            } else {
-                // problem
-                return $this->_error($msg.$original);
-            }
-        }
-
-
-    // PUBLIC METHODS (that every subclass should inherit and support, modify or override as needed)
-    // Lets document every method well, that's the only way to inform the implementors
-
-    // main extrenal css linking method and a replacement for old xarTplAddStyleLink core API
-    function link_static($args = null)
-    {
-        if(!$this->suppress) {
-            $this->set_method_link();
-            $this->_set_other_method_vars($args);
-            $this->set_method_vars($args);
-            return $this->get_output();
-        }
-    }
-
-    // similar to link_static but it's normally used to hide css from older browsers (like NN4)
-    function import_static($args = null)
-    {
-        if(!$this->suppress) {
-            $this->set_method_import();
-            $this->_set_other_method_vars($args);
-            $this->set_method_vars($args);
-            return $this->get_output();
-        }
-    }
-
-    // embedding is the least preferred of course, but it may be very useful for small tests, checks and quick overrides
-    function embed_style($source = null)
-    {
-        if(!$this->suppress) {
-            $this->set_method_style();
-            $this->set_source($source);
-            return $this->get_output();
-        }
-    }
-
-    // TODO: dynamic css interfaces
-
-
-    // OTHER INTERFACES
-
-    // implement as neccessary in subclasses
-    // you should take care of whatever is not covered by _set_other_method_vars()
-    function set_method_vars($args)
-    {
-        if(is_array($args)) extract($args);
-        // nothing here, see examples in module, theme and common subclasses
-        return null;
-    }
-
-
-    // PRIVATE (for now)
-
-    // we treat these variables as expected by most subclasses and check-set them here, privately
-    // normally there is no need to recheck them in subclasses
-    function _set_other_method_vars($args)
-    {
-        if(is_array($args)) extract($args);
-
-        // media attribute
-        if(isset($media)) $this->set_media_attribute($media);
-
-        // title attribute
-        if(isset($title)) $this->set_tag_title($title);
-
-        // id attribute
-        if(isset($id)) $this->set_tag_id($id);
-
-        // rel attribute
-        if(isset($alternate) && $alternate == true) {
-            $this->set_rel_alternate();
-        } else {
-            $this->set_rel_stylesheet();
-        }
-
-        // stylesheet is located in a non-standard theme folder
-        if(isset($themefolder)) {
-            $this->_set_altdir($themefolder);
-        } else {
-            $this->_set_altdir('');
-        }
-
-        // referenced file has the standard or a non-standard extension
-        if(isset($fileext)) {
-            $this->fileext = $fileext;
-        } else {
-            $this->set_fileext_css();
-        }
-
-        // TODO: remove the already set variables from the $args, perhaps?
-    }
-
-    function _suppress()
-    {
-        $this->suppress = true;
-    }
-
-    function _add_component($compname)
-    {
-        $this->components[] = $compname;
-    }
-
-//-----------------------
+        $this->alternatedir = $alternatedir;
     }
 
     // PROTECTED HELPERS
 
-    // handle consolidated static css data array
-    // to use static method var in a consistent way (between php4 and 5) we seem to need this helper
-    function _handle_cssdata_var($add_data = null)
-    {
-        static $cssdata = array();
-
-        if(!$add_data) {
-            return $cssdata;
-        }
-        $cssdata = $add_data;
-        return null;
-    }
-
-    function _error($msg = null)
-    {
-        if(isset($msg)) xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
-    }
 
     // toggle legacy, debug and parse modes dynamically
     function _legacy()
@@ -533,152 +469,34 @@ class xarCSS
     {
         $this->parse = false;
     }
-}
 
-class htmlCSSTag
-{
-    var $tag;
-
-    // Constructor
-    function htmlCSSTag($tag)
-    {
-        $this->tag = $tag;
-    }
-
-    // returns xaraya url for css file
-    function href($dir = null)
-    {
-        // it's static var already in core
-        $url = xarServerGetBaseURL();
-
-        if(isset($dir)){
-            $fullurl = $url.$dir;
-        } else {
-            $fullurl = $url.$this->tag->_xarpath();
-        }
-
-        return $fullurl;
-    }
-
-    // composes valid (x)html atributes
-    function htmlattr($attrname, $attrval)
-    {
-        $htmlstr = " "; // need a lil space here? hmm..
-        $htmlstr .= $attrname;
-        $htmlstr .= "=\"";
-        $htmlstr .= $attrval;
-        $htmlstr .= "\"";
-        return $htmlstr;
-    }
-
-    function render()
-    {
-        switch($this->tag->method)
-        {
-            case "link":
-                $htmlstr = "\n<link";
-                $htmlstr .= $this->htmlattr("rel", $this->tag->rel);
-                $htmlstr .= $this->htmlattr("type", $this->tag->type);
-                $htmlstr .= $this->htmlattr("href", $this->href());
-                $htmlstr .= $this->htmlattr("media", $this->tag->media);
-                if(!empty($this->tag->title)) {
-                    $htmlstr .= $this->htmlattr("title", $this->tag->title);
-                }
-                $htmlstr .= " />";
-                break;
-            case "import":
-                $htmlstr = "\n<style";
-                $htmlstr .= $this->htmlattr("type", $this->tag->type);
-                $htmlstr .= $this->htmlattr("media", $this->tag->media);
-                $htmlstr .= ">";
-                $htmlstr .= "@import ";
-                $htmlstr .= "url(";
-                $htmlstr .= $this->href();
-                $htmlstr .= ");";
-                if(!empty($this->tag->title)) {
-                    $htmlstr .= $this->htmlattr("title", $this->tag->title);
-                }
-                $htmlstr .= "</style>";
-                break;
-            case "style":
-                $htmlstr = "\n<style";
-                $htmlstr .= $this->htmlattr("type", $this->tag->type);
-                $htmlstr .= $this->htmlattr("media", $this->tag->media);
-                $htmlstr .= ">\n<!-- \n";
-                if(empty($this->tag->source)) {
-                    $htmlstr .= $this->compname;
-                    $htmlstr .= " component has provided no css source at this time\n";
-                } else {
-                    $htmlstr .= $this->tag->source;
-                }
-                $htmlstr .= "\n-->\n</style>\n";
-                break;
-            default:
-                // unrecognised
-                $htmlstr = "\n";
-                break;
-        }
-         return $htmlstr;
-    }
 }
 
 /**
- * CSS external stylesheet pathfinder classes
- * (very fast and simple set of methods - no need to instantiate objects)
+ * Queue class. Holds the tag data until it is sent to the template
+ *
  *
  * @package themes
  */
 
-/*  possible paths to resolve and return:
+global $queue;
 
-    CASE 1 - ORIGINAL STYLESHEET OF A MODULE
+class tagqueue {
 
-    (a) Default - No Parameters
-        modules/<modname>/xarstyles/<modname.css>
+    function register($args) {
+        global $queue;
+        $queue[$args['method']][$args['scope']][] = $args;
+    }
 
-    (b) With Parameters
-        modules/<modname>/xarstyles/<filename.fileext>
-
-    CASE 2 - MODULE STYLESHEET OVERRIDDEN IN THEME
-
-    (a) Default - No Parameters
-        <themesdir>/<themename>/modules/<modname>/xarstyles/<modname.css>
-
-    (b) With Parameters
-        <themesdir>/<themename>/modules/<modname>/xarstyles/<filename.fileext>
-
-    CASE 3 - MODULE STYLESHEET OVERRIDDEN IN THEME WITH ALTERNATIVE FOLDER (?)
-
-    (a) Default - No Parameters
-        <themesdir>/<themename>/<altdir>/<modname.css>
-
-    (b) With Parameters
-        <themesdir>/<themename>/<altdir>/<filename.fileext>
-
-    CASE 4 - THEME STYLESHEETS (no overrides required)
-
-        <themesdir>/<themename>/style/<filename.fileext>
-
-    CASE 5 - CORE STYLESHEETS (overrides similar to modules)
-
-        modules/themes/xarstyles/core.css
-
-        or its dynamic equivalent
-
-        modules/themes/xarstyles/corecss.php
-
-    CASE 6 - GENERATED STYLESHEETS (new concept? TODO)
-
-        var/css/modules/<modname>/xarstyles/<modname.css>
-        var/css/themes/<themename>/modules/<modname>/xarstyles/<modname.css>
-        var/css/core/<filename.fileext>
-
-    SEARCH FALLBACK SEQUENCE (component dependent)
-
-    generated -> alternative -> overridden -> original
-
-    existence of original should be guaranteed to continue processing
-*/
-
-
+    function deliver($sort=true) {
+        global $queue;
+        $styles = $queue;
+        if($sort) {
+            krsort($styles);
+            reset($styles);
+        }
+        $queue = array();
+        return $styles;
+    }
+}
 ?>

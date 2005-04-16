@@ -21,12 +21,11 @@
  * @author Andy Varganov
  * @param none
  * @returns string
- */ 
+ */
 function themes_cssapi_rendercss($args)
 {
-    // return "echo xarModFunc('themes', 'user', 'rendercssratruntime');";
-    $args['tagtype'] = 'render';
-    $args['csscomponent'] = 'theme';
+    $args['method'] = 'render';
+    $args['base'] = 'theme';
     return xarModFunc('themes', 'user', 'handlecsstagsatruntime', $args);
 }
 
