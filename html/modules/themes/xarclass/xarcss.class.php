@@ -56,7 +56,7 @@ class xarCSS
     // TYPICAL REQUIRED ATTRIBUTES FOR WELL-FORMED CSS REFERENCE TAGS (xhtml-wise)
     var $rel        = CSSRELSTYLESHEET;
     var $type       = CSSTYPETEXT;
-    var $media      = CSSMEDIAALL;
+    var $media      = CSSMEDIASCREEN;
     var $title      = '';           // empty string title attribute will not be included
     var $id         = '';           // may be supported in the future (TODO?)
 
@@ -89,6 +89,10 @@ class xarCSS
         if (isset($media)) $this->media                 = $media;
         if (isset($modname)) $this->base                = $modname;
         if (isset($filename)) $this->filename           = $filename;
+        if (isset($title)) $this->title                 = $title;
+        if (isset($alternate) && $alternate == 'true') {
+            $this->rel = 'alternate stylesheet';
+        }
         if ($this->scope == 'common') {
             $this->base   = $this->commonbase;
             $this->filename   = $this->commonsource;
