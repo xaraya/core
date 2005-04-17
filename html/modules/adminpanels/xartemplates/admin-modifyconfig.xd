@@ -24,7 +24,7 @@
             </select>
         </div>
         <p>
-	        <xar:mlstring>Note: You can override item order in each block instance.  This setting will only apply when it has not been set there.</xar:mlstring>
+            <xar:mlstring>Note: You can override item order in each block instance.  This setting will only apply when it has not been set there.</xar:mlstring>
         </p>
 
 
