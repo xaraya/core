@@ -34,11 +34,10 @@ function themes_cssapi_registercsstags($args)
    xarTplRegisterTag( 'themes', 'additional-styles', array(), 'themes_cssapi_delivercss');
 
     // Register the tag which is used to include style information
-    $cssTagAttributes = array(  new xarTemplateAttribute('filename' , XAR_TPL_OPTIONAL | XAR_TPL_STRING),
+    $cssTagAttributes = array(  new xarTemplateAttribute('file' , XAR_TPL_OPTIONAL | XAR_TPL_STRING),
                                 new xarTemplateAttribute('scope'    , XAR_TPL_OPTIONAL | XAR_TPL_STRING),
                                 new xarTemplateAttribute('method'   , XAR_TPL_OPTIONAL | XAR_TPL_STRING),
-                                new xarTemplateAttribute('modname'  , XAR_TPL_OPTIONAL | XAR_TPL_STRING),
-                                new xarTemplateAttribute('themename', XAR_TPL_OPTIONAL | XAR_TPL_STRING),
+                                new xarTemplateAttribute('module'   , XAR_TPL_OPTIONAL | XAR_TPL_STRING),
                                 new xarTemplateAttribute('type'     , XAR_TPL_OPTIONAL | XAR_TPL_STRING),
                                 new xarTemplateAttribute('alternate', XAR_TPL_OPTIONAL | XAR_TPL_BOOLEAN),
                                 new xarTemplateAttribute('media'    , XAR_TPL_OPTIONAL | XAR_TPL_STRING),

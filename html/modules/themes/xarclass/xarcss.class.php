@@ -85,8 +85,8 @@ class xarCSS
         if (isset($scope)) $this->scope                 = $scope;
         if (isset($method)) $this->method               = $method;
         if (isset($media)) $this->media                 = $media;
-        if (isset($modname)) $this->base                = $modname;
-        if (isset($filename)) $this->filename           = $filename;
+        if (isset($module)) $this->base                 = $module;
+        if (isset($file)) $this->filename               = $file;
         if (isset($title)) $this->title                 = $title;
         if (isset($alternate) && $alternate == 'true') {
             $this->rel = 'alternate stylesheet';
@@ -104,7 +104,7 @@ class xarCSS
                             'scope'            => $this->scope,
                             'method'           => $this->method,
                             'base'             => $this->base,
-                            'filename'         => $this->filename,
+                            'file'             => $this->filename,
                             'fileext'          => $this->fileext,
                             'source'           => $this->source,
                             'rel'              => $this->rel,

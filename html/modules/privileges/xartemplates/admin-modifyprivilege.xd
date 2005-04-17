@@ -1,6 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:base-include-javascript module="privileges" filename="xarTree.js" />
-<xar:style scope="module" modname="base" filename="navtabs" />
+<xar:style scope="module" module="base" file="navtabs" />
 <script language="JavaScript">
 <!--
     var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 

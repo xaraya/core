@@ -4,7 +4,7 @@
 <xar:set name="current">xarModURL('roles', 'user', 'display', array('uid' => xarUserGetVar('uid')))</xar:set>
 <xar:set name="account">&xar-modurl-roles-user-account;</xar:set>
 <xar:set name="uid">xarUserGetVar('uid')</xar:set>
-<xar:style scope="module" modname="base" filename="navtabs" />
+<xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>Account Information</xar:mlstring>
