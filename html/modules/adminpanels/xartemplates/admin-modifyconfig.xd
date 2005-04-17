@@ -1,26 +1,17 @@
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Adminpanels Administration</xar:mlstring>
-    </span>
+    <span class="xar-mod-title"><xar:mlstring>Adminpanels Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
     <h2>
         <xar:mlstring>Modify Config</xar:mlstring>
     </h2>
-    <form class="xar-fullwidth" method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
+    <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
 
-    <fieldset>
-        <legend>
-            <xar:mlstring>Configure Administrator's Menus (built-in solutions)</xar:mlstring>
-        </legend>
-
-                <td class="adminpanels-rednote">
-
-                </td>
 
         <div class="xar-form-input-wrapper">
             <label for="menustyle" title="#xarML('Set the order to display menu sections')#" class="xar-form-label">
-                <xar:mlstring>Default sort order for menu items:</xar:mlstring>
+                <xar:mlstring>Default Menu Item Order:</xar:mlstring>
             </label>
             <select name="menustyle" id="menustyle">
                 <xar:foreach in="$sortorder" value="$v" key="$k">
@@ -31,14 +22,11 @@
                     </xar:if>
                 </xar:foreach>
             </select>
-            <xar:mlstring>(Overrule this setting in the specific block instance, this setting will only apply when it has not been set there) 
-            </xar:mlstring>       
         </div>
-        <div>
-            <xar:mlstring>The 'show logout' setting can now be adjusted in each instance of the adminmenu block</xar:mlstring>
-        </div>
+        <p>
+	        <xar:mlstring>Note: You can override item order in each block instance.  This setting will only apply when it has not been set there.</xar:mlstring>
+        </p>
 
-    </fieldset>
 
     <div class="xar-form-input-wrapper-after">
         <xar:if condition="$showoverviews eq 1">

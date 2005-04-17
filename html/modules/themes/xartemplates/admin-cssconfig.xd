@@ -20,68 +20,73 @@
     </h2>
     <xar:template file="navtabs" type="module" />
     <xar:if condition="$component eq ''">
+        <h3>
+            <xar:mlstring>
+                CSS Options 
+            </xar:mlstring>
+        </h3>
         <p>
             <xar:mlstring>
                 The CSS subsystem can function in one of two modes: configurable (managed) or non-configurable (unmanaged - default). While default mode is extremely fast and fool-proof, the configurable option gives much more flexibility and control over the way css is treated by Xaraya. 
             </xar:mlstring>
         </p>
         <form class="xar-blocks-admin" action="#xarModURL('themes', 'admin', 'cssconfig')#" method="post">
-            <fieldset class="xar-norm">
+            <div class="xar-form-input-wrapper">
+                <span title="#xarML('Enable manual stylesheet configuration')#" class="xar-form-label">
+                    <xar:mlstring>Mode:</xar:mlstring>
+                </span>
+                <div class="xar-floatleft">
+                    <xar:if condition="$configurable">
+                        <div>
+                            <input type="radio" value="0" id="configurable_false" name="configurable" />
+                            <label for="configurable_false" title="#xarML('Let the system handle CSS automatically')#">
+                                <xar:mlstring>Unmanaged</xar:mlstring>
+                            </label>
+                        </div>
+                        <div>
+                            <input type="radio" value="1" id="configurable_true" checked="checked" name="configurable" />
+                            <label for="configurable_true" title="#xarML('Allow manual CSS management')#">
+                                <xar:mlstring>Managed</xar:mlstring>
+                            </label>
+                        </div>
+                    <xar:else />
+                        <div>
+                            <input type="radio" value="0" id="configurable_false" checked="checked" name="configurable" />
+                            <label for="configurable_false" title="#xarML('Let the system handle CSS automatically')#">
+                                <xar:mlstring>Unmanaged</xar:mlstring>
+                            </label>
+                        </div>
+                        <div>
+                            <input type="radio" value="1" id="configurable_true" name="configurable" />
+                            <label for="configurable_true" title="#xarML('Allow manual CSS management')#">
+                                <xar:mlstring>Managed</xar:mlstring>
+                            </label>
+                        </div>
+                    </xar:if>
+                </div>
+            </div>
+
+            <div class="xar-form-input-wrapper">
+                <span class="xar-form-label">
+                    <a href="#$resettagsurl#">
+                        <xar:mlstring>
+                            (CSS) Stylesheet Tags 
+                        </xar:mlstring>
+                    </a>
+                </span>
+                #$resettagsurlstatus#
+            </div>
+            
+            <div class="xar-align-center">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <fieldset class="formelements xar-norm">
-                    <legend>
-                        <strong>
-                            <xar:mlstring>
-                                CSS Options 
-                            </xar:mlstring>
-                        </strong>
-                    </legend>
-                    <p class="param">
-                        <label for="configurable">
-                            <xar:mlstring>
-                                Mode
-                            </xar:mlstring>
-                        </label>
-                        <xar:if condition="$configurable">
-                            <xar:mlstring>managed</xar:mlstring>
-                        <xar:else />
-                            <xar:mlstring>unmanaged</xar:mlstring>
-                        </xar:if>
-                    </p>
-                    <p class="param">
-                        <label for="configurable">
-                            <xar:mlstring>
-                                Set Mode
-                            </xar:mlstring>
-                        </label>
-                        <xar:if condition="$configurable">
-                            <input type="radio" value="0" id="configurable" name="configurable" />
-                            <xar:mlstring>unmanaged</xar:mlstring><br />
-                            <input type="radio" value="1" checked="checked" id="configurable" name="configurable" />
-                            <xar:mlstring>leave as managed</xar:mlstring>
-                        <xar:else />
-                            <input type="radio" value="0" checked="checked" id="configurable" name="configurable" />
-                            <xar:mlstring>leave as unmanaged</xar:mlstring><br />
-                            <input type="radio" value="1" id="configurable" name="configurable" />
-                            <xar:mlstring>managed</xar:mlstring>
-                        </xar:if>
-                    </p>
-                    <p class="param">
-                        <label for="options">
-                            <a href="#$resettagsurl#">
-                                <xar:mlstring>
-                                    (CSS) Stylesheet Tags 
-                                </xar:mlstring>
-                            </a>
-                        </label>
-                        #$resettagsurlstatus# 
-                    </p>
-                </fieldset>
-                <input type="submit" value="#$submitbutton#" />
-            </fieldset>
+                <input type="submit" value="#xarML('Submit')#" />
+            </div>
         </form>
         
-        <h4><xar:mlstring>Note: About stylesheet tags</xar:mlstring></h4>
+        <h4>
+            <xar:mlstring>Note: About stylesheet tags</xar:mlstring>
+        </h4>
+
         <p>
             <xar:mlstring>With the manager come the custom template tags. 
             These should be used in modules and theme templates instead of (old) xarTplAddStyleLink and $tpl:additionalStyles. 
