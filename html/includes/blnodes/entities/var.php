@@ -19,7 +19,7 @@ class xarTpl__XarVarEntityNode extends xarTpl__EntityNode
         $name = xarTpl__ExpressionTransformer::transformBLExpression($this->parameters[0]);
         if (!isset($name)) return; // throw back
         
-        return $name;
+        return XAR_TOKEN_VAR_START . $name;
     }
 }
 ?>
