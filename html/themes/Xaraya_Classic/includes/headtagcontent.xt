@@ -13,7 +13,7 @@ NEW WAY: (starting from core 0.9.11+) with the following attribute-less tag
 </xar:comment>
 <xar:additional-styles />
 <xar:comment>the CSS rules for ie-win type browsers, we include it via the conditional comment so that other browers ignore it completely</xar:comment>
-<!--[if IE]><link href="themes/xaraya_classic/style/ie_win.css" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if IE]><link href="themes/Xaraya_Classic/style/ie_win.css" rel="stylesheet" type="text/css" /><![endif]-->
 <xar:if condition="$styleswitchertype eq 'javascript'">
     <xar:comment>Styleswitcher JavaScript</xar:comment>
     <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script>
