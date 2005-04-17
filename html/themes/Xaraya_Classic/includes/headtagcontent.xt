@@ -11,6 +11,7 @@ Now required for all css-aware themes.
 OLD WAY: #$tpl:additionalStyles# 
 NEW WAY: (starting from core 0.9.11+) with the following attribute-less tag
 </xar:comment>
+<xar:style scope="common" />
 <xar:additional-styles />
 <xar:comment>the CSS rules for ie-win type browsers, we include it via the conditional comment so that other browers ignore it completely</xar:comment>
 <!--[if IE]><link href="themes/Xaraya_Classic/style/ie_win.css" rel="stylesheet" type="text/css" /><![endif]-->
