@@ -6,7 +6,7 @@
 <xar:set name="statepending">ROLES_STATE_PENDING</xar:set>
 <xar:base-include-javascript module="base" filename="checkall.js" position="head" />
 <xar:style scope="module" module="base" file="navtabs" />
-<xar:style scope="module" module="roles" file="privileges" />
+<xar:style scope="module" file="privileges" />
 <div class="xar-mod-head">
      <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring>
      </span>

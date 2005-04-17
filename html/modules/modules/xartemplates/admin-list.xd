@@ -1,6 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="modstatus">xarSessionGetVar('statusmsg')</xar:set>
-<xar:style scope="module" module="modules" file="modules" />
+<xar:style scope="module" file="modules" />
 <xar:set name="$modstatus">
     xarSessionGetVar('statusmsg') 
 </xar:set>

@@ -82,8 +82,14 @@ class xarCSS
     function xarCSS($args)
     {
         extract($args);
-        if (isset($scope)) $this->scope                 = $scope;
         if (isset($method)) $this->method               = $method;
+        if (isset($scope)) $this->scope                 = $scope;
+        if ($this->scope == 'common') {
+            $this->base   = $this->commonbase;
+            $this->filename   = $this->commonsource;
+        } elseif ($this->scope == 'module') {
+            $this->base   = xarModGetName();
+        }
         if (isset($media)) $this->media                 = $media;
         if (isset($module)) $this->base                 = $module;
         if (isset($file)) $this->filename               = $file;
@@ -91,11 +97,6 @@ class xarCSS
         if (isset($alternate) && $alternate == 'true') {
             $this->rel = 'alternate stylesheet';
         }
-        if ($this->scope == 'common') {
-            $this->base   = $this->commonbase;
-            $this->filename   = $this->commonsource;
-        }
-
         if($this->method == 'import') {
             $this->media = str_replace(' ', ', ', $media);
         }
@@ -187,7 +188,6 @@ class xarCSS
                 }
             } else {
                 // problem
-//                exit;
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException($msg.$original));
                 return;

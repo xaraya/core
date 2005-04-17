@@ -1,6 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:style scope="module" module="base" file="navtabs" />
-<xar:style scope="module" module="privileges" file="privtree" />
+<xar:style scope="module" file="privtree" />
 <xar:base-include-javascript module="privileges" filename="xarTree.js" />
 <script type="javascript">
 <!--
