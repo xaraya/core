@@ -38,7 +38,7 @@ function xarCache_init($args = false)
     }
 
     // load the caching configuration
-    if (!include_once($xarVarDir . '/cache/config.caching.php')) {
+    if (@!include_once($xarVarDir . '/cache/config.caching.php')) {
         // if the config file is missing, turn caching off
         @unlink($cacheDir . '/cache.touch');
         return FALSE;
