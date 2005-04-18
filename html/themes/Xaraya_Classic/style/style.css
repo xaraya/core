@@ -87,7 +87,7 @@ h1 { font-size: 160%; }
 h2 { font-size: 150%; }
 h3 { font-size: 130%; }
 h4 { font-size: 120%; }
-p { margin: .7em 0 0 .3em; }
+p { margin: .5em 0 0 0; }
 
 pre {
     color: #990066;
@@ -102,13 +102,13 @@ ul {
 }
 
 ul li {
-    padding-left: 13px;
+    padding-left: 20px;
     background-image: url(../images/bullet.png);
     background-repeat: no-repeat;
     background-position: 0 .45em;
 }
 
-/* off-set background on all pre-styled li elements for good browsers */
+/* reset background on all pre-styled li elements for good browsers */
 ul li[style] { background-image: none; }
 
 blockquote {
@@ -230,15 +230,17 @@ center block group classes
 module rendering area and related rules 
 -------------------------------------------------------------------------[comment] */
 
+.xar-mod-head, .xar-mod-body, .xar-mod-foot { border: 1px solid #cccccc; }
+
 .xar-mod-head {
-    color: #333366;
-    background-color: #DDDDF0;
     padding: 2px;
     text-align: center;
     font-weight: bold;
-    border-color: #333366;
-    border-width: 1px;
-    border-style: solid;
+    color: #333366;
+    background-color: #ffffff;
+    background-image: url(../images/pagegardients.jpg);
+    background-position: 0px -20px;
+    background-repeat: repeat-x;
 }
 
 .xar-mod-title {
@@ -246,9 +248,14 @@ module rendering area and related rules
     font-weight: bold;
 }
 
-.xar-mod-body { padding: .3em 0;}
+.xar-mod-body {
+	padding: .3em 10px;
+	border-top: 0 none;
+}
  
-.xar-mod-foot { }
+.xar-mod-foot { border-top: 0 none; }
+
+
 
 /*
 complementary styling - colors, backgrounds and outlines 
