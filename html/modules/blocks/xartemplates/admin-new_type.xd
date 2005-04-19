@@ -27,15 +27,7 @@
             <label for="modulename" title="#xarML('This is the name of the module that this block is to be associated with.  Blocks must be associated with modules.  When in doubt use the base module.')#" class="xar-form-label">
                 <xar:mlstring>Module Name:</xar:mlstring>
             </label>
-            <select name="modulename" id="modulename">
-                <xar:loop name="$module_list">
-                    <xar:if condition="$loop:item.name eq $modulename">
-                        <option value="#xarVarPrepForDisplay($loop:item.name)#" selected="selected">#xarVarPrepForDisplay($loop:item.name)#</option>
-                    <xar:else />
-                        <option value="#xarVarPrepForDisplay($loop:item.name)#">#xarVarPrepForDisplay($loop:item.name)#</option>
-                    </xar:if>
-                </xar:loop>
-            </select>
+            <xar:data-input type="module" name="moduleid" id="moduleid" value="$moduleid"/>
         </div>
 
         <div class="xar-form-input-wrapper">
