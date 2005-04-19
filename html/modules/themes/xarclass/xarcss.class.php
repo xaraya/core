@@ -125,6 +125,9 @@ class xarCSS
             $data['comments'] = $this->comments;
             $data['legacy'] = $this->legacy;
             $data['additionalstyles'] = $GLOBALS['xarTpl_additionalStyles'];
+            // TODO: remove these hardcoded comments when BL + QA can handle them in templates
+            $data['opencomment'] = "<!-- ";
+            $data['closecomment'] = " -->\n";
             return $data;
         } else {
             $this->tagdata['url'] = $this->geturl();

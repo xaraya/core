@@ -249,8 +249,8 @@ module rendering area and related rules
 }
 
 .xar-mod-body {
-	padding: .3em 10px;
-	border-top: 0 none;
+    padding: .3em 10px;
+    border-top: 0 none;
 }
  
 .xar-mod-foot { border-top: 0 none; }
