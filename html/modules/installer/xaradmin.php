@@ -110,6 +110,7 @@ function installer_admin_phase3()
     $metRequiredPHPVersion    = false;
 
     $systemVarDir             = xarCoreGetVarDirPath();
+    $cacheDir                 = $systemVarDir . '/cache';
     $cacheTemplatesDir        = $systemVarDir . '/cache/templates';
     $rssTemplatesDir          = $systemVarDir . '/cache/rss';
     $adodbTemplatesDir        = $systemVarDir . '/cache/adodb';
@@ -119,10 +120,11 @@ function installer_admin_phase3()
         if (version_compare(PHP_VERSION,'4.1.2','>=')) $metRequiredPHPVersion = true;
     }
 
-    $systemConfigIsWritable = is_writable($systemConfigFile);
-    $cacheTemplatesIsWritable = is_writable($cacheTemplatesDir);
-    $rssTemplatesIsWritable = is_writable($rssTemplatesDir);
-    $adodbTemplatesIsWritable = is_writable($adodbTemplatesDir);
+    $systemConfigIsWritable     = is_writable($systemConfigFile);
+    $cacheIsWritable            = is_writable($cacheDir);
+    $cacheTemplatesIsWritable   = is_writable($cacheTemplatesDir);
+    $rssTemplatesIsWritable     = is_writable($rssTemplatesDir);
+    $adodbTemplatesIsWritable   = is_writable($adodbTemplatesDir);
 
     // Extension Check
     $data['xmlextension']             = extension_loaded('xml');
@@ -134,6 +136,8 @@ function installer_admin_phase3()
 
     $data['metRequiredPHPVersion']    = $metRequiredPHPVersion;
     $data['phpVersion']               = PHP_VERSION;
+    $data['cacheDir']                 = $cacheDir;
+    $data['cacheIsWritable']          = $cacheIsWritable;
     $data['cacheTemplatesDir']        = $cacheTemplatesDir;
     $data['cacheTemplatesIsWritable'] = $cacheTemplatesIsWritable;
     $data['rssTemplatesDir']          = $rssTemplatesDir;
