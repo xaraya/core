@@ -25,7 +25,7 @@ function privileges_adminapi_getmenulinks()
     if (xarSecurityCheck('EditPrivilege',0)) {
         $menulinks[] = Array('url'   => xarModURL('privileges',
                                                   'admin',
-                                                  'viewprivileges&phase=active'),
+                                                  'viewprivileges',array('phase' => 'active')),
                               'title' => xarML('View all privileges on the system'),
                               'label' => xarML('View Privileges'));
     }
