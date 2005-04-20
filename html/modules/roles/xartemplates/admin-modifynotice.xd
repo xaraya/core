@@ -34,82 +34,86 @@
         </dl>
     </div>
 
-    <h3>
-        <xar:mlstring>Notification Email:</xar:mlstring>
-    </h3>
-
     <form method="post" action="&xar-modurl-roles-admin-modifynotice;" enctype="application/x-www-form-urlencoded" >
+        <fieldset>
+            <legend>
+                <xar:mlstring>
+                    Notification Email
+                </xar:mlstring>
+                :
+            </legend>
+            <p>
+                <xar:mlstring>Ask about sending a notification when an administrator changes the state of a user to:</xar:mlstring>
+            </p>
+            <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="xarModGetVar('roles', 'askpendingemail')">
+                        <input type="checkbox" name="askpendingemail" id="askpendingemail" value="1" checked="checked" />
+                    <xar:else />
+                        <input type="checkbox" name="askpendingemail" id="askpendingemail" value="1" />
+                    </xar:if>
+                    <label for="askpendingemail" title="#xarML('When user state is changed to \'pending\'')#">
+                        <xar:mlstring>Pending</xar:mlstring>
+                    </label>
+                </div>
+        
+                <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="xarModGetVar('roles', 'askwelcomeemail')">
+                        <input type="checkbox" name="askwelcomeemail" id="askwelcomeemail" value="1" checked="checked" />
+                    <xar:else />
+                        <input type="checkbox" name="askwelcomeemail" id="askwelcomeemail" value="1" />
+                    </xar:if>
+                    <label for="askwelcomeemail" title="#xarML('When user state is changed to \'active\'')#">
+                        <xar:mlstring>Active</xar:mlstring>
+                    </label>
+                </div>
+        
+                <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="xarModGetVar('roles', 'askdeactivationemail')">
+                        <input type="checkbox" name="askdeactivationemail" id="askdeactivationemail" value="1" checked="checked" />
+                    <xar:else />
+                        <input type="checkbox" name="askdeactivationemail" id="askdeactivationemail" value="1" />
+                    </xar:if>
+                    <label for="askdeactivationemail" title="#xarML('When user state is changed to \'inactive\'')#">
+                        <xar:mlstring>Inactive</xar:mlstring>
+                    </label>
+                </div>
+        
+                <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="xarModGetVar('roles', 'askvalidationemail')">
+                        <input type="checkbox" name="askvalidationemail" id="askvalidationemail" value="1" checked="checked" />
+                    <xar:else />
+                        <input type="checkbox" name="askvalidationemail" id="askvalidationemail" value="1" />
+                    </xar:if>
+                    <label for="askvalidationemail" title="#xarML('When user state is changed to \'not valuidated\'')#">
+                        <xar:mlstring>Not Validated</xar:mlstring>
+                    </label>
+                </div>
+        
+                <p>
+                    <xar:mlstring>Ask about sending a notification when an administrator:</xar:mlstring>
+                </p>
+        
+                <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="xarModGetVar('roles', 'askpasswordemail')">
+                        <input type="checkbox" name="askpasswordemail" id="askpasswordemail" value="1" checked="checked" />
+                    <xar:else />
+                        <input type="checkbox" name="askpasswordemail" id="askpasswordemail" value="1" />
+                    </xar:if>
+                    <label for="askpasswordemail" title="#xarML('When administrator changes a user\'s password')#">
+                        <xar:mlstring>Changes A User's Password</xar:mlstring>
+                    </label>
+                </div>
+        
+                #$hooks#
+        </fieldset>
 
-        <p>
-            <xar:mlstring>Ask about sending a notification when an administrator changes the state of a user to:</xar:mlstring>
-        </p>
-
-        <div class="xar-form-input-wrapper-after">
-            <xar:if condition="xarModGetVar('roles', 'askpendingemail')">
-                <input type="checkbox" name="askpendingemail" id="askpendingemail" value="1" checked="checked" />
-            <xar:else />
-                <input type="checkbox" name="askpendingemail" id="askpendingemail" value="1" />
-            </xar:if>
-            <label for="askpendingemail" title="#xarML('When user state is changed to \'pending\'')#">
-                <xar:mlstring>Pending</xar:mlstring>
-            </label>
-        </div>
-
-        <div class="xar-form-input-wrapper-after">
-            <xar:if condition="xarModGetVar('roles', 'askwelcomeemail')">
-                <input type="checkbox" name="askwelcomeemail" id="askwelcomeemail" value="1" checked="checked" />
-            <xar:else />
-                <input type="checkbox" name="askwelcomeemail" id="askwelcomeemail" value="1" />
-            </xar:if>
-            <label for="askwelcomeemail" title="#xarML('When user state is changed to \'active\'')#">
-                <xar:mlstring>Active</xar:mlstring>
-            </label>
-        </div>
-
-        <div class="xar-form-input-wrapper-after">
-            <xar:if condition="xarModGetVar('roles', 'askdeactivationemail')">
-                <input type="checkbox" name="askdeactivationemail" id="askdeactivationemail" value="1" checked="checked" />
-            <xar:else />
-                <input type="checkbox" name="askdeactivationemail" id="askdeactivationemail" value="1" />
-            </xar:if>
-            <label for="askdeactivationemail" title="#xarML('When user state is changed to \'inactive\'')#">
-                <xar:mlstring>Inactive</xar:mlstring>
-            </label>
-        </div>
-
-        <div class="xar-form-input-wrapper-after">
-            <xar:if condition="xarModGetVar('roles', 'askvalidationemail')">
-                <input type="checkbox" name="askvalidationemail" id="askvalidationemail" value="1" checked="checked" />
-            <xar:else />
-                <input type="checkbox" name="askvalidationemail" id="askvalidationemail" value="1" />
-            </xar:if>
-            <label for="askvalidationemail" title="#xarML('When user state is changed to \'not valuidated\'')#">
-                <xar:mlstring>Not Validated</xar:mlstring>
-            </label>
-        </div>
-
-        <p>
-            <xar:mlstring>Ask about sending a notification when an administrator:</xar:mlstring>
-        </p>
-
-        <div class="xar-form-input-wrapper-after">
-            <xar:if condition="xarModGetVar('roles', 'askpasswordemail')">
-                <input type="checkbox" name="askpasswordemail" id="askpasswordemail" value="1" checked="checked" />
-            <xar:else />
-                <input type="checkbox" name="askpasswordemail" id="askpasswordemail" value="1" />
-            </xar:if>
-            <label for="askpasswordemail" title="#xarML('When administrator changes a user\'s password')#">
-                <xar:mlstring>Changes A User's Password</xar:mlstring>
-            </label>
-        </div>
-
-        #$hooks#
-
-        <div class="xar-align-center">
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="phase" id="phase" value="update" />
-            <input type="submit" value="#xarML('Update Notification Configuration')#" />
-        </div>
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="phase" id="phase" value="update" />
+                <input type="submit" value="#xarML('Update Notification Configuration')#" />
+            </div>
+        </fieldset>
 
     </form>
 </div>

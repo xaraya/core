@@ -263,23 +263,31 @@
         '#xarVarPrepForDisplay($pname)#'
     </h3>
 
+     
     <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
-        <div class="xar-form-input-wrapper">
-            <label for="privid" title="#xarML('Select the Privilege to add')#" class="xar-form-label">
-                <xar:mlstring>Privilege:</xar:mlstring>
-            </label>
-            <select name="privid" id="privid">
-                <xar:loop name="$allprivileges">
-                    <option value="#$loop:item['pid']#">#xarVarPrepForDisplay($loop:item['name'])#</option>
-                </xar:loop>
-            </select>
-        </div>
-
-        <div class="xar-align-center">
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
-            <input type="submit" value="#xarML('Add Privilege')#" />
-        </div>
-
+        <fieldset>
+            <div class="xar-form-input-wrapper">
+                <label for="privid" title="#xarML('Select the Privilege to add')#" class="xar-form-label">
+                    <xar:mlstring>
+                        Privilege:
+                    </xar:mlstring>
+                </label>
+                <select name="privid" id="privid">
+                    <xar:loop name="$allprivileges">
+                        <option value="#$loop:item['pid']#">
+                            #xarVarPrepForDisplay($loop:item['name'])#
+                        </option>
+                    </xar:loop>
+                </select>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
+                <input type="submit" value="#xarML('Add Privilege')#" />
+            </div>
+        </fieldset>
     </form>
+
 </div>

@@ -53,18 +53,20 @@
             <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
         </div>
 
-        <div class="xar-align-center">
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="phase" id="phase" value="notify" />
-            <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#" />
-            <input type="hidden" name="uid" id="uid" value="#$uid#" />
-            <input type="hidden" name="pass" id="pass" value="#xarVarPrepForDisplay($pass)#" />
-            <input type="hidden" name="ip" id="ip" value="#$ip#" />
-            <input type="hidden" name="groupuid" id="groupuid" value="#$groupuid#" />
-            <input type="hidden" name="state" id="state" value="#$state#" />
-            <input type="submit" value="#xarML('Send')#" class="xar-margin-thickright" />
-            <input type="button" value="#xarML('Cancel')#" onclick="history.back(-1);" class="xar-margin-thickleft" />
-        </div>
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="phase" id="phase" value="notify" />
+                <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#" />
+                <input type="hidden" name="uid" id="uid" value="#$uid#" />
+                <input type="hidden" name="pass" id="pass" value="#xarVarPrepForDisplay($pass)#" />
+                <input type="hidden" name="ip" id="ip" value="#$ip#" />
+                <input type="hidden" name="groupuid" id="groupuid" value="#$groupuid#" />
+                <input type="hidden" name="state" id="state" value="#$state#" />
+                <input type="submit" value="#xarML('Send')#" class="xar-margin-thickright" />
+                <input type="button" value="#xarML('Cancel')#" onclick="history.back(-1);" class="xar-margin-thickleft" />
+            </div>
+        </fieldset>
 
         <p>
             <xar:mlstring>The following variables will be replaced in the text with specific information:</xar:mlstring>
