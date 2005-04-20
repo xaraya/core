@@ -68,8 +68,12 @@
             </xar:if>
         </div>
 
-        <div class="xar-clearboth xar-align-center">
-            <input type="submit" value="#xarML('Update Group')#" class="xar-margin-thick" />
-        </div>
+         
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+                <input type="submit" value="#xarML('Update Group')#" class="xar-margin-thick" />
+            </div>
+        </fieldset>
+
     </form>
 </div>
