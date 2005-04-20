@@ -1,49 +1,77 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<xar:comment>
+    License: GPL http://www.gnu.org/copyleft/gpl.html 
+</xar:comment>
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Adminpanels Administration</xar:mlstring></span>
+    <span class="xar-mod-title">
+        <xar:mlstring>
+            Adminpanels Administration 
+        </xar:mlstring>
+    </span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>Modify Config</xar:mlstring>
+        <xar:mlstring>
+            Modify Config 
+        </xar:mlstring>
     </h2>
     <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
-
-
-        <div class="xar-form-input-wrapper">
-            <label for="menustyle" title="#xarML('Set the order to display menu sections')#" class="xar-form-label">
-                <xar:mlstring>Default Menu Item Order:</xar:mlstring>
-            </label>
-            <select name="menustyle" id="menustyle">
-                <xar:foreach in="$sortorder" value="$v" key="$k">
-                    <xar:if condition="$k eq $menustyle">
-                        <option value="#$k#" selected="selected">#$v#</option>
+        <fieldset>
+            <legend>
+                <xar:mlstring>
+                    Administration menus 
+                </xar:mlstring>
+            </legend>
+            <div class="xar-form-input-wrapper">
+                <label for="menustyle" title="#xarML('Set the order to display menu sections')#" class="xar-form-label">
+                    <xar:mlstring>
+                        Default Menu Item Order: 
+                    </xar:mlstring>
+                </label>
+                <select name="menustyle" id="menustyle">
+                    <xar:foreach in="$sortorder" value="$v" key="$k">
+                        <xar:if condition="$k eq $menustyle">
+                            <option value="#$k#" selected="selected">
+                                #$v# 
+                            </option>
+                            <xar:else />
+                            <option value="#$k#">
+                                #$v# 
+                            </option>
+                        </xar:if>
+                    </xar:foreach>
+                </select>
+            </div>
+            <p>
+                <xar:mlstring>
+                    Note: You can override item order in each block instance. This setting will only apply when it has not been set there. 
+                </xar:mlstring>
+            </p>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <xar:mlstring>
+                    Overviews 
+                </xar:mlstring>
+            </legend>
+            <div class="xar-form-input-wrapper-after">
+                <xar:if condition="$showoverviews eq 1">
+                    <input type="checkbox" name="overview" id="overview" value="1" checked="checked" />
                     <xar:else />
-                        <option value="#$k#">#$v#</option>
-                    </xar:if>
-                </xar:foreach>
-            </select>
-        </div>
-        <p>
-            <xar:mlstring>Note: You can override item order in each block instance.  This setting will only apply when it has not been set there.</xar:mlstring>
-        </p>
-
-
-    <div class="xar-form-input-wrapper-after">
-        <xar:if condition="$showoverviews eq 1">
-            <input type="checkbox" name="overview" id="overview" value="1" checked="checked" />
-        <xar:else />
-            <input type="checkbox" name="overview" id="overview" value="1" />
-        </xar:if>
-        <label for="overview" title="#xarML('Bypass the overviews and go directly to the module configuration')#">
-            <xar:mlstring>Disable Module Overviews</xar:mlstring>
-        </label>
-    </div>
-
-    <div class="xar-clear-both xar-align-center">
-        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-        <input type="submit" value="#xarML('Update Adminpanels Configuration')#" class="xar-margin-thickright" />
-        <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft"  />
-    </div>
-
+                    <input type="checkbox" name="overview" id="overview" value="1" />
+                </xar:if>
+                <label for="overview" title="#xarML('Bypass the overviews and go directly to the module configuration')#">
+                    <xar:mlstring>
+                        Disable Module Overviews 
+                    </xar:mlstring>
+                </label>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="submit" value="#xarML('Update Adminpanels Configuration')#" class="xar-margin-thickright" />
+                <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft" />
+            </div>
+        </fieldset>
     </form>
 </div>

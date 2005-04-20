@@ -95,10 +95,13 @@
 
         </fieldset>
 
-        <div class="xar-clear-both xar-align-center">
-            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-            <input type="submit" value="#xarML('Create Instance')#" class="xar-margin-thickright" />
-        </div>
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+                <input type="submit" value="#xarML('Create Instance')#" class="xar-margin-thickright" />
+            </div>
+        </fieldset>
+
 
     </form>
 </div>

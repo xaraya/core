@@ -211,11 +211,14 @@
 
         </fieldset>
 
-        <div class="xar-clear-both xar-align-center">
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="bid" id="bid" value="#$bid#" />
-            <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
-            <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft"  />
-        </div>
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="bid" id="bid" value="#$bid#" />
+                <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
+                <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft" />
+            </div>
+        </fieldset>
+
     </form>
 </div>

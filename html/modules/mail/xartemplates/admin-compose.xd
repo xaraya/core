@@ -11,55 +11,66 @@
     <span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-    <h2>
-        <xar:mlstring>Test Configuration</xar:mlstring>
-    </h2>
-
     <form action="&xar-modurl-mail-admin-sendtest;" method="post" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded">
-
-        <div class="xar-form-input-wrapper">
-            <label for="name" title="#xarML('Recipient Name.')#" class="xar-form-label">
-                <xar:mlstring>Name:</xar:mlstring>
-            </label>
-            <input type="text" id="name" name="name" value="#$name#" maxlength="100" class="xar-form-textlong" />
-        </div>
-
-        <div class="xar-form-input-wrapper">
-            <label for="email" title="#xarML('Recipient Email Address.')#" class="xar-form-label">
-                <xar:mlstring>Email:</xar:mlstring>
-            </label>
-            <input type="text" id="email" name="email" value="#$email#" maxlength="100" class="xar-form-textlong" />
-        </div>
-
-        <div class="xar-form-input-wrapper">
-            <label for="subject" title="#xarML('Message Subject.')#" class="xar-form-label">
-                <xar:mlstring>Subject:</xar:mlstring>
-            </label>
-            <input type="text" id="subject" name="subject" value="" maxlength="100" class="xar-form-textlong" />
-        </div>
-
-        <div class="xar-form-input-wrapper">
-            <label for="message" title="#xarML('Message Subject.')#" class="xar-form-label">
-                <xar:mlstring>Message:</xar:mlstring>
-            </label>
-            <textarea name="message" id="message" class="xar-form-textarealarge"></textarea>
-        </div>
-
-        <xar:if condition="xarModIsAvailable('scheduler')">
+        <fieldset>
+            <legend>
+                <xar:mlstring>
+                    Test Configuration
+                </xar:mlstring>
+            </legend>
             <div class="xar-form-input-wrapper">
-                <label for="when_input" title="#xarML('Test scheduled mails.')#" class="xar-form-label">
-                    <xar:mlstring>No Earlier Than:</xar:mlstring>
+                <label for="name" title="#xarML('Recipient Name.')#" class="xar-form-label">
+                    <xar:mlstring>
+                        Name:
+                    </xar:mlstring>
                 </label>
-                <xar:data-input name="when" type="calendar" value="" />
+                <input type="text" id="name" name="name" value="#$name#" maxlength="100" class="xar-form-textlong" />
             </div>
+            <div class="xar-form-input-wrapper">
+                <label for="email" title="#xarML('Recipient Email Address.')#" class="xar-form-label">
+                    <xar:mlstring>
+                        Email:
+                    </xar:mlstring>
+                </label>
+                <input type="text" id="email" name="email" value="#$email#" maxlength="100" class="xar-form-textlong" />
+            </div>
+            <div class="xar-form-input-wrapper">
+                <label for="subject" title="#xarML('Message Subject.')#" class="xar-form-label">
+                    <xar:mlstring>
+                        Subject:
+                    </xar:mlstring>
+                </label>
+                <input type="text" id="subject" name="subject" value="" maxlength="100" class="xar-form-textlong" />
+            </div>
+            <div class="xar-form-input-wrapper">
+                <label for="message" title="#xarML('Message Subject.')#" class="xar-form-label">
+                    <xar:mlstring>
+                        Message:
+                    </xar:mlstring>
+                </label>
+                <div class="xar-form-container-after">
+                    <textarea name="message" id="message" class="xar-form-textarealarge"></textarea>
+                </div>
 
-        </xar:if>
-
-        <div class="xar-clear-both xar-align-center">
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="submit" value="#xarML('Send Test Message')#" class="xar-margin-thickright" />
-            <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft"  />
-        </div>
-
+            </div>
+            <xar:if condition="xarModIsAvailable('scheduler')">
+                <div class="xar-form-input-wrapper">
+                    <label for="when_input" title="#xarML('Test scheduled mails.')#" class="xar-form-label">
+                        <xar:mlstring>
+                            No Earlier Than:
+                        </xar:mlstring>
+                    </label>
+                    <xar:data-input name="when" type="calendar" value="" />
+                </div>
+            </xar:if>
+        </fieldset>
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="submit" value="#xarML('Send Test Message')#" class="xar-margin-thickright" />
+                <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft" />
+            </div>
+        </fieldset>
     </form>
 </div>
+

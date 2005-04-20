@@ -177,3 +177,80 @@ div#xc-right { margin-left: 20px; }
 div#xc-center-wrapper { margin: 0 -10px 0 -10px; }
 /* small correction to allow center be centered without the left column */
 div#xc-outermargin-noleft-wrapper  div#xc-center-wrapper { margin: 0 -10px 0 0; }
+
+/*
+positioning and minimal styling of footer 
+-------------------------------------------------------------------------[comment] */
+
+div#xc-footer {
+    background-image: url(../images/pagegardients.jpg);
+    background-position: 0px -40px;
+    background-repeat: repeat-x;
+}
+
+/*
+footer container itself - watch for the explicit height and width limitations
+-------------------------------------------------------------------------[comment] */
+p#footermsg,
+p#footermsg a {
+    display:block;
+    width: 102px;
+    height: 47px;
+}
+
+p#footermsg {
+    float: right;
+    padding: 0;
+    margin: 1px 1px 0 0;
+    text-align: right;
+    background-image: url(../images/xar_badge.gif);
+    background-color: transparent;
+    background-position: 0px 0px;
+}
+
+/* hide logo image in case when css is enabled - we display nicer multicoloured version as per rule above */
+p#footermsg img { display:none; }
+
+/*
+standard content of the footer, limited by explicit width and height 
+-------------------------------------------------------------------------[comment] */
+
+p#slogan {
+    float: left;
+    padding: 17px 0 0 5px;
+    width: auto;
+    text-align: left;
+    margin: 0;
+}
+
+/*
+site slogan can sit in the footer for now 
+-------------------------------------------------------------------------[comment] */
+
+p#copyright {
+    float: left;
+    padding: 17px 0 0 5px;
+    width: 200px;
+    text-align: center;
+    margin: 0;
+}
+
+/*
+and so can the copyright info
+-------------------------------------------------------------------------[comment] */
+
+div.validators {
+    float: right;
+    height: 23px;
+    width: 80px;
+    margin-right: 7px;
+}
+
+/*
+it is a kind of modern trend to display links to w3c validators 
+-------------------------------------------------------------------------[comment] */
+
+div.validators img {
+    margin: 1px 0;
+    display: block;
+}

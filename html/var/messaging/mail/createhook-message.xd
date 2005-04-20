@@ -7,3 +7,4 @@ Title : #$article['title']#
 </xar:if>
 
 Site Name: #$sitename# :: #$siteslogan# -- #$siteurl#
+  

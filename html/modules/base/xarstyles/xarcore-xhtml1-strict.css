@@ -314,7 +314,12 @@ miscellaneous utility clases
 
 .xar-form-input-wrapper-after {
     width: auto;
-    padding-left: 15em;
+    padding-left: 16em;
     margin-bottom: 4px;
     clear: both;
+}
+
+.xar-form-container-after {
+    margin-left: 16em;
+    margin-bottom: 4px;
 }
