@@ -12,6 +12,7 @@
 
 
 
+
 </script> 
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
@@ -258,22 +259,22 @@
             ----------------- Begin Security Options ------------------- 
         </xar:comment>
         <xar:elseif condition="$tab eq 'security'" />
-        <fieldset>
-            <legend>
-                <xar:mlstring>
-                    Sessions and Security 
-                </xar:mlstring>
-            </legend>
-            <xar:set name="authmodules">
-                #xarConfigGetVar('Site.User.AuthenticationModules')# 
-            </xar:set>
-            <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
-                <xar:base-include-javascript module="base" filename="orderitem.js" position="head" />
+        <xar:set name="authmodules">
+            #xarConfigGetVar('Site.User.AuthenticationModules')# 
+        </xar:set>
+        <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
+            <xar:base-include-javascript module="base" filename="orderitem.js" position="head" />
 <script type="text/javascript">
                 xar_base_reorder_warn = '#xarML('You must select the authentication module you want to move.')#';
             </script> 
-            </xar:if>
-            <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
+        </xar:if>
+        <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
+            <fieldset>
+                <legend>
+                    <xar:mlstring>
+                        Sessions and Security 
+                    </xar:mlstring>
+                </legend>
                 <div class="xar-form-input-wrapper-after">
                     <xar:if condition="xarConfigGetVar('Site.Core.EnableSecureServer')">
                         <input type="checkbox" name="secureserver" id="secureserver" value="1" checked="checked" />

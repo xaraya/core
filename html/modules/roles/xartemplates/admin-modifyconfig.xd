@@ -268,7 +268,7 @@
             <fieldset>
                 <legend>
                     <xar:mlstring>
-                        User Registration Options
+                        User Registration Options 
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper">
@@ -435,7 +435,6 @@
             ----------------- Begin Filtering Options ------------------- 
         </xar:comment>
         <xar:elseif condition="$tab eq 'filtering'" />
-
         <xar:if condition="xarModGetVar('roles', 'allowregistration')">
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
                 <fieldset>
@@ -450,9 +449,8 @@
                                 Disallowed User Names: 
                             </xar:mlstring>
                         </label>
-                        
                         <div class="xar-form-container-after">
-                            <textarea name="disallowednames" id="disallowednames" class="xar-form-textarealarge">#$names#</textarea>
+                            <textarea name="disallowednames" id="disallowednames" class="xar-form-textarealarge">#$names# </textarea>
                         </div>
                         <p>
                             <xar:mlstring>
@@ -466,7 +464,6 @@
                                 Disallowed Email Addresses: 
                             </xar:mlstring>
                         </label>
-                        
                         <div class="xar-form-container-after">
                             <textarea name="disallowedemails" id="disallowedemails" class="xar-form-textarealarge">#$emails# </textarea>
                         </div>
@@ -482,7 +479,6 @@
                                 Disallowed IP Addresses: 
                             </xar:mlstring>
                         </label>
-                        
                         <div class="xar-form-container-after">
                             <textarea name="disallowedips" id="disallowedips" class="xar-form-textarealarge">#$ips# </textarea>
                         </div>
@@ -563,57 +559,59 @@
                 <xar:foreach in="$hooks" key="$hookmodule">
                     #$hooks[$hookmodule]# 
                 </xar:foreach>
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="phase" id="phase" value="update" />
-                <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                <input type="submit" value="#xarML('Update Roles Configuration')#" />
-            </div>
-        </fieldset>
-    </form>
-    <xar:else />
-    <p>
-        <xar:mlstring>
-            No hooks are enabled for Groups. 
-        </xar:mlstring>
-    </p>
-</xar:if>
-<xar:comment>
-    ----------------- Begin Member List Options ------------------- 
-</xar:comment>
-<xar:elseif condition="$tab eq 'memberlist'" />
-<form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-    <fieldset>
-        <legend>
-            <xar:mlstring>
-                Member List Options 
-            </xar:mlstring>
-        </legend>
-        <div class="xar-form-input-wrapper-after">
-            <xar:if condition="xarModGetVar('roles', 'searchbyemail')">
-                <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" checked="checked" />
-                <xar:else />
-                <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" />
-            </xar:if>
-            <label for="searchbyemail" title="#xarML('Allow user search by email address')#">
+                <fieldset>
+                    <div class="xar-form-input-wrapper-after">
+                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                        <input type="hidden" name="phase" id="phase" value="update" />
+                        <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                        <input type="submit" value="#xarML('Update Roles Configuration')#" />
+                    </div>
+                </fieldset>
+            </form>
+            <xar:else />
+            <p>
                 <xar:mlstring>
-                    Allow Searching By Email 
+                    No hooks are enabled for Groups. 
                 </xar:mlstring>
-            </label>
-        </div>
-        <p>
-            <xar:mlstring>
-                Caution: this option may reveal enough information to compromise a user's login. 
-            </xar:mlstring>
-        </p>
-    </fieldset>
-    <fieldset>
-        <div class="xar-form-input-wrapper-after">
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="phase" id="phase" value="update" />
-            <input type="hidden" name="tab" id="tab" value="#$tab#" />
-            <input type="submit" value="#xarML('Update Roles Configuration')#" />
-        </div>
-    </fieldset>
-</form>
-</xar:if>
+            </p>
+        </xar:if>
+        <xar:comment>
+            ----------------- Begin Member List Options ------------------- 
+        </xar:comment>
+        <xar:elseif condition="$tab eq 'memberlist'" />
+        <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+            <fieldset>
+                <legend>
+                    <xar:mlstring>
+                        Member List Options 
+                    </xar:mlstring>
+                </legend>
+                <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="xarModGetVar('roles', 'searchbyemail')">
+                        <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" />
+                    </xar:if>
+                    <label for="searchbyemail" title="#xarML('Allow user search by email address')#">
+                        <xar:mlstring>
+                            Allow Searching By Email 
+                        </xar:mlstring>
+                    </label>
+                </div>
+                <p>
+                    <xar:mlstring>
+                        Caution: this option may reveal enough information to compromise a user's login. 
+                    </xar:mlstring>
+                </p>
+            </fieldset>
+            <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="phase" id="phase" value="update" />
+                    <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                    <input type="submit" value="#xarML('Update Roles Configuration')#" />
+                </div>
+            </fieldset>
+        </form>
+    </xar:if>
 </div>
