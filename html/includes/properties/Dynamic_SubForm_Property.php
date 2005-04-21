@@ -54,6 +54,11 @@ class Dynamic_SubForm_Property extends Dynamic_Property
         if ($this->style == 'itemid' && !empty($this->title)) {
             $oldname = $name . '_old';
             xarVarFetch($oldname, 'id', $oldvalue, $this->value, XARVAR_NOT_REQUIRED);
+        } elseif ($this->style == 'parentid' && !empty($this->link)) {
+            $oldname = $name . '_old';
+            xarVarFetch($oldname, 'id', $oldvalue, $this->value, XARVAR_NOT_REQUIRED);
+            $newname = $name . '_new';
+            xarVarFetch($newname, 'id', $newvalue, NULL, XARVAR_NOT_REQUIRED);
         } elseif ($this->style == 'childlist' && !empty($this->link)) {
             $oldname = $name . '_old';
             xarVarFetch($oldname, 'id', $oldvalue, $this->value, XARVAR_NOT_REQUIRED);
@@ -150,6 +155,99 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                 // save new value for preview + new/modify combinations (in case we miss the preview)
                 xarVarSetCached('DynamicData.SubForm',$name,$value);
             }
+            $this->value = $value;
+
+        } elseif ($this->style == 'parentid' && !empty($value) && $value == $oldvalue) {
+
+            // check if we want to create new child items or not
+            xarVarFetch('dd_create', 'array', $dd_create, NULL, XARVAR_NOT_REQUIRED);
+            if (!empty($dd_create) && !empty($dd_create[$this->objectid])) {
+                $docreate = 1;
+            } else {
+                $docreate = 0;
+            }
+
+            $childitems = array();
+            foreach ($object->properties as $property)
+            {
+                $propertyname = $property->name;
+                $propertyid = $property->id;
+                $propertyid = "dd_".$propertyid;
+                unset($propertyvaluearray);
+                xarVarFetch($propertyid, 'array', $propertyvaluearray, NULL, XARVAR_NOT_REQUIRED);
+                if (!empty($propertyvaluearray)) {
+                    foreach ($propertyvaluearray as $id => $val) {
+                        if (empty($id) && !$docreate) continue;
+                        if (!isset($childitems[$id])) {
+                            $childitems[$id] = array();
+                        }
+                        $childitems[$id][$propertyname] = $val;
+                    }
+                }
+            }
+
+            // make sure the link field is included in the field list
+            if (!empty($this->fieldlist) && !in_array($this->link,$this->fieldlist)) {
+                array_push($this->fieldlist,$this->link);
+            }
+            // check user input for the object item
+            $myobject =& Dynamic_Object_Master::getObject(array('objectid'  => $this->objectid,
+                                                                'fieldlist' => $this->fieldlist));
+            $keylist = array_keys($myobject->properties);
+            // report all invalid values here, even the ones we don't see because of the fieldlist
+            $this->invalid = '';
+            $this->warnings = '';
+            foreach ($childitems as $id => $item) {
+                $item['itemid'] = $id;
+                // set parent id in link field if necessary
+                if (!isset($item[$this->link])) {
+                    $item[$this->link] = $value;
+                    $childitems[$id][$this->link] = $value;
+                }
+                $isvalid = $myobject->checkInput($item);
+                if ($isvalid) {
+                    // Note: this also sets new items with id 0 on preview
+                    foreach ($keylist as $key) {
+                        if (isset($item[$key])) {
+                            $object->properties[$key]->setItemValue($id,$item[$key]);
+                        }
+                    }
+                } else {
+                    foreach ($keylist as $key) {
+                        if (!empty($myobject->properties[$key]->invalid)) {
+                            // pass along the invalid message for this property
+                            $this->invalid .= ' [' . $myobject->properties[$key]->label . '] ' . $myobject->properties[$key]->invalid;
+
+                            // invalid messages for fields will be shown in the object form by default, so
+                            // only show explicit warnings for the fields that aren't in the fieldlist here
+                            if (!empty($this->fieldlist) && !in_array($key,$this->fieldlist)) {
+                                $this->warnings .= ' [' . $myobject->properties[$key]->label . '] ' . $myobject->properties[$key]->invalid;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!empty($this->invalid)) {
+                $this->value = null;
+                return false;
+            }
+            $this->invalid = null;
+
+            // if we don't know we're previewing, we don't really have a choice here
+            if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
+            if (empty($preview)) 
+            {
+                foreach ($childitems as $id => $item) {
+                    $item['itemid'] = $id;
+                    if (!empty($id)) {
+                        $id = $myobject->updateItem($item);
+                    } elseif ($docreate) {
+                        $id = $myobject->createItem($item);
+                    }
+                }
+            }
+
             $this->value = $value;
 
 //        } elseif ($this->style == 'childlist' && (empty($value) || $value == $oldvalue)) {
@@ -278,7 +376,6 @@ class Dynamic_SubForm_Property extends Dynamic_Property
         }
         $data['value']     = $value;
 
-
         if (!empty($this->objectid)) {
             $data['object'] =& $this->getObject($value);
 
@@ -288,9 +385,9 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                                                                       'fieldlist' => array($this->title),
                                                                       'where'     => $this->where));
                 $data['dropdown'] = $mylist->getItems();
-            } elseif ($this->style == 'childlist' && !empty($this->link) && empty($this->title)) {
-            
-            
+
+            } elseif (($this->style == 'childlist' || $this->style == 'parentid') &&
+                       !empty($this->link) && empty($this->title)) {
                 // pick some field to count with
                 if (!empty($data['object']->primary)) {
                     // preferably the primary key
@@ -381,6 +478,34 @@ class Dynamic_SubForm_Property extends Dynamic_Property
         }
         $this->oldvalue = $value;
         switch ($this->style) {
+            case 'parentid':
+                if (!isset($myobject)) {
+                    if (empty($this->fieldlist)) {
+                        $status = 1; // skip the display-only properties
+                    } else {
+                        $status = null;
+                    }
+                    $myobject =& Dynamic_Object_Master::getObjectList(array('objectid'  => $this->objectid,
+                                                                            'fieldlist' => $this->fieldlist,
+                                                                            'status'    => $status));
+                } else {
+                    // reset the list of item ids
+                    $myobject->itemids = array();
+                }
+                if (!empty($this->link) && !empty($value)) 
+                {
+                    if (is_numeric($value)) {
+                        $where = $this->link . ' eq ' . $value;
+                    } else {
+                        $where = $this->link . " eq '" . $value . "'";
+                    }
+                    $myobject->getItems(array('where' => $where));
+                } else {
+                    // re-initialize the items array
+                    $myobject->items = array();
+                }
+                break;
+
             case 'childlist':
                 if (!isset($myobject)) {
                     if (empty($this->fieldlist)) {
@@ -529,7 +654,8 @@ class Dynamic_SubForm_Property extends Dynamic_Property
 
         $data['styles']    = array('serialized' => xarML('Local value'),
                                    'itemid'     => xarML('Link to item'),
-                                   'childlist'  => xarML('List of children'));
+                                   'childlist'  => xarML('List of children (child ids)'),
+                                   'parentid'   => xarML('List of children (parent id)'));
 
         // allow template override by child classes
         if (!isset($template)) {

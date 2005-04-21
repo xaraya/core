@@ -8,6 +8,9 @@
       <xar:set name="field">$name.'[objectid]'</xar:set>
       <xar:data-input type="object" name="$field" value="$objectid" tabindex="$tabindex" />
     </td>
+    <td>
+      <xar:mlstring>Select the dynamic object you want to use as sub-form</xar:mlstring>
+    </td>
   </tr>
   <tr>
     <td>
@@ -23,6 +26,14 @@
         </xar:if>    
       </xar:foreach>
       </select>
+    </td>
+    <td>
+      <ul>
+        <li><xar:mlstring>Local value : the item values will be stored locally in serialized format</xar:mlstring></li>
+        <li><xar:mlstring>Link to item : the item id of the parent/sibling item will be stored locally</xar:mlstring></li>
+        <li><xar:mlstring>List of children (child ids) : the list of item ids for the child items will be stored locally</xar:mlstring></li>
+        <li><xar:mlstring>List of children (parent id) : the parent id for the child items will be stored locally (you can use the 'dummy' data source for this property if the parent id corresponds to the current item id)</xar:mlstring></li>
+      </ul>
     </td>
   </tr>
 <xar:if condition="!empty($objectid) and !empty($style) and $style eq 'itemid'">
@@ -43,6 +54,9 @@
       </xar:foreach>
       </select>
     </td>
+    <td>
+      <xar:mlstring>Specify which field (if any) should be used to select the sibling/parent item</xar:mlstring>
+    </td>
   </tr>
 </xar:if>
 <xar:if condition="!empty($objectid) and !empty($style) and $style ne 'serialized'">
@@ -60,7 +74,7 @@
           </xar:if>
         </xar:foreach>
 
-      <xar:elseif condition="$style eq 'childlist'"/>
+      <xar:elseif condition="$style eq 'childlist' or $style eq 'parentid'"/>
         <xar:comment> the parent property needs to be selected </xar:comment>
         <select name="#$name#[link]" id="#$id#_link">
         <xar:foreach in="$properties" key="$propname" value="$propinfo">
@@ -73,12 +87,15 @@
         </select>
       </xar:if>
     </td>
+    <td>
+      <xar:mlstring>For the list of children with parent id, specify which field references the parent id (foreign key) in the child items</xar:mlstring>
+    </td>
   </tr>
 </xar:if>
-<xar:if condition="!empty($objectid) and !empty($style) and $style eq 'childlist'">
+<xar:if condition="!empty($objectid) and !empty($style) and ($style eq 'childlist' or $style eq 'parentid')">
   <tr>
     <td>
-      <xar:mlstring>Parent</xar:mlstring>
+      <xar:mlstring>Parent Id</xar:mlstring>
     </td>
     <td>
       <xar:comment> equal to itemid or selectable </xar:comment>
@@ -102,6 +119,9 @@
         </label>
       </xar:if>
     </td>
+    <td>
+      <xar:mlstring>Make the parent id configurable or not</xar:mlstring>
+    </td>
   </tr>
 </xar:if>
 <xar:comment> TODO: check this
@@ -111,6 +131,9 @@
     </td>
     <td>
       <input type="text" name="#$name#[where]" id="#$id#_where" value="#$where#" size="#$size#" tabindex="#$tabindex#" />
+    </td>
+    <td>
+      <xar:mlstring>Additional WHERE clause for the link to item or list of children</xar:mlstring>
     </td>
   </tr>
 </xar:comment>
@@ -130,13 +153,16 @@
       </xar:foreach>
       </select>
     </td>
+    <td>
+      <xar:mlstring>Select the fields to display in the interface</xar:mlstring>
+    </td>
   </tr>
 </xar:if>
   <tr>
     <td>
       <xar:mlstring>Other rule</xar:mlstring>
     </td>
-    <td>
+    <td colspan="2">
       <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="#$size#" tabindex="#$tabindex#" />
     </td>
   </tr>
@@ -145,3 +171,4 @@
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
 </xar:if>
+
