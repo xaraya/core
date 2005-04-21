@@ -1,27 +1,21 @@
- <div id="xc-leftbg-wrapper">
+<div id="xc-leftbg-wrapper">
     <div id="xc-outermargin-noright-wrapper">
         <div id="xc-inner-wrapper">
-            <div id="xc-innerbg-left">
-                <div id="xc-innerbg-right">
-                    <div id="xc-innerbg">
-                        <div id="xc-innerbg-top">
-                        </div>
-                        <div id="xc-left">
-                            <div class="xc-side-content">
-                                <xar:var name="leftblocksgroup" />
-                            </div>
-                        </div>
-                        <div id="xc-center-wrapper">
-                            <div id="xc-center">
-                                <xar:var name="centerblocksgroup" />
-                                <xar:module class="modulespace" main="true" />
-                            </div>
-                        </div>
-                        <div id="xc-clear">
-                        </div>
-                        <div id="xc-innerbg-bottom">
-                        </div>
+            <div id="xc-innerbg">
+                <div id="xc-left">
+                    <div class="xc-side-content">
+                        <xar:var name="leftblocksgroup" />
                     </div>
+                </div>
+                <div id="xc-center-wrapper">
+                    <div id="xc-center">
+                        <xar:var name="centerblocksgroup" />
+                        <xar:module class="modulespace" main="true" />
+                    </div>
+                </div>
+                <div id="xc-clear">
+                    &nbsp; 
+                    <xar:comment>this is the height clearing empty element</xar:comment>
                 </div>
             </div>
         </div>

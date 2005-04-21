@@ -50,14 +50,6 @@ div#xc-inner-wrapper {
     background-color: #ffffff;
 }
 
-div#xc-innerbg-top { width: auto; }
-div#xc-innerbg-bottom { width: auto; }
-div#xc-innerbg-right { width: auto; }
-div#xc-innerbg-left { width: auto; }
-div#xc-innerbg { width: auto; }
-div#xc-innerbg > div#xc-innerbg-top,
-div#xc-innerbg > div#xc-innerbg-bottom { height: 1px; }
-
 div#xc-left {
     float: left;
     position: relative;
@@ -163,7 +155,11 @@ div#xc-footer {
     margin-top: 5px;
 }
 
-#xc-clear { clear: both; }
+#xc-clear {
+	clear: both;
+	height: 1px;
+	font-size:1px;
+}
 
 div#xc-outer-wrapper {
     min-width: 740px;
