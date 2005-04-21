@@ -323,33 +323,26 @@ function xarTplGetPageTitle()
 }
 
 /**
- * Add stylesheet link for a module (after 0912 this function is just legacy really)
+ * Add stylesheet link for a module (after 0913/uiscrub this function is a legacy)
  *
  * @access public (deprecated - all CSS issues are normally handled by the css classlib via bl tags)
- * @param  string $modname
- * @param  string $filename
+ * @param  string $module
+ * @param  string $file
  * @param  string $fileext
  * @param  string $themefolder ('' or path no leading or trailing /, )
  * @media  string $media (multiple values supported as a comma separated list "screen, print")
- * @todo   can deprecate sometime soon actually, with advent of template tags
+ * @todo   can deprecate after adoption of template css tags
  * @return bool
  */
-function xarTplAddStyleLink($modname = null, $filename = null, $fileext = null, $themefolder = null, $media = null)
-{ 
+function xarTplAddStyleLink($module = null, $file = null, $fileext = null, $themefolder = null, $media = null, $scope = 'module')
+{     
+    $method = 'link';
+    $args = compact('module', 'file', 'fileext', 'themefolder', 'media', 'scope', 'method');
     
-    $args = compact('modname', 'filename', 'fileext', 'themefolder', 'media');
-    
-    // make sure we can use css objects
-    xarModFunc('themes', 'user', 'includemodulecss');
-    // using css class library now
-    $cssObj = xarModuleCSS();
-    
-    // easy? just straight mapping to the class methods
-    if($fileext == 'php'){
-        return $cssObj->link_dynamic($args);
-    } else {
-        return $cssObj->link_static($args);
-    }
+    // make sure we can use css object
+    require_once "modules/themes/xarclass/xarcss.class.php";
+    $obj = new xarCSS($args);
+    return $obj->run_output();
 }
 
 /**
