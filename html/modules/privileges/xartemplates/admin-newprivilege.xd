@@ -25,202 +25,316 @@
     <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-    <h2>
-        <xar:mlstring>Add Privilege</xar:mlstring>
-    </h2>
-
     <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
-        <div class="xar-form-input-wrapper">
-            <label for="pname" title="#xarML('Name of the privilege')#" class="xar-form-label">
-                <xar:mlstring>Name:</xar:mlstring>
-            </label>
-            <input type="text" name="pname" id="pname" value="#$pname#" maxlength="20" class="xar-form-textmedium" />
-        </div>
-
-        <xar:if condition="$ptype eq 'empty'">
-            <div class="xar-form-input-wrapper-after">
-                <input type="radio" name="ptype" id="ptype_empty" value="empty" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
-                <label for="ptype_empty" title="#xarML('This privilege will have no children')#">
-                    <xar:mlstring>empty</xar:mlstring>
-                </label>
-            </div>
-
-            <div class="xar-form-input-wrapper-after">
-                <input type="radio" name="ptype" id="ptype_full" value="full" onclick="this.form.action='&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
-                <label for="ptype_full" title="#xarML('This privilege will have children')#">
-                    <xar:mlstring>with rights</xar:mlstring>
-                </label>
-            </div>
-        <xar:else />
-            <div class="xar-form-input-wrapper-after">
-                <input type="radio" name="ptype" id="ptype_empty" value="empty" onclick="this.form.action='&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
-                <label for="ptype_empty" title="#xarML('This privilege will have no children')#">
-                    <xar:mlstring>empty</xar:mlstring>
-                </label>
-            </div>
-
-            <div class="xar-form-input-wrapper-after">
-                <input type="radio" name="ptype" id="ptype_full" value="full" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
-                <label for="ptype_full" title="#xarML('This privilege will have children')#">
-                    <xar:mlstring>with rights</xar:mlstring>
-                </label>
-            </div>
-
+        <fieldset>
+            <legend>
+                <xar:mlstring>
+                    Add Privilege 
+                </xar:mlstring>
+            </legend>
             <div class="xar-form-input-wrapper">
-                <label for="pparentid" title="#xarML('Parent privilege of this')#" class="xar-form-label">
-                    <xar:mlstring>Member Of:</xar:mlstring>
+                <label for="pname" title="#xarML('Name of the privilege')#" class="xar-form-label">
+                    <xar:mlstring>
+                        Name:
+                    </xar:mlstring>
                 </label>
-                <select name="pparentid" id="pparentid">
-                    <xar:loop name="$privileges">
-                        <xar:if condition="$loop:item['pid'] eq $pparentid">
-                            <option value="#$loop:item['pid']#" selected="selected">#$loop:item['name']#</option>
-                        <xar:else />
-                            <option value="#$loop:item['pid']#">#$loop:item['name']#</option>
-                        </xar:if>
-                    </xar:loop>
-                </select>
+                <input type="text" name="pname" id="pname" value="#$pname#" maxlength="20" class="xar-form-textmedium" />
             </div>
-
-            <xar:if condition="xarModGetVar('privileges','showrealms')">
-                <div class="xar-form-input-wrapper">
-                    <label for="prealm" title="#xarML('Realm in which this privilege applies')#" class="xar-form-label">
-                        <xar:mlstring>Realm:</xar:mlstring>
+            <xar:if condition="$ptype eq 'empty'">
+                <div class="xar-form-input-wrapper-after">
+                    <input type="radio" name="ptype" id="ptype_empty" value="empty" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
+                    <label for="ptype_empty" title="#xarML('This privilege will have no children')#">
+                        <xar:mlstring>
+                            empty
+                        </xar:mlstring>
                     </label>
-                    <select name="prealm" id="prealm">
-                        <xar:loop name="$realms">
-                            <xar:if condition="$loop:item['name'] eq $prealm">
-                                <option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
-                            <xar:else />
-                                <option value="#$loop:item['name']#">#$loop:item['name']#</option>
+                </div>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="radio" name="ptype" id="ptype_full" value="full" onclick="this.form.action='&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
+                    <label for="ptype_full" title="#xarML('This privilege will have children')#">
+                        <xar:mlstring>
+                            with rights
+                        </xar:mlstring>
+                    </label>
+                </div>
+                <xar:else />
+                <div class="xar-form-input-wrapper-after">
+                    <input type="radio" name="ptype" id="ptype_empty" value="empty" onclick="this.form.action='&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
+                    <label for="ptype_empty" title="#xarML('This privilege will have no children')#">
+                        <xar:mlstring>
+                            empty
+                        </xar:mlstring>
+                    </label>
+                </div>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="radio" name="ptype" id="ptype_full" value="full" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-newprivilege;';this.form.submit();" />
+                    <label for="ptype_full" title="#xarML('This privilege will have children')#">
+                        <xar:mlstring>
+                            with rights
+                        </xar:mlstring>
+                    </label>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="pparentid" title="#xarML('Parent privilege of this')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Member Of:
+                        </xar:mlstring>
+                    </label>
+                    <select name="pparentid" id="pparentid">
+                        <xar:loop name="$privileges">
+                            <xar:if condition="$loop:item['pid'] eq $pparentid">
+                                <option value="#$loop:item['pid']#" selected="selected">
+                                    #$loop:item['name']#
+                                </option>
+                                <xar:else />
+                                <option value="#$loop:item['pid']#">
+                                    #$loop:item['name']#
+                                </option>
                             </xar:if>
                         </xar:loop>
                     </select>
                 </div>
-            </xar:if>
-
-            <div class="xar-form-input-wrapper">
-                <label for="pmodule" title="#xarML('Module to which this provilege will apply')#" class="xar-form-label">
-                    <xar:mlstring>Module:</xar:mlstring>
-                </label>
-                <select name="pmodule" id="pmodule" onchange="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();">
-                    <xar:loop name="$modules">
-                        <xar:if condition="strtolower($loop:item['name']) eq strtolower($pmodule)">
-                            <option value="#$loop:item['name']#" selected="selected">#$loop:item['display']#</option>
-                        <xar:else />
-                            <option value="#$loop:item['name']#">#$loop:item['display']#</option>
-                        </xar:if>
-                    </xar:loop>
-                </select>
-            </div>
-
-            <div class="xar-form-input-wrapper">
-                <label for="pcomponent" title="#xarML('Component to which this provilege applies')#" class="xar-form-label">
-                    <xar:mlstring>Component:</xar:mlstring>
-                </label>
-                <select name="pcomponent" id="pcomponent" onchange="this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();">
-                    <xar:loop name="$components">
-                        <xar:if condition="$loop:item['name'] eq $pcomponent">
-                            <option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
-                        <xar:else />
-                            <option value="#$loop:item['name']#">#$loop:item['name']#</option>
-                        </xar:if>
-                    </xar:loop>
-                </select>
-            </div>
-
-            <div class="xar-form-input-wrapper">
-                <label for="plevel" title="#xarML('Security level required by this privilege')#" class="xar-form-label">
-                    <xar:mlstring>Level:</xar:mlstring>
-                </label>
-                <select name="plevel" id="plevel">                
-                    <xar:if condition="$plevel eq 0">
-                        <option value="0" selected="selected"><xar:mlstring>None</xar:mlstring></option>
-                    <xar:else />
-                        <option value="0"><xar:mlstring>None</xar:mlstring></option>
-                    </xar:if>                        
-                    <xar:if condition="$plevel eq 100">
-                        <option value="100" selected="selected"><xar:mlstring>Overview</xar:mlstring></option>
-                    <xar:else />
-                        <option value="100"><xar:mlstring>Overview</xar:mlstring></option>
-                    </xar:if>                        
-                    <xar:if condition="$plevel eq 200">
-                        <option value="200" selected="selected"><xar:mlstring>Read</xar:mlstring></option>
-                    <xar:else />
-                        <option value="200"><xar:mlstring>Read</xar:mlstring></option>
-                    </xar:if>                        
-                    <xar:if condition="$plevel eq 300">
-                        <option value="300" selected="selected"><xar:mlstring>Comment</xar:mlstring></option>
-                    <xar:else />
-                        <option value="300"><xar:mlstring>Comment</xar:mlstring></option>
-                    </xar:if>                        
-                    <xar:if condition="$plevel eq 400">
-                        <option value="400" selected="selected"><xar:mlstring>Moderate</xar:mlstring></option>
-                    <xar:else />
-                        <option value="400"><xar:mlstring>Moderate</xar:mlstring></option>
-                    </xar:if>                        
-                    <xar:if condition="$plevel eq 500">
-                        <option value="500" selected="selected"><xar:mlstring>Edit</xar:mlstring></option>
-                    <xar:else />
-                        <option value="500"><xar:mlstring>Edit</xar:mlstring></option>
-                    </xar:if>                        
-                    <xar:if condition="$plevel eq 600">
-                        <option value="600" selected="selected"><xar:mlstring>Add</xar:mlstring></option>
-                    <xar:else />
-                        <option value="600"><xar:mlstring>Add</xar:mlstring></option>
-                    </xar:if>                        
-                    <xar:if condition="$plevel eq 700">
-                        <option value="700" selected="selected"><xar:mlstring>Delete</xar:mlstring></option>
-                    <xar:else />
-                        <option value="700"><xar:mlstring>Delete</xar:mlstring></option>
-                    </xar:if>                        
-                    <xar:if condition="$plevel eq 800">
-                        <option value="800" selected="selected"><xar:mlstring>Admin</xar:mlstring></option>
-                    <xar:else />
-                        <option value="800"><xar:mlstring>Admin</xar:mlstring></option>
-                    </xar:if>                        
-                </select>
-            </div>
-        </xar:if>
-        <xar:if condition="$ptype ne 'empty'">
-            <xar:if condition="($pcomponent ne 'All') and empty($target)">
-                <p>
-                    <xar:ml>
-                        <xar:mlstring>Allow instances of component #(1) that have:</xar:mlstring>
-                        <xar:mlvar>#$pcomponent#</xar:mlvar>
-                    </xar:ml>
-                </p>
-
-                <xar:loop name="$instances">
+                <xar:if condition="xarModGetVar('privileges','showrealms')">
                     <div class="xar-form-input-wrapper">
-                        <label for="pinstance#$loop:index#" class="xar-form-label">
-                            #$loop:item['header']#
+                        <label for="prealm" title="#xarML('Realm in which this privilege applies')#" class="xar-form-label">
+                            <xar:mlstring>
+                                Realm:
+                            </xar:mlstring>
                         </label>
-                        <xar:if condition="$loop:item['type'] eq 'manual'">
-                            <input type="text" name="pinstance#$loop:index#" id="pinstance#$loop:index#" value="All" class="xar-form-textmedium" />
-                            &nbsp;<xar:mlstring>This field must contain a value</xar:mlstring>
-                        <xar:else />
-                            <select name="pinstance#$loop:index#">
-                                <xar:loop name="$loop:item['dropdown']">
-                                    <option value="#$loop:item['name']#">#$loop:item['name']#</option>
-                                </xar:loop>
-                            </select>
-                        </xar:if>
+                        <select name="prealm" id="prealm">
+                            <xar:loop name="$realms">
+                                <xar:if condition="$loop:item['name'] eq $prealm">
+                                    <option value="#$loop:item['name']#" selected="selected">
+                                        #$loop:item['name']#
+                                    </option>
+                                    <xar:else />
+                                    <option value="#$loop:item['name']#">
+                                        #$loop:item['name']#
+                                    </option>
+                                </xar:if>
+                            </xar:loop>
+                        </select>
                     </div>
-                </xar:loop>
-            <xar:elseif condition="!empty($target)" />
-                <p>
-                    <a href="#$target#" title="#xarML('Use Wizard')#">
-                        <xar:mlstring>Specify the instances that apply for this privilege</xar:mlstring>
-                    </a>
-                </p>
+                </xar:if>
+                <div class="xar-form-input-wrapper">
+                    <label for="pmodule" title="#xarML('Module to which this provilege will apply')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Module:
+                        </xar:mlstring>
+                    </label>
+                    <select name="pmodule" id="pmodule" onchange="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();">
+                        <xar:loop name="$modules">
+                            <xar:if condition="strtolower($loop:item['name']) eq strtolower($pmodule)">
+                                <option value="#$loop:item['name']#" selected="selected">
+                                    #$loop:item['display']#
+                                </option>
+                                <xar:else />
+                                <option value="#$loop:item['name']#">
+                                    #$loop:item['display']#
+                                </option>
+                            </xar:if>
+                        </xar:loop>
+                    </select>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="pcomponent" title="#xarML('Component to which this provilege applies')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Component:
+                        </xar:mlstring>
+                    </label>
+                    <select name="pcomponent" id="pcomponent" onchange="this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();">
+                        <xar:loop name="$components">
+                            <xar:if condition="$loop:item['name'] eq $pcomponent">
+                                <option value="#$loop:item['name']#" selected="selected">
+                                    #$loop:item['name']#
+                                </option>
+                                <xar:else />
+                                <option value="#$loop:item['name']#">
+                                    #$loop:item['name']#
+                                </option>
+                            </xar:if>
+                        </xar:loop>
+                    </select>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="plevel" title="#xarML('Security level required by this privilege')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Level:
+                        </xar:mlstring>
+                    </label>
+                    <select name="plevel" id="plevel">
+                        <xar:if condition="$plevel eq 0">
+                            <option value="0" selected="selected">
+                                <xar:mlstring>
+                                    None
+                                </xar:mlstring>
+                            </option>
+                            <xar:else />
+                            <option value="0">
+                                <xar:mlstring>
+                                    None
+                                </xar:mlstring>
+                            </option>
+                        </xar:if>
+                        <xar:if condition="$plevel eq 100">
+                            <option value="100" selected="selected">
+                                <xar:mlstring>
+                                    Overview
+                                </xar:mlstring>
+                            </option>
+                            <xar:else />
+                            <option value="100">
+                                <xar:mlstring>
+                                    Overview
+                                </xar:mlstring>
+                            </option>
+                        </xar:if>
+                        <xar:if condition="$plevel eq 200">
+                            <option value="200" selected="selected">
+                                <xar:mlstring>
+                                    Read
+                                </xar:mlstring>
+                            </option>
+                            <xar:else />
+                            <option value="200">
+                                <xar:mlstring>
+                                    Read
+                                </xar:mlstring>
+                            </option>
+                        </xar:if>
+                        <xar:if condition="$plevel eq 300">
+                            <option value="300" selected="selected">
+                                <xar:mlstring>
+                                    Comment
+                                </xar:mlstring>
+                            </option>
+                            <xar:else />
+                            <option value="300">
+                                <xar:mlstring>
+                                    Comment
+                                </xar:mlstring>
+                            </option>
+                        </xar:if>
+                        <xar:if condition="$plevel eq 400">
+                            <option value="400" selected="selected">
+                                <xar:mlstring>
+                                    Moderate
+                                </xar:mlstring>
+                            </option>
+                            <xar:else />
+                            <option value="400">
+                                <xar:mlstring>
+                                    Moderate
+                                </xar:mlstring>
+                            </option>
+                        </xar:if>
+                        <xar:if condition="$plevel eq 500">
+                            <option value="500" selected="selected">
+                                <xar:mlstring>
+                                    Edit
+                                </xar:mlstring>
+                            </option>
+                            <xar:else />
+                            <option value="500">
+                                <xar:mlstring>
+                                    Edit
+                                </xar:mlstring>
+                            </option>
+                        </xar:if>
+                        <xar:if condition="$plevel eq 600">
+                            <option value="600" selected="selected">
+                                <xar:mlstring>
+                                    Add
+                                </xar:mlstring>
+                            </option>
+                            <xar:else />
+                            <option value="600">
+                                <xar:mlstring>
+                                    Add
+                                </xar:mlstring>
+                            </option>
+                        </xar:if>
+                        <xar:if condition="$plevel eq 700">
+                            <option value="700" selected="selected">
+                                <xar:mlstring>
+                                    Delete
+                                </xar:mlstring>
+                            </option>
+                            <xar:else />
+                            <option value="700">
+                                <xar:mlstring>
+                                    Delete
+                                </xar:mlstring>
+                            </option>
+                        </xar:if>
+                        <xar:if condition="$plevel eq 800">
+                            <option value="800" selected="selected">
+                                <xar:mlstring>
+                                    Admin
+                                </xar:mlstring>
+                            </option>
+                            <xar:else />
+                            <option value="800">
+                                <xar:mlstring>
+                                    Admin
+                                </xar:mlstring>
+                            </option>
+                        </xar:if>
+                    </select>
+                </div>
             </xar:if>
-        </xar:if>
-
-        <div class="xar-align-center">
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="pid" id="pid" value="#$pid#" />
-            <input type="submit" value="#xarML('Add Privilege')#" />
-        </div>
-
+            <xar:if condition="$ptype ne 'empty'">
+                <xar:if condition="($pcomponent ne 'All') and empty($target)">
+                    <p>
+                        <xar:ml>
+                            <xar:mlstring>
+                                Allow instances of component #(1) that have:
+                            </xar:mlstring>
+                            <xar:mlvar>
+                                #$pcomponent#
+                            </xar:mlvar>
+                        </xar:ml>
+                    </p>
+                    <xar:loop name="$instances">
+                        <div class="xar-form-input-wrapper">
+                            <label for="pinstance#$loop:index#" class="xar-form-label">
+                                #$loop:item['header']# 
+                            </label>
+                            <xar:if condition="$loop:item['type'] eq 'manual'">
+                                <input type="text" name="pinstance#$loop:index#" id="pinstance#$loop:index#" value="All" class="xar-form-textmedium" />
+                                &nbsp;
+                                <xar:mlstring>
+                                    This field must contain a value
+                                </xar:mlstring>
+                                <xar:else />
+                                <select name="pinstance#$loop:index#">
+                                    <xar:loop name="$loop:item['dropdown']">
+                                        <option value="#$loop:item['name']#">
+                                            #$loop:item['name']#
+                                        </option>
+                                    </xar:loop>
+                                </select>
+                            </xar:if>
+                        </div>
+                    </xar:loop>
+                    <xar:elseif condition="!empty($target)" />
+                    <p>
+                        <a href="#$target#" title="#xarML('Use Wizard')#">
+                            <xar:mlstring>
+                                Specify the instances that apply for this privilege
+                            </xar:mlstring>
+                        </a>
+                    </p>
+                </xar:if>
+            </xar:if>
+        </fieldset>
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="pid" id="pid" value="#$pid#" />
+                <input type="submit" value="#xarML('Add Privilege')#" />
+            </div>
+        </fieldset>
     </form>
 </div>
+
