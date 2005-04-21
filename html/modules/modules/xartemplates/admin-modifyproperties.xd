@@ -1,55 +1,72 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>
+    License: GPL http://www.gnu.org/copyleft/gpl.html 
+</xar:comment>
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
+    <span class="xar-mod-title">
+        <xar:mlstring>
+            Modules Administration
+        </xar:mlstring>
+    </span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>Properties of Module:</xar:mlstring> #$displayname#
+        <xar:mlstring>Module</xar:mlstring>: #$displayname# 
     </h2>
     <form action="&xar-modurl-modules-admin-updateproperties;" method="post" enctype="application/x-www-form-urlencoded">
-
-        <div class="xar-form-input-wrapper">
-            <label for="displayname" title="#xarML('The name which will be shown to identify this module.')#" class="xar-form-label">
-                <xar:mlstring>Display Name:</xar:mlstring>
-            </label>
-            #$displayname#
-            <input type="hidden" name="displayname" id="displayname" value="#$displayname#" />
-        </div>
-
-        <xar:if condition="$adminallowed">
-            <div class="xar-form-input-wrapper-after">
-                <xar:if condition="$admincapable eq 1">
-                    <input type="checkbox" name="admincapable" id="admincapable" checked="checked" />
-                <xar:else />
-                    <input type="checkbox" name="admincapable" id="admincapable" />
-                </xar:if>
-                <label for="admincapable" title="#xarML('Set whether to display admin menu entries provided by this module.')#">
-                    <xar:mlstring>Enable Admin Menu</xar:mlstring>
+        <fieldset>
+            <legend>
+                <xar:mlstring>
+                    Properties
+                </xar:mlstring>
+            </legend>
+            <div class="xar-form-input-wrapper">
+                <label for="displayname" title="#xarML('The name which will be shown to identify this module.')#" class="xar-form-label">
+                    <xar:mlstring>
+                        Display Name:
+                    </xar:mlstring>
                 </label>
+                #$displayname# 
+                <input type="hidden" name="displayname" id="displayname" value="#$displayname#" />
             </div>
-        </xar:if>
-
-        <xar:if condition="$userallowed">
-            <div class="xar-form-input-wrapper-after">
-                <xar:if condition="$usercapable eq 1">
-                    <input type="checkbox" name="usercapable" id="usercapable" checked="checked" />
-                <xar:else />
-                    <input type="checkbox" name="usercapable" id="usercapable" />
-                </xar:if>
-                <label for="usercapable" title="#xarML('Set whether to display user menu entries provided by this module.')#">
-                    <xar:mlstring>Enable User Menu</xar:mlstring>
-                </label>
-            </div>
-        </xar:if>
-
-        <div class="xar-clear-both xar-align-center">
-            <xar:if condition="!empty($return_url)">
-                <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
+            <xar:if condition="$adminallowed">
+                <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="$admincapable eq 1">
+                        <input type="checkbox" name="admincapable" id="admincapable" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="admincapable" id="admincapable" />
+                    </xar:if>
+                    <label for="admincapable" title="#xarML('Set whether to display admin menu entries provided by this module.')#">
+                        <xar:mlstring>
+                            Enable Admin Menu
+                        </xar:mlstring>
+                    </label>
+                </div>
             </xar:if>
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="id" id="id" value="#$id#" />
-            <input type="hidden" name="olddisplayname" id="olddisplayname" value="#$displayname#" />
-            <input type="submit" value="#xarML('Save Changes')#" class="xar-margin-thick" />
-        </div>
+            <xar:if condition="$userallowed">
+                <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="$usercapable eq 1">
+                        <input type="checkbox" name="usercapable" id="usercapable" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="usercapable" id="usercapable" />
+                    </xar:if>
+                    <label for="usercapable" title="#xarML('Set whether to display user menu entries provided by this module.')#">
+                        <xar:mlstring>
+                            Enable User Menu
+                        </xar:mlstring>
+                    </label>
+                </div>
+            </xar:if>
+        </fieldset>
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+                <xar:if condition="!empty($return_url)">
+                    <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
+                </xar:if>
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="id" id="id" value="#$id#" />
+                <input type="hidden" name="olddisplayname" id="olddisplayname" value="#$displayname#" />
+                <input type="submit" value="#xarML('Save Changes')#" class="xar-margin-thick" />
+            </div>
+        </fieldset>
     </form>
 </div>

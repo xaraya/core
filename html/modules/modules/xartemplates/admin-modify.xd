@@ -5,19 +5,19 @@
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>
-            Modules Administration
+            Modules Administration 
         </xar:mlstring>
     </span>
 </div>
 <div class="xar-mod-body">
     <h2>
         <xar:mlstring>
-            Module Settings and Hooks
+            Module Settings and Hooks 
         </xar:mlstring>
     </h2>
     <h3>
         <xar:mlstring>
-            For Module:
+            For Module: 
         </xar:mlstring>
         #$displayname# 
     </h3>
@@ -26,27 +26,26 @@
         <xar:comment>
             <label for="newdisplayname">
                 <xar:mlstring>
-                    Enter new display name (Does not work)
+                    Enter new display name (Does not work) 
                 </xar:mlstring>
             </label>
             <div class="xar-form-input-wrapper">
                 <label for="displayname" title="#xarML('The name which will be shown to identify this module.')#" class="xar-form-label">
                     <xar:mlstring>
-                        For Module:
+                        For Module: 
                     </xar:mlstring>
                 </label>
                 #$displayname# 
             </div>
         </xar:comment>
-        
         <xar:if condition="count($hooklist) eq 0">
             <p>
                 <xar:ml>
                     <xar:mlstring>
-                        No hooks available for #(1)
+                        No hooks available for #(1) 
                     </xar:mlstring>
                     <xar:mlvar>
-                        #$displayname#
+                        #$displayname# 
                     </xar:mlvar>
                 </xar:ml>
             </p>
@@ -54,10 +53,10 @@
             <p>
                 <xar:ml>
                     <xar:mlstring>
-                        Available hooks for #(1):
+                        Available hooks for #(1): 
                     </xar:mlstring>
                     <xar:mlvar>
-                        #$displayname#
+                        #$displayname# 
                     </xar:mlvar>
                 </xar:ml>
                 <xar:comment>
@@ -68,14 +67,14 @@
                 <fieldset>
                     <legend>
                         <xar:mlstring>
-                            Hooks from module:
+                            Hooks from module: 
                         </xar:mlstring>
                         #$hookmod['modname']# 
                     </legend>
-                    <div class="xar-floatleft xar-halfwidth">
+                    <div class="xar-form-input-wrapper">
                         <p>
                             <xar:mlstring>
-                                Enable hooks for:
+                                Enable hooks for: 
                             </xar:mlstring>
                         </p>
                         <div class="xar-clearboth">
@@ -86,12 +85,12 @@
                             </xar:if>
                             <label for="hooks_#$hookmod['modname']#_0">
                                 <xar:mlstring>
-                                    All
+                                    All 
                                 </xar:mlstring>
                             </label>
                         </div>
                         <xar:foreach in="$itemtypes" key="$typeid" value="$itemtype">
-                            <div>
+                            <div class="xar-clearboth">
                                 <xar:if condition="!empty($hookmod['checked'][$typeid])">
                                     <input type="checkbox" name="hooks_#$hookmod['modname']#[#$typeid#]" id="hooks_#$hookmod['modname']#_#$typeid#" value="1" checked="checked" />
                                     <xar:else />
@@ -103,20 +102,18 @@
                             </div>
                         </xar:foreach>
                     </div>
-                    <div class="xar-floatleft xar-halfwidth">
                         <p>
                             <xar:mlstring>
-                                Avalable hooks:
+                                Avalable hooks: 
                             </xar:mlstring>
                         </p>
                         <ul>
                             <xar:foreach in="$hookmod['hooks']" key="$hook">
                                 <li>
-                                    #$hook#
+                                    #$hook# 
                                 </li>
                             </xar:foreach>
                         </ul>
-                    </div>
                 </fieldset>
             </xar:foreach>
         </xar:if>
