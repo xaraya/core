@@ -1,29 +1,56 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<xar:comment>
+    License: GPL http://www.gnu.org/copyleft/gpl.html 
+</xar:comment>
 <xar:style scope="module" file="dd" />
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span>
+    <span class="xar-mod-title">
+        <xar:mlstring>
+            Dynamic Data Administration 
+        </xar:mlstring>
+    </span>
 </div>
 <div class="xar-mod-body">
-    <h2>#$label#</h2>
-
     <form>
-        <div>
-            <textarea name="xml" id="xml" class="xar-dd-textarea-data">#$xml#</textarea>
-        </div>
+        <fieldset>
+            <legend>
+                #$label# 
+            </legend>
+            <div class="xar-form-input-wrapper">
+                <label for="xml" class="xar-form-label">
+                    <xar:mlstring>
+                        Definition
+                    </xar:mlstring>
+                    :
+                </label>
+                <div class="xar-form-container-after">
+                    <textarea name="xml" id="xml" class="xar-form-textarealarge">#$xml#</textarea>
+                </div>
+            </div>
+        </fieldset>
     </form>
-
     <xar:if condition="!empty($convertlink)">
-      <a href="#$convertlink#"><xar:mlstring>Create dedicated table for this object</xar:mlstring></a>&nbsp;&nbsp;&nbsp;
+        <a href="#$convertlink#">
+            <xar:mlstring>
+                Create dedicated table for this object 
+            </xar:mlstring>
+        </a>
     </xar:if>
     <xar:if condition="!empty($formlink)">
         <p class="xar-align-center">
-            <a href="#$formlink#"><xar:mlstring>Export Data for all Items to Browser</xar:mlstring></a>
+            <a href="#$formlink#">
+                <xar:mlstring>
+                    Export Data for all Items to Browser 
+                </xar:mlstring>
+            </a>
         </p>
     </xar:if>
-
     <xar:if condition="!empty($filelink)">
         <p class="xar-align-center">
-            <a href="#$filelink#"><xar:mlstring>Export Data for all Items to File</xar:mlstring></a>
+            <a href="#$filelink#">
+                <xar:mlstring>
+                    Export Data for all Items to File 
+                </xar:mlstring>
+            </a>
         </p>
     </xar:if>
 </div>

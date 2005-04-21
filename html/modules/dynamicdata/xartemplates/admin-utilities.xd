@@ -147,9 +147,10 @@
             </xar:if>
         </dl>
     </div>
-    <xar:if condition="empty($option) or $option eq 'query'">
-        <xar:module main="false" module="dynamicdata" type="admin" func="query" />
-        <xar:else />
-        <xar:module main="false" module="dynamicdata" type="util" func="$option" />
-    </xar:if>
+
 </div>
+<xar:if condition="empty($option) or $option eq 'query'">
+    <xar:module main="false" module="dynamicdata" type="admin" func="query" />
+    <xar:else />
+    <xar:module main="false" module="dynamicdata" type="util" func="$option" />
+</xar:if>

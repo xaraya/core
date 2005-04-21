@@ -26,34 +26,41 @@
 
     <form method="post" action="&xar-modurl-dynamicdata-util-migrate;">
 
-        <div class="xar-form-input-wrapper">
-            <label for="map" title="#xarML('Choose a mapping to migrate data')#" class="xar-form-label">
-                <xar:mlstring>Use Mapping:</xar:mlstring>
-            </label>
-            <xar:if condition="count($maplist) gt 0">
-                <select name="map" id="map">
-                    <option value=""></option>
-                    <xar:foreach in="$maplist" value="$maptype">
-                        <xar:if condition="!empty($map) and $map eq $maptype">
-                            <option value="#$maptype#" selected="selected">#$maptype#</option>
-                        <xar:else/>
-                            <option value="#$maptype#">#$maptype#</option>
-                        </xar:if>
-                    </xar:foreach>
-                </select>
-                <input type="submit" name="load" value="#xarML('Load')#" />
-            <xar:else />
-                <xar:mlstring>No mappings available.</xar:mlstring>
-              </xar:if>
-        </div>
-
-        <div class="xar-form-input-wrapper">
-            <label for="newmap" title="#xarML('Enter a new mapping')#" class="xar-form-label">
-                <xar:mlstring>Create Mapping:</xar:mlstring>
-            </label>
-            <input type="text" name="newmap" id="newmap" value="#$newmap#" class="xar-form-textlong" />
-            <input type="submit" name="save" value="#xarML('Save')#" />
-        </div>
+        <fieldset>
+            <legend>
+                <xar:mlstring>
+                    Mapping
+                </xar:mlstring>
+            </legend>
+                <div class="xar-form-input-wrapper">
+                <label for="map" title="#xarML('Choose a mapping to migrate data')#" class="xar-form-label">
+                    <xar:mlstring>Use Mapping:</xar:mlstring>
+                </label>
+                <xar:if condition="count($maplist) gt 0">
+                    <select name="map" id="map">
+                        <option value=""></option>
+                        <xar:foreach in="$maplist" value="$maptype">
+                            <xar:if condition="!empty($map) and $map eq $maptype">
+                                <option value="#$maptype#" selected="selected">#$maptype#</option>
+                            <xar:else/>
+                                <option value="#$maptype#">#$maptype#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                    <input type="submit" name="load" value="#xarML('Load')#" />
+                <xar:else />
+                    <xar:mlstring>No mappings available.</xar:mlstring>
+                  </xar:if>
+            </div>
+        
+            <div class="xar-form-input-wrapper">
+                <label for="newmap" title="#xarML('Enter a new mapping')#" class="xar-form-label">
+                    <xar:mlstring>Create Mapping:</xar:mlstring>
+                </label>
+                <input type="text" name="newmap" id="newmap" value="#$newmap#" class="xar-form-textlong" />
+                <input type="submit" name="save" value="#xarML('Save')#" />
+            </div>
+        </fieldset>
 
         <fieldset class="xar-clearboth">
             <legend>
