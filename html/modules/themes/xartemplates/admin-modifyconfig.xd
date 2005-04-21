@@ -53,7 +53,9 @@
                         Footer Note 
                     </xar:mlstring>
                 </label>
-                <textarea name="footer" id="footer" cols="60" rows="5" class="xar-norm">#xarModGetVar('themes', 'SiteFooter', 1)#</textarea>
+                <div class="xar-form-container-after">
+                    <textarea name="footer" id="footer" cols="60" rows="5" class="xar-form-textareamedium">#xarModGetVar('themes', 'SiteFooter', 1)#</textarea>
+                </div>
             </div>
             #xarVarDelCached('Mod.Variables.themes','SiteFooter')# 
         </fieldset>
@@ -331,12 +333,12 @@
                 </div>
             </xar:if>
         </fieldset>
+         
         <fieldset>
-        <div class="xar-form-input-wrapper-after">
-            <input type="submit" value="#$submitbutton#" />
-            
+            <div class="xar-form-input-wrapper-after">
+                <input type="submit" value="#$submitbutton#" />
             </div>
-
         </fieldset>
+
     </form>
 </div>

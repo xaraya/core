@@ -14,6 +14,14 @@ a:link:hover, a:visited:hover { color: #CD2000; }
 .xar-menu-section { color: #D5004B; }
 h1, h2, h3, h4 { color: #000000; }
 
+legend {
+    background-position: 0px -600px;
+}
+
+label.xar-form-label {
+    color: #666666;
+}
+
 .xar-mod-head {
     color: #000000;
     background-position: 0px -620px;

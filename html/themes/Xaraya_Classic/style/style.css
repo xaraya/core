@@ -301,9 +301,10 @@ module rendering area and related rules
     border-top: 0 none;
 }
  
-.xar-mod-foot { border-top: 0 none; }
-
-
+.xar-mod-foot {
+    border-top: 0 none;
+    padding: .3em 10px;
+}
 
 /*
 complementary styling - colors, backgrounds and outlines 
@@ -439,14 +440,3 @@ abbr, acronym, .help {
     border-bottom: 1px dotted #999;
     cursor: help;
 }
-
-/* small adjustments for core-common styles */
-
-/*
-div.xar-form-input-wrapper textarea.xar-form-textarealarge {
-    margin-left:16em;
-    margin-right:-16em;
-    width:inherit;
-    display:block;
-}
-*/

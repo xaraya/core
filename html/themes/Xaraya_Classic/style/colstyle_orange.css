@@ -13,6 +13,15 @@ a { color: #FF9900; }
 a:link:hover, a:visited:hover { color: #E54000; }
 h1, h2, h3, h4 { color: #996600; }
 
+legend {
+    color: #7F5300;
+    background-position: 0px -400px;
+}
+
+label.xar-form-label {
+    color: #7F5300;
+}
+
 .xar-mod-head {
     color: #7F5300;
     background-position: 0px -420px;
