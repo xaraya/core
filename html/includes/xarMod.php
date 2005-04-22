@@ -1156,6 +1156,14 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
         $BaseModURL = $entrypoint;
     }
 
+    // If we have an empty argument (ie null => null) then set a flag and
+    // remove that element.
+    if (is_array($args) && array_key_exists(NULL, $args) && $args[NULL] === NULL) {
+        // This flag means that the GET part of the URL must be opened.
+        $open_get_flag = true;
+        unset($args[NULL]);
+    }
+
     // Check the global short URL setting before trying to load the URL encoding function
     // for the module. This also applies to custom entry points.
     if ($GLOBALS['xarMod_generateShortURLs']) {
@@ -1168,6 +1176,8 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 
             // Execute the short URL function.
             // It must exist if the SupportShortURLs variable is set for the module.
+            // FIXME: if the function does not exist, then errors are not handled well, often hidden.
+            // Ensure a missing short URL encoding function gets written to the log file.
             $short = xarModAPIFunc($modName, $modType, 'encode_shorturl', $encoderArgs);
             if (!empty($short)) {
                 if (is_array($short)) {
@@ -1203,7 +1213,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 
                 // Workaround for bug 3603
                 // why: template might add extra params we dont see here
-                if (!strpos($path, $pini)) {$path .= $pini;}
+                if (!empty($open_get_flag) && !strpos($path, $pini)) {$path .= $pini;}
 
                 // We now have the short form of the URL.
                 // Further custom manipulation of the URL can be added here.
