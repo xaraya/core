@@ -113,9 +113,10 @@ function roles_userapi_encode_shorturl($args)
         case 'register':
             $path[] = 'register';
             if (!empty($phase)) {
-                if ($phase == 'registerform' || $phase == 'checkage') {
+                // Bug 4404: registerform and registration are aliases.
+                if ($phase == 'registerform' || $phase == 'registration' || $phase == 'checkage') {
                     unset($args['phase']);
-                    $path[] = $phase;
+                    $path[] = ($phase == 'registerform' ? 'registration' : $phase);
                 } else {
                     // unsupported phase - must be passed via forms
                 }

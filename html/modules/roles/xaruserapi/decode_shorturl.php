@@ -106,7 +106,7 @@ function roles_userapi_decode_shorturl($params)
 
     } elseif (preg_match('/^register/i',$params[1])) {
         if (!empty($params[2])) {
-            if ($params[2] == 'registration') {
+            if ($params[2] == 'registration' || $params[2] == 'registerform') {
                 $args['phase'] = 'registerform';
             } elseif ($params[2] == 'checkage') {
                 $args['phase'] = 'checkage';
