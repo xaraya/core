@@ -48,7 +48,9 @@ function roles_user_view($args)
     if ($letter) {
         if ($letter == 'Other') {
             // TODO: check for syntax in other databases or use a different matching method.
-            $selection = " AND xar_name REGEXP '^[^A-Z]'";
+            $selection = " AND ("
+                .$dbconn->substr."(".$dbconn->upperCase."(xar_name),1,1) < 'A' OR "
+                .$dbconn->substr."(".$dbconn->upperCase."(xar_name),1,1) > 'Z')";
             // TODO: move these messages to the template (and shorten it a bit;-).
             $data['msg'] = xarML(
                 'Members whose Display Name begins with character not listed in alphabet above (labeled as "Other")'
