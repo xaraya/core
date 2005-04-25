@@ -47,6 +47,8 @@ function dynamicdata_util_relations($args)
                   'withtable' => $withtable,
                   'withfield' => $withfield,
                   'withvalue' => $withvalue);
+    
+    $data['prop'] = xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'));
 
     $dbconn =& xarDBGetConn();
     $data['tables'] = $dbconn->MetaTables();

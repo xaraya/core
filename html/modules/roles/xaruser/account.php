@@ -27,6 +27,7 @@ function roles_user_account()
 
     $data['name'] = xarUserGetVar('name');
     $data['uid'] = xarUserGetVar('uid');
+    $data['current'] = xarModURL('roles', 'user', 'display', array('uid' => xarUserGetVar('uid')));
 
     $output = xarModCallHooks('item', 'usermenu', '', array('module' => 'roles'));
 

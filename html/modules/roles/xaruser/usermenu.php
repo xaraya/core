@@ -24,8 +24,10 @@ function roles_user_usermenu($args)
         case 'menu':
             $iconbasic = 'modules/roles/xarimages/home.gif';
             $iconenhanced = 'modules/roles/xarimages/home.gif';
+            $current = xarModURL('roles', 'user', 'account', array('moduleload' => 'roles'));
             $data = xarTplModule('roles','user', 'user_menu_icon', array('iconbasic'    => $iconbasic,
-                                                                         'iconenhanced' => $iconenhanced));
+                                                                         'iconenhanced' => $iconenhanced,
+                                                                         'current'      => $current));
             break;
         case 'form':
         case 'formbasic':

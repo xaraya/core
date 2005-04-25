@@ -1,21 +1,14 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="compare">xarServerGetCurrentURL()</xar:set>
-<!-- Next line cant be handled by entities yet -->
-<xar:set name="current">xarModURL('roles', 'user', 'account', array('moduleload' => 'themes'))</xar:set>
+<xar:set name="tabclass">'inactive'</xar:set>
 <xar:if condition="$compare eq $current">
-    <dd class="active">
-        <a href="#xarServerGetCurrentURL()#">
-            <xar:mlstring>
-                Select Theme
-            </xar:mlstring>
-        </a>
-    </dd>    
-<xar:else />
-    <dd>
-        <a href="#xarModURL('roles', 'user', 'account', array('moduleload' => 'themes'))#">
-            <xar:mlstring>
-                Select Theme
-            </xar:mlstring>
-        </a>
-    </dd>    
+    <xar:set name="tabclass">'active'</xar:set>
 </xar:if>
+
+<dd class="#$tabclass#">
+    <a href="#$current##">
+        <xar:mlstring>
+            Select Theme
+        </xar:mlstring>
+    </a>
+</dd>    
