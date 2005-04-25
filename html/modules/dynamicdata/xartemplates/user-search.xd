@@ -10,12 +10,7 @@
         <td valign="top"><xar:mlstring>Search on</xar:mlstring>:</td>
         <td>
           <xar:if condition="!empty($item['fields']) and count($item['fields']) gt 0">
-            <xar:set name="i">-1</xar:set>
             <xar:foreach in="$item['fields']" key="$name" value="$field">
-              <xar:if condition="$i++ and $i % 4 eq 0">
-                <xar:comment> TODO: reformulate this in a xml compliant way </xar:comment>
-                </td><td valign="top">
-              </xar:if>
               <xar:if condition="!empty($field['checked'])">
                 <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check_#$field['id']#" value="1" checked="checked" />
               <xar:else />
