@@ -1532,8 +1532,19 @@ class xarTpl__EntityNode extends xarTpl__Node
 {
     var $entityType;
     var $parameters;
+    var $hasExtras = false;
     
     function xarTpl__EntityNode(&$parser, $tagName, $entityType, $parameters) 
+    {
+        // Register whether the entity is followed by extra params
+        // Bug 3603 workaround
+        // TODO: centralize this further into xarModUrl
+        $this->hasExtras = $parser->peek(5) == '&amp;';
+        // If constructor method is defined in subclass that one is called!!
+        $this->constructor($parser, $tagName, $entityType, $parameters);
+    }
+    
+    function constructor(&$parser, $tagName, $entityType, $parameters)
     {
         parent::constructor($parser, $tagName);
         $this->entityType = $entityType;

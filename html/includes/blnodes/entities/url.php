@@ -37,7 +37,11 @@ class xarTpl__XarUrlEntityNode extends xarTpl__EntityNode
         }
         $args = '';
         if (isset($this->parameters[3])) {
-            $args = ', $'.$this->parameters[3];
+            $args = ', array($'.$this->parameters[3].')';
+        } elseif($this->hasExtras) {
+            // If the template specifies extra params with &amp;, notify xarModUrl of this,
+            // so it can generate the proper ?. Workaround for bug 3603
+            $args = ", array(NULL=>NULL)";
         }
         return "xarModURL('$module', '$type', '$func'$args)";
     }

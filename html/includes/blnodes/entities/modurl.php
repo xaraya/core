@@ -19,7 +19,15 @@ class xarTpl__XarModurlEntityNode extends xarTpl__EntityNode
         $module = $this->parameters[0];
         $type = $this->parameters[1];
         $func = $this->parameters[2];
-        return "xarModURL('".$module."', '".$type."', '".$func."')";
+
+        // TODO: see xarTpl_EntityNode in xarBLCompiler.php
+        $args = '';
+        // If the template specifies extra params with &amp;, notify xarModUrl of this,
+        // so it can generate the proper ?. Workaround for bug 3603
+        if ($this->hasExtras) {
+            $args = ", array(NULL=>NULL)";
+        }
+        return "xarModURL('$module','$type','$func'$args)";
     }
 }
 ?>
