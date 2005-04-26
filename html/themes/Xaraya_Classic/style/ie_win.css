@@ -7,10 +7,12 @@
 /* min-width equvivalent */
 div#xc-outer-wrapper { width: expression((body.clientWidth <= 740) ? "740px" : "auto"); }
 
+
 div.xc-side-content,
 div#xc-center {
     position: relative;
 }
+
 
 div.xc-side-content form input { margin:0 -2px;}
 
@@ -50,10 +52,22 @@ div#xc-header-rightbevel {
 
 div#classicthemecontrols { z-index:13; }
 
-/*ie-win doesnt play with both padding and marging, so we just use margins*/
+/*ie-win doesnt play with both padding and margins, so we just use margins*/
 div#xc-outer-wrapper {
     z-index:13;
     position:relative;
     padding: 0 0 15px 0;
     margin: 15px 2%;
+}
+
+/*ie-win also likes floats with negative margins to be positioned relatively*/
+div#xc-footer-leftbevel,
+div#xc-footer-rightbevel { position:relative; }
+
+/* correction for legend tag, pretty much wacked when displayed as block (for FF) */
+legend {
+    display: inline-block;
+    margin-bottom: .5em;
+    margin-left:-.5em;
+    width: 15em;
 }

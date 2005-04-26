@@ -164,7 +164,7 @@ legend {
 fieldset {
     border: 1px solid #aaaaaa;
     margin: 1em 0;
-    padding:5px 1em;
+    padding:5px;
 }
 
 label.xar-form-label {
@@ -176,6 +176,7 @@ label.xar-form-label {
     color: #333366;
     background-color: #f9f9f9;
     border:1px solid #f0f0f0;
+    clear:left;
 }
 
 /* reset for table header labels to preserve table styles */
@@ -281,7 +282,8 @@ module rendering area and related rules
 .xar-mod-head, .xar-mod-body, .xar-mod-foot { border: 1px solid #cccccc; }
 
 .xar-mod-head {
-    padding: 2px;
+    padding: 3px 10px;
+    margin: 4px 0 0 0;
     text-align: center;
     font-weight: bold;
     color: #333366;
@@ -289,6 +291,7 @@ module rendering area and related rules
     background-image: url(../images/gradients.png);
     background-position: 0px -250px;
     background-repeat: repeat-x;
+    border-bottom: 0 none;
 }
 
 .xar-mod-title {
@@ -297,13 +300,13 @@ module rendering area and related rules
 }
 
 .xar-mod-body {
-    padding: .3em 10px;
-    border-top: 0 none;
+    padding: 5px 10px;
+    margin:0;
 }
  
 .xar-mod-foot {
     border-top: 0 none;
-    padding: .3em 10px;
+    padding: 3px 10px;
 }
 
 /*

@@ -1,13 +1,9 @@
-<xar:comment>
-    include common stylesheet via standard template tag
-</xar:comment>
-<xar:style scope="common" />
 <h1 class="xar-mod-head">
     <xar:mlstring>
         Thank you for installing and trying Xaraya! 
     </xar:mlstring>
 </h1>
-<div class="xar-mod-body xar-norm-outline xar-standard-box-padding" style="margin-bottom:5px;">
+<div class="xar-mod-body">
     <h2>
         <xar:mlstring>
             Xaraya has reached Release Candidate status. 

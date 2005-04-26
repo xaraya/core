@@ -118,7 +118,7 @@ div#xc-header h1 {
 }
 
 /* actual logo image (not used atm) and its link are taken out of the document flow */
-div#xc-header h1 a {
+div#xc-header h1 a, div#xc-header h1 a:hover {
     position: absolute;
     width: 250px;
     height: 100px;
@@ -132,10 +132,10 @@ div#xc-header h1 a span {
 }
 
 div#classicthemecontrols {
+    float: right;
     position: relative;
     width: 180px;
     height:30px;
-    float: right;
     padding: 0;
     margin: 65px -20px 0 0;
     background-image: url(../images/switcherctrls.png);
@@ -169,9 +169,11 @@ div#classicthemecontrols a span { display:none; }
 
 /* slogan is part of the header now (if you upgraded from previous version) */
 p#xc-slogan {
-    position:absolute;
-    top:20px;
-    right:0px;
+    position: absolute;
+    z-index:13;
+    top: 20px;
+    right: 0px;
+    font-weight: bold;
 }
 
 div#xc-footer {
@@ -238,21 +240,18 @@ footer container itself - watch for the explicit height and width limitations
 -------------------------------------------------------------------------[comment] */
 p#footermsg {
     float: left;
-    position:relative;
+    position: relative;
     padding: 0;
-    margin:0;
-    width:45%;
-    /*height:60px;*/
-    padding-top:20px;
+    margin: 0;
+    width: 45%;
+    padding-top: 20px;
     text-align: left;
+    font-weight: bold;
 }
 
 /* hide old powered by image when css is enabled */
 p#footermsg img { display:none; }
 
-/*
-standard content of the footer, limited only by width and height 
--------------------------------------------------------------------------[comment] */
 div.badges {
     float: right;
     position:relative;
@@ -261,11 +260,13 @@ div.badges {
     text-align: right;
 }
 
+div.badges a { text-decoration: none; }
+
 /*
 it is a kind of modern trend to display links to w3c validators and a bunch of micro-badges
 -------------------------------------------------------------------------[comment] */
 div.badges img {
     position:relative;
-    top:20px;
+    top:23px;
     padding:0;
 }
