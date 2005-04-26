@@ -12,9 +12,6 @@
         <xar:template file="headtagcontent" type="theme" />
     </head>
     <body>
-        <div id="pagegradient">
-            <xar:comment>no content here, it's just used for positioning the background image</xar:comment>
-        </div>
         <div id="xc-outer-wrapper">
             <xar:template file="pageheader" type="theme" />
             <xar:template file="pageblockgroups" type="theme" />

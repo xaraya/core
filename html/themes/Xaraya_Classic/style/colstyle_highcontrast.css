@@ -1,12 +1,7 @@
 body {
     color: #000000;
     background-color: #666666;
-}
-
-div#pagegradient {
-    background-image: url(../images/pagegardients.jpg);
-    background-repeat: repeat-x;
-    background-position: 0px -600px;
+    background-image: url(../images/highcontrast/gradients.png);
 }
 
 a { color: #CC3333; }
@@ -15,7 +10,8 @@ a:link:hover, a:visited:hover { color: #CD2000; }
 h1, h2, h3, h4 { color: #000000; }
 
 legend {
-    background-position: 0px -600px;
+    color: #666666;
+    background-image: url(../images/highcontrast/gradients.png);
 }
 
 label.xar-form-label {
@@ -24,7 +20,7 @@ label.xar-form-label {
 
 .xar-mod-head {
     color: #000000;
-    background-position: 0px -620px;
+    background-image: url(../images/highcontrast/gradients.png);
 }
 
 th {
@@ -43,30 +39,23 @@ th {
 .xar-block-title, .xar-block-title-right {
     color: #333333;
     background-color: #f0f0f0;
-    background-image: url(../images/pagegardients.jpg);
-    background-position: 0px -610px;
+    background-image: url(../images/highcontrast/gradients.png);
 }
 
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
-div#xc-header {
-    background-image: url(../images/xc_logo.png);
-    background-position: 0px -690px;
+div#xc-header,
+div#xc-header-rightbevel,
+div#xc-header h1,
+div#xc-footer-leftbevel,
+div#xc-footer-rightbevel,
+div#xc-footer { background-image: url(../images/highcontrast/gradients.png); }
+
+div#classicthemecontrols a#xc-switch-grey {
+    background-image: url(../images/switcherctrls.png);
+    background-position: -75px 0px;
 }
 
-div#xc-header-rightbevel { background-position: -218px -600px; }
-
-div#xc-header h1 a {
-    background-image: url(../images/xc_logo.png);
-    background-position: 0px -600px;
-}
-
-div#xc-footer {
-    background-image: url(../images/pagegardients.jpg);
-    background-repeat: repeat-x;
-    background-position: 0px -640px;
-}
-
-p#footermsg { background-position: -306px 0px; }
+div#classicthemecontrols a#xc-switch-grey:hover { height: 25px; }
 
 /* MENUS (in sideblocks) */
 .xar-block-body ul li.xar-menu-section, 

@@ -1,6 +1,7 @@
+<xar:set name="siteslogan"><xar:var scope="module" module="themes" name="SiteSlogan" /></xar:set>
 <div id="xc-header">
     <div id="xc-header-rightbevel">
-        <xar:comment>Right bevel is somewhat decorational - needs extra div-box</xar:comment>
+        <xar:comment>Right bevel is purely decorational - needs extra div-box</xar:comment>
     </div>
     <xar:comment>See if we need the styleswitcher controls here</xar:comment>
     <xar:if condition="$styleswitchertype ne 'none'">
@@ -12,4 +13,7 @@
             <span>#$sitename#</span>
         </a>
     </h1>
+    <p id="xc-slogan">
+        <xar:var name="siteslogan" />
+    </p>
 </div>

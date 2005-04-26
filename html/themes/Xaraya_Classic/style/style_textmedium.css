@@ -1,1 +1,8 @@
 body { font-size: 90%; }
+
+div#classicthemecontrols a#xc-switch-medium {
+    background-image: url(../images/switcherctrls.png);
+    background-position: -125px 0px;
+}
+
+div#classicthemecontrols a#xc-switch-medium:hover { height: 25px; }

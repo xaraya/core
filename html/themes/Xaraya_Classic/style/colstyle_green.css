@@ -1,12 +1,7 @@
 body {
     color: #003F3F;
     background-color: #669966;
-}
-
-div#pagegradient {
-    background-image: url(../images/pagegardients.jpg);
-    background-repeat: repeat-x;
-    background-position: 0px -200px;
+    background-image: url(../images/green/gradients.png);
 }
 
 a { color: #3F7F7F; }
@@ -15,7 +10,7 @@ h1, h2, h3, h4 { color: #336633; }
 
 legend {
     color: #003F3F;
-    background-position: 0px -200px;
+    background-image: url(../images/green/gradients.png);
 }
 
 label.xar-form-label {
@@ -24,8 +19,7 @@ label.xar-form-label {
 
 .xar-mod-head {
     color: #336633;
-    background-position: 0px -220px;
-}
+    background-image: url(../images/green/gradients.png);}
 
 th {
     color: #3F7F7F;
@@ -43,30 +37,24 @@ th {
 .xar-block-title, .xar-block-title-right {
     color: #336633;
     background-color: #D2E3CC;
-    background-image: url(../images/pagegardients.jpg);
-    background-position: 0px -210px;
+    background-image: url(../images/green/gradients.png);
 }
 
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
-div#xc-header {
-    background-image: url(../images/xc_logo.png);
-    background-position: 0px -290px;
+div#xc-header,
+div#xc-header-rightbevel,
+div#xc-header h1,
+div#xc-footer-leftbevel,
+div#xc-footer-rightbevel,
+div#xc-footer { background-image: url(../images/green/gradients.png); }
+
+div#classicthemecontrols a#xc-switch-green {
+    background-image: url(../images/switcherctrls.png);
+    background-position: -25px 0px;
 }
 
-div#xc-header-rightbevel { background-position: -218px -200px; }
+div#classicthemecontrols a#xc-switch-green:hover { height: 25px; }
 
-div#xc-header h1 a {
-    background-image: url(../images/xc_logo.png);
-    background-position: 0px -200px;
-}
-
-div#xc-footer {
-    background-image: url(../images/pagegardients.jpg);
-    background-repeat: repeat-x;
-    background-position: 0px -240px;
-}
-
-p#footermsg { background-position: -102px 0px; }
 
 /* MENUS (in sideblocks) */
 .xar-block-body ul li.xar-menu-section, 

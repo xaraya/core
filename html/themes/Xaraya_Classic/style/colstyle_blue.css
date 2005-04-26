@@ -1,1 +1,6 @@
-body { }
+div#classicthemecontrols a#xc-switch-blue {
+    background-image: url(../images/switcherctrls.png);
+    background-position: 0px 0px;
+}
+
+div#classicthemecontrols a#xc-switch-blue:hover { height: 25px; }

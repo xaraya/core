@@ -1,29 +1,22 @@
 <xar:comment>set local variables to hold the ML text that we intend to use in the titles and alt attributes</xar:comment>
 <xar:set name="sitefooter"><xar:var scope="module" module="themes" name="SiteFooter" /></xar:set>
-<xar:set name="siteslogan"><xar:var scope="module" module="themes" name="SiteSlogan" /></xar:set>
 <xar:set name="sitecopyright"><xar:var scope="module" module="themes" name="SiteCopyRight" /></xar:set>
 <xar:set name="validatexhtml"><xar:mlstring>Validate XHTML 1.0 Strict</xar:mlstring></xar:set>
 <xar:set name="validatecss"><xar:mlstring>Validate CSS</xar:mlstring></xar:set>
 <xar:set name="tableless"><xar:mlstring>Tableless layout</xar:mlstring></xar:set>
+<xar:set name="poweredbyxaraya"><xar:mlstring>Powered by Xaraya</xar:mlstring></xar:set>
 <div id="xc-footer">
-    <div class="validators">
-        <a class="xc-badge-xhtmlvalidate" href="http://validator.w3.org/check?uri=referer" title="#$validatexhtml#">
-            <img src="#$classicthemedir#/images/xhtml10.gif" alt="#$validatexhtml#" />
-        </a>
-        <a class="xc-badge-cssvalidate" href="http://jigsaw.w3.org/css-validator/validator?uri=&xar-baseurl;index.php" title="#$validatecss#">
-            <img src="#$classicthemedir#/images/css.gif" alt="#$validatecss#" />
-        </a>
-        <a class="xc-badge-tableless" href="http://www.webreference.com/authoring/style/sheets/layout/" title="#$tableless#">
-            <img src="#$classicthemedir#/images/csstableless.gif" alt="#$tableless#" />
-        </a>
+    <div id="xc-footer-leftbevel">
+        &nbsp; 
+    </div>
+    <div id="xc-footer-rightbevel">
+        &nbsp; 
+    </div>
+    <div class="badges">
+        <a class="xc-badge-tableless" href="http://www.webreference.com/authoring/style/sheets/layout/" title="#$tableless#"> <img src="#$classicthemedir#/images/csstableless.gif" alt="#$tableless#" /> </a> <a class="xc-badge-xhtmlvalidate" href="http://validator.w3.org/check?uri=referer" title="#$validatexhtml#"> <img src="#$classicthemedir#/images/xhtml10.gif" alt="#$validatexhtml#" /> </a> <a class="xc-badge-cssvalidate" href="http://jigsaw.w3.org/css-validator/validator?uri=&xar-baseurl;index.php" title="#$validatecss#"> <img src="#$classicthemedir#/images/css.gif" alt="#$validatecss#" /> </a> <a class="xc-badge-tableless" href="http://www.xaraya.com/" title="#$poweredbyxaraya#"> <img src="#$classicthemedir#/images/microbadge.gif" alt="#$poweredbyxaraya#" /> </a> 
     </div>
     <p id="footermsg">
-        <xar:var name="sitefooter" />
-    </p>
-    <p id="copyright">
         <xar:var name="sitecopyright" />
-    </p>
-    <p id="slogan">
-        <xar:var name="siteslogan" />
+        <xar:var name="sitefooter" />
     </p>
 </div>

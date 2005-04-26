@@ -1,29 +1,24 @@
-div#pagegradient {
-    position:absolute;
-    top:0;
-    left:0;
-    height:200px;
-    width:100%;
-    text-align: center;
-    background-image: url(../images/pagegardients.jpg);
+body {
+    background-image: url(../images/gradients.png);
     background-repeat: repeat-x;
+    background-position: 0px -400px;
 }
 
 div#xc-outer-wrapper {
-    padding: 15px 2%;
+    padding: 25px 25px 15px 25px;
     position:relative;
 }
 
 div#xc-leftbg-wrapper {
     width: auto;
-    background-image: url(../images/bkgr200.gif);
+    background-image: url(../images/contentbackground.png);
     background-repeat: repeat-y;
     background-position: left top;
 }
 
 div#xc-rightbg-wrapper {
     width: auto;
-    background-image: url(../images/bkgr200.gif);
+    background-image: url(../images/contentbackground.png);
     background-repeat: repeat-y;
     background-position: right top;
 }
@@ -31,7 +26,7 @@ div#xc-rightbg-wrapper {
 div#xc-outermargin-wrapper {
     width: auto;
     margin-left: 210px;
-    margin-right: 210px;
+    margin-right: 210px;    
 }
 
 div#xc-outermargin-noright-wrapper {
@@ -90,44 +85,47 @@ div#xc-center {
 div#xc-header {
     position: relative;
     z-index: 13;
-    height: 90px;
-    margin: 0 25px 5px 25px;
+    height: 100px;
+    margin: 0 25px 4px 25px;
     background-color: transparent;
-    background-image: url(../images/xc_logo.png);
+    background-image: url(../images/gradients.png);
     background-repeat: repeat-x;
-    background-position: 0px -90px;
+    background-position: 0px -200px;
 }
 
 div#xc-header-rightbevel {
     float: right;
     width: 27px;
-    height: 90px;
+    height: 100px;
     margin-right:-25px;
     background-color: transparent;
-    background-image: url(../images/xc_logo.png);
+    background-image: url(../images/gradients.png);
     background-repeat: no-repeat;
     background-position: 100% 0%;
 }
 
-div#xc-header h1,
-div#xc-header h1 a {
+div#xc-header h1 {
     float: left;
-    width: 205px;
-    height: 90px;
+    position: relative;
+    width: 220px;
+    height: 100px;
     margin: 0;
     padding: 0;
-}
-
-div#xc-header h1 a { margin: 0 0 0 -25px; }
-
-div#xc-header h1 a {
-    position: relative;
-    background-image: url(../images/xc_logo.png);
+    background-image: url(../images/gradients.png);
     background-repeat: no-repeat;
     background-position: 0px 0px;
+    margin-left: -25px;
 }
 
-/* hopefully enough for off-screen placement in all circumstances */
+/* actual logo image (not used atm) and its link are taken out of the document flow */
+div#xc-header h1 a {
+    position: absolute;
+    width: 250px;
+    height: 100px;
+    background-color: transparent;
+}
+
+/* the textual part of header (sitename) is taken off-screen completely */
 div#xc-header h1 a span {
     position: absolute;
     left: -9000px;
@@ -135,24 +133,52 @@ div#xc-header h1 a span {
 
 div#classicthemecontrols {
     position: relative;
-    width: 187px;
+    width: 180px;
+    height:30px;
     float: right;
-    padding: 0 1px 0 0;
-    margin: 69px -18px 0 0;
+    padding: 0;
+    margin: 65px -20px 0 0;
+    background-image: url(../images/switcherctrls.png);
+    background-repeat: no-repeat;
+    background-position: 0px -30px;
 }
 
-div#classicthemecontrols img {
-    position: relative;
-    float: right;
-    width: 26px;
-    height: 21px;
+div#classicthemecontrols a {
+    float:left;
+    height:25px;
+    width:25px;
+}
+
+div#classicthemecontrols a:hover {
+    float: left;
+    height: 30px;
+    width: 25px;
+    background-image: url(../images/switcherctrls.png);
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+}
+div#classicthemecontrols a#xc-switch-green:hover { background-position: -25px 0px; }
+div#classicthemecontrols a#xc-switch-orange:hover { background-position: -50px 0px; }
+div#classicthemecontrols a#xc-switch-grey:hover { background-position: -75px 0px; }
+div#classicthemecontrols a#xc-switch-small:hover { background-position: -100px 0px; }
+div#classicthemecontrols a#xc-switch-medium:hover { background-position: -125px 0px; }
+div#classicthemecontrols a#xc-switch-large:hover { background-position: -150px 0px; }
+
+/* hide anchored text (not anchors) while viewing with css on (TODO: use common class) */
+div#classicthemecontrols a span { display:none; }
+
+/* slogan is part of the header now (if you upgraded from previous version) */
+p#xc-slogan {
+    position:absolute;
+    top:20px;
+    right:0px;
 }
 
 div#xc-footer {
     position: relative;
     z-index: 14;
-    height: 50px;
-    margin-top: 5px;
+    height: 60px;
+    margin-top: 0px;
 }
 
 #xc-clear {
@@ -177,76 +203,69 @@ div#xc-outermargin-noleft-wrapper  div#xc-center-wrapper { margin: 0 -10px 0 0; 
 /*
 positioning and minimal styling of footer 
 -------------------------------------------------------------------------[comment] */
+div#xc-footer-leftbevel {
+    float: left;
+    width: 12px;
+    height:60px;
+    overflow:hidden;
+    margin-left: -10px;
+    background-image: url(../images/gradients.png);
+    background-position: 0px -140px;
+    background-repeat: no-repeat;
+}
+
+div#xc-footer-rightbevel {
+    float: right;
+    width: 12px;
+    height:60px;
+    overflow:hidden;
+    margin-right: -10px;
+    background-image: url(../images/gradients.png);
+    background-position: 100% -140px;
+    background-repeat: no-repeat;
+}
 
 div#xc-footer {
-    background-image: url(../images/pagegardients.jpg);
-    background-position: 0px -40px;
+    margin-left: 10px;
+    margin-right: 10px;
+    background-image: url(../images/gradients.png);
+    background-position: 0px -340px;
     background-repeat: repeat-x;
 }
 
 /*
 footer container itself - watch for the explicit height and width limitations
 -------------------------------------------------------------------------[comment] */
-p#footermsg,
-p#footermsg a {
-    display:block;
-    width: 102px;
-    height: 47px;
-}
-
 p#footermsg {
-    float: right;
+    float: left;
+    position:relative;
     padding: 0;
-    margin: 1px 1px 0 0;
-    text-align: right;
-    background-image: url(../images/xar_badge.gif);
-    background-color: transparent;
-    background-position: 0px 0px;
+    margin:0;
+    width:45%;
+    /*height:60px;*/
+    padding-top:20px;
+    text-align: left;
 }
 
-/* hide logo image in case when css is enabled - we display nicer multicoloured version as per rule above */
+/* hide old powered by image when css is enabled */
 p#footermsg img { display:none; }
 
 /*
-standard content of the footer, limited by explicit width and height 
+standard content of the footer, limited only by width and height 
 -------------------------------------------------------------------------[comment] */
-
-p#slogan {
-    float: left;
-    padding: 17px 0 0 5px;
-    width: auto;
-    text-align: left;
-    margin: 0;
-}
-
-/*
-site slogan can sit in the footer for now 
--------------------------------------------------------------------------[comment] */
-
-p#copyright {
-    float: left;
-    padding: 17px 0 0 5px;
-    width: 200px;
-    text-align: center;
-    margin: 0;
-}
-
-/*
-and so can the copyright info
--------------------------------------------------------------------------[comment] */
-
-div.validators {
+div.badges {
     float: right;
-    height: 23px;
-    width: 80px;
-    margin-right: 7px;
+    position:relative;
+    height: 60px;
+    width: 50%;
+    text-align: right;
 }
 
 /*
-it is a kind of modern trend to display links to w3c validators 
+it is a kind of modern trend to display links to w3c validators and a bunch of micro-badges
 -------------------------------------------------------------------------[comment] */
-
-div.validators img {
-    margin: 1px 0;
-    display: block;
+div.badges img {
+    position:relative;
+    top:20px;
+    padding:0;
 }

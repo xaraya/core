@@ -156,8 +156,8 @@ legend {
     font-weight: bold;
     min-width:15em;
     display:block;
-    background-image: url(../images/pagegardients.jpg);
-    background-position: 0px 0px;
+    background-image: url(../images/gradients.png);
+    background-position: 0px -410px;
     background-repeat: repeat-x;
 }
 
@@ -235,8 +235,8 @@ these defaults apply to the left and right block group
     padding: 0 4px;
     color: #333366;
     background-color: #DDDDF0;
-    background-image: url(../images/pagegardients.jpg);
-    background-position: 0px -10px;
+    background-image: url(../images/gradients.png);
+    background-position: 0px -430px;
     background-repeat: repeat-x;
 }
 
@@ -286,8 +286,8 @@ module rendering area and related rules
     font-weight: bold;
     color: #333366;
     background-color: #ffffff;
-    background-image: url(../images/pagegardients.jpg);
-    background-position: 0px -20px;
+    background-image: url(../images/gradients.png);
+    background-position: 0px -250px;
     background-repeat: repeat-x;
 }
 
