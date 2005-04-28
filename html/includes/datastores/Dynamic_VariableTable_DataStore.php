@@ -544,9 +544,15 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         // easy case where we already know the items we want
         if (count($itemids) > 0) {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
-            $query = "SELECT COUNT(DISTINCT xar_dd_itemid)
+            if($dbconn->databaseType == 'sqlite') {
+                $query = "SELECT COUNT(xar_dd_itemid) 
+                          FROM (SELECT DISTINCT xar_dd_itemid
+                                WHERE xar_dd_propid IN ($bindmarkers) "; // WATCH OUT, STILL UNBALANCED
+            } else {
+                $query = "SELECT COUNT(DISTINCT xar_dd_itemid)
                         FROM $dynamicdata
                        WHERE xar_dd_propid IN ($bindmarkers) ";
+            }
             $bindvars = $propids;
 
             if (count($itemids) > 1) {
@@ -560,6 +566,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $bindvars[] = (int)$itemids[0];
             }
 
+            // Balance parentheses.
+            if($dbconn->databaseType == 'sqlite') $query .= ")";
             if (!empty($this->cache)) {
                 $result =& $dbconn->CacheExecute($this->cache,$query,$bindvars);
             } else {
@@ -579,15 +587,22 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         } elseif (count($this->where) > 0) {
 
         // TODO: this only works for OR conditions !!!
-            $query = "SELECT COUNT(DISTINCT xar_dd_itemid)
+            if($dbconn->databaseType == 'sqlite') {
+                $query = "SELECT COUNT(xar_dd_itemid)
+                          FROM ( SELECT DISTINCT xar_dd_itemid FROM $dynamicdata WHERE "; // WATCH OUT, STILL UNBALANCED
+            } else {
+                $query = "SELECT COUNT(DISTINCT xar_dd_itemid)
                         FROM $dynamicdata
                        WHERE ";
+            }
             // only grab the fields we're interested in here...
 // TODO: support pre- and post-parts here too ? (cfr. bug 3090)
             foreach ($this->where as $whereitem) {
                 $query .= $whereitem['join'] . ' (xar_dd_propid = ' . $whereitem['field'] . ' AND xar_dd_value ' . $whereitem['clause'] . ') ';
             }
-
+            
+            // Balance parentheses.
+            if($dbconn->databaseType == 'sqlite') $query .= ")";
             if (!empty($this->cache)) {
                 $result =& $dbconn->CacheExecute($this->cache, $query);
             } else {
@@ -605,9 +620,15 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         // here we grab everyting
         } else {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
-            $query = "SELECT COUNT(DISTINCT xar_dd_itemid)
+            if($dbconn->databaseType == 'sqlite' ) {
+                $query = "SELECT COUNT(xar_dd_itemid)
+                          FROM (SELECT DISTINCT xar_dd_itemid FROM $dynamicdata 
+                          WHERE xar_dd_propid IN ($bindmarkers)) ";
+            } else {
+                $query = "SELECT COUNT(DISTINCT xar_dd_itemid)
                         FROM $dynamicdata
                        WHERE xar_dd_propid IN ($bindmarkers) ";
+            }
 
             if (!empty($this->cache)) {
                 $result =& $dbconn->CacheExecute($this->cache,$query,$propids);

@@ -479,8 +479,13 @@ if (empty($itemidfield)) {
 
         $dbconn =& xarDBGetConn();
 
-        $query = "SELECT COUNT(DISTINCT $itemidfield)
+        if($dbconn->databaseType == 'sqlite') {
+            $query = "SELECT COUNT($itemidfield) 
+                      FROM (SELECT DISTINCT $itemidfield FROM $table "; // WATCH OUT, STILL UNBALANCED
+        } else {
+            $query = "SELECT COUNT(DISTINCT $itemidfield)
                     FROM $table ";
+        }
 
         $bindvars = array();
         if (count($itemids) > 1) {
@@ -500,7 +505,7 @@ if (empty($itemidfield)) {
         }
 
         // TODO: GROUP BY, LEFT JOIN, ... ? -> cfr. relationships
-
+        if($dbconn->databaseType == 'sqlite') $query.=")";
         if (!empty($this->cache)) {
             $result =& $dbconn->CacheExecute($this->cache,$query,$bindvars);
         } else {
