@@ -60,7 +60,7 @@ function roles_onlineblock_display($blockinfo)
     $sessioninfotable = $xartable['session_info'];
     $activetime = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
     if($dbconn->databaseType == 'sqlite') {
-        $sql = "SELECT COUNT(xar_uid) 
+        $sql = "SELECT COUNT(*) 
                 FROM (SELECT DISTINCT xar_uid FROM $sessioninfotable
                       WHERE xar_lastused > ? AND xar_uid > 2)";
     } else {
@@ -122,7 +122,7 @@ function roles_onlineblock_display($blockinfo)
 
 
     if($dbconn->databaseType == 'sqlite') {
-        $query2 = "SELECT COUNT(xar_ipaddr) 
+        $query2 = "SELECT COUNT(*) 
                    FROM (SELECT DISTINCT xar_ipaddr FROM $sessioninfotable
                          WHERE xar_lastused > ? AND xar_uid = 2)";
     } else {

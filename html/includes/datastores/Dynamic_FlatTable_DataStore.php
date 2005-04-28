@@ -480,7 +480,7 @@ if (empty($itemidfield)) {
         $dbconn =& xarDBGetConn();
 
         if($dbconn->databaseType == 'sqlite') {
-            $query = "SELECT COUNT($itemidfield) 
+            $query = "SELECT COUNT(*) 
                       FROM (SELECT DISTINCT $itemidfield FROM $table "; // WATCH OUT, STILL UNBALANCED
         } else {
             $query = "SELECT COUNT(DISTINCT $itemidfield)

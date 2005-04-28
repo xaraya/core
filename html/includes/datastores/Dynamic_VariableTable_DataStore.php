@@ -545,7 +545,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         if (count($itemids) > 0) {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
             if($dbconn->databaseType == 'sqlite') {
-                $query = "SELECT COUNT(xar_dd_itemid) 
+                $query = "SELECT COUNT(*) 
                           FROM (SELECT DISTINCT xar_dd_itemid
                                 WHERE xar_dd_propid IN ($bindmarkers) "; // WATCH OUT, STILL UNBALANCED
             } else {
@@ -588,7 +588,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
         // TODO: this only works for OR conditions !!!
             if($dbconn->databaseType == 'sqlite') {
-                $query = "SELECT COUNT(xar_dd_itemid)
+                $query = "SELECT COUNT(*)
                           FROM ( SELECT DISTINCT xar_dd_itemid FROM $dynamicdata WHERE "; // WATCH OUT, STILL UNBALANCED
             } else {
                 $query = "SELECT COUNT(DISTINCT xar_dd_itemid)
@@ -621,7 +621,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         } else {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
             if($dbconn->databaseType == 'sqlite' ) {
-                $query = "SELECT COUNT(xar_dd_itemid)
+                $query = "SELECT COUNT(*)
                           FROM (SELECT DISTINCT xar_dd_itemid FROM $dynamicdata 
                           WHERE xar_dd_propid IN ($bindmarkers)) ";
             } else {
