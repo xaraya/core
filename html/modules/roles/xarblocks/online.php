@@ -59,9 +59,15 @@ function roles_onlineblock_display($blockinfo)
     $xartable =& xarDBGetTables();
     $sessioninfotable = $xartable['session_info'];
     $activetime = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
-    $sql = "SELECT COUNT(DISTINCT xar_uid)
+    if($dbconn->databaseType == 'sqlite') {
+        $sql = "SELECT COUNT(xar_uid) 
+                FROM (SELECT DISTINCT xar_uid FROM $sessioninfotable
+                      WHERE xar_lastused > ? AND xar_uid > 2)";
+    } else {
+        $sql = "SELECT COUNT(DISTINCT xar_uid)
             FROM $sessioninfotable
             WHERE xar_lastused > ? AND xar_uid > 2";
+    }
     $result = $dbconn->Execute($sql, array($activetime));
     if (!$result) {return false;}
     list($args['numusers']) = $result->fields;
@@ -115,9 +121,15 @@ function roles_onlineblock_display($blockinfo)
     }
 
 
-    $query2 = "SELECT COUNT(DISTINCT xar_ipaddr)
+    if($dbconn->databaseType == 'sqlite') {
+        $query2 = "SELECT COUNT(xar_ipaddr) 
+                   FROM (SELECT DISTINCT xar_ipaddr FROM $sessioninfotable
+                         WHERE xar_lastused > ? AND xar_uid = 2)";
+    } else {
+        $query2 = "SELECT COUNT(DISTINCT xar_ipaddr)
                FROM $sessioninfotable
                WHERE xar_lastused > ? AND xar_uid = 2";
+    }
     $result2 = $dbconn->Execute($query2, array($activetime));
     if (!$result2) {return false;}
     list($args['numguests']) = $result2->fields;
