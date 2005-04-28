@@ -31,9 +31,9 @@ function roles_user_login()
     global $xarUser_authenticationModules;
 
     if (!$_COOKIE) {
-        xarExceptionFree();
-        $msg = xarML('You must enable Cookies.');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+        xarErrorFree();
+        $msg = xarML('You must enable cookies on your browser to run Xaraya. Check the browser configuration options to make sure cookies are enabled, click on  the "Back" button of the browser and try again.');
+        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
         return;
     }
 
