@@ -30,6 +30,13 @@ function roles_user_login()
 {
     global $xarUser_authenticationModules;
 
+    if (!$_COOKIE) {
+        xarExceptionFree();
+        $msg = xarML('You must enable Cookies.');
+        xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+        return;
+    }
+
     $unlockTime  = (int) xarSessionGetVar('roles.login.lockedout');
     $lockouttime=xarModGetVar('roles','lockouttime')? xarModGetVar('roles','lockouttime') : 15;
     $lockouttries =xarModGetVar('roles','lockouttries') ? xarModGetVar('roles','lockouttries') : 3;
@@ -223,7 +230,7 @@ function roles_user_login()
             elseif ($res == false) {
                 // Problem logging in
                 // TODO - work out flow, put in appropriate HTML
-                
+
                 // Cast the result to an int in case VOID is returned
                 $attempts = (int) xarSessionGetVar('roles.login.attempts');
 
