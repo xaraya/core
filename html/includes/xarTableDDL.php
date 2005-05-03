@@ -520,7 +520,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
 
             // make sure we have the colunm we're altering
             if (empty($args['field'])) {
-                $msg = xarML('Invalid args (field key must be set.)');
+                $msg = xarML('Invalid args (field key must be set).');
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
@@ -636,7 +636,7 @@ function xarDB__postgresqlAlterTable($tableName, $args)
 
             // make sure we have the colunm we're altering
             if (empty($args['field'])) {
-                $msg = xarML('Invalid args (field key must be set.)');
+                $msg = xarML('Invalid args (field key must be set).');
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
@@ -742,7 +742,7 @@ function xarDB__oracleAlterTable($tableName, $args)
 
             // make sure we have the colunm we're altering
             if (empty($args['field'])) {
-                $msg = xarML('Invalid args (field key must be set.)');
+                $msg = xarML('Invalid args (field key must be set).');
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
