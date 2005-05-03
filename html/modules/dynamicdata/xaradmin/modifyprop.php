@@ -153,7 +153,7 @@ function dynamicdata_admin_modifyprop()
     $data['fieldstatusprop'] =& Dynamic_Property_Master::getProperty(array('type' => 'fieldstatus'));
 
     // We have to specify this here, the js expects non xml urls and the => makes the template invalied
-    $data['urlform'] = xarModURL('dynamicdata','admin','form',array('objectid' => $objectid, 'theme' => 'print'),false);
+    $data['urlform'] = xarModURL('dynamicdata','admin','form',array('objectid' => $data['objectid'], 'theme' => 'print'),false);
     
     if (empty($details)) {
         $data['static'] = array();
