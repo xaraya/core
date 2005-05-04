@@ -65,15 +65,10 @@ function dynamicdata_user_display($args)
                                          'join'     => $join,
                                          'table'    => $table,
                                          'itemid'   => $itemid));
+    $hooks = array();
     $hooks = xarModCallHooks('item', 'display', $myobject->itemid, $item, $modinfo['name']);
-    if (empty($hooks)) {
-        $data['hooks'] = '';
-    } elseif (is_array($hooks)) {
-        $data['hooks'] = join('',$hooks);
-    } else {
-        $data['hooks'] = $hooks;
-    }
-
+    $data['hooks'] = $hooks;
+    
     // Return the template variables defined in this function
     return $data;
 }

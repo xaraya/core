@@ -2,5 +2,9 @@
 <xar:if condition="!empty($message)">
     <p>#$message#</p>
 <xar:else />
-    <p>#$output#</p>
+    <p>
+        <xar:foreach in="$output" key="$module" value="$hookoutput">
+            #$hookoutput#
+        </xar:foreach>
+    </p>
 </xar:if>

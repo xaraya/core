@@ -35,14 +35,9 @@ function roles_user_display($args)
     $item['itemtype'] = 0; // handle groups differently someday ?
     $item['returnurl'] = xarModURL('roles', 'user', 'display',
                                    array('uid' => $uid));
+    $hooks = array();
     $hooks = xarModCallHooks('item', 'display', $uid, $item);
-    if (empty($hooks)) {
-        $data['hooks'] = '';
-    } elseif (is_array($hooks)) {
-        $data['hooks'] = join('',$hooks);
-    } else {
-        $data['hooks'] = $hooks;
-    }
+    $data['hooks'] = $hooks;
 
     xarTplSetPageTitle(xarVarPrepForDisplay($data['name']));
 

@@ -112,15 +112,8 @@ function blocks_admin_modify_instance()
     $args['module'] = 'blocks';
     $args['itemtype'] = 3; // block instance
     $args['itemid'] = $bid;
+    $hooks = array();
     $hooks = xarModCallHooks('item', 'modify', $bid, $args);
-
-    if (empty($hooks)) {
-        $hooks = '';
-    } elseif (is_array($hooks)) {
-        $hooks = join('',$hooks);
-    } else {
-        $hooks = $hooks;
-    }
 
     return array(
         'authid'         => xarSecGenAuthKey(),

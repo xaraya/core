@@ -19,7 +19,7 @@ function roles_user_usermenu($args)
     extract($args);
     if(!xarVarFetch('phase','notempty', $phase, 'menu', XARVAR_NOT_REQUIRED)) {return;}
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Your Account Preferences')));
-    $data = array();
+    $data = array(); $hooks = array();
     switch(strtolower($phase)) {
         case 'menu':
             $iconbasic = 'modules/roles/xarimages/home.gif';
@@ -58,19 +58,12 @@ function roles_user_usermenu($args)
             $authid = xarSecGenAuthKey();
             $submitlabel = xarML('Submit');
             $item['module'] = 'roles';
-            $hooks = xarModCallHooks('item','modify',$uid,$item);
-            if (empty($hooks)) {
-                $hooks = '';
-            } elseif (is_array($hooks)) {
-                if (isset($hooks['dynamicdata'])) {
-                    unset($hooks['dynamicdata']);
-                }
-                $hooks = join('',$hooks);
-            }
 
-            if (empty($hooks) || !is_string($hooks)) {
-                $hooks = '';
+            $hooks = xarModCallHooks('item','modify',$uid,$item);
+            if (isset($hooks['dynamicdata'])) {
+                unset($hooks['dynamicdata']);
             }
+            
             $data = xarTplModule('roles','user', 'user_menu_form',
                                   array('authid'       => $authid,
                                   'withupload'   => $withupload,
@@ -88,15 +81,6 @@ function roles_user_usermenu($args)
             $authid = xarSecGenAuthKey();
             $item['module'] = 'roles';
             $hooks = xarModCallHooks('item','modify',$uid,$item);
-            if (empty($hooks)) {
-                $hooks = '';
-            } elseif (is_array($hooks)) {
-                $hooks = join('',$hooks);
-            }
-
-            if (empty($hooks) || !is_string($hooks)) {
-                $hooks = '';
-            }
 
             $data = xarTplModule('roles','user', 'user_menu_formenhanced', array('authid'   => $authid,
                                                                                  'name'     => $name,

@@ -19,6 +19,7 @@ function roles_admin_modifynotice()
     // Security Check
     if (!xarSecurityCheck('AdminRole')) return;
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;
+    $hooks = array();
     switch (strtolower($phase)) {
         case 'modify':
         default: 
@@ -28,12 +29,8 @@ function roles_admin_modifynotice()
 
             $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
                 array('module' => 'roles'));
-            if (empty($hooks) || !is_string($hooks)) {
-                $data['hooks'] = '';
-            } else {
-                $data['hooks'] = $hooks;
-            } 
-
+            $data['hooks'] = $hooks;
+            
             break;
 
         case 'update':

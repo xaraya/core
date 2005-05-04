@@ -63,15 +63,10 @@ function dynamicdata_admin_modify($args)
     $item['module'] = $modinfo['name'];
     $item['itemtype'] = $myobject->itemtype;
     $item['itemid'] = $myobject->itemid;
+    $hooks = array();
     $hooks = xarModCallHooks('item', 'modify', $myobject->itemid, $item, $modinfo['name']); 
-    if (empty($hooks)) {
-        $data['hooks'] = '';
-    } elseif (is_array($hooks)) {
-        $data['hooks'] = join('',$hooks);
-    } else {
-        $data['hooks'] = $hooks;
-    }
-
+    $data['hooks'] = $hooks;
+    
     $template = $myobject->name;
     return xarTplModule('dynamicdata','admin','modify',$data,$template);
 }

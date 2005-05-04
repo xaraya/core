@@ -101,7 +101,7 @@ function roles_admin_modifyconfig()
             $data['uselockout'] =  xarModGetVar('roles', 'uselockout') ? 'checked' : '';
             $data['lockouttime'] = xarModGetVar('roles', 'lockouttime')? xarModGetVar('roles', 'lockouttime'): 15; //minutes
             $data['lockouttries'] = xarModGetVar('roles', 'lockouttries') ? xarModGetVar('roles', 'lockouttries'): 3; 
-
+            $hooks = array();
             switch ($data['tab']) {
                 case 'hooks':
                     // Item type 0 is the default itemtype for 'user' roles.
@@ -117,10 +117,6 @@ function roles_admin_modifyconfig()
                     break;
                 default:
                     break;
-            }
-
-            if (empty($hooks)) {
-                $hooks = array();
             }
 
             $data['hooks'] = $hooks;

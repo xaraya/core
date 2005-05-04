@@ -29,12 +29,11 @@ function roles_user_account()
     $data['uid'] = xarUserGetVar('uid');
     $data['current'] = xarModURL('roles', 'user', 'display', array('uid' => xarUserGetVar('uid')));
 
+    $output = array();
     $output = xarModCallHooks('item', 'usermenu', '', array('module' => 'roles'));
 
     if (empty($output)){
         $message = xarML('There are no account options configured.');
-    } elseif (is_array($output)) {
-        $output = join('',$output);
     }
     $data['output'] = $output;
 
