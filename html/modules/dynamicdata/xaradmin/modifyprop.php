@@ -119,20 +119,13 @@ function dynamicdata_admin_modifyprop()
         //    break;
         }
     }
+    $hooks = array();
     if ($isprimary) {
         $hooks = xarModCallHooks('module','modifyconfig',$modinfo['name'],
                                  array('module' => $modinfo['name'],
                                        'itemtype' => $itemtype));
-        if (empty($hooks)) {
-            $data['hooks'] = '';
-        } elseif (is_array($hooks)) {
-            $data['hooks'] = join('',$hooks);
-        } else {
-            $data['hooks'] = $hooks;
-        }
-    } else {
-        $data['hooks'] = '';
-    }
+    } 
+    $data['hooks'] = $hooks;
 
     $data['labels'] = array(
                             'id' => xarML('ID'),
