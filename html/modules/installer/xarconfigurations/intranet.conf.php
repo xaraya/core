@@ -14,7 +14,7 @@
 
 $configuration_name = xarML('Intranet - modules and privilege appropriate for restricted access');
 
-function installer_intranet_moduleoptions() 
+function installer_intranet_moduleoptions()
 {
     return array(
         array('name' => "autolinks",            'regid' => 11),
@@ -34,7 +34,7 @@ function installer_intranet_moduleoptions()
     );
 }
 
-function installer_intranet_privilegeoptions() 
+function installer_intranet_privilegeoptions()
 {
     return array(
                      array(
@@ -64,6 +64,7 @@ function installer_intranet_configuration_load($args)
 // now do the necessary loading for each item
 
     if(in_array('p1',$args)) {
+        installer_intranet_readaccess();
         installer_intranet_readnoncore();
         xarAssignPrivilege('ReadNonCore','Users');
     }
@@ -142,5 +143,11 @@ function installer_intranet_readnoncore()
     xarMakePrivilegeMember('DenyModules','ReadNonCore');
     xarMakePrivilegeMember('DenyThemes','ReadNonCore');
 //    xarMakePrivilegeMember('DenyDynamicData','ReadNonCore');
+}
+
+function installer_intranet_readaccess()
+{
+        xarRegisterPrivilege('ReadAccess','All','All','All','All','ACCESS_READ','Read access to all modules');
+        xarMakePrivilegeRoot('ReadAccess');
 }
 ?>

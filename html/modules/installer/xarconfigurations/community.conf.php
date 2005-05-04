@@ -14,7 +14,7 @@
 
 $configuration_name = xarML('Community Site -- modules and privilege for semi-open access');
 
-function installer_community_moduleoptions() 
+function installer_community_moduleoptions()
 {
     return array(
         array('name' => "autolinks",            'regid' => 11),
@@ -35,7 +35,7 @@ function installer_community_moduleoptions()
     );
 }
 
-function installer_community_privilegeoptions() 
+function installer_community_privilegeoptions()
 {
     return array(
               array(
@@ -71,6 +71,7 @@ function installer_community_configuration_load($args)
     }
 
     if(in_array('p2',$args)) {
+        installer_community_readaccess();
         installer_community_readnoncore();
         xarAssignPrivilege('ReadNonCore','Everybody');
    }

@@ -13,12 +13,12 @@
 
 $configuration_name = xarML('Core Xaraya install - minimal modules needed to run Xaraya');
 
-function installer_core_moduleoptions() 
+function installer_core_moduleoptions()
 {
     return array();
 }
 
-function installer_core_privilegeoptions() 
+function installer_core_privilegeoptions()
 {
     return array(
         array(
@@ -55,6 +55,7 @@ function installer_core_configuration_load($args)
     }
 
     if(in_array('p2',$args)) {
+        installer_core_readaccess();
         installer_core_readnoncore();
         xarAssignPrivilege('ReadNonCore','Everybody');
    }
