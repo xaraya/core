@@ -31,7 +31,7 @@
 function xarThemeGetVar($themeName, $name, $prep = NULL)
 {
     if (empty($themeName)) {
-        $msg = xarML('Empty themeName (#(1)).', $themeName);
+        $msg = xarML('Empty themeName (#(1)).', '$themeName');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
@@ -52,7 +52,7 @@ function xarThemeGetVar($themeName, $name, $prep = NULL)
 function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='')
 {
     if (empty($themeName)) {
-        $msg = xarML('Empty themeName (#(1)).', $themeName);
+        $msg = xarML('Empty themeName (#(1)).', '$themeName');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
@@ -73,7 +73,7 @@ function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='
 function xarThemeDelVar($themeName, $name)
 {
     if (empty($themeName)) {
-        $msg = xarML('Empty themeName (#(1)).', $themeName);
+        $msg = xarML('Empty themeName (#(1)).', '$themeName');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));return;
     }
 

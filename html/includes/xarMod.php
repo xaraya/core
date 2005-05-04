@@ -449,7 +449,7 @@ function xarModGetVarId($modName, $name)
 function xarModGetIDFromName($modName, $type = 'module')
 {
     if (empty($modName)) {
-        $msg = xarML('Module or Theme Name #(1) is empty.', $modName);
+        $msg = xarML('Module or Theme Name #(1) is empty.', '$modName');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', new SystemException($msg));
         return;
     }
@@ -759,7 +759,7 @@ function xarModAPILoad($modName, $modType = 'user')
 function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
 {
     if (empty($modName)) {
-        $msg = xarML('Module Name #(1) is empty.', $modName);
+        $msg = xarML('Module Name #(1) is empty.', '$modName');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', new SystemException($msg));
         return;
     }
@@ -1328,7 +1328,7 @@ function xarModIsAvailable($modName, $type = 'module')
     static $modAvailableCache = array();
 
     if (empty($modName)) {
-        $msg = xarML('Empty Module or Theme Name (#(1)).', $modName);
+        $msg = xarML('Empty Module or Theme Name (#(1)).', '$modName');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
@@ -1647,7 +1647,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     xarLogMessage("xarMod_getFileInfo ". $modOsDir ." / " . $type);
 
     if (empty($modOsDir)) {
-        $msg = xarML('Directory information #(1) is empty.', $modOsDir);
+        $msg = xarML('Directory information #(1) is empty.', '$modOsDir');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', new SystemException($msg));
         return;
     }
@@ -1773,7 +1773,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     xarLogMessage("xarMod_getBaseInfo ". $modName ." / ". $type);
 
     if (empty($modName)) {
-        $msg = xarML('Module or Theme Name #(1) is empty.', $modName);
+        $msg = xarML('Module or Theme Name #(1) is empty.', '$modName');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM',  new SystemException($msg));
         return;
     }
@@ -1887,7 +1887,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
 function xarMod_getVarsByModule($modName, $type = 'module')
 {
     if (empty($modName)) {
-        $msg = xarML('Empty theme or module name (#(1)).', $modName);
+        $msg = xarML('Empty theme or module name (#(1)).', '$modName');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
@@ -1978,7 +1978,7 @@ function xarMod_getVarsByModule($modName, $type = 'module')
 function xarMod_getVarsByName($varName, $type = 'module')
 {
     if (empty($varName)) {
-        $msg = xarML('Empty Theme or Module variable name (#(1)).', 'varName');
+        $msg = xarML('Empty Theme or Module variable name (#(1)).', '$varName');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
