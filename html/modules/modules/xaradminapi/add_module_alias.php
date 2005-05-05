@@ -38,7 +38,7 @@ function modules_adminapi_add_module_alias($args)
     // Check if the module name we want to define is already in use
     if (xarMod_getBaseInfo($aliasModName)) {
         $msg = xarML('Module name #(1) is already in use', $aliasModName);
-        xarErrorSet(XAR_USER_EXCEPTION, 'AlreadyInUse', new DefaultUserException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new DefaultUserException($msg));
         return;
     } else {
         // TODO: test this someday...
@@ -54,6 +54,12 @@ function modules_adminapi_add_module_alias($args)
     if (!isset($aliases)) {
         $aliases = array();
     }
+    if (!empty($aliases[$aliasModName]) && $aliases[$aliasModName] != $modName) {
+        $msg = xarML('Module alias #(1) is already used by module #(2)', $aliasModName, $aliases[$aliasModName]);
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new DefaultUserException($msg));
+        return;
+    }
+
     // the direction is fake module name -> true module, not the reverse !
     $aliases[$aliasModName] = $modName;
     xarConfigSetVar('System.ModuleAliases', $aliases);
