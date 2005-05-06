@@ -69,6 +69,8 @@ function base_htmlblock_display($blockinfo)
     }
     if(isset($vars['html_content'])) {
         $blockinfo['content'] = $vars['html_content'];
+    } else {
+        $blockinfo['content'] = '';
     }
     return $blockinfo;
 }
