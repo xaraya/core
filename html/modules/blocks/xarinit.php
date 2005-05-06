@@ -287,7 +287,7 @@ function blocks_init()
     */
 
     // Initialisation successful
-    xarModSetVar('blocks', 'selstyle', 'compact');
+    xarModSetVar('blocks', 'selstyle', 'plain');
     return true;
 }
 
