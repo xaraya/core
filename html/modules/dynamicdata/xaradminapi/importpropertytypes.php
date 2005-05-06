@@ -139,7 +139,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                         // Save the name of the property, for the alias
                         $aliasInfo['propertyClass'] = $propertyClass;
                         $aliasInfo['aliases']       = '';
-                        
+                        $aliasInfo['filepath']      = $propertyfilepath;
                         
                         // Add the alias to the property type list
                         $proptypes[$aliasInfo['id']] = $aliasInfo;
