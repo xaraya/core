@@ -153,7 +153,8 @@ function xarSessionGetVar($name)
 function xarSessionSetVar($name, $value)
 {
     assert('!is_null($value); /* Not allowed to set variable to NULL value */');
-    if ($name == 'uid') return false;
+    // security checks : do not allow to set the uid or mess with the session serialization
+    if ($name == 'uid' || strpos($name,'|') !== FALSE) return false;
 
     $var = 'XARSV' . $name;
 
