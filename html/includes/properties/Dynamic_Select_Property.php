@@ -21,6 +21,7 @@ class Dynamic_Select_Property extends Dynamic_Property
 {
     var $options;
     var $func;
+    var $itemfunc;
     var $file;
     var $override = false; // allow values other than those in the options
 
@@ -38,18 +39,16 @@ class Dynamic_Select_Property extends Dynamic_Property
 
     function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
+        if (isset($value)) {
+            $this->value = $value;
         }
-        foreach ($this->options as $option) {
-            if ($option['id'] == $value) {
-                $this->value = $value;
-                return true;
-            }
+        // check if this option really exists
+        $isvalid = $this->getOption(true);
+        if ($isvalid) {
+            return true;
         }
         // check if we allow values other than those in the options
         if ($this->override) {
-            $this->value = $value;
             return true;
         }
         $this->invalid = xarML('selection');
@@ -69,7 +68,7 @@ class Dynamic_Select_Property extends Dynamic_Property
             $data['value'] = $value;
         }
         if (!isset($options) || count($options) == 0) {
-            $data['options'] = $this->options;
+            $data['options'] = $this->getOptions();
         } else {
             $data['options'] = $options;
         }
@@ -96,32 +95,9 @@ class Dynamic_Select_Property extends Dynamic_Property
         } else {
             $data['id']= $id;
         }
-        /*$out = '<select' .
-               ' name="' . $name . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
-               '>';
-
-        foreach ($options as $option) {
-            $out .= '<option';
-            if (empty($option['id']) || $option['id'] != $option['name']) {
-                $out .= ' value="'.$option['id'].'"';
-            }
-            if ($option['id'] == $value) {
-                $out .= ' selected="selected">'.$option['name'].'</option>';
-            } else {
-                $out .= '>'.$option['name'].'</option>';
-            }
-        }
-        */
-
-        /*$out .= '</select>' .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        */
 
         $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
         $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-
 
         $template="dropdown";
         return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
@@ -131,28 +107,18 @@ class Dynamic_Select_Property extends Dynamic_Property
     function showOutput($args = array())
     {
         extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
+        if (isset($value)) {
+            $this->value = $value;
         }
-        //$out = '';
         $data=array();
-        // TODO: support multiple selection
-        $join = '';
-        foreach ($this->options as $option) {
-            if ($option['id'] == $value) {
-                $data['option']['name']=xarVarPrepForDisplay($option['name']);
-                //$out .= $join . xarVarPrepForDisplay($option['name']);
-                $join = ' | ';
-            }
-        }
-        // check if we need to show the current value instead
-        if (!empty($value) && $this->override && empty($join)) {
-            $data['option']['name'] = xarVarPrepForDisplay($value);
-        }
+        $data['value'] = $this->value;
+        // get the option corresponding to this value
+        $result = $this->getOption();
+        $data['option'] = array('id' => $this->value,
+                                'name' => xarVarPrepForDisplay($result));
 
         $template="dropdown";
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
-        // return $out;
     }
 
     function parseValidation($validation = '')
@@ -165,13 +131,14 @@ class Dynamic_Select_Property extends Dynamic_Property
             }
         } elseif (preg_match('/^xarModAPIFunc/i',$validation)) {
             $this->func = $validation;
+/*
             eval('$options = ' . $validation .';');
             if (isset($options) && count($options) > 0) {
                 foreach ($options as $id => $name) {
                     array_push($this->options, array('id' => $id, 'name' => $name));
                 }
             }
-
+*/
         // or if it contains a ; or a , we'll assume that this is a list of name1;name2;name3 or id1,name1;id2,name2;id3,name3
         } elseif (strchr($validation,';') || strchr($validation,',')) {
             // allow escaping \; for values that need a semi-colon
@@ -196,6 +163,51 @@ class Dynamic_Select_Property extends Dynamic_Property
         } elseif (preg_match('/^{file:(.*)}/',$validation, $fileMatch)) {
             $filePath = $fileMatch[1];
             $this->file = $filePath;
+/*
+            $fileLines = file($filePath);
+            foreach ($fileLines as $option)
+            {
+                // allow escaping \, for values that need a comma
+                if (preg_match('/(?<!\\\),/', $option)) {
+                    // if the option contains a , we'll assume it's an id,name combination
+                    list($id,$name) = preg_split('/(?<!\\\),/', $option);
+                    $id = strtr($id,array('\,' => ','));
+                    $name = strtr($name,array('\,' => ','));
+                    array_push($this->options, array('id' => $id, 'name' => $name));
+                } else {
+                    // otherwise we'll use the option for both id and name
+                    $option = strtr($option,array('\,' => ','));
+                    array_push($this->options, array('id' => $option, 'name' => $option));
+                }
+            }
+*/
+
+        // otherwise we'll leave it alone, for use in any subclasses (e.g. min:max in NumberList, or basedir for ImageList, or ...)
+        } else {
+        }
+    }
+
+    /**
+     * Retrieve the list of options on demand
+     */
+    function getOptions()
+    {
+        if (count($this->options) > 0) {
+            return $this->options;
+        }
+
+        $this->options = array();
+        if (!empty($this->func)) {
+            // we have some specific function to retrieve the options here
+            eval('$items = ' . $this->func .';');
+            if (isset($items) && count($items) > 0) {
+                foreach ($items as $id => $name) {
+                    array_push($this->options, array('id' => $id, 'name' => $name));
+                }
+                unset($items);
+            }
+
+        } elseif (!empty($this->file) && file_exists($this->file)) {
             $fileLines = file($filePath);
             foreach ($fileLines as $option)
             {
@@ -213,9 +225,43 @@ class Dynamic_Select_Property extends Dynamic_Property
                 }
             }
 
-        // otherwise we'll leave it alone, for use in any subclasses (e.g. min:max in NumberList, or basedir for ImageList, or ...)
         } else {
+
         }
+
+        return $this->options;
+    }
+
+    /**
+     * Retrieve or check an individual option on demand
+     */
+    function getOption($check = false)
+    {
+        if (!isset($this->value)) {
+             if ($check) return true;
+             return null;
+        }
+        if (empty($this->itemfunc)) {
+            // we're interested in one of the known options (= default behaviour)
+            $options = $this->getOptions();
+            foreach ($options as $option) {
+                if ($option['id'] == $this->value) {
+                    if ($check) return true;
+                    return $option['name'];
+                }
+            }
+            if ($check) return false;
+            return $this->value;
+        }
+        // use $value as argument for your API function : array('whatever' => $value, ...)
+        $value = $this->value;
+        eval('$result = ' . $this->itemfunc .';');
+        if (isset($result)) {
+            if ($check) return true;
+            return $result;
+        }
+        if ($check) return false;
+        return $this->value;
     }
 
     /**

@@ -42,7 +42,8 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
             }
         }
         $validlist = array();
-        foreach ($this->options as $option) {
+        $options = $this->getOptions();
+        foreach ($options as $option) {
             array_push($validlist,$option['id']);
         }
         foreach ($value as $val) {
@@ -66,7 +67,7 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
             $value = $this->value;
         }
         if (!isset($options) || count($options) == 0) {
-            $options = $this->options;
+            $options = $this->getOptions();
         }
         if (empty($value)) {
             $value = array();
@@ -89,26 +90,6 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
         $data['id']     = $id;
         $data['options']= $options;
 
-        /*
-        $out = '<select' .
-               ' name="' . $name . '[]"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
-               ' multiple>';
-        foreach ($options as $option) {
-            $out .= '<option';
-            if (empty($option['id']) || $option['id'] != $option['name']) {
-                $out .= ' value="'.$option['id'].'"';
-            }
-            if (in_array($option['id'],$value)) {
-                $out .= ' selected="selected">'.$option['name'].'</option>';
-            } else {
-                $out .= '>'.$option['name'].'</option>';
-            }
-        }
-        $out .= '</select>' .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        */
         $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
         $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
@@ -135,18 +116,11 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
             }
         }
         if (!isset($options)) {
-            $options = $this->options;
+            $options = $this->getOptions();
         }
         $data['value']= $value;
         $data['options']= $options;
 
-
-        /*foreach ($this->options as $option) {
-            if (in_array($option['id'],$value)) {
-                $out .= $join . xarVarPrepForDisplay($option['name']);
-                $join = ' | ';
-            }
-        }*/
         $template="multiselect";
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }

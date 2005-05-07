@@ -83,6 +83,7 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
         
         if (!isset($options) || count($options) == 0) 
         {
+            $this->getOptions();
             $options = array();            
             foreach( $this->options as $key => $option )
             {
@@ -126,6 +127,7 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
             $value = maskExplode($value);
         }
         
+        $this->getOptions();
         $numOptionsSelected=0;
         $options = array();            
         foreach( $this->options as $key => $option )
@@ -144,7 +146,6 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
 
         $template="checkboxmask";
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
-        // return $out;
     }
      
 }

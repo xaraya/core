@@ -84,7 +84,7 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
         $data['options'] = array();
         if (!isset($options) || count($options) == 0) 
         {
-            $options = $this->options;
+            $options = $this->getOptions();
         }        
         foreach( $options as $key => $option )
         {
@@ -108,7 +108,6 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
 
         $template="checkboxlist";
         return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
-        //return $out;
     }
 
     function showOutput($args = array())
@@ -131,7 +130,6 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
 
         $template="checkboxlist";
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
-        // return $out;
     }
      
 }

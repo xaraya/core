@@ -75,7 +75,7 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
         }
         
         if (!isset($options) || count($options) == 0) {
-            $data['options'] = $this->options;
+            $data['options'] = $this->getOptions();
         } else {
             $data['options'] = $options;
         }
@@ -90,68 +90,36 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
         } else {
             $data['id']= $id;
         }
-        /*$out = '<select' .
-               ' name="' . $name . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
-               '>';
-
-        foreach ($options as $option) {
-            $out .= '<option';
-            if (empty($option['id']) || $option['id'] != $option['name']) {
-                $out .= ' value="'.$option['id'].'"';
-            }
-            if ($option['id'] == $value) {
-                $out .= ' selected="selected">'.$option['name'].'</option>';
-            } else {
-                $out .= '>'.$option['name'].'</option>';
-            }
-        }
-        */
-
-        /*$out .= '</select>' .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        */
 
         $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
         $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
-
         $template="combobox";
         return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
-        //return $out;
     }
 
     function showOutput($args = array())
     {
         extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
+        if (isset($value)) {
+            $this->value = $value;
         }
-        //$out = '';
         $data=array();
-        // TODO: support multiple selection
-        $join = '';
-        foreach ($this->options as $option) 
-        {
-            if ($option['id'] == $value) 
-            {
-                $data['option']['name']=xarVarPrepForDisplay($option['name']);
-                //$out .= $join . xarVarPrepForDisplay($option['name']);
-                $join = ' | ';
-            }
-        }
+        $data['value'] = $this->value;
+        // get the option corresponding to this value
+        $result = $this->getOption();
+        $data['option'] = array('id' => $this->value,
+                                'name' => xarVarPrepForDisplay($result));
 
         // If the value wasn't found in the select list data, then it was
         // probably typed in -- so just display it.
         if( !isset($data['option']['name']) || ( $data['option']['name'] == '') )
         {
-            $data['option']['name'] = xarVarPrepForDisplay($value);
+            $data['option']['name'] = xarVarPrepForDisplay($this->value);
         }
 
         $template="combobox";
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
-        // return $out;
     }
 
     /**

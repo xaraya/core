@@ -35,7 +35,7 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
             $value = $this->value;
         }
         if (!isset($options) || count($options) == 0) {
-            $options = $this->options;
+            $options = $this->getOptions();
         }
         if (empty($name)) {
             $name = 'dd_'.$this->id;
