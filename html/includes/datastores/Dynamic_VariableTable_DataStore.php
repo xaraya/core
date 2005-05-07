@@ -428,6 +428,24 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $propval = 'xar_dd_value';
             }
 
+        /*
+            Note : Alternate syntax for Postgres if contrib/tablefunc.sql is installed
+
+            $query = "SELECT * FROM crosstab(
+                'SELECT xar_dd_itemid, xar_dd_propid, xar_dd_value
+                 FROM $dynamicdata
+                 WHERE xar_dd_propid IN (" . join(', ',$propids) . ")
+                 ORDER BY xar_dd_itemid, xar_dd_propid;', " . count($propids) . ")
+            AS dd(itemid int, dd_" . join(' text, dd_',$propids) . " text)";
+
+            if (count($this->where) > 0) {
+                $query .= " WHERE ";
+                foreach ($this->where as $whereitem) {
+                    $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'dd_' . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
+                }
+            }
+        */
+
             $query = "SELECT xar_dd_itemid ";
             foreach ($propids as $propid) {
                 $query .= ", MAX(CASE WHEN xar_dd_propid = $propid THEN $propval ELSE '' END) AS dd_$propid \n";
