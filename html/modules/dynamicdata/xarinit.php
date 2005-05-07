@@ -190,9 +190,7 @@ function dynamicdata_init()
                                                   'null'        => false,
                                                   'default'     => '0'),
                 /* specific validation rules for this property (e.g. basedir, size, ...) */
-                    'xar_prop_validation' => array('type'        => 'varchar',
-                                                  'size'        => 254,
-                                                  'default'     => NULL)
+                    'xar_prop_validation' => array('type'        => 'text')
               );
 
     // Create the Table - the function will return the SQL is successful or
@@ -822,7 +820,7 @@ function dynamicdata_createPropDefTable()
                                               'size'        => 254,
                                               'default'     => NULL),
                 
-                /* the default validation string for this property */
+                /* the default validation string for this property - no need to use text here... */
                     'xar_prop_validation'   => array('type'        => 'varchar',
                                               'size'        => 254,
                                               'default'     => NULL),

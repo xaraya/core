@@ -697,11 +697,6 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                 $this->validation = $validation;
             }
         }
-// FIXME: remove this once we switch to TEXT for the validation field
-        if (strlen($this->validation) > 254) {
-            $this->invalid = 'validation : too long';
-            return false;
-        }
         // tell the calling function that everything is OK
         return true;
     }
