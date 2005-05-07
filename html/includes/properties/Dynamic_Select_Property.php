@@ -114,8 +114,12 @@ class Dynamic_Select_Property extends Dynamic_Property
         $data['value'] = $this->value;
         // get the option corresponding to this value
         $result = $this->getOption();
+        // only apply xarVarPrepForDisplay on strings, not arrays et al.
+        if (!empty($result) && is_string($result)) {
+            $result = xarVarPrepForDisplay($result);
+        }
         $data['option'] = array('id' => $this->value,
-                                'name' => xarVarPrepForDisplay($result));
+                                'name' => $result);
 
         $template="dropdown";
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
@@ -123,14 +127,23 @@ class Dynamic_Select_Property extends Dynamic_Property
 
     function parseValidation($validation = '')
     {
-        // if the validation field starts with xarModAPIFunc, we'll assume that this is
-        // a function call that returns an array of names, or an array of id => name
-        if(is_array($validation)) {
+        // if the validation field is an array, we'll assume that this is an array of id => name
+        if (is_array($validation)) {
             foreach($validation as $id => $name) {
                 array_push($this->options, array('id' => $id, 'name' => $name));
             }
+
+        // if the validation field starts with xarModAPIFunc, we'll assume that this is
+        // a function call that returns an array of names, or an array of id => name
         } elseif (preg_match('/^xarModAPIFunc/i',$validation)) {
-            $this->func = $validation;
+            // if the validation field contains two ;-separated xarModAPIFunc calls,
+            // the second one is used to get/check the result for a single $value
+            if (preg_match('/^(xarModAPIFunc.+)\s*;\s*(xarModAPIFunc.+)$/i',$validation,$matches)) {
+                $this->func = $matches[1];
+                $this->itemfunc = $matches[2];
+            } else {
+                $this->func = $validation;
+            }
 /*
             eval('$options = ' . $validation .';');
             if (isset($options) && count($options) > 0) {
@@ -139,6 +152,7 @@ class Dynamic_Select_Property extends Dynamic_Property
                 }
             }
 */
+
         // or if it contains a ; or a , we'll assume that this is a list of name1;name2;name3 or id1,name1;id2,name2;id3,name3
         } elseif (strchr($validation,';') || strchr($validation,',')) {
             // allow escaping \; for values that need a semi-colon
@@ -253,6 +267,11 @@ class Dynamic_Select_Property extends Dynamic_Property
             if ($check) return false;
             return $this->value;
         }
+        // most API functions throw exceptions for empty ids, so we skip those here
+        if (empty($this->value)) {
+             if ($check) return true;
+             return $this->value;
+        }
         // use $value as argument for your API function : array('whatever' => $value, ...)
         $value = $this->value;
         eval('$result = ' . $this->itemfunc .';');
@@ -306,7 +325,7 @@ class Dynamic_Select_Property extends Dynamic_Property
         $data = array();
         $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
         $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
-        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
+        $data['tabindex']   = !empty($tabindex) ? $tabindex : 1;
         $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
         // hard-coded options etc.
@@ -320,11 +339,16 @@ class Dynamic_Select_Property extends Dynamic_Property
         $numoptions = count($this->options);
 
         $data['func'] = '';
+        $data['itemfunc'] = '';
         $data['file'] = '';
         $data['options'] = array();
         $data['other'] = '';
         if (!empty($this->func)) {
             $data['func'] = xarVarPrepForDisplay($this->func);
+            // only supported when we use func too
+            if (!empty($this->itemfunc)) {
+                $data['itemfunc'] = xarVarPrepForDisplay($this->itemfunc);
+            }
         } elseif (!empty($this->file)) {
             $data['file'] = xarVarPrepForDisplay($this->file);
         } elseif ($numoptions > 0 && $numoptions != $data['static']) {
@@ -364,6 +388,10 @@ class Dynamic_Select_Property extends Dynamic_Property
             if (is_array($validation)) {
                 if (!empty($validation['func']) && preg_match('/^xarModAPIFunc/i',$validation['func'])) {
                     $this->validation = $validation['func'];
+                    // only supported when we use func too
+                    if (!empty($validation['itemfunc']) && preg_match('/^xarModAPIFunc/i',$validation['itemfunc'])) {
+                        $this->validation .= ';' . $validation['itemfunc'];
+                    }
 
                 } elseif (!empty($validation['file']) && file_exists($validation['file'])) {
                     $this->validation = '{file:' . $validation['file'] . '}';
