@@ -29,12 +29,6 @@
                 </dd>
                 <xar:if condition="!empty($fields)">
                     <dd>
-                        <xar:comment>
-                        This set generate a string for the javascript below, which expects a non XML url, still the array notation make the tpl not well formed
-                        solution: make the javascript go elsewhere or play with CDATA sections (later though)
-                        </xar:comment>
-
-                        <xar:set name="urlform">#xarModURL('dynamicdata','admin','form',array('objectid' => $objectid, 'theme' => 'print'),false)#</xar:set>
                         <script type="text/javascript">
                         <!--
                         function xar_dynamicdata_formpreview()
@@ -217,9 +211,11 @@
             </p>
         </xar:if>
 
-        <xar:if condition="!empty($hooks)">
-            #$hooks# 
-        </xar:if>
+		<xar:if condition="!empty($hooks)">
+			<xar:foreach in="$hooks" key="$module" value="$output">
+				#$output#
+			</xar:foreach>
+		</xar:if>
 
         <div class="xar-align-center">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />

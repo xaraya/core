@@ -9,10 +9,6 @@
     </h2>
 
     <xar:if condition="empty($export)">
-        <xar:set name="prop">
-            #xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'))# 
-        </xar:set>
-
         <xar:if condition="!empty($databases)">
             <h3>
                 <xar:mlstring>Select A Database:</xar:mlstring>
@@ -163,7 +159,8 @@
                 <textarea name="xml" id="xml" class="xar-dd-textarea-data">
 &lt;objects&gt;
     <xar:foreach in="$tables" key="$curtable" value="$fields">
-        &lt;object name="#$curtable#"&gt;
+        <xar:set name="tablename">strtr($curtable,'.','_')</xar:set>
+        &lt;object name="#$tablename#"&gt;
             &lt;label&gt;#$curtable#&lt;/label&gt;
             &lt;moduleid&gt;182&lt;/moduleid&gt;
             &lt;itemtype&gt;-1&lt;/itemtype&gt;
