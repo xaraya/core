@@ -109,6 +109,8 @@
           </xar:if>
     </xar:if>
 
-    #$hooks#
+    <xar:foreach in="$hooks" key="$module" value="$output">
+        #$output#
+    </xar:foreach>
     <br class="xar-clearboth" />
 </div>

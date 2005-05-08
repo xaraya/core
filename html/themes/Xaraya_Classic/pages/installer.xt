@@ -15,7 +15,7 @@
             <meta http-equiv="expires" content="0" />
             <meta name="generator" content="Xaraya; - http://www.xaraya.com" />
             <meta name="rating" content="General" />
-            <style type="text/css">@import url("themes/Xaraya_Classic/style/installer.css"); </style> 
+            <link rel="stylesheet" type="text/css" href="themes/Xaraya_Classic/style/installer.css" />
         </head>
         <body>
             <div id="wrapper">

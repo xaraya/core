@@ -219,7 +219,7 @@
                 </p>
             </xar:if>
 
-            <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $adodbTemplatesIsWritable AND $rssTemplatesIsWritable">
+            <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $adodbTemplatesIsWritable AND $rssTemplatesIsWritable">
                 <input type="hidden" name="install_phase" id="install_phase" value="4" />
                 <xar:set name="buttonnext">
                     <xar:mlstring>Continue</xar:mlstring>

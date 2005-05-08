@@ -1,8 +1,9 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+
 <xar:comment>
-Content type is text.
-Convert all HTML characters to entities and honour newlines with a break.
-Alternatively, the raw text is available in $content_text.
+    Content type is text.
+    Convert all HTML characters to entities and honour newlines with a break.
+    Alternatively, the raw text is available in $content_text.
 </xar:comment>
 <xar:if condition="$content_type eq 'text' and $custom_format eq ''">
     <div><xar:loop name="$content_lines">
@@ -11,34 +12,34 @@ Alternatively, the raw text is available in $content_text.
 </xar:if>
 
 <xar:comment>
-Content type is html.
-Display the content as-is - we assume it is entered by an admin and so can be trusted.
+    Content type is html.
+    Display the content as-is - we assume it is entered by an admin and so can be trusted.
 </xar:comment>
 <xar:if condition="$content_type eq 'html' and $custom_format eq ''">
     <div>#$content_text#</div>
 </xar:if>
 
 <xar:comment>
-Content type is php.
-Display the content as-is - we assume it is entered by an admin and so can be trusted.
+    Content type is php.
+    Display the content as-is - we assume it is entered by an admin and so can be trusted.
 </xar:comment>
 <xar:if condition="$content_type eq 'php' and $custom_format eq ''">
     <div>#$content_text#</div>
 </xar:if>
 
 <xar:comment>
-Content type is data.
-Here the block PHP content can return structured data, e.g. return array('foo'=>'bar');
-which provides the custom variable #$foo# available here.
+    Content type is data.
+    Here the block PHP content can return structured data, e.g. return and associative array;
+    which provides the custom variables as keys.
 </xar:comment>
 <xar:if condition="$content_type eq 'data' and $custom_format eq ''">
     <xar:comment></xar:comment>
 </xar:if>
 
 <xar:comment>
-Custom handling.
-This example: execute content as PHP, then treat the output as text.
-Matches 'content type' = 'php' and 'custom format' = 'text'
+    Custom handling.
+    This example: execute content as PHP, then treat the output as text.
+    Matches 'content type' = 'php' and 'custom format' = 'text'
 </xar:comment>
 <xar:if condition="$content_type eq 'php' and $custom_format eq 'text'">
     <div><xar:loop name="$content_lines">
