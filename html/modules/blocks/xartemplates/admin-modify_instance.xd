@@ -126,7 +126,12 @@
             </xar:if>
 
             <xar:if condition="!empty($extra_fields)">
-                #$extra_fields#
+                    #$extra_fields# 
+				<xar:if condition="!empty($hooks)">
+					<xar:foreach in="$hooks" key="$module" value="$output">
+						#$output#
+					</xar:foreach> 
+	            </xar:if>
             <xar:else />
                 <p>
                     <xar:mlstring>No extra settings for this block type.</xar:mlstring>
