@@ -4,10 +4,6 @@
 <xar:set name="compare">
     xarServerGetCurrentURL()
 </xar:set>
-<!-- Next line can't be replaced with entities yet -->
-<xar:set name="current">
-    xarModURL('roles', 'user', 'display', array('uid' => xarUserGetVar('uid')))
-</xar:set>
 <xar:set name="account">
     &xar-modurl-roles-user-account;
 </xar:set>
@@ -54,7 +50,11 @@
                         </a>
                     </dd>
                 </xar:if>
-                #$output# 
+				<xar:if condition="!empty($output)">
+					<xar:foreach in="$output" key="$module" value="$hookoutput">
+						#$hookoutput#
+					</xar:foreach>
+				</xar:if>
                 <dd>
                     <a href="&xar-modurl-roles-user-logout;">
                         <xar:mlstring>

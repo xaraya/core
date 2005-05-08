@@ -104,7 +104,11 @@
                     </label>
                 </div>
         
-                #$hooks#
+            <xar:if condition="!empty($hooks)">
+				<xar:foreach in="$hooks" key="$module" value="$output">
+					#$output#
+				</xar:foreach>
+            </xar:if>
         </fieldset>
 
         <fieldset>

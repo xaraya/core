@@ -54,6 +54,10 @@
         </xar:if>
     </xar:if>
     <p>
-        #$hooks# 
+	<xar:if condition="!empty($hooks)">
+		<xar:foreach in="$hooks" key="$module" value="$output">
+			#$output#
+		</xar:foreach>
+	</xar:if>
     </p>
 </div>
