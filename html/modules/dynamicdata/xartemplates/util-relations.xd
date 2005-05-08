@@ -422,12 +422,12 @@
                     <xar:foreach in="$relations[$table]" key="$where" value="$links">
 <!-- TODO: check this section, it contains greater than signs, dummy xar:sets and some other hackery -->
                         <xar:if condition="is_numeric($where)">
-				            <xar:set name="relobject">'objectid'</xar:set>
+                            <xar:set name="relobject">'objectid'</xar:set>
                             <xar:set name="wherename">
                                 #$objects[$where]['label']# 
                             </xar:set>
                             <xar:else />
-				            <xar:set name="relobject">'table'</xar:set>
+                            <xar:set name="relobject">'table'</xar:set>
                             <xar:set name="wherename">
                                 #$where# 
                             </xar:set>
@@ -447,13 +447,13 @@
                                     <td class="xar-align-center">
                                         <input type="checkbox" name="what[#$where#][#$idx#]" id="what_#$where#_#$idx#" value="1" />
                                     </td>
-					                <td>
-					                	<a href="&xar-modurl-dynamicdata-util-relations;#$relobject#=#$where#">
-					                		#$wherename#
-					                	</a>
-					                	<br/>
-					                	#$link['to']#
-					                </td>
+                                    <td>
+                                        <a href="&xar-modurl-dynamicdata-util-relations;#$relobject#=#$where#">
+                                            #$wherename#
+                                        </a>
+                                        <br/>
+                                        #$link['to']#
+                                    </td>
                                     <td>
                                         &nbsp; 
                                     </td>
@@ -472,13 +472,13 @@
                                     <td class="xar-align-center">
                                         <input type="checkbox" name="what[#$where#][#$idx#]" id="what_#$where#_#$idx#" value="1" />
                                     </td>
-                					<td>
-                						<a href="&xar-modurl-dynamicdata-util-relations;#$relobject#=#$where#">
-                							#$wherename#
-                						</a>
-                						<br/>
-                						#$link['from']#
-                					</td>
+                                    <td>
+                                        <a href="&xar-modurl-dynamicdata-util-relations;#$relobject#=#$where#">
+                                            #$wherename#
+                                        </a>
+                                        <br/>
+                                        #$link['from']#
+                                    </td>
                                     <td>
                                         &nbsp; 
                                     </td>
@@ -509,13 +509,13 @@
                                     <td class="xar-nowrap">
                                         &nbsp; 
                                     </td>
-                					<td>
-                						<a href="&xar-modurl-dynamicdata-util-relations;#$relobject#=#$where#">
-                							#$wherename#
-                						</a>
-                						<br/>
-                						#$link['to']#
-                					</td>
+                                    <td>
+                                        <a href="&xar-modurl-dynamicdata-util-relations;#$relobject#=#$where#">
+                                            #$wherename#
+                                        </a>
+                                        <br/>
+                                        #$link['to']#
+                                    </td>
                                 </tr>
                                 <xar:elseif condition="$link['type'] eq 'direct' or $link['type'] eq 'extended'" />
                                 <tr>
@@ -531,13 +531,13 @@
                                     <td>
                                         #$link['from']# 
                                     </td>
-                					<td>
-                						<a href="&xar-modurl-dynamicdata-util-relations;#$relobject#=#$where#">
-                							#$wherename#
-                						</a>
-                						<br/>
-                						#$link['to']#
-                					</td>
+                                    <td>
+                                        <a href="&xar-modurl-dynamicdata-util-relations;#$relobject#=#$where#">
+                                            #$wherename#
+                                        </a>
+                                        <br/>
+                                        #$link['to']#
+                                    </td>
                                     <td class="xar-nowrap">
                                         &nbsp; 
                                     </td>
@@ -550,13 +550,13 @@
                                     <td>
                                         &nbsp; 
                                     </td>
-                					<td>
-                						<a href="&xar-modurl-dynamicdata-util-relations;#$relobject#=#$where#">
-                							#$wherename#
-                						</a>
-                						<br/>
-                						#$link['to']#
-                					</td>
+                                    <td>
+                                        <a href="&xar-modurl-dynamicdata-util-relations;#$relobject#=#$where#">
+                                            #$wherename#
+                                        </a>
+                                        <br/>
+                                        #$link['to']#
+                                    </td>
                                     <td>
                                         #$link['from']# 
                                     </td>

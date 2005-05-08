@@ -75,23 +75,23 @@
             <img src="modules/roles/xarimages/test.gif" alt="#xarML('Test Privileges')#" />
         </a>
     </p>
-	<a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$roleid#" title="#xarML('Test this User\'s Privileges')#">
-		<xar:ml>
-			<xar:mlstring>Test the privileges of #(1)</xar:mlstring>
-			<xar:mlvar>
-				#xarVarPrepForDisplay($pname)#
-			</xar:mlvar>
-		</xar:ml>
-	</a>
-	<br /><br />
-	<h3>
-		<xar:ml>
-			<xar:mlstring>Privileges inherited by #(1):</xar:mlstring>
-			<xar:mlvar>
-				#xarVarPrepForDisplay($pname)#
-			</xar:mlvar>
-		</xar:ml>
-	</h3>
+    <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$roleid#" title="#xarML('Test this User\'s Privileges')#">
+        <xar:ml>
+            <xar:mlstring>Test the privileges of #(1)</xar:mlstring>
+            <xar:mlvar>
+                #xarVarPrepForDisplay($pname)#
+            </xar:mlvar>
+        </xar:ml>
+    </a>
+    <br /><br />
+    <h3>
+        <xar:ml>
+            <xar:mlstring>Privileges inherited by #(1):</xar:mlstring>
+            <xar:mlvar>
+                #xarVarPrepForDisplay($pname)#
+            </xar:mlvar>
+        </xar:ml>
+    </h3>
     <xar:if condition="count($inherited) eq 0">
         <p>
             <xar:mlstring>No privileges inherited.</xar:mlstring>            
@@ -169,14 +169,14 @@
         </div>
     </xar:if>
 
-	<h3>
-		<xar:ml>
-			<xar:mlstring>Privileges assigned to #(1):</xar:mlstring>
-			<xar:mlvar>
-				#xarVarPrepForDisplay($pname)#
-			</xar:mlvar>
-		</xar:ml>
-	</h3>            
+    <h3>
+        <xar:ml>
+            <xar:mlstring>Privileges assigned to #(1):</xar:mlstring>
+            <xar:mlvar>
+                #xarVarPrepForDisplay($pname)#
+            </xar:mlvar>
+        </xar:ml>
+    </h3>            
 
     <xar:if condition="count($privileges) eq 0">
         <p>
@@ -265,26 +265,26 @@
         </table>
     </xar:if>
 
-	<xar:if condition="$ptype eq 1">
-		<xar:set name="$thisrole">
-			<xar:mlstring>Group</xar:mlstring>
-		</xar:set>
-	<xar:else />
-		<xar:set name="$thisrole">
-			<xar:mlstring>User</xar:mlstring>
-		</xar:set>
-	</xar:if>
-	<h3>
-		<xar:ml>
-			<xar:mlstring>Assign a Privilege to #(1) '#(2)':</xar:mlstring>
-			<xar:mlvar>
-				#$thisrole#
-			</xar:mlvar>
-			<xar:mlvar>
-				#xarVarPrepForDisplay($pname)#
-			</xar:mlvar>
-		</xar:ml>                     
-	</h3>
+    <xar:if condition="$ptype eq 1">
+        <xar:set name="$thisrole">
+            <xar:mlstring>Group</xar:mlstring>
+        </xar:set>
+    <xar:else />
+        <xar:set name="$thisrole">
+            <xar:mlstring>User</xar:mlstring>
+        </xar:set>
+    </xar:if>
+    <h3>
+        <xar:ml>
+            <xar:mlstring>Assign a Privilege to #(1) '#(2)':</xar:mlstring>
+            <xar:mlvar>
+                #$thisrole#
+            </xar:mlvar>
+            <xar:mlvar>
+                #xarVarPrepForDisplay($pname)#
+            </xar:mlvar>
+        </xar:ml>                     
+    </h3>
      
     <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset>

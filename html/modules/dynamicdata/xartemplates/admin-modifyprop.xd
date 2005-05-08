@@ -211,11 +211,11 @@
             </p>
         </xar:if>
 
-		<xar:if condition="!empty($hooks)">
-			<xar:foreach in="$hooks" key="$module" value="$output">
-				#$output#
-			</xar:foreach>
-		</xar:if>
+        <xar:if condition="!empty($hooks)">
+            <xar:foreach in="$hooks" key="$module" value="$output">
+                #$output#
+            </xar:foreach>
+        </xar:if>
 
         <div class="xar-align-center">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />

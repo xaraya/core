@@ -50,11 +50,11 @@
                         </a>
                     </dd>
                 </xar:if>
-				<xar:if condition="!empty($output)">
-					<xar:foreach in="$output" key="$module" value="$hookoutput">
-						#$hookoutput#
-					</xar:foreach>
-				</xar:if>
+                <xar:if condition="!empty($output)">
+                    <xar:foreach in="$output" key="$module" value="$hookoutput">
+                        #$hookoutput#
+                    </xar:foreach>
+                </xar:if>
                 <dd>
                     <a href="&xar-modurl-roles-user-logout;">
                         <xar:mlstring>
