@@ -278,8 +278,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     include 'includes/xarMLS.php';
-    $systemArgs = array('translationsBackend' => xarConfigGetVar('Site.MLS.TranslationsBackend'),
-                        'MLSMode'             => xarConfigGetVar('Site.MLS.MLSMode'),
+    $systemArgs = array('MLSMode'             => xarConfigGetVar('Site.MLS.MLSMode'),
+//                        'translationsBackend' => xarConfigGetVar('Site.MLS.TranslationsBackend'),
+                        'translationsBackend' => 'xml2php',
                         'defaultLocale'       => xarConfigGetVar('Site.MLS.DefaultLocale'),
                         'allowedLocales'      => xarConfigGetVar('Site.MLS.AllowedLocales'),
                         'defaultTimeZone'     => xarConfigGetVar('Site.Core.TimeZone'),
