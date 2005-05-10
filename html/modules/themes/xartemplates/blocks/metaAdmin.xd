@@ -19,10 +19,12 @@
     <xar:else />
         <input type="checkbox" name="usegeo" id="usegeo#$blockid#" value="1" tabindex="1" />
     </xar:if>
+
     <label for="usegeo#$blockid#" title="#xarML('GeoUrl allows you to locate websites that are geographically close to yours.')#">
         <xar:mlstring>Use GeoURL</xar:mlstring> 
     </label>
-    (<a href="http://geourl.org/" onclick="window.open(this.getAttribute('href'));return false;"><xar:mlstring>About GeoURL</xar:mlstring></a>)
+    (<a href="http://geourl.org/" target="_BLANK"><xar:mlstring>About GeoURL</xar:mlstring></a>)
+	 
 </div>
 
 <xar:if condition="!empty($usegeo)">

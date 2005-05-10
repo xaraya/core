@@ -142,6 +142,7 @@
     </div>
 </fieldset>
 
+<xar:comment>    
 <fieldset>
     <legend>
         <xar:mlstring>Translations backend</xar:mlstring>
@@ -173,3 +174,4 @@
     </div>
 
 </fieldset>
+</xar:comment>
