@@ -1,4 +1,4 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+    <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <div class="xar-form-input-wrapper">
     <label for="metadescription#$blockid#" title="#xarML('Add the meta description.')#" class="xar-form-label">
         <xar:mlstring>Meta Description:</xar:mlstring>
@@ -24,7 +24,7 @@
         <xar:mlstring>Use GeoURL</xar:mlstring> 
     </label>
     (<a href="http://geourl.org/" target="_BLANK"><xar:mlstring>About GeoURL</xar:mlstring></a>)
-	 
+     
 </div>
 
 <xar:if condition="!empty($usegeo)">
