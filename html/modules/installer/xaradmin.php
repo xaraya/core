@@ -115,6 +115,8 @@ function installer_admin_phase3()
     $rssTemplatesDir          = $systemVarDir . '/cache/rss';
     $adodbTemplatesDir        = $systemVarDir . '/cache/adodb';
     $systemConfigFile         = $systemVarDir . '/config.system.php';
+    $phpLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/php';
+    $xmlLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/xml';
 
     if (function_exists('version_compare')) {
         if (version_compare(PHP_VERSION,'4.1.2','>=')) $metRequiredPHPVersion = true;
@@ -125,6 +127,8 @@ function installer_admin_phase3()
     $cacheTemplatesIsWritable   = is_writable($cacheTemplatesDir);
     $rssTemplatesIsWritable     = is_writable($rssTemplatesDir);
     $adodbTemplatesIsWritable   = is_writable($adodbTemplatesDir);
+    $phpLanguageFilesIsWritable = xarMLS__iswritable($phpLanguageDir);
+    $xmlLanguageFilesIsWritable = xarMLS__iswritable($xmlLanguageDir);
 
     // Extension Check
     $data['xmlextension']             = extension_loaded('xml');
@@ -146,6 +150,10 @@ function installer_admin_phase3()
     $data['adodbTemplatesIsWritable'] = $adodbTemplatesIsWritable;
     $data['systemConfigFile']         = $systemConfigFile;
     $data['systemConfigIsWritable']   = $systemConfigIsWritable;
+    $data['phpLanguageDir']             = $phpLanguageDir;
+    $data['phpLanguageFilesIsWritable'] = $phpLanguageFilesIsWritable;
+    $data['xmlLanguageDir']             = $xmlLanguageDir;
+    $data['xmlLanguageFilesIsWritable'] = $xmlLanguageFilesIsWritable;
 
     $data['language']    = $install_language;
     $data['phase']       = 3;
@@ -1088,6 +1096,7 @@ function installer_admin_cleanup()
 
 function installer_admin_finish()
 {
+    xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true));
     xarResponseRedirect('index.php');
 }
 ?>

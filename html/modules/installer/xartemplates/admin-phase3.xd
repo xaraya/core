@@ -108,6 +108,82 @@
 
             <h2>
                 <xar:mlstring>
+                     Locales Settings Check
+                </xar:mlstring>
+            </h2>
+            <p>
+                <xar:mlstring>
+                     For translation to function properly, the Xaraya must have write access to files in the locales directory
+                </xar:mlstring>
+            </p>
+            <xar:if condition="$phpLanguageFilesIsWritable">
+                <p>
+                    <strong>
+                        #$successtitle#</strong>: 
+                    <xar:ml>
+                        <xar:mlstring>
+                            The Xaraya can write to the directory #(1) and all it's files and subdirectories
+                        </xar:mlstring>
+                        <xar:mlvar>
+                            #$phpLanguageDir#
+                        </xar:mlvar>
+                    </xar:ml>
+                </p>
+                <xar:else />
+                <p>
+                    <strong style="color: red">
+                        #$failuretitle#</strong>: 
+                    <xar:ml>
+                        <xar:mlstring>
+                            The installer cannot write to the directory #(1) and all it's files and subdirectories
+                        </xar:mlstring>
+                        <xar:mlvar>
+                            #$phpLanguageDir#
+                        </xar:mlvar>
+                    </xar:ml>
+                    <xar:mlstring>
+                        Please verify that your webserver has write access to the files under the directory: 
+                    </xar:mlstring>
+                    #$phpLanguageDir# 
+                </p>
+            </xar:if>
+            <xar:if condition="$xmlLanguageFilesIsWritable">
+                <p>
+                    <strong>
+                        #$successtitle#</strong>: 
+                    <xar:ml>
+                        <xar:mlstring>
+                            The Xaraya can write to the directory #(1) and all it's files and subdirectories
+                        </xar:mlstring>
+                        <xar:mlvar>
+                            #$xmlLanguageDir#
+                        </xar:mlvar>
+                    </xar:ml>
+                </p>
+                <xar:else />
+                <p>
+                    <strong style="color: orange">
+                        #$warningtitle#</strong>: 
+                    <xar:ml>
+                        <xar:mlstring>
+                             The installer cannot write to the directory #(1) and all it's files and subdirectories
+                         </xar:mlstring>
+                         <xar:mlvar>
+                             #$xmlLanguageDir#
+                         </xar:mlvar>
+                    </xar:ml>
+                    <xar:mlstring>
+                        Please verify that your webserver has write access to the files under the directory: 
+                    </xar:mlstring>
+                    #$xmlLanguageDir# 
+                    <xar:mlstring>
+                        This write access is only needed if you intend on using translations module at your site actively.
+                    </xar:mlstring>
+                </p>
+            </xar:if>
+
+            <h2>
+                <xar:mlstring>
                     Information on Loaded PHP Extensions
                 </xar:mlstring>
             </h2>
@@ -219,7 +295,7 @@
                 </p>
             </xar:if>
 
-            <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $adodbTemplatesIsWritable AND $rssTemplatesIsWritable">
+            <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $adodbTemplatesIsWritable AND $rssTemplatesIsWritable AND $phpLanguageFilesIsWritable">
                 <input type="hidden" name="install_phase" id="install_phase" value="4" />
                 <xar:set name="buttonnext">
                     <xar:mlstring>Continue</xar:mlstring>
