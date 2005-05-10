@@ -71,7 +71,8 @@ function installer_community_configuration_load($args)
     }
 
     if(in_array('p2',$args)) {
-        installer_community_readaccess();
+        // Only do readaccess if we havent already done so
+        if(!in_array('p1',$args)) installer_community_readaccess(); 
         installer_community_readnoncore();
         xarAssignPrivilege('ReadNonCore','Everybody');
    }
