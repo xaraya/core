@@ -129,7 +129,14 @@ function installer_admin_phase3()
     $adodbTemplatesIsWritable   = is_writable($adodbTemplatesDir);
     $phpLanguageFilesIsWritable = xarMLS__iswritable($phpLanguageDir);
     $xmlLanguageFilesIsWritable = xarMLS__iswritable($xmlLanguageDir);
-
+    $memLimit = trim(ini_get('memory_limit'));
+    $memVal = $memLimit;
+    switch(strtolower($memLimit{strlen($memLimit)-1})) {
+        case 'g': $memVal *= 1024;
+        case 'm': $memVal *= 1024;
+        case 'k': $memVal *= 1024;
+    }
+    
     // Extension Check
     $data['xmlextension']             = extension_loaded('xml');
     $data['mysqlextension']           = extension_loaded('mysql');
@@ -154,7 +161,9 @@ function installer_admin_phase3()
     $data['phpLanguageFilesIsWritable'] = $phpLanguageFilesIsWritable;
     $data['xmlLanguageDir']             = $xmlLanguageDir;
     $data['xmlLanguageFilesIsWritable'] = $xmlLanguageFilesIsWritable;
-
+    $data['memory_limit']               = $memLimit;
+    $data['metMinMemRequirement']       = $memVal >= 8 * 1024 * 1024;
+    
     $data['language']    = $install_language;
     $data['phase']       = 3;
     $data['phase_label'] = xarML('Step Three');
