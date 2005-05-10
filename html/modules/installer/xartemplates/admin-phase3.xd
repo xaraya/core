@@ -44,6 +44,31 @@
                 </p>
             </xar:if>
 
+            <xar:if condition="$metMinMemRequirement">
+                <p>
+                    <strong>#$successtitle#</strong>:
+                    <xar:ml>
+                        <xar:mlstring>Xaraya needs a MINIMUM of 8 Megabyte of PHP memory. ( 16M or higher STRONGLY recommended)
+                        The current memory limit is #(1)</xar:mlstring>
+                        <xar:mlvar>#$memory_limit#</xar:mlvar>
+                    </xar:ml>
+                </p>
+            <xar:else/>
+                <p>
+                    <strong style="color: red">#$failuretitle#</strong>:
+                    <xar:ml>
+                        <xar:mlstring>Xaraya needs a MINIMUM of 8 Megabyte of PHP memory. ( 16M or higher STRONGLY recommended)
+                        The current memory limit is #(1)</xar:mlstring>
+                        <xar:mlvar>#$memory_limit#</xar:mlvar>
+                    </xar:ml>
+                </p>
+             </xar:if>
+               <p>
+                    <xar:mlstring>
+                        Especially if you are planning to install modules during the install phase, a lot of memory is
+                        required. When in doubt, do a core only install and install modules manually later.
+                    </xar:mlstring>
+                </p>
             <xar:if condition="$systemConfigIsWritable">
                 <p>
                     <strong>#$successtitle#:</strong> 
@@ -295,7 +320,7 @@
                 </p>
             </xar:if>
 
-            <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $adodbTemplatesIsWritable AND $rssTemplatesIsWritable AND $phpLanguageFilesIsWritable">
+            <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $adodbTemplatesIsWritable AND $rssTemplatesIsWritable AND $phpLanguageFilesIsWritable AND $metMinMemRequirement">
                 <input type="hidden" name="install_phase" id="install_phase" value="4" />
                 <xar:set name="buttonnext">
                     <xar:mlstring>Continue</xar:mlstring>
