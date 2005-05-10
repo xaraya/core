@@ -487,7 +487,9 @@ function xarModGetInfo($modRegId, $type = 'module')
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));return;
     }
 
-    switch(strtolower($type)) {
+    $type = strtolower($type);
+
+    switch($type) {
         case 'module':
             default:
             if (xarCore_IsCached('Mod.Infos', $modRegId)) {
@@ -504,7 +506,7 @@ function xarModGetInfo($modRegId, $type = 'module')
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
         default:
             $the_table = $tables['modules'];
@@ -534,7 +536,7 @@ function xarModGetInfo($modRegId, $type = 'module')
         return;
     }
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
         default:
             list($modInfo['name'],
@@ -555,13 +557,13 @@ function xarModGetInfo($modRegId, $type = 'module')
 
     $modInfo['regid'] = (int) $modRegId;
     $modInfo['mode'] = (int) $mode;
-    // $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name'], $type);
-    // $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name'], $type);
+    $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name'], $type);
+    $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name'], $type);
 
     // Shortcut for os prepared directory
     $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
             default:
             $modState = xarMod_getState($modInfo['regid'], $modInfo['mode']);
@@ -608,7 +610,7 @@ function xarModGetInfo($modRegId, $type = 'module')
 
     $modInfo = array_merge($modFileInfo, $modInfo);
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
             default:
             xarCore_SetCached('Mod.Infos', $modRegId, $modInfo);
@@ -1280,12 +1282,13 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
  */
 function xarModGetDisplayableName($modName = NULL, $type = 'module')
 {
-    xarLogMessage("xarModGetDisplayableName ". $modName ." / " . $type);
-
     if (empty($modName)) {
         $modName = xarModGetName();
     }
     $modInfo = xarMod_getFileInfo($modName, $type);
+
+    xarLogMessage("xarModGetDisplayableName ". $modName ." / " . $type);
+
     return xarML($modInfo['displayname']);
 }
 

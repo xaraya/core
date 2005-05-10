@@ -330,17 +330,19 @@ class PHPBackendGenerator
                 foreach ($vals as $node) {
                     if ($node['tag'] == 'STRING') {
                         $node['value'] = str_replace('\'', '\\\'', $node['value']);
-                        fputs($fp2, '$xarML_PHPBackend_entries[\''.$node['value']."']");
+                        $start = '$xarML_PHPBackend_entries[\''.$node['value']."']";
                     } elseif ($node['tag'] == 'KEY') {
                         $node['value'] = str_replace('\'', '\\\'', $node['value']);
-                        fputs($fp2, '$xarML_PHPBackend_keyEntries[\''.$node['value']."']");
+                        $start = '$xarML_PHPBackend_keyEntries[\''.$node['value']."']";
                     } elseif ($node['tag'] == 'TRANSLATION') {
                         if (!array_key_exists('value',$node)) $node['value'] = '';
                         if ($this->outCharset != 'utf-8') {
                             $node['value'] = $GLOBALS['xarMLS_newEncoding']->convert($node['value'], 'utf-8', $this->outCharset, 0);
                         }
                         $node['value'] = str_replace('\'', '\\\'', $node['value']);
-                        fputs($fp2, " = '".$node['value']."';\n");
+                        if (!empty($node['value'])) {
+                            fputs($fp2, $start . " = '".$node['value']."';\n");
+                        }
                     }
                  }
             }
