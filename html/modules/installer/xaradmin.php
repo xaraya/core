@@ -130,13 +130,14 @@ function installer_admin_phase3()
     $phpLanguageFilesIsWritable = xarMLS__iswritable($phpLanguageDir);
     $xmlLanguageFilesIsWritable = xarMLS__iswritable($xmlLanguageDir);
     $memLimit = trim(ini_get('memory_limit'));
-    $memVal = $memLimit;
+    $memLimit = empty($memLimit) ? '8M' : $memLimit;
+    $memVal = substr($memLimit,0,strlen($memLimit)-1);
     switch(strtolower($memLimit{strlen($memLimit)-1})) {
         case 'g': $memVal *= 1024;
         case 'm': $memVal *= 1024;
         case 'k': $memVal *= 1024;
     }
-    
+
     // Extension Check
     $data['xmlextension']             = extension_loaded('xml');
     $data['mysqlextension']           = extension_loaded('mysql');
@@ -163,7 +164,7 @@ function installer_admin_phase3()
     $data['xmlLanguageFilesIsWritable'] = $xmlLanguageFilesIsWritable;
     $data['memory_limit']               = $memLimit;
     $data['metMinMemRequirement']       = $memVal >= 8 * 1024 * 1024;
-    
+
     $data['language']    = $install_language;
     $data['phase']       = 3;
     $data['phase_label'] = xarML('Step Three');
@@ -264,7 +265,7 @@ function installer_admin_phase5()
     }
     include_once ADODB_DIR . '/adodb.inc.php';
     $ADODB_CACHE_DIR = xarCoreGetVarDirPath() . "/cache/adodb";
-    
+
     // {ML_dont_parse 'includes/xarDB.php'}
     include_once 'includes/xarDB.php';
 
@@ -285,8 +286,7 @@ function installer_admin_phase5()
 
     if (!$dbConnected) {
         // Couldn't connect to the specified dbName. Let's try connecting without dbName now
-        // Need to reset dbconn prior to trying just a normal connection or we'll have 
-        // unexpected results
+        // Need to reset dbconn prior to trying just a normal connection
         unset($dbconn);
         $dbconn = ADONewConnection($dbDriver);
 
@@ -355,7 +355,7 @@ function installer_admin_phase5()
     // Connect to database
     $whatToLoad = XARCORE_SYSTEM_NONE;
     xarDB_init($systemArgs, $whatToLoad);
-    
+
     // drop all the tables that have this prefix
     //TODO: in the future need to replace this with a check further down the road
     // for which modules are already installed
@@ -388,7 +388,7 @@ function installer_admin_phase5()
                                  'initfunc'  => 'init'))) {
         return;
     }
-  
+
     // If we are here, the base system has completed
     // We can now pass control to xaraya.
     include_once 'includes/xarConfig.php';
@@ -607,7 +607,7 @@ function installer_admin_create_administrator()
                                   'center' => 'center',
                                   'topnav' => 'topnav'
                                   );
-    
+
     foreach ($default_blockgroups as $name => $template) {
         if(!xarModAPIFunc('blocks','user','groupgetinfo', array('name' => $name))) {
             // Not there yet
@@ -746,7 +746,7 @@ function installer_admin_choose_configuration()
         $data['warning'] = xarML('There are currently no configuration files available.');
         return $data;
     }
-    
+
     xarModSetVar('installer','modulelist',serialize($fileModules));
     if (count($fileModules) == 0){
     // No non-core modules present. Show only the minimal configuration
@@ -788,14 +788,14 @@ function installer_admin_confirm_configuration()
 
     xarVarSetCached('installer','installing', true);
     xarTplSetPageTemplateName('installer');
-    
+
     if(!xarVarFetch('configuration', 'isset', $configuration, NULL,  XARVAR_DONT_SET))  return;
     if(!isset($configuration)) {
         $msg = xarML("Please go back and select one of the available configurations.");
         xarErrorSet(XAR_USER_EXCEPTION, 'Please select a configuration', $msg);
         return;
     }
-                
+
     //I am not sure if these should these break
     if(!xarVarFetch('confirmed',     'isset', $confirmed,     NULL, XARVAR_DONT_SET))   return;
     if(!xarVarFetch('chosen',        'isset', $chosen,        array(),  XARVAR_NOT_REQUIRED))  return;
@@ -989,7 +989,7 @@ function installer_admin_cleanup()
 {
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarTplSetPageTemplateName('installer');
-    
+
     xarUserLogOut();
 // log in admin user
     $uname = xarModGetVar('roles','lastuser');
