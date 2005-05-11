@@ -213,7 +213,7 @@
                     <xar:mlstring>Override</xar:mlstring>            
                 </th>
                 <th>
-                    <xar:mlstring>&nbsp;</xar:mlstring>            
+                    &nbsp;            
                 </th>
             </tr>
             <xar:loop name="$privileges">

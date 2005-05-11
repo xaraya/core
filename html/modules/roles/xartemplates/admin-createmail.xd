@@ -193,9 +193,7 @@
                     <select name="state" id="state" size="1" tabindex="5" onchange="this.form.submit()">
                         <xar:if condition="$uid eq -1">
                             <option value="#$state#" selected="selected">
-                                <xar:mlstring>
                                     &nbsp;
-                                </xar:mlstring>
                             </option>
                             <xar:elseif condition="$state eq -1" />
                             <option value="#$state#" selected="selected">
