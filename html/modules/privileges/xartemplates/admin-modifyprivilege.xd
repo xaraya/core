@@ -168,7 +168,7 @@
                 <label for="plevel" title="#xarML('Level of access')#" class="xar-form-label">
                     <xar:mlstring>Level:</xar:mlstring>
                 </label>
-				<select name="plevel" id="plevel" size="1" tabindex="6">                
+                <select name="plevel" id="plevel" size="1" tabindex="6">                
                     <xar:if condition="$plevel eq 0">
                         <option value="0" selected="selected"><xar:mlstring>None</xar:mlstring></option>
                     <xar:else />
@@ -231,19 +231,19 @@
                         <label for="pinstance#$id#" class="xar-form-label">
                             #$instance['header']#:
                         </label>
-						<xar:if condition="$instance['type'] eq 'manual'">
-							<input type="text" name="pinstance['#$id#']" id="pinstance#$id#" value="#$instance['default']#" size="20" tabindex="7" />
-						<xar:else />
-							<select name="pinstance['#$id#']" id="pinstance#$id#" size="1" tabindex="7">
-								<xar:foreach in="$instance['dropdown']" value="$option">
-									<xar:if condition="$option['name'] eq $instance['default']">
-										<option value="#$option['name']#" selected="selected">#$option['name']#</option>
-									<xar:else />
-										<option value="#$option['name']#">#$option['name']#</option>
-									</xar:if>
-								</xar:foreach>
-							</select>
-						</xar:if>
+                        <xar:if condition="$instance['type'] eq 'manual'">
+                            <input type="text" name="pinstance['#$id#']" id="pinstance#$id#" value="#$instance['default']#" size="20" tabindex="7" />
+                        <xar:else />
+                            <select name="pinstance['#$id#']" id="pinstance#$id#" size="1" tabindex="7">
+                                <xar:foreach in="$instance['dropdown']" value="$option">
+                                    <xar:if condition="$option['name'] eq $instance['default']">
+                                        <option value="#$option['name']#" selected="selected">#$option['name']#</option>
+                                    <xar:else />
+                                        <option value="#$option['name']#">#$option['name']#</option>
+                                    </xar:if>
+                                </xar:foreach>
+                            </select>
+                        </xar:if>
                     </div>
                 </xar:foreach>
             <xar:elseif condition="!empty($target)" />
@@ -251,7 +251,7 @@
                     <label for="pinstance0" class="xar-form-label">
                         <xar:mlstring>Current Instances:</xar:mlstring>
                     </label>
-					<input type="text" name="pinstance[0]" id="pinstance0" value="#$curinstance#" tabindex="7" />
+                    <input type="text" name="pinstance[0]" id="pinstance0" value="#$curinstance#" tabindex="7" />
                 </div>
 
                 <p>
