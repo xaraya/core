@@ -34,7 +34,6 @@
  * @param integer whatElseIsGoingLoaded
  * @return bool true on success, false on failure
  * @todo <marco> move template tag table definition somewhere else?
- * @todo <marcel> do we want to check to make sure ADODB_DIR is defined as xaradodb?
  */
 function xarDB_init($args, $whatElseIsGoingLoaded)
 {
@@ -43,8 +42,8 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     // ADODB configuration
     // FIXME: do we need a check if the constant is defined whether it has the
     //        right value?
-    if (!defined('ADODB_DIR')) {
-        define('ADODB_DIR', 'xaradodb');
+    if (!defined('XAR_ADODB_DIR')) {
+        define('XAR_ADODB_DIR', 'xaradodb');
     }
 
     // ADODB-to-Xaraya error-to-exception bridge
@@ -52,7 +51,7 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
         define('ADODB_ERROR_HANDLER', 'xarException__dbErrorHandler');
     }
 
-    include_once ADODB_DIR .'/adodb.inc.php';
+    include_once XAR_ADODB_DIR .'/adodb.inc.php';
 
     // Start the default connection
     $GLOBALS['xarDB_connections'] = array();
@@ -211,7 +210,7 @@ function xarDBdriverExists($dbType, $handler = 'adodb')
         default:
             $class = $db; break;
     }
-    $file = ADODB_DIR . "/drivers/adodb-" . $prefix . $db . ".inc.php";
+    $file = XAR_ADODB_DIR . "/drivers/adodb-" . $prefix . $db . ".inc.php";
 
     return (file_exists($file) ? true : false);
 }
