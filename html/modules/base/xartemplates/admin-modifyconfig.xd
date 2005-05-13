@@ -476,6 +476,21 @@
                     <input type="text" id="proxyport" name="proxyport" value="#xarModGetVar('base','proxyport')#" maxlength="10" class="xar-form-textshort" />
                 </div>
             </fieldset>
+    
+            <fieldset>
+                <legend>
+                    <xar:mlstring>Timezone Configuration</xar:mlstring>
+                </legend>
+    
+                <div class="xar-form-input-wrapper">
+                    <label for="defaulttimezone" title="#xarML('Default Timezone')#" class="xar-form-label">
+                        <xar:mlstring>Default Timezone:</xar:mlstring>
+                    </label>
+                    <xar:set name="timezone">#xarConfigGetVar('Site.Core.TimeZone')#</xar:set>
+                    <xar:data-input type="timezone" name="defaulttimezone" id="defaulttimezone" value="$timezone" />
+                </div>
+            </fieldset>
+
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />

@@ -128,20 +128,6 @@
 
 </fieldset>    
     
-<fieldset>
-    <legend>
-        <xar:mlstring>Timezone Configuration</xar:mlstring>
-    </legend>
-    
-    <div class="xar-form-input-wrapper">
-        <label for="defaulttimezone" title="#xarML('Default Timezone')#" class="xar-form-label">
-            <xar:mlstring>Default Timezone:</xar:mlstring>
-        </label>
-        <xar:set name="timezone">#xarConfigGetVar('Site.Core.TimeZone')#</xar:set>
-        <xar:data-input type="timezone" name="defaulttimezone" id="defaulttimezone" value="$timezone" />
-    </div>
-</fieldset>
-
 <xar:comment>    
 <fieldset>
     <legend>
