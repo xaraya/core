@@ -88,7 +88,7 @@ class xarCSS
             $this->base   = $this->commonbase;
             $this->filename   = $this->commonsource;
         } elseif ($this->scope == 'module') {
-            $this->base   = xarModGetName();
+            $this->base   = strtolower(xarModGetName());
         }
         if (isset($media)) $this->media                 = $media;
         if (isset($module)) $this->base                 = $module;
