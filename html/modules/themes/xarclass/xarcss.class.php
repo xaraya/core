@@ -85,10 +85,10 @@ class xarCSS
         if (isset($method)) $this->method               = $method;
         if (isset($scope)) $this->scope                 = $scope;
         if ($this->scope == 'common') {
-            $this->base   = strtolower($this->commonbase);
+            $this->base   = $this->commonbase;
             $this->filename   = $this->commonsource;
         } elseif ($this->scope == 'module') {
-            $this->base   = strtolower(xarModGetName());
+            $this->base   = xarModGetName();
         }
         if (isset($media)) $this->media                 = $media;
         if (isset($module)) $this->base                 = $module;
@@ -172,7 +172,7 @@ class xarCSS
             }
         } else {
 
-            $original = "modules/" . $this->base . "/xarstyles/" . $this->filename . "." . $this->fileext;
+            $original = "modules/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
             // we do not want to supply path for a non-existent original css file or override a bogus file
             // so lets check starting from original then fallback if there arent overriden versions
             if(file_exists($original)) {
@@ -180,7 +180,7 @@ class xarCSS
                 if($this->alternatedir != '') {
                     $overridden = xarTplGetThemeDir() . "/" . $this->alternatedir . "/" . $this->filename . "." . $this->fileext;
                 } else {
-                    $overridden = xarTplGetThemeDir() . "/modules/" . $this->base . "/xarstyles/" . $this->filename . "." . $this->fileext;
+                    $overridden = xarTplGetThemeDir() . "/modules/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
                 }
                 if(file_exists($overridden)) {
                     // prolly need to check if it's not a directory too (?)
