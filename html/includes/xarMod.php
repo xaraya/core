@@ -2288,9 +2288,7 @@ function xarModDelAlias($alias, $modName)
 function xarModGetName()
 {
     //TODO Work around for the prefix.
-    list($modName) = xarRequestGetInfo();
-
+    list($modName) = xarMod_getBaseInfo($modName);
     return $modName;
 }
-
 ?>
