@@ -1160,7 +1160,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 
     // If we have an empty argument (ie null => null) then set a flag and
     // remove that element.
-    if (is_array($args) && array_key_exists(NULL, $args) && $args[NULL] === NULL) {
+    if (is_array($args) && @array_key_exists(NULL, $args) && $args[NULL] === NULL) {
         // This flag means that the GET part of the URL must be opened.
         $open_get_flag = true;
         unset($args[NULL]);
