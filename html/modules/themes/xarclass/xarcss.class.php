@@ -85,7 +85,7 @@ class xarCSS
         if (isset($method)) $this->method               = $method;
         if (isset($scope)) $this->scope                 = $scope;
         if ($this->scope == 'common') {
-            $this->base   = $this->commonbase;
+            $this->base   = strtolower($this->commonbase);
             $this->filename   = $this->commonsource;
         } elseif ($this->scope == 'module') {
             $this->base   = strtolower(xarModGetName());
