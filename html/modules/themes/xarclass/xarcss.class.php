@@ -218,8 +218,10 @@ class tagqueue
         } else if ($op == 'deliver') {
             $styles = $queue;
             if($args) {
-                krsort($styles);
-                reset($styles);
+                if (is_array($styles)){
+                    krsort($styles);
+                    reset($styles);
+                }
             }
             $queue = array();
             return $styles;
