@@ -25,9 +25,7 @@ include_once 'includes/xarPreCore.php';
 if (file_exists(xarPreCoreGetVarDirPath() . '/cache/output/cache.touch')) {
     include_once('includes/xarCache.php');
     // Note : we may already exit here if session-less page caching is enabled
-    if (xarCache_init()) {
-        define('XARCACHE_IS_ENABLED',1);
-    }
+    xarCache_init();
 }
 
 /**

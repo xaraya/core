@@ -16,7 +16,7 @@
 /**
  * Initialise the caching options
  *
- * @returns true on success, false if trouble is encountered
+ * @return bool
  * @todo    consider the use of a shutdownhandler for cache maintenance
  */
 function xarCache_init($args = false)
@@ -43,7 +43,7 @@ function xarCache_init($args = false)
     if (@!include($xarVarDir . '/cache/config.caching.php')) {
         // if the config file is missing, turn caching off
         @unlink($cacheDir . '/cache.touch');
-        return FALSE;
+        return;
     }
 
     $xarOutput_cacheCollection = realpath($cacheDir);
@@ -67,6 +67,7 @@ function xarCache_init($args = false)
 
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarCache__shutdown_handler');
+    define('XARCACHE_IS_ENABLED',1);
     return true;
 }
 
