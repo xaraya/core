@@ -880,7 +880,7 @@ function xarMLS__iswritable($directory=NULL)
     $isWritable &= is_writable($directory);
     $handle = opendir($directory);
     while ($isWritable && (false !== ($filename = readdir($handle)))) {
-        if (($filename!=".") AND ($filename!="..")) {
+        if (($filename != ".") && ($filename != "..") && ($filename != "SCCS")) {
             if (is_dir($directory."/".$filename)) {
                 $isWritable &= is_writable($directory."/".$filename);
                 $isWritable &= xarMLS__iswritable($directory."/".$filename);
