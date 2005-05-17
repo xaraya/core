@@ -49,7 +49,7 @@
                     <strong>#$successtitle#</strong>:
                     <xar:ml>
                         <xar:mlstring>Xaraya needs a MINIMUM of 8 Megabyte of PHP memory. ( 16M or higher STRONGLY recommended)
-                        The current memory limit is #(1)</xar:mlstring>
+                        The current memory limit is #(1).</xar:mlstring>
                         <xar:mlvar>#$memory_limit#</xar:mlvar>
                     </xar:ml>
                 </p>
@@ -58,7 +58,7 @@
                     <strong style="color: red">#$failuretitle#</strong>:
                     <xar:ml>
                         <xar:mlstring>Xaraya needs a MINIMUM of 8 Megabyte of PHP memory. ( 16M or higher STRONGLY recommended)
-                        The current memory limit is #(1)</xar:mlstring>
+                        The current memory limit is #(1).</xar:mlstring>
                         <xar:mlvar>#$memory_limit#</xar:mlvar>
                     </xar:ml>
                 </p>
@@ -93,7 +93,7 @@
                 <p>
                     <strong>#$failuretitle#:</strong> 
                     <xar:mlstring>The installer cannot write to the directory</xar:mlstring> 
-                    #$cacheTemplatesDir# 
+                    #$cacheTemplatesDir#. 
                     <xar:mlstring>Please verify that your webserver has write access to the directory</xar:mlstring> 
                     #$cacheTemplatesDir# 
                 </p>
@@ -109,7 +109,7 @@
                 <p>
                     <strong>#$failuretitle#:</strong> 
                     <xar:mlstring>The installer cannot write to the</xar:mlstring> 
-                    #$rssTemplatesDir# 
+                    #$rssTemplatesDir#. 
                     <xar:mlstring>Please verify that your webserver has write access to the directory</xar:mlstring> 
                     #$rssTemplatesDir# 
                 </p>
@@ -125,7 +125,7 @@
                 <p>
                     <strong>#$failuretitle#:</strong> 
                     <xar:mlstring>The installer cannot write to the directory</xar:mlstring> 
-                    #$adodbTemplatesDir# 
+                    #$adodbTemplatesDir#. 
                     <xar:mlstring>Please verify that your webserver has write access to the directory</xar:mlstring> 
                     #$adodbTemplatesDir# 
                 </p>
@@ -147,7 +147,7 @@
                         #$successtitle#</strong>: 
                     <xar:ml>
                         <xar:mlstring>
-                            The Xaraya can write to the directory #(1) and all it's files and subdirectories
+                            The Xaraya can write to the directory #(1) and all it's files and subdirectories.
                         </xar:mlstring>
                         <xar:mlvar>
                             #$phpLanguageDir#
@@ -160,7 +160,7 @@
                         #$failuretitle#</strong>: 
                     <xar:ml>
                         <xar:mlstring>
-                            The installer cannot write to the directory #(1) and all it's files and subdirectories
+                            The installer cannot write to the directory #(1) and all it's files and subdirectories.
                         </xar:mlstring>
                         <xar:mlvar>
                             #$phpLanguageDir#
@@ -178,7 +178,7 @@
                         #$successtitle#</strong>: 
                     <xar:ml>
                         <xar:mlstring>
-                            The Xaraya can write to the directory #(1) and all it's files and subdirectories
+                            The Xaraya can write to the directory #(1) and all it's files and subdirectories.
                         </xar:mlstring>
                         <xar:mlvar>
                             #$xmlLanguageDir#
@@ -191,7 +191,7 @@
                         #$warningtitle#</strong>: 
                     <xar:ml>
                         <xar:mlstring>
-                             The installer cannot write to the directory #(1) and all it's files and subdirectories
+                             The installer cannot write to the directory #(1) and all it's files and subdirectories.
                          </xar:mlstring>
                          <xar:mlvar>
                              #$xmlLanguageDir#
