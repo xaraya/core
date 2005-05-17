@@ -877,15 +877,15 @@ function xarMLS__iswritable($directory=NULL)
     if ($directory == NULL) {
         $directory = getcwd();
     }
-    $isWritable =& is_writable($directory);
+    $isWritable &= is_writable($directory);
     $handle = opendir($directory);
-    while (false !== ($filename = readdir($handle))) {
+    while ($isWritable && (false !== ($filename = readdir($handle)))) {
         if (($filename!=".") AND ($filename!="..")) {
             if (is_dir($directory."/".$filename)) {
-                $isWritable =& is_writable($directory."/".$filename);
-                $isWritable =& xarMLS__iswritable($directory."/".$filename);
+                $isWritable &= is_writable($directory."/".$filename);
+                $isWritable &= xarMLS__iswritable($directory."/".$filename);
             } else {
-                $isWritable =& is_writable($directory."/".$filename);
+                $isWritable &= is_writable($directory."/".$filename);
             }
         }
     }
