@@ -43,7 +43,7 @@ function xarCache_init($args = false)
     if (@!include($xarVarDir . '/cache/config.caching.php')) {
         // if the config file is missing, turn caching off
         @unlink($cacheDir . '/cache.touch');
-        return;
+        return false;
     }
 
     $xarOutput_cacheCollection = realpath($cacheDir);
