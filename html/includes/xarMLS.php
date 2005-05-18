@@ -848,6 +848,13 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
 
 }
 
+/**
+ * Create directories tree
+ *
+ * @author Volodymyr Metenchuk <voll@xaraya.com>
+ * @access protected
+ * @return bool true
+ */
 function xarMLS__mkdirr($path, $mode)
 {
     // Check if directory already exists
@@ -871,25 +878,39 @@ function xarMLS__mkdirr($path, $mode)
     return false;
 }
 
+/**
+ * Check directory writability and create directory if it doesn't exist
+ *
+ * @author Volodymyr Metenchuk <voll@xaraya.com>
+ * @access protected
+ * @return bool true
+ */
 function xarMLS__iswritable($directory=NULL)
 {
-    $isWritable = true;
     if ($directory == NULL) {
         $directory = getcwd();
     }
-    $isWritable &= is_writable($directory);
-    $handle = opendir($directory);
-    while ($isWritable && (false !== ($filename = readdir($handle)))) {
-        if (($filename != ".") && ($filename != "..") && ($filename != "SCCS")) {
-            if (is_dir($directory."/".$filename)) {
-                $isWritable &= is_writable($directory."/".$filename);
-                $isWritable &= xarMLS__iswritable($directory."/".$filename);
-            } else {
-                $isWritable &= is_writable($directory."/".$filename);
+
+    if (file_exists($directory)) {
+        if (!is_dir($directory)) return false;
+        $isWritable = true;
+        $isWritable &= is_writable($directory);
+        $handle = opendir($directory);
+        while ($isWritable && (false !== ($filename = readdir($handle)))) {
+            if (($filename != ".") && ($filename != "..") && ($filename != "SCCS")) {
+                if (is_dir($directory."/".$filename)) {
+                    $isWritable &= is_writable($directory."/".$filename);
+                    $isWritable &= xarMLS__iswritable($directory."/".$filename);
+                } else {
+                    $isWritable &= is_writable($directory."/".$filename);
+                }
             }
         }
+        return $isWritable;
+    } else {
+        $isWritable = xarMLS__mkdirr($directory, 0777);
+        return $isWritable;
     }
-    return $isWritable;
 }
                                                     
 ?>
