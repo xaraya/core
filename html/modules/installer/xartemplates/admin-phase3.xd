@@ -174,7 +174,6 @@
                         Write access is required to cache language text for locales other than en. If you're not sure, ignore this warning.
                     </xar:mlstring>
                 </p>
-                </p>
             </xar:if>
             <xar:if condition="$xmlLanguageFilesIsWritable">
                 <p>
