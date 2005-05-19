@@ -73,7 +73,7 @@ function &xarMLSLoadLocaleData($locale = NULL)
             if (!$parsedLocale = xarMLS__parseLocaleString($locale)) return false;
             $utf8locale = $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
             $siteCharset = $parsedLocale['charset'];
-            $res = $GLOBALS['xarMLS_localeDataLoader']->load($utf8locale);
+            $res = $GLOBALS['xarMLS_localeDataLoader']->load($locale);
             if (!isset($res)) return; // Throw back
             if ($res == false) {
                 // Can we use xarML here? border case, play it safe for now.
