@@ -11,8 +11,12 @@ var tagToGo; // Apparently at least safari needs this
 
 function loadContent(url,tagid) {
     // TODO: this doesnt belong here
-    //alert('URL: ' + url + ', TagId: ' + tagid);
-    var postfix = "&pageName=module";
+    var postfix = "";
+    // Prevent propagating postfixes
+    if(url.search(/\&pageName\=module/) == -1) {
+        postfix = "&pageName=module";
+    }
+    //alert('URL: ' + url + postfix +', TagId: ' + tagid);
     // Make the tag id global in this scope, required for some implementations
     tagToGo = tagid;
     try {
