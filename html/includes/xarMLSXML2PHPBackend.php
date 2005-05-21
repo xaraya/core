@@ -328,6 +328,8 @@ class PHPBackendGenerator
             fputs($fp2, 'global $xarML_PHPBackend_keyEntries;'."\n");
             if ($xmlFileExists) {
                 foreach ($vals as $node) {
+                    if (!array_key_exists('tag',$node)) continue;
+                    if (!array_key_exists('value',$node)) $node['value'] = '';
                     if ($node['tag'] == 'STRING') {
                         $node['value'] = str_replace('\'', '\\\'', $node['value']);
                         $start = '$xarML_PHPBackend_entries[\''.$node['value']."']";
@@ -335,7 +337,6 @@ class PHPBackendGenerator
                         $node['value'] = str_replace('\'', '\\\'', $node['value']);
                         $start = '$xarML_PHPBackend_keyEntries[\''.$node['value']."']";
                     } elseif ($node['tag'] == 'TRANSLATION') {
-                        if (!array_key_exists('value',$node)) $node['value'] = '';
                         if ($this->outCharset != 'utf-8') {
                             $node['value'] = $GLOBALS['xarMLS_newEncoding']->convert($node['value'], 'utf-8', $this->outCharset, 0);
                         }
@@ -354,6 +355,8 @@ class PHPBackendGenerator
             global $xarML_PHPBackend_keyEntries;
             if ($xmlFileExists) {
                 foreach ($vals as $node) {
+                    if (!array_key_exists('tag',$node)) continue;
+                    if (!array_key_exists('value',$node)) $node['value'] = '';
                     if ($node['tag'] == 'STRING') {
                         $node['value'] = str_replace('\'', '\\\'', $node['value']);
                         $entryIndex = $node['value'];
@@ -363,7 +366,6 @@ class PHPBackendGenerator
                         $entryIndex = $node['value'];
                         $entryType = 'key';
                     } elseif ($node['tag'] == 'TRANSLATION') {
-                        if (!array_key_exists('value',$node)) $node['value'] = '';
                         if ($this->outCharset != 'utf-8') {
                             $node['value'] = $GLOBALS['xarMLS_newEncoding']->convert($node['value'], 'utf-8', $this->outCharset, 0);
                         }
