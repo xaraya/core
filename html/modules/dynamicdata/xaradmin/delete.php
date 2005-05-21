@@ -65,7 +65,8 @@ function dynamicdata_admin_delete($args)
         }
         $data['authid'] = xarSecGenAuthKey();
 
-        return $data;
+        $template = $myobject->name;
+        return xarTplModule('dynamicdata','admin','delete',$data,$template);
     }
 
     // If we get here it means that the user has confirmed the action
