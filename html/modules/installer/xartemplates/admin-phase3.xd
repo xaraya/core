@@ -82,6 +82,22 @@
                     #$systemConfigFile#
                 </p>
             </xar:if>
+            
+            <xar:if condition="$cacheIsWritable">
+                <p>
+                    <strong>#$successtitle#:</strong>
+                    <xar:mlstring>The installer can write to the directory</xar:mlstring> 
+                    #$cacheDir# 
+                </p>
+                <xar:else />
+                <p>
+                    <strong>#$failuretitle#:</strong> 
+                    <xar:mlstring>The installer cannot write to the directory</xar:mlstring> 
+                    #$cacheDir#. 
+                    <xar:mlstring>Please verify that your webserver has write access to the directory</xar:mlstring> 
+                    #$cacheDir# 
+                </p>
+            </xar:if>
 
             <xar:if condition="$cacheTemplatesIsWritable">
                 <p>
@@ -147,7 +163,7 @@
                         #$successtitle#</strong>: 
                     <xar:ml>
                         <xar:mlstring>
-                            The Xaraya can write to the directory #(1) and all it's files and subdirectories.
+                            Xaraya can write to the directory #(1) and all it's files and subdirectories.
                         </xar:mlstring>
                         <xar:mlvar>
                             #$phpLanguageDir#
@@ -160,7 +176,7 @@
                         #$warningtitle#</strong>: 
                     <xar:ml>
                         <xar:mlstring>
-                            The installer cannot write to the directory #(1) and all it's files and subdirectories.
+                            Xaraya cannot write to the directory #(1) and all it's files and subdirectories.
                         </xar:mlstring>
                         <xar:mlvar>
                             #$phpLanguageDir#
@@ -181,7 +197,7 @@
                         #$successtitle#</strong>: 
                     <xar:ml>
                         <xar:mlstring>
-                            The Xaraya can write to the directory #(1) and all it's files and subdirectories.
+                            Xaraya can write to the directory #(1) and all it's files and subdirectories.
                         </xar:mlstring>
                         <xar:mlvar>
                             #$xmlLanguageDir#
@@ -194,7 +210,7 @@
                         #$warningtitle#</strong>: 
                     <xar:ml>
                         <xar:mlstring>
-                             The installer cannot write to the directory #(1) and all it's files and subdirectories.
+                             Xaraya cannot write to the directory #(1) and all it's files and subdirectories.
                          </xar:mlstring>
                          <xar:mlvar>
                              #$xmlLanguageDir#
