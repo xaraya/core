@@ -121,6 +121,11 @@ function roles_user_login()
                                           'user',
                                           'getdeleteduser',
                                           array('uname' => $uname));
+                    if (xarCurrentErrorType() == XAR_USER_EXCEPTION)
+                    {
+                        //getdeleteduser raised an exception
+                        xarErrorFree();
+                    }
                 }
 
 
