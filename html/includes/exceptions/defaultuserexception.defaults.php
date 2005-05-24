@@ -19,6 +19,10 @@
             'title' => xarML('Bad Data'),
             'short' => xarML('The data provided was bad.'),
             'long' => xarML('The value provided during this operation could not be validated, or was not accepted for other reasons.')),
+        'FILE_NOT_EXIST' => array(
+            'title' => xarML('File does not exist'),
+            'short' => xarML('An operation requires a file that cannot be found.'),
+            'long' => xarML('The file may be missing, or its name may have changed.')),
         'CANNOT_CONTINUE' => array(
             'title' => xarML('Operation Halted'),
             'short' => xarML('This operation cannot be completed under the present circumstances.'),
