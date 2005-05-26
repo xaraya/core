@@ -1,2 +1,2 @@
-<xar:comment> The list view is the default by default ;-) </xar:comment>
-<xar:template file="objectlist-list"/>
+<xar:comment> The table view is the default by default, but a list view is also available</xar:comment>
+<xar:template file="objectlist-table"/>
