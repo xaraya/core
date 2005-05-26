@@ -1,1 +1,14 @@
-<xar:template type="theme" file="rsssummary-common"/>
+<item>
+    <title>
+        <xar:var name="rsstitle"/>
+    </title>
+    <pubDate>
+        #xarLocaleFormatUTCDate("%a, %d %b %Y %H:%M:%S GMT",$pubdate)#
+    </pubDate>
+    <description>
+        <xar:var name="rsssummary"/>
+    </description>
+    <link>
+        <xar:var name="link"/>
+    </link>
+</item>
