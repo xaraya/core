@@ -5,16 +5,37 @@
 <xar:style />
 <xar:comment>Styleswitcher CSS files to link to</xar:comment>
 <xar:template file="styleswitchercsslinks" type="theme" />
-<xar:comment>
-Additional CSS rules from Xaraya components (and from this theme via xar:import.. and xar:link.. tags) 
-Now required for all css-aware themes. 
-OLD WAY: #$tpl:additionalStyles# 
-NEW WAY: (starting from core 0.9.11+) with the following attribute-less tag
-</xar:comment>
 <xar:style scope="common" />
+<xar:comment>
+    The CSS for ie-win type browsers is included via the conditional comment - other browsers ignore it completely
+    This method is recommended by MS - look up the details at http://msdn.microsoft.com/workshop/author/dhtml/overview/ccomment_ovw.asp
+    In our case the stylesheet is to be served to any MSIE version which is less than IE7 (we assume IE7 will fix present bugs and deficiency)
+    OTHER EXAMPLES:
+    
+    A) Adding embedded style:
+    
+    <xar:set name="casual_css_source">'
+    div { border:1px solid red }
+    p { 
+        background-color:yellow;
+        border: 1px dotted blue;
+    }
+    ul { border:1px solid green }
+    '</xar:set>
+    <xar:style scope="theme" method="embed" source="'.$casual_css_source.'" />
+    
+    B) Adding external stylesheet file via import method:
+    
+    <xar:style scope="theme" file="no_old_browsers" method="import" />
+</xar:comment>
+<xar:style scope="theme" file="ie_win" condition="lt IE7" />
+<xar:comment>
+    Additional CSS rules from Xaraya components (and from this theme via xar:style tag) 
+    Now required for all css-aware themes. 
+    OLD WAY: #$tpl:additionalStyles# 
+    NEW WAY: (starting from core RC3+) with the following attribute-less tag
+</xar:comment>
 <xar:additional-styles />
-<xar:comment>the CSS rules for ie-win type browsers, we include it via the conditional comment so that other browers ignore it completely</xar:comment>
-<!--[if IE]><link href="themes/Xaraya_Classic/style/ie_win.css" rel="stylesheet" type="text/css" /><![endif]-->
 <xar:if condition="$styleswitchertype eq 'javascript'">
     <xar:comment>Styleswitcher JavaScript</xar:comment>
     <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script>

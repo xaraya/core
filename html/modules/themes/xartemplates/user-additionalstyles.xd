@@ -11,12 +11,20 @@
 <xar:if condition="$loop:item['title'] ne ''">
 <link rel="#$loop:item['rel']#" type="#$loop:item['type']#" href="#$loop:item['url']#" media="#$loop:item['media']#" title="#$loop:item['title']#" />
 <xar:else />
+<xar:if condition="$loop:item['condition'] ne ''">
+#$opencomment#[if #$loop:item['condition']#]#$closebracket#<link rel="#$loop:item['rel']#" type="#$loop:item['type']#" href="#$loop:item['url']#" media="#$loop:item['media']#" />#$openbracket#[endif]#$closecomment#
+<xar:else />
 <link rel="#$loop:item['rel']#" type="#$loop:item['type']#" href="#$loop:item['url']#" media="#$loop:item['media']#" />
 </xar:if>
+</xar:if>
 <xar:elseif condition="$method eq 'import'" />
+<xar:if condition="$loop:item['condition'] ne ''">
+#$opencomment#[if #$loop:item['condition']#]#$closebracket#<style type="#$loop:item['type']#">@import url(#$loop:item['url']#) #$loop:item['media']#;</style>#$openbracket#[endif]#$closecomment#
+<xar:else />
 <style type="#$loop:item['type']#">@import url(#$loop:item['url']#) #$loop:item['media']#;</style>
+</xar:if>
 <xar:elseif condition="$method eq 'embed'" />
-<style type="#$loop:item['type']#" media="#$loop:item['media']#">#$loop:item['filecontents']#</style>
+<style type="#$loop:item['type']#" media="#$loop:item['media']#">#$loop:item['source']#</style>
 </xar:if>
 </xar:loop>
 </xar:foreach>

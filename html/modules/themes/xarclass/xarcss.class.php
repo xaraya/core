@@ -38,7 +38,7 @@ class xarCSS
     // class vars and their defaults
     var $language   = 'html';       // only (x)html compliant css inclusion is supported out of the box
 
-    var $method       = 'link';      // supported are 'link', 'import', 'embed', 'render'
+    var $method       = 'link';      // supported are 'link', 'import', 'embed'
 
     // SUPPORTED SCOPES ARE MODULE, THEME, COMMON
     var $scope      = 'theme';      // component type - 'module, 'theme' or 'common'
@@ -51,7 +51,10 @@ class xarCSS
     var $commonsource = CSSCOMMONSOURCE;  // filename for common css
 
     var $source     = null;         // empty source should not be included (ideally)
-    var $dynfile;
+    
+    var $condition  = null;         // encase in a conditions comment (think ie-win)
+    
+    var $dynfile; // not implemented yet
 
     // TYPICAL REQUIRED ATTRIBUTES FOR WELL-FORMED CSS REFERENCE TAGS (xhtml-wise)
     var $rel        = CSSRELSTYLESHEET;
@@ -97,9 +100,12 @@ class xarCSS
         if (isset($alternate) && $alternate == 'true') {
             $this->rel = 'alternate stylesheet';
         }
-        if($this->method == 'import') {
+        if($this->method == 'import' && isset($media)) {
             $this->media = str_replace(' ', ', ', $media);
         }
+        
+        if (isset($source)) $this->source               = $source;
+        if (isset($condition)) $this->condition         = $condition;
 
         $this->tagdata = array(
                             'scope'            => $this->scope,
@@ -112,7 +118,7 @@ class xarCSS
                             'type'             => $this->type,
                             'media'            => $this->media,
                             'title'            => $this->title,
-                        );
+                            'condition'        => $this->condition );
     }
 
     // The main method for generating tag output
@@ -126,8 +132,10 @@ class xarCSS
             $data['legacy'] = $this->legacy;
             $data['additionalstyles'] = $GLOBALS['xarTpl_additionalStyles'];
             // TODO: remove these hardcoded comments when BL + QA can handle them in templates
-            $data['opencomment'] = "<!-- ";
-            $data['closecomment'] = " -->\n";
+            $data['opencomment']    = "<!-- ";
+            $data['closecomment']   = " -->\n";
+            $data['openbracket']    = "<";
+            $data['closebracket']   = ">";
             return $data;
         } else {
             $this->tagdata['url'] = $this->geturl();

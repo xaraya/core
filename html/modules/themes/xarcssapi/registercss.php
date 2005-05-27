@@ -11,6 +11,7 @@
  * alternate - [yes|(no)]               - this style is an alternative to the main styling?
  * title     - ""                       - what title can we attach to the styling, if any
  * method    - [(import)|link]          - what method do we use to include the style info
+ * condition - [IE|(IE5)|(!IE6)|(lt IE7)] - encase in conditional comment (for serving to ie-win of various flavours)
  *
  * <xar:style file="basename" scope="theme" type="text/css" media="all" alternate="no" title="Great style" method="import" />
  */
