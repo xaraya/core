@@ -197,6 +197,7 @@ function xarVarBatchFetch()
 function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST, $prep = XARVAR_PREP_FOR_NOTHING)
 {
     assert('is_int($flags)');
+    assert('preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", $name)');
 
     $allowOnlyMethod = NULL;
     if ($flags & XARVAR_GET_ONLY) $allowOnlyMethod = 'GET';
