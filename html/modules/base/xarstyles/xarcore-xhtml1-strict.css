@@ -28,6 +28,8 @@
 .xar-halfwidth { width: 49%; }
 .xar-twothirdwidth { width: 66%; }
 .xar-threequarterswidth { width: 75%; }
+.xar-inheritwidth { width: inherit; }
+.xar-autowidth { width: auto; }
 
 /* we use this class when positioning tables inside generic box, so that ie-win can calculate the widths correctly */
 .xar-fullwidth { width: 100%; }
@@ -37,14 +39,20 @@
     margin: auto 0;
 }
 
-/* box elements display */
-.xar-displayblock { display: block; }
+/* elements display directives */
 .xar-displayinline { display: inline; }
+.xar-displayblock { display: block; }
+.xar-displayinline-block { display: inline-block; }
+.xar-displaytable { display: table; }
+.xar-displayinline-table { display: inline-table; }
+.xar-displaytable-row { display: table-row; }
+.xar-displaytable-rowgroup { display: table-row-group; }
+.xar-displaytable-column { display: table-column; }
+.xar-displaytable-columngroup { display: table-column-group; }
+.xar-displaytable-cell { display: table-cell; }
 .xar-displaylist { display: list-item; }
+.xar-displayinherit { display: inherit; }
 .xar-displaynone { display: none; }
-
-/* this class may be deprecated in future in favour of more specific rules */
-.xar-none { display: none; }
 
 /* floated box elements positioning */
 .xar-floatleft { float: left; }
