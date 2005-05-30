@@ -66,6 +66,8 @@
 /* overflow control */
 .xar-overflow-auto { overflow: auto; }
 .xar-overflow-scroll { overflow: scroll; }
+.xar-overflow-hidden { overflow: hidden; }
+.xar-overflow-visible { overflow: visible; }
 
 /* this class may be deprecated in future in favour of more specific rules */
 .xar-clearnone { clear: none; }
