@@ -162,7 +162,10 @@ function xarMakeRoleMemberByName($childName, $parentName)
 function xarMakeRoleMemberByUname($childName, $parentName)
 {
     $roles = new xarRoles();
-    return $roles->makeMember($childName, $parentName);
+    $parent = $roles->ufindRole($parentName);
+    $child = $roles->ufindRole($childName);
+
+    return $parent->addMember($child);
 }
 
 /**
