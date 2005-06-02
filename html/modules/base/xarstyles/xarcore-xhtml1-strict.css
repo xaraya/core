@@ -36,7 +36,7 @@
 
 .xar-fullwidth, .xar-halfwidth, .xar-thirdwidth, .xar-quarterwidth, .xar-twothirdwidth, .xar-threequarterswidth {
     padding: 0;
-    margin: auto 0;
+    /* margin: auto 0; */
 }
 
 /* elements display directives */
@@ -50,6 +50,7 @@
 .xar-displaytable-column { display: table-column; }
 .xar-displaytable-columngroup { display: table-column-group; }
 .xar-displaytable-cell { display: table-cell; }
+.xar-displaytable-caption { display: table-caption; }
 .xar-displaylist { display: list-item; }
 .xar-displayinherit { display: inherit; }
 .xar-displaynone { display: none; }

@@ -48,12 +48,13 @@ we dont really want to underline and hilite named anchors in this theme, just li
 Tables and related selectors
 -------------------------------------------------------------------------[comment] */
 
-table, table.xar-norm {
+table {
     font-size: 100%;
+    line-height: 1.35em;
     margin: 5px 0;
+    border-spacing: 1px;
+    background-color: #d0d0d0;
 }
-
-/* div table {width:inherit;} */
 
 /*
 the actual border should be visible only when border-width is re-declared
@@ -61,16 +62,22 @@ the actual border should be visible only when border-width is re-declared
 
 th {
     color: #666699;
-    background-color: #ECECF4;
-    border: 1px solid #cccccc;
+    background-color: #f3f3f3;
 }
+
+thead { }
 
 tfoot {
     font-weight: bold;
     background-color: #DCDCE1;
 }
 
-th, td { padding: 3px; }
+th, td {
+    padding: 1px 3px;
+    height: auto;
+}
+
+td { background-color: #ffffff; }
 
 /*
 General text and related selectors 
@@ -144,9 +151,7 @@ form {
 
 button { border: 2px outset #f0f0f0; }
 
-input,
-select,
-textarea {}
+input, select, textarea {}
 
 legend {
     color: #CC3300;
