@@ -387,17 +387,21 @@ not so much a decoration, but rather a high visibility tool for beta-testers
 -------------------------------------------------------------------------[comment] */
 
 /* MISCELLANEOUS [gen_heading] */
+/*
 .txttitle {
     font-weight: bold;
     color: #336699;
     text-decoration: none;
 }
+*/
 
+/*
 .sidebtns {
     font-weight: bold;
     color: #336699;
     text-decoration: none;
 }
+*/
 
 /*
 .subhead {
