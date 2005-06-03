@@ -382,87 +382,8 @@ div.xar-block-body-topnav {
     padding: 2px 0;
 }
 
-/*
-not so much a decoration, but rather a high visibility tool for beta-testers 
--------------------------------------------------------------------------[comment] */
-
 /* MISCELLANEOUS [gen_heading] */
-/*
-.txttitle {
-    font-weight: bold;
-    color: #336699;
-    text-decoration: none;
-}
-*/
 
-/*
-.sidebtns {
-    font-weight: bold;
-    color: #336699;
-    text-decoration: none;
-}
-*/
-
-/*
-.subhead {
-    font-weight: bold;
-    color: #60a9f0;
-    text-decoration: none;
-}
-*/
-
-
-/*
-.btns {
-    text-decoration: none;
-    background-color: #FFD800;
-    color: #000000;
-    font-weight: bold;
-    font-size: 9.5pt;
-}
-*/
-
-
-/*
-.busbtns {
-    text-decoration: none;
-    background-color: #85b8ea;
-    color: #000000;
-    font-weight: bold;
-    font-size: 9.5pt;
-}
-*/
-
-/*
-.blk {
-    text-decoration: none;
-    color: #000000;
-    font-weight: bold;
-}
-*/
-
-/*
-.LightUp {
-    background-color: #cfe5fa;
-    color: #ffffff;
-    font-weight: bold;
-    text-decoration: none;
-}
-*/
-
-/*
-.LightDown {
-    background-color: #ffffff;
-    color: #336699;
-    font-weight: bold;
-    font-size: 9.5pt;
-    text-decoration: none;
-}
-*/
-
-/*
-.formUp { background-color: #e3f1ff; }
-*/
 abbr, acronym, .help {
     border-bottom: 1px dotted #999;
     cursor: help;
