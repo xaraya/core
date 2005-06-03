@@ -405,6 +405,8 @@ not so much a decoration, but rather a high visibility tool for beta-testers
     text-decoration: none;
 }
 
+
+/*
 .btns {
     text-decoration: none;
     background-color: #FFD800;
@@ -412,7 +414,10 @@ not so much a decoration, but rather a high visibility tool for beta-testers
     font-weight: bold;
     font-size: 9.5pt;
 }
+*/
 
+
+/*
 .busbtns {
     text-decoration: none;
     background-color: #85b8ea;
@@ -420,20 +425,26 @@ not so much a decoration, but rather a high visibility tool for beta-testers
     font-weight: bold;
     font-size: 9.5pt;
 }
+*/
 
+/*
 .blk {
     text-decoration: none;
     color: #000000;
     font-weight: bold;
 }
+*/
 
+/*
 .LightUp {
     background-color: #cfe5fa;
     color: #ffffff;
     font-weight: bold;
     text-decoration: none;
 }
+*/
 
+/*
 .LightDown {
     background-color: #ffffff;
     color: #336699;
@@ -441,9 +452,11 @@ not so much a decoration, but rather a high visibility tool for beta-testers
     font-size: 9.5pt;
     text-decoration: none;
 }
+*/
 
+/*
 .formUp { background-color: #e3f1ff; }
-
+*/
 abbr, acronym, .help {
     border-bottom: 1px dotted #999;
     cursor: help;
