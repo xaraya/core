@@ -30,7 +30,6 @@
                 <xar:if condition="!empty($fields)">
                     <dd>
                         <script type="text/javascript">
-                        <!--
                         function xar_dynamicdata_formpreview()
                         {
                             var my_window = window.open('#$urlform#',
@@ -39,7 +38,6 @@
                             my_window.opener = window;
                             my_window.focus();
                         }
-                        // -->
                         </script>
                         <a href="javascript:xar_dynamicdata_formpreview();">
                             <xar:mlstring>Preview Input Form</xar:mlstring>
