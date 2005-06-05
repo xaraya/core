@@ -106,10 +106,11 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
             $link = $value;
             $data['link']=xarVarPrepForDisplay($link);
             if (!empty($this->icon)) {
-/*                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="'.xarML('URL').'" /></a>';
-*/
                 $data['value']= $this->value;
-                $data['icon'] = xarVarPrepForDisplay($this->icon);
+                $data['icon'] = xarModAPIFunc('base',
+                               'user',
+                               'getfavicon',
+                                array('url' => $data['value']));
 
                 $template="urlicon";
                 return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);

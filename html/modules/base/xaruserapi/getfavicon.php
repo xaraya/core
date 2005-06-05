@@ -55,7 +55,7 @@ function base_userapi_getfavicon($args)
         return false ;
     }
     
-    $cached_ico = 'var/rss/' . md5($ico_url) . ".ico" ;
+    $cached_ico = 'var/cache/rss/' . md5($ico_url) . ".ico" ;
     $cachetime = 30 * 24 * 60 * 60; // 30 days
 
     // Serve from the cache if it is younger than $cachetime

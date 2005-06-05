@@ -1,6 +1,8 @@
 <?php
 global $xarML_PHPBackend_entries;
 global $xarML_PHPBackend_keyEntries;
+$xarML_PHPBackend_entries['Caught exception'] = 'Caught exception';
+$xarML_PHPBackend_entries['An error occurred while processing your request. The details are:'] = 'An error occurred while processing your request. The details are:';
 $xarML_PHPBackend_keyEntries['UNKNOWN'] = 'Unknown error.';
 $xarML_PHPBackend_keyEntries['ID_NOT_EXIST'] = 'The object identified by \'#(1)\' identifier does not exist.';
 $xarML_PHPBackend_keyEntries['BAD_PARAM'] = 'The \'#(1)\' parameter contains invalid data.';
@@ -15,7 +17,7 @@ $xarML_PHPBackend_keyEntries['MODULE_NOT_ACTIVE'] = 'The \'#(1)\' module is not 
 $xarML_PHPBackend_keyEntries['NOT_LOGGED_IN'] = 'You are not logged in.';
 $xarML_PHPBackend_keyEntries['NOT_IMPLEMENTED'] = 'The requested operation is not implemented.';
 $xarML_PHPBackend_keyEntries['DEPRECATED_API'] = 'The requested operation is deprecated.';
-$xarML_PHPBackend_keyEntries['VARIABLE_NOT_REGISTERED'] = '';
+$xarML_PHPBackend_keyEntries['VARIABLE_NOT_REGISTERED'] = 'The \'#(1)\' variable is not registered.';
 $xarML_PHPBackend_keyEntries['EVENT_NOT_REGISTERED'] = 'The \'#(1)\' event is not registered.';
 $xarML_PHPBackend_keyEntries['LOCALE_NOT_AVAILABLE'] = 'The \'#(1)\' locale is not available.';
 $xarML_PHPBackend_keyEntries['LOCALE_NOT_EXIST'] = 'The \'#(1)\' locale does not exist.';
