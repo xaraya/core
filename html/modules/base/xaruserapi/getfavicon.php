@@ -50,34 +50,35 @@ function base_userapi_getfavicon($args)
     'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//AAD//wAA//8AAP//AAD//wAA//8AAP//' .
     'AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAA=');
     
-	$ico_url = __getFaviconURL($url) ;
-	if(!$ico_url) {
-		return false ;
-	}
-	
+    $ico_url = __getFaviconURL($url) ;
+    if(!$ico_url) {
+        return false ;
+    }
+    
     $cached_ico = 'var/rss/' . md5($ico_url) . ".ico" ;
     $cachetime = 30 * 24 * 60 * 60; // 30 days
 
-	// Serve from the cache if it is younger than $cachetime
-	if (file_exists($cached_ico) && (time() - $cachetime < filemtime($cached_ico))) return $cached_ico;
-	if (!$data = @file_get_contents($ico_url)) $data=$empty_ico_data;
-	if (stristr($data,'html')) $data=$empty_ico_data;
-	$fp = fopen($cached_ico,'w');
-	fputs($fp,$data);
-	fclose($fp);
-	return $cached_ico;
+    // Serve from the cache if it is younger than $cachetime
+    if (file_exists($cached_ico) && (time() - $cachetime < filemtime($cached_ico))) return $cached_ico;
+    if (!$data = @file_get_contents($ico_url)) $data=$empty_ico_data;
+    if (stristr($data,'html')) $data=$empty_ico_data;
+    $fp = fopen($cached_ico,'w');
+    fputs($fp,$data);
+    fclose($fp);
+    return $cached_ico;
 }
 
-function __getFaviconURL($url){
+function __getFaviconURL($url)
+{
     if(!$url){
         return false;
     }else{
-	$url_parts = parse_url($url);
-	$full_url = "http://$url_parts[host]";
-	if(isset($url_parts['port'])){
-		$full_url .= ":$url_parts[port]";
-	}
-	$favicon_url = $full_url . "/favicon.ico" ;
+    $url_parts = parse_url($url);
+    $full_url = "http://$url_parts[host]";
+    if(isset($url_parts['port'])){
+        $full_url .= ":$url_parts[port]";
+    }
+    $favicon_url = $full_url . "/favicon.ico" ;
     }
     return $favicon_url;
 }
