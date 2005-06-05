@@ -59,6 +59,7 @@ function roles_userapi_getallactive($args)
                      a.xar_uname,
                      a.xar_name,
                      a.xar_email,
+                     a.xar_date_reg,
                      b.xar_ipaddr
               FROM $rolestable a, $sessioninfoTable b
               WHERE a.xar_uid = b.xar_uid AND b.xar_lastused > ? AND a.xar_uid > 1";
@@ -101,11 +102,13 @@ function roles_userapi_getallactive($args)
 
     // Put users into result array
     for (; !$result->EOF; $result->MoveNext()) {
-        list($uid, $uname, $name, $email, $ipaddr) = $result->fields;
+        list($uid, $uname, $name, $email, $date_reg, $ipaddr) = $result->fields;
         if (xarSecurityCheck('ReadRole', 0, 'All', "$uname:All:$uid")) {
             $sessions[] = array('uid'       => (int) $uid,
                                 'name'      => $name,
+                                'uname'     => $uname,
                                 'email'     => $email,
+                                'date_reg'  => $date_reg,
                                 'ipaddr'    => $ipaddr);
         }
     }
