@@ -138,6 +138,7 @@ class xarCSS
             $data['closeconditionalcomment']   = "<![endif]-->\n";
             $data['openbracket']    = "<";
             $data['closebracket']   = ">";
+            $data['closeconditionalbracket']   = "]>";
             return $data;
         } else {
             $this->tagdata['url'] = $this->geturl();
