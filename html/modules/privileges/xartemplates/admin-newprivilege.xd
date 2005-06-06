@@ -137,7 +137,7 @@
                     </select>
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="pcomponent" title="#xarML('Component to which this provilege applies')#" class="xar-form-label">
+                    <label for="pcomponent" title="#xarML('Component to which this privilege applies')#" class="xar-form-label">
                         <xar:mlstring>
                             Component:
                         </xar:mlstring>
