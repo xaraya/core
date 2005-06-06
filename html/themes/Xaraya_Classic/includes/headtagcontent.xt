@@ -28,7 +28,7 @@
     
     <xar:style scope="theme" file="no_old_browsers" method="import" />
 </xar:comment>
-<xar:style scope="theme" file="ie_win" condition="lt IE7" />
+<xar:style scope="theme" file="ie_win" condition="lt IE 7" />
 <xar:comment>
     Additional CSS rules from Xaraya components (and from this theme via xar:style tag) 
     Now required for all css-aware themes. 
