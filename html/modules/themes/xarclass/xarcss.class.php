@@ -134,6 +134,8 @@ class xarCSS
             // TODO: remove these hardcoded comments when BL + QA can handle them in templates
             $data['opencomment']    = "<!-- ";
             $data['closecomment']   = " -->\n";
+            $data['openconditionalcomment']    = "<!--[if ";
+            $data['closeconditionalcomment']   = "<![endif]-->\n";
             $data['openbracket']    = "<";
             $data['closebracket']   = ">";
             return $data;
