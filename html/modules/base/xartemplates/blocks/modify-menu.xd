@@ -64,10 +64,10 @@
                 <xar:mlstring>Modify Structure (TODO obviously)</xar:mlstring>
             </caption>
             <tr>
-                <th style="width:50%">
+                <th>
                     <xar:mlstring>Edit</xar:mlstring>
                 </th>
-                <th style="width:50%">
+                <th>
                     <xar:mlstring>Preview</xar:mlstring>
                 </th>
             </tr>
