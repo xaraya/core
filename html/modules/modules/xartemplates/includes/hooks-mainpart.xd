@@ -5,7 +5,7 @@
     <xar:if condition="$hookmod['modname'] eq $curhook">
         <p>
             <xar:mlstring>Use this functionality in the following modules:</xar:mlstring> 
-            [ <a href="javascript:void(0);" title="#xarML('Click to togle details display.')#" onclick="return toggleDisplay('hookdetails');"><xar:mlstring>Details</xar:mlstring></a> ]
+            [ <a href="javascript:void(0);" title="#xarML('Click to toggle details display.')#" onclick="return toggleDisplay('hookdetails');"><xar:mlstring>Details</xar:mlstring></a> ]
         </p>
         <!-- inline style is needed here because IE's DOM support is flaky -->
         <div id="hookdetails" style="display: none;">
