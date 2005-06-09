@@ -112,10 +112,11 @@ function roles_admin_showusers()
         }
 
         // Save the query so we can reuse it somewhere
-        xarSessionSetVar('rolesquery', serialize($q));
+        $q2 = $q;
+        unset($q2->dbconn);
+        xarSessionSetVar('rolesquery', serialize($q2));
     } else {
         $q = unserialize($q);
-        //FIXME: remove this line once the security scenario is merged (becomes unnecessary)
         $q->openconnection();
     }
 

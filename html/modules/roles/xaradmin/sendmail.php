@@ -30,6 +30,8 @@ function roles_admin_sendmail()
 
     // Get the current query
     $q = unserialize(xarSessionGetVar('rolesquery'));
+    // Open a connection to the database again
+    $q->openconnection();
 
     // only need the uid, name and email fields
     $q->clearfields();
