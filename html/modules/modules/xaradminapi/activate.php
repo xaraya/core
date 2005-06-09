@@ -58,7 +58,7 @@ function modules_adminapi_activate ($args)
         return NULL;
     }
 
-    if (function_exists('xarOutputFlushCached')) {
+    if (function_exists('xarOutputFlushCached') && function_exists('xarModGetName') && xarModGetName() != 'installer') {
         xarOutputFlushCached('adminpanels');
         xarOutputFlushCached('base-block');
     }
