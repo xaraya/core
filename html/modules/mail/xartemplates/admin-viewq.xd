@@ -1,0 +1,124 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span>
+</div>
+<div class="xar-mod-body">
+    <h2>
+        <xar:mlstring>Mail Queue</xar:mlstring>
+    </h2>
+
+    <xar:if condition="!empty($log)">
+        <pre>#$log#</pre>
+
+    <xar:elseif condition="!empty($mail)"/>
+        <table>
+            <tr>
+                <td>
+                    <xar:mlstring>Mail ID</xar:mlstring>
+                </td>
+                <td>
+                    #xarVarPrepForDisplay($id)#
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <xar:mlstring>From</xar:mlstring>
+                </td>
+                <td>
+                    #xarVarPrepForDisplay($mail['fromname'])# &lt;#xarVarPrepForDisplay($mail['from'])#&gt;
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <xar:mlstring>To</xar:mlstring>
+                </td>
+                <td>
+                    <xar:if condition="!empty($mail['recipients'])">
+                        <xar:foreach in="$mail['recipients']" key="$k" value="$v">
+                            <xar:if condition="!is_numeric($k)">
+                                #xarVarPrepForDisplay($k)#
+                            </xar:if>
+                            <xar:if condition="!is_numeric($v)">
+                                #xarVarPrepForDisplay($v)#
+                            </xar:if>
+                            <br/>
+                        </xar:foreach>
+                    <xar:elseif condition="!empty($mail['info'])"/>
+                        <xar:if condition="!empty($mail['name'])">
+                            #xarVarPrepForDisplay($mail['name'])#
+                        </xar:if>
+                        &lt;#xarVarPrepForDisplay($mail['info'])#&gt;
+                    </xar:if>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <xar:mlstring>Subject</xar:mlstring>
+                </td>
+                <td>
+                    #xarVarPrepForDisplay($mail['subject'])#
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <xar:mlstring>Queued</xar:mlstring>
+                </td>
+                <td>
+                    #xarLocaleGetFormattedDate('medium',$mail['queued'])# #xarLocaleGetFormattedTime('medium',$mail['queued'])#
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <xar:mlstring>Send After</xar:mlstring>
+                </td>
+                <td>
+                    #xarLocaleGetFormattedDate('medium',$mail['when'])# #xarLocaleGetFormattedTime('medium',$mail['when'])#
+                </td>
+            </tr>
+        </table>
+    </xar:if>
+
+    <form method="POST" action="&xar-modurl-mail-admin-viewq;">
+        <input type="hidden" name="authid" value="#$authid#" />
+        <input type="hidden" name="action" value="process" />
+        <input type="submit" value="#xarML('Process Queue')#" />
+    </form>
+    
+    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+    <tr>
+        <th>
+            <xar:mlstring>Mail ID</xar:mlstring>
+        </th>
+        <th>
+            <xar:mlstring>Send After</xar:mlstring>
+        </th>
+        <th>
+            <xar:mlstring>Action</xar:mlstring>
+        </th>
+    </tr>
+    <xar:if condition="count($items) gt 0">
+    <xar:foreach in="$items" key="$id" value="$when">
+    <tr>
+        <td>
+            #$id#
+        </td>
+        <td>
+            #xarLocaleGetFormattedDate('medium',$when)# #xarLocaleGetFormattedTime('medium',$when)#
+        </td>
+        <td>
+            <a href="#xarModURL('mail','admin','viewq',array('id'=>$id,'action' => 'view','authid' => $authid))#"><xar:mlstring>View</xar:mlstring></a>
+            |
+            <a href="#xarModURL('mail','admin','viewq',array('id'=>$id,'action' => 'delete','authid' => $authid))#"><xar:mlstring>Delete</xar:mlstring></a>
+        </td>
+     </tr>
+     </xar:foreach>
+    <xar:else />
+    <tr>
+      <td colspan="3" align="left">
+      <br />
+      <strong><xar:mlstring>No mails scheduled to be sent later</xar:mlstring></strong>
+      </td>
+    </tr>
+    </xar:if>
+    </table>
+</div>

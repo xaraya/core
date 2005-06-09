@@ -148,6 +148,11 @@ function mail_adminapi_sendhtmlmail($args)
 
     }
 
+    // Check if we want delayed delivery of this mail message
+    if (!isset($when)) {
+        $when = null;
+    }
+
     // Call private sendmail
     return xarModAPIFunc('mail', 'admin', '_sendmail',
         array('info'          => $info,
@@ -168,6 +173,7 @@ function mail_adminapi_sendhtmlmail($args)
               'from'          => $from,
               'fromname'      => $fromname,
               'usetemplates'  => $usetemplates,
+              'when'          => $when,
               'htmlmail'      => true));
 }
 

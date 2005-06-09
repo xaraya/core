@@ -29,6 +29,13 @@ function mail_adminapi_getmenulinks()
                 'compose'),
             'title' => xarML('Test your email configuration'),
             'label' => xarML('Test Configuration'));
+        if (xarModIsAvailable('scheduler')) {
+            $menulinks[] = Array('url' => xarModURL('mail',
+                    'admin',
+                    'viewq'),
+                'title' => xarML('View all mails scheduled to be sent later'),
+                'label' => xarML('View Mail Queue'));
+        }
         $menulinks[] = Array('url' => xarModURL('mail',
                 'admin',
                 'template'),
