@@ -37,6 +37,8 @@ function dynamicdata_util_import($args)
         $basedir = 'modules/dynamicdata';
     }
     $data['basedir'] = $basedir;
+    $data['authid'] = xarSecGenAuthKey();
+
     $filetype = 'xml';
     $files = xarModAPIFunc('dynamicdata','admin','browse',
                            array('basedir' => $basedir,
@@ -91,8 +93,6 @@ function dynamicdata_util_import($args)
          $data['options'][] = array('id' => $file,
                                     'name' => $file);
     }
-
-    $data['authid'] = xarSecGenAuthKey();
 
     if (xarModGetVar('adminpanels','dashboard')) {
         xarTplSetPageTemplateName('admin');
