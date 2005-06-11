@@ -75,8 +75,9 @@ function roles_admin_showusers()
     }
 
     // Check if we already have a selection
-    $q = xarSessionGetVar('rolesquery');
-    if (!isset($q) || empty($q) || isset($reload)) {
+        $q = new xarQuery();
+        $q = $q->sessiongetvar('rolesquery');
+    if (empty($q) || isset($reload)) {
         $xartable =& xarDBGetTables();
         $q = new xarQuery('SELECT');
         $q->addtable($xartable['roles'],'r');
@@ -112,12 +113,7 @@ function roles_admin_showusers()
         }
 
         // Save the query so we can reuse it somewhere
-        $q2 = $q;
-        unset($q2->dbconn);
-        xarSessionSetVar('rolesquery', serialize($q2));
-    } else {
-        $q = unserialize($q);
-        $q->openconnection();
+        $q->sessionsetvar('rolesquery');
     }
 
     // Add limits

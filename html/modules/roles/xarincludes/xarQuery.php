@@ -926,6 +926,20 @@ class xarQuery
     {
         return $this->statement;
     }
+    function sessiongetvar($x)
+    {
+        $q = xarSessionGetVar($x);
+        if (empty($q) || !isset($q)) return;
+        $this = unserialize($q);
+        $this->open();
+        return $this;
+    }
+    function sessionsetvar($x)
+    {
+        $q = $this;
+        unset($q->dbconn);
+        xarSessionSetVar($x, serialize($q));
+    }
     function setstatement($statement='')
     {
         if ($statement != '') {

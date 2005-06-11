@@ -29,16 +29,14 @@ function roles_admin_sendmail()
     // Get user information
 
     // Get the current query
-    $q = unserialize(xarSessionGetVar('rolesquery'));
-    // Open a connection to the database again
-    $q->openconnection();
+    $q = new xarQuery();
+    $q = $q->sessiongetvar('rolesquery');
 
     // only need the uid, name and email fields
     $q->clearfields();
     $q->addfields(array('r.xar_uid','r.xar_name','r.xar_uname','r.xar_email'));
 
     // Open a connection and run the query
-    $q->open();
     $q->run();
 
     foreach ($q->output() as $user) {

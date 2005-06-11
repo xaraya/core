@@ -56,21 +56,17 @@ function roles_admin_createmail()
                             'r.xar_state AS state',
                             'r.xar_date_reg AS date_reg'));
         $q->eq('r.xar_uid',$uid);
-        $q2 = $q;
-        unset($q2->dbconn);
-        xarSessionSetVar('rolesquery', serialize($q2));
+        $q->sessionsetvar('rolesquery');
     }
     else {
         if ($selstyle == 0) $selstyle =1;
 
         // Get the current query or create a new one if need be
-        if ($uid == -1) $q = xarSessionGetVar('rolesquery');
-        if(!empty($q)) {
-            $q = unserialize($q);
-            // Open a connection to the database again
-            $q->openconnection();
+        if ($uid == -1) {
+            $q = new xarQuery();
+            $q = $q->sessiongetvar('rolesquery');
         }
-        else {
+        if(empty($q)) {
             $q = new xarQuery('SELECT');
             $q->addtable($xartable['roles'],'r');
             $q->addfields(array('r.xar_uid AS uid',
@@ -106,12 +102,9 @@ function roles_admin_createmail()
         }
 
         // Save the query so we can reuse it somewhere
-        $q2 = $q;
-        unset($q2->dbconn);
-        xarSessionSetVar('rolesquery', serialize($q2));
+        $q->sessionsetvar('rolesquery');
 
         // open a connection and run the query
-        $q->open();
         $q->run();
 
         foreach($q->output() as $role) {
