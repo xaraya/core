@@ -84,7 +84,8 @@ class xarQuery
 
         // Return array of variables to be serialized.
         // For now, return all variables (but we could reduce this to essentials).
-        return(array_keys(get_object_vars(&$this)));
+        // Removed the reference.  throws errors on php5
+        return(array_keys(get_object_vars($this)));
     }
 
 //---------------------------------------------------------
@@ -960,9 +961,9 @@ class xarQuery
     {
         $q = xarSessionGetVar($x);
         if (empty($q) || !isset($q)) return;
-        $this = unserialize($q);
-        $this->open();
-        return $this;
+        $q = unserialize($q);
+	    $q->open();
+	    return $q;
     }
     function sessionsetvar($x)
     {
