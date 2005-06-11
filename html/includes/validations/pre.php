@@ -95,15 +95,15 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                 case 'num' : $subject = preg_replace('/[^0-9]+/i', '', $subject); break;
 
                 case 'vtoken' :
-                    // Variable-name compatible token.
+                    // Variable-name compatible token. Same as function names.
                     $subject = preg_replace(
-                        array('/[ _]+/', '/[^a-z0-9_]+/i'),
+                        array('/[ _-]+/', '/[^a-zA-Z0-9_\x7f-\xff]+/'),
                         array('_', ''),
-                        trim(strtolower($subject))
+                        trim($subject)
                     );
                     // The token must start with a letter or underscore.
                     // Raise an error if not.
-                    if (!empty($subject) && !preg_match('/^[a-z_]/', $subject)) {
+                    if (!empty($subject) && !preg_match('/^[a-zA-Z_]/', $subject)) {
                         $msg = xarML('Value "#(1)" is not a valid variable name', $subject);
                         xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
                         $return = false;
@@ -114,7 +114,7 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                     // Filename-compatible token. Use in conjunction with
                     // 'lower' if case forcing is required too.
                     // Note: this is not a file name, so periods/full stops/dots
-                    // are in included in the accepted characters.
+                    // are not included in the accepted characters.
                     $subject = preg_replace(
                         array('/[ _]+/', '/[^-a-z0-9_]+/i'),
                         array('_', ''),
@@ -186,7 +186,7 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                     }
 
                     // The passthru validation consumes all further parameters, so clear
-                    // them here to complete the loop.
+                    // them here to exit the outer loop.
                     $parameters = array();
                     break;
             }
