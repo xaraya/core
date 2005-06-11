@@ -28,7 +28,6 @@ class xarQuery
     var $output;
     var $row;
     var $dbconn;
-    var $dbconn_key = NULL;
     var $statement;
     var $israwstatement = 0;
     var $bindvars;
@@ -70,17 +69,16 @@ class xarQuery
     }
 
 //---------------------------------------------------------
-// Serialization prep
+// Prepare for serialization
 //---------------------------------------------------------
     function __sleep()
     {
         // Remove the database connection before serializing.
         // Save the connection number, in case we have several.
         if (!empty($this->dbconn)) {
-        // FIXME: this assumes that the connection number will be the same afterwards
-            $this->dbconn_key = $this->dbconn->database_key;
             unset($this->dbconn);
         }
+
         // Remove any results before serializing
         $this->clearresult();
 
@@ -90,18 +88,13 @@ class xarQuery
     }
 
 //---------------------------------------------------------
-// Unserialization restore
+// Restore after unserialize
 //---------------------------------------------------------
     function __wakeup()
     {
         // Restore the database connection.
         if (empty($this->dbconn)) {
-            if (isset($this->dbconn_key)) {
-            // FIXME: this assumes that the connection number will be the same afterwards
-                $this->dbconn =& xarDBGetConn($this->dbconn_key);
-            } else {
-                $this->dbconn =& xarDBGetConn();
-            }
+            $this->dbconn =& xarDBGetConn();
         }
     }
 
