@@ -428,9 +428,9 @@ function xarRequestGetInfo()
     }
 
     // Get variables
-    xarVarFetch('module', 'str:1:', $modName, NULL, XARVAR_NOT_REQUIRED);
-    xarVarFetch('type', 'str:1:', $modType, 'user');
-    xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $funcName, 'main');
+    xarVarFetch('module', 'pre:ftoken:str:1:', $modName, NULL, XARVAR_NOT_REQUIRED);
+    xarVarFetch('type', 'pre:ftoken:str:1:', $modType, 'user');
+    xarVarFetch('func', 'pre:ftoken:str:1:', $funcName, 'main');
 
     if ($GLOBALS['xarRequest_allowShortURLs'] && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != ''
         // IIS fix
