@@ -962,8 +962,8 @@ class xarQuery
         $q = xarSessionGetVar($x);
         if (empty($q) || !isset($q)) return;
         $q = unserialize($q);
-	    $q->open();
-	    return $q;
+        $q->open();
+        return $q;
     }
     function sessionsetvar($x)
     {
