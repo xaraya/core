@@ -77,9 +77,12 @@ class xarQuery
         // Remove the database connection before serializing.
         // Save the connection number, in case we have several.
         if (!empty($this->dbconn)) {
+        // FIXME: this assumes that the connection number will be the same afterwards
             $this->dbconn_key = $this->dbconn->database_key;
             unset($this->dbconn);
         }
+        // Remove any results before serializing
+        $this->clearresult();
 
         // Return array of variables to be serialized.
         // For now, return all variables (but we could reduce this to essentials).
@@ -93,8 +96,9 @@ class xarQuery
     {
         // Restore the database connection.
         if (empty($this->dbconn)) {
-            if (isset($this->dbconn->database_key)) {
-                $this->dbconn =& xarDBGetConn($this->dbconn->database_key);
+            if (isset($this->dbconn_key)) {
+            // FIXME: this assumes that the connection number will be the same afterwards
+                $this->dbconn =& xarDBGetConn($this->dbconn_key);
             } else {
                 $this->dbconn =& xarDBGetConn();
             }
@@ -958,6 +962,7 @@ class xarQuery
     {
         return $this->statement;
     }
+// FIXME: no longer needed if __sleep and __wakeup are used above
     function sessiongetvar($x)
     {
         $q = xarSessionGetVar($x);
