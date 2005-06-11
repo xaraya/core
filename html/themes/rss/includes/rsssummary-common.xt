@@ -1,13 +1,9 @@
 <item>
-<title><xar:var name="rsstitle"/></title>
-<link><xar:var name="link"/></link>
+<title>#xarVarTransform($rsstitle, 'HTML', 'XML')#</title>
+<link>#xarVarTransform($link, 'HTML', 'XML')#</link>
 <pubDate>#xarLocaleFormatUTCDate("%a, %d %b %Y %H:%M:%S GMT",$pubdate)#</pubDate>
 <content:format rdf:resource="http://www.w3.org/1999/xhtml" />
-<content:encoded><![CDATA[ #$summary# ]]></content:encoded>
-<description><xar:var name="rsssummary"/></description>
-<guid isPermaLink="true"><xar:var name="link"/></guid>
-<xar:if condition="!empty($categories) and count($categories) gt 0">
-<xar:loop name="$categories">
-</xar:loop>
-</xar:if>
+<content:encoded><![CDATA[ #xarVarTransform($summary, 'HTML', 'XML')# ]]></content:encoded>
+<description>#xarVarTransform($rsssummary, 'HTML', 'XML')#</description>
+<guid isPermaLink="true">#xarVarTransform($link, 'HTML', 'XML')#</guid>
 </item>
