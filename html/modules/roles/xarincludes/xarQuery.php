@@ -28,6 +28,7 @@ class xarQuery
     var $output;
     var $row;
     var $dbconn;
+    var $dbconn_key = NULL;
     var $statement;
     var $israwstatement = 0;
     var $bindvars;
@@ -68,6 +69,37 @@ class xarQuery
         $this->dbconn =& xarDBGetConn();
     }
 
+//---------------------------------------------------------
+// Serialization prep
+//---------------------------------------------------------
+    function __sleep()
+    {
+        // Remove the database connection before serializing.
+        // Save the connection number, in case we have several.
+        if (!empty($this->dbconn)) {
+            $this->dbconn_key = $this->dbconn->database_key;
+            unset($this->dbconn);
+        }
+
+        // Return array of variables to be serialized.
+        // For now, return all variables (but we could reduce this to essentials).
+        return(array_keys(get_object_vars(&$this)));
+    }
+
+//---------------------------------------------------------
+// Unserialization restore
+//---------------------------------------------------------
+    function __wakeup()
+    {
+        // Restore the database connection.
+        if (empty($this->dbconn)) {
+            if (isset($this->dbconn->database_key)) {
+                $this->dbconn =& xarDBGetConn($this->dbconn->database_key);
+            } else {
+                $this->dbconn =& xarDBGetConn();
+            }
+        }
+    }
 
     function run($statement='',$display=1)
     {
