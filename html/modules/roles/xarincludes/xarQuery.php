@@ -73,19 +73,18 @@ class xarQuery
 //---------------------------------------------------------
     function __sleep()
     {
-        // Remove the database connection before serializing.
-        // Save the connection number, in case we have several.
-        if (!empty($this->dbconn)) {
-            unset($this->dbconn);
+        // Return array of variables to be serialized.
+        $vars = array_keys(get_object_vars($this));
+
+        // Strip out the variables we don't want serialized, but don't
+        // destroy anything yet, as this object may still be needed.
+        foreach(array('dbconn', 'result', 'output') as $var) {
+            if (($key = array_search($var, $vars)) !== FALSE) {
+                unset($vars[$key]);
+            }
         }
 
-        // Remove any results before serializing
-        $this->clearresult();
-
-        // Return array of variables to be serialized.
-        // For now, return all variables (but we could reduce this to essentials).
-        // Removed the reference.  throws errors on php5
-        return(array_keys(get_object_vars($this)));
+        return($vars);
     }
 
 //---------------------------------------------------------
@@ -93,7 +92,7 @@ class xarQuery
 //---------------------------------------------------------
     function __wakeup()
     {
-        // Restore the database connection.
+        // Restore the database connection if necessary.
         if (empty($this->dbconn)) {
             $this->dbconn =& xarDBGetConn();
         }
