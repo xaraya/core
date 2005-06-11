@@ -193,10 +193,6 @@ class xarLogger_simple extends xarLogger
     // @access private
     function _prepareLogfile()
     {
-        if (!is_writable(dirname($this->_filename))) {
-            xarCore_die ('Logger directory is not writeable: ' . dirname($this->_filename));
-        }
-
         if (file_exists($this->_filename)) {
             if (!is_writable($this->_filename)) {
                 xarCore_die (
@@ -205,6 +201,10 @@ class xarLogger_simple extends xarLogger
                 );
             }
         } else {
+	        if (!is_writable(dirname($this->_filename))) {
+	            xarCore_die ('Logger directory is not writeable: ' . dirname($this->_filename));
+	        }
+
             $this->_newLogFile();
         }
 
