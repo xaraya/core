@@ -22,8 +22,8 @@
  *                (a-z, A-Z, 0-9, _, -, starting a-z or A-Z)
  *                Note: this token is not a file or path name in itself, but is more to
  *                be used as an item name that happens to be linked to template filenames
- * vtoken       - convert to a token suitable for use as a variable name. Similar to ftoken,
- *                but enforced to lower case, and must start with a letter or underscore
+ * vtoken       - convert to a token suitable for use as a variable or function name.
+ *                Similar to ftoken; must start with a letter or underscore
  * passthru:... - pass the remainder of the parameters on to further validation, which could
  * alias: val:... be any string validation type (e-mail, strings with min/max lengths, etc).
  *                Alias for passthru is 'val'.
@@ -181,12 +181,13 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                 // type, making 'passthru' redundant. Doing it this way simplifies the
                 // validation, so fetching a string 'str:1:20' can be trimmed by adding
                 // a simple prefix - 'pre:trim:str:1:20'
-                // Put the current parameter back onto the parameters stack, as we will now
-                // be treating it as the passthru validation type.
             default:
-                array_unshift($parameters, $param);
-            case 'passthru' :
-            case 'val' :
+                if ($param != 'passthru' && $param != 'val') {
+                    // Put the current parameter back onto the parameters stack, as we will now
+                    // be treating it as the passthru validation type.
+                    array_unshift($parameters, $param);
+                }
+
                 if (!empty($parameters)) {
                     // Roll up the remaining parameters.
                     $validation = implode(':', $parameters);
