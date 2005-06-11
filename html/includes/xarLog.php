@@ -29,6 +29,8 @@ define('XARLOG_LEVEL_WARNING',   16);
 define('XARLOG_LEVEL_NOTICE',    32);
 define('XARLOG_LEVEL_INFO',      64);
 define('XARLOG_LEVEL_DEBUG',     128);
+// This is a special define that includes all the levels defined above
+define('XARLOG_LEVEL_ALL',       255);
 
 function xarLog_init($args, &$whatElseIsGoingLoaded) 
 {
@@ -53,7 +55,7 @@ function xarLog_init($args, &$whatElseIsGoingLoaded)
                 'type'      => 'simple',
                 'config'    => array(
                     'fileName' => $logFile,
-                    'logLevel'  => (2*XARLOG_LEVEL_DEBUG-1)));
+                    'logLevel'  => XARLOG_LEVEL_ALL));
         }
     }
 
