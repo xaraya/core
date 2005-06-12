@@ -2028,10 +2028,10 @@ class xarPrivilege extends xarMask
 */
     function makeEntry()
     {
-
+        if ($this->isRootPrivilege()) return true;
         $query = "INSERT INTO $this->privmemberstable VALUES (?,0)";
         //Execute the query, bail if an exception was thrown
-        $this->dbconn->Execute($query,array($this->getID()));
+        if (!$this->dbconn->Execute($query,array($this->getID()))) return;
         return true;
     }
 
@@ -2301,7 +2301,7 @@ class xarPrivilege extends xarMask
 // create an array to hold the objects to be returned
         $parents = array();
 
-// if this is a user just perform a SELECT on the rolemembers table
+// perform a SELECT on the privmembers table
         $query = "SELECT p.*, pm.xar_parentid
                     FROM $this->privilegestable p, $this->privmemberstable pm
                     WHERE p.xar_pid = pm.xar_parentid
@@ -2516,6 +2516,50 @@ class xarPrivilege extends xarMask
     function isEmpty()
     {
         return $this->module == 'empty';
+    }
+
+/**
+ * isParentPrivilege: checks whether a given privilege is a parent of this privilege
+ *
+ * This methods returns true if the privilege is a parent of this one
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   none
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+    function isParentPrivilege($privilege)
+    {
+        $privs = $this->getParents();
+        foreach ($privs as $priv) {
+            if ($privilege->isEqual($priv)) return true;
+        }
+        return false;
+    }
+/**
+ * isRootPrivilege: checks whether this privilege is root privilege
+ *
+ * This methods returns true if this privilege is a root privilege
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   none
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+    function isRootPrivilege()
+    {
+        $query = "SELECT p.*, pm.xar_parentid
+                  FROM $this->privilegestable p, $this->privmemberstable pm
+                  WHERE p.xar_pid = pm.xar_parentid
+                  AND pm.xar_pid = ?
+                  AND pm.xar_parentid = 0";
+        $result = $this->dbconn->Execute($query,array($this->getID()));
+        if (!$result) return;
+        return ($result->_numOfRows == 1);
     }
 }
 
