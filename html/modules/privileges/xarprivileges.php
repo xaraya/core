@@ -1528,19 +1528,8 @@ class xarPrivileges extends xarMasks
 */
     function makeEntry($rootname)
     {
-// get the data for the root object
-        $query = "SELECT xar_pid FROM $this->privilegestable WHERE xar_name = ?";
-        //Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query,array($rootname));
-        if (!$result) return;
-
-// create the entry
-        list($pid) = $result->fields;
-        $query = "INSERT INTO $this->privmemberstable VALUES (?,0)";
-        //Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query,array($pid))) return;
-
-// done
+        $priv = $this->findPrivilege($rootname);
+        $priv->makeEntry();
         return true;
     }
 
@@ -2042,7 +2031,7 @@ class xarPrivilege extends xarMask
 
         $query = "INSERT INTO $this->privmemberstable VALUES (?,0)";
         //Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query,array($this->getID()))) return;
+        $this->dbconn->Execute($query,array($this->getID()));
         return true;
     }
 
