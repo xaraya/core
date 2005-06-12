@@ -14,7 +14,11 @@
 <script language="JavaScript">
 var #$jsID#_cal = new xar_base_calendar(document.getElementById("#$id#_input"), "#$baseuri#");
 #$jsID#_cal.year_scroll = true;
+<xar:if condition="!empty($dateformat) and $dateformat eq '%Y-%m-%d'">
+#$jsID#_cal.time_comp = false;
+<xar:else/>
 #$jsID#_cal.time_comp = true;
+</xar:if>
 </script>
 
 <xar:if condition="!empty($invalid)">
