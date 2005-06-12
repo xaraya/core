@@ -932,6 +932,26 @@ if (empty($step)) {
         xarConfigSetVar('Site.MLS.DefaultTimeOffset', 0);
         echo "Site.MLS.DefaultTimeOffset incorrect, attempting to set.... done!<br />";
     }
+    $cookiename = xarConfigGetVar('Site.Session.CookieName');
+    if (!isset($cookiename)) {
+        xarConfigSetVar('Site.Session.CookieName', '');
+        echo "Site.Session.CookieName incorrect, attempting to set.... done!<br />";
+    }
+    $cookiepath = xarConfigGetVar('Site.Session.CookiePath');
+    if (!isset($cookiepath)) {
+        xarConfigSetVar('Site.Session.CookiePath', '');
+        echo "Site.Session.CookiePath incorrect, attempting to set.... done!<br />";
+    }
+    $cookiedomain = xarConfigGetVar('Site.Session.CookieDomain');
+    if (!isset($cookiedomain)) {
+        xarConfigSetVar('Site.Session.CookieDomain', '');
+        echo "Site.Session.CookieDomain incorrect, attempting to set.... done!<br />";
+    }
+    $referercheck = xarConfigGetVar('Site.Session.RefererCheck');
+    if (!isset($referercheck)) {
+        xarConfigSetVar('Site.Session.RefererCheck', '');
+        echo "Site.Session.RefererCheck incorrect, attempting to set.... done!<br />";
+    }
 
     // Check the installed roles
     echo "<h5>Checking Role Structure</h5>";

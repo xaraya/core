@@ -60,6 +60,10 @@ function base_admin_updateconfig()
             if (!xarVarFetch('sessionduration','int:1:',$sessionDuration,30,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('sessiontimeout','int:1:',$sessionTimeout,10,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('authmodule_order','str:1:',$authmodule_order,'',XARVAR_NOT_REQUIRED)) {return;}
+            if (!xarVarFetch('cookiename','str:1:',$cookieName,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('cookiepath','str:1:',$cookiePath,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('cookiedomain','str:1:',$cookieDomain,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('referercheck','str:1:',$refererCheck,'',XARVAR_NOT_REQUIRED)) return;
 
             xarConfigSetVar('Site.Core.EnableSecureServer', $secureServer);
 
@@ -68,6 +72,10 @@ function base_admin_updateconfig()
             xarConfigSetVar('Site.Session.SecurityLevel', $securityLevel);
             xarConfigSetVar('Site.Session.Duration', $sessionDuration);
             xarConfigSetVar('Site.Session.InactivityTimeout', $sessionTimeout);
+            xarConfigSetVar('Site.Session.CookieName', $cookieName);
+            xarConfigSetVar('Site.Session.CookiePath', $cookiePath);
+            xarConfigSetVar('Site.Session.CookieDomain', $cookieDomain);
+            xarConfigSetVar('Site.Session.RefererCheck', $refererCheck);
 
             // Authentication modules
             if (!empty($authmodule_order)) {

@@ -304,7 +304,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
         $systemArgs = array('securityLevel'     => xarConfigGetVar('Site.Session.SecurityLevel'),
                             'duration'          => xarConfigGetVar('Site.Session.Duration'),
-                            'inactivityTimeout' => xarConfigGetVar('Site.Session.InactivityTimeout'));
+                            'inactivityTimeout' => xarConfigGetVar('Site.Session.InactivityTimeout'),
+                            'cookieName'        => xarConfigGetVar('Site.Session.CookieName'),
+                            'cookiePath'        => xarConfigGetVar('Site.Session.CookiePath'),
+                            'cookieDomain'      => xarConfigGetVar('Site.Session.CookieDomain'),
+                            'refererCheck'      => xarConfigGetVar('Site.Session.RefererCheck'));
         xarSession_init($systemArgs, $whatToLoad);
 
         $whatToLoad ^= XARCORE_BIT_SESSION;

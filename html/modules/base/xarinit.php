@@ -210,6 +210,11 @@ function base_init()
     xarConfigSetVar('Site.Session.SecurityLevel', 'Medium');
     xarConfigSetVar('Site.Session.Duration', 7);
     xarConfigSetVar('Site.Session.InactivityTimeout', 90);
+    // use current defaults in includes/xarSession.php
+    xarConfigSetVar('Site.Session.CookieName', '');
+    xarConfigSetVar('Site.Session.CookiePath', '');
+    xarConfigSetVar('Site.Session.CookieDomain', '');
+    xarConfigSetVar('Site.Session.RefererCheck', '');
     xarConfigSetVar('Site.MLS.TranslationsBackend', 'xml2php');
     // FIXME: <marco> Temporary config vars, ask them at install time
     xarConfigSetVar('Site.MLS.MLSMode', 'SINGLE');

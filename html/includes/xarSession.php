@@ -268,11 +268,6 @@ function xarSession__setup($args)
     //PHP's session related configuration
     if (!xarFuncIsDisabled('ini_set'))
     {
-        $path = xarServerGetBaseURI();
-        if (empty($path)) {
-            $path = '/';
-        }
-
         // PHP configuration variables
         // Stop adding SID to URLs
         ini_set('session.use_trans_sid', 0);
@@ -287,21 +282,35 @@ function xarSession__setup($args)
         ini_set('session.use_cookies', 1);
     
         // Name of our cookie
-        ini_set('session.name', 'XARAYASID');
+        if (empty($args['cookieName'])) {
+            $args['cookieName'] = 'XARAYASID';
+        }
+        ini_set('session.name', $args['cookieName']);
+
+        if (empty($args['cookiePath'])) {
+            $path = xarServerGetBaseURI();
+            if (empty($path)) {
+                $path = '/';
+            }
+        } else {
+            $path = $args['cookiePath'];
+        }
 
         // Lifetime of our cookie
         switch ($args['securityLevel']) {
             case 'High':
                 // Session lasts duration of browser
                 $lifetime = 0;
-                // Referer check
-                $host = xarServerGetVar('HTTP_HOST');
-                $host = preg_replace('/:.*/', '', $host);
-                // this won't work for non-standard ports
-                //if (!xarFuncIsDisabled('ini_set')) ini_set('session.referer_check', "$host$path");
-                // this should be customized for multi-server setups wanting to
-                // share sessions
-                ini_set('session.referer_check', $host);
+                // Referer check defaults to the current host for security level High
+                if (empty($args['refererCheck'])) {
+                    $host = xarServerGetVar('HTTP_HOST');
+                    $host = preg_replace('/:.*/', '', $host);
+                    // this won't work for non-standard ports
+                    //if (!xarFuncIsDisabled('ini_set')) ini_set('session.referer_check', "$host$path");
+                    // this should be customized for multi-server setups wanting to
+                    // share sessions
+                    $args['refererCheck'] = $host;
+                }
                 break;
             case 'Medium':
                 // Session lasts set number of days
@@ -313,8 +322,12 @@ function xarSession__setup($args)
                 $lifetime = 788940000;
                 break;
         }
-
         ini_set('session.cookie_lifetime', $lifetime);
+
+        // Referer check for the session cookie
+        if (!empty($args['refererCheck'])) {
+            ini_set('session.referer_check', $args['refererCheck']);
+        }
 
         // Cookie path
         // this should be customized for multi-server setups wanting to share
@@ -328,7 +341,9 @@ function xarSession__setup($args)
         // Example: www.Xaraya.com for www.Xaraya.com and *.www.Xaraya.com
         //$domain = xarServerGetVar('HTTP_HOST');
         //$domain = preg_replace('/:.*/', '', $domain);
-        //if (!xarFuncIsDisabled('ini_set')) ini_set('session.cookie_domain', $domain);
+        if (!empty($args['cookieDomain'])) {
+            ini_set('session.cookie_domain', $args['cookieDomain']);
+        }
     
         // Garbage collection
         ini_set('session.gc_probability', 1);
