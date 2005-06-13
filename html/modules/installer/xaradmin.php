@@ -185,7 +185,7 @@ function installer_admin_phase4()
     // Get default values from config files
     $data['database_host']       = xarCore_getSystemVar('DB.Host');
     $data['database_username']   = xarCore_getSystemVar('DB.UserName');
-    $data['database_password']   = xarCore_getSystemvar('DB.Password');
+    $data['database_password']   = '';//xarCore_getSystemvar('DB.Password');
     $data['database_name']       = xarCore_getSystemvar('DB.Name');
     $data['database_prefix']     = xarCore_getSystemvar('DB.TablePrefix');
     $data['database_type']       = xarCore_getSystemvar('DB.Type');
