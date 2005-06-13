@@ -33,5 +33,4 @@
 </xar:loop>
 </xar:foreach>
 </xar:foreach>
-<xar:if condition="$legacy and !empty($additionalstyles)">#$additionalstyles#</xar:if>
 </xar:if>

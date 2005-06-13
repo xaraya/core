@@ -100,7 +100,7 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
         }
     }
 
-    $GLOBALS['xarTpl_additionalStyles'] = array();
+    $GLOBALS['xarTpl_additionalStyles'] = '';
 
     // This is wrong here as well, but it's better at least than in xarMod
     include "includes/xarTheme.php";
@@ -913,7 +913,9 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
     $tpl->pageTitle = xarTplGetPageTitle();
     // leaving it ON here for pure legacy support, css classlib in themes mod must have legacy enabled to support it
     // TODO: remove whenever the legacy can be dropped <andy>
-    $tpl->additionalStyles = $GLOBALS['xarTpl_additionalStyles'];
+    
+    // NOTE: This MUST be a reference, since we havent filled the global yet at this point
+    $tpl->additionalStyles =& $GLOBALS['xarTpl_additionalStyles'];
     
     $tplData = array(
         'tpl'                      => $tpl,

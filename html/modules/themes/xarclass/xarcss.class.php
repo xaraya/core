@@ -78,8 +78,6 @@ class xarCSS
     var $debug      = false;        // true == debug mode enabled
     var $parse      = false;        // true == parse mode enabled
     var $suppress   = false;        // true == this css is suppressed
-    var $legacy     = true;         // true == legacy pre-csslib support
-
 
     // constructor
     function xarCSS($args)
@@ -126,25 +124,28 @@ class xarCSS
     function run_output()
     {
         if (!isset($tagqueue)) $tagqueue = new tagqueue();
-        if ($this->method == 'render') {
-            $data['styles'] = $tagqueue->deliver($this->sort);
-            $data['comments'] = $this->comments;
-            $data['legacy'] = $this->legacy;
-            $data['additionalstyles'] = $GLOBALS['xarTpl_additionalStyles'];
-            // TODO: remove these hardcoded comments when BL + QA can handle them in templates
-            $data['opencomment']    = "<!-- ";
-            $data['closecomment']   = " -->\n";
-            $data['openconditionalcomment']    = "<!--[if ";
-            $data['closeconditionalcomment']   = "<![endif]-->\n";
-            $data['openbracket']    = "<";
-            $data['closebracket']   = ">";
-            $data['closeconditionalbracket']   = "]>";
-            return $data;
-        } else {
-            $this->tagdata['url'] = $this->geturl();
-            $tagqueue->register($this->tagdata);
-            return true;
+        switch($this->method) {
+            case 'render':
+                $data['styles'] = $tagqueue->deliver($this->sort);
+                break;
+            case 'renderlegacy':
+                $data['styles'] = $tagqueue->deliverlegacy($this->sort);
+                break;
+            default:
+                $this->tagdata['url'] = $this->geturl();
+                $tagqueue->register($this->tagdata);
+                return true;
         }
+        // TODO: remove these hardcoded comments when BL + QA can handle them in templates
+        $data['comments'] = $this->comments;
+        $data['opencomment']    = "<!-- ";
+        $data['closecomment']   = " -->\n";
+        $data['openconditionalcomment']    = "<!--[if ";
+        $data['closeconditionalcomment']   = "<![endif]-->\n";
+        $data['openbracket']    = "<";
+        $data['closebracket']   = ">";
+        $data['closeconditionalbracket']   = "]>";
+        return $data;
     }
 
     // returns xaraya url for the file
@@ -167,6 +168,7 @@ class xarCSS
 
         $msg = xarML("#(1) css stylesheet file cannot be found at this location: ",$this->scope);
 
+        // <mrb> why is this?
         if ($this->scope == 'common') $this->scope = 'module';
 
         if ($this->scope == 'theme') {
@@ -219,25 +221,44 @@ class xarCSS
 
 class tagqueue
 {
+    var $legacy = true; // Also register the global which existed before the css stuff?
+    
+    function tagqueue()
+    {
+        // TODO: uncomment this :-)
+        //$this->legacy = xarConfigGetVar('Site.Core.LoadLegacy');
+    }
+    
+    // FIXME: $args is used as boolean OR an array depending on the call,
+    // someone is bound to trip over that hack at some point
     function queue($op='register', $args)
     {
         static $queue;
 
-        if ($op == 'register') {
-            $queue[$args['scope']][$args['method']][$args['url']] = $args;
-            return true;
-        } else if ($op == 'deliver') {
-            $styles = $queue;
-            if($args) {
-                if (is_array($styles)){
-                    krsort($styles);
-                    reset($styles);
+        switch($op) {
+            case 'register':
+                // Put it in the queue
+                $queue[$args['scope']][$args['method']][$args['url']] = $args;
+                // Also fill up the legacy global.
+                if($this->legacy) {
+                    // This actually gets called too much, filling up 1 line at a time
+                    $GLOBALS['xarTpl_additionalStyles'] = xarModApiFunc( 'themes','user','deliver', array('method' => 'renderlegacy','base' => 'theme'));
                 }
-            }
-            $queue = array();
-            return $styles;
-        } else {
-            return false;
+                return true;
+            case 'deliver':
+                $styles = $queue;
+                if($args) {
+                    if (is_array($styles)){
+                        krsort($styles);
+                        reset($styles);
+                    }
+                }
+                $queue = array();
+                return $styles;
+            case 'deliverlegacy':
+                return $queue;
+            default:
+                return false;
         }
     }
 
@@ -249,6 +270,11 @@ class tagqueue
     function deliver($sort=true)
     {
         return $this->queue('deliver',$sort);
+    }
+    
+    function deliverlegacy($sort = true)
+    {
+        return $this->queue('deliverlegacy',$sort);
     }
 }
 ?>
