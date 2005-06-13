@@ -50,12 +50,14 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
      
     function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        // this won't do for check boxes !
+        //if (!isset($value)) {
+        //    $value = $this->value;
+        //}
 
-        if( is_array($value) )
-        {
+        if (!isset($value)) {
+            $this->value = '';
+        } elseif ( is_array($value) ) {
             $this->value = implode ( ',', $value);
         } else {
             $this->value = $value;
@@ -76,8 +78,9 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
             $data['value'] = $value;
         }
         
-        if ( !is_array($data['value']) && is_string($data['value']) )
-        {
+        if ( empty($data['value']) ) {
+            $data['value'] = array();
+        } elseif ( !is_array($data['value']) && is_string($data['value']) ) {
             $data['value'] = explode( ',', $data['value'] );
         }
         
