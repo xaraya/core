@@ -633,11 +633,13 @@ function xarModGetInfo($modRegId, $type = 'module')
  * @return mixed
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
  */
-function xarModPrivateLoad($modName, $modType, $flags = 0)
+function xarModPrivateLoad($modName, $modType, $flags = 0, $throwException=1)
 {
     static $loadedModuleCache = array();
     if (empty($modName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        if($throwException) {
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        }
         return;
     }
 
@@ -653,12 +655,16 @@ function xarModPrivateLoad($modName, $modType, $flags = 0)
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', xarML('Unable to find Base Info for Module: #(1)', $modName));
+        if($throwException) {
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', xarML('Unable to find Base Info for Module: #(1)', $modName));
+        }
         return; // throw back
     }
 
     if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', $modBaseInfo['name']);
+        if($throwException) {
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', $modBaseInfo['name']);
+        }
         return;
     }
 
@@ -739,14 +745,16 @@ function xarModLoad($modName, $modType = 'user')
  * @return mixed true on success
  * @raise XAR_SYSTEM_EXCEPTION
  */
-function xarModAPILoad($modName, $modType = 'user')
+function xarModAPILoad($modName, $modType = 'user', $throwException = 1)
 {
     if (!xarCoreIsAPIAllowed($modType)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
+        if($throwException) {
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
+        }
         return;
     }
 
-    return xarModPrivateLoad($modName, $modType.'api', XARMOD_LOAD_ANYSTATE);
+    return xarModPrivateLoad($modName, $modType.'api', XARMOD_LOAD_ANYSTATE, $throwException);
 }
 
 /**
@@ -938,7 +946,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
     $isLoaded = true;
     if (!function_exists($modAPIFunc)) {
         // attempt to load the module's api
-        xarModAPILoad($modName, $modType);
+        xarModAPILoad($modName, $modType, $throwException);
         // let's check for that function again to be sure
         if (!function_exists($modAPIFunc)) {
             // good thing this information is cached :)
