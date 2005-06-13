@@ -60,8 +60,4 @@
     </p>
 
 </div>
-<div class="xar-mod-foot xar-align-center xar-padding-thick">
-    <p>
-        <xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring>
-    </p>
-</div>
+
