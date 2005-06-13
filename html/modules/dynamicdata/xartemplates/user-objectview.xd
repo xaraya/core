@@ -1,8 +1,4 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Dynamic Data</xar:mlstring></span>
-</div>
-<div class="xar-mod-body">
     <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
         <xar:template file="catnavigation"/>
     </xar:if>
@@ -222,4 +218,4 @@
         <br /><br />
         <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
     </xar:if>
-</div>
+
