@@ -1857,9 +1857,12 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $args['newlink'] = '';
         }
 
+        if (empty($args['pagerurl'])) {
+            $args['pagerurl'] = '';
+        }
         list($args['prevurl'],
              $args['nexturl'],
-             $args['sorturl']) = $this->getPager();
+             $args['sorturl']) = $this->getPager($args['pagerurl']);
         
         // Pass the objectid too, comfy for customizing the templates
         // with custom tags.
@@ -1975,9 +1978,12 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $args['catid'] = null;
         }
 
+        if (empty($args['pagerurl'])) {
+            $args['pagerurl'] = '';
+        }
         list($args['prevurl'],
              $args['nexturl'],
-             $args['sorturl']) = $this->getPager();
+             $args['sorturl']) = $this->getPager($args['pagerurl']);
 
         return xarTplModule($args['tplmodule'],'user','objectview',
                             $args,
@@ -2014,7 +2020,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         return $viewvalues;
     }
 
-    function getPager()
+    function getPager($currenturl = '')
     {
         $prevurl = '';
         $nexturl = '';
@@ -2027,7 +2033,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
     // TODO: count items before calling getItems() if we want some better pager
 
         // Get current URL (this uses &amp; by default now)
-        $currenturl = xarServerGetCurrentURL();
+        if (empty($currenturl)) {
+            $currenturl = xarServerGetCurrentURL();
+        }
 
     // TODO: clean up generation of sort URL
 

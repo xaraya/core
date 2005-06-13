@@ -165,12 +165,17 @@ function dynamicdata_userapi_showview($args)
     if (empty($linkfield)) {
         $linkfield = '';
     }
+    // current URL for the pager (defaults to current URL)
+    if (empty($pagerurl)) {
+        $pagerurl = '';
+    }
 
     return $object->showView(array('layout'    => $layout,
                                    'template'  => $template,
                                    'linklabel' => $linklabel,
                                    'linkfunc'  => $linkfunc,
                                    'param'     => $param,
+                                   'pagerurl'  => $pagerurl,
                                    'linkfield' => $linkfield));
 }
 

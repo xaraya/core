@@ -1,4 +1,71 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:if condition="empty($ishooked)">
+
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Dynamic Data</xar:mlstring></span>
+</div>
+<div class="xar-mod-body">
+    <xar:if condition="empty($gotobject)">
+        <xar:set name="label">xarML('Dynamic Data')</xar:set>
+        <h2><xar:ml><xar:mlstring>Search #(1)</xar:mlstring><xar:mlvar>#$label#</xar:mlvar></xar:ml></h2>
+        <ul>
+        <xar:foreach in="$items" value="$item">
+            <li><a href="#$item['link']#"><xar:ml><xar:mlstring>Search #(1)</xar:mlstring><xar:mlvar>#$item['label']#</xar:mlvar></xar:ml></a></li>
+        </xar:foreach>
+        </ul>
+    <xar:else/>
+        <xar:foreach in="$items" value="$item">
+            <h2><xar:ml><xar:mlstring>Search #(1)</xar:mlstring><xar:mlvar>#$item['label']#</xar:mlvar></xar:ml></h2>
+            <form method="get" action="index.php">
+            <div>
+            <table border="0" cellpadding="2" cellspacing="0">
+              <tr>
+                <td valign="top"><label for="q"><xar:mlstring>Search for</xar:mlstring></label>:</td>
+                <td>
+                  <input type="hidden" name="module" value="dynamicdata" />
+                  <input type="hidden" name="func" value="search" />
+                  <xar:if condition="!empty($item['modid'])">
+                    <input type="hidden" name="modid" value="#$item['modid']#" />
+                  </xar:if>
+                  <xar:if condition="!empty($item['itemtype'])">
+                    <input type="hidden" name="itemtype" value="#$item['itemtype']#" />
+                  </xar:if>
+                  <input type="text" name="q" id="q" value="#$q#" size="20" />
+                </td>
+              </tr>
+              <tr>
+                <td valign="top"><xar:mlstring>Search on</xar:mlstring>:</td>
+                <td>
+                  <xar:if condition="!empty($item['fields']) and count($item['fields']) gt 0">
+                    <xar:foreach in="$item['fields']" key="$name" value="$field">
+                      <xar:if condition="!empty($field['checked'])">
+                        <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check_#$field['id']#" value="1" checked="checked" />
+                      <xar:else />
+                        <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check_#$field['id']#" value="1" /> 
+                      </xar:if>
+                      <label for="dd_check_#$field['id']#">#$field['label']#</label><br/>
+                    </xar:foreach>
+                  </xar:if>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <xar:set name="$search"><xar:mlstring>Search</xar:mlstring></xar:set>
+                  <input type="submit" value="#$search#" />
+                </td>
+              </tr>
+            </table>
+            </div>
+            </form>
+            <xar:if condition="!empty($item['result'])">
+                #$item['result']#
+            </xar:if>
+        </xar:foreach>
+    </xar:if>
+</div>
+
+<xar:else/>
+
 <xar:foreach in="$items" value="$item">
   <h2><xar:ml><xar:mlstring>Search #(1)</xar:mlstring><xar:mlvar>#$item['label']#</xar:mlvar></xar:ml></h2>
   <p></p>
@@ -25,3 +92,4 @@
   </xar:if>
 </xar:foreach>
 
+</xar:if>
