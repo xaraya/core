@@ -269,12 +269,18 @@
         </xar:if>
 
         <h3>
-            <xar:mlstring>The Components of</xar:mlstring>&nbsp;'#$pname#':
+            <xar:ml>
+                <xar:mlstring>The Components of '#(1)':</xar:mlstring>
+                <xar:mlvar>#$pname#</xar:mlvar>
+            </xar:ml>
         </h3>
         #$tree#
 
         <h3>
-            <xar:mlstring>Add a Privilege to</xar:mlstring> '#$pname#'
+            <xar:ml>
+                <xar:mlstring>Add a Privilege to '#(1)'</xar:mlstring>
+                <xar:mlvar>#$pname#</xar:mlvar>
+            </xar:ml>
         </h3>
 
         <div class="xar-form-input-wrapper">
@@ -299,7 +305,10 @@
     </form>
 
     <h3>
-        '#$pname#' <xar:mlstring>Component Memberships</xar:mlstring>
+        <xar:ml>
+            <xar:mlstring>'#(1)' Component Memberships</xar:mlstring>
+            <xar:mlvar>#$pname#</xar:mlvar>
+        </xar:ml>
     </h3>
 
     <xar:if condition="count($parents) eq 0">
