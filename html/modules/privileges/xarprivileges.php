@@ -2030,7 +2030,6 @@ class xarPrivilege extends xarMask
     {
         if ($this->isRootPrivilege()) return true;
         $query = "INSERT INTO $this->privmemberstable VALUES (?,0)";
-        //Execute the query, bail if an exception was thrown
         if (!$this->dbconn->Execute($query,array($this->getID()))) return;
         return true;
     }
@@ -2552,14 +2551,14 @@ class xarPrivilege extends xarMask
 */
     function isRootPrivilege()
     {
-        $query = "SELECT p.*, pm.xar_parentid
-                  FROM $this->privilegestable p, $this->privmemberstable pm
-                  WHERE p.xar_pid = pm.xar_parentid
-                  AND pm.xar_pid = ?
-                  AND pm.xar_parentid = 0";
-        $result = $this->dbconn->Execute($query,array($this->getID()));
-        if (!$result) return;
-        return ($result->_numOfRows == 1);
+        $q = new xarQuery('SELECT');
+        $q->addtable($this->privilegestable,'p');
+        $q->addtable($this->privmemberstable,'pm');
+        $q->join('p.xar_pid','pm.xar_pid');
+        $q->eq('pm.xar_pid',$this->getID());
+        $q->eq('pm.xar_parentid',0);
+        if(!$q->run()) return;
+        return (count($q->output()) != array());
     }
 }
 
