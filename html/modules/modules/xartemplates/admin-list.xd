@@ -134,12 +134,12 @@
                             it has id (and name for some browsers) so we shouldnt waste 
                             space with empty anchors here
                             </xar:comment>
-                            <td name="#$modinfo['displayname']#" id="#$modinfo['displayname']#">
+                            <td name="#$modinfo['name']#" id="#$modinfo['name']#">
                                 <xar:comment> if module is active and configurable (admin type) make its name a link to module main admin function </xar:comment>
                                 <xar:if condition="$modinfo['modconfigurl'] ne ''">
-                                    <a href="#$modinfo['modconfigurl']#" title="#$modinfo['adminurltitle']#&nbsp;#$modinfo['displayname']#">#$modinfo['displayname']#</a>
+                                    <a href="#$modinfo['modconfigurl']#" title="#$modinfo['adminurltitle']#&nbsp;#$modinfo['displayname']#">#$modinfo['name']#</a>
                                 <xar:else />
-                                    #$modinfo['displayname']#
+                                    #$modinfo['name']#
                                 </xar:if>
                             </td>
                             <td class="xar-align-right">
