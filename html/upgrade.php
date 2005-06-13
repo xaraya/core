@@ -43,6 +43,12 @@ if (empty($step)) {
 
 <div class="xar-mod-head"><span class="xar-mod-title"><?php echo $title; ?></span></div>
 <div class="xar-mod-body"><h2><?php echo $descr; ?></h2><br />
+  <p>
+    <xar:mlstring>
+        Before you run the upgrade, make sure the existing site is working. If you try to upgrade
+        a non-working site, unexpected results may occur.
+    </xar:mlstring>
+  </p>
   <div style="margin: auto;">
     <form method="POST" action="upgrade.php">
     <p><input type="submit" value="Upgrade Core Tables">
