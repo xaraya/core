@@ -12,10 +12,10 @@
 
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>
-            Query
-        </xar:mlstring>
-        #$label#
+        <xar:ml>
+            <xar:mlstring>Query #(1)</xar:mlstring>
+            <xar:mlvar>#$label#</xar:mlvar>
+        </xar:ml>
     </h2>
     <br />
     <div style="margin: auto;">
@@ -345,22 +345,26 @@
         <xar:if condition="!empty($viewlink)">
             <p>
                 <a href="#$viewlink#">
-                    <xar:mlstring>
-                        View
-                    </xar:mlstring>
-                    #$label#</a>
+                    <xar:ml>
+                        <xar:mlstring>View #(1)</xar:mlstring>
+                        <xar:mlvar>#$label#</xar:mlvar>
+                    </xar:ml>
+                </a>
             </p>
         </xar:if>
         <xar:if condition="isset($mylist)">
             <xar:if condition="!empty($groupby)">
                 <xar:data-view object="$mylist" layout="list" />
-                <xar:else />
+            <xar:else />
                 <xar:data-list object="$mylist" />
             </xar:if>
         </xar:if>
         <xar:if condition="!empty($sample)">
             <p>
-                Sample Tag : #$sample#
+                <xar:ml>
+                    <xar:mlstring>Sample Tag : #(1)</xar:mlstring>
+                    <xar:mlvar>#$sample#</xar:mlvar>
+                </xar:ml>
             </p>
         </xar:if>
     </div>
