@@ -17,6 +17,9 @@
  */
 function privileges_admin_viewroles()
 {
+    // Security Check
+    if(!xarSecurityCheck('EditRole')) return;
+
     $data = array();
 
     if (!xarVarFetch('pid',  'isset', $pid,          NULL,       XARVAR_DONT_SET)) {return;}
@@ -24,9 +27,6 @@ function privileges_admin_viewroles()
 
     // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');
-
-    // Security Check
-    if(!xarSecurityCheck('ViewRoles')) return;
 
     //Call the Privileges class and get the privilege
     $privs = new xarPrivileges();

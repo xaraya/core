@@ -2049,7 +2049,6 @@ class xarPrivilege extends xarMask
 */
     function addMember($member)
     {
-
         $query = "INSERT INTO $this->privmemberstable VALUES (?,?)";
         $bindvars = array($member->getID(), $this->getID());
         //Execute the query, bail if an exception was thrown
@@ -2558,7 +2557,7 @@ class xarPrivilege extends xarMask
         $q->eq('pm.xar_pid',$this->getID());
         $q->eq('pm.xar_parentid',0);
         if(!$q->run()) return;
-        return (count($q->output()) != array());
+        return ($q->output() != array());
     }
 }
 
