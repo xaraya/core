@@ -226,12 +226,6 @@
                 </td>
             </tr>
         </table>
-        <xar:if condition="$modstatus">
-            <xar:comment> lets display latest status roles update </xar:comment>
-            <p>
-                #$modstatus#
-            </p>
-        </xar:if>
     </form>
 
     <xar:comment> the Roles Lists table-based styles (borrow from the Modules list)</xar:comment>
