@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id:
- * 
+ *
  * View the current privileges
- * 
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -18,15 +18,15 @@
  */
 function privileges_admin_viewprivileges()
 {
+    // Security Check
+    if(!xarSecurityCheck('EditPrivilege')) return;
+
     $data = array();
 
     if (!xarVarFetch('show', 'isset', $data['show'], 'assigned', XARVAR_NOT_REQUIRED)) return;
 
     // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');
-
-    // Security Check
-    if(!xarSecurityCheck('ViewPrivileges')) return;
 
     // call the Privileges class
     $privs = new xarPrivileges();

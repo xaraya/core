@@ -16,6 +16,8 @@
  */
 function privileges_admin_displayprivilege()
 {
+// Security Check
+    if(!xarSecurityCheck('EditPrivilege')) return;
 
     if(!xarVarFetch('pid',           'isset', $pid,          NULL, XARVAR_DONT_SET)) {return;}
 
@@ -25,9 +27,6 @@ function privileges_admin_displayprivilege()
         $i++;
         $instance[] = $pinstance;
     }
-
-// Security Check
-    if(!xarSecurityCheck('ViewPrivileges')) return;
 
 //Call the Privileges class and get the privilege to be modified
     $privs = new xarPrivileges();
