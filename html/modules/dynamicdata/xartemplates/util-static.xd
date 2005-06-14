@@ -103,25 +103,38 @@
         </div>
         <xar:else />
         <form>
-            <div>
-                <textarea name="xml" class="xar-form-textarealarge">
-                    &lt;objects&gt; 
-                    <xar:foreach in="$tables" key="$table" value="$fields">
-                        &lt;object name="#$table#"&gt; &lt;label&gt;#$table#&lt;/label&gt; &lt;moduleid&gt;182&lt;/moduleid&gt; &lt;itemtype&gt;-1&lt;/itemtype&gt; &lt;urlparam&gt;itemid&lt;/urlparam&gt; &lt;maxid&gt;0&lt;/maxid&gt; &lt;config&gt;&lt;/config&gt; &lt;isalias&gt;0&lt;/isalias&gt; &lt;properties&gt; 
-                        <xar:foreach in="$fields" key="$name" value="$field">
-                            &lt;property name="#$name#"&gt; 
-                            <xar:foreach in="$field" key="$key" value="$value">
-                                <xar:if condition="$key ne 'name'">
-                                    &lt;#$key#&gt;#$value#&lt;/#$key#&gt; 
-                                </xar:if>
-                            </xar:foreach>
-                            &lt;/property&gt; 
-                        </xar:foreach>
-                        &lt;/properties&gt; &lt;/object&gt; 
-                    </xar:foreach>
-                    &lt;/objects&gt; 
-                </textarea>
-            </div>
+            <fieldset>
+                <legend>
+                    <xar:ml>
+                        <xar:mlstring>Static table definitions for module #(1)</xar:mlstring>
+                        <xar:mlvar>#$module#</xar:mlvar>
+                    </xar:ml>
+                </legend>
+                <div class="xar-form-input-wrapper">
+                    <label class="xar-form-label">
+                        <xar:mlstring>Definition</xar:mlstring>
+                    </label>
+                    <div class="xar-form-container-after">
+                        <textarea name="xml" class="xar-form-textarealarge">
+&lt;objects&gt; 
+<xar:foreach in="$tables" key="$table" value="$fields">
+    &lt;object name="#$table#"&gt; &lt;label&gt;#$table#&lt;/label&gt; &lt;moduleid&gt;182&lt;/moduleid&gt; &lt;itemtype&gt;-1&lt;/itemtype&gt; &lt;urlparam&gt;itemid&lt;/urlparam&gt; &lt;maxid&gt;0&lt;/maxid&gt; &lt;config&gt;&lt;/config&gt; &lt;isalias&gt;0&lt;/isalias&gt; &lt;properties&gt; 
+    <xar:foreach in="$fields" key="$name" value="$field">
+        &lt;property name="#$name#"&gt; 
+        <xar:foreach in="$field" key="$key" value="$value">
+            <xar:if condition="$key ne 'name'">
+                &lt;#$key#&gt;#$value#&lt;/#$key#&gt; 
+            </xar:if>
+        </xar:foreach>
+        &lt;/property&gt; 
+    </xar:foreach>
+    &lt;/properties&gt; &lt;/object&gt; 
+</xar:foreach>
+&lt;/objects&gt; 
+                        </textarea>
+                    </div>
+                </div>
+            </fieldset>
         </form>
         <div class="xar-align-center">
             <a href="&xar-modurl-dynamicdata-util-static;&amp;modid=#$modid#">

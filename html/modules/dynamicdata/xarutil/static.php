@@ -56,6 +56,9 @@ function dynamicdata_util_static($args)
 
     $data['export'] = $export;
     $data['modid'] = $modid;
+    if(!isset($modid) || $modid == 0) $modid = 182;
+    $modInfo = xarModGetInfo($modid);
+    $data['module'] = $modInfo['name'];
     $data['itemtype'] = $itemtype;
     $data['authid'] = xarSecGenAuthKey();
 
