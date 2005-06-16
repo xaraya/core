@@ -30,6 +30,10 @@ function dynamicdata_adminapi_browse($args)
     // Get arguments from argument array
     extract($args);
 
+    if (empty($filematch)) {
+        $filematch = '';
+    }
+
     $todo = array();
     $basedir = realpath($basedir);
     $filelist = array();
@@ -39,7 +43,7 @@ function dynamicdata_adminapi_browse($args)
         if ($dir = @opendir($curdir)) {
             while(($file = @readdir($dir)) !== false) {
                 $curfile = $curdir . '/' . $file;
-                if (preg_match("/\.$filetype$/",$file) && is_file($curfile)) {
+                if (preg_match("/$filematch\.$filetype$/",$file) && is_file($curfile)) {
                     // ugly fix for Windows boxes
                     $tmpdir = strtr($basedir,array('\\' => '\\\\'));
                     $curfile = preg_replace("#$tmpdir/#",'',$curfile);
