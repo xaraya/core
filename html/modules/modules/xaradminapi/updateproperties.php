@@ -37,6 +37,7 @@ function modules_adminapi_updateproperties($args)
 
 // Update
     $xartable =& xarDBGetTables();
+    // CHECKME: this comes falling out of nowhere (from roles module)
     $q = new xarQuery('UPDATE', $xartable['modules']);
 //    if (isset($displayname)) $q->addfield('xar_directory', $displayname);
     if (isset($admincapable)) $q->addfield('xar_admin_capable', $admincapable);
