@@ -64,17 +64,7 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
         if (empty($id)) {
             $id = $name;
         }
-/*        return '<input type="text"'.
-               ' name="' . $name . '"' .
-               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
-               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' />' .
-               (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-*/
+
         $data['name']     = $name;
         $data['id']       = $id;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
@@ -84,8 +74,8 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
         $data['size']     = !empty($size) ? $size : $this->size;
         $data['link']     = xarVarPrepForDisplay($link);
         
-        $template="aim";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="";
+        return xarTplProperty('roles', 'aim', 'showinput', $data);
 
     }
 
@@ -108,9 +98,8 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
                 $data['name'] = $this->name;
                 $data['id']   = $this->id;
                 $data['image']= xarVarPrepForDisplay($this->icon);
-//                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="'.xarML('AIM').'"/></a>';
-                $template="aim";
-                return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+                $template="";
+                return xarTplProperty('roles', 'aim', 'showoutput', $data );
             }
         }
         return '';

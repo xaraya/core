@@ -75,20 +75,9 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
         $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
         $data['size']     = !empty($size) ? $size : $this->size;
         $data['link']     = xarVarPrepForDisplay($link);
-/*       return '<input type="text"'.
-               ' name="' . $name . '"' .
-               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
-               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' />' .
-               (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
 
-*/
-      $template="msn";
-      return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+      $template="";
+      return xarTplProperty('roles', 'msn', 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -111,10 +100,8 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
                 $data['id']   = $this->id;
                 $data['image']= xarVarPrepForDisplay($this->icon);
 
-/*          return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="'.xarML('MSN').'"/></a>';
-*/
-            $template="msn";
-            return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+            $template="";
+            return xarTplProperty('roles', 'msn', 'showoutput', $data);
 
             }
         }

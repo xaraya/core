@@ -62,18 +62,7 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
         if (empty($id)) {
             $id = $name;
         }
-        /*
-        return '<input type="text"'.
-               ' name="' . $name . '"' .
-               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
-               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' />' .
-               (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        */
+
         $data['link']     = $link;
         $data['name']     = $name;
         $data['id']       = $id;
@@ -83,8 +72,8 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
         $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
         $data['size']     = !empty($size) ? $size : $this->size;
  
-        $template="icq";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="";
+        return xarTplProperty('roles', 'icq', 'showinput', $data);
 
     }
 
@@ -116,8 +105,8 @@ else
         $data['id']   = $this->id;
         $data['link'] = $link;
 
-        $template="icq";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template="";
+        return xarTplProperty('roles', 'icq', 'showoutput', $data);
     }
 
     /**

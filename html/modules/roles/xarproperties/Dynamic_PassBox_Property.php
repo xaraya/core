@@ -76,25 +76,7 @@ class Dynamic_PassBox_Property extends Dynamic_Property
             }
         }
 
-        /*
-        return '<input type="password"'.
-               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id.'[0]') . '"' .
-               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
-               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
-               (!empty($id) ? ' id="'.$id.'"' : '') .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' /> &nbsp;&nbsp;&nbsp;&nbsp;Type again:' .
-           '<input type="password"'.
-               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id).'[1]' . '"' .
-               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
-               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
-               (!empty($id) ? ' id="'.$id.'"' : '') .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' />' .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        */
+
 //         $data['name']     = !empty($name) ? $name : 'dd_'.$this->id;
          $data['name']     = !empty($name) ? $name : 'dd_'.$this->id;
          $data['id']       = !empty($id)   ? $id   : 'dd_'.$this->id;
@@ -104,8 +86,8 @@ class Dynamic_PassBox_Property extends Dynamic_Property
          $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
          $data['size']     = !empty($size) ? $size : $this->size;
 
-        $template="password";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="";
+        return xarTplProperty('roles', 'password', 'showinput', $data);
 
     }
 
@@ -115,8 +97,8 @@ class Dynamic_PassBox_Property extends Dynamic_Property
     $data=array();
     $data['value']='';
 
-    $template="password";
-    return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+    $template="";
+    return xarTplProperty('roles', 'password', 'showoutput', $data);
 
     //return '';
     }

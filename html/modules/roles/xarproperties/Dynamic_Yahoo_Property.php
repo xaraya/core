@@ -74,19 +74,8 @@ class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
         $data['size']     = !empty($size) ? $size : $this->size;
         $data['link']     = xarVarPrepForDisplay($link);
 
- /*     return '<input type="text"'.
-               ' name="' . $name . '"' .
-               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
-               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' />' .
-               (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-*/
-        $template="yahoo";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="";
+        return xarTplProperty('roles', 'yahoo', 'showinput', $data);
 
     }
 
@@ -96,7 +85,7 @@ class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-        $data=array();    
+        $data=array();
 
         if (!empty($value)) {
             $link = 'http://edit.yahoo.com/config/send_webmesg?.target='.$value.'&.src=pg';
@@ -108,10 +97,9 @@ class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
                 $data['name'] = $this->name;
                 $data['id']   = $this->id;
                 $data['image']= xarVarPrepForDisplay($this->icon);
-//          return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="'.xarML('Yahoo').'"/></a>';
 
-                $template="yahoo";
-                return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+                $template="";
+                return xarTplProperty('roles', 'yahoo', 'showoutput', $data);
             }
         }
         return '';

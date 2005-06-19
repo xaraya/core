@@ -64,16 +64,7 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
         if (empty($id)) {
             $id = $name;
         }
-        /*return '<input type="text"'.
-               ' name="' . $name . '"' .
-               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
-               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' />' .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        */
+
         $data['name']     = $name;
         $data['id']       = $id;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
@@ -83,8 +74,8 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
         $data['size']     = !empty($size) ? $size : $this->size;
 
 
-        $template="email";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="";
+        return xarTplProperty('roles', 'email', 'showinput', $data );
 
     }
 
@@ -109,8 +100,8 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
         $data['name'] = $this->name;
         $data['id']   = $this->id;
 
-        $template="email";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template="";
+        return xarTplProperty('roles', 'email', 'showoutput', $data);
     }
 
     /**
