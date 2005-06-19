@@ -5,6 +5,7 @@
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
  */
+include_once "modules/dynamicdata/class/properties.php";
 class Dynamic_Array_Property extends Dynamic_Property
 {
     var $fields = array();
@@ -86,8 +87,8 @@ class Dynamic_Array_Property extends Dynamic_Property
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         $data['size']     = !empty($size) ? $size : $this->size;
 
-        $template = "array";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+        $template = "";
+        return xarTplProperty('base', 'array', 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -121,8 +122,8 @@ class Dynamic_Array_Property extends Dynamic_Property
             }
         }
 
-        $template = "array";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template = "";
+        return xarTplProperty('base', 'array', 'showoutput', $data);
     }
 
     /**
