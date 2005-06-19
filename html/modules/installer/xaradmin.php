@@ -87,6 +87,29 @@ function installer_admin_phase2()
 }
 
 /**
+ * Check whether directory permissions allow to write and read files inside it
+ * 
+ * @access private
+ * @param string dirname directory name
+ * @return bool true if directory is writable, readable and executable
+ */
+function check_dir($dirname)
+{
+    if (@touch($dirname . '/.check_dir')) {
+        $fd = @fopen($dirname . '/.check_dir', 'r');
+        if ($fd) {
+            fclose($fd);
+            unlink($dirname . '/.check_dir');
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+    return true;
+}
+
+/**
  * Phase 3: Check system settings
  *
  * @access private
@@ -126,10 +149,10 @@ function installer_admin_phase3()
     }
 
     $systemConfigIsWritable     = is_writable($systemConfigFile);
-    $cacheIsWritable            = is_writable($cacheDir);
-    $cacheTemplatesIsWritable   = is_writable($cacheTemplatesDir);
-    $rssTemplatesIsWritable     = is_writable($rssTemplatesDir);
-    $adodbTemplatesIsWritable   = is_writable($adodbTemplatesDir);
+    $cacheIsWritable            = check_dir($cacheDir);
+    $cacheTemplatesIsWritable   = (check_dir($cacheTemplatesDir) || @mkdir($cacheTemplatesDir, 0700));
+    $rssTemplatesIsWritable     = (check_dir($rssTemplatesDir) || @mkdir($rssTemplatesDir, 0700));
+    $adodbTemplatesIsWritable   = (check_dir($adodbTemplatesDir) || @mkdir($adodbTemplatesDir, 0700));
     $phpLanguageFilesIsWritable = xarMLS__iswritable($phpLanguageDir);
     $xmlLanguageFilesIsWritable = xarMLS__iswritable($xmlLanguageDir);
     $memLimit = trim(ini_get('memory_limit'));
