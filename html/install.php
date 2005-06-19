@@ -112,23 +112,26 @@ $GLOBALS['xarMLS_mode'] = 'SINGLE';
 xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
 // Construct an array of the available locale folders
-$locale_dir = './var/locales/';
-$allowedLocales = array($install_language);
+$locale_dir = xarCoreGetVarDirPath() . '/locales/';
+$allowedLocales = array();
 if(is_dir($locale_dir)) {
     if ($dh = opendir($locale_dir)) {
         while (($file = readdir($dh)) !== false) {
             // Exclude the current, previous and the Bitkeeper folder 
             // (just for us to be able to test, wont affect users who use a build)
             if($file == '.' || $file == '..' || $file == 'SCCS' || filetype($locale_dir . $file) == 'file' ) continue;
-            if(filetype(realpath($locale_dir . $file)) == 'dir') {
+            if(filetype(realpath($locale_dir . $file)) == 'dir' &&
+               file_exists(realpath($locale_dir . $file . '/locale.xml'))) {
                 $allowedLocales[] = $file;
             }
         }
         closedir($dh);
     }
 }
-// This is needed, otherwise the en_US.utf-8 is shown twice
-array_unique($allowedLocales);
+
+if (empty($allowedLocales)) {
+	die("The var directory is corrupted: no locale was found!");
+}
 // A sorted combobox is better
 sort($allowedLocales);
 
@@ -220,7 +223,7 @@ if (!xarInstallMain()) {
         // As we are in the exception handling phase, we can clear it without side effects.
         xarErrorFree();
         // Render page
-        $pageOutput = xarTpl_renderPage($text);
+        $pageOutput = xarTpl_renderPage($text,NULL,'installer');
         if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
             // Fallback to raw html
             $msg = '<span style="color: #FF0000;">The current page is shown because the Blocklayout Template Engine failed to render the page, however this could be due to a problem not in BL itself but in the template. BL has raised or has left uncaught the following exception:</span>';

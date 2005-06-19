@@ -49,11 +49,12 @@ function &xarMLSLoadLocaleData($locale = NULL)
         }
     }
 
-    $fileName = "var/locales/$locale/locale.php";
+    $fileName = xarCoreGetVarDirPath() . '/locales/$locale/locale.php';
+    //xarCoreGetVarDirPath()
     if (!$parsedLocale = xarMLS__parseLocaleString($locale)) return false;
     $siteCharset = $parsedLocale['charset'];
     $utf8locale = $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
-    $utf8FileName = "var/locales/$utf8locale/locale.php";
+    $utf8FileName = xarCoreGetVarDirPath() . '/locales/$utf8locale/locale.php';
     if (file_exists($fileName)) {
         include_once $fileName;
         $GLOBALS['xarMLS_localeDataCache'][$locale] = $localeData;

@@ -50,11 +50,14 @@ function installer_admin_phase1()
         foreach ($locales as $locale) {
             // Get the isocode and the description
             // Before we load the locale data, let's check if the locale is there
-            $fileName = "var/locales/$locale/locale.xml";
-            if(file_exists($fileName)) {
-                $locale_data =& xarMLSLoadLocaleData($locale);
-                $languages[$locale] = $locale_data['/language/display'];
-            }
+            
+            // <marco> This check is really not necessary since available locales are
+            // already determined from existing files. The relative code is in install.php
+            //$fileName = xarCoreGetVarDirPath() . "/locales/$locale/locale.xml";
+            //if(file_exists($fileName)) {
+            $locale_data =& xarMLSLoadLocaleData($locale);
+            $languages[$locale] = $locale_data['/language/display'];
+            //}
         }
     }
 
