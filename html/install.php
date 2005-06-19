@@ -130,7 +130,7 @@ if(is_dir($locale_dir)) {
 }
 
 if (empty($allowedLocales)) {
-    die("The var directory is corrupted: no locale was found!");
+    xarCore_die("The var directory is corrupted: no locale was found!");
 }
 // A sorted combobox is better
 sort($allowedLocales);
