@@ -191,10 +191,14 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $data['class'] = get_class($this);
 
         // allow template override by child classes
+        /* jojodee : the following doesn't seem to be correct - commenting out for now
+                     initialize $template = ''; in case
         if (!isset($template)) {
             $template = 'calendar';
         }
-        return xarTplProperty('base', 'calendar', 'validation', $data, $template);
+        */
+        $template='';
+        return xarTplProperty('base', 'calendar', 'validation', $data);
     }
 
     function updateValidation($args = array())
