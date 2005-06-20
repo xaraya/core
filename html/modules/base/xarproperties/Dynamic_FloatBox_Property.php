@@ -17,7 +17,7 @@
  * Include the base class
  *
  */
-include_once "includes/properties/Dynamic_TextBox_Property.php";
+include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
 
 /**
  * Class to handle floatbox property

@@ -13,7 +13,7 @@
  * @author mikespub <mikespub@xaraya.com>
 */
 
-include_once "includes/properties/Dynamic_Select_Property.php";
+include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 /**
  * Class to handle check box list property

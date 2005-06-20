@@ -16,7 +16,7 @@
  * Include the base class
  *
  */
-include_once "includes/properties/Dynamic_Select_Property.php";
+include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 /**
  * Class to handle dynamic html page property

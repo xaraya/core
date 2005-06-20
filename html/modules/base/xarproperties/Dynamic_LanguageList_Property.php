@@ -15,7 +15,7 @@
  * Include the base file
  *
  */
-include_once "includes/properties/Dynamic_Select_Property.php";
+include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 /**
  * handle the language list property

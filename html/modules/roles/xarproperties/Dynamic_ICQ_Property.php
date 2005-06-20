@@ -17,7 +17,7 @@
  * Include the base class
  *
  */
-include_once "includes/properties/Dynamic_URLIcon_Property.php";
+include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
 
 /**
  * Handle ICQ property
