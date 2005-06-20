@@ -33,6 +33,9 @@ function dynamicdata_adminapi_browse($args)
     if (empty($filematch)) {
         $filematch = '';
     }
+    if (!isset($recursive)) {
+        $recursive = true;
+    }
 
     $todo = array();
     $basedir = realpath($basedir);
@@ -48,7 +51,7 @@ function dynamicdata_adminapi_browse($args)
                     $tmpdir = strtr($basedir,array('\\' => '\\\\'));
                     $curfile = preg_replace("#$tmpdir/#",'',$curfile);
                     $filelist[] = $curfile;
-                } elseif ($file != '.' && $file != '..' && is_dir($curfile)) {
+                } elseif ($file != '.' && $file != '..' && is_dir($curfile) && !empty($recursive)) {
                     array_push($todo, $curfile);
                 }
             }
