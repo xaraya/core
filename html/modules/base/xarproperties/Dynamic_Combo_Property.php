@@ -94,8 +94,8 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
         $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
         $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
-        $template="combobox";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'combobox', 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -118,8 +118,8 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
             $data['option']['name'] = xarVarPrepForDisplay($this->value);
         }
 
-        $template="combobox";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'combobox', 'showoutput', $data);
     }
 
     /**

@@ -23,7 +23,7 @@
         </xar:foreach>
     </select>
 <xar:else />
-    Options not specified in validation field.
+    <xar:mlstring>Options not specified in validation field.</xar:mlstring>
 </xar:if>
 
 <xar:if condition="!empty($invalid)">

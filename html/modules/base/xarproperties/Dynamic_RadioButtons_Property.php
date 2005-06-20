@@ -53,8 +53,8 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
         $data['tabindex'] =!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
         $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
-        $template="radio";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'radio', 'showinput', $data);
 
     }
 

@@ -152,8 +152,8 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         $data['size']     = !empty($size) ? $size : $this->size;
         $data['link']     = xarVarPrepForDisplay($link);
 
-        $template="urltitle";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="";
+        return xarTplProperty('base', 'urltitle', 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -201,8 +201,8 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         $data['link']    = (!empty($link) && $link != 'http://') ? $link : '';
         $data['title']   = (!empty($title)) ? $title : '';
 
-        $template="urltitle";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'urltitle', 'showoutput', $data);
     }
 
     /**

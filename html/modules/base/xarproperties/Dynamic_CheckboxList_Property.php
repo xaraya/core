@@ -109,8 +109,8 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
         $data['invalid']  =!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
 
 
-        $template="checkboxlist";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'checkboxlist', 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -131,8 +131,8 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
 
         $data['value'] = xarVarPrepForDisplay($value);
 
-        $template="checkboxlist";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'checkboxlist', 'showoutput', $data);
     }
      
 }

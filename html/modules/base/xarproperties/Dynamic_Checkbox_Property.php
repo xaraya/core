@@ -12,7 +12,8 @@
  * @subpackage dynamicdata properties
  * @author mikespub <mikespub@xaraya.com>
 */
-
+/* Include parent class */
+include_once "modules/dynamicdata/class/properties.php";
 /**
  * Class to handle check box property
  *
@@ -58,8 +59,8 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
         $data['tabindex']=!empty($tabindex) ? $tabindex : 0;
         $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid): '';
 
-        $template="checkbox";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'checkbox', 'showinput', $data);
 
     }
 
@@ -79,8 +80,8 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
         } else {
             return xarML('no');
         }*/
-        $template="checkbox";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'checkbox', 'showoutput', $data);
 
     }
 

@@ -71,8 +71,8 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         $data['rows']     = !empty($rows) ? $rows : $this->rows;
         $data['cols']     = !empty($cols) ? $cols : $this->cols;
 
-        $template="textarea";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="";
+        return xarTplProperty('base', 'textarea', 'showinput', $data);
 
     }
 
@@ -88,8 +88,8 @@ class Dynamic_TextArea_Property extends Dynamic_Property
             //return xarVarPrepHTMLDisplay($this->value);
             $data['value'] = xarVarPrepHTMLDisplay($this->value);
          }
-         $template="textarea";
-         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+         $template="";
+         return xarTplProperty('base', 'textarea', 'showoutput', $data);
     }
 
     // check validation for allowed rows/cols (or values)
@@ -200,9 +200,9 @@ class Dynamic_TextArea_Property extends Dynamic_Property
 
         // allow template override by child classes
         if (!isset($template)) {
-            $template = 'textarea';
+            $template = '';
         }
-        return xarTplModule('dynamicdata', 'admin', 'validation', $data, $template);
+        return xarTplProperty('base', 'textarea', 'validation', $data);
     }
 
     /**

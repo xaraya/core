@@ -99,8 +99,8 @@ class Dynamic_Select_Property extends Dynamic_Property
         $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
         $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
-        $template="dropdown";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'dropdown', 'showinput', $data);
         //return $out;
     }
 
@@ -121,8 +121,8 @@ class Dynamic_Select_Property extends Dynamic_Property
         $data['option'] = array('id' => $this->value,
                                 'name' => $result);
 
-        $template="dropdown";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'dropdown', 'showoutput', $data);
     }
 
     function parseValidation($validation = '')
@@ -361,9 +361,9 @@ class Dynamic_Select_Property extends Dynamic_Property
 
         // allow template override by child classes
         if (!isset($template)) {
-            $template = 'dropdown';
+            $template = '';
         }
-        return xarTplModule('dynamicdata', 'admin', 'validation', $data, $template);
+        return xarTplProperty('base', 'dropdown', 'validation', $data);
     }
 
     /**

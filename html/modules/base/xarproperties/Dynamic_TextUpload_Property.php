@@ -12,6 +12,8 @@
  * @subpackage dynamicdata properties
  * @author mikespub <mikespub@xaraya.com>
 */
+/* Include parent class */
+include_once "modules/dynamicdata/class/properties.php";
 
 /**
  * Handle text upload property
@@ -194,8 +196,8 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         $data['maxsize']  = !empty($maxsize) ? $maxsize: $this->maxsize;
         $data['size']     = !empty($size) ? $size : $this->size;
 
-        $template="textupload";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="";
+        return xarTplProperties('base', 'textupload', 'showinput', $data);
 
     }
 
@@ -215,8 +217,8 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             $data['value'] ='';
         }
 
-        $template="textupload";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'textupload', 'showoutput', $data);
 
     }
 
@@ -295,9 +297,9 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
 
         // allow template override by child classes
         if (!isset($template)) {
-            $template = 'textupload';
+            $template = '';
         }
-        return xarTplModule('dynamicdata', 'admin', 'validation', $data, $template);
+        return xarTplProperty('base', 'textupload', 'validation', $data);
     }
 
     function updateValidation($args = array())

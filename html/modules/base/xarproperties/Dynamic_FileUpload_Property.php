@@ -5,6 +5,8 @@
  * @package dynamicdata
  * @subpackage properties
  */
+/* Include parent class */
+include_once "modules/dynamicdata/class/properties.php";
 
 /**
  * Class to handle file upload properties
@@ -247,8 +249,8 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         $data['allowed']    = $allowed;
         $data['extensions'] = $extensions;
 
-        $template="fileupload";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="";
+        return xarTplProperty('base', 'fileupload', 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -282,8 +284,8 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             }
             $data['value'] = xarVarPrepForDisplay($value);
 
-            $template="fileupload";
-            return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+            $template="";
+            return xarTplProperty('base', 'fileupload', 'showoutput', $data);
         } else {
             return '';
         }
@@ -380,10 +382,11 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         $data['other'] = '';
 
         // allow template override by child classes
+        // jojodee - this construct not required here now? 
         if (!isset($template)) {
-            $template = 'fileupload';
+            $template = '';
         }
-        return xarTplModule('dynamicdata', 'admin', 'validation', $data, $template);
+        return xarTplProperty('base', 'fileupload', 'validation', $data);
     }
 
     function updateValidation($args = array())

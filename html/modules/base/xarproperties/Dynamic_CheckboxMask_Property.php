@@ -108,8 +108,8 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
         $data['invalid']  =!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
 
 
-        $template="checkboxmask";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'checkboxmask', 'showinput', $data);
         //return $out;
     }
 
@@ -144,8 +144,8 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
         $data['options'] = $options;
         $data['numOptionsSelected'] = $numOptionsSelected;
 
-        $template="checkboxmask";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'checkboxmask', 'showoutput', $data);
     }
      
 }

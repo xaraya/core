@@ -84,8 +84,8 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
         $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
         $data['size']     = !empty($size) ? $size : $this->size;
 
-        $template="url";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="";
+        return xarTplProperty('base', 'url', 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -101,8 +101,8 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
             $data['value'] = xarVarPrepForDisplay($value);
             //return '<a href="'.$value.'">'.$value.'</a>';
 
-            $template="url";
-            return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+            $template="";
+            return xarTplProperty('base', 'url', 'showoutput', $data);
         }
         return '';
     }

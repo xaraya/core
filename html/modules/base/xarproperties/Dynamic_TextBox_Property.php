@@ -12,6 +12,8 @@
  * @subpackage dynamicdata properties
  * @author mikespub <mikespub@xaraya.com>
 */
+/* Include parent class */
+include_once "modules/dynamicdata/class/properties.php";
 
 /**
  * handle the textbox property
@@ -94,8 +96,8 @@ class Dynamic_TextBox_Property extends Dynamic_Property
             $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
             $data['size']     = !empty($size) ? $size : $this->size;
 
-      $template="textbox";
-      return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+      $template="";
+      return xarTplProperty('base', 'textbox', 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -111,8 +113,8 @@ class Dynamic_TextBox_Property extends Dynamic_Property
 
         $data['value'] = $value;
 
-        $template="textbox";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'textbox', 'showoutput', $data);
 
     }
 
@@ -190,9 +192,9 @@ class Dynamic_TextBox_Property extends Dynamic_Property
 
         // allow template override by child classes
         if (!isset($template)) {
-            $template = 'textbox';
+            $template = '';
         }
-        return xarTplModule('dynamicdata', 'admin', 'validation', $data, $template);
+        return xarTplProperty('base', 'textbox', 'validation', $data);
     }
 
     /**

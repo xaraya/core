@@ -62,17 +62,6 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
         if (empty($id)) {
             $id = $name;
         }
-        /*return '<input type="text"'.
-               ' name="' . $name . '"' .
-               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
-               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' />' .
-               (!empty($value) && $value != 'http://' ? ' [ <a href="'.$value.'" target="preview">'.xarML('show').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        */
         $data['name']     = $name;
         $data['id']       = $id;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
@@ -81,8 +70,8 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
         $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
         $data['size']     = !empty($size) ? $size : $this->size;
 
-        $template="image";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="";
+        return xarTplProperty('base', 'image', 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -105,8 +94,8 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
         $data['name']  = $name;
         $data['id']    = $this->id;
 
-        $template="image";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'image', 'showoutput', $data);
 
     }
 

@@ -52,8 +52,8 @@ class Dynamic_StaticText_Property extends Dynamic_Property
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        $template="static";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="";
+        return xarTplProperty('base', 'static', 'showinput', $data);
     }
      // default showOutput() from Dynamic_Property
     function showOutput($args = array())
@@ -69,8 +69,8 @@ class Dynamic_StaticText_Property extends Dynamic_Property
 
         $data['value'] = $value;
         
-        $template="static";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'static', 'showoutput', $data);
 
     }
 

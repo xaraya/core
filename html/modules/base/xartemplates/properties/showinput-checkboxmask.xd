@@ -17,7 +17,7 @@
         </xar:if>
     </xar:foreach>
 <xar:else />
-    No options specified for CheckBox Mask in validation field.
+    <xar:mlstring>No options specified for CheckBox Mask in validation field.</xar:mlstring>
 </xar:if>
 
 <xar:if condition="!empty($invalid)">

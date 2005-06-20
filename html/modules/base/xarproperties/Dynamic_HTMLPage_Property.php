@@ -109,8 +109,8 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         $data['tabindex']= !empty($tabindex) ? $tabindex : 0;
         $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
-        $template="webpage";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'webpage', 'showinput', $data);
 
     }
 
@@ -141,8 +141,8 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         $data['filetype']=$filetype;
         $data['srcpath']=$srcpath;
 
-        $template="webpage";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'webpage', 'showoutput', $data);
 
     }
 

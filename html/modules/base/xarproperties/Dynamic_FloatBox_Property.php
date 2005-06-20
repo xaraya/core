@@ -84,8 +84,8 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
         }
         $data['value']= xarVarPrepForDisplay($value);
         
-        $template="floatbox";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'floatbox', 'showoutput', $data);
 
     }
 

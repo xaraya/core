@@ -89,8 +89,8 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         $data['size']     = !empty($size) ? $size : $this->size;
 
 
-        $template="urlicon";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="";
+        return xarTplProperty('base', 'urlicon', 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -112,8 +112,8 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
                                'getfavicon',
                                 array('url' => $data['value']));
 
-                $template="urlicon";
-                return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+                $template="";
+                return xarTplProperty('base', 'urlicon', 'showoutput', $data);
             }
         }
         return '';
@@ -181,9 +181,9 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
 
         // allow template override by child classes
         if (!isset($template)) {
-            $template = 'urlicon';
+            $template = '';
         }
-        return xarTplModule('dynamicdata', 'admin', 'validation', $data, $template);
+        return xarTplProperty('base', 'urlicon', 'validation', $data);
     }
 
     /**
