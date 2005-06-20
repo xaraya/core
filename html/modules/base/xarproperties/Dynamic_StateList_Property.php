@@ -169,8 +169,8 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
         $data['tabindex'] =! empty($tabindex) ? $tabindex : 0;
 
 
-        $template="statelist";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'statelist', 'showinput', $data);
 
         //return $out;
     }
@@ -191,8 +191,8 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
          if (isset($id)) {
              $data['id']=$id;
          }
-         $template="statelist";
-         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+         $template="";
+         return xarTplProperty('base', 'statelist', 'showoutput', $data);
 
     }
 

@@ -321,8 +321,8 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
         $data['tabindex'] =! empty($tabindex) ? $tabindex: 0;
 
-        $template="countrylist";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+        $template="";
+        return xarTplProperty('base', 'countrylist', 'showinput', $data);
 
     }
 
@@ -341,9 +341,9 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
          if (isset($id)) {
              $data['id']=$id;
          }
-         $template="countrylist";
+         $template="";
 
-         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+         return xarTplProperty('dynamicdata', 'countrylist', 'showoutput', $data);
         /*if (isset($value)) {
             return xarVarPrepHTMLDisplay($value);
         } else {
