@@ -197,7 +197,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         $data['size']     = !empty($size) ? $size : $this->size;
 
         $template="";
-        return xarTplProperties('base', 'textupload', 'showinput', $data);
+        return xarTplProperty('base', 'textupload', 'showinput', $data);
 
     }
 
