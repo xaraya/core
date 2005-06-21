@@ -343,7 +343,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
          }
          $template="";
 
-         return xarTplProperty('dynamicdata', 'countrylist', 'showoutput', $data);
+         return xarTplProperty('base', 'countrylist', 'showoutput', $data);
         /*if (isset($value)) {
             return xarVarPrepHTMLDisplay($value);
         } else {
