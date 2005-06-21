@@ -309,9 +309,9 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
 
         // allow template override by child classes
         if (!isset($template)) {
-            $template = 'userlist';
+            $template = '';
         }
-        return xarTplModule('dynamicdata', 'admin', 'validation', $data, $template);
+        return xarTplProperty('roles', 'userlist', 'validation', $data);
     }
 
     /**
