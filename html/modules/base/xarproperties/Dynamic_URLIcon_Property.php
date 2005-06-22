@@ -180,10 +180,10 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         }
 
         // allow template override by child classes
-        if (!isset($template)) {
-            $template = '';
+        if (empty($template)) {
+            $template = 'urlicon';
         }
-        return xarTplProperty('base', 'urlicon', 'validation', $data);
+        return xarTplProperty('base', $template, 'validation', $data);
     }
 
     /**

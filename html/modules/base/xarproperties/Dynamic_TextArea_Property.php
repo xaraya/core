@@ -199,10 +199,10 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         }
 
         // allow template override by child classes
-        if (!isset($template)) {
-            $template = '';
+        if (empty($template)) {
+            $template = 'textarea';
         }
-        return xarTplProperty('base', 'textarea', 'validation', $data);
+        return xarTplProperty('base', $template, 'validation', $data);
     }
 
     /**

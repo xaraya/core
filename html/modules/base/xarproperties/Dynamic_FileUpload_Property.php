@@ -382,11 +382,10 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         $data['other'] = '';
 
         // allow template override by child classes
-        // jojodee - this construct not required here now? 
-        if (!isset($template)) {
-            $template = '';
+        if (empty($template)) {
+            $template = 'fileupload';
         }
-        return xarTplProperty('base', 'fileupload', 'validation', $data);
+        return xarTplProperty('base', $template, 'validation', $data);
     }
 
     function updateValidation($args = array())

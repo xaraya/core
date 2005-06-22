@@ -296,10 +296,10 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         $data['other'] = '';
 
         // allow template override by child classes
-        if (!isset($template)) {
-            $template = '';
+        if (empty($template)) {
+            $template = 'textupload';
         }
-        return xarTplProperty('base', 'textupload', 'validation', $data);
+        return xarTplProperty('base', $template, 'validation', $data);
     }
 
     function updateValidation($args = array())
