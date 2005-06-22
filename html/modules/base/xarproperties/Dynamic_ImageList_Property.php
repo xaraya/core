@@ -26,19 +26,27 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 class Dynamic_ImageList_Property extends Dynamic_Select_Property
 {
     var $basedir = '';
+    var $baseurl = null;
     var $filetype = '(gif|jpg|jpeg|png|bmp)';
 
     function Dynamic_ImageList_Property($args)
     {
         $this->Dynamic_Select_Property($args);
-        // specify base directory in validation field
+        // specify base directory in validation field, or basedir|baseurl (not ; to avoid conflicts with old behaviour)
         if (empty($this->basedir) && !empty($this->validation)) {
-            $this->basedir = $this->validation;
+            if (strpos($this->validation,'|') !== false) {
+                list($this->basedir, $this->baseurl) = split('\|',$this->validation);
+            } else {
+                $this->basedir = $this->validation;
+            }
         }
         // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/Xaraya_Classic/images
         if (!empty($this->basedir) && preg_match('/\{theme\}/',$this->basedir)) {
             $curtheme = xarTplGetThemeDir();
             $this->basedir = preg_replace('/\{theme\}/',$curtheme,$this->basedir);
+            if (isset($this->baseurl)) {
+                $this->baseurl = preg_replace('/\{theme\}/',$curtheme,$this->baseurl);
+            }
         }
     }
 
@@ -100,6 +108,7 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
         }
 
         $data['basedir'] = $this->basedir;
+        $data['baseurl'] = isset($this->baseurl) ? $this->baseurl : $this->basedir;
         $data['name']    = $name;
         $data['value']   = $value;
         $data['id']      = $id;
@@ -121,6 +130,7 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
             $value = $this->value;
         }
         $basedir = $this->basedir;
+        $baseurl = isset($this->baseurl) ? $this->baseurl : $basedir;
         $filetype = $this->filetype;
 
         if (!empty($value) &&
@@ -128,17 +138,16 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
             preg_match("/$filetype$/",$value) &&
             file_exists($basedir.'/'.$value) &&
             is_file($basedir.'/'.$value)) {
-        // TODO: make sure basedir and baseurl match
-        //    return '<img src="'.$basedir.'/'.$value.'" alt="" />';
-           $srcpath=$basedir.'/'.$value;
+        //    return '<img src="'.$baseurl.'/'.$value.'" alt="" />';
+           $srcpath=$baseurl.'/'.$value;
         } else {
             //return '';
            $srcpath='';
         }
 
-
         $data['value']=$value;
         $data['basedir']=$basedir;
+        $data['baseurl'] = $baseurl;
         $data['filetype']=$filetype;
         $data['srcpath']=$srcpath;
 

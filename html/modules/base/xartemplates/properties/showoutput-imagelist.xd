@@ -1,5 +1,5 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
 <xar:if condition="$srcpath ne ''" >
-     <img src="#$basedir#/#$value#" alt="" />
+     <img src="#$baseurl#/#$value#" alt="" />
 </xar:if>
