@@ -221,6 +221,7 @@ class Dynamic_Property_Master
 
         $dynamicproptypes = $xartable['dynamic_properties_def'];
 
+        // Sort by required module(s) and then by id
         $query = "SELECT 
                     xar_prop_id
                     , xar_prop_name
@@ -237,7 +238,7 @@ class Dynamic_Property_Master
                     , xar_prop_aliases
 
                   FROM $dynamicproptypes
-                  ORDER BY xar_prop_id";
+                  ORDER BY xar_prop_reqmodules, xar_prop_id";
 
         $result =& $dbconn->Execute($query);
 

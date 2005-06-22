@@ -856,7 +856,14 @@ function dynamicdata_createPropDefTable()
         if (empty($query)) return false; // throw back
         $result = $dbconn->Execute($query);
         if (!isset($result)) return false;
-        
+
+        $query = xarDBCreateIndex($dynamic_properties_def,
+                           array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynpropdef_mod',
+                                 'fields' => array('xar_prop_reqmodules')));
+        if (empty($query)) return; // throw back
+        $result = $dbconn->Execute($query);
+        if (!isset($result)) return;
+
         return true;
     }
 ?>

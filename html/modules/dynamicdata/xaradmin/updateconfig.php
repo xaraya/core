@@ -25,7 +25,7 @@ function dynamicdata_admin_updateconfig( $args )
     // Security Check
     if (!xarSecurityCheck('AdminDynamicData')) return;
 
-    // TODO: Check authid
+    if (!xarSecConfirmAuthKey()) return;
     
     if ( isset($flushPropertyCache) && ($flushPropertyCache == true) )
     {
@@ -34,13 +34,49 @@ function dynamicdata_admin_updateconfig( $args )
         
         if( $success )
         {
-            return 'Property Definitions Cache has been cleared and reloaded.';
+            xarResponseRedirect(xarModURL('dynamicdata','admin','modifyconfig'));
+            return true;
         } else {
             return 'Unknown error while clearing and reloading Property Definition Cache.';
         }
     }
 
-    return 'insert update code for property types here ?';
+    if (!xarVarFetch('label','list:str:',$label,NULL,XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('validation','list:str:',$validation,NULL,XARVAR_NOT_REQUIRED)) return;
+
+    if (empty($label) && empty($validation)) {
+        xarResponseRedirect(xarModURL('dynamicdata','admin','modifyconfig'));
+        return true;
+    }
+
+    $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
+
+    $dbconn =& xarDBGetConn();
+    $xartable =& xarDBGetTables();
+
+    $dynamicproptypes = $xartable['dynamic_properties_def'];
+
+    foreach ($proptypes as $proptype) {
+        $id = (int) $proptype['id'];
+        if (empty($label[$id])) {
+            $query = "DELETE FROM $dynamicproptypes
+                            WHERE xar_prop_id = ?";
+            $bindvars = array($id);
+            $result =& $dbconn->Execute($query,$bindvars);
+            if (!$result) return;
+        } elseif ($label[$id] != $proptype['label'] || $validation[$id] != $proptype['validation']) {
+            $query = "UPDATE $dynamicproptypes
+                         SET xar_prop_label = ?,
+                             xar_prop_validation = ?
+                       WHERE xar_prop_id = ?";
+            $bindvars = array($label[$id],$validation[$id],$id);
+            $result =& $dbconn->Execute($query,$bindvars);
+            if (!$result) return;
+        }
+    }
+
+    xarResponseRedirect(xarModURL('dynamicdata','admin','modifyconfig'));
+    return true;
 }
 
 ?>

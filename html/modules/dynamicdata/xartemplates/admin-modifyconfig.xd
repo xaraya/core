@@ -46,19 +46,28 @@
                     #$labels['validation']# 
                 </th>
             </tr>
+            <xar:set name="lastmod">''</xar:set>
             <xar:foreach in="$fields" value="$field">
+                <xar:if condition="$field['requiresmodule'] ne $lastmod">
+                <tr>
+                    <th colspan="5">
+                        #$field['requiresmodule']#
+                        <xar:set name="lastmod">$field['requiresmodule']</xar:set>
+                    </th>
+                </tr>
+                </xar:if>
                 <tr>
                     <td class="xar-align-right">
                         #$field['id']# 
                     </td>
                     <td>
-                        <input type="text" name="name[#$field['id']#]" id="name_#$field['id']#" value="#$field['name']#" class="xar-form-textmedium" />
+                        #$field['name']#
                     </td>
                     <td>
                         <input type="text" name="label[#$field['id']#]" id="label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium" />
                     </td>
                     <td>
-                        <xar:data-input property="$fieldtypeprop" name="format['.$field['id'].']" value="$field['format']" />
+                        <xar:data-output property="$fieldtypeprop" value="$field['format']" />
                     </td>
                     <td>
                         <input type="text" name="validation[#$field['id']#]" id="validation_#$field['id']#" value="#$field['validation']#" class="xar-form-textmedium" />
@@ -67,7 +76,7 @@
             </xar:foreach>
         </table>
         <p>
-            <xar:mlstring>Add a new Property Type using the fields below.</xar:mlstring>
+            <xar:mlstring>Add a new Property Type using the fields below.</xar:mlstring> (TODO)
         </p>
 
         <table class="xar-fullwidth">
@@ -76,7 +85,7 @@
                     #$labels['id']# 
                 </th>
                 <th>
-                    #$labels['name']# 
+                    #$labels['name']#
                 </th>
                 <th>
                     #$labels['label']# 
@@ -108,6 +117,9 @@
         </table>
 
         <div class="xar-align-center">
+            <p>
+                <xar:mlstring>Note: any changes you make here will be lost whenever the property cache gets flushed.</xar:mlstring>
+            </p>
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="submit" value="#xarML('Update Property Types')#" />
         </div>
