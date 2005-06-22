@@ -96,8 +96,12 @@ class Dynamic_TextBox_Property extends Dynamic_Property
             $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
             $data['size']     = !empty($size) ? $size : $this->size;
 
-      $template="";
-      return xarTplProperty('base', 'textbox', 'showinput', $data);
+    // FIXME: this won't work when called by a property from a different module
+        // allow template override by child classes (or in BL tags/API calls)
+        if (empty($template)) {
+            $template = 'textbox';
+        }
+        return xarTplProperty('base', $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -113,8 +117,12 @@ class Dynamic_TextBox_Property extends Dynamic_Property
 
         $data['value'] = $value;
 
-        $template="";
-        return xarTplProperty('base', 'textbox', 'showoutput', $data);
+    // FIXME: this won't work when called by a property from a different module
+        // allow template override by child classes (or in BL tags/API calls)
+        if (empty($template)) {
+            $template = 'textbox';
+        }
+        return xarTplProperty('base', $template, 'showoutput', $data);
 
     }
 
@@ -190,11 +198,12 @@ class Dynamic_TextBox_Property extends Dynamic_Property
             $data['other'] = xarVarPrepForDisplay($this->validation);
         }
 
-        // allow template override by child classes
-        if (!isset($template)) {
-            $template = '';
+    // FIXME: this won't work when called by a property from a different module
+        // allow template override by child classes (or in BL tags/API calls)
+        if (empty($template)) {
+            $template = 'textbox';
         }
-        return xarTplProperty('base', 'textbox', 'validation', $data);
+        return xarTplProperty('base', $template, 'validation', $data);
     }
 
     /**

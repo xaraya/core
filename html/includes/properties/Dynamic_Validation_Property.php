@@ -158,7 +158,7 @@ class Dynamic_Validation_Property extends Dynamic_TextBox_Property
                           'validation' => '',
                           'source'     => '',
                           'dependancies' => '',
-                          'requiresmodule' => '',
+                          'requiresmodule' => 'dynamicdata',
                           'aliases' => '',
                           'args'       => serialize( $args ),
                           // ...

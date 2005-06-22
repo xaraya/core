@@ -99,8 +99,12 @@ class Dynamic_Select_Property extends Dynamic_Property
         $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
         $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
-        $template="";
-        return xarTplProperty('base', 'dropdown', 'showinput', $data);
+    // FIXME: this won't work when called by a property from a different module
+        // allow template override by child classes (or in BL tags/API calls)
+        if (empty($template)) {
+            $template = 'dropdown';
+        }
+        return xarTplProperty('base', $template, 'showinput', $data);
         //return $out;
     }
 
@@ -121,8 +125,12 @@ class Dynamic_Select_Property extends Dynamic_Property
         $data['option'] = array('id' => $this->value,
                                 'name' => $result);
 
-        $template="";
-        return xarTplProperty('base', 'dropdown', 'showoutput', $data);
+    // FIXME: this won't work when called by a property from a different module
+        // allow template override by child classes (or in BL tags/API calls)
+        if (empty($template)) {
+            $template = 'dropdown';
+        }
+        return xarTplProperty('base', $template, 'showoutput', $data);
     }
 
     function parseValidation($validation = '')
@@ -359,11 +367,12 @@ class Dynamic_Select_Property extends Dynamic_Property
         // read-only value set by the property type (for now)
         $data['override'] = $this->override;
 
-        // allow template override by child classes
-        if (!isset($template)) {
-            $template = '';
+    // FIXME: this won't work when called by a property from a different module
+        // allow template override by child classes (or in BL tags/API calls)
+        if (empty($template)) {
+            $template = 'dropdown';
         }
-        return xarTplProperty('base', 'dropdown', 'validation', $data);
+        return xarTplProperty('base', $template, 'validation', $data);
     }
 
     /**
