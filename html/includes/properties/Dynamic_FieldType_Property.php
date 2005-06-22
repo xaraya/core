@@ -62,7 +62,7 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
                             'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => '',
+                              'requiresmodule' => 'dynamicdata',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...

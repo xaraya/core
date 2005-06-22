@@ -121,7 +121,7 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
                               'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => '',
+                              'requiresmodule' => 'roles',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...

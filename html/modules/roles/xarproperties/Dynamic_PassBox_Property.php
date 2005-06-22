@@ -121,7 +121,7 @@ class Dynamic_PassBox_Property extends Dynamic_Property
                                  'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'roles',
                             'aliases'        => '',
                             'args'           => serialize($args)
                             // ...

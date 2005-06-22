@@ -130,7 +130,7 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
                               'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => 'base',
+                            'requiresmodule' => '',
                             'aliases'        => '',
                             'args'           => serialize($args)
                             // ...

@@ -123,7 +123,7 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
                               'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => '',
+                              'requiresmodule' => 'roles',
                               'aliases'        => '',
                               'args'           => serialize($args),
                            );

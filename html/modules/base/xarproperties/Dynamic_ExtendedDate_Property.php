@@ -105,7 +105,7 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
                               'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => 'base',
+                              'requiresmodule' => '',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...

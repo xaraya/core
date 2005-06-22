@@ -63,7 +63,7 @@ class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
                               'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => '',
+                              'requiresmodule' => 'dynamicdata',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...

@@ -126,7 +126,7 @@ else
                               'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => '',
+                              'requiresmodule' => 'roles',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...
