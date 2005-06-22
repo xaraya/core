@@ -672,6 +672,7 @@ class xarRole
         $q->addfield('xar_uname',$this->uname);
         $q->addfield('xar_email',$this->email);
         $q->addfield('xar_state',$this->state);
+        $q->addfield('xar_auth_module',$this->auth_module);
         if ($this->pass != '') $q->addfield('xar_pass',md5($this->pass));
         $q->eq('xar_uid',$this->getID());
 
