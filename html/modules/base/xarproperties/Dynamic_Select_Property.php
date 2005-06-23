@@ -230,7 +230,7 @@ class Dynamic_Select_Property extends Dynamic_Property
             }
 
         } elseif (!empty($this->file) && file_exists($this->file)) {
-            $fileLines = file($filePath);
+            $fileLines = file($this->file);
             foreach ($fileLines as $option)
             {
                 // allow escaping \, for values that need a comma
