@@ -19,14 +19,8 @@ function privileges_admin_displayprivilege()
 // Security Check
     if(!xarSecurityCheck('EditPrivilege')) return;
 
-    if(!xarVarFetch('pid',           'isset', $pid,          NULL, XARVAR_DONT_SET)) {return;}
-
-    $i = 0;
-    $instance = array();
-    while ($pinstance = xarVarCleanFromInput('pinstance'.$i)) {
-        $i++;
-        $instance[] = $pinstance;
-    }
+    if(!xarVarFetch('pid',           'isset', $pid,        NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pinstance',     'array', $instance,   array(), XARVAR_NOT_REQUIRED)) {return;}
 
 //Call the Privileges class and get the privilege to be modified
     $privs = new xarPrivileges();

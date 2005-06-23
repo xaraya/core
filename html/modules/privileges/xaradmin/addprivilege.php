@@ -25,20 +25,11 @@ function privileges_admin_addprivilege()
     if(!xarVarFetch('ptype',      'isset', $type,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('plevel',     'isset', $plevel,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pparentid',  'isset', $pparentid,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pinstance',  'array', $pinstances, array(), XARVAR_NOT_REQUIRED)) {return;}
 
-    $i = 0;
     $instance = "";
-    //Why using this instead of an array??
-    // you can do in the form => <input type=whatever name="array[]">
-    // And you will get an array back...
-    while ( xarVarFetch('pinstance'.$i,
-                        'isset',
-                        $pinstance,
-                        null,
-                        XARVAR_NOT_REQUIRED | XARVAR_DONT_REUSE) && $pinstance ) {
-        $i++;
+    foreach ($pinstances as $pinstance) {
         $instance .= $pinstance . ":";
-        $pinstance = null;
     }
     if ($instance =="") {
         $instance = "All";

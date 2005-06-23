@@ -229,7 +229,7 @@
                 <xar:foreach in="$instances" key="$id" value="$instance">
                     <div class="xar-form-input-wrapper">
                         <label for="pinstance#$id#" class="xar-form-label">
-                            #$instance['header']#:
+                            #$instance['header']#
                         </label>
                         <xar:if condition="$instance['type'] eq 'manual'">
                             <input type="text" name="pinstance['#$id#']" id="pinstance#$id#" value="#$instance['default']#" size="20" tabindex="7" />

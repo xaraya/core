@@ -301,13 +301,13 @@
                                 #$loop:item['header']# 
                             </label>
                             <xar:if condition="$loop:item['type'] eq 'manual'">
-                                <input type="text" name="pinstance#$loop:index#" id="pinstance#$loop:index#" value="All" class="xar-form-textmedium" />
+                                <input type="text" name="pinstance[]" id="pinstance#$loop:index#" value="All" class="xar-form-textmedium" />
                                 &nbsp;
                                 <xar:mlstring>
                                     This field must contain a value
                                 </xar:mlstring>
                                 <xar:else />
-                                <select name="pinstance#$loop:index#">
+                                <select name="pinstance[]">
                                     <xar:loop name="$loop:item['dropdown']">
                                         <option value="#$loop:item['name']#">
                                             #$loop:item['name']#

@@ -26,15 +26,9 @@ function privileges_admin_modifyprivilege()
     if(!xarVarFetch('poldcomponent', 'isset', $oldcomponent, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('ptype',         'isset', $type,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('plevel',        'isset', $level,        NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pinstance',     'array', $instance,     array(), XARVAR_NOT_REQUIRED)) {return;}
 
     if(!xarVarFetch('pparentid',     'isset', $pparentid,    NULL, XARVAR_DONT_SET)) {return;}
-
-    $i = 0;
-    $instance = array();
-    while ($pinstance = xarVarCleanFromInput('pinstance'.$i)) {
-        $i++;
-        $instance[] = $pinstance;
-    }
 
 // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');
