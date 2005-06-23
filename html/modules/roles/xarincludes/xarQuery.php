@@ -69,37 +69,12 @@ class xarQuery
     }
 
 //---------------------------------------------------------
-// Prepare for serialization
+// Execute a query
 //---------------------------------------------------------
-    function __sleep()
-    {
-        // Return array of variables to be serialized.
-        $vars = array_keys(get_object_vars($this));
-
-        // Strip out the variables we don't want serialized, but don't
-        // destroy anything yet, as this object may still be needed.
-        foreach(array('dbconn', 'result', 'output') as $var) {
-            if (($key = array_search($var, $vars)) !== FALSE) {
-                unset($vars[$key]);
-            }
-        }
-
-        return($vars);
-    }
-
-//---------------------------------------------------------
-// Restore after unserialize
-//---------------------------------------------------------
-    function __wakeup()
-    {
-        // Restore the database connection if necessary.
-        if (empty($this->dbconn)) {
-            $this->dbconn =& xarDBGetConn();
-        }
-    }
-
     function run($statement='',$display=1)
     {
+        //FIXME: PHP5 hack
+        $this->open();
         $this->setstatement($statement);
         if ($this->type != 'SELECT') {
             if ($this->usebinding) {
@@ -647,6 +622,21 @@ class xarQuery
         return $key;
     }
 
+    function _sleep()
+    {
+        // Return array of variables to be serialized.
+        $vars = array_keys(get_object_vars($this));
+
+        // Strip out the variables we don't want serialized, but don't
+        // destroy anything yet, as this object may still be needed.
+        foreach(array('dbconn', 'result', 'output') as $var) {
+            if (($key = array_search($var, $vars)) !== FALSE) {
+                unset($vars[$key]);
+            }
+        }
+        return($vars);
+    }
+
     function _statement()
     {
         $st =  $this->type . " ";
@@ -945,7 +935,7 @@ class xarQuery
     function openconnection($x = '')
     {
         if (empty($x)) $this->dbconn =& xarDBGetConn();
-        else $this->dbconn = $x;
+        else $this->dbconn =& $x;
     }
     function getconnection()
     {
@@ -955,7 +945,6 @@ class xarQuery
     {
         return $this->statement;
     }
-// FIXME: no longer needed if __sleep and __wakeup are used above
     function sessiongetvar($x)
     {
         $q = xarSessionGetVar($x);
@@ -967,7 +956,7 @@ class xarQuery
     function sessionsetvar($x)
     {
         $q = $this;
-        unset($q->dbconn);
+        $q->_sleep();
         xarSessionSetVar($x, serialize($q));
     }
     function setstatement($statement='')
