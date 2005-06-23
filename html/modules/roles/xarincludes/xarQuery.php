@@ -622,7 +622,7 @@ class xarQuery
         return $key;
     }
 
-    function _sleep()
+    function __sleep()
     {
         // Return array of variables to be serialized.
         $vars = array_keys(get_object_vars($this));
@@ -635,6 +635,11 @@ class xarQuery
             }
         }
         return($vars);
+    }
+
+    function __wakeup()
+    {
+        $this->openconnection();
     }
 
     function _statement()
@@ -950,13 +955,11 @@ class xarQuery
         $q = xarSessionGetVar($x);
         if (empty($q) || !isset($q)) return;
         $q = unserialize($q);
-        $q->open();
         return $q;
     }
     function sessionsetvar($x)
     {
         $q = $this;
-        $q->_sleep();
         xarSessionSetVar($x, serialize($q));
     }
     function setstatement($statement='')
