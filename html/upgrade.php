@@ -1495,15 +1495,17 @@ if (empty($step)) {
         }
 
         echo "<br /><br />REMEMBER! Run upgrade.php again when you delete the above properties from the includes/properties directory.<br /><br />";
+        echo "</div>";
 
         unset($ddtomove);
 
         CatchOutput();
         return;
-    }else{
+     }else{
+        echo "</div>";
         echo "<br />Done! All properties have been checked and verified for location!<br /><br />";
     }
-    echo "</div>";
+
 
 
     // More or less generic stuff
