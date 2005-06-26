@@ -1,17 +1,17 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:set name="check"><xar:mlstring>check</xar:mlstring></xar:set>
-<xar:set name="preview"><xar:mlstring>preview</xar:mlstring></xar:set>
-
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<xar:set name="check">
+    <xar:mlstring>check</xar:mlstring>
+</xar:set>
+<xar:set name="preview">
+    <xar:mlstring>preview</xar:mlstring>
+</xar:set>
 <xar:if condition="empty($tabindex)">
-    <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" />
-<xar:else />
-    <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#"  />
+    <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" class="xar-form-textlong" />
+    <xar:else />
+    <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" class="xar-form-textlong" />
 </xar:if>
-
-    <xar:if condition="!empty($link)">
-        [ <a href="#$link#" target="#$preview#">#$check#</a> ]
-    </xar:if>
-
-    <xar:if condition="!empty($invalid)">
-        <span class="xar-error">#$invalid#</span>
-    </xar:if>
+<xar:if condition="!empty($link)">[ 
+<a href="#$link#" target="#$preview#">#$check#</a>]</xar:if>
+<xar:if condition="!empty($invalid)">
+    <span class="xar-error">#$invalid#</span>
+</xar:if>
