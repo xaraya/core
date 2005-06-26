@@ -1,7 +1,7 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-
-<textarea name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
-
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<div class="xar-form-container-after">
+    <textarea name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#" class="xar-form-textareamedium">#$value#</textarea>
+</div>
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
 </xar:if>
