@@ -1,20 +1,7 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:comment>
-    You can use different admin-newhook-[objectname].xd templates for different objects
-</xar:comment>
-<xar:comment>
-    If you would like to preset certain properties via GET or POST parameters, you
-    should add preset="yes" to the xar:data-input tag below for these properties.
-    You can also set the property value directly in this template with value="..."
-</xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<xar:comment>You can use different admin-newhook-[objectname].xd templates for different objects</xar:comment>
+<xar:comment>If you would like to preset certain properties via GET or POST parameters, you should add preset="yes" to the xar:data-input tag below for these properties. You can also set the property value directly in this template with value="..."</xar:comment>
 <xar:foreach in="$properties" key="$name">
-<div style="clear: both; padding-top: 10px;">
-    <span style="float: left; width: 20%; text-align: right;">
-        <xar:data-label property="$properties[$name]" label="id" />
-    </span>
-    <span style="float: right; width: 78%; text-align: left;">
-        <xar:data-input property="$properties[$name]" />
-    </span>
-</div>
+    <xar:data-label property="$properties[$name]" label="id" />
+    <xar:data-input property="$properties[$name]" />
 </xar:foreach>
-
