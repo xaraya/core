@@ -2,6 +2,8 @@
 <xar:comment>You can use different admin-newhook-[objectname].xd templates for different objects</xar:comment>
 <xar:comment>If you would like to preset certain properties via GET or POST parameters, you should add preset="yes" to the xar:data-input tag below for these properties. You can also set the property value directly in this template with value="..."</xar:comment>
 <xar:foreach in="$properties" key="$name">
-    <xar:data-label property="$properties[$name]" label="id" />
-    <xar:data-input property="$properties[$name]" />
+    <div class="xar-form-input-wrapper">
+        <xar:data-label property="$properties[$name]" label="id" />
+        <xar:data-input property="$properties[$name]" />
+    </div>
 </xar:foreach>
