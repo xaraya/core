@@ -17,7 +17,7 @@ function dynamicdata_admin_privileges($args)
     if (!xarVarFetch('propname', 'str', $propname,'', XARVAR_NOT_REQUIRED)) return; // empty, 'All', string
     if (!xarVarFetch('proptype', 'str', $proptype,0, XARVAR_NOT_REQUIRED)) return; // empty, 'All', numeric
     if (!xarVarFetch('propid', 'str', $propid, 0, XARVAR_NOT_REQUIRED)) return; // empty, 'All', numeric
-    if (!xarVarFetch('apply', 'bool' , $apply , false, XARVAR_NOT_REQUIRED)) return; // boolean?
+    if (!xarVarFetch('apply', 'str' , $apply , false, XARVAR_NOT_REQUIRED)) return; // boolean?
     if (!xarVarFetch('extpid', 'str', $extpid, '', XARVAR_NOT_REQUIRED)) return; // empty, 'All', numeric ?
     if (!xarVarFetch('extname', 'str', $extname, '', XARVAR_NOT_REQUIRED)) return; // ?
     if (!xarVarFetch('extrealm', 'str', $extrealm, '', XARVAR_NOT_REQUIRED)) return; // ?
