@@ -5,35 +5,26 @@
  */
 function dynamicdata_admin_privileges($args)
 { 
+    extract($args);
+
     // Security Check
     if (!xarSecurityCheck('AdminDynamicData')) return;
 
-    // Preparation of  new block of getting the variables: (prolly use xarVarBatchFetch eeventually)
-//    if(!xarVarFetch('objectid', 'id'   , $objectid                           )) return;    // id? , only passed on further in this func
-//    if(!xarVarFetch('moduleid', 'str::', $moduleid,0, XARVAR_NOT_REQUIRED    )) return;    // empty, 'All', numeric or modulename
-//    if(!xarVarFetch('itemtype', 'str::', $itemtype,0, XARVAR_NOT_REQUIRED    )) return;    // empty, 'All', numeric 
-//    if(!xarVarFetch('itemid'  , 'str::', $itemid  ,0, XARVAR_NOT_REQUIRED    )) return;    // empty, 'All', numeric  
-//    if(!xarVarFetch('propname', 'str::', $propname,'' XARVAR_NOT_REQUIRED    )) return;    // empty, 'All', string
-//    if(!xarVarFetch('proptype', 'str::', $proptype,0, XARVAR_NOT_REQUIRED    )) return;    // empty, 'All', numeric
-//    if(!xarVarFetch('propid'  , 'id'   , $propid  ,0, XARVAR_NOT_REQUIRED    )) return;    // empty, 'All', numeric
-//    if(!xarVarFetch('apply'   , 'bool' , $apply , false, XARVAR_NOT_REQUIRED )) return;    // boolean?
-//    if(!xarVarFetch('extpid'  , 'id'   , $extpid                             )) return;    // empty, 'All', numeric ?
-//    if(!xarVarFetch('extname' , 'str:1', $extname                            )) return;    // ?
-//    if(!xarVarFetch('extrealm', 'str:1', $extrealm                           )) return;    // ?
-//    if(!xarVarFetch('extmodule','str:1', $extmodule                          )) return;    // ?
-//    if(!xarVarFetch('extcomponent', 'enum:Item:Type', $extcomponent          )) return;    // 'Item', 'Type'
-//    if(!xarVarFetch('extinstance', 'str:1', $extinstance,'', XARVAR_NOT_REQUIRED)) return; // somthing:somthing:somthing or empty
-//    if(!xarVarFetch('extlevel', 'str:1', $extlevel                        )) return;
-    
-    // Deprecated block of getting the variables:
-    // fixed params
-    list($objectid     , $moduleid   , $itemtype, $itemid , $propname, $proptype,
-         $propid       , $apply      , $extpid  , $extname, $extrealm, $extmodule,
-         $extcomponent , $extinstance, $extlevel) = xarVarCleanFromInput(
-         'objectid'    ,'moduleid'   ,'itemtype','itemid' ,'propname','proptype',
-         'propid'      ,'apply'      ,  'extpid','extname','extrealm','extmodule',
-         'extcomponent','extinstance','extlevel');
-    extract($args);
+    if (!xarVarFetch('objectid', 'id' , $objectid, NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('moduleid', 'str', $moduleid, 0, XARVAR_NOT_REQUIRED)) return; // empty, 'All', numeric or modulename
+    if (!xarVarFetch('itemtype', 'str', $itemtype, 0, XARVAR_NOT_REQUIRED)) return; // empty, 'All', numeric 
+    if (!xarVarFetch('itemid', 'str', $itemid, 0, XARVAR_NOT_REQUIRED)) return; // empty, 'All', numeric  
+    if (!xarVarFetch('propname', 'str', $propname,'', XARVAR_NOT_REQUIRED)) return; // empty, 'All', string
+    if (!xarVarFetch('proptype', 'str', $proptype,0, XARVAR_NOT_REQUIRED)) return; // empty, 'All', numeric
+    if (!xarVarFetch('propid', 'str', $propid, 0, XARVAR_NOT_REQUIRED)) return; // empty, 'All', numeric
+    if (!xarVarFetch('apply', 'bool' , $apply , false, XARVAR_NOT_REQUIRED)) return; // boolean?
+    if (!xarVarFetch('extpid', 'str', $extpid, '', XARVAR_NOT_REQUIRED)) return; // empty, 'All', numeric ?
+    if (!xarVarFetch('extname', 'str', $extname, '', XARVAR_NOT_REQUIRED)) return; // ?
+    if (!xarVarFetch('extrealm', 'str', $extrealm, '', XARVAR_NOT_REQUIRED)) return; // ?
+    if (!xarVarFetch('extmodule','str', $extmodule, '', XARVAR_NOT_REQUIRED)) return; // ?
+    if (!xarVarFetch('extcomponent', 'enum:All:Item:Field:Type', $extcomponent)) return; // FIXME: is 'Type' needed?
+    if (!xarVarFetch('extinstance', 'str:1', $extinstance, '', XARVAR_NOT_REQUIRED)) return; // somthing:somthing:somthing or empty
+    if (!xarVarFetch('extlevel', 'str:1', $extlevel)) return;
 
 // TODO: combine 'Item' and 'Type' instances someday ?
 
@@ -116,11 +107,20 @@ function dynamicdata_admin_privileges($args)
     // Get module list
     $objectlist = array();
     $modlist = array();
+    // Get a list of all modules - we just want their IDs
+    $all_modules = xarModAPIfunc('modules', 'admin', 'getlist');
+    $all_module_ids = array();
+    foreach($all_modules as $this_module) {
+        $all_module_ids[] = $this_module['systemid'];
+    }
     foreach ($objects as $id => $object) {
         $objectlist[$id] = $object['label'];
         $modid = $object['moduleid'];
-        $modinfo = xarModGetInfo($modid);
-        $modlist[$modid] = $modinfo['displayname'];
+        // Check whether the module exists before trying to fetch the details.
+        if (in_array($modid, $all_module_ids)) {
+            $modinfo = xarModGetInfo($modid);
+            $modlist[$modid] = $modinfo['displayname'];
+        }
     }
 
     // Get property types
