@@ -219,7 +219,8 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                                        'value' => $value,
                                        'multiple' => $this->multiple,
                                        'format' => 'fileupload',
-                                       'methods' => $this->methods));
+                                       'methods' => $this->methods,
+                                       'invalid' => $this->invalid));
         }
 
         // user must have unhooked the uploads module
