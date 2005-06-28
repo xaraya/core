@@ -84,9 +84,9 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
         if (empty($args['template'])) {
-            $args['template'] = '';
+            $args['template'] = 'itemtype';
         }
-        return xarTplProperty('dynamicdata', 'itemtype', 'showinput', $data);
+        return xarTplProperty('dynamicdata', $args['template'], 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -105,9 +105,9 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
                                 'name' => $this->getOption());
 
         if (empty($args['template'])) {
-            $args['template'] = '';
+            $args['template'] = 'itemtype';
         }
-        return xarTplProperty('dynamicdata', 'itemtype', 'showoutput', $data);
+        return xarTplProperty('dynamicdata', $args['template'], 'showoutput', $data);
     }
 
     function setArguments($args = array())

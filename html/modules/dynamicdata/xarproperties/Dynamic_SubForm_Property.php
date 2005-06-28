@@ -412,9 +412,9 @@ class Dynamic_SubForm_Property extends Dynamic_Property
         }
 
         if (!isset($template)) {
-            $template = '';
+            $template = 'subform';
         }
-        return xarTplProperty('dynamicdata', 'subform', 'showinput', $data);
+        return xarTplProperty('dynamicdata', $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -444,10 +444,10 @@ class Dynamic_SubForm_Property extends Dynamic_Property
         }
 
         if (!isset($template)) {
-            $template = '';
+            $template = 'subform';
         }
         
-        return xarTplPropery('dynamicdata', 'subform', 'showoutput', $data);
+        return xarTplPropery('dynamicdata', $template, 'showoutput', $data);
     }
 
     function parseValidation($validation = '')
@@ -659,9 +659,9 @@ class Dynamic_SubForm_Property extends Dynamic_Property
 
         // allow template override by child classes
         if (!isset($template)) {
-            $template = '';
+            $template = 'subform';
         }
-        return xarTplProperty('dynamicdata', 'subform', 'validation', $data);
+        return xarTplProperty('dynamicdata', $template, 'validation', $data);
     }
 
     /**
