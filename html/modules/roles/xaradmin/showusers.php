@@ -97,7 +97,6 @@ function roles_admin_showusers()
             $q->qor($c);
         }
 
-        $q->setorder($data['order']);
         $q->eq('xar_type',0);
 
         // Add state
@@ -115,6 +114,9 @@ function roles_admin_showusers()
         // Save the query so we can reuse it somewhere
         $q->sessionsetvar('rolesquery');
     }
+
+    // Sort order
+    $q->setorder($data['order']);
 
     // Add limits
     $numitems = xarModGetVar('roles', 'rolesperpage');
