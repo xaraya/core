@@ -63,7 +63,11 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                    
                 // Get the name of each file, assumed to be the name of the property
                 // FIXME: <mrb> decouple the classname from the filename someday
-                list($propertyClass, $type) = explode('.',$propertyfile);
+                $fileparts = explode('.',$propertyfile);
+                // Only worry about php files, not backup files or other garbage that might be present
+                if (count($fileparts) != 2) continue;
+                $propertyClass = $fileparts[0];
+                $type = $fileparts[1];
                 
                 // Only worry about php files, not security place holder .html files or other garbage that might be present
                 if( $type != 'php') continue;

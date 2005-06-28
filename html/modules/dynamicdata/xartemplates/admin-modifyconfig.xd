@@ -108,7 +108,7 @@
                     <input type="text" name="label[0]" id="label_0" class="xar-form-textmedium" />
                 </td>
                 <td>
-                    <xar:data-input type="fieldtype" name="format[0]" value="" />
+                    <xar:data-input property="$fieldtypeprop" name="format[0]" id="format_0" value="" />
                 </td>
                 <td>
                     <input type="text" name="validation[0]" id="validation_0" value="" class="xar-form-textmedium" />
