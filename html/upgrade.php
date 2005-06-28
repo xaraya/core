@@ -1455,7 +1455,16 @@ if (empty($step)) {
         array('Dynamic_Module_Property.php',1,'Modules'),
         array('Dynamic_GroupList_Property.php',1,'Roles'),
         array('Dynamic_UserList_Property.php',1,'Roles'),
-        array('Dynamic_Username_Property.php',1,'Roles')
+        array('Dynamic_Username_Property.php',1,'Roles'),
+        array('Dynamic_DataSource_Property.php',1,'DynamicData'),
+        array('Dynamic_FieldStatus_Property.php',1,'DynamicData'),
+        array('Dynamic_FieldType_Property.php',1,'DynamicData'),
+        array('Dynamic_Hidden_Property.php',1,'DynamicData'),
+        array('Dynamic_ItemID_Property.php',1,'DynamicData'),
+        array('Dynamic_ItemType_Property.php',1,'DynamicData'),
+        array('Dynamic_Object_Property.php',1,'DynamicData'),
+        array('Dynamic_SubForm_Property.php',1,'DynamicData'),
+        array('Dynamic_Validation_Property.php',1,'DynamicData')
     );
     //set the array to hold properties that have not moved and should do!
     $ddtomove=array();
