@@ -49,7 +49,7 @@ class Dynamic_Hidden_Property extends Dynamic_Property
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
         $template="";
-        return xarTplProperty('dynamicdata', 'hidden', 'showinput', $data);
+        return xarTplProperty('base', 'hidden', 'showinput', $data);
 
 
     }
@@ -62,7 +62,7 @@ class Dynamic_Hidden_Property extends Dynamic_Property
         $data['hiddenvalue']='';
 
         $template="";
-        return xarTplProperty('dynamicdata', 'hidden', 'showoutput', $data);
+        return xarTplProperty('base', 'hidden', 'showoutput', $data);
 
     }
 
