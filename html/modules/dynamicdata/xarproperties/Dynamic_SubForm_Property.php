@@ -447,7 +447,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             $template = 'subform';
         }
         
-        return xarTplPropery('dynamicdata', $template, 'showoutput', $data);
+        return xarTplProperty('dynamicdata', $template, 'showoutput', $data);
     }
 
     function parseValidation($validation = '')
