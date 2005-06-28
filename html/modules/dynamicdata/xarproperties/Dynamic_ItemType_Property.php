@@ -219,10 +219,12 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
             }
 
         } else {
-            // we have some specific function to retrieve the "item types" here
+            // we have some specific function to retrieve the items here
             eval('$items = ' . $this->func .';');
             if (isset($items) && count($items) > 0) {
                 foreach ($items as $id => $name) {
+                    // skip empty items from e.g. dropdownlist() API
+                    if (empty($id) && empty($name)) continue;
                     array_push($options, array('id' => $id, 'name' => $name));
                 }
             }
@@ -304,6 +306,100 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
                            );
         return $baseInfo;
      }
+
+    /**
+     * Show the current validation rule in a specific form for this property type
+     *
+     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
+     * @param $args['validation'] validation rule (default is the current validation)
+     * @param $args['id'] id of the field
+     * @param $args['tabindex'] tab index of the field
+     * @returns string
+     * @return string containing the HTML (or other) text to output in the BL template
+     */
+    function showValidation($args = array())
+    {
+        extract($args);
+
+        $data = array();
+        $data['name']      = !empty($name) ? $name : 'dd_'.$this->id;
+        $data['id']        = !empty($id)   ? $id   : 'dd_'.$this->id;
+        $data['tabindex']  = !empty($tabindex) ? $tabindex : 0;
+        $data['size']      = !empty($size) ? $size : 50;
+        $data['invalid']   = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+
+        if (isset($validation)) {
+            $this->validation = $validation;
+            $this->parseValidation($validation);
+        }
+
+        $data['modname']   = '';
+        $data['modid']     = '';
+        $data['itemtype']  = '';
+        $data['func']      = '';
+        if (!empty($this->module)) {
+            $data['modname'] = $this->module;
+            $data['modid']   = xarModGetIDFromName($this->module);
+            if (isset($this->itemtype)) {
+                $data['itemtype'] = $this->itemtype;
+                if (isset($this->func)) {
+                    $data['func'] = $this->func;
+                }
+            }
+        }
+        $data['other']     = '';
+
+        // allow template override by child classes
+        if (!isset($template)) {
+            $template = 'itemtype';
+        }
+        return xarTplProperty('dynamicdata', $template, 'validation', $data);
+    }
+
+    /**
+     * Update the current validation rule in a specific way for this property type
+     *
+     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
+     * @param $args['validation'] validation rule (default is the current validation)
+     * @param $args['id'] id of the field
+     * @returns bool
+     * @return bool true if the validation rule could be processed, false otherwise
+     */
+    function updateValidation($args = array())
+    {
+        extract($args);
+
+        // in case we need to process additional input fields based on the name
+        if (empty($name)) {
+            $name = 'dd_'.$this->id;
+        }
+
+        // do something with the validation and save it in $this->validation
+        if (isset($validation)) {
+            if (is_array($validation)) {
+                $this->validation = '';
+                if (!empty($validation['modid'])) {
+                    $modinfo = xarModGetInfo($validation['modid']);
+                    if (empty($modinfo)) return false;
+                    $this->validation = $modinfo['name'];
+                    if (!empty($validation['itemtype'])) {
+                        $this->validation .= '.' . $validation['itemtype'];
+                        if (!empty($validation['func'])) {
+                            $this->validation .= ':' . $validation['func'];
+                        }
+                    }
+
+                } elseif (!empty($validation['other'])) {
+                    $this->validation = $validation['other'];
+                }
+
+            } else {
+                $this->validation = $validation;
+            }
+        }
+        // tell the calling function that everything is OK
+        return true;
+    }
 
 }
 
