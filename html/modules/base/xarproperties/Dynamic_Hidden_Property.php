@@ -84,7 +84,7 @@ class Dynamic_Hidden_Property extends Dynamic_Property
                               'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => 'dynamicdata',
+                              'requiresmodule' => '',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...
