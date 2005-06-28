@@ -71,10 +71,12 @@ function roles_loginblock_display($blockinfo)
         } else {
             return;
         }
-    } else {
+    } elseif (xarServerGetVar('REQUEST_METHOD') == 'GET') {
         // URL of this page
-        // TODO: check this - it doesn't look quite right.
         $args['return_url'] = xarServerGetCurrentURL();
+    } else {
+        // Base URL of the site
+        $args['return_url'] = xarServerGetBaseURL();
     }
 
     // Used in the templates.

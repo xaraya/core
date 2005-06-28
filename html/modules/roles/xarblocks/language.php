@@ -79,8 +79,13 @@ function roles_languageblock_display($blockinfo)
     $tplData['locales'] = $locales;
     $tplData['blockid'] = $blockinfo['bid'];
 
-    // URL of this page
-    $tplData['return_url'] = xarServerGetCurrentURL();
+    if (xarServerGetVar('REQUEST_METHOD') == 'GET') {
+        // URL of this page
+        $tplData['return_url'] = xarServerGetCurrentURL();
+    } else {
+        // Base URL of the site
+        $tplData['return_url'] = xarServerGetBaseURL();
+    }
 
     $blockinfo['content'] = $tplData;
 
