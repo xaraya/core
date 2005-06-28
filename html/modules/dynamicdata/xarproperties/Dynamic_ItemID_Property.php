@@ -41,8 +41,8 @@ class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
 
         // Note: item ids are read-only, even (especially) in input forms
 
-        $template="itemid";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="";
+        return xarTplProperty('dynamicdata', 'itemid', 'showinput', $data);
     }
     // default methods from Dynamic_NumberBox_Property
 

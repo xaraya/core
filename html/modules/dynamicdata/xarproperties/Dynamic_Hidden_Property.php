@@ -48,8 +48,8 @@ class Dynamic_Hidden_Property extends Dynamic_Property
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        $template="hidden";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="";
+        return xarTplProperty('dynamicdata', 'hidden', 'showinput', $data);
 
 
     }
@@ -61,8 +61,8 @@ class Dynamic_Hidden_Property extends Dynamic_Property
         $data=array();
         $data['hiddenvalue']='';
 
-        $template="hidden";
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        $template="";
+        return xarTplProperty('dynamicdata', 'hidden', 'showoutput', $data);
 
     }
 
@@ -84,7 +84,7 @@ class Dynamic_Hidden_Property extends Dynamic_Property
                               'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => '',
+                              'requiresmodule' => 'dynamicdata',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...
