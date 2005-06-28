@@ -455,7 +455,7 @@ class Dynamic_Property
         if (!isset($template)) {
             $template = null;
         }
-        return xarTplModule('dynamicdata', 'user', 'showoutput', $data , $template);
+        return xarTplProperty('dynamicdata', $template, 'showoutput', $data);
     }
 
     /**
@@ -487,7 +487,7 @@ class Dynamic_Property
         if (!isset($template)) {
             $template = null;
         }
-        return xarTplModule('dynamicdata', 'user', 'label', $data , $template);
+        return xarTplProperty('dynamicdata', $template, 'label', $data);
     }
 
     /**
@@ -509,7 +509,10 @@ class Dynamic_Property
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        return xarTplModule('dynamicdata', 'admin', 'showhidden', $data);
+        if (!isset($template)) {
+            $template = null;
+        }
+        return xarTplProperty('dynamicdata', $template, 'showhidden', $data);
     }
     
     /**
@@ -641,7 +644,7 @@ class Dynamic_Property
         if (!isset($template)) {
             $template = null;
         }
-        return xarTplModule('dynamicdata', 'admin', 'validation', $data, $template);
+        return xarTplProperty('dynamicdata', $template, 'validation', $data);
     }
 
     /**
