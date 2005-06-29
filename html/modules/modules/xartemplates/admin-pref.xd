@@ -1,34 +1,14 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<!-- START MODULES ADMIN-PREF TEMPLATE -->
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span></div>
 <div class="xar-mod-body">
     <h2><xar:mlstring>Preferences</xar:mlstring></h2>
-    <div class="xar-norm-outline" style="padding: 1px;">
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: autoborder-style: none none dotted none;">
-            <p><xar:mlstring>Modules List</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>Style:</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>View number of modules per page:</xar:mlstring></p>
-        </div>
-        
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto;border-style: none none dotted none;">
-            <p><xar:mlstring>Restore Defaults</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>Most preferences for this module have default values. Changing your preferences does not affect other users [admins] e.g., people who use different login name than your own.</xar:mlstring></p>
-        </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>Your preferences can be reset to defaults from this page, so that you can, for instance, see the same startup page as a new admin..</xar:mlstring></p>
-        </div>
-        <div class="xar-accent xar-norm-outline" style="text-align: center;padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-            <form method="post" action="&xar-modurl-modules-admin-pref;">
-            <div><input type="submit" name="restore" value="Restore" /></div>
-            <p><xar:mlstring>Status: your current preferences are the same as defaults</xar:mlstring></p>
-            </form>
-        </div>
-    </div>
+    <p><xar:mlstring>Modules List</xar:mlstring></p>
+    <p><xar:mlstring>Style:</xar:mlstring></p>
+    <p><xar:mlstring>View number of modules per page:</xar:mlstring></p>
+    <p><xar:mlstring>Most preferences for this module have default values. Changing your preferences does not affect other users [admins] e.g., people who use different login name than your own.</xar:mlstring></p>
+    <p><xar:mlstring>Your preferences can be reset to defaults from this page, so that you can, for instance, see the same startup page as a new admin..</xar:mlstring></p>
+    <form method="post" action="&xar-modurl-modules-admin-pref;">
+    <div><input type="submit" name="restore" value="Restore" /></div>
+    <p><xar:mlstring>Status: your current preferences are the same as defaults</xar:mlstring></p>
+    </form>
 </div>
-<!-- END MODULES ADMIN-PREF TEMPLATE -->
