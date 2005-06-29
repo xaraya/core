@@ -55,7 +55,7 @@
                 </p>
             <xar:else/>
                 <p>
-                    <strong style="color: red">#$failuretitle#</strong>:
+                    <strong class="failure">#$failuretitle#</strong>:
                     <xar:ml>
                         <xar:mlstring>Xaraya needs a MINIMUM of 8 Megabyte of PHP memory. ( 16M or higher STRONGLY recommended)
                         The current memory limit is #(1).</xar:mlstring>
@@ -172,7 +172,7 @@
                 </p>
                 <xar:else />
                 <p>
-                    <strong style="color: orange">
+                    <strong class="warning">
                         #$warningtitle#</strong>: 
                     <xar:ml>
                         <xar:mlstring>
@@ -206,7 +206,7 @@
                 </p>
                 <xar:else />
                 <p>
-                    <strong style="color: orange">
+                    <strong class="warning">
                         #$warningtitle#</strong>: 
                     <xar:ml>
                         <xar:mlstring>
@@ -246,7 +246,7 @@
                 </p>
                 <xar:else />
                 <p>
-                    <strong style="color: orange">
+                    <strong class="warning">
                         #$warningtitle#</strong>: 
                     <xar:mlstring>
                         The XML Extension is not loaded.
@@ -263,7 +263,7 @@
                 </p>
                 <xar:else />
                 <p>
-                    <strong style="color: orange">
+                    <strong class="warning">
                         #$warningtitle#</strong>: 
                     <xar:mlstring>
                         The MySQL Extension is not loaded.  Xaraya will need either the PGSQL or MySQL extension to be loaded to proceed.
@@ -280,7 +280,7 @@
                 </p>
                 <xar:else />
                 <p>
-                    <strong style="color: orange">
+                    <strong class="warning">
                         #$warningtitle#</strong>: 
                     <xar:mlstring>
                         The PGSQL Extension is not loaded.  Xaraya will need either the PGSQL or MySQL extension to be loaded to proceed.
@@ -297,7 +297,7 @@
                 </p>
                 <xar:else />
                 <p>
-                    <strong style="color: orange">
+                    <strong class="warning">
                         #$warningtitle#</strong>: 
                     <xar:mlstring>
                         The XSLT Extension is not loaded.  This extension is only needed for the XSLT transform module at this time.
@@ -314,7 +314,7 @@
                 </p>
                 <xar:else />
                 <p>
-                    <strong style="color: orange">
+                    <strong class="warning">
                         #$warningtitle#</strong>: 
                     <xar:mlstring>
                         The LDAP Extension is not loaded.  This extension is only needed if you intend on using LDAP authentication with the Xaraya LDAP Modules.
@@ -331,7 +331,7 @@
                 </p>
                 <xar:else />
                 <p>
-                    <strong style="color: orange">
+                    <strong class="warning">
                         #$warningtitle#</strong>: 
                     <xar:mlstring>
                         The GD Extension is not loaded.  This extension is only needed for the images module at this time for resizing of thumbnails.
