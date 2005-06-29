@@ -100,32 +100,32 @@
         <table width="100%" border="0" cellspacing="0" cellpadding="2">
             <tr>
             <xar:if condition="$phase eq 'active' and xarSecurityCheck('AdminPanel',0)">
-                <th style="width: 30%;" align="left">
+                <th class="xar-thirdwidth">
                     <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=name">
                         <xar:mlstring>Display Name</xar:mlstring>
                     </a>
                 </th>
-                <th style="width: 40%;">
+                <th class="xar-thirdwidth">
                     <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=uname">
                         <xar:mlstring>IP Address</xar:mlstring>
                     </a>
                 </th>
             <xar:else />
-                <th style="width: 70%;" align="left">
+                <th class="xar-twothirdwidth">
                     <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=name">
                         <xar:mlstring>Display Name</xar:mlstring>
                     </a>
                 </th>
             </xar:if>
             <xar:if condition="xarModGetVar('roles', 'usersendemails')">
-                <th style="width: 10%;">
+                <th>
                     <xar:mlstring>Email</xar:mlstring>
                 </th>
             </xar:if>
             <xar:if condition="isset($properties) and count($properties) gt 0">
                 <!-- TODO: adapt % of column widths -->
                 <xar:foreach in="$properties" key="$key">
-                <th style="width: 10%;">
+                <th>
                     <xar:data-label property="$properties[$key]" />
                 </th>
                 </xar:foreach>
