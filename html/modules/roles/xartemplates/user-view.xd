@@ -184,17 +184,16 @@
 
         <!-- add the pager here -->
         <div class="xar-align-center">#$pager#</div>
-            <form method="post" action="&xar-modurl-roles-user-view;">
-                <label for="search"><xar:mlstring>Search:</xar:mlstring></label>
-                <input type="hidden" name="phase" id="phase" value="#xarVarPrepForDisplay($phase)#" />
-                <input type="hidden" name="order" id="order" value="#xarVarPrepForDisplay($order)#" />
-                <input type="hidden" name="letter" id="letter" value="" />
-                <input type="text" name="search" id="search" value="" size="40" maxlength="255" tabindex="1" />
-                <input type="submit" value="#xarVarPrepForDisplay($searchlabel)#" />
-            </form>
-            <p>
-                <xar:mlstring>Search condition</xar:mlstring>: <b>#xarVarPrepForDisplay($msg)#</b>
-            </p>
-        </div>
+        <form method="post" action="&xar-modurl-roles-user-view;">
+            <label for="search"><xar:mlstring>Search:</xar:mlstring></label>
+            <input type="hidden" name="phase" id="phase" value="#xarVarPrepForDisplay($phase)#" />
+            <input type="hidden" name="order" id="order" value="#xarVarPrepForDisplay($order)#" />
+            <input type="hidden" name="letter" id="letter" value="" />
+            <input type="text" name="search" id="search" value="" size="40" maxlength="255" tabindex="1" />
+            <input type="submit" value="#xarVarPrepForDisplay($searchlabel)#" />
+        </form>
+        <p>
+            <xar:mlstring>Search condition</xar:mlstring>: <b>#xarVarPrepForDisplay($msg)#</b>
+        </p>
     </xar:if>
 </div>
