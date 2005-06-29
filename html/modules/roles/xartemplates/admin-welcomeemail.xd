@@ -1,7 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Welcome Email</xar:mlstring></h2><br />
-<div style="margin: auto;">
+<div class="xar-mod-body"><h2><xar:mlstring>Welcome Email</xar:mlstring></h2>
     <p><xar:mlstring>This email will be sent to users to welcome them.</xar:mlstring></p>
     <p><xar:mlstring>The welcome email is plain text</xar:mlstring></p>
     <form action="&xar-modurl-roles-admin-welcomeemail;" method="post" enctype="application/x-www-form-urlencoded">
@@ -79,5 +78,4 @@
            </xar:foreach>
        </xar:if>
     </table>
-</div>
 </div>
