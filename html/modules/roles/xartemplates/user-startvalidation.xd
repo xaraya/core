@@ -1,7 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Account Validation</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Start Validation</xar:mlstring></h2>
-<div style="margin: auto;">
 <p><xar:mlstring>Your account has not yet been activated.  You need to finish these final steps in order to complete your registration.</xar:mlstring> </p>
 
 <xar:if condition="!empty($valcode)">
@@ -21,7 +20,7 @@
         <td><input type="text" name="valcode" id="valcode" value="" /></td>
     </tr>
     <tr>
-        <td colspan="2" style="text-align: center;"><br />
+        <td colspan="2" class="xar-align-center">
             <input type="submit" value="#xarVarPrepForDisplay($validatelabel)#" />
         </td>
     </tr>
@@ -43,5 +42,4 @@
            </div>
     </form>
 </xar:if>
-</div>
 </div>
