@@ -29,7 +29,6 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>User Information</xar:mlstring></span></div>
 <div class="xar-mod-body">
 <h2><xar:mlstring>Terms of Use</xar:mlstring></h2>
-<div style="margin: auto;">
 
 <xar:if condition="xarModGetVar('roles', 'showterms')">
     <xar:set name="curnum">++$curnum</xar:set>
@@ -73,7 +72,7 @@
 
         <p><xar:mlstring>You explicitly agree, in using this web site or any service provided, that you shall not:</xar:mlstring></p>
 
-        <ul style="list-style-type: lower-alpha;">
+        <ul>
             <li><xar:mlstring>provide any Content or perform any conduct that may be unlawful, illegal, threatening, harmful, abusive, harassing, stalking, tortious, defamatory, libelous, vulgar, obscene, offensive, objectionable, pornographic, designed to or does interfere or interrupt this web site or any service provided, infected with a virus or other destructive or deleterious programming routine, give rise to civil or criminal liability, or which may violate an applicable local, national or international law;</xar:mlstring></li>
             <li><xar:mlstring>impersonate or misrepresent your association with any person or entity, or forge or otherwise seek to conceal or misrepresent the origin of any Content provided by you;</xar:mlstring></li>
             <li><xar:mlstring>collect or harvest any data about other roles;</xar:mlstring></li>
@@ -84,7 +83,7 @@
     <xar:set name="curnum">++$curnum</xar:set>
     <h3 id="submission">#$curnum#.&nbsp;<xar:mlstring>Submission of Content on this Web Site</xar:mlstring></h3>
         <p><xar:mlstring>By providing any Content to our web site:</xar:mlstring></p>
-        <ul style="list-style-type: lower-alpha;">
+        <ul>
             <li><xar:mlstring>you agree to grant to us a worldwide, royalty-free, perpetual, non-exclusive right and license (including any moral rights or other necessary rights) to use, display, reproduce, modify, adapt, publish, distribute, perform, promote, archive, translate, and to create derivative works and compilations, in whole or in part. Such license will apply with respect to any form, media, technology known or later developed;</xar:mlstring></li>
             <li><xar:mlstring>you warrant and represent that you have all legal, moral, and other rights that may be necessary to grant us with the license set forth in this Section 7;</xar:mlstring></li>
             <li><xar:mlstring>you acknowledge and agree that we shall have the right (but not obligation), in our sole discretion, to refuse to publish or to remove or block access to any Content you provide at any time and for any reason, with or without notice.</xar:mlstring></li>
@@ -131,5 +130,4 @@
 <xar:else />
     <p><xar:mlstring>Terms of Service not active</xar:mlstring></p>
 </xar:if>
-</div>
 </div>
