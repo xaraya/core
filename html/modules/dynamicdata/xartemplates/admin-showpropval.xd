@@ -1,38 +1,37 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:ml><xar:mlstring>Validation for Dynamic Property #(1)</xar:mlstring><xar:mlvar>#$itemid#</xar:mlvar></xar:ml></h2>
-<div style="margin: auto;">
-
-<xar:if condition="!empty($isupload)">
-    <xar:set name="enc_type">'multipart/form-data'</xar:set>
-<xar:else/> 
-    <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
-</xar:if>
-<form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;" enctype="#$enc_type#">
-
-<div>
-    <xar:set name="fieldlist">array('name','label','objectid','type','validation')</xar:set>
-    <xar:data-display object="$object" fieldlist="$fieldlist" />
-
-    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-    <input type="hidden" name="itemid" id="itemid" value="#$itemid#" />
-
-    <table class="xar-norm">
-        <tr>
-            <td>
-                #$showval#
-            </td>
-        </tr>
-        <tr>
-            <td align="center">
-                <input type="submit" name="preview" value="#xarML('Preview')#" />
-                &nbsp;&nbsp;&nbsp;
-                <input type="submit" name="confirm" value="#xarML('Update')#" />
-            </td>
-        </tr>
-    </table>
-
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<div class="xar-mod-head">
+    <span class="xar-mod-title">
+        <xar:mlstring>Dynamic Data Administration</xar:mlstring>
+    </span>
 </div>
-</form>
-</div>
+<div class="xar-mod-body">
+    <h2>
+        <xar:ml>
+            <xar:mlstring>Validation for Dynamic Property #(1)</xar:mlstring>
+            <xar:mlvar>#$itemid#</xar:mlvar>
+        </xar:ml>
+    </h2>
+    <xar:if condition="!empty($isupload)">
+        <xar:set name="enc_type">'multipart/form-data'</xar:set>
+        <xar:else />
+        <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
+    </xar:if>
+    <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;" enctype="#$enc_type#">
+        <div>
+            <xar:set name="fieldlist">array('name','label','objectid','type','validation')</xar:set>
+            <xar:data-display object="$object" fieldlist="$fieldlist" />
+            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+            <input type="hidden" name="itemid" id="itemid" value="#$itemid#" />
+            <table class="xar-norm">
+                <tr>
+                    <td>#$showval#</td>
+                </tr>
+                <tr>
+                    <td align="center">
+                    <input type="submit" name="preview" value="#xarML('Preview')#" />&#160;&#160;&#160; 
+                    <input type="submit" name="confirm" value="#xarML('Update')#" /></td>
+                </tr>
+            </table>
+        </div>
+    </form>
 </div>
