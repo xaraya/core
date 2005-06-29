@@ -1,10 +1,10 @@
-<table style="width:100%;">
+<table class="xar-fullwidth">
      <xar:if condition="!empty($test1)">
          <tr>
-             <td style="width:80%;">
+             <td class="xar-threequarterswidth">
                  <xar:mlstring>Users</xar:mlstring>
              </td>
-             <td style="width:10%;">
+             <td>
                  &nbsp;
              </td>
              <td colspan="2">
@@ -23,10 +23,10 @@
                  <td>
                      &nbsp;
                  </td>
-                 <td style="text-align: center; width:19%;">
+                 <td class="xar-align-center">
                      <img src="modules/roles/xarimages/ob_mail_unreaded.gif" alt="#xarML('Unread messages')#" />
                  </td>
-                 <td style="text-align: center;width:18%;">
+                 <td class="xar-align-center">
                      <img src="modules/roles/xarimages/ob_mail_total.gif" alt="#xarML('Total messages')#" />
                  </td>
              </tr>
@@ -46,12 +46,12 @@
                  <td>
                      &nbsp;
                  </td>
-                 <td style="text-align: center;">
+                 <td class="xar-align-center">
                      <a href="#$dd['messagesurl']#">
                          #$dd['unread']#
                      </a>
                  </td>
-                 <td style="text-align: center;">
+                 <td class="xar-align-center">
                      <a href="#$dd['messagesurl']#">
                          #$dd['total']#
                      </a>
@@ -60,7 +60,7 @@
          </xar:foreach>
      </xar:if>
      <tr>
-         <td colspan="4" style="height:5px;">
+         <td colspan="4">
              &nbsp;
          </td>
      </tr>
@@ -71,7 +71,7 @@
          </td>
          <td>
          </td>
-         <td style="text-align: center;" colspan="2">
+         <td class="xar-align-center" colspan="2">
              #$numusers#
          </td>
      </tr>
@@ -82,7 +82,7 @@
          </td>
          <td>
          </td>
-         <td style="text-align: center;" colspan="2">
+         <td class="xar-align-center" colspan="2">
              #$numguests#
          </td>
      </tr>
