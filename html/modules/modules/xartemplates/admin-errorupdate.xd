@@ -16,24 +16,18 @@
         <xar:mlstring>There is a discrepancy between the module version stored in the database and the module version found in the file system.  If you continue to run with an older version of the module files, you can severely corrupt your data.</xar:mlstring>
     </p>
 
-    <div style="text-align: left;margin: auto;">
-        <div style="float: left; width: 30%; text-align: left; display: inline;">
-            <label class="xar-title"><xar:mlstring>Module</xar:mlstring></label>
-        </div>
-        <div style="float: left; width: 30%; text-align: center; display: inline;">
-            <label class="xar-title"><xar:mlstring>Database Version</xar:mlstring></label>
-        </div>
-        <div style="float: left; width: 30%; text-align: right; display: inline;">
-            <label class="xar-title"><xar:mlstring>Filesystem Version</xar:mlstring></label>
-        </div>
-        <div style="float: left; width: 30%; text-align: left; display: inline;">
+    <div class="xar-overflow-auto">
+        <label class="xar-title xar-thirdwidth xar-floatleft"><xar:mlstring>Module</xar:mlstring></label>
+        <label class="xar-title xar-thirdwidth xar-floatleft"><xar:mlstring>Database Version</xar:mlstring></label>
+        <label class="xar-title xar-thirdwidth xar-floatleft"><xar:mlstring>Filesystem Version</xar:mlstring></label>
+        <div class="xar-thirdwidth xar-floatleft">
             <span class="xar-norm">#$modname#</span>
         </div>
-        <div style="float: left; width: 30%; text-align: center; display: inline;">
+        <div class="xar-thirdwidth xar-floatleft">
             <span class="xar-norm">#$dbversion#</span>
         </div>
-        <div style="float: left; width: 30%; text-align: right; display: inline;">
-                <span class="xar-norm">#$fileversion#</span>
+        <div class="xar-thirdwidth xar-floatleft">
+            <span class="xar-norm">#$fileversion#</span>
         </div>
     </div>
 
