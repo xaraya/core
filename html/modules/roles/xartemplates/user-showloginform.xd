@@ -1,7 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Registration / Login</xar:mlstring></h2>
-<div style="margin: auto;">
 <form action="&xar-modurl-roles-user-login;" method="post" enctype="application/x-www-form-urlencoded">
 <div>
 <table border="0" cellpadding="2" cellspacing="0">
@@ -28,12 +27,12 @@
         </td>
     </tr>
     <tr>
-        <td colspan="2" style="text-align: center;">
+        <td colspan="2" class="xar-align-center">
             <input type="checkbox" name="rememberme" id="remembermeform" value="1" /> <label for="remembermeform"><xar:mlstring>Remember me</xar:mlstring></label>
         </td>
     </tr>
     <tr>
-        <td colspan="2" style="text-align: center;">
+        <td colspan="2" class="xar-align-center">
       <input type="hidden" name="redirecturl" id="returnurl" value="#xarVarPrepForDisplay($redirecturl)#" />
             <input type="submit" value="#xarVarPrepForDisplay($loginlabel)#" />
         </td>
@@ -41,5 +40,4 @@
 </table>
 </div>
 </form>
-</div>
 </div>
