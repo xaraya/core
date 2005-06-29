@@ -36,7 +36,7 @@
             </tr>
             <xar:foreach in="$properties" key="$name">
                 <tr>
-                    <th style="text-align:right;width:14em;">
+                    <th class="xar-align-right xar-form-textlong">
                         <a href="#$sorturl#=#$name#">
                             <xar:data-label property="$properties[$name]" />
                         </a>
