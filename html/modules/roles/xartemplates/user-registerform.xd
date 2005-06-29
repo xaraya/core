@@ -1,7 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Create User Account</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Registration</xar:mlstring></h2>
-<div style="margin: auto;">
 <xar:if condition="isset($withupload) AND $withupload">
     <xar:set name="enc_type">'multipart/form-data'</xar:set>
 <xar:else/>
@@ -117,5 +116,4 @@
 
 </div>
 </form>
-</div>
 </div>
