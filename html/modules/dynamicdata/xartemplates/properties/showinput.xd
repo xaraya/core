@@ -1,18 +1,8 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
-test here
-<xar:set name="inputField">'input type="text" id="'.$id.'" name="'.$name.'" value="'.$value.'"'</xar:set>
-
-<xar:if condition="!empty($size) AND !empty($tabindex)">
-    <xar:set name="inputField">$inputField.' size="'.$size.'"'</xar:set>
-<xar:elseif condition="!empty($maxlength)"/>
-    <xar:set name="inputField">$inputField.' maxlength="'.$maxlength.'"'</xar:set>
-<xar:elseif condition="!empty($tabindex)"/>
-    <xar:set name="inputField">$inputField.' tabindex="'.$tabindex.'"'</xar:set>
-</xar:if>
- 
-&lt;#$inputField# /&gt;
-
+<span class="xar-error"><xar:mlstring>Warning: the template showinput-[property type].xd or showinput-[template].xd is missing for this property !</xar:mlstring></span>
+<br/>
+<input type="text" id="#$id#" name="#$name#" value="#$value#" />
 
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>

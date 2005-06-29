@@ -432,17 +432,10 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
         $templateName = xarVarPrepForOS($templateName);
     }
 
-    if(function_exists('xarMod_getBaseInfo')) {
-        if (!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
-        $modOsDir = $modBaseInfo['osdirectory'];
-    } elseif(!empty($modName)) {
-        // We can assume $modOsDir = $modName
-        $modOsDir = $modName;
-    }
-
     // Basename of module template is apitype-functioname
-    $tplBase      = "$modType-$funcName";
-    unset($sourceFileName);
+    $tplBase        = "$modType-$funcName";
+
+    // Get the right source filename
     $sourceFileName = xarTpl__GetSourceFileName($modName, $tplBase, $templateName);
 
     // Common data for BL
@@ -491,12 +484,10 @@ function xarTplBlock($modName, $blockType, $tplData = array(), $tplName = NULL, 
         $tplName = xarVarPrepForOS($tplName);
     }
 
-    if(!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
-    $modOsDir = $modBaseInfo['osdirectory'];
-
     // Basename of block can be overridden
-    $templateBase      = xarVarPrepForOS(empty($tplBase) ? $blockType : $tplBase);
-    unset($sourceFileName);
+    $templateBase   = xarVarPrepForOS(empty($tplBase) ? $blockType : $tplBase);
+
+    // Get the right source filename
     $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $tplName, 'blocks');
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
@@ -506,24 +497,60 @@ function xarTplBlock($modName, $blockType, $tplData = array(), $tplName = NULL, 
  *
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @access public
- * @param  string $modName      the module name owning the property
- * @param  string $propertyName the name of the property
- * @param  string $tplType      the template type to render ( showoutput(default)|showinput|validation )
+ * @param  string $modName      the module name owning the property, with fall-back to dynamicdata
+ * @param  string $propertyName the name of the property type, or some other name specified in BL tag or API call
+ * @param  string $tplType      the template type to render ( showoutput(default)|showinput|showhidden|validation|label )
  * @param  array  $tplData      arguments for the template
- * @param  string $tplBase      basename of property can be overridden ( for template sharing for properties for example)
+ * @param  string $tplBase      the template type can be overridden too ( unused )
  * @return string xarTpl__executeFromFile($sourceFileName, $tplData)
  */
 function xarTplProperty($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = NULL)
 {
     $tplType = xarVarPrepForOS($tplType);
-        
-    if(!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
-    $modOsDir = $modBaseInfo['osdirectory'];
-    
+
+    // Template type for the property can be overridden too (currently unused)
     $templateBase   = xarVarPrepForOS(empty($tplBase) ? $tplType : $tplBase);
-    unset($sourceFileName);
+
+    // Get the right source filename
     $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $propertyName, 'properties');
-    
+
+    // Final fall-back to default template in dynamicdata
+    if ((empty($sourceFileName) || !file_exists($sourceFileName)) &&
+        $modName != 'dynamicdata') {
+        $sourceFileName = xarTpl__GetSourceFileName('dynamicdata', $templateBase, $propertyName, 'properties');
+    }
+
+    return xarTpl__executeFromFile($sourceFileName, $tplData);
+}
+
+/**
+ * Renders an object through an object template (TODO)
+ *
+ * @author Marcel van der Boom <marcel@xaraya.com>
+ * @access public
+ * @param  string $modName      the module name owning the object, with fall-back to dynamicdata
+ * @param  string $objectName   the name of the object, or some other name specified in BL tag or API call
+ * @param  string $tplType      the template type to render ( objectdisplay(default)|objectform|objectview|objectlist )
+ * @param  array  $tplData      arguments for the template
+ * @param  string $tplBase      the template type can be overridden too ( unused )
+ * @return string xarTpl__executeFromFile($sourceFileName, $tplData)
+ */
+function xarTplObject($modName, $objectName, $tplType = 'objectdisplay', $tplData = array(), $tplBase = NULL)
+{
+    $tplType = xarVarPrepForOS($tplType);
+
+    // Template type for the object can be overridden too (currently unused)
+    $templateBase   = xarVarPrepForOS(empty($tplBase) ? $tplType : $tplBase);
+
+    // Get the right source filename
+    $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $propertyName, 'objects');
+
+    // Final fall-back to default template in dynamicdata
+    if ((empty($sourceFileName) || !file_exists($sourceFileName)) &&
+        $modName != 'dynamicdata') {
+        $sourceFileName = xarTpl__GetSourceFileName('dynamicdata', $templateBase, $propertyName, 'objects');
+    }
+
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -1194,6 +1221,12 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     } elseif(
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")) {
         $use_internal = true;
+    } else {
+        // CHECKME: should we do something here ? At the moment, translations still get loaded,
+        //          the (invalid) $sourceFileName gets passed back to xarTpl*, and we'll get
+        //          an exception when it's passed to xarTpl__executeFromFile().
+        //          We probably don't want to throw an exception here, but we might return
+        //          now, or have some final fall-back template in base (resp. DD for properties)
     }
     // Subpart may have been empty, 
     $sourceFileName = str_replace('//','/',$sourceFileName);
