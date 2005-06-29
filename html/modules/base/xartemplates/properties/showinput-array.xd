@@ -1,24 +1,22 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:if condition="is_array($value)">
     <xar:foreach in="$value" key="$key" value="$val">
-    <div style="clear: both; padding-top: 10px;">
         <xar:if condition="!empty($key) and !is_numeric($key)">
-            <span style="float: left; width: 20%; text-align: right;">
-                #$key#
-            </span>
-            <span style="float: right; width: 78%; text-align: left;">
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label">#$key#</label>
+                <input class="xar-form-textlong" type="text" name="#$name#[#$key#]" id="#$id#_#$key#" value="#$val#" size="#$size#" />
+            </div>
+            <xar:else />
+            <div class="xar-form-input-wrapper-after">
                 <input type="text" name="#$name#[#$key#]" id="#$id#_#$key#" value="#$val#" size="#$size#" />
-            </span>
-        <xar:else/>
-            <input type="text" name="#$name#[#$key#]" id="#$id#_#$key#" value="#$val#" size="#$size#" />
+            </div>
         </xar:if>
-    </div>
     </xar:foreach>
-<xar:else/>
-    <textarea name="#$name#" rows="8" cols="50" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
+    <xar:else />
+    <div class="xar-form-input-wrapper-after">
+        <textarea name="#$name#" rows="8" cols="50" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
+    </div>
 </xar:if>
-
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
 </xar:if>
