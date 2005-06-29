@@ -31,7 +31,6 @@
 </div>
 <div class="xar-mod-body">
     <h2><xar:mlstring>Privacy Policy</xar:mlstring></h2>
-<div style="margin: auto;">
     <xar:if condition="xarModGetVar('roles', 'showprivacy')">
     
     <h3 id="intro"><xar:mlstring>Introduction</xar:mlstring></h3>
@@ -105,5 +104,4 @@
     <xar:else />
         <p><xar:mlstring>Privay Policy Not Active</xar:mlstring></p>
     </xar:if>
-</div>
 </div>
