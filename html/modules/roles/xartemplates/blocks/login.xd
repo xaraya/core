@@ -17,7 +17,7 @@
     </p>
     <p>
         <xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') ne 'High'">
-            <label style="display:block;margin-top:1em;" for="rememberme#$blockid#">
+            <label class="xar-displayblock" for="rememberme#$blockid#">
                 <input type="checkbox" name="rememberme" id="rememberme#$blockid#" value="1" />
                 <xar:mlstring>Don't ask for password</xar:mlstring>
             </label>
