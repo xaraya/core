@@ -1,27 +1,23 @@
 <xar:comment>
     License: GPL http://www.gnu.org/copyleft/gpl.html 
 </xar:comment>
-<xar:comment>
-    two pseudo-columns compact layout - TODO: see if we can use common css instead of inline styles
-</xar:comment>
-<xar:comment>
-    Legend 
-</xar:comment>
-<p class="param">
-    <label>
+<div class="xar-form-input-wrapper">
+    <label class="xar-form-label">
         <xar:mlstring>
             Legend of Actions 
         </xar:mlstring>
     </label>
-    <xar:mlstring>
-        [D]efault [H]idden [M]aximized [E]dit [R]emove 
-    </xar:mlstring>
-</p>
-<div>
+    <strong>
+        <xar:mlstring>
+            [D]efault [H]idden [M]aximized [E]dit [R]emove 
+        </xar:mlstring>
+    </strong>
+</div>
+<div class="xar-overflow-auto">
     <xar:loop name="$blocks">
         <xar:if condition="(($loop:index + 1) % 2)">
-            <div class="xar-accent-outline" style="position:relative;left:0px;width:49%;height:1.5em;border-width:0px 0px 1px 0px;">
-                <div class="xar-sub" style="float:right;width:auto;height:1.5em;text-align:right;">
+            <div class="xar-floatleft xar-halfwidth xar-border-thinbottom">
+                <div class="xar-sub xar-floatright xar-align-right">
                     [ 
                     <xar:if condition="!empty($loop:item.groups)">
                         <xar:loop name="$loop:item.groups" id="groupsl">
@@ -79,8 +75,8 @@
                 </xar:if>
             </div>
             <xar:else />
-            <div class="xar-accent-outline" style="position:relative;top:-1.5em;left:51%;width:49%;height:1.5em;margin-bottom:-1.3em;border-width:0px 0px 1px 0px;">
-                <div class="xar-sub" style="float:right;width:auto;height:1.5em;text-align:right;margin-bottom:-1.3em;">
+            <div class="xar-floatright xar-halfwidth xar-border-thinbottom">
+                <div class="xar-sub xar-floatright xar-align-right">
                     [ 
                     <xar:if condition="!empty($loop:item.groups)">
                         <xar:loop name="$loop:item.groups" id="groupsr">
