@@ -1,7 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Create User Account</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Confirm Registration</xar:mlstring></h2>
-<div style="margin: auto;">
 <form action="&xar-modurl-roles-user-register;" method="post" enctype="application/x-www-form-urlencoded">
 <div>
 <table border="0" cellpadding="2" cellspacing="0">
@@ -28,7 +27,7 @@
     </xar:if>
 </xar:if>
     <tr>
-        <td colspan="2" style="text-align: center;"><br />
+        <td colspan="2" class="xar-align-center">
             <input type="submit" value="#$createlabel#" />
         </td>
     </tr>
@@ -48,5 +47,4 @@
 
 </div>
 </form>
-</div>
 </div>
