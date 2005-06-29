@@ -106,7 +106,7 @@
         </xar:if>
     </xar:if>
     <tr>
-        <td colspan="2" style="text-align: center"><br />
+        <td colspan="2" class="xar-align-center">
             <input type="submit" value="#$userlabel#" />
         </td>
     </tr>
