@@ -1,46 +1,55 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<div class="xar-mod-head">
+    <span class="xar-mod-title">
+        <xar:mlstring>Roles Administration</xar:mlstring>
+    </span>
+</div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>Send notification</xar:mlstring></h2>
-    <div style="text-align: left; margin: auto;">
-        <p><xar:mlstring>This page allows  you to send a notification to the changed user(s)</xar:mlstring>.</p>
-        <form name="updatestate" action="&xar-modurl-roles-admin-updatestate;" method="post" enctype="application/x-www-form-urlencoded">
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="updatephase" id="updatephase" value="notify" />
-            <input type="hidden" name="groupuid" id="groupuid" value="#$groupuid#" />
-            <input type="hidden" name="state" id="state" value="#$state#" />
-            <input type="hidden" name="status" id="status" value="#$status#" />
-            <input type="hidden" name="uids" id="uids" value="#$uids#" />
-            <div style="text-align: left;">
-                <table border="0" cellpadding="2" cellspacing="2">
-                    <tr>
-                        <td colspan="2">
-                            <a href="&xar-modurl-roles-admin-showusers;&amp;phase=#$state#&amp;uid=#$groupuid#"><xar:mlstring>Click here if you don't want to send any notification</xar:mlstring></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="subject"><xar:mlstring>Email Title</xar:mlstring></label>
-                        </td>
-                        <td>
-                            <input type="text" name="subject" id="subject" value="#$subject#" size="35" maxlength="100" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="message"><xar:mlstring>Email Body</xar:mlstring></label>
-                        </td>
-                        <td>
-                            <textarea name="message" id="message" rows="20" cols="80" tabindex="1">#$message#</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="text-align: center"><br />
-                            <input type="submit" value="Send Notification(s)" tabindex="9" />
-                        </td>
-                    </tr>
-                </table>            
-            </div>
-        </form>
-    </div>
+    <h2>
+        <xar:mlstring>Send notification</xar:mlstring>
+    </h2>
+    <p>
+    <xar:mlstring>This page allows you to send a notification to the changed user(s)</xar:mlstring>.</p>
+    <form name="updatestate" action="&xar-modurl-roles-admin-updatestate;" method="post" enctype="application/x-www-form-urlencoded">
+        <table border="0" cellpadding="2" cellspacing="2">
+            <tr>
+                <td colspan="2">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="updatephase" id="updatephase" value="notify" />
+                    <input type="hidden" name="groupuid" id="groupuid" value="#$groupuid#" />
+                    <input type="hidden" name="state" id="state" value="#$state#" />
+                    <input type="hidden" name="status" id="status" value="#$status#" />
+                    <input type="hidden" name="uids" id="uids" value="#$uids#" />                
+                    <a href="&xar-modurl-roles-admin-showusers;&amp;phase=#$state#&amp;uid=#$groupuid#">
+                        <xar:mlstring>Click here if you don't want to send any notification</xar:mlstring>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="subject">
+                        <xar:mlstring>Email Title</xar:mlstring>
+                    </label>
+                </td>
+                <td>
+                    <input type="text" name="subject" id="subject" value="#$subject#" size="35" maxlength="100" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="message">
+                        <xar:mlstring>Email Body</xar:mlstring>
+                    </label>
+                </td>
+                <td>
+                    <textarea name="message" id="message" rows="20" cols="80" tabindex="1">#$message#</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="xar-align-center>
+                    <input type="submit" value="Send Notification(s)" tabindex="9" />
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>
