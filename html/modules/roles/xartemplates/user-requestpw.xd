@@ -1,7 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Request Lost Password</xar:mlstring></h2>
-<div style="margin: auto;">
 <p><xar:mlstring>Enter your username or your e-mail address.</xar:mlstring></p>
 <form action="&xar-modurl-roles-user-lostpassword;" method="post" enctype="application/x-www-form-urlencoded">
 <div>
@@ -23,7 +22,7 @@
     </td>
 </tr>
 <tr>
-    <td colspan="2" style="text-align: center;"><br />
+    <td colspan="2" class="xar-align-center">
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
         <input type="hidden" name="phase" id="phase" value="send" />
         <input type="submit" value="#$emaillabel#" />
@@ -32,5 +31,4 @@
 </table>
 </div>
 </form>
-</div>
 </div>
