@@ -1,9 +1,7 @@
-            <div style="clear: both; padding-top: 10px;">
-                <span style="float: left; width: 20%; text-align: right;">
-                    <span class="help" title="#xarML('Select the dynamic object for which you want to create a form.')#"><label for="objectid#$blockid#"><xar:mlstring>Dynamic Object</xar:mlstring></label>:</span>
-                </span>
-                <span style="float: right; width: 78%; text-align: left;">
-                    <xar:set name="id">'objectid'.$blockid</xar:set>
-                    <xar:data-input type="object" name="objectid" id="$id" value="$objectid" />
-                </span>
-            </div>
+<div class="xar-form-input-wrapper">
+    <label class="help xar-form-label" title="#xarML('Select the dynamic object for which you want to create a form.')#" for="objectid#$blockid#">
+        <xar:mlstring>Dynamic Object</xar:mlstring>
+    </label>
+    <xar:set name="id">'objectid'.$blockid</xar:set>
+    <xar:data-input type="object" name="objectid" id="$id" value="$objectid" />
+</div>
