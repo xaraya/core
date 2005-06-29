@@ -269,6 +269,12 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
             return $this->value;
         }
 
+        // we don't want to check empty values for items
+        if (empty($this->value)) {
+             if ($check) return true;
+             return $this->value;
+        }
+
         // we're interested in one of the items for module+itemtype
         $itemlinks = xarModAPIFunc($this->module,'user','getitemlinks',
                                    // don't throw an exception if this function doesn't exist
