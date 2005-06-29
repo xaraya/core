@@ -252,11 +252,11 @@
     border-bottom-width: 0;
 }
 
-.xar-border-thin { border-width: 1px; }
-.xar-border-thintop { border-top-width: 1px; }
-.xar-border-thinright { border-right-width: 1px; }
-.xar-border-thinbottom { border-bottom-width: 1px; }
-.xar-border-thinleft { border-left-width: 1px; }
+.xar-border-thin { border: 1px solid; }
+.xar-border-thintop { border-top: 1px solid; }
+.xar-border-thinright { border-right: 1px solid; }
+.xar-border-thinbottom { border-bottom: 1px solid; }
+.xar-border-thinleft { border-left: 1px solid; }
 
 .xar-border-thinsides {
     border-left-width: 1px;
