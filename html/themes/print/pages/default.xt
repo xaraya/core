@@ -6,7 +6,7 @@
         <title>#$tpl:pageTitle#</title>
         <base href="&xar-baseurl;index.php" />
         <style type="text/css">@import url(&xar-baseurl;#xarTplGetThemeDir()#/style/style.css); </style>
-        <link rel=stylesheet type="text/css" href="modules/base/xarstyles/xarcore-xhtml1-strict.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="modules/base/xarstyles/xarcore-xhtml1-strict.css" media="screen" />
         <xar:additional-styles />
     </head>
     <body>
