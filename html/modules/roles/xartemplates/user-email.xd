@@ -13,24 +13,22 @@
         <xar:mlstring>Send an Email to</xar:mlstring>
         &nbsp;#xarVarPrepForDisplay($name)#
     </h2>
-    <div style="margin: auto;">
-        <form method="post" action="&xar-modurl-roles-user-email;&amp;phase=confirm#" enctype="application/x-www-form-urlencoded">
+    <form method="post" action="&xar-modurl-roles-user-email;&amp;phase=confirm#" enctype="application/x-www-form-urlencoded">
+        <div>
+            <xar:if condition="!empty($error_message)">
+                <div class="xar-error">#xarVarPrepForDisplay($error_message)#</div>
+            </xar:if>
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="uid" id="uid" value="#$uid#" />
             <div>
-                <xar:if condition="!empty($error_message)">
-                    <div class="xar-error">#xarVarPrepForDisplay($error_message)#</div>
-                </xar:if>
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="uid" id="uid" value="#$uid#" />
-                <div>
-                    <div><label for="subject"><xar:mlstring>Subject:</xar:mlstring></label></div>
-                    <input type="text" name="subject" id="subject" size="40" maxlength="100" value="#xarVarPrepForDisplay($subject)#" />
-                </div>
-                <div>
-                    <div><label for="message"><xar:mlstring>Message:</xar:mlstring></label></div>
-                    <textarea name="message" id="message" rows="20" cols="60">#xarVarPrepForDisplay($message)#</textarea>
-                </div>
-                <input name="submit" type="submit" value="#xarML('Send')#" />
+                <div><label for="subject"><xar:mlstring>Subject:</xar:mlstring></label></div>
+                <input type="text" name="subject" id="subject" size="40" maxlength="100" value="#xarVarPrepForDisplay($subject)#" />
             </div>
-        </form>
-    </div>
+            <div>
+                <div><label for="message"><xar:mlstring>Message:</xar:mlstring></label></div>
+                <textarea name="message" id="message" rows="20" cols="60">#xarVarPrepForDisplay($message)#</textarea>
+            </div>
+            <input name="submit" type="submit" value="#xarML('Send')#" />
+        </div>
+    </form>
 </div>
