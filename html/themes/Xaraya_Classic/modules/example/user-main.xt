@@ -1,4 +1,4 @@
-<p style="color: #FF0000;">
+<p class="xar-error">
   <xar:ml>
     <xar:mlstring>This is an over-ridden template. See #(1)/modules/example/user-main.xt for the example</xar:mlstring>
     <xar:mlvar>#xarTplGetThemeDir()#</xar:mlvar>
@@ -8,14 +8,14 @@
 <table border="0" width="100%">
   <!-- the variables used in this menu come from example_user_menu() -->
   <tr>
-    <th align="center">
+    <th class="xar-align-center">
       <xar:var name="menutitle"/>
     </th>
   </tr>
   <tr>
     <td>
       <table border="0" width="100%">
-        <tr align="center" valign="middle">
+        <tr class="xar-align-center">
           <!-- a link to a particular menu item -->
           <td>
             <a href="#$menulink_view#">#$menulabel_view#</a>
@@ -28,9 +28,8 @@
     </td>
   </tr>
 </table>
-<br />
 <!-- the specific template for the current function comes here -->
 <!-- some variable filled in by the function using this template -->
-<div style="text-align: center;">
-  <b><xar:var name="welcome"/></b>
+<div class="xar-align-center">
+  <strong><xar:var name="welcome"/></strong>
 </div>
