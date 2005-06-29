@@ -11,7 +11,7 @@
         <xar:if condition="!empty($newlink)">
             <tr>
                 <xar:set name="colspan">count($properties)+2</xar:set>
-                <th style="text-align: left;" colspan="#$colspan#">
+                <th class="xar-align-left" colspan="#$colspan#">
                     <a href="#$newlink#"><strong><xar:mlstring>Create New</xar:mlstring></strong></a>
                 </th>
             </tr>
@@ -22,7 +22,7 @@
             <xar:if condition="$item_no eq 0">
                 <tr>                        
                     <xar:foreach in="$properties" key="$name">
-                        <th style="text-align:left;width:14em;">
+                        <th class="xar-align-right xar-form-textlong">
                             <a href="#$sorturl#=#$name#">
                                 <xar:data-label property="$properties[$name]" />
                             </a>
@@ -48,7 +48,7 @@
             </tr>
             <tr class="#$rowclass#">
                 <xar:set name="colspan">count($properties)+2</xar:set>
-                <td style="text-align: right;" colspan="#$colspan#">
+                <td class="xar-align-right" colspan="#$colspan#">
                         <xar:foreach in="$links[$itemid]" value="$option">
                         <xar:if condition="!empty($option['olink'])">
                             #$option['ojoin']# 
