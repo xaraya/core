@@ -303,7 +303,7 @@
                         </th>
                     </tr>
                     <xar:loop name="$purgeusers">
-                        <tr class="xar-norm-outline" style="text-align: left; padding-left: .5em; width: 5em;border-width: 0px 0px 1px 0px;border-style: solid;">
+                        <tr class="xar-norm-outline">
                             <td>
                                 #$loop:item['name']#
                             </td>
