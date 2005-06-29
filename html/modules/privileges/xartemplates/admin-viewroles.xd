@@ -115,7 +115,7 @@
                         #$role['name']#
                     </td>
                     <td class="xar-align-center">
-                        <a href="#$removeurl#&amp;roleid=#$role['roleid']#" title="#xarML('Remove this Privilege assignment')#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
+                        <a href="#$removeurl#&amp;roleid=#$role['roleid']#" title="#xarML('Remove this Privilege assignment')#"><img src="modules/privileges/xarimages/delete.gif" class="xar-valign-middle" /></a>
                     </td>
                 </tr>
             </xar:foreach>
