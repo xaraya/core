@@ -1,92 +1,71 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<script type="text/javascript" src="modules/privileges/xartemplates/xarTree.js">
-</script>
-<script language="JavaScript">
- var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
- function doOnLoad() {
-      oldOnLoadFunction();      
-      xarTree_init('PrivilegesTree');
-      }
- var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
- function doOnUnload() {
-      oldOnUnloadFunction();      
-      xarTree_init('PrivilegesTree');
-      }
- 
- window.onload = doOnLoad;
- window.onunload = doOnUnload;
-</script>
-
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Assignment</xar:mlstring></h2><br />
-<div style="margin: auto;">
-
-<table border="0" width="100%" cellpadding="2">
-    <xar:if condition="count($roles) eq 0">
-        <tr>
-            <td colspan="3">
-                <xar:mlstring>This privilege is not assigned to any user or group.</xar:mlstring>            
-            </td>
-        </tr>
-    <xar:else />
-        <tr>
-            <td>
-                <xar:mlstring>Type </xar:mlstring>            
-            </td>
-            <td>
-                <xar:mlstring>Name </xar:mlstring>            
-            </td>
-            <td>
-                &nbsp;            
-            </td>
-        </tr>
-        <xar:loop name="$roles">
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<script type="text/javascript" src="modules/privileges/xartemplates/xarTree.js"></script>
+<script language="JavaScript">var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); function doOnLoad() { oldOnLoadFunction(); xarTree_init('PrivilegesTree'); } var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); function doOnUnload() { oldOnUnloadFunction(); xarTree_init('PrivilegesTree'); } window.onload = doOnLoad; window.onunload = doOnUnload;</script>
+<div class="xar-mod-head">
+    <span class="xar-mod-title">
+        <xar:mlstring>Privileges Administration</xar:mlstring>
+    </span>
+</div>
+<div class="xar-mod-body">
+    <h2>
+        <xar:mlstring>Assignment</xar:mlstring>
+    </h2>
+    <table border="0" width="100%" cellpadding="2">
+        <xar:if condition="count($roles) eq 0">
             <tr>
-                <td width="150">
-                    <xar:if condition="$loop:item['type'] eq 0">
-                        User
-                    <xar:else />
-                        Group
-                    </xar:if>
+                <td colspan="3">
+                    <xar:mlstring>This privilege is not assigned to any user or group.</xar:mlstring>
                 </td>
-                <td width="150">
-                    #$loop:item['name']#
+            </tr>
+            <xar:else />
+            <tr>
+                <td>
+                    <xar:mlstring>Type</xar:mlstring>
                 </td>
-            <td align="right">
-                    <xar:set name="tmptitleremove"><xar:mlstring>Remove this Privilege assignment</xar:mlstring></xar:set>
-                <a href="#$removeurl#&amp;roleid=#$roleid#" title="#$tmptitleremove#">                
-                    <xar:mlstring>Remove</xar:mlstring>
+                <td>
+                    <xar:mlstring>Name</xar:mlstring>
+                </td>
+                <td>&#160;</td>
+            </tr>
+            <xar:loop name="$roles">
+                <tr>
+                    <td width="150">
+                        <xar:if condition="$loop:item['type'] eq 0">User 
+                        <xar:else />Group</xar:if>
+                    </td>
+                    <td width="150">#$loop:item['name']#</td>
+                    <td align="right">
+                        <xar:set name="tmptitleremove">
+                            <xar:mlstring>Remove this Privilege assignment</xar:mlstring>
+                        </xar:set>
+                        <a href="#$removeurl#&amp;roleid=#$roleid#" title="#$tmptitleremove#">
+                            <xar:mlstring>Remove</xar:mlstring>
+                        </a>
+                    </td>
+                </tr>
+            </xar:loop>
+        </xar:if>
+    </table>
+    <table border="0" width="100%">
+        <tr>
+            <th align="center">
+                <xar:mlstring>Current Privileges</xar:mlstring>
+            </th>
+        </tr>
+    </table>
+    <table border="0" cellspacing="5" width="100%">
+        <tr>
+            <td>
+                <a href="&xar-modurl-privileges-admin-newprivilege;">
+                    <xar:mlstring>Add Privilege</xar:mlstring>
                 </a>
             </td>
-            </tr>
-        </xar:loop>
-    </xar:if>
-</table>
-<br />
-
-<table border="0" width="100%">
-    <tr>
-        <th align="center">
-            <xar:mlstring>Current Privileges</xar:mlstring>
-        </th>
-    </tr>
-</table>
-<table border="0" cellspacing="5" width="100%">
-    <tr>
-        <td>
-            <a href="&xar-modurl-privileges-admin-newprivilege;">
-                <xar:mlstring>Add Privilege</xar:mlstring>
-            </a>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <hr />
-        </td>
-    </tr>
-</table>            
-    <xar:loop name="$trees">
-        #$loop:item['tree']#
-    </xar:loop>
-</div>
+        </tr>
+        <tr>
+            <td>
+                <hr />
+            </td>
+        </tr>
+    </table>
+    <xar:loop name="$trees">#$loop:item['tree']#</xar:loop>
 </div>
