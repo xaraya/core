@@ -270,7 +270,7 @@
                     </select>
                 </td>
                 <xar:if condition="$uid gt 0">
-                    <td style="text-align: center; vertical-align: middle;">
+                    <td  class="xar-align-center xar-valign-middle">
                         <xar:if condition="$includesubgroups eq 0">
                             <input type="checkbox" name="includesubgroups" id="includesubgroups" value="1" onchange="this.form.submit()" />
                             <xar:else />
