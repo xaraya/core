@@ -226,3 +226,6 @@ p.complete, p.active, p.greyed {
     color: #000;
     font-size: .75em;
 }
+
+.warning {color:orange}
+.failure {color:failure}
