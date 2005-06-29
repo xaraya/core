@@ -971,9 +971,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             $args['catid'] = null;
         }
 
-        return xarTplModule($args['tplmodule'],'admin','objectform',
-                            $args,
-                            $args['template']);
+        return xarTplObject($args['tplmodule'],$args['template'],'showform',$args);
     }
 
     /**
@@ -1037,9 +1035,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             $args['catid'] = null;
         }
 
-        return xarTplModule($args['tplmodule'],'user','objectdisplay',
-                            $args,
-                            $args['template']);
+        return xarTplObject($args['tplmodule'],$args['template'],'showdisplay',$args);
     }
 
     /**
@@ -1868,9 +1864,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         // with custom tags.
         $args['objectid'] = $this->objectid;
 
-        return xarTplModule($args['tplmodule'],'admin','objectlist',
-                            $args,
-                            $args['template']);
+        return xarTplObject($args['tplmodule'],$args['template'],'showlist',$args);
     }
 
     function showView($args = array())
@@ -1985,9 +1979,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
              $args['nexturl'],
              $args['sorturl']) = $this->getPager($args['pagerurl']);
 
-        return xarTplModule($args['tplmodule'],'user','objectview',
-                            $args,
-                            $args['template']);
+        return xarTplObject($args['tplmodule'],$args['template'],'showview',$args);
     }
 
     /**

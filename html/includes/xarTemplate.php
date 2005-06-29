@@ -530,12 +530,12 @@ function xarTplProperty($modName, $propertyName, $tplType = 'showoutput', $tplDa
  * @access public
  * @param  string $modName      the module name owning the object, with fall-back to dynamicdata
  * @param  string $objectName   the name of the object, or some other name specified in BL tag or API call
- * @param  string $tplType      the template type to render ( objectdisplay(default)|objectform|objectview|objectlist )
+ * @param  string $tplType      the template type to render ( showdisplay(default)|showview|showform|showlist )
  * @param  array  $tplData      arguments for the template
  * @param  string $tplBase      the template type can be overridden too ( unused )
  * @return string xarTpl__executeFromFile($sourceFileName, $tplData)
  */
-function xarTplObject($modName, $objectName, $tplType = 'objectdisplay', $tplData = array(), $tplBase = NULL)
+function xarTplObject($modName, $objectName, $tplType = 'showdisplay', $tplData = array(), $tplBase = NULL)
 {
     $tplType = xarVarPrepForOS($tplType);
 
@@ -543,12 +543,12 @@ function xarTplObject($modName, $objectName, $tplType = 'objectdisplay', $tplDat
     $templateBase   = xarVarPrepForOS(empty($tplBase) ? $tplType : $tplBase);
 
     // Get the right source filename
-    $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $propertyName, 'objects');
+    $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $objectName, 'objects');
 
     // Final fall-back to default template in dynamicdata
     if ((empty($sourceFileName) || !file_exists($sourceFileName)) &&
         $modName != 'dynamicdata') {
-        $sourceFileName = xarTpl__GetSourceFileName('dynamicdata', $templateBase, $propertyName, 'objects');
+        $sourceFileName = xarTpl__GetSourceFileName('dynamicdata', $templateBase, $objectName, 'objects');
     }
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
