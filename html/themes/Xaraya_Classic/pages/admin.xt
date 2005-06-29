@@ -15,7 +15,9 @@
                 </xar:mlstring>
             </title>
             <meta name="ROBOTS" content="INDEX,FOLLOW" />
+            <xar:style scope="common" />
             <style type="text/css">@import url("themes/Xaraya_Classic/style/admin.css"); </style> 
+            <xar:additional-styles />
             <script type="text/javascript" src="#$themedir#/scripts/nav.js"></script>
         </head>
         <body>
@@ -28,8 +30,7 @@
                 </div>
                 <div id="main">
                     <xar:module main="true" />
-                    <br style="clear:both" />
-                    <br style="clear:both" />
+                    <br class="xar-clearboth" />
                 </div>
             </div>
         </body>
