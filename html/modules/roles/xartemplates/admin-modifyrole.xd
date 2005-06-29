@@ -277,7 +277,7 @@
                         #xarVarPrepForDisplay($loop:item['parentname'])#
                     </xar:if>
                 </td>
-                <td style="text-align: center;">
+                <td class="xar-align-center">
                     <xar:if condition="count($parents) ne 1">
                         <a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$uid#&amp;parentid=#$loop:item['parentid']#&amp;authid=#$authid#">
                             <xar:mlstring>Remove</xar:mlstring>
