@@ -95,7 +95,7 @@
                     [#$labels['id']#: #$field['id']#]
                 </legend>
 
-                <div id="fieldwrapper_#$field.id#" style="display: none;">
+                <div id="fieldwrapper_#$field.id#" class="xar-displaynone">
                     <div class="xar-form-input-wrapper-after">
                         <a href="&xar-modurl-dynamicdata-admin-modify;&amp;objectid=2&amp;itemid=#$field.id#">
                             #xarVarPrepForDisplay($otherfields)#
