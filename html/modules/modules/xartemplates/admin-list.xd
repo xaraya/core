@@ -74,9 +74,9 @@
                 </td>
                 <td class="xar-nowrap xar-align-center">
                     <xar:if condition="$hidecore eq 1">
-                        <input type="checkbox" name="hidecore" id="hidecore" value="1" checked="checked" style="vertical-align: middle;" />
+                        <input type="checkbox" name="hidecore" id="hidecore" value="1" checked="checked" class="xar-valign-middle" />
                     <xar:else />
-                        <input type="checkbox" name="hidecore" id="hidecore" value="1" style="vertical-align: middle;" />
+                        <input type="checkbox" name="hidecore" id="hidecore" value="1" class="xar-valign-middle" />
                     </xar:if>
                     <label for="hidecore">
                         <xar:mlstring>Core Modules</xar:mlstring>
@@ -161,9 +161,7 @@
                                 </xar:if>
                             </td>
                             <td>
-                                <div style="padding-right: .5em;">
-                                    #$modinfo['statelabel']#
-                                </div>
+                                #$modinfo['statelabel']#
                             </td>
                             <td class="xar-nowrap">
                                 <xar:if condition="$selstyle eq 'pro'">
@@ -190,31 +188,29 @@
                                         </noscript>
                                     </xar:if>
                                 <xar:elseif condition="$selstyle eq 'icons'"/>
-                                        <xar:if condition="$modinfo['actionurl'] eq ''">
-                                            <img src="#$modinfo['actionimg1']#" alt="#$modinfo['actionlabel']#" />
-                                        <xar:else />
-                                            <a href="#$modinfo['actionurl']#"><img src="#$modinfo['actionimg1']#" alt="#$modinfo['actionlabel']#" /></a>
-                                        </xar:if>
-                                        <xar:if condition="$modinfo['removeurl'] eq ''">
-                                            <img src="#$modinfo['actionimg2']#" alt="#$modinfo['actionlabel']#" />
-                                        <xar:else />
-                                            <a href="#$modinfo['removeurl']#"><img src="#$modinfo['actionimg2']#" alt="#$modinfo['actionlabel2']#" /></a>
-                                        </xar:if>
+                                    <xar:if condition="$modinfo['actionurl'] eq ''">
+                                        <img src="#$modinfo['actionimg1']#" alt="#$modinfo['actionlabel']#" />
+                                    <xar:else />
+                                        <a href="#$modinfo['actionurl']#"><img src="#$modinfo['actionimg1']#" alt="#$modinfo['actionlabel']#" /></a>
+                                    </xar:if>
+                                    <xar:if condition="$modinfo['removeurl'] eq ''">
+                                        <img src="#$modinfo['actionimg2']#" alt="#$modinfo['actionlabel']#" />
+                                    <xar:else />
+                                        <a href="#$modinfo['removeurl']#"><img src="#$modinfo['actionimg2']#" alt="#$modinfo['actionlabel2']#" /></a>
+                                    </xar:if>
                                 <xar:else />
-                                    <div style="padding-left: .5em;">
-                                        <xar:if condition="$modinfo['coremod']">
-                                            <xar:if condition="$modinfo['state'] eq 5 or $modinfo['state'] eq 2">
-                                                <a href="#$modinfo['actionurl']#">#$modinfo['actionlabel']#</a>
-                                            <xar:else />
-                                                #$modinfo['actionlabel']#
-                                            </xar:if>
-                                        <xar:else />
+                                    <xar:if condition="$modinfo['coremod']">
+                                        <xar:if condition="$modinfo['state'] eq 5 or $modinfo['state'] eq 2">
                                             <a href="#$modinfo['actionurl']#">#$modinfo['actionlabel']#</a>
-                                            <xar:if condition="$modinfo['state'] eq 2">
-                                                | <a href="#$modinfo['removeurl']#">#$modinfo['removelabel']#</a>
-                                            </xar:if>
+                                        <xar:else />
+                                            #$modinfo['actionlabel']#
                                         </xar:if>
-                                    </div>
+                                    <xar:else />
+                                        <a href="#$modinfo['actionurl']#">#$modinfo['actionlabel']#</a>
+                                        <xar:if condition="$modinfo['state'] eq 2">
+                                            | <a href="#$modinfo['removeurl']#">#$modinfo['removelabel']#</a>
+                                        </xar:if>
+                                    </xar:if>
                                 </xar:if>
                             </td>
                             <td class="xar-align-center">
