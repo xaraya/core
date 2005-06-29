@@ -16,6 +16,7 @@
             <meta name="generator" content="Xaraya; - http://www.xaraya.com" />
             <meta name="rating" content="General" />
             <link rel="stylesheet" type="text/css" href="themes/Xaraya_Classic/style/installer.css" />
+            <link rel="stylesheet" type="text/css" href="modules/base/xarstyles/xarcore-xhtml1-strict.css" />
         </head>
         <body>
             <div id="wrapper">
@@ -30,8 +31,7 @@
             </div>
                 <div id="main">
                     <xar:module main="true" />
-                    <br style="clear:both" />
-                    <br style="clear:both" />
+                    <br class="xar-clearboth" />
                 </div>
             </div>
         </body>
