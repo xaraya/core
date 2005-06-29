@@ -131,7 +131,7 @@
                             <br />
                         
                             <xar:set name="hasItemTypes">false</xar:set>
-                            <div id="itemtypes_#$hookedmod['name']#" style="padding-left: 2em;">
+                            <div id="itemtypes_#$hookedmod['name']#" class="xar-padding-thickleft">
                                 <xar:foreach in="$hookedmod['itemtypes']" key="$typeid" value="$itemtype">
                                     <!-- Store the checked attribute -->
                                     <xar:set name="itemtypechecked">false</xar:set>
