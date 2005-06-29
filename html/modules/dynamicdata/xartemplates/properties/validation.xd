@@ -1,11 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <table class="xar-norm">
   <tr>
-    <td colspan="2">
-      <span class="xar-error"><xar:mlstring>Warning: the template validation-[property type].xd or validation-[template].xd is missing for this property !</xar:mlstring></span>
-    </td>
-  </tr>
-  <tr>
     <td>
       <xar:mlstring>Rule</xar:mlstring>
     </td>
@@ -19,7 +14,7 @@
            <xar:set name="value">''</xar:set>
          </xar:if>
       </xar:if>
-      <input type="text" name="#$name#" id="#$id#" value="#$value#" size="50" tabindex="#$tabindex#" />
+      <input type="text" name="#$name#" id="#$id#" value="#$value#" size="#$size#" maxlength="#$maxlength#" tabindex="#$tabindex#" />
     </td>
   </tr>
 </table>
