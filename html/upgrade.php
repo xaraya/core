@@ -1459,7 +1459,7 @@ if (empty($step)) {
         array('Dynamic_DataSource_Property.php',1,'DynamicData'),
         array('Dynamic_FieldStatus_Property.php',1,'DynamicData'),
         array('Dynamic_FieldType_Property.php',1,'DynamicData'),
-        array('Dynamic_Hidden_Property.php',1,'DynamicData'),
+        array('Dynamic_Hidden_Property.php',1,'Base'),
         array('Dynamic_ItemID_Property.php',1,'DynamicData'),
         array('Dynamic_ItemType_Property.php',1,'DynamicData'),
         array('Dynamic_Object_Property.php',1,'DynamicData'),
