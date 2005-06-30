@@ -1497,6 +1497,22 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
     function setWhere($where)
     {
+        // find all single-quoted pieces of text with and/or and replace them first, to
+        // allow where clauses like : title eq 'this and that' and body eq 'here or there'
+        $idx = 0;
+        $found = array();
+        if (preg_match_all("/'([^']*\s+(and|or)\s+[^']*)'/",$where,$matches)) {
+            foreach ($matches[1] as $match) {
+                $found[$idx] = $match;
+                $match = preg_quote($match);
+
+                $match = str_replace("#","\#",$match);
+
+                $where = trim(preg_replace("#'$match'#","'~$idx~'",$where));
+                $idx++;
+            }
+        }
+
         // cfr. BL compiler - adapt as needed (I don't think == and === are accepted in SQL)
         $findLogic      = array(' eq ', ' ne ', ' lt ', ' gt ', ' id ', ' nd ', ' le ', ' ge ');
         $replaceLogic   = array( ' = ', ' != ',  ' < ',  ' > ',  ' = ', ' != ', ' <= ', ' >= ');
@@ -1547,8 +1563,21 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                 } elseif ($this->properties[$name]->type == 21) {
                     $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
                 }
+                if (empty($idx)) {
+                    $mywhere = join(' ',$pieces);
+                } else {
+                    $mywhere = '';
+                    foreach ($pieces as $piece) {
+                        // replace the pieces again if necessary
+                        if (preg_match("#'~(\d+)~'#",$piece,$matches) && isset($found[$matches[1]])) {
+                            $original = $found[$matches[1]];
+                            $piece = preg_replace("#'~(\d+)~'#","'$original'",$piece);
+                        }
+                        $mywhere .= $piece . ' ';
+                    }
+                }
                 $this->datastores[$datastore]->addWhere($this->properties[$name],
-                                                        join(' ',$pieces),
+                                                        $mywhere,
                                                         $join,
                                                         $pre,
                                                         $post);
