@@ -78,7 +78,7 @@
                     <xar:else />
                     <input type="checkbox" name="dashboard" id="dashboard" value="1" />
                 </xar:if>
-                <label for="overview" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#">
+                <label for="dashboard" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#">
                     <xar:mlstring>
                         Enable the Admin Dashboard 
                     </xar:mlstring>
