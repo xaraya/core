@@ -144,10 +144,17 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
                       xar_size,  xar_default, xar_null,  xar_unsigned,
                       xar_increment, xar_primary_key)
                     VALUES (?,?,?,?,?,?,?,?,?,?)";
+        if (!isset($parameters['default'])) {
+            $defaultval = '';
+        } elseif (is_string($parameters['default'])) {
+            $defaultval = $parameters['default'];
+        } else {
+            $defaultval = serialize($parameters['default']);
+        }
         $bindvars = array($nextId,$tableName,$args['field'],
                           (empty($args['type']) ? '' : $args['type']),
                           (empty($args['size']) ? '' : $args['size']),
-                          (empty($args['default']) ? '' : $args['default']),
+                          $defaultval,
                           (empty($args['null']) ? '0' : '1'),
                           (empty($args['unsigned']) ? '0' : '1'),
                           (empty($args['increment']) ? '0' : '1'),
@@ -234,10 +241,17 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
                       xar_size,  xar_default, xar_null, xar_unsigned,
                       xar_increment, xar_primary_key)
                     VALUES (?,?,?,?,?,?,?,?,?,?)";
+            if (!isset($parameters['default'])) {
+                $defaultval = '';
+            } elseif (is_string($parameters['default'])) {
+                $defaultval = $parameters['default'];
+            } else {
+                $defaultval = serialize($parameters['default']);
+            }
             $bindvars = array($nextId,$tableName,$field_name,
                               (empty($parameters['type']) ? '' : $parameters['type']),
                               (empty($parameters['size']) ? '' : $parameters['size']),
-                              (empty($parameters['default']) ? '' : $parameters['default']),
+                              $defaultval,
                               (empty($parameters['null']) ? '0' : '1'),
                               (empty($parameters['unsigned']) ? '0' : '1'),
                               (empty($parameters['increment']) ? '0' : '1'),
