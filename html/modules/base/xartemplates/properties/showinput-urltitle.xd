@@ -1,23 +1,22 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:set name="check"><xar:mlstring>check</xar:mlstring></xar:set>
-<xar:set name="preview"><xar:mlstring>preview</xar:mlstring></xar:set>
-
-<label for="#$id#" class="xar-form-label">
-    <xar:mlstring>
-        Title
-    </xar:mlstring>:
-</label>
-<input type="text" name="#$name#[title]" value="#$title#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" />
-
-<label for="#$name#[link]" class="xar-form-label">
-    <xar:mlstring>
-        URL
-    </xar:mlstring>:
-</label>
-<input type="text" name="#$name#[link]" value="#$link#" size="#$size#" maxlength="#$maxlength#"  />
-<xar:if condition="!empty($link) and ($link ne 'http://')">
-    [ <a href="#$link#" target="#$preview#">#$check#</a> ]
-</xar:if>
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<xar:set name="check">
+    <xar:mlstring>check</xar:mlstring>
+</xar:set>
+<xar:set name="preview">
+    <xar:mlstring>preview</xar:mlstring>
+</xar:set>
+<div class="xar-form-input-wrapper">
+    <label for="#$id#" class="xar-form-label">
+    <xar:mlstring>Title</xar:mlstring>:</label>
+    <input class="xar-form-textlong" type="text" name="#$name#[title]" value="#$title#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" />
+</div>
+<div class="xar-form-input-wrapper">
+    <label for="#$name#[link]" class="xar-form-label">
+    <xar:mlstring>URL</xar:mlstring>:</label>
+    <input class="xar-form-textlong" type="text" name="#$name#[link]" value="#$link#" size="#$size#" maxlength="#$maxlength#" />
+    <xar:if condition="!empty($link) and ($link ne 'http://')">[ 
+    <a href="#$link#" target="#$preview#">#$check#</a>]</xar:if>
+    <xar:if condition="!empty($invalid)">
+        <span class="xar-error">#$invalid#</span>
+    </xar:if>
+</div>
