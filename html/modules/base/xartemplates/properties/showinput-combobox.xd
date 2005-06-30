@@ -26,9 +26,9 @@
 </xar:if>
 
 <xar:if condition="$optionSelected eq false">
-    <input type="text" name="#$name#_tb" id="#$id#_tb" value="#$value#" />
+    <input class="xar-form-textlong" type="text" name="#$name#_tb" id="#$id#_tb" value="#$value#" />
 <xar:else />
-    <input type="text" name="#$name#_tb" id="#$id#_tb" />
+    <input class="xar-form-textlong" type="text" name="#$name#_tb" id="#$id#_tb" />
 </xar:if>
 
 <xar:if condition="!empty($invalid)">

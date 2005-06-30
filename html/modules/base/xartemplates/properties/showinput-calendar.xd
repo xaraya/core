@@ -2,12 +2,10 @@
 <xar:set name="alttext"><xar:mlstring>Click Here to Pick up the date</xar:mlstring></xar:set>
 
 <xar:if condition="empty($tabindex)">
-    <input type="text" name="#$name#" id="#$id#_input" value="#xarLocaleFormatDate($dateformat,$value)#" size="20" maxlength="19" />
+    <input class="xar-form-textlong" type="text" name="#$name#" id="#$id#_input" value="#xarLocaleFormatDate($dateformat,$value)#" size="20" maxlength="19" />
 <xar:else />
-    <input type="text" name="#$name#" id="#$id#_input" value="#xarLocaleFormatDate($dateformat,$value)#" size="20" maxlength="19" tabindex="#$tabindex#" />
+    <input class="xar-form-textlong" type="text" name="#$name#" id="#$id#_input" value="#xarLocaleFormatDate($dateformat,$value)#" size="20" maxlength="19" tabindex="#$tabindex#" />
 </xar:if>
-
-
 
 <a href="javascript:#$jsID#_cal.popup()"><img src="modules/base/xarimages/calendar.gif" width="16" height="16" border="0" alt="#$alttext#" /></a>
 
