@@ -3,7 +3,7 @@
 <xar:set name="check"><xar:mlstring>check</xar:mlstring></xar:set>
 <xar:set name="preview"><xar:mlstring>preview</xar:mlstring></xar:set>
 
-<input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" />
+<input class="xar-form-textlong" type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" />
 
 <xar:if condition="!empty($value) and ($value ne 'http://')">
     [ <a href="#$value#" target="#$preview#">#$check#</a> ]
