@@ -257,3 +257,34 @@ Misc changes:
 
         copy all icons from cute_icons_for_site/* to xaradodb
         Reason: legacy change
+
+
+datadict/datadict-mssql.inc.php lines 127-137:
+
+        // XARAYA MODIFICATION - START
+		// We need support for DEFAULT ''
+		//if (strlen($fdefault)) $suffix .= " DEFAULT $fdefault";
+		if (strlen($fdefault)) {
+			$suffix .= " DEFAULT $fdefault";
+		} elseif (isset($fdefault) && $fdefault === '') {
+			$suffix .= " DEFAULT ''";
+		}
+		// We use GenID() instead
+		//if ($fautoinc) $suffix .= ' IDENTITY(1,1)';
+        // XARAYA MODIFICATION - END
+
+Reason:
+	- IDENTITY and GenID() don't work well together
+	- DEFAULT '' was not supported here, perhaps due to ADODB's weird
+	  datadict syntax : DEFAULT some value without quotes
+
+Upstream:
+	(?)
+
+
+drivers/adodb-xarmssql.inc.php (new) :
+
+	Increase .ini settings for mssql.textsize and mssql.textlimit
+	GenID() and _insertid() replacement for adodb-mssql.inc.php
+
+

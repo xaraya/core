@@ -123,8 +123,19 @@ class ADODB2_mssql extends ADODB_DataDict {
 	function _CreateSuffix($fname,$ftype,$fnotnull,$fdefault,$fautoinc,$fconstraint)
 	{	
 		$suffix = '';
-		if (strlen($fdefault)) $suffix .= " DEFAULT $fdefault";
-		if ($fautoinc) $suffix .= ' IDENTITY(1,1)';
+
+        // XARAYA MODIFICATION - START
+		// We need support for DEFAULT ''
+		//if (strlen($fdefault)) $suffix .= " DEFAULT $fdefault";
+		if (strlen($fdefault)) {
+			$suffix .= " DEFAULT $fdefault";
+		} elseif (isset($fdefault) && $fdefault === '') {
+			$suffix .= " DEFAULT ''";
+		}
+		// We use GenID() instead
+		//if ($fautoinc) $suffix .= ' IDENTITY(1,1)';
+        // XARAYA MODIFICATION - END
+
 		if ($fnotnull) $suffix .= ' NOT NULL';
 		else if ($suffix == '') $suffix .= ' NULL';
 		if ($fconstraint) $suffix .= ' '.$fconstraint;
