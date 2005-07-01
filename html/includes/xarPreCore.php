@@ -20,7 +20,7 @@
 function xarPreCoreInit()
 {
     // Core initialized register the shutdown function
-    register_shutdown_function('xarPreCore__shutdown_handler');
+    //register_shutdown_function('xarPreCore__shutdown_handler');
     return true;
 }
 

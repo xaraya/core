@@ -34,7 +34,8 @@ class SystemException extends xarException
         } else {
             $this->module = '';
         }
-        if (!isset($core)) include("includes/exceptions/xarayacomponents.php");
+        // load relative to the current file (e.g. for shutdown functions)
+        if (!isset($core)) include(dirname(__FILE__) . "/xarayacomponents.php");
         foreach ($core as $corecomponent) {
             if ($corecomponent['name'] == $this->module) {
                 $this->component = $corecomponent['fullname'];

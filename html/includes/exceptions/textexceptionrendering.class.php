@@ -10,7 +10,9 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-include_once "includes/exceptions/exceptionrendering.class.php";
+if (!class_exists('ExceptionRendering')) {
+    include_once(dirname(__FILE__) . "/exceptionrendering.class.php");
+}
 
 class TextExceptionRendering extends ExceptionRendering
 {

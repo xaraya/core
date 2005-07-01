@@ -391,11 +391,15 @@ function xarException__formatStack($format,$stacktype = "ERROR")
         if (empty($error->major)) continue;
 
         if ($format == 'template' || $format == 'rawhtml') {
-            include_once "includes/exceptions/htmlexceptionrendering.class.php";
+            if (!class_exists('HTMLExceptionRendering')) {
+                include_once(dirname(__FILE__) . "/exceptions/htmlexceptionrendering.class.php");
+            }
             $msg = new HTMLExceptionRendering($error);
         }
         else {
-            include_once "includes/exceptions/textexceptionrendering.class.php";
+            if (!class_exists('TextExceptionRendering')) {
+                include_once(dirname(__FILE__) . "/exceptions/textexceptionrendering.class.php");
+            }
             $msg = new TextExceptionRendering($error);
         }
         $formattedmsgs[] = $msg;
@@ -550,7 +554,8 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
         $product = '';
         $component = '';
         if ($module != '') {
-            include("includes/exceptions/xarayacomponents.php");
+            // load relative to the current file (e.g. for shutdown functions)
+            include(dirname(__FILE__) . "/exceptions/xarayacomponents.php");
             foreach ($core as $corecomponent) {
                 if ($corecomponent['name'] == $module) {
                     $component = $corecomponent['fullname'];
@@ -566,6 +571,17 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
                     }
                 }
             }
+        }
+        // Fall-back in case it's too late to redirect
+        if (headers_sent() == true) {
+            $rawmsg = "Normal Xaraya error processing has stopped because of an error encountered. <br /><br />";
+            $rawmsg .= "The last registered error message is: <br /><br />";
+            $rawmsg .= "Product: " . $product . "<br />";
+            $rawmsg .= "Component: " . $component . "<br />";
+            $rawmsg .= "PHP Error code: " . $errorType . "<br /><br />";
+            $rawmsg .= $msg;
+            echo $rawmsg;
+            return;
         }
         // CHECKME: <mrb> This introduces a dependency to 2 subsystems
         xarResponseRedirect(xarModURL('base','user','systemexit',

@@ -35,7 +35,7 @@ class ExceptionRendering
         $this->major = $exception->getMajor();
         switch ($this->major) {
             case XAR_SYSTEM_EXCEPTION:
-                include "includes/exceptions/systemexception.defaults.php";
+                include(dirname(__FILE__) . "/systemexception.defaults.php");
                 if (!array_key_exists($this->id, $this->defaults)) {
                     $this->id = "EXCEPTION_FAILURE";
                 }
@@ -43,7 +43,7 @@ class ExceptionRendering
                 $this->type = 'System Error';
                 break;
             case XAR_USER_EXCEPTION:
-                include "includes/exceptions/defaultuserexception.defaults.php";
+                include(dirname(__FILE__) . "/defaultuserexception.defaults.php");
                 if (array_key_exists($this->id, $this->defaults)) {
                     $this->load();
                 }
@@ -56,7 +56,7 @@ class ExceptionRendering
                 $this->type = 'User Error';
                 break;
             case XAR_SYSTEM_MESSAGE:
-                include "includes/exceptions/systemmessage.defaults.php";
+                include(dirname(__FILE__) . "/systemmessage.defaults.php");
                 if (array_key_exists($this->id, $this->defaults)) {
                     $this->load();
                 }
@@ -69,7 +69,7 @@ class ExceptionRendering
                 $this->type = 'System Message';
                 break;
             default:
-                include "includes/exceptions/systemexception.defaults.php";
+                include(dirname(__FILE__) . "/systemexception.defaults.php");
                 break;
         }
         $this->defaults = '';
