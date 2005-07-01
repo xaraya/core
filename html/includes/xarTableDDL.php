@@ -33,20 +33,6 @@
  *
  */
 
-/*
-$sql = xarDBAlterTable($xartable['nascar_tracks'],
-    array(
-        'command'           => 'add',
-        'field'             => 'xar_track_name',
-        'type'              => 'integer',
-        'unsigned'          => false,
-        'null'              => false,
-        'increment'         => true,
-        'primary_key'       => true,
-    )
-);
-*/
-
 /**
  * Generate the SQL to create a database
  *
@@ -82,6 +68,10 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
          case 'sqlite':
             // No such thing, its created automatically when it doesnt exist
             $sql ='';
+            break;
+        case 'datadict':
+            include_once('includes/tableddl/datadict.php');
+            $sql = xarDB__datadictCreateDatabase($databaseName);
             break;
         // Other DBs go here
         default:
@@ -174,6 +164,10 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
         case 'sqlite':
             include_once('includes/tableddl/sqlite.php');
             $sql = xarDB__sqliteCreateTable($tableName, $fields);
+            break;
+        case 'datadict':
+            include_once('includes/tableddl/datadict.php');
+            $sql = xarDB__datadictCreateTable($tableName, $fields);
             break;
         // Other DBs go here
         default:
@@ -285,6 +279,10 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
             include_once('includes/tableddl/sqlite.php');
             $sql = xarDB__sqliteAlterTable($tableName, $args);
             break;
+        case 'datadict':
+            include_once('includes/tableddl/datadict.php');
+            $sql = xarDB__datadictAlterTable($tableName, $args);
+            break;
         // Other DBs go here
         default:
             $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
@@ -333,6 +331,10 @@ function xarDBDropTable($tableName, $databaseType = NULL)
         case 'oci8po':
         case 'sqlite':
             $sql = 'DROP TABLE '.$tableName;
+            break;
+        case 'datadict':
+            include_once('includes/tableddl/datadict.php');
+            $sql = xarDB__datadictDropTable($tableName);
             break;
         // Other DBs go here
         default:
@@ -401,6 +403,11 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
             $sql .= ' ('.join(',', $index['fields']).')';
             break;
 
+        case 'datadict':
+            include_once('includes/tableddl/datadict.php');
+            $sql = xarDB__datadictCreateIndex($tableName, $index);
+            break;
+
         // Other DBs go here
         default:
             $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
@@ -450,6 +457,10 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
         case 'oci8po':
         case 'sqlite':
             $sql = 'DROP INDEX '.$index['name'];
+            break;
+        case 'datadict':
+            include_once('includes/tableddl/datadict.php');
+            $sql = xarDB__datadictDropIndex($tableName, $index);
             break;
         // Other DBs go here
         default:
