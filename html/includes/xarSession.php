@@ -493,7 +493,7 @@ function xarSession__phpWrite($sessionId, $vars)
     $sessioninfoTable = $xartable['session_info'];
 
     $dbtype = xarDBGetType();
-    if (substr($dbtype,0,4) == 'oci8') {
+    if (substr($dbtype,0,4) == 'oci8' || substr($dbtype,0,5) == 'mssql') {
         $query = "UPDATE $sessioninfoTable SET xar_lastused = ? WHERE xar_sessid = ?";
         $result =& $dbconn->Execute($query,array(time(), $sessionId));
         if (!$result) return;

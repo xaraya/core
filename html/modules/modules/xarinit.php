@@ -227,12 +227,12 @@ function modules_init()
      */
     // default show-hide core modules
     $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value) 
-    VALUES (?,1,'hidecore',0)";
+    VALUES (?,1,'hidecore','0')";
     $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
     if (!$result) return; 
     // default regenerate command
     $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value) 
-    VALUES (?,1,'regen',0)";
+    VALUES (?,1,'regen','0')";
     $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
     if (!$result) return; 
     // default style of module list
@@ -242,7 +242,7 @@ function modules_init()
     if (!$result) return; 
     // default filtering based on module states
     $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value) 
-    VALUES (?,1,'selfilter', 0)";
+    VALUES (?,1,'selfilter', '0')";
     $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
     if (!$result) return; 
     // default modules list sorting order
@@ -252,7 +252,7 @@ function modules_init()
     if (!$result) return; 
     // default show-hide modules statistics
     $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value) 
-    VALUES (?,1,'hidestats',0)";
+    VALUES (?,1,'hidestats','0')";
     $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
     if (!$result) return; 
     // default maximum number of modules listed per page
@@ -267,7 +267,7 @@ function modules_init()
     if (!$result) return; 
     // expertlist
     $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value) 
-    VALUES (?,1,'expertlist',0)";
+    VALUES (?,1,'expertlist','0')";
     $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
     if (!$result) return; 
     // Initialisation successful

@@ -424,6 +424,9 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             $dbtype = xarDBGetType();
             if (substr($dbtype,0,4) == 'oci8') {
                 $propval = 'TO_CHAR(xar_dd_value)';
+            } elseif (substr($dbtype,0,5) == 'mssql') {
+            // CHECKME: limited to 8000 characters ?
+                $propval = 'CAST(xar_dd_value AS VARCHAR(8000))';
             } else {
                 $propval = 'xar_dd_value';
             }

@@ -69,6 +69,7 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
             // No such thing, its created automatically when it doesnt exist
             $sql ='';
             break;
+        case 'mssql':
         case 'datadict':
             include_once('includes/tableddl/datadict.php');
             $sql = xarDB__datadictCreateDatabase($databaseName);
@@ -165,6 +166,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
             include_once('includes/tableddl/sqlite.php');
             $sql = xarDB__sqliteCreateTable($tableName, $fields);
             break;
+        case 'mssql':
         case 'datadict':
             include_once('includes/tableddl/datadict.php');
             $sql = xarDB__datadictCreateTable($tableName, $fields);
@@ -279,6 +281,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
             include_once('includes/tableddl/sqlite.php');
             $sql = xarDB__sqliteAlterTable($tableName, $args);
             break;
+        case 'mssql':
         case 'datadict':
             include_once('includes/tableddl/datadict.php');
             $sql = xarDB__datadictAlterTable($tableName, $args);
@@ -332,6 +335,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
         case 'sqlite':
             $sql = 'DROP TABLE '.$tableName;
             break;
+        case 'mssql':
         case 'datadict':
             include_once('includes/tableddl/datadict.php');
             $sql = xarDB__datadictDropTable($tableName);
@@ -403,6 +407,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
             $sql .= ' ('.join(',', $index['fields']).')';
             break;
 
+        case 'mssql':
         case 'datadict':
             include_once('includes/tableddl/datadict.php');
             $sql = xarDB__datadictCreateIndex($tableName, $index);
@@ -458,6 +463,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
         case 'sqlite':
             $sql = 'DROP INDEX '.$index['name'];
             break;
+        case 'mssql':
         case 'datadict':
             include_once('includes/tableddl/datadict.php');
             $sql = xarDB__datadictDropIndex($tableName, $index);

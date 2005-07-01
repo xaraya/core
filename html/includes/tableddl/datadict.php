@@ -52,7 +52,12 @@ function xarDB__datadictCreateTable($tableName, $fields)
     $datadict =& xarDB__datadictInit();
     $sql = $datadict->dict->CreateTableSQL($tableName, join(', ',$sql_fields));
 
-    return $sql;
+    if (isset($sql) && is_array($sql)) {
+    // CHECKME: will this work for multiple statements ?
+        return join('; ',$sql);
+    } else {
+        return $sql;
+    }
 }
 
 /**
@@ -148,7 +153,12 @@ function xarDB__datadictAlterTable($tableName, $args)
             return;
     }
 
-    return $sql;
+    if (isset($sql) && is_array($sql)) {
+    // CHECKME: will this work for multiple statements ?
+        return join('; ',$sql);
+    } else {
+        return $sql;
+    }
 }
 
 /**
@@ -397,7 +407,12 @@ function xarDB__datadictCreateDatabase($databaseName)
     $datadict =& xarDB__datadictInit();
     $sql = $datadict->dict->CreateDatabase($databaseName);
 
-    return $sql;
+    if (isset($sql) && is_array($sql)) {
+    // CHECKME: will this work for multiple statements ?
+        return join('; ',$sql);
+    } else {
+        return $sql;
+    }
 }
 
 /**
@@ -413,7 +428,12 @@ function xarDB__datadictDropTable($tableName)
     $datadict =& xarDB__datadictInit();
     $sql = $datadict->dict->DropTableSQL($tableName);
 
-    return $sql;
+    if (isset($sql) && is_array($sql)) {
+    // CHECKME: will this work for multiple statements ?
+        return join('; ',$sql);
+    } else {
+        return $sql;
+    }
 }
 
 /**
@@ -429,7 +449,12 @@ function xarDB__datadictCreateIndex($tableName, $index)
     $datadict =& xarDB__datadictInit();
     $sql = $datadict->dict->CreateIndexSQL($index['name'], $tableName, $index['fields']);
 
-    return $sql;
+    if (isset($sql) && is_array($sql)) {
+    // CHECKME: will this work for multiple statements ?
+        return join('; ',$sql);
+    } else {
+        return $sql;
+    }
 }
 
 /**
@@ -447,7 +472,12 @@ function xarDB__datadictDropIndex($tableName, $index)
     $datadict =& xarDB__datadictInit();
     $sql = $datadict->dict->DropIndexSQL($index['name'], $tableName);
 
-    return $sql;
+    if (isset($sql) && is_array($sql)) {
+    // CHECKME: will this work for multiple statements ?
+        return join('; ',$sql);
+    } else {
+        return $sql;
+    }
 }
 
 /**

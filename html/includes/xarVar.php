@@ -770,10 +770,10 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
                 $query = "INSERT INTO $module_varstable
                              (xar_id, xar_modid, xar_name, xar_value)
                           VALUES (?,?,?,?)";
-                $bindvars = array($seqId, $modBaseInfo['systemid'],$name,$value);
+                $bindvars = array($seqId, $modBaseInfo['systemid'],$name,(string)$value);
             } else {
                 $query = "UPDATE $module_varstable SET xar_value = ? WHERE xar_id = ?";
-                $bindvars = array($value,$modvarid);
+                $bindvars = array((string)$value,$modvarid);
             }
 
             break;
@@ -802,7 +802,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
                 $query = "INSERT INTO $module_uservarstable
                             (xar_mvid, xar_uid, xar_value)
                         VALUES (?,?,?)";
-                $bindvars = array($modvarid, $uid, $value);
+                $bindvars = array($modvarid, $uid, (string)$value);
             }
             break;
         case 'themevar':
@@ -822,7 +822,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
                           xar_name, xar_prime,
                           xar_value, xar_description)
                       VALUES (?,?,?,?,?,?)";
-            $bindvars = array($seqId, $modName, $name, $prime, $value, $description);
+            $bindvars = array($seqId, $modName, $name, $prime, (string)$value, $description);
 
             break;
         case 'configvar':
