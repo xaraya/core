@@ -218,7 +218,7 @@ function installer_admin_phase4()
     // Supported  Databases:
     $data['database_types']      = array('mysql'    => array('name' => 'MySQL'   , 'available' => extension_loaded('mysql')),
                                          // use portable version of OCI8 driver to support ? bind variables
-                                         'oci8po'   => array('name' => 'Oracle (not supported)'  , 'available' => extension_loaded('oci8')),
+                                         'oci8po'   => array('name' => 'Oracle 9+ (not supported)'  , 'available' => extension_loaded('oci8')),
                                          'postgres' => array('name' => 'Postgres', 'available' => extension_loaded('pgsql')),
                                          'sqlite'   => array('name' => 'SQLite'  , 'available' => extension_loaded('sqlite')));
 
