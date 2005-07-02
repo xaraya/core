@@ -94,7 +94,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                 if( !isset($baseInfo['dependancies']) )   $baseInfo['dependancies'] = '';
                 if( !isset($baseInfo['requiresmodule']) ) $baseInfo['requiresmodule'] = '';
                 if( !isset($baseInfo['aliases']) )        $baseInfo['aliases'] = '';
-                if( !isset($baseInfo['args']) )           $baseInfo['args'] = '';
+                if( empty($baseInfo['args']) )            $baseInfo['args'] = serialize(array());
        
                 // If the property needs specific files to exist, check for them
                 // Example: HTML Area property needs to check to see if HTMLArea javascript files are present
