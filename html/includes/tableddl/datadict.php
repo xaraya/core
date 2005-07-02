@@ -295,13 +295,13 @@ function xarDB__datadictColumnDefinition($field_name, $parameters)
                     $data_type = 'F';
                     break;
                 case 'decimal':
-                    $data_type = 'F';
+                    $data_type = 'N';
                     break;
                 default:
                     $data_type = 'F';
             }
             if (isset($parameters['width']) && isset($parameters['decimals'])) {
-               $data_type .= '('.$parameters['width'].'.'.$parameters['decimals'].')';
+               $data_type = 'N('.$parameters['width'].'.'.$parameters['decimals'].')';
             }
             $this_field['type'] = $data_type;
             break;
