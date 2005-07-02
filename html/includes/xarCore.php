@@ -100,6 +100,10 @@ define('XAR_INCLUDE_MAY_NOT_EXIST', 2);
  */
 define('XARCORE_CONFIG_FILE', 'config.system.php');
 
+/**
+ * Load the Xaraya pre core early (in case we're not coming in via index.php)
+ */
+include_once('includes/xarPreCore.php');
 
 /**
  * Initializes the core engine
@@ -418,7 +422,6 @@ function xarCore__shutdown_handler()
  */
 function xarCoreGetVarDirPath()
 {
-    include_once("includes/xarPreCore.php");
     return xarPreCoreGetVarDirPath();
 }
 
