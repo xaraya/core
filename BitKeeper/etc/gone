@@ -4255,6 +4255,8 @@ John.Cox@mcnabb.|html/modules/base/xartemplates/blocks/startMenuStyle.xd|2002120
 John.Cox@mcnabb.|html/modules/blocks/xartemplates/admin-registerblock.xd|20030510141521|14988|f67c3d06
 John.Cox@mcnabb.|html/modules/blocks/xartemplates/functions.js|20030831031456|18478|a7836cda
 John.Cox@mcnabb.|html/modules/categories/pnimages/AllTopics.gif|20021129225238|31908|ca3662d3
+John.Cox@mcnabb.|html/modules/dynamicdata/xartemplates/util-query.xd|20041025003005|20696|abcecdf0
+John.Cox@mcnabb.|html/modules/dynamicdata/xarutil/query.php|20041025003005|35316|abdccb16
 John.Cox@mcnabb.|html/modules/example/pntemplates/pnblocks/example-firstblock-modify.pnd|20021128155329|45898|d3b9203a
 John.Cox@mcnabb.|html/modules/example/xarimages/preferences.gif|20030226014045|36690|8e0636e3
 John.Cox@mcnabb.|html/modules/example/xartemplates/blocks/firstAdmin.xd|20030111144640|12881|fab00a03
