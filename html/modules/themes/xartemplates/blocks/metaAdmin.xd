@@ -1,111 +1,135 @@
-    <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <div class="xar-form-input-wrapper">
-    <label for="metadescription#$blockid#" title="#xarML('Add the meta description.')#" class="xar-form-label">
-        <xar:mlstring>Meta Description:</xar:mlstring>
-    </label>
-    <textarea name="metadescription" id="metadescription#$blockid#" class="xar-form-textarealarge">#$metadescription#</textarea>
+    <label for="metadescription#$blockid#" title="#xarML('Add the meta description.')#" class="xar-form-label"> 
+        <xar:mlstring>
+            Meta Description: 
+        </xar:mlstring>
+    </label> 
+    <div class="xar-form-container-after">
+        <textarea name="metadescription" id="metadescription#$blockid#" class="xar-form-textarealarge">
+            #$metadescription# 
+        </textarea>
+    </div>
 </div>
-
 <div class="xar-form-input-wrapper">
-    <label for="metakeywords#$blockid#" title="#xarML('Add the meta keywords.')#" class="xar-form-label">
-        <xar:mlstring>Meta Keywords:</xar:mlstring>
-    </label>
-    <textarea name="metakeywords" id="metakeywords#$blockid#" class="xar-form-textarealarge">#$metakeywords#</textarea>
+    <label for="metakeywords#$blockid#" title="#xarML('Add the meta keywords.')#" class="xar-form-label"> 
+        <xar:mlstring>
+            Meta Keywords: 
+        </xar:mlstring>
+    </label> 
+    <div class="xar-form-container-after">
+        <textarea name="metakeywords" id="metakeywords#$blockid#" class="xar-form-textarealarge">
+            #$metakeywords# 
+        </textarea>
+    </div>
 </div>
-
 <div class="xar-form-input-wrapper-after">
     <xar:if condition="!empty($usegeo)">
-        <input type="checkbox" name="usegeo" id="usegeo#$blockid#" value="1" checked="checked" tabindex="1" />
-    <xar:else />
-        <input type="checkbox" name="usegeo" id="usegeo#$blockid#" value="1" tabindex="1" />
+        <input type="checkbox" name="usegeo" id="usegeo#$blockid#" value="1" checked="checked" tabindex="1" /> 
+        <xar:else />
+        <input type="checkbox" name="usegeo" id="usegeo#$blockid#" value="1" tabindex="1" /> 
     </xar:if>
-
-    <label for="usegeo#$blockid#" title="#xarML('GeoUrl allows you to locate websites that are geographically close to yours.')#">
-        <xar:mlstring>Use GeoURL</xar:mlstring> 
-    </label>
-    (<a href="http://geourl.org/" target="_BLANK"><xar:mlstring>About GeoURL</xar:mlstring></a>)
-     
+    <label for="usegeo#$blockid#" title="#xarML('GeoUrl allows you to locate websites that are geographically close to yours.')#"> 
+        <xar:mlstring>
+            Use GeoURL 
+        </xar:mlstring>
+    </label>( <a href="http://geourl.org/" target="_BLANK"> 
+        <xar:mlstring>
+            About GeoURL 
+        </xar:mlstring>
+    </a>) 
 </div>
-
 <xar:if condition="!empty($usegeo)">
     <div class="xar-form-input-wrapper">
-        <label for="longitude#$blockid#" title="#xarML('Enter your longitude.')#" class="xar-form-label">
-            <xar:mlstring>Your Longitude:</xar:mlstring>
-        </label>
-        <input type="text" name="longitude" id="longitude#$blockid#" value="#$longitude#" maxlength="100" class="xar-form-textmedium" />
+        <label for="longitude#$blockid#" title="#xarML('Enter your longitude.')#" class="xar-form-label"> 
+            <xar:mlstring>
+                Your Longitude: 
+            </xar:mlstring>
+        </label> <input type="text" name="longitude" id="longitude#$blockid#" value="#$longitude#" maxlength="100" class="xar-form-textmedium" /> 
     </div>
-
     <div class="xar-form-input-wrapper">
-        <label for="latitude#$blockid#" title="#xarML('Enter your latitude')#" class="xar-form-label">
-            <xar:mlstring>Your Latitude:</xar:mlstring>
-        </label>
-        <input type="text" name="latitude" id="latitude#$blockid#" value="#$latitude#" maxlength="100" class="xar-form-textmedium" />
+        <label for="latitude#$blockid#" title="#xarML('Enter your latitude')#" class="xar-form-label"> 
+            <xar:mlstring>
+                Your Latitude: 
+            </xar:mlstring>
+        </label> <input type="text" name="latitude" id="latitude#$blockid#" value="#$latitude#" maxlength="100" class="xar-form-textmedium" /> 
     </div>
 </xar:if>
-
 <div class="xar-form-input-wrapper">
-    <span title="#xarML('Xaraya can dynamically generate your meta keywords based on the words used in your Articles or in your Keywords.')#" class="xar-form-label">
-        <xar:mlstring>Use Dynamic Keywords From:</xar:mlstring>
-    </span>
-    <div class="xar-floatleft">
-        <xar:if condition="$usedk eq 0">
-            <input type="radio" name="usedk" id="usedk#$blockid#_none" value="0" checked="checked" />
-        <xar:else />
-            <input type="radio" name="usedk" id="usedk#$blockid#_none" value="0" />
-        </xar:if>
-        <label for="usedk#$blockid#_none">
-            <xar:mlstring>None</xar:mlstring>
-        </label>
-        <br />
-
-        <xar:if condition="$usedk eq 1">
-            <input type="radio" name="usedk" id="usedk#$blockid#_articles" value="1" checked="checked" />
-        <xar:else />
-            <input type="radio" name="usedk" id="usedk#$blockid#_articles" value="1" />
-        </xar:if>
-        <label for="usedk#$blockid#_articles">
-            <xar:mlstring>Articles module</xar:mlstring>
-        </label>
-        <br />
-
-        <xar:if condition="$usedk eq 2">
-            <input type="radio" name="usedk" id="usedk#$blockid#_keywords" value="2" checked="checked" />
-        <xar:else />
-            <input type="radio" name="usedk" id="usedk#$blockid#_keywords" value="2" />
-        </xar:if>
-        <label for="usedk#$blockid#_keywords">
-            <xar:mlstring>Keywords module</xar:mlstring>
-        </label>
-        <br />
-
-        <xar:if condition="$usedk eq 3">
-            <input type="radio" name="usedk" id="usedk#$blockid#_both" value="3" checked="checked" />
-        <xar:else />
-            <input type="radio" name="usedk" id="usedk#$blockid#_both" value="3" />
-        </xar:if>
-        <label for="usedk#$blockid#_both">
-            <xar:mlstring>Both</xar:mlstring>
-        </label>
+    <label title="#xarML('Xaraya can dynamically generate your meta keywords based on the words used in your Articles or in your Keywords.')#" class="xar-form-label"> 
+        <xar:mlstring>
+            Use Dynamic Keywords From: 
+        </xar:mlstring>
+    </label> 
+    <div class="xar-form-container-after">
+        <div class="xar-displayblock">
+            <xar:if condition="$usedk eq 0">
+                <input type="radio" name="usedk" id="usedk#$blockid#_none" value="0" checked="checked" /> 
+                <xar:else />
+                <input type="radio" name="usedk" id="usedk#$blockid#_none" value="0" /> 
+            </xar:if>
+            <label for="usedk#$blockid#_none"> 
+                <xar:mlstring>
+                    None 
+                </xar:mlstring>
+            </label> 
+        </div>
+        <div class="xar-displayblock">
+            <xar:if condition="$usedk eq 1">
+                <input type="radio" name="usedk" id="usedk#$blockid#_articles" value="1" checked="checked" /> 
+                <xar:else />
+                <input type="radio" name="usedk" id="usedk#$blockid#_articles" value="1" /> 
+            </xar:if>
+            <label for="usedk#$blockid#_articles"> 
+                <xar:mlstring>
+                    Articles module 
+                </xar:mlstring>
+            </label> 
+        </div>
+        <div class="xar-displayblock">
+            <xar:if condition="$usedk eq 2">
+                <input type="radio" name="usedk" id="usedk#$blockid#_keywords" value="2" checked="checked" /> 
+                <xar:else />
+                <input type="radio" name="usedk" id="usedk#$blockid#_keywords" value="2" /> 
+            </xar:if>
+            <label for="usedk#$blockid#_keywords"> 
+                <xar:mlstring>
+                    Keywords module 
+                </xar:mlstring>
+            </label> 
+        </div>
+        <div class="xar-displayblock">
+            <xar:if condition="$usedk eq 3">
+                <input type="radio" name="usedk" id="usedk#$blockid#_both" value="3" checked="checked" /> 
+                <xar:else />
+                <input type="radio" name="usedk" id="usedk#$blockid#_both" value="3" /> 
+            </xar:if>
+            <label for="usedk#$blockid#_both"> 
+                <xar:mlstring>
+                    Both 
+                </xar:mlstring>
+            </label> 
+        </div>
     </div>
 </div>
-
 <div class="xar-form-input-wrapper">
-    <label for="copyrightpage#$blockid#" title="#xarML('Xaraya can generate the proper links for your copyright page as used by Mozilla and other popular browsers.')#" class="xar-form-label">
-        <xar:mlstring>Copyright Page:</xar:mlstring>
-    </label>
-    <input type="text" name="copyrightpage" id="copyrightpage#$blockid#" value="#$copyrightpage#" maxlength="100" class="xar-form-textlong" />
+    <label for="copyrightpage#$blockid#" title="#xarML('Xaraya can generate the proper links for your copyright page as used by Mozilla and other popular browsers.')#" class="xar-form-label"> 
+        <xar:mlstring>
+            Copyright Page: 
+        </xar:mlstring>
+    </label> <input type="text" name="copyrightpage" id="copyrightpage#$blockid#" value="#$copyrightpage#" maxlength="100" class="xar-form-textlong" /> 
 </div>
-
 <div class="xar-form-input-wrapper">
-    <label for="helppage#$blockid#" title="#xarML('Xaraya can generate the proper links for your help page as used by Mozilla and other popular browsers.')#" class="xar-form-label">
-        <xar:mlstring>Help Page:</xar:mlstring>
-    </label>
-    <input type="text" name="helppage" id="helppage#$blockid#" value="#$helppage#" maxlength="100" class="xar-form-textlong" />
+    <label for="helppage#$blockid#" title="#xarML('Xaraya can generate the proper links for your help page as used by Mozilla and other popular browsers.')#" class="xar-form-label"> 
+        <xar:mlstring>
+            Help Page: 
+        </xar:mlstring>
+    </label> <input type="text" name="helppage" id="helppage#$blockid#" value="#$helppage#" maxlength="100" class="xar-form-textlong" /> 
 </div>
-
 <div class="xar-form-input-wrapper">
-    <label for="glossary#$blockid#" title="#xarML('Xaraya can generate the proper links for your glossary page as used by Mozilla and other popular browsers.')#" class="xar-form-label">
-        <xar:mlstring>Glossary:</xar:mlstring>
-    </label>
-    <input type="text" name="glossary" id="glossary#$blockid#" value="#$glossary#" maxlength="100" class="xar-form-textlong" />
+    <label for="glossary#$blockid#" title="#xarML('Xaraya can generate the proper links for your glossary page as used by Mozilla and other popular browsers.')#" class="xar-form-label"> 
+        <xar:mlstring>
+            Glossary: 
+        </xar:mlstring>
+    </label> <input type="text" name="glossary" id="glossary#$blockid#" value="#$glossary#" maxlength="100" class="xar-form-textlong" /> 
 </div>
