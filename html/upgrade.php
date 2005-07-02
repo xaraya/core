@@ -793,7 +793,7 @@ if (empty($step)) {
                              'set'     =>  'default'),
                        array('name'    =>  'SiteFooter',
                              'module'  =>  'themes',
-                             'set'     =>  '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" style="border:0px;" /></a>'),
+                             'set'     =>  '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder" /></a>'),
                        array('name'    =>  'everybody',
                              'module'  =>  'roles',
                              'set'     =>  $role->getID()),
