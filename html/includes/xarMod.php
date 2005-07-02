@@ -1600,6 +1600,9 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
         $modHookedCache[$callerModName] = array();
         while(!$result->EOF) {
             list($modname,$itemtype) = $result->fields;
+            if (!empty($itemtype)) {
+                $itemtype = trim($itemtype);
+            }
             if (!isset($modHookedCache[$callerModName][$itemtype])) {
                 $modHookedCache[$callerModName][$itemtype] = array();
             }
@@ -1608,7 +1611,6 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
         }
         $result->Close();
     }
-
     if (empty($callerItemType)) {
         if (isset($modHookedCache[$callerModName][''][$hookModName])) {
             // generic hook is enabled
@@ -2190,8 +2192,8 @@ function xarModRegisterHook($hookObject,
 
     // Get database info
     $dbconn =& xarDBGetConn();
-    $pntable =& xarDBGetTables();
-    $hookstable = $pntable['hooks'];
+    $xartable =& xarDBGetTables();
+    $hookstable = $xartable['hooks'];
 
     // Insert hook
     $query = "INSERT INTO $hookstable (
@@ -2234,8 +2236,8 @@ function xarModUnregisterHook($hookObject,
 
     // Get database info
     $dbconn =& xarDBGetConn();
-    $pntable =& xarDBGetTables();
-    $hookstable = $pntable['hooks'];
+    $xartable =& xarDBGetTables();
+    $hookstable = $xartable['hooks'];
 
     // Remove hook
     $query = "DELETE FROM $hookstable

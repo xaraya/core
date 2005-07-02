@@ -68,6 +68,11 @@ function modules_adminapi_update($args)
              $hookttype,
              $hooktfunc) = $result->fields;
 
+        // Avoid single-space module names e.g. for mssql
+        if (!empty($hooksmodname)) {
+            $hooksmodname = trim($hooksmodname);
+        }
+
         // Get selected value of hook
         unset($hookvalue);
         if (!xarVarFetch("hooks_$hooktmodule", 'isset', $hookvalue,  NULL, XARVAR_DONT_SET)) {return;}

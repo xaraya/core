@@ -59,7 +59,16 @@ function modules_adminapi_gethooklist($args)
     $hooklist = array();
     for (; !$result->EOF; $result->MoveNext()) {
         list($smodName, $itemType, $tmodName,$object,$action,$area,$tmodType,$tmodFunc) = $result->fields;
-        
+
+        // Avoid single-space module names e.g. for mssql
+        if (!empty($smodName)) {
+            $smodName = trim($smodName);
+        }
+        // Avoid single-space item types e.g. for mssql
+        if (!empty($itemType)) {
+            $itemType = trim($itemType);
+        }
+
         // Let's check to make sure this isn't a stale hook
         // if it is, unregister it and continue onto the next iteration in the for loop
         if (is_null(xarModGetIdFromName($tmodName))) {

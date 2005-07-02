@@ -70,6 +70,7 @@ function modules_adminapi_updatehooks($args)
             $todo[$mod['name']] = $ishooked;
         }
     }
+
     // nothing more to do here
     if (count($todo) < 1) {
         return true;
@@ -88,6 +89,11 @@ function modules_adminapi_updatehooks($args)
     for (; !$result->EOF; $result->MoveNext()) {
         list($hookid, $hooksmodname, $hookstype, $hookobject, $hookaction,
              $hooktarea, $hooktmodule, $hookttype, $hooktfunc) = $result->fields;
+
+        // Avoid single-space module names e.g. for mssql
+        if (!empty($hooksmodname)) {
+            $hooksmodname = trim($hooksmodname);
+        }
 
         // See if this is checked and isn't in the database
         if (empty($hooksmodname)) {
