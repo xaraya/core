@@ -32,6 +32,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                          'external' => false,
                          'upload'   => false,
                          'stored'   => false);
+    var $basedir = null;
 
     // this is used by Dynamic_Property_Master::addProperty() to set the $object->upload flag
     var $upload = true;
@@ -45,6 +46,18 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         }
         // always parse validation to preset methods here
         $this->parseValidation($this->validation);
+
+        // Note : {user} will be replaced by the current user uploading the file - e.g. var/uploads/{user} -&gt; var/uploads/myusername_123
+        if (!empty($this->basedir) && preg_match('/\{user\}/',$this->basedir)) {
+            $uname = xarUserGetVar('uname');
+            $uname = xarVarPrepForOS($uname);
+            $uid = xarUserGetVar('uid');
+            // Note: we add the userid just to make sure it's unique e.g. when filtering
+            // out unwanted characters through xarVarPrepForOS, or if the database makes
+            // a difference between upper-case and lower-case and the OS doesn't...
+            $udir = $uname . '_' . $uid;
+            $this->basedir = preg_replace('/\{user\}/',$udir,$this->basedir);
+        }
     }
 
     function validateValue($value = null)
@@ -69,11 +82,18 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         // if the uploads module is hooked (to be verified and set by the calling module)
         // any uploaded files will be referenced in the text as #...:NN# for transform hooks
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
+            // set override for the upload path if necessary
+            if (!empty($this->basedir)) {
+                $override = array('upload' => array('path' => $this->basedir));
+            } else {
+                $override = null;
+            }
             $return = xarModAPIFunc('uploads','admin','validatevalue',
                                     array('id' => $name, // not $this->id
                                           'value' => null, // we don't keep track of values here
                                           'multiple' => FALSE, // not relevant here
                                           'methods' => $this->methods,
+                                          'override' => $override,
                                           'format' => 'textupload',
                                           'maxsize' => $this->maxsize));
             if (!isset($return) || !is_array($return) || count($return) < 2) {
@@ -168,11 +188,18 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             //$extensions = xarModGetVar('uploads','allowed_types');
             $data['extensions']= '';
             $allowed = '';
+            // set override for the upload path if necessary
+            if (!empty($this->basedir)) {
+                $override = array('upload' => array('path' => $this->basedir));
+            } else {
+                $override = null;
+            }
             $uploads = xarModAPIFunc('uploads','admin','showinput',
                                      array('id' => $name, // not $this->id
                                            'value' => null, // we don't keep track of values here
                                            'multiple' => FALSE, // not relevant here
                                            'format' => 'textupload',
+                                           'override' => $override,
                                            'methods' => $this->methods));
             if (!empty($uploads)) {
                 $data['uploads_hooked'] = $uploads;
@@ -228,10 +255,11 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         // Determine if the uploads module is hooked to the calling module
         // if so, we will use the uploads modules functionality
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
-            list($multiple, $methods) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $validation);
+            list($multiple, $methods, $basedir) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $validation);
 
             // $multiple is not relevant here
             $this->methods = $methods;
+            $this->basedir = $basedir;
 
         } else {
             // nothing interesting here
@@ -290,6 +318,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         }
         if ($data['ishooked']) {
             $data['methods'] = $this->methods;
+            $data['basedir'] = $this->basedir;
         } else {
             // nothing interesting here
         }
@@ -334,7 +363,9 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                             $this->validation .= ')';
                         }
                     }
-
+                    if (!empty($validation['basedir'])) {
+                        $this->validation .= ';basedir(' . $validation['basedir'] . ')';
+                    }
                 } else {
                     $this->validation = '';
                     // nothing interesting here

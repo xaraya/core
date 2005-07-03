@@ -2,6 +2,19 @@
 <table class="xar-norm">
   <tr>
     <td>
+      <xar:mlstring>Predefined</xar:mlstring> 
+    </td>
+    <td>
+      <xar:if condition="empty($static)">
+        <xar:set name="static">0</xar:set>
+      </xar:if>
+      <xar:ml><xar:mlstring>#(1) options</xar:mlstring><xar:mlvar>#$static#</xar:mlvar></xar:ml>
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td>
       <xar:mlstring>Function</xar:mlstring>
     </td>
     <td>
@@ -60,19 +73,6 @@
     </td>
     <td>
       <xar:mlstring>Specify your own id =&gt; name options here</xar:mlstring>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <xar:mlstring>Predefined</xar:mlstring> 
-    </td>
-    <td>
-      <xar:if condition="empty($static)">
-        <xar:set name="static">0</xar:set>
-      </xar:if>
-      <xar:ml><xar:mlstring>#(1) options</xar:mlstring><xar:mlvar>#$static#</xar:mlvar></xar:ml>
-    </td>
-    <td>
     </td>
   </tr>
   <tr>

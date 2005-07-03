@@ -27,6 +27,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                          'external' => false,
                          'upload'   => false,
                          'stored'   => false);
+    var $basedir = null;
 
     // this is used by Dynamic_Property_Master::addProperty() to set the $object->upload flag
     var $upload = true;
@@ -82,6 +83,18 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $curtheme = xarTplGetThemeDir();
             $this->basedir = preg_replace('/\{theme\}/',$curtheme,$this->basedir);
         }
+
+        // Note : {user} will be replaced by the current user uploading the file - e.g. var/uploads/{user} -&gt; var/uploads/myusername_123
+        if (!empty($this->basedir) && preg_match('/\{user\}/',$this->basedir)) {
+            $uname = xarUserGetVar('uname');
+            $uname = xarVarPrepForOS($uname);
+            $uid = xarUserGetVar('uid');
+            // Note: we add the userid just to make sure it's unique e.g. when filtering
+            // out unwanted characters through xarVarPrepForOS, or if the database makes
+            // a difference between upper-case and lower-case and the OS doesn't...
+            $udir = $uname . '_' . $uid;
+            $this->basedir = preg_replace('/\{user\}/',$udir,$this->basedir);
+        }
     }
 
     function validateValue($value = null)
@@ -105,12 +118,19 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
 
         // if the uploads module is hooked in, use it's functionality instead
         if ($this->UploadsModule_isHooked == TRUE) {
+            // set override for the upload path if necessary
+            if (!empty($this->basedir)) {
+                $override = array('upload' => array('path' => $this->basedir));
+            } else {
+                $override = null;
+            }
             $return = xarModAPIFunc('uploads','admin','validatevalue',
                                     array('id' => $name, // not $this->id
                                           'value' => $value,
                                           'multiple' => $this->multiple,
                                           'format' => 'fileupload',
                                           'methods' => $this->methods,
+                                          'override' => $override,
                                           'maxsize' => $this->maxsize));
             if (!isset($return) || !is_array($return) || count($return) < 2) {
                 $this->value = null;
@@ -214,12 +234,19 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             if (!empty($value) && !is_numeric($value) && !stristr($value, ';')) {
                 $value = '';
             }
+            // set override for the upload path if necessary
+            if (!empty($this->basedir)) {
+                $override = array('upload' => array('path' => $this->basedir));
+            } else {
+                $override = null;
+            }
             return xarModAPIFunc('uploads','admin','showinput',
                                  array('id' => $name, // not $this->id
                                        'value' => $value,
                                        'multiple' => $this->multiple,
                                        'format' => 'fileupload',
                                        'methods' => $this->methods,
+                                       'override' => $override,
                                        'invalid' => $this->invalid));
         }
 
@@ -295,10 +322,11 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     function parseValidation($validation = '')
     {
         if ($this->UploadsModule_isHooked == TRUE) {
-            list($multiple, $methods) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $validation);
+            list($multiple, $methods, $basedir) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $validation);
 
             $this->multiple = $multiple;
             $this->methods = $methods;
+            $this->basedir = $basedir;
 
         } else {
             // specify base directory and optional file types in validation
@@ -365,6 +393,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         if ($data['ishooked']) {
             $data['multiple'] = $this->multiple;
             $data['methods'] = $this->methods;
+            $data['basedir'] = $this->basedir;
         } else {
             $data['basedir'] = $this->basedir;
             if (!empty($this->filetype)) {
@@ -426,7 +455,9 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                             $this->validation .= ')';
                         }
                     }
-
+                    if (!empty($validation['basedir'])) {
+                        $this->validation .= ';basedir(' . $validation['basedir'] . ')';
+                    }
                 } else {
                     $this->validation = '';
                     if (!empty($validation['basedir'])) {
