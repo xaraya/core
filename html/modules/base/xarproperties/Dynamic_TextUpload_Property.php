@@ -108,6 +108,11 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             $return = xarModAPIFunc('uploads','admin','validatevalue',
                                     array('id' => $name, // not $this->id
                                           'value' => null, // we don't keep track of values here
+                                          // pass the module id, item type and item id (if available) for associations
+                                      // Note: for text upload, the file association is not maintained after editing
+                                          'moduleid' => $this->_moduleid,
+                                          'itemtype' => $this->_itemtype,
+                                          'itemid'   => !empty($this->_itemid) ? $this->_itemid : null,
                                           'multiple' => FALSE, // not relevant here
                                           'methods' => $this->methods,
                                           'override' => $override,

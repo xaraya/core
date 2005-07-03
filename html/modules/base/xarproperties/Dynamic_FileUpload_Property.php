@@ -144,6 +144,10 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $return = xarModAPIFunc('uploads','admin','validatevalue',
                                     array('id' => $name, // not $this->id
                                           'value' => $value,
+                                          // pass the module id, item type and item id (if available) for associations
+                                          'moduleid' => $this->_moduleid,
+                                          'itemtype' => $this->_itemtype,
+                                          'itemid'   => !empty($this->_itemid) ? $this->_itemid : null,
                                           'multiple' => $this->multiple,
                                           'format' => 'fileupload',
                                           'methods' => $this->methods,
