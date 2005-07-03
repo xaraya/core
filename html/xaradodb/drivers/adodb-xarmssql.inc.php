@@ -17,12 +17,29 @@ include_once(ADODB_DIR . '/drivers/adodb-mssql.inc.php');
 
 class ADODB_xarmssql extends ADODB_mssql
 {
+    // override recordset too [for PHP 4.3.4+ - see http://bugs.php.net/bug.php?id=26315]
+    var $rsPrefix = "ADORecordSet_xar";
+
+/*
+    function SelectDB($dbName) 
+    {
+        $this->databaseName = $dbName;
+        if ($this->_connectionID) {
+            return @mssql_select_db($dbName);
+        // trying to execute "sp_dbcmptlevel $dbName, 80" here doesn't seem to help
+        }
+        else return false;
+    }
+*/
+
+    // return genid
     function _insertid()
     {
         // return the GenID value
         return $this->genID;
     }
 
+    // generate id based on sequence table here - IDENTITY doesn't play nice with GenID()
     function GenID($seq='adodbseq',$start=1)
     {
         //$this->debug=1;
@@ -51,6 +68,38 @@ class ADODB_xarmssql extends ADODB_mssql
         
         // in old implementation, pre 1.90, we returned GUID...
         //return $this->GetOne("SELECT CONVERT(varchar(255), NEWID()) AS 'Char'");
+    }
+
+}
+
+class ADORecordset_xarmssql extends ADORecordset_mssql
+{
+    // re-introduce trim for single-space fields [called in result loop]
+    function MoveNext()
+    {
+        $result = parent::MoveNext();
+        if ($result && $this->fields) {
+            foreach($this->fields as $k=>$v) {
+                if (is_string($v) && $v === ' ') {
+                    $this->fields[$k] = '';
+                }
+            }
+        }
+        return $result;
+    }
+
+    // re-introduce trim for single-space fields [called by Init() after _query in _Execute]
+    function _fetch($ignore_fields=false) 
+    {
+        $result = parent::_fetch();
+        if ($result && $this->fields) {
+            foreach($this->fields as $k=>$v) {
+                if (is_string($v) && $v === ' ') {
+                    $this->fields[$k] = '';
+                }
+            }
+        }
+        return $result;
     }
 
 }

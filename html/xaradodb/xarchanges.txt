@@ -286,5 +286,5 @@ drivers/adodb-xarmssql.inc.php (new) :
 
 	Increase .ini settings for mssql.textsize and mssql.textlimit
 	GenID() and _insertid() replacement for adodb-mssql.inc.php
-
+	Replace single spaces by empty strings again in query results
 
