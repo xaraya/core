@@ -33,6 +33,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                          'upload'   => false,
                          'stored'   => false);
     var $basedir = null;
+    var $importdir = null;
 
     // this is used by Dynamic_Property_Master::addProperty() to set the $object->upload flag
     var $upload = true;
@@ -58,6 +59,16 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             $udir = $uname . '_' . $uid;
             $this->basedir = preg_replace('/\{user\}/',$udir,$this->basedir);
         }
+        if (!empty($this->importdir) && preg_match('/\{user\}/',$this->importdir)) {
+            $uname = xarUserGetVar('uname');
+            $uname = xarVarPrepForOS($uname);
+            $uid = xarUserGetVar('uid');
+            // Note: we add the userid just to make sure it's unique e.g. when filtering
+            // out unwanted characters through xarVarPrepForOS, or if the database makes
+            // a difference between upper-case and lower-case and the OS doesn't...
+            $udir = $uname . '_' . $uid;
+            $this->importdir = preg_replace('/\{user\}/',$udir,$this->importdir);
+        }
     }
 
     function validateValue($value = null)
@@ -82,9 +93,15 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         // if the uploads module is hooked (to be verified and set by the calling module)
         // any uploaded files will be referenced in the text as #...:NN# for transform hooks
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
-            // set override for the upload path if necessary
-            if (!empty($this->basedir)) {
-                $override = array('upload' => array('path' => $this->basedir));
+            // set override for the upload/import paths if necessary
+            if (!empty($this->basedir) || !empty($this->importdir)) {
+                $override = array();
+                if (!empty($this->basedir)) {
+                    $override['upload'] = array('path' => $this->basedir);
+                }
+                if (!empty($this->importdir)) {
+                    $override['import'] = array('path' => $this->importdir);
+                }
             } else {
                 $override = null;
             }
@@ -188,9 +205,15 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             //$extensions = xarModGetVar('uploads','allowed_types');
             $data['extensions']= '';
             $allowed = '';
-            // set override for the upload path if necessary
-            if (!empty($this->basedir)) {
-                $override = array('upload' => array('path' => $this->basedir));
+            // set override for the upload/import paths if necessary
+            if (!empty($this->basedir) || !empty($this->importdir)) {
+                $override = array();
+                if (!empty($this->basedir)) {
+                    $override['upload'] = array('path' => $this->basedir);
+                }
+                if (!empty($this->importdir)) {
+                    $override['import'] = array('path' => $this->importdir);
+                }
             } else {
                 $override = null;
             }
@@ -255,11 +278,12 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         // Determine if the uploads module is hooked to the calling module
         // if so, we will use the uploads modules functionality
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
-            list($multiple, $methods, $basedir) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $validation);
+            list($multiple, $methods, $basedir, $importdir) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $validation);
 
             // $multiple is not relevant here
             $this->methods = $methods;
             $this->basedir = $basedir;
+            $this->importdir = $importdir;
 
         } else {
             // nothing interesting here
@@ -319,6 +343,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         if ($data['ishooked']) {
             $data['methods'] = $this->methods;
             $data['basedir'] = $this->basedir;
+            $data['importdir'] = $this->importdir;
         } else {
             // nothing interesting here
         }
@@ -365,6 +390,9 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                     }
                     if (!empty($validation['basedir'])) {
                         $this->validation .= ';basedir(' . $validation['basedir'] . ')';
+                    }
+                    if (!empty($validation['importdir'])) {
+                        $this->validation .= ';importdir(' . $validation['importdir'] . ')';
                     }
                 } else {
                     $this->validation = '';

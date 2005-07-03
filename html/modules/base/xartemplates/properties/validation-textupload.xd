@@ -39,6 +39,21 @@
     </td>
   </tr>
   <tr>
+    <td>
+      <label for="#$id#_importdir">
+      <xar:mlstring>Trusted Directory</xar:mlstring>
+      </label>
+    </td>
+    <td>
+      <input type="text" name="#$name#[importdir]" id="#$id#_importdir" value="#$importdir#" size="#$size#" tabindex="#$tabindex#" />
+      <br/>
+      <xar:mlstring>
+        Note : {user} will be replaced by the current user importing the file
+        - e.g. var/imports/{user} -&gt; var/imports/myusername_123
+      </xar:mlstring>
+    </td>
+  </tr>
+  <tr>
     <td colspan="2">
       <strong><xar:mlstring>Note: the uploads module is hooked</xar:mlstring></strong>
     </td>
