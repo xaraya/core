@@ -10,6 +10,14 @@
     </td>
   </tr>
   <tr>
+    <td colspan="2">
+      <xar:mlstring>
+        Note : {theme} will be replaced by the current theme directory
+        - e.g. {theme}/images -&gt; themes/Xaraya_Classic/images
+      </xar:mlstring>
+    </td>
+  </td>
+  <tr>
     <td>
       <xar:mlstring>File extensions</xar:mlstring>
     </td>

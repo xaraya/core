@@ -32,13 +32,8 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
     function Dynamic_ImageList_Property($args)
     {
         $this->Dynamic_Select_Property($args);
-        // specify base directory in validation field, or basedir|baseurl (not ; to avoid conflicts with old behaviour)
         if (empty($this->basedir) && !empty($this->validation)) {
-            if (strpos($this->validation,'|') !== false) {
-                list($this->basedir, $this->baseurl) = split('\|',$this->validation);
-            } else {
-                $this->basedir = $this->validation;
-            }
+            $this->parseValidation($this->validation);
         }
         // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/Xaraya_Classic/images
         if (!empty($this->basedir) && preg_match('/\{theme\}/',$this->basedir)) {
@@ -156,6 +151,23 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
 
     }
 
+    function parseValidation($validation = '')
+    {
+        if (empty($validation)) return;
+        // specify base directory in validation field, or basedir|baseurl (not ; to avoid conflicts with old behaviour)
+        if (strpos($validation,'|') !== false) {
+            $parts = split('\|',$validation);
+            if (count($parts) < 2) return;
+            $this->basedir = array_shift($parts);
+            $this->baseurl = array_shift($parts);
+            if (count($parts) > 0) {
+                $this->filetype = '(' . join('|',$parts) . ')';
+            }
+        } else {
+            $this->basedir = $validation;
+        }
+    }
+
     /**
      * Get the base information for this property.
      *
@@ -180,6 +192,91 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
                            );
         return $baseInfo;
      }
+
+    function showValidation($args = array())
+    {
+        extract($args);
+
+        $data = array();
+        $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
+        $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
+        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
+        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+
+        $data['size']       = !empty($size) ? $size : 50;
+        $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
+
+        if (isset($validation)) {
+            $this->validation = $validation;
+            $this->parseValidation($validation);
+        }
+
+        $data['basedir'] = $this->basedir;
+        $data['baseurl'] = isset($this->baseurl) ? $this->baseurl : $this->basedir;
+        if (!empty($this->filetype)) {
+            $this->filetype = strtr($this->filetype, array('(' => '', ')' => ''));
+            $data['filetype'] = explode('|',$this->filetype);
+        } else {
+            $data['filetype'] = array();
+        }
+        $numtypes = count($data['filetype']);
+        if ($numtypes < 4) {
+            for ($i = $numtypes; $i < 4; $i++) {
+                $data['filetype'][] = '';
+            }
+        }
+        $data['other'] = '';
+
+        // allow template override by child classes
+        if (empty($template)) {
+            $template = 'imagelist';
+        }
+        return xarTplProperty('base', $template, 'validation', $data);
+    }
+
+    function updateValidation($args = array())
+    {
+        extract($args);
+
+        // in case we need to process additional input fields based on the name
+        if (empty($name)) {
+            $name = 'dd_'.$this->id;
+        }
+        // do something with the validation and save it in $this->validation
+        if (isset($validation)) {
+            if (is_array($validation)) {
+                if (!empty($validation['other'])) {
+                    $this->validation = $validation['other'];
+
+                } else {
+                    $this->validation = '';
+                    if (!empty($validation['basedir'])) {
+                        $this->validation = $validation['basedir'];
+                    }
+                    if (!empty($validation['baseurl'])) {
+                        $this->validation .= '|' . $validation['baseurl'];
+                    }
+                    if (!empty($validation['filetype'])) {
+                        $todo = array();
+                        foreach ($validation['filetype'] as $ext) {
+                            if (empty($ext)) continue;
+                            $todo[] = $ext;
+                        }
+                        if (count($todo) > 0) {
+                            $this->validation .= '|(';
+                            $this->validation .= join('|',$todo);
+                            $this->validation .= ')';
+                        }
+                    }
+                }
+            } else {
+                $this->validation = $validation;
+            }
+        }
+
+        // tell the calling function that everything is OK
+        return true;
+    }
 }
 
 ?>

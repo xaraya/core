@@ -1,0 +1,52 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<table class="xar-norm">
+  <tr>
+    <td>
+      <xar:mlstring>Base directory</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[basedir]" id="#$id#_basedir" value="#$basedir#" size="#$size#" tabindex="#$tabindex#" />
+      <br/>
+      <xar:mlstring>
+        Note : {theme} will be replaced by the current theme directory
+        - e.g. {theme}/images -&gt; themes/Xaraya_Classic/images
+      </xar:mlstring>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <xar:mlstring>Base URL</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[baseurl]" id="#$id#_baseurl" value="#$baseurl#" size="#$size#" tabindex="#$tabindex#" />
+      <br/>
+      <xar:mlstring>
+        Note : only needed if different from the base directory
+      </xar:mlstring>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <xar:mlstring>File extensions</xar:mlstring>
+    </td>
+    <td>
+      <xar:foreach in="$filetype" value="$ext">
+        <input type="text" name="#$name#[filetype][]" value="#$ext#" size="5" tabindex="#$tabindex#" />
+        <br/>
+      </xar:foreach>
+      <input type="text" name="#$name#[filetype][]" value="" size="5" tabindex="#$tabindex#" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <xar:mlstring>Other rule</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="#$size#" tabindex="#$tabindex#" />
+    </td>
+  </tr>
+</table>
+
+<xar:if condition="!empty($invalid)">
+    <span class="xar-error">#$invalid#</span>
+</xar:if>
