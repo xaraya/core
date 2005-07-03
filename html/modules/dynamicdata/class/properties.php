@@ -48,7 +48,10 @@ class Dynamic_Property_Master
                          xar_prop_source,
                          xar_prop_status,
                          xar_prop_order,
-                         xar_prop_validation
+                         xar_prop_validation,
+                         xar_prop_objectid,
+                         xar_prop_moduleid,
+                         xar_prop_itemtype
                   FROM $dynamicprop ";
         if (isset($args['objectid'])) {
             $query .= " WHERE xar_prop_objectid = ?";
@@ -70,7 +73,8 @@ class Dynamic_Property_Master
 
         $properties = array();
         while (!$result->EOF) {
-            list($name, $label, $type, $id, $default, $source, $fieldstatus, $order, $validation) = $result->fields;
+            list($name, $label, $type, $id, $default, $source, $fieldstatus, $order, $validation,
+                 $_objectid, $_moduleid, $_itemtype) = $result->fields;
             if(xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id")) {
                 $property = array('name' => $name,
                                   'label' => $label,
@@ -80,7 +84,11 @@ class Dynamic_Property_Master
                                   'source' => $source,
                                   'status' => $fieldstatus,
                                   'order' => $order,
-                                  'validation' => $validation);
+                                  'validation' => $validation,
+                                  // some internal variables
+                                  '_objectid' => $_objectid,
+                                  '_moduleid' => $_moduleid,
+                                  '_itemtype' => $_itemtype);
                 if (isset($args['objectref'])) {
                     Dynamic_Property_Master::addProperty($property,$args['objectref']);
                 } else {
@@ -311,13 +319,17 @@ class Dynamic_Property
     var $order = 0;
     var $validation = null;
 
-    var $datastore = ''; // name of the data store where this property comes from
+    var $datastore = '';   // name of the data store where this property comes from
 
-    var $value = null;   // value of this property for a particular Dynamic_Object
-    var $invalid = '';   // result of the checkInput/validateValue methods
+    var $value = null;     // value of this property for a particular Dynamic_Object
+    var $invalid = '';     // result of the checkInput/validateValue methods
 
-    var $_itemid;        // reference to $itemid in Dynamic_Object, where the current itemid is kept
-    var $_items;         // reference to $items in Dynamic_Object_List, where the different item values are kept
+    var $_objectid = null; // objectid this property belongs to
+    var $_moduleid = null; // moduleid this property belongs to
+    var $_itemtype = null; // itemtype this property belongs to
+
+    var $_itemid;          // reference to $itemid in Dynamic_Object, where the current itemid is kept
+    var $_items;           // reference to $items in Dynamic_Object_List, where the different item values are kept
 
     /**
      * Default constructor setting the variables
