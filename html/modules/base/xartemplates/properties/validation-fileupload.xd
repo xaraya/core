@@ -7,16 +7,13 @@
     </td>
     <td>
       <input type="text" name="#$name#[basedir]" id="#$id#_basedir" value="#$basedir#" size="#$size#" tabindex="#$tabindex#" />
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2">
+      <br/>
       <xar:mlstring>
         Note : {theme} will be replaced by the current theme directory
         - e.g. {theme}/images -&gt; themes/Xaraya_Classic/images
       </xar:mlstring>
     </td>
-  </td>
+  </tr>
   <tr>
     <td>
       <xar:mlstring>File extensions</xar:mlstring>
