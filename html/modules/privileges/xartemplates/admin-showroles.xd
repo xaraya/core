@@ -34,7 +34,7 @@
                         <xar:else />Group</xar:if>
                     </td>
                     <td width="150">#$loop:item['name']#</td>
-                    <td align="right">
+                    <td class="xar-align-right">
                         <xar:set name="tmptitleremove">
                             <xar:mlstring>Remove this Privilege assignment</xar:mlstring>
                         </xar:set>
@@ -48,7 +48,7 @@
     </table>
     <table border="0" width="100%">
         <tr>
-            <th align="center">
+            <th class="xar-align-center">
                 <xar:mlstring>Current Privileges</xar:mlstring>
             </th>
         </tr>
