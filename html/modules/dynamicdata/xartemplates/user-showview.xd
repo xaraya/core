@@ -1,139 +1,114 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:if condition="empty($layout) or $layout eq 'default'">
     <table border="0" cellspacing="0" cellpadding="4">
-    <xar:foreach in="$items" value="$item">
-    <tr>
-        <td>
-            <table border="0" cellspacing="0" cellpadding="4">
-            <xar:foreach in="$item['fields']" value="$field">
+        <xar:foreach in="$items" value="$item">
             <tr>
-                <td align="right" valign="top"><b>#$field['label']# :</b></td>
-                <td><xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" /></td>
-            </tr>
-            </xar:foreach>
-            <xar:if condition="!empty($item['options']) and count($item['options']) gt 0">
-            <tr>
-                <td>&nbsp;</td>
                 <td>
-                <xar:foreach in="$item['options']" value="$option">
-                    #$option['ojoin']# <a href="#$option['olink']#">#$option['otitle']#</a>
-                </xar:foreach>
+                    <table border="0" cellspacing="0" cellpadding="4">
+                        <xar:foreach in="$item['fields']" value="$field">
+                            <tr>
+                                <td class="xar-align-right">
+                                    <strong>#$field['label']# :</strong>
+                                </td>
+                                <td>
+                                    <xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" />
+                                </td>
+                            </tr>
+                        </xar:foreach>
+                        <xar:if condition="!empty($item['options']) and count($item['options']) gt 0">
+                            <tr>
+                                <td>&#160;</td>
+                                <td>
+                                    <xar:foreach in="$item['options']" value="$option">#$option['ojoin']# 
+                                    <a href="#$option['olink']#">#$option['otitle']#</a></xar:foreach>
+                                </td>
+                            </tr>
+                        </xar:if>
+                    </table>
                 </td>
             </tr>
-            </xar:if>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            &nbsp;
-        </td>
-    </tr>
-    </xar:foreach>
+            <tr>
+                <td>&#160;</td>
+            </tr>
+        </xar:foreach>
     </table>
-
     <xar:if condition="!empty($prevurl) or !empty($nexturl)">
-        <div align="center">
-            <xar:if condition="!empty($prevurl)">
-                 <a href="#$prevurl#">&lt;&lt; </a>
-            <xar:else />
-                 ---
-            </xar:if>
-            &nbsp;&nbsp;&nbsp;
-            <xar:if condition="!empty($nexturl)">
-                 <a href="#$nexturl#"> &gt;&gt;</a>
-            <xar:else />
-                 ---
-            </xar:if>
-        </div>
+        <div class="xar-align-center">
+        <xar:if condition="!empty($prevurl)">
+        <a href="#$prevurl#">&lt;&lt;</a>
+        <xar:else />---</xar:if>&#160;&#160;&#160; 
+        <xar:if condition="!empty($nexturl)">
+        <a href="#$nexturl#">&gt;&gt;</a>
+        <xar:else />---</xar:if></div>
     </xar:if>
-
-<xar:elseif condition="$layout eq 'list'" />
+    <xar:elseif condition="$layout eq 'list'" />
     <table border="0" cellspacing="0" cellpadding="4">
-    <tr>
-        <xar:foreach in="$labels" value="$item">
-            <th align="center">#$item['label']#</th>
-        </xar:foreach>
-        <th>
-            &nbsp;
-        </th>
-    </tr>
-    <xar:foreach in="$items" value="$item">
-    <tr>
-        <!-- we could use xar:data-display here too, instead of looping over fields ourselves -->
-        <xar:foreach in="$item['fields']" value="$field">
-            <td valign="top"><xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" /></td>
-        </xar:foreach>
-        <td valign="top" align="center">
-        <xar:if condition="!empty($item['options']) and count($item['options']) gt 0">
-            <xar:foreach in="$item['options']" value="$option">
-                #$option['ojoin']# <a href="#$option['olink']#">#$option['otitle']#</a>
+        <tr>
+            <xar:foreach in="$labels" value="$item">
+                <th align="center">#$item['label']#</th>
             </xar:foreach>
-        <xar:else />
-            &nbsp;
-        </xar:if>
-        </td>
-    </tr>
-    </xar:foreach>
-    </table>
-
-    <xar:if condition="!empty($prevurl) or !empty($nexturl)">
-        <div align="center">
-            <xar:if condition="!empty($prevurl)">
-                 <a href="#$prevurl#">&lt;&lt; </a>
-            <xar:else />
-                 ---
-            </xar:if>
-            &nbsp;&nbsp;&nbsp;
-            <xar:if condition="!empty($nexturl)">
-                 <a href="#$nexturl#"> &gt;&gt;</a>
-            <xar:else />
-                 ---
-            </xar:if>
-        </div>
-    </xar:if>
-
-<xar:elseif condition="$layout eq 'bullet'" />
-    <ul>
-    <xar:foreach in="$items" value="$item">
-    <li>
-        <xar:foreach in="$item['fields']" value="$field">
-            <xar:if condition="!empty($field['flink'])">
-                <a href="#$field['flink']#">
-                  <xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" />
-                </a>
-            <xar:else/>
-                <xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" />
-            </xar:if>
+            <th>&#160;</th>
+        </tr>
+        <xar:foreach in="$items" value="$item">
+            <tr>
+                <!-- we could use xar:data-display here too, instead of looping over fields ourselves -->
+                <xar:foreach in="$item['fields']" value="$field">
+                    <td valign="top">
+                        <xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" />
+                    </td>
+                </xar:foreach>
+                <td valign="top" align="center">
+                    <xar:if condition="!empty($item['options']) and count($item['options']) gt 0">
+                    <xar:foreach in="$item['options']" value="$option">#$option['ojoin']# 
+                    <a href="#$option['olink']#">#$option['otitle']#</a></xar:foreach>
+                    <xar:else />&#160;</xar:if>
+                </td>
+            </tr>
         </xar:foreach>
-        <xar:if condition="!empty($item['options']) and count($item['options']) gt 0">
-           [ <xar:foreach in="$item['options']" value="$option">
-                #$option['ojoin']# <a href="#$option['olink']#">#$option['otitle']#</a>
-            </xar:foreach> ]
-        </xar:if>
-    </li>
-    </xar:foreach>
-    </ul>
-
+    </table>
     <xar:if condition="!empty($prevurl) or !empty($nexturl)">
-        <div align="left">
-            <xar:if condition="!empty($prevurl)">
-                 <a href="#$prevurl#">&lt;&lt; </a>
-            <xar:else />
-                 ---
-            </xar:if>
-            &nbsp;&nbsp;&nbsp;
-            <xar:if condition="!empty($nexturl)">
-                 <a href="#$nexturl#"> &gt;&gt;</a>
-            <xar:else />
-                 ---
-            </xar:if>
-        </div>
+        <div class="xar-align-center">
+        <xar:if condition="!empty($prevurl)">
+        <a href="#$prevurl#">&lt;&lt;</a>
+        <xar:else />---</xar:if>&#160;&#160;&#160; 
+        <xar:if condition="!empty($nexturl)">
+        <a href="#$nexturl#">&gt;&gt;</a>
+        <xar:else />---</xar:if></div>
     </xar:if>
-
-<!-- TODO: multi-column output -->
-<xar:else />
-    <xar:mlstring>Specify your own layout here...</xar:mlstring>
-    <br /><br />
-    <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+    <xar:elseif condition="$layout eq 'bullet'" />
+    <ul>
+        <xar:foreach in="$items" value="$item">
+            <li>
+                <xar:foreach in="$item['fields']" value="$field">
+                    <xar:if condition="!empty($field['flink'])">
+                        <a href="#$field['flink']#">
+                            <xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" />
+                        </a>
+                        <xar:else />
+                        <xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" />
+                    </xar:if>
+                </xar:foreach>
+                <xar:if condition="!empty($item['options']) and count($item['options']) gt 0">[ 
+                <xar:foreach in="$item['options']" value="$option">#$option['ojoin']# 
+                <a href="#$option['olink']#">#$option['otitle']#</a></xar:foreach>]</xar:if>
+            </li>
+        </xar:foreach>
+    </ul>
+    <xar:if condition="!empty($prevurl) or !empty($nexturl)">
+        <div class="xar-align-left">
+        <xar:if condition="!empty($prevurl)">
+        <a href="#$prevurl#">&lt;&lt;</a>
+        <xar:else />---</xar:if>&#160;&#160;&#160; 
+        <xar:if condition="!empty($nexturl)">
+        <a href="#$nexturl#">&gt;&gt;</a>
+        <xar:else />---</xar:if></div>
+    </xar:if>
+    <!-- TODO: multi-column output -->
+    <xar:else />
+    <p>
+        <xar:mlstring>Specify your own layout here...</xar:mlstring>
+    </p>
+    <p>
+        <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+    </p>
 </xar:if>
