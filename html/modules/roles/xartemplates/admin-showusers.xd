@@ -299,7 +299,7 @@
                             <xar:if condition="!$loop:item['frozen']">
                                 <a href="&xar-modurl-roles-admin-displayrole;&amp;uid=#$loop:item.uid#">#xarVarPrepForDisplay($loop:item['name'])#</a>
                                 <xar:else/>
-                                <b>#xarVarPrepForDisplay($loop:item['name'])#</b>
+                                <strong>#xarVarPrepForDisplay($loop:item['name'])#</strong>
                             </xar:if>
                         </td>
                         <td>
