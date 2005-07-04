@@ -45,7 +45,7 @@
     <table border="0" cellspacing="0" cellpadding="4">
         <tr>
             <xar:foreach in="$labels" value="$item">
-                <th align="center">#$item['label']#</th>
+                <th class="xar-align-center">#$item['label']#</th>
             </xar:foreach>
             <th>&#160;</th>
         </tr>
@@ -53,11 +53,11 @@
             <tr>
                 <!-- we could use xar:data-display here too, instead of looping over fields ourselves -->
                 <xar:foreach in="$item['fields']" value="$field">
-                    <td valign="top">
+                    <td class="xar-valign-top">
                         <xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" />
                     </td>
                 </xar:foreach>
-                <td valign="top" align="center">
+                <td class="xar-align-center xar-valign-top">
                     <xar:if condition="!empty($item['options']) and count($item['options']) gt 0">
                     <xar:foreach in="$item['options']" value="$option">#$option['ojoin']# 
                     <a href="#$option['olink']#">#$option['otitle']#</a></xar:foreach>
