@@ -1,20 +1,21 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:comment>
-    This is a generic form template for any DD object. You can use a specific template
-    for one particular object in this directory as showform-[objectname].xd, and/or
-    use templates in your own [module]/xartemplates/objects directory by specifying the
-    tplmodule="..." argument in the xar:data-form BL tag or showForm() method call.
-</xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<xar:comment>This is a generic form template for any DD object. You can use a specific template for one particular object in this directory as showform-[objectname].xd, and/or use templates in your own [module]/xartemplates/objects directory by specifying the tplmodule="..." argument in the xar:data-form BL tag or showForm() method call.</xar:comment>
 <xar:if condition="empty($layout) or $layout eq 'default'">
     <xar:foreach in="$properties" key="$name" value="$property">
-        <tr align="left" valign="middle">
-            <td><xar:data-label property="$properties[$name]" label="id" /> </td>
-            <td><xar:data-input property="$properties[$name]" /> </td>
+        <tr class="xar-align-left xar-valign-middle">
+            <td>
+                <xar:data-label property="$properties[$name]" label="id" />
+            </td>
+            <td>
+                <xar:data-input property="$properties[$name]" />
+            </td>
         </tr>
     </xar:foreach>
-<xar:else />
-    <xar:mlstring>Specify your own layout here...</xar:mlstring>
-    <br /><br />
-    <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+    <xar:else />
+    <p>
+        <xar:mlstring>Specify your own layout here...</xar:mlstring>
+    </p>
+    <p>
+        <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+    </p>
 </xar:if>
-
