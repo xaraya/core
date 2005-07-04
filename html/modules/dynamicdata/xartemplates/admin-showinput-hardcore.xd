@@ -8,7 +8,7 @@
 
 <table cellpadding="0" cellspacing="0" border="0">
     <tr>
-        <td width="90%" height="300" align="left" valign="top">
+        <td width="90%" height="300" class="xar-align-left xar-valign-top">
             <script>HardCoreWebEditorToolbar();</script>
             <script>
             content = '#$content_unencoded#';
