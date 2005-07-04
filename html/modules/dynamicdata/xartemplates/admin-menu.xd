@@ -1,8 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <table border="1" width="100%" cellpadding="2" cellspacing="0">
     <tr>
-        <th align="center">#$menutitle#</th>
+        <th class="xar-align-center">#$menutitle#</th>
     </tr>
 </table>
-<br />
-
