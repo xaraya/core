@@ -11,9 +11,9 @@
 <xar:if condition="empty($layout) or $layout eq 'default'">
     <table border="0" cellspacing="0" cellpadding="4">
     <xar:foreach in="$properties" key="$name" value="$property">
-        <tr align="left" valign="middle">
-            <td align="right"><b><xar:data-label property="$properties[$name]" /> :</b></td>
-            <td align="left"><xar:data-output property="$properties[$name]" /> </td>
+        <tr class="xar-align-left xar-valign-middle">
+            <td class="xar-align-right"><b><xar:data-label property="$properties[$name]" /> :</b></td>
+            <td class="xar-align-left"><xar:data-output property="$properties[$name]" /> </td>
         </tr>
     </xar:foreach>
     </table>
@@ -22,4 +22,3 @@
     <br /><br />
     <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
 </xar:if>
-
