@@ -2,7 +2,7 @@
 <xar:comment>You can use different admin-modifyconfighook-[objectname].xd templates for different objects</xar:comment>
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
-        <td align="center" colspan="7">
+        <td class="xar-align-center" colspan="7">
         <strong>#$labels['dynamicdata']#</strong>[ 
         <a href="#$link#">#$labels['config']#</a>]</td>
     </tr>
@@ -31,7 +31,7 @@
             </td>
         </tr>
         <xar:foreach in="$fields" value="$field">
-            <tr align="left" valign="middle">
+            <tr class="xar-align-left xar-valign-middle">
                 <td>#$field['id']#</td>
                 <td>#$field['name']#</td>
                 <td>#$field['label']#</td>
