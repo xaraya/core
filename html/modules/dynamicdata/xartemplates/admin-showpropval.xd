@@ -27,7 +27,7 @@
                     <td>#$showval#</td>
                 </tr>
                 <tr>
-                    <td align="center">
+                    <td class="xar-align-center">
                     <input type="submit" name="preview" value="#xarML('Preview')#" />&#160;&#160;&#160; 
                     <input type="submit" name="confirm" value="#xarML('Update')#" /></td>
                 </tr>
