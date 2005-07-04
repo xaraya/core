@@ -27,7 +27,6 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                          'external' => false,
                          'upload'   => false,
                          'stored'   => false);
-    var $basedir = null;
     var $importdir = null;
 
     // this is used by Dynamic_Property_Master::addProperty() to set the $object->upload flag
