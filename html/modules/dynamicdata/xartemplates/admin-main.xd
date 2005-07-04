@@ -180,7 +180,7 @@
 
 <pre>
 <code>&lt;xar:foreach in="&#36;properties" key="&#36;field"&gt;
-    &lt;tr class="xar-norm" valign="top"&gt;
+    &lt;tr class="xar-norm xar-valign-top"&gt;
         &lt;td&gt;
             &lt;xar:data-label property="&#36;properties[&#36;field]" /&gt;:
         &lt;/td&gt;
