@@ -72,7 +72,37 @@
             </a>
         </dd>
     </dl>
-
-    #$phpinfo# 
-
+    <xar:comment>
+        the standard phpinfo layout is table based and uses its own embedded styling,
+        lets see if we can restore the look and feel of it with the help of our own wrapper and a simple embedded css call
+    </xar:comment>
+    <xar:set name="localstyles">'<!--
+div.xar-base-phpinfo-wrapper {background-color: #ffffff; color: #000000;}
+div.xar-base-phpinfo-wrapper td,
+div.xar-base-phpinfo-wrapper th,
+div.xar-base-phpinfo-wrapper h1,
+div.xar-base-phpinfo-wrapper h2 {font-family: sans-serif;}
+div.xar-base-phpinfo-wrapper pre {margin: 0px; font-family: monospace;}
+div.xar-base-phpinfo-wrapper a:link {color: #000099; text-decoration: none; background-color: #ffffff;}
+div.xar-base-phpinfo-wrapper a:hover {text-decoration: underline;}
+div.xar-base-phpinfo-wrapper table {border-collapse: collapse; width:100%;}
+div.xar-base-phpinfo-wrapper .center {text-align: center;}
+.center table { margin-left: auto; margin-right: auto; text-align: left;}
+.center th { text-align: center !important; }
+div.xar-base-phpinfo-wrapper td, 
+div.xar-base-phpinfo-wrapper th { border: 1px solid #eee; font-size: 11px; vertical-align: baseline;}
+div.xar-base-phpinfo-wrapper h1 {font-size: 150%;}
+div.xar-base-phpinfo-wrapper h2 {font-size: 125%;}
+div.xar-base-phpinfo-wrapper .p {text-align: left;}
+div.xar-base-phpinfo-wrapper .e {background-color: #ccccff; font-weight: bold; color: #000000;}
+div.xar-base-phpinfo-wrapper .h {background-color: #9999cc; font-weight: bold; color: #000000;}
+div.xar-base-phpinfo-wrapper .v {background-color: #cccccc; color: #000000;}
+div.xar-base-phpinfo-wrapper i {color: #666666; background-color: #cccccc;}
+div.xar-base-phpinfo-wrapper img {float: right; border: 0px;}
+div.xar-base-phpinfo-wrapper hr {width: 90%; background-color: #cccccc; border: 0px; height: 1px; color: #000000;}
+//-->'</xar:set>
+    <xar:style method="embed" source="'.$localstyles.'" />
+    <div class="xar-base-phpinfo-wrapper">
+        #$phpinfo#
+    </div>
 </div>
