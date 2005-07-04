@@ -3,7 +3,7 @@
     <table border="0" cellspacing="0" cellpadding="4">
         <xar:foreach in="$fields" value="$field">
             <tr class="xar-align-left xar-valign-middle">
-                <td align="right">
+                <td class="xar-align-right">
                     <strong>#$field['label']# :</strong>
                 </td>
                 <td class="xar-align-left">
