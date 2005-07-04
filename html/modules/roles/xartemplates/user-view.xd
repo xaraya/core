@@ -193,7 +193,7 @@
             <input type="submit" value="#xarVarPrepForDisplay($searchlabel)#" />
         </form>
         <p>
-            <xar:mlstring>Search condition</xar:mlstring>: <b>#xarVarPrepForDisplay($msg)#</b>
+            <xar:mlstring>Search condition</xar:mlstring>: <strong>#xarVarPrepForDisplay($msg)#</strong>
         </p>
     </xar:if>
 </div>
