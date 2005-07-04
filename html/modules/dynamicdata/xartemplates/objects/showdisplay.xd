@@ -1,24 +1,27 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:comment>
-    This is a generic display template for any DD object. You can use a specific template
-    for one particular object in this directory as showdisplay-[objectname].xd, and/or
-    use templates in your own [module]/xartemplates/objects directory by specifying the
-    tplmodule="..." argument in the xar:data-display BL tag or showDisplay() method call.
-</xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<xar:comment>This is a generic display template for any DD object. You can use a specific template for one particular object in this directory as showdisplay-[objectname].xd, and/or use templates in your own [module]/xartemplates/objects directory by specifying the tplmodule="..." argument in the xar:data-display BL tag or showDisplay() method call.</xar:comment>
 <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
-    <xar:template file="catnavigation"/>
+    <xar:template file="catnavigation" />
 </xar:if>
 <xar:if condition="empty($layout) or $layout eq 'default'">
     <table border="0" cellspacing="0" cellpadding="4">
-    <xar:foreach in="$properties" key="$name" value="$property">
-        <tr class="xar-align-left xar-valign-middle">
-            <td class="xar-align-right"><b><xar:data-label property="$properties[$name]" /> :</b></td>
-            <td class="xar-align-left"><xar:data-output property="$properties[$name]" /> </td>
-        </tr>
-    </xar:foreach>
+        <xar:foreach in="$properties" key="$name" value="$property">
+            <tr class="xar-align-left xar-valign-middle">
+                <td class="xar-align-right">
+                    <strong>
+                    <xar:data-label property="$properties[$name]" />:</strong>
+                </td>
+                <td class="xar-align-left">
+                    <xar:data-output property="$properties[$name]" />
+                </td>
+            </tr>
+        </xar:foreach>
     </table>
-<xar:else />
-    <xar:mlstring>Specify your own layout here...</xar:mlstring>
-    <br /><br />
-    <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+    <xar:else />
+    <p>
+        <xar:mlstring>Specify your own layout here...</xar:mlstring>
+    </p>
+    <p>
+        <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+    </p>
 </xar:if>
