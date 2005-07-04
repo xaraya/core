@@ -114,7 +114,7 @@
      </xar:foreach>
     <xar:else />
     <tr>
-      <td colspan="3" align="left">
+      <td colspan="3" class="xar-align-left">
       <br />
       <strong><xar:mlstring>No mails scheduled to be sent later</xar:mlstring></strong>
       </td>
