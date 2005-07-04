@@ -1,14 +1,22 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:if condition="empty($layout) or $layout eq 'default'">
     <xar:foreach in="$fields" value="$field">
-        <tr align="left" valign="middle">
-            <td>#$field['label']# </td>
-            <td><xar:data-input type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" validation="$field['validation']" /> <xar:if condition="!empty($field['invalid'])"><span class="xar-error"><xar:mlstring>Invalid</xar:mlstring> #$field['invalid']#</span></xar:if></td>
+        <tr class="xar-align-left xar-valign-middle">
+            <td>#$field['label']#</td>
+            <td>
+                <xar:data-input type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" validation="$field['validation']" />
+                <xar:if condition="!empty($field['invalid'])">
+                    <span class="xar-error">
+                    <xar:mlstring>Invalid</xar:mlstring>#$field['invalid']#</span>
+                </xar:if>
+            </td>
         </tr>
     </xar:foreach>
-<xar:else />
-    <xar:mlstring>Specify your own layout here...</xar:mlstring>
-    <br /><br />
-    <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+    <xar:else />
+    <p>
+        <xar:mlstring>Specify your own layout here...</xar:mlstring>
+    </p>
+    <p>
+        <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+    </p>
 </xar:if>
-
