@@ -8,7 +8,7 @@
 </xar:comment>
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
 <xar:foreach in="$properties" key="$name" value="$property">
-    <tr align="left" valign="middle">
+    <tr class="xar-align-left xar-valign-middle">
         <td><xar:data-label property="$properties[$name]" /> </td>
         <td><xar:data-output property="$properties[$name]" /> </td>
     </tr>
