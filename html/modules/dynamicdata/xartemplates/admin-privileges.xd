@@ -26,7 +26,7 @@
     <table border="1" cellpadding="8" cellspacing="0">
         <xar:if condition="!empty($extcomponent) and $extcomponent eq 'Field'">
             <tr>
-                <th valign="top" align="right">
+                <th class="xar-align-right xar-valign-top">
                     <xar:mlstring>Name</xar:mlstring>
                 </th>
                 <td>
@@ -45,7 +45,7 @@
                 </td>
             </tr>
             <tr>
-                <th valign="top" align="right">
+                <th class="xar-align-right xar-valign-top">
                     <xar:mlstring>Type</xar:mlstring>
                 </th>
                 <td>
@@ -64,7 +64,7 @@
                 </td>
             </tr>
             <tr>
-                <th valign="top" align="right">
+                <th class="xar-align-right xar-valign-top">
                     <xar:mlstring>Property</xar:mlstring>
                 </th>
                 <td>
@@ -86,7 +86,7 @@
             </tr>
             <xar:else />
             <tr>
-                <th valign="top" align="right">
+                <th class="xar-align-right xar-valign-top">
                     <xar:mlstring>Module</xar:mlstring>
                 </th>
                 <td>
@@ -105,7 +105,7 @@
                 </td>
             </tr>
             <tr>
-                <th valign="top" align="right">
+                <th class="xar-align-right xar-valign-top">
                     <xar:mlstring>Item Type</xar:mlstring>
                 </th>
                 <td>
@@ -114,7 +114,7 @@
                 </td>
             </tr>
             <tr>
-                <th valign="top" align="right">
+                <th class="xar-align-right xar-valign-top">
                     <xar:mlstring>Item ID</xar:mlstring>
                 </th>
                 <td>
@@ -124,7 +124,7 @@
             </tr>
         </xar:if>
         <tr>
-            <th valign="top" align="right">
+            <th class="xar-align-right xar-valign-top">
                 <xar:mlstring>Access Level</xar:mlstring>
             </th>
             <td>
@@ -196,21 +196,18 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2" align="center">
+            <td colspan="2" class="xar-align-center">
                 <input type="submit" value="#$refreshlabel#" />
             </td>
         </tr>
     </table>
-    <br />
-    <xar:ml>
-        <xar:mlstring>There are #(1) entries matching these selection criteria at the moment</xar:mlstring>
-        <xar:mlvar>#$numitems#</xar:mlvar>
-    </xar:ml>
-    <br />
-    <hr />
-    <br />(Instance Definition #$extinstance#) 
-    <br />
-    <br />
+    <p>
+        <xar:ml>
+            <xar:mlstring>There are #(1) entries matching these selection criteria at the moment</xar:mlstring>
+            <xar:mlvar>#$numitems#</xar:mlvar>
+        </xar:ml>
+        <hr />
+        (Instance Definition #$extinstance#) 
+    </p>
     <input type="submit" name="apply" value="#$applylabel#" /></form>
-    <br />
 </div>
