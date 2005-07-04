@@ -20,7 +20,7 @@
             <div>
             <table border="0" cellpadding="2" cellspacing="0">
               <tr>
-                <td valign="top"><label for="q"><xar:mlstring>Search for</xar:mlstring></label>:</td>
+                <td class="xar-valign-top"><label for="q"><xar:mlstring>Search for</xar:mlstring></label>:</td>
                 <td>
                   <input type="hidden" name="module" value="dynamicdata" />
                   <input type="hidden" name="func" value="search" />
@@ -34,7 +34,7 @@
                 </td>
               </tr>
               <tr>
-                <td valign="top"><xar:mlstring>Search on</xar:mlstring>:</td>
+                <td class="xar-valign-top"><xar:mlstring>Search on</xar:mlstring>:</td>
                 <td>
                   <xar:if condition="!empty($item['fields']) and count($item['fields']) gt 0">
                     <xar:foreach in="$item['fields']" key="$name" value="$field">
@@ -74,7 +74,7 @@
   <xar:else/>
     <table border="0" cellpadding="2" cellspacing="0">
       <tr>
-        <td valign="top"><xar:mlstring>Search on</xar:mlstring>:</td>
+        <td class="xar-valign-top"><xar:mlstring>Search on</xar:mlstring>:</td>
         <td>
           <xar:if condition="!empty($item['fields']) and count($item['fields']) gt 0">
             <xar:foreach in="$item['fields']" key="$name" value="$field">
