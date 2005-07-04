@@ -95,7 +95,8 @@ div.xar-base-phpinfo-wrapper h1 {font-size: 150%;}
 div.xar-base-phpinfo-wrapper h2 {font-size: 125%;}
 div.xar-base-phpinfo-wrapper .p {text-align: left;}
 div.xar-base-phpinfo-wrapper .e {background-color: #ccccff; font-weight: bold; color: #000000;}
-div.xar-base-phpinfo-wrapper .h {background-color: #9999cc; font-weight: bold; color: #000000;}
+div.xar-base-phpinfo-wrapper tr.h td {background-color: #9999cc !important; font-weight: bold; color: #000000;}
+div.xar-base-phpinfo-wrapper tr.h h1 {color: #000000;}
 div.xar-base-phpinfo-wrapper .v {background-color: #cccccc; color: #000000;}
 div.xar-base-phpinfo-wrapper i {color: #666666; background-color: #cccccc;}
 div.xar-base-phpinfo-wrapper img {float: right; border: 0px;}
