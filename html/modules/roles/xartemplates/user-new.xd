@@ -1,82 +1,126 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:if condition="$stage eq 1">
-  <div align="center">
-        <p><xar:mlstring>Terms and Conditions</xar:mlstring></p>
-        <p><xar:template file="user-terms" type="module" /></p>
-<xar:comment> this stuff shouldnt print        <p><a href="#&xar-modurl-roles-user-new;&amp;stage=2&amp;authid=#xarSecGenAuthKey()###">
-                            <xar:mlstring>Accept terms and conditions</xar:mlstring></a></p> </xar:comment>
-        <p><a href="index.php"><xar:mlstring>Do not accept terms and conditions</xar:mlstring></a></p>
-  </div>
-<xar:elseif condition="$stage eq 2" />
-
-  <div align="center">
-        <p><xar:mlstring>Create User Account</xar:mlstring></p>
-    <form action="&xar-modurl-roles-user-register;" method="post" enctype="application/x-www-form-urlencoded">
-           <div>
-        <input type="hidden" name="stage" id="stage" value="3" />        
-        <input type="hidden" name="authid" id="authid" value="#$authid#" />        
-        <table border="0" cellpadding="5">
-            <tr>
-                <td>
-                    <label for="uname"><xar:mlstring>User Name</xar:mlstring></label>
-                </td>
-                <td>
-                    <input type="text" name="uname" id="uname" value="" size="25" maxlength="255" tabindex="1" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="realname"><xar:mlstring>Real Name</xar:mlstring></label>
-                </td>
-                <td>
-                    <input type="text" name="realname" id="realname" value="" size="25" maxlength="255" tabindex="2" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="email"><xar:mlstring>E-Mail</xar:mlstring></label>
-                </td>
-                <td>
-                    <input type="text" name="email" id="email" value="" size="25" maxlength="255" tabindex="3" />
-                </td>
-            </tr>
-                       <xar:if condition="xarModGetVar('roles', 'chooseownpassword')" >
-            <tr>
-                <td>
-                    <label for="pass1"><xar:mlstring>Password</xar:mlstring></label>
-                </td>
-                <td>
-                    <input type="password" name="pass1" id="pass1" value="" size="25" maxlength="40" tabindex="4" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="pass2"><xar:mlstring>Confirm Password</xar:mlstring></label>
-                </td>
-                <td>
-                    <input type="password" name="pass2" id="pass2" value="" size="25" maxlength="40" tabindex="5" />
-                </td>
-            </tr>
-                        </xar:if>
-        </table>            
-                    
-
-
-        <input type="submit" value="Create User" tabindex="6" />
-        <input type="hidden" name="phase" id="phase" value="createuser" />
-        </div>
-    </form>
-  </div>
-
-<xar:elseif condition="$stage eq 3" /> 
-
-    <p>#$errortext#</p>
-
-<xar:elseif condition="$stage eq 4" />
-<xar:elseif condition="$stage eq 5" />
-    <p><xar:mlstring>This account is awaiting approval from an administrator before being activated.</xar:mlstring></p>
+    <div class="xar-align-center">
+        <p>
+            <xar:mlstring>
+                Terms and Conditions
+            </xar:mlstring>
+        </p>
+        <p>
+            <xar:template file="user-terms" type="module" />
+        </p>
+        <xar:comment>
+            this stuff shouldnt print 
+            <p>
+                <a href="#&xar-modurl-roles-user-new;&amp;stage=2&amp;authid=#xarSecGenAuthKey()###"> 
+                    <xar:mlstring>
+                        Accept terms and conditions
+                    </xar:mlstring>
+                </a>
+            </p>
+        </xar:comment>
+        <p>
+            <a href="index.php">
+                <xar:mlstring>
+                    Do not accept terms and conditions
+                </xar:mlstring>
+            </a>
+        </p>
+    </div>
+    <xar:elseif condition="$stage eq 2" />
+    <div class="xar-align-center">
+        <p>
+            <xar:mlstring>
+                Create User Account
+            </xar:mlstring>
+        </p>
+        <form action="&xar-modurl-roles-user-register;" method="post" enctype="application/x-www-form-urlencoded">
+            <div>
+                <input type="hidden" name="stage" id="stage" value="3" /> <input type="hidden" name="authid" id="authid" value="#$authid#" /> 
+                <table border="0" cellpadding="5">
+                    <tr>
+                        <td>
+                            <label for="uname">
+                                <xar:mlstring>
+                                    User Name
+                                </xar:mlstring>
+                            </label> 
+                        </td>
+                        <td>
+                            <input type="text" name="uname" id="uname" value="" size="25" maxlength="255" tabindex="1" /> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="realname">
+                                <xar:mlstring>
+                                    Real Name
+                                </xar:mlstring>
+                            </label> 
+                        </td>
+                        <td>
+                            <input type="text" name="realname" id="realname" value="" size="25" maxlength="255" tabindex="2" /> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="email">
+                                <xar:mlstring>
+                                    E-Mail
+                                </xar:mlstring>
+                            </label> 
+                        </td>
+                        <td>
+                            <input type="text" name="email" id="email" value="" size="25" maxlength="255" tabindex="3" /> 
+                        </td>
+                    </tr>
+                    <xar:if condition="xarModGetVar('roles', 'chooseownpassword')">
+                        <tr>
+                            <td>
+                                <label for="pass1">
+                                    <xar:mlstring>
+                                        Password
+                                    </xar:mlstring>
+                                </label> 
+                            </td>
+                            <td>
+                                <input type="password" name="pass1" id="pass1" value="" size="25" maxlength="40" tabindex="4" /> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="pass2">
+                                    <xar:mlstring>
+                                        Confirm Password
+                                    </xar:mlstring>
+                                </label> 
+                            </td>
+                            <td>
+                                <input type="password" name="pass2" id="pass2" value="" size="25" maxlength="40" tabindex="5" /> 
+                            </td>
+                        </tr>
+                    </xar:if>
+                </table>
+                <input type="submit" value="Create User" tabindex="6" /> <input type="hidden" name="phase" id="phase" value="createuser" /> 
+            </div>
+        </form>
+    </div>
+    <xar:elseif condition="$stage eq 3" />
+    <p>
+        #$errortext#
+    </p>
+    <xar:elseif condition="$stage eq 4" />
+    <xar:elseif condition="$stage eq 5" />
+    <p>
+        <xar:mlstring>
+            This account is awaiting approval from an administrator before being activated.
+        </xar:mlstring>
+    </p>
     <xar:if condition="xarModGetVar('roles', 'sendwelcomeemail')">
-        <p><xar:mlstring>You will be sent an email when the account is activated.</xar:mlstring></p>
+        <p>
+            <xar:mlstring>
+                You will be sent an email when the account is activated.
+            </xar:mlstring>
+        </p>
     </xar:if>
 </xar:if>
-
