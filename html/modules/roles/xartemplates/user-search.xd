@@ -22,13 +22,13 @@
     </xar:foreach>
     <table border="0" cellpadding="2" cellspacing="0">
         <tr>
-            <td valign="top"><xar:mlstring>Search on</xar:mlstring>:</td>
+            <td class="xar-align-top"><xar:mlstring>Search on</xar:mlstring>:</td>
             <xar:comment>
                 you can also specify individual fields here, if you don't want to allow searching
                 through all dynamic properties (e.g. ... name="icq" ... property="$properties['icq']" ...)
             </xar:comment>
             <xar:foreach in="$columns" value="$fields">
-                <td valign="top">
+                <td class="xar-align-top">
                 <xar:foreach in="$fields" value="$field">
                     <xar:if condition="!empty($checked[$field])">
                         <input type="checkbox" name="#$field#" id="#$field#" value="1" checked="checked" /> <label for="#$field#"><xar:data-label property="$properties[$field]" /></label><br />
@@ -41,4 +41,3 @@
         </tr>
     </table>
 </xar:if>
-
