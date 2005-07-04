@@ -3,9 +3,9 @@
     <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
         <xar:foreach in="$labels" value="$item">
-            <th align="center">#$item['label']#</th>
+            <th class="xar-align-center">#$item['label']#</th>
         </xar:foreach>
-        <th align="center"><xar:mlstring>Options</xar:mlstring></th>
+        <th class="xar-align-center"><xar:mlstring>Options</xar:mlstring></th>
     </tr>
     <xar:foreach in="$items" value="$item">
     <tr>
@@ -33,7 +33,7 @@
 
     <xar:if condition="!empty($prevurl) or !empty($nexturl)">
         <br />
-        <div align="center">
+        <div class="xar-align-center">
             <xar:if condition="!empty($prevurl)">
                  <a href="#$prevurl#">&lt;&lt; </a>
             <xar:else />
@@ -52,7 +52,7 @@
     <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
         <xar:foreach in="$labels" value="$item">
-            <th align="center">#$item['label']#</th>
+            <th class="xar-align-center">#$item['label']#</th>
         </xar:foreach>
     </tr>
     <xar:foreach in="$items" value="$item">
@@ -73,7 +73,7 @@
     </table>
 
     <xar:if condition="!empty($prevurl) or !empty($nexturl)">
-        <div align="center">
+        <div class="xar-align-center">
             <xar:if condition="!empty($prevurl)">
                  <a href="#$prevurl#">&lt;&lt; </a>
             <xar:else />
