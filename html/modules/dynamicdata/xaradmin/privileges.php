@@ -111,7 +111,7 @@ function dynamicdata_admin_privileges($args)
     $all_modules = xarModAPIfunc('modules', 'admin', 'getlist');
     $all_module_ids = array();
     foreach($all_modules as $this_module) {
-        $all_module_ids[] = $this_module['systemid'];
+        $all_module_ids[] = $this_module['regid'];
     }
     foreach ($objects as $id => $object) {
         $objectlist[$id] = $object['label'];
