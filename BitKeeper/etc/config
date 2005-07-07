@@ -1,7 +1,7 @@
 repository: xaraya
 description: Xaraya main repository
 category: applications/publishing
-logging: logging@openlogging.org
+
 license: 
 single_user: 
 single_host: 
