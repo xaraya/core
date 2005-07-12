@@ -18,6 +18,7 @@
  *       or <xar:data-label property="$property" /> with $property some Dynamic Property
  *       <xar:data-label property="$property" label="id" /> will use <label for="dd_$property->id">...</label>
  *       <xar:data-label property="$property" label="name" /> will use <label for="$property->name">...</label>
+ *       <xar:data-label property="$property" label="something" /> will use <label for="something">...</label>
  *
  * @param $args array containing the object or property
  * @returns string
@@ -29,7 +30,11 @@ function dynamicdata_userapi_handleLabelTag($args)
         return 'echo xarVarPrepForDisplay('.$args['object'].'->label); ';
     } elseif (!empty($args['property'])) {
         if (!empty($args['label'])) {
-            return 'echo '.$args['property'].'->showLabel(array(\'for\' => \''.$args['label'].'\')); ';
+            if (substr($args['label'],0,1) == '$') {
+                return 'echo '.$args['property'].'->showLabel(array(\'for\' => '.$args['label'].')); ';
+            } else {
+                return 'echo '.$args['property'].'->showLabel(array(\'for\' => \''.$args['label'].'\')); ';
+            }
         } else {
             return 'echo xarVarPrepForDisplay('.$args['property'].'->label); ';
         }

@@ -3,7 +3,11 @@
 <xar:if condition="empty($style) or $style eq 'serialized'">
   <xar:if condition="!empty($object)">
     <table class="xar-norm">
-      <xar:data-form object="$object" />
+      <xar:comment>
+        Use a field prefix for all input fields of the object, so that
+        you can have several identical objects in the same input form
+      </xar:comment>
+      <xar:data-form object="$object" layout="prefix" fieldprefix="$fieldprefix" />
     </table>
   </xar:if>
 
@@ -18,7 +22,9 @@
             <td>
               <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
               <select name="#$name#" id="#$id#" tabindex="#$tabindex#">
-                <option value="0">[ <xar:mlstring>new item</xar:mlstring> ]</option>
+                <option value="0">
+                  <xar:if condition="!empty($input)">[ <xar:mlstring>new item</xar:mlstring> ]</xar:if>
+                </option>
                 <xar:foreach in="$dropdown" key="$dropid" value="$dropvalue">
                   <xar:if condition="!empty($value) and $value eq $dropid">
                     <option value="#$dropid#" selected="selected">[#$dropid#] #$dropvalue[$title]#</option>
@@ -32,9 +38,18 @@
       <xar:else/>
         <input type="hidden" name="#$name#" id="#$id#" value="#$value#" />
       </xar:if>
+      <xar:if condition="!empty($input) or empty($fieldlist) or empty($title) or count($fieldlist) gt 1">
       <tr>  
-        <td colspan="2"><xar:data-form object="$object" /></td>
+        <td colspan="2">
+          <xar:if condition="!empty($input)">
+            <xar:data-form object="$object" layout="prefix" fieldprefix="$fieldprefix" />
+          <xar:elseif condition="empty($fieldlist) or empty($title) or count($fieldlist) gt 1"/>
+            <xar:comment> don't bother showing this if we only display the title field </xar:comment>
+            <xar:data-display object="$object" />
+          </xar:if>
+        </td>
       </tr>
+      </xar:if>
     </table>
   </xar:if>
 

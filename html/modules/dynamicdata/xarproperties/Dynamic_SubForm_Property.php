@@ -75,8 +75,8 @@ class Dynamic_SubForm_Property extends Dynamic_Property
         $object =& $this->getObject($value);
 
         if ($this->style == 'serialized') {
-            // check user input for the object item
-            $isvalid = $object->checkInput();
+            // check user input for the object item - using the current name as field prefix
+            $isvalid = $object->checkInput(array('fieldprefix' => $name));
 
             $keylist = array_keys($object->properties);
 
@@ -108,9 +108,9 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             }
             $this->value = serialize($value);
 
-        } elseif ($this->style == 'itemid' && (empty($value) || $value == $oldvalue)) {
-            // check user input for the object item
-            $isvalid = $object->checkInput();
+        } elseif ($this->style == 'itemid' && (empty($value) || $value == $oldvalue) && !empty($this->input)) {
+            // check user input for the object item - using the current name as field prefix
+            $isvalid = $object->checkInput(array('fieldprefix' => $name));
 
             $keylist = array_keys($object->properties);
 
@@ -376,6 +376,9 @@ class Dynamic_SubForm_Property extends Dynamic_Property
         }
         $data['value']     = $value;
 
+        // use the current property name/dd_[id] as prefix for the input fields in the sub-object
+        $data['fieldprefix'] = $name;
+
         if (!empty($this->objectid)) {
             $data['object'] =& $this->getObject($value);
 
@@ -460,6 +463,8 @@ class Dynamic_SubForm_Property extends Dynamic_Property
         if (!empty($fields) && is_array($fields)) {
             foreach ($this->arguments as $item) {
                 if (!empty($fields[$item])) {
+                    $this->$item = $fields[$item];
+                } elseif ($item == 'input' && isset($fields[$item])) {
                     $this->$item = $fields[$item];
                 }
             }
@@ -688,6 +693,8 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                 $data = array();
                 foreach ($this->arguments as $item) {
                     if (!empty($validation[$item])) {
+                        $data[$item] = $validation[$item];
+                    } elseif ($item == 'input' && isset($validation[$item])) {
                         $data[$item] = $validation[$item];
                     }
                 }

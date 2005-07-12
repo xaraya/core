@@ -158,6 +158,37 @@
     </td>
   </tr>
 </xar:if>
+<xar:if condition="!empty($objectid) and !empty($style) and $style eq 'itemid'">
+  <tr>
+    <td>
+      <xar:mlstring>Input Form</xar:mlstring>
+    </td>
+    <td>
+      <xar:if condition="empty($input)">
+        <label for="#$id#_input_1">
+          <input type="radio" name="#$name#[input]" id="#$id#_input_1" value="1" />
+          <xar:mlstring>yes</xar:mlstring>
+        </label>
+        <label for="#$id#_input_0">
+          <input type="radio" name="#$name#[input]" id="#$id#_input_0" value="0" checked="checked" />
+          <xar:mlstring>no</xar:mlstring>
+        </label>
+      <xar:else/>
+        <label for="#$id#_input_1">
+          <input type="radio" name="#$name#[input]" id="#$id#_input_1" value="1" checked="checked" />
+          <xar:mlstring>yes</xar:mlstring>
+        </label>
+        <label for="#$id#_input_0">
+          <input type="radio" name="#$name#[input]" id="#$id#_input_0" value="0" />
+          <xar:mlstring>no</xar:mlstring>
+        </label>
+      </xar:if>
+    </td>
+    <td>
+      <xar:mlstring>Allow editing the sibling/parent item here</xar:mlstring>
+    </td>
+  </tr>
+</xar:if>
   <tr>
     <td>
       <xar:mlstring>Other rule</xar:mlstring>

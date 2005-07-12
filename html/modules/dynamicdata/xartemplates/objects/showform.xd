@@ -11,7 +11,23 @@
             </td>
         </tr>
     </xar:foreach>
-    <xar:else />
+<xar:elseif condition="$layout eq 'prefix'" />
+    <xar:comment>
+        This layout uses a field prefix for all input fields of the object, so that
+        you can have several identical objects in the same input form (cfr. subforms)
+    </xar:comment>
+    <xar:foreach in="$properties" key="$name" value="$property">
+        <xar:set name="fieldname">$fieldprefix . '_dd_' . $property->id</xar:set>
+        <tr class="xar-align-left xar-valign-middle">
+            <td>
+                <xar:data-label property="$properties[$name]" label="$fieldname" />
+            </td>
+            <td>
+                <xar:data-input property="$properties[$name]" name="$fieldname" />
+            </td>
+        </tr>
+    </xar:foreach>
+<xar:else />
     <p>
         <xar:mlstring>Specify your own layout here...</xar:mlstring>
     </p>

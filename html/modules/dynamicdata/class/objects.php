@@ -63,6 +63,9 @@ class Dynamic_Object_Master
     // flag indicating if this object has some property that provides file upload
     var $upload = false;
 
+    // prefix to use in field names etc.
+    var $fieldprefix = '';
+
     /**
      * Default constructor to set the object variables, retrieve the dynamic properties
      * and get the corresponding data stores for those properties
@@ -891,6 +894,9 @@ class Dynamic_Object extends Dynamic_Object_Master
             $this->itemid = $args['itemid'];
             $this->getItem($args);
         }
+        if (empty($args['fieldprefix'])) {
+            $args['fieldprefix'] = $this->fieldprefix;
+        }
         $isvalid = true;
         foreach (array_keys($this->properties) as $name) {
             // for hooks, use the values passed via $extrainfo if available
@@ -901,6 +907,12 @@ class Dynamic_Object extends Dynamic_Object_Master
                 }
             } elseif (isset($args[$field])) {
                 if (!$this->properties[$name]->checkInput($field,$args[$field])) {
+                    $isvalid = false;
+                }
+            } elseif (!empty($args['fieldprefix'])) {
+                // cfr. prefix layout in objects/showform template
+                $field = $args['fieldprefix'] . '_' . $field;
+                if (!$this->properties[$name]->checkInput($field)) {
                     $isvalid = false;
                 }
             } elseif (!$this->properties[$name]->checkInput()) {
@@ -929,6 +941,9 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
+        }
+        if (empty($args['fieldprefix'])) {
+            $args['fieldprefix'] = $this->fieldprefix;
         }
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if (!empty($args['preview'])) {
