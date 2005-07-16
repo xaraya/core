@@ -419,7 +419,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
         // TODO: make sure this is portable !
         // more difficult case where we need to create a pivot table, basically
-        } elseif ($numitems > 0 || count($this->sort) > 0 || count($this->where) > 0) {
+        } elseif ($numitems > 0 || count($this->sort) > 0 || count($this->where) > 0 || count($this->groupby) > 0) {
 
             $dbtype = xarDBGetType();
             if (substr($dbtype,0,4) == 'oci8') {
@@ -494,24 +494,133 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
             if (!$result) return;
 
+            $isgrouped = 0;
+            if (count($this->groupby) > 0) {
+                $isgrouped = 1;
+                $items = array();
+                $combo = array();
+                $id = 0;
+                $process = array();
+                foreach ($propids as $propid) {
+                    if (in_array($propid,$this->groupby)) {
+                        continue;
+                    } elseif (empty($this->fields[$propid]->operation)) {
+                        continue; // all fields should be either GROUP BY or have some operation
+                    }
+                    array_push($process, $propid);
+                }
+            }
             while (!$result->EOF) {
                 $values = $result->fields;
                 $itemid = array_shift($values);
                 // oops, something went seriously wrong here...
                 if (empty($itemid) || count($values) != count($propids)) {
+                    $result->MoveNext();
                     continue;
                 }
-                // add this itemid to the list
-                $this->_itemids[] = $itemid;
+                if (!$isgrouped) {
+                    // add this itemid to the list
+                    $this->_itemids[] = $itemid;
 
-                foreach ($propids as $propid) {
-                    // add the item to the value list for this property
-                    $this->fields[$propid]->setItemValue($itemid,array_shift($values));
+                    foreach ($propids as $propid) {
+                        // add the item to the value list for this property
+                        $this->fields[$propid]->setItemValue($itemid,array_shift($values));
+                    }
+
+                } else {
+                    // TODO: use sub-query to do this in the database for MySQL 4.1+ and others ?
+                    $propval = array();
+                    foreach ($propids as $propid) {
+                        $propval[$propid] = array_shift($values);
+                    }
+                    $groupid = '';
+                    foreach ($this->groupby as $propid) {
+                        $groupid .= $propval[$propid] . '~';
+                    }
+                    if (!isset($combo[$groupid])) {
+                        $id++;
+                        $combo[$groupid] = $id;
+                        // add this "itemid" to the list
+                        $this->_itemids[] = $id;
+                        foreach ($this->groupby as $propid) {
+                            // add the item to the value list for this property
+                            $this->fields[$propid]->setItemValue($id,$propval[$propid]);
+                        }
+                        foreach ($process as $propid) {
+                            // add the item to the value list for this property
+                            $this->fields[$propid]->setItemValue($id,null);
+                        }
+                    }
+                    $curid = $combo[$groupid];
+                    foreach ($process as $propid) {
+                        $curval = $this->fields[$propid]->getItemValue($curid);
+                        switch ($this->fields[$propid]->operation) {
+                            case 'COUNT':
+                                if (!isset($curval)) {
+                                    $curval = 0;
+                                }
+                                $curval++;
+                                break;
+                            case 'SUM':
+                                if (!isset($curval)) {
+                                    $curval = $propval[$propid];
+                                } else {
+                                    $curval += $propval[$propid];
+                                }
+                                break;
+                            case 'MIN':
+                                if (!isset($curval)) {
+                                    $curval = $propval[$propid];
+                                } elseif ($curval > $propval[$propid]) {
+                                    $curval = $propval[$propid];
+                                }
+                                break;
+                            case 'MAX':
+                                if (!isset($curval)) {
+                                    $curval = $propval[$propid];
+                                } elseif ($curval < $propval[$propid]) {
+                                    $curval = $propval[$propid];
+                                }
+                                break;
+                            case 'AVG':
+                                if (!isset($curval)) {
+                                    $curval = array('total' => $propval[$propid], 'count' => 1);
+                                } else {
+                                    $curval['total'] += $propval[$propid];
+                                    $curval['count']++;
+                                }
+                                // TODO: divide total by count afterwards
+                                break;
+                            default:
+                                break;
+                        }
+                        $this->fields[$propid]->setItemValue($curid,$curval);
+                    }
                 }
                 $result->MoveNext();
             }
-
             $result->Close();
+
+            // divide total by count afterwards
+            if ($isgrouped) {
+                $divide = array();
+                foreach ($process as $propid) {
+                    if ($this->fields[$propid]->operation == 'AVG') {
+                        $divide[] = $propid;
+                    }
+                }
+                if (count($divide) > 0) {
+                    foreach ($this->_itemids as $curid) {
+                        foreach ($divide as $propid) {
+                            $curval = $this->fields[$propid]->getItemValue($curid);
+                            if (!empty($curval) && is_array($curval) && !empty($curval['count'])) {
+                                $newval = $curval['total'] / $curval['count'];
+                                $this->fields[$propid]->setItemValue($curid,$newval);
+                            }
+                        }
+                    }
+                }
+            }
 
         // here we grab everyting
         } else {
