@@ -1728,6 +1728,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['viewfunc'])) {
             $args['viewfunc'] = $this->viewfunc;
         }
+        if (empty($args['fieldprefix'])) {
+            $args['fieldprefix'] = $this->fieldprefix;
+        }
 
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;

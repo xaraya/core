@@ -158,7 +158,7 @@
     </td>
   </tr>
 </xar:if>
-<xar:if condition="!empty($objectid) and !empty($style) and $style eq 'itemid'">
+<xar:if condition="!empty($objectid) and !empty($style) and $style ne 'serialized'">
   <tr>
     <td>
       <xar:mlstring>Input Form</xar:mlstring>
@@ -185,7 +185,7 @@
       </xar:if>
     </td>
     <td>
-      <xar:mlstring>Allow editing the sibling/parent item here</xar:mlstring>
+      <xar:mlstring>Allow editing the subform items here</xar:mlstring>
     </td>
   </tr>
 </xar:if>

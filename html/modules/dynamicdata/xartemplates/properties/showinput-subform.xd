@@ -85,15 +85,19 @@
         <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
         <input type="hidden" name="#$name#" id="#$id#" value="#$value#" />
       <xar:else/>
-        <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
+        <input type="hidden" name="#$name#_old" id="#$id#_old" value="#xarVarPrepForDisplay($value)#" />
         <input type="hidden" name="#$name#_new" id="#$id#_new" value="1" />
       </xar:if>
 
       <xar:if condition="$style eq 'childlist' or (!empty($dropdown) and !empty($count)) or !empty($value)">
       <tr>
         <td colspan="2">
-          <xar:data-list object="$object" layout="subform" />
-          <strong>TODO: allow removal/deleting of child items</strong>
+          <xar:if condition="!empty($input)">
+            <xar:data-list object="$object" layout="subform" fieldprefix="$fieldprefix" />
+            <strong>TODO: allow removal/deleting of child items</strong>
+          <xar:else/>
+            <xar:data-view object="$object" layout="subform" />
+          </xar:if>
         </td>
       </tr>
       </xar:if>

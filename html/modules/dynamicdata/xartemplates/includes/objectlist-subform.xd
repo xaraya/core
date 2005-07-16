@@ -1,3 +1,8 @@
+<xar:if condition="!empty($fieldprefix)">
+    <xar:set name="fieldprefix">$fieldprefix . '_'</xar:set>
+<xar:else/>
+    <xar:set name="fieldprefix">''</xar:set>
+</xar:if>
 <table class="xar-norm">
     <tr>
         <xar:foreach in="$properties" key="$name">
@@ -15,20 +20,21 @@
             <xar:foreach in="$properties" key="$name">
                 <td>
                     <xar:set name="propid">#$properties.$name:id#</xar:set>
+                    <xar:set name="fieldname">$fieldprefix . 'dd_' . $propid . '[' . $itemid . ']'</xar:set>
                     <xar:if condition="!empty($fields[$name])">
-                        <xar:data-input property="$properties[$name]" name="dd_'.$propid.'['.$itemid.']" size="10" value="$fields[$name]" />
+                        <xar:data-input property="$properties[$name]" name="$fieldname" size="10" value="$fields[$name]" />
                         <xar:else />
-                        <xar:data-input property="$properties[$name]" name="dd_'.$propid.'['.$itemid.']" size="10" />
+                        <xar:data-input property="$properties[$name]" name="$fieldname" size="10" />
                     </xar:if>
                 </td>
             </xar:foreach>
             <td>
             <xar:if condition="empty($itemid)">
                 <xar:set name="shownew">0</xar:set>
-                <input type="checkbox" name="dd_create[#$objectid#]" id="dd_create_#$objectid#" value="1" checked="checked" /><label for="dd_create_#$objectid#"><xar:mlstring>Add</xar:mlstring></label>
+                <input type="checkbox" name="#$fieldprefix#dd_create[#$objectid#]" id="#$fieldprefix#dd_create_#$objectid#" value="1" checked="checked" /><label for="#$fieldprefix#dd_create_#$objectid#"><xar:mlstring>Add</xar:mlstring></label>
             <xar:else/>
             <xar:comment>
-                <input type="checkbox" name="dd_delete[#$objectid#]" id="dd_delete_#$objectid#_#$itemid#" value="#$itemid#" /><label for="dd_delete_#$objectid#_#$itemid#"><xar:mlstring>Delete</xar:mlstring></label>
+                <input type="checkbox" name="#$fieldprefix#dd_delete[#$objectid#]" id="#$fieldprefix#dd_delete_#$objectid#_#$itemid#" value="#$itemid#" /><label for="#$fieldprefix#dd_delete_#$objectid#_#$itemid#"><xar:mlstring>Delete</xar:mlstring></label>
             </xar:comment>
             </xar:if>
             </td>
@@ -39,11 +45,12 @@
         <xar:foreach in="$properties" key="$name">
             <td>
                 <xar:set name="propid">#$properties.$name:id#</xar:set>
-                <xar:data-input property="$properties[$name]" name="dd_'.$propid.'[0]" size="10" />
+                <xar:set name="fieldname">$fieldprefix . 'dd_' . $propid . '[0]'</xar:set>
+                <xar:data-input property="$properties[$name]" name="$fieldname" size="10" />
             </td>
         </xar:foreach>
         <td>
-            <input type="checkbox" name="dd_create[#$objectid#]" id="dd_create_#$objectid#" value="1" /><label for="dd_create_#$objectid#"><xar:mlstring>Add</xar:mlstring></label>
+            <input type="checkbox" name="#$fieldprefix#dd_create[#$objectid#]" id="#$fieldprefix#dd_create_#$objectid#" value="1" /><label for="#$fieldprefix#dd_create_#$objectid#"><xar:mlstring>Add</xar:mlstring></label>
         </td>
     </tr>
     </xar:if>

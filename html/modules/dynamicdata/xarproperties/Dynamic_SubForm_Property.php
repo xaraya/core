@@ -12,7 +12,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
     var $title     = '';
     var $link      = '';
     var $where     = ''; // TODO
-    var $input     = 1; // TODO
+    var $input     = 1;
     var $display   = 1; // TODO
     var $fieldlist = null;
     var $objectref = null;
@@ -157,10 +157,10 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             }
             $this->value = $value;
 
-        } elseif ($this->style == 'parentid' && !empty($value) && $value == $oldvalue) {
+        } elseif ($this->style == 'parentid' && !empty($value) && $value == $oldvalue && !empty($this->input)) {
 
             // check if we want to create new child items or not
-            xarVarFetch('dd_create', 'array', $dd_create, NULL, XARVAR_NOT_REQUIRED);
+            xarVarFetch($name . '_dd_create', 'array', $dd_create, NULL, XARVAR_NOT_REQUIRED);
             if (!empty($dd_create) && !empty($dd_create[$this->objectid])) {
                 $docreate = 1;
             } else {
@@ -172,7 +172,8 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             {
                 $propertyname = $property->name;
                 $propertyid = $property->id;
-                $propertyid = "dd_".$propertyid;
+                // check user input for the object item - using the current name as field prefix
+                $propertyid = $name .'_dd_'.$propertyid;
                 unset($propertyvaluearray);
                 xarVarFetch($propertyid, 'array', $propertyvaluearray, NULL, XARVAR_NOT_REQUIRED);
                 if (!empty($propertyvaluearray)) {
@@ -248,90 +249,116 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                 }
             }
 
+            // we only store the parent id here
             $this->value = $value;
 
 //        } elseif ($this->style == 'childlist' && (empty($value) || $value == $oldvalue)) {
-        } elseif ($this->style == 'childlist' && (empty($value) || !empty($newvalue)) ) {
+        } elseif ($this->style == 'childlist' && (empty($value) || !empty($newvalue)) && !empty($this->input)) {
 
-            // check user input for the object item
-            $myobject =& Dynamic_Object_Master::getObject(array('objectid'  => $this->objectid,
-                                                                'fieldlist' => $this->fieldlist));
-
-            
-            if (!empty($value)) 
-            {
-                if( is_numeric($value) )
-                {
-                    $myobject->getItem(array('itemid' => $value));
-                    $value = array($value);
-                } else {
-                    $unserializedvalue = unserialize($value);
-                    if( $unserializedvalue === false )
-                    {
-                        $myobject->getItem(array('itemid' => $value));
-                        $value = array($value);
-                    } else {
-                        if( !empty($unserializedvalue) )
-                        {
-                            $myobject->getItem(array('itemid' => $unserializedvalue[0]));
-                            $value = $unserializedvalue;
-                        }
-                    }
-                }
+            // check if we want to create new child items or not
+            xarVarFetch($name . '_dd_create', 'array', $dd_create, NULL, XARVAR_NOT_REQUIRED);
+            if (!empty($dd_create) && !empty($dd_create[$this->objectid])) {
+                $docreate = 1;
             } else {
-                $value = array();
+                $docreate = 0;
             }
 
-            // Check over existing items for updates
-            foreach( $object->itemids as $itemid )
-            {
-                // Grab the values for the for the property
-                $propertyvalues = array();
-                foreach( $object->properties as $property)
-                {
-                    $propertyname = $property->name;
-                    $propertyid = $property->id;
-                    $propertyid = "dd_".$propertyid;
-                    unset($propertyvaluearray);
-                    xarVarFetch($propertyid, 'array', $propertyvaluearray, NULL, XARVAR_NOT_REQUIRED);
-                    if( $propertyvaluearray !== NULL )
-                    {
-                        $propertyvalues[$propertyname] = $propertyvaluearray[$itemid];
-                    }
-                }
-
-                $propertyvalues['itemid'] = $itemid;
-                $itemid = $myobject->updateItem($propertyvalues);                
-            }
-
-            // Grab the values for the for the new property, id = 0
-            $addNewItem = false;
-            $propertyvalues = array();
-            foreach( $object->properties as $property)
+            $childitems = array();
+            foreach ($object->properties as $property)
             {
                 $propertyname = $property->name;
                 $propertyid = $property->id;
-                $propertyid = "dd_".$propertyid;
+                // check user input for the object item - using the current name as field prefix
+                $propertyid = $name .'_dd_'.$propertyid;
                 unset($propertyvaluearray);
                 xarVarFetch($propertyid, 'array', $propertyvaluearray, NULL, XARVAR_NOT_REQUIRED);
-                if( $propertyvaluearray !== NULL )
-                {
-                    $propertyvalues[$propertyname] = $propertyvaluearray[0];
-                    if( !empty($propertyvalues[$propertyname]) )
-                    {
-                        $addNewItem = true;
+                if (!empty($propertyvaluearray)) {
+                    foreach ($propertyvaluearray as $id => $val) {
+                        if (empty($id) && !$docreate) continue;
+                        if (!isset($childitems[$id])) {
+                            $childitems[$id] = array();
+                        }
+                        $childitems[$id][$propertyname] = $val;
                     }
-                } else {
-                    $propertyvalues[$propertyname] = 0;
                 }
             }
-            if( $addNewItem )
-            {
-                $itemid = $myobject->createItem($propertyvalues);                
-                $value[] = $itemid;
+
+            // make sure the link field is included in the field list
+            if (!empty($this->fieldlist) && !in_array($this->link,$this->fieldlist)) {
+                array_push($this->fieldlist,$this->link);
+            }
+            // check user input for the object item
+            $myobject =& Dynamic_Object_Master::getObject(array('objectid'  => $this->objectid,
+                                                                'fieldlist' => $this->fieldlist));
+            $keylist = array_keys($myobject->properties);
+            // report all invalid values here, even the ones we don't see because of the fieldlist
+            $this->invalid = '';
+            $this->warnings = '';
+            foreach ($childitems as $id => $item) {
+                $item['itemid'] = $id;
+                // set item id in link field if necessary (not parent id here)
+                if (!isset($item[$this->link])) {
+                    $item[$this->link] = $id;
+                    $childitems[$id][$this->link] = $id;
+                }
+                $isvalid = $myobject->checkInput($item);
+                if ($isvalid) {
+                    // Note: this also sets new items with id 0 on preview
+                    foreach ($keylist as $key) {
+                        if (isset($item[$key])) {
+                            $object->properties[$key]->setItemValue($id,$item[$key]);
+                        }
+                    }
+                } else {
+                    foreach ($keylist as $key) {
+                        if (!empty($myobject->properties[$key]->invalid)) {
+                            // pass along the invalid message for this property
+                            $this->invalid .= ' [' . $myobject->properties[$key]->label . '] ' . $myobject->properties[$key]->invalid;
+
+                            // invalid messages for fields will be shown in the object form by default, so
+                            // only show explicit warnings for the fields that aren't in the fieldlist here
+                            if (!empty($this->fieldlist) && !in_array($key,$this->fieldlist)) {
+                                $this->warnings .= ' [' . $myobject->properties[$key]->label . '] ' . $myobject->properties[$key]->invalid;
+                            }
+                        }
+                    }
+                }
             }
 
+            if (!empty($this->invalid)) {
+                $this->value = null;
+                return false;
+            }
+            $this->invalid = null;
+
+            $value = array();
+            // if we don't know we're previewing, we don't really have a choice here
+            if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
+            if (empty($preview)) 
+            {
+                foreach ($childitems as $id => $item) {
+                    $item['itemid'] = $id;
+                    if (!empty($id)) {
+                        $id = $myobject->updateItem($item);
+                    } elseif ($docreate) {
+                        // this will give us the new child itemid
+                        $id = $myobject->createItem($item);
+                    }
+                    // Note: we need to make sure we're using the same type here
+                    $value[] = (string) $id;
+                }
+            } else {
+                foreach ($childitems as $id => $item) {
+                    if (!empty($id)) {
+                        // Note: we need to make sure we're using the same type here
+                        $value[] = (string) $id;
+                    }
+                }
+            }
+
+            // we store the serialized list of child itemids here
             $this->value = serialize($value);
+
         } else {
             // just accept the new value
             $this->value = $value;
@@ -356,13 +383,13 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                 $this->$item = $$item;
             }
         }
-// CHECKME: set the value to the itemid by default for childlist ?
-/*
-        if (!empty($this->objectid) && $this->style == 'childlist' &&
-            empty($value) && !empty($this->_itemid)) {
+
+        // default to the current itemid if necessary
+        if (!empty($this->objectid) && $this->style == 'parentid' &&
+            empty($value) && !empty($this->title) && !empty($this->_itemid)) {
             $value = $this->_itemid;
         }
-*/
+
         $data = array();
         $data['name']      = $name;
         $data['id']        = $id;
@@ -432,10 +459,10 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                 $this->$item = $$item;
             }
         }
-// CHECKME: set the value to the itemid by default for childlist ?
+
 /*
-        if (!empty($this->objectid) && $this->style == 'childlist' &&
-            empty($value) && !empty($this->_itemid)) {
+        if (!empty($this->objectid) && $this->style == 'parentid' &&
+            empty($value) && !empty($this->title) && !empty($this->_itemid)) {
             $value = $this->_itemid;
         }
 */
@@ -475,6 +502,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
     {
         if (isset($this->objectref)) {
             $myobject =& $this->objectref;
+            // Note: be careful that serialized values have the same type here (cfr. childlist)
             if ($value == $this->oldvalue) {
                 return $myobject;
             }
@@ -546,6 +574,9 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                     if( isset($where) )
                     {
                         $myobject->getItems(array('where' => $where));
+                    } else {
+                        // re-initialize the items array
+                        $myobject->items = array();
                     }
                 } else {
                     // re-initialize the items array
