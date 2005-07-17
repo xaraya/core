@@ -722,6 +722,7 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
     $data = array();
 
     $data['middleitems'] = array();
+    $data['middleurls'] = array();
     $pageNum = (int)ceil(($blockFirstItem - $firstItem + 1) / $itemsPerPage) + $firstPage - 1;
     for ($i = $blockFirstItem; $i <= $blockLastItem; $i += $itemsPerPage) {
         if (!empty($urltemplate)) {
