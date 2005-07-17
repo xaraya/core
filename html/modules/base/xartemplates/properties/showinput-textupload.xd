@@ -1,6 +1,6 @@
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <div class="xar-form-container-after">
-    <textarea class="xar-form-textareamedium" name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
+    <textarea class="xar-form-textarealarge" name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
     <xar:if condition="!empty($uploads_hooked)">#$uploads_hooked# 
     <xar:else />
     <input type="hidden" name="MAX_FILE_SIZE" value="#$maxsize#" />

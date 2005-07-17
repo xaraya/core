@@ -1,5 +1,17 @@
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
-<input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" class="xar-form-textlong" />
+<xar:if condition="!empty($class)">
+<xar:elseif condition="empty($size)"/>
+    <xar:set name="class">'xar-form-textlong'</xar:set>
+<xar:elseif condition="$size gt 48"/>
+    <xar:set name="class">'xar-form-textxlong'</xar:set>
+<xar:elseif condition="$size lt 12"/>
+    <xar:set name="class">'xar-form-textshort'</xar:set>
+<xar:elseif condition="$size lt 30"/>
+    <xar:set name="class">'xar-form-textmedium'</xar:set>
+<xar:else/>
+    <xar:set name="class">'xar-form-textlong'</xar:set>
+</xar:if>
+<input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" class="#$class#" />
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
 </xar:if>
