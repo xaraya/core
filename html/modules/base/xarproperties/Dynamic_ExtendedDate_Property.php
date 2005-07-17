@@ -31,8 +31,42 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
         if (empty($this->validation)) {
             $this->validation = 'datetime';
         }
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (empty($value)) {
+            $this->value = $value;
+            return true;
+
+        } elseif (is_array($value)) {
+
+            if (!empty($value['year']) && !empty($value['mon']) && !empty($value['day'])) {
+                if (is_numeric($value['year']) && is_numeric($value['mon']) && is_numeric($value['day']) &&
+                    $value['mon'] > 0 && $value['mon'] < 13 && $value['day'] > 0 && $value['day'] < 32) {
+                    $this->value = sprintf('%04d-%02d-%02d',$value['year'],$value['mon'],$value['day']);
+                    if ($this->validation == 'datetime') {
+                        if (isset($value['hour']) && isset($value['min']) && isset($value['sec']) &&
+                            is_numeric($value['hour']) && is_numeric($value['min']) && is_numeric($value['sec']) &&
+                            $value['hour'] > -1 && $value['hour'] < 24 && $value['min'] > -1 && $value['min'] < 61 && $value['sec'] > -1 && $value['sec'] < 61) {
+                            $this->value .= ' ' . sprintf('%02d:%02d:%02d',$value['hour'],$value['min'],$value['sec']);
+                        } else {
+                            $this->invalid = xarML('date');
+                            $this->value = null;
+                            return false;
+                        }
+                    }
+                } else {
+                    $this->invalid = xarML('date');
+                    $this->value = null;
+                    return false;
+                }
+            } else {
+                $this->value = '';
+            }
+            return true;
+
         /* sample value: 2004-06-18 18:47:33 */
-        if (!empty($value) &&
+        } elseif (is_string($value) &&
 
             /* check it matches the correct regexp */
             ($this->validation == 'date' &&
@@ -45,6 +79,7 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
             /* TODO: use xaradodb to format the date */
             $this->value = $value;
             return true;
+
         } else {
             $this->invalid = xarML('date');
             $this->value = null;
@@ -52,6 +87,68 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
         }
     } /* validateValue */
 
+    /**
+     * Show the input according to the requested dateformat.
+     */
+    function showInput($args = array())
+    {
+        extract($args);
+        $data = array();
+
+        if (empty($name)) {
+            $name = 'dd_'.$this->id;
+        }
+        if (empty($id)) {
+            $id = $name;
+        }
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+
+        $data['year'] = '';
+        $data['mon']  = '01';
+        $data['day']  = '01';
+        $data['hour'] = '00';
+        $data['min']  = '00';
+        $data['sec']  = '00';
+
+        // default time is unspecified
+        if (empty($value)) {
+            $value = '';
+
+        } elseif ($this->validation == 'date' &&
+            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $value, $matches)) {
+            $data['year'] = $matches[1];
+            $data['mon']  = $matches[2];
+            $data['day']  = $matches[3];
+
+        } elseif ($this->validation == 'datetime' &&
+            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $value, $matches)) {
+            $data['year'] = $matches[1];
+            $data['mon']  = $matches[2];
+            $data['day']  = $matches[3];
+            $data['hour'] = $matches[4];
+            $data['min']  = $matches[5];
+            $data['sec']  = $matches[6];
+        }
+        $data['format']   = $this->validation;
+
+        if (!isset($dateformat)) {
+            if ($this->validation == 'date') {
+                $dateformat = '%Y-%m-%d';
+            } else {
+                $dateformat = '%Y-%m-%d %H:%M:%S';
+            }
+        }
+        $data['dateformat'] = $dateformat;
+        $data['name']       = $name;
+        $data['id']         = $id;
+        $data['value']      = $value;
+        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
+        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+
+        return xarTplProperty('base', 'extendeddate', 'showinput', $data);
+    }
 
     /**
      * Show the output according to the requested dateformat.
@@ -66,10 +163,33 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
             $value = $this->value;
         }
 
-        /* default time is unspecified */
+        $data['year'] = '';
+        $data['mon']  = '';
+        $data['day']  = '';
+        $data['hour'] = '';
+        $data['min']  = '';
+        $data['sec']  = '';
+
+        // default time is unspecified
         if (empty($value)) {
-            $value = -1;
-        } 
+            $value = '';
+
+        } elseif ($this->validation == 'date' &&
+            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $value, $matches)) {
+            $data['year'] = $matches[1];
+            $data['mon']  = $matches[2];
+            $data['day']  = $matches[3];
+
+        } elseif ($this->validation == 'datetime' &&
+            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $value, $matches)) {
+            $data['year'] = $matches[1];
+            $data['mon']  = $matches[2];
+            $data['day']  = $matches[3];
+            $data['hour'] = $matches[4];
+            $data['min']  = $matches[5];
+            $data['sec']  = $matches[6];
+        }
+        $data['format']   = $this->validation;
 
         if (!isset($dateformat)) {
             if ($this->validation == 'date') {
@@ -79,13 +199,10 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
             }
         }
 
-        /* TODO: format the date properly, and use templates */
-        if (preg_match("/(\d{4})-(\d{1,2})-(\d{1,2})/", $value,
-            $matches)) {
-            return $matches[3].'/'.$matches[2].'/'.$matches[1];
-        } else {
-            return $value;
-        }
+        $data['dateformat'] = $dateformat;
+        $data['value']      = $value;
+
+        return xarTplProperty('base', 'extendeddate', 'showoutput', $data);
     } /* showOutput */
 
     /**

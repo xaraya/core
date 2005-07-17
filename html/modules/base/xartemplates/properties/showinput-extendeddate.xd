@@ -1,0 +1,25 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:if condition="empty($tabindex)">
+    <xar:set name="tab">''</xar:set>
+<xar:else/>
+    <xar:set name="tab">'tabindex="'.$tabindex .'"'</xar:set>
+</xar:if>
+<xar:mlstring>Year</xar:mlstring>
+    <input type="text" name="#$name#[year]" id="#$id#" value="#$year#" size="4" maxlength="4" #$tab# />
+<xar:mlstring>Month</xar:mlstring>
+    <input type="text" name="#$name#[mon]" id="#$id#_mon" value="#$mon#" size="2" maxlength="2" #$tab# />
+<xar:mlstring>Day</xar:mlstring>
+    <input type="text" name="#$name#[day]" id="#$id#_day" value="#$day#" size="2" maxlength="2" #$tab# />
+<xar:if condition="!empty($format) and $format eq 'datetime'">
+    <xar:mlstring>Time</xar:mlstring>
+    <input type="text" name="#$name#[hour]" id="#$id#_hour" value="#$hour#" size="2" maxlength="2" #$tab# />
+    :
+    <input type="text" name="#$name#[min]" id="#$id#_min" value="#$min#" size="2" maxlength="2" #$tab# />
+    :
+    <input type="text" name="#$name#[sec]" id="#$id#_sec" value="#$sec#" size="2" maxlength="2" #$tab# />
+</xar:if>
+
+<xar:if condition="!empty($invalid)">
+    <span class="xar-error">#$invalid#</span>
+</xar:if>
+
