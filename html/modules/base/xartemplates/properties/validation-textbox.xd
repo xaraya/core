@@ -18,6 +18,15 @@
   </tr>
   <tr>
     <td>
+      <xar:mlstring>Regular expression</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[regex]" id="#$id#_regex" value="#$regex#" size="30" tabindex="#$tabindex#" />
+      <xar:mlstring>PCRE syntax, e.g. /^[A-Z]+\d*$/</xar:mlstring>
+    </td>
+  </tr>
+  <tr>
+    <td>
       <xar:mlstring>Other rule</xar:mlstring>
     </td>
     <td>

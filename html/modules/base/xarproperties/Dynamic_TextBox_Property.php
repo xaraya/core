@@ -27,6 +27,7 @@ class Dynamic_TextBox_Property extends Dynamic_Property
 
     var $min = null;
     var $max = null;
+    var $regex = null;
 
     function Dynamic_TextBox_Property($args)
     {
@@ -51,6 +52,10 @@ class Dynamic_TextBox_Property extends Dynamic_Property
             return false;
         } elseif (isset($this->min) && strlen($value) < $this->min) {
             $this->invalid = xarML('text : must be at least #(1) characters long',$this->min);
+            $this->value = null;
+            return false;
+        } elseif (!empty($this->regex) && !preg_match($this->regex, $value)) {
+            $this->invalid = xarML('text : does not match regular expression');
             $this->value = null;
             return false;
         } else {
@@ -130,12 +135,17 @@ class Dynamic_TextBox_Property extends Dynamic_Property
     function parseValidation($validation = '')
     {
         if (is_string($validation) && strchr($validation,':')) {
-            list($min,$max) = explode(':',$validation);
+            $fields = explode(':',$validation);
+            $min = array_shift($fields);
+            $max = array_shift($fields);
             if ($min !== '' && is_numeric($min)) {
                 $this->min = $min; // could be int or float - cfr. FloatBox below
             }
             if ($max !== '' && is_numeric($max)) {
                 $this->max = $max; // could be int or float - cfr. FloatBox below
+            }
+            if (count($fields) > 0) {
+                $this->regex = join(':', $fields); // the rest belongs to the regular expression
             }
         }
     }
@@ -192,9 +202,10 @@ class Dynamic_TextBox_Property extends Dynamic_Property
         }
         $data['min'] = isset($this->min) ? $this->min : '';
         $data['max'] = isset($this->max) ? $this->max : '';
+        $data['regex'] = isset($this->regex) ? xarVarPrepForDisplay($this->regex) : '';
         $data['other'] = '';
         // if we didn't match the above format
-        if (!isset($this->min) && !isset($this->max)) {
+        if (!isset($this->min) && !isset($this->max) && !isset($this->regex)) {
             $data['other'] = xarVarPrepForDisplay($this->validation);
         }
 
@@ -237,9 +248,17 @@ class Dynamic_TextBox_Property extends Dynamic_Property
                  } else {
                      $max = '';
                  }
-                 // we have some minimum and/or maximum length
-                 if ($min !== '' || $max !== '') {
+                 if (!empty($validation['regex']) && is_string($validation['regex'])) {
+                     $regex = $validation['regex'];
+                 } else {
+                     $regex = '';
+                 }
+                 // we have some minimum and/or maximum length and/or regular expression
+                 if ($min !== '' || $max !== '' || $regex !== '') {
                      $this->validation = $min .':'. $max;
+                     if (!empty($regex)) {
+                         $this->validation .= ':'. $regex;
+                     }
 
                  // we have some other rule
                  } elseif (!empty($validation['other'])) {
