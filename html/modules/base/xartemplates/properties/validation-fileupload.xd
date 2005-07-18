@@ -27,6 +27,14 @@
     </td>
   </tr>
   <tr>
+    <td>
+      <xar:mlstring>File size</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[maxsize]" id="#$id#_maxsize" value="#$maxsize#" size="#$size#" tabindex="#$tabindex#" />
+    </td>
+  </tr>
+  <tr>
     <td colspan="2">
       <strong><xar:mlstring>Note: the uploads module is not hooked</xar:mlstring></strong>
     </td>

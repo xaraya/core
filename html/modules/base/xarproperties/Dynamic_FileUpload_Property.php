@@ -355,17 +355,21 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $this->basedir = $basedir;
             $this->importdir = $importdir;
 
-        } else {
+        } elseif (!empty($validation)) {
             // specify base directory and optional file types in validation
-            // field - e.g. this/dir or this/dir;(gif|jpg|png|bmp).
-            if (strchr($validation,';')) {
-                list($dir,$type) = explode(';',$validation);
-                $this->basedir = trim($dir);
-                $this->filetype = trim($type);
+            // field - e.g. this/dir or this/dir;(gif|jpg|png|bmp) or this/dir;(gif|jpg|png|bmp);1500000
+            $fields = explode(';',$validation);
+            $this->basedir = trim($fields[0]);
+            if (count($fields) > 1) {
+                $this->filetype = trim($fields[1]);
+                if (count($fields) > 2) {
+                    $this->maxsize = trim($fields[2]);
+                }
             } else {
-                $this->basedir = $validation;
                 $this->filetype = '';
             }
+        } else {
+            // use the default values
         }
     }
 
@@ -436,6 +440,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                     $data['filetype'][] = '';
                 }
             }
+            $data['maxsize'] = $this->maxsize;
         }
         $data['other'] = '';
 
@@ -505,6 +510,12 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                             $this->validation .= join('|',$todo);
                             $this->validation .= ')';
                         }
+                    }
+                    if (!empty($validation['maxsize'])) {
+                        if (empty($todo)) {
+                            $this->validation .= ';';
+                        }
+                        $this->validation .= ';' . $validation['maxsize'];
                     }
                 }
             } else {
