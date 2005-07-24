@@ -43,6 +43,7 @@
 function mail_adminapi__sendmail($args)
 {
     // Get arguments from argument array
+    
     extract($args);
 
     // Check for required arguments
@@ -286,9 +287,15 @@ function mail_adminapi__sendmail($args)
     // We are now setting up the advance options that can be used by the modules
     // Add Attachment will look to see if there is a var passed called
     // attachName and attachPath and attach it to the message
-    if ((!empty($attachName)) || (!empty($attachPath))) {
-        $mail->AddAttachment($attachPath, $attachName);
+ 
+    if (isset($attachPath) && !empty($attachPath)) {
+        if (isset($attachName) && !empty($attachName)) {
+            $mail->AddAttachment($attachPath, $attachName);
+        } else {
+            $mail->AddAttachment($attachPath);
+        }
     }
+
     // Send the mail, or send an exception.
     $result = true;
     if (!$mail->Send()) {

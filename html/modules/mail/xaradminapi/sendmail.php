@@ -144,7 +144,12 @@ function mail_adminapi_sendmail($args)
         if (!isset($when)) {
             $when = null;
         }
-
+        if (!isset($attachName)) {
+            $attacheName = '';
+        }
+        if (!isset($attachPath)) {
+            $attachPath = '';
+        }
         // Call private sendmail
         return xarModAPIFunc('mail', 'admin', '_sendmail',
             array('info'          => $info,
@@ -166,6 +171,8 @@ function mail_adminapi_sendmail($args)
                   'fromname'      => $fromname,
                   'usetemplates'  => $usetemplates,
                   'when'          => $when,
+                  'attachName'    => $attachName,
+                  'attachPath'    => $attachPath,
                   'htmlmail'      => false));
     }
 }
