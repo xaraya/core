@@ -174,7 +174,7 @@ class xarCSS
         if ($this->scope == 'theme') {
             // pretty straightforward
             $themestylesheet =  xarTplGetThemeDir() . "/style/" . $this->filename . "." . $this->fileext;
-            if(file_exists($themestylesheet)) {
+            if(file_exists($themestylesheet) || $this->method == "embed") {
                 // no problem
                 return $themestylesheet;
             } else {
