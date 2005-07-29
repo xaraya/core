@@ -19,7 +19,7 @@
 
 function fnmatch($pattern, $string)
 {
-    require_once 'includes/phpcompat/functions/_fnmatch.php';
+    require_once 'functions/_fnmatch.php';
     return _fnmatch($pattern, $string);
 }
 
