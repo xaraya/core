@@ -1516,8 +1516,12 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         // allow where clauses like : title eq 'this and that' and body eq 'here or there'
         $idx = 0;
         $found = array();
-        if (preg_match_all("/'([^']*\s+(and|or)\s+[^']*)'/",$where,$matches)) {
+        if (preg_match_all("/'(.*?)'/",$where,$matches)) {
             foreach ($matches[1] as $match) {
+                // skip if it doesn't contain and/or
+                if (!preg_match('/\s+(and|or)\s+/',$match)) {
+                    continue;
+                }
                 $found[$idx] = $match;
                 $match = preg_quote($match);
 
