@@ -145,7 +145,7 @@ function mail_adminapi_sendmail($args)
             $when = null;
         }
         if (!isset($attachName)) {
-            $attacheName = '';
+            $attachName = '';
         }
         if (!isset($attachPath)) {
             $attachPath = '';
