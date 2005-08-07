@@ -101,12 +101,12 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         }
         $data=array();
 
-    // TODO: use redirect function here ?
         if (!empty($value) && $value != 'http://') {
             $link = $value;
             $data['link']=xarVarPrepForDisplay($link);
+    // FIXME: $this->icon is supposed to contain the URL already
             if (!empty($this->icon)) {
-                $data['value']= $this->value;
+                $data['value']= $value;
                 $data['icon'] = xarModAPIFunc('base',
                                'user',
                                'getfavicon',

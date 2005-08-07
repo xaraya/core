@@ -70,16 +70,18 @@ function base_userapi_getfavicon($args)
 
 function __getFaviconURL($url)
 {
-    if(!$url){
+    if(empty($url) || $url == 'http://'){
         return false;
-    }else{
-    $url_parts = parse_url($url);
+    }
+    $url_parts = @parse_url($url);
+    if (empty($url_parts)) {
+        return false;
+    }
     $full_url = "http://$url_parts[host]";
     if(isset($url_parts['port'])){
         $full_url .= ":$url_parts[port]";
     }
     $favicon_url = $full_url . "/favicon.ico" ;
-    }
     return $favicon_url;
 }
 ?>
