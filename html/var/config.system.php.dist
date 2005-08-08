@@ -38,6 +38,8 @@ $systemConfiguration['DB.Persistent'] = false;
  * TODO: it also is known to break a PHP5 installation due to the introduction
  *       of E_STRICT error level (see xarException phpErrorHandler function)
  * TODO: move this out of here
+ * Set to false for php 4.4 and php > 5.03
+ * Temp solution for bug #4785 until function return by reference instances reviewed
  */
 $systemConfiguration['Exception.EnablePHPErrorHandler'] = true;
 
