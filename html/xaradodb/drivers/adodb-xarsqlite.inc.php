@@ -62,10 +62,11 @@ class ADODB_xarsqlite extends ADODB_sqlite
                 }
             }
             $result = $this->_altertable($tablename,$alterdefs);
-            return $result;
-        } 
-        // Otherwise use the normal execute method
-        return parent::Execute($sql,$inputarr);
+        } else {
+          // Otherwise use the normal execute method
+          $result = parent::Execute($sql,$inputarr);
+        }
+        return $result;
     }
 
     function _altertable($orgTableName, $alterdefs)
