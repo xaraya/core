@@ -1252,10 +1252,9 @@ class xarTpl__TemplateVariables
     {
         static $instance = NULL;
         if(!isset($instance)) {
-	    $instance = new xarTpl__TemplateVariables();
+            $instance = new xarTpl__TemplateVariables();
         }
         return $instance;
-            
     }
 
     function get($name)
