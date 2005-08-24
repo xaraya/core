@@ -536,7 +536,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 if(in_array($parent->tagName, $natives,true)) $trimmer='trim';
                                 if ($trimmer($text) != '') {
                                     if(!$this->canHaveText($parent)) return;
-                                    $children[] =& xarTpl__NodesFactory::createTextNode($trimmer($text), $this);
+                                    // CHECKME: & removed here for php 4.4 
+                                    $children[] = xarTpl__NodesFactory::createTextNode($trimmer($text), $this);
                                     $text = '';
                                 }
 
@@ -599,7 +600,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 if(in_array($parent->tagName, $natives,true)) $trimmer='trim';
                                 if ($trimmer($text) != '') {
                                     if(!$this->canHaveText($parent)) return;
-                                    $children[] =& xarTpl__NodesFactory::createTextNode($trimmer($text), $this);
+                                    // CHECKME: & removed here for php 4.4
+                                    $children[] = xarTpl__NodesFactory::createTextNode($trimmer($text), $this);
                                     $text = '';
                                 }
                                 // Handle End Tag
@@ -1356,7 +1358,8 @@ class xarTpl__ExpressionTransformer
             usort($matches[0], array('xarTpl__ExpressionTransformer','rlensort')); 
             $numMatches = count($matches[0]);
             for ($i = 0; $i < $numMatches; $i++) {
-                $resolvedName =& xarTpl__ExpressionTransformer::transformBLExpression($matches[0][$i]);
+              // CHECKME: & removed here for php 4.4
+                $resolvedName = xarTpl__ExpressionTransformer::transformBLExpression($matches[0][$i]);
                 if (!isset($resolvedName)) return; // throw back
                       
                 // CHECK: Does it matter if there is overlap in the matches? 
