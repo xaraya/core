@@ -257,6 +257,10 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                 //} else {
                     //$code .= "'" . strtr($childCode, array("\\" => "\\\\", "'" => "\\'")) . "'";
                 //}
+
+                //What is the PHP operator precedence?
+                //Couldnt we use parenthesis to not depend on that??
+                //The fix for bug #1228 should be here in this line. Dont know what it is doing right now 'thought...
                 if ($child->isAssignable() && !($checkNode->needParameter()) || $checkNode->needAssignment()) {
                     $code .= "; ";
                     if ($child->needExceptionsControl() || $this->isPendingExceptionsControl()) {
