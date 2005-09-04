@@ -168,7 +168,7 @@ function pnIsRedirected()
  *
  * @deprec
  * @access public
- * @return boot true if locally referred, false if not
+ * @return bool true if locally referred, false if not
  */
 function pnLocalReferer()
 {
