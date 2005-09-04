@@ -1,12 +1,20 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Account Information</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2>#$name#</h2>
-<div style="margin: auto;">
-<xar:if condition="!empty($message)">
-	#$message#
-<xar:else />
-	#$output#
-	<br /><br />
-</xar:if>
+<div class="xar-mod-head">
+    <span class="xar-mod-title">
+        <xar:mlstring>Account Information</xar:mlstring>
+    </span>
 </div>
+<div class="xar-mod-body"><h2>#$name#</h2>
+    <div style="margin: auto;">
+        <xar:if condition="!empty($message)">
+            #$message#
+        <xar:else />
+            <p>
+                <xar:mlstring>
+                    Configure Your Account Settings:
+                </xar:mlstring>
+            </p>
+            #$output#
+        </xar:if>
+    </div>
 </div>

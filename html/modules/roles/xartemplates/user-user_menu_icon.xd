@@ -1,15 +1,15 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <p>
-	<a href="#xarModURL('roles', 'user', 'usermenu')#&amp;phase=formbasic">
-		<xar:mlstring>
-			To edit your account click here
-		</xar:mlstring>
-	</a>
+    <a href="#xarModURL('roles', 'user', 'usermenu', array('phase' => 'formbasic'))#">
+        <xar:mlstring>
+            Edit Your Account Details
+        </xar:mlstring>
+    </a>
 </p>
 <p>
-	<a href="#xarModURL('roles', 'user', 'logout')#">
-		<xar:mlstring>
-			To log out click here
-		</xar:mlstring>
-	</a>
+    <a href="#xarModURL('roles', 'user', 'logout')#">
+        <xar:mlstring>
+            Logout
+        </xar:mlstring>
+    </a>
 </p>
