@@ -46,7 +46,7 @@
                 Title:
             </td>
             <td>
-                <input type="text" name="block_title" value="<xar:var name="$instance.title" />" length="40" maxlength="255" style="width:150px;" />
+                <input type="text" name="block_title" value="&xar-var-instance.title;" length="40" maxlength="255" style="width:150px;" />
             </td>
         </tr>
         <tr>
@@ -54,7 +54,7 @@
                 Type:
             </td>
             <td>
-                <xar:var name="$instance.module" />\<xar:var name="$instance.type" />
+                &xar-var-instance.module;\&xar-var-instance.type;
             </td>
         </tr>
         <tr>
