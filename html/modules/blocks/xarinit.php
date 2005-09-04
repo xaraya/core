@@ -77,6 +77,13 @@ function blocks_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
+    $query = xarDBCreateIndex($prefix . '_block_instances',
+                             array('name'   => 'xar_type_index',
+                                   'fields' => array('xar_type_id'),
+                                   'unique' => false));
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
     // *_block_types
     $query = xarDBCreateTable($prefix . '_block_types',
                              array('xar_id'          => array('type'        => 'integer',
@@ -98,7 +105,7 @@ function blocks_init()
     $query = xarDBCreateIndex($prefix . '_block_types',
                              array('name'   => 'xar_type_index',
                                    'fields' => array('xar_type'),
-                                   'unique' => false));
+                                   'unique' => 'false'));
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 /*
@@ -126,6 +133,20 @@ function blocks_init()
                                                              'null'        => false,
                                                              'default'     => '0')));
 
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    $query = xarDBCreateIndex($prefix . '_block_group_instances',
+                              array('name' => 'xar_group_index',
+                                    'fields' => array('xar_group_id'),
+                                    'unique' => false));
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    $query = xarDBCreateIndex($prefix . '_block_group_instances',
+                              array('name' => 'xar_instance_index',
+                                    'fields' => array('xar_instance_id'),
+                                    'unique' => false));
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 

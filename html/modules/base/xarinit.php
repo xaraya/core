@@ -108,6 +108,14 @@ function base_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
+    $index = array('name'   => 'i_xar_uid',
+                   'fields' => array('xar_uid'));
+    
+    $query = xarDBCreateIndex($sessionInfoTable,$index);
+   
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
+
     /*********************************************************************
     * Here we install the configuration table and set some default
     * configuration variables
