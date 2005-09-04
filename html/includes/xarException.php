@@ -145,9 +145,9 @@ class ErrorCollection
 
     function toString()
     {
-        $text = "ErrorCollection exception\n";
+        $text = "";
         foreach($this->exceptions as $exc) {
-            $text .= "Exception $exc[id]\n";
+//            $text .= "Exception $exc[id]\n";
             if (method_exists($exc['value'], 'toString')) {
                 $text .= $exc['value']->toString();
                 $text .= "\n";
@@ -158,9 +158,9 @@ class ErrorCollection
 
     function toHTML()
     {
-        $text = 'ErrorCollection exception<br />';
+        $text = "";
         foreach($this->exceptions as $exc) {
-            $text .= "Exception identifier: <b>$exc[id]</b><br />";
+//            $text .= "Exception identifier: <b>$exc[id]</b><br />";
             if (method_exists($exc['value'], 'toHTML')) {
                 $text .= $exc['value']->toHTML();
                 $text .= '<br />';
@@ -317,7 +317,7 @@ function xarExceptionFree()
 /**
  * Handles the current exception
  *
- * You must always call this function when you handled a catched exception.
+ * You must always call this function when you handled a caught exception.
  *
  * @author Marco Canini <m.canini@libero.it>
  * @access public
@@ -348,16 +348,33 @@ function xarExceptionRender($format)
 {
     $text = '';
 
+//    echo count($GLOBALS['xarException_stack']);exit;
     foreach($GLOBALS['xarException_stack'] as $exception) {
+
+        $data['id'] = $exception['id'];
+
+        if ($format == 'html') {
+            if (method_exists($exception['value'], 'toHTML')) {
+                $data['message'] = $exception['value']->toHTML();
+            }
+        } else {
+            if (method_exists($exception['value'], 'toString')) {
+                $data['message'] = $exception['value']->toString();
+            }
+        }
 
         switch ($exception['major']) {
             case XAR_SYSTEM_EXCEPTION:
-                $type = 'System Exception';
+                $type = 'System Error';
+                $template = "system";
+                $data['type'] = $type;
                 break;
             case XAR_USER_EXCEPTION:
                 $type = 'User Error';
+                $template = "user";
+                $data['type'] = $type;
 
-                if ($format == 'html') {
+/*                if ($format == 'html') {
                     $text .= '<br /><span style="color: purple">'.$type.'</span><br /><br />';
                     if (method_exists($exception['value'], 'toHTML')) {
                         $text .= '<span style="color: red">'.$exception['value']->toHTML().'</span>';
@@ -368,11 +385,12 @@ function xarExceptionRender($format)
                         $text .= $exception['value']->toString()."\n";
                     }
                 }
-
+*/
                 continue 2;
             default:
                 continue 2;
         }
+
 
         $showParams = xarCoreIsDebugFlagSet(XARDBG_SHOW_PARAMS_IN_BT);
 
@@ -431,8 +449,7 @@ function xarExceptionRender($format)
             }
         }
     }
-
-    return $text;
+return  xarTplModule('base',$template, 'exception', $data);
 }
 
 // PRIVATE FUNCTIONS
