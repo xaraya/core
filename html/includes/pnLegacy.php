@@ -934,24 +934,6 @@ function pnVarPrepHTMLDisplay($var)
     return xarVarPrepHTMLDisplay($var);
 }
 
-function xarModGetAlias($var)
-{
-    return xarRequest__resolveModuleAlias($var);
-}
-
-function xarModSetAlias($modName, $alias)
-{
-    if (!xarModAPILoad('modules', 'admin')) return;
-    $args = array('modName'=>$alias, 'aliasModName'=>$modName);
-    return xarModAPIFunc('modules', 'admin', 'add_module_alias', $args);
-}
-
-function xarModDelAlias($modName, $alias)
-{
-    if (!xarModAPILoad('modules', 'admin')) return;
-    $args = array('aliasModName'=>$modName);
-    return xarModAPIFunc('modules', 'admin', 'delete_module_alias', $args);
-}
 
 function xarBlockTypeExists($modName, $blockType)
 {
