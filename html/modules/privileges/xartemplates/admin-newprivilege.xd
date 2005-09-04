@@ -18,8 +18,8 @@
 <script language="JavaScript">
 <!--
 function setaction(target){
-document.forms[0].action = target;
-document.forms[0].submit();}
+document.forms['privilegeform'].action = target;
+document.forms['privilegeform'].submit();}
 //-->
 </script>
 
@@ -27,7 +27,7 @@ document.forms[0].submit();}
 <div class="xar-mod-body"><h2><xar:mlstring>Add</xar:mlstring></h2><br />
 <div style="text-align: center; margin: auto;">
 	<br /><br />
-	<form action="&xar-modurl-privileges-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
+	<form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<input type="hidden" name="pid" id="pid" value="#$pid#" />
 		
