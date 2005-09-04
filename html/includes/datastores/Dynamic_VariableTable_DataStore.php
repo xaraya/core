@@ -441,8 +441,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
      * @param $args['objectid'] dynamic object id for the item, or
      * @param $args['modid'] module id for the item +
      * @param $args['itemtype'] item type of the item
-     * @returns integer
-     * @return value of the next id
+     * @return integer value of the next id
      * @raise BAD_PARAM, NO_PERMISSION
      */
     function getNextId($args)
