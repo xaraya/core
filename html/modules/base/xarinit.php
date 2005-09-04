@@ -262,6 +262,22 @@ function base_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
+    // {ML_dont_parse 'includes/xarMod.php'}
+    include_once 'includes/xarMod.php';
+
+    // Start Modules Support
+    $systemArgs = array('enableShortURLsSupport' => false,
+                        'generateXMLURLs' => false);
+    xarMod_init($systemArgs, $whatToLoad);
+
+    /**************************************************************
+    * Install modules table and insert the modules module
+    **************************************************************/
+    if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
+                           array('directory' => 'modules', 'initfunc'  => 'init'))) {
+        return;
+    }
+    
     // Load in installer API
     if (!xarInstallAPILoad('installer','admin')) return;
 
@@ -287,31 +303,8 @@ function base_init()
         return NULL;
     }
 
-    /**************************************************************
-    * Install modules table and insert the modules module
-    **************************************************************/
-    if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
-                           array('directory' => 'modules', 'initfunc'  => 'init'))) {
-        return;
-    }
     $modulesTable = $systemPrefix .'_modules';
     $systemModuleStatesTable = $systemPrefix .'_module_states';
-
-    // Install Modules module
-    $seqId = $dbconn->GenId($modulesTable);
-    $query = "INSERT INTO $modulesTable
-              (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES ($seqId, 'modules', 1, 'modules', '2.02', 1, 'Core Admin', 'Global', 1, 0)";
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    // Set Modules Module to active
-    $query = "INSERT INTO $systemModuleStatesTable (xar_regid, xar_state
-              ) VALUES (1, 3)";
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
 
     // Install authsystem module
     $seqId = $dbconn->GenId($modulesTable);
