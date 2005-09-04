@@ -72,7 +72,7 @@ function xarConfigGetVar($name)
     $query = "SELECT xar_value
               FROM $config_varsTable
               WHERE xar_name='" . xarVarPrepForStore($name) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     if ($result->EOF) {
@@ -152,7 +152,7 @@ function xarConfigSetVar($name, $value)
                    WHERE xar_name='" . xarVarPrepForStore($name) . "'";
     }
 
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     //Update configuration variables

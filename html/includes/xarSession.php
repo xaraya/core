@@ -217,7 +217,7 @@ function xarSession_setUserInfo($userId, $rememberSession)
               SET xar_uid = " . xarVarPrepForStore($userId) . ",
                   xar_remembersess = " . xarVarPrepForStore($rememberSession) . "
               WHERE xar_sessid = '" . xarVarPrepForStore(session_id()) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     if ($xarSession_systemArgs['useOldPHPSessions']) {
@@ -348,7 +348,7 @@ function xarSession__current($sessionId)
               SET xar_lastused = " . time() . "
               WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
 
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     return true;
@@ -380,7 +380,7 @@ function xarSession__new($sessionId, $ipAddress)
                   " . time() . ",
                   " . time() . ")";
 
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     return true;
@@ -425,7 +425,7 @@ function xarSession__phpRead($sessionId)
                      xar_vars
               FROM $sessioninfoTable
               WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     if (!$result->EOF) {
@@ -467,7 +467,7 @@ function xarSession__phpWrite($sessionId, $vars)
     $query = "UPDATE $sessioninfoTable
               SET xar_vars = '" . xarVarPrepForStore($vars) . "'
               WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     return true;
@@ -486,7 +486,7 @@ function xarSession__phpDestroy($sessionId)
 
     $query = "DELETE FROM $sessioninfoTable
               WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     return true;
@@ -527,7 +527,7 @@ function xarSession__phpGC($maxlifetime)
             break;
     }
     $query = "DELETE FROM $sessioninfoTable $where";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     return true;
