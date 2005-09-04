@@ -1,7 +1,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>System Information</xar:mlstring></h2><br />
 <div style="margin: auto;">
-<b><xar:mlstring>Sort Options</xar:mlstring>:</b><br />
+<p><b><xar:mlstring>Sort Options</xar:mlstring>:</b></p>
 
 <form action="&xar-modurl-base-admin-sysinfo;" method="post">
 <div>
