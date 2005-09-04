@@ -50,7 +50,11 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 {
     xarCoreInit(XARCORE_SYSTEM_NONE); // Does not initialise any optional system
 
-    // Handle installation phase designation
+    if (!xarTplSetThemeName('installer')) {
+        xarCore_die('You need the installer theme if you want to install Xaraya.');
+    }
+
+	// Handle installation phase designation
     $phase = (int) xarRequestGetVar('install_phase', 'POST');
     if ($phase == 0) {
         $phase = 1;
@@ -71,9 +75,6 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 
     // Check for installer theme
     //TODO: use main function as the gateway to the phases and the location for this check
-    if (!xarTplSetThemeName('installer')) {
-        xarCore_die('You need the installer theme if you want to install xaraya.');
-    }
     /*
     $installerTheme = xarCore_getSiteVar('BL.DefaultTheme');
     if (strcmp('installer', $installerTheme)) {

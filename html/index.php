@@ -24,12 +24,6 @@ function xarMain()
         $themeName = xarVarPrepForOS($themeName);
         xarTplSetThemeName($themeName);
     }
-    // Use the admin.xt page if available when $modType is admin
-    if ($modType == 'admin') {
-        xarTplSetPageTemplateName('admin');
-    }
-    // Set the default page title
-    xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarConfigGetVar('Site.Core.Slogan'));
 
     // Load the module
     $res = xarModLoad($modName, $modType);
@@ -95,6 +89,12 @@ function xarMain()
     */
 
     // Render page
+	if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
+        // Use the admin.xt page if available when $modType is admin
+        xarTplSetPageTemplateName('admin');
+	}
+    // Set the default page title
+    xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarConfigGetVar('Site.Core.Slogan'));
     //$pageOutput = xarTpl_renderPage($mainModuleOutput, NULL, $template);
     $pageOutput = xarTpl_renderPage($mainModuleOutput);
 

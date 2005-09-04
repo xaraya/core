@@ -677,13 +677,22 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
 function xarDB__postgresqlCreateTable($tableName, $fields)
 {
     $sql_fields = array();
+    $seq_sql = '';
 
     while (list($field_name, $parameters) = each($fields)) {
         $parameters['command'] = 'create';
         $this_field = xarDB__postgresColumnDefinition($field_name, $parameters);
         $sql_fields[] = implode(' ', $this_field);
+
+        // Test for increment field
+        if (isset($parameters['increment']) && $parameters['increment'] == true) {
+            $seq_sql = 'CREATE SEQUENCE seq'.$tableName;
+        }
     }
     $sql = 'CREATE TABLE '.$tableName.' ('.implode(',', $sql_fields).')';
+    if ($seq_sql != '') {
+        $sql .= '; '.$seq_sql;
+    }
     return $sql;
 }
 

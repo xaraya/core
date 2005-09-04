@@ -252,9 +252,9 @@ function xarUserGetNavigationThemeName()
 
         //Hack to make the install work...
         //Marco: can you fix this later? Thanks...
-        if ($themeName != 'installer') {
+        //if ($themeName != 'installer') {
             xarSessionSetVar('navigationThemeName', $themeName);
-        }
+        //}
     }
     return $themeName;
 }

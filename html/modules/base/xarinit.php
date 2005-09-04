@@ -516,6 +516,13 @@ function base_init()
     }
 
     /**************************************************************
+    * Install the blocks module
+    **************************************************************/
+    if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
+	                       array('directory'=>'blocks', 'initfunc'=>'init'))) {
+	    return;
+	}
+    /**************************************************************
     * Install modules table and insert the modules module
     **************************************************************/
     if (!xarInstallAPIFunc('installer',
@@ -667,10 +674,14 @@ function base_activate()
     // initialize blocks module
     $modRegId = xarModGetIDFromName('blocks');
 
-    if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $modRegId))) {
+/*    if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $modRegId))) {
         return NULL;
-    }
+    }*/
 
+    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $modRegId,
+                                                              'state' => XARMOD_STATE_INACTIVE))) {
+        return;
+    }
     if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $modRegId))) {
         return NULL;
     }

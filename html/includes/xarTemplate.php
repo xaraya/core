@@ -61,6 +61,12 @@ function xarTplSetThemeName($themeName)
     return true;
 }
 
+function xarTplGetPageTemplateName()
+{
+    global $xarTpl_pageTemplateName;
+	return $xarTpl_pageTemplateName;
+}
+
 function xarTplSetPageTemplateName($templateName)
 {
     global $xarTpl_pageTemplateName, $xarTpl_themeDir;
