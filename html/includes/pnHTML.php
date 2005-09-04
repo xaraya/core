@@ -48,7 +48,7 @@ define('_PNH_PARSEINPUT', 1);
 /**
  * HTML creation and display functions
  *
- * This class is designed to make generating HTML output in PostNuke
+ * This class is designed to make generating HTML output in Xaraya
  * very simple, and also allows for much greater control of output by
  * the site administrator.
  *
@@ -92,10 +92,10 @@ define('_PNH_PARSEINPUT', 1);
  * $myhtml->PrintPage();
  * </pre>
  *
- * @package PostNuke
+ * @package Xaraya
  * @author Jim McDonald
  * @author Patrick Kellum
- * @link http://www.postnuke.com/ The Official PostNuke website
+ * @link http://www.Xaraya.com/ The Official Xaraya website
  * @copyright (C) 2001, 2002 by the Post-Nuke Development Team
  * @version $Revision$
  * @todo need to add text sanitizer
