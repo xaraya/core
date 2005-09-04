@@ -215,6 +215,7 @@ Linux';
 president@whitehouse.gov';
     $disallowedemails = serialize($emails);
     xarModSetVar('roles', 'disallowedemails', $disallowedemails);
+    
     $remindertitle = 'Replacement login information for %%name%% at %%sitename%%';
     $reminderemail = '%%name%%,
 
@@ -227,7 +228,69 @@ password: %%password%%
 
     xarModSetVar('roles', 'reminderemail', $reminderemail);
     xarModSetVar('roles', 'remindertitle', $remindertitle);
+    
+    //Send notifications values
+    xarModSetVar('roles', 'askwelcomeemail', 1);
+    xarModSetVar('roles', 'askvalidationemail', 1);
+    xarModSetVar('roles', 'askdeactivationemail', 1);
+    xarModSetVar('roles', 'askpendingemail', 1);
+    xarModSetVar('roles', 'askpasswordemail', 1);
+    xarModSetVar('roles', 'rolesdisplay', 'tabbed');
+	//Set validation email
+    $validationtitle = 'Validate your account %%name%% at %%sitename%%';
+    $validationemail = '%%name%%,
+    
+Your account must be validated again because your e-mail address has changed or an administrator has unvalidated it.
+You can either do this now, or on the next time that you log in. 
+If you prefer to do it now, then you will need to follow this link :
+%%link%%
+Validation Code to activate your account:  %%valcode%%
+			    
+You will receive an email has soon as your account is activated again.
 
+%%siteadmin%%%';
+    xarModSetVar('roles', 'validationemail', $deactivationemail);
+    xarModSetVar('roles', 'validationtitle', $deactivationtitle);
+   	//Set desactivation email
+    $deactivationtitle = '%%name%% deactivated at %%sitename%%';
+    $deactivationemail = '%%name%%,
+
+Your account was deactivated by the administrator.
+If you want to know the reason, contact %%adminmail%%
+You will receive an email as soon as your account is activated again.
+
+%%siteadmin%%%';
+    xarModSetVar('roles', 'deactivationemail', $deactivationemail);
+    xarModSetVar('roles', 'deactivationtitle', $deactivationtitle);
+    
+    //Set pending email
+    $pendingtitle = 'Pending state of %%name%% at %%sitename%%';
+    $pendingemail = '%%name%%,
+
+Your account is pending. 
+You\'ll have to wait for the explicit approval of the administrator to log again.
+
+If you want to know the reason, contact %%adminmail%%
+You will receive an email has soon as your account is activated again.
+
+%%siteadmin%%%
+    ';
+    xarModSetVar('roles', 'deactivationemail', $pendingemail);
+    xarModSetVar('roles', 'deactivationtitle', $pendingtitle);
+
+    $passwordtitle = 'Your password at %%sitename%% has been changed';
+    $passwordemail = '%%name%%,
+	
+Your password has been changed by an administrator.
+You can now login at %%link%% with those information :
+Login : %%username%%
+Password : %%pass%%
+
+%%siteadmin%%';
+	    
+    xarModSetVar('roles', 'passwordemail', $passwordemail);
+    xarModSetVar('roles', 'passwordtitle', $passwordtitle);
+    
     $ips = '';
     $disallowedips = serialize($ips);
     xarModSetVar('roles', 'disallowedips', $disallowedips);
@@ -290,8 +353,70 @@ function roless_upgrade($oldVersion)
     // Upgrade dependent on old version number
     switch ($oldVersion) {
         case 1.01:
+	        //Send notifications values
+		    xarModSetVar('roles', 'askwelcomeemail', 1);
+		    xarModSetVar('roles', 'askvalidationemail', 1);
+		    xarModSetVar('roles', 'askdeactivationemail', 1);
+		    xarModSetVar('roles', 'askpendingemail', 1);
+		    xarModSetVar('roles', 'askpasswordemail', 1);
+		    xarModSetVar('roles', 'rolesdisplay', 'tabbed');
+			//Set validation email
+    $validationtitle = 'Validate your account %%name%% at %%sitename%%';
+    $validationemail = '%%name%%,
+    
+Your account must be validated again because your e-mail address has changed or an administrator has unvalidated it.
+You can either do this now, or on the next time that you log in. 
+If you prefer to do it now, then you will need to follow this link :
+%%link%%
+Validation Code to activate your account:  %%valcode%%
+			    
+You will receive an email has soon as your account is activated again.
 
+%%siteadmin%%%';
+    xarModSetVar('roles', 'validationemail', $deactivationemail);
+    xarModSetVar('roles', 'validationtitle', $deactivationtitle);
+   	//Set desactivation email
+    $deactivationtitle = '%%name%% deactivated at %%sitename%%';
+    $deactivationemail = '%%name%%,
+
+Your account was deactivated by the administrator.
+If you want to know the reason, contact %%adminmail%%
+You will receive an email as soon as your account is activated again.
+
+%%siteadmin%%%';
+    xarModSetVar('roles', 'deactivationemail', $deactivationemail);
+    xarModSetVar('roles', 'deactivationtitle', $deactivationtitle);
+    
+    //Set pending email
+    $pendingtitle = 'Pending state of %%name%% at %%sitename%%';
+    $pendingemail = '%%name%%,
+
+Your account is pending. 
+You\'ll have to wait for the explicit approval of the administrator to log again.
+
+If you want to know the reason, contact %%adminmail%%
+You will receive an email has soon as your account is activated again.
+
+%%siteadmin%%%
+    ';
+    xarModSetVar('roles', 'deactivationemail', $pendingemail);
+    xarModSetVar('roles', 'deactivationtitle', $pendingtitle);
+
+    $passwordtitle = 'Your password at %%sitename%% has been changed';
+    $passwordemail = '%%name%%,
+	
+Your password has been changed by an administrator.
+You can now login at %%link%% with those information :
+Login : %%username%%
+Password : %%pass%%
+
+%%siteadmin%%';
+	    
+    xarModSetVar('roles', 'passwordemail', $passwordemail);
+    xarModSetVar('roles', 'passwordtitle', $passwordtitle);
             break;
+        case 1.02:   
+         	break;
         case 2.0:
             // Code to upgrade from version 2.0 goes here
             break;

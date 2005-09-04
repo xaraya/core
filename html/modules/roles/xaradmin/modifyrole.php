@@ -75,9 +75,6 @@ function roles_admin_modifyrole()
     $item['itemid']= $uid;
     $data['hooks'] = xarModCallHooks('item', 'modify', $uid, $item);
 
-    include_once 'modules/roles/xartreerenderer.php';
-    $renderer = new xarTreeRenderer();
-
     $data['uid'] = $uid;
     $data['groups'] = $groups;
     $data['parents'] = $parents;

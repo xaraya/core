@@ -1,0 +1,47 @@
+<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
+</xar:if>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>User Information</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2>
+<xar:if condition="$type eq 0"><xar:mlstring>Manage the user</xar:mlstring>
+<xar:else/><xar:mlstring>Manage the group</xar:mlstring></xar:if>
+: #$name#</h2>
+
+<div id="tabnav">
+	<div class="help" title="Choose an action to perform on the selected user"><xar:mlstring>Actions</xar:mlstring> :</div>
+	<div><a href="#xarModURL('roles', 'admin', 'displayrole', array('uid' => $uid))#" class="active"><xar:mlstring>Display</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid))#"><xar:mlstring>Modify</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('roles', 'admin', 'deleterole', array('uid' => $uid))#"><xar:mlstring>Delete</xar:mlstring></a></div>	
+</div>
+<div style="border: 1px solid #ccc; border-top : none; padding-left: 5px;">
+<br />
+<table>
+	<tr>
+		<td><xar:mlstring>Real Name</xar:mlstring> :</td>
+		<td>#$name#</td>
+	</tr>
+<xar:if condition="$type eq 0">
+	<tr>
+		<td><xar:mlstring>Login</xar:mlstring> :</td>
+		<td>#$uname#</td>
+	</tr>
+	<tr>
+		<td><xar:mlstring>Email</xar:mlstring> :</td>
+		<td>#$email#</td>
+	</tr>
+</xar:if>
+<br />
+<xar:if condition="xarModIsAvailable('dynamicdata')">
+    <xar:data-getitem name="$properties" module="roles" itemid="$uid" />
+    <xar:if condition="isset($properties) and count($properties) gt 0">
+	    <xar:foreach in="$properties" key="$name">
+		    <tr><td><xar:data-label property="$properties[$name]" /> : </td>
+		    	<td> <xar:data-output property="$properties[$name]" /></td>
+		    </tr>
+	    </xar:foreach>
+	</xar:if>
+</xar:if>
+<tr><td colspan="2" style="text-align:center;"><a href="#xarModURL('roles','admin','showusers')#"><xar:mlstring>Member List</xar:mlstring></a></td></tr>
+</table>
+#$hooks#
+</div>
+</div>

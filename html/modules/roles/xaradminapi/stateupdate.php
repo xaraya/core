@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Update a user's core info
+ * Update a user's state
 
  * @param $args['uid'] user ID
  * @param $args['name'] user real name
@@ -15,7 +15,6 @@
 function roles_adminapi_stateupdate($args)
 {
     extract($args);
-
     // Argument check - make sure that all required arguments are present,
     // if not then set an appropriate error message and return
     if ((!isset($uid)) ||
@@ -39,11 +38,6 @@ function roles_adminapi_stateupdate($args)
                      new SystemException($msg));
         return false;
     }
-
-//    if (!xarSecAuthAction(0, 'roles::Item', "$item[uname]::$uid", ACCESS_EDIT)) {
-//        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-//        return;
-//    }
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();

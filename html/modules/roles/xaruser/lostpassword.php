@@ -60,72 +60,30 @@ function roles_user_lostpassword()
                 return;
             }
             // Make new password
-            $pass = xarModAPIFunc('roles',
+            $user['pass'] = xarModAPIFunc('roles',
                                   'user',
                                   'makepass');
 
-            if (empty($pass)) {
+            if (empty($user['pass'])) {
                 $msg = xarML('Problem generating new password');
                 xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                 return;
             }
-
             //Update user password
             // check for user and grab uid if exists
-            $userupdate = xarModAPIFunc('roles',
-                                        'admin',
-                                        'update',
-                                         array('uid'     => $user['uid'],
-                                               'uname'   => $user['uname'],
-                                               'name'    => $user['name'],
-                                               'email'   => $user['email'],
-                                               'state'   => $user['state'],
-                                               'pass'    => $pass));
-
-            if ($userupdate == false) return;
-
-            // Send Email
-            $sitename       = xarModGetVar('themes', 'SiteName');
-            $adminname      = xarModGetVar('mail', 'adminname');
-            $subject        = xarModGetVar('roles', 'remindertitle'); 
-            $message        = xarModGetVar('roles', 'reminderemail');
-            $htmlmessage    = xarModGetVar('roles', 'reminderemail');
-
-            $search = array('/%%name%%/',
-                            '/%%username%%/',
-                            '/%%password%%/');
-
-            $replace = array("$user[name]",
-                             "$user[uname]",
-                             "$pass");
-
-            $subject         = preg_replace($search,
-                                            $replace,
-                                            $subject);
-
-            $message         = preg_replace($search,
-                                            $replace,
-                                            $message);
-
-            $htmlmessage     = preg_replace($search,
-                                            $replace,
-                                            $htmlmessage);
-
-            if (!xarModAPIFunc('mail',
-                               'admin',
-                               'sendmail',
-                               array('info'         => $user['email'],
-                                     'name'         => $user['name'],
-                                     'subject'      => $subject,
-                                     'message'      => $message,
-                                     'htmlmessage'  => $htmlmessage))) return;
-
-            // Let user know that they have an email on the way.
-            $data = xarTplModule('roles','user', 'requestpwconfirm');
-
-            break;
+            if (!xarModAPIFunc('roles','admin','update',$user)) {
+            	$msg = xarML('Problem updating the user information');
+                xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            }
+  			// Send Reminder Email
+            if (!xarModAPIFunc('roles', 'admin','senduseremail', array('uid' => array($user['uid'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) {         
+   					$msg =xarML('Problem sending the reminder email');                
+					xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));            
+            }
+            // Let user know that they have an email on the way.   
+            $data = xarTplModule('roles','user','requestpwconfirm');
+          break;
     }
-
     return $data;
 }
 

@@ -10,13 +10,22 @@
 function roles_adminapi_getmenulinks()
 {
 
-// Security Check
+/* Security Check
     if (xarSecurityCheck('EditRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
                                                   'viewroles'),
                               'title' => xarML('View and edit the groups on the system'),
                               'label' => xarML('View All Groups'));
+    }*/
+    
+    // Security Check
+    if (xarSecurityCheck('EditRole',0)) {
+        $menulinks[] = Array('url'   => xarModURL('roles',
+                                                  'admin',
+                                                  'showusers'),
+                              'title' => xarML('View and edit all users/groups on the system'),
+                              'label' => xarML('View All Users/Groups'));
     }
 
 // Security Check
@@ -32,34 +41,11 @@ function roles_adminapi_getmenulinks()
     if (xarSecurityCheck('AdminRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
-                                                  'confirmationemail'),
-                              'title' => xarML('Modify the confirmation email sent to new users'),
-                              'label' => xarML('Confirmation Email'));
+                                                  'modifynotice'),
+                              'title' => xarML('Modify the notification email'),
+                              'label' => xarML('Notifications Email'));
     }
 
-// Security Check
-    if (xarSecurityCheck('AdminRole',0)) {
-        $menulinks[] = Array('url'   => xarModURL('roles',
-                                                  'admin',
-                                                  'welcomeemail'),
-                              'title' => xarML('Modify the welcome email sent to new users'),
-                              'label' => xarML('Welcome Email'));
-    }
-    if (xarSecurityCheck('AdminRole',0)) {
-        $menulinks[] = Array('url'   => xarModURL('roles',
-                                                  'admin',
-                                                  'reminderemail'),
-                              'title' => xarML('Modify the lost password email'),
-                              'label' => xarML('Reminder Email'));
-    }
-
-    if (xarSecurityCheck('AdminRole',0)) {
-        $menulinks[] = Array('url'   => xarModURL('roles',
-                                                  'admin',
-                                                  'validationemail'),
-                              'title' => xarML('Modify the validation email'),
-                              'label' => xarML('Validation Email'));
-    }
 
     if (xarSecurityCheck('DeleteRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',

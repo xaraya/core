@@ -151,6 +151,7 @@ class xarTreeRenderer {
         $isbranch = count($node['children']) > 0 ? true : false;
         // now begin adding rows to the string
         $this->html .= '<div class="xar-roletree-branch" id="branch' . $this->nodeindex . '">';
+
         // this next table holds the Delete, Users and Privileges links
         // don't allow deletion of certain roles
         if (!xarSecurityCheck('DeleteRole',0,'Roles',$object['name']) || ($object['users'] > 0) || (!$drawchildren)) {
@@ -162,7 +163,13 @@ class xarTreeRenderer {
                 'deleterole',
                 array('uid' => $object['uid'])) . '" title="Delete this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>';
         }
-        // offer to show users of a group if there are some
+        // offer to modify the group
+        $this->html .= '<a href="' .
+            xarModURL('roles',
+                'admin',
+                'modifyrole',
+                array('uid' => $object['uid'])) .'" title="Modify this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/infoicon.gif" style="vertical-align: middle;" /></a>';
+        /* offer to show users of a group if there are some
         if ($object['users'] == 0 || (!$drawchildren)) {
             $this->html .= $this->bigblank;
         } else {
@@ -171,7 +178,7 @@ class xarTreeRenderer {
                 'admin',
                 'showusers',
                 array('uid' => $object['uid'])) . '" title="Show the Users in this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/users.gif" style="vertical-align: middle;" /></a>';
-        }
+        }*/
         // link to group email
         if ($object['users'] == 0 || (!$drawchildren)) {
             $this->html .= $this->bigblank;
@@ -226,13 +233,13 @@ class xarTreeRenderer {
             $this->html .= '<b>' . $object['name'] . '</b>: ';
             $this->html .= ' see the entry above';
         } else {
-            $this->html .= '<a href="' .
+        	$this->html .= '<a href="' .
             xarModURL('roles',
                 'admin',
-                'modifyrole',
-                array('uid' => $object['uid'])) . ' ">' . $object['name'] . '</a>: &nbsp;';
-            $this->html .= count($this->roles->getsubgroups($object['uid'])) . ' subgroups';
-            $this->html .= ' | ' . $object['users'] . ' users</span>';
+                'showusers',
+                array('uid' => $object['uid'])) . ' " title="Show the Users in this Group">' . $object['name'] . '</a>: &nbsp;';
+            $this->html .= count($this->roles->getsubgroups($object['uid'])) .xarML(' subgroups');
+            $this->html .= ' | ' . $object['users'] . xarML(' users').'</span>';
         }
         // we've finished this row; now do the children of this role
         $this->html .= $isbranch ? '<div class="xar-roletree-leaf" id="leaf' . $this->nodeindex . '" >' : '';

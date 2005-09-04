@@ -178,43 +178,17 @@ function roles_user_usermenu($args)
                                          'email'    => $email,
                                          'valcode'  => $confcode,
                                          'state'    => 2))) return;
-
-                    // TODO: make sending mail configurable too, depending on the other options ?
-                    // Set up confirmation email
-                    $confemail = xarModGetVar('roles', 'validationemail');
-                    $conftitle = xarModGetVar('roles', 'validationtitle');
-
-                    $sitename = xarModGetVar('themes', 'SiteName');
-                    $siteadmin = xarModGetVar('mail', 'adminname');
-                    $baseurl = xarServerGetBaseURL();
-
-                    $confemailsearch = array('/%%link%%/',
-                                             '/%%name%%/',
-                                             '/%%username%%/',
-                                             '/%%valcode%%/');
-
-                    $confemailreplace = array("".$baseurl."val.php?v=".$confcode."&u=".$uid."",
-                                              "$name",
-                                              "$uname",
-                                              "$confcode");
-
-                    $confemail = preg_replace($confemailsearch,
-                                              $confemailreplace,
-                                              $confemail);
-
-                    $conftitle = preg_replace($confemailsearch,
-                                              $confemailreplace,
-                                              $conftitle);
-
-                    // TODO Make HTML Message.
-                    // Send confirmation email
-                    if (!xarModAPIFunc('mail',
-                                       'admin',
-                                       'sendmail',
-                                       array('info' => $email,
-                                             'name' => $name,
-                                             'subject' => $conftitle,
-                                             'message' => $confemail))) return;
+                //Send validation email
+                if (!xarModAPIFunc( 'roles',
+                					'admin',
+                					'senduseremail',
+                					array('uid' => array($uid => '1'), 'mailtype' => 'confirmation')) {
+            		$msg = xarML('Problem sending confirmation email');
+                	xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            	}
+                    
+                                         
+                                         
                 }
 
             } else {

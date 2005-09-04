@@ -62,13 +62,23 @@ function roles_user_getvalidation()
 
             $pending = xarModGetVar('roles', 'explicitapproval');
             if ($pending == 1){
-
                 // Update the user status table to reflect a pending account.
                 if (!xarModAPIFunc('roles',
                                    'user',
                                    'updatestatus',
                                     array('uname' => $uname,
                                           'state' => '4'))) return;
+				/*Send Pending Email toggable ?
+				if (!xarModAPIFunc( 'roles',
+                				'admin',
+                				'sendpendingemail',
+                				array('uid'		=> $status["uid"],
+                					  'uname'    => $uname,
+                                      'name'     => $status["name"],
+                                      'email'    => $status["email"]))) {
+            		$msg = xarML('Problem sending pending email');
+                	xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            	}*/
             } else {
                 // Update the user status table to reflect a validated account.
                 if (!xarModAPIFunc('roles',
@@ -76,49 +86,23 @@ function roles_user_getvalidation()
                                    'updatestatus',
                                     array('uname' => $uname,
                                           'state' => '3'))) return;
+				//send welcome email (option)
+                if (xarModGetVar('roles', 'sendwelcomeemail')) {                                          
+	                if (!xarModAPIFunc( 'roles',
+	                				'admin',
+	                				'senduseremail',
+	                				array('uid' => array($status['uid'] => '1'),
+	                					  'mailtype' => 'welcome'))) {
+	            		$msg = xarML('Problem sending welcome email');
+	                	xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+	            	}
+                }                         
             }
-
-
-            // Send Welcome Email
-            $sitename = xarModGetVar('themes', 'SiteName');
-            $siteadmin = xarModGetVar('mail', 'adminname');
-            $welcomeemail = xarModGetVar('roles', 'welcomeemail');
-            $welcometitle = xarModGetVar('roles', 'welcometitle');
-
-            $confemailsearch = array('/%%link%%/',
-                                     '/%%name%%/',
-                                     '/%%username%%/',
-                                     '/%%sitename%%/',
-                                     '/%%siteadmin%%/');
-
-            $confemailreplace = array(xarServerGetBaseURL(),
-                                      "$status[name]",
-                                      "$status[uname]",
-                                      "$sitename",
-                                      "$siteadmin");
-
-            $welcomeemail = preg_replace($confemailsearch,
-                                         $confemailreplace,
-                                         $welcomeemail);
-
-            $welcometitle = preg_replace($confemailsearch,
-                                         $confemailreplace,
-                                         $welcometitle);
-
-            // Send confirmation email
-            if (!xarModAPIFunc('mail',
-                               'admin',
-                               'sendmail',
-                               array('info' => $status['email'],
-                                     'name' => $status['name'],
-                                     'subject' => $welcometitle,
-                                     'message' => $welcomeemail))) return;
-
+			
             if (xarModGetVar('roles', 'sendnotice')){
 
                 $adminname = xarModGetVar('mail', 'adminname');
                 $adminemail = xarModGetVar('mail', 'adminmail');
-
                 $message = "".xarML('A new user has registered.  Here are the details')." \n\n";
                 $message .= "".xarML('Username')." = $status[name]\n";
                 $message .= "".xarML('Email Address')." = $status[email]";
@@ -141,57 +125,22 @@ function roles_user_getvalidation()
             break;
 
         case 'resend':
-
             // check for user and grab uid if exists
             $status = xarModAPIFunc('roles',
                                     'user',
                                     'get',
                                     array('uname' => $uname));
-
-            // Set up confirmation email
-            $confemail = xarModGetVar('roles', 'confirmationemail');
-            $conftitle = xarModGetVar('roles', 'confirmationtitle');
-
-            $sitename = xarModGetVar('themes', 'SiteName');
-            $siteadmin = xarModGetVar('mail', 'adminname');
-            
-            $baseurl = xarServerGetBaseURL();
-            $confemailsearch = array('/%%link%%/',
-                                     '/%%name%%/',
-                                     '/%%username%%/',
-                                     '/%%ipaddr%%/',
-                                     '/%%sitename%%/',
-                                     '/%%password%%/',
-                                     '/%%siteadmin%%/',
-                                     '/%%valcode%%/');
-
-            $confemailreplace = array("".$baseurl."val.php?v=".$status['valcode']."&u=".$status['uid']."",
-                                      "$status[name]",
-                                      "$status[uname]",
-                                      "".xarML('Cannot resend IP')."",
-                                      "$sitename",
-                                      "".xarML('Can Not Resend Password')."",
-                                      "$siteadmin",
-                                       $status['valcode']);
-
-            $confemail = preg_replace($confemailsearch,
-                                      $confemailreplace,
-                                      $confemail);
-
-            $conftitle = preg_replace($confemailsearch,
-                                      $confemailreplace,
-                                      $conftitle);
-
-            // TODO Make HTML Message.
-            // Send confirmation email
-            if (!xarModAPIFunc('mail',
-                               'admin',
-                               'sendmail',
-                               array('info' => $status['email'],
-                                     'name' => $status['name'],
-                                     'subject' => $conftitle,
-                                     'message' => $confemail))) return;
-
+			if (!xarModAPIFunc( 'roles',
+                				'admin',
+                				'senduseremail',
+                				array('uid' => array($status['uid'] => '1'),
+                					  'mailtype' => 'confirmation',
+                					  'ip' => xarML('Cannot resend IP'),
+                					  'pass' => xarML('Can Not Resend Password')))) {
+            		$msg = xarML('Problem resending confirmation email');
+                	xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            	}
+            	
             $data = xarTplModule('roles','user', 'getvalidation');
 
             // Redirect

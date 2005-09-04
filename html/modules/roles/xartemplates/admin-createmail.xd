@@ -1,10 +1,60 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Send Email</xar:mlstring></h2><br />
-<div style="margin: auto;">
+<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
+<br />
+<div id="tabnav">
+	<div class="help" title="Send mail to groups, configure automatic notification or edit notification templates">Email notifications</div>
+	<div><a href="#xarModURL('roles', 'admin', 'createmail')#" class="active">Send mail</a></div>
+	<div><a href="#xarModURL('roles', 'admin', 'modifynotice')#">Configure</a></div>
+	<div><a href="#xarModURL('roles', 'admin', 'validationemail')#"><xar:mlstring>Validation</xar:mlstring></a></div>
+	<div><a href="#xarModURL('roles', 'admin', 'confirmationemail')#"><xar:mlstring>Confirmation</xar:mlstring></a></div>
+	<div><a href="#xarModURL('roles', 'admin', 'welcomeemail')#"><xar:mlstring>Welcome</xar:mlstring></a></div>
+	<div><a href="#xarModURL('roles', 'admin', 'reminderemail')#"><xar:mlstring>Reminder</xar:mlstring></a></div>
+	<div><a href="#xarModURL('roles', 'admin', 'pendingemail')#"><xar:mlstring>Pending</xar:mlstring></a></div>
+	<div><a href="#xarModURL('roles', 'admin', 'deactivationemail')#"><xar:mlstring>Deactivation</xar:mlstring></a></div>
+	<div><a href="#xarModURL('roles', 'admin', 'passwordemail')#"><xar:mlstring>Password</xar:mlstring></a></div>
+</div>
+</xar:if>
+<div style="border: 1px solid #ccc; border-top : none;padding: 10px;">
+<br />
 	<form action="#xarModURL('roles', 'admin', 'sendmail')#" method="post" enctype="application/x-www-form-urlencoded">
-             <div>
+             <div><xar:mlstring>Send to</xar:mlstring> :
+             <select name="groupuid" id="groupuid" size="1" tabindex="9">
+             	<option value="0"><xar:mlstring>All Groups</xar:mlstring></option>
+				<xar:loop name="$groups">
+					<xar:if condition="$groupuid eq $loop:item['uid']">
+						<option value="#$loop:item['uid']#" selected="selected">#$loop:item['name']#</option>
+					<xar:else />
+						<option value="#$loop:item['uid']#">#$loop:item['name']#</option>
+					</xar:if>
+				</xar:loop>
+			</select>
+             &nbsp;<xar:mlstring>in state</xar:mlstring> :
+             <select name="state" id="state" size="1" tabindex="5">
+             	<option value="0"><xar:mlstring>All</xar:mlstring></option>		
+		        <xar:if condition="$state eq 1">
+			        <option value="1" selected="selected"><xar:mlstring>Inactive</xar:mlstring></option>
+		        <xar:else />
+			        <option value="1"><xar:mlstring>Inactive</xar:mlstring></option>
+		        </xar:if>						
+		        <xar:if condition="$state eq 2">
+			        <option value="2" selected="selected"><xar:mlstring>Not Validated</xar:mlstring></option>
+		        <xar:else />
+			        <option value="2"><xar:mlstring>Not Validated</xar:mlstring></option>
+		        </xar:if>						
+		        <xar:if condition="$state eq 3">
+			        <option value="3" selected="selected"><xar:mlstring>Active</xar:mlstring></option>
+		        <xar:else />
+			        <option value="3"><xar:mlstring>Active</xar:mlstring></option>
+		        </xar:if>						
+		        <xar:if condition="$state eq 4">
+			        <option value="4" selected="selected"><xar:mlstring>Pending</xar:mlstring></option>
+		        <xar:else />
+			        <option value="4"><xar:mlstring>Pending</xar:mlstring></option>
+		        </xar:if>						
+	        </select>
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<input type="hidden" name="uid" id="uid" value="#$uid#" />
+		<input type="hidden" name="state" id="state" value="#$state#" />
 		<p><label for="subject"><xar:mlstring>Subject</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="subject" id="subject"></p>
 		<p><label for="message"><xar:mlstring>Message</xar:mlstring></label>:</p>
 		<p><textarea name="message" id="message" wrap="soft" rows="20" cols="50"></textarea></p>

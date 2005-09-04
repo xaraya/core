@@ -1,76 +1,194 @@
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Show Users</xar:mlstring></h2>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Users Administration</xar:mlstring> > #$title# (#$totalstate#)</span></div>
+<div class="xar-mod-body"><br />
 <div style="margin: auto;">
-<p>[&nbsp;<a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $uid))#"><xar:mlstring>View All</xar:mlstring></a>&nbsp;|&nbsp;<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'inactive','uid' => $uid))#"><xar:mlstring>View Inactive</xar:mlstring></a>&nbsp;|&nbsp;<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'notvalidated','uid' => $uid))#"><xar:mlstring>View Not Validated</xar:mlstring></a>&nbsp;|&nbsp;<xar:if condition="xarModGetVar('roles', 'explicitapproval')"><a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'pending','uid' => $uid))#"><xar:mlstring>View Pending</xar:mlstring></a>&nbsp;|&nbsp;</xar:if><a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'active','uid' => $uid))#"><xar:mlstring>View Active</xar:mlstring></a>&nbsp;]</p>
-<h3>#$title# <xar:mlstring>of Group</xar:mlstring> '#$pname#'</h3>
-	<xar:if condition="count($users)==0">
-	<div style="text-align: center;">
-		#$message#
-	</div>
-	<xar:else />
-<table border="0" cellpadding="2" cellspacing="0" width="100%" class="xar-accent-outline">
+<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
+</xar:if>
+<xar:if condition="$display eq 'tree'">
+<div id="tabnav">
+	<div class="help" title="This tree allow you to choose to display users form a selected group"><xar:mlstring>Groups</xar:mlstring> :</div>
+	<div><a href="#xarModURL('roles','admin','showusers', array('uid' => $groupuid, 'state' => $state, 'display' => 'tabbed' ))#" title="Click here if you want to switch to a tabbed representation of groups." class="options"><xar:mlstring>Tabbed</xar:mlstring></a></div>
+</div>
+<div style="border: 1px solid #ccc; border-top : none; padding-left: 5px;">
+#$roletree#
+<xar:else/>
+<div id="tabnav">
+	<div class="help" title="Those tabs allow to choose to display users form a selected group"><xar:mlstring>Groups</xar:mlstring> :</div>
+	<xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
+		<xar:if condition="$groups[$i]['uid'] eq $groupuid">
+			<div><a href="#xarModURL('roles', 'admin', 'displayrole')#&uid=#$groups[$i]['uid']#" title="Display this group" class="active">#$groups[$i]['name']# (#$groups[$i]['users']#)</a></div>
+		<xar:else/>
+			<div><a href="#xarModURL('roles', 'admin', 'showusers')#&uid=#$groups[$i]['uid']#" title="Display the users in this group" >#$groups[$i]['name']# (#$groups[$i]['users']#)</a></div>
+		</xar:if>
+	</xar:for>
+	<xar:if condition="$groupuid eq 0">
+		<div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => 0))#" class="active"><xar:mlstring>All Users</xar:mlstring> (#$totalusers#)</a></div>
+	<xar:else/>
+		<div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => 0))#"><xar:mlstring>All Users </xar:mlstring> (#$totalusers#)</a></div>
+	</xar:if>
+	<div><a href="#xarModURL('roles','admin','showusers', array('uid' => $groupuid, 'state' => $state, 'display' => 'tree' ))#" class="options" title="Click here if you want to switch to a tree representation of groups."><xar:mlstring>Tree</xar:mlstring></a></div>
+</div>
+<div style="border: 1px solid #ccc; border-top : none; padding-left: 5px;">
+<xar:if condition="isset($ancestors)">
+	<br /><br />
+	<span class="help" title="This is the path in the groups tree towards the selected group."><xar:mlstring>Selected group path :</xar:mlstring></span>
+	<xar:for start="$i=count($ancestors)-1" test="$i ge 0" iter="$i--">
+		<a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $ancestors[$i]['uid']))#" title="Modify this role">#$ancestors[$i]['name']#</a> >
+	</xar:for>
+	<a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $groupuid))#" title="Modify this role">#$groupname#</a>
+	<a href="#xarModURL('roles','admin','createmail', array('groupuid' => $groupuid))#" title="Email the Users in this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/email.gif" style="vertical-align: middle;" /></a>
+	<a href="#xarModURL('roles','admin','showprivileges', array('uid' => $groupuid))#" title="Show the Privileges assigned to this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
+	<a href="#xarModURL('roles','admin','testprivileges', array('uid' => $groupuid))#" title="Test this Group Privileges" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>
+</xar:if>
+</xar:if>
+<br /><br />
+<div id="navSquare">
+<div class="help" title="Those tabs allow to choose to display users with a selected state"><xar:mlstring>State</xar:mlstring> :</div>
+<xar:if condition="$state eq 0">
+<div><a href="#xarModURL('roles', 'admin', 'showusers', array('state' => 0, 'uid' => $groupuid))#"  class="active"><xar:mlstring>View All</xar:mlstring></a></div>
+<xar:else/>
+<div><a href="#xarModURL('roles', 'admin', 'showusers', array('state' => 0, 'uid' => $groupuid))#"><xar:mlstring>View All</xar:mlstring></a></div>
+</xar:if>
+<xar:if condition="$state eq 3">
+<div><a href="#xarModURL('roles', 'admin', 'showusers', array('state' => 3,'uid' => $groupuid))#" class="active"><xar:mlstring>View Active</xar:mlstring></a></div>
+<xar:else/>
+<div><a href="#xarModURL('roles', 'admin', 'showusers', array('state' => 3,'uid' => $groupuid))#"><xar:mlstring>View Active</xar:mlstring></a></div>
+</xar:if>
+<xar:if condition="$state eq 1">
+<div><a href="#xarModURL('roles', 'admin', 'showusers', array('state' => 1,'uid' => $groupuid))#" class="active"><xar:mlstring>View Inactive</xar:mlstring></a></div>
+<xar:else/>
+<div><a href="#xarModURL('roles', 'admin', 'showusers', array('state' => 1,'uid' => $groupuid))#"><xar:mlstring>View Inactive</xar:mlstring></a></div>
+</xar:if>
+<xar:if condition="$state eq 2">
+<div><a href="#xarModURL('roles', 'admin', 'showusers', array('state' => 2,'uid' => $groupuid))#" class="active"><xar:mlstring>View Not Validated</xar:mlstring></a></div>
+<xar:else/>
+<div><a href="#xarModURL('roles', 'admin', 'showusers', array('state' => 2,'uid' => $groupuid))#"><xar:mlstring>View Not Validated</xar:mlstring></a></div>
+</xar:if>
+<xar:if condition="xarModGetVar('roles', 'explicitapproval')">
+	<xar:if condition="$state eq 4">
+		<div><a href="#xarModURL('roles', 'admin', 'showusers', array('state' => 4,'uid' => $groupuid))#" class="active"><xar:mlstring>View Pending</xar:mlstring></a></div>
+	<xar:else/>	
+		<div><a href="#xarModURL('roles', 'admin', 'showusers', array('state' => 4,'uid' => $groupuid))#"><xar:mlstring>View Pending</xar:mlstring></a></div>
+	</xar:if>
+</xar:if>
+</div>
+<br />
+<table cellspacing="1" class="xar-accent" style="width:inherit;">
 	<tr>
-		<th width="100">
-			<xar:mlstring>Name</xar:mlstring>            
+		<th colspan="8" style="text-align: left;">#$title# (#$totalstate#)
+		<xar:if condition="$groupuid != 0">
+			<a href="#xarModURL('roles','admin','createmail', array('groupuid' => $groupuid, 'state' => $state))#" title="Email the Users in this Group with this state" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/email.gif" style="vertical-align: middle;" /></a>
+		</xar:if>
 		</th>
-		<th width="100">
-			<xar:mlstring>User Name</xar:mlstring>            
+	</tr>
+<xar:if condition="count($users)==0">
+	<div style="text-align: center;">
+		<tr><td colspan="8">#$message#</td></tr></table>
+	</div>
+<xar:else />
+<!--<div id="group"><a href="#xarModURL('roles', 'admin', 'showusers', array('state' => 'pending','uid' => $groupuid))#">#$pname#</a></div>-->
+<form method="post" action="#xarModURL('roles','admin','updatestate')#">
+	<tr class="xar-norm" style="text-align:right;">
+		<td colspan="8">
+			<label for="status"><xar:mlstring>Change the state of selected users</xar:mlstring></label>&nbsp;:
+			<select name="status" id="status">
+			    <option value="1"><xar:mlstring>Inactive</xar:mlstring></option>
+			    <option value="2"><xar:mlstring>Not Validated</xar:mlstring></option>
+			    <option value="3" selected="selected"><xar:mlstring>Active</xar:mlstring></option>
+			    <option value="4"><xar:mlstring>Pending</xar:mlstring></option>
+			</select>
+			&nbsp;<input type="submit" value="#$changestatuslabel#" />
+			<xar:if condition="!empty($invalid)">
+				<br /><span class="xar-error">#$invalid#</span>
+			</xar:if>
+		</td>
+	</tr>
+	<tr style="text-align:center;">
+		<th>
+			<xar:mlstring>Real name</xar:mlstring>            
 		</th>
-		<th width="200">
-			<xar:mlstring>Email</xar:mlstring>            
+		<th>
+			<xar:mlstring>Login</xar:mlstring>        
 		</th>
-		<th width="200">
+		<th>
+			<xar:mlstring>Email</xar:mlstring>             
+		</th>
+		<th>
 			<xar:mlstring>Date Registered</xar:mlstring>            
 		</th>
-		<th width="20">
-			<xar:mlstring>Delete</xar:mlstring>            
+		<th>
+			<xar:mlstring>State</xar:mlstring>      
 		</th>
-		<th width="20">
-			<xar:mlstring>View</xar:mlstring>            
-		</th>
-		<th width="20">
-			<xar:mlstring>Test</xar:mlstring>            
+		<th colspan="2">
+			<xar:mlstring>Actions</xar:mlstring>     
 		</th>
 	</tr>
 		<xar:loop name="$users">
-			<tr>
-				<td width="100">
+			<tr  class="xar-norm">
+				<td>
 					<xar:if condition="!$loop:item['frozen']">
-						<a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$loop:item['uid']#">				
+						<a href="#xarModURL('roles','admin','displayrole', array('uid' => $loop:item['uid']))#">				
 						#$loop:item['name']#
 						</a>
 					<xar:else />
 						<b>#$loop:item['name']#</b>
 					</xar:if>
 				</td>
-				<td width="100">
+				<td>
 					#$loop:item['uname']#
 				</td>
-				<td width="200">
-					#$loop:item['email']#
-				</td>
-				<td width="200">
-					#$loop:item['date_reg']#
-				</td>
-				<td style="text-align: center">
+				<td style="text-align: center;">
 					<xar:if condition="!$loop:item['frozen']">
-						<a href="&xar-modurl-roles-admin-deleterole;&amp;uid=#$loop:item['uid']#" title="Delete this User"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>
+						<a href="mailto:#$loop:item['email']#" title="Email this user">#$loop:item['email']#</a>
 					<xar:else />
-						&nbsp;
+						<xar:mlstring>None</xar:mlstring>
+					</xar:if>	
+				</td>
+				<td style="text-align: center;">
+					#xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])#
+				</td>
+				<td style="text-align: center;">
+					<xar:if condition="$loop:item['status'] eq 1">	
+						<xar:mlstring>Inactive</xar:mlstring>
+					<xar:elseif condition="$loop:item['status'] eq 2"/>
+						<xar:mlstring>Not Validated</xar:mlstring>
+					<xar:elseif condition="$loop:item['status'] eq 3"/>
+						<xar:mlstring>Active</xar:mlstring>
+					<xar:elseif condition="$loop:item['status'] eq 4"/>
+						<xar:mlstring>Pending</xar:mlstring>
 					</xar:if>
 				</td>
-				<td style="text-align: center">
-					<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$loop:item['uid']#" title="Show the Privileges assigned to this User"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
+				<td style="text-align: right">
+					<xar:if condition="!$loop:item['frozen']">	
+						<a href="#xarModURL('roles','admin','createpassword', array('uid' => $loop:item['uid'], 'state' => $state, 'groupuid' => $groupuid))#" title="Generate a new password for this User"><img src="modules/roles/xarimages/passicon.gif" style="vertical-align: middle;" /></a>&nbsp;
+						<a href="#xarModURL('roles','admin','modifyrole', array('uid' => $loop:item['uid']))##modify" title="Modify this user"><img src="modules/roles/xarimages/infoicon.gif" style="vertical-align: middle;" /></a>&nbsp;
+						<a href="#xarModURL('roles','admin','deleterole', array('uid' => $loop:item['uid']))#" title="Delete this User"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>&nbsp;
+					</xar:if>
+					<a href="#xarModURL('roles','admin','showprivileges', array('uid' => $loop:item['uid']))#" title="Show the Privileges assigned to this User"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>&nbsp;
+					<a href="#xarModURL('roles','admin','testprivileges', array('uid' => $loop:item['uid']))#" title="Test this User's Privileges"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>
 				</td>
-				<td style="text-align: center">
-					<a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$loop:item['uid']#" title="Test this User's Privileges"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>
+				<td style="text-align: center;">
+					<xar:if condition="!$loop:item['frozen']">
+						<input type="checkbox" name="uids[#$loop:item['uid']#]" id="uids[#$loop:item['uid']#]" value="1" />
+					</xar:if>	
 				</td>
 			</tr>
 		</xar:loop>
-	</xar:if>
+			<tr  class="xar-norm">
+				<td colspan="8"><a href="#xarModURL('roles', 'admin', 'newrole', array('ptype' => 0, 'pparentid' => $groupuid))#" title="Add a new user"><xar:mlstring>New User</xar:mlstring></a></td>
+			</tr>
+		<xar:if condition="!empty($pager)">
+			<tr  class="xar-norm" style="text-align: center;">
+				<td colspan="8">#$pager#</td>
+			</tr>
+		</xar:if>	
 </table>
-
-	<!-- add the pager here -->
-	<div align="center">#$pager#</div>
+<input type="hidden" name="groupuid" id="groupuid" value="#$groupuid#" />
+<input type="hidden" name="state" id="state" value="#$state#" />
+<input type="hidden" name="authid" id="authid" value="#$authid#" />
+</form>
+</xar:if>
 </div>
 </div>
+</div>
+<!-- add the pager here -->
+	

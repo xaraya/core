@@ -79,7 +79,15 @@ function roles_admin_updaterole()
     if (!$modifiedrole) {
         return;
     }
-
+    //Change the defaultgroup var values if the name is changed
+    if ($ptype == 1) {
+	    $defaultgroup = xarModGetVar('roles', 'defaultgroup');
+	    $defaultgroupuid = xarModAPIFunc('roles','user','get',
+	                                                 array('uname'  => $defaultgroup,
+	                                                       'type'   => 1));
+	    if ($uid == $defaultgroupuid) xarModSetVar('roles', 'defaultgroup', $pname); 
+    }
+    
     // call item update hooks (for DD etc.)
 // TODO: move to update() function
     $pargs['module'] = 'roles';
