@@ -653,7 +653,18 @@ function pnModAPILoad($modName, $modType)
 
 function pnModCallHooks($hookobject, $hookaction, $hookid, $extrainfo)
 {
-    return xarModCallHooks($hookobject, $hookaction, $hookid, $extrainfo);
+    if ($hookobject == 'item' && $hookaction == 'display') {
+        // Note : this is the only "commonly used" hook in PostNuke that
+        //        expects to receive a string in return
+        $hookoutput = xarModCallHooks($hookobject, $hookaction, $hookid, $extrainfo);
+        if (isset($hookoutput) && is_array($hookoutput)) {
+            return join('',$hookoutput);
+        } else {
+            return $hookoutput;
+        }
+    } else {
+        return xarModCallHooks($hookobject, $hookaction, $hookid, $extrainfo);
+    }
 }
 
 function pnModDBInfoLoad($modname, $directory='')
