@@ -16,7 +16,7 @@
 * This file is for legacy functions needed to make it
 * easier to use pn modules in Xaraya. Please don't fill it with useless
 * stuff or deprecated API funcs except as wrappers, and also.. please
-* do not duplicated constants that already exist in xaraya core
+* do not duplicate constants that already exist in xaraya core
 * If a function did not exist in pn before...don't prefix it with pn
 ***********************************************************************/
 
@@ -520,20 +520,6 @@ function pnModGetUserMods()
  */
 function pnModGetAdminMods()
 {
-    return xarModGetList(array('AdminCapable' => 1));
-}
-
-/**
- * Gets a list of active modules that have an administrative interface.
- *
- * @returns array
- * @return array of module information arrays
- * @raise DATABASE_ERROR
- */
-function xarModGetAdminMods()
-{
-    //TODO Workaround for admin panels.
-    // <andyv> already updated, can be removed at will
     return xarModGetList(array('AdminCapable' => 1));
 }
 

@@ -21,8 +21,6 @@
  * @param args 
  * @param whatElseIsGoingLoaded integer
  * @returns bool
- * @todo    FIXME: <marco> Paul do you wanna move xarBlockTypeExists, 
- *          Register and Unregister out of this file?
  * @todo    And why are you using $blockType instead of $blockName, 
  *          when I said you to change I meant use $blockName everywhere, 
  *          in the end it's the block name, not the block type, don't you think?
@@ -228,7 +226,6 @@ function xarBlock_load($modName, $blockName)
     $loaded["$modName$blockName"] = 1;
 
     // Load the block language files
-    // MrB: this is new functionality in review, we want this
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_BLOCK, $blockName) === NULL) return;
 
     // Initialise block (security schema) if required.
@@ -344,7 +341,6 @@ function xarBlock_render($blockInfo)
 	}
 
     // Handle block state
-    // MrB: review contained xarModAPILoad, not needed anymore.
     $res = xarModAPIFunc('blocks', 'user', 'getState', $blockInfo);
     if (!isset($res)) {
         if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
