@@ -78,7 +78,6 @@ function xarMain()
 
     if (xarResponseIsRedirected()) return true;
     // Here we check for exceptions even if $res isn't empty
-    if (isCoreException()) return; // we found a core exception
     if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
 
     // Note : the page template may be set to something else in the module function
@@ -97,7 +96,6 @@ function xarMain()
     $pageOutput = xarTpl_renderPage($mainModuleOutput);
 
      // Handle exceptions (the bubble at the top handler
-    if (isCoreException()) return; // we found a core exception
     if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
 
     echo $pageOutput;
@@ -109,8 +107,7 @@ if (!xarMain()) {
 
     // If we're here there must be surely an uncaught exception
     if (xarCoreIsDebuggerActive()) {
-        if (isCoreException()) $text = xarErrorRender('html', "CORE");
-        else $text = xarErrorRender('html');
+        $text = xarErrorRender('html');
     } else {
         $text = xarML('An error occurred while processing your request. The details are:');
         $text .= '<br />';
