@@ -231,27 +231,41 @@ class xarMasks
 */
     function winnow($privs1, $privs2)
     {
+        if (!is_array($privs1) || !is_array($privs1)) {
+            $msg = xarML('Parameters to winnow need to be arrays');
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                           new SystemException($msg));
+            return;
+        }
         if ((($privs1 == array()) || ($privs1 == '')) &&
             (($privs2 == array()) || ($privs2 == ''))) return array();
-        if ($privs1 == array()) return $privs2;
-        if ($privs2 == array()) return $privs1;
 
+        $privs1 = array_merge($privs1,$privs2);
+        $privs2 = array();
         foreach ($privs1 as $key1 => $priv1) {
+            $matched = false;
             foreach ($privs2 as $key2 => $priv2) {
 //                echo "Winnowing: ";
-//                echo $priv1->getName(). " implies " . $priv2->getName() . ": " . $priv1->implies($priv2,true) . " | ";
-//                echo $priv2->getName(). " implies " . $priv1->getName() . ": " . $priv2->implies($priv1,true) . " | ";
-                if ($priv1->implies($priv2,true)) array_splice($privs2,$key2);
-                elseif ($priv2->implies($priv1,true)) $privs1[$key1] = $priv2;
-                else {
-                    $privs1[] = $priv2;
-                    array_splice($privs2,$key2);
+//                echo $priv1->getName(). " implies " . $priv2->getName() . ": " . $priv1->implies($priv2) . " | ";
+//                echo $priv2->getName(). " implies " . $priv1->getName() . ": " . $priv2->implies($priv1) . " | ";
+                if ($priv1->implies($priv2)) {
+                    $privs3 = $privs2;
+                    $notmoved = true;
+                    foreach ($privs3 as $priv3) if($priv3->matchesexactly($priv1)) $notmoved = false;
+                    if ($notmoved) $privs2[$key2] = $priv1;
+                    else if (!$priv1->matchesexactly($priv2)) array_splice($privs2,$key2);
+                    $matched = true;
+                }
+                elseif ($priv2->implies($priv1) || $priv1->matchesexactly($priv2)) {
+                    $matched = true;
+                    break;
                 }
             }
+            if(!$matched) $privs2[] = $priv1;
         }
 
 // done
-        return $privs1;
+        return $privs2;
     }
 
 /**
@@ -300,9 +314,8 @@ class xarMasks
         include_once 'modules/roles/xarroles.php';
         $roles = new xarRoles();
 
-// get the pid of the user we will check against
+// get the uid of the role we will check against
 // an empty role means take the current user
-// TODO: what if the id is a group?
         if ($rolename == '') {
             $userID = xarSessionGetVar('uid');
             if (empty($userID)) {
@@ -313,105 +326,9 @@ class xarMasks
         else {
             $role = $roles->findRole($rolename);
         }
-// get the inherited ancestors of the role
-        $ancestors = $role->getAncestors();
-
-// set up an array to hold the privileges
-        $irreducibleset = array();
-
-// if there are ancestors, look for their privileges
-        if (count($ancestors) >0) {
-
-// need to process the last ones first
-            $ancestors = array_reverse($ancestors);
-// set up a temporary array to hold results
-            $final = array();
-
-// begin with the guy at the top of the pyramid
-            $top = $ancestors[0]->getLevel();
-
-// begin processing an ancestor
-            foreach ($ancestors as $ancestor) {
-
-// get the ancestors assigned privileges
-                $privs = $ancestor->getAssignedPrivileges();
-                $privileges = array();
-// for each one winnow the  assigned privileges and then the inherited
-                foreach ($privs as $priv) {
-                    $privileges = $this->winnow(array($priv),$privileges);
-                    $privileges = $this->winnow($priv->getDescendants(),$privileges);
-                }
-
-// add some info on the group they belong to and stick it all in an array
-                $groupname = $ancestor->getName();
-                $grouplevel = $ancestor->getLevel();
-                $final[] = array('privileges'=>$privileges,
-                                    'name'=>$groupname,
-                                    'level'=>$grouplevel);
-            }
-
-// winnow all privileges of a given level above the role
-                foreach ($final as $step) {
-                if ($step['level']) {
-                    $irreducibleset = $this->winnow($irreducibleset,$step['privileges']);
-                }
-
-// or trump the previous privileges with those of a lower level
-// TODO: this is a bug.Probably should winnow the lowerlevel and THEN trump against
-// the higher level
-                else {
-                    $irreducibleset = $this->winnow($irreducibleset,$step['privileges']);
-                    $top = $step['level'];
-                }
-            }
-        }
-
-// get the assigned privileges and winnow them
-        $roleprivs = $role->getAssignedPrivileges();
-        $roleprivileges = array();
-// for each one winnow the assigned privileges and then the inherited
-        foreach ($roleprivs as $priv) {
-            $roleprivileges = $this->winnow(array($priv),$roleprivileges);
-            $roleprivileges = $this->winnow($priv->getDescendants(),$roleprivileges);
-        }
-//      echo "Assigned: ";
-//      foreach($roleprivileges as $test) echo $test->getName();
-
-// winnow them against the accumulated privileges from higher levels
-        $irreducibleset = $this->winnow($irreducibleset,$roleprivileges);
-//      echo "Irreducible: ";
-//      foreach($irreducibleset as $test) echo $test->getName();
-
-        if (empty($rolename)) {
-            xarVarSetCached('Security.Variables','privilegeset',$irreducibleset);
-        }
-    } else {
-        // retrieve the irreducible set of privileges for the current user
-        $irreducibleset = xarVarGetCached('Security.Variables','privilegeset');
-    }
-
-// check each privilege from the irreducible set
-        $pass = false;
-        $score = 0;
-        foreach ($irreducibleset as $chiave) {
-//           if($chiave->matches($mask)){
-//                if ($chiave->implies($mask,false)) {$pass = $chiave; break;}
-//                else {$pass = false; break;}
-//            }
-
-            if ($chiave->implies($mask,false)) {
-                $thisscore = $chiave->tally($mask);
-                if($thisscore > $score) {
-                    $pass = $chiave;
-                }
-                else if ($thisscore == $score) {
-                    if (!$pass) $pass = $chiave;
-                    else if ($chiave->getLevel() > $pass->getLevel()) $pass = $chiave;
-                }
-            }
-
-//         { echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask,false) . " score: " . $thisscore . " level: " . $chiave->getLevel();}
-        }
+// get the privileges and test against them
+        $privileges = $this->irreducibleset(array('roles' => array($role)));
+        $pass = $this->testprivileges($mask,$this->irreducibleset(array('roles' => array($role))),false);
 
 // check if the exception needs to be caught here or not
         if ($catch && !$pass) {
@@ -421,6 +338,59 @@ class xarMasks
         }
 
 // done
+        return $pass;
+        }
+    }
+
+    function irreducibleset($coreset)
+    {
+        $roles = $coreset['roles'];
+        if (count($roles) == 0) return $coreset;
+
+        $coreset['privileges'] = array();
+
+        $parents = array();
+        foreach ($roles as $role) {
+            $privs = $role->getAssignedPrivileges();
+            $privileges = array();
+            foreach ($privs as $priv) {
+                $privileges = $this->winnow(array($priv),$privileges);
+                $privileges = $this->winnow($priv->getDescendants(),$privileges);
+            }
+            $coreset['privileges'] = $this->winnow($coreset['privileges'],$privileges);
+            $parents = array_merge($parents,$role->getParents());
+
+        }
+        $coreset['children'] = $this->irreducibleset(array('roles' => $parents));
+        return $coreset;
+    }
+
+    function testprivileges($mask,$privilegeset,$pass)
+    {
+        $matched = false;
+        foreach ($privilegeset['privileges'] as $privilege) {
+//        echo "<BR>Comparing " . $privilege->present() . " against " . $mask->present() . ". ";
+//        if ($privilege->includes($mask)) echo $privilege->getName() . " wins. ";
+//        elseif ($mask->includes($privilege)) echo $privilege->getName() . " wins. ";
+//        else echo "no match. ";
+            if($privilege->implies($mask)) {
+                $pass = $privilege;
+                $matched = true;
+                break;
+            }
+            elseif ($mask->includes($privilege)) {
+                if ($privilege->getLevel() >= $mask->getLevel()) {
+                    $pass = $privilege;
+                    $matched = true;
+                }
+                break;
+            }
+            elseif ($privilege->includes($mask)) {
+                $matched = true;
+                break;
+            }
+        }
+        if (!$matched) $pass = $this->testprivileges($mask,$privilegeset['children'],$pass);
         return $pass;
     }
 
@@ -1568,6 +1538,84 @@ function drawindent() {
         $this->description  = $description;
     }
 
+    function present() {
+        $display = $this->getName();
+        $display .= "-" . strtolower($this->getLevel());
+        $display .= ":" . strtolower($this->getRealm());
+        $display .= ":" . strtolower($this->getModule());
+        $display .= ":" . strtolower($this->getComponent());
+        $display .= ":" . strtolower($this->getInstance());
+        return $display;
+    }
+
+/**
+ * normalize: creates a "normalized" array representing a mask
+ *
+ * Returns an array of strings representing a mask
+ * The array can be used for comparisons with other masks
+ * The function optionally adds "all"'s to the end of a normalized mask representation
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   none
+ * @return  array of strings
+ * @throws  none
+ * @todo    none
+*/
+    function normalize($adds=0) {
+        $normalform = array();
+        $normalform[] = strtolower($this->getLevel());
+        $normalform[] = strtolower($this->getRealm());
+        $normalform[] = strtolower($this->getModule());
+        $normalform[] = strtolower($this->getComponent());
+        if (strtolower($this->getInstance()) == "All") {
+            $normalform[] = strtolower($this->getInstance());
+        }
+        else {
+            $normalform = array_merge($normalform,explode(':',strtolower($this->getInstance())));
+        }
+        for ($i=0;$i<$adds;$i++) $normalform[] = 'all';
+        return $normalform;
+    }
+
+/**
+ * canonical: returns 2 normalized privileges or masks that can be compared
+ *
+ * Returns two normalized privileges or masks with an equal number of elements
+ * The 2 can be compared element by element
+ * The function does a tiny bit of error checking to make sure the 2 are well formed.
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   mask object
+ * @return  array 2 normalized masks
+ * @throws  none
+ * @todo    none
+*/
+    function canonical($mask)
+    {
+        $priv1 = $this->normalize();
+        $priv2 = $mask->normalize();
+        $p1 = $this->normalize();
+        $p2 = $mask->normalize();
+        if(count($p1) != count($p2)) {
+            if(count($p1) > count($p2)) {
+                $p = $p2;
+                $p2 = $mask->normalize(count($p1) - count($p2));
+            }
+            else {
+                $p = $p1;
+                $p1 = $this->normalize(count($p2) - count($p1));
+            }
+            if (count($p) != 5) {
+                $msg = xarML('#(1) and #(2) do not have the same instances. #(3) #(4)',$mask->getName(),$this->getName(),implode(',',$p1),implode(',',$p2));
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                               new SystemException($msg));
+            }
+        }
+        return array($p1,$p2);
+    }
+
 /**
  * matches: checks the structure of one privilege against another
  *
@@ -1584,174 +1632,73 @@ function drawindent() {
 
     function matches($mask)
     {
-        return (
-               (strtolower($this->realm) == strtolower($mask->realm))
-            && (strtolower($this->module) == strtolower($mask->module))
-            && (strtolower($this->component) == strtolower($mask->component))
-            && (strtolower($this->instance) == strtolower($mask->instance))
-            );
+        list($p1,$p2) = $this->canonical($mask);
+        $match = true;
+        for ($i=1;$i<count($p1);$i++) $match = $match && ($p1[$i]==$p2[$i]);
+//        echo $this->present() . $mask->present() . $match;exit;
+        return $match;
     }
 
 /**
- * tally: count the instance score of a privilege against a mask
+ * matches: checks the structure of one privilege against another
  *
- * The instance score is a measure of the number of exact matches between
- * a privilege and a mask
+ * Checks whether two privileges, or a privilege and a mask, are equal
+ * in all respects
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   mask object
- * @return  integer
- * @throws  none
- * @todo    none
-*/
-
-    function tally($mask)
-    {
-            $tally = 0;
-
-            $instance1 = explode(':',$this->getInstance());
-            $instance2 = explode(':',$mask->getInstance());
-            if ($this->getInstance() == "All") {
-                $instance1 = array();
-                for($i=0;$i<count($instance2);$i++) $instance1[] = "All";
-            }
-            elseif ($mask->getInstance() == "All") {
-                $instance2 = array();
-                for($i=0;$i<count($instance1);$i++) $instance2[] = "All";
-            }
-
-            for ($i=0;$i<count($instance1);$i++) {
-                if (strtolower($instance1[$i]) == strtolower($instance2[$i])) $tally += 1;
-//                echo "i: " . $i . " " . $instance1[$i] . " " . $instance2[$i] . " tally: " . $tally . " | ";
-            }
-            return $tally;
-    }
-
-/**
- * implies: compares two masks
- *
- * Checks whether this mask is mighter than $mask
- * Returns true if it is.
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   mask
  * @return  boolean
  * @throws  none
  * @todo    none
 */
-    function implies($mask,$comparing) {
 
-// take care of the case that one of the instances may be "All"
-if (($this->getName() == "NoDocumants" || $mask->getName() == "NoDocumants") && !$comparing)
-echo " | Comparing: " . $comparing . " " . $this->getName() . " implies " . $mask->getName();
+    function matchesexactly($mask)
+    {
+        $match = $this->matches($mask);
+        return $match && ($this->getLevel() == $mask->getLevel());
+    }
 
-        if($comparing) {
-            $samelevels = $mask->getLevel() == $this->getLevel();
+/**
+ * includes: checks the structure of one privilege against another
+ *
+ * Checks a mask has the same or larger range than another mask
+ *
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   mask object
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
 
-            $thisrealm = strtolower($this->getRealm());
-            $maskrealm = strtolower($mask->getRealm());
-            if ($thisrealm != $maskrealm
-            && !($thisrealm == 'all' && $samelevels)) return false;
+    function includes($mask)
+    {
+        list($p1,$p2) = $this->canonical($mask);
+        $match = true;
+        for ($i=1;$i<count($p1);$i++) $match = $match && (($p1[$i]==$p2[$i]) || ($p1[$i] == 'all'));
+        return $match;
+    }
 
-            $thismodule = strtolower($this->getModule());
-            $maskmodule = strtolower($mask->getModule());
-            if ($thismodule != $maskmodule
-                && !($thismodule == 'all' && $samelevels)) return false;
-            $thiscomponent = strtolower($this->getComponent());
-            $maskcomponent = strtolower($mask->getComponent());
-            if ($thiscomponent != $maskcomponent
-            && !($thiscomponent == 'all' && $samelevels)) return false;
+/**
+ * implies: checks the structure of one privilege against another
+ *
+ * Checks a mask has the same or larger range, and the same or higher access right,
+ * than another mask
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   mask object
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
 
-            $instance1 = explode(':',$this->getInstance());
-            $instance2 = explode(':',$mask->getInstance());
-            if ($this->getInstance() == "All") {
-                $instance1 = array();
-                for($i=0;$i<count($instance2);$i++) $instance1[] = "All";
-            }
-            elseif ($mask->getInstance() == "All") {
-                $instance2 = array();
-                for($i=0;$i<count($instance1);$i++) $instance2[] = "All";
-            }
-
-            if (!($thiscomponent != 'all') && ($maskcomponent == 'all')) {
-                if (count($instance1) != count($instance2)) {
-                    $msg = xarML('Mask #(1) and privilege #(2) do not have the same instances',$mask->getName(),$this->getName());
-                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                   new SystemException($msg));
-                }
-            }
-
-            for ($i=0;$i<count($instance1);$i++) {
-                if (strtolower($instance1[$i]) != strtolower($instance2[$i])
-                && !(strtolower($instance1[$i]) == 'all' && $samelevels)) return false;
-            }
-        }
-        else {
-            $thisrealm = strtolower($this->getRealm());
-            $maskrealm = strtolower($mask->getRealm());
-            if (!(
-                ($thisrealm == 'all') ||
-                ($thisrealm == 'none') && ($maskrealm != 'all')
-            ))
-            {return false;}
-            $thismodule = strtolower($this->getModule());
-            $maskmodule = strtolower($mask->getModule());
-            if (!(
-                ($thismodule == $maskmodule) ||
-                ($maskmodule == 'all') ||
-                ($thismodule == 'all') && ($maskmodule != 'none')
-            ))
-            {return false;}
-
-            $thiscomponent = strtolower($this->getComponent());
-            $maskcomponent = strtolower($mask->getComponent());
-            if (!(
-                ($thiscomponent == $maskcomponent) ||
-                ($maskcomponent == 'all') ||
-                ($thiscomponent == 'all') && ($maskcomponent != 'none')
-            ))
-            {return false;}
-
-            $instance1 = explode(':',$this->getInstance());
-            $instance2 = explode(':',$mask->getInstance());
-            if ($this->getInstance() == "All") {
-                $instance1 = array();
-                for($i=0;$i<count($instance2);$i++) $instance1[] = "All";
-            }
-            elseif ($mask->getInstance() == "All") {
-                $instance2 = array();
-                for($i=0;$i<count($instance1);$i++) $instance2[] = "All";
-            }
-
-            if (!($thiscomponent != 'all') && ($maskcomponent == 'all')) {
-                if (count($instance1) != count($instance2)) {
-                    $msg = xarML('Mask #(1) and privilege #(2) do not have the same instances',$mask->getName(),$this->getName());
-                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                   new SystemException($msg));
-                }
-            }
-
-            for ($i=0;$i<count($instance1);$i++) {
-                if (!(
-                    (strtolower($instance1[$i]) == strtolower($instance2[$i])) ||
-                    (strtolower($instance2[$i]) == 'all') ||
-                    (strtolower($instance1[$i]) == 'all') && (strtolower($instance2[$i]) != 'none')
-                ))
-                {return false;}
-            }
-        }
-
-
-
-        if (!($this->getLevel() >= $mask->getLevel())) return false;
-
-if (($this->getName() == "NoDocumants") && !$comparing)
-echo " hi";
-        if ($this->getLevel() == 0) return false;
-
-        return true;
+    function implies($mask)
+    {
+        $match = $this->includes($mask);
+        return $match && ($this->getLevel() >= $mask->getLevel());
     }
 
     function getID()              {return $this->sid;}
@@ -2057,6 +2004,29 @@ class xarPrivilege extends xarMask
             $result->MoveNext();
         }
         return true;
+    }
+
+/**
+ * isassigned: check if the current privilege is assigned to a role
+ *
+ * This function looks at the acl table and returns true if the current privilege.
+ * is assigned to a given role .
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   role object
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+    function isassigned($role)
+    {
+        $query = "SELECT xar_partid FROM $this->acltable WHERE
+                xar_partid = " . $role->getID() .
+                " AND xar_permid = " . $this->getID();
+        $result = $this->dbconn->Execute($query);
+        if (!$result) return;
+        return !$result->EOF;
     }
 
 /**
