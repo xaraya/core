@@ -150,7 +150,7 @@ if (!xarInstallMain($phase)) {
 
     // TODO: <marco> Do fallback if raised exception is coming from template engine
     if (xarExceptionId() == 'TEMPLATE_NOT_EXIST') {
-        echo '<html><head><title>Error</title><body>' . $text . '</body></html>';
+        echo '<?xml version="1.0"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head><title>Error</title><body>' . $text . '</body></html>';
     } else {
         // It's important here to free exception before caling xarTpl_renderPage
         xarExceptionFree();
@@ -158,14 +158,14 @@ if (!xarInstallMain($phase)) {
         $pageOutput = xarTpl_renderPage($text);
         if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
             // Fallback to raw html
-            $msg = '<font color="red">The current page is shown because the Blocklayout Template Engine failed to render the page, however this could be due to a problem not in BL itself but in the template. BL has raised or has left uncaught the following exception:</font>';
+            $msg = '<span style="color: #FF0000;">The current page is shown because the Blocklayout Template Engine failed to render the page, however this could be due to a problem not in BL itself but in the template. BL has raised or has left uncaught the following exception:</span>';
             $msg .= '<br /><br />';
             $msg .= xarExceptionRender('html');
             $msg .= '<br />';
-            $msg .= '<font color="red">The following exception is instead the exception caught from the main catch clause (Please note that they could be the same if they were raised inside BL or inside the template):</font>';
+            $msg .= '<span style="color: #FF0000;">The following exception is instead the exception caught from the main catch clause (Please note that they could be the same if they were raised inside BL or inside the template):</span>';
             $msg .= '<br /><br />';
             $msg .= $text;
-            echo "<html><head><title>Error</title><body>$msg</body></html>";
+            echo "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head><title>Error</title><body>$msg</body></html>";
         } else {
             echo $pageOutput;
         }

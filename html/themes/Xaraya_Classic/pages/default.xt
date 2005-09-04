@@ -1,6 +1,6 @@
 <?xar type="page" ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta name="Generator" content="#xarConfigGetVar('System.Core.VersionNum')# :: #xarConfigGetVar('System.Core.VersionID')#" />
         <meta name="Keywords" content="#xarConfigGetVar('Site.Core.MetaKeywords')#" />
@@ -15,17 +15,17 @@
     <body>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
     <tr>
-        <td align="left" background="themes/Xaraya_Classic/images/header_fill.gif">
-            <a href="&xar-baseurl;" target="_top">
-            <img src="themes/Xaraya_Classic/images/header_logo1.gif" alt="#xarConfigGetVar('Site.Core.SiteName')#" width="187" height="52" border="0" align="top">
+        <td style="text-align: left;background-image: url(themes/Xaraya_Classic/images/header_fill.gif);">
+            <a href="&xar-baseurl;">
+            <img src="themes/Xaraya_Classic/images/header_logo1.gif" alt="#xarConfigGetVar('Site.Core.SiteName')#" width="187" height="52" border="0" align="top" />
             </a>
         </td>
         <td width="100%" background="themes/Xaraya_Classic/images/header_fill.gif">
-            <img src="themes/Xaraya_Classic/images/dot.gif" alt="" width="1" height="1" border="0" align="top">
+            <img src="themes/Xaraya_Classic/images/dot.gif" alt="" width="1" height="1" border="0" align="top" />
         </td>
-        <td align="right" background="themes/Xaraya_Classic/images/header_fill.gif">
-            <a href="http://www.xaraya.com" target="_top">
-            <img src="themes/Xaraya_Classic/images/header_logo2.gif" alt="#xarConfigGetVar('Site.Core.SiteName')#" width="259" height="52" border="0" align="top">
+        <td align="right" background="themes/Xaraya_Classic/images/header_fill.gif" />
+            <a href="http://www.xaraya.com">
+            <img src="themes/Xaraya_Classic/images/header_logo2.gif" alt="#xarConfigGetVar('Site.Core.SiteName')#" width="259" height="52" border="0" align="top" />
             </a>
         </td>
     </tr>
@@ -37,13 +37,13 @@
     </tr>
 -->
 </table>
-<BR />
+<br />
 
 <!-- start body -->
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
     <tr>
-        <td width="18%" align="left" valign="top">
+        <td style="width: 18%;" align="left" valign="top">
             <table width="100%" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                     <td bgcolor="##ffffff">
@@ -52,11 +52,11 @@
                 </tr>
                 <tr height="200">
                     <td background="themes/Xaraya_Classic/images/sideline.gif">
-                        <img src="themes/Xaraya_Classic/images/dot.gif">
+                        <img src="themes/Xaraya_Classic/images/dot.gif" alt="" />
                     </td>
                 </tr>
             </table>
-        <td width="1%" background="themes/Xaraya_Classic/images/vline.gif">
+        <td width="1%" background="themes/Xaraya_Classic/images/vline.gif" />
         </td>
         <td  class="main_copy" valign="top">
             <xar:blockgroup name="center" id="center" />
@@ -64,7 +64,7 @@
         </td>
         <td width="1%">
         </td>
-        <td style="max-width: 20%;" align="left" valign="top" background="themes/Xaraya_Classic/images/side_all.gif">
+        <td style="width: 20%;" align="left" valign="top" background="themes/Xaraya_Classic/images/side_all.gif">
             <xar:blockgroup name="right" id="right" />
         </td>
     </tr>
@@ -76,12 +76,12 @@
         </td>
     </tr>
 </table>
-<center>
+<div align="center">
 <b>#xarConfigGetVar('Site.Core.CopyRight')#</b>
 <br />
 <br />
 #xarConfigGetVar('Site.Core.Footer')#
-</center>
+</div>
 #$tpl:bodyJavaScript#
 </body>
 </html>

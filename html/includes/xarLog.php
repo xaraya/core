@@ -259,16 +259,16 @@ class xarLog__Logger
         }
         $this->depth += 1;
 
-        $TYPE_COLOR = "red";
-        $NAME_COLOR = "blue";
-        $VALUE_COLOR = "purple";
+        $TYPE_COLOR = "#FF0000";
+        $NAME_COLOR = "#0000FF";
+        $VALUE_COLOR = "#999900";
 
         $str = '';
 
         if (isset($name)) {
             if ($this->format == 'html') {
-                $str = "<font color=\"$NAME_COLOR\">".$blank.'Variable name: <b>'.
-                       htmlspecialchars($name).'</b></font><br/>';
+                $str = "<span style=\"color: $NAME_COLOR;\">".$blank.'Variable name: <b>'.
+                       htmlspecialchars($name).'</b></span><br/>';
             } else {
                 $str = $blank."Variable name: $name\n";
             }
@@ -286,7 +286,7 @@ class xarLog__Logger
             }
 
             if ($this->format == 'html') {
-                $str .= "<font color=\"$TYPE_COLOR\">".$blank."Variable type: $type</font><br/>";
+                $str .= "<span style=\"color: $TYPE_COLOR;\">".$blank."Variable type: $type</span><br/>";
             } else {
                 $str .= $blank."Variable type: $type\n";
             }
@@ -315,9 +315,9 @@ class xarLog__Logger
                 $var = 'true';
             }
             if ($this->format == 'html') {
-                $str .= "<font color=\"$TYPE_COLOR\">".$blank."Variable type: $type</font><br/>";
-                $str .= "<font color=\"$VALUE_COLOR\">".$blank.'Variable value: "'.
-                       htmlspecialchars($var).'"</font><br/><br/>';
+                $str .= "<span style=\"color: $TYPE_COLOR;\">".$blank."Variable type: $type</span><br/>";
+                $str .= "<span style=\"color: $VALUE_COLOR;\">".$blank.'Variable value: "'.
+                       htmlspecialchars($var).'"</span><br/><br/>';
             } else {
                 $str .= $blank."Variable type: $type\n";
                 $str .= $blank."Variable value: \"$var\"\n\n";
@@ -394,7 +394,7 @@ class xarLog__HTMLLogger extends xarLog__Logger
 
         if (file_exists($this->fileName) ||
             !($fd = @fopen($this->fileName, 'a'))) return;
-        $str = "<html><head><title>Xaraya HTML Logger</title></head><body>";
+        $str = "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head><title>Xaraya HTML Logger</title></head><body>";
         fwrite($fd, $str);
         fclose($fd);
     }
@@ -436,9 +436,9 @@ class xarLog__JavaScriptLogger extends xarLog__Logger
     function getWindowLoaderScript()
     {
         $header = "<table size=\\\"100%\\\" cellspacing=\\\"0\\\" cellpadding=\\\"0\\\" border=\\\"0\\\"><tr><td>".
-                  "<hr size=\\\"1\\\">Xaraya Javascript Logger</hr></td><td width=\\\"1%\\\"><font face=\\\"Verdana,arial\\\" size=\\\"1\\\">".
+                  "<hr size=\\\"1\\\">Xaraya Javascript Logger</hr></td><td width=\\\"1%\\\"><span style=\\\"font-face: Verdana,arial; font-size: 8pt;\\\">".
                   date("Y-m-d H:i:s").
-                  "</font></td></tr></table>";
+                  "</span></td></tr></table>";
 
         $code = "debugWindow = window.open(\"Xaraya Javascript Logger\",\"Xaraya Javascript Logger\",\"width=450,height=500,scrollbars=yes,resizable=yes\");\n".
                 "if (debugWindow) {\n".
