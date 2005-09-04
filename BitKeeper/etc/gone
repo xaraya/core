@@ -7036,6 +7036,7 @@ miko@miko.homelinux.org|authldap/pntemplates/admin-modifyconfig.pnd|200211281707
 miko@miko.homelinux.org|authldap/pnuserapi.php|20021125221400|17695|2de99ca045c4e96c
 miko@miko.homelinux.org|authldap/pnversion.php|20021125221400|19709|fa1e22daa839976c
 mrb@duel.hsdev.com|BitKeeper/etc/REPO_LICENSE|20021019073820|27076|ac9e7912c7d0d8b9
+mrb@duel.hsdev.com|BitKeeper/etc/ignore|20020928131446|21304|8879663d36cadc1
 mrb@duel.hsdev.com|BitKeeper/triggers/post-incoming.notice|20021003160140|52074|11de04f8d49e968a
 mrb@duel.hsdev.com|html/images/categories/index.html|20021003205047|18722|fa6d7db1ae5b202f
 mrb@duel.hsdev.com|html/index.html|20021003205047|17344|1eb5eb8cb3118575
