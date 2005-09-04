@@ -161,12 +161,12 @@ function xarTplAddStyleLink($modName, $styleName)
 {
     $info = xarMod_getBaseInfo($modName);
     if (!isset($info)) return;
-    $fileName = "modules/$info[directory]/styles/$styleName.css";
+    $fileName = "modules/$info[directory]/xarstyles/$styleName.css";
     if (!file_exists($fileName)) {
         return false;
     }
     $url = xarServerGetBaseURL().$fileName;
-    $GLOBAL['xarTpl_additionalStyles'] .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$url}\" />\n";
+    $GLOBALS['xarTpl_additionalStyles'] .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$url}\" />\n";
     return true;
 }
 

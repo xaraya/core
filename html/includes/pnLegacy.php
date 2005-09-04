@@ -894,7 +894,7 @@ function pnUserSetVar($name, $value)
  * in, otherwise an array of prepared variables
  * @raise DATABASE_ERROR, BAD_PARAM
  */
-function xarVarCensor()
+function pnVarCensor()
 {
     global $xarVar_enableCensoringWords, $xarVar_censoredWords, $xarVar_censoredWordsReplacers;
 
@@ -948,11 +948,6 @@ function xarVarCensor()
     } else {
         return $resarray;
     }
-}
-
-function pnVarCensor()
-{
-    return xarVarCensor();
 }
 
 function pnVarCleanFromInput()
