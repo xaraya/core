@@ -87,6 +87,21 @@ define('_XARAUTH_FAILED', -1);
 // LEGACY FUNCTIONS
 
 /**
+ * allow a function to raise an exception
+ *
+ * @deprec
+ * The caller must supply a value for the major parameter.
+ * @param major can have one of the values XAR_NO_EXCEPTION, XAR_USER_EXCEPTION, or XAR_SYSTEM_EXCEPTION
+ * @param exceptionId identifier representing the exception type
+ * @param value PHP class containing exception value
+ * @returns void
+ */
+function pnExceptionSet($major, $exceptionId, $value = NULL)
+{
+    return xarExceptionSet($major, $exceptionId, $value);
+}
+
+/**
  * get request info for current page
  *
  * @deprec
@@ -480,6 +495,16 @@ function xarModUnregisterHook($hookObject,
     return true;
 }
 
+/**
+ * get status message from previous operation
+ *
+ * @deprec
+ * Obtains any status message, and also destroys
+ * it from the session to prevent duplication
+ * @public
+ * @returns string
+ * @return the status message
+ */
 function pnGetStatusMsg()
 {
     $msg = xarSessionGetVar('statusmsg');
@@ -806,7 +831,182 @@ function pnDBGetConn()
  */
 function pnDBGetTables()
 {
-    return xarDBGetTables;
+    return xarDBGetTables();
+}
+
+/**
+ * Load the Table Maintenance API
+ *
+ * @deprec
+ * @access public
+ * @return true
+ */
+function pnDBLoadTableMaintenanceAPI()
+{
+    return xarDBLoadTableMaintenanceAPI();
+}
+
+/**
+ * Get the database host
+ *
+ * @deprec
+ * @access public
+ * @returns string
+ * @return database host
+ */
+function pnDBGetHost()
+{
+    return xarDBGetHost();
+}
+
+/**
+ * Get the database type
+ *
+ * @deprec
+ * @access public
+ * @return string database type
+ */
+function pnDBGetType()
+{
+    return xarDBGetType();
+}
+
+/**
+ * Get the database name
+ *
+ * @deprec
+ * @access public
+ * @return string database name
+ */
+function pnDBGetName()
+{
+    return xarDBGetName();
+}
+
+/**
+ * Get the system table prefix
+ *
+ * @deprec
+ * @access public
+ * @return string database name
+ */
+function pnDBGetSystemTablePrefix()
+{
+    return xarDBGetSystemTablePrefix();
+}
+
+/**
+ * Get the site table prefix
+ *
+ * @deprec
+ * @access public
+ * @return string database name
+ */
+function pnDBGetSiteTablePrefix()
+{
+    return xarDBGetSiteTablePrefix();
+}
+
+/**
+ * Generate the SQL to create a database
+ *
+ * @deprec
+ * @access public
+ * @param databaseName name of the session variable to set
+ * @param databaseType name of the session variable to set
+ * @returns string
+ * @return sql statement for database creation
+ */
+function pnDBCreateDatabase($databaseName, $databaseType = NULL)
+{
+    return xarDBCreateDatabase($databaseName, $databaseType);
+}
+
+/**
+ * Alter database table
+ *
+ * @deprec
+ * @access public
+ * @param tableName the table to alter
+ * @param args['command'] command to perform on table(add,modify,drop,rename)
+ * @param args['field_name'] field to alter
+ * @param args['new_field_name'] new field name
+ * @param args['type'] field type
+ * @param args['null'] null or not
+ * @param args['increment'] auto incrementing files
+ * @param args['primary_key'] primary key
+ * @param databaseType the database type (optional)
+ * @returns string
+ * @return generated sql
+ */
+function pnDBAlterTable($tableName, $args, $databaseType = NULL)
+{
+    return xarDBAlterTable($tableName, $args, $databaseType);
+}
+
+/**
+/**
+ * Generate the SQL to create a table
+ *
+ * @deprec
+ * @access public
+ * @param tableName the physical table name
+ * @param fields an array containing the fields to create
+ * @param databaseType database type (optional)
+ * @returns string|false
+ * @return the generated SQL statement, or false on failure
+ */
+function pnDBCreateTable($databaseName, $databaseType = NULL)
+{
+    return xarDBCreateTable($databaseName, $databaseType);
+}
+
+
+/**
+ * Generate the SQL to delete a table
+ *
+ * @deprec
+ * @access public
+ * @param tableName the physical table name
+ * @param index an array containing the index name, type and fields array
+ * @returns data|false
+ * @return the generated SQL statement, or false on failure
+ */
+function pnDBDropTable($tableName, $databaseType = NULL)
+{
+    return xarDBDropTable($tableName, $databaseType);
+}
+
+
+/**
+ * Generate the SQL to create a table index
+ *
+ * @deprec
+ * @param tableName the physical table name
+ * @param index an array containing the index name, type and fields array
+ * @param databaseType is an optional parameter to specify the database type
+ * @returns string|false
+ * @return the generated SQL statement, or false on failure
+ */
+function pnDBCreateIndex($tableName, $index, $databaseType = NULL) 
+{
+    return xarDBCreateIndex($tableName, $index, $databaseType);
+}
+
+/**
+ * Generate the SQL to drop an index
+ *
+ * @deprec
+ * @access public
+ * @param tableName
+ * @param fields array of database index fields?
+ * @param databaseType
+ * @returns string|false
+ * @return generated sql to drop an index
+ */
+function pnDBDropIndex($tableName, $fields, $databaseType = NULL)
+{
+    return xarDBDropIndex($tableName, $fields, $databaseType);
 }
 
 /**
@@ -839,5 +1039,45 @@ function pnSessionDelVar($name)
 {
     return SessionDelVar($name);
 }
+
+/**
+ * Gets Locale Mode
+ *
+ * @deprec
+ * @access public
+ * @returns string
+ * @return MLS Mode
+ */
+function pnMLSGetMode()
+{
+    return xarMLSGetMode();
+}
+
+/**
+ * Translate a string
+ *
+ * @deprec
+ * @access public
+ * @returns string
+ * @return the translated string, or the original string if no translation is available
+ */
+function pnML($string)
+{
+    return xarML($string);
+}
+
+/**
+ * Return the translation associated to passed key
+ *
+ * @deprec
+ * @access public
+ * @returns string
+ * @return the translation string, or the key if no translation is available
+ */
+function pnMLByKey($key)
+{
+    return xarMLByKey($key);
+}
+
 
 ?>
