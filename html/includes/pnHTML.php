@@ -4,7 +4,7 @@
  * 
  * HTML Helpers
  *
- * @package Xaraya eXtensible Management System
+ * @package legacy
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.org
@@ -94,7 +94,7 @@ define('_PNH_PARSEINPUT', 1);
  * $myhtml->PrintPage();
  * </pre>
  *
- * @package Xaraya
+ * @package legacy
  * @author Jim McDonald
  * @author Patrick Kellum
  * @link http://www.Xaraya.com/ The Official Xaraya website

@@ -4,13 +4,20 @@
  * 
  * Configuration Unit
  * 
- * @package Xaraya eXtensible Management System
+ * @package config
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.org
  * @author Marco Canini
 */
 
+
+/**
+ * Initialize config system
+ *
+ * @author  Marco Canini
+ * @return  bool true
+*/
 function xarConfig_init($args, $whatElseIsGoingLoaded)
 {
     // Configuration Unit Tables
