@@ -993,7 +993,8 @@ function drawindent() {
 					"xar_type = $this->type," .
 					"xar_uname = '$this->uname'," .
 					"xar_email = '$this->email'," .
-					"xar_pass = '$this->pass'" .
+					"xar_pass = '$this->pass'," .
+					"xar_state = '$this->state'" .
 					" WHERE xar_uid = " . $this->getID();
 
 //Execute the query, bail if an exception was thrown
@@ -1221,7 +1222,7 @@ function drawindent() {
 						'val_code'=>$val_code,
 						'state'=>$state,
 						'auth_module'=>$auth_module);
-			$users[] = new xarRole($pargs);
+			array_push($users,new xarRole($pargs));
 			$result->MoveNext();
 		}
 
