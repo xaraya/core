@@ -187,13 +187,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     }
 
 
-    // TODO: <marco> Drop them
-    xarEvt_registerEvent('StartBodyTag');
-    xarEvt_registerEvent('EndBodyTag');
-
-    
-
-
     // Start Variables utilities
     // FIXME: <marco> No more sure of this!
     /*
