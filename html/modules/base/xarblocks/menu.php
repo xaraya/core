@@ -143,9 +143,6 @@ function base_menublock_display($blockinfo)
                                                    'link'      => '', 
                                                    'modactive' => 1);
 
-                            // Load API for individual links. 
-                            xarModAPILoad($label, 'user');
-
 
                             // The user API function is called.
                             $menulinks = xarModAPIFunc($label,
