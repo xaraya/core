@@ -1,6 +1,5 @@
 <xar:if condition="!empty($message)">
-	#$message#
+	<p>#$message#</p>
 <xar:else />
-	#$output#
+	<p>#$output#</p>
 </xar:if>
-<br /><br />

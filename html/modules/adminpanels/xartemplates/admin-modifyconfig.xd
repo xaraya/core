@@ -12,7 +12,6 @@
             Configure Adminmenu
         </xar:mlstring>
     </h2>
-<!--     <br /> -->
     <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
         <div>
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
