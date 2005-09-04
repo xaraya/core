@@ -104,7 +104,6 @@ class xarTpl__CodeGenerator
     function generate($documentTree)
     {
         $code = $this->generateNode($documentTree);
-        
         if (!isset($code)) {
             return; // throw back
         }
@@ -117,6 +116,7 @@ class xarTpl__CodeGenerator
             $code .= "\nreturn true;\n?>";
             $this->setPHPBlock(false);
         }
+        //xarLogMessage('generate code: '.$code, XARLOG_LEVEL_ERROR);
         return $code;
     }
 
@@ -245,7 +245,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             return; // throw back
         }
         $documentTree->children = $res;
-        xarLogVariable('documentTree', $documentTree, XARLOG_LEVEL_ERROR);
+        //xarLogVariable('documentTree', $documentTree, XARLOG_LEVEL_ERROR);
         return $documentTree;
     }
 
@@ -544,8 +544,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         break;
                     }
 
-		    // marco: can 'p' token be left out? i assume it's for checking pn?
-                    if ($nextToken != '$' && $nextToken != 'p' && $nextToken != 'x') { 
+                    if ($nextToken != '$' && $nextToken != 'x') { 
                         xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                                        new xarTpl__ParserError("Misplaced '#' character. To print the literal '#', use '##'.", $this));
                         return;
@@ -2315,7 +2314,7 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
                            new xarTpl__ParserError('Missing content in <xar:mlstring> tag.', $this));
             return;
         }
-        return "xarML(\"".addslashes($string)."\"";
+        return "xarML(\"".xarVar_addslashes($string)."\"";
     }
 
     function renderEndTag()
@@ -2519,10 +2518,10 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
         $themeName = xarCore_getSiteVar('BL.DefaultTheme');
         $directories = array();
         if ($type == 'theme') {
-            $directories[] = "themes/$themeName/includes/";
+            $directories[] = "themes/$themeName/includes";
         } elseif ($type == 'module') {
-            $directories[] = "themes/$themeName/modules/$_bl_module_name/includes/";
-            $directories[] = "modules/$_bl_module_name/xarinclude/";
+            //$directories[] = "themes/$themeName/modules/\$_bl_module_name/includes";
+            $directories[] = "modules/\$_bl_module_name/xartemplates/xarincludes";
         } else {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
                            new xarTpl__ParserError("Invalid value '$type' for 'type' attribute in <xar:include> tag.", $this));
@@ -2536,15 +2535,21 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
             return;
         }
 
-        foreach ($directories as $directory) {
-            if (file_exists($directory . '/' . $file)) {
-                return "xarTplFile('$directory/$file', \$_bl_data)\n";
-            }
-        }
+        //foreach ($directories as $directory) {
+        //    if (file_exists($directory . '/' . $file)) {
+                $directory = $directories[0];
+                return "xarTplFile(\"$directory/$file.xd\", \$_bl_data)\n";
+        //    }
+        //}
 
         xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
                        new xarTpl__ParserError("File '$file' not found. (Search path: '$path')", $this));
     }
+
+    /*function isAssignable()
+    {
+        return false;
+    }*/
 }
 
 class xarTpl__XarSetNode extends xarTpl__TplTagNode
