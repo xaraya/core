@@ -603,7 +603,7 @@ function base_activate()
 
     
     // Register Block types
-    $blocks = array('finclude','html','menu','php','rss','text');
+    $blocks = array('finclude','html','menu','php','text');
 
     foreach ($blocks as $block) {
         if (!xarBlockTypeRegister('base', $block)) {
