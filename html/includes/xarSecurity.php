@@ -250,7 +250,7 @@ function xarSec__getAuthInfo($userId)
                      xar_instance,
                      xar_level
               FROM $userpermtable
-              WHERE xar_uid IN (" . xarVarPrepForStore($userIds) . ")
+              WHERE xar_uid='" . xarVarPrepForStore($userId) . "'
               ORDER by xar_sequence";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
