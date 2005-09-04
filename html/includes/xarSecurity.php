@@ -483,6 +483,13 @@ function xarSec__getModulesInstanceSchemaInfo()
     while ($modName = readdir($moddir)) {
         $osfile = 'modules/' . xarVarPrepForOS($modName) . '/xarversion.php';
         @include $osfile;
+
+        // pnAPI compatibility
+        if (!file_exists($osfile)) {
+           $osfile2 = 'modules/' . xarVarPrepForOS($modName) . '/pnversion.php';
+           @include $osfile2;
+        }
+
         if (!empty($modversion['securityschema'])) {
             foreach ($modversion['securityschema'] as $component => $instance) {
                 xarSecAddSchema($component, $instance);
