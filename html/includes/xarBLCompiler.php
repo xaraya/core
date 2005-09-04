@@ -107,7 +107,7 @@ class xarTpl__Compiler
 
     function compileFile($fileName)
     {
-        // FIXME: can we get rid of the @?
+        // The @ makes the code better to handle, leave it.
         if (!($fp = @fopen($fileName, 'r'))) {
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'COMPILER_ERROR',
                             new xarTpl__CompilerError("Cannot open template file '$fileName'."));
@@ -1440,9 +1440,21 @@ class xarTpl__ExpressionTransformer
 
     function transformPHPExpression($phpExpression)
     {
-        // FIXME: <marco> Paul, please, check this regular expression, it must match $(foo:bar)
+        // This regular expression  must match the special variables $foo:bar construct
         // pass it to the resolver, check for exceptions, and replace it with the resolved
         // var name.
+        // Let's dissect the expression so it's a bit more clear:
+        //  1. /..../i      => we're matching in a case - insensitive  way what's betwteen the /-es
+        //  2. \\\$         => matches \$ which is and escaped $ in the string to match 
+        //  3. (            => this starts a subpattern
+        //  4.  [a-z_]      => matches a letter or underscore
+        //  5.  [0-9a-z_]*  => matches a number, letter of underscore, zero or more occurrences
+        //  6.  (           => starts a subpattern
+        //  7.   :          => matches the colon
+        //  8.   [0-9a-z_]+ => matches number,letter or underscore, one or more occurrences
+        //  9.  )           => matches right brace
+        // 10.  {1,2}       => the whole previous subpattern may  appear min. 1 and max 2 times
+        // 11. )            => ends the current pattern
         if (preg_match_all("/\\\$([a-z_][0-9a-z_]*(:[0-9a-z_]+){1,2})/i", $phpExpression, $matches)) {
             // Get xarTpl__SpecialVariableNamesResolver instance
             $resolver =& xarTpl__SpecialVariableNamesResolver::instance();
@@ -2003,6 +2015,12 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
             return;
         }
 
+        if (isset($prefix)) {
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION,'DEPRECATED_ATTRIBUTE',
+                            new xarTpl__ParserError('Use of deprecated \'prefix\' attribute in <xar:loop> tag.',$this));
+            return;
+        }
+
         $name = xarTpl__ExpressionTransformer::transformPHPExpression($name);
         if (!isset($name)) {
             return; // throw back
@@ -2030,9 +2048,10 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         $output .= '$_bl_loop_number'.$loopCounter." = 1; ";
         $output .= 'foreach ('.$name.' as $_bl_loop_key'.$loopCounter.' => $_bl_loop_item'.$loopCounter.") { ";
 
-        // FIXME: deprecate $prefix?
-        if(!isset($prefix) && !isset($id)) $prefix = '_bl_loop_'.$loopCounter;
-        if(!isset($prefix) && isset($id)) $prefix = '_bl_loop_'.$id;
+        if(!isset($id)) 
+            $prefix = '_bl_loop_'.$loopCounter;
+        else
+            $prefix = '_bl_loop_'.$id;
         $output .= 'extract($_bl_loop_item'.$loopCounter.", EXTR_PREFIX_ALL, '$prefix'); ";
 
         return $output;
