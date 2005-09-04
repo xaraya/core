@@ -59,7 +59,7 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
         xarCore_die('You need the installer theme if you want to install Xaraya.');
     }
 
-	// Handle installation phase designation
+    // Handle installation phase designation
     $phase = (int) xarRequestGetVar('install_phase', 'POST');
 
     if ($phase == 0) {
@@ -80,7 +80,7 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     // Build function name from phase
     $funcName = 'phase' . $phase;
 
-	// Handle language setting
+    // Handle language setting
 
     // Load installer module
     $res = xarInstallLoad($modName, $modType);
