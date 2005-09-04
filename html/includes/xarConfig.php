@@ -1,13 +1,14 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Marco Canini
-// Purpose of file: Configuration Unit
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ * 
+ * Configuration Unit
+ * 
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.org
+ * @author Marco Canini
+*/
 
 function xarConfig_init($args, $whatElseIsGoingLoaded)
 {

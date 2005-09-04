@@ -1,13 +1,14 @@
 <?php 
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Jim McDonald
-// Purpose of file: HTML helpers
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ * 
+ * HTML Helpers
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.org
+ * @author Jim McDonald
+*/
 
 /**
  * Set object to keep generated HTML.

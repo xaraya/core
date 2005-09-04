@@ -1,13 +1,14 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Gary Mitchell
-// Purpose of file: Table Maintenance API
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ * 
+ * Table Maintenance API
+ * 
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.org
+ * @author Gary Mitchell
+*/
 
 /* TODO:
  * Check functions!
