@@ -118,8 +118,7 @@
  *
  * @deprec
  * @access public
- * @returns string
- * @return base URI for PostNuke
+ * @return string base URI for PostNuke
  */
 function pnGetBaseURI()
 {
@@ -131,8 +130,7 @@ function pnGetBaseURI()
  *
  * @deprec
  * @access public
- * @returns string
- * @return base URL for PostNuke
+ * @return string base URL for PostNuke
  */
 function pnGetBaseURL()
 {
@@ -145,7 +143,7 @@ function pnGetBaseURL()
  * @deprec
  * @access public
  * @param the URL to redirect to
- * @returns bool
+ * @return bool
  */
 function pnRedirect($redirecturl)
 {
@@ -158,7 +156,7 @@ function pnRedirect($redirecturl)
  * @deprec
  * @access public
  * @author Marco Canini
- * @returns bool
+ * @return bool
  */
 function pnIsRedirected()
 {
@@ -170,8 +168,7 @@ function pnIsRedirected()
  *
  * @deprec
  * @access public
- * @returns bool
- * @return true if locally referred, false if not
+ * @return boot true if locally referred, false if not
  */
 function pnLocalReferer()
 {
@@ -258,8 +255,7 @@ function pnModGetName()
  * @deprec
  * @access public
  * @param modName registered name of module
- * @returns bool
- * @return true if the module is available, false if not
+ * @return bool true if the module is available, false if not
  * @raise DATABASE_ERROR, BAD_PARAM
  */
 function pnModAvailable($modName)
@@ -278,8 +274,7 @@ function pnModAvailable($modName)
  * @param hookModName name of the hook module
  * @param hookModType name of the hook type
  * @param hookFuncName name of the hook function
- * @returns bool
- * @return true on success
+ * @return bool true on success
  * @raise DATABASE_ERROR
  */
 function pnModRegisterHook($hookObject,
@@ -330,8 +325,7 @@ function pnModRegisterHook($hookObject,
  * @param hookModName name of the hook module
  * @param hookModType name of the hook type
  * @param hookFuncName name of the hook function
- * @returns bool
- * @return true if the unregister call suceeded, false if it failed
+ * @return bool true if the unregister call suceeded, false if it failed
  */
 function pnModUnregisterHook($hookObject,
                              $hookAction,
@@ -371,8 +365,7 @@ function pnModUnregisterHook($hookObject,
  * Obtains any status message, and also destroys
  * it from the session to prevent duplication
  * @public
- * @returns string
- * @return the status message
+ * @return string the status message
  */
 function pnGetStatusMsg()
 {
@@ -457,8 +450,7 @@ function accesslevelnames()
  * @param subject - title of the email
  * @param message - body of the email
  * @param headers - extra headers for the email
- * @returns bool
- * @return true if the email was sent, false if not
+ * @return bool true if the email was sent, false if not
  */
 function pnMail($to, $subject, $message, $headers)
 {
@@ -530,8 +522,7 @@ function pnVarValidate($var, $type, $args = NULL)
 /**
  * Gets a list of active modules that have a user interface.
  *
- * @returns array
- * @return array of module information arrays
+ * @return array array of module information arrays
  * @raise DATABASE_ERROR
  */
 function pnModGetUserMods()
@@ -542,8 +533,7 @@ function pnModGetUserMods()
 /**
  * Gets a list of active modules that have an administrative interface.
  *
- * @returns array
- * @return array of module information arrays
+ * @return array array of module information arrays
  * @raise DATABASE_ERROR
  */
 function pnModGetAdminMods()
@@ -628,8 +618,7 @@ function pnConfigSetVar($name, $value)
  * get a list of database connections
  * @deprec
  * @access public
- * @returns array
- * @return array of database connections
+ * @return array array of database connections
  */
 function pnDBGetConn()
 {
@@ -640,8 +629,7 @@ function pnDBGetConn()
  * get a list of database tables
  * @deprec
  * @access public
- * @returns array
- * @return array of database tables
+ * @return array array of database tables
  */
 function pnDBGetTables()
 {
@@ -962,8 +950,7 @@ function xarBlockTypeExists($modName, $blockType)
 /**
  * get the user's language
  *
- * @returns string
- * @return the name of the user's language
+ * @return string the name of the user's language
  * @raise DATABASE_ERROR
  */
 function xarUserGetLang()
@@ -978,8 +965,7 @@ function xarUserGetLang()
 /**
  * Get the user's theme directory path
  *
- * @returns string
- * @return the user's theme directory path if successful, void otherwise
+ * @return string the user's theme directory path if successful, void otherwise
  */
 function xarUser_getThemeName()
 {
