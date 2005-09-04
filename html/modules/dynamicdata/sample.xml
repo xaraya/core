@@ -1,15 +1,15 @@
 <object name="importsample">
-  <objectid>3</objectid>
+  <objectid>6</objectid>
   <label>Imported Sample</label>
   <moduleid>182</moduleid>
-  <itemtype>2</itemtype>
+  <itemtype>3</itemtype>
   <urlparam>itemid</urlparam>
-  <maxid>0</maxid>
+  <maxid>3</maxid>
   <config>nothing much...</config>
   <isalias>1</isalias>
   <properties>
     <property name="id">
-      <id>22</id>
+      <id>45</id>
       <label>Id</label>
       <type>21</type>
       <default></default>
@@ -19,7 +19,7 @@
       <validation></validation>
     </property>
     <property name="name">
-      <id>23</id>
+      <id>46</id>
       <label>Name</label>
       <type>2</type>
       <default>please enter your name...</default>
@@ -29,7 +29,7 @@
       <validation>1:30</validation>
     </property>
     <property name="age">
-      <id>24</id>
+      <id>47</id>
       <label>Age</label>
       <type>15</type>
       <default></default>
@@ -39,7 +39,7 @@
       <validation>0:125</validation>
     </property>
     <property name="location">
-      <id>25</id>
+      <id>48</id>
       <label>Location</label>
       <type>12</type>
       <default></default>
@@ -48,6 +48,26 @@
       <order>4</order>
       <validation></validation>
     </property>
+    <property name="sex">
+      <id>49</id>
+      <label>Sex</label>
+      <type>34</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>5</order>
+      <validation>Male;Female;Unknown;I have a headache</validation>
+    </property>
+    <property name="employment_status">
+      <id>50</id>
+      <label>Employment Status</label>
+      <type>6</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>6</order>
+      <validation>xarModAPIFunc('dynamicdata','util','demolist')</validation>
+    </property>
   </properties>
   <items>
     <importsample itemid="1">
@@ -55,19 +75,24 @@
       <name>Johnny</name>
       <age>32</age>
       <location>http://mikespub.net/xaraya/images/cuernos1.jpg</location>
+      <sex>Male</sex>
+      <employment_status>3</employment_status>
     </importsample>
     <importsample itemid="2">
       <id>2</id>
       <name>Nancy</name>
       <age>29</age>
       <location>http://mikespub.net/xaraya/images/agra1.jpg</location>
+      <sex>Female</sex>
+      <employment_status>1</employment_status>
     </importsample>
     <importsample itemid="3">
       <id>3</id>
       <name>Baby</name>
       <age>1</age>
       <location>http://mikespub.net/xaraya/images/sydney1.jpg</location>
+      <sex>Unknown</sex>
+      <employment_status>7</employment_status>
     </importsample>
   </items>
 </object>
-
