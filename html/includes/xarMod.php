@@ -1527,7 +1527,8 @@ function xarMod_getFileInfo($modOsDir)
 
     if (!file_exists($fileName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $fileName);
-        return;
+        // Fix for bug 295
+        //return;
     }
 
     include($fileName);
