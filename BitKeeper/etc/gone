@@ -3518,7 +3518,6 @@ anon@numenor.|docs/blocklayout/blocklayoutsm.jpg|20021015061608|63464|f33c866b
 anon@numenor.|docs/blocklayout/templates.gif|20021015062454|36138|18b3cdec
 anon@numenor.|docs/blocklayout/xaraya.gif|20021015061608|38710|f33daadf
 dudleyc@bar.|tests/bk/miko.test|20030116165541|45464|3a65aa7d
-html/var/cache/templates/index.html
 jan@jack.iwr.uni-heidelberg.de|docs/rfc/images/rfc0007_2.png|20021126191341|35994|fc55b7d32f9f732f
 jan@jack.iwr.uni-heidelberg.de|docs/rfc/images/rfc0007_3.dia~|20021126191024|27897|9bd80ccec8dd4190
 johnny@falling.local.lan|html/images/index.html|20021003154139|20688|ca7c306767ddff11
@@ -3618,7 +3617,6 @@ marcel@hsdev.com|html/modules/comments/xarincludes/rendering/flat.php|2002122901
 marcel@hsdev.com|html/modules/comments/xarincludes/rendering/nested.php|20021229014640|29999|dcaba3759da027b4
 marcel@hsdev.com|html/modules/comments/xarincludes/rendering/renderbase.php|20021229014640|33771|60a22f8172d51c53
 marcel@hsdev.com|html/modules/comments/xarincludes/rendering/threaded.php|20021229014640|37538|30c409fb5b4eeee2
-marcel@hsdev.com|html/var/cache/templates/index.html|20030203085125|46538|5592895c37061f27
 marcel@hsdev.com|tests/bk/tobedeletd3|20021201185524|27771|2ad34953b9eb374d
 marcel@hsdev.com|tests/bk/tobedelted1|20021201185524|23311|4964bad518a1862a
 marcel@hsdev.com|tests/bk/tobedleted2|20021201185524|24280|230730a268eb4cc3
@@ -3645,7 +3643,6 @@ marcel@sasquatch.pulpcontent.com|PENDING/patch-2003-01-30-11-18-43|2003021511225
 marcel@sasquatch.pulpcontent.com|PENDING/patch-2003-02-15-11-05-40|20030215112254|06142|db0cb813baaa926b
 marcel@sasquatch.pulpcontent.com|PENDING/patch-2003-02-15-11-28-06|20030215113015|13732|e57e01667ca7e7b1
 marcel@sasquatch.pulpcontent.com|PENDING/placeholder|20021104230459|12476|a57f1db1920c49e4
-marcel@sasquatch.pulpcontent.com|PENDING/placeholder|20021105015158|62144|e6c3f51d496ece92
 marco@jabawack.canini.org|BitKeeper/deleted/.del-admin-release_info.xd~ddfb32f578e82abc|20030102175838|59788
 marco@jabawack.canini.org|BitKeeper/deleted/.del-admin-show_menu.xd~112af6aad63c479d|20030102175909|40380
 marco@jabawack.canini.org|BitKeeper/etc/ignore|20030102175539|31590
