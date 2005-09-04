@@ -134,52 +134,8 @@ function xarModSetVar($modName, $name, $value)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    if (empty($name)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
-        return;
-    }
 
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) return; // throw back
-
-    list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
-
-    // Takes the right table basing on module mode
-    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_varstable = $tables['system/module_vars'];
-    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_varstable = $tables['site/module_vars'];
-    }
-
-    $oldValue = xarModGetVar($modName, $name);
-    if (!isset($oldValue)) {
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
-
-        $seqId = $dbconn->GenId($module_varstable);
-        $query = "INSERT INTO $module_varstable
-                     (xar_id,
-                      xar_modid,
-                      xar_name,
-                      xar_value)
-                  VALUES
-                     ('$seqId',
-                      '" . xarVarPrepForStore($modBaseInfo['systemid']) . "',
-                      '" . xarVarPrepForStore($name) . "',
-                      '" . xarVarPrepForStore($value) . "');";
-    } else {
-        $query = "UPDATE $module_varstable
-                  SET xar_value = '" . xarVarPrepForStore($value) . "'
-                  WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'
-                  AND xar_name = '" . xarVarPrepForStore($name) . "'";
-    }
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
-
-    return true;
+    return xarVar__SetVarByAlias($modName, $name, $value, $uid = NULL, $type = 'modvar');
 }
 
 
@@ -199,47 +155,7 @@ function xarModDelVar($modName, $name)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    if (empty($name)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
-        return;
-    }
-
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) return; // throw back
-
-    list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
-
-    // Takes the right table basing on module mode
-    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_varstable = $tables['system/module_vars'];
-        $module_uservarstable = $tables['system/module_uservars'];
-    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_varstable = $tables['site/module_vars'];
-        $module_uservarstable = $tables['site/module_uservars'];
-    }
-
-    // Delete the user variables first
-    $modvarid = xarModGetVarId($modName, $name);
-    if(!$modvarid) return;
-
-    // MrB: we could use xarModDelUserVar in a loop here, but this is
-    //      much faster.
-    $query = "DELETE FROM $module_uservarstable
-              WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'";
-    $result =& $dbconn->Execute($query);
-    if(!$result) return;
-
-    // Now delete the module var
-    $query = "DELETE FROM $module_varstable
-              WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'
-              AND xar_name = '" . xarVarPrepForStore($name) . "'";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    xarVarDelCached('Mod.Variables.' . $modName, $name);
-
-    return true;
+    return xarVar__DelVarByAlias($modName, $name, $uid = NULL, $type = 'modvar');
 }
 
 /**
@@ -368,10 +284,6 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    if (empty($name)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
-        return;
-    }
 
     // If no uid specified assume current user
     if ($uid == NULL) $uid = xarUserGetVar('uid');
@@ -380,51 +292,7 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
     // MrB: should we raise an exception here?
     if ($uid==_XAR_ID_UNREGISTERED) return false;
 
-    // Get the info for the module so we can determine where we need to set
-    // the variable
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) return; // throw back
-
-    list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
-
-    // Takes the right table basing on module mode
-    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_uservarstable = $tables['system/module_uservars'];
-    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_uservarstable = $tables['site/module_uservars'];
-    }
-
-    // Get the default setting to compare the value against.
-    $modsetting = xarModGetVar($modName, $name);
-
-    // We need the variable id
-    unset($modvarid);
-    $modvarid = xarModGetVarId($modName, $name);
-    if(!$modvarid) return;
-
-    // First delete it.
-    // We could first retrieve and then compare the new value to
-    // both oldvalue and the module default, but this leads to
-    // simpler code and assuming the two queries are equal performing
-    // this looks better.
-    // FIXME: check this for performance (compare with xarModSetVar
-    //        performance which uses either update or insert statement.
-    xarModDelUserVar($modName,$name,$uid);
-
-    // Only store setting if different from global setting
-    if ($value != $modsetting) {
-        $query = "INSERT INTO $module_uservarstable
-                 (xar_mvid, xar_uid, xar_value)
-                VALUES
-                 ('" . xarVarPrepForStore($modvarid) . "',
-                  '" . xarVarPrepForStore($uid) . "',
-                  '" . xarVarPrepForStore($value) . "');";
-
-        if (! $dbconn->Execute($query)) return;
-    }
-
-    return true;
+    return xarVar__SetVarByAlias($modName, $name, $value, $uid, $type = 'moduservar');
 }
 
 /**
@@ -450,10 +318,6 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    if (empty($name)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
-        return;
-    }
 
     // If uid is not set assume current user
     if ($uid == NULL) $uid = xarUserGetVar('uid');
@@ -464,32 +328,7 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
     //      it would work.
     if ($uid == 0 ) return true;
 
-    // Get the module info so we know where to delete the value
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) return; // throw back
-
-
-    list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
-
-    // Takes the right table basing on module mode
-    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_uservarstable = $tables['system/module_uservars'];
-    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_uservarstable = $tables['site/module_uservars'];
-    }
-
-    // We need the variable id
-    unset($modvarid); // is this necessary?
-    $modvarid = xarModGetVarId($modName, $name);
-    if(!$modvarid) return;
-
-    $query = "DELETE FROM $module_uservarstable
-              WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'
-              AND xar_uid = '" . xarVarPrepForStore($uid) . "'";
-    if(!$dbconn->Execute($query)) return;
-
-    return true;
+    return xarVar__DelVarByAlias($modName, $name, $uid, $type = 'moduservar');
 }
 
 /**
