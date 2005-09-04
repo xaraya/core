@@ -37,6 +37,15 @@ function modules_admin_upgrade()
         // If there are any, then return NULL to display them (even if
         // the upgrade worked).
         if(!isset($upgraded) || xarExceptionMajor()) {return;}
+
+        // Bug 1669
+        // Also check if module upgrade returned false
+        if (!$upgraded) {
+            $msg = xarML('Module failed to upgrade');
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'SYSTEM_ERROR',
+                            new SystemException($msg));
+            return;
+        }
     }
 
     // set the target location (anchor) to go to within the page
