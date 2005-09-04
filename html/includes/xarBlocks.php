@@ -305,7 +305,9 @@ function xarBlock_render($blockInfo)
     $blockType = $blockInfo['type'];
 
 // this lets the security system know what module we're in
-    xarModSetVar('blocks','currentmodule',$modName);
+// no need to update / select in database for each block here
+//    xarModSetVar('blocks','currentmodule',$modName);
+    xarVarSetCached('Security.Variables','currentmodule',$modName);
 
 /* Lets get rid of these for a bit.  Blocks shouldn't kill a site.
     if (empty($modName)) {
