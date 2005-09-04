@@ -113,76 +113,8 @@ function xarModGetVar($modName, $name, $prep = NULL)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    if (empty($name)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
-        return;
-    }
 
-    if (empty($prep)) {
-        $prep = XARVAR_PREP_FOR_NOTHING;
-    }
-
-    if (xarVarIsCached('Mod.Variables.' . $modName, $name)) {
-        $value = xarVarGetCached('Mod.Variables.' . $modName, $name);
-        if ($value === '*!*MiSSiNG*!*') {
-            return;
-        } else {
-            if ($prep == XARVAR_PREP_FOR_DISPLAY){
-                $value = xarVarPrepForDisplay($value);
-            } elseif ($prep == XARVAR_PREP_FOR_HTML){
-                $value = xarVarPrepHTMLDisplay($value);
-            }
-            return $value;
-        }
-    } elseif (xarVarIsCached('Mod.GetVarsByModule', $modName)) {
-        // we already got everything for this module, and didn't find it above
-        return;
-    } elseif (xarVarIsCached('Mod.GetVarsByName', $name)) {
-        // we already got everything for this name, and didn't find it above
-        return;
-    }
-    // TODO: add pre-loading of all module variables for $modName ?
-    // xarMod_getVarsByModule($modName);
-
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) {
-        return; // throw back
-    }
-
-    list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
-
-    // Takes the right table basing on module mode
-    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_varstable = $tables['system/module_vars'];
-    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_varstable = $tables['site/module_vars'];
-    }
-
-    $query = "SELECT xar_value
-              FROM $module_varstable
-              WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'
-              AND xar_name = '" . xarVarPrepForStore($name) . "'";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    if ($result->EOF) {
-        $result->Close();
-        xarVarSetCached('Mod.Variables.' . $modName, $name, '*!*MiSSiNG*!*');
-        return;
-    }
-    list($value) = $result->fields;
-    $result->Close();
-    
-    xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
-
-    if ($prep == XARVAR_PREP_FOR_DISPLAY){
-        $value = xarVarPrepForDisplay($value);
-    } elseif ($prep == XARVAR_PREP_FOR_HTML){
-        $value = xarVarPrepHTMLDisplay($value);
-    }
-
-    return $value;
+    return xarVar__GetVarByAlias($modName, $name, $uid = NULL, $prep, $type = 'modvar');
 }
 
 /**
@@ -391,15 +323,11 @@ function xarModDelAllVars($modName)
  * @see  xarModGetVar
  * @todo Mrb : Add caching?
  */
-function xarModGetUserVar($modName, $name, $uid=NULL)
+function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL)
 {
     // Module name and variable name are necessary
     if (empty($modName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
-    if (empty($name)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
     }
 
@@ -409,45 +337,9 @@ function xarModGetUserVar($modName, $name, $uid=NULL)
     // Anonymous user always uses the module default setting
     if ($uid==_XAR_ID_UNREGISTERED) return xarModGetVar($modName,$name);
 
-    // Retrieve the info for the module to see where we need to retrieve the values
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) {
-        return; // throw back
-    }
+    return xarVar__GetVarByAlias($modName, $name, $uid, $prep, $type = 'moduservar');
 
-    list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
 
-    // Takes the right table basing on module mode
-    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_uservarstable = $tables['system/module_uservars'];
-    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_uservarstable = $tables['site/module_uservars'];
-    }
-
-    // We need the id of the module variable
-    unset($modvarid); // is this necessary?
-    $modvarid = xarModGetVarId($modName, $name);
-    if (!$modvarid) return;
-
-    $query = "SELECT xar_value
-              FROM $module_uservarstable
-              WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'
-              AND xar_uid ='" . xarVarPrepForStore($uid). "'";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    // If there is no such thing, return the global setting.
-    if ($result->EOF) {
-        $result->Close();
-        // return global setting
-        return xarModGetVar($modName, $name);
-    }
-
-    list($value) = $result->fields;
-    $result->Close();
-
-    return $value;
 }
 
 /**

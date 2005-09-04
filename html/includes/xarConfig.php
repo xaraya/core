@@ -43,29 +43,14 @@ function xarConfig_init($args, $whatElseIsGoingLoaded)
  * @todo do we need these aliases anymore ?
  * @todo return proper site prefix when we can store site vars
  */
-function xarConfigGetVar($name)
+function xarConfigGetVar($name, $prep = NULL)
 {
-    static $aliases = array('sitename' => 'Site.Core.SiteName',
-                            'slogan' => 'Site.Core.Site.Slogan',
-                            'prefix' => 'Site.DB.TablePrefix',
-                            'footer' => 'Site.Core.PageFooter',
-                            'Version_Num' => 'System.Core.VersionNumber',
+    static $aliases = array('Version_Num' => 'System.Core.VersionNumber',
                             'Version_ID' => 'System.Core.VersionId',
                             'Version_Sub' => 'System.Core.VersionSub');
 
-    if (empty($name)) {
-        $msg = xarML('Empty name.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
-
     if (isset($aliases[$name])) {
         $name = $aliases[$name];
-    }
-
-    if (xarVarIsCached('Config.Variables', $name)) {
-        return xarVarGetCached('Config.Variables', $name);
     }
 
     if ($name == 'Site.DB.TablePrefix') {
@@ -79,39 +64,7 @@ function xarConfigGetVar($name)
         return XARCORE_VERSION_SUB;
     }
 
-    list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
-
-    $config_varsTable = $tables['config_vars'];
-
-    $query = "SELECT xar_value
-              FROM $config_varsTable
-              WHERE xar_name='" . xarVarPrepForStore($name) . "'";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    if ($result->EOF) {
-        $result->Close();
-        // FIXME: <marco> Trying to force strong check over config var names
-        /*$msg = xarML('Unexistent config variable: #(1).', $name);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
-                       new SystemException($msg));
-        return;*/
-        xarVarSetCached('Config.Variables', $name, NULL);
-        return;
-    }
-
-    //Get data
-    list($value) = $result->fields;
-    $result->Close();
-
-    // Unserialize variable value
-    $value = unserialize($value);
-
-    //Some caching
-    xarVarSetCached('Config.Variables', $name, $value);
-
-    return $value;
+    return xarVar__GetVarByAlias($modname = NULL, $name, $uid = NULL, $prep, $type = 'configvar');
 }
 
 /**
