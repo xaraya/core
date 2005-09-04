@@ -76,10 +76,68 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 	<p><label for="sessiontimeout"><xar:mlstring>Session Inactivity Time Out</xar:mlstring></label>:
     <input type="text" name="sessiontimeout" value="#xarConfigGetVar('Site.Session.InactivityTimeout')#" size="5" maxlength="3" /></p>
 
-    <h4><xar:mlstring>Multi-Language Configuration</xar:mlstring></h4>
-	  <p>This is now handled by the <a href="&xar-modurl-translations-admin-modifyconfig;">translations module</a>
+    <h4><xar:mlstring>Language/Locale Configuration</xar:mlstring></h4>
+	<table>
+		<tr>
+			<td>
+				<xar:mlstring>The following locales are available to this site:</xar:mlstring>			
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table border="0" padding="2" width="200">
+					<tr>
+						<td width="150" align="center">
+							<xar:mlstring>Locale</xar:mlstring>	
+						</td>
+						<td width="50" align="center">
+							<xar:mlstring>Active (fixed)</xar:mlstring>	
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<hr />
+						</td>
+					</tr>
+				<xar:loop name="$locales">
+					<tr>
+						<td align="center">
+							&nbsp;#$loop:item['name']#
+						</td>
+						<td align="center">
+							 <xar:if condition="$loop:item['active'] == 'true'">
+								  <input type="checkbox" name="active[]" value=#$loop:item['active']# checked />
+							<xar:else />
+								  <input type="checkbox" name="active[]" value=#$loop:item['active']# />
+							</xar:if>
+						</td>
+					</tr>
+				</xar:loop>
+					<tr>
+						<td colspan="2">
+							<hr />
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+			  <label for="defaultlocale"><xar:mlstring>Default Locale</xar:mlstring></label>:&nbsp;&nbsp;
+				<select name="defaultlocale" id="defaultlocale" size="1">
+				<xar:loop name="$locales">
+				  <xar:if condition="xarMLSGetSiteLocale() eq $loop:item['name']">
+					<option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
+				   <xar:else />
+					<option value="#$loop:item['name']#">#$loop:item['name']#</option>
+				  </xar:if>
+				</xar:loop>
+			  </select>
+			</td>
+		</tr>
+	</table>
 	<h4><xar:mlstring>Legacy Configuration</xar:mlstring></h4>
-	<p><label for="loadlegacy"><xar:mlstring>Load Legacy Support</xar:mlstring></label>:
+	<p><label for="loadlegacy"><xar:mlstring>Load Legacy Support for Postnuke (7.1x, 7.2x)</xar:mlstring></label>:
 	<xar:if condition="xarConfigGetVar('Site.Core.LoadLegacy')">
 		<input type="checkbox" name="loadlegacy" id="loadlegacy" value="1" checked="checked" />
 	<xar:else />

@@ -12,18 +12,18 @@ function base_admin_modifyconfig()
 
     if (xarConfigGetVar('Site.Core.DefaultModuleType') == 'admin'){
     // Get list of user capable mods
-        $data['mods'] = xarModAPIFunc('modules', 
-                          'admin', 
-                          'GetList', 
+        $data['mods'] = xarModAPIFunc('modules',
+                          'admin',
+                          'GetList',
                           array('filter'     => array('AdminCapable' => 1)));
         $mods = array();
         foreach($mods as $mod) {
             $data['mods'][] = array('displayname' => $mod);
         }
     } else {
-        $data['mods'] = xarModAPIFunc('modules', 
-                          'admin', 
-                          'GetList', 
+        $data['mods'] = xarModAPIFunc('modules',
+                          'admin',
+                          'GetList',
                           array('filter'     => array('UserCapable' => 1)));
         $mods = array();
         foreach($mods as $mod) {
@@ -31,6 +31,33 @@ function base_admin_modifyconfig()
         }
     }
 
+    $localehome = "var/locales";
+    if (!file_exists($localehome)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE', new SystemException('The locale directory was not found.'));
+    }
+    $dd = opendir($localehome);
+    $locales = array();
+    while ($filename = readdir($dd)) {
+            if (is_dir($localehome . "/" . $filename) && file_exists($localehome . "/" . $filename . "/locale.xml")) {
+                $locales[] = $filename;
+            }
+    }
+    closedir($dd);
+
+//    $locales = xarMLSListSiteLocales();
+    $i = 0; $j = 0;
+    foreach($locales as $locale) {
+        $data['locales'][] = array('name' => $locale, 'active' => true);
+        $i++;
+    }
+    $data['activelocales'] = '';
+    foreach($locales as $locale) {
+        $data['activelocales'] .= $locale;
+        $j++;
+        if ($j < $i) $data['activelocales'] .= ',';
+    }
+
+    $data['translationsBackend'] = xarConfigGetVar('Site.MLS.TranslationsBackend');
     $data['authid'] = xarSecGenAuthKey();
     $data['updatelabel'] = xarML('Update Base Configuration');
 
