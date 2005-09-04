@@ -179,8 +179,6 @@ function base_init()
     xarConfigSetVar('Site.BL.CacheTemplates','true');
     xarConfigSetVar('Site.Core.TimeZone', 'Europe/Rome');
     xarConfigSetVar('Site.Core.EnableShortURLsSupport', 'false');
-    // FIXME: which to use ... one config var.. or 3? it seemeth that one is better..
-    xarConfigSetVar('Site.Core.DefaultModule', array('module'=>'base', 'type'=>'user', 'func'=>'main'));
     xarConfigSetVar('Site.Core.DefaultModuleName', 'base');
     xarConfigSetVar('Site.Core.DefaultModuleType', 'user');
     xarConfigSetVar('Site.Core.DefaultModuleFunction', 'main');
@@ -189,12 +187,13 @@ function base_init()
     xarConfigSetVar('Site.Session.InactivityTimeout', 90);
     xarConfigSetVar('Site.MLS.TranslationsBackend', 'php');
     // FIXME: <marco> Temporary config vars, ask them at install time
-    xarConfigSetVar('Site.MLS.MLSMode', 1);
+    xarConfigSetVar('Site.MLS.MLSMode', 'SINGLE');
     xarConfigSetVar('Site.MLS.DefaultLocale', 'en_US.iso-8859-1');
     xarConfigSetVar('Site.MLS.AllowedLocales','en_US.iso-8858-1');
     xarConfigSetVar('Site.User.AuthenticationModules','authsystem');
 
     // Dummy logger
+    // THESE VARIABLES AREN"T USED ANYWHERE YET.. DON"T BE FOOLED! :)
     xarConfigSetVar('Site.Log.LoggerName', 'dummy');
     xarConfigSetVar('Site.Log.LoggerArgs', '');
     xarConfigSetVar('Site.Log.LogLevel', 1 /*XARLOG_LEVEL_DEBUG*/);
