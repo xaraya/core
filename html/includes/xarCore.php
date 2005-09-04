@@ -370,6 +370,9 @@ function xarCore_getSystemVar($name)
 {
     static $systemVars = NULL;
 
+    if (xarVarIsCached('Core.getSystemVar', $name)) {
+        return xarVarGetCached('Core.getSystemVar', $name);
+    }
 
     if (!isset($systemVars)) {
         $fileName = xarCoreGetVarDirPath() . '/config.system.php';
@@ -382,6 +385,9 @@ function xarCore_getSystemVar($name)
     if (!isset($systemVars[$name])) {
         xarCore_die("xarCore_getSystemVar: Unknown system variable: ".$name);
     }
+
+    xarVarSetCached('Core.getSystemVar', $name, $systemVars[$name]);
+
     return $systemVars[$name];
 }
 
@@ -397,6 +403,10 @@ function xarCore_getSiteVar($name)
 {
     static $siteVars = NULL;
 
+    if (xarVarIsCached('Core.getSiteVar', $name)) {
+        return xarVarGetCached('Core.getSiteVar', $name);
+    }
+
     if (!isset($siteVars)) {
         $configLoader = new xarCore__ConfigFileLoader();
         $serverName = xarServerGetVar('SERVER_NAME');
@@ -410,6 +420,9 @@ function xarCore_getSiteVar($name)
     if (!isset($siteVars[$name])) {
         xarCore_die("xarCore_getSiteVar: Unknown site variable: ".$name);
     }
+
+    xarVarSetCached('Core.getSiteVar', $name, $siteVars[$name]);
+
     return $siteVars[$name];
 
 }
