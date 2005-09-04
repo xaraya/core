@@ -197,7 +197,13 @@ function xarMakeRoleMemberByID($childId, $parentId)
 function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$description='')
 {
     $privileges = new xarPrivileges();
-    return $privileges->register($name,$realm,$module,$component,$instance,$level,$description);
+
+    // Check if the privilege already exists
+    $privilege = $privileges->findPrivilege($name);
+    if (!$privilege) {
+        return $privileges->register($name,$realm,$module,$component,$instance,$level,$description);
+    }
+    return;
 }
 
 /**
