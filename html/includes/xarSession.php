@@ -385,13 +385,6 @@ function xarSession__new($sessionId, $ipAddress)
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    // Load Sniffer Module and Sniff the session.
-    if (function_exists('xarModAPILoad')){
-        if (xarModAPILoad('sniffer', 'user')) {
-          	xarModAPIFunc('sniffer', 'user', 'sniff');
-        }
-    }
-
     return true;
 }
 
