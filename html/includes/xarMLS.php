@@ -28,6 +28,7 @@ define('XARMLS_DNTYPE_CORE', 1);
 define('XARMLS_DNTYPE_THEME', 2);
 define('XARMLS_DNTYPE_MODULE', 3);
 
+/*
 define('XARMLS_CTXTYPE_FILE', 1);
 define('XARMLS_CTXTYPE_TEMPLATE', 2);
 define('XARMLS_CTXTYPE_BLOCK', 3);
@@ -51,6 +52,18 @@ $MLSData = array(
                           'xtype' => 'php',
                           'dir' => '',
                           'label' => 'Common'
+                         ),
+                'core:' => array(
+                          'type' => XARMLS_CTXTYPE_FILE,
+                          'xtype' => 'php',
+                          'dir' => '',
+                          'label' => ''
+                         ),
+                'modules:' => array(
+                          'type' => XARMLS_CTXTYPE_FILE,
+                          'xtype' => 'php',
+                          'dir' => '',
+                          'label' => ''
                          ),
                 'modules:templates' => array(
                           'type' => XARMLS_CTXTYPE_TEMPLATE,
@@ -107,6 +120,7 @@ $MLSData = array(
                           'label' => 'VisualAPI'
                          )
 );
+*/
 
 // This class represents the MLS environment on the site
 class MLSEnvironment {
@@ -116,9 +130,12 @@ class MLSEnvironment {
     var $domain;
     var $backend = "php";
 
-    function MLSEnvironment($data) {
+//    function MLSEnvironment($data) {
+//        $this->mlsobjects = array();
+//        foreach ($data as $key => $value) $this->mlsobjects[$key] = new MLSObject($key,$value);
+//    }
+    function MLSEnvironment() {
         $this->mlsobjects = array();
-        foreach ($data as $key => $value) $this->mlsobjects[$key] = new MLSObject($key,$value);
     }
 
     function setDomain($x) { $this->domain = $x; }
@@ -136,18 +153,18 @@ class MLSEnvironment {
             return NULL;
         }
     }
-    function getContexts() { return $this->mlsobjects; }
+//    function getContexts() { return $this->mlsobjects; }
     function getLocale() { return $this->locale; }
     function getBackend() { return $this->backend; }
     function getDomain() { return $this->domain; }
-    function getContextByName($name) { return $this->mlsobjects[$name]; }
-    function getContextByType($type) {
-        foreach ($this->mlsobjects as $object)
-            if ($object->getType() == $type) return $object;
-        return NULL;
-    }
+//    function getContextByName($name) { return $this->mlsobjects[$name]; }
+//    function getContextByType($type) {
+//        foreach ($this->mlsobjects as $object)
+//            if ($object->getType() == $type) return $object;
+//        return NULL;
+//    }
 }
-
+/*
 class MLSObject {
     var $name;
     var $label;
@@ -175,7 +192,7 @@ class MLSObject {
     function getLabel() { return $this->label; }
     function getDir() { return $this->dir; }
 }
-
+*/
 
 /**
  * Initializes the Multi Language System
@@ -207,7 +224,8 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
         xarCore_die('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
 
-    $GLOBALS['MLS'] = new MLSEnvironment($args['MLSData']);
+//    $GLOBALS['MLS'] = new MLSEnvironment($args['MLSData']);
+    $GLOBALS['MLS'] = new MLSEnvironment();
 
     $GLOBALS['xarMLS_backendName'] = $args['translationsBackend'];
     if ($GLOBALS['xarMLS_backendName'] != 'php' && $GLOBALS['xarMLS_backendName'] != 'xml') {
@@ -1067,7 +1085,7 @@ function xarMLS_setCurrentLocale($locale)
     }
 
     // Load core translations
-    xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', XARMLS_CTXTYPE_FILE, 'core');
+    xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
 
     //xarMLSLoadLocaleData($locale);
 }
@@ -1096,7 +1114,7 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
             // for which it's necessary to load common translations
             if (!isset($loadedCommons[$dnName])) {
                 $loadedCommons[$dnName] = true;
-                if (!$GLOBALS['xarMLS_backend']->loadContext(XARMLS_CTXTYPE_FILE, 'common')) return; // throw back
+                if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'common')) return; // throw back
             }
         }
 
@@ -1546,11 +1564,10 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
         if (strpos($ctxType, 'modules:') !== false) {
             list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
             $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
+        } elseif (strpos($ctxType, 'core:') !== false) {
+            $fileName = $this->getDomainLocation() . "/". $ctxName . "." . $this->backendtype;
         } else {
-            $context = $GLOBALS['MLS']->getContextByType($ctxType);
-            $fileName = $this->getDomainLocation() . "/";
-            if ($context->getDir() != "") $fileName .= $context->getDir() . "/";
-            $fileName .= $ctxName . "." . $this->backendtype;
+            die("Bad Context:" . $ctxType);
         }
 
         if (!file_exists($fileName)) {
@@ -1579,6 +1596,9 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
 
     function translate($string, $type = 0)
     {
+        //FIXME stub for CR - voll - I'm crazy!!!
+        $string=preg_replace('[\x0d]','',$string);
+
         if (isset($GLOBALS['xarML_PHPBackend_entries'][$string]))
             return $GLOBALS['xarML_PHPBackend_entries'][$string];
         else {
@@ -1652,8 +1672,10 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
 
     function getContextNames($ctxType)
     {
-        $context = $GLOBALS['MLS']->getContextByType($ctxType);
-        $this->contextlocation = $this->domainlocation . "/" . $context->getDir();
+        // FIXME need more global check
+        if (($ctxType == 'core:') || ($ctxType == 'modules:')) $directory = '';
+        else list($prefix,$directory) = explode(':',$ctxType);
+        $this->contextlocation = $this->domainlocation . "/" . $directory;
         $ctxNames = array();
         if (!file_exists($this->contextlocation)) {
             return $ctxNames;

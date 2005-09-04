@@ -43,6 +43,9 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
 
     function translate($string, $type = 0)
     {
+        //FIXME stub for CR - voll - I'm crazy!!!
+        $string=preg_replace('[\x0d]','',$string);
+
         if (!isset($this->transEntries[$string])) {
             if ($type == 1) {
                 return $string;
@@ -140,8 +143,11 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
 
     function getContextNames($ctxType)
     {
-        $context = $GLOBALS['MLS']->getContextByType($ctxType);
-        $this->contextlocation = $this->domainlocation . "/" . $context->getDir();
+        // FIXME need more global check
+        if (($ctxType == 'core:') || ($ctxType == 'modules:')) $directory = '';
+        else list($prefix,$directory) = explode(':',$ctxType);
+        $this->contextlocation = $this->domainlocation . "/" . $directory;
+
         $ctxNames = array();
         if (!file_exists($this->contextlocation)) {
             return $ctxNames;
