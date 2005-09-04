@@ -889,7 +889,45 @@ function pnVarCensor()
 
 function pnVarCleanFromInput()
 {
-    return xarVarCleanFromInput();
+    $search = array('|</?\s*SCRIPT.*?>|si',
+                    '|</?\s*FRAME.*?>|si',
+                    '|</?\s*OBJECT.*?>|si',
+                    '|</?\s*META.*?>|si',
+                    '|</?\s*APPLET.*?>|si',
+                    '|</?\s*LINK.*?>|si',
+                    '|</?\s*IFRAME.*?>|si',
+                    '|STYLE\s*=\s*"[^"]*"|si');
+    // <?
+    $replace = array('');
+
+    $resarray = array();
+    foreach (func_get_args() as $name) {
+        if (empty($name)) {
+            // you sure you want to return like this ?
+            return;
+        }
+
+        $var = xarRequestGetVar($name);
+        if (!isset($var)) {
+            array_push($resarray, NULL);
+            continue;
+        }
+
+        // TODO: <marco> Document this security check!
+        if (!function_exists('xarSecAuthAction') || !xarSecAuthAction(0, '::', '::', ACCESS_ADMIN)) {
+            $var = preg_replace($search, $replace, $var);
+        }
+
+        // Add to result array
+        array_push($resarray, $var);
+    }
+
+    // Return vars
+    if (func_num_args() == 1) {
+        return $resarray[0];
+    } else {
+        return $resarray;
+    }
 }
 
 function pnVarPrepForDisplay($var)
