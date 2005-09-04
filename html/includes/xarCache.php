@@ -90,11 +90,11 @@ function xarPageIsCached($cacheKey, $name = '')
 // CHECKME: use $name for something someday ?
     $cache_file = "$xarPage_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
 
-    if (preg_match('/-user-/', $cacheKey) &&
-        !preg_match('/-search/', $cacheKey) &&
-        ((($xarPage_cacheDisplay != 1) && !preg_match('/-display/', $cacheKey)) || ($xarPage_cacheDisplay == 1)) &&
+    if (strstr($cacheKey, '-user-') &&
+        !strstr($cacheKey, '-search') &&
+        ((($xarPage_cacheDisplay != 1) && !strstr($cacheKey, '-display')) || ($xarPage_cacheDisplay == 1)) &&
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
-        preg_match('#'.$xarPage_cacheTheme.'#', $xarTpl_themeDir) &&
+        strstr($xarTpl_themeDir, $xarPage_cacheTheme) &&
         file_exists($cache_file) &&
         filesize($cache_file) > 0 &&
         filemtime($cache_file) > time() - $xarPage_cacheTime &&
@@ -231,22 +231,20 @@ function xarPageSetCached($cacheKey, $name, $value)
 // CHECKME: use $name for something someday ?
     $cache_file = "$xarPage_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
 
-    if (preg_match('/-user-/', $cacheKey) &&
-        !preg_match('/-search/', $cacheKey) &&
-        ((($xarPage_cacheDisplay != 1) && !preg_match('/-display/', $cacheKey)) || ($xarPage_cacheDisplay == 1)) &&
+    if (strstr($cacheKey, '-user-') &&
+        !strstr($cacheKey, '-search') &&
+        ((($xarPage_cacheDisplay != 1) && !strstr($cacheKey, '-display')) || ($xarPage_cacheDisplay == 1)) &&
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
-        preg_match('#'.$xarPage_cacheTheme.'#', $xarTpl_themeDir) &&
+        strstr($xarTpl_themeDir, $xarPage_cacheTheme) &&
         (!file_exists($cache_file) ||
         filemtime($cache_file) < time() - $xarPage_cacheTime) &&
         xarCacheDirSize($xarPage_cacheCollection) <= $xarOutput_cacheSizeLimit &&
         !xarUserIsLoggedIn()) {
         $fp = @fopen($cache_file,"w");
         if (!empty($fp)) {
-            $now = xarML('Last updated on #(1)',strftime('%a, %d %B %Y %H:%M:%S %Z',time()));
             if ($xarPage_cacheShowTime == 1) {
+                $now = xarML('Last updated on #(1)',strftime('%a, %d %B %Y %H:%M:%S %Z',time()));
                 $value = preg_replace('#</body>#','<div class="xar-sub" style="text-align: center; padding: 8px; ">'.$now.'</div></body>',$value);
-            } else {
-                $value = preg_replace('#</body>#','<!--'.$now.'--></body>',$value);
             }
             @fwrite($fp,$value);
             @fclose($fp);
@@ -308,7 +306,7 @@ function xarPageFlushCached($cacheKey)
 
     if ($handle = @opendir($xarPage_cacheCollection)) {
         while (($file = readdir($handle)) !== false) {
-            if ((preg_match("#$cacheKey#",$file)) && (strstr($file, 'php') !== false)) {
+            if ((preg_match("#$cacheKey#",$file)) && (strstr($file, '.php') !== false)) {
                 @unlink($xarPage_cacheCollection . '/' . $file);
             }
         }
