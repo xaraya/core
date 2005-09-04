@@ -16,7 +16,10 @@
  * Initialize config system
  *
  * @author  Marco Canini
- * @return  bool true
+ * @access public
+ * @param args array
+ * @param whatElseIsGoingLoaded integer 
+ * @return  bool
 */
 function xarConfig_init($args, $whatElseIsGoingLoaded)
 {
@@ -34,8 +37,8 @@ function xarConfig_init($args, $whatElseIsGoingLoaded)
  * Gets a configuration variable.
  *
  * @access public
- * @param name the name of the variable
- * @return mixed value of the variable, or void if variable doesn't exist
+ * @param name string the name of the variable
+ * @return mixed value of the variable(string), or void if variable doesn't exist
  * @raise DATABASE_ERROR, BAD_PARAM
  */
 function xarConfigGetVar($name)
@@ -112,8 +115,8 @@ function xarConfigGetVar($name)
  * Sets a configuration variable.
  *
  * @access public
- * @param name the name of the variable
- * @param value the value of the variable
+ * @param name string the name of the variable
+ * @param value mixed (array,integer or string) the value of the variable
  * @return bool true on success, or false if you're trying to set unallowed variables
  * @raise DATABASE_ERROR, BAD_PARAM
  */
