@@ -35,7 +35,72 @@ $configuration_options = $options;
 function installer_public_configuration_load($args)
 {
 // the following needs to be done in any case
+    xarModAPIFunc('modules','admin','regenerate');
+    xarModAPIFunc('modules','admin','initialise',array('regid'=>147));    // categories
+    xarModAPIFunc('modules','admin','activate',array('regid'=>147));
+    xarModAPIFunc('modules','admin','initialise',array('regid'=>151));    // articles
+    xarModAPIFunc('modules','admin','activate',array('regid'=>151));
+    xarModAPIFunc('modules','admin','initialise',array('regid'=>14));     // comments
+    xarModAPIFunc('modules','admin','activate',array('regid'=>14));
+    xarModAPIFunc('modules','admin','initialise',array('regid'=>41));     // ratings
+    xarModAPIFunc('modules','admin','activate',array('regid'=>41));
+    xarModAPIFunc('modules','admin','initialise',array('regid'=>177));    // hitcount
+    xarModAPIFunc('modules','admin','activate',array('regid'=>177));
+    xarModAPIFunc('modules','admin','initialise',array('regid'=>11));     // autolinks
+    xarModAPIFunc('modules','admin','activate',array('regid'=>11));
+    xarModAPIFunc('modules','admin','initialise',array('regid'=>32));     // search
+    xarModAPIFunc('modules','admin','activate',array('regid'=>32));
+    xarModAPIFunc('modules','admin','initialise',array('regid'=>36));     // example
+    xarModAPIFunc('modules','admin','activate',array('regid'=>36));
 
+    xarModAPIFunc('modules','admin','initialise',array('regid'=>28));     // wiki
+    xarModAPIFunc('modules','admin','activate',array('regid'=>28));
+    xarModAPIFunc('modules','admin','initialise',array('regid'=>743));    // webservices
+    xarModAPIFunc('modules','admin','activate',array('regid'=>743));
+
+    $content['marker'] = '[x]';                                           // create the user menu
+    $content['displaymodules'] = 1;
+    $content['content'] = '';
+
+    // Load up database
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
+
+    $blockGroupsTable = $tables['block_groups'];
+
+    $query = "SELECT    xar_id as id
+              FROM      $blockGroupsTable
+              WHERE     xar_name = 'left'";
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    // Freak if we don't get one and only one result
+    if ($result->PO_RecordCount() != 1) {
+        $msg = xarML("Group 'left' not found.");
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return;
+    }
+
+    list ($leftBlockGroup) = $result->fields;
+
+    $adminBlockId= xarModAPIFunc('blocks',
+                                 'admin',
+                                 'block_type_exists',
+                                 array('modName'  => 'base',
+                                       'blockType'=> 'menu'));
+
+    if (!isset($adminBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        return;
+    }
+
+    xarModAPIFunc('blocks','admin','create_instance',array('title' => 'Main Menu',
+                                                           'type' => $adminBlockId,
+                                                           'group' => $leftBlockGroup,
+                                                           'template' => '',
+                                                           'content' => serialize($content),
+                                                           'state' => 2));
 // now do the necessary loading for each item
 
     if(in_array(1,$args)) {
