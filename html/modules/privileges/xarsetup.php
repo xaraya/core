@@ -111,7 +111,7 @@ function initializeSetup() {
     /*********************************************************************
     * Define instances for the core modules
     * Format is
-    * setInstance(Module,Type,ModuleTable,IDField,NameField,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
+    * xarDefineInstance(Module,Component,Querystring,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
     *********************************************************************/
 
 	$query = "SELECT xar_name,xar_id FROM xar_block_groups";
@@ -153,7 +153,7 @@ function initializeSetup() {
     /*********************************************************************
     * Register the module components that are privileges objects
     * Format is
-    * register(Name,Realm,Module,Component,Instance,Level,Description)
+    * xarregisterMask(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
     xarRegisterMask('ViewBlocks','All','base','HTMLBlock','All',ACCESS_OVERVIEW);
@@ -191,7 +191,7 @@ function initializeSetup() {
     xarRegisterMask('EditBlock','All','blocks','All','All',ACCESS_EDIT);
     xarRegisterMask('AddBlock','All','blocks','All','All',ACCESS_ADD);
     xarRegisterMask('DeleteBlock','All','blocks','All','All',ACCESS_DELETE);
-    xarRegisterMask('AdminBlock','All','blocks','All','All',ACCESS_DELETE);
+    xarRegisterMask('AdminBlock','All','blocks','All','All',ACCESS_ADMIN);
 
     xarRegisterMask('PrivilegesGateway','All','Privileges','All','All',ACCESS_READ);
     xarRegisterMask('ViewPrivileges','All','Privileges','ViewPrivileges','All',ACCESS_READ);
