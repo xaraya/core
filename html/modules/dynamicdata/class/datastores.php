@@ -1,7 +1,7 @@
 <?php
 /**
  * File: $Id$
- *
+ * 
  * Dynamic Data Store Classes
  *
  * @package Xaraya eXtensible Management System

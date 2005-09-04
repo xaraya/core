@@ -70,7 +70,9 @@ class Dynamic_Object_Master
             }
         }
         if (empty($this->moduleid)) {
-            $this->moduleid = xarModGetIDFromName(xarModGetName());
+            if (empty($this->objectid)) {
+                $this->moduleid = xarModGetIDFromName(xarModGetName());
+            }
         } elseif (!is_numeric($this->moduleid) && is_string($this->moduleid)) {
             $this->moduleid = xarModGetIDFromName($this->moduleid);
         }
