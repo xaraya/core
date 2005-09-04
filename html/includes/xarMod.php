@@ -403,6 +403,7 @@ function xarModGetUserVar($modName, $name, $uid=NULL)
 
     // If there is no such thing, return the global setting.
     if ($result->EOF) {
+        $result->Close();
         // return global setting
         return xarModGetVar($modName, $name);
     }
@@ -614,6 +615,7 @@ function xarModGetVarId($modName, $name)
 
     // If there was no such thing return
     if ($result->EOF) {
+        $result->Close();
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_FOUND', 'modvarid');
         return;
        }
@@ -845,40 +847,39 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
         $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1);
         if (!$result) return;
 
-        if (!$result->EOF) {
-            while(!$result->EOF) {
-                list($modInfo['regid'],
-                     $modInfo['name'],
-                     $modInfo['directory'],
-                     $modInfo['version'],
-                     $modInfo['systemid'],
-                     $modState) = $result->fields;
-                $result->MoveNext();
+        while(!$result->EOF) {
+            list($modInfo['regid'],
+                 $modInfo['name'],
+                 $modInfo['directory'],
+                 $modInfo['version'],
+                 $modInfo['systemid'],
+                 $modState) = $result->fields;
 
-                if (xarVarIsCached('Mod.Infos', $modInfo['regid'])) {
-                    // Get infos from cache
-                    $modList[] = xarVarGetCached('Mod.Infos', $modInfo['regid']);
-                } else {
-                    $modInfo['mode'] = (int) $mode;
-                    $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
-                    // Shortcut for os prepared directory
-                    $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
+            if (xarVarIsCached('Mod.Infos', $modInfo['regid'])) {
+                // Get infos from cache
+                $modList[] = xarVarGetCached('Mod.Infos', $modInfo['regid']);
+            } else {
+                $modInfo['mode'] = (int) $mode;
+                $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
+                // Shortcut for os prepared directory
+                $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
 
-                    $modInfo['state'] = (int) $modState;
+                $modInfo['state'] = (int) $modState;
 
-                    xarVarSetCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
+                xarVarSetCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
 
-                    $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
-                    if (!isset($modFileInfo)) return; // throw back
-                    //     $modInfo = array_merge($modInfo, $modFileInfo);
-                    $modInfo = array_merge($modFileInfo, $modInfo);
-
-                    xarVarSetCached('Mod.Infos', $modInfo['regid'], $modInfo);
-
-                    $modList[] = $modInfo;
+                $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
+                if (!isset($modFileInfo)) {
+                    $result->Close();
+                    return; // throw back
                 }
-                $modInfo = array();
+                //     $modInfo = array_merge($modInfo, $modFileInfo);
+                $modInfo = array_merge($modFileInfo, $modInfo);
+                xarVarSetCached('Mod.Infos', $modInfo['regid'], $modInfo);
+                $modList[] = $modInfo;
             }
+            $modInfo = array();
+            $result->MoveNext();
         }
 
         $result->Close();
@@ -1488,23 +1489,21 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
     if (!$result) return;
 
     $resarray = array();
-    if (!$result->EOF) {
+    while(!$result->EOF) {
+        list($hookArea,
+             $hookModName,
+             $hookModType,
+             $hookFuncName) = $result->fields;
 
-        while(list($hookArea,
-                   $hookModName,
-                   $hookModType,
-                   $hookFuncName) = $result->fields) {
-            $result->MoveNext();
+        $tmparray = array('area' => $hookArea,
+                          'module' => $hookModName,
+                          'type' => $hookModType,
+                          'func' => $hookFuncName);
 
-            $tmparray = array('area' => $hookArea,
-                              'module' => $hookModName,
-                              'type' => $hookModType,
-                              'func' => $hookFuncName);
-
-            array_push($resarray, $tmparray);
-        }
-        $result->Close();
+        array_push($resarray, $tmparray);
+        $result->MoveNext();
     }
+    $result->Close();
     $hookListCache["$callerModName$hookObject$hookAction"] = $resarray;
     return $resarray;
 }
@@ -1545,13 +1544,12 @@ function xarModIsHooked($hookModName, $callerModName = NULL)
         if (!$result) return;
     
         $modHookedCache[$callerModName] = array();
-        if (!$result->EOF) {
-            while(list($modname) = $result->fields) {
-                $result->MoveNext();
-                $modHookedCache[$callerModName][$modname] = 1;
-            }
-            $result->Close();
+        while(!$result->EOF) {
+            list($modname) = $result->fields;
+            $modHookedCache[$callerModName][$modname] = 1;
+            $result->MoveNext();
         }
+        $result->Close();
     }
     if (isset($modHookedCache[$callerModName][$hookModName])) {
         return true;
@@ -1857,6 +1855,7 @@ function xarMod__getState($modRegId, $modMode)
         $result->Close();
         return (int) $modState;
     } else {
+        $result->Close();
         return (int) XARMOD_STATE_UNINITIALISED;
     }
 }

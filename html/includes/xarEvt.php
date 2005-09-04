@@ -330,39 +330,37 @@ function xarEvt__GetActiveModsList()
         $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1);
         if (!$result) return;
         
-        if (!$result->EOF) {
-            while(!$result->EOF) {
-                list($modInfo['regid'],
-                     $modInfo['name'],
-                     $modInfo['directory'],
-                     $modInfo['version'],
-                     $modState) = $result->fields;
-                $result->MoveNext();
+        while(!$result->EOF) {
+            list($modInfo['regid'],
+                 $modInfo['name'],
+                 $modInfo['directory'],
+                 $modInfo['version'],
+                 $modState) = $result->fields;
                 
-                if (xarVarIsCached('Evt.Mod.Infos', $modInfo['regid'])) {
-                    // Get infos from cache
-                    $modList[] = xarVarGetCached('Evt.Mod.Infos', $modInfo['regid']);
-                } else {
-                    $modInfo['mode'] = (int) $mode;
-//                    $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
-                    // Shortcut for os prepared directory
-//                    $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
-                    
-                    $modInfo['state'] = (int) $modState;
-                    
-                    xarVarSetCached('Evt.Mod.BaseInfos', $modInfo['name'], $modInfo);
-                    
-//                    $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
-//                    if (!isset($modFileInfo)) return; // throw back
-                    //     $modInfo = array_merge($modInfo, $modFileInfo);
-//                    $modInfo = array_merge($modFileInfo, $modInfo);
-                    
-                    xarVarSetCached('Evt.Mod.Infos', $modInfo['regid'], $modInfo);
-                    
-                    $modList[] = $modInfo;
-                }
-                $modInfo = array();
+            if (xarVarIsCached('Evt.Mod.Infos', $modInfo['regid'])) {
+                // Get infos from cache
+                $modList[] = xarVarGetCached('Evt.Mod.Infos', $modInfo['regid']);
+            } else {
+                $modInfo['mode'] = (int) $mode;
+                // $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
+                // Shortcut for os prepared directory
+                // $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
+                
+                $modInfo['state'] = (int) $modState;
+                
+                xarVarSetCached('Evt.Mod.BaseInfos', $modInfo['name'], $modInfo);
+                
+                // $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
+                // if (!isset($modFileInfo)) return; // throw back
+                //    $modInfo = array_merge($modInfo, $modFileInfo);
+                // $modInfo = array_merge($modFileInfo, $modInfo);
+                
+                xarVarSetCached('Evt.Mod.Infos', $modInfo['regid'], $modInfo);
+                
+                $modList[] = $modInfo;
             }
+            $modInfo = array();
+            $result->MoveNext();
         }
     
         $result->Close();
