@@ -208,7 +208,7 @@ function pnUserGetAll($startnum = 1, $numitems = -1)
  * @return string the name of the current top-level module, false if not in a module
  */
 function pnModGetName() {
-    list($modName) = pnGetRequestInfo();
+    list($modName) = pnRequestGetInfo();
 
     return $modName;
 }
