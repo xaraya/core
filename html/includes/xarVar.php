@@ -117,17 +117,34 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     if ($flags & XARVAR_GET_ONLY) $allowOnlyMethod = 'GET';
     if ($flags & XARVAR_POST_ONLY) $allowOnlyMethod = 'POST';
     $subject = xarRequestGetVar($name, $allowOnlyMethod);
-    if ($subject == NULL || xarVarValidate($validation, $subject, $value) == false) {
+    
+    if ($subject == NULL) {
         if ($flags & XARVAR_NOT_REQUIRED || isset($defaultValue)) {
             $value = $defaultValue;
         } else {
             // Raise an exception
-            $msg = xarML('The required #(1) input variable couldn\'t be found or contains invalid data.', $name);
+            $msg = xarML('The required input variable \'#(1)\' could not be found.', $name);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException($msg));
+                            new SystemException($msg));
             return;
         }
     }
+
+    $result = xarVarValidate($validation, $subject, $value);
+    if ($result === NULL) {
+        return;
+    } elseif ($result === false) {
+        if ($flags & XARVAR_NOT_REQUIRED || isset($defaultValue)) {
+            $value = $defaultValue;
+        } else {
+            // Raise an exception
+            $msg = xarML('The required input variable \'#(1)\' contained invalid data.', $name);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                            new SystemException($msg));
+            return;
+        }
+    }
+
     return true;
 }
 
@@ -177,8 +194,7 @@ function xarVarValidate($validation, $subject, &$convValue) {
         // Raise an exception
         $msg = xarML('The validation type \'#(1)\' couldn\'t be found.', $valType);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                        new SystemException($msg));
-        return false;
+                        new SystemException($msg)); return;
     }
 }
 
@@ -195,8 +211,8 @@ function xarVarValidate($validation, $subject, &$convValue) {
  * @param object mixed the validation to be performed
  * @return bool true if the $subject validates correctly, false otherwise
  */
-function xarVarRegisterValidation ($validation_name, $object_name) {
-
+function xarVarRegisterValidation ($validation_name, $object_name)
+{
     global $_xarValidationList;
 
     if (!isset($_xarValidationList)) {
@@ -393,6 +409,22 @@ class xarVarValidator_str extends xarVarValidator {
 }
 
 /**
+ * Regular Expression Validation Class
+ */
+class xarVarValidator_regexp extends xarVarValidator {
+
+    function validate (&$convValue) {
+        if (isset($this->parameters[0]) && !empty($this->parameters[0])
+            && preg_match($this->parameters[0], $this->subject)) {
+            $convValue = $this->subject;
+            return true;
+        }
+
+        return false;
+    }
+}
+
+/**
  * HTML Validation Class
  */
 class xarVarValidator_html extends xarVarValidator {
@@ -431,6 +463,7 @@ xarVarRegisterValidation ('id', 'xarVarValidator_id');
 xarVarRegisterValidation ('float', 'xarVarValidator_float');
 xarVarRegisterValidation ('bool', 'xarVarValidator_bool');
 xarVarRegisterValidation ('str', 'xarVarValidator_str');
+xarVarRegisterValidation ('regexp', 'xarVarValidator_regexp');
 xarVarRegisterValidation ('html', 'xarVarValidator_html');
 
 
