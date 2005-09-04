@@ -1072,6 +1072,8 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
  */
 function xarModEmailURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array())
 {
+//TODO: <garrett> either deprecate this function or keep it in synch with xarModURL *or* add another param
+//      to xarModURL to handle this functionality. See bug #372
     if (empty($modName)) {
         return xarServerGetBaseURL() . 'index.php';
     }
