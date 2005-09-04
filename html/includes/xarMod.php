@@ -9,7 +9,9 @@
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @subpackage Module handling subsystem
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
+ * @author Jim McDonald
+ * @author Marco Canini <m.canini@libero.it>
+ * @uathor Marcel van der Boom <marcel@xaraya.com>
  * @todo Use serialize in module variables?
  */
 
@@ -141,7 +143,7 @@ function xarModGetVar($modName, $name)
 
     $query = "SELECT xar_value
               FROM $module_varstable
-              WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
+              WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'
               AND xar_name = '" . xarVarPrepForStore($name) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
@@ -203,18 +205,18 @@ function xarModSetVar($modName, $name, $value)
         $seqId = $dbconn->GenId($module_varstable);
         $query = "INSERT INTO $module_varstable
                      (xar_id,
-                      xar_modname,
+                      xar_modid,
                       xar_name,
                       xar_value)
                   VALUES
                      ('$seqId',
-                      '" . xarVarPrepForStore($modName) . "',
+                      '" . xarVarPrepForStore($modBaseInfo['systemid']) . "',
                       '" . xarVarPrepForStore($name) . "',
                       '" . xarVarPrepForStore($value) . "');";
     } else {
         $query = "UPDATE $module_varstable
                   SET xar_value = '" . xarVarPrepForStore($value) . "'
-                  WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
+                  WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'
                   AND xar_name = '" . xarVarPrepForStore($name) . "'";
     }
 
@@ -266,6 +268,7 @@ function xarModDelVar($modName, $name)
 
     // Delete the user variables first
     $modvarid = xarModGetVarId($modName, $name);
+    
     if(!$modvarid) return;
     // MrB: we could use xarModDelUserVar in a loop here, but this is 
     //      much faster.
@@ -276,7 +279,7 @@ function xarModDelVar($modName, $name)
     
     // Now delete the module var 
     $query = "DELETE FROM $module_varstable
-              WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
+              WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'
               AND xar_name = '" . xarVarPrepForStore($name) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
@@ -555,9 +558,9 @@ function xarModGetVarId($modName, $name)
 
     $query = "SELECT xar_id 
             FROM $module_varstable
-            WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
+            WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'
             AND xar_name = '" . xarVarPrepForStore($name) . "'";
-    $result = $dbconn -> Execute($query);
+    $result =& $dbconn -> Execute($query);
     
     if(!$result) return;
 
@@ -590,6 +593,7 @@ function xarModGetIDFromName($modName)
     }
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back
+    // MrB: this is a bit confusing as we also have the 'system' id.
     return $modBaseInfo['regid'];
 }
 
@@ -647,7 +651,8 @@ function xarModGetInfo($modRegId)
     if (!isset($modState)) return; // throw back
     $modInfo['state'] = $modState;
 
-    xarVarSetCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
+    // MrB: why do we have Info, BaseInfo, DBInfo, FileInfo etc. that's bloat
+    //xarVarSetCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
 
     $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
     if (!isset($modFileInfo)) return; // throw back
@@ -775,6 +780,7 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
                          mods.xar_name,
                          mods.xar_directory,
                          mods.xar_version,
+                         mods.xar_id,
                          states.xar_state";
 
 
@@ -797,6 +803,7 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
                      $modInfo['name'],
                      $modInfo['directory'],
                      $modInfo['version'],
+                     $modInfo['systemid'],
                      $modState) = $result->fields;
                 $result->MoveNext();
                 
@@ -1461,7 +1468,7 @@ function xarMod_getBaseInfo($modName)
     }
 
     // FIXME: <MrB> I've seen cases where the cache info is not in sync
-    // with reality. I've take a couple ones out, but I haven't testen all
+    // with reality. I've take a couple ones out, but I haven't tested all
     // the way through.
     if (xarVarIsCached('Mod.BaseInfos', $modName)) {
         return xarVarGetCached('Mod.BaseInfos', $modName);
@@ -1473,7 +1480,8 @@ function xarMod_getBaseInfo($modName)
 
     $query = "SELECT xar_regid,
                      xar_directory,
-                     xar_mode
+                     xar_mode,
+                     xar_id
               FROM $modulestable
               WHERE xar_name = '" . xarVarPrepForStore($modName) . "'";
     $result =& $dbconn->Execute($query);
@@ -1487,7 +1495,8 @@ function xarMod_getBaseInfo($modName)
 
     list($modBaseInfo['regid'],
          $modBaseInfo['directory'],
-         $mode) = $result->fields;
+         $mode,
+         $modBaseInfo['systemid']) = $result->fields;
     $result->Close();
 
     $modBaseInfo['name'] = $modName;
@@ -1501,7 +1510,6 @@ function xarMod_getBaseInfo($modName)
     if (!isset($modState)) return; // throw back
     $modBaseInfo['state'] = $modState;
     xarVarSetCached('Mod.BaseInfos', $modName, $modBaseInfo);
-
     return $modBaseInfo;
 }
 
@@ -1539,7 +1547,7 @@ function xarMod_getVarsByModule($modName)
     $query = "SELECT xar_name,
                      xar_value
               FROM $module_varstable
-              WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'";
+              WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -1566,22 +1574,25 @@ function xarMod_getVarsByModule($modName)
  */
 function xarMod_getVarsByName($name)
 {
-    if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
+    // MrB: This couldn't possibly have worked, what gives?
+    //if (empty($modName)) {
+    //    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+    //    return;
+    //}
 
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
 
+    $module_table = $tables['system/modules'];
     $module_varstable = $tables['system/module_vars'];
-// TODO: fetch from site table too ?
-//    $module_varstable = $tables['site/module_vars'];
+    
+    // TODO: fetch from site table too ?
+    //    $module_varstable = $tables['site/module_vars'];
 
-    $query = "SELECT xar_modname,
-                     xar_value
-              FROM $module_varstable
-              WHERE xar_name = '" . xarVarPrepForStore($name) . "'";
+    $query = "SELECT mods.xar_name, vars.xar_value
+              FROM $module_table as mods , $module_varstable as vars
+              WHERE mods.xar_id = vars.xar_modid AND
+                    vars.xar_name = '" . xarVarPrepForStore($name) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 

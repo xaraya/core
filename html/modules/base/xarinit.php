@@ -353,7 +353,7 @@ function base_init()
     'xar_handler' => array('type'=>'varchar','size'=>255,'null'=>false),
     'xar_data'    => array('type'=>'text')
      );
-
+    // FIXME: MrB - replace xar_module with xar_modid asap
     $query = xarDBCreateTable($templateTagsTable,$fields);
 
     $result =& $dbconn->Execute($query);
