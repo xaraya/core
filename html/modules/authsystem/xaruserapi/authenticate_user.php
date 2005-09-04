@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * File: $Id$
+ *
+ * Authenticate a user
+ *
+ * @package authentication
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage authsystem
+ * @author Marco Canini
+*/
 /**
  * authenticate a user
  * @public
