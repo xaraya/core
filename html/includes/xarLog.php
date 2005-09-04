@@ -202,7 +202,7 @@ class xarLog__Logger
     function logVariable($name, $var)
     {
         $msg = $this->dumpVariable($var, $name);
-				$this->logMessage($msg, false);
+                $this->logMessage($msg, false);
     }
 
     /**
@@ -482,48 +482,48 @@ class xarLog__JavaScriptLogger extends xarLog__Logger
 class xarLog__MozJSConsoleLogger extends xarLog__Logger
 {
     var $buffer = '';
-		var $loggerdesc="Mozilla Javascript Console Logger";
-		var $commoncodeinserted;
+    var $loggerdesc="Mozilla Javascript Console Logger";
+    var $commoncodeinserted;
 
     function xarLog__MozJSConsoleLogger($args)
     {
         // Console only supports plain text 
         $this->setFormat('text');
-				$this->commoncodeinserted=false;
-				
-				// FIXME: this will never work, because the tpl engine is not initialized yet.
-				//$code=$this->getCommonCode();
-				//xarTplAddJavaScriptCode('head',$this->loggerdesc,$code);
-		}
+        $this->commoncodeinserted=false;
+                
+        // FIXME: this will never work, because the tpl engine is not initialized yet.
+        //$code=$this->getCommonCode();
+        //xarTplAddJavaScriptCode('head',$this->loggerdesc,$code);
+    }
 
-		function getCommonCode() {
-			// Common javascript to get a variable which has the logmessage method
-			$code="netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');\n".
-				"var con_service_class = Components.classes['@mozilla.org/consoleservice;1'];\n".
-				"var iface = Components.interfaces.nsIConsoleService;\n".
-				"var jsconsole = con_service_class.getService(iface);\n";
-			return $code;
-		}
+    function getCommonCode() {
+        // Common javascript to get a variable which has the logmessage method
+        $code="netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');\n".
+              "var con_service_class = Components.classes['@mozilla.org/consoleservice;1'];\n".
+              "var iface = Components.interfaces.nsIConsoleService;\n".
+              "var jsconsole = con_service_class.getService(iface);\n";
+        return $code;
+    }
 
     function logMessage($msg, $callPrepForDisplay = true)
     {
-			
-			// FIXME: this code depends on a user setting to use principal codebase support (same origin policy)
-			// it should be done with a signed script eventually, but this is rather complex 
-			// TODO: check on windows and browsers other than mozilla, to fall back gracefully
-			if (!$this->commoncodeinserted) {
-				$code = $this->getCommonCode();
-				xarTplAddJavaScriptCode('body',$this->loggerdesc,$code);
-				$this->commoncodeinserted=true;
-			}
-			$logentry=$this->getTimestamp(). " - (" .$this->formatLevel().")".$msg;
-			
-			// Add \ for problematic chars and for each newline format unix, mac and windows
-			$logentry = addslashes($logentry);
-			$trans=array("\n" => "\\\n","\r" => "\\\r","\r\n" => "\\\r\n");
-      $logentry=strtr($logentry,$trans);
-		  $code= "jsconsole.logStringMessage('$logentry');\n";
-			xarTplAddJavaScriptCode('body', $this->loggerdesc, $code);
+            
+        // FIXME: this code depends on a user setting to use principal codebase support (same origin policy)
+        // it should be done with a signed script eventually, but this is rather complex 
+        // TODO: check on windows and browsers other than mozilla, to fall back gracefully
+        if (!$this->commoncodeinserted) {
+            $code = $this->getCommonCode();
+            xarTplAddJavaScriptCode('body',$this->loggerdesc,$code);
+            $this->commoncodeinserted=true;
+        }
+        $logentry=$this->getTimestamp(). " - (" .$this->formatLevel().")".$msg;
+            
+        // Add \ for problematic chars and for each newline format unix, mac and windows
+        $logentry = addslashes($logentry);
+        $trans=array("\n" => "\\\n","\r" => "\\\r","\r\n" => "\\\r\n");
+        $logentry=strtr($logentry,$trans);
+        $code= "jsconsole.logStringMessage('$logentry');\n";
+        xarTplAddJavaScriptCode('body', $this->loggerdesc, $code);
     }
  }
 
@@ -550,4 +550,4 @@ class xarLog__EmailLogger extends xarLog__Logger
     { die('TODO'); }
 
 }
-
+?>

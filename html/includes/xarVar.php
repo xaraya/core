@@ -538,7 +538,7 @@ function xarVarCleanFromInput()
         }
 
         // TODO: <marco> Document this security check!
-		if(!function_exists('xarSecurityCheck') || !xarSecurityCheck('AdminAll',0)) {
+        if (!function_exists('xarSecurityCheck') || !xarSecurityCheck('AdminAll',0)) {
             $var = preg_replace($search, $replace, $var);
         }
 

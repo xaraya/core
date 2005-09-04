@@ -609,7 +609,7 @@ function xarMLS__bindVariables($string, $args)
     foreach($args as $var) {
         $search = "#($i)";
         $string = str_replace($search, $var, $string);
-		$i++;
+        $i++;
     }
     return $string;
 }

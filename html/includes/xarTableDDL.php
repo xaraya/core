@@ -561,28 +561,28 @@ function xarDB_oracleAlterTable($tableName, $args)
 function xarDB__mysqlCreateTable($tableName, $fields)
 {
     $sql_fields = array();
-	$primary_key = array();
+    $primary_key = array();
 
     while (list($field_name, $parameters) = each($fields)) {
         $parameters['command'] = 'create';
         $this_field = xarDB__mysqlColumnDefinition($field_name, $parameters);
 
-		$sql_fields[] = $field_name .' '
-					  . $this_field['type'] .' '
-					  . $this_field['unsigned'] .' '
-					  . $this_field['null'] .' '
-					  . $this_field['default'] .' '
-					  . $this_field['auto_increment'];
-		if ($this_field['primary_key'] == true) {
-			$primary_key[] = $field_name;
-		}
+        $sql_fields[] = $field_name .' '
+                      . $this_field['type'] .' '
+                      . $this_field['unsigned'] .' '
+                      . $this_field['null'] .' '
+                      . $this_field['default'] .' '
+                      . $this_field['auto_increment'];
+        if ($this_field['primary_key'] == true) {
+            $primary_key[] = $field_name;
+        }
     }
 
     $sql = 'CREATE TABLE '.$tableName.' ('.implode(', ',$sql_fields);
-	if (!empty($primary_key)) {
-		$sql .= ', PRIMARY KEY ('.implode(',',$primary_key).')';
-	}
-	$sql .= ')';
+    if (!empty($primary_key)) {
+        $sql .= ', PRIMARY KEY ('.implode(',',$primary_key).')';
+    }
+    $sql .= ')';
 
     return $sql;
 }
@@ -597,7 +597,7 @@ function xarDB__mysqlCreateTable($tableName, $fields)
  */
 function xarDB__mysqlColumnDefinition($field_name, $parameters)
 {
-	$this_field = array();
+    $this_field = array();
 
     switch($parameters['type']) {
 
@@ -765,31 +765,31 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
     }
 
     // Test for UNSIGNED
-	$this_field['unsigned'] = (isset($parameters['unsigned']) && $parameters['unsigned'] == true)
-							? 'UNSIGNED'
-							: '';
+    $this_field['unsigned'] = (isset($parameters['unsigned']) && $parameters['unsigned'] == true)
+                            ? 'UNSIGNED'
+                            : '';
 
     // Test for NO NULLS
-	$this_field['null']	= (isset($parameters['null']) && $parameters['null'] == false)
-						? 'NOT NULL'
-						: '';
+    $this_field['null']    = (isset($parameters['null']) && $parameters['null'] == false)
+                        ? 'NOT NULL'
+                        : '';
 
     // Test for DEFAULTS
-	$this_field['default'] = (isset($parameters['default']))
-						   ? (($parameters['default'] == 'NULL') 
-									? 'DEFAULT NULL'
-									: "DEFAULT '".$parameters['default']."'")
-						   : '';
+    $this_field['default'] = (isset($parameters['default']))
+                           ? (($parameters['default'] == 'NULL') 
+                                    ? 'DEFAULT NULL'
+                                    : "DEFAULT '".$parameters['default']."'")
+                           : '';
 
     // Test for AUTO_INCREMENT
-	$this_field['auto_increment'] = (isset($parameters['increment']) && $parameters['increment'] == true)
-								  ? 'AUTO_INCREMENT'
-								  : '';
+    $this_field['auto_increment'] = (isset($parameters['increment']) && $parameters['increment'] == true)
+                                  ? 'AUTO_INCREMENT'
+                                  : '';
 
     // Test for PRIMARY KEY
-	$this_field['primary_key'] = (isset($parameters['primary_key']) && $parameters['primary_key'] == true)
-							   ? true
-							   : false;
+    $this_field['primary_key'] = (isset($parameters['primary_key']) && $parameters['primary_key'] == true)
+                               ? true
+                               : false;
 
     return $this_field;
 }
@@ -829,28 +829,28 @@ function xarDB__postgresqlCreateTable($tableName, $fields)
 */
 // new code
     $sql_fields = array();
-	$primary_key = array();
+    $primary_key = array();
 
     while (list($field_name, $parameters) = each($fields)) {
         $parameters['command'] = 'create';
         $this_field = xarDB__postgresColumnDefinition($field_name, $parameters);
 
-		$sql_fields[] = $field_name .' '
-					  . $this_field['type'] .' '
-//					  . $this_field['unsigned'] .' ' // doesnt do unsigned
-					  . $this_field['null'] .' '
-					  . $this_field['default'];// .' '
-//					  . $this_field['auto_increment']; // may not use autoinc
-		if ($this_field['primary_key'] == true) {
-			$primary_key[] = $field_name;
-		}
+        $sql_fields[] = $field_name .' '
+                      . $this_field['type'] .' '
+//                      . $this_field['unsigned'] .' ' // doesnt do unsigned
+                      . $this_field['null'] .' '
+                      . $this_field['default'];// .' '
+//                      . $this_field['auto_increment']; // may not use autoinc
+        if ($this_field['primary_key'] == true) {
+            $primary_key[] = $field_name;
+        }
     }
 
     $sql = 'CREATE TABLE '.$tableName.' ('.implode(', ',$sql_fields);
-	if (!empty($primary_key)) {
-		$sql .= ', PRIMARY KEY ('.implode(',',$primary_key).')';
-	}
-	$sql .= ')';
+    if (!empty($primary_key)) {
+        $sql .= ', PRIMARY KEY ('.implode(',',$primary_key).')';
+    }
+    $sql .= ')';
 
     return $sql;
 }
@@ -994,7 +994,7 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
             $this_field['default'] = "DEFAULT ".$parameters['default']."";
         }
     } else {
-    	$this_field['default'] = '';
+        $this_field['default'] = '';
     }
 
     // UNSIGNED - postgres does not unsigned integers so skip this test

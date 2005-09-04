@@ -137,7 +137,7 @@ function xarEvt_trigger($eventName, $value = NULL)
 
     // Call the event handlers in the active modules
     $activemods = xarEvt__GetActiveModsList();
-	xarLogMessage("Triggered event ($eventName)");
+    xarLogMessage("Triggered event ($eventName)");
 //FIXME: <besfred> ^^^ should we catch its return value and react?
 
     $nractive=count($activemods);
@@ -192,7 +192,7 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
     // set which file to load for looking up the event handler
     $xarapifile="modules/{$modName}/xar{$modType}api.php";
     $xartabfile="modules/{$modName}/xartables.php";
-    // $xarapifile="modules/{$modName}/xar{$modType}evt.php";	
+    // $xarapifile="modules/{$modName}/xar{$modType}evt.php";    
 
     if(function_exists($funcSpecific)) {
 
@@ -203,15 +203,15 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
 //        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
     } elseif (file_exists($xarapifile)) {
 
-		include_once($xarapifile);
+        include_once($xarapifile);
 
-		if (file_exists($xartabfile)) {
-		    include_once($xartabfile);
-		    $xartabfunc = $modName.'_xartables';
+        if (file_exists($xartabfile)) {
+            include_once($xartabfile);
+            $xartabfunc = $modName.'_xartables';
 
-		    if (function_exists($xartabfunc)) 
-		    	xarDB_importTables($xartabfunc());
-		}
+            if (function_exists($xartabfunc)) 
+                xarDB_importTables($xartabfunc());
+        }
 
         if(function_exists($funcSpecific)) {
 
@@ -247,7 +247,7 @@ function xarEvt_registerEvent($eventName)
     
     $GLOBALS['xarEvt_knownEvents'][$eventName] = true;
 
-	// return a good message if all worked ok
+    // return a good message if all worked ok
     return true;
 }
 
@@ -279,10 +279,10 @@ function xarEvt__checkEvent($eventName)
  */
 function xarEvt__GetActiveModsList()
 {
-	// use vars instead of defines to narrow the scope
-	$XARMOD_STATE_ACTIVE = 3;
-	$XARMOD_MODE_SHARED = 1;
-	$XARMOD_MODE_PER_SITE = 2;
+    // use vars instead of defines to narrow the scope
+    $XARMOD_STATE_ACTIVE = 3;
+    $XARMOD_MODE_SHARED = 1;
+    $XARMOD_MODE_PER_SITE = 2;
     $startNum = 1;
     $numItems = -1;
 
@@ -292,8 +292,8 @@ function xarEvt__GetActiveModsList()
 
     list($dbconn) = xarDBGetConn();
 
-	$systabpre = xarDBGetSystemTablePrefix();
-	$sitetabpre = xarDBGetSiteTablePrefix();
+    $systabpre = xarDBGetSystemTablePrefix();
+    $sitetabpre = xarDBGetSiteTablePrefix();
 
     $modulestable = $sitetabpre.'_modules';
 

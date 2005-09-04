@@ -91,7 +91,7 @@ function xarBlockGetInfo($blockId)
         $msg = xarML('Block identified by bid #(1) doesn\'t exist.', $blockId);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
                        new SystemException($msg));
-	    return NULL;
+        return NULL;
     }
 
     $block_info = $result->GetRowAssoc(false);
@@ -338,7 +338,7 @@ function xarBlock_render($blockInfo)
     } else {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $displayFuncName);
         return;
-	}
+    }
     /* Removed collapsible blocks for better solution.  
     // Handle block state
     $res = xarModAPIFunc('blocks', 'user', 'getState', $blockInfo);

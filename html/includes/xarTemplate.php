@@ -878,12 +878,12 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     $tag = new xarTemplateTag($tag_module, $tag_name, $tag_attrs, $tag_handler);
     
     list($tag_name,
-     $tag_module,
-     $tag_func,
-     $tag_data) = xarVarPrepForStore($tag->getName(),
-    				$tag->getModule(),
-    				$tag->getHandler(),
-    				serialize($tag));
+         $tag_module,
+         $tag_func,
+         $tag_data) = xarVarPrepForStore($tag->getName(),
+                                         $tag->getModule(),
+                                         $tag->getHandler(),
+                                         serialize($tag));
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
@@ -977,13 +977,13 @@ function xarTplCheckTagAttributes($name, $args)
             // bad type for attribute
             $msg = xarML("'#(1)' attribute in <xar:#(2)> tag does not have correct type. See tag documentation.", $attr_name, $name);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-        		           new SystemException($msg));
+                            new SystemException($msg));
             return false;
         } elseif ($attr->isRequired()) {
             // required attribute is missing!
             $msg = xarML("Required '#(1)' attribute is missing from <xar:#(2)> tag. See tag documentation.", $attr_name, $name);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-        		           new SystemException($msg));
+                            new SystemException($msg));
             return false;
         }
     }

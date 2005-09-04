@@ -190,7 +190,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $systemArgs = array('loadLevel' => $whatToLoad);
     xarEvt_init($systemArgs, $whatToLoad);
 
-	// Start Configuration System
+    // Start Configuration System
     if ($whatToLoad & XARCORE_SYSTEM_CONFIGURATION) {
         // {ML_dont_parse 'includes/xarConfig.php'}
         include_once 'includes/xarConfig.php';
@@ -230,7 +230,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'level' => xarCore_getSiteVar('Log.LogLevel'));
     xarLog_init($systemArgs, $whatToLoad);
 
-	// Start Sessions Subsystem
+    // Start Sessions Subsystem
     if ($whatToLoad & XARCORE_SYSTEM_SESSION) {
         // {ML_dont_parse 'includes/xarSession2.php'}
         // FIXME: LOOK AT xarSession2 code it has a catch22 situation!!
@@ -260,7 +260,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     */
     //xarVar_init($systemArgs, $whatToLoad);
 
-	// Start Blocks Subsystem
+    // Start Blocks Subsystem
     if ($whatToLoad & XARCORE_SYSTEM_BLOCKS) {
         // {ML_dont_parse 'includes/xarBlocks.php'}
         include_once 'includes/xarBlocks.php';
@@ -271,7 +271,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $whatToLoad ^= XARCORE_BIT_BLOCKS;
     }
 
-	// Start Modules Subsystem
+    // Start Modules Subsystem
     if ($whatToLoad & XARCORE_SYSTEM_MODULES) {
         // {ML_dont_parse 'includes/xarMod.php'}
         include_once 'includes/xarMod.php';
@@ -287,9 +287,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     }
 
 // TODO (marcinmilan): review what pasts of the old user system need to be retained
-		if ($whatToLoad & XARCORE_SYSTEM_USER) {
+        if ($whatToLoad & XARCORE_SYSTEM_USER) {
         // {ML_dont_parse 'includes/xarUser.php'}
-		include_once 'includes/xarUser.php';
+        include_once 'includes/xarUser.php';
         // {ML_dont_parse 'includes/xarSecurity.php'}
         include_once 'includes/xarSecurity.php';
 

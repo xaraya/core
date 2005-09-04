@@ -2600,7 +2600,7 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
     function renderBeginTag()
     {
         $string = '';
-	// MrB: these two ifs are in review, not in main, let them be in the merge
+        // MrB: these two ifs are in review, not in main, let them be in the merge
         if (count($this->children) == 0) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                            new xarTpl__ParserError('Missing the string inside <xar:mlstring> tag.', $this));
@@ -2810,7 +2810,7 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
     {
         extract($this->attributes);
         // MrB: review contained a change from marce replacing file with name, although a good idea, not according to spec,
-	// the thing below is the right code for now.
+        // the thing below is the right code for now.
         if (!isset($file)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
                            new xarTpl__ParserError('Missing \'file\' attribute in <xar:template> tag.', $this));

@@ -348,7 +348,7 @@ function pnModUnregisterHook($hookObject,
  */
 function pnGetStatusMsg()
 {
-	return xarGetStatusMsg();
+    return xarGetStatusMsg();
 }
 
 // Prefix Add

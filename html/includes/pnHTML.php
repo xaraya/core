@@ -391,13 +391,13 @@ class pnHTML
      */
     function Pager($startnum, $total, $urltemplate, $perpage = 10)
     {
-	// Sanity check on perpage to prevent infinite loops
-	if($perpage < 1) {
-	    $perpage = 10;
-	}
-	if($startnum < 1) {
-	    $startnum = 1;
-	}
+    // Sanity check on perpage to prevent infinite loops
+    if($perpage < 1) {
+        $perpage = 10;
+    }
+    if($startnum < 1) {
+        $startnum = 1;
+    }
 
         // Quick check to ensure that we have work to do
         if ($total <= $perpage) {
@@ -570,10 +570,10 @@ class pnHTML
      */
     function Linebreak($numbreaks=1)
     {
-	$out = str_repeat('<br />', $numbreaks);
+    $out = str_repeat('<br />', $numbreaks);
 
-	if ($this->GetOutputMode() == _PNH_RETURNOUTPUT)
-	{
+    if ($this->GetOutputMode() == _PNH_RETURNOUTPUT)
+    {
             return $out;
         } else {
             $this->output .= $out;

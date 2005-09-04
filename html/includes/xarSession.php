@@ -104,7 +104,7 @@ function xarSessionGetSecurityLevel()
  */
 function xarSessionGetVar($name)
 {
-	if (!$GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
+    if (!$GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
         if (isset($_SESSION[$name])) {
             return $_SESSION[$name];
         }
@@ -172,7 +172,7 @@ function xarSessionDelVar($name)
             return false;
         }
         unset($_SESSION[$name]);
-		return true;
+        return true;
     }
 
     $var = 'XARSV' . $name;

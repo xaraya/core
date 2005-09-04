@@ -191,12 +191,12 @@ function xarUserGetNavigationThemeName()
 {
     $themeName = xarTplGetThemeName();
 
-  	if (xarUserIsLoggedIn()){
+    if (xarUserIsLoggedIn()){
         $uid = xarUserGetVar('uid');
         $themeName = xarModGetUserVar('themes', 'default', $uid);
     }
 
-	return $themeName;
+    return $themeName;
 }
 
 /**
@@ -623,27 +623,27 @@ function xarUser__getAuthModule($userId)
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
-	// Get user auth_module name
-	$rolestable = $xartable['roles'];
+    // Get user auth_module name
+    $rolestable = $xartable['roles'];
 
-	$query = "SELECT xar_auth_module
-			  FROM $rolestable
-			  WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
-	$result =& $dbconn->Execute($query);
-	if (!$result) return;
+    $query = "SELECT xar_auth_module
+              FROM $rolestable
+              WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
-	if ($result->EOF) {
-		// That user has never logon, strange, don't you think?
-		// However fallback to authsystem
-		$authModName = 'authsystem';
-	} else {
-		list($authModName) = $result->fields;
-		// TODO: remove when issue of Anonymous users is resolved
-		if (empty($authModName)) {
-			$authModName = 'authsystem';
-		}
-	}
-	$result->Close();
+    if ($result->EOF) {
+        // That user has never logon, strange, don't you think?
+        // However fallback to authsystem
+        $authModName = 'authsystem';
+    } else {
+        list($authModName) = $result->fields;
+        // TODO: remove when issue of Anonymous users is resolved
+        if (empty($authModName)) {
+            $authModName = 'authsystem';
+        }
+    }
+    $result->Close();
 
     if (!xarModAPILoad($authModName, 'user')) return;
 

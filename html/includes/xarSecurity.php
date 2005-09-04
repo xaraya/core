@@ -39,16 +39,16 @@ define('ACCESS_DELETE', 700);
 define('ACCESS_ADMIN', 800);
 
 
-	include_once 'modules/privileges/xarprivileges.php';
-	include_once 'modules/roles/xarroles.php';
+    include_once 'modules/privileges/xarprivileges.php';
+    include_once 'modules/roles/xarroles.php';
     $tables = array('masks' => 'xar' . '_masks',
-    				'acl' => 'xar'. '_acl',
-    				'privileges' => 'xar'. '_privileges',
-    				'privmembers' => 'xar'. '_privmembers',
-    				'realms' => 'xar'. '_realms',
-//    				'roles' => 'xar'. '_roles',
-//    				'rolemembers' => 'xar'. '_rolemembers',
-    				'instances' => 'xar'. '_instances');
+                    'acl' => 'xar'. '_acl',
+                    'privileges' => 'xar'. '_privileges',
+                    'privmembers' => 'xar'. '_privmembers',
+                    'realms' => 'xar'. '_realms',
+//                    'roles' => 'xar'. '_roles',
+//                    'rolemembers' => 'xar'. '_rolemembers',
+                    'instances' => 'xar'. '_instances');
 
     xarDB_importTables($tables);
 
@@ -93,10 +93,10 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarMakeGroup($name) {
-			$roles = new xarRoles();
-			return $roles->makeGroup($name);
-	}
+    function xarMakeGroup($name) {
+        $roles = new xarRoles();
+        return $roles->makeGroup($name);
+    }
 
 /**
  * xarMakeUser: create an entry in the database for a user
@@ -111,10 +111,10 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarMakeUser($name,$uname,$email,$pass='',$datereg='',$valcode='',$state=3,$authmodule='') {
-			$roles = new xarRoles();
-			return $roles->makeUser($name,$uname,$email,$pass,$datereg,$valcode,$state,$authmodule);
-	}
+    function xarMakeUser($name,$uname,$email,$pass='',$datereg='',$valcode='',$state=3,$authmodule='') {
+        $roles = new xarRoles();
+        return $roles->makeUser($name,$uname,$email,$pass,$datereg,$valcode,$state,$authmodule);
+    }
 
 /**
  * xarMakeRoleRoot: defines an entry in the database as the root of a role tree
@@ -129,10 +129,10 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarMakeRoleRoot($name) {
-			$roles = new xarRoles();
-			return $roles->isRoot($name);
-	}
+    function xarMakeRoleRoot($name) {
+        $roles = new xarRoles();
+        return $roles->isRoot($name);
+    }
 
 /**
  * xarMakeRoleMemberByName: create a parent-child relationship in the database between two roles
@@ -148,10 +148,10 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarMakeRoleMemberByName($childname, $parentname) {
-			$roles = new xarRoles();
-			return $roles->makeMemberByName($childname, $parentname);
-	}
+    function xarMakeRoleMemberByName($childname, $parentname) {
+        $roles = new xarRoles();
+        return $roles->makeMemberByName($childname, $parentname);
+    }
 
 /**
  * xarMakeRoleMemberByUname: create a parent-child relationship in the database between two roles
@@ -167,10 +167,10 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarMakeRoleMemberByUname($childname, $parentname) {
-			$roles = new xarRoles();
-			return $roles->makeMember($childname, $parentname);
-	}
+    function xarMakeRoleMemberByUname($childname, $parentname) {
+        $roles = new xarRoles();
+        return $roles->makeMember($childname, $parentname);
+    }
 
 /**
  * xarMakeRoleMemberByID: create a parent-child relationship in the database between two roles
@@ -186,12 +186,12 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarMakeRoleMemberByID($childid, $parentid) {
-			$roles = new xarRoles();
-			$parent = $roles->getRole($parentid);
-            $child = $roles->getRole($childid);
-			return $parent->addMember($child);
-	}
+    function xarMakeRoleMemberByID($childid, $parentid) {
+        $roles = new xarRoles();
+        $parent = $roles->getRole($parentid);
+        $child = $roles->getRole($childid);
+         return $parent->addMember($child);
+    }
 
 /**
  * xarRegisterPrivilege: create an entry in the database for a privilege
@@ -207,10 +207,10 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$description='') {
-			$privileges = new xarPrivileges();
-			return $privileges->register($name,$realm,$module,$component,$instance,$level,$description);
-	}
+    function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$description='') {
+        $privileges = new xarPrivileges();
+        return $privileges->register($name,$realm,$module,$component,$instance,$level,$description);
+    }
 
 /**
  * xarMakePrivilegeRoot: defines an entry in the database as the root of a privilege tree
@@ -225,10 +225,10 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarMakePrivilegeRoot($name) {
-			$privileges = new xarPrivileges();
-			return $privileges->makeEntry($name);
-	}
+    function xarMakePrivilegeRoot($name) {
+        $privileges = new xarPrivileges();
+        return $privileges->makeEntry($name);
+    }
 
 /**
  * xarMakePrivilegeMember: create a parent-child relationship in the database between two privileges
@@ -244,10 +244,10 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarMakePrivilegeMember($childname, $parentname) {
-			$privileges = new xarPrivileges();
-			return $privileges->makeMember($childname, $parentname);
-	}
+    function xarMakePrivilegeMember($childname, $parentname) {
+        $privileges = new xarPrivileges();
+        return $privileges->makeMember($childname, $parentname);
+    }
 
 /**
  * xarAssignPrivilege: assign a privilege to a role
@@ -263,10 +263,10 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarAssignPrivilege($privilege,$role) {
-			$privileges = new xarPrivileges();
-			return $privileges->assign($privilege,$role);
-	}
+    function xarAssignPrivilege($privilege,$role) {
+        $privileges = new xarPrivileges();
+        return $privileges->assign($privilege,$role);
+    }
 
 /**
  * xarDefineInstance: creates an instance definition in the database
@@ -281,10 +281,10 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childID='',$parentID='',$description='') {
-			$privileges = new xarPrivileges();
-			return $privileges->defineInstance($module,$type,$query,$propagate,$table2,$childID,$parentID,$description);
-	}
+    function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childID='',$parentID='',$description='') {
+        $privileges = new xarPrivileges();
+        return $privileges->defineInstance($module,$type,$query,$propagate,$table2,$childID,$parentID,$description);
+    }
 
 /**
  * xarRemoveInstances: removes the instances registered by a module form the database
@@ -299,10 +299,10 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarRemoveInstances($module) {
-			$privileges = new xarPrivileges();
-			return $privileges->removeInstances($module);
-	}
+    function xarRemoveInstances($module) {
+        $privileges = new xarPrivileges();
+        return $privileges->removeInstances($module);
+    }
 
 /**
  * xarGetGroups: returns an array of all the groups in the database
@@ -317,10 +317,10 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarGetGroups() {
-			$roles = new xarRoles();
-			return $roles->getgroups();
-	}
+    function xarGetGroups() {
+        $roles = new xarRoles();
+        return $roles->getgroups();
+    }
 
 /**
  * xarSecurityCheck: check a role's privileges against the masks of a component
@@ -336,19 +336,19 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarSecurityCheck($mask,$showexception=1,$component='',$instance='',$module='',$role='')
-	{
-		global $installing;
+    function xarSecurityCheck($mask,$showexception=1,$component='',$instance='',$module='',$role='')
+    {
+        global $installing;
 
-		if(isset($installing) && ($installing == true)) {
-			return true;
-		}
-		else {
-			$masks = new xarMasks();
-			return $masks->xarSecurityCheck($mask,$showexception,$component,
-			$instance,$module,$role);
-		}
-	}
+        if(isset($installing) && ($installing == true)) {
+            return true;
+        }
+        else {
+            $masks = new xarMasks();
+            return $masks->xarSecurityCheck($mask,$showexception,$component,
+            $instance,$module,$role);
+        }
+    }
 
 /**
  * xarRegisterMask: wrapper function for registering a mask
@@ -361,18 +361,18 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
-	{
-		global $installing;
+    function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
+    {
+        global $installing;
 
-		if(isset($installing) && ($installing == true)) {
-			return true;
-		}
-		else {
-			$masks = new xarMasks();
-			return $masks->register($name,$realm,$module,$component,$instance,$level,$description);
-		}
-	}
+        if(isset($installing) && ($installing == true)) {
+            return true;
+        }
+        else {
+            $masks = new xarMasks();
+            return $masks->register($name,$realm,$module,$component,$instance,$level,$description);
+        }
+    }
 
 /**
  * xarUnregisterMask: wrapper function for unregistering a mask
@@ -385,11 +385,11 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarUnregisterMask($name)
-	{
-			$masks = new xarMasks();
-			return $masks->unregister($name);
-	}
+    function xarUnregisterMask($name)
+    {
+        $masks = new xarMasks();
+        return $masks->unregister($name);
+    }
 
 /**
  * see if a user is authorised to carry out a particular task
@@ -405,12 +405,12 @@ $schemas = array();
  */
 function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
 {
-// 		return true;
- 		$msg = xarML('This call needs to be converted to the Xaraya security system');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
-        return true;
-  // FIXME: <marco> BAD_PARAM?
+    $msg = xarML('This call needs to be converted to the Xaraya security system');
+    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                    new SystemException($msg));
+    return true;
+  
+    // FIXME: <rabbitt> is everything below necessary if we're not using it anymore?
 
     if (empty($userId)) {
         $userId = xarSessionGetVar('uid');
@@ -484,8 +484,8 @@ function xarSecGenAuthKey($modName = NULL)
         list($modName) = xarRequestGetInfo();
     }
 
-// Date gives extra security but leave it out for now
-//    $key = xarSessionGetVar('rand') . $modName . date ('YmdGi');
+    // Date gives extra security but leave it out for now
+    // $key = xarSessionGetVar('rand') . $modName . date ('YmdGi');
     $key = xarSessionGetVar('rand') . strtolower($modName);
 
     // Encrypt key
