@@ -21,6 +21,7 @@
 function modules_adminapi_getmenulinks()
 {
     // Security Check
+    $menulinks = array();
     if (xarSecurityCheck('AdminModules',0)) {
         // these links will only be shown to those who can admin the modules
         if(xarModGetUserVar('modules', 'expertlist')){
@@ -45,11 +46,6 @@ function modules_adminapi_getmenulinks()
 /*                              'title' => xarML('Use these tools to build and verify elements of modules.'), */
 /*                              'label' => xarML('Toolbox')); */
     }
-
-    if (empty($menulinks)){
-        $menulinks = '';
-    }
-
     return $menulinks;
 }
 

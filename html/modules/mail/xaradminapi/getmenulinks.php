@@ -22,6 +22,7 @@
 function mail_adminapi_getmenulinks()
 {
     // Security Check
+    $menulinks = array();
     if (xarSecurityCheck('AdminMail', 0)) {
         $menulinks[] = Array('url' => xarModURL('mail',
                 'admin',
@@ -39,11 +40,6 @@ function mail_adminapi_getmenulinks()
             'title' => xarML('Modify the configuration for the utility mail module'),
             'label' => xarML('Modify Config'));
     }
-
-    if (empty($menulinks)) {
-        $menulinks = '';
-    }
-
     return $menulinks;
 }
 ?>

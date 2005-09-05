@@ -21,6 +21,7 @@
 function base_adminapi_getmenulinks()
 {
      // Security Check
+    $menulinks = array();
     if (xarSecurityCheck('AdminBase',0)) {
 
         $menuLinks[] = array('url'   => xarModURL('base','admin','sysinfo'),
@@ -33,10 +34,6 @@ function base_adminapi_getmenulinks()
                              'title' => xarML('Modify Base configuration values'),
                              'label' => xarML('Modify Config'));
     }
-    if (empty($menuLinks)){
-        $menuLinks = '';
-    }
-
     return $menuLinks;
 }
 ?>

@@ -20,7 +20,7 @@
  */
 function roles_adminapi_getmenulinks()
 {
-
+    $menulinks = array();
 /* Security Check
     if (xarSecurityCheck('EditRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',
@@ -78,11 +78,6 @@ function roles_adminapi_getmenulinks()
                               'title' => xarML('Modify the roles module configuration'),
                               'label' => xarML('Modify Config'));
     }
-
-    if (empty($menulinks)){
-        $menulinks = '';
-    }
-
     return $menulinks;
 }
 
