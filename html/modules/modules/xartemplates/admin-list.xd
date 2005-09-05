@@ -229,8 +229,8 @@
             </div>
         </xar:if>
         <div class="xar-norm-outline xar-accent" style="text-align: center;margin-top: 1px;padding:.5em;">
-            <xar:mlstring>Note to module developers: removal of all core modules is currently disabled from GUI; you may need to re-classify your modules in accordance with</xar:mlstring>
-            <a href="http://docs.xaraya.com/docs/rfcs/rfc0013.html">RFC-13</a>
+            <xar:mlstring>Note to module developers: removal of all core modules is currently disabled from GUI; you may need to re-classify your modules in accordance with </xar:mlstring>
+            <a href="http://www.xaraya.com/documentation/rfcs/rfc0013.html">RFC-13</a>
             <xar:if condition="$selstyle eq 'icons'"><br />
                 <div class="xar-alt-outline xar-norm" style="vertical-align: middle;margin:5px; padding: 3px;">
                     <img src="#xarTplGetImage('set1/disabled.png')#"    alt="disabled" hspace="5" /><xar:mlstring>Disabled</xar:mlstring>
