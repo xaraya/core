@@ -1125,93 +1125,21 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
 
     function createTplTagNode($tagName, $attributes, $parentTagName, &$parser)
     {
-        // Core tags
-        switch ($tagName) {
-        case 'blocklayout':
-            if($parser->tagRootSeen) {
-                $this->raiseError(XAR_BL_INVALID_SYNTAX,"The root tag can only occur once.", $parser);
-                return;
-            }
-            $node =& new xarTpl__XarBlocklayoutNode($parser);
-            break;
-        case 'var':
-            $node =& new xarTpl__XarVarNode();
-            break;
-        case 'loop':
-            $node =& new xarTpl__XarLoopNode();
-            break;
-        case 'sec':
-            $node =& new xarTpl__XarSecNode();
-            break;
-            // marco: this should be deleted right, it's not in spec
-        case 'ternary':
-            $node =& new xarTpl__XarTernaryNode();
-            break;
-        case 'if':
-            $node =& new xarTpl__XarIfNode();
-            break;
-        case 'elseif':
-            $node =& new xarTpl__XarElseifNode();
-            break;
-        case 'else':
-            $node =& new xarTpl__XarElseNode();
-            break;
-        case 'while':
-            $node =& new xarTpl__XarWhileNode();
-            break;
-        case 'for':
-            $node =& new xarTpl__XarForNode();
-            break;
-        case 'foreach':
-            $node =& new xarTpl__XarForEachNode();
-            break;
-        case 'block':
-            $node =& new xarTpl__XarBlockNode();
-            break;
-        case 'blockgroup':
-            $node =& new xarTpl__XarBlockGroupNode();
-            break;
-        case 'ml':
-            $node =& new xarTpl__XarMlNode();
-            break;
-        case 'mlkey':
-            $node =& new xarTpl__XarMlkeyNode();
-            break;
-        case 'mlstring':
-            $node =& new xarTpl__XarMlstringNode();
-            break;
-        case 'mlvar':
-            $node =& new xarTpl__XarMlvarNode();
-            break;
-        case 'comment':
-            $node =& new xarTpl__XarCommentNode();
-            break;
-        case 'module':
-            $node =& new xarTpl__XarModuleNode();
-            break;
-        case 'event':
-            $node =& new xarTpl__XarEventNode();
-            break;
-        case 'template':
-            $node =& new xarTpl__XarTemplateNode();
-            break;
-        case 'set':
-            $node =& new xarTpl__XarSetNode();
-            break;
-        case 'break':
-            $node =& new xarTpl__XarBreakNode();
-            break;
-        case 'continue':
-            $node =& new xarTpl__XarContinueNode();
-            break;
-            // <Dracos>  Widgets begin here
-            
-        default:
-            // FIXME: check if this is how you want to support module-registered tags
+        // If the root tag comes along, check if we already have it
+        if($tagName == 'blocklayout' && $parser->tagRootSeen) {
+            $this->raiseError(XAR_BL_INVALID_SYNTAX,"The root tag can only occur once.", $parser);
+            return;
+        }
+
+        // Otherwise we instantiate the right class
+        $tagClass ='xarTpl__Xar' .$tagName.'Node';
+        if(class_exists($tagClass)) {
+            $node =& new $tagClass($parser);
+        } else {
             $node =& new xarTpl__XarOtherNode($tagName);
             if(!isset($node->tagobject)) unset($node);
-            break;
         }
+
         if (isset($node)) {
             $node->tagName = $tagName;
             $node->parentTagName = $parentTagName;
@@ -1222,8 +1150,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
             $node->attributes = $attributes;
             return $node;
         }
-        // FIXME: how do you handle new tags registered by module developers ?
-        // TODO: is xarTplRegisterTag still supposed to work for this ?
+
         // If we get here, the tag doesn't exist so we raise a user exception
         $this->raiseError(XAR_BL_INVALID_TAG,"Cannot instantiate nonexistent tag '$tagName'",$parser);
         return;
@@ -1231,29 +1158,9 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
 
     function createTplEntityNode($entityType, $parameters, &$parser)
     {
-        switch ($entityType) {
-            case 'var':
-                $node =& new xarTpl__XarVarEntityNode();
-                break;
-            case 'config':
-                $node =& new xarTpl__XarConfigEntityNode();
-                break;
-            case 'mod':
-                $node =& new xarTpl__XarModEntityNode();
-                break;
-            case 'session':
-                $node =& new xarTpl__XarSessionEntityNode();
-                break;
-            case 'modurl':
-                $node =& new xarTpl__XarModurlEntityNode();
-                break;
-            case 'url':
-                $node =& new xarTpl__XarUrlEntityNode();
-                break;
-            case 'baseurl':
-                $node =& new xarTpl__XarBaseurlEntityNode();
-                break;
-        }
+        $entityClass = 'xarTpl__Xar'.$entityType.'EntityNode';
+        $node =& new $entityClass();
+
         if (isset($node)) {
             $node->tagName = 'EntityNode';
             $node->entityType = $entityType;
