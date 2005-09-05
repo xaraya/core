@@ -31,7 +31,7 @@
 	<xar:comment> ------------------- Begin General Options --------------------- </xar:comment>
 		<br />
 		<xar:if condition="$tab eq 'realms'">
-			<form method="post" action="#xarModURL('roles', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded" >
+			<form method="post" action="#xarModURL('privileges', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded" >
 				<input type="hidden" name="authid" id="authid" value="#$authid#" />
 				<input type="hidden" name="phase" id="phase" value="update" />
 				<input type="hidden" name="tab" id="tab" value="#$tab#" />
@@ -48,6 +48,9 @@
 							<xar:else />
 								<input type="checkbox" name="enablerealms" id="enablerealms" value="1" />
 							</xar:if>
+						</td>
+						<td>
+							<xar:mlstring>Show or hide realms in the privileges input screens</xar:mlstring>
 						</td>
 					</tr>
 				</table>

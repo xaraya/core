@@ -231,6 +231,7 @@ function initializeSetup()
     xarRegisterMask('EditPrivilege','All','privileges','All','All','ACCESS_EDIT');
     xarRegisterMask('AddPrivilege','All','privileges','All','All','ACCESS_ADD');
     xarRegisterMask('DeletePrivilege','All','privileges','All','All','ACCESS_DELETE');
+    xarRegisterMask('AdminPrivilege','All','privileges','All','All','ACCESS_ADMIN');
 
     xarRegisterMask('EditModules','All','modules','All','All','ACCESS_EDIT');
     xarRegisterMask('AdminModules','All','modules','All','All','ACCESS_ADMIN');
