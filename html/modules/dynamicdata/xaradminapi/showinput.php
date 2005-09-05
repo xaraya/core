@@ -28,8 +28,6 @@ function dynamicdata_adminapi_showinput($args)
     } else {
         return $property->showInput($args);
     }
-
     // TODO: input for some common hook/utility modules
 }
-
 ?>

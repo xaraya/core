@@ -41,8 +41,7 @@ function dynamicdata_adminapi_create($args)
     if (count($invalid) > 0) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     join(', ',$invalid), 'admin', 'create', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
@@ -71,8 +70,6 @@ function dynamicdata_adminapi_create($args)
         }
     }
     $itemid = $myobject->createItem($values);
-
     return $itemid;
 }
-
 ?>

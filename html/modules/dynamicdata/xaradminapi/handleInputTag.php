@@ -46,7 +46,6 @@ function dynamicdata_adminapi_handleInputTag($args)
             return 'echo '.$args['property'].'->showInput(); ';
         }
     }
-
     // we'll call a function to do it for us
     $out = "echo xarModAPIFunc('dynamicdata',
                    'admin',
@@ -67,5 +66,4 @@ function dynamicdata_adminapi_handleInputTag($args)
     }
     return $out;
 }
-
 ?>

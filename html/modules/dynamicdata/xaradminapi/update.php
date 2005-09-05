@@ -44,8 +44,7 @@ function dynamicdata_adminapi_update($args)
     if (count($invalid) > 0) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     join(', ',$invalid), 'admin', 'update', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
@@ -80,8 +79,6 @@ function dynamicdata_adminapi_update($args)
         }
     }
     $itemid = $myobject->updateItem($values);
-
     return $itemid;
 }
-
 ?>

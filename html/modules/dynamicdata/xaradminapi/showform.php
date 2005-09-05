@@ -60,8 +60,7 @@ function dynamicdata_adminapi_showform($args)
     if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'module name', 'admin', 'showform', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return $msg;
     }
 
@@ -117,7 +116,5 @@ function dynamicdata_adminapi_showform($args)
     //}
     return $object->showForm(array('layout'   => $layout,
                                    'template' => $template));
-
 }
-
 ?>

@@ -26,5 +26,4 @@ function dynamicdata_adminapi_deleteobject($args)
     $objectid = Dynamic_Object_Master::deleteObject($args);
     return $objectid;
 }
-
 ?>

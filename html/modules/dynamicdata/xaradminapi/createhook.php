@@ -26,9 +26,6 @@ function dynamicdata_adminapi_createhook($args)
 {
     // we rely on the updatehook to do the real work here
     $args['dd_function'] = 'createhook';
-
     return xarModAPIFunc('dynamicdata','admin','updatehook',$args);
 }
-
-
 ?>

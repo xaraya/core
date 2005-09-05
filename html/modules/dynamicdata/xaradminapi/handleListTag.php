@@ -58,5 +58,4 @@ function dynamicdata_adminapi_handleListTag($args)
     $out .= "                         ));";
     return $out;
 }
-
 ?>

@@ -21,10 +21,7 @@
  */
 function dynamicdata_adminapi_getmenulinks()
 {
-
     $menulinks = array();
-
-// Security Check
 	if (xarSecurityCheck('AdminDynamicData',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
@@ -33,8 +30,6 @@ function dynamicdata_adminapi_getmenulinks()
                               'title' => xarML('View module objects using dynamic data'),
                               'label' => xarML('View Objects'));
     }
-
-// Security Check
 	if (xarSecurityCheck('AdminDynamicData',0)) {
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                   'admin',
@@ -42,8 +37,6 @@ function dynamicdata_adminapi_getmenulinks()
                               'title' => xarML('Configure the default property types'),
                               'label' => xarML('Property Types'));
     }
-
-// Security Check
 	if (xarSecurityCheck('AdminDynamicData',0)) {
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                   'util',
@@ -51,8 +44,6 @@ function dynamicdata_adminapi_getmenulinks()
                               'title' => xarML('Import/export and other utilities'),
                               'label' => xarML('Utilities'));
     }
-
     return $menulinks;
 }
-
 ?>

@@ -33,7 +33,5 @@ function dynamicdata_adminapi_updateconfighook($args)
     /*
      * currently NOT used (we're going through the 'normal' updateconfig for now)
      */
-
 }
-
 ?>

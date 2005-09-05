@@ -20,8 +20,7 @@ function dynamicdata_adminapi_browse($args)
     if (empty($args['basedir']) || empty($args['filetype'])) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'base directory', 'admin', 'browse', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
@@ -54,5 +53,4 @@ function dynamicdata_adminapi_browse($args)
     }
     return $filelist;
 }
-
 ?>

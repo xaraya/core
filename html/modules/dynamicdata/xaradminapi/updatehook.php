@@ -33,8 +33,7 @@ function dynamicdata_adminapi_updatehook($args)
     if (!isset($objectid) || !is_numeric($objectid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4) (not numeric or not set)',
                     'object id', 'admin', $dd_function, 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;
@@ -42,8 +41,7 @@ function dynamicdata_adminapi_updatehook($args)
     if (!isset($extrainfo) || !is_array($extrainfo)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'extrainfo', 'admin', $dd_function, 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;
@@ -61,8 +59,7 @@ function dynamicdata_adminapi_updatehook($args)
     if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'module name', 'admin', $dd_function, 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;
@@ -82,8 +79,7 @@ function dynamicdata_adminapi_updatehook($args)
     if (empty($itemid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'item id', 'admin', $dd_function, 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;
@@ -95,8 +91,7 @@ function dynamicdata_adminapi_updatehook($args)
     if (!isset($myobject)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'object', 'admin', $dd_function, 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;
@@ -108,8 +103,7 @@ function dynamicdata_adminapi_updatehook($args)
     if (!$isvalid) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'input', 'admin', $dd_function, 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;
@@ -124,8 +118,7 @@ function dynamicdata_adminapi_updatehook($args)
     if (empty($itemid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'create/update', 'admin', $dd_function, 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;
@@ -134,6 +127,4 @@ function dynamicdata_adminapi_updatehook($args)
     // Return the extra info
     return $extrainfo;
 }
-
-
 ?>

@@ -39,5 +39,4 @@ function dynamicdata_adminapi_checkinput($args)
     }
     return $invalid;
 }
-
 ?>
