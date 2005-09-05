@@ -21,7 +21,8 @@ include_once ('./includes/loggers/xarLogger.php');
  *
  * @package logging
  */
-class xarLogger_winsyslog extends xarLogger_syslog {
+class xarLogger_winsyslog extends xarLogger_syslog 
+{
     /**
      * Converts a XARLOG_LEVEL* constant into a syslog LOG_* constant.
      *

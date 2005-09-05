@@ -12,7 +12,8 @@
  *
  * @package logging 
  */
-class xarLogger {
+class xarLogger 
+{
 
     /**
     * The maximum level of logging.

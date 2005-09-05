@@ -11,7 +11,8 @@
  * @todo bring back possibility of time authorized keys
  */
 
-class xarDate {
+class xarDate 
+{
 
     var $year;
     var $month;

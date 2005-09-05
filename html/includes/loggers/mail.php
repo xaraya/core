@@ -31,7 +31,8 @@ include_once ('./includes/loggers/xarLogger.php');
  *
  * @package logging
  */
-class xarLog_mail extends xarLogger {
+class xarLog_mail extends xarLogger 
+{
 
     /** 
      * String holding the recipient's email address.

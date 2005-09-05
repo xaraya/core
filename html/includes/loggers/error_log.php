@@ -25,7 +25,8 @@ include_once ('./includes/loggers/xarLogger.php');
  * @author  Flavio Botelho <nuncanada@xaraya.com>
  * @package logging
  */
-class xarLogger_error_log extends xarLogger {
+class xarLogger_error_log extends xarLogger 
+{
     //Take a look at http://br.php.net/manual/en/function.error_log.php
 
     /**

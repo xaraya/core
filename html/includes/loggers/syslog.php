@@ -28,7 +28,8 @@ include_once ('./includes/loggers/xarLogger.php');
  * @since   Horde 1.3
  * @package logging
  */
-class xarLogger_syslog extends xarLogger {
+class xarLogger_syslog extends xarLogger 
+{
     //Take a look at http://br.php.net/manual/en/function.openlog.php for the options/facilities
 
     /**
