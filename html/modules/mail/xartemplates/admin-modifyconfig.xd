@@ -10,7 +10,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Modify Mail Configuration</xar:mlstring></h2><br />
 <div style="margin: auto;">
-<form method="post" action="#xarModUrl('mail', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded" >
+<form method="post" action="#xarModUrl('mail', 'admin', 'updateconfig')#" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded" >
 
         <div style="clear: both; padding-top: 10px;">
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -340,7 +340,7 @@
             <span class="help" title="#xarML('Enter each string on a single line.  Do not separate with comma, etc.  Best use is %%string%% to ensure no conflict exists.')#"><label for="searchstrings"><xar:mlstring>Strings for search</xar:mlstring></label>:</span>
         </span>
         <span style="float: right; width: 78%; text-align: left;">
-            <textarea name="searchstrings" id="searchstrings" rows="10" cols="30" />#$searchstrings#</textarea>
+            <textarea name="searchstrings" id="searchstrings" rows="10" cols="30" >#$searchstrings#</textarea>
         </span>
         </div>
 
@@ -349,7 +349,7 @@
             <span class="help" title="#xarML('Enter each string on a single line in the same order as the search.  Do not separate with comma, etc.')#"><label for="replacestrings"><xar:mlstring>Strings for replacement</xar:mlstring></label>:</span>
         </span>
         <span style="float: right; width: 78%; text-align: left;">
-            <textarea name="replacestrings" id="replacestrings" rows="10" cols="40" />#$replacestrings#</textarea>
+            <textarea name="replacestrings" id="replacestrings" rows="10" cols="40" >#$replacestrings#</textarea>
         </span>
         </div>
 

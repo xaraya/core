@@ -14,7 +14,7 @@
             <label for="newdisplayname"><xar:mlstring>Enter a new display name</xar:mlstring></label>
             <br />
             </xar:comment>
-            Display Name: <input type="text" name="displayname" id="displayname" value="#$displayname#" size="30" maxlength="30" tabindex="1" readonly />
+            Display Name: <input type="text" name="displayname" id="displayname" value="#$displayname#" size="30" maxlength="30" tabindex="1" readonly="readonly" />
             <br />
             <br />
             <label for="menus"><xar:mlstring>Set the menus available:</xar:mlstring></label>
@@ -33,9 +33,9 @@
                             </td>
                             <td style="text-align: center;">
                                 <xar:if condition="$admincapable eq 1">
-                                    <input type="checkbox" name="admincapable" id="admincapable" checked="CHECKED">
+                                    <input type="checkbox" name="admincapable" id="admincapable" checked="CHECKED" />
                                 <xar:else />
-                                    <input type="checkbox" name="admincapable" id="admincapable">
+                                    <input type="checkbox" name="admincapable" id="admincapable" />
                                 </xar:if>
                             </td>
                         </tr>
@@ -49,9 +49,9 @@
                             </td>
                             <td style="text-align: center;">
                                 <xar:if condition="$usercapable eq 1">
-                                    <input type="checkbox" name="usercapable" id="usercapable" checked="CHECKED">
+                                    <input type="checkbox" name="usercapable" id="usercapable" checked="CHECKED" />
                                 <xar:else />
-                                    <input type="checkbox" name="usercapable" id="usercapable">
+                                    <input type="checkbox" name="usercapable" id="usercapable" />
                                 </xar:if>
                             </td>
                         </tr>

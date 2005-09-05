@@ -154,7 +154,7 @@
           <option value="#$option['id']#">#$option['name']#</option>
         </xar:if>
       </xar:foreach>
-    </select> <label for="operation_#$name#">
+    </select> <label for="operation_#$name#"/>
   </td>
   </xar:foreach>
 </tr>
@@ -174,7 +174,7 @@
           <option value="#$option['id']#">#$option['name']#</option>
         </xar:if>
       </xar:foreach>
-    </select> <label for="where_#$name#">
+    </select> <label for="where_#$name#"/>
   </td>
   </xar:foreach>
 </tr>

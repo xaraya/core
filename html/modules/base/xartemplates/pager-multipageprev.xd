@@ -3,7 +3,7 @@
 
 <xar:comment> Display first-page link if there is more than one page and we are not on that page </xar:comment>
 <xar:if condition="$currentpagenum ne $firstpagenum">
-    <a title="#xarML('First page')#" href="#$firsturl#">&lt;&lt</a>
+    <a title="#xarML('First page')#" href="#$firsturl#">&lt;&lt;</a>
 <xar:else/>
     &nbsp;
 </xar:if>

@@ -83,7 +83,7 @@
 <xar:comment> ------------------- Begin General Options --------------------- </xar:comment>
     <br />
     <xar:if condition="$tab eq 'general'">
-        <form method="post" action="#xarModURL('roles', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded" >
+        <form method="post" action="#xarModURL('roles', 'admin', 'modifyconfig')#" enctype="application/x-www-form-urlencoded" >
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="phase" id="phase" value="update" />
             <input type="hidden" name="tab" id="tab" value="#$tab#" />
@@ -287,12 +287,12 @@
 <xar:comment> ----------------- Begin Filtering Options ------------------- </xar:comment>
     <xar:elseif condition="$tab eq 'filtering'" />
         <xar:if condition="xarModGetVar('roles', 'allowregistration')">
-            <form method="post" action="#xarModURL('roles', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded" >
+            <form method="post" action="#xarModURL('roles', 'admin', 'modifyconfig')#" enctype="application/x-www-form-urlencoded" >
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="phase" id="phase" value="update" />
                 <input type="hidden" name="tab" id="tab" value="#$tab#" />
                 <h4><xar:mlstring>Filtering Options</xar:mlstring></h4>
-                <label for=-"disallowednames"><xar:mlstring>Disallowed user names</xar:mlstring>:</label><br />
+                <label for="disallowednames"><xar:mlstring>Disallowed user names</xar:mlstring>:</label><br />
                 <i><xar:mlstring>Note: Enter each name on a single line.  Do not separate with comma, etc</xar:mlstring></i></p>
                 <textarea name="disallowednames" id="disallowednames" rows="10" cols="80">#$names#</textarea> 
 

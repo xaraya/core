@@ -1,5 +1,7 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="yahoo"><xar:mlstring>Yahoo Messenger</xar:mlstring></xar:set>
 <xar:if condition="!empty($link)">
-    <a href="#$link#"><img src="#$image#" alt="#$yahoo#" width="18" height="18"></a>
+    <a href="#$link#">
+      <img src="#$image#" alt="#$yahoo#" width="18" height="18" />
+    </a>
 </xar:if>

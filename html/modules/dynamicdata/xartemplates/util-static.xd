@@ -39,7 +39,7 @@
                </div>
            </form>
        </td>
-    <tr>
+    </tr>
 </xar:foreach>
 </table>
 <br />

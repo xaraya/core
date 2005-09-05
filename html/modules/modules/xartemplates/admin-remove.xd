@@ -43,7 +43,7 @@
         <input type="submit" name="command" id="command" value="#xarML('Remove All')#" tabindex="9" />
         <br />
 
-        <a href="#xarModURL('modules','admin','list')#>#xarML('Go back to the modules list.')#</a>
+        <a href="#xarModURL('modules','admin','list')#">#xarML('Go back to the modules list.')#</a>
 </div>
     </form>
 </div>

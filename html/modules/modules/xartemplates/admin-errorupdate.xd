@@ -10,7 +10,7 @@
         <div style="text-align: left;margin: auto;">
             <p><xar:mlstring>There is a discrepancy between the module version stored in the database and the module version found in the file system.  If you continue to run with an older version of the module files, you can severely corrupt your data.</xar:mlstring></p>
         </div>
-        <br><br>
+        <br/><br/>
         <div style="text-align: left;margin: auto;">
             <div style="float: left; width: 30%; text-align: left; display: inline;">
                 <label class="xar-title"><xar:mlstring>Module</xar:mlstring></label>
@@ -31,7 +31,7 @@
                     <span class="xar-norm">#$fileversion#</span>
             </div>
         </div>
-        <br><br><br><br>
+        <br/><br/><br/><br/>
         <div style="text-align: left;margin: auto;">
             <p><xar:mlstring>The module has been marked inactive until this discrepancy is corrected.</xar:mlstring></p>
             <p><xar:mlstring>You have two choices:</xar:mlstring></p>
@@ -45,7 +45,7 @@
                     <p><xar:mlstring>If modules files are up to date, you can update the database to the current version.  Only do this if you are absolutely certain the module files are up to date.</xar:mlstring></p>
                     <p><a href="#xarModURL('modules', 'admin', 'updateversion',array('id' => $regId))#">Click here to update the module version in the database.</a></p>
                 </label>
-            <ul>
+            </ul>
         </div>
     </div>
 </div>

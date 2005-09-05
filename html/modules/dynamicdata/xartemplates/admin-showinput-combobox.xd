@@ -20,7 +20,7 @@
             </xar:if>
         </xar:foreach>
         <xar:if condition="($optionSelected eq false) and !empty($value)">
-            <option value="" selected>Text Specified ==&gt;</option>
+            <option value="" selected="selected">Text Specified ==&gt;</option>
         </xar:if>
     </select>
 </xar:if>
