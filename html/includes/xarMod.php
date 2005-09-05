@@ -1118,8 +1118,11 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
  * @param modName string registered name of module
  * @return string the displayable name
  */
-function xarModGetDisplayableName($modName)
+function xarModGetDisplayableName($modName = NULL)
 {
+    if (empty($modName)) {
+        $modName = xarModGetName();
+    }
     $modInfo = xarMod_getFileInfo($modName);
     return xarML($modInfo['displayname']);
 }
@@ -1135,6 +1138,9 @@ function xarModGetDisplayableName($modName)
  */
 function xarModGetDisplayableDescription($modName)
 {
+    if (empty($modName)) {
+        $modName = xarModGetName();
+    }
     $modInfo = xarMod_getFileInfo($modName);
     return xarML($modInfo['displaydescription']);
 }
