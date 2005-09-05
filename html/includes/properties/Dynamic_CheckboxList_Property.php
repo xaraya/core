@@ -81,16 +81,15 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
             $data['value'] = explode( ',', $data['value'] );
         }
         
+        $data['options'] = array();
         if (!isset($options) || count($options) == 0) 
         {
-            $options = array();            
-            foreach( $this->options as $key => $option )
-            {
-                $option['checked'] = in_array($option['id'],$data['value']);
-                $options[$key] = $option;
-            }
-            $data['options'] = $options;
-            
+            $options = $this->options;
+        }        
+        foreach( $options as $key => $option )
+        {
+            $option['checked'] = in_array($option['id'],$data['value']);
+            $data['options'][$key] = $option;
         }
         if (empty($name)) {
             $data['name'] = 'dd_' . $this->id;
