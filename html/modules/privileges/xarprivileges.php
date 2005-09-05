@@ -722,6 +722,11 @@ class xarPrivileges extends xarMasks
             $nextIDprep = xarVarPrepForStore($nextID);
             $moduleprep = xarVarPrepForStore($module);
             $typeprep = xarVarPrepForStore($type);
+            // make privilege wizard URLs relative, for easier migration of sites
+            if (!empty($instance['header']) && $instance['header'] == 'external' && !empty($instance['query'])) {
+                $base = xarServerGetBaseURL();
+                $instance['query'] = str_replace($base,'',$instance['query']);
+            }
             $headerprep = xarVarPrepForStore($instance['header']);
             $queryprep = xarVarPrepForStore($instance['query']);
             $limitprep = xarVarPrepForStore($instance['limit']);
