@@ -1129,8 +1129,10 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 
                 // Append any encoderArgs that weren't handled by the module specific short-url encoder
                 // TODO: swap the order here? i.e. put the 'leftovers' at the end.
-                $unencodedArgs = xarMod__URLGetUnencodedArgs($encoderArgs, $path);
-                $path = xarMod__URLaddParametersToPath($unencodedArgs, $path, $pini, $psep);
+                //
+                // Commented out at the request of Jason and mikespub
+                // $unencodedArgs = xarMod__URLGetUnencodedArgs($encoderArgs, $path);
+                // $path = xarMod__URLaddParametersToPath($unencodedArgs, $path, $pini, $psep);
 
                 // We now have the short form of the URL.
                 // Further custom manipulation of the URL can be added here.
