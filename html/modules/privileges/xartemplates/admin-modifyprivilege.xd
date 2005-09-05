@@ -120,23 +120,23 @@ document.forms['privilegeform'].submit();}
                                             <label for="ptype1_full"><xar:mlstring>with rights</xar:mlstring></label>
                                         </td>
                                     </tr>
-									<xar:if condition="xarModGetVar('privileges','showrealms')">
-										<tr>
-											<td>
-												<xar:mlstring>Realm</xar:mlstring>
-											</td>
-											<td>
-												<select name="prealm" id="prealm" size="1" tabindex="3">
-													<xar:loop name="$realms">
-														<xar:if condition="$loop:item['name'] eq $prealm">
-															<option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
-														<xar:else />
-															<option value="#$loop:item['name']#">#$loop:item['name']#</option>
-														</xar:if>
-													</xar:loop>
-												</select>
-											</td>
-										</tr>
+                                    <xar:if condition="xarModGetVar('privileges','showrealms')">
+                                        <tr>
+                                            <td>
+                                                <xar:mlstring>Realm</xar:mlstring>
+                                            </td>
+                                            <td>
+                                                <select name="prealm" id="prealm" size="1" tabindex="3">
+                                                    <xar:loop name="$realms">
+                                                        <xar:if condition="$loop:item['name'] eq $prealm">
+                                                            <option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
+                                                        <xar:else />
+                                                            <option value="#$loop:item['name']#">#$loop:item['name']#</option>
+                                                        </xar:if>
+                                                    </xar:loop>
+                                                </select>
+                                            </td>
+                                        </tr>
                                     </xar:if>
                                     <tr>
                                         <td>
