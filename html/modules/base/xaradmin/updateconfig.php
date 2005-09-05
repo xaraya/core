@@ -105,6 +105,20 @@ function base_admin_updateconfig()
             xarConfigSetVar('Site.MLS.AllowedLocales', $localesList);
             xarConfigSetVar('Site.MLS.TranslationsBackend', $translationsBackend);
 
+            break;
+        case 'other':
+            if (!xarVarFetch('loadlegacy','checkbox',$loadLegacy,true,XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('proxyhost','str:1:',$proxyhost,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('proxyport','int:1:',$proxyport,0,XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('editor','str:1:',$editor,'none',XARVAR_NOT_REQUIRED)) return;
+
+            // Save these in normal module variables for now
+            xarModSetVar('base','proxyhost',$proxyhost);
+            xarModSetVar('base','proxyport',$proxyport);
+
+            xarConfigSetVar('Site.Core.LoadLegacy', $loadLegacy);
+            xarModSetVar('base','editor',$editor);
+
             // Timezone, offset and DST
             if (!xarVarFetch('defaulttimezone','str:1:',$defaulttimezone,'',XARVAR_NOT_REQUIRED)) return;
             if (!empty($defaulttimezone)) {
@@ -125,21 +139,7 @@ function base_admin_updateconfig()
             }
 
             break;
-        case 'other':
-            if (!xarVarFetch('loadlegacy','checkbox',$loadLegacy,true,XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('proxyhost','str:1:',$proxyhost,'',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('proxyport','int:1:',$proxyport,0,XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('editor','str:1:',$editor,'none',XARVAR_NOT_REQUIRED)) return;
-
-       // Save these in normal module variables for now
-            xarModSetVar('base','proxyhost',$proxyhost);
-            xarModSetVar('base','proxyport',$proxyport);
-
-            xarConfigSetVar('Site.Core.LoadLegacy', $loadLegacy);
-            xarModSetVar('base','editor',$editor);
-            break;
     }
-
 
 
     //FIXME: what is this?
