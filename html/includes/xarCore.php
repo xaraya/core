@@ -143,9 +143,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * If there happens something we want to be able to log it
      *
      */
-    $systemArgs = array('loggerName' => xarCore_getSystemVar('Log.LoggerName'),
-                        'loggerArgs' => xarCore_getSystemVar('Log.LoggerArgs'),
-                        'level' => xarCore_getSystemVar('Log.LogLevel'));
+    $systemArgs = array('loggerName' => xarCore_getSystemVar('Log.LoggerName', true),
+                        'loggerArgs' => xarCore_getSystemVar('Log.LoggerArgs', true),
+                        'level' => xarCore_getSystemVar('Log.LogLevel', true));
     xarLog_init($systemArgs, $whatToLoad);
 
     /*

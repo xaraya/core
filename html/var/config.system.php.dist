@@ -48,6 +48,11 @@ $systemConfiguration['DB.UseADODBCache'] = false;
  *
  * Comment them out to use Xaraya's built-in/auto values
  */
+// 1. When you want to use some alternate URI path to your site
+//$systemConfiguration['BaseURI'] = '/test';
+// 2. When you want to use some alternate script file for your site
+//$systemConfiguration['BaseModURL'] = 'index2.php';
+// 3. When you want to use URLs like http://mysite.com/news/123
 //$systemConfiguration['BaseURI'] = '';
 //$systemConfiguration['BaseModURL'] = '';
 ?>
