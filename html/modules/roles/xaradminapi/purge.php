@@ -51,7 +51,7 @@ function roles_adminapi_purge($args)
         // Call the Roles class
         $roles = new xarRoles();
         $role = $roles->getRole($item['uid']);
-        if (!$role->remove()) {
+        if (!$role->purge()) {
             return;
         }
 

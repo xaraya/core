@@ -22,14 +22,8 @@ function roles_admin_purge($args)
     if(!xarSecurityCheck('DeleteRole')) return;
 
     // Get parameters from whatever input we need
-    if (!xarVarFetch('purgestate', 'int:1:', $data['purgestate'], NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('recallstate', 'int:1:', $data['recallstate'], NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('confirmation', 'int:1', $confirmation, 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('submit', 'str', $submit, NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('search', 'str', $data['search'], NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('startnum', 'int:1:', $startnum, 1, XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('uids', 'isset', $uids, array(), XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('groupuid', 'int:1', $data['groupuid'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('operation', 'str', $data['operation'], 'recall', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('confirmation', 'str', $confirmation, 0, XARVAR_NOT_REQUIRED)) return;
 
     extract($args);
 
@@ -39,129 +33,260 @@ function roles_admin_purge($args)
     $rolestable = $xartable['roles'];
 
     $deleted = '[' . xarML('deleted') . ']';
-
-    // Check for confirmation.
-    if ($confirmation == 0) {
-
-    }
-    elseif ($confirmation ==1) {
-
-        // The API function is called
-            if (!xarModAPIFunc('roles',
-                           'admin',
-                           'purge',
-                            array('state' => $data['purgestate']))) return;
-    }
-    elseif ($confirmation ==2) {
-
-        $roleslist = new xarRoles();
-        if ($data['groupuid'] != 0) $parentgroup = $roleslist->getRole($data['groupuid']);
-        foreach ($uids as $uid => $val) {
-            $role = $roleslist->getRole($uid);
-            $state = $role->getType() ? 3 : $data['recallstate'];
-            $uname = explode($deleted,$role->getUser());
-//            echo $uname[0];exit;
-            $query = "UPDATE $rolestable
-                    SET xar_uname = '" . xarVarPrepForStore($uname[0]) .
-                        "', xar_state = " . xarVarPrepForStore($state) ;
-            $query .= " WHERE xar_uid = ".xarVarPrepForStore($uid);
-
-            $result =& $dbconn->Execute($query);
-            if (!$result) return;
-
-            $parentgroup->addmember($role);
-        }
-    } else {
-    }
-
-     $numitems = xarModGetVar('roles', 'rolesperpage');
+    $numitems = xarModGetVar('roles', 'rolesperpage');
     // Make sure a value was retrieved for rolesperpage
-    if (empty($numitems))
-        $numitems = -1;
+    if (empty($numitems)) $numitems = -1;
 
-        $selection = " WHERE xar_state=0";
-    //Create the selection
-    if (!empty($data['search'])) {
-        $selection .= " AND (";
-        $selection .= "(xar_name LIKE '%" . $data['search'] . "%')";
-        $selection .= " OR (xar_uname LIKE '%" . $data['search'] . "%')";
-        $selection .= " OR (xar_email LIKE '%" . $data['search'] . "%')";
-        $selection .= ")";
-    }
-    // Select-clause.
-    $query = '
-        SELECT DISTINCT xar_uid,
-                xar_uname,
-                xar_name,
-                xar_email,
-                xar_type,
-                xar_date_reg
-                FROM ' . $rolestable .
-                $selection .
-                ' ORDER BY xar_name';
+    if ($data['operation'] == 'recall')
+    {
+        if (!xarVarFetch('recallstate', 'int:1:', $data['recallstate'], NULL, XARVAR_DONT_SET)) return;
+        if (!xarVarFetch('recallsubmit', 'str', $recallsubmit, NULL, XARVAR_DONT_SET)) return;
+        if (!xarVarFetch('recallsearch', 'str', $data['recallsearch'], NULL, XARVAR_DONT_SET)) return;
+        if (!xarVarFetch('recallstartnum', 'int:1:', $recallstartnum, 1, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('recalluids', 'isset', $recalluids, array(), XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('groupuid', 'int:1', $data['groupuid'], 0, XARVAR_NOT_REQUIRED)) return;
 
-    $result = $dbconn->Execute($query);
-    $data['totalselect'] = $result->_numOfRows;
-    if (!$result) {return;}
-    if ($startnum != 0) {
-        $result = $dbconn->SelectLimit($query, $numitems, $startnum-1);
-        if (!$result) {return;}
-    }
+        if ($confirmation == "Recall")
+        {
+    // --- recall users and groups
+            if(!xarSecurityCheck('DeleteRole')) return;
+            $roleslist = new xarRoles();
+            if ($data['groupuid'] != 0) $parentgroup = $roleslist->getRole($data['groupuid']);
+            foreach ($recalluids as $uid => $val) {
+                $role = $roleslist->getRole($uid);
+                $state = $role->getType() ? 3 : $data['recallstate'];
+                $uname = explode($deleted,$role->getUser());
+    //            echo $uname[0];exit;
+                $query = "UPDATE $rolestable
+                        SET xar_uname = '" . xarVarPrepForStore($uname[0]) .
+                            "', xar_state = " . xarVarPrepForStore($state) ;
+                $query .= " WHERE xar_uid = ".xarVarPrepForStore($uid);
 
-    if ($data['totalselect'] == 0) {
-        $data['message'] = xarML('There are no deleted groups/users ');
-    }
-    else {
-        $data['message']         = '';
-    }
+                $result =& $dbconn->Execute($query);
+                if (!$result) return;
 
-    $roles = array();
-    $deleted = '[' . xarML('deleted') . ']';
-    for (; !$result->EOF; $result->MoveNext()) {
-        list($uid, $uname, $name, $email, $type, $date_reg) = $result->fields;
-        if (xarSecurityCheck('ReadRole', 0, 'All', "$uname:All:$uid")) {
-            $unique = 1;
-            if ($type) {
-                 $uname = "";
+                $parentgroup->addmember($role);
             }
-            else {
-                $uname1 = explode($deleted,$uname);
-                $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $uname1[0]));
-                if (is_array($existinguser)) $unique = 0;
-                $uname = $uname1[0];
-           }
-            $type = $type ? "Group" : "User";
-            $roles[] = array(
+        }
+// --- display roles that can be recalled
+        $selection = " WHERE xar_state=0 AND xar_email != ''";
+        //Create the selection
+        if (!empty($data['recallsearch'])) {
+            $selection .= " AND (";
+            $selection .= "(xar_name LIKE '%" . $data['recallsearch'] . "%')";
+            $selection .= " OR (xar_uname LIKE '%" . $data['recallsearch'] . "%')";
+            $selection .= " OR (xar_email LIKE '%" . $data['recallsearch'] . "%')";
+            $selection .= ")";
+        }
+        // Select-clause.
+        $query = '
+            SELECT DISTINCT xar_uid,
+                    xar_uname,
+                    xar_name,
+                    xar_email,
+                    xar_type,
+                    xar_date_reg
+                    FROM ' . $rolestable .
+                    $selection .
+                    ' ORDER BY xar_name';
+
+        $result = $dbconn->Execute($query);
+        $data['totalselect'] = $result->_numOfRows;
+        if (!$result) {return;}
+        if ($recallstartnum != 0) {
+            $result = $dbconn->SelectLimit($query, $numitems, $recallstartnum-1);
+            if (!$result) {return;}
+        }
+
+        if ($data['totalselect'] == 0) {
+            $data['recallmessage'] = xarML('There are no deleted groups/users ');
+        }
+        else {
+            $data['recallmessage']         = '';
+        }
+
+        $recallroles = array();
+        for (; !$result->EOF; $result->MoveNext()) {
+            list($uid, $uname, $name, $email, $type, $date_reg) = $result->fields;
+            if (xarSecurityCheck('ReadRole', 0, 'All', "$uname:All:$uid")) {
+                $unique = 1;
+                if ($type) {
+                     $uname = "";
+                }
+                else {
+                    $uname1 = explode($deleted,$uname);
+                    $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $uname1[0]));
+                    if (is_array($existinguser)) $unique = 0;
+                    $uname = $uname1[0];
+               }
+                $type = $type ? "Group" : "User";
+                $recallroles[] = array(
+                    'uid'       => $uid,
+                    'uname'     => $uname,
+                    'name'      => $name,
+                    'email'     => $email,
+                    'type'      => $type,
+                    'date_reg'  => $date_reg,
+                    'unique'    => $unique
+                );
+            }
+        }
+// --- send to template
+        $data['groups'] = xarModAPIFunc('roles',
+                                        'user',
+                                        'getallgroups');
+        $recallfilter['recallstartnum'] = '%%';
+        $filter['state'] = $data['recallstate'];
+        $recallfilter['recallsearch'] = $data['recallsearch'];
+        $data['submitRecall']    = xarML('Recall');
+        $data['recallroles'] = $recallroles;
+        $data['recallpager'] = xarTplGetPager($recallstartnum,
+            $data['totalselect'],
+            xarModURL('roles', 'admin', 'purge',
+                $recallfilter),
+            $numitems);
+    }
+//--------------------------------------------------------
+    elseif ($data['operation'] == 'purge')
+    {
+        if (!xarVarFetch('purgestate', 'int', $data['purgestate'], -1, XARVAR_DONT_SET)) return;
+        if (!xarVarFetch('purgesearch', 'str', $data['purgesearch'], NULL, XARVAR_DONT_SET)) return;
+        if (!xarVarFetch('purgesubmit', 'str', $purgesubmit, NULL, XARVAR_DONT_SET)) return;
+        if (!xarVarFetch('purgestartnum', 'int:1:', $purgestartnum, 1, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('purgeuids', 'isset', $purgeuids, array(), XARVAR_NOT_REQUIRED)) return;
+
+        // Check for confirmation.
+        if ($confirmation == "Purge")
+        {
+// --- purge users
+            if(!xarSecurityCheck('AdminRole')) return;
+            $roleslist = new xarRoles();
+            foreach ($purgeuids as $uid => $val) {
+                $role = $roleslist->getRole($uid);
+                $state = 0;
+                $uname = $deleted . mktime();
+                $name = '';
+                $pass = '';
+                $email = '';
+                $query = "UPDATE $rolestable
+                        SET xar_uname = " . $dbconn->qstr($uname) . ",
+                             xar_name = " . $dbconn->qstr($uname) . ",
+                             xar_pass = " . $dbconn->qstr($pass) . ",
+                             xar_email = " . $dbconn->qstr($email) . ",
+                             xar_state = " . $state ;
+                $query .= " WHERE xar_uid = ". $uid;
+                $result =& $dbconn->Execute($query);
+                if (!$result) return;
+            }
+        }
+
+// --- display users that can be purged
+        $selection = " WHERE xar_email != ''";
+        //Create the selection
+        if ($data['purgestate'] != -1) {
+            $selection .= " AND xar_state = " . $data['purgestate'];
+            switch ($data['purgestate']):
+                case 0 :
+                    $data['purgestatetext'] = 'deleted';
+                    break ;
+                case 1 :
+                    $data['purgestatetext'] = 'inactive';
+                    break ;
+                case 2 :
+                    $data['purgestatetext'] = 'not validated';
+                    break ;
+                case 3 :
+                    $data['purgestatetext'] = 'active';
+                    break ;
+                case 4 :
+                    $data['purgestatetext'] = 'pending';
+                    break ;
+            endswitch ;
+        }
+        else {
+            $data['purgestatetext'] = '';
+        }
+        if (!empty($data['purgesearch'])) {
+            $selection .= " AND (";
+            $selection .= "(xar_name LIKE '%" . $data['purgesearch'] . "%')";
+            $selection .= " OR (xar_uname LIKE '%" . $data['purgesearch'] . "%')";
+            $selection .= " OR (xar_email LIKE '%" . $data['purgesearch'] . "%')";
+            $selection .= ")";
+        }
+        // Select-clause.
+        $query = '
+            SELECT DISTINCT xar_uid,
+                    xar_uname,
+                    xar_name,
+                    xar_email,
+                    xar_state,
+                    xar_date_reg
+                    FROM ' . $rolestable .
+                    $selection .
+                    ' ORDER BY xar_name';
+
+        $result = $dbconn->Execute($query);
+        $data['totalselect'] = $result->_numOfRows;
+        if (!$result) {return;}
+        if ($purgestartnum != 0) {
+            $result = $dbconn->SelectLimit($query, $numitems, $purgestartnum-1);
+            if (!$result) {return;}
+        }
+
+        if ($data['totalselect'] == 0) {
+            $data['purgemessage'] = xarML('There are no users selected');
+        }
+        else {
+            $data['purgemessage']         = '';
+        }
+
+        $purgeusers = array();
+        for (; !$result->EOF; $result->MoveNext()) {
+            list($uid, $uname, $name, $email, $state, $date_reg) = $result->fields;
+            switch ($state):
+                case 0 :
+                    $state = 'deleted';
+                    break ;
+                case 1 :
+                    $state = 'inactive';
+                    break ;
+                case 2 :
+                    $state = 'not validated';
+                    break ;
+                case 3 :
+                    $state = 'active';
+                    break ;
+                case 4 :
+                    $state = 'pending';
+                    break ;
+            endswitch ;
+            $purgeusers[] = array(
                 'uid'       => $uid,
                 'uname'     => $uname,
                 'name'      => $name,
                 'email'     => $email,
-                'type'      => $type,
-                'date_reg'  => $date_reg,
-                'unique'    => $unique
+                'state'      => $state,
+                'date_reg'  => $date_reg
             );
         }
+// --- send to template
+        $purgefilter['purgestartnum'] = '%%';
+        $purgefilter['purgesearch'] = $data['purgesearch'];
+
+        $data['submitPurge']    = xarML('Purge');
+        $data['purgeusers'] = $purgeusers;
+        $data['purgepager'] = xarTplGetPager($purgestartnum,
+            $data['totalselect'],
+            xarModURL('roles', 'admin', 'purge',
+                $purgefilter),
+            $numitems);
     }
+    else {}
 
-    $data['groups'] = xarModAPIFunc('roles',
-                                    'user',
-                                    'getallgroups');
-    $filter['startnum'] = '%%';
-    $filter['state'] = $data['recallstate'];
-    $filter['search'] = $data['search'];
-
+// --- finish up
     $data['authid']         = xarSecGenAuthKey();
-    $data['submitPurge']    = xarML('Purge');
-    $data['submitRecall']    = xarML('Recall');
-    $data['roles'] = $roles;
-    $data['pager'] = xarTplGetPager($startnum,
-        $data['totalselect'],
-        xarModURL('roles', 'admin', 'purge',
-            $filter),
-        $numitems);
     // Return
     return $data;
-
 }
 
 ?>

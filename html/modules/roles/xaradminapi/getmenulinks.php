@@ -62,8 +62,8 @@ function roles_adminapi_getmenulinks()
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
                                                   'purge'),
-                              'title' => xarML('Purge users by status or undelete users/groups'),
-                              'label' => xarML('Purge/Undelete'));
+                              'title' => xarML('Undelete or permanently remove users/groups'),
+                              'label' => xarML('Recall/Purge'));
     }
 
     if (xarSecurityCheck('EditRole',0)) {
