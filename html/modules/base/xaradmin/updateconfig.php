@@ -79,7 +79,8 @@ function base_admin_updateconfig()
             if (!xarVarFetch('defaultlocale','str:1:',$defaultLocale)) return;
             if (!xarVarFetch('active','isset',$active)) return;
             if (!xarVarFetch('mlsmode','str:1:',$MLSMode,'SINGLE',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('translationsbackend','str:1:',$translationsBackend)) return;
+            // if (!xarVarFetch('translationsbackend','str:1:',$translationsBackend)) return;
+            if (!xarVarFetch('translationsbackend', 'enum:xml:php:xml2php', $translationsBackend)) return;
 
             $localesList = array();
             foreach($active as $activelocale) $localesList[] = $activelocale;
