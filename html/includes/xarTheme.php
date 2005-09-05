@@ -130,11 +130,9 @@ function xarThemeDBInfoLoad($themeName, $themeDir = NULL)
  */
 function xarThemeGetDisplayableName($themeName)
 {
-    // The theme display name is language sensitive, so it's fetched through xarMLByKey
-    // <andyv> it was a good idea, but didnt work with xarMLByKey because it didnt like spaces in the names
-    // see bug 720 as a reference to this problem
-    // TODO: need to think of something that actually works.. changed for xarML for now
-    // <MrB> that's the right way, am i missing something?
+    // The theme display name is language sensitive,
+    // so it's fetched through xarML.
+    // TODO: need to think of something that actually works.
     return xarML($themeName);
 }
 
