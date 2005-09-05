@@ -65,7 +65,8 @@ function base_admin_modifyconfig()
         else $active = false;
         $data['locales'][] = array('name' => $locale, 'active' => $active);
     }
-    $data['translationsBackend'] = xarConfigGetVar('Site.MLS.TranslationsBackend');
+    // TODO: delete after new backend testing
+    // $data['translationsBackend'] = xarConfigGetVar('Site.MLS.TranslationsBackend');
     $data['authid'] = xarSecGenAuthKey();
     $data['updatelabel'] = xarML('Update Base Configuration');
     $data['XARCORE_VERSION_NUM'] = XARCORE_VERSION_NUM;
