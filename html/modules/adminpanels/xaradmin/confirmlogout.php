@@ -24,20 +24,7 @@
 */
 function adminpanels_admin_confirmlogout()
 {
-
-    // first we display a pseudo modal-dialogue with Yes/No choice
-    // if answer is Logout, we logout as the admin/user..
-    // if Cancel we return to previous admin panel
-    // prepare data for template
-    $data = xarTplModule(
-    'adminpanels',
-    'admin',
-    'confirmlogout',
-    array(  'warning'       => xarVarPrepForDisplay(xarML('ATTENTION! YOU ARE ABOUT TO LOGOUT FROM ADMIN SYSTEM..')),
-            'question'      => xarVarPrepForDisplay(xarML('Are you sure? Click "Cancel" to return to the previous page..')),
-            'cancelurl'     => 'javascript:top.history.go(-1)'));
-
-
-    return $data;
+    // Template does it all
+    return array();    
 }
 ?>
