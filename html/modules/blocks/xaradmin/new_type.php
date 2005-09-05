@@ -22,20 +22,18 @@ function blocks_admin_new_type()
     if (!xarSecurityCheck('AdminBlock', 0, 'Instance')) {return;}
 
     // Get parameters
-    if (!xarVarFetch('modulename', 'str:1:', $modulename, 'base', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('moduleid',   'id:', $modid, xarModGetIDFromName('base'), XARVAR_NOT_REQUIRED)) { return; }
     if (!xarVarFetch('blockname', 'str:1:', $blockname, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('submit', 'str:1:', $submit, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('scan', 'str:1:', $scan, '', XARVAR_NOT_REQUIRED)) {return;}
 
     // Initialise the list.
     $type_list = array();
-
-    if (!empty($scan) && !empty($modulename)) {
+    $modinfo = xarModGetInfo($modid);
+    if (!empty($scan)) {
         // 'Scan' button pressed.
     
         // Get a list of block types from the module files.
-        $modid = xarModGetIDFromName($modulename);
-        $modinfo = xarModGetInfo($modid);
         if (!empty($modinfo)) {
             // TODO: should 'modules' be hard-coded here?
             $blocks_path = 'modules/' . $modinfo['directory'] . '/xarblocks';
@@ -63,6 +61,7 @@ function blocks_admin_new_type()
         if (!xarSecConfirmAuthKey()) {return;}
 
         // Create the block type.
+        $modulename = $modinfo['name'];
         if (!xarModAPIFunc(
             'blocks', 'admin', 'create_type',
             array('module' => $modulename, 'type' => $blockname))
@@ -71,11 +70,10 @@ function blocks_admin_new_type()
         xarResponseRedirect(xarModURL('blocks', 'admin', 'view_types'));
         return true;
     } else {
-        // Nothing submited yet - return a blank form.
+        // Nothing submitted yet - return a blank form.
         return array(
             'authid' => xarSecGenAuthKey(),
-            'module_list' => xarModAPIfunc('modules', 'admin', 'getlist'),
-            'modulename' => $modulename,
+            'moduleid' => $modid,
             'type_list' => $type_list,
             'blockname' => $blockname
         );
