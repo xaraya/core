@@ -1187,9 +1187,9 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
         // optionally show template filenames if start comment has not already
         // been added as part of a header determination.
         if($outputStartComment === true)
-            $finalTemplate .= "\n<!-- start: " . $sourceFileName . "-->\n";
+            $finalTemplate .= "\n<!-- start: " . $sourceFileName . " -->\n";
         $finalTemplate .= $tplOutput;
-        $finalTemplate .= "\n<!-- end: " . $sourceFileName . '-->';
+        $finalTemplate .= "\n<!-- end: " . $sourceFileName . ' -->';
     } else {
         $finalTemplate .= $tplOutput;
     }
@@ -1281,7 +1281,7 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
 
     foreach($headerTagRegexes as $headerTagRegex) {
         if(preg_match("/$headerTagRegex/smix", $tplOutput, $matchedHeaderTag)) {
-            $startComment = '<!-- start(output actually commenced before header(s)): ' . $sourceFileName . '-->';
+            $startComment = '<!-- start(output actually commenced before header(s)): ' . $sourceFileName . ' -->';
             // replace matched tag with an appended start comment tag in the first match
             // in the template output $tplOutput
             $tplOutput = preg_replace("/$headerTagRegex/smix", $matchedHeaderTag[0] . $startComment, $tplOutput, 1);
