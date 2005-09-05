@@ -132,7 +132,7 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
 
     // Set user auth module information
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     $rolestable = $xartable['roles'];
 
@@ -172,7 +172,7 @@ function xarUserLogOut()
         return true;
     }
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     // Reset user session information
     $res = xarSession_setUserInfo(_XAR_ID_UNREGISTERED, 0);
@@ -618,7 +618,7 @@ function xarUser__getAuthModule($userId)
 // TODO: replace with some roles API ?
 
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     // Get user auth_module name
     $rolestable = $xartable['roles'];
@@ -720,7 +720,7 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
 // TODO: replace with some roles API ?
 
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     $rolestable = $xartable['roles'];
     $usercolumns = $xartable['users_column'];
@@ -735,4 +735,3 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
     return true;
 }
 
-?>

@@ -209,7 +209,7 @@ function xarModDelAllVars($modName)
     //if (!isset($modBaseInfo)) return; // throw back
 
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
 
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
@@ -396,7 +396,7 @@ function xarModGetVarId($modName, $name)
     }
 
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
 
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
@@ -494,7 +494,7 @@ function xarModGetInfo($modRegId, $type = 'module')
     }
 
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
 
     switch(strtolower($type)) {
         case 'module':
@@ -1369,7 +1369,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
 
     // Get database info
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
     $hookstable = $xartable['hooks'];
 
     // Get applicable hooks
@@ -1445,7 +1445,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
     if (!isset($modHookedCache[$callerModName.$callerItemType])) {
         // Get database info
         list($dbconn) = xarDBGetConn();
-        $xartable = xarDBGetTables();
+        $xartable =& xarDBGetTables();
         $hookstable = $xartable['hooks'];
 
         // Get applicable hooks
@@ -1627,7 +1627,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     }
 
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
 
     switch(strtolower($type)) {
         case 'module':
@@ -1756,7 +1756,7 @@ function xarMod_getVarsByModule($modName, $type = 'module')
     }
 
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
 
     switch(strtolower($type)) {
         case 'module':
@@ -1837,7 +1837,7 @@ function xarMod_getVarsByName($varName, $type = 'module')
     }
 
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
 
     switch(strtolower($type)) {
     case 'module':
@@ -1957,7 +1957,7 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
     }
 
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
 
     switch(strtolower($type)) {
         case 'module':
@@ -2025,7 +2025,7 @@ function xarModRegisterHook($hookObject,
 
     // Get database info
     list($dbconn) = xarDBGetConn();
-    $pntable = xarDBGetTables();
+    $pntable =& xarDBGetTables();
     $hookstable = $pntable['hooks'];
 
     // Insert hook
@@ -2074,7 +2074,7 @@ function xarModUnregisterHook($hookObject,
 
     // Get database info
     list($dbconn) = xarDBGetConn();
-    $pntable = xarDBGetTables();
+    $pntable =& xarDBGetTables();
     $hookstable = $pntable['hooks'];
 
     // Remove hook
@@ -2144,4 +2144,3 @@ function xarModGetName()
     return $modName;
 }
 
-?>

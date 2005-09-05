@@ -67,7 +67,7 @@ class xarLogger_sql extends xarLogger
         list($this->_dbconn) = xarDBGetConn();
 
         $this->_table = $conf['table'];
-//        $xartable = xarDBGetTables();
+//        $xartable =& xarDBGetTables();
     }
 
 
@@ -110,5 +110,4 @@ class xarLogger_sql extends xarLogger
         return true;
     }
 }
-
 ?>

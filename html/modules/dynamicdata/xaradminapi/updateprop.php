@@ -67,7 +67,7 @@ function dynamicdata_adminapi_updateprop($args)
     // database handle.  For xarDBGetTables() we want to keep the entire
     // tables array together for easy reference later on
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     // It's good practice to name the table and column definitions you
     // are getting - $table and $column don't cut it in more complex
@@ -110,4 +110,3 @@ function dynamicdata_adminapi_updateprop($args)
     return true;
 }
 
-?>

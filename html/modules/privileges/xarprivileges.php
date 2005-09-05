@@ -2362,4 +2362,3 @@ class xarPrivilege extends xarMask
     function isEmpty()              {return $this->module == 'empty';}
 }
 
-?>

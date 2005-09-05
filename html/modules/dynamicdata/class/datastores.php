@@ -87,7 +87,7 @@ class Dynamic_DataStore_Master
     function &getDataSources($args = array())
     {
         list($dbconn) = xarDBGetConn();
-        $xartable = xarDBGetTables();
+        $xartable =& xarDBGetTables();
 
         $systemPrefix = xarDBGetSystemTablePrefix();
         $metaTable = $systemPrefix . '_tables';
@@ -308,4 +308,3 @@ class Dynamic_DataStore
 
 }
 
-?>

@@ -70,4 +70,3 @@ function modules_adminapi_gethookedmodules($args)
     return $modlist;
 }
 
-?>

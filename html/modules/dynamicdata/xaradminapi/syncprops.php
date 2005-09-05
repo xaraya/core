@@ -47,7 +47,7 @@ function dynamicdata_adminapi_syncprops($args)
     }
 
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     $dynamicprop = $xartable['dynamic_properties'];
 
@@ -63,4 +63,3 @@ function dynamicdata_adminapi_syncprops($args)
     return true;
 }
 
-?>

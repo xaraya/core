@@ -37,7 +37,7 @@ function adminpanels_adminapi_updatemenudb($args){
         return true;
     }else{
         list($dbconn) = xarDBGetConn();
-        $xartable = xarDBGetTables();
+        $xartable =& xarDBGetTables();
         $menutable = $xartable['admin_menu'];
 
         // is the number of rows in our table equal to the number of admin modules?
@@ -89,4 +89,3 @@ function adminpanels_adminapi_updatemenudb($args){
     return true;
 }
 
-?>

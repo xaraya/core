@@ -202,4 +202,3 @@ function adminpanels_delete()
   return false;
 }
 
-?>

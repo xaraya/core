@@ -138,4 +138,3 @@ function themes_adminapi_regenerate()
     return true;
 }
 
-?>

@@ -108,4 +108,3 @@ function modules_adminapi_enablehooks($args)
     return true;
 }
 
-?>

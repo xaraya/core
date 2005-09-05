@@ -22,7 +22,7 @@ function blocks_admin_view_groups()
     $authid = xarSecGenAuthKey();
     // Load up database
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
     $block_groups_table = $xartable['block_groups'];
 
     $query = "SELECT    xar_id as id,
@@ -60,4 +60,3 @@ function blocks_admin_view_groups()
     return array('block_groups' => $block_groups);
 }
 
-?>

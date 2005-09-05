@@ -66,7 +66,7 @@ function dynamicdata_utilapi_getstatic($args)
     }
 
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
 // TODO: support site tables as well
     $systemPrefix = xarDBGetSystemTablePrefix();
@@ -202,4 +202,3 @@ function dynamicdata_utilapi_getstatic($args)
     return $static;
 }
 
-?>

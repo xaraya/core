@@ -131,4 +131,3 @@ function modules_adminapi_setstate($args)
     return true;
 }
 
-?>

@@ -61,4 +61,3 @@ function themes_adminapi_gettpltaglist($args)
     return $aTplTags;
 }
 
-?>

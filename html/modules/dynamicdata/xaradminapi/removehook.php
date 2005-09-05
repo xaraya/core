@@ -60,7 +60,7 @@ function dynamicdata_adminapi_removehook($args)
 
     // Get database setup
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     $dynamicprop = $xartable['dynamic_properties'];
 
@@ -128,4 +128,3 @@ function dynamicdata_adminapi_removehook($args)
     return $extrainfo;
 }
 
-?>

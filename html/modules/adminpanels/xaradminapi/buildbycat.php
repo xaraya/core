@@ -35,7 +35,7 @@ function adminpanels_adminapi_buildbycat($args){
                     '4'=>'Miscellaneous');
 
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
     $menutable = $xartable['admin_menu'];
 
     $catdata = array();
@@ -69,4 +69,3 @@ function adminpanels_adminapi_buildbycat($args){
     return $catdata;
 }
 
-?>

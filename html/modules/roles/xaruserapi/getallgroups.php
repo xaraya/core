@@ -32,4 +32,3 @@ function roles_userapi_getallgroups()
 
 }
 
-?>

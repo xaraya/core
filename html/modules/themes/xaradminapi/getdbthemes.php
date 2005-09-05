@@ -57,4 +57,3 @@ function themes_adminapi_getdbthemes()
     return $dbThemes;
 }
 
-?>

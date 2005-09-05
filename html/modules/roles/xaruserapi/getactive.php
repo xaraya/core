@@ -69,4 +69,3 @@ function roles_userapi_getactive($args)
 
     return $sessions;
 }
-?>

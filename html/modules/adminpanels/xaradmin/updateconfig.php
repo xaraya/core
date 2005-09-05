@@ -97,7 +97,7 @@ function adminpanels_admin_updateconfig()
     
             // obtain db connection
             list($dbconn) = xarDBGetConn();
-            $xartable = xarDBGetTables();
+            $xartable =& xarDBGetTables();
             $blockgroupinstancetable= $xartable['block_group_instances'];
             if($menuposition == 'l'){
                 // we want block to show on the left, let's update xar_block_group_instances
@@ -146,4 +146,3 @@ function adminpanels_admin_updateconfig()
     return true;
 }
 
-?>

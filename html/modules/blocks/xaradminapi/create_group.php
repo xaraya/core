@@ -39,7 +39,7 @@ function blocks_adminapi_create_group($args)
 
     // Load up database
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
     $block_groups_table          = $xartable['block_groups'];
 
     // TODO: make sure group does not already exist
@@ -64,4 +64,3 @@ function blocks_adminapi_create_group($args)
     return $group_id;
 }
 
-?>

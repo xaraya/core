@@ -56,4 +56,3 @@ function modules_adminapi_disablehooks($args)
     return true;
 }
 
-?>

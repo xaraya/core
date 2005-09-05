@@ -33,7 +33,7 @@ function blocks_adminapi_deactivate($args)
 	if(!xarSecurityCheck('EditBlock',1,'Block',"::$bid")) return;
 
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
     $blockstable = $xartable['blocks'];
 
     // Deactivate
@@ -46,4 +46,3 @@ function blocks_adminapi_deactivate($args)
     return true;
 }
 
-?>

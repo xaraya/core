@@ -22,7 +22,7 @@
 function blocks_userapi_reactivate_menus()
 {
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
     $ublockstable = $xartable['userblocks'];
 
     $query="UPDATE $ublockstable 
@@ -36,4 +36,3 @@ function blocks_userapi_reactivate_menus()
     return true;
 }
 
-?>

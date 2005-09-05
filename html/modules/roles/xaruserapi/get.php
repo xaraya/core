@@ -104,4 +104,3 @@ function roles_userapi_get($args)
     return $user;
 }
 
-?>

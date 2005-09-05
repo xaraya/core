@@ -26,7 +26,7 @@ function blocks_userapi_update($args)
         return false;
     }
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     $uid = xarUserGetVar('uid');
 
@@ -56,4 +56,3 @@ function blocks_userapi_update($args)
 
     return;
 }
-?>

@@ -547,4 +547,3 @@ function privileges_delete()
     return true;
 }
 
-?>

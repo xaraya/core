@@ -39,7 +39,7 @@ function modules_adminapi_remove($args)
     }
     else {
         list($dbconn) = xarDBGetConn();
-        $tables = xarDBGetTables();
+        $tables =& xarDBGetTables();
 
         //TODO: Add check if there is any dependents
     /*
@@ -108,4 +108,3 @@ function modules_adminapi_remove($args)
     }
     return true;
 }
-?>

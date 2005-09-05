@@ -50,4 +50,3 @@ function roles_userapi_updatestatus($args)
     return true;
 }
 
-?>

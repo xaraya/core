@@ -33,7 +33,7 @@ function blocks_userapi_getState($args)
     }
 
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     $ublockstable = $xartable['userblocks'];
 
@@ -80,4 +80,3 @@ function blocks_userapi_getState($args)
     return true;
 }
 */
-?>

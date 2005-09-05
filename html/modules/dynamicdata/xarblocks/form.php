@@ -54,7 +54,7 @@ function dynamicdata_formblock_display($blockinfo)
     // Database information
     xarModDBInfoLoad('dynamicdata');
     list($dbconn) = xarDBGetConn();
-    $xartable =xarDBGetTables();
+    $xartable =& xarDBGetTables();
     $dynamicdata = $xartable['dynamic_data'];
 
     // Query
@@ -166,4 +166,3 @@ function dynamicdata_formblock_help()
 
     return $output->GetOutput();
 }
-?>

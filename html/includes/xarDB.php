@@ -109,7 +109,7 @@ function xarDBGetConn()
  * @global array xarDB_tables array of database tables
  * @return array array of database tables
  */
-function xarDBGetTables()
+function &xarDBGetTables()
 {
     return $GLOBALS['xarDB_tables'];
 }
@@ -268,4 +268,3 @@ function xarDB__adodbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $pa
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', $errMsg);
     }
 }
-?>

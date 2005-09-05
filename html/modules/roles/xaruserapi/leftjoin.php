@@ -80,4 +80,3 @@ function roles_userapi_leftjoin($args)
     return $leftjoin;
 }
 
-?>

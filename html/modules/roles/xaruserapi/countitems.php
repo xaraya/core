@@ -39,4 +39,3 @@ function roles_userapi_countitems()
     return $numroles;
 }
 
-?>

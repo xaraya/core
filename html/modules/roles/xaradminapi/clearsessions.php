@@ -56,4 +56,3 @@ function roles_adminapi_clearsessions($spared)
     return true;
 }
 
-?>

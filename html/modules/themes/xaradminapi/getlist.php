@@ -179,4 +179,3 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
     return $themeList;
 }
 
-?>

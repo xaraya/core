@@ -35,7 +35,7 @@ class Dynamic_Property_Master
         // we can't use our own classes here, because we'd have an endless loop :-)
 
         list($dbconn) = xarDBGetConn();
-        $xartable = xarDBGetTables();
+        $xartable =& xarDBGetTables();
 
         $dynamicprop = $xartable['dynamic_properties'];
 
@@ -940,7 +940,7 @@ class Dynamic_Property_Master
     // TODO: yes :)
     /*
         list($dbconn) = xarDBGetConn();
-        $xartable = xarDBGetTables();
+        $xartable =& xarDBGetTables();
 
         $dynamicproptypes = $xartable['dynamic_property_types'];
 
@@ -1149,4 +1149,3 @@ class Dynamic_Property
     }
 }
 
-?>

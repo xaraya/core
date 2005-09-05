@@ -30,7 +30,7 @@ function blocks_adminapi_update_group($args)
 	if(!xarSecurityCheck('EditBlock',1,'Block',"$name::$id")) return;
 
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
     $block_groups_table = $xartable['block_groups'];
     $block_group_instances_table = $xartable['block_group_instances'];
 
@@ -59,4 +59,3 @@ function blocks_adminapi_update_group($args)
     return true;
 }
 
-?>
