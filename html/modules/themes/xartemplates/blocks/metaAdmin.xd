@@ -65,6 +65,11 @@
             <xar:else />
                 <p><input type="radio" name="usedk" id="usedk#$blockid#" value="2" tabindex="2" /><xar:mlstring>Keywords module</xar:mlstring></p>
             </xar:if>
+             <xar:if condition="$usedk eq 3">
+                <p><input type="radio" name="usedk" id="usedk#$blockid#" value="3" checked="checked" tabindex="3" /><xar:mlstring>Both</xar:mlstring></p>
+            <xar:else />
+                <p><input type="radio" name="usedk" id="usedk#$blockid#" value="3" tabindex="2" /><xar:mlstring>Both</xar:mlstring></p>
+            </xar:if>
         </span>
         </div>
 

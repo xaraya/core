@@ -92,6 +92,8 @@ function themes_metablock_display($blockinfo)
     } elseif ((!empty($incomingkeys)) and ($vars['usedk'] == 2)){
         // Keywords generated from keywords module
         $meta['keywords'] = $incomingkeys;
+    } elseif ((!empty($incomingkeys)) and ($vars['usedk'] == 3)){
+        $meta['keywords'] = $incomingkeys.','.$incomingkey;       
     } else {
         $meta['keywords'] = $vars['metakeywords'];
     }
