@@ -288,7 +288,7 @@ function pnModRegisterHook($hookObject,
     // FIXME: <marco> BAD_PARAM?
 
     // Get database info
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $pntable =& xarDBGetTables();
     $hookstable = $pntable['hooks'];
 
@@ -338,7 +338,7 @@ function pnModUnregisterHook($hookObject,
     // FIXME: <marco> BAD_PARAM?
 
     // Get database info
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $pntable =& xarDBGetTables();
     $hookstable = $pntable['hooks'];
 

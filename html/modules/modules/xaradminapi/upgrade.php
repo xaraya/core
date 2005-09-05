@@ -75,7 +75,7 @@ function modules_adminapi_upgrade($args)
         $modFileInfo['category'] = 'Miscellaneous';
 
     // Note the changes in the database...
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
     $sql = "UPDATE $xartable[modules]

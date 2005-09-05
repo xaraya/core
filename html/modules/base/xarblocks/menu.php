@@ -61,7 +61,7 @@ function base_menublock_info()
 function base_menublock_display($blockinfo)
 {
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
 // Security Check
@@ -319,7 +319,7 @@ function base_menublock_display($blockinfo)
 */
 function base_menublock_modify($blockinfo)
 {
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn(0);
     $xartable =& xarDBGetTables();
 
     // Break out options from our content field
