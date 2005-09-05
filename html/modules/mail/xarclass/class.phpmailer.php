@@ -800,10 +800,19 @@ class PHPMailer
         if($this->Mailer != "mail")
             $result .= $this->HeaderLine("Subject", $this->EncodeHeader(trim($this->Subject)));
 
+		// Get  client IP addr
+	    $forwarded = xarServerGetVar('HTTP_X_FORWARDED_FOR');
+	    if (!empty($forwarded)) {
+	        $ipAddress = preg_replace('/,.*/', '', $forwarded);
+	    } else {
+	        $ipAddress = xarServerGetVar('REMOTE_ADDR');
+	    }
+        $result .= $this->HeaderLine("Received", "from [$ipAddress] by " . xarServerGetVar('HTTP_HOST') . "; " . date('r'));
+
         $result .= sprintf("Message-ID: <%s@%s>%s", $uniq_id, $this->ServerHostname(), $this->LE);
         $result .= $this->HeaderLine("X-Priority", $this->Priority);
         $result .= $this->HeaderLine("X-Mailer", "PHPMailer [version " . $this->Version . "]");
-        
+
         if($this->ConfirmReadingTo != "")
         {
             $result .= $this->HeaderLine("Disposition-Notification-To", 

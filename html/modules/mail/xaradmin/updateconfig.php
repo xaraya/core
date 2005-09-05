@@ -24,12 +24,16 @@
 */
 function mail_admin_updateconfig()
 {
+    // Confirm authorisation code (this should be done first to save cpu cycles)
+    if (!xarSecConfirmAuthKey()) return;
+
     // Get parameters
     if (!xarVarFetch('adminname', 'str:1:', $adminname)) return;
     if (!xarVarFetch('adminmail', 'str:1:', $adminmail)) return;
     if (!xarVarFetch('replyto', 'checkbox', $replyto, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('replytoname', 'str:1:', $replytoname, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('replytoemail', 'str:1:', $replytoemail, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('showtemplates', 'checkbox', $showtemplates, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('html', 'checkbox', $html, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('htmluseheadfoot', 'checkbox', $htmluseheadfoot, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('htmlheader', 'str:1:', $htmlheader, '', XARVAR_NOT_REQUIRED)) return;
@@ -50,8 +54,7 @@ function mail_admin_updateconfig()
     if (!xarVarFetch('sendmailpath', 'str:1:', $sendmailpath, '/usr/sbin/sendmail', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('searchstrings', 'str:1', $searchstrings, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('replacestrings', 'str:1', $replacestrings, '', XARVAR_NOT_REQUIRED)) return;
-    // Confirm authorisation code
-    if (!xarSecConfirmAuthKey()) return;
+
     // update the data
     xarModSetVar('mail', 'adminname', $adminname);
     xarModSetVar('mail', 'adminmail', $adminmail);
@@ -59,6 +62,7 @@ function mail_admin_updateconfig()
     xarModSetVar('mail', 'replytoname', $replytoname);
     xarModSetVar('mail', 'replytoemail', $replytoemail);
     xarModSetVar('mail', 'html', $html);
+    xarModSetVar('mail', 'ShowTemplates', $showtemplates);
     xarModSetVar('mail', 'htmluseheadfoot', $htmluseheadfoot);
     xarModSetVar('mail', 'htmlheader', $htmlheader);
     xarModSetVar('mail', 'htmlfooter', $htmlfooter);
