@@ -28,15 +28,15 @@ function roles_admin_showusers()
                                                        'type'   => 1));
     }
     xarVarSetCached('roles', 'defaultgroupuid', $defaultgroupuid);
-    
+
     if (!xarVarFetch('uid', 'int:0:', $uid, $defaultgroupuid['uid'], XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('startnum', 'int:1:', $startnum, 1, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state', 'int:0:', $data['state'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state', 'int:0:', $data['state'], 99, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('selstyle', 'isset', $data['selstyle'], xarSessionGetVar('rolesdisplay'), XARVAR_DONT_SET)) return;
     if (!xarVarFetch('invalid', 'str:0:', $data['invalid'], NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('order', 'str:0:', $data['order'], 'name', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('search', 'str:0:', $data['search'], NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-    
+
     if (empty($data['selstyle'])) $data['selstyle'] = 0;
     xarSessionSetVar('rolesdisplay', $data['selstyle']);
 
@@ -49,7 +49,7 @@ function roles_admin_showusers()
     $selection = NULL;
     //Create the selection
     if (!empty($data['search'])) {
-    	$selection = " AND (";
+        $selection = " AND (";
         $selection .= "(xar_name LIKE '%" . $data['search'] . "%')";
         $selection .= " OR (xar_uname LIKE '%" . $data['search'] . "%')";
         $selection .= " OR (xar_email LIKE '%" . $data['search'] . "%')";
@@ -82,15 +82,16 @@ function roles_admin_showusers()
     }
     else {
         $data['title'] = xarML('All ')." ";
-		$data['groupname'] = '';
+        $data['groupname'] = '';
     }
 
      if ($uid != 0) {
-	$usrs = $role->getUsers($data['state'], $startnum, $numitems, $data['order'], $selection);
-	$data['totalselect'] = count($role->getUsers($data['state'], 0, 0, 'name', $selection));
-     } else {
-	$usrs = xarModAPIFunc('roles','user','getall', array('state' => $data['state'], 'startnum' => $startnum, 'numitems' => $numitems, 'order' => $data['order'], 'selection' => $selection));
-	$data['totalselect']  = count(xarModAPIFunc('roles','user','getall', array('state' => $data['state'], 'selection' => $selection)));
+        $usrs = $role->getUsers($data['state'], $startnum, $numitems, $data['order'], $selection);
+        $data['totalselect'] = count($role->getUsers($data['state'], 0, 0, 'name', $selection));
+     }
+     else {
+        $usrs = xarModAPIFunc('roles','user','getall', array('state' => $data['state'], 'startnum' => $startnum, 'numitems' => $numitems, 'order' => $data['order'], 'selection' => $selection));
+        $data['totalselect']  = count(xarModAPIFunc('roles','user','getall', array('state' => $data['state'], 'selection' => $selection)));
      }
      $data['totaldisplay'] = count($usrs);
     // get all children of this role that are users
@@ -141,7 +142,7 @@ function roles_admin_showusers()
                 'frozen' => !xarSecurityCheck('EditRole',0,'Roles',$user->getName())
                 );
         }
-	 $data['title'] .= " ".xarML('of group')." ";
+     $data['title'] .= " ".xarML('of group')." ";
     } else {
         //$data['pname'] = xarML("All Users");
         while (list($key, $user) = each($usrs)) {

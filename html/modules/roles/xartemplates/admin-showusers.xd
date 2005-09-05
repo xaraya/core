@@ -134,12 +134,12 @@
 			</td>
 			<td style="text-align: center;">
 				<select name="state" id="state" size="1" tabindex="5"  onchange="this.form.submit()">
-					<xar:if condition="$state eq 0">
+					<xar:if condition="$state eq 99">
 						<option value="0" selected="selected">
 							<xar:mlstring>All</xar:mlstring>
 						</option>
 						<xar:else/>
-						<option value="0">
+						<option value="99">
 							<xar:mlstring>All</xar:mlstring>
 						</option>
 					</xar:if>
