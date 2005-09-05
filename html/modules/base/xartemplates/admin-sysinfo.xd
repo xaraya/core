@@ -1,18 +1,12 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>
-            Base Administration 
-        </xar:mlstring>
+        <xar:mlstring>Base Administration</xar:mlstring>
     </span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>
-            System Information 
-        </xar:mlstring>
+        <xar:mlstring>System Information</xar:mlstring>
     </h2>
     <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
     </xar:if>
@@ -80,6 +74,7 @@
             </a>
         </dd>
     </dl>
-    <div>&nbsp;</div>
+
     #$phpinfo# 
+
 </div>

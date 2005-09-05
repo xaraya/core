@@ -7,49 +7,46 @@
 * it correctly, leading to unexpected results
 ***********
 </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Error Message</xar:mlstring></span></div>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Error Message</xar:mlstring></span>
+</div>
 <div class="xar-mod-body">
+    <img src="modules/base/xarimages/exception.jpg" alt="Exception Icon" class="xar-module-icon" />
+
     <h2>#$type#</h2>
-    <div class="xar-norm-outline">
-        <div style="float:right;padding:10px;">
-            <img src="modules/base/xarimages/exception.jpg" alt="Exception Icon" />
-        </div>
-        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-             #$title#
-       </div>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p>#$short#</p>
-        </div>
-        <xar:if condition = "$long ne ''">
-            <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-                <xar:mlstring>Explanation:</xar:mlstring>
-            </div>
-            <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-                <p>#$long#</p>
-            </div>
-        </xar:if>
-        <xar:if condition = "$hint ne ''">
-            <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-                <xar:mlstring>Further Information:</xar:mlstring>
-            </div>
-            <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-                <p>#$hint#</p>
-            </div>
-        </xar:if>
-        <xar:if condition = "$stack ne ''">
-            <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-                <xar:mlstring>Stack:</xar:mlstring>
-            </div>
-            <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-                <p>#$stack#</p>
-            </div>
-        </xar:if>
-        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <xar:if condition = "$product ne ''">
-                <p><a href="http://bugs.xaraya.com/enter_bug.cgi?product=#$product#&amp;component=#$component#&amp;short_desc=#$title#:%20#$product#/#$component#&amp;comment=#$short#" target="_blank">Click here to raise a bug</a></p>
-            <xar:else />
-                <p><a href="http://bugs.xaraya.com/enter_bug.cgi">Click here to raise a bug</a></p>
-            </xar:if>
-        </div>
-    </div>
+
+    <h3>#$title#</h3>
+
+    <p>#$short#</p>
+
+    <xar:if condition = "$long ne ''">
+        <h3>
+            <xar:mlstring>Explanation:</xar:mlstring>
+        </h3>
+
+        <p>#$long#</p>
+    </xar:if>
+
+    <xar:if condition = "$hint ne ''">
+        <h3>
+            <xar:mlstring>Further Information:</xar:mlstring>
+        </h3>
+
+        <p>#$hint#</p>
+    </xar:if>
+
+    <xar:if condition = "$stack ne ''">
+        <h3>
+            <xar:mlstring>Stack:</xar:mlstring>
+        </h3>
+
+        <p>#$stack#</p>
+    </xar:if>
+
+    <xar:if condition = "$product ne ''">
+        <p><a href="http://bugs.xaraya.com/enter_bug.cgi?product=#$product#&amp;component=#$component#&amp;short_desc=#$title#:%20#$product#/#$component#&amp;comment=#$short#" target="_blank"><xar:mlstring>Click here to raise a bug</xar:mlstring></a></p>
+    <xar:else />
+        <p><a href="http://bugs.xaraya.com/enter_bug.cgi"><xar:mlstring>Click here to raise a bug</xar:mlstring></a></p>
+    </xar:if>
+
 </div>
