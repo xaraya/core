@@ -2,8 +2,9 @@
 /**
  * PHPMailer dil dosyasý.
  * Türkçe Versiyonu
- */ÝZYAZILIM - Elçin Özel - Can Yýlmaz - Mehmet Benlioðlu
-
+ * ÝZYAZILIM - Elçin Özel - Can Yýlmaz - Mehmet Benlioðlu
+ */
+ 
 $PHPMAILER_LANG = array();
 
 $PHPMAILER_LANG["provide_address"] = 'En az bir tane mail adresi belirtmek zorundasýnýz ' .
