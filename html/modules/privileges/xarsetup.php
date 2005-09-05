@@ -199,9 +199,9 @@ function initializeSetup()
 
     xarRegisterMask('ViewLogin','All','roles','Block','login:Login:All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewRolesBlocks','All','roles','Block','All','ACCESS_OVERVIEW');
-//    xarRegisterMask('ReadRole','All','roles','Block','All','ACCESS_READ');
     xarRegisterMask('ViewRoles','All','roles','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('ReadRole','All','roles','All','All','ACCESS_READ');
+    xarRegisterMask('AssignRole','All','roles','All','All','ACCESS_MODERATE');
     xarRegisterMask('EditRole','All','roles','All','All','ACCESS_EDIT');
     xarRegisterMask('AddRole','All','roles','All','All','ACCESS_ADD');
     xarRegisterMask('DeleteRole','All','roles','All','All','ACCESS_DELETE');
@@ -218,18 +218,12 @@ function initializeSetup()
     xarRegisterMask('DeleteBlock','All','blocks','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminBlock','All','blocks','All','All','ACCESS_ADMIN');
 
-    //xarRegisterMask('PrivilegesGateway','All','Privileges','All','All','ACCESS_READ');
     xarRegisterMask('AssignPrivilege','All','privileges','All','All','ACCESS_ADD');
     xarRegisterMask('DeassignPrivilege','All','privileges','All','All','ACCESS_DELETE');
     xarRegisterMask('ViewPrivileges','All','privileges','All','All','ACCESS_READ');
     xarRegisterMask('EditPrivilege','All','privileges','All','All','ACCESS_EDIT');
     xarRegisterMask('AddPrivilege','All','privileges','All','All','ACCESS_ADD');
     xarRegisterMask('DeletePrivilege','All','privileges','All','All','ACCESS_DELETE');
-    //xarRegisterMask('ViewPrivilegeRoles','All','privileges','ViewRoles','All','ACCESS_READ');
-    xarRegisterMask('EditRole','All','privileges','All','All','ACCESS_EDIT');
-    xarRegisterMask('AssignRole','All','privileges','All','All','ACCESS_ADD');
-
-    //xarRegisterMask('RolesGateway','All','Roles','All','All','ACCESS_READ');
 
     xarRegisterMask('EditModules','All','modules','All','All','ACCESS_EDIT');
     xarRegisterMask('AdminModules','All','modules','All','All','ACCESS_ADMIN');

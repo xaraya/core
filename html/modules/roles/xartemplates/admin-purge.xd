@@ -1,4 +1,6 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:if condition="xarTplAddStyleLink('roles', 'privileges')">
+</xar:if>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Purge Users by Status</xar:mlstring></h2><br />
 <div style="margin: auto;">
@@ -7,19 +9,167 @@
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="confirmation" id="confirmation" value="1" />
 
-    <span class="xar-title"><xar:mlstring>Select Status Type to Purge</xar:mlstring></span><br /><br />
+    <span class="xar-title"><xar:mlstring>Select Status Type to Purge</xar:mlstring></span><br />
+    <br />
 
 	<p><xar:mlstring>Select Status Type</xar:mlstring>:
-	<select name="state" id="state" size="1">
+	<select name="purgestate" id="purgestate" size="1">
 			<option value="1" selected="selected"><xar:mlstring>Inactive</xar:mlstring></option>
 			<option value="2"><xar:mlstring>Not Validated</xar:mlstring></option>
 			<option value="4"><xar:mlstring>Pending</xar:mlstring></option>
 	</select></p>
 
-    <p><input type="submit" value="#$submitlabel#" /><br /><br />
+    <p><input type="submit" value="#$submitPurge#" /><br /><br />
     
     <a href="#xarModURL('roles', 'admin', 'viewroles')#"><xar:mlstring>Cancel purge process.</xar:mlstring></a></p>
   </div>
 </form>        
+</div>
+<div class="xar-mod-body"><h2><xar:mlstring>Recall Deleted Users</xar:mlstring></h2><br />
+<div style="margin: auto;">
+<form method="post" action="#xarModURL('roles', 'admin', 'purge')#" method="post" enctype="application/x-www-form-urlencoded" >
+   <div>
+    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+    <input type="hidden" name="confirmation" id="confirmation" value="2" />
+	<input type="hidden" name="recallstate" id="state" value="#$recallstate#"/>
+	<input type="hidden" name="search" id="search" value="#$search#"/>
+
+  </div>
+		<div class="xar-norm-outline" style="padding: 0px;">
+		    <!--- Module List Sort and Filter Controls table --->
+		    <table width="100%" border="0" cellspacing="1" cellpadding="1">
+		      <tr>
+				<th nowrap="nowrap" align="center">
+					<label class="xar-mod-title" for="filter" title="#xarML('Search for users with either their real name, login name or email matching the string')#"><xar:mlstring>Search</xar:mlstring></label>
+				</th>
+				<th nowrap="nowrap" style="text-align: center;">
+					<xar:mlstring>Attach recalled groups/users to</xar:mlstring>
+				</th>
+				<th nowrap="nowrap" style="text-align: center;">
+					<xar:mlstring>Set recalled groups/users to</xar:mlstring>
+				</th>
+		      </tr>
+		      <tr>
+				<td style="text-align: center; vertical-align: middle;">
+					<input type="text" name="search" id="search" value="#$search#" size="15" maxlength="255" tabindex="1"/>&nbsp;
+				  <input type="submit" name="reload" id="reload" value="#xarML('Reload')#" />
+				</td>
+				<td style="text-align: center;">
+					<select name="groupuid" id="groupuid" size="1" tabindex="5">
+				<xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
+						<xar:if condition="$groups[$i]['uid'] eq $groupuid">
+							<option value="#$groups[$i]['uid']#" selected="selected">
+								#$groups[$i]['name']#
+							</option>
+						<xar:else/>
+							<option value="#$groups[$i]['uid']#">
+								#$groups[$i]['name']#
+							</option>
+						</xar:if>
+				</xar:for>
+					</select>
+				</td>
+				<td style="text-align: center;vertical-align: middle;">
+					<select name="recallstate" id="recallstate" size="1">
+							<xar:if condition="$recallstate eq 1">
+							<option value="1" selected="selected"><xar:mlstring>Inactive</xar:mlstring></option>
+							<xar:else />
+							<option value="1"><xar:mlstring>Inactive</xar:mlstring></option>
+							</xar:if>
+							<xar:if condition="$recallstate eq 2">
+							<option value="2" selected="selected"><xar:mlstring>Not Validated</xar:mlstring></option>
+							<xar:else />
+							<option value="2"><xar:mlstring>Not Validated</xar:mlstring></option>
+							</xar:if>
+							<xar:if condition="$recallstate eq 3">
+							<option value="3" selected="selected"><xar:mlstring>Active</xar:mlstring></option>
+							<xar:else />
+							<option value="3"><xar:mlstring>Active</xar:mlstring></option>
+							</xar:if>
+							<xar:if condition="$recallstate eq 4">
+							<option value="4" selected="selected"><xar:mlstring>Pending</xar:mlstring></option>
+							<xar:else />
+							<option value="4"><xar:mlstring>Pending</xar:mlstring></option>
+							</xar:if>
+					</select>
+					&nbsp;
+				    <input type="submit" value="#$submitRecall#" />
+				</td>
+		      </tr>
+		    </table>
+		</div>
+		<!--- the Roles Lists table-based styles (borrow from the Modules list)--->
+		<div class="xar-norm-outline" style="margin-top:1px;">
+			<table style="width:100%; border-collapse:collapse; border-spacing:1px; padding:0;">
+				<tr>
+					<th style="text-align: left; padding-left: .5em;">
+						<xar:mlstring>Real name</xar:mlstring>
+					</th>
+					<th style="text-align: left; padding-left: .5em;">
+						<xar:mlstring>User Name</xar:mlstring>
+					</th>
+					<th style="text-align: left; padding-left: .5em;">
+						<xar:mlstring>Email</xar:mlstring>
+					</th>
+					<th style="text-align: center;">
+						<xar:mlstring>Date Registered</xar:mlstring>
+					</th>	
+					<th style="text-align: center;">
+						<xar:mlstring>Type</xar:mlstring>
+					</th>
+					<th style="text-align: center;" colspan="2">
+						<xar:mlstring>Recall</xar:mlstring>
+					</th>
+				</tr>
+				<xar:if condition="count($roles)==0">
+					<tr>
+						<td colspan="7">#$message# 
+							<xar:if condition="$search ne ''"><xar:mlstring>matching</xar:mlstring> '#$search#'
+							</xar:if>
+						</td>
+					</tr>
+				</xar:if>
+				<xar:loop name="$roles">
+					<xar:if condition="$loop:item['unique'] eq 1">
+					<tr class="xar-norm-outline" style="text-align: left; padding-left: .5em; width: 5em;border-width: 0px 0px 1px 0px;border-style: solid;">
+					<xar:else />
+					<tr class="xar-partial" style="text-align: left; padding-left: .5em; width: 5em;border-width: 0px 0px 1px 0px;border-style: solid;">
+					</xar:if>
+						<td>
+							<b>#$loop:item['name']#</b>
+						</td>
+						<td>
+							#$loop:item['uname']#</td>
+						<td>
+							#$loop:item['email']#
+						</td>
+						<td style="text-align: center;">#xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])#</td>
+						<td style="text-align: center;">
+							#$loop:item['type']#						
+						</td>
+						<td style="text-align: right">
+						</td>
+						<td style="text-align: center;">
+							<xar:if condition="$loop:item['unique'] eq 1">
+								<input type="checkbox" name="uids[#$loop:item['uid']#]" id="uids[#$loop:item['uid']#]" value="1"/>
+							</xar:if>
+						</td>
+					</tr>
+				</xar:loop> 
+				<!-- end loop over users -->
+				<input type="hidden" name="purgestate" id="state" value="#$purgestate#"/>
+				</form>
+				<!-- always show the new user link -->
+				<!-- if there is a pager show it in the last row -->
+				<xar:if condition="!empty($pager)">
+					<tr class="xar-norm" style="text-align: center;">
+						<td colspan="7">#$pager#</td>
+					</tr>
+				</xar:if>
+			</table>
+		</div>
+	</form>
+	<br />
+	<span class="xar-title"><xar:mlstring>Note: Shaded roles cannot be recalled because a role of the same name already exists.</xar:mlstring></span>
 </div>
 </div>

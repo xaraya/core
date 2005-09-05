@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id:
- * 
+ *
  * Utility function pass individual menu items to the main menu
- * 
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -23,7 +23,7 @@ function privileges_adminapi_getmenulinks()
 {
 
 // Security Check
-	if (xarSecurityCheck('EditRole',0)) {
+    if (xarSecurityCheck('EditPrivilege',0)) {
         $menulinks[] = Array('url'   => xarModURL('privileges',
                                                   'admin',
                                                   'viewprivileges&phase=active'),
@@ -32,7 +32,7 @@ function privileges_adminapi_getmenulinks()
     }
 
 // Security Check
-	if (xarSecurityCheck('AssignRole',0)) {
+    if (xarSecurityCheck('AssignPrivilege',0)) {
         $menulinks[] = Array('url'   => xarModURL('privileges',
                                                   'admin',
                                                   'newprivilege'),

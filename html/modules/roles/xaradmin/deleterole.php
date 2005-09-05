@@ -73,7 +73,7 @@ function roles_admin_deleterole()
                               'getactive',
                               array('uid' => $uid));
 
-        if (empty($check)) {
+if (empty($check)) {
             // Try to remove the role and bail if an error was thrown
             if (!$role->remove()) return;
 

@@ -34,7 +34,7 @@ function roles_adminapi_purge($args)
              'getall',
              array('state' => $state));
 
-    foreach ($items as $item) {
+        foreach ($items as $item) {
 
         // The user API function is called.
         $user = xarModAPIFunc('roles',
