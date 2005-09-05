@@ -43,6 +43,7 @@ function themes_admin_themesinfo()
     $data['themedir']             = xarVarPrepForDisplay($info['directory']);
     $data['themeclass']           = xarVarPrepForDisplay($info['class']);
     $data['themever']             = xarVarPrepForDisplay($info['version']);
+    $data['themestate']           = $info['state'];
     $data['themeauthor']          = preg_replace('/,/', '<br />', xarVarPrepForDisplay($info['author']));
     if(!empty($info['dependency'])){
         $dependency             = xarML('Working on it...');
