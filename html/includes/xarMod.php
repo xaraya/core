@@ -546,6 +546,7 @@ function xarModGetInfo($modRegId, $type = 'module')
     $modInfo['regid'] = $modRegId;
     $modInfo['mode'] = (int) $mode;
     $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
+    $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name']);
 
     // Shortcut for os prepared directory
     $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
