@@ -159,9 +159,15 @@
             <xar:if condition="xarConfigGetVar('Site.MLS.TranslationsBackend') eq 'xml'">
                 <option value="xml" selected="selected"><xar:mlstring>XML (good for interoperability)</xar:mlstring></option>
                 <option value="php"><xar:mlstring>PHP (good for programmed access)</xar:mlstring></option>
+                <option value="xml2php"><xar:mlstring>XML with caching in PHP (new experimental)</xar:mlstring></option>
             <xar:elseif condition="xarConfigGetVar('Site.MLS.TranslationsBackend') eq 'php'" />
                 <option value="xml"><xar:mlstring>XML (good for interoperability)</xar:mlstring></option>
                 <option value="php" selected="selected"><xar:mlstring>PHP (good for programmed access)</xar:mlstring></option>
+                <option value="xml2php"><xar:mlstring>XML with caching in PHP (new experimental)</xar:mlstring></option>
+            <xar:elseif condition="xarConfigGetVar('Site.MLS.TranslationsBackend') eq 'xml2php'" />
+                <option value="xml"><xar:mlstring>XML (good for interoperability)</xar:mlstring></option>
+                <option value="php"><xar:mlstring>PHP (good for programmed access)</xar:mlstring></option>
+                <option value="xml2php" selected="selected"><xar:mlstring>XML with caching in PHP (new experimental)</xar:mlstring></option>
             </xar:if>
         </select>
     </div>

@@ -16,8 +16,10 @@
         <h2>
             <xar:mlstring>View</xar:mlstring> #$label#
         </h2>
-
-        <xar:data-view module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$param" numitems="30" startnum="$startnum" catid="$catid" />
+        <xar:if condition="empty($numitems)">
+           <xar:set name="numitems">30</xar:set>
+        </xar:set>
+        <xar:data-view module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$param" numitems="$numitems" startnum="$startnum" catid="$catid" />
 
     <xar:else />
         <div class="xar-align-center">

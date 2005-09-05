@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id
- *
  * Update the configuration parameters of the module based on data from the modification form
  *
  * @package Xaraya eXtensible Management System
@@ -36,11 +34,11 @@ function adminpanels_admin_updateconfig()
     if(!xarVarFetch('showhelp', 'isset', $showhelp, false, XARVAR_DONT_SET)) {return;}
 
     // enable or disable overviews
-    if(!xarVarFetch('overview', 'isset', $overview, false, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('overview', 'isset', $overview, 0, XARVAR_DONT_SET)) {return;}
 
     xarModSetVar('adminpanels', 'menustyle', $menustyle);
     xarModSetVar('adminpanels', 'showhelp', (!$showhelp) ? 1 : 0);
-    xarModSetVar('adminpanels', 'overview', (!$overview) ? 1 : 0);
+    xarModSetVar('adminpanels', 'overview', ($overview) ? 1 : 0);
 
     // lets update status and display updated configuration
     xarResponseRedirect(xarModURL('adminpanels', 'admin', 'modifyconfig'));
@@ -49,3 +47,4 @@ function adminpanels_admin_updateconfig()
     return true;
 }
 
+?>

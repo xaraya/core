@@ -30,7 +30,18 @@
             </label>
             <input type="text" name="adminmail" id="adminmail" value="#xarModGetVar('mail', 'adminmail', 1)#" maxlength="100" class="xar-form-textxlong" />
         </div>
-
+        
+        <div class="xar-form-input-wrapper-after">
+            <xar:if condition="xarModGetVar('mail', 'ShowTemplates')">
+                <input type="checkbox" name="showtemplates" id="showtemplates" value="1" checked="checked" />
+            <xar:else />
+                <input type="checkbox" name="showtemplates" id="showtemplates" value="1" />
+            </xar:if>
+            <label for="showtemplates" title="#xarML('If you would like the names of the templates used displayed in the emails, check this box.')#">
+                <xar:mlstring>Show templates used in emails</xar:mlstring>
+            </label>
+        </div>
+        
         <div class="xar-form-input-wrapper-after">
             <xar:if condition="xarModGetVar('mail', 'replyto')">
                 <input type="checkbox" name="replyto" id="replyto" value="1" checked="checked" />

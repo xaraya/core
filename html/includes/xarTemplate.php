@@ -485,27 +485,52 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
  * @author Paul Rosania <paul@xaraya.com>
  * @author Marco Canini <marco@xaraya.com>
  * @access public
- * @param  string $modName      the module name
- * @param  string $blockType    the block type (xar_block_types.xar_type)
- * @param  array  $tplData      arguments for the template
- * @param  string $templateName the specific template to call
- * @param  string $templateBase the base name of the template (defaults to $blockType)
+ * @param  string $modName   the module name
+ * @param  string $blockType the block type (xar_block_types.xar_type)
+ * @param  array  $tplData   arguments for the template
+ * @param  string $tplName   the specific template to call
+ * @param  string $tplBase   the base name of the template (defaults to $blockType)
  * @return string xarTpl__executeFromFile($sourceFileName, $tplData)
  */
-function xarTplBlock($modName, $blockType, $tplData = array(), $templateName = NULL, $templateBase = NULL)
+function xarTplBlock($modName, $blockType, $tplData = array(), $tplName = NULL, $tplBase = NULL)
 {
-    if (!empty($templateName)) {
-        $templateName = xarVarPrepForOS($templateName);
+    if (!empty($tplName)) {
+        $tplName = xarVarPrepForOS($tplName);
     }
 
     if(!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
     $modOsDir = $modBaseInfo['osdirectory'];
 
     // Basename of block can be overridden
-    $tplBase      = xarVarPrepForOS(empty($templateBase) ? $blockType : $templateBase);
+    $templateBase      = xarVarPrepForOS(empty($tplBase) ? $blockType : $tplBase);
     unset($sourceFileName);
-    $sourceFileName = xarTpl__GetSourceFileName($modName, $tplBase, $templateName, 'blocks');
+    $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $tplName, 'blocks');
 
+    return xarTpl__executeFromFile($sourceFileName, $tplData);
+}
+/**
+ * Renders a property through a property template.
+ *
+ * @author Marcel van der Boom <marcel@xaraya.com>
+ * @access public
+ * @param  string $modName      the module name owning the property
+ * @param  string $propertyName the name of the property
+ * @param  string $tplType      the template type to render ( showoutput(default)|showinput|validation )
+ * @param  array  $tplData      arguments for the template
+ * @param  string $tplBase      basename of property can be overridden ( for template sharing for properties for example)
+ * @return string xarTpl__executeFromFile($sourceFileName, $tplData)
+ */
+function xarTplProperty($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = NULL)
+{
+    $tplType = xarVarPrepForOS($tplType);
+        
+    if(!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
+    $modOsDir = $modBaseInfo['osdirectory'];
+    
+    $templateBase   = xarVarPrepForOS(empty($tplBase) ? $tplType : $tplBase);
+    unset($sourceFileName);
+    $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $propertyName, 'properties');
+    
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -1131,7 +1156,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
  * @param  string $modName      Module name doing the request
  * @param  string $tplBase      The base name for the template
  * @param  string $templateName The name for the template to use if any
- * @param  string $tplSubPart   A subpart ('' or 'blocks' only for now)
+ * @param  string $tplSubPart   A subpart ('' or 'blocks' or 'properties')
  * @return string
  *
  * @todo do we need to load the translations here or a bit later? (here:easy, later: better abstraction)
@@ -1147,6 +1172,7 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
 
     // For modules: {tplBase} = {modType}-{funcName}
     // For blocks : {tplBase} = {blockType} or overridden value
+    // For props  : {tplBase} = {propertyName} or overridden value
 
     // Template search order:
     // 1. {theme}/modules/{module}/{tplBase}-{templateName}.xt
@@ -1219,9 +1245,9 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
         // optionally show template filenames if start comment has not already
         // been added as part of a header determination.
         if($outputStartComment === true)
-            $finalTemplate .= "\n<!-- start: " . $sourceFileName . " -->\n";
+            $finalTemplate .= "<!-- start: " . $sourceFileName . " -->\n";
         $finalTemplate .= $tplOutput;
-        $finalTemplate .= "\n<!-- end: " . $sourceFileName . ' -->';
+        $finalTemplate .= "<!-- end: " . $sourceFileName . " -->\n";
     } else {
         $finalTemplate .= $tplOutput;
     }

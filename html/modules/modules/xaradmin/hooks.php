@@ -58,7 +58,7 @@ function modules_admin_hooks($args)
         for ($i = 0, $max = count($modList); $i < $max; $i++) {
             $modList[$i]['checked'] = '';
             if ($oldcat != $modList[$i]['category']) {
-                $modList[$i]['header'] = $modList[$i]['category'];
+                $modList[$i]['header'] = xarVarPrepForDisplay($modList[$i]['category']);
                 $oldcat = $modList[$i]['category'];
             } else {
                 $modList[$i]['header'] = '';

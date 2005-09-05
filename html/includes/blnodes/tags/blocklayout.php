@@ -48,8 +48,8 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
         $_bl_locale  = xarMLSGetCurrentLocale();
         $_bl_charset = xarMLSGetCharsetFromLocale($_bl_locale);
         header("Content-Type: ' . $content . '; charset=$_bl_charset");
-        echo \''.$docTypeString."\n';";
-        return $headercode;
+        echo \''.$docTypeString."';";
+        return trim($headercode);
     }
     
     function renderEndTag()

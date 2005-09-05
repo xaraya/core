@@ -1368,6 +1368,9 @@ if (empty($step)) {
         echo "CSS tags registered successfully, css subsystem is ready to be deployed.<br/>";
     }
 
+    // Bug 3164, store locale in ModUSerVar
+    xarModSetVar('roles', 'locale', '');
+
 ?>
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
 Thank you, the upgrades are complete. It is recommended you go to the

@@ -26,7 +26,7 @@
 </xar:if>
 
 <xar:if condition="xarThemeIsAvailable('atom')">
-    <link rel="alternate" type="application/atom+xml" title="Atom" href="#$activepageatom#" />
+    <link rel="service.feed" type="application/atom+xml" title="Atom-feed" href="#$activepageatom#" />
 </xar:if>
 
 <xar:if condition="xarThemeIsAvailable('print')">

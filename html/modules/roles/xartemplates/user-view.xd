@@ -13,23 +13,47 @@
                 </xar:mlstring>
                 : 
             </dt>
-            <dd>
-                <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#">
-                    <xar:mlstring>All</xar:mlstring>
-                </a>
-            </dd>
+                <xar:if condition="$letter eq ''">
+                    <dd class="active">
+                        <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#">
+                            <xar:mlstring>All</xar:mlstring>
+                        </a>
+                    </dd>
+                <xar:else />
+                    <dd>
+                        <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#">
+                            <xar:mlstring>All</xar:mlstring>
+                        </a>
+                    </dd>
+                </xar:if>
             <xar:foreach in="$alphabet" value="$ltr">
-                <dd>
-                    <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=#$ltr#&amp;order=#$order#">
-                        #$ltr#
-                    </a>
-                </dd>
+                <xar:if condition="$letter eq $ltr">
+                    <dd class="active">
+                        <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=#$ltr#&amp;order=#$order#">
+                            #$ltr#
+                        </a>
+                    </dd>
+                <xar:else />
+                    <dd>
+                        <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=#$ltr#&amp;order=#$order#">
+                            #$ltr#
+                        </a>
+                    </dd>
+                </xar:if>
             </xar:foreach>
-            <dd>
-                <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#">
-                    <xar:mlstring>Other</xar:mlstring>
-                </a>
-            </dd>
+                <xar:if condition="$letter eq 'Other'">
+                    <dd class="active">
+                        <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#">
+                            <xar:mlstring>Other</xar:mlstring>
+                        </a>
+                    </dd>
+                <xar:else />
+                    <dd>
+                        <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#">
+                            <xar:mlstring>Other</xar:mlstring>
+                        </a>
+                    </dd>
+                </xar:if>
         </dl>
         <div>
             <dl class="xar-tabs">
@@ -39,16 +63,32 @@
                     </xar:mlstring>
                     : 
                 </dt>
-                <dd>
-                    <a href="&xar-modurl-roles-user-view;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
+                <xar:if condition="$phase ne 'active'">
+                    <dd class="active">
+                        <a href="&xar-modurl-roles-user-view;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
                         <xar:mlstring>All</xar:mlstring>
-                    </a>
-                </dd>
-                <dd>
-                    <a href="&xar-modurl-roles-user-view;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
+                        </a>
+                    </dd>
+                <xar:else />
+                    <dd>
+                        <a href="&xar-modurl-roles-user-view;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
+                        <xar:mlstring>All</xar:mlstring>
+                        </a>
+                    </dd>
+                </xar:if>
+                <xar:if condition="$phase eq 'active'">
+                    <dd class="active">
+                        <a href="&xar-modurl-roles-user-view;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
                         <xar:mlstring>Online</xar:mlstring>
-                    </a>
-                </dd>
+                        </a>
+                    </dd>
+                <xar:else />
+                    <dd>
+                        <a href="&xar-modurl-roles-user-view;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
+                        <xar:mlstring>Online</xar:mlstring>
+                        </a>
+                    </dd>
+                </xar:if>
             </dl>
         </div>
         <div style="clear: both;">&nbsp;</div>
