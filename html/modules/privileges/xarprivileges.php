@@ -515,6 +515,10 @@ class xarMasks
 */
     function irreducibleset($coreset,$module='')
     {
+        if (!empty($module)) {
+            $module = strtolower($module);
+        }
+
         $roles = $coreset['roles'];
         $coreset['privileges'] = array();
         $coreset['children'] = array();
@@ -529,9 +533,12 @@ class xarMasks
                 $privileges = $this->winnow($priv->getDescendants(),$privileges);
             }
             $privs = array();
-            foreach ($privileges as $priv)
-                if ($priv->getModule() == "All" || $priv->getModule() == $module)
+            foreach ($privileges as $priv) {
+                $privModule = strtolower($priv->getModule());
+                if ($privModule == "all" || $privModule == $module) {
                     $privs[] = $priv;
+                }
+            }
             $coreset['privileges'] = $this->winnow($coreset['privileges'],$privs);
             $parents = array_merge($parents,$role->getParents());
         }
