@@ -25,7 +25,7 @@ include_once ('./includes/loggers/xarLogger.php');
  * @author  Flavio Botelho <nuncanada@xaraya.com>
  * @package logging
  */
-class xarLogger_error_log extends xarLogger 
+class xarLogger_error_log extends xarLogger
 {
     //Take a look at http://br.php.net/manual/en/function.error_log.php
 
@@ -55,16 +55,18 @@ class xarLogger_error_log extends xarLogger
      * @access public
      * @return boolean
      */
-    function setConfig(&$conf) 
+    function setConfig(&$conf)
     {
         parent::setConfig($conf);
-        
+
         /* If it is given a destionation, then use it. */
         if (!empty($conf['destination'])) {
             $this->_destination = $conf['destination'];
         }
 
         /* If it is given a logging type to be used, then use it. */
+        //This should be useful only when 0.
+        //The rest of the options will have better coverage from other loggers.
         if (!empty($conf['type'])) {
             $this->_type = $conf['type'];
         }
@@ -79,7 +81,7 @@ class xarLogger_error_log extends xarLogger
      * Sends $message to the currently open syslog connection.  Calls
      * open() if necessary. Also passes the message along to any Log_observer
      * instances that are observing this Log.
-     * 
+     *
      * @param string $message  The textual message to be logged.
      * @param int $priority (optional) The priority of the message.  Valid
      *                  values are: PEAR_LOG_EMERG, PEAR_LOG_ALERT,
@@ -87,7 +89,7 @@ class xarLogger_error_log extends xarLogger
      *                  PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.
      *                  The default is PEAR_LOG_INFO.
      * @return boolean  True on success or false on failure.
-     * @access public     
+     * @access public
      */
     function notify($message, $level)
     {
