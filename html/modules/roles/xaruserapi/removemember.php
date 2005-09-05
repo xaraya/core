@@ -53,6 +53,7 @@ function roles_userapi_removemember($args)
     $pargs['module'] = 'roles';
     $pargs['itemtype'] = $group->getType(); // we might have something separate for groups later on
     $pargs['itemid'] = $gid;
+    $pargs['uid'] = $uid;
     xarModCallHooks('item', 'delete', $gid, $pargs);
 
     return true;
