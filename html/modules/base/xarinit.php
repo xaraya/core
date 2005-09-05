@@ -200,7 +200,7 @@ function base_init()
     if(!xarConfigGetVar('Site.MLSDefaultLocale')) {
         xarConfigSetVar('Site.MLS.DefaultLocale', 'en_US.utf-8');
         $allowedLocales = array('en_US.utf-8');
-        xarConfigSetVar('Site.MLS.AllowedLocles', $allowedLocales);
+        xarConfigSetVar('Site.MLS.AllowedLocales', $allowedLocales);
     }
     
     $authModules = array('authsystem');
