@@ -334,6 +334,11 @@ class Dynamic_Property_Master
                 $property = new Dynamic_GroupList_Property($args);
                 break;
 
+             case 46: // Password text box
+               require_once "includes/properties/Dynamic_PassBox_Property.php";
+               $property = new Dynamic_PassBox_Property($args);
+               break;
+
             case 105: // (uploads) Upload
                 require_once "includes/properties/Dynamic_Upload_Property.php";
                 $property = new Dynamic_Upload_Property($args);
@@ -786,6 +791,16 @@ class Dynamic_Property_Master
                               'validation' => '',
                               // ...
                              );
+
+     // TODO: make distinctive date, time, and date/time dynamica data sources.
+         $proptypes[46] = array(
+                                 'id'         => 46,
+                                 'name'       => 'password',
+                                 'label'      => 'Password Text Box',
+				 'format'     => '46',
+                                 'validation' => '',
+                                 // ...
+                               );
 
     // TODO: add multiple select and multiple checkboxes
 
