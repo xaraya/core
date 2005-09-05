@@ -60,23 +60,23 @@ global $CoreStack, $ErrorStack;
  * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @return bool true
- * @todo   can we move the stacks above into the init? 
+ * @todo   can we move the stacks above into the init?
  */
 function xarError_init($systemArgs, $whatToLoad)
 {
     global $CoreStack,$ErrorStack;
-    
+
     // The check for xdebug_enable is not necessary here, we want the handler enabled on the flag, period.
     if ($systemArgs['enablePHPErrorHandler'] == true ) { // && !function_exists('xdebug_enable')) {
         set_error_handler('xarException__phpErrorHandler');
     }
-    
+
     $CoreStack = new xarExceptionStack();
     $CoreStack->initialize();
-    
+
     $ErrorStack = new xarExceptionStack();
     xarErrorFree();
-    
+
     // Subsystem initialized, register a handler to run when the request is over
     register_shutdown_function ('xarError__shutdown_handler');
     return true;
@@ -160,9 +160,9 @@ function xarErrorSet($major, $errorID, $value = NULL)
         // TODO: remove again once xarLogException works
         if ($errorID == "ErrorCollection") $obj = $obj->exceptions[0];
         xarLogMessage("Logged error: " . $obj->toString(), XARLOG_LEVEL_ERROR);
-        if (!empty($stack) && $major != XAR_USER_EXCEPTION) 
+        if (!empty($stack) && $major != XAR_USER_EXCEPTION)
             xarLogMessage(
-                "Logged error backtrace: \n" . xarException__formatBacktrace($stack), 
+                "Logged error backtrace: \n" . xarException__formatBacktrace($stack),
                 XARLOG_LEVEL_ERROR);
         //xarLogException();
     }
@@ -306,7 +306,12 @@ function xarErrorRender($format,$stacktype = "ERROR")
     $data['component'] = $error->getComponent();
 
     if ($format == 'template') {
-        return  xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
+        $theme_dir = xarTplGetThemeDir();
+        if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
+            return xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', $data);
+        } else {
+            return xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
+        }
     }
     elseif ($format == 'rawhtml') {
         $msg = "<b><u>" . $data['title'] . "</u></b><br /><br />";
@@ -398,7 +403,7 @@ function xarException__formatStack($format,$stacktype = "ERROR")
     return $formattedmsgs;
 }
 
-/** 
+/**
  * Error handlers section
  *
  * For several areas there are specific bridges to route errors into
@@ -635,23 +640,23 @@ function xarException__formatBacktrace ($vardump,$key=false,$level=0)
     if ($level == 16) return '';
 
     $tabsize = 4;
-    
+
     //make layout
     $return .= str_repeat(' ', $tabsize*$level);
     if ($level != 0) $key = "[$key] =>";
-        
+
     //look for objects
     if (is_object($vardump))
         $return .= "$key ".get_class($vardump)." ".$vardump."\n";
     else
         $return .= "$key $vardump\n";
-        
+
      if (gettype($vardump) == 'object' || gettype($vardump) == 'array') {
         $level++;
         $return .= str_repeat(' ', $tabsize*$level);
         $return .= "(\n";
 
-        if (gettype($vardump) == 'object') 
+        if (gettype($vardump) == 'object')
             $vardump = (array) get_object_vars($vardump);
 
         foreach($vadump as $key => $value)
