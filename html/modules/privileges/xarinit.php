@@ -32,7 +32,7 @@ function privileges_init()
     }
 */
  // Get database information
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
     xarDBLoadTableMaintenanceAPI();
 
@@ -516,7 +516,7 @@ function privileges_delete()
     *********************************************************************/
 
  // Get database information
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
     xarDBLoadTableMaintenanceAPI();
 

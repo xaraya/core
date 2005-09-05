@@ -75,7 +75,7 @@ function themes_adminapi_regenerate()
         }
     }
     //Setup database object for theme insertion
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     // See if we have gained any themes since last generation,
     // or if any current themes have been upgraded

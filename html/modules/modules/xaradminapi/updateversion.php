@@ -34,8 +34,8 @@ function modules_adminapi_updateversion($args)
 	if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regId")) return;
 
     //  Get database connection and tables
-    list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $dbconn =& xarDBGetConn();
+    $xartable =& xarDBGetTables();
     $modules_table = $xartable['modules'];
 
     // Get module information from the filesystem

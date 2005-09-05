@@ -18,7 +18,7 @@
  */
 function blocks_adminapi_resequence()
 {
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $block_group_instances_table = $xartable['block_group_instances'];
 

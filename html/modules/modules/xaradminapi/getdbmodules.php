@@ -20,7 +20,7 @@
  */
 function modules_adminapi_getdbmodules($args)
 {
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     // Get arguments
     extract($args);
 

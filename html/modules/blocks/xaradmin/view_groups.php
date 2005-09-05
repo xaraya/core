@@ -21,7 +21,7 @@ function blocks_admin_view_groups()
 	if(!xarSecurityCheck('AdminBlock',0,'Instance')) return;
     $authid = xarSecGenAuthKey();
     // Load up database
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $block_groups_table = $xartable['block_groups'];
 

@@ -61,7 +61,7 @@ function themes_adminapi_getthemelist($args)
         }
     }
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
     $themestable = $tables['themes'];
 

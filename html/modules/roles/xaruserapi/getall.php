@@ -36,7 +36,7 @@ function roles_userapi_getall($args)
     if(!xarSecurityCheck('ReadRole')) {return;}
 
     // Get database setup
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
     $rolestable = $xartable['roles'];

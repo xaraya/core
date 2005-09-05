@@ -35,7 +35,7 @@ function adminpanels_adminapi_buildbycat($args)
                     '3'=>'Users & Groups',
                     '4'=>'Miscellaneous');
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $menutable = $xartable['admin_menu'];
 

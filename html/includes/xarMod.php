@@ -214,7 +214,7 @@ function xarModDelAllVars($modName)
     $modBaseInfo = xarMod_getBaseInfo($modName);
     //if (!isset($modBaseInfo)) return; // throw back
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     // Takes the right table basing on module mode
@@ -401,7 +401,7 @@ function xarModGetVarId($modName, $name)
         return xarVarGetCached('Mod.GetVarID', $modName . $name);
     }
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     // Takes the right table basing on module mode
@@ -499,7 +499,7 @@ function xarModGetInfo($modRegId, $type = 'module')
             break;
     }
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     switch(strtolower($type)) {
@@ -1374,7 +1374,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     }
 
     // Get database info
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $hookstable = $xartable['hooks'];
 
@@ -1450,7 +1450,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
 
     if (!isset($modHookedCache[$callerModName.$callerItemType])) {
         // Get database info
-        $dbconn =& xarDBGetConn(0);
+        $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
         $hookstable = $xartable['hooks'];
 
@@ -1634,7 +1634,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
             break;
     }
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     switch(strtolower($type)) {
@@ -1763,7 +1763,7 @@ function xarMod_getVarsByModule($modName, $type = 'module')
             break;
     }
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     switch(strtolower($type)) {
@@ -1844,7 +1844,7 @@ function xarMod_getVarsByName($varName, $type = 'module')
         return;
     }
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     switch(strtolower($type)) {
@@ -1964,7 +1964,7 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
         return;
     }
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     switch(strtolower($type)) {
@@ -2032,7 +2032,7 @@ function xarModRegisterHook($hookObject,
     // FIXME: <marco> BAD_PARAM?
 
     // Get database info
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $pntable =& xarDBGetTables();
     $hookstable = $pntable['hooks'];
 
@@ -2081,7 +2081,7 @@ function xarModUnregisterHook($hookObject,
     // FIXME: <marco> BAD_PARAM?
 
     // Get database info
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $pntable =& xarDBGetTables();
     $hookstable = $pntable['hooks'];
 

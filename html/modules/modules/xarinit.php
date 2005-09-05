@@ -24,7 +24,7 @@ xarDBLoadTableMaintenanceAPI();
 function modules_init()
 { 
     // Get database information
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     $sitePrefix = xarDBGetSiteTablePrefix();
@@ -304,7 +304,7 @@ function modules_activate()
 function modules_upgrade($oldVersion)
 {
     // Get database information
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     $sitePrefix = xarDBGetSiteTablePrefix();

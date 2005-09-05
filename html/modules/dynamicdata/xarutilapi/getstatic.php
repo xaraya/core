@@ -65,7 +65,7 @@ function dynamicdata_utilapi_getstatic($args)
         return $propertybag["$modid:$itemtype:$table"];
     }
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
 // TODO: support site tables as well

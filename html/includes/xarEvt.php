@@ -289,7 +289,7 @@ function xarEvt__GetActiveModsList()
     $whereClauses = array();
 
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
 
     $systabpre = xarDBGetSystemTablePrefix();
     $sitetabpre = xarDBGetSiteTablePrefix();

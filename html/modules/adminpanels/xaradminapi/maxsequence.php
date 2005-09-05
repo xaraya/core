@@ -33,7 +33,7 @@ function adminpanels_adminapi_maxsequence($args)
         return;
     }
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
 
     $query = "SELECT MAX($column)
               FROM $table";

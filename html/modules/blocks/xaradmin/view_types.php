@@ -22,7 +22,7 @@ function blocks_admin_view_types()
 	if(!xarSecurityCheck('EditBlock')) return;
 
     // Load up database
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $block_types_table = $xartable['block_types'];
 

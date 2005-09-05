@@ -126,7 +126,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
         $systemPrefix = xarDBGetSystemTablePrefix();
         $metaTable = $systemPrefix . '_tables';
 
-        $dbconn =& xarDBGetConn(0);
+        $dbconn =& xarDBGetConn();
         $nextId = $dbconn->GenId($metaTable);
         $query = "INSERT INTO $metaTable (
                       xar_tableid,
@@ -210,7 +210,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
     $systemPrefix = xarDBGetSystemTablePrefix();
     $metaTable = $systemPrefix . '_tables';
     if ($tableName != $metaTable) {
-        $dbconn =& xarDBGetConn(0);
+        $dbconn =& xarDBGetConn();
         while (list($field_name, $parameters) = each($fields)) {
             $nextId = $dbconn->GenId($metaTable);
             $query = "INSERT INTO $metaTable (
@@ -288,7 +288,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
     $systemPrefix = xarDBGetSystemTablePrefix();
     $metaTable = $systemPrefix . '_tables';
     if ($tableName != $metaTable) {
-        $dbconn =& xarDBGetConn(0);
+        $dbconn =& xarDBGetConn();
         $query = "DELETE FROM $metaTable WHERE xar_table='" . xarVarPrepForStore($tableName) . "'";
         $result =& $dbconn->Execute($query);
     }
@@ -629,7 +629,7 @@ function xarDB__mysqlCreateTable($tableName, $fields)
     // creating DDL to return, not executing it.
     // There are instances when we don't want to drop the table, but
     // look for the exception to know the table has been created.
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $query = 'DROP TABLE IF EXISTS ' . $tableName;
     $result =& $dbconn->Execute($query);
 

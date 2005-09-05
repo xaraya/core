@@ -26,7 +26,7 @@ function roles_adminapi_clearsessions($spared)
         return false;
     }
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $sessionstable = $xartable['session_info'];
     $roles = new xarRoles();

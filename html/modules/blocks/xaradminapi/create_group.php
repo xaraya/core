@@ -38,7 +38,7 @@ function blocks_adminapi_create_group($args)
     if(!xarSecurityCheck('AddBlock',1,'Block',"All:$name:All")) return;
 
     // Load up database
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $block_groups_table          = $xartable['block_groups'];
 

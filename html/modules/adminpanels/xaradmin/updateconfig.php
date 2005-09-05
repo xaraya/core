@@ -96,7 +96,7 @@ function adminpanels_admin_updateconfig()
         if($whatwasbefore != $menuposition){
     
             // obtain db connection
-            $dbconn =& xarDBGetConn(0);
+            $dbconn =& xarDBGetConn();
             $xartable =& xarDBGetTables();
             $blockgroupinstancetable= $xartable['block_group_instances'];
             if($menuposition == 'l'){

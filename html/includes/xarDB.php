@@ -62,12 +62,13 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     include_once ADODB_DIR .'/adodb.inc.php';
 
     // Start connection
-    $dbconn = ADONewConnection($dbType);
+    $dbconn =& ADONewConnection($dbType); // assign by reference
     if (!$dbconn->Connect($dbHost, $dbUname, $dbPass, $dbName)) {
         // FIXME: <mrb> theoretically we could raise an exceptions here, but due to the insane dependencies
         //        we can't right now
         xarCore_die("xarDB_init: Failed to connect to $dbType://$dbUname@$dbHost/$dbName, error message: " . $dbconn->ErrorMsg());
     }
+    
     $GLOBALS['ADODB_FETCH_MODE'] = ADODB_FETCH_NUM;
 
     // force oracle to a consistent date format for comparison methods later on
@@ -76,7 +77,9 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
         $dbconn->Execute("ALTER session SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
     }
 
-    $GLOBALS['xarDB_connections'] = array($dbconn);
+    // iansym : we're only storing the ONE connection now
+    // iansym : have to use $dbconn =& xarDBGetConn() from now on
+    $GLOBALS['xarDB_connections'][0] =& $dbconn; // assign the object to the array by reference
     $GLOBALS['xarDB_tables'] = array();
 
     $ADODB_CACHE_DIR = xarCoreGetVarDirPath() . '/cache/adodb';
@@ -114,12 +117,11 @@ function xarDB__shutdown_handler()
  * @global array xarDB_connections array of database connection objects
  * @return array array of database connection objects
  */
-function &xarDBGetConn($conn=null)
+function &xarDBGetConn()
 {
-    if(isset($conn) && isset($GLOBALS['xarDB_connections'][$conn])) {
-            return $GLOBALS['xarDB_connections'][$conn];
-    }
-    return $GLOBALS['xarDB_connections'];
+    // we only want to return the first connection here
+    // perhaps we'll add linked list capabilities to this soon
+    return $GLOBALS['xarDB_connections'][0];
 }
 
 /**

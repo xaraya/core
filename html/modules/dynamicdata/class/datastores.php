@@ -86,7 +86,7 @@ class Dynamic_DataStore_Master
      */
     function &getDataSources($args = array())
     {
-        $dbconn =& xarDBGetConn(0);
+        $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
 
         $systemPrefix = xarDBGetSystemTablePrefix();

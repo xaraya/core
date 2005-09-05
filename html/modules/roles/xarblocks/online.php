@@ -42,7 +42,7 @@ function roles_onlineblock_display($blockinfo)
     $vars = unserialize($blockinfo['content']);
 
     // Database setup
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $sessioninfotable = $xartable['session_info'];
     $activetime = time() - (xarConfigGetVar('Site.Session.Duration') * 60);

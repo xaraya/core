@@ -38,7 +38,7 @@ function modules_adminapi_remove($args)
         if(!xarModAPIFunc('modules','admin','removemissing',array('regid' => $regid)))  return;
     }
     else {
-        $dbconn =& xarDBGetConn(0);
+        $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
 
         //TODO: Add check if there is any dependents

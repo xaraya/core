@@ -50,7 +50,7 @@ function roles_adminapi_stateupdate($args)
         return false;
     }
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
     $rolesTable = $xartable['roles'];

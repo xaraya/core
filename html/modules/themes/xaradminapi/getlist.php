@@ -90,7 +90,7 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
         }
     }
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     $themestable = $tables['themes'];

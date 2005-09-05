@@ -38,7 +38,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
-        $dbconn =& xarDBGetConn(0);
+        $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
 
         $dynamicdata = $xartable['dynamic_data'];
@@ -83,7 +83,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             return $itemid;
         }
 
-        $dbconn =& xarDBGetConn(0);
+        $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
 
         $dynamicdata = $xartable['dynamic_data'];
@@ -127,7 +127,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             return $itemid;
         }
 
-        $dbconn =& xarDBGetConn(0);
+        $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
 
         $dynamicdata = $xartable['dynamic_data'];
@@ -198,7 +198,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             return $itemid;
         }
 
-        $dbconn =& xarDBGetConn(0);
+        $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
 
         $dynamicdata = $xartable['dynamic_data'];
@@ -239,7 +239,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
-        $dbconn =& xarDBGetConn(0);
+        $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
         $dynamicdata = $xartable['dynamic_data'];
 
@@ -446,7 +446,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             $itemids = array();
         }
 
-        $dbconn =& xarDBGetConn(0);
+        $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
         $dynamicdata = $xartable['dynamic_data'];
 
@@ -545,7 +545,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
-        $dbconn =& xarDBGetConn(0);
+        $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];

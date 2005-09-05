@@ -32,7 +32,7 @@ function blocks_userapi_getState($args)
         return $userblocks[$uid][$bid];
     }
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
     $ublockstable = $xartable['userblocks'];

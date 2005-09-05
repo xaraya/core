@@ -33,7 +33,7 @@ function dynamicdata_utilapi_getmeta($args)
         return array($table => $propertybag[$table]);
     }
 
-    $dbconn =& xarDBGetConn(0);
+    $dbconn =& xarDBGetConn();
 
     if (!empty($table)) {
         $tables = array($table);
