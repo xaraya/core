@@ -234,80 +234,16 @@ class PHPBackendGenerator
         $locales_dir = "$varDir/locales";
 
         $php_locale_dir = "$locales_dir/{$this->locale}";
-
-        if (!$parsedLocale = xarMLS__parseLocaleString("{$this->locale}")) return false;
-        $xml_locale_dir = "$locales_dir/";
-        $xml_locale_dir .= $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
-
         $php_dir = "$php_locale_dir/php";
-        $xml_dir = "$xml_locale_dir/xml";
         $modules_dir = "$php_dir/modules";
         $themes_dir = "$php_dir/themes";
         $core_dir = "$php_dir/core";
-        $xml_modules_dir = "$xml_dir/modules";
-        $xml_themes_dir = "$xml_dir/themes";
-        $xml_core_dir = "$xml_dir/core";
 
-        $canWrite = 1;
-        if (file_exists($locales_dir)) {
-            if (file_exists($php_locale_dir)) {
-                if (file_exists($php_dir)) {
-                    if (file_exists($modules_dir) && file_exists($themes_dir) &&
-                        file_exists($core_dir)) {
-                        if (!is_writeable($modules_dir)) $canWrite = 0;
-                        if (!is_writeable($themes_dir)) $canWrite = 0;
-                        if (!is_writeable($core_dir)) $canWrite = 0;
-                    } else {
-                        if (is_writeable($php_dir)) {
-                            if (file_exists($modules_dir)) {
-                                if (!is_writeable($modules_dir)) $canWrite = 0;
-                            } else {
-                                mkdir($modules_dir, 0777);
-                            }
-                            if (file_exists($themes_dir)) {
-                                if (!is_writeable($themes_dir)) $canWrite = 0;
-                            } else {
-                                mkdir($themes_dir, 0777);
-                            }
-                            if (file_exists($core_dir)) {
-                                if (!is_writeable($core_dir)) $canWrite = 0;
-                            } else {
-                                mkdir($core_dir, 0777);
-                            }
-                        } else {
-                            $canWrite = 0; // var/locales/LOCALE/php is unwriteable
-                        }
-                    }
-                } else {
-                    if (is_writeable($php_locale_dir)) {
-                        mkdir($php_dir, 0777);
-                        mkdir($modules_dir, 0777);
-                        mkdir($themes_dir, 0777);
-                        mkdir($core_dir, 0777);
-                    } else {
-                        $canWrite = 0; // var/locales/LOCALE is unwriteable
-                    }
-                }
-            } else {
-                if (is_writeable($locales_dir)) {
-                    mkdir($php_locale_dir, 0777);
-                    mkdir($php_dir, 0777);
-                    mkdir($modules_dir, 0777);
-                    mkdir($themes_dir, 0777);
-                    mkdir($core_dir, 0777);
-                } else {
-                    $canWrite = 0; // var/locales is unwriteable
-                }
-            }
-        } else {
-            $canWrite = 0; // var/locales missed
-        }
-
-        if (!$canWrite) {
-            $msg = xarML("The directories under #(1) must be writeable by PHP.", $locales_dir);
-            xarErrorSet(XAR_USER_EXCEPTION, 'WrongPermissions', new DefaultUserException($msg));
-            return;
-        }
+        xarMLS__mkdirr($php_locale_dir, 0777);
+        xarMLS__mkdirr($php_dir, 0777);
+        xarMLS__mkdirr($modules_dir, 0777);
+        xarMLS__mkdirr($themes_dir, 0777);
+        xarMLS__mkdirr($core_dir, 0777);
     }
 
     function bindDomain($dnType='core', $dnName='xaraya')
@@ -334,12 +270,12 @@ class PHPBackendGenerator
         case XARMLS_DNTYPE_MODULE:
             $this->baseDir = "$modules_dir/$dnName/";
             $this->baseXMLDir = "$xml_modules_dir/$dnName/";
-            if (!file_exists($this->baseDir)) mkdir($this->baseDir, 0777);
+            if (!file_exists($this->baseDir)) xarMLS__mkdirr($this->baseDir, 0777);
             break;
         case XARMLS_DNTYPE_THEME:
             $this->baseDir = "$themes_dir/$dnName/";
             $this->baseXMLDir = "$xml_themes_dir/$dnName/";
-            if (!file_exists($this->baseDir)) mkdir($this->baseDir, 0777);
+            if (!file_exists($this->baseDir)) xarMLS__mkdirr($this->baseDir, 0777);
             break;
         case XARMLS_DNTYPE_CORE:
             $this->baseDir = $core_dir.'/';
@@ -385,50 +321,63 @@ class PHPBackendGenerator
             xarLogMessage("MLS Could not find XML input: ".$this->xmlFileName);
         }
 
-        $fp2 = fopen ($this->fileName, "w" );
-        fputs($fp2, '<?php'."\n");
-        fputs($fp2, 'global $xarML_PHPBackend_entries;'."\n");
-        fputs($fp2, 'global $xarML_PHPBackend_keyEntries;'."\n");
-        if ($xmlFileExists) {
-            foreach ($vals as $node) {
-                if ($node['tag'] == 'STRING') {
-                    $node['value'] = str_replace('\'', '\\\'', $node['value']);
-                    fputs($fp2, '$xarML_PHPBackend_entries[\''.$node['value']."']");
-                } elseif ($node['tag'] == 'KEY') {
-                    $node['value'] = str_replace('\'', '\\\'', $node['value']);
-                    fputs($fp2, '$xarML_PHPBackend_keyEntries[\''.$node['value']."']");
-                } elseif ($node['tag'] == 'TRANSLATION') {
-                    if (!array_key_exists('value',$node)) $node['value'] = '';
-                    if ($this->outCharset != 'utf-8') {
-                        $node['value'] = $GLOBALS['xarMLS_newEncoding']->convert($node['value'], 'utf-8', $this->outCharset, 0);
+        $fp2 = @fopen ($this->fileName, "w" );
+        if ($fp2 !== false) {
+            fputs($fp2, '<?php'."\n");
+            fputs($fp2, 'global $xarML_PHPBackend_entries;'."\n");
+            fputs($fp2, 'global $xarML_PHPBackend_keyEntries;'."\n");
+            if ($xmlFileExists) {
+                foreach ($vals as $node) {
+                    if ($node['tag'] == 'STRING') {
+                        $node['value'] = str_replace('\'', '\\\'', $node['value']);
+                        fputs($fp2, '$xarML_PHPBackend_entries[\''.$node['value']."']");
+                    } elseif ($node['tag'] == 'KEY') {
+                        $node['value'] = str_replace('\'', '\\\'', $node['value']);
+                        fputs($fp2, '$xarML_PHPBackend_keyEntries[\''.$node['value']."']");
+                    } elseif ($node['tag'] == 'TRANSLATION') {
+                        if (!array_key_exists('value',$node)) $node['value'] = '';
+                        if ($this->outCharset != 'utf-8') {
+                            $node['value'] = $GLOBALS['xarMLS_newEncoding']->convert($node['value'], 'utf-8', $this->outCharset, 0);
+                        }
+                        $node['value'] = str_replace('\'', '\\\'', $node['value']);
+                        fputs($fp2, " = '".$node['value']."';\n");
                     }
-                    $node['value'] = str_replace('\'', '\\\'', $node['value']);
-                    fputs($fp2, " = '".$node['value']."';\n");
-                }
+                 }
+            }
+            fputs($fp2, "?>");
+            fclose($fp2);
+        } else {
+            xarLogMessage("Could not create file: ".$this->fileName);
+            global $xarML_PHPBackend_entries;
+            global $xarML_PHPBackend_keyEntries;
+            if ($xmlFileExists) {
+                foreach ($vals as $node) {
+                    if ($node['tag'] == 'STRING') {
+                        $node['value'] = str_replace('\'', '\\\'', $node['value']);
+                        $entryIndex = $node['value'];
+                        $entryType = 'string';
+                    } elseif ($node['tag'] == 'KEY') {
+                        $node['value'] = str_replace('\'', '\\\'', $node['value']);
+                        $entryIndex = $node['value'];
+                        $entryType = 'key';
+                    } elseif ($node['tag'] == 'TRANSLATION') {
+                        if (!array_key_exists('value',$node)) $node['value'] = '';
+                        if ($this->outCharset != 'utf-8') {
+                            $node['value'] = $GLOBALS['xarMLS_newEncoding']->convert($node['value'], 'utf-8', $this->outCharset, 0);
+                        }
+                        $node['value'] = str_replace('\'', '\\\'', $node['value']);
+                        if ($entryType == 'string') {
+                            $xarML_PHPBackend_entries[$entryIndex] = $node['value'];
+                        } elseif ($entryType == 'key') {
+                            $xarML_PHPBackend_keyEntries[$entryIndex] = $node['value'];
+                        }
+                    }
+                 }
             }
         }
-        fputs($fp2, "?>");
-        fclose($fp2);
 
         return true;
     }
-}
-
-function xarMLS__mkdirr($path, $mode)
-{
-    // Check if directory already exists
-    if (is_dir($path) || empty($path)) {
-        return true;
-    }
-         
-    // Crawl up the directory tree
-    $next_path = substr($path, 0, strrpos($path, '/'));
-    if (xarMLS__mkdirr($next_path, $mode)) {
-        if (!file_exists($path)) {
-            return mkdir($path, $mode);
-        }
-    }
-    return false;
 }
 
 ?>

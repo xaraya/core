@@ -67,7 +67,9 @@ function &xarMLSLoadLocaleData($locale = NULL)
         }
         $GLOBALS['xarMLS_localeDataCache'][$locale] = $localeData;
     } else {
+/* TODO: delete after new backend testing
         if ($GLOBALS['xarMLS_backendName'] == 'xml2php') {
+*/
             if (!$parsedLocale = xarMLS__parseLocaleString($locale)) return false;
             $utf8locale = $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
             $siteCharset = $parsedLocale['charset'];
@@ -87,6 +89,7 @@ function &xarMLSLoadLocaleData($locale = NULL)
                 }
             }
             $GLOBALS['xarMLS_localeDataCache'][$locale] = $tempArray;
+/* TODO: delete after new backend testing
         } else {
             $res = $GLOBALS['xarMLS_localeDataLoader']->load($locale);
             if (!isset($res)) return; // Throw back
@@ -98,6 +101,7 @@ function &xarMLSLoadLocaleData($locale = NULL)
             }
             $GLOBALS['xarMLS_localeDataCache'][$locale] = $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
         }
+*/
     }
 
     return $GLOBALS['xarMLS_localeDataCache'][$locale];

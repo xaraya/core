@@ -54,12 +54,12 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
     default:
         xarCore_die('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
-
     $GLOBALS['xarMLS_backendName'] = $args['translationsBackend'];
+/* TODO: delete after new backend testing
     if ($GLOBALS['xarMLS_backendName'] != 'php' && $GLOBALS['xarMLS_backendName'] != 'xml' && $GLOBALS['xarMLS_backendName'] != 'xml2php') {
         xarCore_die('xarML_init: Unknown translations backend: '.$GLOBALS['xarMLS_backendName']);
     }
-
+*/
     // USERLOCALE FIXME Delete after new backend testing
     $GLOBALS['xarMLS_localeDataLoader'] = new xarMLS__LocaleDataLoader();
     $GLOBALS['xarMLS_localeDataCache'] = array();
@@ -456,6 +456,7 @@ function xarMLS_setCurrentLocale($locale)
     //}
 
     $alternatives = xarMLS__getLocaleAlternatives($locale);
+/* TODO: delete after new backend testing
     switch ($GLOBALS['xarMLS_backendName']) {
     case 'xml':
         include_once 'includes/xarMLSXMLBackend.php';
@@ -466,11 +467,14 @@ function xarMLS_setCurrentLocale($locale)
         $GLOBALS['xarMLS_backend'] = new xarMLS__PHPTranslationsBackend($alternatives);
         break;
     case 'xml2php':
+*/
         include_once 'includes/xarMLSXML2PHPBackend.php';
         $GLOBALS['xarMLS_backend'] = new xarMLS__XML2PHPTranslationsBackend($alternatives);
+
+/*
         break;
     }
-
+*/
     // Load core translations
     xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
 
@@ -840,4 +844,48 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
 
 }
 
+function xarMLS__mkdirr($path, $mode)
+{
+    // Check if directory already exists
+    if (is_dir($path) || empty($path)) {
+        return true;
+    }
+         
+    // Crawl up the directory tree
+    $next_path = substr($path, 0, strrpos($path, '/'));
+    if (xarMLS__mkdirr($next_path, $mode)) {
+        if (!file_exists($path)) {
+            $result = @mkdir($path, $mode);
+            if (!$result) {
+                $msg = xarML("The directories under #(1) must be writeable by PHP.", $next_path);
+                xarLogMessage($msg);
+                // xarErrorSet(XAR_USER_EXCEPTION, 'WrongPermissions', new DefaultUserException($msg));
+            }
+            return $result;
+        }
+    }
+    return false;
+}
+
+function xarMLS__iswritable($directory=NULL)
+{
+    $isWritable = true;
+    if ($directory == NULL) {
+        $directory = getcwd();
+    }
+    $isWritable =& is_writable($directory);
+    $handle = opendir($directory);
+    while (false !== ($filename = readdir($handle))) {
+        if (($filename!=".") AND ($filename!="..")) {
+            if (is_dir($directory."/".$filename)) {
+                $isWritable =& is_writable($directory."/".$filename);
+                $isWritable =& xarMLS__iswritable($directory."/".$filename);
+            } else {
+                $isWritable =& is_writable($directory."/".$filename);
+            }
+        }
+    }
+    return $isWritable;
+}
+                                                    
 ?>

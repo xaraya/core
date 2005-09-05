@@ -133,7 +133,7 @@ array_unique($allowedLocales);
 sort($allowedLocales);
 
 // Start Multi Language System
-$systemArgs = array('translationsBackend' => 'xml',
+$systemArgs = array('translationsBackend' => 'xml2php',
                     'MLSMode'             => 'BOXED',
                     'defaultLocale'       => $install_language,
                     'allowedLocales'      => $allowedLocales);
