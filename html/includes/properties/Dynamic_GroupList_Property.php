@@ -28,9 +28,49 @@ include_once "includes/properties/Dynamic_Select_Property.php";
 class Dynamic_GroupList_Property extends Dynamic_Select_Property
 {
 
+    var $ancestorlist = array();
+    var $parentlist = array();
+    var $grouplist = array();
+
+    /*
+    * Options available to user selection
+    * ===================================
+    * Options take the form:
+    *   option-type:option-value;
+    * option-types:
+    *   ancestor:name[,name] - select only groups who are descendants of the given group(s)
+    *   parent:name[,name] - select only groups who are members of the given group(s)
+    *   group:name[,name] - select only the given group(s)
+    */
+
     function Dynamic_GroupList_Property($args)
     {
-        $this->Dynamic_Select_Property($args);
+        // Don't initialise the parent class as it handles the
+        // validation in an inappropriate way for user lists.
+        // $this->Dynamic_Select_Property($args);
+        $this->Dynamic_Property($args);
+
+        // Handle user options if supplied.
+
+        if (!empty($this->validation)) {
+            foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {
+                // Semi-colons can be escaped with a '\' prefix.
+                $option = str_replace('\;', ';', $option);
+                // An option comes in two parts: option-type:option-value
+                if (strchr($option, ':')) {
+                    list($option_type, $option_value) = explode(':', $option, 2);
+                    if ($option_type == 'ancestor') {
+                        $this->ancestorlist = array_merge($this->ancestorlist, explode(',', $option_value));
+                    }
+                    if ($option_type == 'parent') {
+                        $this->parentlist = array_merge($this->parentlist, explode(',', $option_value));
+                    }
+                    if ($option_type == 'group') {
+                        $this->grouplist = array_merge($this->grouplist, explode(',', $option_value));
+                    }
+                }
+            }
+        }
     }
 
     function validateValue($value = null)
@@ -61,6 +101,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
     {
         extract($args);
         $data = array();
+        $select_options = array();
 
         if (!isset($value)) {
             $value = $this->value;
@@ -70,9 +111,17 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
         }
         if (count($options) == 0) {
 
+            if (!empty($this->ancestorlist)) {
+                $select_options['ancestor'] = implode(',', $this->ancestorlist);
+            }
+            if (!empty($this->parentlist)) {
+                $select_options['parent'] = implode(',', $this->parentlist);
+            }
+            if (!empty($this->grouplist)) {
+                $select_options['group'] = implode(',', $this->grouplist);
+            }
 // TODO: handle large # of groups too (optional - less urgent than for users)
-
-            $groups = xarModAPIFunc('roles', 'user', 'getallgroups');
+            $groups = xarModAPIFunc('roles', 'user', 'getallgroups', $select_options);
             foreach ($groups as $group) {
                 $options[] = array('id' => $group['uid'], 'name' => $group['name']);
             }
