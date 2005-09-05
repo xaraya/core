@@ -1,22 +1,20 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2>#$label#</h2><br />
-<div style="margin: auto;">
+<div class="xar-mod-body">
+    <h2>#$label#</h2>
+    <div style="margin: auto;">
+        <form>
+            <div>
+                <textarea name="xml" id="xml" rows="30" cols="80">#$xml#</textarea>
+            </div>
+        </form>
 
-<form>
-<div>
-<textarea name="xml" id="xml" rows="30" cols="80">
-#$xml#
-</textarea>
-</div>
-</form>
+        <xar:if condition="!empty($formlink)">
+            <a href="#$formlink#"><xar:mlstring>Export Data for all Items to Browser</xar:mlstring></a>&nbsp;&nbsp;&nbsp;
+        </xar:if>
 
-<xar:if condition="!empty($formlink)">
-<a href="#$formlink#"><xar:mlstring>Export Data for all Items to Browser</xar:mlstring></a>&nbsp;&nbsp;&nbsp;
-</xar:if>
-
-<xar:if condition="!empty($filelink)">
-<a href="#$filelink#"><xar:mlstring>Export Data for all Items to File</xar:mlstring></a>&nbsp;&nbsp;&nbsp;
-</xar:if>
-</div>
+        <xar:if condition="!empty($filelink)">
+            <a href="#$filelink#"><xar:mlstring>Export Data for all Items to File</xar:mlstring></a>&nbsp;&nbsp;&nbsp;
+        </xar:if>
+    </div>
 </div>
