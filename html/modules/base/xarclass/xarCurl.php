@@ -21,7 +21,7 @@
  * @param   $args['url'] The main URL for the curl session (optional)
  * @return  nothing
  * @throws  no exceptions
- * @todo    nice handling of protocols other than http; test handling of binary return data.
+ * @todo    nice handling of protocols other than http.
  */
 
 // Example:
@@ -60,11 +60,12 @@ class xarCurl
     // can deal with any messages.
     // errno values:
     //  0:  success
-    //  -1: internal error (see $error for code)
+    //  -1: class error (see $error for textual code, e.g. NO_SESSION, NO_URL)
     //  >0: curl error (see $error for message)
     var $errno = 0;
     var $error = '';
     var $http_code = 0;
+    var $http_desc = '';
 
     // Result of a curl_getinfo() - cached so it is available even after the
     // session is closed.
@@ -73,6 +74,61 @@ class xarCurl
     // Header information from the return message.
     var $header100 = array();
     var $header = array();
+
+    // Curl info types: the information flags that getinfo() can accept.
+    // The basic constants.
+    // There are enough subtleties in the names that we can't
+    // generalise them. Shame.
+    var $info_types = array(
+        CURLINFO_EFFECTIVE_URL => 'url',
+        CURLINFO_HTTP_CODE => 'http_code',
+        CURLINFO_HEADER_SIZE => 'header_size',
+        CURLINFO_REQUEST_SIZE => 'request_size', 
+        CURLINFO_FILETIME => 'filetime',
+        CURLINFO_SSL_VERIFYRESULT => 'ssl_verify_result',
+        CURLINFO_TOTAL_TIME => 'total_time',
+        CURLINFO_NAMELOOKUP_TIME => 'namelookup_time',
+        CURLINFO_CONNECT_TIME => 'connect_time',
+        CURLINFO_PRETRANSFER_TIME => 'pretransfer_time',
+        CURLINFO_SIZE_UPLOAD => 'size_upload',
+        CURLINFO_SIZE_DOWNLOAD => 'size_download',
+        CURLINFO_SPEED_DOWNLOAD => 'speed_download',
+        CURLINFO_SPEED_UPLOAD => 'speed_upload',
+        CURLINFO_CONTENT_LENGTH_DOWNLOAD => 'download_content_length',
+        CURLINFO_CONTENT_LENGTH_UPLOAD => 'upload_content_length'
+    );
+
+    // The textual descriptions of known HTTP codes.
+    // TODO: Some of these codes have related header records, such as
+    // redirection URLs. We should collect those headers automatically
+    // to make handling the exceptions easier.
+    var $http_codes = array(
+        // Success 2xx
+        200 => 'OK',
+        201 => 'CREATED',
+        202 => 'Accepted',
+        203 => 'Partial Information',
+        204 => 'No Response',
+
+        // Redirection 3xx
+        301 => 'Moved',
+        302 => 'Found',
+        303 => 'Method',
+        304 => 'Not Modified',
+
+        // Error 4xx
+        400 => 'Bad request',
+        401 => 'Unauthorized',
+        402 => 'PaymentRequired',
+        403 => 'Forbidden',
+        404 => 'Not found',
+        
+        // Error 5xx
+        500 => 'Internal Error',
+        501 => 'Not implemented',
+        502 => 'Service temporarily overloaded',
+        503 => 'Gateway timeout'
+    );
 
     // Constructor: create the PHP curl object.
     // A url can be passed in at this point, or added later.
@@ -96,14 +152,26 @@ class xarCurl
             $this->seturl($url);
         }
 
+        // Later versions of curl have extra info types. Add these on now.
+        if (defined('CURLINFO_CONTENT_TYPE')) {
+            $this->info_types = array_merge(
+                $this->info_types,
+                array(
+                    CURLINFO_CONTENT_TYPE => 'content_type',
+                    CURLINFO_STARTTRANSFER_TIME => 'starttransfer_time',
+                    CURLINFO_REDIRECT_TIME => 'redirect_time',
+                    CURLINFO_REDIRECT_COUNT => 'redirect_count'
+                )
+            );
+        }
+
         return true;
     }
 
     // Initialize a new session.
     // This only needs to be called to reopen a new session after the initial
     // session is closed. Alternatively, discard the object and create a new one.
-    function init()
-    {
+    function init() {
         // Close any old session.
         $this->close();
         
@@ -126,8 +194,7 @@ class xarCurl
 
     // Set an option.
     // The session must be open to set an option.
-    function setopt($option, $value)
-    {
+    function setopt($option, $value) {
         if (!isset($this->curl)) {
             return false;
         }
@@ -136,8 +203,7 @@ class xarCurl
     }
 
     // Add GET or POST parameters (name/value pair or an array)
-    function _param($name = '', $value = '', $type = '')
-    {
+    function _param($name = '', $value = '', $type = '') {
         if (!isset($name) || $name == '') {
             return false;
         }
@@ -171,8 +237,7 @@ class xarCurl
     }
 
     // Set the URL.
-    function seturl($url)
-    {
+    function seturl($url) {
         // TODO: Do a quick check: we don't want XML-encoded
         // URLs here, just a plain URL.
         $this->url = $url;
@@ -321,44 +386,13 @@ class xarCurl
         return $result;
     }
 
-    function getinfo($option = NULL)
-    {
+    // Get info fields from the curl object.
+    // These info fields will remain available even after the curl session
+    // has been closed.
+    function getinfo($option = NULL) {
         // Info values and elements.
         // Some of these constants are only available on later
         // versions of curl/PHP.
-
-        // The basic constants.
-        $info_types = array(
-            CURLINFO_EFFECTIVE_URL => 'url',
-            CURLINFO_HTTP_CODE => 'http_code',
-            CURLINFO_HEADER_SIZE => 'header_size',
-            CURLINFO_REQUEST_SIZE => 'request_size', 
-            CURLINFO_FILETIME => 'filetime',
-            CURLINFO_SSL_VERIFYRESULT => 'ssl_verify_result',
-            CURLINFO_TOTAL_TIME => 'total_time',
-            CURLINFO_NAMELOOKUP_TIME => 'namelookup_time',
-            CURLINFO_CONNECT_TIME => 'connect_time',
-            CURLINFO_PRETRANSFER_TIME => 'pretransfer_time',
-            CURLINFO_SIZE_UPLOAD => 'size_upload',
-            CURLINFO_SIZE_DOWNLOAD => 'size_download',
-            CURLINFO_SPEED_DOWNLOAD => 'speed_download',
-            CURLINFO_SPEED_UPLOAD => 'speed_upload',
-            CURLINFO_CONTENT_LENGTH_DOWNLOAD => 'download_content_length',
-            CURLINFO_CONTENT_LENGTH_UPLOAD => 'upload_content_length'
-        );
-
-        // The newer constants.
-        if (defined('CURLINFO_CONTENT_TYPE')) {
-            $info_types = array_merge(
-                $info_types,
-                array(
-                    CURLINFO_CONTENT_TYPE => 'content_type',
-                    CURLINFO_STARTTRANSFER_TIME => 'starttransfer_time',
-                    CURLINFO_REDIRECT_TIME => 'redirect_time',
-                    CURLINFO_REDIRECT_COUNT => 'redirect_count'
-                )
-            );
-        }
 
         // Default return value.
         $result = false;
@@ -368,6 +402,9 @@ class xarCurl
             // the curl handle is open.
             $this->info = curl_getinfo($this->curl);
             $this->http_code = $this->info['http_code'];
+            if (isset($this->http_descs[$this->http_code])) {
+                $this->http_desc = $this->http_descs[$this->http_code];
+            }
         }
 
         // Always return the info from the saved array, which will
@@ -375,9 +412,9 @@ class xarCurl
         // handle was closed.
         if (isset($this->info)) {
             if (isset($option)) {
-                if (isset($info_types[$option])) {
+                if (isset($this->info_types[$option])) {
                     // We already have the option saved: return it.
-                    $result = $this->info[$info_types[$option]];
+                    $result = $this->info[$this->info_types[$option]];
                 } else {
                     // Some new option that we don't know about yet: try to fetch it.
                     $result = @curl_getinfo($this->curl, $option);
@@ -413,29 +450,30 @@ class xarCurl
     * decode a string that is encoded w/ "chunked' transfer encoding
     * as defined in RFC2068 19.4.6
     *
-    * This method extracted from 'nusoap'.
+    * This method extracted from other classes in Xaraya (see nusoap).
     *
     * @param    string $buffer
-    * @returns  string
+    * @returns	string
     * @access   public
     */
     function _decode_chunked($buffer)
     {
         $length = 0;
         $new = '';
+        $crnl = "\r\n";
         
         // Read chunk-size, chunk-extension (if any) and CRLF.
         // Get the position of the linebreak.
-        $chunkend = strpos($buffer, "\r\n") + 2;
+        $chunkend = strpos($buffer, $crnl) + 2;
         $temp = substr($buffer, 0, $chunkend);
         $chunk_size = hexdec(trim($temp));
         $chunkstart = $chunkend;
         while ($chunk_size > 0) {
-            $chunkend = strpos( $buffer, "\r\n", $chunkstart + $chunk_size);
+            $chunkend = strpos($buffer, $crnl, $chunkstart + $chunk_size);
             
             // Just in case we got a broken connection
             if ($chunkend == FALSE) {
-                $chunk = substr($buffer,$chunkstart);
+                $chunk = substr($buffer, $chunkstart);
                 // append chunk-data to entity-body
                 $new .= $chunk;
                 $length += strlen($chunk);
@@ -443,27 +481,26 @@ class xarCurl
             }
             
             // read chunk-data and CRLF
-            $chunk = substr($buffer, $chunkstart, $chunkend-$chunkstart);
+            $chunk = substr($buffer, $chunkstart, $chunkend - $chunkstart);
             // append chunk-data to entity-body
             $new .= $chunk;
-            // length := length + chunk-size
             $length += strlen($chunk);
             // read chunk-size and CRLF
             $chunkstart = $chunkend + 2;
             
-            $chunkend = strpos($buffer, "\r\n", $chunkstart)+2;
+            $chunkend = strpos($buffer, $crnl, $chunkstart) + 2;
             if ($chunkend == FALSE) {
                 break; //Just in case we got a broken connection
             }
-            $temp = substr($buffer, $chunkstart, $chunkend-$chunkstart);
+            $temp = substr($buffer, $chunkstart, $chunkend - $chunkstart);
             $chunk_size = hexdec(trim($temp));
             $chunkstart = $chunkend;
         }
 
-        // FIXME: enable these two lines?
-        // It effectively hides the encoding from the caller.
-        //$this->header['content-length'] = $length;
-        //unset($this->header['transfer-encoding']);
+        // This re-evaluation of the content length effectively hides the
+        // encoding from the caller.
+        $this->header['content-length'] = $length;
+        unset($this->header['transfer-encoding']);
 
         return $new;
     }
