@@ -58,7 +58,7 @@
     </li>
 </ul>
 <xar:comment>
-    the modvar to display/hide admin logout link should be available starting from version 1.2.3 of adminpanels -> upgrade transparently via modules module
+    the modvar to display/hide admin logout link should be available starting from version 1.2.3 of adminpanels : upgrade transparently via modules module
 </xar:comment>
 <xar:if condition="xarModGetUserVar('adminpanels', 'showlogout')">
     <ul class="xar-menu-section">

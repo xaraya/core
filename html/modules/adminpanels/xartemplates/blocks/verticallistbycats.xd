@@ -73,7 +73,7 @@
     </xar:if>
 </xar:foreach>
 <xar:comment>
-    the modvar to display/hide admin logout link should be available starting from version 1.2.3 of adminpanels -> upgrade transparently via modules module
+    the modvar to display/hide admin logout link should be available starting from version 1.2.3 of adminpanels : upgrade transparently via modules module
 </xar:comment>
 <xar:if condition="xarModGetUserVar('adminpanels', 'showlogout')">
     <ul class="xar-menu-section">
@@ -144,12 +144,12 @@
     DESIGN NOTES:
         - this template produces exceptionally well structured XHTML code which should work with or without extra styling
         - when combined with correct css the output can be used for building a wide variety of standards-compliant layouts
-        - links in this template can be put on the same line with <li></li> to avoid extra vertical spacing in some browsers with bad css support (surprise:-> IE/Win)
+        - links in this template can be put on the same line with <li></li> to avoid extra vertical spacing in some browsers with bad css support (surprise:- IE/Win)
         - when overriding this template in your own theme you may wish to delete all examples and comments, that's perfectly alright
     
     THINGS TO PAY ATTENTION TO:     
         - every listitem contains a link
         - a link can be either real or 'empty' (named anchors) depending on its *-current* status
-        - this built-in implementation of vertical menus uses empty links as means of providing visual feedback in all browsers, including those that dont support :hover state on anything except links (surprise:-> IE/Win) 
+        - this built-in implementation of vertical menus uses empty links as means of providing visual feedback in all browsers, including those that dont support :hover state on anything except links (surprise: IE/Win) 
 
 </xar:comment>
