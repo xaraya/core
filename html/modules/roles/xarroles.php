@@ -785,6 +785,13 @@ class xarRole
         return true;
     }
 
+
+    /**
+     * Gets all the privileges in the database.
+     *
+     * @author unknown (probably Marc Lutolf <marcinmilan@xaraya.com>)
+     * @return array of privilege arrays like ('pid' => x, 'name' => y)
+     */
     function getAllPrivileges()
     {
         if ((!isset($allprivileges)) || count($allprivileges) == 0) {
@@ -811,6 +818,13 @@ class xarRole
         }
     }
 
+
+    /**
+     * Gets all the privileges assigned directly to this role.
+     *
+     * @author unknown (probably Marc Lutolf <marcinmilan@xaraya.com>)
+     * @return array of privilege objects
+     */
     function getAssignedPrivileges()
     {
         $query = "SELECT xar_pid,
@@ -848,6 +862,13 @@ class xarRole
         return $privileges;
     }
 
+
+    /**
+     * Gets all the privileges inherited by this role.
+     *
+     * @author unknown (probably Marc Lutolf <marcinmilan@xaraya.com>)
+     * @return array of privilege objects
+     */
     function getInheritedPrivileges()
     {
         $ancestors = $this->getAncestors();
