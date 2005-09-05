@@ -799,6 +799,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     }
 
     // Build function name and call function
+    $funcName = strtolower($funcName);
     $modFunc = "{$modName}_{$modType}_{$funcName}";
     $found = true;
     $isLoaded = true;
