@@ -3221,7 +3221,6 @@ class xarTpl__XarContinueNode extends xarTpl__TplTagNode
  * @access private
  * @todo improve the flexibility for registered tags/foreign tags
  * @todo add the possibility to be 'relaxed', just ignoring unknown tags?
- * @todo the method exists are probably paranoid, check that
  */
 class xarTpl__XarOtherNode extends xarTpl__TplTagNode
 {
@@ -3239,74 +3238,42 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
         assert('isset($this->tagobject); /* The tagobject should have been set when constructing */');
         if (!xarTplCheckTagAttributes($this->tagName, $this->attributes)) return;
         // FIXME: should we process the expressions here for attributes?
-        // let xarTemplate worry about calling the right function :)
         return $this->tagobject->callHandler($this->attributes);
     }
 
     function isAssignable()
     {
-        if(method_exists($this->tagobject,'isAssignable')) {
-            return $this->tagobject->isAssignable();
-        } else {
-            // Return the default
-            return false;
-        }
+        return $this->tagobject->isAssignable();
     }
 
     function isPHPCode()
     {
-        if(method_exists($this->tagobject,'isPHPCode')) {
-            return $this->tagobject->isPHPCode();
-        } else {
-            // Return the default
-            return true;
-        }
+        return $this->tagobject->isPHPCode();
     }
 
     function hasText() 
     {
-        if(method_exists($this->tagobject,'hasText')) {
-            return $this->tagobject->hasText();
-        } else {
-            // Return the default
-            return false;
-        }
+        return $this->tagobject->hasText();
     }
     
     function needAssignment()
     {
-        if(method_exists($this->tagobject,'needAssignment')) {
-            return $this->tagobject->needAssignement();
-        } else {
-            return false;
-        }
+        return $this->tagobject->needAssignement();
     }
 
     function hasChildren()
     {
-        if(method_exists($this->tagobject,'hasChildren')) {
-            return $this->tagobject->hasChildren();
-        } else {
-            return false;
-        }
+        return $this->tagobject->hasChildren();
     }
 
     function needParameter()
     {
-        if(method_exists($this->tagobject,'needParameter')) {
-            return $this->tagobject->needParameter();
-        } else {
-            return false;
-        }
+        return $this->tagobject->needParameter();
     }
 
     function needExceptionsControl() 
     {
-        if(method_exists($this->tagobject,'needExceptionsControl')) {
-            return $this->tagobject->needExceptionsControl();
-        } else {
-            return false;
-        }
+        return $this->tagobject->needExceptionsControl();
     }
         
 }
