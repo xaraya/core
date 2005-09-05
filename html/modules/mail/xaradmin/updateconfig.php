@@ -28,8 +28,8 @@ function mail_admin_updateconfig()
     if (!xarVarFetch('adminname', 'str:1:', $adminname)) return;
     if (!xarVarFetch('adminmail', 'str:1:', $adminmail)) return;
     if (!xarVarFetch('replyto', 'checkbox', $replyto, false, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('replytoname', 'str:1:', $replytoname, 'Your Alt Reply To Name', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('replytoemail', 'str:1:', $replytoemail, 'Your Alt Reply To Email', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('replytoname', 'str:1:', $replytoname, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('replytoemail', 'str:1:', $replytoemail, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('html', 'checkbox', $html, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('htmluseheadfoot', 'checkbox', $htmluseheadfoot, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('htmlheader', 'str:1:', $htmlheader, '', XARVAR_NOT_REQUIRED)) return;
@@ -41,12 +41,12 @@ function mail_admin_updateconfig()
     if (!xarVarFetch('priority', 'str:1:', $priority, 'normal')) return;
     if (!xarVarFetch('encoding', 'str:1:', $encoding)) return;
     if (!xarVarFetch('server', 'str:1:', $server, 'mail')) return;
-    if (!xarVarFetch('smtpHost', 'str:1:', $smtpHost, 'Your SMTP Host', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('smtpHost', 'str:1:', $smtpHost, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('smtpPort', 'int:1:', $smtpPort, '25', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('smtpAuth', 'checkbox', $smtpAuth, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('htmlheader', 'str:1:', $htmlheader, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('smtpUserName', 'str:1:', $smtpUserName, 'Your SMTP User Name', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('smtpPassword', 'str:1:', $smtpPassword, 'Your SMTP Password', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('smtpUserName', 'str:1:', $smtpUserName, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('smtpPassword', 'str:1:', $smtpPassword, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('sendmailpath', 'str:1:', $sendmailpath, '/usr/sbin/sendmail', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('searchstrings', 'str:1', $searchstrings, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('replacestrings', 'str:1', $replacestrings, '', XARVAR_NOT_REQUIRED)) return;
@@ -73,7 +73,9 @@ function mail_admin_updateconfig()
     xarModSetVar('mail', 'smtpPort', $smtpPort);
     xarModSetVar('mail', 'smtpAuth', $smtpAuth);
     xarModSetVar('mail', 'smtpUserName', $smtpUserName);
-    xarModSetVar('mail', 'smtpPassword', $smtpPassword);
+    if (!empty($smtpPassword)) {
+        xarModSetVar('mail', 'smtpPassword', $smtpPassword);
+    }
     xarModSetVar('mail', 'sendmailpath', $sendmailpath);
     $searchstrings = serialize($searchstrings);
     xarModSetVar('mail', 'searchstrings', $searchstrings);
