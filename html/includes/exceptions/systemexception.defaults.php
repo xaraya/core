@@ -178,10 +178,6 @@
             'title' => xarML('No Privilege'),
             'short' => xarML('You do not have the privileges for this operation.'),
             'long' => xarML('An operation was attempted for which your user has not been assigned privileges. Privileges must be assigned by the system administrator(s).')),
-        'NOT_LOGGED_IN' => array(
-            'title' => xarML('Not logged in'),
-            'short' => xarML('You are attempting an operation that is not allowed for the Anonymous user.'),
-            'long' => xarML('An operation was encountered that requires the user to be logged in. If you are currently logged in please report this as a bug.')),
         'NOT_IMPLEMENTED' => array(
             'title' => xarML('Not implemented'),
             'short' => xarML('The requested feature is not available.'),
