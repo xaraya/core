@@ -30,13 +30,10 @@ function privileges_admin_updateprivilege()
     if(!xarVarFetch('pcomponent', 'isset', $component,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('ptype',      'isset', $type,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('plevel',     'isset', $level,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pinstance',  'array', $pinstance, array(), XARVAR_NOT_REQUIRED)) {return;}
 
-    $i = 0;
     $instance = "";
-    while ($pinstance = xarVarCleanFromInput('pinstance'.$i)) {
-        $i++;
-        $instance .= $pinstance . ":";
-    }
+    foreach($pinstance as $part) $instance .= $part . ":";
     if ($instance =="") {
         $instance = "All";
     }
