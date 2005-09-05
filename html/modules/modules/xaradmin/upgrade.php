@@ -47,7 +47,7 @@ function modules_admin_upgrade()
         // Bug 1222: check for exceptions in the exception stack.
         // If there are any, then return NULL to display them (even if
         // the upgrade worked).
-        if(!isset($upgraded) || xarExceptionMajor()) {return;}
+        if(!isset($upgraded) || xarCurrentErrorType()) {return;}
 
         // Bug 1669
         // Also check if module upgrade returned false

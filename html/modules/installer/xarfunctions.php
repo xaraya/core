@@ -147,7 +147,7 @@ function xarInstallAPILoad($modName, $modType = 'user')
 
     // Load the API translations files
    /* $res = xarMLS_loadModuleTranslations($modName, $modOsDir, $modType.'api');
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return; // throw back exception
     }
 
@@ -220,7 +220,7 @@ function xarInstallLoad($modName, $modType = 'user')
 
     // Load the module translations files
     /* $res = xarMLS_loadModuleTranslations($modName, $modOsDir, $modType);
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return; // throw back exception
     }*/
 

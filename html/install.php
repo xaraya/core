@@ -148,7 +148,7 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 
     // Load installer module
     $res = xarInstallLoad($modName, $modType);
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
 
         return; // throw back
     }
@@ -186,7 +186,7 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     }
 
     // Here we check for exceptions even if $res isn't empty
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return; // throw back
     }
 
@@ -194,7 +194,7 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     $pageOutput = xarTpl_renderPage($mainModuleOutput);
 
     // Handle exceptions
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return;
     }
 
@@ -221,7 +221,7 @@ if (!xarInstallMain($phase)) {
         xarExceptionFree();
         // Render page
         $pageOutput = xarTpl_renderPage($text);
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
             // Fallback to raw html
             $msg = '<span style="color: #FF0000;">The current page is shown because the Blocklayout Template Engine failed to render the page, however this could be due to a problem not in BL itself but in the template. BL has raised or has left uncaught the following exception:</span>';
             $msg .= '<br /><br />';

@@ -51,7 +51,7 @@ function modules_adminapi_activate ($args)
                         array('regid' => $regid,
                               'state' => XARMOD_STATE_ACTIVE));
 
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return NULL;
     }
 

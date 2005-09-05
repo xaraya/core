@@ -51,7 +51,7 @@ class Dynamic_Hook_DataStore extends Dynamic_DataStore
                 // see if we got something interesting in return
                 if (isset($value)) {
                     $this->fields[$hook]->setValue($value);
-                } elseif (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+                } elseif (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
                     // ignore any exceptions on retrieval for now
                     xarExceptionFree();
                 }

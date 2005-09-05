@@ -33,7 +33,7 @@ function themes_adminapi_activate($args)
     }
 
     $themeInfo = xarThemeGetInfo($regid);
-    if (!isset($themeInfo) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!isset($themeInfo) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return NULL;
     }
 
@@ -44,7 +44,7 @@ function themes_adminapi_activate($args)
                         'setstate',
                         array('regid' => $regid,
                               'state' => XARTHEME_STATE_ACTIVE));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return NULL;
     }
 

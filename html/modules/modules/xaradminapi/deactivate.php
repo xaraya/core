@@ -32,7 +32,7 @@ function modules_adminapi_deactivate ($args)
     }
 
     $modInfo = xarModGetInfo($regid);
-    if (!isset($modInfo) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!isset($modInfo) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return NULL;
     }
 
@@ -59,7 +59,7 @@ function modules_adminapi_deactivate ($args)
                         array('regid' => $regid,
                               'state' => XARMOD_STATE_INACTIVE));
 
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return NULL;
     }
 

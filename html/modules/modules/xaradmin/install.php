@@ -72,7 +72,7 @@ function modules_admin_install()
         } // Else
 
         // Bug 1222: give exceptions raised during the install a chance to be displayed.
-        if (xarExceptionMajor()) {
+        if (xarCurrentErrorType()) {
             return;
         }
     }

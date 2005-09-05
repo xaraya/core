@@ -104,7 +104,7 @@ function installer_adminapi_initialise($args)
         $res = $initFunc();
 
         // Handle exceptions
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
+        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
 
         if ($res == false) {
             // exception
