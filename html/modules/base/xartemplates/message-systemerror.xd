@@ -46,7 +46,7 @@
 		</xar:if>
 		<div style="margin-left: 1em; margin-right: 1em; text-align:left;">
 			<xar:if condition = "$product ne ''">
-				<p><a href="http://bugs.xaraya.com/enter_bug.cgi?product=#$product#&component=#$component#&short_desc=#$title#&comment=#$short#" target="_blank">Click here to raise a bug</a></p>
+				<p><a href="http://bugs.xaraya.com/enter_bug.cgi?product=#$product#&component=#$component#&short_desc=#$title#:%20#$product#/#$component#&comment=#$short#" target="_blank">Click here to raise a bug</a></p>
 			<xar:else />
 				<p><a href="http://bugs.xaraya.com/enter_bug.cgi">Click here to raise a bug</a></p>
 			</xar:if>
