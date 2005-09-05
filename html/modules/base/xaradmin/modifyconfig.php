@@ -68,7 +68,9 @@ function base_admin_modifyconfig()
     $data['translationsBackend'] = xarConfigGetVar('Site.MLS.TranslationsBackend');
     $data['authid'] = xarSecGenAuthKey();
     $data['updatelabel'] = xarML('Update Base Configuration');
-
+    $data['XARCORE_VERSION_NUM'] = XARCORE_VERSION_NUM;
+    $data['XARCORE_VERSION_ID'] =  XARCORE_VERSION_ID;
+    $data['XARCORE_VERSION_SUB'] = XARCORE_VERSION_SUB;
     return $data;
 }
 
