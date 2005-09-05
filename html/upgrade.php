@@ -85,6 +85,7 @@ if (empty($step)) {
     echo "Table Prefix is : ".$sprefix."<br /><br />";
     echo "Checking hard coded table prefixes in security_instances table for categories, articles, ratings and hitcount modules.<br /><br />";
     $instancestable = $sprefix."_security_instances";
+    $privilegestable = $sprefix."_privileges";
     $modulestable=$sprefix.'_modules';
     $categorytable=$sprefix.'_categories';
     $blockinstancetable=$sprefix.'_block_instances';
@@ -127,6 +128,21 @@ if (empty($step)) {
   } else {
       echo "Base module not available - no upgrade carried out.<br />";
   } // endif modavailable('base')
+
+    $dbconn =& xarDBGetConn();
+
+    // replace DynamicData component 'Type' by 'Field'
+    echo "Updating security instance for DynamicData.<br />";
+    $query = "UPDATE $instancestable
+              SET xar_component='Field'
+              WHERE xar_module='dynamicdata' AND xar_component='Type'";
+    $result =& $dbconn->Execute($query);
+
+    echo "Updating privileges for DynamicData.<br />";
+    $query = "UPDATE $privilegestable
+              SET xar_component='Field'
+              WHERE xar_module='dynamicdata' AND xar_component='Type'";
+    $result =& $dbconn->Execute($query);
 
    //now check modules instances - only affected if their site prefix is other than 'xar'
  if ($sprefix == 'xar') { // check ratings, hitcount, articles and categories
@@ -775,105 +791,6 @@ if (empty($step)) {
                        array('name'    =>  'rolesdisplay',
                              'module'  =>  'roles',
                              'set'     =>  'tabbed'),
-                       array('name'    =>  'confirmationemail',
-                             'module'  =>  'roles',
-                             'set'     =>  'Your account has been created for %%sitename%% and needs to be activated.
-You can either do this now, or on the first time that you log in.
-If you prefer to do it now, then you will need to follow this link :
-%%validationlink%%
-Here are the details that were provided.
-
-IP Address of the person creating that account: %%ipaddress%%
-User Name:  %%username%%
-Password:  %%password%%
-
-Validation Code to activate your account:  %%valcode%%
-
-If you did not create this account, then do nothing.  The account will be deemed
-inactive after a period of time and deleted from our records.  You will recieve
-no further emails from us.Thank you,
-
-%%siteadmin%%',
-                             'override'  =>  1),
-                     array('name'    =>  'remindertitle',
-                             'module'  =>  'roles',
-                             'set'     =>  'Replacement login information for %%recipientname%% at
-%%sitename%%',
-                             'override'  =>  1),
-                    array('name'    =>  'reminderemail',
-                             'module'  =>  'roles',
-                             'set'     =>  '%%recipientname%%,
-
-Here is your new password for %%sitename%%. You may now login to %%siteurl%%
-using the following username and password:
-username: %%username%%
-password: %%password%%
-
--- %%siteadmin%%',
-                             'override'  =>  1),
-                    array('name'    =>  'validationtitle',
-                             'module'  =>  'roles',
-                             'set'     =>  'Validate your account %%recipientname%% at %%sitename%%',
-                             'override'  =>  1),
-                    array('name'    =>  'validationemail',
-                             'module'  =>  'roles',
-                             'set'     =>  '%%recipientname%%,
-
-Your account must be validated again because your e-mail address has changed or
-an administrator has unvalidated it. You can either do this now, or on the next
-time that you log in. If you prefer to do it now, then you will need to follow
-this link : %%validationlink%%
-Validation Code to activate your account:  %%valcode%%
-
-You will receive an email has soon as your account is activated again.
-
-%%siteadmin%%',
-                             'override'  =>  1),
-                    array('name'    =>  'deactivationtitle',
-                             'module'  =>  'roles',
-                             'set'     =>  '%%recipientname%% deactivated at %%sitename%%',
-                             'override'  =>  1),
-                    array('name'    =>  'deactivationemail',
-                             'module'  =>  'roles',
-                             'set'     =>  '%%recipientname%%,
-
-Your account was deactivated by the administrator.
-If you want to know the reason, contact %%adminmail%%
-You will receive an email as soon as your account is activated again.
-
-%%siteadmin%%',
-                             'override'  =>  1),
-                    array('name'    =>  'pendingtitle',
-                             'module'  =>  'roles',
-                             'set'     =>  'Pending state of %%recipientname%% at %%sitename%%',
-                             'override'  =>  1),
-                    array('name'    =>  'pendingemail',
-                             'module'  =>  'roles',
-                             'set'     =>  '%%recipientname%%,
-
-Your account is pending.
-You\'ll have to wait for the explicit approval of the administrator to log
-again.
-If you want to know the reason, contact %%adminmail%%
-You will receive an email has soon as your account is activated again.
-
-%%siteadmin%%',
-                             'override'  =>  1),
-                    array('name'    =>  'passwordtitle',
-                             'module'  =>  'roles',
-                             'set'     =>  'Your password at %%sitename%% has been changed',
-                             'override'  =>  1),
-                    array('name'    =>  'passwordemail',
-                             'module'  =>  'roles',
-                             'set'     =>  '%%recipientname%%,
-
-Your password has been changed by an administrator.
-You can now login at %%siteurl%% with the following information:
-Login : %%username%%
-Password : %%password%%
-
-%%siteadmin%%',
-                             'override'  =>  1),
                           );
 
     foreach($modvars as $modvar){
@@ -892,14 +809,41 @@ Password : %%password%%
         }
     }
 
+// TODO: save modified email templates from module variables to var/messages !
+
     // Delete any empty modvars.
     $delmodvars[] = array(array('name'    =>  'showtacs',
-                                'module'  =>  'roles'));
+                                'module'  =>  'roles'),
+                          array('name'    =>  'confirmationtitle',
+                                'module'  =>  'roles'),
+                          array('name'    =>  'confirmationemail',
+                                'module'  =>  'roles'),
+                          array('name'    =>  'remindertitle',
+                                'module'  =>  'roles'),
+                          array('name'    =>  'reminderemail',
+                                'module'  =>  'roles'),
+                          array('name'    =>  'validationtitle',
+                                'module'  =>  'roles'),
+                          array('name'    =>  'validationemail',
+                                'module'  =>  'roles'),
+                          array('name'    =>  'deactivationtitle',
+                                'module'  =>  'roles'),
+                          array('name'    =>  'deactivationemail',
+                                'module'  =>  'roles'),
+                          array('name'    =>  'pendingtitle',
+                                'module'  =>  'roles'),
+                          array('name'    =>  'pendingemail',
+                                'module'  =>  'roles'),
+                          array('name'    =>  'passwordtitle',
+                                'module'  =>  'roles'),
+                          array('name'    =>  'passwordemail',
+                                'module'  =>  'roles'),
+                         );
 
     foreach($delmodvars as $delmodvar){
         foreach($delmodvar as $var){
             $currentvar = xarModGetVar("$var[module]", "$var[name]");
-            if (isset($currentvar)){
+            if (!isset($currentvar)){
                 echo "$var[module] -> $var[name] is deleted, proceeding to next check<br />";
             } else {
                 xarModDelVar($var['module'], $var['name']);
