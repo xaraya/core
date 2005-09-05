@@ -447,6 +447,7 @@ function installer_admin_create_administrator()
     }
     if (!xarModAPIFunc( 'blocks', 'admin', 'create_instance',
                 array(  'title'    => 'Admin',
+                        'name'     => 'adminpanel',
                         'type'     => $adminBlockId,
                         'group'    => $leftBlockGroup,
                         'template' => '',
@@ -473,6 +474,7 @@ function installer_admin_create_administrator()
     if (!xarModAPIFunc('blocks',
                        'admin',
                        'create_instance', array('title'    => 'Reminder',
+                                                'name'     => 'reminder',
                                                 'content'  => $msg,
                                                 'type'     => $htmlBlockId,
                                                 'group'    => $leftBlockGroup,
@@ -761,6 +763,7 @@ function installer_admin_confirm_configuration()
         }
 
         xarModAPIFunc('blocks','admin','create_instance',array('title' => 'Main Menu',
+                                                               'name' => 'mainmenu',
                                                                'type' => $adminBlockId,
                                                                'group' => $leftBlockGroup,
                                                                'template' => '',
@@ -831,6 +834,7 @@ function installer_admin_cleanup() {
 
     if (!xarModAPIFunc( 'blocks', 'admin', 'create_instance',
                 array(  'title'    => 'Login',
+                        'name'     => 'login',
                         'type'     => $loginBlockId,
                         'group'    => $rightBlockGroup,
                         'template' => '',
@@ -867,6 +871,7 @@ function installer_admin_cleanup() {
     if (!xarModAPIFunc('blocks',
                        'admin',
                        'create_instance', array('title'    => 'Meta',
+                                                'name'     => 'meta',
                                                 'type'     => $metaBlockId,
                                                 'group'    => $headerBlockGroup,
                                                 'template' => '',
@@ -905,6 +910,7 @@ function installer_admin_cleanup() {
     if (!xarModAPIFunc('blocks',
                        'admin',
                        'create_instance', array('title'    => 'Syndicate',
+                                                'name'     => 'syndicate',
                                                 'type'     => $syndicateBlockId,
                                                 'group'    => $syndicateBlockGroup,
                                                 'template' => '',
