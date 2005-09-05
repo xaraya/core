@@ -67,7 +67,7 @@
  *
  * Server package:
  * ---------------
- * ServerRequest - event is triggered when a request is received at the server (see index.php)
+ * ServerRequest - event is issued at the end of processing a server request
  * 
  * Session package:
  * ----------------
@@ -150,7 +150,7 @@ function xarEvt_trigger($eventName, $value = NULL)
     for ($i =0; $i < $nractive; $i++) {
         // We issue the event to the user api for now
         // FIXME: Could all 4 types be supported? In which situations?
-        xarEvt_notify($activemods[$i]['name'], 'user', $eventName, $value);
+        xarEvt__notify($activemods[$i]['name'], $eventName, $value);
         //FIXME: <besfred> ^^^ should we catch its return value and react?
     }
 
@@ -164,14 +164,14 @@ function xarEvt_trigger($eventName, $value = NULL)
  *
  * @author  Marco Canini
  * @author  Marcel van der Boom <marcel@xaraya.com>
- * @access  protected
+ * @access  private
  * @param   $modName string The name of the module
  * @param   $modType string userapi / adminapi
  * @return  void
  * @throws  BAD_PARAM
  * @todo    Analyze thoroughly for performance issues.
 */
-function xarEvt_notify($modName, $modType, $eventName, $value)
+function xarEvt__notify($modName, $eventName, $value)
 {
     if (!xarEvt__checkEvent($eventName)) return; // throw back
 
@@ -180,20 +180,18 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
         return;
     }
 
-    // We can't rely on the API, the event system IS the API
-    
-    // We can't use xarModAPIFunc because that sets exceptions and we 
-    // don't want that when a module doesn't react to an event.
-
-    // We can use xarModAPILoad. This will create another event ModAPILoad 
-    // if the api wasn't loaded yet. The event will *not* be created if the
-    // API was already loaded. However, this would mean that all module APIs
-    // are always loaded, which is a bit too much, so we should try it another way
+    // We can't rely on the API, the event system IS the API!
+    // - no use of xarModAPIFunc because that sets exceptions and we 
+    //   don't want that when a module doesn't react to an event.
+    // - we could use xarModAPILoad. This will create another event ModAPILoad 
+    //   if the api wasn't loaded yet. The event will *not* be created if the
+    //   API was already loaded. However, this would mean that all module APIs
+    //   are always loaded, which is a bit too much, so we should try it another way
 
     // First issue it to the specific event handler
     // Function naming: module_eventapi_OnEventName
     $funcSpecific = "{$modName}_eventapi_On$eventName";
-//    $funcGeneral  = "{$modName}_eventapi_OnEvent";
+    // $funcGeneral  = "{$modName}_eventapi_OnEvent";
 
     // set which file to load for looking up the event handler
     $xarapifile="modules/{$modName}/xareventapi.php";
