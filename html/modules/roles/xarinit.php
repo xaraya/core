@@ -193,6 +193,8 @@ function roles_activate()
     xarModSetVar('roles', 'uniqueemail', 1);
     //Default Display
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
+    //Default User Locale
+    xarModSetVar('roles', 'locale', '');
 
     $lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',
