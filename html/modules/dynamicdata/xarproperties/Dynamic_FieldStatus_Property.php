@@ -34,6 +34,7 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
                                  array('id' => 0, 'name' => xarML('Disabled')),
                                  array('id' => 1, 'name' => xarML('Active')),
                                  array('id' => 2, 'name' => xarML('Display Only')),
+                                 array('id' => 3, 'name' => xarML('Hidden')),
                              );
         }
     }

@@ -131,6 +131,7 @@ function dynamicdata_utilapi_import($args)
                     $object['itemtype'] = -1;
                 }
 
+                
                 $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
                                           $object);
                 if (!isset($objectid)) {
@@ -354,7 +355,7 @@ function dynamicdata_utilapi_import($args)
         }
     }
 
-    return $objectid;
+    return isset($objectid) ? $objectid : null;
 }
 
 ?>

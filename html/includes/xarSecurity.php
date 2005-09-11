@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: xarSecurity.php 1.116 05/08/25 17:23:03+02:00 marcel@davinci.hsdev.com $
  *
  * Low-level security access mechanism
  *
@@ -628,9 +628,9 @@ function xarSecGenAuthKey($modName = NULL)
  * @return bool true if the key is valid, false if it is not
  * @todo bring back possibility of time authorized keys
  */
-function xarSecConfirmAuthKey($authIdVarName = 'authid')
+function xarSecConfirmAuthKey($modName = NULL, $authIdVarName = 'authid')
 {
-    list($modName) = xarRequestGetInfo();
+    if(!isset($modName)) list($modName) = xarRequestGetInfo();
     $authid = xarRequestGetVar($authIdVarName);
 
     // Regenerate static part of key
