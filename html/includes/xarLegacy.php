@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: xarLegacy.php 1.69 05/02/01 16:25:59+01:00 mikespub@fully.qualified.hostname $
  *
  * Legacy Functions
  *

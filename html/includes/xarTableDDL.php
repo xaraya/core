@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: xarTableDDL.php 1.71 05/09/01 12:31:28+02:00 marcel@hsdev.com $
  *
  * Table Maintenance API
  *
@@ -57,9 +57,9 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
     }
 
     switch($databaseType) {
+        case 'mssql':
         case 'mysql':
         case 'oci8':
-        case 'oci8po':
             $sql = 'CREATE DATABASE '.$databaseName;
             break;
         case 'postgres':
@@ -68,11 +68,6 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
          case 'sqlite':
             // No such thing, its created automatically when it doesnt exist
             $sql ='';
-            break;
-        case 'mssql':
-        case 'datadict':
-            include_once('includes/tableddl/datadict.php');
-            $sql = xarDB__datadictCreateDatabase($databaseName);
             break;
         // Other DBs go here
         default:
@@ -86,13 +81,22 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
 }
 
 /**
- * Generate the SQL to create a table
+ * Alter database table
  *
  * @access public
- * @param tableName the physical table name
- * @param fields an array containing the fields to create
- * @param databaseType database type (optional)
- * @return string|false the generated SQL statement, or false on failure
+ * @param tableName the table to alter
+ * @param args['command'] command to perform on table(add,modify,drop,rename)
+ * @param args['field'] name of column to alter
+ * @param args['type'] column type
+ * @param args['size'] size of column if varying data
+ * @param args['default'] default value of data
+ * @param args['null'] null or not null (true/false)
+ * @param args['unsigned'] allow unsigned data (true/false)
+ * @param args['increment'] auto incrementing files
+ * @param args['primary_key'] primary key
+ * @param databaseType the database type (optional)
+ * @return string generated sql
+ * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDBCreateTable($tableName, $fields, $databaseType="")
 {
@@ -324,12 +328,26 @@ function xarDBDropTable($tableName, $databaseType = NULL)
     if ($tableName != $metaTable) {
         $dbconn =& xarDBGetConn();
         $query = "DELETE FROM $metaTable WHERE xar_table=?";
-        $result =& $dbconn->Execute($query,array($tableName));
+        // This doesnt have to be fatal
+        try {
+          $result =& $dbconn->Execute($query,array($tableName));
+        } catch(Exception $e) {
+        }
     }
 
     switch($databaseType) {
         case 'mysql':
         case 'postgres':
+            // We gots to drop the sequence too, but only if we 
+            // have created one during the create table counterpart
+            // for now, ignore the exception
+            $seqSQL = "DROP SEQUENCE seq".$tableName;
+            $dbconn =& xarDBGetConn();
+            try {
+                $result = $dbconn->Execute($seqSQL);
+            } catch(Exception $e) {
+                // ignore for now
+            }
         case 'oci8':
         case 'oci8po':
         case 'sqlite':

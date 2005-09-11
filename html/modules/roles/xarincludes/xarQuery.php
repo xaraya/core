@@ -85,7 +85,7 @@ class xarQuery
                 $result = $this->dbconn->Execute($this->statement);
             }
             if(!$result) return;
-            $this->rows = $result->_numOfRows;
+            $this->rows = $result; 
             return true;
         }
         if($this->rowstodo != 0 && $this->limits == 1 && $this->israwstatement) {
@@ -101,13 +101,14 @@ class xarQuery
             else {
                 $result = $this->dbconn->Execute($this->statement);
             }
-            $this->rows = $result->_numOfRows;
+            if (!$result) return;
+            $this->rows = $result->getRecordCount();
         }
         if (!$result) return;
         $this->result =& $result;
 
         if (($result->fields) === false) $numfields = 0;
-        else $numfields = $result->_numOfFields;
+        else $numfields = count($result->fields); // Better than the private var, fields should still be proteced
         $this->output = array();
         if ($display == 1) {
             if ($statement == '') {
@@ -123,7 +124,7 @@ class xarQuery
                     }
                 }
                 while (!$result->EOF) {
-                    $i=0;
+                    $i=0; $line=array();
                     foreach ($this->fields as $key => $value ) {
                         if(!empty($value['alias']))
                             $line[$value['alias']] = $result->fields[$i];

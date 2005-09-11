@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: xarCore.php 1.168 05/09/01 12:31:28+02:00 marcel@hsdev.com $
  *
  * The Core
  *
@@ -30,17 +30,17 @@ define('XARCORE_VERSION_SUB', 'adam_baum');
  * ----------------------------------------------
  * | Name           | Depends on                |
  * ----------------------------------------------
- * | ADODB          | nothing                   |
- * | SESSION        | ADODB                     |
- * | CONFIGURATION  | ADODB                     |
- * | USER           | SESSION, ADODB            |
- * | BLOCKS         | CONFIGURATION, ADODB      |
- * | MODULES        | CONFIGURATION, ADODB      |
+ * | DATABASE       | nothing                   |
+ * | SESSION        | DATABASE                  |
+ * | CONFIGURATION  | DATABASE                  |
+ * | USER           | SESSION, DATABASE         |
+ * | BLOCKS         | CONFIGURATION, DATABASE   | 
+ * | MODULES        | CONFIGURATION, DATABASE   |
  * | EVENTS         | MODULES                   |
  * ----------------------------------------------
  *
  *
- *   ADODB              (00000001)
+ *   DATABASE           (00000001)
  *   |
  *   |- SESSION         (00000011)
  *   |  |
@@ -63,15 +63,15 @@ define('XARCORE_VERSION_SUB', 'adam_baum');
  */
 
 define('XARCORE_SYSTEM_NONE', 0);
-define('XARCORE_SYSTEM_ADODB', 1);
-define('XARCORE_SYSTEM_SESSION', 2 | XARCORE_SYSTEM_ADODB);
+define('XARCORE_SYSTEM_DATABASE', 1);
+define('XARCORE_SYSTEM_SESSION', 2 | XARCORE_SYSTEM_DATABASE);
 define('XARCORE_SYSTEM_USER', 4 | XARCORE_SYSTEM_SESSION);
-define('XARCORE_SYSTEM_CONFIGURATION', 8 | XARCORE_SYSTEM_ADODB);
+define('XARCORE_SYSTEM_CONFIGURATION', 8 | XARCORE_SYSTEM_DATABASE);
 define('XARCORE_SYSTEM_BLOCKS', 16 | XARCORE_SYSTEM_CONFIGURATION);
 define('XARCORE_SYSTEM_MODULES', 32 | XARCORE_SYSTEM_CONFIGURATION);
 define('XARCORE_SYSTEM_ALL', 127); // bit OR of all optional systems (includes templates now)
 
-define('XARCORE_BIT_ADODB', 1);
+define('XARCORE_BIT_DATABASE', 1);
 define('XARCORE_BIT_SESSION', 2);
 define('XARCORE_BIT_USER', 4 );
 define('XARCORE_BIT_CONFIGURATION', 8);
@@ -98,10 +98,14 @@ define('XAR_INCLUDE_MAY_NOT_EXIST', 2);
 /*
  * Miscelaneous
  */
-define('XARCORE_CONFIG_FILE', 'config.system.php');
+define('XARCORE_CONFIG_FILE'  , 'config.system.php');
+define('XARCORE_CACHEDIR'     , '/cache');
+define('XARCORE_DB_CACHEDIR'  , '/cache/database');
+define('XARCORE_RSS_CACHEDIR' , '/cache/rss');
+define('XARCORE_TPL_CACHEDIR' , '/cache/templates');
 
 /**
- * Load the Xaraya pre core early (in case we're not coming in via index.php)
+ * Load the Xaraya pre core early (in case we're not coming in vai index.php)
  */
 include_once('includes/xarPreCore.php');
 
@@ -191,7 +195,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * It think this is the earliest we can do
      *
      */
-    if ($whatToLoad & XARCORE_SYSTEM_ADODB) { // yeah right, as if this is optional
+    if ($whatToLoad & XARCORE_SYSTEM_DATABASE) { // yeah right, as if this is optional
         include 'includes/xarDB.php';
 
         // Decode encoded DB parameters
@@ -211,7 +215,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                             'siteTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'));
         // Connect to database
         xarDB_init($systemArgs, $whatToLoad);
-        $whatToLoad ^= XARCORE_BIT_ADODB;
+        $whatToLoad ^= XARCORE_BIT_DATABASE;
     }
 
     /*

@@ -61,7 +61,7 @@ function adminpanels_adminapi_updatemenudb($args)
         }else{
             // just empty the table
             $query =   "DELETE FROM $menutable";
-            $result =& $dbconn->Execute($query);
+            $result = $dbconn->Execute($query);
             if (!$result) return;
 
             // one modules was added or removed
@@ -78,7 +78,7 @@ function adminpanels_adminapi_updatemenudb($args)
                           xar_amid, xar_name, xar_category)
                           VALUES (?,?,?)";
                 $bindvars = array($dbconn->GenId($menutable),$mod['name'],$modcat);
-                $result =& $dbconn->Execute($query,$bindvars);
+                $result = $dbconn->Execute($query,$bindvars);
                 if (!$result) return;
             }
         }

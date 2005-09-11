@@ -87,6 +87,7 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                 case 'sql' :
                     // Preparing for use as a quoted SQL string.
                     $dbconn =& xarDBGetConn();
+                    // FIXME: when using bindvars this can be just (string) $subject
                     $subject = $dbconn->qstr($subject);
                     break;
 

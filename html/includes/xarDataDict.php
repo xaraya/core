@@ -949,6 +949,7 @@ class xarMetaData
      * @returns array on success, false on failure
      * @return  array of primary keys for the table, false otherwise
      * @throws  none
+     * @todo    The method name suggests that multiple keys are retrieved, which is not true, multiple attribs maybe, but only 1 key.
     */
     function getPrimaryKeys($table)
     {
