@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: menu.php 1.121 05/06/14 13:44:58+02:00 marc@marclaptop. $
  *
  * Menu System
  *
@@ -25,7 +25,8 @@
 function base_menublock_init()
 {
     return array(
-        'displaymodules' => false,
+        'displaymodules' => 'None',
+        'modulelist' => '',
         'displayprint' => true,
         'displayrss' => false,
         'displayprint' => false,
@@ -100,6 +101,9 @@ function base_menublock_display($blockinfo)
 
     $marker = $vars['marker'];
 
+    if (empty($vars['displaymodules'])) {
+        $vars['displaymodules'] = 'None';
+    }
 
     // which module is loaded atm?
     // we need it's name, type and function - dealing only with user type mods, aren't we?
@@ -223,8 +227,19 @@ function base_menublock_display($blockinfo)
     }
 
     // Added list of modules if selected.
-    if (!empty($vars['displaymodules'])) {
+    if ($vars['displaymodules'] != 'None') {
         if (xarSecurityCheck('ReadBaseBlock',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {
+            if ($vars['displaymodules'] == 'List' && !empty($vars['modulelist'])) {
+                $modlist = explode(',',$vars['modulelist']);
+                $list = array();
+                foreach ($modlist as $mod) {
+                    $temp = xarMod_getBaseInfo($mod);
+                    if(!empty($temp) && xarModIsAvailable($temp['name']))
+                        if (isset($temp)) $list[] = $temp;
+                }
+                $mods = $list;
+                if ($list == array()) $usermods = '';
+            }
             foreach($mods as $mod){
                 $label = xarModGetDisplayableName($mod['name']);
                 $title = xarModGetDisplayableDescription($mod['name']);
@@ -396,6 +411,10 @@ function base_menublock_modify($blockinfo)
         $vars['marker'] = '[x]';
     }
 
+    if (empty($vars['modulelist'])) {
+        $vars['modulelist'] = '';
+    }
+
     // Prepare output array
     $c=0;
     if (!empty($vars['content'])) {
@@ -423,7 +442,8 @@ function base_menublock_modify($blockinfo)
 function base_menublock_insert($blockinfo)
 {
     // Global options.
-    if (!xarVarFetch('displaymodules', 'checkbox', $vars['displaymodules'], false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('displaymodules', 'str:1', $vars['displaymodules'], 'None', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('modulelist', 'str', $vars['modulelist'], '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('showlogout', 'checkbox', $vars['showlogout'], true, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('displayrss', 'checkbox', $vars['displayrss'], false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('displayprint', 'checkbox', $vars['displayprint'], false, XARVAR_NOT_REQUIRED)) return;

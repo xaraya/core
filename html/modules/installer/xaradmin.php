@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id: s.xaradmin.php 1.67 03/04/19 16:34:00-04:00 johnny@falling.local.lan $
+ * File: $Id: xaradmin.php 1.172 05/09/04 12:16:41+02:00 Marc.Lutolf@sarek. $
  *
  * Installer admin display functions
  *
@@ -957,7 +957,8 @@ function installer_admin_confirm_configuration()
         $func = "installer_" . basename(strval($configuration),'.conf.php') . "_configuration_load";
         $func($chosen);
         $content['marker'] = '[x]';                                           // create the user menu
-        $content['displaymodules'] = 1;
+        $content['displaymodules'] = 'All';
+        $content['modulelist'] = '';
         $content['content'] = '';
 
         // Load up database

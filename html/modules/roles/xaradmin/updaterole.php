@@ -24,6 +24,7 @@ function roles_admin_updaterole()
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
     if (!xarVarFetch('pname', 'str:1:35:', $pname)) return;
     if (!xarVarFetch('ptype', 'int', $ptype)) return;
+    if (!xarVarFetch('phome', 'str', $phome, '', XARVAR_NOT_REQUIRED)) return;
 
     //Save the old state and type
     $roles = new xarRoles();
@@ -89,6 +90,7 @@ function roles_admin_updaterole()
         'name' => $pname,
         'type' => $ptype,
         'uname' => $puname,
+        'home' => $phome,
         'email' => $pemail,
         'pass' => $ppass1,
         'state' => $pstate);

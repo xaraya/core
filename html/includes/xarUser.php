@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: xarUser.php 1.154 05/05/14 00:24:41+02:00 marc@marclaptop. $
  *
  * User System
  *
@@ -40,6 +40,7 @@ define('XARUSER_AUTH_USER_ENUMERABLE', 128);
  */
 define('XARUSER_AUTH_FAILED', -1);
 define('XARUSER_AUTH_DENIED', -2);
+define('XARUSER_LAST_RESORT', -3);
 
 /**
  * Initialise the User System
@@ -113,9 +114,9 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
 
     $userId = XARUSER_AUTH_FAILED;
     $args = array('uname' => $userName, 'pass' => $password);
-    // FIXME: <rabbitt> Do we want to actually put this here or do this 
-    //        another way? Maybe record the exception stack before we go 
-    //        into the foreach loop below (which can kill any exceptions 
+    // FIXME: <rabbitt> Do we want to actually put this here or do this
+    //        another way? Maybe record the exception stack before we go
+    //        into the foreach loop below (which can kill any exceptions
     //        that are set prior to entering this function)....
     if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
     foreach($GLOBALS['xarUser_authenticationModules'] as $authModName) {
@@ -140,8 +141,17 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
         // but free exceptions set by previous auth module
         xarErrorFree();
     }
-    if ($userId == XARUSER_AUTH_FAILED || $userId == XARUSER_AUTH_DENIED)
-        return false;
+    if ($userId == XARUSER_AUTH_FAILED || $userId == XARUSER_AUTH_DENIED) {
+        if (xarModGetVar('privileges','lastresort')) {
+            $secret = unserialize(xarModGetVar('privileges','lastresort'));
+            if ($secret['name'] == MD5($userName) && $secret['password'] == MD5($password)) {
+                $userId = XARUSER_LAST_RESORT;
+                $rememberMe = 0;
+            }
+        } else {
+            return false;
+        }
+    }
 
     // Catch common variations (0, false, '', ...)
     if (empty($rememberMe)) $rememberMe = 0;
@@ -360,6 +370,7 @@ $GLOBALS['xarUser_objectRef'] = null;
  */
 function xarUserGetVar($name, $userId = NULL)
 {
+
     if (empty($name)) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
@@ -396,6 +407,9 @@ function xarUserGetVar($name, $userId = NULL)
     if (!xarCore_IsCached('User.Variables.'.$userId, $name)) {
 
         if ($name == 'name' || $name == 'uname' || $name == 'email') {
+            if ($userId == XARUSER_LAST_RESORT) {
+                return xarML('No Information');
+            }
             // retrieve the item from the roles module
             $userRole = xarModAPIFunc('roles',
                                       'user',

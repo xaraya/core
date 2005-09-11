@@ -137,6 +137,15 @@
                 </div>
             </xar:if>
 
+            <xar:if condition="xarModGetVar('roles', 'userhome')">
+                <div class="xar-form-input-wrapper">
+                    <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
+                        <xar:mlstring>Home:</xar:mlstring>
+                    </label>
+                    <input type="text" name="phome" id="phome" value="#xarVarPrepForDisplay($phome)#" size="40" maxlength="100" tabindex="7" />
+                </div>
+            </xar:if>                        
+
             <xar:if condition="$ptype eq 0">
                 <p class="xar-clearboth">
                     <xar:mlstring>The fields below only apply for Users.</xar:mlstring>

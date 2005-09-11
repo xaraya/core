@@ -406,6 +406,18 @@
                             </xar:mlstring>
                         </label>
                     </div>
+                    <div class="xar-form-input-wrapper-after">
+						<xar:if condition="xarModGetVar('roles', 'userhome')">
+							<input type="checkbox" name="userhome" id="userhome" value="1" checked="checked" />
+						<xar:else />
+							<input type="checkbox" name="userhome" id="userhome" value="1" />
+						</xar:if>
+                        <label for="uniuserhome" title="#xarML('Each group or user can have their own home URL')#">
+                            <xar:mlstring>
+                                Enable user specific home pages:
+                            </xar:mlstring>
+                        </label>
+                    </div>
                     <xar:comment>
                         <div class="xar-form-input-wrapper-after">
                             <xar:if condition="xarModGetVar('roles', 'allowinvisible')">

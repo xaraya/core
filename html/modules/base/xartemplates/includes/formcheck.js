@@ -6,7 +6,7 @@
 
 function xar_base_formCheck(formobj, fieldRequired, fieldDescription){
     // dialog message
-    var alertMsg = "Please complete the following fields:\n";
+    var alertMsg = "#xarML('Please complete the following fields:')#\n";
     
     var l_Msg = alertMsg.length;
     

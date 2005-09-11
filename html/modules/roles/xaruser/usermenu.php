@@ -55,6 +55,8 @@ function roles_user_usermenu($args)
             $name = xarUserGetVar('name');
             $uid = xarUserGetVar('uid');
             $email = xarUserGetVar('email');
+            $role = xarUFindRole($uname);
+            $home = $role->getHome();
             $authid = xarSecGenAuthKey();
             $submitlabel = xarML('Submit');
             $item['module'] = 'roles';
@@ -69,6 +71,7 @@ function roles_user_usermenu($args)
                                   'withupload'   => $withupload,
                                   'name'         => $name,
                                   'uname'        => $uname,
+                                  'home'         => $home,
                                   'hooks'        => $hooks,
                                   'emailaddress' => $email,
                                   'submitlabel'  => $submitlabel,
@@ -91,6 +94,7 @@ function roles_user_usermenu($args)
             if(!xarVarFetch('uid',   'isset', $uid,     NULL, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('name',  'isset', $name,    NULL, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('email', 'isset', $email,   NULL, XARVAR_DONT_SET)) return;
+            if(!xarVarFetch('home',  'isset', $home,    NULL, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('pass1', 'isset', $pass1,   NULL, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('pass2', 'isset', $pass2,   NULL, XARVAR_DONT_SET)) return;
             $uname = xarUserGetVar('uname');
@@ -119,6 +123,7 @@ function roles_user_usermenu($args)
                                    array('uid' => $uid,
                                          'uname' => $uname,
                                          'name' => $name,
+                                         'home' => $home,
                                          'email' => $oldemail,
                                          'state' => ROLES_STATE_ACTIVE,
                                          'pass' => $pass))) return;
@@ -178,6 +183,7 @@ function roles_user_usermenu($args)
                                        array('uid' => $uid,
                                              'uname' => $uname,
                                              'name' => $name,
+                                             'home' => $home,
                                              'email' => $email,
                                              'state' => ROLES_STATE_ACTIVE))) return;
                 } else {
@@ -197,6 +203,7 @@ function roles_user_usermenu($args)
                                        array('uid'      => $uid,
                                              'uname'    => $uname,
                                              'name'     => $name,
+                                             'home'     => $home,
                                              'email'    => $email,
                                              'valcode'  => $confcode,
                                              'state'    => ROLES_STATE_NOTVALIDATED))) return;
@@ -222,6 +229,7 @@ function roles_user_usermenu($args)
                                    array('uid' => $uid,
                                          'uname' => $uname,
                                          'name' => $name,
+                                         'home' => $home,
                                          'email' => $email,
                                          'state' => ROLES_STATE_ACTIVE))) return;
             }

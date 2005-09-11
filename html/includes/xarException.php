@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: xarException.php 1.126 05/09/04 12:16:40+02:00 Marc.Lutolf@sarek. $
  *
  * Exception Handling System
  *
@@ -307,7 +307,9 @@ function xarErrorRender($format,$stacktype = "ERROR")
 
     if ($format == 'template') {
         $theme_dir = xarTplGetThemeDir();
-        if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
+        if(file_exists($theme_dir . '/modules/base/message-' . $error->id . '.xt')) {
+            return xarTplFile($theme_dir . '/modules/base/message-' . $error->id . '.xt', $data);
+        } elseif(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
             return xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', $data);
         } else {
             return xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);

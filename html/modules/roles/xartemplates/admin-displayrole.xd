@@ -79,6 +79,15 @@
         #xarVarPrepForDisplay($name)#
     </div>
 
+    <xar:if condition="xarModGetVar('roles', 'userhome')">
+        <div class="xar-form-input-wrapper">
+            <span class="xar-form-label">
+                <xar:mlstring>Home:</xar:mlstring>
+            </span>
+            #xarVarPrepForDisplay($phome)#&nbsp;
+        </div>
+    </xar:if>                        
+
     <xar:if condition="$type eq 0">
         <div class="xar-form-input-wrapper">
             <span class="xar-form-label">

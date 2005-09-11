@@ -24,9 +24,10 @@ function roles_admin_addrole()
     if (!xarSecConfirmAuthKey()) return;
 
     // get some vars for both groups and users
-    xarVarFetch('pname', 'str:1:', $pname, NULL, XARVAR_NOT_REQUIRED);
-    xarVarFetch('ptype', 'str:1', $ptype, NULL, XARVAR_NOT_REQUIRED);
-    xarVarFetch('pparentid', 'str:1:', $pparentid, NULL, XARVAR_NOT_REQUIRED);
+    if (!xarVarFetch('pname',      'str:1:', $pname,      NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('ptype',      'str:1',  $ptype,      NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('pparentid',  'str:1:', $pparentid,  NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('return_url', 'isset',  $return_url, NULL, XARVAR_DONT_SET)) return;
     // get the rest for users only
     // TODO: need to see what to do with auth_module
     if ($ptype == 0) {
@@ -35,6 +36,7 @@ function roles_admin_addrole()
         xarVarFetch('ppass1', 'str:1:', $ppass1, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('ppass2', 'str:1:', $ppass2, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('pstate', 'str:1:', $pstate, NULL, XARVAR_NOT_REQUIRED);
+        xarVarFetch('phome', 'str', $phome, NULL, XARVAR_NOT_REQUIRED);
     }
     // checks specific only to users
     if ($ptype == 0) {
@@ -69,15 +71,17 @@ function roles_admin_addrole()
             return;
         }
         // check for duplicate email address
-        $user = xarModAPIFunc('roles',
-            'user',
-            'get',
-            array('email' => $pemail));
+        if(xarModGetVar('roles','uniqueemail')) {
+            $user = xarModAPIFunc('roles',
+                'user',
+                'get',
+                array('email' => $pemail));
 
-        if ($user != false) {
-            $msg = xarML('That email address is already registered.');
-            xarErrorSet(XAR_USER_EXCEPTION, 'DUPLICATE_DATA', new DefaultUserException($msg));
-            return;
+            if ($user != false) {
+                $msg = xarML('That email address is already registered.');
+                xarErrorSet(XAR_USER_EXCEPTION, 'DUPLICATE_DATA', new DefaultUserException($msg));
+                return;
+            }
         }
         // TODO: Replace with DD property type check.
         // check for valid email address
@@ -134,6 +138,10 @@ function roles_admin_addrole()
     xarModCallHooks('item', 'create', $uid, $pargs);
 
     // redirect to the next page
-    xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole',array('uid' => $uid)));
+    if (!empty($return_url)) {
+        xarResponseRedirect($return_url);
+    } else {
+        xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole',array('uid' => $uid)));
+    }
 }
 ?>

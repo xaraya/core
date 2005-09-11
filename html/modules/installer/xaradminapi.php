@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: xaradminapi.php 1.44 05/05/13 10:32:28+01:00 judgej@acadweb.co.uk $
  *
  * Installer admin API functions
  *

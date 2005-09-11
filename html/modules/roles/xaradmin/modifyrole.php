@@ -25,6 +25,7 @@ function roles_admin_modifyrole()
     if (!xarVarFetch('pemail', 'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ppass', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('phome', 'str', $data['phome'], '', XARVAR_NOT_REQUIRED)) return;
     // Call the Roles class and get the role to modify
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
@@ -74,6 +75,12 @@ function roles_admin_modifyrole()
         $data['puname'] = $uname;
     } else {
         $data['puname'] = $role->getUser();
+    }
+
+    if (!empty($home)) {
+        $data['phome'] = $home;
+    } else {
+        $data['phome'] = $role->getHome();
     }
 
     if (!empty($email)) {

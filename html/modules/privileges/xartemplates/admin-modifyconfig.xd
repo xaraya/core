@@ -22,6 +22,19 @@
                     Actions:
                 </xar:mlstring>
             </dt>
+            <xar:if condition="$tab eq 'general'">
+                <dd class="active">
+                    <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=general">
+                        <xar:mlstring>General</xar:mlstring>
+                    </a>
+                </dd>    
+            <xar:else />
+                <dd>
+                    <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=general">    
+                        <xar:mlstring>General</xar:mlstring>
+                    </a>
+                </dd>    
+            </xar:if>
             <xar:if condition="$tab eq 'realms'">
                 <dd class="active">
                     <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=realms">
@@ -39,10 +52,74 @@
                     </a>
                 </dd>
             </xar:if>
+            <xar:if condition="xarModGetVar('privileges','lastresort')">
+                <xar:if condition="$tab eq 'lastresort'">
+                    <dd class="active">
+                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=lastresort">
+                            <xar:mlstring>Last Resort</xar:mlstring>
+                        </a>
+                    </dd>    
+                <xar:else />
+                    <dd>
+                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=lastresort">    
+                            <xar:mlstring>Last Resort</xar:mlstring>
+                        </a>
+                    </dd>    
+                </xar:if>
+            </xar:if>
         </dl>
     </div>
     <xar:comment>
         ------------------- Begin General Options --------------------- 
+    </xar:comment>
+    <xar:if condition="$tab eq 'general'">
+        <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
+            <fieldset>
+                <legend>
+                    <xar:mlstring>
+                        Privileges Inheritance 
+                    </xar:mlstring>
+                </legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="inheritdeny" title="#xarML('Enable or disable inheritance of deny privileges')#" class="xar-form-label">
+                        <xar:mlstring>Inherit Deny Privileges:</xar:mlstring>
+                    </label>
+                    <xar:if condition="xarModGetVar('privileges', 'inheritdeny')">
+                        <input type="checkbox" name="inheritdeny" id="inheritdeny" value="1" checked="checked" />
+                    <xar:else />
+                        <input type="checkbox" name="inheritdeny" id="inheritdeny" value="1" />
+                    </xar:if>
+                    <xar:mlstring>Warning: This setting affects the way privileges work on your site. If changed you should retest all the privileges on your site.</xar:mlstring>
+                </div>
+                <legend>
+                    <xar:mlstring>
+                        Last Resort
+                    </xar:mlstring>
+                </legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="lastresort" title="#xarML('Enable or disable an administrator of last resort')#" class="xar-form-label">
+                        <xar:mlstring>Last Resort Admin:</xar:mlstring>
+                    </label>
+                    <xar:if condition="xarModGetVar('privileges', 'lastresort')">
+                        <input type="checkbox" name="lastresort" id="lastresort" value="1" checked="checked" />
+                    <xar:else />
+                        <input type="checkbox" name="lastresort" id="lastresort" value="1" />
+                    </xar:if>
+                    <xar:mlstring>Warning: This setting opens a tab to enable you to create an administrator whose privileges cannot be removed.</xar:mlstring>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="phase" id="phase" value="update" />
+                    <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                    <input type="submit" value="#xarML('Update Privileges Configuration')#" />
+                </div>
+            </fieldset>
+        </form>
+    </xar:if>
+    <xar:comment>
+        ------------------- Begin Realms Options --------------------- 
     </xar:comment>
     <xar:if condition="$tab eq 'realms'">
         <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
@@ -52,17 +129,56 @@
                         Working With Realms 
                     </xar:mlstring>
                 </legend>
-                <div class="xar-form-input-wrapper-after">
+                <div class="xar-form-input-wrapper">
+                    <label for="enablerealms" title="#xarML('Show or hide realms in the privileges input screens')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Enable Realms
+                        </xar:mlstring>
+                    </label>
                     <xar:if condition="xarModGetVar('privileges', 'showrealms')">
                         <input type="checkbox" name="enablerealms" id="enablerealms" value="1" checked="checked" />
                         <xar:else />
                         <input type="checkbox" name="enablerealms" id="enablerealms" value="1" />
                     </xar:if>
-                    <label for="enablerealms" title="#xarML('Show or hide realms in the privileges input screens')#">
-                        <xar:mlstring>
-                            Enable Realms
-                        </xar:mlstring>
+                    <xar:mlstring>Checking this enables the Manage Realms item on the Privileges menu</xar:mlstring>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="phase" id="phase" value="update" />
+                    <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                    <input type="submit" value="#xarML('Update Privileges Configuration')#" />
+                </div>
+            </fieldset>
+        </form>
+    </xar:if>
+    <xar:comment>
+        ------------------- Begin Last Resort --------------------- 
+    </xar:comment>
+    <xar:if condition="$tab eq 'lastresort' AND xarModGetVar('privileges','lastresort')">
+        <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
+            <fieldset>
+                <legend>
+                    <xar:mlstring>
+                        Create a Last Resort Admin
+                    </xar:mlstring>
+                </legend>
+                <div>
+                    <xar:mlstring>Enter a  name and password to create an administrator that <b>always</b> has rights to the entire system.</xar:mlstring>
+                </div>
+                <br />
+                <div class="xar-form-input-wrapper">
+                    <label for="name" title="#xarML('Name of the administator of last  resort')#" class="xar-form-label">
+                        <xar:mlstring>Admin name:</xar:mlstring>
                     </label>
+                    <input type="text" name="name" id="name" value="" />
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="password" title="#xarML('Password of the administator of last  resort')#" class="xar-form-label">
+                        <xar:mlstring>Password:</xar:mlstring>
+                    </label>
+                    <input type="text" name="password" id="password" value="" />
                 </div>
             </fieldset>
             <fieldset>
