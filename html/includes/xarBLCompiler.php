@@ -1183,14 +1183,14 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
     function class_exists($classname)
     {
       // In >= PHP 5 we want to prevent __autoload to kick in.
-      return (version_compare('5.0.0',phpversion(),'le')) ? class_exists($entityClass,false) : class_exists($entityClass);
+      return (version_compare('5.0.0',phpversion(),'le')) ? class_exists($classname,false) : class_exists($classname);
     }
 
     function createTplEntityNode($entityType, $parameters, &$parser)
     {
         $entityClass = 'xarTpl__Xar'.$entityType.'EntityNode';
         $entityFile = XAR_NODES_LOCATION . 'entities/' .strtolower($entityType) . '.php';
-        if(!$this->class_exists($entityClass) { 
+        if(!xarTpl__NodesFactory::class_exists($entityClass)) { 
             if(!file_exists($entityFile)) {
                 $parser->raiseError(XAR_BL_INVALID_ENTITY,"Cannot instantiate nonexistent entity '$entityType'",$parser);
                 return;
@@ -1209,7 +1209,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
             $instructionClass = 'xarTpl__XarVarInstructionNode';
             $instructionFile = XAR_NODES_LOCATION . 'instructions/var.php';
         } 
-        if(!$this->class_exists($instructionClass)) {
+        if(!xarTpl__NodesFactory::class_exists($instructionClass)) {
             if(!file_exists($instructionFile)) {
                 $parser->raiseError(XAR_BL_INVALID_INSTRUCTION,"Cannot instantiate nonexistent instruction '$instruction'",$parser);
                 return;   
