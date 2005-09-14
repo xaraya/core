@@ -396,7 +396,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $this->tagNamesStack = array();  $this->tagIds = array(); $this->tagRootSeen=false;
 
         // Initializing the containers for template variables and the doctree
-        $this->tplVars = xarTpl__TemplateVariables::instance();
+        $this->tplVars = new xarTpl__TemplateVariables();
         $documentTree = xarTpl__NodesFactory::createDocumentNode($this);
 
         // Parse the document tree
@@ -1250,15 +1250,6 @@ class xarTpl__TemplateVariables
         $this->tplVars['type'] = 'module';
     }
     
-    function &instance() 
-    {
-        static $instance = NULL;
-        if(!isset($instance)) {
-            $instance = new xarTpl__TemplateVariables();
-        }
-        return $instance;
-    }
-
     function get($name)
     {
         if (isset($this->tplVars[$name])) {
