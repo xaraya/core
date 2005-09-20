@@ -79,10 +79,10 @@ function mozConsole(msg, level)
          if(level >= 16) flag= 1; // warning
          var scriptError = Components.classes['@mozilla.org/scripterror;1']
                                    .createInstance(Components.interfaces.nsIScriptError);
-        scriptError.init(msg+b, null, null, null, null, flag, '');\n
+        scriptError.init(msg, null, null, null, null, flag, '');\n
          consoleService.logMessage(scriptError);\n    
       } else {
-        consoleService.logStringMessage(msg +b);\n
+        consoleService.logStringMessage(msg);\n
      }
    }
 }";
