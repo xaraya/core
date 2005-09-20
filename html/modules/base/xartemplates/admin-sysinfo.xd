@@ -7,7 +7,7 @@
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>System Information</xar:mlstring> #$what#
+        <xar:mlstring>System Information</xar:mlstring>
     </h2>
     <dl class="xar-tabs">
         <dt class="help" title="#xarML('Click on a tab to display specific information from your server php installation')#">
