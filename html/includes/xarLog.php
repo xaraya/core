@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: xarLog.php,v 1.1 2005/09/20 06:02:01 mrb Exp $
  *
  * Logging Facilities
  *

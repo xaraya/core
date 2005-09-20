@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File: $Id: s.xarServer.php 1.77 04/10/25 14:11:56+02:00 marcel@hsdev.com $
- *
  * HTTP Protocol Server/Request/Response utilities
  *
  * @package server
@@ -317,6 +315,7 @@ function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target
  * @param allowOnlyMethod string
  * @return mixed
  * @todo change order (POST normally overrides GET)
+ * @todo have a look at raw post data options (xmlhttp postings)
  */
 function xarRequestGetVar($name, $allowOnlyMethod = NULL)
 {
