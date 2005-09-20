@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- * 
  * Configuration Unit
  * 
  * @package config

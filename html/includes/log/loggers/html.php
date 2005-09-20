@@ -1,8 +1,5 @@
 <?php
-
 /**
- * File: $Id$
- *
  * The HTML logger
  *
  * @package logging

@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Multi Language System - XML Translations Backend
  *
  * @package multilanguage

@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * BlockLayout Template Engine
  *
  * @package blocklayout
@@ -1208,6 +1206,11 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     $tplBaseDir   = "modules/$modOsDir";
     $use_internal = false;
     unset($sourceFileName);
+
+    // xarLogMessage("TPL: 1. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt")
+    // xarLogMessage("TPL: 2. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xd")
+    // xarLogMessage("TPL: 3. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase.xt")
+    // xarLogMessage("TPL: 4. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")
 
     if(!empty($templateName) && 
         file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt")) {

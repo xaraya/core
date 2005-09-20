@@ -1,8 +1,5 @@
 <?php
-
 /**
- * File: $Id$
- *
  * Title: Pre-process values.
  * Desc: Allows a value to be pre-processed before (optionally)
  * passing on to another validation method. Each option is processed

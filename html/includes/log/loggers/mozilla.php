@@ -1,8 +1,5 @@
 <?php
-
 /**
- * File: $Id$
- *
  * Mozilla js console logger
  *
  * @package logging

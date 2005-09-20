@@ -1,8 +1,5 @@
 <?php
-
 /**
- * File: $Id$
- *
  * Windows system log
  *
  * @package logging

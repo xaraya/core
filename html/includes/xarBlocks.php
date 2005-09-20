@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Display Blocks
  *
  * xarBlockType functions are now in xarLegacy,

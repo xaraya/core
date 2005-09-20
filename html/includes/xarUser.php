@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * User System
  *
  * @package user

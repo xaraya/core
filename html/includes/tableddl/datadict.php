@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Table Maintenance API for other databases (using xarDataDict)
  *
  * NOTE: THIS SUBSYSTEM IS SCHEDULED FOR DEPRECATION. EXISTING CODE

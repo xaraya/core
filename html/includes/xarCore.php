@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * The Core
  *
  * @package core

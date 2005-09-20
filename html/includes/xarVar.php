@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Variable utilities
  *
  * @package variables

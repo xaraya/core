@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Pre Core - mininmal, lightweight collection of utility functions
  *
  * @package core
