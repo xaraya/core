@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Update configuration parameters of the module
  *
  * @package Xaraya eXtensible Management System

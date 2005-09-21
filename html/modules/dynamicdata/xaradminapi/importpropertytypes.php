@@ -1,8 +1,5 @@
 <?php
-
 /**
- * File: $Id$
- *
  * Check the properties directory for properties and import them into the Property Type table.
  *
  * @package Xaraya eXtensible Management System
@@ -31,18 +28,26 @@ function dynamicdata_adminapi_importpropertytypes( $args )
     $xartable =& xarDBGetTables();
 
     $dynamicproptypes = $xartable['dynamic_properties_def'];
+    $propDirs = array();
+    if(isset($dirs) && is_array($dirs)) {
+      // We got an array of directories passed in for which to import properties
+      // typical usecase: a module which has its own property, during install phase needs that property before
+      // the module is active.
+      $propDirs = $dirs;
+    } else {
+      // Get a list of active modules which might have properties
+      $clearCache = "DELETE FROM $dynamicproptypes";
+      $result =& $dbconn->Execute($clearCache);
+      if(!$result) return; // db error
 
-    $clearCache = "DELETE FROM $dynamicproptypes";
-    $result =& $dbconn->Execute($clearCache);
-    
-    // Get a list of active modules which might have properties
-    $activeMods = xarModApiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
-    if(empty($activeMods)) return; // this should never happen
-    
-    $propDirs = array('includes/properties/'); // Initialize it with the core location of properties
-    foreach($activeMods as $modInfo) {
+      $activeMods = xarModApiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+      if(empty($activeMods)) return; // this should never happen
+      $propDirs[] = 'includes/properties/'; // Initialize it with the core location of properties
+        
+      foreach($activeMods as $modInfo) {
         // FIXME: the modinfo directory does NOT end with a /
         $propDirs[] = 'modules/' .$modInfo['osdirectory'] . '/xarproperties/';
+      }
     }
     
     // Get list of properties in properties directories
@@ -51,13 +56,11 @@ function dynamicdata_adminapi_importpropertytypes( $args )
         
         // Open Properties Directory if it exists, otherwise go to the next one
         if(!file_exists($PropertiesDir)) continue;
-
         if ($pdh = opendir($PropertiesDir)) {
             // Loop through properties directory
             while (($propertyfile = readdir($pdh)) !== false) 
             {
                 $propertyfilepath = $PropertiesDir . $propertyfile;
-                
                 // Only Process files, not directories
                 if(!is_file($propertyfilepath)) continue;
                    
@@ -82,7 +85,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                 // Instantiate a copy of this class
                 if(!class_exists($propertyClass)) {
                     // TODO: <mrb> raise exception?
-                    xarLogMessage("DD : The class $propertyClass does not match the filename $propertyfile");
+                  xarLogMessage("DD : The class $propertyClass does not match the filename $propertyfile",XARLOG_LEVEL_WARNING);
                     continue;
                 }
                 $property = new $propertyClass($args);
@@ -110,6 +113,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                 // Check if any Modules are required
                 // For Example: Categories, Ratings, Hitcount properties all require their respective modules to be enabled
                 // CHECK: <mrb> do we want the owning module in here?
+                // ANSWER: probably not, see above (if the $dirs are passed in)
                 if( isset($baseInfo['requiresmodule']) && ($baseInfo['requiresmodule'] != '') )
                 {
                     $modulesNeeded = explode(';', $baseInfo['requiresmodule']);
