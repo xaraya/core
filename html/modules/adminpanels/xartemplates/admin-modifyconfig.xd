@@ -88,8 +88,7 @@
         <fieldset>
             <div class="xar-form-input-wrapper-after">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="submit" value="#xarML('Update Adminpanels Configuration')#" class="xar-margin-thickright" />
-                <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft" />
+                <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
             </div>
         </fieldset>
     </form>
