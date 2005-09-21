@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id:
- * 
  * PHP Version Compatibility Loader
  * 
  * @package PHP Version Compatibility Library

@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id: s.xarMod.php 1.283 04/10/25 13:50:01+02:00 marcel@hsdev.com $
- *
  * Module handling subsystem
  *
  * @package modules
