@@ -68,7 +68,6 @@
             <div class="xar-form-input-wrapper-after">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="submit" value="#xarML('Send Test Message')#" class="xar-margin-thickright" />
-                <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft" />
             </div>
         </fieldset>
     </form>
