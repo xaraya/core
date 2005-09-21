@@ -218,7 +218,6 @@
                 <input type="hidden" name="phase" id="phase" value="update" />
                 <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#" />
                 <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
-                <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft" />
             </div>
         </fieldset>
     </form>
