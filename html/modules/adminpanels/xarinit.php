@@ -1,17 +1,16 @@
 <?php
 /**
- * File: $Id: s.xarinit.php 1.22 03/01/26 20:03:00-05:00 John.Cox@mcnabb. $
- *
  * Administration System
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage adminpanels module
  * @author Andy Varganov <andyv@xaraya.com>
-*/
+ */
+
 
 /**
  * Initialise the adminpanels module

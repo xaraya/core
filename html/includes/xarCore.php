@@ -446,12 +446,14 @@ function xarCoreActivateDebugger($flags)
          // "Only variable references should be returned by reference..."
          // bug 4785 - Temporary solution until all function return by reference instances reviewed in code
          // $systemConfiguration['Exception.EnablePHPErrorHandler'] also needs to be set to False in config.system.php
+         /*
          if ((phpversion() == '4.4.0') || (phpversion() > '5.0.3')){
              error_reporting(E_ALL ^ E_NOTICE);
          } else {
              // Proper error reporting
              error_reporting(E_ALL);
-         }
+         }*/
+         error_reporting(E_ALL);
         // Activate assertions
         assert_options(ASSERT_ACTIVE,    1);    // Activate when debugging
         assert_options(ASSERT_WARNING,   1);    // Issue a php warning
