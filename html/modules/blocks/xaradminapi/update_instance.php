@@ -90,7 +90,7 @@ function blocks_adminapi_update_instance($args)
         $refresh, $state, $bid
     );
 
-    $result =& $dbconn->Execute($query, $bind);
+    $result = $dbconn->Execute($query, $bind);
     if (!$result) {return;}
 
     // Update the group instances.

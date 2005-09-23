@@ -45,7 +45,7 @@ function modules_adminapi_update($args)
 
     // Delete hook regardless
     $sql = "DELETE FROM $xartable[hooks] WHERE xar_smodule = ?";
-    $result =& $dbconn->Execute($sql,array($modinfo['name']));
+    $result = $dbconn->Execute($sql,array($modinfo['name']));
     if (!$result) return;
 
     $sql = "SELECT DISTINCT xar_id, xar_smodule, xar_stype, xar_object,
@@ -54,7 +54,7 @@ function modules_adminapi_update($args)
             FROM $xartable[hooks]
             WHERE xar_smodule =''";
 
-    $result =& $dbconn->Execute($sql);
+    $result = $dbconn->Execute($sql);
     if (!$result) return;
 
     for (; !$result->EOF; $result->MoveNext()) {

@@ -511,8 +511,8 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
         $sourcetmpl='';
         $base = basename(strval($file),'.php');
         $varDir = xarCoreGetVarDirPath();
-        if (file_exists($varDir . '/cache/templates/CACHEKEYS')) {
-            $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'r');
+        if (file_exists($varDir . XARCORE_TPL_CACHEDIR .'/CACHEKEYS')) {
+            $fd = fopen($varDir . XARCORE_TPL_CACHEDIR .'/CACHEKEYS', 'r');
             while($cache_entry = fscanf($fd, "%s\t%s\n")) {
                 list($hash, $template) = $cache_entry;
                 // Strip the colon

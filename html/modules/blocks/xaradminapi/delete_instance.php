@@ -40,12 +40,12 @@ function blocks_adminapi_delete_instance($args)
 
     $query = "DELETE FROM $block_group_instances_table
               WHERE xar_instance_id = " . $bid;
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) {return;}
 
     $query = "DELETE FROM $block_instances_table
               WHERE xar_id = " . $bid;
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) {return;}
 
     xarModAPIFunc('blocks', 'admin', 'resequence');

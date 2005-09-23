@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: xarversion.php 1.20 04/07/18 21:48:25+03:00 voll@yahoo.com $
  *
  * Base system
  *

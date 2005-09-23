@@ -128,7 +128,8 @@ class xarLogger_simple extends xarLogger
         $this->_prepareLogfile();
 
         // Register the destructor.
-        register_shutdown_function(array(&$this, '_xarLogger_simple_destructor'));
+        // Can't do this, it will miss out on the logging of the other subsystems
+        //register_shutdown_function(array(&$this, '_xarLogger_simple_destructor'));
     }
 
     // Destructor. This will write outstanding records to the logfile.
@@ -154,7 +155,7 @@ class xarLogger_simple extends xarLogger
 
         // Add to loglines array
         $this->_buffer .= $this->_formatMessage($message, $level);
-
+        $this->flushBuffer(false);
         return true;
     }
 

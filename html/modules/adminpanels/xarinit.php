@@ -1,5 +1,6 @@
 <?php
 /**
+ * File: $Id: xarinit.php 1.55 05/03/19 09:21:02+01:00 marcel@hsdev.com $
  * Administration System
  *
  * @package Xaraya eXtensible Management System
@@ -78,56 +79,29 @@ function adminpanels_init()
     // Set config vars
 
     // Fill admin menu
-    $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'adminpanels', 'Global', 0, 1)";
-    $result =& $dbconn->Execute($query,array($id));
-    if (!$result) return;
-
-    $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'mail', 'Global', 0, 1)";
-    $result =& $dbconn->Execute($query,array($id));
-    if (!$result) return;
-
-    $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'dynamicdata', 'Content', 0, 1)";
-    $result =& $dbconn->Execute($query,array($id));
-    if (!$result) return;
-
-    $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'themes', 'Global', 0, 1)";
-    $result =& $dbconn->Execute($query,array($id));
-    if (!$result) return;
-
-    $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'authsystem', 'Global', 0, 1)";
-    $result =& $dbconn->Execute($query,array($id));
-    if (!$result) return;
-
-    $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'base', 'Global', 0, 1)";
-    $result =& $dbconn->Execute($query,array($id));
-    if (!$result) return;
-
-    $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'blocks', 'Global', 0, 1)";
-    $result =& $dbconn->Execute($query,array($id));
-    if (!$result) return;
-
-    $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'modules', 'Global', 0, 1)";
-    $result =& $dbconn->Execute($query,array($id));
-    if (!$result) return;
-
-    $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'privileges', 'Users & Groups', 0, 1)";
-    $result =& $dbconn->Execute($query,array($id));
-    if (!$result) return;
-
-    $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?, 'roles', 'Users & Groups', 0, 1)";
-    $result =& $dbconn->Execute($query,array($id));
-    if (!$result) return;
-
+    $sql  = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES (?,?,?,?,?)";
+    $stmt = $dbconn->prepareStatement($sql);
+    
+    $coremods = array (
+        array('adminpanels', 'Global',0,1),
+        array('mail'       , 'Global',0,1),
+        array('dynamicdata', 'Content',0,1),
+        array('themes'     , 'Global',0,1),
+        array('authsystem' , 'Global',0,1),
+        array('base'       , 'Global',0,1),
+        array('blocks'     , 'Global',0,1),
+        array('modules'    , 'Global',0,1),
+        array('privileges' , 'Users & Groups',0,1),
+        array('roles'      , 'Users & Groups',0,1)
+    );
+        
+    foreach($coremods as &$bindvars) {
+        $id = $dbconn->GenId($adminMenuTable);
+        array_unshift($bindvars,$id);
+        $result = $stmt->executeUpdate($bindvars);
+        if(!$result) return;
+    }                   
+    
     // Register blocks
     if (!xarModAPIFunc('blocks',
                        'admin',
