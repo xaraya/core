@@ -4,7 +4,7 @@ body {
     background-color: #fff;
     color: #000;
     font-family: "Trebuchet MS", Arial, Helvetica, Tahoma, sans-serif;
-    font-size: 18px;
+    font-size: 100.01%;
     margin: 0;
     padding: 0;
 }
@@ -25,6 +25,7 @@ body {
 #main {
     margin-top: 0px;
     margin-bottom: 0px;
+    padding:0 10px;
 }
 
 #install { padding: 0 0 0 20px; }
@@ -92,6 +93,35 @@ form label {
     margin: 0 .5em;
     color: gray;
 }
+
+legend {
+    color: #CC3300;
+    border: 1px dotted #aaaaaa;
+    margin: 0 -1px;
+    padding: 1px 5px;
+    font-weight: bold;
+    min-width:15em;
+    display:block;
+}
+
+fieldset {
+    border: 1px dotted #aaaaaa;
+    padding:5px;
+    margin:10px 0;
+}
+
+label.xar-form-label {
+    padding: 2px;
+    text-align: right;
+    padding-left: 5px;
+    margin: 0 5px 0 0;
+    font-weight: bold;
+    color: #333;
+    background-color: #f9f9f9;
+    border:1px solid #f0f0f0;
+    clear:left;
+}
+
 
 textarea#license, select#configuration {
     background-color: #fff;
