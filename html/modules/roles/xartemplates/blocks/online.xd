@@ -1,4 +1,12 @@
-<table class="xar-fullwidth">
+<xar:style scope="block" file="onlineblock" />
+<xar:comment>
+    the above stylesheet has been included more like example
+    how to include a stylesheet in a block rather than a pure necessity here.
+    Tables really shouldn't be used for layout, only for tablular data,
+    but since it's used it could be put right via css
+    (comment by andyv)
+</xar:comment>
+<table class="xar-fullwidth xar-roles-nicetable">
      <xar:if condition="!empty($test1)">
          <tr>
              <td class="xar-threequarterswidth">

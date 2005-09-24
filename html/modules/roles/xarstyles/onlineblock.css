@@ -1,0 +1,8 @@
+.xar-roles-nicetable {
+	table-layout: auto;
+	border: 0 none;
+	empty-cells: show;
+	border-collapse: collapse;
+}
+
+.xar-roles-nicetable td { padding: 0 5px }

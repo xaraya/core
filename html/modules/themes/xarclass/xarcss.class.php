@@ -86,10 +86,14 @@ class xarCSS
         if (isset($method)) $this->method               = $method;
         if (isset($scope)) $this->scope                 = $scope;
         if ($this->scope == 'common') {
-            $this->base   = $this->commonbase;
-            $this->filename   = $this->commonsource;
+            $this->base = $this->commonbase;
+            $this->filename = $this->commonsource;
         } elseif ($this->scope == 'module') {
-            $this->base   = xarModGetName();
+            $this->base = xarModGetName();
+        } elseif ($this->scope == 'block') {
+            // we basically need to find out which module this block belongs to 
+            // and then procede as with module scope
+            $this->base = xarCore_GetCached('Security.Variables', 'currentmodule');
         }
         if (isset($media)) $this->media                 = $media;
         if (isset($module)) $this->base                 = $module;
@@ -137,14 +141,14 @@ class xarCSS
                 return true;
         }
         // TODO: remove these hardcoded comments when BL + QA can handle them in templates
-        $data['comments'] = $this->comments;
-        $data['opencomment']    = "<!-- ";
-        $data['closecomment']   = " -->\n";
-        $data['openconditionalcomment']    = "<!--[if ";
-        $data['closeconditionalcomment']   = "<![endif]-->\n";
-        $data['openbracket']    = "<";
-        $data['closebracket']   = ">";
-        $data['closeconditionalbracket']   = "]>";
+        $data['comments']                   = $this->comments;
+        $data['opencomment']                = "<!-- ";
+        $data['closecomment']               = " -->\n";
+        $data['openconditionalcomment']     = "<!--[if ";
+        $data['closeconditionalcomment']    = "<![endif]-->\n";
+        $data['openbracket']                = "<";
+        $data['closebracket']               = ">";
+        $data['closeconditionalbracket']    = "]>";
         return $data;
     }
 
@@ -179,11 +183,10 @@ class xarCSS
                 return $themestylesheet;
             } else {
                 // problem
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException($msg.$themestylesheet));
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg.$themestylesheet));
                 return;
             }
-        } else {
+        } elseif ($this->scope == 'module' || $this->scope == 'block') {
 
             $original = "modules/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
             // we do not want to supply path for a non-existent original css file or override a bogus file
@@ -204,10 +207,14 @@ class xarCSS
                 }
             } else {
                 // problem
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException($msg.$original));
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg.$original));
                 return;
             }
+        } else {
+            // no scope, somebody overrode defaults and hasn't assign anything sensible? naughty - lets complain
+            $msg = xarML("#(1) (no valid scope attribute could be deduced from this xar:style tag)",$this->scope);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+            return;
         }
     }
 }
