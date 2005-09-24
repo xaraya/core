@@ -21,7 +21,7 @@
 function dynamicdata_userapi_getitemfordisplay($args)
 {
     $args['getobject'] = 1;
-    $object = & xarModAPIFunc('dynamicdata','user','getitem',$args);
+    $object = xarModAPIFunc('dynamicdata','user','getitem',$args);
     $properties = array();
     if (isset($object)) {
         $properties = & $object->getProperties();
