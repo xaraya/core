@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Return the properties for an item
  *
  * @package Xaraya eXtensible Management System
@@ -24,12 +22,12 @@ function dynamicdata_userapi_getitemfordisplay($args)
 {
     $args['getobject'] = 1;
     $object = & xarModAPIFunc('dynamicdata','user','getitem',$args);
+    $properties = array();
     if (isset($object)) {
         $properties = & $object->getProperties();
-    } else {
-        $properties = array();
     }
-    return array(& $properties);
+    $item = array(& $properties);
+    return $item;
 }
 
 ?>
