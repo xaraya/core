@@ -9,10 +9,42 @@
 <xar:else/>
     <xar:set name="class">'xar-form-textareamedium'</xar:set>
 </xar:if>
+
+<xar:comment>
+    Additional CSS support for "pseudo-dynamic" resizing of textareas 
+    (as in bug http://bugs.xaraya.com/show_bug.cgi?id=4765)
+    
+    The fix works in themes which comply with post-RC3 styleguide and support
+    core (common) css + embedded styles on their page templates via xar:additional-styles tag
+    
+    NOTE 1: a row (height) is measured as 1.6em (a usual line height in typography)
+    but a column (width) is 1 em - roughly 1 charachter m wide
+    
+    NOTE 2: every embedded style is being defined against the element's ID (which must
+    be unique page-wide for the system to work, though it's outside of scope of this fix )
+    
+    NOTE 3: if your theme/module are not happy with the above assumptions or below solution, 
+    you know what todo, override this template or adjust the object values via DD UI
+    
+    WARNING: the only sensible limititations that can be provided by css are max(min)-width and
+    max(min)-height, but unfortunately if you use IE-Win, these standard properties aren't supported
+    and as a consequence the textareas dimensions will be affected by the DD values alone..
+    I'm hesitant to pass along ie-only workarounds at this moment, so be aware of this! (andyv)
+</xar:comment>
+
+<xar:set name="textareasource">'
+<!--
+textarea#'.$id.' {
+    max-width: 99%;
+    width: '. $cols.'em;
+    height: '. ($rows * 1.6) .'em;
+}
+-->
+'</xar:set>
+<xar:style method="embed" source="'.$textareasource.'" media="all" />
 <div class="xar-form-container-after">
     <textarea name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#" class="#$class#">#$value#</textarea>
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
 </xar:if>
 </div>
-
