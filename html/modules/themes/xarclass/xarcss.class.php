@@ -169,16 +169,24 @@ class xarCSS
 
     function getrelativeurl()
     {
-
-        $msg = xarML("#(1) css stylesheet file cannot be found at this location: ",$this->scope);
+        // if requested method is 'embed', we dont really need any file checks, urls, scope etc., 
+        // all we care about is the css source string as provided by the tag
+        if ($this->method == "embed") {
+            // could add a TODO to check validity of the actual source string, either here or earlier
+            return $this->source;
+        }
+        
+        $msg = xarML("#(1) css stylesheet file cannot be found at this location: ", $this->scope);
 
         // <mrb> why is this?
+        // <andyv> scope common is just a special case of a module based stylesheet ATM - matter of implementation
+        // the original idea was to be able to provide common css out of various sources, like db or even inline
         if ($this->scope == 'common') $this->scope = 'module';
 
         if ($this->scope == 'theme') {
             // pretty straightforward
             $themestylesheet =  xarTplGetThemeDir() . "/style/" . $this->filename . "." . $this->fileext;
-            if(file_exists($themestylesheet) || $this->method == "embed") {
+            if(file_exists($themestylesheet)) {
                 // no problem
                 return $themestylesheet;
             } else {
@@ -186,8 +194,8 @@ class xarCSS
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg.$themestylesheet));
                 return;
             }
-        } elseif ($this->scope == 'module' || $this->scope == 'block') {
-
+        } elseif ($this->scope == 'module' || $this->scope == 'block') {            
+            
             $original = "modules/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
             // we do not want to supply path for a non-existent original css file or override a bogus file
             // so lets check starting from original then fallback if there arent overriden versions
