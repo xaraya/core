@@ -376,6 +376,7 @@ class Dynamic_Object_Master
      */
     function &getObjects()
     {
+        $nullreturn = NULL;
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
 
@@ -393,7 +394,7 @@ class Dynamic_Object_Master
                   FROM $dynamicobjects ";
         $result =& $dbconn->Execute($query);
 
-        if (!$result) return;
+        if (!$result) return $nullreturn;
 
         $objects = array();
         while (!$result->EOF) {

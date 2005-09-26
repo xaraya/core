@@ -27,7 +27,8 @@ function &dynamicdata_userapi_interface($args)
     if (empty($args['moduleid']) && !empty($args['modid'])) {
        $args['moduleid'] = $args['modid'];
     }
-    return Dynamic_Object_Master::getObjectInterface($args);
+    $result = Dynamic_Object_Master::getObjectInterface($args);
+    return $result;
 }
 
 ?>

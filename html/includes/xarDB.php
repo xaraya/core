@@ -284,7 +284,7 @@ function &xarDBNewDataDict(&$dbconn, $mode = 'READONLY')
     }
 
     // Instantiate the object.
-    $dict =& new $class($dbconn);
+    $dict = new $class($dbconn);
 
     return $dict;
 }

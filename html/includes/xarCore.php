@@ -448,7 +448,7 @@ function xarCoreActivateDebugger($flags)
          // $systemConfiguration['Exception.EnablePHPErrorHandler'] also needs to be set to False in config.system.php
          /*
          if ((phpversion() == '4.4.0') || (phpversion() > '5.0.3')){
-             error_reporting(E_ALL ^ E_NOTICE);
+             error_reporting(E_ALL);
          } else {
              // Proper error reporting
              error_reporting(E_ALL);
