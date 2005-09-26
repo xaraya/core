@@ -8,7 +8,7 @@
  * @subpackage Dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
  */
-*/
+
 /**
  * display an item
  * This is a standard function to provide detailed informtion on a single item
