@@ -1,18 +1,15 @@
 <?php
 /**
- * File: $Id$
- *
- * Update a users status
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 /**
  * Update a users status
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['uname'] is the users system name
  * @param $args['state'] is the new state for the user
  * returns bool

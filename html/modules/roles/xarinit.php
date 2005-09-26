@@ -1,18 +1,12 @@
 <?php
 /**
- * File: $Id: s.xarinit.php 1.27 03/01/17 15:18:04-08:00 rcave@lxwdev-1.schwabfoundation.org $
- *
- * Initialise the roles module
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
+ *
+ * @subpackage Roles module
  * @author Jan Schrage, John Cox, Gregor Rothfuss
- * @todo need the dynamic users menu
- * @todo needs dyanamic data interface
- * @todo ensure all mod vars are set
  */
 
 /**

@@ -1,17 +1,14 @@
 <?php
 /**
- * File: $Id$
- *
- * Read a pair of subject/message files in a module's messaging directory
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 /**
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['template'] name of the email type which has apair of -subject and -message files
  * @param $args['module'] module directory in var/messaging
  * @return array of strings of file contents read

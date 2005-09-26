@@ -1,15 +1,11 @@
 <?php
 /**
- * File: $Id$
- *
- * Extract function and arguments from short URLs for this module
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 /**
  * extract function and arguments from short URLs for this module, and pass
@@ -36,6 +32,7 @@
  * /roles/settings/form (deprecated)
  * /roles/terms
  *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @author the roles module development team
  * @param $params array containing the different elements of the virtual path
  * @returns array

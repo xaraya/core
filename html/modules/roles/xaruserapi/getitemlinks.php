@@ -1,20 +1,16 @@
 <?php
 /**
- * File: $Id:
- * 
- * Utility function to pass individual item links 
- * 
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage roles
- * @author Example module development team 
+ * @subpackage Roles module
  */
 /**
  * utility function to pass individual item links to whoever
- * 
+ *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param  $args ['itemtype'] item type (optional)
  * @param  $args ['itemids'] array of item ids to get
  * @returns array

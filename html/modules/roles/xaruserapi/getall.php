@@ -1,18 +1,15 @@
 <?php
 /**
- * File: $Id$
- *
- * Get all users
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 /**
  * get all users
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['order'] comma-separated list of order items; default 'name'
  * @param $args['selection'] extra coonditions passed into the where-clause
  * @param $args['group'] comma-separated list of group names or IDs, or
