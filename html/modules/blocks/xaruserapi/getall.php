@@ -119,10 +119,11 @@ function blocks_userapi_getall($args)
                 // Next group instance row.
                 $resultgroup->MoveNext();
             }
+            // Close group query.
+            $resultgroup->Close();
         }
 
-        // Close group query.
-        $resultgroup->Close();
+
 
         // Put the instance into the result array.
         // Using references helps prevent copying data structures around.

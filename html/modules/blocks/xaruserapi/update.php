@@ -51,7 +51,7 @@ function blocks_userapi_update($args)
         . ' SET xar_active = ?'
         . ' WHERE xar_uid = ? AND xar_bid = ?';
 
-    $result =& $dbconn->Execute($query, array($active, $uid, $bid));
+    $result = $dbconn->Execute($query, array($active, $uid, $bid));
 
     return;
 }

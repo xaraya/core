@@ -60,7 +60,7 @@ function blocks_adminapi_unregister_block_type($args)
 
     // Delete the block type
     $query = "DELETE FROM $block_types_table WHERE xar_module = '$modName' AND xar_type = '$blockType';";
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     return true;

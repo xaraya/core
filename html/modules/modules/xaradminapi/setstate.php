@@ -71,8 +71,8 @@ function modules_adminapi_setstate($args)
                         VALUES  (?,?,?)";
                     $bindvars = array($seqId,$regid,$state);
 
-                    $result =& $dbconn->Execute($query,$bindvars);
-                    if (!$result) return;
+                    $newresult = $dbconn->Execute($query,$bindvars);
+                    if (!$newresult) return;
                 }
                 return true;
             }
@@ -118,7 +118,7 @@ function modules_adminapi_setstate($args)
     $query = "UPDATE $module_statesTable
               SET xar_state = ? WHERE xar_regid = ?";
     $bindvars = array($state,$regid);
-    $result =& $dbconn->Execute($query,$bindvars);
+    $result = $dbconn->Execute($query,$bindvars);
     if (!$result) {return;}
     // We're update module state here we must update at least
     // the base info in the cache.

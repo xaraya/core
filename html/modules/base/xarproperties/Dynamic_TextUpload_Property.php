@@ -161,7 +161,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             // this doesn't work on some configurations
             //$this->value = join('', @file($_FILES[$upname]['tmp_name']));
             $tmpdir = xarCoreGetVarDirPath();
-            $tmpdir .= '/cache/templates';
+            $tmpdir .= XARCORE_TPL_CACHEDIR;
             $tmpfile = tempnam($tmpdir, 'dd');
         // no verification of file types here
             if (move_uploaded_file($_FILES[$upname]['tmp_name'], $tmpfile) && file_exists($tmpfile)) {

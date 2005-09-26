@@ -1,5 +1,6 @@
 <?php
 /**
+ * File: $Id: xaradminapi.php 1.46 05/08/29 12:25:00+02:00 marcel@hsdev.com $
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -124,60 +125,34 @@ function installer_adminapi_createdb($args)
 {
     extract($args);
 
-    //All variables are comming thru $args right now.
-/*
-    if (!isset($dbName)) {
-        $dbName = xarCore_getSystemVar('DB.Name');
-    }
-
-    if (!isset($dbType)) {
-        $dbType = xarCore_getSystemVar('DB.Type');
-    }
-
-    // Get connection parameters from config.system.php
-    $dbHost  = xarCore_getSystemVar('DB.Host');
-    $dbUname = xarCore_getSystemVar('DB.UserName');
-    $dbPass  = xarCore_getSystemVar('DB.Password');
-    $dbType  = xarCore_getSystemVar('DB.Type');
-*/
-    // {ML_dont_parse 'includes/xarDB.php'}
-    include_once 'includes/xarDB.php';
-
     // Load in Table Maintainance API
     include_once 'includes/xarTableDDL.php';
 
-    // Load in ADODB
-    // FIXME: This is also in xarDB init, does it need to be here?
-    if (!defined('XAR_ADODB_DIR')) {
-        define('XAR_ADODB_DIR','xaradodb');
+    // Start connection, but use the configured connection db
+   $createArgs = array(
+                       'userName' => $dbUname,
+                       'password' => $dbPass,
+                       'databaseHost' => $dbHost,
+                       'databaseType' => $dbType,
+                       'databaseName' => $dbName, 
+                       'systemTablePrefix' => $dbPrefix,
+                       'siteTablePrefix' => $dbPrefix);
+    try {
+        $dbconn =& xarDBNewConn($createArgs);
+    } catch (Exception $e) {
+        die($e->getMessage());
     }
-    include_once XAR_ADODB_DIR . '/adodb.inc.php';
-    $ADODB_CACHE_DIR = xarCoreGetVarDirPath() . "/cache/adodb";
-
-    // Check if there is a xar- version of the driver, and use it.
-    // Note the driver we load does not affect the database type.
-    if (xarDBdriverExists('xar' . $dbType, 'adodb')) {
-        $dbDriver = 'xar' . $dbType;
-    } else {
-        $dbDriver = $dbType;
-    }
-
-    // Start connection
-    $dbconn = ADONewConnection($dbDriver);
-    if ($dbType == 'postgres') {
-        // quick hack to enable Postgres DB creation
-        $dbh = $dbconn->Connect($dbHost, $dbUname, $dbPass, 'template1');
-    } else {
-        $dbh = $dbconn->Connect($dbHost, $dbUname, $dbPass);
-    }
-    if (!$dbh) {
+    if (!$dbconn) {
         $dbpass = '';
         die("Failed to connect to $dbType://$dbUname:$dbPass@$dbHost/, error message: " . $dbconn->ErrorMsg());
     }
 
     $query = xarDBCreateDatabase($dbName,$dbType);
-
-    $result =& $dbconn->Execute($query);
+    try {
+        $result =& $dbconn->Execute($query);
+    } catch (Exception $e) {
+        die($e->getMessage());
+    }
     if (!$result) return;
 
     return true;

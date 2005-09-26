@@ -1,12 +1,15 @@
 <?php
 /**
+ * Blocks System
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
- */
+ * @subpackage blocks module
+ * @author Jim McDonald, Paul Rosania
+*/
 
 /**
  * initialise the blocks module
@@ -35,14 +38,14 @@ function blocks_init()
                                                              'size'        => 255,
                                                              'null'        => false,
                                                              'default'     => '')));
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     $query = xarDBCreateIndex($prefix . '_block_groups',
                              array('name'   => 'i_' . $prefix . '_block_groups',
                                    'fields' => array('xar_name'),
                                    'unique' => 'true'));
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     // *_block_instances
@@ -79,21 +82,21 @@ function blocks_init()
                                                              'null'        => false,
                                                              'default'     => '0')));
 
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     $query = xarDBCreateIndex($prefix . '_block_instances',
                              array('name'   => 'i_' . $prefix . '_block_instances',
                                    'fields' => array('xar_type_id'),
                                    'unique' => false));
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     $query = xarDBCreateIndex($prefix . '_block_instances',
                              array('name'   => 'i_' . $prefix . '_block_instances_u2',
                                    'fields' => array('xar_name'),
                                    'unique' => true));
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     // *_block_types
@@ -124,14 +127,14 @@ function blocks_init()
         )
     );
 
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     $query = xarDBCreateIndex($prefix . '_block_types',
                              array('name'   => 'i_' . $prefix . '_block_types2',
                                    'fields' => array('xar_module', 'xar_type'),
                                    'unique' => 'false'));
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 /*
     TODO: Find a fix for this - Postgres will not allow partial indexes
@@ -162,21 +165,21 @@ function blocks_init()
                                                              'null'        => false,
                                                              'default'     => '0')));
 
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     $query = xarDBCreateIndex($prefix . '_block_group_instances',
                               array('name' => 'i_' . $prefix . '_block_group_instances',
                                     'fields' => array('xar_group_id'),
                                     'unique' => false));
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     $query = xarDBCreateIndex($prefix . '_block_group_instances',
                               array('name' => 'i_' . $prefix . '_block_group_instances_2',
                                     'fields' => array('xar_instance_id'),
                                     'unique' => false));
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
     
     // create table for block instance specific output cache configuration
@@ -256,14 +259,14 @@ function blocks_init()
                                    'xar_last_update' => array('type'    => 'timestamp',
                                                              'null'    => false)));
 
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     $query = xarDBCreateIndex($prefix . '_userblocks',
                              array('name'   => 'i_' . $prefix . '_userblocks',
                                    'fields' => array('xar_uid', 'xar_bid'),
                                    'unique' => true));
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
 

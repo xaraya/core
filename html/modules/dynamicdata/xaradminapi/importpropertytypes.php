@@ -200,4 +200,3 @@ function updateDB( $proptype, $parent, $filepath )
                       $proptype['aliases']);
     $result =& $dbconn->Execute($insert,$bindvars);
 }
-?>

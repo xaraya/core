@@ -194,7 +194,10 @@ class xarMasks
                 $description, $sid
             );
         } else {
-        $query = "INSERT INTO $this->maskstable VALUES (?,?,?,?,?,?,?,?)";
+            $query = "INSERT INTO $this->maskstable (
+                        xar_sid, xar_name, xar_realm, xar_module, xar_component, 
+                        xar_instance, xar_level, xar_description) 
+                      VALUES (?,?,?,?,?,?,?,?)";
             $bindvars = array(
                 $this->dbconn->genID($this->maskstable),
                           $name, $realm, $module, $component, $instance, $level,
@@ -788,8 +791,12 @@ class xarPrivileges extends xarMasks
                     $description, $iid
                 );
             } else {
-                // FIXME: be explicit with the table columns.
-            $query = "INSERT INTO $this->instancestable VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+                $query = "INSERT INTO $this->instancestable (
+                            xar_iid, xar_module, xar_component, xar_header, 
+                            xar_query, xar_limit, xar_propagate, 
+                            xar_instancetable2, xar_instancechildid, 
+                            xar_instanceparentid, xar_description)
+                          VALUES (?,?,?,?,?,?,?,?,?,?,?)";
                 $bindvars = array(
                     $this->dbconn->genID($this->instancestable),
                               $module, $type, $instance['header'],
@@ -837,7 +844,10 @@ class xarPrivileges extends xarMasks
 */
     function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
-        $query = "INSERT INTO $this->privilegestable VALUES (?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO $this->privilegestable (
+                    xar_pid, xar_name, xar_realm, xar_module, xar_component, 
+                    xar_instance, xar_level, xar_description)
+                  VALUES (?,?,?,?,?,?,?,?)";
         $bindvars = array($this->dbconn->genID($this->privilegestable),
                           $name, $realm, $module, $component,
                           $instance, $level, $description);
