@@ -1,19 +1,16 @@
 <?php
-/** 
- * File: $Id$
- *
- * Update registered users' foldable menus
- *
+/**
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Blocks administration
- * @author Jim McDonald, Paul Rosania
-*/
+ * @subpackage Blocks module
+ */
+
 /**
  * update reg'd users foldable menus
+ * @author Jim McDonald, Paul Rosania
  * @param $args['bid'] blockid to fold
  * @return true on success, false on failure
  */

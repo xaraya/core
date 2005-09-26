@@ -1,20 +1,16 @@
 <?php
-/** 
- * File: $Id$
- *
- * Update attributes of a block instance
- *
+/**
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Blocks administration
- * @author Jim McDonald, Paul Rosania
-*/
+ * @subpackage Blocks module
+ */
 /**
  * update the group details for a block instance
- * TODO: parameter descriptions
+ *
+ * @author Jim McDonald, Paul Rosania
  * @param $args['bid'] the ID of the block to update
  * @param $args['title'] the new title of the block
  * @param $args['group_id'] the new position of the block (deprecated)
