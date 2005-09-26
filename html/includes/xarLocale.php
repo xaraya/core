@@ -36,16 +36,17 @@ function &xarMLSLoadLocaleData($locale = NULL)
     // check for locale availability
     $siteLocales = xarMLSListSiteLocales();
 
+    $nullreturn = null; $falsereturn = false;
     if (!in_array($locale, $siteLocales)) {
         if (strstr($locale,'ISO')) {
             $locale = str_replace('ISO','iso',$locale);
             if (!in_array($locale, $siteLocales)) {
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
-                return;
+                return $nullreturn;
             }
         } else {
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
-            return;
+            return $nullreturn;
         }
     }
 
@@ -71,16 +72,16 @@ function &xarMLSLoadLocaleData($locale = NULL)
 /* TODO: delete after new backend testing
         if ($GLOBALS['xarMLS_backendName'] == 'xml2php') {
 */
-            if (!$parsedLocale = xarMLS__parseLocaleString($locale)) return false;
+            if (!$parsedLocale = xarMLS__parseLocaleString($locale)) return $falsereturn;
             $utf8locale = $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
             $siteCharset = $parsedLocale['charset'];
             $res = $GLOBALS['xarMLS_localeDataLoader']->load($locale);
-            if (!isset($res)) return; // Throw back
+            if (!isset($res)) return $nullreturn; // Throw back
             if ($res == false) {
                 // Can we use xarML here? border case, play it safe for now.
                 $msg = "The locale '$locale' could not be loaded";
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_EXIST',$msg);
-                return;
+                return $nullreturn;
             }
             $tempArray = $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
             if ($siteCharset != 'utf-8') {
@@ -93,12 +94,12 @@ function &xarMLSLoadLocaleData($locale = NULL)
 /* TODO: delete after new backend testing
         } else {
             $res = $GLOBALS['xarMLS_localeDataLoader']->load($locale);
-            if (!isset($res)) return; // Throw back
+            if (!isset($res)) return $nullreturn; // Throw back
             if ($res == false) {
                 // Can we use xarML here? border case, play it safe for now.
                 $msg = "The locale '$locale' could not be loaded";
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_EXIST',$msg);
-                return;
+                return $nullreturn;
             }
             $GLOBALS['xarMLS_localeDataCache'][$locale] = $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
         }
