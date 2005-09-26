@@ -1,20 +1,16 @@
 <?php
 /**
- * File: $Id$
- *
- * Regenerate a theme list
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Themes
- * @author Marty Vance
-*/
+ * @subpackage Themes module
+ */
 /**
  * Regenerate theme list
  *
+ * @author Marty Vance
  * @param none
  * @returns bool
  * @return true on success, false on failure

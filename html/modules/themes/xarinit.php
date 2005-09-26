@@ -1,24 +1,21 @@
 <?php
 /**
- * File: $Id$
- * 
- * Themes administration
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage themes
- * @author Marty Vance 
+ * @subpackage Themes module
  */
+
 // Load Table Maintainance API
 xarDBLoadTableMaintenanceAPI();
 
 /**
  * Initialise the themes module
- * 
- * @param none $ 
+ * Themes administration
+ * @author Marty Vance
+ * @param none $
  * @returns bool
  * @raise DATABASE_ERROR
  */

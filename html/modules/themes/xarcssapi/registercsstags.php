@@ -1,23 +1,16 @@
 <?php
 /**
- * File: $Id$
- *
- * register all css related tags
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage themes
- * @author AndyV_at_Xaraya_dot_Com
- * @todo none
+ * @subpackage Themes module
  */
-
 /**
  * register all css template tags
  *
- * @author Andy Varganov
+ * @author Andy Varganov AndyV_at_Xaraya_dot_Com
  * @param none
  * @returns bool
  */

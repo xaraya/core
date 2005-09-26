@@ -1,25 +1,20 @@
 <?php
 /**
- * File: $Id$
- *
- * Deactivate a theme
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Themes
- * @author Marty Vance
-*/
+ * @subpackage Themes module
+ */
 /**
- * Deactivate a    theme
+ * Deactivate a theme
  * 
  * Loads theme admin API and calls the setstate
  * function    to actually    perfrom    the    deactivation,
  * then    redirects to the list function with    a status
  * message and returns true.
- * 
+ * @author Marty Vance
  * @access public 
  * @param id $ the theme id    to deactivate
  * @returns    
