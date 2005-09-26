@@ -27,7 +27,7 @@ function roles_user_search()
     if (!isset($q)) {
         if (xarModIsHooked('dynamicdata','roles')) {
             // get the Dynamic Object defined for this module
-            $object =& xarModAPIFunc('dynamicdata','user','getobject',
+            $object = xarModAPIFunc('dynamicdata','user','getobject',
                                      array('module' => 'roles'));
             if (isset($object) && !empty($object->objectid)) {
                 // get the Dynamic Properties of this object

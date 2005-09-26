@@ -79,7 +79,7 @@ function roles_user_register()
             $withupload = (int) FALSE;
             if (xarModIsAvailable('dynamicdata')) {
                 // get the Dynamic Object defined for this module (and itemtype, if relevant)
-                $object =& xarModAPIFunc('dynamicdata','user','getobject',
+                $object = xarModAPIFunc('dynamicdata','user','getobject',
                                          array('module' => 'roles'));
                 if (isset($object) && !empty($object->objectid)) {
                     // get the Dynamic Properties of this object
@@ -254,7 +254,7 @@ function roles_user_register()
                 $isvalid = true;
                 if (xarModIsAvailable('dynamicdata')) {
                     // get the Dynamic Object defined for this module (and itemtype, if relevant)
-                    $object =& xarModAPIFunc('dynamicdata','user','getobject',
+                    $object = xarModAPIFunc('dynamicdata','user','getobject',
                                               array('module' => 'roles'));
                     if (isset($object) && !empty($object->objectid)) {
 
