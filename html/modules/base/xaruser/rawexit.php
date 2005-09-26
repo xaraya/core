@@ -1,19 +1,16 @@
 <?php
-
 /**
- * File: $Id$
- *
- * Base System Exit function
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
+ * @subpackage Base module
+ */
+/*
  * This function displays a PHP error in raw html and then exits.
  * If we are here it's because the error makes it impossible to give a standard rendering
  *
- * @subpackage base
  * @author Marc Lutolf
  */
 

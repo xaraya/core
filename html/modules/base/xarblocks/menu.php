@@ -1,16 +1,12 @@
 <?php
 /**
- * File: $Id$
- *
- * Menu System
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2002 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage adminpanels module
- * @author Patrick Kellum, Jim McDonald, Greg Allan, John Cox
-*/
+ * @subpackage  Base  module
+ */
 
 /**
  * initialise block
@@ -225,8 +221,24 @@ function base_menublock_display($blockinfo)
     // Added list of modules if selected.
     if (!empty($vars['displaymodules'])) {
         if (xarSecurityCheck('ReadBaseBlock',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {
+           $useAliasName=0;
+           $aliasname='';
             foreach($mods as $mod){
-                $label = xarModGetDisplayableName($mod['name']);
+                /* Check for active module alias */
+                /* jojodee - This is not good here - should move the whole alias management to central location 
+                 * or we should be using a general function  not specific to a possibly unreliable
+                 * existance of module var name such as aliasname and useModuleAlias
+                 * These are set in Example module - as examples, but no guarantee people use them
+                 * We need to review the module alias functions - get and del don't seem to work at all!
+                 */
+                $useAliasName=xarModGetVar($mod['name'], 'useModuleAlias');
+                $aliasname= xarModGetVar($mod['name'],'aliasname');
+                /* use the alias name if it exists for the label */
+                if (isset($useAliasName) && $useAliasName==1 && isset($aliasname) && !empty($aliasname)) {
+                    $label = $aliasname;
+                } else {
+                    $label = xarModGetDisplayableName($mod['name']);
+                }
                 $title = xarModGetDisplayableDescription($mod['name']);
                 $link = xarModURL($mod['name'] ,'user', 'main', array());
                 // depending on which module is currently loaded we display accordingly

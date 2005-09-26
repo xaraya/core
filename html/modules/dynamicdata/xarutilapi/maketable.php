@@ -1,18 +1,13 @@
 <?php
 /**
- * File: $Id$
- *
- * Make a dedicated table for a dynamic object based on its object definition
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage dynamicdata module
+ * @subpackage Dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
-*/
-
+ */
 /**
  * Create a flat table corresponding to some dynamic object definition, e.g.
  * for performance reasons or when moving from a prototype to the real thing

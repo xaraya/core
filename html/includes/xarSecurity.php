@@ -1,6 +1,5 @@
 <?php
 /**
- * Low-level security access mechanism
  *
  * @package security
  * @copyright (C) 2002 by the Xaraya Development Team.

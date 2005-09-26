@@ -1,17 +1,13 @@
 <?php
 /**
- * File: $Id$
- *
- * Get al data fields for an item
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage dynamicdata module
+ * @subpackage Dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
-*/
+ */
 /**
  * get all data fields (dynamic or static) for an item
  * (identified by module + item type + item id or table + item id)
@@ -34,6 +30,12 @@
 function &dynamicdata_userapi_getitem($args)
 {
     extract($args);
+
+    // Because this function returns a reference, the return statements
+    // need an explicit var to return in case of a null return
+    // we define that here. Both the ref return here and the null return in
+    // other functions should be investigated.
+    $nullreturn = NULL;
 
     if (empty($modid) && empty($moduleid)) {
         if (empty($module)) {
@@ -70,10 +72,10 @@ function &dynamicdata_userapi_getitem($args)
                     join(', ',$invalid), 'user', 'getall', 'DynamicData');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
-        return;
+        return $nullreturn;
     }
 
-    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:$itemid")) return;
+    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:$itemid")) return $nullreturn;
 
     // check the optional field list
     if (empty($fieldlist)) {
@@ -104,7 +106,7 @@ function &dynamicdata_userapi_getitem($args)
                                        'join'      => $join,
                                        'table'     => $table,
                                        'status'    => $status));
-    if (!isset($object) || empty($object->objectid)) return;
+    if (!isset($object) || empty($object->objectid)) return $nullreturn;
     if (!empty($itemid)) {
         $object->getItem();
     }

@@ -1,15 +1,15 @@
 <?php
 /**
- * File: $Id$
- *
- * Purpose of file:  Privileges administration API
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Privileges Module
+ * @subpackage Privileges module
+ */
+
+/*
+ * Purpose of file:  Privileges administration API
  * @author Marc Lutolf <marcinmilan@xaraya.com>
 */
 

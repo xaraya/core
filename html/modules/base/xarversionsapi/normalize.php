@@ -1,16 +1,14 @@
 <?php
-
 /**
- * File: $Id: s.xaruser.php 1.16 03/04/07 04:30:01-04:00 johnny@falling.local.lan $
- *
- * Base User version management functions
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage base
+ * @subpackage Base module
+ */
+/*
+ * Base User version management functions
  * @author Jason Judge
  * @todo none
  */

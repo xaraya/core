@@ -60,7 +60,7 @@
     </xar:if>
 
     <xar:comment>This is where the list of properties shown starts</xar:comment>
-    <xar:if condition=="!isset($layout)">
+    <xar:if condition="!isset($layout)">
       <xar:set name="layout">'default'</xar:set>
     </xar:if>
 

@@ -1,9 +1,12 @@
 <?php
 /**
- * Dynamic SubForm Property
- *
  * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage Dynamicdata module
+ * @author mikespub <mikespub@xaraya.com>
  */
 class Dynamic_SubForm_Property extends Dynamic_Property
 {

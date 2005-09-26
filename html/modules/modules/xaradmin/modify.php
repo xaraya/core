@@ -1,15 +1,11 @@
 <?php
 /**
- * File: $Id$
- *
- * Modify module settings
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage modules module
- * @author Xaraya Team 
+ *
+ * @subpackage Modules module
  */
 /**
  * Modify module settings
@@ -19,6 +15,7 @@
  * for any hooks that the module could use
  * and passes the data to the template.
  *
+ * @author Xaraya Development Team
  * @param id registered module id
  * @param return_url optional return URL after updating the hooks
  * @returns array

@@ -1,21 +1,18 @@
 <?php
 /**
- * File: $Id$
- *
- * Makes theme the default theme.
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage themes module
- * @author Xaraya Team 
+ *
+ * @subpackage Themes module
  */
 /**
  * Default theme for site
  *
  * Sets the module var for the default site theme.
  *
+ * @author Marty Vance
  * @param id the theme id to set
  * @returns
  * @return

@@ -1,23 +1,17 @@
 <?php
-
 /**
- * File: $Id$
- *
- * Base System Exit function
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * This function renders a core exception and then exits
+ * @subpackage Base module
+ */
+/* Renders a core exception and then exits
  *
  * @subpackage base
  * @author Marc Lutolf
  */
-
-
-
 function base_user_systemexit()
 {
     global $CoreStack;

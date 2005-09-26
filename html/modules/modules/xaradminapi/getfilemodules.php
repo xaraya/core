@@ -1,15 +1,11 @@
 <?php
 /**
- * File: $Id$
- *
- * Get module information from xarversion.php for each module
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage modules module
- * @author Xaraya Team 
+ *
+ * @subpackage Modules module
  */
 /**
  * Get module information from xarversion.php for each module
@@ -22,6 +18,7 @@
  * SCCS - where Bitkeeper stores source files
  * PENDING - where Bitkeeper stores pending merges
  *
+ * @author Xaraya Development Team
  * @param $args['regid'] - optional regid to retrieve
  * @returns array
  * @return an array of modules from the file system

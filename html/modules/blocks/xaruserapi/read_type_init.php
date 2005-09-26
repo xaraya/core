@@ -1,18 +1,17 @@
 <?php
-/** 
- * File: $Id$
- *
- * Read and execute a block's init function.
- *
+/**
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
+ * @subpackage Blocks module
+ */
+/* Read and execute a block's init function.
  * @param args['module'] the module name
  * @param args['type'] the block type name
  * @return the block 'info' details (an array) or NULL if no details present
  *
- * @subpackage Blocks administration
  * @author Jim McDonald, Paul Rosania
  */
 

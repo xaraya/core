@@ -1,20 +1,15 @@
 <?php
 /**
- * File: $Id$
- *
- * Handle render javascript form field tags
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage base
- * @author Jason Judge
- * @todo none
+ * @subpackage Base module
  */
 
 /**
+ * Handle render javascript form field tags
  * Get JavaScript for a tag event.
  * Returns all submitted JavaScript fragments for a position (tag) and type (event name)
  * as a single string, each statement separated by a semi-colon.

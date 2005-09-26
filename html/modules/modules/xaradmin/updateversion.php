@@ -1,15 +1,11 @@
 <?php
 /**
- * File: $Id$
- *
- * Update the module version in the database
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage modules module
- * @author Xaraya Team 
+ *
+ * @subpackage Modules module
  */
 /**
  * Update the module version in the database
@@ -18,6 +14,7 @@
  * @returns bool
  * @return true on success, false on failure
  *
+ * @author Xaraya Development Team
  */
 function modules_admin_updateversion()
 {

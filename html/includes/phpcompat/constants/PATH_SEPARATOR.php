@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id:
- * 
  * Constant PATH_SEPARATOR
  * 
  * @package PHP Version Compatibility Library

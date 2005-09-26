@@ -1,20 +1,15 @@
 <?php
-/** 
- * File: $Id$
- *
- * Resequence a blocks table
- *
+/**
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @param $args['gid'] group ID for group to resequence (optional)
  *
- * @subpackage Blocks administration
- * @author Jim McDonald, Paul Rosania
-*/
+ * @subpackage Blocks module
+ */
 /**
  * resequence a blocks table
+ * @author Jim McDonald, Paul Rosania
  * @returns void
  */
 function blocks_adminapi_resequence($args)

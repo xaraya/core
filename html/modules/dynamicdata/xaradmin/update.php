@@ -1,18 +1,15 @@
 <?php
 /**
- * File: $Id$
- *
- * Update current item
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage dynamicdata module
+ * @subpackage Dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
-*/
+ */
 /**
+ * Update current item
  * This is a standard function that is called with the results of the
  * form supplied by xarModFunc('dynamicdata','admin','modify') to update a current item
  * @param 'exid' the id of the item to be updated

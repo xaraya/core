@@ -1,19 +1,18 @@
 <?php
-/** 
- * File: $Id$
- *
- * Get a single block type.
- *
+/**
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
+ * @subpackage Blocks module
+ */
+/*
+ * Get a single block type.
  * @param args['tid'] block type ID (optional)
  * @param args['module'] module name (optional, but requires 'type')
  * @param args['type'] block type name (optional, but requires 'module')
  * @returns array of block types, keyed on block type ID
- *
- * @subpackage Blocks administration
  * @author Jason Judge
 */
 

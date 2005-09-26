@@ -1,20 +1,16 @@
 <?php
 /**
- * File: $Id$
- *
- * Installer initialization functions
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage installer
- * @author Johnny Robeson
+ *
+ * @subpackage Installer
  */
-
 /**
  * Install Xaraya
  *
+ * @author Johnny Robeson
  * @param none
  * @returns bool
  * @raise DATABASE_ERROR

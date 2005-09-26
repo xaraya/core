@@ -1,19 +1,16 @@
 <?php
 /**
- * File: $Id$
- *
- * Configure hooks by hook module
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage modules module
- * @author Xaraya Team
+ *
+ * @subpackage Modules module
  */
 /**
  * Configure hooks by hook module
  *
+ * @author Xaraya Development Team
  * @param $args['curhook'] current hook module (optional)
  * @param $args['return_url'] URL to return to after updating the hooks (optional)
  *

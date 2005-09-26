@@ -1,20 +1,18 @@
 <?php
 /**
- * File: $Id: s.xaradmin.php 1.67 03/04/19 16:34:00-04:00 johnny@falling.local.lan $
- *
- * Installer admin display functions
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage installer
+ * @subpackage Installer
+ */
+
+/* Do not allow this script to run if the install script has been removed.
+ * This assumes the install.php and index.php are in the same directory.
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
-
-// Do not allow this script to run if the install script has been removed.
-// This assumes the install.php and index.php are in the same directory.
 if (!file_exists('install.php')) {xarCore_die(xarML('Already installed'));}
 
 /**

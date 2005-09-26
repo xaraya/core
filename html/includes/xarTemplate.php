@@ -321,7 +321,7 @@ function xarTplGetPageTitle()
 }
 
 /**
- * Add stylesheet link for a module (after 0913/uiscrub this function is a legacy)
+ * Add stylesheet link for a module (after rc3 this function is a legacy)
  *
  * @access public (deprecated - all CSS issues are normally handled by the css classlib via bl tags)
  * @param  string $module

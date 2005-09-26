@@ -1,16 +1,16 @@
 <?php
-
+/**
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage Base module
+ */
 /**
  * Gets a file from the Internet
  *
  * Returns the content of the file (possibly cached). Don't use this to download huge files :)
- *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.com
- *
- * @subpackage base
  * @author mikespub
  * @access public
  * @param $args['url'] string the absolute URL for the file

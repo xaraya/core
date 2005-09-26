@@ -1,20 +1,16 @@
 <?php
 /**
- * File: $Id$
- *
- * Set the state of a theme
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Themes
- * @author Marty Vance
-*/
+ * @subpackage Themes module
+ */
 /**
  * Set the state of a theme
  *
+ * @author Marty Vance
  * @param $args['regid'] the theme id
  * @param $args['state'] the state
  * @raise BAD_PARAM,NO_PERMISSION

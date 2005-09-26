@@ -1,19 +1,15 @@
 <?php
 /**
- * File: $Id$
- *
- * Create a new block instance
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Blocks administration
- * @author Jim McDonald, Paul Rosania
-*/
+ * @subpackage Blocks module
+ */
 /**
  * create a new block instance
+ * @author Jim McDonald, Paul Rosania
  * @param $args['name'] unique name for the block
  * @param $args['title'] the title of the block
  * @param $args['type'] the block's type
