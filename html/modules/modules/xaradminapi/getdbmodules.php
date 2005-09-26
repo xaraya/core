@@ -1,19 +1,16 @@
 <?php
 /**
- * File: $Id$
- *
- * Geta ll modules in the database
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage modules module
- * @author Xaraya Team 
+ *
+ * @subpackage Modules module
  */
 /**
  * Get all modules in the database
  *
+ * @author Xaraya Development Team
  * @param $args['regid'] - optional regid to retrieve
  * @returns array
  * @return array of modules in the database

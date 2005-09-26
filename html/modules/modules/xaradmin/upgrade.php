@@ -1,15 +1,11 @@
 <?php
 /**
- * File: $Id$
- *
- * Upgrade a module
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage modules module
- * @author Xaraya Team 
+ *
+ * @subpackage Modules module
  */
 /**
  * Upgrade a module
@@ -19,6 +15,7 @@
  * the list function and with a status message and returns
  * true.
  *
+ * @author Xaraya Development Team
  * @param id the module id to upgrade
  * @returns
  * @return

@@ -1,20 +1,17 @@
 <?php
 /**
- * File: $Id$
- *
- * View complete module information/details
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage modules module
- * @author Xaraya Team 
+ *
+ * @subpackage Modules module
  */
 /**
  * View complete module information/details
  * function passes the data to the template
  * opens in new window when browser is javascript enabled
+ * @author Xaraya Development Team
  * @access public
  * @param none
  * @returns array

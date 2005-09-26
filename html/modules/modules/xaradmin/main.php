@@ -1,20 +1,17 @@
 <?php
 /**
- * File: $Id$
- *
- * Main modules module function
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage modules module
- * @author Xaraya Team 
+ *
+ * @subpackage Modules module
  */
 /**
  * main modules module function
  * @return modules_admin_main
  *
+ * @author Xaraya Development Team
  */
 function modules_admin_main()
 {

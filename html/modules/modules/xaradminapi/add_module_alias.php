@@ -1,20 +1,17 @@
 <?php
 /**
- * File: $Id$
- *
- * Define a module name as an alias for some other module
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage modules module
- * @author Xaraya Team 
+ *
+ * @subpackage Modules module
  */
 /**
  * define a module name as an alias for some other module
  * (only used for short URL support at the moment)
  *
+ * @author Xaraya Development Team
  * @access public
  * @param modName name of the 'real' module you want to assign it to
  * @param aliasModName name of the 'fake' module you want to define
