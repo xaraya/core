@@ -1,16 +1,17 @@
 <?php
 /**
- * Simplified DST rules (based on modules/timezone/tzdata.php)
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage base
+ *
+ * @subpackage Base module
  */
 /**
- * Simplified DST rules (cfr. modules/timezone/xaradmin/regenerate.php)
+ * Simplified DST rules (based on modules/timezone/tzdata.php)
+ * (cfr. modules/timezone/xaradmin/regenerate.php)
  *
+ * @author mikespub
  * @param $args['rule'] string DST rule we're looking for (default all)
  * @param $args['time'] integer timestamp for the period we're interested in (unsupported)
  * @author the Base module development team

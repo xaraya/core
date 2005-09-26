@@ -1,20 +1,17 @@
 <?php
 /**
- * File: $Id
- *
- * Main admin gui function, entry point
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage base
- * @author John Robeson
- * @author Greg Allan
+ *
+ * @subpackage Base module
  */
+ 
 /**
  * Main admin gui function, entry point
- *
+ * @author John Robeson
+ * @author Greg Allan
  * @return bool
  */
 function base_admin_main()

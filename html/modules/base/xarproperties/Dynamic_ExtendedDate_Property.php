@@ -1,9 +1,13 @@
 <?php
 /**
- * @package dynamicdata
- * @subpackage properties
- * @copyright (C) 2004 by Ninth Avenue Software Pty Ltd
- * @link http://www.ninthave.net
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage Base module
+ */
+/*
  * @author Roger Keays <roger.keays@ninthave.net>
  */
 

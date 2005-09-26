@@ -1,21 +1,16 @@
 <?php
-
 /**
- * File: $Id$
- *
- * Base User version management functions
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage base
- * @author Jason Judge
- * @todo none
+ * @subpackage Base module
  */
 
 /**
+ * Base User version management functions
+ *
  * Compare two legal-style versions supplied as strings or arrays, to an arbitrary number of levels
  * Usage : $which = xarModAPIFunc('base', 'versions', 'compare', array('ver1'=>$version1, 'ver2'=>$version2));
  * or shortcut $which = xarModAPIFunc('base', 'versions', 'compare', array($version1, $version2));

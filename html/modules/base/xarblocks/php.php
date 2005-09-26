@@ -1,20 +1,16 @@
 <?php
 /**
- * File: $Id$
- *
- * Displays a PHP Block
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base Module
- * @author Patrick Kellum
-*/
+ * @subpackage Base module
+ */
 
 /**
  * init func
+ * @author Patrick Kellum
  */
 function base_phpblock_init()
 {

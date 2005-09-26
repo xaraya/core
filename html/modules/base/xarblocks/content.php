@@ -1,20 +1,17 @@
 <?php
 /**
- * File: $Id$
- *
- * Displays a Text/HTML/PHP Block
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base Module
- * @author Jason Judge
-*/
+ * @subpackage Base module
+ */
 
 /**
- * init func
+ * Displays a Text/HTML/PHP Block
+ *
+ * @author Jason Judge
  */
 function base_contentblock_init()
 {

@@ -1,16 +1,16 @@
 <?php
-
 /**
- * Extract a list of links from some HTML content (cfr. getfile and checklink)
- *
- * Note: this is definitely not meant as an exhaustive link extractor
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage base
+ * @subpackage Base module
+ */
+/**
+ * Extract a list of links from some HTML content (cfr. getfile and checklink)
+ * Note: this is definitely not meant as an exhaustive link extractor
+ *
  * @author mikespub
  * @access public
  * @param $args['content'] string the HTML content that you want to extract links from
