@@ -1,20 +1,16 @@
 <?php
 /**
- * File: $Id
- *
- * View recent module releases via central repository
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage base
- * @author John Robeson
- * @author Greg Allan
+ *
+ * @subpackage Base module
  */
 /**
  * View recent module releases via central repository
  *
+ * @author John Cox
  * @access public
  * @param none
  * @returns array
@@ -53,37 +49,38 @@ function base_admin_release($args)
     // Tell feedParser to parse the data
     $info = $p->parseFeed($feeddata);
     if (empty($info['warning'])){
-        foreach ($info as $content){
-             foreach ($content as $newline){
-                    if(is_array($newline)) {
-                        if (isset($newline['description'])){
-                            $description = $newline['description'];
-                        } else {
-                            $description = '';
-                        }
-                        if (isset($newline['title'])){
-                            $title = $newline['title'];
-                        } else {
-                            $title = '';
-                        }
-                        if (isset($newline['link'])){
-                            $link = $newline['link'];
-                        } else {
-                            $link = '';
-                        }
-                    $feedcontent[] = array('title' => $title, 'link' => $link, 'description' => $description);
-                }
+      foreach ($info as $content){
+        foreach ($content as $newline){
+          if(is_array($newline)) {
+            if (isset($newline['description'])){
+              $description = $newline['description'];
+            } else {
+              $description = '';
             }
+            if (isset($newline['title'])){
+              $title = $newline['title'];
+            } else {
+              $title = '';
+            }
+            if (isset($newline['link'])){
+              $link = $newline['link'];
+            } else {
+              $link = '';
+            }
+            $feedcontent[$title] = array('title' => $title, 'link' => $link, 'description' => $description);
+          }
         }
-        $data['chantitle']  =   $info['channel']['title'];
-        $data['chanlink']   =   $info['channel']['link'];
-        $data['chandesc']   =   $info['channel']['description'];
+      }
+      $data['chantitle']  =   $info['channel']['title'];
+      $data['chanlink']   =   $info['channel']['link'];
+      $data['chandesc']   =   $info['channel']['description'];
     } else {
         $msg = xarML('There is a problem with a feed.');
         xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
         return;
     }
-    $data['feedcontent'] = $feedcontent;
+    asort($feedcontent);
+    $data['feedcontent'] = $feedcontent; 
     return $data;
 }
 ?>

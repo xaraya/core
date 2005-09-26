@@ -1,20 +1,16 @@
 <?php
-/** 
- * File: $Id$
- *
- * Count the number of block types [for a given type and/or module]
- *
+/**
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Blocks administration
- * @author Jason Judge
-*/
+ * @subpackage Blocks module
+ */
 /**
  * Count the number of block types [of a given name or module]
  *
+ * @author Jason Judge
  * @access public
  * @param modName the module name
  * @param $args['type'] name of the block type (optional)

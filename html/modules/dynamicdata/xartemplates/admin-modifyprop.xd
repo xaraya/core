@@ -56,172 +56,16 @@
         show some basic info about this dynamic object
         </xar:comment>
 
-        <xar:data-display module="dynamicdata" itemtype="0" itemid="$objectid" fieldlist="name,label,moduleid,itemtype" />
+        <xar:data-display layout="$layout" module="dynamicdata" itemtype="0" itemid="$objectid" fieldlist="name,label,moduleid,itemtype" />
+    </xar:if>
+
+    <xar:comment>This is where the list of properties shown starts</xar:comment>
+    <xar:if condition="!isset($layout)">
+      <xar:set name="layout">'default'</xar:set>
     </xar:if>
 
     <form method="post" action="&xar-modurl-dynamicdata-admin-updateprop;">
-        <p>
-            <xar:mlstring>Hint: empty the Label to delete a property for all items</xar:mlstring>
-        </p>
-
-        <p>
-            <xar:mlstring>Click on a Property Name to edit it.</xar:mlstring>
-        </p>
-
-        <xar:if condition="!empty($objectid) and $objectid lt 3">
-            <h3>
-                <xar:mlstring>Warning! This is a system object used internally by the Dynamic Data module. Trying to modify the properties of this object may break the Dynamic Data module. Proceed with caution.</xar:mlstring>
-            </h3>
-        </xar:if>
-
-        <xar:foreach in="$fields" value="$field">
-            <xar:set name="editvalidation">
-                xarML('Edit validation for property "#(1)"',$field['name']) 
-            </xar:set>
-
-            <xar:set name="otherfields">
-                xarML('Edit property "#(1)"',$field['name']) 
-            </xar:set>
-
-            <fieldset>
-                <legend>
-                    <xar:if condition="!empty($field['name'])">
-                        <a href="javascript:void(0);" title="#xarML('Click to toggle field visibility for this property')#" onclick="return toggleDisplay('fieldwrapper_#$field.id#');">
-                            #$field['name']#</a>
-                       <xar:else />
-                        <a href="javascript:void(0);" title="#xarML('Click to toggle field visibility for this property')#" onclick="return toggleDisplay('fieldwrapper_#$field.id#');">
-                               <xar:mlstring>[unnamed property]</xar:mlstring></a>
-                       </xar:if>
-                    [#$labels['id']#: #$field['id']#]
-                </legend>
-
-                <div id="fieldwrapper_#$field.id#" class="xar-displaynone">
-                    <div class="xar-form-input-wrapper-after">
-                        <a href="&xar-modurl-dynamicdata-admin-modify;&amp;objectid=2&amp;itemid=#$field.id#">
-                            #xarVarPrepForDisplay($otherfields)#
-                        </a>
-                    </div>
-
-                    <div class="xar-form-input-wrapper">
-                        <span class="xar-form-label">
-                            #$labels['source']#:
-                        </span>
-                        #$field['source']#
-                    </div>
-
-                    <div class="xar-form-input-wrapper">
-                        <label for="dd_label_#$field['id']#" class="xar-form-label">
-                            #$labels['label']#:
-                        </label>
-                        <input type="text" name="dd_label[#$field['id']#]" id="dd_label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium" />
-                    </div>
-
-                    <div class="xar-form-input-wrapper">
-                        <label for="dd_type_#$field.id#" class="xar-form-label">
-                            #$labels['type']#:
-                        </label>
-                        <xar:data-input property="$fieldtypeprop" name="dd_type['.$field['id'].']" id="dd_type_'.$field['id'].'" value="$field['type']" />
-                    </div>
-
-                    <div class="xar-form-input-wrapper">
-                        <label for="dd_default_#$field.id#" class="xar-form-label">
-                            #$labels['default']#:
-                        </label>
-                        <input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" value="#xarVarPrepForDisplay($field['default'])#" class="xar-form-textmedium" />
-                    </div>
-
-                    <div class="xar-form-input-wrapper">
-                        <label for="dd_validation_#$field.id#" class="xar-form-label">
-                            #$labels['validation']#:
-                        </label>
-                        <input type="text" name="dd_validation[#$field['id']#]" id="dd_validation_#$field['id']#" value="#xarVarPrepForDisplay($field['validation'])#" class="xar-form-textmedium" />
-                        <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$field.id#" title="#xarVarPrepForDisplay($editvalidation)#">
-                            <xar:mlstring>Edit Validation</xar:mlstring>
-                        </a>
-                    </div>
-
-                    <div class="xar-form-input-wrapper">
-                        <label for="dd_status_#$field.id#" class="xar-form-label">
-                            #$labels['status']#:
-                        </label>
-                        <xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" id="dd_status_'.$field['id'].'" size="15" value="$field['status']" />
-                    </div>
-                </div>
-            </fieldset>
-        </xar:foreach>
-
-        <fieldset>
-            <legend>
-                <xar:mlstring>New Property</xar:mlstring>
-            </legend>
-
-            <div class="xar-form-input-wrapper">
-                <label for="dd_source_0" class="xar-form-label">
-                    #$labels['source']#:
-                </label>
-                <select class="dd-norm" name="dd_source[0]" id="dd_source_0">
-                    <xar:foreach in="$sources" value="$mysource">
-                        <option>#$mysource#</option>
-                    </xar:foreach>
-                </select>
-            </div>
-
-            <div class="xar-form-input-wrapper">
-                <label for="dd_label_0" class="xar-form-label">
-                    #$labels['label']#:
-                </label>
-                <input type="text" name="dd_label[0]" id="dd_label_0" class="xar-form-text-medium" />
-            </div>
-
-            <div class="xar-form-input-wrapper">
-                <label for="dd_type_0" class="xar-form-label">
-                    #$labels['type']#:
-                </label>
-                <xar:data-input property="$fieldtypeprop" name="dd_type[0]" id="dd_type_0" value="" />
-            </div>
-
-            <div class="xar-form-input-wrapper">
-                <label for="dd_default_0" class="xar-form-label">
-                    #$labels['default']#:
-                </label>
-                <input type="text" name="dd_default[0]" id="dd_default_0" class="xar-form-textmedium" />
-            </div>
-
-            <div class="xar-form-input-wrapper">
-                <label for="dd_validation_0" class="xar-form-label">
-                    #$labels['validation']#:
-                </label>
-                <input type="text" name="dd_validation[0]" id="dd_validation_0" class="xar-form-textmedium" />
-            </div>
-
-            <div class="xar-form-input-wrapper">
-                <label for="dd_status_0" class="xar-form-label">
-                    #$labels['status']#:
-                </label>
-                <xar:data-input property="$fieldstatusprop" name="dd_status[0]" id="dd_status_0" value="1" />
-            </div>
-
-        </fieldset>
-
-        <xar:if condition="$modid eq 182">
-            <p>
-                <xar:mlstring>Note: for completely dynamic Objects like this one, you need to define one property that is of type "Item ID"</xar:mlstring>
-            </p>
-        </xar:if>
-
-        <xar:if condition="!empty($hooks)">
-            <xar:foreach in="$hooks" key="$module" value="$output">
-                #$output#
-            </xar:foreach>
-        </xar:if>
-
-        <div class="xar-align-center">
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="objectid" id="objectid" value="#$objectid#" />
-            <input type="hidden" name="modid" id="modid" value="#$modid#" />
-            <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
-            <input type="submit" value="#xarML('Update Properties')#" />
-        </div>
+        <xar:template file="proplist-$layout" />
     </form>
 
     <p>
@@ -232,7 +76,7 @@
         <xar:mlstring>Hint: after you create a property, the label and name are independent from each other. You can adapt the property name by clicking on the ID link above.</xar:mlstring>
     </p>
 
-    <!-- xar:data-list object="$myobject" layout="'cells'" template="''" /-->
+    <!-- <xar:data-list object="$myobject" layout="$layout"  /> -->
     <p>
         [ 
         <xar:if condition="empty($details)">

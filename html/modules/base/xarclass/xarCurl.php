@@ -1,16 +1,11 @@
 <?php
-
-/*
- * File: $Id$
- *
- * Base System
- *
+/**
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2004 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage base module
- * @author Jason Judge
+ * @subpackage Base module
  */
 
 /*

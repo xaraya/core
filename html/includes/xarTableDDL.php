@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Table Maintenance API
  *
  * NOTE: THIS SUBSYSTEM IS SCHEDULED FOR DEPRECATION. EXISTING CODE

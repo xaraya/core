@@ -1,21 +1,17 @@
 <?php
 /**
- * File: $Id$
- *
- * Purpose of file:  Table information for privileges module
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html} 
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage security
- * @author Marc Lutolf <marcinmilan@xaraya.com>
-*/
-
+ * @subpackage Privileges module
+ */
 /**
+ * Purpose of file:  Table information for privileges module
  * Return table name definitions to Xaraya
  *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  * This function is called internally by the core whenever the module is
  * loaded. It is called by xarMod__dbInfoLoad()
  *

@@ -1,8 +1,5 @@
 <?php
-
 /**
- * File: $Id$
- *
  * Validate a date value.
  *
  * @package validation

@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * BlockLayout Template Engine
  *
  * @package blocklayout
@@ -323,7 +321,7 @@ function xarTplGetPageTitle()
 }
 
 /**
- * Add stylesheet link for a module (after 0913/uiscrub this function is a legacy)
+ * Add stylesheet link for a module (after rc3 this function is a legacy)
  *
  * @access public (deprecated - all CSS issues are normally handled by the css classlib via bl tags)
  * @param  string $module
@@ -1208,6 +1206,11 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     $tplBaseDir   = "modules/$modOsDir";
     $use_internal = false;
     unset($sourceFileName);
+
+    // xarLogMessage("TPL: 1. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt")
+    // xarLogMessage("TPL: 2. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xd")
+    // xarLogMessage("TPL: 3. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase.xt")
+    // xarLogMessage("TPL: 4. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")
 
     if(!empty($templateName) && 
         file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt")) {

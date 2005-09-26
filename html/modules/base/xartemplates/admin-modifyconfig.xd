@@ -9,10 +9,6 @@
     // Enter field description to appear in the dialog box
     var base_fieldDescription = Array("Default Module Function");
 //-->
-
-
-
-
 </script> 
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
@@ -256,8 +252,7 @@
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                    <input type="submit" value="#xarML('Update Base Configuration')#" class="xar-margin-thickright" />
-                    <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft" />
+                    <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
                 </div>
             </fieldset>
         </form>
@@ -426,8 +421,7 @@
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                    <input type="submit" value="#xarML('Update Base Configuration')#" class="xar-margin-thickright" />
-                    <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft" />
+                    <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
                 </div>
             </fieldset>
         </form>
@@ -441,8 +435,7 @@
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                    <input type="submit" value="#xarML('Update Base Configuration')#" class="xar-margin-thickright" />
-                    <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft" />
+                    <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
                 </div>
             </fieldset>
         </form>
@@ -537,8 +530,7 @@
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                    <input type="submit" value="#xarML('Update Base Configuration')#" class="xar-margin-thickright" />
-                    <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft" />
+                    <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
                 </div>
             </fieldset>
         </form>

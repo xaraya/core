@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Error Stack class
  *
  * @package exceptions

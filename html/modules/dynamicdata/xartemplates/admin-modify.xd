@@ -56,11 +56,9 @@
             </p>
         </xar:if>
 
-        <table class="xar-fullwidth" border="2">
-            <!-- this does most of the hard work :) -->
-            <xar:data-form object="$object" />
-        </table>
-
+        <!-- this does most of the hard work :) -->
+        <xar:data-form object="$object" />
+ 
         <xar:if condition="!empty($hooks)">
             <xar:foreach in="$hooks" key="$module" value="$output">
                 #$output#

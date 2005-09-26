@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Legacy Functions
  *
  * @package legacy

@@ -1,15 +1,14 @@
 <?php
-/** 
- * File: $Id$
- *
- * Retrieve a group raw data.
- *
+/**
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Blocks administration
+ * @subpackage Blocks module
+ */
+/*
+ * Retrieve a group raw data.
  * @author Jim McDonald, Paul Rosania
 */
 

@@ -15,56 +15,64 @@
                 PHP Info Sort Information:
             </xar:mlstring>
         </dt>
-        <dd>
+        <xar:set name="tabclass">$what==1?'active':''</xar:set>
+        <dd class="#$tabclass#">
             <a href="&xar-modurl-base-admin-sysinfo;&amp;what=1">
                 <xar:mlstring>
                     General info 
                 </xar:mlstring>
             </a>
         </dd>
-        <dd>
+         <xar:set name="tabclass">$what==2?'active':''</xar:set>
+        <dd class="#$tabclass#">
             <a href="&xar-modurl-base-admin-sysinfo;&amp;what=2">
                 <xar:mlstring>
                     Credits 
                 </xar:mlstring>
             </a>
         </dd>
-        <dd>
+         <xar:set name="tabclass">$what==4?'active':''</xar:set>
+        <dd class="#$tabclass#">
             <a href="&xar-modurl-base-admin-sysinfo;&amp;what=4">
                 <xar:mlstring>
                     Configuration 
                 </xar:mlstring>
             </a>
         </dd>
-        <dd>
+         <xar:set name="tabclass">$what==8?'active':''</xar:set>
+        <dd class="#$tabclass#">
             <a href="&xar-modurl-base-admin-sysinfo;&amp;what=8">
                 <xar:mlstring>
                     Modules 
                 </xar:mlstring>
             </a>
         </dd>
-        <dd>
+         <xar:set name="tabclass">$what==16?'active':''</xar:set>
+        <dd class="#$tabclass#">
             <a href="&xar-modurl-base-admin-sysinfo;&amp;what=16">
                 <xar:mlstring>
                     Environment 
                 </xar:mlstring>
             </a>
         </dd>
-        <dd>
+         <xar:set name="tabclass">$what==32?'active':''</xar:set>
+        <dd class="#$tabclass#">
             <a href="&xar-modurl-base-admin-sysinfo;&amp;what=32">
                 <xar:mlstring>
                     Variables 
                 </xar:mlstring>
             </a>
         </dd>
-        <dd>
+         <xar:set name="tabclass">$what==64?'active':''</xar:set>
+        <dd class="#$tabclass#">
             <a href="&xar-modurl-base-admin-sysinfo;&amp;what=64">
                 <xar:mlstring>
                     License 
                 </xar:mlstring>
             </a>
         </dd>
-        <dd>
+         <xar:set name="tabclass">$what==-1?'active':''</xar:set>
+        <dd class="#$tabclass#">
             <a href="&xar-modurl-base-admin-sysinfo;&amp;what=-1">
                 <xar:mlstring>
                     All 

@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- * 
  * HTML Helpers
  *
  * @package legacy

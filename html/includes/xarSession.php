@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Session Support
  *
  * @package sessions

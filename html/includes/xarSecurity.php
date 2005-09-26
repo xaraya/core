@@ -1,8 +1,6 @@
 <?php
 /**
- * File: $Id: xarSecurity.php 1.123 05/06/11 20:03:38+02:00 marc@marclaptop. $
- *
- * Low-level security access mechanism
+ * Low level security access mechanism
  *
  * @package security
  * @copyright (C) 2002 by the Xaraya Development Team.

@@ -1,20 +1,12 @@
 <?php
-
 /**
- * File: $Id$
- *
- * Base User version management functions
- *
-  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage base
- * @author Jason Judge
- * @todo none
+ * @subpackage Base module
  */
-
 
 /**
  * Asserts that the Xaraya application version has reached a certain level.

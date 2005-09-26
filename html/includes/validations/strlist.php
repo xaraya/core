@@ -1,8 +1,5 @@
 <?php
-
 /**
- * File: $Id$
- *
  * list:{sep}:...
  * Split the string into separate items using 'sep' as an item
  * separator, then validate each individually.

@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * XML services for Xaraya
  *
  * @package xml

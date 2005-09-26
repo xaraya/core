@@ -9,7 +9,7 @@
             <xar:mlstring>View</xar:mlstring> <xar:data-label object="$object" />
         </h2>
     
-        <xar:data-view object="$object" />
+        <xar:data-view layout="$layout" object="$object" />
     
     <xar:elseif condition="!empty($modid)" />
         <!-- here we only retrieve the parameters in the function, and we let the data-view tag retrieve the complete object list -->
@@ -19,7 +19,7 @@
         <xar:if condition="empty($numitems)">
            <xar:set name="numitems">30</xar:set>
         </xar:if>
-        <xar:data-view module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$param" numitems="$numitems" startnum="$startnum" catid="$catid" />
+        <xar:data-view layout="$layout" module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$param" numitems="$numitems" startnum="$startnum" catid="$catid" />
 
     <xar:else />
         <div class="xar-align-center">

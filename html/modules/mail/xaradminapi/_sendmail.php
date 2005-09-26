@@ -1,21 +1,18 @@
 <?php
 /**
- * File: $Id: s.xaradmin.php 1.28 03/02/08 17:38:40-05:00 John.Cox@mcnabb. $
- *
- * Mail System
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage mail module
- * @author John Cox <admin@dinerminor.com>
+ *
+ * @subpackage Mail System
  */
 
 /**
  * This is a private utility function that is called to send mail
  * It is used by public functions sendmail() and sendhtmlmail()
  *
+ * @author  John Cox <niceguyeddie@xaraya.com>
  * @param  $ 'info' is the email address we are sending (required)
  * @param  $ 'name' is the name of the email receipitent (optional)
  * @param  $ 'recipients' is an array of recipients (required) // NOTE: $info or $recipients is required, not both

@@ -1,8 +1,5 @@
 <?php
-
 /**
- * File: $Id$
- *
  * SQL based logger
  *
  * @package logging

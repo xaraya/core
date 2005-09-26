@@ -1,19 +1,16 @@
 <?php
 /**
- * File: $Id$
- *
- * Find all the module's dependents recursively
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage modules module
- * @author Xaraya Team 
+ *
+ * @subpackage Modules module
  */
 /**
  * Find all the modules dependents recursively
  *
+ * @author Xaraya Development Team
  * @param $maindId int ID of the module to look dependents for
  * @returns bool
  * @return true on dependencies activated, false for not

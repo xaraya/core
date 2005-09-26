@@ -1,20 +1,17 @@
 <?php
 /**
- * File: $Id$
- *
- * Verifies if all dependencies of a module are satisfied
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage modules module
- * @author Xaraya Team 
+ *
+ * @subpackage Modules module
  */
 /**
  * Verifies if all dependencies of a module are satisfied.
  * To be used before initializing a module.
  *
+ * @author Xaraya Development Team
  * @param $maindId int ID of the module to look dependents for
  * @returns bool
  * @return true on dependencies verified and ok, false for not

@@ -1,8 +1,5 @@
 <?php
-
 /**
- * File: $Id$
- *
  * Mozilla js console logger
  *
  * @package logging
@@ -65,11 +62,28 @@ class xarLogger_mozilla extends xarLogger
     function getCommonCode()
     {
         // Common javascript to get a variable which has the logmessage method
-        $code="netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');\n".
-              "var con_service_class = Components.classes['@mozilla.org/consoleservice;1'];\n".
-              "var iface = Components.interfaces.nsIConsoleService;\n".
-              "var jsconsole = con_service_class.getService(iface);\n";
-        return $code;
+        $code="
+function mozConsole(msg, level) 
+{
+    // Only relevant for moz engine
+    if(navigator.appName.indexOf('Netscape') != -1) {
+      netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');\n
+      var consoleService = Components.classes['@mozilla.org/consoleservice;1']
+                                 .getService(Components.interfaces.nsIConsoleService);
+
+      if(level < 32 ) {
+         if(level >= 0) flag = 0; // error
+         if(level >= 16) flag= 1; // warning
+         var scriptError = Components.classes['@mozilla.org/scripterror;1']
+                                   .createInstance(Components.interfaces.nsIScriptError);
+        scriptError.init(msg, null, null, null, null, flag, '');\n
+         consoleService.logMessage(scriptError);\n    
+      } else {
+        consoleService.logStringMessage(msg);\n
+     }
+   }
+}";
+  return $code;
     }
 
    /**
@@ -85,17 +99,23 @@ class xarLogger_mozilla extends xarLogger
         if (!$this->doLogLevel($level)) return false;
 
         // FIXME: this code depends on a user setting to use principal codebase support (same origin policy)
+        // In mozilla//ff: 
+        // 1. about:config in address bar
+        // 2. look up signed.applets.codebase_principal_support
+        // 3. make sure it is set to true
+        // alternatively user_pref("signed.applets.codebase_principal_support", true);
+        // in the profile prefs.js file
+        // 
         // it should be done with a signed script eventually, but this is rather complex
         // TODO: check on windows and browsers other than mozilla, to fall back gracefully
 
-        $logentry = $this->getTime(). " - (" .$this->levelToString($level).")".$message;
+        $logentry = $this->getTime(). " - (" .$this->levelToString($level).") ".$message;
 
         // Add \ for problematic chars and for each newline format unix, mac and windows
         $logentry = addslashes($logentry);
         $trans = array("\n" => "\\\n","\r" => "\\\r","\r\n" => "\\\r\n");
         $logentry = strtr($logentry,$trans);
-        $this->_buffer .= "jsconsole.logStringMessage('$logentry');\n";
-       
+        $this->_buffer .= "mozConsole('$logentry', $level);\n";
         $this->writeOut();
     }
  }

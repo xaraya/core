@@ -1,19 +1,17 @@
 <?php
 /**
- * File: $Id$
- *
- * @package themes
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @author Roger Keays <r.keays@ninthave.net>
+ * @subpackage Themes module
  */
-
 
 /**
  * Convert a theme directory to a theme name.
  *
+ * @author Roger Keays <r.keays@ninthave.net>
  * @param   directory of the theme
  * @return  the theme name in this directory, or false if theme is not
  *          found

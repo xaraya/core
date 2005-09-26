@@ -1,17 +1,13 @@
 <?php
 /**
- * File: $Id$
- *
- * Modify the dynamic properties for a module + itemtype
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage dynamicdata module
+ * @subpackage Dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
-*/
+ */
 /**
  * Modify the dynamic properties for a module + itemtype
  */
@@ -32,7 +28,7 @@ function dynamicdata_admin_modifyprop()
     if(!xarVarFetch('modid',    'isset', $modid,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('details',  'isset', $details,  NULL, XARVAR_DONT_SET)) {return;}
-
+    if(!xarVarFetch('layout',   'str:1' , $layout,   'default', XARVAR_NOT_REQUIRED)) {return;}
 
 /*
     if (!empty($itemid)) {
@@ -147,7 +143,8 @@ function dynamicdata_admin_modifyprop()
 
     // We have to specify this here, the js expects non xml urls and the => makes the template invalied
     $data['urlform'] = xarModURL('dynamicdata','admin','form',array('objectid' => $data['objectid'], 'theme' => 'print'),false);
-    
+    $data['layout'] = $layout;
+
     if (empty($details)) {
         $data['static'] = array();
         $data['relations'] = array();

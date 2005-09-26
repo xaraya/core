@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id: s.xarDB.php 1.39 03/09/06 12:25:23+01:00 miko@power.dudleynet $
- * 
  * ADODB Database Abstraction Layer API Helpers
  * 
  * @package database

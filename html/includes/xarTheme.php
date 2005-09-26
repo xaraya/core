@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Theme handling functions
  *
  * @package Xaraya eXtensible Management System

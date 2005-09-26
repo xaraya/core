@@ -1,8 +1,5 @@
 <?php
-
 /**
- * File: $Id$
- *
  * Short description of purpose of file
  *
  * @package validation

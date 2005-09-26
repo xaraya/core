@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Exception Handling System
  *
  * @package exceptions

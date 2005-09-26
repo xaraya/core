@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Logging Facilities
  *
  * @package logging

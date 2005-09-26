@@ -3,25 +3,19 @@
 <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
     <xar:template file="catnavigation" />
 </xar:if>
-<xar:if condition="empty($layout) or $layout eq 'default'">
-    <table border="0" cellspacing="0" cellpadding="4">
-        <xar:foreach in="$properties" key="$name" value="$property">
-            <tr class="xar-align-left xar-valign-middle">
-                <td class="xar-align-right">
-                    <strong>
-                    <xar:data-label property="$properties[$name]" />:</strong>
-                </td>
-                <td class="xar-align-left">
-                    <xar:data-output property="$properties[$name]" />
-                </td>
-            </tr>
-        </xar:foreach>
-    </table>
-    <xar:else />
-    <p>
-        <xar:mlstring>Specify your own layout here...</xar:mlstring>
-    </p>
-    <p>
-        <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
-    </p>
+<xar:comment>The layout could be set directly or through inheritance (for example in the modify prop screen)</xar:comment>
+<xar:if condition="empty($layout) or $layout eq 'default' or $layout eq 'list'">
+  <xar:foreach in="$properties" key="$name" value="$property">
+    <div class="xar-form-input-wrapper">
+      <xar:data-label property="$properties[$name]" label="id" />
+      <xar:data-output property="$properties[$name]" />
+    </div>
+  </xar:foreach>
+<xar:else />
+<p>
+  <xar:mlstring>Specify your own layout here...</xar:mlstring>
+</p>
+<p>
+  <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+</p>
 </xar:if>

@@ -1,20 +1,19 @@
 <?php
 /**
- * File: $Id: xaradminapi.php 1.44 05/05/13 10:32:28+01:00 judgej@acadweb.co.uk $
- *
  * Installer admin API functions
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage installer
- * @author Johnny Robeson
+ *
+ * @subpackage Installer
  */
 
 /**
  * Modify the system configuration file
  *
+ * @author Johnny Robeson
  * @param string args['dbHost']
  * @param string args['dbName']
  * @param string args['dbUname']

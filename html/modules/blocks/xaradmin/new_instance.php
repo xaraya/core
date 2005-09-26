@@ -1,21 +1,15 @@
 <?php
-/** 
- * File: $Id$
- *
- * Display form for a new block instance
- *
+/**
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @param formodule optional module name to limit block types to specified module
- * @TODO handling of modules with no block types; probably handle that in the template
  *
- * @subpackage Blocks administration
- * @author Jim McDonald, Paul Rosania
-*/
+ * @subpackage Blocks module
+ */
 /**
  * display form for a new block instance
+ * @author Jim McDonald, Paul Rosania
  */
 function blocks_admin_new_instance()
 {

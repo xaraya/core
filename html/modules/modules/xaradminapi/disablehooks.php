@@ -1,20 +1,17 @@
 <?php
 /**
- * File: $Id$
- *
- * Disable hooks between a caller module and a hook module
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage modules module
- * @author Xaraya Team 
+ *
+ * @subpackage Modules module
  */
 /**
  * Disable hooks between a caller module and a hook module
  * Note : generic hooks will not be disabled if a specific item type is given
  *
+ * @author Xaraya Development Team
  * @param $args['callerModName'] caller module
  * @param $args['callerItemType'] optional item type for the caller module
  * @param $args['hookModName'] hook module

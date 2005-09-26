@@ -1,17 +1,13 @@
 <?php
 /**
- * File: $Id$
- *
- * Show the validation rule of some dynamic property
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage dynamicdata module
+ * @subpackage Dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
-*/
+ */
 /**
  * Show validation of some property
  */

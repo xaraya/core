@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Purpose of file:  Data Dictionary API
  *
  * @package Xaraya eXtensible Management System

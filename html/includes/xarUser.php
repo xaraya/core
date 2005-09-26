@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id: xarUser.php 1.154 05/05/14 00:24:41+02:00 marc@marclaptop. $
- *
  * User System
  *
  * @package user
@@ -370,7 +368,6 @@ $GLOBALS['xarUser_objectRef'] = null;
  */
 function xarUserGetVar($name, $userId = NULL)
 {
-
     if (empty($name)) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;

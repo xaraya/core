@@ -1,17 +1,13 @@
 <?php
 /**
- * File: $Id$
- *
- * View a list of items
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage dynamicdata module
+ * @subpackage Dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
-*/
+ */
 /**
  * view a list of items
  * This is a standard function to provide an overview of all of the items
@@ -27,6 +23,7 @@ function dynamicdata_user_view($args)
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('catid',    'isset', $catid,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('layout',   'str:1' , $layout,   'default', XARVAR_NOT_REQUIRED)) {return;}
 
     // Override if needed from argument array
     extract($args);
@@ -73,6 +70,7 @@ function dynamicdata_user_view($args)
     $data['join'] = $join;
     $data['table'] = $table;
     $data['catid'] = $catid;
+    $data['layout'] = $layout;
 
 /*  // we could also retrieve the object list here, and pass that along to the template
     $numitems = 30;

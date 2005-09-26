@@ -1,22 +1,23 @@
 <?php
 /**
- * Adjust timestamp according to DST rules (based on modules/timezone/tzdata.php)
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage base
+ *
+ * @subpackage Base module
  */
 /**
+ * Adjust timestamp according to DST rules (based on modules/timezone/tzdata.php)
  * Check if we need to adjust timestamp according to DST rules (already with timezone offset)
  *
+ * @author mikespub
+ * @author the Base module development team
  * @param $args['time'] integer timestamp we want to adjust for daylight saving
  * @param $args['timezone'] string the timezone we're in, or
  * @param $args['offset'] integer the timezone offset, and
  * @param $args['rule'] string the DST rule we want to use or
  * @param $args['dstinfo'] array the array of DST information we want to use
- * @author the Base module development team
  * @return integer the (possible) adjustment factor for daylight saving in hours
  */
 function base_userapi_dstadjust($args)
