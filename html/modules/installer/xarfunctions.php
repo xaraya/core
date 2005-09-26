@@ -1,20 +1,17 @@
 <?php
 /**
- * File: $Id$
- *
- * Extra functions for the installer
- *
- * @package Xaraya
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage installer
- * @author John Robeson
- * @author Marcel van der Boom <marcel@hsdev.com>
+ *
+ * @subpackage Installer
  */
-
 /**
  * Call an installer function.
  *
+ * @author John Robeson
+ * @author Marcel van der Boom <marcel@hsdev.com>
  * This function is similar to xarModFunc but simplified. 
  * We need this because during install we cant have the module
  * subsystem online directly, so we need a direct way of calling

@@ -1,13 +1,13 @@
 <?php
 /**
- * File: core.conf.php
- *
- * Configuration file for a core xaraya installation
- *
- * @package installer
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
+ * @subpackage Installer
+ */
+/*
  * @author Marcel van der Boom <marcel@xaraya.com>
  */
 
