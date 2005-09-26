@@ -1,17 +1,17 @@
 <?php
 /**
- * Online Block
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2002 by the Xaraya Development Team.
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage roles module
- * @author Jim McDonald, Greg Allan, John Cox, Michael Makushev
- *
-*/
+ * @subpackage Roles module
+ */
 
-/**
+/** Online Block
+ * @author Jim McDonald, Greg Allan, John Cox, Michael Makushev
+ */
+/*
  * initialise block
  */
 function roles_onlineblock_init()

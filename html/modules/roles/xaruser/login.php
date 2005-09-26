@@ -1,15 +1,11 @@
 <?php
 /**
- * File: $Id$
- *
- * Log user into system
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 /**
  * log user in to system
@@ -25,6 +21,7 @@
  * @param   redirecturl page to return user if possible
  * @return  true if status is 3
  * @raise   exceptions raised if status is 0, 1, or 2
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
  */
 function roles_user_login()
 {

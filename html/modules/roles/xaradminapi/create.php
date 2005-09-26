@@ -1,18 +1,15 @@
 <?php
 /**
- * File: $Id$
- *
- * Create a user
- *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 /**
  * create a user
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['uname'] username of the user
  * @param $args['realname'] real name of the user
  * @param $args['email'] email address of the user
