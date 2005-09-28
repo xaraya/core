@@ -1,0 +1,220 @@
+-- 
+-- Recommended settings for monotone for Xaraya committers
+--
+-- Explanation:
+-- This file contains some definitions and hooks which will 
+-- probably grow over time. Monotone uses a set of default
+-- hooks which are predefined and may not always be suitable
+--
+-- A so called rcfile can live in 3 places:
+-- 1. $HOME/.monotone/monotonerc
+-- 2. <workdir>/MT/monotonerc
+-- 3. specified on commandline as --rcfile=<file> or --rcfle=<directory>
+--
+-- The places 1. and 2. are checked automatically by monotone where
+-- settings in 2. override settings in 1. (repo specific vs. global)
+-- The --rcfile open overrides the settings in the automatic places; if 
+-- you specify a directory after --rcfile, all files contained in that
+-- directory will load
+--
+-- This file focusses on settings and hooks for the Xaraya project and
+-- the obvious location would be <workdir>/MT/monotonerc if you use 
+-- monotone for projects other than Xaraya and you dont want to have
+-- the settings applied to those other projects, or $HOME/.monotone/monotonerc
+-- if you want the settings in this file to be applicable for all your
+-- projects.
+--
+-- All settings will be documented inline as much as needed to explain what
+-- their effect will be. We only include settings and hooks which differ
+-- from the default hooks which monotone predefines.
+--
+--
+
+--
+-- Return my pass when i use my id
+-- This is probably the most important hook to have defined
+-- replace <yourid> with your monotone key id (usually your xaraya email)
+-- and replace <yourpassphrase> with the passphrase you entered when creating
+-- your key.
+function get_passphrase(identity)
+   if (identity == "<yourid>") then return "<yourpassphrase>" end
+end
+
+--
+-- Inode cache
+--
+-- For all monotone commands which need to inspect your working copy this
+-- setting (should) speed up those operations, at the expense of a (small)
+-- chance of getting some file states wrong. If you are a little paranoid
+-- and find monotone's speed increase not worth the risk, either delete
+-- the whole function, or return false from it.
+function use_inodeprints()
+   return true
+end
+
+--
+-- Files matching patterns in this hook will be ignored by monotone
+-- Most of these patterns come from the default hook from monotone
+-- If a file matches it will not be listed by monotone as belonging
+-- to the repository, so changes will not be picked up, it will not be
+-- unknown, just plain ignored.
+-- with : mononotone list ignored 
+-- you can produce a list of files in your repository which are in fact
+-- ignored. Obviously this list is personal and highly dependent on 
+-- what you use locally. Here's the Xaraya recommended contents of the hook
+function ignore_file(name)
+   -- osx
+   if (string.find(name, "%.DS_Store$")) then return true end
+   -- windows
+   if (string.find(name, "%.exe$")) then return true end
+   -- c/c++
+   if (string.find(name, "%.a$")) then return true end
+   if (string.find(name, "%.so$")) then return true end
+   if (string.find(name, "%.o$")) then return true end
+   if (string.find(name, "%.la$")) then return true end
+   if (string.find(name, "%.lo$")) then return true end
+   if (string.find(name, "^core$")) then return true end
+   if (string.find(name, "/core$")) then return true end
+   -- python
+   if (string.find(name, "%.pyc$")) then return true end
+   if (string.find(name, "%.pyo$")) then return true end
+   -- TeX
+   if (string.find(name, "%.aux$")) then return true end
+   -- backup files
+   if (string.find(name, "%.bak$")) then return true end
+   if (string.find(name, "%.orig$")) then return true end
+   if (string.find(name, "%.rej$")) then return true end
+   if (string.find(name, "%~$")) then return true end
+   -- editor temp files
+   -- vim creates .foo.swp files
+   if (string.find(name, "%.[^/]*%.swp$")) then return true end
+   -- emacs creates #foo# files and aquamacs does ._foo
+   if (string.find(name, "%#[^/]*%#$")) then return true end
+   if (string.find(name, "%._[^/]*$")) then return true end
+   -- autotools detritus:
+   if (string.find(name, "^autom4te.cache/")) then return true end
+   if (string.find(name, "/autom4te.cache/")) then return true end
+   if (string.find(name, "^.deps/")) then return true end
+   if (string.find(name, "/.deps/")) then return true end
+   -- Cons/SCons detritus:
+   if (string.find(name, "^.consign$")) then return true end
+   if (string.find(name, "/.consign$")) then return true end
+   if (string.find(name, "^.sconsign$")) then return true end
+   if (string.find(name, "/.sconsign$")) then return true end
+   -- other VCSes:
+   if (string.find(name, "^CVS/")) then return true end
+   if (string.find(name, "/CVS/")) then return true end
+   if (string.find(name, "^%.svn/")) then return true end
+   if (string.find(name, "/%.svn/")) then return true end
+   if (string.find(name, "^SCCS/")) then return true end
+   if (string.find(name, "/SCCS/")) then return true end
+   if (string.find(name, "^_darcs/")) then return true end
+   if (string.find(name, "^.cdv/")) then return true end
+   if (string.find(name, "^.git/")) then return true end
+   return false;
+end
+
+-- This hook gets called just befor writing a commit
+-- changelog entry.
+-- What we do here is massage the status text generated
+-- by monotone to generate a gnu like Changelog entr as
+-- best as we can
+function edit_comment(basetext, existinglog)
+   local exe = "vi"
+   local visual = os.getenv("VISUAL")
+   if (visual ~= nil) then exe = visual end
+   local editor = os.getenv("EDITOR")
+   if (editor ~= nil) then exe = editor end
+
+   -- Write the initial contents to temporary file
+   local tmp, tname = temp_file()
+   if (tmp == nil) then return nil end
+
+   -- Parse the basetext a bit (this takes a status message and produces a changelog
+   -- compatible list of * file: whathappenedto it
+   generatedlog = parse_statusmsg(basetext)
+
+   -- Construct the log
+   tmp:write("\n")
+   tmp:write(generatedlog)
+   tmp:write(existinglog)
+   local notes = [[
+MT: ----------------------------------------------
+MT: Above is what has been parsed as changelog
+MT: from the status of your working dir.
+MT: Augment as you see fit. Write revision comment
+MT: on the first line(s) and file comments as shown
+MT: Lines starting with MT: will automatically be
+MT: removed]]
+   tmp:write(notes)
+   io.close(tmp)
+
+   -- Remove the temporary file  if execution did not return 0
+   if (execute(exe, tname) ~= 0) then
+      os.remove(tname)
+      return nil
+   end
+
+   -- Read it back in and remove all MT: lines
+   tmp = io.open(tname, "r")
+   if (tmp == nil) then os.remove(tname); return nil end
+   local res = ""
+   local line = tmp:read() -- eat the first line (WATCH OUT FOR THIS)
+   while(line ~= nil) do 
+      if (not string.find(line, "^MT:")) then
+         res = res .. line .. "\n"
+      end
+      line = tmp:read()
+   end
+   io.close(tmp)
+   os.remove(tname)
+
+   -- Return the string to be further processed by monotone (as in put into a certificate)
+   return res
+end
+
+function parse_statusmsg(msg)
+   -- Go over the lines and massage it so it comes very close to what 
+   -- I want to enter as a comment anyway
+   local pattern = "([^\n]-)\n"
+   local lines = {}
+   local rename_string = nil
+   local parsed = ""
+
+   for line in string.gfind(msg, pattern) do 
+      -- Handle renames
+      _,_,file = string.find(line,'^rename_file "(.-)"')
+      if(file~=nil) then 
+         rename_string = ": renamed ("..file..")" 
+      end
+      _,_,file = string.find(line,'^%s+to "(.-)"')
+      if(file~=nil and rename_string~=nil) then
+         table.insert(lines,"\t* "..file..rename_string)
+         rename_string = nil
+      end
+      -- Handle new files
+      _,_,file = string.find(line,'^add_file "(.-)"')
+      if(file~=nil) then 
+         table.insert(lines,"\t* "..file..": new file") 
+      end
+      -- Handle dropped files
+      _,_,file = string.find(line,'^delete_file "(.-)"')
+      if(file~=nil) then
+         table.insert(lines,"\t* "..file..": dropped")
+      end
+      
+      -- Handle changed files
+      _,_,file = string.find(line,"^patch \"([%a%.]+)\"")
+      if(file~=nil) then neworadded = file end
+      
+      -- Based on the from line, only add changed stuff
+      i,_,oldrev = string.find(line,"^%s+from %[([%a%d]+)%]")
+      if(oldrev~=nil and neworadded~=nil ) then
+         table.insert(lines,"\t* "..neworadded..": ...")
+         neworadded = nil
+      end
+   end
+   for index, line in pairs(lines) do  parsed = parsed .. line .. "\n" end
+   
+   return parsed
+end
