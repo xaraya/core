@@ -19,6 +19,7 @@
  */
 function roles_admin_new()
 {
-    return xarModFunc('roles', 'admin', 'newrole');
+    if (!xarVarFetch('objectid', 'int', $objectid,  0, XARVAR_NOT_REQUIRED)) {return;}
+    return xarModFunc('roles', 'admin', 'newrole',array('objectid' => $objectid));
 }
 ?>

@@ -59,7 +59,7 @@ class Dynamic_Property_Master
         } else {
             $query .= " WHERE xar_prop_moduleid = ?
                           AND xar_prop_itemtype = ?";
-            $bindvars[] = (int) $args['moduleid'];
+            $bindvars[] = $args['moduleid'];
             $bindvars[] = (int) $args['itemtype'];
         }
         if (empty($args['allprops'])) {

@@ -262,7 +262,7 @@ function roles_user_login()
                     return;
                 }
             }
-            if (xarModGetVar('roles','userhome')) {
+            if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'userhome', 'state' => 1))) {
                 $truecurrenturl = xarServerGetCurrentURL(array(), false);
                 $role = xarUFindRole($uname);
                 $url = $lastresort ? '[base]' : $role->getHome();

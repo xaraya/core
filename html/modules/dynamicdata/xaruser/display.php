@@ -30,7 +30,7 @@ function dynamicdata_user_display($args)
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
-    
+
 /*  // we could also pass along the parameters to the template, and let it retrieve the object
     // but in this case, we'd need to retrieve the object label anyway
     return array('objectid' => $objectid,
@@ -55,7 +55,7 @@ function dynamicdata_user_display($args)
     $data = array();
     $data['object'] =& $myobject;
 
-    $modinfo = xarModGetInfo($myobject->moduleid);
+	$modinfo = xarModAPIFunc('dynamicdata','user','getmodinfo',array('module' => $myobject->moduleid));
     $item = array();
     $item['module'] = $modinfo['name'];
     $item['itemtype'] = $itemtype;
@@ -69,7 +69,7 @@ function dynamicdata_user_display($args)
     $hooks = array();
     $hooks = xarModCallHooks('item', 'display', $myobject->itemid, $item, $modinfo['name']);
     $data['hooks'] = $hooks;
-    
+
     if(!isset($template)) {
         $template = $myobject->name;
     }

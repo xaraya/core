@@ -112,8 +112,12 @@ class Dynamic_Object_Master
             if (empty($this->objectid)) {
                 $this->moduleid = xarModGetIDFromName(xarModGetName());
             }
-        } elseif (!is_numeric($this->moduleid) && is_string($this->moduleid)) {
-            $this->moduleid = xarModGetIDFromName($this->moduleid);
+        }
+        else {
+			$params = explode('.',$this->moduleid);
+			if ((count($params) == 1) && !is_numeric($this->moduleid)) {
+				$this->moduleid = xarModGetIDFromName($this->moduleid);
+			}
         }
         if (empty($this->itemtype)) {
             $this->itemtype = 0;
@@ -476,7 +480,7 @@ class Dynamic_Object_Master
             }
             $query .= " WHERE xar_object_moduleid = ?
                           AND xar_object_itemtype = ? ";
-            $bindvars[] = (int) $args['moduleid'];
+            $bindvars[] = $args['moduleid'];
             $bindvars[] = (int) $args['itemtype'];
         }
         $result =& $dbconn->Execute($query,$bindvars);
@@ -869,7 +873,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         if (!empty($this->primary) && !empty($this->properties[$this->primary])) {
             $primarystore = $this->properties[$this->primary]->datastore;
         }
-        $modinfo = xarModGetInfo($this->moduleid);
+		$modinfo = xarModAPIFunc('dynamicdata','user','getmodinfo',array('module' => $this->moduleid));
         foreach ($this->datastores as $name => $datastore) {
             $itemid = $datastore->getItem(array('modid'    => $this->moduleid,
                                                 'itemtype' => $this->itemtype,
@@ -967,7 +971,7 @@ class Dynamic_Object extends Dynamic_Object_Master
            $args['objectname'] = $this->name;
         }
         $args['moduleid'] = $this->moduleid;
-        $modinfo = xarModGetInfo($this->moduleid);
+		$modinfo = xarModAPIFunc('dynamicdata','user','getmodinfo',array('module' => $this->moduleid));
         $args['modname'] = $modinfo['name'];
         if (empty($this->itemtype)) {
             $args['itemtype'] = null; // don't add to URL
@@ -1035,7 +1039,7 @@ class Dynamic_Object extends Dynamic_Object_Master
            $args['objectname'] = $this->name;
         }
         $args['moduleid'] = $this->moduleid;
-        $modinfo = xarModGetInfo($this->moduleid);
+		$modinfo = xarModAPIFunc('dynamicdata','user','getmodinfo',array('module' => $this->moduleid));
         $args['modname'] = $modinfo['name'];
         if (empty($this->itemtype)) {
             $args['itemtype'] = null; // don't add to URL
@@ -1121,7 +1125,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             }
         }
 
-        $modinfo = xarModGetInfo($this->moduleid);
+		$modinfo = xarModAPIFunc('dynamicdata','user','getmodinfo',array('module' => $this->moduleid));
 
         // special case when we try to create a new object handled by dynamicdata
         if ($this->objectid == 1 &&
@@ -1224,7 +1228,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             return;
         }
 
-        $modinfo = xarModGetInfo($this->moduleid);
+		$modinfo = xarModAPIFunc('dynamicdata','user','getmodinfo',array('module' => $this->moduleid));
     // TODO: this won't work for objects with several static tables !
         // update all the data stores
         foreach (array_keys($this->datastores) as $store) {
@@ -1267,7 +1271,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             return;
         }
 
-        $modinfo = xarModGetInfo($this->moduleid);
+		$modinfo = xarModAPIFunc('dynamicdata','user','getmodinfo',array('module' => $this->moduleid));
 
     // TODO: this won't work for objects with several static tables !
         // delete the item in all the data stores
@@ -1774,7 +1778,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $args['linkfield'] = '';
         }
 
-        $modinfo = xarModGetInfo($this->moduleid);
+		$modinfo = xarModAPIFunc('dynamicdata','user','getmodinfo',array('module' => $this->moduleid));
         $modname = $modinfo['name'];
 
         // override for viewing dynamic objects
@@ -1814,7 +1818,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             if (!empty($this->urlmodule)) {
                 $args['urlmodule'] = $this->urlmodule;
             } else {
-                $args['urlmodule'] = $modname;
+                $info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('moduleid' => $args['moduleid'], 'itemtype' => $args['itemtype']));
+                $base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $info['objectid']));
+                $args['urlmodule'] = $base['name'];
             }
         }
         foreach (array_keys($this->items) as $itemid) {
@@ -1907,7 +1913,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         } elseif (xarSecurityCheck('AddDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':All')) {
             $args['newlink'] = xarModURL($args['urlmodule'],'admin','new',
                                          array('itemtype' => $itemtype,
-                                               'table'    => $table));
+                                               'table'    => $table,
+                                               'objectid'    => $this->objectid,
+                                               ));
         } else {
             $args['newlink'] = '';
         }
@@ -1978,7 +1986,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         // pass some extra template variables for use in BL tags, API calls etc.
         $args['moduleid'] = $this->moduleid;
 
-        $modinfo = xarModGetInfo($this->moduleid);
+		$modinfo = xarModAPIFunc('dynamicdata','user','getmodinfo',array('module' => $this->moduleid));
         $modname = $modinfo['name'];
         $itemtype = $this->itemtype;
         if (empty($itemtype)) {

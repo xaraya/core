@@ -28,6 +28,7 @@ function roles_admin_addrole()
     if (!xarVarFetch('ptype',      'str:1',  $ptype,      NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pparentid',  'str:1:', $pparentid,  NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('return_url', 'isset',  $return_url, NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('objectid', 'int', $objectid,  0, XARVAR_NOT_REQUIRED)) {return;}
     // get the rest for users only
     // TODO: need to see what to do with auth_module
     if ($ptype == 0) {
@@ -37,6 +38,7 @@ function roles_admin_addrole()
         xarVarFetch('ppass2', 'str:1:', $ppass2, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('pstate', 'str:1:', $pstate, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('phome', 'str', $phome, NULL, XARVAR_NOT_REQUIRED);
+        xarVarFetch('pprimaryparent', 'int', $pprimaryparent, NULL, XARVAR_NOT_REQUIRED);
     }
     // checks specific only to users
     if ($ptype == 0) {
@@ -101,6 +103,13 @@ function roles_admin_addrole()
     }
     // assemble the args into an array for the role constructor
     if ($ptype == 0) {
+    	$duvs = array();
+    	if (isset($phome) && xarModAPIFunc('roles','admin','checkduv',array('name' => 'userhome', 'state' => 1)))
+			$duvs['userhome'] = $phome;
+    	if (isset($pprimaryparent) && xarModAPIFunc('roles','admin','checkduv',array('name' => 'primaryparent', 'state' => 1)))
+			$duvs['primaryparent'] = $pprimaryparent;
+		$duvs = serialize($duvs);
+
         $pargs = array('name' => $pname,
             'type' => $ptype,
             'parentid' => $pparentid,
@@ -110,6 +119,7 @@ function roles_admin_addrole()
             'val_code' => 'createdbyadmin',
             'state' => $pstate,
             'auth_module' => 'authsystem',
+            'duvs' => $duvs,
             );
     } else {
         $pargs = array('name' => $pname,
@@ -132,6 +142,7 @@ function roles_admin_addrole()
 
     // call item create hooks (for DD etc.)
 // TODO: move to add() function
+    $pargs['objectid'] = $objectid;
     $pargs['module'] = 'roles';
     $pargs['itemtype'] = $ptype; // we might have something separate for groups later on
     $pargs['itemid'] = $uid;

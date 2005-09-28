@@ -1,17 +1,17 @@
-<?php
-/**
+<?php
+/**
 * @version V4.60 24 Jan 2005 (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
-* Released under both BSD license and Lesser GPL library license.
-* Whenever there is any discrepancy between the two licenses,
-* the BSD license will take precedence.
-*
-* Set tabs to 4 for best viewing.
-*
-* Latest version is available at http://php.weblogs.com
-*
-*  Portable MSSQL Driver that supports || instead of +
-*
-*/
+* Released under both BSD license and Lesser GPL library license.
+* Whenever there is any discrepancy between the two licenses,
+* the BSD license will take precedence.
+*
+* Set tabs to 4 for best viewing.
+*
+* Latest version is available at http://php.weblogs.com
+*
+*  Portable MSSQL Driver that supports || instead of +
+*
+*/
 
 // security - hide paths
 if (!defined('ADODB_DIR')) die();
@@ -22,10 +22,10 @@ if (!defined('ADODB_DIR')) die();
 	the more standard || string concatenation operator.
 */
 	
-include_once(ADODB_DIR.'/drivers/adodb-mssql.inc.php');
-
-class ADODB_mssqlpo extends ADODB_mssql {
-	var $databaseType = "mssqlpo";
+include_once(ADODB_DIR.'/drivers/adodb-mssql.inc.php');
+
+class ADODB_mssqlpo extends ADODB_mssql {
+	var $databaseType = "mssqlpo";
 	var $concat_operator = '||'; 
 	
 	function ADODB_mssqlpo()
@@ -44,19 +44,19 @@ class ADODB_mssqlpo extends ADODB_mssql {
 		if (!$stmt)  return $sql;
 		return array($sql,$stmt);
 	}
-	
-	function _query($sql,$inputarr)
-	{
+	
+	function _query($sql,$inputarr)
+	{
 		if (is_string($sql)) $sql = str_replace('||','+',$sql);
 		return ADODB_mssql::_query($sql,$inputarr);
-	}
-}
-
-class ADORecordset_mssqlpo extends ADORecordset_mssql {
-	var $databaseType = "mssqlpo";
+	}
+}
+
+class ADORecordset_mssqlpo extends ADORecordset_mssql {
+	var $databaseType = "mssqlpo";
 	function ADORecordset_mssqlpo($id,$mode=false)
-	{
+	{
 		$this->ADORecordset_mssql($id,$mode);
 	}
-}
+}
 ?>

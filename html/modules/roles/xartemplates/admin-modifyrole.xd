@@ -137,12 +137,20 @@
                 </div>
             </xar:if>
 
-            <xar:if condition="xarModGetVar('roles', 'userhome')">
+            <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'userhome', 'state' =&gt; 1))">
                 <div class="xar-form-input-wrapper">
                     <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
                         <xar:mlstring>Home:</xar:mlstring>
                     </label>
                     <input type="text" name="phome" id="phome" value="#xarVarPrepForDisplay($phome)#" size="40" maxlength="100" tabindex="7" />
+                </div>
+            </xar:if>                        
+            <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'primaryparent', 'state' =&gt; 1))">
+                <div class="xar-form-input-wrapper">
+                    <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
+                        <xar:mlstring>Primary Group:</xar:mlstring>
+                    </label>
+                    <xar:data-input type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pprimaryparent" tabindex="8"/>
                 </div>
             </xar:if>                        
 

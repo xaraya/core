@@ -49,7 +49,7 @@ function &dynamicdata_userapi_getitem($args)
     } elseif (empty($modid)) {
         $modid = $moduleid;
     }
-    $modinfo = xarModGetInfo($modid);
+	$modinfo = xarModAPIFunc('dynamicdata','user','getmodinfo',array('module' => $modid));
 
     if (empty($itemtype)) {
         $itemtype = 0;

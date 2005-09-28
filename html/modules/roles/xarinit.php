@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id: xarinit.php 1.112 05/04/20 13:10:55+02:00 marc@marclaptop. $
+ * File: $Id: s.xarinit.php 1.27 03/01/17 15:18:04-08:00 rcave@lxwdev-1.schwabfoundation.org $
  *
  * Initialise the roles module
  *
@@ -46,7 +46,7 @@ function roles_init()
      *    xar_valcode varchar(35) NOT NULL default '',
      *    xar_state int(3) NOT NULL default '0',
      *    xar_auth_module varchar(100) NOT NULL default '',
-     *    xar_home varchar(100) NOT NULL default '',
+     *    xar_duvs varchar(100) NOT NULL default '',
      *    PRIMARY KEY  (xar_uid)
      * )
      */
@@ -94,7 +94,7 @@ function roles_init()
                 'size' => 100,
                 'null' => false,
                 'default' => ''),
-            'xar_home' => array('type' => 'varchar',
+            'xar_duvs' => array('type' => 'varchar',
                 'size' => 100,
                 'null' => false,
                 'default' => '')));
@@ -196,7 +196,7 @@ function roles_activate()
     xarModSetVar('roles', 'askpendingemail', 1);
     xarModSetVar('roles', 'askpasswordemail', 1);
     xarModSetVar('roles', 'uniqueemail', 1);
-    xarModSetVar('roles', 'userhome', 0);
+
     //Default Display
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
     //Default User Locale

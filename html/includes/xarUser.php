@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id: xarUser.php 1.154 05/05/14 00:24:41+02:00 marc@marclaptop. $
+ * File: $Id$
  *
  * User System
  *
@@ -428,14 +428,22 @@ function xarUserGetVar($name, $userId = NULL)
             xarCore_SetCached('User.Variables.'.$userId, 'email', $userRole['email']);
 
         } elseif (!xarUser__isVarDefined($name)) {
-            xarCore_SetCached('User.Variables.'.$userId, $name, false);
-            // Here we can't raise an exception because they're all optional
-            if ($name != 'locale' && $name != 'timezone') {
-                // log unknown user variables to inform the site admin
-                $msg = xarML('User variable #(1) was not correctly registered', $name);
-                xarLogMessage($msg, XARLOG_LEVEL_ERROR);
-            }
-            return;
+        	if (xarUser__checkDUV($name, 1)) {
+	        	$value = xarUserGetDUV($name,$userId);
+				if ($value == null) {
+					xarCore_SetCached('User.Variables.'.$userId, $name, false);
+					// Here we can't raise an exception because they're all optional
+					if ($name != 'locale' && $name != 'timezone') {
+						// log unknown user variables to inform the site admin
+						$msg = xarML('User variable #(1) was not correctly registered', $name);
+						xarLogMessage($msg, XARLOG_LEVEL_ERROR);
+					}
+					return;
+				}
+				else {
+					xarCore_SetCached('User.Variables.'.$userId, $name, $value);
+				}
+			}
 
         } else {
             // retrieve the user item
@@ -570,12 +578,15 @@ function xarUserSetVar($name, $value, $userId = NULL)
         xarUser__setUsersTableUserVar($name, $value, $userId);
 
     } elseif (!xarUser__isVarDefined($name)) {
-        xarCore_SetCached('User.Variables.'.$userId, $name, false);
-        $msg = xarML('User variable #(1) was not correctly registered', $name);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'VARIABLE_NOT_REGISTERED',
-                       new SystemException($msg));
-        return;
-
+		if(!xarUser__checkDUV($name, 1)) {
+			xarCore_SetCached('User.Variables.'.$userId, $name, false);
+			$msg = xarML('User variable #(1) was not correctly registered', $name);
+			xarErrorSet(XAR_SYSTEM_EXCEPTION, 'VARIABLE_NOT_REGISTERED',
+						   new SystemException($msg));
+			return;
+		} else {
+			xarUserSetDUV($name,$value,$userId);
+		}
     } else {
         // retrieve the user item
         $itemid = $GLOBALS['xarUser_objectRef']->getItem(array('itemid' => $userId));
@@ -808,4 +819,30 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
     return true;
 }
 
+/*
+ * @access private
+ * @return bool
+ */
+function xarUser__checkDUV($name, $state)
+{
+    return xarModAPIFunc('roles','admin','checkduv', array('name' => $name, 'state' => $state));
+}
+/*
+ * @access public
+ * @return value of DUV
+ */
+function xarUserGetDUV($name, $uid=null)
+{
+    if (isset($uid)) return xarModAPIFunc('roles','admin','getduv', array('name' => $name, 'uid' => $uid));
+    return xarModAPIFunc('roles','admin','getduv', array('name' => $name));
+}
+/*
+ * @access public
+ * @return none
+ */
+function xarUserSetDUV($name, $value, $uid=null)
+{
+    if (isset($uid)) return xarModAPIFunc('roles','admin','setduv', array('name' => $name, 'value' => $value, 'uid' => $uid));
+    return xarModAPIFunc('roles','admin','setduv', array('name' => $name, 'value' => $value));
+}
 ?>

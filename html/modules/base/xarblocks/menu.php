@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id: menu.php 1.121 05/06/14 13:44:58+02:00 marc@marclaptop. $
+ * File: $Id$
  *
  * Menu System
  *
@@ -409,6 +409,10 @@ function base_menublock_modify($blockinfo)
 
     if (empty($vars['marker'])) {
         $vars['marker'] = '[x]';
+    }
+
+    if (empty($vars['displaymodules'])) {
+        $vars['displaymodules'] = "None";
     }
 
     if (empty($vars['modulelist'])) {

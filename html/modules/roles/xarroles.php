@@ -189,6 +189,11 @@ class xarRoles
         $row = $q->row();
         if (empty($row)) return;
 
+		$vars = array();
+        if (!empty($row['xar_duvs'])) {
+			$duvs = unserialize($row['xar_duvs']);
+			foreach ($duvs as $key => $value) $vars[$key] = $value;
+        }
         $pargs = array(
             'uid' =>         $row['xar_uid'],
             'name' =>        $row['xar_name'],
@@ -201,7 +206,8 @@ class xarRoles
             'val_code' =>    $row['xar_valcode'],
             'state' =>       $row['xar_state'],
             'auth_module' => $row['xar_auth_module'],
-            'home' =>        $row['xar_home']);
+            'duvs' =>        $row['xar_duvs']);
+        $pargs = array_merge($pargs,$vars);
         // create and return the role object
         return new xarRole($pargs);
     }
@@ -229,7 +235,7 @@ class xarRoles
         if (!$result) return;
         // create the parent object
         list($uid, $name, $type, $parentid, $uname, $email, $pass,
-            $date_reg, $val_code, $state, $auth_module,$home) = $result->fields;
+            $date_reg, $val_code, $state, $auth_module,$duvs) = $result->fields;
         $pargs = array('uid' => $uid,
             'name' => $name,
             'type' => $type,
@@ -241,7 +247,7 @@ class xarRoles
             'val_code' => $val_code,
             'state' => $state,
             'auth_module' => $auth_module,
-            'home' => $home);
+            'duvs' => $duvs);
         $parent = new xarRole($pargs);
         // retrieve the child's data from the repository
         $query = "SELECT * FROM $this->rolestable
@@ -251,7 +257,7 @@ class xarRoles
         if (!$result) return;
         // create the child object
         list($uid, $name, $type, $parentid, $uname, $email, $pass,
-            $date_reg, $val_code, $state, $auth_module, $home) = $result->fields;
+            $date_reg, $val_code, $state, $auth_module, $duvs) = $result->fields;
         $pargs = array('uid' => $uid,
             'name' => $name,
             'type' => $type,
@@ -263,7 +269,7 @@ class xarRoles
             'val_code' => $val_code,
             'state' => $state,
             'auth_module' => $auth_module,
-            'home' => $home);
+            'duvs' => $duvs);
         $child = new xarRole($pargs);
         // done
         return $parent->addMember($child);
@@ -316,7 +322,7 @@ class xarRoles
      * @throws none
      * @todo create exception handling for bad input
      */
-    function makeUser($name, $uname, $email, $pass = 'xaraya', $datereg = '', $valcode = '', $state = ROLES_STATE_ACTIVE, $authmodule = '', $home='')
+    function makeUser($name, $uname, $email, $pass = 'xaraya', $datereg = '', $valcode = '', $state = ROLES_STATE_ACTIVE, $authmodule = '', $duvs='')
     {
         // TODO: validate the email address
         if (empty($name) && empty($uname) || empty($email)) {
@@ -357,7 +363,7 @@ class xarRoles
             array('name' => 'xar_valcode',     'value' => $valcode),
             array('name' => 'xar_state',       'value' => $state),
             array('name' => 'xar_auth_module', 'value' => $authmodule),
-            array('name' => 'xar_home',        'value' => $home)
+            array('name' => 'xar_duvs',        'value' => $duvs)
         );
         $q = new xarQuery('INSERT',$this->rolestable);
         $q->addfields($tablefields);
@@ -432,7 +438,9 @@ class xarRole
     var $val_code;     //the validation code of this user or group
     var $state;        //the state of this user or group
     var $auth_module;  //no idea what this is (not used by groups)
-    var $home;         //home pagee for this role
+    var $userhome;     //home page for this role
+    var $primaryparent;//primary group for this role
+    var $duvs;         //property for holding dynamic user vars
     var $parentlevel;  //we use this just to store transient information
 
     var $dbconn;
@@ -470,7 +478,7 @@ class xarRole
         if (!isset($parentid)) $parentid = 0;
         if (!isset($uname)) $uname = xarSessionGetVar('uid') . time();
         if (!isset($email)) $email = '';
-        if (!isset($home)) $home = '';
+        if (!isset($duvs)) $duvs = '';
         if (!isset($pass)) $pass = '';
         if (!isset($state)) $state = ROLES_STATE_INACTIVE;
         // FIXME: why is date_reg a varchar in the database and not a date field?
@@ -478,6 +486,21 @@ class xarRole
         if (!isset($val_code)) $val_code = 'createdbyadmin';
         // FIXME: what is a sensible default for auth_module?
         if (!isset($auth_module)) $auth_module = '';
+        $duvs = array();
+        $this->duvs = serialize($duvs);
+		if(isset($userhome)) {
+			$this->userhome = $userhome;
+			$duvs['userhome'] = $userhome;
+		} else {
+			$this->userhome = "";
+		}
+		if(isset($primaryparent)) {
+			$this->primaryparent = $primaryparent;
+			$duvs['primaryparent'] = $primaryparent;
+		} else {
+			$this->primaryparent = "";
+		}
+        if (!empty($duvs)) $this->duvs = serialize($duvs);
 
         $this->uid = (int) $uid;
         $this->name = $name;
@@ -490,7 +513,6 @@ class xarRole
         $this->date_reg = $date_reg;
         $this->val_code = $val_code;
         $this->auth_module = $auth_module;
-        $this->home = $home;
         $this->parentlevel = 0;
     }
 
@@ -555,7 +577,7 @@ class xarRole
             array('name' => 'xar_uname',    'value' => $this->uname),
             array('name' => 'xar_date_reg', 'value' => mktime()),
             array('name' => 'xar_valcode',  'value' => $this->val_code),
-            array('name' => 'xar_home',     'value' => $this->home)
+            array('name' => 'xar_duvs',     'value' => $this->duvs)
         );
         $q = new xarQuery('INSERT',$this->rolestable);
         $q->addfields($tablefields);
@@ -686,7 +708,7 @@ class xarRole
         $q->addfield('xar_email',$this->email);
         $q->addfield('xar_state',$this->state);
         $q->addfield('xar_auth_module',$this->auth_module);
-        $q->addfield('xar_home',$this->home);
+        $q->addfield('xar_duvs',$this->duvs);
         if ($this->pass != '') $q->addfield('xar_pass',md5($this->pass));
         $q->eq('xar_uid',$this->getID());
 
@@ -967,7 +989,7 @@ class xarRole
                         r.xar_valcode,
                         r.xar_state,
                         r.xar_auth_module,
-                        r.xar_home
+                        r.xar_duvs
                         FROM $this->rolestable r, $this->rolememberstable rm
                         WHERE r.xar_uid = rm.xar_uid
                         AND r.xar_type = 0
@@ -985,7 +1007,7 @@ class xarRole
                         r.xar_valcode,
                         r.xar_state,
                         r.xar_auth_module,
-                        r.xar_home
+                        r.xar_duvs
                         FROM $this->rolestable r, $this->rolememberstable rm
                         WHERE r.xar_uid = rm.xar_uid
                         AND r.xar_type = 0 AND r.xar_state = ?
@@ -1006,7 +1028,7 @@ class xarRole
         $users = array();
         while (!$result->EOF) {
             list($uid, $name, $type, $uname, $email, $pass,
-                $date_reg, $val_code, $state, $auth_module,$home) = $result->fields;
+                $date_reg, $val_code, $state, $auth_module,$duvs) = $result->fields;
             $pargs = array('uid' => $uid,
                 'name' => $name,
                 'type' => $type,
@@ -1018,7 +1040,7 @@ class xarRole
                 'val_code' => $val_code,
                 'state' => $state,
                 'auth_module' => $auth_module,
-                'home' => $home);
+                'duvs' => $duvs);
             $users[] = new xarRole($pargs);
             $result->MoveNext();
         }
@@ -1105,7 +1127,7 @@ class xarRole
         // collect the table values and use them to create new role objects
         while (!$result->EOF) {
             list($uid, $name, $type, $parentid, $uname, $email, $pass,
-                $date_reg, $val_code, $state, $auth_module,$home) = $result->fields;
+                $date_reg, $val_code, $state, $auth_module,$duvs) = $result->fields;
             $pargs = array('uid' => $uid,
                 'name' => $name,
                 'type' => $type,
@@ -1117,7 +1139,7 @@ class xarRole
                 'val_code' => $val_code,
                 'state' => $state,
                 'auth_module' => $auth_module,
-                'home' => $home);
+                'duvs' => $duvs);
             $parents[] = new xarRole($pargs);
             $result->MoveNext();
         }
@@ -1383,7 +1405,11 @@ class xarRole
     }
     function getHome()
     {
-        return $this->home;
+        return $this->userhome;
+    }
+    function getPrimaryParent()
+    {
+        return $this->primaryparent;
     }
     function getUname()
     {
@@ -1432,7 +1458,11 @@ class xarRole
     }
     function setHome($var)
     {
-        $this->home = $var;
+        $this->userhome = $var;
+    }
+    function setPrimaryParent($var)
+    {
+        $this->primaryparent = $var;
     }
     function setUname($var)
     {

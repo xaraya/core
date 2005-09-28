@@ -76,7 +76,7 @@ function dynamicdata_admin_modifyprop()
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();
 
-    $modinfo = xarModGetInfo($modid);
+	$modinfo = xarModAPIFunc('dynamicdata','user','getmodinfo',array('module' => $modid));
     if (!isset($object)) {
         $data['objectid'] = 0;
         if (!empty($itemtype)) {
@@ -124,7 +124,7 @@ function dynamicdata_admin_modifyprop()
         $hooks = xarModCallHooks('module','modifyconfig',$modinfo['name'],
                                  array('module' => $modinfo['name'],
                                        'itemtype' => $itemtype));
-    } 
+    }
     $data['hooks'] = $hooks;
 
     $data['labels'] = array(
@@ -147,7 +147,7 @@ function dynamicdata_admin_modifyprop()
 
     // We have to specify this here, the js expects non xml urls and the => makes the template invalied
     $data['urlform'] = xarModURL('dynamicdata','admin','form',array('objectid' => $data['objectid'], 'theme' => 'print'),false);
-    
+
     if (empty($details)) {
         $data['static'] = array();
         $data['relations'] = array();

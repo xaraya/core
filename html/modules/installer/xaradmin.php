@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id: xaradmin.php 1.172 05/09/04 12:16:41+02:00 Marc.Lutolf@sarek. $
+ * File: $Id: s.xaradmin.php 1.67 03/04/19 16:34:00-04:00 johnny@falling.local.lan $
  *
  * Installer admin display functions
  *

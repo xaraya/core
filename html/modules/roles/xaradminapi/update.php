@@ -73,13 +73,13 @@ function roles_adminapi_update($args)
     if (!empty($pass)){
         $cryptpass=md5($pass);
         $query = "UPDATE $rolesTable
-                  SET xar_name = ?, xar_uname = ?, xar_email = ?, xar_home = ?,
+                  SET xar_name = ?, xar_uname = ?, xar_email = ?, xar_duvs = ?,
                       xar_pass = ?, xar_valcode = ?, xar_state = ?
                 WHERE xar_uid = ?";
         $bindvars = array($name,$uname,$email,$home,$cryptpass,$valcode,$state,$uid);
     } else {
         $query = "UPDATE $rolesTable
-                SET xar_name = ?, xar_uname = ?, xar_email = ?, xar_home = ?,
+                SET xar_name = ?, xar_uname = ?, xar_email = ?, xar_duvs = ?,
                     xar_valcode = ?, xar_state = ?
                 WHERE xar_uid = ?";
         $bindvars = array($name,$uname,$email,$home,$valcode,$state,$uid);
@@ -88,10 +88,11 @@ function roles_adminapi_update($args)
     $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
+    $item['objectid'] = $objectid;
     $item['module'] = 'roles';
     $item['itemid'] = $uid;
     $item['name'] = $name;
-    $item['home'] = $home;
+    $item['duvs'] = $duvs;
     $item['uname'] = $uname;
     $item['email'] = $email;
     xarModCallHooks('item', 'update', $uid, $item);
