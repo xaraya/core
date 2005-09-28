@@ -204,7 +204,7 @@ function parse_statusmsg(msg)
       end
       
       -- Handle changed files
-      _,_,file = string.find(line,"^patch \"([%a%.]+)\"")
+      _,_,file = string.find(line,'^patch "(.-)"')
       if(file~=nil) then neworadded = file end
       
       -- Based on the from line, only add changed stuff
@@ -217,4 +217,80 @@ function parse_statusmsg(msg)
    for index, line in pairs(lines) do  parsed = parsed .. line .. "\n" end
    
    return parsed
+end
+
+
+--
+-- This hook runs just after revision id revid has been committed
+-- After the revision has been committed, we parse the changelog and
+-- comment certificates for mentioning of bugs. If found, the user
+-- is asked if they want to create certificates for them
+-- NOTE: this hook spawns the monotone executable inside a lua hook
+-- and assumes that monotone(.exe) exists on the path
+-- while it is a bit risky to call monotone itself in a hook, this
+-- hook runs *after* a revision has been committed, so i think it's OK here.
+function note_commit(revid, certs)
+   -- Gather the info needed
+   -- table with bug numbers
+   bugs = extractbugs(certs)
+   local buglist = ""
+   for bug, there in pairs(bugs) do 
+      if(buglist ~= "") then buglist = buglist .. ", " end
+      buglist = buglist .. bug
+   end
+   if(buglist ~= "") then 
+      print("----------------------------------")
+      print(string.format("Mentioned bugs: %s",buglist))
+      io.write("Link these bugs to revision? [Y/n]")
+      response = io.read()
+      if(response == "" or response=="y" or response=="Y") then
+         print("Ok, creating certificates for them")
+         for bug, there in pairs(bugs) do
+            -- TODO: add some checking here?
+            result,exitcode = execute("monotone","cert",revid,"bug",bug)
+         end
+      else
+         print("Ok, skipping bug certificates")
+      end
+      print("----------------------------------")
+   end
+end
+
+--
+-- Extract a table of bugids mentioned in certs, 
+--
+function extractbugs(certs)
+   local bugs = {} -- empty table for holding the bugs
+   -- which certificates do we want to look in ?
+   local whichcerts = {
+      changelog = true,
+      comment   = true
+   }
+   -- A list of patterns to match in comments, when matched the bug number is recorded
+   -- TODO: make this more intelligent
+   local patterns = {                     
+      "bug%s+[#]?(%d+)",                     -- basic 'bug 999' and 'bug #999' mention
+      "bug[s]?.-[#]?(%d+)",                  -- 'bug[s]' and first number after that
+      "bug[s]?.-[#]?%d+[,]?%s+.-[#]?(%d+)",  -- 'bug[s]' and second number after that
+      "bug[s]?.-and%s+[#]?(%d+)"             -- 'bug[s]' and number preceded by 'and '
+   }
+
+   -- subfunction to actually make the number
+   function  extractbugnumbers(value)
+      for index, pattern in patterns do
+         for w in string.gfind(value, pattern) do  
+            bugs[w] = true
+         end
+      end
+   end
+
+   -- Start main function
+   for cert, value in pairs(certs) do
+      -- Go over each cert
+      if whichcerts[cert] then
+         -- Configured to be parsed
+         extractbugnumbers(value)
+      end
+   end
+   return bugs
 end
