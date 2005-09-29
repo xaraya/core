@@ -172,7 +172,7 @@ class feedParser
 
     function parseFeed($xmldata) 
     {
-        $data =& $this->buildStruct($xmldata);
+        $data = $this->buildStruct($xmldata);
         if(is_array($data) && count($data) > 0) {
             foreach($data as $child) {
                 if(is_array($child)) {
