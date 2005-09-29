@@ -1,7 +1,5 @@
 <?php
 /** 
- * File: $Id$
- *
  * Retrieve a block instance raw data.
  *
  * @package Xaraya eXtensible Management System

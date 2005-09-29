@@ -1,5 +1,7 @@
 <?php
 /**
+ * Utility Class to manage Dynamic Data Stores
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -8,7 +10,6 @@
  * @subpackage Dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
  */
-
 
 /**
  * Utility Class to manage Dynamic Data Stores

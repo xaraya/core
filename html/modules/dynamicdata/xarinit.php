@@ -1,5 +1,7 @@
 <?php
 /**
+ * Dynamic data initilazation
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -11,7 +13,7 @@
  * initialise the dynamicdata module
  * This function is only ever called once during the lifetime of a particular
  * module instance
- * @author mikespub <mikespub@xaraya.com> 
+ * @author mikespub <mikespub@xaraya.com>
  */
 function dynamicdata_init()
 {
