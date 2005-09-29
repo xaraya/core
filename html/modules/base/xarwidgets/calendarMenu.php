@@ -1,11 +1,14 @@
- /**
-  * @package Xaraya eXtensible Management System
-  * @copyright (C) 2005 The Digital Development Foundation
-  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
-  * @link http://www.xaraya.com
-  *
-  * @subpackage Base module
-  */
+<?php
+/**
+ * Calendar Menu Widget
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage Base module
+ */
   
 //could this be a first widget?
 
