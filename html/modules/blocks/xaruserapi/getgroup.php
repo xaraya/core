@@ -10,6 +10,7 @@
 /*
  * Retrieve a group raw data.
  * @author Jim McDonald, Paul Rosania
+ * @todo Is this function called anywhere?
 */
 
 function blocks_userapi_getgroup($args)
@@ -28,9 +29,9 @@ function blocks_userapi_getgroup($args)
 
     // The getall function does the main work.
     if (!empty($gid)) {
-        $group =& xarModAPIfunc('blocks', 'user', 'getallgroups', array('gid' => $gid));
+        $group = xarModAPIfunc('blocks', 'user', 'getallgroups', array('gid' => $gid));
     } else {
-        $group =& xarModAPIfunc('blocks', 'user', 'getallgroups', array('name' => $name));
+        $group = xarModAPIfunc('blocks', 'user', 'getallgroups', array('name' => $name));
     }
 
     // If exactly one row was found then return it.
