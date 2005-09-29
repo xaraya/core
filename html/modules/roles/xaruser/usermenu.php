@@ -35,7 +35,7 @@ function roles_user_usermenu($args)
             $withupload = (int) FALSE;
             if (xarModIsAvailable('dynamicdata')) {
                 // get the Dynamic Object defined for this module (and itemtype, if relevant)
-                $object =& xarModAPIFunc('dynamicdata','user','getobject',
+                $object = xarModAPIFunc('dynamicdata','user','getobject',
                                          array('module' => 'roles'));
                 if (isset($object) && !empty($object->objectid)) {
                     // get the Dynamic Properties of this object
