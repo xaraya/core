@@ -3,7 +3,7 @@
         Thank you for installing and trying Xaraya! 
     </xar:mlstring>
 </h1>
-<div class="xar-mod-body">
+<div class="xar-mod-body xar-overflow-auto">
     <h2>
         <xar:mlstring>
             Xaraya has reached Release Candidate status. 
@@ -32,7 +32,9 @@
             </a>. 
         </xar:mlstring>
         <xar:mlstring>
-            Thank you for your support, and feel free to join our development or user discussions to become involved in our community. 
+            Thank you for your support, and feel free to join our
+        development or user discussions to become involved in our
+        community. 
         </xar:mlstring>
     </p>
     <p>
@@ -44,55 +46,19 @@
             website. 
         </xar:mlstring>
     </p>
-    <h4>#xarML('A glimpse into Xaraya')#</h4>
-    <p>
-            <xar:mlstring>
-                The contents of this page are written in what we call an <em>overridden</em>
-                template (in this case one from the base module). This means that its contents 
-                are determined by the active theme in a
-                Xaraya installation and not by the <em>internal</em> template, which is part of
-                the standard code and templates of Xaraya.
-            </xar:mlstring>
-        <xar:ml>
-            <xar:mlstring>
-                This overridden template you are looking at is located in
-                (#(1)/themename/modules/base/user-main.xt). The template is part of the <em>base</em>
-                module which is by default configured to be the active module on the frontpage
-                of a Xaraya installation.
-            </xar:mlstring>
-            <xar:mlvar><xar:var scope="config" name="Site.BL.ThemesDirectory" /></xar:mlvar>
-        </xar:ml>
-        Of course, the above tiny peek into Xaraya's templates is just the tip of the iceberg. When
-        you decide to use Xaraya, you'll get to know the templating system in far more detail, but 
-        a good start is to have a look at the contents of the file mentioned above.
-    </p>
-    <h4>
-        <xar:mlstring>
-            About the Xaraya Classic theme
-        </xar:mlstring>
-    </h4>
-    <p>
-        <xar:mlstring>
-            The default theme's name is Xaraya_Classic. It is supplied and installed with every 
-            distribution package of Xaraya. The theme not only gives you a pleasant way to explore 
-            Xaraya, but also contains a lot of example on what is possible with Xaraya.
-        </xar:mlstring>
-    </p>
-    <p>
-        <xar:mlstring>
-            The theme is 100% table-free and is totally CSS driven. This means the theme is now 
-            more standards compliant than ever before. However, designing your site with the 
-            web-standards in mind requires certain degree of knowledge, experience, 
-            attention to detail and patience. So we would advise to keep this theme 
-            unmodified within your Xaraya installation directory, in case you need to use it 
-            as a reference to help solve a problem. 
-        </xar:mlstring>
-    </p>
-    <p>
-        <xar:mlstring>
-            If you wish to design your own Xaraya theme based on Xaraya Classic or alter 
-            the appearance of this theme, the graphics sources can be obtained from 
-            <a href="http://www.xaraya.com/~andyv/xclassic_sources">here</a>. 
-        </xar:mlstring>
-    </p>
+    <xar:comment>
+        The following template is just an example of how more static templates 
+        can be added to an already static page (the default front page in this case). 
+        This question pops up in irc, so people are sometimes unaware of these
+        possibilities.. One possibility is to place a static template on the
+        same level (or in a subdirectory) as the 'container' template (this one)
+        and then insert it with xar:template tag as a system template (with optional wrapper div here):
+    </xar:comment>
+    <div class="xar-floatright xar-halfwidth xar-margin-thicksides xar-padding-thick xar-mod-body xar-alt xar-sub">
+        <xar:template file="glimpse.xt" type="system" />
+    </div>
+    <xar:comment>
+        Another easy way is to specify a static template as an extra page template of base module:
+    </xar:comment>
+    <xar:module main="false" module="base" func="main" page="about" />
 </div>
