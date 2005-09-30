@@ -32,18 +32,29 @@ function roles_adminapi_create($args)
     // Get arguments
     extract($args);
 
-    // Argument check
-    if ((!isset($uname)) ||
-        (!isset($email)) ||
-        (!isset($realname)) ||
-        (!isset($state)) ||
-        (!isset($pass) && !isset($cryptpass))) {
-        $msg = xarML('Wrong arguments to roles_adminapi_create.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
-    }
+    $invalid = array();
+    if (!isset($uname)) {
+        $invalid[] = 'uname';
+    } 
+    if (!isset($email)) {
+        $invalid[] = 'email';
+    } 
+    if (!isset($realname)) {
+        $invalid[] = 'realname';
+    } 
+    if (!isset($state)) {
+        $invalid[] = 'state';
+    } 
+    if (!isset($pass)) {
+        $invalid[] = 'pass';
+    } 
+    if (count($invalid) > 0) {
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)', 
+            join(', ', $invalid), 
+            'admin', 'create', 'roles');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        return;
+    } 
 
     // Get datbase setup
     $dbconn =& xarDBGetConn();
