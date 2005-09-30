@@ -713,7 +713,7 @@ function xarUser__isVarDefined($name)
 {
     // Retrieve the dynamic user object if necessary
     if (!isset($GLOBALS['xarUser_objectRef']) && xarModIsHooked('dynamicdata','roles')) {
-        $GLOBALS['xarUser_objectRef'] =& xarModAPIFunc('dynamicdata', 'user', 'getobject',
+        $GLOBALS['xarUser_objectRef'] = xarModAPIFunc('dynamicdata', 'user', 'getobject',
                                                        array('module' => 'roles'));
         if (empty($GLOBALS['xarUser_objectRef']) || empty($GLOBALS['xarUser_objectRef']->objectid)) {
             $GLOBALS['xarUser_objectRef'] = false;
