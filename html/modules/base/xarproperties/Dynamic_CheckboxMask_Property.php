@@ -1,3 +1,4 @@
+<?php
 /**
  * Checkbox Mask Property
  *
