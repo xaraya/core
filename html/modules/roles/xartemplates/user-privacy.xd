@@ -71,7 +71,7 @@
             <xar:mlvar>#$mina-1#</xar:mlvar>
             </xar:ml>
             <br />
-            <a href="mailto:#$contmail#"><xar:mlstring>For more information, please contact our webmaster.</xar:mlstring></a></p>
+            <xar:mlstring>For more information, please contact </xar:mlstring><a href="mailto:#$contmail#"><xar:mlstring>our webmaster.</xar:mlstring></a></p>
             <!-- **NOTE: Feel free to provide other information -->
     </xar:if>
 
