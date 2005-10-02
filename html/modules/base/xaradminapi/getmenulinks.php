@@ -23,7 +23,7 @@ function base_adminapi_getmenulinks()
 
         $menuLinks[] = array('url'   => xarModURL('base','admin','sysinfo'),
                              'title' => xarML('View your PHP configuration'),
-                             'label' => xarML('System'));
+                             'label' => xarML('System Info'));
         $menuLinks[] = array('url'   => xarModURL('base','admin','release'),
                              'title' => xarML('View recent released extensions'),
                              'label' => xarML('Extension Releases'));
