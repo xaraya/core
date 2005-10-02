@@ -229,7 +229,7 @@ end
 -- and assumes that monotone(.exe) exists on the path
 -- while it is a bit risky to call monotone itself in a hook, this
 -- hook runs *after* a revision has been committed, so i think it's OK here.
-function note_commit(revid, certs)
+function note_commit(revid, status_text, certs)
    -- Gather the info needed
    -- table with bug numbers
    bugs = extractbugs(certs)
@@ -285,11 +285,13 @@ function extractbugs(certs)
    end
 
    -- Start main function
-   for cert, value in pairs(certs) do
-      -- Go over each cert
-      if whichcerts[cert] then
-         -- Configured to be parsed
-         extractbugnumbers(value)
+   if(type(certs) == "table") then
+      for cert, value in pairs(certs) do
+         -- Go over each cert
+         if whichcerts[cert] then
+            -- Configured to be parsed
+            extractbugnumbers(value)
+         end
       end
    end
    return bugs
