@@ -1,5 +1,7 @@
 <?php
 /**
+ * Handle Username Property
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -8,7 +10,8 @@
  * @subpackage Roles module
  */
 
-/* Handle Username Property
+/* 
+ * Handle Username Property
  * @author mikespub <mikespub@xaraya.com>
  */
 

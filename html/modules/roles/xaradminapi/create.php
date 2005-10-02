@@ -1,5 +1,7 @@
 <?php
 /**
+ * Test a user or group's privileges against a mask
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}

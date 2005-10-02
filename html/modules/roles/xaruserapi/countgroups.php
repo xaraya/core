@@ -1,5 +1,7 @@
 <?php
 /**
+ * Utility function to count the number of items held by this module
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}

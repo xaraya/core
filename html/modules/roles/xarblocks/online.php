@@ -1,5 +1,7 @@
 <?php
 /**
+ * Online Block
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -8,7 +10,8 @@
  * @subpackage Roles module
  */
 
-/** Online Block
+/** 
+ * Online Block
  * @author Jim McDonald, Greg Allan, John Cox, Michael Makushev
  */
 /*

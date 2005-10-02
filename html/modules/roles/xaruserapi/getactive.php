@@ -1,5 +1,7 @@
 <?php
 /**
+ * Check if a user is active or not on the site
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}

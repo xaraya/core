@@ -1,5 +1,7 @@
 <?php
 /**
+ * Standard function to get main menu links
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -7,7 +9,8 @@
  *
  * @subpackage Roles module
  */
-/* Standard function to get main menu links
+/* 
+ * Standard function to get main menu links
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 function roles_userapi_getmenulinks()
