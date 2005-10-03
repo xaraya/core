@@ -1,5 +1,7 @@
 <?php
 /**
+ * Shows the user terms if set as a modvar
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}

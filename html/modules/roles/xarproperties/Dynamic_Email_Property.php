@@ -1,5 +1,7 @@
 <?php
 /**
+ * Handle E-mail property
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -8,7 +10,8 @@
  * @subpackage Roles module
  */
 
-/* Handle E-mail property
+/* 
+ * Handle E-mail property
  * @author mikespub <mikespub@xaraya.com>
 */
 

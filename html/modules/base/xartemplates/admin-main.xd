@@ -16,48 +16,95 @@
 
     <h3><xar:mlstring>What is it?</xar:mlstring></h3>
 
-    <p><xar:mlstring>The Base Module controls the behind the scenes processing for your Xaraya installation.</xar:mlstring></p>
+    <p><xar:mlstring>The base module provides you with configuration and informational options in the Administration menu, as well as additional functionality through use of its templates and blocks.</xar:mlstring></p>
 
     <h3><xar:mlstring>How to use it?</xar:mlstring></h3>
 
-    <p><xar:mlstring>From the menu, you have three choices.</xar:mlstring></p>
-
-    <ul>
-        <li><xar:mlstring>View System Information: Allows you to print your server and php set-up for trouble shooting.</xar:mlstring></li>
-        <li><xar:mlstring>Extension Releases: Allows you to view recently released extensions.</xar:mlstring></li>
-        <li><xar:mlstring>Modify Config: Allows you to change some of the settings controlling the core behaviour of the site.</xar:mlstring></li>
-    </ul>
+    <p><xar:mlstring>The Administration menu  allows you to have control over various global aspects on your site and includes:</xar:mlstring></p>
+    <p><xar:mlstring>The Administration menu is key to controlling global functionality on your site and includes:</xar:mlstring></p>
+        <ol>
+            <li><xar:mlstring>System Information: Allows you to view your server and php set-up for trouble shooting.</xar:mlstring></li>
+            <li><xar:mlstring>Extension Releases: View recently releasedextensions from the xaraya.com Extension and Release RSS feed.</xar:mlstring></li>
+            <li><xar:mlstring>Modify Config: Allows you to change some of the key settings controlling the core behaviour of the site.</xar:mlstring>
+                 <ul>
+                    <li><xar:mlstring>Default module providing display on your site's front page</xar:mlstring></li>
+                    <li><xar:mlstring>Short URL Master switch</xar:mlstring></li>
+                    <li><xar:mlstring>Languages, Locales and Security</xar:mlstring></li>
+                    <li><xar:mlstring>Cookie settings, and other defaults such as WYWIWYG editor</xar:mlstring></li>
+                 </ul>
+            </li>
+        </ol>
 
     <h3><xar:mlstring>Included Blocks</xar:mlstring></h3>
 
-    <ul>
+    <ol>
         <li><xar:mlstring>finclude: Include a file as block content.</xar:mlstring></li>
         <li><xar:mlstring>html: Enter HTML as block content.</xar:mlstring></li>
         <li><xar:mlstring>menu: Construct menus.</xar:mlstring></li>
         <li><xar:mlstring>php: Execute PHP code in a block.</xar:mlstring></li>
         <li><xar:mlstring>text: Include plain text in a block.</xar:mlstring></li>
-    </ul>
-
-    <h3><xar:mlstring>Included Hooks</xar:mlstring></h3>
-
-    <p><xar:mlstring>The Base Module has no hooks included at this time.</xar:mlstring></p>
-
-    <h3><xar:mlstring>Other Information</xar:mlstring></h3>
-
-    <h4><xar:mlstring>RSS Class</xar:mlstring></h4>
-
-    <p>
-        <xar:mlstring>The RSS capabilities in Xaraya use <a href="http://freshmeat.net/projects/phpfeedparser/?topic_id=914">PHP feedParser</a> as their backend.   The notes for the feedParser by Reverend Jim are as follows:</xar:mlstring>
-    </p>
-    <p>
-        <xar:mlstring>feedParser was created due to the lack of a good, flexible, class-based RSS feed parser for PHP. It has been built as a class, and currently handles RSS 0.91, RSS 0.92, RSS 0.93, RSS 1.0, and RSS 2.0 feeds. For channels it grabs the title, description, link, and creator. For items it grabs the title, description, link, and date. It also provides a form of the date converted into the local timezone to facilitate chronological sorting of items. The dates are provided in UNIX timestamp format for easy manipulation by other PHP functions. </xar:mlstring>
-    </p>
-
-    <h4><xar:mlstring>Expire a Block</xar:mlstring></h4>
+    </ol>
+    <p><xar:mlstring><strong>Expire a Block</strong></xar:mlstring></p>
 
     <p>
         <xar:mlstring>Currently, the HTML and Text blocks can both expire content if you wish.  If you have a message that you would like to only have visible for a certain period of time, you can expire the block.  This functionality can be used in conjunction with any placement or block group that you assign the block.</xar:mlstring>
     </p>
+    <h3><xar:mlstring>Included Hooks</xar:mlstring></h3>
 
+    <p><xar:mlstring>The Base Module has no hooks included at this time.</xar:mlstring></p>
+    <h3><xar:mlstring>Dynamic Data Properties</xar:mlstring></h3>
+
+    <p><xar:mlstring>The Base Module provides a number of Dynamic Data properties that you can use to extend existing Xaraya functionality by hooking Dynamic Data to your modules, or for developers, for use in your own module development.</xar:mlstring></p>
+    <h3><xar:mlstring>Custom Templates</xar:mlstring></h3>
+
+    <p><xar:mlstring>As well as providing a means to provide a custom template for your front page by creating an override for the base user-main.xd template, 
+    you can also create further custom 'static' pages using base module templates. See the documentation for further information.</xar:mlstring></p>
+
+    <h3><xar:mlstring>Custom Tags</xar:mlstring></h3>
+
+    <p><xar:mlstring>The Base Module provides a number of custom tags that can be used by theme creators and module developers to incorporate javascript into templates. These include the <code>&lt;xar:base-render-javascript ... /&gt;, &lt;xar:base-include-javascript ... /&gt;</code> and <code>&lt;xar:base-trigger-javascript ... /&gt;</code> tags. See the documentation for more information.</xar:mlstring></p>
+
+    <h3><xar:mlstring>Privilege Masks</xar:mlstring></h3>
+
+    <p><xar:mlstring>You can set privileges for this module based on the following included masks:</xar:mlstring></p>
+        <ul>
+            <li><xar:mlstring>ViewBase</xar:mlstring></li>
+            <li><xar:mlstring>ReadBase</xar:mlstring></li>
+            <li><xar:mlstring>AdminBase</xar:mlstring></li>
+            <li><xar:mlstring>ViewBaseBlocks, ReadBaseBlocks, EditBaseBlocks, AddBaseBlocks, DeleteBaseBlocks, AdminBaseBlocks.</xar:mlstring></li>
+        </ul>
+    <p><xar:mlstring>See the documentation for further information on privileges, masks and configuring them in your system.</xar:mlstring></p>
+
+    <h3><xar:mlstring>For Developers</xar:mlstring></h3>
+    <p><xar:mlstring>The Base module contains a number of useful classes and miscellaneous functions including:</xar:mlstring></p>
+    <ol>
+        <li><xar:mlstring>RSS Class</xar:mlstring>
+         <p>
+           <xar:mlstring>The RSS capabilities in Xaraya use <a href="http://freshmeat.net/projects/phpfeedparser/?topic_id=914">PHP feedParser</a> as their backend.   The notes for the feedParser by Reverend Jim are as follows:</xar:mlstring>
+         </p>
+         <p>
+          <xar:mlstring>feedParser was created due to the lack of a good, flexible, class-based RSS feed parser for PHP. It has been built as a class, and currently handles RSS 0.91, RSS 0.92, RSS 0.93, RSS 1.0, and RSS 2.0 feeds. For channels it grabs the title, description, link, and creator. For items it grabs the title, description, link, and date. It also provides a form of the date converted into the local timezone to facilitate chronological sorting of items. The dates are provided in UNIX timestamp format for easy manipulation by other PHP functions. </xar:mlstring>
+         </p>
+         <li><xar:mlstring>Curl Class</xar:mlstring></li>
+        <li><xar:mlstring>XML Parser Class</xar:mlstring></li>
+
+    </ol>
+
+    <h3>
+        <xar:mlstring>Further Information</xar:mlstring>
+    </h3>
+    <p>
+        <xar:mlstring>Further information on the Base module can be found at</xar:mlstring>
+    </p>
+       <ul>
+              <li><xar:mlstring>Base Module Extension page at</xar:mlstring> <a title="#xarML('Base Module - Xaraya Extension 68')#" href="http://www.xaraya.com/index.php/release/68.html">Xaraya Extension and Releases</a>.
+              <xar:mlstring> Click on Version History tab at the bottom to get the latest release information.</xar:mlstring>
+              </li>
+              <li><xar:mlstring>Related tutorials and documentation on Base Module found at</xar:mlstring> <a href="http://www.xaraya.com/index.php/keywords/base/" title="#xarML('Related documentation on Base')#"><xar:mlstring>Xaraya Documentation.</xar:mlstring></a>
+              </li>
+         </ul>
+         <p class="xar-sub">
+             <strong>&nbsp;<xar:mlstring>Base Module - Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.0.0&nbsp; 2005-10-01
+         </p>
 </div>
 

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Update users from roles_admin_showusers
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}

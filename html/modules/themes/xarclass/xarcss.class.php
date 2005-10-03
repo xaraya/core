@@ -1,5 +1,7 @@
 <?php
 /**
+ * Xaraya CSS class library
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -8,7 +10,7 @@
  * @subpackage Themes module
  */
 
-/* Xaraya CSS class library
+/** Xaraya CSS class library
  *
  * @author Andy Varganov <andyv@xaraya.com>
  */
