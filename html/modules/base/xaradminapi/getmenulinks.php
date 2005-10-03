@@ -21,16 +21,19 @@ function base_adminapi_getmenulinks()
     $menulinks = array();
     if (xarSecurityCheck('AdminBase',0)) {
 
-        $menuLinks[] = array('url'   => xarModURL('base','admin','sysinfo'),
+        $menulinks[] = Array('url' => xarModURL('base','admin','overview'),
+                             'title' => xarML('Base Overview'),
+                             'label' => xarML('Overview'));
+        $menulinks[] = array('url'   => xarModURL('base','admin','sysinfo'),
                              'title' => xarML('View your PHP configuration'),
                              'label' => xarML('System Info'));
-        $menuLinks[] = array('url'   => xarModURL('base','admin','release'),
+        $menulinks[] = array('url'   => xarModURL('base','admin','release'),
                              'title' => xarML('View recent released extensions'),
                              'label' => xarML('Extension Releases'));
-        $menuLinks[] = array('url'   => xarModURL('base','admin','modifyconfig'),
+        $menulinks[] = array('url'   => xarModURL('base','admin','modifyconfig'),
                              'title' => xarML('Modify Base configuration values'),
                              'label' => xarML('Modify Config'));
     }
-    return $menuLinks;
+    return $menulinks;
 }
 ?>
