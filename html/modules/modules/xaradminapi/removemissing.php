@@ -1,7 +1,6 @@
 <?php
 /**
  * Remove a module when the files are missing
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -34,10 +33,10 @@ function modules_adminapi_removemissing($args)
     $tables =& xarDBGetTables();
 
     $query = "DELETE FROM " . $tables['modules'] . " WHERE xar_regid = ?";
-    $result =& $dbconn->Execute($query,array($regid));
+    $result = $dbconn->Execute($query,array($regid));
     // This next entry probably already gone, but lets be sure
     $query = "DELETE FROM " . $tables['system/module_states'] . " WHERE xar_regid = ?";
-    $result =& $dbconn->Execute($query,array($regid));
+    $result = $dbconn->Execute($query,array($regid));
 
 /*    if(isset($remove)) {
 
@@ -57,14 +56,14 @@ function modules_adminapi_removemissing($args)
         // Delete any hooks assigned for that module, or by that module
         $query = "DELETE FROM $tables[hooks]
                   WHERE xar_smodule = ? OR xar_tmodule = ?";
-        $result =& $dbconn->Execute($query,array($modinfo['name'],$modinfo['name']));
+        $result = $dbconn->Execute($query,array($modinfo['name'],$modinfo['name']));
         if (!$result) return;
 
         // Collect the block types and remove them
         $query = "SELECT xar_id
                   FROM $tables[block_types]
                   WHERE xar_module = ?";
-        $result =& $dbconn->Execute($query,array($modinfo['name']));
+        $result = $dbconn->Execute($query,array($modinfo['name']));
         if (!$result) return;
         while (!$result->EOF) {
             list($typeid) = $result->fields;
@@ -76,7 +75,7 @@ function modules_adminapi_removemissing($args)
         }
         $query = "DELETE FROM $tables[block_types]
                   WHERE xar_module = ?";
-        $result =& $dbconn->Execute($query,array($modinfo['name']));
+        $result = $dbconn->Execute($query,array($modinfo['name']));
         if (!$result) return;
 
         foreach($tablestodrop as $tabletodrop) {
@@ -96,7 +95,7 @@ function modules_adminapi_removemissing($args)
         $tablestable = xarDBGetSiteTablePrefix() . '_tables';
         $query = "SELECT DISTINCT xar_table
                   FROM " .  $tablestable;
-        $result =& $dbconn->Execute($query);
+        $result = $dbconn->Execute($query);
         if (!$result) return;
         while (!$result->EOF) {
             list($table) = $result->fields;

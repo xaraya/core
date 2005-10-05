@@ -1,7 +1,6 @@
 <?php
 /**
  * Update hooks for a particular hook module
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -49,7 +48,7 @@ function modules_adminapi_updatehooks($args)
     // Delete all entries of modules using this hook (but don't delete the '' module)
     // signaling there *is* a hook, we want to keep that knowledge in
     $sql = "DELETE FROM $xartable[hooks] WHERE xar_tmodule = ? AND xar_smodule <> ''";
-    $result =& $dbconn->Execute($sql,array($modinfo['name']));
+    $result = $dbconn->Execute($sql,array($modinfo['name']));
     if (!$result) return;
 
     // get the list of all (active) modules
@@ -82,7 +81,7 @@ function modules_adminapi_updatehooks($args)
             FROM $xartable[hooks]
             WHERE xar_tmodule = ?";
 
-    $result =& $dbconn->Execute($sql,array($modinfo['name']));
+    $result = $dbconn->Execute($sql,array($modinfo['name']));
     if (!$result) return;
 
     for (; !$result->EOF; $result->MoveNext()) {
@@ -111,7 +110,7 @@ function modules_adminapi_updatehooks($args)
                                       $hookobject, $hookaction, $modname,
                                       $itemtype, $hooktarea, $hooktmodule,
                                       $hookttype,$hooktfunc);
-                    $subresult =& $dbconn->Execute($sql,$bindvars);
+                    $subresult = $dbconn->Execute($sql,$bindvars);
                     if (!$subresult) return;
                     // we're done for this module
                     continue;
@@ -130,7 +129,7 @@ function modules_adminapi_updatehooks($args)
                                       $hookobject, $hookaction, $modname,
                                       $itemtype, $hooktarea, $hooktmodule,
                                       $hookttype,$hooktfunc);
-                    $subresult =& $dbconn->Execute($sql,$bindvars);
+                    $subresult = $dbconn->Execute($sql,$bindvars);
                     if (!$subresult) return;
                 }
             }

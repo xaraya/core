@@ -243,7 +243,7 @@ function roles_admin_purge($args)
                     ' ORDER BY xar_name';
 
         $result = $dbconn->Execute($query);
-        $data['totalselect'] = $result->_numOfRows;
+        $data['totalselect'] = $result->getRecordCount();
         if (!$result) {return;}
         if ($purgestartnum != 0) {
             $result = $dbconn->SelectLimit($query, $numitems, $purgestartnum-1);

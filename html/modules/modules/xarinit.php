@@ -223,51 +223,38 @@ function modules_init()
      * at this stage of installer mod vars cannot be set, so we use DB calls
      * prolly need to move this closer to installer, not sure yet
      */
-    // default show-hide core modules
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value) 
-    VALUES (?,1,'hidecore','0')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
-    if (!$result) return; 
-    // default regenerate command
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value) 
-    VALUES (?,1,'regen','0')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
-    if (!$result) return; 
-    // default style of module list
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value) 
-    VALUES (?,1,'selstyle','plain')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
-    if (!$result) return; 
-    // default filtering based on module states
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value) 
-    VALUES (?,1,'selfilter', '0')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
-    if (!$result) return; 
-    // default modules list sorting order
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value) 
-    VALUES (?,1,'selsort','nameasc')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
-    if (!$result) return; 
-    // default show-hide modules statistics
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value) 
-    VALUES (?,1,'hidestats','0')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
-    if (!$result) return; 
-    // default maximum number of modules listed per page
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value) 
-    VALUES (?,1,'selmax','all')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
-    if (!$result) return; 
-    // default start page
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value) 
-    VALUES (?,1,'startpage','overview')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
-    if (!$result) return; 
-    // expertlist
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value) 
-    VALUES (?,1,'expertlist','0')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
-    if (!$result) return; 
+   
+    $sql = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
+            VALUES (?,?,?,?)";
+    $stmt = $dbconn->prepareStatement($sql);
+    
+    $modvars = array(
+                     // default show-hide core modules
+                     array(1,'hidecore','0'),
+                     // default regenerate command
+                     array(1,'regen','0'),
+                     // default style of module list
+                     array(1,'selstyle','plain'),
+                     // default filtering based on module states
+                     array(1,'selfilter', '0'),
+                     // default modules list sorting order
+                     array(1,'selsort','nameasc'),
+                     // default show-hide modules statistics
+                     array(1,'hidestats','0'),
+                     // default maximum number of modules listed per page
+                     array(1,'selmax','all'),
+                     // default start page
+                     array(1,'startpage','overview'),
+                     // expertlist
+                     array(1,'expertlist','0'));
+    
+    foreach($modvars as &$modvar) {
+        $id = $dbconn->GenId($tables['module_vars']);
+        array_unshift($modvar,$id);
+        $result = $stmt->executeUpdate($modvar);
+        if(!$result) return;
+    }
+    
     // Initialisation successful
     return true;
 } 
@@ -342,15 +329,17 @@ function modules_upgrade($oldVersion)
         if (!$result) return;
         
         // Get items from result array
+        // FIXME: updatin (part of) the primkey is not a good plan
+        $updateSql = "UPDATE " . $tables['module_states'] . "
+                      SET xarid = ?
+                      WHERE xar_regid = ? AND
+                            xar_state = ?";
+        $updateStmt = $dbconn->prepareStatement($updateSql);
         while (!$result->EOF) {
             list ($regid, $state) = $result->fields;
 
             $seqId = $dbconn->GenId($tables['module_states']);
-            $query = "UPDATE " . $tables['module_states'] . " 
-                      SET xar_id = $seqId
-                      WHERE xar_regid = $regid
-                      AND xar_state = $state";
-            $updresult = &$dbconn->Execute($query);
+            $updresult = $updateStmt->executeUpdate(array($seqId, $regId, $state));
             if (!$updresult) return;
 
             $result->MoveNext();

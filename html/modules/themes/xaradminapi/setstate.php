@@ -1,7 +1,5 @@
 <?php
 /**
- * Set the state of a theme
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -98,8 +96,8 @@ function themes_adminapi_setstate($args)
                        (xar_regid, xar_state)
                         VALUES (?,?)";
                     $bindvars = array($regid,$state);
-                    $result =& $dbconn->Execute($query,$bindvars);
-                    if (!$result) return;
+                    $newresult =& $dbconn->Execute($query,$bindvars);
+                    if (!$newresult) return;
                 }
                 return true;
             }

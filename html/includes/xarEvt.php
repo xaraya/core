@@ -272,14 +272,13 @@ function xarEvt__GetHandlersList()
         $dbconn =& xarDBGetConn();
         $sitetabpre = xarDBGetSiteTablePrefix();
         $configtable = $sitetabpre.'_config_vars';
-        $query = "SELECT xar_value
-                    FROM $configtable
-                   WHERE xar_name = 'Site.Evt.Handlers'";
-        $result =& $dbconn->Execute($query);
+        $query = "SELECT xar_value FROM $configtable WHERE xar_name = ?";
+        $stmt =& $dbconn->prepareStatement($query);
+        $result =& $stmt->executeQuery(array('Site.Evt.Handlers'), ResultSet::FETCHMODE_ASSOC);
         if (!$result) return;
         $handlers = array();
-        if (!$result->EOF) {
-            list($value) = $result->fields;
+        if ($result->next()) {
+            $value = $result->get('xar_value');
             if (!empty($value)) {
                 $handlers = unserialize($value);
             }
