@@ -228,9 +228,6 @@ function &xarDBGetTables()
 /**
  * Load the Table Maintenance API
  *
- * Include 'includes/xarTableDDL.php'using include_once()
- * and return true
- *
  * @access public
  * @return true
  * @todo <johnny> change to protected or private?
