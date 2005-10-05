@@ -252,13 +252,12 @@ function xarCache_getParents()
     $rolemembers = $systemPrefix . '_rolemembers';
     $dbconn =& xarDBGetConn();
     $query = "SELECT xar_parentid FROM $rolemembers WHERE xar_uid = ?";
-    $result =& $dbconn->Execute($query,array($currentuid));
+    $stmt =& $dbconn->prepareStatement($query);
+    $result =& $stmt->executeQuery(array($currentuid));
     if (!$result) return;
     $gidlist = array();
-    while(!$result->EOF) {
-        list($parentid) = $result->fields;
-        $gidlist[] = $parentid;
-        $result->MoveNext();
+    while($result->next()) {
+        $gidlist[] = $result->getInt(1);
     }
     $result->Close();
     xarCore_SetCached('User.Variables.'.$currentuid, 'parentlist',$gidlist);

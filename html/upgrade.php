@@ -1553,4 +1553,3 @@ function CatchOutput()
     xarTplSetPageTitle(xarML('Upgrade Xaraya'));
     echo xarTpl_renderPage($out,NULL, 'installer');
 }
-?>

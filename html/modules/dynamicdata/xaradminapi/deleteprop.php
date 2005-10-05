@@ -1,7 +1,5 @@
 <?php
 /**
- * Delete a property field
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -57,7 +55,7 @@ function dynamicdata_adminapi_deleteprop($args)
     $dynamicprop = $xartable['dynamic_properties'];
 
     $sql = "DELETE FROM $dynamicprop WHERE xar_prop_id = ?";
-    $result =& $dbconn->Execute($sql,array($prop_id));
+    $result = $dbconn->Execute($sql,array($prop_id));
     if (!$result) return;
 
 // TODO: don't delete if the data source is not in dynamic_data
@@ -65,7 +63,7 @@ function dynamicdata_adminapi_deleteprop($args)
     $dynamicdata = $xartable['dynamic_data'];
 
     $sql = "DELETE FROM $dynamicdata WHERE xar_dd_propid = ?";
-    $result =& $dbconn->Execute($sql,array($prop_id));
+    $result = $dbconn->Execute($sql,array($prop_id));
     if (!$result) return;
 
     return true;
