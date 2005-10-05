@@ -81,10 +81,6 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'Afghanistan', 'name' =>'Afghanistan' );
         $coptions[] = array('id' =>'Albania', 'name' =>'Albania');
         $coptions[] = array('id' =>'Algeria', 'name' =>'Algeria');
-        $coptions[] = array('id' =>'Australia', 'name' =>'Australia');
-        $coptions[] = array('id' =>'Afghanistan', 'name'=>'Afghanistan');
-        $coptions[] = array('id' =>'Albania', 'name'=>'Albania');
-        $coptions[] = array('id' =>'Algeria', 'name'=>'Algeria');
         $coptions[] = array('id' =>'American Samoa','name'=>'American Samoa');
         $coptions[] = array('id' =>'Andorra', 'name'=>'Andorra');
         $coptions[] = array('id' =>'Angola', 'name'=>'Angola');
