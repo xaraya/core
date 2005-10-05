@@ -115,15 +115,16 @@ function modules_adminapi_regenerate()
                 // The version strings are different.
                 // TODO: move the versions API from 'base' to 'modules' if we need to upgrade
                 // the base module through this mechanism.
-                // Compare the versions, only going down to two levels. Only the first two
-                // levels are significant for upgrades. A module writer could use the third level
-                // from 1.0.3 to 1.0.4
+                // Compare the versions, only going down to three levels. Only the first three
+                // levels are significant for upgrades. A module writer could use further levels
+                // to indicate bugfix releases that don't need an explicit upgrade, for example
+                // from 1.0.3 to 1.0.3.1
                 $vercompare = xarModAPIfunc(
                     'base', 'versions', 'compare',
                     array(
                         'ver1'=>$dbModules[$name]['version'],
                         'ver2'=>$modinfo['version'],
-                        'levels' => 2
+                        'levels' => 3
                     )
                 );
                 // Check if database version is less than (or equal to) the file version
