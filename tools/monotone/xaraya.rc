@@ -52,10 +52,10 @@ function use_inodeprints()
    return true
 end
 
--- This hook gets called just befor writing a commit
+-- This hook gets called just before writing a commit
 -- changelog entry.
 -- What we do here is massage the status text generated
--- by monotone to generate a gnu like Changelog entr as
+-- by monotone to generate a gnu like Changelog entry as
 -- best as we can
 function edit_comment(basetext, existinglog)
    local exe = "vi"
@@ -78,10 +78,10 @@ function edit_comment(basetext, existinglog)
    tmp:write(existinglog)
    local notes = [[
 MT: ----------------------------------------------
-MT: Above is what has been parsed as changelog
-MT: from the status of your working dir.
-MT: Augment as you see fit. Write revision comment
-MT: on the first line(s) and file comments as shown
+MT: Above is what has been parsed as changelog from 
+MT: the status of your working dir.
+MT: Augment them you see fit. Write the revision comment
+MT: on the first line(s) and per file comments on the next.
 MT: Lines starting with MT: will automatically be
 MT: removed]]
    tmp:write(notes)
@@ -113,19 +113,19 @@ end
 
 function parse_statusmsg(msg)
    -- Go over the lines and massage it so it comes very close to what 
-   -- I want to enter as a comment anyway
-   local pattern = "([^\n]-)\n"
+   -- we want to enter as a comment anyway
+   local pattern = "([^\n]-)\n" -- shortest thing before the newline
    local lines = {}
    local rename_string = nil
    local parsed = ""
 
    for line in string.gfind(msg, pattern) do 
       -- Handle renames
-      _,_,file = string.find(line,'^rename_file "(.-)"')
+      _,_,file = string.find(line,'^rename_file "(.-)"') -- which file?
       if(file~=nil) then 
          rename_string = ": renamed ("..file..")" 
       end
-      _,_,file = string.find(line,'^%s+to "(.-)"')
+      _,_,file = string.find(line,'^%s+to "(.-)"') -- to what?
       if(file~=nil and rename_string~=nil) then
          table.insert(lines,"\t* "..file..rename_string)
          rename_string = nil
@@ -164,8 +164,8 @@ end
 -- comment certificates for mentioning of bugs. If found, the user
 -- is asked if they want to create certificates for them
 -- NOTE: this hook spawns the monotone executable inside a lua hook
--- and assumes that monotone(.exe) exists on the path
--- while it is a bit risky to call monotone itself in a hook, this
+-- and assumes that monotone(.exe) exists on the path.
+-- While it is a bit risky to call monotone itself in a hook, this
 -- hook runs *after* a revision has been committed, so i think it's OK here.
 function note_commit(revid, status_text, certs)
    -- Gather the info needed
@@ -200,6 +200,9 @@ end
 function extractbugs(certs)
    local bugs = {} -- empty table for holding the bugs
    -- which certificates do we want to look in ?
+   -- at this moment, only changelog is relevant. Other certs can only
+   -- be created after a commit, so this function will never get called for
+   -- those certificates ( I think :-) )
    local whichcerts = {
       changelog = true,
       comment   = true
@@ -216,7 +219,7 @@ function extractbugs(certs)
    -- subfunction to actually make the number
    function  extractbugnumbers(value)
       for index, pattern in patterns do
-         for w in string.gfind(value, pattern) do  
+         for w in string.gfind(string.lower(value), pattern) do  
             bugs[w] = true
          end
       end
