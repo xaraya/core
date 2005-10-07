@@ -1,7 +1,5 @@
 <?php
 /**
- * Get one or all block instances.
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -121,10 +119,11 @@ function blocks_userapi_getall($args)
                 // Next group instance row.
                 $resultgroup->MoveNext();
             }
+            // Close group query.
+            $resultgroup->Close();
         }
 
-        // Close group query.
-        $resultgroup->Close();
+
 
         // Put the instance into the result array.
         // Using references helps prevent copying data structures around.
