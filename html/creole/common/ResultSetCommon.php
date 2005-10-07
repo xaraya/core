@@ -460,7 +460,8 @@ abstract class ResultSetCommon {
             try {
                 $this->next(); $this->previous();
                  // bah
-                $fld->name = key(array_slice($this->fields,$fieldOffset,1));
+                $tmp = array_slice($this->fields,$fieldOffset,1);
+                $fld->name = key($tmp);
             } catch (Exception $e) {
                 throw $e;
             }
