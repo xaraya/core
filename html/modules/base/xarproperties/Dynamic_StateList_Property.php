@@ -145,7 +145,7 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
         $soptions[] = array('id' =>'Tasmania     ', 'name' =>'Tasmania');
         $soptions[] = array('id' =>'Victoria     ', 'name' =>'Victoria');
         $soptions[] = array('id' =>'Western Australia', 'name' =>'Western Australia');
-
+        $soptions[] = array('id' =>'Other', 'name' =>'Other');
         /*for($i=0; isset($soptions[$i]); $i++) {
             $out .= '<option';
             $out .= ' value="'.$soptions[$i]['name'].'"';
