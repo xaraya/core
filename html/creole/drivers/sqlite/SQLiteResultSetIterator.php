@@ -87,3 +87,4 @@ class SQLiteResultSetIterator implements Iterator {
     }
 
 }
+?>

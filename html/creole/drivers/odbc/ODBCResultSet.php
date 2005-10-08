@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: ODBCResultSet.php,v 1.1 2004/07/27 23:08:30 hlellelid Exp $
+ *  $Id: ODBCResultSet.php,v 1.2 2005/04/01 17:10:42 dlawson_mi Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -28,12 +28,18 @@ require_once 'creole/drivers/odbc/ODBCResultSetCommon.php';
  * the methods in here perform some adjustments and extra checking to make
  * sure that this behaves the same as RDBMS drivers using native OFFSET/LIMIT.
  *
- * NOTE: If the driver you are using does not support the odbc_num_rows()
- *       function, then you should use the {@link ODBCCachedResultSet} class
- *       instead.
+ * This class also emulates a row count if the driver is not capable of 
+ * providing one natively.
+ * 
+ * NOTE: This class only works with drivers that support absolute cursor 
+ *       positioning (SQL_FETCH_DIRECTION = SQL_FD_FETCH_ABSOLUTE). If the
+ *       driver you are using does not support reverse/absolute cursor 
+ *       scrolling, you should use the {@link ODBCCachedResultSet} class instead.
+ *       See the documentation for ODBCCachedResultSet for instructions on how
+ *       to use it.
  *
  * @author    Dave Lawson <dlawson@masterytech.com>
- * @version   $Revision: 1.1 $
+ * @version   $Revision: 1.2 $
  * @package   creole.drivers.odbc
  */
 class ODBCResultSet extends ODBCResultSetCommon implements ResultSet
@@ -43,8 +49,15 @@ class ODBCResultSet extends ODBCResultSetCommon implements ResultSet
      *
      * @var int
      */
-    protected $numRows = 0;
+    protected $numRows = -1;
 
+    /**
+     * True if ODBC driver supports odbc_num_rows().
+     *
+     * @var boolean
+     */
+    protected $hasRowCount = false;
+    
     /**
      * @see ResultSet::__construct()
      */
@@ -57,11 +70,12 @@ class ODBCResultSet extends ODBCResultSetCommon implements ResultSet
          * more than one result handle is active at once. For example, the MySQL
          * ODBC driver always returns the number of rows for the last executed
          * result. For this reason, we'll store the row count here.
+         *
+         * Note also that many ODBC drivers do not support this method. In this
+         * case, getRecordCount() will perform a manual count.
          */
         $this->numRows = @odbc_num_rows($result->getHandle());
-
-        if ($this->numRows == -1)
-            throw new SQLException('Error getting record count', $conn->nativeError());
+        $this->hasRowCount = $this->numRows != -1;
     }
 
     /**
@@ -70,7 +84,7 @@ class ODBCResultSet extends ODBCResultSetCommon implements ResultSet
     function close()
     {
         parent::close();
-        $numRows = 0;
+        $numRows = -1;
     }
 
     /**
@@ -78,7 +92,7 @@ class ODBCResultSet extends ODBCResultSetCommon implements ResultSet
      */
     public function seek($rownum)
     {
-        if ($rownum < 0 || $rownum > $this->getRecordCount()+1)
+        if ($rownum < 0 || $this->limit > 0 && $rownum > $this->limit)
             return false;
 
         $this->cursorPos = $rownum;
@@ -91,37 +105,38 @@ class ODBCResultSet extends ODBCResultSetCommon implements ResultSet
      */
     public function next()
     {
-        if ($this->limit > 0 && ($this->cursorPos >= $this->limit)) {
-            $this->afterLast();
+        $this->cursorPos++;
+        
+        if ($this->limit > 0 && $this->cursorPos > $this->limit) {
+            $this->cursorPos = $this->limit+1;
             return false;
         }
 
-        $rowNum = $this->offset + $this->cursorPos + 1;
-
-        $cols = @odbc_fetch_into($this->result->getHandle(), $this->fields, $rowNum);
+        $rowNum = $this->offset + $this->cursorPos;
+        $fields = null;
+        
+        $cols = @odbc_fetch_into($this->result->getHandle(), $fields, $rowNum);
 
         if ($cols === false) {
-            $this->afterLast();
+            $this->cursorPos = -1;
             return false;
         }
 
-        $this->cursorPos++;
-
-        if ($this->fetchmode == ResultSet::FETCHMODE_ASSOC)
-        {
-            for ($i = 0, $n = count($this->fields); $i < $n; $i++)
-            {
-                $colname = @odbc_field_name($this->result->getHandle(), $i+1);
-                $a[$colname] = $this->fields[$i];
-            }
-
-            $this->fields = $a;
-
-            if (!$this->ignoreAssocCase)
-                $this->fields = array_change_key_case($this->fields, CASE_LOWER);
-        }
-
+        $this->fields =& $this->checkFetchMode($fields);
+        
         return true;
+    }
+
+    /**
+     * @see ResultSet::isAfterLast()
+     */
+    public function isAfterLast()
+    {
+        // Force calculation of last record pos.
+        if ($this->cursorPos == -1)
+            $this->getRecordCount();
+            
+        return parent::isAfterLast();
     }
 
     /**
@@ -129,12 +144,36 @@ class ODBCResultSet extends ODBCResultSetCommon implements ResultSet
      */
     function getRecordCount()
     {
-        $numrows = $this->numRows;
+        if ($this->hasRowCount)
+        {
+            // Use driver row count if provided.
+            $numRows = $this->numRows - $this->offset;
 
-        // adjust count based on emulated limit/offset
-        $numrows -= $this->offset;
+            if ($this->limit > 0 && $numRows > $this->limit)
+                $numRows = $this->limit;
+        }
+        else 
+        {
+            // Do manual row count if driver doesn't provide one.
+            if ($this->numRows == -1) 
+            {
+                $this->numRows = 0;
+                $this->beforeFirst();
+            
+                while($this->next()) 
+                    $this->numRows++;
+            }
+                
+            $numRows = $this->numRows;
+        }
 
-        return ($this->limit > 0 && $numrows > $this->limit ? $this->limit : $numrows);
+        // Cursor pos is -1 when an attempt to fetch past the last row was made
+        // (or a fetch error occured).
+        
+        if ($this->cursorPos == -1)
+            $this->cursorPos = $numRows+1;
+            
+        return $numRows;
     }
 
     /**
@@ -168,3 +207,4 @@ class ODBCResultSet extends ODBCResultSetCommon implements ResultSet
     }
 
 }
+?>

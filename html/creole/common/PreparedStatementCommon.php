@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: PreparedStatementCommon.php,v 1.9 2004/10/26 01:42:27 hlellelid Exp $
+ *  $Id: PreparedStatementCommon.php,v 1.14 2005/04/16 18:55:28 hlellelid Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -28,7 +28,7 @@
  * to work with BLOB and CLOB values w/o needing special LOB-specific routines.
  *
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.9 $
+ * @version   $Revision: 1.14 $
  * @package   creole.common
  */
 abstract class PreparedStatementCommon {
@@ -102,25 +102,60 @@ abstract class PreparedStatementCommon {
         $this->conn = $conn;
         $this->sql = $sql;
     
-        // get the positiosn for the '?' in the SQL
-        // we can move this into its own method if it gets more complex
+	$this->positions = $this->parseQuery ( $sql );
+        // save processing later in cases where we may repeatedly exec statement
+	$this->positionsCount = count ( $this->positions );
+    }
+
+    /**
+     * Parse the SQL query for ? positions
+     *
+     * @param string $sql The query to process
+     * @return array Positions from the start of the string that ?'s appear at
+    */
+    protected function parseQuery ( $sql )
+    {
+
         $positions = array();
-        $length = strlen($sql);
-        for ( $position = 0; $position < $length; $position++ ) {
-            $c = $sql{$position};
-            if ( $c === '?' ) {
-                $positions[] = $position;
-            } else if ( $c === '"' || $c === "'" ) {
-                $position++;
-                while ( $position < $length && $sql{$position} !== $c ) {
-                    if ( $sql{$position} === '\\' ) $position++;
-                    $position++;
+	// match anything ? ' " or \ in $sql with an early out if we find nothing
+        if ( preg_match_all ( '([\?]|[\']|[\"]|[\\\])', $sql, $matches, PREG_OFFSET_CAPTURE ) !== 0 ) {
+                $matches = $matches['0'];
+                $open = NULL;
+		// go thru all our matches and see what we can find
+                for ( $i = 0, $j = count ( $matches ); $i < $j; $i++ ) {
+                        switch ( $matches[$i]['0'] ) {
+				// if we already have an open " or ' then check if this is the end
+				// to close it or not
+                                case $open:
+                                        $open = NULL;
+                                        break;
+				// we have a quote, set ourselves open
+                                case '"':
+                                case "'":
+                                        $open = $matches[$i]['0'];
+                                        break;
+				// check if it is an escaped quote and skip if it is
+                                case '\\':
+                                        $next_match = $matches[$i+1]['0'];
+                                        if ( $next_match === '"' || $next_match === "'" ) {
+                                                $i++;
+                                        }
+                                        unset ( $next_match );
+                                        break;
+				// we found a ?, check we arent in an open "/' first and
+				// add it to the position list if we arent
+                                default:
+                                        if ( $open === NULL ) {
+                                                $positions[] = $matches[$i]['1'];
+                                        }
+                        }
+                        unset ( $matches[$i] );
                 }
-            }
+                unset ( $open, $matches, $i, $j );
         }
-    
-        $this->positions = $positions;
-        $this->positionsCount = count($positions); // save processing later in cases where we may repeatedly exec statement
+
+	return $positions;
+
     }
 
     /**
@@ -330,11 +365,16 @@ abstract class PreparedStatementCommon {
                 throw new SQLException("Unsupported object type passed to set(): " . get_class($value));
             }
         } else {
-            if ($type == "integer") {
-                $type = "int";
-            } elseif ($type == "double") {
-                $type = "float";
-            }
+	    switch ( $type ) {
+	    	case 'integer':
+			$type = 'int';
+			break;
+		case 'double':
+			$type = 'float';
+			break;
+		// nice at a later date for large int handling?
+		//case 'gmp':
+	    }
             $setter = 'set' . ucfirst($type); // PHP types are case-insensitive, but we'll do this in case that changes
             $this->$setter($paramIndex, $value);
         }        
@@ -384,9 +424,10 @@ abstract class PreparedStatementCommon {
         } else {
             // they took magic __toString() out of PHP5.0.0; this sucks
             if (is_object($blob)) {
-                $blob = $blob->__toString();
-            }            
-            $this->boundInVars[$paramIndex] = "'" . $this->escape($blob) . "'";
+            	$this->boundInVars[$paramIndex] = "'" . $this->escape($blob->__toString()) . "'";
+            } else {
+            	$this->boundInVars[$paramIndex] = "'" . $this->escape($blob) . "'";
+	    }
         }
     } 
 
@@ -400,9 +441,10 @@ abstract class PreparedStatementCommon {
         } else {      
             // they took magic __toString() out of PHP5.0.0; this sucks
             if (is_object($clob)) {
-                $clob = $clob->__toString();
-            }              
-            $this->boundInVars[$paramIndex] = "'" . $this->escape($clob) . "'";
+            	$this->boundInVars[$paramIndex] = "'" . $this->escape($clob->__toString()) . "'";
+            } else {
+            	$this->boundInVars[$paramIndex] = "'" . $this->escape($clob) . "'";
+	    }
         }
     }     
 
@@ -413,11 +455,11 @@ abstract class PreparedStatementCommon {
      */
     function setDate($paramIndex, $value) 
     {
-        if (is_numeric($value)) $value = date("Y-m-d", $value);
-        if (is_object($value)) $value = date("Y-m-d", $value->getTime());        
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
+            if (is_numeric($value)) $value = date("Y-m-d", $value);
+            elseif (is_object($value)) $value = date("Y-m-d", $value->getTime());        
             $this->boundInVars[$paramIndex] = "'" . $this->escape($value) . "'";
         }
     } 
@@ -509,8 +551,11 @@ abstract class PreparedStatementCommon {
         } else {
             // it's ok to have a fatal error here, IMO, if object doesn't have
             // __toString() and is being passed to this method.
-            $value = (is_object($value) ? $value->__toString() : (string) $value);
-            $this->boundInVars[$paramIndex] = "'" . $this->escape($value) . "'";
+	    if ( is_object ( $value ) ) {
+            	$this->boundInVars[$paramIndex] = "'" . $this->escape($value->__toString()) . "'";
+	    } else {
+            	$this->boundInVars[$paramIndex] = "'" . $this->escape((string)$value) . "'";
+	    }
         }
     } 
     
@@ -521,13 +566,15 @@ abstract class PreparedStatementCommon {
      */
     function setTime($paramIndex, $value) 
     {        
-        if (is_numeric($value)) $value = date("H:i:s", $value);
-        elseif (is_object($value)) $value = date("H:i:s", $value->getTime());
-        
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
-            $this->boundInVars[$paramIndex] = "'" . $this->escape($value) . "'";
+            if ( is_numeric ( $value ) ) {
+	    		$value = date ('H:i:s', $value );
+		    } elseif ( is_object ( $value ) ) {
+		    	$value = date ('H:i:s', $value->getTime ( ) );
+		    }
+            $this->boundInVars [ $paramIndex ] = "'" . $this->escape ( $value ) . "'";
         }
     }
     
@@ -537,15 +584,15 @@ abstract class PreparedStatementCommon {
      * @return void
      */
     function setTimestamp($paramIndex, $value) 
-    {
-        if (is_numeric($value)) $value = date('Y-m-d H:i:s', $value);
-        elseif (is_object($value)) $value = date("Y-m-d H:i:s", $value->getTime());
-        
+    {        
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
+       	    if (is_numeric($value)) $value = date('Y-m-d H:i:s', $value);
+       	    elseif (is_object($value)) $value = date('Y-m-d H:i:s', $value->getTime());
             $this->boundInVars[$paramIndex] = "'".$this->escape($value)."'";
         }
     }
             
 }
+?>

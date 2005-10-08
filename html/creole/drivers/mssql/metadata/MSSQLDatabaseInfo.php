@@ -67,3 +67,4 @@ class MSSQLDatabaseInfo extends DatabaseInfo {
     }
         
 }
+?>

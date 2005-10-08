@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: MySQLResultSet.php,v 1.22 2004/03/20 04:16:49 hlellelid Exp $
+ *  $Id: MySQLResultSet.php,v 1.23 2005/09/16 13:09:50 hlellelid Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -30,7 +30,7 @@ require_once 'creole/common/ResultSetCommon.php';
  * exception was thrown, and that OFFSET/LIMIT will never be emulated for MySQL.
  * 
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.22 $
+ * @version   $Revision: 1.23 $
  * @package   creole.drivers.mysql
  */
 class MySQLResultSet extends ResultSetCommon implements ResultSet {
@@ -123,7 +123,7 @@ class MySQLResultSet extends ResultSetCommon implements ResultSet {
         if ($this->fields[$column] === null) { return null; }
         
         $ts = strtotime($this->fields[$column]);
-        if ($ts === -1) {
+        if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
             // otherwise it's an ugly MySQL timestamp!
             // YYYYMMDDHHMMSS
             if (preg_match('/([\d]{4})([\d]{2})([\d]{2})([\d]{2})([\d]{2})([\d]{2})/', $this->fields[$column], $matches)) {
@@ -132,7 +132,7 @@ class MySQLResultSet extends ResultSetCommon implements ResultSet {
                 $ts = mktime($matches[4], $matches[5], $matches[6], $matches[2], $matches[3], $matches[1]);        
             }
         }
-        if ($ts === -1) { // if it's still -1, then there's nothing to be done; use a different method.
+        if ($ts === -1 || $ts === false) { // if it's still -1, then there's nothing to be done; use a different method.
             throw new SQLException("Unable to convert value at column " . (is_int($column) ? $column + 1 : $column) . " to timestamp: " . $this->fields[$column]);
         }        
         if ($format === null) {
@@ -146,3 +146,4 @@ class MySQLResultSet extends ResultSetCommon implements ResultSet {
     }
 
 }
+?>

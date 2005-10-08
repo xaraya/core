@@ -314,3 +314,4 @@ class MSSQLConnection extends ConnectionCommon implements Connection {
         return new MSSQLCallableStatement($this, $stmt);
     }
 }
+?>

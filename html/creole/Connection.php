@@ -212,3 +212,4 @@ interface Connection {
     public function getUpdateCount();
 
 }
+?>

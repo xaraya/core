@@ -354,3 +354,4 @@ class ODBCResultResource
     }
 
 }
+?>

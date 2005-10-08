@@ -94,3 +94,4 @@ class MySQLiIdGenerator implements IdGenerator {
         return $insert_id;
     }
 }
+?>

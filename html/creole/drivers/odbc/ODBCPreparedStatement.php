@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: ODBCPreparedStatement.php,v 1.2 2004/11/18 21:35:56 dlawson_mi Exp $
+ *  $Id: ODBCPreparedStatement.php,v 1.3 2005/04/01 17:08:37 dlawson_mi Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -27,7 +27,7 @@ require_once 'creole/util/Lob.php';
  * ODBC specific PreparedStatement functions.
  *
  * @author    Dave Lawson <dlawson@masterytech.com>
- * @version   $Revision: 1.2 $
+ * @version   $Revision: 1.3 $
  * @package   creole.drivers.odbc
  */
 class ODBCPreparedStatement extends PreparedStatementCommon implements PreparedStatement
@@ -100,18 +100,27 @@ class ODBCPreparedStatement extends PreparedStatementCommon implements PreparedS
     /**
      * @see PreparedStatement::executeQuery()
      */
-    public function executeQuery($p1 = null, $fetchmode = null)
+    public function executeQuery()
     {
-        $params = null;
-        if ($fetchmode !== null) {
-            $params = $p1;
-        } elseif ($p1 !== null) {
-            if (is_array($p1)) $params = $p1;
-            else $fetchmode = $p1;
-        }
-
+        switch (func_num_args()) {
+        case 2:
+        list($params, $fetchmode) = func_get_args();
+            if (!is_array($params)) {
+                unset($params);
+            }
+            break;
+        case 1:
+            $params = null;
+            list($fetchmode) = func_get_args();
+            break;
+        case 0:
+            $params = null;
+            $fetchmode = null;
+            break;
+        }	
+        
         // Set any params passed directly
-        if ($params) {
+        if (isset($params)) {
             for($i=0,$cnt=count($params); $i < $cnt; $i++) {
                 $this->set($i+1, $params[$i]);
             }
@@ -232,3 +241,4 @@ class ODBCPreparedStatement extends PreparedStatementCommon implements PreparedS
     }
 
 }
+?>

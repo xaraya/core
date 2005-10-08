@@ -1,7 +1,7 @@
 <?php
 
 /*
- *  $Id: TableInfo.php,v 1.13 2005/02/21 16:48:40 pachanga Exp $
+ *  $Id: TableInfo.php,v 1.15 2005/04/13 02:37:40 hlellelid Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -24,15 +24,10 @@
  * Represents a table.
  *
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.13 $
+ * @version   $Revision: 1.15 $
  * @package   creole.metadata
  */
 abstract class TableInfo {
-
-     // FIXME
-     //    - Currently all member attributes are public.  This should be fixed
-     // when PHP's magic __sleep() and __wakeup() functions & serialization support
-     // handles protected/private members. (if ever)
 
     protected $name;
     protected $columns = array();
@@ -222,7 +217,7 @@ abstract class TableInfo {
         if (!isset($this->indexes[$name])) {
             throw new SQLException("Table `".$this->name."` has no index `".$name."`");
         }
-        return @$this->indexes[$name];
+        return $this->indexes[$name];
     }
 
     /**
@@ -307,3 +302,4 @@ abstract class TableInfo {
         return $this->database;
     }
 }
+?>

@@ -1,6 +1,6 @@
 <?php
 /*
- * $Id: MySQLiResultSet.php,v 1.3 2004/09/18 09:15:49 sb Exp $
+ * $Id: MySQLiResultSet.php,v 1.4 2005/09/16 13:09:50 hlellelid Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -30,7 +30,7 @@ require_once 'creole/common/ResultSetCommon.php';
  * exception was thrown, and that OFFSET/LIMIT will never be emulated for MySQL.
  *
  * @author    Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @version   $Revision: 1.3 $
+ * @version   $Revision: 1.4 $
  * @package   creole.drivers.mysqli
  */
 class MySQLiResultSet extends ResultSetCommon implements ResultSet {
@@ -145,7 +145,7 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet {
 
         $ts = strtotime($this->fields[$column]);
 
-        if ($ts === -1) {
+        if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
             // otherwise it's an ugly MySQL timestamp!
             // YYYYMMDDHHMMSS
             if (preg_match('/([\d]{4})([\d]{2})([\d]{2})([\d]{2})([\d]{2})([\d]{2})/', $this->fields[$column], $matches)) {
@@ -155,7 +155,7 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet {
             }
         }
 
-        if ($ts === -1) {
+        if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
             // if it's still -1, then there's nothing to be done; use a different method.
             throw new SQLException("Unable to convert value at column " . (is_int($column) ? $column + 1 : $column) . " to timestamp: " . $this->fields[$column]);
         }
@@ -171,3 +171,4 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet {
         }
     }
 }
+?>

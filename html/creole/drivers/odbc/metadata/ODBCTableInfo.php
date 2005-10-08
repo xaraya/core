@@ -138,3 +138,4 @@ class ODBCTableInfo extends TableInfo {
     }
 
 }
+?>

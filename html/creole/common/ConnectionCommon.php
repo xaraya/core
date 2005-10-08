@@ -364,4 +364,4 @@ abstract class ConnectionCommon {
     }
     // END XARAYA MODIFICATION
 }
-
+?>

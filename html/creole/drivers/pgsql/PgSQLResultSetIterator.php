@@ -99,3 +99,4 @@ class PgSQLResultSetIterator implements SeekableIterator {
 	$this->pos = $index;
     }
 }
+?>

@@ -89,3 +89,4 @@ class PrimaryKeyInfo {
         return $this->name;
     }
 }
+?>

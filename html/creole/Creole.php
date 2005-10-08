@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Creole.php,v 1.9 2005/02/21 16:48:40 pachanga Exp $
+ *  $Id: Creole.php,v 1.11 2005/06/15 13:15:34 gamr Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -40,7 +40,7 @@ include_once 'creole/Connection.php';
  * 
  * 
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.9 $
+ * @version   $Revision: 1.11 $
  * @package   creole
  */
 class Creole {    
@@ -72,8 +72,15 @@ class Creole {
                                         'oracle' => 'creole.drivers.oracle.OCI8Connection',
                                         'mssql' => 'creole.drivers.mssql.MSSQLConnection',
                                         'odbc' => 'creole.drivers.odbc.ODBCConnection'
-                                       );        
-    
+                                       );
+
+    /**
+     * Map of already established connections
+     * @see getConnection()
+     * @var array Hash mapping connection DSN => Connection instance
+     */
+    private static $connectionMap = array();
+
     /**
      * Register your own RDBMS driver class.
      * 
@@ -153,7 +160,35 @@ class Creole {
         } else {
             $dsninfo = self::parseDSN($dsn);
         }
-        
+
+        // sort $dsninfo by keys so the serialized result is always the same
+        // for identical connection parameters, no matter what their order is
+        ksort($dsninfo);
+        $connectionMapKey = crc32(serialize($dsninfo + array('no_assoc_lower' => ($flags & Creole::NO_ASSOC_LOWER) === Creole::NO_ASSOC_LOWER)));
+
+        // see if we already have a connection with these parameters cached
+        if(isset(self::$connectionMap[$connectionMapKey]))
+        {
+            // persistent connections will be used if a non-persistent one was requested and is available
+            // but a persistent connection will be created if a non-persistent one is present
+
+	    // TODO: impliment auto close of non persistent and replacing the
+	    // non persistent with the persistent object so as we dont have
+	    // both links open for no reason
+
+            if( isset(self::$connectionMap[$connectionMapKey][1]) ) { // is persistent
+                // a persistent connection with these parameters is already there,
+                // so we return it, no matter what was specified as persistent flag
+                return self::$connectionMap[$connectionMapKey][1];
+            } else {
+                // we don't have a persistent connection, and since the persistent
+                // flag wasn't set either, we just return the non-persistent connection
+                return self::$connectionMap[$connectionMapKey][0];
+            }
+            // if we're here, a non-persistent connection was already there, but
+            // the user wants a persistent one, so it will be created
+        }
+
         // support "catchall" drivers which will themselves handle the details of connecting
         // using the proper RDBMS driver.
         if (isset(self::$driverMap['*'])) {
@@ -180,8 +215,8 @@ class Creole {
             $sqle->setUserInfo($dsninfo);
             throw $sqle;        
         }
-        
-        return $obj;
+	$persistent = ($flags & Creole::PERSISTENT) === Creole::PERSISTENT;
+        return self::$connectionMap[$connectionMapKey][(int)$persistent] = $obj;
     }
 
     /**
@@ -303,3 +338,4 @@ class Creole {
     }
 
 }
+?>

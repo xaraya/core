@@ -157,3 +157,4 @@ class MSSQLResultSet extends ResultSetCommon implements ResultSet {
     }   
 
 }
+?>

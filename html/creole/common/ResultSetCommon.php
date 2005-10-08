@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: ResultSetCommon.php,v 1.6 2004/05/06 17:31:02 hlellelid Exp $
+ *  $Id: ResultSetCommon.php,v 1.8 2005/09/16 13:09:49 hlellelid Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -47,7 +47,7 @@
  * </code>
  * 
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.6 $
+ * @version   $Revision: 1.8 $
  * @package   creole.common
  */
 abstract class ResultSetCommon {          
@@ -71,7 +71,7 @@ abstract class ResultSetCommon {
     protected $result;
 
     /**
-     * The current cursor position (row number). First row is 0.
+     * The current cursor position (row number). First row is 1. Before first row is 0.
      * @var int
      */
     protected $cursorPos = 0;
@@ -91,7 +91,7 @@ abstract class ResultSetCommon {
     protected $ignoreAssocCase = false;
     
     /**
-     * @see ResultSet::isBeforeFirst()
+     * Constructor.
      */
     public function __construct(Connection $conn, $result, $fetchmode = null)
     {
@@ -144,7 +144,7 @@ abstract class ResultSetCommon {
     }        
     
     /**
-     * @see ResultSet::isBeforeFirst()
+     * @see ResultSet::setFetchmode()
      */
     public function setFetchmode($mode)
     {
@@ -152,7 +152,7 @@ abstract class ResultSetCommon {
     }
     
     /**
-     * @see ResultSet::isBeforeFirst()
+     * @see ResultSet::getFetchmode()
      */
     public function getFetchmode()
     {
@@ -160,7 +160,7 @@ abstract class ResultSetCommon {
     }                
 
     /**
-     * @see ResultSet::isBeforeFirst()
+     * @see ResultSet::previous()
      */
     public function previous()
     {
@@ -195,10 +195,8 @@ abstract class ResultSetCommon {
         return $ok;
     }
 
-
-
     /**
-     * @see ResultSet::isBeforeFirst()
+     * @see ResultSet::absolute()
      */
     public function absolute($pos)
     {
@@ -214,10 +212,9 @@ abstract class ResultSetCommon {
         }        
         return $ok;
     }
-
     
     /**
-     * @see ResultSet::isBeforeFirst()
+     * @see ResultSet::first()
      */
     public function first()
     {
@@ -226,7 +223,7 @@ abstract class ResultSetCommon {
     }
 
     /**
-     * @see ResultSet::isBeforeFirst()
+     * @see ResultSet::last()
      */
     public function last()
     {
@@ -237,25 +234,23 @@ abstract class ResultSetCommon {
     }
     
     /**
-     * @see ResultSet::isBeforeFirst()
+     * @see ResultSet::beforeFirst()
      */
     public function beforeFirst()
     {
         $this->cursorPos = 0;
     }
 
-
     /**
-     * @see ResultSet::isBeforeFirst()
+     * @see ResultSet::afterLast()
      */
     public function afterLast()
     {
         $this->cursorPos = $this->getRecordCount() + 1;
     }
 
-
     /**
-     * @see ResultSet::isBeforeFirst()
+     * @see ResultSet::isAfterLast()
      */
     public function isAfterLast()
     {
@@ -355,7 +350,7 @@ abstract class ResultSetCommon {
         if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
         if ($this->fields[$idx] === null) { return null; }
         $ts = strtotime($this->fields[$idx]);        
-        if ($ts === -1) {
+        if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
             throw new SQLException("Unable to convert value at column " . $column . " to timestamp: " . $this->fields[$idx]);
         }
         if ($format === null) {
@@ -412,7 +407,7 @@ abstract class ResultSetCommon {
         
         $ts = strtotime($this->fields[$idx]);
         
-        if ($ts === -1) {
+        if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
             throw new SQLException("Unable to convert value at column " . (is_int($column) ? $column + 1 : $column) . " to timestamp: " . $this->fields[$idx]);
         }
         if ($format === null) {
@@ -435,7 +430,7 @@ abstract class ResultSetCommon {
         if ($this->fields[$idx] === null) { return null; }
         
         $ts = strtotime($this->fields[$idx]);
-        if ($ts === -1) {
+        if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
             throw new SQLException("Unable to convert value at column " . $column . " to timestamp: " . $this->fields[$idx]);
         }
         if ($format === null) {

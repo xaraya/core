@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: ODBCResultSetCommon.php,v 1.1 2004/07/27 23:08:30 hlellelid Exp $
+ *  $Id: ODBCResultSetCommon.php,v 1.2 2005/04/01 17:12:09 dlawson_mi Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -26,7 +26,7 @@ require_once 'creole/common/ResultSetCommon.php';
  * Base class for ODBC implementation of ResultSet.
  *
  * @author    Dave Lawson <dlawson@masterytech.com>
- * @version   $Revision: 1.1 $
+ * @version   $Revision: 1.2 $
  * @package   creole.drivers.odbc
  */
 abstract class ODBCResultSetCommon extends ResultSetCommon
@@ -70,15 +70,12 @@ abstract class ODBCResultSetCommon extends ResultSetCommon
      * This function exists to set offset after ResultSet is instantiated.
      * This function should be "protected" in Java sense: only available to classes in package.
      * THIS METHOD SHOULD NOT BE CALLED BY ANYTHING EXCEPTION DRIVER CLASSES.
-     * @param int $offset New offset.  If great than 0, then seek(0) will be called to move cursor.
+     * @param int $offset New offset.
      * @access protected
      */
     public function _setOffset($offset)
     {
         $this->offset = $offset;
-        if ($offset > 0) {
-            $this->seek(0);  // 0 becomes $offset by seek() method
-        }
     }
 
     /**
@@ -157,5 +154,35 @@ abstract class ODBCResultSetCommon extends ResultSetCommon
 
         return $data;
     }
+    
+    /**
+     * Converts row fields to names if FETCHMODE_ASSOC is set.
+     *
+     * @param array& Row to convert.
+     *
+     * @return array& Converted row.
+     */
+    protected function checkFetchMode(&$row)
+    {
+        if ($this->fetchmode == ResultSet::FETCHMODE_ASSOC)
+        {
+            $newrow = array();
+            
+            for ($i = 0, $n = count($row); $i < $n; $i++)
+            {
+                $colname = @odbc_field_name($this->result->getHandle(), $i+1);
+                
+                if (!$this->ignoreAssocCase)
+                    $colname = strtolower($colname);
+                    
+                $newrow[$colname] = $row[$i];
+            }
+            
+            $row =& $newrow;
+        }
+        
+        return $row;
+    }
 
 }
+?>
