@@ -96,3 +96,4 @@ class MSSQLPreparedStatement extends PreparedStatementCommon implements Prepared
         return $this->resultSet;
     }
 }
+?>

@@ -283,3 +283,4 @@ class MySQLConnection extends ConnectionCommon implements Connection {
     }
     
 }
+?>

@@ -10,7 +10,7 @@ require_once 'creole/IdGenerator.php';
  *       and use {@link ODBCAdapter::getIdGenerator()} to use it.
  *
  * @author    Dave Lawson <dlawson@masterytech.com>
- * @version   $Revision: 1.1 $
+ * @version   $Revision: 1.2 $
  * @package   creole.drivers.odbc
  */
 class ODBCIdGenerator implements IdGenerator {
@@ -75,9 +75,9 @@ class ODBCIdGenerator implements IdGenerator {
             }
             catch (SQLException $e)
             {
-                $odbcerr = odbc_error($this->conn->getResource());
+                //$odbcerr = odbc_error($this->conn->getResource());
 
-                if ($triedcreate || ($odbcerr != 'S0000' && $odbcerr != 'S0002'))
+                if ($triedcreate)// || ($odbcerr != 'S0000' && $odbcerr != 'S0002'))
                     throw $e;
 
                 $this->drop($seqname, true);
@@ -116,3 +116,4 @@ class ODBCIdGenerator implements IdGenerator {
     }
 
 }
+?>

@@ -237,3 +237,4 @@ class ColumnInfo {
     }
     // END XARAYA modification
 }
+?>

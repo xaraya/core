@@ -32,3 +32,4 @@ require_once 'creole/common/StatementCommon.php';
 class PgSQLStatement extends StatementCommon implements Statement {
     
 }
+?>

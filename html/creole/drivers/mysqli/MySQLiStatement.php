@@ -31,3 +31,4 @@ require_once 'creole/common/StatementCommon.php';
  */
 class MySQLiStatement extends StatementCommon implements Statement {
 }
+?>

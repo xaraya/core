@@ -187,3 +187,4 @@ class ODBCTypes extends CreoleTypes {
     }
 
 }
+?>

@@ -62,3 +62,4 @@ class SQLiteDatabaseInfo extends DatabaseInfo {
     }
         
 }
+?>

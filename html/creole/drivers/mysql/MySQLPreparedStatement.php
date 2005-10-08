@@ -42,3 +42,4 @@ class MySQLPreparedStatement extends PreparedStatementCommon implements Prepared
     }    
     
 }
+?>

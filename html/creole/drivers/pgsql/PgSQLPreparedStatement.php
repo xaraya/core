@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: PgSQLPreparedStatement.php,v 1.13 2004/12/04 05:26:01 gamr Exp $
+ *  $Id: PgSQLPreparedStatement.php,v 1.14 2005/04/16 18:55:28 hlellelid Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -26,7 +26,7 @@ require_once 'creole/common/PreparedStatementCommon.php';
  * PgSQL subclass for prepared statements.
  * 
  * @author Hans Lellelid <hans@xmpl.org>
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  * @package creole.drivers.pgsql
  */
 class PgSQLPreparedStatement extends PreparedStatementCommon implements PreparedStatement {
@@ -225,4 +225,40 @@ class PgSQLPreparedStatement extends PreparedStatementCommon implements Prepared
         }    
         
     }
+	
+	/**
+     * @param int $paramIndex
+     * @param string $value
+     * @return void
+     */
+    function setTime($paramIndex, $value) 
+    {        
+        if ($value === null) {
+            $this->setNull($paramIndex);
+        } else {
+            if ( is_numeric ( $value ) ) {
+	    	$value = date ( "H:i:s O", $value );
+	    } elseif ( is_object ( $value ) ) {
+	    	$value = date ( "H:i:s O", $value->getTime ( ) );
+	    }
+            $this->boundInVars [ $paramIndex ] = "'" . $this->escape ( $value ) . "'";
+        }
+    }
+    
+    /**
+     * @param int $paramIndex
+     * @param string $value
+     * @return void
+     */
+    function setTimestamp($paramIndex, $value) 
+    {        
+        if ($value === null) {
+            $this->setNull($paramIndex);
+        } else {
+       	    if (is_numeric($value)) $value = date('Y-m-d H:i:s O', $value);
+       	    elseif (is_object($value)) $value = date("Y-m-d H:i:s O", $value->getTime());
+            $this->boundInVars[$paramIndex] = "'".$this->escape($value)."'";
+        }
+    }
 }
+?>

@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: PgSQLTableInfo.php,v 1.27 2005/03/09 19:15:47 hlellelid Exp $
+ *  $Id: PgSQLTableInfo.php,v 1.30 2005/04/21 14:48:44 hlellelid Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,139 +34,241 @@ require_once 'creole/metadata/TableInfo.php';
  * @todo -c Eventually move to supporting only Postgres >= 7.4, which has the information_schema
  *
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.27 $
+ * @version   $Revision: 1.30 $
  * @package   creole.drivers.pgsql.metadata
  */
 class PgSQLTableInfo extends TableInfo {
+	
+    /**
+     * Database Version.
+     * @var String
+     */
+    private $version;
+	
+    /**
+     * Table OID
+     * @var Integer
+     */
+    private $oid;
+
+    /**
+     * @param string $table The table name.
+     * @param string $database The database name.
+     * @param resource $dblink The db connection resource.
+     */
+    function __construct(DatabaseInfo $database, $name, $version, $intOID) {
+        parent::__construct ($database, $name);
+        $this->version = $version;
+        $this->oid = $intOID;
+    } // function __construct(DatabaseInfo $database, $name) {
 
     /** Load the columns for this table */
-    protected function initColumns() {
+    protected function initColumns () {
+    	// Include dependencies
+    	include_once ('creole/metadata/ColumnInfo.php');
+    	include_once ('creole/drivers/pgsql/PgSQLTypes.php');
 
-        include_once 'creole/metadata/ColumnInfo.php';
-        include_once 'creole/drivers/pgsql/PgSQLTypes.php';
-
-        // Get any default values for columns
-        $result = pg_query($this->dblink, "SELECT d.adnum as num, d.adsrc as def from pg_attrdef d, pg_class c where d.adrelid=c.oid and c.relname='".$this->name."' order by d.adnum");
-
-        if (!$result) {
-            throw new SQLException("Could not get defaults for columns in table: " . $this->name, pg_last_error($this->dblink));
-        }
-
-        $defaults = array();
-        while($row = pg_fetch_assoc($result)) {
-            // [HL] for now I am going to not add default
-            // values that are nextval(...) sequence values.
-            // We need to resolve on a larger level whether these should
-            // be returned.  Maybe instead indicating that these columns are
-            // sequences would be appropriate...
-            if (!preg_match('/^nextval\(/', $row['def'])) {
-                $defaults[ $row['num'] ] = $row['def'];
-            }
-        }
-
-        // Get the columns, types, etc.
-        // based on SQL from ADOdb
-        $result = pg_query($this->dblink, "SELECT    a.attname,
-                                    t.typname,
-                                    a.attlen,
-                                    a.atttypmod,
-                                    a.attnotnull,
-                                    a.atthasdef,
-                                    a.attnum,
-                                    CAST(
-                                         CASE WHEN t.typtype = 'd' THEN
-                                           CASE WHEN t.typbasetype IN (21, 23, 20) THEN 0
-                                                WHEN t.typbasetype IN (1700) THEN (t.typtypmod - 4) & 65535
-                                                ELSE null END
-                                         ELSE
-                                           CASE WHEN a.atttypid IN (21, 23, 20) THEN 0
-                                                WHEN a.atttypid IN (1700) THEN (a.atttypmod - 4) & 65535
-                                                ELSE null END
-                                         END
-                                         AS int) AS numeric_scale
-                            FROM     pg_class c,
-                                    pg_attribute a,
-                                    pg_type t
-                            WHERE    relkind = 'r' AND
-                                    c.relname='".$this->name."' AND
-                                    a.attnum > 0 AND
-                                    a.atttypid = t.oid AND
-                                    a.attrelid = c.oid
-                            ORDER BY a.attnum");
+    	// Get the columns, types, etc.
+    	// Based on code from pgAdmin3 (http://www.pgadmin.org/)
+    	$result = pg_query ($this->dblink, sprintf ("SELECT 
+    								att.attname,
+    								att.atttypmod,
+    								att.atthasdef,
+    								att.attnotnull,
+    								def.adsrc, 
+    								CASE WHEN att.attndims > 0 THEN 1 ELSE 0 END AS isarray, 
+    								CASE 
+    									WHEN ty.typname = 'bpchar' 
+    										THEN 'char' 
+    									WHEN ty.typname = '_bpchar' 
+	    									THEN '_char' 
+    									ELSE 
+	    									ty.typname 
+    								END AS typname,
+    								ty.typtype
+								FROM pg_attribute att
+									JOIN pg_type ty ON ty.oid=att.atttypid
+									LEFT OUTER JOIN pg_attrdef def ON adrelid=att.attrelid AND adnum=att.attnum
+								WHERE att.attrelid = %d AND att.attnum > 0
+									AND att.attisdropped IS FALSE
+								ORDER BY att.attnum", $this->oid));
 
         if (!$result) {
             throw new SQLException("Could not list fields for table: " . $this->name, pg_last_error($this->dblink));
         }
-
         while($row = pg_fetch_assoc($result)) {
+        	// Check to ensure that this column isn't an array data type
+        	if (((int) $row['isarray']) === 1)
+        	{
+        		throw new SQLException (sprintf ("Array datatypes are not currently supported [%s.%s]", $this->name, $row['attname']));
+        	} // if (((int) $row['isarray']) === 1)
             $name = $row['attname'];
-            $type = $row['typname'];
-            $size = $row['attlen'];
-            $scale = $row['numeric_scale'];
-            if ($size <= 0) {
-                // maxlen for varchar is 4 larger than actual max length
-                $size = $row['atttypmod'] - 4;
-                if ($size <= 0) {
-                    $size = null;
-                }
-            }
+            // If they type is a domain, Process it
+            if (strtolower ($row['typtype']) == 'd')
+            {
+            	$arrDomain = $this->processDomain ($row['typname']);
+            	$type = $arrDomain['type'];
+            	$size = $arrDomain['length'];
+            	$scale = $arrDomain['precision'];
+            	$boolHasDefault = (strlen (trim ($row['atthasdef'])) > 0) ? $row['atthasdef'] : $arrDomain['hasdefault'];
+            	$default = (strlen (trim ($row['adsrc'])) > 0) ? $row['adsrc'] : $arrDomain['default'];
+            	$is_nullable = (strlen (trim ($row['attnotnull'])) > 0) ? $row['attnotnull'] : $arrDomain['notnull'];
+            	$is_nullable = (($is_nullable == 't') ? false : true);
+            } // if (strtolower ($row['typtype']) == 'd')
+            else
+            {
+	            $type = $row['typname'];
+	            $arrLengthPrecision = $this->processLengthPrecision ($row['atttypmod'], $type);
+	            $size = $arrLengthPrecision['length'];
+	            $scale = $arrLengthPrecision['precision'];
+	            $boolHasDefault = $row['atthasdef'];
+	            $default = $row['adsrc'];
+	            $is_nullable = (($row['attnotnull'] == 't') ? false : true);
+            } // else (strtolower ($row['typtype']) == 'd')
 
-            $is_nullable = ($row['attnotnull'] == 't' ? true : false);
-            $default = ($row['atthasdef'] == 't' && isset( $defaults[ $row['attnum'] ]) ? $defaults[ $row['attnum'] ] : null);
-            $this->columns[$name] = new ColumnInfo($this, $name, PgSQLTypes::getType($type), $type, $size, $scale, $is_nullable, $default);
+            $autoincrement = null;
+                       
+            // if column has a default
+            if (($boolHasDefault == 't') && (strlen (trim ($default)) > 0))
+            {
+	            if (!preg_match('/^nextval\(/', $default))
+	            {
+	            	$strDefault= preg_replace ('/::[\W\D]*/', '', $default);
+	            	$default = str_replace ("'", '', $strDefault);
+	            } // if (!preg_match('/^nextval\(/', $row['atthasdef']))
+	            else
+	            {
+	            	$autoincrement = true;
+	            	$default = null;
+	            } // else
+            } // if (($boolHasDefault == 't') && (strlen (trim ($default)) > 0))
+            else
+            {
+            	$default = null;
+            } // else (($boolHasDefault == 't') && (strlen (trim ($default)) > 0))
+
+            $this->columns[$name] = new ColumnInfo($this, $name, PgSQLTypes::getType($type), $type, $size, $scale, $is_nullable, $default, $autoincrement);
         }
 
         $this->colsLoaded = true;
-    }
+    } // protected function initColumns ()
+
+    private function processLengthPrecision ($intTypmod, $strName)
+    {
+    	// Define the return array
+    	$arrRetVal = array ('length'=>null, 'precision'=>null);
+
+    	// Some datatypes don't have a Typmod
+    	if ($intTypmod == -1)
+    	{
+    		return $arrRetVal;
+    	} // if ($intTypmod == -1)
+
+    	// Numeric Datatype?
+    	if ($strName == PgSQLTypes::getNativeType (CreoleTypes::NUMERIC))
+    	{
+    		$intLen = ($intTypmod - 4) >> 16;
+    		$intPrec = ($intTypmod - 4) & 0xffff;
+    		$intLen = sprintf ("%ld", $intLen);
+    		if ($intPrec)
+    		{
+    			$intPrec = sprintf ("%ld", $intPrec);
+    		} // if ($intPrec)
+    		$arrRetVal['length'] = $intLen;
+    		$arrRetVal['precision'] = $intPrec;
+    	} // if ($strName == PgSQLTypes::getNativeType (CreoleTypes::NUMERIC))
+    	elseif ($strName == PgSQLTypes::getNativeType (CreoleTypes::TIME) || $strName == 'timetz'
+    		|| $strName == PgSQLTypes::getNativeType (CreoleTypes::TIMESTAMP) || $strName == 'timestamptz'
+    		|| $strName == 'interval' || $strName == 'bit')
+    	{
+    		$arrRetVal['length'] = sprintf ("%ld", $intTypmod);
+    	} // elseif (TIME, TIMESTAMP, INTERVAL, BIT)
+    	else
+    	{
+    		$arrRetVal['length'] = sprintf ("%ld", ($intTypmod - 4));
+    	} // else
+    	return $arrRetVal;
+    } // private function processLengthPrecision ($intTypmod, $strName)
+
+    private function processDomain ($strDomain)
+    {
+    	if (strlen (trim ($strDomain)) < 1)
+    	{
+    		throw new SQLException ("Invalid domain name [" . $strDomain . "]");
+    	} // if (strlen (trim ($strDomain)) < 1)
+    	$result = pg_query ($this->dblink, sprintf ("SELECT
+														d.typname as domname,
+														b.typname as basetype,
+														d.typlen,
+														d.typtypmod,
+														d.typnotnull,
+														d.typdefault
+													FROM pg_type d
+														INNER JOIN pg_type b ON b.oid = CASE WHEN d.typndims > 0 then d.typelem ELSE d.typbasetype END
+													WHERE
+														d.typtype = 'd'
+														AND d.typname = '%s'
+													ORDER BY d.typname", $strDomain));
+
+        if (!$result) {
+            throw new SQLException("Query for domain [" . $strDomain . "] failed.", pg_last_error($this->dblink));
+        }
+
+        $row = pg_fetch_assoc ($result);
+        if (!$row)
+        {
+        	throw new SQLException ("Domain [" . $strDomain . "] not found.");
+        } // if (!$row)
+        $arrDomain = array ();
+        $arrDomain['type'] = $row['basetype'];
+	    $arrLengthPrecision = $this->processLengthPrecision ($row['typtypmod'], $row['basetype']);
+	    $arrDomain['length'] = $arrLengthPrecision['length'];
+	    $arrDomain['precision'] = $arrLengthPrecision['precision'];
+	    $arrDomain['notnull'] = $row['typnotnull'];
+	    $arrDomain['default'] = $row['typdefault'];
+	    $arrDomain['hasdefault'] = (strlen (trim ($row['typdefault'])) > 0) ? 't' : 'f';
+
+	    pg_free_result ($result);
+	    return $arrDomain;
+    } // private function processDomain ($strDomain)
 
     /** Load foreign keys for this table. */
     protected function initForeignKeys()
     {
         include_once 'creole/metadata/ForeignKeyInfo.php';
 
-        // condef is for reference.
-        $result = pg_query($this->dblink, "SELECT c.relname,
-                        r.conname,
-                        c1.relname AS tablelocal,
-                        a1.attname AS collocal,
-                        c2.relname AS tableforeign,
-                        a2.attname AS colforeign,
-                        r.confupdtype AS onupdate,
-                        r.confdeltype AS ondelete,
-                        pg_catalog.pg_get_constraintdef(r.oid) as condef
-                  FROM  pg_catalog.pg_class c
-              LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-              LEFT JOIN pg_catalog.pg_constraint r ON r.conrelid = c.oid
-              LEFT JOIN pg_catalog.pg_attribute a1 ON a1.attrelid = r.conrelid
-              LEFT JOIN pg_catalog.pg_attribute a2 ON a2.attrelid = r.confrelid
-              LEFT JOIN pg_catalog.pg_class c1 ON c1.oid = r.conrelid
-              LEFT JOIN pg_catalog.pg_class c2 ON c2.oid = r.confrelid
-                  WHERE pg_catalog.pg_table_is_visible(c.oid)
-                    AND c.relname ~ '^".$this->name."$'
-                    AND  r.contype = 'f'
-                    AND a1.attnum > 0
-                    AND NOT a1.attisdropped
-                    AND a1.attnum = r.conkey[1]
-                    AND NOT a2.attisdropped
-                    AND a2.attnum = r.confkey[1]
-                    AND c1.relkind IN  ('r','')
-                    AND pg_catalog.pg_table_is_visible(c1.oid)
-                    AND c2.relkind IN  ('r','')
-                    AND pg_catalog.pg_table_is_visible(c2.oid)
-                    ORDER BY 2");
+        $result = pg_query ($this->dblink, sprintf ("SELECT
+						      conname,
+						      confupdtype,
+						      confdeltype,
+						      cl.relname as fktab,
+						      a2.attname as fkcol,
+						      cr.relname as reftab,
+						      a1.attname as refcol
+						FROM pg_constraint ct
+						     JOIN pg_class cl ON cl.oid=conrelid
+						     JOIN pg_class cr ON cr.oid=confrelid
+						     LEFT JOIN pg_catalog.pg_attribute a1 ON a1.attrelid = ct.confrelid
+						     LEFT JOIN pg_catalog.pg_attribute a2 ON a2.attrelid = ct.conrelid
+						WHERE
+						     contype='f'
+						     AND conrelid = %d
+						     AND a2.attnum = ct.conkey[1]
+						     AND a1.attnum = ct.confkey[1]
+						ORDER BY conname", $this->oid));
         if (!$result) {
             throw new SQLException("Could not list foreign keys for table: " . $this->name, pg_last_error($this->dblink));
         }
 
-        while($row = pg_fetch_row($result)) {
+        while($row = pg_fetch_assoc($result)) {
+            $name = $row['conname'];
+            $local_table = $row['fktab'];
+            $local_column = $row['fkcol'];
+            $foreign_table = $row['reftab'];
+            $foreign_column = $row['refcol'];
 
-            $name = $row[1];
-            $local_table = $row[2];
-            $local_column = $row[3];
-            $foreign_table = $row[4];
-            $foreign_column = $row[5];
-
-            switch ($row[6]) {
+            // On Update
+            switch ($row['confupdtype']) {
               case 'c':
                 $onupdate = ForeignKeyInfo::CASCADE; break;
               case 'd':
@@ -180,7 +282,8 @@ class PgSQLTableInfo extends TableInfo {
                 //NOACTION is the postgresql default
                 $onupdate = ForeignKeyInfo::NONE; break;
             }
-            switch ($row[7]) {
+            // On Delete
+            switch ($row['confdeltype']) {
               case 'c':
                 $ondelete = ForeignKeyInfo::CASCADE; break;
               case 'd':
@@ -205,7 +308,7 @@ class PgSQLTableInfo extends TableInfo {
             if (!isset($this->foreignKeys[$name])) {
                 $this->foreignKeys[$name] = new ForeignKeyInfo($name);
             }
-            $this->foreignKeys[$name]->addReference($localColumn, $foreignColumn, $onupdate, $ondelete);
+            $this->foreignKeys[$name]->addReference($localColumn, $foreignColumn, $ondelete, $onupdate);
         }
 
         $this->fksLoaded = true;
@@ -219,21 +322,15 @@ class PgSQLTableInfo extends TableInfo {
         // columns have to be loaded first
         if (!$this->colsLoaded) $this->initColumns();
 
-        // FIXME -- try this out!
-        // then figure out if we need to add any information
-        // to our index object to accommodate more complex backends
-
-        $result = pg_query($this->dblink, "SELECT c.relname as tablename, c.oid, c2.relname as indexname,
-
-                            i.indisprimary, i.indisunique, pg_catalog.pg_get_indexdef(i.indexrelid) FROM
-
-                            pg_catalog.pg_class c,
-
-                            pg_catalog.pg_class c2, pg_catalog.pg_index i WHERE c.oid = i.indrelid AND
-
-                            i.indexrelid = c2.oid AND c.relname = '".$this->name."' ORDER BY i.indisprimary DESC, i.indisunique DESC,
-
-                            c2.relname");
+		$result = pg_query ($this->dblink, sprintf ("SELECT
+													      DISTINCT ON(cls.relname)
+													      cls.relname as idxname,
+													      indkey,
+													      indisunique
+													FROM pg_index idx
+													     JOIN pg_class cls ON cls.oid=indexrelid
+													WHERE indrelid = %d AND NOT indisprimary
+													ORDER BY cls.relname", $this->oid));
 
 
         if (!$result) {
@@ -241,11 +338,25 @@ class PgSQLTableInfo extends TableInfo {
         }
 
         while($row = pg_fetch_assoc($result)) {
-            $name = $row["indexname"];
+            $name = $row["idxname"];
+            $unique = ($row["indisunique"] == 't') ? true : false;
             if (!isset($this->indexes[$name])) {
-                $this->indexes[$name] = new IndexInfo($name);
+                $this->indexes[$name] = new IndexInfo($name, $unique);
             }
-            $this->indexes[$name]->addColumn($this->columns[ $name ]);
+            $arrColumns = explode (' ', $row['indkey']);
+            foreach ($arrColumns as $intColNum)
+            {
+	            $result2 = pg_query ($this->dblink, sprintf ("SELECT a.attname
+															FROM pg_catalog.pg_class c JOIN pg_catalog.pg_attribute a ON a.attrelid = c.oid
+															WHERE c.oid = '%s' AND a.attnum = %d AND NOT a.attisdropped
+															ORDER BY a.attnum", $this->oid, $intColNum));
+				if (!$result2)
+				{
+            		throw new SQLException("Could not list indexes keys for table: " . $this->name, pg_last_error($this->dblink));
+				}
+				$row2 = pg_fetch_assoc($result2);
+	            $this->indexes[$name]->addColumn($this->columns[ $row2['attname'] ]);
+			} // foreach ($arrColumns as $intColNum)
         }
 
         $this->indexesLoaded = true;
@@ -261,15 +372,16 @@ class PgSQLTableInfo extends TableInfo {
         if (!$this->colsLoaded) $this->initColumns();
 
         // Primary Keys
-        $result = pg_query($this->dblink, "select ta.attname, ia.attnum
-                                            from pg_attribute ta, pg_attribute ia, pg_class c, pg_index i
-                                            where c.relname = '".$this->name."_pkey'
-                                                AND c.oid = i.indexrelid
-                                                AND ia.attrelid = i.indexrelid
-                                                AND ta.attrelid = i.indrelid
-                                                AND ta.attnum = i.indkey[ia.attnum-1]
-                                            ORDER BY ia.attnum");
-
+        
+        $result = pg_query($this->dblink, sprintf ("SELECT
+													      DISTINCT ON(cls.relname)
+													      cls.relname as idxname,
+													      indkey,
+													      indisunique
+													FROM pg_index idx
+													     JOIN pg_class cls ON cls.oid=indexrelid
+													WHERE indrelid = %s AND indisprimary
+													ORDER BY cls.relname", $this->oid));
         if (!$result) {
             throw new SQLException("Could not list primary keys for table: " . $this->name, pg_last_error($this->dblink));
         }
@@ -278,14 +390,28 @@ class PgSQLTableInfo extends TableInfo {
         // adding each column for that key.
 
         while($row = pg_fetch_assoc($result)) {
-            $name = $row["attname"];
-            if (!isset($this->primaryKey)) {
-                $this->primaryKey = new PrimaryKeyInfo($name);
-            }
-            $this->primaryKey->addColumn($this->columns[ $name ]);
+            $arrColumns = explode (' ', $row['indkey']);
+            foreach ($arrColumns as $intColNum)
+            {
+	            $result2 = pg_query ($this->dblink, sprintf ("SELECT a.attname
+															FROM pg_catalog.pg_class c JOIN pg_catalog.pg_attribute a ON a.attrelid = c.oid
+															WHERE c.oid = '%s' AND a.attnum = %d AND NOT a.attisdropped
+															ORDER BY a.attnum", $this->oid, $intColNum));
+				if (!$result2)
+				{
+            		throw new SQLException("Could not list indexes keys for table: " . $this->name, pg_last_error($this->dblink));
+				}
+				$row2 = pg_fetch_assoc($result2);
+				if (!isset($this->primaryKey)) {
+					$this->primaryKey = new PrimaryKeyInfo($row2['attname']);
+				}
+	            $this->primaryKey->addColumn($this->columns[ $row2['attname'] ]);
+			} // foreach ($arrColumns as $intColNum)
         }
-
         $this->pkLoaded = true;
     }
 
+    
+
 }
+?>

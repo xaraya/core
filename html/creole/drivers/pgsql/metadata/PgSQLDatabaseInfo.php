@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: PgSQLDatabaseInfo.php,v 1.8 2004/09/29 00:47:58 cryp2nite Exp $
+ *  $Id: PgSQLDatabaseInfo.php,v 1.9 2005/03/30 11:45:26 hlellelid Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,7 +25,7 @@ require_once 'creole/metadata/DatabaseInfo.php';
  * MySQL implementation of DatabaseInfo.
  *
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.8 $
+ * @version   $Revision: 1.9 $
  * @package   creole.drivers.pgsql.metadata
  */
 class PgSQLDatabaseInfo extends DatabaseInfo {
@@ -37,15 +37,39 @@ class PgSQLDatabaseInfo extends DatabaseInfo {
     protected function initTables()
     {
         include_once 'creole/drivers/pgsql/metadata/PgSQLTableInfo.php';
+        
+        // Get Database Version
+        $result = pg_exec ($this->dblink, "SELECT version() as ver");
+        
+        if (!$result)
+        {
+        	throw new SQLException ("Failed to select database version");
+        } // if (!$result)
+        $row = pg_fetch_assoc ($result, 0);
+        $arrVersion = sscanf ($row['ver'], '%*s %d.%d');
+        $version = sprintf ("%d.%d", $arrVersion[0], $arrVersion[1]);
+        // Clean up
+        $arrVersion = null;
+        $row = null;
+        pg_free_result ($result);
+        $result = null;
 
-        $result = pg_exec($this->dblink, "SELECT tablename FROM pg_tables WHERE schemaname NOT IN ('information_schema','pg_catalog') ORDER BY 1");
+        $result = pg_exec($this->dblink, "SELECT oid, relname FROM pg_class
+										WHERE relkind = 'r' AND relnamespace = (SELECT oid
+										FROM pg_namespace
+										WHERE
+										     nspname NOT IN ('information_schema','pg_catalog')
+										     AND nspname NOT LIKE 'pg_temp%'
+										     AND nspname NOT LIKE 'pg_toast%'
+										LIMIT 1)
+										ORDER BY relname");
 
         if (!$result) {
             throw new SQLException("Could not list tables", pg_last_error($this->dblink));
         }
 
-        while ($row = pg_fetch_row($result)) {
-            $this->tables[strtoupper($row[0])] = new PgSQLTableInfo($this, $row[0]);
+        while ($row = pg_fetch_assoc($result)) {
+            $this->tables[strtoupper($row['relname'])] = new PgSQLTableInfo($this, $row['relname'], $version, $row['oid']);
         }
     }
 
@@ -61,3 +85,5 @@ class PgSQLDatabaseInfo extends DatabaseInfo {
     }
 
 }
+
+?>

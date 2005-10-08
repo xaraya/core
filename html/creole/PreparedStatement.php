@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: PreparedStatement.php,v 1.20 2004/03/05 15:46:11 hlellelid Exp $
+ *  $Id: PreparedStatement.php,v 1.21 2005/03/29 16:56:09 gamr Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -44,7 +44,7 @@
  * methods defined in parent interface), we cannot extend the Statement interface.
  *
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.20 $
+ * @version   $Revision: 1.21 $
  * @package   creole
  */
 interface PreparedStatement {
@@ -143,7 +143,7 @@ interface PreparedStatement {
      * @return ResultSet
      * @throws SQLException if a database access error occurs.
      */
-    public function executeQuery($p1 = null, $fetchmode = null);
+    public function executeQuery();
     
     /**
      * Executes the SQL INSERT, UPDATE, or DELETE statement in this PreparedStatement object.
@@ -251,3 +251,4 @@ interface PreparedStatement {
     public function setTimestamp($paramIndex, $value);
             
 }
+?>
