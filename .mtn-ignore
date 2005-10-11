@@ -1,2 +1,5 @@
-html/var/config.system.php
+html\/var\/config\.system\.php$
 \._.*
+html\/var\/cache\/templates\/.*\.php$
+html\/var\/cache\/templates\/CACHEKEYS$
+html\/var\/logs\/log\.txt$
