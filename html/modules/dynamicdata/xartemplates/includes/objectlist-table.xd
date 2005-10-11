@@ -6,7 +6,7 @@
         </xar:mlstring>
     </h4>
     <!-- we don't use xar:data-form or xar:data-input here, because this is typically not an input form -->
-    <table class="xar-norm xar-norm-outline xar-fullwidth">
+    <table class="xar-fullwidth">
         <!-- Show the create new link only once, if at all -->
         <xar:if condition="!empty($newlink)">
             <tr>
@@ -22,7 +22,7 @@
             <xar:if condition="$item_no eq 0">
                 <tr>                        
                     <xar:foreach in="$properties" key="$name">
-                        <th class="xar-align-right xar-form-textlong">
+                        <th class="xar-form-textlong">
                             <a href="#$sorturl#=#$name#">
                                 <xar:data-label property="$properties[$name]" />
                             </a>
@@ -46,9 +46,9 @@
                     </td>
                 </xar:foreach>
             </tr>
-            <tr class="#$rowclass#">
+            <tr  class="#$rowclass#">
                 <xar:set name="colspan">count($properties)+2</xar:set>
-                <td class="xar-align-right" colspan="#$colspan#">
+                <td style="border-bottom: 1pt solid;" class="xar-align-right" colspan="#$colspan#">
                         <xar:foreach in="$links[$itemid]" value="$option">
                         <xar:if condition="!empty($option['olink'])">
                             #$option['ojoin']# 
