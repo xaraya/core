@@ -74,8 +74,6 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
        (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
        '>';
        */
-        // credit to jojodee for the array.  You can expect me to type this can you?
-        // <jojodee> no but you could do the capital city list for me :)
         $coptions = array();
         $coptions[] = array('id' =>'Please select', 'name' =>'Please select' );
         $coptions[] = array('id' =>'Afghanistan', 'name' =>'Afghanistan' );
@@ -89,7 +87,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'Argentina', 'name'=>'Argentina');
         $coptions[] = array('id' =>'Armenia', 'name'=>'Armenia');
         $coptions[] = array('id' =>'Aruba', 'name'=>'Aruba');
-        $coptions[] = array('id' =>'Australia', 'name'=>'Australia');
+        $coptions[] = array('id' =>'au', 'name'=>'Australia');
         $coptions[] = array('id' =>'Austria', 'name'=>'Austria');
         $coptions[] = array('id' =>'Azerbaijan', 'name'=>'Azerbaijan');
         $coptions[] = array('id' =>'Bahamas', 'name'=>'Bahamas');
@@ -112,13 +110,13 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'Burundi', 'name'=>'Burundi');
         $coptions[] = array('id' =>'Cambodia', 'name'=>'Cambodia');
         $coptions[] = array('id' =>'Cameroon', 'name'=>'Cameroon');
-        $coptions[] = array('id' =>'Canada', 'name'=>'Canada');
+        $coptions[] = array('id' =>'ca', 'name'=>'Canada');
         $coptions[] = array('id' =>'Cape Verde', 'name'=>'Cape Verde');
         $coptions[] = array('id' =>'Cayman Islands', 'name'=>'Cayman Islands');
         $coptions[] = array('id' =>'Central African Republic', 'name'=>'Central African Republic');
         $coptions[] = array('id' =>'Chad', 'name'=>'Chad');
         $coptions[] = array('id' =>'Chile', 'name'=>'Chile');
-        $coptions[] = array('id' =>'China', 'name'=>'China');
+        $coptions[] = array('id' =>'cn', 'name'=>'China');
         $coptions[] = array('id' =>'Colombia', 'name'=>'Colombia');
         $coptions[] = array('id' =>'Comoros', 'name'=>'Comoros');
         $coptions[] = array('id' =>'Congo', 'name'=>'Congo, Republic of');

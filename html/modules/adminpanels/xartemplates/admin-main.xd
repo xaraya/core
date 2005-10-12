@@ -13,7 +13,8 @@
         <xar:mlstring>What is it?</xar:mlstring>
     </h3>
 
-    <p><em><xar:mlstring>Adminpanels is a Xaraya Core Module responsible for the display of the Administration Menu.</em></xar:mlstring>
+    <p><em><xar:mlstring>Adminpanels is a Xaraya Core Module responsible for the display of the 
+Administration Menu.</xar:mlstring></em>
         <xar:mlstring>It is currently responsible for:</xar:mlstring>
     </p>
 

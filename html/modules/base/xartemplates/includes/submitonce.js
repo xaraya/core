@@ -15,4 +15,5 @@ function submitonce(theform) {
                 tempobj.disabled=true;
             }
         }
+    }
 }

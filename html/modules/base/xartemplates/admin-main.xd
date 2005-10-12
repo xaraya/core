@@ -84,7 +84,7 @@
          </p>
          <p>
           <xar:mlstring>feedParser was created due to the lack of a good, flexible, class-based RSS feed parser for PHP. It has been built as a class, and currently handles RSS 0.91, RSS 0.92, RSS 0.93, RSS 1.0, and RSS 2.0 feeds. For channels it grabs the title, description, link, and creator. For items it grabs the title, description, link, and date. It also provides a form of the date converted into the local timezone to facilitate chronological sorting of items. The dates are provided in UNIX timestamp format for easy manipulation by other PHP functions. </xar:mlstring>
-         </p>
+         </p></li>
          <li><xar:mlstring>Curl Class</xar:mlstring></li>
         <li><xar:mlstring>XML Parser Class</xar:mlstring></li>
 
