@@ -30,6 +30,14 @@
 --
 --
 
+
+--
+-- Line endings, a never ending story. Anyways, we want both the internal
+-- representation and the external to have CR only
+function get_linesep_conv(filename)
+   return {"CR","CR"}
+end
+
 --
 -- Return my pass when i use my id
 -- This is probably the most important hook to have defined
