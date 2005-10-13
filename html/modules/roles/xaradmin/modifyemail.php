@@ -59,7 +59,7 @@ function roles_admin_modifyemail($args)
             if (xarModIsAvailable('dynamicdata')) {
                 // get the Dynamic Object defined for this module (and itemtype, if relevant)
                 // FIXME: 'Only variables should be assigned by reference' notice in php4.4
-                @$object = &xarModAPIFunc('dynamicdata', 'user', 'getobject',
+                @$object = xarModAPIFunc('dynamicdata', 'user', 'getobject',
                     array('module' => 'roles'));
                 if (isset($object) && !empty($object->objectid)) {
                     // get the Dynamic Properties of this object
