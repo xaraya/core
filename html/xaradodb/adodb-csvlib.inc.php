@@ -16,8 +16,8 @@ $ADODB_INCLUDED_CSV = 1;
   
   Latest version is available at http://adodb.sourceforge.net
   
-  Library for CSV serialization. This is used by the csv/proxy driver and is the
-  CacheExecute() serialization format.
+  Library for CSV serialization. This is used by the csv/proxy driver and is the 
+  CacheExecute() serialization format. 
   
   ==== NOTE ====
   Format documented at http://php.weblogs.com/ADODB_CSV
@@ -92,11 +92,12 @@ $ADODB_INCLUDED_CSV = 1;
 */
 	function &csv2rs($url,&$err,$timeout=0, $rsclass='ADORecordSet_array')
 	{
+		$false = false;
 		$err = false;
 		$fp = @fopen($url,'rb');
 		if (!$fp) {
 			$err = $url.' file/URL not found';
-			return false;
+			return $false;
 		}
 		flock($fp, LOCK_SH);
 		$arr = array();
@@ -107,7 +108,7 @@ $ADODB_INCLUDED_CSV = 1;
 			if (strncmp($meta[0],'****',4) === 0) {
 				$err = trim(substr($meta[0],4,1024));
 				fclose($fp);
-				return false;
+				return $false;
 			}
 			// check for meta data
 			// $meta[0] is -1 means return an empty recordset
@@ -119,13 +120,13 @@ $ADODB_INCLUDED_CSV = 1;
 					if (sizeof($meta) < 5) {
 						$err = "Corrupt first line for format -1";
 						fclose($fp);
-						return false;
+						return $false;
 					}
 					fclose($fp);
 					
 					if ($timeout > 0) {
 						$err = " Illegal Timeout $timeout ";
-						return false;
+						return $false;
 					}
 					
 					$rs = new $rsclass($val=true);
@@ -156,27 +157,27 @@ $ADODB_INCLUDED_CSV = 1;
 								if ((rand() & 31) == 0) {
 									fclose($fp);
 									$err = "Timeout 3";
-									return false;
+									return $false;
 								}
 								break;
 							case 2: 
 								if ((rand() & 15) == 0) {
 									fclose($fp);
 									$err = "Timeout 2";
-									return false;
+									return $false;
 								}
 								break;
 							case 1:
 								if ((rand() & 3) == 0) {
 									fclose($fp);
 									$err = "Timeout 1";
-									return false;
+									return $false;
 								}
 								break;
 							default: 
 								fclose($fp);
 								$err = "Timeout 0";
-								return false;
+								return $false;
 							} // switch
 							
 						} // if check flush cache
@@ -210,7 +211,7 @@ $ADODB_INCLUDED_CSV = 1;
 				if (!$meta) {
 					fclose($fp);
 					$err = "Unexpected EOF 1";
-					return false;
+					return $false;
 				}
 			}
 
@@ -232,7 +233,7 @@ $ADODB_INCLUDED_CSV = 1;
 		} else {
 			fclose($fp);
 			$err = "Recordset had unexpected EOF 2";
-			return false;
+			return $false;
 		}
 		
 		// slurp in the data
@@ -249,7 +250,7 @@ $ADODB_INCLUDED_CSV = 1;
 		if (!is_array($arr)) {
 			$err = "Recordset had unexpected EOF (in serialized recordset)";
 			if (get_magic_quotes_runtime()) $err .= ". Magic Quotes Runtime should be disabled!";
-			return false;
+			return $false;
 		}
 		$rs = new $rsclass();
 		$rs->timeCreated = $ttl;

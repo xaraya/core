@@ -131,7 +131,10 @@ class ADODB_oci8 extends ADOConnection {
 			$rs->MoveNext();
 		}
 		$rs->Close();
-		return (empty($retarr)) ? $false : $retarr;
+		if (empty($retarr))
+			return  $false;
+		else 
+			return $retarr;
 	}
 	
 	function Time()
@@ -886,7 +889,6 @@ NATSOFT.DOMAIN =
 	*/ 
 	function _query($sql,$inputarr)
 	{
-		
 		if (is_array($sql)) { // is prepared sql
 			$stmt = $sql[1];
 			

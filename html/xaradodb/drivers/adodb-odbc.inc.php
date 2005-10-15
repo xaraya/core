@@ -473,7 +473,8 @@ See http://msdn.microsoft.com/library/default.asp?url=/library/en-us/odbc/htm/od
 		}
 		$rs->Close(); //-- crashes 4.03pl1 -- why?
 		
-		return empty($retarr) ? $false : $retarr;
+		if (empty($retarr)) $retarr = false;
+		return $retarr;
 	}
 	
 	function Prepare($sql)
@@ -711,7 +712,7 @@ class ADORecordSet_odbc extends ADORecordSet {
 	
 	function _fetch()
 	{
-		
+
 		if ($this->_has_stupid_odbc_fetch_api_change)
 			$rez = @odbc_fetch_into($this->_queryID,$this->fields,$row);
 		else {
@@ -734,5 +735,4 @@ class ADORecordSet_odbc extends ADORecordSet {
 	}
 
 }
-
 ?>

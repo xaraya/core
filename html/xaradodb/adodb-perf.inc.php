@@ -86,18 +86,15 @@ global $HTTP_SERVER_VARS;
 			if (is_array(reset($inputarr))) $params = 'Array sizeof='.sizeof($inputarr);
 			else {
 				$params = '';
-				// XARAYA MODIFICATION - START
+				
 				// Quote string parameters so we can see them in the
 				// performance stats. This helps spot disabled indexes.
 				$xar_params = $inputarr;
 				foreach ($xar_params as $xar_param_key => $xar_param) {
-					if (gettype($xar_param) == 'string') {
-						$xar_params[$xar_param_key] = '"' . $xar_param . '"';
-					}
+					if (gettype($xar_param) == 'string')
+					$xar_params[$xar_param_key] = '"' . $xar_param . '"';
 				}
 				$params = implode(', ', $xar_params);
-				//$params = implode(', ',$inputarr);
-				// XARAYA MODIFICATION - END
 				if (strlen($params) >= 3000) $params = substr($params, 0, 3000);
 			}
 		} else {

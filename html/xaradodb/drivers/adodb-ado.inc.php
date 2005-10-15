@@ -334,7 +334,7 @@ class ADORecordSet_ado extends ADORecordSet {
 
 
 	// returns the field object
-	function FetchField($fieldOffset = -1) {
+	function &FetchField($fieldOffset = -1) {
 		$off=$fieldOffset+1; // offsets begin at 1
 		
 		$o= new ADOFieldObject();
@@ -344,8 +344,7 @@ class ADORecordSet_ado extends ADORecordSet {
 		$t = $f->Type;
 		$o->type = $this->MetaType($t);
 		$o->max_length = $f->DefinedSize;
-		$o->ado_type = $t;
-		
+		$o->ado_type = $t;	
 
 		//print "off=$off name=$o->name type=$o->type len=$o->max_length<br>";
 		return $o;

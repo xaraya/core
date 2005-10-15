@@ -151,11 +151,19 @@ class ADORecordset_oci8po extends ADORecordset_oci8 {
 	/* Optimize SelectLimit() by using OCIFetch() instead of OCIFetchInto() */
 	function &GetArrayLimit($nrows,$offset=-1) 
 	{
-		if ($offset <= 0) return $this->GetArray($nrows);
+		if ($offset <= 0) {
+			$arr = $this->GetArray($nrows);
+			return $arr;
+		}
 		for ($i=1; $i < $offset; $i++) 
-			if (!@OCIFetch($this->_queryID)) return array();
-			
-		if (!@OCIfetchinto($this->_queryID,$this->fields,$this->fetchMode)) return array();
+			if (!@OCIFetch($this->_queryID)) {
+				$arr = array();
+				return $arr;
+			}
+		if (!@OCIfetchinto($this->_queryID,$this->fields,$this->fetchMode)) {
+			$arr = array();
+			return $arr;
+		}
 		if ($this->fetchMode & OCI_ASSOC) $this->_updatefields();
 		$results = array();
 		$cnt = 0;

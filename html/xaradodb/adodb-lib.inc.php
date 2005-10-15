@@ -81,7 +81,6 @@ function _adodb_replace(&$zthis, $table, $fieldArray, $keyCol, $autoQuote, $has_
 					$cnt = $zthis->GetOne("select count(*) from $table where $where");
 					if ($cnt > 0) return 1; // record already exists
 				} else {
-				
 					if (($zthis->Affected_Rows()>0)) return 1;
 				}
 			} else
@@ -539,7 +538,7 @@ static $cacheCols;
 		//because we have to call MetaType.
 		//php can't do a $rsclass::MetaType()
 		$rsclass = $zthis->rsPrefix.$zthis->databaseType;
-		$recordSet =& new $rsclass(-1,$zthis->fetchMode);
+		$recordSet = new $rsclass(-1,$zthis->fetchMode);
 		$recordSet->connection = &$zthis;
 		
 		if (is_string($cacheRS) && $cacheRS == $rs) {
