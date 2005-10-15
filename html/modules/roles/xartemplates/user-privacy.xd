@@ -78,7 +78,7 @@
     <xar:set name="curnum">++$curnum</xar:set>
     <h3 id="account">#$curnum#.&nbsp;<xar:mlstring>Editing or Deleting Your Account Information</xar:mlstring></h3>
         <p><xar:mlstring>We provide you with the ability to edit the information in your user account information that you provided to us in registration by using </xar:mlstring>
-        <a href="&xar-modurl-roles-user-main;"><xar:mlstring>your personal page configuration area</xar:mlstring></a>. <xar:mlstring>You may request deletion of your user account by contacting</xar:mlstring>&nbsp;<a href="mailto:#$contmail#">our webmaster</a>.</p>
+        <a href="&xar-modurl-roles-user-main;"><xar:mlstring>your personal page configuration area</xar:mlstring></a>. <xar:mlstring>You may request deletion of your user account by contacting</xar:mlstring>&nbsp;<a href="mailto:#$contmail#"><xar:mlstring>our webmaster</xar:mlstring></a>.</p>
         <!-- **NOTE: Note the following may be suggested for your jurisdiction and there is no harm in including it - begin -->
         <p><xar:mlstring>Content or other data that you may have provided to us and that is not contained within your user account, such as posts that may appear within our forums, may continue to remain on our site at our discretion even though your user account is deleted.</xar:mlstring></p>
         <p><xar:mlstring>We take your right to privacy seriously and want you to feel comfortable using our web site. This Privacy Policy deals with personally identifiable information (referred to as "Data" below) that may be collected by us on our site. This Policy does not apply to other entities that we do not own or control or persons that are not our employees, agents or within our control.</xar:mlstring>
@@ -99,7 +99,7 @@
     <xar:set name="curnum">++$curnum</xar:set>
     <h3 id="contact">#$curnum#.&nbsp;
         <xar:mlstring>Contact Information</xar:mlstring></h3>
-        <p><xar:mlstring>If you have any questions about this Policy or our web site, please feel free to contact</xar:mlstring> <a href="mailto:#$contmail#">our Webmaster.</a></p>
+        <p><xar:mlstring>If you have any questions about this Policy or our web site, please feel free to contact</xar:mlstring> <a href="mailto:#$contmail#"><xar:mlstring>our Webmaster</xar:mlstring></a>.</p>
 
     <xar:else />
         <p><xar:mlstring>Privay Policy Not Active</xar:mlstring></p>

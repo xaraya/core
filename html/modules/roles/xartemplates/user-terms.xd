@@ -22,6 +22,7 @@
 <xar:set name="a19"><xar:mlstring>nineteen</xar:mlstring></xar:set>
 <xar:set name="a20"><xar:mlstring>twenty</xar:mlstring></xar:set>
 <xar:set name="a21"><xar:mlstring>twenty-one</xar:mlstring></xar:set>
+<xar:set name="tou"><xar:mlstring>Terms of Use</xar:mlstring></xar:set>
 <xar:set name="minagewords">array($a0,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$a11,$a12,$a13,$a14,$a15,$a16,$a17,$a18,$a19,$a20,$a21)</xar:set>
 <xar:set name="curnum">0</xar:set>
 <xar:set name="contmail">xarModGetVar('mail','adminmail',1)</xar:set>
@@ -33,11 +34,11 @@
 <xar:if condition="xarModGetVar('roles', 'showterms')">
     <xar:set name="curnum">++$curnum</xar:set>
     <h3 id="accept">#$curnum#.&nbsp;<xar:mlstring>Acceptance of Terms of Use and Amendments</xar:mlstring></h3>
-    <p><xar:mlstring>Each time you use or cause access to this web site, you agree to be bound by these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;">
-        <xar:mlstring>Terms of Use</xar:mlstring></a>, <xar:mlstring>and as amended from time to time with or without notice to you. 
-        In addition, if you are using a particular service on or through this web site, you will be subject to any rules or guidelines applicable to those services and they shall be incorporated by reference into these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a>. 
-        <xar:if condition="xarModGetVar('roles', 'showprivacy')">        
-            <xar:mlstring>Please see our</xar:mlstring> <a href="&xar-modurl-roles-user-privacy;"><xar:mlstring>Privacy Policy</xar:mlstring></a>, <xar:mlstring>which is incorporated into these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> by reference.
+    <p> <xar:mlstring>Each time you use or cause access to this web site, you agree to be bound by these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;">
+        <xar:mlstring>Terms of Use</xar:mlstring></a>, <xar:mlstring>and as amended from time to time with or without notice to you.
+        In addition, if you are using a particular service on or through this web site, you will be subject to any rules or guidelines applicable to those services and they shall be incorporated by reference into these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a>.
+        <xar:if condition="xarModGetVar('roles', 'showprivacy')">
+            <xar:mlstring>Please see our </xar:mlstring><a href="&xar-modurl-roles-user-privacy;"><xar:mlstring>Privacy Policy</xar:mlstring></a>, <xar:mlstring>which is incorporated into these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> by reference.
         </xar:if>
         </p>
     <xar:set name="curnum">++$curnum</xar:set>
@@ -52,7 +53,11 @@
         <p><xar:mlstring>In order to use this web site, you must</xar:mlstring> 
         <a href="&xar-modurl-roles-user-main;"><xar:mlstring>register</xar:mlstring></a> <xar:mlstring>on our site, and agree to provide truthful information when requested.</xar:mlstring>
         <xar:if condition="xarModGetVar('roles', 'minage') gt '0'" >
-              <xar:mlstring>You must also be at least the age of </xar:mlstring> #$minagewords[$mina]# (#$mina#) or <xar:mlstring>older.</xar:mlstring>
+        <xar:ml>
+            <xar:mlstring>You must also be at least the age of #(1) (#(2)) or older.</xar:mlstring>
+            <xar:mlvar>#$minagewords[$mina]#</xar:mlvar>
+            <xar:mlvar>#$mina#</xar:mlvar>
+        </xar:ml>
         </xar:if>
         <xar:mlstring> When registering, you explicitly agree to our</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a><xar:mlstring> and as may be modified by us from time to time and available here.</xar:mlstring></p>
 
