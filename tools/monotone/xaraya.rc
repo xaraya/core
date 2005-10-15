@@ -48,18 +48,6 @@ function get_passphrase(identity)
    if (identity == "<yourid>") then return "<yourpassphrase>" end
 end
 
---
--- Inode cache
---
--- For all monotone commands which need to inspect your working copy this
--- setting (should) speed up those operations, at the expense of a (small)
--- chance of getting some file states wrong. If you are a little paranoid
--- and find monotone's speed increase not worth the risk, either delete
--- the whole function, or return false from it.
-function use_inodeprints()
-   return true
-end
-
 -- This hook gets called just before writing a commit
 -- changelog entry.
 -- What we do here is massage the status text generated
