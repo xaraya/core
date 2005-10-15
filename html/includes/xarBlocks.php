@@ -1,5 +1,6 @@
 <?php
 /**
+ * File: $Id: xarBlocks.php 1.142 05/03/19 08:41:03+01:00 marcel@powerbook.local $
  * Display Blocks
  *
  * xarBlockType functions are now in xarLegacy,
@@ -193,15 +194,15 @@ function xarBlock_renderGroup($groupname, $template = NULL)
               LEFT JOIN $blockTypesTable btypes
               ON        btypes.xar_id = inst.xar_type_id
               WHERE     bgroups.xar_name = ?
-              AND       inst.xar_state > 0
+              AND       inst.xar_state > ?
               ORDER BY  group_inst.xar_position ASC";
-
-    $result =& $dbconn->Execute($query, array($groupname));
+    $stmt =& $dbconn->prepareStatement($query);
+    $result =& $stmt->executeQuery(array($groupname,0), ResultSet::FETCHMODE_ASSOC);
     if (!$result) {return;}
 
     $output = '';
-    while(!$result->EOF) {
-        $blockinfo = $result->GetRowAssoc(false);
+    while($result->next()) {
+        $blockinfo = $result->getRow();
 
         if ($blockCaching) {
             $cacheKey = $blockinfo['module'] . "-blockid" . $blockinfo['bid'] . "-" . $groupname;
@@ -269,9 +270,6 @@ function xarBlock_renderGroup($groupname, $template = NULL)
                 xarErrorFree();
             }
         }
-
-        // Next block in the group.
-        $result->MoveNext();
     }
 
     $result->Close();

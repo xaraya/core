@@ -1,7 +1,6 @@
 <?php
 /**
  * Delete all dynamicdata fields for a module
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -92,7 +91,7 @@ function dynamicdata_adminapi_removehook($args)
     $bindmarkers = '?' . str_repeat(',?',count($ids)-1);
     $sql = "DELETE FROM $dynamicdata
             WHERE xar_dd_propid IN ($bindmarkers)";
-    $result =& $dbconn->Execute($sql,$ids);
+    $result = $dbconn->Execute($sql,$ids);
 
     if (!$result) {
         $msg = xarML('Database error for #(1) function #(2)() in module #(3)',
