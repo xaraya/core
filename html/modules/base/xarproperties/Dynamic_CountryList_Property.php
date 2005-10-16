@@ -77,8 +77,8 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
        /* Updated 2005-10-15 with ISO 1366 country codes and additional countries */
         $coptions = array();
         $coptions[] = array('id' =>'Please select', 'name' =>'Please select' );
-        $coptions[] = array('id' =>'af', 'name'=>'Afghanistan' );
-        $coptions[] = array('id' =>'ax', 'name'=>'Aland Islands' );
+        $coptions[] = array('id' =>'af', 'name'=>'Afghanistan');
+        $coptions[] = array('id' =>'ax', 'name'=>'Aland Islands');
         $coptions[] = array('id' =>'al', 'name'=>'Albania');
         $coptions[] = array('id' =>'dz', 'name'=>'Algeria');
         $coptions[] = array('id' =>'as', 'name'=>'American Samoa');
@@ -169,7 +169,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'gw', 'name'=>'Guinea Bissau');
         $coptions[] = array('id' =>'gy', 'name'=>'Guyana');
         $coptions[] = array('id' =>'ht', 'name'=>'Haiti');
-        $coptions[] = array('id' =>'hm', 'name'=>'Heard Island \& McDonald Islands');
+        $coptions[] = array('id' =>'hm', 'name'=>'Heard Island & McDonald Islands');
         $coptions[] = array('id' =>'va', 'name'=>'Holy See (Vatican City State)');
         $coptions[] = array('id' =>'hn', 'name'=>'Honduras');
         $coptions[] = array('id' =>'hk', 'name'=>'Hong Kong');
@@ -256,16 +256,16 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'ru', 'name'=>'Russian Federation');
         $coptions[] = array('id' =>'rw', 'name'=>'Rwanda');
         $coptions[] = array('id' =>'sh', 'name'=>'St. Helena');
-        $coptions[] = array('id' =>'kn', 'name'=>'St. Kitts and Nevis');
+        $coptions[] = array('id' =>'kn', 'name'=>'St. Kitts & Nevis');
         $coptions[] = array('id' =>'lc', 'name'=>'St. Lucia');
-        $coptions[] = array('id' =>'pm', 'name'=>' St. Pierre and Miquelon');
-        $coptions[] = array('id' =>'vc', 'name'=>' St. Vincent and the Grenadines');
+        $coptions[] = array('id' =>'pm', 'name'=>'St. Pierre & Miquelon');
+        $coptions[] = array('id' =>'vc', 'name'=>'St. Vincent & the Grenadines');
         $coptions[] = array('id' =>'ws', 'name'=>'Samoa');
-        $coptions[] = array('id' =>'sm', 'name'=>' San Marino');
+        $coptions[] = array('id' =>'sm', 'name'=>'San Marino');
         $coptions[] = array('id' =>'st', 'name'=>'SaoTome and Principe');
         $coptions[] = array('id' =>'sa', 'name'=>'Saudi Arabia');
         $coptions[] = array('id' =>'sn', 'name'=>'Senegal');
-        $coptions[] = array('id' =>'cs', 'name'=>'Serbia \& Montenegro');
+        $coptions[] = array('id' =>'cs', 'name'=>'Serbia & Montenegro');
         $coptions[] = array('id' =>'sc', 'name'=>'Seychelles');
         $coptions[] = array('id' =>'sl', 'name'=>'Sierra Leone');
         $coptions[] = array('id' =>'sg', 'name'=>'Singapore');
@@ -274,12 +274,12 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'sb', 'name'=>'Solomon Islands');
         $coptions[] = array('id' =>'so', 'name'=>'Somalia');
         $coptions[] = array('id' =>'za', 'name'=>'South Africa');
-        $coptions[] = array('id' =>'gs', 'name'=>'Sth Georgia \& the South Sandwich Islands');
+        $coptions[] = array('id' =>'gs', 'name'=>'Sth Georgia & the South Sandwich Islands');
         $coptions[] = array('id' =>'es', 'name'=>'Spain');
         $coptions[] = array('id' =>'lk', 'name'=>'Sri Lanka');
         $coptions[] = array('id' =>'sd', 'name'=>'Sudan');
         $coptions[] = array('id' =>'sr', 'name'=>'Suriname');
-        $coptions[] = array('id' =>'sj', 'name'=>'Svalbard \& Jan Mayen');
+        $coptions[] = array('id' =>'sj', 'name'=>'Svalbard & Jan Mayen');
         $coptions[] = array('id' =>'sz', 'name'=>'Swaziland');
         $coptions[] = array('id' =>'se', 'name'=>'Sweden');
         $coptions[] = array('id' =>'ch', 'name'=>'Switzerland');
@@ -311,7 +311,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'vn', 'name'=>'Vietnam');
         $coptions[] = array('id' =>'vg', 'name'=>'Virgin Islands, British');
         $coptions[] = array('id' =>'vi', 'name'=>'Virgin Islands, U.S.');
-        $coptions[] = array('id' =>'wf', 'name'=>'Wallis \& Futuna');
+        $coptions[] = array('id' =>'wf', 'name'=>'Wallis & Futuna');
         $coptions[] = array('id' =>'eh', 'name'=>'Western Sahara');
         $coptions[] = array('id' =>'ye', 'name'=>'Yemen');
         $coptions[] = array('id' =>'zm', 'name'=>'Zambia');
