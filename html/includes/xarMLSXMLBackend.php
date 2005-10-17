@@ -185,6 +185,48 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         return $this->trans[$ind];
     }
 
+    function markEntry($string)
+    {
+        if (!isset($this->transEntries[$string])) {
+            return false;
+        }
+        $ind = $this->transEntries[$string];
+        $this->trans[$ind]['marked'] = 1;
+        return true;
+    }
+
+    function markEntryByKey($key)
+    {
+        if (!isset($this->transKeyEntries[$key])) {
+            return false;
+        }
+        $ind = $this->transKeyEntries[$key];
+        $this->trans[$ind]['marked'] = 1;
+        return true;
+    }
+
+    function getFuzzyEntries()
+    {
+        $fuzzyEntries = array();
+        foreach ($this->trans as $ind => $entry) {
+            if (!isset($this->transEntries[$entry['string']])) continue;
+            if ($entry['marked'] == 1) continue;
+            $fuzzyEntries[] = $entry;
+        }
+        return $fuzzyEntries;
+    }
+
+    function getFuzzyEntriesByKey()
+    {
+        $fuzzyKeys = array();
+        foreach ($this->trans as $ind => $key) {
+            if (!isset($this->transKeyEntries[$key['string']])) continue;
+            if ($key['marked'] == 1) continue;
+            $fuzzyKeys[] = $key;
+        }
+        return $fuzzyKeys;
+    }
+
     function getTransientId($string)
     {
         if (!isset($this->transEntries[$string])) {
@@ -248,6 +290,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         }
         if ($tag == 'entry' || $tag == 'keyEntry') {
             $this->curEntry = array();
+            $this->curEntry['marked'] = 0;
             $this->curEntry['references'] = array();
         } elseif ($tag == 'reference') {
             $reference['file'] = $attribs['file'];
@@ -285,6 +328,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
             $this->curEntry['key'] = trim($this->curData);
         } elseif ($tag == 'translation') {
             $this->curEntry['translation'] = trim($this->curData);
+            $this->curEntry['used'] = 0;
             //$this->curEntry['translation'] = utf8_decode(trim($this->curData));
         }
         $this->curData = '';
