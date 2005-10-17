@@ -74,7 +74,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
        (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
        '>';
        */
-       /* Updated 2005-10-15 with ISO 1366 country codes and additional countries */
+       /* Updated 2005-10-15 with ISO 3166 country codes and additional countries */
         $coptions = array();
         $coptions[] = array('id' =>'Please select', 'name' =>'Please select' );
         $coptions[] = array('id' =>'af', 'name'=>'Afghanistan');
