@@ -251,7 +251,7 @@
                         #$successtitle#</strong>: 
                     <xar:ml>
                         <xar:mlstring>
-                            Xaraya can write to the directory #(1) and all it's files and subdirectories.
+                            Xaraya can write to the directory #(1) and all its files and subdirectories.
                         </xar:mlstring>
                         <xar:mlvar>
                             #$phpLanguageDir#
@@ -264,7 +264,7 @@
                         #$warningtitle#</strong>: 
                     <xar:ml>
                         <xar:mlstring>
-                            Xaraya cannot write to the directory #(1) and all it's files and subdirectories.
+                            Xaraya cannot write to the directory #(1) and all its files and subdirectories.
                         </xar:mlstring>
                         <xar:mlvar>
                             #$phpLanguageDir#
