@@ -242,7 +242,7 @@
             </h2>
             <p>
                 <xar:mlstring>
-                     For translation to function properly, the Xaraya must have write access to files in the locales directory
+                     For translation to function properly, Xaraya must have write access to files in the locales directory
                 </xar:mlstring>
             </p>
             <xar:if condition="$phpLanguageFilesIsWritable">
@@ -290,7 +290,7 @@
                         #$successtitle#</strong>: 
                     <xar:ml>
                         <xar:mlstring>
-                            Xaraya can write to the directory #(1) and all it's files and subdirectories.
+                            Xaraya can write to the directory #(1) and all its files and subdirectories.
                         </xar:mlstring>
                         <xar:mlvar>
                             #$xmlLanguageDir#
@@ -303,7 +303,7 @@
                         #$warningtitle#</strong>: 
                     <xar:ml>
                         <xar:mlstring>
-                             Xaraya cannot write to the directory #(1) and all it's files and subdirectories.
+                             Xaraya cannot write to the directory #(1) and all its files and subdirectories.
                          </xar:mlstring>
                          <xar:mlvar>
                              #$xmlLanguageDir#
@@ -333,7 +333,7 @@
                 <xar:set name="phpnetdestination">'<a href="'.$phpneturl.'">PHP.net</a>'</xar:set>
                 <xar:ml>
                     <xar:mlstring>
-                        These extensions may be required for some modules to work; however the Xaraya
+                        These extensions may be required for some modules to work, however Xaraya
                         is not dependant on these extensions for installation.
                         Refer to #(1) for further information on these extensions.
                     </xar:mlstring>
