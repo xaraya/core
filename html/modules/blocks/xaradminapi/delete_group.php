@@ -39,13 +39,13 @@ function blocks_adminapi_delete_group($args)
     // Delete group-instance links
     $query = "DELETE FROM $block_group_instances_table
               WHERE xar_group_id = " . $gid;
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) {return;}
 
     // Delete block group definition
     $query = "DELETE FROM $block_groups_table
               WHERE xar_id = " . $gid;
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) {return;}
 
     return true;

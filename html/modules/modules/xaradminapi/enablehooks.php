@@ -48,7 +48,7 @@ function modules_adminapi_enablehooks($args)
             WHERE xar_smodule = ? AND xar_stype = ? AND xar_tmodule = ?";
     $bindvars = array($callerModName,$callerItemType,$hookModName);
 
-    $result =& $dbconn->Execute($sql,$bindvars);
+    $result = $dbconn->Execute($sql,$bindvars);
     if (!$result) return;
 
     $sql = "SELECT DISTINCT xar_id, xar_smodule, xar_stype, xar_object,
@@ -57,7 +57,7 @@ function modules_adminapi_enablehooks($args)
             FROM $xartable[hooks]
             WHERE xar_smodule = '' AND xar_tmodule = ?";
 
-    $result =& $dbconn->Execute($sql,array($hookModName));
+    $result = $dbconn->Execute($sql,array($hookModName));
     if (!$result) return;
 
     for (; !$result->EOF; $result->MoveNext()) {

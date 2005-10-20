@@ -1,7 +1,5 @@
 <?php
 /**
- * Update attributes of a block instance
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -89,7 +87,7 @@ function blocks_adminapi_update_instance($args)
         $refresh, $state, $bid
     );
 
-    $result =& $dbconn->Execute($query, $bind);
+    $result = $dbconn->Execute($query, $bind);
     if (!$result) {return;}
 
     // Update the group instances.
