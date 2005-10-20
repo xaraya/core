@@ -21,6 +21,19 @@ include_once "modules/dynamicdata/class/properties.php";
  */
 class Dynamic_Checkbox_Property extends Dynamic_Property
 {
+    function checkInput($name='', $value = null)
+    {
+        if (empty($name)) {
+            $name = 'dd_'.$this->id;
+        }
+        // store the fieldname for validations who need them (e.g. file uploads)
+        $this->fieldname = $name;
+        if (!isset($value)) {
+            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
+        }
+        return $this->validateValue($value);
+    }
+
     function validateValue($value = null)
     {
         // this won't do for check boxes !
@@ -40,7 +53,7 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
     function showInput($args = array())
     {
         extract($args);
-        
+
         $data=array();
 
         if (!isset($value)) {

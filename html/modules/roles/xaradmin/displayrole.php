@@ -37,6 +37,8 @@ function roles_admin_displayrole()
     $data['uid'] = $role->getID();
     $data['type'] = $role->getType();
     $data['name'] = $name;
+    $data['phome'] = $role->getHome();
+    $data['pprimaryparent'] = $role->getPrimaryParent();
     //get the data for a user
     if ($data['type'] == 0) {
         $data['uname'] = $role->getUser();

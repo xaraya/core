@@ -96,11 +96,10 @@ function roles_admin_modifyconfig()
             $data['emails'] = unserialize(xarModGetVar('roles', 'disallowedemails'));
             $data['names'] = unserialize(xarModGetVar('roles', 'disallowednames'));
             $data['ips'] = unserialize(xarModGetVar('roles', 'disallowedips'));
-            $data['authid'] = xarSecGenAuthKey();
             $data['updatelabel'] = xarML('Update Roles Configuration');
             $data['uselockout'] =  xarModGetVar('roles', 'uselockout') ? 'checked' : '';
             $data['lockouttime'] = xarModGetVar('roles', 'lockouttime')? xarModGetVar('roles', 'lockouttime'): 15; //minutes
-            $data['lockouttries'] = xarModGetVar('roles', 'lockouttries') ? xarModGetVar('roles', 'lockouttries'): 3; 
+            $data['lockouttries'] = xarModGetVar('roles', 'lockouttries') ? xarModGetVar('roles', 'lockouttries'): 3;
             $hooks = array();
             switch ($data['tab']) {
                 case 'hooks':
@@ -183,6 +182,8 @@ function roles_admin_modifyconfig()
                     $disallowedips = serialize($disallowedips);
                     xarModSetVar('roles', 'disallowedips', $disallowedips);
                     break;
+                case 'duvs':
+                    break;
                 case 'hooks':
                     // Role type 'user' (itemtype 0).
                     xarModCallHooks('module', 'updateconfig', 'roles',
@@ -211,7 +212,27 @@ function roles_admin_modifyconfig()
             // Return
             return true;
             break;
+
+        case 'links':
+            switch ($data['tab']) {
+                case 'duvs':
+                    if (!xarVarFetch('userhome', 'int', $userhome, null, XARVAR_DONT_SET)) return;
+                    if (isset($userhome) && $userhome) {
+                    	xarModAPIFunc('roles','admin','activateduv',array('name' => 'userhome'));
+                    } elseif (isset($userhome)&& !$userhome) {
+                    	xarModAPIFunc('roles','admin','deactivateduv',array('name' => 'userhome'));
+                    }
+                    if (!xarVarFetch('primaryparent', 'int', $primaryparent, null, XARVAR_DONT_SET)) return;
+                    if (isset($primaryparent) && $primaryparent) {
+                    	xarModAPIFunc('roles','admin','activateduv',array('name' => 'primaryparent'));
+                    } elseif (isset($primaryparent)&& !$primaryparent) {
+                    	xarModAPIFunc('roles','admin','deactivateduv',array('name' => 'primaryparent'));
+                    }
+                    break;
+                }
+        break;
     }
+	$data['authid'] = xarSecGenAuthKey();
     return $data;
 }
 ?>

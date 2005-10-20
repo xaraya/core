@@ -28,7 +28,8 @@ function dynamicdata_admin_new($args)
     if(!xarVarFetch('preview',  'isset', $preview,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
-
+    if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
+    
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');
     }
@@ -69,7 +70,9 @@ function dynamicdata_admin_new($args)
     $hooks = xarModCallHooks('item', 'new', $myobject->itemid, $item, $modinfo['name']); 
     $data['hooks'] = $hooks;
 
-    $template = $myobject->name;
+    if(!isset($template)) {
+        $template = $myobject->name;
+    }
     return xarTplModule('dynamicdata','admin','new',$data,$template);
 }
 

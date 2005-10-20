@@ -29,7 +29,8 @@ function dynamicdata_admin_modify($args)
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
 
     if(!xarVarFetch('itemid',   'isset', $itemid)) {return;}
-
+    if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
+    
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
     if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
@@ -67,7 +68,9 @@ function dynamicdata_admin_modify($args)
     $hooks = xarModCallHooks('item', 'modify', $myobject->itemid, $item, $modinfo['name']); 
     $data['hooks'] = $hooks;
     
-    $template = $myobject->name;
+    if(!isset($template)) {
+        $template = $myobject->name;
+    }
     return xarTplModule('dynamicdata','admin','modify',$data,$template);
 }
 

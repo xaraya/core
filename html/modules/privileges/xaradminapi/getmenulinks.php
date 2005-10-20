@@ -38,7 +38,15 @@ function privileges_adminapi_getmenulinks()
                               'label' => xarML('Add Privilege'));
     }
 
-    if (xarSecurityCheck('AdminRole',0)) {
+    if (xarSecurityCheck('ReadPrivilege',0,'Realm') && xarModGetVar('privileges','showrealms')) {
+        $menulinks[] = Array('url'   => xarModURL('privileges',
+                                                  'admin',
+                                                  'viewrealms'),
+                              'title' => xarML('Add, change or delete realms'),
+                              'label' => xarML('Manage Realms'));
+    }
+
+    if (xarSecurityCheck('AdminPrivilege',0)) {
         $menulinks[] = Array('url'   => xarModURL('privileges',
                                                   'admin',
                                                   'modifyconfig'),
@@ -48,4 +56,3 @@ function privileges_adminapi_getmenulinks()
     return $menulinks;
 }
 
-?>

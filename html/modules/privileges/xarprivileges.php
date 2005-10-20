@@ -354,6 +354,9 @@ class xarMasks
 
     function xarSecurityCheck($mask,$catch=1,$component='',$instance='',$module='',$rolename='',$pnrealm=0,$pnlevel=0)
     {
+        $userID = xarSessionGetVar('uid');
+        if ($userID == XARUSER_LAST_RESORT) return true;
+
         $maskname = $mask;
         $mask =  $this->getMask($mask);
 //        if($mask->getName() == "pnLegacyMask") {
@@ -400,26 +403,26 @@ class xarMasks
         // normalize the mask now - its properties won't change below
         $mask->normalize();
 
+
+        // get the Roles class
+        include_once 'modules/roles/xarroles.php';
+        $roles = new xarRoles();
+
+        // get the uid of the role we will check against
+        // an empty role means take the current user
+        if ($rolename == '') {
+            $userID = xarSessionGetVar('uid');
+            if (empty($userID)) {
+                $userID = _XAR_ID_UNREGISTERED;
+            }
+            $role = $roles->getRole($userID);
+        }
+        else {
+            $role = $roles->findRole($rolename);
+        }
+
         // check if we already have the irreducible set of privileges for the current user
         if (!xarVarIsCached('Security.Variables','privilegeset.'.$mask->module) || !empty($rolename)) {
-
-            // get the Roles class
-            include_once 'modules/roles/xarroles.php';
-            $roles = new xarRoles();
-
-            // get the uid of the role we will check against
-            // an empty role means take the current user
-            if ($rolename == '') {
-                $userID = xarSessionGetVar('uid');
-                if (empty($userID)) {
-                    $userID = _XAR_ID_UNREGISTERED;
-                }
-                $role = $roles->getRole($userID);
-            }
-            else {
-                $role = $roles->findRole($rolename);
-            }
-
             // get the privileges and test against them
             $privileges = $this->irreducibleset(array('roles' => array($role)),$mask->module);
 
@@ -435,7 +438,7 @@ class xarMasks
             $privileges = xarVarGetCached('Security.Variables','privilegeset.'.$mask->module);
         }
 
-        $pass = $this->testprivileges($mask,$privileges,false);
+        $pass = $this->testprivileges($mask,$privileges,false,$role);
 
         // $pass = $this->testprivileges($mask,$this->getprivset($role),false);
 
@@ -584,7 +587,7 @@ class xarMasks
  * @throws  none
  * @todo    none
 */
-    function testprivileges($mask,$privilegeset,$pass)
+    function testprivileges($mask,$privilegeset,$pass,$role='')
     {
         $matched = false;
         $pass = false;
@@ -607,7 +610,18 @@ class xarMasks
                 xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
             }
             if ($privilege->level == 0 && $privilege->includes($mask)) {
-                return false;
+                if (!xarModGetVar('privileges','inheritdeny') && is_object($role)) {
+                    $privs = $role->getAssignedPrivileges();
+                    $isassigned = false;
+                    foreach ($privs as $priv) {
+                        if ($privilege == $priv) {
+                            return false;
+                            break;
+                        }
+                    }
+                } else {
+                    return false;
+                }
             }
         }
 
@@ -670,7 +684,7 @@ class xarMasks
                 }
             }
         }
-        if (!$matched && ($privilegeset['children'] != array())) $pass = $this->testprivileges($mask,$privilegeset['children'],$pass);
+        if (!$matched && ($privilegeset['children'] != array())) $pass = $this->testprivileges($mask,$privilegeset['children'],$pass,$role);
         return $pass;
     }
 
@@ -686,39 +700,28 @@ class xarMasks
  * @throws  none
  * @todo    none
 */
-    function getMask($name,$module="All")
+    function getMask($name,$module="All",$component="All",$suppresscache=FALSE)
     {
         // check if we already have the definition of this mask
-        if (!xarVarIsCached('Security.Masks',$name)) {
-//Set up the query and get the data from the xarmasks table
-            $bindvars = array();
-// FIXME: make mask names unique across modules (+ across realms) ?
-            if ($module == "All") {
-                $query = "SELECT * FROM $this->maskstable WHERE xar_name= ?";
-                $bindvars = array($name);
-            }
-            else {
-                $module = strtolower($module);
-                $query = "SELECT * FROM $this->maskstable
-                            WHERE xar_name= ? AND xar_module = ?";
-                $bindvars = array($name,$module);
-            }
-            $result = $this->dbconn->Execute($query,$bindvars);
-            if (!$result) return;
-            if ($result->EOF) return false;
+        if ($suppresscache || !xarVarIsCached('Security.Masks',$name)) {
+            $q = new xarQuery('SELECT',$this->maskstable);
+            $q->addfields(array(
+                            'xar_sid AS sid',
+                            'xar_name AS name',
+                            'xar_realm AS realm',
+                            'xar_module AS module',
+                            'xar_component AS component',
+                            'xar_instance AS instance',
+                            'xar_level AS level',
+                            'xar_description AS description',
+                        ));
+            $q->eq('xar_name',$name);
+            if ($module != "All") $q->eq('xar_module',strtolower($module));
+            if ($component != "All") $q->eq('xar_component',strtolower($component));
+            if (!$q->run()) return;
+            if ($q->row() == array()) return false;
 
-// reorganize the data into an array and create the masks object
-            list($sid, $name, $realm, $module, $component, $instance, $level,$description) = $result->fields;
-            $result->Close();
-            $pargs = array('sid' => $sid,
-                           'name' => $name,
-                           'realm' => $realm,
-                           'module' => $module,
-                           'component' => $component,
-                           'instance' => $instance,
-                           'level' => $level,
-                           'description'=>$description);
-// done
+            $pargs = $q->row();
             xarVarSetCached('Security.Masks',$name,$pargs);
         } else {
             $pargs = xarVarGetCached('Security.Masks',$name);

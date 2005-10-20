@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * File: $Id$
  *
  * View block instances
@@ -17,13 +17,14 @@
  */
 function blocks_admin_view_instances()
 {
+    if (!xarVarFetch('filter', 'str', $filter, "", XARVAR_NOT_REQUIRED)) {return;}
 // Security Check
     if (!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
     $authid = xarSecGenAuthKey();
 
     // Get all block instances (whether they have group membership or not.
     // CHECKME: & removed below for php 4.4.
-    $instances = xarModAPIfunc('blocks', 'user', 'getall', array('order' => 'name'));
+    $instances = xarModAPIfunc('blocks', 'user', 'getall', array('filter' => $filter,'order' => 'name'));
 
     // Get current style.
     $data['selstyle'] = xarModGetUserVar('blocks', 'selstyle');
@@ -45,9 +46,10 @@ function blocks_admin_view_instances()
     if (empty($data['selstyle'])){
         $data['selstyle'] = 'plain';
     }
-    
+
     $data['authid'] = $authid;
-    
+    $data['filter'] = $filter;
+
     // Select vars for drop-down menus.
     $data['style']['plain'] = xarML('Plain');
     $data['style']['compact'] = xarML('Compact');

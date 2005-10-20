@@ -220,6 +220,7 @@ function initializeSetup()
     xarRegisterMask('DeleteMail', 'All','mail','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminMail','All','mail','All','All','ACCESS_ADMIN');
 
+    xarRegisterMask('CommentBlock','All','blocks','All','All','ACCESS_EDIT');
     xarRegisterMask('EditBlock','All','blocks','All','All','ACCESS_EDIT');
     xarRegisterMask('AddBlock','All','blocks','All','All','ACCESS_ADD');
     xarRegisterMask('DeleteBlock','All','blocks','All','All','ACCESS_DELETE');
@@ -232,6 +233,12 @@ function initializeSetup()
     xarRegisterMask('AddPrivilege','All','privileges','All','All','ACCESS_ADD');
     xarRegisterMask('DeletePrivilege','All','privileges','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminPrivilege','All','privileges','All','All','ACCESS_ADMIN');
+
+    xarRegisterMask('ViewPrivileges','All','privileges','Realm','All','ACCESS_OVERVIEW');
+    xarRegisterMask('ReadPrivilege','All','privileges','Realm','All','ACCESS_READ');
+    xarRegisterMask('EditPrivilege','All','privileges','Realm','All','ACCESS_EDIT');
+    xarRegisterMask('AddPrivilegem','All','privileges','Realm','All','ACCESS_ADD');
+    xarRegisterMask('DeletePrivilege','All','privileges','Realm','All','ACCESS_DELETE');
 
     xarRegisterMask('EditModules','All','modules','All','All','ACCESS_EDIT');
     xarRegisterMask('AdminModules','All','modules','All','All','ACCESS_ADMIN');

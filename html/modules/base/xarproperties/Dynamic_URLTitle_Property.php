@@ -27,6 +27,19 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
 {
+    function checkInput($name='', $value = null)
+    {
+        if (empty($name)) {
+            $name = 'dd_'.$this->id;
+        }
+        // store the fieldname for validations who need them (e.g. file uploads)
+        $this->fieldname = $name;
+        if (!isset($value)) {
+            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
+        }
+        return $this->validateValue($value);
+    }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -34,13 +47,13 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         }
         if (!empty($value)) {
             if (is_array($value)) {
-                
+
                 if (isset($value['title'])) {
                     $title = $value['title'];
                 } else {
                     $title = '';
                 }
-                
+
                 if (isset($value['link'])) {
                     $link = $value['link'];
                 } else {
@@ -52,7 +65,7 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
                 } else {
                     $title = '';
                 }
-                
+
                 // Make sure $value['link'] is set, has a length > 0 and does not equal simply 'http://'
                 if (strlen(trim($link)) && trim($link) != 'http://') {
                         $link = $value['link'];
@@ -62,8 +75,8 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
                     if (eregi('^[a-z]+\:\/\/$', trim($link))) {
                         $link = '';
                     } else {
-                    
-                        // Do some URL validation below - make sure the url 
+
+                        // Do some URL validation below - make sure the url
                         // has at least a scheme (http/ftp/etc) and a host (domain.tld)
                         $uri = parse_url($value['link']);
 

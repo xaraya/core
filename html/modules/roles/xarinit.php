@@ -46,6 +46,7 @@ function roles_init()
      *    xar_valcode varchar(35) NOT NULL default '',
      *    xar_state int(3) NOT NULL default '0',
      *    xar_auth_module varchar(100) NOT NULL default '',
+     *    xar_duvs varchar(100) NOT NULL default '',
      *    PRIMARY KEY  (xar_uid)
      * )
      */
@@ -90,6 +91,10 @@ function roles_init()
                 'null' => false,
                 'default' => '3'),
             'xar_auth_module' => array('type' => 'varchar',
+                'size' => 100,
+                'null' => false,
+                'default' => ''),
+            'xar_duvs' => array('type' => 'varchar',
                 'size' => 100,
                 'null' => false,
                 'default' => '')));
@@ -191,6 +196,7 @@ function roles_activate()
     xarModSetVar('roles', 'askpendingemail', 1);
     xarModSetVar('roles', 'askpasswordemail', 1);
     xarModSetVar('roles', 'uniqueemail', 1);
+
     //Default Display
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
     //Default User Locale

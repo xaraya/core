@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * File: $Id$
  *
  * Get one or all block instances.
@@ -51,13 +51,16 @@ function blocks_userapi_getall($args)
                      btypes.xar_type
               FROM   '.$block_instances_table.' binst
               LEFT JOIN '.$block_types_table.' btypes
-              ON        btypes.xar_id = binst.xar_type_id ' . $orderby;
+              ON        btypes.xar_id = binst.xar_type_id ';
 
     if (!empty($bid)) {
         $query .= ' WHERE binst.xar_id = ' . $bid;
     } elseif (!empty($name)) {
         $query .= ' WHERE binst.xar_name = \'' . $name . '\'';
+    } elseif (!empty($filter)) {
+        $query .= ' WHERE lower(binst.xar_name) LIKE \'%' . strtolower($filter) . '%\'';
     }
+	$query .= ' ' . $orderby;
 
     // Return if no details retrieved.
     $result =& $dbconn->Execute($query);
