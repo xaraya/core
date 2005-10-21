@@ -1,0 +1,52 @@
+<div class="xar-mod-head">
+  <h2><xar:mlstring>Create mail queue definition</xar:mlstring></h2>
+</div>
+<div class="xar-mod-body">
+  <h3><xar:mlstring>Mailqueue definition needed</xar:mlstring></h3>
+  <p>
+    <xar:mlstring>
+      There seems to be no mailqueue definition yet, or the right 
+      object could not be found. 
+    </xar:mlstring>
+  </p>
+  <p>
+    <xar:mlstring>
+      The mail module operates on mailqueues which are temporary
+      stores for either outgoing or incoming mail items. Typically
+      outgoing mail items are created (in outgoing queues obviously)
+      for notifications or newsletters etc. Incoming mail items could
+      be used to create an article or register a trouble ticket. In general
+      the mail module handles the items in each queue defined and, based
+      on the configuration of the mail module and the hook configuration 
+      passes the items on to something else.
+    </xar:mlstring>
+  </p>
+  <p>
+    <xar:mlstring>
+      At this moment there does not seem to be an object which can hold
+      our queue definitions. We need this to be able to continue for 
+      basically every operation in the mail module. This is the reason we
+      are a bit verbose on this page.
+    </xar:mlstring>
+  </p>
+  <form action="&xar-modurl-mail-admin-createqdef;" method="post">
+    <xar:data-input type="hidden" id="authid" name="authid" value="$authid"/>
+    <fieldset>
+      <legend><xar:mlstring>Create object to hold queue definitions</xar:mlstring></legend>
+      <div class="xar-form-input-wrapper">
+        <label class="xar-form-label" for="qdef_name_enter"><xar:mlstring>Queue definition name</xar:mlstring></label>
+        <div>
+          <xar:data-input type="radio"   name="qdef_choose" id="qdef_enter" value="$qdef_method" options="$qdef_create" />
+          <xar:data-input type="textbox" name="qdef_name_enter" id="qdef_name_enter" maxlength="12" size="12" value="$qdef_name" validation="1:12:\w+" onfocus="document.getElementById(\'qdef_enter\').checked=true"/>
+          <label><xar:mlstring>(Max. 12 chars)</xar:mlstring></label>
+        </div>
+        <div>
+          <xar:data-input type="radio" name="qdef_choose" id="qdef_choose" value="$qdef_method" options="$qdef_choose"/>
+          <xar:data-input type="object" name="qdef_name_choose" id="qdef_name_choose" onchange="document.getElementById(\'qdef_choose\').checked=true"/>
+        </div>
+        
+      </div>
+    </fieldset>
+    <input type="submit" name="create" value="#xarML('Create')#"/>
+  </form>
+</div>
