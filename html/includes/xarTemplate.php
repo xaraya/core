@@ -124,7 +124,7 @@ function xarTemplate__shutdown_handler()
 }
 
 /**
- * Get theme name
+ * Get theme name for the theme in use.
  *
  * @access public
  * @global xarTpl_themeName string
@@ -132,10 +132,13 @@ function xarTemplate__shutdown_handler()
  */
 function xarTplGetThemeName()
 {
+    if(isset($GLOBALS['xarTpl_themeName'])) return  $GLOBALS['xarTpl_themeName'];
+    // If it is not set, set it return the default theme.
     if (function_exists('xarModGetVar')) {
         $defaultTheme = xarModGetVar('themes', 'default');
-        if (!empty($defaultTheme)) return $defaultTheme;
+        if (!empty($defaultTheme)) xarTplSetThemeName($defaultTheme);
     }
+    assert('isset($GLOBALS["xarTpl_themeName"]; /* Themename could not be set properly */');
     return $GLOBALS['xarTpl_themeName'];
 }
 
