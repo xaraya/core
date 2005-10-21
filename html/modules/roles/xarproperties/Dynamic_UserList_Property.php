@@ -144,29 +144,8 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         $data['options']=$options;
         $data['users']=$users;
         $data['tabindex']=!empty($tabindex) ? $tabindex : 0;
+        $data['onchange'] = isset($onchange) ? $onchange : null; // let tpl decide what to do
         $data['invalid']=!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-
-        /*$out = '<select' .
-               ' name="' . $name . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
-               '>';
-
-        foreach ($options as $option) {
-            $out .= '<option';
-            if (empty($option['id']) || $option['id'] != $option['name']) {
-                $out .= ' value="'.$option['id'].'"';
-            }
-            if ($option['id'] == $value) {
-                $out .= ' selected="selected">'.$option['name'].'</option>';
-            } else {
-                $out .= '>'.$option['name'].'</option>';
-            }
-        }
-
-        $out .= '</select>' .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-       */
 
         return xarTplProperty('roles', 'userlist', 'showinput', $data);
     }
