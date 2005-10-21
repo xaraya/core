@@ -1291,6 +1291,8 @@ class xarTpl__ExpressionTransformer
      */
     function transformBLExpression($blExpression)
     {
+        $blExpression = xarTpl__ExpressionTransformer::normalize($blExpression);
+
         // 'resolve' the dot and colon notation
         $subparts = preg_split('/[\[|\]]/', $blExpression);
         if(count($subparts) > 1) {
@@ -1323,6 +1325,7 @@ class xarTpl__ExpressionTransformer
 
     function transformPHPExpression($phpExpression)
     {
+        $phpExpression =xarTpl__ExpressionTransformer::normalize($phpExpression);
         // This regular expression matches variables in their notation as 
         // supported by php  and according to the dot/colon grammar in the
         // method above. These expressions are matched and passed on to the BL 
@@ -1378,6 +1381,17 @@ class xarTpl__ExpressionTransformer
             return 0;
         }
         return (strlen($a) < strlen($b)) ? 1 : -1;
+    }
+
+    function normalize($expr)
+    {
+        /* If the expression is enclosed in # s, ignore them */
+        if(empty($expr)) return $expr;
+        if( $expr{0} == XAR_TOKEN_CI_DELIM && 
+            $expr{strlen($expr)-1} == XAR_TOKEN_CI_DELIM) {
+            $expr = substr($expr,1,-1);
+        }
+        return $expr;
     }
 }
 
