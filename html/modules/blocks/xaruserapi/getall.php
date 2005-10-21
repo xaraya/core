@@ -64,8 +64,12 @@ function blocks_userapi_getall($args)
 	$query .= ' ' . $orderby;
 
     // Return if no details retrieved.
-    $result =& $dbconn->Execute($query);
-    if (!$result) {return;}
+    if (isset($startat) && isset($rowstodo)) {
+		$result =& $dbconn->SelectLimit($query,$rowstodo,$startat-1);
+    } else {
+		$result =& $dbconn->Execute($query);
+    }
+	if (!$result) {return;}
 
     // The main result array.
     $instances = array();

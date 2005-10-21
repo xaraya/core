@@ -16,14 +16,23 @@
 function blocks_admin_view_instances()
 {
     if (!xarVarFetch('filter', 'str', $filter, "", XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('startat', 'int', $startat,   1,      XARVAR_NOT_REQUIRED)) {return;}
+
 // Security Check
     if (!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
     $authid = xarSecGenAuthKey();
 
     // Get all block instances (whether they have group membership or not.
     // CHECKME: & removed below for php 4.4.
-    $instances = xarModAPIfunc('blocks', 'user', 'getall', array('filter' => $filter,'order' => 'name'));
-
+    $rowstodo = xarModGetVar('blocks','itemsperpage');
+    // Need to find a better way to do this without breaking the API
+    $instances = xarModAPIfunc('blocks', 'user', 'getall', array('filter' => $filter,
+    															 'order' => 'name'));
+	$total = count($instances);
+    $instances = xarModAPIfunc('blocks', 'user', 'getall', array('filter' => $filter,
+    															 'order' => 'name',
+    															 'rowstodo' => $rowstodo,
+    															 'startat' => $startat));
     // Get current style.
     $data['selstyle'] = xarModGetUserVar('blocks', 'selstyle');
 
@@ -46,7 +55,12 @@ function blocks_admin_view_instances()
     }
 
     $data['authid'] = $authid;
+    // Item filter and pager
     $data['filter'] = $filter;
+	$data['pager'] = xarTplGetPager($startat,
+                            $total,
+                            xarModURL('blocks', 'admin', 'view_instances',array('startat' => '%%')),
+                            $rowstodo);
 
     // Select vars for drop-down menus.
     $data['style']['plain'] = xarML('Plain');
