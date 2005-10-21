@@ -478,7 +478,8 @@ function privileges_init()
 
 */
     // Set up an initial value for module variables.
-    xarModSetVar('privileges', 'showrealms', 0);
+    xarModSetVar('privileges', 'showrealms', false);
+    xarModSetVar('privileges', 'inheritdeny', true);
 
     // Initialisation successful
     return true;

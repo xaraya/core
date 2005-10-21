@@ -957,7 +957,8 @@ function installer_admin_confirm_configuration()
         $func = "installer_" . basename(strval($configuration),'.conf.php') . "_configuration_load";
         $func($chosen);
         $content['marker'] = '[x]';                                           // create the user menu
-        $content['displaymodules'] = 1;
+        $content['displaymodules'] = 'All';
+        $content['modulelist'] = '';
         $content['content'] = '';
 
         // Load up database

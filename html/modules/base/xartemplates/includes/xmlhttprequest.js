@@ -40,7 +40,7 @@ function loadContent(url,tagid) {
             return true; // do the normal action
         }  
     } catch(e) {
-        alert(e);
+        alert("CATCH: " + e);
     }
 }
 
@@ -74,10 +74,13 @@ function processReqChange()
                     return false; // cancel the normal action
                 }
             } else {
-                alert("There was a problem retrieving the XML data:\n" +  req.statusText);
+                // CHECKME: as we are in a looping thingie, displaying an alert here
+                // might be premature, but if it really fails how would we know? Just
+                // the exception handler?
+                //alert("There was a problem retrieving the XML data:\n" +  req.statusText);
             }
         }
     } catch(e) {
-        alert(e);
+        alert("CATCH: " + e);
     }
 }
