@@ -42,7 +42,7 @@
 function mail_adminapi__sendmail($args)
 {
     // Get arguments from argument array
-    
+
     extract($args);
 
     // Check for required arguments
@@ -234,21 +234,21 @@ function mail_adminapi__sendmail($args)
         $mailShowTemplates = xarModGetVar('themes', 'ShowTemplates');
     }
 
-    // go ahead and override the show templates value,  
+    // go ahead and override the show templates value,
     // using the mail modules settings instead :-)
     $oldShowTemplates = xarModGetVar('themes', 'ShowTemplates');
     xarModSetVar('themes', 'ShowTemplates', $mailShowTemplates);
-        
+
     // Check if this is HTML mail and set Body appropriately
     if ($htmlmail) {
-        // Sets the text-only body of the message. 
-        // This automatically sets the email to multipart/alternative. 
-        // This body can be read by mail clients that do not have HTML email 
+        // Sets the text-only body of the message.
+        // This automatically sets the email to multipart/alternative.
+        // This body can be read by mail clients that do not have HTML email
         // capability such as mutt. Clients that can read HTML will view the normal Body.
         if (!empty($message)) {
             if ($usetemplates) {
-                $mail->AltBody = xarTplModule('mail', 
-                                              'admin', 
+                $mail->AltBody = xarTplModule('mail',
+                                              'admin',
                                               'sendmail',
                                               array('message'=>$message),
                                               'text');
@@ -258,8 +258,8 @@ function mail_adminapi__sendmail($args)
         }
         // HTML message body
         if ($usetemplates) {
-            $mail->Body = xarTplModule('mail', 
-                                       'admin', 
+            $mail->Body = xarTplModule('mail',
+                                       'admin',
                                        'sendmail',
                                        array('htmlmessage'=>$htmlmessage),
                                        'html');
@@ -268,8 +268,8 @@ function mail_adminapi__sendmail($args)
         }
     } else {
         if ($usetemplates) {
-            $mail->Body = xarTplModule('mail', 
-                                       'admin', 
+            $mail->Body = xarTplModule('mail',
+                                       'admin',
                                        'sendmail',
                                        array('message'=>$message),
                                        'text');
@@ -286,7 +286,7 @@ function mail_adminapi__sendmail($args)
     // We are now setting up the advance options that can be used by the modules
     // Add Attachment will look to see if there is a var passed called
     // attachName and attachPath and attach it to the message
- 
+
     if (isset($attachPath) && !empty($attachPath)) {
         if (isset($attachName) && !empty($attachName)) {
             $mail->AddAttachment($attachPath, $attachName);
