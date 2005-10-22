@@ -16,14 +16,21 @@ function mail_userapi_getitemtypes($args)
     // other modules by hooking to ALL items (regardless of queue) or
     // to a specific queue.
     //
-    // The list of mail queues is retrieved through the mail api
-    // For now, we construct an in and out itemtype, so we can continue
-    $itemtypes[1] = array('label' => xarVarPrepForDisplay(xarML('Outgoing mail queue')),
-                          'title' => xarVarPrepForDisplay(xarML('Manage outgoing mail items ')),
-                          'url'   => '');
-    $itemtypes[2] = array('label' => xarVarPrepForDisplay(xarML('Incoming mail queue')),
-                          'title' => xarVarPrepForDisplay(xarML('Manage incoming mail queues')),
-                          'url'   => '');
+    // Use dd to retrieve the items of the mailqueue object
+    $qdefName = xarModGetVar('mail','queue-definition');
+    if(!$qdefName) throw new Exception('Mail queue definition does not exist');
+    $qdefObjectInfo = xarModApiFunc('dynamicdata','user','getobjectinfo',array('name' => $qdefName));
+    if(!$qdefObjectInfo) return;
+
+    $args = array( 'itemtype' => $qdefObjectInfo['itemtype'],
+                   'module' => 'mail');
+    $items = xarModApiFunc('dynamicdata','user','getitems',$args);
+ 
+    foreach($items as $id => $props) {
+        $itemtypes[$id] = array('label' => xarVarPrepForDisplay($props['name']),
+                                'title' => xarVarPrepForDisplay($props['description']),
+                                'url'   => '');
+    }
     return $itemtypes;    
 }
 ?>

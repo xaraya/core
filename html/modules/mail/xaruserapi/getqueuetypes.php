@@ -12,6 +12,7 @@ function mail_userapi_getqueuetypes($args)
     // of the queues object we are using.
     $qTypes[1] = xarML('Incoming mail');
     $qTypes[2] = xarML('Outgoing mail');
+    $qTypes[3] = xarML('Black hole');
     return $qTypes;
 }
 ?>
