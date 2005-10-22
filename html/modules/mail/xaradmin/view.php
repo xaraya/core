@@ -6,7 +6,7 @@
  * @subpackage mail
  * @author Marcel van der Boom <marcel@xaraya.com>
  */
-function mail_admin_viewqdefs($args)
+function mail_admin_view($args)
 {
      // Security Check
     if (!xarSecurityCheck('AdminMail')) return;

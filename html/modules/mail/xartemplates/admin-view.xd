@@ -25,7 +25,7 @@
         <input type="hidden" name="itemid" value="#$itemid#"/>
         <input type="hidden" name="objectid" value="#$qdef.objectid#"/>
         <input type="hidden" name="modid" value="#$qdef.moduleid#"/>
-        <input type="hidden" name="return_url" value="&xar-modurl-mail-admin-viewqdefs;"/>
+        <input type="hidden" name="return_url" value="&xar-modurl-mail-admin-view;"/>
         <input type="hidden" name="itemtype" value="#$qdef.itemtype#"/>
         <input type="submit" value="#xarML('Save')#"/>
       </form>
@@ -46,13 +46,13 @@
         <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
         <input type="hidden" name="objectid" value="#$qdef.objectid#"/>
         <input type="hidden" name="modid" value="#$qdef.moduleid#"/>
-        <input type="hidden" name="return_url" value="&xar-modurl-mail-admin-viewqdefs;"/>
+        <input type="hidden" name="return_url" value="&xar-modurl-mail-admin-view;"/>
         <input type="hidden" name="itemtype" value="#$qdef.itemtype#"/>
         <input type="submit" value="#xarML('Save')#"/>
       </form>
     </xar:if>
   </fieldset>
   <xar:if condition="$itemid ne 0">
-    <a href="&xar-modurl-mail-admin-viewqdefs;"><xar:mlstring>Create new queue definition</xar:mlstring></a>
+    <a href="&xar-modurl-mail-admin-view;"><xar:mlstring>Create new queue definition</xar:mlstring></a>
   </xar:if>
 </div>
