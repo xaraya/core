@@ -44,8 +44,12 @@
           <xar:data-input type="radio" name="qdef_choose" id="qdef_choose" value="$qdef_method" options="$qdef_choose"/>
           <xar:data-input type="object" name="qdef_name_choose" id="qdef_name_choose" onchange="document.getElementById(\'qdef_choose\').checked=true"/>
         </div>
-        
       </div>
+      <xar:if condition="isset($error)">
+        <div class="xar-error">
+          <span>#$error#</span>
+        </div>
+      </xar:if>
     </fieldset>
     <input type="submit" name="create" value="#xarML('Create')#"/>
   </form>

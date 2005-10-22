@@ -1,7 +1,7 @@
 <object name="mailqueues">
   <objectid>5</objectid>
   <label>mail-queues</label>
-  <moduleid>182</moduleid>
+  <moduleid>771</moduleid>
   <itemtype>4</itemtype>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
@@ -26,7 +26,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <order>2</order>
-      <validation>1:12:\w+</validation>
+      <validation>1:12:/\w+/</validation>
     </property>
     <property name="type">
       <id>30</id>
