@@ -44,8 +44,7 @@ function dynamicdata_userapi_getprop($args)
     }
 
     if (empty($modid) && !empty($module)) {
-        $modid = xarModAPIFunc('dynamicdata','user','getparentidfromname',
-                                array('module' => $module));
+        $modid = xarModGetIDFromName($module);
     }
     if (empty($itemtype)) {
         $itemtype = 0;
@@ -72,7 +71,7 @@ function dynamicdata_userapi_getprop($args)
     }
 
     $invalid = array();
-    if (!isset($modid)) {
+    if (!isset($modid) || !is_numeric($modid)) {
         $invalid[] = 'module id';
     }
     if (!isset($itemtype) || !is_numeric($itemtype)) {

@@ -43,16 +43,21 @@ function dynamicdata_userapi_showview($args)
 
     if (empty($modid)) {
         if (empty($module)) {
-            $module = xarModGetName();
+            $modname = xarModGetName();
+        } else {
+            $modname = $module;
+        }
+        if (is_numeric($modname)) {
+            $modid = $modname;
+            $modinfo = xarModGetInfo($modid);
+            $modname = $modinfo['name'];
+        } else {
+            $modid = xarModGetIDFromName($modname);
         }
     } else {
-		$module = $modid;
+            $modinfo = xarModGetInfo($modid);
+            $modname = $modinfo['name'];
     }
-
-	$modinfo = xarModAPIFunc('dynamicdata','user','getmodinfo',array('module' => $>module));
-	$modid = $modinfo['id'];
-	$modname = $modinfo['name'];
-
     if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'module name', 'user', 'showview', 'dynamicdata');

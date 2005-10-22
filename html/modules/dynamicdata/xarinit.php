@@ -52,10 +52,9 @@ function dynamicdata_init()
                                                   'null'        => false,
                                                   'default'     => ''),
                 /* the module this object relates to */
-                    'xar_object_moduleid' => array('type'        => 'varchar',
-                                                  'size'        => 254,
+                    'xar_object_moduleid' => array('type'        => 'integer',
                                                   'null'        => false,
-                                                  'default'     => ''),
+                                                  'default'     => '0'),
                 /* the optional item type within this module */
                     'xar_object_itemtype' => array('type'        => 'integer',
                                                   'null'        => false,
@@ -157,8 +156,7 @@ function dynamicdata_init()
                                                   'default'     => '0'),
            /* we keep those 2 for efficiency, even though they're known via the object id as well */
                 /* the module this property relates to */
-                    'xar_prop_moduleid'   => array('type'        => 'varchar',
-                                                  'size'        => 254,
+                    'xar_prop_moduleid'   => array('type'        => 'integer',
                                                   'null'        => false,
                                                   'default'     => '0'),
                 /* the optional item type within this module */
