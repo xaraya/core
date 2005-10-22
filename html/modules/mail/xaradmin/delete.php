@@ -1,6 +1,6 @@
 <?php
 
-function mail_admin_delete($args)
+function mail_admin_delete($args = array())
 {
     // Are we legitimally here?
     if(!xarSecConfirmAuthKey()) return;

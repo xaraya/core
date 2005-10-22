@@ -19,8 +19,14 @@
       <legend><xar:mlstring>Change queue definition</xar:mlstring></legend>
       
       <xar:comment>Normal edit form</xar:comment>
-      <form style="display: inline;" method="post" action="&xar-modurl-mail-admin-modify;">
+      <form style="display: inline;" method="post" action="&xar-modurl-mail-admin-update;">
         <xar:data-form module="$qdef['moduleid']" itemid="$itemid" itemtype="$qdef['itemtype']" linkfield="name"/>
+        <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
+        <input type="hidden" name="itemid" value="#$itemid#"/>
+        <input type="hidden" name="objectid" value="#$qdef.objectid#"/>
+        <input type="hidden" name="modid" value="#$qdef.moduleid#"/>
+        <input type="hidden" name="return_url" value="&xar-modurl-mail-admin-viewqdefs;"/>
+        <input type="hidden" name="itemtype" value="#$qdef.itemtype#"/>
         <input type="submit" value="#xarML('Save')#"/>
       </form>
 
