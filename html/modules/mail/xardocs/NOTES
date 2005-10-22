@@ -1,0 +1,80 @@
+Notebook style scratch doc for the mail modules (created during
+design/implementation of mail-in scenario) This document is roughly
+conforming to the structured text format (stx) which will give people
+who actually want pretty docs a head start. (google: stx2any for
+details)  
+
+! TODOLIST
+* add xmlhttp stuff to the std. dd tags which generate the
+  view/form/display screens, so in case the screen design is fit to do
+  so, they can be used (also for commerce) 
+* add property to the qdef object where you can specify how to store
+  the queue items (sequence types as in the structures which triggered
+  the implementation in the first place) 
+* provide a usecase with some data 
+* augment the new/create/view/modify/update standard functions with
+  checks for the itemtype to validate whether we use our registered
+  definition
+* create entry point where the mta can pipe the mail content into
+  (ws.php?) 
+* 
+
+! GENERAL 
+The idea of the mail-in scenario was triggered by the implementation
+of so called abstract datastructures for xaraya. Initially i started
+with sequences, specialized into stacks, queues and deques. (see below
+includes in the core repository for their specific meanings).
+To be able to test these thouroughly i needed an application and
+stumbled upon some TODOs in the mail modules, combined with my own
+need for a mail interface to xaraya directly (trouble ticket system).
+
+Based on that, the queue code was created in the mail module.
+
+Coming from the above the work is roughly as follows:
+
+Mail queues come in a couple of flavours:
+# incoming 
+  - get filled by something external to xaraya, usualy some mta like
+  thing
+  - get emptied by xaraya after processing is complete. The details
+  for processing are somewhat subtle (see below)
+# outgoing 
+  - get filled by xaraya, typically something like a newsletter module
+    or create notifications, etc.
+  - get emptied by xaraya after processing is done.
+
+There are some special types considered like a ''black hole'' which
+would be a queue which never contains anything (visible) but still can
+emit (radiate) or eat items. For now, we'll focus on incoming and
+outgoing queues.
+
+Typically a queue can be processed directly or on a scheduled
+basis. If the queue is processed directly, it's not much of a queue in
+practice because the items put into the queue are directly processed
+and removed, so (assuming succesfull operation) the queue size is at
+most one.
+It gets more interesting if a queue is processed in a deferred manner,
+either by a threshold parameter, or based on some schedule. 
+* threshold: when a queue reaches a certain size/age the processing
+  code kicks in and issues whatever is defined as the processing code
+  for the queue
+* scheduled: a process indepent on the (passive) xaraya process
+  triggers an processing run, based on (external) parameter like time
+  or load.    
+
+# the process starts at an entry point where xaraya 'receives' mail
+  through some mta magic routing the (raw) content of the mail item
+  into xaraya.
+# the mail modules receives this content and, based on some matching
+  on headers or whatever, puts this into a specific queue for further
+  processing by xaraya.
+# by hooking other modules into the mail module a 'create' signal is
+  generated whenever an item enters into some mail queue, which in
+  turn allows the modules to do with the content whatever they
+  please. 
+# 
+
+dnl Local Variables: 
+dnl mode:stx 
+dnl End: 
+
