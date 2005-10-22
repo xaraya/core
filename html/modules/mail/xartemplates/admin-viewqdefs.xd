@@ -11,7 +11,7 @@
   <!-- Master view -->
   <fieldset>
     <legend><xar:mlstring>Registered mail queues</xar:mlstring></legend>
-    <xar:data-view modid="$qdef['moduleid']" itemtype="$qdef['itemtype']" layout="list" linkfunc="displayqdef" linkfield="name" sort="id"/>
+    <xar:data-view modid="$qdef['moduleid']" itemtype="$qdef['itemtype']" layout="list" linkfield="name" sort="id"/>
   </fieldset>
 
   <fieldset>
