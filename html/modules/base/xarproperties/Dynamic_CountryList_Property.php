@@ -2,14 +2,15 @@
 /**
  * Dynamic Country List Property
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Base module
  * @author John Cox
  */
+
 /**
  * Include the base class
  */
@@ -23,7 +24,6 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_CountryList_Property extends Dynamic_Select_Property
 {
-
     function Dynamic_CountryList_Property($args)
     {
         $this->Dynamic_Select_Property($args);
@@ -45,6 +45,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         } else {
             $this->value = '';
         }
+
         return true;
     }
 
@@ -67,15 +68,88 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $data['value'] = $value;
         $data['name']  = $name;
         $data['id']    = $id;
+        $coptions = getCountryList();
 
-       /* $out = '<select' .
-       ' name="' . $name . '"' .
-       ' id="'. $id . '"' .
-       (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
-       '>';
-       */
-       /* Updated 2005-10-15 with ISO 3166 country codes and additional countries */
-        $coptions = array();
+        $data['coptions'] = $coptions;
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
+        $data['tabindex'] =! empty($tabindex) ? $tabindex: 0;
+
+        $template="";
+        return xarTplProperty('base', 'countrylist', 'showinput', $data);
+
+    }
+
+    function showOutput($args = array())
+    {
+         extract($args);
+
+         $data=array();
+         if (isset($value)) {
+             $data['value']=xarVarPrepHTMLDisplay($value);
+         } else {
+             $data['value']=xarVarPrepHTMLDisplay($this->value);
+         }
+         if (isset($name)) {
+           $data['name']=$name;
+         }
+         if (isset($id)) {
+             $data['id']=$id;
+         }
+
+         $countrynames= getCountryList();
+         $countryname='';
+         /* For templates which are selecting on id and displaying name 
+          * Pass the actual country name to the template as well as the id
+          */
+         foreach ($countrynames as $countrydata) {
+             foreach ($countrydata as $k) {
+               if ($k == $data['value']) {
+                   $countryname=$countrydata['name'];
+               }
+             }
+         }
+         $data['countryname']=$countryname;
+         $template="";
+
+         return xarTplProperty('base', 'countrylist', 'showoutput', $data);
+    }
+
+    /**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+     **/
+     function getBasePropertyInfo()
+     {
+         $args = array();
+         $baseInfo = array(
+                              'id'         => 42,
+                              'name'       => 'countrylisting',
+                              'label'      => 'Country Dropdown',
+                              'format'     => '42',
+                              'validation' => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+                              'args'           => serialize($args),
+                            // ...
+                           );
+        return $baseInfo;
+     }
+}
+/**
+ * Country list according to ISO 3166
+ *
+ * @author jojodee
+ * Updated 2005-10-15 with ISO 3166 country codes
+ * Credit to Pedro Innecco for corrections and updates
+ */
+function getCountryList()
+{
+    $coptions = array();
+        
         $coptions[] = array('id' =>'Please select', 'name' =>'Please select' );
         $coptions[] = array('id' =>'af', 'name'=>'Afghanistan');
         $coptions[] = array('id' =>'ax', 'name'=>'Aland Islands');
@@ -99,7 +173,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'bb', 'name'=>'Barbados');
         $coptions[] = array('id' =>'by', 'name'=>'Belarus');
         $coptions[] = array('id' =>'be', 'name'=>'Belgium');
-        $coptions[] = array('id' =>'be', 'name'=>'Belize');
+        $coptions[] = array('id' =>'bz', 'name'=>'Belize');
         $coptions[] = array('id' =>'bj', 'name'=>'Benin');
         $coptions[] = array('id' =>'bm', 'name'=>'Bermuda');
         $coptions[] = array('id' =>'bt', 'name'=>'Bhutan');
@@ -117,7 +191,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'cm', 'name'=>'Cameroon');
         $coptions[] = array('id' =>'ca', 'name'=>'Canada');
         $coptions[] = array('id' =>'cv', 'name'=>'Cape Verde');
-        $coptions[] = array('id' =>'cy', 'name'=>'Cayman Islands');
+        $coptions[] = array('id' =>'ky', 'name'=>'Cayman Islands');
         $coptions[] = array('id' =>'cf', 'name'=>'Central African Republic');
         $coptions[] = array('id' =>'td', 'name'=>'Chad');
         $coptions[] = array('id' =>'cl', 'name'=>'Chile');
@@ -130,7 +204,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'cd', 'name'=>'Congo, Democratic Republic of (Zaire)');
         $coptions[] = array('id' =>'ck', 'name'=>'Cook Islands');
         $coptions[] = array('id' =>'cr', 'name'=>'Costa Rica');
-        $coptions[] = array('id' =>'ci', 'name'=>'Cote D\'Ivoire');
+        $coptions[] = array('id' =>'ci', 'name'=>'C&#244;te D\'Ivoire');
         $coptions[] = array('id' =>'hr', 'name'=>'Croatia');
         $coptions[] = array('id' =>'cu', 'name'=>'Cuba');
         $coptions[] = array('id' =>'cy', 'name'=>'Cyprus');
@@ -141,7 +215,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'do', 'name'=>'Dominican Republic');
         $coptions[] = array('id' =>'ec', 'name'=>'Ecuador');
         $coptions[] = array('id' =>'eg', 'name'=>'Egypt');
-        $coptions[] = array('id' =>'sv', 'name'=>'El Salvador ');
+        $coptions[] = array('id' =>'sv', 'name'=>'El Salvador');
         $coptions[] = array('id' =>'gq', 'name'=>'Equatorial Guinea');
         $coptions[] = array('id' =>'er', 'name'=>'Eritrea');
         $coptions[] = array('id' =>'ee', 'name'=>'Estonia');
@@ -197,7 +271,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'lb', 'name'=>'Lebanon');
         $coptions[] = array('id' =>'ls', 'name'=>'Lesotho');
         $coptions[] = array('id' =>'lr', 'name'=>'Liberia');
-        $coptions[] = array('id' =>'ly', 'name'=>'Libyan Arab Jamahiriya');
+        $coptions[] = array('id' =>'ly', 'name'=>'Libya');
         $coptions[] = array('id' =>'li', 'name'=>'Liechtenstein');
         $coptions[] = array('id' =>'lt', 'name'=>'Lithuania');
         $coptions[] = array('id' =>'lu', 'name'=>'Luxembourg');
@@ -231,7 +305,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'nc', 'name'=>'New Caledonia');
         $coptions[] = array('id' =>'nz', 'name'=>'New Zealand');
         $coptions[] = array('id' =>'ni', 'name'=>'Nicaragua');
-        $coptions[] = array('id' =>'ni', 'name'=>'Niger');
+        $coptions[] = array('id' =>'ne', 'name'=>'Niger');
         $coptions[] = array('id' =>'ng', 'name'=>'Nigeria');
         $coptions[] = array('id' =>'nu', 'name'=>'Niue');
         $coptions[] = array('id' =>'nf', 'name'=>'Norfolk Island');
@@ -240,9 +314,9 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'om', 'name'=>'Oman');
         $coptions[] = array('id' =>'pk', 'name'=>'Pakistan');
         $coptions[] = array('id' =>'pw', 'name'=>'Palau');
-        $coptions[] = array('id' =>'ps', 'name'=>'Palestinian Territory, Occupied');
+        $coptions[] = array('id' =>'ps', 'name'=>'Palestinian Territory');
         $coptions[] = array('id' =>'pa', 'name'=>'Panama');
-        $coptions[] = array('id' =>'pg', 'name'=>' Papua New Guinea');
+        $coptions[] = array('id' =>'pg', 'name'=>'Papua New Guinea');
         $coptions[] = array('id' =>'py', 'name'=>'Paraguay');
         $coptions[] = array('id' =>'pe', 'name'=>'Peru');
         $coptions[] = array('id' =>'ph', 'name'=>'Philippines');
@@ -250,19 +324,19 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'pl', 'name'=>'Poland');
         $coptions[] = array('id' =>'pt', 'name'=>'Portugal');
         $coptions[] = array('id' =>'pr', 'name'=>'Puerto Rico');
-        $coptions[] = array('id' =>'aq', 'name'=>'Qatar');
+        $coptions[] = array('id' =>'qa', 'name'=>'Qatar');
         $coptions[] = array('id' =>'re', 'name'=>'R&#233;union');
         $coptions[] = array('id' =>'ro', 'name'=>'Romania');
         $coptions[] = array('id' =>'ru', 'name'=>'Russian Federation');
         $coptions[] = array('id' =>'rw', 'name'=>'Rwanda');
         $coptions[] = array('id' =>'sh', 'name'=>'St. Helena');
-        $coptions[] = array('id' =>'kn', 'name'=>'St. Kitts & Nevis');
+        $coptions[] = array('id' =>'kn', 'name'=>'St. Kitts and Nevis');
         $coptions[] = array('id' =>'lc', 'name'=>'St. Lucia');
-        $coptions[] = array('id' =>'pm', 'name'=>'St. Pierre & Miquelon');
-        $coptions[] = array('id' =>'vc', 'name'=>'St. Vincent & the Grenadines');
+        $coptions[] = array('id' =>'pm', 'name'=>'St. Pierre and Miquelon');
+        $coptions[] = array('id' =>'vc', 'name'=>'St. Vincent and the Grenadines');
         $coptions[] = array('id' =>'ws', 'name'=>'Samoa');
         $coptions[] = array('id' =>'sm', 'name'=>'San Marino');
-        $coptions[] = array('id' =>'st', 'name'=>'SaoTome and Principe');
+        $coptions[] = array('id' =>'st', 'name'=>'S&#227;o Tom&#233; and Pr&#237;ncipe');
         $coptions[] = array('id' =>'sa', 'name'=>'Saudi Arabia');
         $coptions[] = array('id' =>'sn', 'name'=>'Senegal');
         $coptions[] = array('id' =>'cs', 'name'=>'Serbia & Montenegro');
@@ -283,8 +357,8 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'sz', 'name'=>'Swaziland');
         $coptions[] = array('id' =>'se', 'name'=>'Sweden');
         $coptions[] = array('id' =>'ch', 'name'=>'Switzerland');
-        $coptions[] = array('id' =>'sy', 'name'=>'Syrian Arab Republic');
-        $coptions[] = array('id' =>'tw', 'name'=>'Taiwan, Province of China');
+        $coptions[] = array('id' =>'sy', 'name'=>'Syria');
+        $coptions[] = array('id' =>'tw', 'name'=>'Taiwan');
         $coptions[] = array('id' =>'tj', 'name'=>'Tajikistan');
         $coptions[] = array('id' =>'tz', 'name'=>'Tanzania, United Republic of');
         $coptions[] = array('id' =>'th', 'name'=>'Thailand');
@@ -305,7 +379,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'us', 'name'=>'United States');
         $coptions[] = array('id' =>'um', 'name'=>'U.S. Minor Outlying Islands');
         $coptions[] = array('id' =>'uy', 'name'=>'Uruguay');
-        $coptions[] = array('id' =>'uz', 'name'=>'Uzbekistan ');
+        $coptions[] = array('id' =>'uz', 'name'=>'Uzbekistan');
         $coptions[] = array('id' =>'vu', 'name'=>'Vanuatu');
         $coptions[] = array('id' =>'ve', 'name'=>'Venezuela');
         $coptions[] = array('id' =>'vn', 'name'=>'Vietnam');
@@ -316,80 +390,6 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'ye', 'name'=>'Yemen');
         $coptions[] = array('id' =>'zm', 'name'=>'Zambia');
         $coptions[] = array('id' =>'zw', 'name'=>'Zimbabwe');
-
-
-        /*
-        for($i=0; isset($coptions[$i]); $i++) {
-            $out .= '<option';
-            $out .= ' value="'.$coptions[$i]['name'].'"';
-            if ($value == $coptions[$i]['name']) {
-                $out .= ' selected="selected">'.$coptions[$i]['name'].'</option>';
-            } else {
-                $out .= '>'.$coptions[$i]['name'].'</option>';
-            }
-        }
-        */
-
-        $data['coptions'] = $coptions;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-        $data['tabindex'] =! empty($tabindex) ? $tabindex: 0;
-
-        $template="";
-        return xarTplProperty('base', 'countrylist', 'showinput', $data);
-
-    }
-
-    function showOutput($args = array())
-    {
-         extract($args);
-         $data=array();
-         if (isset($value)) {
-             $data['value']=xarVarPrepHTMLDisplay($value);
-         } else {
-             $data['value']=xarVarPrepHTMLDisplay($this->value);
-         }
-         if (isset($name)) {
-           $data['name']=$name;
-         }
-         if (isset($id)) {
-             $data['id']=$id;
-         }
-         $template="";
-
-         return xarTplProperty('base', 'countrylist', 'showoutput', $data);
-        /*if (isset($value)) {
-            return xarVarPrepHTMLDisplay($value);
-        } else {
-            return xarVarPrepHTMLDisplay($this->value);
-        }*/
-    }
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 42,
-                              'name'       => 'countrylisting',
-                              'label'      => 'Country Dropdown',
-                              'format'     => '42',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => '',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
+   return $coptions;
 }
-
 ?>
