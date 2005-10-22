@@ -49,20 +49,13 @@ function dynamicdata_adminapi_showlist($args)
         $modname = $module;
     }
 
-	$params = explode('.',$modname);
-	if (count($params) == 1) {
-		if (is_numeric($modname)) {
-			$modid = $modname;
-			$modinfo = xarModGetInfo($modid);
-			$modname = $modinfo['name'];
-		} else {
-			$modid = xarModGetIDFromName($modname);
-		}
-	} else {
-		$modinfo = xarModAPIFunc('dynamicdata','user','getmodinfo',array('module' => $modname));
-		$modid = $modname;
-		$modname = $modinfo['name'];
-	}
+    if (is_numeric($modname)) {
+        $modid = $modname;
+        $modinfo = xarModGetInfo($modid);
+        $modname = $modinfo['name'];
+    } else {
+        $modid = xarModGetIDFromName($modname);
+    }
     if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'module name', 'admin', 'showlist', 'dynamicdata');
