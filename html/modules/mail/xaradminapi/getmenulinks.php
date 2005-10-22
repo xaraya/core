@@ -30,7 +30,7 @@ function mail_adminapi_getmenulinks()
                                  'title' => xarML('View all mails scheduled to be sent later'),
                                  'label' => xarML('View Mail Queue'));
         }
-        $menulinks[] = array('url' => xarModUrl('mail','admin','viewqueues'),
+        $menulinks[] = array('url' => xarModUrl('mail','admin','viewqdefs'),
                              'title' => xarML('Manage queues for mail item handling'),
                              'label' => xarML('Queue management'));
         $menulinks[] = array('url' => xarModURL('mail','admin','template'),
