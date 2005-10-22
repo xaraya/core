@@ -22,7 +22,9 @@ function mail_admin_viewqueues($args)
         } else {
             // Object found
             // TODO: validate here as well?
-            return array('qdef' => $qdefObjectInfo);
+            $data['qdef'] = $qdefObjectInfo;
+            if(!xarVarFetch('itemid','id',$data['itemid'],0,XARVAR_NOT_REQUIRED)) return;
+            return $data;
         }
     } else {
         // Nothing found for sure, offer to create one.
