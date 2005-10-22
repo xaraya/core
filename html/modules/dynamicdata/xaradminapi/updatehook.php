@@ -86,72 +86,68 @@ function dynamicdata_adminapi_updatehook($args)
     if (empty($itemid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'item id', 'admin', $dd_function, 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;
     }
 
-    $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('objectid' => $extrainfo['objectid'], 'base' => false));
-    foreach ($tree as $branch) {
-		$myobject = & Dynamic_Object_Master::getObject(array(
-											 'objectid' => $branch['objectid'],
-											 'moduleid' => $modid,
-											 'itemtype' => $itemtype,
-											 'itemid'   => $itemid));
-		if (!isset($myobject)) {
-			$msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-						'object', 'admin', $dd_function, 'dynamicdata');
-			xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-			// we *must* return $extrainfo for now, or the next hook will fail
-			//return false;
-			return $extrainfo;
-		}
+    $myobject = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
+                                         'itemtype' => $itemtype,
+                                         'itemid'   => $itemid));
+    if (!isset($myobject)) {
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'object', 'admin', $dd_function, 'dynamicdata');
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
 
-		$myobject->getItem();
-		// use the values passed via $extrainfo if available
-		$isvalid = $myobject->checkInput($extrainfo);
-		if (!$isvalid) {
-			if ($verbose) {
-				$msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-							'input', 'admin', $dd_function, 'dynamicdata');
-				// Note : we can't use templating here
-				$msg .= ' : ';
-				foreach ($myobject->properties as $property) {
-					if (!empty($property->invalid)) {
-						$msg .= xarML('#(1) = invalid #(2)',$property->label,$property->invalid);
-						$msg .= ' - ';
-					}
-				}
-			} else {
-				$msg = '';
-				foreach ($myobject->properties as $property) {
-					if (!empty($property->invalid)) {
-						$msg .= $property->invalid . ' ';
-					}
+    $myobject->getItem();
+    // use the values passed via $extrainfo if available
+    $isvalid = $myobject->checkInput($extrainfo);
+    if (!$isvalid) {
+		if ($verbose) {
+			$msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+						'input', 'admin', $dd_function, 'dynamicdata');
+			// Note : we can't use templating here
+			$msg .= ' : ';
+			foreach ($myobject->properties as $property) {
+				if (!empty($property->invalid)) {
+					$msg .= xarML('#(1) = invalid #(2)',$property->label,$property->invalid);
+					$msg .= ' - ';
 				}
 			}
-			xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-			// we *must* return $extrainfo for now, or the next hook will fail
-			//return false;
-			return $extrainfo;
-		}
-
-		if ($dd_function == 'createhook') {
-			$itemid = $myobject->createItem();
 		} else {
-			$itemid = $myobject->updateItem();
+			$msg = '';
+			foreach ($myobject->properties as $property) {
+				if (!empty($property->invalid)) {
+					$msg .= $property->invalid . ' ';
+				}
+			}
 		}
+		xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+		// we *must* return $extrainfo for now, or the next hook will fail
+		//return false;
+		return $extrainfo;
+    }
 
-		if (empty($itemid)) {
-			$msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-						'create/update', 'admin', $dd_function, 'dynamicdata');
-			xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-			// we *must* return $extrainfo for now, or the next hook will fail
-			//return false;
-			return $extrainfo;
-		}
-	}
+    if ($dd_function == 'createhook') {
+        $itemid = $myobject->createItem();
+    } else {
+        $itemid = $myobject->updateItem();
+    }
+
+    if (empty($itemid)) {
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'create/update', 'admin', $dd_function, 'dynamicdata');
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
     // Return the extra info
     return $extrainfo;
 }
