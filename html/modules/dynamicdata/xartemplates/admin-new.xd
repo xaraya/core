@@ -27,9 +27,7 @@
     </xar:if>
 
     <form method="post" action="&xar-modurl-dynamicdata-admin-create;" enctype="#$enc_type#">
-        <table border="2" class="xar-fullwidth">
-            <xar:data-form object="$object" />
-        </table>
+        <xar:data-form object="$object" />
 
         <xar:if condition="!empty($hooks)">
             <xar:foreach in="$hooks" key="$module" value="$output">
