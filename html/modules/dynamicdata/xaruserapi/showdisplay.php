@@ -40,13 +40,14 @@ function dynamicdata_userapi_showdisplay($args)
         $modname = $module;
     }
 
-	// $modname could be a mod id, name or an parentid
-
-	$modinfo = xarModAPIFunc('dynamicdata','user','getmodinfo',array('module' => $modname));
-	$modid = $modinfo['id'];
-	$modname = $modinfo['name'];
-
-	if (empty($modid)) {
+    if (is_numeric($modname)) {
+        $modid = $modname;
+        $modinfo = xarModGetInfo($modid);
+        $modname = $modinfo['name'];
+    } else {
+        $modid = xarModGetIDFromName($modname);
+    }
+    if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'module name', 'user', 'showdisplay', 'dynamicdata');
         xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',

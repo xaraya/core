@@ -54,7 +54,7 @@ function dynamicdata_user_display($args)
     $data = array();
     $data['object'] =& $myobject;
 
-	$modinfo = xarModAPIFunc('dynamicdata','user','getmodinfo',array('module' => $myobject->moduleid));
+    $modinfo = xarModGetInfo($myobject->moduleid);
     $item = array();
     $item['module'] = $modinfo['name'];
     $item['itemtype'] = $itemtype;

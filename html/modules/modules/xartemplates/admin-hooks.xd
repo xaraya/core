@@ -1,4 +1,4 @@
-<ul style="list-style: none;">xxxxxxxxx
+<ul style="list-style: none;">
     <xar:foreach in="$hookmodules" value="$hookmod">
     <xar:if condition="empty($return_url)">
         <li class="xar-alt xar-norm-outline" style="background-image: none; padding:3pt; font-size: 1.2em; margin-bottom: 5pt;"><a href="#$hookmod['modlink']#">#$hookmod['modname']#</a>: #$hookmod['modtitle']#</li>
