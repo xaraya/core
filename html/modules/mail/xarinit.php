@@ -100,7 +100,11 @@ function mail_upgrade($oldVersion)
         // From 0.1.1 -> 2.0.0 we added a mod var which holds the admin id for mail, the adminname is obsolete (no free email choice anymore)
         // Try to find a reasonable admin (the designated one, for example ;-) )
         $desigAdmin = xarModGetVar('roles','admin');
-        xarModSetVar('mail','admin_outgoing', $desigAdmin);
+        // In current xar this always fails as mail is installed before roles gets initialized
+        // in the off chance someone is actually ugrading, we leave it in. 
+        if(!empty($desigAdmin)) {
+            xarModSetVar('mail','admin_outgoing', $desigAdmin);
+        }
         xarModDelVar('mail','adminname');
         xarModDelVar('mail','adminmail');
     case'2.0.0':
