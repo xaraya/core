@@ -17,20 +17,22 @@ details)
   definition
 * create entry point where the mta can pipe the mail content into
   (ws.php?) 
-* 
+* draw a nice diagram of the flows through the system for incoming and
+  outgoing at least.  
 
 ! GENERAL 
 The idea of the mail-in scenario was triggered by the implementation
 of so called abstract datastructures for xaraya. Initially i started
 with sequences, specialized into stacks, queues and deques. (see below
-includes in the core repository for their specific meanings).
-To be able to test these thouroughly i needed an application and
-stumbled upon some TODOs in the mail modules, combined with my own
-need for a mail interface to xaraya directly (trouble ticket system).
+the includes directory in the core repository for their specific
+meanings).  To be able to test these thouroughly i needed an
+application and stumbled upon some TODOs in the mail module, combined
+with my own need for a mail interface to xaraya directly (trouble
+ticket system).
 
 Based on that, the queue code was created in the mail module.
 
-Coming from the above the work is roughly as follows:
+Coming from the above the scenario idea is roughly as follows:
 
 Mail queues come in a couple of flavours:
 # incoming 
@@ -48,7 +50,7 @@ would be a queue which never contains anything (visible) but still can
 emit (radiate) or eat items. For now, we'll focus on incoming and
 outgoing queues.
 
-Typically a queue can be processed directly or on a scheduled
+Typically a queue can be processed directly or on a triggered
 basis. If the queue is processed directly, it's not much of a queue in
 practice because the items put into the queue are directly processed
 and removed, so (assuming succesfull operation) the queue size is at
@@ -57,11 +59,14 @@ It gets more interesting if a queue is processed in a deferred manner,
 either by a threshold parameter, or based on some schedule. 
 * threshold: when a queue reaches a certain size/age the processing
   code kicks in and issues whatever is defined as the processing code
-  for the queue
+  for the queue, the code is executed only when a request (through
+  whatever means), reaches that code, so this is sort of unpredictable
+  when things will actually run.
 * scheduled: a process indepent on the (passive) xaraya process
   triggers an processing run, based on (external) parameter like time
   or load.    
 
+Let's what an incoming mail item process would look like:
 # the process starts at an entry point where xaraya 'receives' mail
   through some mta magic routing the (raw) content of the mail item
   into xaraya.
@@ -72,7 +77,25 @@ either by a threshold parameter, or based on some schedule.
   generated whenever an item enters into some mail queue, which in
   turn allows the modules to do with the content whatever they
   please. 
-# 
+# after these hooks run, the mail module removes the processed items
+  from the queue one by one. (and in turn generates delete hook calls
+  for those operations)
+
+Similarly an outgoing queue:
+# xaraya (in whatever area) creates some item.
+# if the mail module is hooked in, this item gets posted into the
+  right queue by the mail module. When direct processing is enabled,
+  the item is processed directly in the hook call and removed from the
+  queue again.
+# when deferred processing is enabled, after putting the item into the
+  queue, the mail module is finished.
+# after the time comes to actually process a queue, the items are sent
+  off to their destinations and removed from the queue on successfull
+  completion (and in turn generate the delete hook triggers for those
+  who need them)
+
+That's about the basic flow through the system. 
+
 
 dnl Local Variables: 
 dnl mode:stx 
