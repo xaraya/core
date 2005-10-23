@@ -48,7 +48,7 @@ require_once 'creole/drivers/odbc/ODBCTypes.php';
  * @version   $Revision: 1.2 $
  * @package   creole.drivers.odbc
  */
-class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet 
+class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet
 {
     /**
      * Record cache
@@ -153,7 +153,7 @@ class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet
                     }
                 }
             }
-
+                        
             // Add record to cache.
             $this->recs[++$curRecs] = $row;
         }

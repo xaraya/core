@@ -36,40 +36,40 @@ class ColumnInfo {
 
     /** Column name */
     public $name;
-    
+
     /** Column Creole type. */
     public $type;
-    
+
     /** Column native type */
     public $nativeType;
-    
+
     /** Column length */
     public $size;
-    
+
     /** Column scale (number of digits after decimal ) */
     public $scale;
-    
+
     /** Is nullable? */
     public $isNullable;
 
     /** Default value */
     public $defaultValue;
-    
+
     /** Is autoincrement? */
     public $isAutoIncrement;
 
     /** Table */
     public $table;
-    
+
     /**
-    * Additional and optional vendor specific information.
-    * @var vendorSpecificInfo
-    */
-    protected $vendorSpecificInfo = array();    
-    
+     * Additional and optional vendor specific information.
+     * @var vendorSpecificInfo
+     */
+    protected $vendorSpecificInfo = array();
+
     /**
      * Construct a new ColumnInfo object.
-     * 
+     *
      * @param TableInfo $table The table that owns this column.
      * @param string $name Column name.
      * @param int $type Creole type.
@@ -95,7 +95,7 @@ class ColumnInfo {
         $this->table = $table;
         $this->name = $name;
         $this->type = $type;
-        $this->nativeType = $nativeType;        
+        $this->nativeType = $nativeType;
         $this->size = $size;
         $this->scale = $scale;
         $this->isNullable = $is_nullable;
@@ -114,16 +114,16 @@ class ColumnInfo {
     {
         return array('name', 'type', 'nativeType', 'size', 'precision', 'isNullable', 'defaultValue');
     }
-     
+
     /**
      * Get column name.
      * @return string
-     */ 
+     */
     public function getName()
     {
         return $this->name;
     }
-    
+
     /**
      * Get column type.
      * @return int
@@ -132,14 +132,14 @@ class ColumnInfo {
     {
         return $this->type;
     }
-    
+
     /**
      * Gets the native type name.
      * @return string
      */
     public function getNativeType()
     {
-        return $this->nativeType;    
+        return $this->nativeType;
     }
 
     /**
@@ -150,7 +150,7 @@ class ColumnInfo {
     {
         return $this->size;
     }
-    
+
     /**
      * Get column scale.
      * Scale refers to number of digits after the decimal.  Sometimes this is referred
@@ -161,7 +161,7 @@ class ColumnInfo {
     {
         return $this->scale;
     }
-    
+
     /**
      * Get the default value.
      * @return mixed
@@ -170,16 +170,16 @@ class ColumnInfo {
     {
         return $this->defaultValue;
     }
-    
+
     /**
      * Is column nullable?
      * @return boolean
-     */ 
+     */
     public function isNullable()
     {
         return $this->isNullable;
     }
-    
+
     /**
      * Is column of autoincrement type?
      * @return boolean
@@ -198,14 +198,14 @@ class ColumnInfo {
         return $this->vendorSpecificInfo;
     }
 
-    /** 
+    /**
      * @return string
-     */ 
+     */
     public function toString()
     {
         return $this->name;
     }
-    
+
     /**
      * Get parent table.
      * @return TableInfo

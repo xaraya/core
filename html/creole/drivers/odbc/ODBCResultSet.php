@@ -94,7 +94,7 @@ class ODBCResultSet extends ODBCResultSetCommon implements ResultSet
     {
         if ($rownum < 0 || $this->limit > 0 && $rownum > $this->limit)
             return false;
-
+        
         $this->cursorPos = $rownum;
 
         return true;
