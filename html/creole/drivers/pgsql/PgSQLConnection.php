@@ -34,7 +34,7 @@ include_once 'creole/drivers/pgsql/PgSQLResultSet.php';
  */ 
 class PgSQLConnection extends ConnectionCommon implements Connection {        
                 
-    /**
+    /** 
      * Affected Rows of last executed query.
      * Postgres needs this for getUpdateCount()
      * We used to store the entire result set
@@ -127,7 +127,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
     function close()
     {
         $ret = @pg_close($this->dblink);
-        $this->result_affected_rows = null;
+	$this->result_affected_rows = null;
         $this->dblink = null;
         return $ret;
     }
@@ -141,8 +141,8 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
         if (!$result) {
             throw new SQLException('Could not execute query', pg_last_error($this->dblink), $sql);
         }
-        $this->result_affected_rows = @pg_affected_rows($result);
-        
+	$this->result_affected_rows = @pg_affected_rows($result);
+
         return new PgSQLResultSet($this, $result, $fetchmode);
     }        
 
@@ -154,10 +154,10 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
         $result = @pg_query($this->dblink, $sql);
         if (!$result) {
             throw new SQLException('Could not execute update', pg_last_error($this->dblink), $sql);
-        }        
-        $this->result_affected_rows = (int) @pg_affected_rows($result);
-        
-        return $this->result_affected_rows;     
+        }
+	$this->result_affected_rows = (int) @pg_affected_rows($result);
+
+	return $this->result_affected_rows;
     }
 
     /**
@@ -207,10 +207,10 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
      */
     function getUpdateCount()
     {
-       if ( $this->result_affected_rows === null ) {
-               throw new SQLException('getUpdateCount called before any sql queries were executed');
-       }
-       return $this->result_affected_rows;
+	if ( $this->result_affected_rows === null ) {
+		throw new SQLException('getUpdateCount called before any sql queries were executed');
+	}
+	return $this->result_affected_rows;
     }    
 
     

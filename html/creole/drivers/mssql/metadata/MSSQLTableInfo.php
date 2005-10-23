@@ -119,14 +119,14 @@ class MSSQLTableInfo extends TableInfo {
 
             if (!isset($this->foreignKeys[$name])) {
                 $this->foreignKeys[$name] = new ForeignKeyInfo($name);
-                
+
                 if ($this->database->hasTable($ftbl)) {
                     $foreignTable = $this->database->getTable($ftbl);
-                } else {
+                } else {                
                     $foreignTable = new TableInfo($ltbl);
                     $this->database->addTable($foreignTable);
                 }
-                
+
                 if ($foreignTable->hasColumn($fcol)) {
                     $foreignCol = $foreignTable->getColumn($fcol);
                 } else {                

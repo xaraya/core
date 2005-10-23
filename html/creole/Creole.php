@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Creole.php,v 1.11 2005/06/15 13:15:34 gamr Exp $
+ *  $Id: Creole.php,v 1.12 2005/10/17 19:03:50 dlawson_mi Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -30,32 +30,32 @@ include_once 'creole/Connection.php';
 
 /**
  * This is the class that manages the database drivers.
- * 
- * There are a number of default drivers (at the time of writing this comment: MySQL, MSSQL, SQLite, PgSQL, Oracle) 
+ *
+ * There are a number of default drivers (at the time of writing this comment: MySQL, MSSQL, SQLite, PgSQL, Oracle)
  * that are "shipped" with Creole.  You may wish to either add a new driver or swap out one of the existing drivers
  * for your own custom driver.  To do this you simply need to register your driver using the registerDriver() method.
- * 
- * Note that you register your Connection class because the Connection class is responsible for calling the other 
+ *
+ * Note that you register your Connection class because the Connection class is responsible for calling the other
  * driver classes (e.g. ResultSet, PreparedStatement, etc.).
- * 
- * 
+ *
+ *
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.11 $
+ * @version   $Revision: 1.12 $
  * @package   creole
  */
-class Creole {    
+class Creole {
 
     /**
      * Constant that indicates a connection object should be used.
      */
     const PERSISTENT = 1;
-    
+
     /**
-     * Flag to pass to the connection to indicate that no case conversions 
+     * Flag to pass to the connection to indicate that no case conversions
      * should be performed by ResultSet on keys of fetched rows.
      */
-    const NO_ASSOC_LOWER = 16;            
-    
+    const NO_ASSOC_LOWER = 16;
+
     /**
      * Map of built-in drivers.
      * Change or add your own using registerDriver()
@@ -83,10 +83,10 @@ class Creole {
 
     /**
      * Register your own RDBMS driver class.
-     * 
+     *
      * You can use this to specify your own class that replaces a default driver or
-     * adds support for a new driver.  Register your own class by specifying the 
-     * 'phptype' (e.g. mysql) and a dot-path notation to where your Connection class is 
+     * adds support for a new driver.  Register your own class by specifying the
+     * 'phptype' (e.g. mysql) and a dot-path notation to where your Connection class is
      * relative to any location on the include path.  You can also specify '*' as the phptype
      * if you want to register a driver that will handle any native type (e.g. if creating
      * a set of decorator classes that log SQL before calling native driver methods).  YOU CAN
@@ -94,16 +94,16 @@ class Creole {
      * <p>
      * Note: the class you need to register is your Connection class because this is the
      * class that's responsible for instantiating the other classes that are part of your
-     * driver.  It is possible to mix & match drivers -- i.e. to write a custom driver where 
+     * driver.  It is possible to mix & match drivers -- i.e. to write a custom driver where
      * the Connection object just instantiates stock classes for ResultSet and PreparedStatement.
      * Note that if you wanted to "override" only the ResultSet class you would also have to override
      * the Connection and PreparedStatement classes so that they would return the correct ResultSet
      * class.  In the future we may implement a more "packaged" approach to drivers; for now we
      * want to keep it simple.
-     * 
+     *
      * @param string $phptype   The phptype (mysql, mssql, etc.). This is first part of DSN URL (e.g. mysql://localhost/...).
      *                          You may also specify '*' to register a driver that will "wrap" the any native drivers.
-     * @param string $dotpath   A dot-path locating your class.  For example 'creole.drivers.mssql.MSSQLConnection' 
+     * @param string $dotpath   A dot-path locating your class.  For example 'creole.drivers.mssql.MSSQLConnection'
      *                          will be included like: include 'creole/drivers/mssql/MSSQLConnection.php' and the
      *                          classname will be assumed to be 'MSSQLConnection'.
      * @return void
@@ -112,9 +112,9 @@ class Creole {
     {
         self::$driverMap[$phptype] = $dotpath;
     }
-    
+
     /**
-     * Removes the driver for a PHP type.  Note that this will remove user-registered 
+     * Removes the driver for a PHP type.  Note that this will remove user-registered
      * drivers _and_ the default drivers.
      * @param string $phptype The PHP type for driver to de-register.
      * @see registerDriver()
@@ -123,11 +123,11 @@ class Creole {
     {
         unset(self::$driverMap[$phptype]);
     }
-    
+
     /**
      * Returns the class path to the driver registered for specified type.
      * @param string $phptype The phptype handled by driver (e.g. 'mysql', 'mssql', '*').
-     * @return string The driver class in dot-path notation (e.g. creole.drivers.mssql.MSSQLConnection) 
+     * @return string The driver class in dot-path notation (e.g. creole.drivers.mssql.MSSQLConnection)
      *                  or NULL if no registered driver found.
      */
     public static function getDriver($phptype)
@@ -138,7 +138,7 @@ class Creole {
             return null;
         }
     }
-    
+
     /**
      * Create a new DB connection object and connect to the specified
      * database
@@ -179,14 +179,18 @@ class Creole {
             if( isset(self::$connectionMap[$connectionMapKey][1]) ) { // is persistent
                 // a persistent connection with these parameters is already there,
                 // so we return it, no matter what was specified as persistent flag
-                return self::$connectionMap[$connectionMapKey][1];
+                $con = self::$connectionMap[$connectionMapKey][1];
             } else {
                 // we don't have a persistent connection, and since the persistent
                 // flag wasn't set either, we just return the non-persistent connection
-                return self::$connectionMap[$connectionMapKey][0];
+                $con = self::$connectionMap[$connectionMapKey][0];
             }
+
             // if we're here, a non-persistent connection was already there, but
             // the user wants a persistent one, so it will be created
+            
+            if ($con->isConnected())
+                return $con;            
         }
 
         // support "catchall" drivers which will themselves handle the details of connecting
@@ -199,7 +203,7 @@ class Creole {
                 throw new SQLException("No driver has been registered to handle connection type: $type");
             }
         }
-        
+
         // may need to make this more complex if we add support
         // for 'dbsyntax'
         $clazz = self::import(self::$driverMap[$type]);
@@ -208,12 +212,12 @@ class Creole {
         if (!($obj instanceof Connection)) {
             throw new SQLException("Class does not implement creole.Connection interface: $clazz");
         }
-        
+
         try {
             $obj->connect($dsninfo, $flags);
         } catch(SQLException $sqle) {
             $sqle->setUserInfo($dsninfo);
-            throw $sqle;        
+            throw $sqle;
         }
 	$persistent = ($flags & Creole::PERSISTENT) === Creole::PERSISTENT;
         return self::$connectionMap[$connectionMapKey][(int)$persistent] = $obj;
@@ -224,7 +228,7 @@ class Creole {
      *
      * This isn't quite as powerful as DB::parseDSN(); it's also a lot simpler, a lot faster,
      * and many fewer lines of code.
-     * 
+     *
      * A array with the following keys will be returned:
      *  phptype: Database backend used in PHP (mysql, odbc etc.)
      *  protocol: Communication protocol to use (tcp, unix etc.)
@@ -279,7 +283,7 @@ class Creole {
         $parsed['username'] = @$info['user'];
         $parsed['password'] = @$info['pass'];
         $parsed['port'] = @$info['port'];
-        
+
         $host = @$info['host'];
         if (false !== ($pluspos = strpos($host, '+'))) {
             $parsed['protocol'] = substr($host,0,$pluspos);
@@ -291,13 +295,13 @@ class Creole {
         } else {
             $parsed['hostspec'] = $host;
         }
-        
+
         if (isset($info['path'])) {
             $parsed['database'] = substr($info['path'], 1); // remove first char, which is '/'
         }
-        
+
         if (isset($info['query'])) {
-                $opts = explode('&', $info['query']);               
+                $opts = explode('&', $info['query']);
                 foreach ($opts as $opt) {
                     list($key, $value) = explode('=', $opt);
                     if (!isset($parsed[$key])) { // don't allow params overwrite

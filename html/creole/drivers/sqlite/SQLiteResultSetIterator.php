@@ -42,7 +42,7 @@ class SQLiteResultSetIterator implements Iterator {
     {
         $this->result = $rs->getResource();
         $this->fetchmode = $rs->getFetchmode();
-        $this->row_count = $rs->getRecordCount();
+	$this->row_count = $rs->getRecordCount();
     }
     
     /**
@@ -55,7 +55,7 @@ class SQLiteResultSetIterator implements Iterator {
     
     function valid()
     {
-        return ( $this->pos < $this->row_count );
+	return ( $this->pos < $this->row_count );
     }
     
     /**

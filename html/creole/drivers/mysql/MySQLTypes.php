@@ -19,7 +19,7 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/CreoleTypes.php';
 
 /**
@@ -51,7 +51,7 @@ class MySQLTypes extends CreoleTypes {
                                 'time' => CreoleTypes::TIME,
                                 'year' => CreoleTypes::YEAR,
                                 'datetime' => CreoleTypes::TIMESTAMP,
-                                'timestamp' => CreoleTypes::TIMESTAMP,                                
+                                'timestamp' => CreoleTypes::TIMESTAMP,
                                 'tinyblob' => CreoleTypes::BINARY,
                                 'blob' => CreoleTypes::VARBINARY,
                                 'mediumblob' => CreoleTypes::VARBINARY,
@@ -63,10 +63,10 @@ class MySQLTypes extends CreoleTypes {
                                 'enum' => CreoleTypes::CHAR,
                                 'set' => CreoleTypes::CHAR,
                                 );
-    
+
     /** Reverse mapping, created on demand. */
     private static $reverseMap = null;
-    
+
     /**
      * This method returns the generic Creole (JDBC-like) type
      * when given the native db type.
@@ -82,11 +82,11 @@ class MySQLTypes extends CreoleTypes {
             return CreoleTypes::OTHER;
         }
     }
-            
+
     /**
      * This method will return a native type that corresponds to the specified
      * Creole (JDBC-like) type.
-     * If there is more than one matching native type, then the LAST defined 
+     * If there is more than one matching native type, then the LAST defined
      * native type will be returned.
      * @param int $creoleType
      * @return string Native type string.
@@ -98,6 +98,6 @@ class MySQLTypes extends CreoleTypes {
         }
         return @self::$reverseMap[$creoleType];
     }
-                                
+
 }
 ?>
