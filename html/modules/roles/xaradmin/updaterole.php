@@ -22,6 +22,7 @@ function roles_admin_updaterole()
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
     if (!xarVarFetch('pname', 'str:1:35:', $pname)) return;
     if (!xarVarFetch('ptype', 'int', $ptype)) return;
+    if (!xarVarFetch('itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
 
     //Save the old state and type
     $roles = new xarRoles();
@@ -99,7 +100,8 @@ function roles_admin_updaterole()
     // call item update hooks (for DD etc.)
 // TODO: move to update() function
     $pargs['module'] = 'roles';
-    $pargs['itemtype'] = $ptype; // we might have something separate for groups later on
+//    $pargs['itemtype'] = $ptype; // we might have something separate for groups later on
+    $pargs['itemtype'] = $itemtype;
     $pargs['itemid'] = $uid;
     xarModCallHooks('item', 'update', $uid, $pargs);
 
@@ -152,7 +154,7 @@ function roles_admin_updaterole()
     }
 
     // redirect to the next page
-    xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid)));
+    xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid, 'itemtype' => $itemtype)));
 }
 
 ?>

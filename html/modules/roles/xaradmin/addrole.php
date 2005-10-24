@@ -25,6 +25,8 @@ function roles_admin_addrole()
     xarVarFetch('pname', 'str:1:', $pname, NULL, XARVAR_NOT_REQUIRED);
     xarVarFetch('ptype', 'str:1', $ptype, NULL, XARVAR_NOT_REQUIRED);
     xarVarFetch('pparentid', 'str:1:', $pparentid, NULL, XARVAR_NOT_REQUIRED);
+    if (!xarVarFetch('return_url', 'isset',  $return_url, NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
     // get the rest for users only
     // TODO: need to see what to do with auth_module
     if ($ptype == 0) {
@@ -127,11 +129,16 @@ function roles_admin_addrole()
     // call item create hooks (for DD etc.)
 // TODO: move to add() function
     $pargs['module'] = 'roles';
-    $pargs['itemtype'] = $ptype; // we might have something separate for groups later on
+//    $pargs['itemtype'] = $ptype; // we might have something separate for groups later on
     $pargs['itemid'] = $uid;
+    $pargs['itemtype'] = $itemtype;
     xarModCallHooks('item', 'create', $uid, $pargs);
 
     // redirect to the next page
-    xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole',array('uid' => $uid)));
+    if (!empty($return_url)) {
+        xarResponseRedirect($return_url);
+    } else {
+        xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole',array('uid' => $uid, 'itemtype' => $itemtype)));
+    }
 }
 ?>

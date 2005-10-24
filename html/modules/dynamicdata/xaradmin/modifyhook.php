@@ -68,27 +68,33 @@ function dynamicdata_admin_modifyhook($args)
         $itemid = $objectid;
     }
 
-    $object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
-                                       'itemtype' => $itemtype,
-                                       'itemid'   => $itemid));
-    if (!isset($object)) return;
+    $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
 
-    $object->getItem();
+    $data = "";
+    foreach ($tree as $branch) {
+		$object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
+										   'itemtype' => $branch['itemtype'],
+										   'itemid'   => $itemid));
+		if (!isset($object)) return;
 
-    // if we are in preview mode, we need to check for any preview values
-    if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
-    if (!empty($preview)) {
-        $object->checkInput();
-    }
+		$object->getItem();
 
-    if (!empty($object->template)) {
-        $template = $object->template;
-    } else {
-        $template = $object->name;
-    }
-    return xarTplModule('dynamicdata','admin','modifyhook',
-                        array('properties' => & $object->properties),
-                        $template);
+		// if we are in preview mode, we need to check for any preview values
+		if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
+		if (!empty($preview)) {
+			$object->checkInput();
+		}
+
+		if (!empty($object->template)) {
+			$template = $object->template;
+		} else {
+			$template = $object->name;
+		}
+		$data .= xarTplModule('dynamicdata','admin','modifyhook',
+							array('properties' => & $object->properties),
+							$template);
+	}
+    return $data;
 }
 
 ?>

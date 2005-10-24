@@ -2,10 +2,18 @@
 <xar:comment>This is a generic form template for any DD object. You can use a specific template for one particular object in this directory as showform-[objectname].xd, and/or use templates in your own [module]/xartemplates/objects directory by specifying the tplmodule="..." argument in the xar:data-form BL tag or showForm() method call.</xar:comment>
 <xar:if condition="empty($layout) or $layout eq 'default'">
     <xar:foreach in="$properties" key="$name" value="$property">
-      <div class="xar-form-input-wrapper">
-        <xar:data-label property="$properties[$name]" label="id" />
-        <xar:data-input property="$properties[$name]" />
-      </div>
+          <div class="xar-form-input-wrapper">
+            <xar:data-label property="$properties[$name]" label="id" />
+            <xar:if condition="$name eq 'moduleid'">
+                <xar:set name="$onchange">"onchange=\"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();\""</xar:set>                    
+                <xar:data-input property="$properties[$name]" extraparams="$onchange"/>
+            <xar:elseif condition="$name eq 'parent'" />
+                <xar:set name="$modid">$properties['moduleid']->value</xar:set>             
+                <xar:data-input property="$properties[$name]" validation="$modid" />
+            <xar:else />
+                <xar:data-input property="$properties[$name]" />
+            </xar:if>
+          </div>
     </xar:foreach>
 <xar:elseif condition="$layout eq 'prefix'" />
     <xar:comment>
@@ -13,11 +21,15 @@
         you can have several identical objects in the same input form (cfr. subforms)
     </xar:comment>
     <xar:foreach in="$properties" key="$name" value="$property">
-      <xar:set name="fieldname">$fieldprefix . '_dd_' . $property->id</xar:set>
-      <div class="xar-form-input-wrapper">
-        <xar:data-label property="$properties[$name]" label="$fieldname" />
-        <xar:data-input property="$properties[$name]" name="$fieldname" />
-      </div>
+        <xar:set name="fieldname">$fieldprefix . '_dd_' . $property->id</xar:set>
+        <tr class="xar-align-left xar-valign-middle">
+            <td>
+                <xar:data-label property="$properties[$name]" label="$fieldname" />
+            </td>
+            <td>
+                <xar:data-input property="$properties[$name]" name="$fieldname" />
+            </td>
+        </tr>
     </xar:foreach>
 <xar:else />
     <p>

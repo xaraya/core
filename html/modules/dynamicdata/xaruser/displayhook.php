@@ -71,21 +71,25 @@ function dynamicdata_user_displayhook($args)
         $itemid = $objectid;
     }
 
-    $object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
-                                       'itemtype' => $itemtype,
-                                       'itemid' => $itemid));
-    if (!isset($object)) return;
-    $object->getItem();
+    $data = array();
+    $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
+    foreach ($tree as $branch) {
+		$object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
+										   'itemtype' => $branch['itemtype'],
+										   'itemid' => $itemid));
+		if (!isset($object)) return;
+		$object->getItem();
 
-    if (!empty($object->template)) {
-        $template = $object->template;
-    } else {
-        $template = $object->name;
-    }
-    return xarTplModule('dynamicdata','user','displayhook',
-                        array('properties' => & $object->properties),
-                        $template);
-
+		if (!empty($object->template)) {
+			$template = $object->template;
+		} else {
+			$template = $object->name;
+		}
+		$data .= xarTplModule('dynamicdata','user','displayhook',
+							array('properties' => & $object->properties),
+							$template);
+	}
+	return $data
 }
 
 ?>

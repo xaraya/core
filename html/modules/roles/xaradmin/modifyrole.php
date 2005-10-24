@@ -16,13 +16,16 @@
  */
 function roles_admin_modifyrole()
 {
-    if (!xarVarFetch('uid', 'int:1:', $uid)) return;
+    if (!xarVarFetch('uid', 'int:1:', $uid, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pname', 'str:1:', $name, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ptype', 'str:1', $type, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('puname', 'str:1:35:', $uname, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pemail', 'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ppass', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('itemtype', 'int', $data['itemtype'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
+    $uid = isset($itemid) ? $itemid : $uid;
     // Call the Roles class and get the role to modify
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
@@ -89,7 +92,7 @@ function roles_admin_modifyrole()
     // call item modify hooks (for DD etc.)
     $item = $data;
     $item['module']= 'roles';
-    $item['itemtype'] = $data['ptype']; // we might have something separate for groups later on
+//    $item['itemtype'] = $data['ptype']; // we might have something separate for groups later on
     $item['itemid']= $uid;
     $data['hooks'] = xarModCallHooks('item', 'modify', $uid, $item);
 

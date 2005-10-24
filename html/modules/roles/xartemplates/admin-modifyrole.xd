@@ -208,6 +208,7 @@
 
                 <div class="xar-align-center xar-clearboth">
                     <input type="hidden" name="uid" id="uid" value="#$uid#" />
+                    <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="submit" value="#xarML('Update')#" />
                 </div>
