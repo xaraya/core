@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- * 
  * Xaraya WebServices Interface
  * 
  * @package modules
@@ -12,6 +10,61 @@
  * @author Miko 
 */
 
+
+
+include 'includes/xarCore.php';
+// TODO: don't load the whole core
+xarCoreInit(XARCORE_SYSTEM_ALL);
+
+/**
+ * Determine how we got called.
+ *
+ */
+if(isset($argc) && $argc > 0) {
+    // We got called from the command line
+    xarLocalServicesMain($argc, $argv);
+} else {
+    // Through some web mechanism
+    xarWebservicesMain();
+}
+
+/**
+ * Entry point for local services
+ * 
+ * Also know as the command line entry point
+ *
+ * call sign: php ./ws.php <type> [args]
+ *
+ * @todo when this gets any more than this, use getOpt package from PEAR
+ */
+function xarLocalServicesMain($argc, $argv)
+{
+    // Main check
+    if(!isset($argv[1])) return usage();
+    $type = $argv[1];
+    switch($type) {
+    case 'mail':
+        // Expecting input on stdin for a mail msg
+        $exitCode = xarModApiFunc('mail','cli','process',array('argc' => $argc, 'argv' => $argv));
+        break;
+    default:
+        fwrite(STDERR,usage());
+        $exitCode = 1; // generic error
+    }
+    exit($exitCode);
+}
+
+function usage() {
+    echo '
+Usage for local services entry point:
+    php5 ./ws.php <type> [args]
+
+    <type>   : required designator for request type
+               Supported:
+               - \'mail\': a mail message is supplied at stdin
+    [args]   : arguments specific to the supplied <type>
+';die();
+}
 
 /**
  * Entry point for webservices 
@@ -30,24 +83,11 @@
  * TRACKBACK     : http://host.com/ws.php?type=trackback (Is this still right?)
  * WEBDAV        : http://host.com/ws.php?type=webdav
  * FLASHREMOTING : http://host.com/ws.php?type=flashremoting
- */
-
-
-/**
- * Main WebServices Function
  *
  * @access public
- * @todo make this a bit more structured, so all the services have roughly the same interface
- * @toco provide ws.php as a nice (templated) page instead of the dumb list of links
-*/
-include 'includes/xarCore.php';
-
+ */
 function xarWebservicesMain() 
 {
-
-    // TODO: don't load the whole core
-    xarCoreInit(XARCORE_SYSTEM_ALL);
-    
     /* 
      determine the server type, then
      create an instance of an that server and 
@@ -171,5 +211,4 @@ function xarWebservicesMain()
         }
     }
 }
-xarWebservicesMain();
 ?>

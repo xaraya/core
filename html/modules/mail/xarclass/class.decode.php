@@ -5,7 +5,7 @@
  * if it's there it will work, if it's not it will work too
  *
  */
-if(!class_exists('PEAR'),false) {
+if(!class_exists('PEAR')) {
     class PEAR
     {
         /**
@@ -13,7 +13,14 @@ if(!class_exists('PEAR'),false) {
          */
         function raiseError($msg='Unknown error')
         {
-            echo $msg; // TODO: call xarErrorSet here.
+            echo $msg."\n"; // TODO: call xarErrorSet here.
+            return false;
+        }
+        
+        // Signature from PEAR
+        function isError($data, $code = null) 
+        {
+            return ($data === false);
         }
     }
 }
@@ -21,7 +28,7 @@ if(!class_exists('PEAR'),false) {
 // Include the main 3rd party functionaliy for
 // parsing the mails, that file has only one modification
 // namely NOT including PEAR.php
-include dirname(__FILE_)."/mimeDecode.php";
+include_once "modules/mail/xarclass/mimeDecode.php";
 
 /**
  * Mail parser class

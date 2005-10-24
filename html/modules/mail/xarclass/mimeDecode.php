@@ -178,7 +178,7 @@ class Mail_mimeDecode extends PEAR
     function decode($params = null)
     {
         // determine if this method has been called statically
-        $isStatic = !(isset($this) && get_class($this) == __CLASS__);
+        $isStatic = !(isset($this));// XARAYA inherits so remove this condition: && get_class($this) == __CLASS__);
 
         // Have we been called statically?
 	// If so, create an object and pass details to that.
