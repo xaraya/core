@@ -20,9 +20,9 @@ xarCoreInit(XARCORE_SYSTEM_ALL);
  * Determine how we got called.
  *
  */
-if(isset($argc) && $argc > 0) {
+if(isset($argc) && $argc > 0 && basename($argv[0]) == 'ws.php') {
     // We got called from the command line
-    xarLocalServicesMain($argc, $argv);
+    exit(xarLocalServicesMain($argc, $argv));
 } else {
     // Through some web mechanism
     xarWebservicesMain();
@@ -45,25 +45,23 @@ function xarLocalServicesMain($argc, $argv)
     switch($type) {
     case 'mail':
         // Expecting input on stdin for a mail msg
-        $exitCode = xarModApiFunc('mail','cli','process',array('argc' => $argc, 'argv' => $argv));
+        return xarModApiFunc('mail','cli','process',array('argc' => $argc, 'argv' => $argv));
         break;
     default:
-        fwrite(STDERR,usage());
-        $exitCode = 1; // generic error
+        return usage();
     }
-    exit($exitCode);
 }
 
 function usage() {
-    echo '
-Usage for local services entry point:
+    fwrite(STDERR,"Usage for local services entry point:
     php5 ./ws.php <type> [args]
 
     <type>   : required designator for request type
                Supported:
-               - \'mail\': a mail message is supplied at stdin
+               - 'mail': a mail message is supplied at stdin
     [args]   : arguments specific to the supplied <type>
-';die();
+");
+    return 1;
 }
 
 /**
