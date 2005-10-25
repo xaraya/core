@@ -24,6 +24,11 @@
         (#$totalselect#)
     </h2>
 
+    <xar:comment>TODO set the active tab here</xar:comment>
+    <!-- Show the general tab list for roles -->
+    <xar:set name="ptype">1</xar:set>
+    <xar:template file="tablist" />
+
     <p>
         <a href="&xar-modurl-roles-admin-createmail;">
             <xar:mlstring>Email Users In This Group</xar:mlstring>
