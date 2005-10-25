@@ -29,20 +29,6 @@
     <xar:set name="ptype">1</xar:set>
     <xar:template file="tablist" />
 
-    <p>
-        <a href="&xar-modurl-roles-admin-createmail;">
-            <xar:mlstring>Email Users In This Group</xar:mlstring>
-        </a>
-        <xar:if condition="$groupuid ne 0">
-            | <a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$groupuid#">
-                <xar:mlstring>Show Privileges Assigned To This Group</xar:mlstring>
-            </a>
-            | <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$groupuid#">
-                <xar:mlstring>Test This Groups's Privileges</xar:mlstring>
-            </a>
-        </xar:if>
-    </p>
-
     <xar:if condition="$selstyle eq '0'">
     <xar:elseif condition="$selstyle eq '1'"/>
         <script language="JavaScript">
@@ -60,9 +46,12 @@
             window.onunload = doOnUnload;
             // -->
         </script>
-        #$roletree#
-        <br />
-
+        <fieldset>
+          <legend><xar:mlstring>Role hierarchy</xar:mlstring></legend>
+          <div>
+            #$roletree#
+          </div>
+        </fieldset>
     <xar:elseif condition="$selstyle eq '2'"/>
         <div>
             <dl class="xar-tabs">
@@ -372,8 +361,12 @@
     </xar:if>
     <!-- always show the new user link -->
     <p>
-        <a href="&xar-modurl-roles-admin-newrole;&amp;ptype=0&amp;pparentid=#$groupuid#" title="#xarML('Add a new user')#">
-            <xar:mlstring>Add a New User to this Group</xar:mlstring>
-        </a>
+      <a href="&xar-modurl-roles-admin-newrole;&amp;ptype=0&amp;pparentid=#$groupuid#" title="#xarML('Add a new user')#">
+        <xar:mlstring>Add a New User to this Group</xar:mlstring>
+      </a>
+      |
+      <a href="&xar-modurl-roles-admin-createmail;">
+        <xar:mlstring>Email Users In This Group</xar:mlstring>
+      </a>
     </p>
 </div>
