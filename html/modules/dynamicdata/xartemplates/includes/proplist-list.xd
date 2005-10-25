@@ -157,7 +157,7 @@
     #$output#
   </xar:foreach>
 </xar:if>
-
+<fieldset>
 <div class="xar-align-center">
   <input type="hidden" name="authid" id="authid" value="#$authid#" />
   <input type="hidden" name="objectid" id="objectid" value="#$objectid#" />
@@ -165,3 +165,4 @@
   <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
   <input type="submit" value="#xarML('Update Properties')#" />
 </div>
+</fieldset>
