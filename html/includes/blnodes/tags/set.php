@@ -30,7 +30,11 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
             return;
         }
         // Allow specifying name="test" and name="$test" and deprecate the $ form over time
-        $this->_name = str_replace(XAR_TOKEN_VAR_START,'',$name);
+        if(substr($name,0,1) == XAR_TOKEN_VAR_START) {
+            $this->_name = substr($name,1);
+        } else {
+            $this->_name = $name;
+        }
         
         // Allow suppression of template comments (important when using a tag as a child tag)
         if(isset($nonmarkup) && strtolower($nonmarkup) == 'no') {

@@ -27,7 +27,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
         }
         
         // Allow specifying name="test" and name="$test" and deprecate the $ form over time
-        $name = str_replace(XAR_TOKEN_VAR_START,'',$name);
+        if(substr($name,0,1) == XAR_TOKEN_VAR_START) $name = substr($name,1);
         
         switch ($scope) {
             case 'config':
