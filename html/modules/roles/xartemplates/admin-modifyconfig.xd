@@ -421,8 +421,6 @@
                         </div>
                     </xar:comment>
                 </xar:if>
-            </fieldset>
-            <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="phase" id="phase" value="update" />

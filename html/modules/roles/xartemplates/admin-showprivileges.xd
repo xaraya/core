@@ -67,31 +67,25 @@
                     </a>
                 </dd>   
             </xar:if>
+            <dd>
+              <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$roleid#">
+                    <xar:mlstring>Test Privileges</xar:mlstring>
+                </a>
+            </dd>    
+
         </dl>
     </div>
 
-    <p>
-        <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$roleid#" title="#xarML('Test this User\'s Privileges')#">
-            <img src="modules/roles/xarimages/test.gif" alt="#xarML('Test Privileges')#" />
-        </a>
-    </p>
-    <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$roleid#" title="#xarML('Test this User\'s Privileges')#">
-        <xar:ml>
-            <xar:mlstring>Test the privileges of #(1)</xar:mlstring>
-            <xar:mlvar>
-                #xarVarPrepForDisplay($pname)#
-            </xar:mlvar>
-        </xar:ml>
-    </a>
-    <br /><br />
-    <h3>
+    <fieldset>
+      <legend>
         <xar:ml>
             <xar:mlstring>Privileges inherited by #(1):</xar:mlstring>
             <xar:mlvar>
                 #xarVarPrepForDisplay($pname)#
             </xar:mlvar>
         </xar:ml>
-    </h3>
+      </legend>
+    
     <xar:if condition="count($inherited) eq 0">
         <p>
             <xar:mlstring>No privileges inherited.</xar:mlstring>            
@@ -168,15 +162,17 @@
             </table>
         </div>
     </xar:if>
-
-    <h3>
+    </fieldset>
+    <fieldset>
+      <legend>
         <xar:ml>
             <xar:mlstring>Privileges assigned to #(1):</xar:mlstring>
             <xar:mlvar>
                 #xarVarPrepForDisplay($pname)#
             </xar:mlvar>
         </xar:ml>
-    </h3>            
+      </legend>
+          
 
     <xar:if condition="count($privileges) eq 0">
         <p>
@@ -264,7 +260,7 @@
             </xar:loop>
         </table>
     </xar:if>
-
+    </fieldset>
     <xar:if condition="$ptype eq 1">
         <xar:set name="$thisrole">
             <xar:mlstring>Group</xar:mlstring>
@@ -274,7 +270,9 @@
             <xar:mlstring>User</xar:mlstring>
         </xar:set>
     </xar:if>
-    <h3>
+
+    <fieldset>
+      <legend>
         <xar:ml>
             <xar:mlstring>Assign a Privilege to #(1) '#(2)':</xar:mlstring>
             <xar:mlvar>
@@ -284,32 +282,27 @@
                 #xarVarPrepForDisplay($pname)#
             </xar:mlvar>
         </xar:ml>                     
-    </h3>
-     
+      </legend>
     <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
-        <fieldset>
-            <div class="xar-form-input-wrapper">
-                <label for="privid" title="#xarML('Select the Privilege to add')#" class="xar-form-label">
-                    <xar:mlstring>
-                        Privilege:
-                    </xar:mlstring>
-                </label>
-                <select name="privid" id="privid">
-                    <xar:loop name="$allprivileges">
-                        <option value="#$loop:item['pid']#">
-                            #xarVarPrepForDisplay($loop:item['name'])#
-                        </option>
-                    </xar:loop>
-                </select>
-            </div>
-        </fieldset>
-        <fieldset>
-            <div class="xar-form-input-wrapper-after">
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
-                <input type="submit" value="#xarML('Add Privilege')#" />
-            </div>
-        </fieldset>
+      <div class="xar-form-input-wrapper">
+        <label for="privid" title="#xarML('Select the Privilege to add')#" class="xar-form-label">
+          <xar:mlstring>
+            Privilege:
+          </xar:mlstring>
+        </label>
+        <select name="privid" id="privid">
+          <xar:loop name="$allprivileges">
+            <option value="#$loop:item['pid']#">
+              #xarVarPrepForDisplay($loop:item['name'])#
+            </option>
+          </xar:loop>
+        </select>
+      </div>
+      <div class="xar-form-input-wrapper-after">
+        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+        <input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
+        <input type="submit" value="#xarML('Add Privilege')#" />
+      </div>
     </form>
-
+    </fieldset>
 </div>

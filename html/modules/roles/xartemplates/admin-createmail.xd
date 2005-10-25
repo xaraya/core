@@ -302,140 +302,144 @@
     </form>
     <xar:if condition="$modstatus">
         <xar:comment>
-            lets display latest status 
-        </xar:comment>
+            lets display latest status ?? this contains very strange values, so let's not :-)
         <p>
             #$modstatus# 
         </p>
+        </xar:comment>
+
     </xar:if>
-    <xar:if condition="!isset($users)">
+    <fieldset>
+      <legend><xar:mlstring>Users</xar:mlstring></legend>
+      <xar:if condition="!isset($users)">
         <p>
             <xar:mlstring>
                 No users selected
             </xar:mlstring>
             . 
         </p>
-        <xar:else />
+      <xar:else />
         <xar:comment>
             the Roles Lists table-based styles (borrow from the Modules list)
         </xar:comment>
         <xar:if condition="$selstyle eq '1'">
+          <p>
+            <xar:ml>
+              <xar:mlstring>
+                #(1) user(s) selected.
+              </xar:mlstring>
+              <xar:mlvar>
+                #$totalselected#
+              </xar:mlvar>
+            </xar:ml>
+          </p>
+        <xar:elseif condition="$selstyle eq '2'" />
+          <xar:if condition="count($users) eq 0">
             <p>
-                <xar:ml>
-                    <xar:mlstring>
-                        #(1) user(s) selected.
-                    </xar:mlstring>
-                    <xar:mlvar>
-                        #$totalselected#
-                    </xar:mlvar>
-                </xar:ml>
+              <xar:mlstring>
+                No users match
+              </xar:mlstring>
             </p>
-            <xar:elseif condition="$selstyle eq '2'" />
-            <xar:if condition="count($users) eq 0">
-                <p>
+          <xar:else />
+          <table class="xar-fullwidth">
+            <tr>
+              <th>
+                <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=name">
+                  <xar:mlstring>
+                    Real name
+                  </xar:mlstring>
+                </a>
+              </th>
+              <th>
+                <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=uname">
+                  <xar:mlstring>
+                    Login
+                  </xar:mlstring>
+                </a>
+              </th>
+              <th>
+                <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=email">
+                  <xar:mlstring>
+                    Email
+                  </xar:mlstring>
+                </a>
+              </th>
+              <th>
+                <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=date_reg">
+                  <xar:mlstring>
+                    Date Registered
+                  </xar:mlstring>
+                </a>
+              </th>
+              <th>
+                <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=state">
+                  <xar:mlstring>
+                    State
+                  </xar:mlstring>
+                </a>
+              </th>
+            </tr>
+            <xar:loop name="$users">
+              <tr>
+                <td>
+                  #$loop:item['name']# 
+                </td>
+                <td>
+                  #$loop:item['uname']# 
+                </td>
+                <td>
+                  <a href="&xar-modurl-roles-admin-createmail;&amp;uid=#$loop:item.uid#" title="#xarML('Email this user')#">
+                    #$loop:item['email']# 
+                  </a>
+                </td>
+                <td class="xar-align-center">
+                  #xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])# 
+                </td>
+                <td>
+                  <xar:if condition="$loop:item['status'] eq 1">
                     <xar:mlstring>
-                        No users match
+                      Inactive
                     </xar:mlstring>
-                </p>
-                <xar:else />
-                <table class="xar-fullwidth">
-                    <tr>
-                        <th>
-                            <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=name">
-                                <xar:mlstring>
-                                    Real name
-                                </xar:mlstring>
-                            </a>
-                        </th>
-                        <th>
-                            <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=uname">
-                                <xar:mlstring>
-                                    Login
-                                </xar:mlstring>
-                            </a>
-                        </th>
-                        <th>
-                            <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=email">
-                                <xar:mlstring>
-                                    Email
-                                </xar:mlstring>
-                            </a>
-                        </th>
-                        <th>
-                            <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=date_reg">
-                                <xar:mlstring>
-                                    Date Registered
-                                </xar:mlstring>
-                            </a>
-                        </th>
-                        <th>
-                            <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=state">
-                                <xar:mlstring>
-                                    State
-                                </xar:mlstring>
-                            </a>
-                        </th>
-                    </tr>
-                    <xar:loop name="$users">
-                        <tr>
-                            <td>
-                                #$loop:item['name']# 
-                            </td>
-                            <td>
-                                #$loop:item['uname']# 
-                            </td>
-                            <td>
-                                <a href="&xar-modurl-roles-admin-createmail;&amp;uid=#$loop:item.uid#" title="#xarML('Email this user')#">
-                                    #$loop:item['email']# 
-                                </a>
-                            </td>
-                            <td class="xar-align-center">
-                                #xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])# 
-                            </td>
-                            <td>
-                                <xar:if condition="$loop:item['status'] eq 1">
-                                    <xar:mlstring>
-                                        Inactive
-                                    </xar:mlstring>
-                                    <xar:elseif condition="$loop:item['status'] eq 2" />
-                                    <xar:mlstring>
-                                        Not Validated
-                                    </xar:mlstring>
-                                    <xar:elseif condition="$loop:item['status'] eq 3" />
-                                    <xar:mlstring>
-                                        Active
-                                    </xar:mlstring>
-                                    <xar:elseif condition="$loop:item['status'] eq 4" />
-                                    <xar:mlstring>
-                                        Pending
-                                    </xar:mlstring>
-                                </xar:if>
-                            </td>
-                        </tr>
-                    </xar:loop>
-<!-- end loop over users -->
-<!-- if there is a pager show it in the last row -->
-                </table>
-                <xar:if condition="!empty($pager)">
-                    <div class="xar-align-center">
-                        #$pager# 
-                    </div>
-                </xar:if>
-            </xar:if>
+                    <xar:elseif condition="$loop:item['status'] eq 2" />
+                    <xar:mlstring>
+                      Not Validated
+                    </xar:mlstring>
+                    <xar:elseif condition="$loop:item['status'] eq 3" />
+                    <xar:mlstring>
+                      Active
+                    </xar:mlstring>
+                    <xar:elseif condition="$loop:item['status'] eq 4" />
+                    <xar:mlstring>
+                      Pending
+                    </xar:mlstring>
+                  </xar:if>
+                </td>
+              </tr>
+            </xar:loop>
+            <!-- end loop over users -->
+            <!-- if there is a pager show it in the last row -->
+          </table>
+          <xar:if condition="!empty($pager)">
+            <div class="xar-align-center">
+              #$pager# 
+            </div>
+          </xar:if>
+          </xar:if>
         </xar:if>
-    </xar:if>
-    <form action="&xar-modurl-roles-admin-sendmail;" method="post" enctype="application/x-www-form-urlencoded">
-        <p>
-            <xar:mlstring>
-                Choose a message template from the Templates dropdown above, or type in your message directly : 
-            </xar:mlstring>
-        </p>
+      </xar:if>
+      </fieldset>
+      <form action="&xar-modurl-roles-admin-sendmail;" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset>
             <legend>
                 <xar:mlstring>
                     Message 
                 </xar:mlstring>
             </legend>
+        <p>
+            <xar:mlstring>
+                Choose a message template from the Templates dropdown above, or type in your message directly : 
+            </xar:mlstring>
+        </p>
             <div class="xar-form-input-wrapper">
                 <label for="subject" title="#xarML('Subject line of the email')#" class="xar-form-label">
                     <xar:mlstring>
@@ -461,7 +465,7 @@
                 <input type="hidden" name="uid" id="uid" value="#$uid#" />
                 <input type="hidden" name="state" id="state" value="#$state#" />
                 <input type="hidden" name="includesubgroups" id="includesubgroups" value="#$includesubgroups#" />
-<!--<input type="hidden" name="uids" id="uids" value="#$uids#" />-->
+                <!--<input type="hidden" name="uids" id="uids" value="#$uids#" />-->
                 <xar:if condition="!isset($users) or $users eq 0">
                     <input type="submit" value="#xarML('Send')#" disabled="disabled" class="xar-margin-thickright" />
                     <xar:else />

@@ -69,48 +69,56 @@
                     </a>
                 </dd>   
             </xar:if>
+            <dd>
+                <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$uid#">
+                    <xar:mlstring>Test Privileges</xar:mlstring>
+                </a>
+            </dd>    
         </dl>
     </div>
 
-    <div class="xar-form-input-wrapper">
+    <fieldset>
+      <legend><xar:mlstring>Role properties</xar:mlstring></legend>
+      <div class="xar-form-input-wrapper">
         <span class="xar-form-label">
-            <xar:mlstring>Real Name:</xar:mlstring>
+          <xar:mlstring>Real Name:</xar:mlstring>
         </span>
         #xarVarPrepForDisplay($name)#
-    </div>
-
-    <xar:if condition="$type eq 0">
+      </div>
+      
+      <xar:if condition="$type eq 0">
         <div class="xar-form-input-wrapper">
-            <span class="xar-form-label">
-                <xar:mlstring>Login:</xar:mlstring>
-            </span>
-            #xarVarPrepForDisplay($uname)#
+          <span class="xar-form-label">
+            <xar:mlstring>Login:</xar:mlstring>
+          </span>
+          #xarVarPrepForDisplay($uname)#
         </div>
-
+        
         <div class="xar-form-input-wrapper">
-            <span class="xar-form-label">
-                <xar:mlstring>Email:</xar:mlstring>
-            </span>
-            #xarVarPrepForDisplay($email)#
+          <span class="xar-form-label">
+            <xar:mlstring>Email:</xar:mlstring>
+          </span>
+          #xarVarPrepForDisplay($email)#
         </div>
-    </xar:if>
+      </xar:if>
 
-    <xar:if condition="xarModIsAvailable('dynamicdata')">
+      <xar:if condition="xarModIsAvailable('dynamicdata')">
         <xar:data-getitem name="$properties" module="roles" itemtype="$type" itemid="$uid" />
         <xar:if condition="isset($properties) and count($properties) gt 0">
-            <xar:foreach in="$properties" key="$name">
-                <div class="xar-form-input-wrapper">
-                    <span class="xar-form-label">
-                        <xar:data-label property="$properties[$name]" />:
-                    </span>
-                    <xar:data-output property="$properties[$name]" />
-                </div>
-            </xar:foreach>
-          </xar:if>
-    </xar:if>
+          <xar:foreach in="$properties" key="$name">
+            <div class="xar-form-input-wrapper">
+              <span class="xar-form-label">
+                <xar:data-label property="$properties[$name]" />:
+              </span>
+              <xar:data-output property="$properties[$name]" />
+            </div>
+          </xar:foreach>
+        </xar:if>
+      </xar:if>
 
-    <xar:foreach in="$hooks" key="$module" value="$output">
+      <xar:foreach in="$hooks" key="$module" value="$output">
         #$output#
-    </xar:foreach>
-    <br class="xar-clearboth" />
+      </xar:foreach>
+    </fieldset>
+      <br class="xar-clearboth" />
 </div>

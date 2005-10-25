@@ -70,17 +70,23 @@
                     </a>
                 </dd>   
             </xar:if>
+            <dd>
+                <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$uid#">
+                    <xar:mlstring>Test Privileges</xar:mlstring>
+                </a>
+            </dd>    
         </dl>
     </div>
 
-    <h3>
+    <fieldset>
+      <legend>
         <xar:if condition="$ptype eq 0">
             <xar:mlstring>User Properties</xar:mlstring>
         <xar:else/>
             <xar:mlstring>Group Properties</xar:mlstring>
         </xar:if>
-    </h3>
-
+      </legend>
+    
     <form action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
 
            <xar:if condition="$frozen">
@@ -214,8 +220,10 @@
 
         </xar:if>
     </form>
+    </fieldset>
 
-    <h3>
+    <fieldset>
+      <legend>
         <xar:if condition="$ptype eq 0">
             <xar:ml>
                 <xar:mlstring>Add User #(1) to a Group</xar:mlstring>
@@ -227,7 +235,8 @@
                 <xar:mlvar>#$pname#</xar:mlvar>
             </xar:ml>
         </xar:if>
-    </h3>
+      </legend>
+    
 
     <xar:if condition="$frozen">
         <p>
@@ -257,10 +266,9 @@
             </div>
         </form>
     </xar:if>
-
-    <h3>
-        <xar:mlstring>Group Memberships</xar:mlstring>
-    </h3>
+    </fieldset>
+    <fieldset>
+        <legend><xar:mlstring>Group Memberships</xar:mlstring></legend>
 
     <table>
         <tr>
@@ -290,4 +298,5 @@
             </tr>
         </xar:loop>
     </table>
+    </fieldset>
 </div>
