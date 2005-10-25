@@ -147,7 +147,7 @@ class Dynamic_Property_Master
      */
     function &getProperty($args)
     {
-        if (!is_numeric($args['type'])) 
+        if (!is_numeric($args['type']))
         {
             $proptypes = Dynamic_Property_Master::getPropertyTypes();
             if (!isset($proptypes)) {
@@ -169,18 +169,18 @@ class Dynamic_Property_Master
             $propertyClass = $propertyInfo['propertyClass'];
             // Filepath is complete rel path to the php file, and decoupled from the class name
             require_once $propertyInfo['filepath'];
-            
+
             if( isset($propertyInfo['args']) && ($propertyInfo['args'] != '') )
             {
                 $baseArgs = unserialize($propertyInfo['args']);
                 $args = array_merge($baseArgs, $args);
             }
-            
+
             $property = new $propertyClass($args);
         } else {
         $property = new Dynamic_Property($args);
         }
-        
+
         return $property;
     }
 
@@ -228,14 +228,14 @@ class Dynamic_Property_Master
         $dynamicproptypes = $xartable['dynamic_properties_def'];
 
         // Sort by required module(s) and then by id
-        $query = "SELECT 
+        $query = "SELECT
                     xar_prop_id
                     , xar_prop_name
                     , xar_prop_label
                     , xar_prop_parent
                     , xar_prop_filepath
                     , xar_prop_class
-                    , xar_prop_format 
+                    , xar_prop_format
                     , xar_prop_validation
                     , xar_prop_source
                     , xar_prop_reqfiles
@@ -260,10 +260,10 @@ class Dynamic_Property_Master
             $property_types = xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush'=>false));
         } else {
             $property_types = array();
-            while (!$result->EOF) 
+            while (!$result->EOF)
             {
                 list($id,$name,$label,$parent,$filepath,$class,$format,$validation,$source,$reqfiles,$reqmodules,$args,$aliases) = $result->fields;
-    
+
                 $property['id']             = $id;
                 $property['name']           = $name;
                 $property['label']          = $label;
@@ -383,13 +383,36 @@ class Dynamic_Property
      */
     function checkInput($name = '', $value = null)
     {
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
-        // store the fieldname for validations who need them (e.g. file uploads)
-        $this->fieldname = $name;
         if (!isset($value)) {
-            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
+            $isvalid = true;
+            xarVarFetch('dd_'.$this->id, 'isset', $ddvalue,  NULL, XARVAR_NOT_REQUIRED);
+            if (isset($ddvalue)) {
+                $value = $ddvalue;
+            } else {
+                xarVarFetch($this->name, 'isset', $fieldvalue,  NULL, XARVAR_NOT_REQUIRED);
+                if (isset($fieldvalue)) {
+                    $value = $fieldvalue;
+                } else {
+                    xarVarFetch($name, 'isset', $namevalue,  NULL, XARVAR_NOT_REQUIRED);
+                    if (isset($fieldvalue)) {
+                        $value = $fieldvalue;
+                    } else {
+                        $isvalid = false;
+                    }
+                }
+            }
+            if (!$isvalid) {
+                if (!empty($name)) {
+                    $msg = xarML('Field #(1) (#(2)) is missing.', $name, 'dd_'.$this->id);
+                } else {
+                    $msg = xarML('Field #(1) (#(2)) is missing.', $this->name, 'dd_'.$this->id);
+                }
+                xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+                return false;
+            }
+            // store the fieldname for validations who need them (e.g. file uploads)
+            $name = empty($name) ? 'dd_'.$this->id : $name;
+            $this->fieldname = $name;
         }
         return $this->validateValue($value);
     }
@@ -524,7 +547,7 @@ class Dynamic_Property
         }
         return xarTplProperty('dynamicdata', $template, 'showhidden', $data);
     }
-    
+
     /**
      * For use in DD tags : preset="yes" - this can typically be used in admin-new.xd templates
      * for individual properties you'd like to automatically preset via GET or POST parameters
