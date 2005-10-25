@@ -1,7 +1,6 @@
 <?php
 /**
  * Update an admin menu database entry
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -60,7 +59,7 @@ function adminpanels_adminapi_updatemenudb($args)
         }else{
             // just empty the table
             $query =   "DELETE FROM $menutable";
-            $result =& $dbconn->Execute($query);
+            $result = $dbconn->Execute($query);
             if (!$result) return;
 
             // one modules was added or removed
@@ -77,7 +76,7 @@ function adminpanels_adminapi_updatemenudb($args)
                           xar_amid, xar_name, xar_category)
                           VALUES (?,?,?)";
                 $bindvars = array($dbconn->GenId($menutable),$mod['name'],$modcat);
-                $result =& $dbconn->Execute($query,$bindvars);
+                $result = $dbconn->Execute($query,$bindvars);
                 if (!$result) return;
             }
         }
