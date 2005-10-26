@@ -90,9 +90,9 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
                 $option['checked'] = in_array($option['id'],$data['value']);
                 $options[$key] = $option;
             }
-            $data['options'] = $options;
-            
         }
+        $data['options'] = $options;
+
         if (empty($name)) {
             $data['name'] = 'dd_' . $this->id;
         } else {
