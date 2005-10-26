@@ -209,7 +209,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
     {
         $fuzzyEntries = array();
         foreach ($this->trans as $ind => $entry) {
-            if (!isset($this->transEntries[$entry['string']])) continue;
+            if (!isset($entry['string'])) continue;
             if ($entry['marked'] == 1) continue;
             $fuzzyEntries[] = $entry;
         }
@@ -219,10 +219,10 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
     function getFuzzyEntriesByKey()
     {
         $fuzzyKeys = array();
-        foreach ($this->trans as $ind => $key) {
-            if (!isset($this->transKeyEntries[$key['string']])) continue;
-            if ($key['marked'] == 1) continue;
-            $fuzzyKeys[] = $key;
+        foreach ($this->trans as $ind => $entry) {
+            if (!isset($entry['key'])) continue;
+            if ($entry['marked'] == 1) continue;
+            $fuzzyKeys[] = $entry;
         }
         return $fuzzyKeys;
     }
@@ -328,7 +328,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
             $this->curEntry['key'] = trim($this->curData);
         } elseif ($tag == 'translation') {
             $this->curEntry['translation'] = trim($this->curData);
-            $this->curEntry['used'] = 0;
+            $this->curEntry['marked'] = 0;
             //$this->curEntry['translation'] = utf8_decode(trim($this->curData));
         }
         $this->curData = '';
