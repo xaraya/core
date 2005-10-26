@@ -150,7 +150,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions = array();
         $coptions[] = array('id' =>'Please select', 'name' =>xarML('Please select'));
         $coptions[] = array('id' =>'af', 'name'=>xarML('Afghanistan'));
-        $coptions[] = array('id' =>'ax', 'name'=>xarML('Aland Islands'));
+        $coptions[] = array('id' =>'ax', 'name'=>xarML('&#197;land Islands'));
         $coptions[] = array('id' =>'al', 'name'=>xarML('Albania'));
         $coptions[] = array('id' =>'dz', 'name'=>xarML('Algeria'));
         $coptions[] = array('id' =>'as', 'name'=>xarML('American Samoa'));
@@ -236,6 +236,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'gl', 'name'=>xarML('Greenland'));
         $coptions[] = array('id' =>'gd', 'name'=>xarML('Grenada'));
         $coptions[] = array('id' =>'gp', 'name'=>xarML('Guadeloupe'));
+        $coptions[] = array('id' =>'gu', 'name'=>xarML('Guam'));        
         $coptions[] = array('id' =>'gt', 'name'=>xarML('Guatemala'));
         $coptions[] = array('id' =>'gn', 'name'=>xarML('Guinea'));
         $coptions[] = array('id' =>'gw', 'name'=>xarML('Guinea-Bissau'));
@@ -295,7 +296,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'mz', 'name'=>xarML('Mozambique'));
         $coptions[] = array('id' =>'mm', 'name'=>xarML('Myanmar'));
         $coptions[] = array('id' =>'na', 'name'=>xarML('Namibia'));
-        $coptions[] = array('id' =>'nr', 'name'=>xarML('Naru'));
+        $coptions[] = array('id' =>'nr', 'name'=>xarML('Nauru'));
         $coptions[] = array('id' =>'np', 'name'=>xarML('Nepal'));
         $coptions[] = array('id' =>'nl', 'name'=>xarML('Netherlands'));
         $coptions[] = array('id' =>'an', 'name'=>xarML('Netherlands Antilles'));
