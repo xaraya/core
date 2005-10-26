@@ -113,14 +113,13 @@
                     </div>
                 </div>
         </fieldset>
-
         <fieldset>
-            <div class="xar-form-input-wrapper-after">
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="phase" id="phase" value="update" />
-                <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#" />
-                <input type="submit" value="#xarML('Update')#" />
-            </div>
+        <div class="xar-form-input-wrapper-after">
+          <input type="hidden" name="authid" id="authid" value="#$authid#" />
+          <input type="hidden" name="phase" id="phase" value="update" />
+          <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#" />
+          <input type="submit" value="#xarML('Update')#" />
+        </div>
         </fieldset>
 
         <p>

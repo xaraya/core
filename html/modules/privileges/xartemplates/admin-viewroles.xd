@@ -73,25 +73,23 @@
                     <xar:mlstring>Delete</xar:mlstring>
                 </a>
             </dd>
-            <dd>
-                <a href="&xar-modurl-privileges-admin-viewroles;&amp;pid=#$pid#" class="active">
+            <dd class="active">
+                <a href="&xar-modurl-privileges-admin-viewroles;&amp;pid=#$pid#" >
                     <xar:mlstring>Groups/Users</xar:mlstring>
                 </a>
             </dd>
         </dl>
     </div>
 
-    <p>
-        <xar:mlstring>This privilege is assigned to the following groups/users:</xar:mlstring>
-    </p>
-
-    <xar:if condition="count($roles) eq 0">
+    <fieldset>
+      <legend><xar:mlstring>Assignments</xar:mlstring></legend>
+      <xar:if condition="count($roles) eq 0">
         <p>
-            <xar:mlstring>This privilege is not assigned to any user or group.</xar:mlstring>
+          <xar:mlstring>This privilege is not assigned to any user or group.</xar:mlstring>
         </p>
-    <xar:else />
+      <xar:else />
         <table class="xar-fullwidth">
-            <tr>
+          <tr>
                 <th>
                     <xar:mlstring>Type</xar:mlstring>
                 </th>
@@ -120,9 +118,9 @@
                 </tr>
             </xar:foreach>
         </table>
-    </xar:if>
+      </xar:if>
 
-    <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
+      <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
         <div class="xar-form-input-wrapper">
             <label for="roleid" title="#xarML('Choose a new Group to assign this Privilege.')#" class="xar-form-label">
                 <xar:mlstring>Assign to Group:</xar:mlstring>
@@ -139,14 +137,12 @@
             <input type="hidden" name="privid" id="privid" value="#$pid#" />
             <input type="hidden" name="return_url" id="return_url" value="&xar-modurl-privileges-admin-viewroles;&amp;pid=#$pid#" />
         </div>
-    </form>
+      </form>
+    </fieldset>
 
-    <br />
-    <h3>
-        <xar:mlstring>Current Privileges</xar:mlstring>
-    </h3>
-
-    <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-viewroles;" method="post" enctype="application/x-www-form-urlencoded">
+    <fieldset>
+      <legend><xar:mlstring>Current Privileges</xar:mlstring></legend>
+      <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-viewroles;" method="post" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="pid" id="pid" value="#$pid#" />
         <p>
             <a href="&xar-modurl-privileges-admin-newprivilege;">
@@ -174,8 +170,9 @@
                 <xar:mlstring>All</xar:mlstring>
             </label>
         </p>
-    </form>
-    <xar:foreach in="$trees" value="$drawtree">
+      </form>
+      <xar:foreach in="$trees" value="$drawtree">
         #$drawtree['tree']#
-    </xar:foreach>
+      </xar:foreach>
+    </fieldset>
 </div>

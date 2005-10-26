@@ -198,10 +198,12 @@
             </xar:if>
         </fieldset>
         <fieldset>
-            <div class="xar-form-input-wrapper-after">
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="submit" value="#xarML('Add')#" />
-            </div>
+        <div class="xar-form-input-wrapper-after">
+          <input type="hidden" name="authid" id="authid" value="#$authid#" />
+          <input type="submit" value="#xarML('Add')#" />
+        </div>
         </fieldset>
+        
     </form>
+    
 </div>

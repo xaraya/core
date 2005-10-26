@@ -7,8 +7,6 @@
 <xar:set name="unboxed_checked">false</xar:set>
 <xar:if condition="$mlsmode == 'UNBOXED'"><xar:set name="unboxed_checked">true</xar:set></xar:if>
 
-<h3><xar:mlstring>Languages and Locales</xar:mlstring></h3>
-
 <fieldset>
     <legend>
         <xar:mlstring>Mode of Operation</xar:mlstring>

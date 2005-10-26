@@ -8,7 +8,8 @@
     </h2>
 
     <form class="xar-fullwidth" method="post" action="#$updateurl#" enctype="application/x-www-form-urlencoded">
-    
+      <fieldset>
+        <legend><xar:mlstring>Tag details</xar:mlstring></legend>
     
         <div class="xar-form-input-wrapper">
             <label for="tag_module" title="#xarML('The module which provides this tag')#" class="xar-form-label">
@@ -46,6 +47,8 @@
                 </xar:for>
             </div>
         </xar:comment>
+      </fieldset>
+      <fieldset>
 
         <div class="xar-align-center">
             <!-- the same function is used for updates and inserts, therefore we
@@ -59,6 +62,6 @@
             <input type="submit" value="#xarML('Update Tag')#" class="xar-margin-thickright" />
             <input type="button" value="#xarML('Cancel')#" onclick="document.location = '&xar-modurl-themes-admin-listtpltags;';" class="xar-margin-thickleft" />
         </div>
-    
+      </fieldset>
     </form>
 </div>
