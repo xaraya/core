@@ -261,8 +261,8 @@ function xarUserGetNavigationThemeName()
 function xarUserSetNavigationThemeName($themeName)
 {
     assert('$themeName != ""');
-    xarModSetVar('themes', 'default', $themeName);
-
+    // uservar system takes care of dealing with anynomous
+    xarModSetUserVar('themes', 'default', $themeName);
 }
 
 /**
