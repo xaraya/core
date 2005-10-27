@@ -9,7 +9,7 @@
  *
  * @subpackage Privileges module
  */
- 
+
  /**
  * Purpose of file:  Initialisation functions for the security module
  * Initialise the privileges module
@@ -480,6 +480,10 @@ function privileges_init()
     // Set up an initial value for module variables.
     xarModSetVar('privileges', 'showrealms', false);
     xarModSetVar('privileges', 'inheritdeny', true);
+    xarModSetVar('privileges', 'tester', 0);
+    xarModSetVar('privileges', 'test', false);
+    xarModSetVar('privileges', 'testdeny', false);
+    xarModSetVar('privileges', 'testmask', 'All');
 
     // Initialisation successful
     return true;

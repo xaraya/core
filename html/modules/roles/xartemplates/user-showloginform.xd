@@ -30,11 +30,17 @@
         <td colspan="2" class="xar-align-center">
             <input type="checkbox" name="rememberme" id="remembermeform" value="1" /> <label for="remembermeform"><xar:mlstring>Remember me</xar:mlstring></label>
         </td>
+        <td>
+            &nbsp;
+        </td>
     </tr>
     <tr>
         <td colspan="2" class="xar-align-center">
       <input type="hidden" name="redirecturl" id="returnurl" value="#xarVarPrepForDisplay($redirecturl)#" />
             <input type="submit" value="#xarVarPrepForDisplay($loginlabel)#" />
+        </td>
+        <td>
+    &nbsp;
         </td>
     </tr>
 </table>
