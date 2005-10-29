@@ -424,6 +424,7 @@ class xarRole
     var $state;        //the state of this user or group
     var $auth_module;  //no idea what this is (not used by groups)
     var $parentlevel;  //we use this just to store transient information
+    var $basetype;     //the base itemtype. we add this so it can be passed rather than calculated here
 
     var $dbconn;
     var $rolestable;
@@ -467,6 +468,7 @@ class xarRole
         if (!isset($val_code)) $val_code = 'createdbyadmin';
         // FIXME: what is a sensible default for auth_module?
         if (!isset($auth_module)) $auth_module = '';
+        if (!isset($basetype)) $basetype = 0;
 
         $this->uid = (int) $uid;
         $this->name = $name;
@@ -480,6 +482,7 @@ class xarRole
         $this->val_code = $val_code;
         $this->auth_module = $auth_module;
         $this->parentlevel = 0;
+        $this->basetype = $basetype;
     }
 
     /**
@@ -506,7 +509,7 @@ class xarRole
             return false;
         }
         // TODO: validate the email address
-        if ((empty($this->type)) && (empty($this->uname) || empty($this->email))) {
+        if (!$this->basetype && (empty($this->uname) || empty($this->email))) {
             $msg = xarML('You must enter a user name and a valid email address.',
                 'roles');
             xarErrorSet(XAR_USER_EXCEPTION,
@@ -517,7 +520,7 @@ class xarRole
         }
         // Confirm that this group or user does not already exist
         $q = new xarQuery('SELECT',$this->rolestable);
-        if ($this->type == 1) {
+        if ($this->basetype == 1) {
             $q->eq('xar_name',$this->name);
         } else {
             $q->eq('xar_uname',$this->uname);
@@ -546,14 +549,14 @@ class xarRole
         );
         $q = new xarQuery('INSERT',$this->rolestable);
         $q->addfields($tablefields);
-        if ($this->type == 1) {
+        if ($this->basetype == 1) {
             $groupfields = array(
-                array('name' => 'xar_type', 'value' => 1)
+                array('name' => 'xar_type', 'value' => $this->type)
             );
             $q->addfields($groupfields);
         } else {
             $userfields = array(
-                array('name' => 'xar_type',       'value' => 0),
+                array('name' => 'xar_type',       'value' => $this->type),
                 array('name' => 'xar_email',      'value' => $this->email),
                 array('name' => 'xar_pass',       'value' => md5($this->pass)),
                 array('name' => 'xar_state',      'value' => $this->state),

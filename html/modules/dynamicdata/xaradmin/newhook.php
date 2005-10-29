@@ -48,7 +48,7 @@ function dynamicdata_admin_newhook($args)
         return $msg;
     }
 
-    if (!empty($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
+    if (isset($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
         $itemtype = $extrainfo['itemtype'];
     } else {
         $itemtype = 0;

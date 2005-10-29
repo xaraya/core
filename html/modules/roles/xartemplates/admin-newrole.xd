@@ -52,26 +52,9 @@
                         Type:
                     </xar:mlstring>
                 </label>
-                <select name="ptype" id="ptype" onchange="this.form.action='&xar-modurl-roles-admin-newrole;';this.form.submit();">
-                    <xar:if condition="$ptype eq 1">
-                        <option value="1" selected="selected">
-                            Group
-                        </option>
-                        <xar:else />
-                        <option value="1">
-                            Group
-                        </option>
-                    </xar:if>
-                    <xar:if condition="$ptype eq 0">
-                        <option value="0" selected="selected">
-                            User
-                        </option>
-                        <xar:else />
-                        <option value="0">
-                            User
-                        </option>
-                    </xar:if>
-                </select>
+                <xar:set name="moduleitemtype">xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 600))</xar:set>
+                <xar:set name="$onchange">"onchange=\"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();\""</xar:set>                    
+                <xar:data-input property="$moduleitemtype" name="itemtype" validation="27" value="$itemtype" extraparams="$onchange" />
             </div>
             <div class="xar-form-input-wrapper">
                 <label for="pparentid" title="#xarML('Initial Group membership')#" class="xar-form-label">
@@ -93,7 +76,7 @@
                     </xar:loop>
                 </select>
             </div>
-            <xar:if condition="$ptype eq 0">
+            <xar:if condition="$basetype eq 0">
                 <p>
                     <xar:mlstring>
                         The following fields only apply to Users
@@ -200,7 +183,6 @@
         <fieldset>
             <div class="xar-form-input-wrapper-after">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
                 <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
                 <input type="submit" value="#xarML('Add')#" />
             </div>

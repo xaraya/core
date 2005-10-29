@@ -70,7 +70,7 @@ function dynamicdata_adminapi_updatehook($args)
         return $extrainfo;
     }
 
-    if (!empty($extrainfo['itemtype'])) {
+    if (isset($extrainfo['itemtype'])) {
         $itemtype = $extrainfo['itemtype'];
     } else {
         $itemtype = null;

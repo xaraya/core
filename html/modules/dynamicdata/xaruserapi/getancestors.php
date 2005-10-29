@@ -16,6 +16,9 @@ function &dynamicdata_userapi_getancestors($args)
         return false;
     }
 
+    $top = isset($top) ? $top : true;
+    $base = isset($base) ? $base : true;
+
     $xartable =& xarDBGetTables();
 	$q = new xarQuery('SELECT',$xartable['dynamic_objects']);
 	$q->addfields(array('xar_object_id AS objectid','xar_object_moduleid AS moduleid','xar_object_itemtype AS itemtype','xar_object_parent AS parent'));
@@ -40,7 +43,10 @@ function &dynamicdata_userapi_getancestors($args)
 		if ($result == array()) {
 			if ($base) {
 				$info = xarModAPIFunc('dynamicdata','user', 'getobjectinfo', array('moduleid' => $moduleid, 'itemtype' => $itemtype));
-				if (empty($info)) $info = xarModGetinfo($moduleid);
+				if (empty($info)) {
+					$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $moduleid));
+					$info = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => $types[$itemtype]['label']);
+				}
 				return array($info);
 			} else {
 				return array();
@@ -48,9 +54,6 @@ function &dynamicdata_userapi_getancestors($args)
 		}
 		$objectid = $result['objectid'];
    }
-
-    $top = isset($top) ? $top : true;
-    $base = isset($base) ? $base : true;
 
     if ($top) {
     	$ancestors[] = xarModAPIFunc('dynamicdata','user', 'getobjectinfo', array('objectid' => $objectid));

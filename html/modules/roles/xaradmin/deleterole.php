@@ -18,6 +18,7 @@ function roles_admin_deleterole()
     // get parameters
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
     if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED)) return;
+//   	if (!xarVarFetch('itemtype', 'int', $data['itemtype'], 0, XARVAR_NOT_REQUIRED)) return;
 
     // Call the Roles class
     $roles = new xarRoles();
@@ -87,7 +88,7 @@ if (empty($check)) {
             // call item delete hooks (for DD etc.)
 // TODO: move to remove() function
             $pargs['module'] = 'roles';
-            $pargs['itemtype'] = $type; // we might have something separate for groups later on
+//            $pargs['itemtype'] = $type; // we might have something separate for groups later on
             $pargs['itemid'] = $uid;
             xarModCallHooks('item', 'delete', $uid, $pargs);
         } else {

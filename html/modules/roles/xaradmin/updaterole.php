@@ -21,8 +21,8 @@ function roles_admin_updaterole()
 //    if (!xarSecConfirmAuthKey()) return;
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
     if (!xarVarFetch('pname', 'str:1:35:', $pname)) return;
-    if (!xarVarFetch('ptype', 'int', $ptype)) return;
     if (!xarVarFetch('itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
+	$basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
 
     //Save the old state and type
     $roles = new xarRoles();
@@ -31,7 +31,7 @@ function roles_admin_updaterole()
     $oldtype = $oldrole->getType();
 
     // groups dont have pw etc., and can only be active
-    if ($ptype == 1) {
+    if ($basetype == 1) {
         $puname = $oldrole->getUser();
         $pemail = "";
         $ppass1 = "";
@@ -86,11 +86,13 @@ function roles_admin_updaterole()
     // assemble the args into an array for the role constructor
     $pargs = array('uid' => $uid,
         'name' => $pname,
-        'type' => $ptype,
+        'type' => $itemtype,
         'uname' => $puname,
         'email' => $pemail,
         'pass' => $ppass1,
-        'state' => $pstate);
+        'state' => $pstate,
+        'basetype' => $basetype,
+        );
     // create a role from the data
     $role = new xarRole($pargs);
 
@@ -100,13 +102,12 @@ function roles_admin_updaterole()
     // call item update hooks (for DD etc.)
 // TODO: move to update() function
     $pargs['module'] = 'roles';
-//    $pargs['itemtype'] = $ptype; // we might have something separate for groups later on
     $pargs['itemtype'] = $itemtype;
     $pargs['itemid'] = $uid;
     xarModCallHooks('item', 'update', $uid, $pargs);
 
     //Change the defaultgroup var values if the name is changed
-    if ($ptype == 1) {
+    if ($basetype == 1) {
         $defaultgroup = xarModGetVar('roles', 'defaultgroup');
         $defaultgroupuid = xarModAPIFunc('roles','user','get',
                                                      array('uname'  => $defaultgroup,
@@ -154,7 +155,7 @@ function roles_admin_updaterole()
     }
 
     // redirect to the next page
-    xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid, 'itemtype' => $itemtype)));
+    xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid)));
 }
 
 ?>

@@ -20,16 +20,14 @@ function roles_admin_newrole()
     if (!xarVarFetch('pparentid', 'str:1:', $pparentid, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('return_url',  'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('pname', 'str:1:', $name, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('ptype', 'str:1:', $type, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('puname', 'str:1:35:', $uname, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pemail', 'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ppass1', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_NOT_REQUIRED)) return;
-   	if (!xarVarFetch('itemtype', 'int', $data['itemtype'], 0, XARVAR_NOT_REQUIRED)) return;
-    if ($data['itemtype']) {
-    	$base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
-    	$type = $base['itemtype'];
-    }
+
+	$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+
     // Security Check
     if (!xarSecurityCheck('AddRole')) return;
     // Call the Roles class
@@ -52,10 +50,10 @@ function roles_admin_newrole()
         $data['pname'] = '';
     }
 
-    if (isset($type)) {
-        $data['ptype'] = $type;
+    if (isset($itemtype)) {
+        $data['itemtype'] = $itemtype;
     } else {
-        $data['ptype'] = 1;
+        $data['itemtype'] = 1;
     }
 
     if (isset($uname)) {
