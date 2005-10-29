@@ -192,10 +192,10 @@
                     </label>
                     <input type="password" name="ppass2" id="ppass2" value="#$ppass1#" maxlength="40" class="xar-form-text-medium" />
                 </div>
-                <xar:foreach in="$hooks" key="$hookmodule">
-                    #$hooks[$hookmodule]# 
-                </xar:foreach>
             </xar:if>
+            <xar:foreach in="$hooks" key="$hookmodule">
+                #$hooks[$hookmodule]# 
+            </xar:foreach>
         </fieldset>
         <fieldset>
             <div class="xar-form-input-wrapper-after">

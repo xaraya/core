@@ -38,11 +38,13 @@ function &dynamicdata_userapi_getancestors($args)
 		if (!$q->run()) return;
 		$result = $q->row();
 		if ($result == array()) {
-			$msg = xarML('Bad moduleid or itemtype for dynamicdata_userapi_getancestors.');
-			xarErrorSet(XAR_SYSTEM_EXCEPTION,
-						'BAD_PARAM',
-						 new SystemException($msg));
-			return false;
+			if ($base) {
+				$info = xarModAPIFunc('dynamicdata','user', 'getobjectinfo', array('moduleid' => $moduleid, 'itemtype' => $itemtype));
+				if (empty($info)) $info = xarModGetinfo($moduleid);
+				return array($info);
+			} else {
+				return array();
+			}
 		}
 		$objectid = $result['objectid'];
    }
@@ -62,18 +64,27 @@ function &dynamicdata_userapi_getancestors($args)
     $q->eq('xar_object_moduleid',$moduleid);
     if (!$q->run()) return;
 
-    // put in itemtype as key for easier manipulation
+   	// put in itemtype as key for easier manipulation
     foreach($q->output() as $row) $objects [$row['itemtype']] = array('objectid' => $row['objectid'],'objectname' => $row['objectname'], 'moduleid' => $row['moduleid'], 'parent' => $row['parent']);
 
     $parentitemtype = $result['parent'];
     for(;;) {
     	$done = false;
-    	if ($parentitemtype == 0) {
+    	if ($parentitemtype < 1000) {
+    		// this is a module defined itemtype. get ready to quit
     		$done = true;
     		$itemtype = $parentitemtype;
+			$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $moduleid));
 	    	$id = $moduleid;
-	    	$mod = xarModGetInfo($id);
-	    	$name = $mod['name'];
+			$mod = xarModGetInfo($moduleid);
+			if (($parentitemtype == 0) && !isset($types[0])) {
+				// modules like dynamicdata have no itemtype 0 defined
+				$name = $mod['name'];
+			} else {
+				$name = $types[$parentitemtype]['label'];
+			$ancestors[] = array('objectid' => $id, 'itemtype' => $itemtype, 'name' => $name);
+			}
+			$name = $mod['name'];
     	} else {
 			$parent = $objects[$parentitemtype];
     		$moduleid = $parent['moduleid'];
@@ -82,7 +93,7 @@ function &dynamicdata_userapi_getancestors($args)
 	    	$name = $parent['objectname'];
 	    	$parentitemtype = $parent['parent'];
     	}
-    	if (!$done || $base) $ancestors[] = array('objectid' => $id, 'itemtype' => $itemtype, 'name' => $name);
+    	if (!$done || $base) {$ancestors[] = array('objectid' => $id, 'itemtype' => $itemtype, 'name' => $name);}
     	if ($done) break;
     }
     return array_reverse($ancestors, true);

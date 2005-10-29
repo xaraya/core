@@ -81,14 +81,59 @@ class Dynamic_ObjectParent_Property extends Dynamic_Select_Property
         return xarTplProperty('base', $template, 'showinput', $data);
     }
 
+    function showOutput($args = array())
+    {
+        extract($args);
+        if (isset($value)) {
+            $this->value = $value;
+        }
+        if (isset($validation) && $this->value < 1000) {
+        	$moduleid = $validation;
+			$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $moduleid));
+			$data['option'] = array('id' => $validation,
+									'name' => $types[$value]['label']);
+        } else {
+	        return parent::showOutput($args);
+        }
+
+/*        if ($this->value >= 1000) return parent::showOutput($args);
+
+        if (isset($validation)) {
+        	$moduleid = $validation;
+			$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $moduleid));
+			$data['option'] = array('id' => $validation,
+									'name' => $types[$value]['label']);
+        } else {
+        echo "SS";exit;
+        }
+*/
+
+    // FIXME: this won't work when called by a property from a different module
+        // allow template override by child classes (or in BL tags/API calls)
+        if (empty($template)) {
+            $template = 'dropdown';
+        }
+        return xarTplProperty('base', $template, 'showoutput', $data);
+    }
+
     // Return a list of array(id => value) for the possible options
     function filterOptions($objects, $option_value=null)
     {
-		$options[] = array('id' => 0, 'name' => xarML('current module'));
+
+		if (!empty($option_value)) {
+			$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $option_value));
+			if ($types != array()) {
+				foreach ($types as $key => $value) $options[] = array('id' => $key, 'name' => $value['label']);
+			} else {
+				$options[] = array('id' => 0, 'name' => xarML('no itemtypes defined'));
+			}
+		} else {
+			$options[] = array('id' => 0, 'name' => xarML('current module'));
+		}
 		foreach ($objects as $objectid => $object) {
 			if (!empty($option_value)) {
 				if ($object['moduleid'] == $option_value) {
-					$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $objectid));
+					$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $objectid, 'base' => false));
 					$name ="";
 					foreach ($ancestors as $parent) $name .= $parent['name'] . ".";
 					$name = trim($name,".");
@@ -96,20 +141,11 @@ class Dynamic_ObjectParent_Property extends Dynamic_Select_Property
 					// Now get the module defined itemtypes
 				}
 			} else {
-				$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $objectid));
+				$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $objectid, 'base' => false));
 				$name ="";
 				foreach ($ancestors as $parent) $name .= $parent['name'] . ".";
 				$name = trim($name,".");
 				$options[] = array('id' => $object['itemtype'], 'name' => $name);
-			}
-		}
-		if ($object['moduleid'] == $option_value) {
-			$info = xarModGetInfo($object['moduleid']);
-			xarModAPILoad($info['name']);
-			if (function_exists($info['name'] . "_userapi_getitemtypes")) {
-				$types = xarModAPIFunc($info['name'],'user','getitemtypes');
-//				$types = xarModAPIFunc('blocks','user','getitemtypes');
-				foreach ($types as $key => $value) $options[] = array('id' => $key, 'name' => $value['label']);
 			}
 		}
 		return $options;

@@ -25,7 +25,11 @@ function roles_admin_newrole()
     if (!xarVarFetch('pemail', 'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ppass1', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_NOT_REQUIRED)) return;
-   if (!xarVarFetch('itemtype', 'int', $data['itemtype'], 0, XARVAR_NOT_REQUIRED)) return;
+   	if (!xarVarFetch('itemtype', 'int', $data['itemtype'], 0, XARVAR_NOT_REQUIRED)) return;
+    if ($data['itemtype']) {
+    	$base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+    	$type = $base['itemtype'];
+    }
     // Security Check
     if (!xarSecurityCheck('AddRole')) return;
     // Call the Roles class
