@@ -18,11 +18,14 @@ function roles_admin_modifyrole()
 {
     if (!xarVarFetch('uid', 'int:1:', $uid, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pname', 'str:1:', $name, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('itemtype', 'int', $itemtype, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('puname', 'str:1:35:', $uname, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pemail', 'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ppass', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_DONT_SET)) return;
+
+    $uid = isset($itemid) ? $itemid : $uid;
 
     // Call the Roles class and get the role to modify
     $roles = new xarRoles();
@@ -56,7 +59,7 @@ function roles_admin_modifyrole()
                 'dname' => $temp['name']);
         }
     }
-    // Load Template
+   // Load Template
     if (empty($name)) $name = $role->getName();
     $data['pname'] = $name;
 
