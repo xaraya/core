@@ -134,18 +134,20 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
 			if (!empty($option_value)) {
 				if ($object['moduleid'] == $option_value) {
 					$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $objectid, 'base' => false));
-					$name ="";
-					foreach ($ancestors as $parent) $name .= $parent['name'] . ".";
-					$name = trim($name,".");
-					$options[] = array('id' => $object['itemtype'], 'name' => $name);
+//					$name ="";
+//					foreach ($ancestors as $parent) $name .= $parent['name'] . ".";
+//					$name = trim($name,".");
+					$parent = array_shift(array_reverse($ancestors));
+					$options[] = array('id' => $object['itemtype'], 'name' => $parent['name']);
 					// Now get the module defined itemtypes
 				}
 			} else {
 				$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $objectid, 'base' => false));
-				$name ="";
-				foreach ($ancestors as $parent) $name .= $parent['name'] . ".";
-				$name = trim($name,".");
-				$options[] = array('id' => $object['itemtype'], 'name' => $name);
+//				$name ="";
+//				foreach ($ancestors as $parent) $name .= $parent['name'] . ".";
+//				$name = trim($name,".");
+				$parent = array_shift(array_reverse($ancestors));
+				$options[] = array('id' => $object['itemtype'], 'name' => $parent['name']);
 			}
 		}
 		return $options;
