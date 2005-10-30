@@ -9,12 +9,11 @@
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:if condition="$basetype eq 0">
-            <xar:mlstring>Manage User:</xar:mlstring>
-        <xar:else/>
-            <xar:mlstring>Manage Group:</xar:mlstring>
-        </xar:if>
-        '#$pname#'
+        <xar:ml>
+            <xar:mlstring>Manage #(1) '#(2)':</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$pname#</xar:mlvar>
+        </xar:ml>
     </h2>
 
     <xar:if condition="count($parents) ne 0">
@@ -74,11 +73,10 @@
     </div>
 
     <h3>
-        <xar:if condition="$basetype eq 0">
-            <xar:mlstring>User Properties</xar:mlstring>
-        <xar:else/>
-            <xar:mlstring>Group Properties</xar:mlstring>
-        </xar:if>
+        <xar:ml>
+            <xar:mlstring>#(1) Properties:</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+        </xar:ml>
     </h3>
 
     <form action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
@@ -92,11 +90,10 @@
             </div>
 
             <p>
-                <xar:if condition="$basetype eq 0">
-                    <xar:mlstring>This User cannot be edited or deleted.</xar:mlstring>
-                <xar:else />
-                    <xar:mlstring>This Group cannot be edited or deleted.</xar:mlstring>
-                </xar:if>
+                <xar:ml>
+                    <xar:mlstring>This #(1) cannot be edited or deleted.</xar:mlstring>
+                    <xar:mlvar>#$itemtypename#</xar:mlvar>
+                </xar:ml>
             </p>
         <xar:else />
             <div class="xar-form-input-wrapper">
@@ -207,26 +204,19 @@
     </form>
 
     <h3>
-        <xar:if condition="$basetype eq 0">
-            <xar:ml>
-                <xar:mlstring>Add User #(1) to a Group</xar:mlstring>
-                <xar:mlvar>#$pname#</xar:mlvar>
-            </xar:ml>
-        <xar:else/>
-            <xar:ml>
-                <xar:mlstring>Add Group #(1) to another Group</xar:mlstring>
-                <xar:mlvar>#$pname#</xar:mlvar>
-            </xar:ml>
-        </xar:if>
+        <xar:ml>
+            <xar:mlstring>Add #(1) #(2) to a Parent:</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$pname#</xar:mlvar>
+        </xar:ml>
     </h3>
 
     <xar:if condition="$frozen">
         <p>
-            <xar:if condition="$basetype eq 0">
-                <xar:mlstring>This User cannot be edited or deleted.</xar:mlstring>
-            <xar:else />
-                <xar:mlstring>This Group cannot be edited or deleted.</xar:mlstring>
-            </xar:if>
+            <xar:ml>
+                <xar:mlstring>This #(1) cannot be edited or deleted.</xar:mlstring>
+                <xar:mlvar>#$itemtypename#</xar:mlvar>
+            </xar:ml>
         </p>
     <xar:else />
         <form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
