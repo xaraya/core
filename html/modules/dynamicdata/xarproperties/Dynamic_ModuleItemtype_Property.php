@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Dynamic Data Object Parent Property
+ * Dynamic Data Module Itemtype Property
  * A dropdown giving the extensions based on a given module
  * to use for displaying possible parents of an extension
  *
@@ -18,13 +18,13 @@
 include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 /**
- * Handle the object parent property
+ * Handle the module itemtype property
  *
  * @package dynamicdata
  */
-class Dynamic_ObjectParent_Property extends Dynamic_Select_Property
+class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
 {
-    function Dynamic_ObjectParent_Property($args)
+    function Dynamic_ModuleItemtype_Property($args)
     {
         $this->Dynamic_Select_Property($args);
         if (count($this->options) == 0) {
@@ -162,7 +162,7 @@ class Dynamic_ObjectParent_Property extends Dynamic_Select_Property
          $args = array();
          $baseInfo = array(
                               'id'             => 600,
-                              'name'           => 'objectparent',
+                              'name'           => 'moduleitemtype',
                               'label'          => 'Parent',
                               'format'         => '600',
                               'validation'     => '',
