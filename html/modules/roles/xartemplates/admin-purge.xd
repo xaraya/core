@@ -67,7 +67,7 @@
                            </label>
                        </th>
                        <th class="xar-nowrap">
-                           <label for="groupuid" title="#xarML('Assign recelled users to this status')#">
+                           <label for="groupuid" title="#xarML('Assign recalled users to this status')#">
                                   <xar:mlstring>Set Recalled Users To</xar:mlstring>
                            </label>
                        </th>

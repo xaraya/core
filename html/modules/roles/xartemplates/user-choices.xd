@@ -1,47 +1,35 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Registration / Login</xar:mlstring></h2>
-<form action="&xar-modurl-roles-user-login;" method="post" enctype="application/x-www-form-urlencoded">
-<div>
-<table border="0" cellpadding="2" cellspacing="0">
-    <tr>
-        <td>
-            <label for="username"><xar:mlstring>Username</xar:mlstring></label>
-        </td>
-        <td>
-            <input type="text" name="uname" id="username" maxlength="255" size="20" tabindex="1" />
-        </td>
-        <td>
-            <xar:if condition="xarModGetVar('roles', 'minage') eq 0">
-                <a href="&xar-modurl-roles-user-register;&amp;phase=registerform"><xar:mlstring>Want to register?</xar:mlstring></a>
-            <xar:else />
-                <a href="&xar-modurl-roles-user-register;&amp;phase=checkage"><xar:mlstring>Want to register?</xar:mlstring></a>
-            </xar:if>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label for="password"><xar:mlstring>Password</xar:mlstring></label>
-        </td>
-        <td>
-             <input type="password" name="pass" id="password" maxlength="64" size="20" tabindex="2" />
-        </td>
-        <td>
-            <a href="&xar-modurl-roles-user-lostpassword;"><xar:mlstring>Forget your password?</xar:mlstring></a>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" class="xar-align-center">
-            <input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3" /> <label for="remembermeform"><xar:mlstring>Remember me</xar:mlstring></label>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" class="xar-align-center">
-            <input type="hidden" name="redirecturl" id="returnurl" value="index.php" />
-            <input type="submit" value="#$loginlabel#" tabindex="4" />
-        </td>
-    </tr>
-</table>
-</div>
-</form>
+<div class="xar-mod-body">
+  <form action="&xar-modurl-roles-user-login;" method="post" enctype="application/x-www-form-urlencoded">
+    <fieldset>
+      <legend><xar:mlstring>Registration / Login</xar:mlstring></legend>
+      
+      <input type="hidden" name="redirecturl" id="returnurl" value="index.php" />
+      
+      <div class="xar-form-input-wrapper">
+        <label for="username" class="xar-form-label"><xar:mlstring>Username</xar:mlstring></label>
+        <input type="text" name="uname" id="username" maxlength="255" size="20" tabindex="1" />
+        <xar:if condition="xarModGetVar('roles', 'minage') eq 0">
+          <a href="&xar-modurl-roles-user-register;&amp;phase=registerform"><xar:mlstring>Want to register?</xar:mlstring></a>
+          <xar:else />
+          <a href="&xar-modurl-roles-user-register;&amp;phase=checkage"><xar:mlstring>Want to register?</xar:mlstring></a>
+        </xar:if>
+      </div>
+      <div class="xar-form-input-wrapper">
+        <label for="password" class="xar-form-label"><xar:mlstring>Password</xar:mlstring></label>
+        <input type="password" name="pass" id="password" maxlength="64" size="20" tabindex="2" />
+        <a href="&xar-modurl-roles-user-lostpassword;"><xar:mlstring>Forget your password?</xar:mlstring></a>
+      </div>
+      <div class="xar-form-input-wrapper-after">
+        <input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3" /> 
+        <label for="remembermeform"><xar:mlstring>Remember me</xar:mlstring></label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <div class="xar-align-center">
+        <input type="submit" value="#$loginlabel#" tabindex="4" />
+      </div>
+    </fieldset>
+  </form>
 </div>
