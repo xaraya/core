@@ -147,6 +147,10 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
     */
    function getCountryList()
    {
+       // FIXME: does this belong here? See Bug #5097
+       // Load the proper translation context
+        xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE,'base','modules:properties','Dynamic_CountryList_Property');
+
         $coptions = array();
         $coptions[] = array('id' =>'--', 'name' =>xarML('Please select'));
         $coptions[] = array('id' =>'af', 'name'=>xarML('Afghanistan'));
@@ -389,7 +393,6 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'ye', 'name'=>xarML('Yemen'));
         $coptions[] = array('id' =>'zm', 'name'=>xarML('Zambia'));
         $coptions[] = array('id' =>'zw', 'name'=>xarML('Zimbabwe'));
-
        return $coptions;
    }
 ?>
