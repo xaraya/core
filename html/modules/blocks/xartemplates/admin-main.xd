@@ -33,19 +33,20 @@
         site page by using a blocklayout 'blockgroup' tag and placing it in your template page or module template. eg
          <code>&lt;xar:blockgroup name="right" id="right" /&gt;</code>.  The default blockgroups have already been 
          placed in the default theme.</xar:mlstring>
-    </p>
+    </p><br />
     <p><xar:mlstring>The Blocks module has two menu options which allow you to view and create new blockgroups.</xar:mlstring></p>
+    <br />
     <ul>
         <li><xar:mlstring><strong>View Groups</strong>: View the defined Block Groups.</xar:mlstring></li>
         <li><xar:mlstring><strong>Add Group</strong>: Add a new block group for template positioning.</xar:mlstring></li>
-     </ul>
+     </ul><br />
       <h4><xar:mlstring>Creating new instances of blocks</xar:mlstring></h4>
       <p>
           <xar:mlstring>Each module may provide the code and templates for one or more types of blocks.
           For example the Articles module provides a 'featured article' block, and a 'top items' block. 
           The Base module provides a 'menu' block among others. You can create one or more instances of a block 
           and place them in one or more blockgroups using the options provided in the Blocks module menu:</xar:mlstring>
-      </p>
+      </p><br />
 
       <ul>
         <li><xar:mlstring><strong>View Instances</strong>: View the current instances that are actively in use by your Xaraya System.</xar:mlstring></li>
@@ -53,7 +54,7 @@
       </ul>
       <p><xar:mlstring>Block types are defined by a module, and installed when you install the module. Installing a blocktype allows you to choose it as
        your block type when adding a new block instance.</xar:mlstring>
-      </p>
+      </p><br />
       <h4><xar:mlstring>Block Types </xar:mlstring></h4>
 
       <p>
@@ -62,8 +63,13 @@
           that loads the blocktype, you can add it with the options provided by the Blocks module. You should not 
           normally have to add a block in this manner. In addition you can view all block types that
           you have installed.</xar:mlstring>
-      </p>
-      
+      </p><br />
+       <ul>
+        <li><xar:mlstring><strong>Add Block Type</strong>: scan a module for a new block type. This specific function is probably best left to the advanced user.
+            Be certain to learn more about it before using it.</xar:mlstring></li>
+        <li><xar:mlstring><strong>View Block Types</strong>: lists all the registered block types, and references which module they belong to.</xar:mlstring></li>
+      </ul><br />
+
       <h3><xar:mlstring>Using and templating blocks and blockgroups</xar:mlstring></h3>
       <p><xar:mlstring>Each block and blockgroup container has it's own template or uses a supplied default.</xar:mlstring></p>
       <p>
@@ -76,15 +82,15 @@
            You can override these templates if you want, and so produce your own layouts for the block content. 
            If you do wish to create your own block templates (inner templates) then they are kept in 
            <code>themes/yourtheme/modules/themodule/blocks</code> where 'themodule' is the module providing the block.</xar:mlstring>
-       </p>
+       </p><br />
 
        <h3><xar:mlstring>Included Blocks</xar:mlstring></h3>
 
-       <p><xar:mlstring>The Blocks Module has no blocks included at this time.</xar:mlstring></p>
+       <p><xar:mlstring>The Blocks Module has no blocks included at this time.</xar:mlstring></p><br />
 
        <h3><xar:mlstring>Included Hooks</xar:mlstring></h3>
 
-       <p><xar:mlstring>The Blocks Module has no hooks included at this time.</xar:mlstring></p>
+       <p><xar:mlstring>The Blocks Module has no hooks included at this time.</xar:mlstring></p><br />
 
       <h3><xar:mlstring>Further Information</xar:mlstring></h3>
       <p>
