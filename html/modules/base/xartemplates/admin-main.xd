@@ -19,7 +19,7 @@
     <p>
         <xar:mlstring>The base module provides overall site configuration and informational options in the Administration menu and provides a means to add custom static pages.
         It also serves as a collection of classes, custom block layout tags, include templates, and javascript functions that can be used throughout your site,
-        as well as the location of the system wide default css classes.</xar:mlstring></p>
+        as well as being the location of the system wide default css classes.</xar:mlstring></p>
 
     <h3><xar:mlstring>How to use it?</xar:mlstring></h3>
 
