@@ -69,7 +69,8 @@
                 #$output#
             </xar:foreach>
         </xar:if>
-
+      </fieldset>
+      <fieldset>
         <div class="xar-align-center">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="modid" id="modid" value="#$object:moduleid#" />

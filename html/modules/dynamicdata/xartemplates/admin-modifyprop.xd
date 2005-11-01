@@ -94,9 +94,8 @@
     </p>
 
     <xar:if condition="count($static) gt 0">
-        <h2>
-            #$statictitle# 
-        </h2>
+      <fieldset>
+        <legend>#$statictitle#</legend>
 
         <xar:comment>
         TODO: very much under construction, obviously :-)
@@ -147,7 +146,8 @@
                 </tr>
             </xar:foreach>
         </table>
-
+      </fieldset>
+      <fieldset>
         <!-- xar:data-list module="dynamicdata" itemtype="1" where="$where" param="itemid" layout="cells" / -->
         <xar:if condition="count($tables) gt 0">
             <xar:foreach in="$tables" value="$table">
@@ -162,6 +162,7 @@
                 </form>
             </xar:foreach>
         </xar:if>
+      </fieldset>
     </xar:if>
     <xar:if condition="count($relations) gt 0">
 

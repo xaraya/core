@@ -15,6 +15,7 @@
     </span>
 </div>
 <div class="xar-mod-body">
+  <h2><xar:mlstring>Add new block type</xar:mlstring></h2>
     <form action="#xarModURL('blocks', 'admin', 'new_type')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
         <fieldset>
             <legend>

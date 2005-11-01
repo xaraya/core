@@ -34,7 +34,10 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         if (!empty($this->validation)) {
            $this->icon = $this->validation;
         } else {
-           $this->icon = xarML('Please specify the icon to use in the validation field');
+           /* We need to keep this empty now if we want favicon to display if nothing set here
+              $this->icon = xarML('Please specify the icon to use in the validation field');
+           */
+           $this->icon='';
         }
     }
 
@@ -103,14 +106,26 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         if (!empty($value) && $value != 'http://') {
             $link = $value;
             $data['link']=xarVarPrepForDisplay($link);
-    // FIXME: $this->icon is supposed to contain the URL already
-            if (!empty($this->icon)) {
-                $data['value']= $value;
-                $data['icon'] = xarModAPIFunc('base',
-                               'user',
-                               'getfavicon',
+           // FIXME: $this->icon is supposed to contain the URL already
+            if (isset($this->icon))  {
+               $data['icon']=trim($this->icon);
+                if ($data['icon']<>'') {
+                    $data['value']= $value;
+                    $data['icon']= $this->icon;
+                } elseif ($data['icon']=='') { 
+                    /* We don't have a validated icon to display, use favicon */
+                    $data['value']= $value;
+                    
+                    /* FIXME: getfavicon needs to send back nothing if the favicon doens't exist. */
+                    $data['icon'] = xarModAPIFunc('base',
+                                                  'user',
+                                                  'getfavicon',
                                 array('url' => $data['value']));
-
+                    if (!($data['icon'])) {
+                        /* we'll have to use the default system icon */
+                        $data['icon'] = xarTplGetImage('urlicon.gif','base');
+                    }
+                }
                 $template="";
                 return xarTplProperty('base', 'urlicon', 'showoutput', $data);
             }

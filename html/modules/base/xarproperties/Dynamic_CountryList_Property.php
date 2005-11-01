@@ -2,15 +2,14 @@
 /**
  * Dynamic Country List Property
  *
- * @package modules
- * @copyright (C) 2002-2005 The Digital Development Foundation
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Base module
  * @author John Cox
  */
-
 /**
  * Include the base class
  */
@@ -98,9 +97,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
 
          $countrynames= getCountryList();
          $countryname='';
-         /* For templates which are selecting on id and displaying name 
-          * Pass the actual country name to the template as well as the id
-          */
+
          foreach ($countrynames as $countrydata) {
              foreach ($countrydata as $k) {
                if ($k == $data['value']) {
@@ -112,7 +109,9 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
          $template="";
 
          return xarTplProperty('base', 'countrylist', 'showoutput', $data);
+
     }
+
 
     /**
      * Get the base information for this property.
@@ -139,257 +138,257 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         return $baseInfo;
      }
 }
-/**
- * Country list according to ISO 3166
- *
- * @author jojodee
- * Updated 2005-10-15 with ISO 3166 country codes
- * Credit to Pedro Innecco for corrections and updates
- */
-function getCountryList()
-{
-    $coptions = array();
-        
-        $coptions[] = array('id' =>'Please select', 'name' =>'Please select' );
-        $coptions[] = array('id' =>'af', 'name'=>'Afghanistan');
-        $coptions[] = array('id' =>'ax', 'name'=>'Aland Islands');
-        $coptions[] = array('id' =>'al', 'name'=>'Albania');
-        $coptions[] = array('id' =>'dz', 'name'=>'Algeria');
-        $coptions[] = array('id' =>'as', 'name'=>'American Samoa');
-        $coptions[] = array('id' =>'ad', 'name'=>'Andorra');
-        $coptions[] = array('id' =>'ao', 'name'=>'Angola');
-        $coptions[] = array('id' =>'ai', 'name'=>'Anguilla');
-        $coptions[] = array('id' =>'aq', 'name'=>'Antarctica');
-        $coptions[] = array('id' =>'ag', 'name'=>'Antigua and Barbuda');
-        $coptions[] = array('id' =>'ar', 'name'=>'Argentina');
-        $coptions[] = array('id' =>'am', 'name'=>'Armenia');
-        $coptions[] = array('id' =>'aw', 'name'=>'Aruba');
-        $coptions[] = array('id' =>'au', 'name'=>'Australia');
-        $coptions[] = array('id' =>'at', 'name'=>'Austria');
-        $coptions[] = array('id' =>'az', 'name'=>'Azerbaijan');
-        $coptions[] = array('id' =>'bs', 'name'=>'Bahamas');
-        $coptions[] = array('id' =>'bh', 'name'=>'Bahrain');
-        $coptions[] = array('id' =>'bd', 'name'=>'Bangladesh');
-        $coptions[] = array('id' =>'bb', 'name'=>'Barbados');
-        $coptions[] = array('id' =>'by', 'name'=>'Belarus');
-        $coptions[] = array('id' =>'be', 'name'=>'Belgium');
-        $coptions[] = array('id' =>'bz', 'name'=>'Belize');
-        $coptions[] = array('id' =>'bj', 'name'=>'Benin');
-        $coptions[] = array('id' =>'bm', 'name'=>'Bermuda');
-        $coptions[] = array('id' =>'bt', 'name'=>'Bhutan');
-        $coptions[] = array('id' =>'bo', 'name'=>'Bolivia');
-        $coptions[] = array('id' =>'ba', 'name'=>'Bosnia and Herzegovina');
-        $coptions[] = array('id' =>'bw', 'name'=>'Botswana');
-        $coptions[] = array('id' =>'bv', 'name'=>'Bouvet Island');
-        $coptions[] = array('id' =>'br', 'name'=>'Brazil');
-        $coptions[] = array('id' =>'io', 'name'=>'British Indian Ocean Territory');
-        $coptions[] = array('id' =>'bn', 'name'=>'Brunei Darussalam');
-        $coptions[] = array('id' =>'bg', 'name'=>'Bulgaria');
-        $coptions[] = array('id' =>'bf', 'name'=>'Burkina Faso');
-        $coptions[] = array('id' =>'bi', 'name'=>'Burundi');
-        $coptions[] = array('id' =>'kh', 'name'=>'Cambodia');
-        $coptions[] = array('id' =>'cm', 'name'=>'Cameroon');
-        $coptions[] = array('id' =>'ca', 'name'=>'Canada');
-        $coptions[] = array('id' =>'cv', 'name'=>'Cape Verde');
-        $coptions[] = array('id' =>'ky', 'name'=>'Cayman Islands');
-        $coptions[] = array('id' =>'cf', 'name'=>'Central African Republic');
-        $coptions[] = array('id' =>'td', 'name'=>'Chad');
-        $coptions[] = array('id' =>'cl', 'name'=>'Chile');
-        $coptions[] = array('id' =>'cn', 'name'=>'China');
-        $coptions[] = array('id' =>'cx', 'name'=>'Christmas Island');
-        $coptions[] = array('id' =>'cc', 'name'=>'Cocos (Keeling) Islands');
-        $coptions[] = array('id' =>'co', 'name'=>'Colombia');
-        $coptions[] = array('id' =>'km', 'name'=>'Comoros');
-        $coptions[] = array('id' =>'cg', 'name'=>'Congo, Republic of');
-        $coptions[] = array('id' =>'cd', 'name'=>'Congo, Democratic Republic of (Zaire)');
-        $coptions[] = array('id' =>'ck', 'name'=>'Cook Islands');
-        $coptions[] = array('id' =>'cr', 'name'=>'Costa Rica');
-        $coptions[] = array('id' =>'ci', 'name'=>'C&#244;te D\'Ivoire');
-        $coptions[] = array('id' =>'hr', 'name'=>'Croatia');
-        $coptions[] = array('id' =>'cu', 'name'=>'Cuba');
-        $coptions[] = array('id' =>'cy', 'name'=>'Cyprus');
-        $coptions[] = array('id' =>'cz', 'name'=>'Czech Republic');
-        $coptions[] = array('id' =>'dk', 'name'=>'Denmark');
-        $coptions[] = array('id' =>'dj', 'name'=>'Djibouti');
-        $coptions[] = array('id' =>'dm', 'name'=>'Dominica');
-        $coptions[] = array('id' =>'do', 'name'=>'Dominican Republic');
-        $coptions[] = array('id' =>'ec', 'name'=>'Ecuador');
-        $coptions[] = array('id' =>'eg', 'name'=>'Egypt');
-        $coptions[] = array('id' =>'sv', 'name'=>'El Salvador');
-        $coptions[] = array('id' =>'gq', 'name'=>'Equatorial Guinea');
-        $coptions[] = array('id' =>'er', 'name'=>'Eritrea');
-        $coptions[] = array('id' =>'ee', 'name'=>'Estonia');
-        $coptions[] = array('id' =>'et', 'name'=>'Ethiopia');
-        $coptions[] = array('id' =>'fk', 'name'=>'Falkland Islands (Malvinas)');
-        $coptions[] = array('id' =>'fo', 'name'=>'Faroe Islands');
-        $coptions[] = array('id' =>'fj', 'name'=>'Fiji');
-        $coptions[] = array('id' =>'fi', 'name'=>'Finland');
-        $coptions[] = array('id' =>'fr', 'name'=>'France');
-        $coptions[] = array('id' =>'gf', 'name'=>'French Guiana');
-        $coptions[] = array('id' =>'pf', 'name'=>'French Polynesia');
-        $coptions[] = array('id' =>'tf', 'name'=>'French Southern Territories');
-        $coptions[] = array('id' =>'ga', 'name'=>'Gabon');
-        $coptions[] = array('id' =>'gm', 'name'=>'Gambia');
-        $coptions[] = array('id' =>'ge', 'name'=>'Georgia');
-        $coptions[] = array('id' =>'de', 'name'=>'Germany');
-        $coptions[] = array('id' =>'gh', 'name'=>'Ghana');
-        $coptions[] = array('id' =>'gi', 'name'=>'Gibraltar');
-        $coptions[] = array('id' =>'gr', 'name'=>'Greece');
-        $coptions[] = array('id' =>'gl', 'name'=>'Greenland');
-        $coptions[] = array('id' =>'gd', 'name'=>'Grenada');
-        $coptions[] = array('id' =>'gp', 'name'=>'Guadeloupe');
-        $coptions[] = array('id' =>'gt', 'name'=>'Guatemala');
-        $coptions[] = array('id' =>'gn', 'name'=>'Guinea');
-        $coptions[] = array('id' =>'gw', 'name'=>'Guinea Bissau');
-        $coptions[] = array('id' =>'gy', 'name'=>'Guyana');
-        $coptions[] = array('id' =>'ht', 'name'=>'Haiti');
-        $coptions[] = array('id' =>'hm', 'name'=>'Heard Island & McDonald Islands');
-        $coptions[] = array('id' =>'va', 'name'=>'Holy See (Vatican City State)');
-        $coptions[] = array('id' =>'hn', 'name'=>'Honduras');
-        $coptions[] = array('id' =>'hk', 'name'=>'Hong Kong');
-        $coptions[] = array('id' =>'hu', 'name'=>'Hungary');
-        $coptions[] = array('id' =>'is', 'name'=>'Iceland');
-        $coptions[] = array('id' =>'in', 'name'=>'India');
-        $coptions[] = array('id' =>'id', 'name'=>'Indonesia');
-        $coptions[] = array('id' =>'ir', 'name'=>'Iran');
-        $coptions[] = array('id' =>'iq', 'name'=>'Iraq');
-        $coptions[] = array('id' =>'ie', 'name'=>'Ireland');
-        $coptions[] = array('id' =>'il', 'name'=>'Israel');
-        $coptions[] = array('id' =>'it', 'name'=>'Italy');
-        $coptions[] = array('id' =>'jm', 'name'=>'Jamaica');
-        $coptions[] = array('id' =>'jp', 'name'=>'Japan');
-        $coptions[] = array('id' =>'jo', 'name'=>'Jordan');
-        $coptions[] = array('id' =>'kz', 'name'=>'Kazakhstan');
-        $coptions[] = array('id' =>'ke', 'name'=>'Kenya');
-        $coptions[] = array('id' =>'ki', 'name'=>'Kiribati');
-        $coptions[] = array('id' =>'kp', 'name'=>'Korea, Democratic People\'s Republic');
-        $coptions[] = array('id' =>'kr', 'name'=>'Korea, Republic of');
-        $coptions[] = array('id' =>'kw', 'name'=>'Kuwait');
-        $coptions[] = array('id' =>'kg', 'name'=>'Kyrgyzstan');
-        $coptions[] = array('id' =>'la', 'name'=>'Lao People\'s Democratic Republic');
-        $coptions[] = array('id' =>'lv', 'name'=>'Latvia');
-        $coptions[] = array('id' =>'lb', 'name'=>'Lebanon');
-        $coptions[] = array('id' =>'ls', 'name'=>'Lesotho');
-        $coptions[] = array('id' =>'lr', 'name'=>'Liberia');
-        $coptions[] = array('id' =>'ly', 'name'=>'Libya');
-        $coptions[] = array('id' =>'li', 'name'=>'Liechtenstein');
-        $coptions[] = array('id' =>'lt', 'name'=>'Lithuania');
-        $coptions[] = array('id' =>'lu', 'name'=>'Luxembourg');
-        $coptions[] = array('id' =>'mo', 'name'=>'Macao');
-        $coptions[] = array('id' =>'mk', 'name'=>'Macedonia, The Former Yugoslav Republic of');
-        $coptions[] = array('id' =>'mg', 'name'=>'Madagascar');
-        $coptions[] = array('id' =>'mw', 'name'=>'Malawi');
-        $coptions[] = array('id' =>'my', 'name'=>'Malaysia');
-        $coptions[] = array('id' =>'mv', 'name'=>'Maldives');
-        $coptions[] = array('id' =>'ml', 'name'=>'Mali');
-        $coptions[] = array('id' =>'mt', 'name'=>'Malta');
-        $coptions[] = array('id' =>'mh', 'name'=>'Marshall Islands');
-        $coptions[] = array('id' =>'mq', 'name'=>'Martinique');
-        $coptions[] = array('id' =>'mr', 'name'=>'Mauritania');
-        $coptions[] = array('id' =>'mu', 'name'=>'Mauritius');
-        $coptions[] = array('id' =>'yt', 'name'=>'Mayotte');
-        $coptions[] = array('id' =>'mx', 'name'=>'Mexico');
-        $coptions[] = array('id' =>'fm', 'name'=>'Micronesia, Federated States of');
-        $coptions[] = array('id' =>'md', 'name'=>'Moldova, Republic of');
-        $coptions[] = array('id' =>'mc', 'name'=>'Monaco');
-        $coptions[] = array('id' =>'mn', 'name'=>'Mongolia');
-        $coptions[] = array('id' =>'ms', 'name'=>'Montserrat');
-        $coptions[] = array('id' =>'ma', 'name'=>'Morocco');
-        $coptions[] = array('id' =>'mz', 'name'=>'Mozambique');
-        $coptions[] = array('id' =>'mm', 'name'=>'Myanmar');
-        $coptions[] = array('id' =>'na', 'name'=>'Namibia');
-        $coptions[] = array('id' =>'nr', 'name'=>'Naru');
-        $coptions[] = array('id' =>'np', 'name'=>'Nepal');
-        $coptions[] = array('id' =>'nl', 'name'=>'Netherlands');
-        $coptions[] = array('id' =>'an', 'name'=>'Netherlands Antilles');
-        $coptions[] = array('id' =>'nc', 'name'=>'New Caledonia');
-        $coptions[] = array('id' =>'nz', 'name'=>'New Zealand');
-        $coptions[] = array('id' =>'ni', 'name'=>'Nicaragua');
-        $coptions[] = array('id' =>'ne', 'name'=>'Niger');
-        $coptions[] = array('id' =>'ng', 'name'=>'Nigeria');
-        $coptions[] = array('id' =>'nu', 'name'=>'Niue');
-        $coptions[] = array('id' =>'nf', 'name'=>'Norfolk Island');
-        $coptions[] = array('id' =>'mp', 'name'=>'Northern Mariana Islands');
-        $coptions[] = array('id' =>'no', 'name'=>'Norway');
-        $coptions[] = array('id' =>'om', 'name'=>'Oman');
-        $coptions[] = array('id' =>'pk', 'name'=>'Pakistan');
-        $coptions[] = array('id' =>'pw', 'name'=>'Palau');
-        $coptions[] = array('id' =>'ps', 'name'=>'Palestinian Territory');
-        $coptions[] = array('id' =>'pa', 'name'=>'Panama');
-        $coptions[] = array('id' =>'pg', 'name'=>'Papua New Guinea');
-        $coptions[] = array('id' =>'py', 'name'=>'Paraguay');
-        $coptions[] = array('id' =>'pe', 'name'=>'Peru');
-        $coptions[] = array('id' =>'ph', 'name'=>'Philippines');
-        $coptions[] = array('id' =>'pn', 'name'=>'Pitcairn');
-        $coptions[] = array('id' =>'pl', 'name'=>'Poland');
-        $coptions[] = array('id' =>'pt', 'name'=>'Portugal');
-        $coptions[] = array('id' =>'pr', 'name'=>'Puerto Rico');
-        $coptions[] = array('id' =>'qa', 'name'=>'Qatar');
-        $coptions[] = array('id' =>'re', 'name'=>'R&#233;union');
-        $coptions[] = array('id' =>'ro', 'name'=>'Romania');
-        $coptions[] = array('id' =>'ru', 'name'=>'Russian Federation');
-        $coptions[] = array('id' =>'rw', 'name'=>'Rwanda');
-        $coptions[] = array('id' =>'sh', 'name'=>'St. Helena');
-        $coptions[] = array('id' =>'kn', 'name'=>'St. Kitts and Nevis');
-        $coptions[] = array('id' =>'lc', 'name'=>'St. Lucia');
-        $coptions[] = array('id' =>'pm', 'name'=>'St. Pierre and Miquelon');
-        $coptions[] = array('id' =>'vc', 'name'=>'St. Vincent and the Grenadines');
-        $coptions[] = array('id' =>'ws', 'name'=>'Samoa');
-        $coptions[] = array('id' =>'sm', 'name'=>'San Marino');
-        $coptions[] = array('id' =>'st', 'name'=>'S&#227;o Tom&#233; and Pr&#237;ncipe');
-        $coptions[] = array('id' =>'sa', 'name'=>'Saudi Arabia');
-        $coptions[] = array('id' =>'sn', 'name'=>'Senegal');
-        $coptions[] = array('id' =>'cs', 'name'=>'Serbia & Montenegro');
-        $coptions[] = array('id' =>'sc', 'name'=>'Seychelles');
-        $coptions[] = array('id' =>'sl', 'name'=>'Sierra Leone');
-        $coptions[] = array('id' =>'sg', 'name'=>'Singapore');
-        $coptions[] = array('id' =>'sk', 'name'=>'Slovakia');
-        $coptions[] = array('id' =>'si', 'name'=>'Slovenia');
-        $coptions[] = array('id' =>'sb', 'name'=>'Solomon Islands');
-        $coptions[] = array('id' =>'so', 'name'=>'Somalia');
-        $coptions[] = array('id' =>'za', 'name'=>'South Africa');
-        $coptions[] = array('id' =>'gs', 'name'=>'Sth Georgia & the South Sandwich Islands');
-        $coptions[] = array('id' =>'es', 'name'=>'Spain');
-        $coptions[] = array('id' =>'lk', 'name'=>'Sri Lanka');
-        $coptions[] = array('id' =>'sd', 'name'=>'Sudan');
-        $coptions[] = array('id' =>'sr', 'name'=>'Suriname');
-        $coptions[] = array('id' =>'sj', 'name'=>'Svalbard & Jan Mayen');
-        $coptions[] = array('id' =>'sz', 'name'=>'Swaziland');
-        $coptions[] = array('id' =>'se', 'name'=>'Sweden');
-        $coptions[] = array('id' =>'ch', 'name'=>'Switzerland');
-        $coptions[] = array('id' =>'sy', 'name'=>'Syria');
-        $coptions[] = array('id' =>'tw', 'name'=>'Taiwan');
-        $coptions[] = array('id' =>'tj', 'name'=>'Tajikistan');
-        $coptions[] = array('id' =>'tz', 'name'=>'Tanzania, United Republic of');
-        $coptions[] = array('id' =>'th', 'name'=>'Thailand');
-        $coptions[] = array('id' =>'tl', 'name'=>'Timor-Leste');
-        $coptions[] = array('id' =>'tg', 'name'=>'Togo');
-        $coptions[] = array('id' =>'tk', 'name'=>'Tokelau');
-        $coptions[] = array('id' =>'to', 'name'=>'Tonga');
-        $coptions[] = array('id' =>'tt', 'name'=>'Trinidad and Tobago');
-        $coptions[] = array('id' =>'tn', 'name'=>'Tunisia');
-        $coptions[] = array('id' =>'tr', 'name'=>'Turkey');
-        $coptions[] = array('id' =>'tm', 'name'=>'Turkmenistan');
-        $coptions[] = array('id' =>'tc', 'name'=>'Turks and Caicos Islands');
-        $coptions[] = array('id' =>'tv', 'name'=>'Tuvalu');
-        $coptions[] = array('id' =>'ug', 'name'=>'Uganda');
-        $coptions[] = array('id' =>'ua', 'name'=>'Ukraine');
-        $coptions[] = array('id' =>'ae', 'name'=>'United Arab Emirates');
-        $coptions[] = array('id' =>'gb', 'name'=>'United Kingdom');
-        $coptions[] = array('id' =>'us', 'name'=>'United States');
-        $coptions[] = array('id' =>'um', 'name'=>'U.S. Minor Outlying Islands');
-        $coptions[] = array('id' =>'uy', 'name'=>'Uruguay');
-        $coptions[] = array('id' =>'uz', 'name'=>'Uzbekistan');
-        $coptions[] = array('id' =>'vu', 'name'=>'Vanuatu');
-        $coptions[] = array('id' =>'ve', 'name'=>'Venezuela');
-        $coptions[] = array('id' =>'vn', 'name'=>'Vietnam');
-        $coptions[] = array('id' =>'vg', 'name'=>'Virgin Islands, British');
-        $coptions[] = array('id' =>'vi', 'name'=>'Virgin Islands, U.S.');
-        $coptions[] = array('id' =>'wf', 'name'=>'Wallis & Futuna');
-        $coptions[] = array('id' =>'eh', 'name'=>'Western Sahara');
-        $coptions[] = array('id' =>'ye', 'name'=>'Yemen');
-        $coptions[] = array('id' =>'zm', 'name'=>'Zambia');
-        $coptions[] = array('id' =>'zw', 'name'=>'Zimbabwe');
-   return $coptions;
-}
+   /**
+    * Country list according to ISO 3166
+    *
+    * @author jojodee
+    * Updated 2005-10-15 with ISO 3166 country codes
+    * Credit to Pedro Innecco for corrections and updates
+    */
+   function getCountryList()
+   {
+        $coptions = array();
+        $coptions[] = array('id' =>'--', 'name' =>xarML('Please select'));
+        $coptions[] = array('id' =>'af', 'name'=>xarML('Afghanistan'));
+        $coptions[] = array('id' =>'ax', 'name'=>xarML('&#197;land Islands'));
+        $coptions[] = array('id' =>'al', 'name'=>xarML('Albania'));
+        $coptions[] = array('id' =>'dz', 'name'=>xarML('Algeria'));
+        $coptions[] = array('id' =>'as', 'name'=>xarML('American Samoa'));
+        $coptions[] = array('id' =>'ad', 'name'=>xarML('Andorra'));
+        $coptions[] = array('id' =>'ao', 'name'=>xarML('Angola'));
+        $coptions[] = array('id' =>'ai', 'name'=>xarML('Anguilla'));
+        $coptions[] = array('id' =>'aq', 'name'=>xarML('Antarctica'));
+        $coptions[] = array('id' =>'ag', 'name'=>xarML('Antigua and Barbuda'));
+        $coptions[] = array('id' =>'ar', 'name'=>xarML('Argentina'));
+        $coptions[] = array('id' =>'am', 'name'=>xarML('Armenia'));
+        $coptions[] = array('id' =>'aw', 'name'=>xarML('Aruba'));
+        $coptions[] = array('id' =>'au', 'name'=>xarML('Australia'));
+        $coptions[] = array('id' =>'at', 'name'=>xarML('Austria'));
+        $coptions[] = array('id' =>'az', 'name'=>xarML('Azerbaijan'));
+        $coptions[] = array('id' =>'bs', 'name'=>xarML('Bahamas'));
+        $coptions[] = array('id' =>'bh', 'name'=>xarML('Bahrain'));
+        $coptions[] = array('id' =>'bd', 'name'=>xarML('Bangladesh'));
+        $coptions[] = array('id' =>'bb', 'name'=>xarML('Barbados'));
+        $coptions[] = array('id' =>'by', 'name'=>xarML('Belarus'));
+        $coptions[] = array('id' =>'be', 'name'=>xarML('Belgium'));
+        $coptions[] = array('id' =>'bz', 'name'=>xarML('Belize'));
+        $coptions[] = array('id' =>'bj', 'name'=>xarML('Benin'));
+        $coptions[] = array('id' =>'bm', 'name'=>xarML('Bermuda'));
+        $coptions[] = array('id' =>'bt', 'name'=>xarML('Bhutan'));
+        $coptions[] = array('id' =>'bo', 'name'=>xarML('Bolivia'));
+        $coptions[] = array('id' =>'ba', 'name'=>xarML('Bosnia and Herzegovina'));
+        $coptions[] = array('id' =>'bw', 'name'=>xarML('Botswana'));
+        $coptions[] = array('id' =>'bv', 'name'=>xarML('Bouvet Island'));
+        $coptions[] = array('id' =>'br', 'name'=>xarML('Brazil'));
+        $coptions[] = array('id' =>'io', 'name'=>xarML('British Indian Ocean Territory'));
+        $coptions[] = array('id' =>'bn', 'name'=>xarML('Brunei Darussalam'));
+        $coptions[] = array('id' =>'bg', 'name'=>xarML('Bulgaria'));
+        $coptions[] = array('id' =>'bf', 'name'=>xarML('Burkina Faso'));
+        $coptions[] = array('id' =>'bi', 'name'=>xarML('Burundi'));
+        $coptions[] = array('id' =>'kh', 'name'=>xarML('Cambodia'));
+        $coptions[] = array('id' =>'cm', 'name'=>xarML('Cameroon'));
+        $coptions[] = array('id' =>'ca', 'name'=>xarML('Canada'));
+        $coptions[] = array('id' =>'cv', 'name'=>xarML('Cape Verde'));
+        $coptions[] = array('id' =>'ky', 'name'=>xarML('Cayman Islands'));
+        $coptions[] = array('id' =>'cf', 'name'=>xarML('Central African Republic'));
+        $coptions[] = array('id' =>'td', 'name'=>xarML('Chad'));
+        $coptions[] = array('id' =>'cl', 'name'=>xarML('Chile'));
+        $coptions[] = array('id' =>'cn', 'name'=>xarML('China'));
+        $coptions[] = array('id' =>'cx', 'name'=>xarML('Christmas Island'));
+        $coptions[] = array('id' =>'cc', 'name'=>xarML('Cocos (Keeling) Islands'));
+        $coptions[] = array('id' =>'co', 'name'=>xarML('Colombia'));
+        $coptions[] = array('id' =>'km', 'name'=>xarML('Comoros'));
+        $coptions[] = array('id' =>'cg', 'name'=>xarML('Congo, Republic of'));
+        $coptions[] = array('id' =>'cd', 'name'=>xarML('Congo, Democratic Republic of (Zaire)'));
+        $coptions[] = array('id' =>'ck', 'name'=>xarML('Cook Islands'));
+        $coptions[] = array('id' =>'cr', 'name'=>xarML('Costa Rica'));
+        $coptions[] = array('id' =>'ci', 'name'=>xarML('C&#244;te D\'Ivoire'));
+        $coptions[] = array('id' =>'hr', 'name'=>xarML('Croatia'));
+        $coptions[] = array('id' =>'cu', 'name'=>xarML('Cuba'));
+        $coptions[] = array('id' =>'cy', 'name'=>xarML('Cyprus'));
+        $coptions[] = array('id' =>'cz', 'name'=>xarML('Czech Republic'));
+        $coptions[] = array('id' =>'dk', 'name'=>xarML('Denmark'));
+        $coptions[] = array('id' =>'dj', 'name'=>xarML('Djibouti'));
+        $coptions[] = array('id' =>'dm', 'name'=>xarML('Dominica'));
+        $coptions[] = array('id' =>'do', 'name'=>xarML('Dominican Republic'));
+        $coptions[] = array('id' =>'ec', 'name'=>xarML('Ecuador'));
+        $coptions[] = array('id' =>'eg', 'name'=>xarML('Egypt'));
+        $coptions[] = array('id' =>'sv', 'name'=>xarML('El Salvador'));
+        $coptions[] = array('id' =>'gq', 'name'=>xarML('Equatorial Guinea'));
+        $coptions[] = array('id' =>'er', 'name'=>xarML('Eritrea'));
+        $coptions[] = array('id' =>'ee', 'name'=>xarML('Estonia'));
+        $coptions[] = array('id' =>'et', 'name'=>xarML('Ethiopia'));
+        $coptions[] = array('id' =>'fk', 'name'=>xarML('Falkland Islands (Malvinas)'));
+        $coptions[] = array('id' =>'fo', 'name'=>xarML('Faroe Islands'));
+        $coptions[] = array('id' =>'fj', 'name'=>xarML('Fiji'));
+        $coptions[] = array('id' =>'fi', 'name'=>xarML('Finland'));
+        $coptions[] = array('id' =>'fr', 'name'=>xarML('France'));
+        $coptions[] = array('id' =>'gf', 'name'=>xarML('French Guiana'));
+        $coptions[] = array('id' =>'pf', 'name'=>xarML('French Polynesia'));
+        $coptions[] = array('id' =>'tf', 'name'=>xarML('French Southern Territories'));
+        $coptions[] = array('id' =>'ga', 'name'=>xarML('Gabon'));
+        $coptions[] = array('id' =>'gm', 'name'=>xarML('Gambia'));
+        $coptions[] = array('id' =>'ge', 'name'=>xarML('Georgia'));
+        $coptions[] = array('id' =>'de', 'name'=>xarML('Germany'));
+        $coptions[] = array('id' =>'gh', 'name'=>xarML('Ghana'));
+        $coptions[] = array('id' =>'gi', 'name'=>xarML('Gibraltar'));
+        $coptions[] = array('id' =>'gr', 'name'=>xarML('Greece'));
+        $coptions[] = array('id' =>'gl', 'name'=>xarML('Greenland'));
+        $coptions[] = array('id' =>'gd', 'name'=>xarML('Grenada'));
+        $coptions[] = array('id' =>'gp', 'name'=>xarML('Guadeloupe'));
+        $coptions[] = array('id' =>'gu', 'name'=>xarML('Guam'));
+        $coptions[] = array('id' =>'gt', 'name'=>xarML('Guatemala'));
+        $coptions[] = array('id' =>'gn', 'name'=>xarML('Guinea'));
+        $coptions[] = array('id' =>'gw', 'name'=>xarML('Guinea-Bissau'));
+        $coptions[] = array('id' =>'gy', 'name'=>xarML('Guyana'));
+        $coptions[] = array('id' =>'ht', 'name'=>xarML('Haiti'));
+        $coptions[] = array('id' =>'hm', 'name'=>xarML('Heard Island & McDonald Islands'));
+        $coptions[] = array('id' =>'hn', 'name'=>xarML('Honduras'));
+        $coptions[] = array('id' =>'hk', 'name'=>xarML('Hong Kong'));
+        $coptions[] = array('id' =>'hu', 'name'=>xarML('Hungary'));
+        $coptions[] = array('id' =>'is', 'name'=>xarML('Iceland'));
+        $coptions[] = array('id' =>'in', 'name'=>xarML('India'));
+        $coptions[] = array('id' =>'id', 'name'=>xarML('Indonesia'));
+        $coptions[] = array('id' =>'ir', 'name'=>xarML('Iran'));
+        $coptions[] = array('id' =>'iq', 'name'=>xarML('Iraq'));
+        $coptions[] = array('id' =>'ie', 'name'=>xarML('Ireland'));
+        $coptions[] = array('id' =>'il', 'name'=>xarML('Israel'));
+        $coptions[] = array('id' =>'it', 'name'=>xarML('Italy'));
+        $coptions[] = array('id' =>'jm', 'name'=>xarML('Jamaica'));
+        $coptions[] = array('id' =>'jp', 'name'=>xarML('Japan'));
+        $coptions[] = array('id' =>'jo', 'name'=>xarML('Jordan'));
+        $coptions[] = array('id' =>'kz', 'name'=>xarML('Kazakhstan'));
+        $coptions[] = array('id' =>'ke', 'name'=>xarML('Kenya'));
+        $coptions[] = array('id' =>'ki', 'name'=>xarML('Kiribati'));
+        $coptions[] = array('id' =>'kp', 'name'=>xarML('Korea, Democratic People\'s Republic'));
+        $coptions[] = array('id' =>'kr', 'name'=>xarML('Korea, Republic of'));
+        $coptions[] = array('id' =>'kw', 'name'=>xarML('Kuwait'));
+        $coptions[] = array('id' =>'kg', 'name'=>xarML('Kyrgyzstan'));
+        $coptions[] = array('id' =>'la', 'name'=>xarML('Lao People\'s Democratic Republic'));
+        $coptions[] = array('id' =>'lv', 'name'=>xarML('Latvia'));
+        $coptions[] = array('id' =>'lb', 'name'=>xarML('Lebanon'));
+        $coptions[] = array('id' =>'ls', 'name'=>xarML('Lesotho'));
+        $coptions[] = array('id' =>'lr', 'name'=>xarML('Liberia'));
+        $coptions[] = array('id' =>'ly', 'name'=>xarML('Libya'));
+        $coptions[] = array('id' =>'li', 'name'=>xarML('Liechtenstein'));
+        $coptions[] = array('id' =>'lt', 'name'=>xarML('Lithuania'));
+        $coptions[] = array('id' =>'lu', 'name'=>xarML('Luxembourg'));
+        $coptions[] = array('id' =>'mo', 'name'=>xarML('Macao'));
+        $coptions[] = array('id' =>'mk', 'name'=>xarML('Macedonia, The Former Yugoslav Republic of'));
+        $coptions[] = array('id' =>'mg', 'name'=>xarML('Madagascar'));
+        $coptions[] = array('id' =>'mw', 'name'=>xarML('Malawi'));
+        $coptions[] = array('id' =>'my', 'name'=>xarML('Malaysia'));
+        $coptions[] = array('id' =>'mv', 'name'=>xarML('Maldives'));
+        $coptions[] = array('id' =>'ml', 'name'=>xarML('Mali'));
+        $coptions[] = array('id' =>'mt', 'name'=>xarML('Malta'));
+        $coptions[] = array('id' =>'mh', 'name'=>xarML('Marshall Islands'));
+        $coptions[] = array('id' =>'mq', 'name'=>xarML('Martinique'));
+        $coptions[] = array('id' =>'mr', 'name'=>xarML('Mauritania'));
+        $coptions[] = array('id' =>'mu', 'name'=>xarML('Mauritius'));
+        $coptions[] = array('id' =>'yt', 'name'=>xarML('Mayotte'));
+        $coptions[] = array('id' =>'mx', 'name'=>xarML('Mexico'));
+        $coptions[] = array('id' =>'fm', 'name'=>xarML('Micronesia, Federated States of'));
+        $coptions[] = array('id' =>'md', 'name'=>xarML('Moldova, Republic of'));
+        $coptions[] = array('id' =>'mc', 'name'=>xarML('Monaco'));
+        $coptions[] = array('id' =>'mn', 'name'=>xarML('Mongolia'));
+        $coptions[] = array('id' =>'ms', 'name'=>xarML('Montserrat'));
+        $coptions[] = array('id' =>'ma', 'name'=>xarML('Morocco'));
+        $coptions[] = array('id' =>'mz', 'name'=>xarML('Mozambique'));
+        $coptions[] = array('id' =>'mm', 'name'=>xarML('Myanmar'));
+        $coptions[] = array('id' =>'na', 'name'=>xarML('Namibia'));
+        $coptions[] = array('id' =>'nr', 'name'=>xarML('Nauru'));
+        $coptions[] = array('id' =>'np', 'name'=>xarML('Nepal'));
+        $coptions[] = array('id' =>'nl', 'name'=>xarML('Netherlands'));
+        $coptions[] = array('id' =>'an', 'name'=>xarML('Netherlands Antilles'));
+        $coptions[] = array('id' =>'nc', 'name'=>xarML('New Caledonia'));
+        $coptions[] = array('id' =>'nz', 'name'=>xarML('New Zealand'));
+        $coptions[] = array('id' =>'ni', 'name'=>xarML('Nicaragua'));
+        $coptions[] = array('id' =>'ne', 'name'=>xarML('Niger'));
+        $coptions[] = array('id' =>'ng', 'name'=>xarML('Nigeria'));
+        $coptions[] = array('id' =>'nu', 'name'=>xarML('Niue'));
+        $coptions[] = array('id' =>'nf', 'name'=>xarML('Norfolk Island'));
+        $coptions[] = array('id' =>'mp', 'name'=>xarML('Northern Mariana Islands'));
+        $coptions[] = array('id' =>'no', 'name'=>xarML('Norway'));
+        $coptions[] = array('id' =>'om', 'name'=>xarML('Oman'));
+        $coptions[] = array('id' =>'pk', 'name'=>xarML('Pakistan'));
+        $coptions[] = array('id' =>'pw', 'name'=>xarML('Palau'));
+        $coptions[] = array('id' =>'ps', 'name'=>xarML('Palestinian Territory'));
+        $coptions[] = array('id' =>'pa', 'name'=>xarML('Panama'));
+        $coptions[] = array('id' =>'pg', 'name'=>xarML('Papua New Guinea'));
+        $coptions[] = array('id' =>'py', 'name'=>xarML('Paraguay'));
+        $coptions[] = array('id' =>'pe', 'name'=>xarML('Peru'));
+        $coptions[] = array('id' =>'ph', 'name'=>xarML('Philippines'));
+        $coptions[] = array('id' =>'pn', 'name'=>xarML('Pitcairn'));
+        $coptions[] = array('id' =>'pl', 'name'=>xarML('Poland'));
+        $coptions[] = array('id' =>'pt', 'name'=>xarML('Portugal'));
+        $coptions[] = array('id' =>'pr', 'name'=>xarML('Puerto Rico'));
+        $coptions[] = array('id' =>'qa', 'name'=>xarML('Qatar'));
+        $coptions[] = array('id' =>'re', 'name'=>xarML('R&#233;union'));
+        $coptions[] = array('id' =>'ro', 'name'=>xarML('Romania'));
+        $coptions[] = array('id' =>'ru', 'name'=>xarML('Russian Federation'));
+        $coptions[] = array('id' =>'rw', 'name'=>xarML('Rwanda'));
+        $coptions[] = array('id' =>'sh', 'name'=>xarML('St. Helena'));
+        $coptions[] = array('id' =>'kn', 'name'=>xarML('St. Kitts and Nevis'));
+        $coptions[] = array('id' =>'lc', 'name'=>xarML('St. Lucia'));
+        $coptions[] = array('id' =>'pm', 'name'=>xarML('St. Pierre and Miquelon'));
+        $coptions[] = array('id' =>'vc', 'name'=>xarML('St. Vincent and the Grenadines'));
+        $coptions[] = array('id' =>'ws', 'name'=>xarML('Samoa'));
+        $coptions[] = array('id' =>'sm', 'name'=>xarML('San Marino'));
+        $coptions[] = array('id' =>'st', 'name'=>xarML('S&#227;o Tom&#233; and Pr&#237;ncipe'));
+        $coptions[] = array('id' =>'sa', 'name'=>xarML('Saudi Arabia'));
+        $coptions[] = array('id' =>'sn', 'name'=>xarML('Senegal'));
+        $coptions[] = array('id' =>'cs', 'name'=>xarML('Serbia & Montenegro'));
+        $coptions[] = array('id' =>'sc', 'name'=>xarML('Seychelles'));
+        $coptions[] = array('id' =>'sl', 'name'=>xarML('Sierra Leone'));
+        $coptions[] = array('id' =>'sg', 'name'=>xarML('Singapore'));
+        $coptions[] = array('id' =>'sk', 'name'=>xarML('Slovakia'));
+        $coptions[] = array('id' =>'si', 'name'=>xarML('Slovenia'));
+        $coptions[] = array('id' =>'sb', 'name'=>xarML('Solomon Islands'));
+        $coptions[] = array('id' =>'so', 'name'=>xarML('Somalia'));
+        $coptions[] = array('id' =>'za', 'name'=>xarML('South Africa'));
+        $coptions[] = array('id' =>'gs', 'name'=>xarML('Sth Georgia & the South Sandwich Islands'));
+        $coptions[] = array('id' =>'es', 'name'=>xarML('Spain'));
+        $coptions[] = array('id' =>'lk', 'name'=>xarML('Sri Lanka'));
+        $coptions[] = array('id' =>'sd', 'name'=>xarML('Sudan'));
+        $coptions[] = array('id' =>'sr', 'name'=>xarML('Suriname'));
+        $coptions[] = array('id' =>'sj', 'name'=>xarML('Svalbard & Jan Mayen'));
+        $coptions[] = array('id' =>'sz', 'name'=>xarML('Swaziland'));
+        $coptions[] = array('id' =>'se', 'name'=>xarML('Sweden'));
+        $coptions[] = array('id' =>'ch', 'name'=>xarML('Switzerland'));
+        $coptions[] = array('id' =>'sy', 'name'=>xarML('Syria'));
+        $coptions[] = array('id' =>'tw', 'name'=>xarML('Taiwan'));
+        $coptions[] = array('id' =>'tj', 'name'=>xarML('Tajikistan'));
+        $coptions[] = array('id' =>'tz', 'name'=>xarML('Tanzania, United Republic of'));
+        $coptions[] = array('id' =>'th', 'name'=>xarML('Thailand'));
+        $coptions[] = array('id' =>'tl', 'name'=>xarML('Timor-Leste (East Timor)'));
+        $coptions[] = array('id' =>'tg', 'name'=>xarML('Togo'));
+        $coptions[] = array('id' =>'tk', 'name'=>xarML('Tokelau'));
+        $coptions[] = array('id' =>'to', 'name'=>xarML('Tonga'));
+        $coptions[] = array('id' =>'tt', 'name'=>xarML('Trinidad and Tobago'));
+        $coptions[] = array('id' =>'tn', 'name'=>xarML('Tunisia'));
+        $coptions[] = array('id' =>'tr', 'name'=>xarML('Turkey'));
+        $coptions[] = array('id' =>'tm', 'name'=>xarML('Turkmenistan'));
+        $coptions[] = array('id' =>'tc', 'name'=>xarML('Turks and Caicos Islands'));
+        $coptions[] = array('id' =>'tv', 'name'=>xarML('Tuvalu'));
+        $coptions[] = array('id' =>'ug', 'name'=>xarML('Uganda'));
+        $coptions[] = array('id' =>'ua', 'name'=>xarML('Ukraine'));
+        $coptions[] = array('id' =>'ae', 'name'=>xarML('United Arab Emirates'));
+        $coptions[] = array('id' =>'gb', 'name'=>xarML('United Kingdom'));
+        $coptions[] = array('id' =>'us', 'name'=>xarML('United States'));
+        $coptions[] = array('id' =>'um', 'name'=>xarML('U.S. Minor Outlying Islands'));
+        $coptions[] = array('id' =>'uy', 'name'=>xarML('Uruguay'));
+        $coptions[] = array('id' =>'uz', 'name'=>xarML('Uzbekistan'));
+        $coptions[] = array('id' =>'vu', 'name'=>xarML('Vanuatu'));
+        $coptions[] = array('id' =>'va', 'name'=>xarML('Vatican City State (Holy See)'));
+        $coptions[] = array('id' =>'ve', 'name'=>xarML('Venezuela'));
+        $coptions[] = array('id' =>'vn', 'name'=>xarML('Vietnam'));
+        $coptions[] = array('id' =>'vg', 'name'=>xarML('Virgin Islands, British'));
+        $coptions[] = array('id' =>'vi', 'name'=>xarML('Virgin Islands, U.S.'));
+        $coptions[] = array('id' =>'wf', 'name'=>xarML('Wallis & Futuna'));
+        $coptions[] = array('id' =>'eh', 'name'=>xarML('Western Sahara'));
+        $coptions[] = array('id' =>'ye', 'name'=>xarML('Yemen'));
+        $coptions[] = array('id' =>'zm', 'name'=>xarML('Zambia'));
+        $coptions[] = array('id' =>'zw', 'name'=>xarML('Zimbabwe'));
+       return $coptions;
+   }
 ?>

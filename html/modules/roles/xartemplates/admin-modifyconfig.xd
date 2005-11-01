@@ -107,23 +107,25 @@
                     </a>
                 </dd>
             </xar:if>
-            <xar:if condition="$tab eq 'grouphooks'">
-                <dd class="active">
-                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
-                        <xar:mlstring>
-                            Group Hooks 
-                        </xar:mlstring>
-                    </a>
-                </dd>
-                <xar:else />
-                <dd>
-                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
-                        <xar:mlstring>
-                            Group Hooks 
-                        </xar:mlstring>
-                    </a>
-                </dd>
-            </xar:if>
+            <xar:comment>
+                <xar:if condition="$tab eq 'grouphooks'">
+                    <dd class="active">
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
+                            <xar:mlstring>
+                                Group Hooks 
+                            </xar:mlstring>
+                        </a>
+                    </dd>
+                    <xar:else />
+                    <dd>
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
+                            <xar:mlstring>
+                                Group Hooks 
+                            </xar:mlstring>
+                        </a>
+                    </dd>
+                </xar:if>
+            </xar:comment>
             <xar:if condition="$tab eq 'memberlist'">
                 <dd class="active">
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=memberlist">
@@ -148,11 +150,6 @@
     </xar:comment>
     <xar:if condition="$tab eq 'general'">
         <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-            <h3>
-                <xar:mlstring>
-                    General Options 
-                </xar:mlstring>
-            </h3>
             <fieldset>
                 <legend>
                     <xar:mlstring>
@@ -450,8 +447,6 @@
                         </div>
                     </xar:comment>
                 </xar:if>
-            </fieldset>
-            <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="phase" id="phase" value="update" />
@@ -652,28 +647,22 @@
         </xar:comment>
         <xar:elseif condition="$tab eq 'hooks'" />
         <xar:if condition="!empty($hooks)">
-            <h3>
-                <xar:mlstring>
-                    Configuration of Hooked Modules 
-                </xar:mlstring>
-            </h3>
-            <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-                <h4>
-                    <xar:mlstring>
-                        Default Hooks For Users: 
-                    </xar:mlstring>
-                </h4>
+          <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+              <fieldset>
+                <legend><xar:mlstring>Default Hooks For Users</xar:mlstring></legend>
+               
                 <xar:foreach in="$hooks" key="$hookmodule">
                     #$hooks[$hookmodule]# 
                 </xar:foreach>
-                <fieldset>
-                    <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                        <input type="hidden" name="phase" id="phase" value="update" />
-                        <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                        <input type="submit" value="#xarML('Update Roles Configuration')#" />
-                    </div>
-                </fieldset>
+              </fieldset>
+              <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                  <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                  <input type="hidden" name="phase" id="phase" value="update" />
+                  <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                  <input type="submit" value="#xarML('Update Roles Configuration')#" />
+                </div>
+              </fieldset>
             </form>
             <xar:else />
             <p>
@@ -687,20 +676,14 @@
         </xar:comment>
         <xar:elseif condition="$tab eq 'grouphooks'" />
         <xar:if condition="!empty($hooks)">
-            <h3>
-                <xar:mlstring>
-                    Configuration of Hooked Modules 
-                </xar:mlstring>
-            </h3>
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-                <h4>
-                    <xar:mlstring>
-                        Default Hooks For Groups: 
-                    </xar:mlstring>
-                </h4>
-                <xar:foreach in="$hooks" key="$hookmodule">
+                <fieldset>
+                  <legend><xar:mlstring>Default Hooks For Groups</xar:mlstring></legend>
+                  
+                  <xar:foreach in="$hooks" key="$hookmodule">
                     #$hooks[$hookmodule]# 
-                </xar:foreach>
+                  </xar:foreach>
+                </fieldset>
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
                         <input type="hidden" name="authid" id="authid" value="#$authid#" />

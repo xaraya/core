@@ -103,14 +103,12 @@
                         <xar:mlstring>Changes A User's Password</xar:mlstring>
                     </label>
                 </div>
-        
             <xar:if condition="!empty($hooks)">
                 <xar:foreach in="$hooks" key="$module" value="$output">
                     #$output#
                 </xar:foreach>
             </xar:if>
         </fieldset>
-
         <fieldset>
             <div class="xar-form-input-wrapper-after">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />

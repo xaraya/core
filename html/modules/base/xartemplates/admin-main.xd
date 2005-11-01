@@ -16,7 +16,10 @@
 
     <h3><xar:mlstring>What is it?</xar:mlstring></h3>
 
-    <p><xar:mlstring>The base module provides you with configuration and informational options in the Administration menu, as well as additional functionality through use of its templates and blocks.</xar:mlstring></p>
+    <p>
+        <xar:mlstring>The base module provides overall site configuration and informational options in the Administration menu and provides a means to add custom static pages.
+        It also serves as a collection of classes, custom block layout tags, include templates, and javascript functions that can be used throughout your site,
+        as well as being the location of the system wide default css classes.</xar:mlstring></p>
 
     <h3><xar:mlstring>How to use it?</xar:mlstring></h3>
 
@@ -55,14 +58,20 @@
     <h3><xar:mlstring>Dynamic Data Properties</xar:mlstring></h3>
 
     <p><xar:mlstring>The Base Module provides a number of Dynamic Data properties that you can use to extend existing Xaraya functionality by hooking Dynamic Data to your modules, or for developers, for use in your own module development.</xar:mlstring></p>
-    <h3><xar:mlstring>Custom Templates</xar:mlstring></h3>
+    <h3><xar:mlstring>Custom Templates and Static Pages</xar:mlstring></h3>
 
     <p><xar:mlstring>As well as providing a means to provide a custom template for your front page by creating an override for the base user-main.xd template, 
     you can also create further custom 'static' pages using base module templates. See the documentation for further information.</xar:mlstring></p>
 
+    <h3><xar:mlstring>System Wide CSS</xar:mlstring></h3>
+
+    <p><xar:mlstring>The system wide default CSS used by all core templates, and for use in module templates is found in the base module's <code>modules/base/xarstyles</code> directory along with other css used commonly throughout core and modules.</xar:mlstring></p>
+
+
     <h3><xar:mlstring>Custom Tags</xar:mlstring></h3>
 
-    <p><xar:mlstring>The Base Module provides a number of custom tags that can be used by theme creators and module developers to incorporate javascript into templates. These include the <code>&lt;xar:base-render-javascript ... /&gt;, &lt;xar:base-include-javascript ... /&gt;</code> and <code>&lt;xar:base-trigger-javascript ... /&gt;</code> tags. See the documentation for more information.</xar:mlstring></p>
+    <p><xar:mlstring>The Base Module provides a number of custom tags that can be used by theme creators and module developers to incorporate javascript into templates. These include the <code>&lt;xar:base-render-javascript ... /&gt;, &lt;xar:base-include-javascript ... /&gt;</code> and <code>&lt;xar:base-trigger-javascript ... /&gt;</code> tags. </xar:mlstring></p>
+    <p><xar:mlstring>You can use the javascript tags to include your own javascript or some of the library of javascript functions in the <code>modules/basexartemplates/includes</code> directory. See the documentation for more information.</xar:mlstring></p>
 
     <h3><xar:mlstring>Privilege Masks</xar:mlstring></h3>
 
@@ -104,7 +113,7 @@
               </li>
          </ul>
          <p class="xar-sub">
-             <strong>&nbsp;<xar:mlstring>Base Module - Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.0.0&nbsp; 2005-10-01
+             <strong>&nbsp;<xar:mlstring>Base Module - Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.0.1&nbsp; 2005-10-31
          </p>
 </div>
 

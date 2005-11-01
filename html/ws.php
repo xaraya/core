@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- * 
  * Xaraya WebServices Interface
  * 
  * @package modules
