@@ -41,12 +41,6 @@
     <xar:comment>TODO set the active tab here</xar:comment>
     <!-- Show the general tab list for roles -->
     <xar:template file="tablist" />
-            <dd>
-                <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$uid#">
-                    <xar:mlstring>Test Privileges</xar:mlstring>
-                </a>
-            </dd>    
-
     <fieldset>
       <legend>
         <xar:if condition="$ptype eq 0">
