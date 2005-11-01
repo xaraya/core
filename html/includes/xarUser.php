@@ -52,6 +52,7 @@ function xarUser_init($args, $whatElseIsGoingLoaded)
     // User System and Security Service Tables
     $systemPrefix = xarDBGetSystemTablePrefix();
 
+    // CHECK: is this needed?
     $tables = array('roles'            => $systemPrefix . '_roles',
                     'realms'           => $systemPrefix . '_security_realms',
                     'rolemembers' => $systemPrefix . '_rolemembers');
@@ -154,6 +155,7 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
 
     $rolestable = $xartable['roles'];
 
+    // TODO: this should be inside roles module
     $query = "UPDATE $rolestable SET xar_auth_module = ? WHERE xar_uid = ?";
     $result =& $dbconn->Execute($query,array($authModName,$userId));
     if (!$result) return;
@@ -266,6 +268,7 @@ function xarUserGetNavigationLocale()
     if (xarUserIsLoggedIn()) {
         $locale = xarModGetUserVar('roles', 'locale');
         if (!isset($locale)) {
+            // CHECKME: why is this here? The logic of falling back is already in the modgetuservar
             $siteLocale = xarModGetVar('roles', 'locale');
             if (!isset($siteLocale)) {
                 xarModSetVar('roles', 'locale', '');
@@ -323,6 +326,7 @@ function xarUserSetNavigationLocale($locale)
         if (xarUserIsLoggedIn()) {
             $userLocale = xarModGetUserVar('roles', 'locale');
             if (!isset($userLocale)) {
+                // CHECKME: Why is this here? the fallback logic is already in modgetuservar
                 $siteLocale = xarModGetVar('roles', 'locale');
                 if (!isset($siteLocale)) {
                     xarModSetVar('roles', 'locale', '');
@@ -646,6 +650,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
  */
 function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryptSalt = '')
 {
+    // TODO: consider moving to something stronger like sha1
     $md5pass = md5($givenPassword);
     if (strcmp($md5pass, $realPassword) == 0)
         return $md5pass;
@@ -675,7 +680,7 @@ function xarUser__getAuthModule($userId)
         }
     }
 
-// TODO: replace with some roles API ?
+    // TODO: replace with some roles API 
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
@@ -694,6 +699,7 @@ function xarUser__getAuthModule($userId)
     } else {
         list($authModName) = $result->fields;
         // TODO: remove when issue of Anonymous users is resolved
+        // Q: what issue?
         if (empty($authModName)) {
             $authModName = 'authsystem';
         }
