@@ -41,7 +41,6 @@
     <!-- Show the general tab list for roles -->
     <xar:set name="ptype">$type</xar:set>
     <xar:template file="tablist" />
-
     <fieldset>
       <legend><xar:mlstring>Role properties</xar:mlstring></legend>
       <div class="xar-form-input-wrapper">
