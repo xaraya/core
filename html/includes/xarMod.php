@@ -812,7 +812,7 @@ function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
  */
 function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
 {
-    xarLogMessage("xarModFunc: begin $modName:$modType:$funcName");
+    //xarLogMessage("xarModFunc: begin $modName:$modType:$funcName");
 
     if (empty($modName)) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
@@ -895,7 +895,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
 
     $tplOutput = xarTplModule($modBaseInfo['name'], $modType, $funcName, $tplData, $templateName);
 
-    xarLogMessage("xarModFunc: end $modName:$modType:$funcName");
+    //xarLogMessage("xarModFunc: end $modName:$modType:$funcName");
 
     return $tplOutput;
 }
@@ -920,7 +920,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
  */
 function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = array(), $throwException = 1)
 {
-    xarLogMessage("xarModAPIFunc: begin $modName:$modType:$funcName");
+    //xarLogMessage("xarModAPIFunc: begin $modName:$modType:$funcName");
 
     if (empty($modName)) {
         //die("$modName, $modType, $funcName");
@@ -995,7 +995,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
 
     $funcResult = $modAPIFunc($args);
 
-    xarLogMessage("xarModAPIFunc: end $modName:$modType:$funcName");
+    //xarLogMessage("xarModAPIFunc: end $modName:$modType:$funcName");
 
     return $funcResult;
 }
@@ -1293,7 +1293,7 @@ function xarModGetDisplayableName($modName = NULL, $type = 'module')
     }
     $modInfo = xarMod_getFileInfo($modName, $type);
 
-    xarLogMessage("xarModGetDisplayableName ". $modName ." / " . $type);
+    //xarLogMessage("xarModGetDisplayableName ". $modName ." / " . $type);
 
     return xarML($modInfo['displayname']);
 }
@@ -1309,7 +1309,7 @@ function xarModGetDisplayableName($modName = NULL, $type = 'module')
  */
 function xarModGetDisplayableDescription($modName = NULL, $type = 'module')
 {
-    xarLogMessage("xarModGetDisplayableDescription ". $modName ." / " . $type);
+    //xarLogMessage("xarModGetDisplayableDescription ". $modName ." / " . $type);
 
     if (empty($modName)) {
         $modName = xarModGetName();
@@ -1330,7 +1330,7 @@ function xarModGetDisplayableDescription($modName = NULL, $type = 'module')
  */
 function xarModIsAvailable($modName, $type = 'module')
 {
-    xarLogMessage("xarModIsAvailable: begin $type:$modName");
+    //xarLogMessage("xarModIsAvailable: begin $type:$modName");
 
     // FIXME: there is no point to the cache here, since
     // xarMod_getBaseInfo() caches module details anyway.
@@ -1358,7 +1358,7 @@ function xarModIsAvailable($modName, $type = 'module')
             $modAvailableCache[$modBaseInfo['name']] = true;
         }
     }
-    xarLogMessage("xarModIsAvailable: end $type:$modName");
+    //xarLogMessage("xarModIsAvailable: end $type:$modName");
 
     return $modAvailableCache[$modBaseInfo['name']];
 }
