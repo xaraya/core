@@ -951,7 +951,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
         '_bl_mainModuleOutput'     => $mainModuleOutput,
     );
 
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:pages', $templateName) === NULL) return;
+    //if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:pages', $templateName) === NULL) return;
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
@@ -981,7 +981,7 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
         $templateName = 'default';
         $sourceFileName = "$themeDir/blocks/default.xt";
     }
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:blocks', $templateName) === NULL) return;
+    //if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:blocks', $templateName) === NULL) return;
     return xarTpl__executeFromFile($sourceFileName, $blockInfo);
 }
 
@@ -998,7 +998,7 @@ function xarTpl_includeThemeTemplate($templateName, $tplData)
     // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
     $sourceFileName = xarTplGetThemeDir() ."/includes/$templateName.xt";
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:includes', $templateName) === NULL) return;
+    // if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:includes', $templateName) === NULL) return;
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -1018,7 +1018,7 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
     $sourceFileName = xarTplGetThemeDir() . "/modules/$modName/includes/$templateName.xt";
     if (!file_exists($sourceFileName)) {
         $sourceFileName = "modules/$modName/xartemplates/includes/$templateName.xd";
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates/includes', $templateName) === NULL) return;
+        //if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates/includes', $templateName) === NULL) return;
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
@@ -1096,6 +1096,21 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '')
 function xarTpl__executeFromFile($sourceFileName, $tplData)
 {
     assert('is_array($tplData); /* Template data should always be passed in an array */');
+
+    // Load translations for the template
+    $tplpath = explode("/", $sourceFileName);
+    $tplPathCount = count($tplpath);
+    switch ($tplpath[0]) {
+        case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
+        case 'themes':  $dnType = XARMLS_DNTYPE_THEME; break;
+    }
+    $dnName = $tplpath[1];
+    $stack = array();
+    if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
+    for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
+    $ctxType = $tplpath[0].':'.implode("/", $stack);
+    $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
+    if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
 
     $needCompilation = true;
 
@@ -1247,7 +1262,7 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
         $domain = XARMLS_DNTYPE_THEME; $instance = $GLOBALS['xarTpl_themeName'];
         $context = rtrim("themes:modules/$modName/$tplSubPart",'/');
     }
-    if (xarMLS_loadTranslations($domain, $instance, $context, $tplBase) === NULL) return;
+    //if (xarMLS_loadTranslations($domain, $instance, $context, $tplBase) === NULL) return;
 
     return $sourceFileName;
 }
