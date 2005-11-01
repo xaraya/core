@@ -39,7 +39,6 @@
     <!-- Show the general tab list for roles -->
     <xar:set name="uid">$roleid</xar:set>
     <xar:template file="tablist" />
-
     <fieldset>
       <legend>
         <xar:ml>
