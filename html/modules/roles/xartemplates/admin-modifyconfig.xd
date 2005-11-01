@@ -90,23 +90,25 @@
                     </a>
                 </dd>
             </xar:if>
-            <xar:if condition="$tab eq 'grouphooks'">
-                <dd class="active">
-                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
-                        <xar:mlstring>
-                            Group Hooks 
-                        </xar:mlstring>
-                    </a>
-                </dd>
-                <xar:else />
-                <dd>
-                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
-                        <xar:mlstring>
-                            Group Hooks 
-                        </xar:mlstring>
-                    </a>
-                </dd>
-            </xar:if>
+            <xar:comment>
+                <xar:if condition="$tab eq 'grouphooks'">
+                    <dd class="active">
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
+                            <xar:mlstring>
+                                Group Hooks 
+                            </xar:mlstring>
+                        </a>
+                    </dd>
+                    <xar:else />
+                    <dd>
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
+                            <xar:mlstring>
+                                Group Hooks 
+                            </xar:mlstring>
+                        </a>
+                    </dd>
+                </xar:if>
+            </xar:comment>
             <xar:if condition="$tab eq 'memberlist'">
                 <dd class="active">
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=memberlist">
