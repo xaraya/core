@@ -39,13 +39,6 @@
     <!-- Show the general tab list for roles -->
     <xar:set name="uid">$roleid</xar:set>
     <xar:template file="tablist" />
-            <dd>
-              <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$roleid#">
-                    <xar:mlstring>Test Privileges</xar:mlstring>
-                </a>
-            </dd>    
-
-
     <fieldset>
       <legend>
         <xar:ml>
