@@ -34,19 +34,7 @@
   
   <xar:comment>TODO set the active tab here</xar:comment>
   <!-- Show the general tab list for roles -->
-  <xar:template file="tablist" />
-
-  
-  
-      </xar:if>
-      <dd class="active">
-        <a href="#xarServerGetCurrentUrl()#">
-          <xar:mlstring>Test privileges</xar:mlstring>
-        </a>
-      </dd>    
-    </dl>
-  </div>
-  
+  <xar:template file="tablist" />  
   
   <form action="&xar-modurl-roles-admin-testprivileges;" method="post" enctype="application/x-www-form-urlencoded">
     <fieldset>
@@ -97,6 +85,7 @@
             </td>
             <xar:if condition="xarModGetVar('privileges','showrealms')">
               <td>#$mask:getRealm()#</td>
+            </xar:if>
             <td>#$mask:getModule()#</td>
             <td>#$mask:getComponent()#</td>
             <td>#$mask:getInstance()#</td>
