@@ -28,7 +28,11 @@
     </fieldset>
     <fieldset>
       <div class="xar-align-center">
+        </td>
         <input type="submit" value="#$loginlabel#" tabindex="4" />
+        <td>
+    &nbsp;
+        </td>
       </div>
     </fieldset>
   </form>

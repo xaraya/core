@@ -122,7 +122,7 @@ function dynamicdata_admin_modifyprop()
         $hooks = xarModCallHooks('module','modifyconfig',$modinfo['name'],
                                  array('module' => $modinfo['name'],
                                        'itemtype' => $itemtype));
-    } 
+    }
     $data['hooks'] = $hooks;
 
     $data['labels'] = array(

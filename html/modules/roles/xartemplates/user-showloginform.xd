@@ -1,2 +1,9 @@
 <!-- User choices seems to be the one used? -->
 <xar:template type="system" file="user-choices.xd"/>
+
+        <td>
+            &nbsp;
+        </td>
+        <td>
+    &nbsp;
+        </td>
