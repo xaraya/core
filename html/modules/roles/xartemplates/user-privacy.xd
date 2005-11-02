@@ -81,11 +81,6 @@
         <a href="&xar-modurl-roles-user-main;"><xar:mlstring>your personal page configuration area</xar:mlstring></a>. <xar:mlstring>You may request deletion of your user account by contacting</xar:mlstring>&nbsp;<a href="mailto:#$contmail#"><xar:mlstring>our webmaster</xar:mlstring></a>.</p>
         <!-- **NOTE: Note the following may be suggested for your jurisdiction and there is no harm in including it - begin -->
         <p><xar:mlstring>Content or other data that you may have provided to us and that is not contained within your user account, such as posts that may appear within our forums, may continue to remain on our site at our discretion even though your user account is deleted.</xar:mlstring></p>
-        <p><xar:mlstring>We take your right to privacy seriously and want you to feel comfortable using our web site. This Privacy Policy deals with personally identifiable information (referred to as "Data" below) that may be collected by us on our site. This Policy does not apply to other entities that we do not own or control or persons that are not our employees, agents or within our control.</xar:mlstring>
-        <xar:if condition="xarModGetVar('roles', 'showterms')">
-            <xar:mlstring>Please see our</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring> for more information.</xar:mlstring>
-        </xar:if>
-        </p>
     <xar:set name="curnum">++$curnum</xar:set>
     <h3 id="changes">#$curnum#.&nbsp;
         <xar:mlstring>Changes to this Privacy Policy</xar:mlstring></h3>
