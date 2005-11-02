@@ -24,7 +24,7 @@ function mail_adminapi_getmenulinks()
     $menulinks = array();
     if (xarSecurityCheck('AdminMail', 0)) {
         $menulinks[] = Array('url' => xarModURL('mail','admin','overview'),
-            'title' => xarML('MailOverview'),
+            'title' => xarML('Mail Overview'),
             'label' => xarML('Overview'));
 
         $menulinks[] = Array('url' => xarModURL('mail',

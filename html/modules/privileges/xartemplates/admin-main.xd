@@ -117,7 +117,7 @@
       <li><xar:mlstring>Privileges Module Extension page at</xar:mlstring> <a title="#xarML('Privileges  Module - Xaraya Extension 1098')#" href="http://www.xaraya.com/index.php/release/1098.html">Xaraya Extension and Releases</a>.
       <xar:mlstring> Click on Version History tab at the bottom to get the latest release information.</xar:mlstring>
       </li>
-      <li><xar:mlstring>Related tutorials and documentation on Privileges module at</xar:mlstring> <a href="http://www.xaraya.com/index.php/keywords/privileges /" title="#xarML('Related documentation on Privileges')#"><xar:mlstring>Xaraya Documentation.</xar:mlstring></a>
+      <li><xar:mlstring>Related tutorials and documentation on Privileges module at</xar:mlstring> <a href="http://www.xaraya.com/index.php/keywords/privileges/" title="#xarML('Related documentation on Privileges')#"><xar:mlstring>Xaraya Documentation.</xar:mlstring></a>
       </li>
       <li><xar:mlstring>Extended information for Developers at</xar:mlstring> <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html" title="#xarML('RFC 30')#"><xar:mlstring>Xaraya RFC-30</xar:mlstring></a>
       </li>
