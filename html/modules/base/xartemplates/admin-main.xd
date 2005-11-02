@@ -24,7 +24,6 @@
     <h3><xar:mlstring>How to use it?</xar:mlstring></h3>
 
     <p><xar:mlstring>The Administration menu  allows you to have control over various global aspects on your site and includes:</xar:mlstring></p>
-    <p><xar:mlstring>The Administration menu is key to controlling global functionality on your site and includes:</xar:mlstring></p>
         <ol>
             <li><xar:mlstring>System Information: Allows you to view your server and php set-up for trouble shooting.</xar:mlstring></li>
             <li><xar:mlstring>Extension Releases: View recently releasedextensions from the xaraya.com Extension and Release RSS feed.</xar:mlstring></li>
