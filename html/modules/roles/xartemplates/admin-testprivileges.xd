@@ -55,7 +55,7 @@
         <input type="hidden" name="uid" id="uid" value="#$uid#" />
         <input type="submit" value="#xarML('Test Privileges')#" class="xar-margin-thickleft" />
       </div>
-      </div>
+    </fieldset>
   </form>
   
   <xar:if condition="empty($pmodule)">
