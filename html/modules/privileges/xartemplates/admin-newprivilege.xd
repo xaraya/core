@@ -117,7 +117,7 @@
                     </div>
                 </xar:if>
                 <div class="xar-form-input-wrapper">
-                    <label for="pmodule" title="#xarML('Module to which this provilege will apply')#" class="xar-form-label">
+                    <label for="pmodule" title="#xarML('Module to which this privilege will apply')#" class="xar-form-label">
                         <xar:mlstring>
                             Module:
                         </xar:mlstring>
