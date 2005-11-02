@@ -159,6 +159,13 @@
 </xar:if>
 <fieldset>
 <div class="xar-align-center">
+  <xar:comment>
+    Optional extra table for data sources - use a text box if you want to make this configurable
+    <input type="text" name="table" id="table" value="#$table#" />
+  </xar:comment>
+  <xar:if condition="!empty($table)">
+    <input type="hidden" name="table" id="table" value="#$table#" />
+  </xar:if>
   <input type="hidden" name="authid" id="authid" value="#$authid#" />
   <input type="hidden" name="objectid" id="objectid" value="#$objectid#" />
   <input type="hidden" name="modid" id="modid" value="#$modid#" />
