@@ -2,14 +2,15 @@
 /**
  * Dynamic Country List Property
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Base module
  * @author John Cox
  */
+
 /**
  * Include the base class
  */
@@ -97,7 +98,9 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
 
          $countrynames= getCountryList();
          $countryname='';
-
+         /* For templates which are selecting on id and displaying name 
+          * Pass the actual country name to the template as well as the id
+          */
          foreach ($countrynames as $countrydata) {
              foreach ($countrydata as $k) {
                if ($k == $data['value']) {

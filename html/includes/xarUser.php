@@ -157,7 +157,8 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
 
     // TODO: this should be inside roles module
     $query = "UPDATE $rolestable SET xar_auth_module = ? WHERE xar_uid = ?";
-    $result =& $dbconn->Execute($query,array($authModName,$userId));
+    $stmt =& $dbconn->prepareStatement($query);
+    $result =& $stmt->executeUpdate(array($authModName,$userId));
     if (!$result) return;
 
     // Set session variables
@@ -689,15 +690,16 @@ function xarUser__getAuthModule($userId)
     $rolestable = $xartable['roles'];
 
     $query = "SELECT xar_auth_module FROM $rolestable WHERE xar_uid = ?";
-    $result =& $dbconn->Execute($query,array($userId));
+    $stmt =& $dbconn->prepareStatement($query);
+    $result =& $stmt->executeQuery(array($userId),ResultSet::FETCHMODE_NUM);
     if (!$result) return;
 
-    if ($result->EOF) {
+    if (!$result->next()) {
         // That user has never logon, strange, don't you think?
         // However fallback to authsystem
         $authModName = 'authsystem';
     } else {
-        list($authModName) = $result->fields;
+        $authModName = $result->getString(1);
         // TODO: remove when issue of Anonymous users is resolved
         // Q: what issue?
         if (empty($authModName)) {
@@ -780,8 +782,7 @@ function xarUser__syncUsersTableFields()
  */
 function xarUser__setUsersTableUserVar($name, $value, $userId)
 {
-
-// TODO: replace with some roles API ?
+    // TODO: replace with some roles API ?
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
@@ -791,9 +792,9 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
 
     // The $name variable will be used to get the appropriate column
     // from the users table.
-    $query = "UPDATE $rolestable
-              SET $usercolumns[$name] = ? WHERE xar_uid = ?";
-    $result =& $dbconn->Execute($query,array($value,$userId));
+    $query = "UPDATE $rolestable SET $usercolumns[$name] = ? WHERE xar_uid = ?";
+    $stmt =& $dbconn->prepareStatement($query);
+    $result =& $stmt->executeUpdate(array($value,$userId));
     if (!$result) return;
     return true;
 }
