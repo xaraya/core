@@ -5,36 +5,126 @@
 <div class="xar-mod-body">
     <img src="#xarTplGetImage('admin.gif', 'modules')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
 
-    <h2>
-        <xar:mlstring>Overview</xar:mlstring>
-    </h2>
+    <h2><xar:mlstring>Overview</xar:mlstring></h2>
 
-    <h3>
-        <xar:mlstring>What is it?</xar:mlstring>
-    </h3>
-
-    <p><xar:mlstring>The Modules Module controls the modules that you have installed on your Xaraya System. It basically controls the install, upgrades, and removal of modules.</xar:mlstring></p>
-
-    <h3>
-        <xar:mlstring>How to use it?</xar:mlstring>
-    </h3>
+    <h3><xar:mlstring>What is it?</xar:mlstring></h3>
 
     <p>
-        <xar:mlstring>From the menu, you have two choices.</xar:mlstring>
+        <xar:mlstring>The Modules Module determines which modules are available on your Xaraya installation
+        by controlling the install, upgrade, and removal of modules. The Modules Module also provides options 
+        to add further functionality in these modules through management of module hook configurations.
+        </xar:mlstring>
+    </p>
+
+    <h3><xar:mlstring>How to use it?</xar:mlstring></h3>
+
+    <p>
+        <xar:mlstring>From the menu, you have two choices:</xar:mlstring>
     </p>
 
     <ul>
         <li>
-            <xar:mlstring>View All: Allows you to see what modules are currently installed on your system, and the current state that they are in.</xar:mlstring>
+            <xar:mlstring><strong>View All</strong>: Allows you to see what modules are currently installed on
+            your system, and the current state that they are in.</xar:mlstring>
         </li>
         <li>
-            <xar:mlstring>Configure Hooks: Allows you to set certain hooks for modules to be reused (such as allowing comments on a module's data)</xar:mlstring>
+            <xar:mlstring><strong>Configure Hooks</strong>: Allows you to add extra funtionality to modules by 
+            configuring hooks from one module to another. For example, setting a hook to display comments 
+            (the Comments module) in articles (Articles module).</xar:mlstring>
         </li>
     </ul>
 
-    <h3>
-        <xar:mlstring>Included Blocks</xar:mlstring>
-    </h3>
+<h4><xar:mlstring>View All</xar:mlstring></h4>
+
+    <p>
+        <xar:mlstring>The View All option at default setup displays a list of all modules that are available, 
+        but not necessarily active and installed in your Xaraya installation. All valid Xaraya modules found 
+        in your Xaraya modules directory should be listed here.</xar:mlstring>
+    </p>
+    <ol>
+        <li><xar:mlstring>You can add more modules to this list at any time by adding them to your Xaraya 
+          modules directory and clicking the Reload button</xar:mlstring></li>
+        <li><xar:mlstring>Modules must be installed and active to be available for use on your Xaraya site. 
+        You may also need to setup the appropriate privileges for your users to view or use the module 
+        (See Privileges module and Roles module).</xar:mlstring></li>
+        <li><xar:mlstring>You must check to ensure any modules in upgrade status are upgraded and set to 
+        active in order to use them</xar:mlstring></li>
+        <li><xar:mlstring>You cannot uninstall or deactive core modules</xar:mlstring></li>
+    </ol>
+    <p><xar:mlstring>There are a number of options with drop down selection lists that you should check 
+    when displaying your modules.</xar:mlstring></p>
+    <ol>
+       <li><xar:mlstring><strong>Style</strong>: Configures the interface style for display of modules.</xar:mlstring></li>
+       <li><xar:mlstring><strong>View</strong>: Changes the current modules view. By default ALL modules are displayed.</xar:mlstring>
+          <ul>
+              <li><xar:mlstring><em>All Modules</em> Shows all modules.</xar:mlstring></li>
+              <li><xar:mlstring><em>All Installed</em> Shows all modules that have been installed (including active,
+              inactive and upgraded).</xar:mlstring></li>
+              <li><xar:mlstring><em>All Active</em> Shows all active modules.</xar:mlstring></li>
+              <li><xar:mlstring><em>All Inactive</em> Shows all inactive modules.</xar:mlstring></li>
+              <li><xar:mlstring><em>All Upgraded</em> Shows all upgraded modules.</xar:mlstring></li>
+              <li><xar:mlstring><em>Not Installed</em> Shows all modules that have not been installed.</xar:mlstring></li>
+              <li><xar:mlstring><em>Missing</em> Shows all modules that have been present at some time, but are now
+              missing from your modules directory.</xar:mlstring></li>
+              <li><xar:mlstring><em>Update Shows</em> all modules that need updating. Indicates their current status.</xar:mlstring></li>
+           </ul>
+       </li>
+       <li><xar:mlstring><strong>Sort By</strong>: This is the sort order for the module list.</xar:mlstring></li>
+       <li><xar:mlstring><strong>Hide</strong>: Check this to hide core modules.</xar:mlstring></li>
+   </ol>
+
+    <p><xar:mlstring>Within the view itself we have the following headers.</xar:mlstring></p>
+    <ol>
+       <li><xar:mlstring><em>Name</em>: The module name.</xar:mlstring></li>
+       <li><xar:mlstring><em>Version</em>: The module version number.</xar:mlstring></li>
+       <li><xar:mlstring><em>Info</em>: Some basic module information.</xar:mlstring></li>
+       <li><xar:mlstring><em>Status</em>: The current status of the module.</xar:mlstring></li>
+       <li><xar:mlstring><em>Actions</em>: Displays the actions available to you for this module</xar:mlstring></li>
+       <li><xar:mlstring><em>Properties</em>: Provides a link that allows you to alter the module display
+       in the User or Admin menu</xar:mlstring></li>
+       <li><xar:mlstring><em>Hooks</em>: This provides an alternative means for setting hooks from other modules
+       to on or off. If you do not understand this setting, please use the 'Configuring Hooks' settings below
+       to configure and set functionality with hooks.</xar:mlstring></li>
+    </ol><br />
+
+<h4><xar:mlstring>Configure Hooks</xar:mlstring></h4>
+
+    <p>
+        <xar:mlstring>This menu link displays the Module Hooks Configuration page. Each of the installed and]
+         active modules here can provide additional functionality in other modules through the use of 'hooks'.
+         </xar:mlstring>
+    </p>
+    <blockquote>
+    <p><xar:mlstring><strong>Important</strong></xar:mlstring>:</p>
+    <p><xar:mlstring>To use the hook functionality  provided by a module, click on the module that provides the hook, and
+    then check the checkbox next to the module where you want to add that hook functionality.</xar:mlstring>
+    </blockquote>
+    <p>
+        <xar:mlstring>As an example, if you wish to provide comments in articles, you need to activate the 
+        comments hook provided by the  Comments module and allow that for the articles module. Comments 
+        module provides the hook so click on Comments, then check the checkbox next to the Article module, 
+        or one of the Articles module itemtypes to display the output of the comments hook in that module 
+        or itemtype.</xar:mlstring>
+    </p>
+    <p>
+        <xar:mlstring>Taking the Comments module as an example, if you click on Comments and then browse
+        the list you'll see you have the following options for each module where you may wish to hook and
+        activate Comments:</xar:mlstring>
+    </p><br />
+
+    <ul style="margin-left:20px;">
+        <li><xar:mlstring>Do NOT enable Comments functionality in [module name]</xar:mlstring></li>
+        <li><xar:mlstring>Enable the Comments hooks for ALL items in [module name]</xar:mlstring></li>
+        <li><xar:mlstring>Enable Comments functionality for SOME itemtypes in [module name]</xar:mlstring></li>
+    </ul>
+
+    <p>
+        <xar:mlstring>The last option allows you to activate the hook and display Comments in say News or
+         Reviews, but not Documents for example.</xar:mlstring>
+    </p>
+<br />
+
+    <h3><xar:mlstring>Included Blocks</xar:mlstring></h3>
 
     <p>
         <xar:mlstring>The Modules Module has no blocks included at this time.</xar:mlstring>
@@ -43,6 +133,22 @@
     <h3><xar:mlstring>Included Hooks</xar:mlstring></h3>
 
     <p><xar:mlstring>The Modules Module has no hooks included at this time.</xar:mlstring></p>
+    <h3><xar:mlstring>Included Dynamic Data Properties</xar:mlstring></h3>
 
+    <p><xar:mlstring>For developers, the Dynamic Module property is included and provides a drop down selection list of available Modules.</xar:mlstring></p>
+  
+   <h3><xar:mlstring>Further Information</xar:mlstring></h3>
+   <p>
+      <xar:mlstring>Further information on the Modules module can be found at</xar:mlstring>
+   </p>
+   <ul>
+      <li><xar:mlstring>Modules Module Extension page at</xar:mlstring> <a title="#xarML('Modules Module - Xaraya Extension 36')#" href="http://www.xaraya.com/index.php/release/1.html">Xaraya Extension and Releases</a>.
+      <xar:mlstring> Click on Version History tab at the bottom to get the latest release information.</xar:mlstring>
+      </li>
+      <li><xar:mlstring>Related tutorials and documentation on Modules module found at</xar:mlstring> <a href="http://www.xaraya.com/index.php/keywords/modules/" title="#xarML('Related documentation on Modules')#"><xar:mlstring>Xaraya Documentation.</xar:mlstring></a>
+      </li>
+  </ul>
+  <p class="xar-sub">
+    <strong>&nbsp;<xar:mlstring>Modules Module - Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 2.3.0&nbsp; 2005-11-02
+  </p>
 </div>
-
