@@ -1,6 +1,6 @@
 <?php
 /**
- * Add, delete, modify groups in admin men
+ * Add, delete, modify groups in admin menu
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
