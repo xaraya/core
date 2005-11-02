@@ -55,20 +55,7 @@
     when displaying your modules.</xar:mlstring></p>
     <ol>
        <li><xar:mlstring><strong>Style</strong>: Configures the interface style for display of modules.</xar:mlstring></li>
-       <li><xar:mlstring><strong>View</strong>: Changes the current modules view. By default ALL modules are displayed.</xar:mlstring>
-          <ul>
-              <li><xar:mlstring><em>All Modules</em> Shows all modules.</xar:mlstring></li>
-              <li><xar:mlstring><em>All Installed</em> Shows all modules that have been installed (including active,
-              inactive and upgraded).</xar:mlstring></li>
-              <li><xar:mlstring><em>All Active</em> Shows all active modules.</xar:mlstring></li>
-              <li><xar:mlstring><em>All Inactive</em> Shows all inactive modules.</xar:mlstring></li>
-              <li><xar:mlstring><em>All Upgraded</em> Shows all upgraded modules.</xar:mlstring></li>
-              <li><xar:mlstring><em>Not Installed</em> Shows all modules that have not been installed.</xar:mlstring></li>
-              <li><xar:mlstring><em>Missing</em> Shows all modules that have been present at some time, but are now
-              missing from your modules directory.</xar:mlstring></li>
-              <li><xar:mlstring><em>Update Shows</em> all modules that need updating. Indicates their current status.</xar:mlstring></li>
-           </ul>
-       </li>
+       <li><xar:mlstring><strong>View</strong>: Changes the current modules view. By default ALL modules are displayed.</xar:mlstring></li>
        <li><xar:mlstring><strong>Sort By</strong>: This is the sort order for the module list.</xar:mlstring></li>
        <li><xar:mlstring><strong>Hide</strong>: Check this to hide core modules.</xar:mlstring></li>
    </ol>
@@ -90,15 +77,16 @@
 <h4><xar:mlstring>Configure Hooks</xar:mlstring></h4>
 
     <p>
-        <xar:mlstring>This menu link displays the Module Hooks Configuration page. Each of the installed and]
+        <xar:mlstring>This menu link displays the Module Hooks Configuration page. Each of the installed and
          active modules here can provide additional functionality in other modules through the use of 'hooks'.
          </xar:mlstring>
     </p>
     <blockquote>
     <p><xar:mlstring><strong>Important</strong></xar:mlstring>:</p>
     <p><xar:mlstring>To use the hook functionality  provided by a module, click on the module that provides the hook, and
-    then check the checkbox next to the module where you want to add that hook functionality.</xar:mlstring>
+    then check the checkbox next to the module where you want to add that hook functionality.</xar:mlstring></p>
     </blockquote>
+
     <p>
         <xar:mlstring>As an example, if you wish to provide comments in articles, you need to activate the 
         comments hook provided by the  Comments module and allow that for the articles module. Comments 

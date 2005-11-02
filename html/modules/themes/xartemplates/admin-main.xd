@@ -4,53 +4,163 @@
 </div>
 <div class="xar-mod-body">
     <img src="#xarTplGetImage('admin.gif','themes')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
-    <h2>
-        <xar:mlstring>Overview</xar:mlstring>
-    </h2>
+    <h2><xar:mlstring>Overview</xar:mlstring></h2>
 
-    <h3>
-        <xar:mlstring>What is it?</xar:mlstring>
-    </h3>
-
-    <p><xar:mlstring>The Themes Module controls the display of your website.  Certain display variables are set from this module to allow you to control the site name, footer information, etc.</xar:mlstring></p>
-
-    <h3>
-        <xar:mlstring>How to use it?</xar:mlstring>
-    </h3>
+    <h3><xar:mlstring>What is it?</xar:mlstring></h3>
 
     <p>
-        <xar:mlstring>From the menu, you have three choices.</xar:mlstring>
+        <xar:mlstring>The Themes Module controls the the display of your website by managing the themes available
+        for use in your Xaraya installation. It also allows you to set various theme related variables and meta data, 
+        caching options, and provides theme developer options.</xar:mlstring>
     </p>
 
-    <ul>
-        <li>
-            <xar:mlstring>View Themes: Allows you to see what themes are currently installed on your system, and the current state that they are in.</xar:mlstring>
-        </li>
-        <li>
-            <xar:mlstring>Template Tags: Allows you to view, edit, and delete template tags on the system, as well as add new tags to functions.</xar:mlstring>
-        </li>
-        <li>
-            <xar:mlstring>Modify Configuration: Allows you to set certain display configuration values.</xar:mlstring>
-        </li>
-    </ul>
-
-    <h3>
-        <xar:mlstring>Included Blocks</xar:mlstring>
-    </h3>
-
-    <ul>
-        <li>
-            <xar:mlstring>Metablock: The meta block allows you to configure at one time the meta values for your site.  This template can be overridden from your theme directory.</xar:mlstring>
-        </li>
-    </ul>
-
-    <h3>
-        <xar:mlstring>Included Hooks</xar:mlstring>
-    </h3>
+    <h3><xar:mlstring>How to use it?</xar:mlstring></h3>
 
     <p>
-        <xar:mlstring>The Themes module has a user menu hook which allows the users of your Xaraya site to change the default theme to their choosing.  This can be activated and deactivated from the modules module.</xar:mlstring>
+        <xar:mlstring>From the menu, you have three choices:</xar:mlstring>
+    </p>
+    <ol>
+       <li><xar:mlstring><strong>View Themes</strong>: Displays the themes currently installed on your 
+       system, and the current state that they are in.</xar:mlstring></li>
+       <li><xar:mlstring><strong>Template tags</strong>: Allows you view, edit or delete template tags 
+       on the system, as well as add new tags</xar:mlstring></li>
+       <li><xar:mlstring><strong>Modify Configuration </strong>: Allows you to set various site wide 
+       configuration options. This is an important option and you should review these options carefully.<br /><br />
+      There are two important settings in the Modify Configuration - <strong>Cache Templates</strong>, and <strong>Show Template File Names</strong>. Be sure to understand what these options do.</xar:mlstring></li>
+    </ol>
+
+    <h4><xar:mlstring>View Themes</xar:mlstring></h4>
+
+    <p>
+        <xar:mlstring>The View Themes option displays a list of all themes that are available but not
+         necessarily active and installed in your Xaraya installation. All valid Xaraya themes found in 
+         your Xaraya themes directory should be listed here.</xar:mlstring>
+    </p>
+    <ol>
+       <li><xar:mlstring>You can add more themes to this list at any time by adding them to your Xaraya 
+       themes directory and clicking the Refresh button</xar:mlstring></li>
+       <li><xar:mlstring>Themes must be installed and active to be available for use on your Xaraya site.</xar:mlstring></li>
+       <li><xar:mlstring>You cannot uninstall or deactive core modules</xar:mlstring></li>
+    </ol>
+    <p>
+        <xar:mlstring>You have a number of options with drop down selection lists to choose from including
+         Style of display, View (by Status), and Sort by.</xar:mlstring>
     </p>
 
+    <p>
+        <xar:mlstring>Within the list of themes you can view further information on each theme including 
+        Name, Version, basic Info, theme Status, and Actions available to you for each theme. The Default 
+        Theme used to display your site  is also indicated.</xar:mlstring>
+    </p>
+    <br />
+    <h4><xar:mlstring>Template Tags</xar:mlstring></h4>
+
+    <p>
+        <xar:mlstring>Template tags are custom Block Layout tags that developers can create to provide extra 
+        functionality or easy access to functionality in their modules. This page lists the available custom 
+        tags, in addition to Block Layout tags, available for use in creating your templates. These tags are 
+        usually always installed when the module is installed or upgraded.</xar:mlstring>
+    </p>
+
+    <p>
+        <xar:mlstring>It is rare that you would have to access any options on this page unless you are a 
+        developer or wish to install a new tag that has not yet been installed in the usual way.</xar:mlstring>
+    </p>
+    <br />
+    <h4><xar:mlstring>Modify Config</xar:mlstring></h4>
+
+    <p>
+        <xar:mlstring>You have a three main groups of configuration options.</xar:mlstring>
+    </p>
+    <ol>
+       <li><xar:mlstring><strong>Site Display Options</strong><br />
+        These are variables that can be inserted into your templates for display on your site. 
+        They are all used in the Default theme at installation time. To display these variables on your site, 
+        insert them in your templates with the <code>&lt;xar:var /&gt;</code> blocklayout tag.</xar:mlstring>
+
+       <ul>
+           <li><xar:mlstring><em>Site Name</em> : add your site name with <br />
+           <code>&lt;xar:var scope="module" module="themes" name="SiteName" /&gt;</code></xar:mlstring></li>
+           <li><xar:mlstring><em>Site Slogan</em>: Add your slogan and display it with <br />
+           <code>&lt;xar:var scope="module" module="themes" name="SiteSlogan" /&gt;</code></xar:mlstring></li>
+           <li><xar:mlstring><em>Copyright</em>: Defaults to "&copy;
+           Copyright 2003 &lt;administrator name&gt;". Change the text as necessary and
+           insert in your theme with <br /><code>&lt;xar:var scope="module" module="themes" name="SiteCopyRight" /&gt;</code></xar:mlstring></li>
+           <li><xar:mlstring><em>Footer note</em>: The 'footer' is displayed at the
+           bottom (the 'foot') of each and every page on your site in the Default theme. Display this footer 
+           note with <br /><code>&lt;xar:var scope="module" module="themes" name="SiteFooter" /&gt;</code></xar:mlstring></li>
+        </ul>
+      </li>
+       <li><strong><xar:mlstring>Page Title Options</xar:mlstring></strong>
+           <ul>
+           <li><xar:mlstring><em>Page Title Separator</em>: This will be the seperation character(s) in
+           your title. Example: "Themes :: Your Site Slogan :: Your Site Name"</xar:mlstring></li>
+           <li><xar:mlstring><em>Page Title Order</em>: Determines how the page title is displayed.
+           The results of the display options are:</xar:mlstring></li>
+           </ul>
+       </li>
+       <li><strong><xar:mlstring>Template Debugging Options</xar:mlstring></strong>
+       <ul>
+           <li><xar:mlstring><em>Show php comment block header in compiled templates</em></xar:mlstring></li>
+
+           <li><xar:mlstring><strong>Show template filenames in HTML comments</strong>: When you view the source 
+           of a page, checking this option will display the start and end point of each template used in the page. 
+           It is very useful for identifying which template to override and edit when you need to customize your 
+           theme. Turn this option off on a live site.</xar:mlstring></li>
+
+           <li><xar:mlstring><strong>Cache templates</strong>: This option enables caching of templates. 
+           It is important for performance that you have Cache Templates checked and active on a site. 
+           Turn it of when developing your theme.</xar:mlstring></li>
+
+           <li><xar:mlstring><em>Debug Templates by Showing Variables Available</em>: Shows the variables 
+           used in each template which is handy for debugging template errors.</xar:mlstring></li>
+           </ul>
+        </li>
+    </ol>
+    <h3><xar:mlstring>Included Blocks</xar:mlstring></h3>
+
+    <p>
+        <xar:mlstring>The Themes Module supplies the Metablock. The meta block is installed by default at 
+        installation time. You can edit this block by going to Blocks -> View Instances and clicking on Edit 
+        next to the Meta block entry.</xar:mlstring>
+    </p>
+
+    <p>
+        <xar:mlstring>The Meta block allows you to enter a meta description for your site, activate GEOUrl and 
+        set usabiilty pages. You can also set Keywords or activate Dynamic Keywords supplied by Articles or Keywords 
+        modules.</xar:mlstring>
+    </p>
+
+    <h3><xar:mlstring>Included Hooks</xar:mlstring></h3>
+
+    <p>
+        <xar:mlstring>The Themes module supplies a user menu hook.  A user menu hook displays additional 
+        functionality in the user's account page. When activated, this Themes user menu hook allows the 
+        users of your Xaraya site to change their preferred theme for browsing your site. They can choose 
+        a theme from any of those installed and active on your site.</xar:mlstring>
+    </p>
+
+    <p>
+        <xar:mlstring>To activate the hook:</xar:mlstring>
+    </p>
+    <ul>
+      <li><xar:mlstring>go to <code>Modules -> Configure Hooks</code></xar:mlstring></li>
+      <li><xar:mlstring>click on Themes</xar:mlstring></li>
+      <li><xar:mlstring>Scroll down to the Roles module and check the checkbox to activate the Themes hook for the roles module</xar:mlstring></li>
+    </ul>
+   <h3><xar:mlstring>Further Information</xar:mlstring></h3>
+   <p>
+      <xar:mlstring>Further information on the Themes module can be found at</xar:mlstring>
+   </p>
+   <ul>
+      <li><xar:mlstring>Themes Module Extension page at</xar:mlstring> <a title="#xarML('Themes Module - Xaraya Extension 70')#" href="http://www.xaraya.com/index.php/release/70.html">Xaraya Extension and Releases</a>.
+      <xar:mlstring> Click on Version History tab at the bottom to get the latest release information.</xar:mlstring>
+      </li>
+      <li><xar:mlstring>Related tutorials and documentation on Themes module found at</xar:mlstring> <a href="http://www.xaraya.com/index.php/keywords/themes/" title="#xarML('Related documentation on Themes')#"><xar:mlstring>Xaraya Documentation.</xar:mlstring></a>
+      </li>
+  </ul>
+  <p class="xar-sub">
+    <strong>&nbsp;<xar:mlstring>Themes Module - Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.7.0&nbsp; 2005-11-02
+  </p>
 </div>
 
