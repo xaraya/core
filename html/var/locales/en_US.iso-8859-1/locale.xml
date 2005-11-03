@@ -1,12 +1,14 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xarlocale:description xmlns:xarlocale="http://www.xaraya.com/2003/locale" locale="en_US">
   <xarlocale:language>
     <xarlocale:iso3code>eng</xarlocale:iso3code>
-    <xarlocale:display locale="en_US"><!-- TODO: complete this with the right display string for language name (Use an utf-8 editor).-->English</xarlocale:display>
+    <xarlocale:display locale="en_US">English</xarlocale:display>
+    <xarlocale:display locale="en_US">English<!-- TODO: complete this with the right display string for language name (Use an utf-8 editor).--></xarlocale:display>
   </xarlocale:language>
   <xarlocale:country>
     <xarlocale:iso3code>USA</xarlocale:iso3code>
-    <xarlocale:display locale="en_US"><!-- TODO: complete this with the right display string for country name (Use an utf-8 editor).-->United States</xarlocale:display>
+    <xarlocale:display locale="en_US">United States</xarlocale:display>
+    <xarlocale:display locale="en_US">US<!-- TODO: complete this with the right display string for country name (Use an utf-8 editor).--></xarlocale:display>
   </xarlocale:country>
   <xarlocale:monetary>
     <xarlocale:currencySymbol>$</xarlocale:currencySymbol>
@@ -39,11 +41,11 @@
     </xarlocale:integerDigits>
   </xarlocale:numeric>
   <xarlocale:decimalSymbols>
-    <xarlocale:infinity>?</xarlocale:infinity>
+    <xarlocale:infinity>∞</xarlocale:infinity>
     <xarlocale:minusSign>-</xarlocale:minusSign>
-    <xarlocale:notANumber>?</xarlocale:notANumber>
+    <xarlocale:notANumber>�</xarlocale:notANumber>
     <xarlocale:percent>%</xarlocale:percent>
-    <xarlocale:perMill>?</xarlocale:perMill>
+    <xarlocale:perMill>‰</xarlocale:perMill>
     <xarlocale:zeroDigit>0</xarlocale:zeroDigit>
   </xarlocale:decimalSymbols>
   <xarlocale:dateSymbols>
