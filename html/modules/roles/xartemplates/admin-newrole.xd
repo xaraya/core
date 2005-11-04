@@ -220,7 +220,6 @@
         <fieldset>
         <div class="xar-form-input-wrapper-after">
           <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="objectid" id="objectid" value="#$objectid#" />
                 <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
           <input type="submit" value="#xarML('Add')#" />
         </div>

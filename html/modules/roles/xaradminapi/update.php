@@ -87,7 +87,6 @@ function roles_adminapi_update($args)
     $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
-    $item['objectid'] = $objectid;
     $item['module'] = 'roles';
     $item['itemid'] = $uid;
     $item['name'] = $name;
