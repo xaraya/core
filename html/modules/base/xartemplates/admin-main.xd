@@ -26,13 +26,13 @@
     <p><xar:mlstring>The Administration menu  allows you to have control over various global aspects on your site and includes:</xar:mlstring></p>
         <ol>
             <li><xar:mlstring>System Information: Allows you to view your server and php set-up for trouble shooting.</xar:mlstring></li>
-            <li><xar:mlstring>Extension Releases: View recently releasedextensions from the xaraya.com Extension and Release RSS feed.</xar:mlstring></li>
+            <li><xar:mlstring>Extension Releases: View recently released extensions from the xaraya.com Extension and Release RSS feed.</xar:mlstring></li>
             <li><xar:mlstring>Modify Config: Allows you to change some of the key settings controlling the core behaviour of the site.</xar:mlstring>
                  <ul>
                     <li><xar:mlstring>Default module providing display on your site's front page</xar:mlstring></li>
                     <li><xar:mlstring>Short URL Master switch</xar:mlstring></li>
                     <li><xar:mlstring>Languages, Locales and Security</xar:mlstring></li>
-                    <li><xar:mlstring>Cookie settings, and other defaults such as WYWIWYG editor</xar:mlstring></li>
+                    <li><xar:mlstring>Cookie settings, and other defaults such as WYSIWYG editor</xar:mlstring></li>
                  </ul>
             </li>
         </ol>
@@ -70,7 +70,7 @@
     <h3><xar:mlstring>Custom Tags</xar:mlstring></h3>
 
     <p><xar:mlstring>The Base Module provides a number of custom tags that can be used by theme creators and module developers to incorporate javascript into templates. These include the <code>&lt;xar:base-render-javascript ... /&gt;, &lt;xar:base-include-javascript ... /&gt;</code> and <code>&lt;xar:base-trigger-javascript ... /&gt;</code> tags. </xar:mlstring></p>
-    <p><xar:mlstring>You can use the javascript tags to include your own javascript or some of the library of javascript functions in the <code>modules/basexartemplates/includes</code> directory. See the documentation for more information.</xar:mlstring></p>
+    <p><xar:mlstring>You can use the javascript tags to include your own javascript or some of the library of javascript functions in the <code>modules/base/xartemplates/includes</code> directory. See the documentation for more information.</xar:mlstring></p>
 
     <h3><xar:mlstring>Privilege Masks</xar:mlstring></h3>
 

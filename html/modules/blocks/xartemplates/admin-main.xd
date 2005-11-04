@@ -59,8 +59,8 @@
 
       <p>
           <xar:mlstring>A site admin or a developer may provide a new block type after a module is installed.
-          This new blocktype can be installed with an upgrade process, or alternatively if no upgrade is provided
-          to load the blocktype, you can add it with the options provided by the Blocks module. You should not
+          This new block type can be installed with an upgrade process, or alternatively if no upgrade is provided
+          to load the block type, you can add it with the options provided by the Blocks module. You should not
           normally have to add a block in this manner. In addition the Block Types options allow you to view all block types that
           are installed and their associated module.</xar:mlstring>
       </p><br />

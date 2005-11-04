@@ -40,7 +40,7 @@
        <li><xar:mlstring>You can add more themes to this list at any time by adding them to your Xaraya 
        themes directory and clicking the Refresh button</xar:mlstring></li>
        <li><xar:mlstring>Themes must be installed and active to be available for use on your Xaraya site.</xar:mlstring></li>
-       <li><xar:mlstring>You cannot uninstall or deactive core modules</xar:mlstring></li>
+       <li><xar:mlstring>You cannot uninstall or deactivate core modules</xar:mlstring></li>
     </ol>
     <p>
         <xar:mlstring>You have a number of options with drop down selection lists to choose from including
@@ -93,7 +93,7 @@
       </li>
        <li><strong><xar:mlstring>Page Title Options</xar:mlstring></strong>
            <ul>
-           <li><xar:mlstring><em>Page Title Separator</em>: This will be the seperation character(s) in
+           <li><xar:mlstring><em>Page Title Separator</em>: This will be the separation character(s) in
            your title. Example: "Themes :: Your Site Slogan :: Your Site Name"</xar:mlstring></li>
            <li><xar:mlstring><em>Page Title Order</em>: Determines how the page title is displayed.
            The results of the display options are:</xar:mlstring></li>
@@ -127,7 +127,7 @@
 
     <p>
         <xar:mlstring>The Meta block allows you to enter a meta description for your site, activate GEOUrl and 
-        set usabiilty pages. You can also set Keywords or activate Dynamic Keywords supplied by Articles or Keywords 
+        set usability pages. You can also set Keywords or activate Dynamic Keywords supplied by Articles or Keywords 
         modules.</xar:mlstring>
     </p>
 
