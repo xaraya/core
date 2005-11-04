@@ -150,6 +150,11 @@
     </xar:comment>
     <xar:if condition="$tab eq 'general'">
         <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+            <h3>
+                <xar:mlstring>
+                    General Options 
+                </xar:mlstring>
+            </h3>
             <fieldset>
                 <legend>
                     <xar:mlstring>
@@ -447,6 +452,8 @@
                         </div>
                     </xar:comment>
                 </xar:if>
+            </fieldset>
+            <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="phase" id="phase" value="update" />
@@ -534,11 +541,16 @@
         </xar:comment>
         <xar:elseif condition="$tab eq 'duvs'" />
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+                <fieldset>
                     <legend>
-          <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-              <fieldset>
-                <legend><xar:mlstring>Default Hooks For Users</xar:mlstring></legend>
-               
+                        <xar:mlstring>
+                            Basic User Variables 
+                        </xar:mlstring>
+                    </legend>
+                    <table style="width: 90%">
+                        <tr>
+                            <th style="width: 100px">
+                                <xar:mlstring>Name</xar:mlstring>
                             </th>
                             <th style="width: 400px">
                                 <xar:mlstring>Description</xar:mlstring>
@@ -572,6 +584,10 @@
                 </fieldset>
                 <fieldset>
                     <legend>
+                        <xar:mlstring>
+                            Dynamic User Variables 
+                        </xar:mlstring>
+                    </legend>
                     <table style="width: 90%">
                         <tr>
                             <th style="width: 100px">
