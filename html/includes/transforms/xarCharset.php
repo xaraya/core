@@ -280,7 +280,7 @@ class xarCharset
     function convert ($inString, $fromCharset, $toCharset, $turnOnEntities = false)
     {
         if (function_exists('iconv')) {
-            $outString = @iconv($fromCharset, $toCharset, $inString);
+            $outString = @iconv($fromCharset, $toCharset.'//TRANSLIT', $inString);
             if ($outString === false) $outString = '';
         } else {
             $outString = $this->convertByTable($inString, $fromCharset, $toCharset, $turnOnEntities);
