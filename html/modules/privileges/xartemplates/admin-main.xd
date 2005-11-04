@@ -22,8 +22,7 @@
     </p>
 
     <ul>
-        <li>
-            <xar:mlstring>Xaraya's privileges are extremely flexible. You can define privileges at the level of site, modules, component classes within modules, or single instances of those classes.</xar:mlstring>
+        <li><xar:mlstring>Xaraya's privileges are extremely flexible. You can define privileges at the level of site, modules, component classes within modules, or single instances of those classes.</xar:mlstring>
         </li>
         <li>
             <xar:mlstring>You can use privileges as building blocks. Assemble them into compound privileges tailored to any specific role on the site.</xar:mlstring>
@@ -65,9 +64,36 @@
     </ul>
 
     <p>
-        <xar:mlstring>All privileges in the system can be changed or removed. (For those protected by GeneralLock above this takes a bit more doing.) You can also combine privileges by using them as elements to create compound privileges, or make new privileges of your choosing. There is no limit to the number of privileges you can create or their levels of nesting.</xar:mlstring>
+        <xar:mlstring>All privileges in the system can be changed or removed. (For those protected by GeneralLock 
+        above this takes a bit more doing.) You can also combine privileges by using them as elements to create 
+        compound privileges, or make new privileges of your choosing. There is no limit to the number of privileges 
+        you can create or their levels of nesting.</xar:mlstring>
     </p>
+    <h4>
+        <xar:mlstring>Level of Access</xar:mlstring>
+    </h4>
 
+    <p>
+        <xar:mlstring>When you create a privilege you can assign one of a number of predefined levels of 
+        access for that privilege to a module, a component of that module, or an instance (eg an itemtype). 
+        A module author will determine how those levels are applied in their module. Generally they are:</xar:mlstring>
+    </p>
+    <ul>
+        <li><xar:mlstring><em>None</em> : no access</xar:mlstring></li>
+        <li><xar:mlstring><em>Overview</em> : access to some part of the content, but not full content. For example, in Articles module the overview access will allow viewing of article summaries but not full article display.</xar:mlstring></li>
+        <li><xar:mlstring><em>Read</em> : full read access</xar:mlstring></li>
+        <li><xar:mlstring><em>Comment</em> : allows a user to submit content eg Submit a document, submit a comment</xar:mlstring></li>
+        <li><xar:mlstring><em>Moderate</em> : may vary from module to module but usually allows editing of other users' content</xar:mlstring></li>
+        <li><xar:mlstring><em>Edit</em> : can edit content but not add or delete</xar:mlstring></li>
+        <li><xar:mlstring><em>Add</em> : can add and edit but not delete</xar:mlstring></li>
+        <li><xar:mlstring><em>Delete</em> : can delete content as well as add and edit</xar:mlstring></li>
+        <li><xar:mlstring><em>Admin</em> : full administration access</xar:mlstring></li>
+    </ul>
+    <p>
+        <xar:mlstring>Remember that you can assign privileges  to the Myself role, and those privileges will 
+        only apply to a specific user and the content owned or authored by that specific eg they could edit 
+        their own articles, or comments but not articles or comments created by others.</xar:mlstring>
+    </p>
     <h3>
         <xar:mlstring>Included Blocks</xar:mlstring>
     </h3>
@@ -83,10 +109,21 @@
     <p>
         <xar:mlstring>There are no included hooks.</xar:mlstring>
     </p>
+   <h3><xar:mlstring>Further Information</xar:mlstring></h3>
+   <p>
+      <xar:mlstring>Further information on the Privileges module can be found at:</xar:mlstring>
+   </p>
+   <ul>
+      <li><xar:mlstring>Privileges Module Extension page at</xar:mlstring> <a title="#xarML('Privileges  Module - Xaraya Extension 1098')#" href="http://www.xaraya.com/index.php/release/1098.html">Xaraya Extension and Releases</a>.
+      <xar:mlstring> Click on Version History tab at the bottom to get the latest release information.</xar:mlstring>
+      </li>
+      <li><xar:mlstring>Related tutorials and documentation on Privileges module at</xar:mlstring> <a href="http://www.xaraya.com/index.php/keywords/privileges/" title="#xarML('Related documentation on Privileges')#"><xar:mlstring>Xaraya Documentation.</xar:mlstring></a>
+      </li>
+      <li><xar:mlstring>Extended information for Developers at</xar:mlstring> <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html" title="#xarML('RFC 30')#"><xar:mlstring>Xaraya RFC-30</xar:mlstring></a>
+      </li>
 
-</div>
-<div class="xar-mod-foot xar-align-center xar-padding-thick">
-    <p>
-        <xar:mlstring>Extended information about this module can be found in</xar:mlstring> <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html">RFC-30</a>.
-    </p>
+  </ul>
+  <p class="xar-sub">
+    <strong>&nbsp;<xar:mlstring>Privileges  Module - Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 0.1.0&nbsp; 2005-11-03
+  </p>
 </div>

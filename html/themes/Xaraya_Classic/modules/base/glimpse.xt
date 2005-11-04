@@ -16,8 +16,10 @@ the frontpage of a Xaraya installation.
         </xar:mlstring>
         <xar:mlvar><xar:var scope="config" name="Site.BL.ThemesDirectory" /></xar:mlvar>
     </xar:ml>
-    Of course, the above tiny peek into Xaraya's templates is just the tip
+    <xar:mlstring>
+        Of course, the above tiny peek into Xaraya's templates is just the tip
 of the iceberg. When you decide to use Xaraya, you'll get to know the templating
 system in far more detail, but a good start is to have a look at the contents of
 the file mentioned above. 
+    </xar:mlstring>
 </p>

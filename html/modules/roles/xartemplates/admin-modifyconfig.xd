@@ -534,16 +534,11 @@
         </xar:comment>
         <xar:elseif condition="$tab eq 'duvs'" />
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-                <fieldset>
                     <legend>
-                        <xar:mlstring>
-                            Basic User Variables 
-                        </xar:mlstring>
-                    </legend>
-                    <table style="width: 90%">
-                        <tr>
-                            <th style="width: 100px">
-                                <xar:mlstring>Name</xar:mlstring>
+          <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+              <fieldset>
+                <legend><xar:mlstring>Default Hooks For Users</xar:mlstring></legend>
+               
                             </th>
                             <th style="width: 400px">
                                 <xar:mlstring>Description</xar:mlstring>
@@ -577,10 +572,6 @@
                 </fieldset>
                 <fieldset>
                     <legend>
-                        <xar:mlstring>
-                            Dynamic User Variables 
-                        </xar:mlstring>
-                    </legend>
                     <table style="width: 90%">
                         <tr>
                             <th style="width: 100px">
