@@ -361,6 +361,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $this->methods = $methods;
             $this->basedir = $basedir;
             $this->importdir = $importdir;
+            $this->maxsize = xarModGetVar('uploads', 'file.maxsize');
 
         } elseif (!empty($validation)) {
             // specify base directory and optional file types in validation
