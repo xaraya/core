@@ -29,7 +29,6 @@ function roles_admin_newrole()
     if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('phome', 'str', $home, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pprimaryparent', 'int', $primaryparent, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('objectid', 'int', $objectid,  0, XARVAR_NOT_REQUIRED)) {return;}
 
     // Security Check
     if (!xarSecurityCheck('AddRole')) return;
@@ -104,11 +103,9 @@ function roles_admin_newrole()
     // call item new hooks (for DD etc.)
     $item = $data;
     $item['module'] = 'roles';
-    $item['objectid'] = $objectid;
     $item['itemtype'] = $data['ptype']; // we might have something separate for groups later on
     $data['hooks'] = xarModCallHooks('item', 'new', '', $item);
 
-    $data['objectid'] = $objectid;
     $data['authid'] = xarSecGenAuthKey();
     $data['addlabel'] = xarML('Add');
     $data['groups'] = $groups;

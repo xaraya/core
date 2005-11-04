@@ -214,17 +214,13 @@ function roles_admin_modifyconfig()
         case 'links':
             switch ($data['tab']) {
                 case 'duvs':
-                    if (!xarVarFetch('userhome', 'int', $userhome, null, XARVAR_DONT_SET)) return;
-                    if (isset($userhome) && $userhome) {
-                    	xarModAPIFunc('roles','admin','activateduv',array('name' => 'userhome'));
-                    } elseif (isset($userhome)&& !$userhome) {
-                    	xarModAPIFunc('roles','admin','deactivateduv',array('name' => 'userhome'));
-                    }
-                    if (!xarVarFetch('primaryparent', 'int', $primaryparent, null, XARVAR_DONT_SET)) return;
-                    if (isset($primaryparent) && $primaryparent) {
-                    	xarModAPIFunc('roles','admin','activateduv',array('name' => 'primaryparent'));
-                    } elseif (isset($primaryparent)&& !$primaryparent) {
-                    	xarModAPIFunc('roles','admin','deactivateduv',array('name' => 'primaryparent'));
+                	$duvarray = array('userhome','primaryparent','passwordupdate','timezone',);
+                	foreach ($duvarray as $duv) {
+						if (!xarVarFetch($duv, 'int', $$duv, null, XARVAR_DONT_SET)) return;
+						if (isset($$duv)) {
+							if ($$duv) xarModAPIFunc('roles','admin','activateduv',array('name' => $duv));
+							else xarModAPIFunc('roles','admin','deactivateduv',array('name' => $duv));
+						}
                     }
                     break;
                 }

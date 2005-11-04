@@ -636,6 +636,44 @@
                                 </xar:if>
                             </td>
                         </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                passwordupdate
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>The date the last time this role's password was changed.</xar:mlstring>
+                            </td>
+                            <td style="width: 50px; text-align: center;">
+                                <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'passwordupdate', 'state' =&gt; 1))">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','passwordupdate' => 0))#">
+                                        <xar:mlstring>Deactivate</xar:mlstring>
+                                    </a>
+                                <xar:else />
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','passwordupdate' => 1))#">
+                                        <xar:mlstring>Activate</xar:mlstring>
+                                    </a>
+                                </xar:if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                timezone
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>This role's timezone.</xar:mlstring>
+                            </td>
+                            <td style="width: 50px; text-align: center;">
+                                <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'timezone', 'state' =&gt; 1))">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','timezone' => 0))#">
+                                        <xar:mlstring>Deactivate</xar:mlstring>
+                                    </a>
+                                <xar:else />
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','timezone' => 1))#">
+                                        <xar:mlstring>Activate</xar:mlstring>
+                                    </a>
+                                </xar:if>
+                            </td>
+                        </tr>
                     </table>
                 </fieldset>
                 <fieldset>

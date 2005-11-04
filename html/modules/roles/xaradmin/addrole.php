@@ -26,7 +26,6 @@ function roles_admin_addrole()
     if (!xarVarFetch('ptype',      'str:1',  $ptype,      NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pparentid',  'str:1:', $pparentid,  NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('return_url', 'isset',  $return_url, NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('objectid', 'int', $objectid,  0, XARVAR_NOT_REQUIRED)) {return;}
     // get the rest for users only
     // TODO: need to see what to do with auth_module
     if ($ptype == 0) {
@@ -140,7 +139,6 @@ function roles_admin_addrole()
 
     // call item create hooks (for DD etc.)
 // TODO: move to add() function
-    $pargs['objectid'] = $objectid;
     $pargs['module'] = 'roles';
     $pargs['itemtype'] = $ptype; // we might have something separate for groups later on
     $pargs['itemid'] = $uid;
