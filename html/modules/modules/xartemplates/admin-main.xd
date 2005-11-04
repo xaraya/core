@@ -28,7 +28,7 @@
             your system, and the current state that they are in.</xar:mlstring>
         </li>
         <li>
-            <xar:mlstring><strong>Configure Hooks</strong>: Allows you to add extra funtionality to modules by 
+            <xar:mlstring><strong>Configure Hooks</strong>: Allows you to add extra functionality to modules by 
             configuring hooks from one module to another. For example, setting a hook to display comments 
             (the Comments module) in articles (Articles module).</xar:mlstring>
         </li>
@@ -49,7 +49,7 @@
         (See Privileges module and Roles module).</xar:mlstring></li>
         <li><xar:mlstring>You must check to ensure any modules in upgrade status are upgraded and set to 
         active in order to use them</xar:mlstring></li>
-        <li><xar:mlstring>You cannot uninstall or deactive core modules</xar:mlstring></li>
+        <li><xar:mlstring>You cannot uninstall or deactivate core modules</xar:mlstring></li>
     </ol>
     <p><xar:mlstring>There are a number of options with drop down selection lists that you should check 
     when displaying your modules.</xar:mlstring></p>
