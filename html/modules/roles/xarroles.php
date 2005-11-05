@@ -65,6 +65,12 @@ class xarRoles
     {
         // check if we already have the groups stored
         if ((!isset($this->allgroups)) || count($this->allgroups) == 0) {
+        	$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27));
+        	$basetypes = array();
+        	foreach ($types as $key => $value) {
+        		$basetype = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
+        		if ($basetype['itemtype'] == 1) $basetypes[] = $key;
+        	}
             // set up the query and get the groups
             $q = new xarQuery('SELECT');
             $q->addtable($this->rolestable,'r');
@@ -74,7 +80,11 @@ class xarRoles
             $q->addfield('r.xar_name AS name');
             $q->addfield('r.xar_users AS users');
             $q->addfield('rm.xar_parentid AS parentid');
-            $q->ne('r.xar_type',0);
+            $c = array();
+        	foreach ($basetypes as $type) {
+	            $c[] = $q->eq('r.xar_type',$type);
+	        }
+	        $q->qor($c);
             $q->eq('r.xar_state',ROLES_STATE_ACTIVE);
             $q->setorder('r.xar_name');
             if (!$q->run()) return;
