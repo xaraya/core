@@ -60,6 +60,11 @@ function blocks_adminapi_getmenulinks()
             'title' => xarML('Add a new block type into the system'),
             'label' => xarML('Add Block Type')
         );
+        $menulinks[] = array(
+        	'url'   => xarModURL('blocks','admin','modifyconfig'),
+			'title' => xarML('Modify Blocks configuration values'),
+			'label' => xarML('Modify Config')
+		);
     }
     return $menulinks;
 }

@@ -204,8 +204,9 @@ function xarTpl__SetThemeNameAndDir($name)
  * @global string xarTpl_themeDir
  * @return sring  Theme directory
  */
-function xarTplGetThemeDir()
+function xarTplGetThemeDir($theme=null)
 {
+    if (isset($theme) && is_dir("themes/" . $theme)) return "themes/" . $theme;
     return $GLOBALS['xarTpl_themeDir'];
 }
 
@@ -1218,7 +1219,9 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     // 2. modules/{module}/xartemplates/{tplBase}-{templateName}.xd
     // 3. {theme}/modules/{module}/{tplBase}.xt
     // 4. modules/{module}/xartemplates/{tplBase}.xd
-    // 5. complain (later on)
+    // 5. {theme}/modules/{module}/{templateName}.xt (-syntax)
+    // 6. modules/{module}/xartemplates/{templateName}.xd (- syntax)
+    // 7. complain (later on)
 
     $tplThemesDir = xarTplGetThemeDir();
     $tplBaseDir   = "modules/$modOsDir";
@@ -1230,10 +1233,18 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     // xarLogMessage("TPL: 3. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase.xt")
     // xarLogMessage("TPL: 4. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")
 
-    if(!empty($templateName) && 
+    // xarLogMessage("TPL: 1. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt")
+    // xarLogMessage("TPL: 2. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xd")
+    // xarLogMessage("TPL: 3. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase.xt")
+    // xarLogMessage("TPL: 4. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")
+
+    $canTemplateName = strtr($templateName, "-", "/");
+    $canonical = ($canTemplateName == $templateName) ? false : true;
+
+    if(!empty($templateName) &&
         file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt")) {
         $tplBase .= "-$templateName";
-    } elseif(!empty($templateName) && 
+    } elseif(!empty($templateName) &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xd")) {
         $use_internal = true;
         $tplBase .= "-$templateName";
@@ -1242,6 +1253,11 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
         ;
     } elseif(
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")) {
+        $use_internal = true;
+    } elseif($canonical &&
+        file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$canTemplateName.xt")) {
+    } elseif($canonical &&
+        file_exists($sourceFileName = "$tplBaseDir/xartemplates/$canTemplateName.xd")) {
         $use_internal = true;
     } else {
         // CHECKME: should we do something here ? At the moment, translations still get loaded,

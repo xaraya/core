@@ -22,6 +22,11 @@
  */
 function &dynamicdata_userapi_getobject($args)
 {
+    if (empty($args['itemtype']) && !empty($args['name'])) {
+        $info = Dynamic_Object_Master::getObjectInfo($args);
+        $args['moduleid'] = $info['moduleid'];
+        $args['itemtype'] = $info['itemtype'];
+    }
     if (empty($args['moduleid']) && !empty($args['module'])) {
        $args['moduleid'] = xarModGetIDFromName($args['module']);
     }
