@@ -74,7 +74,7 @@ class xarRoles
             $q->addfield('r.xar_name AS name');
             $q->addfield('r.xar_users AS users');
             $q->addfield('rm.xar_parentid AS parentid');
-            $q->eq('r.xar_type',1);
+            $q->ne('r.xar_type',0);
             $q->eq('r.xar_state',ROLES_STATE_ACTIVE);
             $q->setorder('r.xar_name');
             if (!$q->run()) return;

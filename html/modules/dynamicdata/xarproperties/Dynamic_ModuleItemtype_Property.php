@@ -130,6 +130,7 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
 		} else {
 			$options[] = array('id' => 0, 'name' => xarML('current module'));
 		}
+		/*
 		foreach ($objects as $objectid => $object) {
 			if (!empty($option_value)) {
 				if ($object['moduleid'] == $option_value) {
@@ -150,6 +151,7 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
 				$options[] = array('id' => $object['itemtype'], 'name' => $parent['name']);
 			}
 		}
+		*/
 		return $options;
     }
 

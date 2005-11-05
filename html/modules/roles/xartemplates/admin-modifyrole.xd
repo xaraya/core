@@ -108,6 +108,7 @@
                     <label title="#xarML('Type of Role')#" class="xar-form-label">
                         <xar:mlstring>Type:</xar:mlstring>
                     </label>
+                    #$itemtypename#
                     <xar:comment>
                     value should still be there in the form, otherwise validation will fail,
                     do it with a hidden input now, but this should really be done with readonly attribute
