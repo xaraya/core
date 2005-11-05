@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Xaraya Web Interface Entry Point
  *
  * @package Xaraya eXtensible Management System

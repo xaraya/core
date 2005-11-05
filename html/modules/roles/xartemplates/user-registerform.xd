@@ -94,7 +94,7 @@
                 </span>
                 <label for="agreetoterms"  title="#xarML('Please check to agree to the website requirements')#">
                     <xar:mlstring>I agree to be bound by this website's </xar:mlstring>
-                    <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> and <a href="&xar-modurl-roles-user-privacy;"><xar:mlstring>Privacy Policy</xar:mlstring></a>.
+                    <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>and</xar:mlstring> <a href="&xar-modurl-roles-user-privacy;"><xar:mlstring>Privacy Policy</xar:mlstring></a>.
                  </label>
                  <xar:if condition="!empty($invalid['agreetoterms'])">
                      <span class="xar-error">#$invalid['agreetoterms']#</span>

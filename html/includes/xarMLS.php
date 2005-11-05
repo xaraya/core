@@ -772,7 +772,6 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
         //    return $this->domaincache["$dnType.$dnName"];
         //}
 
-        // FIXME: voll delete this line after testing $this->spacedir = $GLOBALS['MLS']->getSpace($dnType);
         switch ($dnType) {
         case XARMLS_DNTYPE_MODULE:
             $this->spacedir = "modules";

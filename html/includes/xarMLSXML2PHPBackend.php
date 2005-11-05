@@ -100,7 +100,6 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend
 //                if (!isset($this->gen)) return false;
 //            }
 
-//            xarLogMessage("MLS Bind gen. directory: $dnType, $dnName");
             if (!$this->gen->bindDomain($dnType, $dnName)) return false;
             if (parent::bindDomain($dnType, $dnName)) return true;
             return false;
@@ -169,7 +168,6 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend
         if ($needGeneration) {
             //$gen = new PHPBackendGenerator(xarMLSGetCurrentLocale());
             //if (!isset($gen)) return false;
-            //xarLogMessage("Bind gen. directory: $dnType, $dnName");
             //if (!$gen->bindDomain($dnType, $dnName)) return false;
             //if (parent::bindDomain($dnType, $dnName)) return true;
 

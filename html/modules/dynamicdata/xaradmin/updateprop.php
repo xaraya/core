@@ -20,6 +20,7 @@ function dynamicdata_admin_updateprop()
     if(!xarVarFetch('objectid',      'isset', $objectid,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('modid',         'isset', $modid,          NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype',      'isset', $itemtype,       NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('table',         'isset', $table,          NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_label',      'isset', $dd_label,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_type',       'isset', $dd_type,        NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_default',    'isset', $dd_default,     NULL, XARVAR_DONT_SET)) {return;}
@@ -158,8 +159,9 @@ function dynamicdata_admin_updateprop()
     }
 
     xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
-                        array('modid' => $modid,
-                              'itemtype' => $itemtype)));
+                        array('modid'    => $modid,
+                              'itemtype' => $itemtype,
+                              'table'    => $table)));
 
     // Return
     return true;

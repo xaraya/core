@@ -1,34 +1,24 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Request Lost Password</xar:mlstring></h2>
-<p><xar:mlstring>Enter your username or your e-mail address.</xar:mlstring></p>
 <form action="&xar-modurl-roles-user-lostpassword;" method="post" enctype="application/x-www-form-urlencoded">
-<div>
-<table border="0" cellpadding="2" cellspacing="0">
-<tr>
-    <td>
-        <label for="username"><xar:mlstring>Username</xar:mlstring>:</label>
-    </td>
-    <td>
-        <input type="text" name="uname" id="username" size="25" maxlength="255" />
-    </td>
-</tr>
-<tr>
-    <td>
-        <label for="email"><xar:mlstring>E-mail address</xar:mlstring>:</label>
-    </td>
-    <td>
-        <input type="text" name="email" id="email" size="25" maxlength="255" />
-    </td>
-</tr>
-<tr>
-    <td colspan="2" class="xar-align-center">
-        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-        <input type="hidden" name="phase" id="phase" value="send" />
-        <input type="submit" value="#$emaillabel#" />
-    </td>
-</tr>
-</table>
-</div>
+  <fieldset>
+    <legend><xar:mlstring>Enter your username or your e-mail address.</xar:mlstring></legend>
+    <div class="xar-form-input-wrapper">
+      <label class="xar-form-label" for="username"><xar:mlstring>Username</xar:mlstring>:</label>
+      <input type="text" name="uname" id="username" size="25" maxlength="255" />
+    </div>
+    <div class="xar-form-input-wrapper">
+      <label class="xar-form-label" for="email"><xar:mlstring>E-mail address</xar:mlstring>:</label>
+      <input type="text" name="email" id="email" size="25" maxlength="255" />
+    </div>
+  </fieldset>
+  <fieldset>
+    <div class="xar-align-center">
+      <input type="hidden" name="authid" id="authid" value="#$authid#" />
+      <input type="hidden" name="phase" id="phase" value="send" />
+      <input type="submit" value="#$emaillabel#" />
+    </div>
+  </fieldset>
 </form>
 </div>

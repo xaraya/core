@@ -2,12 +2,13 @@
 /**
  * Utility function to pass individual menu items
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Blocks module
+ * @link http://xaraya.com/index.php/release/13.html
+ * @subpackage Blocks
  */
 /**
  * utility function pass individual menu items to the main menu
@@ -20,6 +21,11 @@ function blocks_adminapi_getmenulinks()
 {
     $menulinks = array();
     if (xarSecurityCheck('EditBlock', 0)) {
+      $menulinks[] = Array('url'   => xarModURL('blocks',
+                                                   'admin',
+                                                   'overview'),
+                              'title' => xarML('Blocks Overview'),
+                              'label' => xarML('Overview'));
         $menulinks[] = array(
             'url'   => xarModURL('blocks', 'admin', 'view_instances'),
             'title' => xarML('View or edit all block instances'),

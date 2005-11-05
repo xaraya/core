@@ -2,12 +2,13 @@
 /**
  * Pass individual menu items to the admin panels
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Mail System
+ * @subpackage Mail module
+ * @link http://xaraya.com/index.php/release/771.html
  */
 
 /**
@@ -22,6 +23,10 @@ function mail_adminapi_getmenulinks()
     // Security Check
     $menulinks = array();
     if (xarSecurityCheck('AdminMail', 0)) {
+        $menulinks[] = Array('url' => xarModURL('mail','admin','overview'),
+            'title' => xarML('Mail Overview'),
+            'label' => xarML('Overview'));
+
         $menulinks[] = Array('url' => xarModURL('mail',
                 'admin',
                 'compose'),
