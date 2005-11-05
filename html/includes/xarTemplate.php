@@ -1049,7 +1049,7 @@ function xarTpl__getCompilerInstance()
  * @todo Can we migrate the eval() out, as that is hard to cache?
  * @todo $sourceFileName looks wrong here
  */
-function xarTpl__execute($templateCode, $tplData, $sourceFileName = '')
+function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedFileName = null)
 {
     assert('is_array($tplData); /* Template data should always be passed in an array */');
 
@@ -1061,8 +1061,16 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '')
 
     // Start output buffering
     ob_start();
-    // Kick it
-    eval('?>' . $templateCode);
+    if(!isset($cachedFileName)) {
+        // This eval is only used for cases like xarTplString, which is quite rare, and should probably not exist
+        // TODO: consider writing it to a temp file and using include here too, so the bytecacher can use it (risky?)
+        // and we can get rid of the eval alltogether.
+        eval('?>' . $templateCode);
+    } else {
+        // Otherwise use an include, much better :-)
+        assert('file_exists($cachedFileName); /* Compiled templated disappeared in mid air, race condition? */');
+        $res = include($cachedFileName);
+    }
 
     if($sourceFileName != '') {
         $tplOutput = ob_get_contents();
@@ -1113,7 +1121,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
 
     $needCompilation = true;
-
+    $cachedFileName = null;
     if ($GLOBALS['xarTpl_cacheTemplates']) {
         $cacheKey = xarTpl__GetCacheKey($sourceFileName);
         $cachedFileName = XAR_TPL_CACHE_DIR . '/' . $cacheKey . '.php';
@@ -1129,6 +1137,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     }
     xarLogMessage("Using template : $sourceFileName");
     //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
+    $templateCode = null;
     if ($needCompilation) {
         $blCompiler = xarTpl__getCompilerInstance();
         $lasterror = xarCurrentError();
@@ -1152,35 +1161,12 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             fclose($fd);
             // Add an entry into CACHEKEYS
             xarTpl__SetCacheKey($sourceFileName);
-        } else {
-            return xarTpl__execute($templateCode, $tplData, $sourceFileName);
         }
     }
 
-    // $cachedFileName should have a value from this point on
-    // see the return statement couple of lines back.
-
-    //POINT of ENTRY for cleaning variables
-    // We need to be able to figure what is the template output type: RSS, XHTML, XML or whatever
-    $tplData['_bl_data'] = $tplData;
-    extract($tplData, EXTR_OVERWRITE);
-
-    // Load cached template file
-    ob_start();
-    $res = include $cachedFileName;
-    $tplOutput = ob_get_contents();
-    ob_end_clean();
-
-    // Start output buffering
-    ob_start();
-    // this outputs the template and deals with start comments accordingly.
-    echo xarTpl_outputTemplate($sourceFileName, $tplOutput);
-
-    // Fetch output and clean buffer
-    $output = ob_get_contents();
-    ob_end_clean();
-
-    // Return output
+    // Execute either the compiled template, or the code determined
+    // TODO: this signature sucks
+    $output = xarTpl__execute($templateCode,$tplData, $sourceFileName, $cachedFileName);
     return $output;
 }
 
