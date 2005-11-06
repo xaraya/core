@@ -231,8 +231,13 @@ class feedParser
                 }
             }
         
-        } 
-    
+        }
+        if (!isset($channel)) {
+            return array('warning' => TRUE);
+        }
+        if (!isset($item)) {
+            $item = array();
+        }
         return array('channel' => $channel, 'item' => $item);
             
     }
