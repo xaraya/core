@@ -1053,7 +1053,7 @@ function xarMod__URLencode($data, $type = 'getname')
 
     return $data;
 }
-    
+
 /**
  * Format GET parameters formed by nested arrays, to support xarModURL().
  * This function will recurse for each level to the arrays.

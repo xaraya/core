@@ -1197,7 +1197,8 @@ class xarRole
      */
     function isUser()
     {
-        return $this->getType() == 0;
+		$basetype = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $this->getType(), 'moduleid' => 27));
+        return $basetype == 0;
     }
 
     /**
