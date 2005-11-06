@@ -38,8 +38,6 @@ function &dynamicdata_userapi_getancestors($args)
    } else {
 	    $q->eq('xar_object_moduleid',$moduleid);
 	    $q->eq('xar_object_itemtype',$itemtype);
-	    $q->qecho();
-    echo xarCurrentErrorType();
 		if (!$q->run()) return;
 		$result = $q->row();
 		if ($result == array()) {
