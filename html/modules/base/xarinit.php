@@ -207,12 +207,6 @@ function base_init()
         xarConfigSetVar('Site.Core.EnableSecureServer', false);
     }
 
-    // IIS seems to set HTTPS = off for some reason (cfr. xarServerGetProtocol)
-    if (!empty($HTTPS) && $HTTPS != 'off') {
-        xarConfigSetVar('Site.Core.EnableSecureServer', true);
-    } else {
-        xarConfigSetVar('Site.Core.EnableSecureServer', false);
-    }
     xarConfigSetVar('Site.Core.DefaultModuleName', 'base');
     xarConfigSetVar('Site.Core.DefaultModuleType', 'user');
     xarConfigSetVar('Site.Core.DefaultModuleFunction', 'main');
