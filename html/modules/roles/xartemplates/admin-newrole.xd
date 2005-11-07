@@ -54,7 +54,7 @@
                 </label>
                 <xar:set name="moduleitemtype">xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 600))</xar:set>
                 <xar:set name="$onchange">"onchange=\"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();\""</xar:set>                    
-                <xar:data-input property="$moduleitemtype" name="itemtype" validation="27" value="$itemtype" extraparams="$onchange" />
+                <xar:data-input property="$moduleitemtype" name="itemtype" modid="27" value="$itemtype" extraparams="$onchange" />
             </div>
             <div class="xar-form-input-wrapper">
                 <label for="pparentid" title="#xarML('Initial Group membership')#" class="xar-form-label">

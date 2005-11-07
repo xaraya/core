@@ -24,135 +24,65 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
 {
+    var $referencemoduleid = 182;
+
     function Dynamic_ModuleItemtype_Property($args)
     {
         $this->Dynamic_Select_Property($args);
-        if (count($this->options) == 0) {
-            $objects =& Dynamic_Object_Master::getObjects();
-            if (!isset($objects)) {
-                $objects = array();
-            }
-			$this->options = $this->filterOptions($objects, $this->validation);
+        extract($args);
+        if (isset($modid)) $this->referencemoduleid = $modid;
+		$this->options = $this->getOptions();
+	}
+
+    function validateValue($value = null)
+    {
+        if (isset($value)) {
+            $this->value = $value;
         }
+        return true;
     }
 
     function showInput($args = array())
     {
-        $data=array();
         extract($args);
-
-        if (!isset($value)) {
-            $data['value'] = $this->value;
-        } else {
-            $data['value'] = $value;
-        }
-
-        if (!isset($options) || count($options) == 0) {
-            $data['options'] = $this->getOptions();
-        } else {
-            $data['options'] = $options;
-        }
-        if (empty($name)) {
-            $data['name'] = 'dd_' . $this->id;
-        } else {
-            $data['name'] = $name;
-        }
-
-        if (empty($id)) {
-            $data['id'] = $data['name'];
-        } else {
-            $data['id']= $id;
-        }
-
-        if (isset($validation)) {
-            $objects =& Dynamic_Object_Master::getObjects();
-            if (!isset($objects)) {
-                $objects = array();
-            }
-		}
-		$data['options'] = $this->filterOptions($objects, $validation);
-
-        $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-        $data['extraparams'] =!empty($extraparams) ? $extraparams : "";
-        if (empty($template)) {
-            $template = 'dropdown';
-        }
-        return xarTplProperty('base', $template, 'showinput', $data);
+        if (isset($modid)) $this->referencemoduleid = $modid;
+        return parent::showInput($args);
     }
 
     function showOutput($args = array())
     {
         extract($args);
+        if (isset($modid)) $this->referencemoduleid = $modid;
+		$this->options = $this->getOptions();
         if (isset($value)) {
             $this->value = $value;
         }
-        if (isset($validation) && $this->value < 1000) {
-        	$moduleid = $validation;
-			$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $moduleid));
-			$data['option'] = array('id' => $validation,
-									'name' => $types[$value]['label']);
+        if ($this->value < 1000) {
+			$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $this->referencemoduleid));
+			// we may still have a loose end in the module: no appropriate parent
+			$name = isset($types[$this->value]) ? $types[$this->value]['label'] : xarML('not available');
+			$data['option'] = array('id' => $this->referencemoduleid,
+									'name' => $name);
+			if (empty($template)) {
+				$template = 'dropdown';
+			}
+			return xarTplProperty('base', $template, 'showoutput', $data);
         } else {
 	        return parent::showOutput($args);
         }
-
-/*        if ($this->value >= 1000) return parent::showOutput($args);
-
-        if (isset($validation)) {
-        	$moduleid = $validation;
-			$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $moduleid));
-			$data['option'] = array('id' => $validation,
-									'name' => $types[$value]['label']);
-        } else {
-        echo "SS";exit;
-        }
-*/
-
-    // FIXME: this won't work when called by a property from a different module
-        // allow template override by child classes (or in BL tags/API calls)
-        if (empty($template)) {
-            $template = 'dropdown';
-        }
-        return xarTplProperty('base', $template, 'showoutput', $data);
     }
 
     // Return a list of array(id => value) for the possible options
-    function filterOptions($objects, $option_value=null)
+    function getOptions()
     {
-
-		if (!empty($option_value)) {
-			$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $option_value));
-			if ($types != array()) {
-				foreach ($types as $key => $value) $options[] = array('id' => $key, 'name' => $value['label']);
-			} else {
-				$options[] = array('id' => 0, 'name' => xarML('no itemtypes defined'));
-			}
+    	$this->options = array();
+		$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $this->referencemoduleid));
+		if ($types != array()) {
+			foreach ($types as $key => $value) $this->options[] = array('id' => $key, 'name' => $value['label']);
 		} else {
-			$options[] = array('id' => 0, 'name' => xarML('current module'));
+			$this->options[] = array('id' => 0, 'name' => xarML('no itemtypes defined'));
 		}
-		/*
-		foreach ($objects as $objectid => $object) {
-			if (!empty($option_value)) {
-				if ($object['moduleid'] == $option_value) {
-					$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $objectid, 'base' => false));
-//					$name ="";
-//					foreach ($ancestors as $parent) $name .= $parent['name'] . ".";
-//					$name = trim($name,".");
-					$parent = array_shift(array_reverse($ancestors));
-					$options[] = array('id' => $object['itemtype'], 'name' => $parent['name']);
-					// Now get the module defined itemtypes
-				}
-			} else {
-				$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $objectid, 'base' => false));
-//				$name ="";
-//				foreach ($ancestors as $parent) $name .= $parent['name'] . ".";
-//				$name = trim($name,".");
-				$parent = array_shift(array_reverse($ancestors));
-				$options[] = array('id' => $object['itemtype'], 'name' => $parent['name']);
-			}
-		}
-		*/
-		return $options;
+		return $this->options;
     }
 
     /**
