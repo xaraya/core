@@ -90,7 +90,6 @@ function roles_adminapi_update($args)
     $item['module'] = 'roles';
     $item['itemid'] = $uid;
     $item['name'] = $name;
-    $item['duvs'] = $duvs;
     $item['uname'] = $uname;
     $item['email'] = $email;
     xarModCallHooks('item', 'update', $uid, $item);
