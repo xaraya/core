@@ -30,7 +30,8 @@ function mail_init()
     xarModSetVar('mail', 'smtpPort', '25');
     xarModSetVar('mail', 'smtpHost', 'Your SMTP Host');
     xarModSetVar('mail', 'encoding', '8bit');
-    xarModSetVar('mail', 'html', false);    
+    xarModSetVar('mail', 'html', false);
+    xarModSetVar('mail', 'suppresssending', false);
     // when a module item is created
     if (!xarModRegisterHook('item', 'create', 'API',
             'mail', 'admin', 'hookmailcreate')) {

@@ -41,7 +41,8 @@
  */
 function mail_adminapi__sendmail($args)
 {
-    // Get arguments from argument array
+	if (xarModGetVar('mail', 'suppresssending')) return true;
+// Get arguments from argument array
 
     extract($args);
 
