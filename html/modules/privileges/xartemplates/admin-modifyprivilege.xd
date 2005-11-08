@@ -3,7 +3,7 @@
 <xar:style scope="module" module="base" file="navtabs" />
 <script language="JavaScript">
   <!--
-    var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
+    var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
     function doOnLoad() {
         oldOnLoadFunction();      
         xarTree_init('PrivilegesTree');
@@ -135,7 +135,7 @@
           </xar:if>
           
         </xar:if>
-          
+        <xar:if condition="$ptype ne 'empty'">
         <div class="xar-form-input-wrapper">
           <label for="pmodule" title="#xarML('Module which holds the target component')#" class="xar-form-label">
             <xar:mlstring>Module:</xar:mlstring>
@@ -219,7 +219,7 @@
           </select>
         </div>
       </xar:if>
-      <xar:if condition="$ptype ne 'empty'">
+
         <xar:if condition="$pcomponent ne 'All' and empty($target)">
           <p>
             <xar:ml>

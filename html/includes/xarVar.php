@@ -1,6 +1,5 @@
 <?php
 /**
- * File: $Id: xarVar.php 1.154 05/08/29 12:24:58+02:00 marcel@hsdev.com $
  * Variable utilities
  *
  * @package variables
@@ -661,7 +660,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
                 xarVarSetCached($cacheCollection, $cacheName, $missing);
                 return;
             }
-            break;
+        break;
 
         default:
             // We finally found it, update the appropriate cache
@@ -747,10 +746,10 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
                 $query = "INSERT INTO $module_varstable
                              (xar_id, xar_modid, xar_name, xar_value)
                           VALUES (?,?,?,?)";
-                $bindvars = array($seqId, $modBaseInfo['systemid'],$name,(string) $value);
+                $bindvars = array($seqId, $modBaseInfo['systemid'],$name,(string)$value);
             } else {
                 $query = "UPDATE $module_varstable SET xar_value = ? WHERE xar_id = ?";
-                $bindvars = array($value,$modvarid);
+                $bindvars = array((string)$value,$modvarid);
             }
 
             break;
@@ -779,7 +778,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
                 $query = "INSERT INTO $module_uservarstable
                             (xar_mvid, xar_uid, xar_value)
                         VALUES (?,?,?)";
-                $bindvars = array($modvarid, $uid, $value);
+                $bindvars = array($modvarid, $uid, (string)$value);
             }
             break;
         case 'themevar':
@@ -799,7 +798,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
                           xar_name, xar_prime,
                           xar_value, xar_description)
                       VALUES (?,?,?,?,?,?)";
-            $bindvars = array($seqId, $modName, $name, $prime, $value, $description);
+            $bindvars = array($seqId, $modName, $name, $prime, (string)$value, $description);
 
             break;
         case 'configvar':
@@ -823,7 +822,8 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             break;
     }
 
-    if (xarCore_getSystemVar('DB.UseADODBCache')){
+    // TODO : Explain the cache logic behind this, why exclude moduservars? (see above)
+    if (xarCore_getSystemVar('DB.UseADODBCache') && strtolower($type) != 'moduservar'){
         $result = $dbconn->CacheFlush();
     }
 

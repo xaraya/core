@@ -1,14 +1,13 @@
 <?php
 /**
- * File: $Id$
+ * Core Upgrade File
  *
- * Core Database Upgrade File
- *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2002 by the Xaraya Development Team.
+ * package upgrade
+ * @copyright (C) 2002-2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage html
+ * @subpackage Upgrade
  * @author mikespub <mikespub@xaraya.com>
 */
 
@@ -766,10 +765,38 @@ if (empty($step)) {
 
     // Set any empty modvars.
     echo "<h5>Checking Module and Config Variables</h5>";
+    /* Bug 2204 - the mod var roles - admin is more than likely set in 99.9 percent installs
+                  since it was introduced around the beginning of 2004. Let's check it's set,
+                  and use that, else check for a new name. If the new name in that rare case
+                  is not Admin, then we'll have to display message to check and set as such first.
+    */
+    $realadmin = xarModGetVar('roles','admin');
+
+    if (!isset($realadmin) || empty($realadmin)) {
+        $admin = xarUFindRole('Admin');
+        if (!isset($admin)) $admin = xarFindRole('Admin');
+        if (!isset($admin)) {
+            echo "<div><h2 style=\"color:red; font-weigh:bold;\">WARNING!</h2>Your installation has a missing roles variable.<br />";
+            echo "Please change your administrator username to 'Admin' and re-run upgrade.php<br />
+                  You can change it back once your site is upgraded.<br />";
+
+            echo "<br /><br />REMEMBER! Don't forget to re-run upgrade.php<br /><br />";
+            echo "</div>";
+            CatchOutput();
+            return;
+        }
+    } else {
+
+        $thisadmin= xarUserGetVar('uname', $realadmin);
+         $admin = xarUFindRole($thisadmin);
+    }
+
+
     $role = xarFindRole('Everybody');
-    $admin = xarUFindRole('Admin');
-    if (!isset($admin)) $admin = xarFindRole('Admin');
-    if (!isset($admin)) $admin = xarFindRole(xarModGetVar('mail','adminname'));
+
+    /* Bug 2204 - this var is not reliable for admin name
+       if (!isset($admin)) $admin = xarFindRole(xarModGetVar('mail','adminname')); 
+    */
     $modvars[] = array(array('name'    =>  'hidecore',
                              'module'  =>  'themes',
                              'set'     =>  0),

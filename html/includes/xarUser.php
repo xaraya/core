@@ -782,7 +782,8 @@ function xarUser__syncUsersTableFields()
  */
 function xarUser__setUsersTableUserVar($name, $value, $userId)
 {
-    // TODO: replace with some roles API ?
+
+// TODO: replace with some roles API ?
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();

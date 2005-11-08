@@ -70,6 +70,7 @@ function modules_adminapi_regenerate()
         }
 
         // If this is a new module, i.e. not in the db list, add it
+        assert('$modinfo["regid"] != 0; /* Reg id for the module is 0, something seriously wrong, probably corruption of files */');
         if (empty($dbModules[$name])) {
             // New module
             $modId = $dbconn->GenId($modules_table);

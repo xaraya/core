@@ -1,15 +1,14 @@
 <?php
 /**
- * File: $Id: install.php 1.189 05/08/29 11:52:37+02:00 marcel@davinci.hsdev.com $
- *
  * Xaraya Installer
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * package installer
+ * @copyright (C) 2002-2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @subpackage Installer
- * @author Johnny Robeson 
+ * @author Johnny Robeson
  * @author Paul Rosania
  * @author Marc Lutolf
  * @author Marcel van der Boom
@@ -65,8 +64,6 @@ include_once 'includes/xarServer.php';
 include_once 'includes/xarMLS.php';
 // {ML_dont_parse 'includes/xarTemplate.php'}
 include_once 'includes/xarTemplate.php';
-// {ML_dont_parse 'includes/xarDB.php'}
-include_once 'includes/xarDB.php';
 
 // Besides what we explicitly load, we dont want to load
 // anything extra for maximum control
@@ -81,12 +78,6 @@ xarLog_init($systemArgs, $whatToLoad);
 // Start Exception Handling System very early too
 $systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
 xarError_init($systemArgs, $whatToLoad);
-
-// Start DB subsystem, but dont connect just yet
-$systemArgs = array('doConnect' => false,
-                    'systemTablePrefix' => 'xar',
-                    'siteTablePrefix' => 'xar');
-xarDB_init($systemArgs, $whatToLoad);
 
 // Start Event Messaging System
 // <mrb> Is this needed? the events are dispatched to modules, which arent here yet.

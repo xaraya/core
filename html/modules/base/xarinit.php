@@ -198,12 +198,19 @@ function base_init()
     xarConfigSetVar('Site.Core.EnableShortURLsSupport', false);
     // when installing via https, we assume that we want to support that :)
     $HTTPS = xarServerGetVar('HTTPS');
+    /* jojodee - monitor this fix.
+       Localized fix for installer where HTTPS shows incorrectly as being on in
+       some environments. Fix is ok as long as we dont access directly
+       outside of installer. Consider setting config vars at later point rather than here.
+    */
+    $REQ_URI = parse_url(xarServerGetVar('HTTP_REFERER'));
     // IIS seems to set HTTPS = off for some reason (cfr. xarServerGetProtocol)
-    if (!empty($HTTPS) && $HTTPS != 'off') {
+    if (!empty($HTTPS) && $HTTPS != 'off' && $REQ_URI['scheme'] == 'https') {
         xarConfigSetVar('Site.Core.EnableSecureServer', true);
     } else {
         xarConfigSetVar('Site.Core.EnableSecureServer', false);
     }
+
     xarConfigSetVar('Site.Core.DefaultModuleName', 'base');
     xarConfigSetVar('Site.Core.DefaultModuleType', 'user');
     xarConfigSetVar('Site.Core.DefaultModuleFunction', 'main');

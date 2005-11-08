@@ -31,9 +31,9 @@ Administration Menu.</xar:mlstring></em>
 
     <p><strong><xar:mlstring>The Modify Config option</xar:mlstring></strong><xar:mlstring> in the Adminpanels menu currently has three options:</xar:mlstring>
     <ol>
-        <li><xar:mlstring><strong>Admin Menu sort modules by Category or Name</strong> - global switch, can be overriden in individual instances of the Adminpanels Admin Menu block</xar:mlstring></li>
+        <li><xar:mlstring><strong>Admin Menu sort modules by Category or Name</strong> - global switch, can be overridden in individual instances of the Adminpanels Admin Menu block</xar:mlstring></li>
         <li><xar:mlstring><strong>Disable Module Overviews</strong> - This switch turns off display by default of all module Overviews, such as the one you are reading now.</xar:mlstring></li>
-        <li><xar:mlstring><strong>Enable Admin Dashboard</strong> - This switch turns on the Admin Dashboard, a special theme reserved only for Site Administrators. By Default it diplays as a horizontal drop down menu with all active modules with an Admin UI listed.</xar:mlstring></li>
+        <li><xar:mlstring><strong>Enable Admin Dashboard</strong> - This switch turns on the Admin Dashboard, a special theme reserved only for Site Administrators. By Default it displays as a horizontal drop down menu with all active modules with an Admin UI listed.</xar:mlstring></li>
     </ol>
     </p>
 

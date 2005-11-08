@@ -24,7 +24,9 @@ function themes_adminapi_getmenulinks()
 
     // Generate security key - redundant here TODO: remove
     // $data['authid'] = xarSecGenAuthKey();
-
+    $menulinks[] = Array('url' => xarModURL('themes','admin','overview'),
+    'title' => xarML('Themes Overview'),
+    'label' => xarML('Overview'));
 
     $menulinks[] = array(   'url'   => xarModURL('themes', 'admin', 'list'),
     'title' => xarML('View installed themes on the system'),

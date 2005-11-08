@@ -65,7 +65,7 @@
                     <strong>#$successtitle#</strong>:
                     <xar:ml>
                         <xar:mlstring>
-                            Xaraya needs a MINIMUM of 8 Megabyte of PHP memory. ( 16M or higher STRONGLY recommended)
+                            Xaraya needs a MINIMUM of 8 Megabyte of PHP memory (16M or higher STRONGLY recommended).
                             The current memory limit is #(1).
                         </xar:mlstring>
                         <xar:mlvar>
