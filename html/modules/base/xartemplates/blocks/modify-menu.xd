@@ -110,15 +110,55 @@
     <xar:mlstring>Menu Extras</xar:mlstring>
 </p>
 
-<div class="xar-form-input-wrapper-after">
-    <xar:if condition="!empty($displaymodules)">
-        <input type="checkbox" value="1" name="displaymodules" id="displaymodules" checked="checked" />
-    <xar:else />
-        <input type="checkbox" value="1" name="displaymodules" id="displaymodules" />
-    </xar:if>
-    <label for="displaymodules" title="#xarML('If you would like Xaraya to generate a menu for you based on the modules that you have installed, check this box.')#">
-        <xar:mlstring>Display Modules</xar:mlstring>
+<div class="xar-form-input-wrapper">
+    <label for="displaymodules" title="#xarML('To display a restricted list of modules, enter their names separated by commas in the text box at right, and choose Manual List from the dropdown.')#" class="xar-form-label">
+        <xar:mlstring>
+            Display Modules 
+        </xar:mlstring>
     </label>
+    <select name="displaymodules" id="displaymodules">
+        <xar:if condition="$displaymodules eq 'None'">
+            <option value="None" selected="selected">
+                <xar:mlstring>
+                    None 
+                </xar:mlstring>
+            </option>
+        <xar:else />
+            <option value="None">
+                <xar:mlstring>
+                    None 
+                </xar:mlstring>
+            </option>
+        </xar:if>
+        <xar:if condition="$displaymodules eq 'All'">
+            <option value="All" selected="selected">
+                <xar:mlstring>
+                    All Modules 
+                </xar:mlstring>
+            </option>
+        <xar:else />
+            <option value="All">
+                <xar:mlstring>
+                    All Modules 
+                </xar:mlstring>
+            </option>
+        </xar:if>
+        <xar:if condition="$displaymodules eq 'List'">
+            <option value="List" selected="selected">
+                <xar:mlstring>
+                    Manual List 
+                </xar:mlstring>
+            </option>
+        <xar:else />
+            <option value="List">
+                <xar:mlstring>
+                    Manual List 
+                </xar:mlstring>
+            </option>
+        </xar:if>
+    </select>
+    &nbsp;
+    <input class="xar-norm" type="text" name="modulelist" id="modulelist" size="50" maxlength="255" value="#$modulelist#" />
 </div>
 
 <div class="xar-form-input-wrapper-after">
