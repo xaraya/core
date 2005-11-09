@@ -6,28 +6,19 @@
 <div class="xar-mod-body xar-overflow-auto">
     <h2>
         <xar:mlstring>
-            Xaraya has reached Release Candidate status. 
+            Xaraya has reached Production Stable status.
         </xar:mlstring>
     </h2>
     <p>
         <xar:mlstring>
             This means we feel our functionality is complete, our core 
-            features are mature and the use of the modules in our repositories is 
-            stable enough to start the last mile:
-            <strong>The road to Xaraya 1.0!</strong>
+            features are mature and the use of the modules in our repositories is
+            stable enough to finalize our release of <strong>Xaraya 1.0!</strong>
         </xar:mlstring>
     </p>
     <p>
         <xar:mlstring>
-            This last mile is an important stretch. No major changes to the codebase
-            in terms of functionality will land, but there are a couple of bugs left we
-            really would like to see fixed before we release Xaraya 1.0 as a result
-            of almost 3 years of work. 
-        </xar:mlstring>
-    </p>
-    <p>
-        <xar:mlstring>
-            For this, more than ever, we need you to keep filing  any 
+            We still need you to keep filing  any
             unexpected functionality in our <a href="http://bugs.xaraya.com">bug tracker
             </a>. 
         </xar:mlstring>
