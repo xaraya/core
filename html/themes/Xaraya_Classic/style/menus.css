@@ -70,7 +70,7 @@
 /* menu items anchors - hover state */
 .xar-block-body ul ul li.xar-menu-item a:hover, 
 .xar-block-body-right ul ul li.xar-menu-item a:hover {
-   /* Partial fix - bug 3992 */
+   /* Partial fix - bug 3992 
     padding: 0 6px;
     margin: 0 1px 0 1px; */
     color: #333366;
