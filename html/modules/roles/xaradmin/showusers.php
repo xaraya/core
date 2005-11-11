@@ -23,7 +23,7 @@ function roles_admin_showusers()
         $defaultgroup = xarModGetVar('roles', 'defaultgroup');
         $defaultgroupuid = xarModAPIFunc('roles','user','get',
                                                  array('uname'  => $defaultgroup,
-                                                       'type'   => 1));
+                                                       'type'   => GROUPTYPE));
     }
     xarVarSetCached('roles', 'defaultgroupuid', $defaultgroupuid);
 
@@ -80,7 +80,7 @@ function roles_admin_showusers()
 		$basetypes = array();
 		foreach ($types as $key => $value) {
 			$basetype = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
-			if ($basetype['itemtype'] == 0) $basetypes[] = $key;
+			if ($basetype['itemtype'] == USERTYPE) $basetypes[] = $key;
 		}
         $xartable =& xarDBGetTables();
         $q = new xarQuery('SELECT');

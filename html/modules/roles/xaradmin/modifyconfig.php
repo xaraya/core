@@ -98,20 +98,20 @@ function roles_admin_modifyconfig()
             $data['updatelabel'] = xarML('Update Roles Configuration');
             $data['uselockout'] =  xarModGetVar('roles', 'uselockout') ? 'checked' : '';
             $data['lockouttime'] = xarModGetVar('roles', 'lockouttime')? xarModGetVar('roles', 'lockouttime'): 15; //minutes
-            $data['lockouttries'] = xarModGetVar('roles', 'lockouttries') ? xarModGetVar('roles', 'lockouttries'): 3; 
+            $data['lockouttries'] = xarModGetVar('roles', 'lockouttries') ? xarModGetVar('roles', 'lockouttries'): 3;
             $hooks = array();
             switch ($data['tab']) {
                 case 'hooks':
                     // Item type 0 is the default itemtype for 'user' roles.
                     $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
                                              array('module' => 'roles',
-                                                   'itemtype' => 0));
+                                                   'itemtype' => USERTYPE));
                     break;
                 case 'grouphooks':
                     // Item type 1 is the (current) itemtype for 'group' roles.
                     $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
                                              array('module' => 'roles',
-                                                   'itemtype' => 1));
+                                                   'itemtype' => GROUPTYPE));
                     break;
                 default:
                     break;
@@ -182,16 +182,16 @@ function roles_admin_modifyconfig()
                     xarModSetVar('roles', 'disallowedips', $disallowedips);
                     break;
                 case 'hooks':
-                    // Role type 'user' (itemtype 0).
+                    // Role type 'user' (itemtype 1).
                     xarModCallHooks('module', 'updateconfig', 'roles',
                                     array('module' => 'roles',
-                                          'itemtype' => 0));
+                                          'itemtype' => USERTYPE));
                     break;
                 case 'grouphooks':
-                    // Role type 'group' (itemtype 1).
+                    // Role type 'group' (itemtype 2).
                     xarModCallHooks('module', 'updateconfig', 'roles',
                                     array('module' => 'roles',
-                                          'itemtype' => 1));
+                                          'itemtype' => GROUPTYPE));
                     break;
                 case 'memberlist':
                     if (!xarVarFetch('searchbyemail', 'checkbox', $searchbyemail, false, XARVAR_NOT_REQUIRED)) return;

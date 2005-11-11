@@ -19,7 +19,7 @@ function roles_admin_deleterole()
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
     if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED)) return;
 //    if (!xarVarFetch('itemtype', 'int', $itemtype, NULL, XARVAR_DONT_SET)) return;
-//   	if (!xarVarFetch('itemtype', 'int', $data['itemtype'], 0, XARVAR_NOT_REQUIRED)) return;
+//   	if (!xarVarFetch('itemtype', 'int', $data['itemtype'], USERTYPE, XARVAR_NOT_REQUIRED)) return;
 
     // Call the Roles class
     $roles = new xarRoles();

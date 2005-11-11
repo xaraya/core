@@ -66,7 +66,7 @@ function roles_userapi_getall($args)
                 'roles', 'user', 'get',
                 array(
                     (is_numeric($group) ? 'uid' : 'name') => $group,
-                    'type' => 1
+                    'type' => GROUPTYPE
                 )
             );
             if (isset($group['uid']) && is_numeric($group['uid'])) {
@@ -142,7 +142,7 @@ function roles_userapi_getall($args)
     }
 
     // Return only users (not groups).
-    $where_clause[] = 'roletab.xar_type = 0';
+    $where_clause[] = 'roletab.xar_type = ' . USERTYPE;
 
     // Add the where-clause to the query.
     $query .= ' WHERE ' . implode(' AND ', $where_clause);
