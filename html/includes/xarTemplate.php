@@ -1118,6 +1118,24 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
     $ctxType = $tplpath[0].':'.implode("/", $stack);
     $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
+    /* Temporary partial fix for Bug 5156. This is a temporary workaround and
+       while here, themes cannot be translated. This should be fixed as soon as possible */
+    if(isset($dnType)) {
+        if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
+    }
+    // Load translations for the template
+    $tplpath = explode("/", $sourceFileName);
+    $tplPathCount = count($tplpath);
+    switch ($tplpath[0]) {
+        case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
+        case 'themes':  $dnType = XARMLS_DNTYPE_THEME; break;
+    }
+    $dnName = $tplpath[1];
+    $stack = array();
+    if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
+    for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
+    $ctxType = $tplpath[0].':'.implode("/", $stack);
+    $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
     if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
 
     // Load translations for the template
