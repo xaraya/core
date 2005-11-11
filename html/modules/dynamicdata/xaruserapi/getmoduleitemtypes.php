@@ -32,22 +32,24 @@
 			$module = $info['name'];
 		}
 
+		$native = isset($native) ? $native : true;
 		$extensions = isset($extensions) ? $extensions : true;
 
-		$found = false;
-		xarModAPILoad($module);
-		$func = $module . '_userapi_getitemtypes';
-		$found = function_exists($func);
-		if (!$found) {
-			$funcFile = 'modules/' . $info['name'] . '/xaruserapi/getitemtypes.php';
-			$found = file_exists($funcFile);
+		if ($native) {
+			$found = false;
+			xarModAPILoad($module);
+			$func = $module . '_userapi_getitemtypes';
+			$found = function_exists($func);
+			if (!$found) {
+				$funcFile = 'modules/' . $info['name'] . '/xaruserapi/getitemtypes.php';
+				$found = file_exists($funcFile);
+			}
+			if ($found) {
+				$types = xarModAPIFunc($module,'user','getitemtypes');
+			} else {
+				$types = array();
+			}
 		}
-		if ($found) {
-			$types = xarModAPIFunc($module,'user','getitemtypes');
-		} else {
-			$types = array();
-		}
-
 		if ($extensions) {
 			// Get all the objects at once
 		    $xartable =& xarDBGetTables();

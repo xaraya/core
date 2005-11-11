@@ -72,7 +72,7 @@ function roles_admin_modifyrole()
         $data['itemtype'] = $role->getType();
     }
 	$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
-	$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27));
+	$types = xarModAPIFunc('roles','user','getitemtypes');
 	$data['itemtypename'] = $types[$data['itemtype']]['label'];
 
     if (!empty($uname)) {

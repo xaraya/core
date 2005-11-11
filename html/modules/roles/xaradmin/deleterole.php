@@ -65,7 +65,7 @@ function roles_admin_deleterole()
         return false;
     }
 
-	$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27));
+	$types = xarModAPIFunc('roles','user','getitemtypes');
 	$data['itemtypename'] = $types[$itemtype]['label'];
 
     if (empty($confirmation)) {

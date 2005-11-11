@@ -76,7 +76,7 @@ function roles_admin_showusers()
         $q = new xarQuery();
         $q = $q->sessiongetvar('rolesquery');
     if (empty($q) || isset($reload)) {
-		$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27));
+		$types = xarModAPIFunc('roles','user','getitemtypes');
 		$basetypes = array();
 		foreach ($types as $key => $value) {
 			$basetype = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
