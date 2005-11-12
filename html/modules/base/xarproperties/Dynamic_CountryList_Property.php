@@ -2,14 +2,15 @@
 /**
  * Dynamic Country List Property
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Base module
  * @author John Cox
  */
+
 /**
  * Include the base class
  */
@@ -97,7 +98,9 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
 
          $countrynames= getCountryList();
          $countryname='';
-
+         /* For templates which are selecting on id and displaying name 
+          * Pass the actual country name to the template as well as the id
+          */
          foreach ($countrynames as $countrydata) {
              foreach ($countrydata as $k) {
                if ($k == $data['value']) {
@@ -109,9 +112,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
          $template="";
 
          return xarTplProperty('base', 'countrylist', 'showoutput', $data);
-
     }
-
 
     /**
      * Get the base information for this property.
@@ -138,7 +139,47 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         return $baseInfo;
      }
 }
-   /**
+/**
+ * Country list according to ISO 3166
+ *
+ * @author jojodee
+ * Updated 2005-10-15 with ISO 3166 country codes
+ * Credit to Pedro Innecco for corrections and updates
+ */
+function getCountryList()
+{
+    $coptions = array();
+        
+        $coptions[] = array('id' =>'bz', 'name'=>'Belize');
+        $coptions[] = array('id' =>'ky', 'name'=>'Cayman Islands');
+        $coptions[] = array('id' =>'ci', 'name'=>'C&#244;te D\'Ivoire');
+        $coptions[] = array('id' =>'sv', 'name'=>'El Salvador');
+        $coptions[] = array('id' =>'ly', 'name'=>'Libya');
+        $coptions[] = array('id' =>'ne', 'name'=>'Niger');
+        $coptions[] = array('id' =>'ps', 'name'=>'Palestinian Territory');
+        $coptions[] = array('id' =>'pg', 'name'=>'Papua New Guinea');
+        $coptions[] = array('id' =>'qa', 'name'=>'Qatar');
+        $coptions[] = array('id' =>'kn', 'name'=>'St. Kitts and Nevis');
+        $coptions[] = array('id' =>'pm', 'name'=>'St. Pierre and Miquelon');
+        $coptions[] = array('id' =>'vc', 'name'=>'St. Vincent and the Grenadines');
+        $coptions[] = array('id' =>'st', 'name'=>'S&#227;o Tom&#233; and Pr&#237;ncipe');
+        $coptions[] = array('id' =>'sy', 'name'=>'Syria');
+        $coptions[] = array('id' =>'tw', 'name'=>'Taiwan');
+        $coptions[] = array('id' =>'uz', 'name'=>'Uzbekistan');
+   return $coptions;
+
+         $countrynames= getCountryList();
+         $countryname='';
+
+         foreach ($countrynames as $countrydata) {
+             foreach ($countrydata as $k) {
+               if ($k == $data['value']) {
+                   $countryname=$countrydata['name'];
+               }
+             }
+         }
+         $data['countryname']=$countryname;
+}
     * Country list according to ISO 3166
     *
     * @author jojodee
