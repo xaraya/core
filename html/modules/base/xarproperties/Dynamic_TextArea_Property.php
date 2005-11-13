@@ -1,5 +1,6 @@
 <?php
 /**
+ * Dynamic Textarea Property
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -13,7 +14,7 @@
 class Dynamic_TextArea_Property extends Dynamic_Property
 {
     var $rows = 8;
-    var $cols = 50;
+    var $cols = 35;
  
     function Dynamic_TextArea_Property($args)
     {

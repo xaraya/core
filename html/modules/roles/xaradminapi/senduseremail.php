@@ -1,20 +1,19 @@
 <?php
 /**
- * File: $Id$
- *
- * Send user an email on change or loss of password
+ * Send lost password
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 
 /**
  * Send user email (whenever a user lost his password or an admin modify a password)
  *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['uid'] array of uid of the user(s) array($uid => '1')
  * @param $args['mailtype'] type of the message to send (confirmation, deactivation, ...)
  * @param $args['message'] the message of the mail (optionnal)
@@ -76,7 +75,7 @@ function roles_adminapi_senduseremail($args)
             // retrieve the dynamic properties (if any) for use in the e-mail too
             if (xarModIsAvailable('dynamicdata')) {
                 // get the Dynamic Object defined for this module and item id
-                $object =& xarModAPIFunc('dynamicdata','user','getobject',
+                $object = xarModAPIFunc('dynamicdata','user','getobject',
                                          array('module' => 'roles',
                                                // we know the item id now...
                                                'itemid' => $userid));

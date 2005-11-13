@@ -1,5 +1,6 @@
 <?php
 /**
+ * Default setup for roles and privileges
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -220,6 +221,7 @@ function initializeSetup()
     xarRegisterMask('DeleteMail', 'All','mail','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminMail','All','mail','All','All','ACCESS_ADMIN');
 
+    xarRegisterMask('CommentBlock','All','blocks','All','All','ACCESS_EDIT');
     xarRegisterMask('EditBlock','All','blocks','All','All','ACCESS_EDIT');
     xarRegisterMask('AddBlock','All','blocks','All','All','ACCESS_ADD');
     xarRegisterMask('DeleteBlock','All','blocks','All','All','ACCESS_DELETE');

@@ -1,6 +1,6 @@
 <?php
 /**
- * Installer admin API functions
+ * Modify the system configuration File
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation

@@ -18,6 +18,8 @@
         <p>
             <xar:mlstring>The whole management of the object instances (creation, modification, display, deletion, ...) is typically hard-coded in the module, and tightly wired to the underlying data structure, which makes it difficult to e.g. add another property to your objects without rewriting half the module code (and templates).</xar:mlstring>
         </p>
+        
+        <h3><xar:mlstring>What is it?</xar:mlstring></h3>
         <p>
             <xar:mlstring>The Dynamic Data module allows you to dynamically add properties to your module objects, and to integrate them with the rest of the site without much effort - regardless of whether you're the module developer, a third-party solution designer or the website admin.</xar:mlstring>
         </p>
@@ -55,7 +57,7 @@
 <code>&lt;!-- <xar:mlstring>this retrieves the dynamic properties defined for the 'users' module,
      and their value for all items listed in &#36;uidlist. You'll need to build
      that uid list in your module function and pass it along to the template</xar:mlstring> --&gt;
-&lt;xar:data-getitems name="&#36;properties" values="&#36;values" module="users" 
+&lt;xar:data-getitems name="&#36;properties" value="&#36;values" module="users" 
  itemids="&#36;uidlist" /&gt;
 
 &lt;!-- <xar:mlstring>this shows the label for dynamic property</xar:mlstring> '&#36;name' --&gt;
@@ -80,7 +82,7 @@
         <pre>
 <code>&lt;!-- <xar:mlstring>avoid errors when the dynamic data module isn't activated</xar:mlstring> --&gt;
 &lt;xar:if condition="xarModIsAvailable('dynamicdata')"&gt;
-&lt;xar:data-getitems name="&#36;properties" values="&#36;values" module="users" 
+&lt;xar:data-getitems name="&#36;properties" value="&#36;values" module="users" 
  itemids="&#36;uidlist" /&gt;
 &lt;/xar:if&gt;</code>
 </pre> 
@@ -223,12 +225,16 @@
 <xar:mlstring>Idem for</xar:mlstring> &lt;xar:data-output ... /&gt;</code>
 </pre> 
         <h3>
-            <xar:mlstring>Using hooks</xar:mlstring>
+            <xar:mlstring>Included hooks</xar:mlstring>
         </h3>
 
         <ul>
             <li>
-                admin : new/create/modify/update/delete + modifyconf/updateconfig 
+                <xar:mlstring><strong>Admin Hook</strong> : new/create/modify/update/delete plus 
+                modifyconf/updateconfig.</xar:mlstring><br />
+                <xar:mlstring>You can hook Dynamic Data to other modules by going to Modules -> Configure Hooks 
+                and clicking on Dynamic Data. Activate the hook by checking the checkbox next to the module where 
+                you would like to use Dynamic Data.</xar:mlstring>
             </li>
             <li>
                 user : display ( 
@@ -297,4 +303,19 @@
         <p>
             <xar:mlstring>[+ Easter Egg : util meta -&gt; export to XML -&gt; save to file -&gt; util import -&gt; access your whole database via DD]</xar:mlstring>
         </p>
+        <h3>
+            <xar:mlstring>Further Information</xar:mlstring>
+        </h3>
+        <p>
+           <xar:mlstring>Further information on the DynamicData module can be found at:</xar:mlstring>
+        </p>
+        <ul>
+           <li><xar:mlstring>DynamicData Module Extension page at</xar:mlstring> <a title="#xarML('DynamicData  Module - Xaraya Extension 182')#" href="http://www.xaraya.com/index.php/release/182.html">Xaraya Extension and Releases</a>.
+           </li>
+           <li><xar:mlstring>Related tutorials and documentation on DynamicData module at</xar:mlstring> <a href="http://www.xaraya.com/index.php/keywords/dynamicdata/" title="#xarML('Related documentation on DynamicData')#"><xar:mlstring>Xaraya Documentation.</xar:mlstring></a>
+           </li>
+       </ul>
+       <p class="xar-sub">
+         <strong>&nbsp;<xar:mlstring>DynamicData Module - Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.2.1&nbsp; 2005-11-03
+       </p>
 </div>

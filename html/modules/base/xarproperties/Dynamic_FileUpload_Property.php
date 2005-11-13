@@ -1,5 +1,7 @@
 <?php
 /**
+ * File upload property
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -76,7 +78,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
 
         $this->basePath = $base_directory;
 
-        if (empty($this->basedir)) {
+        if (empty($this->basedir) && $this->UploadsModule_isHooked != TRUE) {
             $this->basedir = 'var/uploads';
         }
 
@@ -158,6 +160,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             } else {
                 $override = null;
             }
+
             $return = xarModAPIFunc('uploads','admin','validatevalue',
                                     array('id' => $name, // not $this->id
                                           'value' => $value,
@@ -372,6 +375,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $this->methods = $methods;
             $this->basedir = $basedir;
             $this->importdir = $importdir;
+            $this->maxsize = xarModGetVar('uploads', 'file.maxsize');
 
         } elseif (!empty($validation)) {
             // specify base directory and optional file types in validation

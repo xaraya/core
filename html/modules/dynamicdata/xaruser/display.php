@@ -66,7 +66,7 @@ function dynamicdata_user_display($args)
     $hooks = array();
     $hooks = xarModCallHooks('item', 'display', $myobject->itemid, $item, $modinfo['name']);
     $data['hooks'] = $hooks;
-    
+
     if(!isset($template)) {
         $template = $myobject->name;
     }

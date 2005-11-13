@@ -1,15 +1,13 @@
 <?php
 /**
- * File: $Id$
- *
  * Update a role
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 /**
  * updaterole - update a role
@@ -25,6 +23,7 @@ function roles_admin_updaterole()
     if (!xarVarFetch('pname', 'str:1:35:', $pname)) return;
     if (!xarVarFetch('ptype', 'int', $ptype)) return;
     if (!xarVarFetch('phome', 'str', $phome, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('pprimaryparent', 'int', $pprimaryparent, '', XARVAR_NOT_REQUIRED)) return;
 
     //Save the old state and type
     $roles = new xarRoles();
@@ -90,7 +89,8 @@ function roles_admin_updaterole()
         'name' => $pname,
         'type' => $ptype,
         'uname' => $puname,
-        'home' => $phome,
+        'userhome' => $phome,
+        'primaryparent' => $pprimaryparent,
         'email' => $pemail,
         'pass' => $ppass1,
         'state' => $pstate);

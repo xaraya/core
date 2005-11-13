@@ -1,18 +1,17 @@
 <?php
 /**
- * File: $Id$
- *
  * Log user out of system
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 /**
  * log user out of system
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
  */
 function roles_user_logout()
 {

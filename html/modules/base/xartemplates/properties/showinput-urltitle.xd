@@ -6,15 +6,14 @@
     <xar:mlstring>preview</xar:mlstring>
 </xar:set>
 <div class="xar-form-input-wrapper">
-    <label for="#$id#" class="xar-form-label">
+    <label for="#$id#" class="xar-form-labelshort">
     <xar:mlstring>Title</xar:mlstring>:</label>
     <input class="xar-form-textlong" type="text" name="#$name#[title]" value="#$title#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" />
-</div>
-<div class="xar-form-input-wrapper">
-    <label for="#$name#[link]" class="xar-form-label">
+    <br />
+    <label for="#$name#[link]" class="xar-form-labelshort">
     <xar:mlstring>URL</xar:mlstring>:</label>
     <input class="xar-form-textlong" type="text" name="#$name#[link]" value="#$link#" size="#$size#" maxlength="#$maxlength#" />
-    <xar:if condition="!empty($link) and ($link ne 'http://')">[ 
+    <xar:if condition="!empty($link) and ($link ne 'http://')">[
     <a href="#$link#" target="#$preview#">#$check#</a>]</xar:if>
     <xar:if condition="!empty($invalid)">
         <span class="xar-error">#$invalid#</span>

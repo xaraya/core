@@ -1,18 +1,17 @@
 <?php
 /**
- * File: $Id$
- *
  * Add a user to a group
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 /**
  * insertuser - add a user to a group
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['uid'] user id
  * @param $args['gid'] group id
  * @return true on succes, false on failure

@@ -1,5 +1,6 @@
 <?php
 /**
+ * Get field properties for a specific module + item type
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}

@@ -70,6 +70,7 @@ class ADORecordSet_mysqlt extends ADORecordSet_mysql{
 			global $ADODB_FETCH_MODE;
 			$mode = $ADODB_FETCH_MODE;
 		}
+		
 		switch ($mode)
 		{
 		case ADODB_FETCH_NUM: $this->fetchMode = MYSQL_NUM; break;
@@ -86,7 +87,7 @@ class ADORecordSet_mysqlt extends ADORecordSet_mysql{
 	
 	function MoveNext()
 	{
-		if (@$this->fields =& mysql_fetch_array($this->_queryID,$this->fetchMode)) {
+		if (@$this->fields = mysql_fetch_array($this->_queryID,$this->fetchMode)) {
 			$this->_currentRow += 1;
 			return true;
 		}
@@ -100,7 +101,7 @@ class ADORecordSet_mysqlt extends ADORecordSet_mysql{
 
 class ADORecordSet_ext_mysqlt extends ADORecordSet_mysqlt {	
 
-	function ADORecordSet_ext_mysqli($queryID,$mode=false) 
+	function ADORecordSet_ext_mysqlt($queryID,$mode=false) 
 	{
 		if ($mode === false) { 
 			global $ADODB_FETCH_MODE;
@@ -116,7 +117,7 @@ class ADORecordSet_ext_mysqlt extends ADORecordSet_mysqlt {
 		default: 
 			$this->fetchMode = MYSQL_BOTH; break;
 		}
-	
+		$this->adodbFetchMode = $mode;
 		$this->ADORecordSet($queryID);	
 	}
 	

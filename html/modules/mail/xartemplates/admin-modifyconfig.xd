@@ -83,6 +83,16 @@
                     <xar:mlstring>Send HTML Emails</xar:mlstring>
                 </label>
             </div>
+            <div class="xar-form-input-wrapper-after">
+                <xar:if condition="xarModGetVar('mail', 'suppresssending')">
+                    <input type="checkbox" name="suppresssending" id="suppresssending" value="1" checked="checked" />
+                <xar:else />
+                    <input type="checkbox" name="suppresssending" id="suppresssending" value="1" />
+                </xar:if>
+                <label for="html" title="#xarML('Check this box if you want to suppress email sending for testing purposes.')#">
+                    <xar:mlstring>Suppress Emails</xar:mlstring>
+                </label>
+            </div>
         </fieldset>
 
         <fieldset>

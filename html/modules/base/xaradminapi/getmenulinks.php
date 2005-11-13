@@ -1,5 +1,6 @@
 <?php
 /**
+ * Get admin menu links
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -19,16 +20,19 @@ function base_adminapi_getmenulinks()
     $menulinks = array();
     if (xarSecurityCheck('AdminBase',0)) {
 
-        $menuLinks[] = array('url'   => xarModURL('base','admin','sysinfo'),
+        $menulinks[] = Array('url' => xarModURL('base','admin','overview'),
+                             'title' => xarML('Base Overview'),
+                             'label' => xarML('Overview'));
+        $menulinks[] = array('url'   => xarModURL('base','admin','sysinfo'),
                              'title' => xarML('View your PHP configuration'),
-                             'label' => xarML('System'));
-        $menuLinks[] = array('url'   => xarModURL('base','admin','release'),
+                             'label' => xarML('System Info'));
+        $menulinks[] = array('url'   => xarModURL('base','admin','release'),
                              'title' => xarML('View recent released extensions'),
                              'label' => xarML('Extension Releases'));
-        $menuLinks[] = array('url'   => xarModURL('base','admin','modifyconfig'),
+        $menulinks[] = array('url'   => xarModURL('base','admin','modifyconfig'),
                              'title' => xarML('Modify Base configuration values'),
                              'label' => xarML('Modify Config'));
     }
-    return $menuLinks;
+    return $menulinks;
 }
 ?>

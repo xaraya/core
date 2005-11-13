@@ -110,6 +110,27 @@
     </xar:ml>
     <xar:if condition="$tab eq 'display'">
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
+               <fieldset>
+                <legend>
+                    <xar:mlstring>
+                        Version Information
+                    </xar:mlstring>
+                </legend>
+                <div class="xar-form-input-wrapper">
+                    <label title="#xarML('Current Version.')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Xaraya Core:
+                        </xar:mlstring>
+                    </label>
+
+                    <xar:ml>
+                        <xar:mlstring>#(1) version #(2) (#(3))</xar:mlstring>
+                        <xar:mlvar>#$XARCORE_VERSION_ID#</xar:mlvar>
+                        <xar:mlvar>#$XARCORE_VERSION_NUM#</xar:mlvar>
+                        <xar:mlvar>#$XARCORE_VERSION_SUB#</xar:mlvar>
+                     </xar:ml>
+                </div>
+            </fieldset>
             <fieldset>
                 <legend>
                     <xar:mlstring>

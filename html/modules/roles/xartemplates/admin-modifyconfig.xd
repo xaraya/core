@@ -73,6 +73,23 @@
                     </a>
                 </dd>
             </xar:if>
+            <xar:if condition="$tab eq 'duvs'">
+                <dd class="active">
+                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=duvs">
+                        <xar:mlstring>
+                            User Variables 
+                        </xar:mlstring>
+                    </a>
+                </dd>
+                <xar:else />
+                <dd>
+                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=duvs">
+                        <xar:mlstring>
+                            User Variables 
+                        </xar:mlstring>
+                    </a>
+                </dd>
+            </xar:if>
             <xar:if condition="$tab eq 'hooks'">
                 <dd class="active">
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=hooks">
@@ -90,23 +107,25 @@
                     </a>
                 </dd>
             </xar:if>
-            <xar:if condition="$tab eq 'grouphooks'">
-                <dd class="active">
-                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
-                        <xar:mlstring>
-                            Group Hooks 
-                        </xar:mlstring>
-                    </a>
-                </dd>
-                <xar:else />
-                <dd>
-                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
-                        <xar:mlstring>
-                            Group Hooks 
-                        </xar:mlstring>
-                    </a>
-                </dd>
-            </xar:if>
+            <xar:comment>
+                <xar:if condition="$tab eq 'grouphooks'">
+                    <dd class="active">
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
+                            <xar:mlstring>
+                                Group Hooks 
+                            </xar:mlstring>
+                        </a>
+                    </dd>
+                    <xar:else />
+                    <dd>
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
+                            <xar:mlstring>
+                                Group Hooks 
+                            </xar:mlstring>
+                        </a>
+                    </dd>
+                </xar:if>
+            </xar:comment>
             <xar:if condition="$tab eq 'memberlist'">
                 <dd class="active">
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=memberlist">
@@ -131,11 +150,6 @@
     </xar:comment>
     <xar:if condition="$tab eq 'general'">
         <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-            <h3>
-                <xar:mlstring>
-                    General Options 
-                </xar:mlstring>
-            </h3>
             <fieldset>
                 <legend>
                     <xar:mlstring>
@@ -407,11 +421,11 @@
                         </label>
                     </div>
                     <div class="xar-form-input-wrapper-after">
-						<xar:if condition="xarModGetVar('roles', 'userhome')">
-							<input type="checkbox" name="userhome" id="userhome" value="1" checked="checked" />
-						<xar:else />
-							<input type="checkbox" name="userhome" id="userhome" value="1" />
-						</xar:if>
+                        <xar:if condition="xarModGetVar('roles', 'userhome')">
+                            <input type="checkbox" name="userhome" id="userhome" value="1" checked="checked" />
+                        <xar:else />
+                            <input type="checkbox" name="userhome" id="userhome" value="1" />
+                        </xar:if>
                         <label for="uniuserhome" title="#xarML('Each group or user can have their own home URL')#">
                             <xar:mlstring>
                                 Enable user specific home pages:
@@ -433,8 +447,6 @@
                         </div>
                     </xar:comment>
                 </xar:if>
-            </fieldset>
-            <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="phase" id="phase" value="update" />
@@ -518,24 +530,147 @@
             </p>
         </xar:if>
         <xar:comment>
-            ----------------- Begin User Hooks Options ------------------- 
+            ----------------- Begin User Variable Options ------------------- 
         </xar:comment>
-        <xar:elseif condition="$tab eq 'hooks'" />
-        <xar:if condition="!empty($hooks)">
-            <h3>
-                <xar:mlstring>
-                    Configuration of Hooked Modules 
-                </xar:mlstring>
-            </h3>
+        <xar:elseif condition="$tab eq 'duvs'" />
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-                <h4>
-                    <xar:mlstring>
-                        Default Hooks For Users: 
-                    </xar:mlstring>
-                </h4>
-                <xar:foreach in="$hooks" key="$hookmodule">
-                    #$hooks[$hookmodule]# 
-                </xar:foreach>
+                <fieldset>
+                    <legend>
+                        <xar:mlstring>
+                            Basic User Variables 
+                        </xar:mlstring>
+                    </legend>
+                    <table style="width: 90%">
+                        <tr>
+                            <th style="width: 100px">
+                                <xar:mlstring>Name</xar:mlstring>
+                            </th>
+                            <th style="width: 400px">
+                                <xar:mlstring>Description</xar:mlstring>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                uname
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>The handle or nick under which the user is known to the site. The uname is unique to each user.</xar:mlstring>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                name
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>The user's display name, as shown in the members list and other displays. The name need not be unique.</xar:mlstring>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                email
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>The user's email address. The email address can be defined by the site administrator to be unique or not.</xar:mlstring>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <xar:mlstring>
+                            Dynamic User Variables 
+                        </xar:mlstring>
+                    </legend>
+                    <table style="width: 90%">
+                        <tr>
+                            <th style="width: 100px">
+                                <xar:mlstring>Name</xar:mlstring>
+                            </th>
+                            <th style="width: 400px">
+                                <xar:mlstring>Description</xar:mlstring>
+                            </th>
+                            <th style="width: 50px">
+                                &nbsp;
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                userhome
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>The user's home page, which is initially displayed when the user logs in. The home page can be user specific or inherited from a parent group</xar:mlstring>
+                            </td>
+                            <td style="width: 50px; text-align: center;">
+                                <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'userhome', 'state' =&gt; 1))">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','userhome' => 0))#">
+                                        <xar:mlstring>Deactivate</xar:mlstring>
+                                    </a>
+                                <xar:else />
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','userhome' => 1))#">
+                                        <xar:mlstring>Activate</xar:mlstring>
+                                    </a>
+                                </xar:if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                primaryparent
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>The user's primary parent group. Inherited properties from this parent take precendence over inherited properties from other parent groups.</xar:mlstring>
+                            </td>
+                            <td style="width: 50px; text-align: center;">
+                                <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'primaryparent', 'state' =&gt; 1))">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','primaryparent' => 0))#">
+                                        <xar:mlstring>Deactivate</xar:mlstring>
+                                    </a>
+                                <xar:else />
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','primaryparent' => 1))#">
+                                        <xar:mlstring>Activate</xar:mlstring>
+                                    </a>
+                                </xar:if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                passwordupdate
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>The date the last time this role's password was changed.</xar:mlstring>
+                            </td>
+                            <td style="width: 50px; text-align: center;">
+                                <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'passwordupdate', 'state' =&gt; 1))">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','passwordupdate' => 0))#">
+                                        <xar:mlstring>Deactivate</xar:mlstring>
+                                    </a>
+                                <xar:else />
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','passwordupdate' => 1))#">
+                                        <xar:mlstring>Activate</xar:mlstring>
+                                    </a>
+                                </xar:if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                timezone
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>This role's timezone.</xar:mlstring>
+                            </td>
+                            <td style="width: 50px; text-align: center;">
+                                <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'timezone', 'state' =&gt; 1))">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','timezone' => 0))#">
+                                        <xar:mlstring>Deactivate</xar:mlstring>
+                                    </a>
+                                <xar:else />
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','timezone' => 1))#">
+                                        <xar:mlstring>Activate</xar:mlstring>
+                                    </a>
+                                </xar:if>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
                         <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -544,6 +679,28 @@
                         <input type="submit" value="#xarML('Update Roles Configuration')#" />
                     </div>
                 </fieldset>
+            </form>
+        <xar:comment>
+            ----------------- Begin User Hooks Options ------------------- 
+        </xar:comment>
+        <xar:elseif condition="$tab eq 'hooks'" />
+        <xar:if condition="!empty($hooks)">
+          <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+              <fieldset>
+                <legend><xar:mlstring>Default Hooks For Users</xar:mlstring></legend>
+               
+                <xar:foreach in="$hooks" key="$hookmodule">
+                    #$hooks[$hookmodule]# 
+                </xar:foreach>
+              </fieldset>
+              <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                  <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                  <input type="hidden" name="phase" id="phase" value="update" />
+                  <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                  <input type="submit" value="#xarML('Update Roles Configuration')#" />
+                </div>
+              </fieldset>
             </form>
             <xar:else />
             <p>
@@ -557,20 +714,14 @@
         </xar:comment>
         <xar:elseif condition="$tab eq 'grouphooks'" />
         <xar:if condition="!empty($hooks)">
-            <h3>
-                <xar:mlstring>
-                    Configuration of Hooked Modules 
-                </xar:mlstring>
-            </h3>
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-                <h4>
-                    <xar:mlstring>
-                        Default Hooks For Groups: 
-                    </xar:mlstring>
-                </h4>
-                <xar:foreach in="$hooks" key="$hookmodule">
+                <fieldset>
+                  <legend><xar:mlstring>Default Hooks For Groups</xar:mlstring></legend>
+                  
+                  <xar:foreach in="$hooks" key="$hookmodule">
                     #$hooks[$hookmodule]# 
-                </xar:foreach>
+                  </xar:foreach>
+                </fieldset>
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
                         <input type="hidden" name="authid" id="authid" value="#$authid#" />

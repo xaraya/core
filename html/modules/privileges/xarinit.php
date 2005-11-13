@@ -1,5 +1,6 @@
 <?php
 /**
+ * Initialisation functions for the security module
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -478,6 +479,10 @@ function privileges_init()
     // Set up an initial value for module variables.
     xarModSetVar('privileges', 'showrealms', false);
     xarModSetVar('privileges', 'inheritdeny', true);
+    xarModSetVar('privileges', 'tester', 0);
+    xarModSetVar('privileges', 'test', false);
+    xarModSetVar('privileges', 'testdeny', false);
+    xarModSetVar('privileges', 'testmask', 'All');
 
     // Initialisation successful
     return true;

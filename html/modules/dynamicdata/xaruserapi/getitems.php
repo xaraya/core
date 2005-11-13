@@ -1,5 +1,6 @@
 <?php
 /**
+ * Get all dynamic data fields for a list of items
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -35,7 +36,7 @@
 function &dynamicdata_userapi_getitems($args)
 {
     extract($args);
-
+    $nullreturn = null;
     if (empty($modid) && empty($moduleid)) {
         if (empty($module)) {
             $modname = xarModGetName();
@@ -68,10 +69,10 @@ function &dynamicdata_userapi_getitems($args)
                     join(', ',$invalid), 'user', 'getitems', 'DynamicData');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
-        return;
+        return $nullreturn;
     }
 
-    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return;
+    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return $nullreturn;
 
     if (empty($itemids)) {
         $itemids = array();
@@ -80,7 +81,7 @@ function &dynamicdata_userapi_getitems($args)
     }
 
     foreach ($itemids as $itemid) {
-        if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:$itemid")) return;
+        if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:$itemid")) return $nullreturn;
     }
 
     // check the optional field list
@@ -138,14 +139,15 @@ function &dynamicdata_userapi_getitems($args)
                                            'catid' => $catid,
                                            'groupby' => $groupby,
                                            'status' => $status));
-    if (!isset($object)) return;
+    if (!isset($object)) return $nullreturn;
     // $items[$itemid]['fields'][$name]['value'] --> $items[$itemid][$name] now
 
     if (!empty($getobject)) {
         $object->getItems();
         return $object;
     } else {
-        return $object->getItems();
+        $result = $object->getItems();
+        return $result;
     }
 }
 

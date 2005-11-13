@@ -33,7 +33,12 @@
       [#$labels['id']#: #$field['id']#]
     </legend>
     
-    <div id="fieldwrapper_#$field.id#" class="xar-displaynone">
+    <xar:comment>
+      The js doesnt handle the class properly, it takes 2 clicks to toggle. 
+      We leave the class in, but add display: none explicitly
+      (btw, that class is in core css)
+    </xar:comment>
+    <div id="fieldwrapper_#$field.id#" style="display: none;" class="xar-displaynone">
       <div class="xar-form-input-wrapper-after">
         <a href="&xar-modurl-dynamicdata-admin-modify;&amp;objectid=2&amp;itemid=#$field.id#">
           #xarVarPrepForDisplay($otherfields)#
@@ -152,11 +157,19 @@
     #$output#
   </xar:foreach>
 </xar:if>
-
+<fieldset>
 <div class="xar-align-center">
+  <xar:comment>
+    Optional extra table for data sources - use a text box if you want to make this configurable
+    <input type="text" name="table" id="table" value="#$table#" />
+  </xar:comment>
+  <xar:if condition="!empty($table)">
+    <input type="hidden" name="table" id="table" value="#$table#" />
+  </xar:if>
   <input type="hidden" name="authid" id="authid" value="#$authid#" />
   <input type="hidden" name="objectid" id="objectid" value="#$objectid#" />
   <input type="hidden" name="modid" id="modid" value="#$modid#" />
   <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
   <input type="submit" value="#xarML('Update Properties')#" />
 </div>
+</fieldset>

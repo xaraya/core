@@ -1,15 +1,13 @@
 <?php
 /**
- * File: $Id$
- *
  * Add a role
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Jan Schrage, Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 /**
  * addRole - add a role
@@ -37,6 +35,7 @@ function roles_admin_addrole()
         xarVarFetch('ppass2', 'str:1:', $ppass2, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('pstate', 'str:1:', $pstate, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('phome', 'str', $phome, NULL, XARVAR_NOT_REQUIRED);
+        xarVarFetch('pprimaryparent', 'int', $pprimaryparent, NULL, XARVAR_NOT_REQUIRED);
     }
     // checks specific only to users
     if ($ptype == 0) {
@@ -101,6 +100,13 @@ function roles_admin_addrole()
     }
     // assemble the args into an array for the role constructor
     if ($ptype == 0) {
+    	$duvs = array();
+    	if (isset($phome) && xarModAPIFunc('roles','admin','checkduv',array('name' => 'userhome', 'state' => 1)))
+			$duvs['userhome'] = $phome;
+    	if (isset($pprimaryparent) && xarModAPIFunc('roles','admin','checkduv',array('name' => 'primaryparent', 'state' => 1)))
+			$duvs['primaryparent'] = $pprimaryparent;
+		$duvs = serialize($duvs);
+
         $pargs = array('name' => $pname,
             'type' => $ptype,
             'parentid' => $pparentid,
@@ -110,6 +116,7 @@ function roles_admin_addrole()
             'val_code' => 'createdbyadmin',
             'state' => $pstate,
             'auth_module' => 'authsystem',
+            'duvs' => $duvs,
             );
     } else {
         $pargs = array('name' => $pname,

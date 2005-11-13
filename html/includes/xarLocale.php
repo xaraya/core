@@ -36,16 +36,17 @@ function &xarMLSLoadLocaleData($locale = NULL)
     // check for locale availability
     $siteLocales = xarMLSListSiteLocales();
 
+    $nullreturn = null; $falsereturn = false;
     if (!in_array($locale, $siteLocales)) {
         if (strstr($locale,'ISO')) {
             $locale = str_replace('ISO','iso',$locale);
             if (!in_array($locale, $siteLocales)) {
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
-                return;
+                return $nullreturn;
             }
         } else {
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
-            return;
+            return $nullreturn;
         }
     }
 
@@ -71,17 +72,17 @@ function &xarMLSLoadLocaleData($locale = NULL)
 /* TODO: delete after new backend testing
         if ($GLOBALS['xarMLS_backendName'] == 'xml2php') {
 */
-            if (!$parsedLocale = xarMLS__parseLocaleString($locale)) return false;
+            if (!$parsedLocale = xarMLS__parseLocaleString($locale)) return $falsereturn;
             $utf8locale = $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
             $siteCharset = $parsedLocale['charset'];
-            $res = $GLOBALS['xarMLS_localeDataLoader']->load($locale);
-            if (!isset($res)) return; // Throw back
-            if ($res == false) {
+            $res = $GLOBALS['xarMLS_localeDataLoader']->load($utf8locale);
+            if (isset($res) && $res == false) {
                 // Can we use xarML here? border case, play it safe for now.
-                $msg = "The locale '$locale' could not be loaded";
+                $msg = "The locale '$utf8locale' could not be loaded";
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_EXIST',$msg);
-                return;
+                return $nullreturn;
             }
+            if (!isset($res)) return $nullreturn; // Throw back
             $tempArray = $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
             if ($siteCharset != 'utf-8') {
                 foreach ( $tempArray as $tempKey => $tempValue ) {
@@ -93,12 +94,12 @@ function &xarMLSLoadLocaleData($locale = NULL)
 /* TODO: delete after new backend testing
         } else {
             $res = $GLOBALS['xarMLS_localeDataLoader']->load($locale);
-            if (!isset($res)) return; // Throw back
+            if (!isset($res)) return $nullreturn; // Throw back
             if ($res == false) {
                 // Can we use xarML here? border case, play it safe for now.
                 $msg = "The locale '$locale' could not be loaded";
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_EXIST',$msg);
-                return;
+                return $nullreturn;
             }
             $GLOBALS['xarMLS_localeDataCache'][$locale] = $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
         }
@@ -369,9 +370,9 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
     $locale_format = str_replace('z','%Z',$locale_format);
     // format the single digit flags
     if (strpos($locale_format,'H') !== false)
-        $locale_format = str_replace('H',sprintf('%1d',gmstrftime('%H',$timestamp)),$locale_format);
+        $locale_format = str_replace('%H',sprintf('%1d',gmstrftime('%H',$timestamp)),$locale_format);
     if (strpos($locale_format,'h') !== false)
-        $locale_format = str_replace('h',sprintf('%1d',gmstrftime('%I',$timestamp)),$locale_format);
+        $locale_format = str_replace('%h',sprintf('%1d',gmstrftime('%I',$timestamp)),$locale_format);
     if (strpos($locale_format,'m') !== false)
         $locale_format = str_replace('m',sprintf('%1d',gmstrftime('%M',$timestamp)),$locale_format);
     if (strpos($locale_format,'s') !== false)

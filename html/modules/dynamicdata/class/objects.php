@@ -1,5 +1,6 @@
 <?php
 /**
+ * Metaclass for Dynamic Objects
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -376,6 +377,7 @@ class Dynamic_Object_Master
      */
     function &getObjects()
     {
+        $nullreturn = NULL;
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
 
@@ -393,7 +395,7 @@ class Dynamic_Object_Master
                   FROM $dynamicobjects ";
         $result =& $dbconn->Execute($query);
 
-        if (!$result) return;
+        if (!$result) return $nullreturn;
 
         $objects = array();
         while (!$result->EOF) {
@@ -1012,7 +1014,8 @@ class Dynamic_Object extends Dynamic_Object_Master
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
-                    if ($this->properties[$name]->status != 3)
+                    $thisprop = $this->properties[$name];
+                    if ($thisprop->status != 3)
                         $args['properties'][$name] = & $this->properties[$name];
                 }
             }
@@ -1943,7 +1946,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
-                    if ($this->properties[$name]->status != 3)
+                    $thisprop = $this->properties[$name];
+                    if ($thisprop->status != 3)
                         $args['properties'][$name] = & $this->properties[$name];
                 }
             }

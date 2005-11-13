@@ -27,7 +27,7 @@ function blocks_adminapi_activate($args)
     }
 
     // Security
-    if(!xarSecurityCheck('EditBlock',1,'Block',"::$bid")) {return;}
+    if(!xarSecurityCheck('CommentBlock',1,'Block',"::$bid")) {return;}
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();

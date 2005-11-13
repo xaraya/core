@@ -23,7 +23,7 @@ function dynamicdata_userapi_getitemsforview($args)
         $args['status'] = 1;
     }
     $args['getobject'] = 1;
-    $object = & xarModAPIFunc('dynamicdata','user','getitems',$args);
+    $object =  xarModAPIFunc('dynamicdata','user','getitems',$args);
     if (!isset($object)) {
         return array(array(), array());
     }

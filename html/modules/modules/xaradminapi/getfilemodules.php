@@ -14,6 +14,7 @@
  * return an array of information from xarversion.php of each module.
  *
  * Excluded directories:
+ * MT  - this is a special directory of Monotone
  * CVS - this is a special directory of the Concurrent Versioning System
  * SCCS - where Bitkeeper stores source files
  * PENDING - where Bitkeeper stores pending merges
@@ -41,6 +42,7 @@ function modules_adminapi_getfilemodules($args)
         switch ($modOsDir) {
             case '.':
             case '..':
+            case 'MT':
             case 'CVS':
             case 'SCCS':
             case 'PENDING':

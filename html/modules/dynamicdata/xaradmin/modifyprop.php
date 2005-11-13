@@ -1,5 +1,6 @@
 <?php
 /**
+ * Modify the dynamic properties for a module and itemtype
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -27,8 +28,9 @@ function dynamicdata_admin_modifyprop()
     if(!xarVarFetch('itemid',   'isset', $itemid,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('modid',    'isset', $modid,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('table',    'isset', $table,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('details',  'isset', $details,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('layout',   'str:1' , $layout,   'default', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('layout',   'str:1', $layout,   'default', XARVAR_NOT_REQUIRED)) {return;}
 
 /*
     if (!empty($itemid)) {
@@ -97,8 +99,16 @@ function dynamicdata_admin_modifyprop()
         $data['fields'] = array();
     }
 
-    // get possible data sources
-    $data['sources'] = Dynamic_DataStore_Master::getDataSources();
+    // get possible data sources (with optional extra table)
+// TODO: combine with static tables list below someday ?
+    $params = array();
+    if (!empty($table)) {
+        $params['table'] = $table;
+        $data['table'] = $table;
+    } else {
+        $data['table'] = null;
+    }
+    $data['sources'] = Dynamic_DataStore_Master::getDataSources($params);
     if (empty($data['sources'])) {
         $data['sources'] = array();
     }
@@ -120,7 +130,7 @@ function dynamicdata_admin_modifyprop()
         $hooks = xarModCallHooks('module','modifyconfig',$modinfo['name'],
                                  array('module' => $modinfo['name'],
                                        'itemtype' => $itemtype));
-    } 
+    }
     $data['hooks'] = $hooks;
 
     $data['labels'] = array(

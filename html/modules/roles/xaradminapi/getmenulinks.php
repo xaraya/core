@@ -1,20 +1,19 @@
 <?php
 /**
- * File: $Id$
+ * Utility function pass individual menu items to the main menu
  *
- * Utility function to pass individual menu items to main menu
- *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @package modules
+ * @copyright (C) 2002-2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
+ * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * utility function pass individual menu items to the main menu
  *
- * @author the Example module development team
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @returns array
  * @return array containing the menulinks for the main menu items.
  */
@@ -31,6 +30,10 @@ function roles_adminapi_getmenulinks()
     }*/
 
     if (xarSecurityCheck('EditRole',0)) {
+        $menulinks[] = Array('url' => xarModURL('roles','admin','overview'),
+                               'title' => xarML('Roles Overview'),
+                              'label' => xarML('Overview'));
+
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
                                                   'showusers'),

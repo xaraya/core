@@ -7,7 +7,7 @@
     <h2><xar:mlstring>Welcome to Xaraya</xar:mlstring></h2>
 
     <p>
-        <xar:mlstring>Xaraya is currently in Beta Production.  If you notice any unexpected functionality, please use our bug tracker at <a href="http://bugs.xaraya.com">http://bugs.xaraya.com</a>.  Thank you for your support, and feel free to join our development or user discussions to become involved in our community.</xar:mlstring>
+        <xar:mlstring>Xaraya is now at Production Stable.  If you notice any unexpected functionality, please use our bug tracker at <a href="http://bugs.xaraya.com">http://bugs.xaraya.com</a>.  Thank you for your support, and feel free to join our development or user discussions to become involved in our community.</xar:mlstring>
     </p>
 
     <p>

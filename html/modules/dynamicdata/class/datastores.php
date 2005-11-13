@@ -9,7 +9,6 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
-
 /**
  * Utility Class to manage Dynamic Data Stores
  *
@@ -80,27 +79,11 @@ class Dynamic_DataStore_Master
 
     /**
      * Get possible data sources (// TODO: for a module ?)
+     *
+     * @param $args['table'] optional extra table whose fields you want to add as potential data source
      */
     function &getDataSources($args = array())
     {
-        $dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
-
-        $systemPrefix = xarDBGetSystemTablePrefix();
-        $metaTable = $systemPrefix . '_tables';
-
-    // TODO: remove Xaraya system tables from the list of available sources ?
-        $query = "SELECT xar_table,
-                         xar_field,
-                         xar_type,
-                         xar_size
-                  FROM $metaTable
-                  ORDER BY xar_table ASC, xar_field ASC";
-
-        $result =& $dbconn->Execute($query);
-
-        if (!$result) return;
-
         $sources = array();
 
         // default data source is dynamic data
@@ -124,6 +107,36 @@ class Dynamic_DataStore_Master
 
         // no local storage
         $sources[] = 'dummy';
+
+        // try to get the meta table definition
+        if (!empty($args['table'])) {
+            $meta = xarModAPIFunc('dynamicdata','util','getmeta',$args,0);
+            if (!empty($meta) && !empty($meta[$args['table']])) {
+                foreach ($meta[$args['table']] as $column) {
+                    if (!empty($column['source'])) {
+                        $sources[] = $column['source'];
+                    }
+                }
+            }
+        }
+
+        $dbconn =& xarDBGetConn();
+        $xartable =& xarDBGetTables();
+
+        $systemPrefix = xarDBGetSystemTablePrefix();
+        $metaTable = $systemPrefix . '_tables';
+
+    // TODO: remove Xaraya system tables from the list of available sources ?
+        $query = "SELECT xar_table,
+                         xar_field,
+                         xar_type,
+                         xar_size
+                  FROM $metaTable
+                  ORDER BY xar_table ASC, xar_field ASC";
+
+        $result =& $dbconn->Execute($query);
+
+        if (!$result) return;
 
         // add the list of table + field
         while (!$result->EOF) {

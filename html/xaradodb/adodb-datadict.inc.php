@@ -189,25 +189,25 @@ class ADODB_DataDict {
 		return false;
 	}
 	
-	function &MetaTables()
+	function MetaTables()
 	{
 		if (!$this->connection->IsConnected()) return array();
 		return $this->connection->MetaTables();
 	}
 	
-	function &MetaColumns($tab, $upper=true, $schema=false)
+	function MetaColumns($tab, $upper=true, $schema=false)
 	{
 		if (!$this->connection->IsConnected()) return array();
 		return $this->connection->MetaColumns($this->TableName($tab), $upper, $schema);
 	}
 	
-	function &MetaPrimaryKeys($tab,$owner=false,$intkey=false)
+	function MetaPrimaryKeys($tab,$owner=false,$intkey=false)
 	{
 		if (!$this->connection->IsConnected()) return array();
 		return $this->connection->MetaPrimaryKeys($this->TableName($tab), $owner, $intkey);
 	}
 	
-	function &MetaIndexes($table, $primary = false, $owner = false)
+	function MetaIndexes($table, $primary = false, $owner = false)
 	{
 		if (!$this->connection->IsConnected()) return array();
 		return $this->connection->MetaIndexes($this->TableName($table), $primary, $owner);
@@ -713,16 +713,10 @@ class ADODB_DataDict {
 		if ($this->connection->fetchMode !== false) $savem = $this->connection->SetFetchMode(false);
 		
 		// check table exists
-        // XARAYA MODIFICATION - START
-        // Suppress errors raised when the table does not exist.
-        // See http://phplens.com/lens/lensforum/msgs.php?id=11956
-        // There is not an easy way to provide this customisation as an
-        // overloaded class.
-        $save_handler = $this->connection->raiseErrorFn;
-        $this->connection->raiseErrorFn = '';
-		$cols = &$this->MetaColumns($tablename);
-        $this->connection->raiseErrorFn = $save_handler;
-        // XARAYA MODIFICATION - END
+		$save_handler = $this->connection->raiseErrorFn;
+		$this->connection->raiseErrorFn = '';
+		$cols = $this->MetaColumns($tablename);
+		$this->connection->raiseErrorFn = $save_handler;
 		
 		if (isset($savem)) $this->connection->SetFetchMode($savem);
 		$ADODB_FETCH_MODE = $save;
@@ -741,7 +735,7 @@ class ADODB_DataDict {
 				if ( isset($cols[$k]) && is_object($cols[$k]) ) {
 					$c = $cols[$k];
 					$ml = $c->max_length;
-					$mt = &$this->MetaType($c->type,$ml);
+					$mt = $this->MetaType($c->type,$ml);
 					if ($ml == -1) $ml = '';
 					if ($mt == 'X') $ml = $v['SIZE'];
 					if (($mt != $v['TYPE']) ||  $ml != $v['SIZE']) {

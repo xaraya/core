@@ -53,6 +53,7 @@ function xarUser_init($args, $whatElseIsGoingLoaded)
     // User System and Security Service Tables
     $systemPrefix = xarDBGetSystemTablePrefix();
 
+    // CHECK: is this needed?
     $tables = array('roles'            => $systemPrefix . '_roles',
                     'realms'           => $systemPrefix . '_security_realms',
                     'rolemembers' => $systemPrefix . '_rolemembers');
@@ -164,6 +165,7 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
 
     $rolestable = $xartable['roles'];
 
+    // TODO: this should be inside roles module
     $query = "UPDATE $rolestable SET xar_auth_module = ? WHERE xar_uid = ?";
     $result =& $dbconn->Execute($query,array($authModName,$userId));
     if (!$result) return;
@@ -261,8 +263,8 @@ function xarUserGetNavigationThemeName()
 function xarUserSetNavigationThemeName($themeName)
 {
     assert('$themeName != ""');
-    xarModSetVar('themes', 'default', $themeName);
-
+    // uservar system takes care of dealing with anynomous
+    xarModSetUserVar('themes', 'default', $themeName);
 }
 
 /**
@@ -276,6 +278,7 @@ function xarUserGetNavigationLocale()
     if (xarUserIsLoggedIn()) {
         $locale = xarModGetUserVar('roles', 'locale');
         if (!isset($locale)) {
+            // CHECKME: why is this here? The logic of falling back is already in the modgetuservar
             $siteLocale = xarModGetVar('roles', 'locale');
             if (!isset($siteLocale)) {
                 xarModSetVar('roles', 'locale', '');
@@ -333,6 +336,7 @@ function xarUserSetNavigationLocale($locale)
         if (xarUserIsLoggedIn()) {
             $userLocale = xarModGetUserVar('roles', 'locale');
             if (!isset($userLocale)) {
+                // CHECKME: Why is this here? the fallback logic is already in modgetuservar
                 $siteLocale = xarModGetVar('roles', 'locale');
                 if (!isset($siteLocale)) {
                     xarModSetVar('roles', 'locale', '');
@@ -425,14 +429,22 @@ function xarUserGetVar($name, $userId = NULL)
             xarCore_SetCached('User.Variables.'.$userId, 'email', $userRole['email']);
 
         } elseif (!xarUser__isVarDefined($name)) {
-            xarCore_SetCached('User.Variables.'.$userId, $name, false);
-            // Here we can't raise an exception because they're all optional
-            if ($name != 'locale' && $name != 'timezone') {
-                // log unknown user variables to inform the site admin
-                $msg = xarML('User variable #(1) was not correctly registered', $name);
-                xarLogMessage($msg, XARLOG_LEVEL_ERROR);
-            }
-            return;
+        	if (xarUser__checkDUV($name, 1)) {
+	        	$value = xarUserGetDUV($name,$userId);
+				if ($value == null) {
+					xarCore_SetCached('User.Variables.'.$userId, $name, false);
+					// Here we can't raise an exception because they're all optional
+					if ($name != 'locale' && $name != 'timezone') {
+						// log unknown user variables to inform the site admin
+						$msg = xarML('User variable #(1) was not correctly registered', $name);
+						xarLogMessage($msg, XARLOG_LEVEL_ERROR);
+					}
+					return;
+				}
+				else {
+					xarCore_SetCached('User.Variables.'.$userId, $name, $value);
+				}
+			}
 
         } else {
             // retrieve the user item
@@ -567,12 +579,15 @@ function xarUserSetVar($name, $value, $userId = NULL)
         xarUser__setUsersTableUserVar($name, $value, $userId);
 
     } elseif (!xarUser__isVarDefined($name)) {
-        xarCore_SetCached('User.Variables.'.$userId, $name, false);
-        $msg = xarML('User variable #(1) was not correctly registered', $name);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'VARIABLE_NOT_REGISTERED',
-                       new SystemException($msg));
-        return;
-
+		if(!xarUser__checkDUV($name, 1)) {
+			xarCore_SetCached('User.Variables.'.$userId, $name, false);
+			$msg = xarML('User variable #(1) was not correctly registered', $name);
+			xarErrorSet(XAR_SYSTEM_EXCEPTION, 'VARIABLE_NOT_REGISTERED',
+						   new SystemException($msg));
+			return;
+		} else {
+			xarUserSetDUV($name,$value,$userId);
+		}
     } else {
         // retrieve the user item
         $itemid = $GLOBALS['xarUser_objectRef']->getItem(array('itemid' => $userId));
@@ -659,6 +674,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
  */
 function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryptSalt = '')
 {
+    // TODO: consider moving to something stronger like sha1
     $md5pass = md5($givenPassword);
     if (strcmp($md5pass, $realPassword) == 0)
         return $md5pass;
@@ -688,7 +704,7 @@ function xarUser__getAuthModule($userId)
         }
     }
 
-// TODO: replace with some roles API ?
+    // TODO: replace with some roles API 
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
@@ -707,6 +723,7 @@ function xarUser__getAuthModule($userId)
     } else {
         list($authModName) = $result->fields;
         // TODO: remove when issue of Anonymous users is resolved
+        // Q: what issue?
         if (empty($authModName)) {
             $authModName = 'authsystem';
         }
@@ -726,7 +743,7 @@ function xarUser__isVarDefined($name)
 {
     // Retrieve the dynamic user object if necessary
     if (!isset($GLOBALS['xarUser_objectRef']) && xarModIsHooked('dynamicdata','roles')) {
-        $GLOBALS['xarUser_objectRef'] =& xarModAPIFunc('dynamicdata', 'user', 'getobject',
+        $GLOBALS['xarUser_objectRef'] = xarModAPIFunc('dynamicdata', 'user', 'getobject',
                                                        array('module' => 'roles'));
         if (empty($GLOBALS['xarUser_objectRef']) || empty($GLOBALS['xarUser_objectRef']->objectid)) {
             $GLOBALS['xarUser_objectRef'] = false;
@@ -805,4 +822,30 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
     return true;
 }
 
+/*
+ * @access private
+ * @return bool
+ */
+function xarUser__checkDUV($name, $state)
+{
+    return xarModAPIFunc('roles','admin','checkduv', array('name' => $name, 'state' => $state));
+}
+/*
+ * @access public
+ * @return value of DUV
+ */
+function xarUserGetDUV($name, $uid=null)
+{
+    if (isset($uid)) return xarModAPIFunc('roles','admin','getduv', array('name' => $name, 'uid' => $uid));
+    return xarModAPIFunc('roles','admin','getduv', array('name' => $name));
+}
+/*
+ * @access public
+ * @return none
+ */
+function xarUserSetDUV($name, $value, $uid=null)
+{
+    if (isset($uid)) return xarModAPIFunc('roles','admin','setduv', array('name' => $name, 'value' => $value, 'uid' => $uid));
+    return xarModAPIFunc('roles','admin','setduv', array('name' => $name, 'value' => $value));
+}
 ?>

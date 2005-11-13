@@ -34,7 +34,7 @@ class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
             return;
         }
         
-        $codeGenerator =& new xarTpl__CodeGenerator();
+        $codeGenerator = new xarTpl__CodeGenerator();
         $codeGenerator->setPHPBlock(true);
         
         $output = ', ';

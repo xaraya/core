@@ -1,5 +1,6 @@
 <?php
 /**
+ * Display a php error in raw html 
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -13,7 +14,6 @@
  *
  * @author Marc Lutolf
  */
-
 function base_user_rawexit()
 {
     $errorcodes = array(

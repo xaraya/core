@@ -18,8 +18,10 @@
                 <dt class="help">
                     <xar:mlstring>Options:</xar:mlstring>
                 </dt>
-                <dd>
-                    <a href="&xar-modurl-dynamicdata-admin-view;&amp;itemid=#$itemid#"><xar:mlstring>View Items</xar:mlstring></a>
+                <dd class="active">
+                  <a href="#xarServerGetCurrentUrl()#">
+                    <xar:mlstring>Modify Object definition</xar:mlstring>
+                  </a>
                 </dd>
                 <dd>
                     <a href="&xar-modurl-dynamicdata-admin-modifyprop;&amp;itemid=#$itemid#"><xar:mlstring>Modify Dynamic Properties</xar:mlstring></a>
@@ -27,15 +29,17 @@
                 <dd>
                     <a href="&xar-modurl-dynamicdata-util-export;&amp;objectid=#$itemid#"><xar:mlstring>Export Object Definition to XML</xar:mlstring></a>
                 </dd>
+                <dd>
+                    <a href="&xar-modurl-dynamicdata-admin-view;&amp;itemid=#$itemid#"><xar:mlstring>View Items</xar:mlstring></a>
+                </dd>
             </dl>
         </div>
     </xar:if>
 
-    <h3>
-        <xar:mlstring>Preview</xar:mlstring>
-    </h3>
-
-    <xar:data-display object="$object" />
+    <fieldset>
+      <legend><xar:mlstring>Preview</xar:mlstring></legend>
+      <xar:data-display object="$object" />
+    </fieldset>
 
     <xar:set name="isupload">#$object:upload#</xar:set>
     <xar:if condition="!empty($isupload)">
@@ -45,7 +49,8 @@
     </xar:if>
 
     <form method="post" action="&xar-modurl-dynamicdata-admin-update;" enctype="#$enc_type#">
-
+      <fieldset>
+        <legend><xar:mlstring>Modify Object Definition</xar:mlstring></legend>
         <xar:if condition="!empty($objectid) and $objectid eq 1 and $itemid lt 3">
             <h3 class="xar-align-center">
                 <xar:mlstring>Warning! This is a system object used internally by the Dynamic Data module.</xar:mlstring>
@@ -64,7 +69,8 @@
                 #$output#
             </xar:foreach>
         </xar:if>
-
+      </fieldset>
+      <fieldset>
         <div class="xar-align-center">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="modid" id="modid" value="#$object:moduleid#" />
@@ -83,6 +89,6 @@
                 </a>
             </p>
         </xar:if>
-
+      </fieldset>
     </form>
 </div>

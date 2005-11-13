@@ -61,7 +61,7 @@
                 </xar:if>
                 <label for="overview" title="#xarML('Bypass the overviews and go directly to the module configuration')#">
                     <xar:mlstring>
-                        Disable Module Overviews 
+                        Disable Module Overviews by Default
                     </xar:mlstring>
                 </label>
             </div>

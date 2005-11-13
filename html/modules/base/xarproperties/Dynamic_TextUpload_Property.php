@@ -1,5 +1,6 @@
 <?php
 /**
+ * Dynamic Textupload Property
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -287,6 +288,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             $this->methods = $methods;
             $this->basedir = $basedir;
             $this->importdir = $importdir;
+            $this->maxsize = xarModGetVar('uploads', 'file.maxsize');
 
         } else {
             // nothing interesting here

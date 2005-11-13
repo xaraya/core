@@ -228,9 +228,6 @@ function &xarDBGetTables()
 /**
  * Load the Table Maintenance API
  *
- * Include 'includes/xarTableDDL.php'using include_once()
- * and return true
- *
  * @access public
  * @return true
  * @todo <johnny> change to protected or private?
@@ -284,7 +281,7 @@ function &xarDBNewDataDict(&$dbconn, $mode = 'READONLY')
     }
 
     // Instantiate the object.
-    $dict =& new $class($dbconn);
+    $dict = new $class($dbconn);
 
     return $dict;
 }

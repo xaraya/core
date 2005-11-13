@@ -341,7 +341,7 @@ class ADORecordSet_ado extends ADORecordSet {
 
 
 	// returns the field object
-	function FetchField($fieldOffset = -1) {
+	function &FetchField($fieldOffset = -1) {
 		$off=$fieldOffset+1; // offsets begin at 1
 		
 		$o= new ADOFieldObject();

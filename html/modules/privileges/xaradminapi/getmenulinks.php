@@ -1,11 +1,12 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Privileges module
+ * @link http://xaraya.com/index.php/release/1098.html
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 /**
@@ -19,6 +20,10 @@ function privileges_adminapi_getmenulinks()
 {
     $menulinks = array();
     if (xarSecurityCheck('EditPrivilege',0)) {
+        $menulinks[] = Array('url' => xarModURL('privileges','admin','overview'),
+                               'title' => xarML('Privileges Overview'),
+                              'label' => xarML('Overview'));
+                              
         $menulinks[] = Array('url'   => xarModURL('privileges',
                                                   'admin',
                                                   'viewprivileges',array('phase' => 'active')),

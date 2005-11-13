@@ -149,7 +149,7 @@ class xarXmlParser
         if(is_object($handler) && is_subclass_of($handler,XARXML_HANDLERCLASS))
             $this->handler =& $handler;
         else
-            $this->handler =& new $defHandlerClass();
+            $this->handler = new $defHandlerClass();
     }
     
     /**

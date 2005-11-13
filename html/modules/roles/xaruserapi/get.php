@@ -1,20 +1,19 @@
 <?php
 /**
- * File: $Id$
- *
  * Get a specific user by any of his attributes
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 /**
  * get a specific user by any of his attributes
  * uname, uid and email are guaranteed to be unique,
  * otherwise the first hit will be returned
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['uid'] id of user to get
  * @param $args['uname'] user name of user to get
  * @param $args['name'] name of user to get

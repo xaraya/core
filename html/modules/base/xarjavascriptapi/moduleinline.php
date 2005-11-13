@@ -8,7 +8,6 @@
  * @subpackage Base module
  */
 
-
 /**
  * Base JavaScript management functions
  * Include a section of inline JavaScript code in a page.

@@ -1,5 +1,6 @@
 <?php
 /**
+ * Admin panels block management
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -57,7 +58,7 @@ function adminpanels_adminmenublock_info()
 function adminpanels_adminmenublock_display($blockinfo)
 {
     // Security Check
-    if (!xarSecurityCheck('AdminPanel', 0, 'adminmenu', "$blockinfo[title]:All:All")) {return;}
+    if (!xarSecurityCheck('AdminPanel',0,'Block',"adminmenu:$blockinfo[title]:$blockinfo[bid]")) {return;}
 
     // Get variables from content block
     if (!is_array($blockinfo['content'])) {

@@ -28,8 +28,7 @@
 	ADO, SAP DB, SQLite and ODBC. We have had successful reports of connecting to Progress and
 	other databases via ODBC.
 
-	Latest Download at http://php.weblogs.com/adodb<br>
-	Manual is at http://php.weblogs.com/adodb_manual
+	Latest Download at http://adodb.sourceforge.net/
 	  
  */
  
@@ -843,7 +842,6 @@
 	
 	function &_Execute($sql,$inputarr=false)
 	{
-
 		if ($this->debug) {
 			global $ADODB_INCLUDED_LIB;
 			if (empty($ADODB_INCLUDED_LIB)) include_once(ADODB_DIR.'/adodb-lib.inc.php');
@@ -867,13 +865,13 @@
 		} 
 		
 		if ($this->_queryID === true) { // return simplified recordset for inserts/updates/deletes with lower overhead
-			$rs =& new ADORecordSet_empty();
+			$rs = new ADORecordSet_empty();
 			return $rs;
 		}
 		
 		// return real recordset from select statement
 		$rsclass = $this->rsPrefix.$this->databaseType;
-		$rs =& new $rsclass($this->_queryID,$this->fetchMode);
+		$rs = new $rsclass($this->_queryID,$this->fetchMode);
 		$rs->connection = &$this; // Pablo suggestion
 		$rs->Init();
 		if (is_array($sql)) $rs->sql = $sql[0];
@@ -920,19 +918,13 @@
 		$getnext = sprintf($this->_genIDSQL,$seqname);
 		
 		$holdtransOK = $this->_transOK;
-
-        // XARAYA MODIFICATION - START
-        // Suppress errors raised when the table does not exist.
-        // See http://phplens.com/lens/lensforum/msgs.php?id=11956
-        // There is not an easy way to provide this customisation as an
-        // overloaded class.
-        $save_handler = $this->raiseErrorFn;
-        $this->raiseErrorFn = '';
+		
+		$save_handler = $this->raiseErrorFn;
+		$this->raiseErrorFn = '';
 		@($rs = $this->Execute($getnext));
-        $this->raiseErrorFn = $save_handler;
-        // XARAYA MODIFICATION - END
-
-        if (!$rs) {
+		$this->raiseErrorFn = $save_handler;
+		
+		if (!$rs) {
 			$this->_transOK = $holdtransOK; //if the status was ok before reset
 			$createseq = $this->Execute(sprintf($this->_genSeqSQL,$seqname,$startID));
 			$rs = $this->Execute($getnext);
@@ -1195,7 +1187,7 @@
 		
 		$arrayClass = $this->arrayClass;
 		
-		$rs2 =& new $arrayClass();
+		$rs2 = new $arrayClass();
 		$rs2->connection = &$this;
 		$rs2->sql = $rs->sql;
 		$rs2->dataProvider = $this->dataProvider;
@@ -1254,7 +1246,7 @@
 		
 		$ret = false;
 		$rs = &$this->Execute($sql,$inputarr);
-		if ($rs) {		
+		if ($rs) {	
 			if (!$rs->EOF) $ret = reset($rs->fields);
 			$rs->Close();
 		}
@@ -1345,8 +1337,10 @@
 		$rs =& $this->Execute($sql,$inputarr);
 		$ADODB_COUNTRECS = $savec;
 		if (!$rs) 
-			if (defined('ADODB_PEAR')) return ADODB_PEAR_Error();
-			else {
+			if (defined('ADODB_PEAR')) {
+				$cls = ADODB_PEAR_Error();
+				return $cls;
+			} else {
 				$false = false;
 				return $false;
 			}
@@ -1370,8 +1364,10 @@
 		$ADODB_COUNTRECS = $savec;
 		
 		if (!$rs) 
-			if (defined('ADODB_PEAR')) return ADODB_PEAR_Error();
-			else {
+			if (defined('ADODB_PEAR')) {
+				$cls = ADODB_PEAR_Error();
+				return $cls;
+			} else {
 				$false = false;
 				return $false;
 			}
@@ -1567,16 +1563,23 @@
 	 */
 	function &CacheExecute($secs2cache,$sql=false,$inputarr=false)
 	{
+
+			
 		if (!is_numeric($secs2cache)) {
 			$inputarr = $sql;
 			$sql = $secs2cache;
 			$secs2cache = $this->cacheSecs;
 		}
+		
+		if (is_array($sql)) {
+			$sqlparam = $sql;
+			$sql = $sql[0];
+		} else
+			$sqlparam = $sql;
+			
 		global $ADODB_INCLUDED_CSV;
 		if (empty($ADODB_INCLUDED_CSV)) include_once(ADODB_DIR.'/adodb-csvlib.inc.php');
 		
-		if (is_array($sql)) $sql = $sql[0];
-			
 		$md5file = $this->_gencachename($sql.serialize($inputarr),true);
 		$err = '';
 		
@@ -1597,7 +1600,7 @@
 				if ($this->debug !== -1) ADOConnection::outp( " $md5file cache failure: $err (see sql below)");
 			}
 			
-			$rs = &$this->Execute($sql,$inputarr);
+			$rs = &$this->Execute($sqlparam,$inputarr);
 
 			if ($rs) {
 				$eof = $rs->EOF;
@@ -1650,19 +1653,18 @@
 		
 		$forceUpdate means that even if the data has not changed, perform update.
 	 */
-	function AutoExecute($table, $fields_values, $mode = 'INSERT', $where = FALSE, $forceUpdate=true, $magicq=false) 
+	function& AutoExecute($table, $fields_values, $mode = 'INSERT', $where = FALSE, $forceUpdate=true, $magicq=false) 
 	{
-		//$flds = array_keys($fields_values);
-		//$fldstr = implode(', ',$flds);
 		$sql = 'SELECT * FROM '.$table;  
 		if ($where!==FALSE) $sql .= ' WHERE '.$where;
 		else if ($mode == 'UPDATE') {
 			ADOConnection::outp('AutoExecute: Illegal mode=UPDATE with empty WHERE clause');
 			return false;
 		}
-
+		$ret = false;
 		$rs =& $this->SelectLimit($sql,1);
-		if (!$rs) return false; // table does not exist
+		if (!$rs) return $ret; // table does not exist
+		$rs->tableName = $table;
 		
 		switch((string) $mode) {
 		case 'UPDATE':
@@ -1675,10 +1677,12 @@
 			break;
 		default:
 			ADOConnection::outp("AutoExecute: Unknown mode=$mode");
-			return false;
+			return $ret;
 		}
-		if ($sql) return $this->Execute($sql);
-		return false;
+		
+		if ($sql) $ret = $this->Execute($sql);
+		if ($ret) $ret = true;
+		return $ret;
 	}
 	
 	
@@ -2025,7 +2029,7 @@
 
 			$retarr = array();
 			while (!$rs->EOF) { //print_r($rs->fields);
-				$fld =& new ADOFieldObject();
+				$fld = new ADOFieldObject();
 				$fld->name = $rs->fields[0];
 				$fld->type = $rs->fields[1];
 				if (isset($rs->fields[3]) && $rs->fields[3]) {
@@ -2066,7 +2070,7 @@
      function &MetaIndexes($table, $primary = false, $owner = false)
      {
 	 		$false = false;
-            return false;
+            return $false;
      }
 
 	/**
@@ -2513,6 +2517,8 @@
 			$size, $selectAttr,$compareFields0);
 	}
 	
+
+	
 	/**
 	 * Generate a SELECT tag string from a recordset, and return the string.
 	 * If the recordset has 2 cols, we treat the 1st col as the containing 
@@ -2528,7 +2534,6 @@
 			$size, $selectAttr,false);
 	}
 
-
 	/**
 	 * return recordset as a 2-dimensional array.
 	 *
@@ -2538,8 +2543,10 @@
 	 */
 	function &GetArray($nRows = -1) 
 	{
-	global $ADODB_EXTENSION; if ($ADODB_EXTENSION) return adodb_getall($this,$nRows);
-		
+	global $ADODB_EXTENSION; if ($ADODB_EXTENSION) {
+		$results = adodb_getall($this,$nRows);
+		return $results;
+	}
 		$results = array();
 		$cnt = 0;
 		while (!$this->EOF && $nRows != $cnt) {
@@ -2697,7 +2704,9 @@
 				}
 			}
 		}
-		return $results; 
+		
+		$ref =& $results; # workaround accelerator incompat with PHP 4.4 :(
+		return $ref; 
 	}
 	
 	
@@ -2940,7 +2949,7 @@
 	{
 		$this->bind = array();
 		for ($i=0; $i < $this->_numOfFields; $i++) {
-			$o =& $this->FetchField($i);
+			$o = $this->FetchField($i);
 			if ($upper === 2) $this->bind[$o->name] = $i;
 			else $this->bind[($upper) ? strtoupper($o->name) : strtolower($o->name)] = $i;
 		}
@@ -3102,7 +3111,7 @@
 	function &FetchObject($isupper=true)
 	{
 		if (empty($this->_obj)) {
-			$this->_obj =& new ADOFetchObj();
+			$this->_obj = new ADOFetchObj();
 			$this->_names = array();
 			for ($i=0; $i <$this->_numOfFields; $i++) {
 				$f = $this->FetchField($i);
@@ -3463,6 +3472,7 @@
 		function Fields($colname)
 		{
 			$mode = isset($this->adodbFetchMode) ? $this->adodbFetchMode : $this->fetchMode;
+			
 			if ($mode & ADODB_FETCH_ASSOC) {
 				if (!isset($this->fields[$colname])) $colname = strtolower($colname);
 				return $this->fields[$colname];
@@ -3617,6 +3627,7 @@
 		if (strpos($db,'://')) {
 			$origdsn = $db;
 			$dsna = @parse_url($db);
+			
 			if (!$dsna) {
 				// special handling of oracle, which might not have host
 				$db = str_replace('@/','@adodb-fakehost/',$db);
@@ -3679,7 +3690,7 @@
 				return $false;
 			}
 			
-			$obj =& new $cls();
+			$obj = new $cls();
 		}
 		
 		# constructor should not fail
@@ -3754,7 +3765,7 @@
 		@include_once(ADODB_DIR."/perf/perf-$drivername.inc.php");
 		$class = "Perf_$drivername";
 		if (!class_exists($class)) return $false;
-		$perf =& new $class($conn);
+		$perf = new $class($conn);
 		
 		return $perf;
 	}
@@ -3774,7 +3785,7 @@
 		}
 		include_once($path);
 		$class = "ADODB2_$drivername";
-		$dict =& new $class();
+		$dict = new $class();
 		$dict->dataProvider = $conn->dataProvider;
 		$dict->connection = &$conn;
 		$dict->upperName = strtoupper($drivername);

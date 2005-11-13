@@ -1,15 +1,13 @@
 <?php
 /**
- * File: $Id$
- *
- * Log user into system
+ * Log user in to system
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 /**
  * log user in to system
@@ -25,6 +23,7 @@
  * @param   redirecturl page to return user if possible
  * @return  true if status is 3
  * @raise   exceptions raised if status is 0, 1, or 2
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
  */
 function roles_user_login()
 {
@@ -262,7 +261,7 @@ function roles_user_login()
                     return;
                 }
             }
-            if (xarModGetVar('roles','userhome')) {
+            if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'userhome', 'state' => 1))) {
                 $truecurrenturl = xarServerGetCurrentURL(array(), false);
                 $role = xarUFindRole($uname);
                 $url = $lastresort ? '[base]' : $role->getHome();
@@ -284,7 +283,7 @@ function roles_user_login()
                     {
                         case '[': // module link
                         {
-                            // Credit to Elek Márton for further expansion
+                            // Credit to Elek Mï¿½ton for further expansion
                             $sections = explode(']',substr($url,1));
                             $url = explode(':', $sections[0]);
                             // if the current module is active, then we are here

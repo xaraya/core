@@ -103,7 +103,6 @@ class ADODB_mssql extends ADOConnection {
 	var $uniqueOrderBy = true;
 	var $_bindInputArray = true;
 	
-	
 	function ADODB_mssql() 
 	{		
 		$this->_has_mssql_init = (strnatcmp(PHP_VERSION,'4.1.0')>=0);
@@ -126,6 +125,7 @@ class ADODB_mssql extends ADOConnection {
 		$row = $this->GetRow($stmt);
 		
 		//$row = $this->GetRow("execute sp_server_info 2");
+		
 		
 		if ($this->fetchMode === false) {
 			$ADODB_FETCH_MODE = $savem;
@@ -436,7 +436,8 @@ order by constraint_name, referenced_table_name, keyno";
 		$ADODB_FETCH_MODE = $savem;
 		
 		if ($a && sizeof($a)>0) return $a;
-		return false;	  
+		$false = false;
+		return $false;	  
 	}
 
 	
@@ -781,15 +782,17 @@ class ADORecordset_mssql extends ADORecordSet {
 		fields in a certain query result. If the field offset isn't specified, the next field that wasn't yet retrieved by
 		fetchField() is retrieved.	*/
 
-	function FetchField($fieldOffset = -1) 
+	function &FetchField($fieldOffset = -1) 
 	{
 		if ($fieldOffset != -1) {
-			return @mssql_fetch_field($this->_queryID, $fieldOffset);
+			$f = @mssql_fetch_field($this->_queryID, $fieldOffset);
 		}
 		else if ($fieldOffset == -1) {	/*	The $fieldOffset argument is not provided thus its -1 	*/
-			return @mssql_fetch_field($this->_queryID);
+			$f = @mssql_fetch_field($this->_queryID);
 		}
-		return null;
+		$false = false;
+		if (empty($f)) return $false;
+		return $f;
 	}
 	
 	function _seek($row) 

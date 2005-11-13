@@ -1,18 +1,14 @@
 <?php
 /**
- * File: $Id: xarinit.php 1.112 05/04/20 13:10:55+02:00 marc@marclaptop. $
- *
  * Initialise the roles module
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
+ *
+ * @subpackage Roles module
  * @author Jan Schrage, John Cox, Gregor Rothfuss
- * @todo need the dynamic users menu
- * @todo needs dyanamic data interface
- * @todo ensure all mod vars are set
  */
 
 /**
@@ -46,7 +42,7 @@ function roles_init()
      *    xar_valcode varchar(35) NOT NULL default '',
      *    xar_state int(3) NOT NULL default '0',
      *    xar_auth_module varchar(100) NOT NULL default '',
-     *    xar_home varchar(100) NOT NULL default '',
+     *    xar_duvs varchar(100) NOT NULL default '',
      *    PRIMARY KEY  (xar_uid)
      * )
      */
@@ -94,7 +90,7 @@ function roles_init()
                 'size' => 100,
                 'null' => false,
                 'default' => ''),
-            'xar_home' => array('type' => 'varchar',
+            'xar_duvs' => array('type' => 'varchar',
                 'size' => 100,
                 'null' => false,
                 'default' => '')));
@@ -196,7 +192,7 @@ function roles_activate()
     xarModSetVar('roles', 'askpendingemail', 1);
     xarModSetVar('roles', 'askpasswordemail', 1);
     xarModSetVar('roles', 'uniqueemail', 1);
-    xarModSetVar('roles', 'userhome', 0);
+
     //Default Display
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
     //Default User Locale

@@ -1,18 +1,17 @@
 <?php
 /**
- * File: $Id$
- *
- * Check if a user is active or not
+ * Check if a user is active or not on the site
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 /**
  * check if a user is active or not on the site
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param bool $include_anonymous whether or not to include anonymous user
  * @returns array
  * @return array of users, or false on failure

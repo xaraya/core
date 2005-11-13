@@ -1,14 +1,17 @@
 <?php
 /**
- * File: $Id$
- *
  * Search
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
+ *
+ * @subpackage Roles module
+ */
+
+/*
+ * Search
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 function roles_user_search()
@@ -27,7 +30,7 @@ function roles_user_search()
     if (!isset($q)) {
         if (xarModIsHooked('dynamicdata','roles')) {
             // get the Dynamic Object defined for this module
-            $object =& xarModAPIFunc('dynamicdata','user','getobject',
+            $object = xarModAPIFunc('dynamicdata','user','getobject',
                                      array('module' => 'roles'));
             if (isset($object) && !empty($object->objectid)) {
                 // get the Dynamic Properties of this object

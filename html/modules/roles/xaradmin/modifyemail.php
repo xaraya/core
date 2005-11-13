@@ -1,16 +1,13 @@
 <?php
 /**
- * File: $Id$
- *
- * Modify the email for users
+ * Modify the  email for users
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Xaraya Team
- * @todo This file could be coded a bit shorter
+ *
+ * @subpackage Roles module
  */
 /**
  * Modify the  email for users
@@ -61,7 +58,8 @@ function roles_admin_modifyemail($args)
             $data['properties'] = null;
             if (xarModIsAvailable('dynamicdata')) {
                 // get the Dynamic Object defined for this module (and itemtype, if relevant)
-                $object = &xarModAPIFunc('dynamicdata', 'user', 'getobject',
+                // FIXME: 'Only variables should be assigned by reference' notice in php4.4
+                @$object = xarModAPIFunc('dynamicdata', 'user', 'getobject',
                     array('module' => 'roles'));
                 if (isset($object) && !empty($object->objectid)) {
                     // get the Dynamic Properties of this object

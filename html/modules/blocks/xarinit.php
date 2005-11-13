@@ -1,5 +1,6 @@
 <?php
 /**
+ * Initialise the blocks module
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -284,6 +285,7 @@ function blocks_init()
 
     // Initialisation successful
     xarModSetVar('blocks', 'selstyle', 'plain');
+    xarModSetVar('blocks', 'itemsperpage', 20);
     return true;
 }
 

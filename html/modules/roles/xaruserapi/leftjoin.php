@@ -1,15 +1,13 @@
 <?php
 /**
- * File: $Id$
- *
- * Return the field names and correct values fo joining on users table
+ *  Return the field names and correct values for joining on users table
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 /**
  * return the field names and correct values for joining on users table
@@ -21,6 +19,7 @@
  *               AND $email LIKE '%xaraya.com'
  *               AND $where
  *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['uids'] optional array of uids that we are selecting on
  * @returns array
  * @return array('table' => 'xar_roles',

@@ -164,8 +164,8 @@ class xarTpl__Compiler extends xarTpl__CompilerError
 
     function xarTpl__Compiler()
     {
-        $this->parser =& new xarTpl__Parser();
-        $this->codeGenerator =& new xarTpl__CodeGenerator();
+        $this->parser = new xarTpl__Parser();
+        $this->codeGenerator = new xarTpl__CodeGenerator();
     }
 
     function &instance() 
@@ -1168,10 +1168,10 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         // FIXME: sync the implementation of core / custom tags, handle them the same way
         if(file_exists($tagfile)) {
             include_once($tagfile);
-            $node =& new $tagClass($parser, $tagName, $parentTagName, $attributes);
+            $node = new $tagClass($parser, $tagName, $parentTagName, $attributes);
         } else {
             include_once(XAR_NODES_LOCATION .'tags/other.php');
-            $node =& new xarTpl__XarOtherNode($parser, $tagName, $parentTagName, $attributes);
+            $node = new xarTpl__XarOtherNode($parser, $tagName, $parentTagName, $attributes);
             if(!isset($node->tagobject)) {
                 $parser->raiseError(XAR_BL_INVALID_TAG,"Cannot instantiate nonexistent tag '$tagName'",$parser);
                 return;
@@ -1197,7 +1197,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
             }
             include_once($entityFile);
         }
-        $node =& new $entityClass($parser,'EntityNode', $entityType, $parameters);
+        $node = new $entityClass($parser,'EntityNode', $entityType, $parameters);
         return $node;
     }
 
@@ -1216,19 +1216,19 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
             }
             include_once($instructionFile);
         }
-        $node =& new $instructionClass($parser, 'InstructionNode', $instruction);
+        $node = new $instructionClass($parser, 'InstructionNode', $instruction);
         return $node;
     }
 
     function createTextNode($content, &$parser)
     {
-        $node =& new xarTpl__TextNode($parser, 'TextNode', $content);
+        $node = new xarTpl__TextNode($parser, 'TextNode', $content);
         return $node;
     }
 
     function createDocumentNode(&$parser)
     {
-        $node =& new xarTpl__DocumentNode($parser,'DocumentNode');
+        $node = new xarTpl__DocumentNode($parser,'DocumentNode');
         return $node;
     }
 }

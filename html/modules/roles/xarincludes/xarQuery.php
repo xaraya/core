@@ -1,4 +1,15 @@
 <?php
+/**
+ * xarQuery Class for SQL abstraction
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage Roles module
+ */
+
   /**************************************************************************\
   * xarQuery class for SQL abstraction                                       *
   * Written by Marc Lutolf (marcinmilan@xaraya.com)                          *
@@ -940,7 +951,7 @@ class xarQuery
     function openconnection($x = '')
     {
         if (empty($x)) $this->dbconn =& xarDBGetConn();
-        else $this->dbconn =& $x;
+        else $this->dbconn = $x;
     }
     function getconnection()
     {

@@ -105,9 +105,9 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
 
     // NOTE: starting from 0.9.11 we attempt to link core css to any css-aware xhtml theme
     // immediate goal is elimination of inline styles, consistency and other core UI related issues
-    // no need to init anything, the css tags api is handling everything css related now.. 
+    // no need to init anything, the css tags api is handling everything css related now..
     // DONE: removed all but legacy css handling from core to themes module
-    
+
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarTemplate__shutdown_handler');
     return true;
@@ -124,7 +124,7 @@ function xarTemplate__shutdown_handler()
 }
 
 /**
- * Get theme name
+ * Get theme name for the theme in use.
  *
  * @access public
  * @global xarTpl_themeName string
@@ -132,10 +132,13 @@ function xarTemplate__shutdown_handler()
  */
 function xarTplGetThemeName()
 {
+    if(isset($GLOBALS['xarTpl_themeName'])) return  $GLOBALS['xarTpl_themeName'];
+    // If it is not set, set it return the default theme.
     if (function_exists('xarModGetVar')) {
         $defaultTheme = xarModGetVar('themes', 'default');
-        if (!empty($defaultTheme)) return $defaultTheme;
+        if (!empty($defaultTheme)) xarTplSetThemeName($defaultTheme);
     }
+    assert('isset($GLOBALS["xarTpl_themeName"]; /* Themename could not be set properly */');
     return $GLOBALS['xarTpl_themeName'];
 }
 
@@ -183,7 +186,7 @@ function xarTplSetThemeDir($themeDir)
  * Private helper function for the xarTplSetThemeName and xarTplSetThemeDir
  *
  * @access private
- * @param  string $name Name of the theme 
+ * @param  string $name Name of the theme
  * @todo theme name and dir are not required to be identical
  * @return void
  */
@@ -201,8 +204,9 @@ function xarTpl__SetThemeNameAndDir($name)
  * @global string xarTpl_themeDir
  * @return sring  Theme directory
  */
-function xarTplGetThemeDir()
+function xarTplGetThemeDir($theme=null)
 {
+    if (isset($theme) && is_dir("themes/" . $theme)) return "themes/" . $theme;
     return $GLOBALS['xarTpl_themeDir'];
 }
 
@@ -333,10 +337,10 @@ function xarTplGetPageTitle()
  * @return bool
  */
 function xarTplAddStyleLink($module = null, $file = null, $fileext = null, $themefolder = null, $media = null, $scope = 'module')
-{     
+{
     $method = 'link';
     $args = compact('module', 'file', 'fileext', 'themefolder', 'media', 'scope', 'method');
-    
+
     // make sure we can use css object
     require_once "modules/themes/xarclass/xarcss.class.php";
     $obj = new xarCSS($args);
@@ -376,7 +380,7 @@ function xarTplAddJavaScript($position, $type, $data, $index = '')
 
     //Do lazy initialization of the array. There are instances of the logging system
     //where we need to use this function before the Template System was initialized
-    //Maybe this can be used with a new shutdown event (not based on the 
+    //Maybe this can be used with a new shutdown event (not based on the
     // php's register_shutdown_function) as at that time it's already too late to be able
     // to log anything
     if (!isset($GLOBALS['xarTpl_JavaScript'])) {
@@ -397,9 +401,9 @@ function xarTplAddJavaScript($position, $type, $data, $index = '')
  * Get JavaScript code or links cached for template output
  *
  * @access public
- * @global array  xarTpl_JavaScript 
+ * @global array  xarTpl_JavaScript
  * @param  string $position
- * @param  string $index   
+ * @param  string $index
  * @return array
  */
 function xarTplGetJavaScript($position = '', $index = '')
@@ -452,7 +456,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
         $var_dump = xarModGetVar('themes', 'var_dump');
         if ($var_dump == true){
             if (function_exists('var_export')) {
-                $pre = var_export($tplData, true); 
+                $pre = var_export($tplData, true);
                 echo "<pre>$pre</pre>";
             } else {
                 echo '<pre>',var_dump($tplData),'</pre>';
@@ -919,7 +923,7 @@ function xarTplCompileString($templateSource)
  * @access protected
  * @global string xarTpl_additionalStyles
  * @param  string $mainModuleOutput       the module output
- * @param  string $otherModulesOutput 
+ * @param  string $otherModulesOutput
  * @param  string $templateName           the template page to use
  * @return string
  *
@@ -939,16 +943,16 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
     $tpl->pageTitle = xarTplGetPageTitle();
     // leaving it ON here for pure legacy support, css classlib in themes mod must have legacy enabled to support it
     // TODO: remove whenever the legacy can be dropped <andy>
-    
+
     // NOTE: This MUST be a reference, since we havent filled the global yet at this point
     $tpl->additionalStyles =& $GLOBALS['xarTpl_additionalStyles'];
-    
+
     $tplData = array(
         'tpl'                      => $tpl,
         '_bl_mainModuleOutput'     => $mainModuleOutput,
     );
 
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:pages', $templateName) === NULL) return;
+    //if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:pages', $templateName) === NULL) return;
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
@@ -978,7 +982,7 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
         $templateName = 'default';
         $sourceFileName = "$themeDir/blocks/default.xt";
     }
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:blocks', $templateName) === NULL) return;
+    //if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:blocks', $templateName) === NULL) return;
     return xarTpl__executeFromFile($sourceFileName, $blockInfo);
 }
 
@@ -995,7 +999,7 @@ function xarTpl_includeThemeTemplate($templateName, $tplData)
     // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
     $sourceFileName = xarTplGetThemeDir() ."/includes/$templateName.xt";
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:includes', $templateName) === NULL) return;
+    // if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:includes', $templateName) === NULL) return;
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -1015,7 +1019,7 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
     $sourceFileName = xarTplGetThemeDir() . "/modules/$modName/includes/$templateName.xt";
     if (!file_exists($sourceFileName)) {
         $sourceFileName = "modules/$modName/xartemplates/includes/$templateName.xd";
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates/includes', $templateName) === NULL) return;
+        //if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates/includes', $templateName) === NULL) return;
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
@@ -1040,7 +1044,7 @@ function xarTpl__getCompilerInstance()
  * @access private
  * @param  string $templateCode   Templatecode to execute
  * @param  array  $tplData        Template variables
- * @param  string $sourceFileName 
+ * @param  string $sourceFileName
  * @return string output
  *
  * @todo Can we migrate the eval() out, as that is hard to cache?
@@ -1093,6 +1097,21 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '')
 function xarTpl__executeFromFile($sourceFileName, $tplData)
 {
     assert('is_array($tplData); /* Template data should always be passed in an array */');
+
+    // Load translations for the template
+    $tplpath = explode("/", $sourceFileName);
+    $tplPathCount = count($tplpath);
+    switch ($tplpath[0]) {
+        case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
+        case 'themes':  $dnType = XARMLS_DNTYPE_THEME; break;
+    }
+    $dnName = $tplpath[1];
+    $stack = array();
+    if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
+    for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
+    $ctxType = $tplpath[0].':'.implode("/", $stack);
+    $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
+    if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
 
     $needCompilation = true;
 
@@ -1182,7 +1201,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
  *
  * @todo do we need to load the translations here or a bit later? (here:easy, later: better abstraction)
  */
-function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tplSubPart = '') 
+function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tplSubPart = '')
 {
     if(function_exists('xarMod_getBaseInfo')) {
         if(!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
@@ -1200,7 +1219,9 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     // 2. modules/{module}/xartemplates/{tplBase}-{templateName}.xd
     // 3. {theme}/modules/{module}/{tplBase}.xt
     // 4. modules/{module}/xartemplates/{tplBase}.xd
-    // 5. complain (later on)
+    // 5. {theme}/modules/{module}/{templateName}.xt (-syntax)
+    // 6. modules/{module}/xartemplates/{templateName}.xd (-syntax)
+    // 7. complain (later on)
 
     $tplThemesDir = xarTplGetThemeDir();
     $tplBaseDir   = "modules/$modOsDir";
@@ -1212,10 +1233,23 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     // xarLogMessage("TPL: 3. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase.xt")
     // xarLogMessage("TPL: 4. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")
 
-    if(!empty($templateName) && 
+    // xarLogMessage("TPL: 1. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt")
+    // xarLogMessage("TPL: 2. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xd")
+    // xarLogMessage("TPL: 3. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase.xt")
+    // xarLogMessage("TPL: 4. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")
+
+    // xarLogMessage("TPL: 1. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt")
+    // xarLogMessage("TPL: 2. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xd")
+    // xarLogMessage("TPL: 3. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase.xt")
+    // xarLogMessage("TPL: 4. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")
+
+    $canTemplateName = strtr($templateName, "-", "/");
+    $canonical = ($canTemplateName == $templateName) ? false : true;
+
+    if(!empty($templateName) &&
         file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt")) {
         $tplBase .= "-$templateName";
-    } elseif(!empty($templateName) && 
+    } elseif(!empty($templateName) &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xd")) {
         $use_internal = true;
         $tplBase .= "-$templateName";
@@ -1225,6 +1259,11 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     } elseif(
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")) {
         $use_internal = true;
+    } elseif($canonical &&
+        file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$canTemplateName.xt")) {
+    } elseif($canonical &&
+        file_exists($sourceFileName = "$tplBaseDir/xartemplates/$canTemplateName.xd")) {
+        $use_internal = true;
     } else {
         // CHECKME: should we do something here ? At the moment, translations still get loaded,
         //          the (invalid) $sourceFileName gets passed back to xarTpl*, and we'll get
@@ -1232,7 +1271,7 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
         //          We probably don't want to throw an exception here, but we might return
         //          now, or have some final fall-back template in base (resp. DD for properties)
     }
-    // Subpart may have been empty, 
+    // Subpart may have been empty,
     $sourceFileName = str_replace('//','/',$sourceFileName);
     // assert('isset($sourceFileName); /* The source file for the template has no value in xarTplModule */');
 
@@ -1244,7 +1283,7 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
         $domain = XARMLS_DNTYPE_THEME; $instance = $GLOBALS['xarTpl_themeName'];
         $context = rtrim("themes:modules/$modName/$tplSubPart",'/');
     }
-    if (xarMLS_loadTranslations($domain, $instance, $context, $tplBase) === NULL) return;
+    //if (xarMLS_loadTranslations($domain, $instance, $context, $tplBase) === NULL) return;
 
     return $sourceFileName;
 }
@@ -1255,7 +1294,7 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
  *
  * @access private
  * @param  string $sourceFileName
- * @param  string $tplOutput 
+ * @param  string $tplOutput
  * @return void
  *
  * @todo Rethink this function, it contains hardcoded xhtml
@@ -1315,7 +1354,7 @@ function xarTpl_outputPHPCommentBlockInTemplates()
  * @access private
  * @global int xarTpl_showTemplateFilenames
  * @return int value of xarTpl_showTemplateFilenames (0 or 1)
- * 
+ *
  * @todo Check whether the check for xarModGetVar is needed
  * @todo Rethink this function
  */
@@ -1344,7 +1383,7 @@ function xarTpl_outputTemplateFilenames()
  *
  * @access private
  * @param  string $sourceFileName
- * @param  string $tplOutput 
+ * @param  string $tplOutput
  * @return bool found header content
  *
  * @todo it is possible that the first regex <!DOCTYPE[^>].*]> is too
@@ -1371,7 +1410,7 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
 
     foreach($headerTagRegexes as $headerTagRegex) {
         if(preg_match("/$headerTagRegex/smix", $tplOutput, $matchedHeaderTag)) {
-            // FIXME: the next line assumes that we are not in a comment already, no way of knowing that, 
+            // FIXME: the next line assumes that we are not in a comment already, no way of knowing that,
             // keep the functionality for now, but dont change more than necessary (see bug #3559)
             // $startComment = '<!-- start(output actually commenced before header(s)): ' . $sourceFileName . ' -->';
             $startComment ='';
@@ -1445,7 +1484,7 @@ function xarTpl__loadFromFile($sourceFileName)
  * @param  string $sourceFileName  For which file are we entering the key?
  * @return boolean
  */
-function xarTpl__SetCacheKey($sourceFileName) 
+function xarTpl__SetCacheKey($sourceFileName)
 {
     $cacheKey = xarTpl__getCacheKey($sourceFileName);
     $fd = fopen(XAR_TPL_CACHE_DIR . '/CACHEKEYS', 'a');
@@ -1474,10 +1513,10 @@ function xarTpl__getCacheKey($sourceFileName)
  *
  * @package blocklayout
  * @access protected
- * 
+ *
  * @todo see FIXME
  */
-class xarTemplateAttribute 
+class xarTemplateAttribute
 {
     var $_name;     // Attribute name
     var $_flags;    // Attribute flags (datatype, required/optional, etc.)
@@ -1545,12 +1584,12 @@ class xarTemplateAttribute
  * Only used for custom tags atm
  * @package blocklayout
  * @access  protected
- * 
+ *
  * @todo Make this more general
  * @todo _module, _type and _func and _handler introduce unneeded redundancy
  * @todo pass handler check at template registration someday (<mrb>what does this mean?)
  */
-class xarTemplateTag 
+class xarTemplateTag
 {
     var $_name = NULL;          // Name of the tag
     var $_attributes = array(); // Array with the supported attributes
@@ -1591,7 +1630,7 @@ class xarTemplateTag
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
             return;
         }
-        
+
         // Everything seems to be in order, set the properties
         $this->_name = $name;
         $this->_handler = $handler;
@@ -1742,7 +1781,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
                 (?,?,?,?,?)";
 
     $bindvars = array($tag_id,
-                      $tag->getName(), 
+                      $tag->getName(),
                       $tag->getModule(),
                       $tag->getHandler(),
                       serialize($tag));
@@ -1878,7 +1917,7 @@ function xarTplGetTagObjectFromName($tag_name)
 
     // Module must be active for the tag to be active
     if(!xarModIsAvailable($module)) return; //throw back
-    
+
     $obj = unserialize($obj);
 
     $tag_objects[$tag_name] = $obj;

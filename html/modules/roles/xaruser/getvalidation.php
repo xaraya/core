@@ -1,20 +1,19 @@
 <?php
 /**
- * File: $Id$
- *
- * Validate a new user into the system
+ * Getvalidation validates a new user into the system
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com>
+ *
+ * @subpackage Roles module
  */
 /**
  * getvalidation validates a new user into the system
  * if their status is set to two.
  *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @param   uname users name
  * @param   valcode is the validation code sent to user on registration
  * @param   phase is the point in the function to return

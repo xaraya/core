@@ -1,17 +1,20 @@
 <?php
 /**
- * File: $Id$
- *
- * Dynamic Password Box Property
+ * Dynamic Passbox property
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2005 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage dynamicdata properties
+ * @subpackage Roles module
+ */
+
+/* 
+ * Dynamic Passbox property
  * @author mikespub <mikespub@xaraya.com>
-*/
+ */
+
 class Dynamic_PassBox_Property extends Dynamic_Property
 {
     var $size = 25;

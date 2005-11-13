@@ -1,6 +1,6 @@
 /*
   Submit Once form validation- 
-  © Dynamic Drive (www.dynamicdrive.com)
+   Dynamic Drive (www.dynamicdrive.com)
   For full source code, usage terms, and 100's more DHTML scripts, visit http://dynamicdrive.com
 */
 
@@ -15,4 +15,5 @@ function submitonce(theform) {
                 tempobj.disabled=true;
             }
         }
+    }
 }

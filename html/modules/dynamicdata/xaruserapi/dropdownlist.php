@@ -1,5 +1,6 @@
 <?php
 /**
+ * Get an array of DD items for use in dropdown lists
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -44,7 +45,7 @@ function dynamicdata_userapi_dropdownlist($args)
     // get back the object
     $args['getobject'] = 1;
 
-    $object =& xarModAPIFunc('dynamicdata','user','getitems',$args);
+    $object = xarModAPIFunc('dynamicdata','user','getitems',$args);
     if (!isset($object)) return;
 
     $field = $args['field'];

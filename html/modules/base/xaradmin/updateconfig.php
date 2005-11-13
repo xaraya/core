@@ -10,7 +10,7 @@
 /**
  * Update site configuration
  *
- * @param string
+ * @param string tab
  * @return void?
  * @todo move in timezone var when we support them
  * @todo decide whether a site admin can set allowed locales for users
@@ -37,8 +37,7 @@ function base_admin_updateconfig()
             if (!xarVarFetch('htmlenitites','checkbox',$FixHTMLEntities,false,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('themedir','str:1:',$defaultThemeDir,'themes',XARVAR_NOT_REQUIRED)) return;
             xarConfigSetVar('Site.BL.ThemesDirectory', $defaultThemeDir);
-            // FIXME: Where has this moved to??? It's not settable now, very inconvenient
-            //xarConfigSetVar('Site.BL.CacheTemplates', $cacheTemplates);
+ 
             xarConfigSetVar('Site.Core.DefaultModuleName', $defaultModuleName);
             xarModSetVar('base','UseAlternatePageTemplate', ($alternatePageTemplate ? 1 : 0));
             xarModSetVar('base','AlternatePageTemplateName', $alternatePageTemplateName);
@@ -82,8 +81,6 @@ function base_admin_updateconfig()
             if (!xarVarFetch('defaultlocale','str:1:',$defaultLocale)) return;
             if (!xarVarFetch('active','isset',$active)) return;
             if (!xarVarFetch('mlsmode','str:1:',$MLSMode,'SINGLE',XARVAR_NOT_REQUIRED)) return;
-            // TODO: delete after new backend testing
-            // if (!xarVarFetch('translationsbackend', 'enum:xml:php:xml2php', $translationsBackend)) return;
 
             $localesList = array();
             foreach($active as $activelocale) $localesList[] = $activelocale;
@@ -107,8 +104,6 @@ function base_admin_updateconfig()
             xarConfigSetVar('Site.MLS.MLSMode', $MLSMode);
             xarConfigSetVar('Site.MLS.DefaultLocale', $defaultLocale);
             xarConfigSetVar('Site.MLS.AllowedLocales', $localesList);
-            // TODO: delete after new backend testing
-            // xarConfigSetVar('Site.MLS.TranslationsBackend', $translationsBackend);
 
             break;
         case 'other':
@@ -146,18 +141,9 @@ function base_admin_updateconfig()
             break;
     }
 
-
-    //FIXME: what is this?
-    if (!isset($cacheTemplates)) {
-        $cacheTemplates = true;
-
-    //$authModules = array('authsystem');
-    //xarConfigSetVar('Site.User.AuthenticationModules',$authModules);
-
     // Call updateconfig hooks
     xarModCallHooks('module','updateconfig','base', array('module' => 'base'));
 
-    }
     xarResponseRedirect(xarModURL('base', 'admin', 'modifyconfig',array('tab' => $data['tab'])));
 
     return true;

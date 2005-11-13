@@ -248,6 +248,7 @@ class ADODB_mysqli extends ADOConnection {
 		// save old fetch mode
 		global $ADODB_FETCH_MODE;
 		
+		$false = false;
 		$save = $ADODB_FETCH_MODE;
 		$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
 		if ($this->fetchMode !== FALSE) {
@@ -264,7 +265,7 @@ class ADODB_mysqli extends ADOConnection {
 		$ADODB_FETCH_MODE = $save;
 		
 		if (!is_object($rs)) {
-		        return FALSE;
+		        return $false;
 		}
 		
 		$indexes = array ();
@@ -389,8 +390,9 @@ class ADODB_mysqli extends ADOConnection {
 	
  	function &MetaColumns($table) 
 	{
+		$false = false;
 		if (!$this->metaColumnsSQL)
-			return false;
+			return $false;
 		
 		global $ADODB_FETCH_MODE;
 		$save = $ADODB_FETCH_MODE;
@@ -401,7 +403,7 @@ class ADODB_mysqli extends ADOConnection {
 		if (isset($savem)) $this->SetFetchMode($savem);
 		$ADODB_FETCH_MODE = $save;
 		if (!is_object($rs))
-			return false;
+			return $false;
 		
 		$retarr = array();
 		while (!$rs->EOF) {
@@ -511,7 +513,7 @@ class ADODB_mysqli extends ADOConnection {
 				else $a .= 'd';
 			}
 			
-			$fnarr =& array_merge( array($stmt,$a) , $inputarr);
+			$fnarr = array_merge( array($stmt,$a) , $inputarr);
 			$ret = call_user_func_array('mysqli_stmt_bind_param',$fnarr);
 
 			$ret = mysqli_stmt_execute($stmt);

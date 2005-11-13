@@ -1,16 +1,18 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * utility function pass individual menu items to the main menu
+ * @package modules
+ * @copyright (C) 2002-2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Modules module
+ * @subpackage Modules Module
+ * @link http://xaraya.com/index.php/release/1.html
  */
 /**
  * utility function pass individual menu items to the main menu
  *
- * @author the Example module development team
+ * @author the Modules module development team
  * @returns array
  * @return array containing the menulinks for the main menu items.
  */
@@ -19,6 +21,10 @@ function modules_adminapi_getmenulinks()
     // Security Check
     $menulinks = array();
     if (xarSecurityCheck('AdminModules',0)) {
+            $menulinks[] = Array('url' => xarModURL('modules','admin','overview'),
+            'title' => xarML('Modules Overview'),
+            'label' => xarML('Overview'));
+
         // these links will only be shown to those who can admin the modules
         if(xarModGetUserVar('modules', 'expertlist')){
             $menulinks[] = Array('url'  => xarModURL('modules','admin','expertlist'),

@@ -8,13 +8,12 @@
             <xar:set name="theID">$id.'_'.$key</xar:set>
         </xar:if>
     
-        <label for="#$theID#">#$option['name']# </label>
-    
-        <xar:if condition="$option['checked']">
+        <xar:if condition="isset($option['checked'])">
             <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="true" />
         <xar:else />
             <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
         </xar:if>
+        <label for="#$theID#">#$option['name']# </label>
     </xar:foreach>
 <xar:else />
     <xar:mlstring>No options specified for CheckBox Mask in validation field.</xar:mlstring>

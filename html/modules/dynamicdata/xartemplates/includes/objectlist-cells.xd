@@ -1,12 +1,10 @@
-<table>
+<table class="xar-fullwidth">
     <tr>
-        <td>
+        <th>| 
             <xar:foreach in="$properties" key="$name">
-                <strong>
-                    <xar:data-label property="$properties[$name]" />
-                </strong>
+              <xar:data-label property="$properties[$name]" /> |
             </xar:foreach>
-        </td>
+        </th>
     </tr>
     <!-- for this layout, we'll use xar:data-input here -->
     <xar:foreach in="$items" key="$itemid" value="$fields">

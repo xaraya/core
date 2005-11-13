@@ -132,7 +132,8 @@ order by constraint_name, referenced_table_name, keyno";
 	
 	function &MetaColumns($table)
 	{
-		return ADOConnection::MetaColumns($table);
+		$arr = ADOConnection::MetaColumns($table);
+		return $arr;
 	}
 	
 	function _query($sql,$inputarr)
@@ -163,7 +164,8 @@ order by constraint_name, referenced_table_name, keyno";
 		$ADODB_FETCH_MODE = $savem;
 		
 		if ($a && sizeof($a)>0) return $a;
-		return false;	  
+		$false = false;
+		return $false;	  
 	}
 	
 	function &SelectLimit($sql,$nrows=-1,$offset=-1, $inputarr=false,$secs2cache=0)

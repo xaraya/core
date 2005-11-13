@@ -1,290 +1,229 @@
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
+  <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-    <h2>
-        <xar:mlstring>Test Privileges Of</xar:mlstring>
-        <xar:if condition="$ptype eq 1">
-            <xar:mlstring>Test Privileges Of Group</xar:mlstring>
-        <xar:else />
-            <xar:mlstring>Test Privileges Of User</xar:mlstring>
-        </xar:if>
-        '#$pname#'
-    </h2>
-
-    <xar:if condition="count($parents) ne 0">
-        <div>
-            <dl class="xar-tabs">
-                <dt class="help" title="These are the groups that #$pname# is a member of">
-                    <xar:mlstring>Parent Groups:</xar:mlstring>
-                </dt>
-                <xar:set name="prevgroup">""</xar:set>
-                <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
-                    <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                        <dd>
-                            <a href="&xar-modurl-roles-admin-showusers;&amp;uid=#$parents.$i.parentid#" title="#xarML('Show this group')#">#$parents[$i]['parentname']#</a>
-                        </dd>
-                    </xar:if>
-                    <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
-                </xar:for>
-            </dl>
-        </div>
+  <h2>
+    <xar:if condition="$ptype eq 1">
+      <xar:mlstring>Test Privileges Of Group</xar:mlstring>
+      <xar:else />
+      <xar:mlstring>Test Privileges Of User</xar:mlstring>
     </xar:if>
-
+    '#$pname#'
+  </h2>
+  
+  <xar:if condition="count($parents) ne 0">
     <div>
-        <dl class="xar-tabs">
-            <dt class="help" title="Choose an action to perform on the selected user">
-                <xar:mlstring>Actions:</xar:mlstring>
-            </dt>
+      <dl class="xar-tabs">
+        <dt class="help" title="These are the groups that #$pname# is a member of">
+          <xar:mlstring>Parent Groups:</xar:mlstring>
+        </dt>
+        <xar:set name="prevgroup">""</xar:set>
+        <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
+          <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
             <dd>
-                <a href="&xar-modurl-roles-admin-displayrole;&amp;uid=#$uid#">
-                    <xar:mlstring>Display</xar:mlstring>
-                </a>
-            </dd>    
-            <dd>
-                <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">
-                    <xar:mlstring>Modify</xar:mlstring>
-                </a>
-            </dd>    
-            <dd>
-                <a href="&xar-modurl-roles-admin-deleterole;&amp;uid=#$uid#">
-                    <xar:mlstring>Delete</xar:mlstring>
-                </a>
-            </dd>    
-            <dd>
-                <a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#" class="active">
-                    <xar:mlstring>Privileges</xar:mlstring>
-                </a>
-            </dd>    
-            <xar:if condition="$ptype eq 1">
-                <dd>
-                    <a href="&xar-modurl-roles-admin-showusers;&amp;uid=#$uid#">
-                        <xar:mlstring>Users</xar:mlstring>
-                    </a>
-                </dd>    
-            </xar:if>
+              <a href="&xar-modurl-roles-admin-showusers;&amp;uid=#$parents.$i.parentid#" title="#xarML('Show this group')#">#$parents[$i]['parentname']#</a>
+            </dd>
+          </xar:if>
+          <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
+        </xar:for>
       </dl>
     </div>
-
-    <p>
-        <a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#">
-            <xar:mlstring>Show the privileges of</xar:mlstring>&nbsp;#$pname#
-        </a>
-    </p>
-
-    <xar:if condition="!empty($test)">
-        <h3>
-            <xar:mlstring>Test Result:</xar:mlstring>
-            <xar:if condition="$ptype eq 1">
-                <xar:mlstring>Group</xar:mlstring>
-                <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">'#$pname#'</a>
-            <xar:else />
-                <xar:mlstring>User</xar:mlstring>
-                <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">'#$pname#'</a>
+  </xar:if>
+  
+  <xar:comment>TODO set the active tab here</xar:comment>
+  <!-- Show the general tab list for roles -->
+  <xar:template file="tablist" />  
+  
+  <form action="&xar-modurl-roles-admin-testprivileges;" method="post" enctype="application/x-www-form-urlencoded">
+    <fieldset>
+      <legend><xar:mlstring>Scope</xar:mlstring></legend>
+      <div class="xar-form-input-wrapper">
+        <label for="pmodule" title="#xarML('Choose the module to test privileges against.')#" class="xar-form-label">
+          <xar:mlstring>Registered Masks For Module:</xar:mlstring>
+        </label>
+        <select name="pmodule" id="pmodule" onchange="this.form.submit();" class="xar-margin-thickright">
+          <xar:loop name="$allmodules">
+            <xar:if condition="$loop:item['name'] eq $pmodule">
+              <option value="#$loop:item['name']#" selected="selected">#$loop:item['display']#</option>
+              <xar:else />
+              <option value="#$loop:item['name']#">#$loop:item['display']#</option>
             </xar:if>
-                
-            <xar:if condition="$testresult eq false">
-                <xar:mlstring>Is Not Permitted</xar:mlstring>
-            <xar:else />
-                <xar:mlstring>Is Permitted</xar:mlstring>
+          </xar:loop>
+        </select>
+        <input type="hidden" name="uid" id="uid" value="#$uid#" />
+        <input type="submit" value="#xarML('Test Privileges')#" class="xar-margin-thickleft" />
+      </div>
+    </fieldset>
+  </form>
+  
+  <xar:if condition="empty($pmodule)">
+      <xar:mlstring>Choose a module from the list and click "Test Privileges".</xar:mlstring>
+  <xar:elseif condition="count($masks) eq 0" />
+    <h3><xar:mlstring>No masks registered for this module.</xar:mlstring></h3>
+  <xar:else />
+    <fieldset>
+      <legend><xar:mlstring>Click On The Mask You Want To Test Privileges Against:</xar:mlstring></legend>
+      <table class="xar-fullwidth">
+        <tr>
+          <th><xar:mlstring>Mask</xar:mlstring></th>
+          <xar:if condition="xarModGetVar('privileges','showrealms')">
+            <th><xar:mlstring>Realm</xar:mlstring></th>
+          </xar:if>
+          <th><xar:mlstring>Module</xar:mlstring></th>
+          <th><xar:mlstring>Component</xar:mlstring></th>
+          <th><xar:mlstring>Instance</xar:mlstring></th>
+          <th><xar:mlstring>Level</xar:mlstring></th>
+        </tr>
+        <xar:foreach in="$masks" value="$mask">
+          <tr>
+            <td>
+              <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=&xar-var-uid;&amp;name=#$mask:getName()#&amp;test=true">
+                #$mask:getName()#
+              </a>
+            </td>
+            <xar:if condition="xarModGetVar('privileges','showrealms')">
+              <td>#$mask:getRealm()#</td>
             </xar:if>
-        </h3>
-
-        <h4>
-            <xar:mlstring>Masks:</xar:mlstring>
-        </h4>
-
-        <table class="xar-fullwidth">
-            <tr>
-                <th>
-                    <xar:mlstring>Mask</xar:mlstring>    
-                </th>
-                <xar:if condition="xarModGetVar('privileges','showrealms')">
-                    <th>
-                        <xar:mlstring>Realm</xar:mlstring>            
-                    </th>
-                </xar:if>
-                <th>
-                    <xar:mlstring>Module</xar:mlstring>            
-                </th>
-                <th>
-                    <xar:mlstring>Component</xar:mlstring>            
-                </th>
-                <th>
-                    <xar:mlstring>Instance</xar:mlstring>            
-                </th>
-                <th>
-                    <xar:mlstring>Level</xar:mlstring>            
-                </th>
-            </tr>
-            <xar:loop name="$testmasks">
-                <tr>
-                    <td>
-                        #$loop:item['sname']#
-                    </td>
-                    <xar:if condition="xarModGetVar('privileges','showrealms')">
-                        <td>
-                            #$loop:item['srealm']#
-                        </td>
-                    </xar:if>
-                    <td>
-                        #$loop:item['smodule']#
-                    </td>
-                    <td>
-                        #$loop:item['scomponent']#
-                    </td>
-                    <td>
-                        #$loop:item['sinstance']#
-                    </td>
-                    <td class="xar-nowrap">
-                        #$loop:item['slevel']#
-                    </td>
-                </tr>
-            </xar:loop>
-        </table>
-
-        <h4>
-            <xar:mlstring>Privileges:</xar:mlstring>
-        </h4>
-
-        <table class="xar-fullwidth">
-            <xar:if condition="$testresult ne false">
-                <tr>
-                    <th>
-                        <xar:mlstring>Privilege</xar:mlstring>    
-                    </th>
-                    <xar:if condition="xarModGetVar('privileges','showrealms')">
-                        <th>
-                            <xar:mlstring>Realm</xar:mlstring>            
-                        </th>
-                    </xar:if>
-                    <th>
-                        <xar:mlstring>Module</xar:mlstring>            
-                    </th>
-                    <th>
-                        <xar:mlstring>Component</xar:mlstring>            
-                    </th>
-                    <th>
-                        <xar:mlstring>Instance</xar:mlstring>            
-                    </th>
-                    <th>
-                        <xar:mlstring>Level</xar:mlstring>            
-                    </th>
-                </tr>
-                <tr>
-                    <td>
-                        #$rname#
-                    </td>
-                    <xar:if condition="xarModGetVar('privileges','showrealms')">
-                        <td>
-                            #$rrealm#
-                        </td>
-                    </xar:if>
-                    <td>
-                        #$rmodule#
-                    </td>
-                    <td>
-                        #$rcomponent#
-                    </td>
-                    <td>
-                        #$rinstance#
-                    </td>
-                    <td class="xar-nowrap">
-                        #$rlevel#
-                    </td>
-                </tr>
+            <td>#$mask:getModule()#</td>
+            <td>#$mask:getComponent()#</td>
+            <td>#$mask:getInstance()#</td>
+            <td class="xar-nowrap">
+              #$mask:getLevel()#
+            </td>
+          </tr>
+        </xar:foreach>
+      </table>
+    </fieldset>
+  </xar:if>
+  <xar:if condition="!empty($test)">
+    <fieldset>
+      <legend><xar:mlstring>Masks:</xar:mlstring></legend>
+      <table class="xar-fullwidth">
+        <tr>
+          <th>
+            <xar:mlstring>Mask</xar:mlstring>    
+          </th>
+          <xar:if condition="xarModGetVar('privileges','showrealms')">
+            <th>
+              <xar:mlstring>Realm</xar:mlstring>            
+            </th>
+          </xar:if>
+          <th>
+            <xar:mlstring>Module</xar:mlstring>            
+          </th>
+          <th>
+            <xar:mlstring>Component</xar:mlstring>            
+          </th>
+          <th>
+            <xar:mlstring>Instance</xar:mlstring>            
+          </th>
+          <th>
+            <xar:mlstring>Level</xar:mlstring>            
+          </th>
+        </tr>
+        <xar:loop name="$testmasks">
+          <tr>
+            <td>
+              #$loop:item['sname']#
+            </td>
+            <xar:if condition="xarModGetVar('privileges','showrealms')">
+              <td>
+                #$loop:item['srealm']#
+              </td>
             </xar:if>
-        </table>
+            <td>
+              #$loop:item['smodule']#
+            </td>
+            <td>
+              #$loop:item['scomponent']#
+            </td>
+            <td>
+              #$loop:item['sinstance']#
+            </td>
+            <td class="xar-nowrap">
+              #$loop:item['slevel']#
+            </td>
+          </tr>
+        </xar:loop>
+      </table>
+    </fieldset>
+    
+    <fieldset>
+      <legend><xar:mlstring>Privileges:</xar:mlstring></legend>
+      <table class="xar-fullwidth">
+        <xar:if condition="$testresult ne false">
+          <tr>
+            <th>
+              <xar:mlstring>Privilege</xar:mlstring>    
+            </th>
+            <xar:if condition="xarModGetVar('privileges','showrealms')">
+              <th>
+                <xar:mlstring>Realm</xar:mlstring>            
+              </th>
+            </xar:if>
+            <th>
+              <xar:mlstring>Module</xar:mlstring>            
+            </th>
+            <th>
+              <xar:mlstring>Component</xar:mlstring>            
+            </th>
+            <th>
+              <xar:mlstring>Instance</xar:mlstring>            
+            </th>
+            <th>
+              <xar:mlstring>Level</xar:mlstring>            
+            </th>
+          </tr>
+          <tr>
+            <td>
+              #$rname#
+            </td>
+            <xar:if condition="xarModGetVar('privileges','showrealms')">
+              <td>
+                #$rrealm#
+              </td>
+            </xar:if>
+            <td>
+              #$rmodule#
+            </td>
+            <td>
+              #$rcomponent#
+            </td>
+            <td>
+              #$rinstance#
+            </td>
+            <td class="xar-nowrap">
+              #$rlevel#
+            </td>
+          </tr>
+        </xar:if>
+      </table>
+      
+      <p class="xar-align-center">
+        #$resultdisplay#
+      </p>
+    </fieldset>
+    <fieldset>
+      <legend><xar:mlstring>Test Result</xar:mlstring></legend>
+      <h4>
+        <xar:if condition="$ptype eq 1">
+          <xar:mlstring>Group </xar:mlstring>
+          <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">'#$pname#'</a>
+          <xar:else />
+          <xar:mlstring>User </xar:mlstring>
+          <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">'#$pname#'</a>
+        </xar:if>
+        
+        <xar:if condition="$testresult eq false">
+          <xar:mlstring>Is Not Permitted</xar:mlstring>
+          <xar:else />
+          <xar:mlstring>Is Permitted</xar:mlstring>
+        </xar:if>
+      </h4>
+    </fieldset>
+    
 
-        <p class="xar-align-center">
-            #$resultdisplay#
-        </p>
-
-    </xar:if>
-
-    <form action="&xar-modurl-roles-admin-testprivileges;" method="post" enctype="application/x-www-form-urlencoded">
-        <div class="xar-form-input-wrapper">
-            <label for="pmodule" title="#xarML('Choose the module to test privileges against.')#" class="xar-form-label">
-                <xar:mlstring>Registered Masks For Module:</xar:mlstring>
-            </label>
-            <select name="pmodule" id="pmodule" onchange="this.form.submit();" class="xar-margin-thickright">
-                <xar:loop name="$allmodules">
-                    <xar:if condition="$loop:item['name'] eq $pmodule">
-                        <option value="#$loop:item['name']#" selected="selected">#$loop:item['display']#</option>
-                    <xar:else />
-                        <option value="#$loop:item['name']#">#$loop:item['display']#</option>
-                    </xar:if>
-                </xar:loop>
-            </select>
-            <input type="hidden" name="uid" id="uid" value="#$uid#" />
-            <input type="submit" value="#xarML('Test Privileges')#" class="xar-margin-thickleft" />
-        </div>
-    </form>
-
-    <xar:if condition="empty($pmodule)">
-        <p>
-            <xar:mlstring>Choose a module from the list and click "Test Privileges".</xar:mlstring>
-        </p>
-    <xar:elseif condition="count($masks) eq 0" />
-        <h3>
-            <xar:mlstring>No masks registered for this module.</xar:mlstring>
-        </h3>
-    <xar:else />
-        <h3>
-            <xar:mlstring>Click On The Mask You Want To Test Privileges Against:</xar:mlstring>
-        </h3>
-
-        <table class="xar-fullwidth">
-            <tr>
-                <th>
-                    <xar:mlstring>Mask</xar:mlstring>    
-                </th>
-                <xar:if condition="xarModGetVar('privileges','showrealms')">
-                    <th>
-                        <xar:mlstring>Realm</xar:mlstring>            
-                    </th>
-                </xar:if>
-                <th>
-                    <xar:mlstring>Module</xar:mlstring>            
-                </th>
-                <th>
-                    <xar:mlstring>Component</xar:mlstring>            
-                </th>
-                <th>
-                    <xar:mlstring>Instance</xar:mlstring>            
-                </th>
-                <th>
-                    <xar:mlstring>Level</xar:mlstring>            
-                </th>
-            </tr>
-            <xar:foreach in="$masks" value="$mask">
-                <tr>
-                    <td>
-                        <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=&xar-var-uid;&amp;name=#$mask:getName()#&amp;test=true">
-                            #$mask:getName()#
-                        </a>
-                    </td>
-                    <xar:if condition="xarModGetVar('privileges','showrealms')">
-                        <td>
-                            #$mask:getRealm()#
-                        </td>
-                    </xar:if>
-                    <td>
-                        #$mask:getModule()#
-                    </td>
-                    <td>
-                        #$mask:getComponent()#
-                    </td>
-                    <td>
-                        #$mask:getInstance()#
-                    </td>
-                    <td class="xar-nowrap">
-                        #$mask:getLevel()#
-                    </td>
-                </tr>
-            </xar:foreach>
-        </table>
-    </xar:if>
+  </xar:if>
 </div>
