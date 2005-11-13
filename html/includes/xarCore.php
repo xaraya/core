@@ -18,8 +18,8 @@
  * better control on config settings
  *
  */
-define('XARCORE_VERSION_NUM', '1.0');
-define('XARCORE_VERSION_ID',  'Xaraya');
+define('XARCORE_VERSION_NUM', 'none');
+define('XARCORE_VERSION_ID',  'Xaraya 2 series');
 define('XARCORE_VERSION_SUB', 'adam_baum');
 
 /*
