@@ -104,6 +104,27 @@
     </xar:comment>
     <xar:if condition="$tab eq 'display'">
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
+               <fieldset>
+                <legend>
+                    <xar:mlstring>
+                        Version Information
+                    </xar:mlstring>
+                </legend>
+                <div class="xar-form-input-wrapper">
+                    <label title="#xarML('Current Version.')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Xaraya Core:
+                        </xar:mlstring>
+                    </label>
+
+                    <xar:ml>
+                        <xar:mlstring>#(1) version #(2) (#(3))</xar:mlstring>
+                        <xar:mlvar>#$XARCORE_VERSION_ID#</xar:mlvar>
+                        <xar:mlvar>#$XARCORE_VERSION_NUM#</xar:mlvar>
+                        <xar:mlvar>#$XARCORE_VERSION_SUB#</xar:mlvar>
+                     </xar:ml>
+                </div>
+            </fieldset>
             <fieldset>
                 <legend>
                     <xar:mlstring>
@@ -195,7 +216,7 @@
                             Default Module Function: 
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="defaultfunction" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" maxlength="100" class="xar-form-textmedium" />
+                    <input type="text" id="defaultfunction" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" maxlength="100" class="xar-form-textlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="themedir" title="#xarML('The default directory for site themes - no trailing slash.')#" class="xar-form-label">
@@ -203,7 +224,7 @@
                             Default Theme Directory: 
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="themedir" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" maxlength="100" class="xar-form-textmedium" />
+                    <input type="text" id="themedir" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" maxlength="100" class="xar-form-textlong" />
                 </div>
                 <div class="xar-form-input-wrapper-after">
                     <xar:if condition="xarConfigGetVar('Site.Core.EnableShortURLsSupport')">
