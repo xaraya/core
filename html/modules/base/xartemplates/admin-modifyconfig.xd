@@ -222,7 +222,7 @@
                             Default Module Function: 
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="defaultfunction" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" maxlength="100" class="xar-form-textmedium" />
+                    <input type="text" id="defaultfunction" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" maxlength="100" class="xar-form-textlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="themedir" title="#xarML('The default directory for site themes - no trailing slash.')#" class="xar-form-label">
@@ -230,7 +230,7 @@
                             Default Theme Directory: 
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="themedir" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" maxlength="100" class="xar-form-textmedium" />
+                    <input type="text" id="themedir" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" maxlength="100" class="xar-form-textlong" />
                 </div>
                 <div class="xar-form-input-wrapper-after">
                     <xar:if condition="xarConfigGetVar('Site.Core.EnableShortURLsSupport')">

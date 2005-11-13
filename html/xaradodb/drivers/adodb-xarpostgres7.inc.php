@@ -21,11 +21,13 @@ class ADODB_xarpostgres7 extends ADODB_postgres7
         // causes a failure in initialisation of the driver.
         // We want to suppress this statement.
         if ($sql == 'set datestyle=\'ISO\'') {
-            return true;
+            $result = true;
+            return $result;
         }
 
         // Execute the standard PGSQL driver method.
-        return ADODB_postgres7::Execute($sql, $inputarr);
+        $result =ADODB_postgres7::Execute($sql, $inputarr);
+        return $result;
     }
 
     // Add some debug timings to the driver execute method.

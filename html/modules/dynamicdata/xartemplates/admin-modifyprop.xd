@@ -55,10 +55,10 @@
             </dl>
         </div>
 
-        <xar:data-display layout="$layout" module="dynamicdata" itemtype="0" itemid="$objectid" fieldlist="name,label,moduleid,itemtype" />
         <fieldset>
           <legend><xar:mlstring>Object summary</xar:mlstring></legend>
           <xar:data-display layout="$layout" module="dynamicdata" itemtype="0" itemid="$objectid" fieldlist="name,label,moduleid,itemtype" />
+        </fieldset>
     </xar:if>
 
     <xar:comment>This is where the list of properties shown starts</xar:comment>
