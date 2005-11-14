@@ -513,7 +513,6 @@ class xarRole
         $this->date_reg = $date_reg;
         $this->val_code = $val_code;
         $this->auth_module = $auth_module;
-        $this->home = $home;
         $this->parentlevel = 0;
     }
 

@@ -646,7 +646,6 @@ class xarMasks
                 } else {
                     return false;
                 }
-                }
             }
         }
 
