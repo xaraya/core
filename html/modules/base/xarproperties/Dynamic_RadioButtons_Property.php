@@ -38,7 +38,7 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
         if (empty($id)) {
             $id = $name;
         }
-        
+
         $data['value']   = $value;
         $data['name']    = $name;
         $data['id']      = $id;

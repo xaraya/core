@@ -42,6 +42,8 @@ function privileges_admin_modifyconfig()
                 case 'realms':
                     if (!xarVarFetch('enablerealms', 'bool', $data['enablerealms'], false, XARVAR_NOT_REQUIRED)) return;
                     xarModSetVar('privileges', 'showrealms', $data['enablerealms']);
+                    if (!xarVarFetch('realmvalue', 'str', $realmvalue, 'none', XARVAR_NOT_REQUIRED)) return;
+                    xarModSetVar('privileges', 'realmvalue', $realmvalue);
                     break;
                 case 'lastresort':
                     if (!xarVarFetch('name', 'str', $name, '', XARVAR_NOT_REQUIRED)) return;

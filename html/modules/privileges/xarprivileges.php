@@ -399,6 +399,24 @@ class xarMasks
         if ($pnrealm != '') $mask->setRealm($pnrealm);
         if ($pnlevel != '') $mask->setLevel($pnlevel);
 
+		switch(xarModGetVar('privileges', 'realmvalue')) {
+			case "theme":
+				$mask->setRealm(xarModGetVar('themes', 'default'));
+				break;
+			case "domain":
+				$host = xarServerGetHost();
+				$parts = explode('.',$host);
+				if (count($parts) < 3) {
+					$mask->setRealm('All');
+				} else {
+					$mask->setRealm($parts[0]);
+				}
+				break;
+			case "none":
+			default:
+				$mask->setRealm('All');
+				break;
+		}
         // normalize the mask now - its properties won't change below
         $mask->normalize();
 

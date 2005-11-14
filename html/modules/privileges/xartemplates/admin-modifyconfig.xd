@@ -162,6 +162,33 @@
                     <xar:mlstring>Checking this enables the Manage Realms item on the Privileges menu</xar:mlstring>
                 </div>
             </fieldset>
+            <xar:if condition="xarModGetVar('privileges', 'showrealms')">
+                <fieldset>
+                    <legend>
+                        <xar:mlstring>
+                            Global Value for Realms in Masks 
+                        </xar:mlstring>
+                    </legend>
+                    <div class="xar-form-input-wrapper">
+                        <label for="maskvalue" title="#xarML('The following choice will be inserted into any mask')#" class="xar-form-label">
+                            <xar:mlstring>
+                                Choose Value Type
+                            </xar:mlstring>
+                        </label>
+                        <xar:set name="radio">xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 34))</xar:set>
+                        <xar:set name="options">array(
+                                                array('id' => 'none', 'name' => 'No Value'),
+                                                array('id' => 'domain', 'name' => 'Current Domain'),
+                                                array('id' => 'theme', 'name' => 'Current Theme'),
+                                                array('id' => 'group', 'name' => 'Primary Parent Group'),)
+                                                </xar:set>
+                        <xar:set name="realmvalue">xarModGetVar('privileges', 'realmvalue')</xar:set>
+                        <xar:data-input name="realmvalue" property="$radio" value="$realmvalue" options="$options" />
+                        <br />
+                        <xar:mlstring>Security checks will match any privilege that contains the above choice in its realm</xar:mlstring>
+                    </div>
+                </fieldset>
+            </xar:if>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />

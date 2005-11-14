@@ -484,6 +484,7 @@ function privileges_init()
     xarModSetVar('privileges', 'test', false);
     xarModSetVar('privileges', 'testdeny', false);
     xarModSetVar('privileges', 'testmask', 'All');
+	xarModSetVar('privileges', 'realmvalue', 'none');
 
     // Initialisation successful
     return true;
