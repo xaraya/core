@@ -104,6 +104,11 @@
                     </xar:if>
                     <xar:mlstring>Warning: This setting affects the way privileges work on your site. If changed you should retest all the privileges on your site.</xar:mlstring>
                 </div>
+                <legend>
+                    <xar:mlstring>
+                        Last Resort
+                    </xar:mlstring>
+                </legend>
                 <div class="xar-form-input-wrapper">
                     <label for="lastresort" title="#xarML('Enable or disable an administrator of last resort')#" class="xar-form-label">
                         <xar:mlstring>Last Resort Admin:</xar:mlstring>

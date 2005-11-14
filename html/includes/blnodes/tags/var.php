@@ -12,6 +12,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
     {
         $scope = 'local';
         $prep = false;
+        $user = xarUserGetVar('uid');
         extract($this->attributes);
         
         if (!isset($name)) {
@@ -37,7 +38,8 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
                 $value = "xarSessionGetVar('".$name."')";
                 break;
             case 'user':
-                $value = "xarUserGetVar('".$name."')";
+                $user = xarTpl__ExpressionTransformer::transformPHPExpression($user);
+                $value = "xarUserGetVar('".$name."',".$user.")";
                 break;
             case 'module':
                 if (!isset($module)) {

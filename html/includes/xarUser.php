@@ -113,9 +113,9 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
 
     $userId = XARUSER_AUTH_FAILED;
     $args = array('uname' => $userName, 'pass' => $password);
-    // FIXME: <rabbitt> Do we want to actually put this here or do this 
-    //        another way? Maybe record the exception stack before we go 
-    //        into the foreach loop below (which can kill any exceptions 
+    // FIXME: <rabbitt> Do we want to actually put this here or do this
+    //        another way? Maybe record the exception stack before we go
+    //        into the foreach loop below (which can kill any exceptions
     //        that are set prior to entering this function)....
     if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
     foreach($GLOBALS['xarUser_authenticationModules'] as $authModName) {

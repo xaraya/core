@@ -283,7 +283,7 @@ function roles_user_login()
                     {
                         case '[': // module link
                         {
-                            // Credit to Elek Márton for further expansion
+                            // Credit to Elek Mï¿½ton for further expansion
                             $sections = explode(']',substr($url,1));
                             $url = explode(':', $sections[0]);
                             // if the current module is active, then we are here

@@ -155,6 +155,7 @@ function roles_admin_modifyconfig()
                     if (!xarVarFetch('sendwelcomeemail', 'checkbox', $sendwelcomeemail, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('minpasslength', 'int:1', $minpasslength, 5, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('uniqueemail', 'checkbox', $uniqueemail, xarModGetVar('roles', 'uniqueemail'), XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('userhome', 'checkbox', $userhome, xarModGetVar('roles', 'userhome'), XARVAR_NOT_REQUIRED)) return;
                     xarModSetVar('roles', 'chooseownpassword', $chooseownpassword);
                     xarModSetVar('roles', 'defaultgroup', $defaultgroup);
                     xarModSetVar('roles', 'allowregistration', $allowregistration);
@@ -166,6 +167,7 @@ function roles_admin_modifyconfig()
                     xarModSetVar('roles', 'sendwelcomeemail', $sendwelcomeemail);
                     xarModSetVar('roles', 'minpasslength', $minpasslength);
                     xarModSetVar('roles', 'uniqueemail', $uniqueemail);
+                    xarModSetVar('roles', 'userhome', $userhome);
                     break;
                 case 'filtering':
                     if (!xarVarFetch('disallowednames', 'str:1', $disallowednames, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;

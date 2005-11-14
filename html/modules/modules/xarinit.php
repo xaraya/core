@@ -88,6 +88,9 @@ function modules_init()
 
     $result = &$dbconn->Execute($query,$bindvars);
     if (!$result) return;
+    // Save the actual insert id
+    $savedmodid = $dbconn->PO_Insert_ID($tables['modules'] 'xar_id');
+
     // prefix_module_states
     /**
      * CREATE TABLE xar_module_states (
@@ -171,6 +174,9 @@ function modules_init()
      *   PRIMARY KEY  (xar_mvid, xar_uid)
      * )
      */
+    // CHECKME: the unsiged param for xar_uid changed from true to false in the changesdue scenario
+    // * upgrade needed, this has NOT been done yet?
+    // * this id will be the first in Xaraya which can receive negative values, not sure that is a good idea
     $fields = array('xar_mvid' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
         'xar_uid' => array('type' => 'integer', 'null' => false, 'unsigned' => false, 'primary_key' => true),
         'xar_value' => array('type' => 'text', 'size' => 'long')
@@ -225,48 +231,48 @@ function modules_init()
      */
     // default show-hide core modules
     $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,1,'hidecore','0')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
+    VALUES (?,?,'hidecore','0')";
+    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
     if (!$result) return;
     // default regenerate command
     $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,1,'regen','0')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
+    VALUES (?,?,'regen','0')";
+    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
     if (!$result) return;
     // default style of module list
     $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,1,'selstyle','plain')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
+    VALUES (?,?,'selstyle','plain')";
+    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
     if (!$result) return;
     // default filtering based on module states
     $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,1,'selfilter', '0')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
+    VALUES (?,?,'selfilter', '0')";
+    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
     if (!$result) return;
     // default modules list sorting order
     $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,1,'selsort','nameasc')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
+    VALUES (?,?,'selsort','nameasc')";
+    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
     if (!$result) return;
     // default show-hide modules statistics
     $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,1,'hidestats','0')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
+    VALUES (?,?,'hidestats','0')";
+    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
     if (!$result) return;
     // default maximum number of modules listed per page
     $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,1,'selmax','all')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
+    VALUES (?,?,'selmax','all')";
+    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
     if (!$result) return;
     // default start page
     $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,1,'startpage','overview')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
+    VALUES (?,?,'startpage','overview')";
+    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
     if (!$result) return;
     // expertlist
     $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,1,'expertlist','0')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars'])));
+    VALUES (?,?,'expertlist','0')";
+    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
     if (!$result) return;
     // Initialisation successful
     return true;

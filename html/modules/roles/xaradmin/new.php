@@ -19,6 +19,6 @@
  */
 function roles_admin_new()
 {
-    return xarModFunc('roles', 'admin', 'newrole',array('objectid' => $objectid));
+    return xarModFunc('roles', 'admin', 'newrole');
 }
 ?>

@@ -1,7 +1,6 @@
 <?php
 /**
  * Initialisation functions for the security module
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -9,7 +8,7 @@
  *
  * @subpackage Privileges module
  */
-
+ 
  /**
  * Purpose of file:  Initialisation functions for the security module
  * Initialise the privileges module
