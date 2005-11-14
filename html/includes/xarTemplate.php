@@ -51,7 +51,7 @@ define('XAR_TPL_TAG_NEEDEXCEPTIONSCONTROL'     ,64);
  *
  */
 // Let's do this once here, not scattered all over the place
-define('XAR_TPL_CACHE_DIR',xarCoreGetVarDirPath() . '/cache/templates');
+define('XAR_TPL_CACHE_DIR',xarCoreGetVarDirPath() . XARCORE_TPL_CACHEDIR);
 
 /**
  * Initializes the BlockLayout Template Engine
@@ -89,7 +89,7 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
 
     if ($GLOBALS['xarTpl_cacheTemplates']) {
         if (!is_writeable(XAR_TPL_CACHE_DIR)) {
-            $msg = "xarTpl_init: Cannot write in cache/templates directory '"
+            $msg = "xarTpl_init: Cannot write in '". XAR_TPL_CACHEDIR ."' directory '"
                 . XAR_TPL_CACHE_DIR . "', but the setting: 'cache templates' is set to 'On'.\n"
                 ."Either change the permissions on the mentioned file/directory or set template caching to 'Off' (not recommended).";
             $GLOBALS['xarTpl_cacheTemplates'] = false;
@@ -1118,6 +1118,21 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
     $ctxType = $tplpath[0].':'.implode("/", $stack);
     $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
+    if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
+
+    // Load translations for the template
+    $tplpath = explode("/", $sourceFileName);
+    $tplPathCount = count($tplpath);
+    switch ($tplpath[0]) {
+        case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
+        case 'themes':  $dnType = XARMLS_DNTYPE_THEME; break;
+    }
+    $dnName = $tplpath[1];
+    $stack = array();
+    if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
+    for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
+    $ctxType = $tplpath[0].':'.implode("/", $stack);
+    $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
     /* Temporary partial fix for Bug 5156. This is a temporary workaround and
        while here, themes cannot be translated. This should be fixed as soon as possible */
     if(isset($dnType)) {
@@ -1784,7 +1799,8 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
                       $tag->getHandler(),
                       serialize($tag));
 
-    $result = $dbconn->Execute($query,$bindvars);
+    $stmt =& $dbconn->prepareStatement($query);
+    $result =& $stmt->executeUpdate($bindvars);
     if (!$result) return;
 
     return true;
@@ -1812,7 +1828,8 @@ function xarTplUnregisterTag($tag_name)
 
     $query = "DELETE FROM $tag_table WHERE xar_name = ?";
 
-    $result =& $dbconn->Execute($query,array($tag_name));
+    $stmt =& $dbconn->prepareStatement($query);
+    $result =& $stmt->executeUpdate(array($tag_name));
     if (!$result) return;
 
     return true;
@@ -1902,7 +1919,7 @@ function xarTplGetTagObjectFromName($tag_name)
     $tag_table = $systemPrefix . '_template_tags';
     $query = "SELECT xar_data, xar_module FROM $tag_table WHERE xar_name=?";
 
-    $result =& $dbconn->SelectLimit($query, 1,-1,array($tag_name));
+    $result =& $dbconn->SelectLimit($query, 1,-1,array($tag_name),ResultSet::FETCHMODE_NUM);
     if (!$result) return;
 
     if ($result->EOF) {
@@ -1910,7 +1927,7 @@ function xarTplGetTagObjectFromName($tag_name)
         return NULL; // tag does not exist
     }
 
-    list($obj,$module) = $result->fields;
+    list($obj,$module) = $result->getRow();
     $result->Close();
 
     // Module must be active for the tag to be active
