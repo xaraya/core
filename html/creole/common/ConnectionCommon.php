@@ -363,13 +363,14 @@ abstract class ConnectionCommon {
         return $columns;
     }
     // END XARAYA MODIFICATION
-}
-/**
- * Returns false if connection is closed.
- * @return boolean
- */
-public function isConnected()
-{
-    return !empty($this->dblink);
+
+    /**
+     * Returns false if connection is closed.
+     * @return boolean
+     */
+    public function isConnected()
+    {
+        return !empty($this->dblink);
+    }
 }
 ?>
