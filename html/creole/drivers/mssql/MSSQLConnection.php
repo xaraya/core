@@ -214,8 +214,7 @@ class MSSQLConnection extends ConnectionCommon implements Connection {
         
         $result = @mssql_query($sql, $this->dblink);
         if (!$result) {
-            $errMsgs[] = mssql_get_last_message();
-            throw new SQLException('Could not execute update', implode("\n",$errMsgs), $sql);
+            throw new SQLException('Could not execute update', mssql_get_last_message(), $sql);
         }
         $updated = $this->getUpdateCount();
         

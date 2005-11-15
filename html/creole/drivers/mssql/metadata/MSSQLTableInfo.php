@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: MSSQLTableInfo.php,v 1.12 2004/12/17 09:58:40 micha Exp $
+ *  $Id: MSSQLTableInfo.php,v 1.13 2005/11/01 01:52:40 hlellelid Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -26,7 +26,7 @@ require_once 'creole/metadata/TableInfo.php';
  * MSSQL implementation of TableInfo.
  * 
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.12 $
+ * @version   $Revision: 1.13 $
  * @package   creole.drivers.mssql.metadata
  */
 class MSSQLTableInfo extends TableInfo {    
@@ -56,7 +56,11 @@ class MSSQLTableInfo extends TableInfo {
             $is_nullable = $row['NULLABLE'];
             $default = $row['COLUMN_DEF'];
             $precision = $row['PRECISION'];
-            $this->columns[$name] = new ColumnInfo($this, $name, MSSQLTypes::getType($type), $type, $length, $precision, $is_nullable, $default);
+			$identity = false;
+			if (strtolower($type) == "int identity") {
+			    $identity = true;
+			}
+            $this->columns[$name] = new ColumnInfo($this, $name, MSSQLTypes::getType($type), $type, $length, $precision, $is_nullable, $default, $identity);
         }
                 
         $this->colsLoaded = true;
