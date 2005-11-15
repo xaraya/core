@@ -41,10 +41,11 @@ textarea#'.$id.' {
 }
 -->
 '</xar:set>
-<xar:style method="embed" source="'.$textareasource.'" media="all" />
+<!-- Leaving this out does work better with Xaraya Classic, what am i missing here? -->
+<!-- <xar:style method="embed" source="'.$textareasource.'" media="all" /> -->
 <div class="xar-form-container-after">
     <textarea name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#" class="#$class#">#$value#</textarea>
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+    <xar:if condition="!empty($invalid)">
+      <span class="xar-error">#$invalid#</span>
+    </xar:if>
 </div>
