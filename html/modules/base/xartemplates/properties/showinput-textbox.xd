@@ -11,7 +11,11 @@
 <xar:else/>
     <xar:set name="class">'xar-form-textlong'</xar:set>
 </xar:if>
-<input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" class="#$class#" />
+<xar:comment>On focus event</xar:comment>
+<xar:if condition="!isset($onfocus)">
+  <xar:set name="onfocus">'return true;'</xar:set>
+</xar:if>
+<input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" class="#$class#" onfocus="#$onfocus#"/>
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
 </xar:if>
