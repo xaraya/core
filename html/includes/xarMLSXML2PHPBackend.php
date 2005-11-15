@@ -18,9 +18,9 @@
  */
 class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend
 {
-    var $gen;
-    var $basePHPDir;
-    var $baseXMLDir;
+    public $gen;
+    public $basePHPDir;
+    public $baseXMLDir;
 
     function xarMLS__XML2PHPTranslationsBackend($locales)
     {
@@ -65,7 +65,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend
         $GLOBALS['xarML_PHPBackend_keyEntries'] = array();
     }
 
-    function bindDomain($dnType, $dnName='xaraya')
+    function bindDomain($dnType, $dnName)
     {
         $bindResult = parent::bindDomain($dnType, $dnName);
 
@@ -215,11 +215,11 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend
 class PHPBackendGenerator 
 {
 
-    var $locale;
-    var $outCharset;
-    var $fp;
-    var $baseDir;
-    var $baseXMLDir;
+    public $locale;
+    public $outCharset;
+    public $fp;
+    public $baseDir;
+    public $baseXMLDir;
 
     function PHPBackendGenerator($locale)
     {

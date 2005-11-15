@@ -23,10 +23,10 @@ include_once "modules/base/xarproperties/Dynamic_NumberBox_Property.php";
  */
 class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
 {
-    var $module   = ''; // get itemtypes for this module with getitemtypes()
-    var $itemtype = null; // get items for this module+itemtype with getitemlinks()
-    var $func     = null; // specific API call to retrieve a list of items
-    var $options  = array();
+    public $module   = ''; // get itemtypes for this module with getitemtypes()
+    public $itemtype = null; // get items for this module+itemtype with getitemlinks()
+    public $func     = null; // specific API call to retrieve a list of items
+    public $options  = array();
 
     function Dynamic_ItemType_Property($args)
     {

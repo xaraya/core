@@ -157,8 +157,8 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
 
     // TODO: this should be inside roles module
     $query = "UPDATE $rolestable SET xar_auth_module = ? WHERE xar_uid = ?";
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeUpdate(array($authModName,$userId));
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeUpdate(array($authModName,$userId));
     if (!$result) return;
 
     // Set session variables

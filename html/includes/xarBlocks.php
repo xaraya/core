@@ -196,8 +196,8 @@ function xarBlock_renderGroup($groupname, $template = NULL)
               WHERE     bgroups.xar_name = ?
               AND       inst.xar_state > ?
               ORDER BY  group_inst.xar_position ASC";
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeQuery(array($groupname,0), ResultSet::FETCHMODE_ASSOC);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array($groupname,0), ResultSet::FETCHMODE_ASSOC);
     if (!$result) {return;}
 
     $output = '';

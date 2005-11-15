@@ -384,7 +384,7 @@ function installer_admin_phase5()
                 $sql = xarDBDropTable($table,$dbType);
                 $result = $dbconn->Execute($sql);
             } catch (Exception $e) {
-                die($e->getMessage());
+                //die($e->getMessage());
                 return;
             }
         }
@@ -1035,7 +1035,7 @@ function installer_admin_cleanup()
     
 
     // Check for db errors
-    $result =& $stmt->executeQuery(array('right'));
+    $result = $stmt->executeQuery(array('right'));
     if (!$result) return;
 
     // Freak if we don't get one and only one result
@@ -1072,7 +1072,7 @@ function installer_admin_cleanup()
     }
 
     // Check for db errors
-    $result =& $stmt->executeQuery(array('header'));
+    $result = $stmt->executeQuery(array('header'));
     if (!$result) return;
     xarLogMessage("Selected the header block group", XARLOG_LEVEL_ERROR);
     // Freak if we don't get one and only one result

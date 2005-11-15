@@ -348,8 +348,8 @@ abstract class ConnectionCommon {
     
     function &MetaTables($ttype=false,$showSchema=false,$mask=false)
     {
-        $dbinfo =& $this->getDatabaseInfo();
-        $tables =& $dbinfo->getTables();
+        $dbinfo = $this->getDatabaseInfo();
+        $tables = $dbinfo->getTables();
         foreach ($tables as $table) {
             $tmp[$table->getName()]= $table->getName();
         }
@@ -358,8 +358,8 @@ abstract class ConnectionCommon {
     
     function &MetaColumns($table) 
     {
-        $tableinfo =& $this->getDatabaseInfo()->getTable($table);
-        $columns =& $tableinfo->getColumns();
+        $tableinfo = $this->getDatabaseInfo()->getTable($table);
+        $columns = $tableinfo->getColumns();
         return $columns;
     }
     // END XARAYA MODIFICATION

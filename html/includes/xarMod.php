@@ -421,8 +421,8 @@ function xarModGetVarId($modName, $name)
     }
 
     $query = "SELECT xar_id FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeQuery(array((int)$modBaseInfo['systemid'],$name),ResultSet::FETCHMODE_NUM);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array((int)$modBaseInfo['systemid'],$name),ResultSet::FETCHMODE_NUM);
     // If there is no such thing, the callee is responsible, return null
     if(!$result || !$result->next()) return;
 
@@ -526,8 +526,8 @@ function xarModGetInfo($modRegId, $type = 'module')
                        FROM $the_table WHERE xar_regid = ?";
             break;
     }
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeQuery(array($modRegId),ResultSet::FETCHMODE_NUM);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array($modRegId),ResultSet::FETCHMODE_NUM);
     if (!$result) return;
 
     if (!$result->next()) {
@@ -1537,8 +1537,8 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     $query .= " AND xar_object = ? AND xar_action = ? ORDER BY xar_order ASC";
     $bindvars[] = $hookObject;
     $bindvars[] = $hookAction;
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_NUM);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_NUM);
     if (!$result) return;
 
     $resarray = array();
@@ -1849,8 +1849,8 @@ function xarMod_getBaseInfo($modName, $type = 'module')
         . ' WHERE mods.xar_name = ? OR mods.xar_directory = ?';
     $bindvars = array($modName, $modName);
     
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
     if (!$result) return;
     
     if (!$result->next()) {
@@ -2151,8 +2151,8 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
 
             break;
     }
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeQuery(array($modRegId),ResultSet::FETCHMODE_NUM);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array($modRegId),ResultSet::FETCHMODE_NUM);
     if (!$result) return;
 
     // the module is not in the table
@@ -2204,8 +2204,8 @@ function xarModRegisterHook($hookObject,
               VALUES (?,?,?,?,?,?,?)";
     $seqId = $dbconn->GenId($hookstable);
     $bindvars = array($seqId,$hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeUpdate($bindvars);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeUpdate($bindvars);
     if (!$result) return;
 
     return true;

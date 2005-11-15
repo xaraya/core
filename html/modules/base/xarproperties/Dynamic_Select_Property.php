@@ -13,11 +13,11 @@
 */
 class Dynamic_Select_Property extends Dynamic_Property
 {
-    var $options;
-    var $func;
-    var $itemfunc;
-    var $file;
-    var $override = false; // allow values other than those in the options
+    public $options;
+    public $func;
+    public $itemfunc;
+    public $file;
+    public $override = false; // allow values other than those in the options
 
     function Dynamic_Select_Property($args)
     {

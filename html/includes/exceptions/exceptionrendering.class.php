@@ -12,21 +12,21 @@
 
 class ExceptionRendering
 {
-    var $exception;
-    var $id;
-    var $major;
-    var $type;
-    var $defaults;
-    var $title;
-    var $short;
-    var $long;
-    var $hint;
-    var $stack;
-    var $linebreak = "<br/>";
-    var $openstrong = "<strong>";
-    var $closestrong = "</strong>";
-    var $openpre = "<pre>";
-    var $closepre = "</pre>";
+    public $exception;
+    public $id;
+    public $major;
+    public $type;
+    public $defaults;
+    public $title;
+    public $short;
+    public $long;
+    public $hint;
+    public $stack;
+    public $linebreak = "<br/>";
+    public $openstrong = "<strong>";
+    public $closestrong = "</strong>";
+    public $openpre = "<pre>";
+    public $closepre = "</pre>";
 
     function ExceptionRendering($exception = NULL)
     {

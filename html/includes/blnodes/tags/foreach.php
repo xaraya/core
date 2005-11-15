@@ -10,10 +10,10 @@
  */
 class xarTpl__XarForEachNode extends xarTpl__TplTagNode
 {
-    var $attr_value = null; // properties to hold the values of any values which might have the same name in
-    var $attr_key = null;   // the scope of the foreach loop.
-    var $keysavename = null;
-    var $valsavename = null;
+    public $attr_value = null; // properties to hold the values of any values which might have the same name in
+    public $attr_key = null;   // the scope of the foreach loop.
+    public $keysavename = null;
+    public $valsavename = null;
     
     function renderBeginTag()
    {

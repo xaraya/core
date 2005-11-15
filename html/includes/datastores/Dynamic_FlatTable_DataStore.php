@@ -410,7 +410,7 @@ if (empty($itemidfield)) {
             if (!empty($this->cache)) {
                 $result =& $dbconn->CacheSelectLimit($this->cache, $query, $numitems, $startnum-1, $bindvars);
             } else {
-                $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
+                $result = $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
             }
         } else {
             if (!empty($this->cache)) {

@@ -494,7 +494,7 @@ function xarSession__phpWrite($sessionId, $vars)
 
     // FIXME: We had to do qstr here, cos the query failed for some reason
     $query = "UPDATE $sessioninfoTable SET xar_vars = ". $dbconn->qstr($vars) . ", xar_lastused = " . $dbconn->qstr(time()). "WHERE xar_sessid = ".$dbconn->qstr($sessionId);
-    $result =& $dbconn->executeUpdate($query);
+    $result = $dbconn->executeUpdate($query);
     if (!$result) return;
 
     return true;

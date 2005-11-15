@@ -21,9 +21,9 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 class Dynamic_GroupList_Property extends Dynamic_Select_Property
 {
 
-    var $ancestorlist = array();
-    var $parentlist = array();
-    var $grouplist = array();
+    public $ancestorlist = array();
+    public $parentlist = array();
+    public $grouplist = array();
 
     /*
     * Options available to user selection

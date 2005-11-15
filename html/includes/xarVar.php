@@ -630,8 +630,8 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
     }
 
     // TODO : Here used to be a resultset cache option, reconsider it
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
     if (!$result) return;
     
     if ($result->getRecordCount() == 0) {
@@ -828,8 +828,8 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
     }
 
     if (!empty($query)){
-        $stmt =& $dbconn->prepareStatement($query);
-        $result =& $stmt->executeUpdate($bindvars);
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeUpdate($bindvars);
         if (!$result) return;
     }
 
@@ -904,8 +904,8 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
                 // MrB: we could use xarModDelUserVar in a loop here, but this is
                 //      much faster.
                 $query = "DELETE FROM $module_uservarstable WHERE xar_mvid = ?";
-                $stmt =& $dbconn->prepareStatement($query);
-                $result =& $stmt->executeUpdate(array((int)$modvarid));
+                $stmt = $dbconn->prepareStatement($query);
+                $result = $stmt->executeUpdate(array((int)$modvarid));
                 if(!$result) return;
                 $result->close(); unset($result);
             }
@@ -952,8 +952,8 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
             break;
     }
 
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeUpdate($bindvars);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeUpdate($bindvars);
     if (!$result) return;
 
     switch(strtolower($type)) {

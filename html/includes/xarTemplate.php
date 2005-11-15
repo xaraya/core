@@ -1531,8 +1531,8 @@ function xarTpl__getCacheKey($sourceFileName)
  */
 class xarTemplateAttribute 
 {
-    var $_name;     // Attribute name
-    var $_flags;    // Attribute flags (datatype, required/optional, etc.)
+    public $_name;     // Attribute name
+    public $_flags;    // Attribute flags (datatype, required/optional, etc.)
 
     function xarTemplateAttribute($name, $flags = NULL)
     {
@@ -1604,20 +1604,20 @@ class xarTemplateAttribute
  */
 class xarTemplateTag 
 {
-    var $_name = NULL;          // Name of the tag
-    var $_attributes = array(); // Array with the supported attributes
-    var $_handler = NULL;       // Name of the handler function
-    var $_module;               // Modulename
-    var $_type;                 // Type of the handler (user/admin etc.)
-    var $_func;                 // Function name
+    public $_name = NULL;          // Name of the tag
+    public $_attributes = array(); // Array with the supported attributes
+    public $_handler = NULL;       // Name of the handler function
+    public $_module;               // Modulename
+    public $_type;                 // Type of the handler (user/admin etc.)
+    public $_func;                 // Function name
     // properties for registering what kind of tag we have here
-    var $_hasChildren = false;
-    var $_hasText = false;
-    var $_isAssignable = false;
-    var $_isPHPCode = true;
-    var $_needAssignment = false;
-    var $_needParameter = false;
-    var $_needExceptionsControl = false;
+    public $_hasChildren = false;
+    public $_hasText = false;
+    public $_isAssignable = false;
+    public $_isPHPCode = true;
+    public $_needAssignment = false;
+    public $_needParameter = false;
+    public $_needExceptionsControl = false;
 
 
     function xarTemplateTag($module, $name, $attributes = array(), $handler = NULL, $flags = XAR_TPL_TAG_ISPHPCODE)
@@ -1799,8 +1799,8 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
                       $tag->getHandler(),
                       serialize($tag));
 
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeUpdate($bindvars);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeUpdate($bindvars);
     if (!$result) return;
 
     return true;
@@ -1828,8 +1828,8 @@ function xarTplUnregisterTag($tag_name)
 
     $query = "DELETE FROM $tag_table WHERE xar_name = ?";
 
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeUpdate(array($tag_name));
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeUpdate(array($tag_name));
     if (!$result) return;
 
     return true;
@@ -1919,7 +1919,7 @@ function xarTplGetTagObjectFromName($tag_name)
     $tag_table = $systemPrefix . '_template_tags';
     $query = "SELECT xar_data, xar_module FROM $tag_table WHERE xar_name=?";
 
-    $result =& $dbconn->SelectLimit($query, 1,-1,array($tag_name),ResultSet::FETCHMODE_NUM);
+    $result = $dbconn->SelectLimit($query, 1,-1,array($tag_name),ResultSet::FETCHMODE_NUM);
     if (!$result) return;
 
     if ($result->EOF) {

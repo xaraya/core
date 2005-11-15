@@ -37,21 +37,21 @@ define('XAR_ENABLE_WINNOW', 0);
 
 class xarMasks
 {
-    var $dbconn;
-    var $privilegestable;
-    var $privmemberstable;
-    var $maskstable;
-    var $modulestable;
-    var $modulestatestable;
-    var $realmstable;
-    var $acltable;
-    var $allmasks;
-    var $levels;
-    var $instancestable;
-    var $levelstable;
-    var $privsetstable;
+    public $dbconn;
+    public $privilegestable;
+    public $privmemberstable;
+    public $maskstable;
+    public $modulestable;
+    public $modulestatestable;
+    public $realmstable;
+    public $acltable;
+    public $allmasks;
+    public $levels;
+    public $instancestable;
+    public $levelstable;
+    public $privsetstable;
 
-    var $privilegeset;
+    public $privilegeset;
 
 /**
  * xarMasks: constructor for the class
@@ -1560,19 +1560,19 @@ class xarPrivileges extends xarMasks
 
   class xarMask
 {
-    var $sid;           //the id of this privilege
-    var $name;          //the name of this privilege
-    var $realm;         //the realm of this privilege
-    var $module;        //the module of this privilege
-    var $component;     //the component of this privilege
-    var $instance;      //the instance of this privilege
-    var $level;         //the access level of this privilege
-    var $description;   //the long description of this privilege
-    var $normalform;    //the normalized form of this privilege
+    public $sid;           //the id of this privilege
+    public $name;          //the name of this privilege
+    public $realm;         //the realm of this privilege
+    public $module;        //the module of this privilege
+    public $component;     //the component of this privilege
+    public $instance;      //the instance of this privilege
+    public $level;         //the access level of this privilege
+    public $description;   //the long description of this privilege
+    public $normalform;    //the normalized form of this privilege
 
-    var $dbconn;
-    var $privilegestable;
-    var $privmemberstable;
+    public $dbconn;
+    public $privilegestable;
+    public $privmemberstable;
 
 /**
  * xarMask: constructor for the class
@@ -1894,19 +1894,19 @@ class xarPrivileges extends xarMasks
 class xarPrivilege extends xarMask
 {
 
-    var $pid;           //the id of this privilege
-    var $name;          //the name of this privilege
-    var $realm;         //the realm of this privilege
-    var $module;        //the module of this privilege
-    var $component;     //the component of this privilege
-    var $instance;      //the instance of this privilege
-    var $level;         //the access level of this privilege
-    var $description;   //the long description of this privilege
-    var $parentid;      //the pid of the parent of this privilege
+    public $pid;           //the id of this privilege
+    public $name;          //the name of this privilege
+    public $realm;         //the realm of this privilege
+    public $module;        //the module of this privilege
+    public $component;     //the component of this privilege
+    public $instance;      //the instance of this privilege
+    public $level;         //the access level of this privilege
+    public $description;   //the long description of this privilege
+    public $parentid;      //the pid of the parent of this privilege
 
-    var $dbconn;
-    var $privilegestable;
-    var $privmemberstable;
+    public $dbconn;
+    public $privilegestable;
+    public $privmemberstable;
 
 /**
  * xarPrivilege: constructor for the class

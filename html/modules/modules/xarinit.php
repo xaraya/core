@@ -89,7 +89,7 @@ function modules_init()
     $result = &$dbconn->Execute($query,$bindvars);
     if (!$result) return; 
     // Save the actual insert id
-    $savedmodid = $dbconn->PO_Insert_ID($tables['modules'] 'xar_id');
+    $savedmodid = $dbconn->PO_Insert_ID($tables['modules'], 'xar_id');
 
     // prefix_module_states
     /**

@@ -329,12 +329,15 @@ function xarDBDropTable($tableName, $databaseType = NULL)
     $metaTable = $systemPrefix . '_tables';
     if ($tableName != $metaTable) {
         $dbconn =& xarDBGetConn();
-        $query = "DELETE FROM $metaTable WHERE xar_table=?";
-        // This doesnt have to be fatal
-        try {
-          $result =& $dbconn->Execute($query,array($tableName));
-        } catch(Exception $e) {
-        }
+        //$dbInfo = $dbconn->getDatabaseInfo();
+        //if($dbInfo->hasTable($metaTable)) {
+            $query = "DELETE FROM $metaTable WHERE xar_table=?";
+            // This doesnt have to be fatal
+            //try {
+                $result =& $dbconn->Execute($query,array($tableName));
+            //} catch(Exception $e) {
+            //}
+            //}
     }
 
     switch($databaseType) {

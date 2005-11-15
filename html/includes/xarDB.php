@@ -119,7 +119,7 @@ function &xarDBNewConn($args = NULL)
                  'database' => $dbName);
     
     $conn = null;
-    $conn =& xarDB::getConnection($dsn,ResultSet::FETCHMODE_NUM);
+    $conn = xarDB::getConnection($dsn,ResultSet::FETCHMODE_NUM);
     // Store the connection for global access.
     $GLOBALS['xarDB_connections'][] =& $conn;
 

@@ -121,8 +121,8 @@ function xarConfig_loadVars()
     $query = "SELECT xar_name,
                      xar_value
                 FROM $tables[config_vars]";
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeQuery(array(),ResultSet::FETCHMODE_ASSOC);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array(),ResultSet::FETCHMODE_ASSOC);
     if (!$result) return;
 
     while ($result->next()) {

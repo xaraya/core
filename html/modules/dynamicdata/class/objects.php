@@ -20,47 +20,47 @@ require_once 'modules/dynamicdata/class/datastores.php';
  */
 class Dynamic_Object_Master
 {
-    var $objectid = null;
-    var $name = null;
-    var $label = null;
-    var $moduleid = null;
-    var $itemtype = null;
+    public $objectid = null;
+    public $name = null;
+    public $label = null;
+    public $moduleid = null;
+    public $itemtype = null;
 
-    var $urlparam = 'itemid';
-    var $maxid = 0;
-    var $config = '';
-    var $isalias = 0;
+    public $urlparam = 'itemid';
+    public $maxid = 0;
+    public $config = '';
+    public $isalias = 0;
 
-    var $properties;
-    var $datastores;
+    public $properties;
+    public $datastores;
 
-    var $fieldlist;
-    var $status = null;
+    public $fieldlist;
+    public $status = null;
 
     // optional layout inside the templates
-    var $layout = 'default';
+    public $layout = 'default';
     // optional sub-template, e.g. user-objectview-[template].xd (defaults to the object name)
-    var $template = '';
+    public $template = '';
     // optional module where the object templates reside (defaults to 'dynamicdata')
-    var $tplmodule = 'dynamicdata';
+    public $tplmodule = 'dynamicdata';
 
     // optional module for use in xarModURL() (defaults to the object module)
-    var $urlmodule = '';
+    public $urlmodule = '';
     // optional view function for use in xarModURL() (defaults to 'view')
-    var $viewfunc = 'view';
+    public $viewfunc = 'view';
 
     // primary key is item id
-    var $primary = null;
+    public $primary = null;
     // secondary key could be item type (e.g. for articles)
-    var $secondary = null;
+    public $secondary = null;
     // set this true to automatically filter by current itemtype on secondary key
-    var $filter;
+    public $filter;
 
     // flag indicating if this object has some property that provides file upload
-    var $upload = false;
+    public $upload = false;
 
     // prefix to use in field names etc.
-    var $fieldprefix = '';
+    public $fieldprefix = '';
 
     /**
      * Default constructor to set the object variables, retrieve the dynamic properties
@@ -375,7 +375,7 @@ class Dynamic_Object_Master
      * @returns array
      * @return array of object definitions
      */
-    function &getObjects()
+    static function &getObjects()
     {
         $nullreturn = NULL;
         $dbconn =& xarDBGetConn();
@@ -426,7 +426,7 @@ class Dynamic_Object_Master
      * @returns array
      * @return array containing the name => value pairs for the object
      */
-    function getObjectInfo($args)
+    static function getObjectInfo($args)
     {
         if (!empty($args['table'])) {
             $info = array();
@@ -508,7 +508,7 @@ class Dynamic_Object_Master
      * @returns object
      * @return the requested object definition
      */
-    function &getObject($args)
+    static function &getObject($args)
     {
         if (!isset($args['itemid'])) $args['itemid'] = null;
         $classname = 'Dynamic_Object';
@@ -542,7 +542,7 @@ class Dynamic_Object_Master
      * @returns object
      * @return the requested object definition
      */
-    function &getObjectList($args)
+    static function &getObjectList($args)
     {
         $classname = 'Dynamic_Object_List';
         if (!empty($args['classname'])) {
@@ -818,7 +818,7 @@ class Dynamic_Object_Master
  */
 class Dynamic_Object extends Dynamic_Object_Master
 {
-    var $itemid = 0;
+    public $itemid = 0;
 
     /**
      * Inherits from Dynamic_Object_Master and sets the requested item id
@@ -1334,21 +1334,21 @@ class Dynamic_Object extends Dynamic_Object_Master
  */
 class Dynamic_Object_List extends Dynamic_Object_Master
 {
-    var $itemids;           // the list of item ids used in data stores
-    var $where;
-    var $sort;
-    var $groupby;
-    var $numitems = null;
-    var $startnum = null;
+    public $itemids;           // the list of item ids used in data stores
+    public $where;
+    public $sort;
+    public $groupby;
+    public $numitems = null;
+    public $startnum = null;
 
-    var $startstore = null; // the data store we should start with (for sort)
+    public $startstore = null; // the data store we should start with (for sort)
 
-    var $items;             // the result array of itemid => (property name => value)
+    public $items;             // the result array of itemid => (property name => value)
 
     // optional URL style for use in xarModURL() (defaults to itemtype=...&...)
-    var $urlstyle = 'itemtype'; // TODO: table or object, or wrapper for all, or all in template, or...
+    public $urlstyle = 'itemtype'; // TODO: table or object, or wrapper for all, or all in template, or...
     // optional display function for use in xarModURL() (defaults to 'display')
-    var $linkfunc = 'display';
+    public $linkfunc = 'display';
 
     /**
      * Inherits from Dynamic_Object_Master and sets the requested item ids, sort, where, ...

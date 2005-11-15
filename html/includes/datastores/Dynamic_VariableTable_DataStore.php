@@ -481,7 +481,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 if (!empty($this->cache)) {
                     $result =& $dbconn->CacheSelectLimit($this->cache, $query, $numitems, $startnum-1);
                 } else {
-                    $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1);
+                    $result = $dbconn->SelectLimit($query, $numitems, $startnum-1);
                 }
             } else {
                 if (!empty($this->cache)) {

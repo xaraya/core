@@ -22,12 +22,12 @@ include_once "modules/dynamicdata/class/properties.php";
  */
 class Dynamic_TextBox_Property extends Dynamic_Property
 {
-    var $size = 50;
-    var $maxlength = 254;
+    public $size = 50;
+    public $maxlength = 254;
 
-    var $min = null;
-    var $max = null;
-    var $regex = null;
+    public $min = null;
+    public $max = null;
+    public $regex = null;
 
     function Dynamic_TextBox_Property($args)
     {

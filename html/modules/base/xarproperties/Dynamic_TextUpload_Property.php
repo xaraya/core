@@ -23,20 +23,20 @@ include_once "modules/dynamicdata/class/properties.php";
  */
 class Dynamic_TextUpload_Property extends Dynamic_Property
 {
-    var $rows = 8;
-    var $cols = 50;
+    public $rows = 8;
+    public $cols = 50;
 
-    var $size = 40;
-    var $maxsize = 1000000;
-    var $methods = array('trusted'  => false,
+    public $size = 40;
+    public $maxsize = 1000000;
+    public $methods = array('trusted'  => false,
                          'external' => false,
                          'upload'   => false,
                          'stored'   => false);
-    var $basedir = null;
-    var $importdir = null;
+    public $basedir = null;
+    public $importdir = null;
 
     // this is used by Dynamic_Property_Master::addProperty() to set the $object->upload flag
-    var $upload = true;
+    public $upload = true;
 
     function Dynamic_TextUpload_Property($args)
     {
