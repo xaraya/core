@@ -36,19 +36,7 @@
 		$extensions = isset($extensions) ? $extensions : true;
 
 		if ($native) {
-			$found = false;
-			xarModAPILoad($module);
-			$func = $module . '_userapi_getitemtypes';
-			$found = function_exists($func);
-			if (!$found) {
-				$funcFile = 'modules/' . $info['name'] . '/xaruserapi/getitemtypes.php';
-				$found = file_exists($funcFile);
-			}
-			if ($found) {
-				$types = xarModAPIFunc($module,'user','getitemtypes');
-			} else {
-				$types = array();
-			}
+			if (!($types = xarModAPIFunc($module,'user','getitemtypes',array(),0))) $types = array();
 		}
 		if ($extensions) {
 			// Get all the objects at once
