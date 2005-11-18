@@ -404,7 +404,7 @@ class xarRoles
         $createdate = mktime();
         $query = "INSERT INTO $this->rolestable
                     (xar_uid, xar_name, xar_type, xar_uname,xar_date_reg)
-                  VALUES (?,?,GROUPTYPE,?,?)";
+                  VALUES (?,?," . GROUPTYPE .",?,?)";
         $bindvars = array($this->dbconn->genID($this->rolestable),
                           $name, $uname, $createdate);
         if (!$this->dbconn->Execute($query,$bindvars)) return;

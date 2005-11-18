@@ -35,8 +35,9 @@
 		$native = isset($native) ? $native : true;
 		$extensions = isset($extensions) ? $extensions : true;
 
+		$types = array();
 		if ($native) {
-			if (!($types = xarModAPIFunc($module,'user','getitemtypes',array(),0))) $types = array();
+			if ($nativetypes = xarModAPIFunc($module,'user','getitemtypes',array(),0)) $types = array_merge($types,$nativetypes);
 		}
 		if ($extensions) {
 			// Get all the objects at once
