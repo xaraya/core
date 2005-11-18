@@ -196,7 +196,7 @@
                     <label for="pname" title="#xarML('Text value for realm')#" class="xar-form-label">
                         <xar:mlstring>
                         Text Value:
-                        </xar:mlstring>#$realmvalue#
+                        </xar:mlstring>
                     </label>
                     <input type="text" name="textvalue" id="name" value="#$textvalue#" size="20" maxlength="20" class="xar-form-textmedium" />
                     &nbsp;

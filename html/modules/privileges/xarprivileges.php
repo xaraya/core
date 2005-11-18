@@ -399,7 +399,7 @@ class xarMasks
         if ($pnlevel != '') $mask->setLevel($pnlevel);
 
 		$realmvalue = xarModGetVar('privileges', 'realmvalue');
-		if (strpos('string:',$realmvalue) === 0) {
+		if (strpos($realmvalue,'string:') === 0) {
 			$textvalue = substr($realmvalue,7);
 			$realmvalue = 'string';
 		} else {

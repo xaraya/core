@@ -28,7 +28,7 @@ function privileges_admin_modifyconfig()
                 case 'realms':
 				$data['showrealms'] = xarModGetVar('privileges', 'showrealms');
 				$realmvalue = xarModGetVar('privileges', 'realmvalue');
-				if (strpos('string:',$realmvalue) === 0) {
+				if (strpos($realmvalue,'string:') === 0) {
 					$textvalue = substr($realmvalue,7);
 					$realmvalue = 'string';
 				} else {
