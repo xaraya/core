@@ -22,9 +22,22 @@ function privileges_admin_modifyconfig()
     switch (strtolower($phase)) {
         case 'modify':
         default:
-            $data['showrealms'] = xarModGetVar('privileges', 'showrealms');
             $data['inheritdeny'] = xarModGetVar('privileges', 'inheritdeny');
             $data['authid'] = xarSecGenAuthKey();
+            switch ($data['tab']) {
+                case 'realms':
+				$data['showrealms'] = xarModGetVar('privileges', 'showrealms');
+				$realmvalue = xarModGetVar('privileges', 'realmvalue');
+				if (strpos('string:',$realmvalue) === 0) {
+					$textvalue = substr($realmvalue,7);
+					$realmvalue = 'string';
+				} else {
+					$textvalue = '';
+				}
+				$data['realmvalue'] = $realmvalue;
+				$data['textvalue'] = $textvalue;
+				break;
+            }
             break;
 
         case 'update':
@@ -44,6 +57,10 @@ function privileges_admin_modifyconfig()
                     if (!xarVarFetch('enablerealms', 'bool', $data['enablerealms'], false, XARVAR_NOT_REQUIRED)) return;
                     xarModSetVar('privileges', 'showrealms', $data['enablerealms']);
                     if (!xarVarFetch('realmvalue', 'str', $realmvalue, 'none', XARVAR_NOT_REQUIRED)) return;
+                    if ($realmvalue == 'string') {
+						if (!xarVarFetch('textvalue', 'str', $textvalue, '', XARVAR_NOT_REQUIRED)) return;
+						$realmvalue = empty($textvalue) ? 'none' : 'string:' . $textvalue;
+                    }
                     xarModSetVar('privileges', 'realmvalue', $realmvalue);
                     break;
                 case 'lastresort':

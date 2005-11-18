@@ -398,7 +398,14 @@ class xarMasks
         if ($pnrealm != '') $mask->setRealm($pnrealm);
         if ($pnlevel != '') $mask->setLevel($pnlevel);
 
-		switch(xarModGetVar('privileges', 'realmvalue')) {
+		$realmvalue = xarModGetVar('privileges', 'realmvalue');
+		if (strpos('string:',$realmvalue) === 0) {
+			$textvalue = substr($realmvalue,7);
+			$realmvalue = 'string';
+		} else {
+			$textvalue = '';
+		}
+		switch($realmvalue) {
 			case "theme":
 				$mask->setRealm(xarModGetVar('themes', 'default'));
 				break;
@@ -411,11 +418,15 @@ class xarMasks
 					$mask->setRealm($parts[0]);
 				}
 				break;
+			case "string":
+				$mask->setRealm($textvalue);
+				break;
 			case "none":
 			default:
 				$mask->setRealm('All');
 				break;
 		}
+
         // normalize the mask now - its properties won't change below
         $mask->normalize();
 
@@ -1765,8 +1776,19 @@ class xarPrivileges extends xarMasks
             $p2 = $mask->normalize();
         }
 
-        // match realm, module and component. bail if no match.
-        for ($i=1;$i<4;$i++) {
+        // match realm. bail if no match.
+		switch(xarModGetVar('privileges', 'realmcomparison')) {
+			case "contains":
+				$fails = $p1[1]!=$p2[1];
+			case "exact":
+			default:
+				$fails = $p1[1]!=$p2[1];
+				break;
+		}
+		if (($p1[1] != 'all') && ($fails)) return false;
+
+        // match module and component. bail if no match.
+        for ($i=2;$i<4;$i++) {
             if (($p1[$i] != 'all') && ($p1[$i]!=$p2[$i])) {
                 return false;
             }

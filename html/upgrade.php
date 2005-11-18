@@ -726,19 +726,19 @@ if (empty($step)) {
 
         $blockinstancestable = xarDBGetSiteTablePrefix() . '_roles';
         $columns = $datadict->getColumns($blockinstancestable);
-        // Do we have a xar_home column?
+        // Do we have a xar_duvs column?
         $blocks_column_found = false;
         foreach($columns as $column) {
-            if ($column->name == 'xar_home') {
+            if ($column->name == 'xar_duvs') {
                 $blocks_column_found = true;
                 break;
             }
         }
-        // Upgrade the table (xar_roles) if the home column is not found.
+        // Upgrade the table (xar_roles) if the duvs column is not found.
         if (!$blocks_column_found) {
             // Create the column.
-            $result = $datadict->addColumn($blockinstancestable, 'xar_home C(100) Null');
-            echo "Added column xar_home to roles table<br/>";
+            $result = $datadict->addColumn($blockinstancestable, 'xar_duvs C(100) Null');
+            echo "Added column xar_duvs to roles table<br/>";
         } else {
             echo "Roles table is up-to-date<br/>";
         }
@@ -823,7 +823,7 @@ if (empty($step)) {
     $role = xarFindRole('Everybody');
 
     /* Bug 2204 - this var is not reliable for admin name
-       if (!isset($admin)) $admin = xarFindRole(xarModGetVar('mail','adminname')); 
+       if (!isset($admin)) $admin = xarFindRole(xarModGetVar('mail','adminname'));
     */
     $modvars[] = array(array('name'    =>  'hidecore',
                              'module'  =>  'themes',
@@ -903,6 +903,27 @@ if (empty($step)) {
                        array('name'    =>  'showrealms',
                              'module'  =>  'privileges',
                              'set'     =>  0),
+                       array('name'    =>  'inheritdeny',
+                             'module'  =>  'privileges',
+                             'set'     =>  true),
+                       array('name'    =>  'tester',
+                             'module'  =>  'privileges',
+                             'set'     =>  0),
+                       array('name'    =>  'test',
+                             'module'  =>  'privileges',
+                             'set'     =>  false),
+                       array('name'    =>  'testdeny',
+                             'module'  =>  'privileges',
+                             'set'     =>  false),
+                       array('name'    =>  'testmask',
+                             'module'  =>  'privileges',
+                             'set'     =>  'All'),
+                       array('name'    =>  'realmvalue',
+                             'module'  =>  'privileges',
+                             'set'     =>  'none'),
+                       array('name'    =>  'realmcomparison',
+                             'module'  =>  'privileges',
+                             'set'     =>  'exact'),
                           );
 
     foreach($modvars as $modvar){
@@ -1451,7 +1472,7 @@ if (empty($step)) {
             return;
         }
     } // End bug 630
-    
+
     // after 0911, make sure CSS class lib is deployed and css tags are registered
     echo "<h5>Making sure CSS tags are registered</h5>";
     if(!xarModAPIFunc('themes', 'css', 'registercsstags')) {
