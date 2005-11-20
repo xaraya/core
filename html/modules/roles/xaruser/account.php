@@ -24,22 +24,25 @@ function roles_user_account()
                                       'register'));
     }
 
-    $data['name'] = xarUserGetVar('name');
     $data['uid'] = xarUserGetVar('uid');
-    $data['current'] = xarModURL('roles', 'user', 'display', array('uid' => xarUserGetVar('uid')));
+    $data['name'] = xarUserGetVar('name');
+    if ($data['uid'] == XARUSER_LAST_RESORT) {
+        $data['message'] = xarML('You are logged in as the last resort administrator.');
+    } else  {
+        $data['current'] = xarModURL('roles', 'user', 'display', array('uid' => xarUserGetVar('uid')));
 
-    $output = array();
-    $output = xarModCallHooks('item', 'usermenu', '', array('module' => 'roles'));
+        $output = array();
+        $output = xarModCallHooks('item', 'usermenu', '', array('module' => 'roles'));
 
-    if (empty($output)){
-        $message = xarML('There are no account options configured.');
+        if (empty($output)){
+            $message = xarML('There are no account options configured.');
+        }
+        $data['output'] = $output;
+
+        if (empty($message)){
+            $data['message'] = '';
+        }
     }
-    $data['output'] = $output;
-
-    if (empty($message)){
-        $data['message'] = '';
-    }
-
     return $data;
 }
 

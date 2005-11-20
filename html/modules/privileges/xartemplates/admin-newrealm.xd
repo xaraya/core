@@ -1,0 +1,40 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
+</div>
+<div class="xar-mod-body">
+    <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+    </xar:if>
+    <dl class="xar-tabs">
+        <dd  class="active" style="float: right; margin-right: .5em; text-align: left;">
+            <a href="#xarModURL('privileges','admin','viewrealms')#">
+                <xar:mlstring>View Realms</xar:mlstring>
+            </a>
+        </dd>    
+    </dl>
+    <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-newrealm;" method="post" enctype="application/x-www-form-urlencoded">
+        <fieldset>
+            <legend>
+            <xar:mlstring>
+                Add Realm 
+            </xar:mlstring>
+            </legend>
+            <div class="xar-form-input-wrapper">
+            <label for="pname" title="#xarML('Name of the realm')#" class="xar-form-label">
+                <xar:mlstring>
+                Name:
+                </xar:mlstring>
+            </label>
+            <input type="text" name="name" id="name" value="" size="20" maxlength="20" tabindex="1" class="xar-form-textmedium" />
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="confirmed" id="confirmed" value="true" />
+            <xar:set name="tmpaddvalue"><xar:mlstring>Add</xar:mlstring></xar:set>
+            <input type="submit" value="#$tmpaddvalue#" tabindex="2" />
+            </div>
+        </fieldset>
+    </form>
+</div>

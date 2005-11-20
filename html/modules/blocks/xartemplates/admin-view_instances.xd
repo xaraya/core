@@ -31,7 +31,12 @@
             </select>
             <input type="submit" value="#xarML('Refresh')#" />
         </div>
-
+        <div class="xar-form-input-wrapper">
+            <label for="filter" title="#xarML('Filter the instances to be shown.')#" class="xar-form-label">
+                <xar:mlstring>Filter:</xar:mlstring>
+            </label>
+            <input type="text" id="filter" name="filter" value="#$filter#" class="xar-form-textmedium" />
+        </div>
     </fieldset>
 
         <xar:if condition="$selstyle eq 'compact'">
