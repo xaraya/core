@@ -1,7 +1,6 @@
 <?php
 /**
  * Utility function to pass individual menu items
- *
  * @package modules
  * @copyright (C) 2002-2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -60,6 +59,11 @@ function blocks_adminapi_getmenulinks()
             'title' => xarML('Add a new block type into the system'),
             'label' => xarML('Add Block Type')
         );
+        $menulinks[] = array(
+        	'url'   => xarModURL('blocks','admin','modifyconfig'),
+			'title' => xarML('Modify Blocks configuration values'),
+			'label' => xarML('Modify Config')
+		);
     }
     return $menulinks;
 }

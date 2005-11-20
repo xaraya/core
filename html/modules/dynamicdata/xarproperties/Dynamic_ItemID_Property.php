@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic Item Id property Property
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -24,6 +23,19 @@ include_once "modules/base/xarproperties/Dynamic_NumberBox_Property.php";
  */
 class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
 {
+    function checkInput($name='', $value = null)
+    {
+        if (empty($name)) {
+            $name = 'dd_'.$this->id;
+        }
+        // store the fieldname for validations who need them (e.g. file uploads)
+        $this->fieldname = $name;
+        if (!isset($value)) {
+            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
+        }
+        return $this->validateValue($value);
+    }
+
 // TODO: evaluate if we want some other output here
 //    function showInput($name = '', $value = null)
     function showInput($args = array())
