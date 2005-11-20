@@ -625,9 +625,9 @@ function xarSecGenAuthKey($modName = NULL)
  * @return bool true if the key is valid, false if it is not
  * @todo bring back possibility of time authorized keys
  */
-function xarSecConfirmAuthKey($authIdVarName = 'authid')
+function xarSecConfirmAuthKey($modName = NULL, $authIdVarName = 'authid')
 {
-    list($modName) = xarRequestGetInfo();
+    if(!isset($modName)) list($modName) = xarRequestGetInfo();
     $authid = xarRequestGetVar($authIdVarName);
 
     // Regenerate static part of key
