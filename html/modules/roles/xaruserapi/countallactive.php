@@ -63,7 +63,7 @@ function roles_userapi_countallactive($args)
         $bindvars[] = (int) $thisrole['uid'];
     }
 
-    $query .= " AND xar_type = 0";
+    $query .= " AND xar_type = USERTYPE";
 
 // cfr. xarcachemanager - this approach might change later
     $expire = xarModGetVar('roles','cache.userapi.countallactive');

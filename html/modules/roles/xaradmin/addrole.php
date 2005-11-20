@@ -23,12 +23,14 @@ function roles_admin_addrole()
 
     // get some vars for both groups and users
     if (!xarVarFetch('pname',      'str:1:', $pname,      NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('ptype',      'str:1',  $ptype,      NULL, XARVAR_NOT_REQUIRED)) return;
+    xarVarFetch('itemtype', 'str:1', $itemtype, NULL, XARVAR_NOT_REQUIRED);
     if (!xarVarFetch('pparentid',  'str:1:', $pparentid,  NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('return_url', 'isset',  $return_url, NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
     // get the rest for users only
     // TODO: need to see what to do with auth_module
-    if ($ptype == 0) {
+	$basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+    if ($basetype == USERTYPE) {
         xarVarFetch('puname', 'str:1:35:', $puname, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('pemail', 'str:1:', $pemail, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('ppass1', 'str:1:', $ppass1, NULL, XARVAR_NOT_REQUIRED);
@@ -36,7 +38,7 @@ function roles_admin_addrole()
         xarVarFetch('pstate', 'str:1:', $pstate, NULL, XARVAR_NOT_REQUIRED);
     }
     // checks specific only to users
-    if ($ptype == 0) {
+    if ($basetype == USERTYPE) {
         // check for valid username
         if ((!$puname) || !(!preg_match("/[[:space:]]/", $puname))) {
             $msg = xarML('There is an error in the username');
@@ -95,9 +97,9 @@ function roles_admin_addrole()
         }
     }
     // assemble the args into an array for the role constructor
-    if ($ptype == 0) {
+    if ($basetype == USERTYPE) {
         $pargs = array('name' => $pname,
-            'type' => $ptype,
+            'type' => $itemtype,
             'parentid' => $pparentid,
             'uname' => $puname,
             'email' => $pemail,
@@ -105,17 +107,19 @@ function roles_admin_addrole()
             'val_code' => 'createdbyadmin',
             'state' => $pstate,
             'auth_module' => 'authsystem',
+            'basetype' => $basetype,
             );
     } else {
         $pargs = array('name' => $pname,
-            'type' => $ptype,
+            'type' => $itemtype,
             'parentid' => $pparentid,
             'uname' => xarSessionGetVar('uid') . time(),
             'val_code' => 'createdbyadmin',
             'auth_module' => 'authsystem',
+            'basetype' => $basetype,
             );
     }
-    // create a new role object
+// create a new role object
     $role = new xarRole($pargs);
     // Try to add the role to the repositoryand bail if an error was thrown
     if (!$role->add()) {
@@ -128,7 +132,7 @@ function roles_admin_addrole()
     // call item create hooks (for DD etc.)
 // TODO: move to add() function
     $pargs['module'] = 'roles';
-    $pargs['itemtype'] = $ptype; // we might have something separate for groups later on
+    $pargs['itemtype'] = $itemtype;
     $pargs['itemid'] = $uid;
     xarModCallHooks('item', 'create', $uid, $pargs);
 

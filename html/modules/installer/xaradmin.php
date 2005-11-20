@@ -50,7 +50,7 @@ function installer_admin_phase1()
         foreach ($locales as $locale) {
             // Get the isocode and the description
             // Before we load the locale data, let's check if the locale is there
-            
+
             // <marco> This check is really not necessary since available locales are
             // already determined from existing files. The relative code is in install.php
             //$fileName = xarCoreGetVarDirPath() . "/locales/$locale/locale.xml";
@@ -88,7 +88,7 @@ function installer_admin_phase2()
 
 /**
  * Check whether directory permissions allow to write and read files inside it
- * 
+ *
  * @access private
  * @param string dirname directory name
  * @return bool true if directory is writable, readable and executable
@@ -447,14 +447,24 @@ function installer_admin_bootstrap()
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarVarSetCached('installer','installing', true);
 
+    // load modules into *_modules table
+    if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
+
+    // Initialise and activate dynamic data
+    $modlist = array('dynamicdata');
+    foreach ($modlist as $mod) {
+        // Initialise the module
+        $regid = xarModGetIDFromName($mod);
+        if (isset($regid)) {
+            if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
+            // Activate the module
+            if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+        }
+    }
+
     // create the default roles and privileges setup
     include 'modules/privileges/xarsetup.php';
     initializeSetup();
-
-    // Set up default user properties, etc.
-
-    // load modules into *_modules table
-    if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
 
     // Set the state and activate the following modules
     $modlist=array('roles','privileges','blocks','themes');
@@ -493,7 +503,7 @@ function installer_admin_bootstrap()
     }
 
     // Initialise and activate adminpanels, mail, dynamic data
-    $modlist = array('adminpanels','mail', 'dynamicdata');
+    $modlist = array('adminpanels','mail');
     foreach ($modlist as $mod) {
         // Initialise the module
         $regid = xarModGetIDFromName($mod);

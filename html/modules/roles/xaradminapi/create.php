@@ -63,7 +63,7 @@ function roles_adminapi_create($args)
 
     // Check if that username exists
     $query = "SELECT xar_uid FROM $rolestable
-            WHERE xar_uname= ? AND xar_type = 0";
+            WHERE xar_uname= ? AND xar_type = " . USERTYPE;
     $result =& $dbconn->Execute($query,array($uname));
     if (!$result) return;
 

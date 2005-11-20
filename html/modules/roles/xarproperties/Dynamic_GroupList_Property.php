@@ -176,7 +176,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
         } else {
             $group = xarModAPIFunc('roles','user','get',
                                    array('uid' => $value,
-                                         'type' => 1)); // we're looking for a group here
+                                         'type' => GROUPTYPE)); // we're looking for a group here
             if (empty($group) || empty($group['name'])) {
                 $groupname = '';
             } else {
@@ -198,7 +198,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
             return xarVarPrepForDisplay($groupname);
         }
         */
-        
+
         return xarTplProperty('roles', 'grouplist', 'showoutput', $data);
     }
 

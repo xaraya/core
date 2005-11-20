@@ -18,12 +18,14 @@ function roles_admin_deleterole()
     // get parameters
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
     if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED)) return;
+//    if (!xarVarFetch('itemtype', 'int', $itemtype, NULL, XARVAR_DONT_SET)) return;
+//   	if (!xarVarFetch('itemtype', 'int', $data['itemtype'], USERTYPE, XARVAR_NOT_REQUIRED)) return;
 
     // Call the Roles class
     $roles = new xarRoles();
     // get the role to be deleted
     $role = $roles->getRole($uid);
-    $type = $role->isUser() ? 0 : 1;
+	$itemtype = $role->getType();
 
     // get the array of parents of this role
     // need to display this in the template
@@ -63,6 +65,9 @@ function roles_admin_deleterole()
         return false;
     }
 
+	$types = xarModAPIFunc('roles','user','getitemtypes');
+	$data['itemtypename'] = $types[$itemtype]['label'];
+
     if (empty($confirmation)) {
         // Load Template
         $data['authid'] = xarSecGenAuthKey();
@@ -87,7 +92,7 @@ if (empty($check)) {
             // call item delete hooks (for DD etc.)
 // TODO: move to remove() function
             $pargs['module'] = 'roles';
-            $pargs['itemtype'] = $type; // we might have something separate for groups later on
+            $pargs['itemtype'] = $itemtype;
             $pargs['itemid'] = $uid;
             xarModCallHooks('item', 'delete', $uid, $pargs);
         } else {
