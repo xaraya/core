@@ -129,7 +129,7 @@
         <xar:if condition="$mailtype eq 'confirmation' or $mailtype eq 'validation' ">
             <div class="xar-form-input-wrapper">
                 <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                    <xar:mlstring>##$password##</xar:mlstring>
+                    ##$password##
                 </span>
                 <span class="xar-padding-thickleft">
                     <xar:mlstring>Password of the user</xar:mlstring>
@@ -138,7 +138,7 @@
 
             <div class="xar-form-input-wrapper">
                 <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                    <xar:mlstring>##$validationlink##</xar:mlstring>
+                    ##$validationlink##
                 </span>
                 <span class="xar-padding-thickleft">
                     <xar:mlstring>Validation link for the user</xar:mlstring>
@@ -147,7 +147,7 @@
 
             <div class="xar-form-input-wrapper">
                 <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                    <xar:mlstring>##$valcode##</xar:mlstring>
+                    ##$valcode##
                 </span>
                 <span class="xar-padding-thickleft">
                     <xar:mlstring>Validation code for the user</xar:mlstring>
@@ -156,7 +156,7 @@
 
             <div class="xar-form-input-wrapper">
                 <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                    <xar:mlstring>##$ipaddress##</xar:mlstring>
+                    ##$ipaddress##
                 </span>
                 <span class="xar-padding-thickleft">
                     <xar:mlstring>IP address of the user</xar:mlstring>
@@ -166,7 +166,7 @@
         <xar:elseif condition="$mailtype eq 'password' or $mailtype eq 'reminder'"/>    
             <div class="xar-form-input-wrapper">
                 <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                    <xar:mlstring>##$password##</xar:mlstring>
+                    ##$password##
                 </span>
                 <span class="xar-padding-thickleft">
                     <xar:mlstring>Password of the user</xar:mlstring>
@@ -176,7 +176,7 @@
 
         <div class="xar-form-input-wrapper">
             <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                <xar:mlstring>##$sitename##</xar:mlstring>
+                ##$sitename##
             </span>
             <span class="xar-padding-thickleft">
                 <xar:mlstring>Name of the site</xar:mlstring>
@@ -185,7 +185,7 @@
 
         <div class="xar-form-input-wrapper">
             <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                <xar:mlstring>##$siteadmin##</xar:mlstring>
+                ##$siteadmin##
             </span>
             <span class="xar-padding-thickleft">
                 <xar:mlstring>Name of the administrator</xar:mlstring>
@@ -194,7 +194,7 @@
 
         <div class="xar-form-input-wrapper">
             <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                <xar:mlstring>##$adminmail##</xar:mlstring>
+                ##$adminmail##
             </span>
             <span class="xar-padding-thickleft">
                 <xar:mlstring>Email address of the administrator</xar:mlstring>
@@ -203,7 +203,7 @@
 
         <div class="xar-form-input-wrapper">
             <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                <xar:mlstring>##$siteurl##</xar:mlstring>
+                ##$siteurl##
             </span>
             <span class="xar-padding-thickleft">
                 <xar:mlstring>URL of the site</xar:mlstring>
@@ -212,7 +212,7 @@
 
         <div class="xar-form-input-wrapper">
             <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                <xar:mlstring>##$myname##</xar:mlstring>
+                ##$myname##
             </span>
             <span class="xar-padding-thickleft">
                 <xar:mlstring>Name of the user</xar:mlstring>
@@ -221,7 +221,7 @@
 
         <div class="xar-form-input-wrapper">
             <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                <xar:mlstring>##$username##</xar:mlstring>
+                ##$username##
             </span>
             <span class="xar-padding-thickleft">
                 <xar:mlstring>Username of the user</xar:mlstring>
@@ -230,7 +230,7 @@
 
         <div class="xar-form-input-wrapper">
             <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                <xar:mlstring>##$useremail##</xar:mlstring>
+                ##$useremail##
             </span>
             <span class="xar-padding-thickleft">
                 <xar:mlstring>Email address of the user</xar:mlstring>
