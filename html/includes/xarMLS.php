@@ -718,14 +718,14 @@ class xarMLS__TranslationsBackend
  */
 class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
 {
-    var $locales;
-    var $locale;
-    var $domainlocation;
-    var $contextlocation;
-    var $backendtype;
-    var $space;
-    var $spacedir;
-    var $domaincache;
+    public $locales;
+    public $locale;
+    public $domainlocation;
+    public $contextlocation;
+    public $backendtype;
+    public $space;
+    public $spacedir;
+    public $domaincache;
 
     function xarMLS__ReferencesBackend($locales)
     {

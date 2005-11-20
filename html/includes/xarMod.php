@@ -237,31 +237,34 @@ function xarModDelAllVars($modName)
     // MySql: multiple table delete only from 4.0 up
     // Select the id's which need to be removed
     $sql="SELECT $module_varstable.xar_id FROM $module_varstable WHERE $module_varstable.xar_modid = ?";
-    $result =& $dbconn->Execute($sql, array($modBaseInfo['systemid']));
+    $stmt =& $dbconn->prepareStatement($sql);
+    $result =& $stmt->executeQuery(array($modBaseInfo['systemid']), ResultSet::FETCHMODE_NUM);
     if(!$result) return;
 
     // Seems that at least mysql and pgsql support the scalar IN operator
     $idlist = array();
-    while (!$result->EOF) {
-        list($id) = $result->fields;
-        $result->MoveNext();
-        $idlist[] = (int) $id;
+    while ($result->next()) {
+        $idlist[] = $result->getInt(1);
     }
-
-    if (count($idlist) != 0) {
-            $idlist = join(', ', $idlist);
-            // CHECKME: can bind variables be used here?
-            $sql = "DELETE FROM $module_uservarstable WHERE $module_uservarstable.xar_mvid IN (".$idlist.")";
-            $result =& $dbconn->Execute($sql);
-            if (!$result) return;
+    $result->close();
+    unset($result);
+    
+    if(count($idlist) != 0 ) {
+            $bindmarkers = '?' . str_repeat(',?', count($idlist) -1);
+            $sql = "DELETE FROM $module_uservarstable WHERE $module_uservarstable.xar_mvid IN (".$bindmarkers.")";
+            $stmt =& $dbconn->prepareStatement($sql);
+            $result =& $stmt->executeUpdate($idlist);
+            if(!$result) return;
             $result->Close();
+            unset($result);
     }
 
     // Now delete the module vars
-    $query = 'DELETE FROM '.$module_varstable.' WHERE xar_modid = ?';
-    $result =& $dbconn->Execute($query, array($modBaseInfo['systemid']));
+    $query = "DELETE FROM $module_varstable WHERE xar_modid = ?";
+    $stmt  =& $dbconn->prepareStatement($query);
+    $result =& $stmt->executeUpdate(array($modBaseInfo['systemid']));
     if (!$result) return;
-
+    $result->close();
     return true;
 }
 
@@ -417,19 +420,17 @@ function xarModGetVarId($modName, $name)
         $module_varstable = $tables['site/module_vars'];
     }
 
-    $query = 'SELECT xar_id FROM '.$module_varstable.' WHERE xar_modid = ? AND xar_name = ?';
-    $result =& $dbconn->Execute($query, array((int)$modBaseInfo['systemid'], $name));
+    $query = "SELECT xar_id FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array((int)$modBaseInfo['systemid'],$name),ResultSet::FETCHMODE_NUM);
+    // If there is no such thing, the callee is responsible, return null
+    if(!$result || !$result->next()) return;
 
-    if(!$result) return;
-
-    if ($result->EOF) {
-        return;
-    }
-    list($modvarid) = $result->fields;
+    // Return the ID 
+    $modvarid = $result->getInt(1);
     $result->Close();
 
-    $modvarid = (int) $modvarid;
-    xarCore_SetCached('Mod.GetVarID', $modBaseInfo['name'] . $name, $modvarid);
+    xarCore_SetCached('Mod.GetVarID', $modName . $name, $modvarid);
 
     return $modvarid;
 }
@@ -525,10 +526,11 @@ function xarModGetInfo($modRegId, $type = 'module')
                        FROM $the_table WHERE xar_regid = ?";
             break;
     }
-    $result =& $dbconn->Execute($query,array($modRegId));
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array($modRegId),ResultSet::FETCHMODE_NUM);
     if (!$result) return;
 
-    if ($result->EOF) {
+    if (!$result->next()) {
         $result->Close();
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST', $modRegId);
         return;
@@ -542,16 +544,17 @@ function xarModGetInfo($modRegId, $type = 'module')
                  $mode,
                  $modInfo['version'],
                  $modInfo['admincapable'],
-                 $modInfo['usercapable']) = $result->fields;
+                 $modInfo['usercapable']) = $result->getRow();
             break;
         case 'theme':
             list($modInfo['name'],
                  $modInfo['directory'],
                  $mode,
-                 $modInfo['version']) = $result->fields;
+                 $modInfo['version']) = $result->getRow();
             break;
     }
     $result->Close();
+    unset($result);
 
     $modInfo['regid'] = (int) $modRegId;
     $modInfo['mode'] = (int) $mode;
@@ -1534,16 +1537,17 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     $query .= " AND xar_object = ? AND xar_action = ? ORDER BY xar_order ASC";
     $bindvars[] = $hookObject;
     $bindvars[] = $hookAction;
-    $result =& $dbconn->Execute($query,$bindvars);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_NUM);
     if (!$result) return;
 
     $resarray = array();
-    while(!$result->EOF) {
+    while($result->next()) {
         list($hookArea,
              $hookModName,
              $hookModType,
              $hookFuncName,
-             $hookOrder) = $result->fields;
+             $hookOrder) = $result->getRow();
 
         $tmparray = array('area' => $hookArea,
                           'module' => $hookModName,
@@ -1551,7 +1555,6 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
                           'func' => $hookFuncName);
 
         array_push($resarray, $tmparray);
-        $result->MoveNext();
     }
     $result->Close();
     $hookListCache["$callerModName$callerItemType$hookObject$hookAction"] = $resarray;
@@ -1845,18 +1848,18 @@ function xarMod_getBaseInfo($modName, $type = 'module')
         . ' ON modstates.xar_regid = mods.xar_regid'
         . ' WHERE mods.xar_name = ? OR mods.xar_directory = ?';
     $bindvars = array($modName, $modName);
-
-    $result =& $dbconn->Execute($query, $bindvars);
+    
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
     if (!$result) return;
-
-    if ($result->EOF) {
+    
+    if (!$result->next()) {
         $result->Close();
         return;
     }
 
     $modBaseInfo = array();
-
-    list($regid, $directory, $mode, $systemid, $state, $name) = $result->fields;
+    list($regid,  $directory, $mode, $systemid, $state, $name) = $result->getRow();
     $result->Close();
 
     $modBaseInfo['regid'] = (int) $regid;
@@ -1932,19 +1935,18 @@ function xarMod_getVarsByModule($modName, $type = 'module')
                 $module_varstable = $tables['site/module_vars'];
             }
 
-            $query = 'SELECT xar_name, xar_value FROM '.$module_varstable
-                . ' WHERE xar_modid = ?';
-            $result =& $dbconn->Execute($query, array($modBaseInfo['systemid']));
+            $query = "SELECT xar_name, xar_value FROM $module_varstable
+                      WHERE xar_modid = ?";
+            $stmt =& $dbconn->prepareStatement($query);
+            $result =& $stmt->executeQuery(array($modBaseInfo['systemid']),ResultSet::FETCHMODE_ASSOC);
             if (!$result) return;
 
-            while (!$result->EOF) {
-                list($name, $value) = $result->fields;
-                xarCore_SetCached('Mod.Variables.' . $modBaseInfo['name'], $name, $value);
-                $result->MoveNext();
+            while ($result->next()) {
+                xarCore_SetCached('Mod.Variables.' . $modName, $result->getString('xar_name'), $result->get('xar_value'));
             }
             $result->Close();
 
-            xarCore_SetCached('Mod.GetVarsByModule', $modBaseInfo['name'], true);
+            xarCore_SetCached('Mod.GetVarsByModule', $modName, true);
             break;
         case 'theme':
             // Takes the right table basing on theme mode
@@ -1954,17 +1956,17 @@ function xarMod_getVarsByModule($modName, $type = 'module')
                 $theme_varsTable = $tables['site/theme_vars'];
             }
 
-            $query = 'SELECT xar_name, xar_prime, xar_value, xar_description'
-                . ' FROM '.$theme_varsTable.' WHERE xar_themeName = ?';
-            $result =& $dbconn->Execute($query, array($themeName));
+            $query = "SELECT xar_name as name, xar_prime as prime, 
+                             xar_value as value, xar_description as description
+                      FROM $theme_varsTable WHERE xar_themeName = ?";
+            $stmt =& $dbconn->prepareStatement($query);
+            $result =& $stmt->executeQuery(array($themeName),ResultSet::FETCHMODE_ASSOC);
             if (!$result) return;
 
             $themevars = array();
-            while (!$result->EOF) {
-                list($name, $prime, $value, $description) = $result->fields;
-                $themevars[] = array('name' => $name, 'prime' => $prime, 'value' => $value, 'description' => $description);
-                xarCore_SetCached('Theme.Variables.' . $themeName, $name, $value);
-                $result->MoveNext();
+            while ($result->next()) {
+                $themevars[] = $result->getRow();
+                xarCore_SetCached('Theme.Variables.' . $themeName, $result->getString('name'), $result->get('value'));
             }
             $result->Close();
 
@@ -2023,14 +2025,13 @@ function xarMod_getVarsByName($varName, $type = 'module')
         break;
     }
 
-    $result =& $dbconn->Execute($query,array($varName));
+    $stmt =& $dbconn->prepareStatement($query);
+    $result =& $stmt->executeQuery(array($varName),ResultSet::FETCHMODE_NUM);
     if (!$result) return;
 
     // Add module variables to cache
-    while (!$result->EOF) {
-        list($name,$value) = $result->fields;
-        xarCore_SetCached('Mod.Variables.' . $name, $varName, $value);
-        $result->MoveNext();
+    while ($result->next()) {
+        xarCore_SetCached('Mod.Variables.' . $result->getString(1), $varName, $result->get(2));
     }
 
     $result->Close();
@@ -2150,20 +2151,18 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
 
             break;
     }
-
-    $result =& $dbconn->Execute($query,array($modRegId));
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array($modRegId),ResultSet::FETCHMODE_NUM);
     if (!$result) return;
 
     // the module is not in the table
-    // set state to XARMOD_STATE_MISSING
-    if (!$result->EOF) {
-        list($modState) = $result->fields;
-        $result->Close();
-        return (int) $modState;
-    } else {
-        $result->Close();
-        return (int) XARMOD_STATE_UNINITIALISED;
+    // set state to XARMOD_STATE_UNINITIALISED
+    $modState = (int) XARMOD_STATE_UNINITIALISED;
+    if ($result->next()) {
+        $modState = $result->getInt(1);
     }
+    $result->Close();
+    return $modState;
 }
 
 /**
@@ -2205,7 +2204,8 @@ function xarModRegisterHook($hookObject,
               VALUES (?,?,?,?,?,?,?)";
     $seqId = $dbconn->GenId($hookstable);
     $bindvars = array($seqId,$hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
-    $result =& $dbconn->Execute($query,$bindvars);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeUpdate($bindvars);
     if (!$result) return;
 
     return true;
@@ -2230,8 +2230,6 @@ function xarModUnregisterHook($hookObject,
                              $hookModType,
                              $hookFuncName)
 {
-    // FIXME: <marco> BAD_PARAM?
-
     // Get database info
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
@@ -2242,8 +2240,9 @@ function xarModUnregisterHook($hookObject,
               WHERE xar_object = ?
               AND xar_action = ? AND xar_tarea = ? AND xar_tmodule = ?
               AND xar_ttype = ?  AND xar_tfunc = ?";
+    $stmt =& $dbconn->prepareStatement($query);
     $bindvars = array($hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
-    $result =& $dbconn->Execute($query,$bindvars);
+    $result =& $stmt->executeUpdate($bindvars);
     if (!$result) return;
 
     return true;

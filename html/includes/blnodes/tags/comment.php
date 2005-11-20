@@ -9,7 +9,7 @@
  */
 class xarTpl__XarCommentNode extends xarTpl__TplTagNode
 {
-    function constructor(&$parser,$tagName, $parentTagName, $attributes)
+    function constructor(&$parser,$tagName, $parentTagName='', $attributes=array())
     {
         parent::constructor($parser, $tagName, $parentTagName, $attributes);
         // Completely skip the contents of the tag

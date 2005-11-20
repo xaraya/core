@@ -1,5 +1,6 @@
 <?php
 /**
+ * File: $Id: xarSession.php 1.97 05/09/01 13:31:53+02:00 marcel@hsdev.com $
  * Session Support
  *
  * @package sessions
@@ -440,7 +441,8 @@ function xarSession__phpRead($sessionId)
     //        out? At least the roles/privileges modules are using it actively
     $query = "SELECT xar_uid, xar_ipaddr, xar_lastused, xar_vars
               FROM $sessioninfoTable WHERE xar_sessid = ?";
-    $result =& $dbconn->Execute($query,array($sessionId));
+
+    $result =& $dbconn->Execute($query,array($sessionId),ResultSet::FETCHMODE_NUM);
     if (!$result) return;
 
     if (!$result->EOF) {
@@ -448,7 +450,7 @@ function xarSession__phpRead($sessionId)
         if (xarSession__UseOldSessions()) {
             global $XARSVuid;
         }
-        list($XARSVuid, $GLOBALS['xarSession_ipAddress'], $lastused, $vars) = $result->fields;
+        list($XARSVuid, $GLOBALS['xarSession_ipAddress'], $lastused, $vars) = $result->getRow();
         // in case garbage collection didn't have the opportunity to do its job
         if (!empty($GLOBALS['xarSession_systemArgs']['securityLevel']) &&
             $GLOBALS['xarSession_systemArgs']['securityLevel'] == 'High') {
@@ -490,20 +492,10 @@ function xarSession__phpWrite($sessionId, $vars)
 
     $sessioninfoTable = $xartable['session_info'];
 
-    $dbtype = xarDBGetType();
-    if (substr($dbtype,0,4) == 'oci8' || substr($dbtype,0,5) == 'mssql') {
-        $query = "UPDATE $sessioninfoTable SET xar_lastused = ? WHERE xar_sessid = ?";
-        $result =& $dbconn->Execute($query,array(time(), $sessionId));
-        if (!$result) return;
-        $id = $dbconn->qstr($sessionId);
-        // Note: not sure why we use BLOB instead of TEXT (aka CLOB) for this field
-        $result =& $dbconn->UpdateBlob($sessioninfoTable, 'xar_vars', $vars, "xar_sessid = $id");
-        if (!$result) return;
-    } else {
-        $query = "UPDATE $sessioninfoTable SET xar_vars = ?, xar_lastused = ? WHERE xar_sessid = ?";
-        $result =& $dbconn->Execute($query,array($vars, time(), $sessionId));
-        if (!$result) return;
-    }
+    // FIXME: We had to do qstr here, cos the query failed for some reason
+    $query = "UPDATE $sessioninfoTable SET xar_vars = ". $dbconn->qstr($vars) . ", xar_lastused = " . $dbconn->qstr(time()). "WHERE xar_sessid = ".$dbconn->qstr($sessionId);
+    $result = $dbconn->executeUpdate($query);
+    if (!$result) return;
 
     return true;
 }
@@ -520,7 +512,7 @@ function xarSession__phpDestroy($sessionId)
     $sessioninfoTable = $xartable['session_info'];
 
     $query = "DELETE FROM $sessioninfoTable WHERE xar_sessid = ?";
-    $result =& $dbconn->Execute($query,array($sessionId));
+    $result =& $dbconn->execute($query,array($sessionId));
     if (!$result) return;
 
     return true;

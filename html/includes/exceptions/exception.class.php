@@ -16,18 +16,18 @@
  */
 class xarException
 {
-    var $msg = '';
-    var $id = 0;
-    var $major = 0;
-    var $defaults;
-    var $title = '';
-    var $short = '';
-    var $long = '';
-    var $hint = '';
-    var $stack;
-    var $product = '';
-    var $component = '';
-    var $module = '';
+    public $msg = '';
+    public $id = 0;
+    public $major = 0;
+    public $defaults;
+    public $title = '';
+    public $short = '';
+    public $long = '';
+    public $hint = '';
+    public $stack;
+    public $product = '';
+    public $component = '';
+    public $module = '';
 
     function xarException()
     {

@@ -159,8 +159,9 @@ class xarTpl__ParserError extends SystemException
  */
 class xarTpl__Compiler extends xarTpl__CompilerError
 {
-    var $parser;
-    var $codeGenerator;
+    private static $instance = null;
+    public $parser;
+    public $codeGenerator;
 
     function xarTpl__Compiler()
     {
@@ -168,14 +169,12 @@ class xarTpl__Compiler extends xarTpl__CompilerError
         $this->codeGenerator = new xarTpl__CodeGenerator();
     }
 
-    function &instance() 
+    static function &instance() 
     {
-        static $instance = NULL;
-        if(!isset($instance)) {
-            $instance = new xarTpl__Compiler();
+        if(self::$instance == null) {
+            self::$instance = new xarTpl__Compiler();
         }
-        return $instance;
-        
+        return self::$instance;
     }
     
     function compileFile($fileName)
@@ -219,10 +218,10 @@ class xarTpl__Compiler extends xarTpl__CompilerError
  */
 class xarTpl__PositionInfo extends xarTpl__ParserError
 {
-    var $fileName = '';
-    var $line = 1;
-    var $column = 1;
-    var $lineText = '';
+    public $fileName = '';
+    public $line = 1;
+    public $column = 1;
+    public $lineText = '';
     
     function setFileName($fileName)
     {
@@ -240,9 +239,9 @@ class xarTpl__PositionInfo extends xarTpl__ParserError
  */
 class xarTpl__CodeGenerator extends xarTpl__PositionInfo
 {
-    var $isPHPBlock = false;
-    var $pendingExceptionsControl = false;
-    var $code;
+    public $isPHPBlock = false;
+    public $pendingExceptionsControl = false;
+    public $code;
 
     function isPHPBlock()
     {
@@ -381,9 +380,9 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
  */
 class xarTpl__Parser extends xarTpl__PositionInfo
 {
-    var $tagNamesStack;
-    var $tagIds;
-    var $tagRootSeen;
+    public $tagNamesStack;
+    public $tagIds;
+    public $tagRootSeen;
 
     function parse(&$templateSource)
     {
@@ -1246,7 +1245,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
  */
 class xarTpl__TemplateVariables
 {
-    var $tplVars = array();
+    public $tplVars = array();
 
     function xarTpl__TemplateVariables()
     {
@@ -1375,7 +1374,7 @@ class xarTpl__ExpressionTransformer
         return $phpExpression;
     }
     
-    function rlensort($a, $b) 
+    static function rlensort($a, $b) 
     {
         if(strlen($a) == strlen($b)) {
             return 0;
@@ -1412,7 +1411,7 @@ class xarTpl__ExpressionTransformer
  */
 class xarTpl__Node extends xarTpl__PositionInfo
 {
-    var $tagName;   // This is an internal name of the node, not the actual tag name
+    public $tagName;   // This is an internal name of the node, not the actual tag name
     
     // What we're doing here is create an alias for the constructor, so
     // it derives properly. That way we decouple the class name from the 
@@ -1425,9 +1424,9 @@ class xarTpl__Node extends xarTpl__PositionInfo
         $this->constructor($parser, $nodeName);
     }
     
-    function constructor(&$parser, $nodeName)
+    function constructor(&$parser, $tagName, $parentTagName='', $attributes=array())
     {
-        $this->tagName  = $nodeName;
+        $this->tagName  = $tagName;
         $this->fileName = $parser->fileName;
         $this->line     = $parser->line;
         $this->column   = $parser->column;
@@ -1501,9 +1500,9 @@ class xarTpl__Node extends xarTpl__PositionInfo
  */
 class xarTpl__TplTagNode extends xarTpl__Node
 {
-    var $attributes;
-    var $parentTagName;
-    var $children;
+    public $attributes;
+    public $parentTagName;
+    public $children;
     
     // Do the same here as we do in tplnode class
     function xarTpl__TplTagNode(&$parser, $tagName, $parentTagName, $attributes) 
@@ -1513,7 +1512,7 @@ class xarTpl__TplTagNode extends xarTpl__Node
     }
     
     
-    function constructor(&$parser, $tagName, $parentTagName, $attributes)
+    function constructor(&$parser, $tagName, $parentTagName='', $attributes=array())
     {
         // TplNode has no parent, nor attributes, separation is here.
         parent::constructor($parser, $tagName);
@@ -1543,9 +1542,9 @@ class xarTpl__TplTagNode extends xarTpl__Node
  */
 class xarTpl__EntityNode extends xarTpl__Node
 {
-    var $entityType;
-    var $parameters;
-    var $hasExtras = false;
+    public $entityType;
+    public $parameters;
+    public $hasExtras = false;
     
     function xarTpl__EntityNode(&$parser, $tagName, $entityType, $parameters) 
     {
@@ -1557,10 +1556,11 @@ class xarTpl__EntityNode extends xarTpl__Node
         $this->constructor($parser, $tagName, $entityType, $parameters);
     }
     
-    function constructor(&$parser, $tagName, $entityType, $parameters)
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
     {
+        // TODO: refactor the interface here, PHP5 insists on have the naming of parameters the same
         parent::constructor($parser, $tagName);
-        $this->entityType = $entityType;
+        $this->entityType = $parentTagName;
         $this->parameters = $parameters;
     }
     
@@ -1586,7 +1586,7 @@ class xarTpl__EntityNode extends xarTpl__Node
  */
 class xarTpl__InstructionNode extends xarTpl__Node
 {
-    var $instruction;
+    public $instruction;
     
     function xarTpl__InstructionNode(&$parser, $tagName, $instruction)
     {
@@ -1615,8 +1615,8 @@ class xarTpl__InstructionNode extends xarTpl__Node
  */
 class xarTpl__DocumentNode extends xarTpl__Node
 {
-    var $children;
-    var $variables;
+    public $children;
+    public $variables;
 
     function renderBeginTag()
     {
@@ -1657,7 +1657,7 @@ class xarTpl__DocumentNode extends xarTpl__Node
  */
 class xarTpl__TextNode extends xarTpl__Node
 {
-    var $content;
+    public $content;
 
     function xarTpl__TextNode(&$parser, $tagName, $content)
     {

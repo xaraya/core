@@ -1,7 +1,6 @@
 <?php
 /**
  * Numberlist property
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -21,8 +20,8 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_NumberList_Property extends Dynamic_Select_Property
 {
-    var $min = null;
-    var $max = null;
+    public $min = null;
+    public $max = null;
 
     function Dynamic_NumberList_Property($args)
     {

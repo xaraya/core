@@ -630,16 +630,16 @@ function xarMLS_strftime($format=null,$timestamp=null)
  */
 class xarMLS__LocaleDataLoader
 {
-    var $curData;
-    var $curPath;
+    public $curData;
+    public $curPath;
 
-    var $parser;
+    public $parser;
 
-    var $localeData;
+    public $localeData;
 
-    var $attribsStack = array();
+    public $attribsStack = array();
 
-    var $tmpVars;
+    public $tmpVars;
 
     function load($locale)
     {

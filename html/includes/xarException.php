@@ -478,7 +478,8 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
     global $CoreStack;
 
     //Checks for a @ presence in the given line, should stop from setting Xaraya or DB errors
-    if (!error_reporting() || $errorType > E_ALL) {
+    // Let's not display E_STRICT in development longer term, but lets do it now anyways
+    if (!error_reporting() || $errorType > E_STRICT ) {
         // Log the message so it is not lost.
         // TODO: make this message available to calling functions that suppress
         // errors through '@'.
@@ -511,8 +512,8 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
         $sourcetmpl='';
         $base = basename(strval($file),'.php');
         $varDir = xarCoreGetVarDirPath();
-        if (file_exists($varDir . '/cache/templates/CACHEKEYS')) {
-            $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'r');
+        if (file_exists($varDir . XARCORE_TPL_CACHEDIR .'/CACHEKEYS')) {
+            $fd = fopen($varDir . XARCORE_TPL_CACHEDIR .'/CACHEKEYS', 'r');
             while($cache_entry = fscanf($fd, "%s\t%s\n")) {
                 list($hash, $template) = $cache_entry;
                 // Strip the colon

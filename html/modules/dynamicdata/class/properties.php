@@ -1,7 +1,6 @@
 <?php
 /**
  * Utility Class to manage Dynamic Properties
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -28,7 +27,7 @@ class Dynamic_Property_Master
      * @param $args['objectref'] a reference to the object to add those properties to (optional)
      * @param $args['allprops'] skip disabled properties by default
      */
-    function getProperties($args)
+    static function getProperties($args)
     {
         // we can't use our own classes here, because we'd have an endless loop :-)
 
@@ -110,7 +109,7 @@ class Dynamic_Property_Master
      * ...
      * @param $objectref a reference to the object to add this property to
      */
-    function addProperty($args, &$objectref)
+    static function addProperty($args, &$objectref)
     {
         if (!isset($objectref) || empty($args['name']) || empty($args['type'])) {
             return;
@@ -145,7 +144,7 @@ class Dynamic_Property_Master
     /**
      * Class method to get a new dynamic property of the right type
      */
-    function &getProperty($args)
+    static function &getProperty($args)
     {
         if (!is_numeric($args['type'])) 
         {
@@ -223,7 +222,7 @@ class Dynamic_Property_Master
     /**
      * Class method listing all defined property types
      */
-    function getPropertyTypes()
+    static function getPropertyTypes()
     {
         if (xarVarIsCached('DynamicData','PropertyTypes')) {
             return xarVarGetCached('DynamicData','PropertyTypes');
@@ -315,27 +314,27 @@ class Dynamic_Property_Master
  */
 class Dynamic_Property
 {
-    var $id = null;
-    var $name = null;
-    var $label = null;
-    var $type = 1;
-    var $default = '';
-    var $source = 'dynamic_data';
-    var $status = 1;
-    var $order = 0;
-    var $validation = null;
+    public $id = null;
+    public $name = null;
+    public $label = null;
+    public $type = 1;
+    public $default = '';
+    public $source = 'dynamic_data';
+    public $status = 1;
+    public $order = 0;
+    public $validation = null;
 
-    var $datastore = '';   // name of the data store where this property comes from
+    public $datastore = '';   // name of the data store where this property comes from
 
-    var $value = null;     // value of this property for a particular Dynamic_Object
-    var $invalid = '';     // result of the checkInput/validateValue methods
+    public $value = null;     // value of this property for a particular Dynamic_Object
+    public $invalid = '';     // result of the checkInput/validateValue methods
 
-    var $_objectid = null; // objectid this property belongs to
-    var $_moduleid = null; // moduleid this property belongs to
-    var $_itemtype = null; // itemtype this property belongs to
+    public $_objectid = null; // objectid this property belongs to
+    public $_moduleid = null; // moduleid this property belongs to
+    public $_itemtype = null; // itemtype this property belongs to
 
-    var $_itemid;          // reference to $itemid in Dynamic_Object, where the current itemid is kept
-    var $_items;           // reference to $items in Dynamic_Object_List, where the different item values are kept
+    public $_itemid;          // reference to $itemid in Dynamic_Object, where the current itemid is kept
+    public $_items;           // reference to $items in Dynamic_Object_List, where the different item values are kept
 
     /**
      * Default constructor setting the variables

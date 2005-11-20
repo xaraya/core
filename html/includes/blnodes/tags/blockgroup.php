@@ -9,8 +9,8 @@
  */
 class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
 {
-    var $template = NULL;
-    var $assignable = true;
+    public $template = NULL;
+    public $assignable = true;
     
     
     function renderBeginTag()

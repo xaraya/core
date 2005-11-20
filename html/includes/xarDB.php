@@ -1,19 +1,19 @@
 <?php
 /**
- * ADODB Database Abstraction Layer API Helpers
+ * Database Abstraction Layer API Helpers
  * 
  * @package database
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
- * @subpackage adodb
+ * @subpackage database
  * @author Marco Canini
 */
 
 /**
  * Initializes the database connection.
  *
- * This function loads up ADODB  and starts the database
+ * This function loads up the db abstraction layer  and starts the database
  * connection using the required parameters then it sets
  * the table prefixes and xartables up and returns true
  * 
@@ -29,35 +29,26 @@
  * @param bool args[persistent] flag to say we want persistent connections (optional)
  * @param string args[systemTablePrefix] system table prefix
  * @param string args[siteTablePrefix] site table prefix
+ * @param bool   args[doConnect] on inialisation, also connect, defaults to true if not specified
  * @param integer whatElseIsGoingLoaded
  * @return bool true on success, false on failure
  * @todo <marco> move template tag table definition somewhere else?
  */
 function xarDB_init($args, $whatElseIsGoingLoaded)
 {
+    if(!array_key_exists('doConnect',$args)) $args['doConnect'] = true;
     $GLOBALS['xarDB_systemArgs'] = $args;
-
-    // ADODB configuration
-    // FIXME: do we need a check if the constant is defined whether it has the
-    //        right value?
-    if (!defined('XAR_ADODB_DIR')) {
-        define('XAR_ADODB_DIR', 'xaradodb');
-    }
-
-    // ADODB-to-Xaraya error-to-exception bridge
-    if (!defined('ADODB_ERROR_HANDLER')) {
-        define('ADODB_ERROR_HANDLER', 'xarException__dbErrorHandler');
-    }
-
-    include_once XAR_ADODB_DIR .'/adodb.inc.php';
-
+    
+    include_once 'creole/xarCreole.php';
+    
     // Start the default connection
     $GLOBALS['xarDB_connections'] = array();
-    $dbconn =& xarDBNewConn();
+    
+    if($args['doConnect']) {
+        $dbconn =& xarDBNewConn();
+    }
 
     $GLOBALS['xarDB_tables'] = array();
-
-    $ADODB_CACHE_DIR = xarCoreGetVarDirPath() . '/cache/adodb';
 
     $systemPrefix = $args['systemTablePrefix'];
     $sitePrefix   = $args['siteTablePrefix'];
@@ -121,96 +112,19 @@ function &xarDBNewConn($args = NULL)
     $dbPass  = $args['password'];
     $persistent = !empty($args['persistent']) ? true : false;
 
-    // Check if there is a xar- version of the driver.
-    if (xarDBdriverExists('xar'.$dbType, 'adodb')) {
-        $dbType = 'xar'.$dbType;
-    }
-
-    $conn =& ADONewConnection($dbType);
-
-    if ($persistent) {
-        if (!$conn->PConnect($dbHost, $dbUname, $dbPass, $dbName)) {
-            // FIXME: <mrb> theoretically we could raise an exceptions here, but due to the dependencies we can't right now
-            xarCore_die("xarDB_init: Failed to pconnect to $dbType://$dbUname@$dbHost/$dbName, error message: " . $conn->ErrorMsg());
-        }
-    } elseif (!$conn->Connect($dbHost, $dbUname, $dbPass, $dbName, true)) {
-        // FIXME: <mrb> theoretically we could raise an exceptions here, but due to the dependencies we can't right now
-        xarCore_die("xarDB_init: Failed to connect to $dbType://$dbUname@$dbHost/$dbName, error message: " . $conn->ErrorMsg());
-    }
-    // Set the default settings for this connection
-    // FIXME: ADODB currently allows setting of fetch mode via global and the method setfetchmode()
-    // however, it doesn't seem to take into account the global setting when setfetchmode is set
-    // which causes problems in postgres drivers (and possibly others). reason being that these drivers,
-    // don't actually use the setFetchMode method everywhere - instead opting for the global (which can be out 
-    // of sync with the latter). -- rabbitt
-    // With the ADODB 4.60 onwards, this option can be set individually for each connection object.
-    // It may be better to remove the global completely, and set the property against each
-    // connection object as they are created. We may now be in the position to restore the
-    // commented-out line below.
-    $GLOBALS['ADODB_FETCH_MODE'] = ADODB_FETCH_NUM;
-
-    // Commented out due to FIXME above.
-    // $conn->SetFetchMode(ADODB_FETCH_NUM);
-
-    // force oracle (oci8, oci8po or oci805) to a consistent date format for comparison methods later on
-    // FIXME: <mrb> this doesn't belong here
-    if (substr($dbType, 0, 4) == 'oci8') {
-        $conn->Execute("ALTER session SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
-    }
-
+    $dsn = array('phptype' => $dbType,
+                 'hostspec' => $dbHost,
+                 'username' => $dbUname,
+                 'password' => $dbPass,
+                 'database' => $dbName);
+    
+    $conn = null;
+    $conn = xarDB::getConnection($dsn,ResultSet::FETCHMODE_NUM);
     // Store the connection for global access.
     $GLOBALS['xarDB_connections'][] =& $conn;
-    // Fetch the key for this this connection.
-    $key = key($GLOBALS['xarDB_connections']);
-    // Store the key in the connection object so the caller knows how to fetch it again.
-    $conn->database_key = $key;
 
     xarLogMessage("New connection created, now serving " . count($GLOBALS['xarDB_connections']) . " connections");
     return $conn;
-}
-
-/**
- * Check whether an ADOdb driver exists.
- * Checks the driver by looking for its file, without attempting to load it.
- * It would be nice if this were a public function of ADOdb, because we
- * should not have to keep this code updated.
- *
- * @access private
- * @return boolean true if the driver exists
- * @todo this is a copy of private ADOdb code, must keep it updated
- * @todo expand the handler types as necessary (e.g. for creole)
- */
-function xarDBdriverExists($dbType, $handler = 'adodb') 
-{
-    if (empty($dbType) || $handler != 'adodb') {return false;}
-
-    // Strip off and save the 'xar' prefix, if it exists.
-    if (strpos($dbType, 'xar') === 0) {
-        $prefix = 'xar';
-        $dbType = substr ($dbType, 3);
-    } else {
-        $prefix = '';
-    }
-
-    // Do some ADOdb-specific mapping.
-    // This mapping is for version 4.60.
-    $db = strtolower($dbType);
-    switch ($db) {
-        case 'ado': 
-            if (PHP_VERSION >= 5) $db = 'ado5';
-            $class = 'ado'; 
-            break;
-        case 'ifx':
-        case 'maxsql': $class = $db = 'mysqlt'; break;
-        case 'postgres':
-        case 'postgres8':
-        case 'pgsql': $class = $db = 'postgres7'; break;
-        default:
-            $class = $db; break;
-    }
-    $file = XAR_ADODB_DIR . "/drivers/adodb-" . $prefix . $db . ".inc.php";
-
-    return (file_exists($file) ? true : false);
 }
 
 /**
@@ -259,7 +173,7 @@ function xarDBLoadTableMaintenanceAPI()
  *
  * @access public
  * @return data   dictionary object (specifics depend on mode)
- * @param  object $dbconn ADODB database connection object
+ * @param  object $dbconn database connection object
  * @param  string $mode the mode in which the data dictionary will be used; default READONLY
  * @todo   fully implement the mode, by layering the classes into separate files of readonly and amend methods
  * @todo   xarMetaData class needs to accept the database connection object

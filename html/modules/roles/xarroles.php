@@ -32,11 +32,11 @@ define('ROLES_STATE_ALL',99);
  */
 class xarRoles
 {
-    var $allgroups = array();
-    var $users = array();
-    var $dbconn;
-    var $rolestable;
-    var $rolememberstable;
+    public $allgroups = array();
+    public $users = array();
+    public $dbconn;
+    public $rolestable;
+    public $rolememberstable;
 
     function xarRoles()
     {
@@ -412,26 +412,26 @@ class xarRoles
  */
 class xarRole
 {
-    var $uid;          //the id of this user or group
-    var $name;         //the name of this user or group
-    var $type;         //the type of this role (0=user, 1=group)
-    var $parentid;     //the id of the parent of this role
-    var $uname;        //the user name (not used by groups)
-    var $email;        //the email address (not used by groups)
-    var $pass;         //the password (not used by groups)
-    var $date_reg;     //the date of registration
-    var $val_code;     //the validation code of this user or group
-    var $state;        //the state of this user or group
-    var $auth_module;  //no idea what this is (not used by groups)
-    var $parentlevel;  //we use this just to store transient information
+    public $uid;          //the id of this user or group
+    public $name;         //the name of this user or group
+    public $type;         //the type of this role (0=user, 1=group)
+    public $parentid;     //the id of the parent of this role
+    public $uname;        //the user name (not used by groups)
+    public $email;        //the email address (not used by groups)
+    public $pass;         //the password (not used by groups)
+    public $date_reg;     //the date of registration
+    public $val_code;     //the validation code of this user or group
+    public $state;        //the state of this user or group
+    public $auth_module;  //no idea what this is (not used by groups)
+    public $parentlevel;  //we use this just to store transient information
 
-    var $dbconn;
-    var $rolestable;
-    var $rolememberstable;
-    var $privilegestable;
-    var $acltable;
+    public $dbconn;
+    public $rolestable;
+    public $rolememberstable;
+    public $privilegestable;
+    public $acltable;
 
-    var $allprivileges;
+    public $allprivileges;
 
     /**
      * xarRole: constructor for the role object

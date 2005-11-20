@@ -629,37 +629,17 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
 
     }
 
-    // TODO : Explain the cache logic behind this, why exclude moduservars?
-    // TODO : why have cache period 1 week ?
-    if (xarCore_getSystemVar('DB.UseADODBCache')){
-        switch(strtolower($type)) {
-        case 'modvar':
-        case 'themevar':
-        case 'configvar':
-            $result =& $dbconn->CacheExecute(3600*24*7,$query,$bindvars);
-            if (!$result) return;
-            break;
-        case 'moduservar':
-            $result =& $dbconn->Execute($query,$bindvars);
-            if (!$result) return;
-            break;
-        }
-    } else {
-        $result =& $dbconn->Execute($query,$bindvars);
-        if (!$result) return;
-    }
-
-    if (strtolower($type) == 'moduservar') {
-        // If there is no such thing, return the global setting.
-        if ($result->EOF) {
-            $result->Close();
-            // return global setting
-            return xarModGetVar($modName, $name);
-        }
-    }
-
-    if ($result->EOF) {
-        $result->Close();
+    // TODO : Here used to be a resultset cache option, reconsider it
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
+    if (!$result) return;
+    
+    if ($result->getRecordCount() == 0) {
+        $result->close(); unset($result);
+        
+        // If there is no such thing, return the global setting for moduservars
+        if (strtolower($type) == 'moduservar') return xarModGetVar($modName, $name);
+        
         xarVarSetCached($cacheCollection, $cacheName, $missing);
         return;
     }
@@ -667,10 +647,8 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
     switch(strtolower($type)) {
         case 'themevar':
         case 'modvar':
-            while (!$result->EOF) {
-                list($name, $value) = $result->fields;
-                xarVarSetCached($cacheCollection, $name, $value);
-                $result->MoveNext();
+            while ($result->next()) {
+                xarVarSetCached($cacheCollection, $result->getString(1), $result->get(2));
             }
             //Special value to tell this select has already been run, any
             //variable not found now on is missing
@@ -688,7 +666,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
             // We finally found it, update the appropriate cache
             //Couldnt we serialize and unserialize all variables?
             //would that be too time expensive?
-            list($value) = $result->fields;
+            list($value) = $result->getRow();
             if($type == 'configvar') {
                 $value = unserialize($value);
             }
@@ -850,7 +828,8 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
     }
 
     if (!empty($query)){
-        $result =& $dbconn->Execute($query,$bindvars);
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeUpdate($bindvars);
         if (!$result) return;
     }
 
@@ -925,8 +904,10 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
                 // MrB: we could use xarModDelUserVar in a loop here, but this is
                 //      much faster.
                 $query = "DELETE FROM $module_uservarstable WHERE xar_mvid = ?";
-                $result =& $dbconn->Execute($query,array((int)$modvarid));
+                $stmt = $dbconn->prepareStatement($query);
+                $result = $stmt->executeUpdate(array((int)$modvarid));
                 if(!$result) return;
+                $result->close(); unset($result);
             }
             // Takes the right table basing on module mode
             if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
@@ -971,7 +952,8 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
             break;
     }
 
-    $result =& $dbconn->Execute($query, $bindvars);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeUpdate($bindvars);
     if (!$result) return;
 
     switch(strtolower($type)) {

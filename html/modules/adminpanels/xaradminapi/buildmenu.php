@@ -1,7 +1,6 @@
 <?php
 /**
  * Build admin menu items
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -56,7 +55,7 @@ function adminpanels_adminapi_buildmenu($args)
                     FROM $menutable
                     WHERE xar_category = ?
                     AND xar_flag = 1";
-        $result =& $dbconn->Execute($query,array($cat));
+        $result = $dbconn->Execute($query,array($cat));
         if (!$result) return;
 
         // the category label
