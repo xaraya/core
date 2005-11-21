@@ -148,77 +148,96 @@ function mail_adminapi__sendmail($args)
     // $recipients = array of recipients -- meant to replace $info/$name
     // $subject = The subject of the mail
     // $message = The body of the email
-    // $name = name of person recieving email (not required)
-    if (!empty($recipients)) {
-        foreach($recipients as $k=>$v) {
-            if (!is_numeric($k) && !is_numeric($v)) {
-                // $recipients[$info] = $name describes $recipients parameter
-                $mail->AddAddress($k, $v);
-            } else if (!is_numeric($k)) {
-                // $recipients[$info] = (int) describes $recipients parameter
-                $mail->AddAddress($k);
-            } else {
-                // $recipients[(int)] = $info describes $recipients parameter
-                $mail->AddAddress($v);
-            }// if
-        }// foreach
-    } else {
-        if (!empty($info)) {
-            if (!empty($name)) {
-                $mail->AddAddress($info, $name);
-            } else {
-                $mail->AddAddress($info);
-            }
-        }
-    }// if
+    // $name = name of person receiving email (not required)
+    if (xarModGetVar('mail','redirectsending')) {
+		$mail->ClearAddresses();
+		$recipients = array();
+		$redirectaddress = xarModGetVar('mail','redirectaddress');
+	    if (!empty($redirectaddress)) {
+	    	$info = $redirectaddress;
+	    	$name = xarML('Xaraya Mail Debugging');
+	    } else {
+	    	return true;
+	    }
+	}
+	if (!empty($recipients)) {
+		foreach($recipients as $k=>$v) {
+			if (!is_numeric($k) && !is_numeric($v)) {
+				// $recipients[$info] = $name describes $recipients parameter
+				$mail->AddAddress($k, $v);
+			} else if (!is_numeric($k)) {
+				// $recipients[$info] = (int) describes $recipients parameter
+				$mail->AddAddress($k);
+			} else {
+				// $recipients[(int)] = $info describes $recipients parameter
+				$mail->AddAddress($v);
+			}// if
+		}// foreach
+	} else {
+		if (!empty($info)) {
+			if (!empty($name)) {
+				$mail->AddAddress($info, $name);
+			} else {
+				$mail->AddAddress($info);
+			}
+		}
+	}// if
 
     // Add a "CC" address
-    if (!empty($ccrecipients)) {
-        foreach($ccrecipients as $k=>$v) {
-            if (!is_numeric($k) && !is_numeric($v)) {
-                // $recipients[$info] = $name describes $recipients parameter
-                $mail->AddCC($k, $v);
-            } else if (!is_numeric($k)) {
-                // $recipients[$info] = (int) describes $recipients parameter
-                $mail->AddCC($k);
-            } else {
-                // $recipients[(int)] = $info describes $recipients parameter
-                $mail->AddCC($v);
-            }// if
-        }// foreach
-    } else {
-        if (!empty($ccinfo)) {
-            if (!empty($ccname)) {
-                $mail->AddCC($ccinfo, $ccname);
-            } else {
-                $mail->AddCC($ccinfo);
-            }
-        }
-    }// if
+    if (!xarModGetVar('mail','redirectsending')) {
+		$mail->ClearCCs();
+		$ccrecipients = array();
+    }
+	if (!empty($ccrecipients)) {
+		foreach($ccrecipients as $k=>$v) {
+			if (!is_numeric($k) && !is_numeric($v)) {
+				// $recipients[$info] = $name describes $recipients parameter
+				$mail->AddCC($k, $v);
+			} else if (!is_numeric($k)) {
+				// $recipients[$info] = (int) describes $recipients parameter
+				$mail->AddCC($k);
+			} else {
+				// $recipients[(int)] = $info describes $recipients parameter
+				$mail->AddCC($v);
+			}// if
+		}// foreach
+	} else {
+		if (!empty($ccinfo)) {
+			if (!empty($ccname)) {
+				$mail->AddCC($ccinfo, $ccname);
+			} else {
+				$mail->AddCC($ccinfo);
+			}
+		}
+	}// if
 
     // Add a "BCC" address
-    if (!empty($bccrecipients)) {
-        foreach($bccrecipients as $k=>$v) {
-            if (!is_numeric($k) && !is_numeric($v)) {
-                // $recipients[$info] = $name describes $recipients parameter
-                $mail->AddBCC($k, $v);
-            } else if (!is_numeric($k)) {
-                // $recipients[$info] = (int) describes $recipients parameter
-                $mail->AddBCC($k);
-            } else {
-                // $recipients[(int)] = $info describes $recipients parameter
-                $mail->AddBCC($v);
-            }// if
-        }// foreach
-    } else {
-        if (!empty($bccinfo)) {
-            if (!empty($bccname)) {
-                $mail->AddBCC($bccinfo, $bccname);
-            } else {
-                $mail->AddBCC($bccinfo);
-            }
-        }
-    }// if
+    if (!xarModGetVar('mail','redirectsending')) {
+		$mail->ClearBCCs();
+		$bccrecipients = array();
+    }
+	if (!empty($bccrecipients)) {
+		foreach($bccrecipients as $k=>$v) {
+			if (!is_numeric($k) && !is_numeric($v)) {
+				// $recipients[$info] = $name describes $recipients parameter
+				$mail->AddBCC($k, $v);
+			} else if (!is_numeric($k)) {
+				// $recipients[$info] = (int) describes $recipients parameter
+				$mail->AddBCC($k);
+			} else {
+				// $recipients[(int)] = $info describes $recipients parameter
+				$mail->AddBCC($v);
+			}// if
+		}// foreach
+	} else {
+		if (!empty($bccinfo)) {
+			if (!empty($bccname)) {
+				$mail->AddBCC($bccinfo, $bccname);
+			} else {
+				$mail->AddBCC($bccinfo);
+			}
+		}
+	}// if
 
     // Set subject
     $mail->Subject = $subject;

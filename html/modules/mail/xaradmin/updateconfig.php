@@ -51,6 +51,8 @@ function mail_admin_updateconfig()
     if (!xarVarFetch('searchstrings', 'str:1', $searchstrings, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('replacestrings', 'str:1', $replacestrings, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('suppresssending', 'checkbox', $suppresssending, false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('redirectsending', 'checkbox', $redirectsending, false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('redirectaddress', 'str:1', $redirectaddress, '', XARVAR_NOT_REQUIRED)) return;
 
     // update the data
     xarModSetVar('mail', 'adminname', $adminname);
@@ -83,6 +85,8 @@ function mail_admin_updateconfig()
     $replacestrings = serialize($replacestrings);
     xarModSetVar('mail', 'replacestrings', $replacestrings);
     xarModSetVar('mail', 'suppresssending', $suppresssending);
+    xarModSetVar('mail', 'redirectsending', $redirectsending);
+    xarModSetVar('mail', 'redirectaddress', $redirectaddress);
 
     if (xarModIsAvailable('scheduler')) {
         if (!xarVarFetch('interval', 'str:1', $interval, '', XARVAR_NOT_REQUIRED)) return;
