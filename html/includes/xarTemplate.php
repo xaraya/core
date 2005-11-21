@@ -1114,12 +1114,6 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             $newFileName = 'themes' . substr($sourceFileName, $themePathLen);
         }
     }
-    $stack = array();
-    if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
-    for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
-    $ctxType = $tplpath[0].':'.implode("/", $stack);
-    $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
-    if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
                                                             
     // Load translations for the template
     $tplpath = explode("/", $newFileName);
