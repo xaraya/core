@@ -1,4 +1,4 @@
-
+<?php
 /**
  * Checkbox Mask Property
  * @package Xaraya eXtensible Management System
@@ -45,8 +45,8 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
                        );
         return $baseInfo;
     }
-     
-     
+
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -62,28 +62,28 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
 
         return true;
     }
-     
+
     function showInput($args = array())
     {
         extract($args);
         $data=array();
 
-        if (!isset($value)) 
+        if (!isset($value))
         {
             $data['value'] = $this->value;
         } else {
             $data['value'] = $value;
         }
-        
+
         if ( !is_array($data['value']) && is_string($data['value']) )
         {
             $data['value'] = maskExplode( $data['value'] );
         }
-        
-        if (!isset($options) || count($options) == 0) 
+
+        if (!isset($options) || count($options) == 0)
         {
             $this->getOptions();
-            $options = array();            
+            $options = array();
             foreach( $this->options as $key => $option )
             {
                 $option['checked'] = in_array($option['id'],$data['value']);
@@ -115,20 +115,20 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
     function showOutput($args = array())
     {
         extract($args);
-        
-        if (!isset($value)) 
+
+        if (!isset($value))
         {
             $value = $this->value;
         }
-        
+
         if( !is_array($value) )
         {
             $value = maskExplode($value);
         }
-        
+
         $this->getOptions();
         $numOptionsSelected=0;
-        $options = array();            
+        $options = array();
         foreach( $this->options as $key => $option )
         {
             $option['checked'] = in_array($option['id'],$value);
@@ -146,7 +146,7 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
         $template="";
         return xarTplProperty('base', 'checkboxmask', 'showoutput', $data);
     }
-     
+
 }
 
 function maskImplode ( $anArray )

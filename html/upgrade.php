@@ -823,7 +823,7 @@ if (empty($step)) {
     $role = xarFindRole('Everybody');
 
     /* Bug 2204 - this var is not reliable for admin name
-       if (!isset($admin)) $admin = xarFindRole(xarModGetVar('mail','adminname')); 
+       if (!isset($admin)) $admin = xarFindRole(xarModGetVar('mail','adminname'));
     */
     $modvars[] = array(array('name'    =>  'hidecore',
                              'module'  =>  'themes',
@@ -924,6 +924,15 @@ if (empty($step)) {
                        array('name'    =>  'realmcomparison',
                              'module'  =>  'privileges',
                              'set'     =>  'exact'),
+                       array('name'    =>  'suppresssending',
+                             'module'  =>  'mail',
+                             'set'     =>  'false'),
+                       array('name'    =>  'redirectsending',
+                             'module'  =>  'mail',
+                             'set'     =>  'exact'),
+                       array('name'    =>  'redirectaddress',
+                             'module'  =>  'mail',
+                             'set'     =>  ''),
                           );
 
     foreach($modvars as $modvar){

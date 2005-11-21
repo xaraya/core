@@ -1,4 +1,4 @@
-
+<?php
 /**
  * Date Format Property
  * @package Xaraya eXtensible Management System
