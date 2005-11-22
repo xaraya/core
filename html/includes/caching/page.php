@@ -395,10 +395,11 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
                     }
                     sort($checkurls);
                     sort($cachingConfiguration['Page.SessionLess']);
-                    if (count($checkurls) > 0 &&
-                        $checkurls != $cachingConfiguration['Page.SessionLess']) {
-
-                        $checkurls = str_replace("'","\\'",$checkurls);
+                    if (count($checkurls) > 0 && $checkurls != $cachingConfiguration['Page.SessionLess']) {
+ 
+                        foreach ($checkurls as $key => $url) {
+                            $checkurls[$key] = str_replace("'", '%27', $url);
+                        }
                         $sessionlesslist = "'" . join("','",$checkurls) . "'";
 
                         $cachingConfig = join('', file($cachingConfigFile));
