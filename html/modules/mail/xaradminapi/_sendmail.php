@@ -228,13 +228,14 @@ function mail_adminapi__sendmail($args)
 
     $mailShowTemplates  = xarModGetVar('mail', 'ShowTemplates');
 
-    // If mailShowTemplates is undefined, then the modvar is missing
-    // for some reason, so just go with the value of the theme show templates
+    // If mailShowTemplates is undefined, then the modvar is missing for some reason
+    // If so, we assume off, since the GUI will also show off in this case
     if (!isset($mailShowTemplates)) {
-        $mailShowTemplates = xarModGetVar('themes', 'ShowTemplates');
+        xarModSetVar('mail','ShowTemplates',false);
+        $mailShowTemplates = false;
     }
 
-    // go ahead and override the show templates value,  
+    // go ahead and override the show *theme* templates value,  
     // using the mail modules settings instead :-)
     $oldShowTemplates = xarModGetVar('themes', 'ShowTemplates');
     xarModSetVar('themes', 'ShowTemplates', $mailShowTemplates);
