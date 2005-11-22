@@ -38,7 +38,7 @@
         <xar:mlstring>Terms of Use</xar:mlstring></a>, <xar:mlstring>and as amended from time to time with or without notice to you.
         In addition, if you are using a particular service on or through this web site, you will be subject to any rules or guidelines applicable to those services and they shall be incorporated by reference into these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a>.
         <xar:if condition="xarModGetVar('roles', 'showprivacy')">
-            <xar:mlstring>Please see our </xar:mlstring><a href="&xar-modurl-roles-user-privacy;"><xar:mlstring>Privacy Policy</xar:mlstring></a>, <xar:mlstring>which is incorporated into these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> by reference.
+            <xar:mlstring>Please see our </xar:mlstring><a href="&xar-modurl-roles-user-privacy;"><xar:mlstring>Privacy Policy</xar:mlstring></a>, <xar:mlstring>which is incorporated into these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>by reference.</xar:mlstring>
         </xar:if>
         </p>
     <xar:set name="curnum">++$curnum</xar:set>
