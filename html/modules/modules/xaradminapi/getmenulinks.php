@@ -1,7 +1,6 @@
 <?php
 /**
  * utility function pass individual menu items to the main menu
- *
  * @package modules
  * @copyright (C) 2002-2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
