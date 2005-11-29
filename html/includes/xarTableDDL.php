@@ -326,7 +326,6 @@ function xarDBDropTable($tableName, $databaseType = NULL)
     }
 
     switch($databaseType) {
-        case 'mysql':
         case 'postgres':
             // Also drop the related sequence 
             // TODO: please can we use something else? pwetty please?
@@ -334,6 +333,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
             $dbconn =& xarDBGetConn();
             $result = $dbconn->Execute($seqSQL);
             // ignore exception for now
+        case 'mysql':
         case 'oci8':
         case 'oci8po':
         case 'sqlite':
