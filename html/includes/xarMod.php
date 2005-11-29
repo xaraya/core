@@ -248,24 +248,30 @@ function xarModDelAllVars($modName)
     }
     $result->close();
     unset($result);
-    
-    if(count($idlist) != 0 ) {
+
+    // We delete the module vars and the user vars in a transaction, which either succeeds completely or totally fails
+    try {
+        $dbconn->begin();
+        if(count($idlist) != 0 ) {
             $bindmarkers = '?' . str_repeat(',?', count($idlist) -1);
             $sql = "DELETE FROM $module_uservarstable WHERE $module_uservarstable.xar_mvid IN (".$bindmarkers.")";
             $stmt = $dbconn->prepareStatement($sql);
             $result = $stmt->executeUpdate($idlist);
-            if(!$result) return;
-            $result->Close();
-            unset($result);
+        }
+        
+        // Now delete the module vars
+        $query = "DELETE FROM $module_varstable WHERE xar_modid = ?";
+        $stmt  = $dbconn->prepareStatement($query);
+        $result = $stmt->executeUpdate(array($modBaseInfo['systemid']));
+        $dbconn->commit();
+        return true;
+    } catch (SQLException $e) { 
+        // If there was an SQL exception roll back to where we started
+        $dbconn->rollback();
+        // and raise it again so the handler catches
+        // TODO: demote to error? rais other type of exception?
+        throw $e;
     }
-
-    // Now delete the module vars
-    $query = "DELETE FROM $module_varstable WHERE xar_modid = ?";
-    $stmt  = $dbconn->prepareStatement($query);
-    $result = $stmt->executeUpdate(array($modBaseInfo['systemid']));
-    if (!$result) return;
-    $result->close();
-    return true;
 }
 
 /**
@@ -2193,7 +2199,9 @@ function xarModRegisterHook($hookObject,
     $hookstable = $xartable['hooks'];
 
     // Insert hook
-    $query = "INSERT INTO $hookstable (
+    try {
+        $dbconn->begin();
+        $query = "INSERT INTO $hookstable (
               xar_id,
               xar_object,
               xar_action,
@@ -2202,12 +2210,15 @@ function xarModRegisterHook($hookObject,
               xar_ttype,
               xar_tfunc)
               VALUES (?,?,?,?,?,?,?)";
-    $seqId = $dbconn->GenId($hookstable);
-    $bindvars = array($seqId,$hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
-    $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeUpdate($bindvars);
-    if (!$result) return;
-
+        $seqId = $dbconn->GenId($hookstable);
+        $bindvars = array($seqId,$hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeUpdate($bindvars);
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e; 
+    }
     return true;
 }
 
@@ -2236,15 +2247,20 @@ function xarModUnregisterHook($hookObject,
     $hookstable = $xartable['hooks'];
 
     // Remove hook
-    $query = "DELETE FROM $hookstable
-              WHERE xar_object = ?
-              AND xar_action = ? AND xar_tarea = ? AND xar_tmodule = ?
-              AND xar_ttype = ?  AND xar_tfunc = ?";
-    $stmt =& $dbconn->prepareStatement($query);
-    $bindvars = array($hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
-    $result =& $stmt->executeUpdate($bindvars);
-    if (!$result) return;
-
+    try {
+        $dbconn->begin();
+        $query = "DELETE FROM $hookstable
+                  WHERE xar_object = ?
+                  AND xar_action = ? AND xar_tarea = ? AND xar_tmodule = ?
+                  AND xar_ttype = ?  AND xar_tfunc = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $bindvars = array($hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
+        $stmt->executeUpdate($bindvars);
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
     return true;
 }
 
