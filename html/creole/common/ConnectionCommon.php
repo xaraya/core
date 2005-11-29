@@ -362,6 +362,17 @@ abstract class ConnectionCommon {
         $columns = $tableinfo->getColumns();
         return $columns;
     }
+
+    /*
+     * Some modules in xaraya use this to test whether a db execute operation has succeeded
+     * value 0: succeeded
+     * otherwise: error
+     * Since we throw exceptions if we have an error, this just return 0
+     */
+    function ErrorNo()
+    {
+        return 0;
+    }
     // END XARAYA MODIFICATION
 
     /**
