@@ -435,6 +435,7 @@ function xarCoreGetVarDirPath()
  * @global integer xarDebug_sqlCalls
  * @global string xarDebug_startTime
  * @param integer flags bit mask for the debugger flags
+ * @todo  a big part of this should be in the exception (error handling) subsystem.
  * @return void
  */
 function xarCoreActivateDebugger($flags)
@@ -446,7 +447,11 @@ function xarCoreActivateDebugger($flags)
         // Turn off assertion evaluation
         assert_options(ASSERT_ACTIVE, 0);
     } elseif ($flags & XARDBG_ACTIVE) {
-        error_reporting(E_STRICT);
+        // See if config.system.php has info for us on the errorlevel, but dont break if it has not
+        $errLevel = xarCore_getSystemVar('Exception.ErrorLevel',true);
+        if(!isset($errLevel)) $errLevel = E_STRICT;
+
+        error_reporting($errLevel);
         // Activate assertions
         assert_options(ASSERT_ACTIVE,    1);    // Activate when debugging
         assert_options(ASSERT_WARNING,   1);    // Issue a php warning

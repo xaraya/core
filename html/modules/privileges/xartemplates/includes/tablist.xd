@@ -1,0 +1,24 @@
+<xar:style scope="module" module="base" file="navtabs" />
+<xar:set name="activetab">$_bl_module_func</xar:set>
+<div>
+  <dl class="xar-tabs">
+    <dt class="help" title="Choose the privileges to display">
+      <xar:mlstring>Show privileges:</xar:mlstring>
+    </dt>
+
+    <xar:set name="tabclass">$show=='assigned'?'active':''</xar:set>
+    <dd class="#$tabclass#">
+      <a href="&xar-modurl-privileges-admin-viewprivileges;&amp;show=assigned">
+        <xar:mlstring>Assigned</xar:mlstring>
+      </a>
+    </dd>    
+
+    <xar:set name="tabclass">$show=='all'?'active':''</xar:set>
+    <dd class="#$tabclass#">
+      <a href="&xar-modurl-privileges-admin-viewprivileges;&amp;show=all">
+        <xar:mlstring>All</xar:mlstring>
+      </a>
+    </dd>    
+
+  </dl>
+</div>

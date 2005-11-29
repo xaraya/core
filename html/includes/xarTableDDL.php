@@ -57,6 +57,7 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
     switch($databaseType) {
         case 'mysql':
         case 'oci8':
+        case 'oci8po':
             $sql = 'CREATE DATABASE '.$databaseName;
             break;
         case 'postgres':
@@ -341,18 +342,14 @@ function xarDBDropTable($tableName, $databaseType = NULL)
     }
 
     switch($databaseType) {
-        case 'mysql':
         case 'postgres':
-            // We gots to drop the sequence too, but only if we 
-            // have created one during the create table counterpart
-            // for now, ignore the exception
+            // Also drop the related sequence 
+            // TODO: please can we use something else? pwetty please?
             $seqSQL = "DROP SEQUENCE seq".$tableName;
             $dbconn =& xarDBGetConn();
-            try {
-                $result = $dbconn->Execute($seqSQL);
-            } catch(Exception $e) {
-                // ignore for now
-            }
+            $result = $dbconn->Execute($seqSQL);
+            // ignore exception for now
+        case 'mysql':
         case 'oci8':
         case 'oci8po':
         case 'sqlite':

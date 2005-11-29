@@ -478,8 +478,9 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
     global $CoreStack;
 
     //Checks for a @ presence in the given line, should stop from setting Xaraya or DB errors
-    // Let's not display E_STRICT in development longer term, but lets do it now anyways
-    if (!error_reporting() || $errorType > E_STRICT ) {
+    $errLevel = xarCore_getSystemVar('Exception.ErrorLevel',true);
+    if(!isset($errLevel)) $errLevel = E_STRICT;
+    if (!error_reporting() || $errorType > $errLevel) {
         // Log the message so it is not lost.
         // TODO: make this message available to calling functions that suppress
         // errors through '@'.
