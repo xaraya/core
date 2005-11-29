@@ -156,10 +156,16 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
     $rolestable = $xartable['roles'];
 
     // TODO: this should be inside roles module
-    $query = "UPDATE $rolestable SET xar_auth_module = ? WHERE xar_uid = ?";
-    $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeUpdate(array($authModName,$userId));
-    if (!$result) return;
+    try {
+        $dbconn->begin();
+        $query = "UPDATE $rolestable SET xar_auth_module = ? WHERE xar_uid = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate(array($authModName,$userId));
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
 
     // Set session variables
 
@@ -793,10 +799,15 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
 
     // The $name variable will be used to get the appropriate column
     // from the users table.
-    $query = "UPDATE $rolestable SET $usercolumns[$name] = ? WHERE xar_uid = ?";
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeUpdate(array($value,$userId));
-    if (!$result) return;
+    try {
+        $dbconn->begin();
+        $query = "UPDATE $rolestable SET $usercolumns[$name] = ? WHERE xar_uid = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate(array($value,$userId));
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
     return true;
 }
 
