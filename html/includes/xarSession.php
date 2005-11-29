@@ -230,12 +230,18 @@ function xarSession_setUserInfo($userId, $rememberSession)
     $xartable =& xarDBGetTables();
 
     $sessioninfoTable = $xartable['session_info'];
-    $query = "UPDATE $sessioninfoTable
-              SET xar_uid = ? ,xar_remembersess = ?
-              WHERE xar_sessid = ?";
-    $bindvars = array($userId, $rememberSession, session_id());
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
+    try {
+        $dbconn->begin();
+        $query = "UPDATE $sessioninfoTable
+                  SET xar_uid = ? ,xar_remembersess = ?
+                  WHERE xar_sessid = ?";
+        $bindvars = array($userId, $rememberSession, session_id());
+        $dbconn->Execute($query,$bindvars);
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
 
     if (xarSession__UseOldSessions()) {
         global $XARSVuid;
@@ -388,12 +394,18 @@ function xarSession__new($sessionId, $ipAddress)
 
     $sessioninfoTable = $xartable['session_info'];
 
-    $query = "INSERT INTO $sessioninfoTable
-                 (xar_sessid, xar_ipaddr, xar_uid, xar_firstused, xar_lastused)
-              VALUES (?,?,?,?,?)";
-    $bindvars = array($sessionId, $ipAddress, _XAR_ID_UNREGISTERED, time(), time());
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
+    try {
+        $dbconn->begin();
+        $query = "INSERT INTO $sessioninfoTable
+                  (xar_sessid, xar_ipaddr, xar_uid, xar_firstused, xar_lastused)
+                  VALUES (?,?,?,?,?)";
+        $bindvars = array($sessionId, $ipAddress, _XAR_ID_UNREGISTERED, time(), time());
+        $dbconn->Execute($query,$bindvars);
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
 
     // Generate a random number, used for
     // some authentication
@@ -492,10 +504,16 @@ function xarSession__phpWrite($sessionId, $vars)
 
     $sessioninfoTable = $xartable['session_info'];
 
-    // FIXME: We had to do qstr here, cos the query failed for some reason
-    $query = "UPDATE $sessioninfoTable SET xar_vars = ". $dbconn->qstr($vars) . ", xar_lastused = " . $dbconn->qstr(time()). "WHERE xar_sessid = ".$dbconn->qstr($sessionId);
-    $result = $dbconn->executeUpdate($query);
-    if (!$result) return;
+    try {
+        $dbconn->begin();
+        // FIXME: We had to do qstr here, cos the query failed for some reason
+        $query = "UPDATE $sessioninfoTable SET xar_vars = ". $dbconn->qstr($vars) . ", xar_lastused = " . $dbconn->qstr(time()). "WHERE xar_sessid = ".$dbconn->qstr($sessionId);
+        $dbconn->executeUpdate($query);
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
 
     return true;
 }
@@ -511,10 +529,15 @@ function xarSession__phpDestroy($sessionId)
 
     $sessioninfoTable = $xartable['session_info'];
 
-    $query = "DELETE FROM $sessioninfoTable WHERE xar_sessid = ?";
-    $result =& $dbconn->execute($query,array($sessionId));
-    if (!$result) return;
-
+    try {
+        $dbconn->begin();
+        $query = "DELETE FROM $sessioninfoTable WHERE xar_sessid = ?";
+        $dbconn->execute($query,array($sessionId));
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
     return true;
 }
 
@@ -551,10 +574,15 @@ function xarSession__phpGC($maxlifetime)
         $where = "WHERE xar_lastused < ?";
         break;
     }
-    $query = "DELETE FROM $sessioninfoTable $where";
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
-
+    try {
+        $dbconn->begin();
+        $query = "DELETE FROM $sessioninfoTable $where";
+        $dbconn->Execute($query,$bindvars);
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
     return true;
 }
 
