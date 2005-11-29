@@ -53,6 +53,28 @@ global $CoreStack, $ErrorStack;
 /* Error Handling System implementation */
 
 /**
+ * Exception handler for unhandled exceptions
+ *
+ * This handler is called when an exception is raised and otherwise unhandled
+ * Execution stops directly after this handler runs.
+ * The exception object is documented here: http://www.php.net/manual/en/language.exceptions.php
+ *
+ * @author Marcel van der Boom <marcel@xaraya.com>
+ * @access private
+ * @param  Exception $exception The exception object
+ * @todo Make exception handling the default error handling and get rid of the redundant parts
+ * @return void
+ */
+function xarException__ExceptionHandler(Exception $e)
+{
+    // Poor mans final fallback for unhandled exceptions
+    $msg = $e->getMessage() ."\n\n". $e->getTraceAsString();
+    
+    xarErrorSet(XAR_SYSTEM_EXCEPTION,'UNHANDLED EXCEPTION',$msg);
+    echo xarErrorRender('rawhtml');
+}
+
+/**
  * Initializes the Error Handling System
  *
  * @author Marco Canini <marco@xaraya.com>
@@ -63,6 +85,7 @@ global $CoreStack, $ErrorStack;
 function xarError_init($systemArgs, $whatToLoad)
 {
     global $CoreStack,$ErrorStack;
+    set_exception_handler('xarException__ExceptionHandler');
 
     // The check for xdebug_enable is not necessary here, we want the handler enabled on the flag, period.
     if ($systemArgs['enablePHPErrorHandler'] == true ) { // && !function_exists('xdebug_enable')) {
@@ -480,14 +503,14 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
     //Checks for a @ presence in the given line, should stop from setting Xaraya or DB errors
     $errLevel = xarCore_getSystemVar('Exception.ErrorLevel',true);
     if(!isset($errLevel)) $errLevel = E_STRICT;
-    if (!error_reporting() || $errorType > $errLevel) {
+    //if (/*!error_reporting() ||*/ $errorType >= $errLevel) {
         // Log the message so it is not lost.
         // TODO: make this message available to calling functions that suppress
         // errors through '@'.
         $msg = "PHP error code $errorType at line $line of $file: $errorString";
         xarLogMessage($msg);
-        return;
-    }
+        //return;
+        //}
 
     //Newer php versions have a 5th parameter that will give us back the context
     //The variable values during the error...

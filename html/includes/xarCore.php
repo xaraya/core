@@ -449,9 +449,10 @@ function xarCoreActivateDebugger($flags)
     } elseif ($flags & XARDBG_ACTIVE) {
         // See if config.system.php has info for us on the errorlevel, but dont break if it has not
         $errLevel = xarCore_getSystemVar('Exception.ErrorLevel',true);
-        if(!isset($errLevel)) $errLevel = E_STRICT;
-
+        if(!isset($errLevel)) $errLevel = E_ALL;
+                
         error_reporting($errLevel);
+
         // Activate assertions
         assert_options(ASSERT_ACTIVE,    1);    // Activate when debugging
         assert_options(ASSERT_WARNING,   1);    // Issue a php warning

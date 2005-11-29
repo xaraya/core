@@ -237,8 +237,8 @@ function xarModDelAllVars($modName)
     // MySql: multiple table delete only from 4.0 up
     // Select the id's which need to be removed
     $sql="SELECT $module_varstable.xar_id FROM $module_varstable WHERE $module_varstable.xar_modid = ?";
-    $stmt =& $dbconn->prepareStatement($sql);
-    $result =& $stmt->executeQuery(array($modBaseInfo['systemid']), ResultSet::FETCHMODE_NUM);
+    $stmt = $dbconn->prepareStatement($sql);
+    $result = $stmt->executeQuery(array($modBaseInfo['systemid']), ResultSet::FETCHMODE_NUM);
     if(!$result) return;
 
     // Seems that at least mysql and pgsql support the scalar IN operator
@@ -252,8 +252,8 @@ function xarModDelAllVars($modName)
     if(count($idlist) != 0 ) {
             $bindmarkers = '?' . str_repeat(',?', count($idlist) -1);
             $sql = "DELETE FROM $module_uservarstable WHERE $module_uservarstable.xar_mvid IN (".$bindmarkers.")";
-            $stmt =& $dbconn->prepareStatement($sql);
-            $result =& $stmt->executeUpdate($idlist);
+            $stmt = $dbconn->prepareStatement($sql);
+            $result = $stmt->executeUpdate($idlist);
             if(!$result) return;
             $result->Close();
             unset($result);
@@ -261,8 +261,8 @@ function xarModDelAllVars($modName)
 
     // Now delete the module vars
     $query = "DELETE FROM $module_varstable WHERE xar_modid = ?";
-    $stmt  =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeUpdate(array($modBaseInfo['systemid']));
+    $stmt  = $dbconn->prepareStatement($query);
+    $result = $stmt->executeUpdate(array($modBaseInfo['systemid']));
     if (!$result) return;
     $result->close();
     return true;
