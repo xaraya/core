@@ -39,10 +39,8 @@
 
     <xar:comment>TODO set the active tab here</xar:comment>
     <!-- Show the general tab list for roles -->
-    <xar:template file="tablist" />
     <fieldset>
       <legend>
-            <xar:if condition="$basetype eq GROUPTYPE">
         <xar:ml>
             <xar:mlstring>#(1) Properties:</xar:mlstring>
             <xar:mlvar>#$itemtypename#</xar:mlvar>
@@ -73,7 +71,7 @@
                 <input type="text" name="pname" id="pname" value="#xarVarPrepForDisplay($pname)#" maxlength="255" class="xar-form-textlong" />
             </div>
         
-            <xar:if condition="$basetype eq GROUPTYPE and $haschildren">
+            <xar:if condition="$basetype eq ROLES_GROUPTYPE and $haschildren">
                 <div class="xar-form-input-wrapper">
                     <label title="#xarML('Type of Role')#" class="xar-form-label">
                         <xar:mlstring>Type:</xar:mlstring>
@@ -96,7 +94,7 @@
                 </div>
             </xar:if>
 
-            <xar:if condition="$basetype eq 0">
+            <xar:if condition="$basetype eq ROLES_USERTYPE">
                 <p class="xar-clearboth">
                     <xar:mlstring>The fields below only apply for Users.</xar:mlstring>
                 </p>
@@ -176,13 +174,8 @@
     </fieldset>
 
     <fieldset>
-        <xar:ml>
-            <xar:mlstring>Add #(1) #(2) to a Parent:</xar:mlstring>
-            <xar:mlvar>#$itemtypename#</xar:mlvar>
-            <xar:mlvar>#$pname#</xar:mlvar>
-        </xar:ml>
-                <xar:mlstring>This #(1) cannot be edited or deleted.</xar:mlstring>
-                <xar:mlvar>#$itemtypename#</xar:mlvar>
+        <legend><xar:mlstring>Group Memberships</xar:mlstring></legend>
+        <table class="xar-fullwidth">
           <tr>
             <th><xar:mlstring>Group</xar:mlstring></th>
             <th><xar:mlstring>Remove</xar:mlstring></th>
@@ -210,13 +203,17 @@
             </tr>
           </xar:loop>
         </table>
+        <xar:ml>
+            <xar:mlstring>Add #(1) #(2) to a Parent:</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$pname#</xar:mlvar>
+        </xar:ml>
         <xar:if condition="$frozen">
           <p>
-            <xar:if condition="$ptype eq 0">
-              <xar:mlstring>This User cannot be edited or deleted.</xar:mlstring>
-              <xar:else />
-              <xar:mlstring>This Group cannot be edited or deleted.</xar:mlstring>
-            </xar:if>
+        <xar:ml>
+            <xar:mlstring>This #(1) cannot be edited or deleted.</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+        </xar:ml>
           </p>
           <xar:else />
           <form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">

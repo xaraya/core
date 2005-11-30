@@ -43,7 +43,7 @@
     <xar:template file="tablist" />
     <fieldset>
       <legend><xar:mlstring>Role properties</xar:mlstring></legend>
-            <xar:if condition="$type eq GROUPTYPE">
+            <xar:if condition="$type eq ROLES_GROUPTYPE">
       <div class="xar-form-input-wrapper">
         <span class="xar-form-label">
           <xar:mlstring>Real Name:</xar:mlstring>

@@ -34,7 +34,7 @@
   <xar:comment>TODO set the active tab here</xar:comment>
   <!-- Show the general tab list for roles -->
   <xar:template file="tablist" />  
-            <xar:if condition="$ptype eq GROUPTYPE">
+            <xar:if condition="$ptype eq ROLES_GROUPTYPE">
   
   <form action="&xar-modurl-roles-admin-testprivileges;" method="post" enctype="application/x-www-form-urlencoded">
     <fieldset>

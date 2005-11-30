@@ -20,8 +20,8 @@ define('ROLES_STATE_PENDING',4);
 define('ROLES_STATE_CURRENT',98);
 define('ROLES_STATE_ALL',99);
 
-define('USERTYPE',1);
-define('GROUPTYPE',2);
+define('ROLES_USERTYPE',1);
+define('ROLES_GROUPTYPE',2);
 
 /**
  * xarRoles: class for the role repository
@@ -72,7 +72,7 @@ class xarRoles
         	$basetypes = array();
         	foreach ($types as $key => $value) {
         		$basetype = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
-        		if ($basetype['itemtype'] == GROUPTYPE) $basetypes[] = $key;
+        		if ($basetype['itemtype'] == ROLES_GROUPTYPE) $basetypes[] = $key;
         	}
             // set up the query and get the groups
             $q = new xarQuery('SELECT');
@@ -354,7 +354,7 @@ class xarRoles
         $tablefields = array(
             array('name' => 'xar_uid',         'value' => $nextId),
             array('name' => 'xar_name',        'value' => $name),
-            array('name' => 'xar_type',        'value' => USERTYPE),
+            array('name' => 'xar_type',        'value' => ROLES_USERTYPE),
             array('name' => 'xar_uname',       'value' => $uname),
             array('name' => 'xar_email',       'value' => $email),
             array('name' => 'xar_pass',        'value' => $pass),
@@ -404,7 +404,7 @@ class xarRoles
         $createdate = mktime();
         $query = "INSERT INTO $this->rolestable
                     (xar_uid, xar_name, xar_type, xar_uname,xar_date_reg)
-                  VALUES (?,?," . GROUPTYPE .",?,?)";
+                  VALUES (?,?," . ROLES_GROUPTYPE .",?,?)";
         $bindvars = array($this->dbconn->genID($this->rolestable),
                           $name, $uname, $createdate);
         if (!$this->dbconn->Execute($query,$bindvars)) return;
@@ -533,7 +533,7 @@ class xarRole
         }
         // Confirm that this group or user does not already exist
         $q = new xarQuery('SELECT',$this->rolestable);
-        if ($this->basetype == GROUPTYPE) {
+        if ($this->basetype == ROLES_GROUPTYPE) {
             $q->eq('xar_name',$this->name);
         } else {
             $q->eq('xar_uname',$this->uname);
@@ -562,7 +562,7 @@ class xarRole
         );
         $q = new xarQuery('INSERT',$this->rolestable);
         $q->addfields($tablefields);
-        if ($this->basetype == GROUPTYPE) {
+        if ($this->basetype == ROLES_GROUPTYPE) {
             $groupfields = array(
                 array('name' => 'xar_type', 'value' => $this->type)
             );
@@ -939,7 +939,7 @@ class xarRole
                         r.xar_auth_module
                         FROM $this->rolestable r, $this->rolememberstable rm
                         WHERE r.xar_uid = rm.xar_uid
-                        AND r.xar_type = " . USERTYPE .
+                        AND r.xar_type = " . ROLES_USERTYPE .
                         " AND r.xar_state != " . ROLES_STATE_DELETED .
                         " AND rm.xar_parentid = ?";
             $bindvars = array($this->uid);
@@ -956,7 +956,7 @@ class xarRole
                         r.xar_auth_module
                         FROM $this->rolestable r, $this->rolememberstable rm
                         WHERE r.xar_uid = rm.xar_uid
-                        AND r.xar_type = " . USERTYPE . " AND r.xar_state = ?
+                        AND r.xar_type = " . ROLES_USERTYPE . " AND r.xar_state = ?
                         AND rm.xar_parentid = ?";
             $bindvars = array($state, $this->uid);
         }
@@ -1201,7 +1201,7 @@ class xarRole
     function isUser()
     {
 		$base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $this->getType(), 'moduleid' => 27));
-        return $base['itemtype'] == USERTYPE;
+        return $base['itemtype'] == ROLES_USERTYPE;
     }
 
     /**

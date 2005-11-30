@@ -30,7 +30,7 @@ function roles_admin_addrole()
     // get the rest for users only
     // TODO: need to see what to do with auth_module
 	$basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
-    if ($basetype == USERTYPE) {
+    if ($basetype == ROLES_USERTYPE) {
         xarVarFetch('puname', 'str:1:35:', $puname, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('pemail', 'str:1:', $pemail, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('ppass1', 'str:1:', $ppass1, NULL, XARVAR_NOT_REQUIRED);
@@ -38,7 +38,7 @@ function roles_admin_addrole()
         xarVarFetch('pstate', 'str:1:', $pstate, NULL, XARVAR_NOT_REQUIRED);
     }
     // checks specific only to users
-    if ($basetype == USERTYPE) {
+    if ($basetype == ROLES_USERTYPE) {
         // check for valid username
         if ((!$puname) || !(!preg_match("/[[:space:]]/", $puname))) {
             $msg = xarML('There is an error in the username');
@@ -97,7 +97,7 @@ function roles_admin_addrole()
         }
     }
     // assemble the args into an array for the role constructor
-    if ($basetype == USERTYPE) {
+    if ($basetype == ROLES_USERTYPE) {
         $pargs = array('name' => $pname,
             'type' => $itemtype,
             'parentid' => $pparentid,

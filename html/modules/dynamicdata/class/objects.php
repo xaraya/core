@@ -1748,7 +1748,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
-                    if ($property->status != 3)
+                    if ($this->properties[$name]->status != 3)
                         $args['properties'][$name] = & $this->properties[$name];
                 }
             }

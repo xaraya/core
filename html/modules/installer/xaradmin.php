@@ -611,7 +611,7 @@ function installer_admin_create_administrator()
     // assemble the args into an array for the role constructor
     $pargs = array('uid'   => $role->getID(),
                    'name'  => $name,
-                   'type'  => 0,
+                   'type'  => ROLES_USERTYPE,
                    'uname' => $userName,
                    'email' => $email,
                    'pass'  => $pass,

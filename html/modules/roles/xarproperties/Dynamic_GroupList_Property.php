@@ -10,7 +10,7 @@
  * @subpackage Roles module
  */
 
-/* 
+/*
  * Handle Group list property
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -176,7 +176,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
         } else {
             $group = xarModAPIFunc('roles','user','get',
                                    array('uid' => $value,
-                                         'type' => GROUPTYPE)); // we're looking for a group here
+                                         'type' => ROLES_GROUPTYPE)); // we're looking for a group here
             if (empty($group) || empty($group['name'])) {
                 $groupname = '';
             } else {

@@ -42,7 +42,7 @@ function roles_userapi_getdeleteduser($args)
 
     // Set type to user
     if (empty($type)){
-        $type = USERTYPE;
+        $type = ROLES_USERTYPE;
     }
 
     // Security Check

@@ -31,7 +31,7 @@ function roles_admin_updaterole()
     $oldtype = $oldrole->getType();
 
     // groups dont have pw etc., and can only be active
-    if ($basetype == GROUPTYPE) {
+    if ($basetype == ROLES_GROUPTYPE) {
         $puname = $oldrole->getUser();
         $pemail = "";
         $ppass1 = "";
@@ -107,18 +107,18 @@ function roles_admin_updaterole()
     xarModCallHooks('item', 'update', $uid, $pargs);
 
     //Change the defaultgroup var values if the name is changed
-    if ($basetype == GROUPTYPE) {
+    if ($basetype == ROLES_GROUPTYPE) {
         $defaultgroup = xarModGetVar('roles', 'defaultgroup');
         $defaultgroupuid = xarModAPIFunc('roles','user','get',
                                                      array('uname'  => $defaultgroup,
-                                                           'type'   => GROUPTYPE));
+                                                           'type'   => ROLES_GROUPTYPE));
         if ($uid == $defaultgroupuid) xarModSetVar('roles', 'defaultgroup', $pname);
 
         // Adjust the user count if necessary
-        if ($oldtype == USERTYPE) $oldrole->adjustParentUsers(-1);
+        if ($oldtype == ROLES_USERTYPE) $oldrole->adjustParentUsers(-1);
     }else {
         // Adjust the user count if necessary
-        if ($oldtype == GROUPTYPE) $oldrole->adjustParentUsers(1);
+        if ($oldtype == ROLES_GROUPTYPE) $oldrole->adjustParentUsers(1);
         //TODO : Be able to send 2 email if both password and type has changed... (or an single email with a overall msg...)
         //Ask to send email if the password has changed
         if ($ppass1 != '') {

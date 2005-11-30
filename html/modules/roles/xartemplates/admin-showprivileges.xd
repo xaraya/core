@@ -41,7 +41,7 @@
     <xar:template file="tablist" />
     <fieldset>
       <legend>
-            <xar:if condition="$ptype eq GROUPTYPE">
+            <xar:if condition="$ptype eq ROLES_GROUPTYPE">
         <xar:ml>
             <xar:mlstring>Privileges inherited by #(1):</xar:mlstring>
             <xar:mlvar>
