@@ -1766,23 +1766,26 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     $tag_table = $systemPrefix . '_template_tags';
 
     // Get next ID in table
-    $tag_id = $dbconn->GenId($tag_table);
+    try {
+        $dbconn->begin();
+        $tag_id = $dbconn->GenId($tag_table);
 
-    $query = "INSERT INTO $tag_table
-                (xar_id, xar_name, xar_module, xar_handler, xar_data)
-              VALUES
-                (?,?,?,?,?)";
-
-    $bindvars = array($tag_id,
-                      $tag->getName(), 
-                      $tag->getModule(),
-                      $tag->getHandler(),
-                      serialize($tag));
-
-    $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeUpdate($bindvars);
-    if (!$result) return;
-
+        $query = "INSERT INTO $tag_table
+                  (xar_id, xar_name, xar_module, xar_handler, xar_data)
+                  VALUES(?,?,?,?,?)";
+        $bindvars = array($tag_id,
+                          $tag->getName(), 
+                          $tag->getModule(),
+                          $tag->getHandler(),
+                          serialize($tag));
+        
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate($bindvars);
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
     return true;
 }
 
@@ -1805,13 +1808,16 @@ function xarTplUnregisterTag($tag_name)
     $xartable =& xarDBGetTables();
 
     $tag_table = $xartable['template_tags'];
-
-    $query = "DELETE FROM $tag_table WHERE xar_name = ?";
-
-    $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeUpdate(array($tag_name));
-    if (!$result) return;
-
+    try {
+        $dbconn->begin();
+        $query = "DELETE FROM $tag_table WHERE xar_name = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate(array($tag_name));
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
     return true;
 }
 
