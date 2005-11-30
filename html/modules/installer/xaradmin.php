@@ -379,15 +379,17 @@ function installer_admin_phase5()
     if (isset($removetables) && $removetables) {
         $dbconn =& xarDBGetConn();
         $dbinfo = $dbconn->getDatabaseInfo();
-        foreach($dbinfo->getTables() as $tbl) {
-            try {
+        try {
+            $dbconn->begin();
+            foreach($dbinfo->getTables() as $tbl) {
                 $table = $tbl->getName();
                 $sql = xarDBDropTable($table,$dbType);
-                $result = $dbconn->Execute($sql);
-            } catch (Exception $e) {
-                //die($e->getMessage());
-                return;
+                $dbconn->Execute($sql);
             }
+            $dbconn->commit();
+        } catch (SQLException $e) {
+            $dbconn->rollback();
+            throw $e;
         }
     }
 
