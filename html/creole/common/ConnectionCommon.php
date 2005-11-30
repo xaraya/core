@@ -160,6 +160,7 @@ abstract class ConnectionCommon {
             $this->beginTrans();
         }
         $this->transactionOpcount++;
+        xarLogMessage("DB: starting transaction [".$this->transactionOpcount."]");
     }
 
     /**
@@ -170,6 +171,7 @@ abstract class ConnectionCommon {
         if ($this->transactionOpcount > 0) {
             if ($this->transactionOpcount == 1 || $this->supportsNestedTrans()) {
                 $this->commitTrans();
+                xarLogMessage("DB: committed transaction [".$this->transactionOpcount."]");
             }
             $this->transactionOpcount--;       
         }
@@ -183,6 +185,7 @@ abstract class ConnectionCommon {
         if ($this->transactionOpcount > 0) {
             if ($this->transactionOpcount == 1 || $this->supportsNestedTrans()) {
                 $this->rollbackTrans();
+                xarLogMessage("DB: Rolled back transaction [".$this->transactionOpcount."]");
             }
             $this->transactionOpcount--;       
         }
@@ -251,6 +254,7 @@ abstract class ConnectionCommon {
     // to prevent changing all execute statements
     public function &Execute($sql,$bindvars = array(), $fetchmode = null)
     {
+        xarLogMessage("DB: $sql");
         $stmt = $this->prepareStatement($sql);
         if($stmt) {
             if($this->isSelect($sql)) {
@@ -263,14 +267,15 @@ abstract class ConnectionCommon {
                 if($res == 0 ) $res=true;
             }
             if(!$res) {
-                throw new Exception("CREOLE: query $sql failed to execute");
+                throw new SQLException("CREOLE: query $sql failed to execute");
             }
             return $res;
         }
     }
     
-    public function SelectLimit($sql,$limit=0 ,$offset=0 , $bindvars = array(),$fetchmode = null) 
+    public function &SelectLimit($sql,$limit=0 ,$offset=0 , $bindvars = array(),$fetchmode = null) 
     {
+        xarLogMessage("DB: $sql");
         $stmt = $this->prepareStatement($sql);
         $stmt->setLimit($limit);
         $stmt->setOffset($offset);
@@ -329,6 +334,9 @@ abstract class ConnectionCommon {
     function __get($propname)
     {
         switch($propname) {
+            // return the database type
+            case 'databaseType':
+                return $this->dsn['phptype'];
             default:
                 throw new Exception("Unknown property accessed for connection");
         }

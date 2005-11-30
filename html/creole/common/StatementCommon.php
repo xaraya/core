@@ -156,7 +156,7 @@ abstract class StatementCommon {
      */
     public function execute($sql, $fetchmode = null)
     {
-        
+        xarLogMessage("DB: $sql");
         if (!$this->isSelect($sql)) {                    
             $this->updateCount = $this->executeUpdate($sql);
             return false;
@@ -235,6 +235,7 @@ abstract class StatementCommon {
      */
     public function executeQuery($sql, $fetchmode = null)
     {
+        xarLogMessage("DB: $sql");
         $this->updateCount = null;
         if ($this->limit > 0 || $this->offset > 0) {
             $this->conn->applyLimit($sql, $this->offset, $this->limit);
@@ -252,6 +253,7 @@ abstract class StatementCommon {
      */
     public function executeUpdate($sql) 
     {
+        xarLogMessage("DB: $sql");
         if ($this->resultSet) $this->resultSet->close();
         $this->resultSet = null;
         $this->updateCount = $this->conn->executeUpdate($sql);
