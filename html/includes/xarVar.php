@@ -828,9 +828,15 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
     }
 
     if (!empty($query)){
-        $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeUpdate($bindvars);
-        if (!$result) return;
+        try {
+            $dbconn->begin();
+            $stmt = $dbconn->prepareStatement($query);
+            $stmt->executeUpdate($bindvars);
+            $dbconn->commit();
+        } catch (SQLException $e) {
+            $dbconn->rollback();
+            throw $e;
+        }
     }
 
     switch(strtolower($type)) {
@@ -888,9 +894,10 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    switch(strtolower($type)) {
+    try {
+        switch(strtolower($type)) {
         case 'modvar':
-            default:
+        default:
             // Delete all the user variables first
             $modvarid = xarModGetVarId($modName, $name);
             if($modvarid) {
@@ -901,13 +908,8 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
                     $module_uservarstable = $tables['site/module_uservars'];
                 }
 
-                // MrB: we could use xarModDelUserVar in a loop here, but this is
-                //      much faster.
                 $query = "DELETE FROM $module_uservarstable WHERE xar_mvid = ?";
-                $stmt = $dbconn->prepareStatement($query);
-                $result = $stmt->executeUpdate(array((int)$modvarid));
-                if(!$result) return;
-                $result->close(); unset($result);
+                $dbconn->execute($query,array((int)$modvarid));
             }
             // Takes the right table basing on module mode
             if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
@@ -917,7 +919,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
             }
             // Now delete the module var itself
             $query = "DELETE FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
-            $bindvars = array((int)$modBaseInfo['systemid'], $name);
+            $dbconn->execute($query,array((int)$modBaseInfo['systemid'], $name));
             break;
         case 'moduservar':
             // Takes the right table basing on module mode
@@ -926,13 +928,14 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
             } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
                 $module_uservarstable = $tables['site/module_uservars'];
             }
-
+            
             // We need the variable id
             $modvarid = xarModGetVarId($modName, $name);
             if(!$modvarid) return;
-
+            
             $query = "DELETE FROM $module_uservarstable WHERE xar_mvid = ? AND xar_uid = ?";
             $bindvars = array((int)$modvarid, (int)$uid);
+            $dbconn->execute($query,$bindvars);
             break;
         case 'themevar':
             // Takes the right table basing on theme mode
@@ -944,17 +947,22 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
 
             $query = "DELETE FROM $theme_varsTable WHERE xar_themename = ?  AND xar_name = ?";
             $bindvars = array($modName,$name);
+            $dbconn->execute($query,$bindvars);
             break;
         case 'configvar':
             $config_varsTable = $tables['config_vars'];
             $query = "DELETE FROM $config_varsTable WHERE xar_name = ?";
             $bindvars = array($name);
+            $dbconn->execute($query,$bindvars);
             break;
+        }
+        // All done, commit
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
     }
 
-    $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeUpdate($bindvars);
-    if (!$result) return;
 
     switch(strtolower($type)) {
         case 'modvar':
