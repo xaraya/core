@@ -337,6 +337,7 @@ function installer_admin_phase5()
         return $data;
     }
 
+    xarDBLoadTableMaintenanceAPI();
     // Create the database if necessary
     if ($createDB) {
         $data['confirmDB']  = true;
@@ -348,7 +349,7 @@ function installer_admin_phase5()
         if ($dbExists) {
             if (!$dbconn->Execute('DROP DATABASE ' . $dbName)) return;
         }
-        if(!$dbconn->Execute(xarDBCreateDatase($dbName,$dbType))) {
+        if(!$dbconn->Execute(xarDBCreateDatabase($dbName,$dbType))) {
           //if (!xarInstallAPIFunc('createdb', $config_args)) {
           $msg = xarML('Could not create database (#(1)). Check if you already have a database by that name and remove it.', $dbName);
           xarCore_die($msg);
@@ -374,7 +375,7 @@ function installer_admin_phase5()
     // drop all the tables that have this prefix
     //TODO: in the future need to replace this with a check further down the road
     // for which modules are already installed
-    xarDBLoadTableMaintenanceAPI();
+    
     if (isset($removetables) && $removetables) {
         $dbconn =& xarDBGetConn();
         $dbinfo = $dbconn->getDatabaseInfo();
