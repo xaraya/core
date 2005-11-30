@@ -286,86 +286,23 @@ function pnModAvailable($modName)
  * register a hook function
  *
  * @deprec
- * @access public
- * @param hookObject the hook object
- * @param hookAction the hook action
- * @param hookArea the area of the hook (either 'GUI' or 'API')
- * @param hookModName name of the hook module
- * @param hookModType name of the hook type
- * @param hookFuncName name of the hook function
- * @return bool true on success
- * @raise DATABASE_ERROR
+ * @see xarModRegisterHook
  */
-function pnModRegisterHook($hookObject,
-                           $hookAction,
-                           $hookArea,
-                           $hookModName,
-                           $hookModType,
-                           $hookFuncName)
+function pnModRegisterHook($hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName)
 {
-    // FIXME: <marco> BAD_PARAM?
-
-    // Get database info
-    $dbconn =& xarDBGetConn();
-    $pntable =& xarDBGetTables();
-    $hookstable = $pntable['hooks'];
-
-    // Insert hook
-    $query = "INSERT INTO $hookstable (
-              xar_id, xar_object, xar_action, xar_tarea,
-              xar_tmodule, xar_ttype, xar_tfunc)
-              VALUES (?,?,?,?,?,?,?)";
-    $bindvars = array($dbconn->GenId($hookstable),
-                      $hookObject,
-                      $hookAction,
-                      $hookArea,
-                      $hookModName,
-                      $hookModType,
-                      $hookFuncName);
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
-
-    return true;
+    return xarModRegisterHook($hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
 }
 
 /**
  * unregister a hook function
  *
  * @deprec
- * @access public
- * @param hookObject the hook object
- * @param hookAction the hook action
- * @param hookArea the area of the hook (either 'GUI' or 'API')
- * @param hookModName name of the hook module
- * @param hookModType name of the hook type
- * @param hookFuncName name of the hook function
- * @return bool true if the unregister call suceeded, false if it failed
+ * @see xarModUnregisterHook
  */
-function pnModUnregisterHook($hookObject,
-                             $hookAction,
-                             $hookArea,
-                             $hookModName,
-                             $hookModType,
-                             $hookFuncName)
+function pnModUnregisterHook($hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName)
 {
-    // FIXME: <marco> BAD_PARAM?
-
-    // Get database info
-    $dbconn =& xarDBGetConn();
-    $pntable =& xarDBGetTables();
-    $hookstable = $pntable['hooks'];
-
-    // Remove hook
-    $query = "DELETE FROM $hookstable
-              WHERE xar_object = ?
-              AND xar_action = ?  AND xar_tarea = ?
-              AND xar_tmodule = ? AND xar_ttype = ?
-              AND xar_tfunc = ?";
-    $bindvars = array($hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
-
-    return true;
+    //simple wrapper
+    return xarModUnregisterHook($hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
 }
 
 
