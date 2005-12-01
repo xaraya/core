@@ -371,7 +371,7 @@ function installer_admin_phase5()
     // Connect to database
     $whatToLoad = XARCORE_SYSTEM_NONE;
     xarDB_init($systemArgs, $whatToLoad);
-    
+
     // drop all the tables that have this prefix
     //TODO: in the future need to replace this with a check further down the road
     // for which modules are already installed

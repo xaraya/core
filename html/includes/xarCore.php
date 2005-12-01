@@ -18,7 +18,7 @@
  * better control on config settings
  *
  */
-define('XARCORE_VERSION_NUM', '1.0');
+define('XARCORE_VERSION_NUM', '1.0.1');
 define('XARCORE_VERSION_ID',  'Xaraya');
 define('XARCORE_VERSION_SUB', 'adam_baum');
 
@@ -450,9 +450,8 @@ function xarCoreActivateDebugger($flags)
         // See if config.system.php has info for us on the errorlevel, but dont break if it has not
         $errLevel = xarCore_getSystemVar('Exception.ErrorLevel',true);
         if(!isset($errLevel)) $errLevel = E_ALL;
-                
-        error_reporting($errLevel);
 
+        error_reporting($errLevel);
         // Activate assertions
         assert_options(ASSERT_ACTIVE,    1);    // Activate when debugging
         assert_options(ASSERT_WARNING,   1);    // Issue a php warning
