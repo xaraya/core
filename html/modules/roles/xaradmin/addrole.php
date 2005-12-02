@@ -23,7 +23,6 @@ function roles_admin_addrole()
 
     // get some vars for both groups and users
     if (!xarVarFetch('pname',      'str:1:', $pname,      NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('ptype',      'str:1',  $ptype,      NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pparentid',  'str:1:', $pparentid,  NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('return_url', 'isset',  $return_url, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;

@@ -76,7 +76,7 @@
                     </xar:loop>
                 </select>
             </div>
-            <xar:if condition="$basetype eq 0">
+            <xar:if condition="$basetype eq ROLES_USERTYPE">
                 <p>
                     <xar:mlstring>
                         The following fields only apply to Users
