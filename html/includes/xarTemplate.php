@@ -1142,7 +1142,11 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
     $ctxType = $tplpath[0].':'.implode("/", $stack);
     $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
-    if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
+
+    /* This $dnType check is a workaround for non-standard templates like we need in workflows etc. */
+    if(isset($dnType)) {
+        if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
+    }
 
     $needCompilation = true;
     $cachedFileName = null;
