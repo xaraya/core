@@ -160,8 +160,11 @@ class ModuleNotActiveException extends xarExceptions
 class NotLoggedInException extends xarExceptions
 { protected $message = 'An operation was encountered that requires the user to be logged in. If you are currently logged in please report this as a bug.';}
 
+// Registration
 class VariableRegistrationException extends xarExceptions
 { protected $message = 'Variable "#(1)" is not properly registered';}
+class EventRegistrationException extends xarExceptions
+{ protected $message = 'The even "#(1)" is not properly registered';}
 
 /*
  * Error constants for exception throwing

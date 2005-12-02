@@ -156,10 +156,8 @@ function xarEvt__notify($modName, $eventName, $value, $modDir = NULL)
 {
     if (!xarEvt__checkEvent($eventName)) return; // throw back
 
-    if (empty($modName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
+
     if (empty($modDir)) {
         $modDir = $modName;
     }
@@ -226,10 +224,7 @@ function xarEvt__notify($modName, $eventName, $value, $modDir = NULL)
  */
 function xarEvt_registerEvent($eventName)
 {
-    if (empty($eventName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'eventName');
-        return;
-    }
+    if (empty($eventName)) throw new EmptyParameterException('eventName');
     
     $GLOBALS['xarEvt_knownEvents'][$eventName] = true;
     return true;
@@ -248,8 +243,7 @@ function xarEvt_registerEvent($eventName)
 function xarEvt__checkEvent($eventName)
 {
     if (!isset($GLOBALS['xarEvt_knownEvents'][$eventName])) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EVENT_NOT_REGISTERED', $eventName);
-        return;
+        throw new EventRegistrationException($eventName);
     }
     return true;
 }
