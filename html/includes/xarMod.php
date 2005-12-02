@@ -153,11 +153,7 @@ function xarMod__shutdown_handler()
  */
 function xarModGetVar($modName, $name, $prep = NULL)
 {
-    if (empty($modName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
-
+    if (empty($modName)) throw new EmptyParameterException('modName');
     return xarVar__GetVarByAlias($modName, $name, $uid = NULL, $prep, 'modvar');
 }
 
@@ -174,11 +170,7 @@ function xarModGetVar($modName, $name, $prep = NULL)
  */
 function xarModSetVar($modName, $name, $value)
 {
-    if (empty($modName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
-
+    if (empty($modName)) throw new EmptyParameterException('modName');
     return xarVar__SetVarByAlias($modName, $name, $value, $prime = NULL, $description = NULL, $uid = NULL, $type = 'modvar');
 }
 
@@ -195,10 +187,7 @@ function xarModSetVar($modName, $name, $value)
  */
 function xarModDelVar($modName, $name)
 {
-    if (empty($modName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
     return xarVar__DelVarByAlias($modName, $name, $uid = NULL, $type = 'modvar');
 }
 
@@ -213,10 +202,7 @@ function xarModDelVar($modName, $name)
  */
 function xarModDelAllVars($modName)
 {
-    if(empty($modName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
+    if(empty($modName)) throw new EmptyParameterException('modName');
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
     //if (!isset($modBaseInfo)) return; // throw back
@@ -294,10 +280,7 @@ function xarModDelAllVars($modName)
 function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL)
 {
     // Module name and variable name are necessary
-    if (empty($modName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
 
     // If uid not specified take the current user
     if ($uid == NULL) $uid=xarUserGetVar('uid');
@@ -306,8 +289,6 @@ function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL)
     if ($uid==_XAR_ID_UNREGISTERED) return xarModGetVar($modName,$name);
 
     return xarVar__GetVarByAlias($modName, $name, $uid, $prep, $type = 'moduservar');
-
-
 }
 
 /**
@@ -332,10 +313,7 @@ function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL)
 function xarModSetUserVar($modName, $name, $value, $uid=NULL)
 {
     // Module name and variable name are necessary
-    if (empty($modName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
 
     // If no uid specified assume current user
     if ($uid == NULL) $uid = xarUserGetVar('uid');
@@ -366,10 +344,7 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
 function xarModDelUserVar($modName, $name, $uid=NULL)
 {
     // ModName and name are required
-    if (empty($modName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
 
     // If uid is not set assume current user
     if ($uid == NULL) $uid = xarUserGetVar('uid');
@@ -399,14 +374,7 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
 function xarModGetVarId($modName, $name)
 {
     // Module name and variable name are both necesary
-    if (empty($modName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
-    if (empty($name)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
-        return;
-    }
+    if (empty($modName) or empty($name)) throw new EmptyParameterException('modName and/or name');
 
     // Retrieve module info, so we can decide where to look
     $modBaseInfo = xarMod_getBaseInfo($modName);
@@ -453,11 +421,7 @@ function xarModGetVarId($modName, $name)
  */
 function xarModGetIDFromName($modName, $type = 'module')
 {
-    if (empty($modName)) {
-        $msg = xarML('Module or Theme Name #(1) is empty.', '$modName');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', new SystemException($msg));
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
 
     switch(strtolower($type)) {
         case 'module':
@@ -487,10 +451,7 @@ function xarModGetInfo($modRegId, $type = 'module')
 {
     xarLogMessage("xarModGetInfo ". $modRegId ." / " . $type);
 
-    if (empty($modRegId) || $modRegId == 0) {
-        $msg = xarML('Empty RegId (#(1)) or RegId is equal to 0.', $modRegId);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));return;
-    }
+    if (empty($modRegId)) throw new EmptyParameterException('modRegid');
 
     $type = strtolower($type);
 
@@ -537,9 +498,8 @@ function xarModGetInfo($modRegId, $type = 'module')
     if (!$result) return;
 
     if (!$result->next()) {
-        $result->Close();
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST', $modRegId);
-        return;
+        $result->close();
+        throw new IDNotFoundException($modRegId);
     }
 
     switch($type) {
@@ -644,9 +604,7 @@ function xarModPrivateLoad($modName, $modType, $flags = 0, $throwException=1)
 {
     static $loadedModuleCache = array();
     if (empty($modName)) {
-        if($throwException) {
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        }
+        if($throwException) throw new EmptyParameterException('modName');
         return;
     }
 
@@ -662,16 +620,12 @@ function xarModPrivateLoad($modName, $modType, $flags = 0, $throwException=1)
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) {
-        if($throwException) {
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', xarML('Unable to find Base Info for Module: #(1)', $modName));
-        }
+        if($throwException) throw new ModuleBaseInfoNotFound($modName);
         return; // throw back
     }
 
     if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
-        if($throwException) {
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', $modBaseInfo['name']);
-        }
+        if($throwException) throw new ModuleNotActiveException($modName);
         return;
     }
 
@@ -737,8 +691,8 @@ function xarModPrivateLoad($modName, $modType, $flags = 0, $throwException=1)
 function xarModLoad($modName, $modType = 'user')
 {
     if (!xarCoreIsApiAllowed($modType)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
-        return;
+        // InputValidationException is more clear here, even though it's not user input.
+        throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
     }
     return xarModPrivateLoad($modName, $modType);
 }
@@ -756,7 +710,8 @@ function xarModAPILoad($modName, $modType = 'user', $throwException = 1)
 {
     if (!xarCoreIsAPIAllowed($modType)) {
         if($throwException) {
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
+            // InputValidationException is more clear here, even though it's not user input.
+            throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
         }
         return;
     }
@@ -775,11 +730,8 @@ function xarModAPILoad($modName, $modType = 'user', $throwException = 1)
  */
 function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
 {
-    if (empty($modName)) {
-        $msg = xarML('Module Name #(1) is empty.', '$modName');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', new SystemException($msg));
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
+
     // Get the directory if we don't already have it
     if (empty($modDir)) {
         switch(strtolower($type)) {
@@ -823,18 +775,13 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
 {
     //xarLogMessage("xarModFunc: begin $modName:$modType:$funcName");
 
-    if (empty($modName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
+    
     if (!xarCoreIsApiAllowed($modType)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
-        return;
+        // InputValidationException is more clear here, even though it's not user input.
+        throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
     }
-    if (empty($funcName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'funcName');
-        return;
-    }
+    if (empty($funcName)) throw new EmptyParameterException('modName');
 
     // good thing this information is cached :)
     $modBaseInfo = xarMod_getBaseInfo($modName);
@@ -863,9 +810,8 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
                 ob_end_clean();
 
                 if (empty($r) || !$r) {
-                    $msg = xarML("Could not load function file: [#(1)].", $funcFile) . "\n\n";
-                    $msg .= xarML("Error Caught:") . "\n";
-                    $msg .= $error_msg;
+                    $msg = "Could not load function file: [#(1)]\n\nError Caught: #(2)";
+                    $params= array($funcFile,$error_msg);
                     $isLoaded = false;
                 }
 
@@ -884,10 +830,10 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     if (!$found) {
         // if it's loaded but not found, then set the error message to that
         if (!$isLoaded || empty($msg)) {
-            $msg = xarML('Module function #(1) does not exist.', $modFunc);
+            $msg = 'Module function #(1) does not exist.';
+            $params = array($modFunc);
         }
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
-        return;
+        throw new FunctionNotFoundException($params,$msg);
     }
 
     $tplData = $modFunc($args);
@@ -931,19 +877,13 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
 {
     //xarLogMessage("xarModAPIFunc: begin $modName:$modType:$funcName");
 
-    if (empty($modName)) {
-        //die("$modName, $modType, $funcName");
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
     if (!xarCoreIsApiAllowed($modType)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
-        return;
+        // InputValidationException is more clear here, even though it's not user input.
+        throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
     }
-    if (empty($funcName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'funcName');
-        return;
-    }
+    if (empty($funcName)) throw new EmptyParameterException('modName');
+  
 
     // Build function name and call function
     $funcName = strtolower($funcName);
@@ -970,7 +910,8 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
                 ob_end_clean();
 
                 if (empty($r) || !$r) {
-                    $msg = xarML("Could not load function file: [#(1)].\n\n Error Caught:\n #(2)", $funcFile, $error_msg);
+                    $msg = "Could not load function file: [#(1)].\n\n Error Caught:\n #(2)";
+                    $params = array($funcFile, $error_msg);
                     $isLoaded = false;
                 }
 
@@ -990,14 +931,15 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
     if (!$found) {
         if ($throwException) {
             if (!$isLoaded || empty($msg)) {
-                $msg = xarML('Module API function #(1) does not exist or could not be loaded.', $modAPIFunc);
+                $msg = 'Module API function #(1) does not exist or could not be loaded.';
+                $params = array($modAPIFunc);
             }
 
             // MrB: When there is a parse error in the api file we sometimes end up
             // here, the error is never shown !!!! (xmlrpc for example)
             // TODO: the isloaded stuff -should- fix the problem above
             //       someone needs to double check this to be sure
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
+            throw new FunctionNotFoundException($params, $msg);
         }
         return;
     }
@@ -1345,11 +1287,7 @@ function xarModIsAvailable($modName, $type = 'module')
     // xarMod_getBaseInfo() caches module details anyway.
     static $modAvailableCache = array();
 
-    if (empty($modName)) {
-        $msg = xarML('Empty Module or Theme Name (#(1)).', '$modName');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
 
     // Get the real module details.
     // The module details will be cached anyway.
@@ -1407,13 +1345,10 @@ function xarModIsAvailable($modName, $type = 'module')
 function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerModName = NULL, $callerItemType = '')
 {
     //if ($hookObject != 'item' && $hookObject != 'category') {
-    //    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookObject');
-    //    return;
-    //}
+    //    throw new BadParameterException('hookObject');
     //if ($hookAction != 'create' && $hookAction != 'delete' && $hookAction != 'transform' && $hookAction != 'display') {
-    //    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookAction');
-    //    return;
-    //}
+    //    throw new BadParameterException('hookAction');
+
 
     // allow override of current module if necessary (e.g. modules admin, blocks, API functions, ...)
     if (empty($callerModName)) {
@@ -1501,17 +1436,13 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
 {
     static $hookListCache = array();
 
-    if (empty($callerModName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'callerModName');
-        return;
-    }
+    if (empty($callerModName)) throw new EmptyParameterException('callerModName');
+
     //if ($hookObject != 'item' && $hookObject != 'category') {
-    //    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookObject');
-    //    return;
+    //    throw new BadParameterException('hookObject');
     //}
     //if ($hookAction != 'create' && $hookAction != 'delete' && $hookAction != 'transform' && $hookAction != 'display') {
-    //    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookAction');
-    //    return;
+    //    throw new BadParameterException('hookAction');
     //}
 
     if (isset($hookListCache["$callerModName$callerItemType$hookObject$hookAction"])) {
@@ -1582,10 +1513,8 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
 {
     static $modHookedCache = array();
 
-    if (empty($hookModName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'hookModName');
-        return;
-    }
+    if (empty($hookModName)) throw new EmptyParameterException('hookModName');
+
     if (empty($callerModName)) {
         list($callerModName) = xarRequestGetInfo();
     }
@@ -1666,11 +1595,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
 {
     xarLogMessage("xarMod_getFileInfo ". $modOsDir ." / " . $type);
 
-    if (empty($modOsDir)) {
-        $msg = xarML('Directory information #(1) is empty.', '$modOsDir');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', new SystemException($msg));
-        return;
-    }
+    if (empty($modOsDir)) throw new EmptyParameterException('modOsDir');
 
     if (empty($GLOBALS['xarMod_noCacheState']) && xarCore_IsCached('Mod.getFileInfos', $modOsDir)) {
         return xarCore_GetCached('Mod.getFileInfos', $modOsDir);
@@ -1686,11 +1611,8 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
                 $fileName = 'modules/' . $modOsDir . '/pnversion.php';
                 if (file_exists($fileName)) {
                     $fd = fopen($fileName, 'r');
-                    if (!$fd){
-                        $msg = xarML('Cannot open file #(1).', $fd);
-                        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException($msg));
-                        return;
-                    }
+                    if (!$fd) throw new FileNotFoundException($fileName);
+
                     $buf = '';
                     while (!feof($fd)) {
                         $buf .= fgets($fd, 1024);
@@ -1719,7 +1641,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     if (!file_exists($fileName)) {
         // Don't raise an exception, it is too harsh, but log it tho (bug #295)
         xarLogMessage("xarMod_getFileInfo: Could not find xarversion.php or pnversion.php, skipping $modOsDir");
-        //xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $fileName);
+        // throw new FileNotFoundException($fileName);
         return;
     }
 
@@ -1792,18 +1714,12 @@ function xarMod_getBaseInfo($modName, $type = 'module')
 {
     xarLogMessage("xarMod_getBaseInfo ". $modName ." / ". $type);
 
-    if (empty($modName)) {
-        $msg = xarML('Module or Theme Name #(1) is empty.', '$modName');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM',  new SystemException($msg));
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
 
     $type = strtolower($type);
 
     if ($type != 'module' && $type != 'theme') {
-        $msg = xarML('Wrong type, it must be \'module\' or \'theme\': #(1).', $type);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM',  new SystemException($msg));
-        return;
+        throw new BadParameterException($type,'The value of the "type" parameter must be "module" or "theme", it was "#(1)"');
     }
 
     if ($type != 'theme') {
@@ -1906,11 +1822,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
  */
 function xarMod_getVarsByModule($modName, $type = 'module')
 {
-    if (empty($modName)) {
-        $msg = xarML('Empty theme or module name (#(1)).', '$modName');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
 
     switch(strtolower($type)) {
         case 'module':
@@ -1996,11 +1908,7 @@ function xarMod_getVarsByModule($modName, $type = 'module')
  */
 function xarMod_getVarsByName($varName, $type = 'module')
 {
-    if (empty($varName)) {
-        $msg = xarML('Empty Theme or Module variable name (#(1)).', '$varName');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (empty($varName)) throw new EmptyParameterException('varName');
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
@@ -2067,14 +1975,9 @@ function xarMod__loadDbInfo($modName, $modDir)
 {
     static $loadedDbInfoCache = array();
 
-    if (empty($modName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
-    if (empty($modDir)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modDir');
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
+    if (empty($modDir))  throw new EmptyParameterException('modDir');
+
 
     // Check to ensure we aren't doing this twice
     if (isset($loadedDbInfoCache[$modName])) {
@@ -2119,16 +2022,12 @@ function xarMod__loadDbInfo($modName, $modDir)
  */
 function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
 {
-    if ($modRegId < 1) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modRegId');
-        return;
-    }
+    if ($modRegId < 1) throw new BadParameterException('modRegId');
+
     //FIXME: what the heck this is doing in the interface?
     //Shouldnt this be a global of some sort, or function that returns this or whatever?
-    if ($modMode != XARMOD_MODE_SHARED && $modMode != XARMOD_MODE_PER_SITE) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modMode');
-        return;
-    }
+    if ($modMode != XARMOD_MODE_SHARED && $modMode != XARMOD_MODE_PER_SITE) 
+        throw new BadParameterException('modMode');
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
@@ -2312,7 +2211,6 @@ function xarModGetName()
 {
     //TODO Work around for the prefix.
     list($modName) = xarRequestGetInfo();
-
     return $modName;
 }
 

@@ -133,6 +133,30 @@ class DebugException extends xarExceptions
     protected $variables ='a variable value should normally be here';
 }
 
+/* Other exception classes which probably should be moved somewhere else 
+   TODO: this sort of begs for dynamic class generation. 
+         We could model it differently but catching is based on classname which is really comfy, 
+         so we actually need all those classes
+*/
+// Parameter exceptions
+class EmptyParameterException extends xarExceptions
+{ protected $message = "The parameter '#(1)' was expected in a call to a function, but was not provided.";}
+class BadParameterException extends xarExceptions
+{ protected $message = "The parameter '#(1)' provided during this operation could not be validated, or was not accepted for other reasons.";}
+
+// Not finding things
+class FunctionNotFoundException
+{ protected $message = 'The function "#(1)" could not be found or not be loaded.';}
+class IDNotFoundException extends xarExceptions
+{ protected $message = 'An item was requested based on a unique identifier (ID), however, the ID: "#(1)" could not be found.';}
+class FileNotFoundException extends xarExceptions
+{ protected $message = 'The file "#(1) could not be found.';}
+
+class ModuleBaseInfoNotFound extends xarExceptions
+{ protected $message = "The base info for module #(1) could not be found";}
+class ModuleNotActiveException extends xarExceptions
+{ protected $message = "The module #(1) was called, but it is not active.";}
+
 /*
  * Error constants for exception throwing
  * 
@@ -331,7 +355,6 @@ function xarErrorSet($major, $errorID, $value = NULL)
     $obj->setID($errorID);
     $obj->setStack($stack);
     $obj->major = $major;
-
     // Stick the object on the error stack
     $ErrorStack->push($obj);
     // If the XARDBG_EXCEPTIONS flag is set we log every raised error.
@@ -735,6 +758,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
             //return;
         }
     }
+
     throw new PHPException($msg,$errorType);
 }
 
