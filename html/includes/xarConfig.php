@@ -1,6 +1,5 @@
 <?php
 /**
- * File: $Id: xarConfig.php 1.44 05/03/19 08:41:04+01:00 marcel@powerbook.local $
  * Configuration Unit
  * 
  * @package config

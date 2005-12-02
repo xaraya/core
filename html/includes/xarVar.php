@@ -52,16 +52,8 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
      * Initialise the variable cache
      */
     $GLOBALS['xarVar_cacheCollection'] = array();
-
     $GLOBALS['xarVar_allowableHTML'] = xarConfigGetVar('Site.Core.AllowableHTML');
-    if (!isset($GLOBALS['xarVar_allowableHTML']) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return; // throw back exception
-    }
-
     $GLOBALS['xarVar_fixHTMLEntities'] = xarConfigGetVar('Site.Core.FixHTMLEntities');
-    if (!isset($GLOBALS['xarVar_fixHTMLEntities']) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return; // throw back exception
-    }
 
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarVar__shutdown_handler');
@@ -321,12 +313,7 @@ function xarVarValidate($validation, &$subject, $supress = false, $name='')
     $valParams = explode(':', $validation);
     $valType = strtolower(array_shift($valParams));
 
-    if (empty($valType)) {
-        // Raise an exception
-        $msg = xarML('No validation type present.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (empty($valType)) throw new EmptyParameterException('valType');
 
     // {ML_include 'includes/validations/array.php'}
     // {ML_include 'includes/validations/bool.php'}
@@ -488,10 +475,7 @@ function xarVar__getAllowedTags($level)
  //FIXME: Theme vars seems to be useless, get rid of it.
 function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL, $type = 'modvar')
 {
-    if (empty($name)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
-        return;
-    }
+    if (empty($name)) throw new EmptyParameterException('name');
 
     // FIXME: <mrb> Has this a specific historic reason to do it like this?
     $missing = '*!*MiSSiNG*!*';
@@ -702,10 +686,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
 function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $description = NULL, $uid = NULL, $type = 'modvar')
 {
     assert('!is_null($value); /* Not allowed to set a variable to NULL value */');
-    if (empty($name)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
-        return;
-    }
+    if (empty($name)) throw new EmptyParameterException('name');
 
     switch(strtolower($type)) {
         case 'modvar':
@@ -871,10 +852,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
  */
 function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'modvar')
 {
-    if (empty($name)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
-        return;
-    }
+    if (empty($name)) throw new EmptyParameterException('name');
 
     switch(strtolower($type)) {
         case 'modvar':
@@ -993,17 +971,12 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
  * @param targetContext The name of the module
  * @return string the string in the new context
  * @raise EMPTY_PARAM
+ * @todo  Would it be useful to be able to transform arrays of strings at once?
  */
 function xarVarTransform ($string, $sourceContext, $targetContext)
 {
-
-    //Would it be useful to be able to transform arrays of strings at once?
-
-    if (empty($sourceContext) || empty($targetContext)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'sourceContext or targetContext');
-        return;
-    }
-
+    if (empty($sourceContext)) throw new EmptyParameterException('sourceContext');
+    if (empty($targetContext)) throw new EmptyParameterException('targetContext');
     $transform_type = $sourceContext.'_to_'.$targetContext;
     $function_name = xarVarLoad ('transforms', $transform_type);
 
@@ -1037,9 +1010,9 @@ function xarVarLoad ($includes_type, $filename)
 
     if (!function_exists($function_name)) {
         // Raise an exception
-        $msg = xarML('The #(1) type \'#(2)\' could not be found.', $includes_type, $filename);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        $msg = 'The #(1) type \'#(2)\' could not be found.';
+        $params = arrary($includes_type, $filename);
+        throw new BadParameterException($params,$msg);
     }
 
     return $function_name;
@@ -1053,15 +1026,11 @@ function xarVarLoad ($includes_type, $filename)
  * @param targetContext The name of the context to escape for
  * @return string the string escape for the context
  * @raise EMPTY_PARAM
+ * @todo Would it be useful to be able to transform arrays of strings at once?
  */
 function xarVarEscape ($string, $targetContext, $extras = array())
 {
-
-    //Would it be useful to be able to transform arrays of strings at once?
-    if (empty($targetContext)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'targetContext');
-        return;
-    }
+    if (empty($targetContext)) throw new EmptyParameterException('targetContext');
 
     $function_name = xarVarLoad ('escapes', $targetContext);
     if (!$function_name) {return;}
