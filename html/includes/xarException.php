@@ -136,9 +136,10 @@ class DebugException extends xarExceptions
 /*
  * Error constants for exception throwing
  * 
- * @todo probably move this to core loader
+ * @todo probably move this to core loader or get rid of it completely, doesnt do something sane.
  */
 define('E_XAR_ASSERT', 1);
+define('E_XAR_PHPERR', 2);
 
 /**
  * Public error types
@@ -591,9 +592,8 @@ function xarException__formatStack($format,$stacktype = "ERROR")
  *
  * Handlers:
  * 1. assert failures -> xarException__assertErrorHandler($script,$line,$code)
- * 2. ado db errors   -> xarException__dbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $param1 = fail, $param2 = false)
- * 3. php Errors      -> xarException__phpErrorHandler($errorType, $errorString, $file, $line)
- * 4. exceptions      -> xarException__ExceptionHandler(Exception $exceptionObject) // See top of this file
+ * 2. php Errors      -> xarException__phpErrorHandler($errorType, $errorString, $file, $line)
+ * 3. exceptions      -> xarException__ExceptionHandler(Exception $exceptionObject) // See top of this file
  */
 
 /**
@@ -614,34 +614,6 @@ function xarException__assertErrorHandler($script,$line,$code)
     $msg = "ASSERTION FAILED: $script [$line] : $code";
     // TODO: classify the exception, we never want to use the base object directly.
     throw new SRCException($msg, E_XAR_ASSERT);
-}
-
-/**
- * ADODB error handler bridge
- *
- * @access private
- * @param  string databaseName
- * @param  string funcName
- * @param  integer errNo
- * @param  string errMsg
- * @param  bool param1
- * @param  bool param2
- * @raise  DATABASE_ERROR
- * @return void
- * @todo   <mrb> delete it, not needed anymore :-)
- */
-function xarException__dbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $param1 = false, $param2 = false)
-{
-    if ($funcName == 'EXECUTE') {
-        if (function_exists('xarML')) {
-            $msg = xarML('Database error while executing: \'#(1)\'; error description is: \'#(2)\'.', $param1, $errMsg);
-        } else {
-            $msg = 'Database error while executing: '. $param1 .'; error description is: ' . $errMsg;
-        }
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemException("ErrorNo: ".$errNo.", Message:".$msg));
-    } else {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', $errMsg);
-    }
 }
 
 /**
@@ -763,15 +735,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
             //return;
         }
     }
-
     throw new PHPException($msg,$errorType);
-
-    //xarResponseRedirect(xarModURL('base','user','systemexit',
-    //    array('code' => $errorType,
-    //          'exception' => $msg,
-    //          'product' => $product,
-    //          'component' => $component)));
-    
 }
 
 /**
