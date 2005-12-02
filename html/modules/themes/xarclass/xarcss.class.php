@@ -218,9 +218,7 @@ class xarCSS
                 // no problem
                 return $original;
             }
-        } else {
-            // no scope, somebody overrode defaults and hasn't assign anything sensible? naughty - lets complain
-            }
+
         } else {
             // no scope, somebody overrode defaults and hasn't assign anything sensible? naughty - lets complain
             $msg = xarML("#(1) (no valid scope attribute could be deduced from this xar:style tag)",$this->scope);
