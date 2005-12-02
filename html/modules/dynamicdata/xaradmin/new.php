@@ -27,7 +27,7 @@ function dynamicdata_admin_new($args)
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('notfresh', 'isset', $notfresh,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
-
+    
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');
     }

@@ -387,6 +387,7 @@ function installer_admin_phase5()
     // drop all the tables that have this prefix
     //TODO: in the future need to replace this with a check further down the road
     // for which modules are already installed
+    xarDBLoadTableMaintenanceAPI();
     if (isset($removetables) && $removetables) {
         $dbconn =& xarDBGetConn();
         $result = $dbconn->Execute($dbconn->metaTablesSQL);
@@ -399,7 +400,13 @@ function installer_admin_phase5()
             $result->MoveNext();
         }
         foreach ($tables as $table) {
-            if (!$dbconn->Execute('DROP TABLE ' . $table)) return;
+            // FIXME: a lot!
+            // 1. the drop table drops the sequence while the table gets dropped in the second statement
+            //    so if that fails, the table remains while the sequence is gone, at least transactions is needed
+            // 3. generating sql and executing in 2 parts sucks, wrt encapsulation
+            $sql = xarDBDropTable($table,$dbType); 
+            $result = $dbconn->Execute($sql);
+            if(!$result) return;
         }
     }
 

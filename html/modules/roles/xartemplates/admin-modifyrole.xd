@@ -39,6 +39,7 @@
 
     <xar:comment>TODO set the active tab here</xar:comment>
     <!-- Show the general tab list for roles -->
+    <xar:template file="tablist" />
     <fieldset>
       <legend>
         <xar:ml>

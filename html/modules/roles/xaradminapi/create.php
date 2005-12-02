@@ -53,7 +53,7 @@ function roles_adminapi_create($args)
             'admin', 'create', 'roles');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
-    }
+    } 
 
     // Get datbase setup
     $dbconn =& xarDBGetConn();

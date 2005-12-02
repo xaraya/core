@@ -83,6 +83,7 @@
             </td>
             <xar:if condition="xarModGetVar('privileges','showrealms')">
               <td>#$mask:getRealm()#</td>
+            </xar:if>
             <td>#$mask:getModule()#</td>
             <td>#$mask:getComponent()#</td>
             <td>#$mask:getInstance()#</td>
