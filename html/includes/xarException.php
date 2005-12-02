@@ -153,9 +153,15 @@ class FileNotFoundException extends xarExceptions
 { protected $message = 'The file "#(1) could not be found.';}
 
 class ModuleBaseInfoNotFound extends xarExceptions
-{ protected $message = "The base info for module #(1) could not be found";}
+{ protected $message = 'The base info for module "#(1)" could not be found';}
 class ModuleNotActiveException extends xarExceptions
-{ protected $message = "The module #(1) was called, but it is not active.";}
+{ protected $message = 'The module "#(1)" was called, but it is not active.';}
+
+class NotLoggedInException extends xarExceptions
+{ protected $message = 'An operation was encountered that requires the user to be logged in. If you are currently logged in please report this as a bug.';}
+
+class VariableRegistrationException extends xarExceptions
+{ protected $message = 'Variable "#(1)" is not properly registered';}
 
 /*
  * Error constants for exception throwing
