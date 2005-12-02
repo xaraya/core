@@ -1214,4 +1214,23 @@ function xarPage_httpCacheHeaders($cache_file)
     xarPageCache_sendHeaders($modtime);
 }
 
+/**
+
+ * see if a user is authorised to carry out a particular task
+ *
+ * @access public
+ * @param  integer realm the realm to authorize
+ * @param  string component the component to authorize
+ * @param  string instance the instance to authorize
+ * @param  integer level the level of access required
+ * @param  integer userId  user id to check for authorisation
+ * @return bool
+ * @raise DATABASE_ERROR
+ */
+function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
+{
+    return pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId);
+}
+
+
 ?>

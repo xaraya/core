@@ -166,6 +166,9 @@ class VariableRegistrationException extends xarExceptions
 class EventRegistrationException extends xarExceptions
 { protected $message = 'The even "#(1)" is not properly registered';}
 
+class ForbiddenOperationException extends xarExceptions
+{ protected $message = 'The operation you are attempting is not allowed in the current circumstances.';}
+
 /*
  * Error constants for exception throwing
  * 
