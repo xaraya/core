@@ -10,20 +10,129 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-// Exception classes we will probably need:
-// SQLException (provided by creole atm) - signals a db backend error
-// PHPException - signals the php error handler was called
-class PHPException extends Exception 
+/* RFC MATERIAL follows:
+
+   Exception classes we will probably need:
+   I'd say that each subsystem or component can derive an exception class from (XAR)Exception
+   class and provide there whatever it needs.
+
+   The exception classes should be defined with reasonbly meaningful names, so the catch clause(s)
+   remain readable by a human too. While this is a bit longer to type, the added value when debugging
+   someone elses code is invaluable.
+
+   A derivation tree COULD be: ( items marked with * are provided here, others can come from somewhere else)
+   This is just to give an idea what the tree could look like, we just provide the * marked items here and
+   the required interface for derived classes.
+
+   Exception [PHP]
+   |-->[3rdPartyExceptions go here]
+   |-->SQLException [Creole] - signals exception in SQL backend.
+   |-->PHPException* - the php error handler raised the exception, means that a PHP error occurred.
+   |-->SRCException* - the assertion handler raised the exception, means that an assertion in the code has failed.
+   |-->xarExceptions*
+       |-->DebugException* - debug Exception, i imagine we should be able to enable/disable this at will very easy so we can quickly test things.
+       |-->NotFoundExceptions
+       |   |-->FileNotFoundException
+       |   |-->IDNotFoundException
+       |   |-->LocaleNotFoundException
+       |-->DuplicateExceptions
+       |   |-->FileDuplicateException
+       |   |-->BlockDuplicateException
+       |-->ValidationExceptions
+       |   |-->XMLValidationException
+       |   |-->InputValidationException
+       |-->ConfigurationExceptions
+       |-->DeprecationExceptions
+       |   |-->APIDeprecationException
+       |   |-->SyntaxDeprecationException
+       |-->SecurityExceptions
+       |   |-->AuthenticationSecurityException
+       |   |-->AuthorisationSecurityException
+       |-->TranslationException
+       |-->RegistrationExceptions
+       |   |-->TagRegistrationException
+       |   |-->EventRegistrationException
+       |-->DependencyExceptions
+       |   |-->VersionDependencyException
+
+   The default interface of the base Exception class is:
+   new Exception(String $message, Int $code);
+   (see also: http://www.php.net/manual/en/language.exceptions.php)
+   Overridden exception classes must implement the interface of the xarExceptions class however
+
+   NOTE: Pay special attention in the above to the use of plural forms for container classes, so they can
+         be caught all at once like:
+         try {
+            ..something risky..
+         } catch(xarExceptions $e) {
+           .. any Xar exception will be caught here, but no others
+         }
+
+   NOTE: I'm putting stuff on this all in this file now, we can split things up later on
+
+   Q: do we need compatability classes for the legacy classes?
+   Q: the exception handler receives the instantiated Exception class. 
+      How do we know there what is available in the derived object so we can specialize handling?
+      To only allow deriving from XARExceptions and standardize there is probably not enough, but lets do that for now.
+
+*/
+
+/* PHP Errors are special exceptions, thrown by the php error handler */
+final class PHPException extends Exception 
 {}
 
-// TPLException? - would signal an error in a xar template (provided by tpl system)
-// SRCException? - would signal a definite source exception (like an assert, pre/pro/invariant failing)
-class SRCException extends Exception
+/* Assertions are special exceptions, thrown by the assert error handler */
+final class SRCException extends Exception
 {}
 
-// Compatability classes for the legacy classes?
-// what else? 
- 
+
+interface IxarExceptions {
+    public function __construct($vars = NULL, $msg = NULL);
+}
+/* Our own exceptions, the base container class, cannot be instantiated */
+abstract class xarExceptions extends Exception implements IxarExceptions
+{
+    // Variable parts in the message.
+    protected $message ="Missing Exception Info, please put the defaults for '\$message' and '\$variables' members in the derived exception class.";
+    protected $variables = array();
+    /*
+     All exceptions have the same interface from XAR point of view
+     so we dont allow this to be overridden just now. The message parameter
+     may be overridden though. If not supplied the default message
+     for the class gets used.
+     Throwing an exeception is done by: 
+         throw new WhateverException($vars);
+     $vars is an array of values which are variable in the message. 
+     The message is normally not overridden but possible., example:
+         throw new FileNotFoundException(array($file,$dir),'Go place the file #(1) in the #(2) location, i can not find it');
+    */
+    final public function __construct($vars = NULL, $msg = NULL) 
+    {
+        // Make sure the construction creates the right values first
+        if(!is_null($msg)) $this->message = $msg;
+        parent::__construct($this->message,$this->code);
+
+        if(!is_null($vars)) $this->variables = $vars;
+        if(!is_array($this->variables)) $this->variables = array($this->variables);
+        $rep=1;
+        foreach($this->variables as $var) 
+            $this->message = str_replace("#(".$rep++.")",(string)$var,$this->message);
+    }
+}
+
+
+/*
+ * Exception class for debugging
+ *
+ * @todo Devise some special constructor, so it's not really easy to leave the objects laying around
+ */
+class DebugException extends xarExceptions
+{
+    // Derived exception class should minimally proved the following 2
+    protected $message ='Default "$message" for "DebugException" with "$variables" member with value: "#(1)"';
+    protected $variables ='a variable value should normally be here';
+}
+
 /*
  * Error constants for exception throwing
  * 
@@ -81,7 +190,8 @@ global $CoreStack, $ErrorStack;
  * Execution stops directly after this handler runs.
  * The base exception object is documented here: http://www.php.net/manual/en/language.exceptions.php
  * but we dont want to instantiate that directly, but rather one of our derived classes.
- * 
+ * We define this handler here, because it needs to be defined before set_exception_handler
+ *
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @access private
  * @param  Exception $exception The exception object
@@ -110,6 +220,7 @@ function xarException__ExceptionHandler(Exception $e)
             $msg = xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
         }
     }
+    xarErrorFree();
     // Make an attemtp to render the page, hoping we have everything in place still
     echo xarTpl_renderPage($msg);
     // Execution stops after this handler, except for the shutdown handlers.
@@ -723,7 +834,7 @@ function xarException__formatBacktrace ($vardump,$key=false,$level=0)
         if (gettype($vardump) == 'object')
             $vardump = (array) get_object_vars($vardump);
 
-        foreach($vadump as $key => $value)
+        foreach($vardump as $key => $value)
             $return .= xarException__formatBacktrace($value,$key,$level+1);
 
         $return .= str_repeat(' ', $tabsize*$level);
