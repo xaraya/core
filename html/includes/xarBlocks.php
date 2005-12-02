@@ -1,6 +1,5 @@
 <?php
 /**
- * File: $Id: xarBlocks.php 1.142 05/03/19 08:41:03+01:00 marcel@powerbook.local $
  * Display Blocks
  *
  * xarBlockType functions are now in xarLegacy,
@@ -157,10 +156,8 @@ function xarBlock_render($blockinfo)
  */
 function xarBlock_renderGroup($groupname, $template = NULL)
 {
-    if (empty($groupname)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'groupname');
-        return;
-    }
+    if (empty($groupname)) throw new EmptyParameterException('groupname');
+
     $blockCaching = xarCore_GetCached('xarcache', 'blockCaching');
 
     $dbconn =& xarDBGetConn();
