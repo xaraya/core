@@ -169,6 +169,15 @@ class EventRegistrationException extends xarExceptions
 class ForbiddenOperationException extends xarExceptions
 { protected $message = 'The operation you are attempting is not allowed in the current circumstances.';}
 
+class DuplicateTagException extends xarExceptions
+{ protected $message = 'The tag definition for the tag: "#(1)" already exists.';}
+
+class BLValidationException extends xarExceptions
+{ protected $message = 'A blocklayout tag or attribute construct was invalid, see the tag documentation for the correct syntax';}
+
+class ConfigurationException extends xarExceptions
+{ protected $message = 'There is an unknown configuration error detected.';}
+
 /*
  * Error constants for exception throwing
  * 

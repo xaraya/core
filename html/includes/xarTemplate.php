@@ -87,18 +87,18 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
         xarCore_die("xarTpl_init: Nonexistent default.xt page in theme directory '". xarTplGetThemeDir() ."'");
     }
 
+    $GLOBALS['xarTpl_additionalStyles'] = '';
     if ($GLOBALS['xarTpl_cacheTemplates']) {
         if (!is_writeable(XAR_TPL_CACHE_DIR)) {
             $msg = "xarTpl_init: Cannot write in '". XAR_TPL_CACHEDIR ."' directory '"
                 . XAR_TPL_CACHE_DIR . "', but the setting: 'cache templates' is set to 'On'.\n"
                 ."Either change the permissions on the mentioned file/directory or set template caching to 'Off' (not recommended).";
             $GLOBALS['xarTpl_cacheTemplates'] = false;
-            // Set the exception, but do not return just yet, because we *can* continue.
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONFIG_ERROR', $msg);
+            // Set the exception, but we *could* continue (only slow, so an error might be in place here). Let's see
+            // how the exception feels like in practice for a while
+            throw new ConfigurationException(NULL, $msg);
         }
     }
-
-    $GLOBALS['xarTpl_additionalStyles'] = '';
 
     // This is wrong here as well, but it's better at least than in xarMod
     include "includes/xarTheme.php";
@@ -1159,10 +1159,9 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
         }
     }
 
-    if (!file_exists($sourceFileName) && $needCompilation == true) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST', $sourceFileName);
-        return;
-    }
+    if (!file_exists($sourceFileName) && $needCompilation == true) 
+        throw new FileNotFoundException($sourceFileName);
+
     xarLogMessage("Using template : $sourceFileName");
     //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
     $templateCode = null;
@@ -1170,6 +1169,10 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
         $blCompiler = xarTpl__getCompilerInstance();
         $lasterror = xarCurrentError();
         $templateCode = $blCompiler->compileFile($sourceFileName);
+        // TODO !
+        // TODO !
+        // TODO: Recheck the flow here, this was put in as a hack (?) iirc to deal with errors during the process.
+        //       We might not need this anymore now.
         // we check the error stack here to make sure no new errors happened during compile
         // but we do not check the core stack
         if (!isset($templateCode) || xarCurrentError() != $lasterror) {
@@ -1441,14 +1444,14 @@ function xarTpl__loadFromFile($sourceFileName)
     }
 
     if (!file_exists($sourceFileName) && $needCompilation == true) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST', $sourceFileName);
-        return;
+        throw new FileNotFoundException($sourceFileName);
     }
 
     //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
     if ($needCompilation) {
         $blCompiler = xarTpl__getCompilerInstance();
         $templateCode = $blCompiler->compileFile($sourceFileName);
+        // TODO: CHECK THIS, we might not need this anymore
         if (!isset($templateCode) || xarCurrentErrorType() != XAR_NO_EXCEPTION) {
             return; // exception! throw back
         }
@@ -1518,17 +1521,12 @@ class xarTemplateAttribute
     {
         // See defines at top of file
         if (!eregi(XAR_TPL_ATTRIBUTE_REGEX, $name)) {
-            $msg = xarML("Illegal attribute name ('#(1)'): Attribute name may contain letters, numbers, _ and -, and must start with a letter.", $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException($msg));
-            return;
+            // This should be a XML validation exception perhaps?
+            throw new BadParamterException($name,'The attribute name "#(1)" is invalid. Attribute names contain letters, numbers, _ and -, and must start with a letter.');
         }
 
         if (!is_integer($flags) && $flags != NULL) {
-            $msg = xarML("Illegal attribute flags ('#(1)'): flags must be of integer type.", $flags);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException($msg));
-            return;
+            throw new BadParameterException($flags,"Illegal attribute flags ('#(1)'): flags must be of integer type.");
         }
 
         $this->_name  = $name;
@@ -1604,24 +1602,18 @@ class xarTemplateTag
     {
         // See defines at top of file
         if (!eregi(XAR_TPL_TAGNAME_REGEX, $name)) {
-            $msg = xarML("Illegal tag definition: '#(1)' is an invalid tag name.", $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
-            return;
+            throw new BadParameterException($name,'Illegal tag definition: "#(1)" is an invalid tag name.');
         }
 
         if (preg_match("/($module)_(\w+)api_(.*)/",$handler,$matches)) {
             $this->_type = $matches[2];
             $this->_func = $matches[3];
         } else {
-            $msg = xarML("Illegal tag definition: '#(1)' is an invalid handler.", $handler);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
-            return;
+            throw new BadParameterException($handler,'Illegal tag definition: "#(1)" is an invalid handler.');
         }
 
         if (!is_integer($flags)) {
-            $msg = xarML("Illegal tag registration flags ('#(1)'): flags must be of integer type.", $flags);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
-            return;
+            throw new BadParameterException($flags,'Illegal tag registration flags ("#(1)"): flags must be of integer type.');
         }
         
         // Everything seems to be in order, set the properties
@@ -1711,12 +1703,9 @@ class xarTemplateTag
                 $this->_type = $matches[2];
                 $this->_func = $matches[3];
             } else {
-                $msg = xarML("Illegal tag definition: '#(1)' is an invalid handler.", $handler);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                               new SystemException($msg));
                 // FIXME: why is this needed?
                 $this->_name = NULL;
-                return;
+                throw new BadParameterException($handler,'Illegal tag definition: "#(1)" is an invalid handler.');
             }
         }
         // Add the type to the args
@@ -1749,10 +1738,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     // Check to make sure tag does not exist first
     if (xarTplGetTagObjectFromName($tag_name) != NULL) {
         // Already registered
-        $msg = xarML('<xar:#(1)> tag is already defined.', $tag_name);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                       new SystemException($msg));
-        return false;
+        throw new DuplicateTagException($tag_name,'<xar:#(1)> tag is already defined.');
     }
 
     // Validity of tagname is checked in class.
@@ -1865,16 +1851,10 @@ function xarTplCheckTagAttributes($name, $args)
             }
 
             // bad type for attribute
-            $msg = xarML("'#(1)' attribute in <xar:#(2)> tag does not have correct type. See tag documentation.", $attr_name, $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                            new SystemException($msg));
-            return false;
+            throw new BLValidationException(array($attr_name,$name),'"#(1)" attribute in <xar:#(2)> tag does not have correct type. See tag documentation.');
         } elseif ($attr->isRequired()) {
             // required attribute is missing!
-            $msg = xarML("Required '#(1)' attribute is missing from <xar:#(2)> tag. See tag documentation.", $attr_name, $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                            new SystemException($msg));
-            return false;
+            throw new BLValidationException(array($attr_name,$name),'Required "#(1)" attribute is missing from <xar:#(2)> tag. See tag documentation.');
         }
     }
 
