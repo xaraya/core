@@ -37,7 +37,7 @@
 
 		$types = array();
 		if ($native) {
-			if ($nativetypes = xarModAPIFunc($module,'user','getitemtypes',array(),0)) $types = array_merge($types,$nativetypes);
+			if ($nativetypes = xarModAPIFunc($module,'user','getitemtypes',array(),0)) $types = $nativetypes;
 
 		}
 		if ($extensions) {
