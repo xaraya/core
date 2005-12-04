@@ -323,6 +323,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
         $dbconn =& xarDBGetConn();
         $query = "DELETE FROM $metaTable WHERE xar_table=?";
         $result =& $dbconn->Execute($query,array($tableName));
+        xarErrorFree();
     }
 
     switch($databaseType) {
