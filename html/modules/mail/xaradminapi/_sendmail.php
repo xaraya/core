@@ -280,9 +280,7 @@ function mail_adminapi__sendmail($args)
     }
 
     // Set the showTemplates back to what it was previously
-    if (!$mailShowTemplates) {
-        xarModSetVar('themes', 'ShowTemplates', $oldShowTemplates);
-    }
+    xarModSetVar('themes', 'ShowTemplates', $oldShowTemplates);
 
     // We are now setting up the advance options that can be used by the modules
     // Add Attachment will look to see if there is a var passed called
