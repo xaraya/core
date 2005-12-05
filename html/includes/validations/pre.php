@@ -210,7 +210,7 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
     //    $errorstack =& xarErrorGet();
     //    $error = array_shift($errorstack);
     //    $msg = xarML('Field "#(1)" is invalid. [#(2)]', $fieldname, $error['short']);
-    //xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+    //    throw new BadParameter/Validation exception?
     //}
 
     // Single point of exit.
