@@ -63,20 +63,8 @@ class xarDataDict
     function addColumn($table, $fields)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (empty($fields)) {
-            $invalid[] = 'fields';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'addColumn', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
+        if (empty($table)) throw new EmptyParameterException('table');
+        if (empty($fields)) throw new EmptyParameterException('fields');
 
         // Generate SQL to add a column to the table
         $sql = $this->dict->AddColumnSQL($table, $fields);
@@ -105,20 +93,8 @@ class xarDataDict
     function alterColumn($table, $fields)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (empty($fields)) {
-            $invalid[] = 'fields';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'alterColumn', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
+        if (empty($table)) throw new EmptyParameterException('table');
+        if (empty($fields)) throw new EmptyParameterException('empty');
 
         // Generate SQL to change the column in the table
         $sql = $this->dict->AlterColumnSQL($table, $fields);
@@ -173,24 +149,8 @@ class xarDataDict
     function changeTable($table, $fields)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (empty($fields)) {
-            $invalid[] = 'fields';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML(
-                'Invalid #(1) for function #(2)() in #(3)',
-                join(', ',$invalid), 'changeTable', 'xarDataDict'
-            );
-            xarErrorSet(
-                XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                new SystemException(__FILE__.'('.__LINE__.'): ' . $msg)
-            );
-            return false;
-        }
+        if (empty($table)) throw new EmptyParameterException('table');
+        if (empty($fields)) throw new EmptyParameterException('fields');
 
         // Generate SQL to change the table
         $sql = $this->dict->ChangeTableSQL($table, $fields);
@@ -220,17 +180,7 @@ class xarDataDict
     function createDatabase($database, $options = false)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($database)) {
-            $invalid[] = 'database';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'createDatabase', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
+        if (empty($database)) throw new EmptyParameterException('database');
 
         // Generate SQL to create the database
         $sql = $this->dict->CreateDatabase($database, $options);
@@ -262,27 +212,9 @@ class xarDataDict
     function createIndex($index, $table, $fields, $options = false)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($index)) {
-            $invalid[] = 'index name';
-        }
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (empty($fields)) {
-            $invalid[] = 'fields';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML(
-                'Invalid #(1) for function #(2)() in #(3)',
-                join(', ',$invalid), 'createIndex', 'xarDataDict'
-            );
-            xarErrorSet(
-                XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                new SystemException(__FILE__.'('.__LINE__.'): '.$msg)
-            );
-            return false;
-        }
+        if (empty($index)) throw new EmptyParameterException('index');
+        if (empty($table)) throw new EmptyParameterException('table');
+        if (empty($fields)) throw new EmptyParameterException('fields');
 
         // Generate SQL to create the index
         $sql = $this->dict->CreateIndexSQL($index, $table, $fields, $options);
@@ -312,23 +244,9 @@ class xarDataDict
     function dropIndex($index, $table)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($index)) {
-            $invalid[] = 'index name';
-        }
+        if (empty($index)) throw new EmptyParameterException('index');
         if (empty($table)) {
             $table = NULL;
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML(
-                'Invalid #(1) for function #(2)() in #(3)',
-                join(', ',$invalid), 'dropIndex', 'xarDataDict'
-            );
-            xarErrorSet(
-                XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                new SystemException(__FILE__.'('.__LINE__.'): '.$msg)
-            );
-            return false;
         }
 
         // Generate SQL to drop the index
@@ -368,20 +286,8 @@ class xarDataDict
     function createTable($table, $fields, $options = false)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (empty($fields)) {
-            $invalid[] = 'fields';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'createTable', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
+        if (empty($table)) throw new EmptyParameterException('table');
+        if (empty($fields)) throw new EmptyParameterException('fields');
 
         // Generate SQL to create the table
         $sql = $this->dict->CreateTableSQL($table, $fields, $options);
@@ -410,20 +316,8 @@ class xarDataDict
     function dropColumn($table, $fields)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (empty($fields)) {
-            $invalid[] = 'fields';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'dropColumn', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
+        if (empty($table)) throw new EmptyParameterException('table');
+        if (empty($fields)) throw new EmptyParameterException('fields');
 
         // Generate SQL to drop the column
         $sql = $this->dict->DropColumnSQL($table, $fields);
@@ -451,17 +345,7 @@ class xarDataDict
     function dropTable($table)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'dropTable', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
+        if (empty($table)) throw new EmptyParameterException('table');
 
         // Generate SQL to drop the table
         $sql = $this->dict->DropTableSQL($table);
@@ -511,18 +395,7 @@ class xarDataDict
     function getColumns($table)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'getColumns', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
-
+        if (empty($table)) throw new EmptyParameterException('table');
         $columns = $this->dict->MetaColumns($table);
         return $columns;
     }
@@ -542,18 +415,7 @@ class xarDataDict
     function getPrimaryKeys($table)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'getPrimaryKeys', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
-
+        if (empty($table)) throw new EmptyParameterException('table');
         $keys = $this->dict->MetaPrimaryKeys($table);
         return $keys;
     }
@@ -574,22 +436,7 @@ class xarDataDict
     function getIndexes($table, $primary = false)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML(
-                'Invalid #(1) for function #(2)() in #(3)',
-                join(', ',$invalid), 'getIndexes', 'xarDataDict'
-            );
-            xarErrorSet(
-                XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                new SystemException(__FILE__.'('.__LINE__.'): ' . $msg)
-            );
-            return false;
-        }
-
+        if (empty($table)) throw new EmptyParameterException('table');
         return $this->dict->MetaIndexes($table, $primary);
     }
 
