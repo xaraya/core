@@ -37,7 +37,8 @@
 
 		$types = array();
 		if ($native) {
-			if ($nativetypes = xarModAPIFunc($module,'user','getitemtypes',array(),0)) $types = array_merge($types,$nativetypes);
+			if ($nativetypes = xarModAPIFunc($module,'user','getitemtypes',array(),0)) $types = $nativetypes;
+
 		}
 		if ($extensions) {
 			// Get all the objects at once
@@ -54,6 +55,7 @@
 											'title' => xarML('View #(1)',$row['objectname']),
 											'url' => xarModURL('dynamicdata','user','view',array('itemtype' => $row['itemtype'])));
 		}
+
 		return $types;
 	}
 ?>
