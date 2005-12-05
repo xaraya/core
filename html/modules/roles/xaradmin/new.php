@@ -19,6 +19,7 @@
  */
 function roles_admin_new()
 {
-    return xarModFunc('roles', 'admin', 'newrole');
+    if (!xarVarFetch('itemtype', 'int', $itemtype, ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
+    return xarModFunc('roles', 'admin', 'newrole',array('itemtype' => $itemtype));
 }
 ?>

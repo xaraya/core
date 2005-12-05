@@ -365,7 +365,7 @@ function roles_user_register()
                 $userRole = xarModGetVar('roles', 'defaultgroup');
 
                  // Get the group id
-                $defaultRole = xarModAPIFunc('roles', 'user', 'get', array('name'  => $userRole, 'type'   => 1));
+                $defaultRole = xarModAPIFunc('roles', 'user', 'get', array('name'  => $userRole, 'type'   => ROLES_GROUPTYPE));
 
                 if (empty($defaultRole)) return;
 
@@ -411,7 +411,7 @@ function roles_user_register()
                 // Get the group id
                 $defaultRole = xarModAPIFunc('roles', 'user', 'get',
                                               array('name'  => $userRole,
-                                                    'type'   => 1));
+                                                    'type'   => ROLES_GROUPTYPE));
 
                 if (empty($defaultRole)) return;
 

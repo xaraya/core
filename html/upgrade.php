@@ -151,7 +151,7 @@ if (empty($step)) {
               WHERE xar_module='dynamicdata' AND xar_component='Type'";
     $result =& $dbconn->Execute($query);
 
-    
+
 
     //now check modules instances - only affected if their site prefix is other than 'xar'
     if ($sprefix == 'xar') { // check ratings, hitcount, articles and categories
@@ -193,7 +193,7 @@ if (empty($step)) {
                       }
                   }
             }//end foreach
-             
+
             //now do the last one as a separate instance - to get it to work properly
             $categoryinstance ='SELECT DISTINCT instances.xar_title FROM '.$blockinstancetable.' as instances LEFT JOIN '.$blocktypestable.' as btypes ON  btypes.xar_id = instances.xar_type_id WHERE xar_module = \'categories\'';
 
@@ -204,7 +204,7 @@ if (empty($step)) {
                       $result =&$dbconn->Execute($query);
 
             list($iid, $header, $xarquery) = $result->fields;
-            if ($categoryinstance != $xarquery) 
+            if ($categoryinstance != $xarquery)
             {
                    $categoriesupdate=true;
                    echo "Attempting to update categories instance  with component Block and header Category Block Title: ";
@@ -227,7 +227,7 @@ if (empty($step)) {
         } // endif modavailable
 
         //check hitcount instances
-        if (xarModIsAvailable('hitcount')) 
+        if (xarModIsAvailable('hitcount'))
         {
             $hitcountupdate=false;
             $hitcountinstances[]=array(array ('ccomponent'  => 'Item',
@@ -1016,6 +1016,29 @@ if (empty($step)) {
         echo "AttachRole, RemoveRole masks have been created previously, moving to next check. <br />";
     }
 
+    $roles = new xarRoles();
+    $everybody = $roles->getRole(1);
+    $upgrade['roles_itemtypes'] = $everybody->getType() == 2;
+    if (!$upgrade['roles_itemtypes']) {
+        echo "Roles itemtypes are still old definitions... ";
+		$xartable =& xarDBGetTables();
+        $query = "UPDATE $xartable[roles]
+                     SET xar_type=2
+                   WHERE xar_type=1";
+        $result1 =& $dbconn->Execute($query);
+        $query = "UPDATE $xartable[roles]
+                     SET xar_type=1
+                   WHERE xar_type=0";
+        $result2 =& $dbconn->Execute($query);
+        if (!$result1 && !$result2){
+            echo "failed<br/>\r\n";
+        } else {
+            echo "done!<br/>\r\n";
+        }
+    } else {
+        echo "Roles itemtypes have been updated previously, moving to next check. <br />";
+    }
+
     // Check the installed privs and masks.
     echo "<h5>Checking Privilege Structure</h5>";
 
@@ -1305,9 +1328,9 @@ if (empty($step)) {
         xar_page            L           NotNull DEFAULT 0,
         xar_user            L           NotNull DEFAULT 0,
         xar_expire          I           Null
-    ";  
+    ";
     // Create or alter the table as necessary.
-    $result = $datadict->changeTable($cacheblockstable, $flds);    
+    $result = $datadict->changeTable($cacheblockstable, $flds);
     if (!$result) {return;}
     // Create a unique key on the xar_bid collumn
     $result = $datadict->createIndex('i_' . xarDBGetSiteTablePrefix() . '_cache_blocks_1',
@@ -1315,8 +1338,8 @@ if (empty($step)) {
                                      'xar_bid',
                                      array('UNIQUE'));
     echo "...done.<br/>";
-    
-  /*$varCacheDir = xarCoreGetVarDirPath() . '/cache'; 
+
+  /*$varCacheDir = xarCoreGetVarDirPath() . '/cache';
     if (file_exists($varCacheDir . '/output/cache.touch')) {
         echo "Output caching enabled, checking for required table...<br/>";
         $dbconn =& xarDBGetConn();
@@ -1337,7 +1360,7 @@ if (empty($step)) {
         }
     } else {
         echo "Output caching is not enabled.<br/>";
-    } */ 
+    } */
     // Done with xarCache state check
 
     // Bug 1798 - Rename davedap module to phpldapmodule
@@ -1409,7 +1432,7 @@ if (empty($step)) {
             return;
         }
     } // End bug 630
-    
+
     // after 0911, make sure CSS class lib is deployed and css tags are registered
     echo "<h5>Making sure CSS tags are registered</h5>";
     if(!xarModAPIFunc('themes', 'css', 'registercsstags')) {
