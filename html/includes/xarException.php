@@ -13,10 +13,10 @@
 /* RFC MATERIAL follows:
 
    Exception classes we will probably need:
-   I'd say that each subsystem or component can derive an exception class from (XAR)Exception
+   I'd say that each subsystem or component can derive an exception class from (XAR)Exceptions
    class and provide there whatever it needs.
 
-   The exception classes should be defined with reasonbly meaningful names, so the catch clause(s)
+   The exception classes should be defined with reasonably meaningful names, so the catch clause(s)
    remain readable by a human too. While this is a bit longer to type, the added value when debugging
    someone elses code is invaluable.
 
@@ -55,10 +55,10 @@
        |-->DependencyExceptions
        |   |-->VersionDependencyException
 
-   The default interface of the base Exception class is:
+   The default interface of the php internal base Exception class is:
    new Exception(String $message, Int $code);
    (see also: http://www.php.net/manual/en/language.exceptions.php)
-   Overridden exception classes must implement the interface of the xarExceptions class however
+   Overridden exception classes however must implement the interface of the xarExceptions class however
 
    NOTE: Pay special attention in the above to the use of plural forms for container classes, so they can
          be caught all at once like:
@@ -139,21 +139,23 @@ class DebugException extends xarExceptions
          so we actually need all those classes
 */
 // Parameter exceptions
-class EmptyParameterException extends xarExceptions
+abstract class ParameterExceptions extends xarExceptions {}
+class EmptyParameterException extends ParameterExceptions
 { protected $message = "The parameter '#(1)' was expected in a call to a function, but was not provided.";}
-class BadParameterException extends xarExceptions
+class BadParameterException extends ParameterExceptions
 { protected $message = "The parameter '#(1)' provided during this operation could not be validated, or was not accepted for other reasons.";}
 
 // Not finding things
-class FunctionNotFoundException
+abstract class NotFoundExceptions extends xarExceptions {}
+class FunctionNotFoundException extends NotFoundExceptions
 { protected $message = 'The function "#(1)" could not be found or not be loaded.';}
-class IDNotFoundException extends xarExceptions
+class IDNotFoundException extends NotFoundExceptions
 { protected $message = 'An item was requested based on a unique identifier (ID), however, the ID: "#(1)" could not be found.';}
-class FileNotFoundException extends xarExceptions
+class FileNotFoundException extends NotFoundExceptions
 { protected $message = 'The file "#(1) could not be found.';}
-
 class ModuleBaseInfoNotFound extends xarExceptions
 { protected $message = 'The base info for module "#(1)" could not be found';}
+
 class ModuleNotActiveException extends xarExceptions
 { protected $message = 'The module "#(1)" was called, but it is not active.';}
 
@@ -161,20 +163,24 @@ class NotLoggedInException extends xarExceptions
 { protected $message = 'An operation was encountered that requires the user to be logged in. If you are currently logged in please report this as a bug.';}
 
 // Registration
-class VariableRegistrationException extends xarExceptions
+abstract class RegistrationExceptions extends xarExceptions {}
+class VariableRegistrationException extends RegistrationExceptions
 { protected $message = 'Variable "#(1)" is not properly registered';}
-class EventRegistrationException extends xarExceptions
+class EventRegistrationException extends RegistrationExceptions
 { protected $message = 'The even "#(1)" is not properly registered';}
 
 class ForbiddenOperationException extends xarExceptions
 { protected $message = 'The operation you are attempting is not allowed in the current circumstances.';}
 
+// Duplication
 class DuplicateTagException extends xarExceptions
 { protected $message = 'The tag definition for the tag: "#(1)" already exists.';}
 
+// Validation
 class BLValidationException extends xarExceptions
 { protected $message = 'A blocklayout tag or attribute construct was invalid, see the tag documentation for the correct syntax';}
 
+// Configuration
 class ConfigurationException extends xarExceptions
 { protected $message = 'There is an unknown configuration error detected.';}
 
@@ -257,7 +263,7 @@ function xarException__ExceptionHandler(Exception $e)
         $data = array('major' => 'MAJOR TBD (Code was: '. $e->getCode().')',
                       'type'  => get_class($e), 'title' => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
                       'short' => $e->getMessage(), 'long' => 'LONG msg TBD',
-                      'hint'  => 'HINT TBD', 'stack' => '<pre>'.$e->getTraceAsString()."</pre>",
+                      'hint'  => 'HINT TBD', 'stack' => '<pre>'. $e->getTraceAsString()."</pre>",
                       'product' => 'Product TBD', 'component' => 'Component TBD');
         $theme_dir = xarTplGetThemeDir(); $template="systemerror";
         if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {

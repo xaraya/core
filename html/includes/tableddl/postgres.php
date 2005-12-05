@@ -120,10 +120,7 @@ function xarDB__postgresqlAlterTable($tableName, $args)
     switch ($args['command']) {
         case 'add':
             if (empty($args['field'])) {
-                $msg = xarML('Invalid args (field key must be set).');
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                return;
+                throw new BadParameterException('args','Invalid parameter "#(1)" (field key must be set).');
             }
             $sql = 'ALTER TABLE '.$tableName.' ADD '.$args['field'].' ';
             // Get column definitions
@@ -137,10 +134,7 @@ function xarDB__postgresqlAlterTable($tableName, $args)
             break;
         case 'rename':
             if (empty($args['new_name'])) {
-                $msg = xarML('Invalid args (new_name key must be set.)');
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                return;
+                throw new BadParameterException('args','Invalid parameter "#(1)" (new_name key must be set.)');
             }
             $sql = 'ALTER TABLE '.$tableName.' RENAME TO '.$args['new_name'];
             break;
@@ -164,25 +158,16 @@ function xarDB__postgresqlAlterTable($tableName, $args)
 
             // make sure we have the colunm we're altering
             if (empty($args['field'])) {
-                $msg = xarML('Invalid args (field key must be set).');
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                return;
+                throw new BadParameterException('args','Invalid parameter "#(1)" (field key must be set).');
             }
             // check to make sure we have an action to perform on the colunm
             if (!empty($args['type']) || !empty($args['size']) || !empty($args['default']) || !empty($args['unsigned']) || !empty($args['increment']) || !empty($args['primary_key'])) {
-                $msg = xarML('Modify does not currently support: type, size, default, unsigned, increment, or primary_key)');
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                return $msg;
+                throw new BadParameterException('args','Modify does not currently support: type, size, default, unsigned, increment, or primary_key)');
             }
 
             // check to make sure we have an action to perform on the colunm
             if (empty($args['null']) && $args['null']!=FALSE) {
-                $msg = xarML('Invalid args (type,size,default,null, unsigned, increment, or primary_key must be set)');
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                return;
+                throw new BadParameterException('args','Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
             }
 
             // prep the first part of the query
@@ -199,10 +184,8 @@ function xarDB__postgresqlAlterTable($tableName, $args)
             // break out of the case to return the modify sql
             break;
         default:
-            $msg = xarML('Unknown command: \'#(1)\'.', $args['command']);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return;
+            throw new BadParameterException($args['command'],'Unknown command: "#(1)"');
+
     }
     return $sql;
 }
