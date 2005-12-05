@@ -146,7 +146,7 @@ class xarTpl__ParserError extends SystemException
         $out .= "Line contents before the parsing error occurred:\n";
         $out .= $posInfo->lineText . " <== Error position\n";
         // throw a generic exception for now, this probably should not do this, but i dunno yet
-        throw new BLException('TBD',$msg)
+        throw new BLException('TBD',$msg);
     }
 }
 
