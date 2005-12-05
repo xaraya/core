@@ -15,7 +15,6 @@ function variable_validations_regexp (&$subject, $parameters, $supress_soft_exc,
     if ($name == '') $name = '<unknown>';
     if (!isset($parameters[0]) || trim($parameters[0]) == '') {
         $msg = 'There is not parameter to check agains the regular expression validation.';
-
         // CHECK: this is probably better a BadParameterException ?
         throw new VariableValidationException(array($name,$subject,$msg));
     } elseif (preg_match($parameters[0], $subject)) {
@@ -25,6 +24,7 @@ function variable_validations_regexp (&$subject, $parameters, $supress_soft_exc,
     $msg = 'Variable #(1): "#(2)" did not match pattern "#(3)"';
     if (!$supress_soft_exc) 
         throw new VariableValidationException(array( $name, $subject, $parameters[0]),$msg);
+    return false;
 }
 
 ?>

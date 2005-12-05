@@ -17,6 +17,7 @@ function variable_validations_notempty (&$subject, $parameters, $supress_soft_ex
         $msg = 'Variable is empty';
         if (!$supress_soft_exc) 
             throw new VariableValidationException(array($name,$subject,$msg));
+        return false;
     }
 
     return true;

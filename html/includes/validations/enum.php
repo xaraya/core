@@ -34,6 +34,7 @@ function variable_validations_enum (&$subject, $parameters, $supress_soft_exc, &
         }
         if (!$supress_soft_exc) 
             throw new VariableValidationException(array($name,$subject,$msg));
+        return false;
     }
 }
 

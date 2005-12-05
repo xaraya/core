@@ -16,6 +16,7 @@ function variable_validations_str (&$subject, $parameters, $supress_soft_exc, &$
         $msg = 'Not a string';
         if (!$supress_soft_exc) 
             throw new VariableValidationException(array($name,$subject,$msg));
+        return false;
     }
 
     $length = strlen($subject);
@@ -28,6 +29,7 @@ function variable_validations_str (&$subject, $parameters, $supress_soft_exc, &$
             $msg = 'Size of the string "#(1)" is smaller than the specified minimum "#(2)"';
             if (!$supress_soft_exc)
                 throw new VariableValidationException(array($subject, $parameters[0]),$msg);
+            return false;
         }
     }
 
@@ -39,6 +41,7 @@ function variable_validations_str (&$subject, $parameters, $supress_soft_exc, &$
             $msg = 'Size of the string "#(1)" is larger than the specified maximum "#(2)"';
             if (!$supress_soft_exc)
                 throw new VariableValidationException(array($subject, $parameters[1]),$msg);
+            return false;
         }
     }
 

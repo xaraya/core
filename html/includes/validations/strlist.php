@@ -28,6 +28,7 @@ function variable_validations_strlist (&$subject, $parameters, $supress_soft_exc
         $msg = 'Not a string';
         if (!$supress_soft_exc) 
             throw new VariableValidationException(array($name,$subject,$msg));
+        return false;
     }
 
     if (!empty($parameters)) {
@@ -40,6 +41,7 @@ function variable_validations_strlist (&$subject, $parameters, $supress_soft_exc
             if (!$supress_soft_exc) {
                 throw new BadParameterException($msg);
             }
+            return false;
         }
 
         // Roll up the remaining validation parameters (noting there

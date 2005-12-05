@@ -17,6 +17,7 @@ function variable_validations_email (&$subject, $parameters=null, $supress_soft_
         $msg = 'Not a valid email format';
         if (!$supress_soft_exc) 
             throw new VariableValidationException(array($name,$subject,$msg));
+        return false;
     }
 
     return true;

@@ -17,6 +17,7 @@ function variable_validations_list (&$subject, $parameters, $supress_soft_exc, &
         $msg = 'Not an array';
         if (!$supress_soft_exc) 
             throw new VariableValidationException(array($name,$subject,$msg));
+        return false;
     }
 
     if (isset($parameters[0]) && trim($parameters[0]) != '') {

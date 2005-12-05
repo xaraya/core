@@ -17,6 +17,7 @@ function variable_validations_float (&$subject, $parameters, $supress_soft_exc, 
             $msg = 'Not a float type';
             if (!$supress_soft_exc) 
                 throw new VariableValidationException(array($name,$subject,$msg));
+            return false;
         }
 
         if (isset($parameters[0]) && trim($parameters[0]) != '') {
@@ -27,6 +28,7 @@ function variable_validations_float (&$subject, $parameters, $supress_soft_exc, 
                 $msg = 'Float Value "#(1)" is smaller than the specified minimum "#(2)"';
                 if (!$supress_soft_exc) 
                     throw new VariableValidationException(array($value,$parameters[0]),$msg);
+                return false;
             }
         }
 
@@ -38,6 +40,7 @@ function variable_validations_float (&$subject, $parameters, $supress_soft_exc, 
                 $msg = 'Float Value "#(1)" is larger than the specified maximum "#(2)"';
                 if (!$supress_soft_exc) 
                     throw new VariableValidationException(array($value,$parameters[0]),$msg);
+                return false;
             }
         }
 

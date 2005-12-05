@@ -23,6 +23,7 @@ function variable_validations_bool (&$subject, $parameters=null, $supress_soft_e
         if ($name == '') $name = '<unknown>';
         $msg = 'Not a boolean';
         if (!$supress_soft_exc) throw new VariableValidationException(array($name,$subject,$msg));
+        return false;
     }
     return true;
 }

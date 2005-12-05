@@ -16,6 +16,7 @@ function variable_validations_array (&$subject, $parameters, $supress_soft_exc, 
     if (!is_array($subject)) {
         $msg = 'Not an array';
         if (!$supress_soft_exc) throw new VariableValidationException(array($name,$subject,$msg));
+        return false;
     }
 
     if (isset($parameters[0]) && trim($parameters[0]) != '') {
@@ -27,6 +28,7 @@ function variable_validations_array (&$subject, $parameters, $supress_soft_exc, 
             $msg = 'Array variable has less elements "#(1)" than the specified minimum "#(2)"';
             if (!$supress_soft_exc) 
                 throw new VariableValidationException(array(count($subject), $parameters[0]), $msg);
+            return false;
         }
     }
 
@@ -39,6 +41,7 @@ function variable_validations_array (&$subject, $parameters, $supress_soft_exc, 
             $msg = 'Array variable has more elements "#(1)" than the specified maximum "#(2)"';
             if (!$supress_soft_exc) 
                 throw new VariableValidationException(array(count($subject), $parameters[1]), $msg);
+            return false;
         }
     }
 

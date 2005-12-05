@@ -101,9 +101,11 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                     );
                     // The token must start with a letter or underscore.
                     // Raise an error if not.
-                    if (!empty($subject) && !preg_match('/^[a-zA-Z_]/', $subject) && !$supress_soft_exc) {
+                    if (!empty($subject) && !preg_match('/^[a-zA-Z_]/', $subject)) { 
                         $msg = 'Value "#(1)" is not a valid variable name';
-                        throw new VariableValidationException($subject,$msg);
+                        if(!$supress_soft_exc) 
+                            throw new VariableValidationException($subject,$msg);
+                        return false;
                     }
                     break;
 
@@ -197,21 +199,17 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                 break;
             }
     }
-    
-    // CHECKME: Since we raise exceptions now, if something goes wrong in the chain, it will be dealt with
-    // immediately, so is it safe to assume that we never get here?
-    // TODO: Since the $supress_soft_exc value goes for this, we should probably reformulate this and use a try
-    //       catch block to deal with it.
 
-    //  if (!$return && !empty($fieldname) && !$supress_soft_exc) {
+    // CHECKME: since we either handle it directly and/or the stack is never filled. Is this still needed?
+    if (!$return && !empty($fieldname) && !$supress_soft_exc) {
         // Add another error message, naming the field.
         // Combine it with the 'short' details of the last message logged,
         // with the assumption that it will contain some useful details.
-    //    $errorstack =& xarErrorGet();
-    //    $error = array_shift($errorstack);
-    //    $msg = xarML('Field "#(1)" is invalid. [#(2)]', $fieldname, $error['short']);
-    //    throw new BadParameter/Validation exception?
-    //}
+        //        $errorstack =& xarErrorGet();
+        //$error = array_shift($errorstack);
+        $msg = 'Field "#(1)" is invalid. [#(2)]';
+        throw new VariableValidationException(array($fieldname,'UNKNOWN'),$msg);
+    }
 
     // Single point of exit.
     return $return;

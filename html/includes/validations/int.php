@@ -18,6 +18,7 @@ function variable_validations_int (&$subject, $parameters, $supress_soft_exc, &$
     $msg = 'Not an integer';
     if ("$subject" != "$value") {
         if (!$supress_soft_exc) throw new VariableValidationException(array($name,$subject,$msg));
+        return false;
     }
 
     if (isset($parameters[0]) && trim($parameters[0]) != '') {
@@ -28,6 +29,7 @@ function variable_validations_int (&$subject, $parameters, $supress_soft_exc, &$
             $msg = 'Integer Value "#(1)" is smaller than the specified minimum "#(2)"';
             if (!$supress_soft_exc) 
                 throw new VariableValidationException(array($value,$parameters[0]),$msg);
+            return false;
         }
     }
 
@@ -39,6 +41,7 @@ function variable_validations_int (&$subject, $parameters, $supress_soft_exc, &$
             $msg = 'Integer Value "#(1)" is larger than the specified minimum "#(2)"';
             if (!$supress_soft_exc) 
                 throw new VariableValidationException(array($value,$parameters[1]),$msg);
+            return false;
         }
     }
 

@@ -98,6 +98,7 @@ function variable_validations_mxcheck (&$subject, $parameters=null, $supress_sof
                     $msg = 'Invalid e-mail #(1), the mail server doesnt recognize it.';
                     if (!$supress_soft_exc) 
                         throw new VariableValidationException($subject,$msg);
+                    return false;
                 }
         }
     } else { // Failure in socket connection
@@ -105,6 +106,7 @@ function variable_validations_mxcheck (&$subject, $parameters=null, $supress_sof
         // CHECK: is this considered to be a validation exception?
         $msg = 'Unable to connect to the mail server #(1) for e-mail #(2).';
         if (!$supress_soft_exc) throw new VariableValidationException(array($ConnectAddress, $subject),$msg);
+        return false;
     }
 
     return true;
