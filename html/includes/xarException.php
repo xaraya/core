@@ -153,8 +153,10 @@ class IDNotFoundException extends NotFoundExceptions
 { protected $message = 'An item was requested based on a unique identifier (ID), however, the ID: "#(1)" could not be found.';}
 class FileNotFoundException extends NotFoundExceptions
 { protected $message = 'The file "#(1) could not be found.';}
-class ModuleBaseInfoNotFound extends xarExceptions
+class ModuleBaseInfoNotFoundException extends NotFoundExceptions
 { protected $message = 'The base info for module "#(1)" could not be found';}
+class LocaleNotFoundException extends NotFoundExceptions
+{ protected $message = 'The locale "#(1)" could not be found or is currently unavailable';}
 
 class ModuleNotActiveException extends xarExceptions
 { protected $message = 'The module "#(1)" was called, but it is not active.';}
@@ -184,6 +186,8 @@ class BLValidationException extends xarExceptions
 class ConfigurationException extends xarExceptions
 { protected $message = 'There is an unknown configuration error detected.';}
 
+class XMLParseException extends xarExceptions
+{ protected $message = 'The XML file "#(1)" could not be parsed. At line #(2): #(3)';}
 /*
  * Error constants for exception throwing
  * 
