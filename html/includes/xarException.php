@@ -196,6 +196,8 @@ abstract class DeprecationExceptions extends xarExceptions {}
 class ApiDeprecationException extends DeprecationExceptions
 { protected $message = "You are trying to use a deprecated API function [#(1)], Replace this call with #(2)";}
 
+class BLException extends xarExceptions 
+{ protected $message = 'Unknown blocklayout exception (TODO)';}
 /*
  * Error constants for exception throwing
  * 

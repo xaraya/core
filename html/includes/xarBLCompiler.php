@@ -121,7 +121,8 @@ class xarTpl__CompilerError extends SystemException
     function raiseError($msg)
     {
         // FIXME: is this usefull at all, if the compiler doesn't work, how are we going to show the exception ?
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,'COMPILER_ERROR',$msg);
+        //throw a generic exception for now
+        throw new BLException('TBD',$msg);
     }
 }
 
@@ -144,8 +145,8 @@ class xarTpl__ParserError extends SystemException
         $out .= $msg."\n\n";
         $out .= "Line contents before the parsing error occurred:\n";
         $out .= $posInfo->lineText . " <== Error position\n";
-
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,$type,$out);
+        // throw a generic exception for now, this probably should not do this, but i dunno yet
+        throw new BLException('TBD',$msg)
     }
 }
 

@@ -1823,10 +1823,9 @@ function xarTplCheckTagAttributes($name, $args)
 {
     $tag_ref = xarTplGetTagObjectFromName($name);
     if ($tag_ref == NULL) {
-        $msg = xarML('<xar:#(1)> tag is not defined.', $name);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                       new SystemException($msg));
-        return;
+        // Throw a generic BL exception for now
+        $msg = '<xar:#(1)> tag is not defined.';
+        throw new BLException($name,$msg);
     }
 
     $tag_attrs = $tag_ref->getAttributes();
