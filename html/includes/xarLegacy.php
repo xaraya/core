@@ -76,9 +76,9 @@ include 'includes/pnHTML.php';
 * pnUserGetLang -> xarUserGetLang
 * pnUserGetVar -> xarUserGetVar
 * pnUserSetVar -> xarUserSetVar
-* pnUserGetVars -> xarErrorSet('DEPRECATED_API')
-* pnUserDelVar -> xarErrorSet('DEPRECATED_API')
-* pnUserGetAll($startnum = 1, $numitems = -1) -> xarErrorSet('DEPRECATED_API') - invalid args!!!
+* pnUserGetVars -> throw Deprecation Exception
+* pnUserDelVar -> throw Deprecation Exception
+* pnUserGetAll($startnum = 1, $numitems = -1) -> throw Deprecation Exception
 *
 * BLOCKS FUNCTIONS
 * pnBlockGetInfo -> xarBlockGetInfo
@@ -119,7 +119,7 @@ include 'includes/pnHTML.php';
 * DEPRECATED XAR FUNCTIONS
 * xarModEmailURL        -> no direct equivalent
 * xarVarPrepForStore()  -> use bind vars or dbconn->qstr() method
-* xarExceptionSet()     -> xarErrorSet()
+* xarExceptionSet()     -> throw Exception
 * xarExceptionMajor()   -> xarCurrentErrorType()
 * xarExceptionId()      -> xarCurrentErrorID()
 * xarExceptionValue()   -> xarCurrentError()
@@ -216,9 +216,7 @@ function pnUserLoggedIn()
  */
 function pnUserGetVars($userId)
 {
-    xarErrorSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
-                       new SystemException(__FILE__.'('.__LINE__.')'));
-    return NULL;
+    throw new ApiDeprecationException('pnUserGetVars','a different construct. The function has no direct equivalent in Xaraya');
 }
 
 /**
@@ -232,9 +230,7 @@ function pnUserGetVars($userId)
  */
 function pnUserDelVar($name)
 {
-    xarErrorSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
-                       new SystemException(__FILE__.'('.__LINE__.')'));
-    return NULL;
+    throw new ApiDeprecationException('pnUserDelVar','the API of the module subsystem to set/clear ModUservars');
 }
 
 
@@ -250,9 +246,7 @@ function pnUserDelVar($name)
  */
 function pnUserGetAll($startnum = 1, $numitems = -1)
 {
-    xarErrorSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
-                       new SystemException(__FILE__.'('.__LINE__.')'));
-    return;
+    throw new ApiDeprecationException('pnUserGetAll','using the roles module API to retrieve users');
 }
 
 /**
@@ -967,10 +961,7 @@ function xarUser_getThemeName()
  */
 function xarSecAddSchema($component, $schema)
 {
-    $msg = xarML('This call needs to be removed');
-    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DEPRECATED_API',
-                    new SystemException($msg));
-    return true;
+    throw new ApiDeprecationException('xarSecAddSchema','the removal of it. The call isnt needed anymore');
 }
 
 function pnUserGetTheme()
