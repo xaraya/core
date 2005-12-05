@@ -12,14 +12,11 @@
  */
 function variable_validations_notempty (&$subject, $parameters, $supress_soft_exc, &$name)
 {
-
     if (empty($subject)) {
-        if ($name != '')
-            $msg = xarML('Variable #(1) should not be empty: "#(2)"', $name, '$subject');
-        else
-            $msg = xarML('Should not be empty: "#(1)"', '$subject');
-        if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-        return false;
+        if ($name == '') $name = '<unknown>';
+        $msg = 'Variable is empty';
+        if (!$supress_soft_exc) 
+            throw new VariableValidationException(array($name,$subject,$msg));
     }
 
     return true;

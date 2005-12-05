@@ -179,8 +179,11 @@ class DuplicateTagException extends xarExceptions
 { protected $message = 'The tag definition for the tag: "#(1)" already exists.';}
 
 // Validation
+abstract class ValidationExceptions extends xarExceptions {}
 class BLValidationException extends xarExceptions
 { protected $message = 'A blocklayout tag or attribute construct was invalid, see the tag documentation for the correct syntax';}
+class VariableValidationException extends ValidationExceptions
+{ protected $message = 'The variable "#(1)" [Value: "#(2)"] did not comply with the required validation: "#(3)"';}
 
 // Configuration
 class ConfigurationException extends xarExceptions

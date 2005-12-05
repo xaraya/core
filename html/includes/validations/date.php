@@ -29,13 +29,10 @@
 
 function variable_validations_date (&$subject, $parameters, $supress_soft_exc, &$name)
 {
+    if ($name == '') $name = '<unknown>';
     if (!is_string($subject)) {
-        if ($name != '')
-            $msg = xarML('Variable #(1) is not a string: "#(2)"', $name, $subject);
-        else
-            $msg = xarML('Not a string: "#(1)"', $subject);
-        if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-        return false;
+        $msg = 'Not a string';
+        if (!$supress_soft_exc) throw new VariableValidationException(array($name,$subject,$msg));
     }
 
     if (isset($parameters[0])) {
@@ -96,9 +93,9 @@ function variable_validations_date (&$subject, $parameters, $supress_soft_exc, &
     if ($timestamp > 0) {
         $subject = strftime($store_format, $timestamp);
     } else {
-        $msg = xarML('Invalid date format for #(1)', $name);
-        if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-        return false;
+        $msg = 'Not a valid date format';
+        if (!$supress_soft_exc) 
+            throw new VariableValidationException(array($name,$subject,$msg));
     }
 
     return true;

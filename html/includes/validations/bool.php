@@ -11,6 +11,8 @@
  */
 function variable_validations_bool (&$subject, $parameters=null, $supress_soft_exc, &$name)
 {
+    // NOTE: can't we use $subject = (boolean) $subject; ?
+
     //Added the '1' because that is what true is translated for afaik
     if ($subject === true || $subject === 'true' || $subject == '1') {
         $subject = true;
@@ -18,14 +20,10 @@ function variable_validations_bool (&$subject, $parameters=null, $supress_soft_e
     } elseif ($subject === false || $subject === 'false' || $subject == '0' || $subject == '') {
         $subject = false;
     } else {
-        if ($name != '')
-            $msg = xarML('Variable #(1) is not a boolean: "#(2)"', $name, $subject);
-        else
-            $msg = xarML('Not a boolean: "#(1)"', $subject);
-        if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-        return false;
+        if ($name == '') $name = '<unknown>';
+        $msg = 'Not a boolean';
+        if (!$supress_soft_exc) throw new VariableValidationException(array($name,$subject,$msg));
     }
-
     return true;
 }
 

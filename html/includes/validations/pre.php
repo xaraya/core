@@ -102,9 +102,8 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                     // The token must start with a letter or underscore.
                     // Raise an error if not.
                     if (!empty($subject) && !preg_match('/^[a-zA-Z_]/', $subject) && !$supress_soft_exc) {
-                        $msg = xarML('Value "#(1)" is not a valid variable name', $subject);
-                        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-                        $return = false;
+                        $msg = 'Value "#(1)" is not a valid variable name';
+                        throw new VariableValidationException($subject,$msg);
                     }
                     break;
 
@@ -199,15 +198,20 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
             }
     }
     
-    if (!$return && !empty($fieldname) && !$supress_soft_exc) {
+    // CHECKME: Since we raise exceptions now, if something goes wrong in the chain, it will be dealt with
+    // immediately, so is it safe to assume that we never get here?
+    // TODO: Since the $supress_soft_exc value goes for this, we should probably reformulate this and use a try
+    //       catch block to deal with it.
+
+    //  if (!$return && !empty($fieldname) && !$supress_soft_exc) {
         // Add another error message, naming the field.
         // Combine it with the 'short' details of the last message logged,
         // with the assumption that it will contain some useful details.
-        $errorstack =& xarErrorGet();
-        $error = array_shift($errorstack);
-        $msg = xarML('Field "#(1)" is invalid. [#(2)]', $fieldname, $error['short']);
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-    }
+    //    $errorstack =& xarErrorGet();
+    //    $error = array_shift($errorstack);
+    //    $msg = xarML('Field "#(1)" is invalid. [#(2)]', $fieldname, $error['short']);
+    //xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+    //}
 
     // Single point of exit.
     return $return;
