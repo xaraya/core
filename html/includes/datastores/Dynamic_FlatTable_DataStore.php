@@ -181,11 +181,8 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         if (empty($itemid)) {
-            $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                         'item id from table '.$table, 'Dynamic_FlatTable_DataStore', 'createItem', 'DynamicData');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
-            return;
+            $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+            throw new BadParameterException(array('item id from table '.$table, 'Dynamic_FlatTable_DataStore', 'createItem', 'DynamicData'),$msg);
         }
         $this->fields[$itemidfield]->setValue($itemid);
         return $itemid;
