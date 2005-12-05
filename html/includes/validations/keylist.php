@@ -37,7 +37,7 @@ function variable_validations_keylist (&$subject, $parameters, $supress_soft_exc
 {
     if ($name == '') $name = '<unknown>';
     if (!is_array($subject)) {
-        $msg 'Not an array';
+        $msg = 'Not an array';
         
         // NULL is a special case. Perform a 'soft' fail should we encounter a NULL
         if (!($subject === NULL && $supress_soft_exc)) {
