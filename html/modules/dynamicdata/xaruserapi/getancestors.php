@@ -99,7 +99,8 @@ function &dynamicdata_userapi_getancestors($args)
     	if (!$done || $base) {$ancestors[] = array('objectid' => $id, 'itemtype' => $itemtype, 'name' => $name);}
     	if ($done) break;
     }
-    return array_reverse($ancestors, true);
+    $ancestors = array_reverse($ancestors, true);
+    return $ancestors;
 
 }
 
