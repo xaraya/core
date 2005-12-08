@@ -349,8 +349,8 @@ function dynamicdata_utilapi_import($args)
             }
         }
     }
-
-    return isset($objectid) ? $objectid : null;
+    $result = isset($objectid) ? $objectid : null;
+    return $result;
 }
 
 ?>

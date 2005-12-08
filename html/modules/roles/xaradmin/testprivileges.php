@@ -38,6 +38,8 @@ function roles_admin_testprivileges()
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
 
+	$types = xarModAPIFunc('roles','user','getitemtypes');
+	$data['itemtypename'] = $types[$role->getType()]['label'];
     // get the array of parents of this role
     // need to display this in the template
     $parents = array();

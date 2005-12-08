@@ -376,8 +376,9 @@ class Dynamic_Object_Master
      * @returns array
      * @return array of object definitions
      */
-    function &getObjects()
+    function &getObjects($args=array())
     {
+        extract($args);
         $nullreturn = NULL;
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
@@ -394,6 +395,7 @@ class Dynamic_Object_Master
                          xar_object_config,
                          xar_object_isalias
                   FROM $dynamicobjects ";
+        if (isset($modid)) $query .= "WHERE xar_object_moduleid = " . $modid;
         $result =& $dbconn->Execute($query);
 
         if (!$result) return $nullreturn;
@@ -1813,7 +1815,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             if (!empty($this->urlmodule)) {
                 $args['urlmodule'] = $this->urlmodule;
             } else {
-                $args['urlmodule'] = $modname;
+                $info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('moduleid' => $args['moduleid'], 'itemtype' => $args['itemtype']));
+                $base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $info['objectid']));
+                $args['urlmodule'] = $base['name'];
             }
         }
         foreach (array_keys($this->items) as $itemid) {

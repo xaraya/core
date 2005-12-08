@@ -36,7 +36,7 @@ function roles_admin_displayrole()
     $data['type'] = $role->getType();
     $data['name'] = $name;
     //get the data for a user
-    if ($data['type'] == 0) {
+    if ($data['type'] == ROLES_USERTYPE) {
         $data['uname'] = $role->getUser();
         $data['type'] = $role->getType();
         $data['email'] = $role->getEmail();

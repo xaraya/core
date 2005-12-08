@@ -103,7 +103,7 @@ function roles_admin_purge($args)
                 $skip = 0;
                 $unique = 1;
                 if ($role['type']) {
-                    $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $role['uname'], 'type' => 1, 'state' => ROLES_STATE_CURRENT));
+                    $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $role['uname'], 'type' => ROLES_GROUPTYPE, 'state' => ROLES_STATE_CURRENT));
                     if (is_array($existinguser)) $unique = 0;
                     $role['uname'] = "";
                 }
