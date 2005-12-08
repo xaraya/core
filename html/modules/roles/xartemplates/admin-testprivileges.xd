@@ -5,12 +5,11 @@
 </div>
 <div class="xar-mod-body">
   <h2>
-    <xar:if condition="$ptype eq 1">
-      <xar:mlstring>Test Privileges Of Group</xar:mlstring>
-      <xar:else />
-      <xar:mlstring>Test Privileges Of User</xar:mlstring>
-    </xar:if>
-    '#$pname#'
+        <xar:ml>
+            <xar:mlstring>Test Privileges of #(1) '#(2)':</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$pname#</xar:mlvar>
+        </xar:ml>
   </h2>
   
   <xar:if condition="count($parents) ne 0">
@@ -35,13 +34,12 @@
   <xar:comment>TODO set the active tab here</xar:comment>
   <!-- Show the general tab list for roles -->
   <xar:template file="tablist" />  
+            <xar:if condition="$ptype eq ROLES_GROUPTYPE">
   
   <form action="&xar-modurl-roles-admin-testprivileges;" method="post" enctype="application/x-www-form-urlencoded">
     <fieldset>
       <legend><xar:mlstring>Scope</xar:mlstring></legend>
-      <div class="xar-form-input-wrapper">
-        <label for="pmodule" title="#xarML('Choose the module to test privileges against.')#" class="xar-form-label">
-          <xar:mlstring>Registered Masks For Module:</xar:mlstring>
+            #$itemtypename# <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">'#$pname#'</a>                
         </label>
         <select name="pmodule" id="pmodule" onchange="this.form.submit();" class="xar-margin-thickright">
           <xar:loop name="$allmodules">

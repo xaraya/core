@@ -68,10 +68,11 @@ function dynamicdata_user_display($args)
     $hooks = array();
     $hooks = xarModCallHooks('item', 'display', $myobject->itemid, $item, $modinfo['name']);
     $data['hooks'] = $hooks;
-    
+
     if(!isset($template)) {
         $template = $myobject->name;
     }
+//    echo var_dump($template);exit;
     // Return the template variables defined in this function
     return xarTplModule('dynamicdata','user','display',$data,$template);
 }

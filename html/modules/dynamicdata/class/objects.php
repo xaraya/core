@@ -376,8 +376,9 @@ class Dynamic_Object_Master
      * @returns array
      * @return array of object definitions
      */
-    function &getObjects()
+    function &getObjects($args=array())
     {
+        extract($args);
         $nullreturn = NULL;
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
@@ -394,6 +395,7 @@ class Dynamic_Object_Master
                          xar_object_config,
                          xar_object_isalias
                   FROM $dynamicobjects ";
+        if (isset($modid)) $query .= "WHERE xar_object_moduleid = " . $modid;
         $result =& $dbconn->Execute($query);
 
         if (!$result) return $nullreturn;
@@ -447,7 +449,7 @@ class Dynamic_Object_Master
         $xartable =& xarDBGetTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
-        
+
         $bindvars = array();
         $query = "SELECT xar_object_id,
                          xar_object_name,
@@ -472,7 +474,7 @@ class Dynamic_Object_Master
             if (empty($args['itemtype'])) {
                 $args['itemtype'] = 0;
             }
-            $query .= " WHERE xar_object_moduleid = ? 
+            $query .= " WHERE xar_object_moduleid = ?
                           AND xar_object_itemtype = ? ";
             $bindvars[] = (int) $args['moduleid'];
             $bindvars[] = (int) $args['itemtype'];
@@ -835,7 +837,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         if (isset($args['itemid'])) {
             $this->itemid = $args['itemid'];
         }
-        
+
         // see if we can access this object, at least in overview
         if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->moduleid.':'.$this->itemtype.':'.$this->itemid)) return;
 
@@ -1746,7 +1748,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
-                    if ($property->status != 3)
+                    if ($this->properties[$name]->status != 3)
                         $args['properties'][$name] = & $this->properties[$name];
                 }
             }
@@ -1813,7 +1815,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             if (!empty($this->urlmodule)) {
                 $args['urlmodule'] = $this->urlmodule;
             } else {
-                $args['urlmodule'] = $modname;
+                $info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('moduleid' => $args['moduleid'], 'itemtype' => $args['itemtype']));
+                $base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $info['objectid']));
+                $args['urlmodule'] = $base['name'];
             }
         }
         foreach (array_keys($this->items) as $itemid) {
@@ -1917,7 +1921,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         list($args['prevurl'],
              $args['nexturl'],
              $args['sorturl']) = $this->getPager($args['pagerurl']);
-        
+
         // Pass the objectid too, comfy for customizing the templates
         // with custom tags.
         $args['objectid'] = $this->objectid;

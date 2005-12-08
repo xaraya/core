@@ -38,9 +38,13 @@
             <tr class="#$rowclass#">
                 <xar:foreach in="$properties" key="$name">
                     <td>
-                        <xar:if condition="!empty($fields[$name])">
-                            <xar:data-output property="$properties[$name]" value="$fields[$name]" />
+                        <xar:if condition="!empty($fields[$name]) OR ($fields[$name] eq 0) AND ($fields['objectid'] gt 3)">
+                            <xar:if condition="$name eq 'parent'">
+                                <xar:data-output property="$properties[$name]" value="$fields[$name]" modid="$fields['moduleid']" />
                             <xar:else />
+                                <xar:data-output property="$properties[$name]" value="$fields[$name]" />
+                            </xar:if>
+                        <xar:else />
                             &nbsp; 
                         </xar:if>
                     </td>
