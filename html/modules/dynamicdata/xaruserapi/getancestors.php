@@ -47,10 +47,11 @@ function &dynamicdata_userapi_getancestors($args)
 					$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $moduleid));
 					$info = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => $types[$itemtype]['label']);
 				}
-				return array($info);
+				$result = array($info);
 			} else {
-				return array();
+				$result = array();
 			}
+			return $result;
 		}
 		$objectid = $result['objectid'];
    }
