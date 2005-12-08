@@ -147,6 +147,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             } else {
                 $override = null;
             }
+
             $return = xarModAPIFunc('uploads','admin','validatevalue',
                                     array('id' => $name, // not $this->id
                                           'value' => $value,
