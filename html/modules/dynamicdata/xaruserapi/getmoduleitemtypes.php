@@ -44,15 +44,15 @@
 			// Get all the objects at once
 		    $xartable =& xarDBGetTables();
 			$q = new xarQuery('SELECT',$xartable['dynamic_objects']);
-			$q->addfields(array('xar_object_id AS objectid','xar_object_name AS objectname','xar_object_moduleid AS moduleid','xar_object_itemtype AS itemtype','xar_object_parent AS parent'));
+			$q->addfields(array('xar_object_id AS objectid','xar_object_label AS objectlabel','xar_object_moduleid AS moduleid','xar_object_itemtype AS itemtype','xar_object_parent AS parent'));
 			$q->eq('xar_object_moduleid',$moduleid);
 			if (!$q->run()) return;
 
 			// put in itemtype as key for easier manipulation
 			foreach($q->output() as $row)
 				$types [$row['itemtype']] = array(
-											'label' => $row['objectname'],
-											'title' => xarML('View #(1)',$row['objectname']),
+											'label' => $row['objectlabel'],
+											'title' => xarML('View #(1)',$row['objectlabel']),
 											'url' => xarModURL('dynamicdata','user','view',array('itemtype' => $row['itemtype'])));
 		}
 

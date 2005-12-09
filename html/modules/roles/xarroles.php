@@ -330,7 +330,6 @@ class xarRoles
             xarErrorSet(XAR_USER_EXCEPTION,
                 'DUPLICATE_DATA',
                 new DefaultUserException($msg));
-            xarSessionSetVar('errormsg', _MODARGSERROR);
             return false;
         }
         // Confirm that this group or user does not already exist
@@ -344,7 +343,6 @@ class xarRoles
             xarErrorSet(XAR_USER_EXCEPTION,
                 'DUPLICATE_DATA',
                 new DefaultUserException($msg));
-            xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
             return false;
         }
         // create an ID for the user
@@ -510,6 +508,7 @@ class xarRole
      * @throws none
      * @todo none
      */
+
     function add()
     {
         if (empty($this->name)) {
@@ -553,27 +552,22 @@ class xarRole
 
         $nextId = $this->dbconn->genID($this->rolestable);
 
-        $tablefields = array(
-            array('name' => 'xar_uid',      'value' => $nextId),
-            array('name' => 'xar_name',     'value' => $this->name),
-            array('name' => 'xar_uname',    'value' => $this->uname),
-            array('name' => 'xar_date_reg', 'value' => mktime()),
-            array('name' => 'xar_valcode',  'value' => $this->val_code)
-        );
         $q = new xarQuery('INSERT',$this->rolestable);
+        $tablefields = array(
+            array('name' => 'xar_uid',        'value' => $nextId),
+            array('name' => 'xar_name',       'value' => $this->name),
+            array('name' => 'xar_uname',      'value' => $this->uname),
+            array('name' => 'xar_date_reg',   'value' => mktime()),
+            array('name' => 'xar_valcode',    'value' => $this->val_code),
+			array('name' => 'xar_auth_module','value' => $this->auth_module),
+			array('name' => 'xar_type',       'value' => $this->type),
+        );
         $q->addfields($tablefields);
-        if ($this->basetype == ROLES_GROUPTYPE) {
-            $groupfields = array(
-                array('name' => 'xar_type', 'value' => $this->type)
-            );
-            $q->addfields($groupfields);
-        } else {
+        if ($this->basetype == ROLES_USERTYPE) {
             $userfields = array(
-                array('name' => 'xar_type',       'value' => $this->type),
                 array('name' => 'xar_email',      'value' => $this->email),
                 array('name' => 'xar_pass',       'value' => md5($this->pass)),
                 array('name' => 'xar_state',      'value' => $this->state),
-                array('name' => 'xar_auth_module','value' => $this->auth_module)
             );
             $q->addfields($userfields);
         }

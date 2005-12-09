@@ -97,8 +97,8 @@ function roles_admin_addrole()
     }
     // assemble the args into an array for the role constructor
     if ($basetype == ROLES_USERTYPE) {
-        $pargs = array('name' => $pname,
-            'type' => $itemtype,
+        $args = array('name' => $pname,
+            'itemtype' => $itemtype,
             'parentid' => $pparentid,
             'uname' => $puname,
             'email' => $pemail,
@@ -109,8 +109,8 @@ function roles_admin_addrole()
             'basetype' => $basetype,
             );
     } else {
-        $pargs = array('name' => $pname,
-            'type' => $itemtype,
+        $args = array('name' => $pname,
+            'itemtype' => $itemtype,
             'parentid' => $pparentid,
             'uname' => xarSessionGetVar('uid') . time(),
             'val_code' => 'createdbyadmin',
@@ -118,15 +118,7 @@ function roles_admin_addrole()
             'basetype' => $basetype,
             );
     }
-// create a new role object
-    $role = new xarRole($pargs);
-    // Try to add the role to the repositoryand bail if an error was thrown
-    if (!$role->add()) {
-        return;
-    }
-
-    // retrieve the uid of this new user
-    $uid = $role->uid;
+    $uid = xarModAPIFunc('roles','admin','create',$args);
 
     // call item create hooks (for DD etc.)
 // TODO: move to add() function
