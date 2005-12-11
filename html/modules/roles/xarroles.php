@@ -469,8 +469,10 @@ class xarRole
         $this->acltable = $xartable['security_acl'];
 
         if (!isset($uid)) $uid = 0;
-        if (!isset($parentid)) $parentid = 0;
-        if (!isset($uname)) $uname = xarSessionGetVar('uid') . time();
+        if (!isset($type)) $type = ROLES_USERTYPE;
+        if (!isset($parentid)) $parentid = 1;
+        if (!isset($uname)) $uname = xarSessionGetVar('uid') . microtime();
+        usleep(1);
         if (!isset($email)) $email = '';
         if (!isset($pass)) $pass = '';
         if (!isset($state)) $state = ROLES_STATE_INACTIVE;
@@ -521,7 +523,7 @@ class xarRole
             return false;
         }
         // TODO: validate the email address
-        if (!$this->basetype && (empty($this->uname) || empty($this->email))) {
+        if (($this->basetype == ROLES_USERTYPE) && (empty($this->uname) || empty($this->email))) {
             $msg = xarML('You must enter a user name and a valid email address.',
                 'roles');
             xarErrorSet(XAR_USER_EXCEPTION,

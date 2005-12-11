@@ -40,11 +40,12 @@ function roles_adminapi_create($args)
     }
 
     $invalid = array();
-    if (!isset($uname)) {
-        $invalid[] = 'uname';
-    }
     $baseitemtype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+	$args['basetype'] = $baseitemtype;
     if ($baseitemtype == ROLES_USERTYPE) {
+		if (!isset($uname)) {
+			$invalid[] = 'uname';
+		}
 		if (!isset($email)) {
 			$invalid[] = 'email';
 		}
@@ -57,11 +58,11 @@ function roles_adminapi_create($args)
 		if (!isset($pass)) {
 			$invalid[] = 'pass';
 		}
+		$args['cryptpass'] = md5($pass);
     } elseif ($baseitemtype == ROLES_GROUPTYPE) {
-		$email = isset($email) ? $email : 'none@none.com';
-		$realname = isset($realname) ? $realname : '';
-		$state = isset($state) ? $state : ROLES_STATE_INACTIVE;
-		$pass = isset($pass) ? $pass : 'changeme';
+		if (!isset($name)) {
+			$invalid[] = 'realname';
+		}
     }
     if (count($invalid) > 0) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
@@ -72,7 +73,6 @@ function roles_adminapi_create($args)
     }
 
 	$args['type'] = $itemtype;
-	$args['cryptpass'] = md5($pass);
 	if (empty($authmodule)) {
 		$args['auth_module'] = 'authsystem';
 	}
