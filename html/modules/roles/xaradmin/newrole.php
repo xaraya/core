@@ -17,15 +17,15 @@
  */
 function roles_admin_newrole()
 {
-    if (!xarVarFetch('return_url',  'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('pparentid', 'str:1:', $pparentid, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('return_url',  'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('pname', 'str:1:', $name, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemtype', 'int', $itemtype, ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('puname', 'str:1:35:', $uname, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('pemail', 'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('ppass1', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('return_url',  'isset',  $return_url, NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('pparentid',   'str:1:', $pparentid, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('return_url',  'isset',  $return_url, NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('pname',       'str:1:', $name, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemtype',    'int',    $itemtype, ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('puname',      'str:1:35:', $uname, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('pemail',      'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('ppass1',      'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state',       'str:1:', $state, '', XARVAR_NOT_REQUIRED)) return;
 
 	$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
 
