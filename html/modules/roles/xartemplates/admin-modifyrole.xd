@@ -19,8 +19,8 @@
     <xar:if condition="count($parents) ne 0">
         <div>
             <dl class="xar-tabs">
-                <dt class="help" title="These are the groups that #$pname# is a member of">
-                    <xar:mlstring>Parent Groups:</xar:mlstring>
+                <dt class="help" title="These are the parents that #$pname# is a member of">
+                    <xar:mlstring>Parents:</xar:mlstring>
                 </dt>
                 <xar:set name="prevgroup">""</xar:set>
                 <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
@@ -175,10 +175,10 @@
     </fieldset>
 
     <fieldset>
-        <legend><xar:mlstring>Group Memberships</xar:mlstring></legend>
+        <legend><xar:mlstring>Memberships</xar:mlstring></legend>
         <table class="xar-fullwidth">
           <tr>
-            <th><xar:mlstring>Group</xar:mlstring></th>
+            <th><xar:mlstring>Parent</xar:mlstring></th>
             <th><xar:mlstring>Remove</xar:mlstring></th>
           </tr>
           <xar:loop name="$parents">
@@ -219,8 +219,8 @@
           <xar:else />
           <form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
             <div class="xar-form-input-wrapper">
-              <label for="roleid" title="#xarML('Choose group to assign membership')#" class="xar-form-label">
-                <xar:mlstring>Add to Group:</xar:mlstring>
+              <label for="roleid" title="#xarML('Choose a parent to assign membership')#" class="xar-form-label">
+                <xar:mlstring>Add to:</xar:mlstring>
               </label>
               <select name="roleid" id="roleid">
                 <xar:loop name="$groups">
