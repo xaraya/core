@@ -61,7 +61,7 @@ function trphp($phpExpression, $runs = 1)
     if (preg_match_all($regex, $phpExpression, $matches)) {
         // Resolve BL expresions inside the php Expressions
         usort($matches[0], 'rlensort');
-        echo print_r($matches,true);
+        //echo print_r($matches,true);
         $numMatches = count($matches[0]);
         for ($i = 0; $i < $numMatches; $i++) {
             $resolvedName =& testit($matches[0][$i]);
@@ -108,9 +108,10 @@ $tests = array (
                 '$o:m($a.b.c)', '$o:m($a:b:c)',
                 '$o:m($a.b, $a:b, $a.b:c, $a:b.c)',
                 '$a[$b].c',
-                '$a[$c.d].e', '$a[$c.d].$e', '$a[$c.$c].e'
+                '$a[$c.d].e', '$a[$c.d].$e', '$a[$c.$c].e',
+				'parents[$i].parentname'
 );
-$tests = array ( 'empty($position) and is_array($loop:top:item)');
+//$tests = array ( 'empty($position) and is_array($loop:top:item)');
 
 foreach($tests as $test) {
    echo str_pad($test, 15, ' ') . " ~ " . trphp($test,1) ."\n";
