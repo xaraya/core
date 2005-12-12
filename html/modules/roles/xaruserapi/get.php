@@ -1,23 +1,28 @@
 <?php
 /**
- * Get a specific user by any of his attributes
+ * Get a specific role by it's attributs
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  */
 /**
- * get a specific user by any of his attributes
+ * Get a specific role by it's attributs
+ *
  * uname, uid and email are guaranteed to be unique,
  * otherwise the first hit will be returned
+ *
+ * @todo revisit this
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['uid'] id of user to get
- * @param $args['uname'] user name of user to get
- * @param $args['name'] name of user to get
- * @param $args['email'] email of user to get
+ * @param int    $args['uid'] id of user to get
+ * @param string $args['uname'] user name of user to get
+ * @param string $args['name'] name of user to get
+ * @param string $args['email'] email of user to get
+ * @param int    $args['type'] (deprecated) @see args['itemtype']
+ * @param int    $args['itemtype'] type of role to get
  * @returns array
  * @return user array, or false on failure
  */
@@ -42,6 +47,8 @@ function roles_userapi_get($args)
 
     if (empty($type)) $type = ROLES_USERTYPE;
 
+    if (empty($itemtype)) $itemtype = $type;
+  
     $xartable =& xarDBGetTables();
     $rolestable = $xartable['roles'];
 
@@ -76,16 +83,16 @@ function roles_userapi_get($args)
     elseif (!empty($state) && $state != ROLES_STATE_ALL) {
         $q->eq('xar_state',(int)$state);
     }
-    $q->eq('xar_type',$type);
+    $q->eq('xar_type',$itemtype);
     if (!$q->run()) return;
 
     // Check for no rows found, and if so return
-    $user = $q->row();
-    if ($user == array()) return false;
+    $role = $q->row();
+    if ($role == array()) return false;
     // uid and type are reserved/key words in Oracle et al.
-    $user['uid'] = $user['xar_uid'];
-    $user['type'] = $user['xar_type'];
-    return $user;
+    $role['uid'] = $role['xar_uid'];
+    $role['type'] = $role['xar_type'];
+    $role['itemtype'] = $role['xar_type'];
+    return $role;
 }
-
 ?>

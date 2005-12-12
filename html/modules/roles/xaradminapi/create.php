@@ -1,27 +1,29 @@
 <?php
 /**
- * Test a user or group's privileges against a mask
+ * Create a user
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  */
 /**
- * create a user
+ * Create a user
+ * 
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['uname'] username of the user
- * @param $args['realname'] real name of the user
- * @param $args['email'] email address of the user
- * @param $args['pass'] password of the user
- * @param $args['date'] registration date
- * @param $args['valcode'] validation code
- * @param $args['state'] state of the account
- * @param $args['authmodule'] authentication module
- * @param $args['uid'] user id to be used (import only)
- * @param $args['cryptpass'] encrypted password to be used (import only)
+ * @param string $args['uname'] username of the user
+ * @param string $args['realname'] real name of the user
+ * @param string $args['email'] email address of the user
+ * @param string $args['pass'] password of the user
+ * @param string $args['date'] registration date
+ * @param string $args['valcode'] validation code
+ * @param int    $args['state'] state of the account
+ * @param string $args['authmodule'] authentication module
+ * @param int    $args['uid'] user id to be used (import only)
+ * @param string $args['cryptpass'] encrypted password to be used (import only)
+ * @param int    $args['itemtype'] item type to create
  * @returns int
  * @return user ID on success, false on failure
  */
@@ -42,6 +44,7 @@ function roles_adminapi_create($args)
     $invalid = array();
     $baseitemtype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
 	$args['basetype'] = $baseitemtype;
+
     if ($baseitemtype == ROLES_USERTYPE) {
 		if (!isset($uname)) {
 			$invalid[] = 'uname';
@@ -50,7 +53,7 @@ function roles_adminapi_create($args)
 			$invalid[] = 'email';
 		}
 		if (!isset($name)) {
-			$invalid[] = 'realname';
+			$invalid[] = 'name';
 		}
 		if (!isset($state)) {
 			$invalid[] = 'state';
@@ -61,7 +64,7 @@ function roles_adminapi_create($args)
 		$args['cryptpass'] = md5($pass);
     } elseif ($baseitemtype == ROLES_GROUPTYPE) {
 		if (!isset($name)) {
-			$invalid[] = 'realname';
+			$invalid[] = 'name';
 		}
     }
     if (count($invalid) > 0) {
