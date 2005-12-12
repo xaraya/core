@@ -79,7 +79,7 @@ function roles_adminapi_create($args)
 
     $role = new xarRole($args);
     $role->add();
-    $uid = $role->getID();;
+    $uid = $role->getID();
 
     // Let any hooks know that we have created a new user.
     $item['module'] = 'roles';
