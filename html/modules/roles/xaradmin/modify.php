@@ -19,8 +19,6 @@
  */
 function roles_admin_modify()
 {
-    if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemtype', 'int', $itemtype, NULL, XARVAR_NOT_REQUIRED)) return;
-    return xarModFunc('roles', 'admin', 'modifyrole',array('itemid' => $itemid));
+    return xarModFunc('roles', 'admin', 'modifyrole');
 }
 ?>
