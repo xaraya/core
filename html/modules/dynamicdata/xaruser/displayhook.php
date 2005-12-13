@@ -74,8 +74,9 @@ function dynamicdata_user_displayhook($args)
     foreach ($tree as $branch) {
 		$object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
 										   'itemtype' => $branch['itemtype'],
-										   'itemid' => $itemid));
+										   'itemid'   => $itemid));
 		if (!isset($object)) return;
+
 		$object->getItem();
 
 		if (!empty($object->template)) {

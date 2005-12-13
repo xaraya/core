@@ -96,7 +96,7 @@ function roles_admin_modifyrole()
     // call item modify hooks (for DD etc.)
     $item = $data;
     $item['module']= 'roles';
-    $item['itemtype'] = $data['itemtype']; // we might have something separate for groups later on
+    $item['itemtype'] = $data['itemtype'];
     $item['itemid']= $uid;
     $data['hooks'] = xarModCallHooks('item', 'modify', $uid, $item);
 

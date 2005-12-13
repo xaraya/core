@@ -18,6 +18,9 @@ function roles_user_display($args)
     extract($args);
 
     if (!xarVarFetch('uid','int:1:',$uid, xarUserGetVar('uid'))) return;
+    if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
+
+    $uid = isset($itemid) ? $itemid : $uid;
 
     // Get user information
     $data = xarModAPIFunc('roles',
@@ -26,17 +29,16 @@ function roles_user_display($args)
                           array('uid' => $uid));
 
     if ($data == false) return;
-    
+
     $data['email'] = xarVarPrepForDisplay($data['email']);
 
     $item = $data;
     $item['module'] = 'roles';
-    $item['itemtype'] = 0; // handle groups differently someday ?
+    $item['itemtype'] = $data['type'];
+    $item['itemid']= $uid;
     $item['returnurl'] = xarModURL('roles', 'user', 'display',
                                    array('uid' => $uid));
-    $hooks = array();
-    $hooks = xarModCallHooks('item', 'display', $uid, $item);
-    $data['hooks'] = $hooks;
+    $data['hooks'] = xarModCallHooks('item', 'display', $uid, $item);
 
     xarTplSetPageTitle(xarVarPrepForDisplay($data['name']));
 

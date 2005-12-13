@@ -67,9 +67,8 @@ function dynamicdata_admin_modifyhook($args)
         $itemid = $objectid;
     }
 
+    $data = array();
     $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
-
-    $data = "";
     foreach ($tree as $branch) {
 		$object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
 										   'itemtype' => $branch['itemtype'],
