@@ -757,6 +757,37 @@ class xarRole
 
 
     /**
+     * purge: make a role purged
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param none $
+     * @return boolean
+     * @throws none
+     */
+    function purge()
+    {
+        // no checks here. just do it
+        $this->remove();
+        $state = ROLES_STATE_DELETED;
+        $uname = xarML('deleted') . microtime(TRUE) .'.'. $this->uid;
+        $name = '';
+        $pass = '';
+        $email = '';
+        $date_reg = '';
+        $q = new xarQuery('UPDATE',$this->rolestable);
+        $q->addfield('xar_name',$name);
+        $q->addfield('xar_uname',$uname);
+        $q->addfield('xar_pass',$pass);
+        $q->addfield('xar_email',$email);
+        $q->addfield('xar_date_reg',$date_reg);
+        $q->addfield('xar_state',$state);
+        $q->eq('xar_uid',$this->uid);
+        if(!$q->run()) return;
+        return true;
+    }
+
+    /**
      * Gets all the privileges in the database.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
