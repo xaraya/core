@@ -1105,8 +1105,17 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
 {
     assert('is_array($tplData); /* Template data should always be passed in an array */');
 
+    // Process non-default themes base directory
+    $newFileName = $sourceFileName;
+    if ($GLOBALS['xarTpl_themesBaseDir'] != 'themes') {
+        $themePathLen = strlen($GLOBALS['xarTpl_themesBaseDir']);
+        if (!strncmp($sourceFileName, $GLOBALS['xarTpl_themesBaseDir'], $themePathLen)) {
+            $newFileName = 'themes' . substr($sourceFileName, $themePathLen);
+        }
+    }
+                                                            
     // Load translations for the template
-    $tplpath = explode("/", $sourceFileName);
+    $tplpath = explode("/", $newFileName);
     $tplPathCount = count($tplpath);
     switch ($tplpath[0]) {
         case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
@@ -1118,40 +1127,11 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
     $ctxType = $tplpath[0].':'.implode("/", $stack);
     $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
-    /* Temporary partial fix for Bug 5156. This is a temporary workaround and
-       while here, themes cannot be translated. This should be fixed as soon as possible */
+
+    /* This $dnType check is a workaround for non-standard templates like we need in workflows etc. */
     if(isset($dnType)) {
         if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
     }
-    // Load translations for the template
-    $tplpath = explode("/", $sourceFileName);
-    $tplPathCount = count($tplpath);
-    switch ($tplpath[0]) {
-        case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
-        case 'themes':  $dnType = XARMLS_DNTYPE_THEME; break;
-    }
-    $dnName = $tplpath[1];
-    $stack = array();
-    if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
-    for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
-    $ctxType = $tplpath[0].':'.implode("/", $stack);
-    $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
-    if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
-
-    // Load translations for the template
-    $tplpath = explode("/", $sourceFileName);
-    $tplPathCount = count($tplpath);
-    switch ($tplpath[0]) {
-        case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
-        case 'themes':  $dnType = XARMLS_DNTYPE_THEME; break;
-    }
-    $dnName = $tplpath[1];
-    $stack = array();
-    if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
-    for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
-    $ctxType = $tplpath[0].':'.implode("/", $stack);
-    $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
-    if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
 
     $needCompilation = true;
     $cachedFileName = null;

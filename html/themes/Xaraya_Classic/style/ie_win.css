@@ -71,9 +71,3 @@ legend {
     margin-left:-.5em;
     width: 15em;
 }
-/* Fix for FF bug 3992  - move problem class to IE only 
-   This problem with overflow auto and non-mac FF is apparently fixed in version 1.1 */
-.xar-form-input-wrapper {
-    margin-bottom: 4px;
-    overflow:auto;
-}
