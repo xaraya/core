@@ -54,12 +54,16 @@ function xarLocalServicesMain($argc, $argv)
 
 function usage() {
     fwrite(STDERR,"Usage for local services entry point:
-    php5 ./ws.php <type> [args]
+    php5 ./ws.php <type> [-u <user>][-p <pass>] [args]
 
     <type>   : required designator for request type
                Supported:
                - 'mail': a mail message is supplied at stdin
+    -u <user>: optional username to pass in
+    -p <pass>: optional cleartext password to pass in
     [args]   : arguments specific to the supplied <type>
+    NOTES:
+       - make sure that PHP can determine your ip address (for example by setting REMOTE_ADDR in the environment) 
 ");
     return 1;
 }
