@@ -854,7 +854,7 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
  * @access protected
  * @return bool true
  */
-function xarMLS__mkdirr($path, $mode)
+function xarMLS__mkdirr($path)
 {
     // Check if directory already exists
     if (is_dir($path) || empty($path)) {
@@ -863,9 +863,9 @@ function xarMLS__mkdirr($path, $mode)
          
     // Crawl up the directory tree
     $next_path = substr($path, 0, strrpos($path, '/'));
-    if (xarMLS__mkdirr($next_path, $mode)) {
+    if (xarMLS__mkdirr($next_path)) {
         if (!file_exists($path)) {
-            $result = @mkdir($path, $mode);
+            $result = @mkdir($path, 0700);
             if (!$result) {
                 $msg = xarML("The directories under #(1) must be writeable by PHP.", $next_path);
                 xarLogMessage($msg);
@@ -907,7 +907,7 @@ function xarMLS__iswritable($directory=NULL)
         }
         return $isWritable;
     } else {
-        $isWritable = xarMLS__mkdirr($directory, 0777);
+        $isWritable = xarMLS__mkdirr($directory);
         return $isWritable;
     }
 }

@@ -354,9 +354,7 @@ div.xar-center {
 
 .xar-form-input-wrapper {
     margin-bottom: 4px;
-   /* bug 3992 - testing 
-      Overflow moved to IE-Win.css
-      overflow: auto; */
+    overflow:auto;
 }
 
 .xar-form-input-wrapper-after {

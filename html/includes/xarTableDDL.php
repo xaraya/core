@@ -323,11 +323,18 @@ function xarDBDropTable($tableName, $databaseType = NULL)
         $dbconn =& xarDBGetConn();
         $query = "DELETE FROM $metaTable WHERE xar_table=?";
         $result =& $dbconn->Execute($query,array($tableName));
+        xarErrorFree();
     }
 
     switch($databaseType) {
-        case 'mysql':
         case 'postgres':
+            // Also drop the related sequence 
+            // TODO: please can we use something else? pwetty please?
+            $seqSQL = "DROP SEQUENCE seq".$tableName;
+            $dbconn =& xarDBGetConn();
+            $result = $dbconn->Execute($seqSQL);
+            // ignore exception for now
+        case 'mysql':
         case 'oci8':
         case 'oci8po':
         case 'sqlite':
