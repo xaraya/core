@@ -154,10 +154,9 @@ function roles_user_register()
 
             } else {
                 // check for duplicate usernames
-                $user = xarModAPIFunc('roles',
-                                      'user',
-                                      'get',
-                                       array('uname' => $username));
+                $user = xarModAPIFunc('roles', 'user', 'get',
+                                       array('uname' => $username,
+                                             'itemtype' => ROLES_USERTYPE));
                 if ($user != false) {
                     unset($user);
                     $invalid['username'] = xarML('That username is already taken.');
@@ -201,10 +200,9 @@ function roles_user_register()
 
                 if(xarModGetVar('roles','uniqueemail')) {
                     // check for duplicate email address
-                    $user = xarModAPIFunc('roles',
-                                          'user',
-                                          'get',
-                                           array('email' => $email));
+                    $user = xarModAPIFunc('roles', 'user', 'get',
+                                   array('email' => $email,
+                                         'itemtype' => ROLES_USERTYPE));
                     if ($user != false) {
                         unset($user);
                         $invalid['email'] = xarML('That email address is already registered.');

@@ -1,14 +1,12 @@
 <?php
 /**
- * File: $Id$
- *
  * Modify a role
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
- * @subpackage Roles Module
+ * @subpackage roles
  * @author Marc Lutolf
  */
 /**

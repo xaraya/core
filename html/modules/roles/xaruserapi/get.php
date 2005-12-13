@@ -15,9 +15,10 @@
  * uname, uid and email are guaranteed to be unique,
  * otherwise the first hit will be returned
  *
- * @todo revisit this
+ * @todo revisit this (a whole lot!)
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param int    $args['uid'] id of user to get
+ * @param int    $args['uid'] @see args['itemid]
+ * @param int    $args['itemid'] id of role to get
  * @param string $args['uname'] user name of user to get
  * @param string $args['name'] name of user to get
  * @param string $args['email'] email of user to get
@@ -28,16 +29,19 @@
  */
 function roles_userapi_get($args)
 {
-    // Get arguments from argument array
     extract($args);
-    // Argument checks
-    if (empty($uid) && empty($name) && empty($uname) && empty($email)) {
+
+    if ((empty($itemid) && !empty($uid))) {
+        $itemid = $uid;
+    }
+
+    if (empty($itemid) && empty($name) && empty($uname) && empty($email)) {
         $msg = xarML('Wrong arguments to roles_userapi_get.');
         xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));
         return false;
-    } elseif (!empty($uid) && !is_numeric($uid)) {
+    } elseif (!empty($itemid) && !is_numeric($itemid)) {
         $msg = xarML('Wrong arguments to roles_userapi_get.');
         xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
@@ -46,6 +50,7 @@ function roles_userapi_get($args)
     }
 
 
+    
     $xartable =& xarDBGetTables();
     $rolestable = $xartable['roles'];
 
@@ -62,8 +67,8 @@ function roles_userapi_get($args)
                   'xar_valcode AS valcode',
                   'xar_state AS state'
                 ));
-    if (!empty($uid) && is_numeric($uid)) {
-        $q->eq('xar_uid',(int)$uid);
+    if (!empty($itemid) && is_numeric($itemid)) {
+        $q->eq('xar_uid',(int)$itemid);
     }
     if (!empty($name)) {
         $q->eq('xar_name',$name);
@@ -90,6 +95,7 @@ function roles_userapi_get($args)
     if ($role == array()) return false;
     // uid and type are reserved/key words in Oracle et al.
     $role['uid'] = $role['xar_uid'];
+    $role['itemid'] = $role['xar_uid'];
     $role['type'] = $role['xar_type'];
     $role['itemtype'] = $role['xar_type'];
     return $role;
