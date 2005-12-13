@@ -9,7 +9,6 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * display dynamicdata for an item - hook for ('item','display','GUI') - currently unused
  *
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
@@ -69,7 +68,7 @@ function dynamicdata_user_displayhook($args)
         $itemid = $objectid;
     }
 
-    $data = array();
+    $data = "";
     $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
     foreach ($tree as $branch) {
 		$object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
@@ -88,7 +87,7 @@ function dynamicdata_user_displayhook($args)
 							array('properties' => & $object->properties),
 							$template);
 	}
-	return $data
+	return $data;
 }
 
 ?>

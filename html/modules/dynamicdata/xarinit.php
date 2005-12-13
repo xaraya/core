@@ -418,6 +418,11 @@ function dynamicdata_init()
                            'dynamicdata', 'admin', 'createhook')) {
         return false;
     }
+    // when a module item is being displayed
+    if (!xarModRegisterHook('item', 'display', 'GUI',
+                           'dynamicdata', 'user', 'displayhook')) {
+        return false;
+    }
     // when a module item is being modified (uses 'dd_*')
     if (!xarModRegisterHook('item', 'modify', 'GUI',
                            'dynamicdata', 'admin', 'modifyhook')) {
@@ -581,12 +586,12 @@ function dynamicdata_init()
 function dynamicdata_upgrade($oldVersion)
 {
 
-    
+
     // Upgrade dependent on old version number
     switch($oldVersion) {
     case '1.0':
         // Code to upgrade from version 1.0 goes here
-        
+
         // Register BL item tags to get properties and values directly in the template
         // get properties for this item
         xarTplRegisterTag('dynamicdata', 'data-getitem',
@@ -596,7 +601,7 @@ function dynamicdata_upgrade($oldVersion)
         xarTplRegisterTag('dynamicdata', 'data-getitems',
                           array(),
                           'dynamicdata_userapi_handleGetItemsTag');
-        
+
         // for the switch from blob to text of the xar_dd_value field, no upgrade is necessary for MySQL,
         // and no simple upgrade is possible for PostgreSQL
     case '1.1':
@@ -786,7 +791,7 @@ function dynamicdata_createPropDefTable()
     /**
       * Dynamic Data Properties Definition Table
       */
-      
+
     // Get existing DB info
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
@@ -821,7 +826,7 @@ function dynamicdata_createPropDefTable()
                     'xar_prop_class'   => array('type'        => 'varchar',
                                               'size'        => 254,
                                               'default'     => NULL),
-                
+
                 /* the default validation string for this property - no need to use text here... */
                     'xar_prop_validation'   => array('type'        => 'varchar',
                                               'size'        => 254,
@@ -839,10 +844,10 @@ function dynamicdata_createPropDefTable()
                                               'size'        => 254,
                                               'default'     => NULL),
                 /* the default args for this property -- serialized array */
-                    'xar_prop_args'    => array('type'        => 'text', 
+                    'xar_prop_args'    => array('type'        => 'text',
                                               'size'        => 'medium',
                                               'null'        => 'false'),
-                                              
+
                 /*  */
                     'xar_prop_aliases'   => array('type'        => 'varchar',
                                               'size'        => 254,
