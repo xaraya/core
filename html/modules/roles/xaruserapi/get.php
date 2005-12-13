@@ -45,7 +45,6 @@ function roles_userapi_get($args)
         return false;
     }
 
-    if (empty($type)) $type = ROLES_USERTYPE;
 
     if (empty($itemtype)) $itemtype = $type;
   
@@ -83,7 +82,9 @@ function roles_userapi_get($args)
     elseif (!empty($state) && $state != ROLES_STATE_ALL) {
         $q->eq('xar_state',(int)$state);
     }
-    $q->eq('xar_type',$itemtype);
+    if (!empty($type)) {
+	    $q->eq('xar_type',$type);
+    }
     if (!$q->run()) return;
 
     // Check for no rows found, and if so return

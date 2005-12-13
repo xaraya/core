@@ -83,28 +83,18 @@ function roles_admin_updaterole()
         }
     }
 
-    // assemble the args into an array for the role constructor
+    // assemble the args into an array for the API function
     $pargs = array('uid' => $uid,
         'name' => $pname,
-        'type' => $itemtype,
+        'itemtype' => $itemtype,
         'uname' => $puname,
         'email' => $pemail,
         'pass' => $ppass1,
         'state' => $pstate,
         'basetype' => $basetype,
         );
-    // create a role from the data
-    $role = new xarRole($pargs);
 
-   // Try to update the role to the repository and bail if an error was thrown
-    if (!$role->update()) return;
-
-    // call item update hooks (for DD etc.)
-// TODO: move to update() function
-    $pargs['module'] = 'roles';
-    $pargs['itemtype'] = $itemtype;
-    $pargs['itemid'] = $uid;
-    xarModCallHooks('item', 'update', $uid, $pargs);
+    if (!xarModAPIFunc('roles','admin','update',$pargs)) return;
 
     //Change the defaultgroup var values if the name is changed
     if ($basetype == ROLES_GROUPTYPE) {
