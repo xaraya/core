@@ -46,8 +46,6 @@ function roles_userapi_get($args)
     }
 
 
-    if (empty($itemtype)) $itemtype = $type;
-  
     $xartable =& xarDBGetTables();
     $rolestable = $xartable['roles'];
 
