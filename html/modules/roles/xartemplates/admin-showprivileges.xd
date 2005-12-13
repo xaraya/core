@@ -6,12 +6,11 @@
 </div>
 <div class="xar-mod-body">
     <h2>
-      <xar:if condition="$ptype eq 0">
-        <xar:mlstring>Show Privileges of User:</xar:mlstring>
-        <xar:else/>
-        <xar:mlstring>Show Privileges of Group:</xar:mlstring>
-      </xar:if>
-      <xar:var name="pname" prep="true"/>
+        <xar:ml>
+            <xar:mlstring>Show privileges #(1) '#(2)':</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$pname#</xar:mlvar>
+        </xar:ml>
     </h2>
 
     <xar:if condition="count($parents) ne 0">
@@ -41,7 +40,6 @@
     <xar:template file="tablist" />
     <fieldset>
       <legend>
-            <xar:if condition="$ptype eq ROLES_GROUPTYPE">
         <xar:ml>
             <xar:mlstring>Privileges inherited by #(1):</xar:mlstring>
             <xar:mlvar>
@@ -178,7 +176,7 @@
           </xar:loop>
         </table>
       </xar:if>
-      <xar:if condition="$ptype eq 1">
+        <xar:if condition="$itemtype eq ROLES_GROUPTYPE">
         <xar:set name="$thisrole">
           <xar:mlstring>Group</xar:mlstring>
         </xar:set>
