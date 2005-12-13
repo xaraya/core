@@ -2,12 +2,11 @@
 /**
  * Modify role details
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
+ * @subpackage roles
  */
 /**
  * modifyrole - modify role details
