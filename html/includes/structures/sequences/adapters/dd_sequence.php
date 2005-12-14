@@ -4,7 +4,8 @@
  *
  * 
  */
-class DynamicDataSequence implements iSequence, iSequenceAdapter
+include_once dirname(__FILE__).'/array_sequence.php';
+class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceAdapter
 {
     private $seqInfo   = null; /* This stays the same more or less */
     private $seqObject = null; /* The object definition */
@@ -24,15 +25,6 @@ class DynamicDataSequence implements iSequence, iSequenceAdapter
         $this->getSequence();
     }
 
-    /* Implementation of iSequenceAdapter */
-    public function head() 
-    {
-        return $this->empty ? -1: 0;
-    }
-    public function tail()
-    {
-        return $this->size - 1;
-    }
 
     /* Implementation of iSequence */
     // r (int)  size   : number of elements in the sequence
@@ -40,7 +32,7 @@ class DynamicDataSequence implements iSequence, iSequenceAdapter
     public function __get($property)
     {
         // Make sure we have the most current
-        // TODO: move this out of here, side-effect
+        // TODO: move this out of here, has a side-effect
         $this->getSequence();
     
         switch($property) {

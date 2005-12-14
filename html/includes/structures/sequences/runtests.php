@@ -8,7 +8,10 @@ include 'includes/xarCore.php';
 // TODO: don't load the whole core
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
-function m($msg) { echo "$msg\n"; }
+function m($msg,$level=0) { 
+    $prefix = str_repeat('  ',$level);
+    echo "$prefix - $msg\n"; 
+}
 
 if(!xarUserLogin('Admin','12345')) {
     die("Authentication failed\n");
@@ -19,65 +22,63 @@ if(!xarUserLogin('Admin','12345')) {
 
 include_once('includes/structures/sequences/queue.php');
 include_once('includes/structures/sequences/stack.php');
-
-m('Creating new dd queue');
+$l=0;
+/*m('Testing DD queue',$l++);
 $q = new Queue('dd',array('name'=>'masterq'));
 $q->clear();
+_tests($q,$l--);
 
-m('Operations on empty Q');
-m("Size of empty Q: ".$q->size);
-$s=$q->empty?"yes":"NO?";
-m("Empty Q is empty: $s");
-m('Popping from empty Q');
-$q->pop();
-
-$q->clear();
-m('Pushing and popping 1 item into the Q');
-m('first');
-$q->push('first');
-m('Getting items back');
-m($q->pop());
-
-m('Pushing and popping 3 items into the Q');
-m('first');
-$q->push('first');
-m('second');
-$q->push('second');
-m('third');
-$q->push('third');
-
-m('Getting items back');
-m($q->pop());
-m($q->pop());
-m($q->pop());
-
+m('Testing DD stack',$l++);
 $q = new Stack('dd',array('name'=>'masterq'));
-m('Operations on empty S');
-m("Size of empty S: ".$q->size);
-$s=$q->empty?"yes":"NO?";
-m("Empty S is empty: $s");
-m('Popping from empty S');
-$q->pop();
-
 $q->clear();
-m('Pushing and popping 1 item into the S');
-m('first');
-$q->push('first');
-m('Getting items back');
-m($q->pop());
+_tests($q,$l--);
+*/
+m('Testing array queue',$l++);
+$q = new Queue();
+$q->clear();
+_tests($q,$l--);
 
-m('Pushing and popping 3 items into the S');
-m('first');
-$q->push('first');
-m('second');
-$q->push('second');
-m('third');
-$q->push('third');
+m('Testing array stack',$l++);
+$q = new Stack();
+$q->clear();
+_tests($q,$l--);
 
-m('Getting items back');
-m($q->pop());
-m($q->pop());
-m($q->pop());
+function _tests($seq,$l=0)
+{
+    $seqName = get_class($seq);
+    m("Operations on empty $seqName",$l++);
+    m("Size of empty $seqName: ".$seq->size,$l);
+    $s=$seq->empty?"yes":"NO?";
+    m("Empty $seqName is empty: $s",$l);
+    m("Popping from empty $seqName",$l);
+    $seq->pop();
+    $l--;
+
+    $seq->clear();
+    m("Pushing and popping 1 item into the $seqName",$l++);
+    m("first",$l);
+    $seq->push("first",$l--);
+    m("Getting items back",$l++);
+    m($seq->pop(),$l);
+    $l--;
+
+    m("Pushing and popping 3 items into the $seqName",$l++);
+    m("first",$l);
+    $seq->push("first");
+    m("second",$l);
+    $seq->push("second");
+    m("third",$l);
+    $seq->push("third");
+    $l--;
+
+    m("Getting items back",$l++);
+    m($seq->pop(),$l);
+    m($seq->pop(),$l);
+    m($seq->pop(),$l);
+    $l--;
+}
+
+
 
 
 ?>
