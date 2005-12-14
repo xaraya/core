@@ -9,7 +9,6 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
 {
     private $seqInfo   = null; /* This stays the same more or less */
     private $seqObject = null; /* The object definition */
-    private $seq       = null; /* The sequenceData we extract our index mapping from */
 
     /* Construct the dd sequence
      * 
@@ -25,26 +24,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
         $this->getSequence();
     }
 
-
     /* Implementation of iSequence */
-    // r (int)  size   : number of elements in the sequence
-    // r (bool) empty  : is the sequence empty
-    public function __get($property)
-    {
-        // Make sure we have the most current
-        // TODO: move this out of here, has a side-effect
-        $this->getSequence();
-    
-        switch($property) {
-        case 'size':
-            return count($this->seq);
-            break;
-        case 'empty':
-            return count($this->seq)==0;
-        }
-        return null;
-    }
-
     public function &get($position) 
     {
         $item = null;
@@ -53,10 +33,10 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
         $params = array('modid'     => $this->seqInfo['moduleid'],
                         'itemtype'  => $this->seqInfo['itemtype'],
                         'fieldlist' => array('data'),
-                        'where'    => 'id = '.$this->seq[$position]['id']);
+                        'where'    => 'id = '.$this->items[$position]['id']);
         // And get the data
         $item = xarModApiFunc('dynamicdata','user','getitems',$params);
-        $item = $item[$this->seq[$position]['id']]['data'];
+        $item = $item[$this->items[$position]['id']]['data'];
         $item = unserialize(base64_decode($item));
         return $item;
     }
@@ -75,15 +55,17 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
         } else {
             // Insert the new item, with nextid pointing to the id of the
             // item currently at position N 
-            $IDn = $this->seq[$position]['id']; // This should always exist by now
-            $params['nextid'] = $this->seq[$position]['id'];
+            $IDn = $this->items[$position]['id']; // This should always exist by now
+            $params['nextid'] = $this->items[$position]['id'];
             $newID = $this->seqObject->createItem($params);
 
             // Update the item at N-1 (if any) with the new ID of the inserted item
             if($position > 0 && isset($newID)) {
-                $this->setNextId($this->seq[$position-1]['id'],$newId);
+                $this->setNextId($this->items[$position-1]['id'],$newId);
             }
         }
+        // Data changed, refresh the sequence
+        $this->getSequence();
         return true;
     }
 
@@ -93,31 +75,36 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
         if($this->empty) return true;
 
         // Delete the item at that position
-        $this->seqObject->deleteItem(array('itemid'=>$this->seq[$position]['id']));
+        $this->seqObject->deleteItem(array('itemid'=>$this->items[$position]['id']));
 
         // Link the nextid of Item_n-1 to the id of Item_n+1
-        if(isset($this->seq[$position-1])) {
+        if(isset($this->items[$position-1])) {
             // There is a previous item to set
             $IDnpls1 = -1;
-            if(isset($this->seq[$position+1])) {
+            if(isset($this->items[$position+1])) {
                 // There is also a next item
-                $IDnpls1 = $this->seq[$position+1]['id'];
+                $IDnpls1 = $this->items[$position+1]['id'];
             }
-            $res = $this->setNextId($this->seq[$position-1]['id'],$IDnpls1);
+            $res = $this->setNextId($this->items[$position-1]['id'],$IDnpls1);
         }
+        // Data changed, refresh the sequence
+        $this->getSequence();
         return true;
     }
 
     public function clear() 
     {
         if($this->empty) return true;
-        if(!$this->seq) return true; // CHECK THIS
-        foreach($this->seq as $index => $values) {
+        if(!$this->items) return true; // CHECK THIS
+        foreach($this->items as $index => $values) {
             $this->seqObject->deleteItem(array('itemid'=>$values['id']));
         }
+        // Data changed, refresh the sequence
+        $this->getSequence();
         return true;
     }
-
+    /* End implementation of iSequence */
+    
     private function &getSequence()
     {
         $this->seqObject = xarModApiFunc('dynamicdata','user','getobject',$this->seqInfo);
@@ -127,7 +114,8 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
                         'fieldlist' => array('id','nextid'));
         // And get the data
         $objectData = xarModApiFunc('dynamicdata','user','getitems',$params);
-        $this->seq = array_reverse($objectData);
+        $this->items = array_reverse($objectData);
+        //var_dump($this->items);
     }
     
     private function setNextId($itemid, $nextid)

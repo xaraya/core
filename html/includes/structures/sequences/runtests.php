@@ -23,7 +23,7 @@ if(!xarUserLogin('Admin','12345')) {
 include_once('includes/structures/sequences/queue.php');
 include_once('includes/structures/sequences/stack.php');
 $l=0;
-/*m('Testing DD queue',$l++);
+m('Testing DD queue',$l++);
 $q = new Queue('dd',array('name'=>'masterq'));
 $q->clear();
 _tests($q,$l--);
@@ -32,7 +32,7 @@ m('Testing DD stack',$l++);
 $q = new Stack('dd',array('name'=>'masterq'));
 $q->clear();
 _tests($q,$l--);
-*/
+
 m('Testing array queue',$l++);
 $q = new Queue();
 $q->clear();

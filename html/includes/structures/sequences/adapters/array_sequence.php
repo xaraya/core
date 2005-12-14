@@ -8,7 +8,7 @@
 class ArraySequence implements iSequence, iSequenceAdapter
 {
     // An array holds our sequence items
-    private $items = array();
+    protected $items = array();
 
     // iSequenceAdapter implementation
     public function head() 
@@ -79,6 +79,8 @@ class ArraySequence implements iSequence, iSequenceAdapter
             return count($this->items);
         case 'empty':
             return count($this->items) == 0;
+        default:
+            die("wrong property: $name"); // TODO: raise exception
         }
     }
 }
