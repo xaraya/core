@@ -7,7 +7,19 @@
     <xar:set name="itemid">0</xar:set>
 </xar:if>
 
+<xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-body">
+  <dl class="xar-tabs">
+    <dt class="help" title="#xarML('Queue management areas')#">
+      <xar:mlstring>Queue</xar:mlstring>
+    </dt>
+    <dd class="active">
+      <a href="&xar-modurl-mail-admin-view;"><xar:mlstring>Registration</xar:mlstring></a>
+    </dd>
+    <dd>
+      <a href="&xar-modurl-mail-admin-mapping;"><xar:mlstring>Mapping</xar:mlstring></a>
+    </dd>
+  </dl>
   <!-- Master view -->
   <fieldset>
     <legend><xar:mlstring>Registered mail queues</xar:mlstring></legend>
@@ -20,7 +32,7 @@
       
       <xar:comment>Normal edit form</xar:comment>
       <form style="display: inline;" method="post" action="&xar-modurl-mail-admin-update;">
-        <xar:data-form module="$qdef['moduleid']" itemid="$itemid" itemtype="$qdef['itemtype']" linkfield="name"/>
+        <xar:data-form module="$qdef['moduleid']" itemid="$itemid" itemtype="$qdef['itemtype']" linkfield="name" fieldlist="name,type,description"/>
         <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
         <input type="hidden" name="itemid" value="#$itemid#"/>
         <input type="hidden" name="objectid" value="#$qdef.objectid#"/>
@@ -42,7 +54,7 @@
 
       <xar:comment>Create form</xar:comment>
       <form style="display: inline;" method="post" action="&xar-modurl-mail-admin-create;">
-        <xar:data-form module="$qdef['moduleid']" itemid="$itemid" itemtype="$qdef['itemtype']" linkfield="name"/>
+        <xar:data-form module="$qdef['moduleid']" itemid="$itemid" itemtype="$qdef['itemtype']" linkfield="name" fieldlist="name,type,description"/>
         <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
         <input type="hidden" name="objectid" value="#$qdef.objectid#"/>
         <input type="hidden" name="modid" value="#$qdef.moduleid#"/>

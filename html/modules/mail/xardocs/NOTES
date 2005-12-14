@@ -66,7 +66,7 @@ either by a threshold parameter, or based on some schedule.
   triggers an processing run, based on (external) parameter like time
   or load.    
 
-Let's what an incoming mail item process would look like:
+Let's see what an incoming mail item process would look like:
 # the process starts at an entry point where xaraya 'receives' mail
   through some mta magic routing the (raw) content of the mail item
   into xaraya.
@@ -77,7 +77,7 @@ Let's what an incoming mail item process would look like:
   generated whenever an item enters into some mail queue, which in
   turn allows the modules to do with the content whatever they
   please. 
-# after these hooks run, the mail module removes the processed items
+# optionally after these hooks run, the mail module removes the processed items
   from the queue one by one. (and in turn generates delete hook calls
   for those operations)
 
