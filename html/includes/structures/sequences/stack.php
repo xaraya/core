@@ -11,16 +11,16 @@ class Stack extends SequenceAdapter implements iStack
 {
     public function push($item)
     {
-        return $this->insert($item, parent::head());
+        return $this->insert($item, $this->head);
     }
 
     public function &pop()
     {
         $item = null;
         if($this->empty) return $item;
-        $item = parent::get(parent::head());
+        $item = parent::get($this->head);
         if($item == null) return $item;
-        parent::delete(parent::head());
+        parent::delete($this->head);
         return $item;
     }
     

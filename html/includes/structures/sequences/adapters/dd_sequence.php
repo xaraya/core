@@ -25,27 +25,31 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
     }
 
     /* Implementation of iSequence */
+
+    /* Get an item from the sequence */
     public function &get($position) 
     {
         $item = null;
-        if($position > $this->tail()) return $item;
-        if($position == $this->head()) $position = 0;
+        if($position >  $this->tail) return $item;
+        if($position == $this->head) $position = 0;
         $params = array('modid'     => $this->seqInfo['moduleid'],
                         'itemtype'  => $this->seqInfo['itemtype'],
                         'fieldlist' => array('data'),
                         'where'    => 'id = '.$this->items[$position]['id']);
-        // And get the data
+        // And get the data, we do this explicitly because the 'data' field might be very big
+        // so it is not included in the items property for this object by default.
         $item = xarModApiFunc('dynamicdata','user','getitems',$params);
         $item = $item[$this->items[$position]['id']]['data'];
         $item = unserialize(base64_decode($item));
         return $item;
     }
 
+    /* Insert an item into the sequence at a certain position */
     public function insert(&$item, $position)
     {
         // Make sure position is in range
-        if($position > $this->tail()) return false;
-        if($position==$this->head()) $position=0;
+        if($position >  $this->tail) return false;
+        if($position == $this->head) $position=0;
         
         $params['data'] = base64_encode(serialize($item));
         $params['nextid'] = -1;
@@ -68,10 +72,10 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
         $this->getSequence();
         return true;
     }
-
+    /* Delete an item from the sequence at a certain position */
     public function delete($position) 
     {
-        if($position > $this->tail()) return false;
+        if($position > $this->tail) return false;
         if($this->empty) return true;
 
         // Delete the item at that position
@@ -92,6 +96,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
         return true;
     }
 
+    /* Clear the sequence */
     public function clear() 
     {
         if($this->empty) return true;
@@ -105,6 +110,8 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
     }
     /* End implementation of iSequence */
     
+    /* Private helper function */
+    /* Refresh the sequence data */
     private function &getSequence()
     {
         $this->seqObject = xarModApiFunc('dynamicdata','user','getobject',$this->seqInfo);
@@ -114,10 +121,11 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
                         'fieldlist' => array('id','nextid'));
         // And get the data
         $objectData = xarModApiFunc('dynamicdata','user','getitems',$params);
+        // Make sure we have them in the right order (logically), i.e. sort on nextid
         $this->items = array_reverse($objectData);
-        //var_dump($this->items);
     }
     
+    /* Update an item to have a new successor in the sequence */
     private function setNextId($itemid, $nextid)
     {
         $params = array('modid'     => $this->seqInfo['moduleid'],

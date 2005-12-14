@@ -62,8 +62,8 @@ interface iSequenceAdapter
 {
     // r (int)  size : number of elements
     // r (bool) empty: is the sequence empty
-    /*   (int)  index*/public function head();
-    /*   (int)  index*/public function tail();
+    // r (int)  head : index of the head of the sequence
+    // r (int)  tail : index of the tail of the sequence
 }
 
 /**

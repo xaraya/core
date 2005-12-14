@@ -17,53 +17,51 @@ class SequenceAdapter implements iAdapter, iSequenceAdapter
     {
         switch($type) {
         case 'array':
-            // Only array as storage implemented atm
+            // Sequence stored as plain array, volatile
             $classfile = 'array_sequence.php';
             $class='ArraySequence';
             break;
         case 'dd':
+            // Sequence stored in dd object, persistent
             $classfile = 'dd_sequence.php';
             $class= 'DynamicDataSequence';
             break;
         default:
-            die('Wrong type');
+            die('Unsupported sequence: $type'); // TODO: raise exception
         }
         include_once dirname(__FILE__).'/'.$classfile;
         $this->implementor = new $class($args);
     }
+
     // iSequenceAdapter implementation
-    public function head()
-    {
-        return $this->implementor->head();
-    }
-    public function tail()
-    {
-        return $this->implementor->tail();
-    }
+
     // I want to have this protected but php wont let me
     public function __get($property) {
         switch($property) {
         case 'size':
             return $this->implementor->size;
-        case 'empty':
-            return ($this->implementor->size == 0);
+        case 'empty': // TODO: this is traditionally a method, should we?
+            return $this->implementor->empty;
+        case 'head':
+            return $this->implementor->head;
+        case 'tail':
+            return $this->implementor->tail;
+        default:
+            die('unknown property: $property');// TODO: raise exception
         }
     }
     // The actual implementor handles the implementation details,
     protected function &get($position) 
     {    
-        // TODO: check size and empty
         $item = $this->implementor->get($position); 
         return $item;
     }
     protected function insert(&$item, $position) 
     { 
-        // TODO: check size and empty
         return $this->implementor->insert($item, $position);
     }
     protected function delete($position)
     { 
-        // TODO: check size and empty
         return $this->implementor->delete($position);
     }
     protected function clear() 

@@ -10,15 +10,6 @@ class ArraySequence implements iSequence, iSequenceAdapter
     // An array holds our sequence items
     protected $items = array();
 
-    // iSequenceAdapter implementation
-    public function head() 
-    {
-        return $this->empty ? -1: 0;
-    }
-    public function tail()
-    {
-        return $this->size - 1;
-    }
     // iSequence implementation
     // Get the item at the specified position
     public function &get($position)
@@ -30,12 +21,12 @@ class ArraySequence implements iSequence, iSequenceAdapter
     // Insert an item on the specified position
     public function insert(&$item, $position)
     {
-        if($position > $this->tail()) return false;
+        if($position > $this->tail) return false;
         switch($position) {
-        case $this->head():
+        case $this->head:
             array_unshift($this->items,$item);
             break;
-        case $this->tail():
+        case $this->tail:
             array_push($this->items, $item);
             break;
         default:
@@ -49,12 +40,12 @@ class ArraySequence implements iSequence, iSequenceAdapter
     // Delete an item from the specified position
     public function delete($position)
     {
-        if($position > $this->tail() or $this->empty) return false;
+        if($position > $this->tail or $this->empty) return false;
         switch($position) {
-        case $this->tail():
+        case $this->tail:
             $item = array_pop($this->items);
             break;
-        case $this->head():
+        case $this->head:
         case 0:
             $item = array_shift($this->items);
             break;
@@ -79,6 +70,10 @@ class ArraySequence implements iSequence, iSequenceAdapter
             return count($this->items);
         case 'empty':
             return count($this->items) == 0;
+        case 'tail':
+            return count($this->items)-1;
+        case 'head':
+            return empty($this->items)?-1:0;
         default:
             die("wrong property: $name"); // TODO: raise exception
         }

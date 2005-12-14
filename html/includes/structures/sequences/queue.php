@@ -15,15 +15,15 @@ class Queue extends SequenceAdapter implements iQueue
     {
         $item = null;
         if($this->empty) return $item;
-        $item = parent::get(parent::tail());
+        $item = parent::get($this->tail);
         if($item == null) return $item;
-        parent::delete(parent::tail());
+        parent::delete($this->tail);
         return $item;
     }
     
     public function push($item)
     {
-        return parent::insert($item, parent::head());
+        return parent::insert($item, $this->head);
     }
     
     public function clear()
