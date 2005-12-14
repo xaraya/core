@@ -13,6 +13,8 @@ class Queue extends SequenceAdapter implements iQueue
 {
     public function &pop()
     {
+        $item = null;
+        if($this->empty) return $item;
         $item = parent::get(parent::tail());
         if($item == null) return $item;
         parent::delete(parent::tail());

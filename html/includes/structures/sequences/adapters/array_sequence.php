@@ -30,6 +30,7 @@ class ArraySequence implements iSequence, iSequenceAdapter
     // Insert an item on the specified position
     public function insert(&$item, $position)
     {
+        if($position > $this->size) return false;
         switch($position) {
         case $this->head():
             array_unshift($this->items,$item);
@@ -38,13 +39,17 @@ class ArraySequence implements iSequence, iSequenceAdapter
             array_push($this->items, $item);
             break;
         default:
-            // TODO: insert at position $position
+            $first = array_slice($this->items,0,$position-1);
+            $last  = aray_slice($this->items,$position);
+            $first[] = $item;
+            $this->items = array_merge($first,$last);
         }
         return true;
     }
     // Delete an item from the specified position
     public function delete($position)
     {
+        if($position > $this->size or $this->empty) return false;
         switch($position) {
         case $this->tail():
             $item = array_shift($this->items);
@@ -53,7 +58,9 @@ class ArraySequence implements iSequence, iSequenceAdapter
             $item = array_pop($this->items);
             break;
         default:
-            //TODO: delete at position $position
+            $first = array_slice($this->items,0,$position-1);
+            $last = array_slice($this->items,$position+1);
+            $this->items = array_merge($first,$last);
         }
         return true;
     }

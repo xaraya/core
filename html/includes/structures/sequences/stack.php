@@ -16,6 +16,8 @@ class Stack extends SequenceAdapter implements iStack
 
     public function &pop()
     {
+        $item = null;
+        if($this->empty) return $item;
         $item = parent::get(parent::head());
         if($item == null) return $item;
         parent::delete(parent::head());

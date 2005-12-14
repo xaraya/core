@@ -15,9 +15,21 @@ class SequenceAdapter implements iAdapter, iSequenceAdapter
     // Our children have nothing to say, we do the construction
     final public function __construct($type = 'array', $args = array())
     {
-        // Only array as storage implemented atm
-        include_once dirname(__FILE__).'/array_sequence.php';
-        $this->implementor = new ArraySequence();
+        switch($type) {
+        case 'array':
+            // Only array as storage implemented atm
+            $classfile = 'array_sequence.php';
+            $class='ArraySequence';
+            break;
+        case 'dd':
+            $classfile = 'dd_sequence.php';
+            $class= 'DynamicDataSequence';
+            break;
+        default:
+            die('Wrong type');
+        }
+        include_once dirname(__FILE__).'/'.$classfile;
+        $this->implementor = new $class($args);
     }
     // iSequenceAdapter implementation
     public function head()
@@ -40,15 +52,18 @@ class SequenceAdapter implements iAdapter, iSequenceAdapter
     // The actual implementor handles the implementation details,
     protected function &get($position) 
     {    
+        // TODO: check size and empty
         $item = $this->implementor->get($position); 
         return $item;
     }
     protected function insert(&$item, $position) 
     { 
+        // TODO: check size and empty
         return $this->implementor->insert($item, $position);
     }
     protected function delete($position)
     { 
+        // TODO: check size and empty
         return $this->implementor->delete($position);
     }
     protected function clear() 
