@@ -35,9 +35,17 @@ function roles_userapi_getitemtypes($args)
                          );
 
     $extensionitemtypes = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27, 'native' =>false));
+
+    /* TODO: activate this code when we move to php5
     $keys = array_merge(array_keys($itemtypes),array_keys($extensionitemtypes));
     $values = array_merge(array_values($itemtypes),array_values($extensionitemtypes));
     return array_combine($keys,$values);
+    */
+
+    $types = array();
+    foreach ($itemtypes as $key => $value) $types[$key] = $value;
+    foreach ($extensionitemtypes as $key => $value) $types[$key] = $value;
+    return $types;
 }
 
 ?>
