@@ -84,6 +84,11 @@
                     value should still be there in the form, otherwise validation will fail,
                     do it with a hidden input now, but this should really be done with readonly attribute
                     </xar:comment>
+                    <xar:if condition="$ptype eq 1">
+                        <input type="text" name="ptypedisplay" value="#xarML('Group')#" disabled="disabled" />
+                    <xar:else />
+                        <input type="text" name="ptypedisplay" value="#xarML('User')#" disabled="disabled" />
+                    </xar:if>
                     <input type="hidden" name="ptype" value="#$ptype#" />
                 </div>
             <xar:else />                
