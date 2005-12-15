@@ -1128,6 +1128,11 @@ class xarRole
         while (!$result->EOF) {
             list($uid, $name, $type, $parentid, $uname, $email, $pass,
                 $date_reg, $val_code, $state, $auth_module,$duvs) = $result->fields;
+			$vars = array();
+			if (!empty($duvs)) {
+				$duvs = unserialize($duvs);
+				foreach ($duvs as $key => $value) $vars[$key] = $value;
+			}
             $pargs = array('uid' => $uid,
                 'name' => $name,
                 'type' => $type,
@@ -1140,6 +1145,7 @@ class xarRole
                 'state' => $state,
                 'auth_module' => $auth_module,
                 'duvs' => $duvs);
+			$pargs = array_merge($pargs,$vars);
             $parents[] = new xarRole($pargs);
             $result->MoveNext();
         }

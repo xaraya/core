@@ -30,18 +30,20 @@ xarDBLoadTableMaintenanceAPI();
 
 // The System.Core.VersionNum contains the currently stored version number
 // this may be different from the define in xarCore.php
+$xarProduct = xarConfigGetVar('System.Core.VersionId');
 $xarVersion = xarConfigGetVar('System.Core.VersionNum');
+$xarRelease = xarConfigGetVar('System.Core.VersionSub');
 
 $title = xarML('Upgrade');
 
 if (empty($step)) {
-    $descr = xarML('Preparing to upgrade from previous Xaraya Version #(1) to version #(2)',$xarVersion, XARCORE_VERSION_NUM);
+    $descr = xarML('Preparing to upgrade from previous #(1) Version #(2) (release #(3)) to #(4) version #(5)  (release #(6))',$xarProduct,$xarVersion,$xarRelease, XARCORE_VERSION_ID, XARCORE_VERSION_NUM, XARCORE_VERSION_SUB);
     // start the output buffer
     ob_start();
 ?>
 
 <div class="xar-mod-head"><span class="xar-mod-title"><?php echo $title; ?></span></div>
-<div class="xar-mod-body"><h2><?php echo $descr; ?></h2><br />
+<div class="xar-mod-body"><p><h3><?php echo $descr; ?></h3></p>
   <p>
     <xar:mlstring>
         Before you run the upgrade, make sure the existing site is working. If you try to upgrade
