@@ -42,8 +42,7 @@ function mail_cliapi_process($args)
 
     // 4. Put the message ($raw) into the queues
     // This would typically be something we want to postpone.
-    // TODO: do we want a master queue and push the references instead, thus having only one raw source ?
-    
+   
     foreach ($destination as $q) {
         $result = $q->push($input);
     }

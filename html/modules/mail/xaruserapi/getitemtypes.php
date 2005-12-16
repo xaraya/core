@@ -12,7 +12,7 @@ function mail_userapi_getitemtypes($args)
     // put, mail can be incoming or outgoing.  To be able to hook
     // modules into a subset of messages we define the concept of
     // queues which contain sets of messages. Each queue gets assigned
-    // an itemtype, so it can be extended with the functonality of
+    // an itemtype (in DD), so it can be extended with the functonality of
     // other modules by hooking to ALL items (regardless of queue) or
     // to a specific queue.
     //
@@ -22,15 +22,23 @@ function mail_userapi_getitemtypes($args)
     $qdefObjectInfo = xarModApiFunc('dynamicdata','user','getobjectinfo',array('name' => $qdefName));
     if(!$qdefObjectInfo) return;
 
-    $args = array( 'itemtype' => $qdefObjectInfo['itemtype'],
-                   'module' => 'mail');
-    $items = xarModApiFunc('dynamicdata','user','getitems',$args);
- 
-    foreach($items as $id => $props) {
-        $itemtypes[$id] = array('label' => xarVarPrepForDisplay($props['name']),
-                                'title' => xarVarPrepForDisplay($props['description']),
-                                'url'   => '');
+    $itemtypes = array();
+
+    // Shamelessly pasted from DD (we should takes this as a baseline/augmentation for getitemtypes for all mods really)
+
+    // Get objects
+    $objects = xarModAPIFunc('dynamicdata','user','getobjects');
+    $modid = xarModGetIDFromName('mail');
+    foreach ($objects as $id => $object) {
+        // skip any object that doesn't belong to mail itself
+        if ($modid != $object['moduleid']) continue;
+        // Should we skip the "internal" mail objects (i.e. the queue-definition)?
+        // if ($object['objectid'] == $qdefObjectInfo['objectid'] ) continue;
+        $itemtypes[$object['itemtype']] = array('label' => xarVarPrepForDisplay($object['label']),
+                                                'title' => xarVarPrepForDisplay(xarML('View #(1)',$object['label'])),
+                                                'url'   => xarModURL('mail','user','view',array('itemtype' => $object['itemtype']))
+                                               );
     }
-    return $itemtypes;    
+    return $itemtypes;   
 }
 ?>

@@ -13,6 +13,6 @@ function mail_adminapi_maptoqueue($args)
     include_once('includes/structures/sequences/queue.php');
     // Test mapping, map em all to the masterq
     $q = new Queue('dd',array('name' => 'masterq'));
-    return array($q);
+    return $q;
 }
 ?>

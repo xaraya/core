@@ -1,0 +1,10 @@
+<xar:template file="mod-head"/>
+
+<div class="xar-mod-body">
+    <xar:set name="active_tab">'status'</xar:set>
+    <xar:template file="queue-tabs"/>
+
+    <fieldset>
+        <legend><xar:mlstring>Queue status overview</xar:mlstring>
+    </fieldset>
+</div>

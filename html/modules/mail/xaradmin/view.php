@@ -12,25 +12,13 @@ function mail_admin_view($args)
     if (!xarSecurityCheck('AdminMail')) return;
      
     // Retrieve the object which holds our queue definition
-    $qDef = xarModGetVar('mail','queue-definition');
-    if($qDef != NULL) {
-        // Modvar has a value, try fetching the object
-        $qdefObjectInfo = xarModApiFunc('dynamicdata','user','getobjectinfo',array('name' => $qDef));
-        if(!isset($qdefObjectInfo)) {
-            // Mod var exists but object doesnt
-            return OfferCreate($qDef);
-        } else {
-            // Object found
-            // TODO: validate here as well?
-            $data['qdef'] = $qdefObjectInfo;
-            if(!xarVarFetch('itemid','id',$data['itemid'],0,XARVAR_NOT_REQUIRED)) return;
-            return $data;
-        }
-    } else {
-        // Nothing found for sure, offer to create one.
+    if(!$qdefInfo = xarModApiFunc('mail','admin','getqdef')) {
         return OfferCreate();
+    } else {
+        $data['qdef'] = $qdefInfo;
+        if(!xarVarFetch('itemid','id',$data['itemid'],0,XARVAR_NOT_REQUIRED)) return;
+        return $data;
     }
-    // 
 }
 
 function OfferCreate($qDef = null)

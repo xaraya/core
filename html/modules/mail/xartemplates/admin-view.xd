@@ -1,6 +1,4 @@
-<div class="xar-mod-head">
-  <span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span>
-</div>
+<xar:template file="mod-head"/>
 
 <xar:comment>Sanity checks</xar:comment>
 <xar:if condition="!isset($itemid)">
@@ -9,21 +7,12 @@
 
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-body">
-  <dl class="xar-tabs">
-    <dt class="help" title="#xarML('Queue management areas')#">
-      <xar:mlstring>Queue</xar:mlstring>
-    </dt>
-    <dd class="active">
-      <a href="&xar-modurl-mail-admin-view;"><xar:mlstring>Registration</xar:mlstring></a>
-    </dd>
-    <dd>
-      <a href="&xar-modurl-mail-admin-mapping;"><xar:mlstring>Mapping</xar:mlstring></a>
-    </dd>
-  </dl>
-  <!-- Master view -->
-  <fieldset>
-    <legend><xar:mlstring>Registered mail queues</xar:mlstring></legend>
-    <xar:data-view modid="$qdef['moduleid']" itemtype="$qdef['itemtype']" layout="list" linkfield="name" sort="id"/>
+    <xar:set name="active_tab">'registration'</xar:set>
+    <xar:template file="queue-tabs"/>
+    <!-- Master view -->
+    <fieldset>
+        <legend><xar:mlstring>Registered mail queues</xar:mlstring></legend>
+        <xar:data-view modid="$qdef['moduleid']" itemtype="$qdef['itemtype']" layout="list" linkfield="name" sort="id"/>
   </fieldset>
 
   <fieldset>
