@@ -90,7 +90,6 @@ function roles_admin_newrole()
     // call item new hooks (for DD etc.)
     $item = $data;
     $item['module'] = 'roles';
-//    $item['itemtype'] = $data['ptype']; // we might have something separate for groups later on
     $data['hooks'] = xarModCallHooks('item', 'new', '', $item);
 
 	$data['authid'] = xarSecGenAuthKey();
