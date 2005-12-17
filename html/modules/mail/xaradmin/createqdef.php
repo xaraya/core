@@ -24,26 +24,12 @@ function mail_admin_createqdef($args)
         // Wrong value, raise exception
     }
  
-    $saneDef = '47ef16f9cc4264ce7b5975616547e3196220ea1a'; // sha1 hash on std definition, update when def changes.
     if($qdefNew) {
         $xmlDef = @file_get_contents('modules/mail/xardata/qdef.xml'); // if it fails, sane check will catch it.
-    } else {
-        // Set some stuff to the default values, so the sane check runs ok
-        $qdefCheck = $qdefObject;
-        $qdefCheck->name = 'mailqueues'; // $qdefName still holds the original
-        $qdefCheck->maxid = 0; 
-        $qdefCheck->itemtype=-1;
-        $xmlDef = xarModApiFunc('dynamicdata','util','export', array('objectref' => $qdefCheck));
-    }
-    // FIXME: Doesn't work, the variable parts objectid and propids are included on export. Can we get rid of that?
-    //if(sha1($xmlDef) != $saneDef) 
-    //    var_dump($xmlDef);var_dump($qdefCheck);
-    //    throw new Exception('XML definition not proper');
-
-    if($qdefNew) {
         // Take the xml and the objectname and try to create the object
         $qdefObjectId = xarModApiFunc('dynamicdata','util','import',array('objectname' => $qdefName, 'xml' => $xmlDef));
-        if(!isset($qdefObjectId)) throw new Exception('object creation failed');
+        if(!isset($qdefObjectId)) return;
+
         // The file contained itemtype -1 which needs to be corrected now.
         // We created the object successfully, register it as soon as possible (getitemtypes depends on it, for one)
         xarModSetVar('mail','queue-definition',$qdefName);
@@ -51,8 +37,15 @@ function mail_admin_createqdef($args)
         $itemtypes = xarModApiFunc('mail','user','getitemtypes');
         // Get the max value from the keys and add one
         ksort($itemtypes); end($itemtypes);
-        $itemid = Dynamic_Object_Master::updateObject(array('objectid' => $qdefObjectId,
-                                                            'itemtype' => key($itemtypes)+1));
+        $newItemtype = key($itemtypes) +1;
+        if($newItemtype==0) $newItemtype++; // prevent the 0 value
+
+        $params = array('objectid' => $qdefObjectId, 'itemtype' => $newItemtype);
+        $itemid = Dynamic_Object_Master::updateObject($params);
+
+        // Itemtype changed, resync the props
+        $params['moduleid'] = 771; // mail module
+        if (!xarModAPIFunc('dynamicdata','admin','syncprops',$params)) return;
     } else {
         // All went well, we can set the modvar now
         xarModSetVar('mail','queue-definition',$qdefName);
