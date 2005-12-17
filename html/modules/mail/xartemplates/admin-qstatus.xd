@@ -8,10 +8,18 @@
         ul.qstatus { background-position: 0 50%; background-repeat: no-repeat; height: 1.5em;clear:left; margin-bottom: 1pt;}
         ul.qstatus li { background-image: none; float:left;}
         fieldset.qslip { float:left; margin-top: 10pt; width: 48%;}
-        ul.qslip li { height: 1.8em; }
+        ul.qslip li { height: 1.8em; background-position: 0 50%;}
+        div.qstatus { text-align: right; font-size: smaller;}
     </style>
 
     <fieldset>
+        <div class="qstatus">
+            <xar:ml>
+                <xar:mlstring>Status as of: #(1) : #(2)</xar:mlstring>
+                <xar:mlvar>#xarLocaleGetFormattedDate()#</xar:mlvar>
+                <xar:mlvar>#xarLocaleGetFormattedTime('long')#</xar:mlvar>
+            </xar:ml>
+        </div>
         <legend><xar:mlstring>Queue status overview</xar:mlstring></legend>
         <xar:foreach in="$queues" key="$index" value="$qinfo">
             <xar:set name="rowclass">$index % 2?'xar-alt':''</xar:set>
@@ -26,7 +34,9 @@
     <fieldset class="qslip">
         <legend><xar:mlstring>Operations</xar:mlstring></legend>
         <ul class="qslip">
-            <li style="background-image: url(#xarTplGetImage('refresh.gif')#);"><xar:mlstring>Refresh current status</xar:mlstring></li>
+            <li style="background-image: url(#xarTplGetImage('refresh.gif')#);">
+                <a href="&xar-modurl-mail-admin-qstatus;"><xar:mlstring>Refresh current status</xar:mlstring></a>
+            </li>
             <li style="background-image: url(#xarTplGetImage('reprocess.gif')#);"><xar:mlstring>Reprocess all queues</xar:mlstring></li>
         </ul>
     </fieldset>

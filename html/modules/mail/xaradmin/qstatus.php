@@ -20,10 +20,20 @@ function mail_admin_qstatus($args)
     $queues = xarModApiFunc('mail','user','getqueues');
     $data['qtypes'] = xarModApiFunc('mail','user','getqueuetypes');
     foreach($queues as $index => $qInfo) {
-        // Augment them with status info
-        $queues[$index]['status'] = 'active';
-        $queues[$index]['count'] = rand(0,1000);
-        $queues[$index]['msg'] ='No msg yet';
+        // Get some info on the Q
+        $qName = 'q_'.$queues[$index]['name'];
+        $qInfo = xarModApiFunc('dynamicdata','user','getobjectinfo',array('name'=>$qName));
+        if(!isset($qInfo)) {
+            // Not there, we know enough
+            $queues[$index]['status'] = 'problematic';
+            $queues[$index]['count'] = 0;
+            $queues[$index]['msg'] = xarML('The storage object of this queue cannot be found ( #(1) )',$qName);
+        } else {
+            // We have some info, retrieve details                    
+            $queues[$index]['status'] = 'active';
+            $queues[$index]['count'] = rand(0,1000);
+            $queues[$index]['msg'] ='No msg yet';
+        }
     }
     $data['queues'] = $queues;
     //var_dump($queues);die();

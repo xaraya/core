@@ -2,7 +2,7 @@
 
 function mail_userapi_getqueues($args)
 {
-    // Queues are all different from the itemtypes here, in the sense
+    // Queues are different from the itemtypes here, in the sense
     // that we want the registered queues, which may or may not be an
     // itemtypes of mail yet. In short, the items of the qDef object
 
