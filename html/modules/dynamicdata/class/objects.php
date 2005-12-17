@@ -116,6 +116,9 @@ class Dynamic_Object_Master
         if (empty($this->itemtype)) {
             $this->itemtype = 0;
         }
+        if (empty($this->parent)) {
+            $this->parent = 1;
+        }
         if (empty($this->name)) {
             $info = Dynamic_Object_Master::getObjectInfo($args);
             if (isset($info) && count($info) > 0) {
@@ -391,6 +394,7 @@ class Dynamic_Object_Master
                          xar_object_label,
                          xar_object_moduleid,
                          xar_object_itemtype,
+                         xar_object_parent,
                          xar_object_urlparam,
                          xar_object_maxid,
                          xar_object_config,
@@ -409,6 +413,7 @@ class Dynamic_Object_Master
                  $info['label'],
                  $info['moduleid'],
                  $info['itemtype'],
+                 $info['parent'],
                  $info['urlparam'],
                  $info['maxid'],
                  $info['config'],
@@ -439,6 +444,7 @@ class Dynamic_Object_Master
             $info['label'] = xarML('Table #(1)',$args['table']);
             $info['moduleid'] = 182;
             $info['itemtype'] = 0;
+            $info['parent'] = 1;
             $info['urlparam'] = 'itemid';
             $info['maxid'] = 0;
             $info['config'] = '';
@@ -457,6 +463,7 @@ class Dynamic_Object_Master
                          xar_object_label,
                          xar_object_moduleid,
                          xar_object_itemtype,
+                         xar_object_parent,
                          xar_object_urlparam,
                          xar_object_maxid,
                          xar_object_config,
@@ -489,6 +496,7 @@ class Dynamic_Object_Master
              $info['label'],
              $info['moduleid'],
              $info['itemtype'],
+             $info['parent'],
              $info['urlparam'],
              $info['maxid'],
              $info['config'],
@@ -661,6 +669,9 @@ class Dynamic_Object_Master
         }
         if (!isset($args['itemtype'])) {
             $args['itemtype'] = null;
+        }
+        if (!isset($args['parent'])) {
+            $args['parent'] = null;
         }
         if (!isset($args['classname'])) {
             $args['classname'] = null;
