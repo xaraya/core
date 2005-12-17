@@ -1,0 +1,46 @@
+<object name="mailqueues">
+  <label>mail-queues</label>
+  <moduleid>771</moduleid>
+  <itemtype>-1</itemtype>
+  <urlparam>itemid</urlparam>
+  <config></config>
+  <isalias>0</isalias>
+  <properties>
+    <property name="id">
+      <label>ID</label>
+      <type>itemid</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>1</order>
+      <validation></validation>
+    </property>
+    <property name="name">
+      <label>Name</label>
+      <type>textbox</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>2</order>
+      <validation>1:12:/\w+/</validation>
+    </property>
+    <property name="type">
+      <label>Type</label>
+      <type>dropdown</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>3</order>
+      <validation>xarModApiFunc('mail','user','getqueuetypes')</validation>
+    </property>
+    <property name="description">
+      <label>Description</label>
+      <type>textarea_medium</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>4</order>
+      <validation></validation>
+    </property>
+  </properties>
+</object>
