@@ -27,8 +27,7 @@ function roles_user_display($args)
 
     // Get role information
     $data = xarModAPIFunc('roles', 'user', 'get',
-                    array('itemid' => $uid,
-                          'itemtype' => $itemtype));
+                    array('itemid' => $uid));
 
     if ($data == false) return;
 

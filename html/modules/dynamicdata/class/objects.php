@@ -670,9 +670,6 @@ class Dynamic_Object_Master
         if (!isset($args['itemtype'])) {
             $args['itemtype'] = null;
         }
-        if (!isset($args['parent'])) {
-            $args['parent'] = null;
-        }
         if (!isset($args['classname'])) {
             $args['classname'] = null;
         }
