@@ -36,7 +36,8 @@ function mail_userapi_getitemtypes($args)
         // if ($object['objectid'] == $qdefObjectInfo['objectid'] ) continue;
         $itemtypes[$object['itemtype']] = array('label' => xarVarPrepForDisplay($object['label']),
                                                 'title' => xarVarPrepForDisplay(xarML('View #(1)',$object['label'])),
-                                                'url'   => xarModURL('mail','user','view',array('itemtype' => $object['itemtype']))
+                                                'url'   => xarModURL('mail','user','view',array('itemtype' => $object['itemtype'])),
+                                                'info'  => $object
                                                );
     }
     return $itemtypes;   
