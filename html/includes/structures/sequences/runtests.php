@@ -22,6 +22,7 @@ if(!xarUserLogin('Admin','12345')) {
 
 include_once('includes/structures/sequences/queue.php');
 include_once('includes/structures/sequences/stack.php');
+m('WHY IS THIS NOT USING THE LOVELY UNITTESTS?');
 $l=0;
 m('Testing DD queue',$l++);
 $q = new Queue('dd',array('name'=>'masterq'));
