@@ -22,9 +22,14 @@
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>
-            Add Role
-        </xar:mlstring>
+        <xar:ml>
+            <xar:mlstring>
+                Add #(1)
+            </xar:mlstring>
+            <xar:mlvar>
+                #$itemtypename#
+            </xar:mlvar>
+        </xar:ml>
     </h2>
     <p>
         <xar:mlstring>
@@ -34,9 +39,14 @@
     <form id="newrole" action="&xar-modurl-roles-admin-addrole;" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset>
             <legend>
-                <xar:mlstring>
-                    Role Details
-                </xar:mlstring>
+                <xar:ml>
+                    <xar:mlstring>
+                        #(1) Details
+                    </xar:mlstring>
+                    <xar:mlvar>
+                        #$itemtypename#
+                    </xar:mlvar>
+                </xar:ml>
             </legend>
             <div class="xar-form-input-wrapper">
                 <label for="pname" title="#xarML('Common name')#" class="xar-form-label">
@@ -182,9 +192,9 @@
         </fieldset>
         <fieldset>
         <div class="xar-form-input-wrapper-after">
-          <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
-          <input type="submit" value="#xarML('Add')#" />
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
+            <input type="submit" value="#xarML('Add')#" />
         </div>
         </fieldset>
         

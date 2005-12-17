@@ -28,6 +28,8 @@ function roles_admin_newrole()
     if (!xarVarFetch('state',       'str:1:', $state, '', XARVAR_NOT_REQUIRED)) return;
 
 	$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+	$types = xarModAPIFunc('roles','user','getitemtypes');
+	$data['itemtypename'] = $types[$itemtype]['label'];
 
     // Security Check
     if (!xarSecurityCheck('AddRole')) return;
