@@ -21,15 +21,15 @@ function roles_userapi_getitemtypes($args)
     $itemtypes = array();
 
 /* this is the default for roles at the moment - select ALL in hooks if you want this*/
-    $itemtypes[0] = array('label' => xarML('Role'),
+    $itemtypes[ROLES_ROLETYPE] = array('label' => xarML('Role'),
                           'title' => xarML('View Role'),
                           'url'   => xarModURL('roles','user','view')
                          );
-    $itemtypes[1] = array('label' => xarML('User'),
+    $itemtypes[ROLES_USERTYPE] = array('label' => xarML('User'),
                           'title' => xarML('View User'),
                           'url'   => xarModURL('roles','user','view')
                          );
-    $itemtypes[2] = array('label' => xarML('Group'),
+    $itemtypes[ROLES_GROUPTYPE] = array('label' => xarML('Group'),
                           'title' => xarML('View Group'),
                           'url'   => xarModURL('roles','user','viewtree')
                          );

@@ -20,9 +20,9 @@ define('ROLES_STATE_PENDING',4);
 define('ROLES_STATE_CURRENT',98);
 define('ROLES_STATE_ALL',99);
 
-define('ROLES_ROLETYPE',0);
-define('ROLES_USERTYPE',1);
-define('ROLES_GROUPTYPE',2);
+define('ROLES_ROLETYPE',1);
+define('ROLES_USERTYPE',2);
+define('ROLES_GROUPTYPE',3);
 
 /**
  * xarRoles: class for the role repository

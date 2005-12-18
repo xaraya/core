@@ -2,7 +2,7 @@
 /**
  * File: $Id$
  *
- * Get the next itemtype of objects pertaining to a given module
+ * Get the next itemtype of extended objects pertaining to a given module
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
@@ -22,8 +22,19 @@
  */
 function dynamicdata_adminapi_getnextitemtype($args = array())
 {
-    $objs =  Dynamic_Object_Master::getObjects($args);
-    return count($objs) + 1000;
+    extract($args);
+    if(!isset($modid)) {
+        $msg = xarML('Wrong arguments to dynamicdata_adminapi_getnextitemtype.');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,
+                    'BAD_PARAM',
+                     new SystemException($msg));
+        return false;
+    }
+	$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $modid));
+	$ids = array_keys($types);
+	sort($ids);
+	$lastid = array_pop($ids);
+	return max(1000,$lastid + 1);
 }
 
 ?>
