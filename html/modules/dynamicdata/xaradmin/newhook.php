@@ -64,6 +64,7 @@ function dynamicdata_admin_newhook($args)
 
     $data = "";
     foreach ($tree as $branch) {
+    	if ($branch['objectid'] == 0) continue;
 		$object = & Dynamic_Object_Master::getObject(array(
 										   'objectid' => $branch['objectid'],
 										   'moduleid' => $modid,

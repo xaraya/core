@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Get the next itemtype of extended objects pertaining to a given module
  *
  * @package Xaraya eXtensible Management System

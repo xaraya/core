@@ -86,7 +86,7 @@ function &dynamicdata_userapi_getancestors($args)
 				$name = $mod['name'];
 			} else {
 				$name = $types[$parentitemtype]['label'];
-			$ancestors[] = array('objectid' => $id, 'itemtype' => $itemtype, 'name' => $name);
+			$ancestors[] = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => $name, 'moduleid' => $moduleid);
 			}
 			$name = $mod['name'];
     	} else {
