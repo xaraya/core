@@ -26,7 +26,6 @@ function mail_admin_compose()
     if (!xarSecurityCheck('AdminMail')) return; 
     // Generate a one-time authorisation code for this operation
     $data['authid']         = xarSecGenAuthKey(); 
-    $data['createlabel']    = xarML('Submit');
 
     // Include 'formcheck' JavaScript.
     // TODO: move this to a template widget when available.
@@ -36,6 +35,8 @@ function mail_admin_compose()
     );
 
     // Get the admin email address
+    $data['email']  = xarModGetVar('mail', 'adminmail');
+    $data['name']   = xarModGetVar('mail', 'adminname');
     $data['email']  = xarModGetVar('mail', 'adminmail');
     $data['name']   = xarModGetVar('mail', 'adminname');
      
