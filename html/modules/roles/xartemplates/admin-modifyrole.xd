@@ -83,10 +83,6 @@
                     do it with a hidden input now, but this should really be done with readonly attribute
                     </xar:comment>
                     <input type="hidden" name="itemtype" value="#$itemtype#" />
-                        <input type="text" name="ptypedisplay" value="#xarML('Group')#" disabled="disabled" />
-                    <xar:else />
-                        <input type="text" name="ptypedisplay" value="#xarML('User')#" disabled="disabled" />
-                    </xar:if>
                 </div>
             <xar:else />                
                 <div class="xar-form-input-wrapper">

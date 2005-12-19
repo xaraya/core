@@ -174,7 +174,7 @@
                 <div class="xar-form-input-wrapper-after">
                     <xar:if condition="xarModGetVar('roles', 'showprivacy')">
                         <input type="checkbox" name="showprivacy" id="showprivacy" value="1" checked="checked" />
-                        <xar:else />
+                    <xar:else />
                         <input type="checkbox" name="showprivacy" id="showprivacy" value="1" />
                     </xar:if>
                     <label for="showprivacy" title="#xarML('Show privacy policy in Roles user menu')#">
