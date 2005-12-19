@@ -237,8 +237,7 @@ function roles_user_login()
             }
 
             // Log the user in
-            //$res = xarModAPIFunc('roles','user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
-            $res = true;
+            $res = xarModAPIFunc('roles','user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
             if ($res === NULL) return;
             elseif ($res == false) {
                 // Problem logging in

@@ -1114,7 +1114,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             $newFileName = 'themes' . substr($sourceFileName, $themePathLen);
         }
     }
-                                                            
+
     // Load translations for the template
     $tplpath = explode("/", $newFileName);
     $tplPathCount = count($tplpath);
