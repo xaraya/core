@@ -1,42 +1,45 @@
 <?php
 /**
- * display user
+ * Display user
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  */
 /**
- * display user
+ * Display user
+ *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @param int uid
+ * @return array
  */
 function roles_user_display($args)
 {
     extract($args);
 
-    if (!xarVarFetch('uid','int:1:',$uid, xarUserGetVar('uid'))) return;
+    if (!xarVarFetch('uid','id',$uid, xarUserGetVar('uid'))) return;
+    if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
 
-    // Get user information
-    $data = xarModAPIFunc('roles',
-                          'user',
-                          'get',
-                          array('uid' => $uid));
+    $uid = isset($itemid) ? $itemid : $uid;
+
+    // Get role information
+    $data = xarModAPIFunc('roles', 'user', 'get',
+                    array('itemid' => $uid));
 
     if ($data == false) return;
-    
+
     $data['email'] = xarVarPrepForDisplay($data['email']);
 
     $item = $data;
     $item['module'] = 'roles';
-    $item['itemtype'] = 0; // handle groups differently someday ?
+    $item['itemtype'] = $data['type'];
+    $item['itemid']= $uid;
     $item['returnurl'] = xarModURL('roles', 'user', 'display',
                                    array('uid' => $uid));
-    $hooks = array();
-    $hooks = xarModCallHooks('item', 'display', $uid, $item);
-    $data['hooks'] = $hooks;
+    $data['hooks'] = xarModCallHooks('item', 'display', $uid, $item);
 
     xarTplSetPageTitle(xarVarPrepForDisplay($data['name']));
 

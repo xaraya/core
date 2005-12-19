@@ -260,10 +260,9 @@ president@whitehouse.gov';
 
     xarModAPIFunc('modules', 'admin', 'enablehooks',
         array('callerModName' => 'roles', 'hookModName' => 'roles'));
-    // This won't work because the dynamicdata hooks aren't registered yet when this is
-    // called at installation --> put in xarinit.php of dynamicdata instead
-    //xarModAPIFunc('modules','admin','enablehooks',
-    // array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
+    xarModAPIFunc('modules','admin','enablehooks',
+		array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
+
     return true;
 }
 

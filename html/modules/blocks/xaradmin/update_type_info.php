@@ -1,6 +1,6 @@
 <?php
 /**
- * Regsiter a new block type
+ * Register a new block type
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation

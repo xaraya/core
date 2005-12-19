@@ -2,12 +2,12 @@
 /**
  * Displays the dynamic user menu.
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  */
 /**
  * Displays the dynamic user menu.  Currently does not work, due to design
@@ -29,6 +29,9 @@ function roles_user_account()
     $data['current'] = xarModURL('roles', 'user', 'display', array('uid' => xarUserGetVar('uid')));
 
     $output = array();
+    $item = array();
+    $item['module'] = 'roles';
+    $item['itemtype'] = ROLES_USERTYPE;
     $output = xarModCallHooks('item', 'usermenu', '', array('module' => 'roles'));
 
     if (empty($output)){
