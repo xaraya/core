@@ -9,19 +9,18 @@
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:if condition="$ptype eq 0">
-            <xar:mlstring>Manage User:</xar:mlstring>
-        <xar:else/>
-            <xar:mlstring>Manage Group:</xar:mlstring>
-        </xar:if>
-        '#$pname#'
+        <xar:ml>
+            <xar:mlstring>Manage #(1) '#(2)':</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$pname#</xar:mlvar>
+        </xar:ml>
     </h2>
 
     <xar:if condition="count($parents) ne 0">
         <div>
             <dl class="xar-tabs">
-                <dt class="help" title="These are the groups that #$pname# is a member of">
-                    <xar:mlstring>Parent Groups:</xar:mlstring>
+                <dt class="help" title="These are the parents that #$pname# is a member of">
+                    <xar:mlstring>Parents:</xar:mlstring>
                 </dt>
                 <xar:set name="prevgroup">""</xar:set>
                 <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
@@ -84,11 +83,6 @@
                     value should still be there in the form, otherwise validation will fail,
                     do it with a hidden input now, but this should really be done with readonly attribute
                     </xar:comment>
-                    <xar:if condition="$ptype eq 1">
-                        <input type="text" name="ptypedisplay" value="#xarML('Group')#" disabled="disabled" />
-                    <xar:else />
-                        <input type="text" name="ptypedisplay" value="#xarML('User')#" disabled="disabled" />
-                    </xar:if>
                     <input type="hidden" name="ptype" value="#$ptype#" />
                 </div>
             <xar:else />                

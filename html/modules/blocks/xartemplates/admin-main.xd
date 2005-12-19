@@ -32,6 +32,7 @@
         <xar:mlstring>You must tell Xaraya where you want to place your blockgroups in your site page by using the 'blockgroup' tag and placing it in your template page or module template. eg
          <code>&lt;xar:blockgroup name="right" id="right" /&gt;</code>.  The default blockgroups have already been
          placed in the default theme template.</xar:mlstring>
+         placed in the default theme.</xar:mlstring>
     </p><br />
     <p><xar:mlstring>The Blocks module has two menu options which allow you to view and create new blockgroups.</xar:mlstring></p>
     <br />

@@ -78,7 +78,8 @@ function roles_user_register()
             if (xarModIsAvailable('dynamicdata')) {
                 // get the Dynamic Object defined for this module (and itemtype, if relevant)
                 $object = xarModAPIFunc('dynamicdata','user','getobject',
-                                         array('module' => 'roles'));
+                                         array('module' => 'roles',
+                                               'itemtype' => ROLES_USERTYPE));
                 if (isset($object) && !empty($object->objectid)) {
                     // get the Dynamic Properties of this object
                     $properties =& $object->getProperties();
@@ -153,10 +154,9 @@ function roles_user_register()
 
             } else {
                 // check for duplicate usernames
-                $user = xarModAPIFunc('roles',
-                                      'user',
-                                      'get',
-                                       array('uname' => $username));
+                $user = xarModAPIFunc('roles', 'user', 'get',
+                                       array('uname' => $username,
+                                             'itemtype' => ROLES_USERTYPE));
                 if ($user != false) {
                     unset($user);
                     $invalid['username'] = xarML('That username is already taken.');
@@ -200,10 +200,9 @@ function roles_user_register()
 
                 if(xarModGetVar('roles','uniqueemail')) {
                     // check for duplicate email address
-                    $user = xarModAPIFunc('roles',
-                                          'user',
-                                          'get',
-                                           array('email' => $email));
+                    $user = xarModAPIFunc('roles', 'user', 'get',
+                                   array('email' => $email,
+                                         'itemtype' => ROLES_USERTYPE));
                     if ($user != false) {
                         unset($user);
                         $invalid['email'] = xarML('That email address is already registered.');
@@ -253,7 +252,8 @@ function roles_user_register()
                 if (xarModIsAvailable('dynamicdata')) {
                     // get the Dynamic Object defined for this module (and itemtype, if relevant)
                     $object = xarModAPIFunc('dynamicdata','user','getobject',
-                                              array('module' => 'roles'));
+                                              array('module' => 'roles',
+                                                    'itemtype' => ROLES_USERTYPE));
                     if (isset($object) && !empty($object->objectid)) {
 
                         // check the input values for this object !
@@ -319,8 +319,9 @@ function roles_user_register()
                 else $state = ROLES_STATE_ACTIVE;
 
                 $uid = xarModAPIFunc('roles', 'admin', 'create',
-                                      array('uname' => $username,
-                                            'realname' => $realname,
+                                      array('itemtype' => ROLES_USERTYPE,
+                                            'uname' => $username,
+                                            'name' => $realname,
                                             'email' => $email,
                                             'pass'  => $pass,
                                             'date'     => $now,
@@ -365,7 +366,7 @@ function roles_user_register()
                 $userRole = xarModGetVar('roles', 'defaultgroup');
 
                  // Get the group id
-                $defaultRole = xarModAPIFunc('roles', 'user', 'get', array('name'  => $userRole, 'type'   => 1));
+                $defaultRole = xarModAPIFunc('roles', 'user', 'get', array('name'  => $userRole, 'itemtype' => ROLES_GROUPTYPE));
 
                 if (empty($defaultRole)) return;
 
@@ -393,8 +394,9 @@ function roles_user_register()
             } else {
                 // Create user - this will also create the dynamic properties (if any) via the create hook
                 $uid = xarModAPIFunc('roles', 'admin', 'create',
-                                      array('uname' => $username,
-                                            'realname' => $realname,
+                                      array('itemtype' => ROLES_USERTYPE,
+                                            'uname' => $username,
+                                            'name' => $realname,
                                             'email' => $email,
                                             'pass'  => $pass,
                                             'date'     => $now,
@@ -411,7 +413,7 @@ function roles_user_register()
                 // Get the group id
                 $defaultRole = xarModAPIFunc('roles', 'user', 'get',
                                               array('name'  => $userRole,
-                                                    'type'   => 1));
+                                                    'itemtype'   => ROLES_GROUPTYPE));
 
                 if (empty($defaultRole)) return;
 
