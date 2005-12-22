@@ -9,10 +9,7 @@ function mail_userapi_qisactive($args)
 {
     extract($args);
     if(!isset($objectid)) return false; // we're lazy
-
-    $params = array('objectid' => $objectid, 'fieldlist' => array('id'));
-    $props = xarModApiFunc('dynamicdata','user','getprop',$params);
-    if(isset($props['id'])) return true;
-    return false;
+    if(!isset($status)) return false;
+    return $status;
 }
 ?>
