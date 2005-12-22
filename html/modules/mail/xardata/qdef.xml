@@ -42,5 +42,14 @@
       <order>4</order>
       <validation></validation>
     </property>
+    <property name="status">
+      <label>Status</label>
+      <type>integerlist</type>
+      <default>0</default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>5</order>
+      <validation>0,inactive;1,active</validation>
+    </property>
   </properties>
 </object>

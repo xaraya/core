@@ -22,14 +22,14 @@ function mail_admin_qstatus($args)
     $data['qtypes'] = xarModApiFunc('mail','user','getqueuetypes');
     foreach($queues as $index => $qInfo) {
         // Get some info on the Q
-        $qName = 'q_'.$queues[$index]['name'];
-        $qInfo = xarModApiFunc('dynamicdata','user','getobjectinfo',array('name'=>$qName));
-        if(!isset($qInfo)) {
+        $qName = 'q_'.$qInfo['name'];
+        $qStore = xarModApiFunc('dynamicdata','user','getobjectinfo',array('name'=>$qName));
+        if(!isset($qStore)) {
             // Not there, we know enough
             $queues[$index]['status'] = 'problematic';
             $queues[$index]['count'] = 0;
             $queues[$index]['msg'] = xarML('The storage object of this queue cannot be found ( #(1) )',$qName);
-            $measures[$queues[$index]['name']][] = array('action' => 'createq', 'text' => xarML('Create storage and link to queue'));
+            $measures[$qInfo['name']][] = array('action' => 'createq', 'text' => xarML('Create storage and link to queue'));
         } else {
             // We have some qInfo, retrieve details
             // We have an object, so we can count the items in it.
@@ -39,10 +39,11 @@ function mail_admin_qstatus($args)
                 // Queue is inactive
                 $queues[$index]['status'] = 'inactive';
                 $queues[$index]['msg'] = xarML('Queue is not activated');
-                $measures[$queues[$index]['name']][] = array('action' => 'activate', 'text' => xarML('Activate the queue'));
+                $measures[$qInfo['name']][] = array('action' => 'activate', 'text' => xarML('Activate the queue'));
             } else {
+                // Queue is active
                 $queues[$index]['status'] = 'active';
-                $measures[$queues[$index]['name']][] = array('action' => 'deactivate', 'text' => xarML('Deactivate the queue'));
+                $measures[$qInfo['name']][] = array('action' => 'deactivate', 'text' => xarML('Deactivate the queue'));
 
                 $queues[$index]['msg'] ='No msg yet';
             }
