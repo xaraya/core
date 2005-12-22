@@ -33,7 +33,9 @@ function mail_admin_qstatus($args)
         } else {
             // We have some qInfo, retrieve details
             // We have an object, so we can count the items in it.
-            $queues[$index]['count'] = rand(0,1000);
+            include_once('includes/structures/sequences/queue.php');
+            $q = new Queue('dd',array('name'=>$qInfo['name']));
+            $queues[$index]['count'] = $q->size;
             // Determine status
             if(!xarModApiFunc('mail','user','qisactive',$qInfo)) {
                 // Queue is inactive
