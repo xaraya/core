@@ -46,10 +46,7 @@ function roles_admin_displayrole()
         $data['valcode'] = $role->getValCode();
     } else {
         //get the data for a group
-
     }
-
-
 
     $item = $data;
     $item['module'] = 'roles';

@@ -39,7 +39,9 @@ function dynamicdata_userapi_handleDisplayTag($args)
         }
     }
 
-    $out = "echo xarModAPIFunc('dynamicdata',
+    // since no object available we must have a moduleid
+    // TODO: create a fallbakc to DD module
+    $out = "echo xarModAPIFunc(xarGetModuleNameByID(\$moduleid),
                    'user',
                    'showdisplay',\n";
     if (isset($args['definition'])) {

@@ -4,7 +4,7 @@
 </div>
 <div class="xar-mod-body">
     <h2>
-        <a href="&xar-modurl-roles-user-view;">
+        <a href="&xar-modurl-roles-user-viewlist;">
             <xar:mlstring>Member List</xar:mlstring>
         </a>&nbsp;&gt;&nbsp;
         <a href="&xar-modurl-roles-user-display;&amp;uid=#$uid#">

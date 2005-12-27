@@ -86,7 +86,7 @@ function &dynamicdata_userapi_getancestors($args)
 				$name = $mod['name'];
 			} else {
 				$name = $types[$parentitemtype]['label'];
-			$ancestors[] = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => $name, 'moduleid' => $moduleid);
+				if ($base) {$ancestors[] = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => $name, 'moduleid' => $moduleid);}
 			}
 			$name = $mod['name'];
     	} else {
@@ -96,8 +96,8 @@ function &dynamicdata_userapi_getancestors($args)
     		$itemtype = $parentitemtype;
 	    	$name = $parent['objectname'];
 	    	$parentitemtype = $parent['parent'];
+			$ancestors[] = array('objectid' => $id, 'itemtype' => $itemtype, 'name' => $name, 'moduleid' => $moduleid);
     	}
-    	if (!$done || $base) {$ancestors[] = array('objectid' => $id, 'itemtype' => $itemtype, 'name' => $name);}
     	if ($done) break;
     }
     $ancestors = array_reverse($ancestors, true);

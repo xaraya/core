@@ -26,12 +26,30 @@ function roles_user_display($args)
     $uid = isset($itemid) ? $itemid : $uid;
 
     // Get role information
-    $data = xarModAPIFunc('roles', 'user', 'get',
-                    array('itemid' => $uid));
+    $roles = new xarRoles();
+    $role = $roles->getRole($uid);
 
-    if ($data == false) return;
+    if (!$role) return;
 
-    $data['email'] = xarVarPrepForDisplay($data['email']);
+    $name = $role->getName();
+// Security Check
+    if(!xarSecurityCheck('ViewRoles',0,'Roles',$name)) return;
+
+    $data['uid'] = $role->getID();
+    $data['itemtype'] = $role->getType();
+	$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+	$types = xarModAPIFunc('roles','user','getitemtypes');
+	$data['itemtypename'] = $types[$data['itemtype']]['label'];
+    $data['name'] = $name;
+    //get the data for a user
+    if ($data['basetype'] == ROLES_USERTYPE) {
+        $data['uname'] = $role->getUser();
+		$data['email'] = xarVarPrepForDisplay($role->getEmail());
+        $data['state'] = $role->getState();
+        $data['valcode'] = $role->getValCode();
+    } else {
+        //get the data for a group
+    }
 
     $item = $data;
     $item['module'] = 'roles';
