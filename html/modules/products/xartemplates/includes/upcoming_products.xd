@@ -1,0 +1,16 @@
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr> 
+    <td class="main" style="border-bottom: 1px solid; border-color: cccccc;">{#heading_upcoming#}</td>
+  </tr>
+  {foreach name=aussen item=module_data from=$module_content}
+  <tr>
+    <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr bgcolor="{cycle values="#ffffff,#f1f1f1"}">
+          <td class="main"><a href="{$module_data.PRODUCTS_LINK}">{$module_data.PRODUCTS_NAME}</a></td>
+          <td class="main"><div align="right">{$module_data.PRODUCTS_DATE}</div></td>
+        </tr>
+      </table></td>
+  </tr>
+  {/foreach}
+</table>
+

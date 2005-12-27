@@ -1,0 +1,27 @@
+<xar:template file="application_top" type="module"/>
+<a href="{$PRODUCTS_LINK}">{$PRODUCTS_NAME}</a></strong></font><br>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="main"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td><div align="center"><strong>{$IMAGE}</strong></div></td>
+        </tr>
+      </table>
+      <strong> {#text_date#}</strong> {$DATE}<br>
+      <strong>{#text_author#}</strong> {$AUTHOR}<br>
+      <br>
+      <strong>{#text_text#}</strong><br>
+      {$REVIEWS_TEXT}<br>
+      <br>
+      <strong>{#text_rating#}</strong> {$RATING}</td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>{$BUTTON_BACK} </td>
+    <td><div align="right">{$BUTTON_BUY_NOW}</div></td>
+  </tr>
+</table>
+<p>&nbsp;</p>

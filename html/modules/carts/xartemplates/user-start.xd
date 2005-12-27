@@ -1,0 +1,21 @@
+<div class="xar-mod-head">
+	<span class="xar-mod-title">
+		<xar:mlstring>Commerce</xar:mlstring>
+	</span>
+</div>
+<xar:template file="user-header" type="module"/>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr> 
+    <td class="pageHeading">&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td colspan="2" class="main">#$text#<br> </td>
+  </tr>
+  <tr> 
+    <td colspan="2" class="main">{$MODULE_new_products}</td>
+  </tr>
+  <tr>
+    <td colspan="2" class="main">{$MODULE_upcoming_products}</td>
+  </tr>
+</table>

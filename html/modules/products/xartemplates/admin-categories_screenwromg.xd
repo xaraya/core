@@ -1,0 +1,218 @@
+<xar:template file="application_top" type="module"/>
+
+<style type="text/css">@import url(modules/commerce/xarstyles/adminstylesheet.css);</style>
+<script type="text/javascript" src="modules/commerce/xartemplates/general.js"></script>
+<xar:template file="adminheader" type="module" module="commerce" />
+
+<table border="0" width="100%" cellspacing="0" cellpadding="2">
+	<tr>
+		<td>
+			<table border="0" width="100%" cellspacing="0" cellpadding="0">
+				<tr>
+					<td class="pageHeading">
+						sprintf($text_new_or_edit, xtc_output_generated_category_path($current_category_id));
+					</td>
+					<td class="pageHeading" align="right">
+						<img src="#xarTplGetImage('pixel_trans.gif')#" width="#$configuration['heading_image_width']#" height="#$configuration['heading_image_height']#">
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<img src="#xarTplGetImage('pixel_trans.gif')#" width="1" height="10">
+		</td>
+	</tr>
+</table>
+<div id="tabnav">
+	<xar:loop name="$languages">
+		<div>
+			<xar:if condition="$loop:item['id'] eq $langid">
+				<a href="#xarModURL('products', 'admin', 'categories_screen', array('langid' => $loop:item['id']))#" class="active">#$loop:item['name']#
+					<img src="#xarTplGetImage($loop:item['directory'] .'/admin/' . $loop:item['image'])#" border="0" alt="#xarML($loop:item['name'])#">
+				</a>
+			<xar:else />
+				<a href="#xarModURL('products', 'admin', 'categories_screen', array('langid' => $loop:item['id']))#">#$loop:item['name']#
+					<img src="#xarTplGetImage($loop:item['directory'] .'/admin/' . $loop:item['image'])#" border="0" alt="#xarML($loop:item['name'])#">
+				</a>
+			</xar:if>
+		</div>	
+	</xar:loop>
+</div>
+<div style="border: 1px solid #ccc; border-top : none; padding-left: 5px;">
+<br />
+</div>		<?php
+		$form_action = ($_GET['cID']) ? 'update_category' : 'insert_category';
+		echo xtc_draw_form('new_category', FILENAME_CATEGORIES, 'cPath=' . $cPath . '&cID=' . $_GET['cID'] . '&action='.$form_action, 'post', 'enctype="multipart/form-data"'); ?>
+		<td><table border="0" cellspacing="0" cellpadding="2">
+
+		<?php    for ($i=0; $i<sizeof($languages); $i++) { ?>
+		<tr>
+			<td class="main">
+				<?php if ($i == 0) <xar:mlstring>Category Name</xar:mlstring>:
+			</td>
+			<td class="main">
+				<input type="image" src="#xarTplGetImage($loop:item['directory'] .'/admin/' . $loop:item['image'])#" border="0" alt="#xarML($loop:item['name'])#">
+				&nbsp;' . xtc_draw_input_field('categories_name[' . $languages[$i]['id'] . ']', (($categories_name[$languages[$i]['id']]) ? stripslashes($categories_name[$languages[$i]['id']]) : xtc_get_categories_name($cInfo->categories_id, $languages[$i]['id']))); ?>
+			</td>
+		</tr>
+		<?php } ?>
+
+		<tr>
+			<td colspan="2">
+				<img src="#xarTplGetImage('pixel_trans.gif')#" width="1" height="10">
+			</td>
+		</tr>
+
+		<?php    for ($i=0; $i<sizeof($languages); $i++) { ?>
+		<tr>
+			<td class="main">
+				<?php if ($i == 0) echo TEXT_EDIT_CATEGORIES_HEADING_TITLE; ?>
+			</td>
+			<td class="main">
+				<input type="image" src="#xarTplGetImage($loop:item['directory'] .'/admin/' . $loop:item['image'])#" border="0" alt="#xarML($loop:item['name'])#">				
+				&nbsp;' . xtc_draw_input_field('categories_heading_title[' . $languages[$i]['id'] . ']', (($categories_name[$languages[$i]['id']]) ? stripslashes($categories_name[$languages[$i]['id']]) : xtc_get_categories_heading_title($cInfo->categories_id, $languages[$i]['id']))); ?>
+			</td>
+		</tr>
+		<?php } ?>
+
+		<tr>
+			<td colspan="2">
+				<img src="#xarTplGetImage('pixel_trans.gif')#" width="1" height="10">
+			</td>
+		</tr>
+
+		<?php    for ($i=0; $i<sizeof($languages); $i++) { ?>
+		<tr>
+			<td class="main" valign="top">
+				<xar:mlstring>Category Description</xar:mlstring>:
+			</td>
+			<td>
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td class="main" valign="top">
+							<input type="image" src="#xarTplGetImage($loop:item['directory'] .'/admin/' . $loop:item['image'])#" border="0" alt="#xarML($loop:item['name'])#">
+							&nbsp;
+						</td>
+						<td class="main">
+							<?php echo xtc_draw_textarea_field('categories_description[' . $languages[$i]['id'] . ']', 'soft', '70', '15', (($categories_description[$languages[$i]['id']]) ? stripslashes($categories_description[$languages[$i]['id']]) : xtc_get_categories_description($cInfo->categories_id, $languages[$i]['id']))); ?>
+						</td>
+					</tr>
+				</table>
+			</td>
+			</tr>
+			<tr>
+			<td class="main" valign="top">
+				<xar:mlstring>Meta Title</xar:mlstring>:
+			</td>
+			<td>
+				<table border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td class="main" valign="top">
+					<input type="image" src="#xarTplGetImage($loop:item['directory'] .'/admin/' . $loop:item['image'])#" border="0" alt="#xarML($loop:item['name'])#">
+					&nbsp;
+				</td>
+				<td class="main">
+					<?php echo xtc_draw_textarea_field('categories_meta_title[' . $languages[$i]['id'] . ']', 'soft', '70', '2', (($categories_meta_title[$languages[$i]['id']]) ? stripslashes($categories_meta_title[$languages[$i]['id']]) : xtc_get_categories_meta_title($cInfo->categories_id, $languages[$i]['id']))); ?>
+				</td>
+			</tr>
+		</table>
+	</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<img src="#xarTplGetImage('pixel_trans.gif')#" width="1" height="10">
+		</td>
+	</tr>
+	<tr>
+	<td class="main" valign="top">
+		<xar:mlstring>Meta Description</xar:mlstring>:
+	</td>
+	<td>
+		<table border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td class="main" valign="top>
+					<input type="image" src="#xarTplGetImage($loop:item['directory'] .'/admin/' . $loop:item['image'])#" border="0" alt="#xarML($loop:item['name'])#">
+					&nbsp;
+				</td>
+				<td class="main">
+					<?php echo xtc_draw_textarea_field('categories_meta_description[' . $languages[$i]['id'] . ']', 'soft', '70', '3', (($categories_meta_description[$languages[$i]['id']]) ? stripslashes($categories_meta_description[$languages[$i]['id']]) : xtc_get_categories_meta_description($cInfo->categories_id, $languages[$i]['id']))); ?>
+				</td>
+			</tr>
+		</table>
+	</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<img src="#xarTplGetImage('pixel_trans.gif')#" width="1" height="10">
+		</td>
+	</tr>
+	<tr>
+		<td class="main" valign="top">
+			<xar:mlstring>Meta Keywords</xar:mlstring>:
+		</td>
+		<td>
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td class="main" valign="top">
+						<input type="image" src="#xarTplGetImage($loop:item['directory'] .'/admin/' . $loop:item['image'])#" border="0" alt="#xarML($loop:item['name'])#">
+						&nbsp;
+					</td>
+					<td class="main">
+						<?php echo xtc_draw_textarea_field('categories_meta_keywords[' . $languages[$i]['id'] . ']', 'soft', '70', '3', (($categories_meta_keywords[$languages[$i]['id']]) ? stripslashes($categories_meta_keywords[$languages[$i]['id']]) : xtc_get_categories_meta_keywords($cInfo->categories_id, $languages[$i]['id']))); ?>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<?php } ?>
+	<tr>
+		<td colspan="2">
+			<img src="#xarTplGetImage('pixel_trans.gif')#" width="1" height="10">
+		</td>
+	</tr>
+	<tr>
+		<td class="main">
+			<xar:mlstring>Category Image</xar:mlstring>:
+		</td>
+		<td class="main">
+			<img src="#xarTplGetImage('pixel_trans.gif')#" width="24" height="15">
+			&nbsp;' . xtc_draw_file_field('categories_image') . '<br>' . 
+			<img src="#xarTplGetImage('pixel_trans.gif')#" width="24" height="15">
+			&nbsp;' . $cInfo->categories_image .
+			<input type="hidden" name="categories_previous_image" value="#$cInfo->categories_image#">
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<img src="#xarTplGetImage('pixel_trans.gif')#" width="1" height="10">
+		</td>
+	</tr>
+	<tr>
+		<td class="main">
+			<xar:mlstring>Sort Order</xar:mlstring>:
+		</td>
+		<td class="main">
+			<img src="#xarTplGetImage('pixel_trans.gif')#" width="24" height="15">
+			&nbsp;' . xtc_draw_input_field('sort_order', $cInfo->sort_order, 'size="2"'); ?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<img src="#xarTplGetImage('pixel_trans.gif')#" width="1" height="10">
+		</td>
+	</tr>
+</table>
+</td>
+	</tr>
+	<tr>
+		<td class="main" align="right">
+			<input type="hidden" name="categories_date_added" value="#(($cInfo->date_added) ? $cInfo->date_added : date('Y-m-d'))#">
+			<input type="hidden" name="parent_id" value="#$cInfo->parent_id#">
+			<input type="image" src="#xarTplGetImage('buttons/' . xarSessionGetVar('language') . '/'.'button_save.gif')#" border="0" alt = "#xarML('Save')#" style="cursor:hand" onClick="return confirm(\''.SAVE_ENTRY.'\')">.
+		. '&nbsp;&nbsp;<a href="' . xarModURL('commerce','admin',(FILENAME_CATEGORIES, 'cPath=' . $cPath . '&cID=' . $_GET['cID']) . '">' . xarModAPIFunc('commerce','user','image',array('src' => xarTplGetImage('buttons/' . xarSessionGetVar('language') . '/'.'button_cancel.gif'),'alt' => #xarML('Cancel')#); . '</a>'; ?>
+		</td>
+		</form>
+	</tr>
+</table>

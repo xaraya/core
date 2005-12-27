@@ -1,0 +1,5 @@
+<div class="display">
+    <span>
+        <xar:data-input type="dropdown" value="$value" options="$options" name="$name" id="$id" tabindex="$tabindex"/>
+    </span>
+</div>

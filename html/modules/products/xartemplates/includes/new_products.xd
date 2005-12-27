@@ -1,0 +1,38 @@
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="infoBoxHeading">{#heading_text#} </td>
+  </tr>
+</table>
+<br>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+  {foreach name=aussen item=module_data from=$module_content}
+  {php} $col++;
+  {/php}
+    <td class="main"><div align="left">
+        <table  width="100%" border="0" cellpadding="0" cellspacing="4">
+          <tr>
+            <td width="1" rowspan="2" ><a href="{$module_data.PRODUCTS_LINK}"><img src="{$module_data.PRODUCTS_IMAGE}" border="1"></a></td>
+            <td class="main"><strong><a href="{$module_data.PRODUCTS_LINK}">{$module_data.PRODUCTS_NAME}</a></strong></td>
+          </tr>
+          <tr>
+            <td  class="main">{$module_data.PRODUCTS_DESCRIPTION}<br>
+              <strong>{$module_data.PRODUCTS_PRICE}<br>
+              </strong>{$module_data.BUTTON_BUY_NOW}<br>
+            </td>
+          </tr>
+
+        </table>
+
+      </div></td>
+  {php}
+
+  if ($col>=2) {
+  $col=0;
+  echo '</tr><tr>';
+  }
+  {/php}
+  {/foreach}
+  </tr>
+</table>

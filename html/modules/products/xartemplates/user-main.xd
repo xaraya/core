@@ -1,0 +1,42 @@
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Commerce Module</xar:mlstring></span></div>
+<div class="xar-mod-body">
+    <h2><xar:mlstring>Overview</xar:mlstring></h2>
+    <div style="padding: 1px;" class="xar-norm-outline">
+        <div style="float:right;padding:10px;">
+            <xar:if condition="file_exists('modules/commerce/xarimages/admin.gif')" >
+                <img src="modules/commerce/xarimages/admin.gif" alt="official icon" width="96" height="96" />
+            <xar:else />
+                <img src="modules/commerce/xarimages/admin_generic.gif" alt="official icon" width="96" height="96" />
+            </xar:if>
+        </div>
+        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
+            <xar:mlstring>What is it?</xar:mlstring>
+        </div>
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <p><xar:mlstring>Welcome to the Commerce Module.</xar:mlstring>
+            </p>
+		</div>
+        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
+            <xar:mlstring>How to use it?</xar:mlstring>
+        </div>
+         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+			 <p><xar:mlstring>N/A</xar:mlstring></p>
+        </div>
+        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
+            <xar:mlstring>Included Blocks</xar:mlstring>
+        </div>
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <xar:mlstring>None.</xar:mlstring>
+        </div>
+        <br />
+        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
+            <xar:mlstring>Included Hooks</xar:mlstring>
+        </div>
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <xar:mlstring>None.</xar:mlstring>
+        </div>
+        <div class="xar-norm-outline xar-accent" style="text-align: center; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
+            <xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring>
+        </div>
+    </div>
+</div>

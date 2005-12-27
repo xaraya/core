@@ -1,0 +1,8 @@
+<xar:set name="siteslogan"><xar:var scope="module" module="themes" name="SiteSlogan" /></xar:set>
+
+<img id="iceBg" src="&xar-baseurl;#xarTplGetThemeDir()#/images/iceBackground.png" title="ice ice baby" />
+    
+<div id="iceHeader">
+    <a href="/" title="ICE home"><img id="iceLogo" src="&xar-baseurl;#xarTplGetThemeDir()#/images/iceLogoTest.png" title="ice logo" /></a>
+    <div id="iceSlogan"><xar:var name="siteslogan" /></div>
+</div>

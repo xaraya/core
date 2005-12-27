@@ -1,0 +1,345 @@
+<xar:template file="calendarbase" type="module" module="commerce" />
+<xar:template file="application_top" type="module" module="commerce" />
+
+<xar:if condition="xarTplAddStyleLink('commerce', 'tabs')">
+</xar:if>
+
+<style type="text/css">@import url(modules/commerce/xarstyles/adminstylesheet.css);</style>
+<script type="text/javascript" src="modules/commerce/xartemplates/general.js"></script>
+<xar:template file="adminheader" type="module" module="commerce" />
+
+<table border="0" width="100%" cellspacing="0" cellpadding="2">
+    <tr>
+        <td>
+            <xar:set name="$form_action">$pID ? 'update_product' : 'insert_product'</xar:set>
+            <FORM action="#xarModURL('commerce','admin','product_screen', array('cPath' => $cPath, 'pID' => $pID, 'action'=> $form_action))#" method="POST" enctype="multipart/form-data">
+
+				<span class="pageHeading">
+					<xar:if condition="$pID eq 0">
+						<xar:mlstring>New Product in</xar:mlstring>
+					<xar:else />
+						<xar:mlstring>Update Product in</xar:mlstring>
+					</xar:if>
+					#xarModAPIFunc('commerce','user','output_generated_category_path', array('id' => $cPath))#
+				</span>
+				<br /><br />
+				<table width="100%"  border="0">
+					<tr>
+						<td class="main">
+							<xar:mlstring>Product Status</xar:mlstring>:
+							<img src="#xarTplGetImage('pixel_trans.gif')#" width="24" height="15">
+							<input type="checkbox" name="products_status">
+							&nbsp;&nbsp;
+							<xar:mlstring>In Stock</xar:mlstring>
+							&nbsp;&nbsp;
+							<input type="checkbox" name="products_status">
+							&nbsp;&nbsp;
+							<xar:mlstring>Out of Stock</xar:mlstring>
+							<table width="100%" border="0">
+                                <tr>
+                                    <td class="main" width="127">
+                                        <xar:mlstring>Date Available</xar:mlstring>
+                                        <br />
+                                        <small>(YYYY-MM-DD)</small>
+                                    </td>
+                                    <td class="main">
+                                        <img src="#xarTplGetImage('pixel_trans.gif')#" width="24" height="15">
+                                        &nbsp;
+										<xar:if condition="$pID ne 0">
+											<input name='dateAvailable' size='12' value='#$pInfo.products_date_available#'>
+										<xar:else />
+											<input name='dateAvailable' size='12' value=''>
+										</xar:if>
+							
+										<img src="modules/commerce/xarimages/cal.gif" style="vertical-align: top" onclick="return showCalendar('dateAvailable', 'y-m-d');" />
+                                    </td>
+                                </tr>
+                            </table>
+                            <table bgcolor="f3f3f3" style="border: 1px solid; border-color: #cccccc;" "width="100%"  border="0">
+                                <tr>
+                                    <td class="main">
+                                        <xar:mlstring>Product Sort</xar:mlstring></span>
+                                    </td>
+                                    <td class="main">
+										<xar:if condition="$pID ne 0">
+											<input type="text" name="products_sort" value="#$pInfo.products_sort#">
+										<xar:else />
+											<input type="text" name="products_sort" value="ASC">
+										</xar:if>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="main">
+                                            <xar:mlstring>Product Model</xar:mlstring>
+                                        </span>
+                                    </td>
+                                    <td class="main">
+										<xar:if condition="$pID ne 0">
+											<input type="text" name="products_model" value="#$pInfo.products_model#">
+										<xar:else />
+											<input type="text" name="products_model" value="">
+										</xar:if>	
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="main">
+                                        <xar:mlstring>Product Manufacturer</xar:mlstring>
+                                    </td>
+									<td class="main">
+										#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'manufacturers_id', 'values' => xarModAPIFunc('commerce','user','get_manufacturers',array('manufacturers_array' => array(array('id' => '', 'text' => xarML('-- none --'))))), 'default' =>$pInfo.manufacturers_id))#
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="main">
+                                        <xar:mlstring>FSK18</xar:mlstring>
+                                    </td>
+                                    <td class="main">
+										#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'fsk18', 'values' => array(array('id' => 0, 'text' => xarML('No')),array('id' => 1, 'text' => xarML('Yes'))), 'default' =>$pInfo.products_fsk18))#
+                                    </td>
+                                </tr>
+                                <xar:if condition="$configuration['activate_shipping_status'] eq true">
+                                    <tr>
+                                        <td class="main">
+                                            <xar:mlstring>Shipping Status</xar:mlstring>
+                                        </td>
+                                        <td class="main">
+											#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'shipping_status', 'values' => xarModAPIFunc('commerce','user','get_shipping_status'), 'default' =>$pInfo.products_shippingtime))#
+                                        </td>
+                                    </tr>
+                                </xar:if>
+                                <tr>
+									<td class="main">
+										<xar:mlstring>Product Detail Template</xar:mlstring>
+									</td>
+									<td class="main">
+										#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'info_template', 'values' => $producttemplatefiles, 'default' => $pInfo.product_template))#
+									</td>
+								</tr>
+								<tr>
+									<td class="main">
+										<xar:mlstring>Product Options Template</xar:mlstring>
+									</td>
+									<td class="main">
+										#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'options_template', 'values' => $optionstemplatefiles, 'default' => $pInfo.options_template))#											
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+	            <br /><br />
+				<div id="tabnav">
+					<xar:loop name="$languages">
+						<div>
+							<xar:if condition="$loop:item['id'] eq $langid">
+								<a href="#xarModURL('commerce', 'admin', 'product_screen', array('langid' => $loop:item['id']))#" class="active">#$loop:item['name']#
+									<img src="#xarTplGetImage($loop:item['directory'] .'/admin/' . $loop:item['image'])#" border="0" alt="#xarML($loop:item['name'])#">
+								</a>
+							<xar:else />
+								<a href="#xarModURL('commerce', 'admin', 'product_screen', array('langid' => $loop:item['id']))#">#$loop:item['name']#
+									<img src="#xarTplGetImage($loop:item['directory'] .'/admin/' . $loop:item['image'])#" border="0" alt="#xarML($loop:item['name'])#">
+								</a>
+							</xar:if>
+						</div>	
+					</xar:loop>
+				</div>
+				<div style="border: 1px solid #ccc; border-top : none; padding-left: 5px; width: 100%">
+					<br />
+					<xar:loop name="$languages">
+						<xar:if condition="$loop:item['id'] eq $langid">
+							<table width="100%" border="0">
+								<tr>
+									<td bgcolor="000000" height="10">
+									</td>
+								</tr>
+								<tr>
+									<td bgcolor="#FFCC33" valign="top" class="main">
+										&nbsp;<xar:mlstring>Product Name</xar:mlstring>
+										<xar:if condition="$pID ne 0">
+											<input type="text" name="products_name[#$langid#]" value="#$pInfo['products_name'][$langid]#" size="60">
+										<xar:else />
+											<input type="text" name="products_name[#$langid#]" value="" size="60">
+										</xar:if>											
+									</td>
+								</tr>
+								<tr>
+									<td class="main">
+										<xar:mlstring>Product URL</xar:mlstring>
+										&nbsp;<small>(<xar:mlstring>without http://</xar:mlstring>)</small>
+										<xar:if condition="$pID ne 0">
+											<input type="text" name="products_url[#$langid#]" value="#$pInfo['products_url'][$langid]#" size="60">
+										<xar:else />
+											<input type="text" name="products_url[#$langid#]" value="" size="60">
+										</xar:if>											
+									</td>
+								</tr>
+							</table>
+							<table width="100%" border="0">
+								<tr>
+									<td class="main" colspan="2">
+										<b><xar:mlstring>Product Description</xar:mlstring></b><br />
+										<xar:if condition="$configuration['use_spaw'] eq true">
+											<xar:if condition="$pID ne 0">
+												#xarModAPIFunc('commerce', 'user', 'create_spaw', array('name' => 'products_description[' .$langid .']', 'value' => $pInfo['products_description'][$langid]))#
+											<xar:else />
+												#xarModAPIFunc('commerce', 'user', 'create_spaw', array('name' => 'products_description[' .$langid .']', 'value' => ''))#
+											</xar:if>
+										<xar:else />
+											<textarea name="products_description_[#$loop:item['id']#]" wrap="soft" rows="15" cols="150">
+												<xar:if condition="$pID ne 0">
+													#$pInfo['products_description'][$langid]#		
+												</xar:if>											
+											</textarea>
+										</xar:if>
+									</td>
+								</tr>
+								<tr>
+									<td class="main" width="60%" valign="top">
+										<b><xar:mlstring>Product Short Description</xar:mlstring></b><br />
+										<xar:if condition="$configuration['use_spaw'] eq true">
+											<xar:if condition="$pID ne 0">
+												#xarModAPIFunc('commerce', 'user', 'create_spaw', array('name' => 'products_short_description[' .$langid .']', 'value' => $pInfo['products_short_description'][$langid]))#
+											<xar:else />
+												#xarModAPIFunc('commerce', 'user', 'create_spaw', array('name' => 'products_short_description[' .$langid .']', 'value' => ''))#
+											</xar:if>
+										<xar:else />
+											<textarea name="products_short_description_[#$loop:item['id']#" wrap="soft" rows="8" cols="40">
+												<xar:if condition="$pID ne 0">
+													#$pInfo['products_short_description'][$langid]#
+												</xar:if>											
+											</textarea>
+										</xar:if>
+									</td>
+									<td class="main" valign="top">
+										&nbsp;<xar:mlstring>Meta Title</xar:mlstring>
+										<br />
+										&nbsp;<textarea name="products_meta_title[#$langid#]" wrap="soft" rows="5" cols="40">
+											<xar:if condition="$pID ne 0">
+												#$pInfo['products_meta_title'][$langid]#
+											</xar:if>											
+										</textarea>
+										<br /><br />
+										&nbsp;<xar:mlstring>Meta Description</xar:mlstring>
+										<br />
+										&nbsp;<textarea name="products_meta_description[#$langid#]" wrap="soft" rows="5" cols="40">
+											<xar:if condition="$pID ne 0">
+												#$pInfo['products_meta_description'][$langid]#
+											</xar:if>											
+										</textarea>
+										<br /><br />
+										&nbsp;<xar:mlstring>Meta Keywords</xar:mlstring>
+										<br />
+										&nbsp;<textarea name="products_meta_keywords[#$langid#]" wrap="soft" rows="5" cols="40">
+											<xar:if condition="$pID ne 0">
+												#$pInfo['products_meta_keywords'][$langid]#
+											</xar:if>											
+										</textarea>
+									</td>
+								</tr>
+							</table>
+						</xar:if>
+					</xar:loop>
+				</div>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td class="main" width="60%" valign="top">
+							<b><xar:mlstring>Product Options</xar:mlstring></b>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<table width="100%" border="0" bgcolor="f3f3f3" style="border: 1px solid; border-color: #cccccc;">
+								<tr>
+									<td class="main">
+										<xar:mlstring>Product Quantity</xar:mlstring>
+										<br />
+										<xar:if condition="$pID ne 0">
+											<input type="text" name="products_quantity" value="#$pInfo['products_quantity']#">
+										<xar:else />
+											<input type="text" name="products_quantity" value="0">
+										</xar:if>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="4">
+											<img src="#xarTplGetImage('pixel_trans.gif')#" width="1" height="1">
+									</td>
+								</tr>
+								<tr>
+									<td class="main">
+										<xar:mlstring>Product Weight</xar:mlstring>
+										<br />
+										<xar:if condition="$pID ne 0">
+											<input type="text" name="products_weight" value="#$pInfo.products_weight#">
+										<xar:else />
+											<input type="text" name="products_weight" value="0">
+										</xar:if>
+										<small><xar:mlstring>(kg)</xar:mlstring></small>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="4">
+										<img src="#xarTplGetImage('pixel_trans.gif')#" width="1" height="10">
+									</td>
+								</tr>
+								<tr>
+									<td class="main">
+										<xar:mlstring>Product Image</xar:mlstring><br />
+										<input type="file" name="products_image">
+										<br />.
+										<img src="#xarTplGetImage('pixel_trans.gif')#" width="24" height="15">
+										<xar:if condition="$pID ne 0">
+											&nbsp;#$pInfo.products_image#
+											<input type="hidden" name="products_previous_image" value="#$pInfo.products_image#">
+										</xar:if>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="4">
+										<img src="#xarTplGetImage('pixel_trans.gif')#" width="1" height="10">
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<table width="100%" border="0">
+								<tr>
+									<td colspan="4">
+										<img src="#xarTplGetImage('pixel_trans.gif')#" width="1" height="10">
+									</td>
+								</tr>
+								<tr>
+									<td colspan="4">
+										<xar:template file="group_prices" type="module"/>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="4">
+										<img src="#xarTplGetImage('pixel_trans.gif')#" width="1" height="10">
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td class="main" align="right">
+							<xar:if condition="$pID eq 0">
+								<input type="hidden" name="products_date_added" value="date('Y-m-d')">
+							<xar:else />
+								<input type="hidden" name="products_date_added" value="$cInfo.date_added">
+							</xar:if>
+							<input type="image" src="#xarTplGetImage($language .'/admin/buttons/button_save.gif')#" border="0" alt="#xarML('Save')#" style="cursor:hand" onClick="return confirm('#xarML("Save this Entry?")#')">
+							&nbsp;&nbsp;
+							<a href="#xarModURL('commerce','admin','categories', array('cPath' => $cPath, 'pID' => $pID))#">
+								<img src="#xarTplGetImage($language .'/admin/buttons/button_cancel.gif')#" alt="#xarML('Cancel')#">
+							</a>
+						</td>
+					</tr>
+                </table>
+            </FORM>
+		</td>
+	</tr>
+</table>

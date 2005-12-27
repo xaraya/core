@@ -1,0 +1,42 @@
+<script type="text/javascript" src="modules/commerce/xartemplates/header.js"></script>
+<div class="xar-fullwidth xar-noborder" cellspacing="0" cellpadding="1" class="infoBox">
+	<table class="xar-fullwidth xar-noborder" cellspacing="0" cellpadding="0">
+		<tr>
+			<td height="14" class="infoBoxHeading">
+				<img src="#xarTplGetImage('corner_right_left.gif','commerce')#" border="0" alt="" width="11" height="14">
+			</td>
+			<td width="100%" height="14" class="infoBoxHeading">
+				<font size="1" face="Verdana, Arial, Helvetica, sans-serif">
+				<xar:mlstring>
+					Categories
+				</xar:mlstring>
+				</font>
+			</td>
+			<td height="14" class="infoBoxHeading" nowrap>
+				<img src="#xarTplGetImage('pixel_trans.gif','commerce')#" border="0" alt="" width="11" height="14">
+			</td>
+		</tr>
+	</table>
+</div>
+<div class="xar-fullwidth xar-noborder" cellspacing="0" cellpadding="1" class="infoBox">
+	<div class="xar-fullwidth xar-noborder" cellspacing="0" cellpadding="3" class="infoBoxContents">
+		<div>
+			<span>
+				<img src="#xarTplGetImage('pixel_trans.gif','commerce')#" border="0" alt="" width="100%" height="1">
+			</span>
+		</div>
+		<div>
+			<span align="left" class="boxText"><font size="1" face="Verdana, Arial, Helvetica, sans-serif">
+				#$tree#
+				<FORM method="POST" name="categories" id="post" action="$formaction">
+				</FORM>
+				</font>
+			</span>
+		</div>
+		<div>
+			<span>
+				<img src="#xarTplGetImage('pixel_trans.gif','commerce')#" border="0" alt="" width="100%" height="1">
+			</span>
+		</div>
+	</div>
+</div>

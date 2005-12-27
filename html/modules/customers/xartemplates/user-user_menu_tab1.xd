@@ -1,0 +1,43 @@
+<xar:comment>
+    License: GPL http://www.gnu.org/copyleft/gpl.html 
+</xar:comment>
+<xar:if condition="isset($withupload) AND $withupload">
+    <xar:set name="enc_type">
+        'multipart/form-data' 
+    </xar:set>
+    <xar:else />
+    <xar:set name="enc_type">
+        'application/x-www-form-urlencoded' 
+    </xar:set>
+</xar:if>
+<div class="xar-mod-body fixer">
+    <form action="&xar-modurl-foo-user-usermenu;" method="post" id="post" name="post" enctype="#$enc_type#" class="fixer">
+        <fieldset>
+            <legend>
+                Legend for Tab 1 with an example DD property
+            </legend>            
+             <div class="xar-form-input-wrapper">
+                    <xar:data-label type="grouplist" label="id" />
+                    <xar:data-input property="$properties['dancepartner']" />
+            </div>
+        </fieldset>
+        <xar:if condition="!empty($hooks)">
+            <div class="xar-form-input-wrapper">
+                <xar:foreach in="$hooks" key="$module" value="$output">
+                    #$output#
+                </xar:foreach>
+            </div>
+        </xar:if>
+        <fieldset>
+            <input type="hidden" name="name" id="name" value="#$name#" />
+            <input type="hidden" name="uname" id="uname" value="#$uname#" />
+            <input type="hidden" name="emailaddress" id="emailaddress" value="#$emailaddress#" />
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="uid" id="uid" value="#$uid#" />
+            <input type="hidden" name="phase" id="phase" value="updatebasic" />
+            <div class="xar-form-input-wrapper-after">
+                <input type="submit" value="#xarVarPrepForDisplay($submitlabel)#" />
+            </div>
+        </fieldset>
+    </form>
+</div>

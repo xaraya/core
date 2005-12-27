@@ -23,7 +23,10 @@ function roles_user_view($args)
     if (!xarVarFetch('itemtype', 'int', $args['itemtype'], 0, XARVAR_NOT_REQUIRED)) return;
     if(!xarVarFetch('search', 'str:1:100', $args['search'], NULL, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('order', 'str', $args['order'], NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('include', 'str', $args['include'], NULL, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('exclude', 'str', $args['exclude'], NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('tplmodule', 'str', $args['tplmodule'], 'roles', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('template', 'str', $args['template'], '', XARVAR_NOT_REQUIRED)) {return;}
 
     $data['items'] = array();
     $data['pager'] = '';
@@ -59,10 +62,10 @@ function roles_user_view($args)
     $data['pager'] = xarTplGetPager(
         $data['startnum'],
         $data['total'],
-        xarModURL('roles', 'user', 'viewl', $pagerfilter),
+        xarModURL('roles', 'user', 'view', $pagerfilter),
         $numitems
     );
-    return $data;
+    return xarTplModule($args['tplmodule'],'user','view',$data,$args['template']);
 }
 
 ?>

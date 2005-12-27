@@ -1,0 +1,651 @@
+<xar:if condition="xarTplAddStyleLink('commerce', 'tabs')">
+</xar:if>
+<div id="tabnav">
+	<div class="help" title="Choose a set of configuration options">
+		<span style="width:120px">
+			<xar:mlstring>Configuration</xar:mlstring> :
+		</span>
+	</div>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 1))#" class="active">
+				<xar:mlstring>My Shop</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 1))#">	
+				<xar:mlstring>My Shop</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 2))#" class="active">
+				<xar:mlstring>Minimum Values</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 2))#">	
+				<xar:mlstring>Minimum Values</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 3))#" class="active">
+				<xar:mlstring>Maximum Values</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 3))#">	
+				<xar:mlstring>Maximum Values</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 4))#" class="active">
+				<xar:mlstring>Image Options</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 4))#">	
+				<xar:mlstring>Image Options</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 5))#" class="active">
+				<xar:mlstring>Customer Details</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 5))#">	
+				<xar:mlstring>Customer Details</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+</div>
+<div id="tabnav">
+	<div class="help">
+		<span style="width:120px"></span>
+	</div>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 6))#" class="active">
+				<xar:mlstring>Module Options</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 6))#">	
+				<xar:mlstring>Module Options</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 7))#" class="active">
+				<xar:mlstring>Shipping Options</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 7))#">	
+				<xar:mlstring>Shipping Options</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 8))#" class="active">
+				<xar:mlstring>Prod Listing Options</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 8))#">	
+				<xar:mlstring>Prod Listing Options</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 9))#" class="active">
+				<xar:mlstring>Stock Options</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 9))#">	
+				<xar:mlstring>Stock Options</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 10))#" class="active">
+				<xar:mlstring>Logging Options</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 10))#">	
+				<xar:mlstring>Logging Options</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+</div>
+<div id="tabnav">
+	<div class="help">
+		<span style="width:120px"></span>
+	</div>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 11))#" class="active">
+				<xar:mlstring>Cache Options</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 11))#">	
+				<xar:mlstring>Cache Options</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 12))#" class="active">
+				<xar:mlstring>Email Options</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 12))#">	
+				<xar:mlstring>Email Options</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 13))#" class="active">
+				<xar:mlstring>Download Options</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 13))#">	
+				<xar:mlstring>Download Options</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 14))#" class="active">
+				<xar:mlstring>Gzip Compression</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 14))#">	
+				<xar:mlstring>Gzip Compression</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 15))#" class="active">
+				<xar:mlstring>Sessions</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 15))#">	
+				<xar:mlstring>Sessions</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 16))#" class="active">
+				<xar:mlstring>Metatags</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','configuration',array('gID' => 16))#">	
+				<xar:mlstring>Metatags</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+</div>
+<div id="tabnav">
+	<div class="help" title="Choose a set of configuration options">
+		<span style="width:120px">
+			<xar:mlstring>Modules</xar:mlstring> :
+		</span>
+	</div>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','modules',array('set' => 'payment'))#" class="active">
+				<xar:mlstring>Payment Systems</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','modules',array('set' => 'payment'))#">	
+				<xar:mlstring>Payment Systems</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','modules',array('set' => 'shipping'))#" class="active">
+				<xar:mlstring>Shipping Methods</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','modules',array('set' => 'shipping'))#">	
+				<xar:mlstring>Shipping Methods</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','modules',array('set' => 'ordertotal'))#" class="active">
+				<xar:mlstring>Order Total</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','modules',array('set' => 'ordertotal'))#">	
+				<xar:mlstring>Order Total</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+</div>
+<div id="tabnav">
+	<div class="help" title="Choose a set of configuration options">
+		<span style="width:120px">
+			<xar:mlstring>Zones/Taxes</xar:mlstring> :
+		</span>
+	</div>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','languages')#" class="active">
+				<xar:mlstring>Languages</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','languages')#">	
+				<xar:mlstring>Languages</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','countries')#" class="active">
+				<xar:mlstring>Countries</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','countries')#">	
+				<xar:mlstring>Countries</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','currencies')#" class="active">
+				<xar:mlstring>Currencies</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','currencies')#">	
+				<xar:mlstring>Currencies</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','zones')#" class="active">
+				<xar:mlstring>Zones</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','zones')#">	
+				<xar:mlstring>Zones</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','geo_zones')#" class="active">
+				<xar:mlstring>Tax Zones</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','geo_zones')#">	
+				<xar:mlstring>Tax Zones</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','tax_classes')#" class="active">
+				<xar:mlstring>Tax Classes</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','tax_classes')#">	
+				<xar:mlstring>Tax Classes</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','tax_rates')#" class="active">
+				<xar:mlstring>Tax Rates</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','tax_rates')#">	
+				<xar:mlstring>Tax Rates</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+</div>
+<div id="tabnav">
+	<div class="help" title="Choose a set of configuration options">
+		<span style="width:120px">
+			<xar:mlstring>Customers</xar:mlstring> :
+		</span>
+	</div>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','customers')#" class="active">
+				<xar:mlstring>Customers</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','customers')#">	
+				<xar:mlstring>Customers</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','customers_status')#" class="active">
+				<xar:mlstring>Customer Groups</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','customers_status')#">	
+				<xar:mlstring>Customer Groups</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','orders')#" class="active">
+				<xar:mlstring>Orders</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','orders')#">	
+				<xar:mlstring>Orders</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+</div>
+<div id="tabnav">
+	<div class="help" title="Choose a set of configuration options">
+		<span style="width:120px">
+			<xar:mlstring>Products</xar:mlstring> :
+		</span>
+	</div>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','categories')#" class="active">
+				<xar:mlstring>Categories/Products</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','categories')#">	
+				<xar:mlstring>Categories/Products</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','xsell_products')#" class="active">
+				<xar:mlstring>XSell Products</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','xsell_products')#">	
+				<xar:mlstring>XSell Products</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','new_attributes')#" class="active">
+				<xar:mlstring>Attribute Manager</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','new_attributes')#">	
+				<xar:mlstring>Attribute Manager</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','product_attributes')#" class="active">
+				<xar:mlstring>Product Options</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','product_attributes')#">	
+				<xar:mlstring>Product Options</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','manufacturers')#" class="active">
+				<xar:mlstring>Manufacturers</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','manufacturers')#">	
+				<xar:mlstring>Manufacturers</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+</div>
+<div id="tabnav">
+	<div class="help">
+		<span style="width:120px"></span>
+	</div>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','reviews')#" class="active">
+				<xar:mlstring>Product Reviews</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','reviews')#">	
+				<xar:mlstring>Product Reviews</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','specials')#" class="active">
+				<xar:mlstring>Special Pricing</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','specials')#">	
+				<xar:mlstring>Special Pricing</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','products_expected')#" class="active">
+				<xar:mlstring>Products Expected</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','products_expected')#">	
+				<xar:mlstring>Products Expected</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+</div>
+<div id="tabnav">
+	<div class="help" title="Choose a set of configuration options">
+		<span style="width:120px">
+			<xar:mlstring>Statistics</xar:mlstring> :
+		</span>
+	</div>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','stats_products_viewed')#" class="active">
+				<xar:mlstring>Viewed Products</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','stats_products_viewed')#">	
+				<xar:mlstring>Viewed Products</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','stats_products_purchased')#" class="active">
+				<xar:mlstring>Sold Products</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','stats_products_purchased')#">	
+				<xar:mlstring>Sold Products</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','stats_customers')#" class="active">
+				<xar:mlstring>Purchasing Statistics</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','stats_customers')#">	
+				<xar:mlstring>Purchasing Statistics</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+</div>
+<div id="tabnav">
+	<div class="help" title="Choose a set of configuration options">
+		<span style="width:120px">
+			<xar:mlstring>Tools</xar:mlstring> :
+		</span>
+	</div>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','module_newsletter')#" class="active">
+				<xar:mlstring>Newsletter</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','module_newsletter')#">
+				<xar:mlstring>Newsletter</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','content_manager')#" class="active">
+				<xar:mlstring>Content Manager</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','content_manager')#">
+				<xar:mlstring>Content Manager</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','backup')#" class="active">
+				<xar:mlstring>Database Manager</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','backup')#">
+				<xar:mlstring>Database Manager</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','server_info')#" class="active">
+				<xar:mlstring>Server Info</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','server_info')#">
+				<xar:mlstring>Server Info</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+	<xar:if condition="$tab eq 'display'">
+		<div>
+			<a href="#xarModURL('commerce','admin','whos_online')#" class="active">
+				<xar:mlstring>Who os Online</xar:mlstring>
+			</a>
+		</div>	
+	<xar:else />
+		<div>
+			<a href="#xarModURL('commerce','admin','whos_online')#">
+				<xar:mlstring>Who is Online</xar:mlstring>
+			</a>
+		</div>	
+	</xar:if>
+</div>

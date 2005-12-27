@@ -1,0 +1,153 @@
+<object name="ice_customers">
+  <objectid>54</objectid>
+  <label>Customer</label>
+  <moduleid>27</moduleid>
+  <itemtype>1004</itemtype>
+  <parent>2</parent>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config></config>
+  <isalias>1</isalias>
+  <properties>
+    <property name="salutation">
+      <id>301</id>
+      <label>Salutation</label>
+      <type>textbox</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>1</order>
+      <validation></validation>
+    </property>
+    <property name="first_name">
+      <id>302</id>
+      <label>First Name</label>
+      <type>textbox</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>2</order>
+      <validation></validation>
+    </property>
+    <property name="middle_name">
+      <id>303</id>
+      <label>Middle Name</label>
+      <type>textbox</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>3</order>
+      <validation></validation>
+    </property>
+    <property name="last_name">
+      <id>304</id>
+      <label>Last Name</label>
+      <type>textbox</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>4</order>
+      <validation></validation>
+    </property>
+    <property name="date_of_birth">
+      <id>305</id>
+      <label>Date of Birth</label>
+      <type>textbox</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>5</order>
+      <validation></validation>
+    </property>
+    <property name="address_id">
+      <id>306</id>
+      <label>Address ID</label>
+      <type>integerbox</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>6</order>
+      <validation></validation>
+    </property>
+    <property name="telephone">
+      <id>307</id>
+      <label>Telephone</label>
+      <type>textbox</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>7</order>
+      <validation></validation>
+    </property>
+    <property name="fax">
+      <id>308</id>
+      <label>Fax</label>
+      <type>static</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>8</order>
+      <validation></validation>
+    </property>
+    <property name="gender">
+      <id>309</id>
+      <label>Gender</label>
+      <type>dropdown</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>9</order>
+      <validation>----,----;M,Male;F,Female</validation>
+    </property>
+    <property name="account_type">
+      <id>310</id>
+      <label>Account Type</label>
+      <type>textbox</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>10</order>
+      <validation></validation>
+    </property>
+    <property name="status">
+      <id>311</id>
+      <label>Status</label>
+      <type>textbox</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>11</order>
+      <validation></validation>
+    </property>
+    <property name="last_login">
+      <id>312</id>
+      <label>Last Login</label>
+      <type>calendar</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>12</order>
+      <validation></validation>
+    </property>
+    <property name="number_of_logins">
+      <id>313</id>
+      <label>Number of Logins</label>
+      <type>integerbox</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>13</order>
+      <validation></validation>
+    </property>
+    <property name="product_notifications">
+      <id>314</id>
+      <label>Product Notifications</label>
+      <type>radio</type>
+      <default>0</default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>14</order>
+      <validation>0,No;1,Yes;</validation>
+    </property>
+  </properties>
+</object>

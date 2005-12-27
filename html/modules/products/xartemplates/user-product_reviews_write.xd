@@ -1,0 +1,28 @@
+{config_load file="$language/lang_$language.conf" section="reviews"}<br><font size="3" face="Verdana, Arial, Helvetica, sans-serif"><strong>{#heading_reviews_write#}</strong></font><br>
+<br>
+{if $error}
+{$error}
+{else}
+<FORM method="POST" name="product_reviews_write" id="post" action="#xarModURL('commerce','user','product_reviews'_WRITE, 'action=process&products_id=' . $_GET['products_id'])#" onSubmit="return checkForm();">
+  <input type="hidden" name="get_params" value="#$get_params#">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="main"><p><strong>{#text_product#}</strong> {$PRODUCTS_NAME}<br>
+        <strong>{#text_author#}</strong> {$AUTHOR}</p>
+      <p><strong>{#text_input#}</strong><br>
+        {$INPUT_TEXT}<br>
+        <font size="1" face="Verdana, Arial, Helvetica, sans-serif">{#text_note#}</font><br>
+        <br>
+        <strong>{#text_rating#}&nbsp;<font color="#FF0000" size="1" face="Verdana, Arial, Helvetica, sans-serif">{#text_bad#}</font></strong>{$INPUT_RATING}<font color="#FF0000" size="1" face="Verdana, Arial, Helvetica, sans-serif"><strong>{#text_good#}</strong></font></p></td>
+  </tr>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>{$BUTTON_BACK}</td>
+    <td><div align="right">{$BUTTON_SUBMIT}</div></td>
+  </tr>
+</table>
+</form>
+</FORM>
+{/if}

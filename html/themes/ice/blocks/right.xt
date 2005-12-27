@@ -1,0 +1,11 @@
+<div class="xar-blocksRight">
+    <xar:if id="title_condition" condition="!empty($title)">
+    <div class="xar-block-head-right">
+        <div class="xar-block-title-right">#$title#</div>
+    </div>
+    </xar:if>
+    <div class="xar-block-body-right">
+        #$content#
+    </div>
+    <div class="xar-block-foot-right"></div>
+</div>

@@ -1,0 +1,132 @@
+<xar:template file="application_top" type="module"/>
+
+<style type="text/css">@import url(modules/commerce/xarstyles/adminstylesheet.css);</style>
+<script type="text/javascript" src="modules/commerce/xartemplates/general.js"></script>
+<xar:template file="adminheader" type="module" module="commerce" />
+
+<!-- body //-->
+<table border="0" width="100%" cellspacing="0" cellpadding="2">
+<!-- top links //-->
+	<tr>
+		<td>
+		<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			  <tr>
+				<td width="80" rowspan="2">
+					<img src="#xarTplGetImage('adminicons/heading_configuration.gif')#" style="vertical-align: bottom" />
+				</td>
+				<td class="pageHeading">#$cfg_group['configuration_group_title']#
+				</td>
+			  </tr>
+			  <tr>
+				<td class="main" valign="top"><xar:mlstring>XT Configuration</xar:mlstring></td>
+			  </tr>
+		</table> 
+		</td>
+	</tr>
+	<tr>
+        <td>
+        	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+				<tr>
+					<td valign="top">
+						<table border="0" width="100%" cellspacing="0" cellpadding="2">
+							<tr class="dataTableHeadingRow">
+								<td class="dataTableHeadingContent"><xar:mlstring>Title</xar:mlstring></td>
+								<td class="dataTableHeadingContent"><xar:mlstring>Value</xar:mlstring></td>
+								<td class="dataTableHeadingContent" align="right"><xar:mlstring>Action</xar:mlstring>&nbsp;</td>
+							</tr>
+							<xar:loop name="$configurations">
+								<xar:set name="$key">#$loop:item['configuration_key']#</xar:set>
+								<xar:set name="$value">#$loop:item['configuration_value']#</xar:set>
+								<xar:set name="$test">is_array($cInfo)</xar:set>
+								<xar:if condition="(is_array($cInfo) && ($loop:item['configuration_id'] eq ($cInfo['configuration_id'])))">
+									<tr class="dataTableRowSelected" onmouseover="this.style.cursor='hand'" onclick="document.location.href='#$thisurl#&amp;cID=#$loop:item['configuration_id']#&amp;action=edit';">
+								<xar:else />
+									<tr class="dataTableRow" onmouseover="this.className='dataTableRowOver';this.style.cursor='hand'" onmouseout="this.className='dataTableRow'" onclick="document.location.href='#$thisurl#&amp;cID=#$loop:item['configuration_id']#';">
+								</xar:if>
+									<td class="dataTableContent">
+										<xar:set name="$key_display">strtoupper($key)</xar:set>
+										#$key_display#
+									</td>
+									<td class="dataTableContent">
+										<xar:set name="$short_cfgValue">$value</xar:set>
+										<xar:if condition="is_string($short_cfgValue) and strlen($short_cfgValue) gt 30">
+											<xar:set name="$short_cfgValue">substr($short_cfgValue,0,30)</xar:set>
+										</xar:if>
+										<xar:set name="$short_cfgValue">htmlspecialchars($short_cfgValue)</xar:set>
+										#$short_cfgValue#
+									</td>
+
+									<td class="dataTableContent" align="right">
+										<xar:if condition="(is_array($cInfo) && ($loop:item['configuration_id'] eq ($cInfo['configuration_id'])))">					
+											<img src="#xarTplGetImage('adminimages/icon_arrow_right.gif')#" />
+										<xar:else />
+											<a href="#$thisurl#&amp;cID=#$loop:item['configuration_id']#">
+												<img src="#xarTplGetImage('adminimages/icon_info.gif')#" />
+											</a>
+										</xar:if>
+										&nbsp;
+									</td>
+								</tr>
+							</xar:loop>
+						</table>
+					</td>
+					<td width="25%" valign="top">
+						<table border="0" width="100%" cellspacing="0" cellpadding="2">
+						  <tr class="dataTableHeadingRow">
+							<td align="center" class="dataTableHeadingContent">#$cInfo['configuration_key']#</td>
+							</tr>
+							<tr>
+						  <xar:if condition="$action eq 'edit'">
+								<td class="dataTableContent">
+							  <form name="configuration" method="POST" action="#xarModURL('commerce','admin','configuration',array('gID'=>$gID,'cID'=> $cInfo['configuration_id'],'action'=>'save'))#">
+									<xar:mlstring>Please make any necessary changes</xar:mlstring>
+									<br />
+									<br />
+									<b>#$cInfo['configuration_key']#</b>
+									<br /><br />
+									<xar:if condition="$cInfo['set_function']">
+										eval('$value_field = ' . $cInfo['set_function'] . '"' . htmlspecialchars($cInfo['configuration_value']) . '");');
+									<xar:else />
+										<input type="text" name="configuration_value" value="#$cInfo['configuration_value']#">        
+									</xar:if>
+								  <br />
+								  </td>
+								  </tr>
+								  <tr>
+								  <td align="center">
+								  <br />
+								<input type="image" src="#xarTplGetImage($language .'/admin/buttons/button_update.gif')#" border="0" alt="Submit">
+								  <a href="#xarModURL('commerce','admin','configuration',array('gID'=>$gID,'cID'=> $cInfo['configuration_id']))#">
+										<img src="#xarTplGetImage($language .'/admin/buttons/button_cancel.gif')#" alt="Cancel" style="vertical-align: bottom" />
+								  </a>
+							  </form>
+									</td>
+						<xar:else />
+									<td align="center">
+								<a href="#xarModURL('commerce','admin','configuration',array('gID'=>$gID,'cID'=> $cInfo['configuration_id'],'action'=>'edit'))#">
+									<img src="#xarTplGetImage($language .'/admin/buttons/button_edit.gif')#" style="vertical-align: bottom" />
+								</a>
+								</td>
+								</tr>
+								<td>
+								<br /><b>#$cInfo['configuration_key']#</b>
+								<br /><br /><xar:mlstring>Date Added</xar:mlstring>: 
+								#xarLocaleGetFormattedDate('short',$cInfo['date_added'])#
+								<xar:if condition="isset($cInfo['last_modified'])">
+									<br /><xar:mlstring>Last Modified</xar:mlstring>: #xarLocaleGetFormattedDate('short',$cInfo['last_modified'])#
+								</xar:if>
+							</td>
+							</xar:if>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+</table>
+<!-- body_eof //-->
+
+<!-- footer //-->
+<xar:template file="adminfooter" type="module"/>
+<xar:template file="application_bottom" type="module"/>

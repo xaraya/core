@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE blocklayout PUBLIC "-//XAR//DTD BL 1.0 Strict//EN" "http://xaraya.com/bl1/DTD/bl1-strict.dtd">
+<?xar type="include" ?>
+<xar:blocklayout version="1.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
+    <xar:comment>set local variables to hold the ML text that we intend to use in the titles and alt attributes</xar:comment>
+    <xar:set name="sitefooter"><xar:var scope="module" module="themes" name="SiteFooter" /></xar:set>
+    <xar:set name="sitecopyright"><xar:var scope="module" module="themes" name="SiteCopyRight" /></xar:set>
+    <xar:set name="poweredbyxaraya"><xar:mlstring>Powered by Xaraya</xar:mlstring></xar:set>
+
+    <div id="iceFooter">
+        <div id="iceFooterGroup">
+            <xar:blockgroup name="footer" id="footer" />
+        </div>
+        <div id="iceFooterXar">
+            <xar:var name="sitefooter" />
+        </div>
+    </div>
+
+</xar:blocklayout>

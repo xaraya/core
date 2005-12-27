@@ -1,0 +1,56 @@
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>xxxx
+
+<div id="ice-objectdisplay">
+    <xar:set name="isupload">#$object:upload#</xar:set>
+    <xar:if condition="!empty($isupload)">
+        <xar:set name="enc_type">'multipart/form-data'</xar:set>
+    <xar:else/> 
+        <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
+    </xar:if>
+
+    <form method="post" action="&xar-modurl-dynamicdata-admin-update;" enctype="#$enc_type#">
+        <fieldset>
+            <legend>
+                <xar:ml>
+                    <xar:mlstring>Modify Item #(1) in #(2)</xar:mlstring>
+                    <xar:mlvar>#$object:itemid#</xar:mlvar>
+                    <xar:mlvar>#$object:label#</xar:mlvar>
+                </xar:ml>
+            </legend>
+            
+            <!-- this does most of the hard work :) -->
+            <xar:data-form object="$object" template="ice"/>
+
+            <xar:if condition="!empty($hooks)">
+                <xar:foreach in="$hooks" key="$module" value="$output">
+                    #$output#
+                </xar:foreach>
+            </xar:if>
+            <!-- Make sure the fieldset encloses the whole group, regardless of floating -->
+            <div style="clear:both;">&nbsp;</div>
+        </fieldset>
+
+        <div style="clear:both;">
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="modid" id="modid" value="#$object:moduleid#" />
+            <input type="hidden" name="itemtype" id="itemtype" value="#$object:itemtype#" />
+            <input type="hidden" name="join" id="join" value="#$object:join#" />
+            <input type="hidden" name="table" id="table" value="#$object:table#" />
+            <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
+            <input type="hidden" name="template" id="template" value="ice"/>
+            
+            <!-- TODO: create a generic return url so we can reuse this template -->
+            <input type="hidden" name="return_url" value="&xar-modurl-commerce-admin-countries;"/>
+            
+            <!-- <input type="submit" name="preview" value="#xarML('Preview')#" class="xar-margin-thickright" /> -->
+            <button type="submit"><xar:mlstring>OK</xar:mlstring></button>
+            <a  href="&xar-modurl-dynamicdata-user-display;&amp;modid=#$object:moduleid#&amp;itemtype=#$object:itemtype#&amp;itemid=#$object:itemid#&amp;template=ice"
+               onclick="return loadContent(this.href, 'ice-objectdisplay');">
+               <button type="button">
+                   <xar:mlstring>Cancel</xar:mlstring>
+               </button>
+            </a>
+            
+        </div>
+    </form>
+</div>

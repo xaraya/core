@@ -1,0 +1,831 @@
+urer_info.php
+processing delta on xarblocks/manufacturers.php
+delta on xarblocks/manufacturers.php in first changeset renamed to xarblocks/manufacturers.php
+processing delta on xarblocks/product_notifications.php
+delta on xarblocks/product_notifications.php in first changeset renamed to xarblocks/product_notifications.php
+processing delta on xarblocks/search.php
+delta on xarblocks/search.php in first changeset renamed to xarblocks/search.php
+processing delta on xarblocks/specials.php
+delta on xarblocks/specials.php in first changeset renamed to xarblocks/specials.php
+processing delta on xarblocks/unused/add_a_quickie.php
+delta on xarblocks/unused/add_a_quickie.php in first changeset renamed to xarblocks/unused/add_a_quickie.php
+processing delta on xarblocks/unused/best_sellers.php
+delta on xarblocks/unused/best_sellers.php in first changeset renamed to xarblocks/unused/best_sellers.php
+processing delta on xarblocks/unused/content.php
+delta on xarblocks/unused/content.php in first changeset renamed to xarblocks/unused/content.php
+processing delta on xarimages/index.html
+delta on xarimages/index.html in first changeset renamed to xarimages/index.html
+processing delta on xarincludes/index.html
+delta on xarincludes/index.html in first changeset renamed to xarincludes/index.html
+processing delta on xarincludes/modules/default.php
+delta on xarincludes/modules/default.php in first changeset renamed to xarincludes/modules/default.php
+processing delta on xarincludes/modules/index.html
+delta on xarincludes/modules/index.html in first changeset renamed to xarincludes/modules/index.html
+processing delta on xarincludes/new_attributes_config.php
+delta on xarincludes/new_attributes_config.php in first changeset renamed to xarincludes/new_attributes_config.php
+processing delta on xarincludes/new_attributes_include.php
+delta on xarincludes/new_attributes_include.php in first changeset renamed to xarincludes/new_attributes_include.php
+processing delta on xarincludes/new_attributes_select.php
+delta on xarincludes/new_attributes_select.php in first changeset renamed to xarincludes/new_attributes_select.php
+processing delta on xarincludes/unused/new_attributes_config.php
+delta on xarincludes/unused/new_attributes_config.php in first changeset renamed to xarincludes/unused/new_attributes_config.php
+processing delta on xarincludes/unused/new_attributes_include.php
+delta on xarincludes/unused/new_attributes_include.php in first changeset renamed to xarincludes/unused/new_attributes_include.php
+processing delta on xarincludes/unused/new_attributes_select.php
+delta on xarincludes/unused/new_attributes_select.php in first changeset renamed to xarincludes/unused/new_attributes_select.php
+processing delta on xarinit.php
+delta on xarinit.php in first changeset renamed to xarinit.php
+processing delta on xarstyles/index.html
+delta on xarstyles/index.html in first changeset renamed to xarstyles/index.html
+processing delta on xarstyles/userstylesheet.css
+delta on xarstyles/userstylesheet.css in first changeset renamed to xarstyles/userstylesheet.css
+processing delta on xartables.php
+delta on xartables.php in first changeset renamed to xartables.php
+processing delta on xartemplates/admin-categories.xd
+delta on xartemplates/admin-categories.xd in first changeset renamed to xartemplates/admin-categories.xd
+processing delta on xartemplates/admin-categories_screen.xd
+delta on xartemplates/admin-categories_screen.xd in first changeset renamed to xartemplates/admin-categories_screen.xd
+processing delta on xartemplates/admin-categories_screenno.xd
+delta on xartemplates/admin-categories_screenno.xd in first changeset renamed to xartemplates/admin-categories_screenno.xd
+processing delta on xartemplates/admin-categories_screenwromg.xd
+delta on xartemplates/admin-categories_screenwromg.xd in first changeset renamed to xartemplates/admin-categories_screenwromg.xd
+processing delta on xartemplates/admin-categories_view.xd
+delta on xartemplates/admin-categories_view.xd in first changeset renamed to xartemplates/admin-categories_view.xd
+processing delta on xartemplates/admin-configuration.xd
+delta on xartemplates/admin-configuration.xd in first changeset renamed to xartemplates/admin-configuration.xd
+processing delta on xartemplates/admin-main.xd
+delta on xartemplates/admin-main.xd in first changeset renamed to xartemplates/admin-main.xd
+processing delta on xartemplates/admin-manufacturers.xd
+delta on xartemplates/admin-manufacturers.xd in first changeset renamed to xartemplates/admin-manufacturers.xd
+processing delta on xartemplates/admin-new_attributes.xd
+delta on xartemplates/admin-new_attributes.xd in first changeset renamed to xartemplates/admin-new_attributes.xd
+processing delta on xartemplates/admin-product_screen.xd
+delta on xartemplates/admin-product_screen.xd in first changeset renamed to xartemplates/admin-product_screen.xd
+processing delta on xartemplates/admin-products_attributes.xd
+delta on xartemplates/admin-products_attributes.xd in first changeset renamed to xartemplates/admin-products_attributes.xd
+processing delta on xartemplates/admin-products_attributesold.xd
+delta on xartemplates/admin-products_attributesold.xd in first changeset renamed to xartemplates/admin-products_attributesold.xd
+processing delta on xartemplates/admin-products_expected.xd
+delta on xartemplates/admin-products_expected.xd in first changeset renamed to xartemplates/admin-products_expected.xd
+processing delta on xartemplates/admin-stats_products_purchased.xd
+delta on xartemplates/admin-stats_products_purchased.xd in first changeset renamed to xartemplates/admin-stats_products_purchased.xd
+processing delta on xartemplates/blocks/best_sellers.xd
+delta on xartemplates/blocks/best_sellers.xd in first changeset renamed to xartemplates/blocks/best_sellers.xd
+processing delta on xartemplates/blocks/categories.xd
+delta on xartemplates/blocks/categories.xd in first changeset renamed to xartemplates/blocks/categories.xd
+processing delta on xartemplates/blocks/manufacturers.xd
+delta on xartemplates/blocks/manufacturers.xd in first changeset renamed to xartemplates/blocks/manufacturers.xd
+processing delta on xartemplates/blocks/manufacturers_info.xd
+delta on xartemplates/blocks/manufacturers_info.xd in first changeset renamed to xartemplates/blocks/manufacturers_info.xd
+processing delta on xartemplates/blocks/notifications.xd
+delta on xartemplates/blocks/notifications.xd in first changeset renamed to xartemplates/blocks/notifications.xd
+processing delta on xartemplates/blocks/search.xd
+delta on xartemplates/blocks/search.xd in first changeset renamed to xartemplates/blocks/search.xd
+processing delta on xartemplates/blocks/specials.xd
+delta on xartemplates/blocks/specials.xd in first changeset renamed to xartemplates/blocks/specials.xd
+processing delta on xartemplates/blocks/whatsnew.xd
+delta on xartemplates/blocks/whatsnew.xd in first changeset renamed to xartemplates/blocks/whatsnew.xd
+processing delta on xartemplates/category_listing/category_listing.xd
+delta on xartemplates/category_listing/category_listing.xd in first changeset renamed to xartemplates/category_listing/category_listing.xd
+processing delta on xartemplates/commerce/product_listing.xd
+delta on xartemplates/commerce/product_listing.xd in first changeset renamed to xartemplates/commerce/product_listing.xd
+processing delta on xartemplates/commerce/user-category_listing.xd
+delta on xartemplates/commerce/user-category_listing.xd in first changeset renamed to xartemplates/commerce/user-category_listing.xd
+processing delta on xartemplates/includes/admin-navigation.xd
+delta on xartemplates/includes/admin-navigation.xd in first changeset renamed to xartemplates/includes/admin-navigation.xd
+processing delta on xartemplates/includes/new_products.xd
+delta on xartemplates/includes/new_products.xd in first changeset renamed to xartemplates/includes/new_products.xd
+processing delta on xartemplates/includes/upcoming_products.xd
+delta on xartemplates/includes/upcoming_products.xd in first changeset renamed to xartemplates/includes/upcoming_products.xd
+processing delta on xartemplates/index.html
+delta on xartemplates/index.html in first changeset renamed to xartemplates/index.html
+processing delta on xartemplates/main_content.xd
+delta on xartemplates/main_content.xd in first changeset renamed to xartemplates/main_content.xd
+processing delta on xartemplates/product_info/product_info_v1.html
+delta on xartemplates/product_info/product_info_v1.html in first changeset renamed to xartemplates/product_info/product_info_v1.html
+processing delta on xartemplates/product_listing/product_listing_v1.html
+delta on xartemplates/product_listing/product_listing_v1.html in first changeset renamed to xartemplates/product_listing/product_listing_v1.html
+processing delta on xartemplates/product_options/product_options_dropdown.html
+delta on xartemplates/product_options/product_options_dropdown.html in first changeset renamed to xartemplates/product_options/product_options_dropdown.html
+processing delta on xartemplates/product_options/product_options_selection.html
+delta on xartemplates/product_options/product_options_selection.html in first changeset renamed to xartemplates/product_options/product_options_selection.html
+processing delta on xartemplates/stats_products_viewed.php
+delta on xartemplates/stats_products_viewed.php in first changeset renamed to xartemplates/stats_products_viewed.php
+processing delta on xartemplates/user-category_listing.xd
+delta on xartemplates/user-category_listing.xd in first changeset renamed to xartemplates/user-category_listing.xd
+processing delta on xartemplates/user-main.xd
+delta on xartemplates/user-main.xd in first changeset renamed to xartemplates/user-main.xd
+processing delta on xartemplates/user-product_listing.xd
+delta on xartemplates/user-product_listing.xd in first changeset renamed to xartemplates/user-product_listing.xd
+processing delta on xartemplates/user-product_reviews.xd
+delta on xartemplates/user-product_reviews.xd in first changeset renamed to xartemplates/user-product_reviews.xd
+processing delta on xartemplates/user-product_reviews_info.xd
+delta on xartemplates/user-product_reviews_info.xd in first changeset renamed to xartemplates/user-product_reviews_info.xd
+processing delta on xartemplates/user-product_reviews_write.xd
+delta on xartemplates/user-product_reviews_write.xd in first changeset renamed to xartemplates/user-product_reviews_write.xd
+processing delta on xartemplates/user-start.xd
+delta on xartemplates/user-start.xd in first changeset renamed to xartemplates/user-start.xd
+processing delta on xaruser.php
+delta on xaruser.php in first changeset renamed to xaruser.php
+processing delta on xaruser/default.php
+delta on xaruser/default.php in first changeset renamed to xaruser/default.php
+processing delta on xaruser/index.html
+delta on xaruser/index.html in first changeset renamed to xaruser/index.html
+processing delta on xaruser/main.php
+delta on xaruser/main.php in first changeset renamed to xaruser/main.php
+processing delta on xaruser/product_reviews.php
+delta on xaruser/product_reviews.php in first changeset renamed to xaruser/product_reviews.php
+processing delta on xaruser/product_reviews_info.php
+delta on xaruser/product_reviews_info.php in first changeset renamed to xaruser/product_reviews_info.php
+processing delta on xaruser/product_reviews_write.php
+delta on xaruser/product_reviews_write.php in first changeset renamed to xaruser/product_reviews_write.php
+processing delta on xaruser/products_new.php
+delta on xaruser/products_new.php in first changeset renamed to xaruser/products_new.php
+processing delta on xaruser/specials.php
+delta on xaruser/specials.php in first changeset renamed to xaruser/specials.php
+processing delta on xaruser/start.php
+delta on xaruser/start.php in first changeset renamed to xaruser/start.php
+processing delta on xaruser/unused/default.php
+delta on xaruser/unused/default.php in first changeset renamed to xaruser/unused/default.php
+processing delta on xaruser/unused/exit.php
+delta on xaruser/unused/exit.php in first changeset renamed to xaruser/unused/exit.php
+processing delta on xaruser/unused/product_reviews.php
+delta on xaruser/unused/product_reviews.php in first changeset renamed to xaruser/unused/product_reviews.php
+processing delta on xaruser/unused/product_reviews_info.php
+delta on xaruser/unused/product_reviews_info.php in first changeset renamed to xaruser/unused/product_reviews_info.php
+processing delta on xaruser/unused/product_reviews_write.php
+delta on xaruser/unused/product_reviews_write.php in first changeset renamed to xaruser/unused/product_reviews_write.php
+processing delta on xaruser/unused/products_new.php
+delta on xaruser/unused/products_new.php in first changeset renamed to xaruser/unused/products_new.php
+processing delta on xaruser/unused/shop_content.php
+delta on xaruser/unused/shop_content.php in first changeset renamed to xaruser/unused/shop_content.php
+processing delta on xaruser/unused/specials.php
+delta on xaruser/unused/specials.php in first changeset renamed to xaruser/unused/specials.php
+processing delta on xaruserapi/count_products_in_category.php
+delta on xaruserapi/count_products_in_category.php in first changeset renamed to xaruserapi/count_products_in_category.php
+processing delta on xaruserapi/get_categories.php
+delta on xaruserapi/get_categories.php in first changeset renamed to xaruserapi/get_categories.php
+processing delta on xaruserapi/get_category_tree.php
+delta on xaruserapi/get_category_tree.php in first changeset renamed to xaruserapi/get_category_tree.php
+processing delta on xaruserapi/index.html
+delta on xaruserapi/index.html in first changeset renamed to xaruserapi/index.html
+processing delta on xaruserapi/remove_product.php
+delta on xaruserapi/remove_product.php in first changeset renamed to xaruserapi/remove_product.php
+processing delta on xaruserapi/set_categories_status.php
+delta on xaruserapi/set_categories_status.php in first changeset renamed to xaruserapi/set_categories_status.php
+processing delta on xaruserapi/set_product_status.php
+delta on xaruserapi/set_product_status.php in first changeset renamed to xaruserapi/set_product_status.php
+processing delta on xarversion.php
+delta on xarversion.php in first changeset renamed to xarversion.php
+delta on xarblocks/unused/configmenu.php in second changeset copied forward
+fusing deltas on xarinit.php :  -> 23a1dbd5ea9294289020228888a37243bac7f474 and 23a1dbd5ea9294289020228888a37243bac7f474 -> d4118f6b49844a96d844eb9d7ec66867f3da7d8c
+delta on xartemplates/blocks/configmenu.xd in second changeset copied forward
+fusing deltas on xarversion.php :  -> 203b0327a33d71c9eae2e4c5b29cdd01c79f5df7 and 203b0327a33d71c9eae2e4c5b29cdd01c79f5df7 -> 58bac2de279f00cf54bb86f0a8e4ff877f6d9569
+finished concatenation
+binding 1 parameters for SELECT data FROM revisions WHERE id = ?
+binding 1 with value 'c0ecada2545de1f693bee2643e0387ba79e2eb88'
+Examining 04969753959126d4eb60024b01244ed0cdf0bb71 -> 989e18a9db4ab92e14e8f63554bce680438c106e
+concatenating change sets
+concatenating 7 and 4 deltas
+processing delta on xaradmin/categories_screen.php
+delta on xaradmin/categories_screen.php in first changeset renamed to xaradmin/categories_screen.php
+processing delta on xaradminapi/getmenulinks.php
+delta on xaradminapi/getmenulinks.php in first changeset renamed to xaradminapi/getmenulinks.php
+processing delta on xartables.php
+delta on xartables.php in first changeset renamed to xartables.php
+processing delta on xartemplates/admin-categories.xd
+delta on xartemplates/admin-categories.xd in first changeset renamed to xartemplates/admin-categories.xd
+processing delta on xartemplates/admin-categories_screen.xd
+delta on xartemplates/admin-categories_screen.xd in first changeset renamed to xartemplates/admin-categories_screen.xd
+processing delta on xartemplates/admin-categories_screenno.xd
+delta on xartemplates/admin-categories_screenno.xd in first changeset renamed to xartemplates/admin-categories_screenno.xd
+processing delta on xartemplates/admin-categories_screenwromg.xd
+delta on xartemplates/admin-categories_screenwromg.xd in first changeset renamed to xartemplates/admin-categories_screenwromg.xd
+delta on xarblocks/unused/configmenu.php in second changeset copied forward
+delta on xarinit.php in second changeset copied forward
+delta on xartemplates/blocks/configmenu.xd in second changeset copied forward
+delta on xarversion.php in second changeset copied forward
+finished concatenation
+binding 1 parameters for SELECT id FROM manifests WHERE id = ?
+binding 1 with value '70298ae6bd59d35ba9430a52a4bacc80525e4907'
+reconstructing 70298ae6bd59d35ba9430a52a4bacc80525e4907 in manifest_deltas
+binding 1 parameters for SELECT id FROM manifest_deltas WHERE id = ?
+binding 1 with value '70298ae6bd59d35ba9430a52a4bacc80525e4907'
+binding 1 parameters for SELECT id FROM manifests WHERE id = ?
+binding 1 with value '70298ae6bd59d35ba9430a52a4bacc80525e4907'
+binding 1 parameters for SELECT base FROM manifest_deltas WHERE id = ?
+binding 1 with value '70298ae6bd59d35ba9430a52a4bacc80525e4907'
+inserting edge: 70298ae6bd59d35ba9430a52a4bacc80525e4907 <- 54642508ed8c30b8a9a670b29f269d05941262c2
+version cache hit on 54642508ed8c30b8a9a670b29f269d05941262c2
+following delta 54642508ed8c30b8a9a670b29f269d05941262c2 -> 70298ae6bd59d35ba9430a52a4bacc80525e4907
+binding 2 parameters for SELECT delta FROM manifest_deltas WHERE id = ? AND base = ?
+binding 1 with value '70298ae6bd59d35ba9430a52a4bacc80525e4907'
+binding 2 with value '54642508ed8c30b8a9a670b29f269d05941262c2'
+concatenating change sets
+concatenating 125 and 11 deltas
+processing delta on index.html
+delta on index.html in first changeset renamed to index.html
+processing delta on xaradmin/categories.php
+delta on xaradmin/categories.php in first changeset renamed to xaradmin/categories.php
+processing delta on xaradmin/categories_screen.php
+delta on xaradmin/categories_screen.php in first changeset renamed to xaradmin/categories_screen.php
+processing delta on xaradmin/configuration.php
+delta on xaradmin/configuration.php in first changeset renamed to xaradmin/configuration.php
+processing delta on xaradmin/content_manager.php
+delta on xaradmin/content_manager.php in first changeset renamed to xaradmin/content_manager.php
+processing delta on xaradmin/index.html
+delta on xaradmin/index.html in first changeset renamed to xaradmin/index.html
+processing delta on xaradmin/main.php
+delta on xaradmin/main.php in first changeset renamed to xaradmin/main.php
+processing delta on xaradmin/manufacturers.php
+delta on xaradmin/manufacturers.php in first changeset renamed to xaradmin/manufacturers.php
+processing delta on xaradmin/new_attributes.php
+delta on xaradmin/new_attributes.php in first changeset renamed to xaradmin/new_attributes.php
+processing delta on xaradmin/new_attributes_change.php
+delta on xaradmin/new_attributes_change.php in first changeset renamed to xaradmin/new_attributes_change.php
+processing delta on xaradmin/new_attributes_config.php
+delta on xaradmin/new_attributes_config.php in first changeset renamed to xaradmin/new_attributes_config.php
+processing delta on xaradmin/new_attributes_functions.php
+delta on xaradmin/new_attributes_functions.php in first changeset renamed to xaradmin/new_attributes_functions.php
+processing delta on xaradmin/new_attributes_include.php
+delta on xaradmin/new_attributes_include.php in first changeset renamed to xaradmin/new_attributes_include.php
+processing delta on xaradmin/new_attributes_select.php
+delta on xaradmin/new_attributes_select.php in first changeset renamed to xaradmin/new_attributes_select.php
+processing delta on xaradmin/product_screen.php
+delta on xaradmin/product_screen.php in first changeset renamed to xaradmin/product_screen.php
+processing delta on xaradmin/products_attributes.php
+delta on xaradmin/products_attributes.php in first changeset renamed to xaradmin/products_attributes.php
+processing delta on xaradmin/products_expected.php
+delta on xaradmin/products_expected.php in first changeset renamed to xaradmin/products_expected.php
+processing delta on xaradmin/reviews.php
+delta on xaradmin/reviews.php in first changeset renamed to xaradmin/reviews.php
+processing delta on xaradmin/start.php
+delta on xaradmin/start.php in first changeset renamed to xaradmin/start.php
+processing delta on xaradmin/unused/categoriesold.php
+delta on xaradmin/unused/categoriesold.php in first changeset renamed to xaradmin/unused/categoriesold.php
+processing delta on xaradmin/unused/manufacturers.php
+delta on xaradmin/unused/manufacturers.php in first changeset renamed to xaradmin/unused/manufacturers.php
+processing delta on xaradmin/unused/manufacturersold.php
+delta on xaradmin/unused/manufacturersold.php in first changeset renamed to xaradmin/unused/manufacturersold.php
+processing delta on xaradmin/unused/new_attributes.php
+delta on xaradmin/unused/new_attributes.php in first changeset renamed to xaradmin/unused/new_attributes.php
+processing delta on xaradmin/unused/products_attributesold.php
+delta on xaradmin/unused/products_attributesold.php in first changeset renamed to xaradmin/unused/products_attributesold.php
+processing delta on xaradmin/unused/specials.php
+delta on xaradmin/unused/specials.php in first changeset renamed to xaradmin/unused/specials.php
+processing delta on xaradmin/unused/stats_products_purchased.php
+delta on xaradmin/unused/stats_products_purchased.php in first changeset renamed to xaradmin/unused/stats_products_purchased.php
+processing delta on xaradmin/unused/stats_products_viewed.php
+delta on xaradmin/unused/stats_products_viewed.php in first changeset renamed to xaradmin/unused/stats_products_viewed.php
+processing delta on xaradminapi/getmenulinks.php
+delta on xaradminapi/getmenulinks.php in first changeset renamed to xaradminapi/getmenulinks.php
+processing delta on xaradminapi/index.html
+delta on xaradminapi/index.html in first changeset renamed to xaradminapi/index.html
+processing delta on xaradminapi/remove_category.php
+delta on xaradminapi/remove_category.php in first changeset renamed to xaradminapi/remove_category.php
+processing delta on xaradminapi/remove_product.php
+delta on xaradminapi/remove_product.php in first changeset renamed to xaradminapi/remove_product.php
+processing delta on xarblocks/best_sellers.php
+delta on xarblocks/best_sellers.php in first changeset renamed to xarblocks/best_sellers.php
+processing delta on xarblocks/categories.php
+delta on xarblocks/categories.php in first changeset renamed to xarblocks/categories.php
+processing delta on xarblocks/configmenu.php
+delta on xarblocks/configmenu.php in first changeset renamed to xarblocks/configmenu.php
+discarding delta []->[7a7275459f1fea11b6eb4fa09b49bcc3695bb441] for deleted file 'xarblocks/configmenu.php'
+processing delta on xarblocks/index.html
+delta on xarblocks/index.html in first changeset renamed to xarblocks/index.html
+processing delta on xarblocks/manufacturer_info.php
+delta on xarblocks/manufacturer_info.php in first changeset renamed to xarblocks/manufacturer_info.php
+processing delta on xarblocks/manufacturers.php
+delta on xarblocks/manufacturers.php in first changeset renamed to xarblocks/manufacturers.php
+processing delta on xarblocks/product_notifications.php
+delta on xarblocks/product_notifications.php in first changeset renamed to xarblocks/product_notifications.php
+processing delta on xarblocks/search.php
+delta on xarblocks/search.php in first changeset renamed to xarblocks/search.php
+processing delta on xarblocks/specials.php
+delta on xarblocks/specials.php in first changeset renamed to xarblocks/specials.php
+processing delta on xarblocks/unused/add_a_quickie.php
+delta on xarblocks/unused/add_a_quickie.php in first changeset renamed to xarblocks/unused/add_a_quickie.php
+processing delta on xarblocks/unused/best_sellers.php
+delta on xarblocks/unused/best_sellers.php in first changeset renamed to xarblocks/unused/best_sellers.php
+processing delta on xarblocks/unused/content.php
+delta on xarblocks/unused/content.php in first changeset renamed to xarblocks/unused/content.php
+processing delta on xarimages/index.html
+delta on xarimages/index.html in first changeset renamed to xarimages/index.html
+processing delta on xarincludes/index.html
+delta on xarincludes/index.html in first changeset renamed to xarincludes/index.html
+processing delta on xarincludes/modules/default.php
+delta on xarincludes/modules/default.php in first changeset renamed to xarincludes/modules/default.php
+processing delta on xarincludes/modules/index.html
+delta on xarincludes/modules/index.html in first changeset renamed to xarincludes/modules/index.html
+processing delta on xarincludes/new_attributes_config.php
+delta on xarincludes/new_attributes_config.php in first changeset renamed to xarincludes/new_attributes_config.php
+processing delta on xarincludes/new_attributes_include.php
+delta on xarincludes/new_attributes_include.php in first changeset renamed to xarincludes/new_attributes_include.php
+processing delta on xarincludes/new_attributes_select.php
+delta on xarincludes/new_attributes_select.php in first changeset renamed to xarincludes/new_attributes_select.php
+processing delta on xarincludes/unused/new_attributes_config.php
+delta on xarincludes/unused/new_attributes_config.php in first changeset renamed to xarincludes/unused/new_attributes_config.php
+processing delta on xarincludes/unused/new_attributes_include.php
+delta on xarincludes/unused/new_attributes_include.php in first changeset renamed to xarincludes/unused/new_attributes_include.php
+processing delta on xarincludes/unused/new_attributes_select.php
+delta on xarincludes/unused/new_attributes_select.php in first changeset renamed to xarincludes/unused/new_attributes_select.php
+processing delta on xarinit.php
+delta on xarinit.php in first changeset renamed to xarinit.php
+processing delta on xarstyles/index.html
+delta on xarstyles/index.html in first changeset renamed to xarstyles/index.html
+processing delta on xarstyles/userstylesheet.css
+delta on xarstyles/userstylesheet.css in first changeset renamed to xarstyles/userstylesheet.css
+processing delta on xartables.php
+delta on xartables.php in first changeset renamed to xartables.php
+processing delta on xartemplates/admin-categories.xd
+delta on xartemplates/admin-categories.xd in first changeset renamed to xartemplates/admin-categories.xd
+processing delta on xartemplates/admin-categories_screen.xd
+delta on xartemplates/admin-categories_screen.xd in first changeset renamed to xartemplates/admin-categories_screen.xd
+processing delta on xartemplates/admin-categories_screenno.xd
+delta on xartemplates/admin-categories_screenno.xd in first changeset renamed to xartemplates/admin-categories_screenno.xd
+processing delta on xartemplates/admin-categories_screenwromg.xd
+delta on xartemplates/admin-categories_screenwromg.xd in first changeset renamed to xartemplates/admin-categories_screenwromg.xd
+processing delta on xartemplates/admin-categories_view.xd
+delta on xartemplates/admin-categories_view.xd in first changeset renamed to xartemplates/admin-categories_view.xd
+processing delta on xartemplates/admin-configuration.xd
+delta on xartemplates/admin-configuration.xd in first changeset renamed to xartemplates/admin-configuration.xd
+processing delta on xartemplates/admin-main.xd
+delta on xartemplates/admin-main.xd in first changeset renamed to xartemplates/admin-main.xd
+processing delta on xartemplates/admin-manufacturers.xd
+delta on xartemplates/admin-manufacturers.xd in first changeset renamed to xartemplates/admin-manufacturers.xd
+processing delta on xartemplates/admin-new_attributes.xd
+delta on xartemplates/admin-new_attributes.xd in first changeset renamed to xartemplates/admin-new_attributes.xd
+processing delta on xartemplates/admin-product_screen.xd
+delta on xartemplates/admin-product_screen.xd in first changeset renamed to xartemplates/admin-product_screen.xd
+processing delta on xartemplates/admin-products_attributes.xd
+delta on xartemplates/admin-products_attributes.xd in first changeset renamed to xartemplates/admin-products_attributes.xd
+processing delta on xartemplates/admin-products_attributesold.xd
+delta on xartemplates/admin-products_attributesold.xd in first changeset renamed to xartemplates/admin-products_attributesold.xd
+processing delta on xartemplates/admin-products_expected.xd
+delta on xartemplates/admin-products_expected.xd in first changeset renamed to xartemplates/admin-products_expected.xd
+processing delta on xartemplates/admin-stats_products_purchased.xd
+delta on xartemplates/admin-stats_products_purchased.xd in first changeset renamed to xartemplates/admin-stats_products_purchased.xd
+processing delta on xartemplates/blocks/best_sellers.xd
+delta on xartemplates/blocks/best_sellers.xd in first changeset renamed to xartemplates/blocks/best_sellers.xd
+processing delta on xartemplates/blocks/categories.xd
+delta on xartemplates/blocks/categories.xd in first changeset renamed to xartemplates/blocks/categories.xd
+processing delta on xartemplates/blocks/manufacturers.xd
+delta on xartemplates/blocks/manufacturers.xd in first changeset renamed to xartemplates/blocks/manufacturers.xd
+processing delta on xartemplates/blocks/manufacturers_info.xd
+delta on xartemplates/blocks/manufacturers_info.xd in first changeset renamed to xartemplates/blocks/manufacturers_info.xd
+processing delta on xartemplates/blocks/notifications.xd
+delta on xartemplates/blocks/notifications.xd in first changeset renamed to xartemplates/blocks/notifications.xd
+processing delta on xartemplates/blocks/search.xd
+delta on xartemplates/blocks/search.xd in first changeset renamed to xartemplates/blocks/search.xd
+processing delta on xartemplates/blocks/specials.xd
+delta on xartemplates/blocks/specials.xd in first changeset renamed to xartemplates/blocks/specials.xd
+processing delta on xartemplates/blocks/whatsnew.xd
+delta on xartemplates/blocks/whatsnew.xd in first changeset renamed to xartemplates/blocks/whatsnew.xd
+processing delta on xartemplates/category_listing/category_listing.xd
+delta on xartemplates/category_listing/category_listing.xd in first changeset renamed to xartemplates/category_listing/category_listing.xd
+processing delta on xartemplates/commerce/product_listing.xd
+delta on xartemplates/commerce/product_listing.xd in first changeset renamed to xartemplates/commerce/product_listing.xd
+processing delta on xartemplates/commerce/user-category_listing.xd
+delta on xartemplates/commerce/user-category_listing.xd in first changeset renamed to xartemplates/commerce/user-category_listing.xd
+processing delta on xartemplates/includes/admin-navigation.xd
+delta on xartemplates/includes/admin-navigation.xd in first changeset renamed to xartemplates/includes/admin-navigation.xd
+processing delta on xartemplates/includes/new_products.xd
+delta on xartemplates/includes/new_products.xd in first changeset renamed to xartemplates/includes/new_products.xd
+processing delta on xartemplates/includes/upcoming_products.xd
+delta on xartemplates/includes/upcoming_products.xd in first changeset renamed to xartemplates/includes/upcoming_products.xd
+processing delta on xartemplates/index.html
+delta on xartemplates/index.html in first changeset renamed to xartemplates/index.html
+processing delta on xartemplates/main_content.xd
+delta on xartemplates/main_content.xd in first changeset renamed to xartemplates/main_content.xd
+processing delta on xartemplates/product_info/product_info_v1.html
+delta on xartemplates/product_info/product_info_v1.html in first changeset renamed to xartemplates/product_info/product_info_v1.html
+processing delta on xartemplates/product_listing/product_listing_v1.html
+delta on xartemplates/product_listing/product_listing_v1.html in first changeset renamed to xartemplates/product_listing/product_listing_v1.html
+processing delta on xartemplates/product_options/product_options_dropdown.html
+delta on xartemplates/product_options/product_options_dropdown.html in first changeset renamed to xartemplates/product_options/product_options_dropdown.html
+processing delta on xartemplates/product_options/product_options_selection.html
+delta on xartemplates/product_options/product_options_selection.html in first changeset renamed to xartemplates/product_options/product_options_selection.html
+processing delta on xartemplates/stats_products_viewed.php
+delta on xartemplates/stats_products_viewed.php in first changeset renamed to xartemplates/stats_products_viewed.php
+processing delta on xartemplates/user-category_listing.xd
+delta on xartemplates/user-category_listing.xd in first changeset renamed to xartemplates/user-category_listing.xd
+processing delta on xartemplates/user-main.xd
+delta on xartemplates/user-main.xd in first changeset renamed to xartemplates/user-main.xd
+processing delta on xartemplates/user-product_listing.xd
+delta on xartemplates/user-product_listing.xd in first changeset renamed to xartemplates/user-product_listing.xd
+processing delta on xartemplates/user-product_reviews.xd
+delta on xartemplates/user-product_reviews.xd in first changeset renamed to xartemplates/user-product_reviews.xd
+processing delta on xartemplates/user-product_reviews_info.xd
+delta on xartemplates/user-product_reviews_info.xd in first changeset renamed to xartemplates/user-product_reviews_info.xd
+processing delta on xartemplates/user-product_reviews_write.xd
+delta on xartemplates/user-product_reviews_write.xd in first changeset renamed to xartemplates/user-product_reviews_write.xd
+processing delta on xartemplates/user-start.xd
+delta on xartemplates/user-start.xd in first changeset renamed to xartemplates/user-start.xd
+processing delta on xaruser.php
+delta on xaruser.php in first changeset renamed to xaruser.php
+processing delta on xaruser/default.php
+delta on xaruser/default.php in first changeset renamed to xaruser/default.php
+processing delta on xaruser/index.html
+delta on xaruser/index.html in first changeset renamed to xaruser/index.html
+processing delta on xaruser/main.php
+delta on xaruser/main.php in first changeset renamed to xaruser/main.php
+processing delta on xaruser/product_reviews.php
+delta on xaruser/product_reviews.php in first changeset renamed to xaruser/product_reviews.php
+processing delta on xaruser/product_reviews_info.php
+delta on xaruser/product_reviews_info.php in first changeset renamed to xaruser/product_reviews_info.php
+processing delta on xaruser/product_reviews_write.php
+delta on xaruser/product_reviews_write.php in first changeset renamed to xaruser/product_reviews_write.php
+processing delta on xaruser/products_new.php
+delta on xaruser/products_new.php in first changeset renamed to xaruser/products_new.php
+processing delta on xaruser/specials.php
+delta on xaruser/specials.php in first changeset renamed to xaruser/specials.php
+processing delta on xaruser/start.php
+delta on xaruser/start.php in first changeset renamed to xaruser/start.php
+processing delta on xaruser/unused/default.php
+delta on xaruser/unused/default.php in first changeset renamed to xaruser/unused/default.php
+processing delta on xaruser/unused/exit.php
+delta on xaruser/unused/exit.php in first changeset renamed to xaruser/unused/exit.php
+processing delta on xaruser/unused/product_reviews.php
+delta on xaruser/unused/product_reviews.php in first changeset renamed to xaruser/unused/product_reviews.php
+processing delta on xaruser/unused/product_reviews_info.php
+delta on xaruser/unused/product_reviews_info.php in first changeset renamed to xaruser/unused/product_reviews_info.php
+processing delta on xaruser/unused/product_reviews_write.php
+delta on xaruser/unused/product_reviews_write.php in first changeset renamed to xaruser/unused/product_reviews_write.php
+processing delta on xaruser/unused/products_new.php
+delta on xaruser/unused/products_new.php in first changeset renamed to xaruser/unused/products_new.php
+processing delta on xaruser/unused/shop_content.php
+delta on xaruser/unused/shop_content.php in first changeset renamed to xaruser/unused/shop_content.php
+processing delta on xaruser/unused/specials.php
+delta on xaruser/unused/specials.php in first changeset renamed to xaruser/unused/specials.php
+processing delta on xaruserapi/count_products_in_category.php
+delta on xaruserapi/count_products_in_category.php in first changeset renamed to xaruserapi/count_products_in_category.php
+processing delta on xaruserapi/get_categories.php
+delta on xaruserapi/get_categories.php in first changeset renamed to xaruserapi/get_categories.php
+processing delta on xaruserapi/get_category_tree.php
+delta on xaruserapi/get_category_tree.php in first changeset renamed to xaruserapi/get_category_tree.php
+processing delta on xaruserapi/index.html
+delta on xaruserapi/index.html in first changeset renamed to xaruserapi/index.html
+processing delta on xaruserapi/remove_product.php
+delta on xaruserapi/remove_product.php in first changeset renamed to xaruserapi/remove_product.php
+processing delta on xaruserapi/set_categories_status.php
+delta on xaruserapi/set_categories_status.php in first changeset renamed to xaruserapi/set_categories_status.php
+processing delta on xaruserapi/set_product_status.php
+delta on xaruserapi/set_product_status.php in first changeset renamed to xaruserapi/set_product_status.php
+processing delta on xarversion.php
+delta on xarversion.php in first changeset renamed to xarversion.php
+fusing deltas on xaradmin/categories_screen.php :  -> 2549fe4d7e359de30ea8f45ddbf3b5d8ca25e587 and 2549fe4d7e359de30ea8f45ddbf3b5d8ca25e587 -> 7e3fe837145a3d60aa54f979ec657992e6b6bd6e
+fusing deltas on xaradminapi/getmenulinks.php :  -> fd130e3e0935b3d0e0c1e8f59e732c889767e6b8 and fd130e3e0935b3d0e0c1e8f59e732c889767e6b8 -> a99fb9246b6b18699dfec8ab474af878c7b376f5
+delta on xarblocks/unused/configmenu.php in second changeset copied forward
+fusing deltas on xarinit.php :  -> 23a1dbd5ea9294289020228888a37243bac7f474 and 23a1dbd5ea9294289020228888a37243bac7f474 -> d4118f6b49844a96d844eb9d7ec66867f3da7d8c
+fusing deltas on xartables.php :  -> 4d91e01e14612f9a446ada75833c0ea51c3b1b61 and 4d91e01e14612f9a446ada75833c0ea51c3b1b61 -> 693ea80206e835a424eb77759d4c6450d6a76a1d
+fusing deltas on xartemplates/admin-categories.xd :  -> 77bce442480f9fb6593e73935c41653fadcfd423 and 77bce442480f9fb6593e73935c41653fadcfd423 -> e09389e69a732c3ef23db4ae6c8b507f7a52e7b7
+fusing deltas on xartemplates/admin-categories_screen.xd :  -> d21f961dc30ce3dda3327cabdfe338ed4788af03 and d21f961dc30ce3dda3327cabdfe338ed4788af03 -> 0a29e3ceab367483d7880f3e3074ef94f164447a
+fusing deltas on xartemplates/admin-categories_screenno.xd :  -> d75e42ddd324e6064dc1c60bcc22c8f7131e4926 and d75e42ddd324e6064dc1c60bcc22c8f7131e4926 -> 4973b7a2b1e4b3aede10e89788ec4170a0b6ffb3
+fusing deltas on xartemplates/admin-categories_screenwromg.xd :  -> f8d379d6f6bee96519968de5d074bb1189088c77 and f8d379d6f6bee96519968de5d074bb1189088c77 -> 0a5346580bef4fc6a794257702396179859a8f3c
+delta on xartemplates/blocks/configmenu.xd in second changeset copied forward
+fusing deltas on xarversion.php :  -> 203b0327a33d71c9eae2e4c5b29cdd01c79f5df7 and 203b0327a33d71c9eae2e4c5b29cdd01c79f5df7 -> 58bac2de279f00cf54bb86f0a8e4ff877f6d9569
+finished concatenation
+binding 1 parameters for SELECT data FROM revisions WHERE id = ?
+binding 1 with value '04969753959126d4eb60024b01244ed0cdf0bb71'
+Examining 87360e9899a790108040273827e1ec313fd76b72 -> 989e18a9db4ab92e14e8f63554bce680438c106e
+concatenating change sets
+concatenating 0 and 11 deltas
+delta on xaradmin/categories_screen.php in second changeset copied forward
+delta on xaradminapi/getmenulinks.php in second changeset copied forward
+delta on xarblocks/unused/configmenu.php in second changeset copied forward
+delta on xarinit.php in second changeset copied forward
+delta on xartables.php in second changeset copied forward
+delta on xartemplates/admin-categories.xd in second changeset copied forward
+delta on xartemplates/admin-categories_screen.xd in second changeset copied forward
+delta on xartemplates/admin-categories_screenno.xd in second changeset copied forward
+delta on xartemplates/admin-categories_screenwromg.xd in second changeset copied forward
+delta on xartemplates/blocks/configmenu.xd in second changeset copied forward
+delta on xarversion.php in second changeset copied forward
+finished concatenation
+binding 1 parameters for SELECT id FROM manifests WHERE id = ?
+binding 1 with value '77e71728478ad3f5c36fab2b0be7d1a74394e928'
+reconstructing 77e71728478ad3f5c36fab2b0be7d1a74394e928 in manifest_deltas
+binding 1 parameters for SELECT id FROM manifest_deltas WHERE id = ?
+binding 1 with value '77e71728478ad3f5c36fab2b0be7d1a74394e928'
+binding 1 parameters for SELECT id FROM manifests WHERE id = ?
+binding 1 with value '77e71728478ad3f5c36fab2b0be7d1a74394e928'
+binding 1 parameters for SELECT base FROM manifest_deltas WHERE id = ?
+binding 1 with value '77e71728478ad3f5c36fab2b0be7d1a74394e928'
+inserting edge: 77e71728478ad3f5c36fab2b0be7d1a74394e928 <- 70298ae6bd59d35ba9430a52a4bacc80525e4907
+version cache hit on 70298ae6bd59d35ba9430a52a4bacc80525e4907
+following delta 70298ae6bd59d35ba9430a52a4bacc80525e4907 -> 77e71728478ad3f5c36fab2b0be7d1a74394e928
+binding 2 parameters for SELECT delta FROM manifest_deltas WHERE id = ? AND base = ?
+binding 1 with value '77e71728478ad3f5c36fab2b0be7d1a74394e928'
+binding 2 with value '70298ae6bd59d35ba9430a52a4bacc80525e4907'
+concatenating change sets
+concatenating 130 and 11 deltas
+processing delta on BitKeeper/cia-bk2xml.sh
+delta on BitKeeper/cia-bk2xml.sh in first changeset renamed to BitKeeper/cia-bk2xml.sh
+discarding delta []->[984f6a50236638af46456a3d84a01caf667db59a] for deleted file 'BitKeeper/cia-bk2xml.sh'
+processing delta on BitKeeper/etc/config
+delta on BitKeeper/etc/config in first changeset renamed to BitKeeper/etc/config
+discarding delta []->[efdfd2fb17c556c273b8e9ba7d4f9eeff7c08cfb] for deleted file 'BitKeeper/etc/config'
+processing delta on BitKeeper/etc/ignore
+delta on BitKeeper/etc/ignore in first changeset renamed to BitKeeper/etc/ignore
+discarding delta []->[ea8000735ec65dbfb79289d842542b991d6835ea] for deleted file 'BitKeeper/etc/ignore'
+processing delta on BitKeeper/etc/logging_ok
+delta on BitKeeper/etc/logging_ok in first changeset renamed to BitKeeper/etc/logging_ok
+discarding delta []->[56e69764ae0e6abffdbe05c7e48eb75a3ccb517d] for deleted file 'BitKeeper/etc/logging_ok'
+processing delta on BitKeeper/post-incoming.notice
+delta on BitKeeper/post-incoming.notice in first changeset renamed to BitKeeper/post-incoming.notice
+discarding delta []->[eea2e9cd8e99955d3cfd0b92784da61ba056a15d] for deleted file 'BitKeeper/post-incoming.notice'
+processing delta on index.html
+delta on index.html in first changeset renamed to index.html
+processing delta on xaradmin/categories.php
+delta on xaradmin/categories.php in first changeset renamed to xaradmin/categories.php
+processing delta on xaradmin/categories_screen.php
+delta on xaradmin/categories_screen.php in first changeset renamed to xaradmin/categories_screen.php
+processing delta on xaradmin/configuration.php
+delta on xaradmin/configuration.php in first changeset renamed to xaradmin/configuration.php
+processing delta on xaradmin/content_manager.php
+delta on xaradmin/content_manager.php in first changeset renamed to xaradmin/content_manager.php
+processing delta on xaradmin/index.html
+delta on xaradmin/index.html in first changeset renamed to xaradmin/index.html
+processing delta on xaradmin/main.php
+delta on xaradmin/main.php in first changeset renamed to xaradmin/main.php
+processing delta on xaradmin/manufacturers.php
+delta on xaradmin/manufacturers.php in first changeset renamed to xaradmin/manufacturers.php
+processing delta on xaradmin/new_attributes.php
+delta on xaradmin/new_attributes.php in first changeset renamed to xaradmin/new_attributes.php
+processing delta on xaradmin/new_attributes_change.php
+delta on xaradmin/new_attributes_change.php in first changeset renamed to xaradmin/new_attributes_change.php
+processing delta on xaradmin/new_attributes_config.php
+delta on xaradmin/new_attributes_config.php in first changeset renamed to xaradmin/new_attributes_config.php
+processing delta on xaradmin/new_attributes_functions.php
+delta on xaradmin/new_attributes_functions.php in first changeset renamed to xaradmin/new_attributes_functions.php
+processing delta on xaradmin/new_attributes_include.php
+delta on xaradmin/new_attributes_include.php in first changeset renamed to xaradmin/new_attributes_include.php
+processing delta on xaradmin/new_attributes_select.php
+delta on xaradmin/new_attributes_select.php in first changeset renamed to xaradmin/new_attributes_select.php
+processing delta on xaradmin/product_screen.php
+delta on xaradmin/product_screen.php in first changeset renamed to xaradmin/product_screen.php
+processing delta on xaradmin/products_attributes.php
+delta on xaradmin/products_attributes.php in first changeset renamed to xaradmin/products_attributes.php
+processing delta on xaradmin/products_expected.php
+delta on xaradmin/products_expected.php in first changeset renamed to xaradmin/products_expected.php
+processing delta on xaradmin/reviews.php
+delta on xaradmin/reviews.php in first changeset renamed to xaradmin/reviews.php
+processing delta on xaradmin/start.php
+delta on xaradmin/start.php in first changeset renamed to xaradmin/start.php
+processing delta on xaradmin/unused/categoriesold.php
+delta on xaradmin/unused/categoriesold.php in first changeset renamed to xaradmin/unused/categoriesold.php
+processing delta on xaradmin/unused/manufacturers.php
+delta on xaradmin/unused/manufacturers.php in first changeset renamed to xaradmin/unused/manufacturers.php
+processing delta on xaradmin/unused/manufacturersold.php
+delta on xaradmin/unused/manufacturersold.php in first changeset renamed to xaradmin/unused/manufacturersold.php
+processing delta on xaradmin/unused/new_attributes.php
+delta on xaradmin/unused/new_attributes.php in first changeset renamed to xaradmin/unused/new_attributes.php
+processing delta on xaradmin/unused/products_attributesold.php
+delta on xaradmin/unused/products_attributesold.php in first changeset renamed to xaradmin/unused/products_attributesold.php
+processing delta on xaradmin/unused/specials.php
+delta on xaradmin/unused/specials.php in first changeset renamed to xaradmin/unused/specials.php
+processing delta on xaradmin/unused/stats_products_purchased.php
+delta on xaradmin/unused/stats_products_purchased.php in first changeset renamed to xaradmin/unused/stats_products_purchased.php
+processing delta on xaradmin/unused/stats_products_viewed.php
+delta on xaradmin/unused/stats_products_viewed.php in first changeset renamed to xaradmin/unused/stats_products_viewed.php
+processing delta on xaradminapi/getmenulinks.php
+delta on xaradminapi/getmenulinks.php in first changeset renamed to xaradminapi/getmenulinks.php
+processing delta on xaradminapi/index.html
+delta on xaradminapi/index.html in first changeset renamed to xaradminapi/index.html
+processing delta on xaradminapi/remove_category.php
+delta on xaradminapi/remove_category.php in first changeset renamed to xaradminapi/remove_category.php
+processing delta on xaradminapi/remove_product.php
+delta on xaradminapi/remove_product.php in first changeset renamed to xaradminapi/remove_product.php
+processing delta on xarblocks/best_sellers.php
+delta on xarblocks/best_sellers.php in first changeset renamed to xarblocks/best_sellers.php
+processing delta on xarblocks/categories.php
+delta on xarblocks/categories.php in first changeset renamed to xarblocks/categories.php
+processing delta on xarblocks/configmenu.php
+delta on xarblocks/configmenu.php in first changeset renamed to xarblocks/configmenu.php
+discarding delta []->[7a7275459f1fea11b6eb4fa09b49bcc3695bb441] for deleted file 'xarblocks/configmenu.php'
+processing delta on xarblocks/index.html
+delta on xarblocks/index.html in first changeset renamed to xarblocks/index.html
+processing delta on xarblocks/manufacturer_info.php
+delta on xarblocks/manufacturer_info.php in first changeset renamed to xarblocks/manufacturer_info.php
+processing delta on xarblocks/manufacturers.php
+delta on xarblocks/manufacturers.php in first changeset renamed to xarblocks/manufacturers.php
+processing delta on xarblocks/product_notifications.php
+delta on xarblocks/product_notifications.php in first changeset renamed to xarblocks/product_notifications.php
+processing delta on xarblocks/search.php
+delta on xarblocks/search.php in first changeset renamed to xarblocks/search.php
+processing delta on xarblocks/specials.php
+delta on xarblocks/specials.php in first changeset renamed to xarblocks/specials.php
+processing delta on xarblocks/unused/add_a_quickie.php
+delta on xarblocks/unused/add_a_quickie.php in first changeset renamed to xarblocks/unused/add_a_quickie.php
+processing delta on xarblocks/unused/best_sellers.php
+delta on xarblocks/unused/best_sellers.php in first changeset renamed to xarblocks/unused/best_sellers.php
+processing delta on xarblocks/unused/content.php
+delta on xarblocks/unused/content.php in first changeset renamed to xarblocks/unused/content.php
+processing delta on xarimages/index.html
+delta on xarimages/index.html in first changeset renamed to xarimages/index.html
+processing delta on xarincludes/index.html
+delta on xarincludes/index.html in first changeset renamed to xarincludes/index.html
+processing delta on xarincludes/modules/default.php
+delta on xarincludes/modules/default.php in first changeset renamed to xarincludes/modules/default.php
+processing delta on xarincludes/modules/index.html
+delta on xarincludes/modules/index.html in first changeset renamed to xarincludes/modules/index.html
+processing delta on xarincludes/new_attributes_config.php
+delta on xarincludes/new_attributes_config.php in first changeset renamed to xarincludes/new_attributes_config.php
+processing delta on xarincludes/new_attributes_include.php
+delta on xarincludes/new_attributes_include.php in first changeset renamed to xarincludes/new_attributes_include.php
+processing delta on xarincludes/new_attributes_select.php
+delta on xarincludes/new_attributes_select.php in first changeset renamed to xarincludes/new_attributes_select.php
+processing delta on xarincludes/unused/new_attributes_config.php
+delta on xarincludes/unused/new_attributes_config.php in first changeset renamed to xarincludes/unused/new_attributes_config.php
+processing delta on xarincludes/unused/new_attributes_include.php
+delta on xarincludes/unused/new_attributes_include.php in first changeset renamed to xarincludes/unused/new_attributes_include.php
+processing delta on xarincludes/unused/new_attributes_select.php
+delta on xarincludes/unused/new_attributes_select.php in first changeset renamed to xarincludes/unused/new_attributes_select.php
+processing delta on xarinit.php
+delta on xarinit.php in first changeset renamed to xarinit.php
+processing delta on xarstyles/index.html
+delta on xarstyles/index.html in first changeset renamed to xarstyles/index.html
+processing delta on xarstyles/userstylesheet.css
+delta on xarstyles/userstylesheet.css in first changeset renamed to xarstyles/userstylesheet.css
+processing delta on xartables.php
+delta on xartables.php in first changeset renamed to xartables.php
+processing delta on xartemplates/admin-categories.xd
+delta on xartemplates/admin-categories.xd in first changeset renamed to xartemplates/admin-categories.xd
+processing delta on xartemplates/admin-categories_screen.xd
+delta on xartemplates/admin-categories_screen.xd in first changeset renamed to xartemplates/admin-categories_screen.xd
+processing delta on xartemplates/admin-categories_screenno.xd
+delta on xartemplates/admin-categories_screenno.xd in first changeset renamed to xartemplates/admin-categories_screenno.xd
+processing delta on xartemplates/admin-categories_screenwromg.xd
+delta on xartemplates/admin-categories_screenwromg.xd in first changeset renamed to xartemplates/admin-categories_screenwromg.xd
+processing delta on xartemplates/admin-categories_view.xd
+delta on xartemplates/admin-categories_view.xd in first changeset renamed to xartemplates/admin-categories_view.xd
+processing delta on xartemplates/admin-configuration.xd
+delta on xartemplates/admin-configuration.xd in first changeset renamed to xartemplates/admin-configuration.xd
+processing delta on xartemplates/admin-main.xd
+delta on xartemplates/admin-main.xd in first changeset renamed to xartemplates/admin-main.xd
+processing delta on xartemplates/admin-manufacturers.xd
+delta on xartemplates/admin-manufacturers.xd in first changeset renamed to xartemplates/admin-manufacturers.xd
+processing delta on xartemplates/admin-new_attributes.xd
+delta on xartemplates/admin-new_attributes.xd in first changeset renamed to xartemplates/admin-new_attributes.xd
+processing delta on xartemplates/admin-product_screen.xd
+delta on xartemplates/admin-product_screen.xd in first changeset renamed to xartemplates/admin-product_screen.xd
+processing delta on xartemplates/admin-products_attributes.xd
+delta on xartemplates/admin-products_attributes.xd in first changeset renamed to xartemplates/admin-products_attributes.xd
+processing delta on xartemplates/admin-products_attributesold.xd
+delta on xartemplates/admin-products_attributesold.xd in first changeset renamed to xartemplates/admin-products_attributesold.xd
+processing delta on xartemplates/admin-products_expected.xd
+delta on xartemplates/admin-products_expected.xd in first changeset renamed to xartemplates/admin-products_expected.xd
+processing delta on xartemplates/admin-stats_products_purchased.xd
+delta on xartemplates/admin-stats_products_purchased.xd in first changeset renamed to xartemplates/admin-stats_products_purchased.xd
+processing delta on xartemplates/blocks/best_sellers.xd
+delta on xartemplates/blocks/best_sellers.xd in first changeset renamed to xartemplates/blocks/best_sellers.xd
+processing delta on xartemplates/blocks/categories.xd
+delta on xartemplates/blocks/categories.xd in first changeset renamed to xartemplates/blocks/categories.xd
+processing delta on xartemplates/blocks/manufacturers.xd
+delta on xartemplates/blocks/manufacturers.xd in first changeset renamed to xartemplates/blocks/manufacturers.xd
+processing delta on xartemplates/blocks/manufacturers_info.xd
+delta on xartemplates/blocks/manufacturers_info.xd in first changeset renamed to xartemplates/blocks/manufacturers_info.xd
+processing delta on xartemplates/blocks/notifications.xd
+delta on xartemplates/blocks/notifications.xd in first changeset renamed to xartemplates/blocks/notifications.xd
+processing delta on xartemplates/blocks/search.xd
+delta on xartemplates/blocks/search.xd in first changeset renamed to xartemplates/blocks/search.xd
+processing delta on xartemplates/blocks/specials.xd
+delta on xartemplates/blocks/specials.xd in first changeset renamed to xartemplates/blocks/specials.xd
+processing delta on xartemplates/blocks/whatsnew.xd
+delta on xartemplates/blocks/whatsnew.xd in first changeset renamed to xartemplates/blocks/whatsnew.xd
+processing delta on xartemplates/category_listing/category_listing.xd
+delta on xartemplates/category_listing/category_listing.xd in first changeset renamed to xartemplates/category_listing/category_listing.xd
+processing delta on xartemplates/commerce/product_listing.xd
+delta on xartemplates/commerce/product_listing.xd in first changeset renamed to xartemplates/commerce/product_listing.xd
+processing delta on xartemplates/commerce/user-category_listing.xd
+delta on xartemplates/commerce/user-category_listing.xd in first changeset renamed to xartemplates/commerce/user-category_listing.xd
+processing delta on xartemplates/includes/admin-navigation.xd
+delta on xartemplates/includes/admin-navigation.xd in first changeset renamed to xartemplates/includes/admin-navigation.xd
+processing delta on xartemplates/includes/new_products.xd
+delta on xartemplates/includes/new_products.xd in first changeset renamed to xartemplates/includes/new_products.xd
+processing delta on xartemplates/includes/upcoming_products.xd
+delta on xartemplates/includes/upcoming_products.xd in first changeset renamed to xartemplates/includes/upcoming_products.xd
+processing delta on xartemplates/index.html
+delta on xartemplates/index.html in first changeset renamed to xartemplates/index.html
+processing delta on xartemplates/main_content.xd
+delta on xartemplates/main_content.xd in first changeset renamed to xartemplates/main_content.xd
+processing delta on xartemplates/product_info/product_info_v1.html
+delta on xartemplates/product_info/product_info_v1.html in first changeset renamed to xartemplates/product_info/product_info_v1.html
+processing delta on xartemplates/product_listing/product_listing_v1.html
+delta on xartemplates/product_listing/product_listing_v1.html in first changeset renamed to xartemplates/product_listing/product_listing_v1.html
+processing delta on xartemplates/product_options/product_options_dropdown.html
+delta on xartemplates/product_options/product_options_dropdown.html in first changeset renamed to xartemplates/product_options/product_options_dropdown.html
+processing delta on xartemplates/product_options/product_options_selection.html
+delta on xartemplates/product_options/product_options_selection.html in first changeset renamed to xartemplates/product_options/product_options_selection.html
+processing delta on xartemplates/stats_products_viewed.php
+delta on xartemplates/stats_products_viewed.php in first changeset renamed to xartemplates/stats_products_viewed.php
+processing delta on xartemplates/user-category_listing.xd
+delta on xartemplates/user-category_listing.xd in first changeset renamed to xartemplates/user-category_listing.xd
+processing delta on xartemplates/user-main.xd
+delta on xartemplates/user-main.xd in first changeset renamed to xartemplates/user-main.xd
+processing delta on xartemplates/user-product_listing.xd
+delta on xartemplates/user-product_listing.xd in first changeset renamed to xartemplates/user-product_listing.xd
+processing delta on xartemplates/user-product_reviews.xd
+delta on xartemplates/user-product_reviews.xd in first changeset renamed to xartemplates/user-product_reviews.xd
+processing delta on xartemplates/user-product_reviews_info.xd
+delta on xartemplates/user-product_reviews_info.xd in first changeset renamed to xartemplates/user-product_reviews_info.xd
+processing delta on xartemplates/user-product_reviews_write.xd
+delta on xartemplates/user-product_reviews_write.xd in first changeset renamed to xartemplates/user-product_reviews_write.xd
+processing delta on xartemplates/user-start.xd
+delta on xartemplates/user-start.xd in first changeset renamed to xartemplates/user-start.xd
+processing delta on xaruser.php
+delta on xaruser.php in first changeset renamed to xaruser.php
+processing delta on xaruser/default.php
+delta on xaruser/default.php in first changeset renamed to xaruser/default.php
+processing delta on xaruser/index.html
+delta on xaruser/index.html in first changeset renamed to xaruser/index.html
+processing delta on xaruser/main.php
+delta on xaruser/main.php in first changeset renamed to xaruser/main.php
+processing delta on xaruser/product_reviews.php
+delta on xaruser/product_reviews.php in first changeset renamed to xaruser/product_reviews.php
+processing delta on xaruser/product_reviews_info.php
+delta on xaruser/product_reviews_info.php in first changeset renamed to xaruser/product_reviews_info.php
+processing delta on xaruser/product_reviews_write.php
+delta on xaruser/product_reviews_write.php in first changeset renamed to xaruser/product_reviews_write.php
+processing delta on xaruser/products_new.php
+delta on xaruser/products_new.php in first changeset renamed to xaruser/products_new.php
+processing delta on xaruser/specials.php
+delta on xaruser/specials.php in first changeset renamed to xaruser/specials.php
+processing delta on xaruser/start.php
+delta on xaruser/start.php in first changeset renamed to xaruser/start.php
+processing delta on xaruser/unused/default.php
+delta on xaruser/unused/default.php in first changeset renamed to xaruser/unused/default.php
+processing delta on xaruser/unused/exit.php
+delta on xaruser/unused/exit.php in first changeset renamed to xaruser/unused/exit.php
+processing delta on xaruser/unused/product_reviews.php
+delta on xaruser/unused/product_reviews.php in first changeset renamed to xaruser/unused/product_reviews.php
+processing delta on xaruser/unused/product_reviews_info.php
+delta on xaruser/unused/product_reviews_info.php in first changeset renamed to xaruser/unused/product_reviews_info.php
+processing delta on xaruser/unused/product_reviews_write.php
+delta on xaruser/unused/product_reviews_write.php in first changeset renamed to xaruser/unused/product_reviews_write.php
+processing delta on xaruser/unused/products_new.php
+delta on xaruser/unused/products_new.php in first changeset renamed to xaruser/unused/products_new.php
+processing delta on xaruser/unused/shop_content.php
+delta on xaruser/unused/shop_content.php in first changeset renamed to xaruser/unused/shop_content.php
+processing delta on xaruser/unused/specials.php
+delta on xaruser/unused/specials.php in first changeset renamed to xaruser/unused/specials.php
+processing delta on xaruserapi/count_products_in_category.php
+delta on xaruserapi/count_products_in_category.php in first changeset renamed to xaruserapi/count_products_in_category.php
+processing delta on xaruserapi/get_categories.php
+delta on xaruserapi/get_categories.php in first changeset renamed to xaruserapi/get_categories.php
+processing delta on xaruserapi/get_category_tree.php
+delta on xaruserapi/get_category_tree.php in first changeset renamed to xaruserapi/get_category_tree.php
+processing delta on xaruserapi/index.html
+delta on xaruserapi/index.html in first changeset renamed to xaruserapi/index.html
+processing delta on xaruserapi/remove_product.php
+delta on xaruserapi/remove_product.php in first changeset renamed to xaruserapi/remove_product.php
+processing delta on xaruserapi/set_categories_status.php
+delta on xaruserapi/set_categories_status.php in first changeset renamed to xaruserapi/set_categories_status.php
+processing delta on xaruserapi/set_product_status.php
+delta on xaruserapi/set_product_status.php in first changeset renamed to xaruserapi/set_product_status.php
+processing delta on xarversion.php
+delta on xarversion.php in first changeset renamed to xarversion.php
+fusing deltas on xaradmin/categories_screen.php :  -> 2549fe4d7e359de30ea8f45ddbf3b5d8ca25e587 and 2549fe4d7e359de30ea8f45ddbf3b5d8ca25e587 -> 7e3fe837145a3d60aa54f979ec657992e6b6bd6e
+fusing deltas on xaradminapi/getmenulinks.php :  -> fd130e3e0935b3d0e0c1e8f59e732c889767e6b8 and fd130e3e0935b3d0e0c1e8f59e732c889767e6b8 -> a99fb9246b6b18699dfec8ab474af878c7b376f5
+delta on xarblocks/unused/configmenu.php in second changeset copied forward
+fusing deltas on xarinit.php :  -> 23a1dbd5ea9294289020228888a37243bac7f474 and 23a1dbd5ea9294289020228888a37243bac7f474 -> d4118f6b49844a96d844eb9d7ec66867f3da7d8c
+fusing deltas on xartables.php :  -> 4d91e01e14612f9a446ada75833c0ea51c3b1b61 and 4d91e01e14612f9a446ada75833c0ea51c3b1b61 -> 693ea80206e835a424eb77759d4c6450d6a76a1d
+fusing deltas on xartemplates/admin-categories.xd :  -> 77bce442480f9fb6593e73935c41653fadcfd423 and 77bce442480f9fb6593e73935c41653fadcfd423 -> e09389e69a732c3ef23db4ae6c8b507f7a52e7b7
+fusing deltas on xartemplates/admin-categories_screen.xd :  -> d21f961dc30ce3dda3327cabdfe338ed4788af03 and d21f961dc30ce3dda3327cabdfe338ed4788af03 -> 0a29e3ceab367483d7880f3e3074ef94f164447a
+fusing deltas on xartemplates/admin-categories_screenno.xd :  -> d75e42ddd324e6064dc1c60bcc22c8f7131e4926 and d75e42ddd324e6064dc1c60bcc22c8f7131e4926 -> 4973b7a2b1e4b3aede10e89788ec4170a0b6ffb3
+fusing deltas on xartemplates/admin-categories_screenwromg.xd :  -> f8d379d6f6bee96519968de5d074bb1189088c77 and f8d379d6f6bee96519968de5d074bb1189088c77 -> 0a5346580bef4fc6a794257702396179859a8f3c
+delta on xartemplates/blocks/configmenu.xd in second changeset copied forward
+fusing deltas on xarversion.php :  -> 203b0327a33d71c9eae2e4c5b29cdd01c79f5df7 and 203b0327a33d71c9eae2e4c5b29cdd01c79f5df7 -> 58bac2de279f00cf54bb86f0a8e4ff877f6d9569
+finished concatenation
+binding 1 parameters for SELECT data FROM revisions WHERE id = ?
+binding 1 with value '989e18a9db4ab92e14e8f63554bce680438c106e'
+noting acceptence of revision 989e18a9db4ab92e14e8f63554bce680438c106e
+loading lua hook get_branch_key
+lua failure: isfunction() in get_fn; stack = nil  
+Lua::ok(): failed = 1
+prepared statement SELECT id FROM private_keys
+binding 0 parameters for SELECT id FROM private_keys
+cert: signable text [branch@989e18a9db4ab92e14e8f63554bce680438c106e:Y29tLnhhcmF5YS5tb2R1bGVzLnByb2R1Y3Rz]
+loading lua hook persist_phrase_ok
+lua: extracted bool = 1
+Lua::ok(): failed = 0
+prepared statement SELECT id FROM private_keys WHERE id = ?
+binding 1 parameters for SELECT id FROM private_keys WHERE id = ?
+binding 1 with value 'mfl@netspan.ch'
+prepared statement SELECT keydata FROM private_keys WHERE id = ?
+binding 1 parameters for SELECT keydata FROM private_keys WHERE id = ?
+binding 1 with value 'mfl@netspan.ch'
+loading lua hook get_priv_key
+lua failure: isfunction() in get_fn; stack = nil  
+Lua::ok(): failed = 1
+loading lua hook persist_phrase_ok
+lua: extracted bool = 1
+Lua::ok(): failed = 0
+base64-decoding 859-byte private key
+loading lua hook persist_phrase_ok
+lua: extracted bool = 1
+Lua::ok(): failed = 0
+loading lua hook get_passphrase
+lua failure: isfunction() in get_fn; stack = nil  
+Lua::ok(): failed = 1

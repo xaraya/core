@@ -1,0 +1,63 @@
+<object name="ice_suppliers">
+  <objectid>55</objectid>
+  <label>Supplier</label>
+  <moduleid>27</moduleid>
+  <itemtype>1001</itemtype>
+  <parent>1000</parent>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config></config>
+  <isalias>1</isalias>
+  <properties>
+    <property name="description">
+      <id>269</id>
+      <label>Description</label>
+      <type>textarea_large</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>1</order>
+      <validation></validation>
+    </property>
+    <property name="keywords">
+      <id>270</id>
+      <label>Keywords</label>
+      <type>textarea_medium</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>2</order>
+      <validation></validation>
+    </property>
+    <property name="url">
+      <id>271</id>
+      <label>URL</label>
+      <type>url</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>3</order>
+      <validation></validation>
+    </property>
+    <property name="url_clicks">
+      <id>272</id>
+      <label>URL Clicks</label>
+      <type>integerbox</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>4</order>
+      <validation></validation>
+    </property>
+    <property name="last_clicked">
+      <id>273</id>
+      <label>Last Clicked</label>
+      <type>calendar</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>5</order>
+      <validation></validation>
+    </property>
+  </properties>
+</object>

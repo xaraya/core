@@ -1,0 +1,51 @@
+{config_load file="$language/lang_$language.conf" section="categorie_listing"}
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top"> 
+    <td class="main"> <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr valign="top"> 
+          <td><font size="1" face="Verdana, Arial, Helvetica, sans-serif"><strong><font color="#666666" size="4">{$CATEGORIES_NAME}</font></strong> 
+            </font></td>
+          <td align="right">{if $CATEGORIES_IMAGE}<img src="{$CATEGORIES_IMAGE}">{/if}</td>
+        </tr>
+      </table>{if $CATEGORIES_DESCRIPTION}
+      {$CATEGORIES_DESCRIPTION} 
+      <br>
+      <br>
+	  {/if}
+      {if $module_content !=''} <strong>{#heading_more_categories#}</strong> 
+      <br>
+      <table style="border-top: 2px solid; border-color: #d4d4d4;" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr> {foreach name=aussen item=module_data from=$module_content} 
+		{php} 
+          $col++; 
+		{/php} 
+          <td class="main"><div align="left"> 
+              <table  width="100%" border="0" cellpadding="0" cellspacing="4">
+                <tr> 
+                  <td width="1" rowspan="2" >{if $module_data.CATEGORIES_IMAGE}<a href="{$module_data.CATEGORIES_LINK}"><img src="{$module_data.CATEGORIES_IMAGE}" border="0"></a>{/if}</td>
+                  <td class="main"><strong><a href="{$module_data.CATEGORIES_LINK}">{$module_data.CATEGORIES_NAME}</a></strong></td>
+                </tr>
+                <tr> 
+                  <td  class="main">{$module_data.CATEGORIES_DESCRIPTION}</td>
+                </tr>
+              </table>
+            </div></td>
+          {php} 
+		  if ($col>=3) { 
+		  $col=0; 
+		  echo '</tr><tr>';
+		   } 
+		  {/php} 
+		 {/foreach} </tr>
+      </table> 
+       {/if} <br>
+    </td>
+    <td class="main" nowrap width="1%">&nbsp; </td>
+  </tr>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>{$MODULE_new_products}</td>
+  </tr>
+</table>

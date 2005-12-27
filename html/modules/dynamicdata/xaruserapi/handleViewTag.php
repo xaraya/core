@@ -41,7 +41,7 @@ function dynamicdata_userapi_handleViewTag($args)
     }
 
     // if we don't have an object yet, we'll make one below
-    $out = echo "if (!isset(\$moduleid)) \$moduleid = 182";
+    $out = "if (!isset(\$moduleid)) \$moduleid = 182;";
     $out .= "echo xarModAPIFunc(xarGetModuleNameByID(\$moduleid),
                    'user',
                    'showview',\n";

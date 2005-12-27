@@ -1,0 +1,108 @@
+{if $TEXT_NOT_FOUND}
+{$TEXT_NOT_FOUND}
+{else}
+<form name="cart_quantity" action="{$FORM_ACTION}" method="post">
+<table width="100%" border="0">
+  <tr>
+    <td>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td class="main"><table  nowrap width="100%" border="0">
+              <tr>
+                <td><font color="#666666" size="3" face="Verdana, Arial, Helvetica, sans-serif"><strong>{$PRODUCTS_NAME}</strong>
+                  </font></td>
+                <td nowrap>
+<div align="right"><font size="5" face="Verdana, Arial, Helvetica, sans-serif"><strong>{$PRODUCTS_PRICE}
+                    </strong> </font></div></td>
+              </tr>
+            </table>
+             {#model#}
+            {$PRODUCTS_MODEL} {$PRODUCTS_DISCOUNT}<br>
+            {#print#}{$PRODUCTS_PRINT}<br>
+            <br>
+            </td>
+        </tr>
+      </table>
+      <table width="100%" border="0">
+        <tr>
+          <td style="border-right: 1px solid; border-color: #cccccc;" valign="top" >
+<div align="center">
+              <table width="1" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td width="1">
+                    <div align="center">
+                      <table width="1" border="0" cellpadding="5" cellspacing="0">
+                        <tr>
+                          <td style="border-top: 1px solid; border-bottom: 1px solid; border-right: 1px solid; border-left: 1px solid;"><a href="{$PRODUCTS_POPUP_LINK}"><img src="{$PRODUCTS_IMAGE}" border="0"></a></td>
+                        </tr>
+                      </table>
+                      <br>
+                      <font size="1" face="Verdana, Arial, Helvetica, sans-serif">{if $PRODUCTS_IMAGE_LINK!=''}<a href="{$PRODUCTS_IMAGE_LINK}" target="_new">{$PRODUCTS_TEXT_ZOOM}</a><br>{/if}
+                      {$MODULE_graduated_price}<br>
+                      <br>
+                      </font><font size="1" face="Verdana, Arial, Helvetica, sans-serif"><br>
+                      </font> </div>
+</td>
+                </tr>
+              </table>
+            </div></td>
+          <td width="100%" class="main" valign="top">{$PRODUCTS_DESCRIPTION}<br>
+            <br>
+            <font size="1" face="Verdana, Arial, Helvetica, sans-serif">{$MODULE_product_options}
+            <br>
+            {$ADD_CART_BUTTON}</font> <br>
+              </td>
+        </tr>
+      </table>
+
+    </td>
+  </tr>
+</table>
+
+
+{if $PRODUCTS_URL != ''}
+<table width="100%" border="0" bgcolor="#CCCCCC">
+  <tr>
+    <td><p align="center"><font size="1" face="Verdana, Arial, Helvetica, sans-serif">{$PRODUCTS_URL}<br>
+        </font></p></td>
+  </tr>
+</table>
+{/if}
+{if $PRODUCTS_DATE_AVIABLE != ''}
+<table width="100%" border="0" bgcolor="#CCCCCC">
+  <tr>
+    <td><p align="center"><font size="1" face="Verdana, Arial, Helvetica, sans-serif">
+        {$PRODUCTS_DATE_AVIABLE}</font></p></td>
+  </tr>
+</table>
+{/if}
+{if $PRODUCTS_ADDED != ''}
+<table width="100%" border="0" bgcolor="#CCCCCC">
+  <tr>
+    <td><p align="center"><font size="1" face="Verdana, Arial, Helvetica, sans-serif">
+        {$PRODUCTS_ADDED}</font></p></td>
+  </tr>
+</table>
+{/if}
+<table width="100%" border="0">
+  <tr>
+      <td>{$MODULE_products_reviews}</td>
+  </tr>
+</table>
+
+
+  <table width="100%" border="0">
+    <tr>
+      <td><div align="center">{$MODULE_products_media}</div></td>
+    </tr>
+  </table>
+  <font size="1" face="Verdana, Arial, Helvetica, sans-serif"><br>
+  </font>
+  <table width="100%" border="0">
+    <tr>
+      <td><div align="center">{$MODULE_also_purchased}</div></td>
+    </tr>
+  </table>
+</div><br>
+</form>
+{/if}

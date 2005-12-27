@@ -1,0 +1,74 @@
+<div class="xar-mod-head">
+	<span class="xar-mod-title">
+		<xar:mlstring>Commerce</xar:mlstring>
+	</span>
+</div>
+<xar:template file="user-header" type="module"/>
+<p><font size="3" face="Verdana, Arial, Helvetica, sans-serif"><strong>
+	<xar:mlstring>
+		Your shopping cart contains:
+	</xar:mlstring>
+  </strong></font><br>
+  <br>
+<xar:if condition="!empty($info_message)">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+		<td class="main"><div align="center"><font color="#FF0000">{$info_message} </font></div></td>
+	  </tr>
+	</table>
+</xar:if>
+<br>
+<xar:if condition="$cart_empty">
+	</p>
+
+	<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+	  <tr> 
+		<td class="main"><div align="center">
+			<xar:mlstring>
+				Your shopping cart is empty
+			</xar:mlstring>
+		</div></td>
+	  </tr>
+	  <tr>
+		<td class="main">
+			<div align="right">
+				<a href="#xarModURL('commerce','user','default')#">
+					<img src = "#xarTplGetImage($language . '/buttons_catalog/button_continue.gif')#" alt = "#xarML('Continue')#">
+				</a>
+			</div>
+		</td>
+	  </tr>
+	</table>
+<xar:else />
+	<FORM name="cart_quantity" method="POST" id="action=process&amp;products_id=$_GET['products_id']" action="#xarModURL('commerce','user','shopping_cart', array('action' =&gt; 'update_product'))#">
+		<input type="hidden" name="#id[' . $products[$i]['id'] . '][' . $option . ']#" value="#$value#">
+	{$HIDDEN_OPTIONS}
+	  <br>
+	  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr> 
+		  <td>{$MODULE_order_details}</td>
+		</tr>
+		<tr>
+		  <td class="main"></td>
+		</tr>
+	  </table>
+
+	  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+		<td><div align="left">
+			<input type="image" src="#xarTplGetImage($language . '/buttons_catalog/button_update_cart.gif')#" border="0" alt="#xarML('Update Cart')#">
+			</div>
+		</td>
+		<td><div align="right">
+			<a href="#xarModURL('commerce','user','shipping')#">
+				<img src="#xarTplGetImage($language . '/buttons_catalog/button_checkout.gif')#" alt="#xarML('Checkout')#">
+			</a>	
+			</div>
+		</td>
+	  </tr>
+	</table>
+	</FORM>
+	<div align="center" class="main"></div>
+	<p>
+</xar:if>
+</p>
