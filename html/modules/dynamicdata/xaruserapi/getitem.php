@@ -101,26 +101,43 @@ function &dynamicdata_userapi_getitem($args)
         $table = '';
     }
 
-    $object = & Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
-                                       'itemtype'  => $itemtype,
-                                       'itemid'    => $itemid,
-                                       'fieldlist' => $fieldlist,
-                                       'join'      => $join,
-                                       'table'     => $table,
-                                       'status'    => $status));
-    if (!isset($object) || empty($object->objectid)) return $nullreturn;
-    if (!empty($itemid)) {
-        $object->getItem();
-    }
-    if (!empty($preview)) {
-        $object->checkInput();
-    }
+    $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
+    $objectarray = $itemsarray = array();
+	foreach ($tree as $branch) {
+		$object = & Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
+										   'itemtype'  => $branch['itemtype'],
+										   'itemid'    => $itemid,
+										   'fieldlist' => $fieldlist,
+										   'join'      => $join,
+										   'table'     => $table,
+										   'status'    => $status));
+		if (!isset($object) || empty($object->objectid)) return $nullreturn;
+		if (!empty($itemid)) {
+			$result = $object->getItem();
+		}
+		if (!empty($preview)) {
+			$object->checkInput();
+		}
 
-    if (!empty($getobject)) {
-        return $object;
-    }
-    $objectData = $object->getFieldValues();
-    return $objectData;
+		if (!empty($getobject)) {
+			$objectarray[] = $object;
+		} else {
+			if (isset($result)) {
+				if ($itemsarray == array()) {
+					$itemsarray = $object->getFieldValues();}
+				else {
+					$itemsarray = array_merge($itemsarray, $object->getFieldValues());
+				}
+			}
+		}
+	}
+	echo var_dump($itemsarray);
+	if (!empty($getobject)) {
+		if (count($objectarray == 1)) return $objectarray[0];
+		else return $objectarray;
+	} else {
+		return $itemsarray;
+	}
 }
 
 ?>

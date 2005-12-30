@@ -6,12 +6,11 @@
 </div>
 <div class="xar-mod-body">
     <h2>
-      <xar:if condition="$ptype eq 0">
-        <xar:mlstring>Show Privileges of User:</xar:mlstring>
-        <xar:else/>
-        <xar:mlstring>Show Privileges of Group:</xar:mlstring>
-      </xar:if>
-      <xar:var name="pname" prep="true"/>
+        <xar:ml>
+            <xar:mlstring>Show privileges #(1) '#(2)':</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$pname#</xar:mlvar>
+        </xar:ml>
     </h2>
 
     <xar:if condition="count($parents) ne 0">
@@ -177,23 +176,14 @@
           </xar:loop>
         </table>
       </xar:if>
-      <xar:if condition="$ptype eq 1">
-        <xar:set name="$thisrole">
-          <xar:mlstring>Group</xar:mlstring>
-        </xar:set>
-        <xar:else />
-        <xar:set name="$thisrole">
-          <xar:mlstring>User</xar:mlstring>
-        </xar:set>
-      </xar:if>
-      
+
       <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
         <div class="xar-form-input-wrapper">
           <label for="privid" title="#xarML('Select the Privilege to add')#" class="xar-form-label">
             <xar:ml>
               <xar:mlstring>Assign a Privilege to #(1) '#(2)'</xar:mlstring>
               <xar:mlvar>
-                #$thisrole#
+                #$itemtypename#
               </xar:mlvar>
               <xar:mlvar>
                 #xarVarPrepForDisplay($pname)#

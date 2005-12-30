@@ -5,12 +5,11 @@
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:if condition="$type eq 0">
-            <xar:mlstring>Manage User:</xar:mlstring>
-        <xar:else/>
-            <xar:mlstring>Manage Group:</xar:mlstring>
-        </xar:if>
-        #$name#
+        <xar:ml>
+            <xar:mlstring>Manage #(1) '#(2)':</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$name#</xar:mlvar>
+        </xar:ml>
     </h2>
 
     <xar:if condition="count($parents) ne 0">
@@ -39,7 +38,6 @@
 
     <xar:comment>TODO set the active tab here</xar:comment>
     <!-- Show the general tab list for roles -->
-    <xar:set name="ptype">$type</xar:set>
     <xar:template file="tablist" />
     <fieldset>
       <legend><xar:mlstring>Role properties</xar:mlstring></legend>
@@ -50,7 +48,7 @@
         #xarVarPrepForDisplay($name)#
       </div>
       
-      <xar:if condition="$type eq 0">
+      <xar:if condition="$basetype eq ROLES_USERTYPE">
         <div class="xar-form-input-wrapper">
           <span class="xar-form-label">
             <xar:mlstring>Login:</xar:mlstring>
@@ -67,7 +65,7 @@
       </xar:if>
 
       <xar:if condition="xarModIsAvailable('dynamicdata')">
-        <xar:data-getitem name="$properties" module="roles" itemtype="$type" itemid="$uid" />
+        <xar:data-getitem name="$properties" module="roles" itemtype="$itemtype" itemid="$uid" />
         <xar:if condition="isset($properties) and count($properties) gt 0">
           <xar:foreach in="$properties" key="$name">
             <div class="xar-form-input-wrapper">

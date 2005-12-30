@@ -621,6 +621,12 @@ function xarModGetInfo($modRegId, $type = 'module')
     return $modInfo;
 }
 
+function xarGetModuleNameByID($regid) {
+	$modinfo = xarModGetInfo($regid);
+	return $modinfo['name'];
+}
+
+
 /**
  * Load the modType of module identified by modName.
  *
@@ -1053,7 +1059,7 @@ function xarMod__URLencode($data, $type = 'getname')
 
     return $data;
 }
-    
+
 /**
  * Format GET parameters formed by nested arrays, to support xarModURL().
  * This function will recurse for each level to the arrays.
