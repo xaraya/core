@@ -51,7 +51,7 @@ define('XAR_TPL_TAG_NEEDEXCEPTIONSCONTROL'     ,64);
  *
  */
 // Let's do this once here, not scattered all over the place
-define('XAR_TPL_CACHE_DIR',xarCoreGetVarDirPath() . '/cache/templates');
+define('XAR_TPL_CACHE_DIR',xarCoreGetVarDirPath() . XARCORE_TPL_CACHEDIR);
 
 /**
  * Initializes the BlockLayout Template Engine
@@ -87,18 +87,18 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
         xarCore_die("xarTpl_init: Nonexistent default.xt page in theme directory '". xarTplGetThemeDir() ."'");
     }
 
+    $GLOBALS['xarTpl_additionalStyles'] = '';
     if ($GLOBALS['xarTpl_cacheTemplates']) {
         if (!is_writeable(XAR_TPL_CACHE_DIR)) {
-            $msg = "xarTpl_init: Cannot write in cache/templates directory '"
+            $msg = "xarTpl_init: Cannot write in '". XAR_TPL_CACHEDIR ."' directory '"
                 . XAR_TPL_CACHE_DIR . "', but the setting: 'cache templates' is set to 'On'.\n"
                 ."Either change the permissions on the mentioned file/directory or set template caching to 'Off' (not recommended).";
             $GLOBALS['xarTpl_cacheTemplates'] = false;
-            // Set the exception, but do not return just yet, because we *can* continue.
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONFIG_ERROR', $msg);
+            // Set the exception, but we *could* continue (only slow, so an error might be in place here). Let's see
+            // how the exception feels like in practice for a while
+            throw new ConfigurationException(NULL, $msg);
         }
     }
-
-    $GLOBALS['xarTpl_additionalStyles'] = '';
 
     // This is wrong here as well, but it's better at least than in xarMod
     include "includes/xarTheme.php";
@@ -1105,6 +1105,21 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
 {
     assert('is_array($tplData); /* Template data should always be passed in an array */');
 
+    // Load translations for the template
+    $tplpath = explode("/", $sourceFileName);
+    $tplPathCount = count($tplpath);
+    switch ($tplpath[0]) {
+        case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
+        case 'themes':  $dnType = XARMLS_DNTYPE_THEME; break;
+    }
+    $dnName = $tplpath[1];
+    $stack = array();
+    if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
+    for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
+    $ctxType = $tplpath[0].':'.implode("/", $stack);
+    $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
+    if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
+
     // Process non-default themes base directory
     $newFileName = $sourceFileName;
     if ($GLOBALS['xarTpl_themesBaseDir'] != 'themes') {
@@ -1144,10 +1159,9 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
         }
     }
 
-    if (!file_exists($sourceFileName) && $needCompilation == true) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST', $sourceFileName);
-        return;
-    }
+    if (!file_exists($sourceFileName) && $needCompilation == true) 
+        throw new FileNotFoundException($sourceFileName);
+
     xarLogMessage("Using template : $sourceFileName");
     //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
     $templateCode = null;
@@ -1155,6 +1169,10 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
         $blCompiler = xarTpl__getCompilerInstance();
         $lasterror = xarCurrentError();
         $templateCode = $blCompiler->compileFile($sourceFileName);
+        // TODO !
+        // TODO !
+        // TODO: Recheck the flow here, this was put in as a hack (?) iirc to deal with errors during the process.
+        //       We might not need this anymore now.
         // we check the error stack here to make sure no new errors happened during compile
         // but we do not check the core stack
         if (!isset($templateCode) || xarCurrentError() != $lasterror) {
@@ -1426,14 +1444,14 @@ function xarTpl__loadFromFile($sourceFileName)
     }
 
     if (!file_exists($sourceFileName) && $needCompilation == true) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST', $sourceFileName);
-        return;
+        throw new FileNotFoundException($sourceFileName);
     }
 
     //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
     if ($needCompilation) {
         $blCompiler = xarTpl__getCompilerInstance();
         $templateCode = $blCompiler->compileFile($sourceFileName);
+        // TODO: CHECK THIS, we might not need this anymore
         if (!isset($templateCode) || xarCurrentErrorType() != XAR_NO_EXCEPTION) {
             return; // exception! throw back
         }
@@ -1496,24 +1514,19 @@ function xarTpl__getCacheKey($sourceFileName)
  */
 class xarTemplateAttribute 
 {
-    var $_name;     // Attribute name
-    var $_flags;    // Attribute flags (datatype, required/optional, etc.)
+    public $_name;     // Attribute name
+    public $_flags;    // Attribute flags (datatype, required/optional, etc.)
 
     function xarTemplateAttribute($name, $flags = NULL)
     {
         // See defines at top of file
         if (!eregi(XAR_TPL_ATTRIBUTE_REGEX, $name)) {
-            $msg = xarML("Illegal attribute name ('#(1)'): Attribute name may contain letters, numbers, _ and -, and must start with a letter.", $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException($msg));
-            return;
+            // This should be a XML validation exception perhaps?
+            throw new BadParamterException($name,'The attribute name "#(1)" is invalid. Attribute names contain letters, numbers, _ and -, and must start with a letter.');
         }
 
         if (!is_integer($flags) && $flags != NULL) {
-            $msg = xarML("Illegal attribute flags ('#(1)'): flags must be of integer type.", $flags);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException($msg));
-            return;
+            throw new BadParameterException($flags,"Illegal attribute flags ('#(1)'): flags must be of integer type.");
         }
 
         $this->_name  = $name;
@@ -1569,44 +1582,38 @@ class xarTemplateAttribute
  */
 class xarTemplateTag 
 {
-    var $_name = NULL;          // Name of the tag
-    var $_attributes = array(); // Array with the supported attributes
-    var $_handler = NULL;       // Name of the handler function
-    var $_module;               // Modulename
-    var $_type;                 // Type of the handler (user/admin etc.)
-    var $_func;                 // Function name
+    public $_name = NULL;          // Name of the tag
+    public $_attributes = array(); // Array with the supported attributes
+    public $_handler = NULL;       // Name of the handler function
+    public $_module;               // Modulename
+    public $_type;                 // Type of the handler (user/admin etc.)
+    public $_func;                 // Function name
     // properties for registering what kind of tag we have here
-    var $_hasChildren = false;
-    var $_hasText = false;
-    var $_isAssignable = false;
-    var $_isPHPCode = true;
-    var $_needAssignment = false;
-    var $_needParameter = false;
-    var $_needExceptionsControl = false;
+    public $_hasChildren = false;
+    public $_hasText = false;
+    public $_isAssignable = false;
+    public $_isPHPCode = true;
+    public $_needAssignment = false;
+    public $_needParameter = false;
+    public $_needExceptionsControl = false;
 
 
     function xarTemplateTag($module, $name, $attributes = array(), $handler = NULL, $flags = XAR_TPL_TAG_ISPHPCODE)
     {
         // See defines at top of file
         if (!eregi(XAR_TPL_TAGNAME_REGEX, $name)) {
-            $msg = xarML("Illegal tag definition: '#(1)' is an invalid tag name.", $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
-            return;
+            throw new BadParameterException($name,'Illegal tag definition: "#(1)" is an invalid tag name.');
         }
 
         if (preg_match("/($module)_(\w+)api_(.*)/",$handler,$matches)) {
             $this->_type = $matches[2];
             $this->_func = $matches[3];
         } else {
-            $msg = xarML("Illegal tag definition: '#(1)' is an invalid handler.", $handler);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
-            return;
+            throw new BadParameterException($handler,'Illegal tag definition: "#(1)" is an invalid handler.');
         }
 
         if (!is_integer($flags)) {
-            $msg = xarML("Illegal tag registration flags ('#(1)'): flags must be of integer type.", $flags);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
-            return;
+            throw new BadParameterException($flags,'Illegal tag registration flags ("#(1)"): flags must be of integer type.');
         }
         
         // Everything seems to be in order, set the properties
@@ -1696,12 +1703,9 @@ class xarTemplateTag
                 $this->_type = $matches[2];
                 $this->_func = $matches[3];
             } else {
-                $msg = xarML("Illegal tag definition: '#(1)' is an invalid handler.", $handler);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                               new SystemException($msg));
                 // FIXME: why is this needed?
                 $this->_name = NULL;
-                return;
+                throw new BadParameterException($handler,'Illegal tag definition: "#(1)" is an invalid handler.');
             }
         }
         // Add the type to the args
@@ -1734,10 +1738,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     // Check to make sure tag does not exist first
     if (xarTplGetTagObjectFromName($tag_name) != NULL) {
         // Already registered
-        $msg = xarML('<xar:#(1)> tag is already defined.', $tag_name);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                       new SystemException($msg));
-        return false;
+        throw new DuplicateTagException($tag_name,'<xar:#(1)> tag is already defined.');
     }
 
     // Validity of tagname is checked in class.
@@ -1751,22 +1752,26 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     $tag_table = $systemPrefix . '_template_tags';
 
     // Get next ID in table
-    $tag_id = $dbconn->GenId($tag_table);
+    try {
+        $dbconn->begin();
+        $tag_id = $dbconn->GenId($tag_table);
 
-    $query = "INSERT INTO $tag_table
-                (xar_id, xar_name, xar_module, xar_handler, xar_data)
-              VALUES
-                (?,?,?,?,?)";
-
-    $bindvars = array($tag_id,
-                      $tag->getName(), 
-                      $tag->getModule(),
-                      $tag->getHandler(),
-                      serialize($tag));
-
-    $result = $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
-
+        $query = "INSERT INTO $tag_table
+                  (xar_id, xar_name, xar_module, xar_handler, xar_data)
+                  VALUES(?,?,?,?,?)";
+        $bindvars = array($tag_id,
+                          $tag->getName(), 
+                          $tag->getModule(),
+                          $tag->getHandler(),
+                          serialize($tag));
+        
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate($bindvars);
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
     return true;
 }
 
@@ -1789,12 +1794,16 @@ function xarTplUnregisterTag($tag_name)
     $xartable =& xarDBGetTables();
 
     $tag_table = $xartable['template_tags'];
-
-    $query = "DELETE FROM $tag_table WHERE xar_name = ?";
-
-    $result =& $dbconn->Execute($query,array($tag_name));
-    if (!$result) return;
-
+    try {
+        $dbconn->begin();
+        $query = "DELETE FROM $tag_table WHERE xar_name = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate(array($tag_name));
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
     return true;
 }
 
@@ -1814,10 +1823,9 @@ function xarTplCheckTagAttributes($name, $args)
 {
     $tag_ref = xarTplGetTagObjectFromName($name);
     if ($tag_ref == NULL) {
-        $msg = xarML('<xar:#(1)> tag is not defined.', $name);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                       new SystemException($msg));
-        return;
+        // Throw a generic BL exception for now
+        $msg = '<xar:#(1)> tag is not defined.';
+        throw new BLException($name,$msg);
     }
 
     $tag_attrs = $tag_ref->getAttributes();
@@ -1842,16 +1850,10 @@ function xarTplCheckTagAttributes($name, $args)
             }
 
             // bad type for attribute
-            $msg = xarML("'#(1)' attribute in <xar:#(2)> tag does not have correct type. See tag documentation.", $attr_name, $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                            new SystemException($msg));
-            return false;
+            throw new BLValidationException(array($attr_name,$name),'"#(1)" attribute in <xar:#(2)> tag does not have correct type. See tag documentation.');
         } elseif ($attr->isRequired()) {
             // required attribute is missing!
-            $msg = xarML("Required '#(1)' attribute is missing from <xar:#(2)> tag. See tag documentation.", $attr_name, $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                            new SystemException($msg));
-            return false;
+            throw new BLValidationException(array($attr_name,$name),'Required "#(1)" attribute is missing from <xar:#(2)> tag. See tag documentation.');
         }
     }
 
@@ -1882,7 +1884,7 @@ function xarTplGetTagObjectFromName($tag_name)
     $tag_table = $systemPrefix . '_template_tags';
     $query = "SELECT xar_data, xar_module FROM $tag_table WHERE xar_name=?";
 
-    $result =& $dbconn->SelectLimit($query, 1,-1,array($tag_name));
+    $result = $dbconn->SelectLimit($query, 1,-1,array($tag_name),ResultSet::FETCHMODE_NUM);
     if (!$result) return;
 
     if ($result->EOF) {
@@ -1890,7 +1892,7 @@ function xarTplGetTagObjectFromName($tag_name)
         return NULL; // tag does not exist
     }
 
-    list($obj,$module) = $result->fields;
+    list($obj,$module) = $result->getRow();
     $result->Close();
 
     // Module must be active for the tag to be active

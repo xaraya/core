@@ -76,9 +76,9 @@ include 'includes/pnHTML.php';
 * pnUserGetLang -> xarUserGetLang
 * pnUserGetVar -> xarUserGetVar
 * pnUserSetVar -> xarUserSetVar
-* pnUserGetVars -> xarErrorSet('DEPRECATED_API')
-* pnUserDelVar -> xarErrorSet('DEPRECATED_API')
-* pnUserGetAll($startnum = 1, $numitems = -1) -> xarErrorSet('DEPRECATED_API') - invalid args!!!
+* pnUserGetVars -> throw Deprecation Exception
+* pnUserDelVar -> throw Deprecation Exception
+* pnUserGetAll($startnum = 1, $numitems = -1) -> throw Deprecation Exception
 *
 * BLOCKS FUNCTIONS
 * pnBlockGetInfo -> xarBlockGetInfo
@@ -119,7 +119,7 @@ include 'includes/pnHTML.php';
 * DEPRECATED XAR FUNCTIONS
 * xarModEmailURL        -> no direct equivalent
 * xarVarPrepForStore()  -> use bind vars or dbconn->qstr() method
-* xarExceptionSet()     -> xarErrorSet()
+* xarExceptionSet()     -> throw Exception
 * xarExceptionMajor()   -> xarCurrentErrorType()
 * xarExceptionId()      -> xarCurrentErrorID()
 * xarExceptionValue()   -> xarCurrentError()
@@ -216,9 +216,7 @@ function pnUserLoggedIn()
  */
 function pnUserGetVars($userId)
 {
-    xarErrorSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
-                       new SystemException(__FILE__.'('.__LINE__.')'));
-    return NULL;
+    throw new ApiDeprecationException('pnUserGetVars','a different construct. The function has no direct equivalent in Xaraya');
 }
 
 /**
@@ -232,9 +230,7 @@ function pnUserGetVars($userId)
  */
 function pnUserDelVar($name)
 {
-    xarErrorSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
-                       new SystemException(__FILE__.'('.__LINE__.')'));
-    return NULL;
+    throw new ApiDeprecationException('pnUserDelVar','the API of the module subsystem to set/clear ModUservars');
 }
 
 
@@ -250,9 +246,7 @@ function pnUserDelVar($name)
  */
 function pnUserGetAll($startnum = 1, $numitems = -1)
 {
-    xarErrorSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
-                       new SystemException(__FILE__.'('.__LINE__.')'));
-    return;
+    throw new ApiDeprecationException('pnUserGetAll','using the roles module API to retrieve users');
 }
 
 /**
@@ -286,86 +280,23 @@ function pnModAvailable($modName)
  * register a hook function
  *
  * @deprec
- * @access public
- * @param hookObject the hook object
- * @param hookAction the hook action
- * @param hookArea the area of the hook (either 'GUI' or 'API')
- * @param hookModName name of the hook module
- * @param hookModType name of the hook type
- * @param hookFuncName name of the hook function
- * @return bool true on success
- * @raise DATABASE_ERROR
+ * @see xarModRegisterHook
  */
-function pnModRegisterHook($hookObject,
-                           $hookAction,
-                           $hookArea,
-                           $hookModName,
-                           $hookModType,
-                           $hookFuncName)
+function pnModRegisterHook($hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName)
 {
-    // FIXME: <marco> BAD_PARAM?
-
-    // Get database info
-    $dbconn =& xarDBGetConn();
-    $pntable =& xarDBGetTables();
-    $hookstable = $pntable['hooks'];
-
-    // Insert hook
-    $query = "INSERT INTO $hookstable (
-              xar_id, xar_object, xar_action, xar_tarea,
-              xar_tmodule, xar_ttype, xar_tfunc)
-              VALUES (?,?,?,?,?,?,?)";
-    $bindvars = array($dbconn->GenId($hookstable),
-                      $hookObject,
-                      $hookAction,
-                      $hookArea,
-                      $hookModName,
-                      $hookModType,
-                      $hookFuncName);
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
-
-    return true;
+    return xarModRegisterHook($hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
 }
 
 /**
  * unregister a hook function
  *
  * @deprec
- * @access public
- * @param hookObject the hook object
- * @param hookAction the hook action
- * @param hookArea the area of the hook (either 'GUI' or 'API')
- * @param hookModName name of the hook module
- * @param hookModType name of the hook type
- * @param hookFuncName name of the hook function
- * @return bool true if the unregister call suceeded, false if it failed
+ * @see xarModUnregisterHook
  */
-function pnModUnregisterHook($hookObject,
-                             $hookAction,
-                             $hookArea,
-                             $hookModName,
-                             $hookModType,
-                             $hookFuncName)
+function pnModUnregisterHook($hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName)
 {
-    // FIXME: <marco> BAD_PARAM?
-
-    // Get database info
-    $dbconn =& xarDBGetConn();
-    $pntable =& xarDBGetTables();
-    $hookstable = $pntable['hooks'];
-
-    // Remove hook
-    $query = "DELETE FROM $hookstable
-              WHERE xar_object = ?
-              AND xar_action = ?  AND xar_tarea = ?
-              AND xar_tmodule = ? AND xar_ttype = ?
-              AND xar_tfunc = ?";
-    $bindvars = array($hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
-
-    return true;
+    //simple wrapper
+    return xarModUnregisterHook($hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
 }
 
 
@@ -1030,10 +961,7 @@ function xarUser_getThemeName()
  */
 function xarSecAddSchema($component, $schema)
 {
-    $msg = xarML('This call needs to be removed');
-    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DEPRECATED_API',
-                    new SystemException($msg));
-    return true;
+    throw new ApiDeprecationException('xarSecAddSchema','the removal of it. The call isnt needed anymore');
 }
 
 function pnUserGetTheme()
@@ -1276,5 +1204,24 @@ function xarPage_httpCacheHeaders($cache_file)
 
     xarPageCache_sendHeaders($modtime);
 }
+
+/**
+
+ * see if a user is authorised to carry out a particular task
+ *
+ * @access public
+ * @param  integer realm the realm to authorize
+ * @param  string component the component to authorize
+ * @param  string instance the instance to authorize
+ * @param  integer level the level of access required
+ * @param  integer userId  user id to check for authorisation
+ * @return bool
+ * @raise DATABASE_ERROR
+ */
+function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
+{
+    return pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId);
+}
+
 
 ?>

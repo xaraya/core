@@ -20,11 +20,11 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 class Dynamic_UserList_Property extends Dynamic_Select_Property
 {
-    var $grouplist = array();
-    var $userstate = -1;
-    var $showlist = array();
-    var $orderlist = array();
-    var $showglue = '; ';
+    public $grouplist = array();
+    public $userstate = -1;
+    public $showlist = array();
+    public $orderlist = array();
+    public $showglue = '; ';
 
     /*
     * Options available to user selection

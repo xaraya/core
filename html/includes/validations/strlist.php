@@ -23,14 +23,11 @@ function variable_validations_strlist (&$subject, $parameters, $supress_soft_exc
 {
     $return = true;
 
+    if ($name == '') $name = '<unknown>';
     if (!is_string($subject)) {
-        if ($name != '')
-            $msg = xarML('Variable #(1) is not a string: "#(2)"', $name, $subject);
-        else
-            $msg = xarML('Not a string: "#(1)"', $subject);
-        if (!$supress_soft_exc) {
-            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-        }
+        $msg = 'Not a string';
+        if (!$supress_soft_exc) 
+            throw new VariableValidationException(array($name,$subject,$msg));
         return false;
     }
 
@@ -42,7 +39,7 @@ function variable_validations_strlist (&$subject, $parameters, $supress_soft_exc
         if (empty($sep)) {
             $msg = xarML('No separator character(s) provided for validation type "strlist"');
             if (!$supress_soft_exc) {
-                xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+                throw new BadParameterException($msg);
             }
             return false;
         }

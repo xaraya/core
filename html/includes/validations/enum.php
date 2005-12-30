@@ -23,18 +23,17 @@ function variable_validations_enum (&$subject, $parameters, $supress_soft_exc, &
     if ($found) {
         return true;
     } else {
-        if ($name != '')
-            $msg = xarML('Input "#(1)" was not one of the possibilities for #(2): "', $subject, $name);
-        else
-            $msg = xarML('Input "#(1)" was not one of the possibilities.', $subject);
+        if ($name == '') $name = '<unknown>';
+        $msg = 'Input given is not in list of valid options';
         $first = true;
         foreach ($parameters as $param) {
             if ($first) $first = false;
-            else $msg .= ' or ';
+            else $msg .= ' or '; // TODO: evaluate MLS consequences later on
 
             $msg .= $param;
         }
-        if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+        if (!$supress_soft_exc) 
+            throw new VariableValidationException(array($name,$subject,$msg));
         return false;
     }
 }

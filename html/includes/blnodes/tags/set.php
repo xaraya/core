@@ -9,10 +9,10 @@
  */
 class xarTpl__XarSetNode extends xarTpl__TplTagNode
 {
-    var $_name;             // What are we setting?
-    var $_nonmarkup = true; // Do we accept non markup?
+    private $_name;             // What are we setting?
+    private $_nonmarkup = true; // Do we accept non markup?
     
-    var $_showTemplates;    // The ShowTemplates setting we may need to save
+    private $_showTemplates;    // The ShowTemplates setting we may need to save
     
     function render()
    {

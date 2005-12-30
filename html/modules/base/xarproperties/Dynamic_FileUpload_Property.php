@@ -23,21 +23,21 @@ include_once "modules/dynamicdata/class/properties.php";
 
 class Dynamic_FileUpload_Property extends Dynamic_Property
 {
-    var $size = 40;
-    var $maxsize = 1000000;
-    var $basedir = '';
-    var $filetype;
-    var $UploadsModule_isHooked = FALSE;
-    var $basePath;
-    var $multiple = TRUE;
-    var $methods = array('trusted'  => false,
+    public $size = 40;
+    public $maxsize = 1000000;
+    public $basedir = '';
+    public $filetype;
+    public $UploadsModule_isHooked = FALSE;
+    public $basePath;
+    public $multiple = TRUE;
+    public $methods = array('trusted'  => false,
                          'external' => false,
                          'upload'   => false,
                          'stored'   => false);
-    var $importdir = null;
+    public $importdir = null;
 
     // this is used by Dynamic_Property_Master::addProperty() to set the $object->upload flag
-    var $upload = true;
+    public $upload = true;
 
     function Dynamic_FileUpload_Property($args)
     {

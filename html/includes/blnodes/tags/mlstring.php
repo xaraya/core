@@ -8,7 +8,7 @@
  */
 class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
 {
-    var $_rightspace;
+    private $_rightspace;
     
     function render()
    {

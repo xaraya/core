@@ -59,7 +59,7 @@ function blocks_adminapi_delete_type($args)
               AND       btypes.xar_module = ?
               AND       btypes.xar_type = ?";
 
-    $result =& $dbconn->Execute($query, array($module, $type));
+    $result = $dbconn->Execute($query, array($module, $type));
     if (!$result) return;
 
     while (!$result->EOF) {
@@ -77,7 +77,7 @@ function blocks_adminapi_delete_type($args)
 
     // Delete the block type
     $query = "DELETE FROM $block_types_table WHERE xar_module = ? AND xar_type = ?";
-    $result =& $dbconn->Execute($query, array($module, $type));
+    $result = $dbconn->Execute($query, array($module, $type));
     if (!$result) return;
 
     return true;

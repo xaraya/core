@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic Validation property
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -24,10 +23,10 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_Validation_Property extends Dynamic_TextBox_Property
 {
-    var $size = 50;
-    var $maxlength = 254;
+    public $size = 50;
+    public $maxlength = 254;
 
-    var $proptype = null;
+    public $proptype = null;
 
     function Dynamic_Validation_Property($args)
     {

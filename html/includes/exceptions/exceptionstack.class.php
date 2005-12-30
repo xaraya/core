@@ -11,7 +11,7 @@
 
 class xarExceptionStack
 {
-    var $stack;
+    public $stack;
 
     function xarExceptionStack()
     {}

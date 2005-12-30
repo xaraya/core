@@ -17,11 +17,11 @@
 
 class Dynamic_PassBox_Property extends Dynamic_Property
 {
-    var $size = 25;
-    var $maxlength = 254;
+    public $size = 25;
+    public $maxlength = 254;
 
-    var $min = 5;
-    var $max = null;
+    public $min = 5;
+    public $max = null;
 
     function Dynamic_PassBox_Property($args)
     {

@@ -49,6 +49,9 @@ function base_init()
     *   PRIMARY KEY  (xar_tableid)
     * )
     *********************************************************************/
+    // FIXME : this needs to go, use the meta information of the database for this
+    // especially using an autoincrement on this table will cause cluttering of the
+    // code, because we can not create the sequence for this table
     $fields = array(
     'xar_tableid'     => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
     'xar_table'       => array('type'=>'varchar','size'=>64,'default'=>'','null'=>false),
@@ -95,7 +98,7 @@ function base_init()
     'xar_firstused'    => array('type'=>'integer','null'=>false,'default'=>'0'),
     'xar_lastused'     => array('type'=>'integer','null'=>false,'default'=>'0'),
     'xar_uid'          => array('type'=>'integer','null'=>false,'default'=>'0'),
-    'xar_vars'         => array('type'=>'blob'),
+    'xar_vars'         => array('type'=>'blob', 'null' => true),
     'xar_remembersess' => array('type'=>'integer','size'=>'tiny','default'=>'0')
     );
 
@@ -163,7 +166,7 @@ function base_init()
     // Start Configuration Unit
     $systemArgs = array();
     // change this loadlevel to the proper level
-    $whatToLoad = XARCORE_SYSTEM_ADODB;
+    $whatToLoad = XARCORE_SYSTEM_DATABASE;
     xarConfig_init($systemArgs, $whatToLoad);
     // Start Variable Utils
     xarVar_init($systemArgs, $whatToLoad);
@@ -297,103 +300,43 @@ function base_init()
     $modulesTable = $systemPrefix .'_modules';
     $systemModuleStatesTable = $systemPrefix .'_module_states';
 
-    // Install authsystem module
-    $seqId = $dbconn->GenId($modulesTable);
-    $query = "INSERT INTO $modulesTable
-              (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES (?, 'authsystem', 42, 'authsystem', '0.91.0', 1, 'Core Utility', 'Global', 0, 0)";
-
-    $result =& $dbconn->Execute($query,array($seqId));
-    if (!$result) return;
+    $newModSql   = "INSERT INTO $modulesTable (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable)
+                    VALUES (?,?,?,?,?,?,?,?,?,?)";
+    $newStmt     = $dbconn->prepareStatement($newModSql);
     
-    // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or 
-    // the sequence for xar_id will not be available in PostgreSQL
-    $seqId = $dbconn->GenId($systemModuleStatesTable);
+    $stateModSql = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state)
+                    VALUES (?, ?, ?)";
+    $stateStmt   = $dbconn->prepareStatement($stateModSql);
+    
+    $modData   = array(
+                       array('authsystem', 42 , 'authsystem', '0.91.0', 1, 'Core Utility', 'Global', 0, 0),
+                       array('base'      , 68 , 'base'      , '0.1.0' , 1, 'Core Admin'  , 'Global', 1, 1),
+                       array('installer' , 200, 'installer' , '1.0.0' , 1, 'Core Utility', 'Global', 0, 0),
+                       array('blocks'    , 13 , 'blocks'    , '1.0.0' , 1, 'Core Utility', 'Global', 1, 0),
+                       array('themes'    , 70 , 'themes'    , '1.3.0' , 1, 'Core Utility', 'Global', 1, 0)
+                       );
+    $stateData  = array(
+                        array(42,3),
+                        array(68,3),
+                        array(200,3),
+                        array(13,3),
+                        array(70,3)
+                        );
+                        
+    assert('count($modData) == count($stateData); /* The modules and state arrays should have the same number of entries */');
+    for($module=0; $module < count($modData); $module++) {
+        // Insert module
+        $id = $dbconn->GenId($modulesTable);
+        array_unshift($modData[$module],$id);
+        $result = $newStmt->executeUpdate($modData[$module]);
+        if(!$result) return;
+        // Set the state
+        $id = $dbconn->GenId($systemModuleStatesTable);
+        array_unshift($stateData[$module],$id);
+        $result = $stateStmt->executeUpdate($stateData[$module]);
+        if(!$result) return;
+    }
 
-    // Set authsystem to active
-    $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
-              ) VALUES (?, 42, 3)";
-
-    $result =& $dbconn->Execute($query,array($seqId));
-    if (!$result) return;
-
-    // Install base module
-    $seqId = $dbconn->GenId($modulesTable);
-    $query = "INSERT INTO $modulesTable
-              (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES (?, 'base', 68, 'base', '0.1.0', 1, 'Core Admin', 'Global', 1, 1)";
-
-    $result =& $dbconn->Execute($query,array($seqId));
-    if (!$result) return;
-
-    // Bug #1813 - Have to use GenId to create the sequence for xar_id or 
-    // the sequence for xar_id will not be available in PostgreSQL
-    $seqId = $dbconn->GenId($systemModuleStatesTable);
-
-    // Set installer to active
-    $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
-              ) VALUES (?, 68, 3)";
-
-    $result =& $dbconn->Execute($query,array($seqId));
-    if (!$result) return;
-
-    // Install installer module
-    $seqId = $dbconn->GenId($modulesTable);
-    $query = "INSERT INTO $modulesTable
-              (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES (?, 'installer', 200, 'installer', '1.0.0', 1, 'Core Utility', 'Global', 0, 0)";
-
-    $result =& $dbconn->Execute($query,array($seqId));
-    if (!$result) return;
-
-    // Bug #1813 - Have to use GenId to create the sequence for xar_id or 
-    // the sequence for xar_id will not be available in PostgreSQL
-    $seqId = $dbconn->GenId($systemModuleStatesTable);
-
-    // Set installer to active
-    $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
-              ) VALUES (?, 200, 3)";
-
-    $result =& $dbconn->Execute($query,array($seqId));
-    if (!$result) return;
-
-    // Install blocks module
-    $seqId = $dbconn->GenId($modulesTable);
-    $query = "INSERT INTO $modulesTable
-              (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES (?, 'blocks', 13, 'blocks', '1.0.0', 1, 'Core Utility', 'Global', 1, 0)";
-    $result =& $dbconn->Execute($query,array($seqId));
-    if (!$result) return;
-
-    // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or 
-    // the sequence for xar_id will not be available in PostgreSQL
-    $seqId = $dbconn->GenId($systemModuleStatesTable);
-
-    // Set blocks to active
-    $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
-              ) VALUES (?, 13, 3)";
-    $result =& $dbconn->Execute($query,array($seqId));
-    if (!$result) return;
-
-    // Install themes module
-    $seqId = $dbconn->GenId($modulesTable);
-    // FIXME: the theme version should not be hard-coded here.
-    // Fetch it from the modules/themes/xarversion.php script
-    $query = "INSERT INTO $modulesTable
-              (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES (?, 'themes', 70, 'themes', '1.3.1', 1, 'Core Utility', 'Global', 1, 0)";
-    $result =& $dbconn->Execute($query,array($seqId));
-    if (!$result) return;
-
-    // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or 
-    // the sequence for xar_id will not be available in PostgreSQL
-    $seqId = $dbconn->GenId($systemModuleStatesTable);
-
-    // Set themes to active
-    $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
-              ) VALUES (?, 70, 3)";
-    $result =& $dbconn->Execute($query,array($seqId));
-    if (!$result) return;
 
     /**************************************************************
     * Install the blocks module
