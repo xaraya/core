@@ -497,8 +497,17 @@ abstract class ResultSetCommon {
             case 'MoveNext':
                 return $this->next();
                 break;
+            case 'GetRowAssoc':
+                // We have to reget the current row in associative mode
+                if($this->getFetchMode() != ResultSet::FETCHMODE_ASSOC) {
+                    $this->setFetchMode(ResultSet::FETCHMODE_ASSOC);
+                    $this->next(); $this->previous();                
+                }
+                //bah
+                return $this->getRow($args);
+                                    
             default:
-                throw new Exception("Unknown method calls for connection");
+                throw new Exception("Unknown method call $method for connection");
         }
     }
     
