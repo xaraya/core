@@ -505,7 +505,10 @@ abstract class ResultSetCommon {
                 }
                 //bah
                 return $this->getRow($args);
-                                    
+                break;
+            case 'RecordCount':
+                return $this->getRecordCount();
+                break;
             default:
                 throw new Exception("Unknown method call $method for connection");
         }

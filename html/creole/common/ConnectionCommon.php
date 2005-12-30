@@ -337,8 +337,12 @@ abstract class ConnectionCommon {
             // return the database type
             case 'databaseType':
                 return $this->dsn['phptype'];
+                break;
+            case 'hasTransactions':
+                return true;
+                break;
             default:
-                throw new Exception("Unknown property accessed for connection");
+                throw new Exception("Unknown property $propname accessed for connection");
         }
     }
     
@@ -349,6 +353,20 @@ abstract class ConnectionCommon {
                 // DOH! we dont want this
                 return  "'".str_replace("'","\\'",$args[0])."'";
                 break;
+            case 'StartTrans':
+                return $this->BeginTrans($args);
+                break;
+            case 'CompleteTrans':
+                try {
+                    $this->CommitTrans();
+                } catch(SQLException $e) {
+                    return false;
+                }
+                return true;
+                break;
+            case 'Affected_Rows':
+                return $this->getUpdateCount();
+                break; 
             default:
                 throw new Exception("Unknown method call for connection");
         }
