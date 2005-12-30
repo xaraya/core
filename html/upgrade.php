@@ -30,18 +30,20 @@ xarDBLoadTableMaintenanceAPI();
 
 // The System.Core.VersionNum contains the currently stored version number
 // this may be different from the define in xarCore.php
+$xarProduct = xarConfigGetVar('System.Core.VersionId');
 $xarVersion = xarConfigGetVar('System.Core.VersionNum');
+$xarRelease = xarConfigGetVar('System.Core.VersionSub');
 
 $title = xarML('Upgrade');
 
 if (empty($step)) {
-    $descr = xarML('Preparing to upgrade from previous Xaraya Version #(1) to version #(2)',$xarVersion, XARCORE_VERSION_NUM);
+    $descr = xarML('Preparing to upgrade from previous #(1) Version #(2) (release #(3)) to #(4) version #(5)  (release #(6))',$xarProduct,$xarVersion,$xarRelease, XARCORE_VERSION_ID, XARCORE_VERSION_NUM, XARCORE_VERSION_SUB);
     // start the output buffer
     ob_start();
 ?>
 
 <div class="xar-mod-head"><span class="xar-mod-title"><?php echo $title; ?></span></div>
-<div class="xar-mod-body"><h2><?php echo $descr; ?></h2><br />
+<div class="xar-mod-body"><p><h3><?php echo $descr; ?></h3></p>
   <p>
     <xar:mlstring>
         Before you run the upgrade, make sure the existing site is working. If you try to upgrade
@@ -151,7 +153,7 @@ if (empty($step)) {
               WHERE xar_module='dynamicdata' AND xar_component='Type'";
     $result =& $dbconn->Execute($query);
 
-    
+
 
     //now check modules instances - only affected if their site prefix is other than 'xar'
     if ($sprefix == 'xar') { // check ratings, hitcount, articles and categories
@@ -193,7 +195,7 @@ if (empty($step)) {
                       }
                   }
             }//end foreach
-             
+
             //now do the last one as a separate instance - to get it to work properly
             $categoryinstance ='SELECT DISTINCT instances.xar_title FROM '.$blockinstancetable.' as instances LEFT JOIN '.$blocktypestable.' as btypes ON  btypes.xar_id = instances.xar_type_id WHERE xar_module = \'categories\'';
 
@@ -204,7 +206,7 @@ if (empty($step)) {
                       $result =&$dbconn->Execute($query);
 
             list($iid, $header, $xarquery) = $result->fields;
-            if ($categoryinstance != $xarquery) 
+            if ($categoryinstance != $xarquery)
             {
                    $categoriesupdate=true;
                    echo "Attempting to update categories instance  with component Block and header Category Block Title: ";
@@ -227,7 +229,7 @@ if (empty($step)) {
         } // endif modavailable
 
         //check hitcount instances
-        if (xarModIsAvailable('hitcount')) 
+        if (xarModIsAvailable('hitcount'))
         {
             $hitcountupdate=false;
             $hitcountinstances[]=array(array ('ccomponent'  => 'Item',
@@ -717,6 +719,34 @@ if (empty($step)) {
     }
 
 
+    {
+        // Change to the roles table
+
+        echo "<h5>Checking Roles Table Definitions</h5>";
+        $dbconn =& xarDBGetConn();
+        $datadict =& xarDBNewDataDict($dbconn, 'CREATE');
+
+        $blockinstancestable = xarDBGetSiteTablePrefix() . '_roles';
+        $columns = $datadict->getColumns($blockinstancestable);
+        // Do we have a xar_duvs column?
+        $blocks_column_found = false;
+        foreach($columns as $column) {
+            if ($column->name == 'xar_duvs') {
+                $blocks_column_found = true;
+                break;
+            }
+        }
+        // Upgrade the table (xar_roles) if the duvs column is not found.
+        if (!$blocks_column_found) {
+            // Create the column.
+            $result = $datadict->addColumn($blockinstancestable, 'xar_duvs C(100) Null');
+            echo "Added column xar_duvs to roles table<br/>";
+        } else {
+            echo "Roles table is up-to-date<br/>";
+        }
+    }
+
+
     // Add the syndicate block type and syndicate block for RSS display.
     echo "<h5>Checking Installed Blocks</h5>";
 
@@ -795,7 +825,7 @@ if (empty($step)) {
     $role = xarFindRole('Everybody');
 
     /* Bug 2204 - this var is not reliable for admin name
-       if (!isset($admin)) $admin = xarFindRole(xarModGetVar('mail','adminname')); 
+       if (!isset($admin)) $admin = xarFindRole(xarModGetVar('mail','adminname'));
     */
     $modvars[] = array(array('name'    =>  'hidecore',
                              'module'  =>  'themes',
@@ -875,6 +905,36 @@ if (empty($step)) {
                        array('name'    =>  'showrealms',
                              'module'  =>  'privileges',
                              'set'     =>  0),
+                       array('name'    =>  'inheritdeny',
+                             'module'  =>  'privileges',
+                             'set'     =>  true),
+                       array('name'    =>  'tester',
+                             'module'  =>  'privileges',
+                             'set'     =>  0),
+                       array('name'    =>  'test',
+                             'module'  =>  'privileges',
+                             'set'     =>  false),
+                       array('name'    =>  'testdeny',
+                             'module'  =>  'privileges',
+                             'set'     =>  false),
+                       array('name'    =>  'testmask',
+                             'module'  =>  'privileges',
+                             'set'     =>  'All'),
+                       array('name'    =>  'realmvalue',
+                             'module'  =>  'privileges',
+                             'set'     =>  'none'),
+                       array('name'    =>  'realmcomparison',
+                             'module'  =>  'privileges',
+                             'set'     =>  'exact'),
+                       array('name'    =>  'suppresssending',
+                             'module'  =>  'mail',
+                             'set'     =>  'false'),
+                       array('name'    =>  'redirectsending',
+                             'module'  =>  'mail',
+                             'set'     =>  'exact'),
+                       array('name'    =>  'redirectaddress',
+                             'module'  =>  'mail',
+                             'set'     =>  ''),
                           );
 
     foreach($modvars as $modvar){
@@ -1095,6 +1155,20 @@ if (empty($step)) {
         echo "pnLegacy Masks have been created previously, moving to next check. <br />";
     }
 
+    $upgrade['priv_masks'] = xarMaskExists('ViewPrivileges','privileges','Realm');
+    if (!$upgrade['priv_masks']) {
+        echo "Privileges realm Masks do not exist, attempting to create... done! <br />";
+
+        // create a couple of new masks
+        xarRegisterMask('ViewPrivileges','All','privileges','Realm','All','ACCESS_OVERVIEW');
+        xarRegisterMask('ReadPrivilege','All','privileges','Realm','All','ACCESS_READ');
+        xarRegisterMask('EditPrivilege','All','privileges','Realm','All','ACCESS_EDIT');
+        xarRegisterMask('AddPrivilegem','All','privileges','Realm','All','ACCESS_ADD');
+        xarRegisterMask('DeletePrivilege','All','privileges','Realm','All','ACCESS_DELETE');
+    } else {
+        echo "Privileges realm masks have been created previously, moving to next check. <br />";
+    }
+
     $upgrade['priv_locks'] = xarPrivExists('GeneralLock');
     if (!$upgrade['priv_locks']) {
         echo "Privileges Locks do not exist, attempting to create... done! <br />";
@@ -1305,9 +1379,9 @@ if (empty($step)) {
         xar_page            L           NotNull DEFAULT 0,
         xar_user            L           NotNull DEFAULT 0,
         xar_expire          I           Null
-    ";  
+    ";
     // Create or alter the table as necessary.
-    $result = $datadict->changeTable($cacheblockstable, $flds);    
+    $result = $datadict->changeTable($cacheblockstable, $flds);
     if (!$result) {return;}
     // Create a unique key on the xar_bid collumn
     $result = $datadict->createIndex('i_' . xarDBGetSiteTablePrefix() . '_cache_blocks_1',
@@ -1315,8 +1389,8 @@ if (empty($step)) {
                                      'xar_bid',
                                      array('UNIQUE'));
     echo "...done.<br/>";
-    
-  /*$varCacheDir = xarCoreGetVarDirPath() . '/cache'; 
+
+  /*$varCacheDir = xarCoreGetVarDirPath() . '/cache';
     if (file_exists($varCacheDir . '/output/cache.touch')) {
         echo "Output caching enabled, checking for required table...<br/>";
         $dbconn =& xarDBGetConn();
@@ -1337,7 +1411,7 @@ if (empty($step)) {
         }
     } else {
         echo "Output caching is not enabled.<br/>";
-    } */ 
+    } */
     // Done with xarCache state check
 
     // Bug 1798 - Rename davedap module to phpldapmodule
@@ -1409,7 +1483,7 @@ if (empty($step)) {
             return;
         }
     } // End bug 630
-    
+
     // after 0911, make sure CSS class lib is deployed and css tags are registered
     echo "<h5>Making sure CSS tags are registered</h5>";
     if(!xarModAPIFunc('themes', 'css', 'registercsstags')) {

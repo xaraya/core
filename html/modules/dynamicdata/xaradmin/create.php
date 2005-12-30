@@ -1,7 +1,5 @@
 <?php
 /**
- * Standard function to create a new item
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -33,6 +31,7 @@ function dynamicdata_admin_create($args)
     if (!xarVarFetch('return_url',  'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('join',        'isset', $join,       NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('table',       'isset', $table,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('template',     'isset', $template,   NULL, XARVAR_DONT_SET)) {return;}
 
     if (!xarSecConfirmAuthKey()) return;
 
@@ -61,10 +60,13 @@ function dynamicdata_admin_create($args)
         $item['itemtype'] = $myobject->itemtype;
         $item['itemid'] = $myobject->itemid;
         $hooks = array();
-        $hooks = xarModCallHooks('item', 'new', $myobject->itemid, $item, $modinfo['name']); 
+        $hooks = xarModCallHooks('item', 'new', $myobject->itemid, $item, $modinfo['name']);
         $data['hooks'] = $hooks;
 
-        return xarTplModule('dynamicdata','admin','new', $data);
+        if(!isset($template)) {
+            $template = $myobject->name;
+        }
+        return xarTplModule('dynamicdata','admin','new',$data,$template);
     }
 
     $itemid = $myobject->createItem();
