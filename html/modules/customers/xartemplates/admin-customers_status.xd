@@ -1,0 +1,383 @@
+<xar:template file="application_top" type="module"/>
+
+<style type="text/css">@import url(modules/commerce/xarstyles/adminstylesheet.css);</style>
+<script type="text/javascript" src="modules/commerce/xartemplates/general.js"></script>
+<xar:template file="adminheader" type="module"/>
+
+<table border="0" width="100%" cellspacing="0" cellpadding="2">
+      <tr>
+        <td>
+			<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			  <tr>
+				<td width="80" rowspan="2"><img src="#xarTplGetImage('adminicons/heading_customers.gif')#"></td>
+				<td class="pageHeading"><xar:mlstring>Customer Groups</xar:mlstring></td>
+			  </tr>
+			  <tr>
+				<td class="main" valign="top"><xar:mlstring>XT Customers</xar:mlstring></td>
+			  </tr>
+			</table>
+        </td>
+      </tr>
+      <tr>
+        <td>
+			<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			  <tr>
+				<td valign="top">
+				<table border="0" width="100%" cellspacing="0" cellpadding="2">
+					<td class="dataTableHeadingContent" align="left" width=""><xar:mlstring>Icon</xar:mlstring></td>
+					<td class="dataTableHeadingContent" align="left" width=""><xar:mlstring>User</xar:mlstring></td>
+					<td class="dataTableHeadingContent" align="left" width=""><xar:mlstring>Group</xar:mlstring></td>
+					<td class="dataTableHeadingContent" align="center" width=""><xar:mlstring> Price/Tax</xar:mlstring></td>
+					<td class="dataTableHeadingContent" align="center" colspan="2"><xar:mlstring>Discount</xar:mlstring></td>
+					<td class="dataTableHeadingContent" width=""><xar:mlstring>Graduated Price</xar:mlstring></td>
+					<td class="dataTableHeadingContent" width=""><xar:mlstring>Payment N/A</xar:mlstring></td>
+					<td class="dataTableHeadingContent" width=""><xar:mlstring>Shipping N/A</xar:mlstring></td>
+					<td class="dataTableHeadingContent" align="right"><xar:mlstring>Action</xar:mlstring>&nbsp;</td>
+				  </tr>
+
+<xar:comment>  BEGIN LOOP ROWS  </xar:comment>
+    <xar:loop name="$items">
+    
+        <xar:if condition="is_array($cInfo) and($loop:item['customers_status_id'] eq $cInfo.customers_status_id)">
+            <tr class="dataTableRowSelected" onmouseover="this.style.cursor='hand'" onclick="document.location.href='#$loop:item['url']#'">
+        <xar:else />
+            <tr class="dataTableRow" onmouseover="this.className='dataTableRowOver';this.style.cursor='hand'" onmouseout="this.className='dataTableRow'" onclick="document.location.href='#$loop:item['url']#'">
+        </xar:if>
+
+            <td class="dataTableContent" align="left">
+				<xar:if condition="isset($loop:item['customers_status_image']) and $loop:item['customers_status_image'] ne ''">
+					<img src="#xarTplGetImage($loop:item['customers_status_image'])#" alt="#xarML('Group icon')#">
+				<xar:else />
+					&nbsp;
+				</xar:if>
+            </td>
+            <td class="dataTableContent" align="left">#$loop:item['customers_status_id']#
+            #xarModAPIFUnc('commerce','admin','get_status_users',array('status_id' =>$loop:item['customers_status_id']))#</td>
+			<td class="dataTableContent" align="left">
+				<xar:if condition = "$loop:item['customers_status_id'] eq $configuration.default_customers_status_id">
+					<b>#$loop:item['customers_status_name']#
+					(<xar:mlstring>default</xar:mlstring>)
+					<xar:if condition = "$loop:item['customers_status_public'] eq 1">
+						&nbsp;<xar:mlstring>public</xar:mlstring>
+	                </xar:if>
+	                </b>
+                <xar:else />
+					#$loop:item['customers_status_name']#
+					(<xar:mlstring>default</xar:mlstring>)
+					<xar:if condition = "$loop:item['customers_status_public'] eq 1">
+						&nbsp;<xar:mlstring>public</xar:mlstring>
+	                </xar:if>
+                </xar:if>
+            </td>
+			<xar:if condition = "$loop:item['customers_status_show_price'] eq 1">
+				<td nowrap class="smallText" align="center">
+					<xar:if condition = "$loop:item['customers_status_show_price_tax'] eq 1">
+						<xar:mlstring>incl.</xar:mlstring>
+					<xar:else />
+						<xar:mlstring>excl.</xar:mlstring>
+	                </xar:if>
+	            </td>
+            <xar:else />
+				<td class="smallText" align="center">
+					&nbsp;
+	            </td>
+            </xar:if>
+			<td nowrap class="smallText" align="center">
+				#$loop:item['customers_status_discount']#%
+			</td>
+			<td nowrap class="dataTableContent" align="center">
+				<xar:if condition = "$loop:item['customers_status_ot_discount_flag'] eq 0">
+					<font color="ff0000">
+						#$loop:item['customers_status_ot_discount']#%
+					</font>
+				<xar:else />
+						#$loop:item['customers_status_ot_discount']#%
+				</xar:if>
+            </td>
+			<td class="dataTableContent" align="center">
+				<xar:if condition = "$loop:item['customers_status_graduated_prices'] eq 0">
+						<xar:mlstring>no</xar:mlstring>
+				<xar:else />
+						<xar:mlstring>yes</xar:mlstring>
+				</xar:if>
+			</td>
+			<td nowrap class="smallText" align="center">
+				#$loop:item['customers_status_payment_unallowed']#
+			</td>
+			<td nowrap class="smallText" align="center">
+				#$loop:item['customers_status_shipping_unallowed']#
+			</td>
+            <td class="dataTableContent" align="right">
+                <xar:if condition = "is_array($cInfo) and($loop:item['customers_status_id'] eq $cInfo.customers_status_id)">
+                    <img src="#xarTplGetImage('adminimages/icon_arrow_right.gif')#">
+                <xar:else />
+                    <a href="#xarModURL('commerce','admin','customers_status',array('page' => $page, 'cID' =>  $loop:item['customers_status_id']))#">
+                        <img src="#xarTplGetImage('adminimages/icon_info.gif')#" alt="#xarML('Info')#">
+                    </a>
+                </xar:if>
+            &nbsp;
+            </td>
+        </tr>
+    </xar:loop>
+<xar:comment>  END LOOP ROWS  </xar:comment>
+        <tr>
+            <td colspan="8">
+                <table border="0" width="100%" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td class="smallText" valign="top"> 
+                            #$pagermsg#   
+                        </td>
+                        <td class="smallText" align="right">
+                            #$displaylinks#
+                        </td>
+                    </tr>
+
+                    <xar:if condition = "!isset($action)">
+                        <tr>
+                            <td colspan="2" align="right">
+                                <a href="#xarModURL('commerce','admin','customers_status',array('page' => $page, 'action' => 'new'))#">
+                                    <img src="#xarTplGetImage($language .'/admin/buttons/' . 'button_insert.gif')#" alt ="#xarML('New customer group')#">                                  
+                                </a>
+                            </td>
+                        </tr>
+                    </xar:if>
+                </table>
+            </td>
+        </tr>
+			  </table>
+			</td>
+			<td width="25%" valign="top">
+				<table border="0" width="100%" cellspacing="0" cellpadding="2">
+				  <tr class="dataTableHeadingRow">
+		<xar:if condition = "$action eq 'new'">
+			<td class="infoBoxHeading" valign="top">
+			<b><xar:mlstring>New Customer Group</xar:mlstring></b>
+			</td>
+			</tr>
+			<tr>
+			<FORM name="customers_status" action="#xarModURL('commerce','admin','customers_status',array('page' => $page,'action' => 'insert'))#" method="POST">
+				<td class="infoBoxContent">
+					<xar:mlstring>Please enter the new customer group with its related data</xar:mlstring>		
+					<br /><b><xar:mlstring>Group Name</xar:mlstring></b><br />
+					<xar:loop name="$languages">
+						<br />
+						<input type="image" src="#xarTplGetImage($loop:item['directory'] .'/admin/' . $loop:item['image'])#" border="0" alt="#xarML($loop:item['name'])#">
+						&nbsp;
+						<input type="text" name="customers_status_name[#$loop:item['id']#]">					
+					</xar:loop>
+					<br /><br />
+					<xar:mlstring>Group Image</xar:mlstring><br />
+					<input type="file" name="customers_status_image">
+					<br /><br />
+					<b><xar:mlstring>Show Public?</xar:mlstring></b><br />
+					#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'customers_status_public', 'values' => $customers_status_public_array, 'default' => 0))#
+					<br /><br />
+					<b><xar:mlstring>Show price in shop</xar:mlstring></b><br />
+					#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'customers_status_show_price', 'values' => $customers_status_show_price_array, 'default' => 0))#
+					<br /><br />
+					<b><xar:mlstring>Show prices with or without tax</xar:mlstring></b><br />
+					<xar:mlstring>Prices include tax</xar:mlstring>&nbsp;
+					#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'customers_status_show_price_tax', 'values' => $customers_status_show_price_tax_array, 'default' => 0))#
+					<br /><br />
+					<b><xar:mlstring>If prices incl. tax set to = "No"</xar:mlstring></b><br />
+					<xar:mlstring>Show tax in order total</xar:mlstring>&nbsp;
+					#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'customers_status_add_tax_ot', 'values' => $customers_status_add_tax_ot_array, 'default' => 0))#
+					<br /><br />
+					<b><xar:mlstring>Max. % discount on single Products</xar:mlstring></b><br />
+					<xar:mlstring>Discount</xar:mlstring><br />
+					<input type="text" name="customers_status_discount">
+					<br /><br />
+					<b><xar:mlstring>Discount on product attributes</xar:mlstring></b><br />
+					<xar:mlstring>(Max. % Discount on single product)</xar:mlstring><br />
+					<xar:mlstring>Discount</xar:mlstring>&nbsp;
+					#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'customers_status_discount_attributes', 'values' => $customers_status_discount_attributes_array, 'default' => 0))#
+					<br /><br />
+					<b><xar:mlstring>Discount on total order</xar:mlstring></b><br />
+					<xar:mlstring>Discount</xar:mlstring>&nbsp;
+					#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'customers_status_ot_discount_flag', 'values' => $customers_status_ot_discount_flag_array, 'default' => 0))#<br />
+					<xar:mlstring>Discount</xar:mlstring><br />
+					<input type="text" name="customers_status_ot_discount">
+					<br /><br />
+					<b><xar:mlstring>Graduated Prices</xar:mlstring></b><br />
+					<xar:mlstring>Graduated Prices</xar:mlstring>&nbsp;
+					#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'customers_status_graduated_prices', 'values' => $customers_status_graduated_prices_array, 'default' => 0))#
+					<br /><br />
+					<b><xar:mlstring>n. a. Payment methods</xar:mlstring></b><br />
+					<xar:mlstring>Enter not allowed payment modules</xar:mlstring><br />
+					<input type="text" name="customers_status_payment_unallowed">
+					<br /><br />
+					<b><xar:mlstring>Not allowed Shipping modules</xar:mlstring></b><br />
+					<xar:mlstring>Enter not allowed shipping modules</xar:mlstring><br />
+					<input type="text" name="customers_status_shipping_unallowed">
+					<br /><br />
+					<input type="checkbox" name="default">&nbsp;
+					<xar:mlstring>Set as default</xar:mlstring>
+					<br /><br />
+					&nbsp;
+					<input type="image" src="#xarTplGetImage($language .'/admin/buttons/button_insert.gif')#" border="0" alt="#xarML('Insert')#">
+					&nbsp;
+					<a href="#xarModURL('commerce','admin','customers_status',array('page' => $page))#">
+						<img src="#xarTplGetImage($language .'/admin/buttons/button_cancel.gif')#" alt="#xarML('Cancel')#">
+					</a>
+				</td>
+			</FORM>
+		<xar:elseif condition="$action eq 'edit'" />
+			<td class="infoBoxHeading">
+			<b><xar:mlstring>Edit Customer Group</xar:mlstring></b>
+			</td>
+			</tr>
+			<tr>
+			<FORM name="customers_status" action="#xarModURL('commerce','admin','customers_status',array('page' => $page,'cID' => $cInfo.customers_status_id,'action' => 'save'))#" method="POST">
+				<td class="infoBoxContent">
+					<xar:mlstring>Please make any necessary changes</xar:mlstring>
+					<br /><br /><b><xar:mlstring>Group Name</xar:mlstring></b>
+					<xar:loop name="$languages">
+						<br />
+						<input type="image" src="#xarTplGetImage($loop:item['directory'] .'/admin/' . $loop:item['image'])#" border="0" alt="#xarML($loop:item['name'])#">
+						&nbsp;
+                        <xar:set name="$group">
+							#xarModAPIFunc('commerce','user','get_customer_status',array('customer_status_id' => $cInfo.customers_status_id,'language_id' => $loop:item['id']))#
+                        </xar:set>
+						<input type="text" name="customers_status_name[#$loop:item['id']#]" value="#$group['customers_status_name']#">					
+					</xar:loop>
+					<br /><br />
+					<xar:mlstring>Group Image</xar:mlstring><br />
+					#xarTplGetImage($cInfo.customers_status_image)#
+					<br /><br />
+					<b><xar:mlstring>Show Public?</xar:mlstring></b><br />
+					#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'customers_status_public', 'values' => $customers_status_public_array, 'default' => $cInfo.customers_status_public))#
+					<br /><br />
+					<b><xar:mlstring>Show price in shop</xar:mlstring></b><br />
+					#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'customers_status_show_price', 'values' => $customers_status_show_price_array, 'default' => $cInfo.customers_status_show_price))#
+					<br /><br />
+					<b><xar:mlstring>Show prices with or without tax</xar:mlstring></b><br />
+					<xar:mlstring>Prices include tax</xar:mlstring>&nbsp;
+					#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'customers_status_show_price_tax', 'values' => $customers_status_show_price_tax_array, 'default' => $cInfo.customers_status_show_price_tax))#
+					<br /><br />
+					<b><xar:mlstring>If prices incl. tax set to = "No"</xar:mlstring></b><br />
+					<xar:mlstring>Show tax in order total</xar:mlstring>&nbsp;
+					#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'customers_status_add_tax_ot', 'values' => $customers_status_add_tax_ot_array, 'default' => $cInfo.customers_status_add_tax_ot))#
+					<br /><br />
+					<b><xar:mlstring>Max. % discount on single Products</xar:mlstring></b><br />
+					<xar:mlstring>Discount</xar:mlstring><br />
+					<input type="text" name="customers_status_discount" value="#$cInfo.customers_status_discount#">
+					<br /><br />
+					<b><xar:mlstring>Discount on product attributes</xar:mlstring></b><br />
+					<xar:mlstring>(Max. % Discount on single product)</xar:mlstring><br />
+					<xar:mlstring>Discount</xar:mlstring>&nbsp;
+					#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'customers_status_discount_attributes', 'values' => $customers_status_discount_attributes_array, 'default' => $cInfo.customers_status_discount_attributes))#
+					<br /><br />
+					<b><xar:mlstring>Discount on total order</xar:mlstring></b><br />
+					<xar:mlstring>Discount</xar:mlstring>&nbsp;
+					#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'customers_status_ot_discount_flag', 'values' => $customers_status_ot_discount_flag_array, 'default' => $cInfo.customers_status_ot_discount_flag))#<br />
+					<xar:mlstring>Discount</xar:mlstring><br />
+					<input type="text" name="customers_status_ot_discount" value="#$cInfo.customers_status_ot_discount#">
+					<br /><br />
+					<b><xar:mlstring>Graduated Prices</xar:mlstring></b><br />
+					<xar:mlstring>Graduated Prices</xar:mlstring>&nbsp;
+					#xarModAPIFunc('commerce','user','draw_pull_down_menu',array('name' => 'customers_status_graduated_prices', 'values' => $customers_status_graduated_prices_array, 'default' => $cInfo.customers_status_graduated_prices))#
+					<br /><br />
+					<b><xar:mlstring>n. a. Payment methods</xar:mlstring></b><br />
+					<xar:mlstring>Enter not allowed payment modules</xar:mlstring><br />
+					<input type="text" name="customers_status_payment_unallowed" value="#$cInfo.customers_status_payment_unallowed#">
+					<br /><br />
+					<b><xar:mlstring>Not allowed Shipping modules</xar:mlstring></b><br />
+					<xar:mlstring>Enter not allowed shipping modules</xar:mlstring><br />
+					<input type="text" name="customers_status_shipping_unallowed" value="#$cInfo.customers_status_shipping_unallowed#">
+					<br /><br />
+					<input type="checkbox" name="default">&nbsp;
+					<xar:mlstring>Set as default</xar:mlstring>
+					<br /><br />
+					&nbsp;
+					<input type="image" src="#xarTplGetImage($language .'/admin/buttons/button_update.gif')#" border="0" alt="#xarML('Edit')#">
+					&nbsp;
+					<a href="#xarModURL('commerce','admin','customers_status',array('page' => $page))#">
+						<img src="#xarTplGetImage($language .'/admin/buttons/button_cancel.gif')#" alt="#xarML('Cancel')#">
+					</a>
+				</td>
+			</FORM>
+		<xar:elseif condition="$action eq 'delete'" />
+			<td class="infoBoxHeading">
+			<b><xar:mlstring>Delete Customer Group</xar:mlstring></b>
+			</td>
+			</tr>
+			<tr>
+			<FORM name="customers_status" action="#xarModURL('commerce','admin','customers_status',array('page' => $page,'cID' => $cInfo.customers_status_id,'action' => 'deleteconfirm'))#" method="POST">
+				<td class="infoBoxContent">
+					<xar:mlstring>Are you sure you want to delete this customer group?</xar:mlstring>
+					<br /><b>#$cInfo.customers_status_name#</b>
+					<br /><br />
+					&nbsp;
+					<input type="image" src="#xarTplGetImage($language .'/admin/buttons/button_delete.gif')#" border="0" alt="#xarML('Delete')#">
+					&nbsp;
+					<a href="#xarModURL('commerce','admin','customers_status',array('page' => $page,'cID' => $cInfo.customers_status_id))#">
+						<img src="#xarTplGetImage($language .'/admin/buttons/button_cancel.gif')#" alt="#xarML('Cancel')#">
+					</a>
+				</td>
+			</FORM>
+		<xar:else />
+			<xar:if condition = "is_array($cInfo)">
+				<td class="infoBoxHeading" valign="top">
+					<b>#$cInfo.customers_status_name#</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="infoBoxContent" align="center">
+					&nbsp;
+					<a href="#xarModURL('commerce','admin','customers_status',array('page' => $page,'cID' => $cInfo.customers_status_id,'action' => 'edit'))#">
+						<img src="#xarTplGetImage($language .'/admin/buttons/button_edit.gif')#" alt="#xarML('Edit')#">
+					</a>
+					<br />
+					&nbsp;
+					<a href="#xarModURL('commerce','admin','customers_status',array('page' => $page,'cID' => $cInfo.customers_status_id,'action' => 'delete'))#">
+						<img src="#xarTplGetImage($language .'/admin/buttons/button_delete.gif')#" alt="#xarML('Delete')#">
+					</a>
+				</td>
+			</tr>
+			<tr>
+				<td class="infoBoxContent" align="left">
+					<xar:loop name="$languages">
+						<br />
+						<input type="image" src="#xarTplGetImage($loop:item['directory'] .'/admin/' . $loop:item['image'])#" border="0" alt="#xarML($loop:item['name'])#">
+						&nbsp;
+                        <xar:set name="$group">
+							#xarModAPIFunc('commerce','user','get_customer_status',array('customer_status_id' => $cInfo.customers_status_id,'language_id' => $loop:item['id']))#
+                        </xar:set>
+                        #$group['customers_status_name']#
+					</xar:loop>
+					<br /><br />
+					<b><xar:mlstring>Max. % discount on single Products</xar:mlstring></b><br />
+					<xar:mlstring>Discount</xar:mlstring>&nbsp;#$cInfo.customers_status_discount#
+					<br /><br />
+					<b><xar:mlstring>Discount on product attributes</xar:mlstring></b><br />
+					<xar:mlstring>(Max. % Discount on single product)</xar:mlstring><br />
+					<xar:mlstring>Discount</xar:mlstring>:&nbsp;
+					#$customers_status_discount_attributes_array[$cInfo.customers_status_discount_attributes]['text']#				
+					<br /><br />
+					<b><xar:mlstring>Discount on total order</xar:mlstring></b><br />
+					<xar:mlstring>Discount</xar:mlstring>:&nbsp;
+					#$customers_status_ot_discount_flag_array[$cInfo.customers_status_ot_discount_flag]['text']# - 
+					#$cInfo.customers_status_ot_discount#
+					<br /><br />
+					<b><xar:mlstring>Graduated Prices</xar:mlstring></b><br />
+					<xar:mlstring>Graduated Prices</xar:mlstring>:&nbsp;
+					#$customers_status_graduated_prices_array[$cInfo.customers_status_graduated_prices]['text']#
+					<br /><br />
+					<b><xar:mlstring>n. a. Payment methods</xar:mlstring></b><br />
+					<xar:mlstring>Enter not allowed payment modules</xar:mlstring><br />
+					#$cInfo.customers_status_payment_unallowed#
+					<br /><br />
+					<b><xar:mlstring>Not allowed Shipping modules</xar:mlstring></b><br />
+					<xar:mlstring>Enter not allowed shipping modules</xar:mlstring><br />
+					#$cInfo.customers_status_shipping_unallowed#
+				</td>
+			</xar:if>
+		</xar:if>
+				</tr>
+			</table>
+		</td>
+		</tr>
+	</table>
+	</td>
+  </tr>
+</table>

@@ -20,48 +20,57 @@ function roles_user_display($args)
 {
     extract($args);
 
-    if (!xarVarFetch('uid','id',$uid, xarUserGetVar('uid'))) return;
+    if (!xarVarFetch('uid','id',$uid, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
+    if(!xarVarFetch('tplmodule', 'str', $args['tplmodule'], 'roles', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('template', 'str', $args['template'], '', XARVAR_NOT_REQUIRED)) {return;}
 
-    $uid = isset($itemid) ? $itemid : $uid;
+	$uid = isset($itemid) ? $itemid : $uid;
 
-    // Get role information
-    $roles = new xarRoles();
-    $role = $roles->getRole($uid);
+    if ($uid) {
+		// Get role information
+		$roles = new xarRoles();
+		$role = $roles->getRole($uid);
 
-    if (!$role) return;
+		if (!$role) return;
 
-    $name = $role->getName();
-// Security Check
-    if(!xarSecurityCheck('ViewRoles',0,'Roles',$name)) return;
+		$name = $role->getName();
 
-    $data['uid'] = $role->getID();
-    $data['itemtype'] = $role->getType();
-	$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+	// Security Check
+		if(!xarSecurityCheck('ViewRoles',0,'Roles',$name)) return;
+
+		$data['uid'] = $role->getID();
+		$data['itemtype'] = $role->getType();
+		$data['name'] = $name;
+		//get the data for a user
+		if ($data['basetype'] == ROLES_USERTYPE) {
+			$data['uname'] = $role->getUser();
+			$data['email'] = xarVarPrepForDisplay($role->getEmail());
+			$data['state'] = $role->getState();
+			$data['valcode'] = $role->getValCode();
+		} else {
+			//get the data for a group
+		}
+
+		$item = $data;
+		$item['module'] = 'roles';
+		$item['itemtype'] = $data['type'];
+		$item['itemid']= $uid;
+		$item['returnurl'] = xarModURL('roles', 'user', 'display',
+									   array('uid' => $uid));
+		$data['hooks'] = xarModCallHooks('item', 'display', $uid, $item);
+
+		xarTplSetPageTitle(xarVarPrepForDisplay($data['name']));
+	} else {
+		$data['uid'] = $uid;
+	}
+
+	$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
 	$types = xarModAPIFunc('roles','user','getitemtypes');
-	$data['itemtypename'] = $types[$data['itemtype']]['label'];
-    $data['name'] = $name;
-    //get the data for a user
-    if ($data['basetype'] == ROLES_USERTYPE) {
-        $data['uname'] = $role->getUser();
-		$data['email'] = xarVarPrepForDisplay($role->getEmail());
-        $data['state'] = $role->getState();
-        $data['valcode'] = $role->getValCode();
-    } else {
-        //get the data for a group
-    }
+	$data['itemtypename'] = $types[$itemtype]['label'];
 
-    $item = $data;
-    $item['module'] = 'roles';
-    $item['itemtype'] = $data['type'];
-    $item['itemid']= $uid;
-    $item['returnurl'] = xarModURL('roles', 'user', 'display',
-                                   array('uid' => $uid));
-    $data['hooks'] = xarModCallHooks('item', 'display', $uid, $item);
-
-    xarTplSetPageTitle(xarVarPrepForDisplay($data['name']));
-
-    return $data;
+    return xarTplModule($args['tplmodule'],'user','display',$data,$args['template']);
 }
 
 ?>

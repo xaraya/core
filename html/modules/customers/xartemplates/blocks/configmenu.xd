@@ -1,0 +1,18 @@
+<ul class="xar-menu-section">
+    <li class="xar-menu-section"><xar:mlstring>Customers</xar:mlstring>
+        <ul class="xar-menu-item">
+            <xar:if condition="xarModURL('customers','admin','main') eq $currenturl">
+                <li class="xar-menu-subitem-current"><xar:mlstring>Customers</xar:mlstring> #$marker#</li>
+            <xar:else />
+                <li class="xar-menu-subitem"><a href="#xarModURL('customers','admin','customers')#" title="#xarML('Customers')#"><xar:mlstring>Customers</xar:mlstring></a>
+		</li>
+            </xar:if>
+            <xar:if condition="xarModURL('customers','admin','customer_status') eq $currenturl">
+                <li class="xar-menu-subitem-current"><xar:mlstring>Customer Groups</xar:mlstring> #$marker#</li>
+            <xar:else />
+                <li class="xar-menu-subitem"><a href="#xarModURL('customers','admin','customer_groups')#" title="#xarML('Customer Groups')#"><xar:mlstring>Customer Groups</xar:mlstring></a>
+		</li>
+            </xar:if>
+        </ul>
+    </li>
+</ul>

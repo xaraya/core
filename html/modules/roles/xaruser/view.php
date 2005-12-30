@@ -65,6 +65,7 @@ function roles_user_view($args)
         xarModURL('roles', 'user', 'view', $pagerfilter),
         $numitems
     );
+
     return xarTplModule($args['tplmodule'],'user','view',$data,$args['template']);
 }
 
