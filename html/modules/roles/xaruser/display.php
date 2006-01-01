@@ -20,9 +20,9 @@ function roles_user_display($args)
 {
     extract($args);
 
-    if (!xarVarFetch('uid','id',$uid, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('uid','id',$uid, xarUserGetVar('uid'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemtype', 'int', $itemtype, 1, XARVAR_NOT_REQUIRED)) return;
     if(!xarVarFetch('tplmodule', 'str', $args['tplmodule'], 'roles', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('template', 'str', $args['template'], '', XARVAR_NOT_REQUIRED)) {return;}
 
@@ -41,9 +41,11 @@ function roles_user_display($args)
 		if(!xarSecurityCheck('ViewRoles',0,'Roles',$name)) return;
 
 		$data['uid'] = $role->getID();
-		$data['itemtype'] = $role->getType();
+		$itemtype = $role->getType();
+		$data['itemtype'] = $itemtype;
 		$data['name'] = $name;
 		//get the data for a user
+		$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
 		if ($data['basetype'] == ROLES_USERTYPE) {
 			$data['uname'] = $role->getUser();
 			$data['email'] = xarVarPrepForDisplay($role->getEmail());
@@ -55,7 +57,7 @@ function roles_user_display($args)
 
 		$item = $data;
 		$item['module'] = 'roles';
-		$item['itemtype'] = $data['type'];
+		$item['itemtype'] = $data['itemtype'];
 		$item['itemid']= $uid;
 		$item['returnurl'] = xarModURL('roles', 'user', 'display',
 									   array('uid' => $uid));
@@ -66,7 +68,6 @@ function roles_user_display($args)
 		$data['uid'] = $uid;
 	}
 
-	$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
 	$types = xarModAPIFunc('roles','user','getitemtypes');
 	$data['itemtypename'] = $types[$itemtype]['label'];
 

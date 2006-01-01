@@ -108,6 +108,10 @@ function modules_adminapi_getlist($args)
         $whereClauses[] = 'mods.xar_class = ?';
         $bindvars[] = $filter['Class'];
     }
+    if (isset($class)) {
+        $whereClauses[] = 'mods.xar_class = ?';
+        $bindvars[] = $class;
+    }
     if (isset($filter['Category'])) {
         $whereClauses[] = 'mods.xar_category = ?';
         $bindvars[] = $filter['Category'];

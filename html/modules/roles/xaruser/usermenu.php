@@ -60,12 +60,13 @@ function roles_user_usermenu($args)
             $authid = xarSecGenAuthKey();
             $submitlabel = xarML('Submit');
             $item['module'] = 'roles';
+            $item['itemtype'] = ROLES_USERTYPE;
 
             $hooks = xarModCallHooks('item','modify',$uid,$item);
             if (isset($hooks['dynamicdata'])) {
                 unset($hooks['dynamicdata']);
             }
-            
+
             $data = xarTplModule('roles','user', 'user_menu_form',
                                   array('authid'       => $authid,
                                   'withupload'   => $withupload,

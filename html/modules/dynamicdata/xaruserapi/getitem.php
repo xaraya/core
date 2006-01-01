@@ -131,7 +131,7 @@ function &dynamicdata_userapi_getitem($args)
 			}
 		}
 	}
-	echo var_dump($itemsarray);
+
 	if (!empty($getobject)) {
 		if (count($objectarray == 1)) return $objectarray[0];
 		else return $objectarray;

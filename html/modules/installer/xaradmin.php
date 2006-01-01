@@ -404,7 +404,7 @@ function installer_admin_phase5()
             // 1. the drop table drops the sequence while the table gets dropped in the second statement
             //    so if that fails, the table remains while the sequence is gone, at least transactions is needed
             // 3. generating sql and executing in 2 parts sucks, wrt encapsulation
-            $sql = xarDBDropTable($table,$dbType); 
+            $sql = xarDBDropTable($table,$dbType);
             $result = $dbconn->Execute($sql);
             if(!$result) return;
         }
@@ -1073,7 +1073,8 @@ function installer_admin_cleanup()
 
     list ($rightBlockGroup) = $result->fields;
 
-    $loginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+/*
+	$loginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
                                     array('module' => 'roles',
                                           'type'   => 'login'));
 
@@ -1095,7 +1096,7 @@ function installer_admin_cleanup()
             return;
         }
     }
-
+*/
     $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
               WHERE     xar_name = 'header'";

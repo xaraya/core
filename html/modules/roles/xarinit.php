@@ -167,6 +167,10 @@ function roles_init()
     $query = xarDBCreateIndex($tables['rolemembers'], $index);
     if (!$dbconn->Execute($query)) return;
     //Database Initialisation successful
+
+
+    xarModSetVar('roles', 'defaultauthmodule', '');
+
     return true;
 }
 
@@ -177,16 +181,7 @@ function roles_activate()
 
     // Set up an initial value for module variables.
     xarModSetVar('roles', 'rolesperpage', 20);
-    xarModSetVar('roles', 'allowregistration', 1);
-    xarModSetVar('roles', 'requirevalidation', 1);
-    xarModSetVar('roles', 'defaultgroup', 'Users');
-    //Send notifications values
-    xarModSetVar('roles', 'askwelcomeemail', 1);
-    xarModSetVar('roles', 'askvalidationemail', 1);
-    xarModSetVar('roles', 'askdeactivationemail', 1);
-    xarModSetVar('roles', 'askpendingemail', 1);
-    xarModSetVar('roles', 'askpasswordemail', 1);
-    xarModSetVar('roles', 'uniqueemail', 1);
+    xarModSetVar('roles', 'defaultauthmodule', '');
     //Default Display
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
     //Default User Locale
@@ -201,35 +196,6 @@ function roles_activate()
     xarModSetVar('roles', 'lockdata', serialize($lockdata));
     // Unfortunately, crappy format here, and not to PEAR Standardards
     // But I need the line break to come into play without the tab.
-
-/*---------------------------------------------------------------
-* Set disallowed names
-*/
-    $names = 'Admin
-Root
-Linux';
-    $disallowednames = serialize($names);
-    xarModSetVar('roles', 'disallowednames', $disallowednames);
-
-    $emails = 'none@none.com
-president@whitehouse.gov';
-    $disallowedemails = serialize($emails);
-    xarModSetVar('roles', 'disallowedemails', $disallowedemails);
-
-/*---------------------------------------------------------------
-* Set disallowed IPs
-*/
-    $ips = '';
-    $disallowedips = serialize($ips);
-    xarModSetVar('roles', 'disallowedips', $disallowedips);
-
-    xarModSetVar('roles', 'minage', 13);
-    // Register blocks
-    if (!xarModAPIFunc('blocks',
-            'admin',
-            'register_block_type',
-            array('modName' => 'roles',
-                'blockType' => 'login'))) return;
 
     if (!xarModAPIFunc('blocks',
             'admin',
@@ -321,11 +287,12 @@ function roles_delete()
     xarModDelVar('roles', 'disallowedemails');
 
     /**
-     * Remove instances and masks
+     * Remove modvars, instances and masks
      */
-    // Remove Masks and Instances
+    xarModDelAllVars('roles');
     xarRemoveMasks('roles');
     xarRemoveInstances('roles');
+
     // Deletion successful
     return true;
 }
