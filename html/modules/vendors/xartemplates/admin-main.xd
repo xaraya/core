@@ -1,0 +1,15 @@
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Foo Administration</xar:mlstring></span>
+</div>
+<div class="xar-mod-body">
+    <img src="#xarTplGetImage('admin.gif', 'foo')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
+
+    <h2>
+        <xar:mlstring>Overview</xar:mlstring>
+    </h2>
+
+        <p>
+            <xar:mlstring>Dummy foo text</xar:mlstring>
+        </p>
+</div>

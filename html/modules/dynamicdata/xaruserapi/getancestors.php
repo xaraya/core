@@ -45,7 +45,7 @@ function &dynamicdata_userapi_getancestors($args)
 				$info = xarModAPIFunc('dynamicdata','user', 'getobjectinfo', array('moduleid' => $moduleid, 'itemtype' => $itemtype));
 				if (empty($info)) {
 					$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $moduleid));
-					$info = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => $types[$itemtype]['label']);
+					$info = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => xarGetModuleNameByID($moduleid));
 				}
 				$result = array($info);
 			} else {
@@ -85,7 +85,8 @@ function &dynamicdata_userapi_getancestors($args)
 				// modules like dynamicdata have no itemtype 0 defined
 				$name = $mod['name'];
 			} else {
-				$name = $types[$parentitemtype]['label'];
+				//TODO: check this
+				$name = xarGetModuleNameByID($moduleid);
 				if ($base) {$ancestors[] = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => $name, 'moduleid' => $moduleid);}
 			}
 			$name = $mod['name'];

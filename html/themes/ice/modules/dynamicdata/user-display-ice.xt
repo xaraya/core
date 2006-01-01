@@ -1,0 +1,17 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+
+<div id="ice-objectdisplay">
+    <xar:if condition="!empty($object)">
+        <xar:data-display object="$object" template="ice"/>
+    <xar:else />
+        <!-- here we only retrieve the parameters in the function, and we let the data-display tag retrieve the complete object -->
+        <xar:data-display module="$module" itemtype="$itemtype" itemid="$itemid" template="ice" />
+    </xar:if>
+    
+    <xar:if condition="!empty($hooks)">
+        <xar:foreach in="$hooks" key="$module" value="$output">
+            #$output#
+        </xar:foreach>
+    </xar:if>
+
+</div>

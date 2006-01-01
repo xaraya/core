@@ -1,0 +1,22 @@
+<object name="commerceroles">
+  <objectid>42</objectid>
+  <label>CommerceRoles</label>
+  <moduleid>27</moduleid>
+  <itemtype>1000</itemtype>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config></config>
+  <isalias>1</isalias>
+  <properties>
+    <property name="country">
+      <id>97</id>
+      <label>Country</label>
+      <type>countrylisting</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>1</order>
+      <validation></validation>
+    </property>
+  </properties>
+</object>
