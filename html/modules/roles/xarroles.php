@@ -1138,6 +1138,8 @@ class xarRole
         foreach ($parents as $key => $parent) {
             $parents[$key]->setLevel(1);
         }
+        //Reset the array pointer - else in some cases we may miss getting all ancestors
+        reset($parents);
         // Get the parent field for each parent
         while (list($key, $parent) = each ($parents)) {
             $plevel = $parent->getLevel() + 1;
