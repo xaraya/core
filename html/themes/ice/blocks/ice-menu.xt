@@ -1,5 +1,0 @@
-<!-- Wrapper around a menu if this is needed -->
-<div class="ice-menu">
-    <xar:var name="content" />
-</div>
-<div style="clear:both;">&nbsp;</div>
