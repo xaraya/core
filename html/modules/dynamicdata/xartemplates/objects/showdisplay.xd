@@ -15,7 +15,7 @@
                 <xar:data-output property="$properties[$name]" />
             </xar:if>
     </div>
-  </xar:foreach>vv
+  </xar:foreach>
 <xar:else />
 <p>
   <xar:mlstring>Specify your own layout here...</xar:mlstring>

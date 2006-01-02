@@ -16,7 +16,7 @@
         <td><xar:mlstring>E-mail Address</xar:mlstring>:</td>
         <td>#xarVarPrepForDisplay($email)#</td>
     </tr>
-<xar:if condition="xarModGetVar('roles', 'showdynamic')" >
+<xar:if condition="xarModGetVar(xarGetModuleNameByID(xarModGetVar('roles','defaultauthmodule')), 'showdynamic')" >
     <xar:if condition="isset($properties)" >
         <xar:foreach in="$properties" key="$name">
             <tr>
