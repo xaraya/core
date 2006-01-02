@@ -20,7 +20,7 @@ function roles_admin_showusers()
     if (xarVarIsCached('roles', 'defaultgroupuid')) {
         $defaultgroupuid = xarVarGetCached('roles', 'defaultgroupuid');
     } else {
-        $defaultgroup = xarModGetVar('roles', 'defaultgroup');
+        $defaultgroup = xarModGetVar(xarGetModuleNameByID(xarModGetVar('roles','defaultauthmodule')), 'defaultgroup');
         $defaultgroupuid = xarModAPIFunc('roles','user','get',
                                                  array('uname'  => $defaultgroup,
                                                        'type'   => ROLES_GROUPTYPE));
