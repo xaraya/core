@@ -41,7 +41,7 @@ textarea#'.$id.' {
 }
 -->
 '</xar:set>
-<xar:style method="embed" source="'.$textareasource.'" media="all" />
+<!-- <xar:style method="embed" source="'.$textareasource.'" media="all" />-->
 <div class="xar-form-container-after">
     <textarea name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#" class="#$class#">#$value#</textarea>
 <xar:if condition="!empty($invalid)">

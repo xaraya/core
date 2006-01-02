@@ -189,10 +189,10 @@ class xarRoles
         $row = $q->row();
         if (empty($row)) return;
 
-		$vars = array();
+        $vars = array();
         if (!empty($row['xar_duvs'])) {
-			$duvs = unserialize($row['xar_duvs']);
-			foreach ($duvs as $key => $value) $vars[$key] = $value;
+            $duvs = unserialize($row['xar_duvs']);
+            foreach ($duvs as $key => $value) $vars[$key] = $value;
         }
         $pargs = array(
             'uid' =>         $row['xar_uid'],
@@ -488,18 +488,18 @@ class xarRole
         if (!isset($auth_module)) $auth_module = '';
         $duvs = array();
         $this->duvs = serialize($duvs);
-		if(isset($userhome)) {
-			$this->userhome = $userhome;
-			$duvs['userhome'] = $userhome;
-		} else {
-			$this->userhome = "";
-		}
-		if(isset($primaryparent)) {
-			$this->primaryparent = $primaryparent;
-			$duvs['primaryparent'] = $primaryparent;
-		} else {
-			$this->primaryparent = "";
-		}
+        if(isset($userhome)) {
+            $this->userhome = $userhome;
+            $duvs['userhome'] = $userhome;
+        } else {
+            $this->userhome = "";
+        }
+        if(isset($primaryparent)) {
+            $this->primaryparent = $primaryparent;
+            $duvs['primaryparent'] = $primaryparent;
+        } else {
+            $this->primaryparent = "";
+        }
         if (!empty($duvs)) $this->duvs = serialize($duvs);
 
         $this->uid = (int) $uid;
@@ -1128,11 +1128,11 @@ class xarRole
         while (!$result->EOF) {
             list($uid, $name, $type, $parentid, $uname, $email, $pass,
                 $date_reg, $val_code, $state, $auth_module,$duvs) = $result->fields;
-			$vars = array();
-			if (!empty($duvs)) {
-				$duvs = unserialize($duvs);
-				foreach ($duvs as $key => $value) $vars[$key] = $value;
-			}
+            $vars = array();
+            if (!empty($duvs)) {
+                $duvs = unserialize($duvs);
+                foreach ($duvs as $key => $value) $vars[$key] = $value;
+            }
             $pargs = array('uid' => $uid,
                 'name' => $name,
                 'type' => $type,
@@ -1145,7 +1145,7 @@ class xarRole
                 'state' => $state,
                 'auth_module' => $auth_module,
                 'duvs' => $duvs);
-			$pargs = array_merge($pargs,$vars);
+            $pargs = array_merge($pargs,$vars);
             $parents[] = new xarRole($pargs);
             $result->MoveNext();
         }

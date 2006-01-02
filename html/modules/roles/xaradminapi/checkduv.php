@@ -21,29 +21,29 @@ function roles_adminapi_checkduv($args)
     if (!isset($name)) return false;
     $state = isset($state) ? $state : 0;
 
-	switch ($state) {
-		case 0 :
-			$result = false;
-			$duvs = xarModGetVar('roles','duvs');
-			if (isset($duvs)) {
-				$duvs = unserialize($duvs);
-				if (isset($duvs[$name])) {
-					$result = true;
-				}
-			}
-			break;
-		case 1 :
-		default:
-			$result = false;
-			$duvs = xarModGetVar('roles','duvs');
-			if (isset($duvs)) {
-				$duvs = unserialize($duvs);
-				if (isset($duvs[$name]) && $duvs[$name]['state']) {
-					$result = true;
-				}
-			}
-	}
-	return $result;
+    switch ($state) {
+        case 0 :
+            $result = false;
+            $duvs = xarModGetVar('roles','duvs');
+            if (isset($duvs)) {
+                $duvs = unserialize($duvs);
+                if (isset($duvs[$name])) {
+                    $result = true;
+                }
+            }
+            break;
+        case 1 :
+        default:
+            $result = false;
+            $duvs = xarModGetVar('roles','duvs');
+            if (isset($duvs)) {
+                $duvs = unserialize($duvs);
+                if (isset($duvs[$name]) && $duvs[$name]['state']) {
+                    $result = true;
+                }
+            }
+    }
+    return $result;
 }
 
 ?>

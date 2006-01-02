@@ -25,31 +25,31 @@ function roles_adminapi_setduv($args)
                      new SystemException($msg));
         return false;
     }
-    $uid = isset('uid') ? $uid : xarSessionGetVar('uid');
+    $uid = isset($uid) ? $uid : xarSessionGetVar('uid');
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
-	$q = new xarQuery('SELECT',$xartables['roles'],'duvs');
-	$q->eq('xar_uid', $uid);
-	if (!$q->run($query)) return;
-	$result = $q->row();
-	$duvs = unserialize($result['duvs']);
+    $q = new xarQuery('SELECT',$xartables['roles'],'duvs');
+    $q->eq('xar_uid', $uid);
+    if (!$q->run($query)) return;
+    $result = $q->row();
+    $duvs = unserialize($result['duvs']);
 
-	$done = false;
-	for($i=0;$i<$limit;$i++) {
-		if (($duvs[$i]['name'] == $name) && $duvs[$i]['state']) {
-			$duvs[$i]['value'] = $value;
-			$done = true;
-			break;
-		}
-	}
-	if (!$done) $duvs[] = array('name' => $name, 'value' => $value, 'state' => 1));
+    $done = false;
+    for($i=0;$i<$limit;$i++) {
+        if (($duvs[$i]['name'] == $name) && $duvs[$i]['state']) {
+            $duvs[$i]['value'] = $value;
+            $done = true;
+            break;
+        }
+    }
+    if (!$done) $duvs[] = array('name' => $name, 'value' => $value, 'state' => 1);
 
-	$q = new xarQuery('UPDATE',$xartables['roles']);
-	$q->addfield('duvs', serialize($duvs));
-	$q->eq('xar_uid', $uid);
-	if (!$q->run($query)) return;
-	return true;
+    $q = new xarQuery('UPDATE',$xartables['roles']);
+    $q->addfield('duvs', serialize($duvs));
+    $q->eq('xar_uid', $uid);
+    if (!$q->run($query)) return;
+    return true;
 }
 
 ?>

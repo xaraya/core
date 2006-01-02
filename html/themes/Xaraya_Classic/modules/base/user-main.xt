@@ -1,56 +1,205 @@
 <h1 class="xar-mod-head">
-    <xar:mlstring>
-        Thank you for installing and trying Xaraya! 
-    </xar:mlstring>
+    <xar:mlstring>Overview of screen control types</xar:mlstring>
 </h1>
 <div class="xar-mod-body xar-overflow-auto">
-    <xar:set name="versionnum">XARCORE_VERSION_NUM</xar:set>
-    <h2>
-        <xar:ml>
-            <xar:mlstring>Xaraya has reached Production Stable Version #(1)</xar:mlstring>
-            <xar:mlvar>#$versionnum#</xar:mlvar>
-        </xar:ml>
-    </h2>
+   
+    <xar:set name="checkbox">1</xar:set>
+    <xar:set name="options">array(array('id'=>1,'name'=>'option1'),array('id'=>2,'name'=>'option2'))</xar:set>
+    <xar:set name="options10">array(array('id'=>1,'name'=>'option1'),array('id'=>2,'name'=>'option2'),array('id'=>3,'name'=>'option3'),array('id'=>4,'name'=>'option4'),array('id'=>5,'name'=>'option5'),array('id'=>6,'name'=>'option6'),array('id'=>7,'name'=>'option7'),array('id'=>8,'name'=>'option8'),array('id'=>9,'name'=>'option9'),array('id'=>10,'name'=>'option10'))</xar:set>
+    
+    <h2>Control types</h2>
     <p>
-        <xar:mlstring>
-            This means we feel our functionality is complete, our core
-            features are mature and the use of the modules in our distribution is
-            stable enough to move to <strong>Xaraya 1.0</strong> and beyond!
-        </xar:mlstring>
+        The controls in an application/website can be divided into 3 types. Eacht type signals
+        a fundamentally different <strong>type</strong> of behaviour.
+        This page gives an short overview of them and tries to translate the generic concept into
+        a practical example on how these concepts could translate to a specific output
+        format. Since you're looking at a HTML page we use HTML as our example format.
+        We use the Xaraya &lt;xar:data-*/&gt; tags to render most of them.
     </p>
     <p>
-        <xar:mlstring>
-            We still need you to keep filing  any
-            unexpected functionality in our <a href="http://bugs.xaraya.com">bug tracker</a>.
-        </xar:mlstring>
-        <xar:mlstring>
-            Thank you for your support, and feel free to join our
-        development or user discussions to become involved in our
-        community.
-        </xar:mlstring>
+        We distinguish 3 types of controls:
+        <ol>
+            <li>Input controls
+                <ol>
+                    <li>text data</li>
+                    <li>single choice</li>
+                    <li>multiple choice</li>
+                    <li>range</li>
+                </ol>
+            </li>
+            <li>Output controls</li>
+            <li>Action controls</li>
+        </ol>
+    </p>
+    <h3>Input controls</h3>
+    <p>
+        Input controls produce data which is processed by the application and in general goes through one
+        or more validation stages to ensure that data is valid within the business rules.
+    </p>
+    <h4>Text type</h4>
+    <p>
+        The text type is text without special semantics for type. It can be single line, multiline,
+        hidden, transformed or read-only, but it all remains text
+        
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="Typical" for="textbox" />
+            <xar:data-input type="textbox" size="15" value="textbox"/>  
+        </div>
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="Multiple lines" for="foratt"/>
+            <xar:data-input type="textarea_small" style="height: 100px !important;" rows="5" cols="10"/>
+        </div>
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="Read only" for="static"/>
+            <input type="text" readonly="readonly" size="15" value="Read only"/> 
+        </div>
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="Disabled" for="static"/>
+            <input type="text" disabled="disabled" size="15" value="Disabled"/> 
+        </div>
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="Hidden" for="foratt"/>
+            <xar:data-input type="hidden"/>
+        </div>
+        <br style="clear:both;"/>
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="Secret" for="foratt"/>
+            <xar:data-input type="password" value="i said it was secret"/>
+        </div>
+
+    </p>
+    <br style="clear:both;"/>
+    <h4>Single choice</h4>
+    <p>
+        From a list of options you can only choose one value (or none at all) to register as your
+        input. Depending on the context multiple renderings may be applicable.
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="One option" for="checkbox" />
+            <xar:data-input type="checkbox" label="A label with textbox" value="$checkbox"/>
+            <xar:data-label label="option 1" />
+        </div>
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="Few options" for="radiogroup"/>
+            <xar:data-input type="radio" label="A label with textbox" options="$options" value="$checkbox"/>
+        </div>
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="More options, alt. 1" for="foratt"/>
+            <xar:data-input type="multiselect" options="$options10" single="yes" />
+        </div>
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="More options, alt. 2" for="countrlylist"/>
+            <xar:data-input type="countrylisting"/>
+        </div>
+    </p>
+    <br style="clear:both;"/>
+    <h4>Multiple choice</h4>
+    <p>         
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="One option (lame)" for="checkbox" />
+            <xar:data-input type="checkbox" label="A label with textbox" value="$checkbox"/>
+            <xar:data-label label="Enable" />
+        </div>
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="Few options" for="foratt"/>
+            <xar:data-input type="checkboxmask" options="$options"/>	
+        </div>
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="More options" for="foratt"/>
+            <xar:data-input type="multiselect" options="$options10"/>
+        </div>
+    </p>
+    <br style="clear:both;"/>
+    <h3>Output controls</h3>
+    <p>
+        Output controls are controls which modify the (visual) presentation of the application to aid the
+        gathering of input, usually by adding more information to the input controls so the semantics are
+        improved.
     </p>
     <p>
-        <xar:mlstring>
-            For more information on Xaraya, please visit 
-            <a href="http://www.xaraya.com">
-                Xaraya's
-            </a>
-            website. 
-        </xar:mlstring>
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="Static text" for="static"/>
+            <xar:data-output type="static" value="Controlled static text"/>
+        </div>
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="Images" for="static"/>
+            <xar:data-output type="image" value="http://xartest.hsdev.com/themes/Xaraya_Classic/images/csstableless.gif"/>
+        </div>
+        <fieldset>
+            <legend>Grouping of controls</legend>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label label="First" for="yep"/>
+                <xar:data-input type="textbox"/>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label label="Second" for="yep"/>
+                <xar:data-input type="textbox"/>
+            </div>
+        </fieldset>
     </p>
-    <xar:comment>
-        The following template is just an example of how more static templates 
-        can be added to an already static page (the default front page in this case). 
-        This question pops up in irc, so people are sometimes unaware of these
-        possibilities.. One possibility is to place a static template on the
-        same level (or in a subdirectory) as the 'container' template (this one)
-        and then insert it with xar:template tag as a system template (with optional wrapper div here):
-    </xar:comment>
-    <div class="xar-floatright xar-halfwidth xar-margin-thicksides xar-padding-thick xar-mod-body xar-alt xar-sub">
-        <xar:template file="glimpse.xt" type="system" />
-    </div>
-    <xar:comment>
-        Another easy way is to specify a static template as an extra page template of base module:
-    </xar:comment>
-    <xar:module main="false" module="base" func="main" page="about" />
+    <br style="clear:both;"/>
+    <h3>Action controls</h3>
+    <p>
+        Action controls set things in motion, but dont produce data by themselves. They always 
+        <strong>operate on</strong> something. Usually they operate on (a set of) input controls.
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="Trigger, alt 1." for="button"/>
+            <button>Button</button>
+        </div>
+        <div class="xar-form-input-wrapper">
+            <xar:data-label label="Trigger, alt. 2." for="submit"/>
+            <input type="submit" value="Submit"/>
+        </div>
+    </p>
+    <br style="clear:both;"/>
+    <h3>The next layer: derived and compound controls</h3>
+    <p>
+        Using the atomic controls as described above, and given a certain output format (here:html)
+        the construction of derived controls (similar as the atomic controls in presentation, but with
+        additional restrictions or features) and compound controls (a control which consists of a combination
+        of atomic and/or derived controls).
+    </p>
+    <p>
+        In the following we have gathered a number of different controls; one on each line. 
+        Try to answer the following questions:
+        <ol>
+            <li>Is the control atomic, derived or compound, something else</li>
+            <li>Is the chosen rendering suitable for the input? (use a bit of imagination here).</li>
+            <li>If you had to answer a support call with this form, how would you refer to the elements</li>
+            <li>There is an obvious error in the presentation, what explanation does it bring to you on first look?</li>
+            <li>Given the first layer with its details, the second layer in summary, describe the third layer in concept</li>
+        </ol>
+
+        <fieldset>
+            <legend>The next generation</legend>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label label="Date of birth" for="calendar"/>
+                <xar:data-input type="calendar"/>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label label="Birt certificate" for="upload"/>
+                <xar:data-input type="fileupload"/>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label label="ICQ registration number" for="foratt"/>
+                <xar:data-input type="icq" value="4469526"/>	
+            </div>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label label="Preferred date format" for="foratt"/>
+                <xar:data-input type="dateformat"/>	
+            </div>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label label="" for="foratt"/>
+                <xar:data-input type="validation" validation="unknown"/>	
+            </div>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label label="What option is for you?" for="foratt"/>
+                <xar:data-input type="checkboxlist" options="$options10"/>	
+            </div>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label label="Future Xaraya level" for="foratt"/>
+                <xar:data-input type="grouplist"/>
+            </div>
+        </fieldset>
+    </p>
+    <a href="themes/Xaraya_Classic/modules/base/user-main.xt">Get the xar template for this page</a>
 </div>

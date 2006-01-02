@@ -18,7 +18,7 @@ function privileges_admin_modifyconfig()
     if (!xarSecurityCheck('AdminPrivilege')) return;
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
-	if (!xarVarFetch('tester', 'int', $data['tester'], xarModGetVar('privileges', 'tester'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('tester', 'int', $data['tester'], xarModGetVar('privileges', 'tester'), XARVAR_NOT_REQUIRED)) return;
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -26,17 +26,17 @@ function privileges_admin_modifyconfig()
             $data['authid'] = xarSecGenAuthKey();
             switch ($data['tab']) {
                 case 'realms':
-				$data['showrealms'] = xarModGetVar('privileges', 'showrealms');
-				$realmvalue = xarModGetVar('privileges', 'realmvalue');
-				if (strpos($realmvalue,'string:') === 0) {
-					$textvalue = substr($realmvalue,7);
-					$realmvalue = 'string';
-				} else {
-					$textvalue = '';
-				}
-				$data['realmvalue'] = $realmvalue;
-				$data['textvalue'] = $textvalue;
-				break;
+                $data['showrealms'] = xarModGetVar('privileges', 'showrealms');
+                $realmvalue = xarModGetVar('privileges', 'realmvalue');
+                if (strpos($realmvalue,'string:') === 0) {
+                    $textvalue = substr($realmvalue,7);
+                    $realmvalue = 'string';
+                } else {
+                    $textvalue = '';
+                }
+                $data['realmvalue'] = $realmvalue;
+                $data['textvalue'] = $textvalue;
+                break;
             }
             break;
 
@@ -58,8 +58,8 @@ function privileges_admin_modifyconfig()
                     xarModSetVar('privileges', 'showrealms', $data['enablerealms']);
                     if (!xarVarFetch('realmvalue', 'str', $realmvalue, 'none', XARVAR_NOT_REQUIRED)) return;
                     if ($realmvalue == 'string') {
-						if (!xarVarFetch('textvalue', 'str', $textvalue, '', XARVAR_NOT_REQUIRED)) return;
-						$realmvalue = empty($textvalue) ? 'none' : 'string:' . $textvalue;
+                        if (!xarVarFetch('textvalue', 'str', $textvalue, '', XARVAR_NOT_REQUIRED)) return;
+                        $realmvalue = empty($textvalue) ? 'none' : 'string:' . $textvalue;
                     }
                     xarModSetVar('privileges', 'realmvalue', $realmvalue);
                     break;

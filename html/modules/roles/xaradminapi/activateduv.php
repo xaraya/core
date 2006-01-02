@@ -26,10 +26,10 @@ function roles_adminapi_activateduv($args)
     }
 
     $duvs = xarModGetVar('roles','duvs');
-	if (isset($duvs)) $duvs = unserialize($duvs);
-	$duvs[$name] = array('state' => 1);
-	xarModSetVar('roles','duvs',serialize($duvs));
-	return true;
+    if (isset($duvs)) $duvs = unserialize($duvs);
+    $duvs[$name] = array('state' => 1);
+    xarModSetVar('roles','duvs',serialize($duvs));
+    return true;
 }
 
 ?>

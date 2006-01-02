@@ -43,13 +43,13 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
                 if (strchr($option, ':')) {
                     list($option_type, $option_value) = explode(':', $option, 2);
                     if ($option_type == 'static' && $option_value == 1) {
-                    	$includestatics = true;
-						$modlist = xarModAPIFunc('modules',
-										 'admin',
-										 'GetList');
-						foreach ($modlist as $modinfo) {
-							$this->options[] = array('id' => $modinfo['regid'], 'name' => $modinfo['displayname']);
-						}
+                        $includestatics = true;
+                        $modlist = xarModAPIFunc('modules',
+                                         'admin',
+                                         'GetList');
+                        foreach ($modlist as $modinfo) {
+                            $this->options[] = array('id' => $modinfo['regid'], 'name' => $modinfo['displayname']);
+                        }
                     }
                 }
             }
@@ -60,13 +60,13 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
                 $objects = array();
             }
             foreach ($objects as $objectid => $object) {
-            	if (!empty($includestatics)) {
-            		$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $objectid, 'top' => false));
-            		$name ="";
-            		foreach ($ancestors as $parent) $name .= $parent['name'] . ".";
-	                $this->options[] = array('id' => '182.' . $objectid, 'name' => $name . $object['name']);
-            	} else {
-	                $this->options[] = array('id' => $objectid, 'name' => $object['name']);
+                if (!empty($includestatics)) {
+                    $ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $objectid, 'top' => false));
+                    $name ="";
+                    foreach ($ancestors as $parent) $name .= $parent['name'] . ".";
+                    $this->options[] = array('id' => '182.' . $objectid, 'name' => $name . $object['name']);
+                } else {
+                    $this->options[] = array('id' => $objectid, 'name' => $object['name']);
                 }
             }
 //        }

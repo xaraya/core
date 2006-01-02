@@ -28,7 +28,7 @@ function roles_adminapi_removeduv($args)
     $duvs = unserialize(xarModGetVar('roles','duvs'));
     unset($duvs[$name]);
     xarModSetVar('roles','duvs',serialize($duvs));
-	return true;
+    return true;
 }
 
 ?>

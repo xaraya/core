@@ -59,15 +59,15 @@ function blocks_userapi_getall($args)
     } elseif (!empty($filter)) {
         $query .= ' WHERE lower(binst.xar_name) LIKE \'%' . strtolower($filter) . '%\'';
     }
-	$query .= ' ' . $orderby;
+    $query .= ' ' . $orderby;
 
     // Return if no details retrieved.
     if (isset($startat) && isset($rowstodo)) {
-		$result =& $dbconn->SelectLimit($query,$rowstodo,$startat-1);
+        $result =& $dbconn->SelectLimit($query,$rowstodo,$startat-1);
     } else {
-		$result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query);
     }
-	if (!$result) {return;}
+    if (!$result) {return;}
 
     // The main result array.
     $instances = array();

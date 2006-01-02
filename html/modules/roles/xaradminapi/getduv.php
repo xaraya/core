@@ -17,29 +17,29 @@
 function roles_adminapi_getduv($args)
 {
     extract($args);
-    if (!isset($name) {
+    if (!isset($name)) {
         $msg = xarML('Wrong arguments to roles_adminapi_getduv.');
         xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));
         return false;
     }
-    $uid = isset('uid') ? $uid : xarSessionGetVar('uid');
+    $uid = isset($uid) ? $uid : xarSessionGetVar('uid');
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
-	$q = new xarQuery('SELECT',$xartables['roles'],'duvs');
-	$q->eq('xar_uid', $uid);
-	if (!$q->run($query)) return;
-	$result = $q->row();
-	$duvs = unserialize($result['duvs']);
-	foreach ($duvs as $duv) {
-		if (($duv['name'] == $name) && $duv['state']) {
-			return $duv['value'];
-			break;
-		}
-	}
-	return;
+    $q = new xarQuery('SELECT',$xartables['roles'],'duvs');
+    $q->eq('xar_uid', $uid);
+    if (!$q->run($query)) return;
+    $result = $q->row();
+    $duvs = unserialize($result['duvs']);
+    foreach ($duvs as $duv) {
+        if (($duv['name'] == $name) && $duv['state']) {
+            return $duv['value'];
+            break;
+        }
+    }
+    return;
 }
 
 ?>

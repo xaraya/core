@@ -88,6 +88,7 @@ class Dynamic_PassBox_Property extends Dynamic_Property
          $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
          $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
          $data['size']     = !empty($size) ? $size : $this->size;
+         $data['confirm']  = !empty($confirm);
 
         $template="";
         return xarTplProperty('roles', 'password', 'showinput', $data);
