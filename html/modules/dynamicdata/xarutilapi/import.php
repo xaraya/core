@@ -14,6 +14,7 @@
  * @param $args['file'] location of the .xml file containing the object definition, or
  * @param $args['xml'] XML string containing the object definition
  * @param $args['keepitemid'] (try to) keep the item id of the different items (default false)
+ * @param $args['objectname'] optional name to override object name we're importing.
  * @returns mixed
  * @return object id on success, null on failure
  */
@@ -81,7 +82,12 @@ function dynamicdata_utilapi_import($args)
         if (empty($what)) {
             if (preg_match('#<object name="(\w+)">#',$line,$matches)) { // in case we import the object definition
                 $object = array();
-                $object['name'] = $matches[1];
+                if(empty($objectname)) {
+                    $object['name'] = $matches[1];
+                } else {
+                    // Overide was passed in thru $args
+                    $object['name'] = $objectname;
+                }
                 $what = 'object';
             } elseif (preg_match('#<items>#',$line)) { // in case we only import data
                 $what = 'item';

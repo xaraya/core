@@ -174,11 +174,8 @@ function modules_init()
      *   PRIMARY KEY  (xar_mvid, xar_uid)
      * )
      */
-    // CHECKME: the unsiged param for xar_uid changed from true to false in the changesdue scenario
-    // * upgrade needed, this has NOT been done yet?
-    // * this id will be the first in Xaraya which can receive negative values, not sure that is a good idea
     $fields = array('xar_mvid' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
-        'xar_uid' => array('type' => 'integer', 'null' => false, 'unsigned' => false, 'primary_key' => true),
+        'xar_uid' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'primary_key' => true),
         'xar_value' => array('type' => 'text', 'size' => 'long')
         );
 
