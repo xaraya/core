@@ -47,16 +47,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         if (empty($id)) {
             $id = $name;
         }
-/*        return '<textarea' .
-               ' name="' . $name . '"' .
-               ' rows="'. (!empty($rows) ? $rows : $this->rows) . '"' .
-               ' cols="'. (!empty($cols) ? $cols : $this->cols) . '"' .
-               ' wrap="'. (!empty($wrap) ? $wrap : $this->wrap) . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               '>' . (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '</textarea>' .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-*/
+
         $data['name']     = $name;
         $data['id']       = $id;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
