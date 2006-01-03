@@ -95,7 +95,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         }
         
         if ($xmlExtensionLoaded === false) {
-            xarCore_die('Using the "xml" backend for translations, but the php-xml extension is not loaded. Please modify your php.ini to load the extension or choose the "php" backend.');
+            throw new Exception('Using the "xml" backend for translations, but the php-xml extension is not loaded. Please modify your php.ini to load the extension or choose the "php" backend.');
         }
         
         $this->curData = '';

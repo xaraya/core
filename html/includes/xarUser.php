@@ -561,6 +561,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
 
     if ($name == 'name' || $name == 'uname' || $name == 'email') {
     // TODO: replace with some roles API
+    // TODO: not -^ but get rid of this entirely here.
         xarUser__setUsersTableUserVar($name, $value, $userId);
 
     } elseif (!xarUser__isVarDefined($name)) {
@@ -816,6 +817,7 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
  */
 function xarUser__checkDUV($name, $state)
 {
+    // TODO: get rid of this here.
     return xarModAPIFunc('roles','admin','checkduv', array('name' => $name, 'state' => $state));
 }
 /*
@@ -824,6 +826,7 @@ function xarUser__checkDUV($name, $state)
  */
 function xarUserGetDUV($name, $uid=null)
 {
+    // TODO: get rid of this here
     if (isset($uid)) return xarModAPIFunc('roles','admin','getduv', array('name' => $name, 'uid' => $uid));
     return xarModAPIFunc('roles','admin','getduv', array('name' => $name));
 }
@@ -833,6 +836,7 @@ function xarUserGetDUV($name, $uid=null)
  */
 function xarUserSetDUV($name, $value, $uid=null)
 {
+    // TODO: get rid of this here
     if (isset($uid)) return xarModAPIFunc('roles','admin','setduv', array('name' => $name, 'value' => $value, 'uid' => $uid));
     return xarModAPIFunc('roles','admin','setduv', array('name' => $name, 'value' => $value));
 }

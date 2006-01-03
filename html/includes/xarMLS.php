@@ -48,16 +48,16 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
         $GLOBALS['xarMLS_mode'] = $args['MLSMode'];
         if (!function_exists('mb_http_input')) {
             // mbstring required
-            xarCore_die('xarMLS_init: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
+            throw new Exception('xarMLS_init: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
         }
         break;
     default:
-        xarCore_die('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
+        throw new Exception('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
     $GLOBALS['xarMLS_backendName'] = $args['translationsBackend'];
 /* TODO: delete after new backend testing
     if ($GLOBALS['xarMLS_backendName'] != 'php' && $GLOBALS['xarMLS_backendName'] != 'xml' && $GLOBALS['xarMLS_backendName'] != 'xml2php') {
-        xarCore_die('xarML_init: Unknown translations backend: '.$GLOBALS['xarMLS_backendName']);
+        throw new Exception('xarML_init: Unknown translations backend: '.$GLOBALS['xarMLS_backendName']);
     }
 */
     // USERLOCALE FIXME Delete after new backend testing

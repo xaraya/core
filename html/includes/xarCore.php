@@ -514,7 +514,7 @@ function xarCore_getSystemVar($name, $returnNull = false)
     if (!isset($systemVars)) {
         $fileName = xarCoreGetVarDirPath() . '/' . XARCORE_CONFIG_FILE;
         if (!file_exists($fileName)) {
-            xarCore_die("xarCore_getSystemVar: Configuration file not present: ".$fileName);
+            throw new FileNotFoundException($fileName);
         }
         include $fileName;
         $systemVars = $systemConfiguration;
@@ -529,7 +529,7 @@ function xarCore_getSystemVar($name, $returnNull = false)
             if ($name == 'DB.UseADODBCache') {
                 $systemVars[$name] = false;
             } else {
-                xarCore_die("xarCore_getSystemVar: Unknown system variable: ".$name);
+                throw new Exception("xarCore_getSystemVar: Unknown system variable: ".$name);
             }
         }
     }
@@ -586,48 +586,7 @@ function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)
  */
 function xarCore_die($msg)
 {
-    static $dying = false;
-    /*
-     * Prolly paranoid now, but to prevent looping we keep track if we have already
-     * been here.
-     */
-    if($dying) return;
-    $dying = true;
-
-    // This is allowed, in core itself
-    // NOTE that this will never be translated
-    if (xarCoreIsDebuggerActive()) {
-        $msg = nl2br($msg);
-$debug = <<<EOD
-<br /><br />
-<p align="center"><span style="color: blue">Technical information</span></p>
-<p>Xaraya has failed to serve the request, and the failure could not be handled.</p>
-<p>This is a bad sign and probably means that Xaraya is not configured properly.</p>
-<p>The failure reason is: <span style="color: red">$msg</span></p>
-EOD;
-    } else {
-       $debug = '';
-    }
-$errPage = <<<EOM
-<html>
-  <head>
-    <title>Fatal Error</title>
-  </head>
-  <body>
-    <p>A fatal error occurred while serving your request.</p>
-    <p>We are sorry for this inconvenience.</p>
-    <p>If this is the first time you see this message, you can try to access the site directly through index.php<br/>
-    If you see this message every time you tried to access to this service, it is probable that our server
-    is experiencing heavy problems, for this reason we ask you to retry in some hours.<br/>
-    If you see this message for days, we ask you to report the unavailablity of service to our webmaster. Thanks.
-    </p>
-    $debug
-  </body>
-</html>
-EOM;
-    echo $errPage;
-    // Sorry, this is the end, nothing can be trusted anymore.
-    die();
+    throw new Exception($msg);
 }
 
 /**

@@ -80,11 +80,11 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
 
     if (!xarTplSetThemeDir($args['defaultThemeDir'])) {
         // If there is no theme, there is no page template, we dont know what to do now.
-        xarCore_die("xarTpl_init: Nonexistent theme directory '" . $args['defaultThemeDir'] ."'");
+        throw new DirectoryNotFoundException(array($args['defaultThemeDir'],"xarTpl_init: Nonexistent theme directory #(1)"));
     }
     if (!xarTplSetPageTemplateName('default')) {
         // If there is no page template, we can't show anything
-        xarCore_die("xarTpl_init: Nonexistent default.xt page in theme directory '". xarTplGetThemeDir() ."'");
+        throw new FileNotFoundException('default.xt',"xarTpl_init: Nonexistent #(1) page in theme directory '". xarTplGetThemeDir() ."'");
     }
 
     $GLOBALS['xarTpl_additionalStyles'] = '';

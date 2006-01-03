@@ -13,6 +13,14 @@
  */
 
 /**
+ * Session exception class
+ *
+ */
+class SessionException extends Exception
+{
+}
+
+/**
  * Initialise the Session Support
  * 
  * @author Jim McDonald, Marco Canini <marco@xaraya.com>
@@ -37,7 +45,7 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
         // of the session namespace (yes, we still need this in this case)
         foreach($GLOBALS as $k=>$v) {
             if (substr($k,0,5) == 'XARSV') {
-                xarCore_die('xarSession_init: Session Support initialisation failed.');
+                throw new SessionException('xarSession_init: Session Support initialisation failed.');
             }
         }
     }

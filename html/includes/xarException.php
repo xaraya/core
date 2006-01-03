@@ -153,6 +153,8 @@ class IDNotFoundException extends NotFoundExceptions
 { protected $message = 'An item was requested based on a unique identifier (ID), however, the ID: "#(1)" could not be found.';}
 class FileNotFoundException extends NotFoundExceptions
 { protected $message = 'The file "#(1) could not be found.';}
+class DirectoryNotFoundException extends NotFoundExceptions
+{ protected $message = 'The directory "#(1) could not be found.';}
 class ModuleBaseInfoNotFoundException extends NotFoundExceptions
 { protected $message = 'The base info for module "#(1)" could not be found';}
 class LocaleNotFoundException extends NotFoundExceptions
