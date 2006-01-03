@@ -305,7 +305,9 @@ function xarErrorRender($format,$stacktype = "ERROR")
 
     if ($format == 'template') {
         $theme_dir = xarTplGetThemeDir();
-        if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
+        if(file_exists($theme_dir . '/modules/base/message-' . $error->id . '.xt')) {
+            return xarTplFile($theme_dir . '/modules/base/message-' . $error->id . '.xt', $data);
+        } elseif(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
             return xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', $data);
         } else {
             return xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
@@ -478,7 +480,9 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
     global $CoreStack;
 
     //Checks for a @ presence in the given line, should stop from setting Xaraya or DB errors
-    if (!error_reporting() || $errorType > E_ALL) {
+    $errLevel = xarCore_getSystemVar('Exception.ErrorLevel',true);
+    if(!isset($errLevel)) $errLevel = E_ALL;
+    if (!error_reporting() || $errorType > $errLevel) {
         // Log the message so it is not lost.
         // TODO: make this message available to calling functions that suppress
         // errors through '@'.

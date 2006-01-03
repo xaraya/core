@@ -374,11 +374,9 @@ div.xar-block-body-topnav .xar-menu-section ul li a {
 
 /* all links should display horizontally in topnav block in this theme */
 div.xar-block-body-topnav {
-    border-color: #757F8B;
-    border-width: 1px;
-    border-style: solid;
-    margin-bottom: 2px;
+    margin: 2px 0;
     padding: 2px 0;
+    background-color:#ffffff;
 }
 
 /* MISCELLANEOUS [gen_heading] */

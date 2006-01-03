@@ -10,7 +10,7 @@
  * @subpackage Themes module
  */
 
-/** Xaraya CSS class library
+/* Xaraya CSS class library
  *
  * @author Andy Varganov <andyv@xaraya.com>
  */
@@ -103,6 +103,7 @@ class xarCSS
         if (isset($module)) $this->base                 = $module;
         if (isset($file)) $this->filename               = $file;
         if (isset($title)) $this->title                 = $title;
+        if (isset($fileext)) $this->fileext             = $fileext;
         if (isset($alternate) && $alternate == 'true') {
             $this->rel = 'alternate stylesheet';
         }
@@ -203,24 +204,19 @@ class xarCSS
             $original = "modules/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
             // we do not want to supply path for a non-existent original css file or override a bogus file
             // so lets check starting from original then fallback if there arent overriden versions
-            if(file_exists($original)) {
-                // how about the overridden one?
-                if($this->alternatedir != '') {
-                    $overridden = xarTplGetThemeDir() . "/" . $this->alternatedir . "/" . $this->filename . "." . $this->fileext;
-                } else {
-                    $overridden = xarTplGetThemeDir() . "/modules/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
-                }
-                if(file_exists($overridden)) {
-                    // prolly need to check if it's not a directory too (?)
-                    return $overridden;
-                } else {
-                    // no problem
-                    return $original;
-                }
+            // how about the overridden one?
+            // Look for theme-based stylesheet whether the module contains one or not.
+            if($this->alternatedir != '') {
+                $overridden = xarTplGetThemeDir() . "/" . $this->alternatedir . "/" . $this->filename . "." . $this->fileext;
             } else {
-                // problem
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg.$original));
-                return;
+                $overridden = xarTplGetThemeDir() . "/modules/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
+            }
+            if(file_exists($overridden)) {
+                // prolly need to check if it's not a directory too (?)
+                return $overridden;
+            } else {
+                // no problem
+                return $original;
             }
         } else {
             // no scope, somebody overrode defaults and hasn't assign anything sensible? naughty - lets complain

@@ -233,3 +233,12 @@ function extractbugs(certs)
    end
    return bugs
 end
+
+--
+-- List of branches which we consider closed
+--
+function ignore_branch(name)
+   if name=='com.xaraya.core.ddextend' then return true end
+   if name=='com.xaraya.core.ddprops' then return true end
+   return false
+end

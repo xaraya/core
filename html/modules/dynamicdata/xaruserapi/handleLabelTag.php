@@ -1,7 +1,6 @@
 <?php
 /**
  * Handle dynamic data tags
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -36,8 +35,16 @@ function dynamicdata_userapi_handleLabelTag($args)
         } else {
             return 'echo xarVarPrepForDisplay('.$args['property'].'->label); ';
         }
+    } elseif(isset($args['label'])) {
+        // Plain label, we want to use the template nevertheless
+        $argsstring = "array('label'=>'".$args['label']."'";
+        if(isset($args['for'])){
+            $argsstring.=",'for'=>'".$args['for']."'";
+        }
+        $argsstring.=")";
+        return "echo xarTplProperty('dynamicdata','label','showoutput',$argsstring,'label');";
     } else {
-        return 'echo "I need an object or a property"; ';
+        return 'echo "I need an object or a property or a label attribute"; ';
     }
 }
 

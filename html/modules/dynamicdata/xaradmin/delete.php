@@ -1,7 +1,6 @@
 <?php
 /**
  * Delete an item
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -27,6 +26,7 @@ function dynamicdata_admin_delete($args)
     if(!xarVarFetch('noconfirm','isset', $noconfirm, NULL,                              XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
 
     $myobject = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
                                          'itemtype' => $itemtype,
@@ -63,7 +63,9 @@ function dynamicdata_admin_delete($args)
         }
         $data['authid'] = xarSecGenAuthKey();
 
-        $template = $myobject->name;
+        if(!isset($template)) {
+            $template = $myobject->name;
+        }
         return xarTplModule('dynamicdata','admin','delete',$data,$template);
     }
 

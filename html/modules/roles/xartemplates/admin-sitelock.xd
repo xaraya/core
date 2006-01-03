@@ -120,8 +120,6 @@
             <div class="xar-form-input-wrapper-after">
                 <input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#" />
                 <input type="hidden" name="toggle" id="toggle" value="#$toggle#" />
-                <input type="hidden" name="lockedoutmsg" id="lockedoutmsg" value="#$lockedoutmsg#" />
-                <input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#" />
                 <input type="button" value="#xarML('Save Site Lock Settings')#"  tabindex="2" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=save';this.form.submit();" />
             </div>
         </fieldset>

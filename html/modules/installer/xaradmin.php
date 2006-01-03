@@ -50,7 +50,7 @@ function installer_admin_phase1()
         foreach ($locales as $locale) {
             // Get the isocode and the description
             // Before we load the locale data, let's check if the locale is there
-            
+
             // <marco> This check is really not necessary since available locales are
             // already determined from existing files. The relative code is in install.php
             //$fileName = xarCoreGetVarDirPath() . "/locales/$locale/locale.xml";
@@ -88,7 +88,7 @@ function installer_admin_phase2()
 
 /**
  * Check whether directory permissions allow to write and read files inside it
- * 
+ *
  * @access private
  * @param string dirname directory name
  * @return bool true if directory is writable, readable and executable
@@ -387,6 +387,7 @@ function installer_admin_phase5()
     // drop all the tables that have this prefix
     //TODO: in the future need to replace this with a check further down the road
     // for which modules are already installed
+    xarDBLoadTableMaintenanceAPI();
     if (isset($removetables) && $removetables) {
         $dbconn =& xarDBGetConn();
         $result = $dbconn->Execute($dbconn->metaTablesSQL);
@@ -399,7 +400,13 @@ function installer_admin_phase5()
             $result->MoveNext();
         }
         foreach ($tables as $table) {
-            if (!$dbconn->Execute('DROP TABLE ' . $table)) return;
+            // FIXME: a lot!
+            // 1. the drop table drops the sequence while the table gets dropped in the second statement
+            //    so if that fails, the table remains while the sequence is gone, at least transactions is needed
+            // 3. generating sql and executing in 2 parts sucks, wrt encapsulation
+            $sql = xarDBDropTable($table,$dbType); 
+            $result = $dbconn->Execute($sql);
+            if(!$result) return;
         }
     }
 
@@ -957,7 +964,8 @@ function installer_admin_confirm_configuration()
         $func = "installer_" . basename(strval($configuration),'.conf.php') . "_configuration_load";
         $func($chosen);
         $content['marker'] = '[x]';                                           // create the user menu
-        $content['displaymodules'] = 1;
+        $content['displaymodules'] = 'All';
+        $content['modulelist'] = '';
         $content['content'] = '';
 
         // Load up database
