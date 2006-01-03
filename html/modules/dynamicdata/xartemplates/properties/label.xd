@@ -14,5 +14,7 @@
         #$label#
     </label>
 <xar:else/>
-    #$label#
+     <label class="xar-form-label">
+        #$label#
+    </label>
 </xar:if>

@@ -398,6 +398,7 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
                     if (count($checkurls) > 0 &&
                         $checkurls != $cachingConfiguration['Page.SessionLess']) {
 
+                        $checkurls = str_replace("'","\\'",$checkurls);
                         $sessionlesslist = "'" . join("','",$checkurls) . "'";
 
                         $cachingConfig = join('', file($cachingConfigFile));

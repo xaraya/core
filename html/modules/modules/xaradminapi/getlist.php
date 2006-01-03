@@ -1,7 +1,6 @@
 <?php
 /**
  * Get a list of modules that matches required criteria.
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -107,6 +106,10 @@ function modules_adminapi_getlist($args)
     if (isset($filter['Class'])) {
         $whereClauses[] = 'mods.xar_class = ?';
         $bindvars[] = $filter['Class'];
+    }
+    if (isset($class)) {
+        $whereClauses[] = 'mods.xar_class = ?';
+        $bindvars[] = $class;
     }
     if (isset($filter['Category'])) {
         $whereClauses[] = 'mods.xar_category = ?';

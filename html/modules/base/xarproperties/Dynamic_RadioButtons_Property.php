@@ -1,7 +1,6 @@
 <?php
 /**
  * Radio Buttons property
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -38,7 +37,7 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
         if (empty($id)) {
             $id = $name;
         }
-        
+
         $data['value']   = $value;
         $data['name']    = $name;
         $data['id']      = $id;

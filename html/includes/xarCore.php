@@ -431,6 +431,7 @@ function xarCoreGetVarDirPath()
  * @global integer xarDebug_sqlCalls
  * @global string xarDebug_startTime
  * @param integer flags bit mask for the debugger flags
+ * @todo  a big part of this should be in the exception (error handling) subsystem.
  * @return void
  */
 function xarCoreActivateDebugger($flags)
@@ -442,18 +443,11 @@ function xarCoreActivateDebugger($flags)
         // Turn off assertion evaluation
         assert_options(ASSERT_ACTIVE, 0);
     } elseif ($flags & XARDBG_ACTIVE) {
-         // in php 4.4.0 and 5.1 and above we dont want to see notices like these:
-         // "Only variable references should be returned by reference..."
-         // bug 4785 - Temporary solution until all function return by reference instances reviewed in code
-         // $systemConfiguration['Exception.EnablePHPErrorHandler'] also needs to be set to False in config.system.php
-         /*
-         if ((phpversion() == '4.4.0') || (phpversion() > '5.0.3')){
-             error_reporting(E_ALL);
-         } else {
-             // Proper error reporting
-             error_reporting(E_ALL);
-         }*/
-         error_reporting(E_ALL);
+        // See if config.system.php has info for us on the errorlevel, but dont break if it has not
+        $errLevel = xarCore_getSystemVar('Exception.ErrorLevel',true);
+        if(!isset($errLevel)) $errLevel = E_ALL;
+
+        error_reporting($errLevel);
         // Activate assertions
         assert_options(ASSERT_ACTIVE,    1);    // Activate when debugging
         assert_options(ASSERT_WARNING,   1);    // Issue a php warning

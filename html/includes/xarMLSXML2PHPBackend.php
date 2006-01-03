@@ -182,9 +182,6 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend
     function loadContext($ctxType, $ctxName)
     {
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
-            // $msg = xarML("Context type: #(1) and file name: #(2)", $ctxType, $ctxName);
-            // xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($msg));
-            // return;
             return true;
         }
         include $fileName;
@@ -237,11 +234,11 @@ class PHPBackendGenerator
         $themes_dir = "$php_dir/themes";
         $core_dir = "$php_dir/core";
 
-        xarMLS__mkdirr($php_locale_dir, 0777);
-        xarMLS__mkdirr($php_dir, 0777);
-        xarMLS__mkdirr($modules_dir, 0777);
-        xarMLS__mkdirr($themes_dir, 0777);
-        xarMLS__mkdirr($core_dir, 0777);
+        xarMLS__mkdirr($php_locale_dir);
+        xarMLS__mkdirr($php_dir);
+        xarMLS__mkdirr($modules_dir);
+        xarMLS__mkdirr($themes_dir);
+        xarMLS__mkdirr($core_dir);
     }
 
     function bindDomain($dnType='core', $dnName='xaraya')
@@ -268,12 +265,12 @@ class PHPBackendGenerator
         case XARMLS_DNTYPE_MODULE:
             $this->baseDir = "$modules_dir/$dnName/";
             $this->baseXMLDir = "$xml_modules_dir/$dnName/";
-            if (!file_exists($this->baseDir)) xarMLS__mkdirr($this->baseDir, 0777);
+            if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS__mkdirr($this->baseDir);
             break;
         case XARMLS_DNTYPE_THEME:
             $this->baseDir = "$themes_dir/$dnName/";
             $this->baseXMLDir = "$xml_themes_dir/$dnName/";
-            if (!file_exists($this->baseDir)) xarMLS__mkdirr($this->baseDir, 0777);
+            if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS__mkdirr($this->baseDir);
             break;
         case XARMLS_DNTYPE_CORE:
             $this->baseDir = $core_dir.'/';
@@ -299,8 +296,6 @@ class PHPBackendGenerator
         }
 
         $dirForMkDir = $this->fileName;
-        if (!file_exists($dirForMkDir)) xarMLS__mkdirr($dirForMkDir, 0777);
-
         $this->fileName .= $ctxName . ".php";
         $this->xmlFileName .= $ctxName . ".xml";
 
@@ -319,31 +314,32 @@ class PHPBackendGenerator
             xarLogMessage("MLS Could not find XML input: ".$this->xmlFileName);
         }
 
+        if (!$xmlFileExists) return true;
+
+        if (!file_exists($dirForMkDir)) xarMLS__mkdirr($dirForMkDir);
         $fp2 = @fopen ($this->fileName, "w" );
         if ($fp2 !== false) {
             fputs($fp2, '<?php'."\n");
             fputs($fp2, 'global $xarML_PHPBackend_entries;'."\n");
             fputs($fp2, 'global $xarML_PHPBackend_keyEntries;'."\n");
-            if ($xmlFileExists) {
-                foreach ($vals as $node) {
-                    if (!array_key_exists('tag',$node)) continue;
-                    if (!array_key_exists('value',$node)) $node['value'] = '';
-                    if ($node['tag'] == 'STRING') {
-                        $node['value'] = str_replace('\'', '\\\'', $node['value']);
-                        $start = '$xarML_PHPBackend_entries[\''.$node['value']."']";
-                    } elseif ($node['tag'] == 'KEY') {
-                        $node['value'] = str_replace('\'', '\\\'', $node['value']);
-                        $start = '$xarML_PHPBackend_keyEntries[\''.$node['value']."']";
-                    } elseif ($node['tag'] == 'TRANSLATION') {
-                        if ($this->outCharset != 'utf-8') {
-                            $node['value'] = $GLOBALS['xarMLS_newEncoding']->convert($node['value'], 'utf-8', $this->outCharset, 0);
-                        }
-                        $node['value'] = str_replace('\'', '\\\'', $node['value']);
-                        if (!empty($node['value'])) {
-                            fputs($fp2, $start . " = '".$node['value']."';\n");
-                        }
+            foreach ($vals as $node) {
+                if (!array_key_exists('tag',$node)) continue;
+                if (!array_key_exists('value',$node)) $node['value'] = '';
+                if ($node['tag'] == 'STRING') {
+                    $node['value'] = str_replace('\'', '\\\'', $node['value']);
+                    $start = '$xarML_PHPBackend_entries[\''.$node['value']."']";
+                } elseif ($node['tag'] == 'KEY') {
+                    $node['value'] = str_replace('\'', '\\\'', $node['value']);
+                    $start = '$xarML_PHPBackend_keyEntries[\''.$node['value']."']";
+                } elseif ($node['tag'] == 'TRANSLATION') {
+                    if ($this->outCharset != 'utf-8') {
+                        $node['value'] = $GLOBALS['xarMLS_newEncoding']->convert($node['value'], 'utf-8', $this->outCharset, 0);
                     }
-                 }
+                    $node['value'] = str_replace('\'', '\\\'', $node['value']);
+                    if (!empty($node['value'])) {
+                        fputs($fp2, $start . " = '".$node['value']."';\n");
+                    }
+                }
             }
             fputs($fp2, "?>");
             fclose($fp2);
@@ -351,30 +347,28 @@ class PHPBackendGenerator
             xarLogMessage("Could not create file: ".$this->fileName);
             global $xarML_PHPBackend_entries;
             global $xarML_PHPBackend_keyEntries;
-            if ($xmlFileExists) {
-                foreach ($vals as $node) {
-                    if (!array_key_exists('tag',$node)) continue;
-                    if (!array_key_exists('value',$node)) $node['value'] = '';
-                    if ($node['tag'] == 'STRING') {
-                        $node['value'] = str_replace('\'', '\\\'', $node['value']);
-                        $entryIndex = $node['value'];
-                        $entryType = 'string';
-                    } elseif ($node['tag'] == 'KEY') {
-                        $node['value'] = str_replace('\'', '\\\'', $node['value']);
-                        $entryIndex = $node['value'];
-                        $entryType = 'key';
-                    } elseif ($node['tag'] == 'TRANSLATION') {
-                        if ($this->outCharset != 'utf-8') {
-                            $node['value'] = $GLOBALS['xarMLS_newEncoding']->convert($node['value'], 'utf-8', $this->outCharset, 0);
-                        }
-                        $node['value'] = str_replace('\'', '\\\'', $node['value']);
-                        if ($entryType == 'string') {
-                            $xarML_PHPBackend_entries[$entryIndex] = $node['value'];
-                        } elseif ($entryType == 'key') {
-                            $xarML_PHPBackend_keyEntries[$entryIndex] = $node['value'];
-                        }
+            foreach ($vals as $node) {
+                if (!array_key_exists('tag',$node)) continue;
+                if (!array_key_exists('value',$node)) $node['value'] = '';
+                if ($node['tag'] == 'STRING') {
+                    $node['value'] = str_replace('\'', '\\\'', $node['value']);
+                    $entryIndex = $node['value'];
+                    $entryType = 'string';
+                } elseif ($node['tag'] == 'KEY') {
+                    $node['value'] = str_replace('\'', '\\\'', $node['value']);
+                    $entryIndex = $node['value'];
+                    $entryType = 'key';
+                } elseif ($node['tag'] == 'TRANSLATION') {
+                    if ($this->outCharset != 'utf-8') {
+                        $node['value'] = $GLOBALS['xarMLS_newEncoding']->convert($node['value'], 'utf-8', $this->outCharset, 0);
                     }
-                 }
+                    $node['value'] = str_replace('\'', '\\\'', $node['value']);
+                    if ($entryType == 'string') {
+                        $xarML_PHPBackend_entries[$entryIndex] = $node['value'];
+                    } elseif ($entryType == 'key') {
+                        $xarML_PHPBackend_keyEntries[$entryIndex] = $node['value'];
+                    }
+                }
             }
         }
 

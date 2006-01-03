@@ -1,3 +1,7 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
-#$value#
+<xar:if condition="!empty($value)">
+    #$value#
+<xar:else />
+    <xar:mlstring>Auto allocated</xar:mlstring>
+</xar:if>
