@@ -567,10 +567,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
     } elseif (!xarUser__isVarDefined($name)) {
         if(!xarUser__checkDUV($name, 1)) {
             xarCore_SetCached('User.Variables.'.$userId, $name, false);
-            $msg = xarML('User variable #(1) was not correctly registered', $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'VARIABLE_NOT_REGISTERED',
-                           new SystemException($msg));
-            return;
+            throw new xarException($name,'User variable #(1) was not correctly registered');
         } else {
             xarUserSetDUV($name,$value,$userId);
         }
