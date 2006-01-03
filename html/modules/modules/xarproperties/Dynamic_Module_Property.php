@@ -1,7 +1,5 @@
 <?php
 /**
- * Dynamic Data Module Property
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -28,9 +26,9 @@ class Dynamic_Module_Property extends Dynamic_Select_Property
     {
         $this->Dynamic_Select_Property($args);
         if (count($this->options) == 0) {
-            $modlist = xarModAPIFunc('modules', 
-                             'admin', 
-                             'GetList');
+            $modlist = xarModAPIFunc('modules',
+                             'admin',
+                             'getlist',$args);
             foreach ($modlist as $modinfo) {
                 $this->options[] = array('id' => $modinfo['regid'], 'name' => $modinfo['displayname']);
             }

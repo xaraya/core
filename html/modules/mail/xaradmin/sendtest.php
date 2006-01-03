@@ -1,7 +1,6 @@
 <?php
 /**
  * Test the email settings
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -25,8 +24,12 @@ function mail_admin_sendtest()
     // Get parameters from whatever input we need
     if (!xarVarFetch('message', 'str:1:', $message)) return;
     if (!xarVarFetch('subject', 'str:1', $subject)) return;
-    if (!xarVarFetch('email', 'str:1', $email, '')) return;
+    if (!xarVarFetch('email', 'email', $email, '')) return;
     if (!xarVarFetch('name', 'str:1', $name, '')) return;
+    if (!xarVarFetch('emailcc', 'email', $emailcc, '')) return;
+    if (!xarVarFetch('namecc', 'str:1', $namecc, '')) return;
+    if (!xarVarFetch('emailcc', 'email', $emailbcc, '')) return;
+    if (!xarVarFetch('namecc', 'str:1', $namebcc, '')) return;
 
     // Confirm authorisation code.
     if (!xarSecConfirmAuthKey()) return;
@@ -56,6 +59,10 @@ function mail_admin_sendtest()
             'sendmail',
             array('info' => $email,
                 'name' => $name,
+                'ccinfo' => $emailcc,
+                'ccname' => $namecc,
+                'bccinfo' => $emailbcc,
+                'bccname' => $namebcc,
                 'subject' => $subject,
                 'message' => $message,
                 'htmlmessage' => $htmlmessage,

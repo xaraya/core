@@ -1,7 +1,6 @@
 <?php
 /**
  * Checkbox List Property
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -46,8 +45,21 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
                        );
         return $baseInfo;
     }
-     
-     
+
+
+    function checkInput($name='', $value = null)
+    {
+        if (empty($name)) {
+            $name = 'dd_'.$this->id;
+        }
+        // store the fieldname for validations who need them (e.g. file uploads)
+        $this->fieldname = $name;
+        if (!isset($value)) {
+            xarVarFetch($name, 'isset', $value,  NULL, XARVAR_NOT_REQUIRED);
+        }
+        return $this->validateValue($value);
+    }
+
     function validateValue($value = null)
     {
         // this won't do for check boxes !
@@ -65,30 +77,30 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
 
         return true;
     }
-     
+
     function showInput($args = array())
     {
         extract($args);
         $data=array();
 
-        if (!isset($value)) 
+        if (!isset($value))
         {
             $data['value'] = $this->value;
         } else {
             $data['value'] = $value;
         }
-        
+
         if ( empty($data['value']) ) {
             $data['value'] = array();
         } elseif ( !is_array($data['value']) && is_string($data['value']) ) {
             $data['value'] = explode( ',', $data['value'] );
         }
-        
+
         $data['options'] = array();
-        if (!isset($options) || count($options) == 0) 
+        if (!isset($options) || count($options) == 0)
         {
             $options = $this->getOptions();
-        }        
+        }
         foreach( $options as $key => $option )
         {
             $option['checked'] = in_array($option['id'],$data['value']);
@@ -116,17 +128,17 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
     function showOutput($args = array())
     {
         extract($args);
-        
-        if (!isset($value)) 
+
+        if (!isset($value))
         {
             $value = $this->value;
         }
-        
+
         if( is_array($value) )
         {
             $value = implode(',',$value);
         }
-        
+
         $data=array();
 
         $data['value'] = xarVarPrepForDisplay($value);
@@ -134,7 +146,7 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
         $template="";
         return xarTplProperty('base', 'checkboxlist', 'showoutput', $data);
     }
-     
+
 }
 
 ?>

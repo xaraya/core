@@ -1,14 +1,14 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <script language="JavaScript">
-  <!--
-      // Enter name of mandatory fields
-      //var mail_fieldRequired = Array("adminname", "adminmail");
-      // Enter field description to appear in the dialog box
-      var mail_fieldDescription = Array("Admin Name", "Admin Email");
-      //-->
+<!--
+    // Enter name of mandatory fields
+    var mail_fieldRequired = Array("adminname", "adminmail");
+    // Enter field description to appear in the dialog box
+    var mail_fieldDescription = Array("Admin Name", "Admin Email");
+//-->
 </script>
 <div class="xar-mod-head">
-  <span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span>
+    <span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span>
 </div>
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-body">

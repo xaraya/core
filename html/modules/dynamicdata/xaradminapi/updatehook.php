@@ -1,7 +1,5 @@
 <?php
 /**
- * Update fields for an item
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -22,6 +20,8 @@
  */
 function dynamicdata_adminapi_updatehook($args)
 {
+    $verbose = false;
+
     extract($args);
 
     if (!isset($dd_function) || $dd_function != 'createhook') {
@@ -31,7 +31,7 @@ function dynamicdata_adminapi_updatehook($args)
     if (!isset($objectid) || !is_numeric($objectid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4) (not numeric or not set)',
                     'object id', 'admin', $dd_function, 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;
@@ -39,7 +39,7 @@ function dynamicdata_adminapi_updatehook($args)
     if (!isset($extrainfo) || !is_array($extrainfo)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'extrainfo', 'admin', $dd_function, 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;
@@ -64,7 +64,7 @@ function dynamicdata_adminapi_updatehook($args)
     if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'module name', 'admin', $dd_function, 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;
@@ -106,17 +106,26 @@ function dynamicdata_adminapi_updatehook($args)
     // use the values passed via $extrainfo if available
     $isvalid = $myobject->checkInput($extrainfo);
     if (!$isvalid) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'input', 'admin', $dd_function, 'dynamicdata');
-        // Note : we can't use templating here
-        $msg .= ' : ';
-        foreach ($myobject->properties as $property) {
-            if (!empty($property->invalid)) {
-                $msg .= xarML('#(1) = invalid #(2)',$property->label,$property->invalid);
-                $msg .= ' - ';
+        if ($verbose) {
+            $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                        'input', 'admin', $dd_function, 'dynamicdata');
+            // Note : we can't use templating here
+            $msg .= ' : ';
+            foreach ($myobject->properties as $property) {
+                if (!empty($property->invalid)) {
+                    $msg .= xarML('#(1) = invalid #(2)',$property->label,$property->invalid);
+                    $msg .= ' - ';
+                }
+            }
+        } else {
+            $msg = '';
+            foreach ($myobject->properties as $property) {
+                if (!empty($property->invalid)) {
+                    $msg .= $property->invalid . ' ';
+                }
             }
         }
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;

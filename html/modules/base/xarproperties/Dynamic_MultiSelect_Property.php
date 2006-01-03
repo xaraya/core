@@ -1,7 +1,6 @@
 <?php
 /**
  * Multiselect Property
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -83,6 +82,7 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
         $data['name']   = $name;
         $data['id']     = $id;
         $data['options']= $options;
+        $data['single']= isset($args['single']) ? true : false;
 
         $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
         $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';

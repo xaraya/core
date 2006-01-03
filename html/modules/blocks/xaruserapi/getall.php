@@ -1,7 +1,5 @@
 <?php
 /**
- * Get one or all block instances.
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -52,16 +50,23 @@ function blocks_userapi_getall($args)
                      btypes.xar_type
               FROM   '.$block_instances_table.' binst
               LEFT JOIN '.$block_types_table.' btypes
-              ON        btypes.xar_id = binst.xar_type_id ' . $orderby;
+              ON        btypes.xar_id = binst.xar_type_id ';
 
     if (!empty($bid)) {
         $query .= ' WHERE binst.xar_id = ' . $bid;
     } elseif (!empty($name)) {
         $query .= ' WHERE binst.xar_name = \'' . $name . '\'';
+    } elseif (!empty($filter)) {
+        $query .= ' WHERE lower(binst.xar_name) LIKE \'%' . strtolower($filter) . '%\'';
     }
+    $query .= ' ' . $orderby;
 
     // Return if no details retrieved.
-    $result =& $dbconn->Execute($query);
+    if (isset($startat) && isset($rowstodo)) {
+        $result =& $dbconn->SelectLimit($query,$rowstodo,$startat-1);
+    } else {
+        $result =& $dbconn->Execute($query);
+    }
     if (!$result) {return;}
 
     // The main result array.

@@ -23,9 +23,15 @@ function mail_adminapi_getmenulinks()
     // Security Check
     $menulinks = array();
     if (xarSecurityCheck('AdminMail', 0)) {
-        $menulinks[] = array('url' => xarModURL('mail','admin','compose'),
-                             'title' => xarML('Test your email configuration'),
-                             'label' => xarML('Test Configuration'));
+        $menulinks[] = Array('url' => xarModURL('mail','admin','overview'),
+            'title' => xarML('Mail Overview'),
+            'label' => xarML('Overview'));
+
+        $menulinks[] = Array('url' => xarModURL('mail',
+                'admin',
+                'compose'),
+            'title' => xarML('Test your email configuration'),
+            'label' => xarML('Test Configuration'));
         if (xarModIsAvailable('scheduler')) {
             $menulinks[] = array('url' => xarModURL('mail','admin','viewq'),
                                  'title' => xarML('View all mails scheduled to be sent later'),

@@ -22,7 +22,7 @@
  */
 function mail_init()
 {
-    // TODO: create separate xar_mail_queue table here someday
+// TODO: create separate xar_mail_queue table here someday
     xarModSetVar('mail', 'server', 'mail');
     xarModSetVar('mail', 'replyto', '0');
     xarModSetVar('mail', 'wordwrap', '78');
@@ -32,6 +32,9 @@ function mail_init()
     xarModSetVar('mail', 'encoding', '8bit');
     xarModSetVar('mail', 'html', false);  
     xarModSetVar('mail', 'ShowTemplates', false);
+    xarModSetVar('mail', 'suppresssending', false);
+    xarModSetVar('mail', 'redirectsending', false);
+    xarModSetVar('mail', 'redirectaddress', false);
     // when a module item is created
     if (!xarModRegisterHook('item', 'create', 'API',
             'mail', 'admin', 'hookmailcreate')) {

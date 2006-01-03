@@ -14,13 +14,13 @@ xarDBLoadTableMaintenanceAPI();
 
 /**
  * Initialise the modules module
- * 
- * @param none $ 
+ *
+ * @param none $
  * @returns bool
  * @raise DATABASE_ERROR
  */
 function modules_init()
-{ 
+{
     // Get database information
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
@@ -32,11 +32,11 @@ function modules_init()
     $tables['module_states'] = $sitePrefix . '_module_states';
     $tables['module_vars'] = $sitePrefix . '_module_vars';
     $tables['module_uservars'] = $sitePrefix . '_module_uservars';
-    $tables['hooks'] = $sitePrefix . '_hooks'; 
+    $tables['hooks'] = $sitePrefix . '_hooks';
     // Create tables
     /**
      * Here we create all the tables for the module system
-     * 
+     *
      * prefix_modules       - basic module info
      * prefix_module_states - table to hold states for unshared modules
      * prefix_module_vars   - module variables table
@@ -76,9 +76,9 @@ function modules_init()
     if (!$result) return;
 
     $modInfo = xarMod_getFileInfo('modules');
-    if (!isset($modInfo)) return; // throw back 
+    if (!isset($modInfo)) return; // throw back
     // Use version, since that's the only info likely to change
-    $modVersion = $modInfo['version']; 
+    $modVersion = $modInfo['version'];
     // Manually Insert Modules module into modules table
     $seqId = $dbconn->GenId($tables['modules']);
     $query = "INSERT INTO " . $tables['modules'] . "
@@ -102,7 +102,7 @@ function modules_init()
      * )
      */
     $fields = array('xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'unsigned' => true, 'primary_key' => true),
-                    'xar_regid' => array('type' => 'integer', 'null' => false, 'unsigned' => true), 
+                    'xar_regid' => array('type' => 'integer', 'null' => false, 'unsigned' => true),
                     'xar_state' => array('type' => 'integer', 'null' => false, 'default' => '0')
         );
 
@@ -116,9 +116,9 @@ function modules_init()
     $query = xarDBCreateIndex($tables['module_states'], $index);
 
     $result = &$dbconn->Execute($query);
-    if (!$result) return; 
-    
-    // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or 
+    if (!$result) return;
+
+    // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or
     // the sequence for xar_id will not be available in PostgreSQL
     $seqId = $dbconn->GenId($tables['module_states']);
 
@@ -164,7 +164,7 @@ function modules_init()
     $query = xarDBCreateIndex($tables['module_vars'], $index);
 
     $result = &$dbconn->Execute($query);
-    if (!$result) return; 
+    if (!$result) return;
     // prefix_module_uservars
     /**
      * CREATE TABLE xar_module_uservars (
@@ -182,7 +182,7 @@ function modules_init()
     $query = xarDBCreateTable($tables['module_uservars'], $fields);
 
     $result = &$dbconn->Execute($query);
-    if (!$result) return; 
+    if (!$result) return;
     // MrB: do we want an index on xar_value, on large sites, lots of records may exist
     // <mikespub> the only reason why you might want to use an index on value is when you're doing
     // simple queries or stats based on it. But since all values of all kinds of stuff
@@ -207,7 +207,7 @@ function modules_init()
     $fields = array('xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
         'xar_object' => array('type' => 'varchar', 'size' => 64, 'null' => false),
         'xar_action' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_smodule' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'default' => ''), 
+        'xar_smodule' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'default' => ''),
         // TODO: switch to integer for itemtype (see also xarMod.php)
         'xar_stype' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'default' => ''),
         'xar_tarea' => array('type' => 'varchar', 'size' => 64, 'null' => false),
@@ -220,7 +220,7 @@ function modules_init()
     $query = xarDBCreateTable($tables['hooks'], $fields);
 
     $result = &$dbconn->Execute($query);
-    if (!$result) return; 
+    if (!$result) return;
     // <andyv> Add module variables for default user/admin, used in modules list
     /**
      * at this stage of installer mod vars cannot be set, so we use DB calls
@@ -273,16 +273,16 @@ function modules_init()
     if (!$result) return; 
     // Initialisation successful
     return true;
-} 
+}
 
 /**
  * Activates the modules module
- * 
- * @param none $ 
+ *
+ * @param none $
  * @returns bool
  */
 function modules_activate()
-{ 
+{
     // make sure we dont miss empty variables (which were not passed thru)
     if (empty($selstyle)) $selstyle = 'plain';
     if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;
@@ -295,11 +295,11 @@ function modules_activate()
     xarModSetVar('modules', 'selsort', $selsort);
 
     return true;
-} 
+}
 
 /**
  * Upgrade the modules module from an old version
- * 
+ *
  * @param oldversion $ the old version to upgrade from
  * @returns bool
  * @todo include setting moduservars in next upgrade (2.1)
@@ -324,32 +324,32 @@ function modules_upgrade($oldVersion)
         // - add xar_id as primary key
         // - make index on xar_regid unique
         // 1. Add the primary key: save operation
-        $changes = array('command'     => 'add', 
-                         'field'       => 'xar_id', 
-                         'type'        => 'integer', 
-                         'null'        => false, 
-                         'unsigned'    => true, 
-                         'increment'   => true, 
+        $changes = array('command'     => 'add',
+                         'field'       => 'xar_id',
+                         'type'        => 'integer',
+                         'null'        => false,
+                         'unsigned'    => true,
+                         'increment'   => true,
                          'primary_key' => true,
                          'first'       => true);
         $query = xarDBAlterTable($tables['module_states'], $changes);
         $result = &$dbconn->Execute($query);
-        if (!$result) return; 
+        if (!$result) return;
 
-        // Bug #1971 - Have to use GenId to create values for xar_id on 
+        // Bug #1971 - Have to use GenId to create values for xar_id on
         // existing rows or the create unique index will fail
-        $query = "SELECT xar_regid, xar_state 
-                  FROM " . $tables['module_states'] . " 
+        $query = "SELECT xar_regid, xar_state
+                  FROM " . $tables['module_states'] . "
                   WHERE xar_id IS NULL";
         $result = &$dbconn->Execute($query);
         if (!$result) return;
-        
+
         // Get items from result array
         while (!$result->EOF) {
             list ($regid, $state) = $result->fields;
 
             $seqId = $dbconn->GenId($tables['module_states']);
-            $query = "UPDATE " . $tables['module_states'] . " 
+            $query = "UPDATE " . $tables['module_states'] . "
                       SET xar_id = $seqId
                       WHERE xar_regid = $regid
                       AND xar_state = $state";
@@ -366,30 +366,30 @@ function modules_upgrade($oldVersion)
         $indexname = 'i_' . $sitePrefix . '_module_states_regid';
         $query = xarDBDropIndex($tables['module_states'], array('name' => $indexname));
         $result = &$dbconn->Execute($query);
-        if (!$result) return; 
+        if (!$result) return;
 
         // 3. Add the new unique index reg_id
         $index = array('name' => $indexname, 'unique' => true, 'fields' => array('xar_regid'));
         $query = xarDBCreateIndex($tables['module_states'], $index);
-        
+
         $result = &$dbconn->Execute($query);
-        if (!$result) return; 
+        if (!$result) return;
     case '2.3.0':
         // current version
     }
     return true;
-} 
+}
 
 /**
  * Delete the modules module
- * 
- * @param none $ 
+ *
+ * @param none $
  * @returns bool
  */
 function modules_delete()
-{ 
+{
     // this module cannot be removed
     return false;
-} 
+}
 
 ?>

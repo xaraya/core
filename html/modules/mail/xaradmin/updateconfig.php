@@ -122,7 +122,7 @@ function mail_admin_updateconfig()
             }
         }
     }
-        
+
     // lets update status and display updated configuration
     xarResponseRedirect(xarModURL('mail', 'admin', 'modifyconfig',array('tab' => $tab)));
     // Return
