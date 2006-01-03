@@ -952,7 +952,7 @@ class xarQuery
     function openconnection($x = '')
     {
         if (empty($x)) $this->dbconn =& xarDBGetConn();
-        else $this->dbconn =& $x;
+        else $this->dbconn = $x;
     }
     function getconnection()
     {

@@ -463,7 +463,14 @@ function privileges_init()
 
 */
     // Set up an initial value for module variables.
-    xarModSetVar('privileges', 'showrealms', 0);
+    xarModSetVar('privileges', 'showrealms', false);
+    xarModSetVar('privileges', 'inheritdeny', true);
+    xarModSetVar('privileges', 'tester', 0);
+    xarModSetVar('privileges', 'test', false);
+    xarModSetVar('privileges', 'testdeny', false);
+    xarModSetVar('privileges', 'testmask', 'All');
+    xarModSetVar('privileges', 'realmvalue', 'none');
+    xarModSetVar('privileges', 'realmcomparison','exact');
 
     // Initialisation successful
     return true;

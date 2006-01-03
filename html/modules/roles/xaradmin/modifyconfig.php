@@ -98,7 +98,7 @@ function roles_admin_modifyconfig()
             $data['updatelabel'] = xarML('Update Roles Configuration');
             $data['uselockout'] =  xarModGetVar('roles', 'uselockout') ? 'checked' : '';
             $data['lockouttime'] = xarModGetVar('roles', 'lockouttime')? xarModGetVar('roles', 'lockouttime'): 15; //minutes
-            $data['lockouttries'] = xarModGetVar('roles', 'lockouttries') ? xarModGetVar('roles', 'lockouttries'): 3; 
+            $data['lockouttries'] = xarModGetVar('roles', 'lockouttries') ? xarModGetVar('roles', 'lockouttries'): 3;
             $hooks = array();
             switch ($data['tab']) {
                 case 'hooks':
@@ -156,6 +156,7 @@ function roles_admin_modifyconfig()
                     if (!xarVarFetch('sendwelcomeemail', 'checkbox', $sendwelcomeemail, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('minpasslength', 'int:1', $minpasslength, 5, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('uniqueemail', 'checkbox', $uniqueemail, xarModGetVar('roles', 'uniqueemail'), XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('userhome', 'checkbox', $userhome, xarModGetVar('roles', 'userhome'), XARVAR_NOT_REQUIRED)) return;
                     xarModSetVar('roles', 'chooseownpassword', $chooseownpassword);
                     xarModSetVar('roles', 'defaultgroup', $defaultgroup);
                     xarModSetVar('roles', 'allowregistration', $allowregistration);
@@ -167,6 +168,7 @@ function roles_admin_modifyconfig()
                     xarModSetVar('roles', 'sendwelcomeemail', $sendwelcomeemail);
                     xarModSetVar('roles', 'minpasslength', $minpasslength);
                     xarModSetVar('roles', 'uniqueemail', $uniqueemail);
+                    xarModSetVar('roles', 'userhome', $userhome);
                     break;
                 case 'filtering':
                     if (!xarVarFetch('disallowednames', 'str:1', $disallowednames, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
@@ -180,6 +182,8 @@ function roles_admin_modifyconfig()
 
                     $disallowedips = serialize($disallowedips);
                     xarModSetVar('roles', 'disallowedips', $disallowedips);
+                    break;
+                case 'duvs':
                     break;
                 case 'hooks':
                     // Role type 'user' (itemtype 0).
@@ -209,7 +213,23 @@ function roles_admin_modifyconfig()
             // Return
             return true;
             break;
+
+        case 'links':
+            switch ($data['tab']) {
+                case 'duvs':
+                    $duvarray = array('userhome','primaryparent','passwordupdate','timezone',);
+                    foreach ($duvarray as $duv) {
+                        if (!xarVarFetch($duv, 'int', $$duv, null, XARVAR_DONT_SET)) return;
+                        if (isset($$duv)) {
+                            if ($$duv) xarModAPIFunc('roles','admin','activateduv',array('name' => $duv));
+                            else xarModAPIFunc('roles','admin','deactivateduv',array('name' => $duv));
+                        }
+                    }
+                    break;
+                }
+        break;
     }
+    $data['authid'] = xarSecGenAuthKey();
     return $data;
 }
 ?>

@@ -1,6 +1,5 @@
 <?php
 /**
- * File: $Id: xarSession.php 1.97 05/09/01 13:31:53+02:00 marcel@hsdev.com $
  * Session Support
  *
  * @package sessions

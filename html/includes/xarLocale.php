@@ -364,9 +364,9 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
     $locale_format = str_replace('z','%Z',$locale_format);
     // format the single digit flags
     if (strpos($locale_format,'H') !== false)
-        $locale_format = str_replace('H',sprintf('%1d',gmstrftime('%H',$timestamp)),$locale_format);
+        $locale_format = str_replace('%H',sprintf('%1d',gmstrftime('%H',$timestamp)),$locale_format);
     if (strpos($locale_format,'h') !== false)
-        $locale_format = str_replace('h',sprintf('%1d',gmstrftime('%I',$timestamp)),$locale_format);
+        $locale_format = str_replace('%h',sprintf('%1d',gmstrftime('%I',$timestamp)),$locale_format);
     if (strpos($locale_format,'m') !== false)
         $locale_format = str_replace('m',sprintf('%1d',gmstrftime('%M',$timestamp)),$locale_format);
     if (strpos($locale_format,'s') !== false)

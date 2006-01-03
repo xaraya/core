@@ -396,6 +396,7 @@ function xarErrorSet($major, $errorID, $value = NULL)
     $obj->setID($errorID);
     $obj->setStack($stack);
     $obj->major = $major;
+
     // Stick the object on the error stack
     $ErrorStack->push($obj);
     // If the XARDBG_EXCEPTIONS flag is set we log every raised error.
@@ -548,7 +549,9 @@ function xarErrorRender($format,$stacktype = "ERROR")
 
     if ($format == 'template') {
         $theme_dir = xarTplGetThemeDir();
-        if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
+        if(file_exists($theme_dir . '/modules/base/message-' . $error->id . '.xt')) {
+            return xarTplFile($theme_dir . '/modules/base/message-' . $error->id . '.xt', $data);
+        } elseif(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
             return xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', $data);
         } else {
             return xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);

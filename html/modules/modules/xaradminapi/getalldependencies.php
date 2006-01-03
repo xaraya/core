@@ -151,7 +151,7 @@ function modules_adminapi_getalldependencies($args)
             break;
         }
     }
-    
+
     return $dependency_array;
 }
 

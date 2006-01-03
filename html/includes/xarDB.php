@@ -141,7 +141,6 @@ function &xarDBGetTables()
 
 /**
  * Load the Table Maintenance API
- *
  * @access public
  * @return true
  * @todo <johnny> change to protected or private?

@@ -81,6 +81,7 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
         $data['name']   = $name;
         $data['id']     = $id;
         $data['options']= $options;
+        $data['single']= isset($args['single']) ? true : false;
 
         $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
         $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';

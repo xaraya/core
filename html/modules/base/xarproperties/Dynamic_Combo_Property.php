@@ -42,7 +42,7 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
 
             // store the fieldname for validations who need them (e.g. file uploads)
             $this->fieldname = $name;
-            if (!isset($value)) 
+            if (!isset($value))
             {
                 if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
             }
@@ -52,12 +52,12 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
 
     function validateValue($value = null)
     {
-        if (!isset($value)) 
+        if (!isset($value))
         {
             $value = $this->value;
         }
         $this->value = $value;
-        
+
         return true;
     }
 
@@ -65,7 +65,7 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
     function showInput($args = array())
     {
         extract($args);
-        
+
         $data=array();
 
         if (!isset($value)) {
@@ -73,7 +73,7 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
         } else {
             $data['value'] = $value;
         }
-        
+
         if (!isset($options) || count($options) == 0) {
             $data['options'] = $this->getOptions();
         } else {
@@ -84,7 +84,7 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
         } else {
             $data['name'] = $name;
         }
-        if (empty($id)) 
+        if (empty($id))
         {
             $data['id'] = $data['name'];
         } else {

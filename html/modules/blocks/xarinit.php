@@ -285,6 +285,7 @@ function blocks_init()
 
     // Initialisation successful
     xarModSetVar('blocks', 'selstyle', 'plain');
+    xarModSetVar('blocks', 'itemsperpage', 20);
     return true;
 }
 

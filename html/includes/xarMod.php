@@ -1004,7 +1004,7 @@ function xarMod__URLencode($data, $type = 'getname')
 
     return $data;
 }
-    
+
 /**
  * Format GET parameters formed by nested arrays, to support xarModURL().
  * This function will recurse for each level to the arrays.
@@ -1682,6 +1682,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     $FileInfo['author']         = isset($version['author'])         ? $version['author'] : false;
     $FileInfo['contact']        = isset($version['contact'])        ? $version['contact'] : false;
     $FileInfo['dependency']     = isset($version['dependency'])     ? $version['dependency'] : array();
+    $FileInfo['dependencyinfo'] = isset($version['dependencyinfo']) ? $version['dependencyinfo'] : array();
     $FileInfo['extensions']     = isset($version['extensions'])     ? $version['extensions'] : array();
     $FileInfo['directory']      = isset($version['directory'])      ? $version['directory'] : false;
     $FileInfo['homepage']       = isset($version['homepage'])       ? $version['homepage'] : false;

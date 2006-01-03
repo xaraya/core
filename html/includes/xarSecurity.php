@@ -380,6 +380,34 @@ function xarUFindRole($name)
     return $roles->ufindRole($name);
 }
 
+function xarCurrentRole()
+{
+    $roles = new xarRoles();
+    return $roles->getRole(xarSessionGetVar('uid'));
+}
+
+function xarIsParent($name1, $name2)
+{
+    $roles = new xarRoles();
+    $role1 = $roles->findRole($name1);
+    $role2 = $roles->ufindRole($name2);
+    if (is_object($role1) && is_object($role2)) {
+        return $role2->isParent($role1);
+    }
+    return false;
+}
+
+function xarIsAncestor($name1, $name2)
+{
+    $roles = new xarRoles();
+    $role1 = $roles->findRole($name1);
+    $role2 = $roles->ufindRole($name2);
+    if (is_object($role1) && is_object($role2)) {
+        return $role2->isAncestor($role1);
+    }
+    return false;
+}
+
 /* xarTree: creates a tree object
  *
  * This is a wrapper function
@@ -453,10 +481,10 @@ function xarPrivExists($name)
  * @param   string module of mask
  * @return  boolean
  */
-function xarMaskExists($name,$module="All")
+function xarMaskExists($name,$module="All",$component="All")
 {
     $masks = new xarMasks();
-    $mask = $masks->getMask($name,$module);
+    $mask = $masks->getMask($name,$module,$component,TRUE);
     if ($mask) return TRUE;
     else return FALSE;
 }
@@ -602,9 +630,9 @@ function xarSecGenAuthKey($modName = NULL)
  * @return bool true if the key is valid, false if it is not
  * @todo bring back possibility of time authorized keys
  */
-function xarSecConfirmAuthKey($authIdVarName = 'authid')
+function xarSecConfirmAuthKey($modName = NULL, $authIdVarName = 'authid')
 {
-    list($modName) = xarRequestGetInfo();
+    if(!isset($modName)) list($modName) = xarRequestGetInfo();
     $authid = xarRequestGetVar($authIdVarName);
 
     // Regenerate static part of key

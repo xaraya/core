@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic Passbox property
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -88,6 +87,7 @@ class Dynamic_PassBox_Property extends Dynamic_Property
          $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
          $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
          $data['size']     = !empty($size) ? $size : $this->size;
+         $data['confirm']  = !empty($confirm) ? true : false;
 
         $template="";
         return xarTplProperty('roles', 'password', 'showinput', $data);
