@@ -15,7 +15,7 @@
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
-if (!file_exists('install.php')) {xarCore_die(xarML('Already installed'));}
+if (!file_exists('install.php')) { throw new Exception('Already installed');}
 
 /**
  * Dead
@@ -261,15 +261,13 @@ function installer_admin_phase5()
 
     if ($dbName == '') {
         $msg = xarML('No database was specified');
-        xarCore_die($msg);
-        return;
+        throw new Exception($msg);
     }
 
     // allow only a-z 0-9 and _ in table prefix
     if (!preg_match('/^\w*$/',$dbPrefix)) {
         $msg = xarML('Invalid character in table prefix');
-        xarCore_die($msg);
-        return;
+        throw new Exception($msg);
     }
     // Save config data
     $config_args = array('dbHost'    => $dbHost,
@@ -312,15 +310,13 @@ function installer_admin_phase5()
         // It failed without dbname too
         $msg = xarML('Database connection failed. The information supplied was erroneous, such as a bad or missing password or wrong username.
                           The message was: ' . $ex->getMessage());
-        xarCore_die($msg);
-        return;
+        throw new Exception($msg);
       }
     }
     
     if (!$createDB && !$dbExists) {
         $msg = xarML('Database #(1) doesn\'t exist and it wasnt selected to be created.', $dbName);
-        xarCore_die($msg);
-        return;
+        throw new Exception($msg);
     }
 
     $data['confirmDB']  = $confirmDB;
@@ -352,8 +348,7 @@ function installer_admin_phase5()
         if(!$dbconn->Execute(xarDBCreateDatabase($dbName,$dbType))) {
           //if (!xarInstallAPIFunc('createdb', $config_args)) {
           $msg = xarML('Could not create database (#(1)). Check if you already have a database by that name and remove it.', $dbName);
-          xarCore_die($msg);
-          return;
+          throw new Exception($msg);
         }
     }
     else {
