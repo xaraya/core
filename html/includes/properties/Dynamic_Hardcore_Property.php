@@ -15,9 +15,9 @@
  */
 class Dynamic_Hardcore_Property extends Dynamic_Property
 {
-    var $rows = 8;
-    var $cols = 50;
-    var $wrap = 'soft';
+    public $rows = 8;
+    public $cols = 50;
+    public $wrap = 'soft';
 
     function validateValue($value = null)
     {

@@ -82,7 +82,7 @@ class Dynamic_DataStore_Master
      *
      * @param $args['table'] optional extra table whose fields you want to add as potential data source
      */
-    function &getDataSources($args = array())
+    static function &getDataSources($args = array())
     {
         $sources = array();
 
@@ -162,19 +162,19 @@ class Dynamic_DataStore_Master
  */
 class Dynamic_DataStore
 {
-    var $name;     // some static name, or the table name, or the moduleid + itemtype, or ...
-    var $type;
-    var $fields;   // array of $name => reference to property in Dynamic_Object*
-    var $primary;
+    public $name;     // some static name, or the table name, or the moduleid + itemtype, or ...
+    public $type;
+    public $fields;   // array of $name => reference to property in Dynamic_Object*
+    public $primary;
 
-    var $sort;
-    var $where;
-    var $groupby;
-    var $join;
+    public $sort;
+    public $where;
+    public $groupby;
+    public $join;
 
-    var $_itemids;  // reference to itemids in Dynamic_Object_List
+    public $_itemids;  // reference to itemids in Dynamic_Object_List TODO: investigate public scope
 
-    var $cache = 0;
+    public $cache = 0;
 
     function Dynamic_DataStore($name)
     {

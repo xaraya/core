@@ -33,21 +33,21 @@ define('XAR_ENABLE_WINNOW', 0);
 
 class xarMasks
 {
-    var $dbconn;
-    var $privilegestable;
-    var $privmemberstable;
-    var $maskstable;
-    var $modulestable;
-    var $modulestatestable;
-    var $realmstable;
-    var $acltable;
-    var $allmasks;
-    var $levels;
-    var $instancestable;
-    var $levelstable;
-    var $privsetstable;
+    public $dbconn;
+    public $privilegestable;
+    public $privmemberstable;
+    public $maskstable;
+    public $modulestable;
+    public $modulestatestable;
+    public $realmstable;
+    public $acltable;
+    public $allmasks;
+    public $levels;
+    public $instancestable;
+    public $levelstable;
+    public $privsetstable;
 
-    var $privilegeset;
+    public $privilegeset;
 
 /**
  * xarMasks: constructor for the class
@@ -192,7 +192,10 @@ class xarMasks
                 $description, $sid
             );
         } else {
-        $query = "INSERT INTO $this->maskstable VALUES (?,?,?,?,?,?,?,?)";
+            $query = "INSERT INTO $this->maskstable (
+                        xar_sid, xar_name, xar_realm, xar_module, xar_component, 
+                        xar_instance, xar_level, xar_description) 
+                      VALUES (?,?,?,?,?,?,?,?)";
             $bindvars = array(
                 $this->dbconn->genID($this->maskstable),
                           $name, $realm, $module, $component, $instance, $level,
@@ -826,8 +829,12 @@ class xarPrivileges extends xarMasks
                     $description, $iid
                 );
             } else {
-                // FIXME: be explicit with the table columns.
-            $query = "INSERT INTO $this->instancestable VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+                $query = "INSERT INTO $this->instancestable (
+                            xar_iid, xar_module, xar_component, xar_header, 
+                            xar_query, xar_limit, xar_propagate, 
+                            xar_instancetable2, xar_instancechildid, 
+                            xar_instanceparentid, xar_description)
+                          VALUES (?,?,?,?,?,?,?,?,?,?,?)";
                 $bindvars = array(
                     $this->dbconn->genID($this->instancestable),
                               $module, $type, $instance['header'],
@@ -875,7 +882,10 @@ class xarPrivileges extends xarMasks
 */
     function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
-        $query = "INSERT INTO $this->privilegestable VALUES (?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO $this->privilegestable (
+                    xar_pid, xar_name, xar_realm, xar_module, xar_component, 
+                    xar_instance, xar_level, xar_description)
+                  VALUES (?,?,?,?,?,?,?,?)";
         $bindvars = array($this->dbconn->genID($this->privilegestable),
                           $name, $realm, $module, $component,
                           $instance, $level, $description);
@@ -1586,19 +1596,19 @@ class xarPrivileges extends xarMasks
 
   class xarMask
 {
-    var $sid;           //the id of this privilege
-    var $name;          //the name of this privilege
-    var $realm;         //the realm of this privilege
-    var $module;        //the module of this privilege
-    var $component;     //the component of this privilege
-    var $instance;      //the instance of this privilege
-    var $level;         //the access level of this privilege
-    var $description;   //the long description of this privilege
-    var $normalform;    //the normalized form of this privilege
+    public $sid;           //the id of this privilege
+    public $name;          //the name of this privilege
+    public $realm;         //the realm of this privilege
+    public $module;        //the module of this privilege
+    public $component;     //the component of this privilege
+    public $instance;      //the instance of this privilege
+    public $level;         //the access level of this privilege
+    public $description;   //the long description of this privilege
+    public $normalform;    //the normalized form of this privilege
 
-    var $dbconn;
-    var $privilegestable;
-    var $privmemberstable;
+    public $dbconn;
+    public $privilegestable;
+    public $privmemberstable;
 
 /**
  * xarMask: constructor for the class
@@ -1931,19 +1941,19 @@ class xarPrivileges extends xarMasks
 class xarPrivilege extends xarMask
 {
 
-    var $pid;           //the id of this privilege
-    var $name;          //the name of this privilege
-    var $realm;         //the realm of this privilege
-    var $module;        //the module of this privilege
-    var $component;     //the component of this privilege
-    var $instance;      //the instance of this privilege
-    var $level;         //the access level of this privilege
-    var $description;   //the long description of this privilege
-    var $parentid;      //the pid of the parent of this privilege
+    public $pid;           //the id of this privilege
+    public $name;          //the name of this privilege
+    public $realm;         //the realm of this privilege
+    public $module;        //the module of this privilege
+    public $component;     //the component of this privilege
+    public $instance;      //the instance of this privilege
+    public $level;         //the access level of this privilege
+    public $description;   //the long description of this privilege
+    public $parentid;      //the pid of the parent of this privilege
 
-    var $dbconn;
-    var $privilegestable;
-    var $privmemberstable;
+    public $dbconn;
+    public $privilegestable;
+    public $privmemberstable;
 
 /**
  * xarPrivilege: constructor for the class

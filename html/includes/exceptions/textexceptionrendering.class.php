@@ -16,11 +16,11 @@ if (!class_exists('ExceptionRendering')) {
 
 class TextExceptionRendering extends ExceptionRendering
 {
-    var $linebreak = "\n";
-    var $openstrong = "";
-    var $closestrong = "";
-    var $openpre = "";
-    var $closepre = "";
+    public $linebreak = "\n";
+    public $openstrong = "";
+    public $closestrong = "";
+    public $openpre = "";
+    public $closepre = "";
 }
 
 ?>

@@ -28,11 +28,7 @@
  */
 function xarThemeGetVar($themeName, $name, $prep = NULL)
 {
-    if (empty($themeName)) {
-        $msg = xarML('Empty themeName (#(1)).', '$themeName');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (empty($themeName)) throw new EmptyParameterException('themename');
 
     return xarVar__GetVarByAlias($themeName, $name, $uid = NULL, $prep, $type = 'themevar');
 }
@@ -49,11 +45,7 @@ function xarThemeGetVar($themeName, $name, $prep = NULL)
  */
 function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='')
 {
-    if (empty($themeName)) {
-        $msg = xarML('Empty themeName (#(1)).', '$themeName');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (empty($themeName)) throw new EmptyParameterException('themename');
 
     return xarVar__SetVarByAlias($themeName, $name, $value, $prime, $description, $uid = NULL, $type = 'themevar');
 }
@@ -70,10 +62,7 @@ function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='
  */
 function xarThemeDelVar($themeName, $name)
 {
-    if (empty($themeName)) {
-        $msg = xarML('Empty themeName (#(1)).', '$themeName');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));return;
-    }
+    if (empty($themeName)) throw new EmptyParameterException('themename');
 
     return xarVar__DelVarByAlias($themeName, $name, $uid = NULL, $type = 'themevar');
 }
@@ -131,7 +120,7 @@ function xarThemeGetDisplayableName($themeName)
     // The theme display name is language sensitive,
     // so it's fetched through xarML.
     // TODO: need to think of something that actually works.
-    return xarML($themeName);
+    return $themeName;
 }
 
 /**

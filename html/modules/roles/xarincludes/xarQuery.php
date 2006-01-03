@@ -23,33 +23,33 @@
 class xarQuery
 {
 
-    var $version = "1.3";
-    var $id;
-    var $type;
-    var $tables;
-    var $fields;
-    var $conditions;
-    var $conjunctions;
-    var $bindings;
-    var $sorts;
-    var $result;
-    var $rows = 0;
-    var $rowstodo = 0;
-    var $startat = 1;
-    var $output;
-    var $row;
-    var $dbconn;
-    var $statement;
-    var $israwstatement = 0;
-    var $bindvars;
-    var $bindstring;
-    var $limits = 1;
+    public $version = "1.3";
+    public $id;
+    public $type;
+    public $tables;
+    public $fields;
+    public $conditions;
+    public $conjunctions;
+    public $bindings;
+    public $sorts;
+    public $result;
+    public $rows = 0;
+    public $rowstodo = 0;
+    public $startat = 1;
+    public $output;
+    public $row;
+    public $dbconn;
+    public $statement;
+    public $israwstatement = 0;
+    public $bindvars;
+    public $bindstring;
+    public $limits = 1;
 
 // Flags
 // Set to true to use binding variables supported by some dbs
-    var $usebinding = true;
+    public $usebinding = true;
 // Two unrelated conditions will be inserted into the query as AND or OR
-    var $implicitconjunction = "AND";
+    public $implicitconjunction = "AND";
 
 //---------------------------------------------------------
 // Constructor
@@ -96,7 +96,7 @@ class xarQuery
                 $result = $this->dbconn->Execute($this->statement);
             }
             if(!$result) return;
-            $this->rows = $result->_numOfRows;
+            $this->rows = $result; 
             return true;
         }
         if($this->rowstodo != 0 && $this->limits == 1 && $this->israwstatement) {
@@ -112,19 +112,20 @@ class xarQuery
             else {
                 $result = $this->dbconn->Execute($this->statement);
             }
-            $this->rows = $result->_numOfRows;
+            if (!$result) return;
+            $this->rows = $result->getRecordCount();
         }
         if (!$result) return;
         $this->result =& $result;
 
         if (($result->fields) === false) $numfields = 0;
-        else $numfields = $result->_numOfFields;
+        else $numfields = count($result->fields); // Better than the private var, fields should still be proteced
         $this->output = array();
         if ($display == 1) {
             if ($statement == '') {
                 if ($this->fields == array() && $numfields > 0) {
                     for ($i=0;$i<$numfields;$i++) {
-                        $o =& $result->FetchField($i);
+                        $o = $result->FetchField($i);
                         if (!isset($o) || !isset($o->name)) {
                             $msg = xarML('SELECT with total of columns different from the number retrieved.');
                             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
@@ -134,7 +135,7 @@ class xarQuery
                     }
                 }
                 while (!$result->EOF) {
-                    $i=0;
+                    $i=0; $line=array();
                     foreach ($this->fields as $key => $value ) {
                         if(!empty($value['alias']))
                             $line[$value['alias']] = $result->fields[$i];

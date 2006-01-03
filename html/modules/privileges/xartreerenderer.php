@@ -19,28 +19,28 @@ include_once 'modules/privileges/xarprivileges.php';
 class xarTreeRenderer
 {
 
-    var $privs;
+    public $privs;
 
     // some variables we'll need to hold drawing info
-    var $html;
-    var $nodeindex;
-    var $indent;
-    var $level;
+    public $html;
+    public $nodeindex;
+    public $indent;
+    public $level;
 
     // convenience variables to hold strings referring to pictures
-    var $el = '<img src="modules/privileges/xarimages/el.gif" alt="" style="vertical-align: middle" />';
-    var $tee = '<img src="modules/privileges/xarimages/T.gif" alt="" style="vertical-align: middle" />';
-    var $aye = '<img src="modules/privileges/xarimages/I.gif" alt="" style="vertical-align: middle" />';
-    var $bar = '<img src="modules/privileges/xarimages/s.gif" alt="" style="vertical-align: middle" />';
-    var $emptybox = '<img class="xar-privtree-box" src="modules/privileges/xarimages/k1.gif" alt="" style="padding-left: 0.1em; vertical-align: middle" />';
-    var $expandedbox = '<img class="xar-privtree-box" src="modules/privileges/xarimages/k2.gif" alt="" style="padding-left: 0.1em; vertical-align: middle" onclick="toggleBranch(this, this.parentNode.lastChild);" />';
-    var $blank = '<img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle" />';
-    var $collapsedbox = '<img class="xar-privtree-box" src="modules/privileges/xarimages/k3.gif" alt="" style="padding-left: 0.1em; vertical-align: middle" onclick="toggleBranch(this, this.parentNode.lastChild);" />';
-    var $bigblank ='<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
-    var $biggerblank ='<span style="padding-left: 0.25em; padding-right: 0.5em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
+    public $el = '<img src="modules/privileges/xarimages/el.gif" alt="" style="vertical-align: middle" />';
+    public $tee = '<img src="modules/privileges/xarimages/T.gif" alt="" style="vertical-align: middle" />';
+    public $aye = '<img src="modules/privileges/xarimages/I.gif" alt="" style="vertical-align: middle" />';
+    public $bar = '<img src="modules/privileges/xarimages/s.gif" alt="" style="vertical-align: middle" />';
+    public $emptybox = '<img class="xar-privtree-box" src="modules/privileges/xarimages/k1.gif" alt="" style="padding-left: 0.1em; vertical-align: middle" />';
+    public $expandedbox = '<img class="xar-privtree-box" src="modules/privileges/xarimages/k2.gif" alt="" style="padding-left: 0.1em; vertical-align: middle" onclick="toggleBranch(this, this.parentNode.lastChild);" />';
+    public $blank = '<img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle" />';
+    public $collapsedbox = '<img class="xar-privtree-box" src="modules/privileges/xarimages/k3.gif" alt="" style="padding-left: 0.1em; vertical-align: middle" onclick="toggleBranch(this, this.parentNode.lastChild);" />';
+    public $bigblank ='<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
+    public $biggerblank ='<span style="padding-left: 0.25em; padding-right: 0.5em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
 
     // we'll use this to check whether a group has already been processed
-    var $alreadydone;
+    public $alreadydone;
 
     /**
      * Constructor

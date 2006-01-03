@@ -7,10 +7,207 @@
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
+/* RFC MATERIAL follows:
+
+   Exception classes we will probably need:
+   I'd say that each subsystem or component can derive an exception class from (XAR)Exceptions
+   class and provide there whatever it needs.
+
+   The exception classes should be defined with reasonably meaningful names, so the catch clause(s)
+   remain readable by a human too. While this is a bit longer to type, the added value when debugging
+   someone elses code is invaluable.
+
+   A derivation tree COULD be: ( items marked with * are provided here, others can come from somewhere else)
+   This is just to give an idea what the tree could look like, we just provide the * marked items here and
+   the required interface for derived classes.
+
+   Exception [PHP]
+   |-->[3rdPartyExceptions go here]
+   |-->SQLException [Creole] - signals exception in SQL backend.
+   |-->PHPException* - the php error handler raised the exception, means that a PHP error occurred.
+   |-->SRCException* - the assertion handler raised the exception, means that an assertion in the code has failed.
+   |-->xarExceptions*
+       |-->DebugException* - debug Exception, i imagine we should be able to enable/disable this at will very easy so we can quickly test things.
+       |-->NotFoundExceptions
+       |   |-->FileNotFoundException
+       |   |-->IDNotFoundException
+       |   |-->LocaleNotFoundException
+       |-->DuplicateExceptions
+       |   |-->FileDuplicateException
+       |   |-->BlockDuplicateException
+       |-->ValidationExceptions
+       |   |-->XMLValidationException
+       |   |-->InputValidationException
+       |-->ConfigurationExceptions
+       |-->DeprecationExceptions
+       |   |-->APIDeprecationException
+       |   |-->SyntaxDeprecationException
+       |-->SecurityExceptions
+       |   |-->AuthenticationSecurityException
+       |   |-->AuthorisationSecurityException
+       |-->TranslationException
+       |-->RegistrationExceptions
+       |   |-->TagRegistrationException
+       |   |-->EventRegistrationException
+       |-->DependencyExceptions
+       |   |-->VersionDependencyException
+
+   The default interface of the php internal base Exception class is:
+   new Exception(String $message, Int $code);
+   (see also: http://www.php.net/manual/en/language.exceptions.php)
+   Overridden exception classes however must implement the interface of the xarExceptions class however
+
+   NOTE: Pay special attention in the above to the use of plural forms for container classes, so they can
+         be caught all at once like:
+         try {
+            ..something risky..
+         } catch(xarExceptions $e) {
+           .. any Xar exception will be caught here, but no others
+         }
+
+   NOTE: I'm putting stuff on this all in this file now, we can split things up later on
+
+   Q: do we need compatability classes for the legacy classes?
+   Q: the exception handler receives the instantiated Exception class. 
+      How do we know there what is available in the derived object so we can specialize handling?
+      To only allow deriving from XARExceptions and standardize there is probably not enough, but lets do that for now.
+
+*/
+
+/* PHP Errors are special exceptions, thrown by the php error handler */
+final class PHPException extends Exception 
+{}
+
+/* Assertions are special exceptions, thrown by the assert error handler */
+final class SRCException extends Exception
+{}
+
+
+interface IxarExceptions {
+    public function __construct($vars = NULL, $msg = NULL);
+}
+/* Our own exceptions, the base container class, cannot be instantiated */
+abstract class xarExceptions extends Exception implements IxarExceptions
+{
+    // Variable parts in the message.
+    protected $message ="Missing Exception Info, please put the defaults for '\$message' and '\$variables' members in the derived exception class.";
+    protected $variables = array();
+    /*
+     All exceptions have the same interface from XAR point of view
+     so we dont allow this to be overridden just now. The message parameter
+     may be overridden though. If not supplied the default message
+     for the class gets used.
+     Throwing an exeception is done by: 
+         throw new WhateverException($vars);
+     $vars is an array of values which are variable in the message. 
+     The message is normally not overridden but possible., example:
+         throw new FileNotFoundException(array($file,$dir),'Go place the file #(1) in the #(2) location, i can not find it');
+    */
+    final public function __construct($vars = NULL, $msg = NULL) 
+    {
+        // Make sure the construction creates the right values first
+        if(!is_null($msg)) $this->message = $msg;
+        parent::__construct($this->message,$this->code);
+
+        if(!is_null($vars)) $this->variables = $vars;
+        if(!is_array($this->variables)) $this->variables = array($this->variables);
+        $rep=1;
+        foreach($this->variables as $var) 
+            $this->message = str_replace("#(".$rep++.")",(string)$var,$this->message);
+    }
+}
+
+
+/*
+ * Exception class for debugging
+ *
+ * @todo Devise some special constructor, so it's not really easy to leave the objects laying around
+ */
+class DebugException extends xarExceptions
+{
+    // Derived exception class should minimally proved the following 2
+    protected $message ='Default "$message" for "DebugException" with "$variables" member with value: "#(1)"';
+    protected $variables ='a variable value should normally be here';
+}
+
+/* Other exception classes which probably should be moved somewhere else 
+   TODO: this sort of begs for dynamic class generation. 
+         We could model it differently but catching is based on classname which is really comfy, 
+         so we actually need all those classes
+*/
+// Parameter exceptions
+abstract class ParameterExceptions extends xarExceptions {}
+class EmptyParameterException extends ParameterExceptions
+{ protected $message = "The parameter '#(1)' was expected in a call to a function, but was not provided.";}
+class BadParameterException extends ParameterExceptions
+{ protected $message = "The parameter '#(1)' provided during this operation could not be validated, or was not accepted for other reasons.";}
+
+// Not finding things
+abstract class NotFoundExceptions extends xarExceptions {}
+class FunctionNotFoundException extends NotFoundExceptions
+{ protected $message = 'The function "#(1)" could not be found or not be loaded.';}
+class IDNotFoundException extends NotFoundExceptions
+{ protected $message = 'An item was requested based on a unique identifier (ID), however, the ID: "#(1)" could not be found.';}
+class FileNotFoundException extends NotFoundExceptions
+{ protected $message = 'The file "#(1) could not be found.';}
+class ModuleBaseInfoNotFoundException extends NotFoundExceptions
+{ protected $message = 'The base info for module "#(1)" could not be found';}
+class LocaleNotFoundException extends NotFoundExceptions
+{ protected $message = 'The locale "#(1)" could not be found or is currently unavailable';}
+
+class ModuleNotActiveException extends xarExceptions
+{ protected $message = 'The module "#(1)" was called, but it is not active.';}
+
+class NotLoggedInException extends xarExceptions
+{ protected $message = 'An operation was encountered that requires the user to be logged in. If you are currently logged in please report this as a bug.';}
+
+// Registration
+abstract class RegistrationExceptions extends xarExceptions {}
+class VariableRegistrationException extends RegistrationExceptions
+{ protected $message = 'Variable "#(1)" is not properly registered';}
+class EventRegistrationException extends RegistrationExceptions
+{ protected $message = 'The even "#(1)" is not properly registered';}
+
+class ForbiddenOperationException extends xarExceptions
+{ protected $message = 'The operation you are attempting is not allowed in the current circumstances.';}
+
+// Duplication
+class DuplicateTagException extends xarExceptions
+{ protected $message = 'The tag definition for the tag: "#(1)" already exists.';}
+
+// Validation
+abstract class ValidationExceptions extends xarExceptions {}
+class BLValidationException extends xarExceptions
+{ protected $message = 'A blocklayout tag or attribute construct was invalid, see the tag documentation for the correct syntax';}
+class VariableValidationException extends ValidationExceptions
+{ protected $message = 'The variable "#(1)" [Value: "#(2)"] did not comply with the required validation: "#(3)"';}
+
+// Configuration
+class ConfigurationException extends xarExceptions
+{ protected $message = 'There is an unknown configuration error detected.';}
+
+class XMLParseException extends xarExceptions
+{ protected $message = 'The XML file "#(1)" could not be parsed. At line #(2): #(3)';}
+
+abstract class DeprecationExceptions extends xarExceptions {}
+class ApiDeprecationException extends DeprecationExceptions
+{ protected $message = "You are trying to use a deprecated API function [#(1)], Replace this call with #(2)";}
+
+class BLException extends xarExceptions 
+{ protected $message = 'Unknown blocklayout exception (TODO)';}
+/*
+ * Error constants for exception throwing
+ * 
+ * @todo probably move this to core loader or get rid of it completely, doesnt do something sane.
+ */
+define('E_XAR_ASSERT', 1);
+define('E_XAR_PHPERR', 2);
+
 /**
- * Public errors
+ * Public error types
  */
 define('XAR_NO_EXCEPTION', 0);
 define('XAR_USER_EXCEPTION', 1);
@@ -53,6 +250,49 @@ global $CoreStack, $ErrorStack;
 /* Error Handling System implementation */
 
 /**
+ * Exception handler for unhandled exceptions
+ *
+ * This handler is called when an exception is raised and otherwise unhandled
+ * Execution stops directly after this handler runs.
+ * The base exception object is documented here: http://www.php.net/manual/en/language.exceptions.php
+ * but we dont want to instantiate that directly, but rather one of our derived classes.
+ * We define this handler here, because it needs to be defined before set_exception_handler
+ *
+ * @author Marcel van der Boom <marcel@xaraya.com>
+ * @access private
+ * @param  Exception $exception The exception object
+ * @todo Make exception handling the default error handling and get rid of the redundant parts
+ * @return void
+ */
+function xarException__ExceptionHandler(Exception $e)
+{
+    // This handles exceptions, which can arrive directly or through xarErrorSet.
+    // if through xarErrorSet there will be something waiting for us on the stack
+    if(xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+        // TODO: phase this out
+        $msg = xarErrorRender('template');
+
+    } else {
+        // Poor mans final fallback for unhandled exceptions (simulate the same rendering as first part of the if
+        $data = array('major' => 'MAJOR TBD (Code was: '. $e->getCode().')',
+                      'type'  => get_class($e), 'title' => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
+                      'short' => $e->getMessage(), 'long' => 'LONG msg TBD',
+                      'hint'  => 'HINT TBD', 'stack' => '<pre>'. $e->getTraceAsString()."</pre>",
+                      'product' => 'Product TBD', 'component' => 'Component TBD');
+        $theme_dir = xarTplGetThemeDir(); $template="systemerror";
+        if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
+            $msg = xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', $data);
+        } else {
+            $msg = xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
+        }
+    }
+    xarErrorFree();
+    // Make an attemtp to render the page, hoping we have everything in place still
+    echo xarTpl_renderPage($msg);
+    // Execution stops after this handler, except for the shutdown handlers.
+}
+
+/**
  * Initializes the Error Handling System
  *
  * @author Marco Canini <marco@xaraya.com>
@@ -62,10 +302,13 @@ global $CoreStack, $ErrorStack;
  */
 function xarError_init($systemArgs, $whatToLoad)
 {
-    global $CoreStack,$ErrorStack;
+    global $CoreStack,$ErrorStack; // Pretty much obsolete, now we treat errors like exceptions
 
-    // The check for xdebug_enable is not necessary here, we want the handler enabled on the flag, period.
-    if ($systemArgs['enablePHPErrorHandler'] == true ) { // && !function_exists('xdebug_enable')) {
+    // Send all exceptions to the exception handler.
+    set_exception_handler('xarException__ExceptionHandler');
+
+    // Do we want our error handler or the native one?
+    if ($systemArgs['enablePHPErrorHandler'] == true ) { 
         set_error_handler('xarException__phpErrorHandler');
     }
 
@@ -110,11 +353,12 @@ function xarErrorSet($major, $errorID, $value = NULL)
         $major != XAR_USER_EXCEPTION &&
         $major != XAR_SYSTEM_EXCEPTION &&
         $major != XAR_SYSTEM_MESSAGE) {
-            xarCore_die('Attempting to set an error with an invalid major value: ' . $major);
+        throw new Exception('Attempting to set an error with an invalid major value', $major);
     }
 
     $stack = xarException__backTrace();
     if (!is_object($value)) {
+
         // The error passed in is just a msg or an identifier, try to construct
         // the object here.
         if (is_string($value)) {
@@ -130,11 +374,15 @@ function xarErrorSet($major, $errorID, $value = NULL)
 
         if ($major == XAR_SYSTEM_EXCEPTION) {
             $obj = new SystemException($value);
+            //throw new SystemException($value);
         } elseif ($major == XAR_USER_EXCEPTION){
             $obj = new DefaultUserException($value);
+            // throw new DefaultUserException($value);
         } elseif ($major == XAR_SYSTEM_MESSAGE){
+            // What to do with this?
             $obj = new UserMessage($value);
         } else {
+            // Likewise
             $obj = new NoException($value);
         }
 
@@ -164,6 +412,7 @@ function xarErrorSet($major, $errorID, $value = NULL)
                 XARLOG_LEVEL_ERROR);
         //xarLogException();
     }
+    throw new Exception($obj->getLong(),$obj->major);
 }
 
 /**
@@ -247,10 +496,6 @@ function xarErrorFree()
  */
 function xarErrorHandled()
 {
-//    if (xarCurrentErrorType() == XAR_NO_EXCEPTION) {
-//            xarCore_die('xarErrorHandled: Invalid major value: XAR_NO_EXCEPTION');
-//    }
-
     global $ErrorStack;
     if (!$ErrorStack->isempty())
     $ErrorStack->pop();
@@ -272,7 +517,6 @@ function xarErrorHandled()
 function xarErrorRender($format,$stacktype = "ERROR")
 {
     assert('$format == "template" || $format == "rawhtml" || $format == "text"; /* Improper format passed to xarErrorRender */');
-
     $msgs = xarException__formatStack($format,$stacktype);
     $error = $msgs[0];
 
@@ -415,10 +659,8 @@ function xarException__formatStack($format,$stacktype = "ERROR")
  *
  * Handlers:
  * 1. assert failures -> xarException__assertErrorHandler($script,$line,$code)
- * 2. ado db errors   -> xarException__dbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $param1 = fail, $param2 = false)
- * 3. php Errors      -> xarException__phpErrorHandler($errorType, $errorString, $file, $line)
- *
- * @todo Use trigger_error functionality for them all and take php5 into account
+ * 2. php Errors      -> xarException__phpErrorHandler($errorType, $errorString, $file, $line)
+ * 3. exceptions      -> xarException__ExceptionHandler(Exception $exceptionObject) // See top of this file
  */
 
 /**
@@ -437,35 +679,8 @@ function xarException__assertErrorHandler($script,$line,$code)
 {
     // Redirect the assertion to a system exception
     $msg = "ASSERTION FAILED: $script [$line] : $code";
-    xarErrorSet(XAR_SYSTEM_EXCEPTION,'ASSERT_FAILURE',$msg);
-}
-
-/**
- * ADODB error handler bridge
- *
- * @access private
- * @param  string databaseName
- * @param  string funcName
- * @param  integer errNo
- * @param  string errMsg
- * @param  bool param1
- * @param  bool param2
- * @raise  DATABASE_ERROR
- * @return void
- * @todo   <marco> complete it
- */
-function xarException__dbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $param1 = false, $param2 = false)
-{
-    if ($funcName == 'EXECUTE') {
-        if (function_exists('xarML')) {
-            $msg = xarML('Database error while executing: \'#(1)\'; error description is: \'#(2)\'.', $param1, $errMsg);
-        } else {
-            $msg = 'Database error while executing: '. $param1 .'; error description is: ' . $errMsg;
-        }
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemException("ErrorNo: ".$errNo.", Message:".$msg));
-    } else {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', $errMsg);
-    }
+    // TODO: classify the exception, we never want to use the base object directly.
+    throw new SRCException($msg, E_XAR_ASSERT);
 }
 
 /**
@@ -481,14 +696,13 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
 
     //Checks for a @ presence in the given line, should stop from setting Xaraya or DB errors
     $errLevel = xarCore_getSystemVar('Exception.ErrorLevel',true);
-    if(!isset($errLevel)) $errLevel = E_ALL;
-    if (!error_reporting() || $errorType > $errLevel) {
+    if(!isset($errLevel)) $errLevel = E_STRICT;
+    if (!error_reporting() || $errorType >= $errLevel) {
         // Log the message so it is not lost.
-        // TODO: make this message available to calling functions that suppress
-        // errors through '@'.
+        // TODO: make this message available to calling functions that suppress errors through '@'.
         $msg = "PHP error code $errorType at line $line of $file: $errorString";
         xarLogMessage($msg);
-        return;
+        return; // no need to raise exception
     }
 
     //Newer php versions have a 5th parameter that will give us back the context
@@ -506,7 +720,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
         $rawmsg .= $msg . "</div>";
         echo $rawmsg;
         exit;
-    }
+    } 
 
     // Make cached files also display their source file if it's a template
     // This is just for convenience when giving support, as people will probably
@@ -515,8 +729,8 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
         $sourcetmpl='';
         $base = basename(strval($file),'.php');
         $varDir = xarCoreGetVarDirPath();
-        if (file_exists($varDir . '/cache/templates/CACHEKEYS')) {
-            $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'r');
+        if (file_exists($varDir . XARCORE_TPL_CACHEDIR .'/CACHEKEYS')) {
+            $fd = fopen($varDir . XARCORE_TPL_CACHEDIR .'/CACHEKEYS', 'r');
             while($cache_entry = fscanf($fd, "%s\t%s\n")) {
                 list($hash, $template) = $cache_entry;
                 // Strip the colon
@@ -537,19 +751,20 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
         $rawmsg .= "The last registered error message is: <br /><br />";
         $rawmsg .= "PHP Error code: " . $errorType . "<br /><br />";
         $rawmsg .= $msg;
-        echo $rawmsg;
-        exit;
+        $msg = $rawmsg;
+        //echo $rawmsg;
+        //exit;
     }
     else {
         if ($GLOBALS['xarRequest_allowShortURLs'] && isset($GLOBALS['xarRequest_shortURLVariables']['module'])) {
             $module = $GLOBALS['xarRequest_shortURLVariables']['module'];
-        // Then check in $_GET
+            // Then check in $_GET
         } elseif (isset($_GET['module'])) {
             $module = $_GET['module'];
-        // Try to fallback to $HTTP_GET_VARS for older php versions
+            // Try to fallback to $HTTP_GET_VARS for older php versions
         } elseif (isset($GLOBALS['HTTP_GET_VARS']['module'])) {
             $module = $GLOBALS['HTTP_GET_VARS']['module'];
-        // Nothing found, return void
+            // Nothing found, return void
         } else {
             $module = '';
         }
@@ -582,16 +797,13 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
             $rawmsg .= "Component: " . $component . "<br />";
             $rawmsg .= "PHP Error code: " . $errorType . "<br /><br />";
             $rawmsg .= $msg;
-            echo $rawmsg;
-            return;
+            $msg = $rawmsg;
+            //echo $rawmsg;
+            //return;
         }
-        // CHECKME: <mrb> This introduces a dependency to 2 subsystems
-        xarResponseRedirect(xarModURL('base','user','systemexit',
-        array('code' => $errorType,
-              'exception' => $msg,
-              'product' => $product,
-              'component' => $component)));
     }
+
+    throw new PHPException($msg,$errorType);
 }
 
 /**
@@ -605,38 +817,11 @@ function xarException__backTrace()
 {
     $btFuncName = array();
 
-    if (function_exists('xdebug_enable')) {
-        xdebug_enable();
-        $btFuncName = xarException__xdebugBackTrace();
-    } elseif (function_exists('debug_backtrace')) {
+    if (function_exists('debug_backtrace')) {
         $btFuncName = debug_backtrace();
     }
     return $btFuncName;
 }
-
-/**
- * Returns a debug back trace using xdebug
- *
- * Converts a xdebug stack trace to a valid back trace.
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access private
- * @return array back trace
- */
-function xarException__xdebugBackTrace()
-{
-    $stack = xdebug_get_function_stack();
-    // Performs some action to make $stack conformant with debug_backtrace
-    array_shift($stack); // Drop {main}
-    array_pop($stack); // Drop xarException__xdebugBackTrace
-    if (xarCoreIsDebugFlagSet(XARDBG_SHOW_PARAMS_IN_BT)) {
-        for($i = 0, $max = count($stack); $i < $max; $i++) {
-            $stack[$i]['args'] = $stack[$i]['params'];
-        }
-    }
-    return array_reverse($stack);
-}
-
 
 function xarCoreExceptionFree()
 {
@@ -681,7 +866,7 @@ function xarException__formatBacktrace ($vardump,$key=false,$level=0)
         if (gettype($vardump) == 'object')
             $vardump = (array) get_object_vars($vardump);
 
-        foreach($vadump as $key => $value)
+        foreach($vardump as $key => $value)
             $return .= xarException__formatBacktrace($value,$key,$level+1);
 
         $return .= str_repeat(' ', $tabsize*$level);

@@ -42,16 +42,40 @@
     <!-- Show the general tab list for roles -->
     <xar:template file="tablist" />
     <fieldset>
-        <legend>
-            <xar:if condition="$ptype eq 0">
-                <xar:mlstring>User Properties</xar:mlstring>
-            <xar:else/>
-                <xar:mlstring>Group Properties</xar:mlstring>
-            </xar:if>
-        </legend>
+      <legend>
+        <xar:if condition="$ptype eq 0">
+            <xar:mlstring>User Properties</xar:mlstring>
+        <xar:else/>
+            <xar:mlstring>Group Properties</xar:mlstring>
+        </xar:if>
+      </legend>
     
-        <form action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
-            <xar:if condition="$frozen">
+    <form action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
+
+           <xar:if condition="$frozen">
+            <div class="xar-form-input-wrapper">
+                <label for="pname" title="#xarML('Common name')#" class="xar-form-label">
+                    <xar:mlstring>Display Name:</xar:mlstring>
+                </label>
+                <input type="text" name="pname" id="pname" value="#xarVarPrepForDisplay($pname)#" maxlength="255" disabled="disabled" class="xar-form-textlong" />
+            </div>
+
+            <p>
+                <xar:if condition="$ptype eq 0">
+                    <xar:mlstring>This User cannot be edited or deleted.</xar:mlstring>
+                <xar:else />
+                    <xar:mlstring>This Group cannot be edited or deleted.</xar:mlstring>
+                </xar:if>
+            </p>
+        <xar:else />
+            <div class="xar-form-input-wrapper">
+                <label for="pname" title="#xarML('Common name')#" class="xar-form-label">
+                    <xar:mlstring>Display Name:</xar:mlstring>
+                </label>
+                <input type="text" name="pname" id="pname" value="#xarVarPrepForDisplay($pname)#" maxlength="255" class="xar-form-textlong" />
+            </div>
+        
+            <xar:if condition="$ptype eq 1 and $haschildren">
                 <div class="xar-form-input-wrapper">
                     <label for="pname" title="#xarML('Common name')#" class="xar-form-label">
                         <xar:mlstring>Display Name:</xar:mlstring>

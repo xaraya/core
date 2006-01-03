@@ -46,21 +46,24 @@ function blocks_userapi_groupgetinfo($args)
                         xar_template as template
               FROM      ' . $blockGroupsTable;
 
+    $bindvars = array();
     if (!empty($gid)) {
-        $query .= ' WHERE xar_id = ' . $gid;
+        $query .= ' WHERE xar_id = ?';
+        $bindvars=array($gid);
     } elseif (!empty($name)) {
-        $query .= ' WHERE xar_name = ' . $dbconn->qstr($name);
+        $query .= ' WHERE xar_name = ?';
+        $bindvars=array($name);
     }
 
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query,$bindvars,ResultSet::FETCHMODE_ASSOC);
     if (!$result) {return;}
 
     // Return if we don't get exactly one result.
-    if ($result->PO_RecordCount() != 1) {
+    if ($result->getRecordCount() != 1) {
         return;
     }
 
-    $group = $result->GetRowAssoc(false);
+    $group = $result->fields;
     $result->Close();
 
     // If the name was used to find the group, then get the GID from the fetched group.
@@ -82,16 +85,16 @@ function blocks_userapi_groupgetinfo($args)
               ON        inst.xar_id = group_inst.xar_instance_id
               LEFT JOIN $blockTypesTable as btypes
               ON        btypes.xar_id = inst.xar_type_id
-              WHERE     bgroups.xar_id = " . $gid . "
+              WHERE     bgroups.xar_id = ? 
               ORDER BY  group_inst.xar_position ASC";
 
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query,array($gid),ResultSet::FETCHMODE_ASSOC);
     if (!$result) {return;}
 
     // Load up list of group's instances
     $instances = array();
     while(!$result->EOF) {
-        $instances[] = $result->GetRowAssoc(false);
+        $instances[] = $result->fields;
         $result->MoveNext();
     }
 
@@ -100,7 +103,6 @@ function blocks_userapi_groupgetinfo($args)
     $group['instances'] = $instances;
 
     xarVarSetCached('Block.Group.Infos', $gid, $group);
-
     return $group;
 }
 

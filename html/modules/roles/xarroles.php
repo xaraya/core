@@ -32,11 +32,11 @@ define('ROLES_STATE_ALL',99);
  */
 class xarRoles
 {
-    var $allgroups = array();
-    var $users = array();
-    var $dbconn;
-    var $rolestable;
-    var $rolememberstable;
+    public $allgroups = array();
+    public $users = array();
+    public $dbconn;
+    public $rolestable;
+    public $rolememberstable;
 
     function xarRoles()
     {
@@ -449,7 +449,7 @@ class xarRole
     var $privilegestable;
     var $acltable;
 
-    var $allprivileges;
+    public $allprivileges;
 
     /**
      * xarRole: constructor for the role object

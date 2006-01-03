@@ -62,40 +62,40 @@ class xarLogger_simple extends xarLogger
 {
     // String holding the filename of the logfile.
     // @var string
-    var $_filename;
+    private $_filename;
 
     // Integer holding the file handle.
     // NULL if the file is not open.
     // @var integer
-    var $_fp = NULL;
+    private $_fp = NULL;
 
     // Integer containing the logfile's permissions mode.
     // Written in octal, the permissions mimic the Unix 'chmod' format.
     // If zero, then no changes are made to the file mode when created.
     // Typical value: 0644
     // @var integer
-    var $_mode = 0;
+    private $_mode = 0;
 
     // Output buffer. Log records are buffered before being written to
     // the log file either explicitly, or on destroying the class.
     // @var array
-    var $_buffer;
+    private $_buffer;
 
     // Maximum file size
     // TODO: allow formats such as '2M', '100k' etc. That conversion could
     // be a core function, as there are many places it could be used.
-    var $_maxFileSize = 1048576; // 1Mb
+    private $_maxFileSize = 1048576; // 1Mb
 
     // End of line marker for writing to the log file.
     // TODO: automatically determine the OS-specific EOL characters.
-    var $EOL = "\r\n";
+    public $EOL = "\r\n";
 
     // Configure the logging object.
     // @param $conf['fileName'] string The filename of the logfile
     // @param $conf['mode'] string File mode of the log file, in Octal (optional)
     // @param $conf['maxFileSize'] integer The maximum size the logfile can be before it is moved or deleted (optional, bytes)
     // @access public
-    function setConfig($conf)
+    function setConfig(&$conf)
     {
         parent::setConfig($conf);
 
@@ -128,7 +128,8 @@ class xarLogger_simple extends xarLogger
         $this->_prepareLogfile();
 
         // Register the destructor.
-        register_shutdown_function(array(&$this, '_xarLogger_simple_destructor'));
+        // Can't do this, it will miss out on the logging of the other subsystems
+        //register_shutdown_function(array(&$this, '_xarLogger_simple_destructor'));
     }
 
     // Destructor. This will write outstanding records to the logfile.
@@ -154,7 +155,7 @@ class xarLogger_simple extends xarLogger
 
         // Add to loglines array
         $this->_buffer .= $this->_formatMessage($message, $level);
-
+        $this->flushBuffer(false);
         return true;
     }
 

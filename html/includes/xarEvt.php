@@ -156,10 +156,8 @@ function xarEvt__notify($modName, $eventName, $value, $modDir = NULL)
 {
     if (!xarEvt__checkEvent($eventName)) return; // throw back
 
-    if (empty($modName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
+
     if (empty($modDir)) {
         $modDir = $modName;
     }
@@ -226,10 +224,7 @@ function xarEvt__notify($modName, $eventName, $value, $modDir = NULL)
  */
 function xarEvt_registerEvent($eventName)
 {
-    if (empty($eventName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'eventName');
-        return;
-    }
+    if (empty($eventName)) throw new EmptyParameterException('eventName');
     
     $GLOBALS['xarEvt_knownEvents'][$eventName] = true;
     return true;
@@ -248,8 +243,7 @@ function xarEvt_registerEvent($eventName)
 function xarEvt__checkEvent($eventName)
 {
     if (!isset($GLOBALS['xarEvt_knownEvents'][$eventName])) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EVENT_NOT_REGISTERED', $eventName);
-        return;
+        throw new EventRegistrationException($eventName);
     }
     return true;
 }
@@ -272,14 +266,13 @@ function xarEvt__GetHandlersList()
         $dbconn =& xarDBGetConn();
         $sitetabpre = xarDBGetSiteTablePrefix();
         $configtable = $sitetabpre.'_config_vars';
-        $query = "SELECT xar_value
-                    FROM $configtable
-                   WHERE xar_name = 'Site.Evt.Handlers'";
-        $result =& $dbconn->Execute($query);
+        $query = "SELECT xar_value FROM $configtable WHERE xar_name = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery(array('Site.Evt.Handlers'), ResultSet::FETCHMODE_ASSOC);
         if (!$result) return;
         $handlers = array();
-        if (!$result->EOF) {
-            list($value) = $result->fields;
+        if ($result->next()) {
+            $value = $result->get('xar_value');
             if (!empty($value)) {
                 $handlers = unserialize($value);
             }
