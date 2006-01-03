@@ -271,7 +271,6 @@ function xarException__ExceptionHandler(Exception $e)
     if(xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         // TODO: phase this out
         $msg = xarErrorRender('template');
-
     } else {
         // Poor mans final fallback for unhandled exceptions (simulate the same rendering as first part of the if
         $data = array('major' => 'MAJOR TBD (Code was: '. $e->getCode().')',
@@ -279,11 +278,21 @@ function xarException__ExceptionHandler(Exception $e)
                       'short' => $e->getMessage(), 'long' => 'LONG msg TBD',
                       'hint'  => 'HINT TBD', 'stack' => '<pre>'. $e->getTraceAsString()."</pre>",
                       'product' => 'Product TBD', 'component' => 'Component TBD');
-        $theme_dir = xarTplGetThemeDir(); $template="systemerror";
-        if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
-            $msg = xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', $data);
+        // If we have em, use em
+        if(function_exists('xarTplGetThemeDir')) {
+            $theme_dir = xarTplGetThemeDir(); $template="systemerror";
+            if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
+                $msg = xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', $data);
+            } else {
+                $msg = xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
+            }
         } else {
-            $msg = xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
+            // no templating yet, pass direct and render as rawhtml
+            $major = XAR_SYSTEM_EXCEPTION; $errorID = get_class($e);
+            $value = $e->getMessage();
+            xarErrorSet($major, $errorID, $value, false);
+            $msg = xarErrorRender('rawhtml');
+            echo $msg;die();
         }
     }
     xarErrorFree();
@@ -345,7 +354,7 @@ function xarError__shutdown_handler()
  * @param value error object
  * @return void
  */
-function xarErrorSet($major, $errorID, $value = NULL)
+function xarErrorSet($major, $errorID, $value = NULL,$throw=true)
 {
     global $ErrorStack;
 
@@ -412,7 +421,7 @@ function xarErrorSet($major, $errorID, $value = NULL)
                 XARLOG_LEVEL_ERROR);
         //xarLogException();
     }
-    throw new Exception($obj->getLong(),$obj->major);
+    if($throw) throw new Exception($obj->getLong(),$obj->major);
 }
 
 /**
@@ -514,12 +523,12 @@ function xarErrorHandled()
  * @param stacktype string one of CORE or ERROR
  * @return string the string representing the raised error
  */
-function xarErrorRender($format,$stacktype = "ERROR")
+function xarErrorRender($format,$stacktype = "ERROR", $data=array())
 {
     assert('$format == "template" || $format == "rawhtml" || $format == "text"; /* Improper format passed to xarErrorRender */');
     $msgs = xarException__formatStack($format,$stacktype);
-    $error = $msgs[0];
 
+    $error = $msgs[0];
     switch ($error->getMajor()) {
         case XAR_SYSTEM_EXCEPTION:
             $template = "systemerror";
