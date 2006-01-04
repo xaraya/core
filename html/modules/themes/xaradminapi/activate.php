@@ -22,12 +22,7 @@ function themes_adminapi_activate($args)
     extract($args);
 
     // Argument check
-    if (!isset($regid)) {
-        $msg = xarML('Empty regid (#(1)).', $regid);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (!isset($regid)) throw new EmptyParameterException('regid');
 
     $themeInfo = xarThemeGetInfo($regid);
     if (!isset($themeInfo) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {

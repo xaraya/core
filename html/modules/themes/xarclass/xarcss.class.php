@@ -191,14 +191,8 @@ class xarCSS
         if ($this->scope == 'theme') {
             // pretty straightforward
             $themestylesheet =  xarTplGetThemeDir() . "/style/" . $this->filename . "." . $this->fileext;
-            if(file_exists($themestylesheet)) {
-                // no problem
-                return $themestylesheet;
-            } else {
-                // problem
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg.$themestylesheet));
-                return;
-            }
+            if(!file_exists($themestylesheet)) throw new FileNotFoundException($themestylesheet);
+            return $themestylesheet;
         } elseif ($this->scope == 'module' || $this->scope == 'block') {            
             
             $original = "modules/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
@@ -221,8 +215,7 @@ class xarCSS
         } else {
             // no scope, somebody overrode defaults and hasn't assign anything sensible? naughty - lets complain
             $msg = xarML("#(1) (no valid scope attribute could be deduced from this xar:style tag)",$this->scope);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-            return;
+            throw new Exception($msg);
         }
     }
 }

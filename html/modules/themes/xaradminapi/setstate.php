@@ -22,15 +22,10 @@ function themes_adminapi_setstate($args)
     extract($args);
 
     // Argument check
-    if ((!isset($regid)) ||
-        (!isset($state))) {
-        $msg = xarML('Empty regid (#(1)) or state (#(2)).', $regid, $state);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (!isset($regid)) throw new EmptyParameterException('regid');
+    if (!isset($state)) throw new EmptyParameterException('state');
 
-// Security Check
+    // Security Check
     if(!xarSecurityCheck('AdminTheme')) return;
 
     // Clear cache to make sure we get newest values

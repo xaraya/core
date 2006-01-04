@@ -159,6 +159,8 @@ class ModuleBaseInfoNotFoundException extends NotFoundExceptions
 { protected $message = 'The base info for module "#(1)" could not be found';}
 class ModuleNotFoundException extends NotFoundExceptions
 { protected $message = 'A module is missing, the module name could not be determined in the current context';}
+class ThemeNotFoundException extends NotFoundExceptions
+{ protected $message = 'A theme is missing, the theme name could not be determined in the current context';}
 class LocaleNotFoundException extends NotFoundExceptions
 { protected $message = 'The locale "#(1)" could not be found or is currently unavailable';}
 class DataNotFoundException extends NotFoundExceptions
@@ -175,7 +177,9 @@ abstract class RegistrationExceptions extends xarExceptions {}
 class VariableRegistrationException extends RegistrationExceptions
 { protected $message = 'Variable "#(1)" is not properly registered';}
 class EventRegistrationException extends RegistrationExceptions
-{ protected $message = 'The even "#(1)" is not properly registered';}
+{ protected $message = 'The event "#(1)" is not properly registered';}
+class TagRegistrationException extends RegistrationExceptions
+{ protected $message = 'The tag "#(1)" is not properly registered';}
 
 class ForbiddenOperationException extends xarExceptions
 { protected $message = 'The operation you are attempting is not allowed in the current circumstances.';}
