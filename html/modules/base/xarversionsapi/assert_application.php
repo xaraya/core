@@ -40,9 +40,7 @@ function base_versionsapi_assert_application($args)
 
     if ($result < 0) {
         // The supplied version is greater than the system version.
-        $msg = xarML('The application version is too low; version #(1) or later is required.', $ver);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'WRONG_VERSION', new SystemException($msg));
-        return false;
+        throw new ConfigurationException($ver,'The application version is too low; version #(1) or later is required.');
     }
 
     return true;

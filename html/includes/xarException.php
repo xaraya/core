@@ -120,7 +120,6 @@ abstract class xarExceptions extends Exception implements IxarExceptions
     }
 }
 
-
 /*
  * Exception class for debugging
  *
@@ -159,6 +158,8 @@ class ModuleBaseInfoNotFoundException extends NotFoundExceptions
 { protected $message = 'The base info for module "#(1)" could not be found';}
 class LocaleNotFoundException extends NotFoundExceptions
 { protected $message = 'The locale "#(1)" could not be found or is currently unavailable';}
+class DataNotFoundException extends NotFoundExceptions
+{ protected $message = 'The data requested could not be found';}
 
 class ModuleNotActiveException extends xarExceptions
 { protected $message = 'The module "#(1)" was called, but it is not active.';}
@@ -347,7 +348,7 @@ function xarError__shutdown_handler()
 /**
  * Allows the caller to raise an error
  *
- * Valid value for $major paramter are: XAR_NO_EXCEPTION, XAR_USER_EXCEPTION, XAR_SYSTEM_EXCEPTION, XAR_SYSTEM_MESSAGE.
+ * Valid value for $major parameter are: XAR_NO_EXCEPTION, XAR_USER_EXCEPTION, XAR_SYSTEM_EXCEPTION, XAR_SYSTEM_MESSAGE.
  *
  * @author Marco Canini <marco@xaraya.com>
  * @access public
