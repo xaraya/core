@@ -180,7 +180,6 @@ class ForbiddenOperationException extends xarExceptions
 // Duplication
 class DuplicateException extends xarExceptions
 { protected $message = 'The #(1) "#(2)" already exists, no duplicates are allowed'; }
-
 class DuplicateTagException extends xarExceptions
 { protected $message = 'The tag definition for the tag: "#(1)" already exists.';}
 
