@@ -261,11 +261,8 @@ class xarMasks
 */
     function winnow($privs1, $privs2)
     {
-        if (!is_array($privs1) || !is_array($privs1)) {
-            $msg = xarML('Parameters to winnow need to be arrays');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException($msg));
-            return;
+        if (!is_array($privs1) || !is_array($privs2)) {
+            throw new BadParameterException(null,'Parameters to winnow need to be arrays');
         }
         if ((($privs1 == array()) || ($privs1 == '')) &&
             (($privs2 == array()) || ($privs2 == ''))) return array();
@@ -386,9 +383,7 @@ class xarMasks
             else {
                 $msg = xarML('Did not find mask #(1) registered for component #(2) in module #(3)', $maskname, $component, $module);
             }
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA',
-                           new DefaultUserException($msg));
-            return;
+            throw new Exception($msg);
         }
 
         // insert any component overrides
@@ -478,8 +473,7 @@ class xarMasks
                 xarResponseRedirect(xarModURL('roles','user','register'));
             } else {
                 $msg = xarML('No privilege for #(1)',$mask->getName());
-                xarErrorSet(XAR_USER_EXCEPTION, 'NO_PRIVILEGES',
-                               new DefaultUserException($msg));
+                throw new Exception($msg);
             }
         }
 
@@ -1270,9 +1264,7 @@ class xarPrivileges extends xarMasks
             if ($selection =='') {
                 $msg = xarML('A query is missing in component #(1) of module #(2)', $component, $module);
 
-                xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA',
-                               new DefaultUserException($msg));
-                return;
+                throw new Exception($msg);
             }
 
             $result1 = $this->dbconn->Execute($selection);
@@ -1817,8 +1809,7 @@ class xarPrivileges extends xarMasks
             }
             if (count($p) != 5) {
                 $msg = xarML('#(1) and #(2) do not have the same instances. #(3) | #(4) | #(5)',$mask->getName(),$this->getName(),implode(',',$p2),implode(',',$p1),$this->present() . "|" . $mask->present());
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException($msg));
+                throw new Exception($msg);
             }
         }
         for ( $i = 4, $p1count = count($p1); $i < $p1count; $i++) {
@@ -2015,9 +2006,7 @@ class xarPrivilege extends xarMask
         if(empty($this->name)) {
             $msg = xarML('You must enter a name.',
                         'privileges');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                        'DUPLICATE_DATA',
-                         new DefaultUserException($msg));
+            throw new DuplicateException(null,$msg);
             xarSessionSetVar('errormsg', _MODARGSERROR);
             return false;
         }
@@ -2032,15 +2021,8 @@ class xarPrivilege extends xarMask
 
         list($count) = $result->fields;
 
-        if ($count == 1) {
-            $msg = xarML('This entry already exists.',
-                        'privileges');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                        'DUPLICATE_DATA',
-                         new DefaultUserException($msg));
-            xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
-            return;
-        }
+        if ($count == 1) throw new DuplicateException(array('privilege',$this->name));
+
 
 // create the insert query
         $query = "INSERT INTO $this->privilegestable

@@ -23,9 +23,7 @@ function privileges_init()
 {
 /*    if(!xarModIsAvailable('roles')) {
         $msg=xarML('The roles module should be activated first');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,'MODULE_DEPENDENCY',
-                        new SystemException($msg));
-        return;
+        throw new Exception($msg);
     }
 */
  // Get database information
