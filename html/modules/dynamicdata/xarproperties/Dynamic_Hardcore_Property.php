@@ -42,15 +42,6 @@ class Dynamic_Hardcore_Property extends Dynamic_Property
             $id = $name;
         }
 
-/*
-        $js_stuff = '<link rel="stylesheet" type="text/css" href="hardcore/webeditor/webeditor.css" />'
-                    .'<script src="hardcore/webeditor/webeditor.js"></script>';
-
-        $cmd    = "<script>HardCoreWebEditorToolbar();</script>";
-        $cmd   .= "<script>content_editor = new HardCoreWebEditor('/hardcore/webeditor/', 'html', 'content', '" . (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . "', '" . (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . "');</script>";
-        $cmd   .= "<script>HardCoreWebEditorDOMInspector();</script>";
-*/
-
         $data['name']     = $name;
         $data['id']       = $id;
         $data['value']    = isset($value) ? $value : $this->value;
