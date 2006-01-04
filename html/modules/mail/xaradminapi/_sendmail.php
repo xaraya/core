@@ -46,7 +46,6 @@ function mail_adminapi__sendmail($args)
     extract($args);
 
     // Check for required arguments
-    $invalid = array();
     if (!isset($info) && !isset($recipients)) throw new EmptyParameterException('info or recipients');
     if (!isset($subject)) throw new EmptyParameterException('subject');
     if (!isset($message)) throw new EmptyParameterException('message');

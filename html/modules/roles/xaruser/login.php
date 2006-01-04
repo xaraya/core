@@ -24,6 +24,8 @@
  * @return  true if status is 3
  * @raise   exceptions raised if status is 0, 1, or 2
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @todo  Move this out of here
+ * @todo  Get rid of the globals including COOKIE
  */
 function roles_user_login()
 {
@@ -31,9 +33,8 @@ function roles_user_login()
 
     if (!$_COOKIE) {
         xarErrorFree();
-        $msg = xarML('You must enable cookies on your browser to run Xaraya. Check the browser configuration options to make sure cookies are enabled, click on  the "Back" button of the browser and try again.');
-        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-        return;
+        $msg = 'You must enable cookies on your browser to run Xaraya. Check the browser configuration options to make sure cookies are enabled, click on  the "Back" button of the browser and try again.';
+        throw new ConfigurationException(null,$msg);
     }
 
     $unlockTime  = (int) xarSessionGetVar('roles.login.lockedout');
@@ -41,22 +42,17 @@ function roles_user_login()
     $lockouttries =xarModGetVar('roles','lockouttries') ? xarModGetVar('roles','lockouttries') : 3;
 
     if ((time() < $unlockTime) && (xarModGetVar('roles','uselockout')==true)) {
-        $msg = xarML('Your account has been locked for #(1) minutes.', $lockouttime);
-        xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
-        return;
+        throw new ForbiddenOperationException($lockouttime,'Your account has been locked for #(1) minutes.');
     }
 
     if (!xarVarFetch('uname','str:1:100',$uname)) {
+        // Why like this? why not just return?
         xarErrorFree();
-        $msg = xarML('You must provide a username.');
-        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-        return;
+        throw new EmptyParameterException(null,'You must provide a valid username.');
     }
     if (!xarVarFetch('pass','str:1:100',$pass)) {
         xarErrorFree();
-        $msg = xarML('You must provide a password.');
-        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-        return;
+        throw new EmptyParameterException(null,'You must provide a valid password.');
     }
     if (!xarVarFetch('rememberme','checkbox',$rememberme,false,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('redirecturl','str:1:100',$redirecturl,'index.php',XARVAR_NOT_REQUIRED)) return;
@@ -71,7 +67,7 @@ function roles_user_login()
     foreach($xarUser_authenticationModules as $authModName) {
 
        switch(strtolower($authModName)) {
-       // Ooof, didn't realize we were doing this.  We really need a hook here.
+       // TODO: Ooof, didn't realize we were doing this.  We really need a hook here.
             case 'authldap':
 
                 // The authldap module allows the admin to allow an
@@ -119,14 +115,11 @@ function roles_user_login()
                     // Make sure we haven't already found authldap module
                     if (empty($user) && ($extAuthentication == false))
                     {
-                        $msg = xarML('Problem logging in: Invalid username or password.');
-                        xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
-                        return;
+                        $msg = 'Problem logging in: Invalid username or password.';
+                        throw new BadParameterException(null,$msg);
                     } elseif (empty($user)) {
                         // Check if user has been deleted.
-                        $user = xarModAPIFunc('roles',
-                                              'user',
-                                              'getdeleteduser',
+                        $user = xarModAPIFunc('roles','user','getdeleteduser',
                                               array('uname' => $uname));
                         if (xarCurrentErrorType() == XAR_USER_EXCEPTION)
                         {
@@ -166,46 +159,32 @@ function roles_user_login()
     switch(strtolower($state)) {
 
         case ROLES_STATE_DELETED:
-
             // User is deleted by all means.  Return a message that says the same.
-            $msg = xarML('Your account has been terminated by your request or at the adminstrator\'s discression.');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
-
+            throw new ForbiddenOperationException(null,'Your account has been terminated by your request or at the adminstrator\'s discression.');
             break;
-
         case ROLES_STATE_INACTIVE:
-
             // User is inactive.  Return message stating.
-            $msg = xarML('Your account has been marked as inactive.  Contact the adminstrator with further questions.');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
-
+            throw new ForbiddenOperationException(null,'Your account has been marked as inactive.  Contact the adminstrator with further questions.');
             break;
-
         case ROLES_STATE_NOTVALIDATED:
-
             // User has not validated.
             xarResponseRedirect(xarModURL('roles', 'user', 'getvalidation'));
-
             break;
-
         case ROLES_STATE_ACTIVE:
         default:
-
             // User is active.
-
-                // TODO: remove this when everybody has moved to 1.0
-                if(!xarModGetVar('roles', 'lockdata')) {
-                    $lockdata = array('roles' => array( array('uid' => 4,
-                                                              'name' => 'Administrators',
-                                                              'notify' => TRUE)
-                                                       ),
-                                      'message' => '',
-                                      'locked' => 0,
-                                      'notifymsg' => '');
-                    xarModSetVar('roles', 'lockdata', serialize($lockdata));
-                }
+            
+            // TODO: remove this when everybody has moved to 1.0
+            if(!xarModGetVar('roles', 'lockdata')) {
+                $lockdata = array('roles' => array( array('uid' => 4,
+                                                          'name' => 'Administrators',
+                                                          'notify' => TRUE)
+                                                    ),
+                                  'message' => '',
+                                  'locked' => 0,
+                                  'notifymsg' => '');
+                xarModSetVar('roles', 'lockdata', serialize($lockdata));
+            }
 
             // Check if the site is locked and this user is allowed in
             $lockvars = unserialize(xarModGetVar('roles','lockdata'));
@@ -229,10 +208,7 @@ function roles_user_login()
                 }
 
                 if (!$letthru) {
-                    xarErrorSet(XAR_SYSTEM_MESSAGE,
-                    'SITE_LOCKED',
-                     new SystemMessage($lockvars['message']));
-                     return;
+                    throw new ForbiddenOperationException(null,'The site is currently locked');
                 }
             }
 
@@ -250,15 +226,11 @@ function roles_user_login()
                     // set the time for fifteen minutes from now
                     xarSessionSetVar('roles.login.lockedout', time() + (60 * $lockouttime));
                     xarSessionSetVar('roles.login.attempts', 0);
-                    $msg = xarML('Problem logging in: Invalid username or password.  Your account has been locked for #(1) minutes.', $lockouttime);
-                    xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
-                    return;
+                    throw new ForbiddenOperationException($lockouttime,'Problem logging in: Invalid username or password.  Your account has been locked for #(1) minutes.');
                 } else{
                     $newattempts = $attempts + 1;
                     xarSessionSetVar('roles.login.attempts', $newattempts);
-                    $msg = xarML('Problem logging in: Invalid username or password.  You have tried to log in #(1) times.', $newattempts);
-                    xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
-                    return;
+                    throw new ForbiddenOperationException($newattempts,'Problem logging in: Invalid username or password.  You have tried to log in #(1) times.');
                 }
             }
             if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'userhome', 'state' => 1))) {
@@ -362,12 +334,8 @@ function roles_user_login()
             return true;
             break;
         case ROLES_STATE_PENDING:
-
             // User is pending activation
-        $msg = xarML('Your account has not yet been activated by the site administrator');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
-
+            throw new ForbiddenOperationException(null,'Your account has not yet been activated by the site administrator');
             break;
     }
 

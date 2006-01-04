@@ -17,13 +17,7 @@
 function roles_adminapi_activateduv($args)
 {
     extract($args);
-    if (!isset($name)) {
-        $msg = xarML('Wrong arguments to roles_adminapi_registerduv.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
-    }
+    if (!isset($name)) throw new EmptyParameterException('name');
 
     $duvs = xarModGetVar('roles','duvs');
     if (isset($duvs)) $duvs = unserialize($duvs);

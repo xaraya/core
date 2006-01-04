@@ -71,9 +71,7 @@ function roles_user_getvalidation()
 
             // Check Validation codes to ensure a match.
             if ($valcode != $status['valcode']) {
-                $msg = xarML('The validation codes do not match');
-                xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                return;
+                throw new VariableValidationException(array('valcode','n/a','must match'));
             }
 
             $pending = xarModGetVar('roles', 'explicitapproval');
@@ -94,7 +92,7 @@ function roles_user_getvalidation()
                                       'name'     => $status["name"],
                                       'email'    => $status["email"]))) {
                     $msg = xarML('Problem sending pending email');
-                    xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                    throw new Exception($msg);
                 }*/
             } else {
                 // Update the user status table to reflect a validated account.
@@ -110,8 +108,7 @@ function roles_user_getvalidation()
                                     'senduseremail',
                                     array('uid' => array($status['uid'] => '1'),
                                           'mailtype' => 'welcome'))) {
-                        $msg = xarML('Problem sending welcome email');
-                        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                        throw new Exception('Problem sending welcome email');
                     }
                 }
 
@@ -159,9 +156,8 @@ function roles_user_getvalidation()
                                       'mailtype' => 'confirmation',
                                       'ip' => xarML('Cannot resend IP'),
                                       'pass' => xarML('Can Not Resend Password')))) {
-                    $msg = xarML('Problem resending confirmation email');
-                    xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                }
+                throw new Exception('Problem resending confirmation email');
+            }
 
             $data = xarTplModule('roles','user', 'getvalidation');
 

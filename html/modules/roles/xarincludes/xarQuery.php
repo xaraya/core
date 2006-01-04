@@ -58,9 +58,7 @@ class xarQuery
     {
         if (in_array($type,array("SELECT","INSERT","UPDATE","DELETE"))) $this->type = $type;
         else {
-            $msg = xarML('The operation #(1) is not supported', $type);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
-            return;
+            throw new ForbiddenOperationException($type,'This operation is not supported yet. "#(1)"');
         }
 
         $this->key = mktime();
@@ -127,9 +125,7 @@ class xarQuery
                     for ($i=0;$i<$numfields;$i++) {
                         $o = $result->FetchField($i);
                         if (!isset($o) || !isset($o->name)) {
-                            $msg = xarML('SELECT with total of columns different from the number retrieved.');
-                            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
-                            return;
+                            throw new BadParameterException(null,'SELECT with total of columns different from the number retrieved.');
                         }
                         $this->fields[$o->name]['name'] = strtolower($o->name);
                     }
@@ -206,9 +202,9 @@ class xarQuery
             $table = func_get_arg(0);
             if (!is_array($table)) {
                 if (!is_string($table)) {
-                    $msg = xarML('The table #(1) you are trying to add needs to be a string or an array.', $table);
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
-                    return;
+                    $msg = 'The table #(1) you are trying to add needs to be a string or an array.';
+                    $vars= $table;
+                    throw new VariableValidationException(array('table',$table,'must be string or array'));
                 }
                 else {
                     $newtable = explode(' ',$table);
@@ -224,11 +220,8 @@ class xarQuery
                 $argsarray = $table;
             }
         }
-        else {
-            $msg = xarML('This function can only take 1 or 2 parameters');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemMessage($msg));
-            return;
-        }
+        else throw new BadParameterException(null,'This function can only take 1 or 2 parameters');
+
         $notdone = true;
         $limit = count($this->tables);
         for ($i=0;$i<$limit;$i++) {
@@ -253,11 +246,8 @@ class xarQuery
         elseif ($numargs == 1) {
             $field = func_get_arg(0);
             if (!is_array($field)) {
-                if (!is_string($field)) {
-                    $msg = xarML('The field #(1) you are trying to add needs to be a string or an array.', $field);
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
-                    return;
-                }
+                if (!is_string($field)) 
+                    throw new BadParameterException($field,'The field #(1) you are trying to add needs to be a string or an array.');
                 else {
                     if ($this->type == 'SELECT') {
                         if (preg_match("/(.*) as (.*)/i", $field, $match)) {
@@ -276,11 +266,8 @@ class xarQuery
                 $argsarray = $field;
             }
         }
-        else {
-            $msg = xarML('This function can only take 1 or 2 parameters');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemMessage($msg));
-            return;
-        }
+        else throw new BadParameterException(null,'This function can only take 1 or 2 parameters');
+
         $this->fields[$argsarray['name']] = $argsarray;
     }
 
@@ -761,8 +748,7 @@ class xarQuery
             break;
         case "UPDATE" :
             if($this->fields == array('*')) {
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage(xarML('Your query has no fields.')));
-                return;
+                throw new BadParameterException(null,'Your query has no fields.');
             }
             foreach ($this->fields as $field) {
                 if (is_array($field)) {

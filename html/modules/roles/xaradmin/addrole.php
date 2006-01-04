@@ -40,10 +40,9 @@ function roles_admin_addrole()
     // checks specific only to users
     if ($ptype == 0) {
         // check for valid username
+        // TODO: do this in the xarVarFetch above, no need to do this here.
         if ((!$puname) || !(!preg_match("/[[:space:]]/", $puname))) {
-            $msg = xarML('There is an error in the username');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
+            throw new BadParameterException($puname,'The username "#(1)" contains spacing characters, this is not allowed');
         }
 
         // check for duplicate username
@@ -53,49 +52,25 @@ function roles_admin_addrole()
             array('uname' => $puname));
 
         if ($user != false) {
-            $msg = xarML('That username is already taken.');
-            xarErrorSet(XAR_USER_EXCEPTION, 'DUPLICATE_DATA', new DefaultUserException($msg));
-            return;
+            throw new DuplicateException(array('user',$puname));
         }
 
-        if (strrpos($puname, ' ') > 0) {
-            $msg = xarML('There is a space in the username');
-            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-            return;
-        }
         // check for empty email address
         if ($pemail == '') {
-            $msg = xarML('Please enter an email address');
-            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-            return;
+            throw new BadParameterException(null,'Email address should have a value');
         }
         // check for duplicate email address
         if(xarModGetVar('roles','uniqueemail')) {
-            $user = xarModAPIFunc('roles',
-                'user',
-                'get',
-                array('email' => $pemail));
-
-            if ($user != false) {
-                $msg = xarML('That email address is already registered.');
-                xarErrorSet(XAR_USER_EXCEPTION, 'DUPLICATE_DATA', new DefaultUserException($msg));
-                return;
-            }
+            $user = xarModAPIFunc('roles','user', 'get', array('email' => $pemail));
+            if ($user != false) throw new DuplicateException(array('email',$pemail));
         }
         // TODO: Replace with DD property type check.
         // check for valid email address
         $res = preg_match('/.*@.*/', $pemail);
-
-        if ($res == false) {
-            $msg = xarML('There is an error in the email address');
-            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-            return;
-        }
+        if ($res == false) throw new BadParameterException($pemail,'The email address "#(1)" is invalid');
 
         if (strcmp($ppass1, $ppass2) != 0) {
-            $msg = xarML('The two password entries are not the same');
-            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-            return;
+            throw new BadParameterException(null,'The two entered passwords are not the same');
         }
     }
     // assemble the args into an array for the role constructor

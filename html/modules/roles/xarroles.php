@@ -300,9 +300,9 @@ class xarRoles
         // create the entry
         list($uid) = $result->fields;
         $query = "INSERT INTO $this->rolememberstable
-                VALUES (?,0)";
+                VALUES (?,?)";
         // Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query, array($uid))) return;
+        if (!$this->dbconn->Execute($query, array($uid,0))) return;
         // done
         return true;
     }
@@ -326,27 +326,18 @@ class xarRoles
     {
         // TODO: validate the email address
         if (empty($name) && empty($uname) || empty($email)) {
-            $msg = xarML('You must enter a user name and a valid email address.',
-                'roles');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                'DUPLICATE_DATA',
-                new DefaultUserException($msg));
+            $msg = 'You must enter a user name and a valid email address.';
             xarSessionSetVar('errormsg', _MODARGSERROR);
-            return false;
+            throw new EmptyParameterException(null,$msg);
         }
         // Confirm that this group or user does not already exist
         $q = new xarQuery('SELECT',$this->rolestable);
         $q->eq('xar_uname',$uname);
 
         if (!$q->run()) return;
-        if ($q->getrows() == 1) {
-            $msg = xarML('This entry already exists.',
-                'roles');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                'DUPLICATE_DATA',
-                new DefaultUserException($msg));
+        if ($q->getrows() > 0) {
             xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
-            return false;
+            throw new DuplicateException(array('user',$uname));
         }
         // create an ID for the user
         $nextId = $this->dbconn->genID($this->rolestable);
@@ -394,21 +385,17 @@ class xarRoles
         if (!$q->run()) return;
 
         $row = $q->row();
-        if ($row['COUNT(*)'] == 1) {
-            $msg = xarML('This entry already exists.',
-                'roles');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                'DUPLICATE_DATA',
-                new DefaultUserException($msg));
+        if ($row['COUNT(*)'] > 0) {
+            throw new DuplicateException(array('group',$name));
             return false;
         }
 
         $createdate = mktime();
         $query = "INSERT INTO $this->rolestable
                     (xar_uid, xar_name, xar_type, xar_uname,xar_date_reg)
-                  VALUES (?,?,1,?,?)";
+                  VALUES (?,?,?,?,?)";
         $bindvars = array($this->dbconn->genID($this->rolestable),
-                          $name, $uname, $createdate);
+                          $name, 1, $uname, $createdate);
         if (!$this->dbconn->Execute($query,$bindvars)) return;
         // done
         return true;
@@ -531,23 +518,13 @@ class xarRole
     function add()
     {
         if (empty($this->name)) {
-            $msg = xarML('You must enter a name.',
-                'roles');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                'DUPLICATE_DATA',
-                new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _MODARGSERROR);
-            return false;
+            throw new EmptyParameterException('You must enter a name.');
         }
         // TODO: validate the email address
         if ((empty($this->type)) && (empty($this->uname) || empty($this->email))) {
-            $msg = xarML('You must enter a user name and a valid email address.',
-                'roles');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                'DUPLICATE_DATA',
-                new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _MODARGSERROR);
-            return false;
+            throw new EmptyParameterException('You must enter a user name and a valid email address.');
         }
         // Confirm that this group or user does not already exist
         $q = new xarQuery('SELECT',$this->rolestable);
@@ -559,14 +536,9 @@ class xarRole
 
         if (!$q->run()) return;
 
-        if ($q->getrows() == 1) {
-            $msg = xarML('This entry already exists.',
-                'roles');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                'DUPLICATE_DATA',
-                new DefaultUserException($msg));
+        if ($q->getrows() > 0) {
             xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
-            return false;
+            throw new DuplicateException(array('role',($this->type==1)?$this->name:$this->uname));
         }
 
         $nextId = $this->dbconn->genID($this->rolestable);
@@ -992,10 +964,10 @@ class xarRole
                         r.xar_duvs
                         FROM $this->rolestable r, $this->rolememberstable rm
                         WHERE r.xar_uid = rm.xar_uid
-                        AND r.xar_type = 0
-                        AND r.xar_state != " . ROLES_STATE_DELETED .
-                        " AND rm.xar_parentid = ?";
-            $bindvars = array($this->uid);
+                        AND r.xar_type = ?
+                        AND r.xar_state != ? 
+                        AND rm.xar_parentid = ?";
+            $bindvars = array(0,ROLES_STATE_DELETED,$this->uid);
         } else {
             $query = "SELECT r.xar_uid,
                         r.xar_name,
@@ -1010,9 +982,9 @@ class xarRole
                         r.xar_duvs
                         FROM $this->rolestable r, $this->rolememberstable rm
                         WHERE r.xar_uid = rm.xar_uid
-                        AND r.xar_type = 0 AND r.xar_state = ?
+                        AND r.xar_type = ? AND r.xar_state = ?
                         AND rm.xar_parentid = ?";
-            $bindvars = array($state, $this->uid);
+            $bindvars = array(0, $state, $this->uid);
         }
         if (isset($selection)) $query .= $selection;
         $query .= " ORDER BY xar_" . $order;

@@ -18,13 +18,9 @@
 function roles_adminapi_setduv($args)
 {
     extract($args);
-    if (!isset($name) || !isset($value)) {
-        $msg = xarML('Wrong arguments to roles_adminapi_setduv.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
-    }
+    if (!isset($name))  throw new EmptyParameterException('name');
+    if (!isset($value)) throw new EmptyParameterException('value'); 
+    
     $uid = isset($uid) ? $uid : xarSessionGetVar('uid');
 
     $dbconn =& xarDBGetConn();

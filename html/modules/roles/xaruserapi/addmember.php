@@ -20,23 +20,12 @@ function roles_userapi_addmember($args)
 {
     extract($args);
 
-    if((!isset($gid)) || (!isset($uid))) {
-        $msg = xarML('groups_userapi_addmember');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
-    }
+    if (!isset($gid)) throw new EmptyParameterException('gid');
+    if (!isset($uid)) throw new EmptyParameterException('uid');
 
     $roles = new xarRoles();
     $group = $roles->getRole($gid);
-    if($group->isUser()) {
-        $msg = xarML('Did not find a group');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
-    }
+    if($group->isUser()) throw new IDNotFoundException($gid);
 
     $user = $roles->getRole($uid);
 

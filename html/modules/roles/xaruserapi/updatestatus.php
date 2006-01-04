@@ -20,13 +20,8 @@ function roles_userapi_updatestatus($args)
 {
     extract($args);
 
-    if ((!isset($uname)) ||
-        (!isset($state))) {
-        $msg = xarML('Invalid Parameter Count');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                        new SystemException($msg));
-        return;
-    }
+    if (!isset($uname)) throw new EmptyParameterException('uname');
+    if (!isset($state)) throw new EmptyParameterException('state');
 
     if (!xarSecurityCheck('ViewRoles')) return;
 
@@ -38,9 +33,9 @@ function roles_userapi_updatestatus($args)
 
     // Update the status
     $query = "UPDATE $rolesTable
-              SET xar_valcode = '', xar_state = ?
+              SET xar_valcode = ?, xar_state = ?
               WHERE xar_uname = ?";
-    $bindvars = array($state,$uname);
+    $bindvars = array('',$state,$uname);
 
     $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;

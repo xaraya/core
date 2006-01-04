@@ -51,9 +51,7 @@ function roles_user_lostpassword()
             if (!xarSecConfirmAuthKey()) return;
 
             if ((empty($uname)) && (empty($email))) {
-                $msg = xarML('You must enter your username or your email to proceed');
-                xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                return;
+                throw new EmptyParameterException('username or email');
             }
 
             // check for user and grab uid if exists
@@ -64,19 +62,13 @@ function roles_user_lostpassword()
                                          'email' => $email));
 
             if (empty($user)) {
-                $msg = xarML('That email address or username is not registered');
-                xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                return;
+                throw new BadParameterException(array($uname,$email),'The email addres "#(1)" or the username "#(2)" was not found.');
             }
             // Make new password
-            $user['pass'] = xarModAPIFunc('roles',
-                                  'user',
-                                  'makepass');
+            $user['pass'] = xarModAPIFunc('roles','user','makepass');
 
             if (empty($user['pass'])) {
-                $msg = xarML('Problem generating new password');
-                xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                return;
+                throw new BadParameterException(null,'Problem generating new password, it was empty');
             }
 
             // We need to tell some hooks that we are coming from the lost password screen
@@ -87,8 +79,7 @@ function roles_user_lostpassword()
             //Update user password
             // check for user and grab uid if exists
             if (!xarModAPIFunc('roles','admin','update',$user)) {
-                $msg = xarML('Problem updating the user information');
-                xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                throw new BadParameterException(null,'Problems updating the user information');
             }
               // Send Reminder Email
             if (!xarModAPIFunc('roles', 'admin','senduseremail', array('uid' => array($user['uid'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) return;
