@@ -556,32 +556,22 @@ function installer_admin_create_administrator()
 
     if ($pass != $pass1) {
         $msg = xarML('The passwords do not match');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        throw new Exception($msg);
     }
 
     if (empty($userName)) {
         $msg = xarML('You must provide a preferred username to continue.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-
+        throw new Exception($msg);
+    }
     // check for spaces in the username
-    } elseif (preg_match("/[[:space:]]/",$userName)) {
+    if (preg_match("/[[:space:]]/",$userName)) {
         $msg = xarML('There is a space in the username.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-
+        throw new Exception($msg);
+    }
     // check the length of the username
-    } elseif (strlen($userName) > 255) {
+    if (strlen($userName) > 255) {
         $msg = xarML('Your username is too long.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-
-    // check for spaces in the username (again ?)
-    } elseif (strrpos($userName,' ') > 0) {
-        $msg = xarML('There is a space in your username.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        throw new Exception($msg);
     }
 
     // assemble the args into an array for the role constructor
@@ -638,16 +628,12 @@ function installer_admin_create_administrator()
     $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
               WHERE     xar_name = ?";
-
-    $result =& $dbconn->Execute($query,array('left'));
-    if (!$result) return;
+    $dbconn->Execute($query,array('left'));
 
     // Freak if we don't get one and only one result
     if ($result->getRecordCount() != 1) {
         $msg = xarML("Group 'left' not found.");
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
+        throw new Exception($msg);
     }
 
     list ($leftBlockGroup) = $result->fields;
@@ -741,9 +727,7 @@ function installer_admin_choose_configuration()
 
     if (count($awol) != 0) {
         $msg = xarML("Xaraya cannot install bcause the following core modules are missing or corrupted: #(1)",implode(', ', $awol));
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
-                       new SystemException($msg));
-        return;
+        throw new Exception($msg);
     }
 
     $basedir = realpath('modules/installer/xarconfigurations');
@@ -806,8 +790,7 @@ function installer_admin_confirm_configuration()
     if(!xarVarFetch('configuration', 'isset', $configuration, NULL,  XARVAR_DONT_SET))  return;
     if(!isset($configuration)) {
         $msg = xarML("Please go back and select one of the available configurations.");
-        xarErrorSet(XAR_USER_EXCEPTION, 'Please select a configuration', $msg);
-        return;
+        throw new Exception($msg);
     }
 
     //I am not sure if these should these break
@@ -868,12 +851,18 @@ function installer_admin_confirm_configuration()
         *********************************************************************/
         $dbconn =& xarDBGetConn();
         $sitePrefix = xarDBGetSiteTablePrefix();
-        $query = "DELETE FROM " . $sitePrefix . '_privileges';
-        if (!$dbconn->Execute($query)) return;
-        $query = "DELETE FROM " . $sitePrefix . '_privmembers';
-        if (!$dbconn->Execute($query)) return;
-        $query = "DELETE FROM " . $sitePrefix . '_security_acl';
-        if (!$dbconn->Execute($query)) return;
+        try {
+            $dbconn->begin();
+            $query = "DELETE FROM " . $sitePrefix . '_privileges';
+            $dbconn->Execute($query);
+            $query = "DELETE FROM " . $sitePrefix . '_privmembers';
+            $dbconn->Execute($query);
+            $query = "DELETE FROM " . $sitePrefix . '_security_acl';
+            $dbconn->Execute($query);
+        } catch(SQLException $e) {
+            $dbconn->rollback();
+            throw $e;
+        }
 
         /*********************************************************************
         * Enter some default privileges
@@ -916,31 +905,30 @@ function installer_admin_confirm_configuration()
         xarAssignPrivilege('GeneralLock','Everybody');
         xarAssignPrivilege('GeneralLock','Administrators');
         xarAssignPrivilege('GeneralLock','Users');
-
+        
         // disable caching of module state in xarMod.php
-            $GLOBALS['xarMod_noCacheState'] = true;
-            xarModAPIFunc('modules','admin','regenerate');
+        $GLOBALS['xarMod_noCacheState'] = true;
+        xarModAPIFunc('modules','admin','regenerate');
 
         // load the modules from the configuration
-            foreach ($options2 as $module) {
-                if(in_array($module['item'],$chosen)) {
-                   $dependents = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$module['item']));
-                   if (count($dependents['unsatisfiable']) > 0) {
-                        $msg = xarML("Cannot load because of unsatisfied dependencies. One or more of the following modules is missing: ");
-                        foreach ($dependents['unsatisfiable'] as $dependent) {
-                            $modname = isset($dependent['name']) ? $dependent['name'] : "Unknown";
-                            $modid = isset($dependent['id']) ? $dependent['id'] : $dependent;
-                            $msg .= $modname . " (ID: " . $modid . "), ";
-                        }
-                        $msg = trim($msg,', ') . ". " . xarML("Please check the listings at www.xaraya.com to identify any modules flagged as 'Unknown'.");
-                        $msg .= " " . xarML('Add the missing module(s) to the modules directory and run the installer again.');
-                        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
-                        return;
-                   }
-                   xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$module['item']));
-//                    xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
+        foreach ($options2 as $module) {
+            if(in_array($module['item'],$chosen)) {
+                $dependents = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$module['item']));
+                if (count($dependents['unsatisfiable']) > 0) {
+                    $msg = xarML("Cannot load because of unsatisfied dependencies. One or more of the following modules is missing: ");
+                    foreach ($dependents['unsatisfiable'] as $dependent) {
+                        $modname = isset($dependent['name']) ? $dependent['name'] : "Unknown";
+                        $modid = isset($dependent['id']) ? $dependent['id'] : $dependent;
+                        $msg .= $modname . " (ID: " . $modid . "), ";
+                    }
+                    $msg = trim($msg,', ') . ". " . xarML("Please check the listings at www.xaraya.com to identify any modules flagged as 'Unknown'.");
+                    $msg .= " " . xarML('Add the missing module(s) to the modules directory and run the installer again.');
+                    throw new Exception($msg);
                 }
+                xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$module['item']));
+                // xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
             }
+        }
         $func = "installer_" . basename(strval($configuration),'.conf.php') . "_configuration_load";
         $func($chosen);
         $content['marker'] = '[x]';                                           // create the user menu
@@ -964,9 +952,7 @@ function installer_admin_confirm_configuration()
         // Freak if we don't get one and only one result
         if ($result->getRecordCount() != 1) {
             $msg = xarML("Group 'left' not found.");
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return;
+            throw new Exception($msg);
         }
 
         list ($leftBlockGroup) = $result->fields;
@@ -1013,9 +999,7 @@ function installer_admin_cleanup()
     $pass = xarModGetVar('roles','adminpass');
     if (!xarUserLogIn($uname, $pass, 0)) {
         $msg = xarML('Cannot log in the default administrator. Check your setup.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
+        throw new Exception($msg);
     }
 
     $remove = xarModDelVar('roles','adminpass');
@@ -1040,9 +1024,7 @@ function installer_admin_cleanup()
     // Freak if we don't get one and only one result
     if ($result->getRecordCount() != 1) {
         $msg = xarML("Group 'right' not found.");
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
+        throw new Exception($msg);
     }
 
     list ($rightBlockGroup) = $result->fields;
@@ -1077,9 +1059,7 @@ function installer_admin_cleanup()
     // Freak if we don't get one and only one result
     if ($result->getRecordCount() != 1) {
         $msg = xarML("Group 'header' not found.");
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
+        throw new Exception($msg);
     }
 
     list ($headerBlockGroup) = $result->fields;

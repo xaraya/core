@@ -70,23 +70,14 @@ function installer_adminapi_initialise($args)
 
 
     if (empty($directory) || empty($initfunc)) {
-        $msg = xarML('Empty modName (#(1)) or name (#(2)).', $directory, $initFunc);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+        throw new EmptyParameterException('directory or initfunc');
     }
 
     $osDirectory = xarVarPrepForOS($directory);
     $modInitFile = 'modules/'. $osDirectory. '/xarinit.php';
 
-    if (file_exists($modInitFile)) {
-        include_once ($modInitFile);
-    } else {
-        // modules/modulename/xarinit.php not found?!
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
-                       new SystemException(__FILE__."(".__LINE__."): Module file $modInitFile doesn't exist."));
-                       return;
-    }
+    if(!file_exist($modInitFile)) throw new FileNotFoundException($modInitFile);
+    include_once ($modInitFile);
 
     // Run the function, check for existence
 
@@ -99,15 +90,11 @@ function installer_adminapi_initialise($args)
 
         if ($res == false) {
             // exception
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException(__FILE__.'('.__LINE__.'): core initialization failed!'));
-                           return;
+            throw new Exception('Core initialization failed!');
         }
     } else {
         // modulename_init() not found?!
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-                       new SystemException(__FILE__."(".__LINE__."): Module API function $initFunc doesn't exist."));
-                       return;
+        throw new FunctionNotFoundException($initFunc);
     }
 
     return true;
@@ -138,25 +125,11 @@ function installer_adminapi_createdb($args)
                        'databaseName' => $dbName, 
                        'systemTablePrefix' => $dbPrefix,
                        'siteTablePrefix' => $dbPrefix);
-    try {
-        $dbconn =& xarDBNewConn($createArgs);
-    } catch (Exception $e) {
-        die($e->getMessage());
-    }
-    if (!$dbconn) {
-        $dbpass = '';
-        die("Failed to connect to $dbType://$dbUname:$dbPass@$dbHost/, error message: " . $dbconn->ErrorMsg());
-    }
-
-    $query = xarDBCreateDatabase($dbName,$dbType);
-    try {
-        $result =& $dbconn->Execute($query);
-    } catch (Exception $e) {
-        die($e->getMessage());
-    }
-    if (!$result) return;
-
-    return true;
+   $dbconn =& xarDBNewConn($createArgs);
+   
+   $query = xarDBCreateDatabase($dbName,$dbType);
+   $result =& $dbconn->Execute($query);
+   return true;
 }
 
 
@@ -175,17 +148,14 @@ function installer_adminapi_CheckForField($args)
 
     // Argument check - make sure that all required arguments are present,
     // if not then set an appropriate error message and return
-    if ((!isset($field_name)) ||
-        (!isset($table_name))) {
-        $msg = xarML('Invalid Parameter Count');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+    if ((!isset($field_name)) || (!isset($table_name))) {
+        throw new EmptyParameterException('field_name or table_name');
     }
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
+    // CHECKME: Is this portable? In any case, use the meta classes
     $query = "desc $table_name";
     $result =& $dbconn->Execute($query);
 
@@ -213,16 +183,13 @@ function installer_adminapi_GetFieldType($args)
 
     // Argument check - make sure that all required arguments are present,
     // if not then set an appropriate error message and return
-    if ((!isset($field_name)) ||
-        (!isset($table_name))) {
-        $msg = xarML('Invalid Parameter Count');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+    if ((!isset($field_name)) || (!isset($table_name))) {
+        throw new EmptyParameterException('field_name or table_name');
     }
 
     $dbconn =& xarDBGetConn();
 
+    // CHECKME: Is this portable? In any case, use the meta classes
     $query = "desc $table_name";
     $result =& $dbconn->Execute($query);
 
@@ -248,12 +215,7 @@ function installer_adminapi_CheckTableExists($args)
 
     // Argument check - make sure that all required arguments are present,
     // if not then set an appropriate error message and return
-    if (!isset($table_name)) {
-        $msg = xarML('Invalid Parameter Count');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    if (!isset($table_name)) throw new EmptyParameterException('table_name');
 
     $dbconn =& xarDBGetConn();
     $result = $dbconn->MetaTables();
