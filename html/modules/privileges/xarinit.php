@@ -1,7 +1,6 @@
 <?php
 /**
  * Initialisation functions for the security module
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -9,7 +8,7 @@
  *
  * @subpackage Privileges module
  */
- 
+
  /**
  * Purpose of file:  Initialisation functions for the security module
  * Initialise the privileges module
@@ -478,7 +477,14 @@ function privileges_init()
 
 */
     // Set up an initial value for module variables.
-    xarModSetVar('privileges', 'showrealms', 0);
+    xarModSetVar('privileges', 'showrealms', false);
+    xarModSetVar('privileges', 'inheritdeny', true);
+    xarModSetVar('privileges', 'tester', 0);
+    xarModSetVar('privileges', 'test', false);
+    xarModSetVar('privileges', 'testdeny', false);
+    xarModSetVar('privileges', 'testmask', 'All');
+    xarModSetVar('privileges', 'realmvalue', 'none');
+    xarModSetVar('privileges', 'realmcomparison','exact');
 
     // Initialisation successful
     return true;

@@ -1,0 +1,43 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
+</div>
+<div class="xar-mod-body">
+    <h2 style="width:100%;height:1.5em;">
+        <span style="width:95%;float:left;text-align:left;">
+            <xar:mlstring>View Realms</xar:mlstring>
+        </span>
+    </h2>
+    <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+    </xar:if>
+    <dl class="xar-tabs">
+        <dd  class="active" style="float: right; margin-right: .5em; text-align: left;">
+            <a href="#xarModURL('privileges','admin','newrealm')#">
+                <xar:mlstring>Add Realm</xar:mlstring>
+            </a>
+        </dd>    
+    </dl>
+    <div style="width: 35em; margin-top:1px;">
+        <table class="xar-fullwidth xar-clearboth">
+            <tr>
+                <th style="text-align: left; padding-left: .5em;">
+                    <xar:mlstring>Name</xar:mlstring>
+                </th>
+                <th style="text-align: center; padding-left: .5em;">
+                    <xar:mlstring>Actions</xar:mlstring>
+                </th>
+            </tr>
+            <xar:loop name="$realms">
+                <tr class="xar-norm-outline" style="text-align: left; padding-left: .5em; width: 5em;border-width: 0px 0px 1px 0px;border-style: solid;">
+                    <td style="width: 20em">
+                        <a href="#xarModURL('privileges','admin','modifyrealm', array('rid' => $loop:item['rid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>
+                    </td>
+                    <td style="text-align: center">
+                        <a href="#xarModURL('privileges','admin','modifyrealm', array('rid' => $loop:item['rid']))#" title="#xarML('Modify this realm')#"><img src="modules/roles/xarimages/infoicon.gif" style="vertical-align: middle;"/></a>&nbsp;
+                        <a href="#xarModURL('privileges','admin','deleterealm', array('rid' => $loop:item['rid']))#" title="#xarML('Delete this realm')#"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;"/></a>
+                    </td>
+                </tr>
+            </xar:loop>
+        </table>
+    </div>
+</div> <!-- mod body -->
