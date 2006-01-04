@@ -178,6 +178,9 @@ class ForbiddenOperationException extends xarExceptions
 { protected $message = 'The operation you are attempting is not allowed in the current circumstances.';}
 
 // Duplication
+class DuplicateException extends xarExceptions
+{ protected $message = 'The #(1) "#(2)" already exists, no duplicates are allowed'; }
+
 class DuplicateTagException extends xarExceptions
 { protected $message = 'The tag definition for the tag: "#(1)" already exists.';}
 

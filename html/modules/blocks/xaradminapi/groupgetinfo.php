@@ -22,10 +22,7 @@ function blocks_adminapi_groupgetinfo($args)
 {
     extract($args);
 
-    if ($blockGroupId < 1) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'blockGroupId');
-        return;
-    }
+    if ($blockGroupId < 1) throw new BadParameterException('blockGroupId');
 
     return xarModAPIFunc(
         'blocks', 'user', 'groupgetinfo',

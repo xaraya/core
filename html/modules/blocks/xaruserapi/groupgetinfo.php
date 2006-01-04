@@ -25,8 +25,7 @@ function blocks_userapi_groupgetinfo($args)
     if (empty($name)) {$name = '';}
 
     if (empty($name) && empty($gid)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'gid/name');
-        return;
+        throw new EmptyParameterException('name or gid');
     }
 
     if (xarVarIsCached('Block.Group.Infos', $gid)) {
@@ -56,7 +55,6 @@ function blocks_userapi_groupgetinfo($args)
     }
 
     $result = $dbconn->Execute($query,$bindvars,ResultSet::FETCHMODE_ASSOC);
-    if (!$result) {return;}
 
     // Return if we don't get exactly one result.
     if ($result->getRecordCount() != 1) {
@@ -64,7 +62,7 @@ function blocks_userapi_groupgetinfo($args)
     }
 
     $group = $result->fields;
-    $result->Close();
+    $result->close();
 
     // If the name was used to find the group, then get the GID from the fetched group.
     if (empty($gid)) {

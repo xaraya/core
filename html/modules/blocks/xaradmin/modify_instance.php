@@ -66,15 +66,8 @@ function blocks_admin_modify_instance()
 
     if (empty($block_info)) {
         // Function does not exist so throw error
-        $msg = xarML(
-            'Block info function for module "#(1)" and type "#(2)"',
-            $instance['module'], $instance['type']
-        );
-        xarErrorSet(
-            XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-            new SystemException(__FILE__.'('.__LINE__.'): '.$msg)
-        );
-        return NULL;
+        throw FunctionNotFoundException(array($instance['module'],$instance['type']),
+                                        'Block info function for module "#(1)" and type "#(2)" was not found or could not be loaded');
     }
 
     // Build refresh times array.

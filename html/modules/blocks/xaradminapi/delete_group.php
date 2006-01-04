@@ -21,11 +21,7 @@ function blocks_adminapi_delete_group($args)
     extract($args);
 
     // Argument check
-    if (!isset($gid) || !is_numeric($gid)) {
-        $msg = xarML('Invalid parameter');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return false;
-    }
+    if (!isset($gid) || !is_numeric($gid)) throw new BadParameterException('gid');
 
     // Security
     if (!xarSecurityCheck('DeleteBlock', 1, 'Block', "::$gid")) {return;}
@@ -36,17 +32,21 @@ function blocks_adminapi_delete_group($args)
     $block_group_instances_table = $xartable['block_group_instances'];
 
     // Delete group-instance links
-    $query = "DELETE FROM $block_group_instances_table
-              WHERE xar_group_id = " . $gid;
-    $result = $dbconn->Execute($query);
-    if (!$result) {return;}
+    try {
+        $dbconn->begin();
+        $query = "DELETE FROM $block_group_instances_table  WHERE xar_group_id = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate(array($gid));
 
-    // Delete block group definition
-    $query = "DELETE FROM $block_groups_table
-              WHERE xar_id = " . $gid;
-    $result = $dbconn->Execute($query);
-    if (!$result) {return;}
-
+        // Delete block group definition
+        $query = "DELETE FROM $block_groups_table WHERE xar_id = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate(array($gid));
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
     return true;
 }
 
