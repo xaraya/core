@@ -262,7 +262,7 @@ class xarMasks
 */
     function winnow($privs1, $privs2)
     {
-        if (!is_array($privs1) || !is_array($privs1)) {
+        if (!is_array($privs1) || !is_array($privs2)) {
             $msg = xarML('Parameters to winnow need to be arrays');
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException($msg));
