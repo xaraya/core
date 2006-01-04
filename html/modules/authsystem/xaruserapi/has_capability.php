@@ -33,11 +33,9 @@ function authsystem_userapi_has_capability($args)
         case XARUSER_AUTH_USER_DELETEABLE:
             return false;
             break;
+        default:
+            throw new BadParameterException($capability,'Unknown capability requested "#(1)"');
     }
-    $msg = xarML('Unknown capability.');
-    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                   new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-    return;
 }
 
 ?>
