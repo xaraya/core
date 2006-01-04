@@ -22,12 +22,7 @@ function modules_adminapi_upgrade($args)
     extract($args);
 
     // Argument check
-    if (!isset($regid)) {
-        $msg = xarML('Empty regid (#(1)).', $regid);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (!isset($regid)) throw new EmptyParameterException('regid');
 
     // Get module information
     $modInfo = xarModGetInfo($regid);

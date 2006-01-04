@@ -21,13 +21,9 @@ function modules_adminapi_update($args)
     extract($args);
 
     // Argument check
-    if (!isset($regid)) {
-        $msg = xarML('Empty regid (#(1)).', $regid);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (!isset($regid)) throw new EmptyParameterException('regid');
 
-// Security Check
+    // Security Check
     if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regid")) return;
 
     // Rename operation
@@ -75,27 +71,35 @@ function modules_adminapi_update($args)
         // See if this is checked and isn't in the database
         if ((isset($hookvalue)) && (is_array($hookvalue)) && (empty($hooksmodname))) {
             // Insert hook if required
-            foreach (array_keys($hookvalue) as $itemtype) {
-                if ($itemtype == 0) $itemtype = '';
-                $sql = "INSERT INTO $xartable[hooks] (
-                      xar_id, xar_object, xar_action, xar_smodule,
-                      xar_stype, xar_tarea, xar_tmodule, xar_ttype, xar_tfunc)
+            // Prepare statement outside the loop
+            $sql = "INSERT INTO $xartable[hooks] 
+                    (xar_id,xar_object,xar_action,xar_smodule,xar_stype,xar_tarea,xar_tmodule,xar_ttype,xar_tfunc)
                     VALUES (?,?,?,?,?,?,?,?,?)";
-                $bindvars = array($dbconn->GenId($xartable['hooks']),
-                                  $hookobject,
-                                  $hookaction,
-                                  $modinfo['name'],
-                                  $itemtype,
-                                  $hooktarea,
-                                  $hooktmodule,
-                                  $hookttype,
-                                  $hooktfunc);
-                $subresult =& $dbconn->Execute($sql,$bindvars);
-                if (!$subresult) return;
+            $stmt = $dbconn->prepareStatement($sql);
+            try {
+                $dbconn->begin();
+                foreach (array_keys($hookvalue) as $itemtype) {
+                    if ($itemtype == 0) $itemtype = '';
+                    $bindvars = array($dbconn->GenId($xartable['hooks']),
+                                      $hookobject,
+                                      $hookaction,
+                                      $modinfo['name'],
+                                      $itemtype,
+                                      $hooktarea,
+                                      $hooktmodule,
+                                      $hookttype,
+                                      $hooktfunc);
+                    $stmt->executeUpdate($bindvars);
+                }
+                $dbconn->commit();
+                $stmt->close();
+            } catch(SQLException $e) {
+                $dbconn->rollback();
+                throw $e;
             }
         }
     }
-    $result->Close();
+    $result->close();
     return true;
 }
 

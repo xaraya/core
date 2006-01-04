@@ -23,11 +23,7 @@ function modules_adminapi_executeinitfunction ($args)
     if(!xarSecurityCheck('AdminModules')) return;
 
     // Argument check
-    if (!isset($args['regid'])) {
-        $msg = xarML('Missing module regid.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-        return;
-    }
+    if (!isset($args['regid'])) throw new EmptyParameterException('regid');
 
     // Get module information
     $modInfo = xarModGetInfo($args['regid']);
@@ -35,10 +31,10 @@ function modules_adminapi_executeinitfunction ($args)
     if (!isset($modInfo['osdirectory']) ||
         empty($modInfo['osdirectory']) ||
         !is_dir('modules/'. $modInfo['osdirectory'])) {
-
-        $msg = xarML('Module (regid: #(1) - directory: #(2) does not exist.', $args['regid'], $modInfo['osdirectory']);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',  $msg);
-        return;
+        
+        $msg = 'Module (regid: #(1) - directory: #(2) does not exist.';
+        $vars = array($args['regid'], $modInfo['osdirectory']);
+        throw new ModuleNotFoundException($vars,$msg);
     }
 
     // Get module database info, they might be needed in the function to be called
@@ -49,20 +45,14 @@ function modules_adminapi_executeinitfunction ($args)
     if (file_exists('modules/'. $modInfo['osdirectory'] .'/xarinit.php')) {
         $xarinitfile = 'modules/'. $modInfo['osdirectory'] .'/xarinit.php';
     } elseif (file_exists('modules/'. $modInfo['osdirectory'] .'/pninit.php')) {
+        // ok, i'll leave it in for now.
         $xarinitfile = 'modules/'. $modInfo['osdirectory'] .'/pninit.php';
     }
 
-    if (empty($xarinitfile)) {
-        /*
-        $msg = xarML('No Initialization File Found for Module "#(1)"', $modInfo['name']);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $msg);
-        return;
-        */
-        //Return gracefully, the metaweblogapi doesnt have the init file..
-        //Should it be obligatory? The same can be asked about each individual process function
-        // (init/activate/deactivate/remobve)
-        return true;
-    }
+    // If there is no xarinit file, there is apparently nothing to init.
+    // TODO: we migh consider making it required.
+    if (empty($xarinitfile)) return true;
+   
 
     // if (!empty($xarinitfile)) {
     ob_start();
@@ -72,8 +62,7 @@ function modules_adminapi_executeinitfunction ($args)
 
     if (empty($r) || !$r) {
         $msg = xarML("Could not load file: [#(1)].\n\n Error Caught:\n #(2)", $xarinitfile, $error_msg);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $msg);
-        return;
+        throw new Exception($msg);
     }
 
     $func = $modInfo['name'] . '_'.$args['function'];
@@ -90,25 +79,12 @@ function modules_adminapi_executeinitfunction ($args)
 
         if ($result === false) {
             $msg = xarML('While changing state of the #(1) module, the function #(2) returned a false value when executed.', $modInfo['name'], $func);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
-            return;
+            throw new Exception($msg);
         } elseif ($result != true) {
             $msg = xarML('An error ocurred while changing state of the #(1) module, executing function #(2)', $modInfo['name'], $func);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
-            return;
+            throw new Exception($msg);
         }
-    } else {
-        // A lot of init files dont have the function, maily activate...
-        // Should we enforce them to have it?
-        /*
-        // file exists, but function not found. Exception!
-        $msg = xarML('Module change of state failed because your module did not include an #(1) function: #(2)', $args['function'], $func);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $msg);
-        return;
-        */
     }
-    //}
-
     return true;
 }
 

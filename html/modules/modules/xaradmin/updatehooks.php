@@ -25,9 +25,7 @@ function modules_admin_updatehooks()
     $regId = xarModGetIDFromName($curhook);
     if (!isset($curhook) || !isset($regId)) {
         $msg = xarML('Invalid hook');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                        new SystemException($msg));
-        return;
+        throw new Exception($msg);
     }
 
     // Only update if the module is active.

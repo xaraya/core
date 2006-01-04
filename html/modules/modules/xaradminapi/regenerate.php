@@ -45,25 +45,17 @@ function modules_adminapi_regenerate()
         // Check matching name and regid values
         foreach ($dbModules as $dbmodule) {
             // Bail if 2 modules have the same regid but not the same name
-            if (($modinfo['regid'] == $dbmodule['regid']) && 
-               ($modinfo['name'] != $dbmodule['name'])) {
-                $msg = xarML('The same registered ID (#(1)) was found belonging to a #(2) module in the file system and a registered #(3) module in the database. Please correct this and regenerate the list.', $dbmodule['regid'], $modinfo['name'], $dbmodule['name']);
-                xarErrorSet(
-                    XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                    new SystemException($msg)
-                );
-                return;
+            if (($modinfo['regid'] == $dbmodule['regid']) && ($modinfo['name'] != $dbmodule['name'])) {
+                $msg = 'The same registered ID (#(1)) was found belonging to a #(2) module in the file system and a registered #(3) module in the database. Please correct this and regenerate the list.';
+                $vars = array($dbmodule['regid'], $modinfo['name'], $dbmodule['name']);
+                throw new DuplicateException($vars,$msg);
             }
 
             // Bail if 2 modules have the same name but not the same regid
-            if (($modinfo['name'] == $dbmodule['name']) && 
-               ($modinfo['regid'] != $dbmodule['regid'])) {
-                $msg = xarML('The module #(1) is found with two different registered IDs, #(2)  in the file system and #(3) in the database. Please correct this and regenerate the list.', $modinfo['name'], $modinfo['regid'], $dbmodule['regid']);
-                xarErrorSet(
-                    XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                    new SystemException($msg)
-                );
-                return;
+            if (($modinfo['name'] == $dbmodule['name']) && ($modinfo['regid'] != $dbmodule['regid'])) {
+                $msg = 'The module #(1) is found with two different registered IDs, #(2)  in the file system and #(3) in the database. Please correct this and regenerate the list.';
+                $vars = array($modinfo['name'], $modinfo['regid'], $dbmodule['regid']);
+                throw new DuplicateException($vars,$msg);
             }
         }
 

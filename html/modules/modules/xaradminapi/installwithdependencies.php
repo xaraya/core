@@ -36,11 +36,7 @@ function modules_adminapi_installwithdependencies ($args)
         return;
 
     // Argument check
-    if (!isset($mainId)) {
-        $msg = xarML('Missing module regid (#(1)).', $mainId);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (!isset($mainId)) throw new EmptyParameterException('regid');
 
     // See if we have lost any modules since last generation
     if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
@@ -55,8 +51,7 @@ function modules_adminapi_installwithdependencies ($args)
     // Get module information
     $modInfo = xarModGetInfo($mainId);
     if (!isset($modInfo)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', new SystemException(__FILE__."(".__LINE__."): Module (regid: $regid) does not exist."));
-        return;
+        throw new ModuleNotFoundException($regid,'Module (regid: #(1)) does not exist.');
     }
 
     switch ($modInfo['state']) {
@@ -75,11 +70,8 @@ function modules_adminapi_installwithdependencies ($args)
     if (!empty($modInfo['extensions'])) {
         foreach ($modInfo['extensions'] as $extension) {
             if (!empty($extension) && !extension_loaded($extension)) {
-                xarErrorSet(
-                    XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
-                    new SystemException(xarML("Required PHP extension '#(1)' is missing for module '#(2)'", $extension, $modInfo['displayname']))
-                );
-                return;
+                throw new ModuleNotFoundException(array($extension,$modInfo['displayname']),
+                                                  "Required PHP extension '#(1)' is missing for module '#(2)'");
             }
         }
     }
@@ -106,8 +98,7 @@ function modules_adminapi_installwithdependencies ($args)
                 return;
             } else {
                 $msg = xarML('Unable to initialize dependency module with ID (#(1)).', $modId);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
-                return;
+                throw new Exception($msg);
             }
         }
     }
@@ -120,8 +111,7 @@ function modules_adminapi_installwithdependencies ($args)
                 return;
             } else {
                 $msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
-                return;
+                throw new Exception($msg);
             }
         }
     }
@@ -132,8 +122,7 @@ function modules_adminapi_installwithdependencies ($args)
             return;
         } else {
             $msg = xarML('Unable to activate module "#(1)".', $modInfo['displayname']);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
-            return;
+            throw new Exception($msg);
         }
     }
 

@@ -132,6 +132,7 @@ class DebugException extends xarExceptions
     protected $variables ='a variable value should normally be here';
 }
 
+
 /* Other exception classes which probably should be moved somewhere else 
    TODO: this sort of begs for dynamic class generation. 
          We could model it differently but catching is based on classname which is really comfy, 
@@ -156,6 +157,8 @@ class DirectoryNotFoundException extends NotFoundExceptions
 { protected $message = 'The directory "#(1) could not be found.';}
 class ModuleBaseInfoNotFoundException extends NotFoundExceptions
 { protected $message = 'The base info for module "#(1)" could not be found';}
+class ModuleNotFoundException extends NotFoundExceptions
+{ protected $message = 'A module is missing, the module name could not be determined in the current context';}
 class LocaleNotFoundException extends NotFoundExceptions
 { protected $message = 'The locale "#(1)" could not be found or is currently unavailable';}
 class DataNotFoundException extends NotFoundExceptions
@@ -203,6 +206,8 @@ class ApiDeprecationException extends DeprecationExceptions
 
 class BLException extends xarExceptions 
 { protected $message = 'Unknown blocklayout exception (TODO)';}
+
+
 /*
  * Error constants for exception throwing
  * 
