@@ -139,7 +139,6 @@ function installer_admin_phase3()
     $cacheDir                 = $systemVarDir . XARCORE_CACHEDIR;
     $cacheTemplatesDir        = $systemVarDir . XARCORE_TPL_CACHEDIR;
     $rssTemplatesDir          = $systemVarDir . XARCORE_RSS_CACHEDIR;
-    $adodbTemplatesDir        = $systemVarDir . XARCORE_DB_CACHEDIR;
     $systemConfigFile         = $systemVarDir . '/' . XARCORE_CONFIG_FILE;
     $phpLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/php';
     $xmlLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/xml';
@@ -152,7 +151,6 @@ function installer_admin_phase3()
     $cacheIsWritable            = check_dir($cacheDir);
     $cacheTemplatesIsWritable   = (check_dir($cacheTemplatesDir) || @mkdir($cacheTemplatesDir, 0700));
     $rssTemplatesIsWritable     = (check_dir($rssTemplatesDir) || @mkdir($rssTemplatesDir, 0700));
-    $adodbTemplatesIsWritable   = (check_dir($adodbTemplatesDir) || @mkdir($adodbTemplatesDir, 0700));
     $phpLanguageFilesIsWritable = xarMLS__iswritable($phpLanguageDir);
     $xmlLanguageFilesIsWritable = xarMLS__iswritable($xmlLanguageDir);
     $memLimit = trim(ini_get('memory_limit'));
@@ -180,8 +178,6 @@ function installer_admin_phase3()
     $data['cacheTemplatesIsWritable'] = $cacheTemplatesIsWritable;
     $data['rssTemplatesDir']          = $rssTemplatesDir;
     $data['rssTemplatesIsWritable']   = $rssTemplatesIsWritable;
-    $data['adodbTemplatesDir']        = $adodbTemplatesDir;
-    $data['adodbTemplatesIsWritable'] = $adodbTemplatesIsWritable;
     $data['systemConfigFile']         = $systemConfigFile;
     $data['systemConfigIsWritable']   = $systemConfigIsWritable;
     $data['phpLanguageDir']             = $phpLanguageDir;
