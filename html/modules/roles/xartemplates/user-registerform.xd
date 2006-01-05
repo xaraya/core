@@ -104,7 +104,7 @@
             <input type="hidden" name="agreetoterms" id="agreetoterms" value="1" />
             </xar:if>
         </fieldset>
-        <xar:if condition="xarModGetVar('roles', 'showdynamic')" >
+        <xar:if condition="xarModGetVar(xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule')), 'showdynamic')" >
             <xar:if condition="isset($properties)">
             <fieldset>
                 <legend><xar:mlstring>User Details</xar:mlstring></legend>

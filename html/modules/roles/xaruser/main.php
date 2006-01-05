@@ -32,7 +32,7 @@ function roles_user_main()
         }
     }
     elseif(xarSecurityCheck('ViewRoles',0)) {
-    */    
+    */
     $allowregistration = xarModGetVar('roles', 'allowregistration');
 
         if (xarUserIsLoggedIn()) {
@@ -40,11 +40,11 @@ function roles_user_main()
                                          'user',
                                          'account'));
         } elseif ($allowregistration != true) {
-            xarResponseRedirect(xarModURL('roles',
+            xarResponseRedirect(xarModURL(xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule')),
                                           'user',
                                           'showloginform'));
         } else {
-            xarResponseRedirect(xarModURL('roles',
+            xarResponseRedirect(xarModURL(xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule')),
                                           'user',
                                           'register'));
 

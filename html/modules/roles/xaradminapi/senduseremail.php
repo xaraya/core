@@ -1,6 +1,6 @@
 <?php
 /**
- * Send lost password
+ * Send emails to users
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
@@ -11,7 +11,9 @@
  */
 
 /**
- * Send user email (whenever a user lost his password or an admin modify a password)
+ * Send emails to users by mailtype 
+ * 
+ * Ex: Lost Password, Confirmation
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['uid'] array of uid of the user(s) array($uid => '1')
