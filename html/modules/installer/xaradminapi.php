@@ -218,12 +218,8 @@ function installer_adminapi_CheckTableExists($args)
     if (!isset($table_name)) throw new EmptyParameterException('table_name');
 
     $dbconn =& xarDBGetConn();
-    $result = $dbconn->MetaTables();
-    if (in_array($table_name, $result)){
-        return true;
-    } else {
-        return false;
-    }
+    $dbInfo = $dbconn->getDatabaseInfo();
+    return $dbInfo->hasTable($table_name);
 }
 
 ?>
