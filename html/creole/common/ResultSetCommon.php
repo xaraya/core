@@ -444,29 +444,6 @@ abstract class ResultSetCommon {
     }  
     
     // XARAYA MODIFICATION
-    public function FetchField($fieldOffset)
-    {
-        $fld = (object) null;
-        if($this->fetchmode == ResultSet::FETCHMODE_ASSOC) {
-            $fld->name = $fieldOffset;
-        } else {
-            // The fields are numerically indexed, we have to reget the current row
-            $this->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-            try {
-                $this->next(); $this->previous();
-                 // bah
-                $tmp = array_slice($this->fields,$fieldOffset,1);
-                $fld->name = key($tmp);
-            } catch (Exception $e) {
-                throw $e;
-            }
-            $this->setFetchmode(ResultSet::FETCHMODE_NUM);
-            $this->next(); $this->previous();
-        }
-        return $fld;
-    }
-    
-    
    function __get($propname)
    {
         switch($propname) {

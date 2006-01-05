@@ -46,7 +46,7 @@ class xarQuery
     public $limits = 1;
 
 // Flags
-// Set to true to use binding variables supported by some dbs
+// Set to true to use binding variables 
     public $usebinding = true;
 // Two unrelated conditions will be inserted into the query as AND or OR
     public $implicitconjunction = "AND";
@@ -85,29 +85,29 @@ class xarQuery
         //FIXME: PHP5 hack
         $this->open();
         $this->setstatement($statement);
+        // NON SELECT
         if ($this->type != 'SELECT') {
             if ($this->usebinding) {
                 $result = $this->dbconn->Execute($this->statement,$this->bindvars);
                 $this->bindvars = array();
-            }
-            else {
+            } else {
                 $result = $this->dbconn->Execute($this->statement);
             }
             if(!$result) return;
             $this->rows = $result; 
             return true;
         }
+
+        // SELECT statement
         if($this->rowstodo != 0 && $this->limits == 1 && $this->israwstatement) {
             $begin = $this->startat-1;
             $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
             $this->statement .= " LIMIT " . $begin . "," . $this->rowstodo;
-        }
-        else {
+        } else {
             if ($this->usebinding) {
                 $result = $this->dbconn->Execute($this->statement,$this->bindvars);
                 $this->bindvars = array();
-            }
-            else {
+            } else {
                 $result = $this->dbconn->Execute($this->statement);
             }
             if (!$result) return;
@@ -116,19 +116,27 @@ class xarQuery
         if (!$result) return;
         $this->result =& $result;
 
-        if (($result->fields) === false) $numfields = 0;
-        else $numfields = count($result->fields); // Better than the private var, fields should still be proteced
+        if (($result->fields) === false) 
+            $numfields = 0;
+        else 
+            $numfields = count($result->fields); // Better than the private var, fields should still be proteced
+
         $this->output = array();
         if ($display == 1) {
             if ($statement == '') {
                 if ($this->fields == array() && $numfields > 0) {
-                    for ($i=0;$i<$numfields;$i++) {
-                        $o = $result->FetchField($i);
-                        if (!isset($o) || !isset($o->name)) {
-                            throw new BadParameterException(null,'SELECT with total of columns different from the number retrieved.');
-                        }
-                        $this->fields[$o->name]['name'] = strtolower($o->name);
+                    $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
+                    $result->next(); $result->previous(); 
+                    for ($i=0;$i< $numfields;$i++) {
+                        // Fetchfield was the only one used throughout the whole codebase, simulate it here instead of in creole
+                        //$o = $result->FetchField($i);
+                        // FIXME: get rid of it more globally since this never was portable anyway and it kills performance
+                        $tmp = array_slice($result->fields,$i,1);
+                        $finally_we_got_the_name_of_the_field  = key($tmp);
+                        $this->fields[$finally_we_got_the_name_of_the_field]['name'] = strtolower($finally_we_got_the_name_of_the_field);
                     }
+                    $result->setFetchMode(ResultSet::FETCHMODE_NUM);
+                    $result->next(); $result->previous();
                 }
                 while (!$result->EOF) {
                     $i=0; $line=array();
@@ -144,11 +152,10 @@ class xarQuery
                     $this->output[] = $line;
                     $result->MoveNext();
                 }
-            }
-            else {
+            } else {
                 while (!$result->EOF) {
                     $line = array();
-                    for ($i=0;$i<$numfields;$i++) {
+                    for ($i=0;$i< $numfields;$i++) {
                         $line[] = $result->fields[$i];
                     }
                     $this->output[] = $line;
@@ -990,6 +997,7 @@ class xarQuery
         $limit = count($pieces);
         for ($i=1;$i<$limit;$i++){
             if (gettype($this->bindvars[$i-1]) == 'string') {
+                // FIXME: qstr should not be used
                 $sqlfield = $this->dbconn->qstr($this->bindvars[$i-1]);
             }
             else {
@@ -998,14 +1006,6 @@ class xarQuery
             $bound .= $sqlfield . $pieces[$i];
         }
         $this->statement = $bound;
-    }
-    function nextid($table="", $id="")
-    {
-        return $this->dbconn->PO_Insert_ID();
-    }
-    function lastid($table="", $id="")
-    {
-        return $this->dbconn->GetOne("SELECT MAX($id) FROM $table");
     }
 }
 ?>
