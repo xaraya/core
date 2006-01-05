@@ -89,15 +89,8 @@ function roles_admin_modifyconfig()
                 xarModSetVar('roles', 'disallowedips', $ip);
             }
             $data['siteadmins'] = $siteadmins;
-            $data['defaultgroup'] = xarModGetVar('roles', 'defaultgroup');
-            $data['groups'] = $groups;
-            $data['emails'] = unserialize(xarModGetVar('roles', 'disallowedemails'));
-            $data['names'] = unserialize(xarModGetVar('roles', 'disallowednames'));
-            $data['ips'] = unserialize(xarModGetVar('roles', 'disallowedips'));
+            $data['authid'] = xarSecGenAuthKey();
             $data['updatelabel'] = xarML('Update Roles Configuration');
-            $data['uselockout'] =  xarModGetVar('roles', 'uselockout') ? 'checked' : '';
-            $data['lockouttime'] = xarModGetVar('roles', 'lockouttime')? xarModGetVar('roles', 'lockouttime'): 15; //minutes
-            $data['lockouttries'] = xarModGetVar('roles', 'lockouttries') ? xarModGetVar('roles', 'lockouttries'): 3;
             $hooks = array();
             switch ($data['tab']) {
                 case 'hooks':
@@ -126,63 +119,14 @@ function roles_admin_modifyconfig()
             switch ($data['tab']) {
                 case 'general':
                     if (!xarVarFetch('rolesperpage', 'str:1:4:', $rolesperpage, '20', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+                    if (!xarVarFetch('defaultauthmodule', 'str:1:', $defaultauthmodule, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                     if (!xarVarFetch('shorturls', 'checkbox', $shorturls, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('showterms', 'checkbox', $showterms, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('showprivacy', 'checkbox', $showprivacy, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('siteadmin', 'int:1', $siteadmin, xarModGetVar('roles','admin'), XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('uselockout', 'checkbox', $uselockout, true, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('lockouttime', 'int:1:', $lockouttime, 15, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    if (!xarVarFetch('lockouttries', 'int:1:', $lockouttries, 3, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
                     xarModSetVar('roles', 'rolesperpage', $rolesperpage);
+                    xarModSetVar('roles', 'defaultauthmodule', $defaultauthmodule);
                     xarModSetVar('roles', 'SupportShortURLs', $shorturls);
-                    xarModSetVar('roles', 'showterms', $showterms);
-                    xarModSetVar('roles', 'showprivacy', $showprivacy);
                     xarModSetVar('roles', 'admin', $siteadmin);
-                    xarModSetVar('roles', 'uselockout', $uselockout);
-                    xarModSetVar('roles', 'lockouttime', $lockouttime);
-                    xarModSetVar('roles', 'lockouttries', $lockouttries);
-                    break;
-                case 'registration':
-                    if (!xarVarFetch('defaultgroup', 'str:1', $defaultgroup, 'Users', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    if (!xarVarFetch('allowregistration', 'checkbox', $allowregistration, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('chooseownpassword', 'checkbox', $chooseownpassword, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('minage', 'str:1:3:', $minage, '13', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    if (!xarVarFetch('sendnotice', 'checkbox', $sendnotice, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('explicitapproval', 'checkbox', $explicitapproval, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('requirevalidation', 'checkbox', $requirevalidation, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('showdynamic', 'checkbox', $showdynamic, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('sendwelcomeemail', 'checkbox', $sendwelcomeemail, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('minpasslength', 'int:1', $minpasslength, 5, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('uniqueemail', 'checkbox', $uniqueemail, xarModGetVar('roles', 'uniqueemail'), XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('userhome', 'checkbox', $userhome, xarModGetVar('roles', 'userhome'), XARVAR_NOT_REQUIRED)) return;
-                    xarModSetVar('roles', 'chooseownpassword', $chooseownpassword);
-                    xarModSetVar('roles', 'defaultgroup', $defaultgroup);
-                    xarModSetVar('roles', 'allowregistration', $allowregistration);
-                    xarModSetVar('roles', 'minage', $minage);
-                    xarModSetVar('roles', 'sendnotice', $sendnotice);
-                    xarModSetVar('roles', 'explicitapproval', $explicitapproval);
-                    xarModSetVar('roles', 'requirevalidation', $requirevalidation);
-                    xarModSetVar('roles', 'showdynamic', $showdynamic);
-                    xarModSetVar('roles', 'sendwelcomeemail', $sendwelcomeemail);
-                    xarModSetVar('roles', 'minpasslength', $minpasslength);
-                    xarModSetVar('roles', 'uniqueemail', $uniqueemail);
-                    xarModSetVar('roles', 'userhome', $userhome);
-                    break;
-                case 'filtering':
-                    if (!xarVarFetch('disallowednames', 'str:1', $disallowednames, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    if (!xarVarFetch('disallowedemails', 'str:1', $disallowedemails, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    if (!xarVarFetch('disallowedips', 'str:1', $disallowedips, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    $disallowednames = serialize($disallowednames);
-                    xarModSetVar('roles', 'disallowednames', $disallowednames);
-
-                    $disallowedemails = serialize($disallowedemails);
-                    xarModSetVar('roles', 'disallowedemails', $disallowedemails);
-
-                    $disallowedips = serialize($disallowedips);
-                    xarModSetVar('roles', 'disallowedips', $disallowedips);
-                    break;
-                case 'duvs':
                     break;
                 case 'hooks':
                     // Role type 'user' (itemtype 0).

@@ -55,7 +55,7 @@ function roles_admin_deleterole()
                      new SystemException($msg));
         return false;
     }
-    if(strtolower($role->getName()) == strtolower(xarModGetVar('roles','defaultgroup'))) {
+    if(strtolower($role->getName()) == strtolower(xarModAPIFunc('roles','user','get_defaultgroup'))) {
         $msg = xarML('The group #(1) is the default group for new users. If you want to remove this group change the roles configuration setting first.', $role->getName());
         xarErrorSet(XAR_USER_EXCEPTION,
                     'CANNOT_CONTINUE',

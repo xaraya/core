@@ -621,6 +621,12 @@ function xarModGetInfo($modRegId, $type = 'module')
     return $modInfo;
 }
 
+function xarModGetNameFromID($regid) {
+	$modinfo = xarModGetInfo($regid);
+	return $modinfo['name'];
+}
+
+
 /**
  * Load the modType of module identified by modName.
  *
