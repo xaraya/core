@@ -527,7 +527,6 @@ function xarCore_getSystemVar($name, $returnNull = false)
         } else {
             throw new Exception("xarCore_getSystemVar: Unknown system variable: ".$name);
         }
-        }
     }
 
     xarCore_SetCached('Core.getSystemVar', $name, $systemVars[$name]);
