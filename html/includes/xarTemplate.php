@@ -954,7 +954,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
 
     //if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:pages', $templateName) === NULL) return;
 
-    return xarTpl__executeFromFile($sourceFileName, $tplData);
+    return xarTpl__executeFromFile($sourceFileName, $tplData, 'page');
 }
 
 /**
@@ -1050,13 +1050,12 @@ function xarTpl__getCompilerInstance()
  * @todo Can we migrate the eval() out, as that is hard to cache?
  * @todo $sourceFileName looks wrong here
  */
-function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedFileName = null)
+function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedFileName = null, $tplType = 'module')
 {
     assert('is_array($tplData); /* Template data should always be passed in an array */');
-
+    
     //POINT of ENTRY for cleaning variables
     // We need to be able to figure what is the template output type: RSS, XHTML, XML or whatever
-
     $tplData['_bl_data'] = $tplData;
     extract($tplData, EXTR_OVERWRITE);
 
@@ -1070,9 +1069,20 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
     } else {
         // Otherwise use an include, much better :-)
         assert('file_exists($cachedFileName); /* Compiled templated disappeared in mid air, race condition? */');
-        $res = include($cachedFileName);
+        if($tplType=='page') set_exception_handler('xarException__BoneHandler');
+        try {
+            // Let's see what we cooked up in the compiler
+            $res = include($cachedFileName);
+        } catch (Exception $e) {
+            // Any exception inside the compile template invalidates our output from it.
+            // Destroy its buffer, and raise exactly that exception, letting the exception handlers
+            // take care of the rest.
+            // nice, very nice :-)
+            ob_end_clean();
+            throw $e;
+        }
     }
-
+    
     if($sourceFileName != '') {
         $tplOutput = ob_get_contents();
         ob_end_clean();
@@ -1102,7 +1112,7 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
  * @todo  insert log warning when double entry in cachekeys occurs? (race condition)
  * @todo  make the checking whethet templatecode is set more robst (related to templated exception handling)
  */
-function xarTpl__executeFromFile($sourceFileName, $tplData)
+function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
 {
     assert('is_array($tplData); /* Template data should always be passed in an array */');
 
@@ -1183,7 +1193,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
 
     // Execute either the compiled template, or the code determined
     // TODO: this signature sucks
-    $output = xarTpl__execute($templateCode,$tplData, $sourceFileName, $cachedFileName);
+    $output = xarTpl__execute($templateCode,$tplData, $sourceFileName, $cachedFileName, $tplType);
     return $output;
 }
 

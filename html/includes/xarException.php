@@ -278,7 +278,7 @@ global $CoreStack, $ErrorStack;
  * @todo Make exception handling the default error handling and get rid of the redundant parts
  * @return void
  */
-function xarException__ExceptionHandler(Exception $e)
+function xarException__DefaultHandler(Exception $e)
 {
     // This handles exceptions, which can arrive directly or through xarErrorSet.
     // if through xarErrorSet there will be something waiting for us on the stack
@@ -302,17 +302,39 @@ function xarException__ExceptionHandler(Exception $e)
             }
         } else {
             // no templating yet, pass direct and render as rawhtml
-            $major = XAR_SYSTEM_EXCEPTION; $errorID = get_class($e);
-            $value = $e->getMessage();
-            xarErrorSet($major, $errorID, $value, false);
-            $msg = xarErrorRender('rawhtml');
-            echo $msg;die();
+            RenderRawException($e);
+            die();
         }
     }
     xarErrorFree();
-    // Make an attemtp to render the page, hoping we have everything in place still
-    echo xarTpl_renderPage($msg);
-    // Execution stops after this handler, except for the shutdown handlers.
+    // Make an attempt to render the page, hoping we have everything in place still
+    try {
+        echo xarTpl_renderPage($msg);
+    } catch( Exception $e) {
+        // Oh well, pick up the bones
+        RenderRawException($e);
+    }
+}
+
+/** 
+ * Define a bare exception handler for when shit hits the fan
+ *
+ */
+function xarException__BoneHandler(Exception $e)
+{
+    RenderRawException($e);
+    // We picked up the bone, get the hell outta here again
+}
+
+function RenderRawException(Exception $e)
+{
+    // TODO: how many assumptions can we make about the rendering capabilities of the client here?
+    $out="<pre>";
+    $out.= 'Error: '.$e->getCode().": ".get_class($e)."\n";
+    $out.= $e->getMessage()."\n\n";
+    $out.= $e->getTraceAsString();
+    $out.= "</pre>";
+    echo $out;
 }
 
 /**
@@ -328,7 +350,7 @@ function xarError_init($systemArgs, $whatToLoad)
     global $CoreStack,$ErrorStack; // Pretty much obsolete, now we treat errors like exceptions
 
     // Send all exceptions to the exception handler.
-    set_exception_handler('xarException__ExceptionHandler');
+    set_exception_handler('xarException__DefaultHandler');
 
     // Do we want our error handler or the native one?
     if ($systemArgs['enablePHPErrorHandler'] == true ) { 
