@@ -755,7 +755,9 @@ class xarMetaData
     */
     function getColumns($table)
     {
-        $columns = $this->dbconn->MetaColumns($table);
+        $dbInfo = $this->dbconn->getDatabaseInfo();
+        $tblInfo = $dbInfo->getTable($table);
+        $columns = $tblInfo->getColumns();
         if (!isset($columns)) {
             return;
         }
