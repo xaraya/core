@@ -34,7 +34,7 @@ function dynamicdata_admin_showpropval($args)
     $newid = $myobject->getItem();
 
     if (empty($newid) || empty($myobject->properties['id']->value)) {
-        throw new BadParameterException(nu;;,'Invalid item id');
+        throw new BadParameterException(null,'Invalid item id');
     }
 
     // check if the module+itemtype this property belongs to is hooked to the uploads module

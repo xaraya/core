@@ -22,7 +22,7 @@ function dynamicdata_util_importprops()
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
 
-    if (empty($modid)) thow new EmptyParameterException('modid');
+    if (empty($modid)) throw new EmptyParameterException('modid');
 
     // Confirm authorisation code.  This checks that the form had a valid
     // authorisation code attached to it.  If it did not then the function will

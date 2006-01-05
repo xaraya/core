@@ -26,7 +26,7 @@ function dynamicdata_utilapi_import($args)
 
     extract($args);
 
-    if (empty($xml) && empty($file)) 
+    if (empty($xml) && empty($file)) {
         throw new EmptyParameterException('xml or file');
     } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/',$file)) ) {
         throw new BadParameterException($file,'Invalid importfile "#(1)"');
