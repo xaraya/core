@@ -336,13 +336,11 @@ abstract class ConnectionCommon {
         switch($propname) {
             // return the database type
             case 'databaseType':
+                // This has no realistic equivalent in creole, probably leave it in
                 return $this->dsn['phptype'];
                 break;
-            case 'hasTransactions':
-                // Only seen in modules, remove when we can, it's not needed here
-                return true;
-                break;
             default:
+                // We want to leave this in, so the migration errors show up nicely 
                 throw new Exception("Unknown property $propname accessed for connection");
         }
     }
@@ -351,27 +349,13 @@ abstract class ConnectionCommon {
     {
         switch($method) {
             case 'qstr':
+                // Used in a couple of places where bind variable replacement is less than trivial
+                // (roles and dd only)
                 // DOH! we dont want this
                 return  "'".str_replace("'","\\'",$args[0])."'";
                 break;
-            case 'StartTrans':
-                // Only seen in modules, remove when we can
-                return $this->begin($args);
-                break;
-            case 'CompleteTrans':
-                // Only seen in modules, remove when we can
-                try {
-                    $this->commit($args);
-                } catch(SQLException $e) {
-                    return false;
-                }
-                return true;
-                break;
-            case 'Affected_Rows':
-                // Only seen in modules, remove when we can
-                return $this->getUpdateCount();
-                break; 
             default:
+                // We do want to leave this in, so the migration erros show up nicely
                 throw new Exception("Unknown method call for connection");
         }
     }

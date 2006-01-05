@@ -447,22 +447,26 @@ abstract class ResultSetCommon {
    function __get($propname)
    {
         switch($propname) {
-            case 'EOF': 
+            case 'EOF':
+                // Used all over the place, probably needs to stay for a while
                 return $this->isAfterLast();
                 break;
             default:
+                // We leave this in so any api migration error show up in a nice way
                 throw new Exception("Unknown property accessed for connection");
         }
    }
     
-    public function __call($method, $args) 
+   public function __call($method, $args) 
    {
         switch($method) {
             case 'MoveNext':
+                // Used all over the place, prolly cant go for a while
                 return $this->next();
                 break;
             case 'GetRowAssoc':
                 // We have to reget the current row in associative mode
+                // Only seen in modules, prolly remove it her
                 if($this->getFetchMode() != ResultSet::FETCHMODE_ASSOC) {
                     $this->setFetchMode(ResultSet::FETCHMODE_ASSOC);
                     $this->next(); $this->previous();                
@@ -471,13 +475,15 @@ abstract class ResultSetCommon {
                 return $this->getRow($args);
                 break;
             case 'RecordCount':
+                // Used all over the place, migrated core over already,
+                // Can't hurt to leave it in place
                 return $this->getRecordCount();
                 break;
             default:
+                // We leave this in so any api migration error show up in a nice way
                 throw new Exception("Unknown method call $method for connection");
         }
     }
-    
     // END XARAYA MODIFICATION
 }
 ?>
