@@ -473,6 +473,17 @@ function installer_admin_bootstrap()
     include 'modules/privileges/xarsetup.php';
     initializeSetup();
 
+    // Set up default user properties, etc.
+
+    // load modules into *_modules table
+    if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
+
+	//TODO: improve this once we know where authentication modules are headed
+	$regid=xarModGetIDFromName('authentication');
+	if (empty($regid)) {
+		die(xarML('I cannot load the authentication module. Please make it available and reinstall'));
+	}
+
     // Set the state and activate the following modules
     $modlist=array('roles','privileges','blocks','themes');
     foreach ($modlist as $mod) {
@@ -526,16 +537,6 @@ function installer_admin_bootstrap()
     if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_INACTIVE))) return;
     // Set module state to active
     if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) return;
-
-    // save the uids of the default roles for later
-    $role = xarFindRole('Everybody');
-    xarModSetVar('roles', 'everybody', $role->getID());
-    $role = xarFindRole('Anonymous');
-    xarConfigSetVar('Site.User.AnonymousUID', $role->getID());
-    // set the current session information to the right anonymous uid
-    xarSession_setUserInfo($role->getID(), 0);
-    $role = xarFindRole('Admin');
-    xarModSetVar('roles', 'admin', $role->getID());
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
 }
@@ -735,6 +736,16 @@ function installer_admin_create_administrator()
             return;
         }
     }
+
+    // Initialise authentication
+    // TODO: this is happening late here because we need to create a block
+	$regid = xarModGetIDFromName('authentication');
+	if (isset($regid)) {
+		if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
+		// Activate the module
+		if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+	}
+
     xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
 }
 

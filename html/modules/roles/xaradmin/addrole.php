@@ -69,15 +69,17 @@ function roles_admin_addrole()
             return;
         }
         // check for duplicate email address
-        $user = xarModAPIFunc('roles',
-            'user',
-            'get',
-            array('email' => $pemail));
+        if(xarModGetVar('roles','uniqueemail')) {
+            $user = xarModAPIFunc('roles',
+                'user',
+                'get',
+                array('email' => $pemail));
 
-        if ($user != false) {
-            $msg = xarML('That email address is already registered.');
-            xarErrorSet(XAR_USER_EXCEPTION, 'DUPLICATE_DATA', new DefaultUserException($msg));
-            return;
+            if ($user != false) {
+                $msg = xarML('That email address is already registered.');
+                xarErrorSet(XAR_USER_EXCEPTION, 'DUPLICATE_DATA', new DefaultUserException($msg));
+                return;
+            }
         }
         // TODO: Replace with DD property type check.
         // check for valid email address

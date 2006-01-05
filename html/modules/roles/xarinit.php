@@ -176,17 +176,18 @@ function roles_init()
 
 function roles_activate()
 {
+    //TODO: this stuff is happening here because at install blocks is not yet installed
+
     // only go through this once
-    if (xarModGetVar('roles','rolesperpage')) return true;
-
-    // Set up an initial value for module variables.
-    xarModSetVar('roles', 'rolesperpage', 20);
+# --------------------------------------------------------
+#
+# Create some modvars
+#
+    //TODO: improve on this hardwiring
     xarModSetVar('roles', 'defaultauthmodule', '');
-    //Default Display
+    if (xarModGetVar('roles','itemsperpage')) return true;
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
-    //Default User Locale
     xarModSetVar('roles', 'locale', '');
-
     $lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',
                                               'notify' => TRUE)),
@@ -194,9 +195,23 @@ function roles_activate()
                                   'locked' => 0,
                                   'notifymsg' => '');
     xarModSetVar('roles', 'lockdata', serialize($lockdata));
-    // Unfortunately, crappy format here, and not to PEAR Standardards
-    // But I need the line break to come into play without the tab.
 
+    xarModSetVar('roles', 'itemsperpage', 20);
+    // save the uids of the default roles for later
+    $role = xarFindRole('Everybody');
+    xarModSetVar('roles', 'everybody', $role->getID());
+    $role = xarFindRole('Anonymous');
+    xarConfigSetVar('Site.User.AnonymousUID', $role->getID());
+    // set the current session information to the right anonymous uid
+    xarSession_setUserInfo($role->getID(), 0);
+    $role = xarFindRole('Admin');
+    xarModSetVar('roles', 'admin', $role->getID());
+
+
+# --------------------------------------------------------
+#
+# Register block types
+#
     if (!xarModAPIFunc('blocks',
             'admin',
             'register_block_type',
@@ -244,10 +259,65 @@ function roles_upgrade($oldVersion)
 {
     // Upgrade dependent on old version number
     switch ($oldVersion) {
-        case 1.01:
+        case '1.01':
             break;
-        case 2.0:
-            // Code to upgrade from version 2.0 goes here
+        case '1.1.1':
+        	// is there an authentication module?
+			$regid = xarModGetIDFromName('authentication');
+
+			if (isset($regid)) {
+				// remove the login block type and block from roles
+				$result = xarModAPIfunc('blocks', 'admin', 'delete_type', array('module' => 'roles', 'type' => 'login'));
+
+				// install the authentication module
+				if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
+					// Activate the module
+				if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+
+				// create the new authentication modvars
+				xarModSetVar('authentication', 'allowregistration', xarModGetVar('roles', 'allowregistration'));
+				xarModSetVar('authentication', 'requirevalidation', xarModGetVar('roles', 'requirevalidation'));
+				xarModSetVar('authentication', 'itemsperpage', xarModGetVar('roles', 'rolesperpage'));
+				xarModSetVar('authentication', 'uniqueemail', xarModGetVar('roles', 'uniqueemail'));
+				xarModSetVar('authentication', 'askwelcomeemail', xarModGetVar('roles', 'askwelcomeemail'));
+				xarModSetVar('authentication', 'askvalidationemail', xarModGetVar('roles', 'askvalidationemail'));
+				xarModSetVar('authentication', 'askdeactivationemail', xarModGetVar('roles', 'askdeactivationemail'));
+				xarModSetVar('authentication', 'askpendingemail', xarModGetVar('roles', 'askpendingemail'));
+				xarModSetVar('authentication', 'askpasswordemail', xarModGetVar('roles', 'askpasswordemail'));
+				xarModSetVar('authentication', 'defaultgroup', xarModGetVar('roles', 'defaultgroup'));
+				xarModSetVar('authentication', 'lockouttime', 15);
+				xarModSetVar('authentication', 'lockouttries', 3);
+				xarModSetVar('authentication', 'minage', xarModGetVar('roles', 'minage'));
+				xarModSetVar('authentication', 'disallowednames', xarModGetVar('roles', 'disallowednames'));
+				xarModSetVar('authentication', 'disallowedemails', xarModGetVar('roles', 'disallowedemails'));
+				xarModSetVar('authentication', 'disallowedips', xarModGetVar('roles', 'disallowedips'));
+
+				// delete the old roles modvars
+				xarModDelVar('roles', 'allowregistration');
+				xarModDelVar('roles', 'requirevalidation');
+				xarModDelVar('roles', 'rolesperpage');
+				xarModDelVar('roles', 'uniqueemail');
+				xarModDelVar('roles', 'askwelcomeemail');
+				xarModDelVar('roles', 'askvalidationemail');
+				xarModDelVar('roles', 'askdeactivationemail');
+				xarModDelVar('roles', 'askpendingemail');
+				xarModDelVar('roles', 'askpasswordemail');
+				xarModDelVar('roles', 'defaultgroup');
+				xarModDelVar('roles', 'lockouttime');
+				xarModDelVar('roles', 'lockouttries');
+				xarModDelVar('roles', 'minage');
+				xarModDelVar('roles', 'disallowednames');
+				xarModDelVar('roles', 'disallowedemails');
+				xarModDelVar('roles', 'disallowedips');
+
+				// create one new roles modvar
+				xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authentication'));
+			} else {
+//				$msg = xarML('I could not load the authentication module. Please make it available and try again');
+//				xarErrorSet(XAR_USER_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new DefaultUserException($msg));
+//				return;
+				die(xarML('I could not load the authentication module. Please make it available and try again'));
+		    }
             break;
     }
     // Update successful
@@ -281,10 +351,6 @@ function roles_delete()
     $query = xarDBDropTable($tables['rolemembers']);
     if (empty($query)) return; // throw back
     if (!$dbconn->Execute($query)) return;
-    // Delete any module variables
-    xarModDelVar('roles', 'rolesperpage');
-    xarModDelVar('roles', 'disallowednames');
-    xarModDelVar('roles', 'disallowedemails');
 
     /**
      * Remove modvars, instances and masks

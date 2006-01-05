@@ -40,11 +40,11 @@ function roles_user_main()
                                          'user',
                                          'account'));
         } elseif ($allowregistration != true) {
-            xarResponseRedirect(xarModURL(xarGetModuleNameByID(xarModGetVar('roles','defaultauthmodule')),
+            xarResponseRedirect(xarModURL(xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule')),
                                           'user',
                                           'showloginform'));
         } else {
-            xarResponseRedirect(xarModURL(xarGetModuleNameByID(xarModGetVar('roles','defaultauthmodule')),
+            xarResponseRedirect(xarModURL(xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule')),
                                           'user',
                                           'register'));
 
