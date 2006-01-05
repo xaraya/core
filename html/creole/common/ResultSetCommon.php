@@ -455,20 +455,7 @@ abstract class ResultSetCommon {
         }
    }
     
-   public function UnixTimeStamp($value) 
-   {
-       if (!preg_match("|^([0-9]{4})[-/\.]?([0-9]{1,2})[-/\.]?([0-9]{1,2})[ ,-]*(([0-9]{1,2}):?([0-9]{1,2}):?([0-9\.]{1,4}))?|", 
-                       ($value), $rr)) return false;
-       
-       if ($rr[1] <= 100 && $rr[2]<= 1) return 0;
-       
-       // h-m-s-MM-DD-YY
-       if (!isset($rr[5])) return  mktime(0,0,0,$rr[2],$rr[3],$rr[1]);
-       return  mktime($rr[5],$rr[6],$rr[7],$rr[2],$rr[3],$rr[1]);
-        
-   }
-    
-   public function __call($method, $args) 
+    public function __call($method, $args) 
    {
         switch($method) {
             case 'MoveNext':

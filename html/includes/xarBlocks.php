@@ -211,7 +211,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
             $output .= xarBlockGetCached($cacheKey,'block');
 
         } else {
-            $blockinfo['last_update'] = $result->UnixTimeStamp($blockinfo['last_update']);
+            $blockinfo['last_update'] = $blockinfo['last_update'];
 
             // Get the overriding template name.
             // Levels, in order (most significant first): group instance, instance, group
