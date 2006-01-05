@@ -94,11 +94,9 @@ class Dynamic_Object_Master
                                   array('table' => $this->table));
             // we throw an exception here because we assume a table should always exist (for now)
             if (!isset($meta) || !isset($meta[$this->table])) {
-                $msg = xarML('Invalid #(1) #(2) for dynamic object #(3)',
-                             'table',$this->table,$this->table);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                new SystemException($msg));
-                return;
+                $msg = 'Invalid #(1) #(2) for dynamic object #(3)';
+                $vars = array('table',$this->table,$this->table);
+                throw new BadParameterException($vars,$msg);
             }
             foreach ($meta[$this->table] as $name => $propinfo) {
                 $this->addProperty($propinfo);
@@ -144,11 +142,9 @@ class Dynamic_Object_Master
                                   array('table' => $this->join));
             // we throw an exception here because we assume a table should always exist (for now)
             if (!isset($meta) || !isset($meta[$this->join])) {
-                $msg = xarML('Invalid #(1) #(2) for dynamic object #(3)',
-                             'join',$this->join,$this->name);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                new SystemException($msg));
-                return;
+                $msg = 'Invalid #(1) #(2) for dynamic object #(3)';
+                $vars = array('join',$this->join,$this->name);
+                throw new BadParameterException($vars,$msg);
             }
             $count = count($this->properties);
             foreach ($meta[$this->join] as $name => $propinfo) {
@@ -735,11 +731,9 @@ class Dynamic_Object_Master
                               array('table' => $args['table']));
         // we throw an exception here because we assume a table should always exist (for now)
         if (!isset($meta) || !isset($meta[$args['table']])) {
-            $msg = xarML('Invalid #(1) #(2) for dynamic object #(3)',
-                         'join',$args['table'],$this->name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
-            return;
+            $msg = 'Invalid #(1) #(2) for dynamic object #(3)';
+            $vars = array('join',$args['table'],$this->name);
+            throw new BadParameterException($vars, $msg);
         }
         $count = count($this->properties);
         foreach ($meta[$args['table']] as $name => $propinfo) {
@@ -780,11 +774,9 @@ class Dynamic_Object_Master
                 $name = array_shift($pieces);
                 // sanity check on SQL
                 if (count($pieces) < 2) {
-                    $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                                 'query ' . $args['where'], 'Dynamic_Object_Master', 'joinTable', 'DynamicData');
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                    new SystemException($msg));
-                    return;
+                    $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+                    $vars = array('query ' . $args['where'], 'Dynamic_Object_Master', 'joinTable', 'DynamicData');
+                    throw new BadParameterException($vars,$msg);
                 }
                 // for many-to-1 relationships where you specify the foreign key in the original table here
                 // (e.g. properties joined to xar_dynamic_objects -> where object_id eq objectid)
@@ -857,11 +849,9 @@ class Dynamic_Object extends Dynamic_Object_Master
             $this->itemid = $args['itemid'];
         }
         if (empty($this->itemid)) {
-            $msg = xarML('Invalid item id in method #(1)() for dynamic object [#(2)] #(3)',
-                         'getItem',$this->objectid,$this->name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
-            return;
+            $msg = 'Invalid item id in method #(1)() for dynamic object [#(2)] #(3)';
+            $vars = array('getItem',$this->objectid,$this->name);
+            throw new BadParameterException($vars,$msg);
         }
         if (!empty($this->primary) && !empty($this->properties[$this->primary])) {
             $primarystore = $this->properties[$this->primary]->datastore;
@@ -1132,12 +1122,9 @@ class Dynamic_Object extends Dynamic_Object_Master
         if (empty($this->itemid)) {
             // no primary key identified for this object, so we're stuck
             if (!isset($this->primary)) {
-                $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                             'primary key', 'Dynamic_Object', 'createItem', 'DynamicData');
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                new SystemException($msg));
-                return;
-
+                $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+                $vars = array('primary key', 'Dynamic_Object', 'createItem', 'DynamicData');
+                throw new BadParameterException($vars,$msg);
             } else {
                 $value = $this->properties[$this->primary]->getValue();
 
@@ -1159,11 +1146,9 @@ class Dynamic_Object extends Dynamic_Object_Master
                                                                                        'modname'  => $modinfo['name']));
 
                 } else {
-                    $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                                 'primary key datastore', 'Dynamic Object', 'createItem', 'DynamicData');
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                    new SystemException($msg));
-                    return;
+                    $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+                    $vars = array('primary key datastore', 'Dynamic Object', 'createItem', 'DynamicData');
+                    throw new BadParameterException($vars,$msg);
                 }
             }
         }
@@ -1215,11 +1200,9 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
 
         if (empty($this->itemid)) {
-            $msg = xarML('Invalid item id in method #(1)() for dynamic object [#(2)] #(3)',
-                         'updateItem',$this->objectid,$this->name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
-            return;
+            $msg = 'Invalid item id in method #(1)() for dynamic object [#(2)] #(3)';
+            $vars = array('updateItem',$this->objectid,$this->name);
+            throw new BadParameterException($vars,$msg);
         }
 
         $modinfo = xarModGetInfo($this->moduleid);
@@ -1258,11 +1241,9 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
 
         if (empty($this->itemid)) {
-            $msg = xarML('Invalid item id in method #(1)() for dynamic object [#(2)] #(3)',
-                         'deleteItem',$this->objectid,$this->name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
-            return;
+            $msg = 'Invalid item id in method #(1)() for dynamic object [#(2)] #(3)';
+            $vars = array('deleteItem',$this->objectid,$this->name);
+            throw new BadParameterException($vars, $msg);
         }
 
         $modinfo = xarModGetInfo($this->moduleid);
@@ -1563,11 +1544,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             }
             // sanity check on SQL
             if (count($pieces) < 2) {
-                $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                             'query ' . $where, 'Dynamic_Object_List', 'getWhere', 'DynamicData');
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                new SystemException($msg));
-                return;
+                $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+                $vars = array('query ' . $where, 'Dynamic_Object_List', 'getWhere', 'DynamicData');
+                throw new BadParameterException($vars,$msg);
             }
             if (isset($this->properties[$name])) {
                 // pass the where clause to the right data store

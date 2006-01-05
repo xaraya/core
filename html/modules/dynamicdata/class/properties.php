@@ -409,13 +409,13 @@ class Dynamic_Property
                 }
             }
             if (!$isvalid) {
+                $msg = 'Field #(1) (dd_#(2)) is missing.';
                 if (!empty($name)) {
-                    $msg = xarML('Field #(1) (#(2)) is missing.', $name, 'dd_'.$this->id);
+                    $vars = array($name,$this->id);
                 } else {
-                    $msg = xarML('Field #(1) (#(2)) is missing.', $this->name, 'dd_'.$this->id);
+                    $vars = array($this->name,$this->id);
                 }
-                xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-                return false;
+                throw new BadParameterException($vars,$msg);
             }
             // store the fieldname for validations who need them (e.g. file uploads)
             $name = empty($name) ? 'dd_'.$this->id : $name;

@@ -43,7 +43,7 @@
 
       <xar:comment>Create form</xar:comment>
       <form style="display: inline;" method="post" action="&xar-modurl-mail-admin-create;">
-        <xar:data-form module="$qdef['moduleid']" itemid="$itemid" itemtype="$qdef['itemtype']" linkfield="name" fieldlist="name,type,description"/>
+        <xar:data-form module="$qdef['moduleid']" itemid="$itemid" itemtype="$qdef['itemtype']" linkfield="name" fieldlist="name,type,description,status"/>
         <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
         <input type="hidden" name="objectid" value="#$qdef.objectid#"/>
         <input type="hidden" name="modid" value="#$qdef.moduleid#"/>
