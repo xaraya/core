@@ -142,7 +142,7 @@ function xarDB__datadictAlterTable($tableName, $args)
 }
 
 /**
- * DataDict specific column type generation - adapted from adodb-mysql.inc.php mapping
+ * DataDict specific column type generation - adapted from a d o d b-mysql.inc.php mapping
  *
  * @access private
  * @param field_name

@@ -134,9 +134,9 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         $dbconn =& xarDBGetConn();
 
-    // TODO: this won't work for objects with several static tables !
+        // TODO: this won't work for objects with several static tables !
         if (empty($itemid)) {
-            // get the next id (or dummy) from ADODB for this table
+            // get the next id (or dummy) 
             $itemid = $dbconn->GenId($table);
             $checkid = true;
         } else {
@@ -175,7 +175,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         $result = & $dbconn->Execute($query,$bindvars);
         if (!$result) return;
 
-        // get the real next id from ADODB for this table now
+        // get the last inserted id
         if ($checkid) {
             $itemid = $dbconn->PO_Insert_ID($table, $itemidfield);
         }
