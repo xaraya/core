@@ -141,17 +141,18 @@
                         Table: 
                     </xar:mlstring>
                 </label>
+
                 <select name="table" id="table">
                     <option value="">
                     </option>
-                    <xar:foreach in="$tables" value="$name">
-                        <xar:if condition="!empty($table) and $table eq $name">
-                            <option value="#$name#" selected="selected">
-                                #$name# 
+                    <xar:foreach in="$tables" value="$tblInfo">
+                        <xar:if condition="!empty($table) and $table eq $tblInfo:getName()">
+                            <option value="#$tblInfo:getName()#" selected="selected">
+                                #$tblInfo:getName()# 
                             </option>
                             <xar:else />
-                            <option value="#$name#">
-                                #$name# 
+                            <option value="#$tblInfo:getName()#">
+                                #$tblInfo:getName()# #$nogwat#
                             </option>
                         </xar:if>
                     </xar:foreach>
