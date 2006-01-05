@@ -173,9 +173,10 @@ function xarDB__mysqlAlterTable($tableName, $args)
             // ASSOC so we don't have to loop through the entire returned array looking for are our one
             // field and field type
             $dbconn =& xarDBGetConn();
-            $GLOBALS['ADODB_FETCH_MODE'] = ADODB_FETCH_ASSOC;
-            $tableInfoArray = $dbconn->metacolumns($tableName);
-            $GLOBALS['ADODB_FETCH_MODE'] = ADODB_FETCH_NUM;
+            $dbInfo = $dbconn->getDatabaseInfo();
+            $tblInfo = $dbInfo->getTable($tableName);
+            $tableInfoArray = $tblInfo->getColumns();
+
             if (!empty($tableInfoArray[strtoupper($args['field'])]->type)){
                 $sql.=$tableInfoArray[strtoupper($args['field'])]->type;
             }
