@@ -124,12 +124,6 @@ function blocks_adminapi_update_instance_groups($args)
         }
     }
 
-    // TODO: use ADODB array query function?
-    // TODO: error handling?
-//    foreach ($query_arr as $query) {
-//        $result = $dbconn->Execute($query);
-//    }
-
     // Resequence the position values, since we may have changed the existing values.
     // Span the resequence across all groups, since any number of groups could have
     // been affected.

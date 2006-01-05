@@ -1258,7 +1258,7 @@ if (empty($step)) {
         $module_states_table = $sitePrefix . '_module_states';
         echo "<h5>Upgrade $module_states_table table</h5>";
 
-        // TODO: use adodb transactions to ensure atomicity?
+        // TODO: use transactions to ensure atomicity?
         // The changes for bug 1716:
         // - add xar_id as primary key
         // - make index on xar_regid unique

@@ -306,7 +306,7 @@ function modules_upgrade($oldVersion)
     case '2.02':
         // compatability upgrade, nothing to be done
     case '2.2.0':
-        // TODO: use adodb transactions to ensure atomicity?
+        // TODO: use transactions to ensure atomicity?
         // The changes for bug 1716:
         // - add xar_id as primary key
         // - make index on xar_regid unique

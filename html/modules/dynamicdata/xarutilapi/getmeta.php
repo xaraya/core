@@ -10,7 +10,7 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * (try to) get the "meta" properties of tables via PHP ADODB
+ * (try to) get the "meta" properties of tables via db abstraction layer
  *
  * @author the DynamicData module development team
  * @param $args['table']  optional table you're looking for
