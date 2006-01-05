@@ -510,18 +510,19 @@ function xarSession__phpWrite($sessionId, $vars)
     $xartable =& xarDBGetTables();
 
     $sessioninfoTable = $xartable['session_info'];
-
     try {
         $dbconn->begin();
         // FIXME: We had to do qstr here, cos the query failed for some reason
+        // This is apparently because this is in a session write handler.
+        // Additional notes:
+        // * apache 2 on debian linux segfaults
         $query = "UPDATE $sessioninfoTable SET xar_vars = ". $dbconn->qstr($vars) . ", xar_lastused = " . $dbconn->qstr(time()). "WHERE xar_sessid = ".$dbconn->qstr($sessionId);
         $dbconn->executeUpdate($query);
         $dbconn->commit();
-    } catch (SQLException $e) {
-        $dbconn->rollback();
+    } catch (Exception $e) {
+        //$dbconn->rollback();
         throw $e;
     }
-
     return true;
 }
 
