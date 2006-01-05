@@ -23,10 +23,7 @@ function modules_adminapi_delete_module_alias($args)
 {
     extract($args);
 
-    if (empty($aliasModName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'aliasModName');
-        return;
-    }
+    if (empty($aliasModName)) throw new EmptyParameterException('aliasModName');
 
     $aliases = xarConfigGetVar('System.ModuleAliases');
     if (!isset($aliases[$aliasModName])) return false;

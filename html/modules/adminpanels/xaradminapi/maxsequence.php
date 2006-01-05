@@ -22,24 +22,17 @@ function adminpanels_adminapi_maxsequence($args)
     extract($args);
 
     // Argument check
-    if ((!isset($table)) ||
-        (!isset($column))) {
-        $msg = xarML('Empty table (#(1)) or column (#(2)).', $table, $column);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
+    if ((!isset($table)) || (!isset($column))) {
+        throw new BadParameterException(array($table,$column),'Empty table (#(1)) or column (#(2)).');
     }
 
     $dbconn =& xarDBGetConn();
 
-    $query = "SELECT MAX($column)
-              FROM $table";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    list($maxseq) = $result->fields;
-    $result->Close();
-
+    $query = "SELECT MAX($column) FROM $table";
+    $result =& $dbconn->executeQuery($query);
+    $maxseq = $result->getInt(1);
+    $result->close();
+    
     return($maxseq);
 }
 

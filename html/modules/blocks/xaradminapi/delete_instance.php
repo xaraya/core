@@ -21,11 +21,7 @@ function blocks_adminapi_delete_instance($args)
     extract($args);
 
     // Argument check
-    if (!isset($bid) || !is_numeric($bid)) {
-        $msg = xarML('Invalid parameter');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return false;
-    }
+    if (!isset($bid) || !is_numeric($bid)) throw new BadParameterException('bid');
 
     // Security
     if (!xarSecurityCheck('DeleteBlock', 1, 'Block', "::$bid")) {return;}
@@ -37,12 +33,12 @@ function blocks_adminapi_delete_instance($args)
 
     $query = "DELETE FROM $block_group_instances_table
               WHERE xar_instance_id = " . $bid;
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) {return;}
 
     $query = "DELETE FROM $block_instances_table
               WHERE xar_id = " . $bid;
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) {return;}
 
     xarModAPIFunc('blocks', 'admin', 'resequence');

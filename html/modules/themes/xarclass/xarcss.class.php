@@ -40,48 +40,48 @@ define("CSSCOMMONBASE", "base");
 class xarCSS
 {
     // class vars and their defaults
-    var $language   = 'html';       // only (x)html compliant css inclusion is supported out of the box
+    public $language   = 'html';       // only (x)html compliant css inclusion is supported out of the box
 
-    var $method       = 'link';      // supported are 'link', 'import', 'embed'
+    public $method       = 'link';      // supported are 'link', 'import', 'embed'
 
     // SUPPORTED SCOPES ARE MODULE, THEME, COMMON
-    var $scope      = 'theme';      // component type - 'module, 'theme' or 'common'
-    var $compcssdir = 'xarstyles';  // component css directory name (e.g. 'xarstyles')
+    public $scope      = 'theme';      // component type - 'module, 'theme' or 'common'
+    public $compcssdir = 'xarstyles';  // component css directory name (e.g. 'xarstyles')
 
-    var $base       = 'theme';      // component name (e.g. module's name 'base')
-    var $filename   = 'style';      // default css file name (without extension)
-    var $fileext    = 'css';        // default css file extension
-    var $commonbase = CSSCOMMONBASE;// base dirctory for common css
-    var $commonsource = CSSCOMMONSOURCE;  // filename for common css
+    public $base       = 'theme';      // component name (e.g. module's name 'base')
+    public $filename   = 'style';      // default css file name (without extension)
+    public $fileext    = 'css';        // default css file extension
+    public $commonbase = CSSCOMMONBASE;// base dirctory for common css
+    public $commonsource = CSSCOMMONSOURCE;  // filename for common css
 
-    var $source     = null;         // empty source should not be included (ideally)
+    public $source     = null;         // empty source should not be included (ideally)
     
-    var $condition  = null;         // encase in a conditions comment (think ie-win)
+    public $condition  = null;         // encase in a conditions comment (think ie-win)
     
-    var $dynfile; // not implemented yet
+    public $dynfile; // not implemented yet
 
     // TYPICAL REQUIRED ATTRIBUTES FOR WELL-FORMED CSS REFERENCE TAGS (xhtml-wise)
-    var $rel        = CSSRELSTYLESHEET;
-    var $type       = CSSTYPETEXT;
-    var $media      = CSSMEDIASCREEN;
-    var $title      = '';           // empty string title attribute will not be included
-    var $id         = '';           // may be supported in the future (TODO?)
+    public $rel        = CSSRELSTYLESHEET;
+    public $type       = CSSTYPETEXT;
+    public $media      = CSSMEDIASCREEN;
+    public $title      = '';           // empty string title attribute will not be included
+    public $id         = '';           // may be supported in the future (TODO?)
 
     // BASIC OVERRIDES SETTINGS (still TODO)
-    var $overridden = false;        // true == stylesheet has been overridden in theme or elsewhere
-    var $alternatedir     = '';     // alternative directory for overridden css file
+    public $overridden = false;        // true == stylesheet has been overridden in theme or elsewhere
+    public $alternatedir     = '';     // alternative directory for overridden css file
 
     // SUPPORT FOR DYNAMIC CSS SERVING AND ADMIN GUI (TODO)
-    var $cssdecl;                   // TODO: associative array containing css declarations
+    public $cssdecl;                   // TODO: associative array containing css declarations
                                     // $this->componentCSS["body"]["background-color"]
-    var $cssconf    = false;        // Use runtime configuration parameters (with db backend)
-    var $suppresstype;              // true == tags of this type are suppressed
-    var $suppressscope;             // true == tags of this scope are suppressed
-    var $sort       = true;         // true == tags will be sorted
-    var $comments   = true;         // true == comments will be shown in the templates
-    var $debug      = false;        // true == debug mode enabled
-    var $parse      = false;        // true == parse mode enabled
-    var $suppress   = false;        // true == this css is suppressed
+    public $cssconf    = false;        // Use runtime configuration parameters (with db backend)
+    public $suppresstype;              // true == tags of this type are suppressed
+    public $suppressscope;             // true == tags of this scope are suppressed
+    public $sort       = true;         // true == tags will be sorted
+    public $comments   = true;         // true == comments will be shown in the templates
+    public $debug      = false;        // true == debug mode enabled
+    public $parse      = false;        // true == parse mode enabled
+    public $suppress   = false;        // true == this css is suppressed
 
     // constructor
     function xarCSS($args)
@@ -191,14 +191,8 @@ class xarCSS
         if ($this->scope == 'theme') {
             // pretty straightforward
             $themestylesheet =  xarTplGetThemeDir() . "/style/" . $this->filename . "." . $this->fileext;
-            if(file_exists($themestylesheet)) {
-                // no problem
-                return $themestylesheet;
-            } else {
-                // problem
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg.$themestylesheet));
-                return;
-            }
+            if(!file_exists($themestylesheet)) throw new FileNotFoundException($themestylesheet);
+            return $themestylesheet;
         } elseif ($this->scope == 'module' || $this->scope == 'block') {            
             
             $original = "modules/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
@@ -221,8 +215,7 @@ class xarCSS
         } else {
             // no scope, somebody overrode defaults and hasn't assign anything sensible? naughty - lets complain
             $msg = xarML("#(1) (no valid scope attribute could be deduced from this xar:style tag)",$this->scope);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-            return;
+            throw new Exception($msg);
         }
     }
 }
@@ -236,7 +229,7 @@ class xarCSS
 
 class tagqueue
 {
-    var $legacy = true; // Also register the global which existed before the css stuff?
+    public $legacy = true; // Also register the global which existed before the css stuff?
     
     function tagqueue()
     {

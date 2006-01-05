@@ -93,14 +93,14 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             }
         }
 
-        $result =& $dbconn->Execute($query,array((int)$itemid));
+        $result =& $dbconn->Execute($query,array((int)$itemid),ResultSet::FETCHMODE_NUM);
 
         if (!$result) return;
 
         if ($result->EOF) {
             return;
         }
-        $values = $result->fields;
+        $values = $result->getRow();
         $result->Close();
 
         $newitemid = array_shift($values);
@@ -134,9 +134,9 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         $dbconn =& xarDBGetConn();
 
-    // TODO: this won't work for objects with several static tables !
+        // TODO: this won't work for objects with several static tables !
         if (empty($itemid)) {
-            // get the next id (or dummy) from ADODB for this table
+            // get the next id (or dummy) 
             $itemid = $dbconn->GenId($table);
             $checkid = true;
         } else {
@@ -175,17 +175,14 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         $result = & $dbconn->Execute($query,$bindvars);
         if (!$result) return;
 
-        // get the real next id from ADODB for this table now
+        // get the last inserted id
         if ($checkid) {
             $itemid = $dbconn->PO_Insert_ID($table, $itemidfield);
         }
 
         if (empty($itemid)) {
-            $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                         'item id from table '.$table, 'Dynamic_FlatTable_DataStore', 'createItem', 'DynamicData');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
-            return;
+            $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+            throw new BadParameterException(array('item id from table '.$table, 'Dynamic_FlatTable_DataStore', 'createItem', 'DynamicData'),$msg);
         }
         $this->fields[$itemidfield]->setValue($itemid);
         return $itemid;
@@ -410,7 +407,7 @@ if (empty($itemidfield)) {
             if (!empty($this->cache)) {
                 $result =& $dbconn->CacheSelectLimit($this->cache, $query, $numitems, $startnum-1, $bindvars);
             } else {
-                $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
+                $result = $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
             }
         } else {
             if (!empty($this->cache)) {
@@ -428,7 +425,7 @@ if (empty($itemidfield)) {
         }
         $itemid = 0;
         while (!$result->EOF) {
-            $values = $result->fields;
+            $values = $result->getRow();
             if ($isgrouped) {
                 $itemid++;
             } else {
@@ -436,7 +433,7 @@ if (empty($itemidfield)) {
             }
             // oops, something went seriously wrong here...
             if (empty($itemid) || count($values) != count($fieldlist)) {
-                $result->MoveNext();
+                $result->next();
                 continue;
             }
 
@@ -450,7 +447,7 @@ if (empty($itemidfield)) {
                 $this->fields[$field]->setItemValue($itemid,array_shift($values));
             }
 
-            $result->MoveNext();
+            $result->next();
         }
         $result->Close();
     }
@@ -537,18 +534,17 @@ if (empty($itemidfield)) {
 
     // TODO: improve this once we can define better relationships
         $query = "SELECT xar_field, xar_type
-                    FROM $metaTable
-                   WHERE xar_primary_key = 1
-                     AND xar_table=?";
+                  FROM $metaTable
+                  WHERE xar_primary_key = ?
+                    AND xar_table=?";
 
-        $result =& $dbconn->Execute($query,array($table));
+        $result =& $dbconn->Execute($query,array(1,$table),ResultSet::FETCHMODE_NUM);
 
         if (!$result || $result->EOF) return;
 
-        list($field, $type) = $result->fields;
-        $result->Close();
-
+        $field = $result->get(1);
         $this->primary = $field;
+        $result->Close();
         return $field;
     }
 
@@ -624,9 +620,9 @@ if (empty($itemidfield)) {
             }
 
             if ($numitems > 0) {
-                $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
+                $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars,ResultSet::FETCHMODE_NUM);
             } else {
-                $result =& $dbconn->Execute($query,$bindvars);
+                $result =& $dbconn->Execute($query,$bindvars,ResultSet::FETCHMODE_NUM);
             }
             if (!$result) return;
             $temp['result'] =& $result;
@@ -641,7 +637,7 @@ if (empty($itemidfield)) {
             return;
         }
 
-        $values = $result->fields;
+        $values = $result->getRow();
         $itemid = array_shift($values);
         // oops, something went seriously wrong here...
         if (empty($itemid) || count($values) != count($this->fields)) {
@@ -657,7 +653,7 @@ if (empty($itemidfield)) {
             $this->fields[$field]->setValue(array_shift($values));
         }
 
-        $result->MoveNext();
+        $result->next();
         return $itemid;
     }
 

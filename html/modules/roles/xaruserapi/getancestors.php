@@ -19,13 +19,7 @@ function roles_userapi_getancestors($args)
 {
     extract($args);
 
-    if(!isset($uid)) {
-        $msg = xarML('Wrong arguments to roles_userapi_getancestors.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
-    }
+    if(!isset($uid)) throw new EmptyParameterException('uid');
 
     if(!xarSecurityCheck('ReadRole')) return;
 

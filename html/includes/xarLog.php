@@ -30,6 +30,15 @@ define('XARLOG_LEVEL_DEBUG',     128);
 // This is a special define that includes all the levels defined above
 define('XARLOG_LEVEL_ALL',       255);
 
+/**
+ * Exceptions raised within the loggers
+ *
+ */
+class LoggerException extends Exception
+{
+    // Fill in later.
+}
+
 function xarLog_init($args, &$whatElseIsGoingLoaded) 
 {
 
@@ -40,7 +49,7 @@ function xarLog_init($args, &$whatElseIsGoingLoaded)
     {
         //We can't use xarInclude here.
         if (!include_once (xarLogConfigFile())) {
-            xarCore_die('xarLog_init: Log configuration file is invalid!');
+            throw new LoggerException('xarLog_init: Log configuration file is invalid!');
         }
 
     } elseif (xarLogFallbackPossible()) {
@@ -170,13 +179,13 @@ function xarLog__shutdown_handler()
 function xarLog__add_logger($type, $config_args)
 {
     if (!xarInclude ('includes/log/loggers/'.$type.'.php')) {
-        xarCore_die('xarLog_init: Unable to load driver for logging: '.$type);
+        throw new LoggerException('xarLog_init: Unable to load driver for logging: '.$type);
     }
 
     $type = 'xarLogger_'.$type;
 
      if (!$observer = new $type()) {
-        xarCore_die('xarLog_init: Unable to instanciate class for logging: '.$type);
+         throw new LoggerException('xarLog_init: Unable to instantiate class for logging: '.$type);
      }
 
       $observer->setConfig($config_args);

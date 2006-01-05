@@ -1,0 +1,77 @@
+<xar:template file="mod-head"/>
+
+<div class="xar-mod-body">
+    <xar:set name="active_tab">'status'</xar:set>
+    <xar:template file="queue-tabs"/>
+
+    <style type="text/css">
+        ul.qstatus { background-position: 0 50%; background-repeat: no-repeat; height: 1.5em;clear:left; margin-bottom: 1pt;}
+        ul.qstatus li { background-position: 0 50%; background-image: none; float:left;}
+        fieldset.qslip { float:left; margin-top: 10pt; width: 48%;}
+        ul.qslip li { height: 1.8em; background-position: 0 50%;}
+        div.qstatus { text-align: right; font-size: smaller;}
+        div.qstatus a, div.qstatus a:hover { text-decoration: none; }
+        div.qstatus a img { vertical-align: middle; }
+    </style>
+
+    <fieldset>
+        <div class="qstatus">
+            <xar:ml>
+                <xar:mlstring>Status as of: #(1) / #(2)</xar:mlstring>
+                <xar:mlvar>#xarLocaleGetFormattedDate('medium')#</xar:mlvar>
+                <xar:mlvar>#xarLocaleGetFormattedTime('medium')#</xar:mlvar>
+            </xar:ml>
+        </div>
+        <legend><xar:mlstring>Queue status overview</xar:mlstring></legend>
+        <xar:foreach in="$queues" key="$index" value="$qinfo">
+            <xar:set name="rowclass">$index % 2?'xar-alt':''</xar:set>
+            <ul class="qstatus #$rowclass#" style="background-image: url(#xarTplGetImage($qinfo.status .'.gif')#);">
+                <li style="width: 16px;"><img style="vertical-align: middle;" src="#xarTplGetImage('qtype_'.$qinfo['type'].'.gif')#"/></li>
+                <li style="width: 5em;">#$qinfo.name#</li>
+                <li style="width: 12em; text-align: right;">#$qinfo.count# items</li>
+                <li>#$qinfo.msg#</li>
+            </ul>
+        </xar:foreach>
+        <div class="qstatus">
+             <a href="&xar-modurl-mail-admin-qstatus;">
+                 <img src="#xarTplGetImage('refresh.gif')#"/>
+                 <xar:mlstring>Refresh current status</xar:mlstring>
+             </a>
+             <a href="&xar-modurl-mail-admin-qstatus;">
+                 <img src="#xarTplGetImage('reprocess.gif')#"/>
+                 <xar:mlstring>Reprocess queues</xar:mlstring>
+             </a> 
+        </div>
+    </fieldset>
+    <fieldset class="qslip">
+        <legend><xar:mlstring>Corrective measures</xar:mlstring></legend>
+        <xar:foreach in="$measures" key="$qname" value="$measure">
+            <ul>
+                <li>#$qname#
+                    <ul class="qstatus">
+                        <xar:foreach in="$measure" value="$action">
+                            <xar:set name="bckgrndimg">xarTplGetImage($action['action']).'.gif'</xar:set>
+                            <li style="background-image: url($bckgrndimg)">
+                                <a style="text-decoration: none; font-size: 0.85em;" 
+                                   href="#xarModUrl('mail','admin',$action['action'],array('name' => $qname, 'authid' => $authid))#">#$action.text#</a></li>
+                        </xar:foreach>
+                    </ul>
+                </li>
+            </ul>
+        </xar:foreach>
+        
+    </fieldset>
+
+    <fieldset class="qslip" style="margin-left: 5pt;">
+        <legend><xar:mlstring>Legend</xar:mlstring></legend>
+        <ul class="qslip" >
+            <li style="background-image: url(#xarTplGetImage('active.gif')#);"/>Queue is active and in good condition</li>
+            <li style="background-image: url(#xarTplGetImage('inactive.gif')#);">Queue is inactive</li>
+            <li style="background-image: url(#xarTplGetImage('problematic.gif')#);">Queue is inactive due to a problem</li>
+            <xar:foreach in="$qtypes" key="$type" value="$description">
+                <li style="background-image: url(#xarTplGetImage('qtype_'.$type.'.gif')#);">#$description#</li>
+            </xar:foreach>
+        </ul>
+    </fieldset>
+
+</div>

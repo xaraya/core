@@ -129,7 +129,7 @@ if(is_dir($locale_dir)) {
 }
 
 if (empty($allowedLocales)) {
-    xarCore_die("The var directory is corrupted: no locale was found!");
+    throw new Exception("The var directory is corrupted: no locale was found!");
 }
 // A sorted combobox is better
 sort($allowedLocales);
@@ -156,7 +156,7 @@ function xarInstallMain()
 
     // Make sure we can render a page
     xarTplSetPageTitle(xarML('Xaraya installer'));
-    xarTplSetThemeName('Xaraya_Classic') or  xarCore_die('You need the Xaraya_Classic theme if you want to install Xaraya.');
+    xarTplSetThemeName('Xaraya_Classic') or  throw new Exception('You need the Xaraya_Classic theme if you want to install Xaraya.');
 
     // Handle installation phase designation
     xarVarFetch('install_phase','int:1:6',$phase,1,XARVAR_NOT_REQUIRED);

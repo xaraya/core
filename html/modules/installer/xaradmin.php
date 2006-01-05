@@ -15,7 +15,7 @@
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
-if (!file_exists('install.php')) {xarCore_die(xarML('Already installed'));}
+if (!file_exists('install.php')) { throw new Exception('Already installed');}
 
 /**
  * Dead
@@ -136,11 +136,10 @@ function installer_admin_phase3()
     $metRequiredPHPVersion    = false;
 
     $systemVarDir             = xarCoreGetVarDirPath();
-    $cacheDir                 = $systemVarDir . '/cache';
-    $cacheTemplatesDir        = $systemVarDir . '/cache/templates';
-    $rssTemplatesDir          = $systemVarDir . '/cache/rss';
-    $adodbTemplatesDir        = $systemVarDir . '/cache/adodb';
-    $systemConfigFile         = $systemVarDir . '/config.system.php';
+    $cacheDir                 = $systemVarDir . XARCORE_CACHEDIR;
+    $cacheTemplatesDir        = $systemVarDir . XARCORE_TPL_CACHEDIR;
+    $rssTemplatesDir          = $systemVarDir . XARCORE_RSS_CACHEDIR;
+    $systemConfigFile         = $systemVarDir . '/' . XARCORE_CONFIG_FILE;
     $phpLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/php';
     $xmlLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/xml';
 
@@ -152,7 +151,6 @@ function installer_admin_phase3()
     $cacheIsWritable            = check_dir($cacheDir);
     $cacheTemplatesIsWritable   = (check_dir($cacheTemplatesDir) || @mkdir($cacheTemplatesDir, 0700));
     $rssTemplatesIsWritable     = (check_dir($rssTemplatesDir) || @mkdir($rssTemplatesDir, 0700));
-    $adodbTemplatesIsWritable   = (check_dir($adodbTemplatesDir) || @mkdir($adodbTemplatesDir, 0700));
     $phpLanguageFilesIsWritable = xarMLS__iswritable($phpLanguageDir);
     $xmlLanguageFilesIsWritable = xarMLS__iswritable($xmlLanguageDir);
     $memLimit = trim(ini_get('memory_limit'));
@@ -180,8 +178,6 @@ function installer_admin_phase3()
     $data['cacheTemplatesIsWritable'] = $cacheTemplatesIsWritable;
     $data['rssTemplatesDir']          = $rssTemplatesDir;
     $data['rssTemplatesIsWritable']   = $rssTemplatesIsWritable;
-    $data['adodbTemplatesDir']        = $adodbTemplatesDir;
-    $data['adodbTemplatesIsWritable'] = $adodbTemplatesIsWritable;
     $data['systemConfigFile']         = $systemConfigFile;
     $data['systemConfigIsWritable']   = $systemConfigIsWritable;
     $data['phpLanguageDir']             = $phpLanguageDir;
@@ -261,15 +257,13 @@ function installer_admin_phase5()
 
     if ($dbName == '') {
         $msg = xarML('No database was specified');
-        xarCore_die($msg);
-        return;
+        throw new Exception($msg);
     }
 
     // allow only a-z 0-9 and _ in table prefix
     if (!preg_match('/^\w*$/',$dbPrefix)) {
         $msg = xarML('Invalid character in table prefix');
-        xarCore_die($msg);
-        return;
+        throw new Exception($msg);
     }
     // Save config data
     $config_args = array('dbHost'    => $dbHost,
@@ -283,59 +277,42 @@ function installer_admin_phase5()
         return;
     }
 
-    //Do we already have a db?
-    //TODO: rearrange the loading sequence so that I can use xar functions
-    //rather than going directly to adodb
-    // Load in ADODB
-    // FIXME: This is also in xarDB init, does it need to be here?
-    if (!defined('XAR_ADODB_DIR')) {
-        define('XAR_ADODB_DIR','xaradodb');
-    }
-    include_once XAR_ADODB_DIR . '/adodb.inc.php';
-    $ADODB_CACHE_DIR = xarCoreGetVarDirPath() . "/cache/adodb";
-
+    $init_args =  array('userName' => $dbUname,
+                        'password' => $dbPass,
+                        'databaseHost' => $dbHost,
+                        'databaseType' => $dbType,
+                        'databaseName' => $dbName,
+                        'systemTablePrefix' => $dbPrefix,
+                        'siteTablePrefix' => $dbPrefix,
+                        'doConnect' => false);
+    
     // {ML_dont_parse 'includes/xarDB.php'}
     include_once 'includes/xarDB.php';
-
-    // Check if there is a xar- version of the driver, and use it.
-    // Note the driver we load does not affect the database type.
-    if (xarDBdriverExists('xar' . $dbType, 'adodb')) {
-        $dbDriver = 'xar' . $dbType;
-    } else {
-        $dbDriver = $dbType;
-    }
-
-    $dbconn = ADONewConnection($dbDriver);
-    $dbExists = TRUE;
+    xarDB_Init($init_args, XARCORE_SYSTEM_NONE);
 
     // Not all Database Servers support selecting the specific db *after* connecting
     // so let's try connecting with the dbname first, and then without if that fails
-    $dbConnected = @$dbconn->Connect($dbHost, $dbUname, $dbPass, $dbName);
-
-    if (!$dbConnected) {
-        // Couldn't connect to the specified dbName. Let's try connecting without dbName now
-        // Need to reset dbconn prior to trying just a normal connection
-        unset($dbconn);
-        $dbconn = ADONewConnection($dbDriver);
-
-        if ($dbConnected = @$dbconn->Connect($dbHost, $dbUname, $dbPass)) {
-            $dbExists = FALSE;
-        } else {
-            $dbConnected = FALSE;
-            $dbExists = FALSE;
-        }
+    $dbExists = false;
+    try {
+      $dbconn = xarDBNewConn($init_args);
+      $dbExists = true;
+    } catch(Exception $e) {
+      // Couldn't connect to the specified dbName
+      // Let's try without db name
+      try {
+        $init_args['databaseName'] ='';
+        $dbconn = xarDBNewConn($init_args);
+      } catch(Exception $ex) {
+        // It failed without dbname too
+        $msg = xarML('Database connection failed. The information supplied was erroneous, such as a bad or missing password or wrong username.
+                          The message was: ' . $ex->getMessage());
+        throw new Exception($msg);
+      }
     }
-
-    if (!$dbConnected) {
-        $msg = xarML('Database connection failed. The information supplied was erroneous, such as a bad or missing password or wrong username.');
-        xarCore_die($msg);
-        return;
-    }
-
+    
     if (!$createDB && !$dbExists) {
         $msg = xarML('Database #(1) doesn\'t exist and it wasnt selected to be created.', $dbName);
-        xarCore_die($msg);
-        return;
+        throw new Exception($msg);
     }
 
     $data['confirmDB']  = $confirmDB;
@@ -348,9 +325,11 @@ function installer_admin_phase5()
         $data['dbType']     = $dbType;
         $data['install_create_database']      = $createDB;
         $data['language']    = $install_language;
+        // Gots to ask confirmation
         return $data;
     }
 
+    xarDBLoadTableMaintenanceAPI();
     // Create the database if necessary
     if ($createDB) {
         $data['confirmDB']  = true;
@@ -362,17 +341,17 @@ function installer_admin_phase5()
         if ($dbExists) {
             if (!$dbconn->Execute('DROP DATABASE ' . $dbName)) return;
         }
-        if (!xarInstallAPIFunc('createdb', $config_args)) {
-            $msg = xarML('Could not create database (#(1)). Check if you already have a database by that name and remove it.', $dbName);
-            xarCore_die($msg);
-            return;
+        if(!$dbconn->Execute(xarDBCreateDatabase($dbName,$dbType))) {
+          //if (!xarInstallAPIFunc('createdb', $config_args)) {
+          $msg = xarML('Could not create database (#(1)). Check if you already have a database by that name and remove it.', $dbName);
+          throw new Exception($msg);
         }
     }
     else {
         $removetables = true;
     }
 
-    // Start the database
+    // Re-init with the new values and connect
     $systemArgs = array('userName' => $dbUname,
                         'password' => $dbPass,
                         'databaseHost' => $dbHost,
@@ -387,26 +366,21 @@ function installer_admin_phase5()
     // drop all the tables that have this prefix
     //TODO: in the future need to replace this with a check further down the road
     // for which modules are already installed
-    xarDBLoadTableMaintenanceAPI();
+    
     if (isset($removetables) && $removetables) {
         $dbconn =& xarDBGetConn();
-        $result = $dbconn->Execute($dbconn->metaTablesSQL);
-        if(!$result) return;
-        $tables = array();
-        while(!$result->EOF) {
-            list($table) = $result->fields;
-            $parts = explode('_',$table);
-            if ($parts[0] == $dbPrefix) $tables[] = $table;
-            $result->MoveNext();
-        }
-        foreach ($tables as $table) {
-            // FIXME: a lot!
-            // 1. the drop table drops the sequence while the table gets dropped in the second statement
-            //    so if that fails, the table remains while the sequence is gone, at least transactions is needed
-            // 3. generating sql and executing in 2 parts sucks, wrt encapsulation
-            $sql = xarDBDropTable($table,$dbType); 
-            $result = $dbconn->Execute($sql);
-            if(!$result) return;
+        $dbinfo = $dbconn->getDatabaseInfo();
+        try {
+            $dbconn->begin();
+            foreach($dbinfo->getTables() as $tbl) {
+                $table = $tbl->getName();
+                $sql = xarDBDropTable($table,$dbType);
+                $dbconn->Execute($sql);
+            }
+            $dbconn->commit();
+        } catch (SQLException $e) {
+            $dbconn->rollback();
+            throw $e;
         }
     }
 
@@ -427,7 +401,8 @@ function installer_admin_phase5()
     // If we are here, the base system has completed
     // We can now pass control to xaraya.
     include_once 'includes/xarConfig.php';
-    xarConfig_init(array(),XARCORE_SYSTEM_ADODB);
+    
+    xarConfig_init(array(),XARCORE_SYSTEM_DATABASE);
     xarConfigSetVar('Site.MLS.DefaultLocale', $install_language);
 
     // Set the allowed locales to our "C" locale and the one used during installation
@@ -577,32 +552,22 @@ function installer_admin_create_administrator()
 
     if ($pass != $pass1) {
         $msg = xarML('The passwords do not match');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        throw new Exception($msg);
     }
 
     if (empty($userName)) {
         $msg = xarML('You must provide a preferred username to continue.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-
+        throw new Exception($msg);
+    }
     // check for spaces in the username
-    } elseif (preg_match("/[[:space:]]/",$userName)) {
+    if (preg_match("/[[:space:]]/",$userName)) {
         $msg = xarML('There is a space in the username.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-
+        throw new Exception($msg);
+    }
     // check the length of the username
-    } elseif (strlen($userName) > 255) {
+    if (strlen($userName) > 255) {
         $msg = xarML('Your username is too long.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-
-    // check for spaces in the username (again ?)
-    } elseif (strrpos($userName,' ') > 0) {
-        $msg = xarML('There is a space in your username.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        throw new Exception($msg);
     }
 
     // assemble the args into an array for the role constructor
@@ -658,17 +623,13 @@ function installer_admin_create_administrator()
 
     $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
-              WHERE     xar_name = 'left'";
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
+              WHERE     xar_name = ?";
+    $dbconn->Execute($query,array('left'));
 
     // Freak if we don't get one and only one result
-    if ($result->PO_RecordCount() != 1) {
+    if ($result->getRecordCount() != 1) {
         $msg = xarML("Group 'left' not found.");
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
+        throw new Exception($msg);
     }
 
     list ($leftBlockGroup) = $result->fields;
@@ -762,9 +723,7 @@ function installer_admin_choose_configuration()
 
     if (count($awol) != 0) {
         $msg = xarML("Xaraya cannot install bcause the following core modules are missing or corrupted: #(1)",implode(', ', $awol));
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
-                       new SystemException($msg));
-        return;
+        throw new Exception($msg);
     }
 
     $basedir = realpath('modules/installer/xarconfigurations');
@@ -827,8 +786,7 @@ function installer_admin_confirm_configuration()
     if(!xarVarFetch('configuration', 'isset', $configuration, NULL,  XARVAR_DONT_SET))  return;
     if(!isset($configuration)) {
         $msg = xarML("Please go back and select one of the available configurations.");
-        xarErrorSet(XAR_USER_EXCEPTION, 'Please select a configuration', $msg);
-        return;
+        throw new Exception($msg);
     }
 
     //I am not sure if these should these break
@@ -877,6 +835,7 @@ function installer_admin_confirm_configuration()
         $func = "installer_" . basename(strval($configuration),'.conf.php') . "_privilegeoptions";
         $data['options1'] = $func();
         $data['options2'] = $options2;
+        $data['options3'] = $options3;
         $data['installed'] = implode(', ',$installedmodules);
         $data['missing'] = implode(', ',$awolmodules);
         $data['configuration'] = $configuration;
@@ -888,12 +847,18 @@ function installer_admin_confirm_configuration()
         *********************************************************************/
         $dbconn =& xarDBGetConn();
         $sitePrefix = xarDBGetSiteTablePrefix();
-        $query = "DELETE FROM " . $sitePrefix . '_privileges';
-        if (!$dbconn->Execute($query)) return;
-        $query = "DELETE FROM " . $sitePrefix . '_privmembers';
-        if (!$dbconn->Execute($query)) return;
-        $query = "DELETE FROM " . $sitePrefix . '_security_acl';
-        if (!$dbconn->Execute($query)) return;
+        try {
+            $dbconn->begin();
+            $query = "DELETE FROM " . $sitePrefix . '_privileges';
+            $dbconn->Execute($query);
+            $query = "DELETE FROM " . $sitePrefix . '_privmembers';
+            $dbconn->Execute($query);
+            $query = "DELETE FROM " . $sitePrefix . '_security_acl';
+            $dbconn->Execute($query);
+        } catch(SQLException $e) {
+            $dbconn->rollback();
+            throw $e;
+        }
 
         /*********************************************************************
         * Enter some default privileges
@@ -936,31 +901,30 @@ function installer_admin_confirm_configuration()
         xarAssignPrivilege('GeneralLock','Everybody');
         xarAssignPrivilege('GeneralLock','Administrators');
         xarAssignPrivilege('GeneralLock','Users');
-
+        
         // disable caching of module state in xarMod.php
-            $GLOBALS['xarMod_noCacheState'] = true;
-            xarModAPIFunc('modules','admin','regenerate');
+        $GLOBALS['xarMod_noCacheState'] = true;
+        xarModAPIFunc('modules','admin','regenerate');
 
         // load the modules from the configuration
-            foreach ($options2 as $module) {
-                if(in_array($module['item'],$chosen)) {
-                   $dependents = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$module['item']));
-                   if (count($dependents['unsatisfiable']) > 0) {
-                        $msg = xarML("Cannot load because of unsatisfied dependencies. One or more of the following modules is missing: ");
-                        foreach ($dependents['unsatisfiable'] as $dependent) {
-                            $modname = isset($dependent['name']) ? $dependent['name'] : "Unknown";
-                            $modid = isset($dependent['id']) ? $dependent['id'] : $dependent;
-                            $msg .= $modname . " (ID: " . $modid . "), ";
-                        }
-                        $msg = trim($msg,', ') . ". " . xarML("Please check the listings at www.xaraya.com to identify any modules flagged as 'Unknown'.");
-                        $msg .= " " . xarML('Add the missing module(s) to the modules directory and run the installer again.');
-                        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
-                        return;
-                   }
-                   xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$module['item']));
-//                    xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
+        foreach ($options2 as $module) {
+            if(in_array($module['item'],$chosen)) {
+                $dependents = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$module['item']));
+                if (count($dependents['unsatisfiable']) > 0) {
+                    $msg = xarML("Cannot load because of unsatisfied dependencies. One or more of the following modules is missing: ");
+                    foreach ($dependents['unsatisfiable'] as $dependent) {
+                        $modname = isset($dependent['name']) ? $dependent['name'] : "Unknown";
+                        $modid = isset($dependent['id']) ? $dependent['id'] : $dependent;
+                        $msg .= $modname . " (ID: " . $modid . "), ";
+                    }
+                    $msg = trim($msg,', ') . ". " . xarML("Please check the listings at www.xaraya.com to identify any modules flagged as 'Unknown'.");
+                    $msg .= " " . xarML('Add the missing module(s) to the modules directory and run the installer again.');
+                    throw new Exception($msg);
                 }
+                xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$module['item']));
+                // xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
             }
+        }
         $func = "installer_" . basename(strval($configuration),'.conf.php') . "_configuration_load";
         $func($chosen);
         $content['marker'] = '[x]';                                           // create the user menu
@@ -976,17 +940,15 @@ function installer_admin_confirm_configuration()
 
         $query = "SELECT    xar_id as id
                   FROM      $blockGroupsTable
-                  WHERE     xar_name = 'left'";
+                  WHERE     xar_name = ?";
 
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,array('left'));
         if (!$result) return;
 
         // Freak if we don't get one and only one result
-        if ($result->PO_RecordCount() != 1) {
+        if ($result->getRecordCount() != 1) {
             $msg = xarML("Group 'left' not found.");
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return;
+            throw new Exception($msg);
         }
 
         list ($leftBlockGroup) = $result->fields;
@@ -1027,14 +989,13 @@ function installer_admin_cleanup()
     xarTplSetPageTemplateName('installer');
 
     xarUserLogOut();
-// log in admin user
+
+    // log in admin user
     $uname = xarModGetVar('roles','lastuser');
     $pass = xarModGetVar('roles','adminpass');
     if (!xarUserLogIn($uname, $pass, 0)) {
         $msg = xarML('Cannot log in the default administrator. Check your setup.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
+        throw new Exception($msg);
     }
 
     $remove = xarModDelVar('roles','adminpass');
@@ -1048,18 +1009,18 @@ function installer_admin_cleanup()
 
     $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
-              WHERE     xar_name = 'right'";
+              WHERE     xar_name = ?";
+    $stmt = $dbconn->prepareStatement($query);
+    
 
     // Check for db errors
-    $result =& $dbconn->Execute($query);
+    $result = $stmt->executeQuery(array('right'));
     if (!$result) return;
 
     // Freak if we don't get one and only one result
-    if ($result->PO_RecordCount() != 1) {
+    if ($result->getRecordCount() != 1) {
         $msg = xarML("Group 'right' not found.");
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
+        throw new Exception($msg);
     }
 
     list ($rightBlockGroup) = $result->fields;
@@ -1087,20 +1048,14 @@ function installer_admin_cleanup()
         }
     }
 
-    $query = "SELECT    xar_id as id
-              FROM      $blockGroupsTable
-              WHERE     xar_name = 'header'";
-
     // Check for db errors
-    $result =& $dbconn->Execute($query);
+    $result = $stmt->executeQuery(array('header'));
     if (!$result) return;
-
+    xarLogMessage("Selected the header block group", XARLOG_LEVEL_ERROR);
     // Freak if we don't get one and only one result
-    if ($result->PO_RecordCount() != 1) {
+    if ($result->getRecordCount() != 1) {
         $msg = xarML("Group 'header' not found.");
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
+        throw new Exception($msg);
     }
 
     list ($headerBlockGroup) = $result->fields;

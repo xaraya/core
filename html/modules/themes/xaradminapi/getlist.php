@@ -53,10 +53,7 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
     static $validOrderFields = array('name' => 'themes', 'regid' => 'themes',
                                      'class' => 'infos');
     if (!is_array($filter)) {
-        $msg = xarML('Parameter filter must be an array.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+        throw new BadParameterException('filter','Parameter filter must be an array.');
     }
 
     // Optional arguments.
@@ -71,10 +68,7 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
     $orderByClauses = array(); $extraSelectClause = '';
     foreach ($orderFields as $orderField) {
         if (!isset($validOrderFields[$orderField])) {
-            $msg = xarML('Parameter orderBy can contain only \'name\' or \'regid\' or \'class\' as items.');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException($msg));
-            return;
+            throw new BadParameterException('orderBy','Parameter orderBy can contain only \'name\' or \'regid\' or \'class\' as items.');
         }
         // Here $validOrderFields[$orderField] is the table alias
         $orderByClauses[] = $validOrderFields[$orderField] . '.xar_' . $orderField;

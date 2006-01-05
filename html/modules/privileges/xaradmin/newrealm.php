@@ -33,10 +33,7 @@ function privileges_admin_newrealm()
         if(!$q->run()) return;
 
         if ($q->getrows() > 0) {
-            $msg = xarML('There is already a realm with the name #(1)', $name);
-            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA',
-                           new DefaultUserException($msg));
-            return;
+            throw new DuplicateException(array('realm',$name));
         }
 
         $q = new xarQuery('INSERT',$xartable['security_realms']);

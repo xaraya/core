@@ -48,16 +48,16 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
         $GLOBALS['xarMLS_mode'] = $args['MLSMode'];
         if (!function_exists('mb_http_input')) {
             // mbstring required
-            xarCore_die('xarMLS_init: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
+            throw new Exception('xarMLS_init: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
         }
         break;
     default:
-        xarCore_die('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
+        throw new Exception('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
     $GLOBALS['xarMLS_backendName'] = $args['translationsBackend'];
 /* TODO: delete after new backend testing
     if ($GLOBALS['xarMLS_backendName'] != 'php' && $GLOBALS['xarMLS_backendName'] != 'xml' && $GLOBALS['xarMLS_backendName'] != 'xml2php') {
-        xarCore_die('xarML_init: Unknown translations backend: '.$GLOBALS['xarMLS_backendName']);
+        throw new Exception('xarML_init: Unknown translations backend: '.$GLOBALS['xarMLS_backendName']);
     }
 */
     // USERLOCALE FIXME Delete after new backend testing
@@ -229,11 +229,7 @@ function xarML($string/*, ...*/)
 function xarMLByKey($key/*, ...*/)
 {
     // Key must have a value and not contain spaces
-    if(empty($key) || strpos($key," ")) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM');
-        return;
-    }
-
+    if(empty($key) || strpos($key," ")) throw new BadParameterException('key');
 
     if (isset($GLOBALS['xarMLS_backend'])) {
         $trans = $GLOBALS['xarMLS_backend']->translateByKey($key);
@@ -281,20 +277,18 @@ function xarLocaleGetInfo($locale)
  */
 function xarLocaleGetString($localeInfo)
 {
-    if (!isset($localeInfo['lang']) || !isset($localeInfo['country']) || !isset($localeInfo['specializer']) || !isset($localeInfo['charset'])) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
-        return;
+    if (!isset($localeInfo['lang']) || 
+        !isset($localeInfo['country']) || 
+        !isset($localeInfo['specializer']) || 
+        !isset($localeInfo['charset'])) {
+        throw new BadParameterException('localeInfo');
     }
-    if (strlen($localeInfo['lang']) != 2) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
-        return;
-    }
+    if (strlen($localeInfo['lang']) != 2) throw new BadParameterException('localeInfo');
+
     $locale = strtolower($localeInfo['lang']);
     if (!empty($localeInfo['country'])) {
-        if (strlen($localeInfo['country']) != 2) {
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
-            return;
-        }
+        if (strlen($localeInfo['country']) != 2) throw new BadParameterException('localeInfo');
+
         $locale .= '_'.strtoupper($localeInfo['country']);
     }
     if (!empty($localeInfo['charset'])) {
@@ -612,8 +606,7 @@ function xarMLS__parseLocaleString($locale)
     // Match the locales standard format  : en_US.iso-8859-1
     // Thus: language code lowercase(2), country code uppercase(2), encoding lowercase(1+)
     if (!preg_match('/([a-z][a-z])(_([A-Z][A-Z]))?(\.([0-9a-z\-]+))?(@([0-9a-zA-Z]+))?/', $locale, $matches)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'locale');
-        return;
+        throw new BadParameterException('locale');
     }
 
     $res['lang'] = $matches[1];
@@ -718,14 +711,14 @@ class xarMLS__TranslationsBackend
  */
 class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
 {
-    var $locales;
-    var $locale;
-    var $domainlocation;
-    var $contextlocation;
-    var $backendtype;
-    var $space;
-    var $spacedir;
-    var $domaincache;
+    public $locales;
+    public $locale;
+    public $domainlocation;
+    public $contextlocation;
+    public $backendtype;
+    public $space;
+    public $spacedir;
+    public $domaincache;
 
     function xarMLS__ReferencesBackend($locales)
     {
@@ -869,7 +862,7 @@ function xarMLS__mkdirr($path)
             if (!$result) {
                 $msg = xarML("The directories under #(1) must be writeable by PHP.", $next_path);
                 xarLogMessage($msg);
-                // xarErrorSet(XAR_USER_EXCEPTION, 'WrongPermissions', new DefaultUserException($msg));
+                // throw new PermissionException?
             }
             return $result;
         }

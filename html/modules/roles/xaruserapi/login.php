@@ -23,24 +23,11 @@ function roles_userapi_login($args)
     extract($args);
 
     // FIXME: this should be removed as far as possible
-    if (isset($passwd) && !isset($pass)) {
-        die("roles_userapi_login: roles_userapi_login prototype has changed, " .
-            "you should use pass instead of passwd to " .
-            "avoid this message being displayed");
-    }
+    assert('!isset($passwd);/* Do not use \'passwd\', use \'pass\' instead. This function\'s signature has changed');
 
-    if (!isset($rememberme)) {
-        $rememberme = 0;
-    }
-
-if ((!isset($uname)) ||
-        (!isset($pass))) {
-        $msg = xarML('Wrong arguments to roles_userapi_login.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
-    }
+    if (!isset($rememberme)) $rememberme = 0;
+    if (!isset($uname)) throw new EmptyParameterException('uname');
+    if (!isset($pass))  throw new EmptyParameterException('pass');
 
     return xarUserLogIn($uname, $pass, $rememberme);
 }

@@ -41,26 +41,17 @@ function roles_admin_deleterole()
 
 // Prohibit removal of any groups that have children
     if($role->countChildren()) {
-        $msg = xarML('The group #(1) has children. If you want to remove this group you have to delete the children first.', $role->getName());
-        xarErrorSet(XAR_USER_EXCEPTION,
-                    'CANNOT_CONTINUE',
-                     new SystemException($msg));
-        return false;
+        $msg = 'The group #(1) has children. If you want to remove this group you have to delete the children first.';
+        throw new ForBiddenOperationException($role->getName,$msg);
     }
 // Prohibit removal of any groups or users the system needs
     if($uid == xarModGetVar('roles','admin')) {
-        $msg = xarML('The user #(1) is the designated site administrator. If you want to remove this user change the site admin in the roles configuration setting first.', $role->getName());
-        xarErrorSet(XAR_USER_EXCEPTION,
-                    'CANNOT_CONTINUE',
-                     new SystemException($msg));
-        return false;
+        $msg = 'The user #(1) is the designated site administrator. If you want to remove this user change the site admin in the roles configuration setting first.';
+        throw new ForbiddenOperationException($role->getName,$msg);
     }
     if(strtolower($role->getName()) == strtolower(xarModGetVar('roles','defaultgroup'))) {
-        $msg = xarML('The group #(1) is the default group for new users. If you want to remove this group change the roles configuration setting first.', $role->getName());
-        xarErrorSet(XAR_USER_EXCEPTION,
-                    'CANNOT_CONTINUE',
-                     new SystemException($msg));
-        return false;
+        $msg = 'The group #(1) is the default group for new users. If you want to remove this group change the roles configuration setting first.';
+        throw new ForbiddenOperationException($role->getName(),$msg);
     }
 
     if (empty($confirmation)) {
@@ -80,20 +71,18 @@ function roles_admin_deleterole()
                               'getactive',
                               array('uid' => $uid));
 
-if (empty($check)) {
+        if (empty($check)) {
             // Try to remove the role and bail if an error was thrown
             if (!$role->remove()) return;
-
+            
             // call item delete hooks (for DD etc.)
-// TODO: move to remove() function
+            // TODO: move to remove() function
             $pargs['module'] = 'roles';
             $pargs['itemtype'] = $type; // we might have something separate for groups later on
             $pargs['itemid'] = $uid;
             xarModCallHooks('item', 'delete', $uid, $pargs);
         } else {
-            $msg = xarML('That user has a current active session', 'roles');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
+            throw new ForbiddenOperation($role->getName(),'The user "#(1)" has an active session and can not be removed at this time.');
         }
         // redirect to the next page
         xarResponseRedirect(xarModURL('roles', 'admin', 'showusers'));

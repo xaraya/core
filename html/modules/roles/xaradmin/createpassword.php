@@ -20,18 +20,16 @@ function roles_admin_createpassword()
     if(!xarVarFetch('state', 'isset', $state, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('groupuid', 'int:0:', $groupuid, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('uid', 'isset', $uid)) {
+        // Why like this, why not just return?
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)','parameters', 'admin', 'createpassword', 'Roles');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',new SystemException($msg." -- ".$uid));
-        return;
+        throw new Exception($msg);
     }
 
     $pass = xarModAPIFunc('roles',
                           'user',
                           'makePass');
      if (empty($pass)) {
-            $msg = xarML('Problem generating new password');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
+         throw new EmptyParameterException(null,'Problem generating new password, it came up empty');
      }
      $roles = new xarRoles();
      $role = $roles->getRole($uid);

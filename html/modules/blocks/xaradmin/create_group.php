@@ -28,9 +28,7 @@ function blocks_admin_create_group()
     // Check the group name has not already been used.
     $checkname = xarModAPIfunc('blocks', 'user', 'groupgetinfo', array('name' => $name));
     if (!empty($checkname)) {
-        $msg = xarML('Block group name "#(1)" already exists', $name);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        throw new DuplicateException(array('block group',$name));
     }
 
     // Pass to API

@@ -24,7 +24,7 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
 {
-    var $icon;
+    public $icon;
 
     function Dynamic_URLIcon_Property($args)
     {

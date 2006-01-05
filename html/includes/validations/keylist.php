@@ -35,16 +35,13 @@
  */
 function variable_validations_keylist (&$subject, $parameters, $supress_soft_exc, &$name)
 {
-
+    if ($name == '') $name = '<unknown>';
     if (!is_array($subject)) {
-        if ($name != '')
-            $msg = xarML('Variable #(1) is not an array: "#(2)"', $name, $subject);
-        else
-            $msg = xarML('Not an array: "#(1)"', $subject);
+        $msg = 'Not an array';
+        
         // NULL is a special case. Perform a 'soft' fail should we encounter a NULL
         if (!($subject === NULL && $supress_soft_exc)) {
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-            return;
+            throw new VariableValidationException(array($name,$subject,$msg));
         } else {
             return false;
         }

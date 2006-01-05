@@ -1,6 +1,7 @@
 <?php
 /**
  *  View recent extension releases
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -26,9 +27,7 @@ function base_admin_release($args)
     // allow fopen
     if (!xarFuncIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
     if (!ini_get('allow_url_fopen')) {
-        $msg = xarML('Unable to use fopen to get RSS feeds.');
-        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-        return;
+        throw new ForbiddenOperationException('fopen to get RSS feeds','The current PHP configuration does not allow to use #(1) with an url');
     }
     // Require the xmlParser class
     require_once('modules/base/xarclass/xmlParser.php');
@@ -76,11 +75,8 @@ function base_admin_release($args)
       $data['chanlink']   =   $info['channel']['link'];
       $data['chandesc']   =   $info['channel']['description'];
     } else {
-        $msg = xarML('There is a problem with a feed.');
-        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-        return;
+        throw new DataNotFoundException(null,'There is a problem with a feed.');
     }
-    asort($feedcontent);
     $data['feedcontent'] = $feedcontent; 
     return $data;
 }

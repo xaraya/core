@@ -33,21 +33,21 @@ define('XAR_ENABLE_WINNOW', 0);
 
 class xarMasks
 {
-    var $dbconn;
-    var $privilegestable;
-    var $privmemberstable;
-    var $maskstable;
-    var $modulestable;
-    var $modulestatestable;
-    var $realmstable;
-    var $acltable;
-    var $allmasks;
-    var $levels;
-    var $instancestable;
-    var $levelstable;
-    var $privsetstable;
+    public $dbconn;
+    public $privilegestable;
+    public $privmemberstable;
+    public $maskstable;
+    public $modulestable;
+    public $modulestatestable;
+    public $realmstable;
+    public $acltable;
+    public $allmasks;
+    public $levels;
+    public $instancestable;
+    public $levelstable;
+    public $privsetstable;
 
-    var $privilegeset;
+    public $privilegeset;
 
 /**
  * xarMasks: constructor for the class
@@ -192,7 +192,10 @@ class xarMasks
                 $description, $sid
             );
         } else {
-        $query = "INSERT INTO $this->maskstable VALUES (?,?,?,?,?,?,?,?)";
+            $query = "INSERT INTO $this->maskstable (
+                        xar_sid, xar_name, xar_realm, xar_module, xar_component, 
+                        xar_instance, xar_level, xar_description) 
+                      VALUES (?,?,?,?,?,?,?,?)";
             $bindvars = array(
                 $this->dbconn->genID($this->maskstable),
                           $name, $realm, $module, $component, $instance, $level,
@@ -259,10 +262,7 @@ class xarMasks
     function winnow($privs1, $privs2)
     {
         if (!is_array($privs1) || !is_array($privs2)) {
-            $msg = xarML('Parameters to winnow need to be arrays');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException($msg));
-            return;
+            throw new BadParameterException(null,'Parameters to winnow need to be arrays');
         }
         if ((($privs1 == array()) || ($privs1 == '')) &&
             (($privs2 == array()) || ($privs2 == ''))) return array();
@@ -383,9 +383,7 @@ class xarMasks
             else {
                 $msg = xarML('Did not find mask #(1) registered for component #(2) in module #(3)', $maskname, $component, $module);
             }
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA',
-                           new DefaultUserException($msg));
-            return;
+            throw new Exception($msg);
         }
 
         // insert any component overrides
@@ -475,8 +473,7 @@ class xarMasks
                 xarResponseRedirect(xarModURL('roles','user','register'));
             } else {
                 $msg = xarML('No privilege for #(1)',$mask->getName());
-                xarErrorSet(XAR_USER_EXCEPTION, 'NO_PRIVILEGES',
-                               new DefaultUserException($msg));
+                throw new Exception($msg);
             }
         }
 
@@ -826,8 +823,12 @@ class xarPrivileges extends xarMasks
                     $description, $iid
                 );
             } else {
-                // FIXME: be explicit with the table columns.
-            $query = "INSERT INTO $this->instancestable VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+                $query = "INSERT INTO $this->instancestable (
+                            xar_iid, xar_module, xar_component, xar_header, 
+                            xar_query, xar_limit, xar_propagate, 
+                            xar_instancetable2, xar_instancechildid, 
+                            xar_instanceparentid, xar_description)
+                          VALUES (?,?,?,?,?,?,?,?,?,?,?)";
                 $bindvars = array(
                     $this->dbconn->genID($this->instancestable),
                               $module, $type, $instance['header'],
@@ -875,7 +876,10 @@ class xarPrivileges extends xarMasks
 */
     function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
-        $query = "INSERT INTO $this->privilegestable VALUES (?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO $this->privilegestable (
+                    xar_pid, xar_name, xar_realm, xar_module, xar_component, 
+                    xar_instance, xar_level, xar_description)
+                  VALUES (?,?,?,?,?,?,?,?)";
         $bindvars = array($this->dbconn->genID($this->privilegestable),
                           $name, $realm, $module, $component,
                           $instance, $level, $description);
@@ -1260,9 +1264,7 @@ class xarPrivileges extends xarMasks
             if ($selection =='') {
                 $msg = xarML('A query is missing in component #(1) of module #(2)', $component, $module);
 
-                xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA',
-                               new DefaultUserException($msg));
-                return;
+                throw new Exception($msg);
             }
 
             $result1 = $this->dbconn->Execute($selection);
@@ -1586,19 +1588,19 @@ class xarPrivileges extends xarMasks
 
   class xarMask
 {
-    var $sid;           //the id of this privilege
-    var $name;          //the name of this privilege
-    var $realm;         //the realm of this privilege
-    var $module;        //the module of this privilege
-    var $component;     //the component of this privilege
-    var $instance;      //the instance of this privilege
-    var $level;         //the access level of this privilege
-    var $description;   //the long description of this privilege
-    var $normalform;    //the normalized form of this privilege
+    public $sid;           //the id of this privilege
+    public $name;          //the name of this privilege
+    public $realm;         //the realm of this privilege
+    public $module;        //the module of this privilege
+    public $component;     //the component of this privilege
+    public $instance;      //the instance of this privilege
+    public $level;         //the access level of this privilege
+    public $description;   //the long description of this privilege
+    public $normalform;    //the normalized form of this privilege
 
-    var $dbconn;
-    var $privilegestable;
-    var $privmemberstable;
+    public $dbconn;
+    public $privilegestable;
+    public $privmemberstable;
 
 /**
  * xarMask: constructor for the class
@@ -1807,8 +1809,7 @@ class xarPrivileges extends xarMasks
             }
             if (count($p) != 5) {
                 $msg = xarML('#(1) and #(2) do not have the same instances. #(3) | #(4) | #(5)',$mask->getName(),$this->getName(),implode(',',$p2),implode(',',$p1),$this->present() . "|" . $mask->present());
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException($msg));
+                throw new Exception($msg);
             }
         }
         for ( $i = 4, $p1count = count($p1); $i < $p1count; $i++) {
@@ -1931,19 +1932,19 @@ class xarPrivileges extends xarMasks
 class xarPrivilege extends xarMask
 {
 
-    var $pid;           //the id of this privilege
-    var $name;          //the name of this privilege
-    var $realm;         //the realm of this privilege
-    var $module;        //the module of this privilege
-    var $component;     //the component of this privilege
-    var $instance;      //the instance of this privilege
-    var $level;         //the access level of this privilege
-    var $description;   //the long description of this privilege
-    var $parentid;      //the pid of the parent of this privilege
+    public $pid;           //the id of this privilege
+    public $name;          //the name of this privilege
+    public $realm;         //the realm of this privilege
+    public $module;        //the module of this privilege
+    public $component;     //the component of this privilege
+    public $instance;      //the instance of this privilege
+    public $level;         //the access level of this privilege
+    public $description;   //the long description of this privilege
+    public $parentid;      //the pid of the parent of this privilege
 
-    var $dbconn;
-    var $privilegestable;
-    var $privmemberstable;
+    public $dbconn;
+    public $privilegestable;
+    public $privmemberstable;
 
 /**
  * xarPrivilege: constructor for the class
@@ -2005,9 +2006,7 @@ class xarPrivilege extends xarMask
         if(empty($this->name)) {
             $msg = xarML('You must enter a name.',
                         'privileges');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                        'DUPLICATE_DATA',
-                         new DefaultUserException($msg));
+            throw new DuplicateException(null,$msg);
             xarSessionSetVar('errormsg', _MODARGSERROR);
             return false;
         }
@@ -2022,15 +2021,8 @@ class xarPrivilege extends xarMask
 
         list($count) = $result->fields;
 
-        if ($count == 1) {
-            $msg = xarML('This entry already exists.',
-                        'privileges');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                        'DUPLICATE_DATA',
-                         new DefaultUserException($msg));
-            xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
-            return;
-        }
+        if ($count == 1) throw new DuplicateException(array('privilege',$this->name));
+
 
 // create the insert query
         $query = "INSERT INTO $this->privilegestable
@@ -2445,14 +2437,9 @@ class xarPrivilege extends xarMask
                     WHERE p.xar_pid = pm.xar_pid";
         // retrieve all children of everyone at once
         //              AND pm.xar_parentid = " . $cacheId;
-// Can't use caching here. The privs have changed
-//        if (xarCore_getSystemVar('DB.UseADODBCache')){
-//            $result =& $this->dbconn->CacheExecute(3600,$query);
-//            if (!$result) return;
-//        } else {
-            $result = $this->dbconn->Execute($query);
-            if (!$result) return;
-//        }
+        // Can't use caching here. The privs have changed
+        $result = $this->dbconn->Execute($query);
+        if (!$result) return;
 
         // collect the table values and use them to create new role objects
         while(!$result->EOF) {

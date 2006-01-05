@@ -28,11 +28,9 @@ function modules_adminapi_disablehooks($args)
     extract($args);
 
     // Argument check
-    if (empty($callerModName) || empty($hookModName)) {
-        $msg = xarML('callerModName or hookModName');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-        return;
-    }
+    if (empty($callerModName)) throw new EmptyParameterException('callerModName');
+    if (empty($hookModName))  throw new EmptyParameterException('hookModName');
+
     if (empty($callerItemType)) {
         $callerItemType = '';
     }

@@ -32,14 +32,13 @@ function modules_adminapi_remove($args)
     $modinfo = xarModGetInfo($regid);
 
     //TODO: Add check if there is any dependents
-/*
-    if (!xarModAPIFunc('modules','admin','verifydependents',array('regid'=>$regid))) {
-        //TODO: Add description of the dependencies
-        $msg = xarML('There are dependents to the module "#(1)" that weren\'t removed yet.', $modInfo['displayname']);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
-        return;
-    }
-*/
+    //
+    //if (!xarModAPIFunc('modules','admin','verifydependents',array('regid'=>$regid))) {
+    //TODO: Add description of the dependencies
+    //$msg = xarML('There are dependents to the module "#(1)" that weren\'t removed yet.', $modInfo['displayname']);
+    //    throw new Exception($msg);
+    //}
+
     // If the files have been removed, the module will now also be removed from the db
     if ($modinfo['state'] == XARMOD_STATE_MISSING_FROM_UNINITIALISED ||
         $modinfo['state'] == XARMOD_STATE_MISSING_FROM_INACTIVE ||

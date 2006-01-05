@@ -29,11 +29,7 @@ function modules_adminapi_removewithdependents ($args)
         return;
 
     // Argument check
-    if (!isset($mainId)) {
-        $msg = xarML('Missing module regid (#(1)).', $mainId);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (!isset($mainId)) throw new EmptyParameterException('regid');
 
     // See if we have lost any modules since last generation
     if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
@@ -48,27 +44,21 @@ function modules_adminapi_removewithdependents ($args)
     //Deactivate Actives
     foreach ($dependents['active'] as $active_dependent) {
         if (!xarModAPIFunc('modules', 'admin', 'deactivate', array('regid' => $active_dependent['regid']))) {
-            $msg = xarML('Unable to deactivate module "#(1)".', $active_dependent['displayname']);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-            return;
+            throw new BadParameterException($active_dependent['displayname'],'Unable to deactivate module "#(1)".');
         }
     }
     
     //Remove the previously active
     foreach ($dependents['active'] as $active_dependent) {
         if (!xarModAPIFunc('modules', 'admin', 'remove', array('regid' => $active_dependent['regid']))) {
-            $msg = xarML('Unable to remove module "#(1)".', $active_dependent['displayname']);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-            return;
+            throw new BadParameterException($active_dependent['displayname'], 'Unable to remove module "#(1)".');
         }
     }
     
     //Remove the initialised
     foreach ($dependents['initialised'] as $active_dependent) {
         if (!xarModAPIFunc('modules', 'admin', 'remove', array('regid' => $active_dependent['regid']))) {
-            $msg = xarML('Unable to remove module "#(1)".', $active_dependent['displayname']);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-            return;
+            throw new BadParameterException($active_dependent['displayname'], 'Unable to remove module "#(1)".');
         }
     }
     

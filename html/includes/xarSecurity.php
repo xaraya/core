@@ -584,29 +584,6 @@ function xarRemoveMasks($module)
 }
 
 /**
-
- * see if a user is authorised to carry out a particular task
- *
- * @access public
- * @param  integer realm the realm to authorize
- * @param  string component the component to authorize
- * @param  string instance the instance to authorize
- * @param  integer level the level of access required
- * @param  integer userId  user id to check for authorisation
- * @return bool
- * @raise DATABASE_ERROR
- */
-function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
-{
-    return pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId);
-    $msg = xarML('Security Realm #(1) - Component #(2) - Instance #(3) - Level #(4) : This call needs to be converted to the Xaraya security system',
-                 $testRealm, $testComponent, $testInstance, $testLevel);
-    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DEPRECATED_API',
-                    new SystemException($msg));
-    return true;
-}
-
-/**
  * Generate an authorisation key
  *
  * The authorisation key is used to confirm that actions requested by a
@@ -687,9 +664,7 @@ function xarSecConfirmAuthKey($modName = NULL, $authIdVarName = 'authid')
         return true;
     }
     // Not found, assume invalid
-        xarErrorSet(XAR_USER_EXCEPTION, 'FORBIDDEN_OPERATION',
-                       new DefaultUserException());
-        return;
+    throw new ForbiddenOperationException();
 }
 
 ?>

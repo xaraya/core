@@ -120,14 +120,13 @@ function xarConfig_loadVars()
     $query = "SELECT xar_name,
                      xar_value
                 FROM $tables[config_vars]";
-    $result =& $dbconn->Execute($query);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array(),ResultSet::FETCHMODE_ASSOC);
     if (!$result) return;
 
-    while (!$result->EOF) {
-        list($name,$value) = $result->fields;
-        $newval = unserialize($value);
-        xarCore_SetCached($cacheCollection, $name, $newval);
-        $result->MoveNext();
+    while ($result->next()) {
+        $newval = unserialize($result->getString('xar_value'));
+        xarCore_SetCached($cacheCollection, $result->getString('xar_name'), $newval);
     }
     $result->Close();
 

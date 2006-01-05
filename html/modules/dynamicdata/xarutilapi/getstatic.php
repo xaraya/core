@@ -48,11 +48,9 @@ function dynamicdata_utilapi_getstatic($args)
         $invalid[] = 'item type';
     }
     if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'util', 'getstatic', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array(join(', ',$invalid), 'util', 'getstatic', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
     if (empty($table)) {
         $table = '';

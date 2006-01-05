@@ -40,16 +40,11 @@ function roles_userapi_leftjoin($args)
     }
 
     // Security check
-    if (!xarSecurityCheck('ViewRoles',0)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+    if (!xarSecurityCheck('ViewRoles',0)) return;
+
 // TODO: check this !
     foreach ($uids as $uid) {
-        if (!xarSecurityCheck('ReadRole',0,'All',"All:All:$uid")) {
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-            return;
-        }
+        if (!xarSecurityCheck('ReadRole',0,'All',"All:All:$uid")) return;
     }
 
     // Table definition

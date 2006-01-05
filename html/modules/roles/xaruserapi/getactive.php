@@ -21,11 +21,7 @@ function roles_userapi_getactive($args)
     extract($args);
 
     if (!empty($uid) && !is_numeric($uid)) {
-        $msg = xarML('Wrong arguments to roles_userapi_get.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
+        throw new VariableValidationException(array('uid',$uid,'numeric'));
     }
 
     if (empty($filter)){
