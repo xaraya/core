@@ -111,7 +111,7 @@ function roles_user_usermenu($args)
                 if ($pass1 == $pass2){
                     $pass = $pass1;
                 } else {
-                    throw new VariableValidationException(array('passwords','*password values hidden*','must be equal');
+                    throw new VariableValidationException(array('passwords','*password values hidden*','must be equal'));
                 }
                 $oldemail = xarUserGetVar('email');
                 // The API function is called.

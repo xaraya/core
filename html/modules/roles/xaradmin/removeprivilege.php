@@ -43,7 +43,7 @@ function roles_admin_removeprivilege()
         {
             throw new ForbiddenOperationException(null,'This privilege cannot be removed');
         }
-    }
+    
     // Security Check
     if (!xarSecurityCheck('EditRole')) return;
     // some info for the template display

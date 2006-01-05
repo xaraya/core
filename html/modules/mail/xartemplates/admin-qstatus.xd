@@ -50,7 +50,8 @@
                 <li>#$qname#
                     <ul class="qstatus">
                         <xar:foreach in="$measure" value="$action">
-                            <li style="background-image: url(#xarTplGetImage($action['action'].'.gif')#)")>
+                            <xar:set name="bckgrndimg">xarTplGetImage($action['action']).'.gif'</xar:set>
+                            <li style="background-image: url($bckgrndimg)">
                                 <a style="text-decoration: none; font-size: 0.85em;" 
                                    href="#xarModUrl('mail','admin',$action['action'],array('name' => $qname, 'authid' => $authid))#">#$action.text#</a></li>
                         </xar:foreach>

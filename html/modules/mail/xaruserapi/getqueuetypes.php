@@ -17,4 +17,3 @@ function mail_userapi_getqueuetypes($args)
     return $qTypes;
 }
 ?>
-
