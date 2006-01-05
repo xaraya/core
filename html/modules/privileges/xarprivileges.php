@@ -2437,14 +2437,9 @@ class xarPrivilege extends xarMask
                     WHERE p.xar_pid = pm.xar_pid";
         // retrieve all children of everyone at once
         //              AND pm.xar_parentid = " . $cacheId;
-// Can't use caching here. The privs have changed
-//        if (xarCore_getSystemVar('DB.UseADODBCache')){
-//            $result =& $this->dbconn->CacheExecute(3600,$query);
-//            if (!$result) return;
-//        } else {
-            $result = $this->dbconn->Execute($query);
-            if (!$result) return;
-//        }
+        // Can't use caching here. The privs have changed
+        $result = $this->dbconn->Execute($query);
+        if (!$result) return;
 
         // collect the table values and use them to create new role objects
         while(!$result->EOF) {

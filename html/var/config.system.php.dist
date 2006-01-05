@@ -53,19 +53,6 @@ $systemConfiguration['Exception.EnablePHPErrorHandler'] = true;
  $systemConfiguration['Exception.ErrorLevel'] = E_ALL;
 
 /*
- * This value determines to use the ADODB cache for SQL queries
- * In some cases performance will be reduced by setting this value to
- * true (on).
- *
- * Rule of thumb: If your db server is slower than your webserver and/or
- *                your db does no query caching (mysql 3.x for exampl)
- *                this might speed things up a little
- * TODO: Move this out of here
-*/
-$systemConfiguration['DB.UseADODBCache'] = false;
-
-
-/*
  * This value is used to change the default behavior of the
  * xarServerGetBaseURL() and xarModURL() functions to allow you
  * to use things like Apache's mod_rewrite to shorten your

@@ -803,11 +803,6 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             break;
     }
 
-    // TODO : Explain the cache logic behind this, why exclude moduservars? (see above)
-    if (xarCore_getSystemVar('DB.UseADODBCache') && strtolower($type) != 'moduservar'){
-        $result = $dbconn->CacheFlush();
-    }
-
     if (!empty($query)){
         try {
             $dbconn->begin();
