@@ -339,6 +339,7 @@ abstract class ConnectionCommon {
                 return $this->dsn['phptype'];
                 break;
             case 'hasTransactions':
+                // Only seen in modules, remove when we can, it's not needed here
                 return true;
                 break;
             default:
@@ -354,17 +355,20 @@ abstract class ConnectionCommon {
                 return  "'".str_replace("'","\\'",$args[0])."'";
                 break;
             case 'StartTrans':
-                return $this->BeginTrans($args);
+                // Only seen in modules, remove when we can
+                return $this->begin($args);
                 break;
             case 'CompleteTrans':
+                // Only seen in modules, remove when we can
                 try {
-                    $this->CommitTrans();
+                    $this->commit($args);
                 } catch(SQLException $e) {
                     return false;
                 }
                 return true;
                 break;
             case 'Affected_Rows':
+                // Only seen in modules, remove when we can
                 return $this->getUpdateCount();
                 break; 
             default:
@@ -382,18 +386,12 @@ abstract class ConnectionCommon {
         return $tmp;
     }
     
-    function &MetaColumns($table) 
-    {
-        $tableinfo = $this->getDatabaseInfo()->getTable($table);
-        $columns = $tableinfo->getColumns();
-        return $columns;
-    }
-
     /*
      * Some modules in xaraya use this to test whether a db execute operation has succeeded
      * value 0: succeeded
      * otherwise: error
      * Since we throw exceptions if we have an error, this just return 0
+     * @todo remove when we can, only seen in modules
      */
     function ErrorNo()
     {
