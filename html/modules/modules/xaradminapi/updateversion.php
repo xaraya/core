@@ -21,12 +21,7 @@ function modules_adminapi_updateversion($args)
     extract($args);
 
     // Argument check
-    if (!isset($regId)) {
-        $msg = xarML('Empty regId (#(1)).', $regId);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (!isset($regId)) throw new EmptyParameterException('redId');
 
     // Security Check
     if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regId")) return;

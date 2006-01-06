@@ -1,4 +1,3 @@
-<?php
 /**
  * Multiselect Property
  * @package Xaraya eXtensible Management System

@@ -8,6 +8,9 @@
  * @link http://www.xaraya.com
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
+if(!function_exists('xarML')) {
+    function xarML($msg) { return $msg; }
+ }
 
     $this->defaults = array(
         'ASSERT_FAILURE' => array(

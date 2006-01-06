@@ -14,8 +14,8 @@
 */
 class Dynamic_TextArea_Property extends Dynamic_Property
 {
-    var $rows = 8;
-    var $cols = 35;
+    public $rows = 8;
+    public $cols = 35;
  
     function Dynamic_TextArea_Property($args)
     {

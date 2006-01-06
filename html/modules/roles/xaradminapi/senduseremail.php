@@ -28,14 +28,10 @@
  */
 function roles_adminapi_senduseremail($args)
 {
-
     // Send Email
     extract($args);
-    if ((!isset($uid)) || (!isset($mailtype))) {
-        $msg = xarML('Wrong arguments to roles_adminapi_senduseremail. uid: #(1) type: #(2)',$uid,$mailtype);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return false;
-    }
+    if (!isset($uid)) throw new EmptyParameterException('uid');
+    if (!isset($mailtype)) throw new EmptyParameterException('mailtype');
 
     // Get the predefined email if none is defined
     $strings = xarModAPIFunc('roles','admin','getmessagestrings', array('module' => 'roles','template' => $mailtype));

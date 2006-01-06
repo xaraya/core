@@ -82,7 +82,7 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
             preg_match('/\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}/', $value))
             ) {
 
-            /* TODO: use xaradodb to format the date */
+            /* TODO: use middleware to format the date? */
             $this->value = $value;
             return true;
 

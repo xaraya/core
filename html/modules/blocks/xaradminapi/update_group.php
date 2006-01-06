@@ -45,7 +45,7 @@ function blocks_adminapi_update_group($args)
     $query = 'UPDATE ' . $block_groups_table
         . ' SET xar_name = ?, xar_template = ?'
         . ' WHERE xar_id = ?';
-    $result =& $dbconn->Execute($query, array($name, $template, $gid));
+    $result = $dbconn->Execute($query, array($name, $template, $gid));
     if (!$result) {return;}
 
     if (!empty($instance_order)) {
@@ -57,7 +57,7 @@ function blocks_adminapi_update_group($args)
                 . ' AND xar_group_id = ? '
                 . ' AND xar_position <> ?';
             if (is_numeric($instance_id)) {
-                $result =& $dbconn->Execute($query, array($position, $instance_id, $gid, $position));
+                $result = $dbconn->Execute($query, array($position, $instance_id, $gid, $position));
                 if (!$result) {return;}
             }
 

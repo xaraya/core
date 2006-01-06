@@ -205,36 +205,6 @@
                 </p>
             </xar:if>
 
-            <xar:if condition="$adodbTemplatesIsWritable">
-                <p>
-                    <strong>#$successtitle#:</strong> 
-                    <xar:ml>
-                        <xar:mlstring>
-                            The installer can write to the directory #(1)
-                        </xar:mlstring>
-                        <xar:mlvar>
-                            #$adodbTemplatesDir#
-                        </xar:mlvar>
-                    </xar:ml>
-                </p>
-            <xar:else />
-                <p>
-                    <strong>#$failuretitle#:</strong> 
-                    <xar:ml>
-                        <xar:mlstring>
-                            The installer cannot write to the directory #(1).
-                            Please verify that your webserver has write access to the directory #(2)
-                        </xar:mlstring>
-                        <xar:mlvar>
-                            #$adodbTemplatesDir#
-                        </xar:mlvar>
-                        <xar:mlvar>
-                            #$adodbTemplatesDir#
-                        </xar:mlvar>
-                    </xar:ml>
-                </p>
-            </xar:if>
-
             <h2>
                 <xar:mlstring>
                      Locales Settings Check
@@ -451,7 +421,7 @@
                 </p>
             </xar:if>
 
-            <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $adodbTemplatesIsWritable AND $rssTemplatesIsWritable AND $metMinMemRequirement">
+            <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $rssTemplatesIsWritable AND $metMinMemRequirement">
                 <input type="hidden" name="install_phase" id="install_phase" value="4" />
                 <xar:set name="buttonnext">
                     <xar:mlstring>Continue</xar:mlstring>

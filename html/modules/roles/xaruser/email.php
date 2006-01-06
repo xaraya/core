@@ -24,8 +24,7 @@ function roles_user_email($args)
     // we can only send emails to other members if we are logged in
     if(!xarUserIsLoggedIn())
     {
-        xarErrorSet(XAR_USER_EXCEPTION, 'NOT_LOGGED_IN', new DefaultUserException());
-        return;
+        throw new ForbiddenOperationException(null,'You are not logged in, sending emails is not allowed');
     }
 
     extract($args);

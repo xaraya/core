@@ -52,36 +52,20 @@ function roles_admin_updaterole()
             array('uname' => $puname));
 
         if (($user != false) && ($user['uid'] != $uid)) {
-            $msg = xarML('That username is already taken.');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
+            throw new DuplicateException(array('user',$puname));
         }
         // check for valid username
         if ((!$puname) || !(!preg_match("/[[:space:]]/", $puname))) {
-            $msg = xarML('There is an error in the username');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
+            throw new BadParameterException($puname,'The username "#(1)" contains spacing characters, this is not allowed');
         }
 
-        if (strrpos($puname, ' ') > 0) {
-            $msg = xarML('There is a space in the username');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
-        }
         // TODO: Replace with DD property type check.
         // check for valid email address
         $res = preg_match('/.*@.*/', $pemail);
-        if ($res == false) {
-            $msg = xarML('There is an error in the email address');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
-        }
+        if ($res == false) throw new BadParameterException($email,'The email adress "#(1)" is invalid');
+
         // check for valid password
-        if (strcmp($ppass1, $ppass2) != 0) {
-            $msg = xarML('The two password entries are not the same');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
-        }
+        if (strcmp($ppass1, $ppass2) != 0) throw new DuplicateException(null,'The entered passwords are not the same');
     }
 
     // assemble the args into an array for the role constructor

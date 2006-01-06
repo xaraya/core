@@ -1,4 +1,4 @@
-<?php
+1<?php
 /**
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
@@ -23,9 +23,8 @@ function themes_admin_release()
     // allow fopen
     if (!xarFuncIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
     if (!ini_get('allow_url_fopen')) {
-        $msg = xarML('Unable to use fopen to get RSS feeds.');
-        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-        return;
+        throw new ConfigurationException('allow_url_fopen','PHP is not currently configured to allow URL retrieval
+                             of remote files.  Please turn on #(1) to use the base module getfile userapi.');
     }
     // Require the xmlParser class
     require_once('modules/base/xarclass/xmlParser.php');
@@ -75,8 +74,7 @@ function themes_admin_release()
         $data['chandesc']   =   $info['channel']['description'];
     } else {
         $msg = xarML('There is a problem with a feed.');
-        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-        return;
+        throw new Exception($msg);
     }
     $data['feedcontent'] = $feedcontent;
     return $data;

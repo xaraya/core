@@ -18,32 +18,32 @@ include_once 'modules/roles/xarroles.php';
 
 class xarTreeRenderer
 {
-    var $roles;
-    var $tree;
-    var $treenode;
-    var $treeitems;
-    var $levels;
+    public $roles;
+    public $tree;
+    public $treenode;
+    public $treeitems;
+    public $levels;
 
     // some variables we'll need to hold drawing info
-    var $html;
-    var $nodeindex;
-    var $indent;
-    var $level;
-    var $isbranch;
-    var $drawchildren;
-    var $alreadydone;
+    public $html;
+    public $nodeindex;
+    public $indent;
+    public $level;
+    public $isbranch;
+    public $drawchildren;
+    public $alreadydone;
 
     // convenience variables to hold strings referring to pictures
-    var $expandedbox;
-    var $collapsedbox;
-    var $el;
-    var $tee;
-    var $aye;
-    var $bar;
-    var $emptybox;
-    var $blank;
-    var $bigblank;
-    var $smallblank;
+    public $expandedbox;
+    public $collapsedbox;
+    public $el;
+    public $tee;
+    public $aye;
+    public $bar;
+    public $emptybox;
+    public $blank;
+    public $bigblank;
+    public $smallblank;
 
     /**
      * Constructor
@@ -159,7 +159,7 @@ class xarTreeRenderer
     {
         if ($tree == '') $tree = $this->tree;
         if ($tree == '') {
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ENTITY', new SystemException('A tree must be defined before attempting to display.'));
+            throw new EmptyParameterException(null,'A tree must be defined before attempting to display.');
         }
         $this->html = '<div name="RolesTree" id="RolesTree">';
         $this->nodeindex = 0;

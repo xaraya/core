@@ -43,9 +43,7 @@ function blocks_admin_update_instance()
     if ($blockinfo['name'] != $name) {
         $checkname = xarModAPIFunc('blocks', 'user', 'get', array('name' => $name));
         if (!empty($checkname)) {
-            $msg = xarML('Block name "#(1)" already exists', $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-            return;
+            throw new DuplicateException(array('block',$name));
         }
     }
     $blockinfo['name'] = $name;
@@ -112,8 +110,8 @@ function blocks_admin_update_instance()
         if (!xarCurrentErrorType()) {
             // Raise an error here, since no error has been raised in 
             // the block update function.
-            $msg = xarML('Unknown error in block update function "#(1)"', $updatefunc);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+            // CHECKME: is this still needed, as we can escape the flow now with exceptions
+            throw new BadParameterException($updatefunc,'Unknown error in block update function "#(1)"');
         }
         return; 
     }

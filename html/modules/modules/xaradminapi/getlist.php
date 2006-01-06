@@ -55,12 +55,7 @@ function modules_adminapi_getlist($args)
 
     if (!isset($filter)) $filter = array();
 
-    if (!is_array($filter)) {
-        $msg = xarML('Parameter filter must be an array.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    if (!is_array($filter)) throw new BadParameterException('filter','Parameter filter must be an array.');
 
     // Optional arguments.
     if (!isset($startNum)) $startNum = 1;
@@ -77,10 +72,8 @@ function modules_adminapi_getlist($args)
     $orderFields = explode('/', $orderBy);
     $orderByClauses = array(); $extraSelectClause = '';
     foreach ($orderFields as $orderField) {
-        if (!isset($validOrderFields[$orderField])) {
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'orderBy');
-            return;
-        }
+        if (!isset($validOrderFields[$orderField])) throw new BadParameterExceptions('orderBy');
+
         // Here $validOrderFields[$orderField] is the table alias
         $orderByClauses[] = $validOrderFields[$orderField] . '.xar_' . $orderField;
         if ($validOrderFields[$orderField] == 'mods') {

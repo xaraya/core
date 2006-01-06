@@ -1,6 +1,7 @@
 <?php
 /**
  * Dynamic Subform property
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -11,18 +12,18 @@
  */
 class Dynamic_SubForm_Property extends Dynamic_Property
 {
-    var $objectid  = 0;
-    var $style     = 'serialized';
-    var $title     = '';
-    var $link      = '';
-    var $where     = ''; // TODO
-    var $input     = 1;
-    var $display   = 1; // TODO
-    var $fieldlist = null;
-    var $objectref = null;
-    var $oldvalue  = null;
-    var $arguments = array('objectid','style','title','link','where','input','display','fieldlist');
-    var $warnings  = '';
+    public $objectid  = 0;
+    public $style     = 'serialized';
+    public $title     = '';
+    public $link      = '';
+    public $where     = ''; // TODO
+    public $input     = 1;
+    public $display   = 1; // TODO
+    public $fieldlist = null;
+    public $objectref = null;
+    public $oldvalue  = null;
+    public $arguments = array('objectid','style','title','link','where','input','display','fieldlist');
+    public $warnings  = '';
 
     function Dynamic_SubForm_Property($args)
     {

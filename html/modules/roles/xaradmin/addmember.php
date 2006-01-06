@@ -38,23 +38,14 @@ function roles_admin_addmember()
     if(!xarSecurityCheck('AttachRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;
 
     // check that this assignment hasn't already been made
-    if ($member->isEqual($role)) {
-        $msg = xarML('This assignment is not possible');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new SystemException($msg));
-        return;
-    }
+    if ($member->isEqual($role)) throw new ForbiddenOperationException(null,'This assignment is not possible');
+
     // check that this assignment hasn't already been made
-    if ($member->isParent($role)) {
-        $msg = xarML('This assignment already exists');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new SystemException($msg));
-        return;
-    }
+    if ($member->isParent($role)) throw new DuplicateException(array('role assignment','below the specified parent'));
+
     // check that the parent is not already a child of the child
-    if ($role->isAncestor($member)) {
-        $msg = xarML('Cannot make this assignment');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new SystemException($msg));
-        return;
-    }
+    if ($role->isAncestor($member)) throw new ForbiddenOperation(null,'The parent is already a child of the specified child');
+
     // assign the child to the parent and bail if an error was thrown
     if (!xarModAPIFUnc('roles','user','addmember', array('uid' => $uid, 'gid' => $roleid))) return;
 

@@ -36,7 +36,6 @@ include 'includes/xarCore.php';
  *
  * @access public
  * @return bool
- * @todo <marco> #2 Do fallback if raised exception is coming from template engine
  */
 function xarMain()
 {
@@ -156,47 +155,7 @@ function xarMain()
     return true;
 }
 
-if (!xarMain()) {
-
-    // If we're here there must be surely an uncaught exception
-    if (xarCoreIsDebuggerActive()) {
-        $text = xarErrorRender('template');
-    } else {
-        $text = xarML('An error occurred while processing your request. The details are:');
-        $text .= '<br />';
-        $value = xarCurrentError();
-        if (is_object($value) && method_exists($value, 'toHTML')) {
-            $text .= '<span style="color: #FF0000;">'.$value->toHTML().'</span>';
-        } else {
-            $text .= '<span style="color: #999900;">'.xarCurrentErrorID().'</span>';
-        }
-    }
-
-//    xarLogException(XARLOG_LEVEL_ERROR);
-
-    // TODO: #2
-    if (xarCurrentErrorID() == 'TEMPLATE_NOT_EXIST') {
-        echo "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head><title>Error</title></head><body>$text</body></html>";
-    } else {
-        // It's important here to free exception before calling xarTplPrintPage
-        // As we are in the exception handling phase, we can clear it without side effects.
-        xarErrorFree();
-        // Render page
-        $pageOutput = xarTpl_renderPage($text);
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            // Fallback to raw html
-            $msg = '<span style="color: #FF0000;">The current page is shown because the Blocklayout Template Engine failed to render the page, however this could be due to a problem not in BL itself but in the template. BL has raised or has left uncaught the following exception:</span>';
-            $msg .= '<br /><br />';
-            $msg .= xarErrorRender('rawhtml');
-            $msg .= '<br />';
-            $msg .= '<span style="color: #FF0000;">The following exception is instead the exception caught from the main catch clause (Please note that they could be the same if they were raised inside BL or inside the template):</span>';
-            $msg .= '<br /><br />';
-            $msg .= $text;
-            echo "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head><title>Error</title><body>$msg</body></html>";
-        } else {
-            echo $pageOutput;
-        }
-    }
-}
+// The world is not enough...
+xarMain();
 // All done, the shutdown handlers take care of the rest
 ?>

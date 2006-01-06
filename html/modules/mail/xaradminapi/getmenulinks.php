@@ -33,22 +33,19 @@ function mail_adminapi_getmenulinks()
             'title' => xarML('Test your email configuration'),
             'label' => xarML('Test Configuration'));
         if (xarModIsAvailable('scheduler')) {
-            $menulinks[] = Array('url' => xarModURL('mail',
-                    'admin',
-                    'viewq'),
-                'title' => xarML('View all mails scheduled to be sent later'),
-                'label' => xarML('View Mail Queue'));
+            $menulinks[] = array('url' => xarModURL('mail','admin','viewq'),
+                                 'title' => xarML('View all mails scheduled to be sent later'),
+                                 'label' => xarML('View Mail Queue'));
         }
-        $menulinks[] = Array('url' => xarModURL('mail',
-                'admin',
-                'template'),
-            'title' => xarML('Change the mail template for notifications'),
-            'label' => xarML('Notification Template'));
-        $menulinks[] = Array('url' => xarModURL('mail',
-                'admin',
-                'modifyconfig'),
-            'title' => xarML('Modify the configuration for the utility mail module'),
-            'label' => xarML('Modify Config'));
+        $menulinks[] = array('url' => xarModUrl('mail','admin','view'),
+                             'title' => xarML('Manage queues for mail item handling'),
+                             'label' => xarML('Queue management'));
+        $menulinks[] = array('url' => xarModURL('mail','admin','template'),
+                             'title' => xarML('Change the mail template for notifications'),
+                             'label' => xarML('Notification Template'));
+        $menulinks[] = array('url' => xarModURL('mail','admin','modifyconfig'),
+                             'title' => xarML('Modify the configuration for the utility mail module'),
+                             'label' => xarML('Modify Config'));
     }
     return $menulinks;
 }

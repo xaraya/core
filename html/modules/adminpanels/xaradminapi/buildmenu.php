@@ -55,7 +55,7 @@ function adminpanels_adminapi_buildmenu($args)
                     FROM $menutable
                     WHERE xar_category = ?
                     AND xar_flag = 1";
-        $result =& $dbconn->Execute($query,array($cat));
+        $result = $dbconn->Execute($query,array($cat));
         if (!$result) return;
 
         // the category label

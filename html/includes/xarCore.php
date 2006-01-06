@@ -18,8 +18,8 @@
  * better control on config settings
  *
  */
-define('XARCORE_VERSION_NUM', '1.0.1');
-define('XARCORE_VERSION_ID',  'Xaraya');
+define('XARCORE_VERSION_NUM', 'none');
+define('XARCORE_VERSION_ID',  'Xaraya 2 series');
 define('XARCORE_VERSION_SUB', 'adam_baum');
 
 /*
@@ -28,17 +28,17 @@ define('XARCORE_VERSION_SUB', 'adam_baum');
  * ----------------------------------------------
  * | Name           | Depends on                |
  * ----------------------------------------------
- * | ADODB          | nothing                   |
- * | SESSION        | ADODB                     |
- * | CONFIGURATION  | ADODB                     |
- * | USER           | SESSION, ADODB            |
- * | BLOCKS         | CONFIGURATION, ADODB      |
- * | MODULES        | CONFIGURATION, ADODB      |
+ * | DATABASE       | nothing                   |
+ * | SESSION        | DATABASE                  |
+ * | CONFIGURATION  | DATABASE                  |
+ * | USER           | SESSION, DATABASE         |
+ * | BLOCKS         | CONFIGURATION, DATABASE   | 
+ * | MODULES        | CONFIGURATION, DATABASE   |
  * | EVENTS         | MODULES                   |
  * ----------------------------------------------
  *
  *
- *   ADODB              (00000001)
+ *   DATABASE           (00000001)
  *   |
  *   |- SESSION         (00000011)
  *   |  |
@@ -61,15 +61,15 @@ define('XARCORE_VERSION_SUB', 'adam_baum');
  */
 
 define('XARCORE_SYSTEM_NONE', 0);
-define('XARCORE_SYSTEM_ADODB', 1);
-define('XARCORE_SYSTEM_SESSION', 2 | XARCORE_SYSTEM_ADODB);
+define('XARCORE_SYSTEM_DATABASE', 1);
+define('XARCORE_SYSTEM_SESSION', 2 | XARCORE_SYSTEM_DATABASE);
 define('XARCORE_SYSTEM_USER', 4 | XARCORE_SYSTEM_SESSION);
-define('XARCORE_SYSTEM_CONFIGURATION', 8 | XARCORE_SYSTEM_ADODB);
+define('XARCORE_SYSTEM_CONFIGURATION', 8 | XARCORE_SYSTEM_DATABASE);
 define('XARCORE_SYSTEM_BLOCKS', 16 | XARCORE_SYSTEM_CONFIGURATION);
 define('XARCORE_SYSTEM_MODULES', 32 | XARCORE_SYSTEM_CONFIGURATION);
 define('XARCORE_SYSTEM_ALL', 127); // bit OR of all optional systems (includes templates now)
 
-define('XARCORE_BIT_ADODB', 1);
+define('XARCORE_BIT_DATABASE', 1);
 define('XARCORE_BIT_SESSION', 2);
 define('XARCORE_BIT_USER', 4 );
 define('XARCORE_BIT_CONFIGURATION', 8);
@@ -96,7 +96,11 @@ define('XAR_INCLUDE_MAY_NOT_EXIST', 2);
 /*
  * Miscelaneous
  */
-define('XARCORE_CONFIG_FILE', 'config.system.php');
+define('XARCORE_CONFIG_FILE'  , 'config.system.php');
+define('XARCORE_CACHEDIR'     , '/cache');
+define('XARCORE_DB_CACHEDIR'  , '/cache/database');
+define('XARCORE_RSS_CACHEDIR' , '/cache/rss');
+define('XARCORE_TPL_CACHEDIR' , '/cache/templates');
 
 /**
  * Load the Xaraya pre core early (in case we're not coming in via index.php)
@@ -189,7 +193,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * It think this is the earliest we can do
      *
      */
-    if ($whatToLoad & XARCORE_SYSTEM_ADODB) { // yeah right, as if this is optional
+    if ($whatToLoad & XARCORE_SYSTEM_DATABASE) { // yeah right, as if this is optional
         include 'includes/xarDB.php';
 
         // Decode encoded DB parameters
@@ -209,7 +213,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                             'siteTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'));
         // Connect to database
         xarDB_init($systemArgs, $whatToLoad);
-        $whatToLoad ^= XARCORE_BIT_ADODB;
+        $whatToLoad ^= XARCORE_BIT_DATABASE;
     }
 
     /*
@@ -510,7 +514,7 @@ function xarCore_getSystemVar($name, $returnNull = false)
     if (!isset($systemVars)) {
         $fileName = xarCoreGetVarDirPath() . '/' . XARCORE_CONFIG_FILE;
         if (!file_exists($fileName)) {
-            xarCore_die("xarCore_getSystemVar: Configuration file not present: ".$fileName);
+            throw new FileNotFoundException($fileName);
         }
         include $fileName;
         $systemVars = $systemConfiguration;
@@ -521,12 +525,7 @@ function xarCore_getSystemVar($name, $returnNull = false)
         {
             return null;
         } else {
-            // FIXME: remove if/when there's some way to upgrade config.system.php or equivalent
-            if ($name == 'DB.UseADODBCache') {
-                $systemVars[$name] = false;
-            } else {
-                xarCore_die("xarCore_getSystemVar: Unknown system variable: ".$name);
-            }
+            throw new Exception("xarCore_getSystemVar: Unknown system variable: ".$name);
         }
     }
 
@@ -582,48 +581,7 @@ function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)
  */
 function xarCore_die($msg)
 {
-    static $dying = false;
-    /*
-     * Prolly paranoid now, but to prevent looping we keep track if we have already
-     * been here.
-     */
-    if($dying) return;
-    $dying = true;
-
-    // This is allowed, in core itself
-    // NOTE that this will never be translated
-    if (xarCoreIsDebuggerActive()) {
-        $msg = nl2br($msg);
-$debug = <<<EOD
-<br /><br />
-<p align="center"><span style="color: blue">Technical information</span></p>
-<p>Xaraya has failed to serve the request, and the failure could not be handled.</p>
-<p>This is a bad sign and probably means that Xaraya is not configured properly.</p>
-<p>The failure reason is: <span style="color: red">$msg</span></p>
-EOD;
-    } else {
-       $debug = '';
-    }
-$errPage = <<<EOM
-<html>
-  <head>
-    <title>Fatal Error</title>
-  </head>
-  <body>
-    <p>A fatal error occurred while serving your request.</p>
-    <p>We are sorry for this inconvenience.</p>
-    <p>If this is the first time you see this message, you can try to access the site directly through index.php<br/>
-    If you see this message every time you tried to access to this service, it is probable that our server
-    is experiencing heavy problems, for this reason we ask you to retry in some hours.<br/>
-    If you see this message for days, we ask you to report the unavailablity of service to our webmaster. Thanks.
-    </p>
-    $debug
-  </body>
-</html>
-EOM;
-    echo $errPage;
-    // Sorry, this is the end, nothing can be trusted anymore.
-    die();
+    throw new Exception($msg);
 }
 
 /**

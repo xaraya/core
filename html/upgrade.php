@@ -775,11 +775,8 @@ if (empty($step)) {
         if (!$result) return;
 
         // Freak if we don't get one and only one result
-        if ($result->PO_RecordCount() != 1) {
-            $msg = xarML("Group 'syndicate' not found.");
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return;
+        if ($result->getRecordCount() != 1) {
+            throw new BadParameterException(null,"Group 'syndicate' not found.");
         }
         list ($syndicateBlockGroup) = $result->fields;
         $result = xarModAPIFunc('blocks', 'admin', 'delete_group', array('gid' => $syndicateBlockGroup));
@@ -1261,7 +1258,7 @@ if (empty($step)) {
         $module_states_table = $sitePrefix . '_module_states';
         echo "<h5>Upgrade $module_states_table table</h5>";
 
-        // TODO: use adodb transactions to ensure atomicity?
+        // TODO: use transactions to ensure atomicity?
         // The changes for bug 1716:
         // - add xar_id as primary key
         // - make index on xar_regid unique

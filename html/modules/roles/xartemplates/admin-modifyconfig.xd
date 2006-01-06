@@ -65,7 +65,7 @@
                             </xar:mlstring>
                         </a>
                     </dd>
-                <xar:else />
+                    <xar:else />
                     <dd>
                         <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
                             <xar:mlstring>

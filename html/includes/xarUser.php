@@ -102,14 +102,8 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
     if (xarUserIsLoggedIn()) {
         return true;
     }
-    if (empty($userName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'userName');
-        return;
-    }
-    if (empty($password)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'password');
-        return;
-    }
+    if (empty($userName)) throw new EmptyParameterException('userName');
+    if (empty($password)) throw new EmptyParameterException('password');
 
     $userId = XARUSER_AUTH_FAILED;
     $args = array('uname' => $userName, 'pass' => $password);
@@ -166,9 +160,16 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
     $rolestable = $xartable['roles'];
 
     // TODO: this should be inside roles module
-    $query = "UPDATE $rolestable SET xar_auth_module = ? WHERE xar_uid = ?";
-    $result =& $dbconn->Execute($query,array($authModName,$userId));
-    if (!$result) return;
+    try {
+        $dbconn->begin();
+        $query = "UPDATE $rolestable SET xar_auth_module = ? WHERE xar_uid = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate(array($authModName,$userId));
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
 
     // Set session variables
 
@@ -372,10 +373,7 @@ $GLOBALS['xarUser_objectRef'] = null;
  */
 function xarUserGetVar($name, $userId = NULL)
 {
-    if (empty($name)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
-        return;
-    }
+    if (empty($name)) throw new EmptyParameterException('name');
 
     if (empty($userId)) {
         $userId = xarSessionGetVar('uid');
@@ -389,15 +387,12 @@ function xarUserGetVar($name, $userId = NULL)
         if ($name == 'name' || $name == 'uname') {
             return xarML('Anonymous');
         }
-        xarErrorSet(XAR_USER_EXCEPTION, 'NOT_LOGGED_IN');
-        return;
+        throw new NotLoggedInException();
     }
 
     // Don't allow any module to retrieve passwords in this way
-    if ($name == 'pass') {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'name');
-        return;
-    }
+    if ($name == 'pass') throw new BadParameterException('name');
+
 
 /* TODO: #1 - some security check from the roles module needed here
     if ($userId != xarSessionGetVar('uid')) {
@@ -418,10 +413,7 @@ function xarUserGetVar($name, $userId = NULL)
                                        array('uid' => $userId));
 
             if (empty($userRole) || $userRole['uid'] != $userId) {
-                $msg = xarML('User identified by uid #(1) does not exist.', $userId);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
-                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                return;
+                throw new IDNotFoundException($userId,'User identified by uid #(1) does not exist.');
             }
 
             xarCore_SetCached('User.Variables.'.$userId, 'uname', $userRole['uname']);
@@ -450,10 +442,7 @@ function xarUserGetVar($name, $userId = NULL)
             // retrieve the user item
             $itemid = $GLOBALS['xarUser_objectRef']->getItem(array('itemid' => $userId));
             if (empty($itemid) || $itemid != $userId) {
-                $msg = xarML('User identified by uid #(1) does not exist.', $userId);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
-                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                return;
+                throw new IDNotFoundException($userId,'User identified by uid #(1) does not exist.');
             }
 
             // save the properties
@@ -551,13 +540,9 @@ function xarUserGetVar($name, $userId = NULL)
 function xarUserSetVar($name, $value, $userId = NULL)
 {
     // check that $name is valid
-    if (empty($name)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
-        return;
-    }
+    if (empty($name)) throw new EmptyParameterException('name');
     if ($name == 'uid' || $name == 'authenticationModule' || $name == 'pass') {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'name');
-        return;
+        throw new BadParameterException('name');
     }
 
     if (empty($userId)) {
@@ -565,7 +550,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
     }
     if ($userId == _XAR_ID_UNREGISTERED) {
         // Anonymous user
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN');
+        throw new NotLoggedInException();
     }
 
 /* TODO: #1 - some security check from the roles module needed here
@@ -576,15 +561,13 @@ function xarUserSetVar($name, $value, $userId = NULL)
 
     if ($name == 'name' || $name == 'uname' || $name == 'email') {
     // TODO: replace with some roles API
+    // TODO: not -^ but get rid of this entirely here.
         xarUser__setUsersTableUserVar($name, $value, $userId);
 
     } elseif (!xarUser__isVarDefined($name)) {
         if(!xarUser__checkDUV($name, 1)) {
             xarCore_SetCached('User.Variables.'.$userId, $name, false);
-            $msg = xarML('User variable #(1) was not correctly registered', $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'VARIABLE_NOT_REGISTERED',
-                           new SystemException($msg));
-            return;
+            throw new xarException($name,'User variable #(1) was not correctly registered');
         } else {
             xarUserSetDUV($name,$value,$userId);
         }
@@ -592,10 +575,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
         // retrieve the user item
         $itemid = $GLOBALS['xarUser_objectRef']->getItem(array('itemid' => $userId));
         if (empty($itemid) || $itemid != $userId) {
-            $msg = xarML('User identified by uid #(1) does not exist.', $userId);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
-                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return;
+            throw new IDNotFoundException($userId,'User identified by uid "#(1)" does not exist.');
         }
 
         // check if we need to update the item
@@ -713,15 +693,16 @@ function xarUser__getAuthModule($userId)
     $rolestable = $xartable['roles'];
 
     $query = "SELECT xar_auth_module FROM $rolestable WHERE xar_uid = ?";
-    $result =& $dbconn->Execute($query,array($userId));
+    $stmt =& $dbconn->prepareStatement($query);
+    $result =& $stmt->executeQuery(array($userId),ResultSet::FETCHMODE_NUM);
     if (!$result) return;
 
-    if ($result->EOF) {
+    if (!$result->next()) {
         // That user has never logon, strange, don't you think?
         // However fallback to authsystem
         $authModName = 'authsystem';
     } else {
-        list($authModName) = $result->fields;
+        $authModName = $result->getString(1);
         // TODO: remove when issue of Anonymous users is resolved
         // Q: what issue?
         if (empty($authModName)) {
@@ -815,10 +796,15 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
 
     // The $name variable will be used to get the appropriate column
     // from the users table.
-    $query = "UPDATE $rolestable
-              SET $usercolumns[$name] = ? WHERE xar_uid = ?";
-    $result =& $dbconn->Execute($query,array($value,$userId));
-    if (!$result) return;
+    try {
+        $dbconn->begin();
+        $query = "UPDATE $rolestable SET $usercolumns[$name] = ? WHERE xar_uid = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate(array($value,$userId));
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
     return true;
 }
 
@@ -828,6 +814,7 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
  */
 function xarUser__checkDUV($name, $state)
 {
+    // TODO: get rid of this here.
     return xarModAPIFunc('roles','admin','checkduv', array('name' => $name, 'state' => $state));
 }
 /*
@@ -836,6 +823,7 @@ function xarUser__checkDUV($name, $state)
  */
 function xarUserGetDUV($name, $uid=null)
 {
+    // TODO: get rid of this here
     if (isset($uid)) return xarModAPIFunc('roles','admin','getduv', array('name' => $name, 'uid' => $uid));
     return xarModAPIFunc('roles','admin','getduv', array('name' => $name));
 }
@@ -845,6 +833,7 @@ function xarUserGetDUV($name, $uid=null)
  */
 function xarUserSetDUV($name, $value, $uid=null)
 {
+    // TODO: get rid of this here
     if (isset($uid)) return xarModAPIFunc('roles','admin','setduv', array('name' => $name, 'value' => $value, 'uid' => $uid));
     return xarModAPIFunc('roles','admin','setduv', array('name' => $name, 'value' => $value));
 }

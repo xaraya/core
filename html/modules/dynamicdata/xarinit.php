@@ -1,6 +1,7 @@
 <?php
 /**
  * Dynamic data initilazation
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -111,20 +112,25 @@ function dynamicdata_init()
     $modid = xarModGetIDFromName('dynamicdata');
 
     // create default objects for dynamic data
+    $sql = "INSERT INTO $dynamic_objects (
+                xar_object_id, xar_object_name, xar_object_label, 
+                xar_object_moduleid, xar_object_itemtype, xar_object_urlparam, 
+                xar_object_maxid, xar_object_config, xar_object_isalias)
+            VALUES (?,?,?,?,?,?,?,?,?)";
+    $stmt = $dbconn->prepareStatement($sql);
+    
     $objects = array(
-                     // 1 -> 3
-                     "'objects','Dynamic Objects',$modid,0,'itemid',0,'',0",
-                     "'properties','Dynamic Properties',$modid,1,'itemid',0,'',0",
-                     "'sample','Sample Object',$modid,2,'itemid',3,'nothing much...',0",
+                     array('objects'   ,'Dynamic Objects'   ,$modid,0,'itemid',0,''               ,0),
+                     array('properties','Dynamic Properties',$modid,1,'itemid',0,''               ,0),
+                     array('sample'    ,'Sample Object'     ,$modid,2,'itemid',3,'nothing much...',0)
                     );
+    
     $objectid = array();
     $idx = 0;
-    foreach ($objects as $object) {
+    foreach ($objects as &$object) {
         $nextId = $dbconn->GenId($dynamic_objects);
-        $query = "INSERT INTO $dynamic_objects
-                         (xar_object_id, xar_object_name, xar_object_label, xar_object_moduleid, xar_object_itemtype, xar_object_urlparam, xar_object_maxid, xar_object_config, xar_object_isalias)
-                  VALUES (?, $object)";
-        $result = $dbconn->Execute($query,array($nextId));
+        array_unshift($object,$nextId);
+        $result = $stmt->executeUpdate($object);
         if (!isset($result)) return;
         $idx++;
         $objectid[$idx] = $dbconn->PO_Insert_ID($dynamic_objects,'xar_object_id');
@@ -228,46 +234,51 @@ function dynamicdata_init()
      */
 
     // create default properties for dynamic data objects
+    $sql = "INSERT INTO $dynamic_properties (
+                xar_prop_id, xar_prop_name, xar_prop_label, xar_prop_objectid, 
+                xar_prop_moduleid, xar_prop_itemtype, xar_prop_type, 
+                xar_prop_default, xar_prop_source, xar_prop_status, 
+                xar_prop_order, xar_prop_validation)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+    $stmt = $dbconn->prepareStatement($sql);
+
     $properties = array(
         // 1 -> 9
-        "'objectid','Id',$objectid[1],182,0,21,'','" . $dynamic_objects . ".xar_object_id',1,1,''",
-        "'name','Name',$objectid[1],182,0,2,'','" . $dynamic_objects . ".xar_object_name',1,2,'1:30'",
-        "'label','Label',$objectid[1],182,0,2,'','" . $dynamic_objects . ".xar_object_label',1,3,'0:254'",
-        "'moduleid','Module',$objectid[1],182,0,19,'182','" . $dynamic_objects . ".xar_object_moduleid',1,4,''",
-        "'itemtype','Item Type',$objectid[1],182,0,20,'0','" . $dynamic_objects . ".xar_object_itemtype',1,5,''",
-        "'urlparam','URL Param',$objectid[1],182,0,2,'itemid','" . $dynamic_objects . ".xar_object_urlparam',1,6,'0:30'",
-        "'maxid','Max Id',$objectid[1],182,0,15,'0','" . $dynamic_objects . ".xar_object_maxid',2,7,''",
-        "'config','Config',$objectid[1],182,0,4,'','" . $dynamic_objects . ".xar_object_config',2,8,''",
-        "'isalias','Alias in short URLs',$objectid[1],182,0,14,'1','" . $dynamic_objects . ".xar_object_isalias',2,9,''",
-
+        array('objectid'  ,'Id'                 ,$objectid[1],182,0,21,''            ,$dynamic_objects.'.xar_object_id'         ,1,1 ,'integer'),
+        array('name'      ,'Name'               ,$objectid[1],182,0,2 ,''            ,$dynamic_objects.'.xar_object_name'       ,1,2 ,'varchar (30)'),
+        array('label'     ,'Label'              ,$objectid[1],182,0,2 ,''            ,$dynamic_objects.'.xar_object_label'      ,1,3 ,'varchar (254)'),
+        array('moduleid'  ,'Module'             ,$objectid[1],182,0,19,'182'         ,$dynamic_objects.'.xar_object_moduleid'   ,1,4 ,'integer'),
+        array('itemtype'  ,'Item Type'          ,$objectid[1],182,0,20,'0'           ,$dynamic_objects.'.xar_object_itemtype'   ,1,5 ,'integer'),
+        array('urlparam'  ,'URL Param'          ,$objectid[1],182,0,2 ,'itemid'      ,$dynamic_objects.'.xar_object_urlparam'   ,1,6 ,'varchar (30)'),
+        array('maxid'     ,'Max Id'             ,$objectid[1],182,0,15,'0'           ,$dynamic_objects.'.xar_object_maxid'      ,2,7 ,'integer'),
+        array('config'    ,'Config'             ,$objectid[1],182,0,4 ,''            ,$dynamic_objects.'.xar_object_config'     ,2,8 ,'text'),
+        array('isalias'   ,'Alias in short URLs',$objectid[1],182,0,14,'1'           ,$dynamic_objects.'.xar_object_isalias'    ,2,9 ,'integer (tiny)'),
         // 10 -> 21
-        "'id','Id',$objectid[2],182,1,21,'','" . $dynamic_properties . ".xar_prop_id',1,1,''",
-        "'name','Name',$objectid[2],182,1,2,'','" . $dynamic_properties . ".xar_prop_name',2,2,'1:30'",
-        "'label','Label',$objectid[2],182,1,2,'','" . $dynamic_properties . ".xar_prop_label',1,3,'0:254'",
-        "'objectid','Object',$objectid[2],182,1,24,'','" . $dynamic_properties . ".xar_prop_objectid',1,4,''",
-        "'moduleid','Module',$objectid[2],182,1,19,'','" . $dynamic_properties . ".xar_prop_moduleid',2,5,''",
-        "'itemtype','Item Type',$objectid[2],182,1,20,'','" . $dynamic_properties . ".xar_prop_itemtype',2,6,''",
-        "'type','Property Type',$objectid[2],182,1,22,'','" . $dynamic_properties . ".xar_prop_type',1,7,''",
-        "'default','Default',$objectid[2],182,1,3,'','" . $dynamic_properties . ".xar_prop_default',1,8,''",
-        "'source','Source',$objectid[2],182,1,23,'dynamic_data','" . $dynamic_properties . ".xar_prop_source',1,9,''",
-        "'status','Status',$objectid[2],182,1,25,'1','" . $dynamic_properties . ".xar_prop_status',1,10,''",
-        "'order','Order',$objectid[2],182,1,15,'0','" . $dynamic_properties . ".xar_prop_order',2,11,''",
-        "'validation','Validation',$objectid[2],182,1,2,'','" . $dynamic_properties . ".xar_prop_validation',2,12,'0:254'",
-
+        array('id'        ,'Id'                 ,$objectid[2],182,1,21,''            ,$dynamic_properties.'.xar_prop_id'        ,1,1 ,'integer'),
+        array('name'      ,'Name'               ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_name'      ,2,2 ,'varchar (30)'),
+        array('label'     ,'Label'              ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_label'     ,1,3 ,'varchar (254)'),
+        array('objectid'  ,'Object'             ,$objectid[2],182,1,24,''            ,$dynamic_properties.'.xar_prop_objectid'  ,1,4 ,'integer'),
+        array('moduleid'  ,'Module'             ,$objectid[2],182,1,19,''            ,$dynamic_properties.'.xar_prop_moduleid'  ,2,5 ,'integer'),
+        array('itemtype'  ,'Item Type'          ,$objectid[2],182,1,20,''            ,$dynamic_properties.'.xar_prop_itemtype'  ,2,6 ,'integer'),
+        array('type'      ,'Property Type'      ,$objectid[2],182,1,22,''            ,$dynamic_properties.'.xar_prop_type'      ,1,7 ,'integer'),
+        array('default'   ,'Default'            ,$objectid[2],182,1,3 ,''            ,$dynamic_properties.'.xar_prop_default'   ,1,8 ,'varchar (254)'),
+        array('source'    ,'Source'             ,$objectid[2],182,1,23,'dynamic_data',$dynamic_properties.'.xar_prop_source'    ,1,9 ,'varchar (254)'),
+        array('status'    ,'Status'             ,$objectid[2],182,1,25,'1'           ,$dynamic_properties.'.xar_prop_status'    ,1,10,'integer (tiny)'),
+        array('order'     ,'Order'              ,$objectid[2],182,1,15,'0'           ,$dynamic_properties.'.xar_prop_order'     ,2,11,'integer (tiny)'),
+        array('validation','Validation'         ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_validation',2,12,'varchar (254)'),
         // 22 -> 25
-        "'id','Id',$objectid[3],182,2,21,'','dynamic_data',2,1,''",
-        "'name','Name',$objectid[3],182,2,2,'please enter your name...','dynamic_data',1,2,'1:30'",
-        "'age','Age',$objectid[3],182,2,15,'','dynamic_data',1,3,'0:125'",
-        "'location','Location',$objectid[3],182,2,12,'','dynamic_data',2,4,''",
+        array('id'        ,'Id'                 ,$objectid[3],182,2,21,''                         ,'dynamic_data',2,1,''),
+        array('name'      ,'Name'               ,$objectid[3],182,2,2 ,'please enter your name...','dynamic_data',1,2,'1:30'),
+        array('age'       ,'Age'                ,$objectid[3],182,2,15,''                         ,'dynamic_data',1,3,'0:125'),
+        array('location'  ,'Location'           ,$objectid[3],182,2,12,''                         ,'dynamic_data',2,4,'')
         );
+    
     $propid = array();
     $idx = 0;
-    foreach ($properties as $property) {
+    foreach ($properties as &$property) {
         $nextId = $dbconn->GenId($dynamic_properties);
-        $query = "INSERT INTO $dynamic_properties
-                         (xar_prop_id, xar_prop_name, xar_prop_label, xar_prop_objectid, xar_prop_moduleid, xar_prop_itemtype, xar_prop_type, xar_prop_default, xar_prop_source, xar_prop_status, xar_prop_order, xar_prop_validation)
-                  VALUES (?,$property)";
-        $result = $dbconn->Execute($query,array($nextId));
+        array_unshift($property, $nextId);
+        $result = $stmt->executeUpdate($property);
         if (!isset($result)) return;
         $idx++;
         $propid[$idx] = $dbconn->PO_Insert_ID($dynamic_properties,'xar_prop_id');
@@ -333,28 +344,31 @@ function dynamicdata_init()
     // we don't really need to create an object and properties for the dynamic data table
 
     // create some sample data for the sample object
+    $sql = "INSERT INTO $dynamic_data (xar_dd_id, xar_dd_propid, xar_dd_itemid, xar_dd_value)
+            VALUES (?,?,?,?)";
+    $stmt = $dbconn->prepareStatement($sql);
+    
     $dataentries = array(
-        "$propid[22],1,'1'",
-        "$propid[23],1,'Johnny'",
-        "$propid[24],1,'32'",
-        "$propid[25],1,'http://mikespub.net/xaraya/images/cuernos1.jpg'",
+                         array($propid[22],1,'1'),
+                         array($propid[23],1,'Johnny'),
+                         array($propid[24],1,'32'),
+                         array($propid[25],1,'http://mikespub.net/xaraya/images/cuernos1.jpg'),
 
-        "$propid[22],2,'2'",
-        "$propid[23],2,'Nancy'",
-        "$propid[24],2,'29'",
-        "$propid[25],2,'http://mikespub.net/xaraya/images/agra1.jpg'",
-
-        "$propid[22],3,'3'",
-        "$propid[23],3,'Baby'",
-        "$propid[24],3,'1'",
-        "$propid[25],3,'http://mikespub.net/xaraya/images/sydney1.jpg'",
-        );
-    foreach ($dataentries as $dataentry) {
+                         array($propid[22],2,'2'),
+                         array($propid[23],2,'Nancy'),
+                         array($propid[24],2,'29'),
+                         array($propid[25],2,'http://mikespub.net/xaraya/images/agra1.jpg'),
+                         
+                         array($propid[22],3,'3'),
+                         array($propid[23],3,'Baby'),
+                         array($propid[24],3,'1'),
+                         array($propid[25],3,'http://mikespub.net/xaraya/images/sydney1.jpg')
+                         );
+    
+    foreach ($dataentries as &$dataentry) {
         $nextId = $dbconn->GenId($dynamic_data);
-        $query = "INSERT INTO $dynamic_data
-                         (xar_dd_id, xar_dd_propid, xar_dd_itemid, xar_dd_value)
-                  VALUES (?,$dataentry)";
-        $result = $dbconn->Execute($query,array($nextId));
+        array_unshift($dataentry, $nextId);
+        $result = $stmt->executeUpdate($dataentry);
         if (!isset($result)) return;
     }
 

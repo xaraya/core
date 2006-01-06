@@ -64,14 +64,14 @@
                     <xar:mlstring>Database Type</xar:mlstring>
                 </label>
                 <select name="install_database_type" id="install_database_type">
-                    <xar:foreach in="$database_types" key="$adodbdriver" value="$info">
+                    <xar:foreach in="$database_types" key="$dbdriver" value="$info">
                         <xar:if condition="!$info.available">
-                            <option value="#$adodbdriver#" disabled="disabled">#$info.name# <xar:mlstring>[not available]</xar:mlstring></option>
+                            <option value="#$dbdriver#" disabled="disabled">#$info.name# <xar:mlstring>[not available]</xar:mlstring></option>
                         <xar:else/>
-                            <xar:if condition="$database_type == $adodbdriver">
-                                <option selected="selected" value="#$adodbdriver#">#$info.name#</option>
+                            <xar:if condition="$database_type == $dbdriver">
+                                <option selected="selected" value="#$dbdriver#">#$info.name#</option>
                             <xar:else/>
-                                <option value="#$adodbdriver#">#$info.name#</option>
+                                <option value="#$dbdriver#">#$info.name#</option>
                             </xar:if>
                         </xar:if>
                     </xar:foreach>

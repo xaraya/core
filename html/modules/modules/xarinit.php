@@ -174,11 +174,8 @@ function modules_init()
      *   PRIMARY KEY  (xar_mvid, xar_uid)
      * )
      */
-    // CHECKME: the unsiged param for xar_uid changed from true to false in the changesdue scenario
-    // * upgrade needed, this has NOT been done yet?
-    // * this id will be the first in Xaraya which can receive negative values, not sure that is a good idea
     $fields = array('xar_mvid' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
-        'xar_uid' => array('type' => 'integer', 'null' => false, 'unsigned' => false, 'primary_key' => true),
+        'xar_uid' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'primary_key' => true),
         'xar_value' => array('type' => 'text', 'size' => 'long')
         );
 
@@ -229,51 +226,38 @@ function modules_init()
      * at this stage of installer mod vars cannot be set, so we use DB calls
      * prolly need to move this closer to installer, not sure yet
      */
-    // default show-hide core modules
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,?,'hidecore','0')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
-    if (!$result) return;
-    // default regenerate command
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,?,'regen','0')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
-    if (!$result) return;
-    // default style of module list
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,?,'selstyle','plain')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
-    if (!$result) return;
-    // default filtering based on module states
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,?,'selfilter', '0')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
-    if (!$result) return;
-    // default modules list sorting order
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,?,'selsort','nameasc')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
-    if (!$result) return;
-    // default show-hide modules statistics
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,?,'hidestats','0')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
-    if (!$result) return;
-    // default maximum number of modules listed per page
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,?,'selmax','all')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
-    if (!$result) return;
-    // default start page
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,?,'startpage','overview')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
-    if (!$result) return;
-    // expertlist
-    $query = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-    VALUES (?,?,'expertlist','0')";
-    $result = &$dbconn->Execute($query,array($dbconn->GenId($tables['module_vars']),$savedmodid));
-    if (!$result) return;
+   
+    $sql = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
+            VALUES (?,?,?,?)";
+    $stmt = $dbconn->prepareStatement($sql);
+    
+    $modvars = array(
+                     // default show-hide core modules
+                     array($savedmodid,'hidecore','0'),
+                     // default regenerate command
+                     array($savedmodid,'regen','0'),
+                     // default style of module list
+                     array($savedmodid,'selstyle','plain'),
+                     // default filtering based on module states
+                     array($savedmodid,'selfilter', '0'),
+                     // default modules list sorting order
+                     array($savedmodid,'selsort','nameasc'),
+                     // default show-hide modules statistics
+                     array($savedmodid,'hidestats','0'),
+                     // default maximum number of modules listed per page
+                     array($savedmodid,'selmax','all'),
+                     // default start page
+                     array($savedmodid,'startpage','overview'),
+                     // expertlist
+                     array($savedmodid,'expertlist','0'));
+    
+    foreach($modvars as &$modvar) {
+        $id = $dbconn->GenId($tables['module_vars']);
+        array_unshift($modvar,$id);
+        $result = $stmt->executeUpdate($modvar);
+        if(!$result) return;
+    }
+    
     // Initialisation successful
     return true;
 }
@@ -322,7 +306,7 @@ function modules_upgrade($oldVersion)
     case '2.02':
         // compatability upgrade, nothing to be done
     case '2.2.0':
-        // TODO: use adodb transactions to ensure atomicity?
+        // TODO: use transactions to ensure atomicity?
         // The changes for bug 1716:
         // - add xar_id as primary key
         // - make index on xar_regid unique
@@ -348,15 +332,17 @@ function modules_upgrade($oldVersion)
         if (!$result) return;
 
         // Get items from result array
+        // FIXME: updatin (part of) the primkey is not a good plan
+        $updateSql = "UPDATE " . $tables['module_states'] . "
+                      SET xarid = ?
+                      WHERE xar_regid = ? AND
+                            xar_state = ?";
+        $updateStmt = $dbconn->prepareStatement($updateSql);
         while (!$result->EOF) {
             list ($regid, $state) = $result->fields;
 
             $seqId = $dbconn->GenId($tables['module_states']);
-            $query = "UPDATE " . $tables['module_states'] . "
-                      SET xar_id = $seqId
-                      WHERE xar_regid = $regid
-                      AND xar_state = $state";
-            $updresult = &$dbconn->Execute($query);
+            $updresult = $updateStmt->executeUpdate(array($seqId, $regId, $state));
             if (!$updresult) return;
 
             $result->MoveNext();

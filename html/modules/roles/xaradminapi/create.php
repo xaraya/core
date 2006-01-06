@@ -31,29 +31,11 @@ function roles_adminapi_create($args)
     // Get arguments
     extract($args);
 
-    $invalid = array();
-    if (!isset($uname)) {
-        $invalid[] = 'uname';
-    } 
-    if (!isset($email)) {
-        $invalid[] = 'email';
-    } 
-    if (!isset($realname)) {
-        $invalid[] = 'realname';
-    } 
-    if (!isset($state)) {
-        $invalid[] = 'state';
-    } 
-    if (!isset($pass)) {
-        $invalid[] = 'pass';
-    } 
-    if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)', 
-            join(', ', $invalid), 
-            'admin', 'create', 'roles');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    } 
+    if (!isset($uname)) throw new EmptyParameterException('uname');
+    if (!isset($email)) throw new EmptyParameterException('email');
+    if (!isset($realname)) throw new EmptyParameterException('realname');
+    if (!isset($state)) throw new EmptyParameterException('state');
+    if (!isset($pass)) throw new EmptyParameterException('pass');
 
     // Get datbase setup
     $dbconn =& xarDBGetConn();
@@ -62,12 +44,11 @@ function roles_adminapi_create($args)
     $rolestable = $xartable['roles'];
 
     // Check if that username exists
-    $query = "SELECT xar_uid FROM $rolestable
-            WHERE xar_uname= ? AND xar_type = 0";
-    $result =& $dbconn->Execute($query,array($uname));
+    $query = "SELECT xar_uid FROM $rolestable WHERE xar_uname= ? AND xar_type = ?";
+    $result =& $dbconn->Execute($query,array($uname,0));
     if (!$result) return;
 
-    if ($result->RecordCount() > 0) {
+    if ($result->getRecordCount() > 0) {
         return 0;  // username is already there
     }
 
@@ -106,7 +87,7 @@ function roles_adminapi_create($args)
     $bindvars = array($nextId, $uname, $realname, 0,
                       $cryptpass,$email,$date_reg,$valcode,
                       $state,$authmodule);
-    $result =& $dbconn->Execute($query,$bindvars);
+    $result = $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     // Get the ID of the user that we created.

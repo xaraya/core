@@ -1,5 +1,7 @@
 <?php
 /**
+ * Update module information
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -24,27 +26,28 @@ function modules_adminapi_updateproperties($args)
     extract($args);
 
     // Argument check
-    if (!isset($regid)) {
-        $msg = xarML('Empty regid (#(1)).', $regid);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (!isset($regid)) throw new EmptyParameterException('regid');
 
-// Security Check
+    // Security Check
     if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regid")) return;
 
-// Update
+    // Update
     $xartable =& xarDBGetTables();
-    // CHECKME: this comes falling out of nowhere (from roles module)
-    $q = new xarQuery('UPDATE', $xartable['modules']);
-//    if (isset($displayname)) $q->addfield('xar_directory', $displayname);
-    if (isset($admincapable)) $q->addfield('xar_admin_capable', $admincapable);
-    if (isset($usercapable)) $q->addfield('xar_user_capable', $usercapable);
-    if (isset($version)) $q->addfield('xar_version', $version);
-    if (isset($class)) $q->addfield('xar_class', $class);
-    if (isset($category)) $q->addfield('xar_category', $category);
-    $q->eq('xar_regid', $regid);
-    if(!$q->run()) return;
+    $q = 'UPDATE ' . $xartable['modules'] . ' SET ';
+    $uparts=array(); $bindvars=array();
+    //    if (isset($displayname)) {$uparts[] = 'xar_directory=?'; $bindvars[] = $displayname;}
+    if (isset($admincapable)) {$uparts[] = 'xar_admin_capable=?'; $bindvars[] = $admincapable;}
+    if (isset($usercapable))  {$uparts[] = 'xar_user_capable=?';  $bindvars[] = $usercapable; }
+    if (isset($version))      {$uparts[] = 'xar_version=?';       $bindvars[] = $version;}
+    if (isset($class))        {$uparts[] = 'xar_class=?';         $bindvars[] = $class;}
+    if (isset($category))     {$uparts[] = 'xar_category=?';      $bindvars[] = $category;}
+    if(!empty($uparts)) {
+        // We have something to update
+        $q .= join(',',$uparts) . ' WHERE xar_regid=?';
+        $bindvars[] = $regid;
+        $dbconn = xarDbGetConn();
+        $dbconn->Execute($q, $bindvars);
+    }
     return true;
 }
 

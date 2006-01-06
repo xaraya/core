@@ -13,7 +13,7 @@ include_once "includes/exceptions/exception.class.php";
 
 class DefaultUserException extends xarException
 {
-    var $link;
+    public $link;
 
     function DefaultUserException($msg = '', $link = NULL)
     {

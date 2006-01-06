@@ -27,35 +27,22 @@ function modules_adminapi_verifydependency($args)
     if(!xarSecurityCheck('AdminModules',1,'All','All','modules')) return;
 
     // Argument check
-    if (!isset($mainId)) {
-        $msg = xarML('Missing module regid (#(1)).', $mainId);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));return;
-    }
+    if (!isset($mainId)) throw new EmptyParameterException('mainId');
 
     // Get module information
     $modInfo = xarModGetInfo($mainId);
-    if (!isset($modInfo)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
-                       new SystemException(__FILE__."(".__LINE__."): Module (regid: $regid) does not exist."));
-                       return;
-    }
-
+    if (!isset($modInfo)) throw new ModuleBaseInfoNotFoundException("with regid $regid");
 
     // See if we have lost any modules since last generation
     if (!xarModAPIFunc('modules','admin','checkmissing')) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', 'Missing Module');
-        return;
+        throw new ModuleNotFoundException();
     }
 
     // Get all modules in DB
     // A module is able to fullfil a dependency only if it is activated at least.
     // So db modules should be a safe start to go looking for them
     $dbModules = xarModAPIFunc('modules','admin','getdbmodules');
-    if (!isset($dbModules)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', 'Unable to find modules in the database');
-        return;
-    }
+    if (!isset($dbModules)) throw new ModuleNotFoundException();
 
     $dbMods = array();
 
@@ -70,12 +57,8 @@ function modules_adminapi_verifydependency($args)
     if (!empty($modInfo['extensions'])) {
         foreach ($modInfo['extensions'] as $extension) {
             if (!empty($extension) && !extension_loaded($extension)) {
-                xarErrorSet(
-                    XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
-                    new SystemException(xarML("Required PHP extension '#(1)' is missing for module '#(2)'", $extension, $modInfo['displayname']))
-                );
-                //Need to add some info for the user
-                return false;
+                $msg = xarML("Required PHP extension '#(1)' is missing for module '#(2)'", $extension, $modInfo['displayname']);
+                throw new Exception($msg);
             }
         }
     }
@@ -91,14 +74,8 @@ function modules_adminapi_verifydependency($args)
         if (is_array($conditions)) {
 
             //Required module inexistent
-            if (!isset($dbMods[$module_id])) {
-                xarErrorSet(
-                    XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
-                    new SystemException(xarML('Required module missing (ID #(1))', $module_id))
-                );
-                //Need to add some info for the user
-                return false;
-            }
+            if (!isset($dbMods[$module_id]))
+                throw new ModuleNotFoundException($module_id,'Required module missing (ID #(1))');
 
             if (xarModAPIFunc('base','versions','compare',array(
                 'ver1'      => $conditions['minversion'],
@@ -121,14 +98,8 @@ function modules_adminapi_verifydependency($args)
 
         } else {
             //Required module inexistent
-            if (!isset($dbMods[$conditions])) {
-                xarErrorSet(
-                    XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
-                    new SystemException(xarML('Required module missing (ID #(1))', $conditions))
-                );
-                //Need to add some info for the user
-                return false;
-            }
+            if (!isset($dbMods[$conditions]))  
+                throw new ModuleNotFoundException($conditions,'Required module missing (ID #(1))');
         }
     }
 

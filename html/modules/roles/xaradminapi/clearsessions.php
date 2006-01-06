@@ -15,16 +15,11 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['uid']
  * @return true on success, false otherwise
+ * @todo Move this to sessions subssystem, doesnt belong here.
  */
 function roles_adminapi_clearsessions($spared)
 {
-    if(!isset($spared)) {
-        $msg = xarML('Wrong arguments to groups_adminapi_clearsessions');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
-    }
+    if(!isset($spared)) throw new EmptyParameterException('spared');
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
@@ -34,20 +29,28 @@ function roles_adminapi_clearsessions($spared)
     $query = "SELECT xar_sessid, xar_uid FROM $sessionstable";
     $result = $dbconn->Execute($query);
     if (!$result) return;
-    while (!$result->EOF) {
-       list($thissession, $thisuid) = $result->fields;
-       foreach ($spared as $uid) {
-            $thisrole = $roles->getRole($thisuid);
-            $thatrole = $roles->getRole($uid);
-            if (!$thisuid == $uid && !$thisrole->isParent($thatrole)) {
-                $query = "DELETE FROM $sessionstable
-                  WHERE xar_sessid = ?";
-                if (!$dbconn->Execute($query,array($thisuid))) return;
-                break;
+    // Prepare query outside the loop
+    $sql = "DELETE FROM $sessionstable WHERE xar_sessid = ?";
+    $stmt = $dbconn->prepareStatement($sql);
+    try {
+        $dbconn->begin();
+        while (!$result->EOF) {
+            list($thissession, $thisuid) = $result->fields;
+            foreach ($spared as $uid) {
+                $thisrole = $roles->getRole($thisuid);
+                $thatrole = $roles->getRole($uid);
+                if (!$thisuid == $uid && !$thisrole->isParent($thatrole)) {
+                    $stmt->executeUpdate(array($thisuid));
+                    break;
+                }
             }
+            $result->MoveNext();
         }
-       $result->MoveNext();
-   }
+        $dbconn->commit();
+    } catch(SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
 
 // Security Check
     if(!xarSecurityCheck('EditRole')) return;

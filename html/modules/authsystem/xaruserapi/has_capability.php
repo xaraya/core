@@ -1,6 +1,7 @@
-
+<?php
 /**
  * Check for module capability
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -32,11 +33,9 @@ function authsystem_userapi_has_capability($args)
         case XARUSER_AUTH_USER_DELETEABLE:
             return false;
             break;
+        default:
+            throw new BadParameterException($capability,'Unknown capability requested "#(1)"');
     }
-    $msg = xarML('Unknown capability.');
-    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                   new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-    return;
 }
 
 ?>
