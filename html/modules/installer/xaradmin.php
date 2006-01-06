@@ -576,7 +576,7 @@ function installer_admin_create_administrator()
                    'state' => 3);
 
     xarModSetVar('roles', 'lastuser', $userName);
-    xarModSetVar('roles', 'adminpass', $pass);
+    xarModSetVar('roles', 'adminpass', $pass);// <-- come again? why store the pass?
 
     // create a role from the data
     $role = new xarRole($pargs);
@@ -620,7 +620,7 @@ function installer_admin_create_administrator()
     $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
               WHERE     xar_name = ?";
-    $dbconn->Execute($query,array('left'));
+    $result = $dbconn->Execute($query,array('left'));
 
     // Freak if we don't get one and only one result
     if ($result->getRecordCount() != 1) {
@@ -1054,7 +1054,7 @@ function installer_admin_cleanup()
             return;
         }
     }
-
+*/
     // Check for db errors
     $result = $stmt->executeQuery(array('header'));
     if (!$result) return;

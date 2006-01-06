@@ -76,7 +76,8 @@ function installer_adminapi_initialise($args)
     $osDirectory = xarVarPrepForOS($directory);
     $modInitFile = 'modules/'. $osDirectory. '/xarinit.php';
 
-    if(!file_exist($modInitFile)) throw new FileNotFoundException($modInitFile);
+
+    if(!file_exists($modInitFile)) throw new FileNotFoundException($modInitFile);
     include_once ($modInitFile);
 
     // Run the function, check for existence

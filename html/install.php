@@ -156,7 +156,8 @@ function xarInstallMain()
 
     // Make sure we can render a page
     xarTplSetPageTitle(xarML('Xaraya installer'));
-    xarTplSetThemeName('Xaraya_Classic') or  throw new Exception('You need the Xaraya_Classic theme if you want to install Xaraya.');
+    if(!xarTplSetThemeName('Xaraya_Classic'))
+        throw new Exception('You need the Xaraya_Classic theme if you want to install Xaraya.');
 
     // Handle installation phase designation
     xarVarFetch('install_phase','int:1:6',$phase,1,XARVAR_NOT_REQUIRED);
