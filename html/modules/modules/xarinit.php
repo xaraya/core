@@ -83,8 +83,8 @@ function modules_init()
     $seqId = $dbconn->GenId($tables['modules']);
     $query = "INSERT INTO " . $tables['modules'] . "
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES (?, 'modules', 1, 'modules', ?, 1, 'Core Admin', 'Global', 1, 0)";
-    $bindvars = array($seqId,(string) $modVersion);
+     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $bindvars = array($seqId,'modules',1,'modules',(string) $modVersion,1,'Core Admin','Global',1,0);
 
     $result = &$dbconn->Execute($query,$bindvars);
     if (!$result) return;
@@ -124,8 +124,8 @@ function modules_init()
 
     // manually set Modules Module to active
     $query = "INSERT INTO " . $tables['module_states'] . "(xar_id, xar_regid, xar_state
-              ) VALUES (?, 1, 3)";
-    $bindvars = array($seqId);
+              ) VALUES (?, ?, ?)";
+    $bindvars = array($seqId,1,3);
 
     $result = &$dbconn->Execute($query,$bindvars);
     if (!$result) return;
@@ -251,13 +251,19 @@ function modules_init()
                      // expertlist
                      array($savedmodid,'expertlist','0'));
     
-    foreach($modvars as &$modvar) {
-        $id = $dbconn->GenId($tables['module_vars']);
-        array_unshift($modvar,$id);
-        $result = $stmt->executeUpdate($modvar);
-        if(!$result) return;
+    try {
+        $dbconn->begin();
+        foreach($modvars as &$modvar) {
+            $id = $dbconn->GenId($tables['module_vars']);
+            array_unshift($modvar,$id);
+            $stmt->executeUpdate($modvar);
+        }
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
     }
-    
+
     // Initialisation successful
     return true;
 }
@@ -280,6 +286,19 @@ function modules_activate()
     xarModSetVar('modules', 'selstyle', $selstyle);
     xarModSetVar('modules', 'selfilter', $selfilter);
     xarModSetVar('modules', 'selsort', $selsort);
+    // New here in 2.x series from adminpanels
+    xarModSetVar('modules', 'disableoverview',0);
+    xarModSetVar('modules', 'usedashboard',0);
+
+    // Register the blocks here, since this is the earlies point we can do it
+    // Register blocks
+    if (!xarModAPIFunc('blocks','admin','register_block_type',
+                       array('modName'  => 'modules',
+                             'blockType'=> 'adminmenu'))) return;
+
+    if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
+                       array('modName'  => 'modules',
+                             'blockType'=> 'waitingcontent'))) return;
 
     return true;
 }
@@ -338,14 +357,19 @@ function modules_upgrade($oldVersion)
                       WHERE xar_regid = ? AND
                             xar_state = ?";
         $updateStmt = $dbconn->prepareStatement($updateSql);
-        while (!$result->EOF) {
-            list ($regid, $state) = $result->fields;
-
-            $seqId = $dbconn->GenId($tables['module_states']);
-            $updresult = $updateStmt->executeUpdate(array($seqId, $regId, $state));
-            if (!$updresult) return;
-
-            $result->MoveNext();
+        try {
+            $dbconn->begin();
+            while (!$result->EOF) {
+                list ($regid, $state) = $result->fields;
+                
+                $seqId = $dbconn->GenId($tables['module_states']);
+                $updateStmt->executeUpdate(array($seqId, $regId, $state));
+                $result->MoveNext();
+            }
+            $dbconn->commit();
+        } catch (SQLException $e) {
+            $dbconn->rollback();
+            throw $e;
         }
 
         // Close result set

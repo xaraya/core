@@ -626,7 +626,7 @@ function xarModPrivateLoad($modName, $modType, $flags = 0, $throwException=1)
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) {
-        if($throwException) throw new ModuleBaseInfoNotFound($modName);
+        if($throwException) throw new ModuleNotFoundException($modName);
         return; // throw back
     }
 

@@ -445,7 +445,7 @@ function installer_admin_bootstrap()
 	}
 
     // Set the state and activate the following modules
-    $modlist=array('roles','privileges','blocks','themes');
+    $modlist=array('roles','privileges','blocks','themes','modules');
     foreach ($modlist as $mod) {
         // Set state to inactive
         $regid=xarModGetIDFromName($mod);
@@ -480,8 +480,8 @@ function installer_admin_bootstrap()
         }
     }
 
-    // Initialise and activate adminpanels, mail, dynamic data
-    $modlist = array('adminpanels','mail', 'dynamicdata');
+    // Initialise and activate mail, dynamic data
+    $modlist = array('mail', 'dynamicdata');
     foreach ($modlist as $mod) {
         // Initialise the module
         $regid = xarModGetIDFromName($mod);
@@ -585,7 +585,7 @@ function installer_admin_create_administrator()
     $modifiedrole = $role->update();
     if (!$modifiedrole) {return;}
 
-    // Register Block types
+    // Register Block types 
     $blocks = array('finclude','html','menu','php','text','content');
 
     foreach ($blocks as $block) {
@@ -631,7 +631,7 @@ function installer_admin_create_administrator()
     list ($leftBlockGroup) = $result->fields;
 
     $adminBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                    array('module'  => 'adminpanels',
+                                    array('module'  => 'modules',
                                           'type'    => 'adminmenu'));
 
     if (empty($adminBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {

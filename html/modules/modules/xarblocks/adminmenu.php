@@ -17,7 +17,7 @@
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  */
-function adminpanels_adminmenublock_init()
+function modules_adminmenublock_init()
 {
     // Nothing to configure...
     return array('nocache' => 1);
@@ -33,12 +33,12 @@ function adminpanels_adminmenublock_init()
  * @throws  no exceptions
  * @todo    nothing
 */
-function adminpanels_adminmenublock_info()
+function modules_adminmenublock_info()
 {
     // Values
     return array(
         'text_type' => 'adminmenu',
-        'module' => 'adminpanels',
+        'module' => 'modules',
         'text_type_long' => 'Admin Menu',
         'allow_multiple' => false,
         'form_content' => false,
@@ -55,7 +55,7 @@ function adminpanels_adminmenublock_info()
  * @return  data array on success or void on failure
  * @todo    implement centre menu position
 */
-function adminpanels_adminmenublock_display($blockinfo)
+function modules_adminmenublock_display($blockinfo)
 {
     // Security Check
     if (!xarSecurityCheck('AdminPanel',0,'Block',"adminmenu:$blockinfo[title]:$blockinfo[bid]")) {return;}
@@ -65,15 +65,6 @@ function adminpanels_adminmenublock_display($blockinfo)
         $vars = unserialize($blockinfo['content']);
     } else {
         $vars = $blockinfo['content'];
-    }
-    
-    // due to shortcomings of modules module, we need this workaround
-    // if our module deactivated intentionally or by accident
-    // we just switch to the block mode that is not dependent on the module's api
-    // the only such mode at the moment is sort by name
-    // TODO: eradicate dependency on module api for other sort orders too
-    if (!xarModIsAvailable('adminpanels')) {
-        xarModSetVar('adminpanels', 'menustyle', 'byname');
     }
     
     // are there any admin modules, then get the whole list sorted by names
@@ -95,13 +86,13 @@ function adminpanels_adminmenublock_display($blockinfo)
     // SETTING 2: Menustyle 
     if(!isset($vars['menustyle'])) {
         // If it is not set, revert to the default setting
-        $vars['menustyle'] = xarModGetVar('adminpanels', 'menustyle');
+        $vars['menustyle'] = xarModGetVar('modules', 'menustyle');
     }
 
     // SETTING 3: Show overviews or not
     if(!isset($vars['overview'])) {
         // If it i not set, rever to the default setting
-        $vars['overview'] = xarModGetVar('adminpanels','overview');
+        $vars['overview'] = xarModGetVar('modules','disableoverview');
     }
     
     // Get current URL for later comparisons because we need to compare

@@ -48,6 +48,9 @@ function modules_adminapi_getmenulinks()
 /*         $menulinks[] = Array('url'   => xarModURL('modules','admin','tools'), */
 /*                              'title' => xarML('Use these tools to build and verify elements of modules.'), */
 /*                              'label' => xarML('Toolbox')); */
+        $menulinks[] = Array('url'  => xarModURL('modules','admin','modifyconfig'),
+                            'title' => xarML('Modify configuration parameters'),
+                            'label' => xarML('Modify config'));
     }
     return $menulinks;
 }

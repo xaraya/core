@@ -7,7 +7,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage adminpanels module
+ * @subpackage modules module
  * @author Andy Varganov <andyv@xaraya.com>
  */
 /**
@@ -20,7 +20,7 @@
  * @throws  XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION'
  * @todo    nothing
 */
-function adminpanels_admin_modifyconfig()
+function modules_admin_modifyconfig()
 {
     // Security Check
     if(!xarSecurityCheck('AdminPanel')) return;
@@ -28,10 +28,10 @@ function adminpanels_admin_modifyconfig()
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();
 
-    // moved from modify overviews
-    $data['showoverviews']          = xarModGetVar('adminpanels', 'overview');
+    // New modvar to keep track of the overview setting, was in adminpanels
+    $data['disableoverview'] = xarModGetVar('modules', 'disableoverview');
     // Dashboard
-    $data['dashboard']              = xarModGetVar('adminpanels', 'dashboard');
+    $data['dashboard']              = xarModGetVar('modules', 'usedashboard');
     // everything else happens in Template for now
     return $data;
 }

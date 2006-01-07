@@ -7,7 +7,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage adminpanels module
+ * @subpackage modules module
  * @author Andy Varganov <andyv@xaraya.com>
  */
 /**
@@ -20,18 +20,19 @@
  * @throws  no exceptions
  * @todo    nothing
 */
-function adminpanels_admin_updateconfig()
+function modules_admin_updateconfig()
 {
     // Confirm authorisation code
     if (!xarSecConfirmAuthKey()) return;
     
     // enable or disable overviews
-    if(!xarVarFetch('dashboard', 'isset', $dashboard, 0, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dashboard', 'isset', $dashboard, 0, XARVAR_DONT_SET)) return;
+    if(!xarVarFetch('disableoverview','isset', $disableoverview, 0, XARVAR_DONT_SET)) return;
 
-    xarModSetVar('adminpanels', 'overview', ($overview) ? 1 : 0);
+    xarModSetVar('modules', 'disableoverview', ($disableoverview) ? 1 : 0);
     xarModSetVar('adminpanels', 'dashboard', ($dashboard) ? 1 : 0);
     // lets update status and display updated configuration
-    xarResponseRedirect(xarModURL('adminpanels', 'admin', 'modifyconfig'));
+    xarResponseRedirect(xarModURL('modules', 'admin', 'modifyconfig'));
 
     // Return
     return true;
