@@ -169,6 +169,16 @@ function roles_init()
     //Database Initialisation successful
 
 
+# --------------------------------------------------------
+#
+# Create wrapper DD objects for the native itemtypes of this module
+#
+	if (!xarModAPIFunc('roles','admin','createrolesobjects')) return;
+
+# --------------------------------------------------------
+#
+# Create some modvars
+#
     xarModSetVar('roles', 'defaultauthmodule', '');
 
     return true;
@@ -261,7 +271,7 @@ function roles_upgrade($oldVersion)
     switch ($oldVersion) {
         case '1.01':
             break;
-        case '1.1.1':
+        case '1.1.0':
         	// is there an authentication module?
 			$regid = xarModGetIDFromName('authentication');
 
@@ -318,6 +328,9 @@ function roles_upgrade($oldVersion)
 //				return;
 				die(xarML('I could not load the authentication module. Please make it available and try again'));
 		    }
+            break;
+        case '1.1.1':
+		    if (!xarModAPIFunc('roles','admin','createrolesobjects')) return;
             break;
     }
     // Update successful

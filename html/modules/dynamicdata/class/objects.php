@@ -2213,7 +2213,13 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 */
         return $itemid;
     }
+}
 
+class Extended_Object extends Dynamic_Object
+{
+    function Extended_Object($args)
+    {
+    }
 }
 
 ?>
