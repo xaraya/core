@@ -264,11 +264,11 @@ function roles_activate()
  */
 function roles_upgrade($oldVersion)
 {
-    // Upgrade dependent on old version number
+	// Upgrade dependent on old version number
     switch ($oldVersion) {
         case '1.01':
             break;
-        case '1.1.1':
+        case '1.1.0':
         	// is there an authentication module?
 			$regid = xarModGetIDFromName('authentication');
 
