@@ -97,6 +97,12 @@ function adminpanels_adminmenublock_display($blockinfo)
         // If it is not set, revert to the default setting
         $vars['menustyle'] = xarModGetVar('adminpanels', 'menustyle');
     }
+
+    // SETTING 3: Show overviews or not
+    if(!isset($vars['overview'])) {
+        // If it i not set, rever to the default setting
+        $vars['overview'] = xarModGetVar('adminpanels','overview');
+    }
     
     // Get current URL for later comparisons because we need to compare
     // xhtml compliant url, we fetch the default 'XML'-formatted URL.

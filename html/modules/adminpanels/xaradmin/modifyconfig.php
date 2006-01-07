@@ -28,9 +28,6 @@ function adminpanels_admin_modifyconfig()
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();
 
-    $data['menustyle']              = xarModGetVar('adminpanels', 'menustyle');
-    $data['showhelp']               = xarModGetVar('adminpanels', 'showhelp');
-
     // moved from modify overviews
     $data['showoverviews']          = xarModGetVar('adminpanels', 'overview');
     // Dashboard

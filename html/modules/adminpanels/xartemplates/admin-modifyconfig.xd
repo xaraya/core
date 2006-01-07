@@ -1,39 +1,12 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>
-            Adminpanels Administration 
-        </xar:mlstring>
+        <xar:mlstring>Adminpanels Administration</xar:mlstring>
     </span>
 </div>
 <div class="xar-mod-body">
-    <h2>
-        <xar:mlstring>
-            Modify Config 
-        </xar:mlstring>
-    </h2>
+    <h2><xar:mlstring>Modify Config</xar:mlstring></h2>
     <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
-        <fieldset>
-            <legend>
-                <xar:mlstring>
-                    Overviews 
-                </xar:mlstring>
-            </legend>
-            <div class="xar-form-input-wrapper-after">
-                <xar:if condition="$showoverviews eq 1">
-                    <input type="checkbox" name="overview" id="overview" value="1" checked="checked" />
-                    <xar:else />
-                    <input type="checkbox" name="overview" id="overview" value="1" />
-                </xar:if>
-                <label for="overview" title="#xarML('Bypass the overviews and go directly to the module configuration')#">
-                    <xar:mlstring>
-                        Disable Module Overviews by Default
-                    </xar:mlstring>
-                </label>
-            </div>
-        </fieldset>
         <fieldset>
             <legend>
                 <xar:mlstring>

@@ -25,22 +25,9 @@ function adminpanels_admin_updateconfig()
     // Confirm authorisation code
     if (!xarSecConfirmAuthKey()) return;
     
-    // Get parameters
-
-    // this is actually a sort order switch, which of course affect the style of the menu
-    if(!xarVarFetch('menustyle', 'isset', $menustyle, 'byname', XARVAR_NOT_REQUIRED)) {return;}
-
-    // show or hide a link in adminmenu to a contectual on-line help for the active module
-    if(!xarVarFetch('showhelp', 'isset', $showhelp, false, XARVAR_DONT_SET)) {return;}
-
-    // enable or disable overviews
-    if(!xarVarFetch('overview', 'isset', $overview, 0, XARVAR_DONT_SET)) {return;}
-
     // enable or disable overviews
     if(!xarVarFetch('dashboard', 'isset', $dashboard, 0, XARVAR_DONT_SET)) {return;}
 
-    xarModSetVar('adminpanels', 'menustyle', $menustyle);
-    xarModSetVar('adminpanels', 'showhelp', (!$showhelp) ? 1 : 0);
     xarModSetVar('adminpanels', 'overview', ($overview) ? 1 : 0);
     xarModSetVar('adminpanels', 'dashboard', ($dashboard) ? 1 : 0);
     // lets update status and display updated configuration
