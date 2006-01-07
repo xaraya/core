@@ -429,12 +429,13 @@ function xarModGetIDFromName($modName, $type = 'module')
             $modBaseInfo = xarMod_getBaseInfo($modName);
             break;
         case 'theme':
+            // MrB: this is obviously very wrong
             $modBaseInfo = xarMod_getBaseInfo($modName, 'theme');
             break;
     }
 
     if (!isset($modBaseInfo)) return; // throw back
-    // MrB: this is a bit confusing as we also have the 'system' id.
+    // MrB: this is confusing 
     return $modBaseInfo['regid'];
 }
 
@@ -1827,80 +1828,38 @@ function xarMod_getBaseInfo($modName, $type = 'module')
  * @return mixed true on success
  * @raise DATABASE_ERROR, BAD_PARAM
  */
-function xarMod_getVarsByModule($modName, $type = 'module')
+function xarMod_getVarsByModule($modName)
 {
     if (empty($modName)) throw new EmptyParameterException('modName');
 
-    switch(strtolower($type)) {
-        case 'module':
-            default:
-            $modBaseInfo = xarMod_getBaseInfo($modName);
-            if (!isset($modBaseInfo)) {
-                return; // throw back
-            }
-            break;
-        case 'theme':
-            $modBaseInfo = xarMod_getBaseInfo($modName, $type = 'theme');
-            if (!isset($modBaseInfo)) {
-                return; // throw back
-            }
-            break;
-    }
+    $modBaseInfo = xarMod_getBaseInfo($modName);
+    if (!isset($modBaseInfo)) return;
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    switch(strtolower($type)) {
-        case 'module':
-            default:
-            // Takes the right table basing on module mode
-            if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-                $module_varstable = $tables['system/module_vars'];
-            } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-                $module_varstable = $tables['site/module_vars'];
-            }
-
-            $query = "SELECT xar_name, xar_value FROM $module_varstable
-                      WHERE xar_modid = ?";
-            $stmt =& $dbconn->prepareStatement($query);
-            $result =& $stmt->executeQuery(array($modBaseInfo['systemid']),ResultSet::FETCHMODE_ASSOC);
-            if (!$result) return;
-
-            while ($result->next()) {
-                xarCore_SetCached('Mod.Variables.' . $modName, $result->getString('xar_name'), $result->get('xar_value'));
-            }
-            $result->Close();
-
-            xarCore_SetCached('Mod.GetVarsByModule', $modName, true);
-            break;
-        case 'theme':
-            // Takes the right table basing on theme mode
-            if ($themeBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
-                $theme_varsTable = $tables['theme_vars'];
-            } elseif ($themeBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
-                $theme_varsTable = $tables['site/theme_vars'];
-            }
-
-            $query = "SELECT xar_name as name, xar_prime as prime, 
-                             xar_value as value, xar_description as description
-                      FROM $theme_varsTable WHERE xar_themeName = ?";
-            $stmt =& $dbconn->prepareStatement($query);
-            $result =& $stmt->executeQuery(array($themeName),ResultSet::FETCHMODE_ASSOC);
-            if (!$result) return;
-
-            $themevars = array();
-            while ($result->next()) {
-                $themevars[] = $result->getRow();
-                xarCore_SetCached('Theme.Variables.' . $themeName, $result->getString('name'), $result->get('value'));
-            }
-            $result->Close();
-
-            xarCore_SetCached('Theme.GetVarsByTheme', $themeName, true);
-            break;
+    // Takes the right table basing on module mode
+    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+        $module_varstable = $tables['system/module_vars'];
+    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+        $module_varstable = $tables['site/module_vars'];
     }
 
+    $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ?";
+    $stmt =& $dbconn->prepareStatement($query);
+    $result =& $stmt->executeQuery(array($modBaseInfo['systemid']),ResultSet::FETCHMODE_ASSOC);
+    if (!$result) return;
+
+    while ($result->next()) {
+        xarCore_SetCached('Mod.Variables.' . $modName, $result->getString('xar_name'), $result->get('xar_value'));
+    }
+    $result->Close();
+    
+    xarCore_SetCached('Mod.GetVarsByModule', $modName, true);
+    break;
     return true;
 }
+
 
 /**
  * Get all module variables with a particular name

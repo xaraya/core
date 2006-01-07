@@ -8,14 +8,8 @@
  * 
  * @subpackage themes
  * @author mrb <marcel@xaraya.com> (this tag means responsible person)
+ * @todo Most of this doesnt belong here, but in the themes module, move it away
 */
-
-
-
-// Theme Function Wrappers
-// FIXME: This should be done better integrated
-//        We have no redundancy at least with xarMod.php now, but it's still a bit messy
-
 
 /**
  * get a theme variable
@@ -30,7 +24,8 @@ function xarThemeGetVar($themeName, $name, $prep = NULL)
 {
     if (empty($themeName)) throw new EmptyParameterException('themename');
 
-    return xarVar__GetVarByAlias($themeName, $name, $uid = NULL, $prep, $type = 'themevar');
+    $itemid = xarThemeGetIDFromName($themeName,'systemid');
+    return xarVar__GetVarByAlias('themes', $name, $itemid, $prep, $type = 'moditemvar');
 }
 
 /**
@@ -47,7 +42,8 @@ function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='
 {
     if (empty($themeName)) throw new EmptyParameterException('themename');
 
-    return xarVar__SetVarByAlias($themeName, $name, $value, $prime, $description, $uid = NULL, $type = 'themevar');
+    $itemid = xarThemeGetIDFromName($themeName,'systemid');
+    return xarVar__SetVarByAlias('themes', $name, $value, $prime, $description, $itemid, $type = 'moditemvar');
 }
 
 
@@ -64,7 +60,8 @@ function xarThemeDelVar($themeName, $name)
 {
     if (empty($themeName)) throw new EmptyParameterException('themename');
 
-    return xarVar__DelVarByAlias($themeName, $name, $uid = NULL, $type = 'themevar');
+    $itemid = xarThemeGetIDFromName($themeName,'systemid');
+    return xarVar__DelVarByAlias('themes', $name, $itemid, $type = 'moditemvar');
 }
 
 /**
@@ -75,9 +72,14 @@ function xarThemeDelVar($themeName, $name)
  * @return xarModGetIDFromName for processing
  * @raise DATABASE_ERROR, BAD_PARAM, THEME_NOT_EXIST
  */
-function xarThemeGetIDFromName($themeName)
+function xarThemeGetIDFromName($themeName,$id='regid')
 {
-    return xarModGetIDFromName($themeName, $type = 'theme');
+    if (empty($themeName)) throw new EmptyParameterException('themeName');
+
+    $themeBaseInfo = xarMod_getBaseInfo($modName, 'theme');
+    if (!isset($themeBaseInfo)) return; // throw back
+
+    return $modBaseInfo[$id];
 }
 
 /**
@@ -172,7 +174,9 @@ function xarTheme_getBaseInfo($themeName)
  */
 function xarTheme_getVarsByTheme($themeName)
 {
-    return xarMod_getVarsByModule($name, $type = 'theme');
+    // This is wrong, get them for themes module for now
+    //return xarMod_getVarsByModule($themeName, $type = 'theme');
+    return xarMod_getVarsByModule('themes');
 }
 
 /**
