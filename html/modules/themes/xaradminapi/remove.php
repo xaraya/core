@@ -41,7 +41,7 @@ function themes_adminapi_remove($args)
     // Bail out if we're trying to remove while one of our users
     // has it set to their default theme
     $mvid = xarModGetVarId('themes','default');
-    $sql = "SELECT COUNT(*) FROM $tables[module_uservars] WHERE xar_mvid=? AND xar_value = ?";
+    $sql = "SELECT COUNT(*) FROM $tables[module_itemvars] WHERE xar_mvid=? AND xar_value = ?";
     $result =& $dbconn->Execute($sql, array($mvid,$defaultTheme));
     if(!$result) return;
     // count should be zero

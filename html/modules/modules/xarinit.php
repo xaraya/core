@@ -31,7 +31,7 @@ function modules_init()
     $tables['modules'] = $systemPrefix . '_modules';
     $tables['module_states'] = $sitePrefix . '_module_states';
     $tables['module_vars'] = $sitePrefix . '_module_vars';
-    $tables['module_uservars'] = $sitePrefix . '_module_uservars';
+    $tables['module_itemvars'] = $sitePrefix . '_module_itemvars';
     $tables['hooks'] = $sitePrefix . '_hooks';
     // Create tables
     /**
@@ -165,21 +165,22 @@ function modules_init()
 
     $result = &$dbconn->Execute($query);
     if (!$result) return;
-    // prefix_module_uservars
+    // prefix_module_itemvars
     /**
-     * CREATE TABLE xar_module_uservars (
+     * CREATE TABLE xar_module_itemvars (
      *   xar_mvid int(11) NOT NULL auto_increment,
-     *   xar_uid  int(11) NOT NULL default 0,
+     *   xar_itemid  int(11) NOT NULL default 0,
      *   xar_value longtext,
      *   PRIMARY KEY  (xar_mvid, xar_uid)
      * )
      */
-    $fields = array('xar_mvid' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
-        'xar_uid' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'primary_key' => true),
-        'xar_value' => array('type' => 'text', 'size' => 'long')
-        );
+    $fields = array(
+                    'xar_mvid' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
+                    'xar_itemid' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'primary_key' => true),
+                    'xar_value' => array('type' => 'text', 'size' => 'long')
+                    );
 
-    $query = xarDBCreateTable($tables['module_uservars'], $fields);
+    $query = xarDBCreateTable($tables['module_itemvars'], $fields);
 
     $result = &$dbconn->Execute($query);
     if (!$result) return;

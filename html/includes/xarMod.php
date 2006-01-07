@@ -110,8 +110,8 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
                     'system/module_vars' => $systemPrefix . '_module_vars',
                     'site/module_states' => $sitePrefix . '_module_states',
                     'site/module_vars' => $sitePrefix . '_module_vars',
-                    'system/module_uservars' => $systemPrefix . '_module_uservars',
-                    'site/module_uservars' => $sitePrefix . '_module_uservars',
+                    'system/module_itemvars' => $systemPrefix . '_module_itemvars',
+                    'site/module_itemvars' => $sitePrefix . '_module_itemvars',
                     'themes' => $systemPrefix . '_themes',
                     'system/theme_states' => $systemPrefix . '_theme_states',
                     'system/theme_vars' => $systemPrefix . '_theme_vars',
@@ -122,7 +122,7 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
     // Old tables
     $tables['theme_vars']           = $systemPrefix . '_theme_vars';
     $tables['module_vars']           = $systemPrefix . '_module_vars';
-    $tables['module_uservars']       = $systemPrefix . '_module_uservars';
+    $tables['module_itemvars']       = $systemPrefix . '_module_itemvars';
     $tables['hooks']                 = $systemPrefix . '_hooks';
 
     xarDB_importTables($tables);
@@ -166,7 +166,7 @@ function xarModGetVar($modName, $name, $prep = NULL)
  * @param value The value of the variable
  * @return bool true on success
  * @raise DATABASE_ERROR, BAD_PARAM
- * @todo  We could delete the user vars for the module with the new value to save space?
+ * @todo  We could delete the item vars for the module with the new value to save space?
  */
 function xarModSetVar($modName, $name, $value)
 {
@@ -183,7 +183,7 @@ function xarModSetVar($modName, $name, $value)
  * @param name The name of the variable
  * @return bool true on success
  * @raise DATABASE_ERROR, BAD_PARAM
- * @todo Add caching for user variables?
+ * @todo Add caching for item variables?
  */
 function xarModDelVar($modName, $name)
 {
@@ -198,7 +198,7 @@ function xarModDelVar($modName, $name)
  * @param modName The name of the module
  * @return bool true on success
  * @raise DATABASE_ERROR, BAD_PARAM
- * @todo Add caching for user variables?
+ * @todo Add caching for item variables?
  */
 function xarModDelAllVars($modName)
 {
@@ -213,10 +213,10 @@ function xarModDelAllVars($modName)
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
         $module_varstable = $tables['system/module_vars'];
-        $module_uservarstable = $tables['system/module_uservars'];
+        $module_itemvarstable = $tables['system/module_itemvars'];
     } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
         $module_varstable = $tables['site/module_vars'];
-        $module_uservarstable = $tables['site/module_uservars'];
+        $module_itemvarstable = $tables['site/module_itemvars'];
     }
 
     // PostGres (allows only one table in DELETE)
@@ -240,7 +240,7 @@ function xarModDelAllVars($modName)
         $dbconn->begin();
         if(count($idlist) != 0 ) {
             $bindmarkers = '?' . str_repeat(',?', count($idlist) -1);
-            $sql = "DELETE FROM $module_uservarstable WHERE $module_uservarstable.xar_mvid IN (".$bindmarkers.")";
+            $sql = "DELETE FROM $module_itemvarstable WHERE $module_itemvarstable.xar_mvid IN (".$bindmarkers.")";
             $stmt = $dbconn->prepareStatement($sql);
             $result = $stmt->executeUpdate($idlist);
         }
@@ -265,7 +265,7 @@ function xarModDelAllVars($modName)
  *
  * This is basically the same as xarModSetVar, but this
  * allows for getting variable values which are tied to
- * a specific user for a certain module. Typical usage
+ * a specific item for a certain module. Typical usage
  * is storing user preferences.
  *
  * @access public
@@ -288,7 +288,7 @@ function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL)
     // Anonymous user always uses the module default setting
     if ($uid==_XAR_ID_UNREGISTERED) return xarModGetVar($modName,$name);
 
-    return xarVar__GetVarByAlias($modName, $name, $uid, $prep, $type = 'moduservar');
+    return xarVar__GetVarByAlias($modName, $name, $uid, $prep, $type = 'moditemvar');
 }
 
 /**
@@ -322,7 +322,7 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
     // MrB: should we raise an exception here?
     if ($uid==_XAR_ID_UNREGISTERED) return false;
 
-    return xarVar__SetVarByAlias($modName, $name, $value, $prime = NULL, $description = NULL, $uid, $type = 'moduservar');
+    return xarVar__SetVarByAlias($modName, $name, $value, $prime = NULL, $description = NULL, $uid, $type = 'moditemvar');
 }
 
 /**
@@ -355,7 +355,7 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
     //      it would work.
     if ($uid == 0 ) return true;
 
-    return xarVar__DelVarByAlias($modName, $name, $uid, $type = 'moduservar');
+    return xarVar__DelVarByAlias($modName, $name, $uid, $type = 'moditemvar');
 }
 
 /**
