@@ -146,7 +146,7 @@ class xarTpl__ParserError extends SystemException
         $out .= "Line contents before the parsing error occurred:\n";
         $out .= $posInfo->lineText . " <== Error position\n";
         // throw a generic exception for now, this probably should not do this, but i dunno yet
-        throw new BLException('TBD',$msg);
+        throw new BLException('TBD',$out);
     }
 }
 
@@ -241,7 +241,6 @@ class xarTpl__PositionInfo extends xarTpl__ParserError
 class xarTpl__CodeGenerator extends xarTpl__PositionInfo
 {
     public $isPHPBlock = false;
-    public $pendingExceptionsControl = false;
     public $code;
 
     function isPHPBlock()
@@ -258,16 +257,6 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             $code = ($isPHPBlock)? '<?php ' : '?>';
         }
         return $code;
-    }
-
-    function isPendingExceptionsControl()
-    {
-        return $this->pendingExceptionsControl;
-    }
-
-    function setPendingExceptionsControl($pendingExceptionsControl)
-    {
-        $this->pendingExceptionsControl = $pendingExceptionsControl;
     }
 
     function generate(&$documentTree)
@@ -327,15 +316,8 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                 $code .= $childCode;
 
                 // This is in the outer level of the current node, see what kind of node we're dealing with
-                // here and whether it needs exceptions control
                 if ($child->isAssignable() && !($node->needParameter()) || $node->needAssignment()) {
                     $code .= "; ";
-                    if ($child->needExceptionsControl() || $this->isPendingExceptionsControl()) {
-                        $code .= "if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return false; ";
-                        $this->setPendingExceptionsControl(false);
-                    }
-                } elseif ($child->needExceptionsControl()) {
-                        $this->setPendingExceptionsControl(true);
                 }
             }
 
@@ -349,20 +331,13 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             if (!isset($endCode)) return; // throw back
 
             $code .= $endCode;
-
-            // Other part: exception handling
-            if (!$node->isAssignable() && ($node->needExceptionsControl())) {
-                $code .= $this->setPHPBlock(true);
-                $code .= "if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return false; ";
-                $this->setPendingExceptionsControl(false);
-            }
         } else {
             // If there are no children or no text, we can render it as is.
             // Recursion end condition as well.
             $code = $node->render();
             if(!isset($code)) ;//xarLogVariable('offending node:', $node);
-            // Either code must have a value, or an exception must be pending.
-            assert('isset($code) || xarCurrentErrorType() != XAR_NO_EXCEPTION; /* The rendering code for a node is not working properly */');
+            // Either code must have a value
+            assert('isset($code); /* The rendering code for a node is not working properly */');
             if (!isset($code))  return; // throw back
         }
         return $code;
@@ -1408,7 +1383,6 @@ class xarTpl__ExpressionTransformer
  * isPHPCode -> false
  * needAssignment -> false
  * needParameter -> false
- * needExceptionsControl -> false
  */
 class xarTpl__Node extends xarTpl__PositionInfo
 {
@@ -1478,11 +1452,6 @@ class xarTpl__Node extends xarTpl__PositionInfo
     {
         return false;
     }
-
-    function needExceptionsControl()
-    {
-        return false;
-    }
 }
 
 /**
@@ -1496,7 +1465,6 @@ class xarTpl__Node extends xarTpl__PositionInfo
  * isPHPCode -> true
  * needAssignment -> false
  * needParameter -> false
- * needExceptionsControl -> false
  * @package blocklayout
  */
 class xarTpl__TplTagNode extends xarTpl__Node
@@ -1538,7 +1506,6 @@ class xarTpl__TplTagNode extends xarTpl__Node
  * isPHPCode -> true
  * needAssignment -> false
  * needParameter -> false
- * needExceptionsControl -> false
  * @package blocklayout
  */
 class xarTpl__EntityNode extends xarTpl__Node
@@ -1582,7 +1549,6 @@ class xarTpl__EntityNode extends xarTpl__Node
  * isPHPCode -> true
  * needAssignment -> false
  * needParameter -> false
- * needExceptionsControl -> false
  * @package blocklayout
  */
 class xarTpl__InstructionNode extends xarTpl__Node
@@ -1612,7 +1578,6 @@ class xarTpl__InstructionNode extends xarTpl__Node
  * isPHPCode -> false
  * needAssignment -> false
  * needParameter -> false
- * needExceptionsControl -> false
  */
 class xarTpl__DocumentNode extends xarTpl__Node
 {
@@ -1653,7 +1618,6 @@ class xarTpl__DocumentNode extends xarTpl__Node
  * isPHPCode -> false
  * needAssignment -> false
  * needParameter -> false
- * needExceptionsControl -> false
  * @package blocklayout
  */
 class xarTpl__TextNode extends xarTpl__Node

@@ -54,10 +54,5 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
     {
         return false;
     }
-    
-    function needExceptionsControl()
-    {
-        return true;
-    }
 }
 ?>

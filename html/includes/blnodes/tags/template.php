@@ -67,10 +67,5 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
                 return;
         }
     }
-    
-    function needExceptionsControl()
-    {
-        return true;
-    }
 }
 ?>

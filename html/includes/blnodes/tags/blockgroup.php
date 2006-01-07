@@ -62,11 +62,7 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
         return true;
    }
     
-    function needExceptionsControl()
-   {
-        return true;
-   }
-    function isAssignable() 
+   function isAssignable() 
    {
         // FIXME: this should be true on closed form and false on open form, but 
         // we only know that while generating the code into the template, so we

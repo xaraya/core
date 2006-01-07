@@ -44,7 +44,6 @@ define('XAR_TPL_TAG_ISASSIGNABLE'              ,4);
 define('XAR_TPL_TAG_ISPHPCODE'                 ,8);
 define('XAR_TPL_TAG_NEEDASSIGNMENT'            ,16);
 define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
-define('XAR_TPL_TAG_NEEDEXCEPTIONSCONTROL'     ,64);
 
 /**
  * Miscelaneous defines
@@ -1601,8 +1600,6 @@ class xarTemplateTag
     public $_isPHPCode = true;
     public $_needAssignment = false;
     public $_needParameter = false;
-    public $_needExceptionsControl = false;
-
 
     function xarTemplateTag($module, $name, $attributes = array(), $handler = NULL, $flags = XAR_TPL_TAG_ISPHPCODE)
     {
@@ -1641,7 +1638,6 @@ class xarTemplateTag
         $this->_isPHPCode      = ($flags & XAR_TPL_TAG_ISPHPCODE)      == XAR_TPL_TAG_ISPHPCODE;
         $this->_needAssignment = ($flags & XAR_TPL_TAG_NEEDASSIGNMENT) == XAR_TPL_TAG_NEEDASSIGNMENT;
         $this->_needParameter  = ($flags & XAR_TPL_TAG_NEEDPARAMETER)  == XAR_TPL_TAG_NEEDPARAMETER;
-        $this->_needExceptionsControl = ($flags & XAR_TPL_TAG_NEEDEXCEPTIONSCONTROL)   == XAR_TPL_TAG_NEEDEXCEPTIONSCONTROL;
     }
 
     function hasChildren()
@@ -1672,11 +1668,6 @@ class xarTemplateTag
     function needParameter()
     {
         return $this->_needParameter;
-    }
-
-    function needExceptionsControl()
-    {
-        return $this->_needExceptionsControl;
     }
 
     function getAttributes()

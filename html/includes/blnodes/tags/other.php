@@ -70,10 +70,5 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
     {
         return $this->tagobject->needParameter();
     }
-    
-    function needExceptionsControl()
-    {
-        return $this->tagobject->needExceptionsControl();
-    }
 }
 ?>

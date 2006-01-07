@@ -87,11 +87,6 @@ EOT;
         return $this->renderBeginTag();
     }
 
-    function needExceptionsControl()
-    {
-        return true;
-    }
-
     function hasText()
     {
         return true;
