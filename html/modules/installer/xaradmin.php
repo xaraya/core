@@ -1090,8 +1090,6 @@ function installer_admin_cleanup()
         }
     }
 
-    xarModAPIFunc('adminpanels', 'admin', 'updatemenudb',array('force' => true));
-
     $data['language']    = $install_language;
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Step Six');
