@@ -28,15 +28,8 @@ function adminpanels_admin_modifyconfig()
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();
 
-    $data['sortorder'] = array();
-    $data['sortorder']['byname']    = xarML('By Name');
-    $data['sortorder']['bycat']     = xarML('By Category');
-    //$data['sortorder']['byweight']  = xarML('By Weight');
-    //$data['sortorder']['bygroup']   = xarML('By Group');
-
     $data['menustyle']              = xarModGetVar('adminpanels', 'menustyle');
     $data['showhelp']               = xarModGetVar('adminpanels', 'showhelp');
-/*     $data['submitlabel']            = xarML('Click "Submit" to change configuration:'); */
 
     // moved from modify overviews
     $data['showoverviews']          = xarModGetVar('adminpanels', 'overview');

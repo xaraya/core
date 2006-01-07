@@ -18,38 +18,6 @@
         <fieldset>
             <legend>
                 <xar:mlstring>
-                    Administration menus 
-                </xar:mlstring>
-            </legend>
-            <div class="xar-form-input-wrapper">
-                <label for="menustyle" title="#xarML('Set the order to display menu sections')#" class="xar-form-label">
-                    <xar:mlstring>
-                        Default Menu Item Order: 
-                    </xar:mlstring>
-                </label>
-                <select name="menustyle" id="menustyle">
-                    <xar:foreach in="$sortorder" value="$v" key="$k">
-                        <xar:if condition="$k eq $menustyle">
-                            <option value="#$k#" selected="selected">
-                                #$v# 
-                            </option>
-                            <xar:else />
-                            <option value="#$k#">
-                                #$v# 
-                            </option>
-                        </xar:if>
-                    </xar:foreach>
-                </select>
-            </div>
-            <p>
-                <xar:mlstring>
-                    Note: You can override item order in each block instance. This setting will only apply when it has not been set there. 
-                </xar:mlstring>
-            </p>
-        </fieldset>
-        <fieldset>
-            <legend>
-                <xar:mlstring>
                     Overviews 
                 </xar:mlstring>
             </legend>

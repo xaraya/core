@@ -51,11 +51,8 @@ function adminpanels_adminapi_buildmenu($args)
 
     foreach($cats as $num=>$cat){
         // get records from the table to match our categories
-        $query =   "SELECT xar_name
-                    FROM $menutable
-                    WHERE xar_category = ?
-                    AND xar_flag = 1";
-        $result = $dbconn->Execute($query,array($cat));
+        $query =   "SELECT xar_name FROM $menutable WHERE xar_category = ? AND xar_flag = ?";
+        $result = $dbconn->Execute($query,array($cat,1));
         if (!$result) return;
 
         // the category label

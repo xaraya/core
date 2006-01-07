@@ -27,9 +27,7 @@ function adminpanels_adminapi_updatemenudb($args)
     if(!isset($force)) $force = false;
 
     // what admin mods do we have here?
-    $mods = xarModAPIFunc('modules',
-                          'admin',
-                          'getlist',
+    $mods = xarModAPIFunc('modules','admin','getlist',
                           array('filter'     => array('AdminCapable' => 1)));
     if(empty($mods)) {
         // none, so dont do anything
@@ -45,8 +43,7 @@ function adminpanels_adminapi_updatemenudb($args)
         // since we can only add/activate one module at a time,
         // there is no need for a more sophisticated check
 
-        $query =   "SELECT COUNT(*)
-                    FROM $menutable";
+        $query =   "SELECT COUNT(*) FROM $menutable";
         $result =& $dbconn->Execute($query);
         if (!$result) return;
 
@@ -58,26 +55,28 @@ function adminpanels_adminapi_updatemenudb($args)
             return true;
         }else{
             // just empty the table
-            $query =   "DELETE FROM $menutable";
-            $result = $dbconn->Execute($query);
-            if (!$result) return;
+            try {
+                $dbconn->begin();
+                $query =   "DELETE FROM $menutable";
+                $dbconn->Execute($query);
 
-            // one modules was added or removed
-            // re-populate db table
-            foreach($mods as $mod){
-                // we want to know the category info for each mod
-                $modid = xarModGetIDFromName($mod['name']);
-                $modinfo = xarModGetInfo($modid);
-                if($modinfo){
-                    $modcat = $modinfo['category'];
+                // one modules was added or removed
+                // re-populate db table
+                // Prepare statement outside the loop
+                $query = "INSERT INTO $menutable (xar_amid, xar_name, xar_category) VALUES (?,?,?)";
+                $stmt = $dbconn->prepareStatement($query);
+                foreach($mods as $mod){
+                    // we want to know the category info for each mod
+                    $modid = xarModGetIDFromName($mod['name']);
+                    $modinfo = xarModGetInfo($modid);
+                    if($modinfo) $modcat = $modinfo['category'];
                 }
-
-                $query = "INSERT INTO $menutable (
-                          xar_amid, xar_name, xar_category)
-                          VALUES (?,?,?)";
                 $bindvars = array($dbconn->GenId($menutable),$mod['name'],$modcat);
-                $result = $dbconn->Execute($query,$bindvars);
-                if (!$result) return;
+                $stmt->executeUpdate($bindvars);
+                $dbconn->commit();
+            } catch (SQLException $e) {
+                $dbconn->rollback();
+                throw $e;
             }
         }
     }

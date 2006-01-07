@@ -20,7 +20,6 @@
 function adminpanels_adminmenublock_init()
 {
     // Nothing to configure...
-    // TODO: ...yet
     return array('nocache' => 1);
 }
 

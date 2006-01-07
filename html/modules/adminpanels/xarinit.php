@@ -1,6 +1,5 @@
 <?php
 /**
- * File: $Id: xarinit.php 1.55 05/03/19 09:21:02+01:00 marcel@hsdev.com $
  * Administration System
  *
  * @package Xaraya eXtensible Management System
@@ -95,23 +94,25 @@ function adminpanels_init()
         array('roles'      , 'Users & Groups',0,1)
     );
         
-    foreach($coremods as &$bindvars) {
-        $id = $dbconn->GenId($adminMenuTable);
-        array_unshift($bindvars,$id);
-        $result = $stmt->executeUpdate($bindvars);
-        if(!$result) return;
-    }                   
+    try {
+        $dbconn->begin();
+        foreach($coremods as &$bindvars) {
+            $id = $dbconn->GenId($adminMenuTable);
+            array_unshift($bindvars,$id);
+            $result = $stmt->executeUpdate($bindvars);
+        }
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
     
     // Register blocks
-    if (!xarModAPIFunc('blocks',
-                       'admin',
-                       'register_block_type',
+    if (!xarModAPIFunc('blocks','admin','register_block_type',
                        array('modName'  => 'adminpanels',
                              'blockType'=> 'adminmenu'))) return;
 
-    if (!xarModAPIFunc('blocks',
-                       'admin',
-                       'register_block_type',
+    if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
                        array('modName'  => 'adminpanels',
                              'blockType'=> 'waitingcontent'))) return;
 
