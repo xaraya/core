@@ -76,10 +76,10 @@ function xarThemeGetIDFromName($themeName,$id='regid')
 {
     if (empty($themeName)) throw new EmptyParameterException('themeName');
 
-    $themeBaseInfo = xarMod_getBaseInfo($modName, 'theme');
+    $themeBaseInfo = xarMod_getBaseInfo($themeName, 'theme');
     if (!isset($themeBaseInfo)) return; // throw back
 
-    return $modBaseInfo[$id];
+    return $themeBaseInfo[$id];
 }
 
 /**
