@@ -7,7 +7,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage adminpanels module
+ * @subpackage modules module
  * @author Andy Varganov <andyv@xaraya.com>
  */
 
@@ -71,10 +71,6 @@ function modules_adminmenublock_display($blockinfo)
     // checking this as early as possible
     $mods = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('AdminCapable' => 1)));
   
-    // there aren't any admin modules, dont display adminmenu
-    // <mrb> How would this happen? adminpanels is here :-)
-    if (empty($mods)) return;
-
     // which module is loaded atm?
     // we need it's name, type and function - dealing only with admin type mods, aren't we?
     list($thismodname, $thismodtype, $thisfuncname) = xarRequestGetInfo();

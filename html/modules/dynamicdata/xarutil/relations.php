@@ -140,7 +140,7 @@ function dynamicdata_util_relations($args)
         $data['relations'] = array();
     }
     
-    if (xarModGetVar('adminpanels','dashboard')) {
+    if (xarModGetVar('modules','usedashboard')) {
         xarTplSetPageTemplateName('admin');
     }else {
         xarTplSetPageTemplateName('default');

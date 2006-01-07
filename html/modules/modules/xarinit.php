@@ -286,7 +286,7 @@ function modules_activate()
     xarModSetVar('modules', 'selstyle', $selstyle);
     xarModSetVar('modules', 'selfilter', $selfilter);
     xarModSetVar('modules', 'selsort', $selsort);
-    // New here in 2.x series from adminpanels
+    // New here in 2.x series 
     xarModSetVar('modules', 'disableoverview',0);
     xarModSetVar('modules', 'usedashboard',0);
 

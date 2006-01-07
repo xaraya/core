@@ -537,14 +537,6 @@ if (empty($step)) {
         echo "$table_name[admin_wc] table still exists, attempting to drop... ";
             xarModRegisterHook('item', 'waitingcontent', 'GUI',
                                'articles', 'admin', 'waitingcontent');
-            xarModUnregisterHook('item', 'create', 'API',
-                                 'adminpanels', 'admin', 'createwc');
-            xarModUnregisterHook('item', 'update', 'API',
-                                 'adminpanels', 'admin', 'deletewc');
-            xarModUnregisterHook('item', 'delete', 'API',
-                                 'adminpanels', 'admin', 'deletewc');
-            xarModUnregisterHook('item', 'remove', 'API',
-                                 'adminpanels', 'admin', 'deletewc');
 
             // Generate the SQL to drop the table using the API
             $query = xarDBDropTable($table_name['admin_wc']);

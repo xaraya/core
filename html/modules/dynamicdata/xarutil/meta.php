@@ -48,7 +48,7 @@ function dynamicdata_util_meta($args)
     $data['export'] = $export;
     $data['prop'] = xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'));
 
-    if (xarModGetVar('adminpanels','dashboard')) {
+    if (xarModGetVar('modules','usedashboard')) {
         xarTplSetPageTemplateName('admin');
     }else {
         xarTplSetPageTemplateName('default');

@@ -18,7 +18,7 @@ function blocks_admin_main()
 // Security Check
     if(!xarSecurityCheck('EditBlock')) return;
 
-    if (xarModGetVar('adminpanels', 'overview') == 0){
+    if (xarModGetVar('modules', 'disableoverview') == 0){
         // Return the output
         return array();
     } else {

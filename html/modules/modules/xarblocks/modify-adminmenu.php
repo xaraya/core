@@ -7,7 +7,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage adminpanels module
+ * @subpackage modules module
  * @author Marcel van der Boom <marcel@xaraya.com>
  */
 
@@ -29,7 +29,7 @@ function modules_adminmenublock_modify($blockinfo)
     if(empty($vars['showlogout'])) $vars['showlogout'] = 0;
     if(empty($vars['showmarker'])) $vars['showmarker'] = 0;
     if(empty($vars['menustyle']))  $vars['menustyle'] = xarModGetVar('modules','menustyle');
-    if(empty($vars['overview']))   $vars['overview']  = xarModGetVar('adminpanels','disableoverview');
+    if(empty($vars['overview']))   $vars['overview']  = xarModGetVar('modules','disableoverview');
 
     // Set the config values
     $args['showlogout'] = $vars['showlogout'];

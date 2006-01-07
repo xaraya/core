@@ -87,7 +87,7 @@ function dynamicdata_util_import($args)
                                     'name' => $file);
     }
 
-    if (xarModGetVar('adminpanels','dashboard')) {
+    if (xarModGetVar('modules','usedashboard')) {
         xarTplSetPageTemplateName('admin');
     }else {
         xarTplSetPageTemplateName('default');

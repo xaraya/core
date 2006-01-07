@@ -28,7 +28,7 @@ function modules_admin_modifyconfig()
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();
 
-    // New modvar to keep track of the overview setting, was in adminpanels
+    // Disable the overview pages?
     $data['disableoverview'] = xarModGetVar('modules', 'disableoverview');
     // Dashboard
     $data['dashboard']              = xarModGetVar('modules', 'usedashboard');
