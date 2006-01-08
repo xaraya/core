@@ -102,31 +102,34 @@ function modules_init()
      *   UNIQUE (xar_regid)
      * )
      */
-    $fields = array('xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'unsigned' => true, 'primary_key' => true),
+    $fields = array(
+                    'xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'unsigned' => true, 'primary_key' => true),
                     'xar_regid' => array('type' => 'integer', 'null' => false, 'unsigned' => true),
+                    'xar_modid' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'default' => '0'),
                     'xar_state' => array('type' => 'integer', 'null' => false, 'default' => '0')
-        );
-
+                    );
     $query = xarDBCreateTable($tables['module_states'], $fields);
-
     $result = &$dbconn->Execute($query);
     if (!$result) return;
 
     $index = array('name' => 'i_' . $sitePrefix . '_module_states_regid', 'unique' => true, 'fields' => array('xar_regid'));
-
     $query = xarDBCreateIndex($tables['module_states'], $index);
-
     $result = &$dbconn->Execute($query);
     if (!$result) return;
+
+    //$index = array('name' => 'i_' . $sitePrefix . '_module_states_modid', 'unique' => true, 'fields' => array('xar_modid'));
+    //$query = xarDBCreateIndex($tables['module_states'], $index);
+    //$result = &$dbconn->Execute($query);
+    //if (!$result) return;
 
     // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or
     // the sequence for xar_id will not be available in PostgreSQL
     $seqId = $dbconn->GenId($tables['module_states']);
 
     // manually set Modules Module to active
-    $query = "INSERT INTO " . $tables['module_states'] . "(xar_id, xar_regid, xar_state
-              ) VALUES (?, ?, ?)";
-    $bindvars = array($seqId,1,3);
+    $query = "INSERT INTO $tables[module_states] 
+              (xar_id, xar_regid, xar_modid, xar_state  ) VALUES (?, ?, ?, ?)";
+    $bindvars = array($seqId,1, $savedmodid, 3);
 
     $result = &$dbconn->Execute($query,$bindvars);
     if (!$result) return;
@@ -141,11 +144,12 @@ function modules_init()
      *   PRIMARY KEY  (xar_id)
      * )
      */
-    $fields = array('xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
-        'xar_modid' => array('type' => 'integer', 'null' => false),
-        'xar_name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_value' => array('type' => 'text', 'size' => 'long')
-        );
+    $fields = array(
+                    'xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
+                    'xar_modid' => array('type' => 'integer', 'null' => false),
+                    'xar_name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                    'xar_value' => array('type' => 'text', 'size' => 'long')
+                    );
 
     $query = xarDBCreateTable($tables['module_vars'], $fields);
     $result = &$dbconn->Execute($query);
@@ -328,7 +332,8 @@ function modules_upgrade($oldVersion)
     switch($oldVersion) {
     case '2.3.0':
         // 1.0 version, add upgrade code to 2.x here
-        // - removed columns smodule, tmodule in xar_hooks, made them smodid and tmodid
+        // - hooks: removed columns smodule, tmodule in xar_hooks, made them smodid and tmodid
+        // - module_states: replaced regid with modid
     case '2.4.0':
         //current version
     }

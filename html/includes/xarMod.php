@@ -1783,13 +1783,22 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     //This is a hack while we have 2 different tables for modules states
     //It will look in the most probable one first (SHARED)
     $modules_statesTable = $tables['system/'.$type.'_states'];
-
-    $query = 'SELECT mods.xar_regid, mods.xar_directory, mods.xar_mode,'
-        . ' mods.xar_id, modstates.xar_state, mods.xar_name'
-        . ' FROM '.$modulestable.' mods'
-        . ' LEFT JOIN '.$modules_statesTable.' modstates'
-        . ' ON modstates.xar_regid = mods.xar_regid'
-        . ' WHERE mods.xar_name = ? OR mods.xar_directory = ?';
+    
+    if($type == 'module') {
+        $query = "SELECT mods.xar_regid, mods.xar_directory, mods.xar_mode,
+                         mods.xar_id, modstates.xar_state, mods.xar_name
+                  FROM   $modulestable mods
+                  LEFT JOIN $modules_statesTable  modstates
+                         ON modstates.xar_modid = mods.xar_id
+                  WHERE mods.xar_name = ? OR mods.xar_directory = ?";
+    } else {
+        $query = 'SELECT mods.xar_regid, mods.xar_directory, mods.xar_mode,'
+            . ' mods.xar_id, modstates.xar_state, mods.xar_name'
+            . ' FROM '.$modulestable.' mods'
+            . ' LEFT JOIN '.$modules_statesTable.' modstates'
+            . ' ON modstates.xar_regid = mods.xar_regid'
+            . ' WHERE mods.xar_name = ? OR mods.xar_directory = ?';
+    }
     $bindvars = array($modName, $modName);
     
     $stmt = $dbconn->prepareStatement($query);
@@ -2020,8 +2029,9 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
                 $module_statesTable = $tables['site/module_states'];
             }
 
-            $query = "SELECT xar_state FROM $module_statesTable
-                      WHERE xar_regid = ?";
+            $query = "SELECT xar_state 
+                      FROM $module_statesTable states, $tables[modules] mods
+                      WHERE states.xar_modid = mods.xar_id AND mods.xar_regid = ?";
             break;
         case 'theme':
             if ($modMode == XARTHEME_MODE_SHARED) {

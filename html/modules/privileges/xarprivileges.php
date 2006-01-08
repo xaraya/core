@@ -38,7 +38,7 @@ class xarMasks
     public $privmemberstable;
     public $maskstable;
     public $modulestable;
-    public $modulestatestable;
+    //    public $modulestatestable;
     public $realmstable;
     public $acltable;
     public $allmasks;
@@ -70,7 +70,7 @@ class xarMasks
         $this->privmemberstable = $xartable['privmembers'];
         $this->maskstable = $xartable['security_masks'];
         $this->modulestable = $xartable['modules'];
-        $this->modulestatestable = $xartable['module_states'];
+        //        $this->modulestatestable = $xartable['module_states'];
         $this->realmstable = $xartable['security_realms'];
         $this->acltable = $xartable['security_acl'];
         $this->instancestable = $xartable['security_instances'];
@@ -1126,25 +1126,25 @@ class xarPrivileges extends xarMasks
             $query = "SELECT modules.xar_id,
                         modules.xar_name
                         FROM $this->modulestable modules LEFT JOIN $this->modulestatestable states
-                        ON modules.xar_regid = states.xar_regid
-                        WHERE states.xar_state = 3
+                        ON modules.xar_id = states.xar_modid
+                        WHERE states.xar_state = ?
                         ORDER BY modules.xar_name";
 
-            $result = $this->dbconn->Execute($query);
+            $result = $this->dbconn->Execute($query,array(3));
             if (!$result) return;
 
-// add some extra lines we want
+            // add some extra lines we want
             $modules = array();
-//          $modules[] = array('id' => -2,
-//                             'name' => ' ');
+            //          $modules[] = array('id' => -2,
+            //                             'name' => ' ');
             $modules[] = array('id' => -1,
                                'name' => 'All',
                                'display' => 'All');
-//          $modules[] = array('id' => 0,
-//                             'name' => 'None');
-
-// add the modules from the database
-// TODO: maybe remove the key, don't really need it
+            //          $modules[] = array('id' => 0,
+            //                             'name' => 'None');
+            
+            // add the modules from the database
+            // TODO: maybe remove the key, don't really need it
             while(!$result->EOF) {
                 list($mid, $name) = $result->fields;
                 $modules[] = array('id' => $mid,
@@ -2036,6 +2036,7 @@ class xarPrivilege extends xarMask
 
 // the insert created a new index value
 // retrieve the value
+        // FIXME: use creole here
         $query = "SELECT MAX(xar_pid) FROM $this->privilegestable";
         //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
@@ -2070,8 +2071,8 @@ class xarPrivilege extends xarMask
     function makeEntry()
     {
         if ($this->isRootPrivilege()) return true;
-        $query = "INSERT INTO $this->privmemberstable VALUES (?,0)";
-        if (!$this->dbconn->Execute($query,array($this->getID()))) return;
+        $query = "INSERT INTO $this->privmemberstable VALUES (?,?)";
+        if (!$this->dbconn->Execute($query,array($this->getID(),0))) return;
         return true;
     }
 
@@ -2207,8 +2208,8 @@ class xarPrivilege extends xarMask
         }
 
 // remove this child from the root privilege too
-        $query = "DELETE FROM $this->privmemberstable WHERE xar_pid=? AND xar_parentid=0";
-        if (!$this->dbconn->Execute($query,array($this->pid))) return;
+        $query = "DELETE FROM $this->privmemberstable WHERE xar_pid=? AND xar_parentid=?";
+        if (!$this->dbconn->Execute($query,array($this->pid,0))) return;
 
 // get all the roles this privilege was assigned to
         $roles = $this->getRoles();

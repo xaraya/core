@@ -32,14 +32,16 @@ function modules_adminapi_removemissing($args)
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
     
+    $modInfo = xarModGetInfo($regid);
+    $modId = $modInfo['systemid'];
     // Make what we do at least atomic
     try {
         $dbconn->begin();
-        $query = "DELETE FROM $tables[modules] WHERE xar_regid = ?";
-        $dbconn->Execute($query,array($regid));
+        $query = "DELETE FROM $tables[modules] WHERE xar_id = ?";
+        $dbconn->Execute($query,array($modId));
         // This next entry probably already gone, but lets be sure
-        $query = "DELETE FROM $tables[system/module_states] WHERE xar_regid = ?";
-        $dbconn->Execute($query,array($regid));
+        $query = "DELETE FROM $tables[system/module_states] WHERE xar_modid = ?";
+        $dbconn->Execute($query,array($modId));
         $dbconn->commit();
     } catch (SQLException $e) {
         $dbconn->rollback();

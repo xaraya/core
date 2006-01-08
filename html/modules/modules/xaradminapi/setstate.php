@@ -53,16 +53,16 @@ function modules_adminapi_setstate($args)
             if ($oldState != XARMOD_STATE_INACTIVE) {
                 // New Module
                 $module_statesTable = $xartable['system/module_states'];
-                $query = "SELECT * FROM $module_statesTable WHERE xar_regid = ?";
-                $result =& $dbconn->Execute($query,array($regid));
+                $query = "SELECT * FROM $module_statesTable WHERE xar_modid = ?";
+                $result =& $dbconn->Execute($query,array($modInfo['systemid']));
                 if (!$result) return;
                 if ($result->EOF) {
                     $seqId = $dbconn->GenId($module_statesTable);
 
                     $query = "INSERT INTO $module_statesTable
-                              (xar_id, xar_regid, xar_state)
-                             VALUES  (?,?,?)";
-                    $bindvars = array($seqId,$regid,$state);
+                              (xar_id, xar_regid, xar_modid, xar_state)
+                             VALUES  (?,?,?,?)";
+                    $bindvars = array($seqId,$regid,$modInfo['systemid'],$state);
 
                     $newresult = $dbconn->Execute($query,$bindvars);
                     if (!$newresult) return;
@@ -109,8 +109,8 @@ function modules_adminapi_setstate($args)
     }
 
     $query = "UPDATE $module_statesTable
-              SET xar_state = ? WHERE xar_regid = ?";
-    $bindvars = array($state,$regid);
+              SET xar_state = ? WHERE xar_modid = ?";
+    $bindvars = array($state,$modInfo['systemid']);
     $result = $dbconn->Execute($query,$bindvars);
     if (!$result) {return;}
     // We're update module state here we must update at least

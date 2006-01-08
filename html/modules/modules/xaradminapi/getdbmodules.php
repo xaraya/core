@@ -34,7 +34,7 @@ function modules_adminapi_getdbmodules($args)
 
     // Get all modules in DB
     $sql = "SELECT $xartable[modules].xar_regid, xar_name, xar_directory, xar_class, xar_version, xar_mode, xar_state
-              FROM $xartable[modules] LEFT JOIN $xartable[module_states] ON $xartable[modules].xar_regid = $xartable[module_states].xar_regid";
+              FROM $xartable[modules] LEFT JOIN $xartable[module_states] ON $xartable[modules].xar_id = $xartable[module_states].xar_modid";
 
     if ($modregid) {
         $sql .= " WHERE $xartable[modules].xar_regid = $modregid";

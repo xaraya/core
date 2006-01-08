@@ -304,8 +304,8 @@ function base_init()
                     VALUES (?,?,?,?,?,?,?,?,?,?)";
     $newStmt     = $dbconn->prepareStatement($newModSql);
     
-    $stateModSql = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state)
-                    VALUES (?, ?, ?)";
+    $stateModSql = "INSERT INTO $systemModuleStatesTable (xar_id, xar_modid, xar_regid, xar_state)
+                    VALUES (?, ?, ?, ?)";
     $stateStmt   = $dbconn->prepareStatement($stateModSql);
     
     $modData   = array(
@@ -330,9 +330,13 @@ function base_init()
         array_unshift($modData[$module],$id);
         $result = $newStmt->executeUpdate($modData[$module]);
         if(!$result) return;
+        $newModId = $dbconn->PO_Insert_ID($tables['modules'], 'xar_id');
+
         // Set the state
         $id = $dbconn->GenId($systemModuleStatesTable);
+        array_unshift($stateData[$module],$newModId);
         array_unshift($stateData[$module],$id);
+
         $result = $stateStmt->executeUpdate($stateData[$module]);
         if(!$result) return;
     }
