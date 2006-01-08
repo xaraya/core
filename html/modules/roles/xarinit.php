@@ -173,7 +173,7 @@ function roles_init()
 #
 # Create wrapper DD objects for the native itemtypes of this module
 #
-	if (!xarModAPIFunc('roles','admin','createrolesobjects')) return;
+	if (!xarModAPIFunc('roles','admin','createobjects')) return;
 
 # --------------------------------------------------------
 #
@@ -330,7 +330,7 @@ function roles_upgrade($oldVersion)
 		    }
             break;
         case '1.1.1':
-		    if (!xarModAPIFunc('roles','admin','createrolesobjects')) return;
+		    if (!xarModAPIFunc('roles','admin','createobjects')) return;
             break;
     }
     // Update successful

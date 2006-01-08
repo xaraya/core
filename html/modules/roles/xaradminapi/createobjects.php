@@ -15,7 +15,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @returns boolean
  */
-function roles_adminapi_createrolesobjects($args)
+function roles_adminapi_createobjects($args)
 {
     $moduleid = 27;
 
@@ -23,6 +23,7 @@ function roles_adminapi_createrolesobjects($args)
 #
 # Create the role object
 #
+    $prefix = xarDBGetSiteTablePrefix();
     $itemtype = 1;
     $objectid = xarModAPIFunc('dynamicdata','admin','createobject',array(
                                     'name'     => 'role',
@@ -39,7 +40,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'moduleid' => $moduleid,
                                     'itemtype' => $itemtype,
                                     'type'     => 21,
-                                    'source'   =>  'xar_roles.xar_uid',
+                                    'source'   =>  $prefix . '_roles.xar_uid',
                                     'status'   => 1,
                                     'order'    => 1,
                                     ))) return;
@@ -64,7 +65,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'moduleid' => $moduleid,
                                     'itemtype' => $itemtype,
                                     'type'     => 21,
-                                    'source'   =>  'xar_roles.xar_uid',
+                                    'source'   =>  $prefix . '_roles.xar_uid',
                                     'status'   => 1,
                                     'order'    => 1,
                                     ))) return;
@@ -76,7 +77,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
 //                                    'default'  => '',
-                                    'source'   =>  'xar_roles.xar_name',
+                                    'source'   =>  $prefix . '_roles.xar_name',
                                     'status'   => 1,
                                     'order'    => 2,
                                     ))) return;
@@ -88,7 +89,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 15,
                                     'default'  => 2,
-                                    'source'   =>  'xar_roles.xar_type',
+                                    'source'   =>  $prefix . '_roles.xar_type',
                                     'status'   => 1,
                                     'order'    => 3,
                                     ))) return;
@@ -100,7 +101,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
 //                                    'default'  => '',
-                                    'source'   =>  'xar_roles.xar_uname',
+                                    'source'   =>  $prefix . '_roles.xar_uname',
                                     'status'   => 1,
                                     'order'    => 4,
                                     ))) return;
@@ -112,7 +113,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 26,
 //                                    'default'  => '',
-                                    'source'   =>  'xar_roles.xar_email',
+                                    'source'   =>  $prefix . '_roles.xar_email',
                                     'status'   => 1,
                                     'order'    => 5,
                                     ))) return;
@@ -124,7 +125,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 26,
 //                                    'default'  => '',
-                                    'source'   =>  'xar_roles.xar_pass',
+                                    'source'   =>  $prefix . '_roles.xar_pass',
                                     'status'   => 1,
                                     'order'    => 6,
                                     ))) return;
@@ -136,7 +137,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
 //                                    'default'  => '',
-                                    'source'   =>  'xar_roles.xar_date_reg',
+                                    'source'   =>  $prefix . '_roles.xar_date_reg',
                                     'status'   => 1,
                                     'order'    => 7,
                                     ))) return;
@@ -148,7 +149,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
 //                                    'default'  => '',
-                                    'source'   =>  'xar_roles.xar_valcode',
+                                    'source'   =>  $prefix . '_roles.xar_valcode',
                                     'status'   => 1,
                                     'order'    => 8,
                                     ))) return;
@@ -160,7 +161,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 15,
 //                                    'default'  => '',
-                                    'source'   =>  'xar_roles.xar_state',
+                                    'source'   =>  $prefix . '_roles.xar_state',
                                     'status'   => 1,
                                     'order'    => 9,
                                     ))) return;
@@ -172,7 +173,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
 //                                    'default'  => '',
-                                    'source'   =>  'xar_roles.xar_auth_module',
+                                    'source'   =>  $prefix . '_roles.xar_auth_module',
                                     'status'   => 1,
                                     'order'    => 10,
                                     ))) return;
@@ -197,7 +198,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'moduleid' => $moduleid,
                                     'itemtype' => $itemtype,
                                     'type'     => 21,
-                                    'source'   =>  'xar_roles.xar_uid',
+                                    'source'   =>  $prefix . '_roles.xar_uid',
                                     'status'   => 1,
                                     'order'    => 1,
                                     ))) return;
@@ -209,7 +210,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
 //                                    'default'  => '',
-                                    'source'   =>  'xar_roles.xar_name',
+                                    'source'   =>  $prefix . '_roles.xar_name',
                                     'status'   => 1,
                                     'order'    => 2,
                                     ))) return;
@@ -221,7 +222,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 15,
 //                                    'default'  => '',
-                                    'source'   =>  'xar_roles.xar_type',
+                                    'source'   =>  $prefix . '_roles.xar_type',
                                     'status'   => 1,
                                     'order'    => 3,
                                     ))) return;
@@ -233,7 +234,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 15,
                                     'default'  => 3,
-                                    'source'   =>  'xar_roles.xar_users',
+                                    'source'   =>  $prefix . '_roles.xar_users',
                                     'status'   => 1,
                                     'order'    => 4,
                                     ))) return;
@@ -245,7 +246,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
 //                                    'default'  => '',
-                                    'source'   =>  'xar_roles.xar_uname',
+                                    'source'   =>  $prefix . '_roles.xar_uname',
                                     'status'   => 1,
                                     'order'    => 5,
                                     ))) return;
@@ -257,7 +258,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
 //                                    'default'  => '',
-                                    'source'   =>  'xar_roles.xar_date_reg',
+                                    'source'   =>  $prefix . '_roles.xar_date_reg',
                                     'status'   => 1,
                                     'order'    => 6,
                                     ))) return;
@@ -269,7 +270,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
 //                                    'default'  => '',
-                                    'source'   =>  'xar_roles.xar_valcode',
+                                    'source'   =>  $prefix . '_roles.xar_valcode',
                                     'status'   => 1,
                                     'order'    => 7,
                                     ))) return;
@@ -281,7 +282,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 15,
 //                                    'default'  => '',
-                                    'source'   =>  'xar_roles.xar_state',
+                                    'source'   =>  $prefix . '_roles.xar_state',
                                     'status'   => 1,
                                     'order'    => 8,
                                     ))) return;
@@ -293,7 +294,7 @@ function roles_adminapi_createrolesobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
 //                                    'default'  => '',
-                                    'source'   =>  'xar_roles.xar_auth_module',
+                                    'source'   =>  $prefix . '_roles.xar_auth_module',
                                     'status'   => 1,
                                     'order'    => 9,
                                     ))) return;
