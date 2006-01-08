@@ -523,6 +523,12 @@ function installer_admin_bootstrap()
     // Set module state to active
     if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) return;
 
+# --------------------------------------------------------
+#
+# Create wrapper DD objects for the native itemtypes of the privileges module
+#
+	if (!xarModAPIFunc('privileges','admin','createobjects')) return;
+
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
 }
 
