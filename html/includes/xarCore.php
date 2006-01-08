@@ -145,8 +145,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Load PHP Version Backwards Compatibility Library
      *
      */
-    include 'includes/xarPHPCompat.php';
-    xarPHPCompat::loadAll('includes/phpcompat');
+    //include 'includes/xarPHPCompat.php';
+    //xarPHPCompat::loadAll('includes/phpcompat');
 
     /**
         * At this point we should be able to catch all low level errors, so we can start the debugger
