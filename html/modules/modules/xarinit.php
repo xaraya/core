@@ -210,11 +210,11 @@ function modules_init()
                     'xar_id'      => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
                     'xar_object'  => array('type' => 'varchar', 'size' => 64, 'null' => false),
                     'xar_action'  => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                    'xar_smodid'  => array('type' => 'integer', 'null' => false, 'default' => '0'),
+                    'xar_smodid'  => array('type' => 'integer', 'null' => true, 'default' => null),
                     // TODO: switch to integer for itemtype (see also xarMod.php)
                     'xar_stype'   => array('type' => 'varchar', 'size' => 64, 'null' => false, 'default' => ''),
                     'xar_tarea'   => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                    'xar_tmodid'  => array('type' => 'integer', 'null' => false, 'default' => '0'),
+                    'xar_tmodid'  => array('type' => 'integer', 'null' => true, 'default' => null),
                     'xar_ttype'   => array('type' => 'varchar', 'size' => 64, 'null' => false),
                     'xar_tfunc'   => array('type' => 'varchar', 'size' => 64, 'null' => false),
                     'xar_order'   => array('type' => 'integer', 'null' => false, 'default' => '0')

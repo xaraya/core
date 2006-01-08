@@ -39,8 +39,7 @@ function modules_adminapi_gethooklist($args)
                               hooks.xar_object, hooks.xar_action, hooks.xar_tarea, hooks.xar_ttype,
                               hooks.xar_tfunc
               FROM $xartable[hooks] hooks, $xartable[modules] smods, $xartable[modules] tmods
-              WHERE hooks.xar_smodid = smods.xarid AND
-                    hooks.xar_tmodid = tmods.xarid ";
+              WHERE hooks.xar_tmodid = tmods.xar_id ";
 
     if (!empty($modName)) {
         $query .= " AND ( hooks.xar_smodid = ? OR  smods.xar_name = ?) 
