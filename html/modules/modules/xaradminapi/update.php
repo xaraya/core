@@ -30,69 +30,54 @@ function modules_adminapi_update($args)
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
-    // Hooks
-
     // Get module name
     $modinfo = xarModGetInfo($regid);
 
-    // Delete hook regardless
-    $sql = "DELETE FROM $xartable[hooks] WHERE xar_smodid = ?";
-    $result = $dbconn->Execute($sql,array($modinfo['systemid']));
-    if (!$result) return;
-
-    $sql = "SELECT DISTINCT xar_id, xar_smodid, xar_stype, xar_object,
+    // Make it atomic
+    try {
+        $dbconn->begin();
+        // Delete hook regardless
+        $sql = "DELETE FROM $xartable[hooks] WHERE xar_smodid = ?";
+        $dbconn->Execute($sql,array($modinfo['systemid']));
+        
+        $sql = "SELECT DISTINCT xar_id, xar_smodid, xar_stype, xar_object,
                             xar_action, xar_tarea, xar_tmodid, xar_ttype,
                             xar_tfunc
-            FROM $xartable[hooks]
-            WHERE xar_smodid = ?";
+                FROM $xartable[hooks]
+                WHERE xar_smodid = ?";
+        $stmt = $dbconn->prepareStatement($sql);
+        $result = $stmt->executeQuery(array(0));
 
-    $result = $dbconn->Execute($sql,array(0));
-    if (!$result) return;
-
-    for (; !$result->EOF; $result->MoveNext()) {
-        list($hookid,
-             $hooksmodid,
-             $hookstype,
-             $hookobject,
-             $hookaction,
-             $hooktarea,
-             $hooktmodid,
-             $hookttype,
-             $hooktfunc) = $result->fields;
-
-       // Get selected value of hook
-        unset($hookvalue);
-        if (!xarVarFetch("hooks_$hooktmodule", 'isset', $hookvalue,  NULL, XARVAR_DONT_SET)) {return;}
-        // See if this is checked and isn't in the database
-        if ((isset($hookvalue)) && (is_array($hookvalue)) && (empty($hooksmodid))) {
-            // Insert hook if required
-            // Prepare statement outside the loop
-            $sql = "INSERT INTO $xartable[hooks] 
+        while($result->next()) {
+            list($hookid,$hooksmodid,$hookstype,$hookobject,
+                 $hookaction,$hooktarea,$hooktmodid,$hookttype,$hooktfunc) = $result->fields;
+            
+            // Get selected value of hook
+            unset($hookvalue);
+            xarVarFetch("hooks_$hooktmodule", 'isset', $hookvalue,  NULL, XARVAR_DONT_SET);
+            // See if this is checked and isn't in the database
+            if ((isset($hookvalue)) && (is_array($hookvalue)) && (empty($hooksmodid))) {
+                // Insert hook if required
+                // Prepare statement outside the loop
+                $sql = "INSERT INTO $xartable[hooks] 
                     (xar_id,xar_object,xar_action,xar_smodid,xar_stype,xar_tarea,xar_tmodid,xar_ttype,xar_tfunc)
                     VALUES (?,?,?,?,?,?,?,?,?)";
-            $stmt = $dbconn->prepareStatement($sql);
-            try {
-                $dbconn->begin();
+                $stmt2 = $dbconn->prepareStatement($sql);
+                
                 foreach (array_keys($hookvalue) as $itemtype) {
                     if ($itemtype == 0) $itemtype = '';
                     $bindvars = array($dbconn->GenId($xartable['hooks']),
-                                      $hookobject,
-                                      $hookaction,
-                                      $modinfo['systemid'],
-                                      $itemtype,
-                                      $hooktarea,
-                                      $hooktmodid,
-                                      $hookttype,
-                                      $hooktfunc);
-                    $stmt->executeUpdate($bindvars);
+                                      $hookobject,$hookaction,$modinfo['systemid'],
+                                      $itemtype,$hooktarea,$hooktmodid,
+                                      $hookttype,$hooktfunc);
+                    $stmt2->executeUpdate($bindvars);
                 }
-                $dbconn->commit();
-                $stmt->close();
-            } catch(SQLException $e) {
-                $dbconn->rollback();
-                throw $e;
             }
         }
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
     }
     $result->close();
     return true;

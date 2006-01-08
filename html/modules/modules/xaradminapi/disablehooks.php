@@ -21,8 +21,8 @@
  */
 function modules_adminapi_disablehooks($args)
 {
-// Security Check (called by other modules, so we can't use one this here)
-//    if(!xarSecurityCheck('AdminModules')) return;
+    // Security Check (called by other modules, so we can't use one this here)
+    //    if(!xarSecurityCheck('AdminModules')) return;
 
     // Get arguments from argument array
     extract($args);
@@ -47,12 +47,18 @@ function modules_adminapi_disablehooks($args)
     $smodId = $smodInfo['systemid'];
     $tmodInfo = xarMod_GetBaseInfo($hookModName);
     $tmodId = $tmodInfo['systemid'];
-    $sql = "DELETE FROM $xartable[hooks] 
-            WHERE xar_smodid = ? AND xar_stype = ? AND xar_tmodid = ?";
-    $bindvars = array($smodId,$callerItemType,$tmodId);
+    $sql = "DELETE FROM $xartable[hooks] WHERE xar_smodid = ? AND xar_stype = ? AND xar_tmodid = ?";
+    $stmt = $dbconn->prepareStatement($sql);
 
-    $result =& $dbconn->Execute($sql,$bindvars);
-    if (!$result) return;
+    try {
+        $dbconn->begin();
+        $bindvars = array($smodId,$callerItemType,$tmodId);
+        $stmt->executeUpdate($bindvars);
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
 
     return true;
 }

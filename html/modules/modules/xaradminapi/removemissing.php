@@ -22,21 +22,29 @@ function modules_adminapi_removemissing($args)
     // Get arguments from argument array
     extract($args);
 
-// TODO (random) This whole exercise is on hold because w have no way of knowing which
-// tables actually belong to the module being removed, and so the cleanup is incomplete
-// For now just remove the entry in the modules and modules states tables
-
-//    if (!xarVarFetch('remove', 'str', $remove, NULL, XARVAR_NOT_REQUIRED)) return;
+    // TODO (random) This whole exercise is on hold because w have no way of knowing which
+    // tables actually belong to the module being removed, and so the cleanup is incomplete
+    // For now just remove the entry in the modules and modules states tables
+    
+    //    if (!xarVarFetch('remove', 'str', $remove, NULL, XARVAR_NOT_REQUIRED)) return;
     // Get module information
-//    $modinfo = xarModGetInfo($regid);
+    //    $modinfo = xarModGetInfo($regid);
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
-
-    $query = "DELETE FROM " . $tables['modules'] . " WHERE xar_regid = ?";
-    $result = $dbconn->Execute($query,array($regid));
-    // This next entry probably already gone, but lets be sure
-    $query = "DELETE FROM " . $tables['system/module_states'] . " WHERE xar_regid = ?";
-    $result = $dbconn->Execute($query,array($regid));
+    
+    // Make what we do at least atomic
+    try {
+        $dbconn->begin();
+        $query = "DELETE FROM $tables[modules] WHERE xar_regid = ?";
+        $dbconn->Execute($query,array($regid));
+        // This next entry probably already gone, but lets be sure
+        $query = "DELETE FROM $tables[system/module_states] WHERE xar_regid = ?";
+        $dbconn->Execute($query,array($regid));
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
 
     return true;
 }
