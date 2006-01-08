@@ -20,6 +20,7 @@ function modules_admin_updatehooks()
     if(!xarSecurityCheck('AdminModules')) {return;}
 
     if (!xarSecConfirmAuthKey()) {return;}
+    // Curhook contains module name
     if (!xarVarFetch('curhook', 'str:1:', $curhook)) {return;}
 
     $regId = xarModGetIDFromName($curhook);
@@ -32,11 +33,7 @@ function modules_admin_updatehooks()
     $modinfo = xarModGetInfo($regId);
     if (!empty($modinfo) && xarModIsAvailable($modinfo['name'])) {
         // Pass to API
-        $updated = xarModAPIFunc(
-            'modules', 'admin', 'updatehooks',
-            array('regid' => $regId)
-        );
-        if (!isset($updated)) {return;}
+        if(!xarModAPIFunc('modules', 'admin', 'updatehooks', array('regid' => $regId))) return;
     }
 
     if (!xarVarFetch('return_url', 'isset', $return_url, '', XARVAR_NOT_REQUIRED)) {return;}

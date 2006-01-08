@@ -38,15 +38,12 @@ function modules_adminapi_updatehooks($args)
     }
 
     // Delete all entries of modules using this hook (but don't delete the '' module)
-    // signaling there *is* a hook, we want to keep that knowledge in
+    // signaling there *is* a hook, we want to keep that knowledge in.
     $sql = "DELETE FROM $xartable[hooks] WHERE xar_tmodid = ? AND xar_smodid <> ?";
-    $result = $dbconn->Execute($sql,array($modinfo['systemid'],0));
-    if (!$result) return;
+    $dbconn->Execute($sql,array($modinfo['systemid'],0));
 
     // get the list of all (active) modules
     $modList = xarModAPIFunc('modules', 'admin', 'getlist');
-    //throw back
-    if (!isset($modList)) return;
 
     // see for which one(s) we need to enable this hook
     $todo = array();
@@ -60,11 +57,8 @@ function modules_adminapi_updatehooks($args)
             $todo[$mod['systemid']] = $ishooked;
         }
     }
-
     // nothing more to do here
-    if (count($todo) < 1) {
-        return true;
-    }
+    if (empty($todo)) return true;
 
     // get the list of individual hooks offered by this module
     $sql = "SELECT DISTINCT xar_id, xar_smodid, xar_stype, xar_object,
@@ -72,16 +66,15 @@ function modules_adminapi_updatehooks($args)
                             xar_tfunc
             FROM $xartable[hooks]
             WHERE xar_tmodid = ?";
-
-    $result = $dbconn->Execute($sql,array($modinfo['systemid']));
-    if (!$result) return;
+    $stmt = $dbconn->prepareStatement($sql);
+    $result = $stmt->executeQuery(array($modinfo['systemid']));
 
     // Prepare the insert statement outside the loops
     $sql = "INSERT INTO $xartable[hooks] 
             (xar_id,xar_object,xar_action,xar_smodid,xar_stype,xar_tarea,xar_tmodid,xar_ttype,xar_tfunc)
             VALUES (?,?,?,?,?,?,?,?,?)";
     $stmt = $dbconn->prepareStatement($sql);
-    for (; !$result->EOF; $result->MoveNext()) {
+    while($result->next()) {
         list($hookid, $hooksmodid, $hookstype, $hookobject, $hookaction,
              $hooktarea, $hooktmodid, $hookttype, $hooktfunc) = $result->fields;
 
@@ -95,7 +88,7 @@ function modules_adminapi_updatehooks($args)
                     
                     // If user specified ALL specifically, set itemtype hard to empty
                     if ($hookvalue[0] == 1) {
-                        $itemtype = '';
+                        $itemtype = ''; // Make this 0 later on
                         $bindvars = array($dbconn->GenId($xartable['hooks']),
                                           $hookobject, $hookaction, $modId,
                                           $itemtype, $hooktarea, $hooktmodid,
@@ -105,7 +98,6 @@ function modules_adminapi_updatehooks($args)
                         continue;
                     }
                     
-                    // If user specified SOME specifically, skip itemtype 0
                     foreach (array_keys($hookvalue) as $itemtype) {
                         // If user specified SOME specifically, skip itemtype 0
                         if ($hookvalue[0] == 2 && $itemtype == 0) continue;
