@@ -69,15 +69,20 @@ function roles_admin_updaterole()
     }
 
     // assemble the args into an array for the role constructor
+	$duvs = array();
+	if (isset($phome) && xarModGetVar('roles','userhome'))
+		$duvs['userhome'] = $phome;
+	if (isset($pprimaryparent) && xarModGetVar('roles','primaryparent'))
+		$duvs['primaryparent'] = $pprimaryparent;
     $pargs = array('uid' => $uid,
         'name' => $pname,
         'type' => $ptype,
         'uname' => $puname,
-        'userhome' => $phome,
-        'primaryparent' => $pprimaryparent,
         'email' => $pemail,
         'pass' => $ppass1,
-        'state' => $pstate);
+        'state' => $pstate,
+		'duvs' => $duvs,
+		);
     // create a role from the data
     $role = new xarRole($pargs);
 

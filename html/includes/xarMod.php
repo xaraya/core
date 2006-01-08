@@ -244,14 +244,14 @@ function xarModDelAllVars($modName)
             $stmt = $dbconn->prepareStatement($sql);
             $result = $stmt->executeUpdate($idlist);
         }
-        
+
         // Now delete the module vars
         $query = "DELETE FROM $module_varstable WHERE xar_modid = ?";
         $stmt  = $dbconn->prepareStatement($query);
         $result = $stmt->executeUpdate(array($modBaseInfo['systemid']));
         $dbconn->commit();
         return true;
-    } catch (SQLException $e) { 
+    } catch (SQLException $e) {
         // If there was an SQL exception roll back to where we started
         $dbconn->rollback();
         // and raise it again so the handler catches
@@ -400,7 +400,7 @@ function xarModGetVarId($modName, $name)
     // If there is no such thing, the callee is responsible, return null
     if(!$result || !$result->next()) return;
 
-    // Return the ID 
+    // Return the ID
     $modvarid = $result->getInt(1);
     $result->Close();
 
@@ -435,7 +435,7 @@ function xarModGetIDFromName($modName, $type = 'module')
     }
 
     if (!isset($modBaseInfo)) return; // throw back
-    // MrB: this is confusing 
+    // MrB: this is confusing
     return $modBaseInfo['regid'];
 }
 
@@ -783,7 +783,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     //xarLogMessage("xarModFunc: begin $modName:$modType:$funcName");
 
     if (empty($modName)) throw new EmptyParameterException('modName');
-    
+
     if (!xarCoreIsApiAllowed($modType)) {
         // InputValidationException is more clear here, even though it's not user input.
         throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
@@ -890,7 +890,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
         throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
     }
     if (empty($funcName)) throw new EmptyParameterException('modName');
-  
+
 
     // Build function name and call function
     $funcName = strtolower($funcName);
@@ -1778,11 +1778,11 @@ function xarMod_getBaseInfo($modName, $type = 'module')
         . ' ON modstates.xar_regid = mods.xar_regid'
         . ' WHERE mods.xar_name = ? OR mods.xar_directory = ?';
     $bindvars = array($modName, $modName);
-    
+
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
     if (!$result) return;
-    
+
     if (!$result->next()) {
         $result->Close();
         return;
@@ -1854,7 +1854,7 @@ function xarMod_getVarsByModule($modName)
         xarCore_SetCached('Mod.Variables.' . $modName, $result->getString('xar_name'), $result->get('xar_value'));
     }
     $result->Close();
-    
+
     xarCore_SetCached('Mod.GetVarsByModule', $modName, true);
     break;
     return true;
@@ -1992,7 +1992,7 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
 
     //FIXME: what the heck this is doing in the interface?
     //Shouldnt this be a global of some sort, or function that returns this or whatever?
-    if ($modMode != XARMOD_MODE_SHARED && $modMode != XARMOD_MODE_PER_SITE) 
+    if ($modMode != XARMOD_MODE_SHARED && $modMode != XARMOD_MODE_PER_SITE)
         throw new BadParameterException('modMode');
 
     $dbconn =& xarDBGetConn();
@@ -2082,7 +2082,7 @@ function xarModRegisterHook($hookObject,
         $dbconn->commit();
     } catch (SQLException $e) {
         $dbconn->rollback();
-        throw $e; 
+        throw $e;
     }
     return true;
 }

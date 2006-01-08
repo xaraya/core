@@ -32,7 +32,7 @@ define('XARCORE_VERSION_SUB', 'adam_baum');
  * | SESSION        | DATABASE                  |
  * | CONFIGURATION  | DATABASE                  |
  * | USER           | SESSION, DATABASE         |
- * | BLOCKS         | CONFIGURATION, DATABASE   | 
+ * | BLOCKS         | CONFIGURATION, DATABASE   |
  * | MODULES        | CONFIGURATION, DATABASE   |
  * | EVENTS         | MODULES                   |
  * ----------------------------------------------
