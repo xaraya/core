@@ -21,8 +21,8 @@
  */
 function modules_adminapi_enablehooks($args)
 {
-// Security Check (called by other modules, so we can't use one this here)
-//    if(!xarSecurityCheck('AdminModules')) return;
+    // Security Check (called by other modules, so we can't use one this here)
+    //    if(!xarSecurityCheck('AdminModules')) return;
 
     // Get arguments from argument array
     extract($args);
@@ -56,7 +56,8 @@ function modules_adminapi_enablehooks($args)
                                 xar_tfunc
                 FROM $xartable[hooks]
                 WHERE xar_smodid = ? AND xar_tmodid = ?";
-        $result = $dbconn->Execute($sql,array(0,$tmodId));
+        $stmt1 = $dbconn->prepareStatement($sql);
+        $result = $stmt1->executeQuery(array(0,$tmodId));
         
         // Prepare the statement outside the loop
         $sql = "INSERT INTO $xartable[hooks] 
@@ -64,10 +65,9 @@ function modules_adminapi_enablehooks($args)
                 VALUES (?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
-        for (; !$result->EOF; $result->MoveNext()) {
-            list($hookid, $smodId, $hookstype, $hookobject, 
-                 $hookaction,  $hooktarea, $tmodId, $hookttype,
-                 $hooktfunc) = $result->fields;
+        while($result->next()) {
+            list($hookid,$smodId,$hookstype,$hookobject,$hookaction,
+                 $hooktarea,$tmodId,$hookttype,$hooktfunc) = $result->fields;
             
             $bindvars = array($dbconn->GenId($xartable['hooks']),
                               $hookobject, $hookaction, $smodId,
@@ -76,7 +76,6 @@ function modules_adminapi_enablehooks($args)
             $stmt->executeUpdate($bindvars);
         }
         $dbconn->commit();
-        $stmt->close();
     } catch (SQLException $e) {
         $dbconn->rollback();
         throw $e;
