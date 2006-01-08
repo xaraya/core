@@ -148,7 +148,7 @@ function xarVarBatchFetch()
  * The $defaultValue provides a default value that is returned when the variable is not present or doesn't validate
  * correctly.
  *
- * The $flag parameter is a bitmask between the following constants: 
+ * The $flag parameter is a bitmask between the following constants:
  * XARVAR_GET_OR_POST  - fetch from GET or POST variables
  * XARVAR_GET_ONLY     - fetch from GET variables only
  * XARVAR_POST_ONLY    - fetch from POST variables only
@@ -583,10 +583,10 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
     if (!$result) return;
-    
+
     if ($result->getRecordCount() == 0) {
         $result->close(); unset($result);
-        
+
         // If there is no such thing, return the global setting for moditemvars
         if (strtolower($type) == 'moditemvar') return xarModGetVar($modName, $name);
         return;
@@ -612,6 +612,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
             // We finally found it, update the appropriate cache
             //Couldnt we serialize and unserialize all variables?
             //would that be too time expensive?
+        	$result->next();
             list($value) = $result->getRow();
             if($type == 'configvar') {
                 $value = unserialize($value);
@@ -832,11 +833,11 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
             } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
                 $module_itemvarstable = $tables['site/module_itemvars'];
             }
-            
+
             // We need the variable id
             $modvarid = xarModGetVarId($modName, $name);
             if(!$modvarid) return;
-            
+
             $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
             $bindvars = array((int)$modvarid, (int)$itemid);
             $dbconn->execute($query,$bindvars);
