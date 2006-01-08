@@ -42,32 +42,36 @@ function modules_adminapi_enablehooks($args)
     // Delete hooks regardless
     try {
         $dbconn->begin();
-        $sql = "DELETE FROM $xartable[hooks]
-                WHERE xar_smodule = ? AND xar_stype = ? AND xar_tmodule = ?";
-        $bindvars = array($callerModName,$callerItemType,$hookModName);
+        // TODO: do this differently, the baseinfo function is supposed to be protected
+        $smodInfo = xarMod_GetBaseInfo($callerModName);
+        $smodId = $smodInfo['systemid'];
+        $tmodInfo = xarMod_GetBaseInfo($hookModName);
+        $tmodId = $tmodInfo['systemid'];
+        $sql = "DELETE FROM $xartable[hooks] WHERE xar_smodid = ? AND xar_stype = ? AND xar_tmodid = ?";
+        $bindvars = array($smodId,$callerItemType,$tmodId);
         $dbconn->Execute($sql,$bindvars);
        
-        $sql = "SELECT DISTINCT xar_id, xar_smodule, xar_stype, xar_object,
-                                xar_action, xar_tarea, xar_tmodule, xar_ttype,
+        $sql = "SELECT DISTINCT xar_id, xar_smodid, xar_stype, xar_object,
+                                xar_action, xar_tarea, xar_tmodid, xar_ttype,
                                 xar_tfunc
                 FROM $xartable[hooks]
-                WHERE xar_smodule = '' AND xar_tmodule = ?";
-        $result = $dbconn->Execute($sql,array($hookModName));
+                WHERE xar_smodid = ? AND xar_tmodid = ?";
+        $result = $dbconn->Execute($sql,array(0,$tmodId));
         
         // Prepare the statement outside the loop
         $sql = "INSERT INTO $xartable[hooks] 
-                (xar_id,xar_object,xar_action,xar_smodule,xar_stype,xar_tarea,xar_tmodule,xar_ttype,xar_tfunc)
+                (xar_id,xar_object,xar_action,xar_smodid,xar_stype,xar_tarea,xar_tmodid,xar_ttype,xar_tfunc)
                 VALUES (?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
         for (; !$result->EOF; $result->MoveNext()) {
-            list($hookid, $hooksmodname, $hookstype, $hookobject, 
-                 $hookaction,  $hooktarea, $hooktmodule, $hookttype,
+            list($hookid, $smodId, $hookstype, $hookobject, 
+                 $hookaction,  $hooktarea, $tmodId, $hookttype,
                  $hooktfunc) = $result->fields;
             
             $bindvars = array($dbconn->GenId($xartable['hooks']),
-                              $hookobject, $hookaction, $callerModName,
-                              $callerItemType, $hooktarea, $hooktmodule,
+                              $hookobject, $hookaction, $smodId,
+                              $callerItemType, $hooktarea, $tmodId,
                               $hookttype, $hooktfunc);
             $stmt->executeUpdate($bindvars);
         }

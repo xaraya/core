@@ -58,16 +58,17 @@ function modules_init()
      *   PRIMARY KEY  (xar_id)
      * )
      */
-    $fields = array('xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
-        'xar_name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
-        'xar_directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
-        'xar_mode' => array('type' => 'integer', 'size' => 'small', 'null' => false, 'default' => '1'),
-        'xar_class' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_category' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_admin_capable' => array('type' => 'integer', 'size' => 'tiny', 'null' => false, 'default' => '0'),
-        'xar_user_capable' => array('type' => 'integer', 'size' => 'tiny', 'null' => false, 'default' => '0')
+    $fields = array(
+                    'xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
+                    'xar_name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                    'xar_regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
+                    'xar_directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                    'xar_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
+                    'xar_mode' => array('type' => 'integer', 'size' => 'small', 'null' => false, 'default' => '1'),
+                    'xar_class' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                    'xar_category' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                    'xar_admin_capable' => array('type' => 'integer', 'size' => 'tiny', 'null' => false, 'default' => '0'),
+                    'xar_user_capable' => array('type' => 'integer', 'size' => 'tiny', 'null' => false, 'default' => '0')
         );
 
     $query = xarDBCreateTable($tables['modules'], $fields);
@@ -205,18 +206,20 @@ function modules_init()
      *   PRIMARY KEY  (xar_id)
      * )
      */
-    $fields = array('xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
-        'xar_object' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_action' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_smodule' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'default' => ''),
-        // TODO: switch to integer for itemtype (see also xarMod.php)
-        'xar_stype' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'default' => ''),
-        'xar_tarea' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_tmodule' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_ttype' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_tfunc' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_order' => array('type' => 'integer', 'null' => false, 'default' => '0')
-        );
+    $fields = array(
+                    'xar_id'      => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
+                    'xar_object'  => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                    'xar_action'  => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                    'xar_smodid'  => array('type' => 'integer', 'null' => false, 'default' => '0'),
+                    // TODO: switch to integer for itemtype (see also xarMod.php)
+                    'xar_stype'   => array('type' => 'varchar', 'size' => 64, 'null' => false, 'default' => ''),
+                    'xar_tarea'   => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                    'xar_tmodid'  => array('type' => 'integer', 'null' => false, 'default' => '0'),
+                    'xar_ttype'   => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                    'xar_tfunc'   => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                    'xar_order'   => array('type' => 'integer', 'null' => false, 'default' => '0')
+                    );
+    // TODO: no indexes?
 
     $query = xarDBCreateTable($tables['hooks'], $fields);
 
@@ -323,73 +326,11 @@ function modules_upgrade($oldVersion)
     $tables['module_states'] = $sitePrefix . '_module_states';
 
     switch($oldVersion) {
-    case '2.02':
-        // compatability upgrade, nothing to be done
-    case '2.2.0':
-        // TODO: use transactions to ensure atomicity?
-        // The changes for bug 1716:
-        // - add xar_id as primary key
-        // - make index on xar_regid unique
-        // 1. Add the primary key: save operation
-        $changes = array('command'     => 'add',
-                         'field'       => 'xar_id',
-                         'type'        => 'integer',
-                         'null'        => false,
-                         'unsigned'    => true,
-                         'increment'   => true,
-                         'primary_key' => true,
-                         'first'       => true);
-        $query = xarDBAlterTable($tables['module_states'], $changes);
-        $result = &$dbconn->Execute($query);
-        if (!$result) return;
-
-        // Bug #1971 - Have to use GenId to create values for xar_id on
-        // existing rows or the create unique index will fail
-        $query = "SELECT xar_regid, xar_state
-                  FROM " . $tables['module_states'] . "
-                  WHERE xar_id IS NULL";
-        $result = &$dbconn->Execute($query);
-        if (!$result) return;
-
-        // Get items from result array
-        // FIXME: updatin (part of) the primkey is not a good plan
-        $updateSql = "UPDATE " . $tables['module_states'] . "
-                      SET xarid = ?
-                      WHERE xar_regid = ? AND
-                            xar_state = ?";
-        $updateStmt = $dbconn->prepareStatement($updateSql);
-        try {
-            $dbconn->begin();
-            while (!$result->EOF) {
-                list ($regid, $state) = $result->fields;
-                
-                $seqId = $dbconn->GenId($tables['module_states']);
-                $updateStmt->executeUpdate(array($seqId, $regId, $state));
-                $result->MoveNext();
-            }
-            $dbconn->commit();
-        } catch (SQLException $e) {
-            $dbconn->rollback();
-            throw $e;
-        }
-
-        // Close result set
-        $result->Close();
-
-        // 2. Drop the old index
-        $indexname = 'i_' . $sitePrefix . '_module_states_regid';
-        $query = xarDBDropIndex($tables['module_states'], array('name' => $indexname));
-        $result = &$dbconn->Execute($query);
-        if (!$result) return;
-
-        // 3. Add the new unique index reg_id
-        $index = array('name' => $indexname, 'unique' => true, 'fields' => array('xar_regid'));
-        $query = xarDBCreateIndex($tables['module_states'], $index);
-
-        $result = &$dbconn->Execute($query);
-        if (!$result) return;
     case '2.3.0':
-        // current version
+        // 1.0 version, add upgrade code to 2.x here
+        // - removed columns smodule, tmodule in xar_hooks, made them smodid and tmodid
+    case '2.4.0':
+        //current version
     }
     return true;
 }

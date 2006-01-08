@@ -40,11 +40,16 @@ function modules_adminapi_disablehooks($args)
     $xartable =& xarDBGetTables();
 
     // Delete hooks regardless
-    $sql = "DELETE FROM $xartable[hooks]
-            WHERE xar_smodule = ?
-              AND xar_stype = ?
-              AND xar_tmodule = ?";
-    $bindvars = array($callerModName,$callerItemType,$hookModName);
+    // New query: select on the mod id's instead of their names
+    // optionally: get the ids first and then use the select
+    // better: construct a join with the modules table but not possible for postgres for example
+    $smodInfo = xarMod_GetBaseInfo($callerModName);
+    $smodId = $smodInfo['systemid'];
+    $tmodInfo = xarMod_GetBaseInfo($hookModName);
+    $tmodId = $tmodInfo['systemid'];
+    $sql = "DELETE FROM $xartable[hooks] 
+            WHERE xar_smodid = ? AND xar_stype = ? AND xar_tmodid = ?";
+    $bindvars = array($smodId,$callerItemType,$tmodId);
 
     $result =& $dbconn->Execute($sql,$bindvars);
     if (!$result) return;

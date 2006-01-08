@@ -477,21 +477,23 @@ function xarModGetInfo($modRegId, $type = 'module')
         case 'module':
         default:
             $the_table = $tables['modules'];
-            $query = "SELECT xar_name,
-                            xar_directory,
-                            xar_mode,
-                            xar_version,
-                            xar_admin_capable,
-                            xar_user_capable
-                       FROM $the_table WHERE xar_regid = ?";
+            $query = "SELECT xar_id,
+                             xar_name,
+                             xar_directory,
+                             xar_mode,
+                             xar_version,
+                             xar_admin_capable,
+                             xar_user_capable
+                       FROM  $the_table WHERE xar_regid = ?";
             break;
         case 'theme':
             $the_table = $tables['themes'];
-            $query = "SELECT xar_name,
-                            xar_directory,
-                            xar_mode,
-                            xar_version
-                       FROM $the_table WHERE xar_regid = ?";
+            $query = "SELECT xar_id,
+                             xar_name,
+                             xar_directory,
+                             xar_mode,
+                             xar_version
+                       FROM  $the_table WHERE xar_regid = ?";
             break;
     }
     $stmt = $dbconn->prepareStatement($query);
@@ -506,7 +508,8 @@ function xarModGetInfo($modRegId, $type = 'module')
     switch($type) {
         case 'module':
         default:
-            list($modInfo['name'],
+            list($modInfo['systemid'],
+                 $modInfo['name'],
                  $modInfo['directory'],
                  $mode,
                  $modInfo['version'],
@@ -514,7 +517,8 @@ function xarModGetInfo($modRegId, $type = 'module')
                  $modInfo['usercapable']) = $result->getRow();
             break;
         case 'theme':
-            list($modInfo['name'],
+            list($modInfo['systemid'],
+                 $modInfo['name'],
                  $modInfo['directory'],
                  $mode,
                  $modInfo['version']) = $result->getRow();
@@ -1462,23 +1466,28 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     $hookstable = $xartable['hooks'];
 
     // Get applicable hooks
-    $query = "SELECT DISTINCT xar_tarea, xar_tmodule, xar_ttype, xar_tfunc, xar_order
-              FROM $hookstable WHERE xar_smodule = ?";
+    // New query:
+    $query ="SELECT DISTINCT tmods.xar_name, smods.xar_name, 
+	                         hooks.xar_tarea, hooks.xar_ttype, hooks.xar_tfunc, hooks.xar_order
+             FROM xar_hooks hooks, xar_modules tmods, xar_modules smods
+             WHERE hooks.xar_tmodid = tmods.xar_id AND
+                   hooks.xar_smodid = smods.xar_id AND
+	               smods.xar_name=?";
     $bindvars = array($callerModName);
 
     if (empty($callerItemType)) {
         // Itemtype is not specified, only get the generic hooks
-        $query .= " AND xar_stype = ''";
+        $query .= " AND hooks.xar_stype = ''";
     } else {
         // hooks can be enabled for all or for a particular item type
-        $query .= " AND (xar_stype = '' OR xar_stype = ?)";
+        $query .= " AND (hooks.xar_stype = '' OR hooks.xar_stype = ?)";
         $bindvars[] = (string)$callerItemType;
         // FIXME: if itemtype is specified, why get the generic hooks? To save a function call in the modules?
         // Answer: generic hooks apply for *all* itemtypes, so if a caller specifies an itemtype, you
         //         need to check whether hooks are enabled for this particular itemtype or for all
         //         itemtypes here...
     }
-    $query .= " AND xar_object = ? AND xar_action = ? ORDER BY xar_order ASC";
+    $query .= " AND hooks.xar_object = ? AND hooks.xar_action = ? ORDER BY hooks.xar_order ASC";
     $bindvars[] = $hookObject;
     $bindvars[] = $hookAction;
     $stmt = $dbconn->prepareStatement($query);
@@ -1534,7 +1543,10 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
         $hookstable = $xartable['hooks'];
 
         // Get applicable hooks
-        $query = "SELECT DISTINCT xar_tmodule, xar_stype FROM $hookstable WHERE xar_smodule = ?";
+        // New query:
+        $query = "SELECT DISTINCT tmods.xar_name, hooks.xar_stype 
+                  FROM xar_hooks hooks, xar_modules tmods
+                  WHERE hooks.xar_tmodid = tmods.xar_id AND tmods.xar_name = ?";
         $bindvars = array($callerModName);
 
         $result =& $dbconn->Execute($query,$bindvars);
@@ -2066,17 +2078,14 @@ function xarModRegisterHook($hookObject,
     // Insert hook
     try {
         $dbconn->begin();
-        $query = "INSERT INTO $hookstable (
-              xar_id,
-              xar_object,
-              xar_action,
-              xar_tarea,
-              xar_tmodule,
-              xar_ttype,
-              xar_tfunc)
-              VALUES (?,?,?,?,?,?,?)";
+        // New query: the same but insert the modid's instead of the modnames into tmodule
+        $tmodInfo = xarMod_getBaseInfo($hookModName);
+        $tmodId = $tmodInfo['systemid'];
+        $query = "INSERT INTO $hookstable 
+                  (xar_id, xar_object, xar_action, xar_tarea, xar_tmodid, xar_ttype, xar_tfunc)
+                  VALUES (?,?,?,?,?,?,?)";
         $seqId = $dbconn->GenId($hookstable);
-        $bindvars = array($seqId,$hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
+        $bindvars = array($seqId,$hookObject,$hookAction,$hookArea,$tmodId,$hookModType,$hookFuncName);
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeUpdate($bindvars);
         $dbconn->commit();
@@ -2114,12 +2123,15 @@ function xarModUnregisterHook($hookObject,
     // Remove hook
     try {
         $dbconn->begin();
+        // New query: same but test on tmodid instead of tmodname
+        $tmodInfo = xarMod_getBaseInfo($hookModName);
+        $tmodId = $tmodInfo['systemid'];
         $query = "DELETE FROM $hookstable
                   WHERE xar_object = ?
-                  AND xar_action = ? AND xar_tarea = ? AND xar_tmodule = ?
+                  AND xar_action = ? AND xar_tarea = ? AND xar_tmodid = ?
                   AND xar_ttype = ?  AND xar_tfunc = ?";
         $stmt = $dbconn->prepareStatement($query);
-        $bindvars = array($hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
+        $bindvars = array($hookObject,$hookAction,$hookArea,$tmodId,$hookModType,$hookFuncName);
         $stmt->executeUpdate($bindvars);
         $dbconn->commit();
     } catch (SQLException $e) {

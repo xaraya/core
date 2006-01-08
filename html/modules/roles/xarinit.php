@@ -177,20 +177,7 @@ function roles_init()
 #
 # Register hooks
 #
-    if (!xarModRegisterHook('item', 'search', 'GUI',
-            'roles', 'user', 'search')) {
-        return false;
-    }
-    if (!xarModRegisterHook('item', 'usermenu', 'GUI',
-            'roles', 'user', 'usermenu')) {
-        return false;
-    }
-    xarModAPIFunc('modules', 'admin', 'enablehooks',
-        array('callerModName' => 'roles', 'hookModName' => 'roles'));
-    // This won't work because the dynamicdata hooks aren't registered yet when this is
-    // called at installation --> put in xarinit.php of dynamicdata instead
-    //xarModAPIFunc('modules','admin','enablehooks',
-    // array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
+
 
     return true;
 }
@@ -251,6 +238,20 @@ function roles_activate()
             array('modName' => 'roles',
                 'blockType' => 'language'))) return;
 
+    if (!xarModRegisterHook('item', 'search', 'GUI',
+            'roles', 'user', 'search')) {
+        return false;
+    }
+    if (!xarModRegisterHook('item', 'usermenu', 'GUI',
+            'roles', 'user', 'usermenu')) {
+        return false;
+    }
+    xarModAPIFunc('modules', 'admin', 'enablehooks',
+        array('callerModName' => 'roles', 'hookModName' => 'roles'));
+    // This won't work because the dynamicdata hooks aren't registered yet when this is
+    // called at installation --> put in xarinit.php of dynamicdata instead
+    //xarModAPIFunc('modules','admin','enablehooks',
+    // array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
     return true;
 }
 

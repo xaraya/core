@@ -36,44 +36,39 @@ function modules_adminapi_update($args)
     $modinfo = xarModGetInfo($regid);
 
     // Delete hook regardless
-    $sql = "DELETE FROM $xartable[hooks] WHERE xar_smodule = ?";
-    $result = $dbconn->Execute($sql,array($modinfo['name']));
+    $sql = "DELETE FROM $xartable[hooks] WHERE xar_smodid = ?";
+    $result = $dbconn->Execute($sql,array($modinfo['systemid']));
     if (!$result) return;
 
-    $sql = "SELECT DISTINCT xar_id, xar_smodule, xar_stype, xar_object,
-                            xar_action, xar_tarea, xar_tmodule, xar_ttype,
+    $sql = "SELECT DISTINCT xar_id, xar_smodid, xar_stype, xar_object,
+                            xar_action, xar_tarea, xar_tmodid, xar_ttype,
                             xar_tfunc
             FROM $xartable[hooks]
-            WHERE xar_smodule =''";
+            WHERE xar_smodid = ?";
 
-    $result = $dbconn->Execute($sql);
+    $result = $dbconn->Execute($sql,array(0));
     if (!$result) return;
 
     for (; !$result->EOF; $result->MoveNext()) {
         list($hookid,
-             $hooksmodname,
+             $hooksmodid,
              $hookstype,
              $hookobject,
              $hookaction,
              $hooktarea,
-             $hooktmodule,
+             $hooktmodid,
              $hookttype,
              $hooktfunc) = $result->fields;
 
-        // Avoid single-space module names e.g. for mssql
-        if (!empty($hooksmodname)) {
-            $hooksmodname = trim($hooksmodname);
-        }
-
-        // Get selected value of hook
+       // Get selected value of hook
         unset($hookvalue);
         if (!xarVarFetch("hooks_$hooktmodule", 'isset', $hookvalue,  NULL, XARVAR_DONT_SET)) {return;}
         // See if this is checked and isn't in the database
-        if ((isset($hookvalue)) && (is_array($hookvalue)) && (empty($hooksmodname))) {
+        if ((isset($hookvalue)) && (is_array($hookvalue)) && (empty($hooksmodid))) {
             // Insert hook if required
             // Prepare statement outside the loop
             $sql = "INSERT INTO $xartable[hooks] 
-                    (xar_id,xar_object,xar_action,xar_smodule,xar_stype,xar_tarea,xar_tmodule,xar_ttype,xar_tfunc)
+                    (xar_id,xar_object,xar_action,xar_smodid,xar_stype,xar_tarea,xar_tmodid,xar_ttype,xar_tfunc)
                     VALUES (?,?,?,?,?,?,?,?,?)";
             $stmt = $dbconn->prepareStatement($sql);
             try {
@@ -83,10 +78,10 @@ function modules_adminapi_update($args)
                     $bindvars = array($dbconn->GenId($xartable['hooks']),
                                       $hookobject,
                                       $hookaction,
-                                      $modinfo['name'],
+                                      $modinfo['systemid'],
                                       $itemtype,
                                       $hooktarea,
-                                      $hooktmodule,
+                                      $hooktmodid,
                                       $hookttype,
                                       $hooktfunc);
                     $stmt->executeUpdate($bindvars);

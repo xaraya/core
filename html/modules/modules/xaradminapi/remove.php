@@ -60,9 +60,7 @@ function modules_adminapi_remove($args)
     }
     else {
         // Module deletion function
-        if (!xarModAPIFunc('modules',
-                           'admin',
-                           'executeinitfunction',
+        if (!xarModAPIFunc('modules', 'admin', 'executeinitfunction',
                            array('regid'    => $regid,
                                  'function' => 'delete'))) {
             //Raise an Exception
@@ -76,9 +74,7 @@ function modules_adminapi_remove($args)
         xarModDelAllVars($modinfo['name']);
 
         // Update state of module
-        $res = xarModAPIFunc('modules',
-                            'admin',
-                            'setstate',
+        $res = xarModAPIFunc('modules', 'admin', 'setstate',
                              array('regid' => $regid,
                                   'state' => XARMOD_STATE_UNINITIALISED));
     }
@@ -92,8 +88,9 @@ function modules_adminapi_remove($args)
     xarModCallHooks('module','remove',$modinfo['name'],'',$modinfo['name']);
 
     // Delete any hooks assigned for that module, or by that module
-    $query = "DELETE FROM $tables[hooks] WHERE xar_smodule = ? OR xar_tmodule = ?";
-    $bindvars = array($modinfo['name'],$modinfo['name']);
+    
+    $query = "DELETE FROM $tables[hooks] WHERE xar_smodid = ? OR xar_tmodid = ?";
+    $bindvars = array($modinfo['systemid'],$modinfo['systemid']);
     $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) {return;}
 
@@ -102,17 +99,14 @@ function modules_adminapi_remove($args)
     //
 
     // Get block types.
-    $blocktypes = xarModAPIfunc(
-        'blocks', 'user', 'getallblocktypes',
-        array('module' => $modinfo['name'])
+    $blocktypes = xarModAPIfunc('blocks', 'user', 'getallblocktypes',
+                                array('module' => $modinfo['name'])
     );
 
     // Delete block types.
     if (is_array($blocktypes) && !empty($blocktypes)) {
         foreach($blocktypes as $blocktype) {
-            $result = xarModAPIfunc(
-                'blocks', 'admin', 'delete_type', $blocktype
-            );
+            $result = xarModAPIfunc('blocks', 'admin', 'delete_type', $blocktype);
         }
     }
 

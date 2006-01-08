@@ -35,19 +35,20 @@ function modules_adminapi_gethooklist($args)
     // TODO: allow finer selection of hooks based on type etc., and
     //       filter out irrelevant ones (like module remove, search...)
     $bindvars = array();
-    $query = "SELECT DISTINCT xar_smodule, xar_stype, xar_tmodule,
-                            xar_object, xar_action, xar_tarea, xar_ttype,
-                            xar_tfunc
-            FROM $xartable[hooks] ";
+    $query = "SELECT DISTINCT smods.xar_name, hooks.xar_stype, tmods.xar_name,
+                              hooks.xar_object, hooks.xar_action, hooks.xar_tarea, hooks.xar_ttype,
+                              hooks.xar_tfunc
+              FROM $xartable[hooks] hooks, $xartable[modules] smods, $xartable[modules] tmods
+              WHERE hooks.xar_smodid = smods.xarid AND
+                    hooks.xar_tmodid = tmods.xarid ";
 
     if (!empty($modName)) {
-        $query .= " WHERE xar_smodule=''
-                       OR xar_smodule = ?
-                 ORDER BY xar_tmodule,
-                          xar_smodule DESC";
+        $query .= " AND ( hooks.xar_smodid = ? OR  smods.xar_name = ?) 
+                 ORDER BY tmods.xar_name,smods.xar_name DESC";
+        $bindvars[] = 0;
         $bindvars[] = $modName;
     } else {
-        $query .= " ORDER BY xar_tmodule";
+        $query .= " ORDER BY smods.xar_name";
     }
     $result =& $dbconn->Execute($query,$bindvars);
     if(!$result) return;
