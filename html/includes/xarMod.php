@@ -450,8 +450,6 @@ function xarModGetIDFromName($modName, $type = 'module')
  */
 function xarModGetInfo($modRegId, $type = 'module')
 {
-    xarLogMessage("xarModGetInfo ". $modRegId ." / " . $type);
-
     if (empty($modRegId)) throw new EmptyParameterException('modRegid');
 
     $type = strtolower($type);
@@ -469,6 +467,8 @@ function xarModGetInfo($modRegId, $type = 'module')
             }
             break;
     }
+    // Log it when it doesnt come from the cache
+    xarLogMessage("xarModGetInfo ". $modRegId ." / " . $type);
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
@@ -626,7 +626,7 @@ function xarModPrivateLoad($modName, $modType, $flags = 0, $throwException=1)
         // Already loaded (or tried to) from somewhere else.
         return true;
     }
-
+    // Log it when it doesnt come from the cache
     xarLogMessage("xarModLoad: loading $modName:$modType");
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
@@ -1612,13 +1612,14 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
  */
 function xarMod_getFileInfo($modOsDir, $type = 'module')
 {
-    xarLogMessage("xarMod_getFileInfo ". $modOsDir ." / " . $type);
-
     if (empty($modOsDir)) throw new EmptyParameterException('modOsDir');
 
     if (empty($GLOBALS['xarMod_noCacheState']) && xarCore_IsCached('Mod.getFileInfos', $modOsDir)) {
         return xarCore_GetCached('Mod.getFileInfos', $modOsDir);
     }
+    // Log it when it didnt came from cache
+    xarLogMessage("xarMod_getFileInfo ". $modOsDir ." / " . $type);
+
 
     // TODO redo legacy support via type.
     switch(strtolower($type)) {
@@ -1658,7 +1659,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     }
 
     if (!file_exists($fileName)) {
-        // Don't raise an exception, it is too harsh, but log it tho (bug #295)
+        // Don't raise an exception, it is too harsh, but log it tho (bug 295)
         xarLogMessage("xarMod_getFileInfo: Could not find xarversion.php or pnversion.php, skipping $modOsDir");
         // throw new FileNotFoundException($fileName);
         return;
@@ -1732,8 +1733,6 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
  */
 function xarMod_getBaseInfo($modName, $type = 'module')
 {
-    xarLogMessage("xarMod_getBaseInfo ". $modName ." / ". $type);
-
     if (empty($modName)) throw new EmptyParameterException('modName');
 
     $type = strtolower($type);
@@ -1770,6 +1769,8 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     if (empty($GLOBALS[$checkNoState]) && xarCore_IsCached($cacheCollection, $modName)) {
        return xarCore_GetCached($cacheCollection, $modName);
     }
+    // Log it when it doesnt come from the cache
+    xarLogMessage("xarMod_getBaseInfo ". $modName ." / ". $type);
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
