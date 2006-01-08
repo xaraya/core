@@ -104,23 +104,17 @@ function modules_init()
      */
     $fields = array(
                     'xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'unsigned' => true, 'primary_key' => true),
-                    'xar_regid' => array('type' => 'integer', 'null' => false, 'unsigned' => true),
-                    'xar_modid' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'default' => '0'),
+                    'xar_modid' => array('type' => 'integer', 'null' => false, 'unsigned' => true),
                     'xar_state' => array('type' => 'integer', 'null' => false, 'default' => '0')
                     );
     $query = xarDBCreateTable($tables['module_states'], $fields);
     $result = &$dbconn->Execute($query);
     if (!$result) return;
 
-    $index = array('name' => 'i_' . $sitePrefix . '_module_states_regid', 'unique' => true, 'fields' => array('xar_regid'));
+    $index = array('name' => 'i_' . $sitePrefix . '_module_states_modid', 'unique' => true, 'fields' => array('xar_modid'));
     $query = xarDBCreateIndex($tables['module_states'], $index);
     $result = &$dbconn->Execute($query);
     if (!$result) return;
-
-    //$index = array('name' => 'i_' . $sitePrefix . '_module_states_modid', 'unique' => true, 'fields' => array('xar_modid'));
-    //$query = xarDBCreateIndex($tables['module_states'], $index);
-    //$result = &$dbconn->Execute($query);
-    //if (!$result) return;
 
     // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or
     // the sequence for xar_id will not be available in PostgreSQL
@@ -128,8 +122,8 @@ function modules_init()
 
     // manually set Modules Module to active
     $query = "INSERT INTO $tables[module_states] 
-              (xar_id, xar_regid, xar_modid, xar_state  ) VALUES (?, ?, ?, ?)";
-    $bindvars = array($seqId,1, $savedmodid, 3);
+              (xar_id, xar_modid, xar_state  ) VALUES (?, ?, ?)";
+    $bindvars = array($seqId,$savedmodid,3);
 
     $result = &$dbconn->Execute($query,$bindvars);
     if (!$result) return;

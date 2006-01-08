@@ -60,9 +60,9 @@ function modules_adminapi_setstate($args)
                     $seqId = $dbconn->GenId($module_statesTable);
 
                     $query = "INSERT INTO $module_statesTable
-                              (xar_id, xar_regid, xar_modid, xar_state)
-                             VALUES  (?,?,?,?)";
-                    $bindvars = array($seqId,$regid,$modInfo['systemid'],$state);
+                              (xar_id, xar_modid, xar_state)
+                             VALUES  (?,?,?)";
+                    $bindvars = array($seqId,$modInfo['systemid'],$state);
 
                     $newresult = $dbconn->Execute($query,$bindvars);
                     if (!$newresult) return;
