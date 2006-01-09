@@ -1,0 +1,17 @@
+A log of important changes made to the 2.x branch which we need to
+revisit later on before trusting the branch to be released or used.
+
+DB-CHANGES:
+
+- module_uservars is now module_itemvars where item is an item in a
+  module, not only roles. The columns are adapted accordingly.
+- hooks table now registers the mod id in the columns smodid and
+  tmodid instead of the name of the module.
+- adminpanels as module is completely gone, which also means its table
+  was deleted. The complete functionality of adminpanels is now in the
+  modules module.
+
+OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
+- when encountered, upgrade code to upgrade modules from older
+versions than in 1.0 are removed, assuming we will only support
+upgrading from 1.0 to 2.x and not versions before 1.0

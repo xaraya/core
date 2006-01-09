@@ -44,7 +44,6 @@ function roles_init()
          *    xar_valcode varchar(35) NOT NULL default '',
          *    xar_state int(3) NOT NULL default '0',
          *    xar_auth_module varchar(100) NOT NULL default '',
-         *    xar_duvs varchar(100) NOT NULL default '',
          *    PRIMARY KEY  (xar_uid)
          * )
          */

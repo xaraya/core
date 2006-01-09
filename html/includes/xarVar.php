@@ -531,9 +531,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
 
     if($type != 'configvar') {
         $modBaseInfo = xarMod_getBaseInfo($modName, $baseinfotype);
-        if (!isset($modBaseInfo)) {
-            return; // throw back
-        }
+        if (!isset($modBaseInfo)) return; // throw back
     }
 
 
@@ -565,24 +563,20 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
         $modvarid = xarModGetVarId($modName, $name);
         if (!$modvarid) return;
 
-        $query = "SELECT xar_value FROM $module_itemvarstable
-                  WHERE xar_mvid = ? AND xar_itemid = ?";
+        $query = "SELECT xar_value FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
         $bindvars = array((int)$modvarid, (int)$itemid);
         break;
     case 'configvar':
-
         $config_varsTable = $tables['config_vars'];
 
         $query = "SELECT xar_value FROM $config_varsTable WHERE xar_name=?";
         $bindvars = array($name);
         break;
-
     }
 
     // TODO : Here used to be a resultset cache option, reconsider it
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
-    if (!$result) return;
 
     if ($result->getRecordCount() == 0) {
         $result->close(); unset($result);
