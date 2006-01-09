@@ -595,8 +595,7 @@ class xarRole
             array('name' => 'xar_name',       'value' => $this->name),
             array('name' => 'xar_uname',      'value' => $this->uname),
             array('name' => 'xar_date_reg',   'value' => mktime()),
-            array('name' => 'xar_valcode',  'value' => $this->val_code),
-            array('name' => 'xar_duvs',     'value' => $this->duvs)
+            array('name' => 'xar_duvs',     'value' => $this->duvs),
             array('name' => 'xar_valcode',    'value' => $this->val_code),
 			array('name' => 'xar_auth_module','value' => $this->auth_module),
 			array('name' => 'xar_type',       'value' => $this->type),

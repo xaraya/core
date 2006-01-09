@@ -177,7 +177,6 @@ function roles_init()
 # --------------------------------------------------------
 #
 # Register hooks
-# Create wrapper DD objects for the native itemtypes of this module
 #
     if (!xarModRegisterHook('item', 'search', 'GUI',
             'roles', 'user', 'search')) {
@@ -186,6 +185,11 @@ function roles_init()
     if (!xarModRegisterHook('item', 'usermenu', 'GUI',
             'roles', 'user', 'usermenu')) {
         return false;
+
+# --------------------------------------------------------
+#
+# Create wrapper DD objects for the native itemtypes of this module
+#
 	if (!xarModAPIFunc('roles','admin','createobjects')) return;
 
 # --------------------------------------------------------

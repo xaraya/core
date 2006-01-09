@@ -44,7 +44,6 @@
 
     <xar:comment>TODO set the active tab here</xar:comment>
     <!-- Show the general tab list for roles -->
-    <xar:set name="ptype">$type</xar:set>
     <xar:template file="tablist" />
     <fieldset>
       <legend><xar:mlstring>Role properties</xar:mlstring></legend>
@@ -55,23 +54,23 @@
         #xarVarPrepForDisplay($name)#
       </div>
       
-    <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'userhome', 'state' =&gt; 1))">
-      <xar:if condition="$basetype eq ROLES_USERTYPE">
-        <div class="xar-form-input-wrapper">
-            <span class="xar-form-label">
-                <xar:mlstring>Home:</xar:mlstring>
-            </span>
-            #xarVarPrepForDisplay($phome)#&nbsp;
-        </div>
-    </xar:if>                        
-    <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'primaryparent', 'state' =&gt; 1))">
-        <div class="xar-form-input-wrapper">
-            <span class="xar-form-label">
-                <xar:mlstring>Primary Group:</xar:mlstring>
-            </span>
-            <xar:data-output type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pprimaryparent"/>
-        </div>
-    </xar:if>                        
+    <xar:if condition="$basetype eq ROLES_USERTYPE">
+        <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'userhome', 'state' =&gt; 1))">
+            <div class="xar-form-input-wrapper">
+                <span class="xar-form-label">
+                    <xar:mlstring>Home:</xar:mlstring>
+                </span>
+                #xarVarPrepForDisplay($phome)#&nbsp;
+            </div>
+        </xar:if>                        
+        <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'primaryparent', 'state' =&gt; 1))">
+            <div class="xar-form-input-wrapper">
+                <span class="xar-form-label">
+                    <xar:mlstring>Primary Group:</xar:mlstring>
+                </span>
+                <xar:data-output type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pprimaryparent"/>
+            </div>
+        </xar:if>                        
 
         <div class="xar-form-input-wrapper">
           <span class="xar-form-label">
@@ -86,18 +85,6 @@
           </span>
           #xarVarPrepForDisplay($email)#
         </div>
-      </xar:if>
-
-      <xar:if condition="xarModIsAvailable('dynamicdata')">
-          <xar:foreach in="$properties" key="$name">
-            <div class="xar-form-input-wrapper">
-              <span class="xar-form-label">
-                <xar:data-label property="$properties[$name]" />:
-              </span>
-              <xar:data-output property="$properties[$name]" />
-            </div>
-          </xar:foreach>
-        </xar:if>
       </xar:if>
 
       <xar:foreach in="$hooks" key="$module" value="$output">

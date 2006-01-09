@@ -38,7 +38,9 @@
   <form action="&xar-modurl-roles-admin-testprivileges;" method="post" enctype="application/x-www-form-urlencoded">
     <fieldset>
       <legend><xar:mlstring>Scope</xar:mlstring></legend>
-            #$itemtypename# <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">'#$pname#'</a>                
+      <div class="xar-form-input-wrapper">
+        <label for="pmodule" title="#xarML('Choose the module to test privileges against.')#" class="xar-form-label">
+          <xar:mlstring>Registered Masks For Module:</xar:mlstring>
         </label>
         <select name="pmodule" id="pmodule" onchange="this.form.submit();" class="xar-margin-thickright">
           <xar:loop name="$allmodules">
@@ -212,8 +214,6 @@
           <xar:mlstring>Is Permitted</xar:mlstring>
         </xar:if>
       </h4>
-    </fieldset>
-    
-
+    </fieldset>   
   </xar:if>
 </div>
