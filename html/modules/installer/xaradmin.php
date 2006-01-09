@@ -454,6 +454,21 @@ function installer_admin_bootstrap()
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarVarSetCached('installer','installing', true);
 
+    // load modules into *_modules table
+    if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
+
+    // Initialise and activate dynamic data
+    $modlist = array('dynamicdata');
+    foreach ($modlist as $mod) {
+        // Initialise the module
+        $regid = xarModGetIDFromName($mod);
+        if (isset($regid)) {
+            if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
+            // Activate the module
+            if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+        }
+    }
+
     // create the default roles and privileges setup
     include 'modules/privileges/xarsetup.php';
     initializeSetup();
@@ -506,7 +521,7 @@ function installer_admin_bootstrap()
     }
 
     // Initialise and activate adminpanels, mail, dynamic data
-    $modlist = array('adminpanels','mail', 'dynamicdata');
+    $modlist = array('adminpanels','mail');
     foreach ($modlist as $mod) {
         // Initialise the module
         $regid = xarModGetIDFromName($mod);
@@ -528,7 +543,6 @@ function installer_admin_bootstrap()
 # Create wrapper DD objects for the native itemtypes of the privileges module
 #
 	if (!xarModAPIFunc('privileges','admin','createobjects')) return;
-
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
 }
 
@@ -610,7 +624,7 @@ function installer_admin_create_administrator()
     // assemble the args into an array for the role constructor
     $pargs = array('uid'   => $role->getID(),
                    'name'  => $name,
-                   'type'  => 0,
+                   'type'  => ROLES_USERTYPE,
                    'uname' => $userName,
                    'email' => $email,
                    'pass'  => $pass,

@@ -1,16 +1,21 @@
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>User Information</xar:mlstring></span>
+    <span class="xar-mod-title">
+        <xar:ml>
+            <xar:mlstring>#(1) Information</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+        </xar:ml>
+    <xar:mlstring>User Information</xar:mlstring>
+    </span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:if condition="$type eq 0">
-            <xar:mlstring>Manage User:</xar:mlstring>
-        <xar:else/>
-            <xar:mlstring>Manage Group:</xar:mlstring>
-        </xar:if>
-        #$name#
+        <xar:ml>
+            <xar:mlstring>Manage #(1) '#(2)':</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$name#</xar:mlvar>
+        </xar:ml>
     </h2>
 
     <xar:if condition="count($parents) ne 0">
@@ -51,6 +56,7 @@
       </div>
       
     <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'userhome', 'state' =&gt; 1))">
+      <xar:if condition="$basetype eq ROLES_USERTYPE">
         <div class="xar-form-input-wrapper">
             <span class="xar-form-label">
                 <xar:mlstring>Home:</xar:mlstring>
@@ -67,7 +73,6 @@
         </div>
     </xar:if>                        
 
-      <xar:if condition="$type eq 0">
         <div class="xar-form-input-wrapper">
           <span class="xar-form-label">
             <xar:mlstring>Login:</xar:mlstring>
@@ -84,8 +89,6 @@
       </xar:if>
 
       <xar:if condition="xarModIsAvailable('dynamicdata')">
-        <xar:data-getitem name="$properties" module="roles" itemtype="$type" itemid="$uid" />
-        <xar:if condition="isset($properties) and count($properties) gt 0">
           <xar:foreach in="$properties" key="$name">
             <div class="xar-form-input-wrapper">
               <span class="xar-form-label">

@@ -25,6 +25,7 @@ class Dynamic_Object_Master
     var $label = null;
     var $moduleid = null;
     var $itemtype = null;
+    var $parent = null;
 
     var $urlparam = 'itemid';
     var $maxid = 0;
@@ -113,6 +114,9 @@ class Dynamic_Object_Master
         }
         if (empty($this->itemtype)) {
             $this->itemtype = 0;
+        }
+        if (empty($this->parent)) {
+            $this->parent = 1;
         }
         if (empty($this->name)) {
             $info = Dynamic_Object_Master::getObjectInfo($args);
@@ -375,8 +379,9 @@ class Dynamic_Object_Master
      * @returns array
      * @return array of object definitions
      */
-    function &getObjects()
+    function &getObjects($args=array())
     {
+        extract($args);
         $nullreturn = NULL;
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
@@ -388,11 +393,13 @@ class Dynamic_Object_Master
                          xar_object_label,
                          xar_object_moduleid,
                          xar_object_itemtype,
+                         xar_object_parent,
                          xar_object_urlparam,
                          xar_object_maxid,
                          xar_object_config,
                          xar_object_isalias
                   FROM $dynamicobjects ";
+        if (isset($modid)) $query .= "WHERE xar_object_moduleid = " . $modid;
         $result =& $dbconn->Execute($query);
 
         if (!$result) return $nullreturn;
@@ -405,6 +412,7 @@ class Dynamic_Object_Master
                  $info['label'],
                  $info['moduleid'],
                  $info['itemtype'],
+                 $info['parent'],
                  $info['urlparam'],
                  $info['maxid'],
                  $info['config'],
@@ -435,6 +443,7 @@ class Dynamic_Object_Master
             $info['label'] = xarML('Table #(1)',$args['table']);
             $info['moduleid'] = 182;
             $info['itemtype'] = 0;
+            $info['parent'] = 1;
             $info['urlparam'] = 'itemid';
             $info['maxid'] = 0;
             $info['config'] = '';
@@ -453,6 +462,7 @@ class Dynamic_Object_Master
                          xar_object_label,
                          xar_object_moduleid,
                          xar_object_itemtype,
+                         xar_object_parent,
                          xar_object_urlparam,
                          xar_object_maxid,
                          xar_object_config,
@@ -485,6 +495,7 @@ class Dynamic_Object_Master
              $info['label'],
              $info['moduleid'],
              $info['itemtype'],
+             $info['parent'],
              $info['urlparam'],
              $info['maxid'],
              $info['config'],
@@ -1812,7 +1823,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             if (!empty($this->urlmodule)) {
                 $args['urlmodule'] = $this->urlmodule;
             } else {
-                $args['urlmodule'] = $modname;
+                $info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('moduleid' => $args['moduleid'], 'itemtype' => $args['itemtype']));
+                $base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $info['objectid']));
+                $args['urlmodule'] = $base['name'];
             }
         }
         foreach (array_keys($this->items) as $itemid) {
@@ -2199,7 +2212,13 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 */
         return $itemid;
     }
+}
 
+class Extended_Object extends Dynamic_Object
+{
+    function Extended_Object($args)
+    {
+    }
 }
 
 ?>

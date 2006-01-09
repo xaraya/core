@@ -173,9 +173,11 @@ function roles_init()
     if (!$dbconn->Execute($query)) return;
     //Database Initialisation successful
 
+
 # --------------------------------------------------------
 #
 # Register hooks
+# Create wrapper DD objects for the native itemtypes of this module
 #
     if (!xarModRegisterHook('item', 'search', 'GUI',
             'roles', 'user', 'search')) {
@@ -184,6 +186,13 @@ function roles_init()
     if (!xarModRegisterHook('item', 'usermenu', 'GUI',
             'roles', 'user', 'usermenu')) {
         return false;
+	if (!xarModAPIFunc('roles','admin','createobjects')) return;
+
+# --------------------------------------------------------
+#
+# Create some modvars
+#
+    xarModSetVar('roles', 'defaultauthmodule', '');
     }
     xarModAPIFunc('modules', 'admin', 'enablehooks',
         array('callerModName' => 'roles', 'hookModName' => 'roles'));
@@ -250,6 +259,9 @@ function roles_activate()
             'register_block_type',
             array('modName' => 'roles',
                 'blockType' => 'language'))) return;
+
+    xarModAPIFunc('modules','admin','enablehooks',
+		array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
 
     return true;
 }
@@ -325,6 +337,9 @@ function roles_upgrade($oldVersion)
 //				return;
 				die(xarML('I could not load the authentication module. Please make it available and try again'));
 		    }
+            break;
+        case '1.1.1':
+		    if (!xarModAPIFunc('roles','admin','createobjects')) return;
             break;
     }
     // Update successful

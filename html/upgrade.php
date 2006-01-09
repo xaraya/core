@@ -1076,6 +1076,29 @@ if (empty($step)) {
         echo "AttachRole, RemoveRole masks have been created previously, moving to next check. <br />";
     }
 
+    $roles = new xarRoles();
+    $everybody = $roles->getRole(1);
+    $upgrade['roles_itemtypes'] = $everybody->getType() == 2;
+    if (!$upgrade['roles_itemtypes']) {
+        echo "Roles itemtypes are still old definitions... ";
+		$xartable =& xarDBGetTables();
+        $query = "UPDATE $xartable[roles]
+                     SET xar_type=2
+                   WHERE xar_type=1";
+        $result1 =& $dbconn->Execute($query);
+        $query = "UPDATE $xartable[roles]
+                     SET xar_type=1
+                   WHERE xar_type=0";
+        $result2 =& $dbconn->Execute($query);
+        if (!$result1 && !$result2){
+            echo "failed<br/>\r\n";
+        } else {
+            echo "done!<br/>\r\n";
+        }
+    } else {
+        echo "Roles itemtypes have been updated previously, moving to next check. <br />";
+    }
+
     // Check the installed privs and masks.
     echo "<h5>Checking Privilege Structure</h5>";
 

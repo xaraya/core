@@ -38,7 +38,7 @@
         <a href="#$nexturl#">&gt;&gt;</a>
         <xar:else />&gt;&gt;</xar:if></div>
     </xar:if>
-    <xar:elseif condition="$layout eq 'list'" />
+  <xar:elseif condition="$layout eq 'list'" />
     <table border="0" cellspacing="0" cellpadding="4">
         <tr>
             <xar:foreach in="$properties" key="$name">

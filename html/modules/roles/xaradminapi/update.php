@@ -64,30 +64,14 @@ function roles_adminapi_update($args)
 //        return;
 //    }
 
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    //FIXME: we need to standardize to 'itemtype' everywhere
+    $args['type'] = $itemtype;
 
-    $rolesTable = $xartable['roles'];
-
-    if (!empty($pass)){
-        $cryptpass=md5($pass);
-        $query = "UPDATE $rolesTable
-                  SET xar_name = ?, xar_uname = ?, xar_email = ?, xar_duvs = ?,
-                      xar_pass = ?, xar_valcode = ?, xar_state = ?
-                WHERE xar_uid = ?";
-        $bindvars = array($name,$uname,$email,$home,$cryptpass,$valcode,$state,$uid);
-    } else {
-        $query = "UPDATE $rolesTable
-                SET xar_name = ?, xar_uname = ?, xar_email = ?, xar_duvs = ?,
-                    xar_valcode = ?, xar_state = ?
-                WHERE xar_uid = ?";
-        $bindvars = array($name,$uname,$email,$home,$valcode,$state,$uid);
-    }
-
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
+    $role = new xarRole($args);
+    $role->update();
 
     $item['module'] = 'roles';
+    $item['itemtype'] = $itemtype;
     $item['itemid'] = $uid;
     $item['name'] = $name;
     $item['home'] = $home;

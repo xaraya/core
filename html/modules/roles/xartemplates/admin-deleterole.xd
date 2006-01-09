@@ -72,33 +72,21 @@
 
     <xar:if condition="$frozen">
         <p>
-            <xar:if condition="$ptype eq 1">
-                <xar:ml>
-                    <xar:mlstring>You do not have the privileges to delete Group #(1)</xar:mlstring>
-                    <xar:mlvar>#$name#</xar:mlvar>
-                </xar:ml>
-            <xar:else />
-                <xar:ml>
-                    <xar:mlstring>You do not have the privileges to delete User #(1)</xar:mlstring>
-                    <xar:mlvar>#$name#</xar:mlvar>
-                </xar:ml>
-            </xar:if>
+            <xar:ml>
+                <xar:mlstring>You do not have the privileges to delete #(1) #(2)</xar:mlstring>
+                <xar:mlvar>#$itemtypename#</xar:mlvar>
+                <xar:mlvar>#$name#</xar:mlvar>
+            </xar:ml>
         </p>
     <xar:else />
         <form method="post" action="&xar-modurl-roles-admin-deleterole;" enctype="application/x-www-form-urlencoded">
     
             <h3 class="xar-align-center">
-                <xar:if condition="$ptype eq 1">
-                    <xar:ml>
-                        <xar:mlstring>Confirm the deletion of Group #(1)</xar:mlstring>
-                        <xar:mlvar>#$name#</xar:mlvar>
-                    </xar:ml>
-                <xar:else />
-                    <xar:ml>
-                        <xar:mlstring>Confirm the deletion of User #(1)</xar:mlstring>
-                        <xar:mlvar>#$name#</xar:mlvar>
-                    </xar:ml>
-                </xar:if>
+                <xar:ml>
+                    <xar:mlstring>Confirm the deletion of #(1) #(2)</xar:mlstring>
+                    <xar:mlvar>#$itemtypename#</xar:mlvar>
+                    <xar:mlvar>#$name#</xar:mlvar>
+                </xar:ml>
             </h3>
     
             <div class="xar-align-center">

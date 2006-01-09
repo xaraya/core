@@ -8,7 +8,7 @@
  *
  * @subpackage Privileges module
  */
-
+ 
  /**
  * Purpose of file:  Initialisation functions for the security module
  * Initialise the privileges module
