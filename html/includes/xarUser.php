@@ -421,8 +421,8 @@ function xarUserGetVar($name, $userId = NULL)
             xarCore_SetCached('User.Variables.'.$userId, 'email', $userRole['email']);
 
         } elseif (!xarUser__isVarDefined($name)) {
-            if (xarUser__checkDUV($name, 1)) {
-                $value = xarUserGetDUV($name,$userId);
+            if (xarModGetVar('roles',$name)) {
+                $value = xarModGetUserVar('roles',$name,$userId);
                 if ($value == null) {
                     xarCore_SetCached('User.Variables.'.$userId, $name, false);
                     // Here we can't raise an exception because they're all optional
@@ -565,11 +565,11 @@ function xarUserSetVar($name, $value, $userId = NULL)
         xarUser__setUsersTableUserVar($name, $value, $userId);
 
     } elseif (!xarUser__isVarDefined($name)) {
-        if(!xarUser__checkDUV($name, 1)) {
+		if (xarModGetVar('roles',$name)) {
             xarCore_SetCached('User.Variables.'.$userId, $name, false);
             throw new xarException($name,'User variable #(1) was not correctly registered');
         } else {
-            xarUserSetDUV($name,$value,$userId);
+            xarModSetUserVar('roles',$name,$value,$userId);
         }
     } else {
         // retrieve the user item
@@ -684,7 +684,7 @@ function xarUser__getAuthModule($userId)
         }
     }
 
-    // TODO: replace with some roles API 
+    // TODO: replace with some roles API
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
@@ -806,35 +806,5 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
         throw $e;
     }
     return true;
-}
-
-/*
- * @access private
- * @return bool
- */
-function xarUser__checkDUV($name, $state)
-{
-    // TODO: get rid of this here.
-    return xarModAPIFunc('roles','admin','checkduv', array('name' => $name, 'state' => $state));
-}
-/*
- * @access public
- * @return value of DUV
- */
-function xarUserGetDUV($name, $uid=null)
-{
-    // TODO: get rid of this here
-    if (isset($uid)) return xarModAPIFunc('roles','admin','getduv', array('name' => $name, 'uid' => $uid));
-    return xarModAPIFunc('roles','admin','getduv', array('name' => $name));
-}
-/*
- * @access public
- * @return none
- */
-function xarUserSetDUV($name, $value, $uid=null)
-{
-    // TODO: get rid of this here
-    if (isset($uid)) return xarModAPIFunc('roles','admin','setduv', array('name' => $name, 'value' => $value, 'uid' => $uid));
-    return xarModAPIFunc('roles','admin','setduv', array('name' => $name, 'value' => $value));
 }
 ?>

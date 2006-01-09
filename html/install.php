@@ -31,7 +31,7 @@
 */
 
 /**
- * Defines for the phases 
+ * Defines for the phases
  *
  */
 define ('XARINSTALL_PHASE_WELCOME',             '1');
@@ -95,7 +95,7 @@ $systemArgs = array('enableShortURLsSupport' =>false,
 xarSerReqRes_init($systemArgs, $whatToLoad);
 
 // Start BlockLayout Template Engine
-// This is probably the trickiest part, but we want the installer 
+// This is probably the trickiest part, but we want the installer
 // templateable too obviously
 $systemArgs = array('enableTemplatesCaching' => false,
                     'themesBaseDirectory'    => 'themes',
@@ -108,7 +108,7 @@ xarTpl_init($systemArgs, $whatToLoad);
 // We need the var to be able to initialize MLS, but we need MLS to get the var
 // So we need something temporarily set, so we can continue
 // We set a utf locale intially, otherwise the combo box wont be filled correctly
-// for language names which include utf characters 
+// for language names which include utf characters
 $GLOBALS['xarMLS_mode'] = 'SINGLE';
 xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
@@ -118,7 +118,7 @@ $allowedLocales = array();
 if(is_dir($locale_dir)) {
     if ($dh = opendir($locale_dir)) {
         while (($file = readdir($dh)) !== false) {
-            // Exclude the current, previous and the Bitkeeper folder 
+            // Exclude the current, previous and the Bitkeeper folder
             // (just for us to be able to test, wont affect users who use a build)
             if($file == '.' || $file == '..' || $file == 'SCCS' || filetype($locale_dir . $file) == 'file' ) continue;
             if(filetype(realpath($locale_dir . $file)) == 'dir' &&

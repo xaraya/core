@@ -60,8 +60,7 @@ function roles_init()
                         'xar_date_reg' => array('type' => 'varchar', 'size' => 100, 'null' => false, 'default' => '0000-00-00 00:00:00'),
                         'xar_valcode' => array('type' => 'varchar', 'size' => 35, 'null' => false, 'default' => ''),
                         'xar_state' => array('type' => 'integer', 'null' => false,'default' => '3'),
-                        'xar_auth_module' => array('type' => 'varchar', 'size' => 100,'null' => false, 'default' => ''),
-                        'xar_duvs' => array('type' => 'varchar', 'size' => 100, 'null' => false,'default' => ''));
+                        'xar_auth_module' => array('type' => 'varchar', 'size' => 100,'null' => false, 'default' => ''));
         $query = xarDBCreateTable($tables['roles'],$fields);
         $dbconn->Execute($query);
         
@@ -164,6 +163,8 @@ function roles_activate()
     if (xarModGetVar('roles','itemsperpage')) return true;
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
     xarModSetVar('roles', 'locale', '');
+    xarModSetVar('roles', 'userhome', 0);
+    xarModSetVar('roles', 'primaryparent', 0);
     $lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',
                                               'notify' => TRUE)),
