@@ -10,6 +10,7 @@ DB-CHANGES:
 - adminpanels as module is completely gone, which also means its table
   was deleted. The complete functionality of adminpanels is now in the
   modules module.
+- template_tags column xar_module replaced by a column xar_modid
 
 OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
 - when encountered, upgrade code to upgrade modules from older

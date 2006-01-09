@@ -28,24 +28,19 @@ function themes_adminapi_gettpltaglist($args)
 
     // Get all registered tags from the DB
     $bindvars = array();
-    $sSql = "SELECT xar_id, xar_name, xar_module
-              FROM $xartable[template_tags] WHERE 1=1 ";
-        if (isset($module) && trim($module) != '') {
-            $sSql .= " AND xar_module = ?";
-            $bindvars[] = $module;
-        }
-        if (isset($id) && trim($id) != '') {
-            $sSql .= " AND xar_id = ? ";
-            $bindvars[] = $id;
-        }
+    $sSql = "SELECT tags.xar_id, tags.xar_name, mods.xar_name
+             FROM $xartable[template_tags] tags, $xartable[modules] mods
+             WHERE mods.xar_id = tags.xar_modid ";
+    if (isset($module) && trim($module) != '') {
+        $sSql .= " AND mods.xar_name = ?";
+        $bindvars[] = $module;
+    }
+    if (isset($id) && trim($id) != '') {
+        $sSql .= " AND tags.xar_id = ? ";
+        $bindvars[] = $id;
+    }
         
     $oResult = $dbconn->Execute($sSql,$bindvars);
-    if (!$oResult) return;
-    if (!$oResult) {
-        $sMsg = 'Could not get any Tags';
-        xarSessionSetVar('errormsg',xarML($sMsg));
-        return false;
-    }
 
     while(!$oResult->EOF) {
             $aTplTags[] = array(

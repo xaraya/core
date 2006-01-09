@@ -246,7 +246,7 @@ function base_init()
         $fields = array(
                         'xar_id'      => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
                         'xar_name'    => array('type'=>'varchar','size'=>255,'null'=>false),
-                        'xar_module'  => array('type'=>'varchar','size'=>255,'null'=>true),
+                        'xar_modid'   => array('type'=>'integer','null'=>false,'default'=>'0'),
                         'xar_handler' => array('type'=>'varchar','size'=>255,'null'=>false),
                         'xar_data'    => array('type'=>'text')
                         );

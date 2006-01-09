@@ -1752,13 +1752,15 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     try {
         $dbconn->begin();
         $tag_id = $dbconn->GenId($tag_table);
-
+        
+        $modInfo = xarMod_GetBaseInfo($tag->getModule());
+        $modId = $modInfo['systemid'];
         $query = "INSERT INTO $tag_table
-                  (xar_id, xar_name, xar_module, xar_handler, xar_data)
+                  (xar_id, xar_name, xar_modid, xar_handler, xar_data)
                   VALUES(?,?,?,?,?)";
         $bindvars = array($tag_id,
                           $tag->getName(), 
-                          $tag->getModule(),
+                          $modId,
                           $tag->getHandler(),
                           serialize($tag));
         
@@ -1879,7 +1881,10 @@ function xarTplGetTagObjectFromName($tag_name)
 
     $systemPrefix = xarDBGetSystemTablePrefix();
     $tag_table = $systemPrefix . '_template_tags';
-    $query = "SELECT xar_data, xar_module FROM $tag_table WHERE xar_name=?";
+    $mod_table = $systemPrefix . '_modules';
+    $query = "SELECT tags.xar_data, mods.xar_name 
+              FROM $tag_table tags, $mod_table mods
+              WHERE tags.xar_modid = mods.xar_id AND mods.xar_name=?";
 
     $result = $dbconn->SelectLimit($query, 1,-1,array($tag_name),ResultSet::FETCHMODE_NUM);
     if (!$result) return;
