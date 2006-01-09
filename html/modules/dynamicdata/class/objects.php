@@ -1825,7 +1825,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             } else {
                 $info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('moduleid' => $args['moduleid'], 'itemtype' => $args['itemtype']));
                 $base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $info['objectid']));
-                $args['urlmodule'] = $base['name'];
+                $args['urlmodule'] = $modname;
             }
         }
         foreach (array_keys($this->items) as $itemid) {

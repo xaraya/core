@@ -233,7 +233,7 @@ function roles_adminapi_createobjects($args)
                                     'moduleid' => $moduleid,
                                     'itemtype' => $itemtype,
                                     'type'     => 15,
-                                    'default'  => 3,
+                                    'default'  => 0,
                                     'source'   =>  $prefix . '_roles.xar_users',
                                     'status'   => 1,
                                     'order'    => 4,
