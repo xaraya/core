@@ -1884,7 +1884,7 @@ function xarTplGetTagObjectFromName($tag_name)
     $mod_table = $systemPrefix . '_modules';
     $query = "SELECT tags.xar_data, mods.xar_name 
               FROM $tag_table tags, $mod_table mods
-              WHERE tags.xar_modid = mods.xar_id AND mods.xar_name=?";
+              WHERE tags.xar_modid = mods.xar_id AND tags.xar_name=?";
 
     $result = $dbconn->SelectLimit($query, 1,-1,array($tag_name),ResultSet::FETCHMODE_NUM);
     if (!$result) return;
