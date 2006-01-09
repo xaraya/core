@@ -106,12 +106,12 @@
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="rolesperpage" title="#xarML('Number of users to show on each page.')#" class="xar-form-label">
+                    <label for="itemsperpage" title="#xarML('Number of users to show on each page.')#" class="xar-form-label">
                         <xar:mlstring>
                             Users Per Page: 
                         </xar:mlstring>
                     </label>
-                    <input type="text" name="rolesperpage" id="rolesperpage" value="#xarModGetVar('roles', 'rolesperpage')#" maxlength="3" class="xar-form-textshort" />
+                    <input type="text" name="itemsperpage" id="itemsperpage" value="#xarModGetVar('roles', 'itemsperpage')#" maxlength="3" class="xar-form-textshort" />
                 </div>
                 <div class="xar-form-input-wrapper-after">
                     <xar:if condition="xarModGetVar('roles', 'SupportShortURLs')">

@@ -476,7 +476,10 @@ function privileges_init()
     xarDB_importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
 
 */
-    // Set up an initial value for module variables.
+# --------------------------------------------------------
+#
+# Set up modvars
+#
     xarModSetVar('privileges', 'showrealms', false);
     xarModSetVar('privileges', 'inheritdeny', true);
     xarModSetVar('privileges', 'tester', 0);
@@ -499,8 +502,8 @@ function privileges_init()
 function privileges_upgrade($oldVersion)
 {
     switch($oldVersion) {
-    case '0.1':
-        // compatability upgrade to 3 positions, no functional changes
+    case '0.1.0':
+		if (!xarModAPIFunc('privileges','admin','createobjects')) return;
         break;
     }
     return true;

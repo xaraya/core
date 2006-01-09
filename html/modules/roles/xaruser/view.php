@@ -131,7 +131,7 @@ function roles_user_view($args)
                     'selection'   => $selection,
                     'include_anonymous' => false,
                     'include_myself' => false,
-                    'numitems' => xarModGetVar('roles', 'rolesperpage')
+                    'numitems' => xarModGetVar('roles', 'itemsperpage')
                 )
             );
             break;
@@ -166,7 +166,7 @@ function roles_user_view($args)
                     'selection' => $selection,
                     'include_anonymous' => false,
                     'include_myself' => false,
-                    'numitems' => xarModGetVar('roles', 'rolesperpage')
+                    'numitems' => xarModGetVar('roles', 'itemsperpage')
                 )
             );
             break;
@@ -206,7 +206,7 @@ function roles_user_view($args)
     // Add the array of items to the template variables
     $data['items'] = $items;
 
-    $numitems = xarModGetVar('roles', 'rolesperpage');
+    $numitems = xarModGetVar('roles', 'itemsperpage');
     $pagerfilter['phase'] = $phase;
     $pagerfilter['order'] = $order;
     $pagerfilter['letter'] = $letter;
