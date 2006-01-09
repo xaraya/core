@@ -11,6 +11,7 @@ DB-CHANGES:
   was deleted. The complete functionality of adminpanels is now in the
   modules module.
 - template_tags column xar_module replaced by a column xar_modid
+- security_instances column xar_module replaced by column xar_modid
 
 OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
 - when encountered, upgrade code to upgrade modules from older

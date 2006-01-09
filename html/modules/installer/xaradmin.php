@@ -429,14 +429,12 @@ function installer_admin_bootstrap()
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarVarSetCached('installer','installing', true);
 
+    // load modules into *_modules table
+    if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
+
     // create the default roles and privileges setup
     include 'modules/privileges/xarsetup.php';
     initializeSetup();
-
-    // Set up default user properties, etc.
-
-    // load modules into *_modules table
-    if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
 
 	//TODO: improve this once we know where authentication modules are headed
 	$regid=xarModGetIDFromName('authentication');

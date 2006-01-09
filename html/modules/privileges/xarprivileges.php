@@ -76,6 +76,7 @@ class xarMasks
         $this->instancestable = $xartable['security_instances'];
         $this->levelstable = $xartable['security_levels'];
 //        $this->privsetstable = $xartable['security_privsets'];
+        $this->modulestable = $xartable['modules'];
 
 // hack this for display purposes
 // probably should be defined elsewhere
@@ -805,40 +806,53 @@ class xarPrivileges extends xarMasks
             // FIXME: since the header is just a label, it probably should not be
             // treated as key information here. Do we need some further unique (within a
             // module and component) name for an instance, independant of the header label?
-            $query = 'SELECT xar_iid FROM ' . $this->instancestable
-                . ' WHERE xar_module = ? AND xar_component = ? AND xar_header = ?';
+            $iTable = $this->instancestable; $mTable = $this->modulestable;
+            $query = "SELECT instances.xar_iid 
+                      FROM   $iTable instances, $mTable mods
+                      WHERE  instances.xar_modid = mods.xar_id AND 
+                             mods.xar_name = ? AND 
+                             instances.xar_component = ? AND 
+                             instances.xar_header = ?";
             $result = $this->dbconn->execute($query, array($module, $type, $instance['header']));
-            if (!$result) return;
-            if (!$result->EOF) {
-                // Instance exists: update it.
-                list($iid) = $result->fields;
-                $query = 'UPDATE ' . $this->instancestable
-                    . ' SET xar_query = ?, xar_limit = ?,'
-                    . ' xar_propagate = ?, xar_instancetable2 = ?, xar_instancechildid = ?,'
-                    . ' xar_instanceparentid = ?, xar_description = ?'
-                    . ' WHERE xar_iid = ?';
-                $bindvars = array(
-                    $instance['query'], $instance['limit'],
-                    $propagate, $table2, $childID, $parentID,
-                    $description, $iid
-                );
-            } else {
-                $query = "INSERT INTO $this->instancestable (
-                            xar_iid, xar_module, xar_component, xar_header, 
+
+            try {
+                $this->dbconn->begin();
+                if (!$result->EOF) {
+                    // Instance exists: update it.
+                    list($iid) = $result->fields;
+                    $query = "UPDATE $iTable
+                          SET xar_query = ?, xar_limit = ?,
+                              xar_propagate = ?, xar_instancetable2 = ?, xar_instancechildid = ?,
+                              xar_instanceparentid = ?, xar_description = ?
+                          WHERE xar_iid = ?'";
+                    $bindvars = array(
+                                      $instance['query'], $instance['limit'],
+                                      $propagate, $table2, $childID, $parentID,
+                                      $description, $iid
+                                      );
+                } else {
+                    $query = "INSERT INTO $iTable
+                          ( xar_iid, xar_modid, xar_component, xar_header, 
                             xar_query, xar_limit, xar_propagate, 
                             xar_instancetable2, xar_instancechildid, 
                             xar_instanceparentid, xar_description)
                           VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-                $bindvars = array(
-                    $this->dbconn->genID($this->instancestable),
-                              $module, $type, $instance['header'],
-                              $instance['query'], $instance['limit'],
-                              $propagate, $table2, $childID, $parentID,
-                    $description
-                );
+                    $modInfo = xarMod_GetBaseInfo($module);
+                    $modId = $modInfo['systemid'];
+                    $bindvars = array(
+                                      $this->dbconn->genID($this->instancestable),
+                                      $modId, $type, $instance['header'],
+                                      $instance['query'], $instance['limit'],
+                                      $propagate, $table2, $childID, $parentID,
+                                      $description
+                                      );
+                }
+                $this->dbconn->Execute($query,$bindvars);
+                $this->dbconn->commit();
+            } catch (SQLException $e) { 
+                $this->dbconn->rollback();
+                throw $e;
             }
-
-            if (!$this->dbconn->Execute($query,$bindvars)) return;
         }
         return true;
     }
@@ -855,9 +869,18 @@ class xarPrivileges extends xarMasks
 */
     function removeInstances($module)
     {
-        $query = "DELETE FROM $this->instancestable WHERE xar_module = ?";
-        //Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query,array($module))) return;
+        try {
+            $dbconn->begin();
+            $modInfo = xarMod_GetBaseInfo($module);
+            $modId = $modInfo['systemid'];
+            $query = "DELETE FROM $this->instancestable WHERE xar_modid = ?";
+            //Execute the query, bail if an exception was thrown
+            $dbconn->Execute($query,array($module));
+            $dbconn->commit();
+        } catch (SQLException $e) {
+            $dbconn->rollback(); // redundant? we need to investigate concurencly and locking
+            throw $e;
+        }
         return true;
     }
 
@@ -1178,13 +1201,14 @@ class xarPrivileges extends xarMasks
 */
     function getcomponents($module)
     {
+        $modInfo = xarMod_GetBaseInfo($module);
+        $modId = $modInfo['systemid'];
         $query = "SELECT DISTINCT xar_component
                     FROM $this->instancestable
-                    WHERE xar_module= ?
+                    WHERE xar_modid= ?
                     ORDER BY xar_component";
 
-        $result = $this->dbconn->Execute($query,array($module));
-        if (!$result) return;
+        $result = $this->dbconn->Execute($query,array($modId));
 
         $components = array();
         if ($module ==''){
@@ -1232,7 +1256,8 @@ class xarPrivileges extends xarMasks
 */
     function getinstances($module, $component)
     {
-
+        $modInfo = xarMod_GetBaseInfo($module);
+        $modId = $modInfo['systemid'];
 
         if ($component =="All") {
             $componentstring = "";
@@ -1242,70 +1267,55 @@ class xarPrivileges extends xarMasks
         }
         $query = "SELECT xar_header, xar_query, xar_limit
                     FROM $this->instancestable
-                    WHERE xar_module= ? AND xar_component= ?
+                    WHERE xar_modid= ? AND xar_component= ?
                      ORDER BY xar_component,xar_iid";
-        $bindvars = array($module,$component);
+        $bindvars = array($modId,$component);
 
         $instances = array();
         $result = $this->dbconn->Execute($query,$bindvars);
-        if (!$result) return;
-
         while(!$result->EOF) {
             list($header,$selection,$limit) = $result->fields;
 
-// Check if an external instance wizard is requested, if so redirect using the URL in the 'query' part
-// This is indicated by the keyword 'external' in the 'header' of the instance definition
+            // Check if an external instance wizard is requested, if so redirect using the URL in the 'query' part
+            // This is indicated by the keyword 'external' in the 'header' of the instance definition
             if ($header == 'external') {
                 return array('external' => 'yes',
                              'target'   => $selection);
             }
-
-// check if the query is there
+            
+            // check if the query is there
             if ($selection =='') {
                 $msg = xarML('A query is missing in component #(1) of module #(2)', $component, $module);
-
+                
                 throw new Exception($msg);
             }
-
+            
             $result1 = $this->dbconn->Execute($selection);
-            if (!$result1) return;
 
             $dropdown = array();
             if ($module ==''){
-                $dropdown[] = array('id' => -2,
-                                   'name' => '');
-            }
-            elseif($result->EOF) {
-                $dropdown[] = array('id' => -1,
-                                   'name' => 'All');
-    //          $dropdown[] = array('id' => 0,
-    //                             'name' => 'None');
-            }
-            else {
-                $dropdown[] = array('id' => -1,
-                                   'name' => 'All');
-    //          $dropdown[] = array('id' => 0,
-    //                             'name' => 'None');
+                $dropdown[] = array('id' => -2,'name' => '');
+            }  elseif($result->EOF) {
+                $dropdown[] = array('id' => -1,'name' => 'All');
+    //          $dropdown[] = array('id' => 0, 'name' => 'None');
+            }  else {
+                $dropdown[] = array('id' => -1,'name' => 'All');
+    //          $dropdown[] = array('id' => 0, 'name' => 'None');
             }
             while(!$result1->EOF) {
                 list($dropdownline) = $result1->fields;
                 if (($dropdownline != 'All') && ($dropdownline != 'None')){
-                    $dropdown[] = array('id' => $dropdownline,
-                                       'name' => $dropdownline);
+                    $dropdown[] = array('id' => $dropdownline, 'name' => $dropdownline);
                 }
                 $result1->MoveNext();
             }
 
             if (count($dropdown) > $limit) {
                 $type = "manual";
-            }
-            else {
+            } else {
                 $type = "dropdown";
             }
-            $instances[] = array('header' => $header,
-                                'dropdown' => $dropdown,
-                                'type' => $type
-                                );
+            $instances[] = array('header' => $header,'dropdown' => $dropdown, 'type' => $type);
             $result->MoveNext();
         }
 
