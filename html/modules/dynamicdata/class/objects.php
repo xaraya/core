@@ -55,7 +55,7 @@ class Dynamic_Object_Master
     // secondary key could be item type (e.g. for articles)
     var $secondary = null;
     // set this true to automatically filter by current itemtype on secondary key
-    var $filter;
+    var $filter = true;
 
     // flag indicating if this object has some property that provides file upload
     var $upload = false;

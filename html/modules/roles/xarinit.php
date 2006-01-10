@@ -188,12 +188,6 @@ function roles_init()
 
 # --------------------------------------------------------
 #
-# Create wrapper DD objects for the native itemtypes of this module
-#
-	if (!xarModAPIFunc('roles','admin','createobjects')) return;
-
-# --------------------------------------------------------
-#
 # Create some modvars
 #
     xarModSetVar('roles', 'defaultauthmodule', '');

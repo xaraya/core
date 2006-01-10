@@ -44,6 +44,18 @@ function roles_adminapi_createobjects($args)
                                     'status'   => 1,
                                     'order'    => 1,
                                     ))) return;
+    if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
+                                    'name'     => 'type',
+                                    'label'    => 'Type',
+                                    'objectid' => $objectid,
+                                    'moduleid' => $moduleid,
+                                    'itemtype' => $itemtype,
+                                    'type'     => 20,
+                                    'default'  => 1,
+                                    'source'   =>  $prefix . '_roles.xar_type',
+                                    'status'   => 1,
+                                    'order'    => 3,
+                                    ))) return;
 
 # --------------------------------------------------------
 #
@@ -87,7 +99,7 @@ function roles_adminapi_createobjects($args)
                                     'objectid' => $objectid,
                                     'moduleid' => $moduleid,
                                     'itemtype' => $itemtype,
-                                    'type'     => 15,
+                                    'type'     => 20,
                                     'default'  => 2,
                                     'source'   =>  $prefix . '_roles.xar_type',
                                     'status'   => 1,
@@ -220,8 +232,8 @@ function roles_adminapi_createobjects($args)
                                     'objectid' => $objectid,
                                     'moduleid' => $moduleid,
                                     'itemtype' => $itemtype,
-                                    'type'     => 15,
-//                                    'default'  => '',
+                                    'type'     => 20,
+                                    'default'  => 3,
                                     'source'   =>  $prefix . '_roles.xar_type',
                                     'status'   => 1,
                                     'order'    => 3,
