@@ -201,7 +201,7 @@ function privileges_init()
          *   xar_sid int(11) NOT NULL default '0',
          *   xar_name varchar(100) NOT NULL default '',
          *   xar_realm varchar(100) NOT NULL default '',
-         *   xar_module varchar(100) NOT NULL default '',
+         *   xar_modid int(11) NOT NULL default '0',
          *   xar_component varchar(100) NOT NULL default '',
          *   xar_instance varchar(100) NOT NULL default '',
          *   xar_instancetable1 varchar(100) NOT NULL default '',
@@ -217,40 +217,16 @@ function privileges_init()
          * )
          *********************************************************************/
         
-        $query = xarDBCreateTable($tables['security_masks'],
-                                  array('xar_sid'  => array('type'       => 'integer',
-                                                            'null'        => false,
-                                                            'default'     => '0',
-                                                            'increment'   => true,
-                                                            'primary_key' => true),
-                                        'xar_name' => array('type'       => 'varchar',
-                                                            'size'        => 100,
-                                                            'null'        => false,
-                                                            'default'     => ''),
-                                        'xar_realm' => array('type'      => 'varchar',
-                                                             'size'        => 100,
-                                                             'null'        => false,
-                                                             'default'     => ''),
-                                        'xar_module' => array('type'     => 'varchar',
-                                                              'size'        => 100,
-                                                              'null'        => false,
-                                                              'default'     => ''),
-                                        'xar_component' => array('type'  => 'varchar',
-                                                                 'size'        => 100,
-                                                                 'null'        => false,
-                                                                 'default'     => ''),
-                                        'xar_instance' => array('type'   => 'varchar',
-                                                                'size'        => 100,
-                                                                'null'        => false,
-                                                                'default'     => ''),
-                                        'xar_level' => array('type'      => 'integer',
-                                                             'null'        => false,
-                                                             'default'     => '0'),
-                                        'xar_description' => array('type'=> 'varchar',
-                                                                   'size'        => 255,
-                                                                   'null'        => false,
-                                                                   'default'     => '')));
-        
+        $fields = array(
+                        'xar_sid'  => array('type'=> 'integer','null'=> false,'default'=>'0','increment'=>true,'primary_key' => true),
+                        'xar_name' => array('type'=>'varchar','size'=>100,'null'=>false,'default'=>''),
+                        'xar_realm'=> array('type'=>'varchar','size'=>100,'null'=> false,'default'=>''),
+                        'xar_modid'=> array('type'=>'integer','unsigned'=>true,'null'=>false,'default'=>'0'),
+                        'xar_component'=>array('type'=>'varchar','size'=>100,'null'=>false,'default'=>''),
+                        'xar_instance' => array('type'=>'varchar','size'=> 100,'null'=>false,'default'=>''),
+                        'xar_level' => array('type'=>'integer','null'=> false,'default'=>'0'),
+                        'xar_description' => array('type'=> 'varchar','size'=>255,'null'=>false,'default'=>''));
+        $query = xarDBCreateTable($tables['security_masks'],$fields);
         $dbconn->Execute($query);
 
         $index = array('name'      => 'i_'.$sitePrefix.'_security_masks_realm',
@@ -260,7 +236,7 @@ function privileges_init()
         $dbconn->Execute($query);
 
         $index = array('name'      => 'i_'.$sitePrefix.'_security_masks_module',
-                       'fields'    => array('xar_module'),
+                       'fields'    => array('xar_modid'),
                        'unique'    => FALSE);
         $query = xarDBCreateIndex($tables['security_masks'],$index);
         $dbconn->Execute($query);

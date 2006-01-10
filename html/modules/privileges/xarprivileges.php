@@ -78,8 +78,9 @@ class xarMasks
 //        $this->privsetstable = $xartable['security_privsets'];
         $this->modulestable = $xartable['modules'];
 
-// hack this for display purposes
-// probably should be defined elsewhere
+        // hack this for display purposes
+        // probably should be defined elsewhere
+        // TODO: how about a dd object or a table?
         $this->levels = array(0=>'No Access (0)',
                     100=>'Overview (100)',
                     200=>'Read (200)',
@@ -109,41 +110,45 @@ class xarMasks
 */
     function getmasks($module = 'All',$component='All')
     {
+        // TODO: try to do all this a bit more compact and without xarMod_GetBaseInfo
+        // TODO: sort on the name of the mod again
         $bindvars = array();
         if ($module == '' || $module == 'All') {
+            $modId = 0;
             if ($component == '' || $component == 'All') {
-                $query = "SELECT * FROM $this->maskstable ORDER BY xar_module, xar_component, xar_name";
-            }
-            else {
+                $query = "SELECT * FROM $this->maskstable ";
+            } else {
                 $query = "SELECT * FROM $this->maskstable
-                        WHERE (xar_component = ?)
-                        OR (xar_component = 'All')
-                        OR (xar_component = 'None')
-                        ORDER BY xar_module, xar_component, xar_name";
-                $bindvars = array($component);
+                          WHERE (xar_component = ?) OR
+                                (xar_component = ?) OR
+                                (xar_component = ?) ";
+                $bindvars = array($component,'All','None');
             }
-        }
-        else {
+        } else {
+            $modInfo = xarMod_GetBaseInfo($module);
+            $modId = $modInfo['systemid'];
             if ($component == '' || $component == 'All') {
                 $query = "SELECT * FROM $this->maskstable
-                        WHERE xar_module = ? ORDER BY xar_module, xar_component, xar_name";
-                $bindvars = array($module);
-            }
-            else {
+                          WHERE xar_modid = ? ";
+                $bindvars = array($modId);
+            } else {
                 $query = "SELECT *
-                    FROM $this->maskstable WHERE (xar_module = ?)
-                    AND ((xar_component = ?)
-                    OR (xar_component = 'All')
-                    OR (xar_component = 'None'))
-                    ORDER BY xar_module, xar_component, xar_name";
-                $bindvars = array($module,$component);
+                          FROM $this->maskstable 
+                          WHERE (xar_modid = ?) AND
+                          ((xar_component = ?) OR
+                           (xar_component = ?) OR 
+                           (xar_component = ?)
+                          ) ";
+                $bindvars = array($modId,$component,'All','None');
             }
         }
+        $query .= "ORDER BY xar_modid, xar_component, xar_name";
+
         $result = $this->dbconn->Execute($query,$bindvars);
-        if (!$result) return;
+
         $masks = array();
         while(!$result->EOF) {
-            list($sid, $name, $realm, $module, $component, $instance, $level,
+            list($sid, $name, $realm, $modid, $component, $instance, $level,
                     $description) = $result->fields;
             $pargs = array('sid' => $sid,
                                'name' => $name,
@@ -175,36 +180,43 @@ class xarMasks
     function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
         // Check if the mask has already been registered, and update it if necessary.
-// FIXME: make mask names unique across modules (+ across realms) ?
+        // FIXME: make mask names unique across modules (+ across realms) ?
         // FIXME: is module/name enough? Perhaps revisit this with realms in mind.
-        $query = 'SELECT xar_sid FROM ' . $this->maskstable
-            . ' WHERE xar_module = ? AND xar_name = ?';
-        $result = $this->dbconn->Execute($query, array($module, $name));
-        if (!$result) return;
-        if (!$result->EOF) {
-            list($sid) = $result->fields;
-            $query = 'UPDATE ' . $this->maskstable
-                . ' SET xar_realm = ?, xar_component = ?,'
-                . ' xar_instance = ?, xar_level = ?,'
-                . ' xar_description = ?'
-                . ' WHERE xar_sid = ?';
-            $bindvars = array(
-                $realm, $component, $instance, $level,
-                $description, $sid
-            );
+        if($module == 'All') {
+            $modId = 0;
         } else {
-            $query = "INSERT INTO $this->maskstable (
-                        xar_sid, xar_name, xar_realm, xar_module, xar_component, 
-                        xar_instance, xar_level, xar_description) 
-                      VALUES (?,?,?,?,?,?,?,?)";
-            $bindvars = array(
-                $this->dbconn->genID($this->maskstable),
-                          $name, $realm, $module, $component, $instance, $level,
-                $description
-            );
+            $modInfo = xarMod_GetBaseInfo($module);
+            $modId= $modInfo['systemid'];
         }
+        $query = "SELECT xar_sid FROM $this->maskstable WHERE xar_modid = ? AND xar_name = ?";
+        $result = $this->dbconn->Execute($query, array($modId, $name));
 
-        if (!$this->dbconn->Execute($query,$bindvars)) return;
+        try {
+            $this->dbconn->begin();
+            if (!$result->EOF) {
+                list($sid) = $result->fields;
+                $query = "UPDATE $this->maskstable
+                          SET xar_realm = ?, xar_component = ?,
+                              xar_instance = ?, xar_level = ?,
+                              xar_description = ?
+                          WHERE xar_sid = ?";
+                $bindvars = array($realm, $component, $instance, $level,
+                                  $description, $sid);
+            } else {
+                $query = "INSERT INTO $this->maskstable 
+                          (xar_sid, xar_name, xar_realm, xar_modid, xar_component, xar_instance, xar_level, xar_description) 
+                          VALUES (?,?,?,?,?,?,?,?)";
+                $bindvars = array(
+                                  $this->dbconn->genID($this->maskstable),
+                                  $name, $realm, $modId, $component, $instance, $level,
+                                  $description);
+            }
+            $this->dbconn->Execute($query,$bindvars);
+            $this->dbconn->commit();
+        } catch (SQLException $e) {
+            $dbconn->rollback();
+            throw $e;
+        }
         return true;
     }
 
@@ -220,11 +232,11 @@ class xarMasks
  * @return  boolean
  * @throws  none
  * @todo    none
-*/
+ */
     function unregister($name)
     {
         $query = "DELETE FROM $this->maskstable WHERE xar_name = ?";
-        if (!$this->dbconn->Execute($query,array($name))) return;
+        $this->dbconn->Execute($query,array($name));
         return true;
     }
 
@@ -236,13 +248,18 @@ class xarMasks
  * @param   module name
  * @return  boolean
  * @throws  none
- * @todo    none
 */
     function removemasks($module)
     {
-        $query = "DELETE FROM $this->maskstable WHERE xar_module = ?";
+        if($module=='All') {
+            $modId = 0;
+        } else {
+            $modInfo = xarMod_GetBaseInfo($module);
+            $modId = $modInfo['systemid'];
+        }
+        $query = "DELETE FROM $this->maskstable WHERE xar_modid = ?";
         //Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query,array($module))) return;
+        $this->dbconn->Execute($query,array($module));
         return true;
     }
 
@@ -736,25 +753,29 @@ class xarMasks
     function getMask($name,$module="All",$component="All",$suppresscache=FALSE)
     {
         // check if we already have the definition of this mask
+        // TODO: try to do this without xarMod_GetBaseInfo
         if ($suppresscache || !xarVarIsCached('Security.Masks',$name)) {
-            $q = new xarQuery('SELECT',$this->maskstable);
-            $q->addfields(array(
-                            'xar_sid AS sid',
-                            'xar_name AS name',
-                            'xar_realm AS realm',
-                            'xar_module AS module',
-                            'xar_component AS component',
-                            'xar_instance AS instance',
-                            'xar_level AS level',
-                            'xar_description AS description',
-                        ));
-            $q->eq('xar_name',$name);
-            if ($module != "All") $q->eq('xar_module',strtolower($module));
-            if ($component != "All") $q->eq('xar_component',strtolower($component));
-            if (!$q->run()) return;
-            if ($q->row() == array()) return false;
-
-            $pargs = $q->row();
+            $bindvars = array();
+            $query = "SELECT xar_sid AS sid, xar_name AS name, xar_realm AS realm,
+                             xar_modid AS module, xar_component as component, xar_instance AS instance,
+                             xar_level AS level, xar_description AS description
+                      FROM $this->maskstable WHERE xar_name = ? ";
+            $bindvars[] = $name;
+            if($module != 'All') {
+                $modInfo = xarMod_GetBaseInfo($module);
+                $modId = $modInfo['systemid'];
+                $query .= " AND xar_modid = ?";
+                $bindvars[] = $modId;
+            }
+            if($component != 'All') {
+                $query .= " AND xar_component = ? ";
+                $bindvars[] = strtolower($component);
+            }
+            $stmt = $this->dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            $result->next();
+            $pargs = $result->getRow();
+            $pargs['module'] = $module;
             xarVarSetCached('Security.Masks',$name,$pargs);
         } else {
             $pargs = xarVarGetCached('Security.Masks',$name);
