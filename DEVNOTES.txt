@@ -15,6 +15,8 @@ DB-CHANGES:
 - security_masks column xar_module replaced by column xar_modid
 - xar_roles column xar_auth_module replaced by column xar_auth_modid. The interface WAS NOT ADAPTED but nothing
   uses the auth_module directly and the columns is probably going to move away to somewhere else anyway.
+- xar_block_types column xar_module replaced by column xar_modid. This was far out the most intrusive one since that table is used
+  in the privilege instance queries. I adapted as best as I could, no doubt they wont work anymore in some cases. We'll see
 
 OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
 - when encountered, upgrade code to upgrade modules from older
