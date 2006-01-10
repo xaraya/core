@@ -21,27 +21,10 @@ function blocks_userapi_getallblocktypes($args)
 {
     extract($args);
 
-    $where = array();
-    $bind = array();
-
-    if (!empty($module)) {
-        $where[] = 'xar_module = ?';
-        $bind [] = $module;
-    }
-
-    if (!empty($type)) {
-        $where[] = 'xar_type = ?';
-        $bind [] = $type;
-    }
-
-    if (!empty($tid) && is_numeric($tid)) {
-        $where[] = 'xar_id = ?';
-        $bind [] = $tid;
-    }
-
     // Order by columns.
     // Only id, type and module allowed.
     // Ignore order-clause silently if incorrect unmerated columns passed in.
+    // TODO: this will now fail
     if (!empty($order) && xarVarValidate('strlist:,|:pre:trim:passthru:enum:module:type:id', $order, true)) {
         $orderby = ' ORDER BY xar_' . implode(', xar_', explode(',', $order));
     } else {
@@ -51,20 +34,32 @@ function blocks_userapi_getallblocktypes($args)
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $block_types_table = $xartable['block_types'];
+    $modules_table     = $xartable['modules'];
 
     // Fetch instance details.
-    $query = 'SELECT xar_id, xar_module, xar_type, xar_info'
-        . ' FROM ' . $block_types_table;
+    $query = "SELECT btypes.xar_id, mods.xar_name, btypes.xar_type, btypes.xar_info
+              FROM  $block_types_table btypes, $modules_table mods
+              WHERE btypes.xar_modid = mods.xar_id ";
 
-    if (!empty($where)) {
-        $query .= ' WHERE ' . implode(' AND ', $where);
+    $bind = array();
+    if (!empty($module)) {
+        $query .= ' AND mods.xar_name = ?';
+        $bind [] = $module;
     }
 
+    if (!empty($type)) {
+        $query .= ' AND btypes.xar_type = ?';
+        $bind [] = $type;
+    }
+
+    if (!empty($tid) && is_numeric($tid)) {
+        $query .= ' AND btypes.xar_id = ?';
+        $bind [] = $tid;
+    }
     $query .= $orderby;
 
     // Return if no details retrieved.
     $result =& $dbconn->Execute($query, $bind);
-    if (!$result) {return;}
 
     // The main result array.
     $types = array();

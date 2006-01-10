@@ -35,26 +35,27 @@ function blocks_adminapi_update_type_info($args)
     }
 
     // Load and execute the info function of the block.
-    $block_info = xarModAPIfunc(
-        'blocks', 'user', 'read_type_info',
-        array(
-            'module' => $type['module'],
-            'type' => $type['type']
-        )
-    );
+    $block_info = xarModAPIfunc('blocks', 'user', 'read_type_info',
+                                array('module' => $type['module'],
+                                      'type' => $type['type']));
     if (empty($block_info)) {return;}
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
     $block_types_table =& $xartable['block_types'];
-
-    // Update the info column for the block in the database.
-    $query = 'UPDATE ' . $block_types_table . ' SET xar_info = ? WHERE xar_id = ?';
-    $bind = array(serialize($block_info), $type['tid']);
-    $result =& $dbconn->Execute($query, $bind);
-    if (!$result) {return;}
-
+    
+    try {
+        $dbconn->begin();
+        // Update the info column for the block in the database.
+        $query = "UPDATE $block_types_table SET xar_info = ? WHERE xar_id = ?";
+        $bind = array(serialize($block_info), $type['tid']);
+        $dbconn->Execute($query, $bind);
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
     return true;
 }
 

@@ -172,6 +172,8 @@ abstract class ConnectionCommon {
             if ($this->transactionOpcount == 1 || $this->supportsNestedTrans()) {
                 $this->commitTrans();
                 xarLogMessage("DB: committed transaction [".$this->transactionOpcount."]");
+            } else {
+                xarLogMessage("DB: postponing commit of transaction [".$this->transactionOpcount."]");
             }
             $this->transactionOpcount--;       
         }
@@ -318,7 +320,8 @@ abstract class ConnectionCommon {
             // Id is returned by something like last_inserted thingie
             return $idgen->getId($tablename);
         } else {
-            // The id is known upfront and in the db, use same as adodb hack now, which is wrong, but alas
+            // The id is known upfront and in the db, use same as 
+            // adodb hack now, which is wrong, but alas
             $sql = "SELECT MAX($fieldname) AS maxid FROM $tablename";
             $stmt = $this->prepareStatement($sql);
             $stmt->SetLimit(1);

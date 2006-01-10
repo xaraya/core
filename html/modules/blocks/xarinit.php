@@ -109,11 +109,11 @@ function blocks_init()
                                                             'null'          => false,
                                                             'default'       => ''
                                                             ),
-                                        'xar_module' => array(
-                                                              'type'          => 'varchar',
-                                                              'size'          => 64,
+                                        'xar_modid' => array(
+                                                              'type'          => 'integer',
+                                                              'unsigned'      => true,
                                                               'null'          => false,
-                                                              'default'       => ''
+                                                              'default'       => '0'
                                                               ),
                                         'xar_info' => array(
                                                             'type'          => 'text',
@@ -126,14 +126,14 @@ function blocks_init()
 
         $query = xarDBCreateIndex($prefix . '_block_types',
                                   array('name'   => 'i_' . $prefix . '_block_types2',
-                                        'fields' => array('xar_module', 'xar_type'),
+                                        'fields' => array('xar_modid', 'xar_type'),
                                         'unique' => 'false'));
         $dbconn->Execute($query);
         /*
          TODO: Find a fix for this - Postgres will not allow partial indexes
          $query = xarDBCreateIndex($prefix . '_block_types',
          array('name'   => 'i_' . $prefix . '_block_types_2',
-         'fields' => array('xar_type(50)', 'xar_module(50)'),
+         'fields' => array('xar_type(50)', 'xar_modid(50)'),
          'unique' => true));
          $result =& $dbconn->Execute($query);
          if (!$result) return;

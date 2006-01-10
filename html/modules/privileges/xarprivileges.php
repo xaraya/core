@@ -38,7 +38,7 @@ class xarMasks
     public $privmemberstable;
     public $maskstable;
     public $modulestable;
-    //    public $modulestatestable;
+    public $modulestatestable;
     public $realmstable;
     public $acltable;
     public $allmasks;
@@ -70,7 +70,7 @@ class xarMasks
         $this->privmemberstable = $xartable['privmembers'];
         $this->maskstable = $xartable['security_masks'];
         $this->modulestable = $xartable['modules'];
-        //        $this->modulestatestable = $xartable['module_states'];
+        $this->modulestatestable = $xartable['module_states'];
         $this->realmstable = $xartable['security_realms'];
         $this->acltable = $xartable['security_acl'];
         $this->instancestable = $xartable['security_instances'];

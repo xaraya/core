@@ -39,6 +39,7 @@ function blocks_userapi_groupgetinfo($args)
     $blockTypesTable          = $tables['block_types'];
     $blockGroupsTable         = $tables['block_groups'];
     $blockGroupInstancesTable = $tables['block_group_instances'];
+    $modulesTable             = $tables['modules'];
 
     $query = 'SELECT    xar_id as id,
                         xar_name as name,
@@ -70,24 +71,22 @@ function blocks_userapi_groupgetinfo($args)
     }
 
     // Query for instances in this group
+    // NOTE: same query as in includes/xarBlocks.php
     $query = "SELECT    inst.xar_id as id,
                         btypes.xar_type as type,
-                        btypes.xar_module as module,
+                        mods.xar_name as module,
                         inst.xar_title as title,
                         inst.xar_name as name,
                         group_inst.xar_position as position
               FROM      $blockGroupInstancesTable as group_inst
-              LEFT JOIN $blockGroupsTable as bgroups
-              ON        group_inst.xar_group_id = bgroups.xar_id
-              LEFT JOIN $blockInstancesTable as inst
-              ON        inst.xar_id = group_inst.xar_instance_id
-              LEFT JOIN $blockTypesTable as btypes
-              ON        btypes.xar_id = inst.xar_type_id
+              LEFT JOIN $blockGroupsTable as bgroups ON group_inst.xar_group_id = bgroups.xar_id
+              LEFT JOIN $blockInstancesTable as inst ON inst.xar_id = group_inst.xar_instance_id
+              LEFT JOIN $blockTypesTable as btypes   ON btypes.xar_id = inst.xar_type_id
+              LEFT JOIN $modulesTable as mods        ON btypes.xar_modid = mods.xar_id
               WHERE     bgroups.xar_id = ? 
               ORDER BY  group_inst.xar_position ASC";
 
     $result = $dbconn->Execute($query,array($gid),ResultSet::FETCHMODE_ASSOC);
-    if (!$result) {return;}
 
     // Load up list of group's instances
     $instances = array();
