@@ -39,7 +39,6 @@ function themes_adminapi_gettpltaglist($args)
         $sSql .= " AND tags.xar_id = ? ";
         $bindvars[] = $id;
     }
-        
     $oResult = $dbconn->Execute($sSql,$bindvars);
 
     while(!$oResult->EOF) {

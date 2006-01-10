@@ -23,6 +23,24 @@
 
         <div class="simpleform">
             <p>
+                <label for="install_database_type">
+                    <xar:mlstring>Database Type</xar:mlstring>
+                </label>
+                <select name="install_database_type" id="install_database_type">
+                    <xar:foreach in="$database_types" key="$dbdriver" value="$info">
+                        <xar:if condition="!$info.available">
+                            <option value="#$dbdriver#" disabled="disabled">#$info.name# <xar:mlstring>[not available]</xar:mlstring></option>
+                        <xar:else/>
+                            <xar:if condition="$database_type == $dbdriver">
+                                <option selected="selected" value="#$dbdriver#">#$info.name#</option>
+                            <xar:else/>
+                                <option value="#$dbdriver#">#$info.name#</option>
+                            </xar:if>
+                        </xar:if>
+                    </xar:foreach>
+                </select>
+            </p>
+            <p>
                 <label for="install_database_host">
                     <xar:mlstring>Host</xar:mlstring>
                 </label>
@@ -58,24 +76,6 @@
                 <span class="xar-sub">
                     <xar:mlstring>(for Table Sharing)</xar:mlstring>
                 </span>
-            </p>
-            <p>
-                <label for="install_database_type">
-                    <xar:mlstring>Database Type</xar:mlstring>
-                </label>
-                <select name="install_database_type" id="install_database_type">
-                    <xar:foreach in="$database_types" key="$dbdriver" value="$info">
-                        <xar:if condition="!$info.available">
-                            <option value="#$dbdriver#" disabled="disabled">#$info.name# <xar:mlstring>[not available]</xar:mlstring></option>
-                        <xar:else/>
-                            <xar:if condition="$database_type == $dbdriver">
-                                <option selected="selected" value="#$dbdriver#">#$info.name#</option>
-                            <xar:else/>
-                                <option value="#$dbdriver#">#$info.name#</option>
-                            </xar:if>
-                        </xar:if>
-                    </xar:foreach>
-                </select>
             </p>
         </div>
         <p>
