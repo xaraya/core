@@ -12,6 +12,9 @@ DB-CHANGES:
   modules module.
 - template_tags column xar_module replaced by a column xar_modid
 - security_instances column xar_module replaced by column xar_modid
+- security_masks column xar_module replaced by column xar_modid
+- xar_roles column xar_auth_module replaced by column xar_auth_modid. The interface WAS NOT ADAPTED but nothing
+  uses the auth_module directly and the columns is probably going to move away to somewhere else anyway.
 
 OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
 - when encountered, upgrade code to upgrade modules from older

@@ -71,7 +71,7 @@ function roles_userapi_leftjoin($args)
     }
 
     // Add available columns in the roles table
-    // note : we forget about pass and auth_module for now :-)
+    // note : we forget about pass and auth module for now :-)
     $columns = array('uid','uname','name','email');
     foreach ($columns as $column) {
         $leftjoin[$column] = $rolestable . '.xar_' . $column;

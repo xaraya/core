@@ -46,7 +46,6 @@ function roles_adminapi_create($args)
     // Check if that username exists
     $query = "SELECT xar_uid FROM $rolestable WHERE xar_uname= ? AND xar_type = ?";
     $result =& $dbconn->Execute($query,array($uname,0));
-    if (!$result) return;
 
     if ($result->getRecordCount() > 0) {
         return 0;  // username is already there
@@ -61,7 +60,8 @@ function roles_adminapi_create($args)
 
 // TODO: check this
     if (empty($authmodule)) {
-        $authmodule = 'authsystem';
+        $modInfo = xarMod_GetBaseInfo('authsystem');
+        $modId = $modInfo['systemid'];
     }
 
     // Add item, with encrypted passwd
@@ -81,12 +81,12 @@ function roles_adminapi_create($args)
     $query = "INSERT INTO $rolestable (
               xar_uid, xar_uname, xar_name, xar_type,
               xar_pass, xar_email, xar_date_reg, xar_valcode,
-              xar_state, xar_auth_module
+              xar_state, xar_auth_modid
               )
             VALUES (?,?,?,?,?,?,?,?,?,?)";
     $bindvars = array($nextId, $uname, $realname, 0,
                       $cryptpass,$email,$date_reg,$valcode,
-                      $state,$authmodule);
+                      $state,$modId);
     $result = $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 

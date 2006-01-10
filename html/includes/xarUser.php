@@ -122,6 +122,9 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
         // user api function
         if (!xarModAPILoad($authModName, 'user')) continue;
 
+        $modInfo = xarMod_GetBaseInfo($authModName);
+        $modId = $modInfo['systemid'];
+
         $userId = xarModAPIFunc($authModName, 'user', 'authenticate_user', $args);
         if (!isset($userId)) {
             return; // throw back
@@ -162,9 +165,9 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
     // TODO: this should be inside roles module
     try {
         $dbconn->begin();
-        $query = "UPDATE $rolestable SET xar_auth_module = ? WHERE xar_uid = ?";
+        $query = "UPDATE $rolestable SET xar_auth_modid = ? WHERE xar_uid = ?";
         $stmt = $dbconn->prepareStatement($query);
-        $stmt->executeUpdate(array($authModName,$userId));
+        $stmt->executeUpdate(array($modId,$userId));
         $dbconn->commit();
     } catch (SQLException $e) {
         $dbconn->rollback();
@@ -691,11 +694,14 @@ function xarUser__getAuthModule($userId)
 
     // Get user auth_module name
     $rolestable = $xartable['roles'];
+    $modstable = $xartable['modules'];
 
-    $query = "SELECT xar_auth_module FROM $rolestable WHERE xar_uid = ?";
+    $query = "SELECT mods.xar_name
+              FROM $modstable mods, $rolestable roles
+              WHERE mods.xar_id = roles.xar_auth_modid AND
+                    roles.xar_uid = ?";
     $stmt =& $dbconn->prepareStatement($query);
     $result =& $stmt->executeQuery(array($userId),ResultSet::FETCHMODE_NUM);
-    if (!$result) return;
 
     if (!$result->next()) {
         // That user has never logon, strange, don't you think?

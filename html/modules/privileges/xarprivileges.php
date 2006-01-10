@@ -112,6 +112,8 @@ class xarMasks
     {
         // TODO: try to do all this a bit more compact and without xarMod_GetBaseInfo
         // TODO: sort on the name of the mod again
+        // TODO: evaluate ambiguous signature of this method: does 'All' mean get *only* the masks which apply to all modules
+        //       or get *all* masks.
         $bindvars = array();
         if ($module == '' || $module == 'All') {
             $modId = 0;
@@ -2299,41 +2301,40 @@ class xarPrivilege extends xarMask
     function getRoles()
     {
 
-// set up a query to select the roles this privilege
-// is linked to in the acl table
-        $query = "SELECT r.xar_uid,
-                    r.xar_name,
-                    r.xar_type,
-                    r.xar_uname,
-                    r.xar_email,
-                    r.xar_pass,
-                    r.xar_auth_module
-                    FROM $this->rolestable r, $this->acltable acl
-                    WHERE r.xar_uid = acl.xar_partid
-                    AND acl.xar_permid = ?";
-//Execute the query, bail if an exception was thrown
+        // set up a query to select the roles this privilege
+        // is linked to in the acl table
+        $query = "SELECT r.xar_uid, r.xar_name, r.xar_type,
+                         r.xar_uname, r.xar_email, r.xar_pass,
+                         r.xar_auth_modid
+                  FROM $this->rolestable r, $this->acltable acl
+                  WHERE r.xar_uid = acl.xar_partid
+                        acl.xar_permid = ?";
+        //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($this->pid));
-        if (!$result) return;
 
-// make objects from the db entries retrieved
+        // make objects from the db entries retrieved
         include_once 'modules/roles/xarroles.php';
         $roles = array();
-//      $ind = 0;
+        //      $ind = 0;
         while(!$result->EOF) {
-            list($uid,$name,$type,$uname,$email,$pass,$auth_module) = $result->fields;
-//          $ind = $ind + 1;
+            list($uid,$name,$type,$uname,$email,$pass,$auth_modid) = $result->fields;
+            //          $ind = $ind + 1;
+            
             $role = new xarRole(array('uid' => $uid,
-                               'name' => $name,
-                               'type' => $type,
-                               'uname' => $uname,
-                               'email' => $email,
-                               'pass' => $pass,
-                               'auth_module' => $auth_module,
-                               'parentid' => 0));
+                                      'name' => $name,
+                                      'type' => $type,
+                                      'uname' => $uname,
+                                      'email' => $email,
+                                      'pass' => $pass,
+                                      // NOTE: CHANGED since 1.x! to and ID, 
+                                      // but i dont think it matters, auth module should probably
+                                      // be phased out of this table completely
+                                      'auth_module' => $auth_modid,
+                                      'parentid' => 0));
             $result->MoveNext();
             $roles[] = $role;
         }
-// done
+        // done
         return $roles;
     }
 

@@ -27,7 +27,7 @@ function roles_admin_addrole()
     if (!xarVarFetch('pparentid',  'str:1:', $pparentid,  NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('return_url', 'isset',  $return_url, NULL, XARVAR_DONT_SET)) return;
     // get the rest for users only
-    // TODO: need to see what to do with auth_module
+    // TODO: need to see what to do with auth module
     if ($ptype == 0) {
         xarVarFetch('puname', 'str:1:35:', $puname, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('pemail', 'str:1:', $pemail, NULL, XARVAR_NOT_REQUIRED);

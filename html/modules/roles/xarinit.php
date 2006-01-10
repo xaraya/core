@@ -43,7 +43,7 @@ function roles_init()
          *    xar_date_reg datetime NOT NULL default '0000-00-00 00:00:00',
          *    xar_valcode varchar(35) NOT NULL default '',
          *    xar_state int(3) NOT NULL default '0',
-         *    xar_auth_module varchar(100) NOT NULL default '',
+         *    xar_auth_modid int(11) NOT NULL default '0',
          *    PRIMARY KEY  (xar_uid)
          * )
          */
@@ -59,7 +59,7 @@ function roles_init()
                         'xar_date_reg' => array('type' => 'varchar', 'size' => 100, 'null' => false, 'default' => '0000-00-00 00:00:00'),
                         'xar_valcode' => array('type' => 'varchar', 'size' => 35, 'null' => false, 'default' => ''),
                         'xar_state' => array('type' => 'integer', 'null' => false,'default' => '3'),
-                        'xar_auth_module' => array('type' => 'varchar', 'size' => 100,'null' => false, 'default' => ''));
+                        'xar_auth_modid' => array('type' => 'integer', 'unsigneded' => true,'null' => false, 'default' => '0'));
         $query = xarDBCreateTable($tables['roles'],$fields);
         $dbconn->Execute($query);
         

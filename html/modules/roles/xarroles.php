@@ -206,7 +206,7 @@ class xarRoles
             'date_reg' =>    $row['xar_date_reg'],
             'val_code' =>    $row['xar_valcode'],
             'state' =>       $row['xar_state'],
-            'auth_module' => $row['xar_auth_module'],
+            'auth_module' => $row['xar_auth_modid'],
             'duvs'		  => $duvs	);
         // create and return the role object
         return new xarRole($pargs);
@@ -351,7 +351,7 @@ class xarRoles
             array('name' => 'xar_date_reg',    'value' => mktime()),
             array('name' => 'xar_valcode',     'value' => $valcode),
             array('name' => 'xar_state',       'value' => $state),
-            array('name' => 'xar_auth_module', 'value' => $authmodule),
+            array('name' => 'xar_auth_modid', 'value' => $authmodule),
         );
         $q = new xarQuery('INSERT',$this->rolestable);
         $q->addfields($tablefields);
@@ -469,7 +469,7 @@ class xarRole
         if (!isset($date_reg)) $date_reg = mktime();
         if (!isset($val_code)) $val_code = 'createdbyadmin';
         // FIXME: what is a sensible default for auth_module?
-        if (!isset($auth_module)) $auth_module = '';
+        if (!isset($auth_module)) $auth_module = 0;
 
         $this->uid = (int) $uid;
         $this->name = $name;
@@ -663,7 +663,7 @@ class xarRole
         $q->addfield('xar_uname',$this->uname);
         $q->addfield('xar_email',$this->email);
         $q->addfield('xar_state',$this->state);
-        $q->addfield('xar_auth_module',$this->auth_module);
+        $q->addfield('xar_auth_modid',$this->auth_module);
         if ($this->pass != '') $q->addfield('xar_pass',md5($this->pass));
         $q->eq('xar_uid',$this->getID());
 
