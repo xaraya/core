@@ -54,10 +54,13 @@ function blocks_userapi_getall($args)
               LEFT JOIN '.$block_types_table.' btypes
               ON        btypes.xar_id = binst.xar_type_id ' . $orderby;
 
+   
     if (!empty($bid)) {
-        $query .= ' WHERE binst.xar_id = ' . $bid;
+        $query .= ' WHERE binst.xar_id = ?';
+        $bindvars = array($bid);
     } elseif (!empty($name)) {
-        $query .= ' WHERE binst.xar_name = \'' . $name . '\'';
+        $query .= ' WHERE binst.xar_name = ?';
+        $bindvars = array($name);
     }
 
     // Return if no details retrieved.
@@ -96,9 +99,9 @@ function blocks_userapi_getall($args)
                   FROM   '.$block_group_instances_table.' bgroup_inst
                   LEFT JOIN '.$block_groups_table.' bgroups
                   ON        bgroups.xar_id = bgroup_inst.xar_group_id
-                  WHERE     bgroup_inst.xar_instance_id = ' . $bid;
+                  WHERE     bgroup_inst.xar_instance_id = ?';
 
-        $resultgroup =& $dbconn->Execute($querygroup);
+        $resultgroup =& $dbconn->Execute($querygroup,array($bid));
         if ($resultgroup) {
             while (!$resultgroup->EOF) {
                 list(

@@ -41,10 +41,10 @@ function blocks_adminapi_unregister_block_type($args)
               FROM      $block_instances_table as inst,
                         $block_types_table as btypes
               WHERE     btypes.xar_id = inst.xar_type_id
-              AND       btypes.xar_module = '$modName'
-              AND       btypes.xar_type = '$blockType'";
+              AND       btypes.xar_module = ?
+              AND       btypes.xar_type = ?";
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,array($modName,$blockType));
     if (!$result) return;
 
     while (!$result->EOF) {
@@ -61,8 +61,8 @@ function blocks_adminapi_unregister_block_type($args)
     $result->Close();
 
     // Delete the block type
-    $query = "DELETE FROM $block_types_table WHERE xar_module = '$modName' AND xar_type = '$blockType';";
-    $result =& $dbconn->Execute($query);
+    $query = "DELETE FROM $block_types_table WHERE xar_module = ? AND xar_type = ?";
+    $result =& $dbconn->Execute($query,array($modName,$blockType));
     if (!$result) return;
 
     return true;
