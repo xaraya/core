@@ -77,141 +77,6 @@
 
 */
 
-/* PHP Errors are special exceptions, thrown by the php error handler */
-final class PHPException extends Exception 
-{}
-
-/* Assertions are special exceptions, thrown by the assert error handler */
-final class SRCException extends Exception
-{}
-
-
-interface IxarExceptions {
-    public function __construct($vars = NULL, $msg = NULL);
-}
-/* Our own exceptions, the base container class, cannot be instantiated */
-abstract class xarExceptions extends Exception implements IxarExceptions
-{
-    // Variable parts in the message.
-    protected $message ="Missing Exception Info, please put the defaults for '\$message' and '\$variables' members in the derived exception class.";
-    protected $variables = array();
-    /*
-     All exceptions have the same interface from XAR point of view
-     so we dont allow this to be overridden just now. The message parameter
-     may be overridden though. If not supplied the default message
-     for the class gets used.
-     Throwing an exeception is done by: 
-         throw new WhateverException($vars);
-     $vars is an array of values which are variable in the message. 
-     The message is normally not overridden but possible., example:
-         throw new FileNotFoundException(array($file,$dir),'Go place the file #(1) in the #(2) location, i can not find it');
-    */
-    final public function __construct($vars = NULL, $msg = NULL) 
-    {
-        // Make sure the construction creates the right values first
-        if(!is_null($msg)) $this->message = $msg;
-        parent::__construct($this->message,$this->code);
-
-        if(!is_null($vars)) $this->variables = $vars;
-        if(!is_array($this->variables)) $this->variables = array($this->variables);
-        $rep=1;
-        foreach($this->variables as $var) 
-            $this->message = str_replace("#(".$rep++.")",(string)$var,$this->message);
-    }
-}
-
-/*
- * Exception class for debugging
- *
- * @todo Devise some special constructor, so it's not really easy to leave the objects laying around
- */
-class DebugException extends xarExceptions
-{
-    // Derived exception class should minimally proved the following 2
-    protected $message ='Default "$message" for "DebugException" with "$variables" member with value: "#(1)"';
-    protected $variables ='a variable value should normally be here';
-}
-
-
-/* Other exception classes which probably should be moved somewhere else 
-   TODO: this sort of begs for dynamic class generation. 
-         We could model it differently but catching is based on classname which is really comfy, 
-         so we actually need all those classes
-*/
-// Parameter exceptions
-abstract class ParameterExceptions extends xarExceptions {}
-class EmptyParameterException extends ParameterExceptions
-{ protected $message = "The parameter '#(1)' was expected in a call to a function, but was not provided.";}
-class BadParameterException extends ParameterExceptions
-{ protected $message = "The parameter '#(1)' provided during this operation could not be validated, or was not accepted for other reasons.";}
-
-// Not finding things
-abstract class NotFoundExceptions extends xarExceptions {}
-class FunctionNotFoundException extends NotFoundExceptions
-{ protected $message = 'The function "#(1)" could not be found or not be loaded.';}
-class IDNotFoundException extends NotFoundExceptions
-{ protected $message = 'An item was requested based on a unique identifier (ID), however, the ID: "#(1)" could not be found.';}
-class FileNotFoundException extends NotFoundExceptions
-{ protected $message = 'The file "#(1) could not be found.';}
-class DirectoryNotFoundException extends NotFoundExceptions
-{ protected $message = 'The directory "#(1) could not be found.';}
-class ModuleBaseInfoNotFoundException extends NotFoundExceptions
-{ protected $message = 'The base info for module "#(1)" could not be found';}
-class ModuleNotFoundException extends NotFoundExceptions
-{ protected $message = 'A module is missing, the module name could not be determined in the current context';}
-class ThemeNotFoundException extends NotFoundExceptions
-{ protected $message = 'A theme is missing, the theme name could not be determined in the current context';}
-class LocaleNotFoundException extends NotFoundExceptions
-{ protected $message = 'The locale "#(1)" could not be found or is currently unavailable';}
-class DataNotFoundException extends NotFoundExceptions
-{ protected $message = 'The data requested could not be found';}
-
-class ModuleNotActiveException extends xarExceptions
-{ protected $message = 'The module "#(1)" was called, but it is not active.';}
-
-class NotLoggedInException extends xarExceptions
-{ protected $message = 'An operation was encountered that requires the user to be logged in. If you are currently logged in please report this as a bug.';}
-
-// Registration
-abstract class RegistrationExceptions extends xarExceptions {}
-class VariableRegistrationException extends RegistrationExceptions
-{ protected $message = 'Variable "#(1)" is not properly registered';}
-class EventRegistrationException extends RegistrationExceptions
-{ protected $message = 'The event "#(1)" is not properly registered';}
-class TagRegistrationException extends RegistrationExceptions
-{ protected $message = 'The tag "#(1)" is not properly registered';}
-
-class ForbiddenOperationException extends xarExceptions
-{ protected $message = 'The operation you are attempting is not allowed in the current circumstances.';}
-
-// Duplication
-class DuplicateException extends xarExceptions
-{ protected $message = 'The #(1) "#(2)" already exists, no duplicates are allowed'; }
-class DuplicateTagException extends xarExceptions
-{ protected $message = 'The tag definition for the tag: "#(1)" already exists.';}
-
-// Validation
-abstract class ValidationExceptions extends xarExceptions {}
-class BLValidationException extends xarExceptions
-{ protected $message = 'A blocklayout tag or attribute construct was invalid, see the tag documentation for the correct syntax';}
-class VariableValidationException extends ValidationExceptions
-{ protected $message = 'The variable "#(1)" [Value: "#(2)"] did not comply with the required validation: "#(3)"';}
-
-// Configuration
-class ConfigurationException extends xarExceptions
-{ protected $message = 'There is an unknown configuration error detected.';}
-
-class XMLParseException extends xarExceptions
-{ protected $message = 'The XML file "#(1)" could not be parsed. At line #(2): #(3)';}
-
-abstract class DeprecationExceptions extends xarExceptions {}
-class ApiDeprecationException extends DeprecationExceptions
-{ protected $message = "You are trying to use a deprecated API function [#(1)], Replace this call with #(2)";}
-
-class BLException extends xarExceptions 
-{ protected $message = 'Unknown blocklayout exception (TODO)';}
-
-
 /*
  * Error constants for exception throwing
  * 
@@ -259,7 +124,9 @@ include "includes/exceptions/defaultuserexception.class.php";
 include "includes/exceptions/noexception.class.php";
 include "includes/exceptions/errorcollection.class.php";
 
-// Make sure the handlers are here
+// Include the set of exception types
+include "includes/exceptions/types.php";
+// And the handlers to deal with them
 include "includes/exceptions/handlers.php";
 
 global $CoreStack, $ErrorStack;
