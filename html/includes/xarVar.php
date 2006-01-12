@@ -112,17 +112,14 @@ function xarVarBatchFetch()
 
     foreach ($batch as $line) {
         $result_array[$line[2]] = array();
-        $result = xarVarFetch($line[0], $line[1], $result_array[$line[2]]['value'], isset($line[3])?$line[3]:NULL, isset($line[4])?$line[4]:XARVAR_GET_OR_POST);
-
-        if (!$result) {
+        try {
+            $result = xarVarFetch($line[0], $line[1], $result_array[$line[2]]['value'], isset($line[3])?$line[3]:NULL, isset($line[4])?$line[4]:XARVAR_GET_OR_POST);
+            $result_array[$line[2]]['error'] = '';
+        } catch (ValidationExceptions $e) { // Only catch validation exceptions, the rest should be thrown
             //Records the error presented in the given input variable
-            $result_array[$line[2]]['error'] = xarCurrentError();
-            //Handle the Exception
-            xarErrorHandled();
+            $result_array[$line[2]]['error'] = $e->getMessage();
             //Mark that we've got an error
             $no_errors = false;
-        } else {
-            $result_array[$line[2]]['error'] = '';
         }
     }
 
@@ -130,7 +127,7 @@ function xarVarBatchFetch()
     //errors present in the Fetched variables.
     $result_array['no_errors'] = $no_errors;
 
-    return $result_array;
+    return $result_array; // TODO: Is it the responsability of the callee to further handle this? If they dont => security risk.
 }
 
 /**
@@ -204,7 +201,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     //This allows us to have a extract($args) before the xarVarFetch and still run
     //the variables thru the tests here.
 
-// FIXME: this flag doesn't seem to work !?
+    // FIXME: this flag doesn't seem to work !?
     //The FLAG here, stops xarVarFetch from reusing the variable if already present
     if (!isset($value) || ($flags & XARVAR_DONT_REUSE)) {
         $value = xarRequestGetVar($name, $allowOnlyMethod);

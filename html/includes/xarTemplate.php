@@ -1162,17 +1162,8 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     $templateCode = null;
     if ($needCompilation) {
         $blCompiler = xarTpl__getCompilerInstance();
-        $lasterror = xarCurrentError();
+        // TODO: possibly wrap this in an exception catcher.
         $templateCode = $blCompiler->compileFile($sourceFileName);
-        // TODO !
-        // TODO !
-        // TODO: Recheck the flow here, this was put in as a hack (?) iirc to deal with errors during the process.
-        //       We might not need this anymore now.
-        // we check the error stack here to make sure no new errors happened during compile
-        // but we do not check the core stack
-        if (!isset($templateCode) || xarCurrentError() != $lasterror) {
-            return; // exception! throw back
-        }
         if ($GLOBALS['xarTpl_cacheTemplates']) {
             $fd = fopen($cachedFileName, 'w');
             if(xarTpl_outputPHPCommentBlockInTemplates()) {

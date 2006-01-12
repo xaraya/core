@@ -28,8 +28,6 @@
 * DEPRECATED XAR FUNCTIONS
 * xarModEmailURL        -> no direct equivalent
 * xarVarPrepForStore()  -> use bind vars or dbconn->qstr() method
-* xarExceptionId()      -> xarCurrentErrorID()
-* xarExceptionValue()   -> xarCurrentError()
 * xarExceptionFree()    -> xarErrorFree()
 * xarExceptionHandled() -> xarErrorHandled()
 * xarExceptionRender()  -> xarErrorRender()
@@ -189,38 +187,6 @@ function xarVarPrepForStore()
         return $resarray;
     }
 }
-
-/**
-* Gets the identifier of current error
- *
- * Returns the error identifier corresponding to the current error.
- * If invoked when no error was raised, a void value is returned.
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access public
- * @return string the error identifier
- * @deprec 2004-04-01
- */
-function xarExceptionId()
-{
-    return xarCurrentErrorID();
-} 
-
-/**
-* Gets the current error object
- *
- * Returns the value corresponding to the current error.
- * If invoked when no error or an error for which there is no associated information was raised, a void value is returned.
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access public
- * @return mixed error value object
- * @deprec 2004-04-01
- */
-function xarExceptionValue()
-{
-    return xarCurrentError();
-}    // deprecated
 
 /**
 * Resets current error status
