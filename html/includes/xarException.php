@@ -259,83 +259,10 @@ include "includes/exceptions/defaultuserexception.class.php";
 include "includes/exceptions/noexception.class.php";
 include "includes/exceptions/errorcollection.class.php";
 
+// Make sure the handlers are here
+include "includes/exceptions/handlers.php";
+
 global $CoreStack, $ErrorStack;
-
-/* Error Handling System implementation */
-
-/**
- * Exception handler for unhandled exceptions
- *
- * This handler is called when an exception is raised and otherwise unhandled
- * Execution stops directly after this handler runs.
- * The base exception object is documented here: http://www.php.net/manual/en/language.exceptions.php
- * but we dont want to instantiate that directly, but rather one of our derived classes.
- * We define this handler here, because it needs to be defined before set_exception_handler
- *
- * @author Marcel van der Boom <marcel@xaraya.com>
- * @access private
- * @param  Exception $exception The exception object
- * @todo Make exception handling the default error handling and get rid of the redundant parts
- * @return void
- */
-function xarException__DefaultHandler(Exception $e)
-{
-    // This handles exceptions, which can arrive directly or through xarErrorSet.
-    // if through xarErrorSet there will be something waiting for us on the stack
-    if(xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        // TODO: phase this out
-        $msg = xarErrorRender('template');
-    } else {
-        // Poor mans final fallback for unhandled exceptions (simulate the same rendering as first part of the if
-        $data = array('major' => 'MAJOR TBD (Code was: '. $e->getCode().')',
-                      'type'  => get_class($e), 'title' => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
-                      'short' => $e->getMessage(), 'long' => 'LONG msg TBD',
-                      'hint'  => 'HINT TBD', 'stack' => '<pre>'. $e->getTraceAsString()."</pre>",
-                      'product' => 'Product TBD', 'component' => 'Component TBD');
-        // If we have em, use em
-        if(function_exists('xarTplGetThemeDir')) {
-            $theme_dir = xarTplGetThemeDir(); $template="systemerror";
-            if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
-                $msg = xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', $data);
-            } else {
-                $msg = xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
-            }
-        } else {
-            // no templating yet, pass direct and render as rawhtml
-            RenderRawException($e);
-            die();
-        }
-    }
-    xarErrorFree();
-    // Make an attempt to render the page, hoping we have everything in place still
-    try {
-        echo xarTpl_renderPage($msg);
-    } catch( Exception $e) {
-        // Oh well, pick up the bones
-        RenderRawException($e);
-    }
-}
-
-/** 
- * Define a bare exception handler for when shit hits the fan
- *
- */
-function xarException__BoneHandler(Exception $e)
-{
-    RenderRawException($e);
-    // We picked up the bone, get the hell outta here again
-}
-
-function RenderRawException(Exception $e)
-{
-    // TODO: how many assumptions can we make about the rendering capabilities of the client here?
-    $out="<pre>";
-    $out.= 'Error: '.$e->getCode().": ".get_class($e)."\n";
-    $out.= $e->getMessage()."\n\n";
-    $out.= $e->getTraceAsString();
-    $out.= "</pre>";
-    echo $out;
-}
 
 /**
  * Initializes the Error Handling System
@@ -349,10 +276,12 @@ function xarError_init($systemArgs, $whatToLoad)
 {
     global $CoreStack,$ErrorStack; // Pretty much obsolete, now we treat errors like exceptions
 
-    // Send all exceptions to the exception handler.
-    set_exception_handler('xarException__DefaultHandler');
+    // Send all exceptions to the default exception handler, no excuses
+    set_exception_handler(array('ExceptionHandlers','defaulthandler'));
 
     // Do we want our error handler or the native one?
+    // FIXME: review this, we probably want a decicated exception handler class 
+    //        sprinkled with all sorts of handlers.
     if ($systemArgs['enablePHPErrorHandler'] == true ) { 
         set_error_handler('xarException__phpErrorHandler');
     }
@@ -452,11 +381,12 @@ function xarErrorSet($major, $errorID, $value = NULL,$throw=true)
         if ($errorID == "ErrorCollection") $obj = $obj->exceptions[0];
         xarLogMessage("Logged error: " . $obj->toString(), XARLOG_LEVEL_ERROR);
         if (!empty($stack) && $major != XAR_USER_EXCEPTION)
-            xarLogMessage(
-                "Logged error backtrace: \n" . xarException__formatBacktrace($stack),
-                XARLOG_LEVEL_ERROR);
+            // Simulate a backtrace
+            $e = new Exception($obj->toString); $backTrace = $e->getTraceAsString();
+            xarLogMessage("Logged error backtrace: $backTrace \n",XARLOG_LEVEL_ERROR);
         //xarLogException();
     }
+    // FIXME: Get rid of the $throw parameter, it is temporary
     if($throw) throw new Exception($obj->getLong(),$obj->major);
 }
 
@@ -878,49 +808,6 @@ function xarIsCoreException()
 {
     global $CoreStack;
     return $CoreStack->size() > 1;
-}
-
-//NOT GPLed CODE: (Probably Public Domain? or PHP's?)
-//Code from PHP's manual on function print_r
-//So this can work for versions lower than php 4.3 http://br.php.net/function.print_r
-//Code by ???? matt at crx4u dot com??? Not clear from the manual
-function xarException__formatBacktrace ($vardump,$key=false,$level=0)
-{
-    if (version_compare("4.3.0", phpversion(), "<=")) return print_r($vardump, true);
-    //else
-    //Getting afraid some of the arrays might reference itself... Dont know what will happen
-    if ($level == 16) return '';
-
-    $tabsize = 4;
-
-    //make layout
-    $return .= str_repeat(' ', $tabsize*$level);
-    if ($level != 0) $key = "[$key] =>";
-
-    //look for objects
-    if (is_object($vardump))
-        $return .= "$key ".get_class($vardump)." ".$vardump."\n";
-    else
-        $return .= "$key $vardump\n";
-
-     if (gettype($vardump) == 'object' || gettype($vardump) == 'array') {
-        $level++;
-        $return .= str_repeat(' ', $tabsize*$level);
-        $return .= "(\n";
-
-        if (gettype($vardump) == 'object')
-            $vardump = (array) get_object_vars($vardump);
-
-        foreach($vardump as $key => $value)
-            $return .= xarException__formatBacktrace($value,$key,$level+1);
-
-        $return .= str_repeat(' ', $tabsize*$level);
-        $return .= ")\n";
-        $level--;
-    }
-
-     //return everything
-     return $return;
 }
 
 ?>

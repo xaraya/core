@@ -1068,7 +1068,7 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
     } else {
         // Otherwise use an include, much better :-)
         assert('file_exists($cachedFileName); /* Compiled templated disappeared in mid air, race condition? */');
-        if($tplType=='page') set_exception_handler('xarException__BoneHandler');
+        if($tplType=='page') set_exception_handler(array('ExceptionHandlers','bone'));
         try {
             // Let's see what we cooked up in the compiler
             $res = include($cachedFileName);

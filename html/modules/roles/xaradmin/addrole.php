@@ -81,6 +81,7 @@ function roles_admin_addrole()
         if (isset($pprimaryparent) && xarModGetVar('roles','primaryparent'))
             $duvs['primaryparent'] = $pprimaryparent;
 
+        
         $pargs = array('name' => $pname,
             'type' => $ptype,
             'parentid' => $pparentid,

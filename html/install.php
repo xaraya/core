@@ -79,7 +79,7 @@ xarLog_init($systemArgs, $whatToLoad);
 $systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
 xarError_init($systemArgs, $whatToLoad);
 // As long as we are coming in through install.php we need to pick up the bones if something goes wrong
-set_exception_handler('xarException__BoneHandler');
+set_exception_handler(array('ExceptionHandlers','bone'));
 
 // Start Event Messaging System
 // <mrb> Is this needed? the events are dispatched to modules, which arent here yet.

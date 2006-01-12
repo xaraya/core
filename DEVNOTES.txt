@@ -13,12 +13,29 @@ DB-CHANGES:
 - template_tags column xar_module replaced by a column xar_modid
 - security_instances column xar_module replaced by column xar_modid
 - security_masks column xar_module replaced by column xar_modid
-- xar_roles column xar_auth_module replaced by column xar_auth_modid. The interface WAS NOT ADAPTED but nothing
-  uses the auth_module directly and the columns is probably going to move away to somewhere else anyway.
-- xar_block_types column xar_module replaced by column xar_modid. This was far out the most intrusive one since that table is used
-  in the privilege instance queries. I adapted as best as I could, no doubt they wont work anymore in some cases. We'll see
+- xar_roles column xar_auth_module replaced by column
+  xar_auth_modid. The interface WAS NOT ADAPTED but nothing uses the
+  auth_module directly and the columns is probably going to move away
+  to somewhere else anyway. 
+- xar_block_types column xar_module replaced by column xar_modid. This
+  was far out the most intrusive one since that table is used in the
+  privilege instance queries. I adapted as best as I could, no doubt
+  they wont work anymore in some cases. We'll see.
 
 OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
 - when encountered, upgrade code to upgrade modules from older
 versions than in 1.0 are removed, assuming we will only support
 upgrading from 1.0 to 2.x and not versions before 1.0
+
+
+REFACTORING LIST:
+List of things which need to be refactored before starting the actual
+design work can begin.
+
+* divide the exception classes over their respective subsystems
+* i really like some sort of import(modules.variables) dot notation to
+* include major parts into the flow when doing stuff, instead of
+* xarInclude or something
+* Finish up the planned db changes to normalizing the database.
+* document minimum required versions of the databases and stuff
+* OO-ify stuff in core where appropriate
