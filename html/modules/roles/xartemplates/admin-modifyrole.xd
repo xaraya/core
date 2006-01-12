@@ -71,7 +71,7 @@
                     <input type="text" name="pname" id="pname" value="#xarVarPrepForDisplay($pname)#" maxlength="255" class="xar-form-textlong" />
                 </div>
         
-            <xar:if condition="$basetype eq ROLES_GROUPTYPE and $haschildren">
+                <xar:if condition="$basetype eq ROLES_GROUPTYPE and $haschildren">
                     <div class="xar-form-input-wrapper">
                         <label title="#xarML('Type of Role')#" class="xar-form-label">
                             <xar:mlstring>Type:</xar:mlstring>
@@ -85,17 +85,17 @@
                     </div>
                 <xar:else />                
                     <div class="xar-form-input-wrapper">
-                    <label for="itemtype" title="#xarML('Type of Role')#" class="xar-form-label">
-                            <xar:mlstring>Type:</xar:mlstring>
+                        <label for="itemtype" title="#xarML('Type of Role')#" class="xar-form-label">
+                                <xar:mlstring>Type:</xar:mlstring>
                         </label>
-                    <xar:set name="moduleitemtype">xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 600))</xar:set>
-                    <xar:set name="$onchange">"onchange=\"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();\""</xar:set>                    
-                    <xar:data-input property="$moduleitemtype" name="itemtype" modid="27" value="$itemtype" extraparams="$onchange" />
+                        <xar:set name="moduleitemtype">xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 600))</xar:set>
+                        <xar:set name="$onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();\""</xar:set>                    
+                        <xar:data-input property="$moduleitemtype" name="itemtype" modid="27" value="$itemtype" onchange="$onchange" />
                     </div>
                 </xar:if>
 
-                <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'userhome', 'state' =&gt; 1))">
             <xar:if condition="$basetype eq ROLES_USERTYPE">
+                <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'userhome', 'state' =&gt; 1))">
                     <div class="xar-form-input-wrapper">
                         <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
                             <xar:mlstring>Home:</xar:mlstring>

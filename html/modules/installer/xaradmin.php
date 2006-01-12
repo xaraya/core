@@ -549,6 +549,7 @@ function installer_admin_bootstrap()
 # Create wrapper DD objects for the native itemtypes of the privileges module
 #
 	if (!xarModAPIFunc('privileges','admin','createobjects')) return;
+
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
 }
 

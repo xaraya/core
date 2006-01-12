@@ -53,14 +53,15 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 20,
                                     'default'  => 1,
                                     'source'   =>  $prefix . '_roles.xar_type',
-                                    'status'   => 1,
+                                    'status'   => 3,
                                     'order'    => 3,
-                                    ))) return;
-
+                                    ))) {
+                                    return;}
 # --------------------------------------------------------
 #
 # Create the user object
 #
+
     $itemtype = 2;
     $objectid = xarModAPIFunc('dynamicdata','admin','createobject',array(
                                     'name'     => 'user',

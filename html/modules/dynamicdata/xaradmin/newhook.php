@@ -65,6 +65,10 @@ function dynamicdata_admin_newhook($args)
     $data = "";
     foreach ($tree as $branch) {
     	if ($branch['objectid'] == 0) continue;
+    	// TODO: this next line jumps over itemtypes that correspond to wrappers of native itemtypes
+    	// TODO: make this more robust
+    	if ($branch['itemtype'] < 1000) continue;
+
 		$object = & Dynamic_Object_Master::getObject(array(
 										   'objectid' => $branch['objectid'],
 										   'moduleid' => $modid,
