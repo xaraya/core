@@ -30,45 +30,11 @@
                         </xar:mlstring>
                     </a>
                 </dd>
-                <xar:else />
+            <xar:else />
                 <dd>
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=general">
                         <xar:mlstring>
                             General 
-                        </xar:mlstring>
-                    </a>
-                </dd>
-            </xar:if>
-            <xar:if condition="$tab eq 'registration'">
-                <dd class="active">
-                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=registration">
-                        <xar:mlstring>
-                            Registration 
-                        </xar:mlstring>
-                    </a>
-                </dd>
-                <xar:else />
-                <dd>
-                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=registration">
-                        <xar:mlstring>
-                            Registration 
-                        </xar:mlstring>
-                    </a>
-                </dd>
-            </xar:if>
-            <xar:if condition="$tab eq 'filtering'">
-                <dd class="active">
-                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=filtering">
-                        <xar:mlstring>
-                            Filtering 
-                        </xar:mlstring>
-                    </a>
-                </dd>
-                <xar:else />
-                <dd>
-                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=filtering">
-                        <xar:mlstring>
-                            Filtering 
                         </xar:mlstring>
                     </a>
                 </dd>
@@ -81,7 +47,7 @@
                         </xar:mlstring>
                     </a>
                 </dd>
-                <xar:else />
+            <xar:else />
                 <dd>
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=hooks">
                         <xar:mlstring>
@@ -99,7 +65,7 @@
                             </xar:mlstring>
                         </a>
                     </dd>
-                    <xar:else />
+                <xar:else />
                     <dd>
                         <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
                             <xar:mlstring>
@@ -117,7 +83,7 @@
                         </xar:mlstring>
                     </a>
                 </dd>
-                <xar:else />
+            <xar:else />
                 <dd>
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=memberlist">
                         <xar:mlstring>
@@ -140,12 +106,12 @@
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="rolesperpage" title="#xarML('Number of users to show on each page.')#" class="xar-form-label">
+                    <label for="itemsperpage" title="#xarML('Number of users to show on each page.')#" class="xar-form-label">
                         <xar:mlstring>
                             Users Per Page: 
                         </xar:mlstring>
                     </label>
-                    <input type="text" name="rolesperpage" id="rolesperpage" value="#xarModGetVar('roles', 'rolesperpage')#" maxlength="3" class="xar-form-textshort" />
+                    <input type="text" name="itemsperpage" id="itemsperpage" value="#xarModGetVar('roles', 'itemsperpage')#" maxlength="3" class="xar-form-textshort" />
                 </div>
                 <div class="xar-form-input-wrapper-after">
                     <xar:if condition="xarModGetVar('roles', 'SupportShortURLs')">
@@ -156,30 +122,6 @@
                     <label for="shorturls" title="#xarML('Enable short URLs for Roles module')#">
                         <xar:mlstring>
                             Enable Short URLs 
-                        </xar:mlstring>
-                    </label>
-                </div>
-                <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="xarModGetVar('roles', 'showterms')">
-                        <input type="checkbox" name="showterms" id="showterms" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="showterms" id="showterms" value="1" />
-                    </xar:if>
-                    <label for="showterms" title="#xarML('Show terms of service in Roles user menu')#">
-                        <xar:mlstring>
-                            Show Terms of Service 
-                        </xar:mlstring>
-                    </label>
-                </div>
-                <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="xarModGetVar('roles', 'showprivacy')">
-                        <input type="checkbox" name="showprivacy" id="showprivacy" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="showprivacy" id="showprivacy" value="1" />
-                    </xar:if>
-                    <label for="showprivacy" title="#xarML('Show privacy policy in Roles user menu')#">
-                        <xar:mlstring>
-                            Show Privacy Policy 
                         </xar:mlstring>
                     </label>
                 </div>
@@ -214,38 +156,17 @@
             <fieldset>
                 <legend>
                     <xar:mlstring>
-                        Login Security Options 
+                        Default Authentication Module 
                     </xar:mlstring>
                 </legend>
-                <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="xarModGetVar('roles', 'uselockout')">
-                        <input type="checkbox" name="uselockout" id="uselockout" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="uselockout" id="uselockout" value="1" />
-                    </xar:if>
-                    <label for="uselockout">
-                        <xar:mlstring>
-                            Use lockout time on incorrect login attempts? 
-                        </xar:mlstring>
-                    </label>
-                </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="lockouttries" class="xar-form-label">
+                    <label for="defaultauthmodule" title="#xarML('Select the module that manages registration and authentication of users')#" class="xar-form-label">
                         <xar:mlstring>
-                            Number of attempts before lockout 
+                            Registration/Authentication: 
                         </xar:mlstring>
-                        : 
                     </label>
-                    <input type="text" name="lockouttries" id="lockouttries" value="#xarModGetVar('roles', 'lockouttries')#" size="2" maxlength="2" />
-                </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="lockouttime" class="xar-form-label">
-                        <xar:mlstring>
-                            Length of time for lockout (minutes) 
-                        </xar:mlstring>
-                        : 
-                    </label>
-                    <input type="text" name="lockouttime" id="lockouttime" value="#xarModGetVar('roles', 'lockouttime')#" size="2" maxlength="2" />
+                    <xar:set name="defaultauthmodule">xarModGetVar('roles','defaultauthmodule')</xar:set>
+                    <xar:data-input type="module" name="defaultauthmodule" class="authentication" value="$defaultauthmodule" />
                 </div>
             </fieldset>
             <fieldset>
@@ -257,249 +178,6 @@
                 </div>
             </fieldset>
         </form>
-        <xar:comment>
-            ----------------- Begin Registration Options ------------------- 
-        </xar:comment>
-        <xar:elseif condition="$tab eq 'registration'" />
-        <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-            <fieldset>
-                <legend>
-                    <xar:mlstring>
-                        User Registration Options 
-                    </xar:mlstring>
-                </legend>
-                <div class="xar-form-input-wrapper">
-                    <label for="defaultgroup" title="#xarML('New Users automatically get assigned to this Group')#" class="xar-form-label">
-                        <xar:mlstring>
-                            Default Group For New Users: 
-                        </xar:mlstring>
-                    </label>
-                    <select name="defaultgroup" id="defaultgroup">
-                        <xar:loop name="$groups">
-                            <xar:if condition="$loop:item['name'] eq $defaultgroup">
-                                <option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#" selected="selected">
-                                    #$loop:item['name']# 
-                                </option>
-                                <xar:else />
-                                <option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#">
-                                    #$loop:item['name']# 
-                                </option>
-                            </xar:if>
-                        </xar:loop>
-                    </select>
-                </div>
-                <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="xarModGetVar('roles', 'allowregistration')">
-                        <input type="checkbox" name="allowregistration" id="allowregistration" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="allowregistration" id="allowregistration" value="1" />
-                    </xar:if>
-                    <label for="allowregistration" title="#xarML('Allow anonymous users to create accounts')#">
-                        <xar:mlstring>
-                            Allow Registration 
-                        </xar:mlstring>
-                    </label>
-                </div>
-                <xar:if condition="xarModGetVar('roles', 'allowregistration')">
-                    <div class="xar-form-input-wrapper">
-                        <label for="minage" title="#xarML('Users need to be this age or older to register')#" class="xar-form-label">
-                            <xar:mlstring>
-                                Minimum Age To Be A User: 
-                            </xar:mlstring>
-                        </label>
-                        <input type="text" name="minage" id="minage" value="#xarModGetVar('roles', 'minage')#" maxlength="3" class="xar-form-textshort" />
-                    </div>
-                    <div class="xar-form-input-wrapper-after">
-                        <xar:if condition="xarModGetVar('roles', 'chooseownpassword')">
-                            <input type="checkbox" name="chooseownpassword" id="chooseownpassword" value="1" checked="checked" />
-                            <xar:else />
-                            <input type="checkbox" name="chooseownpassword" id="chooseownpassword" value="1" />
-                        </xar:if>
-                        <label for="chooseownpassword" title="#xarML('Allow users to choose their own password when registering')#">
-                            <xar:mlstring>
-                                Users May Choose Their Own Password 
-                            </xar:mlstring>
-                        </label>
-                    </div>
-                    <xar:if condition="xarModGetVar('roles', 'chooseownpassword')">
-                        <div class="xar-form-input-wrapper">
-                            <label for="minpasslength" title="#xarML('Users must choose passwords with at least this many characters')#" class="xar-form-label">
-                                <xar:mlstring>
-                                    Minimum Password Length: 
-                                </xar:mlstring>
-                            </label>
-                            <input type="text" name="minpasslength" id="minpasslength" value="#xarModGetVar('roles', 'minpasslength')#" maxlength="3" class="xar-form-textshort" />
-                        </div>
-                    </xar:if>
-                    <div class="xar-form-input-wrapper-after">
-                        <xar:if condition="xarModGetVar('roles', 'sendnotice')">
-                            <input type="checkbox" name="sendnotice" id="sendnotice" value="1" checked="checked" />
-                            <xar:else />
-                            <input type="checkbox" name="sendnotice" id="sendnotice" value="1" />
-                        </xar:if>
-                        <label for="sendnotice" title="#xarML('Notify Admin when users create an account')#">
-                            <xar:mlstring>
-                                Send Notice To Admin Upon User Registration 
-                            </xar:mlstring>
-                        </label>
-                    </div>
-                    <div class="xar-form-input-wrapper-after">
-                        <xar:if condition="xarModGetVar('roles', 'explicitapproval')">
-                            <input type="checkbox" name="explicitapproval" id="explicitapproval" value="1" checked="checked" />
-                            <xar:else />
-                            <input type="checkbox" name="explicitapproval" id="explicitapproval" value="1" />
-                        </xar:if>
-                        <label for="explicitapproval" title="#xarML('Administrator must approve and activate new user accounts')#">
-                            <xar:mlstring>
-                                User Activation Requires Administrator Approval 
-                            </xar:mlstring>
-                        </label>
-                    </div>
-                    <div class="xar-form-input-wrapper-after">
-                        <xar:if condition="xarModGetVar('roles', 'requirevalidation')">
-                            <input type="checkbox" name="requirevalidation" id="requirevalidation" value="1" checked="checked" />
-                            <xar:else />
-                            <input type="checkbox" name="requirevalidation" id="requirevalidation" value="1" />
-                        </xar:if>
-                        <label for="requirevalidation" title="#xarML('Users must confirm their accounts via confirmation code')#">
-                            <xar:mlstring>
-                                Require Validation Of New Users 
-                            </xar:mlstring>
-                        </label>
-                    </div>
-                    <div class="xar-form-input-wrapper-after">
-                        <xar:if condition="xarModGetVar('roles', 'showdynamic')">
-                            <input type="checkbox" name="showdynamic" id="showdynamic" value="1" checked="checked" />
-                            <xar:else />
-                            <input type="checkbox" name="showdynamic" id="showdynamic" value="1" />
-                        </xar:if>
-                        <label for="showdynamic" title="#xarML('Allow users to enter dynamic property values during account creation process')#">
-                            <xar:mlstring>
-                                Show Dynamic Properties On Registration (if enabled) 
-                            </xar:mlstring>
-                        </label>
-                    </div>
-                    <div class="xar-form-input-wrapper-after">
-                        <xar:if condition="xarModGetVar('roles', 'sendwelcomeemail')">
-                            <input type="checkbox" name="sendwelcomeemail" id="sendwelcomeemail" value="1" checked="checked" />
-                            <xar:else />
-                            <input type="checkbox" name="sendwelcomeemail" id="sendwelcomeemail" value="1" />
-                        </xar:if>
-                        <label for="sendwelcomeemail" title="#xarML('Users can be notified when their account has been created')#">
-                            <xar:mlstring>
-                                Send Welcome Email On Successful Registration Of User 
-                            </xar:mlstring>
-                        </label>
-                    </div>
-                    <div class="xar-form-input-wrapper-after">
-                        <xar:if condition="xarModGetVar('roles', 'uniqueemail')">
-                            <input type="checkbox" name="uniqueemail" id="uniqueemail" value="1" checked="checked" />
-                            <xar:else />
-                            <input type="checkbox" name="uniqueemail" id="uniqueemail" value="1" />
-                        </xar:if>
-                        <label for="uniqueemail" title="#xarML('Require each user account to have a distinct email address')#">
-                            <xar:mlstring>
-                                Email Address Must Be Unique To Each Registered User 
-                            </xar:mlstring>
-                        </label>
-                    </div>
-                    <xar:comment>
-                        <div class="xar-form-input-wrapper-after">
-                            <xar:if condition="xarModGetVar('roles', 'allowinvisible')">
-                                <input type="checkbox" name="allowinvisible" id="allowinvisible" value="1" checked="checked" tabindex="1" />
-                                <xar:else />
-                                <input type="checkbox" name="allowinvisible" id="allowinvisible" value="1" tabindex="1" />
-                            </xar:if>
-                            <label for="allowinvisible" title="#xarML('Allow users to be hidden in user list')#">
-                                <xar:mlstring>
-                                    Allow Users To Be Invisible In Users List 
-                                </xar:mlstring>
-                            </label>
-                        </div>
-                    </xar:comment>
-                </xar:if>
-                <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="phase" id="phase" value="update" />
-                    <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                    <input type="submit" value="#xarML('Update Roles Configuration')#" />
-                </div>
-            </fieldset>
-        </form>
-        <xar:comment>
-            ----------------- Begin Filtering Options ------------------- 
-        </xar:comment>
-        <xar:elseif condition="$tab eq 'filtering'" />
-        <xar:if condition="xarModGetVar('roles', 'allowregistration')">
-            <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-                <fieldset>
-                    <legend>
-                        <xar:mlstring>
-                            Filtering Options 
-                        </xar:mlstring>
-                    </legend>
-                    <div class="xar-form-input-wrapper">
-                        <label for="disallowednames" title="#xarML('User names to which cannot be used')#" class="xar-form-label">
-                            <xar:mlstring>
-                                Disallowed User Names: 
-                            </xar:mlstring>
-                        </label>
-                        <div class="xar-form-container-after">
-                            <textarea name="disallowednames" id="disallowednames" class="xar-form-textarealarge">#$names# </textarea>
-                        </div>
-                        <p>
-                            <xar:mlstring>
-                                Note: Enter each name on a single line. Do not separate with comma, etc 
-                            </xar:mlstring>
-                        </p>
-                    </div>
-                    <div class="xar-form-input-wrapper">
-                        <label for="disallowedemails" title="#xarML('Email addresses which cannot be used')#" class="xar-form-label">
-                            <xar:mlstring>
-                                Disallowed Email Addresses: 
-                            </xar:mlstring>
-                        </label>
-                        <div class="xar-form-container-after">
-                            <textarea name="disallowedemails" id="disallowedemails" class="xar-form-textarealarge">#$emails# </textarea>
-                        </div>
-                        <p class="xar-clearboth">
-                            <xar:mlstring>
-                                Note: Enter each name on a single line. Do not separate with comma, etc 
-                            </xar:mlstring>
-                        </p>
-                    </div>
-                    <div class="xar-form-input-wrapper">
-                        <label for="disallowedips" title="#xarML('Deny access the site from these IP addresses')#" class="xar-form-label">
-                            <xar:mlstring>
-                                Disallowed IP Addresses: 
-                            </xar:mlstring>
-                        </label>
-                        <div class="xar-form-container-after">
-                            <textarea name="disallowedips" id="disallowedips" class="xar-form-textarealarge">#$ips# </textarea>
-                        </div>
-                        <p class="xar-clearboth">
-                            <xar:mlstring>
-                                Note: Enter each name on a single line. Do not separate with comma, etc 
-                            </xar:mlstring>
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                        <input type="hidden" name="phase" id="phase" value="update" />
-                        <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                        <input type="submit" value="#xarML('Update Roles Configuration')#" />
-                    </div>
-                </fieldset>
-            </form>
-            <xar:else />
-            <p>
-                <xar:mlstring>
-                    User Registration must be enabled. 
-                </xar:mlstring>
-            </p>
-        </xar:if>
         <xar:comment>
             ----------------- Begin User Hooks Options ------------------- 
         </xar:comment>

@@ -52,7 +52,7 @@ function blocks_userapi_getall($args)
                      btypes.xar_type
               FROM   '.$block_instances_table.' binst
               LEFT JOIN '.$block_types_table.' btypes
-              ON        btypes.xar_id = binst.xar_type_id ' . $orderby;
+              ON        btypes.xar_id = binst.xar_type_id ';
 
    
     if (!empty($bid)) {
@@ -60,11 +60,19 @@ function blocks_userapi_getall($args)
         $bindvars = array($bid);
     } elseif (!empty($name)) {
         $query .= ' WHERE binst.xar_name = ?';
-        $bindvars = array($name);
+        $bindvars = array($name); 
+    } elseif (!empty($filter)) {
+        $query .= ' WHERE lower(binst.xar_name) LIKE ?';
+        $bindvars = array('%' . strtolower($filter) . '%');
     }
+    $query .= ' ' . $orderby;
 
     // Return if no details retrieved.
-    $result =& $dbconn->Execute($query,$bindvars);
+    if (isset($startat) && isset($rowstodo)) {
+        $result =& $dbconn->SelectLimit($query,$rowstodo,$startat-1,$bindvars);
+    } else {
+        $result =& $dbconn->Execute($query,$bindvars);
+    }
     if (!$result) {return;}
 
     // The main result array.

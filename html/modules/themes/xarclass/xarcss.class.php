@@ -10,7 +10,7 @@
  * @subpackage Themes module
  */
 
-/** Xaraya CSS class library
+/* Xaraya CSS class library
  *
  * @author Andy Varganov <andyv@xaraya.com>
  */

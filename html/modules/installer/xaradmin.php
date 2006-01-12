@@ -50,7 +50,7 @@ function installer_admin_phase1()
         foreach ($locales as $locale) {
             // Get the isocode and the description
             // Before we load the locale data, let's check if the locale is there
-            
+
             // <marco> This check is really not necessary since available locales are
             // already determined from existing files. The relative code is in install.php
             //$fileName = xarCoreGetVarDirPath() . "/locales/$locale/locale.xml";
@@ -88,7 +88,7 @@ function installer_admin_phase2()
 
 /**
  * Check whether directory permissions allow to write and read files inside it
- * 
+ *
  * @access private
  * @param string dirname directory name
  * @return bool true if directory is writable, readable and executable
@@ -404,7 +404,7 @@ function installer_admin_phase5()
             // 1. the drop table drops the sequence while the table gets dropped in the second statement
             //    so if that fails, the table remains while the sequence is gone, at least transactions is needed
             // 3. generating sql and executing in 2 parts sucks, wrt encapsulation
-            $sql = xarDBDropTable($table,$dbType); 
+            $sql = xarDBDropTable($table,$dbType);
             $result = $dbconn->Execute($sql);
             if(!$result) return;
         }
@@ -463,6 +463,12 @@ function installer_admin_bootstrap()
     // load modules into *_modules table
     if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
 
+	//TODO: improve this once we know where authentication modules are headed
+	$regid=xarModGetIDFromName('authentication');
+	if (empty($regid)) {
+		die(xarML('I cannot load the authentication module. Please make it available and reinstall'));
+	}
+
     // Set the state and activate the following modules
     $modlist=array('roles','privileges','blocks','themes');
     foreach ($modlist as $mod) {
@@ -517,15 +523,11 @@ function installer_admin_bootstrap()
     // Set module state to active
     if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) return;
 
-    // save the uids of the default roles for later
-    $role = xarFindRole('Everybody');
-    xarModSetVar('roles', 'everybody', $role->getID());
-    $role = xarFindRole('Anonymous');
-    xarConfigSetVar('Site.User.AnonymousUID', $role->getID());
-    // set the current session information to the right anonymous uid
-    xarSession_setUserInfo($role->getID(), 0);
-    $role = xarFindRole('Admin');
-    xarModSetVar('roles', 'admin', $role->getID());
+# --------------------------------------------------------
+#
+# Create wrapper DD objects for the native itemtypes of the privileges module
+#
+	if (!xarModAPIFunc('privileges','admin','createobjects')) return;
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
 }
@@ -725,6 +727,16 @@ function installer_admin_create_administrator()
             return;
         }
     }
+
+    // Initialise authentication
+    // TODO: this is happening late here because we need to create a block
+	$regid = xarModGetIDFromName('authentication');
+	if (isset($regid)) {
+		if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
+		// Activate the module
+		if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+	}
+
     xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
 }
 
@@ -964,7 +976,8 @@ function installer_admin_confirm_configuration()
         $func = "installer_" . basename(strval($configuration),'.conf.php') . "_configuration_load";
         $func($chosen);
         $content['marker'] = '[x]';                                           // create the user menu
-        $content['displaymodules'] = 1;
+        $content['displaymodules'] = 'All';
+        $content['modulelist'] = '';
         $content['content'] = '';
 
         // Load up database
@@ -1063,7 +1076,8 @@ function installer_admin_cleanup()
 
     list ($rightBlockGroup) = $result->fields;
 
-    $loginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+/*
+	$loginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
                                     array('module' => 'roles',
                                           'type'   => 'login'));
 
@@ -1085,7 +1099,7 @@ function installer_admin_cleanup()
             return;
         }
     }
-
+*/
     $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
               WHERE     xar_name = 'header'";

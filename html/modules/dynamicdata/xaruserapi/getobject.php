@@ -1,7 +1,5 @@
 <?php
 /**
- * Get a dynamic object
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -22,6 +20,11 @@
  */
 function &dynamicdata_userapi_getobject($args)
 {
+    if (empty($args['itemtype']) && !empty($args['name'])) {
+        $info = Dynamic_Object_Master::getObjectInfo($args);
+        $args['moduleid'] = $info['moduleid'];
+        $args['itemtype'] = $info['itemtype'];
+    }
     if (empty($args['moduleid']) && !empty($args['module'])) {
        $args['moduleid'] = xarModGetIDFromName($args['module']);
     }

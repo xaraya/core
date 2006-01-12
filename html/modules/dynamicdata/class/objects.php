@@ -1,7 +1,6 @@
 <?php
 /**
  * Metaclass for Dynamic Objects
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -1015,11 +1014,16 @@ class Dynamic_Object extends Dynamic_Object_Master
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
-                    $args['properties'][$name] = & $this->properties[$name];
+                    $thisprop = $this->properties[$name];
+                    if ($thisprop->status != 3)
+                        $args['properties'][$name] = & $this->properties[$name];
                 }
             }
         } else {
-            $args['properties'] = & $this->properties;
+            foreach ($this->properties as $property) {
+                if ($property->status != 3)
+                    $args['properties'][$property->name] = $property;
+            }
         }
 
         // pass some extra template variables for use in BL tags, API calls etc.
@@ -1741,11 +1745,15 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
-                    $args['properties'][$name] = & $this->properties[$name];
+                    if ($this->properties[$name]->status != 3)
+                        $args['properties'][$name] = & $this->properties[$name];
                 }
             }
         } else {
-            $args['properties'] = & $this->properties;
+            foreach ($this->properties as $property) {
+                if ($property->status != 3)
+                    $args['properties'][$property->name] = $property;
+            }
         }
 
         $args['items'] = & $this->items;
@@ -1944,11 +1952,16 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
-                    $args['properties'][$name] = & $this->properties[$name];
+                    $thisprop = $this->properties[$name];
+                    if ($thisprop->status != 3)
+                        $args['properties'][$name] = & $this->properties[$name];
                 }
             }
         } else {
-            $args['properties'] = & $this->properties;
+            foreach ($this->properties as $property) {
+                if ($property->status != 3)
+                    $args['properties'][$property->name] = $property;
+            }
         }
 
         $args['items'] = & $this->items;

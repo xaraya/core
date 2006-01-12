@@ -1,23 +1,23 @@
 #
-#	Name:             KOI8-U to Unicode
-#	Unicode version:  3.0
-#	Table version:    1.0
-#	Table format:     Format A
-#	Date:             18 October 2003
-#	Authors:          Mikolaj Jedrzejak <mikolajj@op.pl>
+#    Name:             KOI8-U to Unicode
+#    Unicode version:  3.0
+#    Table version:    1.0
+#    Table format:     Format A
+#    Date:             18 October 2003
+#    Authors:          Mikolaj Jedrzejak <mikolajj@op.pl>
 #                    (I'm not an author :-) I have just rote down few things from www.net.ua)
 #
-#	Format:  Three columns
-#		 Column #1 is the KOI8-U code (in hex as 0xXX)
-#		 Column #2 is the Unicode (in hex as 0xXXXX)
-#		 Column #3 the Unicode name (follows a comment sign, '#')
+#    Format:  Three columns
+#         Column #1 is the KOI8-U code (in hex as 0xXX)
+#         Column #2 is the Unicode (in hex as 0xXXXX)
+#         Column #3 the Unicode name (follows a comment sign, '#')
 #
-#	The entries are in KOI8-U order.
+#    The entries are in KOI8-U order.
 #
-#	Version history
-#	1.0 version: created.
+#    Version history
+#    1.0 version: created.
 #
-#	Any comments or problems, contact at www.net.ua
+#    Any comments or problems, contact at www.net.ua
 #
 0x00   0x0000    #NULL (NUL)
 0x01   0x0001    #START OF HEADING (SOH)
