@@ -632,10 +632,8 @@ function xarException__formatStack($format,$stacktype = "ERROR")
  * For several areas there are specific bridges to route errors into
  * the exception subsystem:
  *
- * Handlers:
+ * Handlers: (most of them have moved to exceptions/handlers.php
  * 1. assert failures -> xarException__assertErrorHandler($script,$line,$code)
- * 2. php Errors      -> xarException__phpErrorHandler($errorType, $errorString, $file, $line)
- * 3. exceptions      -> xarException__ExceptionHandler(Exception $exceptionObject) // See top of this file
  */
 
 /**
@@ -656,18 +654,6 @@ function xarException__assertErrorHandler($script,$line,$code)
     $msg = "ASSERTION FAILED: $script [$line] : $code";
     // TODO: classify the exception, we never want to use the base object directly.
     throw new SRCException($msg, E_XAR_ASSERT);
-}
-
-function xarCoreExceptionFree()
-{
-    global $CoreStack;
-    $CoreStack->initialize();
-}
-
-function xarIsCoreException()
-{
-    global $CoreStack;
-    return $CoreStack->size() > 1;
 }
 
 ?>
