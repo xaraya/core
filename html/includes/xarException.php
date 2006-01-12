@@ -330,7 +330,7 @@ function xarErrorSet($major, $errorID, $value = NULL,$throw=true)
         throw new Exception('Attempting to set an error with an invalid major value', $major);
     }
 
-    $stack = xarException__backTrace();
+    $stack = debug_backtrace();
     if (!is_object($value)) {
 
         // The error passed in is just a msg or an identifier, try to construct
@@ -779,23 +779,6 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
     }
 
     throw new PHPException($msg,$errorType);
-}
-
-/**
- * Returns a debug back trace
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access private
- * @return array back trace
- */
-function xarException__backTrace()
-{
-    $btFuncName = array();
-
-    if (function_exists('debug_backtrace')) {
-        $btFuncName = debug_backtrace();
-    }
-    return $btFuncName;
 }
 
 function xarCoreExceptionFree()
