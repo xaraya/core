@@ -39,7 +39,7 @@ final class ExceptionHandlers
                           'hint'  => 'HINT TBD', 'stack' => '<pre>'. $e->getTraceAsString()."</pre>",
                           'product' => 'Product TBD', 'component' => 'Component TBD');
             // If we have em, use em
-            if(function_exists('xarTplGetThemeDir') && function_exist('xarTplFile')) {
+            if(function_exists('xarTplGetThemeDir') && function_exists('xarTplFile')) {
                 $theme_dir = xarTplGetThemeDir(); $template="systemerror";
                 if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
                     $msg = xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', $data);
