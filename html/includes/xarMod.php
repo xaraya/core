@@ -848,8 +848,6 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     }
 
     $tplData = $modFunc($args);
-    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
-
     if (!is_array($tplData)) {
         return $tplData;
     }
@@ -1349,7 +1347,6 @@ function xarModIsAvailable($modName, $type = 'module')
  * @return mixed output from hooks, or null if there are no hooks
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
  * @todo <marco> #1 add BAD_PARAM exception
- * @todo <marco> #2 check way of hanlding exception
  * @todo <marco> <mikespub> re-evaluate how GUI / API hooks are handled
  * @todo add itemtype (in extrainfo or as additional parameter)
  */
@@ -1379,11 +1376,6 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
     }
     xarLogMessage("xarModCallHooks: getting $hookObject $hookAction hooks for $modName.$callerItemType");
     $hooklist = xarModGetHookList($modName, $hookObject, $hookAction, $callerItemType);
-
-    // TODO: #2
-    if (!isset($hooklist) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return;
-    }
 
     $output = array();
     $isGUI = false;

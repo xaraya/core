@@ -28,8 +28,6 @@
 * DEPRECATED XAR FUNCTIONS
 * xarModEmailURL        -> no direct equivalent
 * xarVarPrepForStore()  -> use bind vars or dbconn->qstr() method
-* xarExceptionSet()     -> throw Exception
-* xarExceptionMajor()   -> xarCurrentErrorType()
 * xarExceptionId()      -> xarCurrentErrorID()
 * xarExceptionValue()   -> xarCurrentError()
 * xarExceptionFree()    -> xarErrorFree()
@@ -89,14 +87,6 @@ function xarUser_getThemeName()
         return;
     }
     $themeName = xarUserGetVar('Theme');
-    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        // Here we can't raise an exception
-        // so what we can do here is only to log the exception
-        // and call xarExceptionFree
-        //xarLogException(XARLOG_LEVEL_ERROR);
-        //xarExceptionFree();
-        return;
-    }
     return $themeName;
 }
 
@@ -133,21 +123,6 @@ function xarModEmailURL($modName = NULL, $modType = 'user', $funcName = 'main', 
 // Let's depreciate it for 1.0.0  next release I will remove it.
     if (empty($modName)) {
         return xarServerGetBaseURL() . 'index.php';
-    }
-
-    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        // If exceptionId is MODULE_FUNCTION_NOT_EXIST there's no problem,
-        // this exception means that the module does not support short urls
-        // for this $modType.
-        // If exceptionId is MODULE_FILE_NOT_EXIST there's no problem too,
-        // this exception means that the module does not have the $modType API.
-        if (xarExceptionId() != 'MODULE_FUNCTION_NOT_EXIST' &&
-            xarExceptionId() != 'MODULE_FILE_NOT_EXIST') {
-            // In all other cases we just log the exception since we must always
-            // return a valid url
-            xarLogException(XARLOG_LEVEL_ERROR);
-        }
-        xarExceptionFree();
     }
 
     // The arguments
@@ -214,16 +189,6 @@ function xarVarPrepForStore()
         return $resarray;
     }
 }
-
-function xarExceptionSet($major, $errorID, $value = NULL)
-{
-    xarErrorSet($major, $errorID, $value);
-}
-
-function xarExceptionMajor()
-{
-    return xarCurrentErrorType();
-}    // deprecated
 
 /**
 * Gets the identifier of current error

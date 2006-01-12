@@ -111,7 +111,6 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
     //        another way? Maybe record the exception stack before we go
     //        into the foreach loop below (which can kill any exceptions
     //        that are set prior to entering this function)....
-    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
     foreach($GLOBALS['xarUser_authenticationModules'] as $authModName) {
         // Bug #918 - If the module has been deactivated, then continue
         // checking with the next available authentication module
@@ -211,7 +210,7 @@ function xarUserLogOut()
 
     // Reset user session information
     $res = xarSession_setUserInfo(_XAR_ID_UNREGISTERED, 0);
-    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+    if (!isset($res)) {
         return; // throw back
     }
 
@@ -309,16 +308,6 @@ function xarUserGetNavigationLocale()
         if (!isset($locale)) {
             // CHECKME: use dynamicdata for roles, module user variable and/or
             // session variable (see also 'timezone' in xarMLS_userOffset())
-            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                // Here we need to return always a meaningfull result,
-                // so what we can do here is only to log the exception
-                // and call xarErrorFree
-                // xarLogException(XARLOG_LEVEL_ERROR);
-                // This will Free all exceptions, including the ones pending
-                // as these are still unhandled if they are here i commented it out
-                // for now, as we had lots of exceptions hiding on us (MrB)
-                //xarErrorFree();
-            }
             $locale = xarMLSGetSiteLocale();
             xarSessionSetVar('navigationLocale', $locale);
         }
@@ -636,7 +625,6 @@ function xarUserSetVar($name, $value, $userId = NULL)
                              'value' => $value,
                              'prop_id' => $prop_id,
                              'prop_dtype' => $prop_dtype))) {
-        assert('xarCurrentErrorType() != XAR_NO_EXCEPTION');
         return;
     }
 

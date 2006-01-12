@@ -481,21 +481,6 @@ function xarRequestGetInfo()
                 }
                 $loopHole = NULL;
             }
-            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                // If exceptionId is MODULE_FUNCTION_NOT_EXIST there's no problem,
-                // this exception means that the module does not support short urls
-                // for this $modType.
-                // If exceptionId is MODULE_FILE_NOT_EXIST there's no problem too,
-                // this exception means that the module does not have the $modType API.
-
-                // IMPORTANT: As this is exactly the same construct as in xarModUrl and that was
-                // causing a lot of exceptions to be hidden, i commented this one out as well
-                // but i haven't been able to trace exception hiding back to this line. If it behaves
-                // wrong, and is still needed uncomment it (MrB)
-                //xarErrorFree();
-
-                // <mikespub> see above :)
-            }
         }
     }
 
@@ -574,11 +559,6 @@ function xarRequest__resolveModuleAlias($aliasModName)
  */
 function xarResponseRedirect($redirectURL)
 {
-
-    // First checks if there's a pending exception, if so does not redirect browser
-    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return false;
-
-
     if (headers_sent() == true) return false;
 
     // MrB: We only do this for pn Legacy, consider removing it

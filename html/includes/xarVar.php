@@ -218,8 +218,6 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
 
     $result = xarVarValidate($validation, $value, $supress, $name);
 
-    if (xarCurrentErrorType()) {return;} //Throw back
-
     if (!$result) {
     // CHECKME:  even for the XARVAR_DONT_SET flag !?
         // if you set a non-null default value, assume you want to use it here

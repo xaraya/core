@@ -100,7 +100,6 @@ function xarBlock_render($blockinfo)
         $blockinfo = $displayFuncName($blockinfo);
 
         if (!isset($blockinfo)) {
-            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {return;} // throw back
             return '';
         }
 
@@ -259,13 +258,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
             }
             $output .= $blockoutput;
 
-            // don't throw back exception for broken blocks
-            //if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back
-            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                $output .= xarErrorRender('template');
-                // We handled the exception(s) so we can clear it
-                xarErrorFree();
-            }
+
         }
     }
 
@@ -313,14 +306,6 @@ function xarBlock_renderBlock($args)
                 xarBlockSetCached($cacheKey, 'block', $blockoutput);
             }
             $output = $blockoutput;
-
-            // don't throw back exception for broken blocks
-            //if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back
-            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                $output .= xarErrorRender('template');
-                // We handled the exception(s) so we can clear it
-                xarErrorFree();
-            }
         }
     } else {
         // TODO: return NULL to indicate no block found?

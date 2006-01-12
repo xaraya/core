@@ -1457,7 +1457,7 @@ function xarTpl__loadFromFile($sourceFileName)
         $blCompiler = xarTpl__getCompilerInstance();
         $templateCode = $blCompiler->compileFile($sourceFileName);
         // TODO: CHECK THIS, we might not need this anymore
-        if (!isset($templateCode) || xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+        if (!isset($templateCode)) {
             return; // exception! throw back
         }
         if ($GLOBALS['xarTpl_cacheTemplates']) {

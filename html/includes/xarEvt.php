@@ -202,10 +202,8 @@ function xarEvt__notify($modName, $eventName, $value, $modDir = NULL)
     
      if (isset($funcToRun)) {
         $funcToRun($value);
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
      } elseif (isset($funcToRunGeneral)) {
         $funcToRunGeneral($eventName, $value);
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
      }
 
     // Nothing to be done, be silent about it
