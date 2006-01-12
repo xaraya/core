@@ -26,35 +26,33 @@ final class ExceptionHandlers
      */
     public static function defaulthandler(Exception $e)
     {
-        // This handles exceptions, which can arrive directly or through xarErrorSet.
-        // if through xarErrorSet there will be something waiting for us on the stack
-        // Poor mans final fallback for unhandled exceptions (simulate the same rendering as first part of the if
-        $data = array('major' => 'MAJOR TBD (Code was: '. $e->getCode().')',
-                      'type'  => get_class($e), 'title' => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
-                      'short' => $e->getMessage(), 'long' => 'LONG msg TBD',
-                      'hint'  => 'HINT TBD', 'stack' => '<pre>'. $e->getTraceAsString()."</pre>",
-                      'product' => 'Product TBD', 'component' => 'Component TBD');
-        // If we have em, use em
-        if(function_exists('xarTplGetThemeDir') && function_exists('xarTplFile')) {
-            $theme_dir = xarTplGetThemeDir(); $template="systemerror";
-            if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
-                $msg = xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', $data);
-            } else {
-                $msg = xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
-            }
-        } else {
-            // no templating yet, pass direct and render as rawhtml
-            ExceptionHandlers::RenderRaw($e);
-            die();
-        }
-
         // Make an attempt to render the page, hoping we have everything in place still
-        // CHECKME: Hmm, is this a problem, as we're already in a handler
+        // CHECKME: Hmm, is this a problem, as we're already in a handler?
         //          If it is not, then we really only have to consider really fatal errors 
         //          (which wont get caught by any handler) and make sure the rest ends up
         //          in the bone handler
         try {
-            echo xarTpl_renderPage($msg);
+            // Try to get the full path location out of the trace
+            $root  = str_replace('includes/exceptions','',dirname(__FILE__));
+            $trace = str_replace($root,'/',$e->getTraceAsString());
+            $data = array('major' => 'MAJOR TBD (Code was: '. $e->getCode().')',
+                          'type'  => get_class($e), 'title' => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
+                          'short' => $e->getMessage(), 'long' => 'LONG msg TBD',
+                          'hint'  => 'HINT TBD', 'stack' => "<pre>$trace</pre>",
+                          'product' => 'Product TBD', 'component' => 'Component TBD');
+            // If we have em, use em
+            if(function_exists('xarTplGetThemeDir') && function_exists('xarTplFile')) {
+                $theme_dir = xarTplGetThemeDir(); $template="systemerror";
+                if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
+                    $msg = xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', $data);
+                } else {
+                    $msg = xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
+                }            
+                echo xarTpl_renderPage($msg);
+            } else {
+                // Rethrow it, we cant handle it.
+                throw $e;
+            }
         } catch( Exception $e) {
             // Oh well, pick up the bones
             ExceptionHandlers::bone($e);
