@@ -63,7 +63,7 @@ final class ExceptionHandlers
     // Lowest level handler, should always work, no assumptions whatsoever
     public static function bone(Exception $e)
     {
-        ExceptionHandlers::RenderRaw($e);
+        echo ExceptionHandlers::RenderRaw($e);
     }
 
     /**
@@ -73,7 +73,7 @@ final class ExceptionHandlers
      * @access private
      * @return void
      */
-    function phperrors($errorType, $errorString, $file, $line)
+    public static function phperrors($errorType, $errorString, $file, $line)
     {
         //Checks for a @ presence in the given line, should stop from setting Xaraya errors
         $errLevel = xarCore_getSystemVar('Exception.ErrorLevel',true);
@@ -82,6 +82,7 @@ final class ExceptionHandlers
             // Log the message so it is not lost.
             // TODO: make this message available to calling functions that suppress errors through '@'.
             $msg = "PHP error code $errorType at line $line of $file: $errorString";
+            // TODO: How do we now xarLogMessage is available?
             xarLogMessage($msg);
             return; // no need to raise exception
         }
@@ -90,20 +91,6 @@ final class ExceptionHandlers
         //The variable values during the error...
         $msg = "At: " . $file." (Line: " . $line.")\n". $errorString ;
 
-        // Trap for errors that are on the so-called "safe path" for rendering
-        // Need to revert to raw HTML here
-        // FIXME: Do we still need this, since we dont redirect at all anymore now
-        if (isset($_GET['func']) && $_GET['func'] == 'systemexit') {
-            echo '<font color="red"><b>^Error Condition<br /><br />see below<br /><br /></b></font>';
-            $rawmsg = "</table><div><hr /><b>Recursive Error</b><br /><br />";
-            $rawmsg .= "Normal Xaraya error processing has stopped because of a recurring PHP error. <br /><br />";
-            $rawmsg .= "The last registered error message is: <br /><br />";
-            $rawmsg .= "PHP Error code: " . $errorType . "<br /><br />";
-            $rawmsg .= $msg . "</div>";
-            echo $rawmsg;
-            exit;
-        } 
-        
         // Make cached files also display their source file if it's a template
         // This is just for convenience when giving support, as people will probably
         // not look in the CACHEKEYS file to mention the template.
@@ -167,22 +154,12 @@ final class ExceptionHandlers
                     }
                 }
             }
-            // Fall-back in case it's too late to redirect
-            // FIXME: Do we still need this, as we dont redirect anymore now.
-            if (headers_sent() == true) {
-                $rawmsg = "Normal Xaraya error processing has stopped because of an error encountered. <br /><br />";
-                $rawmsg .= "The last registered error message is: <br /><br />";
-                $rawmsg .= "Product: " . $product . "<br />";
-                $rawmsg .= "Component: " . $component . "<br />";
-                $rawmsg .= "PHP Error code: " . $errorType . "<br /><br />";
-                $rawmsg .= $msg;
-                $msg = $rawmsg;
-            }
         }
         // Throw an exception to let the default handler handle the rest.
         throw new PHPException($msg,$errorType);
     }
 
+    // Private methods
     private static function RenderRaw(Exception $e)
     {
         // TODO: how many assumptions can we make about the rendering capabilities of the client here?
@@ -191,7 +168,7 @@ final class ExceptionHandlers
         $out.= $e->getMessage()."\n\n";
         $out.= $e->getTraceAsString();
         $out.= "</pre>";
-        echo $out;
+        return $out;
     }
 }
 ?>
