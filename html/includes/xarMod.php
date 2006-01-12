@@ -1467,8 +1467,8 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
 
     // Get applicable hooks
     // New query:
-    $query ="SELECT DISTINCT tmods.xar_name, smods.xar_name, 
-	                         hooks.xar_tarea, hooks.xar_ttype, hooks.xar_tfunc, hooks.xar_order
+    $query ="SELECT DISTINCT hooks.xar_tarea, tmods.xar_name, 
+	                         hooks.xar_ttype, hooks.xar_tfunc, hooks.xar_order
              FROM xar_hooks hooks, xar_modules tmods, xar_modules smods
              WHERE hooks.xar_tmodid = tmods.xar_id AND
                    hooks.xar_smodid = smods.xar_id AND
