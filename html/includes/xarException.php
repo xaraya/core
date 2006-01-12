@@ -129,7 +129,7 @@ include "includes/exceptions/types.php";
 // And the handlers to deal with them
 include "includes/exceptions/handlers.php";
 
-global $CoreStack, $ErrorStack;
+global $ErrorStack;
 
 /**
  * Initializes the Error Handling System
@@ -141,23 +141,14 @@ global $CoreStack, $ErrorStack;
  */
 function xarError_init($systemArgs, $whatToLoad)
 {
-    global $CoreStack,$ErrorStack; // Pretty much obsolete, now we treat errors like exceptions
-
     // Send all exceptions to the default exception handler, no excuses
     set_exception_handler(array('ExceptionHandlers','defaulthandler'));
 
     // Do we want our error handler or the native one?
-    // FIXME: review this, we probably want a decicated exception handler class 
-    //        sprinkled with all sorts of handlers.
+    // FIXME: do we still want this variable, seems odd
     if ($systemArgs['enablePHPErrorHandler'] == true ) { 
         set_error_handler(array('ExceptionHandlers','phperrors'));
     }
-
-    $CoreStack = new xarExceptionStack();
-    $CoreStack->initialize();
-
-    $ErrorStack = new xarExceptionStack();
-    xarErrorFree();
 
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarError__shutdown_handler');
@@ -186,75 +177,21 @@ function xarError__shutdown_handler()
  * @param value error object
  * @return void
  */
-function xarErrorSet($major, $errorID, $value = NULL,$throw=true)
+function xarErrorSet($major, $errorID, $value = NULL)
 {
-    global $ErrorStack;
+    // MINIMAL backward compatability 
 
-    if ($major != XAR_NO_EXCEPTION &&
-        $major != XAR_USER_EXCEPTION &&
-        $major != XAR_SYSTEM_EXCEPTION &&
-        $major != XAR_SYSTEM_MESSAGE) {
-        throw new Exception('Attempting to set an error with an invalid major value', $major);
+    // If $value is a descendant from the old xarException class, get the message from it
+    if(is_a($value,'xarException')) {
+        $msg = $value->toString();
+    } else { 
+        // Probably already a string, use it.
+        $msg = $value;
     }
-
-    $stack = debug_backtrace();
-    if (!is_object($value)) {
-
-        // The error passed in is just a msg or an identifier, try to construct
-        // the object here.
-        if (is_string($value)) {
-            // A msg was passed in, use that
-            $value = $value; // possibly redundant
-        } else {
-            if ($major == XAR_SYSTEM_EXCEPTION) {
-                $value = '';
-            } else {
-                $value = "No further information available.";
-            }
-        }
-
-        if ($major == XAR_SYSTEM_EXCEPTION) {
-            $obj = new SystemException($value);
-            //throw new SystemException($value);
-        } elseif ($major == XAR_USER_EXCEPTION){
-            $obj = new DefaultUserException($value);
-            // throw new DefaultUserException($value);
-        } elseif ($major == XAR_SYSTEM_MESSAGE){
-            // What to do with this?
-            $obj = new UserMessage($value);
-        } else {
-            // Likewise
-            $obj = new NoException($value);
-        }
-
-    }
-    else {
-        $obj = $value;
-    }
-
-    // At this point we have a nice error object
-    // Now add whatever properties are still missing
-    $obj->setID($errorID);
-    $obj->setStack($stack);
-    $obj->major = $major;
-
-    // Stick the object on the error stack
-    $ErrorStack->push($obj);
-    // If the XARDBG_EXCEPTIONS flag is set we log every raised error.
-    // This can be useful in debugging since EHS is not so perfect as a native
-    // EHS could be (read damned PHP language :).
-    if (xarCoreIsDebugFlagSet(XARDBG_EXCEPTIONS)) {
-        // TODO: remove again once xarLogException works
-        if ($errorID == "ErrorCollection") $obj = $obj->exceptions[0];
-        xarLogMessage("Logged error: " . $obj->toString(), XARLOG_LEVEL_ERROR);
-        if (!empty($stack) && $major != XAR_USER_EXCEPTION)
-            // Simulate a backtrace
-            $e = new Exception($obj->toString); $backTrace = $e->getTraceAsString();
-            xarLogMessage("Logged error backtrace: $backTrace \n",XARLOG_LEVEL_ERROR);
-        //xarLogException();
-    }
-    // FIXME: Get rid of the $throw parameter, it is temporary
-    if($throw) throw new Exception($obj->getLong(),$obj->major);
+    if($msg=='') $msg = 'No information supplied';
+    // TODO: we should map errorID to an exception class to be a little friendlier
+    // Raise a special exception, pointing people to not use this ErrorSet anymore.
+    throw new ErrorDeprecationException(array($msg,$major));
 }
 
 /**
@@ -265,14 +202,12 @@ function xarErrorSet($major, $errorID, $value = NULL,$throw=true)
  *
  * @author Marco Canini <marco@xaraya.com>
  * @access public
+ * @deprec 2006-01-12
  * @return integer the major value of raised error
  */
 function xarCurrentErrorType()
 {
-    global $ErrorStack;
-    if ($ErrorStack->isempty()) return false;
-    $err = $ErrorStack->peek();
-    return $err->getMajor();
+    return;
 }
 
 /**
@@ -283,14 +218,12 @@ function xarCurrentErrorType()
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
+ * @deprec 2006-01-12
  * @return string the error identifier
  */
 function xarCurrentErrorID()
 {
-    global $ErrorStack;
-    if ($ErrorStack->isempty()) return false;
-    $err = $ErrorStack->peek();
-    return $err->getID();
+    return;
 }
 
 /**
@@ -301,13 +234,12 @@ function xarCurrentErrorID()
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
+ * @deprec 2006-01-12
  * @return mixed error value object
  */
 function xarCurrentError()
 {
-    global $ErrorStack;
-    if ($ErrorStack->isempty()) return false;
-    return $ErrorStack->peek();
+    return;
 }
 
 /**
@@ -319,12 +251,12 @@ function xarCurrentError()
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
+ * @deprec 2006-01-12
  * @return void
  */
 function xarErrorFree()
 {
-    global $ErrorStack;
-    $ErrorStack->initialize();
+    return;
 }
 
 /**
@@ -338,9 +270,7 @@ function xarErrorFree()
  */
 function xarErrorHandled()
 {
-    global $ErrorStack;
-    if (!$ErrorStack->isempty())
-    $ErrorStack->pop();
+    return;
 }
 
 /**
@@ -463,14 +393,11 @@ function xarErrorGet($stacktype = "ERROR",$format='data')
 function xarException__formatStack($format,$stacktype = "ERROR")
 {
     global $ErrorStack;
-    global $CoreStack;
 
-    if ($stacktype == "ERROR") $stack = $ErrorStack;
-    else $stack = $CoreStack;
+    $stack = $ErrorStack;
 
     $formattedmsgs = array();
     while (!$stack->isempty()) {
-
         $error = $stack->pop();
 
         // FIXME: skip noexception because it's not rendered well

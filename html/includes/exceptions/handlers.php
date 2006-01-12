@@ -21,46 +21,46 @@ final class ExceptionHandlers
      * We define this handler here, because it needs to be defined before set_exception_handler
      *
      * @param  Exception $exception The exception object
-     * @todo Make exception handling the default error handling and get rid of the redundant parts
+     * @todo Get rid of the redundant parts
      * @return void
      */
     public static function defaulthandler(Exception $e)
     {
         // This handles exceptions, which can arrive directly or through xarErrorSet.
         // if through xarErrorSet there will be something waiting for us on the stack
-        if(xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            // TODO: phase this out
-            $msg = xarErrorRender('template');
-        } else {
-            // Poor mans final fallback for unhandled exceptions (simulate the same rendering as first part of the if
-            $data = array('major' => 'MAJOR TBD (Code was: '. $e->getCode().')',
-                          'type'  => get_class($e), 'title' => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
-                          'short' => $e->getMessage(), 'long' => 'LONG msg TBD',
-                          'hint'  => 'HINT TBD', 'stack' => '<pre>'. $e->getTraceAsString()."</pre>",
-                          'product' => 'Product TBD', 'component' => 'Component TBD');
-            // If we have em, use em
-            if(function_exists('xarTplGetThemeDir') && function_exists('xarTplFile')) {
-                $theme_dir = xarTplGetThemeDir(); $template="systemerror";
-                if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
-                    $msg = xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', $data);
-                } else {
-                    $msg = xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
-                }
+        // Poor mans final fallback for unhandled exceptions (simulate the same rendering as first part of the if
+        $data = array('major' => 'MAJOR TBD (Code was: '. $e->getCode().')',
+                      'type'  => get_class($e), 'title' => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
+                      'short' => $e->getMessage(), 'long' => 'LONG msg TBD',
+                      'hint'  => 'HINT TBD', 'stack' => '<pre>'. $e->getTraceAsString()."</pre>",
+                      'product' => 'Product TBD', 'component' => 'Component TBD');
+        // If we have em, use em
+        if(function_exists('xarTplGetThemeDir') && function_exists('xarTplFile')) {
+            $theme_dir = xarTplGetThemeDir(); $template="systemerror";
+            if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
+                $msg = xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', $data);
             } else {
-                // no templating yet, pass direct and render as rawhtml
-                ExceptionHandlers::RenderRaw($e);
-                die();
+                $msg = xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
+            }
+        } else {
+            // no templating yet, pass direct and render as rawhtml
+            ExceptionHandlers::RenderRaw($e);
+            die();
         }
-        }
-        xarErrorFree();
+
         // Make an attempt to render the page, hoping we have everything in place still
+        // CHECKME: Hmm, is this a problem, as we're already in a handler
+        //          If it is not, then we really only have to consider really fatal errors 
+        //          (which wont get caught by any handler) and make sure the rest ends up
+        //          in the bone handler
         try {
             echo xarTpl_renderPage($msg);
         } catch( Exception $e) {
             // Oh well, pick up the bones
-            ExceptionHandlers::RenderRaw($e);
+            ExceptionHandlers::bone($e);
         }
     }
+
 
     // Lowest level handler, should always work, no assumptions whatsoever
     public static function bone(Exception $e)
@@ -77,9 +77,7 @@ final class ExceptionHandlers
      */
     function phperrors($errorType, $errorString, $file, $line)
     {
-        global $CoreStack;
-
-        //Checks for a @ presence in the given line, should stop from setting Xaraya or DB errors
+        //Checks for a @ presence in the given line, should stop from setting Xaraya errors
         $errLevel = xarCore_getSystemVar('Exception.ErrorLevel',true);
         if(!isset($errLevel)) $errLevel = E_STRICT;
         if (!error_reporting() || $errorType >= $errLevel) {
@@ -96,6 +94,7 @@ final class ExceptionHandlers
 
         // Trap for errors that are on the so-called "safe path" for rendering
         // Need to revert to raw HTML here
+        // FIXME: Do we still need this, since we dont redirect at all anymore now
         if (isset($_GET['func']) && $_GET['func'] == 'systemexit') {
             echo '<font color="red"><b>^Error Condition<br /><br />see below<br /><br /></b></font>';
             $rawmsg = "</table><div><hr /><b>Recursive Error</b><br /><br />";
@@ -137,8 +136,6 @@ final class ExceptionHandlers
             $rawmsg .= "PHP Error code: " . $errorType . "<br /><br />";
             $rawmsg .= $msg;
             $msg = $rawmsg;
-            //echo $rawmsg;
-            //exit;
         } else {
             if ($GLOBALS['xarRequest_allowShortURLs'] && isset($GLOBALS['xarRequest_shortURLVariables']['module'])) {
                 $module = $GLOBALS['xarRequest_shortURLVariables']['module'];
@@ -173,6 +170,7 @@ final class ExceptionHandlers
                 }
             }
             // Fall-back in case it's too late to redirect
+            // FIXME: Do we still need this, as we dont redirect anymore now.
             if (headers_sent() == true) {
                 $rawmsg = "Normal Xaraya error processing has stopped because of an error encountered. <br /><br />";
                 $rawmsg .= "The last registered error message is: <br /><br />";
@@ -181,11 +179,9 @@ final class ExceptionHandlers
                 $rawmsg .= "PHP Error code: " . $errorType . "<br /><br />";
                 $rawmsg .= $msg;
                 $msg = $rawmsg;
-                //echo $rawmsg;
-                //return;
             }
         }
-        
+        // Throw an exception to let the default handler handle the rest.
         throw new PHPException($msg,$errorType);
     }
 

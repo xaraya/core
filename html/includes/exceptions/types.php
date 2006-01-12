@@ -224,6 +224,11 @@ class ApiDeprecationException extends DeprecationExceptions
 { 
     protected $message = "You are trying to use a deprecated API function [#(1)], Replace this call with #(2)";
 }
+// Errors
+class ErrorDeprecationException extends DeprecationExceptions
+{
+    protected $message ="This exception was called through a deprecated API (usually xarErrorSet).\n You should not use xarErrorSet anymore, but raise/catch real exceptions.\nThis was the original error: #(1)";
+}
 
 class BLException extends xarExceptions 
 { 
