@@ -374,13 +374,13 @@ class xarMasks
     {
         $userID = xarSessionGetVar('uid');
         if ($userID == XARUSER_LAST_RESORT) return true;
-
+        
         $maskname = $mask;
         $mask =  $this->getMask($mask);
-//        if($mask->getName() == "pnLegacyMask") {
-//            echo "realm: " . $pnrealm . "\n" . "level: " . $pnlevel;exit;
-//        }
-//        else return 1;
+        //        if($mask->getName() == "pnLegacyMask") {
+        //            echo "realm: " . $pnrealm . "\n" . "level: " . $pnlevel;exit;
+        //        }
+        //        else return 1;
         if (!$mask) {
             // <mikespub> moved this whole $module thing where it's actually used, i.e. for
             // error reporting only. If you want to override masks with this someday, move
@@ -415,7 +415,6 @@ class xarMasks
         // this is for PostNuke backward compatibility
         if ($pnrealm != '') $mask->setRealm($pnrealm);
         if ($pnlevel != '') $mask->setLevel($pnlevel);
-
         $realmvalue = xarModGetVar('privileges', 'realmvalue');
         if (strpos($realmvalue,'string:') === 0) {
             $textvalue = substr($realmvalue,7);
@@ -448,11 +447,9 @@ class xarMasks
         // normalize the mask now - its properties won't change below
         $mask->normalize();
 
-
         // get the Roles class
         include_once 'modules/roles/xarroles.php';
         $roles = new xarRoles();
-
         // get the uid of the role we will check against
         // an empty role means take the current user
         if ($rolename == '') {
@@ -470,7 +467,6 @@ class xarMasks
         if (!xarVarIsCached('Security.Variables','privilegeset.'.$mask->module) || !empty($rolename)) {
             // get the privileges and test against them
             $privileges = $this->irreducibleset(array('roles' => array($role)),$mask->module);
-
             // leave this as same-page caching, even if the db cache is finished
             // if this is the current user, save the irreducible set of privileges to cache
             if ($rolename == '') {
@@ -482,7 +478,6 @@ class xarMasks
             // get the irreducible set of privileges for the current user from cache
             $privileges = xarVarGetCached('Security.Variables','privilegeset.'.$mask->module);
         }
-
         $pass = $this->testprivileges($mask,$privileges,false,$role);
 
         // $pass = $this->testprivileges($mask,$this->getprivset($role),false);
@@ -490,6 +485,8 @@ class xarMasks
         // check if the exception needs to be caught here or not
         if ($catch && !$pass) {
             if (xarModGetVar('privileges','exceptionredirect')) {
+                // TODO: 1. this function doesnt exist
+                // TODO: 2. when the privileges on the redirect page fail=> BOOM!
                 xarResponseRedirect(xarModURL('roles','user','register'));
             } else {
                 $msg = xarML('No privilege for #(1)',$mask->getName());
@@ -576,6 +573,7 @@ class xarMasks
         if (count($roles) == 0) return $coreset;
 
         $parents = array();
+        
         foreach ($roles as $role) {
             // FIXME: evaluate why role is empty
             // Below (hack) fix added by Rabbitt (suggested by mikespub on the devel mailing list)
@@ -587,6 +585,7 @@ class xarMasks
                 $privileges = $this->winnow(array($priv),$privileges);
                 $privileges = $this->winnow($priv->getDescendants(),$privileges);
             }
+
             $privs = array();
             foreach ($privileges as $priv) {
                 $privModule = strtolower($priv->getModule());
@@ -594,9 +593,11 @@ class xarMasks
                     $privs[] = $priv;
                 }
             }
+                        
             $coreset['privileges'] = $this->winnow($coreset['privileges'],$privs);
             $parents = array_merge($parents,$role->getParents());
         }
+        // CHECKME: Tail recursion, could be removed
         $coreset['children'] = $this->irreducibleset(array('roles' => $parents),$module);
         return $coreset;
     }
@@ -2307,7 +2308,7 @@ class xarPrivilege extends xarMask
                          r.xar_uname, r.xar_email, r.xar_pass,
                          r.xar_auth_modid
                   FROM $this->rolestable r, $this->acltable acl
-                  WHERE r.xar_uid = acl.xar_partid
+                  WHERE r.xar_uid = acl.xar_partid AND
                         acl.xar_permid = ?";
         //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($this->pid));

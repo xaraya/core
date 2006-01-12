@@ -808,10 +808,10 @@ class xarRole
      */
     function getAssignedPrivileges()
     {
-        $query = "SELECT xar_pid, xar_name, xar_realm, xar_module,
-                    xar_component, xar_instance, xar_level, xar_description
-                  FROM $this->privilegestable p, $this->acltable acl
-                  WHERE p.xar_pid = acl.xar_permid AND acl.xar_partid = ?";
+        $query = "SELECT  xar_pid, xar_name, xar_realm, xar_module,
+                          xar_component, xar_instance, xar_level, xar_description
+                  FROM    $this->privilegestable p, $this->acltable acl
+                  WHERE   p.xar_pid = acl.xar_permid AND acl.xar_partid = ?";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($this->uid));
         if (!$result) return;

@@ -205,8 +205,6 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
         // Add another error message, naming the field.
         // Combine it with the 'short' details of the last message logged,
         // with the assumption that it will contain some useful details.
-        //        $errorstack =& xarErrorGet();
-        //$error = array_shift($errorstack);
         $msg = 'Field "#(1)" is invalid. [#(2)]';
         throw new VariableValidationException(array($fieldname,'UNKNOWN'),$msg);
     }

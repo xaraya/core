@@ -19,12 +19,12 @@ function blocks_userapi_getall($args)
 {
     extract($args);
 
-    // Check parameters.
+    // Check parameters
     if (!empty($bid) && !xarVarValidate('int:1:', $bid)) {return;}
     if (!empty($name) && !xarVarValidate('str', $name)) {return;}
-
+    
     if (!empty($order) && xarVarValidate('strlist:,|:enum:name:title:id', $order, true)) {
-        $orderby = ' ORDER BY xar_' . implode(', inst.xar_', explode(',', $order));
+        $orderby = ' ORDER BY binst.xar_' . implode(', inst.xar_', explode(',', $order));
     } else {
         $orderby = '';
     }

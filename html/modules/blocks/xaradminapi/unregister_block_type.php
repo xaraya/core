@@ -32,7 +32,7 @@ function blocks_adminapi_unregister_block_type($args)
 
     $block_types_table     = $xartable['block_types'];
     $block_instances_table = $xartable['block_instances'];
-    $modules_table         = $xartable['modules']
+    $modules_table         = $xartable['modules'];
     // First we need to retrieve the block ids and remove 
     // the corresponding id's from the xar_block_instances
     // and xar_block_group_instances tables
