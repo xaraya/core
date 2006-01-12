@@ -124,6 +124,8 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
         $modInfo = xarMod_GetBaseInfo($authModName);
         $modId = $modInfo['systemid'];
 
+        // CHECKME: Does this raise an exception??? If so:
+        // TODO: test with multiple auth modules and wrap in try/catch clause
         $userId = xarModAPIFunc($authModName, 'user', 'authenticate_user', $args);
         if (!isset($userId)) {
             return; // throw back
@@ -131,10 +133,6 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
             // Someone authenticated the user or passed XARUSER_AUTH_DENIED
             break;
         }
-
-        // if here $userId is XARUSER_AUTH_FAILED, try with next auth module
-        // but free exceptions set by previous auth module
-        xarErrorFree();
     }
     if ($userId == XARUSER_AUTH_FAILED || $userId == XARUSER_AUTH_DENIED) {
         if (xarModGetVar('privileges','lastresort')) {

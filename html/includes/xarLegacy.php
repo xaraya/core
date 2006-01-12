@@ -28,8 +28,6 @@
 * DEPRECATED XAR FUNCTIONS
 * xarModEmailURL        -> no direct equivalent
 * xarVarPrepForStore()  -> use bind vars or dbconn->qstr() method
-* xarExceptionFree()    -> xarErrorFree()
-* xarExceptionHandled() -> xarErrorHandled()
 * xarExceptionRender()  -> xarErrorRender()
 * xarPage_sessionLess() -> xarPageCache_sessionLess()
 * xarPage_httpCacheHeaders() -> xarPageCache_sendHeaders()
@@ -186,38 +184,6 @@ function xarVarPrepForStore()
     } else {
         return $resarray;
     }
-}
-
-/**
-* Resets current error status
- *
- * xarErrorFree is a shortcut for xarErrorSet(XAR_NO_EXCEPTION, NULL, NULL).
- * You must always call this function when you handle a caught error or
- * equivalently you don't throw the error back to the caller.
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access public
- * @return void
- * @deprec 2004-04-01
- */
-function xarExceptionFree()
-{
-    xarErrorFree();
-} 
-
-/**
-* Handles the current error
- *
- * You must always call this function when you handle a caught error.
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access public
- * @return void
- * @deprec 2004-04-01
- */
-function xarExceptionHandled()
-{
-    xarErrorHandled();
 }
 
 /**
