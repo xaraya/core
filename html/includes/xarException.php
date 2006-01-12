@@ -283,7 +283,7 @@ function xarError_init($systemArgs, $whatToLoad)
     // FIXME: review this, we probably want a decicated exception handler class 
     //        sprinkled with all sorts of handlers.
     if ($systemArgs['enablePHPErrorHandler'] == true ) { 
-        set_error_handler('xarException__phpErrorHandler');
+        set_error_handler(array('ExceptionHandlers','phperrors'));
     }
 
     $CoreStack = new xarExceptionStack();
@@ -656,129 +656,6 @@ function xarException__assertErrorHandler($script,$line,$code)
     $msg = "ASSERTION FAILED: $script [$line] : $code";
     // TODO: classify the exception, we never want to use the base object directly.
     throw new SRCException($msg, E_XAR_ASSERT);
-}
-
-/**
- * PHP error handler bridge to Xaraya exceptions
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access private
- * @return void
- */
-function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
-{
-    global $CoreStack;
-
-    //Checks for a @ presence in the given line, should stop from setting Xaraya or DB errors
-    $errLevel = xarCore_getSystemVar('Exception.ErrorLevel',true);
-    if(!isset($errLevel)) $errLevel = E_STRICT;
-    if (!error_reporting() || $errorType >= $errLevel) {
-        // Log the message so it is not lost.
-        // TODO: make this message available to calling functions that suppress errors through '@'.
-        $msg = "PHP error code $errorType at line $line of $file: $errorString";
-        xarLogMessage($msg);
-        return; // no need to raise exception
-    }
-
-    //Newer php versions have a 5th parameter that will give us back the context
-    //The variable values during the error...
-    $msg = "At: " . $file." (Line: " . $line.")\n". $errorString ;
-
-    // Trap for errors that are on the so-called "safe path" for rendering
-    // Need to revert to raw HTML here
-    if (isset($_GET['func']) && $_GET['func'] == 'systemexit') {
-        echo '<font color="red"><b>^Error Condition<br /><br />see below<br /><br /></b></font>';
-        $rawmsg = "</table><div><hr /><b>Recursive Error</b><br /><br />";
-        $rawmsg .= "Normal Xaraya error processing has stopped because of a recurring PHP error. <br /><br />";
-        $rawmsg .= "The last registered error message is: <br /><br />";
-        $rawmsg .= "PHP Error code: " . $errorType . "<br /><br />";
-        $rawmsg .= $msg . "</div>";
-        echo $rawmsg;
-        exit;
-    } 
-
-    // Make cached files also display their source file if it's a template
-    // This is just for convenience when giving support, as people will probably
-    // not look in the CACHEKEYS file to mention the template.
-    if(isset($GLOBALS['xarTpl_cacheTemplates'])) {
-        $sourcetmpl='';
-        $base = basename(strval($file),'.php');
-        $varDir = xarCoreGetVarDirPath();
-        if (file_exists($varDir . XARCORE_TPL_CACHEDIR .'/CACHEKEYS')) {
-            $fd = fopen($varDir . XARCORE_TPL_CACHEDIR .'/CACHEKEYS', 'r');
-            while($cache_entry = fscanf($fd, "%s\t%s\n")) {
-                list($hash, $template) = $cache_entry;
-                // Strip the colon
-                $hash = substr($hash,0,-1);
-                if($hash == $base) {
-                    // Found the file, source is $template
-                    $sourcetmpl = $template;
-                    break;
-                }
-            }
-            fclose($fd);
-        }
-    }
-
-    if(isset($sourcetmpl) && $sourcetmpl != '') $msg .= "<br/><br/>[".$sourcetmpl."]";
-    if (!function_exists('xarModURL')) {
-        $rawmsg = "Normal Xaraya error processing has stopped because of an error encountered. <br /><br />";
-        $rawmsg .= "The last registered error message is: <br /><br />";
-        $rawmsg .= "PHP Error code: " . $errorType . "<br /><br />";
-        $rawmsg .= $msg;
-        $msg = $rawmsg;
-        //echo $rawmsg;
-        //exit;
-    }
-    else {
-        if ($GLOBALS['xarRequest_allowShortURLs'] && isset($GLOBALS['xarRequest_shortURLVariables']['module'])) {
-            $module = $GLOBALS['xarRequest_shortURLVariables']['module'];
-            // Then check in $_GET
-        } elseif (isset($_GET['module'])) {
-            $module = $_GET['module'];
-            // Try to fallback to $HTTP_GET_VARS for older php versions
-        } elseif (isset($GLOBALS['HTTP_GET_VARS']['module'])) {
-            $module = $GLOBALS['HTTP_GET_VARS']['module'];
-            // Nothing found, return void
-        } else {
-            $module = '';
-        }
-        $product = '';
-        $component = '';
-        if ($module != '') {
-            // load relative to the current file (e.g. for shutdown functions)
-            include(dirname(__FILE__) . "/exceptions/xarayacomponents.php");
-            foreach ($core as $corecomponent) {
-                if ($corecomponent['name'] == $module) {
-                    $component = $corecomponent['fullname'];
-                    $product = "App - Core";
-                    break;
-                }
-            }
-            if ($component != '') {
-                foreach ($apps as $appscomponent) {
-                    if ($appscomponent['name'] == $module) {
-                        $component = $appscomponent['fullname'];
-                        $product = "App - Modules";
-                    }
-                }
-            }
-        }
-        // Fall-back in case it's too late to redirect
-        if (headers_sent() == true) {
-            $rawmsg = "Normal Xaraya error processing has stopped because of an error encountered. <br /><br />";
-            $rawmsg .= "The last registered error message is: <br /><br />";
-            $rawmsg .= "Product: " . $product . "<br />";
-            $rawmsg .= "Component: " . $component . "<br />";
-            $rawmsg .= "PHP Error code: " . $errorType . "<br /><br />";
-            $rawmsg .= $msg;
-            $msg = $rawmsg;
-            //echo $rawmsg;
-            //return;
-        }
-    }
-
-    throw new PHPException($msg,$errorType);
 }
 
 function xarCoreExceptionFree()
