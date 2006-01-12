@@ -64,7 +64,7 @@ function blocks_userapi_getall($args)
     }
 
     // Return if no details retrieved.
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) {return;}
 
     // The main result array.
