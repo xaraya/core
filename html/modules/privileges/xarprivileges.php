@@ -759,26 +759,25 @@ class xarMasks
         // TODO: try to do this without xarMod_GetBaseInfo
         if ($suppresscache || !xarVarIsCached('Security.Masks',$name)) {
             $bindvars = array();
-            $query = "SELECT xar_sid AS sid, xar_name AS name, xar_realm AS realm,
-                             xar_modid AS module, xar_component as component, xar_instance AS instance,
-                             xar_level AS level, xar_description AS description
-                      FROM $this->maskstable WHERE xar_name = ? ";
+            $query = "SELECT masks.xar_sid AS sid, masks.xar_name AS name, masks.xar_realm AS realm,
+                             mods.xar_name AS module, masks.xar_component as component, masks.xar_instance AS instance,
+                             masks.xar_level AS level, masks.xar_description AS description
+                      FROM   $this->maskstable masks LEFT JOIN $this->modulestable mods ON masks.xar_modid = mods.xar_id
+                      WHERE  masks.xar_name = ? ";
             $bindvars[] = $name;
             if($module != 'All') {
-                $modInfo = xarMod_GetBaseInfo($module);
-                $modId = $modInfo['systemid'];
-                $query .= " AND xar_modid = ?";
-                $bindvars[] = $modId;
+                $query .= " AND mods.xar_name = ?";
+                $bindvars[] = $module;
             }
             if($component != 'All') {
-                $query .= " AND xar_component = ? ";
+                $query .= " AND masks.xar_component = ? ";
                 $bindvars[] = strtolower($component);
             }
             $stmt = $this->dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
             $result->next();
             $pargs = $result->getRow();
-            $pargs['module'] = $module;
+            if(is_null($pargs['module'])) $pargs['module'] = 'All';
             xarVarSetCached('Security.Masks',$name,$pargs);
         } else {
             $pargs = xarVarGetCached('Security.Masks',$name);
