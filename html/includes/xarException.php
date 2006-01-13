@@ -101,35 +101,10 @@ define('XAR_CORE_EXCEPTION', 11);
 define('XAR_DATABASE_EXCEPTION', 12);
 define('XAR_TEMPLATE_EXCEPTION', 13);
 
-// {ML_include 'includes/exceptions/defaultuserexception.class.php'}
-// {ML_include 'includes/exceptions/errorcollection.class.php'}
-// {ML_include 'includes/exceptions/exceptionstack.class.php'}
-// {ML_include 'includes/exceptions/htmlexceptionrendering.class.php'}
-// {ML_include 'includes/exceptions/noexception.class.php'}
-// {ML_include 'includes/exceptions/systemexception.class.php'}
-// {ML_include 'includes/exceptions/systemmessage.class.php'}
-// {ML_include 'includes/exceptions/textexceptionrendering.class.php'}
-
-// {ML_include 'includes/exceptions/defaultuserexception.defaults.php'}
-// {ML_include 'includes/exceptions/exception.class.php'}
-// {ML_include 'includes/exceptions/exceptionrendering.class.php'}
-// {ML_include 'includes/exceptions/systemexception.defaults.php'}
-// {ML_include 'includes/exceptions/systemmessage.defaults.php'}
-
-include "includes/exceptions/exceptionstack.class.php";
-
-include "includes/exceptions/systemmessage.class.php";
-include "includes/exceptions/systemexception.class.php";
-include "includes/exceptions/defaultuserexception.class.php";
-include "includes/exceptions/noexception.class.php";
-include "includes/exceptions/errorcollection.class.php";
-
 // Include the set of exception types
 include "includes/exceptions/types.php";
 // And the handlers to deal with them
 include "includes/exceptions/handlers.php";
-
-global $ErrorStack;
 
 /**
  * Initializes the Error Handling System
