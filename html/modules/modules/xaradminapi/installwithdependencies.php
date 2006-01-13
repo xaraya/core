@@ -94,12 +94,8 @@ function modules_adminapi_installwithdependencies ($args)
         }
 
         if (!xarModAPIFunc('modules', 'admin', 'installwithdependencies', array('regid'=>$modId))) {
-            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                return;
-            } else {
-                $msg = xarML('Unable to initialize dependency module with ID (#(1)).', $modId);
-                throw new Exception($msg);
-            }
+            $msg = xarML('Unable to initialize dependency module with ID (#(1)).', $modId);
+            throw new Exception($msg);
         }
     }
 
@@ -107,25 +103,17 @@ function modules_adminapi_installwithdependencies ($args)
     if (!$initialised) {
         // Finally, now that dependencies are dealt with, initialize the module
         if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $mainId))) {
-            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                return;
-            } else {
-                $msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
-                throw new Exception($msg);
-            }
+            $msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
+            throw new Exception($msg);
         }
     }
 
     // And activate it!
     if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $mainId))) {
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            return;
-        } else {
-            $msg = xarML('Unable to activate module "#(1)".', $modInfo['displayname']);
-            throw new Exception($msg);
-        }
+        $msg = xarML('Unable to activate module "#(1)".', $modInfo['displayname']);
+        throw new Exception($msg);
     }
-
+    
     return true;
 }
 

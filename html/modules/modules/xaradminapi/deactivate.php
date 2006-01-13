@@ -25,20 +25,15 @@ function modules_adminapi_deactivate ($args)
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     $modInfo = xarModGetInfo($regid);
-    if (!isset($modInfo) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return NULL;
-    }
 
     //Shouldnt we check first if the module is alredy ACTIVATED????
     //What should we do with UPGRADED STATE? What is it meant to?
-//  if ($modInfo['state'] != XARMOD_STATE_ACTIVE)
+    //  if ($modInfo['state'] != XARMOD_STATE_ACTIVE)
 
     // Module activate function
     // only run if the module is actually there. It may have been removed
     if ($modInfo['state'] != XARMOD_STATE_MISSING_FROM_ACTIVE) {
-        if (!xarModAPIFunc('modules',
-                           'admin',
-                           'executeinitfunction',
+        if (!xarModAPIFunc('modules','admin','executeinitfunction',
                            array('regid'    => $regid,
                                  'function' => 'deactivate'))) {
             //Raise an Exception
@@ -46,15 +41,11 @@ function modules_adminapi_deactivate ($args)
         }
     }
     // Update state of module
-    $res = xarModAPIFunc('modules',
-                        'admin',
-                        'setstate',
+    $res = xarModAPIFunc('modules','admin','setstate',
                         array('regid' => $regid,
                               'state' => XARMOD_STATE_INACTIVE));
 
-    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return NULL;
-    }
+
 
     if (function_exists('xarOutputFlushCached')) {
         xarOutputFlushCached('modules');

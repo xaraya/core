@@ -25,20 +25,11 @@ function themes_adminapi_activate($args)
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     $themeInfo = xarThemeGetInfo($regid);
-    if (!isset($themeInfo) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return NULL;
-    }
-
 
     // Update state of theme
-    $res = xarModAPIFunc('themes',
-                        'admin',
-                        'setstate',
+    $res = xarModAPIFunc('themes','admin','setstate',
                         array('regid' => $regid,
                               'state' => XARTHEME_STATE_ACTIVE));
-    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return NULL;
-    }
 
     return true;
 }

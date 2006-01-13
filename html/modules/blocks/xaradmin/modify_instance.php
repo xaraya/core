@@ -42,11 +42,6 @@ function blocks_admin_modify_instance()
     if (function_exists($modfunc)) {
         $extra = $modfunc($instance);
 
-        // if there was an error here, return...
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            return;
-        }
-
         if (is_array($extra)) {
             // Render the extra settings if necessary.
             $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);

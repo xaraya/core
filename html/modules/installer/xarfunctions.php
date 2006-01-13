@@ -149,8 +149,6 @@ function xarInstallLoad()
 
     // Load the module translations files
     $res = xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:', $modType);
-    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back exception
- 
     return true;
 }
 

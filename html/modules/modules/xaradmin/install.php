@@ -76,17 +76,6 @@ function modules_admin_install()
         }
     }
 
-    // Send the full error stack to the install template for rendering.
-    // (The hope is that all errors can be rendered like this eventually)
-    if (xarCurrentErrorType()) {
-        // Get the error stack
-        $errorstack = xarErrorget();
-        // Free up the error stack since we are handling it locally.
-        xarErrorFree();
-        // Return the stack for rendering.
-        return array('errorstack' => $errorstack);
-    }
-
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
 

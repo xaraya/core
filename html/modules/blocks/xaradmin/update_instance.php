@@ -104,18 +104,6 @@ function blocks_admin_update_instance()
         }
     }
 
-    // If the update function failed to return the blockinfo array, then
-    // throw the error back (if there is an error).
-    if (!is_array($blockinfo)) {
-        if (!xarCurrentErrorType()) {
-            // Raise an error here, since no error has been raised in 
-            // the block update function.
-            // CHECKME: is this still needed, as we can escape the flow now with exceptions
-            throw new BadParameterException($updatefunc,'Unknown error in block update function "#(1)"');
-        }
-        return; 
-    }
-
     // Pass to API - do generic updates.
     if (!xarModAPIFunc('blocks', 'admin', 'update_instance', $blockinfo)) {return;}
 

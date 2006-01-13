@@ -632,10 +632,6 @@ function installer_admin_create_administrator()
                                     array('module'  => 'modules',
                                           'type'    => 'adminmenu'));
 
-    if (empty($adminBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return;
-    }
-
     $adminBlockTypeId = $adminBlockType['tid'];
 
     if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'adminpanel'))) {
@@ -660,10 +656,6 @@ function installer_admin_create_administrator()
     $htmlBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
                                  array('module'  => 'base',
                                        'type'    => 'html'));
-
-    if (empty($htmlBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return;
-    }
 
     $htmlBlockTypeId = $htmlBlockType['tid'];
 
@@ -961,9 +953,6 @@ function installer_admin_confirm_configuration()
                                      array('module'  => 'base',
                                            'type'=> 'menu'));
 
-        if (empty($menuBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            return;
-        }
 
         $menuBlockTypeId = $menuBlockType['tid'];
 
@@ -1034,9 +1023,6 @@ function installer_admin_cleanup()
                                     array('module' => 'roles',
                                           'type'   => 'login'));
 
-    if (empty($loginBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return;
-    }
 
     $loginBlockTypeId = $loginBlockType['tid'];
 
@@ -1068,10 +1054,6 @@ function installer_admin_cleanup()
     $metaBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
                                    array('module' => 'themes',
                                          'type'   => 'meta'));
-
-    if (empty($metaBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return;
-    }
 
     $metaBlockTypeId = $metaBlockType['tid'];
 

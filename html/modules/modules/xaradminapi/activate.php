@@ -27,14 +27,9 @@ function modules_adminapi_activate ($args)
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     $modInfo = xarModGetInfo($regid);
-    if (!isset($modInfo) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return NULL;
-    }
 
     // Module activate function
-    if (!xarModAPIFunc('modules',
-                           'admin',
-                           'executeinitfunction',
+    if (!xarModAPIFunc('modules','admin', 'executeinitfunction',
                            array('regid'    => $regid,
                                  'function' => 'activate'))) {
         $msg = xarML('Unable to execute "activate" function in the xarinit.php file of module (#(1))', $modInfo['displayname']);
@@ -42,15 +37,9 @@ function modules_adminapi_activate ($args)
     }
 
     // Update state of module
-    $res = xarModAPIFunc('modules',
-                        'admin',
-                        'setstate',
+    $res = xarModAPIFunc('modules','admin','setstate',
                         array('regid' => $regid,
                               'state' => XARMOD_STATE_ACTIVE));
-
-    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return NULL;
-    }
 
     if (function_exists('xarOutputFlushCached') && function_exists('xarModGetName') && xarModGetName() != 'installer') {
         xarOutputFlushCached('modules');

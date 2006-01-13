@@ -86,9 +86,6 @@ function installer_adminapi_initialise($args)
     if (function_exists($initFunc)) {
         $res = $initFunc();
 
-        // Handle exceptions
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
-
         if ($res == false) {
             // exception
             throw new Exception('Core initialization failed!');

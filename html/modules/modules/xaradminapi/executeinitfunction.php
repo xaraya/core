@@ -74,9 +74,6 @@ function modules_adminapi_executeinitfunction ($args)
             $result = $func();
         }
 
-        // If an exception was set, then return
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
-
         if ($result === false) {
             $msg = xarML('While changing state of the #(1) module, the function #(2) returned a false value when executed.', $modInfo['name'], $func);
             throw new Exception($msg);
