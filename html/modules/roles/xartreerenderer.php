@@ -36,12 +36,11 @@ class xarTreeRenderer
     // convenience variables to hold strings referring to pictures
     var $expandedbox;
     var $collapsedbox;
-    var $el;
-    var $tee;
-    var $aye;
-    var $bar;
+    var $L;
+    var $T;
+    var $I;
+    var $B;
     var $emptybox;
-    var $blank;
     var $bigblank;
     var $smallblank;
 
@@ -50,16 +49,17 @@ class xarTreeRenderer
      */
     function xarTreeRenderer($allowtoggle=0)
     {
-        $boxwidth = '1em';
-        $boxheight = '21px';
-        $this->el = '<img src="' . xarTplGetImage("el.gif",'roles') . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
-        $this->tee = '<img src="' . xarTplGetImage("T.gif",'roles') . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
-        $this->aye = '<img src="' . xarTplGetImage("I.gif",'roles') . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
-        $this->bar = '<img src="' . xarTplGetImage("s.gif",'roles') . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
-        $this->emptybox = '<img src="' . xarTplGetImage("k1.gif",'roles') . '" alt="" style="vertical-align: middle" />';
-        $this->blank = '<img src="' . xarTplGetImage("blank.gif",'roles') . '" alt="" style="vertical-align: middle" />';
-        $this->bigblank = '<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="' . xarTplGetImage("blank.gif",'roles') . '" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
-        $this->smallblank     = '<span style="padding-left: 0em; padding-right: 0em;"><img src="' . xarTplGetImage("blank.gif",'roles') . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" /></span>';
+        $this->smallblank = xarTplObject('roles', 'spacer', 'small');
+        $this->L = xarTplObject('roles', 'L', 'drawing');
+        $this->T = xarTplObject('roles', 'T', 'drawing');
+        $this->I = xarTplObject('roles', 'I', 'drawing');
+        $this->B = xarTplObject('roles', 'B', 'drawing');
+        $this->emptybox = xarTplObject('roles', 'emptybox', 'drawing');
+
+		$data['onclick'] = $allowtoggle ? "toggleBranch(this,this.parentNode.lastChild)" : "";
+		$this->expandedbox  = xarTplObject('roles', 'expandedbox', 'drawing', $data);
+		$this->collapsedbox = xarTplObject('roles', 'collapsedbox', 'drawing', $data);
+
         $this->roles = new xarRoles();
         $this->setitem(1, "deleteitem");
         $this->setitem(2, "leafitem");
@@ -68,14 +68,6 @@ class xarTreeRenderer
         $this->setitem(5, "testitem");
         $this->setitem(6, "treeitem");
         $this->setitem(7, "descriptionitem");
-        if ($allowtoggle) {
-            $this->expandedbox    = '<img class="xar-roletree-box" src="modules/roles/xarimages/k2.gif" alt="" style="vertical-align: middle" onclick="toggleBranch(this,this.parentNode.lastChild)" />';
-            $this->collapsedbox   = '<img class="xar-roletree-box" src="modules/roles/xarimages/k3.gif" alt="" style="vertical-align: middle" onclick="toggleBranch(this,this.parentNode.lastChild)"/>';
-        }
-        else {
-            $this->expandedbox    = '<img class="xar-roletree-box" src="modules/roles/xarimages/k2.gif" alt="" style="vertical-align: middle" />';
-            $this->collapsedbox   = '<img class="xar-roletree-box" src="modules/roles/xarimages/k3.gif" alt="" style="vertical-align: middle" />';
-        }
     }
 
     /**
@@ -161,15 +153,12 @@ class xarTreeRenderer
         if ($tree == '') {
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ENTITY', new SystemException('A tree must be defined before attempting to display.'));
         }
-        $this->html = '<div name="RolesTree" id="RolesTree">';
         $this->nodeindex = 0;
         $this->indent = array();
         $this->level = 0;
         $this->alreadydone = array();
-
-        $this->drawbranch($tree);
-        $this->html .= '</div>';
-        return $this->html;
+        $data['content'] = $this->drawbranch($tree);
+        return xarTplObject('roles', 'tree', 'drawing',$data);
     }
 
     /**
@@ -203,35 +192,41 @@ class xarTreeRenderer
         // is this a branch?
         $this->isbranch = count($node['children']) > 0 ? true : false;
         // now begin adding rows to the string
-        $this->html .= $this->isbranch ?
-            '<div class="xar-roletree-branch" id="branch' . $this->nodeindex . '">' :
-            '<div class="xar-roletree-leaf" id="leaf' . $this->nodeindex . '" >';
 
-        for ($i=1,$max = count($this->treeitems); $i <= $max; $i++) {
+
+//-------------------- Assemble the data for a single row
+		$html = "";
+		for ($i=1,$max = count($this->treeitems); $i <= $max; $i++) {
             $func = $this->treeitems[$i];
-            $this->html .= $this->{$func}();
+            $html .= $this->{$func}();
         }
 
-        // we've finished this row; now do the children of this role
+//-------------------- We've finished this row; now do the children of this role
         $ind = 0;
         foreach($node['children'] as $subnode) {
             $ind = $ind + 1;
             // if this is the last child, get ready to draw an "L", otherwise a sideways "T"
             if ($ind == count($node['children'])) {
-                $this->indent[] = $this->el;
+                $this->indent[] = $this->L;
             } else {
-                $this->indent[] = $this->tee;
+                $this->indent[] = $this->T;
             }
             // draw this child
-            $this->drawbranch($subnode);
+            $html .= $this->drawbranch($subnode);
             // we're done; remove the indent string
             array_pop($this->indent);
         }
         $this->level --;
-        // write the closing tags
-//        $this->html .= $this->isbranch ? '</div>' : '';
-        // close the html row
-        $this->html .= '</div>';
+
+//-------------------- Put everything in the container
+			$data['nodeindex'] = $this->nodeindex;
+			$data['content'] = $html;
+            if ($this->isbranch) {
+            	$data['type'] = "branch";
+            } else {
+            	$data['type'] = "leaf";
+            }
+        return xarTplObject('roles', 'container', 'drawing',$data);
     }
 
     /**
@@ -265,103 +260,85 @@ class xarTreeRenderer
     function leafitem()
     {
         if ($this->treenode['users'] == 0 || (!$this->drawchildren)) {
-            $html = $this->bigblank;
+			return xarTplObject('roles', 'spacer', 'large');
         } else {
-            $html = '<a href="' .
-            xarModURL('roles',
-                'admin',
-                'showusers',
-                array('uid' => $this->treenode['uid'], 'reload' => 1)) . '" title="' . xarML('Show the Users in this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/users.gif" style="vertical-align: middle;" alt="" /></a>';
+        	$data['leafitemurl'] = xarModURL('roles', 'admin', 'showusers',
+        					array('uid' => $this->treenode['uid'], 'reload' => 1));
+        	$data['leafitemtitle'] = xarML('Show the Users in this Group');
+        	$data['leafitemimage'] = xarTplGetImage('users.png');
+			return xarTplObject('roles', 'leaf', 'showuser', $data);
         }
-        return $html;
     }
 
     function deleteitem()
     {
         if (!xarSecurityCheck('DeleteRole',0,'Roles',$this->treenode['name']) || ($this->treenode['users'] > 0) || (!$this->drawchildren)) {
-            $html = $this->bigblank;
+			return xarTplObject('roles', 'spacer', 'large');
         } else {
-            $html = '<a href="' .
-            xarModURL('roles',
-                'admin',
-                'deleterole',
-                array('uid' => $this->treenode['uid'])) . '" title="' . xarML('Delete this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" alt="" /></a>';
+        	$data['leafitemurl'] = xarModURL('roles', 'admin', 'deleterole',
+        					array('uid' => $this->treenode['uid']));
+        	$data['leafitemtitle'] = xarML('Delete this Group');
+        	$data['leafitemimage'] = xarTplGetImage('delete.png');
+			return xarTplObject('roles', 'leaf', 'deleteuser', $data);
         }
-        return $html;
     }
 
     function emailitem()
     {
         if ($this->treenode['users'] == 0 || (!$this->drawchildren)) {
-            $html = $this->bigblank;
+			return xarTplObject('roles', 'spacer', 'large');
         } else {
-            $html = '<a href="' .
-            xarModURL('roles',
-                'admin',
-                'createmail',
-                array('uid' => $this->treenode['uid'])) . '" title="' . xarML('Email the Users in this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/email.gif" style="vertical-align: middle;" alt=""/></a>';
+        	$data['leafitemurl'] = xarModURL('roles', 'admin', 'createmail',
+        					array('uid' => $this->treenode['uid']));
+        	$data['leafitemtitle'] = xarML('Email the Users in this Group');
+        	$data['leafitemimage'] = xarTplGetImage('email.png');
+			return xarTplObject('roles', 'leaf', 'email', $data);
         }
-        return $html;
     }
 
     function privilegesitem()
     {
         if (!$this->drawchildren) {
-            $html = $this->bigblank;
+			return xarTplObject('roles', 'spacer', 'large');
         } else {
-            $html = '<a href="' .
-            xarModURL('roles',
-                'admin',
-                'showprivileges',
-                array('uid' => $this->treenode['uid'])) . '" title="' . xarML('Show the Privileges assigned to this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" alt="" /></a>';
+        	$data['leafitemurl'] = xarModURL('roles', 'admin', 'showprivileges',
+        					array('uid' => $this->treenode['uid']));
+        	$data['leafitemtitle'] = xarML('Show the Privileges assigned to this Group');
+        	$data['leafitemimage'] = xarTplGetImage('privileges.png');
+			return xarTplObject('roles', 'leaf', 'showprivileges', $data);
         }
-        return $html;
     }
 
     function testitem()
     {
         if (!$this->drawchildren) {
-            $html = $this->bigblank;
+			return xarTplObject('roles', 'spacer', 'large');
         } else {
-            $html = '<a href="' .
-            xarModURL('roles',
-                'admin',
-                'testprivileges',
-                array('uid' => $this->treenode['uid'])) . '" title="' . xarML('Test this Groups\'s Privileges') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" alt=""/></a>';
+        	$data['leafitemurl'] = xarModURL('roles', 'admin', 'testprivileges',
+        					array('uid' => $this->treenode['uid']));
+        	$data['leafitemtitle'] = xarML("Test this Groups's Privileges");
+        	$data['leafitemimage'] = xarTplGetImage('test.png');
+			return xarTplObject('roles', 'leaf', 'testprivileges', $data);
         }
-        return $html;
-    }
-
-    function branchitem()
-    {
-        $html = '<a href="' .
-            xarModURL('roles',
-                'admin',
-                'modifyrole',
-                array('uid' => $this->treenode['uid'])) .'" title="' . xarML('Modify this Group') . '" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/infoicon.gif" style="vertical-align: middle;" alt=""/></a>';
-        return $html;
     }
 
     function descriptionitem()
     {
-        $html = '<span style="padding-left: 1em">';
         // if we've already done this entry skip the links and just tell the user
         if (!$this->drawchildren) {
-            $html .= '<b>' . $this->treenode['name'] . '</b>: ';
-            $html .= ' see the entry above';
+        	$data['leafitemtext'] = $this->treenode['name'];
+			return xarTplObject('roles', 'leaf', 'placeholder', $data);
         } else {
-            $html .= '<a href="' .
-            xarModURL('roles',
-                'admin',
-                'modifyrole',
-                array('uid' => $this->treenode['uid'])) . ' " title="' . xarML('Modify this Group') . '">' . $this->treenode['name'] . '</a>: &nbsp;';
             $numofsubgroups = count($this->roles->getsubgroups($this->treenode['uid']));
             $subgroups = $numofsubgroups == 1 ? xarML('subgroup') : xarML('subgroups');
-            $html .= $numofsubgroups . " " . $subgroups;
             $users = $this->treenode['users'] == 1 ? xarML('user') : xarML('users');
-            $html .= ' | ' . $this->treenode['users'] . " " . $users . '</span>';
+        	$data['leafitemurl'] = xarModURL('roles', 'admin', 'modifyrole',
+        					array('uid' => $this->treenode['uid']));
+        	$data['leafitemtitle'] = xarML("Modify this Group");
+        	$data['leafitemtext'] = $this->treenode['name'];
+        	$data['leafitemdescription'] = $numofsubgroups . " " . $subgroups . ' | ' . $this->treenode['users'] . " " . $users;
+			return xarTplObject('roles', 'leaf', 'modifyuser', $data);
         }
-        return $html;
     }
 
     function treeitem()
@@ -371,17 +348,17 @@ class xarTreeRenderer
         if ($this->isbranch) {
             if ($this->nodeindex != 1) {
                 $lastindent = array_pop($this->indent);
-                if ($lastindent == $this->el) {
+                if ($lastindent == $this->L) {
                     $this->indent[] = $this->smallblank . $this->smallblank;
                 } else {
-                    $this->indent[] = $this->aye . $this->smallblank;
+                    $this->indent[] = $this->I . $this->smallblank;
                 }
-                $html .= $this->bar;
+                $html .= $this->B;
             }
             $html .= $this->expandedbox;
         } else {
             if ($this->nodeindex != 1) {
-                $html .= $this->bar;
+                $html .= $this->B;
             }
             $html .= $this->emptybox;
         }
