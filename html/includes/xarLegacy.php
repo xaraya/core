@@ -28,7 +28,6 @@
 * DEPRECATED XAR FUNCTIONS
 * xarModEmailURL        -> no direct equivalent
 * xarVarPrepForStore()  -> use bind vars or dbconn->qstr() method
-* xarExceptionRender()  -> xarErrorRender()
 * xarPage_sessionLess() -> xarPageCache_sessionLess()
 * xarPage_httpCacheHeaders() -> xarPageCache_sendHeaders()
 */
@@ -185,25 +184,6 @@ function xarVarPrepForStore()
         return $resarray;
     }
 }
-
-/**
-* Renders the current error
- *
- * Returns a string formatted according to the $format parameter that provides all the information
- * available on current error.
- * If there is no error currently raised an empty string is returned.
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access public
- * @param format string one of template or plain
- * @param stacktype string one of CORE or ERROR
- * @return string the string representing the raised error
- * @deprec 2004-04-01
- */
-function xarExceptionRender($format)
-{
-    return xarErrorRender($format);
-}    // deprecated
 
 /**
  * Session-less page caching

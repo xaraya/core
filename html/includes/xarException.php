@@ -284,71 +284,12 @@ function xarErrorHandled()
  * @access public
  * @param format string one of template or plain
  * @param stacktype string one of CORE or ERROR
+ * @deprec 20060113
  * @return string the string representing the raised error
  */
 function xarErrorRender($format,$stacktype = "ERROR", $data=array())
 {
-    assert('$format == "template" || $format == "rawhtml" || $format == "text"; /* Improper format passed to xarErrorRender */');
-    $msgs = xarException__formatStack($format,$stacktype);
-
-    $error = $msgs[0];
-    switch ($error->getMajor()) {
-        case XAR_SYSTEM_EXCEPTION:
-            $template = "systemerror";
-            break;
-        case XAR_USER_EXCEPTION:
-            $template = "usererror";
-            break;
-        case XAR_SYSTEM_MESSAGE:
-            $template = "systeminfo";
-            break;
-        case XAR_NO_EXCEPTION:
-            break;
-        default:
-            break;
-    }
-
-    $data = array();
-    $data['major'] = $error->getMajor();
-    $data['type'] = $error->getType();
-    $data['title'] = $error->getTitle();
-    $data['short'] = $error->getShort();
-    $data['long'] = $error->getLong();
-    $data['hint'] = $error->getHint();
-    $data['stack'] = $error->getStack();
-    $data['product'] = $error->getProduct();
-    $data['component'] = $error->getComponent();
-
-    if ($format == 'template') {
-        $theme_dir = xarTplGetThemeDir();
-        if(file_exists($theme_dir . '/modules/base/message-' . $error->id . '.xt')) {
-            return xarTplFile($theme_dir . '/modules/base/message-' . $error->id . '.xt', $data);
-        } elseif(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
-            return xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', $data);
-        } else {
-            return xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
-        }
-    }
-    elseif ($format == 'rawhtml') {
-        $msg = "<b><u>" . $data['title'] . "</u></b><br /><br />";
-        $msg .= "<b>Description:</b> " . $data['short'] . "<br /><br />";
-        $msg .= "<b>Explanation:</b> " . $data['long'] . "<br /><br/>";
-        if ($data['hint'] != '') $msg .= "<b>Hint:</b> " . $data['hint'] . "<br /><br/>";
-        if ($data['stack'] != '') $msg .= "<b>Stack:</b><br />" . $data['stack'] . "<br /><br />";
-        if ($data['product'] != '') $msg .= "<b>Product:</b> " . $data['product'] . "<br /><br />";
-        if ($data['component'] != '') $msg .= "<b>Component:</b> " . $data['component'] . "<br /><br />";
-        return $msg;
-    }
-    elseif ($format == 'text') {
-        $msg = $data['title'] . "\n";
-        $msg .= "Description: " . $data['short'] . "\n";
-        $msg .= "Explanation: " . $data['long'] . "\n";
-        if ($data['hint'] != '') $msg .= "Hint: " . $data['hint'] . "\n";
-        if ($data['stack'] != '') $msg .= "Stack:\n" . $data['stack'] . "\n";
-        if ($data['product'] != '') $msg .= "Product: " . $data['product'] . "\n";
-        if ($data['component'] != '') $msg .= "Component: " . $data['component'] . "\n";
-        return $msg;
-    }
+    return;
 }
 
 /**
@@ -364,44 +305,6 @@ function xarErrorGet($stacktype = "ERROR",$format='data')
 }
 
 // PRIVATE FUNCTIONS
-
-/**
- * Adds formatting to the raw error messages
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access private
- * @param format string one of html or text
- * @return array of formatted error msgs
- */
-function xarException__formatStack($format,$stacktype = "ERROR")
-{
-    global $ErrorStack;
-
-    $stack = $ErrorStack;
-
-    $formattedmsgs = array();
-    while (!$stack->isempty()) {
-        $error = $stack->pop();
-
-        // FIXME: skip noexception because it's not rendered well
-        if (empty($error->major)) continue;
-
-        if ($format == 'template' || $format == 'rawhtml') {
-            if (!class_exists('HTMLExceptionRendering')) {
-                include_once(dirname(__FILE__) . "/exceptions/htmlexceptionrendering.class.php");
-            }
-            $msg = new HTMLExceptionRendering($error);
-        }
-        else {
-            if (!class_exists('TextExceptionRendering')) {
-                include_once(dirname(__FILE__) . "/exceptions/textexceptionrendering.class.php");
-            }
-            $msg = new TextExceptionRendering($error);
-        }
-        $formattedmsgs[] = $msg;
-    }
-    return $formattedmsgs;
-}
 
 /**
  * Error handlers section

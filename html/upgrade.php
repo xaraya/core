@@ -1448,10 +1448,6 @@ if (empty($step)) {
             array('module' => 'base', 'type' => 'html')
         );
 
-        if (empty($htmlBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            return;
-        }
-
         // Get the first available group ID, and assume that will be
         // visible to the administrator.
         $allgroups = xarModAPIFunc(
