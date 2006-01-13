@@ -355,29 +355,12 @@ function xarErrorRender($format,$stacktype = "ERROR", $data=array())
  * Gets a formatted array of errors
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @access public
- * @param format string one of template or plain
- * @param stacktype string one of CORE or ERROR
- * @return array of formatted errors
+ * @deprec 2006-01-13
+ * @return void
  */
 function xarErrorGet($stacktype = "ERROR",$format='data')
 {
-    $msgs = xarException__formatStack($format,$stacktype);
-    $datamsgs = array();
-
-    foreach($msgs as $msg) {
-        $data['major'] = $msg->getMajor();
-        $data['type'] = $msg->getType();
-        $data['title'] = $msg->getTitle();
-        $data['short'] = $msg->getShort();
-        $data['long'] = $msg->getLong();
-        $data['hint'] = $msg->getHint();
-        $data['stack'] = $msg->getStack();
-        $data['product'] = $msg->getProduct();
-        $data['component'] = $msg->getComponent();
-        $datamsgs[] = $data;
-    }
-    return $datamsgs;
+    return;
 }
 
 // PRIVATE FUNCTIONS

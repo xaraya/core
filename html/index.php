@@ -129,9 +129,6 @@ function xarMain()
             }
         }
 
-        // Here we check for exceptions even if $res isn't empty
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
-
         xarVarFetch('pageName','str:1:', $pageName, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
         if (!empty($pageName)){
             xarTplSetPageTemplateName($pageName);
@@ -140,9 +137,6 @@ function xarMain()
         // Render page
         //$pageOutput = xarTpl_renderPage($mainModuleOutput, NULL, $template);
         $pageOutput = xarTpl_renderPage($mainModuleOutput);
-
-        // Handle exceptions (the bubble at the top handler
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
 
         if ($pageCaching == 1) {
             // save the output in cache *before* sending it to the client
