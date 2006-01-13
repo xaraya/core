@@ -1,10 +1,14 @@
 .xar-roletree-box {
 }
 .xar-roletree-branch {
-background-color: transparent;
-visibility: inherit;
+    margin: 0px;
+    padding: 0px;
+    background-color: transparent;
+    visibility: inherit;
 }
 .xar-roletree-leaf {
-background-color: transparent;
-visibility: inherit;
+    margin: 0px;
+    padding: 0px;
+    background-color: transparent;
+    visibility: inherit;
 }
