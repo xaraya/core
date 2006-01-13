@@ -28,11 +28,9 @@ function modules_adminapi_add_module_alias($args)
 
     // Check if the module name we want to define is already in use
     if (xarMod_getBaseInfo($aliasModName)) {
-        throw new DuplicateException(array('modname',$aliasModName));
+        throw new DuplicateException(array('module alias',$aliasModName));
     } else {
-        // TODO: test this someday...
-        //if (xarCurrentErrorID() != 'MODULE_NOT_EXIST') return; // throw back
-        //xarErrorFree();
+        // We did not find the base info, that is good, no?
     }
 
     // Check if the alias we want to set it to *does* exist

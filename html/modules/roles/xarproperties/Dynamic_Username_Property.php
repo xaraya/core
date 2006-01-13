@@ -38,10 +38,13 @@ class Dynamic_Username_Property extends Dynamic_Property
         if (empty($value)) {
             $value = xarUserGetVar('uid');
         }
-        // check that the user exists
+        // check that the user exists, but dont except
         if (is_numeric($value)) {
-            $user = xarUserGetVar('uname', $value);
-            if (!isset($user)) xarErrorHandled();
+            try {
+                $user = xarUserGetVar('uname', $value);
+            } catch (NotFoundExceptions $e) {
+                // Nothing to do?
+            }
         }
         if (!is_numeric($value) || empty($user)) {
             $this->invalid = xarML('user');
@@ -71,19 +74,16 @@ class Dynamic_Username_Property extends Dynamic_Property
         }
         $data=array();
 
-        $user = xarUserGetVar('name', $value);
+        try {
+            $user = xarUserGetVar('name', $value);
 
-        if (empty($user)) {
-            if (!isset($user)) xarErrorHandled();
-            $user = xarUserGetVar('uname', $value);
-            if (!isset($user)) xarErrorHandled();
+            if (empty($user)) 
+                $user = xarUserGetVar('uname', $value);
+        } catch (NotFoundExceptions $e) {
+            // Nothing to do?
         }
 
         if ($value > 1) {
-/*            $output .= ' [ <a href="'.xarModURL('roles','user','display',
-                                         array('uid' => $value))
-                    . '" target="preview">'.xarML('profile').'</a> ]';
-*/
             $data['linkurl'] = xarModURL('roles','user','display', array('uid' => $value));
         }
         $data['user'] = xarVarprepForDisplay($user);
@@ -105,11 +105,12 @@ class Dynamic_Username_Property extends Dynamic_Property
             $value = xarUserGetVar('uid');
         }
         $data=array();
-        $user = xarUserGetVar('name', $value);
-        if (empty($user)) {
-            if (!isset($user)) xarErrorHandled();
-            $user = xarUserGetVar('uname', $value);
-            if (!isset($user)) xarErrorHandled();
+        try {
+            $user = xarUserGetVar('name', $value);
+            if (empty($user)) 
+                $user = xarUserGetVar('uname', $value);
+        } catch(NotFoundExceptions $e) {
+            // Nothing to do?
         }
 
         $data['value'] = $value;

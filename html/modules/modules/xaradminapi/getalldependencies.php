@@ -51,14 +51,11 @@ function modules_adminapi_getalldependencies($args)
     $checked_ids[] = $mainId;
 
     // Get module information
-    $modInfo = xarModGetInfo($mainId);
-    if (!isset($modInfo)) {
-        //Handle the Exception Thrown
-        xarErrorHandled();
-
+    try {
+        $modInfo = xarModGetInfo($mainId);
+    } catch (NotFoundExceptions $e) {
         //Add this module to the unsatisfiable list
         $dependency_array['unsatisfiable'][] = $mainId;
-
         //Return now, we cant find more info about this module
         return $dependency_array;
     }

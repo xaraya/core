@@ -173,14 +173,11 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                                           'methods' => $this->methods,
                                           'override' => $override,
                                           'maxsize' => $this->maxsize));
+            // TODO: this raises exceptions now, we want to catch some of them
+            // TODO: Insert try/catch clause once we know what uploads raises 
+            // TODO:
             if (!isset($return) || !is_array($return) || count($return) < 2) {
                 $this->value = null;
-            // CHECKME: copied from autolinks :)
-                // 'text' rendering will return an array
-                $errorstack = xarErrorGet();
-                $errorstack = array_shift($errorstack);
-                $this->invalid = $errorstack['short'];
-                xarErrorHandled();
                 return false;
             }
             if (empty($return[0])) {

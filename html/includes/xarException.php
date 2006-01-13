@@ -249,10 +249,6 @@ function xarCurrentError()
 /**
  * Resets current error status
  *
- * xarErrorFree is a shortcut for xarErrorSet(XAR_NO_EXCEPTION, NULL, NULL).
- * You must always call this function when you handle a caught error or
- * equivalently you don't throw the error back to the caller.
- *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @deprec 2006-01-12

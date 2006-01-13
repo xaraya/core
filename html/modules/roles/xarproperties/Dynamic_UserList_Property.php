@@ -65,12 +65,14 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         }
         if (!empty($value)) {
             // check if this is a valid user id
-            $uname = xarUserGetVar('uname', $value);
-            if (isset($uname)) {
-                $this->value = $value;
-                return true;
-            } else {
-                xarErrorHandled();
+            try {
+                $uname = xarUserGetVar('uname', $value);
+                if (isset($uname)) {
+                    $this->value = $value;
+                    return true;
+                }
+            } catch (NotFoundExceptions $e) {
+                // Nothing to do?
             }
         } elseif (empty($value)) {
             $this->value = $value;
@@ -165,24 +167,17 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         if (empty($value)) {
             $user = '';
         } else {
-            $user = xarUserGetVar('name', $value);
-            if (empty($user)) {
-                if (!isset($user)) xarErrorHandled();
-                $user = xarUserGetVar('uname', $value);
-                if (!isset($user)) xarErrorHandled();
+            try {
+                $user = xarUserGetVar('name', $value);
+                if (empty($user)) {
+                    $user = xarUserGetVar('uname', $value);
+                }
+            } catch (NotFoundExceptions $e) {
+                // Nothing to do?
             }
         }
         $data['value']=$value;
         $data['user']=$user;
-        /*
-        if ($value > 1) {
-            return '<a href="'.xarModURL('roles', 'user', 'display',
-                                         array('uid' => $value))
-                    . '">'.xarVarPrepForDisplay($user).'</a>';
-        } else {
-            return xarVarPrepForDisplay($user);
-        }
-        */
 
         return xarTplProperty('roles', 'userlist', 'showoutput', $data);
     }
