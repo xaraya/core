@@ -240,5 +240,7 @@ end
 function ignore_branch(name)
    if name=='com.xaraya.core.ddextend' then return true end
    if name=='com.xaraya.core.ddprops' then return true end
+   if name=='com.xaraya.core.changesdue' then return true end
+   if name=='com.xaraya.core.creole' then return true end
    return false
 end

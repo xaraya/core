@@ -67,7 +67,8 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
         $data['value']=$value;
         $data['name']=$name;
         $data['id']=$id;
-        $data['checked']=!empty($value) ? true : false;
+        $data['checked'] = isset($checked) && $checked ? true : false;
+        $data['onchange'] = !empty($onchange) ? $onchange : null; // let tpl decide what to do with it
         $data['tabindex']=!empty($tabindex) ? $tabindex : 0;
         $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid): '';
 
