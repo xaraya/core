@@ -90,7 +90,8 @@ class xarTreeRenderer
                     'parent' => $this->roles->getgroup($topuid),
                     'level' => 1
                     );
-        $this->tree = $this->addbranches($initialnode);
+//        $this->tree = $this->addbranches($initialnode);
+        return $this->addbranches($initialnode);
     }
 
     /**

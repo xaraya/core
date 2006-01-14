@@ -1,5 +1,3 @@
-.xar-roletree-box {
-}
 .xar-roletree-branch {
     margin: 0px;
     padding: 0px;
@@ -11,4 +9,96 @@
     padding: 0px;
     background-color: transparent;
     visibility: inherit;
+}
+
+div.tree a{
+    text-decoration: none;
+}
+
+div.tree li{
+/*    border: 0.1px solid white; */
+}
+
+
+div.tree ul{
+    width: auto;
+    padding-left : 0px;
+    margin-left : 0px;
+}
+
+div.tree img{
+    border : none;
+    margin: 0px;
+    vertical-align: middle;
+}
+ 
+
+div.tree ul li{
+}
+
+div.tree ul ul{
+    margin-left: 16px;        
+}
+div.tree li.closed ul {
+    display: none;
+}
+
+div.tree ul li{
+    clear: left;    
+    list-style: none;
+    background: url(../xarimages/I-repeater.png) 0 0 repeat-y;
+    display: block;
+    width: auto;
+    padding-left: 0;
+    white-space: nowrap;
+}
+
+div.tree li.lastnode {
+    list-style: none;
+    background-image: none;
+}
+
+/* Span-A: I/L/I glpyhs */
+div.tree ul ul span.a {
+    background: url(../xarimages/T.png) 0 50% no-repeat;
+    display: block;
+}
+div.tree ul ul span.a.lastnode {
+    background: url(../xarimages/L.png) 0 50% no-repeat;
+}
+
+/* Span-B: Plus/Minus icon */
+div.tree ul span.b {
+}
+div.tree ul span.a.children span.b {
+    background: url(../xarimages/minus.gif) 0 50% no-repeat;
+    cursor: pointer;
+}
+div.tree li.closed span.a.children span.b {
+    background: url(../xarimages/plus.gif) 0 50% no-repeat;
+    cursor: pointer;
+}
+
+/* Span-C: Spacing and extending tree line below the icon */
+div.tree span.c {
+    margin-left: 16px;
+}
+div.tree span.a.children span.c {
+    background: url(../xarimages/I-bottom.png) 0 50% no-repeat;
+}
+div.tree span.a.spanClosed span.c {
+    background-image: none;
+}
+
+/* Items */
+div.tree .treeattributes {
+    white-space: nowrap;
+    padding: 0px 10px 0px 18px;
+    background: url(../xarimages/emptybox.png) 0 50% no-repeat;
+}
+div.tree span.a.children .treeattributes {
+    background-image: url(../xarimages/openbox.png);
+}
+div.tree span.a.children.spanClosed .treeattributes {
+    background-image: url(../xarimages/closedbox.png);
 }

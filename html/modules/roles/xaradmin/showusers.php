@@ -44,6 +44,8 @@ function roles_admin_showusers()
         include_once 'modules/roles/xartreerenderer.php';
         $renderer = new xarTreeRenderer();
         $data['roletree'] = $renderer->drawtree($renderer->maketree());
+        $data['treenode'] = array($renderer->maketree());
+//        echo var_dump($data['treenode']);exit;
     }
 
 // Get information on the group we're at
