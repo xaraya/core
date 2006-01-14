@@ -1792,7 +1792,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $linkfunc = 'view';
             // Don't show link to view items that don't belong to the DD module
             // Set to 0 when interested in viewing them anyway...
-            $dummy_mode = 1;
+            $dummy_mode = 0;
         } else {
             $linktype = 'user';
             $linkfunc = $args['linkfunc'];

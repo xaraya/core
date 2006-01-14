@@ -53,7 +53,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 20,
                                     'default'  => 1,
                                     'source'   =>  $prefix . '_roles.xar_type',
-                                    'status'   => 3,
+                                    'status'   => 1,
                                     'order'    => 3,
                                     ))) {
                                     return;}
