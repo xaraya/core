@@ -15,8 +15,8 @@ div.tree a{
     text-decoration: none;
 }
 
-div.tree li{
-/*    border: 0.1px solid white; */
+div.tree ul li{
+/*    border: 1px solid white; */
 }
 
 
@@ -32,10 +32,6 @@ div.tree img{
     vertical-align: middle;
 }
  
-
-div.tree ul li{
-}
-
 div.tree ul ul{
     margin-left: 16px;        
 }
@@ -94,6 +90,7 @@ div.tree span.a.spanClosed span.c {
 div.tree .treeattributes {
     white-space: nowrap;
     padding: 0px 10px 0px 18px;
+    height: 21px;
     background: url(../xarimages/emptybox.png) 0 50% no-repeat;
 }
 div.tree span.a.children .treeattributes {
