@@ -72,18 +72,18 @@ function roles_adminapi_update($args)
     if (!empty($pass)){
         $cryptpass=md5($pass);
         $query = "UPDATE $rolesTable
-                  SET xar_name = ?, xar_uname = ?, xar_email = ?, xar_duvs = ?,
+                  SET xar_name = ?, xar_uname = ?, xar_email = ?,
                       xar_pass = ?, xar_valcode = ?, xar_state = ?
                 WHERE xar_uid = ?";
         $bindvars = array($name,$uname,$email,$home,$cryptpass,$valcode,$state,$uid);
     } else {
         $query = "UPDATE $rolesTable
-                SET xar_name = ?, xar_uname = ?, xar_email = ?, xar_duvs = ?,
+                SET xar_name = ?, xar_uname = ?, xar_email = ?,
                     xar_valcode = ?, xar_state = ?
                 WHERE xar_uid = ?";
-        $bindvars = array($name,$uname,$email,$home,$valcode,$state,$uid);
+        $bindvars = array($name,$uname,$email,$valcode,$state,$uid);
     }
-
+	xarModSetUserVar('roles','userhome',$home,$uid);
     $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 

@@ -718,35 +718,6 @@ if (empty($step)) {
         }
     }
 
-
-    {
-        // Change to the roles table
-
-        echo "<h5>Checking Roles Table Definitions</h5>";
-        $dbconn =& xarDBGetConn();
-        $datadict =& xarDBNewDataDict($dbconn, 'CREATE');
-
-        $blockinstancestable = xarDBGetSiteTablePrefix() . '_roles';
-        $columns = $datadict->getColumns($blockinstancestable);
-        // Do we have a xar_duvs column?
-        $blocks_column_found = false;
-        foreach($columns as $column) {
-            if ($column->name == 'xar_duvs') {
-                $blocks_column_found = true;
-                break;
-            }
-        }
-        // Upgrade the table (xar_roles) if the duvs column is not found.
-        if (!$blocks_column_found) {
-            // Create the column.
-            $result = $datadict->addColumn($blockinstancestable, 'xar_duvs C(100) Null');
-            echo "Added column xar_duvs to roles table<br/>";
-        } else {
-            echo "Roles table is up-to-date<br/>";
-        }
-    }
-
-
     // Add the syndicate block type and syndicate block for RSS display.
     echo "<h5>Checking Installed Blocks</h5>";
 
