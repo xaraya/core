@@ -64,7 +64,6 @@ class Dynamic_TextBox_Property extends Dynamic_Property
         }
     }
 
-//    function showInput($name = '', $value = null, $size = 0, $maxlength = 0, $id = '', $tabindex = '')
     function showInput($args = array())
     {
         extract($args);
@@ -82,25 +81,16 @@ class Dynamic_TextBox_Property extends Dynamic_Property
         if (empty($id)) {
             $id = $name;
         }
-/*        return '<input type="text"'.
-               ' name="' . $name . '"' .
-               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
-               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' />' .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-*/
-            $data['name']     = $name;
-            $data['id']       = $id;
-            $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-            $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-            $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-            $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-            $data['size']     = !empty($size) ? $size : $this->size;
+        $data['name']     = $name;
+        $data['id']       = $id;
+        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
+        $data['size']     = !empty($size) ? $size : $this->size;
+        $data['onfocus']  = isset($onfocus) ? $onfocus : null; // let tpl decide what to do with it
 
-    // FIXME: this won't work when called by a property from a different module
+        // FIXME: this won't work when called by a property from a different module
         // allow template override by child classes (or in BL tags/API calls)
         if (empty($template)) {
             $template = 'textbox';

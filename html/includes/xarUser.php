@@ -581,7 +581,10 @@ function xarUserSetVar($name, $value, $userId = NULL)
     } elseif (!xarUser__isVarDefined($name)) {
 		if (xarModGetVar('roles',$name)) {
             xarCore_SetCached('User.Variables.'.$userId, $name, false);
-            throw new xarException($name,'User variable #(1) was not correctly registered');
+            $msg = xarML('User variable #(1) was not correctly registered', $name);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'VARIABLE_NOT_REGISTERED',
+                           new SystemException($msg));
+            return;
         } else {
             xarModSetUserVar('roles',$name,$value,$userId);
         }

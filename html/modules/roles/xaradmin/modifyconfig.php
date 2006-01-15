@@ -172,7 +172,7 @@ function roles_admin_modifyconfig()
                 }
         break;
     }
-	$data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSecGenAuthKey();
     return $data;
 }
 ?>

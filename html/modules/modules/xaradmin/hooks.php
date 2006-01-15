@@ -56,8 +56,8 @@ function modules_admin_hooks($args)
             $modList[$i]['checked'] = '';
             $modList[$i]['links'] = '';
 
-	   	 	$modList[$i]['link'] = xarModURL('modules','admin','modifyorder', array('modulename' => $curhook,
-							'modulehookedname' => $modList[$i]['name'] ));
+                $modList[$i]['link'] = xarModURL('modules','admin','modifyorder', array('modulename' => $curhook,
+                            'modulehookedname' => $modList[$i]['name'] ));
 
             if ($oldcat != $modList[$i]['category']) {
                 $modList[$i]['header'] = xarVarPrepForDisplay($modList[$i]['category']);
@@ -80,12 +80,12 @@ function modules_admin_hooks($args)
                 if (!empty($hookedmods[$modList[$i]['name']])) {
                     foreach ($hookedmods[$modList[$i]['name']] as $itemType => $val) {
                         $modList[$i]['checked'][$itemType] = 1;
-			// BEGIN MODIF
-			$modList[$i]['links'][$itemType] = xarModURL('modules','admin','modifyorder',
-									array('modulename' => $curhook,
-							'modulehookedname' =>  $modList[$i]['name'],
-							'itemtype' => $itemType));
-    			// END MODIF
+            // BEGIN MODIF
+            $modList[$i]['links'][$itemType] = xarModURL('modules','admin','modifyorder',
+                                    array('modulename' => $curhook,
+                            'modulehookedname' =>  $modList[$i]['name'],
+                            'itemtype' => $itemType));
+                // END MODIF
                     }
                     break;
                 }

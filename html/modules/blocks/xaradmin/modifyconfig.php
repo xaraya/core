@@ -32,5 +32,4 @@ function blocks_admin_modifyconfig()
     $data['authid'] = xarSecGenAuthKey();
     return $data;
 }
-
 ?>

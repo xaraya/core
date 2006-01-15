@@ -1114,11 +1114,11 @@ class xarRole
         while (!$result->EOF) {
             list($uid, $name, $type, $parentid, $uname, $email, $pass,
                 $date_reg, $val_code, $state, $auth_module) = $result->fields;
-			$vars = array();
-			if (!empty($duvs)) {
-				$duvs = unserialize($duvs);
-				foreach ($duvs as $key => $value) $vars[$key] = $value;
-			}
+            $vars = array();
+            if (!empty($duvs)) {
+                $duvs = unserialize($duvs);
+                foreach ($duvs as $key => $value) $vars[$key] = $value;
+            }
             $pargs = array('uid' => $uid,
                 'name' => $name,
                 'type' => $type,
@@ -1133,7 +1133,7 @@ class xarRole
 			$duvarray = array('userhome','primaryparent','passwordupdate','timezone');
 			$vars = array();
 			foreach ($duvarray as $key) $vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
-			$pargs = array_merge($pargs,$vars);
+            $pargs = array_merge($pargs,$vars);
             $parents[] = new xarRole($pargs);
             $result->MoveNext();
         }

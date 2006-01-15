@@ -89,11 +89,11 @@
                                 <xar:mlvar>#$hookmod['modname']#</xar:mlvar>
                                 <xar:mlvar>#$hookedmod['name']#</xar:mlvar>
                             </xar:ml>
-			    <!-- BEGIN MODIFS -->
+                <!-- BEGIN MODIFS -->
                             <xar:if condition="xarModIsHooked($hookmod['modname'],$hookedmod['name'])">
-				<a href="#$hookedmod['link']#"><xar:mlstring>Configure hook order</xar:mlstring></a>
-			    </xar:if>
-			    <!-- END MODIFS -->
+                <a href="#$hookedmod['link']#"><xar:mlstring>Configure hook order</xar:mlstring></a>
+                </xar:if>
+                <!-- END MODIFS -->
                         </label>
                         <br/>
                         
@@ -148,14 +148,14 @@
                                         </xar:if>
                                     </xar:if>
                                     <label for="hooked_#$hookedmod['name']#_#$typeid#">#$itemtype['label']#</label>
-			    	    <!-- BEGIN MODIFS -->
+                        <!-- BEGIN MODIFS -->
                                     <xar:if condition="$itemtypechecked">
-                            	    <xar:if condition="xarModIsHooked($hookmod['modname'],$hookedmod['name'],$typeid)">
-					<a href="#$hookedmod['links'][$typeid]#">
-					    <xar:mlstring>Configure hook order</xar:mlstring>
-					</a>
-			    	    </xar:if></xar:if><br />
-			    <!-- END MODIFS -->
+                                    <xar:if condition="xarModIsHooked($hookmod['modname'],$hookedmod['name'],$typeid)">
+                    <a href="#$hookedmod['links'][$typeid]#">
+                        <xar:mlstring>Configure hook order</xar:mlstring>
+                    </a>
+                        </xar:if></xar:if><br />
+                <!-- END MODIFS -->
                                 </xar:foreach>
                             </div>
                             <!-- NOTE: the position of this script thingie is important, it has to come AFTER the div above -->

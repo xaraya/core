@@ -104,8 +104,8 @@ function blocks_adminapi_update_instance_groups($args)
             $nextId = $dbconn->GenId($block_group_instances_table);
             $query = "INSERT INTO $block_group_instances_table
                         (xar_id, xar_group_id, xar_instance_id, xar_position, xar_template)
-                      VALUES (?,?,?,0,?)";
-            $bindvars = array($nextId, $gid, $bid, $newgroups[$gid]['template']);
+                      VALUES (?,?,?,?,?)";
+            $bindvars = array($nextId, $gid, $bid, 0, $newgroups[$gid]['template']);
             $result =& $dbconn->Execute($query,$bindvars);
             if(!$result) return;
             //echo " create:$gid with " . $newgroups[$gid]['template'];

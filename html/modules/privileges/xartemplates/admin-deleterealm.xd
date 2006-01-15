@@ -19,7 +19,7 @@
             </dd>    
         </dl>
         <div class="xar-norm-outline xar-fullwidth" style="margin-top:1px;">
-            <form method="post" action="&xar-modurl-privileges-admin-deleterealm;" method="post" enctype="application/x-www-form-urlencoded" >
+            <form action="&xar-modurl-privileges-admin-deleterealm;" method="post" enctype="application/x-www-form-urlencoded" >
                 <div style="text-align: center">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="rid" id="rid" value="#$rid#" />

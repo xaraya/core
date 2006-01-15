@@ -258,7 +258,7 @@ class xarMasks
 */
     function winnow($privs1, $privs2)
     {
-        if (!is_array($privs1) || !is_array($privs1)) {
+        if (!is_array($privs1) || !is_array($privs2)) {
             $msg = xarML('Parameters to winnow need to be arrays');
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException($msg));
@@ -398,34 +398,34 @@ class xarMasks
         if ($pnrealm != '') $mask->setRealm($pnrealm);
         if ($pnlevel != '') $mask->setLevel($pnlevel);
 
-		$realmvalue = xarModGetVar('privileges', 'realmvalue');
-		if (strpos($realmvalue,'string:') === 0) {
-			$textvalue = substr($realmvalue,7);
-			$realmvalue = 'string';
-		} else {
-			$textvalue = '';
-		}
-		switch($realmvalue) {
-			case "theme":
-				$mask->setRealm(xarModGetVar('themes', 'default'));
-				break;
-			case "domain":
-				$host = xarServerGetHost();
-				$parts = explode('.',$host);
-				if (count($parts) < 3) {
-					$mask->setRealm('All');
-				} else {
-					$mask->setRealm($parts[0]);
-				}
-				break;
-			case "string":
-				$mask->setRealm($textvalue);
-				break;
-			case "none":
-			default:
-				$mask->setRealm('All');
-				break;
-		}
+        $realmvalue = xarModGetVar('privileges', 'realmvalue');
+        if (strpos($realmvalue,'string:') === 0) {
+            $textvalue = substr($realmvalue,7);
+            $realmvalue = 'string';
+        } else {
+            $textvalue = '';
+        }
+        switch($realmvalue) {
+            case "theme":
+                $mask->setRealm(xarModGetVar('themes', 'default'));
+                break;
+            case "domain":
+                $host = xarServerGetHost();
+                $parts = explode('.',$host);
+                if (count($parts) < 3) {
+                    $mask->setRealm('All');
+                } else {
+                    $mask->setRealm($parts[0]);
+                }
+                break;
+            case "string":
+                $mask->setRealm($textvalue);
+                break;
+            case "none":
+            default:
+                $mask->setRealm('All');
+                break;
+        }
 
         // normalize the mask now - its properties won't change below
         $mask->normalize();
@@ -471,12 +471,12 @@ class xarMasks
 
         // check if the exception needs to be caught here or not
         if ($catch && !$pass) {
-        	if (xarModGetVar('privileges','exceptionredirect')) {
-				xarResponseRedirect(xarModURL('roles','user','register'));
-        	} else {
-				$msg = xarML('No privilege for #(1)',$mask->getName());
-				xarErrorSet(XAR_USER_EXCEPTION, 'NO_PRIVILEGES',
-							   new DefaultUserException($msg));
+            if (xarModGetVar('privileges','exceptionredirect')) {
+                xarResponseRedirect(xarModURL('roles','user','register'));
+            } else {
+                $msg = xarML('No privilege for #(1)',$mask->getName());
+                xarErrorSet(XAR_USER_EXCEPTION, 'NO_PRIVILEGES',
+                               new DefaultUserException($msg));
             }
         }
 
@@ -1777,15 +1777,15 @@ class xarPrivileges extends xarMasks
         }
 
         // match realm. bail if no match.
-		switch(xarModGetVar('privileges', 'realmcomparison')) {
-			case "contains":
-				$fails = $p1[1]!=$p2[1];
-			case "exact":
-			default:
-				$fails = $p1[1]!=$p2[1];
-				break;
-		}
-		if (($p1[1] != 'all') && ($fails)) return false;
+        switch(xarModGetVar('privileges', 'realmcomparison')) {
+            case "contains":
+                $fails = $p1[1]!=$p2[1];
+            case "exact":
+            default:
+                $fails = $p1[1]!=$p2[1];
+                break;
+        }
+        if (($p1[1] != 'all') && ($fails)) return false;
 
         // match module and component. bail if no match.
         for ($i=2;$i<4;$i++) {

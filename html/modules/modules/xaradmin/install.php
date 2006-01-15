@@ -49,11 +49,11 @@ function modules_admin_install()
         //First 2 have $modInfo under them foreach module,
         //3rd has only 'regid' key with the ID of the module
 
-	    // get any dependency info on this module for a better message if something is missing
-	    $thisinfo = xarModGetInfo($id);
-	    if (!isset($thisinfo)) xarErrorHandled();
-	    if (isset($thisinfo['dependencyinfo'])) $data['dependencyinfo'] = $thisinfo['dependencyinfo'];
-	    else $data['dependencyinfo'] = array();
+        // get any dependency info on this module for a better message if something is missing
+        $thisinfo = xarModGetInfo($id);
+        if (!isset($thisinfo)) xarErrorHandled();
+        if (isset($thisinfo['dependencyinfo'])) $data['dependencyinfo'] = $thisinfo['dependencyinfo'];
+        else $data['dependencyinfo'] = array();
 
         $data['authid']       = xarSecGenAuthKey();
         $data['dependencies'] = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$id));
