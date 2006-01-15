@@ -135,10 +135,10 @@ class xarMasks
                 $bindvars = array($modId);
             } else {
                 $query = "SELECT *
-                          FROM $this->maskstable 
+                          FROM $this->maskstable
                           WHERE (xar_modid = ?) AND
                           ((xar_component = ?) OR
-                           (xar_component = ?) OR 
+                           (xar_component = ?) OR
                            (xar_component = ?)
                           ) ";
                 $bindvars = array($modId,$component,'All','None');
@@ -205,8 +205,8 @@ class xarMasks
                 $bindvars = array($realm, $component, $instance, $level,
                                   $description, $sid);
             } else {
-                $query = "INSERT INTO $this->maskstable 
-                          (xar_sid, xar_name, xar_realm, xar_modid, xar_component, xar_instance, xar_level, xar_description) 
+                $query = "INSERT INTO $this->maskstable
+                          (xar_sid, xar_name, xar_realm, xar_modid, xar_component, xar_instance, xar_level, xar_description)
                           VALUES (?,?,?,?,?,?,?,?)";
                 $bindvars = array(
                                   $this->dbconn->genID($this->maskstable),
@@ -374,7 +374,7 @@ class xarMasks
     {
         $userID = xarSessionGetVar('uid');
         if ($userID == XARUSER_LAST_RESORT) return true;
-        
+
         $maskname = $mask;
         $mask =  $this->getMask($mask);
         //        if($mask->getName() == "pnLegacyMask") {
@@ -573,7 +573,7 @@ class xarMasks
         if (count($roles) == 0) return $coreset;
 
         $parents = array();
-        
+
         foreach ($roles as $role) {
             // FIXME: evaluate why role is empty
             // Below (hack) fix added by Rabbitt (suggested by mikespub on the devel mailing list)
@@ -593,7 +593,7 @@ class xarMasks
                     $privs[] = $priv;
                 }
             }
-                        
+
             $coreset['privileges'] = $this->winnow($coreset['privileges'],$privs);
             $parents = array_merge($parents,$role->getParents());
         }
@@ -778,7 +778,9 @@ class xarMasks
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
             $result->next();
             $pargs = $result->getRow();
+        if ($name == 'ViewBase') {echo xarModGetNameFromID($pargs['module']); exit;}
             $pargs['module'] = $module;
+//            $pargs['module'] = xarModGetNameFromID($pargs['module']);
             xarVarSetCached('Security.Masks',$name,$pargs);
         } else {
             $pargs = xarVarGetCached('Security.Masks',$name);
@@ -831,11 +833,11 @@ class xarPrivileges extends xarMasks
             // treated as key information here. Do we need some further unique (within a
             // module and component) name for an instance, independant of the header label?
             $iTable = $this->instancestable; $mTable = $this->modulestable;
-            $query = "SELECT instances.xar_iid 
+            $query = "SELECT instances.xar_iid
                       FROM   $iTable instances, $mTable mods
-                      WHERE  instances.xar_modid = mods.xar_id AND 
-                             mods.xar_name = ? AND 
-                             instances.xar_component = ? AND 
+                      WHERE  instances.xar_modid = mods.xar_id AND
+                             mods.xar_name = ? AND
+                             instances.xar_component = ? AND
                              instances.xar_header = ?";
             $result = $this->dbconn->execute($query, array($module, $type, $instance['header']));
 
@@ -856,9 +858,9 @@ class xarPrivileges extends xarMasks
                                       );
                 } else {
                     $query = "INSERT INTO $iTable
-                          ( xar_iid, xar_modid, xar_component, xar_header, 
-                            xar_query, xar_limit, xar_propagate, 
-                            xar_instancetable2, xar_instancechildid, 
+                          ( xar_iid, xar_modid, xar_component, xar_header,
+                            xar_query, xar_limit, xar_propagate,
+                            xar_instancetable2, xar_instancechildid,
                             xar_instanceparentid, xar_description)
                           VALUES (?,?,?,?,?,?,?,?,?,?,?)";
                     $modInfo = xarMod_GetBaseInfo($module);
@@ -873,7 +875,7 @@ class xarPrivileges extends xarMasks
                 }
                 $this->dbconn->Execute($query,$bindvars);
                 $this->dbconn->commit();
-            } catch (SQLException $e) { 
+            } catch (SQLException $e) {
                 $this->dbconn->rollback();
                 throw $e;
             }
@@ -924,7 +926,7 @@ class xarPrivileges extends xarMasks
     function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
         $query = "INSERT INTO $this->privilegestable (
-                    xar_pid, xar_name, xar_realm, xar_module, xar_component, 
+                    xar_pid, xar_name, xar_realm, xar_module, xar_component,
                     xar_instance, xar_level, xar_description)
                   VALUES (?,?,?,?,?,?,?,?)";
         $bindvars = array($this->dbconn->genID($this->privilegestable),
@@ -1189,7 +1191,7 @@ class xarPrivileges extends xarMasks
                                'display' => 'All');
             //          $modules[] = array('id' => 0,
             //                             'name' => 'None');
-            
+
             // add the modules from the database
             // TODO: maybe remove the key, don't really need it
             while(!$result->EOF) {
@@ -1306,14 +1308,14 @@ class xarPrivileges extends xarMasks
                 return array('external' => 'yes',
                              'target'   => $selection);
             }
-            
+
             // check if the query is there
             if ($selection =='') {
                 $msg = xarML('A query is missing in component #(1) of module #(2)', $component, $module);
-                
+
                 throw new Exception($msg);
             }
-            
+
             $result1 = $this->dbconn->Execute($selection);
 
             $dropdown = array();
@@ -2320,14 +2322,14 @@ class xarPrivilege extends xarMask
         while(!$result->EOF) {
             list($uid,$name,$type,$uname,$email,$pass,$auth_modid) = $result->fields;
             //          $ind = $ind + 1;
-            
+
             $role = new xarRole(array('uid' => $uid,
                                       'name' => $name,
                                       'type' => $type,
                                       'uname' => $uname,
                                       'email' => $email,
                                       'pass' => $pass,
-                                      // NOTE: CHANGED since 1.x! to and ID, 
+                                      // NOTE: CHANGED since 1.x! to and ID,
                                       // but i dont think it matters, auth module should probably
                                       // be phased out of this table completely
                                       'auth_module' => $auth_modid,
