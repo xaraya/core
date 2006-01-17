@@ -47,7 +47,7 @@ function dynamicdata_admin_newhook($args)
         return $msg;
     }
 
-    if (!empty($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
+    if (isset($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
         $itemtype = $extrainfo['itemtype'];
     } else {
         $itemtype = 0;
@@ -60,25 +60,38 @@ function dynamicdata_admin_newhook($args)
     } else {
         $itemid = 0;
     }
-    $object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
-                                       'itemtype' => $itemtype,
-                                       'itemid'   => $itemid));
-    if (!isset($object)) return;
+    $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
 
-    // if we are in preview mode, we need to check for any preview values
-    if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
-    if (!empty($preview)) {
-        $object->checkInput();
-    }
+    $data = "";
+    foreach ($tree as $branch) {
+    	if ($branch['objectid'] == 0) continue;
+    	// TODO: this next line jumps over itemtypes that correspond to wrappers of native itemtypes
+    	// TODO: make this more robust
+    	if ($branch['itemtype'] < 1000) continue;
 
-    if (!empty($object->template)) {
-        $template = $object->template;
-    } else {
-        $template = $object->name;
+		$object = & Dynamic_Object_Master::getObject(array(
+										   'objectid' => $branch['objectid'],
+										   'moduleid' => $modid,
+										   'itemtype' => $itemtype,
+										   'itemid'   => $itemid));
+		if (!isset($object)) return;
+
+		// if we are in preview mode, we need to check for any preview values
+		if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
+		if (!empty($preview)) {
+			$object->checkInput();
+		}
+
+		if (!empty($object->template)) {
+			$template = $object->template;
+		} else {
+			$template = $object->name;
+		}
+		$data .= xarTplModule('dynamicdata','admin','newhook',
+							array('properties' => & $object->properties),
+							$template);
     }
-    return xarTplModule('dynamicdata','admin','newhook',
-                        array('properties' => & $object->properties),
-                        $template);
+    return $data;
 }
 
 ?>

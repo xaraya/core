@@ -70,6 +70,7 @@ function dynamicdata_user_display($args)
     if(!isset($template)) {
         $template = $myobject->name;
     }
+
     // Return the template variables defined in this function
     return xarTplModule('dynamicdata','user','display',$data,$template);
 }
