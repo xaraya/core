@@ -36,7 +36,6 @@ function roles_user_display($args)
 		if (!$role) return;
 
 		$name = $role->getName();
-
 	// Security Check
 		if(!xarSecurityCheck('ViewRoles',0,'Roles',$name)) return;
 

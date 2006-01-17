@@ -498,6 +498,7 @@ class xarRole
         if (!isset($val_code)) $val_code = 'createdbyadmin';
         // FIXME: what is a sensible default for auth_module?
         if (!isset($auth_module)) $auth_module = 0;
+        if (!isset($basetype)) $basetype = 0;
 
         $this->uid = (int) $uid;
         $this->name = $name;

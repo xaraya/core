@@ -71,6 +71,7 @@
         </div>
     </xar:if>                        
 
+      <xar:if condition="$basetype eq ROLES_USERTYPE">
         <div class="xar-form-input-wrapper">
           <span class="xar-form-label">
             <xar:mlstring>Login:</xar:mlstring>
