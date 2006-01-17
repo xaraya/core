@@ -39,6 +39,23 @@
                     </a>
                 </dd>
             </xar:if>
+            <xar:if condition="$tab eq 'duvs'">
+                <dd class="active">
+                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=duvs">
+                        <xar:mlstring>
+                            User Variables 
+                        </xar:mlstring>
+                    </a>
+                </dd>
+                <xar:else />
+                <dd>
+                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=duvs">
+                        <xar:mlstring>
+                            User Variables 
+                        </xar:mlstring>
+                    </a>
+                </dd>
+            </xar:if>
             <xar:if condition="$tab eq 'hooks'">
                 <dd class="active">
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=hooks">
@@ -178,6 +195,157 @@
                 </div>
             </fieldset>
         </form>
+        <xar:comment>
+            ----------------- Begin User Variable Options ------------------- 
+        </xar:comment>
+        <xar:elseif condition="$tab eq 'duvs'" />
+            <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+                <fieldset>
+                    <legend>
+                        <xar:mlstring>
+                            Basic User Variables 
+                        </xar:mlstring>
+                    </legend>
+                    <table style="width: 90%">
+                        <tr>
+                            <th style="width: 100px">
+                                <xar:mlstring>Name</xar:mlstring>
+                            </th>
+                            <th style="width: 400px">
+                                <xar:mlstring>Description</xar:mlstring>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                uname
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>The handle or nick under which the user is known to the site. The uname is unique to each user.</xar:mlstring>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                name
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>The user's display name, as shown in the members list and other displays. The name need not be unique.</xar:mlstring>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                email
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>The user's email address. The email address can be defined by the site administrator to be unique or not.</xar:mlstring>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <xar:mlstring>
+                            Dynamic User Variables 
+                        </xar:mlstring>
+                    </legend>
+                    <table style="width: 90%">
+                        <tr>
+                            <th style="width: 100px">
+                                <xar:mlstring>Name</xar:mlstring>
+                            </th>
+                            <th style="width: 400px">
+                                <xar:mlstring>Description</xar:mlstring>
+                            </th>
+                            <th style="width: 50px">
+                                &nbsp;
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                userhome
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>The user's home page, which is initially displayed when the user logs in. The home page can be user specific or inherited from a parent group</xar:mlstring>
+                            </td>
+                            <td style="width: 50px; text-align: center;">
+                                <xar:if condition="xarModGetVar('roles','userhome')">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','userhome' => 0))#">
+                                        <xar:mlstring>Deactivate</xar:mlstring>
+                                    </a>
+                                <xar:else />
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','userhome' => 1))#">
+                                        <xar:mlstring>Activate</xar:mlstring>
+                                    </a>
+                                </xar:if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                primaryparent
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>The user's primary parent group. Inherited properties from this parent take precendence over inherited properties from other parent groups.</xar:mlstring>
+                            </td>
+                            <td style="width: 50px; text-align: center;">
+                                <xar:if condition="xarModGetVar('roles','primaryparent')">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','primaryparent' => 0))#">
+                                        <xar:mlstring>Deactivate</xar:mlstring>
+                                    </a>
+                                <xar:else />
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','primaryparent' => 1))#">
+                                        <xar:mlstring>Activate</xar:mlstring>
+                                    </a>
+                                </xar:if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                passwordupdate
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>The date the last time this role's password was changed.</xar:mlstring>
+                            </td>
+                            <td style="width: 50px; text-align: center;">
+                                <xar:if condition="xarModGetVar('roles','passwordupdate')">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','passwordupdate' => 0))#">
+                                        <xar:mlstring>Deactivate</xar:mlstring>
+                                    </a>
+                                <xar:else />
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','passwordupdate' => 1))#">
+                                        <xar:mlstring>Activate</xar:mlstring>
+                                    </a>
+                                </xar:if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                timezone
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>This role's timezone.</xar:mlstring>
+                            </td>
+                            <td style="width: 50px; text-align: center;">
+                                <xar:if condition="xarModGetVar('roles','timezone')">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','timezone' => 0))#">
+                                        <xar:mlstring>Deactivate</xar:mlstring>
+                                    </a>
+                                <xar:else />
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','timezone' => 1))#">
+                                        <xar:mlstring>Activate</xar:mlstring>
+                                    </a>
+                                </xar:if>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset>
+                    <div class="xar-form-input-wrapper-after">
+                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                        <input type="hidden" name="phase" id="phase" value="update" />
+                        <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                        <input type="submit" value="#xarML('Update Roles Configuration')#" />
+                    </div>
+                </fieldset>
+            </form>
         <xar:comment>
             ----------------- Begin User Hooks Options ------------------- 
         </xar:comment>

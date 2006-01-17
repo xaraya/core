@@ -9,7 +9,6 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * display dynamicdata for an item - hook for ('item','display','GUI') - currently unused
  *
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
@@ -69,21 +68,31 @@ function dynamicdata_user_displayhook($args)
         $itemid = $objectid;
     }
 
-    $object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
-                                       'itemtype' => $itemtype,
-                                       'itemid' => $itemid));
-    if (!isset($object)) return;
-    $object->getItem();
+    $data = "";
+    $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
+    foreach ($tree as $branch) {
+    	if ($branch['objectid'] == 0) continue;
+    	// TODO: this next line jumps over itemtypes that correspond to wrappers of native itemtypes
+    	// TODO: make this more robust
+    	if ($branch['itemtype'] < 1000) continue;
 
-    if (!empty($object->template)) {
-        $template = $object->template;
-    } else {
-        $template = $object->name;
-    }
-    return xarTplModule('dynamicdata','user','displayhook',
-                        array('properties' => & $object->properties),
-                        $template);
+		$object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
+										   'itemtype' => $branch['itemtype'],
+										   'itemid'   => $itemid));
+		if (!isset($object)) return;
 
+		$object->getItem();
+
+		if (!empty($object->template)) {
+			$template = $object->template;
+		} else {
+			$template = $object->name;
+		}
+		$data .= xarTplModule('dynamicdata','user','displayhook',
+							array('properties' => & $object->properties),
+							$template);
+	}
+	return $data;
 }
 
 ?>
