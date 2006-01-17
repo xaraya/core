@@ -42,7 +42,6 @@ function roles_init()
      *    xar_valcode varchar(35) NOT NULL default '',
      *    xar_state int(3) NOT NULL default '0',
      *    xar_auth_module varchar(100) NOT NULL default '',
-     *    xar_duvs varchar(100) NOT NULL default '',
      *    PRIMARY KEY  (xar_uid)
      * )
      */
@@ -87,10 +86,6 @@ function roles_init()
                 'null' => false,
                 'default' => '3'),
             'xar_auth_module' => array('type' => 'varchar',
-                'size' => 100,
-                'null' => false,
-                'default' => ''),
-            'xar_duvs' => array('type' => 'varchar',
                 'size' => 100,
                 'null' => false,
                 'default' => '')));
@@ -173,7 +168,6 @@ function roles_init()
     if (!$dbconn->Execute($query)) return;
     //Database Initialisation successful
 
-
 # --------------------------------------------------------
 #
 # Register hooks
@@ -185,13 +179,8 @@ function roles_init()
     if (!xarModRegisterHook('item', 'usermenu', 'GUI',
             'roles', 'user', 'usermenu')) {
         return false;
-
-# --------------------------------------------------------
-#
-# Create some modvars
-#
-    xarModSetVar('roles', 'defaultauthmodule', '');
     }
+
     xarModAPIFunc('modules', 'admin', 'enablehooks',
         array('callerModName' => 'roles', 'hookModName' => 'roles'));
     // This won't work because the dynamicdata hooks aren't registered yet when this is
@@ -216,6 +205,8 @@ function roles_activate()
     if (xarModGetVar('roles','itemsperpage')) return true;
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
     xarModSetVar('roles', 'locale', '');
+    xarModSetVar('roles', 'userhome', 0);
+    xarModSetVar('roles', 'primaryparent', 0);
     $lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',
                                               'notify' => TRUE)),

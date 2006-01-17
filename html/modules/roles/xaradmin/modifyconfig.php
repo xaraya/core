@@ -160,12 +160,12 @@ function roles_admin_modifyconfig()
         case 'links':
             switch ($data['tab']) {
                 case 'duvs':
-                    $duvarray = array('userhome','primaryparent','passwordupdate','timezone',);
+                    $duvarray = array('userhome','primaryparent','passwordupdate','timezone');
                     foreach ($duvarray as $duv) {
                         if (!xarVarFetch($duv, 'int', $$duv, null, XARVAR_DONT_SET)) return;
                         if (isset($$duv)) {
-                            if ($$duv) xarModAPIFunc('roles','admin','activateduv',array('name' => $duv));
-                            else xarModAPIFunc('roles','admin','deactivateduv',array('name' => $duv));
+                            if ($$duv) xarModSetVar('roles',$duv,1);
+                            else xarModSetVar('roles',$duv,0);
                         }
                     }
                     break;

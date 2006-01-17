@@ -267,7 +267,7 @@
                                 <xar:mlstring>The user's home page, which is initially displayed when the user logs in. The home page can be user specific or inherited from a parent group</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
-                                <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'userhome', 'state' =&gt; 1))">
+                                <xar:if condition="xarModGetVar('roles','userhome')">
                                     <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','userhome' => 0))#">
                                         <xar:mlstring>Deactivate</xar:mlstring>
                                     </a>
@@ -286,7 +286,7 @@
                                 <xar:mlstring>The user's primary parent group. Inherited properties from this parent take precendence over inherited properties from other parent groups.</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
-                                <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'primaryparent', 'state' =&gt; 1))">
+                                <xar:if condition="xarModGetVar('roles','primaryparent')">
                                     <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','primaryparent' => 0))#">
                                         <xar:mlstring>Deactivate</xar:mlstring>
                                     </a>
@@ -305,7 +305,7 @@
                                 <xar:mlstring>The date the last time this role's password was changed.</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
-                                <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'passwordupdate', 'state' =&gt; 1))">
+                                <xar:if condition="xarModGetVar('roles','passwordupdate')">
                                     <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','passwordupdate' => 0))#">
                                         <xar:mlstring>Deactivate</xar:mlstring>
                                     </a>
@@ -324,7 +324,7 @@
                                 <xar:mlstring>This role's timezone.</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
-                                <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'timezone', 'state' =&gt; 1))">
+                                <xar:if condition="xarModGetVar('roles','timezone')">
                                     <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','timezone' => 0))#">
                                         <xar:mlstring>Deactivate</xar:mlstring>
                                     </a>

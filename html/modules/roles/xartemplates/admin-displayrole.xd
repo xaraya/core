@@ -54,23 +54,22 @@
         #xarVarPrepForDisplay($name)#
       </div>
       
-    <xar:if condition="$basetype eq ROLES_USERTYPE">
-        <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'userhome', 'state' =&gt; 1))">
-            <div class="xar-form-input-wrapper">
-                <span class="xar-form-label">
-                    <xar:mlstring>Home:</xar:mlstring>
-                </span>
-                #xarVarPrepForDisplay($phome)#&nbsp;
-            </div>
-        </xar:if>                        
-        <xar:if condition="xarModAPIFunc('roles','admin','checkduv',array('name' =&gt; 'primaryparent', 'state' =&gt; 1))">
-            <div class="xar-form-input-wrapper">
-                <span class="xar-form-label">
-                    <xar:mlstring>Primary Group:</xar:mlstring>
-                </span>
-                <xar:data-output type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pprimaryparent"/>
-            </div>
-        </xar:if>                        
+    <xar:if condition="xarModGetVar('roles','userhome')">
+        <div class="xar-form-input-wrapper">
+            <span class="xar-form-label">
+                <xar:mlstring>Home:</xar:mlstring>
+            </span>
+            #xarVarPrepForDisplay($phome)#&nbsp;
+        </div>
+    </xar:if>                        
+    <xar:if condition="xarModGetVar('roles','primaryparent')">
+        <div class="xar-form-input-wrapper">
+            <span class="xar-form-label">
+                <xar:mlstring>Primary Group:</xar:mlstring>
+            </span>
+            <xar:data-output type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pprimaryparent"/>
+        </div>
+    </xar:if>                        
 
         <div class="xar-form-input-wrapper">
           <span class="xar-form-label">
