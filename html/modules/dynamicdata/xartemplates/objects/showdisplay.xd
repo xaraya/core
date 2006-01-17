@@ -4,7 +4,7 @@
     <xar:template file="catnavigation" />
 </xar:if>
 <xar:comment>The layout could be set directly or through inheritance (for example in the modify prop screen)</xar:comment>
-<xar:if condition="empty($layout) or $layout eq 'default' or $layout eq 'list'">
+<xar:if condition="empty($layout) or $layout eq 'default' or $layout eq 'list' or $layout eq 'dynamic'">
   <xar:foreach in="$properties" key="$name" value="$property">
     <div class="xar-form-input-wrapper">
       <xar:data-label property="$properties[$name]" label="id" />

@@ -226,7 +226,6 @@ function roles_activate()
     $role = xarFindRole('Admin');
     xarModSetVar('roles', 'admin', $role->getID());
 
-
 # --------------------------------------------------------
 #
 # Register block types

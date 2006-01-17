@@ -33,6 +33,7 @@ function roles_user_view($args)
 	$roles = xarModAPIFunc('roles', 'user', 'getallroles',$args);
 	$items = $roles['nativeitems'];
 	$objectlists = $roles['dditems'];
+                    'numitems' => xarModGetVar('roles', 'itemsperpage')
 
     // keep track of the selected uid's
 

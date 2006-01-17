@@ -47,12 +47,14 @@ function blocks_userapi_groupgetinfo($args)
               FROM      ' . $blockGroupsTable;
 
     if (!empty($gid)) {
-        $query .= ' WHERE xar_id = ' . $gid;
+        $query .= ' WHERE xar_id = ?';
+        $bindvars = array($gid);
     } elseif (!empty($name)) {
-        $query .= ' WHERE xar_name = ' . $dbconn->qstr($name);
+        $query .= ' WHERE xar_name = ?';
+        $bindvars = array($name);
     }
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) {return;}
 
     // Return if we don't get exactly one result.
@@ -82,10 +84,10 @@ function blocks_userapi_groupgetinfo($args)
               ON        inst.xar_id = group_inst.xar_instance_id
               LEFT JOIN $blockTypesTable as btypes
               ON        btypes.xar_id = inst.xar_type_id
-              WHERE     bgroups.xar_id = " . $gid . "
+              WHERE     bgroups.xar_id = ?
               ORDER BY  group_inst.xar_position ASC";
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,array($gid));
     if (!$result) {return;}
 
     // Load up list of group's instances

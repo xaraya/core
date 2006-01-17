@@ -746,7 +746,6 @@ if (empty($step)) {
         }
     }
 
-
     // Add the syndicate block type and syndicate block for RSS display.
     echo "<h5>Checking Installed Blocks</h5>";
 

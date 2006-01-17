@@ -7,8 +7,11 @@
 <xar:set name="modstatus">xarSessionGetVar('statusmsg')</xar:set>
 <xar:base-include-javascript module="base" filename="checkall.js" position="head" />
 <xar:base-include-javascript module="roles" filename="xarTree.js" position="head" />
+<xar:base-include-javascript module="roles" filename="tree.js" position="head" />
 <xar:style scope="module" module="base" file="navtabs" />
 <xar:style scope="module" file="roletree" />
+<xar:style scope="module" file="tree" />
+<xar:additional-styles />
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
 </div>
@@ -31,21 +34,12 @@
 
     <xar:if condition="$selstyle eq '0'">
     <xar:elseif condition="$selstyle eq '1'"/>
-        <script language="JavaScript">
-            <!--
-            var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
-            function doOnLoad() {
-                 oldOnLoadFunction();
-                 xarTree_init('RolesTree');
-                 }
-            var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;");
-            function doOnUnload() {
-                 oldOnUnloadFunction();
-                 }
-            window.onload = doOnLoad;
-            window.onunload = doOnUnload;
-            // -->
-        </script>
+        <fieldset>
+          <legend><xar:mlstring>Role hierarchy</xar:mlstring></legend>
+            <div name="tree" id="tree" class="tree">
+                <xar:template file="tree" />
+          </div>
+        </fieldset>
         <fieldset>
           <legend><xar:mlstring>Role hierarchy</xar:mlstring></legend>
           <div>

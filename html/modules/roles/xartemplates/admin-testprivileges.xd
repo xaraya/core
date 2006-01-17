@@ -211,6 +211,9 @@
         <xar:if condition="$testresult eq false">
           <xar:mlstring>Is Not Permitted</xar:mlstring>
           <xar:else />
+          <xar:mlstring>User </xar:mlstring>
+          <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">'#$pname#'</a>
+          <xar:else />
           <xar:mlstring>Is Permitted</xar:mlstring>
         </xar:if>
       </h4>

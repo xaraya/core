@@ -1,0 +1,6 @@
+<span style="padding-left: 1em">
+    <a href="#$leafitemurl#" title="#$leafitemtitle#" style="margin: 0 0.25em 0 0.25em;">
+        #$leafitemtext#
+    </a>
+    #$leafitemdescription#
+</span>
