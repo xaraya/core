@@ -1,7 +1,6 @@
 <?php
 /**
  * Initialise the mail module
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -32,6 +31,9 @@ function mail_init()
     xarModSetVar('mail', 'encoding', '8bit');
     xarModSetVar('mail', 'html', false);  
     xarModSetVar('mail', 'ShowTemplates', false);
+    xarModSetVar('mail', 'suppresssending', false);
+    xarModSetVar('mail', 'redirectsending', false);
+    xarModSetVar('mail', 'redirectaddress', false);
     // when a module item is created
     if (!xarModRegisterHook('item', 'create', 'API',
             'mail', 'admin', 'hookmailcreate')) {

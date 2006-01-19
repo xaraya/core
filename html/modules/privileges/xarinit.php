@@ -1,7 +1,6 @@
 <?php
 /**
  * Initialisation functions for the security module
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -9,7 +8,7 @@
  *
  * @subpackage Privileges module
  */
- 
+
  /**
  * Purpose of file:  Initialisation functions for the security module
  * Initialise the privileges module
@@ -477,8 +476,18 @@ function privileges_init()
     xarDB_importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
 
 */
-    // Set up an initial value for module variables.
-    xarModSetVar('privileges', 'showrealms', 0);
+# --------------------------------------------------------
+#
+# Set up modvars
+#
+    xarModSetVar('privileges', 'showrealms', false);
+    xarModSetVar('privileges', 'inheritdeny', true);
+    xarModSetVar('privileges', 'tester', 0);
+    xarModSetVar('privileges', 'test', false);
+    xarModSetVar('privileges', 'testdeny', false);
+    xarModSetVar('privileges', 'testmask', 'All');
+    xarModSetVar('privileges', 'realmvalue', 'none');
+    xarModSetVar('privileges', 'realmcomparison','exact');
 
     // Initialisation successful
     return true;
@@ -493,8 +502,8 @@ function privileges_init()
 function privileges_upgrade($oldVersion)
 {
     switch($oldVersion) {
-    case '0.1':
-        // compatability upgrade to 3 positions, no functional changes
+    case '0.1.0':
+		if (!xarModAPIFunc('privileges','admin','createobjects')) return;
         break;
     }
     return true;

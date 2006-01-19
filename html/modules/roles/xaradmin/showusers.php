@@ -20,7 +20,7 @@ function roles_admin_showusers()
     if (xarVarIsCached('roles', 'defaultgroupuid')) {
         $defaultgroupuid = xarVarGetCached('roles', 'defaultgroupuid');
     } else {
-        $defaultgroup = xarModGetVar('roles', 'defaultgroup');
+    	$defaultgroup = xarModAPIFunc('roles','user','getdefaultgroup');
         $defaultgroupuid = xarModAPIFunc('roles','user','get',
                                                  array('uname'  => $defaultgroup,
                                                        'type'   => 1));
@@ -44,6 +44,8 @@ function roles_admin_showusers()
         include_once 'modules/roles/xartreerenderer.php';
         $renderer = new xarTreeRenderer();
         $data['roletree'] = $renderer->drawtree($renderer->maketree());
+        $data['treenode'] = array($renderer->maketree());
+//        echo var_dump($data['treenode']);exit;
     }
 
 // Get information on the group we're at
@@ -117,7 +119,7 @@ function roles_admin_showusers()
     $q->setorder($data['order']);
 
     // Add limits
-    $numitems = xarModGetVar('roles', 'rolesperpage');
+    $numitems = xarModGetVar('roles', 'itemsperpage');
     $q->setrowstodo($numitems);
     $q->setstartat($startnum);
     if(!$q->run()) return;

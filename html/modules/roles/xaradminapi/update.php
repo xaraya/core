@@ -55,6 +55,9 @@ function roles_adminapi_update($args)
     if (empty($valcode)) {
         $valcode = '';
     }
+    if (empty($home)) {
+        $home = '';
+    }
 
 //    if (!xarSecAuthAction(0, 'roles::Item', "$item[uname]::$uid", ACCESS_EDIT)) {
 //        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
@@ -72,7 +75,7 @@ function roles_adminapi_update($args)
                   SET xar_name = ?, xar_uname = ?, xar_email = ?,
                       xar_pass = ?, xar_valcode = ?, xar_state = ?
                 WHERE xar_uid = ?";
-        $bindvars = array($name,$uname,$email,$cryptpass,$valcode,$state,$uid);
+        $bindvars = array($name,$uname,$email,$home,$cryptpass,$valcode,$state,$uid);
     } else {
         $query = "UPDATE $rolesTable
                 SET xar_name = ?, xar_uname = ?, xar_email = ?,
@@ -80,13 +83,14 @@ function roles_adminapi_update($args)
                 WHERE xar_uid = ?";
         $bindvars = array($name,$uname,$email,$valcode,$state,$uid);
     }
-
+	xarModSetUserVar('roles','userhome',$home,$uid);
     $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     $item['module'] = 'roles';
     $item['itemid'] = $uid;
     $item['name'] = $name;
+    $item['home'] = $home;
     $item['uname'] = $uname;
     $item['email'] = $email;
     xarModCallHooks('item', 'update', $uid, $item);

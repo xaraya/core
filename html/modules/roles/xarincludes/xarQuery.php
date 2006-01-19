@@ -9,7 +9,7 @@
  *
  * @subpackage Roles module
  */
- 
+
   /**************************************************************************\
   * xarQuery class for SQL abstraction                                       *
   * Written by Marc Lutolf (marcinmilan@xaraya.com)                          *
@@ -951,7 +951,7 @@ class xarQuery
     function openconnection($x = '')
     {
         if (empty($x)) $this->dbconn =& xarDBGetConn();
-        else $this->dbconn =& $x;
+        else $this->dbconn = $x;
     }
     function getconnection()
     {

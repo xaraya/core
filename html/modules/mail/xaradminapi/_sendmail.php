@@ -1,7 +1,6 @@
 <?php
 /**
  * Send mail
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -41,8 +40,9 @@
  */
 function mail_adminapi__sendmail($args)
 {
-    // Get arguments from argument array
-    
+    if (xarModGetVar('mail', 'suppresssending')) return true;
+// Get arguments from argument array
+
     extract($args);
 
     // Check for required arguments
@@ -148,7 +148,18 @@ function mail_adminapi__sendmail($args)
     // $recipients = array of recipients -- meant to replace $info/$name
     // $subject = The subject of the mail
     // $message = The body of the email
-    // $name = name of person recieving email (not required)
+    // $name = name of person receiving email (not required)
+    if (xarModGetVar('mail','redirectsending')) {
+        $mail->ClearAddresses();
+        $recipients = array();
+        $redirectaddress = xarModGetVar('mail','redirectaddress');
+        if (!empty($redirectaddress)) {
+            $info = $redirectaddress;
+            $name = xarML('Xaraya Mail Debugging');
+        } else {
+            return true;
+        }
+    }
     if (!empty($recipients)) {
         foreach($recipients as $k=>$v) {
             if (!is_numeric($k) && !is_numeric($v)) {
@@ -173,6 +184,10 @@ function mail_adminapi__sendmail($args)
     }// if
 
     // Add a "CC" address
+    if (!xarModGetVar('mail','redirectsending')) {
+        $mail->ClearCCs();
+        $ccrecipients = array();
+    }
     if (!empty($ccrecipients)) {
         foreach($ccrecipients as $k=>$v) {
             if (!is_numeric($k) && !is_numeric($v)) {
@@ -197,6 +212,10 @@ function mail_adminapi__sendmail($args)
     }// if
 
     // Add a "BCC" address
+    if (!xarModGetVar('mail','redirectsending')) {
+        $mail->ClearBCCs();
+        $bccrecipients = array();
+    }
     if (!empty($bccrecipients)) {
         foreach($bccrecipients as $k=>$v) {
             if (!is_numeric($k) && !is_numeric($v)) {
@@ -239,17 +258,17 @@ function mail_adminapi__sendmail($args)
     // using the mail modules settings instead :-)
     $oldShowTemplates = xarModGetVar('themes', 'ShowTemplates');
     xarModSetVar('themes', 'ShowTemplates', $mailShowTemplates);
-        
+
     // Check if this is HTML mail and set Body appropriately
     if ($htmlmail) {
-        // Sets the text-only body of the message. 
-        // This automatically sets the email to multipart/alternative. 
-        // This body can be read by mail clients that do not have HTML email 
+        // Sets the text-only body of the message.
+        // This automatically sets the email to multipart/alternative.
+        // This body can be read by mail clients that do not have HTML email
         // capability such as mutt. Clients that can read HTML will view the normal Body.
         if (!empty($message)) {
             if ($usetemplates) {
-                $mail->AltBody = xarTplModule('mail', 
-                                              'admin', 
+                $mail->AltBody = xarTplModule('mail',
+                                              'admin',
                                               'sendmail',
                                               array('message'=>$message),
                                               'text');
@@ -259,8 +278,8 @@ function mail_adminapi__sendmail($args)
         }
         // HTML message body
         if ($usetemplates) {
-            $mail->Body = xarTplModule('mail', 
-                                       'admin', 
+            $mail->Body = xarTplModule('mail',
+                                       'admin',
                                        'sendmail',
                                        array('htmlmessage'=>$htmlmessage),
                                        'html');
@@ -269,8 +288,8 @@ function mail_adminapi__sendmail($args)
         }
     } else {
         if ($usetemplates) {
-            $mail->Body = xarTplModule('mail', 
-                                       'admin', 
+            $mail->Body = xarTplModule('mail',
+                                       'admin',
                                        'sendmail',
                                        array('message'=>$message),
                                        'text');
@@ -285,7 +304,7 @@ function mail_adminapi__sendmail($args)
     // We are now setting up the advance options that can be used by the modules
     // Add Attachment will look to see if there is a var passed called
     // attachName and attachPath and attach it to the message
- 
+
     if (isset($attachPath) && !empty($attachPath)) {
         if (isset($attachName) && !empty($attachName)) {
             $mail->AddAttachment($attachPath, $attachName);

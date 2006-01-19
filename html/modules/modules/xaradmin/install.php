@@ -1,7 +1,5 @@
 <?php
 /**
- * Installs a module
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -50,6 +48,13 @@ function modules_admin_install()
         //They come in 3 arrays: satisfied, satisfiable and unsatisfiable
         //First 2 have $modInfo under them foreach module,
         //3rd has only 'regid' key with the ID of the module
+
+        // get any dependency info on this module for a better message if something is missing
+        $thisinfo = xarModGetInfo($id);
+        if (!isset($thisinfo)) xarErrorHandled();
+        if (isset($thisinfo['dependencyinfo'])) $data['dependencyinfo'] = $thisinfo['dependencyinfo'];
+        else $data['dependencyinfo'] = array();
+
         $data['authid']       = xarSecGenAuthKey();
         $data['dependencies'] = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$id));
         return $data;
@@ -84,7 +89,7 @@ function modules_admin_install()
 
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
-    
+
     if (function_exists('xarOutputFlushCached')) {
         xarOutputFlushCached('adminpanels');
         xarOutputFlushCached('base-block');

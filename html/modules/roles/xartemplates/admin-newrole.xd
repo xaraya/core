@@ -115,6 +115,26 @@
                     </label>
                     <input type="text" name="pemail" id="pemail" value="#$pemail#" maxlength="255" class="xar-form-textlong" />
                 </div>
+                <xar:if condition="xarModGetVar('roles','userhome')">
+                    <div class="xar-form-input-wrapper">
+                        <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
+                            <xar:mlstring>
+                                Home:
+                            </xar:mlstring>
+                        </label>
+                        <input type="text" name="phome" id="phome" value="#$phome#" size="40" maxlength="100" tabindex="7" />
+                    </div>
+                </xar:if>                        
+                <xar:if condition="xarModGetVar('roles','primaryparent')">
+                    <div class="xar-form-input-wrapper">
+                        <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
+                            <xar:mlstring>
+                                Primary Group:
+                            </xar:mlstring>
+                        </label>
+                    <xar:data-input type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pparentid" tabindex="8" />
+                    </div>
+                </xar:if>                        
                 <div class="xar-form-input-wrapper">
                     <label for="pstate" title="#xarML('Status of this user')#" class="xar-form-label">
                         <xar:mlstring>
@@ -200,6 +220,7 @@
         <fieldset>
         <div class="xar-form-input-wrapper-after">
           <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
           <input type="submit" value="#xarML('Add')#" />
         </div>
         </fieldset>

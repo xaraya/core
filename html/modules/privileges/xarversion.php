@@ -1,7 +1,6 @@
 <?php
 /**
  * Initialization function
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -19,7 +18,7 @@
  */
 $modversion['name'] = 'Privileges Adminstration';
 $modversion['id'] = '1098';
-$modversion['version'] = '0.1.0';
+$modversion['version'] = '1.0.1';
 $modversion['displayname'] = xarML('Privileges');
 $modversion['description'] = 'Modify privileges security';
 $modversion['displaydescription'] = xarML('Modify privileges security');
