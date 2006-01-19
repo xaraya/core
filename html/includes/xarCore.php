@@ -147,6 +147,16 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
     //include 'includes/xarPHPCompat.php';
     //xarPHPCompat::loadAll('includes/phpcompat');
+    
+    /*
+     * Start Exception Handling System
+     *
+     * Before we do anything make sure we can except out of code in a predictable matter
+     *
+     */
+    include 'includes/xarException.php';
+    $systemArgs = array();
+    xarError_init($systemArgs, $whatToLoad);
 
     /**
         * At this point we should be able to catch all low level errors, so we can start the debugger
@@ -174,15 +184,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'level'      => xarCore_getSystemVar('Log.LogLevel', true));
     xarLog_init($systemArgs, $whatToLoad);
 
-    /*
-     * Start Exception Handling System
-     *
-     * Before we do anything make sure we can except out of code in a predictable matter
-     *
-     */
-    include 'includes/xarException.php';
-    $systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
-    xarError_init($systemArgs, $whatToLoad);
+
 
 
     /*

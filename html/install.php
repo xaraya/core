@@ -43,19 +43,29 @@ define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
 
 // Include the core
 include 'includes/xarCore.php';
-// Include some extra functions, as the installer is somewhat special
-// for loading gui and api functions
-include 'modules/installer/xarfunctions.php';
+// Besides what we explicitly load, we dont want to load
+// anything extra for maximum control
+$whatToLoad = XARCORE_SYSTEM_NONE;
+
+// Start Exception Handling System very early 
+include_once 'includes/xarException.php';
+$systemArgs = array();
+xarError_init($systemArgs, $whatToLoad);
+// As long as we are coming in through install.php we need to pick up the bones if something goes wrong
+set_exception_handler(array('ExceptionHandlers','bone'));
 
 // Enable debugging always for the installer
 xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT);
+
+// Include some extra functions, as the installer is somewhat special
+// for loading gui and api functions
+include 'modules/installer/xarfunctions.php';
 
 // Basic systems always loaded
 // {ML_dont_parse 'includes/xarLog.php'}
 include_once 'includes/xarLog.php';
 // {ML_dont_parse 'includes/xarEvt.php'}
 include_once 'includes/xarEvt.php';
-include_once 'includes/xarException.php';
 // {ML_dont_parse 'includes/xarVar.php'}
 include_once 'includes/xarVar.php';
 // {ML_dont_parse 'includes/xarServer.php'}
@@ -65,21 +75,12 @@ include_once 'includes/xarMLS.php';
 // {ML_dont_parse 'includes/xarTemplate.php'}
 include_once 'includes/xarTemplate.php';
 
-// Besides what we explicitly load, we dont want to load
-// anything extra for maximum control
-$whatToLoad = XARCORE_SYSTEM_NONE;
-
 // Start Logging Facilities as soon as possible
 $systemArgs = array('loggerName' => xarCore_getSystemVar('Log.LoggerName', true),
                     'loggerArgs' => xarCore_getSystemVar('Log.LoggerArgs', true),
                     'level'      => xarCore_getSystemVar('Log.LogLevel', true));
 xarLog_init($systemArgs, $whatToLoad);
 
-// Start Exception Handling System very early too
-$systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
-xarError_init($systemArgs, $whatToLoad);
-// As long as we are coming in through install.php we need to pick up the bones if something goes wrong
-set_exception_handler(array('ExceptionHandlers','bone'));
 
 // Start Event Messaging System
 // <mrb> Is this needed? the events are dispatched to modules, which arent here yet.

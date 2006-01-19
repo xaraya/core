@@ -119,11 +119,8 @@ function xarError_init($systemArgs, $whatToLoad)
     // Send all exceptions to the default exception handler, no excuses
     set_exception_handler(array('ExceptionHandlers','defaulthandler'));
 
-    // Do we want our error handler or the native one?
-    // FIXME: do we still want this variable, seems odd
-    if ($systemArgs['enablePHPErrorHandler'] == true ) { 
-        set_error_handler(array('ExceptionHandlers','phperrors'));
-    }
+    // Send all error the the default error handler (which basically just throws a specific exception)
+    set_error_handler(array('ExceptionHandlers','phperrors'));
 
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarError__shutdown_handler');

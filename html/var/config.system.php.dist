@@ -30,18 +30,6 @@ $systemConfiguration['DB.Persistent'] = false;
  */
 
 /*
- * if you set this to true the core will be able to
- * trap every message that comes  from PHP and if
- * possible to show a gracefully error page.
- * This is an advanced option, leave it to false if unsure.
- * TODO: review this in code, it is known to hide some errors
- * TODO: it also is known to break a PHP5 installation due to the introduction
- *       of E_STRICT error level (see xarException phpErrorHandler function)
- * TODO: move this out of here
- */
-$systemConfiguration['Exception.EnablePHPErrorHandler'] = true;
-
-/*
  * Global error level, optional
  *
  * If set it is passed directly into the error_reporting() function of PHP
