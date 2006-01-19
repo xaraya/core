@@ -116,7 +116,7 @@ class DTDIdentifiers
  * @package blocklayout
  * @access private
  */
-class xarTpl__CompilerError extends SystemException
+class xarTpl__CompilerError extends Exception
 {
     function raiseError($msg)
     {
@@ -137,7 +137,7 @@ class xarTpl__CompilerError extends SystemException
  * @todo ML for the error message?
  * @todo Does the exception need to be a system exception?
  */
-class xarTpl__ParserError extends SystemException
+class xarTpl__ParserError extends Exception
 {
     function raiseError($type, $msg, $posInfo)
     {

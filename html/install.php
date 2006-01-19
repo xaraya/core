@@ -76,9 +76,14 @@ include_once 'includes/xarMLS.php';
 include_once 'includes/xarTemplate.php';
 
 // Start Logging Facilities as soon as possible
-$systemArgs = array('loggerName' => xarCore_getSystemVar('Log.LoggerName', true),
-                    'loggerArgs' => xarCore_getSystemVar('Log.LoggerArgs', true),
-                    'level'      => xarCore_getSystemVar('Log.LogLevel', true));
+try {
+    $systemArgs = array('loggerName' => xarCore_getSystemVar('Log.LoggerName', true),
+                        'loggerArgs' => xarCore_getSystemVar('Log.LoggerArgs', true),
+                        'level'      => xarCore_getSystemVar('Log.LogLevel', true));
+} catch(Exception $e) {
+    // no workie
+    $systemArgs = array();
+}
 xarLog_init($systemArgs, $whatToLoad);
 
 
