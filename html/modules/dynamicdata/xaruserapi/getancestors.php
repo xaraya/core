@@ -74,7 +74,7 @@ function &dynamicdata_userapi_getancestors($args)
     if (!$q->run()) return;
 
 // -------------- Put in itemtype as key for easier manipulation
-    foreach($q->output() as $row) $objects [$row['itemtype']] = array('objectid' => $row['objectid'],'objectname' => $row['objectname'], 'moduleid' => $row['moduleid'], 'parent' => $row['parent']);
+    foreach($q->output() as $row) $objects [$row['itemtype']] = array('objectid' => $row['objectid'],'objectname' => $row['objectname'], 'moduleid' => $row['moduleid'], 'itemtype' => $row['itemtype'], 'parent' => $row['parent']);
 
 // -------------- Cycle through each ancestor
     $parentitemtype = $result['parent'];

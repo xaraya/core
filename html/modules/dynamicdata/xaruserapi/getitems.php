@@ -148,9 +148,10 @@ function &dynamicdata_userapi_getitems($args)
 			$object->getItems();
 			$objectarray[] = $object;
 		} else {
-        $result = $object->getItems();
-        return $result;
+			$objectarray = $object->getItems();
+        }
     }
+	return $objectarray;
 }
 
 ?>
