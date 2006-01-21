@@ -37,6 +37,7 @@ function roles_admin_deleterole()
     $name = $role->getName();
 
 // Security Check
+    if (!xarSecurityCheck('DeleteRole',1,'Roles',$name)) return;
     $data['frozen'] = !xarSecurityCheck('DeleteRole',0,'Roles',$name);
 
 // Prohibit removal of any groups that have children

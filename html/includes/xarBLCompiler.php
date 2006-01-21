@@ -1358,7 +1358,7 @@ class xarTpl__ExpressionTransformer
             usort($matches[0], array('xarTpl__ExpressionTransformer','rlensort')); 
             $numMatches = count($matches[0]);
             for ($i = 0; $i < $numMatches; $i++) {
-              // CHECKME: & removed here for php 4.4
+                // CHECKME: & removed here for php 4.4
                 $resolvedName = xarTpl__ExpressionTransformer::transformBLExpression($matches[0][$i]);
                 if (!isset($resolvedName)) return; // throw back
                       
@@ -1367,6 +1367,8 @@ class xarTpl__ExpressionTransformer
             }
         }
 
+        // TODO: this needs to be replaced with something else since it's way too harsh now
+        //       ( for example: 'le' is a french word which is now unusable )
         $findLogic      = array(' eq ', ' ne ', ' lt ', ' gt ', ' id ', ' nd ', ' le ', ' ge ');
         $replaceLogic   = array(' == ', ' != ',  ' < ',  ' > ', ' === ', ' !== ', ' <= ', ' >= ');
 
