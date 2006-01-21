@@ -266,6 +266,8 @@ function roles_upgrade($oldVersion)
         case '1.01':
             break;
         case '1.1.0':
+		    if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
+
         	// is there an authentication module?
 			$regid = xarModGetIDFromName('authentication');
 
