@@ -272,7 +272,7 @@ function roles_upgrade($oldVersion)
         	// is there an authentication module?
 			$regid = xarModGetIDFromName('authentication');
 
-			if (isset($regid)) {
+			if (file_exists('modules/authentication/xarversion.php')) {
 				// remove the login block type and block from roles
 				$result = xarModAPIfunc('blocks', 'admin', 'delete_type', array('module' => 'roles', 'type' => 'login'));
 

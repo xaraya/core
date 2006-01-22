@@ -1392,6 +1392,41 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         $this->setArguments($args);
     }
 
+    function extend()
+    {
+        $ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $this->objectid, 'top' => false));
+        // If this is an extended object add the ancestor properties for display purposes
+        if (!empty($ancestors)) {
+        	foreach ($ancestors as $ancestor) {
+        		$object =& Dynamic_Object_Master::getObject(array('objectid' => $ancestor['objectid']));
+
+        		$properties = $object->getProperties();
+        		foreach ($properties as &$newproperty) {
+        			$args = array('name'  => $newproperty->name,
+        						  'type'  => $newproperty->type,
+        						  'label' => $newproperty->label);
+        			if (!isset($this->datastores[$newproperty->datastore])) {
+        				$newstore = $this->property2datastore(&$newproperty);
+						$this->addDatastore($newstore[0],$newstore[1]);
+        			}
+        			// TODO: are these lines really needed?
+//        			$newproperty->_objectid =& $this->objectid;
+//        			$newproperty->_moduleid =& $this->moduleid;
+//        			$newproperty->_itemtype =& $this->itemtype;
+        			$newproperty->_items =& $this->items;
+					$this->datastores[$newproperty->datastore]->addField(&$newproperty);
+        			$this->addProperty($args);
+        			// TODO: are these lines really needed?
+//        			$this->properties[$newproperty->name]->_objectid =& $this->objectid;
+//        			$this->properties[$newproperty->name]->_moduleid =& $this->moduleid;
+//        			$this->properties[$newproperty->name]->_itemtype =& $this->itemtype;
+//        			$this->properties[$newproperty->name]->_items =& $this->items;
+        			$this->fieldlist[] = $newproperty->name;
+				}
+        	}
+        }
+    }
+
     function setArguments($args)
     {
         // set the number of items to retrieve
@@ -1733,6 +1768,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
     function showList($args = array())
     {
+        if (!empty($args['extend'])) {
+            $this->extend();
+        }
         if (empty($args['layout'])) {
             $args['layout'] = $this->layout;
         }

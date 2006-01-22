@@ -113,7 +113,6 @@ function dynamicdata_adminapi_showlist($args)
         // get active properties only (+ not the display only ones)
         $status = 1;
     }
-
     // join a module table to a dynamic object
     if (empty($join)) {
         $join = '';
@@ -145,6 +144,8 @@ function dynamicdata_adminapi_showlist($args)
                                            'catid' => $catid,
                                            'groupby' => $groupby,
                                            'status' => $status));
+    if (!empty($extend)) $object->extend();
+
     $object->getItems();
 
     return $object->showList(array('layout'   => $layout,

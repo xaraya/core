@@ -13,7 +13,7 @@
 include_once "includes/datastores/Dynamic_SQL_DataStore.php";
 
 /**
- * Class for flat table 
+ * Class for flat table
  *
  * @package dynamicdata
  */
@@ -25,6 +25,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
      */
     function getFieldName(&$property)
     {
+        if (!is_object($property)) die($property);
         // support [database.]table.field syntax
         if (preg_match('/^(.+)\.(\w+)$/', $property->source, $matches)) {
             $table = $matches[1];
@@ -227,7 +228,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
         $query .= " WHERE $itemidfield=?";
         $bindvars[] = (int)$itemid;
-        
+
         $result =& $dbconn->Execute($query,$bindvars);
         if (!$result) return;
 
@@ -248,7 +249,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         $dbconn =& xarDBGetConn();
 
         $query = "DELETE FROM $table WHERE $itemidfield = ?";
-        
+
         $result =& $dbconn->Execute($query,array((int)$itemid));
         if (!$result) return;
 
@@ -480,7 +481,7 @@ if (empty($itemidfield)) {
         $dbconn =& xarDBGetConn();
 
         if($dbconn->databaseType == 'sqlite') {
-            $query = "SELECT COUNT(*) 
+            $query = "SELECT COUNT(*)
                       FROM (SELECT DISTINCT $itemidfield FROM $table "; // WATCH OUT, STILL UNBALANCED
         } else {
             $query = "SELECT COUNT(DISTINCT $itemidfield)
