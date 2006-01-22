@@ -42,7 +42,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         $xartable =& xarDBGetTables();
 
         $dynamicdata = $xartable['dynamic_data'];
-        
+
         $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
         $query = "SELECT xar_dd_propid, xar_dd_value
                     FROM $dynamicdata
@@ -166,7 +166,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             } else {
                 $nextId = $dbconn->GenId($dynamicdata);
 
-                $query = "INSERT INTO $dynamicdata 
+                $query = "INSERT INTO $dynamicdata
                             (xar_dd_id, xar_dd_propid, xar_dd_itemid, xar_dd_value)
                           VALUES (?,?,?,?)";
                 $bindvars = array($nextId,$propid,$itemid, (string) $value);
@@ -453,7 +453,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $query .= ", MAX(CASE WHEN xar_dd_propid = $propid THEN $propval ELSE '' END) AS dd_$propid \n";
             }
             $query .= " FROM $dynamicdata
-                       WHERE xar_dd_propid IN (" . join(', ',$propids) . ") 
+                       WHERE xar_dd_propid IN (" . join(', ',$propids) . ")
                     GROUP BY xar_dd_itemid ";
 
             if (count($this->where) > 0) {
@@ -624,8 +624,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         // here we grab everyting
         } else {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
-            $query = "SELECT xar_dd_itemid,
-                             xar_dd_propid,
+            $query = "SELECT DISTINCT xar_dd_propid,
+                             xar_dd_itemid,
                              xar_dd_value
                         FROM $dynamicdata
                        WHERE xar_dd_propid IN ($bindmarkers)";
@@ -640,7 +640,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
             $itemidlist = array();
             while (!$result->EOF) {
-                list($itemid,$propid, $value) = $result->getRow();
+                list($propid,$itemid,$value) = $result->getRow();
                 $itemidlist[$itemid] = 1;
                 if (isset($value)) {
                     // add the item to the value list for this property
@@ -679,7 +679,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         if (count($itemids) > 0) {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
             if($dbconn->databaseType == 'sqlite') {
-                $query = "SELECT COUNT(*) 
+                $query = "SELECT COUNT(*)
                           FROM (SELECT DISTINCT xar_dd_itemid
                                 WHERE xar_dd_propid IN ($bindmarkers) "; // WATCH OUT, STILL UNBALANCED
             } else {
@@ -734,7 +734,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             foreach ($this->where as $whereitem) {
                 $query .= $whereitem['join'] . ' (xar_dd_propid = ' . $whereitem['field'] . ' AND xar_dd_value ' . $whereitem['clause'] . ') ';
             }
-            
+
             // Balance parentheses.
             if($dbconn->databaseType == 'sqlite') $query .= ")";
             if (!empty($this->cache)) {
@@ -756,7 +756,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
             if($dbconn->databaseType == 'sqlite' ) {
                 $query = "SELECT COUNT(*)
-                          FROM (SELECT DISTINCT xar_dd_itemid FROM $dynamicdata 
+                          FROM (SELECT DISTINCT xar_dd_itemid FROM $dynamicdata
                           WHERE xar_dd_propid IN ($bindmarkers)) ";
             } else {
                 $query = "SELECT COUNT(DISTINCT xar_dd_itemid)
