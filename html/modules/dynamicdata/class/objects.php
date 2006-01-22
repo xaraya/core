@@ -207,9 +207,9 @@ class Dynamic_Object_Master
             $cleanlist = array();
             foreach ($this->fieldlist as $name) {
                 if (!strstr($name,'(')) {
-                    if (isset($this->properties[$name])) {
+//                    if (isset($this->properties[$name])) {
                         $cleanlist[] = $name;
-                    }
+//                    }
                 } elseif (preg_match('/^(.+)\((.+)\)/',$name,$matches)) {
                     $operation = $matches[1];
                     $field = $matches[2];
@@ -1402,6 +1402,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
         		$properties = $object->getProperties();
         		foreach ($properties as &$newproperty) {
+        			// ignore if we have a fieldlist and this property isn't in it
+        			if (!empty($this->fieldlist) && (!in_array($newproperty->name,$this->fieldlist))) continue;
         			$args = array('name'  => $newproperty->name,
         						  'type'  => $newproperty->type,
         						  'label' => $newproperty->label);
@@ -1790,6 +1792,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
         }
+
         if (count($args['fieldlist']) > 0 || !empty($this->status)) {
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
