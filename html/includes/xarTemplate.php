@@ -51,8 +51,9 @@ define('XAR_TPL_TAG_NEEDEXCEPTIONSCONTROL'     ,64);
  *
  */
 // Let's do this once here, not scattered all over the place
-define('XAR_TPL_CACHE_DIR',xarCoreGetVarDirPath() . '/cache/templates');
-
+if(function_exists('xarCoreGetVarDirPath')) {
+    define('XAR_TPL_CACHE_DIR',xarCoreGetVarDirPath() . '/cache/templates');
+}
 /**
  * Initializes the BlockLayout Template Engine
  *

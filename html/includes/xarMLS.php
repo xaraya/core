@@ -27,8 +27,8 @@ define('XARMLS_DNTYPE_CORE', 1);
 define('XARMLS_DNTYPE_THEME', 2);
 define('XARMLS_DNTYPE_MODULE', 3);
 
-require_once "includes/xarLocale.php";
-require_once "includes/transforms/xarCharset.php";
+require_once dirname(__FILE__)."/xarLocale.php";
+require_once dirname(__FILE__)."/transforms/xarCharset.php";
 
 /**
  * Initializes the Multi Language System

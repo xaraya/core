@@ -40,13 +40,14 @@ define('XAR_TEMPLATE_EXCEPTION', 13);
 // {ML_include 'includes/exceptions/systemexception.defaults.php'}
 // {ML_include 'includes/exceptions/systemmessage.defaults.php'}
 
-include "includes/exceptions/exceptionstack.class.php";
+$here=dirname(__FILE__);
+include "$here/exceptions/exceptionstack.class.php";
 
-include "includes/exceptions/systemmessage.class.php";
-include "includes/exceptions/systemexception.class.php";
-include "includes/exceptions/defaultuserexception.class.php";
-include "includes/exceptions/noexception.class.php";
-include "includes/exceptions/errorcollection.class.php";
+include "$here/exceptions/systemmessage.class.php";
+include "$here/exceptions/systemexception.class.php";
+include "$here/exceptions/defaultuserexception.class.php";
+include "$here/exceptions/noexception.class.php";
+include "$here/exceptions/errorcollection.class.php";
 
 global $CoreStack, $ErrorStack;
 

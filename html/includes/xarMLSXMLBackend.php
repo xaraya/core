@@ -18,6 +18,7 @@
  * running Xaraya in the multi-language mode (UTF-8).
  * @package multilanguage
  */
+include_once dirname(__FILE__).'/xarMLS.php';
 class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
 {
     var $curEntry;
