@@ -21,8 +21,9 @@ function roles_admin_updaterole()
 //    if (!xarSecConfirmAuthKey()) return;
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
     if (!xarVarFetch('pname', 'str:1:35:', $pname)) return;
-    if (!xarVarFetch('ptype', 'int', $ptype)) return;
+    if (!xarVarFetch('itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('phome', 'str', $phome, '', XARVAR_NOT_REQUIRED)) return;
+	$basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
     if (!xarVarFetch('pprimaryparent', 'int', $pprimaryparent, '', XARVAR_NOT_REQUIRED)) return;
 
     //Save the old state and type
@@ -32,7 +33,7 @@ function roles_admin_updaterole()
     $oldtype = $oldrole->getType();
 
     // groups dont have pw etc., and can only be active
-    if ($ptype == 1) {
+    if ($basetype == ROLES_GROUPTYPE) {
         $puname = $oldrole->getUser();
         $pemail = "";
         $ppass1 = "";
@@ -68,7 +69,7 @@ function roles_admin_updaterole()
         if (strcmp($ppass1, $ppass2) != 0) throw new DuplicateException(null,'The entered passwords are not the same');
     }
 
-    // assemble the args into an array for the role constructor
+    // assemble the args into an array for the API function
 	$duvs = array();
 	if (isset($phome) && xarModGetVar('roles','userhome'))
 		$duvs['userhome'] = $phome;
@@ -76,41 +77,31 @@ function roles_admin_updaterole()
 		$duvs['primaryparent'] = $pprimaryparent;
     $pargs = array('uid' => $uid,
         'name' => $pname,
-        'type' => $ptype,
+        'itemtype' => $itemtype,
         'uname' => $puname,
         'userhome' => $phome,
         'primaryparent' => $pprimaryparent,
         'email' => $pemail,
         'pass' => $ppass1,
         'state' => $pstate,
-		'duvs' => $duvs,
-		);
-    // create a role from the data
-    $role = new xarRole($pargs);
+        'basetype' => $basetype,
+        );
 
-   // Try to update the role to the repository and bail if an error was thrown
-    if (!$role->update()) return;
-
-    // call item update hooks (for DD etc.)
-// TODO: move to update() function
-    $pargs['module'] = 'roles';
-    $pargs['itemtype'] = $ptype; // we might have something separate for groups later on
-    $pargs['itemid'] = $uid;
-    xarModCallHooks('item', 'update', $uid, $pargs);
+    if (!xarModAPIFunc('roles','admin','update',$pargs)) return;
 
     //Change the defaultgroup var values if the name is changed
-    if ($ptype == 1) {
-        $defaultgroup = xarModGetVar('roles', 'defaultgroup');
+    if ($basetype == ROLES_GROUPTYPE) {
+    	$defaultgroup = xarModAPIFunc('roles','user','getdefaultgroup');
         $defaultgroupuid = xarModAPIFunc('roles','user','get',
                                                      array('uname'  => $defaultgroup,
-                                                           'type'   => 1));
-        if ($uid == $defaultgroupuid) xarModSetVar('roles', 'defaultgroup', $pname);
+                                                           'type'   => ROLES_GROUPTYPE));
+        if ($uid == $defaultgroupuid) xarModSetVar(xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule')), 'defaultgroup', $pname);
 
         // Adjust the user count if necessary
-        if ($oldtype == 0) $oldrole->adjustParentUsers(-1);
+        if ($oldtype == ROLES_USERTYPE) $oldrole->adjustParentUsers(-1);
     }else {
         // Adjust the user count if necessary
-        if ($oldtype == 1) $oldrole->adjustParentUsers(1);
+        if ($oldtype == ROLES_GROUPTYPE) $oldrole->adjustParentUsers(1);
         //TODO : Be able to send 2 email if both password and type has changed... (or an single email with a overall msg...)
         //Ask to send email if the password has changed
         if ($ppass1 != '') {

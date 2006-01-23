@@ -393,12 +393,13 @@ class xarQuery
     }
     function qand()
     {
-        $key = $this->_addcondition();
         $numargs = func_num_args();
         if ($numargs == 2) {
         }
         elseif ($numargs == 1) {
             $field = func_get_arg(0);
+			if ($field == array()) return true;
+	        $key = $this->_addcondition();
             $this->conjunction[$key] = array('conditions' => $field,
                                              'conj' => 'AND');
             if (!is_array($field)) $field = array($field);
@@ -411,12 +412,13 @@ class xarQuery
     }
     function qor()
     {
-        $key = $this->_addcondition();
         $numargs = func_num_args();
         if ($numargs == 2) {
         }
         elseif ($numargs == 1) {
             $field = func_get_arg(0);
+			if ($field == array()) return true;
+			$key = $this->_addcondition();
             $this->conjunctions[$key] = array('conditions' => $field,
                                              'conj' => 'OR');
             if (!is_array($field)) $field = array($field);
