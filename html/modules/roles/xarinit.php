@@ -180,6 +180,7 @@ function roles_init()
             'roles', 'user', 'usermenu')) {
         return false;
     }
+
     xarModAPIFunc('modules', 'admin', 'enablehooks',
         array('callerModName' => 'roles', 'hookModName' => 'roles'));
     // This won't work because the dynamicdata hooks aren't registered yet when this is
@@ -224,8 +225,6 @@ function roles_activate()
     xarSession_setUserInfo($role->getID(), 0);
     $role = xarFindRole('Admin');
     xarModSetVar('roles', 'admin', $role->getID());
-
-
 # --------------------------------------------------------
 #
 # Register block types
@@ -248,6 +247,9 @@ function roles_activate()
             array('modName' => 'roles',
                 'blockType' => 'language'))) return;
 
+    xarModAPIFunc('modules','admin','enablehooks',
+		array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
+
     return true;
 }
 
@@ -266,7 +268,6 @@ function roles_upgrade($oldVersion)
         case '1.01':
             break;
         case '1.1.0':
-
         	// is there an authentication module?
 			$regid = xarModGetIDFromName('authentication');
 
@@ -323,6 +324,17 @@ function roles_upgrade($oldVersion)
 //				return;
 				die(xarML('I could not load the authentication module. Please make it available and try again'));
 		    }
+            break;
+        case '1.1.1':
+        	$roles_objects = array('role','user','group');
+			$existing_objects  = xarModApiFunc('dynamicdata','user','getobjects');
+			foreach($existing_objects as $objectid => $objectinfo) {
+				if(in_array($objectinfo['name'], $roles_objects)) {
+					// KILL
+					if(!xarModApiFunc('dynamicdata','admin','deleteobject', array('objectid' => $objectid))) return;
+				}
+			}
+		    if (!xarModAPIFunc('roles','admin','createobjects')) return;
             break;
     }
     // Update successful

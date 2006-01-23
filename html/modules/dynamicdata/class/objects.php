@@ -25,6 +25,7 @@ class Dynamic_Object_Master
     var $label = null;
     var $moduleid = null;
     var $itemtype = null;
+    var $parent = null;
 
     var $urlparam = 'itemid';
     var $maxid = 0;
@@ -54,7 +55,7 @@ class Dynamic_Object_Master
     // secondary key could be item type (e.g. for articles)
     var $secondary = null;
     // set this true to automatically filter by current itemtype on secondary key
-    var $filter;
+    var $filter = true;
 
     // flag indicating if this object has some property that provides file upload
     var $upload = false;
@@ -113,6 +114,9 @@ class Dynamic_Object_Master
         }
         if (empty($this->itemtype)) {
             $this->itemtype = 0;
+        }
+        if (empty($this->parent)) {
+            $this->parent = 1;
         }
         if (empty($this->name)) {
             $info = Dynamic_Object_Master::getObjectInfo($args);
@@ -203,9 +207,9 @@ class Dynamic_Object_Master
             $cleanlist = array();
             foreach ($this->fieldlist as $name) {
                 if (!strstr($name,'(')) {
-                    if (isset($this->properties[$name])) {
+//                    if (isset($this->properties[$name])) {
                         $cleanlist[] = $name;
-                    }
+//                    }
                 } elseif (preg_match('/^(.+)\((.+)\)/',$name,$matches)) {
                     $operation = $matches[1];
                     $field = $matches[2];
@@ -375,8 +379,9 @@ class Dynamic_Object_Master
      * @returns array
      * @return array of object definitions
      */
-    function &getObjects()
+    function &getObjects($args=array())
     {
+        extract($args);
         $nullreturn = NULL;
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
@@ -388,11 +393,13 @@ class Dynamic_Object_Master
                          xar_object_label,
                          xar_object_moduleid,
                          xar_object_itemtype,
+                         xar_object_parent,
                          xar_object_urlparam,
                          xar_object_maxid,
                          xar_object_config,
                          xar_object_isalias
                   FROM $dynamicobjects ";
+        if (isset($modid)) $query .= "WHERE xar_object_moduleid = " . $modid;
         $result =& $dbconn->Execute($query);
 
         if (!$result) return $nullreturn;
@@ -405,6 +412,7 @@ class Dynamic_Object_Master
                  $info['label'],
                  $info['moduleid'],
                  $info['itemtype'],
+                 $info['parent'],
                  $info['urlparam'],
                  $info['maxid'],
                  $info['config'],
@@ -435,6 +443,7 @@ class Dynamic_Object_Master
             $info['label'] = xarML('Table #(1)',$args['table']);
             $info['moduleid'] = 182;
             $info['itemtype'] = 0;
+            $info['parent'] = 1;
             $info['urlparam'] = 'itemid';
             $info['maxid'] = 0;
             $info['config'] = '';
@@ -453,6 +462,7 @@ class Dynamic_Object_Master
                          xar_object_label,
                          xar_object_moduleid,
                          xar_object_itemtype,
+                         xar_object_parent,
                          xar_object_urlparam,
                          xar_object_maxid,
                          xar_object_config,
@@ -485,6 +495,7 @@ class Dynamic_Object_Master
              $info['label'],
              $info['moduleid'],
              $info['itemtype'],
+             $info['parent'],
              $info['urlparam'],
              $info['maxid'],
              $info['config'],
@@ -1381,6 +1392,43 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         $this->setArguments($args);
     }
 
+    function extend()
+    {
+        $ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $this->objectid, 'top' => false));
+        // If this is an extended object add the ancestor properties for display purposes
+        if (!empty($ancestors)) {
+        	foreach ($ancestors as $ancestor) {
+        		$object =& Dynamic_Object_Master::getObject(array('objectid' => $ancestor['objectid']));
+
+        		$properties = $object->getProperties();
+        		foreach ($properties as &$newproperty) {
+        			// ignore if we have a fieldlist and this property isn't in it
+        			if (!empty($this->fieldlist) && (!in_array($newproperty->name,$this->fieldlist))) continue;
+        			$args = array('name'  => $newproperty->name,
+        						  'type'  => $newproperty->type,
+        						  'label' => $newproperty->label);
+        			if (!isset($this->datastores[$newproperty->datastore])) {
+        				$newstore = $this->property2datastore(&$newproperty);
+						$this->addDatastore($newstore[0],$newstore[1]);
+        			}
+        			// TODO: are these lines really needed?
+//        			$newproperty->_objectid =& $this->objectid;
+//        			$newproperty->_moduleid =& $this->moduleid;
+//        			$newproperty->_itemtype =& $this->itemtype;
+        			$newproperty->_items =& $this->items;
+					$this->datastores[$newproperty->datastore]->addField(&$newproperty);
+        			$this->addProperty($args);
+        			// TODO: are these lines really needed?
+//        			$this->properties[$newproperty->name]->_objectid =& $this->objectid;
+//        			$this->properties[$newproperty->name]->_moduleid =& $this->moduleid;
+//        			$this->properties[$newproperty->name]->_itemtype =& $this->itemtype;
+//        			$this->properties[$newproperty->name]->_items =& $this->items;
+        			$this->fieldlist[] = $newproperty->name;
+				}
+        	}
+        }
+    }
+
     function setArguments($args)
     {
         // set the number of items to retrieve
@@ -1722,6 +1770,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
     function showList($args = array())
     {
+        if (!empty($args['extend'])) {
+            $this->extend();
+        }
         if (empty($args['layout'])) {
             $args['layout'] = $this->layout;
         }
@@ -1741,6 +1792,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
         }
+
         if (count($args['fieldlist']) > 0 || !empty($this->status)) {
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
@@ -1781,7 +1833,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $linkfunc = 'view';
             // Don't show link to view items that don't belong to the DD module
             // Set to 0 when interested in viewing them anyway...
-            $dummy_mode = 1;
+            $dummy_mode = 0;
         } else {
             $linktype = 'user';
             $linkfunc = $args['linkfunc'];
@@ -1812,6 +1864,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             if (!empty($this->urlmodule)) {
                 $args['urlmodule'] = $this->urlmodule;
             } else {
+                $info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('moduleid' => $args['moduleid'], 'itemtype' => $args['itemtype']));
+                $base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $info['objectid']));
                 $args['urlmodule'] = $modname;
             }
         }
@@ -2199,7 +2253,13 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 */
         return $itemid;
     }
+}
 
+class Extended_Object extends Dynamic_Object
+{
+    function Extended_Object($args)
+    {
+    }
 }
 
 ?>
