@@ -31,8 +31,8 @@ function roles_admin_purge($args)
     $rolestable = $xartable['roles'];
 
     $deleted = '[' . xarML('deleted') . ']';
-    $numitems = xarModGetVar('roles', 'rolesperpage');
-    // Make sure a value was retrieved for rolesperpage
+    $numitems = xarModGetVar('roles', 'itemsperpage');
+    // Make sure a value was retrieved for itemsperpage
     if (empty($numitems)) $numitems = -1;
 
     if ($data['operation'] == 'recall')

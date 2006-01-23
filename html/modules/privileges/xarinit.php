@@ -429,8 +429,8 @@ function privileges_init()
 function privileges_upgrade($oldVersion)
 {
     switch($oldVersion) {
-    case '0.1':
-        // compatability upgrade to 3 positions, no functional changes
+    case '0.1.0':
+		if (!xarModAPIFunc('privileges','admin','createobjects')) return;
         break;
     }
     return true;

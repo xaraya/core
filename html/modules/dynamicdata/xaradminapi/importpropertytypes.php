@@ -43,7 +43,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
       $activeMods = xarModApiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
       if(empty($activeMods)) return; // this should never happen
       $propDirs[] = 'includes/properties/'; // Initialize it with the core location of properties
-        
+
       foreach($activeMods as $modInfo) {
         // FIXME: the modinfo directory does NOT end with a /
         $propDirs[] = 'modules/' .$modInfo['osdirectory'] . '/xarproperties/';

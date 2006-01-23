@@ -78,6 +78,8 @@ function roles_admin_updaterole()
         'name' => $pname,
         'type' => $ptype,
         'uname' => $puname,
+        'userhome' => $phome,
+        'primaryparent' => $pprimaryparent,
         'email' => $pemail,
         'pass' => $ppass1,
         'state' => $pstate,

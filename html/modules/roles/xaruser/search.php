@@ -124,7 +124,7 @@ function roles_user_search()
     if (xarModGetVar('roles', 'searchbyemail')) {
         $selection .= " OR (xar_email LIKE " . $quotedlike . ")";
     }
-    
+
     $selection .= ")";
 
     $data['total'] = xarModAPIFunc('roles',
@@ -150,7 +150,7 @@ function roles_user_search()
                                   'include_anonymous' => false,
                                   'include_myself' => false,
                                   'numitems' => xarModGetVar('roles',
-                                                             'rolesperpage')));
+                                                             'itemsperpage')));
 
     // combine search results with DD
     if (!empty($users) && count($data['users']) > 0) {

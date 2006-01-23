@@ -1,7 +1,6 @@
 <?php
 /**
  * Base Module Initialisation
- *
  * @package modules
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}

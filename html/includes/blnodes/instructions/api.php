@@ -15,10 +15,18 @@ class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
         if (strlen($this->instruction) <= 1) {
             $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid API reference instruction.', $this);
         }
-        $instruction = xarTpl__ExpressionTransformer::transformPHPExpression($this->instruction);
-        if (!isset($instruction)) return; // throw back
+        $funcName = substr($this->instruction, 0, strpos($this->instruction, '('));
+
+        // FIXME: Temporary hack for bug 5369
+        if(strtolower($funcName) != 'xarml') {
+            // This is "reasonably" save here because xarML($somevarorphpexpression) wont work anyway, so we
+            // can reasonably count on it being a string only.
+            $instruction = xarTpl__ExpressionTransformer::transformPHPExpression($this->instruction);
+            if (!isset($instruction)) return; // throw back
+        } else {
+            $instruction = $this->instruction;
+        }
         
-        $funcName = substr($instruction, 0, strpos($instruction, '('));
         if(!function_exists($funcName)) {
             $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid API reference instruction or invalid function syntax.', $this);
             return;
