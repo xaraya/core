@@ -10,7 +10,7 @@
  * @subpackage Roles module
  */
 
-include_once 'modules/roles/xarincludes/xarQuery.php';
+include_once dirname(__FILE__).'/xarincludes/xarQuery.php';
 
 define('ROLES_STATE_DELETED',0);
 define('ROLES_STATE_INACTIVE',1);

@@ -19,7 +19,7 @@
 * If a function did not exist in pn before...don't prefix it with pn
 ***********************************************************************/
 
-include 'includes/pnHTML.php';
+include dirname(__FILE__).'/pnHTML.php';
 
 /**********************************************************************
 * WARNING: THIS FILE IS A WORK IN PROGRESS!!!!!!!!!!!!!!!!!!!

@@ -10,7 +10,7 @@
  */
 
 
-include_once "includes/exceptions/exception.class.php";
+include_once dirname(__FILE__)."/exception.class.php";
 
 class SystemException extends xarException
 {

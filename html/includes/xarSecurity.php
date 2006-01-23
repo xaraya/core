@@ -23,15 +23,28 @@
 
     //Maybe changing this touch to a centralized API would be a good idea?
     //Even if in the end it would use touched files too...
+$here = dirname(__FILE__);
+include_once "$here/xarCore.php";
+if (file_exists(xarCoreGetVarDirPath() . '/security/on.touch')) {
+    include_once "$here/xarCacheSecurity.php";
+ }
 
-    if (file_exists(xarCoreGetVarDirPath() . '/security/on.touch')) {
-        include_once('./includes/xarCacheSecurity.php');
-    }
+// FIXME: Can we reverse this? (i.e. the module loading the files from here?)
+//        said another way, can we move the two files to /includes (partially preferably)
+include_once "$here/../modules/privileges/xarprivileges.php";
+include_once "$here/../modules/roles/xarroles.php";
 
-    // FIXME: Can we reverse this? (i.e. the module loading the files from here?)
-    //        said another way, can we move the two files to /includes (partially preferably)
-    include_once 'modules/privileges/xarprivileges.php';
-    include_once 'modules/roles/xarroles.php';
+
+/**
+ * Start the security subsystem
+ *
+ * @access protected
+ * @return bool true
+ */
+
+function xarSecurity_init()
+{
+    // Subsystem initialized, register a handler to run when the request is over
     $prefix = xarDBGetSiteTablePrefix();
     $tables = array('security_masks' => $prefix . '_security_masks',
                     'security_acl' => $prefix . '_security_acl',
@@ -44,19 +57,7 @@
                     'module_states' => $prefix . '_module_states',
                     'security_privsets' => $prefix . '_security_privsets'
                     );
-
     xarDB_importTables($tables);
-
-/**
- * Start the security subsystem
- *
- * @access protected
- * @return bool true
- */
-
-function xarSecurity_init()
-{
-    // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarSecurity__shutdown_handler');
     return true;
 }
