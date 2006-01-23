@@ -34,15 +34,15 @@ class xarTreeRenderer
     public $alreadydone;
 
     // convenience variables to hold strings referring to pictures
-    var $expandedbox;
-    var $collapsedbox;
-    var $L;
-    var $T;
-    var $I;
-    var $B;
-    var $emptybox;
-    var $bigblank;
-    var $smallblank;
+    public $expandedbox;
+    public $collapsedbox;
+    public $L;
+    public $T;
+    public $I;
+    public $B;
+    public $emptybox;
+    public $bigblank;
+    public $smallblank;
 
     /**
      * Constructor
