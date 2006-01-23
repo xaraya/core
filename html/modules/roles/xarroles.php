@@ -520,12 +520,12 @@ class xarRole
     {
         if (empty($this->name)) {
             xarSessionSetVar('errormsg', _MODARGSERROR);
-            throw new EmptyParameterException('You must enter a name.');
+            throw new EmptyParameterException('name');
         }
         // TODO: validate the email address
         if (($this->basetype == ROLES_USERTYPE) && (empty($this->uname) || empty($this->email))) {
             xarSessionSetVar('errormsg', _MODARGSERROR);
-            throw new EmptyParameterException('You must enter a user name and a valid email address.');
+            throw new EmptyParameterException('user name and valid email address.');
         }
         // Confirm that this group or user does not already exist
         $q = new xarQuery('SELECT',$this->rolestable);
@@ -551,7 +551,7 @@ class xarRole
             array('name' => 'xar_uname',      'value' => $this->uname),
             array('name' => 'xar_date_reg',   'value' => mktime()),
             array('name' => 'xar_valcode',    'value' => $this->val_code),
-			array('name' => 'xar_auth_module','value' => $this->auth_module),
+			array('name' => 'xar_auth_modid', 'value' => $this->auth_module),
 			array('name' => 'xar_type',       'value' => $this->type),
         );
         $q->addfields($tablefields);
@@ -958,7 +958,7 @@ class xarRole
                         r.xar_date_reg,
                         r.xar_valcode,
                         r.xar_state,
-                        r.xar_auth_module
+                        r.xar_auth_modid
                         FROM $this->rolestable r, $this->rolememberstable rm
                         WHERE r.xar_uid = rm.xar_uid
                         AND r.xar_type = ?
@@ -975,7 +975,7 @@ class xarRole
                         r.xar_date_reg,
                         r.xar_valcode,
                         r.xar_state,
-                        r.xar_auth_module
+                        r.xar_auth_modid
                         FROM $this->rolestable r, $this->rolememberstable rm
                         WHERE r.xar_uid = rm.xar_uid
                         AND r.xar_type = ? AND r.xar_state = ?

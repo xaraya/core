@@ -33,53 +33,29 @@ function roles_adminapi_create($args)
     // Get arguments
     extract($args);
 
-    if (!isset($uname)) throw new EmptyParameterException('uname');
-    if (!isset($email)) throw new EmptyParameterException('email');
-    if (!isset($realname)) throw new EmptyParameterException('realname');
-    if (!isset($state)) throw new EmptyParameterException('state');
-    if (!isset($pass)) throw new EmptyParameterException('pass');
     $baseitemtype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
 	$args['basetype'] = $baseitemtype;
 
     if ($baseitemtype == ROLES_USERTYPE) {
-		if (!isset($uname)) {
-			$invalid[] = 'uname';
-		}
-		if (!isset($email)) {
-			$invalid[] = 'email';
-		}
-		if (!isset($name)) {
-			$invalid[] = 'name';
-		}
-		if (!isset($state)) {
-			$invalid[] = 'state';
-		}
-		if (!isset($pass)) {
-			$invalid[] = 'pass';
-		}
+		if (!isset($uname)) throw new EmptyParameterException('uname');
+		if (!isset($email)) throw new EmptyParameterException('email');
+		if (!isset($name)) throw new EmptyParameterException('name');
+		if (!isset($state)) throw new EmptyParameterException('state');
+		if (!isset($pass)) throw new EmptyParameterException('pass');
 		$args['cryptpass'] = md5($pass);
     } elseif ($baseitemtype == ROLES_GROUPTYPE) {
-		if (!isset($name)) {
-			$invalid[] = 'name';
-		}
+		if (!isset($realname)) throw new EmptyParameterException('realname');
     }
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-            join(', ', $invalid),
-    }
-
 	$args['type'] = $itemtype;
 	if (empty($authmodule)) {
         $modInfo = xarMod_GetBaseInfo('authsystem');
-        $modId = $modInfo['systemid'];
+        $args['modId'] = $modInfo['systemid'];
 	}
 
     $role = new xarRole($args);
     $role->add();
     $uid = $role->getID();
 
-              xar_state, xar_auth_modid
-                      $state,$modId);
-    $result = $dbconn->Execute($query,$bindvars);
     // Let any hooks know that we have created a new user.
     $item['module'] = 'roles';
     $item['itemtype'] = $itemtype;

@@ -56,11 +56,6 @@
                     </a>
                 </dd>
             </xar:if>
-            <xar:if condition="$tab eq 'duvs'">
-                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=duvs">
-                            User Variables 
-                    <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=duvs">
-                            User Variables 
             <xar:if condition="$tab eq 'hooks'">
                 <dd class="active">
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=hooks">
@@ -87,7 +82,7 @@
                             </xar:mlstring>
                         </a>
                     </dd>
-                    <xar:else />
+                <xar:else />
                     <dd>
                         <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
                             <xar:mlstring>
@@ -185,6 +180,7 @@
                         <xar:mlstring>
                             Registration/Authentication: 
                         </xar:mlstring>
+                    </label>
                     <xar:set name="defaultauthmodule">xarModGetVar('roles','defaultauthmodule')</xar:set>
                     <xar:data-input type="module" name="defaultauthmodule" class="authentication" value="$defaultauthmodule" />
                 </div>
@@ -200,6 +196,7 @@
         </form>
         <xar:comment>
             ----------------- Begin User Variable Options ------------------- 
+        </xar:comment>
         <xar:elseif condition="$tab eq 'duvs'" />
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
                 <fieldset>
@@ -347,6 +344,7 @@
                     </div>
                 </fieldset>
             </form>
+        <xar:comment>
             ----------------- Begin User Hooks Options ------------------- 
         </xar:comment>
         <xar:elseif condition="$tab eq 'hooks'" />

@@ -5,8 +5,8 @@
       <div class="xar-form-input-wrapper">
         <xar:data-label property="$properties[$name]" label="id" />
             <xar:if condition="$name eq 'moduleid'">
-                <xar:set name="$onchange">"onchange=\"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();\""</xar:set>                    
-                <xar:data-input property="$properties[$name]" extraparams="$onchange" />
+                <xar:set name="$onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>                    
+                <xar:data-input property="$properties[$name]" onchange="$onchange" />
             <xar:elseif condition="$name eq 'parent'" />
                 <xar:set name="$modid">$properties['moduleid']->value</xar:set>             
                 <xar:data-input property="$properties[$name]" modid="$modid" />

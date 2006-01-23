@@ -1,7 +1,8 @@
 <?php
 /**
+ * Get a specific user by any of his attributes
  *
- * @package modules
+ * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -13,8 +14,6 @@
  *
  * uname, uid and email are guaranteed to be unique,
  * otherwise the first hit will be returned
- *
- * @todo revisit this (a whole lot!)
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param int    $args['uid'] @see args['itemid]
  * @param int    $args['itemid'] id of role to get
@@ -29,18 +28,15 @@
 function roles_userapi_get($args)
 {
     extract($args);
-
-    if ((empty($itemid) && !empty($uid))) {
+    if (empty($uid) && empty($name) && empty($uname) && empty($email)) {
         throw new EmptyParameterException('uid or name or uname or email');
-    }
-
-    if (empty($itemid) && empty($name) && empty($uname) && empty($email)) {
-    } elseif (!empty($itemid) && !is_numeric($itemid)) {
+    } elseif (!empty($uid) && !is_numeric($uid)) {
         throw new VariableValidationException(array('uid',$uid,'numeric'));
     }
+    if ((empty($itemid) && !empty($uid))) {
+        $itemid = $uid;
+    }
 
-
-    
     $xartable =& xarDBGetTables();
     $rolestable = $xartable['roles'];
 
