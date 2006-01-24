@@ -432,6 +432,18 @@ function installer_admin_bootstrap()
     // load modules into *_modules table
     if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
 
+    // Initialise and activate dynamic data
+    $modlist = array('dynamicdata');
+    foreach ($modlist as $mod) {
+        // Initialise the module
+        $regid = xarModGetIDFromName($mod);
+        if (isset($regid)) {
+            if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
+            // Activate the module
+            if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+        }
+    }
+
     // create the default roles and privileges setup
     include 'modules/privileges/xarsetup.php';
     initializeSetup();
@@ -479,7 +491,7 @@ function installer_admin_bootstrap()
     }
 
     // Initialise and activate mail, dynamic data
-    $modlist = array('mail', 'dynamicdata');
+    $modlist = array('mail');
     foreach ($modlist as $mod) {
         // Initialise the module
         $regid = xarModGetIDFromName($mod);
@@ -496,6 +508,12 @@ function installer_admin_bootstrap()
     // Set module state to active
     if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) return;
 
+# Create wrapper DD objects for the native itemtypes of the roles module
+#
+	if (!xarModAPIFunc('roles','admin','createobjects')) return;
+
+# --------------------------------------------------------
+#
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
 }
 
@@ -567,7 +585,7 @@ function installer_admin_create_administrator()
     // assemble the args into an array for the role constructor
     $pargs = array('uid'   => $role->getID(),
                    'name'  => $name,
-                   'type'  => 0,
+                   'type'  => ROLES_USERTYPE,
                    'uname' => $userName,
                    'email' => $email,
                    'pass'  => $pass,
