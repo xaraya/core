@@ -216,7 +216,7 @@ class xarMasks
             $this->dbconn->Execute($query,$bindvars);
             $this->dbconn->commit();
         } catch (SQLException $e) {
-            $dbconn->rollback();
+            $this->dbconn->rollback();
             throw $e;
         }
         return true;
@@ -848,7 +848,7 @@ class xarPrivileges extends xarMasks
                           SET xar_query = ?, xar_limit = ?,
                               xar_propagate = ?, xar_instancetable2 = ?, xar_instancechildid = ?,
                               xar_instanceparentid = ?, xar_description = ?
-                          WHERE xar_iid = ?'";
+                          WHERE xar_iid = ?";
                     $bindvars = array(
                                       $instance['query'], $instance['limit'],
                                       $propagate, $table2, $childID, $parentID,
@@ -894,15 +894,15 @@ class xarPrivileges extends xarMasks
     function removeInstances($module)
     {
         try {
-            $dbconn->begin();
+            $this->dbconn->begin();
             $modInfo = xarMod_GetBaseInfo($module);
             $modId = $modInfo['systemid'];
             $query = "DELETE FROM $this->instancestable WHERE xar_modid = ?";
             //Execute the query, bail if an exception was thrown
-            $dbconn->Execute($query,array($module));
-            $dbconn->commit();
+            $this->dbconn->Execute($query,array($module));
+            $this->dbconn->commit();
         } catch (SQLException $e) {
-            $dbconn->rollback(); // redundant? we need to investigate concurencly and locking
+            $this->dbconn->rollback(); // redundant? we need to investigate concurently and locking
             throw $e;
         }
         return true;
