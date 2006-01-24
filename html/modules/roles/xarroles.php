@@ -560,6 +560,7 @@ class xarRole
                 array('name' => 'xar_email',      'value' => $this->email),
                 array('name' => 'xar_pass',       'value' => md5($this->pass)),
                 array('name' => 'xar_state',      'value' => $this->state),
+                array('name' => 'xar_auth_modid','value' => $this->auth_module)
             );
             $q->addfields($userfields);
         }
