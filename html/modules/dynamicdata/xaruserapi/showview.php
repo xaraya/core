@@ -30,12 +30,20 @@ function dynamicdata_userapi_showview($args)
         $template = '';
     }
 
+    // do we want to count?
+    if(empty($count)) {
+        $count=false;
+    } else {
+        $count=true;
+    }
+    
     // we got everything via template parameters
     if (isset($items) && is_array($items)) {
         return xarTplModule('dynamicdata','user','showview',
                             array('items' => $items,
                                   'labels' => $labels,
-                                  'layout' => $layout),
+                                  'layout' => $layout,
+                                  'count'  => count($items)), // no overhead, count anyway
                             $template);
     }
 
@@ -141,6 +149,11 @@ function dynamicdata_userapi_showview($args)
                                            'status' => $status));
     if (!isset($object)) return;
 
+    // Count before numitems!
+    $numthings = 0;
+    if($count) {
+        $numthings = $object->countItems();
+    }
     $object->getItems();
 
     // label to use for the display link (if you don't use linkfield)
@@ -170,7 +183,8 @@ function dynamicdata_userapi_showview($args)
                                    'linkfunc'  => $linkfunc,
                                    'param'     => $param,
                                    'pagerurl'  => $pagerurl,
-                                   'linkfield' => $linkfield));
+                                   'linkfield' => $linkfield,
+                                   'count'     => $numthings));
 }
 
 ?>

@@ -2,7 +2,7 @@
 /**
  * Count all active users
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -10,9 +10,11 @@
  * @subpackage Roles module
  */
 /**
- * count all active users
+ * Count all active users
+ *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param bool $include_anonymous whether or not to include anonymous user
+ * @param string $filter
  * @returns integer
  * @return number of users
  */
@@ -66,7 +68,7 @@ function roles_userapi_countallactive($args)
         $bindvars[] = (int) $thisrole['uid'];
     }
 
-    $query .= " AND xar_type = ?";
+    $query .= " AND xar_type = " . ROLES_USERTYPE;
     $bindvars[] = 0;
 
 // cfr. xarcachemanager - this approach might change later

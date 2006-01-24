@@ -25,6 +25,8 @@ function dynamicdata_admin_new($args)
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('notfresh', 'isset', $notfresh,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
     
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');
@@ -49,6 +51,11 @@ function dynamicdata_admin_new($args)
                                          'table'    => $table,
                                          'itemid'   => $itemid));
 
+    if (isset($myobject->properties['moduleid'])) {
+		if ($notfresh) $isvalid = $myobject->checkInput();
+		$itemtype = xarModAPIFunc('dynamicdata','admin', 'getnextitemtype', array('modid' => $myobject->properties['moduleid']->value));
+		$myobject->properties['itemtype']->value = $itemtype;
+	}
     $data['object'] =& $myobject;
 
     // Generate a one-time authorisation code for this operation
@@ -63,7 +70,7 @@ function dynamicdata_admin_new($args)
     $item['itemtype'] = $myobject->itemtype;
     $item['itemid'] = $myobject->itemid;
     $hooks = array();
-    $hooks = xarModCallHooks('item', 'new', $myobject->itemid, $item, $modinfo['name']); 
+    $hooks = xarModCallHooks('item', 'new', $myobject->itemid, $item, $modinfo['name']);
     $data['hooks'] = $hooks;
 
     if(!isset($template)) {

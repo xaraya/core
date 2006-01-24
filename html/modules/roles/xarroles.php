@@ -20,6 +20,10 @@ define('ROLES_STATE_PENDING',4);
 define('ROLES_STATE_CURRENT',98);
 define('ROLES_STATE_ALL',99);
 
+define('ROLES_ROLETYPE',1);
+define('ROLES_USERTYPE',2);
+define('ROLES_GROUPTYPE',3);
+
 /**
  * xarRoles: class for the role repository
  *
@@ -65,6 +69,12 @@ class xarRoles
     {
         // check if we already have the groups stored
         if ((!isset($this->allgroups)) || count($this->allgroups) == 0) {
+        	$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27));
+        	$basetypes = array();
+        	foreach ($types as $key => $value) {
+        		$basetype = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
+        		if ($basetype['itemtype'] == ROLES_GROUPTYPE) $basetypes[] = $key;
+        	}
             // set up the query and get the groups
             $q = new xarQuery('SELECT');
             $q->addtable($this->rolestable,'r');
@@ -74,7 +84,11 @@ class xarRoles
             $q->addfield('r.xar_name AS name');
             $q->addfield('r.xar_users AS users');
             $q->addfield('rm.xar_parentid AS parentid');
-            $q->eq('r.xar_type',1);
+            $c = array();
+        	foreach ($basetypes as $type) {
+	            $c[] = $q->eq('r.xar_type',$type);
+	        }
+	        $q->qor($c);
             $q->eq('r.xar_state',ROLES_STATE_ACTIVE);
             $q->setorder('r.xar_name');
             if (!$q->run()) return;
@@ -325,7 +339,6 @@ class xarRoles
         // TODO: validate the email address
         if (empty($name) && empty($uname) || empty($email)) {
             $msg = 'You must enter a user name and a valid email address.';
-            xarSessionSetVar('errormsg', _MODARGSERROR);
             throw new EmptyParameterException(null,$msg);
         }
         // Confirm that this group or user does not already exist
@@ -334,7 +347,6 @@ class xarRoles
 
         if (!$q->run()) return;
         if ($q->getrows() > 0) {
-            xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
             throw new DuplicateException(array('user',$uname));
         }
         // create an ID for the user
@@ -344,7 +356,7 @@ class xarRoles
         $tablefields = array(
             array('name' => 'xar_uid',         'value' => $nextId),
             array('name' => 'xar_name',        'value' => $name),
-            array('name' => 'xar_type',        'value' => 0),
+            array('name' => 'xar_type',        'value' => ROLES_USERTYPE),
             array('name' => 'xar_uname',       'value' => $uname),
             array('name' => 'xar_email',       'value' => $email),
             array('name' => 'xar_pass',        'value' => $pass),
@@ -393,7 +405,7 @@ class xarRoles
                     (xar_uid, xar_name, xar_type, xar_uname,xar_date_reg)
                   VALUES (?,?,?,?,?)";
         $bindvars = array($this->dbconn->genID($this->rolestable),
-                          $name, 1, $uname, $createdate);
+                          $name, ROLES_GROUPTYPE, $uname, $createdate);
         if (!$this->dbconn->Execute($query,$bindvars)) return;
         // done
         return true;
@@ -427,6 +439,7 @@ class xarRole
 //    public $primaryparent;//primary group for this role
     public $duvs;         //property for holding dynamic user vars
     public $parentlevel;  //we use this just to store transient information
+    var $basetype;     //the base itemtype. we add this so it can be passed rather than calculated here
 
     public $dbconn;
     public $rolestable;
@@ -460,8 +473,10 @@ class xarRole
         $this->acltable = $xartable['security_acl'];
 
         if (!isset($uid)) $uid = 0;
-        if (!isset($parentid)) $parentid = 0;
-        if (!isset($uname)) $uname = xarSessionGetVar('uid') . time();
+        if (!isset($type)) $type = ROLES_USERTYPE;
+        if (!isset($parentid)) $parentid = 1;
+        if (!isset($uname)) $uname = xarSessionGetVar('uid') . microtime();
+        usleep(1);
         if (!isset($email)) $email = '';
         if (!isset($pass)) $pass = '';
         if (!isset($state)) $state = ROLES_STATE_INACTIVE;
@@ -470,6 +485,7 @@ class xarRole
         if (!isset($val_code)) $val_code = 'createdbyadmin';
         // FIXME: what is a sensible default for auth_module?
         if (!isset($auth_module)) $auth_module = 0;
+        if (!isset($basetype)) $basetype = 0;
 
         $this->uid = (int) $uid;
         $this->name = $name;
@@ -484,6 +500,7 @@ class xarRole
         $this->auth_module = $auth_module;
         $this->parentlevel = 0;
 		$this->duvs = isset($duvs) ? $duvs : array();
+        $this->basetype = $basetype;
     }
 
     /**
@@ -498,20 +515,21 @@ class xarRole
      * @throws none
      * @todo none
      */
+
     function add()
     {
         if (empty($this->name)) {
             xarSessionSetVar('errormsg', _MODARGSERROR);
-            throw new EmptyParameterException('You must enter a name.');
+            throw new EmptyParameterException('name');
         }
         // TODO: validate the email address
-        if ((empty($this->type)) && (empty($this->uname) || empty($this->email))) {
+        if (($this->basetype == ROLES_USERTYPE) && (empty($this->uname) || empty($this->email))) {
             xarSessionSetVar('errormsg', _MODARGSERROR);
-            throw new EmptyParameterException('You must enter a user name and a valid email address.');
+            throw new EmptyParameterException('user name and valid email address.');
         }
         // Confirm that this group or user does not already exist
         $q = new xarQuery('SELECT',$this->rolestable);
-        if ($this->type == 1) {
+        if ($this->basetype == ROLES_GROUPTYPE) {
             $q->eq('xar_name',$this->name);
         } else {
             $q->eq('xar_uname',$this->uname);
@@ -526,27 +544,22 @@ class xarRole
 
         $nextId = $this->dbconn->genID($this->rolestable);
 
-        $tablefields = array(
-            array('name' => 'xar_uid',      'value' => $nextId),
-            array('name' => 'xar_name',     'value' => $this->name),
-            array('name' => 'xar_uname',    'value' => $this->uname),
-            array('name' => 'xar_date_reg', 'value' => mktime()),
-            array('name' => 'xar_valcode',  'value' => $this->val_code),
-        );
         $q = new xarQuery('INSERT',$this->rolestable);
+        $tablefields = array(
+            array('name' => 'xar_uid',        'value' => $nextId),
+            array('name' => 'xar_name',       'value' => $this->name),
+            array('name' => 'xar_uname',      'value' => $this->uname),
+            array('name' => 'xar_date_reg',   'value' => mktime()),
+            array('name' => 'xar_valcode',    'value' => $this->val_code),
+			array('name' => 'xar_auth_modid', 'value' => $this->auth_module),
+			array('name' => 'xar_type',       'value' => $this->type),
+        );
         $q->addfields($tablefields);
-        if ($this->type == 1) {
-            $groupfields = array(
-                array('name' => 'xar_type', 'value' => 1)
-            );
-            $q->addfields($groupfields);
-        } else {
+        if ($this->basetype == ROLES_USERTYPE) {
             $userfields = array(
-                array('name' => 'xar_type',       'value' => 0),
                 array('name' => 'xar_email',      'value' => $this->email),
                 array('name' => 'xar_pass',       'value' => md5($this->pass)),
                 array('name' => 'xar_state',      'value' => $this->state),
-                array('name' => 'xar_auth_module','value' => $this->auth_module)
             );
             $q->addfields($userfields);
         }
@@ -945,13 +958,13 @@ class xarRole
                         r.xar_date_reg,
                         r.xar_valcode,
                         r.xar_state,
-                        r.xar_auth_module
+                        r.xar_auth_modid
                         FROM $this->rolestable r, $this->rolememberstable rm
                         WHERE r.xar_uid = rm.xar_uid
                         AND r.xar_type = ?
                         AND r.xar_state != ?
                         AND rm.xar_parentid = ?";
-            $bindvars = array(0,ROLES_STATE_DELETED,$this->uid);
+            $bindvars = array(ROLES_USERTYPE,ROLES_STATE_DELETED,$this->uid);
         } else {
             $query = "SELECT r.xar_uid,
                         r.xar_name,
@@ -962,12 +975,12 @@ class xarRole
                         r.xar_date_reg,
                         r.xar_valcode,
                         r.xar_state,
-                        r.xar_auth_module
+                        r.xar_auth_modid
                         FROM $this->rolestable r, $this->rolememberstable rm
                         WHERE r.xar_uid = rm.xar_uid
                         AND r.xar_type = ? AND r.xar_state = ?
                         AND rm.xar_parentid = ?";
-            $bindvars = array(0, $state, $this->uid);
+            $bindvars = array(ROLES_USERTYPE, $state, $this->uid);
         }
         if (isset($selection)) $query .= $selection;
         $query .= " ORDER BY xar_" . $order;
@@ -1209,8 +1222,8 @@ class xarRole
     /**
      * isUser: checks whether this role is a user
      *
-     * Users have type = 0.
-     * Groups have type = 1.
+     * Users have type = 2.
+     * Groups have type = 3.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @access public
@@ -1221,7 +1234,8 @@ class xarRole
      */
     function isUser()
     {
-        return $this->getType() == 0;
+		$base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $this->getType(), 'moduleid' => 27));
+        return $base['itemtype'] == ROLES_USERTYPE;
     }
 
     /**
