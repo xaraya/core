@@ -73,7 +73,7 @@ function modules_init()
                         'xar_admin_capable' => array('type' => 'integer', 'size' => 'tiny', 'null' => false, 'default' => '0'),
                         'xar_user_capable' => array('type' => 'integer', 'size' => 'tiny', 'null' => false, 'default' => '0')
                         );
-        
+
         // Create the modules table
         $query = xarDBCreateTable($tables['modules'], $fields);
         $dbconn->Execute($query);
@@ -85,8 +85,8 @@ function modules_init()
         // Manually Insert Modules module into modules table
         $seqId = $dbconn->GenId($tables['modules']);
         $query = "INSERT INTO " . $tables['modules'] . "
-              (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, 
-               xar_class, xar_category, xar_admin_capable, xar_user_capable ) 
+              (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode,
+               xar_class, xar_category, xar_admin_capable, xar_user_capable )
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $bindvars = array($seqId,'modules',1,'modules',(string) $modVersion,1,'Core Admin','Global',1,0);
         $dbconn->Execute($query,$bindvars);
@@ -120,11 +120,11 @@ function modules_init()
         $seqId = $dbconn->GenId($tables['module_states']);
 
         // manually set Modules Module to active
-        $query = "INSERT INTO $tables[module_states] 
+        $query = "INSERT INTO $tables[module_states]
                   (xar_id, xar_modid, xar_state  ) VALUES (?, ?, ?)";
         $bindvars = array($seqId,$savedmodid,3);
         $dbconn->Execute($query,$bindvars);
-        
+
         /**
          * CREATE TABLE xar_module_vars (
          *   xar_id int(11) NOT NULL auto_increment,
@@ -144,7 +144,7 @@ function modules_init()
         // Create the module vars table
         $query = xarDBCreateTable($tables['module_vars'], $fields);
         $dbconn->Execute($query);
-        
+
         $index = array('name' => 'i_' . $sitePrefix . '_module_vars_modid',
                        'fields' => array('xar_modid'));
 
@@ -170,7 +170,7 @@ function modules_init()
                         'xar_itemid' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'primary_key' => true),
                         'xar_value' => array('type' => 'text', 'size' => 'long')
                         );
-        
+
         // Create the module itemvars table
         $query = xarDBCreateTable($tables['module_itemvars'], $fields);
         $dbconn->Execute($query);
@@ -210,21 +210,21 @@ function modules_init()
                         'xar_order'   => array('type' => 'integer', 'null' => false, 'default' => '0')
                     );
         // TODO: no indexes?
-        
+
         // Create the hooks table
         $query = xarDBCreateTable($tables['hooks'], $fields);
         $dbconn->Execute($query);
-        
+
         // <andyv> Add module variables for default user/admin, used in modules list
         /**
          * at this stage of installer mod vars cannot be set, so we use DB calls
          * prolly need to move this closer to installer, not sure yet
          */
-        
+
         $sql = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
                 VALUES (?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
-    
+
         $modvars = array(
                          // default show-hide core modules
                          array($savedmodid,'hidecore','0'),
@@ -244,13 +244,13 @@ function modules_init()
                          array($savedmodid,'startpage','overview'),
                          // expertlist
                          array($savedmodid,'expertlist','0'));
-        
+
         foreach($modvars as &$modvar) {
             $id = $dbconn->GenId($tables['module_vars']);
             array_unshift($modvar,$id);
             $stmt->executeUpdate($modvar);
         }
-        
+
         // We're done, thanks, commit the thingie
         $dbconn->commit();
     } catch (Exception $e) {
@@ -271,16 +271,16 @@ function modules_init()
 function modules_activate()
 {
     // make sure we dont miss empty variables (which were not passed thru)
-    if (empty($selstyle)) $selstyle = 'plain';
-    if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;
-    if (empty($hidecore)) $hidecore = 0;
-    if (empty($selsort)) $selsort = 'namedesc';
+    $selstyle = xarModGetVar('modules', 'hidecore');
+    $selstyle = xarModGetVar('modules', 'selstyle');
+    $selstyle = xarModGetVar('modules', 'selfilter');
+    $selstyle = xarModGetVar('modules', 'selsort');
+    if (empty($hidecore)) xarModSetVar('modules', 'hidecore', 0);
+    if (empty($selstyle)) xarModSetVar('modules', 'selstyle', 'plain');
+    if (empty($selfilter)) xarModSetVar('modules', 'selfilter', XARMOD_STATE_ANY);
+    if (empty($selsort)) xarModSetVar('modules', 'selsort', 'nameasc');
 
-    xarModSetVar('modules', 'hidecore', $hidecore);
-    xarModSetVar('modules', 'selstyle', $selstyle);
-    xarModSetVar('modules', 'selfilter', $selfilter);
-    xarModSetVar('modules', 'selsort', $selsort);
-    // New here in 2.x series 
+    // New here in 2.x series
     xarModSetVar('modules', 'disableoverview',0);
     xarModSetVar('modules', 'usedashboard',0);
 
