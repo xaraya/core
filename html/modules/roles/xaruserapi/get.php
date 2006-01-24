@@ -10,23 +10,20 @@
  * @subpackage Roles module
  */
 /**
- * Get a specific role by it's attributs
- *
+ * get a specific user by any of his attributes
  * uname, uid and email are guaranteed to be unique,
  * otherwise the first hit will be returned
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param int    $args['uid'] @see args['itemid]
- * @param int    $args['itemid'] id of role to get
- * @param string $args['uname'] user name of user to get
- * @param string $args['name'] name of user to get
- * @param string $args['email'] email of user to get
- * @param int    $args['type'] (deprecated) @see args['itemtype']
- * @param int    $args['itemtype'] type of role to get
+ * @param $args['uid'] id of user to get
+ * @param $args['uname'] user name of user to get
+ * @param $args['name'] name of user to get
+ * @param $args['email'] email of user to get
  * @returns array
  * @return user array, or false on failure
  */
 function roles_userapi_get($args)
 {
+    // Get arguments from argument array
     extract($args);
     // Argument checks
     if (empty($uid) && empty($name) && empty($uname) && empty($email)) {
@@ -35,8 +32,8 @@ function roles_userapi_get($args)
         throw new VariableValidationException(array('uid',$uid,'numeric'));
     }
 
+    if (empty($type)) $type = 0;
 
-    
     $xartable =& xarDBGetTables();
     $rolestable = $xartable['roles'];
 
@@ -53,8 +50,8 @@ function roles_userapi_get($args)
                   'xar_valcode AS valcode',
                   'xar_state AS state'
                 ));
-    if (!empty($itemid) && is_numeric($itemid)) {
-        $q->eq('xar_uid',(int)$itemid);
+    if (!empty($uid) && is_numeric($uid)) {
+        $q->eq('xar_uid',(int)$uid);
     }
     if (!empty($name)) {
         $q->eq('xar_name',$name);
@@ -71,19 +68,16 @@ function roles_userapi_get($args)
     elseif (!empty($state) && $state != ROLES_STATE_ALL) {
         $q->eq('xar_state',(int)$state);
     }
-    if (!empty($type)) {
-	    $q->eq('xar_type',$type);
-    }
+    $q->eq('xar_type',$type);
     if (!$q->run()) return;
 
     // Check for no rows found, and if so return
-    $role = $q->row();
-    if ($role == array()) return false;
+    $user = $q->row();
+    if ($user == array()) return false;
     // uid and type are reserved/key words in Oracle et al.
-    $role['uid'] = $role['xar_uid'];
-    $role['itemid'] = $role['xar_uid'];
-    $role['type'] = $role['xar_type'];
-    $role['itemtype'] = $role['xar_type'];
-    return $role;
+    $user['uid'] = $user['xar_uid'];
+    $user['type'] = $user['xar_type'];
+    return $user;
 }
+
 ?>
