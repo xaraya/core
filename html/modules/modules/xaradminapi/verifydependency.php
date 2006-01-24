@@ -39,7 +39,7 @@ function modules_adminapi_verifydependency($args)
     }
 
     // Get all modules in DB
-    // A module is able to fullfil a dependency only if it is activated at least.
+    // A module is able to fullfil a dependency if it is not missing.
     // So db modules should be a safe start to go looking for them
     $dbModules = xarModAPIFunc('modules','admin','getdbmodules');
     if (!isset($dbModules)) throw new ModuleNotFoundException();
@@ -48,7 +48,7 @@ function modules_adminapi_verifydependency($args)
 
     //Find the modules which are active (should upgraded be added too?)
     foreach ($dbModules as $name => $dbInfo) {
-        if ($dbInfo['state'] == XARMOD_STATE_ACTIVE) 
+        if (($dbInfo['state'] != XARMOD_STATE_MISSING_FROM_UNINITIALISED) && ($dbInfo['state'] < XARMOD_STATE_MISSING_FROM_INACTIVE))
         {
             $dbMods[$dbInfo['regid']] = $dbInfo;
         }
@@ -64,13 +64,13 @@ function modules_adminapi_verifydependency($args)
     }
 
     $dependency = $modInfo['dependency'];
-    
+
     if (empty($dependency)) {
         $dependency = array();
     }
 
     foreach ($dependency as $module_id => $conditions) {
-    
+
         if (is_array($conditions)) {
 
             //Required module inexistent
@@ -98,7 +98,7 @@ function modules_adminapi_verifydependency($args)
 
         } else {
             //Required module inexistent
-            if (!isset($dbMods[$conditions]))  
+            if (!isset($dbMods[$conditions]))
                 throw new ModuleNotFoundException($conditions,'Required module missing (ID #(1))');
         }
     }
