@@ -179,13 +179,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
     // {ML_dont_parse 'includes/xarLog.php'}
     include 'includes/xarLog.php';
-    $systemArgs = array('loggerName' => xarCore_getSystemVar('Log.LoggerName', true),
-                        'loggerArgs' => xarCore_getSystemVar('Log.LoggerArgs', true),
-                        'level'      => xarCore_getSystemVar('Log.LogLevel', true));
     xarLog_init($systemArgs, $whatToLoad);
-
-
-
 
     /*
      * Start Database Connection Handling System
@@ -199,18 +193,31 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         include 'includes/xarDB.php';
 
         // Decode encoded DB parameters
+        // These need to be there
         $userName = xarCore_getSystemVar('DB.UserName');
         $password = xarCore_getSystemVar('DB.Password');
-        if (xarCore_getSystemVar('DB.Encoded') == '1') {
-            $userName = base64_decode($userName);
-            $password  = base64_decode($password);
+        $persistent = null;
+        try {
+            $persistent = xarCore_getSystemVar('DB.Persistent');
+        } catch(VariableNotFoundException $e) {
+            $persistent = null;
         }
+        try {
+            if (xarCore_getSystemVar('DB.Encoded') == '1') {
+                $userName = base64_decode($userName);
+                $password  = base64_decode($password);
+            }
+        } catch(VariableNotFoundException $e) {
+            // doesnt matter, we assume not encoded
+        }
+
+        // Optionals dealt with, do the rest inline
         $systemArgs = array('userName' => $userName,
                             'password' => $password,
                             'databaseHost' => xarCore_getSystemVar('DB.Host'),
                             'databaseType' => xarCore_getSystemVar('DB.Type'),
                             'databaseName' => xarCore_getSystemVar('DB.Name'),
-                            'persistent' => xarCore_getSystemVar('DB.Persistent',true),
+                            'persistent' => $persistent,
                             'systemTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'),
                             'siteTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'));
         // Connect to database
@@ -507,9 +514,9 @@ function xarCoreIsDebugFlagSet($flag)
  * @access protected
  * @static systemVars array
  * @param string name name of core system variable to get
- * @param boolean returnNull if System variable doesn't exist return null
+ * @todo check if we need both the isCached and static
  */
-function xarCore_getSystemVar($name, $returnNull = false)
+function xarCore_getSystemVar($name)
 {
     static $systemVars = NULL;
 
@@ -526,12 +533,7 @@ function xarCore_getSystemVar($name, $returnNull = false)
     }
 
     if (!isset($systemVars[$name])) {
-        if($returnNull)
-        {
-            return null;
-        } else {
-            throw new Exception("xarCore_getSystemVar: Unknown system variable: ".$name);
-        }
+        throw new VariableNotFoundException($name,"xarCore_getSystemVar: Unknown system variable: '#(1)'.");
     }
 
     xarCore_SetCached('Core.getSystemVar', $name, $systemVars[$name]);
