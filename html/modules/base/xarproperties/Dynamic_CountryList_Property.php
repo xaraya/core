@@ -26,6 +26,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
     function Dynamic_CountryList_Property($args)
     {
         $this->Dynamic_Select_Property($args);
+        $this->options = $this->getCountryList();
     }
 
     function validateValue($value = null)
@@ -52,7 +53,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
     function showInput($args = array())
     {
         extract($args);
-        
+
         $data=array();
 
         if (!isset($value)) {
@@ -78,41 +79,6 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
 
     }
 
-    function showOutput($args = array())
-    {
-         extract($args);
-
-         $data=array();
-         if (isset($value)) {
-             $data['value']=xarVarPrepHTMLDisplay($value);
-         } else {
-             $data['value']=xarVarPrepHTMLDisplay($this->value);
-         }
-         if (isset($name)) {
-           $data['name']=$name;
-         }
-         if (isset($id)) {
-             $data['id']=$id;
-         }
-
-         $countrynames= getCountryList();
-         $countryname='';
-
-         foreach ($countrynames as $countrydata) {
-             foreach ($countrydata as $k) {
-               if ($k == $data['value']) {
-                   $countryname=$countrydata['name'];
-               }
-             }
-         }
-         $data['countryname']=$countryname;
-         $template="";
-
-         return xarTplProperty('base', 'countrylist', 'showoutput', $data);
-
-    }
-
-
     /**
      * Get the base information for this property.
      *
@@ -137,7 +103,6 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
                            );
         return $baseInfo;
      }
-}
    /**
     * Country list according to ISO 3166
     *
@@ -391,4 +356,5 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'zw', 'name'=>xarML('Zimbabwe'));
        return $coptions;
    }
+}
 ?>
