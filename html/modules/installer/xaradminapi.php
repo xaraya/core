@@ -104,7 +104,6 @@ function installer_adminapi_initialise($args)
 function installer_adminapi_createdb($args)
 {
     extract($args);
-
     // Load in Table Maintainance API
     include_once 'includes/xarTableDDL.php';
 

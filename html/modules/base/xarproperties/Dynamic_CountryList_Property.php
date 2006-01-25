@@ -68,7 +68,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $data['value'] = $value;
         $data['name']  = $name;
         $data['id']    = $id;
-        $coptions = getCountryList();
+        $coptions = $this->getCountryList();
 
         $data['coptions'] = $coptions;
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
@@ -79,6 +79,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
 
     }
 
+         parent::showOutput($args,'countrylist')
     /**
      * Get the base information for this property.
      *

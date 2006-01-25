@@ -282,6 +282,7 @@ class xarQuery
     {
         $this->_addfields($tables);
     }
+
     function addtables($tables)
     {
         $this->_addtables($tables);
@@ -787,6 +788,7 @@ class xarQuery
         }
         return $this->bindstring;
     }
+
     function assembledconditions()
     {
         $c = "";

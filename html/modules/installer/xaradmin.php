@@ -511,7 +511,6 @@ function installer_admin_bootstrap()
 # Create wrapper DD objects for the native itemtypes of the roles module
 #
 	if (!xarModAPIFunc('roles','admin','createobjects')) return;
-
 # --------------------------------------------------------
 #
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));

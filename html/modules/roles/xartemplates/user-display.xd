@@ -24,7 +24,7 @@
                             Email 
                         </xar:mlstring>
                     </strong>
-                    :
+                :
                     <a href="&xar-modurl-roles-user-email;&amp;uid=#$uid#">
                         <xar:ml>
                             <xar:mlstring>
@@ -43,7 +43,7 @@
                             Name 
                         </xar:mlstring>
                     </strong>
-                    :
+                :
                     #xarVarPrepForDisplay($name)# 
                 </p>
             </xar:if>

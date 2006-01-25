@@ -22,19 +22,19 @@ function dynamicdata_init()
      */
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
-
+    
     $dynamic_objects = $xartable['dynamic_objects'];
     $dynamic_properties = $xartable['dynamic_properties'];
     $dynamic_data = $xartable['dynamic_data'];
     $dynamic_relations = $xartable['dynamic_relations'];
     $dynamic_properties_def = $xartable['dynamic_properties_def'];
     $modulestable = $xartable['modules'];
-
+    
     //Load Table Maintenance API
     xarDBLoadTableMaintenanceAPI();
-
+    
     // Create all in one swoop (or not)
-    try {
+    try { 
         $dbconn->begin();
         /**
          * Dynamic Objects table
@@ -83,12 +83,12 @@ function dynamicdata_init()
                                                              'null'        => false,
                                                              'default'     => '1'),
                               );
-
+        
         // Create the Table - the function will return the SQL is successful or
         // raise an exception if it fails, in this case $query is empty
         $query = xarDBCreateTable($dynamic_objects,$objectfields);
         $dbconn->Execute($query);
-
+        
         // TODO: evaluate efficiency of combined index vs. individual ones
         // the combination of module id + item type *must* be unique
         $query = xarDBCreateIndex($dynamic_objects,
@@ -97,35 +97,35 @@ function dynamicdata_init()
                                                           'xar_object_itemtype'),
                                         'unique' => 'true'));
         $dbconn->Execute($query);
-
+        
         // the object name *must* be unique
         $query = xarDBCreateIndex($dynamic_objects,
                                   array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynobjects_name',
                                         'fields' => array('xar_object_name'),
                                         'unique' => 'true'));
         $dbconn->Execute($query);
-
+        
         /**
          * Note : Classic chicken and egg problem - we can't use createobject() here
          *        because dynamicdata doesn't know anything about objects yet :-)
          */
-
+        
         $modid = xarModGetIDFromName('dynamicdata');
-
+        
         // create default objects for dynamic data
         $sql = "INSERT INTO $dynamic_objects (
-                xar_object_id, xar_object_name, xar_object_label,
-                xar_object_moduleid, xar_object_itemtype, xar_object_urlparam,
+                xar_object_id, xar_object_name, xar_object_label, 
+                xar_object_moduleid, xar_object_itemtype, xar_object_urlparam, 
                 xar_object_maxid, xar_object_config, xar_object_isalias)
                 VALUES (?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
-
+        
         $objects = array(
                          array('objects'   ,'Dynamic Objects'   ,$modid,0,'itemid',0,''               ,0),
                          array('properties','Dynamic Properties',$modid,1,'itemid',0,''               ,0),
                          array('sample'    ,'Sample Object'     ,$modid,2,'itemid',3,'nothing much...',0)
                          );
-
+        
         $objectid = array();
         $idx = 0;
         foreach ($objects as &$object) {
@@ -135,8 +135,8 @@ function dynamicdata_init()
             $idx++;
             $objectid[$idx] = $dbconn->PO_Insert_ID($dynamic_objects,'xar_object_id');
         }
-
-
+        
+        
         /**
          * Dynamic Properties table
          */
@@ -194,12 +194,12 @@ function dynamicdata_init()
                             /* specific validation rules for this property (e.g. basedir, size, ...) */
                             'xar_prop_validation' => array('type'        => 'text')
                             );
-
+        
         // Create the Table - the function will return the SQL is successful or
         // raise an exception if it fails, in this case $query is empty
         $query = xarDBCreateTable($dynamic_properties,$propfields);
         $dbconn->Execute($query);
-
+        
         // TODO: evaluate efficiency of combined index vs. individual ones
         // the combination of module id + item type + property name *must* be unique !
         $query = xarDBCreateIndex($dynamic_properties,
@@ -209,31 +209,31 @@ function dynamicdata_init()
                                                           'xar_prop_name'),
                                         'unique' => 'true'));
         $dbconn->Execute($query);
-
+        
         $query = xarDBCreateIndex($dynamic_properties,
                                   array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynprops_name',
                                         'fields' => array('xar_prop_name')));
         $dbconn->Execute($query);
-
+        
         $query = xarDBCreateIndex($dynamic_properties,
                                   array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynprops_objectid',
                                         'fields' => array('xar_prop_objectid')));
         $dbconn->Execute($query);
-
+        
         /**
          * Note : same remark as above - we can't use createproperty() here
          *        because dynamicdata doesn't know anything about properties yet :-)
          */
-
+        
         // create default properties for dynamic data objects
         $sql = "INSERT INTO $dynamic_properties (
-                xar_prop_id, xar_prop_name, xar_prop_label, xar_prop_objectid,
-                xar_prop_moduleid, xar_prop_itemtype, xar_prop_type,
-                xar_prop_default, xar_prop_source, xar_prop_status,
+                xar_prop_id, xar_prop_name, xar_prop_label, xar_prop_objectid, 
+                xar_prop_moduleid, xar_prop_itemtype, xar_prop_type, 
+                xar_prop_default, xar_prop_source, xar_prop_status, 
                 xar_prop_order, xar_prop_validation)
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
-
+        
         $properties = array(
                             // 1 -> 9
                             array('objectid'  ,'Id'                 ,$objectid[1],182,0,21,''            ,$dynamic_objects.'.xar_object_id'         ,1,1 ,'integer'),
@@ -264,7 +264,7 @@ function dynamicdata_init()
                             array('age'       ,'Age'                ,$objectid[3],182,2,15,''                         ,'dynamic_data',1,3,'0:125'),
                             array('location'  ,'Location'           ,$objectid[3],182,2,12,''                         ,'dynamic_data',2,4,'')
                             );
-
+        
         $propid = array();
         $idx = 0;
         foreach ($properties as &$property) {
@@ -274,8 +274,8 @@ function dynamicdata_init()
             $idx++;
             $propid[$idx] = $dbconn->PO_Insert_ID($dynamic_properties,'xar_prop_id');
         }
-
-
+        
+        
         /**
          * Dynamic Data table (= one of the possible data sources for properties)
          */
@@ -305,57 +305,57 @@ function dynamicdata_init()
                                                        'size'        => 'medium',
                                                        'null'        => 'false')
                             );
-
+        
         // Create the Table - the function will return the SQL is successful or
         // raise an exception if it fails, in this case $query is empty
         $query = xarDBCreateTable($dynamic_data,$datafields);
         $dbconn->Execute($query);
-
+        
         $query = xarDBCreateIndex($dynamic_data,
                                   array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dyndata_propid',
                                         'fields' => array('xar_dd_propid')));
         $dbconn->Execute($query);
-
+        
         $query = xarDBCreateIndex($dynamic_data,
                                   array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dyndata_itemid',
                                         'fields' => array('xar_dd_itemid')));
         $dbconn->Execute($query);
-
+        
         /**
          * Note : here we *could* start using the dynamicdata APIs, but since
          *        the module isn't activated yet, Xaraya doesn't like that either :-)
          */
-
+        
         // we don't really need to create an object and properties for the dynamic data table
-
+        
         // create some sample data for the sample object
         $sql = "INSERT INTO $dynamic_data (xar_dd_id, xar_dd_propid, xar_dd_itemid, xar_dd_value)
             VALUES (?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
-
+        
         $dataentries = array(
                              array($propid[22],1,'1'),
                              array($propid[23],1,'Johnny'),
                              array($propid[24],1,'32'),
                              array($propid[25],1,'http://mikespub.net/xaraya/images/cuernos1.jpg'),
-
+                             
                              array($propid[22],2,'2'),
                              array($propid[23],2,'Nancy'),
                              array($propid[24],2,'29'),
                              array($propid[25],2,'http://mikespub.net/xaraya/images/agra1.jpg'),
-
+                             
                              array($propid[22],3,'3'),
                              array($propid[23],3,'Baby'),
                              array($propid[24],3,'1'),
                              array($propid[25],3,'http://mikespub.net/xaraya/images/sydney1.jpg')
                              );
-
+        
         foreach ($dataentries as &$dataentry) {
             $nextId = $dbconn->GenId($dynamic_data);
             array_unshift($dataentry, $nextId);
             $stmt->executeUpdate($dataentry);
         }
-
+    
         /**
          * Dynamic Relations table (= to keep track of relationships between objects)
          */
@@ -369,70 +369,68 @@ function dynamicdata_init()
                                                               'null'        => false,
                                                               'default'     => '0'),
                                 );
-
+        
         // Create the Table - the function will return the SQL is successful or
         // raise an exception if it fails, in this case $query is empty
         $query = xarDBCreateTable($dynamic_relations,$relationfields);
         $dbconn->Execute($query);
-
+        
         // Add Dynamic Data Properties Definition Table
         dynamicdata_createPropDefTable();
-
+        
         /**
          * Set module variables
          */
         xarModSetVar('dynamicdata', 'SupportShortURLs', 1);
-
+        
         /**
          * Register blocks
          */
         xarModAPIFunc('blocks','admin','register_block_type', array('modName'=>'dynamicdata','blockType'=>'form'));
-
+        
         /**
          * Register hooks
          */
         // when a new module item is being specified
         xarModRegisterHook('item', 'new', 'GUI', 'dynamicdata', 'admin', 'newhook');
-
+        
         // when a module item is created (uses 'dd_*')
         xarModRegisterHook('item', 'create', 'API','dynamicdata', 'admin', 'createhook');
-
+        
     // when a module item is being displayed
     if (!xarModRegisterHook('item', 'display', 'GUI',
                            'dynamicdata', 'user', 'displayhook')) {
-        return false;
-    }
         // when a module item is being modified (uses 'dd_*')
         xarModRegisterHook('item', 'modify', 'GUI','dynamicdata', 'admin', 'modifyhook');
-
+        
         // when a module item is updated (uses 'dd_*')
         xarModRegisterHook('item', 'update', 'API','dynamicdata', 'admin', 'updatehook');
-
+        
         // when a module item is deleted
         xarModRegisterHook('item', 'delete', 'API', 'dynamicdata', 'admin', 'deletehook');
-
+    
         // when a module configuration is being modified (uses 'dd_*')
         xarModRegisterHook('module', 'modifyconfig', 'GUI','dynamicdata', 'admin', 'modifyconfighook');
-
+        
         // when a module configuration is updated (uses 'dd_*')
         xarModRegisterHook('module', 'updateconfig', 'API','dynamicdata', 'admin', 'updateconfighook');
-
+        
         // when a whole module is removed, e.g. via the modules admin screen
         // (set object ID to the module name !)
         xarModRegisterHook('module', 'remove', 'API','dynamicdata', 'admin', 'removehook');
-
+    
         //  Ideally, people should be able to use the dynamic fields in their
         //  module templates as if they were normal fields, this means
         //  adapting the get() function in the user API of the module, and/or
         //  using some common data retrieval function (DD) in the future...
-
+    
         /*  display hook is now disabled by default - use the BL tags or APIs instead
          // when a module item is being displayed
          xarModRegisterHook('item', 'display', 'GUI','dynamicdata', 'user', 'displayhook');
         */
-
+        
         xarModRegisterHook('item', 'search', 'GUI', 'dynamicdata', 'user', 'search');
-
+        
         /**
          * Register BL tags
          */
@@ -444,7 +442,7 @@ function dynamicdata_init()
         xarTplRegisterTag('dynamicdata', 'data-display',array(), 'dynamicdata_userapi_handleDisplayTag');
         // view a list of these items
         xarTplRegisterTag('dynamicdata', 'data-view', array(),'dynamicdata_userapi_handleViewTag');
-
+        
         // Register BL admin tags
         // input field for this property
         xarTplRegisterTag('dynamicdata', 'data-input', array(), 'dynamicdata_adminapi_handleInputTag');
@@ -452,42 +450,42 @@ function dynamicdata_init()
         xarTplRegisterTag('dynamicdata', 'data-form', array(), 'dynamicdata_adminapi_handleFormTag');
         // admin list for these items
         xarTplRegisterTag('dynamicdata', 'data-list', array(), 'dynamicdata_adminapi_handleListTag');
-
+        
         // Register BL item tags to get properties and values directly in the template
         // get properties for this item
         xarTplRegisterTag('dynamicdata', 'data-getitem', array(),'dynamicdata_userapi_handleGetItemTag');
         // get properties and item values for these items
         xarTplRegisterTag('dynamicdata', 'data-getitems', array(),'dynamicdata_userapi_handleGetItemsTag');
-
+        
         // Register BL utility tags to avoid OO problems with the BL compiler
         // get label for this object or property
         xarTplRegisterTag('dynamicdata', 'data-label', array(),'dynamicdata_userapi_handleLabelTag');
         // get value or invoke method for this object or property
         xarTplRegisterTag('dynamicdata', 'data-object', array(), 'dynamicdata_userapi_handleObjectTag');
-
+        
         /*********************************************************************
          * Register the module components that are privileges objects
          * Format is
          * register(Name,Realm,Module,Component,Instance,Level,Description)
          *********************************************************************/
-
+        
         xarRegisterMask('ViewDynamicData','All','dynamicdata','All','All','ACCESS_OVERVIEW');
         xarRegisterMask('EditDynamicData','All','dynamicdata','All','All','ACCESS_EDIT');
         xarRegisterMask('AdminDynamicData','All','dynamicdata','All','All','ACCESS_ADMIN');
-
+        
         xarRegisterMask('ViewDynamicDataItems','All','dynamicdata','Item','All:All:All','ACCESS_OVERVIEW');
         xarRegisterMask('ReadDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_READ');
         xarRegisterMask('EditDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_EDIT');
         xarRegisterMask('AddDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_ADD');
         xarRegisterMask('DeleteDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_DELETE');
         xarRegisterMask('AdminDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_ADMIN');
-
+        
         xarRegisterMask('ReadDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_READ');
         xarRegisterMask('EditDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_EDIT');
         xarRegisterMask('AddDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_ADD');
         xarRegisterMask('DeleteDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_DELETE');
         xarRegisterMask('AdminDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_ADMIN');
-
+        
         xarRegisterMask('ViewDynamicDataBlocks','All','dynamicdata','Block','All:All:All','ACCESS_OVERVIEW');
         xarRegisterMask('ReadDynamicDataBlock','All','dynamicdata','Block','All:All:All','ACCESS_READ');
         /*********************************************************************
@@ -495,7 +493,7 @@ function dynamicdata_init()
          * Format is
          * setInstance(Module,Component,Query,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
          *********************************************************************/
-
+    
         $instances = array(
                            array('header' => 'external', // this keyword indicates an external "wizard"
                                  'query'  => xarModURL('dynamicdata', 'admin', 'privileges'),
@@ -503,7 +501,7 @@ function dynamicdata_init()
                                  )
                            );
         xarDefineInstance('dynamicdata','Item',$instances);
-
+        
         $instances = array(
                            array('header' => 'external', // this keyword indicates an external "wizard"
                                  'query'  => xarModURL('dynamicdata', 'admin', 'privileges'),
@@ -511,10 +509,10 @@ function dynamicdata_init()
                                  )
                            );
         xarDefineInstance('dynamicdata','Field',$instances);
-
+        
         xarModAPIFunc('modules','admin','enablehooks',
                       array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
-
+        
         $dbconn->commit();
     } catch (Exception $e) {
         $dbconn->rollback();
@@ -523,7 +521,7 @@ function dynamicdata_init()
     // Initialisation successful
     return true;
 }
-
+    
     /**
  * upgrade the dynamicdata module from an old version
  * This function can be called multiple times
@@ -739,11 +737,11 @@ function dynamicdata_createPropDefTable()
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $dynamic_properties_def = $xartable['dynamic_properties_def'];
-
+    
     //Load Table Maintenance API
     xarDBLoadTableMaintenanceAPI();
-
-
+    
+    
     $propdefs = array('xar_prop_id'   => array('type'        => 'integer',
                                                'null'        => false,
                                                'default'     => '0',
@@ -769,7 +767,7 @@ function dynamicdata_createPropDefTable()
                       'xar_prop_class'   => array('type'        => 'varchar',
                                                   'size'        => 254,
                                                   'default'     => NULL),
-
+                      
                       /* the default validation string for this property - no need to use text here... */
                       'xar_prop_validation'   => array('type'        => 'varchar',
                                                        'size'        => 254,
@@ -790,7 +788,7 @@ function dynamicdata_createPropDefTable()
                       'xar_prop_args'    => array('type'        => 'text',
                                                   'size'        => 'medium',
                                                   'null'        => 'false'),
-
+                      
                       /*  */
                       'xar_prop_aliases'   => array('type'        => 'varchar',
                                                     'size'        => 254,
@@ -799,13 +797,13 @@ function dynamicdata_createPropDefTable()
                       'xar_prop_format'   => array('type'        => 'integer',
                                                    'default'     => '0'),
                       );
-
+    
     // Create the Table - the function will return the SQL is successful or
     // raise an exception if it fails, in this case $query is empty
 
     $query = xarDBCreateTable($dynamic_properties_def,$propdefs);
     $dbconn->Execute($query);
-
+    
     $query = xarDBCreateIndex($dynamic_properties_def,
                               array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynpropdef_mod',
                                     'fields' => array('xar_prop_reqmodules')));

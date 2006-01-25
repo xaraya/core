@@ -127,7 +127,6 @@ function roles_admin_modifyconfig()
                     xarModSetVar('roles', 'defaultauthmodule', $defaultauthmodule);
                     xarModSetVar('roles', 'SupportShortURLs', $shorturls);
                     xarModSetVar('roles', 'admin', $siteadmin);
-                    break;
                 case 'hooks':
                     // Role type 'user' (itemtype 1).
                     xarModCallHooks('module', 'updateconfig', 'roles',

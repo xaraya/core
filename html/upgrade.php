@@ -710,7 +710,6 @@ if (empty($step)) {
         }
     }
 
-
     {
         // Change to the roles table
 

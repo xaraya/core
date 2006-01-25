@@ -176,6 +176,7 @@
                         Default Authentication Module 
                     </xar:mlstring>
                 </legend>
+                <div class="xar-form-input-wrapper">
                     <label for="defaultauthmodule" title="#xarML('Select the module that manages registration and authentication of users')#" class="xar-form-label">
                         <xar:mlstring>
                             Registration/Authentication: 
