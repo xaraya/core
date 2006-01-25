@@ -81,7 +81,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
 
     function showOutput($args = array())
     {
-        parent::showOutput($args,'countrylist')
+        parent::showOutput($args,'countrylist');
     }
 
     /**
