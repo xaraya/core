@@ -145,13 +145,18 @@ class FileNotFoundException extends NotFoundExceptions
 // Directories
 class DirectoryNotFoundException extends NotFoundExceptions
 { 
-    protected $message = 'The directory "#(1) could not be found.';
+    protected $message = 'The directory "#(1)" could not be found.';
 }
 // Generic data
 // FIXME: this is too generic
 class DataNotFoundException extends NotFoundExceptions
 { 
     protected $message = 'The data requested could not be found';
+}
+// Variables
+class VariableNotFoundException extends NotFoundExceptions
+{
+    protected $message = 'The variable "#(1)" could not be found';
 }
 
 // Generic duplication exception
