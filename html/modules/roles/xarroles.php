@@ -192,8 +192,10 @@ class xarRoles
         $duvarray = array('userhome','primaryparent','passwordupdate','timezone');
         $duvs = array();
         foreach ($duvarray as $key) {
-        	$duv = xarModGetUserVar('roles',$key,$row['xar_uid']);
-			if (!empty($duv)) $duvs[$key] = $duv;
+			if (xarModGetVar('roles',$key)) {
+				$duvs[$key] = xarModGetUserVar('roles',$key,$row['xar_uid']);
+				$duvs[$key] = ($duvs[$key] == 1) ? '' : $duv;
+			}
         }
         $pargs = array(
             'uid' =>         $row['xar_uid'],
@@ -423,8 +425,6 @@ class xarRole
     public $val_code;     //the validation code of this user or group
     public $state;        //the state of this user or group
     public $auth_module;  //no idea what this is (not used by groups)
-//    public $userhome;     //home page for this role
-//    public $primaryparent;//primary group for this role
     public $duvs;         //property for holding dynamic user vars
     public $parentlevel;  //we use this just to store transient information
 
@@ -997,7 +997,12 @@ class xarRole
                 'auth_module' => $auth_module);
 			$duvarray = array('userhome','primaryparent','passwordupdate','timezone');
 			$vars = array();
-			foreach ($duvarray as $key) $vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
+			foreach ($duvarray as $key) {
+				if (xarModGetVar('roles',$key)) {
+					$vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
+					$vars[$key] = ($vars[$key] == 1) ? '' : $vars[$key];
+				}
+			}
 			$pargs = array_merge($pargs,$vars);
             $users[] = new xarRole($pargs);
             $result->MoveNext();
@@ -1099,7 +1104,12 @@ class xarRole
                 'auth_module' => $auth_module);
 			$duvarray = array('userhome','primaryparent','passwordupdate','timezone');
 			$vars = array();
-			foreach ($duvarray as $key) $vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
+			foreach ($duvarray as $key) {
+				if (xarModGetVar('roles',$key)) {
+					$vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
+					$vars[$key] = ($vars[$key] == 1) ? '' : $vars[$key];
+				}
+			}
 			$pargs = array_merge($pargs,$vars);
             $parents[] = new xarRole($pargs);
             $result->MoveNext();
