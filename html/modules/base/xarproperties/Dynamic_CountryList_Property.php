@@ -80,6 +80,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
     }
 
          parent::showOutput($args,'countrylist')
+         parent::showOutput($args,'countrylist')
     /**
      * Get the base information for this property.
      *

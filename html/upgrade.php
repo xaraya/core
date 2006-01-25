@@ -716,7 +716,6 @@ if (empty($step)) {
         echo "<h5>Checking Roles Table Definitions</h5>";
         $dbconn =& xarDBGetConn();
         $datadict =& xarDBNewDataDict($dbconn, 'CREATE');
-
         $blockinstancestable = xarDBGetSiteTablePrefix() . '_roles';
         $columns = $datadict->getColumns($blockinstancestable);
         // Do we have a xar_duvs column?

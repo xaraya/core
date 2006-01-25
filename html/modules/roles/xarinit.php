@@ -183,6 +183,7 @@ function roles_activate()
     xarSession_setUserInfo($role->getID(), 0);
     $role = xarFindRole('Admin');
     xarModSetVar('roles', 'admin', $role->getID());
+    
     // --------------------------------------------------------
     //
     // Register block types
@@ -190,12 +191,12 @@ function roles_activate()
     xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'online'));
     xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'user'));
     xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'language'));
+    
     // Register hooks here, init is too soon
     xarModRegisterHook('item', 'search', 'GUI','roles', 'user', 'search');
     xarModRegisterHook('item', 'usermenu', 'GUI','roles', 'user', 'usermenu');
 
-    xarModAPIFunc('modules','admin','enablehooks',
-		array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
+    xarModAPIFunc('modules', 'admin', 'enablehooks', array('callerModName' => 'roles', 'hookModName' => 'roles'));
 
     //xarModAPIFunc('modules','admin','enablehooks',array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
     return true;

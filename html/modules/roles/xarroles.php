@@ -341,6 +341,7 @@ class xarRoles
         // TODO: validate the email address
         if (empty($name) && empty($uname) || empty($email)) {
             $msg = 'You must enter a user name and a valid email address.';
+            xarSessionSetVar('errormsg', _MODARGSERROR);
             throw new EmptyParameterException(null,$msg);
         }
         // Confirm that this group or user does not already exist
@@ -349,6 +350,7 @@ class xarRoles
 
         if (!$q->run()) return;
         if ($q->getrows() > 0) {
+            xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
             throw new DuplicateException(array('user',$uname));
         }
         // create an ID for the user
