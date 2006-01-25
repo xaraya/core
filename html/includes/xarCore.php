@@ -91,7 +91,6 @@ define('XARDBG_INACTIVE'         ,16);
  * xarInclude flags
  */
 define('XAR_INCLUDE_ONCE'         , 1);
-define('XAR_INCLUDE_MAY_NOT_EXIST', 2);
 
 /*
  * Miscelaneous

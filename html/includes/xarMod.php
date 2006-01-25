@@ -686,11 +686,6 @@ function xarModPrivateLoad($modName, $modType, $flags = 0)
     // Load the module translations files (common functions, uncut functions etc.)
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modBaseInfo['name'], 'modules:', $modType) === NULL) return;
 
-    // Try to load PN style translations -- Bridge mechanism -- Should disappear later on
-    // How to find out what language is being used and what is the correspondent in pn style?
-    $fileName = 'modules/'.$modDir.'/pnlang/eng/'.$modType.'.php';
-    if (!xarInclude($fileName, XAR_INCLUDE_MAY_NOT_EXIST)) {return;}
-
     // Load database info
     xarMod__loadDbInfo($modBaseInfo['name'], $modDir);
 
