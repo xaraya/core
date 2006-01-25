@@ -68,7 +68,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $data['value'] = $value;
         $data['name']  = $name;
         $data['id']    = $id;
-        $coptions = getCountryList();
+        $coptions = $this->getCountryList();
 
         $data['coptions'] = $coptions;
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
@@ -77,6 +77,11 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $template="";
         return xarTplProperty('base', 'countrylist', 'showinput', $data);
 
+    }
+
+    function showOutput($args = array())
+    {
+         parent::showOutput($args,'countrylist')
     }
 
     /**
@@ -103,6 +108,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
                            );
         return $baseInfo;
      }
+
    /**
     * Country list according to ISO 3166
     *
