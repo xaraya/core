@@ -26,7 +26,6 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
     function Dynamic_CountryList_Property($args)
     {
         parent::Dynamic_Select_Property($args);
-        $this->options = $this->getCountryList();
     }
 
     function validateValue($value = null)
@@ -52,36 +51,19 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
 //    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
     function showInput($args = array())
     {
-        extract($args);
-
-        $data=array();
-
-        if (!isset($value)) {
-            $value = $this->value;
+        if (empty($args['template'])) {
+			$args['template'] = 'countrylist';
         }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        $data['value'] = $value;
-        $data['name']  = $name;
-        $data['id']    = $id;
-        $coptions = $this->getCountryList();
-
-        $data['coptions'] = $coptions;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-        $data['tabindex'] =! empty($tabindex) ? $tabindex: 0;
-
-        $template="";
-        return xarTplProperty('base', 'countrylist', 'showinput', $data);
+         return parent::showInput($args);
 
     }
 
     function showOutput($args = array())
     {
-         parent::showOutput($args,'countrylist');
+        if (empty($args['template'])) {
+			$args['template'] = 'countrylist';
+        }
+         return parent::showOutput($args);
     }
 
     /**
@@ -116,7 +98,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
     * Updated 2005-10-15 with ISO 3166 country codes
     * Credit to Pedro Innecco for corrections and updates
     */
-   function getCountryList()
+   function getOptions()
    {
         $coptions = array();
         $coptions[] = array('id' =>'--', 'name' =>xarML('Please select'));
@@ -360,7 +342,8 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'ye', 'name'=>xarML('Yemen'));
         $coptions[] = array('id' =>'zm', 'name'=>xarML('Zambia'));
         $coptions[] = array('id' =>'zw', 'name'=>xarML('Zimbabwe'));
-       return $coptions;
+        $this->options = $coptions;
+       return $this->options;
    }
 }
 ?>
