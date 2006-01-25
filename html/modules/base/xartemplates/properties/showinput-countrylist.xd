@@ -1,11 +1,23 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
-<select name="#$name#" id="#$id#" tabindex="#$tabindex#" >
-    <xar:foreach in="$coptions" value="$coption" >
-        <xar:if condition="$value eq $coption['name']" >
-            <option value="#$coption['name']#" selected="selected">#$coption['name']#</option>
+<xar:if condition="isset($onchange)">
+  <xar:set name="evt_change">$onchange</xar:set>
+<xar:else/>
+  <xar:set name="evt_change">'return true;'</xar:set>
+</xar:if>
+
+<select name="#$name#" id="#$id#" tabindex="#$tabindex#" onchange="#$evt_change#">
+    <xar:foreach in="$options" value="$option" >
+        <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
+            <xar:if condition="$option['id'] eq $value" >
+                <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+            <xar:else />
+                <option value="#$option['id']#">#$option['name']#</option>
+            </xar:if>
+        <xar:elseif condition="$option['id'] eq $value" />
+            <option selected="selected">#$option['name']#</option>
         <xar:else />
-            <option value="#$coption['name']#">#$coption['name']#</option>
+            <option>#$option['name']#</option>
         </xar:if>
     </xar:foreach>
 </select>
