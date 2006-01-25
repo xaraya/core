@@ -547,33 +547,27 @@ function xarCore_getSystemVar($name)
  *
  * @access public
  * @param  string $fileName name of the file to load
- * @param  bool   $flags    can this file only be loaded once, or multiple times? XAR_INCLUDE_ONCE and  XAR_INCLUDE_MAY_NOT_EXIST are the possible flags right now, INCLUDE_MAY_NOT_EXISTS makes the function succeed even in te absense of the file
- * @return bool   true if file was loaded successfully, false on error (NO exception)
+ * @param  bool   $flags  can this file only be loaded once, or multiple times? XAR_INCLUDE_ONCE 
+ * @return bool   true if file was loaded successfully
+ * @todo  remove the may not exist flag, raise FileNotFound
  */
 function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)
 {
     // If the file isn't there return according to the flags
-    if (!file_exists($fileName))
-        return ($flags & XAR_INCLUDE_MAY_NOT_EXIST);
+    if (!file_exists($fileName)) throw new FileNotFoundException($fileName);
 
-    //Commeting this to speed this function
-    //Anyways the error_msg wasnt being used for anything.
-    //I guess this doesnt work like this.
-    //You would have to trap all the page output to get the PHP parse errors?!
-    // Catch output, if any
-
-//    ob_start();
-
+    // Catch output, if any (more like suppressing it)
+    ob_start();
+    // <mrb> why not always include_once ?
     if ($flags & XAR_INCLUDE_ONCE) {
         $r = include_once($fileName);
     } else {
         $r = include($fileName);
     }
-
-//    $error_msg = strip_tags(ob_get_contents());
-//    ob_end_clean();
+    ob_end_clean();
 
     if (empty($r) || !$r) {
+        // TODO: we probably *should* raise an exception here, but which one?
         return false;
     }
 

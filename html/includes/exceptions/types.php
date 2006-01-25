@@ -158,6 +158,11 @@ class VariableNotFoundException extends NotFoundExceptions
 {
     protected $message = 'The variable "#(1)" could not be found';
 }
+// Classes
+class ClassNotFoundException extends NotFoundExceptions
+{
+    protected $message = 'The class "#(1)" could not be found';
+}
 
 // Generic duplication exception
 // TODO: go over the uses of this generic one and make them explicit for what was actually duplicated
