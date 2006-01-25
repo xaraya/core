@@ -116,7 +116,9 @@ function privileges_admin_modifyprivilege()
     include_once 'modules/privileges/xartreerenderer.php';
     $renderer = new xarTreeRenderer();
 
-    $data['tree'] = $renderer->drawtree($renderer->maketree($priv));
+    // $data['tree'] = $renderer->drawtree($renderer->maketree($priv));
+    $data['trees'] = array($renderer->maketree($priv));
+    //debug($data['trees']);
     $data['oldcomponent'] = $component;
     $data['authid'] = xarSecGenAuthKey();
     $data['parents'] = $parents;

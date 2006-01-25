@@ -11,19 +11,26 @@
  */
 
 /**
- * Class to deal with our exceptions in a uniform way.
+ * Interface for all Xaraya raised exceptions
  *
  */
 interface IxarExceptions {
     public function __construct($vars = NULL, $msg = NULL);
 }
 
-/* Our own exceptions, the base container class, cannot be instantiated */
+/**
+ * Base class for all Xaraya exceptions
+ *
+ * Every part of Xaraya may derive their 
+ * own Exception class if they see fit to do so
+ * 
+ */
 abstract class xarExceptions extends Exception implements IxarExceptions
 {
     // Variable parts in the message.
     protected $message ="Missing Exception Info, please put the defaults for '\$message' and '\$variables' members in the derived exception class.";
     protected $variables = array();
+
     /*
      All exceptions have the same interface from XAR point of view
      so we dont allow this to be overridden just now. The message parameter
@@ -68,11 +75,44 @@ class DebugException extends xarExceptions
     protected $variables ='a variable value should normally be here';
 }
 
-
 /**
- * Parameter exceptions
+ * Xaraya exception types
+ *
+ * The ideal situation here is that we only have abstract classes
+ * below to help the rest of the framework derive their exceptions
+ * Since it is not ideal yet, some explicit exception types are 
+ * also defined here now. Over time, the explicit ones should move
+ * to their respective subsystems or modules.
+ *
  */
-// The base class
+
+// Let's start with the abstract classes we ar reasonably sure of
+// Registration failures
+abstract class RegistrationExceptions extends xarExceptions 
+{}
+// Validation failures
+abstract class ValidationExceptions extends xarExceptions 
+{}
+// Not finding stuff
+abstract class NotFoundExceptions extends xarExceptions 
+{}
+// Duplication failures
+abstract class DuplicationExceptions extends xarExceptions
+{}
+// Configuration failures
+abstract class ConfigurationExceptions extends xarExceptions
+{}
+// Deprecation exceptions
+abstract class DeprecationExceptions extends xarExceptions 
+{}
+
+
+/* ANYTHING BELOW THIS LINE IS UP FOR REVIEW AND SHOULD PROBABLY BE MOVED OR REWRITTEN */
+
+
+// Anything going wrong with parameters in functions and method derives from this
+// FIXME: this is weak
+// FIXME: it's probably better to bring this under validation? In some cases even assertions.
 abstract class ParameterExceptions extends xarExceptions 
 {}
 // Empty required parameters
@@ -86,153 +126,53 @@ class BadParameterException extends ParameterExceptions
     protected $message = "The parameter '#(1)' provided during this operation could not be validated, or was not accepted for other reasons.";
 }
 
-/**
- * Things which could not be found
- */
-
-// The base class
-abstract class NotFoundExceptions extends xarExceptions 
-{}
-// Function 
+// Functions 
+// FIXME: this is almost isolated in xarMod. Only installer uses it too.
 class FunctionNotFoundException extends NotFoundExceptions
 { 
     protected $message = 'The function "#(1)" could not be found or not be loaded.';
 }
-// ID 
+// ID's
 class IDNotFoundException extends NotFoundExceptions
 { 
     protected $message = 'An item was requested based on a unique identifier (ID), however, the ID: "#(1)" could not be found.';
 }
-// File
+// Files
 class FileNotFoundException extends NotFoundExceptions
 { 
     protected $message = 'The file "#(1) could not be found.';
 }
-// Directory
+// Directories
 class DirectoryNotFoundException extends NotFoundExceptions
 { 
     protected $message = 'The directory "#(1) could not be found.';
 }
-// Base info for module
-class ModuleBaseInfoNotFoundException extends NotFoundExceptions
-{ 
-    protected $message = 'The base info for module "#(1)" could not be found';
-}
-// Module
-class ModuleNotFoundException extends NotFoundExceptions
-{ 
-    protected $message = 'A module is missing, the module name could not be determined in the current context';
-}
-// Theme
-class ThemeNotFoundException extends NotFoundExceptions
-{ 
-    protected $message = 'A theme is missing, the theme name could not be determined in the current context';
-}
-// Locale
-class LocaleNotFoundException extends NotFoundExceptions
-{ 
-    protected $message = 'The locale "#(1)" could not be found or is currently unavailable';
-}
 // Generic data
+// FIXME: this is too generic
 class DataNotFoundException extends NotFoundExceptions
 { 
     protected $message = 'The data requested could not be found';
 }
 
-/** 
- * Some things which are there, but not active
- */
-// Module
-class ModuleNotActiveException extends xarExceptions
+// Generic duplication exception
+// TODO: go over the uses of this generic one and make them explicit for what was actually duplicated
+class DuplicateException extends DuplicationExceptions
 { 
-    protected $message = 'The module "#(1)" was called, but it is not active.';
+    protected $message = 'The #(1) "#(2)" already exists, no duplicates are allowed'; 
 }
-// User (kinda)
-class NotLoggedInException extends xarExceptions
-{ 
-    protected $message = 'An operation was encountered that requires the user to be logged in. If you are currently logged in please report this as a bug.';
-}
-
-/**
- * Registration failures
- */
-// The base class
-abstract class RegistrationExceptions extends xarExceptions 
-{}
-// Variables
-class VariableRegistrationException extends RegistrationExceptions
-{ 
-    protected $message = 'Variable "#(1)" is not properly registered';
-}
-// Events
-class EventRegistrationException extends RegistrationExceptions
-{ 
-    protected $message = 'The event "#(1)" is not properly registered';
-}
-// Tags
-class TagRegistrationException extends RegistrationExceptions
-{ 
-    protected $message = 'The tag "#(1)" is not properly registered';
-}
-
 
 // Forbidden operation
+// FIXME: What is this? validation?
 class ForbiddenOperationException extends xarExceptions
 { 
     protected $message = 'The operation you are attempting is not allowed in the current circumstances.';
 }
 
-// Duplication
-class DuplicateException extends xarExceptions
-{ 
-    protected $message = 'The #(1) "#(2)" already exists, no duplicates are allowed'; 
-}
-class DuplicateTagException extends xarExceptions
-{ 
-    protected $message = 'The tag definition for the tag: "#(1)" already exists.';
-}
-
-// Validation
-abstract class ValidationExceptions extends xarExceptions {}
-// BL
-class BLValidationException extends xarExceptions
-{ 
-    protected $message = 'A blocklayout tag or attribute construct was invalid, see the tag documentation for the correct syntax';
-}
-// Variables
-class VariableValidationException extends ValidationExceptions
-{ 
-    protected $message = 'The variable "#(1)" [Value: "#(2)"] did not comply with the required validation: "#(3)"';
-}
-
-// Configuration
-class ConfigurationException extends xarExceptions
-{ 
-    protected $message = 'There is an unknown configuration error detected.';
-}
-
+// Generic XML parse exception
+// FIXME: this is isolated in MLS now, make those instance more specific and lose this one
 class XMLParseException extends xarExceptions
 { 
     protected $message = 'The XML file "#(1)" could not be parsed. At line #(2): #(3)';
-}
-
-// Deprecation
-abstract class DeprecationExceptions extends xarExceptions 
-{}
-// API
-class ApiDeprecationException extends DeprecationExceptions
-{ 
-    protected $message = "You are trying to use a deprecated API function [#(1)], Replace this call with #(2)";
-}
-// Errors
-class ErrorDeprecationException extends DeprecationExceptions
-{
-    protected $message ="This exception was called through a deprecated API (usually xarErrorSet).\n You should not use xarErrorSet anymore, but raise/catch real exceptions.\nThis was the original error: #(1)";
-}
-
-class BLException extends xarExceptions 
-{ 
-    protected $message = 'Unknown blocklayout exception (TODO)';
 }
 
 ?>

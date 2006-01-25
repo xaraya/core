@@ -9,6 +9,16 @@
  * @author Marco Canini
 */
 
+/**
+ * Exceptions for this subsystem
+ *
+ */
+// Generic
+// FIXME: too weak
+class ConfigurationException extends ConfigurationExceptions
+{ 
+    protected $message = 'There is an unknown configuration error detected.';
+}
 
 /**
  * Initialize config system

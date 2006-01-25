@@ -10,11 +10,29 @@
  * @author Marco Canini <marco@xaraya.com>
  */
 
+/**
+ * Exceptions for this subsystem
+ *
+ */
+class DuplicateTagException extends DuplicationExceptions
+{ 
+    protected $message = 'The tag definition for the tag: "#(1)" already exists.';
+}
 
-  /**
-   * Defines for template handling
-   *
-   */
+class BLValidationException extends ValidationExceptions
+{ 
+    protected $message = 'A blocklayout tag or attribute construct was invalid, see the tag documentation for the correct syntax';
+}
+
+class BLException extends xarExceptions 
+{ 
+    protected $message = 'Unknown blocklayout exception (TODO)';
+}
+
+/**
+ * Defines for template handling
+ *
+ */
 
 /// OLD STUFF //////////////////////////////////
 define ('XAR_TPL_OPTIONAL', 2);
@@ -278,6 +296,7 @@ function xarTplSetDoctype($doctypeName)
  */
 function xarTplSetPageTitle($title = NULL, $module = NULL)
 {
+    xarLogMessage("TPL: Setting pagetitle to $title");
     if (!function_exists('xarModGetVar')){
         $GLOBALS['xarTpl_pageTitle'] = $title;
     } else {

@@ -51,6 +51,15 @@
  */
 
 /**
+ * Exceptions raised by this subsystem
+ *
+ */
+class EventRegistrationException extends RegistrationExceptions
+{ 
+    protected $message = 'The event "#(1)" is not properly registered';
+}
+
+/**
  * Intializes Event Messaging System
  *
  * @author Marco Canini <marco@xaraya.com>

@@ -34,7 +34,8 @@
        |-->NotFoundExceptions
        |   |-->FileNotFoundException
        |   |-->IDNotFoundException
-       |   |-->LocaleNotFoundException
+       |   |-->LocaleNotFoundException    [locale subsystem]
+       |   |-->ThemeNotFoundException     [themes module]
        |-->DuplicateExceptions
        |   |-->FileDuplicateException
        |   |-->BlockDuplicateException
@@ -50,8 +51,8 @@
        |   |-->AuthorisationSecurityException
        |-->TranslationException
        |-->RegistrationExceptions
-       |   |-->TagRegistrationException
-       |   |-->EventRegistrationException
+       |   |-->TagRegistrationException   [themes module]
+       |   |-->EventRegistrationException [events subsystem]
        |-->DependencyExceptions
        |   |-->VersionDependencyException
 
@@ -101,10 +102,25 @@ define('XAR_CORE_EXCEPTION', 11);
 define('XAR_DATABASE_EXCEPTION', 12);
 define('XAR_TEMPLATE_EXCEPTION', 13);
 
+// We still need the old classes
+include "includes/exceptions/systemexception.class.php";
+include "includes/exceptions/defaultuserexception.class.php";
+include "includes/exceptions/systemmessage.class.php";
+
 // Include the set of exception types
 include "includes/exceptions/types.php";
 // And the handlers to deal with them
 include "includes/exceptions/handlers.php";
+
+/**
+ * Exceptions for the exception subsystem itself
+ *
+ */
+// Special exception signalling the old ErrorSet was used
+class ErrorDeprecationException extends DeprecationExceptions
+{
+    protected $message ="This exception was called through a deprecated API (usually xarErrorSet).\n You should not use xarErrorSet anymore, but raise/catch real exceptions.\nThis was the original error: #(1)";
+}
 
 /**
  * Initializes the Error Handling System

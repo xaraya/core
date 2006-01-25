@@ -9,6 +9,15 @@
  * @author Marco Canini
 */
 
+/**
+ * Exceptions defined by this subsystem
+ *
+ */
+class ApiDeprecationException extends DeprecationExceptions
+{ 
+    protected $message = "You are trying to use a deprecated API function [#(1)], Replace this call with #(2)";
+}
+
 /***********************************************************************
 * This file is for legacy functions needed to make it
 * easier to use modules from Xaraya version 1.x in the version 2 series
