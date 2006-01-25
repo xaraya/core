@@ -375,7 +375,8 @@ class Dynamic_Object_Master
      * @returns array
      * @return array of object definitions
      */
-    static function &getObjects($args=array())
+
+        static function &getObjects($args=array())
     {
         extract($args);
         $nullreturn = NULL;

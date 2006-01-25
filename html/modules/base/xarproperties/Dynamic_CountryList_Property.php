@@ -25,7 +25,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
 {
     function Dynamic_CountryList_Property($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::Dynamic_Select_Property($args);
         $this->options = $this->getCountryList();
     }
 
@@ -79,8 +79,8 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
 
     }
 
-         parent::showOutput($args,'countrylist')
-         parent::showOutput($args,'countrylist')
+         parent::showOutput($args,'countrylist');
+
     /**
      * Get the base information for this property.
      *

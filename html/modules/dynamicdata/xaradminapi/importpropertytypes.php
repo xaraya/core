@@ -37,11 +37,11 @@ function dynamicdata_adminapi_importpropertytypes( $args )
     } else {
       // Get a list of active modules which might have properties
       $clearCache = "DELETE FROM $dynamicproptypes";
-      $result =& $dbconn->Execute($clearCache);
+      $dbconn->Execute($clearCache);
       if(!$result) return; // db error
 
       $activeMods = xarModApiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
-      if(empty($activeMods)) return; // this should never happen
+      assert('!empty($activeMods)'); // this should never happen
       $propDirs[] = 'includes/properties/'; // Initialize it with the core location of properties
 
       foreach($activeMods as $modInfo) {
@@ -76,7 +76,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                 if( $type != 'php') continue;
 
                 // Include the file into the environment
-                require_once $propertyfilepath;
+                include_once $propertyfilepath;
 
                 // Tell the property to skip initialization, this is only really needed for Dynamic_FieldType_Property
                 // because it causes this function to recurse.
@@ -200,6 +200,6 @@ function updateDB( $proptype, $parent, $filepath )
                       $proptype['format'], $proptype['validation'], $proptype['source'],
                       $proptype['dependancies'], $proptype['requiresmodule'], $proptype['args'],
                       $proptype['aliases']);
-    $result =& $dbconn->Execute($insert,$bindvars);
+    $dbconn->Execute($insert,$bindvars);
 }
 ?>

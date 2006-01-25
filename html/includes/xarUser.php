@@ -12,6 +12,16 @@
  */
 
 /**
+ * Exceptions defined by this subsystem
+ *
+ */
+// User (kinda)
+class NotLoggedInException extends xarExceptions
+{ 
+    protected $message = 'An operation was encountered that requires the user to be logged in. If you are currently logged in please report this as a bug.';
+}
+
+/**
  * Dynamic User Data types for User Properties
  */
 /* (currently unused)

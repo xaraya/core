@@ -209,8 +209,6 @@ class xarQuery
             $table = func_get_arg(0);
             if (!is_array($table)) {
                 if (!is_string($table)) {
-                    $msg = 'The table #(1) you are trying to add needs to be a string or an array.';
-                    $vars= $table;
                     throw new VariableValidationException(array('table',$table,'must be string or array'));
                 }
                 else {

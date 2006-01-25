@@ -10,6 +10,15 @@
  */
 
 /**
+ * Exceptions defined for this subsystem
+ *
+ */
+class LocaleNotFoundException extends NotFoundExceptions
+{ 
+    protected $message = 'The locale "#(1)" could not be found or is currently unavailable';
+}
+
+/**
  * Gets the locale data for a certain locale.
  * Locale data is an associative array, its keys are described at the top
  * of this file

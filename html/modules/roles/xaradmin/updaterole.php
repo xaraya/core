@@ -84,6 +84,7 @@ function roles_admin_updaterole()
         'email' => $pemail,
         'pass' => $ppass1,
         'state' => $pstate,
+	'duvs' => $duvs,
         'basetype' => $basetype,
         );
 

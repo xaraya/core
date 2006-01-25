@@ -10,6 +10,16 @@
  */
 
 /**
+ * Exceptions for this subsystem
+ *
+ */
+
+class VariableValidationException extends ValidationExceptions
+{ 
+    protected $message = 'The variable "#(1)" [Value: "#(2)"] did not comply with the required validation: "#(3)"';
+}
+
+/**
  * Variables package defines
  */
 define('XARVAR_ALLOW_NO_ATTRIBS', 1);

@@ -712,7 +712,6 @@ if (empty($step)) {
 
     {
         // Change to the roles table
-
         echo "<h5>Checking Roles Table Definitions</h5>";
         $dbconn =& xarDBGetConn();
         $datadict =& xarDBNewDataDict($dbconn, 'CREATE');

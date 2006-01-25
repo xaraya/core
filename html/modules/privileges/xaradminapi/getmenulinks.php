@@ -23,7 +23,7 @@ function privileges_adminapi_getmenulinks()
         $menulinks[] = Array('url' => xarModURL('privileges','admin','overview'),
                                'title' => xarML('Privileges Overview'),
                               'label' => xarML('Overview'));
-                              
+
         $menulinks[] = Array('url'   => xarModURL('privileges',
                                                   'admin',
                                                   'viewprivileges',array('phase' => 'active')),
