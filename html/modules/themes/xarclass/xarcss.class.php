@@ -55,9 +55,9 @@ class xarCSS
     public $commonsource = CSSCOMMONSOURCE;  // filename for common css
 
     public $source     = null;         // empty source should not be included (ideally)
-    
+
     public $condition  = null;         // encase in a conditions comment (think ie-win)
-    
+
     public $dynfile; // not implemented yet
 
     // TYPICAL REQUIRED ATTRIBUTES FOR WELL-FORMED CSS REFERENCE TAGS (xhtml-wise)
@@ -110,7 +110,7 @@ class xarCSS
         if($this->method == 'import' && isset($media)) {
             $this->media = str_replace(' ', ', ', $media);
         }
-        
+
         if (isset($source)) $this->source               = $source;
         if (isset($condition)) $this->condition         = $condition;
 
@@ -212,8 +212,8 @@ class xarCSS
                 // no problem
                 return $original;
             }
+
         } else {
-            // no scope, somebody overrode defaults and hasn't assign anything sensible? naughty - lets complain
             $msg = xarML("#(1) (no valid scope attribute could be deduced from this xar:style tag)",$this->scope);
             throw new Exception($msg);
         }
@@ -230,13 +230,13 @@ class xarCSS
 class tagqueue
 {
     public $legacy = true; // Also register the global which existed before the css stuff?
-    
+
     function tagqueue()
     {
         // TODO: uncomment this :-)
         //$this->legacy = xarConfigGetVar('Site.Core.LoadLegacy');
     }
-    
+
     // FIXME: $args is used as boolean OR an array depending on the call,
     // someone is bound to trip over that hack at some point
     function queue($op='register', $args)
@@ -279,7 +279,7 @@ class tagqueue
     {
         return $this->queue('deliver',$sort);
     }
-    
+
     function deliverlegacy($sort = true)
     {
         return $this->queue('deliverlegacy',$sort);

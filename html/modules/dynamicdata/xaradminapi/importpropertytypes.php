@@ -38,6 +38,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
       // Get a list of active modules which might have properties
       $clearCache = "DELETE FROM $dynamicproptypes";
       $dbconn->Execute($clearCache);
+      if(!$result) return; // db error
 
       $activeMods = xarModApiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
       assert('!empty($activeMods)'); // this should never happen

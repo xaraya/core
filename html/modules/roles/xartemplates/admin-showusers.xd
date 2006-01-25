@@ -29,7 +29,7 @@
 
     <xar:comment>TODO set the active tab here</xar:comment>
     <!-- Show the general tab list for roles -->
-    <xar:set name="ptype">1</xar:set>
+    <xar:set name="basetype">ROLES_GROUPTYPE</xar:set>
     <xar:template file="tablist" />
 
     <xar:if condition="$selstyle eq '0'">
@@ -38,6 +38,12 @@
           <legend><xar:mlstring>Role hierarchy</xar:mlstring></legend>
             <div name="tree" id="tree" class="tree">
                 <xar:template file="tree" />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend><xar:mlstring>Role hierarchy</xar:mlstring></legend>
+          <div>
+            #$roletree#
           </div>
         </fieldset>
     <xar:elseif condition="$selstyle eq '2'"/>

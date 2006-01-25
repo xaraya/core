@@ -24,7 +24,6 @@
     </h2>
     <xar:template file="tablist" />
     <br />
-    <!--<xar:loop name="$trees">
         #$loop:item['tree']#
     </xar:loop>
     -->

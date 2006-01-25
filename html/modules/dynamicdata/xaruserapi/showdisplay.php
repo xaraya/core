@@ -21,6 +21,10 @@ function dynamicdata_userapi_showdisplay($args)
     extract($args);
 
     // optional layout for the template
+    if (empty($tplmodule)) {
+        $tplmodule = 'dynamicdata';
+    }
+    // optional layout for the template
     if (empty($layout)) {
         $layout = 'default';
     }
@@ -110,7 +114,8 @@ function dynamicdata_userapi_showdisplay($args)
     }
 
     return $object->showDisplay(array('layout'   => $layout,
-                                      'template' => $template));
+                                      'template' => $template,
+                                      'tplmodule'=> $tplmodule));
 }
 
 ?>
