@@ -1077,15 +1077,30 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
     $tplData['_bl_data'] = $tplData;
     extract($tplData, EXTR_OVERWRITE);
 
+    // Avoid evalling alltogether if we can
+    // TODO: Although this should never happen in production systems, it eats the memory
+    // out of any server. At least we're not using eval anymore :-)
+    // NOTES:
+    // 1. If safe mode is ON this will most likely NOT work without specific configuration, do we want to go that far?
+    // 2. An alternative is write a stream wrapper class around $templateCode and use include/require on the streadm 
+    //    (This should theoretically work, but it crashes me all over the place and introduces a whole new class)
+    // 3. If all else fails we can still fall back to the eval. 
+    // yeah, getting rid of eval isnt your daily walk in the park
+    $tmpPending = false; $useEval = false;
     // Start output buffering
     ob_start();
+    // FIXME: add better escape clause when safe mode is on to fall back to eval
+    if(!isset($cachedFileName) && !$useEval) {
+        $cachedFileName = tempnam("","");
+        $fd = fopen($cachedFileName,"w");
+        $tmpPending = true; // We got to remove this one again too
+        fwrite($fd,$templateCode);
+        fclose($fd);
+    } 
+    
     if(!isset($cachedFileName)) {
-        // This eval is only used for cases like xarTplString, which is quite rare, and should probably not exist
-        // TODO: consider writing it to a temp file and using include here too, so the bytecacher can use it (risky?)
-        // and we can get rid of the eval alltogether.
-        eval('?>' . $templateCode);
+        eval('?> '.$templateCode);
     } else {
-        // Otherwise use an include, much better :-)
         assert('file_exists($cachedFileName); /* Compiled templated disappeared in mid air, race condition? */');
         if($tplType=='page') set_exception_handler(array('ExceptionHandlers','bone'));
         try {
@@ -1094,13 +1109,14 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
         } catch (Exception $e) {
             // Any exception inside the compile template invalidates our output from it.
             // Destroy its buffer, and raise exactly that exception, letting the exception handlers
-            // take care of the rest.
-            // nice, very nice :-)
+            // take care of the rest. nice, very nice :-)
             ob_end_clean();
+            if($tmpPending) unlink($cachedFileName);
             throw $e;
         }
+        if($tmpPending) unlink($cachedFileName); 
     }
-    
+
     if($sourceFileName != '') {
         $tplOutput = ob_get_contents();
         ob_end_clean();
