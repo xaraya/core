@@ -451,7 +451,7 @@ function xarCoreActivateDebugger($flags)
     } elseif ($flags & XARDBG_ACTIVE) {
         // See if config.system.php has info for us on the errorlevel, but dont break if it has not
         try {
-            $errLevel = xarCore_getSystemVar('Exception.ErrorLevel',true);
+            $errLevel = xarCore_getSystemVar('Exception.ErrorLevel');
         } catch(Exception $e) {
             $errLevel = E_ALL;
         }
