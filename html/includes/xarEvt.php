@@ -191,7 +191,11 @@ function xarEvt__notify($modName, $eventName, $value, $modDir = NULL)
 
     //If not loaded, try to
     if (!isset($loaded[$xarapifile])) {
-        $loaded[$xarapifile] = xarInclude($xarapifile, XAR_INCLUDE_MAY_NOT_EXIST + XAR_INCLUDE_ONCE);
+        try {
+            $loaded[$xarapifile] = xarInclude($xarapifile, XAR_INCLUDE_ONCE);
+        } catch(FileNotFoundException $e) {
+            $loaded[$xarapifile] = false;
+        }
     }
     
     //Nothing to do if the API file isnt there
@@ -204,9 +208,13 @@ function xarEvt__notify($modName, $eventName, $value, $modDir = NULL)
     if (isset($funcToRun) || isset($funcToRunGeneral)) {
         //LAZY LOAD!
         // We may need the tables
-        xarInclude($xartabfile, XAR_INCLUDE_MAY_NOT_EXIST + XAR_INCLUDE_ONCE);
-        $xartabfunc = $modName.'_xartables';
-        if (function_exists($xartabfunc)) xarDB_importTables($xartabfunc());
+        try {
+            xarInclude($xartabfile, XAR_INCLUDE_ONCE);
+            $xartabfunc = $modName.'_xartables';
+            if (function_exists($xartabfunc)) xarDB_importTables($xartabfunc());
+        } catch(FileNotFoundException $e) {
+            // no worries
+        }
     }
     
      if (isset($funcToRun)) {
