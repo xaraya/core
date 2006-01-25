@@ -122,7 +122,7 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
                               'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'base',
                             'aliases' => '',
                             'args'         => '',
                             // ...

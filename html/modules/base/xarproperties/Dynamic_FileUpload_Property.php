@@ -174,7 +174,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                                           'override' => $override,
                                           'maxsize' => $this->maxsize));
             // TODO: this raises exceptions now, we want to catch some of them
-            // TODO: Insert try/catch clause once we know what uploads raises 
+            // TODO: Insert try/catch clause once we know what uploads raises
             // TODO:
             if (!isset($return) || !is_array($return) || count($return) < 2) {
                 $this->value = null;
@@ -409,7 +409,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                               'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => '',
+                              'requiresmodule' => 'base',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...

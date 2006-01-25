@@ -111,10 +111,10 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
                 if ($data['icon']<>'') {
                     $data['value']= $value;
                     $data['icon']= $this->icon;
-                } elseif ($data['icon']=='') { 
+                } elseif ($data['icon']=='') {
                     /* We don't have a validated icon to display, use favicon */
                     $data['value']= $value;
-                    
+
                     /* FIXME: getfavicon needs to send back nothing if the favicon doens't exist. */
                     $data['icon'] = xarModAPIFunc('base',
                                                   'user',
@@ -148,7 +148,7 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
                           'validation' => '',
                           'source'     => '',
                           'dependancies' => '',
-                          'requiresmodule' => '',
+                          'requiresmodule' => 'base',
                           'aliases' => '',
                           'args'         => '',
                           // ...

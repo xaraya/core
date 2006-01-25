@@ -1,3 +1,4 @@
+<?php
 /**
  * Multiselect Property
  * @package Xaraya eXtensible Management System
@@ -136,7 +137,7 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
                               'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'base',
                             'aliases'        => '',
                             'args'           => serialize($args)
                             // ...

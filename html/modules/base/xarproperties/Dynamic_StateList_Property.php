@@ -62,7 +62,7 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
         $data['value'] = $value;
         $data['name']  = $name;
         $data['id']    = $id;
-       
+
        /*
         $out = '<select' .
        ' name="' . $name . '"' .
@@ -207,7 +207,7 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
                               'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'base',
                             'aliases'        => '',
                             'args'           => serialize($args)
                             // ...

@@ -301,7 +301,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
      function getBasePropertyInfo()
      {
         $args['rows'] = 20;
-     
+
          $baseInfo = array(
                               'id'         => 38,
                               'name'       => 'textupload',
@@ -310,7 +310,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                               'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'base',
                             'aliases' => '',
                             'args' => serialize( $args ),
                             'args'         => '',

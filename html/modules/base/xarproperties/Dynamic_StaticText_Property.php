@@ -61,7 +61,7 @@ class Dynamic_StaticText_Property extends Dynamic_Property
         $data=array();
 
         $data['value'] = $value;
-        
+
         $template="";
         return xarTplProperty('base', 'static', 'showoutput', $data);
 
@@ -85,7 +85,7 @@ class Dynamic_StaticText_Property extends Dynamic_Property
                               'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'base',
                             'aliases'        => '',
                             'args'           => serialize($args)
                             // ...

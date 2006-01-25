@@ -29,7 +29,7 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         $this->Dynamic_Select_Property($args);
         // specify base directory in validation field
         if (empty($this->basedir) && !empty($this->validation)) {
-            // Hack for passing this thing into transform hooks 
+            // Hack for passing this thing into transform hooks
             // validation may start with 'transform:' and we
             // obviously dont want that in basedir
             if(substr($this->validation,0,10) == 'transform:') {
@@ -99,7 +99,7 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         }
 
         $data['name']    = $name;
-        $data['value']    = $value;        
+        $data['value']    = $value;
         $data['id']      = $id;
         $data['options'] = $options;
         $data['tabindex']= !empty($tabindex) ? $tabindex : 0;
@@ -161,7 +161,7 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
                               'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => '',
+                              'requiresmodule' => 'base',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...

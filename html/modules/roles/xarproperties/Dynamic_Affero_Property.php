@@ -10,7 +10,7 @@
  * @subpackage Roles module
  */
 
-/* 
+/*
  * Handle MSN property
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -112,7 +112,7 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
      {
         $args = array();
          $baseInfo = array(
-                             'id'         => 40,
+                              'id'         => 40,
                               'name'       => 'affero',
                               'label'      => 'Affero Username',
                               'format'     => '40',
