@@ -43,12 +43,11 @@ function dynamicdata_adminapi_importpropertytypes( $args )
             // Get a list of active modules which might have properties
             $clearCache = "DELETE FROM $dynamicproptypes";
             $dbconn->Execute($clearCache);
-      if(!$result) return; // db error
-        
+
             $activeMods = xarModApiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
             assert('!empty($activeMods)'); // this should never happen
             $propDirs[] = 'includes/properties/'; // Initialize it with the core location of properties
-            
+
             foreach($activeMods as $modInfo) {
                 // FIXME: the modinfo directory does NOT end with a /
                 $propDirs[] = 'modules/' .$modInfo['osdirectory'] . '/xarproperties/';
@@ -66,7 +65,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                     $propertyfilepath = $PropertiesDir . $propertyfile;
                     // Only Process files, not directories
                     if(!is_file($propertyfilepath)) continue;
-                        
+
                     // Get the name of each file, assumed to be the name of the property
                     // FIXME: <mrb> decouple the classname from the filename someday
                     $fileparts = explode('.',$propertyfile);
@@ -74,16 +73,16 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                     if (count($fileparts) != 2) continue;
                     $propertyClass = $fileparts[0];
                     $type = $fileparts[1];
-                    
+
                     // Only worry about php files, not security place holder .html files or other garbage that might be present
                     if( $type != 'php') continue;
-                    
+
                     // Include the file into the environment
                     xarInclude($propertyfilepath);
                     // Tell the property to skip initialization, this is only really needed for Dynamic_FieldType_Property
                     // because it causes this function to recurse.
                     $args['skipInit'] = true;
-                    
+
                     // Instantiate a copy of this class
                     if(!class_exists($propertyClass)) {
                         $vars = array($propertyClass, $propertyfile);
@@ -91,16 +90,16 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                         throw new ClassNotFoundException($vars,$msg);
                     }
                     $property = new $propertyClass($args);
-                    
+
                     // Get the base information that used to be hardcoded into /modules/dynamicdata/class/properties.php
                     $baseInfo = $property->getBasePropertyInfo();
-                    
+
                     // Ensure that the base properties are all present.
                     if( !isset($baseInfo['dependancies']) )   $baseInfo['dependancies'] = '';
                     if( !isset($baseInfo['requiresmodule']) ) $baseInfo['requiresmodule'] = '';
                     if( !isset($baseInfo['aliases']) )        $baseInfo['aliases'] = '';
                     if( empty($baseInfo['args']) )            $baseInfo['args'] = serialize(array());
-                    
+
                     // If the property needs specific files to exist, check for them
                     // Example: HTML Area property needs to check to see if HTMLArea javascript files are present
                     if( isset($baseInfo['dependancies']) && ($baseInfo['dependancies'] != '') )
@@ -111,7 +110,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                                 if( !file_exists($dependancy) )  continue 2;
                             }
                         }
-                    
+
                     // Check if any Modules are required
                     // For Example: Categories, Ratings, Hitcount properties all require their respective modules to be enabled
                     // CHECK: <mrb> do we want the owning module in here?
@@ -125,22 +124,22 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                                     if( !xarModIsAvailable($moduleName) ) continue 2;
                                 }
                         }
-                    
-                    
+
+
                     // Save the name of the property
                     $baseInfo['propertyClass'] = $propertyClass;
                     $baseInfo['filepath'] = $propertyfilepath;
-                    
-                    
+
+
                     // Check for aliases
-                    if( !isset($baseInfo['aliases']) || 
+                    if( !isset($baseInfo['aliases']) ||
                         ($baseInfo['aliases'] == '') || !is_array($baseInfo['aliases']) ) {
                         // Make sure that this is always available
                         $baseInfo['aliases'] = '';
-                        
+
                         // Add the property to the property type list
                         $proptypes[$baseInfo['id']] = $baseInfo;
-                        
+
                     } elseif ( is_array($baseInfo['aliases']) && (count($baseInfo['aliases']) > 0) ) {
                         // if aliases are present include them as seperate entries
                         $aliasList = '';
@@ -150,24 +149,24 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                                 $aliasInfo['propertyClass'] = $propertyClass;
                                 $aliasInfo['aliases']       = '';
                                 $aliasInfo['filepath']      = $propertyfilepath;
-                                
+
                                 // Add the alias to the property type list
                                 $proptypes[$aliasInfo['id']] = $aliasInfo;
                                 $aliasList .= $aliasInfo['id'].',';
-                                
+
                                 // Update Database
                                 updateDB( $aliasInfo, $baseInfo['id'], $propertyfilepath );
-                                
+
                             }
-                        
+
                         // Store a list of reference ID's from the base property it's aliases
                         // FIXME: strip the last comma off?
                         $baseInfo['aliases'] = $aliasList;
-                        
+
                         // Add the base property to the property type list
                         $proptypes[$baseInfo['id']] = $baseInfo;
                     }
-                    
+
                     // Update database entry for this property (the aliases array, if any, will now be an aliaslist)
                     updateDB( $baseInfo, '', $propertyfilepath );
                 }
