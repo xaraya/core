@@ -81,7 +81,6 @@ function base_admin_release($args)
         xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
         return;
     }
-    asort($feedcontent);
     $data['feedcontent'] = $feedcontent; 
     return $data;
 }
