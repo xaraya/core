@@ -1,20 +1,48 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:base-include-javascript module="base" filename="toggle.js" />
+<xar:if condition="empty($return_url)">
+    <xar:comment>
+    When this template is not included somewhere else, build some header
+    stuff
+    </xar:comment>
+    <div class="xar-mod-head">
+        <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>
+            <xar:mlstring>Configure Hooks</xar:mlstring>
+        </h2>
+
+        <p>
+            <xar:mlstring>Extend the functionality of your modules via one of the following available hooks.</xar:mlstring>
+        </p>
+        <p>
+            <xar:mlstring>Select the hook module providing the extra functionality and then check the boxes of the modules you would like to enable that functionality in. (e.g. select "comments" and then check "articles" to enable comments in the articles module)</xar:mlstring>
+        </p>
+
+        <xar:template file="hooks-mainpart" module="modules" />
+    </div>
+<xar:else/>
+
 <ul style="list-style: none;">
     <xar:foreach in="$hookmodules" value="$hookmod">
     <xar:if condition="empty($return_url)">
-        <li class="xar-alt xar-norm-outline" style="background-image: none; padding:3pt; font-size: 1.2em; margin-bottom: 5pt;"><a href="#$hookmod['modlink']#">#$hookmod['modname']#</a>: #$hookmod['modtitle']#</li>
+        <li class="xar-alt xar-norm-outline" style="background-image: none; padding:3pt; font-size: 1.2em; margin-bottom: 5pt;">
+            <a href="#$hookmod['modlink']#">#$hookmod['modname']#</a>: #$hookmod['modtitle']#
+        </li>
     </xar:if>
     <xar:if condition="$hookmod['modname'] eq $curhook">
-        <xar:mlstring>Use this functionality in the following modules:</xar:mlstring> [<a href="#$DetailsURL#">#$DetailsLabel#</a>]<br />
+        <ul>
+        <p><xar:mlstring>Use this functionality in the following modules:</xar:mlstring> [<a href="#$DetailsURL#">#$DetailsLabel#</a>]</p>
         <xar:if condition="count($hooktypes) gt 0">
-            <br />
-            <xar:mlstring>This module offers the following hooks:</xar:mlstring><br />
-            <ul>
+            <p><xar:mlstring>This module offers the following hooks:</xar:mlstring></p>
+
                 <xar:foreach in="$hooktypes" value="$hooktype">
                     <li>#$hooktype#</li>
                 </xar:foreach>
-            </ul>
-        </xar:if>
 
+        </xar:if>
+        </ul>
         <form action="&xar-modurl-modules-admin-updatehooks;" method="post">
             <div>
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -39,13 +67,18 @@
                     
                     <!-- Store the disabled attribute for reuse -->
                     <xar:set name="hookedmoddisabled">true</xar:set>
-                    <xar:if condition="$hookmod['modstatus'] eq 1"><xar:set name="hookedmoddisabled">false</xar:set></xar:if>
-            
-                    <div>
+                    <xar:if condition="$hookmod['modstatus'] eq 1">
+                        <xar:set name="hookedmoddisabled">false</xar:set>
+                    </xar:if>
+                    <fieldset>
+                        <legend>
+                            #$hookedmod['name']#
+                        </legend>
+                    <!--<div>
                         <a title="#xarML('Click to toggle visibility')#" href="" onclick="toggleDisplay('hooksfor_#$hookedmod['name']#'); return false;">#$hookedmod['name']#</a>
-                    </div>
-                    <div id="hooksfor_#$hookedmod['name']#" class="xar-alt-outline" style="margin: 8pt;">
-                        
+                    </div> -->
+                    <!--<div id="hooksfor_#$hookedmod['name']#" class="xar-alt-outline" style="margin: 8pt;">-->
+
                         <!-- The NOT radio -->
                         <xar:if condition="$NOTischecked">
                             <xar:if condition="$hookedmoddisabled">
@@ -91,8 +124,8 @@
                             </xar:ml>
                 <!-- BEGIN MODIFS -->
                             <xar:if condition="xarModIsHooked($hookmod['modname'],$hookedmod['name'])">
-                <a href="#$hookedmod['link']#"><xar:mlstring>Configure hook order</xar:mlstring></a>
-                </xar:if>
+                                 <a href="#$hookedmod['link']#"><xar:mlstring>Configure hook order</xar:mlstring></a>
+                            </xar:if>
                 <!-- END MODIFS -->
                         </label>
                         <br/>
@@ -170,11 +203,15 @@
                                 </script>
                             </xar:if>
                         </xar:if>
-                    </div>
+                    <!--</div>-->
+                 </fieldset>
                 </xar:foreach>
-                <div><input type="submit" value="#$savechangeslabel#" /></div>
+                 <div class="xar-align-center">
+                    <input type="submit" value="#$savechangeslabel#" />
+                </div>
             </div>
         </form>
     </xar:if>
 </xar:foreach>
 </ul>
+</xar:if>

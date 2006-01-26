@@ -1,13 +1,14 @@
-<ul style="list-style: none;">
+<!--<ul style="list-style: none;">-->
     <xar:foreach in="$hookmodules" value="$hookmod">
     <xar:if condition="empty($return_url)">
-        <li class="xar-alt xar-norm-outline" style="background-image: none; padding:3pt; font-size: 1.2em; margin-bottom: 5pt;"><a href="#$hookmod['modlink']#">#$hookmod['modname']#</a>: #$hookmod['modtitle']#</li>
+        <p class="xar-alt xar-norm-outline" style="background-image: none; padding:3pt; font-size: 1.2em; margin-bottom: 5pt;">
+            <a href="#$hookmod['modlink']#">#$hookmod['modname']#</a>: #$hookmod['modtitle']#
+        </p>
     </xar:if>
     <xar:if condition="$hookmod['modname'] eq $curhook">
-        <xar:mlstring>Use this functionality in the following modules:</xar:mlstring> [<a href="#$DetailsURL#">#$DetailsLabel#</a>]<br />
+        <p><xar:mlstring>Use this functionality in the following modules:</xar:mlstring> [<a href="#$DetailsURL#">#$DetailsLabel#</a>]</p>
         <xar:if condition="count($hooktypes) gt 0">
-            <br />
-            <xar:mlstring>This module offers the following hooks:</xar:mlstring><br />
+            <p><xar:mlstring>This module offers the following hooks:</xar:mlstring></p>
             <ul>
                 <xar:foreach in="$hooktypes" value="$hooktype">
                     <li>#$hooktype#</li>
@@ -39,12 +40,15 @@
                     
                     <!-- Store the disabled attribute for reuse -->
                     <xar:set name="hookedmoddisabled">true</xar:set>
-                    <xar:if condition="$hookmod['modstatus'] eq 1"><xar:set name="hookedmoddisabled">false</xar:set></xar:if>
+                    <xar:if condition="$hookmod['modstatus'] eq 1">
+                        <xar:set name="hookedmoddisabled">false</xar:set>
+                    </xar:if>
             
-                    <div>
-                        <a title="#xarML('Click to toggle visibility')#" href="" onclick="toggleDisplay('hooksfor_#$hookedmod['name']#'); return false;">#$hookedmod['name']#</a>
-                    </div>
-                    <div id="hooksfor_#$hookedmod['name']#" class="xar-alt-outline" style="margin: 8pt;">
+                    <fieldset>
+                        <legend>
+                            #$hookedmod['name']#
+                        </legend>
+                       <!--<div id="hooksfor_#$hookedmod['name']#" class="xar-alt-outline" style="margin: 8pt;">-->
                         
                         <!-- The NOT radio -->
                         <xar:if condition="$NOTischecked">
@@ -170,11 +174,14 @@
                                 </script>
                             </xar:if>
                         </xar:if>
-                    </div>
+                    <!--</div>-->
+                 </fieldset>
                 </xar:foreach>
-                <div><input type="submit" value="#$savechangeslabel#" /></div>
+                <div class="xar-align-center">
+                    <input type="submit" value="#$savechangeslabel#" />
+                </div>
             </div>
         </form>
     </xar:if>
 </xar:foreach>
-</ul>
+<!--</ul>-->
