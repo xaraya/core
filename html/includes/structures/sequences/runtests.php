@@ -14,7 +14,7 @@ function m($msg,$level=0) {
 }
 
 if(!xarUserLogin('Admin','12345')) {
-    die("Authentication failed\n");
+    throw new Exception("Authentication failed\n");
 } else {
     m('Authenticated');
 }

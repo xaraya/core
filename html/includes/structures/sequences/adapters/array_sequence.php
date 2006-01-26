@@ -75,7 +75,7 @@ class ArraySequence implements iSequence, iSequenceAdapter
         case 'head':
             return empty($this->items)?-1:0;
         default:
-            die("wrong property: $name"); // TODO: raise exception
+            throw new Exception("Property $name does not exist");
         }
     }
 }

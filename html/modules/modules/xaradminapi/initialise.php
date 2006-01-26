@@ -52,7 +52,7 @@ function modules_adminapi_initialise($args)
                         array('regid' => $regid,
                               'state' => XARMOD_STATE_INACTIVE));
 
-//    die(var_dump($set));
+    // debug($set);
     if (!isset($set)) {
         $msg = xarML('Module state change failed');
         throw new Exception($msg);

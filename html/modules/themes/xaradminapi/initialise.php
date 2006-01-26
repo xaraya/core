@@ -63,7 +63,7 @@ function themes_adminapi_initialise($args)
                         'setstate',
                         array('regid' => $regid,
                               'state' => XARTHEME_STATE_INACTIVE));
-    //die(var_dump($set));
+    // debug($set);
     if (!isset($set)) {
         xarSessionSetVar('errormsg', xarML('Theme state change failed'));
         return false;

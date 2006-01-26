@@ -17,7 +17,7 @@
  *
  * @package multilanguage
  */
-class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
+class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
     function xarMLS__PHPTranslationsBackend($locales)
     {
