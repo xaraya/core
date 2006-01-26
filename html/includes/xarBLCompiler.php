@@ -1389,7 +1389,8 @@ class xarTpl__ExpressionTransformer
 class xarTpl__Node extends xarTpl__PositionInfo
 {
     public $tagName;   // This is an internal name of the node, not the actual tag name
-    
+    protected $isPHPCode = false;
+
     // What we're doing here is create an alias for the constructor, so
     // it derives properly. That way we decouple the class name from the 
     // constructor. Oh, the beauty of PHP :-(
@@ -1442,7 +1443,7 @@ class xarTpl__Node extends xarTpl__PositionInfo
 
     function isPHPCode()
     {
-        return false;
+        return $this->isPHPCode;
     }
 
     function needAssignment()
@@ -1479,6 +1480,7 @@ class xarTpl__TplTagNode extends xarTpl__Node
     function xarTpl__TplTagNode(&$parser, $tagName, $parentTagName, $attributes) 
     {
         // If constructor method is defined in subclass that one is called!!
+        $this->isPHPCode = true;
         $this->constructor($parser, $tagName, $parentTagName, $attributes);
     }
     
@@ -1489,11 +1491,6 @@ class xarTpl__TplTagNode extends xarTpl__Node
         parent::constructor($parser, $tagName);
         $this->parentTagName = $parentTagName;
         $this->attributes = $attributes;  
-    }
-    
-    function isPHPCode()
-    {
-        return true;
     }
 }
 
@@ -1522,6 +1519,7 @@ class xarTpl__EntityNode extends xarTpl__Node
         // Bug 3603 workaround
         // TODO: centralize this further into xarModUrl
         $this->hasExtras = $parser->peek(5) == '&amp;';
+        $this->isPHPCode = true;
         // If constructor method is defined in subclass that one is called!!
         $this->constructor($parser, $tagName, $entityType, $parameters);
     }
@@ -1532,11 +1530,6 @@ class xarTpl__EntityNode extends xarTpl__Node
         parent::constructor($parser, $tagName);
         $this->entityType = $parentTagName;
         $this->parameters = $parameters;
-    }
-    
-    function isPHPCode()
-    {
-        return true;
     }
 }
 
@@ -1561,11 +1554,7 @@ class xarTpl__InstructionNode extends xarTpl__Node
     {
         parent::constructor($parser,$tagName);
         $this->instruction = $instruction;
-    }
-    
-    function isPHPCode()
-    {
-        return true;
+        $this->isPHPCode = true;
     }
 }
 

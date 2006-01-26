@@ -21,6 +21,7 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
             //$end = $parser->peek(strlen($endMarker));
             //xarLogMessage("BL: next should read '$endMarker' : '$end'");
         }
+        $this->isPHPCode = false;
     }
 
     function renderBeginTag()
@@ -55,11 +56,6 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
     function hasText()
     {
         return true;
-    }
-
-    function isPHPCode()
-    {
-        return false;
     }
 
     function isAssignable()
