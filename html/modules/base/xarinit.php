@@ -28,7 +28,7 @@ function base_init()
 
     $systemPrefix = xarDBGetSystemTablePrefix();
 
-    
+
     /*********************************************************************
     * First we create the meta-table that will contain the definition of
     * all Xaraya tables
@@ -71,10 +71,10 @@ function base_init()
                         );
         // xar_width,
         // xar_decimals,
-        
+
         $query = xarDBCreateTable($tablesTable,$fields);
         $dbconn->Execute($query);
-        
+
         /*********************************************************************
          * Here we create non module associated tables
          *
@@ -104,7 +104,7 @@ function base_init()
                         'xar_vars'         => array('type'=>'blob', 'null' => true),
                         'xar_remembersess' => array('type'=>'integer','size'=>'tiny','default'=>'0')
                         );
-        
+
         $query = xarDBCreateTable($sessionInfoTable,$fields);
         $dbconn->Execute($query);
 
@@ -117,10 +117,10 @@ function base_init()
         $index = array('name'   => 'i_'.$systemPrefix.'_session_lastused',
                        'fields' => array('xar_lastused'),
                        'unique' => false);
-        
+
         $query = xarDBCreateIndex($sessionInfoTable,$index);
         $dbconn->Execute($query);
-        
+
         /*********************************************************************
          * Here we install the configuration table and set some default
          * configuration variables
@@ -135,13 +135,13 @@ function base_init()
          *  KEY xar_name (xar_name)
          * )
          *********************************************************************/
-        
+
         $fields = array(
                         'xar_id'    => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
                         'xar_name'  => array('type'=>'varchar','size'=>64,'null'=>false),
                         'xar_value' => array('type'=>'text','size'=>'long')
                         );
-        
+
         $query = xarDBCreateTable($configVarsTable,$fields);
         $dbconn->Execute($query);
 
@@ -149,12 +149,12 @@ function base_init()
         $index = array('name'   => 'i_'.$systemPrefix.'_config_name',
                        'fields' => array('xar_name'),
                        'unique' => true);
-        
+
         $query = xarDBCreateIndex($configVarsTable,$index);
         $dbconn->Execute($query);
 
         include_once 'includes/xarConfig.php';
-        
+
         // Start Configuration Unit
         $systemArgs = array();
         // change this loadlevel to the proper level
@@ -162,13 +162,13 @@ function base_init()
         xarConfig_init($systemArgs, $whatToLoad);
         // Start Variable Utils
         xarVar_init($systemArgs, $whatToLoad);
-        
+
         $allowableHTML = array (
-                                '!--'=>2, 'a'=>2, 'b'=>2, 'blockquote'=>2,'br'=>2, 'center'=>2, 
+                                '!--'=>2, 'a'=>2, 'b'=>2, 'blockquote'=>2,'br'=>2, 'center'=>2,
                                 'div'=>2, 'em'=>2, 'font'=>0, 'hr'=>2, 'i'=>2, 'img'=>0, 'li'=>2,
-                                'marquee'=>0, 'ol'=>2, 'p'=>2, 'pre'=> 2, 'span'=>0,'strong'=>2, 
+                                'marquee'=>0, 'ol'=>2, 'p'=>2, 'pre'=> 2, 'span'=>0,'strong'=>2,
                                 'tt'=>2, 'ul'=>2, 'table'=>2, 'td'=>2, 'th'=>2, 'tr'=> 2);
-        
+
         xarConfigSetVar('Site.Core.AllowableHTML',$allowableHTML);
         /****************************************************************
          * Set System Configuration Variables
@@ -201,7 +201,7 @@ function base_init()
         } else {
             xarConfigSetVar('Site.Core.EnableSecureServer', false);
         }
-        
+
         xarConfigSetVar('Site.Core.DefaultModuleName', 'base');
         xarConfigSetVar('Site.Core.DefaultModuleType', 'user');
         xarConfigSetVar('Site.Core.DefaultModuleFunction', 'main');
@@ -217,7 +217,7 @@ function base_init()
         xarConfigSetVar('Site.MLS.TranslationsBackend', 'xml2php');
         // FIXME: <marco> Temporary config vars, ask them at install time
         xarConfigSetVar('Site.MLS.MLSMode', 'SINGLE');
-        
+
         // The installer should now set the default locale based on the
         // chose language, let's make sure that is true
         if(!xarConfigGetVar('Site.MLS.DefaultLocale')) {
@@ -227,16 +227,16 @@ function base_init()
         }
         // Minimal information for timezone offset handling (see also Site.Core.TimeZone)
         xarConfigSetVar('Site.MLS.DefaultTimeOffset', 0);
-        
+
         $authModules = array('authsystem');
         xarConfigSetVar('Site.User.AuthenticationModules',$authModules);
-        
+
         $templateTagsTable = $systemPrefix . '_template_tags';
         /*********************************************************************
          * CREATE TABLE xar_template_tags (
          *  xar_id int(11) NOT NULL auto_increment,
          *  xar_name varchar(255) NOT NULL default '',
-         *  xar_module varchar(255) default NULL,
+         *  xar_modid int(11) default 0,
          *  xar_handler varchar(255) NOT NULL default '',
          *  xar_data text,
          *  PRIMARY KEY  (xar_id)
@@ -249,29 +249,28 @@ function base_init()
                         'xar_handler' => array('type'=>'varchar','size'=>255,'null'=>false),
                         'xar_data'    => array('type'=>'text')
                         );
-        // FIXME: MrB - replace xar_module with xar_modid asap
         $query = xarDBCreateTable($templateTagsTable,$fields);
         $dbconn->Execute($query);
-        
-        
+
+
         // {ML_dont_parse 'includes/xarMod.php'}
         include_once 'includes/xarMod.php';
-        
+
         // Start Modules Support
         $systemArgs = array('enableShortURLsSupport' => false,
                             'generateXMLURLs' => false);
         xarMod_init($systemArgs, $whatToLoad);
-        
+
         /**************************************************************
          * Install modules table and insert the modules module
          **************************************************************/
         xarInstallAPIFunc('initialise', array('directory' => 'modules', 'initfunc'  => 'init'));
-        
+
         /****************************************************************
          * Install roles module and set up default roles
          ****************************************************************/
         xarInstallAPIFunc('initialise', array('directory' => 'roles','initfunc'  => 'init'));
-        
+
         /**************************************************************
          * Install privileges module and setup default privileges
          **************************************************************/
@@ -279,15 +278,15 @@ function base_init()
 
         $modulesTable = $systemPrefix .'_modules';
         $systemModuleStatesTable = $systemPrefix .'_module_states';
-        
+
         $newModSql   = "INSERT INTO $modulesTable (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable)
                         VALUES (?,?,?,?,?,?,?,?,?,?)";
         $newStmt     = $dbconn->prepareStatement($newModSql);
-    
+
         $stateModSql = "INSERT INTO $systemModuleStatesTable (xar_id, xar_modid,xar_state)
                         VALUES (?, ?, ?)";
         $stateStmt   = $dbconn->prepareStatement($stateModSql);
-    
+
         $modData   = array(
                            array('authsystem', 42 , 'authsystem', '0.91.0', 1, 'Core Utility', 'Global', 0, 0),
                            array('base'      , 68 , 'base'      , '0.1.0' , 1, 'Core Admin'  , 'Global', 1, 1),
@@ -321,7 +320,7 @@ function base_init()
         xarInstallAPIFunc('initialise', array('directory'=>'themes', 'initfunc'=>'init'));
 
         // Fill language list(?)
-        
+
         // TODO: move this to some common place in Xaraya ?
         // Register BL user tags
         // Include a JavaScript file in a page
@@ -331,7 +330,7 @@ function base_init()
 
         // TODO: is this is correct place for a default value for a modvar?
         xarModSetVar('base', 'AlternatePageTemplate', 'homepage');
-        
+
         // We're done, commit all
         $dbconn->commit();
     } catch (Exception $e) {
