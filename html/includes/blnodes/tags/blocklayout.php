@@ -17,6 +17,7 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
         $parser->tagRootSeen = true; // Ladies and gentlemen, we got him!
         $this->hasChildren = true;
         $this->hasText = true;
+        $this->isAssignable = false;
     }
     
     function renderBeginTag()
@@ -46,11 +47,6 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
     function renderEndTag()
     {
         return ' ';
-    }
-    
-    function isAssignable()
-    {
-        return false;
     }
 }
 ?>

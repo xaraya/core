@@ -1392,6 +1392,7 @@ class xarTpl__Node extends xarTpl__PositionInfo
     protected $isPHPCode = false;
     protected $hasChildren = false;
     protected $hasText = false;
+    protected $isAssignable = true;
 
     // What we're doing here is create an alias for the constructor, so
     // it derives properly. That way we decouple the class name from the 
@@ -1440,7 +1441,7 @@ class xarTpl__Node extends xarTpl__PositionInfo
 
     function isAssignable()
     {
-        return true;
+        return $this->isAssignable;
     }
 
     function isPHPCode()
@@ -1557,6 +1558,7 @@ class xarTpl__InstructionNode extends xarTpl__Node
         parent::constructor($parser,$tagName);
         $this->instruction = $instruction;
         $this->isPHPCode = true;
+
     }
 }
 
@@ -1581,6 +1583,7 @@ class xarTpl__DocumentNode extends xarTpl__Node
         parent::constructor($parser, $nodeName);
         $this->hasChildren = true;
         $this->hasText = true;
+        $this->isAssignable = false;
     }
 
 
@@ -1592,11 +1595,6 @@ class xarTpl__DocumentNode extends xarTpl__Node
     function renderEndTag()
     {
         return '';
-    }
-
-    function isAssignable()
-    {
-        return false;
     }
 }
 
@@ -1618,16 +1616,12 @@ class xarTpl__TextNode extends xarTpl__Node
     {
         parent::constructor($parser, $tagName);
         $this->content = $content;
+        $this->isAssignable = false;
     }
     
     function render()
     {
         return $this->content;
-    }
-
-    function isAssignable()
-    {
-        return false;
     }
 }
 

@@ -10,12 +10,15 @@
 class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
 {
     public $template = NULL;
-    public $assignable = true;
     
     function constructor(&$parser, $tagName, $parentTagName='', $attributes=array())
     {
         parent::constructor($parser, $tagName, $parentTagName, $attributes);
         $this->hasChildren = true;
+        // FIXME: this should be true on closed form and false on open form, but 
+        // we only know that while generating the code into the template, so we
+        // need to reorganize that a bit
+        $this->isAssignable = true;
     }
 
     function renderBeginTag()
@@ -60,15 +63,6 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
         } else {
             return 'xarBlock_renderGroup("' . xarVar_addSlashes($name) . '")';
         }
-   }
-    
-   function isAssignable() 
-   {
-        // FIXME: this should be true on closed form and false on open form, but 
-        // we only know that while generating the code into the template, so we
-        // need to reorganize that a bit
-        // Let's make this a variable for now
-        return $this->assignable;
    }
 }
 ?>

@@ -15,6 +15,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         parent::constructor($parser, $tagName, $parentTagName, $parameters);
         $this->hasChildren = true;
         $this->hasText = true;
+        $this->isAssignable = false;
     }
 
     function loopCounter($operator = NULL)
@@ -91,11 +92,6 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
             $output .= '$loop = unserialize($loop_'.$previousLoop.'_save);';
         } 
         return $output;
-    }
-    
-    function isAssignable()
-    {
-        return false;
     }
 }
 ?>

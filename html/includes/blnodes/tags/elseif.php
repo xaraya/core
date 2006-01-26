@@ -10,6 +10,12 @@
      */
 class xarTpl__XarElseifNode extends xarTpl__TplTagNode
 {
+    function constructor(&$parser, $tagName, $parentTagName='', $attributes=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $attributes);
+        $this->isAssignable = false;
+    }
+
     function render()
     {
         extract($this->attributes);
@@ -23,11 +29,6 @@ class xarTpl__XarElseifNode extends xarTpl__TplTagNode
         if (!isset($condition)) return; // throw back
         
         return "} elseif ($condition) { ";
-    }
-    
-    function isAssignable()
-    {
-        return false;
     }
 }
 ?>

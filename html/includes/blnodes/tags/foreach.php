@@ -20,6 +20,7 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
         parent::constructor($parser, $tagName, $parentTagName, $parameters);
         $this->hasChildren = true;
         $this->hasText = true;
+        $this->isAssignable = false;
     }
 
     function renderBeginTag()
@@ -73,11 +74,5 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
             return "} if (isset($this->keysavename)) $this->attr_key = $this->keysavename; ";
         
    }
-    
-    function isAssignable()
-   {
-        return false;
-   }
-    
 }
 ?>
