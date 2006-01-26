@@ -25,8 +25,7 @@ function modules_admin_hooks($args)
 
     // Get the list of all hook modules, and the current hooks enabled for all modules
     $hooklist = xarModAPIFunc('modules','admin','gethooklist');
-    //echo "<pre>".var_export($hooklist,true),"</pre>";
-    //die();
+    //debug($hooklist);
     $data = array();
     $data['savechangeslabel'] = xarML('Save Changes');
     $data['hookmodules'] = array();

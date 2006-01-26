@@ -7,6 +7,14 @@
  */
 class xarTpl__XarSecNode extends xarTpl__TplTagNode
 {
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $parameters);
+        $this->hasChildren = true;
+        $this->hasText = true;
+        $this->isAssignable = false;
+    }
+
     function renderBeginTag()
     {
         $catch = 'true';  // Catch exceptions by default
@@ -38,21 +46,6 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
     function renderEndTag()
     {
         return "} ";
-    }
-    
-    function hasChildren()
-    {
-        return true;
-    }
-    
-    function hasText()
-    {
-        return true;
-    }
-    
-    function isAssignable()
-    {
-        return false;
     }
 }
 ?>

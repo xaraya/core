@@ -8,6 +8,12 @@
  */
 class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
 {
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $parameters);
+        $this->hasText = true;
+    }
+
     function render()
     {
         return $this->renderBeginTag() . $this->renderEndTag();
@@ -52,11 +58,6 @@ class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
     function renderEndTag()
     {
         return ")";
-    }
-    
-    function hasText()
-    {
-        return true;
     }
 }
 ?>

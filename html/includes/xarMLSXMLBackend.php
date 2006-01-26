@@ -18,7 +18,7 @@
  * running Xaraya in the multi-language mode (UTF-8).
  * @package multilanguage
  */
-class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
+class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
     var $curEntry;
     var $curData;
@@ -39,6 +39,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         $this->backendtype = "xml";
     }
 
+    // Implement the ITranslationsBackendInterface
     function translate($string, $type = 0)
     {
         if (!isset($this->transEntries[$string])) {
@@ -119,9 +120,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         xml_set_character_data_handler($this->parser, "characterData");
 
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
-//            die("Could not load context:" . $ctxName . " in " . $this->locale);
-//            throw new ContextNotFoundException? 
-//            return;
+            //  throw new ContextNotFounException(array($ctxName,$this->locale),'Could not load context:"#(1)" in "#(2)"');
             return true;
         }
 
@@ -164,6 +163,8 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         closedir($dd);
         return $ctxNames;
     }
+    // End ItranslationsBackend interface
+
 
     function getEntry($string)
     {

@@ -8,6 +8,13 @@
  */
 class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
 {
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $parameters);
+        $this->hasChildren = true;
+        $this->needParameter = true;
+    }
+
     function renderBeginTag()
     {
         return '';
@@ -41,16 +48,6 @@ class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
         $output .= $codeGenerator->generateNode($this->children[0]);
         $this->cachedOutput = $output;
         return $output;
-    }
-    
-    function hasChildren()
-    {
-        return true;
-    }
-    
-    function needParameter()
-    {
-        return true;
     }
 }
 ?>

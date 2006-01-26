@@ -16,7 +16,7 @@
  *
  * @package multilanguage
  */
-class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend
+class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
     public $gen;
     public $basePHPDir;

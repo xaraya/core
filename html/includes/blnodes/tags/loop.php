@@ -10,6 +10,14 @@
  */
 class xarTpl__XarLoopNode extends xarTpl__TplTagNode
 {
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $parameters);
+        $this->hasChildren = true;
+        $this->hasText = true;
+        $this->isAssignable = false;
+    }
+
     function loopCounter($operator = NULL)
     {
         static $loopCounter = 0;
@@ -84,21 +92,6 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
             $output .= '$loop = unserialize($loop_'.$previousLoop.'_save);';
         } 
         return $output;
-    }
-    
-    function hasChildren()
-    {
-        return true;
-    }
-    
-    function hasText()
-    {
-        return true;
-    }
-    
-    function isAssignable()
-    {
-        return false;
     }
 }
 ?>

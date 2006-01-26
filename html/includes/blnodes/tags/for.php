@@ -10,6 +10,13 @@
  */
 class xarTpl__XarForNode extends xarTpl__TplTagNode
 {
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array()) {
+        parent::constructor($parser, $tagName, $entityType, $parameters);
+        $this->hasChildren = true;
+        $this->hasText = true;
+        $this->isAssignable = false;
+    }
+
     function renderBeginTag()
     {
         extract($this->attributes);
@@ -44,21 +51,6 @@ class xarTpl__XarForNode extends xarTpl__TplTagNode
     function renderEndTag()
     {
         return "} ";
-    }
-    
-    function hasChildren()
-    {
-        return true;
-    }
-    
-    function hasText()
-    {
-        return true;
-    }
-    
-    function isAssignable()
-    {
-        return false;
     }
 }
 ?>

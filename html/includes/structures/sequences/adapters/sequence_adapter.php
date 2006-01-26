@@ -27,7 +27,7 @@ class SequenceAdapter implements iAdapter, iSequenceAdapter
             $class= 'DynamicDataSequence';
             break;
         default:
-            die('Unsupported sequence: $type'); // TODO: raise exception
+            throw new Exception("Sequence type $type is not supported");
         }
         include_once dirname(__FILE__).'/'.$classfile;
         $this->implementor = new $class($args);
@@ -47,7 +47,7 @@ class SequenceAdapter implements iAdapter, iSequenceAdapter
         case 'tail':
             return $this->implementor->tail;
         default:
-            die('unknown property: $property');// TODO: raise exception
+            throw new Exception("Property $property does not exist");
         }
     }
     // The actual implementor handles the implementation details,

@@ -574,17 +574,6 @@ function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)
 }
 
 /**
- * Error function before Exceptions are loaded
- *
- * @access protected
- * @param string msg message to print as an error
- */
-function xarCore_die($msg)
-{
-    throw new Exception($msg);
-}
-
-/**
  * Check whether a certain API type is allowed
  *
  * Check whether an API type is allowed to load

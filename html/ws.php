@@ -106,8 +106,8 @@ function xarWebservicesMain()
         }
         if (!$server) {
             xarLogMessage("Could not load XML-RPC server, giving up");
-            // Why do we need to die here?
-            die('Could not load XML-RPC server');
+            // TODO: we need a specific handler for this
+            throw new Exception('Could not load XML-RPC server');
         } else {
             xarLogMessage("Created XMLRPC server");
         }
@@ -145,8 +145,8 @@ function xarWebservicesMain()
         }
         if (!$server) {
             xarLogMessage("Could not load trackback server, giving up");
-            // Why do we need to die here?
-            die('Could not load trackback server');
+            // TODO: we need a specific handler for this
+            throw new Exception('Could not load trackback server');
         } else {
             xarLogMessage("Created trackback server");
         }
@@ -175,8 +175,8 @@ function xarWebservicesMain()
             $server = xarModAPIFunc('webdavserver','user','initwebdavserver');
             if(!$server) {
                 xarLogMessage('Could not load webdav server, giving up');
-                // FIXME: construct errors response manually? bah
-                die('Could not load webdav server');
+                // TODO: we need a specific handler for this
+                throw new Exception('Could not load webdav server');
             } else {
                 xarLogMessage("Created webdav server");
             }

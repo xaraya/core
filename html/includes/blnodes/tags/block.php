@@ -16,6 +16,11 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 {
     var $blockgrouptemplate = NULL;
     
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $parameters);
+        $this->hasText = true;
+    }
     
     function renderBeginTag()
    {
@@ -85,11 +90,6 @@ EOT;
     function render()
     {
         return $this->renderBeginTag();
-    }
-
-    function hasText()
-    {
-        return true;
     }
 }
 ?>

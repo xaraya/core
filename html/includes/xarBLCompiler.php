@@ -1389,7 +1389,13 @@ class xarTpl__ExpressionTransformer
 class xarTpl__Node extends xarTpl__PositionInfo
 {
     public $tagName;   // This is an internal name of the node, not the actual tag name
-    
+    protected $isPHPCode = false;
+    protected $hasChildren = false;
+    protected $hasText = false;
+    protected $isAssignable = true;
+    protected $needAssignment = false;
+    protected $needParameter = false;
+
     // What we're doing here is create an alias for the constructor, so
     // it derives properly. That way we decouple the class name from the 
     // constructor. Oh, the beauty of PHP :-(
@@ -1427,32 +1433,32 @@ class xarTpl__Node extends xarTpl__PositionInfo
 
     function hasChildren()
     {
-        return false;
+        return $this->hasChildren;
     }
 
     function hasText()
     {
-        return false;
+        return $this->hasText;
     }
 
     function isAssignable()
     {
-        return true;
+        return $this->isAssignable;
     }
 
     function isPHPCode()
     {
-        return false;
+        return $this->isPHPCode;
     }
 
     function needAssignment()
     {
-        return false;
+        return $this->needAssignment;
     }
 
     function needParameter()
     {
-        return false;
+        return $this->needParameter;
     }
 }
 
@@ -1479,6 +1485,7 @@ class xarTpl__TplTagNode extends xarTpl__Node
     function xarTpl__TplTagNode(&$parser, $tagName, $parentTagName, $attributes) 
     {
         // If constructor method is defined in subclass that one is called!!
+        $this->isPHPCode = true;
         $this->constructor($parser, $tagName, $parentTagName, $attributes);
     }
     
@@ -1489,11 +1496,6 @@ class xarTpl__TplTagNode extends xarTpl__Node
         parent::constructor($parser, $tagName);
         $this->parentTagName = $parentTagName;
         $this->attributes = $attributes;  
-    }
-    
-    function isPHPCode()
-    {
-        return true;
     }
 }
 
@@ -1522,6 +1524,7 @@ class xarTpl__EntityNode extends xarTpl__Node
         // Bug 3603 workaround
         // TODO: centralize this further into xarModUrl
         $this->hasExtras = $parser->peek(5) == '&amp;';
+        $this->isPHPCode = true;
         // If constructor method is defined in subclass that one is called!!
         $this->constructor($parser, $tagName, $entityType, $parameters);
     }
@@ -1532,11 +1535,6 @@ class xarTpl__EntityNode extends xarTpl__Node
         parent::constructor($parser, $tagName);
         $this->entityType = $parentTagName;
         $this->parameters = $parameters;
-    }
-    
-    function isPHPCode()
-    {
-        return true;
     }
 }
 
@@ -1561,11 +1559,8 @@ class xarTpl__InstructionNode extends xarTpl__Node
     {
         parent::constructor($parser,$tagName);
         $this->instruction = $instruction;
-    }
-    
-    function isPHPCode()
-    {
-        return true;
+        $this->isPHPCode = true;
+
     }
 }
 
@@ -1586,6 +1581,14 @@ class xarTpl__DocumentNode extends xarTpl__Node
     public $children;
     public $variables;
 
+    function constructor(&$parser, $nodeName) {
+        parent::constructor($parser, $nodeName);
+        $this->hasChildren = true;
+        $this->hasText = true;
+        $this->isAssignable = false;
+    }
+
+
     function renderBeginTag()
     {
         return '';
@@ -1594,21 +1597,6 @@ class xarTpl__DocumentNode extends xarTpl__Node
     function renderEndTag()
     {
         return '';
-    }
-
-    function hasChildren()
-    {
-        return true;
-    }
-
-    function hasText()
-    {
-        return true;
-    }
-
-    function isAssignable()
-    {
-        return false;
     }
 }
 
@@ -1630,16 +1618,12 @@ class xarTpl__TextNode extends xarTpl__Node
     {
         parent::constructor($parser, $tagName);
         $this->content = $content;
+        $this->isAssignable = false;
     }
     
     function render()
     {
         return $this->content;
-    }
-
-    function isAssignable()
-    {
-        return false;
     }
 }
 

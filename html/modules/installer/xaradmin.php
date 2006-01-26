@@ -439,7 +439,7 @@ function installer_admin_bootstrap()
 	//TODO: improve this once we know where authentication modules are headed
 	$regid=xarModGetIDFromName('authentication');
 	if (empty($regid)) {
-		die(xarML('I cannot load the authentication module. Please make it available and reinstall'));
+		throw new Exception("I cannot load the authentication module. Please make it available and reinstall");
 	}
 
     // Set the state and activate the following modules
