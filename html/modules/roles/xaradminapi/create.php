@@ -44,7 +44,7 @@ function roles_adminapi_create($args)
 		if (!isset($pass)) throw new EmptyParameterException('pass');
 		$args['cryptpass'] = md5($pass);
     } elseif ($baseitemtype == ROLES_GROUPTYPE) {
-		if (!isset($realname)) throw new EmptyParameterException('realname');
+		if (!isset($name)) throw new EmptyParameterException('name');
     }
 	$args['type'] = $itemtype;
 	if (empty($authmodule)) {
