@@ -117,6 +117,7 @@
                     </xar:if>
                     <xar:mlstring>This redirects to the login screen when a user doesn't have the proper privileges.</xar:mlstring>
                 </div>
+                <xar:comment>
                 <div class="xar-form-input-wrapper">
                     <label for="inheritdeny" title="#xarML('Enable or disable inheritance of deny privileges')#" class="xar-form-label">
                         <xar:mlstring>Inherit Deny Privileges:</xar:mlstring>
@@ -128,6 +129,7 @@
                     </xar:if>
                     <xar:mlstring>Warning: This setting affects the way privileges work on your site. If changed you should retest all the privileges on your site.</xar:mlstring>
                 </div>
+                </xar:comment>
                 <legend>
                     <xar:mlstring>
                         Last Resort
