@@ -14,13 +14,19 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
     
     private $_showTemplates;    // The ShowTemplates setting we may need to save
     
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $parameters);
+        $this->hasChildren = true;
+    }
+
     function render()
-   {
+    {
         return '';
-   }
+    }
     
     function renderBeginTag()
-   {
+    {
         $code ='';
         $nonmarkup = 'yes'; // Default is to just use what is produced. 
         extract($this->attributes);
@@ -44,10 +50,10 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
         }
         $code.= XAR_TOKEN_VAR_START . $this->_name;
         return $code;
-   }
+    }
     
     function renderEndTag()
-   {
+    {
         $code ='';
         
         if(!$this->_nonmarkup) {
@@ -63,14 +69,9 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
    }
     
     function isAssignable()
-   {
+    {
         return false;
-   }
-    
-    function hasChildren()
-   {
-        return true;
-   }
+    }
     
     function needAssignment()
    {

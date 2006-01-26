@@ -15,8 +15,14 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
     public $keysavename = null;
     public $valsavename = null;
     
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $parameters);
+        $this->hasChildren = true;
+    }
+
     function renderBeginTag()
-   {
+    {
         extract($this->attributes);
         
         if (!isset($in)) {
@@ -67,11 +73,7 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
         
    }
     
-    function hasChildren()
-   {
-        return true;
-   }
-    
+   
     function hasText()
    {
         return true;

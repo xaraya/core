@@ -12,7 +12,12 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
     public $template = NULL;
     public $assignable = true;
     
-    
+    function constructor(&$parser, $tagName, $parentTagName='', $attributes=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $attributes);
+        $this->hasChildren = true;
+    }
+
     function renderBeginTag()
    {
         extract($this->attributes);
@@ -55,11 +60,6 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
         } else {
             return 'xarBlock_renderGroup("' . xarVar_addSlashes($name) . '")';
         }
-   }
-    
-    function hasChildren()
-   {
-        return true;
    }
     
    function isAssignable() 

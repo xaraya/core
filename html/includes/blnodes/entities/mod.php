@@ -20,10 +20,5 @@ class xarTpl__XarModEntityNode extends xarTpl__EntityNode
         $name = $this->parameters[1];
         return "xarModGetVar('".$module."', '".$name."')";
     }
-    
-    function needExceptionsControl()
-    {
-        return true;
-    }
 }
 ?>
