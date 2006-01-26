@@ -59,17 +59,17 @@ function xarLog_init($args, &$whatElseIsGoingLoaded)
         $logFile = xarLogFallbackFile();
         if ($logFile) {
             $xarLogConfig[] = array(
-                'type'      => 'simple',
-                'config'    => array(
-                    'fileName' => $logFile,
-                    'logLevel'  => XARLOG_LEVEL_ALL));
+                                    'type'      => 'simple',
+                                    'config'    => array(
+                                                         'fileName' => $logFile,
+                                                         'logLevel'  => XARLOG_LEVEL_ALL)
+                                    );
         }
     }
 
     // If none of these => do nothing.
-     foreach ($xarLogConfig as $logger) {
-        $config = array_merge(array(
-            'loadLevel' => &$whatElseIsGoingLoaded), $logger['config']);
+    foreach ($xarLogConfig as $logger) {
+         $config = array_merge(array('loadLevel' => &$whatElseIsGoingLoaded), $logger['config']);
          xarLog__add_logger($logger['type'], $config);
      }
 

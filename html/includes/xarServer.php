@@ -62,7 +62,7 @@ function xarServer__shutdown_handler()
  *
  * Returns the value of $name server variable.
  * Accepted values for $name are exactly the ones described by the
- * {@link http://www.php.net/manual/en/reserved.variables.html#reserved.variables.server PHP manual}.
+ * {@link http://www.php.net/manual/en/reserved.variables.html PHP manual}.
  * If the server variable doesn't exist void is returned.
  *
  * @author Marco Canini <marco@xaraya.com>
@@ -102,21 +102,19 @@ function xarServerGetBaseURI()
   // Allows overriding the Base URI from config.php
   // it can be used to configure Xaraya for mod_rewrite by
   // setting BaseURI = '' in config.php
-  $BaseURI =  xarCore_getSystemVar('BaseURI',true);
-  if( isSet( $BaseURI) )
-  {
-    // If BaseURI set, just use it
-    return  $BaseURI;
+  try {
+      $BaseURI =  xarCore_getSystemVar('BaseURI');
+      return $BaseURI;
+  } catch(VariableNotFoundException $e) {
+      // We need to build it
   }
-  // Otherwise build it dynamically
 
+  // Get the name of this URI
+  $path = xarServerGetVar('REQUEST_URI');
 
-    // Get the name of this URI
-    $path = xarServerGetVar('REQUEST_URI');
-
-    //if ((empty($path)) ||
-    //    (substr($path, -1, 1) == '/')) {
-    //what's wrong with a path (cfr. Indexes index.php, mod_rewrite etc.) ?
+  //if ((empty($path)) ||
+  //    (substr($path, -1, 1) == '/')) {
+  //what's wrong with a path (cfr. Indexes index.php, mod_rewrite etc.) ?
     if (empty($path)) {
         // REQUEST_URI was empty or pointed to a path
         // adapted patch from Chris van de Steeg for IIS
@@ -128,20 +126,20 @@ function xarServerGetBaseURI()
             $path = xarServerGetVar('PATH_INFO');
         }
     }
-
+    
     $path = preg_replace('/[#\?].*/', '', $path);
-
+    
     $path = preg_replace('/\.php\/.*$/', '', $path);
     if (substr($path, -1, 1) == '/') {
         $path .= 'dummy';
     }
     $path = dirname($path);
-
+    
     //FIXME: This is VERY slow!!
     if (preg_match('!^[/\\\]*$!', $path)) {
         $path = '';
     }
-
+    
     return $path;
 }
 

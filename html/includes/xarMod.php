@@ -630,13 +630,10 @@ function xarModGetNameFromID($regid) {
  * @return mixed
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
  */
-function xarModPrivateLoad($modName, $modType, $flags = 0, $throwException=1)
+function xarModPrivateLoad($modName, $modType, $flags = 0)
 {
     static $loadedModuleCache = array();
-    if (empty($modName)) {
-        if($throwException) throw new EmptyParameterException('modName');
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
 
     // Make sure we access the cache with lower case key
     // Q: Why to repeat a functionality already present in the PHP functions?
@@ -649,14 +646,10 @@ function xarModPrivateLoad($modName, $modType, $flags = 0, $throwException=1)
     xarLogMessage("xarModLoad: loading $modName:$modType");
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) {
-        if($throwException) throw new ModuleNotFoundException($modName);
-        return; // throw back
-    }
+    if (!isset($modBaseInfo)) throw new ModuleNotFoundException($modName);
 
     if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
-        if($throwException) throw new ModuleNotActiveException($modName);
-        return;
+        throw new ModuleNotActiveException($modName);
     }
 
     // TODO: use the xarVarPrepForOS()'d version for $modDir and $modType
@@ -692,11 +685,6 @@ function xarModPrivateLoad($modName, $modType, $flags = 0, $throwException=1)
 
     // Load the module translations files (common functions, uncut functions etc.)
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modBaseInfo['name'], 'modules:', $modType) === NULL) return;
-
-    // Try to load PN style translations -- Bridge mechanism -- Should disappear later on
-    // How to find out what language is being used and what is the correspondent in pn style?
-    $fileName = 'modules/'.$modDir.'/pnlang/eng/'.$modType.'.php';
-    if (!xarInclude($fileName, XAR_INCLUDE_MAY_NOT_EXIST)) {return;}
 
     // Load database info
     xarMod__loadDbInfo($modBaseInfo['name'], $modDir);
@@ -736,17 +724,14 @@ function xarModLoad($modName, $modType = 'user')
  * @return mixed true on success
  * @raise XAR_SYSTEM_EXCEPTION
  */
-function xarModAPILoad($modName, $modType = 'user', $throwException = 1)
+function xarModAPILoad($modName, $modType = 'user')
 {
     if (!xarCoreIsAPIAllowed($modType)) {
-        if($throwException) {
-            // InputValidationException is more clear here, even though it's not user input.
-            throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
-        }
-        return;
+        // InputValidationException is more clear here, even though it's not user input.
+        throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
     }
 
-    return xarModPrivateLoad($modName, $modType.'api', XARMOD_LOAD_ANYSTATE, $throwException);
+    return xarModPrivateLoad($modName, $modType.'api', XARMOD_LOAD_ANYSTATE);
 }
 
 /**
@@ -1119,8 +1104,9 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     // The following allows you to modify the BaseModURL from the config file
     // it can be used to configure Xaraya for mod_rewrite by
     // setting BaseModURL = '' in config.system.php
-    $BaseModURL = xarCore_getSystemVar('BaseModURL', true);
-    if (!isset($BaseModURL)) {
+    try {
+        $BaseModURL = xarCore_getSystemVar('BaseModURL');
+    } catch(VariableNotFoundException $e) {
         $BaseModURL = 'index.php';
     }
 

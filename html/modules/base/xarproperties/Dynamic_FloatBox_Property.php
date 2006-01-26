@@ -77,7 +77,7 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
             //}
         }
         $data['value']= xarVarPrepForDisplay($value);
-        
+
         $template="";
         return xarTplProperty('base', 'floatbox', 'showoutput', $data);
 
@@ -101,7 +101,7 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
                           'validation' => '',
                           'source'         => '',
                           'dependancies'   => '',
-                          'requiresmodule' => '',
+                          'requiresmodule' => 'base',
                           'aliases'        => '',
                           'args'           => serialize($args),
                           // ...

@@ -77,7 +77,7 @@ final class ExceptionHandlers
     {
         //Checks for a @ presence in the given line, should stop from setting Xaraya errors
         try {
-            $errLevel = xarCore_getSystemVar('Exception.ErrorLevel',true);
+            $errLevel = xarCore_getSystemVar('Exception.ErrorLevel');
         } catch(Exception $e) {
             $errLevel = E_STRICT;
         }

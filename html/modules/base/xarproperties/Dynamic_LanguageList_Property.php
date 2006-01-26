@@ -60,7 +60,7 @@ class Dynamic_LanguageList_Property extends Dynamic_Select_Property
                               'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'base',
                             'aliases'        => '',
                             'args'           => serialize($args)
                             // ...
