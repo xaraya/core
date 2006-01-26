@@ -15,18 +15,9 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
     {
         parent::constructor($parser, $tagName, $parentTagName, $attributes);
         $parser->tagRootSeen = true; // Ladies and gentlemen, we got him!
+        $this->hasChildren = true;
+        $this->hasText = true;
     }
-    
-    function hasChildren()
-    {
-        return true;
-    }
-    
-    function hasText()
-    {
-        return true;
-    }
-    
     
     function renderBeginTag()
     {

@@ -18,6 +18,7 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
     {
         parent::constructor($parser, $tagName, $parentTagName, $parameters);
         $this->hasChildren = true;
+        $this->hasText = true;
     }
 
     function render()
@@ -74,11 +75,6 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
     }
     
     function needAssignment()
-   {
-        return true;
-   }
-    
-    function hasText()
    {
         return true;
    }

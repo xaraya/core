@@ -11,6 +11,7 @@ class xarTpl__XarIfNode extends xarTpl__TplTagNode
     {
         parent::constructor($parser, $tagName, $parentTagName, $parameters);
         $this->hasChildren = true;
+        $this->hasText = true;
     }
 
     function renderBeginTag()
@@ -31,11 +32,6 @@ class xarTpl__XarIfNode extends xarTpl__TplTagNode
     function renderEndTag()
     {
         return "} ";
-    }
-    
-    function hasText()
-    {
-        return true;
     }
     
     function isAssignable()

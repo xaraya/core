@@ -9,6 +9,12 @@
 class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
 {
     private $_rightspace;
+
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $parameters);
+        $this->hasText = true;
+    }
     
     function render()
    {
@@ -64,11 +70,6 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
     function renderEndTag()
     {
         return ") . '" . $this->_rightspace ."'";
-    }
-
-    function hasText()
-    {
-        return true;
     }
 }
 ?>

@@ -23,6 +23,7 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
         }
         $this->isPHPCode = false;
         $this->hasChildren = true;
+        $this->hasText = true;
     }
 
     function renderBeginTag()
@@ -47,11 +48,6 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
         // This is just here to prevent the abstract method to kick in
         // FIXME: see above
         return '';
-    }
-
-    function hasText()
-    {
-        return true;
     }
 
     function isAssignable()
