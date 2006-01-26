@@ -14,7 +14,7 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param string $args['uname'] username of the user
- * @param string $args['realname'] real name of the user
+ * @param string $args['name'] real name of the user
  * @param string $args['email'] email address of the user
  * @param string $args['pass'] password of the user
  * @param string $args['date'] registration date
