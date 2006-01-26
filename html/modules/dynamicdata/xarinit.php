@@ -62,6 +62,10 @@ function dynamicdata_init()
                               'xar_object_itemtype' => array('type'        => 'integer',
                                                              'null'        => false,
                                                              'default'     => '0'),
+                /* the item type of the parent of this object */
+                    'xar_object_parent' => array('type'        => 'integer',
+                                                  'null'        => false,
+                                                  'default'     => '0'),
                               /* the URL parameter used to pass on the item id to the original module */
                               'xar_object_urlparam' => array('type'        => 'varchar',
                                                              'size'        => 30,
@@ -240,8 +244,8 @@ function dynamicdata_init()
                             array('urlparam'  ,'URL Param'          ,$objectid[1],182,0,2 ,'itemid'      ,$dynamic_objects.'.xar_object_urlparam'   ,1,6 ,'varchar (30)'),
                             array('maxid'     ,'Max Id'             ,$objectid[1],182,0,15,'0'           ,$dynamic_objects.'.xar_object_maxid'      ,2,7 ,'integer'),
                             array('config'    ,'Config'             ,$objectid[1],182,0,4 ,''            ,$dynamic_objects.'.xar_object_config'     ,2,8 ,'text'),
-                            array('isalias'   ,'Alias in short URLs',$objectid[1],182,0,14,'1'           ,$dynamic_objects.'.xar_object_isalias'    ,2,9 ,'integer (tiny)'),
-                            // 10 -> 21
+                            array('isalias'   ,'Alias in short URLs',$objectid[1],182,0,14,'1'           ,$dynamic_objects.'.xar_object_isalias'    ,$objectid[1],182 ,'integer (tiny)'),
+                            array('parent'    ,'Parent',             $objectid[1],182,0,600,'0'          ,$dynamic_objects.'.xar_object_parent'     ,1,6 ,'integer'),
                             array('id'        ,'Id'                 ,$objectid[2],182,1,21,''            ,$dynamic_properties.'.xar_prop_id'        ,1,1 ,'integer'),
                             array('name'      ,'Name'               ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_name'      ,2,2 ,'varchar (30)'),
                             array('label'     ,'Label'              ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_label'     ,1,3 ,'varchar (254)'),
@@ -393,6 +397,9 @@ function dynamicdata_init()
         // when a module item is created (uses 'dd_*')
         xarModRegisterHook('item', 'create', 'API','dynamicdata', 'admin', 'createhook');
         
+    // when a module item is being displayed
+    if (!xarModRegisterHook('item', 'display', 'GUI',
+                           'dynamicdata', 'user', 'displayhook')) {
         // when a module item is being modified (uses 'dd_*')
         xarModRegisterHook('item', 'modify', 'GUI','dynamicdata', 'admin', 'modifyhook');
         

@@ -79,6 +79,7 @@
             <input type="hidden" name="table" id="table" value="#$object:table#" />
             <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
             <input type="submit" name="preview" value="#xarML('Preview')#" class="xar-margin-thickright" />
+            <input type="hidden" name="notfresh" id="notfresh" value="true" />
             <input type="submit" value="#xarML('Update')#" class="xar-margin-thickleft" />
         </div>
 
