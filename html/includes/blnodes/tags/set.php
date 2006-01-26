@@ -20,6 +20,7 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
         $this->hasChildren = true;
         $this->hasText = true;
         $this->isAssignable = false;
+        $this->needAssignment = true;
     }
 
     function render()
@@ -68,11 +69,6 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
          */
         // FIXME: add some checking whether $name already is a template variable
         return $code .' $_bl_data[\''.$this->_name.'\'] =& '. XAR_TOKEN_VAR_START . $this->_name.';';
-   }
-    
-    function needAssignment()
-   {
-        return true;
    }
 }
 ?>

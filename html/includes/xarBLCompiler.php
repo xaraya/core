@@ -1393,6 +1393,7 @@ class xarTpl__Node extends xarTpl__PositionInfo
     protected $hasChildren = false;
     protected $hasText = false;
     protected $isAssignable = true;
+    protected $needAssignment = false;
 
     // What we're doing here is create an alias for the constructor, so
     // it derives properly. That way we decouple the class name from the 
@@ -1451,7 +1452,7 @@ class xarTpl__Node extends xarTpl__PositionInfo
 
     function needAssignment()
     {
-        return false;
+        return $this->needAssignment;
     }
 
     function needParameter()
