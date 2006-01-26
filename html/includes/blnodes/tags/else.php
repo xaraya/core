@@ -29,10 +29,5 @@ class xarTpl__XarElseNode extends xarTpl__TplTagNode
         }
                 return $output;
     }
-        
-    function needParameter()
-    {
-        return false;
-    }
 }
 ?>

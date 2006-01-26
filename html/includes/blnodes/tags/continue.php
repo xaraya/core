@@ -20,10 +20,5 @@ class xarTpl__XarContinueNode extends xarTpl__TplTagNode
         extract($this->attributes);
         return  " continue $depth; ";
     }
-    
-    function needParameter()
-    {
-        return false;
-    }
 }
 ?>

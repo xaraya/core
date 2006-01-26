@@ -20,10 +20,5 @@ class xarTpl__XarBreakNode extends xarTpl__TplTagNode
         extract($this->attributes);
         return " break $depth; ";
     }
-    
-    function needParameter()
-    {
-        return false;
-    }
 }
 ?>
