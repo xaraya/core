@@ -1461,7 +1461,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $hookstable    = $xartable['hooks'];
-    $modulestablee = $xartable['modules'];
+    $modulestable  = $xartable['modules'];
 
     // Get applicable hooks
     // New query:
