@@ -32,10 +32,10 @@ REFACTORING LIST:
 List of things which need to be refactored before starting the actual
 design work can begin.
 
-* divide the exception classes over their respective subsystems
-* i really like some sort of import(modules.variables) dot notation to
-* include major parts into the flow when doing stuff, instead of
-* xarInclude or something
+* i really like some sort of import(name.of.some.sub.part) dot notation to
+  include major parts into the flow when doing stuff, instead of
+  xarInclude or something
 * Finish up the planned db changes to normalizing the database.
 * document minimum required versions of the databases and stuff
-* OO-ify stuff in core where appropriate
+* OO-ify stuff in core where appropriate (including getting rid of die()'s and modelling the classes where php4 could not)
+* 
