@@ -13,7 +13,7 @@
  * create a user
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['uname'] username of the user
- * @param $args['realname'] real name of the user
+ * @param $args['name'] real name of the user
  * @param $args['email'] email address of the user
  * @param $args['pass'] password of the user
  * @param $args['date'] registration date
@@ -33,7 +33,7 @@ function roles_adminapi_create($args)
 
     if (!isset($uname)) throw new EmptyParameterException('uname');
     if (!isset($email)) throw new EmptyParameterException('email');
-    if (!isset($realname)) throw new EmptyParameterException('realname');
+    if (!isset($name)) throw new EmptyParameterException('name');
     if (!isset($state)) throw new EmptyParameterException('state');
     if (!isset($pass)) throw new EmptyParameterException('pass');
 
@@ -84,7 +84,7 @@ function roles_adminapi_create($args)
               xar_state, xar_auth_modid
               )
             VALUES (?,?,?,?,?,?,?,?,?,?)";
-    $bindvars = array($nextId, $uname, $realname, 0,
+    $bindvars = array($nextId, $uname, $name, 0,
                       $cryptpass,$email,$date_reg,$valcode,
                       $state,$modId);
     $result = $dbconn->Execute($query,$bindvars);
