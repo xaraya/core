@@ -1470,7 +1470,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
              FROM $hookstable hooks, $modulestable tmods, $modulestable smods
              WHERE hooks.xar_tmodid = tmods.xar_id AND
                    hooks.xar_smodid = smods.xar_id AND
-	               smods.xar_name=?";
+	               smods.xar_name = ?";
     $bindvars = array($callerModName);
 
     if (empty($callerItemType)) {
@@ -1478,7 +1478,8 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
         $query .= " AND hooks.xar_stype = ''";
     } else {
         // hooks can be enabled for all or for a particular item type
-        $query .= " AND (hooks.xar_stype = '' OR hooks.xar_stype = ?)";
+        $query .= " AND (hooks.xar_stype = ? OR hooks.xar_stype = ?)";
+        $bindvars[] = ''
         $bindvars[] = (string)$callerItemType;
         // FIXME: if itemtype is specified, why get the generic hooks? To save a function call in the modules?
         // Answer: generic hooks apply for *all* itemtypes, so if a caller specifies an itemtype, you
