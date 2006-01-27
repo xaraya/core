@@ -1460,13 +1460,14 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     // Get database info
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
-    $hookstable = $xartable['hooks'];
+    $hookstable    = $xartable['hooks'];
+    $modulestablee = $xartable['modules'];
 
     // Get applicable hooks
     // New query:
     $query ="SELECT DISTINCT hooks.xar_tarea, tmods.xar_name, 
 	                         hooks.xar_ttype, hooks.xar_tfunc, hooks.xar_order
-             FROM xar_hooks hooks, xar_modules tmods, xar_modules smods
+             FROM $hookstable hooks, $modulestable tmods, $modulestable smods
              WHERE hooks.xar_tmodid = tmods.xar_id AND
                    hooks.xar_smodid = smods.xar_id AND
 	               smods.xar_name=?";
@@ -1537,13 +1538,15 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
         // Get database info
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
-        $hookstable = $xartable['hooks'];
+        $hookstable   = $xartable['hooks'];
+        $modulestable = $xartable['modules'];
 
         // Get applicable hooks
         // New query:
         $query = "SELECT DISTINCT tmods.xar_name, hooks.xar_stype 
-                  FROM xar_hooks hooks, xar_modules tmods
-                  WHERE hooks.xar_tmodid = tmods.xar_id AND tmods.xar_name = ?";
+                  FROM  $hookstable hooks, $modulestable tmods
+                  WHERE hooks.xar_tmodid = tmods.xar_id AND 
+                        tmods.xar_name = ?";
         $bindvars = array($callerModName);
 
         $result =& $dbconn->Execute($query,$bindvars);
@@ -1789,12 +1792,12 @@ function xarMod_getBaseInfo($modName, $type = 'module')
                          ON modstates.xar_modid = mods.xar_id
                   WHERE mods.xar_name = ? OR mods.xar_directory = ?";
     } else {
-        $query = 'SELECT mods.xar_regid, mods.xar_directory, mods.xar_mode,'
-            . ' mods.xar_id, modstates.xar_state, mods.xar_name'
-            . ' FROM '.$modulestable.' mods'
-            . ' LEFT JOIN '.$modules_statesTable.' modstates'
-            . ' ON modstates.xar_regid = mods.xar_regid'
-            . ' WHERE mods.xar_name = ? OR mods.xar_directory = ?';
+        $query = "SELECT mods.xar_regid, mods.xar_directory, mods.xar_mode,
+                         mods.xar_id, modstates.xar_state, mods.xar_name
+                  FROM   $modulestable mods 
+                  LEFT JOIN $modules_statesTable modstates
+                         ON modstates.xar_regid = mods.xar_regid
+                  WHERE  mods.xar_name = ? OR mods.xar_directory = ?";
     }
     $bindvars = array($modName, $modName);
 
@@ -1917,10 +1920,9 @@ function xarMod_getVarsByName($varName, $type = 'module')
         break;
     case 'theme':
         $theme_varsTable = $tables['system/theme_vars'];
-        $query = "SELECT xar_themeName,
-                             xar_value
-                      FROM $theme_varsTable
-                      WHERE xar_name = ?";
+        $query = "SELECT xar_themeName, xar_value
+                  FROM   $theme_varsTable
+                  WHERE  xar_name = ?";
         break;
     }
 
@@ -2016,6 +2018,7 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
+    $modulesTable = $tables['modules'];
 
     switch(strtolower($type)) {
         case 'module':
@@ -2027,8 +2030,9 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
             }
 
             $query = "SELECT xar_state 
-                      FROM $module_statesTable states, $tables[modules] mods
-                      WHERE states.xar_modid = mods.xar_id AND mods.xar_regid = ?";
+                      FROM   $module_statesTable states, $modulesTable mods
+                      WHERE  states.xar_modid = mods.xar_id AND 
+                             mods.xar_regid = ?";
             break;
         case 'theme':
             if ($modMode == XARTHEME_MODE_SHARED) {
