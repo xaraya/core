@@ -139,7 +139,6 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
 
     // JC -- Question are these depreciated?
     // Old tables
-    $tables['theme_vars']           = $systemPrefix . '_theme_vars';
     $tables['module_vars']           = $systemPrefix . '_module_vars';
     $tables['module_itemvars']       = $systemPrefix . '_module_itemvars';
     $tables['hooks']                 = $systemPrefix . '_hooks';
@@ -658,10 +657,6 @@ function xarModPrivateLoad($modName, $modType, $flags = 0)
     $modDir = $modBaseInfo['directory'];
 
     $fileName = 'modules/'.$modDir.'/xar'.$modType.'.php';
-
-    if (!file_exists($fileName)){
-        $fileName = 'modules/'.$modDir.'/pn'.$modType.'.php';
-    }
 
     // Removed the exception.  Causing some wierd results with modules without an api.
     // <nuncanada> But now we wont know if something was loaded or not!
@@ -1629,40 +1624,19 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
             default:
             // Spliffster, additional mod info from modules/$modDir/xarversion.php
             $fileName = 'modules/' . $modOsDir . '/xarversion.php';
-            if (!file_exists($fileName)) {
-                $fileName = 'modules/' . $modOsDir . '/pnversion.php';
-                if (file_exists($fileName)) {
-                    $fd = fopen($fileName, 'r');
-                    if (!$fd) throw new FileNotFoundException($fileName);
 
-                    $buf = '';
-                    while (!feof($fd)) {
-                        $buf .= fgets($fd, 1024);
-                    }
-                    fclose($fd);
-                    //generate a checksum of max 10 digits
-                    $checksum = abs(crc32($buf));
-                    $modversion['id'] = "666" . substr($checksum,5);
-                }
-            }
             // If the locale is already present, it means we can make the translations available
-
             if(!empty($GLOBALS['xarMLS_currentLocale']))
                 xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
             break;
         case 'theme':
             $fileName = xarConfigGetVar('Site.BL.ThemesDirectory'). '/' . $modOsDir . '/xartheme.php';
-            // pnAPI compatibility
-            if (!file_exists($fileName)) {
-                $fileName = 'themes/' . $modOsDir . '/xartheme.php';
-            }
-
             break;
     }
 
     if (!file_exists($fileName)) {
         // Don't raise an exception, it is too harsh, but log it tho (bug 295)
-        xarLogMessage("xarMod_getFileInfo: Could not find xarversion.php or pnversion.php, skipping $modOsDir");
+        xarLogMessage("xarMod_getFileInfo: Could not find xarversion.php, skipping $modOsDir");
         // throw new FileNotFoundException($fileName);
         return;
     }
@@ -1975,9 +1949,6 @@ function xarMod__loadDbInfo($modName, $modDir)
 
     // Load the database definition if required
     $osxartablefile = "modules/$modDir/xartables.php";
-    if (!file_exists($osxartablefile)) {
-        $osxartablefile = 'modules/' . $modDir . '/pntables.php';
-    }
 
     if (!file_exists($osxartablefile)) {
         return false;
@@ -1985,12 +1956,9 @@ function xarMod__loadDbInfo($modName, $modDir)
     include_once $osxartablefile;
 
     $tablefunc = $modName . '_' . 'xartables';
-    $pntablefunc = $modName . '_' . 'pntables';
 
     if (function_exists($tablefunc)) {
         xarDB_importTables($tablefunc());
-    } elseif (function_exists($pntablefunc)) {
-        xarDB_importTables($pntablefunc());
     }
 
     $loadedDbInfoCache[$modName] = true;
