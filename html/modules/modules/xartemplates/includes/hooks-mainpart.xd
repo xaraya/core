@@ -1,6 +1,7 @@
 <xar:foreach in="$hookmodules" value="$hookmod">
     <xar:if condition="empty($return_url)">
-        <p class="xar-alt xar-norm-outline" style="background-image: none; padding:3pt; font-size: 1.2em; margin-bottom: 5pt;">
+        <xar:comment>In-line style - temporarily left to see if it provides better readability and delineation from the modules to be hooked. Adjust to class if necessary.</xar:comment>
+        <p class="xar-alt xar-block-title xar-norm-outline xar-padding-thick xar-margin-thickbottom" >
             <a href="#$hookmod['modlink']#">#$hookmod['modname']#</a>: #$hookmod['modtitle']#
         </p>
 
