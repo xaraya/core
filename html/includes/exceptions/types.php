@@ -15,7 +15,9 @@
  *
  */
 interface IxarExceptions {
+    /* Why can't i specify final here? */
     public function __construct($vars = NULL, $msg = NULL);
+    public function getHint();
 }
 
 /**
@@ -28,8 +30,9 @@ interface IxarExceptions {
 abstract class xarExceptions extends Exception implements IxarExceptions
 {
     // Variable parts in the message.
-    protected $message ="Missing Exception Info, please put the defaults for '\$message' and '\$variables' members in the derived exception class.";
+    protected $message   = "Missing Exception Info, please put the defaults for '\$message' and '\$variables' members in the derived exception class.";
     protected $variables = array();
+    protected $hint      = "No hint available";
 
     /*
      All exceptions have the same interface from XAR point of view
@@ -54,18 +57,25 @@ abstract class xarExceptions extends Exception implements IxarExceptions
         foreach($this->variables as $var) 
             $this->message = str_replace("#(".$rep++.")",(string)$var,$this->message);
     }
+
+    public function getHint()
+    {
+        // preserve protected status if peeps call it by reference (i'd say this is a php bug)
+        $ret =$this->hint;
+        return $ret;
+    }
 }
 
 /**
  * System types
  */
-// PHP errors
+// PHP errors (includes assertions)
 final class PHPException extends Exception 
-{}
-
-// Assertion failure
-final class SRCException extends Exception 
-{}
+{
+    // This needs to be here to simplify the implementation of the handler
+    // formally, we should not put this here and test in the handler
+    function getHint() {}
+}
 
 // Debugging
 class DebugException extends xarExceptions

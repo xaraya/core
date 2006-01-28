@@ -40,7 +40,7 @@
             <xar:mlstring>Stack:</xar:mlstring>
         </h3>
 
-        <p>#$stack#</p>
+        <pre>#$stack#</pre>
     </xar:if>
 
     <xar:if condition = "$product ne ''">
