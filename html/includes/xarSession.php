@@ -521,10 +521,4 @@ function xarSession__phpGC($maxlifetime)
     }
     return true;
 }
-
-function xarSession__UseOldSessions() 
-{
-    return (phpversion() < "4.2.0" ? 1 : 0);
-}
-
 ?>
