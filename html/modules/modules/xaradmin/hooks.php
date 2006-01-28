@@ -56,12 +56,15 @@ function modules_admin_hooks($args)
         $oldcat = '';
         for ($i = 0, $max = count($modList); $i < $max; $i++) {
             $modList[$i]['checked'] = '';
+            if ($oldcat != $modList[$i]['category']) {
+          /*  Comment out code from changesdue merge
             $modList[$i]['links'] = '';
 
                 $modList[$i]['link'] = xarModURL('modules','admin','modifyorder', array('modulename' => $curhook,
                             'modulehookedname' => $modList[$i]['name'] ));
 
-            if ($oldcat != $modList[$i]['category']) {
+          */            
+
                 $modList[$i]['header'] = xarVarPrepForDisplay($modList[$i]['category']);
                 $oldcat = $modList[$i]['category'];
             } else {
@@ -77,17 +80,19 @@ function modules_admin_hooks($args)
                 $modList[$i]['itemtypes'] = array();
             }
             $modList[$i]['checked'] = array();
-            $modList[$i]['links'] = array();
+            //$modList[$i]['links'] = array();
             foreach ($hooklist[$curhook] as $hook => $hookedmods) {
                 if (!empty($hookedmods[$modList[$i]['name']])) {
                     foreach ($hookedmods[$modList[$i]['name']] as $itemType => $val) {
                         $modList[$i]['checked'][$itemType] = 1;
-            // BEGIN MODIF
+            /* Comment out code from changesdue merge
+            BEGIN MODIF
             $modList[$i]['links'][$itemType] = xarModURL('modules','admin','modifyorder',
                                     array('modulename' => $curhook,
                             'modulehookedname' =>  $modList[$i]['name'],
                             'itemtype' => $itemType));
-                // END MODIF
+              END MODIF
+            */
                     }
                     break;
                 }
@@ -97,6 +102,9 @@ function modules_admin_hooks($args)
         $data['hookedmodules'] = $modList;
         $data['authid'] = xarSecGenAuthKey('modules');
 
+        foreach ($hooklist[$curhook] as $hook => $hookedmods) {
+            $data['hooktypes'][] = $hook;
+        /*  Comment out code from changesdue merge
         if (!xarVarFetch('details', 'bool', $details, false, XARVAR_NOT_REQUIRED)) {return;}
         if ($details) {
             $data['DetailsLabel'] = xarML('Hide Details');
@@ -110,6 +118,7 @@ function modules_admin_hooks($args)
             $data['DetailsLabel'] = xarML('Show Details');
             $data['DetailsURL'] = xarModURL('modules','admin','hooks',
                                             array('hook' => $curhook, 'details' => true));
+        */
         }
     }
 
