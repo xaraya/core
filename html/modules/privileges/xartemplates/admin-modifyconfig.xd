@@ -270,33 +270,22 @@
                     </label>
                     <input type="text" name="name" id="name" value="" />
                 </div>
-                <!--
                 <div class="xar-form-input-wrapper">
-                    <label for="password" title="#xarML('Password of the administator of last  resort')#" class="xar-form-label">
+                    <label for="password" title="#xarML('Password of the administrator of last resort')#" class="xar-form-label">
                         <xar:mlstring>Password:</xar:mlstring>
                     </label>
-                    <input type="text" name="password" id="password" value="" />
+                    <input type="password" name="password" id="password" value="" maxlength="40" class="xar-form-textmedium" />
                 </div>
-                -->
-                <!--begin mod -->
-                    <div class="xar-form-input-wrapper">
-                        <label for="password" title="#xarML('Password of the administrator of last resort')#" class="xar-form-label">
-                            <xar:mlstring>Password:</xar:mlstring>
-                        </label>
-                        <input type="password" name="password" id="password" value="" maxlength="40" class="xar-form-textmedium" />
-                    </div>
-
-                    <div class="xar-form-input-wrapper">
-                        <label for="password2" title="#xarML('Confirm password for administrator of last resort')#" class="xar-form-label">
-                            <xar:mlstring>Confirm Password:</xar:mlstring>
-                        </label>
-                        <input type="password" name="password2" id="password2" value="" maxlength="40" class="xar-form-textmedium" />
-                    </div>
-                    <xar:if condition="xarSessionGetVar('statusmsg') ne ''">
-                        <p class="xar-form-input-wrapper-after xar-error">#xarSessionGetVar('statusmsg')#</p>
-                    </xar:if>
-                   <xar:set name="dummy">xarSessionSetVar('statusmsg','')</xar:set>
-                    <!--end mod -->
+                <div class="xar-form-input-wrapper">
+                    <label for="password2" title="#xarML('Confirm password for administrator of last resort')#" class="xar-form-label">
+                        <xar:mlstring>Confirm Password:</xar:mlstring>
+                    </label>
+                    <input type="password" name="password2" id="password2" value="" maxlength="40" class="xar-form-textmedium" />
+                </div>
+                <xar:if condition="xarSessionGetVar('statusmsg') ne ''">
+                    <p class="xar-form-input-wrapper-after xar-error">#xarSessionGetVar('statusmsg')#</p>
+                </xar:if>
+               <xar:set name="dummy">xarSessionSetVar('statusmsg','')</xar:set>
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">

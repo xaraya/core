@@ -147,7 +147,8 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
                 $userId = XARUSER_LAST_RESORT;
                 $rememberMe = 0;
             }
-        } else {
+         }
+        if ($userId !=XARUSER_LAST_RESORT) {
             return false;
         }
     }
