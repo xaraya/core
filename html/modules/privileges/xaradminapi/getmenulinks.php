@@ -58,4 +58,5 @@ function privileges_adminapi_getmenulinks()
     }
     return $menulinks;
 }
+
 ?>
