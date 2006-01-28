@@ -489,30 +489,36 @@ function xarSession__phpGC($maxlifetime)
     $sessioninfoTable = $xartable['session_info'];
 
     $timeoutSetting = time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60);
-    $bindvars=array($timeoutSetting);
+    $bindvars = array();
     switch ($GLOBALS['xarSession_systemArgs']['securityLevel']) {
     case 'Low':
         // Low security - delete session info if user decided not to
         //                remember themself
-        $where = "WHERE xar_remembersess = 0 AND xar_lastused < ?";
+        $where = "xar_remembersess = ? AND 
+                  xar_lastused < ?";
+        $bindvars[] = 0;
+        $bindvars[] = $timeoutSetting;
         break;
     case 'Medium':
         // Medium security - delete session info if session cookie has
         //                   expired or user decided not to remember
         //                   themself
-        $where = "WHERE (xar_remembersess = 0 AND xar_lastused <  ?)
-                      OR xar_firstused < ?";
+        $where = "(xar_remembersess = ? AND xar_lastused <  ?) OR
+                   xar_firstused < ?";
+        $bindvars[] = 0;
+        $bindvars[] = $timeoutSetting;
         $bindvars[] = (time()- ($GLOBALS['xarSession_systemArgs']['duration'] * 86400));
         break;
     case 'High':
     default:
         // High security - delete session info if user is inactive
-        $where = "WHERE xar_lastused < ?";
+        $where = "xar_lastused < ?";
+        $bindvars[] = $timeoutSetting;
         break;
     }
     try {
         $dbconn->begin();
-        $query = "DELETE FROM $sessioninfoTable $where";
+        $query = "DELETE FROM $sessioninfoTable WHERE $where";
         $dbconn->Execute($query,$bindvars);
         $dbconn->commit();
     } catch (SQLException $e) {
