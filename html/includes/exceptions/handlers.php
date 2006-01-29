@@ -11,7 +11,8 @@
 
 interface IExceptionHandlers
 {
-    public static function defaulthandler(Exception $e); 
+    public static function defaulthandler(Exception $e);
+    public static function phperrors($errorType, $errorString, $file, $line);
 }
 
 class ExceptionHandlers implements IExceptionHandlers
@@ -45,7 +46,7 @@ class ExceptionHandlers implements IExceptionHandlers
                           'title'     => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
                           'short'     => $e->getMessage(), 
                           'long'      => 'LONG msg TBD',
-                          'hint'      => $e->getHint(), 
+                          'hint'      => (method_exists($e,'getHint'))? $e->getHint() : 'No hint available',
                           'stack'     => htmlspecialchars($trace),
                           'product'   => 'Product TBD', 
                           'component' => 'Component TBD');
