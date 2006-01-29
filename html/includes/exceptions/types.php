@@ -72,9 +72,6 @@ abstract class xarExceptions extends Exception implements IxarExceptions
 // PHP errors (includes assertions)
 final class PHPException extends Exception 
 {
-    // This needs to be here to simplify the implementation of the handler
-    // formally, we should not put this here and test in the handler
-    function getHint() {}
 }
 
 // Debugging
