@@ -102,39 +102,6 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
         $databaseType = xarDBGetType();
     }
 
-    // save table definition
-    $systemPrefix = xarDBGetSystemTablePrefix();
-    $metaTable = $systemPrefix . '_tables';
-    if ($tableName != $metaTable) {
-        $dbconn =& xarDBGetConn();
-        while (list($field_name, $parameters) = each($fields)) {
-            $nextId = $dbconn->GenId($metaTable);
-            $query = "INSERT INTO $metaTable (
-                      xar_tableid, xar_table, xar_field,  xar_type,
-                      xar_size,  xar_default, xar_null, xar_unsigned,
-                      xar_increment, xar_primary_key)
-                    VALUES (?,?,?,?,?,?,?,?,?,?)";
-            if (!isset($parameters['default'])) {
-                $defaultval = '';
-            } elseif (is_string($parameters['default'])) {
-                $defaultval = $parameters['default'];
-            } else {
-                $defaultval = serialize($parameters['default']);
-            }
-            $bindvars = array($nextId,$tableName,$field_name,
-                              (empty($parameters['type']) ? '' : $parameters['type']),
-                              (empty($parameters['size']) ? '' : $parameters['size']),
-                              $defaultval,
-                              (empty($parameters['null']) ? '0' : '1'),
-                              (empty($parameters['unsigned']) ? '0' : '1'),
-                              (empty($parameters['increment']) ? '0' : '1'),
-                              (empty($parameters['primary_key']) ? '0' : '1'));
-                  //    xar_width,
-                  //    xar_decimals,
-            $result =& $dbconn->Execute($query,$bindvars);
-        }
-    }
-
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
@@ -196,49 +163,6 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
         $databaseType = xarDBGetType();
     }
 
-    // save table definition
-    if (isset($args['command']) && $args['command'] == 'add') {
-        $systemPrefix = xarDBGetSystemTablePrefix();
-        $metaTable = $systemPrefix . '_tables';
-
-        $dbconn =& xarDBGetConn();
-        $nextId = $dbconn->GenId($metaTable);
-        $query = "INSERT INTO $metaTable (
-                      xar_tableid, xar_table, xar_field, xar_type,
-                      xar_size,  xar_default, xar_null,  xar_unsigned,
-                      xar_increment, xar_primary_key)
-                    VALUES (?,?,?,?,?,?,?,?,?,?)";
-        if (!isset($parameters['default'])) {
-            $defaultval = '';
-        } elseif (is_string($parameters['default'])) {
-            $defaultval = $parameters['default'];
-        } else {
-            $defaultval = serialize($parameters['default']);
-        }
-        $bindvars = array($nextId,$tableName,$args['field'],
-                          (empty($args['type']) ? '' : $args['type']),
-                          (empty($args['size']) ? '' : $args['size']),
-                          $defaultval,
-                          (empty($args['null']) ? '0' : '1'),
-                          (empty($args['unsigned']) ? '0' : '1'),
-                          (empty($args['increment']) ? '0' : '1'),
-                          (empty($args['primary_key']) ? '0' : '1'));
-                  //    xar_width,
-                  //    xar_decimals,
-        $result =& $dbconn->Execute($query,$bindvars);
-
-    } elseif (isset($args['command']) && $args['command'] == 'rename') {
-
-        $systemPrefix = xarDBGetSystemTablePrefix();
-        $metaTable = $systemPrefix . '_tables';
-
-        $dbconn =& xarDBGetConn();
-        $nextId = $dbconn->GenId($metaTable);
-        $query = "UPDATE $metaTable SET xar_table = ? WHERE xar_table = ?";
-        $bindvars = array((string) $args['new_name'], (string) $tableName);
-        $result =& $dbconn->Execute($query,$bindvars);
-    }
-
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
@@ -285,21 +209,6 @@ function xarDBDropTable($tableName, $databaseType = NULL)
     if (empty($tableName)) throw new EmptyParameterException('tableName');
     if (empty($databaseType)) {
         $databaseType = xarDBGetType();
-    }
-
-    // remove table definition
-    $systemPrefix = xarDBGetSystemTablePrefix();
-    $metaTable = $systemPrefix . '_tables';
-    if ($tableName != $metaTable) {
-        $dbconn =& xarDBGetConn();
-        $dbInfo = $dbconn->getDatabaseInfo();
-        if($dbInfo->hasTable($metaTable)) {
-            $query = "DELETE FROM $metaTable WHERE xar_table=?";
-            // This doesnt have to be fatal
-            try {
-                $result =& $dbconn->Execute($query,array($tableName));
-            } catch(SQLException $e) {}
-        }
     }
 
     switch($databaseType) {
