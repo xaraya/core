@@ -1379,12 +1379,6 @@ class xarTpl__ExpressionTransformer
  * abstract and should be overridden by each specific node class
  *
  * @package blocklayout
- * hasChildren -> false
- * hasText -> false
- * isAssignable -> true
- * isPHPCode -> false
- * needAssignment -> false
- * needParameter -> false
  */
 class xarTpl__Node extends xarTpl__PositionInfo
 {

@@ -9,7 +9,13 @@
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
 
-final class ExceptionHandlers
+interface IExceptionHandlers
+{
+    public static function defaulthandler(Exception $e);
+    public static function phperrors($errorType, $errorString, $file, $line);
+}
+
+class ExceptionHandlers implements IExceptionHandlers
 {
     /**
      * Default Exception handler for unhandled exceptions
@@ -35,11 +41,15 @@ final class ExceptionHandlers
             // Try to get the full path location out of the trace
             $root  = str_replace('includes/exceptions','',dirname(__FILE__));
             $trace = str_replace($root,'/',$e->getTraceAsString());
-            $data = array('major' => 'MAJOR TBD (Code was: '. $e->getCode().')',
-                          'type'  => get_class($e), 'title' => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
-                          'short' => $e->getMessage(), 'long' => 'LONG msg TBD',
-                          'hint'  => 'HINT TBD', 'stack' => "<pre>$trace</pre>",
-                          'product' => 'Product TBD', 'component' => 'Component TBD');
+            $data = array('major'     => 'MAJOR TBD (Code was: '. $e->getCode().')',
+                          'type'      => get_class($e), // consider stripping of 'Exception'
+                          'title'     => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
+                          'short'     => $e->getMessage(), 
+                          'long'      => 'LONG msg TBD',
+                          'hint'      => (method_exists($e,'getHint'))? $e->getHint() : 'No hint available',
+                          'stack'     => htmlspecialchars($trace),
+                          'product'   => 'Product TBD', 
+                          'component' => 'Component TBD');
             // If we have em, use em
             if(function_exists('xarTplGetThemeDir') && function_exists('xarTplFile')) {
                 $theme_dir = xarTplGetThemeDir(); $template="systemerror";
@@ -59,7 +69,6 @@ final class ExceptionHandlers
         }
     }
 
-
     // Lowest level handler, should always work, no assumptions whatsoever
     public static function bone(Exception $e)
     {
@@ -73,26 +82,32 @@ final class ExceptionHandlers
      * @access private
      * @return void
      */
-    public static function phperrors($errorType, $errorString, $file, $line)
+    final public static function phperrors($errorType, $errorString, $file, $line)
     {
         //Checks for a @ presence in the given line, should stop from setting Xaraya errors
         try {
+            // We'll try
             $errLevel = xarCore_getSystemVar('Exception.ErrorLevel');
         } catch(Exception $e) {
+            // Oh well.
             $errLevel = E_STRICT;
         }
         if (!error_reporting() || $errorType >= $errLevel) {
             // Log the message so it is not lost.
             // TODO: make this message available to calling functions that suppress errors through '@'.
             $msg = "PHP error code $errorType at line $line of $file: $errorString";
-            // TODO: How do we know xarLogMessage is available?
-            //xarLogMessage($msg);
+            try {
+                // We'll try to log it.
+                xarLogMessage($msg);
+            } catch(Exception $e) {
+                // Oh well, forget it then
+            }
             return; // no need to raise exception
         }
 
         //Newer php versions have a 5th parameter that will give us back the context
         //The variable values during the error...
-        $msg = "At: " . $file." (Line: " . $line.")\n". $errorString ;
+        $msg = "At: " . $file." (Line: " . $line.")\n". $errorString;
 
         // Make cached files also display their source file if it's a template
         // This is just for convenience when giving support, as people will probably
@@ -117,11 +132,11 @@ final class ExceptionHandlers
             }
         }
         
-        if(isset($sourcetmpl) && $sourcetmpl != '') $msg .= "<br/><br/>[".$sourcetmpl."]";
+        if(isset($sourcetmpl) && $sourcetmpl != '') $msg .= "\n\n[".$sourcetmpl."]";
         if (!function_exists('xarModURL')) {
-            $rawmsg = "Normal Xaraya error processing has stopped because of an error encountered. <br /><br />";
-            $rawmsg .= "The last registered error message is: <br /><br />";
-            $rawmsg .= "PHP Error code: " . $errorType . "<br /><br />";
+            $rawmsg = "Normal Xaraya error processing has stopped because of an error encountered.\n\n";
+            $rawmsg .= "The last registered error message is:\n\n";
+            $rawmsg .= "PHP Error code: " . $errorType . "\n\n";
             $rawmsg .= $msg;
             $msg = $rawmsg;
         } else {

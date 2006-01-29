@@ -118,37 +118,12 @@ function xarSessionGetVar($name)
     $var = 'XARSV' . $name;
 
     // First try to handle stuff through _SESSION
-    if (!xarSession__UseOldSessions()) {
-        if (isset($_SESSION[$var])) {
-            return $_SESSION[$var];
-        } elseif ($name == 'uid') {
-            $_SESSION[$var] = _XAR_ID_UNREGISTERED;
-            return $_SESSION[$var];
-        }
-        return;
-    }
-
-    // Use the 'old' session var way
-
-    // + $_SESSION doesn't work for PHP 4.0.6
-    // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
-    //    if (isset($HTTP_SESSION_VARS[$var])) {
-    //        return $HTTP_SESSION_VARS[$var];
-    if (isset($GLOBALS[$var])) {
-        return $GLOBALS[$var];
-    } elseif (isset($GLOBALS['HTTP_SESSION_VARS'][$var])) {
-        // another 'feature' for Windows
-        $GLOBALS[$var] = $GLOBALS['HTTP_SESSION_VARS'][$var];
-        return $GLOBALS['HTTP_SESSION_VARS'][$var];
+    if (isset($_SESSION[$var])) {
+        return $_SESSION[$var];
     } elseif ($name == 'uid') {
-        $GLOBALS[$var] = _XAR_ID_UNREGISTERED;
-        if (!session_is_registered($var)) {
-            session_register($var);
-        }
-        return $GLOBALS[$var];
+        $_SESSION[$var] = _XAR_ID_UNREGISTERED;
+        return $_SESSION[$var];
     }
-
-    return;
 }
 
 /**
@@ -168,20 +143,6 @@ function xarSessionSetVar($name, $value)
     if (isset($_SESSION)) {
         $_SESSION[$var] = $value;
     }
-
-    // Try to handle through _SESSION
-    if (!xarSession__UseOldSessions()) {
-        return true;
-    }
-
-    // + $_SESSION for now - doesn't work for PHP 4.0.6
-    // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
-    //    $HTTP_SESSION_VARS[$var] = $value;
-    $GLOBALS[$var] = $value;
-    $GLOBALS['HTTP_SESSION_VARS'][$var] = $value;
-    if (!session_is_registered($var)) {
-        session_register($var);
-    }
     return true;
 }
 
@@ -195,32 +156,14 @@ function xarSessionDelVar($name)
 
     $var = 'XARSV' . $name;
 
-    // First try to handle through _SESSION
-    if (!xarSession__UseOldSessions()) {
-        if (!isset($_SESSION[$var])) {
-            return false;
-        }
-        unset($_SESSION[$var]);
-        // still needed here too
-        if (ini_get('register_globals')) {
-            session_unregister($var);
-        }
-        return true;
+    if (!isset($_SESSION[$var])) {
+        return false;
     }
-
-    // + $_SESSION for now - doesn't work for PHP 4.0.6
-    // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
-    //    if (isset($HTTP_SESSION_VARS[$var])) {
-    //        unset($HTTP_SESSION_VARS[$var]);
-     if (isset($GLOBALS[$var]) || isset($GLOBALS['HTTP_SESSION_VARS'][$var])) {
-        unset($GLOBALS[$var]);
-        unset($GLOBALS['HTTP_SESSION_VARS'][$var]);
-        // contrary to some of the PHP documentation, you *do* need this too !
-        // http://www.php.net/manual/en/function.session-unregister.php is wrong
-        // but http://www.php.net/manual/en/ref.session.php is right
+    unset($_SESSION[$var]);
+    // still needed here too
+    if (ini_get('register_globals')) {
         session_unregister($var);
     }
-
     return true;
 }
 
@@ -250,12 +193,7 @@ function xarSession_setUserInfo($userId, $rememberSession)
         throw $e;
     }
 
-    if (xarSession__UseOldSessions()) {
-        global $XARSVuid;
-        $XARSVuid = $userId;
-    } else {
-        $_SESSION['XARSVuid'] = $userId;
-    }
+    $_SESSION['XARSVuid'] = $userId;
     return true;
 }
 
@@ -466,9 +404,6 @@ function xarSession__phpRead($sessionId)
 
     if (!$result->EOF) {
         $GLOBALS['xarSession_isNewSession'] = false;
-        if (xarSession__UseOldSessions()) {
-            global $XARSVuid;
-        }
         list($XARSVuid, $GLOBALS['xarSession_ipAddress'], $lastused, $vars) = $result->getRow();
         // in case garbage collection didn't have the opportunity to do its job
         if (!empty($GLOBALS['xarSession_systemArgs']['securityLevel']) &&
@@ -483,15 +418,8 @@ function xarSession__phpRead($sessionId)
         }
     } else {
         $GLOBALS['xarSession_isNewSession'] = true;
-        // NOTE: <marco> Since it's useless to save the same information twice into
-        // the session_info table, we use a little hack: $XARSVuid will appear to be
-        // a session variable even if it's not registered as so!
-        if (xarSession__UseOldSessions()) {
-            global $XARSVuid;
-            $XARSVuid = _XAR_ID_UNREGISTERED;
-        } else {
-            $_SESSION['XARSVuid'] = _XAR_ID_UNREGISTERED;
-        }
+        $_SESSION['XARSVuid'] = _XAR_ID_UNREGISTERED;
+        
         $GLOBALS['xarSession_ipAddress'] = '';
         $vars = '';
     }
@@ -561,30 +489,36 @@ function xarSession__phpGC($maxlifetime)
     $sessioninfoTable = $xartable['session_info'];
 
     $timeoutSetting = time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60);
-    $bindvars=array($timeoutSetting);
+    $bindvars = array();
     switch ($GLOBALS['xarSession_systemArgs']['securityLevel']) {
     case 'Low':
         // Low security - delete session info if user decided not to
         //                remember themself
-        $where = "WHERE xar_remembersess = 0 AND xar_lastused < ?";
+        $where = "xar_remembersess = ? AND 
+                  xar_lastused < ?";
+        $bindvars[] = 0;
+        $bindvars[] = $timeoutSetting;
         break;
     case 'Medium':
         // Medium security - delete session info if session cookie has
         //                   expired or user decided not to remember
         //                   themself
-        $where = "WHERE (xar_remembersess = 0 AND xar_lastused <  ?)
-                      OR xar_firstused < ?";
+        $where = "(xar_remembersess = ? AND xar_lastused <  ?) OR
+                   xar_firstused < ?";
+        $bindvars[] = 0;
+        $bindvars[] = $timeoutSetting;
         $bindvars[] = (time()- ($GLOBALS['xarSession_systemArgs']['duration'] * 86400));
         break;
     case 'High':
     default:
         // High security - delete session info if user is inactive
-        $where = "WHERE xar_lastused < ?";
+        $where = "xar_lastused < ?";
+        $bindvars[] = $timeoutSetting;
         break;
     }
     try {
         $dbconn->begin();
-        $query = "DELETE FROM $sessioninfoTable $where";
+        $query = "DELETE FROM $sessioninfoTable WHERE $where";
         $dbconn->Execute($query,$bindvars);
         $dbconn->commit();
     } catch (SQLException $e) {
@@ -593,17 +527,4 @@ function xarSession__phpGC($maxlifetime)
     }
     return true;
 }
-
-/**
- * Use the sessions from before php 4.2?
- *
- * @author Marcel van der Boom <marcel@xaraya.com>
- * @link http://www.php.net/manual/en/ref.session.php
- * @return bool 
- */
-function xarSession__UseOldSessions() 
-{
-    return (phpversion() < "4.2.0" ? 1 : 0);
-}
-
 ?>

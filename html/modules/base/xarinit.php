@@ -29,51 +29,9 @@ function base_init()
     $systemPrefix = xarDBGetSystemTablePrefix();
 
 
-    /*********************************************************************
-    * First we create the meta-table that will contain the definition of
-    * all Xaraya tables
-    *********************************************************************/
-
     // We want all this to succeed or fail completely
     try {
         $dbconn->begin();
-
-        $tablesTable = $systemPrefix . '_tables';
-        /*********************************************************************
-         * CREATE TABLE xar_tables (
-         *   xar_tableid int(11) NOT NULL auto_increment,
-         *   xar_table varchar(100) NOT NULL default '',
-         *   xar_field varchar(100) NOT NULL default '',
-         *   xar_type varchar(100) NOT NULL default '',
-         *   xar_size varchar(100) NOT NULL default '',
-         *   xar_default varchar(255) NOT NULL default '',
-         *   xar_null tinyint(1) default NULL,
-         *   xar_unsigned tinyint(1) default NULL,
-         *   xar_increment tinyint(1) default NULL,
-         *   xar_primary_key tinyint(1) default NULL,
-         *   PRIMARY KEY  (xar_tableid)
-         * )
-         *********************************************************************/
-        // FIXME : this needs to go, use the meta information of the database for this
-        // especially using an autoincrement on this table will cause cluttering of the
-        // code, because we can not create the sequence for this table
-        $fields = array(
-                        'xar_tableid'     => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
-                        'xar_table'       => array('type'=>'varchar','size'=>64,'default'=>'','null'=>false),
-                        'xar_field'       => array('type'=>'varchar','size'=>64,'default'=>'','null'=>false),
-                        'xar_type'        => array('type'=>'varchar','size'=>64,'default'=>'','null'=>false),
-                        'xar_size'        => array('type'=>'varchar','size'=>64,'default'=>'','null'=>false),
-                        'xar_default'     => array('type'=>'varchar','size'=>254,'default'=>'','null'=>false),
-                        'xar_null'        => array('type'=>'integer','size'=>'tiny','default'=>'0','null'=>false),
-                        'xar_unsigned'    => array('type'=>'integer','size'=>'tiny','default'=>'0','null'=>false),
-                        'xar_increment'   => array('type'=>'integer','size'=>'tiny','default'=>'0','null'=>false),
-                        'xar_primary_key' => array('type'=>'integer','size'=>'tiny','default'=>'0','null'=>false)
-                        );
-        // xar_width,
-        // xar_decimals,
-
-        $query = xarDBCreateTable($tablesTable,$fields);
-        $dbconn->Execute($query);
 
         /*********************************************************************
          * Here we create non module associated tables

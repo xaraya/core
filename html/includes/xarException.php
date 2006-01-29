@@ -3,78 +3,26 @@
  * Exception Handling System
  *
  * @package exceptions
- * @copyright (C) 2002 by the Xaraya Development Team.
+ * @copyright (C) 2006 by the Digital Xaraya Development Foundation
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.com
+ * @link http://www.xaraya.com/documentation/rfcs/rfc0054.html
  * @author Marco Canini <marco@xaraya.com>
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @author Marcel van der Boom <marcel@xaraya.com>
  */
 
-/* RFC MATERIAL follows:
-
-   Exception classes we will probably need:
-   I'd say that each subsystem or component can derive an exception class from (XAR)Exceptions
-   class and provide there whatever it needs.
-
-   The exception classes should be defined with reasonably meaningful names, so the catch clause(s)
-   remain readable by a human too. While this is a bit longer to type, the added value when debugging
-   someone elses code is invaluable.
-
-   A derivation tree COULD be: ( items marked with * are provided here, others can come from somewhere else)
-   This is just to give an idea what the tree could look like, we just provide the * marked items here and
-   the required interface for derived classes.
-
-   Exception [PHP]
-   |-->[3rdPartyExceptions go here]
-   |-->SQLException [Creole] - signals exception in SQL backend.
-   |-->PHPException* - the php error handler raised the exception, means that a PHP error occurred.
-   |-->SRCException* - the assertion handler raised the exception, means that an assertion in the code has failed.
-   |-->xarExceptions*
-       |-->DebugException* - debug Exception, i imagine we should be able to enable/disable this at will very easy so we can quickly test things.
-       |-->NotFoundExceptions
-       |   |-->FileNotFoundException
-       |   |-->IDNotFoundException
-       |   |-->LocaleNotFoundException    [locale subsystem]
-       |   |-->ThemeNotFoundException     [themes module]
-       |-->DuplicateExceptions
-       |   |-->FileDuplicateException
-       |   |-->BlockDuplicateException
-       |-->ValidationExceptions
-       |   |-->XMLValidationException
-       |   |-->InputValidationException
-       |-->ConfigurationExceptions
-       |-->DeprecationExceptions
-       |   |-->APIDeprecationException
-       |   |-->SyntaxDeprecationException
-       |-->SecurityExceptions
-       |   |-->AuthenticationSecurityException
-       |   |-->AuthorisationSecurityException
-       |-->TranslationException
-       |-->RegistrationExceptions
-       |   |-->TagRegistrationException   [themes module]
-       |   |-->EventRegistrationException [events subsystem]
-       |-->DependencyExceptions
-       |   |-->VersionDependencyException
-
-   The default interface of the php internal base Exception class is:
-   new Exception(String $message, Int $code);
-   (see also: http://www.php.net/manual/en/language.exceptions.php)
-   Overridden exception classes however must implement the interface of the xarExceptions class however
-
-   NOTE: Pay special attention in the above to the use of plural forms for container classes, so they can
-         be caught all at once like:
-         try {
-            ..something risky..
-         } catch(xarExceptions $e) {
-           .. any Xar exception will be caught here, but no others
-         }
-
-   NOTE: I'm putting stuff on this all in this file now, we can split things up later on
+/* 
+   For all documentation about exceptions see RFC-0054
+*/
+/*
+   NOTE: I'm putting stuff on this all in this file now, we can split things up 
+         later on
 
    Q: do we need compatability classes for the legacy classes?
    Q: the exception handler receives the instantiated Exception class. 
-      How do we know there what is available in the derived object so we can specialize handling?
-      To only allow deriving from XARExceptions and standardize there is probably not enough, but lets do that for now.
+      How do we know there what is available in the derived object so we can 
+      specialize handling? To only allow deriving from XARExceptions and 
+      standardize there is probably not enough, but lets do that for now.
 
 */
 
@@ -119,7 +67,8 @@ include "includes/exceptions/handlers.php";
 // Special exception signalling the old ErrorSet was used
 class ErrorDeprecationException extends DeprecationExceptions
 {
-    protected $message ="This exception was called through a deprecated API (usually xarErrorSet).\n You should not use xarErrorSet anymore, but raise/catch real exceptions.\nThis was the original error: #(1)";
+    protected $message ="This exception was called through a deprecated API (usually xarErrorSet).\n Original error: #(1)";
+    protected $hint    ="You should not use xarErrorSet anymore, but raise/catch real exceptions.\n Replace the 'xarErrorSet()' in the code with a try/catch block or delete it if the exception can be caught automatically.";
 }
 
 /**
@@ -291,37 +240,4 @@ function xarErrorGet($stacktype = "ERROR",$format='data')
 {
     return;
 }
-
-// PRIVATE FUNCTIONS
-
-/**
- * Error handlers section
- *
- * For several areas there are specific bridges to route errors into
- * the exception subsystem:
- *
- * Handlers: (most of them have moved to exceptions/handlers.php
- * 1. assert failures -> xarException__assertErrorHandler($script,$line,$code)
- */
-
-/**
- * Error handler for assert failures
- *
- * This handler is called when assertions in code fail.
- *
- * @author Marcel van der Boom <marcel@xaraya.com>
- * @access private
- * @param  string  $script filename in which assertion failed
- * @param  integer $line   linenumber on which assertion is made
- * @param  string  $code   the assertion expressed in code which evaluated to false
- * @return void
- */
-function xarException__assertErrorHandler($script,$line,$code)
-{
-    // Redirect the assertion to a system exception
-    $msg = "ASSERTION FAILED: $script [$line] : $code";
-    // TODO: classify the exception, we never want to use the base object directly.
-    throw new SRCException($msg, E_XAR_ASSERT);
-}
-
 ?>

@@ -468,8 +468,6 @@ function xarCoreActivateDebugger($flags)
         assert_options(ASSERT_WARNING,   1);    // Issue a php warning
         assert_options(ASSERT_BAIL,      0);    // Stop processing?
         assert_options(ASSERT_QUIET_EVAL,0);    // Quiet evaluation of assert condition?
-        // Dependency! (move to xarException?)
-        assert_options(ASSERT_CALLBACK,'xarException__assertErrorHandler'); // Call this function when the assert fails
         $GLOBALS['xarDebug_sqlCalls'] = 0;
         $lmtime = explode(' ', microtime());
         $GLOBALS['xarDebug_startTime'] = $lmtime[1] + $lmtime[0];

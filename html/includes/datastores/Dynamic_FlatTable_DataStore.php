@@ -524,29 +524,18 @@ if (empty($itemidfield)) {
             return $this->primary;
         }
 
-        // Try to get the primary field via the meta table
-
-        $table = $this->name;
-
         $dbconn =& xarDBGetConn();
+        $dbInfo =& $dbconn->getDatabaseInfo();
+        $tblInfo=& $dbInfo->getTable($this->name);
+        $keyInfo=& $tblInfo->getPrimaryKey();
 
-        $systemPrefix = xarDBGetSystemTablePrefix();
-        $metaTable = $systemPrefix . '_tables';
-
-    // TODO: improve this once we can define better relationships
-        $query = "SELECT xar_field, xar_type
-                  FROM $metaTable
-                  WHERE xar_primary_key = ?
-                    AND xar_table=?";
-
-        $result =& $dbconn->Execute($query,array(1,$table),ResultSet::FETCHMODE_NUM);
-
-        if (!$result || $result->EOF) return;
-
-        $field = $result->get(1);
-        $this->primary = $field;
-        $result->Close();
-        return $field;
+        $columns = $keyInfo->getColumns();
+        if(count($columns) > 1) {
+            // TODO: support composite keys
+            throw new BadParameterException($this->name,'The table "#(1)" has more than one column in its primary key. We only support single column keys at this moment');
+        }
+        $this->primary = $columns[0]->getName();
+        return $this->primary;
     }
 
     function getNext($args = array())

@@ -139,7 +139,6 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
 
     // JC -- Question are these depreciated?
     // Old tables
-    $tables['theme_vars']           = $systemPrefix . '_theme_vars';
     $tables['module_vars']           = $systemPrefix . '_module_vars';
     $tables['module_itemvars']       = $systemPrefix . '_module_itemvars';
     $tables['hooks']                 = $systemPrefix . '_hooks';
@@ -658,10 +657,6 @@ function xarModPrivateLoad($modName, $modType, $flags = 0)
     $modDir = $modBaseInfo['directory'];
 
     $fileName = 'modules/'.$modDir.'/xar'.$modType.'.php';
-
-    if (!file_exists($fileName)){
-        $fileName = 'modules/'.$modDir.'/pn'.$modType.'.php';
-    }
 
     // Removed the exception.  Causing some wierd results with modules without an api.
     // <nuncanada> But now we wont know if something was loaded or not!
@@ -1460,24 +1455,27 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     // Get database info
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
-    $hookstable = $xartable['hooks'];
+    $hookstable    = $xartable['hooks'];
+    $modulestable  = $xartable['modules'];
 
     // Get applicable hooks
     // New query:
     $query ="SELECT DISTINCT hooks.xar_tarea, tmods.xar_name, 
 	                         hooks.xar_ttype, hooks.xar_tfunc, hooks.xar_order
-             FROM xar_hooks hooks, xar_modules tmods, xar_modules smods
+             FROM $hookstable hooks, $modulestable tmods, $modulestable smods
              WHERE hooks.xar_tmodid = tmods.xar_id AND
                    hooks.xar_smodid = smods.xar_id AND
-	               smods.xar_name=?";
+	               smods.xar_name = ?";
     $bindvars = array($callerModName);
 
     if (empty($callerItemType)) {
         // Itemtype is not specified, only get the generic hooks
-        $query .= " AND hooks.xar_stype = ''";
+        $query .= " AND hooks.xar_stype = ?";
+        $bindvars[] = '';
     } else {
         // hooks can be enabled for all or for a particular item type
-        $query .= " AND (hooks.xar_stype = '' OR hooks.xar_stype = ?)";
+        $query .= " AND (hooks.xar_stype = ? OR hooks.xar_stype = ?)";
+        $bindvars[] = '';
         $bindvars[] = (string)$callerItemType;
         // FIXME: if itemtype is specified, why get the generic hooks? To save a function call in the modules?
         // Answer: generic hooks apply for *all* itemtypes, so if a caller specifies an itemtype, you
@@ -1537,13 +1535,15 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
         // Get database info
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
-        $hookstable = $xartable['hooks'];
+        $hookstable   = $xartable['hooks'];
+        $modulestable = $xartable['modules'];
 
         // Get applicable hooks
         // New query:
         $query = "SELECT DISTINCT tmods.xar_name, hooks.xar_stype 
-                  FROM xar_hooks hooks, xar_modules tmods
-                  WHERE hooks.xar_tmodid = tmods.xar_id AND tmods.xar_name = ?";
+                  FROM  $hookstable hooks, $modulestable tmods
+                  WHERE hooks.xar_tmodid = tmods.xar_id AND 
+                        tmods.xar_name = ?";
         $bindvars = array($callerModName);
 
         $result =& $dbconn->Execute($query,$bindvars);
@@ -1624,40 +1624,19 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
             default:
             // Spliffster, additional mod info from modules/$modDir/xarversion.php
             $fileName = 'modules/' . $modOsDir . '/xarversion.php';
-            if (!file_exists($fileName)) {
-                $fileName = 'modules/' . $modOsDir . '/pnversion.php';
-                if (file_exists($fileName)) {
-                    $fd = fopen($fileName, 'r');
-                    if (!$fd) throw new FileNotFoundException($fileName);
 
-                    $buf = '';
-                    while (!feof($fd)) {
-                        $buf .= fgets($fd, 1024);
-                    }
-                    fclose($fd);
-                    //generate a checksum of max 10 digits
-                    $checksum = abs(crc32($buf));
-                    $modversion['id'] = "666" . substr($checksum,5);
-                }
-            }
             // If the locale is already present, it means we can make the translations available
-
             if(!empty($GLOBALS['xarMLS_currentLocale']))
                 xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
             break;
         case 'theme':
             $fileName = xarConfigGetVar('Site.BL.ThemesDirectory'). '/' . $modOsDir . '/xartheme.php';
-            // pnAPI compatibility
-            if (!file_exists($fileName)) {
-                $fileName = 'themes/' . $modOsDir . '/xartheme.php';
-            }
-
             break;
     }
 
     if (!file_exists($fileName)) {
         // Don't raise an exception, it is too harsh, but log it tho (bug 295)
-        xarLogMessage("xarMod_getFileInfo: Could not find xarversion.php or pnversion.php, skipping $modOsDir");
+        xarLogMessage("xarMod_getFileInfo: Could not find xarversion.php, skipping $modOsDir");
         // throw new FileNotFoundException($fileName);
         return;
     }
@@ -1789,12 +1768,12 @@ function xarMod_getBaseInfo($modName, $type = 'module')
                          ON modstates.xar_modid = mods.xar_id
                   WHERE mods.xar_name = ? OR mods.xar_directory = ?";
     } else {
-        $query = 'SELECT mods.xar_regid, mods.xar_directory, mods.xar_mode,'
-            . ' mods.xar_id, modstates.xar_state, mods.xar_name'
-            . ' FROM '.$modulestable.' mods'
-            . ' LEFT JOIN '.$modules_statesTable.' modstates'
-            . ' ON modstates.xar_regid = mods.xar_regid'
-            . ' WHERE mods.xar_name = ? OR mods.xar_directory = ?';
+        $query = "SELECT mods.xar_regid, mods.xar_directory, mods.xar_mode,
+                         mods.xar_id, modstates.xar_state, mods.xar_name
+                  FROM   $modulestable mods 
+                  LEFT JOIN $modules_statesTable modstates
+                         ON modstates.xar_regid = mods.xar_regid
+                  WHERE  mods.xar_name = ? OR mods.xar_directory = ?";
     }
     $bindvars = array($modName, $modName);
 
@@ -1917,10 +1896,9 @@ function xarMod_getVarsByName($varName, $type = 'module')
         break;
     case 'theme':
         $theme_varsTable = $tables['system/theme_vars'];
-        $query = "SELECT xar_themeName,
-                             xar_value
-                      FROM $theme_varsTable
-                      WHERE xar_name = ?";
+        $query = "SELECT xar_themeName, xar_value
+                  FROM   $theme_varsTable
+                  WHERE  xar_name = ?";
         break;
     }
 
@@ -1971,9 +1949,6 @@ function xarMod__loadDbInfo($modName, $modDir)
 
     // Load the database definition if required
     $osxartablefile = "modules/$modDir/xartables.php";
-    if (!file_exists($osxartablefile)) {
-        $osxartablefile = 'modules/' . $modDir . '/pntables.php';
-    }
 
     if (!file_exists($osxartablefile)) {
         return false;
@@ -1981,12 +1956,9 @@ function xarMod__loadDbInfo($modName, $modDir)
     include_once $osxartablefile;
 
     $tablefunc = $modName . '_' . 'xartables';
-    $pntablefunc = $modName . '_' . 'pntables';
 
     if (function_exists($tablefunc)) {
         xarDB_importTables($tablefunc());
-    } elseif (function_exists($pntablefunc)) {
-        xarDB_importTables($pntablefunc());
     }
 
     $loadedDbInfoCache[$modName] = true;
@@ -2016,6 +1988,7 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
+    $modulesTable = $tables['modules'];
 
     switch(strtolower($type)) {
         case 'module':
@@ -2027,8 +2000,9 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
             }
 
             $query = "SELECT xar_state 
-                      FROM $module_statesTable states, $tables[modules] mods
-                      WHERE states.xar_modid = mods.xar_id AND mods.xar_regid = ?";
+                      FROM   $module_statesTable states, $modulesTable mods
+                      WHERE  states.xar_modid = mods.xar_id AND 
+                             mods.xar_regid = ?";
             break;
         case 'theme':
             if ($modMode == XARTHEME_MODE_SHARED) {
