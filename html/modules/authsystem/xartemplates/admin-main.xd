@@ -1,0 +1,62 @@
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<div class="xar-mod-head">
+    <span class="xar-mod-title">
+        <xar:mlstring>Authsystem Authentication Administration</xar:mlstring>
+    </span>
+</div>
+<div class="xar-mod-body">
+    <img src="#xarTplGetImage('admin.gif', 'roles')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
+    <h2>
+        <xar:mlstring>Overview</xar:mlstring>
+    </h2>
+    <h3>
+        <xar:mlstring>What is it?</xar:mlstring>
+    </h3>
+    <p>
+        <xar:mlstring>The Authsystem is the default module that handles user authentication on your site. </xar:mlstring>
+    </p>
+    <h3>
+        <xar:mlstring>How to use it?</xar:mlstring>
+    </h3>
+    <p>
+        <xar:mlstring>To be added</xar:mlstring>
+    </p>
+    <h3>
+        <xar:mlstring>Included Blocks</xar:mlstring>
+    </h3>
+    <ul>
+        <li>
+            <xar:mlstring>Login Block allows users to login</xar:mlstring>
+        </li>
+    </ul>
+    <h3>
+        <xar:mlstring>Included Hooks</xar:mlstring>
+    </h3>
+    <p>
+        <xar:mlstring>None</xar:mlstring>
+    </p>
+    <h3>
+        <xar:mlstring>Included Dynamic Data Properties</xar:mlstring>
+    </h3>
+    <p>
+        <xar:mlstring>None</xar:mlstring>
+    </p>
+   <h3><xar:mlstring>Further Information</xar:mlstring></h3>
+   <p>
+      <xar:mlstring>Further information on the Authsystem Authentication module can be found at:</xar:mlstring>
+   </p>
+   <ul>
+      <li><xar:mlstring>Authsystem Module Extension page at</xar:mlstring> <a title="#xarML('Authsystem Module - Xaraya Extension 42')#" href="http://www.xaraya.com/index.php/release/42.html">Xaraya Extension and Releases</a>.
+      <xar:mlstring> Click on Version History tab at the bottom to get the latest release information.</xar:mlstring>
+      </li>
+      <li><xar:mlstring>Related tutorials and documentation on Authsystem module at</xar:mlstring> <a href="http://www.xaraya.com/index.php/keywords/authsystem/" title="#xarML('Related documentation on Authsystem')#"><xar:mlstring>Xaraya Documentation.</xar:mlstring></a>
+      </li>
+      <li><xar:mlstring>Extended information for Developers at</xar:mlstring> <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html" title="#xarML('RFC 30')#"><xar:mlstring>Xaraya RFC-30</xar:mlstring></a>
+      </li>
+
+  </ul>
+  <p class="xar-sub">
+    <strong>&nbsp;<xar:mlstring>Authentication Module - Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.0.0&nbsp; 2006-01-04
+  </p>
+</div>
+

@@ -1,13 +1,14 @@
 <?php
 /**
- * Authsystem initialization
+ * Initialise the Authsystem module
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage authsystem
+ * @subpackage Authsystem module
+ * @link http://xaraya.com/index.php/release/42.html
  * @author Marco Canini
  */
 
@@ -17,7 +18,7 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
-$modversion['name'] = 'AuthSystem';
+$modversion['name'] = 'authsystem';
 $modversion['displayname'] = xarML('Authentication');
 $modversion['id'] = '42';
 $modversion['version'] = '0.91.0';
@@ -30,9 +31,9 @@ $modversion['license'] = 'docs/license.txt';
 $modversion['official'] = 1;
 $modversion['author'] = 'Marco Canini';
 $modversion['contact'] = 'marco.canini@xaraya.com';
-$modversion['admin'] = 0;
+$modversion['admin'] = 1;
 $modversion['user'] = 0;
 $modversion['securityschema'] = array();
-$modversion['class'] = 'Core Utility';
+$modversion['class'] = 'Authentication';
 $modversion['category'] = 'Global';
 ?>

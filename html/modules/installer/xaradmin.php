@@ -464,13 +464,20 @@ function installer_admin_bootstrap()
     if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
 
 	//TODO: improve this once we know where authentication modules are headed
-	$regid=xarModGetIDFromName('authentication');
+   /*	
+   $regid=xarModGetIDFromName('registration');
 	if (empty($regid)) {
 		die(xarML('I cannot load the authentication module. Please make it available and reinstall'));
 	}
+	*/
+    $regid=xarModGetIDFromName('authsystem');
+	if (empty($regid)) {
+		die(xarML('I cannot load the Authsystem module. Please make it available and reinstall'));
+    }
+
 
     // Set the state and activate the following modules
-    $modlist=array('roles','privileges','blocks','themes');
+    $modlist=array('roles','privileges','blocks','authsystem','themes');
     foreach ($modlist as $mod) {
         // Set state to inactive
         $regid=xarModGetIDFromName($mod);
@@ -1076,9 +1083,9 @@ function installer_admin_cleanup()
 
     list ($rightBlockGroup) = $result->fields;
 
-/*
+
 	$loginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                    array('module' => 'roles',
+                                    array('module' => 'authsystem',
                                           'type'   => 'login'));
 
     if (empty($loginBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
@@ -1099,7 +1106,7 @@ function installer_admin_cleanup()
             return;
         }
     }
-*/
+
     $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
               WHERE     xar_name = 'header'";

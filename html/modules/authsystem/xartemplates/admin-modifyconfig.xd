@@ -1,0 +1,81 @@
+<xar:comment>
+    License: GPL http://www.gnu.org/copyleft/gpl.html 
+</xar:comment>
+<xar:style scope="module" module="base" file="navtabs" />
+<div class="xar-mod-head">
+    <span class="xar-mod-title">
+        <xar:mlstring>
+            Authsystem Authentication Administration
+        </xar:mlstring>
+    </span>
+</div>
+<div class="xar-mod-body">
+    <h2>
+        <xar:mlstring>
+            Modify Configuration
+        </xar:mlstring>
+    </h2>
+    <form method="post" action="&xar-modurl-authsystem-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+        <fieldset>
+            <legend>
+                <xar:mlstring>
+                    General Options
+                </xar:mlstring>
+            </legend>
+            <div class="xar-form-input-wrapper">
+                <label for="shorturls" class="xar-form-label" title="#xarML('Enable short URLS?')#">
+                    <xar:mlstring>Enable short URLs?</xar:mlstring>
+                </label>
+                <xar:if condition="$shorturlschecked">
+                    <input type="checkbox" name="shorturls" id="shorturls" value="1" checked="checked" />
+                <xar:else/>
+                    <input type="checkbox" name="shorturls" id="shorturls" value="1" />
+                 </xar:if>
+             </div>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <xar:mlstring>
+                    Login Security Options
+                </xar:mlstring>
+            </legend>
+                <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="xarModGetVar('authsystem', 'uselockout')">
+                        <input type="checkbox" name="uselockout" id="uselockout" value="1" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="uselockout" id="uselockout" value="1" />
+                    </xar:if>
+                    <label for="uselockout">
+                        <xar:mlstring>
+                            Use lockout time on incorrect login attempts? 
+                        </xar:mlstring>
+                    </label>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="lockouttries" class="xar-form-label">
+                        <xar:mlstring>
+                            Number of attempts before lockout 
+                        </xar:mlstring>
+                        : 
+                    </label>
+                    <input type="text" name="lockouttries" id="lockouttries" value="#xarModGetVar('authsystem', 'lockouttries')#" size="2" maxlength="2" />
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="lockouttime" class="xar-form-label">
+                        <xar:mlstring>
+                            Length of time for lockout (minutes) 
+                        </xar:mlstring>
+                        : 
+                    </label>
+                    <input type="text" name="lockouttime" id="lockouttime" value="#xarModGetVar('authsystem', 'lockouttime')#" size="2" maxlength="2" />
+                </div>
+        </fieldset>
+        <fieldset>
+             <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="phase" id="phase" value="update" />
+                    <input type="submit" value="#xarML('Update Authentication Configuration')#" />
+              </div>
+          </fieldset>
+    </form>
+</div>

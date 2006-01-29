@@ -200,7 +200,7 @@ function roles_activate()
 # Create some modvars
 #
     //TODO: improve on this hardwiring
-    xarModSetVar('roles', 'defaultauthmodule', '');
+     xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem')); //Setting a default
     if (xarModGetVar('roles','itemsperpage')) return true;
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
     xarModSetVar('roles', 'locale', '');
@@ -323,6 +323,9 @@ function roles_upgrade($oldVersion)
 //				return;
 				die(xarML('I could not load the authentication module. Please make it available and try again'));
 		    }
+            break;
+       case '1.1.1':
+	        xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
             break;
     }
     // Update successful
