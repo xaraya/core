@@ -68,8 +68,8 @@ function roles_adminapi_update($args)
         $bindvars = array($name,$uname,$email,$valcode,$state,$uid);
     }
     xarModSetUserVar('roles','userhome',$home,$uid);
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
+    $dbconn->Execute($query,$bindvars);
+
 
     $item['module'] = 'roles';
     $item['itemid'] = $uid;

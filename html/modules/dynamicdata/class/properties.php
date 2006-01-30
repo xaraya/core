@@ -67,8 +67,6 @@ class Dynamic_Property_Master
 
         $result =& $dbconn->Execute($query,$bindvars);
 
-        if (!$result) return;
-
         $properties = array();
         while (!$result->EOF) {
             list($name, $label, $type, $id, $default, $source, $fieldstatus, $order, $validation,
@@ -255,12 +253,6 @@ class Dynamic_Property_Master
                   ORDER BY xar_prop_reqmodules, xar_prop_id";
 
         $result =& $dbconn->Execute($query);
-
-        if (!$result)
-        {
-            //TODO: Something interesting?  Probably an exception.
-            return;
-        }
 
         // If no properties are found, import them in.
         if( $result->EOF)

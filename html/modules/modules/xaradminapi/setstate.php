@@ -57,7 +57,7 @@ function modules_adminapi_setstate($args)
                 $module_statesTable = $xartable['system/module_states'];
                 $query = "SELECT * FROM $module_statesTable WHERE xar_modid = ?";
                 $result =& $dbconn->Execute($query,array($modInfo['systemid']));
-                if (!$result) return;
+
                 if ($result->EOF) {
                     $seqId = $dbconn->GenId($module_statesTable);
 
@@ -67,7 +67,6 @@ function modules_adminapi_setstate($args)
                     $bindvars = array($seqId,$modInfo['systemid'],$state);
 
                     $newresult = $dbconn->Execute($query,$bindvars);
-                    if (!$newresult) return;
                 }
                 return true;
             }
@@ -113,8 +112,8 @@ function modules_adminapi_setstate($args)
     $query = "UPDATE $module_statesTable
               SET xar_state = ? WHERE xar_modid = ?";
     $bindvars = array($state,$modInfo['systemid']);
-    $result = $dbconn->Execute($query,$bindvars);
-    if (!$result) {return;}
+    $dbconn->Execute($query,$bindvars);
+
     // We're update module state here we must update at least
     // the base info in the cache.
     $modInfo['state']=$state;

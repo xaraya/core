@@ -350,7 +350,7 @@ class xarMasks
         $query = "SELECT xar_level FROM $this->levelstable
                     WHERE xar_leveltext = ?";
         $result = $this->dbconn->Execute($query,array($levelname));
-        if (!$result) return;
+
         $level = -1;
         if (!$result->EOF) list($level) = $result->fields;
         xarVarSetCached('Security.xarSecLevel', $levelname, $level);
@@ -515,7 +515,7 @@ class xarMasks
     function forgetprivsets()
     {
         $query = "DELETE FROM $this->privsetstable";
-        if (!$this->dbconn->Execute($query)) return;
+        $this->dbconn->Execute($query);
         return true;
     }
 
@@ -536,13 +536,12 @@ class xarMasks
         }
         $query = "SELECT xar_set FROM $this->privsetstable WHERE xar_uid =?";
         $result = $this->dbconn->Execute($query,array($role->getID()));
-        if (!$result) return;
 
         if ($result->EOF) {
             $privileges = $this->irreducibleset(array('roles' => array($role)));
             $query = "INSERT INTO $this->privsetstable VALUES (?,?)";
             $bindvars = array($role->getID(), serialize($privileges));
-            if (!$this->dbconn->Execute($query,$bindvars)) return;
+            $this->dbconn->Execute($query,$bindvars);
             return $privileges;
         } else {
             list($serprivs) = $result->fields;
@@ -932,7 +931,7 @@ class xarPrivileges extends xarMasks
                           $name, $realm, $module, $component,
                           $instance, $level, $description);
 
-        if (!$this->dbconn->Execute($query,$bindvars)) return;
+        $this->dbconn->Execute($query,$bindvars);
         return true;
     }
 
@@ -968,7 +967,7 @@ class xarPrivileges extends xarMasks
 // Add the assignation as an entry to the acl table
         $query = "INSERT INTO $this->acltable VALUES (?,?)";
         $bindvars = array($roleid,$privid);
-        if (!$this->dbconn->Execute($query,$bindvars)) return;
+        $this->dbconn->Execute($query,$bindvars);
 
 // empty the privset cache
 //        $this->forgetprivsets();
@@ -1008,7 +1007,7 @@ class xarPrivileges extends xarMasks
                         ORDER BY p.xar_name";
 
             $result = $this->dbconn->Execute($query);
-            if (!$result) return;
+
 
             $privileges = array();
             while(!$result->EOF) {
@@ -1076,7 +1075,6 @@ class xarPrivileges extends xarMasks
                     pm.xar_parentid ";
         $query .= $fromclause;
         $result = $this->dbconn->Execute($query);
-        if (!$result) return;
 
         $privileges = array();
         $pids = array();
@@ -1127,7 +1125,6 @@ class xarPrivileges extends xarMasks
                         FROM $this->realmstable";
 
             $result = $this->dbconn->Execute($query);
-            if (!$result) return;
 
 // add some extra lines we want
             $realms = array();
@@ -1179,7 +1176,6 @@ class xarPrivileges extends xarMasks
                         ORDER BY modules.xar_name";
 
             $result = $this->dbconn->Execute($query,array(3));
-            if (!$result) return;
 
             // add some extra lines we want
             $modules = array();
@@ -1439,7 +1435,7 @@ class xarPrivileges extends xarMasks
         $query = "SELECT * FROM $this->privilegestable WHERE xar_pid = ?";
         //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($pid));
-        if (!$result) return;
+
         if (!$result->EOF) {
             list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
             $pargs = array('pid'=>$pid,
@@ -1474,7 +1470,7 @@ class xarPrivileges extends xarMasks
         $query = "SELECT * FROM $this->privilegestable WHERE xar_name = ?";
         //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($name));
-        if (!$result) return;
+
         if (!$result->EOF) {
             list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
             $pargs = array('pid'=>$pid,
@@ -1510,7 +1506,7 @@ class xarPrivileges extends xarMasks
         $query = "SELECT * FROM $this->privilegestable WHERE xar_module = ?";
         //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($module));
-        if (!$result) return;
+
         for (; !$result->EOF; $result->MoveNext()) {
             list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
             $pargs = array('pid'=>$pid,
@@ -1550,7 +1546,7 @@ class xarPrivileges extends xarMasks
                   FROM $this->privilegestable WHERE xar_name = ?";
         //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($parentname));
-        if (!$result) return;
+
 
 // create the parent object
         list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
@@ -1569,7 +1565,7 @@ class xarPrivileges extends xarMasks
         $query = "SELECT * FROM $this->privilegestable WHERE xar_name = ?";
         //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($childname));
-        if (!$result) return;
+
 
 // create the child object
         list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
@@ -2052,7 +2048,6 @@ class xarPrivilege extends xarMask
               WHERE xar_name = ?";
 
         $result = $this->dbconn->Execute($query,array($this->name));
-        if (!$result) return;
 
         list($count) = $result->fields;
 
@@ -2067,7 +2062,7 @@ class xarPrivilege extends xarMask
                           $this->name, $this->realm, $this->module,
                           $this->component, $this->instance, $this->level);
         //Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query,$bindvars)) return;
+        $this->dbconn->Execute($query,$bindvars);
 
 // the insert created a new index value
 // retrieve the value
@@ -2075,7 +2070,6 @@ class xarPrivilege extends xarMask
         $query = "SELECT MAX(xar_pid) FROM $this->privilegestable";
         //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
-        if (!$result) return;
 
 // use the index to get the privileges object created from the repository
         list($pid) = $result->fields;
@@ -2107,7 +2101,7 @@ class xarPrivilege extends xarMask
     {
         if ($this->isRootPrivilege()) return true;
         $query = "INSERT INTO $this->privmemberstable VALUES (?,?)";
-        if (!$this->dbconn->Execute($query,array($this->getID(),0))) return;
+        $this->dbconn->Execute($query,array($this->getID(),0));
         return true;
     }
 
@@ -2129,7 +2123,7 @@ class xarPrivilege extends xarMask
         $query = "INSERT INTO $this->privmemberstable VALUES (?,?)";
         $bindvars = array($member->getID(), $this->getID());
         //Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query,$bindvars)) return;
+        $this->dbconn->Execute($query,$bindvars);
 
 // empty the privset cache
 //        $privileges = new xarPrivileges();
@@ -2200,7 +2194,7 @@ class xarPrivilege extends xarMask
                           $this->component, $this->instance, $this->level,
                           $this->getID());
         //Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query,$bindvars)) return;
+        $this->dbconn->Execute($query,$bindvars);
         return true;
     }
 
@@ -2222,14 +2216,13 @@ class xarPrivilege extends xarMask
 // set up the DELETE query
         $query = "DELETE FROM $this->privilegestable WHERE xar_pid=?";
 //Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query,array($this->pid))) return;
+        $this->dbconn->Execute($query,array($this->pid));
 
 // set up a query to get all the parents of this child
         $query = "SELECT xar_parentid FROM $this->privmemberstable
               WHERE xar_pid=?";
         //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($this->getID()));
-        if (!$result) return;
 
 // remove this child from all the parents
         $perms = new xarPrivileges();
@@ -2244,7 +2237,7 @@ class xarPrivilege extends xarMask
 
 // remove this child from the root privilege too
         $query = "DELETE FROM $this->privmemberstable WHERE xar_pid=? AND xar_parentid=?";
-        if (!$this->dbconn->Execute($query,array($this->pid,0))) return;
+        $this->dbconn->Execute($query,array($this->pid,0));
 
 // get all the roles this privilege was assigned to
         $roles = $this->getRoles();
@@ -2284,7 +2277,7 @@ class xarPrivilege extends xarMask
                 xar_partid = ? AND xar_permid = ?";
         $bindvars = array($role->getID(), $this->getID());
         $result = $this->dbconn->Execute($query,$bindvars);
-        if (!$result) return;
+
         return !$result->EOF;
     }
 
@@ -2381,7 +2374,6 @@ class xarPrivilege extends xarMask
                     WHERE p.xar_pid = pm.xar_parentid
                       AND pm.xar_pid = ?";
         $result = $this->dbconn->Execute($query,array($this->getID()));
-        if (!$result) return;
 
 // collect the table values and use them to create new role objects
         $ind = 0;
@@ -2474,7 +2466,6 @@ class xarPrivilege extends xarMask
         //              AND pm.xar_parentid = " . $cacheId;
         // Can't use caching here. The privs have changed
         $result = $this->dbconn->Execute($query);
-        if (!$result) return;
 
         // collect the table values and use them to create new role objects
         while(!$result->EOF) {

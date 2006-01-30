@@ -76,7 +76,6 @@ function roles_userapi_countallactive($args)
     } else {
         $result = $dbconn->Execute($query,$bindvars);
     }
-    if (!$result) return;
 
     // Obtain the number of users
     list($numroles) = $result->fields;

@@ -397,7 +397,6 @@ function privileges_init()
          
          TO BE IMPLEMENTED LATER
          $result = $dbconn->Execute($query);
-         if (!$result) return;
          
          xarDB_importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
          
@@ -456,29 +455,30 @@ function privileges_delete()
     $tables =& xarDBGetTables();
     xarDBLoadTableMaintenanceAPI();
 
+    // TODO: wrap in transaction? (this section is only for testing anyways)
     $query = xarDBDropTable($tables['privileges']);
     if (empty($query)) return; // throw back
-    if (!$dbconn->Execute($query)) return;
+    $dbconn->Execute($query);
 
     $query = xarDBDropTable($tables['privmembers']);
     if (empty($query)) return; // throw back
-    if (!$dbconn->Execute($query)) return;
+    $dbconn->Execute($query);
 
     $query = xarDBDropTable($tables['security_realms']);
     if (empty($query)) return; // throw back
-    if (!$dbconn->Execute($query)) return;
+    $dbconn->Execute($query);
 
     $query = xarDBDropTable($tables['security_acl']);
     if (empty($query)) return; // throw back
-    if (!$dbconn->Execute($query)) return;
+    $dbconn->Execute($query);
 
     $query = xarDBDropTable($tables['security_masks']);
     if (empty($query)) return; // throw back
-    if (!$dbconn->Execute($query)) return;
+    $dbconn->Execute($query);
 
     $query = xarDBDropTable($tables['security_instances']);
     if (empty($query)) return; // throw back
-    if (!$dbconn->Execute($query)) return;
+    $dbconn->Execute($query);
 
     return true;
 }

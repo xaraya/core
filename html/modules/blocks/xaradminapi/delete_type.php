@@ -31,9 +31,8 @@ function blocks_adminapi_delete_type($args)
     if (!empty($modName)) {$module = $modName;}
     if (!empty($blockType)) {$type = $blockType;}
 
-    $count = xarModAPIFunc(
-        'blocks', 'user', 'countblocktypes',
-        array('module' => $module, 'type' => $type)
+    $count = xarModAPIFunc('blocks', 'user', 'countblocktypes',
+                           array('module' => $module, 'type' => $type)
     );
 
     if (!isset($count)) {return;}
@@ -60,15 +59,12 @@ function blocks_adminapi_delete_type($args)
               AND       btypes.xar_type = ?";
 
     $result = $dbconn->Execute($query, array($module, $type));
-    if (!$result) return;
 
     while (!$result->EOF) {
         list($bid) = $result->fields;
 
         // Pass ids to API
-        xarModAPIFunc(
-            'blocks', 'admin', 'delete_instance', array('bid' => $bid)
-        );
+        xarModAPIFunc('blocks', 'admin', 'delete_instance', array('bid' => $bid));
 
         $result->MoveNext();
     }
@@ -77,9 +73,7 @@ function blocks_adminapi_delete_type($args)
 
     // Delete the block type
     $query = "DELETE FROM $block_types_table WHERE xar_modid = ? AND xar_type = ?";
-    $result = $dbconn->Execute($query, array($module, $type));
-    if (!$result) return;
-
+    $dbconn->Execute($query, array($module, $type));
     return true;
 }
 

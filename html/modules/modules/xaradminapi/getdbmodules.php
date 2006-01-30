@@ -42,7 +42,6 @@ function modules_adminapi_getdbmodules($args)
     }
 
     $result = $dbconn->Execute($sql);
-    if (!$result) return;
 
     while(!$result->EOF) {
         list($regid, $name, $directory, $class, $version, $mode, $state) = $result->fields;

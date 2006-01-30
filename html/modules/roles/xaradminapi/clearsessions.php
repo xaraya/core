@@ -28,7 +28,7 @@ function roles_adminapi_clearsessions($spared)
 
     $query = "SELECT xar_sessid, xar_uid FROM $sessionstable";
     $result = $dbconn->Execute($query);
-    if (!$result) return;
+
     // Prepare query outside the loop
     $sql = "DELETE FROM $sessionstable WHERE xar_sessid = ?";
     $stmt = $dbconn->prepareStatement($sql);

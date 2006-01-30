@@ -374,7 +374,6 @@ class Dynamic_Object_Master
      */
     static function &getObjects()
     {
-        $nullreturn = NULL;
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
 
@@ -391,8 +390,6 @@ class Dynamic_Object_Master
                          xar_object_isalias
                   FROM $dynamicobjects ";
         $result =& $dbconn->Execute($query);
-
-        if (!$result) return $nullreturn;
 
         $objects = array();
         while (!$result->EOF) {
@@ -474,7 +471,7 @@ class Dynamic_Object_Master
             $bindvars[] = (int) $args['itemtype'];
         }
         $result =& $dbconn->Execute($query,$bindvars);
-        if (!$result || $result->EOF) return;
+        if ($result->EOF) return;
 
         $info = array();
         list($info['objectid'],
@@ -1299,7 +1296,7 @@ class Dynamic_Object extends Dynamic_Object_Master
                    WHERE xar_object_moduleid = ?";
 
         $result =& $dbconn->Execute($query,array((int)$args['moduleid']));
-        if (!$result || $result->EOF) return;
+        if ($result->EOF) return;
 
         $nexttype = $result->fields[0];
 

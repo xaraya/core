@@ -39,8 +39,7 @@ function roles_adminapi_recall($args)
               SET xar_uname = ?, xar_email = ?, xar_state = ?
               WHERE xar_uid = ?";
     $bindvars = array($uname[0],$email[0],$state,$uid);
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
+    $dbconn->Execute($query,$bindvars);
 
     // Let any hooks know that we have recalled this user.
     $item['module'] = 'roles';

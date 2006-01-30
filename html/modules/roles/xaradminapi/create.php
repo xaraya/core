@@ -87,8 +87,7 @@ function roles_adminapi_create($args)
     $bindvars = array($nextId, $uname, $name, 0,
                       $cryptpass,$email,$date_reg,$valcode,
                       $state,$modId);
-    $result = $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
+    $dbconn->Execute($query,$bindvars);
 
     // Get the ID of the user that we created.
     if (empty($uid) || !is_numeric($uid)) {

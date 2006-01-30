@@ -50,8 +50,7 @@ function dynamicdata_adminapi_syncprops($args)
             SET xar_prop_moduleid = ?, xar_prop_itemtype = ?
             WHERE xar_prop_objectid = ?";
     $bindvars = array($moduleid, $itemtype, $objectid);
-    $result = $dbconn->Execute($sql,$bindvars);
-    if (!$result) return;
+    $dbconn->Execute($sql,$bindvars);
 
     return true;
 }

@@ -939,7 +939,6 @@ function installer_admin_confirm_configuration()
                   WHERE     xar_name = ?";
 
         $result =& $dbconn->Execute($query,array('left'));
-        if (!$result) return;
 
         // Freak if we don't get one and only one result
         if ($result->getRecordCount() != 1) {

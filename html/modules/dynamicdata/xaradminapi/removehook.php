@@ -62,14 +62,8 @@ function dynamicdata_adminapi_removehook($args)
 
     $sql = "SELECT xar_prop_id FROM $dynamicprop WHERE xar_prop_moduleid = ?";
     $result =& $dbconn->Execute($sql,array($modid));
-    if (!$result) {
-        // CHECKME: this code ever reached? if execute fails, exception is raised.
-        // we *must* return $extrainfo for now, or the next hook will fail
-        // MrB: why does the next hook need to run when we have a system exception 
-        // pending?
-        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-        //return $extrainfo;
-    }
+    // TODO: do we want to catch the exception here? or in the callee?
+
     $ids = array();
     while (!$result->EOF) {
         list($id) = $result->fields;

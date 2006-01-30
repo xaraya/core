@@ -137,7 +137,6 @@ function blocks_init()
          'fields' => array('xar_type(50)', 'xar_modid(50)'),
          'unique' => true));
          $result =& $dbconn->Execute($query);
-         if (!$result) return;
         */
         // *_block_group_instances
         $query = xarDBCreateTable($prefix . '_block_group_instances',
@@ -223,14 +222,13 @@ function blocks_init()
          'null'    => false)));
          
          $result = $dbconn->Execute($query);
-         if (!$result) return;
          
          $query = xarDBCreateIndex($prefix . '_userblocks',
          array('name'   => 'i_' . $prefix . '_userblocks',
          'fields' => array('xar_uid', 'xar_bid'),
          'unique' => true));
          $result = $dbconn->Execute($query);
-         if (!$result) return;
+
          
          
          // Register BL tags

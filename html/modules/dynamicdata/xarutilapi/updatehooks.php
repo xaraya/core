@@ -201,8 +201,7 @@ function dynamicdata_utilapi_updatehooks($args)
                          AND $typefield = ?
                          AND $idfield IN ($bindmarkers)";
             if (empty($debug)) {
-                $result = $dbconn->Execute($query, $bindvars);
-                if (!$result) return;
+                $dbconn->Execute($query, $bindvars);
             } else {
                 $debug .= xarML('Updating hook #(1) from #(2) to #(3) for items #(4)',
                                 $tohook, "$from[module]:$from[itemtype]", "$to[module]:$to[itemtype]", join(',',array_keys($itemids)));

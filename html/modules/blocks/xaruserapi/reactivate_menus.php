@@ -28,9 +28,7 @@ function blocks_userapi_reactivate_menus()
                SET xar_active=? 
              WHERE xar_active=?";
 
-    $result =& $dbconn->Execute($query,array(1,0));
-    if (!$result) 
-        return;
+    $dbconn->Execute($query,array(1,0));
 
     return true;
 }
