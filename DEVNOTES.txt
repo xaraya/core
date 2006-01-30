@@ -44,7 +44,6 @@ design work can begin.
 * I really would like to do something with views wrt multisites et. al.
 * I really would like to do something with triggers, dunno for what
 * I really would like to do something with stored procedures, dunno for what
-* removing xslt from installer, php5 does that different
 * blocks do not end up in group anymore, need to investigate
 * put labels on controls in installer
 * simplify xaradmin.php before rewriting it

@@ -144,7 +144,7 @@ function installer_admin_phase3()
     $xmlLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/xml';
 
     if (function_exists('version_compare')) {
-        if (version_compare(PHP_VERSION,'4.1.2','>=')) $metRequiredPHPVersion = true;
+        if (version_compare(PHP_VERSION,'5.0','>=')) $metRequiredPHPVersion = true;
     }
 
     $systemConfigIsWritable     = is_writable($systemConfigFile);
@@ -166,7 +166,7 @@ function installer_admin_phase3()
     $data['xmlextension']             = extension_loaded('xml');
     $data['mysqlextension']           = extension_loaded('mysql');
     $data['pgsqlextension']           = extension_loaded ('pgsql');
-    $data['xsltextension']            = extension_loaded ('xslt');
+    $data['xsltextension']            = extension_loaded ('xsl');
     $data['ldapextension']            = extension_loaded ('ldap');
     $data['gdextension']              = extension_loaded ('gd');
 
