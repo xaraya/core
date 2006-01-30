@@ -611,7 +611,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
             // We finally found it, update the appropriate cache
             //Couldnt we serialize and unserialize all variables?
             //would that be too time expensive?
-        	$result->next();
+            $result->next();
             list($value) = $result->getRow();
             if($type == 'configvar') {
                 $value = unserialize($value);

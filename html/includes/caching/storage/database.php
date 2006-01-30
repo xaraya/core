@@ -207,7 +207,7 @@ class xarCache_Database_Storage extends xarCache_Storage
                             WHERE xar_type = ?";
             $bindvars = array($this->type);
         } else {
-            $key = '%'.$key.'%'
+            $key = '%'.$key.'%';
             $query = "DELETE FROM $table  WHERE xar_type = ? AND xar_key LIKE ?";
             $bindvars = array($this->type,$key);
         }

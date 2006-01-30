@@ -613,9 +613,10 @@ function xarModGetInfo($modRegId, $type = 'module')
     return $modInfo;
 }
 
-function xarModGetNameFromID($regid) {
-	$modinfo = xarModGetInfo($regid);
-	return $modinfo['name'];
+function xarModGetNameFromID($regid) 
+{
+    $modinfo = xarModGetInfo($regid);
+    return $modinfo['name'];
 }
 
 
@@ -1461,11 +1462,11 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     // Get applicable hooks
     // New query:
     $query ="SELECT DISTINCT hooks.xar_tarea, tmods.xar_name, 
-	                         hooks.xar_ttype, hooks.xar_tfunc, hooks.xar_order
+                             hooks.xar_ttype, hooks.xar_tfunc, hooks.xar_order
              FROM $hookstable hooks, $modulestable tmods, $modulestable smods
              WHERE hooks.xar_tmodid = tmods.xar_id AND
                    hooks.xar_smodid = smods.xar_id AND
-	               smods.xar_name = ?";
+                   smods.xar_name = ?";
     $bindvars = array($callerModName);
 
     if (empty($callerItemType)) {

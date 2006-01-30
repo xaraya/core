@@ -436,11 +436,11 @@ function installer_admin_bootstrap()
     include 'modules/privileges/xarsetup.php';
     initializeSetup();
 
-	//TODO: improve this once we know where authentication modules are headed
-	$regid=xarModGetIDFromName('authentication');
-	if (empty($regid)) {
-		throw new Exception("I cannot load the authentication module. Please make it available and reinstall");
-	}
+    //TODO: improve this once we know where authentication modules are headed
+    $regid=xarModGetIDFromName('authentication');
+    if (empty($regid)) {
+        throw new Exception("I cannot load the authentication module. Please make it available and reinstall");
+    }
 
     // Set the state and activate the following modules
     $modlist=array('roles','privileges','blocks','themes','modules');
@@ -675,12 +675,12 @@ function installer_admin_create_administrator()
 
     // Initialise authentication
     // TODO: this is happening late here because we need to create a block
-	$regid = xarModGetIDFromName('authentication');
-	if (isset($regid)) {
-		if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
-		// Activate the module
-		if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
-	}
+    $regid = xarModGetIDFromName('authentication');
+    if (isset($regid)) {
+        if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
+        // Activate the module
+        if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+    }
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
 }
@@ -1019,7 +1019,7 @@ function installer_admin_cleanup()
     list ($rightBlockGroup) = $result->fields;
 
 /*
-	$loginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+    $loginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
                                     array('module' => 'roles',
                                           'type'   => 'login'));
 

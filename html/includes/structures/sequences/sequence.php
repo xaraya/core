@@ -15,16 +15,20 @@ class Sequence extends SequenceAdapter implements iSequence
      We just have to make the methods public, as a 
      sequence doesnt have to be adapted to a sequence ;-)
     */
-    public function &get($position) {
+    public function &get($position) 
+    {
         return parent::get($position);
     }
-    public function insert(&$item, $position) {
+    public function insert(&$item, $position) 
+    {
         return parent::insert($item, $position);
     }
-    public function delete($position) {
+    public function delete($position) 
+    {
         return parent::delete($position);
     }
-    public function clear() {
+    public function clear() 
+    {
         return parent::clear();
     }
 }

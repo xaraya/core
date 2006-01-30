@@ -1575,7 +1575,8 @@ class xarTpl__DocumentNode extends xarTpl__Node
     public $children;
     public $variables;
 
-    function constructor(&$parser, $nodeName) {
+    function constructor(&$parser, $nodeName) 
+    {
         parent::constructor($parser, $nodeName);
         $this->hasChildren = true;
         $this->hasText = true;

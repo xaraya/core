@@ -67,7 +67,7 @@ function roles_adminapi_update($args)
                 WHERE xar_uid = ?";
         $bindvars = array($name,$uname,$email,$valcode,$state,$uid);
     }
-	xarModSetUserVar('roles','userhome',$home,$uid);
+    xarModSetUserVar('roles','userhome',$home,$uid);
     $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 

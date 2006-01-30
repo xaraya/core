@@ -32,7 +32,7 @@ function privileges_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'parent'    => 0,
                                     ));
-	if (!$objectid) return;
+    if (!$objectid) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
                                     'name'     => 'id',
                                     'label'    => 'ID',
@@ -57,7 +57,7 @@ function privileges_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'parent'    => 0,
                                     ));
-	if (!$objectid) return;
+    if (!$objectid) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
                                     'name'     => 'id',
                                     'label'    => 'ID',
@@ -166,7 +166,7 @@ function privileges_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'parent'    => 0,
                                     ));
-	if (!$objectid) return;
+    if (!$objectid) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
                                     'name'     => 'id',
                                     'label'    => 'ID',

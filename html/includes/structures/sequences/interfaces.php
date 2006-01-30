@@ -108,3 +108,4 @@ interface iDeque
     /*   (mixed) item */public function &pop($whichEnd);
     /*   (bool)  ok   */public function clear();
 }
+?>
