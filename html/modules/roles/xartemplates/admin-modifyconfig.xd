@@ -183,7 +183,8 @@
                         </xar:mlstring>
                     </label>
                     <xar:set name="defaultauthmodule">xarModGetVar('roles','defaultauthmodule')</xar:set>
-                    <xar:data-input type="module" name="defaultauthmodule" class="authentication" value="" />
+                    <xar:set name="filter">array('Class'=>'Authentication')</xar:set>
+                    <xar:data-input type="module" name="defaultauthmodule" filter="$filter" value="$defaultauthmodule" />
                 </div>
             </fieldset>
             <fieldset>
