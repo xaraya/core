@@ -436,13 +436,6 @@ function installer_admin_bootstrap()
     include 'modules/privileges/xarsetup.php';
     initializeSetup();
 
-    //TODO: improve this once we know where authentication modules are headed
-    $regid=xarModGetIDFromName('authentication');
-    if (empty($regid)) {
-        throw new Exception("I cannot load the authentication module. Please make it available and reinstall");
-    }
-
-
     // Set the state and activate the following modules
     $modlist=array('roles','privileges','blocks','themes','modules');
     foreach ($modlist as $mod) {
@@ -682,7 +675,7 @@ function installer_admin_create_administrator()
 
     // Initialise authentication
     // TODO: this is happening late here because we need to create a block
-    $regid = xarModGetIDFromName('authentication');
+    $regid = xarModGetIDFromName('authsystem');
     if (isset($regid)) {
         if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
         // Activate the module
@@ -1007,22 +1000,20 @@ function installer_admin_cleanup()
 
     $blockGroupsTable = $tables['block_groups'];
 
+    // Prepare getting one blockgroup
     $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
               WHERE     xar_name = ?";
     $stmt = $dbconn->prepareStatement($query);
-    
 
-    // Check for db errors
+    // Execute for the right blockgroup
     $result = $stmt->executeQuery(array('right'));
-    if (!$result) return;
 
     // Freak if we don't get one and only one result
     if ($result->getRecordCount() != 1) {
         $msg = xarML("Group 'right' not found.");
         throw new Exception($msg);
     }
-
     list ($rightBlockGroup) = $result->fields;
 
 
@@ -1030,8 +1021,8 @@ function installer_admin_cleanup()
                                     array('module' => 'authsystem',
                                           'type'   => 'login'));
 
-
     $loginBlockTypeId = $loginBlockType['tid'];
+    assert('is_numeric($loginBlockTypeId)');
 
     if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login'))) {
         if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
@@ -1039,16 +1030,17 @@ function installer_admin_cleanup()
                                  'name'     => 'login',
                                  'type'     => $loginBlockTypeId,
                                  'groups'    => array(array('gid'      => $rightBlockGroup,
-                                                           'template' => '')),
+                                                            'template' => '')),
                                  'template' => '',
                                  'state'    => 2))) {
-            return;
         }
+    } else {
+        throw new Exception('Login block created too early?');
     }
-*/
-    // Check for db errors
+
+    // Same query, but for header group.
     $result = $stmt->executeQuery(array('header'));
-    if (!$result) return;
+
     xarLogMessage("Selected the header block group", XARLOG_LEVEL_ERROR);
     // Freak if we don't get one and only one result
     if ($result->getRecordCount() != 1) {

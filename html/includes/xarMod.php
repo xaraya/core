@@ -243,7 +243,6 @@ function xarModDelAllVars($modName)
     $sql="SELECT $module_varstable.xar_id FROM $module_varstable WHERE $module_varstable.xar_modid = ?";
     $stmt = $dbconn->prepareStatement($sql);
     $result = $stmt->executeQuery(array($modBaseInfo['systemid']), ResultSet::FETCHMODE_NUM);
-    if(!$result) return;
 
     // Seems that at least mysql and pgsql support the scalar IN operator
     $idlist = array();
@@ -416,7 +415,7 @@ function xarModGetVarId($modName, $name)
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array((int)$modBaseInfo['systemid'],$name),ResultSet::FETCHMODE_NUM);
     // If there is no such thing, the callee is responsible, return null
-    if(!$result || !$result->next()) return;
+    if(!$result->next()) return;
 
     // Return the ID
     $modvarid = $result->getInt(1);
@@ -516,7 +515,6 @@ function xarModGetInfo($modRegId, $type = 'module')
     }
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array($modRegId),ResultSet::FETCHMODE_NUM);
-    if (!$result) return;
 
     if (!$result->next()) {
         $result->close();
@@ -1488,7 +1486,6 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     $bindvars[] = $hookAction;
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_NUM);
-    if (!$result) return;
 
     $resarray = array();
     while($result->next()) {
@@ -1548,7 +1545,6 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
         $bindvars = array($callerModName);
 
         $result =& $dbconn->Execute($query,$bindvars);
-        if (!$result) return;
 
         $modHookedCache[$callerModName] = array();
         while(!$result->EOF) {
@@ -1780,7 +1776,6 @@ function xarMod_getBaseInfo($modName, $type = 'module')
 
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
-    if (!$result) return;
 
     if (!$result->next()) {
         $result->Close();
@@ -1847,7 +1842,6 @@ function xarMod_getVarsByModule($modName)
     $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ?";
     $stmt =& $dbconn->prepareStatement($query);
     $result =& $stmt->executeQuery(array($modBaseInfo['systemid']),ResultSet::FETCHMODE_ASSOC);
-    if (!$result) return;
 
     while ($result->next()) {
         xarCore_SetCached('Mod.Variables.' . $modName, $result->getString('xar_name'), $result->get('xar_value'));
@@ -1905,7 +1899,6 @@ function xarMod_getVarsByName($varName, $type = 'module')
 
     $stmt =& $dbconn->prepareStatement($query);
     $result =& $stmt->executeQuery(array($varName),ResultSet::FETCHMODE_NUM);
-    if (!$result) return;
 
     // Add module variables to cache
     while ($result->next()) {
@@ -2019,7 +2012,6 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
     }
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array($modRegId),ResultSet::FETCHMODE_NUM);
-    if (!$result) return;
 
     // the module is not in the table
     // set state to XARMOD_STATE_UNINITIALISED

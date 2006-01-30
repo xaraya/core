@@ -254,7 +254,7 @@ function xarCache_getParents()
     $query = "SELECT xar_parentid FROM $rolemembers WHERE xar_uid = ?";
     $stmt =& $dbconn->prepareStatement($query);
     $result =& $stmt->executeQuery(array($currentuid));
-    if (!$result) return;
+
     $gidlist = array();
     while($result->next()) {
         $gidlist[] = $result->getInt(1);

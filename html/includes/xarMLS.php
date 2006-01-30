@@ -849,13 +849,13 @@ function xarMLS__mkdirr($path)
     $next_path = substr($path, 0, strrpos($path, '/'));
     if (xarMLS__mkdirr($next_path)) {
         if (!file_exists($path)) {
-            $result = @mkdir($path, 0700);
-            if (!$result) {
+            $madeDir = @mkdir($path, 0700);
+            if (!$madeDir) {
                 $msg = xarML("The directories under #(1) must be writeable by PHP.", $next_path);
                 xarLogMessage($msg);
                 // throw new PermissionException?
             }
-            return $result;
+            return $madeDir;
         }
     }
     return false;

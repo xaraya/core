@@ -88,15 +88,12 @@ class xarLogger_sql extends xarLogger
 
         /* Build the SQL query for this log entry insertion. */
         $id = $this->_dbconn->GenId('log_id');
-        $q = sprintf('insert into %s (id, ident, logtime, priority, message)' .
-                     'values(?, ?, ?, ?, ?)',
+        $q = sprintf('INSERT INTO %s (id, ident, logtime, priority, message)' .
+                     'VALUES(?, ?, ?, ?, ?)',
                      $this->_table);
         $bindvars = array($id, $thid->_ident, $this->getTime(), $priority, $message);
         $stmt =& $this->_dbconn->prepareStatement($q);
-        $result =& $stmt->executeUpdate($bindvars);
-        if (!$result) {
-            return false;
-        }
+        $stmt->executeUpdate($bindvars);
 
         return true;
     }

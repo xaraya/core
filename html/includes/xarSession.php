@@ -400,7 +400,6 @@ function xarSession__phpRead($sessionId)
               FROM $sessioninfoTable WHERE xar_sessid = ?";
 
     $result =& $dbconn->Execute($query,array($sessionId),ResultSet::FETCHMODE_NUM);
-    if (!$result) return;
 
     if (!$result->EOF) {
         $GLOBALS['xarSession_isNewSession'] = false;
